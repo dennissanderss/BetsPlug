@@ -22,36 +22,44 @@ import {
   Trophy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 
 interface NavItem {
-  label: string;
+  labelKey: string;
+  fallback: string;
   href: string;
   icon: React.ElementType;
   badge?: string;
 }
 
 const navItems: NavItem[] = [
-  { label: "About",        href: "/about",        icon: BookOpen },
-  { label: "Dashboard",    href: "/dashboard",    icon: LayoutDashboard },
-  { label: "Search",       href: "/search",       icon: Search },
-  { label: "Live Matches", href: "/live",         icon: Radio,         badge: "LIVE" },
-  { label: "Bet of the Day", href: "/bet-of-the-day", icon: Trophy, badge: "HOT" },
-  { label: "Predictions",  href: "/predictions",  icon: Sparkles },
-  { label: "Strategy Lab", href: "/strategy",     icon: FlaskConical },
-  { label: "Trackrecord",  href: "/trackrecord",  icon: ClipboardList },
-  { label: "Reports",      href: "/reports",      icon: FileBarChart2 },
-  { label: "Admin",        href: "/admin",        icon: ShieldCheck },
+  { labelKey: "nav.about",          fallback: "About",          href: "/about",          icon: BookOpen },
+  { labelKey: "nav.dashboard",      fallback: "Dashboard",      href: "/dashboard",      icon: LayoutDashboard },
+  { labelKey: "nav.search",         fallback: "Search",         href: "/search",         icon: Search },
+  { labelKey: "nav.live_matches",   fallback: "Live Matches",   href: "/live",           icon: Radio,         badge: "LIVE" },
+  { labelKey: "nav.bet_of_the_day", fallback: "Bet of the Day", href: "/bet-of-the-day", icon: Trophy,        badge: "HOT" },
+  { labelKey: "nav.predictions",    fallback: "Predictions",    href: "/predictions",    icon: Sparkles },
+  { labelKey: "nav.strategy_lab",   fallback: "Strategy Lab",   href: "/strategy",       icon: FlaskConical },
+  { labelKey: "nav.trackrecord",    fallback: "Trackrecord",    href: "/trackrecord",    icon: ClipboardList },
+  { labelKey: "nav.reports",        fallback: "Reports",        href: "/reports",        icon: FileBarChart2 },
+  { labelKey: "nav.admin",          fallback: "Admin",          href: "/admin",          icon: ShieldCheck },
 ];
 
 const bottomNavItems: NavItem[] = [
-  { label: "Settings",     href: "/settings",     icon: Settings },
-  { label: "Deals",        href: "/deals",        icon: Gift,          badge: "NEW" },
+  { labelKey: "nav.settings", fallback: "Settings", href: "/settings", icon: Settings },
+  { labelKey: "nav.deals",    fallback: "Deals",    href: "/deals",    icon: Gift,    badge: "NEW" },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { t } = useTranslation();
+
+  const getLabel = (item: NavItem) => {
+    const translated = t(item.labelKey as any);
+    return translated === item.labelKey ? item.fallback : translated;
+  };
 
   const NavContent = () => (
     <div className="flex h-full flex-col">
@@ -110,7 +118,7 @@ export function Sidebar() {
                 )}
               />
               <span className={cn("flex-1", isActive ? "text-blue-300" : "group-hover:text-slate-200")}>
-                {item.label}
+                {getLabel(item)}
               </span>
 
               {/* LIVE badge with pulsing dot */}
@@ -172,7 +180,7 @@ export function Sidebar() {
                 )}
               />
               <span className={cn("flex-1", isActive ? "text-blue-300" : "group-hover:text-slate-200")}>
-                {item.label}
+                {getLabel(item)}
               </span>
 
               {/* NEW badge — blue gradient */}
@@ -202,12 +210,12 @@ export function Sidebar() {
         {/* Status indicator */}
         <div className="flex items-center gap-2 mb-3">
           <span className="live-dot" />
-          <span className="text-xs text-slate-400">All systems operational</span>
+          <span className="text-xs text-slate-400">{t("common.all_systems" as any)}</span>
         </div>
 
         {/* Disclaimer */}
         <p className="text-[10px] leading-relaxed text-slate-600">
-          For analytical &amp; educational purposes only. Not financial advice.
+          {t("phrase.educational_only" as any)} {t("phrase.no_financial_advice" as any)}
         </p>
       </div>
     </div>

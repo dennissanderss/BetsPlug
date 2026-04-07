@@ -26,9 +26,11 @@ export const LANGUAGES: Language[] = [
 
 type TranslationKey =
   // Navigation
+  | "nav.about"
   | "nav.dashboard"
   | "nav.search"
   | "nav.live_matches"
+  | "nav.bet_of_the_day"
   | "nav.predictions"
   | "nav.strategy_lab"
   | "nav.trackrecord"
@@ -100,7 +102,9 @@ type Translations = Record<TranslationKey, string>;
 const translations: Record<string, Translations> = {
   en: {
     // Navigation
+    "nav.about":          "About",
     "nav.dashboard":     "Dashboard",
+    "nav.bet_of_the_day": "Bet of the Day",
     "nav.search":        "Search",
     "nav.live_matches":  "Live Matches",
     "nav.predictions":   "Predictions",
@@ -171,7 +175,9 @@ const translations: Record<string, Translations> = {
   },
 
   nl: {
+    "nav.about":          "Over ons",
     "nav.dashboard":     "Dashboard",
+    "nav.bet_of_the_day": "Tip van de Dag",
     "nav.search":        "Zoeken",
     "nav.live_matches":  "Live Wedstrijden",
     "nav.predictions":   "Voorspellingen",
@@ -239,7 +245,9 @@ const translations: Record<string, Translations> = {
   },
 
   de: {
+    "nav.about":          "Über uns",
     "nav.dashboard":     "Dashboard",
+    "nav.bet_of_the_day": "Tipp des Tages",
     "nav.search":        "Suche",
     "nav.live_matches":  "Live-Spiele",
     "nav.predictions":   "Vorhersagen",
@@ -307,7 +315,9 @@ const translations: Record<string, Translations> = {
   },
 
   fr: {
+    "nav.about":          "À propos",
     "nav.dashboard":     "Tableau de bord",
+    "nav.bet_of_the_day": "Pari du Jour",
     "nav.search":        "Recherche",
     "nav.live_matches":  "Matchs en direct",
     "nav.predictions":   "Prédictions",
@@ -375,7 +385,9 @@ const translations: Record<string, Translations> = {
   },
 
   es: {
+    "nav.about":          "Acerca de",
     "nav.dashboard":     "Panel de control",
+    "nav.bet_of_the_day": "Apuesta del Día",
     "nav.search":        "Buscar",
     "nav.live_matches":  "Partidos en vivo",
     "nav.predictions":   "Predicciones",
