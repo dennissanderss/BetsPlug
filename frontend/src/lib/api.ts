@@ -181,6 +181,28 @@ class ApiClient {
     });
   }
 
+  // Fixture Results
+  getFixtureResults(days = 7, league?: string) {
+    const params = new URLSearchParams({ days: String(days) });
+    if (league) params.set("league_slug", league);
+    return this.request<import("@/types/api").FixturesResponse>(
+      `/fixtures/results?${params}`
+    );
+  }
+  getWeeklySummary() {
+    return this.request<import("@/types/api").WeeklySummary>(
+      "/fixtures/results/weekly-summary"
+    );
+  }
+  getFixturesToday() {
+    return this.request<import("@/types/api").FixturesResponse>("/fixtures/today");
+  }
+  getFixturesUpcoming(days = 7) {
+    return this.request<import("@/types/api").FixturesResponse>(
+      `/fixtures/upcoming?days=${days}`
+    );
+  }
+
   // Live matches
   getLiveToday() {
     return this.request<{

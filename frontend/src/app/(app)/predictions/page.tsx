@@ -14,48 +14,16 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { api } from "@/lib/api";
-import type { LiveMatch, Prediction } from "@/types/api";
+import type { Fixture, FixturePrediction } from "@/types/api";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 type ConfidenceLevel = "High" | "Medium" | "Low";
-type SortKey = "confidence" | "time" | "sport";
-type SportFilter = "All" | string;
+type SortKey = "confidence" | "time" | "league";
+type LeagueFilter = "All" | string;
 type ConfidenceFilter = "All" | ConfidenceLevel;
 
-interface DisplayMatch {
-  /** Unique key: prefer LiveMatch.external_id, else Prediction.id */
-  key: string;
-  /** Derived from league_slug */
-  sport: string;
-  league: string;
-  homeTeam: string;
-  awayTeam: string;
-  scheduledAt: string;
-  status: LiveMatch["status"];
-  /** null when no prediction available */
-  prediction: Prediction | null;
-}
-
 // ─── Helpers ─────────────────────────────────────────────────────────────────
-
-function slugToTitle(slug: string): string {
-  return slug
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
-
-/** Very rough sport detection from league slug */
-function sportFromLeagueSlug(slug: string): string {
-  const s = slug.toLowerCase();
-  if (s.includes("nba") || s.includes("basketball") || s.includes("euroleague") || s.includes("wnba")) return "Basketball";
-  if (s.includes("tennis") || s.includes("atp") || s.includes("wta") || s.includes("masters")) return "Tennis";
-  if (s.includes("nfl") || s.includes("american-football")) return "American Football";
-  if (s.includes("nhl") || s.includes("hockey") || s.includes("ice")) return "Hockey";
-  if (s.includes("mlb") || s.includes("baseball")) return "Baseball";
-  return "Football";
-}
 
 function formatMatchTime(iso: string): string {
   try {
@@ -89,16 +57,6 @@ function getConfidenceBg(level: ConfidenceLevel): string {
   if (level === "High") return "bg-emerald-500/10 text-emerald-400";
   if (level === "Medium") return "bg-amber-500/10 text-amber-400";
   return "bg-red-500/10 text-red-400";
-}
-
-function statusLabel(status: LiveMatch["status"]): { text: string; color: string } {
-  switch (status) {
-    case "live":      return { text: "LIVE", color: "#ef4444" };
-    case "finished":  return { text: "FT",   color: "#64748b" };
-    case "postponed": return { text: "PPD",  color: "#f59e0b" };
-    case "cancelled": return { text: "CANC", color: "#64748b" };
-    default:          return { text: "SCH",  color: "#3b82f6" };
-  }
 }
 
 // ─── Probability Bar ─────────────────────────────────────────────────────────
@@ -198,7 +156,7 @@ function ProbabilityPending() {
         <div className="h-full w-full rounded-full bg-white/[0.04] animate-pulse" />
       </div>
       <p className="mt-2.5 text-[10px] font-medium text-slate-600 italic text-center">
-        Model analysis pending
+        Analysis pending
       </p>
     </div>
   );
@@ -206,21 +164,15 @@ function ProbabilityPending() {
 
 // ─── Match Card ───────────────────────────────────────────────────────────────
 
-function MatchCard({ match }: { match: DisplayMatch }) {
+function MatchCard({ fixture }: { fixture: Fixture }) {
   const [expanded, setExpanded] = useState(false);
-  const hasPrediction = match.prediction !== null;
-  const pred = match.prediction;
+  const pred: FixturePrediction | null = fixture.prediction;
+  const hasPrediction = pred !== null;
 
-  const confidenceLevel = hasPrediction
-    ? getConfidenceLevel(Math.round((pred!.confidence ?? 0) * 100))
-    : null;
-  const confidenceScore = hasPrediction
-    ? Math.round((pred!.confidence ?? 0) * 100)
-    : null;
+  const confidenceScore = hasPrediction ? Math.round(pred!.confidence * 100) : null;
+  const confidenceLevel = confidenceScore !== null ? getConfidenceLevel(confidenceScore) : null;
   const confidenceColor = confidenceLevel ? getConfidenceColor(confidenceLevel) : "#475569";
-  const confidenceBg = confidenceLevel ? getConfidenceBg(confidenceLevel) : "bg-slate-500/10 text-slate-500";
-
-  const st = statusLabel(match.status);
+  const confidenceBg    = confidenceLevel ? getConfidenceBg(confidenceLevel) : "bg-slate-500/10 text-slate-500";
 
   return (
     <div className="glass-card-hover overflow-hidden animate-slide-up">
@@ -230,33 +182,30 @@ function MatchCard({ match }: { match: DisplayMatch }) {
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <div className="flex items-center gap-1.5 flex-wrap">
             <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-              {match.league}
+              {fixture.league_name}
             </span>
-            <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[10px] font-medium text-slate-400">
-              {match.sport}
-            </span>
-            {/* Status badge */}
+            {/* Scheduled badge */}
             <span
               className="rounded-full px-2 py-0.5 text-[10px] font-bold"
               style={{
-                background: `${st.color}18`,
-                color: st.color,
-                border: `1px solid ${st.color}40`,
+                background: "rgba(59,130,246,0.12)",
+                color: "#3b82f6",
+                border: "1px solid rgba(59,130,246,0.25)",
               }}
             >
-              {st.text}
+              SCH
             </span>
           </div>
 
           <p className="text-base font-semibold text-slate-100 leading-tight">
-            {match.homeTeam}{" "}
+            {fixture.home_team_name}{" "}
             <span className="text-slate-500 font-normal">vs</span>{" "}
-            {match.awayTeam}
+            {fixture.away_team_name}
           </p>
 
           <p className="text-xs text-slate-500 flex items-center gap-1">
             <Clock className="h-3 w-3 shrink-0" />
-            {formatMatchTime(match.scheduledAt)}
+            {formatMatchTime(fixture.scheduled_at)}
           </p>
         </div>
 
@@ -267,11 +216,11 @@ function MatchCard({ match }: { match: DisplayMatch }) {
           </p>
           {hasPrediction ? (
             <ProbabilityBar
-              homeProb={Math.round((pred!.home_win_prob ?? 0) * 100)}
-              drawProb={pred!.draw_prob !== null ? Math.round((pred!.draw_prob) * 100) : null}
-              awayProb={Math.round((pred!.away_win_prob ?? 0) * 100)}
-              homeTeam={match.homeTeam}
-              awayTeam={match.awayTeam}
+              homeProb={Math.round(pred!.home_win_prob * 100)}
+              drawProb={pred!.draw_prob !== null ? Math.round(pred!.draw_prob * 100) : null}
+              awayProb={Math.round(pred!.away_win_prob * 100)}
+              homeTeam={fixture.home_team_name}
+              awayTeam={fixture.away_team_name}
             />
           ) : (
             <ProbabilityPending />
@@ -293,15 +242,20 @@ function MatchCard({ match }: { match: DisplayMatch }) {
                 <span className={`mt-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${confidenceBg}`}>
                   {confidenceLevel} Confidence
                 </span>
+                {pred!.model_name && (
+                  <span className="mt-1 text-[9px] text-slate-600 uppercase tracking-wider">
+                    {pred!.model_name}
+                  </span>
+                )}
               </>
             ) : (
-              <span className="text-sm font-medium text-slate-600 italic">No model output</span>
+              <span className="text-sm font-medium text-slate-600 italic">Analysis pending</span>
             )}
           </div>
 
           <button
             className="flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-slate-300 transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-300"
-            aria-label={`View details for ${match.homeTeam} vs ${match.awayTeam}`}
+            aria-label={`View details for ${fixture.home_team_name} vs ${fixture.away_team_name}`}
           >
             <Eye className="h-3.5 w-3.5" />
             View Details
@@ -309,31 +263,20 @@ function MatchCard({ match }: { match: DisplayMatch }) {
         </div>
       </div>
 
-      {/* ── Bottom: Explanation / factors ── */}
-      {hasPrediction && pred!.explanation && (
-        <div className="border-t border-white/[0.05] bg-white/[0.02] px-5 py-3">
-          <div className="flex items-start justify-between gap-3">
+      {/* ── Bottom: venue / pending note ── */}
+      <div className="border-t border-white/[0.05] bg-white/[0.02] px-5 py-2.5">
+        {hasPrediction ? (
+          <div className="flex items-center justify-between gap-3">
             <div className="min-w-0 flex-1">
-              <p className="text-xs text-slate-500">
-                <span className="font-semibold text-slate-400">Summary:</span>{" "}
-                {pred!.explanation.summary}
-              </p>
-              {expanded && pred!.explanation.top_factors_for && (
-                <div className="mt-2 animate-fade-in">
-                  <p className="text-xs font-semibold text-slate-500 mb-1">Top factors (home):</p>
-                  <div className="flex flex-wrap gap-2">
-                    {Object.entries(pred!.explanation.top_factors_for)
-                      .slice(0, 4)
-                      .map(([factor, weight]) => (
-                        <span
-                          key={factor}
-                          className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] font-medium text-blue-400"
-                        >
-                          {factor}: {typeof weight === "number" ? weight.toFixed(2) : weight}
-                        </span>
-                      ))}
-                  </div>
-                </div>
+              {fixture.venue && (
+                <p className="text-[10px] text-slate-600 truncate">
+                  <span className="font-medium text-slate-500">Venue:</span> {fixture.venue}
+                </p>
+              )}
+              {pred!.predicted_at && (
+                <p className="text-[10px] text-slate-700 truncate mt-0.5">
+                  Predicted {new Date(pred!.predicted_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
+                </p>
               )}
             </div>
             <button
@@ -348,14 +291,37 @@ function MatchCard({ match }: { match: DisplayMatch }) {
               )}
             </button>
           </div>
-        </div>
-      )}
-
-      {!hasPrediction && (
-        <div className="border-t border-white/[0.05] bg-white/[0.02] px-5 py-3">
+        ) : (
           <p className="text-xs text-slate-600 italic">
             This match has not yet been processed by the prediction engine. Check back closer to kick-off.
           </p>
+        )}
+      </div>
+
+      {/* ── Expanded: venue / extra detail ── */}
+      {hasPrediction && expanded && (
+        <div className="border-t border-white/[0.05] bg-white/[0.015] px-5 py-3 animate-fade-in">
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Home Win</p>
+              <p className="text-lg font-bold text-blue-400">{Math.round(pred!.home_win_prob * 100)}%</p>
+            </div>
+            {pred!.draw_prob !== null && (
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Draw</p>
+                <p className="text-lg font-bold text-amber-400">{Math.round(pred!.draw_prob * 100)}%</p>
+              </div>
+            )}
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Away Win</p>
+              <p className="text-lg font-bold text-red-400">{Math.round(pred!.away_win_prob * 100)}%</p>
+            </div>
+          </div>
+          {fixture.venue && (
+            <p className="mt-3 text-[11px] text-slate-600 text-center">
+              <span className="font-medium text-slate-500">Venue:</span> {fixture.venue}
+            </p>
+          )}
         </div>
       )}
     </div>
@@ -388,32 +354,24 @@ function SkeletonCard() {
 
 // ─── Stats Bar ───────────────────────────────────────────────────────────────
 
-function StatsBar() {
-  const { data, isError } = useQuery({
-    queryKey: ["trackrecord-summary"],
-    queryFn: () => api.getTrackrecordSummary(),
-    staleTime: 5 * 60 * 1000,
-    retry: 1,
-  });
+function StatsBar({ fixtures }: { fixtures: Fixture[] }) {
+  const total      = fixtures.length;
+  const withPred   = fixtures.filter((f) => f.prediction !== null).length;
+  const pending    = total - withPred;
+  const avgConf    = withPred > 0
+    ? Math.round(
+        fixtures
+          .filter((f) => f.prediction !== null)
+          .reduce((acc, f) => acc + f.prediction!.confidence, 0) / withPred * 100
+      )
+    : null;
 
-  const fmt = (val: number | undefined, decimals = 1, suffix = "") =>
-    val !== undefined && val !== null
-      ? `${(val * (suffix === "%" ? 100 : 1)).toFixed(decimals)}${suffix}`
-      : "—";
-
-  const stats = isError || !data
-    ? [
-        { label: "Total Predictions", value: "—" },
-        { label: "Avg Confidence",    value: "—" },
-        { label: "Model Accuracy",    value: "—" },
-        { label: "Sports Covered",    value: "—" },
-      ]
-    : [
-        { label: "Total Predictions", value: String(data.total_predictions) },
-        { label: "Avg Confidence",    value: fmt(data.avg_confidence, 1, "%") },
-        { label: "Model Accuracy",    value: fmt(data.accuracy, 1, "%") },
-        { label: "Sports Covered",    value: "—" },  // not in summary endpoint — show dash
-      ];
+  const stats = [
+    { label: "Upcoming Matches", value: String(total) },
+    { label: "Predictions Ready", value: String(withPred) },
+    { label: "Analysis Pending",  value: String(pending) },
+    { label: "Avg Confidence",    value: avgConf !== null ? `${avgConf}%` : "—" },
+  ];
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -437,45 +395,45 @@ function StatsBar() {
 // ─── Filter Bar ──────────────────────────────────────────────────────────────
 
 interface FilterBarProps {
-  sportFilter: SportFilter;
-  setSportFilter: (v: SportFilter) => void;
+  leagueFilter: LeagueFilter;
+  setLeagueFilter: (v: LeagueFilter) => void;
   confidenceFilter: ConfidenceFilter;
   setConfidenceFilter: (v: ConfidenceFilter) => void;
   sortKey: SortKey;
   setSortKey: (v: SortKey) => void;
   total: number;
-  availableSports: string[];
+  availableLeagues: string[];
 }
 
 function FilterBar({
-  sportFilter,
-  setSportFilter,
+  leagueFilter,
+  setLeagueFilter,
   confidenceFilter,
   setConfidenceFilter,
   sortKey,
   setSortKey,
   total,
-  availableSports,
+  availableLeagues,
 }: FilterBarProps) {
-  const sportTabs: SportFilter[] = ["All", ...availableSports];
+  const leagueTabs: LeagueFilter[] = ["All", ...availableLeagues];
   const confOptions: ConfidenceFilter[] = ["All", "High", "Medium", "Low"];
   const sortOptions: { key: SortKey; label: string }[] = [
     { key: "confidence", label: "Confidence" },
     { key: "time",       label: "Time" },
-    { key: "sport",      label: "Sport" },
+    { key: "league",     label: "League" },
   ];
 
   return (
     <div className="glass-card p-4">
       <div className="flex flex-wrap items-center gap-4">
-        {/* Sport tabs */}
+        {/* League tabs */}
         <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1 flex-wrap">
-          {sportTabs.map((tab) => (
+          {leagueTabs.map((tab) => (
             <button
               key={tab}
-              onClick={() => setSportFilter(tab)}
+              onClick={() => setLeagueFilter(tab)}
               className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                sportFilter === tab
+                leagueFilter === tab
                   ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                   : "text-slate-400 hover:text-slate-200"
               }`}
@@ -575,120 +533,72 @@ function DisclaimerBanner() {
 // ─── Main page ───────────────────────────────────────────────────────────────
 
 export default function PredictionsPage() {
-  const [sportFilter,      setSportFilter]      = useState<SportFilter>("All");
+  const [leagueFilter,     setLeagueFilter]     = useState<LeagueFilter>("All");
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("All");
   const [sortKey,          setSortKey]          = useState<SortKey>("confidence");
 
-  // ── Fetch live matches ─────────────────────────────────────────────────────
-  const todayQuery = useQuery({
-    queryKey: ["live-today"],
-    queryFn:  () => api.getLiveToday(),
+  // ── Fetch upcoming fixtures from DB (fast) ────────────────────────────────
+  const fixturesQuery = useQuery({
+    queryKey: ["fixtures-upcoming", 7],
+    queryFn:  () => api.getFixturesUpcoming(7),
     staleTime: 60_000,
     refetchInterval: 60_000,
     retry: 2,
   });
 
-  const upcomingQuery = useQuery({
-    queryKey: ["live-upcoming", 3],
-    queryFn:  () => api.getLiveUpcoming(3),
-    staleTime: 60_000,
-    refetchInterval: 60_000,
-    retry: 2,
-  });
+  const isLoading = fixturesQuery.isLoading;
+  const hasError  = fixturesQuery.isError;
 
-  // ── Fetch predictions ──────────────────────────────────────────────────────
-  const predictionsQuery = useQuery({
-    queryKey: ["predictions"],
-    queryFn:  () => api.getPredictions({ page_size: "100" }),
-    staleTime: 60_000,
-    refetchInterval: 60_000,
-    retry: 2,
-  });
+  // ── Only show SCHEDULED (upcoming) fixtures ───────────────────────────────
+  const upcomingFixtures = useMemo<Fixture[]>(() => {
+    const all = fixturesQuery.data?.fixtures ?? [];
+    return all.filter((f) => f.status === "scheduled");
+  }, [fixturesQuery.data]);
 
-  const isLoading = todayQuery.isLoading || upcomingQuery.isLoading;
-
-  // ── Merge live matches + predictions ──────────────────────────────────────
-  const displayMatches = useMemo<DisplayMatch[]>(() => {
-    const todayMatches   = todayQuery.data?.matches   ?? [];
-    const upcomingMatches = upcomingQuery.data?.matches ?? [];
-
-    // De-dupe by external_id
-    const seen = new Set<string>();
-    const allLive: LiveMatch[] = [];
-    for (const m of [...todayMatches, ...upcomingMatches]) {
-      if (!seen.has(m.external_id)) {
-        seen.add(m.external_id);
-        allLive.push(m);
-      }
-    }
-
-    // Build a map from match_id → Prediction using the prediction's match field
-    const predMap = new Map<string, Prediction>();
-    const predictions = predictionsQuery.data?.items ?? [];
-    for (const pred of predictions) {
-      if (pred.match_id) {
-        predMap.set(pred.match_id, pred);
-      }
-    }
-
-    return allLive.map((m): DisplayMatch => ({
-      key:         m.external_id,
-      sport:       sportFromLeagueSlug(m.league_slug),
-      league:      slugToTitle(m.league_slug),
-      homeTeam:    slugToTitle(m.home_team_slug),
-      awayTeam:    slugToTitle(m.away_team_slug),
-      scheduledAt: m.scheduled_at,
-      status:      m.status,
-      prediction:  predMap.get(m.external_id) ?? null,
-    }));
-  }, [todayQuery.data, upcomingQuery.data, predictionsQuery.data]);
-
-  // ── Derived sports list for filter tabs ───────────────────────────────────
-  const availableSports = useMemo(() => {
+  // ── Derived leagues list for filter tabs ─────────────────────────────────
+  const availableLeagues = useMemo(() => {
     const s = new Set<string>();
-    displayMatches.forEach((m) => s.add(m.sport));
+    upcomingFixtures.forEach((f) => s.add(f.league_name));
     return Array.from(s).sort();
-  }, [displayMatches]);
+  }, [upcomingFixtures]);
 
-  // ── Filter + sort ──────────────────────────────────────────────────────────
+  // ── Filter + sort ─────────────────────────────────────────────────────────
   const filtered = useMemo(() => {
-    let items = [...displayMatches];
+    let items = [...upcomingFixtures];
 
-    if (sportFilter !== "All") {
-      items = items.filter((m) => m.sport === sportFilter);
+    if (leagueFilter !== "All") {
+      items = items.filter((f) => f.league_name === leagueFilter);
     }
 
     if (confidenceFilter !== "All") {
-      items = items.filter((m) => {
-        if (!m.prediction) return false;
-        const score = Math.round((m.prediction.confidence ?? 0) * 100);
+      items = items.filter((f) => {
+        if (!f.prediction) return false;
+        const score = Math.round(f.prediction.confidence * 100);
         return getConfidenceLevel(score) === confidenceFilter;
       });
     }
 
     if (sortKey === "confidence") {
       items.sort((a, b) => {
-        const ca = a.prediction ? (a.prediction.confidence ?? 0) : -1;
-        const cb = b.prediction ? (b.prediction.confidence ?? 0) : -1;
+        const ca = a.prediction ? a.prediction.confidence : -1;
+        const cb = b.prediction ? b.prediction.confidence : -1;
         return cb - ca;
       });
     } else if (sortKey === "time") {
-      items.sort((a, b) => a.scheduledAt.localeCompare(b.scheduledAt));
-    } else if (sortKey === "sport") {
-      items.sort((a, b) => a.sport.localeCompare(b.sport));
+      items.sort((a, b) => a.scheduled_at.localeCompare(b.scheduled_at));
+    } else if (sortKey === "league") {
+      items.sort((a, b) => a.league_name.localeCompare(b.league_name));
     }
 
     return items;
-  }, [displayMatches, sportFilter, confidenceFilter, sortKey]);
+  }, [upcomingFixtures, leagueFilter, confidenceFilter, sortKey]);
 
-  // ── Auto-refresh indicator ─────────────────────────────────────────────────
+  // ── Auto-refresh indicator ────────────────────────────────────────────────
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
   useEffect(() => {
     const id = setInterval(() => setLastRefresh(new Date()), 60_000);
     return () => clearInterval(id);
   }, []);
-
-  const hasError = todayQuery.isError && upcomingQuery.isError;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -704,7 +614,7 @@ export default function PredictionsPage() {
               Predictions
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              AI-powered match analysis and probability forecasting
+              AI-powered match analysis and probability forecasting — next 7 days
             </p>
           </div>
         </div>
@@ -713,18 +623,28 @@ export default function PredictionsPage() {
           {/* Model badge */}
           <div className="flex items-center gap-2 rounded-full border border-blue-500/25 bg-blue-500/10 px-4 py-2">
             <span className="h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
-            <span className="text-xs font-semibold text-blue-300">Model: Ensemble v2.1</span>
+            <span className="text-xs font-semibold text-blue-300">Model: Ensemble</span>
           </div>
           {/* Last refresh */}
           <div className="flex items-center gap-1.5 text-[10px] text-slate-600">
             <RefreshCw className="h-3 w-3" />
-            <span>Auto-refreshes every 60s · Last: {lastRefresh.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}</span>
+            <span>
+              Auto-refreshes every 60s · Last:{" "}
+              {lastRefresh.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}
+            </span>
           </div>
         </div>
       </div>
 
       {/* ── Stats bar ── */}
-      <StatsBar />
+      {!isLoading && <StatsBar fixtures={upcomingFixtures} />}
+      {isLoading && (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 animate-pulse">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="glass-card h-20 rounded-xl bg-white/[0.03]" />
+          ))}
+        </div>
+      )}
 
       {/* ── Error banner ── */}
       {hasError && (
@@ -734,21 +654,21 @@ export default function PredictionsPage() {
         >
           <AlertTriangle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
           <p className="text-sm text-slate-400">
-            Could not load live match data. The API may be temporarily unavailable. Please try refreshing.
+            Could not load fixture data from the database. Please try refreshing.
           </p>
         </div>
       )}
 
       {/* ── Filter bar ── */}
       <FilterBar
-        sportFilter={sportFilter}
-        setSportFilter={setSportFilter}
+        leagueFilter={leagueFilter}
+        setLeagueFilter={setLeagueFilter}
         confidenceFilter={confidenceFilter}
         setConfidenceFilter={setConfidenceFilter}
         sortKey={sortKey}
         setSortKey={setSortKey}
         total={filtered.length}
-        availableSports={availableSports}
+        availableLeagues={availableLeagues}
       />
 
       {/* ── Content ── */}
@@ -756,12 +676,12 @@ export default function PredictionsPage() {
         <div className="space-y-3">
           {[1, 2, 3, 4].map((i) => <SkeletonCard key={i} />)}
         </div>
-      ) : displayMatches.length === 0 ? (
+      ) : upcomingFixtures.length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
           <Sparkles className="h-8 w-8 text-slate-600" />
-          <p className="text-base font-medium text-slate-400">No predictions available yet</p>
+          <p className="text-base font-medium text-slate-400">No upcoming matches in the next 7 days</p>
           <p className="text-sm text-slate-600">
-            No upcoming matches were found from the data sources. Check back shortly.
+            No scheduled fixtures were found in the database. Check back shortly.
           </p>
         </div>
       ) : filtered.length === 0 ? (
@@ -769,10 +689,10 @@ export default function PredictionsPage() {
           <Sparkles className="h-8 w-8 text-slate-600" />
           <p className="text-base font-medium text-slate-400">No predictions match your filters</p>
           <p className="text-sm text-slate-600">
-            Try adjusting the sport or confidence filters above.
+            Try adjusting the league or confidence filters above.
           </p>
           <button
-            onClick={() => { setSportFilter("All"); setConfidenceFilter("All"); }}
+            onClick={() => { setLeagueFilter("All"); setConfidenceFilter("All"); }}
             className="btn-gradient mt-2 rounded-lg px-4 py-2 text-sm font-semibold text-white"
           >
             Clear filters
@@ -780,8 +700,8 @@ export default function PredictionsPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map((match) => (
-            <MatchCard key={match.key} match={match} />
+          {filtered.map((fixture) => (
+            <MatchCard key={fixture.id} fixture={fixture} />
           ))}
         </div>
       )}

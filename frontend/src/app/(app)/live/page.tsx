@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import Link from "next/link";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Activity,
@@ -13,71 +12,14 @@ import {
   RefreshCw,
   AlertCircle,
 } from "lucide-react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
-import type { LiveMatch } from "@/types/api";
+import type { Fixture } from "@/types/api";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type MatchStatus = "scheduled" | "live" | "finished" | "postponed" | "cancelled";
 type StatusFilter = "All" | "Live" | "Upcoming" | "Finished";
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-/** Replace hyphens with spaces and capitalise each word. */
-function slugToName(slug: string): string {
-  return slug
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-}
-
-/** Convert league slug to a friendly display name. */
-const LEAGUE_DISPLAY: Record<string, string> = {
-  "premier-league": "Premier League",
-  "la-liga": "La Liga",
-  "bundesliga": "Bundesliga",
-  "serie-a": "Serie A",
-  "ligue-1": "Ligue 1",
-  "eredivisie": "Eredivisie",
-  "champions-league": "Champions League",
-};
-
-function leagueName(slug: string): string {
-  return LEAGUE_DISPLAY[slug] ?? slugToName(slug);
-}
-
-/** Format an ISO datetime string as a local time "HH:MM". */
-function formatTime(iso: string): string {
-  try {
-    return new Date(iso).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return "--:--";
-  }
-}
-
-/** Format an ISO datetime string as "Apr 07" style. */
-function formatDate(iso: string): string {
-  try {
-    return new Date(iso).toLocaleDateString([], {
-      month: "short",
-      day: "2-digit",
-    });
-  } catch {
-    return "";
-  }
-}
-
-/** "Last updated" relative time — shows "just now" or "X min ago". */
-function lastUpdatedLabel(ts: number): string {
-  const diff = Math.floor((Date.now() - ts) / 1000);
-  if (diff < 10) return "just now";
-  if (diff < 60) return `${diff}s ago`;
-  return `${Math.floor(diff / 60)}m ago`;
-}
 
 const STATUS_FILTERS: StatusFilter[] = ["All", "Live", "Upcoming", "Finished"];
 
@@ -97,10 +39,35 @@ const STATUS_GLOW: Record<string, string> = {
   cancelled: "shadow-none",
 };
 
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function formatTime(iso: string): string {
+  try {
+    return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  } catch {
+    return "--:--";
+  }
+}
+
+function formatDate(iso: string): string {
+  try {
+    return new Date(iso).toLocaleDateString([], { month: "short", day: "2-digit" });
+  } catch {
+    return "";
+  }
+}
+
+function lastUpdatedLabel(ts: number): string {
+  const diff = Math.floor((Date.now() - ts) / 1000);
+  if (diff < 10) return "just now";
+  if (diff < 60) return `${diff}s ago`;
+  return `${Math.floor(diff / 60)}m ago`;
+}
+
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function StatusBadge({ match }: { match: LiveMatch }) {
-  if (match.status === "live") {
+function StatusBadge({ fixture }: { fixture: Fixture }) {
+  if (fixture.status === "live") {
     return (
       <span className="flex items-center gap-1.5 rounded-full bg-blue-500/10 px-2.5 py-0.5 text-[11px] font-bold text-blue-400 ring-1 ring-blue-500/30">
         <span className="live-dot-red" style={{ width: 6, height: 6 }} />
@@ -108,15 +75,15 @@ function StatusBadge({ match }: { match: LiveMatch }) {
       </span>
     );
   }
-  if (match.status === "scheduled") {
+  if (fixture.status === "scheduled") {
     return (
       <span className="flex items-center gap-1.5 rounded-full bg-slate-700/50 px-2.5 py-0.5 text-[11px] font-medium text-slate-400">
         <Clock className="h-3 w-3" />
-        {formatTime(match.scheduled_at)}
+        {formatTime(fixture.scheduled_at)}
       </span>
     );
   }
-  if (match.status === "finished") {
+  if (fixture.status === "finished") {
     return (
       <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
         <CheckCircle2 className="h-3 w-3" />
@@ -124,7 +91,7 @@ function StatusBadge({ match }: { match: LiveMatch }) {
       </span>
     );
   }
-  if (match.status === "postponed") {
+  if (fixture.status === "postponed") {
     return (
       <span className="flex items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-amber-400">
         Postponed
@@ -138,38 +105,80 @@ function StatusBadge({ match }: { match: LiveMatch }) {
   );
 }
 
-/** Probability section — shown as pending when no model data exists. */
-function ProbabilityPending() {
+function ProbabilitySection({ fixture }: { fixture: Fixture }) {
+  const pred = fixture.prediction;
+
+  if (!pred) {
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center gap-1.5">
+          <TrendingUp className="h-3 w-3 text-slate-600" />
+          <span className="text-[10px] font-medium text-slate-600">
+            Analysis pending
+          </span>
+        </div>
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.04]">
+          <div className="h-full w-0" />
+        </div>
+      </div>
+    );
+  }
+
+  const homeP = Math.round(pred.home_win_prob * 100);
+  const awayP = Math.round(pred.away_win_prob * 100);
+  const drawP = pred.draw_prob !== null ? Math.round(pred.draw_prob * 100) : null;
+  const total = homeP + (drawP ?? 0) + awayP;
+
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <div className="flex items-center gap-1.5">
-        <TrendingUp className="h-3 w-3 text-slate-600" />
-        <span className="text-[10px] font-medium text-slate-600">
-          Probability calculation pending — requires historical data
+        <TrendingUp className="h-3 w-3 text-blue-500" />
+        <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
+          Win probability
         </span>
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.04]">
-        <div className="h-full w-0" />
+      <div className="flex h-2 w-full overflow-hidden rounded-full bg-white/[0.06] gap-0.5">
+        <div
+          className="h-full rounded-full bg-blue-500 transition-all"
+          style={{ width: `${(homeP / total) * 100}%`, opacity: homeP >= awayP ? 1 : 0.4 }}
+        />
+        {drawP !== null && (
+          <div
+            className="h-full rounded-full bg-amber-500 transition-all"
+            style={{ width: `${(drawP / total) * 100}%`, opacity: 0.5 }}
+          />
+        )}
+        <div
+          className="h-full rounded-full bg-red-500 transition-all"
+          style={{ width: `${(awayP / total) * 100}%`, opacity: awayP > homeP ? 1 : 0.4 }}
+        />
+      </div>
+      <div className="flex justify-between text-[9px] font-semibold uppercase tracking-wider">
+        <span className={homeP >= awayP ? "text-blue-400" : "text-slate-600"}>
+          {homeP}% H
+        </span>
+        {drawP !== null && (
+          <span className="text-slate-600">{drawP}% D</span>
+        )}
+        <span className={awayP > homeP ? "text-red-400" : "text-slate-600"}>
+          {awayP}% A
+        </span>
       </div>
     </div>
   );
 }
 
-function MatchCard({ match, index }: { match: LiveMatch; index: number }) {
-  const isLive     = match.status === "live";
-  const isFinished = match.status === "finished";
-  const isScheduled = match.status === "scheduled";
-
-  const homeTeam = slugToName(match.home_team_slug);
-  const awayTeam = slugToName(match.away_team_slug);
-  const league   = leagueName(match.league_slug);
+function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
+  const isLive      = fixture.status === "live";
+  const isFinished  = fixture.status === "finished";
+  const isScheduled = fixture.status === "scheduled";
 
   return (
     <div
       className={cn(
         "glass-card-hover flex flex-col border-l-4 animate-slide-up",
-        STATUS_BORDER[match.status] ?? "border-l-slate-600",
-        STATUS_GLOW[match.status]  ?? "shadow-none"
+        STATUS_BORDER[fixture.status] ?? "border-l-slate-600",
+        STATUS_GLOW[fixture.status]  ?? "shadow-none"
       )}
       style={{ animationDelay: `${index * 60}ms` }}
     >
@@ -177,16 +186,11 @@ function MatchCard({ match, index }: { match: LiveMatch; index: number }) {
       <div className="flex items-center justify-between gap-2 border-b border-white/[0.06] px-4 py-3">
         <div className="flex min-w-0 items-center gap-2">
           <span className="truncate text-xs font-semibold text-slate-300">
-            {league}
+            {fixture.league_name}
           </span>
-          {match.matchday != null && (
-            <span className="shrink-0 rounded bg-white/[0.05] px-1.5 py-0.5 text-[10px] text-slate-500">
-              MD {match.matchday}
-            </span>
-          )}
         </div>
         <div className="shrink-0">
-          <StatusBadge match={match} />
+          <StatusBadge fixture={fixture} />
         </div>
       </div>
 
@@ -195,7 +199,7 @@ function MatchCard({ match, index }: { match: LiveMatch; index: number }) {
         {/* Home team */}
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-slate-100 leading-tight">
-            {homeTeam}
+            {fixture.home_team_name}
           </span>
           {(isLive || isFinished) && (
             <span
@@ -204,7 +208,7 @@ function MatchCard({ match, index }: { match: LiveMatch; index: number }) {
                 isLive ? "gradient-text" : "text-slate-200"
               )}
             >
-              {match.home_score ?? 0}
+              {fixture.result ? fixture.result.home_score : "—"}
             </span>
           )}
         </div>
@@ -221,7 +225,7 @@ function MatchCard({ match, index }: { match: LiveMatch; index: number }) {
         {/* Away team */}
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-slate-100 leading-tight">
-            {awayTeam}
+            {fixture.away_team_name}
           </span>
           {(isLive || isFinished) && (
             <span
@@ -230,7 +234,7 @@ function MatchCard({ match, index }: { match: LiveMatch; index: number }) {
                 isLive ? "gradient-text" : "text-slate-200"
               )}
             >
-              {match.away_score ?? 0}
+              {fixture.result ? fixture.result.away_score : "—"}
             </span>
           )}
         </div>
@@ -240,26 +244,26 @@ function MatchCard({ match, index }: { match: LiveMatch; index: number }) {
           <div className="mt-3 flex items-center justify-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.03] py-2">
             <Clock className="h-3.5 w-3.5 text-slate-500" />
             <span className="text-xs font-medium text-slate-400">
-              Kick-off {formatTime(match.scheduled_at)} · {formatDate(match.scheduled_at)}
+              Kick-off {formatTime(fixture.scheduled_at)} · {formatDate(fixture.scheduled_at)}
             </span>
           </div>
         )}
 
         {/* Venue */}
-        {match.venue && (
+        {fixture.venue && (
           <p className="mt-2 truncate text-center text-[10px] text-slate-600">
-            {match.venue}
+            {fixture.venue}
           </p>
         )}
       </div>
 
       {/* ── Analytics bottom ── */}
       <div className="space-y-3 border-t border-white/[0.06] px-4 py-3">
-        <ProbabilityPending />
+        <ProbabilitySection fixture={fixture} />
 
         {/* View Analysis button */}
         <Link
-          href={`/matches/${match.external_id}`}
+          href={`/matches/${fixture.id}`}
           className="group flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-xs font-semibold text-slate-400 transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-400"
         >
           View Analysis
@@ -270,15 +274,7 @@ function MatchCard({ match, index }: { match: LiveMatch; index: number }) {
   );
 }
 
-function FilterPill({
-  label,
-  active,
-  onClick,
-}: {
-  label: string;
-  active: boolean;
-  onClick: () => void;
-}) {
+function FilterPill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -294,10 +290,10 @@ function FilterPill({
   );
 }
 
-function StatStrip({ matches }: { matches: LiveMatch[] }) {
-  const liveCount     = matches.filter((m) => m.status === "live").length;
-  const upcomingCount = matches.filter((m) => m.status === "scheduled").length;
-  const finishedCount = matches.filter((m) => m.status === "finished").length;
+function StatStrip({ fixtures }: { fixtures: Fixture[] }) {
+  const liveCount     = fixtures.filter((f) => f.status === "live").length;
+  const upcomingCount = fixtures.filter((f) => f.status === "scheduled").length;
+  const finishedCount = fixtures.filter((f) => f.status === "finished").length;
 
   return (
     <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
@@ -319,7 +315,6 @@ function StatStrip({ matches }: { matches: LiveMatch[] }) {
   );
 }
 
-/** Loading skeleton for the match grid. */
 function MatchGridSkeleton() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -345,14 +340,7 @@ function MatchGridSkeleton() {
   );
 }
 
-/** Empty / error state. */
-function EmptyState({
-  message,
-  onClearFilters,
-}: {
-  message: string;
-  onClearFilters?: () => void;
-}) {
+function EmptyState({ message, onClearFilters }: { message: string; onClearFilters?: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] py-20">
       <Activity className="h-10 w-10 text-slate-700" />
@@ -374,18 +362,18 @@ function EmptyState({
 export default function LiveMatchesPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
 
-  // ── Today's live / finished matches (auto-refresh every 60 s) ──
+  // ── Today's matches (DB-only, instant) ──
   const todayQuery = useQuery({
-    queryKey: ["live", "today"],
-    queryFn: () => api.getLiveToday(),
+    queryKey: ["fixtures", "today"],
+    queryFn: () => api.getFixturesToday(),
     refetchInterval: 60_000,
     staleTime: 30_000,
   });
 
-  // ── Upcoming matches for the next 3 days ──
+  // ── Upcoming matches for the next 3 days (DB-only, instant) ──
   const upcomingQuery = useQuery({
-    queryKey: ["live", "upcoming", 3],
-    queryFn: () => api.getLiveUpcoming(3),
+    queryKey: ["fixtures", "upcoming", 3],
+    queryFn: () => api.getFixturesUpcoming(3),
     refetchInterval: 60_000,
     staleTime: 30_000,
   });
@@ -393,39 +381,35 @@ export default function LiveMatchesPage() {
   const isLoading = todayQuery.isLoading || upcomingQuery.isLoading;
   const hasError  = todayQuery.isError  || upcomingQuery.isError;
 
-  // Merge + deduplicate by external_id
-  const allMatches: LiveMatch[] = useMemo(() => {
+  // Merge + deduplicate by id
+  const allFixtures: Fixture[] = useMemo(() => {
     const seen = new Set<string>();
-    const combined: LiveMatch[] = [
-      ...((todayQuery.data?.matches)    ?? []),
-      ...((upcomingQuery.data?.matches) ?? []),
+    const combined: Fixture[] = [
+      ...((todayQuery.data?.fixtures)    ?? []),
+      ...((upcomingQuery.data?.fixtures) ?? []),
     ];
-    return combined.filter((m) => {
-      if (seen.has(m.external_id)) return false;
-      seen.add(m.external_id);
+    return combined.filter((f) => {
+      if (seen.has(f.id)) return false;
+      seen.add(f.id);
       return true;
     });
   }, [todayQuery.data, upcomingQuery.data]);
 
   // Apply status filter
-  const filtered: LiveMatch[] = useMemo(() => {
-    return allMatches.filter((m) => {
+  const filtered: Fixture[] = useMemo(() => {
+    return allFixtures.filter((f) => {
       if (statusFilter === "All")      return true;
-      if (statusFilter === "Live")     return m.status === "live";
-      if (statusFilter === "Upcoming") return m.status === "scheduled";
-      if (statusFilter === "Finished") return m.status === "finished";
+      if (statusFilter === "Live")     return f.status === "live";
+      if (statusFilter === "Upcoming") return f.status === "scheduled";
+      if (statusFilter === "Finished") return f.status === "finished";
       return true;
     });
-  }, [allMatches, statusFilter]);
+  }, [allFixtures, statusFilter]);
 
   // Sort: live first, then scheduled (by time), then finished
-  const sorted: LiveMatch[] = useMemo(() => {
-    const order: Record<MatchStatus, number> = {
-      live:       0,
-      scheduled:  1,
-      finished:   2,
-      postponed:  3,
-      cancelled:  4,
+  const sorted: Fixture[] = useMemo(() => {
+    const order: Record<string, number> = {
+      live: 0, scheduled: 1, finished: 2, postponed: 3, cancelled: 4,
     };
     return [...filtered].sort((a, b) => {
       const byStatus = (order[a.status] ?? 9) - (order[b.status] ?? 9);
@@ -439,6 +423,18 @@ export default function LiveMatchesPage() {
     Math.max(todayQuery.dataUpdatedAt ?? 0, upcomingQuery.dataUpdatedAt ?? 0) || null;
 
   const isRefetching = todayQuery.isFetching || upcomingQuery.isFetching;
+
+  // Auto-refresh countdown indicator
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setTick((t) => t + 1), 1000);
+    return () => clearInterval(id);
+  }, []);
+  void tick; // used only to force re-render for lastUpdatedLabel
+
+  // Determine empty-state message
+  const todayCount  = todayQuery.data?.fixtures?.length ?? 0;
+  const noTodayMsg  = todayCount === 0 && !isLoading && !hasError;
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -457,7 +453,7 @@ export default function LiveMatchesPage() {
             </div>
           </div>
           <p className="mt-1.5 text-sm text-slate-400">
-            Real-time match tracking and analysis
+            Today&apos;s matches and upcoming fixtures — next 3 days
           </p>
           {/* Last updated */}
           <div className="mt-2 flex items-center gap-1.5">
@@ -477,7 +473,7 @@ export default function LiveMatchesPage() {
 
         {/* Stat strip */}
         {!isLoading && !hasError && (
-          <StatStrip matches={allMatches} />
+          <StatStrip fixtures={allFixtures} />
         )}
       </div>
 
@@ -487,6 +483,16 @@ export default function LiveMatchesPage() {
           <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
           <p className="text-sm text-red-400">
             Could not reach the backend API. Showing cached data if available — retrying automatically.
+          </p>
+        </div>
+      )}
+
+      {/* ── No games today notice ── */}
+      {noTodayMsg && allFixtures.length > 0 && (
+        <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+          <Clock className="h-4 w-4 shrink-0 text-slate-500" />
+          <p className="text-sm text-slate-400">
+            No matches scheduled for today. Next fixtures:
           </p>
         </div>
       )}
@@ -515,9 +521,9 @@ export default function LiveMatchesPage() {
         <EmptyState
           message={
             hasError
-              ? "No live data available — backend unreachable."
-              : allMatches.length === 0
-              ? "No live data available. Check back when matches are scheduled."
+              ? "No data available — backend unreachable."
+              : allFixtures.length === 0
+              ? "No matches found. Check back when fixtures are scheduled."
               : "No matches found for the selected filter."
           }
           onClearFilters={
@@ -528,8 +534,8 @@ export default function LiveMatchesPage() {
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {sorted.map((match, i) => (
-            <MatchCard key={match.external_id} match={match} index={i} />
+          {sorted.map((fixture, i) => (
+            <MatchCard key={fixture.id} fixture={fixture} index={i} />
           ))}
         </div>
       )}
@@ -538,10 +544,10 @@ export default function LiveMatchesPage() {
       <div className="flex items-start gap-2 rounded-xl border border-white/[0.04] bg-white/[0.02] px-4 py-3">
         <Zap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-600" />
         <p className="text-[11px] leading-relaxed text-slate-600">
-          Match data is fetched live from the backend API and refreshed every 60 seconds.
+          Match data is loaded directly from the database and refreshed every 60 seconds.
           Probability calculations are model-generated simulations for analytical purposes
-          only and require historical training data to activate. Predictions do not
-          constitute betting advice. Match times are shown in your local timezone.
+          only. Predictions do not constitute betting advice. Match times are shown in your
+          local timezone.
         </p>
       </div>
     </div>

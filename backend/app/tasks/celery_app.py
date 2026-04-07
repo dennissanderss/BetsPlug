@@ -48,6 +48,7 @@ def create_celery_app() -> Celery:
         backend=_settings.celery_result_backend,
         include=[
             "app.tasks.celery_app",
+            "app.tasks.sync_tasks",
         ],
     )
 
@@ -70,6 +71,7 @@ def create_celery_app() -> Celery:
         result_expires=86400,
         # Beat schedule
         beat_schedule={
+            # ── Existing report tasks ──────────────────────────────────────
             # Weekly report: every Monday at 08:00 UTC
             "weekly-report-monday-0800": {
                 "task": "app.tasks.celery_app.task_generate_weekly_report",
@@ -82,7 +84,7 @@ def create_celery_app() -> Celery:
                 "schedule": crontab(hour=8, minute=0, day_of_month=1),
                 "options": {"queue": "reports"},
             },
-            # ── Daily pipeline: ingest → forecast → evaluate ──
+            # ── Daily pipeline: ingest → forecast → evaluate ──────────────
             # Morning sync: fetch latest data at 06:00 UTC
             "daily-ingest-0600": {
                 "task": "app.tasks.celery_app.task_daily_pipeline",
@@ -100,6 +102,33 @@ def create_celery_app() -> Celery:
                 "task": "app.tasks.celery_app.task_daily_pipeline",
                 "schedule": crontab(hour=17, minute=0),
                 "options": {"queue": "ingestion"},
+            },
+            # ── Background data synchronisation (new) ─────────────────────
+            # Fetch upcoming fixtures + recent results every 5 minutes.
+            # Rotates through PL/PD/BL1/SA/FL1/CL to stay within free-tier
+            # rate limit of 10 requests/minute.
+            "sync-matches-every-5m": {
+                "task": "app.tasks.sync_tasks.task_sync_matches",
+                "schedule": crontab(minute="*/5"),
+                "options": {"queue": "ingestion"},
+            },
+            # Fetch standings for one competition every 30 minutes.
+            "sync-standings-every-30m": {
+                "task": "app.tasks.sync_tasks.task_sync_standings",
+                "schedule": crontab(minute="*/30"),
+                "options": {"queue": "ingestion"},
+            },
+            # Run ensemble model on upcoming matches without predictions.
+            "generate-predictions-every-10m": {
+                "task": "app.tasks.sync_tasks.task_generate_predictions",
+                "schedule": crontab(minute="*/10"),
+                "options": {"queue": "forecasting"},
+            },
+            # Weekly winners/losers summary every Monday at 08:00 UTC.
+            "weekly-sync-report-monday-0800": {
+                "task": "app.tasks.sync_tasks.task_weekly_report",
+                "schedule": crontab(hour=8, minute=0, day_of_week=1),
+                "options": {"queue": "reports"},
             },
         },
     )

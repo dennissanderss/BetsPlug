@@ -185,7 +185,7 @@ export function Header({ className }: HeaderProps) {
               {/* User info */}
               <div className="px-3 py-2.5 border-b border-white/[0.06] mb-1">
                 <p className="text-sm font-semibold text-slate-200">Admin User</p>
-                <p className="text-xs text-slate-500">admin@sip.io</p>
+                <p className="text-xs text-slate-500">admin@betsplug.io</p>
               </div>
 
               <button

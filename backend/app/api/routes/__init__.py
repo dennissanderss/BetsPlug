@@ -15,6 +15,7 @@ from app.api.routes.admin import router as admin_router
 from app.api.routes.live import router as live_router
 from app.api.routes.subscriptions import router as subscriptions_router
 from app.api.routes.betoftheday import router as betoftheday_router
+from app.api.routes.fixtures import router as fixtures_router
 
 router = APIRouter()
 
@@ -33,3 +34,4 @@ router.include_router(admin_router, prefix="/admin", tags=["admin"])
 router.include_router(live_router, prefix="/live", tags=["live"])
 router.include_router(subscriptions_router, prefix="/subscriptions", tags=["subscriptions"])
 router.include_router(betoftheday_router, prefix="/bet-of-the-day", tags=["bet-of-the-day"])
+router.include_router(fixtures_router, prefix="/fixtures", tags=["fixtures"])

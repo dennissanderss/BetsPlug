@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, Query
-from sqlalchemy import func, select
+from sqlalchemy import Integer, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
@@ -45,7 +45,7 @@ async def get_trackrecord_summary(
         select(
             func.count(PredictionEvaluation.id).label("total"),
             func.sum(
-                func.cast(PredictionEvaluation.is_correct, type_=None)
+                func.cast(PredictionEvaluation.is_correct, Integer)
             ).label("correct"),
             func.avg(PredictionEvaluation.brier_score).label("avg_brier"),
             func.avg(PredictionEvaluation.log_loss).label("avg_log_loss"),
@@ -105,7 +105,7 @@ async def get_trackrecord_segments(
                 Sport.name.label("segment_value"),
                 func.count(PredictionEvaluation.id).label("total"),
                 func.avg(
-                    func.cast(PredictionEvaluation.is_correct, type_=None)
+                    func.cast(PredictionEvaluation.is_correct, Integer)
                 ).label("accuracy"),
                 func.avg(PredictionEvaluation.brier_score).label("avg_brier"),
                 func.avg(PredictionEvaluation.log_loss).label("avg_log_loss"),
@@ -124,7 +124,7 @@ async def get_trackrecord_segments(
                 func.to_char(Prediction.predicted_at, "YYYY-MM").label("segment_value"),
                 func.count(PredictionEvaluation.id).label("total"),
                 func.avg(
-                    func.cast(PredictionEvaluation.is_correct, type_=None)
+                    func.cast(PredictionEvaluation.is_correct, Integer)
                 ).label("accuracy"),
                 func.avg(PredictionEvaluation.brier_score).label("avg_brier"),
                 func.avg(PredictionEvaluation.log_loss).label("avg_log_loss"),
@@ -141,7 +141,7 @@ async def get_trackrecord_segments(
                 League.name.label("segment_value"),
                 func.count(PredictionEvaluation.id).label("total"),
                 func.avg(
-                    func.cast(PredictionEvaluation.is_correct, type_=None)
+                    func.cast(PredictionEvaluation.is_correct, Integer)
                 ).label("accuracy"),
                 func.avg(PredictionEvaluation.brier_score).label("avg_brier"),
                 func.avg(PredictionEvaluation.log_loss).label("avg_log_loss"),

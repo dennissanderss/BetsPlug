@@ -168,7 +168,7 @@ function SaveToast({ visible }: { visible: boolean }) {
 export default function SettingsPage() {
   // Profile
   const [displayName, setDisplayName] = useState("Dennis van der Berg");
-  const [email]                        = useState("dennis@sip.io");
+  const [email]                        = useState("dennis@betsplug.io");
   const [editingProfile, setEditingProfile] = useState(false);
 
   // Sport preferences

@@ -1,5 +1,5 @@
 // ============================================
-// Sports Intelligence Platform - API Types
+// BetsPlug - API Types
 // ============================================
 
 export interface Sport {
@@ -257,6 +257,69 @@ export interface TeamStatsData {
   away_wins: number;
   avg_goals_scored: number | null;
   avg_goals_conceded: number | null;
+}
+
+export interface WeeklyPerformer {
+  name: string;
+  accuracy: number;
+  total: number;
+}
+
+export interface WeeklySummary {
+  total_calls: number;
+  won: number;
+  lost: number;
+  win_rate: number;
+  pl_units: number;
+  best_performers: WeeklyPerformer[];
+  worst_performers: WeeklyPerformer[];
+}
+
+// ─── Fixture (DB-only, fast) ──────────────────────────────────────────────────
+
+export interface FixturePrediction {
+  home_win_prob: number;
+  draw_prob: number | null;
+  away_win_prob: number;
+  confidence: number;
+  model_name: string | null;
+  predicted_at?: string;
+}
+
+/** Shape returned by /api/fixtures/today, /upcoming, /results */
+export interface Fixture {
+  id: string;
+  league_id?: string;
+  league_name: string;
+  league_slug: string;
+  home_team_id?: string;
+  home_team_name: string;
+  home_team_slug: string;
+  away_team_id?: string;
+  away_team_name: string;
+  away_team_slug: string;
+  external_id?: string;
+  status: "scheduled" | "live" | "finished" | "postponed" | "cancelled";
+  scheduled_at: string;
+  venue: string | null;
+  round_name?: string | null;
+  matchday: number | null;
+  result: {
+    home_score: number;
+    away_score: number;
+    winner: "home" | "away" | "draw" | null;
+    home_score_ht?: number | null;
+    away_score_ht?: number | null;
+  } | null;
+  prediction: FixturePrediction | null;
+}
+
+export interface FixturesResponse {
+  date?: string;
+  days?: number;
+  count: number;
+  disclaimer: string;
+  fixtures: Fixture[];
 }
 
 export interface MatchAnalysis {

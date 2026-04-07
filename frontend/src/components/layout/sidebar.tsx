@@ -40,6 +40,8 @@ const navItems: NavItem[] = [
   { labelKey: "nav.live_matches",   fallback: "Live Matches",   href: "/live",           icon: Radio,         badge: "LIVE" },
   { labelKey: "nav.bet_of_the_day", fallback: "Bet of the Day", href: "/bet-of-the-day", icon: Trophy,        badge: "HOT" },
   { labelKey: "nav.predictions",    fallback: "Predictions",    href: "/predictions",    icon: Sparkles },
+  { labelKey: "nav.results",         fallback: "Results",         href: "/results",        icon: Trophy },
+  { labelKey: "nav.weekly_report",  fallback: "Weekly Report",  href: "/weekly-report",  icon: FileBarChart2 },
   { labelKey: "nav.strategy_lab",   fallback: "Strategy Lab",   href: "/strategy",       icon: FlaskConical },
   { labelKey: "nav.trackrecord",    fallback: "Trackrecord",    href: "/trackrecord",    icon: ClipboardList },
   { labelKey: "nav.reports",        fallback: "Reports",        href: "/reports",        icon: FileBarChart2 },
@@ -64,22 +66,38 @@ export function Sidebar() {
   const NavContent = () => (
     <div className="flex h-full flex-col">
       {/* ── Logo ── */}
-      <div className="flex items-center gap-3 px-5 py-6 border-b border-white/[0.06]">
+      <div className="flex items-center gap-3 px-5 py-5 border-b border-white/[0.06]">
         <div
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
           style={{
-            background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
-            boxShadow: "0 0 16px rgba(59,130,246,0.45), 0 2px 8px rgba(0,0,0,0.4)",
+            background: "linear-gradient(135deg, #10b981 0%, #059669 50%, #3b82f6 100%)",
+            boxShadow: "0 0 20px rgba(16,185,129,0.4), 0 0 40px rgba(59,130,246,0.2), 0 2px 8px rgba(0,0,0,0.4)",
           }}
         >
-          <TrendingUp className="h-5 w-5 text-white" />
+          <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2v6" />
+            <path d="M8 2v6" />
+            <path d="M16 2v6" />
+            <rect x="6" y="8" width="12" height="6" rx="2" />
+            <path d="M10 14v4a2 2 0 0 0 4 0v-4" />
+            <circle cx="12" cy="21" r="1" fill="white" />
+          </svg>
         </div>
         <div className="flex flex-col leading-tight">
-          <span className="text-sm font-bold tracking-tight text-white">
-            SIP
+          <span className="text-base font-extrabold tracking-tight" style={{
+            background: "linear-gradient(135deg, #ffffff 0%, #10b981 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}>
+            BETS
+            <span style={{
+              background: "linear-gradient(135deg, #10b981 0%, #34d399 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}>PLUG</span>
           </span>
-          <span className="text-[10px] text-slate-400 tracking-wider uppercase">
-            Sports Intelligence
+          <span className="text-[9px] text-slate-500 tracking-[0.2em] uppercase font-medium">
+            AI Sports Analytics
           </span>
         </div>
       </div>
