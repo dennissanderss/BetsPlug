@@ -201,6 +201,62 @@ class ApiClient {
   getHealth() {
     return this.request<{ status: string; version: string }>("/health");
   }
+
+  // Bet of the Day
+  getBetOfTheDay(targetDate?: string) {
+    const params = targetDate ? `?target_date=${targetDate}` : "";
+    return this.request<{
+      available: boolean;
+      match_id?: string;
+      home_team?: string;
+      away_team?: string;
+      league?: string;
+      scheduled_at?: string;
+      home_win_prob?: number;
+      draw_prob?: number;
+      away_win_prob?: number;
+      confidence?: number;
+      predicted_outcome?: string;
+      explanation_summary?: string;
+      prediction_id?: string;
+    }>(`/bet-of-the-day/${params}`);
+  }
+
+  // Subscriptions
+  getSubscriptionPlans() {
+    return this.request<{
+      id: string;
+      name: string;
+      price_monthly: number;
+      price_total: number;
+      duration_months: number;
+      features: string[];
+    }[]>("/subscriptions/plans");
+  }
+
+  createCheckout(plan: string, successUrl: string, cancelUrl: string) {
+    return this.request<{ checkout_url: string; session_id: string }>(
+      "/subscriptions/create-checkout",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          plan,
+          success_url: successUrl,
+          cancel_url: cancelUrl,
+        }),
+      }
+    );
+  }
+
+  getSubscriptionStatus() {
+    return this.request<{
+      has_subscription: boolean;
+      plan: string | null;
+      status: string | null;
+      is_lifetime: boolean;
+      current_period_end: string | null;
+    }>("/subscriptions/status");
+  }
 }
 
 export const api = new ApiClient(API_BASE);

@@ -82,6 +82,25 @@ def create_celery_app() -> Celery:
                 "schedule": crontab(hour=8, minute=0, day_of_month=1),
                 "options": {"queue": "reports"},
             },
+            # ── Daily pipeline: ingest → forecast → evaluate ──
+            # Morning sync: fetch latest data at 06:00 UTC
+            "daily-ingest-0600": {
+                "task": "app.tasks.celery_app.task_daily_pipeline",
+                "schedule": crontab(hour=6, minute=0),
+                "options": {"queue": "ingestion"},
+            },
+            # Midday refresh: catch updates + new matches at 12:00 UTC
+            "midday-refresh-1200": {
+                "task": "app.tasks.celery_app.task_daily_pipeline",
+                "schedule": crontab(hour=12, minute=0),
+                "options": {"queue": "ingestion"},
+            },
+            # Evening refresh: final update before peak hours at 17:00 UTC
+            "evening-refresh-1700": {
+                "task": "app.tasks.celery_app.task_daily_pipeline",
+                "schedule": crontab(hour=17, minute=0),
+                "options": {"queue": "ingestion"},
+            },
         },
     )
 
@@ -489,3 +508,80 @@ def task_generate_report(self, report_type: str = "weekly") -> dict:
         return task_generate_monthly_report.apply(args=[]).get()
     else:
         raise ValueError(f"Unknown report_type: '{report_type}'")
+
+
+# ---------------------------------------------------------------------------
+# Task: daily pipeline (ingest → forecast → evaluate)
+# ---------------------------------------------------------------------------
+
+
+@celery_app.task(
+    name="app.tasks.celery_app.task_daily_pipeline",
+    bind=True,
+    max_retries=2,
+    default_retry_delay=300,
+    queue="ingestion",
+)
+def task_daily_pipeline(self) -> dict:
+    """
+    Automated daily pipeline that runs three stages in sequence:
+
+    1. **Ingest** — Fetch today's matches + recent results from all data sources
+       (football-data.org, OpenLigaDB, TheSportsDB)
+    2. **Forecast** — Generate predictions for all upcoming matches (next 48h)
+       that don't have predictions yet
+    3. **Evaluate** — Score predictions for recently finished matches
+
+    This task runs 3x daily (06:00, 12:00, 17:00 UTC) via Celery Beat.
+    It ensures the platform always shows fresh, real-time data with predictions.
+    """
+    logger.info("Daily pipeline started")
+    pipeline_result = {
+        "started_at": datetime.now(timezone.utc).isoformat(),
+        "stages": {},
+    }
+
+    try:
+        # Stage 1: Data Ingestion
+        logger.info("Pipeline Stage 1: Ingestion")
+        try:
+            ingestion_result = task_run_ingestion.apply(
+                kwargs={"sport_slug": "all"}
+            ).get(timeout=600)
+            pipeline_result["stages"]["ingestion"] = ingestion_result
+        except Exception as exc:
+            logger.warning("Pipeline ingestion failed: %s", exc)
+            pipeline_result["stages"]["ingestion"] = {"status": "failed", "error": str(exc)}
+
+        # Stage 2: Forecast Generation
+        logger.info("Pipeline Stage 2: Forecasting")
+        try:
+            forecast_result = task_run_forecast_batch.apply(
+                kwargs={"hours_ahead": 48}
+            ).get(timeout=1200)
+            pipeline_result["stages"]["forecasting"] = forecast_result
+        except Exception as exc:
+            logger.warning("Pipeline forecasting failed: %s", exc)
+            pipeline_result["stages"]["forecasting"] = {"status": "failed", "error": str(exc)}
+
+        # Stage 3: Evaluation
+        logger.info("Pipeline Stage 3: Evaluation")
+        try:
+            eval_result = task_run_evaluation_batch.apply(
+                kwargs={"days_back": 3}
+            ).get(timeout=600)
+            pipeline_result["stages"]["evaluation"] = eval_result
+        except Exception as exc:
+            logger.warning("Pipeline evaluation failed: %s", exc)
+            pipeline_result["stages"]["evaluation"] = {"status": "failed", "error": str(exc)}
+
+        pipeline_result["finished_at"] = datetime.now(timezone.utc).isoformat()
+        pipeline_result["status"] = "completed"
+        logger.info("Daily pipeline completed", extra=pipeline_result)
+        return pipeline_result
+
+    except Exception as exc:
+        logger.error("Daily pipeline failed: %s", exc)
+        pipeline_result["status"] = "failed"
+        pipeline_result["error"] = str(exc)
+        raise self.retry(exc=exc)

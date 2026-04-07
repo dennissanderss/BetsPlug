@@ -51,6 +51,17 @@ class Settings(BaseSettings):
     celery_broker_url: str = "redis://redis:6379/1"
     celery_result_backend: str = "redis://redis:6379/2"
 
+    # Stripe (free to set up — only pay per transaction: 1.5% + €0.25 EU)
+    stripe_secret_key: str = "sk_test_placeholder"
+    stripe_webhook_secret: str = ""
+    stripe_price_basic: str = ""      # Create in Stripe Dashboard: €15.99/month recurring
+    stripe_price_standard: str = ""   # Create in Stripe Dashboard: €35.97 every 3 months recurring
+    stripe_price_premium: str = ""    # Create in Stripe Dashboard: €56.94 every 6 months recurring
+    stripe_price_lifetime: str = ""   # Create in Stripe Dashboard: €199.99 one-time
+
+    # Football Data API
+    football_data_api_key: str = ""
+
     # Reports
     reports_output_dir: str = "/app/reports"
 

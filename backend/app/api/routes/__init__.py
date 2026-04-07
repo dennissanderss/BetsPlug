@@ -13,6 +13,8 @@ from app.api.routes.backtests import router as backtests_router
 from app.api.routes.reports import router as reports_router
 from app.api.routes.admin import router as admin_router
 from app.api.routes.live import router as live_router
+from app.api.routes.subscriptions import router as subscriptions_router
+from app.api.routes.betoftheday import router as betoftheday_router
 
 router = APIRouter()
 
@@ -29,3 +31,5 @@ router.include_router(backtests_router, prefix="/backtests", tags=["backtests"])
 router.include_router(reports_router, prefix="/reports", tags=["reports"])
 router.include_router(admin_router, prefix="/admin", tags=["admin"])
 router.include_router(live_router, prefix="/live", tags=["live"])
+router.include_router(subscriptions_router, prefix="/subscriptions", tags=["subscriptions"])
+router.include_router(betoftheday_router, prefix="/bet-of-the-day", tags=["bet-of-the-day"])

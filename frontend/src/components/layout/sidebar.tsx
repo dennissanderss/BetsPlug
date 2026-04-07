@@ -19,6 +19,7 @@ import {
   Settings,
   Gift,
   BookOpen,
+  Trophy,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ const navItems: NavItem[] = [
   { label: "Dashboard",    href: "/dashboard",    icon: LayoutDashboard },
   { label: "Search",       href: "/search",       icon: Search },
   { label: "Live Matches", href: "/live",         icon: Radio,         badge: "LIVE" },
+  { label: "Bet of the Day", href: "/bet-of-the-day", icon: Trophy, badge: "HOT" },
   { label: "Predictions",  href: "/predictions",  icon: Sparkles },
   { label: "Strategy Lab", href: "/strategy",     icon: FlaskConical },
   { label: "Trackrecord",  href: "/trackrecord",  icon: ClipboardList },
@@ -121,8 +123,21 @@ export function Sidebar() {
                 </span>
               )}
 
+              {/* HOT badge */}
+              {item.badge === "HOT" && (
+                <span
+                  className="text-[10px] font-bold tracking-wider text-white px-1.5 py-0.5 rounded"
+                  style={{
+                    background: "linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)",
+                    boxShadow: "0 0 8px rgba(245,158,11,0.45)",
+                  }}
+                >
+                  HOT
+                </span>
+              )}
+
               {/* Active chevron */}
-              {isActive && !isLive && (
+              {isActive && !isLive && !item.badge && (
                 <ChevronRight className="h-3.5 w-3.5 text-blue-400/60" />
               )}
             </Link>
