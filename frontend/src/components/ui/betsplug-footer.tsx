@@ -1,300 +1,452 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  MessageCircle,
+  Send,
   Twitter,
   Instagram,
-  X,
-  Send,
-  CheckCircle2,
+  Youtube,
+  MessageCircle,
+  Mail,
+  MapPin,
+  ShieldCheck,
+  Lock,
+  ArrowRight,
   Sparkles,
+  CheckCircle2,
 } from "lucide-react";
-import { GetStartedButton } from "@/components/ui/get-started-button";
+
+/* ─────────────────────────────────────────────────────────────────
+   Footer data
+   ───────────────────────────────────────────────────────────────── */
+
+const productLinks = [
+  { text: "Predictions", href: "#predictions" },
+  { text: "Track Record", href: "#track-record" },
+  { text: "How It Works", href: "#how-it-works" },
+  { text: "Pricing", href: "#pricing" },
+  { text: "Comparison", href: "#comparison" },
+];
+
+const companyLinks = [
+  { text: "About Us", href: "/about" },
+  { text: "Our Models", href: "/about#models" },
+  { text: "Blog", href: "/blog" },
+  { text: "Careers", href: "/careers" },
+  { text: "Contact", href: "/support" },
+];
+
+const legalLinks = [
+  { text: "Terms of Service", href: "/terms" },
+  { text: "Privacy Policy", href: "/privacy" },
+  { text: "Cookie Settings", href: "/cookies" },
+  { text: "Responsible Play", href: "/responsible-play" },
+];
+
+const bottomLinks = [
+  { text: "Privacy", href: "/privacy" },
+  { text: "Terms", href: "/terms" },
+  { text: "Cookies", href: "/cookies" },
+];
+
+const socials = [
+  { icon: Twitter, label: "Twitter", href: "https://twitter.com/betsplug" },
+  { icon: Instagram, label: "Instagram", href: "https://instagram.com/betsplug" },
+  { icon: Youtube, label: "YouTube", href: "https://youtube.com/@betsplug" },
+  { icon: Send, label: "Telegram", href: "https://t.me/betsplug" },
+];
+
+/* ─────────────────────────────────────────────────────────────────
+   Brand SVG payment badges (inline, no external assets)
+   ───────────────────────────────────────────────────────────────── */
+
+function PayPalBadge() {
+  return (
+    <div
+      className="flex h-10 w-16 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm transition-colors hover:border-green-500/30 hover:bg-white/[0.06]"
+      aria-label="PayPal"
+    >
+      <svg viewBox="0 0 80 20" className="h-4 w-auto" aria-hidden="true">
+        <text
+          x="0"
+          y="15"
+          fontFamily="var(--font-brand), Arial, sans-serif"
+          fontWeight="900"
+          fontSize="16"
+          letterSpacing="-0.5"
+        >
+          <tspan fill="#60a5fa">Pay</tspan>
+          <tspan fill="#3b82f6">Pal</tspan>
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+function StripeBadge() {
+  return (
+    <div
+      className="flex h-10 w-16 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm transition-colors hover:border-green-500/30 hover:bg-white/[0.06]"
+      aria-label="Stripe"
+    >
+      <svg viewBox="0 0 80 20" className="h-4 w-auto" aria-hidden="true">
+        <text
+          x="0"
+          y="15"
+          fontFamily="var(--font-brand), Arial, sans-serif"
+          fontWeight="900"
+          fontSize="16"
+          letterSpacing="-0.5"
+          fill="#a78bfa"
+        >
+          stripe
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+function VisaBadge() {
+  return (
+    <div
+      className="flex h-10 w-16 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm transition-colors hover:border-green-500/30 hover:bg-white/[0.06]"
+      aria-label="Visa"
+    >
+      <svg viewBox="0 0 80 20" className="h-4 w-auto" aria-hidden="true">
+        <text
+          x="0"
+          y="15"
+          fontFamily="var(--font-brand), Arial, sans-serif"
+          fontWeight="900"
+          fontStyle="italic"
+          fontSize="16"
+          letterSpacing="-0.5"
+          fill="#f1f5f9"
+        >
+          VISA
+        </text>
+      </svg>
+    </div>
+  );
+}
+
+function MastercardBadge() {
+  return (
+    <div
+      className="flex h-10 w-16 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm transition-colors hover:border-green-500/30 hover:bg-white/[0.06]"
+      aria-label="Mastercard"
+    >
+      <svg viewBox="0 0 40 24" className="h-5 w-auto" aria-hidden="true">
+        <circle cx="15" cy="12" r="8" fill="#ef4444" opacity="0.9" />
+        <circle cx="25" cy="12" r="8" fill="#f59e0b" opacity="0.9" />
+        <path
+          d="M20 6.5a8 8 0 0 0 0 11 8 8 0 0 0 0-11z"
+          fill="#fb923c"
+          opacity="0.95"
+        />
+      </svg>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Footer
+   ───────────────────────────────────────────────────────────────── */
 
 export function BetsPlugFooter() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  // Lock body scroll when modal is open
-  useEffect(() => {
-    if (modalOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [modalOpen]);
-
-  // Close on ESC
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setModalOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-    setSubmitted(true);
-    // TODO: wire up to backend newsletter endpoint
-    setTimeout(() => {
-      setModalOpen(false);
-      setSubmitted(false);
-      setEmail("");
-    }, 2000);
-  };
-
   return (
-    <>
-      <footer className="relative mx-auto mt-10 max-w-7xl overflow-hidden rounded-t-3xl border border-white/[0.06] border-b-0 bg-gradient-to-b from-white/[0.02] to-transparent px-6 pb-8 pt-16 backdrop-blur-sm">
-        {/* Background grid pattern with radial mask */}
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(74,222,128,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(74,222,128,0.04)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_center,black,transparent_80%)]" />
+    <footer className="relative w-full overflow-hidden pt-16 pb-10">
+      {/* ── Background ── */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[#070a13] to-[#050811]" />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(74,222,128,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.6) 1px, transparent 1px)",
+          backgroundSize: "52px 52px",
+          maskImage:
+            "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+        }}
+      />
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-[15%] top-10 h-[420px] w-[420px] rounded-full bg-green-500/[0.07] blur-[140px]" />
+        <div className="absolute right-[15%] bottom-0 h-[360px] w-[360px] rounded-full bg-emerald-500/[0.05] blur-[120px]" />
+      </div>
 
-        {/* Glow ambient */}
-        <div className="pointer-events-none absolute -top-32 left-1/2 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-green-500/[0.08] blur-[120px]" />
+      <div className="relative z-10 mx-auto max-w-7xl px-6">
+        {/* ═══════════════════════════════════════════════════════════
+            PREMIUM TELEGRAM CTA — glass card (replaces newsletter)
+            ═══════════════════════════════════════════════════════════ */}
+        <div className="relative mb-20 overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] via-white/[0.02] to-white/[0.01] p-8 backdrop-blur-xl md:p-12">
+          {/* Decorative glow */}
+          <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-500/[0.18] blur-[100px]" />
+          <div className="pointer-events-none absolute -left-10 -bottom-20 h-[240px] w-[240px] rounded-full bg-emerald-500/[0.12] blur-[90px]" />
 
-        <div className="relative z-10 mx-auto max-w-6xl">
-          <div className="mb-14 grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-8">
-            {/* Brand column */}
-            <div className="col-span-1 flex flex-col gap-6 md:col-span-5">
-              <Link href="/" className="flex items-center">
-                <img
-                  src="/logo.webp"
-                  alt="BetsPlug"
-                  className="h-14 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)] sm:h-16"
-                />
-              </Link>
+          <div className="relative grid items-center gap-10 md:grid-cols-[1.2fr_1fr]">
+            <div>
+              {/* Badge */}
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-400">
+                <Sparkles className="h-3.5 w-3.5" />
+                Premium access
+              </div>
 
-              <p className="max-w-sm text-sm leading-relaxed text-slate-400">
-                AI-driven sports predictions for serious analysts. Data, models, and insights
-                — united in one platform built for your winning edge.
+              <h3 className="text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
+                Join our <span className="gradient-text">Premium Telegram</span>
+                <br className="hidden sm:block" /> group
+              </h3>
+
+              <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-400">
+                Get real-time picks, edge alerts and live chat with our AI
+                analysts. Be the first to know when a high-value match hits the
+                board — straight in your pocket.
               </p>
 
-              {/* Newsletter CTA trigger */}
-              <div className="mt-2 max-w-sm rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.06] to-transparent p-5 backdrop-blur-sm">
-                <div className="mb-3 flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/15">
-                    <Send className="h-4 w-4 text-green-400" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-white">Exclusive Telegram Tips</p>
-                    <p className="text-xs text-slate-500">Free daily picks & insights</p>
-                  </div>
-                </div>
-                <p className="mb-4 text-xs leading-relaxed text-slate-400">
-                  Join our newsletter to unlock premium tips shared{" "}
-                  <span className="font-semibold text-green-400">only in our private Telegram</span>.
-                </p>
-                <button type="button" onClick={() => setModalOpen(true)} className="w-full">
-                  <GetStartedButton className="w-full">Join Telegram</GetStartedButton>
-                </button>
-              </div>
-            </div>
-
-            {/* Link columns */}
-            {[
-              {
-                title: "Platform",
-                links: [
-                  { label: "Predictions", href: "/predictions" },
-                  { label: "Live Matches", href: "/live" },
-                  { label: "Track Record", href: "/trackrecord" },
-                  { label: "Bet of the Day", href: "/bet-of-the-day" },
-                ],
-              },
-              {
-                title: "Company",
-                links: [
-                  { label: "About", href: "/about" },
-                  { label: "Pricing", href: "/subscriptions" },
-                  { label: "Deals", href: "/deals" },
-                  { label: "Contact", href: "#" },
-                ],
-              },
-              {
-                title: "Connect",
-                links: [
-                  { label: "Telegram", href: "#" },
-                  { label: "Twitter / X", href: "#" },
-                  { label: "Instagram", href: "#" },
-                  { label: "Discord", href: "#" },
-                ],
-              },
-            ].map((section) => (
-              <div
-                key={section.title}
-                className="col-span-1 flex flex-col gap-4 md:col-span-2"
-              >
-                <h4 className="font-mono text-xs font-semibold uppercase tracking-widest text-white/70">
-                  {section.title}
-                </h4>
-                <ul className="flex flex-col gap-3">
-                  {section.links.map((link) => (
-                    <li key={link.label}>
-                      <Link
-                        href={link.href}
-                        className="group flex w-fit items-center gap-2 text-sm text-slate-400 transition-colors hover:text-green-400"
-                      >
-                        <span className="h-1.5 w-1.5 rounded-full bg-slate-600 transition-all duration-200 group-hover:w-4 group-hover:bg-green-400" />
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          {/* Disclaimer */}
-          <div className="mb-6 rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
-            <p className="text-center text-xs leading-relaxed text-slate-500">
-              <span className="font-semibold text-amber-400">Disclaimer:</span> BetsPlug is a data
-              analytics platform. We calculate probabilities using statistical models. This is{" "}
-              <span className="font-semibold text-slate-300">not gambling advice</span>. All
-              outputs are simulated and hypothetical. Always make your own informed decisions.
-            </p>
-          </div>
-
-          {/* Bottom bar */}
-          <div className="flex flex-col items-center justify-between gap-6 border-t border-white/5 pt-8 md:flex-row">
-            <p className="font-mono text-xs text-slate-600">
-              © {new Date().getFullYear()} BETSPLUG // ALL RIGHTS RESERVED
-            </p>
-
-            <div className="flex items-center gap-6">
-              {/* Socials */}
-              <div className="mr-2 flex gap-4 border-r border-white/10 pr-6">
+              {/* Perk bullets */}
+              <ul className="mt-6 grid gap-2 sm:grid-cols-2">
                 {[
-                  { Icon: MessageCircle, href: "#", label: "Telegram" },
-                  { Icon: Twitter, href: "#", label: "Twitter" },
-                  { Icon: Instagram, href: "#", label: "Instagram" },
-                ].map(({ Icon, href, label }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    aria-label={label}
-                    className="text-slate-600 transition-colors hover:text-green-400"
+                  "Instant value alerts",
+                  "Private analyst Q&A",
+                  "Daily free picks",
+                  "VIP-only deep dives",
+                ].map((perk) => (
+                  <li
+                    key={perk}
+                    className="flex items-center gap-2 text-sm text-slate-300"
                   >
-                    <Icon size={18} />
-                  </a>
+                    <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-green-400" />
+                    {perk}
+                  </li>
                 ))}
-              </div>
+              </ul>
 
-              {/* Status */}
-              <div className="flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/5 px-3 py-1">
-                <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" />
-                <span className="text-[10px] font-medium uppercase tracking-wider text-green-400/80">
-                  All Systems Normal
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <a
+                  href="https://t.me/betsplug"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-gradient group inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold shadow-lg shadow-green-500/20"
+                >
+                  <Send className="h-4 w-4" />
+                  Join the Premium Group
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </a>
+                <span className="text-xs font-medium text-slate-500">
+                  Limited spots · Members only
                 </span>
               </div>
             </div>
-          </div>
-        </div>
-      </footer>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          Newsletter Modal
-         ═══════════════════════════════════════════════════════════════════ */}
-      {modalOpen && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in"
-          role="dialog"
-          aria-modal="true"
-        >
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/70 backdrop-blur-md"
-            onClick={() => setModalOpen(false)}
-          />
-
-          {/* Modal content */}
-          <div className="relative w-full max-w-md animate-slide-up overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-[#0d1220] to-[#080b14] p-8 shadow-2xl">
-            {/* Glow */}
-            <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-500/20 blur-[100px]" />
-            <div className="pointer-events-none absolute -left-20 -bottom-20 h-[300px] w-[300px] rounded-full bg-emerald-500/10 blur-[100px]" />
-
-            {/* Close button */}
-            <button
-              type="button"
-              onClick={() => setModalOpen(false)}
-              className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-400 transition-all hover:border-white/20 hover:bg-white/10 hover:text-white"
-              aria-label="Close"
-            >
-              <X size={16} />
-            </button>
-
-            {!submitted ? (
+            {/* Right visual */}
+            <div className="relative hidden md:flex md:justify-end">
               <div className="relative">
-                {/* Icon */}
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-green-500/15 shadow-[0_0_30px_rgba(74,222,128,0.25)]">
-                  <Sparkles className="h-7 w-7 text-green-400" />
-                </div>
-
-                <h3 className="mb-3 text-2xl font-extrabold text-white">
-                  Get Exclusive Tips on{" "}
-                  <span className="gradient-text">Telegram</span>
-                </h3>
-                <p className="mb-6 text-sm leading-relaxed text-slate-400">
-                  Sign up for our newsletter and unlock access to our{" "}
-                  <span className="font-semibold text-white">private Telegram channel</span>{" "}
-                  with exclusive daily picks, live insights, and premium content — all for free.
-                </p>
-
-                {/* Benefits */}
-                <div className="mb-6 space-y-2">
-                  {[
-                    "Daily premium picks straight to your phone",
-                    "Early access to Bet of the Day",
-                    "Live analyst commentary during matches",
-                  ].map((b) => (
-                    <div key={b} className="flex items-start gap-2 text-sm text-slate-300">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
-                      <span>{b}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="your@email.com"
-                      className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white placeholder:text-slate-600 backdrop-blur-sm transition-colors focus:border-green-500/60 focus:outline-none focus:ring-2 focus:ring-green-500/20"
-                    />
+                <div className="absolute inset-0 rotate-6 rounded-3xl bg-green-500/15 blur-xl" />
+                <div className="relative flex h-72 w-72 flex-col items-center justify-center rounded-3xl border border-white/10 bg-gradient-to-br from-[#0d1220] to-[#080b14] p-6 shadow-2xl">
+                  {/* Phone-like mockup */}
+                  <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 shadow-[0_0_30px_rgba(74,222,128,0.5)]">
+                    <Send className="h-7 w-7 text-[#04130a]" strokeWidth={2.5} />
                   </div>
-                  <button type="submit" className="w-full">
-                    <GetStartedButton className="w-full">Join Telegram Channel</GetStartedButton>
-                  </button>
-                </form>
+                  <p className="text-xs font-semibold uppercase tracking-widest text-green-400">
+                    BetsPlug VIP
+                  </p>
+                  <p className="mt-1 text-xl font-extrabold text-white">
+                    Premium Group
+                  </p>
 
-                <p className="mt-4 text-center text-[11px] text-slate-600">
-                  No spam. Unsubscribe anytime.
-                </p>
-              </div>
-            ) : (
-              <div className="relative py-6 text-center">
-                <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/15 shadow-[0_0_40px_rgba(74,222,128,0.4)]">
-                  <CheckCircle2 className="h-8 w-8 text-green-400" />
+                  {/* Mock chat bubbles */}
+                  <div className="mt-5 w-full space-y-2">
+                    <div className="rounded-2xl rounded-bl-sm bg-white/[0.05] px-3 py-2 text-[11px] text-slate-300">
+                      🔥 Value pick: Arsenal ML @ 2.10
+                    </div>
+                    <div className="ml-6 rounded-2xl rounded-br-sm bg-green-500/20 px-3 py-2 text-[11px] text-green-200">
+                      Edge: +6.2% · Confidence 78%
+                    </div>
+                  </div>
+
+                  {/* Live indicator */}
+                  <div className="mt-5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <span className="live-dot" />
+                    1,200+ members online
+                  </div>
                 </div>
-                <h3 className="mb-2 text-2xl font-extrabold text-white">You&apos;re in!</h3>
-                <p className="text-sm text-slate-400">
-                  Check your inbox for the Telegram invite link.
-                </p>
               </div>
-            )}
+            </div>
           </div>
         </div>
-      )}
-    </>
+
+        {/* ═══════════════════════════════════════════════════════════
+            MAIN FOOTER GRID
+            ═══════════════════════════════════════════════════════════ */}
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-4 lg:grid-cols-5">
+          {/* Brand column */}
+          <div className="col-span-2 lg:col-span-2">
+            <Link href="/" className="inline-flex items-center gap-2">
+              <img
+                src="/logo.webp"
+                alt="BetsPlug"
+                className="h-10 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)]"
+              />
+            </Link>
+
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate-400">
+              BetsPlug unites data, Elo ratings, Poisson models and machine
+              learning into one platform — built for serious sports analysts
+              who refuse to guess.
+            </p>
+
+            {/* Contact */}
+            <ul className="mt-6 space-y-2 text-sm">
+              <li className="flex items-center gap-2 text-slate-400">
+                <Mail className="h-4 w-4 text-green-400" />
+                <a
+                  href="mailto:hello@betsplug.com"
+                  className="transition-colors hover:text-white"
+                >
+                  hello@betsplug.com
+                </a>
+              </li>
+              <li className="flex items-center gap-2 text-slate-400">
+                <MapPin className="h-4 w-4 text-green-400" />
+                <span>Amsterdam, Netherlands</span>
+              </li>
+            </ul>
+
+            {/* Socials */}
+            <div className="mt-6 flex items-center gap-3">
+              {socials.map(({ icon: Icon, label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.03] text-slate-400 backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-green-500/10 hover:text-green-400"
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Product */}
+          <div>
+            <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
+              Product
+            </h4>
+            <ul className="space-y-3">
+              {productLinks.map(({ text, href }) => (
+                <li key={text}>
+                  <Link
+                    href={href}
+                    className="text-sm text-slate-400 transition-colors hover:text-green-400"
+                  >
+                    {text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
+              Company
+            </h4>
+            <ul className="space-y-3">
+              {companyLinks.map(({ text, href }) => (
+                <li key={text}>
+                  <Link
+                    href={href}
+                    className="text-sm text-slate-400 transition-colors hover:text-green-400"
+                  >
+                    {text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
+              Legal
+            </h4>
+            <ul className="space-y-3">
+              {legalLinks.map(({ text, href }) => (
+                <li key={text}>
+                  <Link
+                    href={href}
+                    className="text-sm text-slate-400 transition-colors hover:text-green-400"
+                  >
+                    {text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* ═══════════════════════════════════════════════════════════
+            PAYMENT / SECURITY STRIP
+            ═══════════════════════════════════════════════════════════ */}
+        <div className="mt-16 flex flex-col items-center gap-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-6 backdrop-blur-sm md:flex-row md:justify-between">
+          {/* Secure payments label */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/15 ring-1 ring-green-500/30">
+              <ShieldCheck className="h-5 w-5 text-green-400" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white">Secure payments</p>
+              <p className="flex items-center gap-1 text-xs text-slate-500">
+                <Lock className="h-3 w-3" />
+                256-bit SSL encrypted checkout
+              </p>
+            </div>
+          </div>
+
+          {/* Payment badges */}
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <PayPalBadge />
+            <StripeBadge />
+            <VisaBadge />
+            <MastercardBadge />
+          </div>
+
+          {/* Trust seal */}
+          <div className="flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/[0.06] px-4 py-2">
+            <span className="live-dot" />
+            <span className="text-xs font-bold uppercase tracking-wider text-green-400">
+              PCI DSS compliant
+            </span>
+          </div>
+        </div>
+
+        {/* ═══════════════════════════════════════════════════════════
+            BOTTOM BAR
+            ═══════════════════════════════════════════════════════════ */}
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-6 md:flex-row">
+          <p className="text-xs text-slate-500">
+            © {new Date().getFullYear()} BetsPlug. All rights reserved.
+            BetsPlug is a data & analytics platform — not a gambling operator.
+          </p>
+          <div className="flex items-center gap-5">
+            {bottomLinks.map(({ text, href }) => (
+              <Link
+                key={text}
+                href={href}
+                className="text-xs text-slate-500 transition-colors hover:text-green-400"
+              >
+                {text}
+              </Link>
+            ))}
+            <div className="hidden items-center gap-1.5 rounded-full bg-white/[0.03] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 md:flex">
+              <MessageCircle className="h-3 w-3 text-green-400" />
+              18+ Play responsibly
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
   );
 }
