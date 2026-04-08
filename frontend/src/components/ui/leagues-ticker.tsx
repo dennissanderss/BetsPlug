@@ -32,30 +32,51 @@ export function LeaguesTicker() {
 
   return (
     <section
-      className="relative overflow-hidden border-y border-white/[0.06] py-14 md:py-16"
+      className="relative overflow-hidden py-16 md:py-20"
       aria-labelledby="leagues-heading"
     >
-      {/* Background ambience */}
+      {/* ── Unique background ─────────────────────────────────────────── */}
+      {/* Base gradient */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14] via-[#0a1018] to-[#080b14]" />
+
+      {/* Diagonal striped pattern */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(135deg, rgba(74,222,128,0.8) 0 1px, transparent 1px 18px)",
+        }}
+      />
+
+      {/* Soft radial glows — asymmetric (different from hero) */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/2 h-[260px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500/[0.04] blur-[100px]" />
+        <div className="absolute left-[15%] top-0 h-[380px] w-[380px] rounded-full bg-emerald-500/[0.06] blur-[120px]" />
+        <div className="absolute right-[10%] bottom-0 h-[320px] w-[320px] rounded-full bg-green-500/[0.05] blur-[110px]" />
       </div>
-      <div className="pointer-events-none absolute inset-0 grid-bg opacity-20" />
+
+      {/* Thin green top/bottom accent lines */}
+      <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-green-500/30 to-transparent" />
+      <div className="pointer-events-none absolute left-0 right-0 bottom-0 h-px bg-gradient-to-r from-transparent via-green-500/30 to-transparent" />
 
       {/* Title */}
-      <div className="relative z-10 mb-10 text-center">
-        <span
-          id="leagues-heading"
-          className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-slate-500"
-        >
-          Leagues We Cover
+      <div className="relative z-10 mb-12 text-center">
+        <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
+          Global Coverage
         </span>
+        <h2
+          id="leagues-heading"
+          className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl"
+        >
+          Leagues We{" "}
+          <span className="gradient-text">Cover</span>
+        </h2>
       </div>
 
       {/* Ticker */}
       <div className="relative">
         {/* Gradient masks on the sides */}
-        <div className="pointer-events-none absolute left-0 top-0 z-20 h-full w-16 bg-gradient-to-r from-[#0d1220] to-transparent sm:w-32" />
-        <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-16 bg-gradient-to-l from-[#0d1220] to-transparent sm:w-32" />
+        <div className="pointer-events-none absolute left-0 top-0 z-20 h-full w-16 bg-gradient-to-r from-[#0a1018] to-transparent sm:w-32" />
+        <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-16 bg-gradient-to-l from-[#0a1018] to-transparent sm:w-32" />
 
         <div className="overflow-hidden">
           <motion.div
