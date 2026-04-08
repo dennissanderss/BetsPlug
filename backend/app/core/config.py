@@ -82,6 +82,7 @@ class Settings(BaseSettings):
     # Sports Data APIs
     football_data_api_key: str = ""   # football-data.org (free, 10 req/min)
     api_football_key: str = ""        # api-football.com (free, 100 req/day)
+    the_odds_api_key: str = ""        # the-odds-api.com (free, 500 req/month)
 
     # Reports
     reports_output_dir: str = "/app/reports"
