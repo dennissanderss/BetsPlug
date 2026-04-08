@@ -104,7 +104,7 @@ export default function LandingPage() {
           <Link href="/" className="flex items-center">
             <img
               src="/logo.webp"
-              alt="Betsplug"
+              alt="BetsPlug"
               className={`w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)] transition-all duration-300 ${
                 isScrolled
                   ? "h-8 sm:h-10 md:h-12 lg:h-14"
@@ -200,7 +200,7 @@ export default function LandingPage() {
             <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center">
               <img
                 src="/logo.webp"
-                alt="Betsplug"
+                alt="BetsPlug"
                 className="h-12 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)]"
               />
             </Link>
@@ -305,7 +305,7 @@ export default function LandingPage() {
               </h1>
 
               <p className="mt-8 max-w-xl text-lg leading-relaxed text-slate-400">
-                Betsplug unites data, Elo ratings, Poisson models and machine learning
+                BetsPlug unites data, Elo ratings, Poisson models and machine learning
                 into one platform. Live probabilities, deep insights, proven track record —
                 built for serious sports analysts.
               </p>
@@ -457,7 +457,7 @@ export default function LandingPage() {
               </h2>
             </div>
             <p className="text-base leading-relaxed text-slate-400">
-              Betsplug unites and secures a growing ecosystem of data sources, AI models,
+              BetsPlug unites and secures a growing ecosystem of data sources, AI models,
               and proven strategies. One platform for data-driven sports analysts who refuse
               to guess.
             </p>
@@ -623,7 +623,7 @@ export default function LandingPage() {
               </p>
 
               <p className="mt-4 text-base leading-relaxed text-slate-400">
-                Whether you follow football, basketball, or tennis, Betsplug unites data and
+                Whether you follow football, basketball, or tennis, BetsPlug unites data and
                 machine learning into insights you can actually use.
               </p>
 
@@ -726,7 +726,7 @@ export default function LandingPage() {
                 today.
               </h2>
               <p className="mx-auto mt-5 max-w-xl text-base text-slate-400">
-                Join thousands of sports analysts who use Betsplug&apos;s AI-driven predictions.
+                Join thousands of sports analysts who use BetsPlug&apos;s AI-driven predictions.
                 Free trial — no credit card required.
               </p>
 

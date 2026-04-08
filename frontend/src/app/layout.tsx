@@ -4,7 +4,7 @@ import "./globals.css";
 import { AppProviders } from "@/components/layout/providers";
 
 export const metadata: Metadata = {
-  title: "Betsplug - AI-Powered Sports Analytics",
+  title: "BetsPlug - AI-Powered Sports Analytics",
   description: "Premium AI-powered sports analytics. Data-driven predictions, live match tracking, and deep performance insights.",
   icons: {
     icon: [

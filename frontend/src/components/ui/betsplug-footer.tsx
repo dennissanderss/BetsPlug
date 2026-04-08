@@ -67,7 +67,7 @@ export function BetsPlugFooter() {
               <Link href="/" className="flex items-center">
                 <img
                   src="/logo.webp"
-                  alt="Betsplug"
+                  alt="BetsPlug"
                   className="h-14 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)] sm:h-16"
                 />
               </Link>
@@ -155,7 +155,7 @@ export function BetsPlugFooter() {
           {/* Disclaimer */}
           <div className="mb-6 rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
             <p className="text-center text-xs leading-relaxed text-slate-500">
-              <span className="font-semibold text-amber-400">Disclaimer:</span> Betsplug is a data
+              <span className="font-semibold text-amber-400">Disclaimer:</span> BetsPlug is a data
               analytics platform. We calculate probabilities using statistical models. This is{" "}
               <span className="font-semibold text-slate-300">not gambling advice</span>. All
               outputs are simulated and hypothetical. Always make your own informed decisions.

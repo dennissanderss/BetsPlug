@@ -20,7 +20,7 @@ const pillars = [
   {
     icon: LineChart,
     title: "Data-Backed Betting Predictions",
-    text: "Every AI betting prediction on Betsplug is backed by thousands of historical matches, live form data, and expected-goals metrics — giving you the sharpest sports picks online.",
+    text: "Every AI betting prediction on BetsPlug is backed by thousands of historical matches, live form data, and expected-goals metrics — giving you the sharpest sports picks online.",
   },
   {
     icon: Trophy,
@@ -40,26 +40,26 @@ const pillars = [
   {
     icon: ShieldCheck,
     title: "Analytics, Not Gambling",
-    text: "Betsplug is a sports analytics platform — not a bookmaker. We deliver AI-driven sports predictions and data insights so you can make informed decisions, without ever placing a bet on our site.",
+    text: "BetsPlug is a sports analytics platform — not a bookmaker. We deliver AI-driven sports predictions and data insights so you can make informed decisions, without ever placing a bet on our site.",
   },
 ];
 
 const faqs = [
   {
     q: "What is an AI sports prediction platform?",
-    a: "An AI sports prediction platform uses machine learning models, historical data, and statistical engines (like Elo and Poisson) to forecast the most likely outcome of sporting events. Betsplug is built as a pure analytics tool — we show you the numbers, probabilities and expected value, so you can decide which bets to place with a bookmaker of your choice.",
+    a: "An AI sports prediction platform uses machine learning models, historical data, and statistical engines (like Elo and Poisson) to forecast the most likely outcome of sporting events. BetsPlug is built as a pure analytics tool — we show you the numbers, probabilities and expected value, so you can decide which bets to place with a bookmaker of your choice.",
   },
   {
     q: "How accurate are AI sports betting predictions?",
     a: "Accuracy depends on the sport, the market and the model. Our AI betting predictions are continuously benchmarked against closing lines and logged in our public track record. You can see the exact hit-rate, ROI and confidence distribution of every model we run — no cherry-picking, no hidden losses.",
   },
   {
-    q: "Is Betsplug a betting or gambling website?",
-    a: "No. Betsplug is a data analytics platform for sports fans, traders and researchers. We provide AI sports predictions, statistics and insights. You cannot gamble, deposit or place bets on Betsplug — we exist to inform your decisions, not to take them.",
+    q: "Is BetsPlug a betting or gambling website?",
+    a: "No. BetsPlug is a data analytics platform for sports fans, traders and researchers. We provide AI sports predictions, statistics and insights. You cannot gamble, deposit or place bets on BetsPlug — we exist to inform your decisions, not to take them.",
   },
   {
     q: "Can I use AI for sports betting research?",
-    a: "Absolutely. Thousands of data-driven bettors use Betsplug as their research layer: compare our AI predictions against bookmaker odds, filter by confidence, backtest strategies, and identify value bets before the market corrects.",
+    a: "Absolutely. Thousands of data-driven bettors use BetsPlug as their research layer: compare our AI predictions against bookmaker odds, filter by confidence, backtest strategies, and identify value bets before the market corrects.",
   },
   {
     q: "Which sports does the AI predictor cover?",
@@ -103,7 +103,7 @@ export function SeoSection() {
             <span className="gradient-text">Data-Driven Betting Picks</span>
           </h2>
           <p className="mt-5 text-base leading-relaxed text-slate-400 sm:text-lg">
-            Betsplug is the data-driven home for{" "}
+            BetsPlug is the data-driven home for{" "}
             <strong className="text-slate-200">AI sports predictions</strong>,
             machine-learning betting picks and statistical match forecasts.
             Whether you&apos;re researching your next football accumulator,
@@ -159,7 +159,7 @@ export function SeoSection() {
               <strong className="text-slate-200">
                 best sports prediction website
               </strong>
-              , you&apos;ve landed in the right place. Betsplug blends
+              , you&apos;ve landed in the right place. BetsPlug blends
               artificial intelligence, machine learning and decades of
               statistical modeling into a single platform that tells you which
               bets carry real value — and which ones are traps set by the
@@ -172,7 +172,7 @@ export function SeoSection() {
               AI Betting Predictions Powered by Real Math
             </h4>
             <p className="mt-3 text-base leading-relaxed text-slate-400">
-              Behind every Betsplug pick is a combination of{" "}
+              Behind every BetsPlug pick is a combination of{" "}
               <strong className="text-slate-200">Elo ratings</strong>,{" "}
               <strong className="text-slate-200">Poisson goal models</strong>{" "}
               and{" "}
@@ -240,7 +240,7 @@ export function SeoSection() {
               Data Insights, Not Gambling Advice
             </h4>
             <p className="mt-3 text-base leading-relaxed text-slate-400">
-              A crucial note: Betsplug is{" "}
+              A crucial note: BetsPlug is{" "}
               <strong className="text-slate-200">
                 not a bookmaker and not a gambling site
               </strong>

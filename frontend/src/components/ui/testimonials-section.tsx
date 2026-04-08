@@ -5,7 +5,7 @@ import { TestimonialsColumn, type Testimonial } from "@/components/ui/testimonia
 
 const testimonials: Testimonial[] = [
   {
-    text: "Betsplug completely changed how I approach football predictions. The Elo and Poisson models give me an edge I never had before. I've tripled my hit-rate in three months.",
+    text: "BetsPlug completely changed how I approach football predictions. The Elo and Poisson models give me an edge I never had before. I've tripled my hit-rate in three months.",
     image: "https://randomuser.me/api/portraits/men/32.jpg",
     name: "Lucas van Dijk",
     role: "Semi-pro Bettor",
@@ -17,7 +17,7 @@ const testimonials: Testimonial[] = [
     role: "Data Analyst",
   },
   {
-    text: "As a data nerd, I love that Betsplug shows the math behind every pick. Confidence scores, Elo deltas, edge percentages — it's like having a quant desk in my pocket.",
+    text: "As a data nerd, I love that BetsPlug shows the math behind every pick. Confidence scores, Elo deltas, edge percentages — it's like having a quant desk in my pocket.",
     image: "https://randomuser.me/api/portraits/men/52.jpg",
     name: "Mark Jansen",
     role: "Sports Trader",
@@ -29,7 +29,7 @@ const testimonials: Testimonial[] = [
     role: "Casual Bettor",
   },
   {
-    text: "Running my own tipping community used to take hours of research. Betsplug gives me data-backed insights in seconds. My subscribers have never been happier.",
+    text: "Running my own tipping community used to take hours of research. BetsPlug gives me data-backed insights in seconds. My subscribers have never been happier.",
     image: "https://randomuser.me/api/portraits/men/23.jpg",
     name: "Daniel Kowalski",
     role: "Tipster & Content Creator",
@@ -47,7 +47,7 @@ const testimonials: Testimonial[] = [
     role: "Quant Bettor",
   },
   {
-    text: "The Telegram tips are pure gold. Clean, concise, and the hit-rate speaks for itself. Best decision I made this season was signing up for Betsplug.",
+    text: "The Telegram tips are pure gold. Clean, concise, and the hit-rate speaks for itself. Best decision I made this season was signing up for BetsPlug.",
     image: "https://randomuser.me/api/portraits/women/29.jpg",
     name: "Chloe Dubois",
     role: "Subscriber",
@@ -89,7 +89,7 @@ export const TestimonialsSection = () => {
             What our <span className="gradient-text">analysts</span> say
           </h2>
           <p className="mt-5 text-base text-slate-400">
-            Join 1,500+ data-driven bettors who trust Betsplug for their edge over the bookmakers.
+            Join 1,500+ data-driven bettors who trust BetsPlug for their edge over the bookmakers.
           </p>
         </motion.div>
 
