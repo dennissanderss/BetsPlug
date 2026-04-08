@@ -300,15 +300,15 @@ export function BetsPlugFooter() {
               <li className="flex items-center gap-2 text-slate-400">
                 <Mail className="h-4 w-4 text-green-400" />
                 <a
-                  href="mailto:hello@betsplug.com"
+                  href="mailto:support@betsplug.com"
                   className="transition-colors hover:text-white"
                 >
-                  hello@betsplug.com
+                  support@betsplug.com
                 </a>
               </li>
               <li className="flex items-center gap-2 text-slate-400">
                 <MapPin className="h-4 w-4 text-green-400" />
-                <span>Amsterdam, Netherlands</span>
+                <span>Netherlands</span>
               </li>
             </ul>
 
