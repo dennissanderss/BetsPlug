@@ -27,6 +27,7 @@ import { TestimonialsSection } from "@/components/ui/testimonials-section";
 import { SocialProofPopup } from "@/components/ui/social-proof-popup";
 import { SeoSection } from "@/components/ui/seo-section";
 import { FloatingSports } from "@/components/ui/floating-sports";
+import { LeaguesTicker } from "@/components/ui/leagues-ticker";
 
 // ─── Animated counter ────────────────────────────────────────────────────────
 
@@ -445,6 +446,11 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          LEAGUES WE COVER — infinite ticker
+         ═══════════════════════════════════════════════════════════════════ */}
+      <LeaguesTicker />
 
       {/* ═══════════════════════════════════════════════════════════════════
           TRUSTED PARTNER SECTION — 3 cards with middle highlighted
