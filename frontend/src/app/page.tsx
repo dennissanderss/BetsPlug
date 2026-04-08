@@ -20,6 +20,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { GetStartedButton } from "@/components/ui/get-started-button";
+import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 
 // ─── Animated counter ────────────────────────────────────────────────────────
 
@@ -595,47 +596,7 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════════════════════════════════
           FOOTER
          ═══════════════════════════════════════════════════════════════════ */}
-      <footer className="border-t border-white/[0.06] py-12">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            <div className="flex items-center gap-3">
-              <img
-                src="/logo.webp"
-                alt="Betsplug"
-                className="h-10 sm:h-12 md:h-16 w-auto drop-shadow-[0_0_12px_rgba(74,222,128,0.3)]"
-              />
-            </div>
-
-            <div className="flex items-center gap-8">
-              <Link href="/about" className="text-sm text-slate-500 hover:text-green-400 transition-colors">
-                About
-              </Link>
-              <Link href="/subscriptions" className="text-sm text-slate-500 hover:text-green-400 transition-colors">
-                Pricing
-              </Link>
-              <Link href="/predictions" className="text-sm text-slate-500 hover:text-green-400 transition-colors">
-                Predictions
-              </Link>
-              <Link href="/trackrecord" className="text-sm text-slate-500 hover:text-green-400 transition-colors">
-                Track Record
-              </Link>
-            </div>
-
-            <p className="text-xs text-slate-600">
-              &copy; {new Date().getFullYear()} Betsplug. All rights reserved.
-            </p>
-          </div>
-
-          <div className="mt-8 rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4 text-center">
-            <p className="text-xs leading-relaxed text-slate-500">
-              <span className="font-semibold text-amber-400">Disclaimer:</span> Betsplug is a data
-              analytics platform. We calculate probabilities using statistical models. This is{" "}
-              <span className="font-semibold text-slate-300">not gambling advice</span>. All outputs
-              are simulated and hypothetical. Always make your own informed decisions.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <BetsPlugFooter />
     </div>
   );
 }
