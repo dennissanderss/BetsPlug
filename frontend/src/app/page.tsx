@@ -34,6 +34,36 @@ import { PricingSection } from "@/components/ui/pricing-section";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
+// ─── Featured match data ─────────────────────────────────────────────────────
+
+interface FeaturedMatch {
+  available: boolean;
+  home_team: string | null;
+  away_team: string | null;
+  league: string | null;
+  kickoff: string | null;
+  pick: string | null;
+  home_win_prob: number | null;
+  draw_prob: number | null;
+  away_win_prob: number | null;
+  confidence: number | null;
+  elo_diff: number | null;
+  edge: number | null;
+  label: string | null;
+}
+
+function useFeaturedMatch() {
+  const [data, setData] = useState<FeaturedMatch | null>(null);
+  useEffect(() => {
+    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+    fetch(`${API}/homepage/featured-match`)
+      .then((r) => r.json())
+      .then((d) => setData(d))
+      .catch(() => setData(null));
+  }, []);
+  return data;
+}
+
 // ─── Animated counter ────────────────────────────────────────────────────────
 
 function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: string }) {
@@ -69,6 +99,7 @@ export default function LandingPage() {
   const loc = useLocalizedHref();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const featured = useFeaturedMatch();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -388,7 +419,7 @@ export default function LandingPage() {
                       <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                         {t("hero.livePick")}
                       </p>
-                      <p className="mt-1 text-xl font-extrabold text-white">Arsenal vs Chelsea</p>
+                      <p className="mt-1 text-xl font-extrabold text-white">{featured?.available ? `${featured.home_team} vs ${featured.away_team}` : "Arsenal vs Chelsea"}</p>
                     </div>
                     <span className="flex items-center gap-1.5 rounded-full bg-green-500/15 px-3 py-1 text-[10px] font-bold uppercase text-green-400">
                       <Sparkles className="h-3 w-3" /> {t("hero.hot")}
@@ -398,23 +429,23 @@ export default function LandingPage() {
                   <div className="mb-4 rounded-2xl border border-white/5 bg-black/30 p-4">
                     <div className="mb-2 flex items-baseline justify-between">
                       <span className="text-sm text-slate-400">{t("hero.homeWin")}</span>
-                      <span className="text-2xl font-extrabold text-green-400">52%</span>
+                      <span className="text-2xl font-extrabold text-green-400">{featured?.available ? `${Math.round((featured.home_win_prob ?? 0.52) * 100)}%` : "52%"}</span>
                     </div>
                     <div className="h-2 w-full overflow-hidden rounded-full bg-white/[0.06]">
-                      <div className="h-full w-[52%] rounded-full bg-gradient-to-r from-green-400 to-emerald-400 shadow-[0_0_12px_rgba(74,222,128,0.6)]" />
+                      <div className="h-full rounded-full bg-gradient-to-r from-green-400 to-emerald-400 shadow-[0_0_12px_rgba(74,222,128,0.6)]" style={{ width: `${featured?.available ? Math.round((featured.home_win_prob ?? 0.52) * 100) : 52}%` }} />
                     </div>
                     <div className="mt-3 flex gap-2 text-xs text-slate-500">
-                      <span>{t("hero.draw")} 24%</span>
+                      <span>{t("hero.draw")} {featured?.available ? `${Math.round((featured.draw_prob ?? 0.24) * 100)}%` : "24%"}</span>
                       <span>·</span>
-                      <span>{t("hero.away")} 24%</span>
+                      <span>{t("hero.away")} {featured?.available ? `${Math.round((featured.away_win_prob ?? 0.24) * 100)}%` : "24%"}</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { label: t("hero.confidence"), value: "78%" },
-                      { label: "Elo Δ", value: "+24" },
-                      { label: t("hero.edge"), value: "+6.2%" },
+                      { label: t("hero.confidence"), value: featured?.available ? `${Math.round((featured.confidence ?? 0.78) * 100)}%` : "78%" },
+                      { label: "Elo Δ", value: featured?.available && featured.elo_diff != null ? `${featured.elo_diff > 0 ? "+" : ""}${featured.elo_diff}` : "+24" },
+                      { label: t("hero.edge"), value: featured?.available ? `+${((featured.edge ?? 0.062) * 100).toFixed(1)}%` : "+6.2%" },
                     ].map((s) => (
                       <div
                         key={s.label}

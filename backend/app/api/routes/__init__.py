@@ -23,6 +23,7 @@ from app.api.routes.admin_users import router as admin_users_router
 from app.api.routes.admin_settings import router as admin_settings_router
 from app.api.routes.admin_seo import router as admin_seo_router
 from app.api.routes.admin_backfill import router as admin_backfill_router
+from app.api.routes.homepage import router as homepage_router
 
 router = APIRouter()
 
@@ -49,3 +50,4 @@ router.include_router(admin_users_router, prefix="/admin/users", tags=["admin-us
 router.include_router(admin_settings_router, prefix="/admin/settings", tags=["admin-settings"])
 router.include_router(admin_seo_router, prefix="/admin/seo", tags=["admin-seo"])
 router.include_router(admin_backfill_router, prefix="/admin", tags=["admin-backfill"])
+router.include_router(homepage_router, prefix="/homepage", tags=["homepage"])
