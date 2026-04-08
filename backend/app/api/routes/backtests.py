@@ -26,30 +26,38 @@ async def start_backtest(
     db: AsyncSession = Depends(get_db),
 ) -> BacktestRunResponse:
     """
-    Create a BacktestRun record and enqueue the computation.
-
-    Returns the run record with status='running'.
-
-    # TODO: delegate actual backtest computation to Celery task / service layer
+    Run a walk-forward backtest for the specified model, sport, and date range.
+    Returns the completed run with aggregate metrics.
     """
-    new_run = BacktestRun(
-        model_version_id=payload.model_version_id,
-        name=payload.name,
-        sport_slug=payload.sport_slug,
-        league_slug=payload.league_slug,
-        start_date=payload.start_date,
-        end_date=payload.end_date,
-        config=payload.config,
-        status="running",
-        ran_at=datetime.now(timezone.utc),
-    )
-    db.add(new_run)
-    await db.flush()
-    await db.refresh(new_run)
+    from app.backtesting.backtest_service import BacktestService
 
-    # TODO: enqueue celery task: run_backtest.delay(str(new_run.id))
+    config = {
+        "model_version_id": str(payload.model_version_id),
+        "sport_slug": payload.sport_slug,
+        "league_slug": payload.league_slug,
+        "start_date": payload.start_date.isoformat() if payload.start_date else None,
+        "end_date": payload.end_date.isoformat() if payload.end_date else None,
+        "name": payload.name,
+        **(payload.config or {}),
+    }
 
-    return BacktestRunResponse.model_validate(new_run)
+    try:
+        service = BacktestService()
+        run = await service.run_backtest(config, db)
+        await db.commit()
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc),
+        )
+    except Exception as exc:
+        await db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Backtest failed: {exc}",
+        )
+
+    return BacktestRunResponse.model_validate(run)
 
 
 @router.get(
