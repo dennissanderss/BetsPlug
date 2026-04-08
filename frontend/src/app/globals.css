@@ -5,9 +5,8 @@
 /* ═══════════════════════════════════════════════════════════════════
    Brand typeface
    ─────────────────────────────────────────────────────────────────
-   Manrope — open-source geometric-humanist sans loaded via
-   next/font/google. Exposed as the CSS variable --font-brand from
-   src/app/layout.tsx.
+   Poppins — open-source geometric sans loaded via next/font/google.
+   Exposed as the CSS variable --font-brand from src/app/layout.tsx.
    ═══════════════════════════════════════════════════════════════════ */
 
 @layer base {
@@ -117,7 +116,7 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* ── Headings — Manrope Bold ── */
+  /* ── Headings — Poppins Bold ── */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-brand), system-ui, -apple-system, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif;
