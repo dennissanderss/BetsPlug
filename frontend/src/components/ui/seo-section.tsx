@@ -51,7 +51,15 @@ const pillars = [
   },
 ];
 
-const faqCategories = [
+type FaqItem = { q: string; a: string };
+type FaqCategory = {
+  id: string;
+  label: string;
+  icon: typeof Rocket;
+  items: FaqItem[];
+};
+
+const faqCategories: FaqCategory[] = [
   {
     id: "getting-started",
     label: "Getting Started",
@@ -128,10 +136,10 @@ const faqCategories = [
       },
     ],
   },
-] as const;
+];
 
 // Flat list for Schema.org JSON-LD
-const faqs = faqCategories.flatMap((c) => c.items);
+const faqs: FaqItem[] = faqCategories.flatMap((c) => c.items);
 
 export function SeoSection() {
   return (
