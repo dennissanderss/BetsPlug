@@ -23,7 +23,14 @@ async def lifespan(app: FastAPI):
     except Exception as exc:
         import logging
         logging.getLogger(__name__).warning("Auto-migration skipped: %s", exc)
+
+    # Start background scheduler (data sync + prediction generation)
+    from app.services.scheduler import start_scheduler, stop_scheduler
+    start_scheduler()
+
     yield
+
+    stop_scheduler()
 
 
 def create_app() -> FastAPI:
