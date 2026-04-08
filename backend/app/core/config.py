@@ -4,12 +4,13 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     # Application
-    app_name: str = "Sports Intelligence Platform"
-    app_version: str = "1.0.0"
+    app_name: str = "BetsPlug"
+    app_version: str = "2.0.0"
     debug: bool = False
     log_level: str = "INFO"
 
-    # Database
+    # Database - supports both Docker (individual vars) and production (full URL)
+    database_url_override: str = ""  # Set DATABASE_URL for production (Supabase etc.)
     postgres_host: str = "db"
     postgres_port: int = 5432
     postgres_db: str = "sports_intelligence"
@@ -18,6 +19,12 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self) -> str:
+        if self.database_url_override:
+            url = self.database_url_override
+            # Convert postgresql:// to postgresql+asyncpg://
+            if url.startswith("postgresql://"):
+                return url.replace("postgresql://", "postgresql+asyncpg://", 1)
+            return url
         return (
             f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}"
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
@@ -25,6 +32,14 @@ class Settings(BaseSettings):
 
     @property
     def database_url_sync(self) -> str:
+        if self.database_url_override:
+            url = self.database_url_override
+            # Convert to psycopg2 format
+            if url.startswith("postgresql://"):
+                return url.replace("postgresql://", "postgresql+psycopg2://", 1)
+            if "asyncpg" in url:
+                return url.replace("asyncpg", "psycopg2")
+            return url
         return (
             f"postgresql+psycopg2://{self.postgres_user}:{self.postgres_password}"
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
