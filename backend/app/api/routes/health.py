@@ -54,7 +54,8 @@ async def health_check() -> dict:
         checks["redis"] = "error"
 
     # --- Sports API config check ---
-    checks["sports_api"] = "configured" if settings.football_data_api_key else "missing"
+    has_api = bool(settings.api_football_key or settings.football_data_api_key)
+    checks["sports_api"] = "configured" if has_api else "missing"
 
     # --- Overall status ---
     if checks["database"] == "error":
