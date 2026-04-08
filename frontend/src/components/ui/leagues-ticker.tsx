@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 type League = {
   name: string;
   slug: string;
+  ext?: "png" | "svg";
 };
 
 const leagues: League[] = [
@@ -21,7 +22,7 @@ const leagues: League[] = [
   { name: "Brasileirão", slug: "brazil-serie-a" },
   { name: "Allsvenskan", slug: "allsvenskan" },
   { name: "NBA", slug: "nba" },
-  { name: "NFL", slug: "nfl" },
+  { name: "NFL", slug: "nfl", ext: "svg" },
   { name: "MLB", slug: "mlb" },
   { name: "NHL", slug: "nhl" },
 ];
@@ -96,9 +97,9 @@ export function LeaguesTicker() {
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={`/leagues/${league.slug}.png`}
+                  src={`/leagues/${league.slug}.${league.ext ?? "png"}`}
                   alt={league.name}
-                  className="h-full w-auto max-w-[120px] object-contain opacity-70 grayscale transition-all duration-300 group-hover:scale-110 group-hover:opacity-100 group-hover:grayscale-0 sm:max-w-[140px] md:max-w-[160px]"
+                  className="h-full w-auto max-w-[120px] object-contain opacity-90 drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)] transition-all duration-300 group-hover:scale-110 group-hover:opacity-100 sm:max-w-[140px] md:max-w-[160px]"
                   loading="lazy"
                 />
               </div>
