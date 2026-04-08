@@ -198,7 +198,7 @@ export default function LandingPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#0a0e1a]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-1">
           <Link href="/" className="flex items-center">
-            <img src="/logo.webp" alt="Betsplug" className="h-20 md:h-24 w-auto drop-shadow-[0_0_20px_rgba(16,185,129,0.4)]" />
+            <img src="/logo.webp" alt="Betsplug" className="h-10 sm:h-14 md:h-20 lg:h-24 w-auto drop-shadow-[0_0_20px_rgba(16,185,129,0.4)]" />
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">
@@ -541,7 +541,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
             <div className="flex items-center gap-3">
-              <img src="/logo.webp" alt="Betsplug" className="h-16 w-auto drop-shadow-[0_0_12px_rgba(16,185,129,0.3)]" />
+              <img src="/logo.webp" alt="Betsplug" className="h-10 sm:h-12 md:h-16 w-auto drop-shadow-[0_0_12px_rgba(16,185,129,0.3)]" />
             </div>
 
             <div className="flex items-center gap-8">
