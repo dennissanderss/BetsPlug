@@ -15,33 +15,11 @@ import {
   Sparkles,
   CheckCircle2,
 } from "lucide-react";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 /* ─────────────────────────────────────────────────────────────────
    Footer data
    ───────────────────────────────────────────────────────────────── */
-
-const productLinks = [
-  { text: "Predictions", href: "#predictions" },
-  { text: "Track Record", href: "#track-record" },
-  { text: "How It Works", href: "#how-it-works" },
-  { text: "Pricing", href: "#pricing" },
-  { text: "Comparison", href: "#comparison" },
-];
-
-const companyLinks = [
-  { text: "About Us", href: "/about" },
-  { text: "Our Models", href: "/about#models" },
-  { text: "Blog", href: "/blog" },
-  { text: "Careers", href: "/careers" },
-  { text: "Contact", href: "/support" },
-];
-
-const legalLinks = [
-  { text: "Terms of Service", href: "/terms" },
-  { text: "Privacy Policy", href: "/privacy" },
-  { text: "Cookie Settings", href: "/cookies" },
-  { text: "Responsible Play", href: "/responsible-play" },
-];
 
 const bottomLinks = [
   { text: "Privacy", href: "/privacy" },
@@ -154,6 +132,30 @@ function MastercardBadge() {
    ───────────────────────────────────────────────────────────────── */
 
 export function BetsPlugFooter() {
+  const { t } = useTranslations();
+  const loc = useLocalizedHref();
+
+  const productLinksT = [
+    { text: t("nav.predictions"), href: "#predictions" },
+    { text: t("nav.trackRecord"), href: "#track-record" },
+    { text: t("nav.howItWorks"), href: "#how-it-works" },
+    { text: t("nav.pricing"), href: "#pricing" },
+    { text: "Comparison", href: "#comparison" },
+  ];
+  const companyLinksT = [
+    { text: "About Us", href: loc("/about") },
+    { text: "Our Models", href: loc("/about") + "#models" },
+    { text: "Blog", href: "/blog" },
+    { text: "Careers", href: "/careers" },
+    { text: "Contact", href: loc("/support") },
+  ];
+  const legalLinksT = [
+    { text: "Terms of Service", href: "/terms" },
+    { text: "Privacy Policy", href: "/privacy" },
+    { text: "Cookie Settings", href: "/cookies" },
+    { text: "Responsible Play", href: "/responsible-play" },
+  ];
+
   return (
     <footer className="relative w-full overflow-hidden pt-16 pb-10">
       {/* ── Background ── */}
@@ -189,27 +191,26 @@ export function BetsPlugFooter() {
               {/* Badge */}
               <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-400">
                 <Sparkles className="h-3.5 w-3.5" />
-                Premium access
+                {t("footer.premiumBadge")}
               </div>
 
               <h3 className="text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
-                Join our <span className="gradient-text">Premium Telegram</span>
-                <br className="hidden sm:block" /> group
+                {t("footer.premiumTitleA")}{" "}
+                <span className="gradient-text">{t("footer.premiumTitleB")}</span>
+                <br className="hidden sm:block" /> {t("footer.premiumTitleC")}
               </h3>
 
               <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-400">
-                Get real-time picks, edge alerts and live chat with our AI
-                analysts. Be the first to know when a high-value match hits the
-                board — straight in your pocket.
+                {t("footer.premiumSubtitle")}
               </p>
 
               {/* Perk bullets */}
               <ul className="mt-6 grid gap-2 sm:grid-cols-2">
                 {[
-                  "Instant value alerts",
-                  "Private analyst Q&A",
-                  "Daily free picks",
-                  "VIP-only deep dives",
+                  t("footer.perk1"),
+                  t("footer.perk2"),
+                  t("footer.perk3"),
+                  t("footer.perk4"),
                 ].map((perk) => (
                   <li
                     key={perk}
@@ -229,11 +230,11 @@ export function BetsPlugFooter() {
                   className="btn-gradient group inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold shadow-lg shadow-green-500/20"
                 >
                   <Send className="h-4 w-4" />
-                  Join the Premium Group
+                  {t("footer.joinCta")}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </a>
                 <span className="text-xs font-medium text-slate-500">
-                  Limited spots · Members only
+                  {t("footer.limited")}
                 </span>
               </div>
             </div>
@@ -267,7 +268,7 @@ export function BetsPlugFooter() {
                   {/* Live indicator */}
                   <div className="mt-5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                     <span className="live-dot" />
-                    1,200+ members online
+                    {t("footer.onlineNow")}
                   </div>
                 </div>
               </div>
@@ -290,9 +291,7 @@ export function BetsPlugFooter() {
             </Link>
 
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate-400">
-              BetsPlug unites data, Elo ratings, Poisson models and machine
-              learning into one platform — built for serious sports analysts
-              who refuse to guess.
+              {t("footer.brandTagline")}
             </p>
 
             {/* Contact */}
@@ -332,10 +331,10 @@ export function BetsPlugFooter() {
           {/* Product */}
           <div>
             <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
-              Product
+              {t("footer.product")}
             </h4>
             <ul className="space-y-3">
-              {productLinks.map(({ text, href }) => (
+              {productLinksT.map(({ text, href }) => (
                 <li key={text}>
                   <Link
                     href={href}
@@ -351,10 +350,10 @@ export function BetsPlugFooter() {
           {/* Company */}
           <div>
             <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
-              Company
+              {t("footer.company")}
             </h4>
             <ul className="space-y-3">
-              {companyLinks.map(({ text, href }) => (
+              {companyLinksT.map(({ text, href }) => (
                 <li key={text}>
                   <Link
                     href={href}
@@ -370,10 +369,10 @@ export function BetsPlugFooter() {
           {/* Legal */}
           <div>
             <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
-              Legal
+              {t("footer.legal")}
             </h4>
             <ul className="space-y-3">
-              {legalLinks.map(({ text, href }) => (
+              {legalLinksT.map(({ text, href }) => (
                 <li key={text}>
                   <Link
                     href={href}
@@ -397,10 +396,10 @@ export function BetsPlugFooter() {
               <ShieldCheck className="h-5 w-5 text-green-400" />
             </div>
             <div>
-              <p className="text-sm font-bold text-white">Secure payments</p>
+              <p className="text-sm font-bold text-white">{t("footer.secureTitle")}</p>
               <p className="flex items-center gap-1 text-xs text-slate-500">
                 <Lock className="h-3 w-3" />
-                256-bit SSL encrypted checkout
+                {t("footer.secureDesc")}
               </p>
             </div>
           </div>
@@ -417,7 +416,7 @@ export function BetsPlugFooter() {
           <div className="flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/[0.06] px-4 py-2">
             <span className="live-dot" />
             <span className="text-xs font-bold uppercase tracking-wider text-green-400">
-              PCI DSS compliant
+              {t("footer.pciCompliant")}
             </span>
           </div>
         </div>
@@ -427,8 +426,7 @@ export function BetsPlugFooter() {
             ═══════════════════════════════════════════════════════════ */}
         <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-6 md:flex-row">
           <p className="text-xs text-slate-500">
-            © {new Date().getFullYear()} BetsPlug. All rights reserved.
-            BetsPlug is a data & analytics platform — not a gambling operator.
+            © {new Date().getFullYear()} BetsPlug. {t("footer.copyright")}
           </p>
           <div className="flex items-center gap-5">
             {bottomLinks.map(({ text, href }) => (
@@ -442,7 +440,7 @@ export function BetsPlugFooter() {
             ))}
             <div className="hidden items-center gap-1.5 rounded-full bg-white/[0.03] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 md:flex">
               <MessageCircle className="h-3 w-3 text-green-400" />
-              18+ Play responsibly
+              {t("footer.responsible")}
             </div>
           </div>
         </div>

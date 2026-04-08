@@ -6,38 +6,47 @@ import {
   isLocale,
   type Locale,
 } from "@/i18n/config";
+import { localizePath, parseLocalizedPath } from "@/i18n/routes";
 
 /**
- * i18n middleware
+ * i18n middleware with translated slugs
  * ────────────────────────────────────────────────────────────
- * - If URL starts with a locale prefix (/nl, /de …) we strip it
- *   via `rewrite` so that the existing App Router pages still
- *   match, and we set a cookie so the client can read the
- *   active locale during hydration.
- * - If no prefix is present we pick the locale from (in order):
- *     1. existing NEXT_LOCALE cookie
- *     2. Accept-Language header
- *     3. default locale (en)
- *   and keep serving the root path (no redirect) — this keeps
- *   `/` as the canonical English URL.
+ * - Incoming requests with a locale prefix (/nl, /de …) are
+ *   parsed: the first segment after the locale is translated
+ *   back to its canonical English slug (e.g. "voorspellingen"
+ *   → "predictions") and the request is internally rewritten
+ *   so the existing Next.js pages match.
+ * - Incoming requests without a locale prefix are either
+ *   served as-is (default locale) or redirected to the
+ *   localized URL if the visitor has a NEXT_LOCALE cookie for
+ *   a non-default locale or the Accept-Language header picks
+ *   one.
+ * - /en/... URLs are permanently redirected to the canonical
+ *   unprefixed version to avoid duplicate content.
  */
 
 const PUBLIC_FILE = /\.(.*)$/;
 
 function pickFromAcceptLanguage(header: string | null): Locale | null {
   if (!header) return null;
-  const parts = header
-    .split(",")
-    .map((p) => p.trim().split(";")[0].toLowerCase());
-  for (const raw of parts) {
-    const primary = raw.split("-")[0];
+  for (const raw of header.split(",")) {
+    const primary = raw.trim().split(";")[0].split("-")[0].toLowerCase();
     if (isLocale(primary)) return primary;
   }
   return null;
 }
 
+function setLocaleCookie(res: NextResponse, locale: Locale) {
+  res.cookies.set(LOCALE_COOKIE, locale, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+  });
+  res.headers.set("Content-Language", locale);
+}
+
 export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+  const { pathname, search } = req.nextUrl;
 
   // Skip Next internals, API routes and public files
   if (
@@ -49,56 +58,65 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const segments = pathname.split("/").filter(Boolean);
-  const first = segments[0];
+  const firstSegment = pathname.split("/").filter(Boolean)[0];
+  const hasLocalePrefix = isLocale(firstSegment);
 
-  // ── Case 1: URL has an explicit locale prefix ────────────
-  if (isLocale(first)) {
-    // /en is treated the same as /, we redirect it away so we
-    // don't duplicate content.
-    if (first === defaultLocale) {
+  // ── Case 1: explicit locale prefix ──────────────────────────
+  if (hasLocalePrefix) {
+    // /en/... → redirect to canonical unprefixed URL
+    if (firstSegment === defaultLocale) {
       const url = req.nextUrl.clone();
-      url.pathname = "/" + segments.slice(1).join("/");
+      url.pathname = pathname.replace(/^\/en/, "") || "/";
       return NextResponse.redirect(url);
     }
 
-    // Rewrite /nl/foo → /foo (internal) so pages still match
+    const parsed = parseLocalizedPath(pathname, firstSegment as Locale);
+
+    // Rewrite /nl/voorspellingen → /predictions (internal)
     const url = req.nextUrl.clone();
-    url.pathname = "/" + segments.slice(1).join("/");
+    url.pathname = parsed.canonical;
     const res = NextResponse.rewrite(url);
-    res.cookies.set(LOCALE_COOKIE, first, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: "lax",
-    });
-    // Content-Language header also helps search engines
-    res.headers.set("Content-Language", first);
+    setLocaleCookie(res, parsed.locale);
     return res;
   }
 
-  // ── Case 2: no prefix → infer locale, stay on current URL ─
+  // ── Case 2: no locale prefix ────────────────────────────────
   const cookieLocale = req.cookies.get(LOCALE_COOKIE)?.value;
   const headerLocale = pickFromAcceptLanguage(req.headers.get("accept-language"));
-  const inferred: Locale = isLocale(cookieLocale)
+  const preferred: Locale = isLocale(cookieLocale)
     ? cookieLocale
     : headerLocale ?? defaultLocale;
 
-  const res = NextResponse.next();
-  if (!cookieLocale || cookieLocale !== inferred) {
-    res.cookies.set(LOCALE_COOKIE, inferred, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-      sameSite: "lax",
-    });
+  // If the visitor prefers a non-default locale, redirect them
+  // to the localized URL so they see translated slugs + content.
+  if (preferred !== defaultLocale) {
+    // Only redirect if this is a GET navigation to an HTML doc.
+    const accept = req.headers.get("accept") ?? "";
+    if (req.method === "GET" && accept.includes("text/html")) {
+      const localizedPath = localizePath(pathname, preferred);
+      if (localizedPath !== pathname) {
+        const url = req.nextUrl.clone();
+        url.pathname = localizedPath;
+        url.search = search;
+        const res = NextResponse.redirect(url);
+        setLocaleCookie(res, preferred);
+        return res;
+      }
+    }
   }
-  res.headers.set("Content-Language", inferred);
+
+  // Default locale (or non-HTML) → serve as-is, just refresh cookie.
+  const res = NextResponse.next();
+  if (!cookieLocale || cookieLocale !== preferred) {
+    setLocaleCookie(res, preferred);
+  } else {
+    res.headers.set("Content-Language", preferred);
+  }
   return res;
 }
 
 export const config = {
-  // Match everything except Next internals and static assets
   matcher: ["/((?!_next|api|.*\\..*).*)"],
 };
 
-// Re-export for tests / docs
 export { locales };

@@ -2,32 +2,30 @@
 
 import { motion } from "motion/react";
 import { UserPlus, Search, Trophy } from "lucide-react";
-
-const steps = [
-  {
-    number: "01",
-    icon: UserPlus,
-    title: "Create Your Account",
-    description:
-      "Sign up in seconds for free and unlock daily AI sports predictions, live probabilities and our public track record — no credit card required.",
-  },
-  {
-    number: "02",
-    icon: Search,
-    title: "Explore AI Predictions",
-    description:
-      "Browse upcoming matches across every major league. Filter by confidence, sport, or market and compare our AI edge to the bookmaker lines in real-time.",
-  },
-  {
-    number: "03",
-    icon: Trophy,
-    title: "Make Smarter Decisions",
-    description:
-      "Use our data-driven insights to research your next bet with confidence. Track your picks, follow the Bet of the Day and bet ahead of the market.",
-  },
-];
+import { useTranslations } from "@/i18n/locale-provider";
 
 export function HowItWorks() {
+  const { t } = useTranslations();
+  const steps = [
+    {
+      number: "01",
+      icon: UserPlus,
+      title: t("how.step1Title"),
+      description: t("how.step1Desc"),
+    },
+    {
+      number: "02",
+      icon: Search,
+      title: t("how.step2Title"),
+      description: t("how.step2Desc"),
+    },
+    {
+      number: "03",
+      icon: Trophy,
+      title: t("how.step3Title"),
+      description: t("how.step3Desc"),
+    },
+  ];
   return (
     <section
       id="how-it-works-process"
@@ -58,17 +56,16 @@ export function HowItWorks() {
           className="mx-auto mb-16 max-w-3xl text-center"
         >
           <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
-            Process
+            {t("how.badge")}
           </span>
           <h2
             id="how-it-works-heading"
             className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl"
           >
-            How It <span className="gradient-text">Works</span>
+            <span className="gradient-text">{t("how.title")}</span>
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-400 sm:text-lg">
-            Three simple steps to start making smarter, data-driven betting
-            decisions with BetsPlug.
+            {t("how.subtitle")}
           </p>
         </motion.div>
 

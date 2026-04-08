@@ -13,8 +13,9 @@
  */
 
 import { createContext, useCallback, useContext, useMemo } from "react";
-import { defaultLocale, LOCALE_COOKIE, locales, type Locale } from "./config";
+import { defaultLocale, LOCALE_COOKIE, type Locale } from "./config";
 import { translate, type TranslationKey } from "./messages";
+import { translatePath } from "./routes";
 
 type LocaleContextValue = {
   locale: Locale;
@@ -41,16 +42,10 @@ export function LocaleProvider({
     // 1 year cookie, root path so it applies everywhere.
     document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
 
-    // Rewrite the current URL to carry the locale prefix so that
-    // hreflang + server rendering pick it up on next navigation.
+    // Translate the current URL from whatever locale it was in
+    // into the target locale, preserving slugs and query string.
     const url = new URL(window.location.href);
-    const segments = url.pathname.split("/").filter(Boolean);
-    if (segments.length && (locales as readonly string[]).includes(segments[0])) {
-      segments.shift();
-    }
-    const rest = segments.join("/");
-    url.pathname = next === defaultLocale ? `/${rest}` : `/${next}${rest ? `/${rest}` : ""}`;
-    if (!url.pathname.startsWith("/")) url.pathname = "/" + url.pathname;
+    url.pathname = translatePath(url.pathname, next);
     window.location.href = url.toString();
   }, []);
 
@@ -75,4 +70,24 @@ export function useTranslations() {
     };
   }
   return ctx;
+}
+
+/**
+ * Returns a function that takes a canonical (English) internal
+ * href and returns the localized URL for the current locale.
+ * Pass as `href` to Next.js <Link> so that clicking navigates
+ * to `/nl/voorspellingen` instead of `/predictions` etc.
+ *
+ * External URLs (http…) and hash/query fragments pass through.
+ */
+export function useLocalizedHref() {
+  const { locale } = useTranslations();
+  return useCallback(
+    (href: string) => {
+      if (!href) return href;
+      if (/^(https?:|mailto:|tel:|#)/.test(href)) return href;
+      return translatePath(href, locale);
+    },
+    [locale]
+  );
 }

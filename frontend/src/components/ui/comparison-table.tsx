@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { Check, X, Minus, Crown, Users, Sparkles } from "lucide-react";
+import { useTranslations } from "@/i18n/locale-provider";
 
 type Cell = "yes" | "no" | "partial";
 
@@ -118,6 +119,7 @@ function CompetitorCell({ value }: { value: Cell }) {
 }
 
 export function ComparisonTable() {
+  const { t } = useTranslations();
   return (
     <section
       id="comparison"
@@ -149,18 +151,17 @@ export function ComparisonTable() {
         >
           <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
             <Sparkles className="h-3.5 w-3.5" />
-            Why BetsPlug
+            {t("comparison.badge")}
           </span>
           <h2
             id="comparison-heading"
             className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl"
           >
-            Not all prediction sites{" "}
-            <span className="gradient-text">are built the same.</span>
+            {t("comparison.titleA")}{" "}
+            <span className="gradient-text">{t("comparison.titleB")}</span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-400 sm:text-lg">
-            Here&apos;s exactly what separates BetsPlug from typical tipster
-            sites — no fine print, no cherry-picked wins.
+            {t("comparison.subtitle")}
           </p>
         </motion.div>
 
@@ -183,7 +184,7 @@ export function ComparisonTable() {
             <div className="grid grid-cols-[1.3fr_1fr_1fr] items-stretch gap-2 px-2 pb-3 pt-4 sm:grid-cols-[1.7fr_1fr_1fr] sm:px-4 sm:pb-4 sm:pt-5">
               <div className="flex items-end">
                 <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                  Feature
+                  {t("comparison.feature")}
                 </span>
               </div>
 
@@ -204,7 +205,7 @@ export function ComparisonTable() {
                   </div>
                   <div className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-green-400">
                     <span className="h-1 w-1 animate-pulse rounded-full bg-green-400" />
-                    Winner
+                    {t("comparison.winner")}
                   </div>
                 </div>
               </div>
@@ -216,10 +217,10 @@ export function ComparisonTable() {
                 </div>
                 <div className="text-center">
                   <div className="text-sm font-bold tracking-tight text-slate-400 sm:text-base">
-                    Others
+                    {t("comparison.others")}
                   </div>
                   <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-600">
-                    Typical tipsters
+                    {t("comparison.typicalTipsters")}
                   </div>
                 </div>
               </div>
@@ -283,7 +284,7 @@ export function ComparisonTable() {
             >
               <div className="flex items-center border-t border-white/[0.08] py-6 pr-2">
                 <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                  Final score
+                  {t("comparison.finalScore")}
                 </span>
               </div>
 
@@ -294,7 +295,7 @@ export function ComparisonTable() {
                   <span className="text-slate-500">/{rows.length}</span>
                 </div>
                 <div className="text-[10px] font-bold uppercase tracking-wider text-green-400">
-                  Full house
+                  {t("comparison.fullHouse")}
                 </div>
               </div>
 
@@ -305,7 +306,7 @@ export function ComparisonTable() {
                   <span className="text-slate-700">/{rows.length}</span>
                 </div>
                 <div className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                  Falls short
+                  {t("comparison.fallsShort")}
                 </div>
               </div>
             </motion.div>
@@ -319,8 +320,7 @@ export function ComparisonTable() {
             viewport={{ once: true }}
             className="mt-6 text-center text-xs text-slate-500"
           >
-            Comparison based on publicly available information from leading
-            tipster platforms as of 2026.
+            {t("comparison.caption")}
           </motion.p>
         </motion.div>
       </div>

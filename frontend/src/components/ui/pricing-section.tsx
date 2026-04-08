@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { Check, Crown, Sparkles, Zap, Shield } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useTranslations } from "@/i18n/locale-provider";
 
 type Billing = "monthly" | "yearly";
 
@@ -125,6 +126,7 @@ const platinum = {
 };
 
 export function PricingSection() {
+  const { t } = useTranslations();
   const [billing, setBilling] = useState<Billing>("monthly");
 
   return (
@@ -159,18 +161,16 @@ export function PricingSection() {
           className="mx-auto mb-16 max-w-3xl text-center"
         >
           <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
-            Pricing
+            {t("pricing.badge")}
           </span>
           <h2
             id="pricing-heading"
             className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl"
           >
-            Simple, honest{" "}
-            <span className="gradient-text">pricing</span>
+            <span className="gradient-text">{t("pricing.title")}</span>
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-400 sm:text-lg">
-            Start free, upgrade whenever you&apos;re ready. No hidden fees, no
-            lock-in contracts — cancel anytime.
+            {t("pricing.subtitle")}
           </p>
         </motion.div>
 
@@ -209,7 +209,7 @@ export function PricingSection() {
                   : "text-slate-300 hover:text-white"
               }`}
             >
-              Monthly
+              {t("pricing.monthly")}
             </button>
             <button
               type="button"
@@ -222,7 +222,7 @@ export function PricingSection() {
                   : "text-slate-300 hover:text-white"
               }`}
             >
-              Yearly
+              {t("pricing.yearly")}
               <span
                 className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider transition-colors duration-200 ${
                   billing === "yearly"
@@ -244,9 +244,7 @@ export function PricingSection() {
                 transition={{ duration: 0.25 }}
                 className="text-xs text-slate-400"
               >
-                You&apos;re saving{" "}
-                <span className="font-bold text-green-400">2 months</span>{" "}
-                with yearly billing.
+                {t("pricing.savingNote")}
               </motion.p>
             )}
           </AnimatePresence>
@@ -280,7 +278,7 @@ export function PricingSection() {
                     <div className="pointer-events-none absolute -left-20 -top-20 h-[280px] w-[280px] rounded-full bg-green-500/[0.18] blur-[100px]" />
                     <div className="pointer-events-none absolute -right-20 -bottom-20 h-[280px] w-[280px] rounded-full bg-emerald-500/[0.12] blur-[100px]" />
                     <span className="absolute right-6 top-6 rounded-full border border-green-500/40 bg-green-500/15 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-green-300 shadow-[0_0_20px_rgba(74,222,128,0.3)]">
-                      Most Popular
+                      {t("pricing.mostPopular")}
                     </span>
                   </>
                 )}

@@ -32,7 +32,7 @@ import { HowItWorks } from "@/components/ui/how-it-works";
 import { ComparisonTable } from "@/components/ui/comparison-table";
 import { PricingSection } from "@/components/ui/pricing-section";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
-import { useTranslations } from "@/i18n/locale-provider";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 // ─── Animated counter ────────────────────────────────────────────────────────
 
@@ -66,6 +66,7 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
 
 export default function LandingPage() {
   const { t } = useTranslations();
+  const loc = useLocalizedHref();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -143,7 +144,7 @@ export default function LandingPage() {
 
             {/* Desktop buttons (lg+) */}
             <Link
-              href="/dashboard"
+              href={loc("/dashboard")}
               className={`hidden rounded-lg border border-white/[0.1] font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white lg:inline-block ${
                 isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
               }`}
@@ -151,7 +152,7 @@ export default function LandingPage() {
               {t("nav.login")}
             </Link>
             <Link
-              href="/subscriptions"
+              href={loc("/subscriptions")}
               className={`btn-gradient hidden rounded-full font-bold shadow-lg shadow-green-500/20 transition-all duration-300 lg:inline-block ${
                 isScrolled ? "px-4 py-1.5 text-xs" : "px-5 py-2.5 text-sm"
               }`}
@@ -161,7 +162,7 @@ export default function LandingPage() {
 
             {/* Mobile/Tablet CTA button */}
             <Link
-              href="/subscriptions"
+              href={loc("/subscriptions")}
               className={`btn-gradient flex items-center justify-center rounded-full font-bold shadow-lg shadow-green-500/20 transition-all duration-300 lg:hidden ${
                 isScrolled ? "px-3 py-1.5 text-[11px]" : "px-4 py-2 text-xs sm:text-sm"
               }`}
@@ -259,7 +260,7 @@ export default function LandingPage() {
             </div>
 
             <Link
-              href="/dashboard"
+              href={loc("/dashboard")}
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center justify-between rounded-2xl border border-white/[0.08] bg-white/[0.02] px-4 py-4 text-base font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white"
             >
@@ -281,7 +282,7 @@ export default function LandingPage() {
                 {t("nav.joinBlurb")}
               </p>
               <Link
-                href="/subscriptions"
+                href={loc("/subscriptions")}
                 onClick={() => setMobileMenuOpen(false)}
                 className="btn-gradient flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-bold shadow-lg shadow-green-500/20"
               >
@@ -359,7 +360,7 @@ export default function LandingPage() {
 
               {/* CTAs */}
               <div className="mt-10 flex flex-wrap items-center gap-4">
-                <Link href="/predictions">
+                <Link href={loc("/predictions")}>
                   <GetStartedButton>{t("hero.ctaPrimary")}</GetStartedButton>
                 </Link>
                 <Link
@@ -426,7 +427,7 @@ export default function LandingPage() {
                   </div>
 
                   <Link
-                    href="/predictions"
+                    href={loc("/predictions")}
                     className="btn-gradient mt-5 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold"
                   >
                     {t("hero.joinNow")} <ChevronRight className="h-4 w-4" />
@@ -665,7 +666,7 @@ export default function LandingPage() {
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
-                <Link href="/predictions">
+                <Link href={loc("/predictions")}>
                   <GetStartedButton>Learn More</GetStartedButton>
                 </Link>
                 <Link
@@ -805,11 +806,11 @@ export default function LandingPage() {
               </p>
 
               <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link href="/subscriptions">
+                <Link href={loc("/subscriptions")}>
                   <GetStartedButton>Start Free Trial</GetStartedButton>
                 </Link>
                 <Link
-                  href="/about"
+                  href={loc("/about")}
                   className="text-sm font-semibold text-slate-400 underline underline-offset-4 transition-colors hover:text-white"
                 >
                   Learn more →
