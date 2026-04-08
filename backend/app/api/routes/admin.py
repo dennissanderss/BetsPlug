@@ -516,6 +516,36 @@ async def generate_predictions(
     )
 
 
+class SeedStrategiesResponse(BaseModel):
+    strategies: List[Dict[str, Any]]
+    message: str
+
+
+@router.post(
+    "/seed-strategies",
+    response_model=SeedStrategiesResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Seed default betting strategies",
+)
+async def seed_strategies(
+    db: AsyncSession = Depends(get_db),
+) -> SeedStrategiesResponse:
+    """
+    Insert the four default betting strategies if they don't already exist.
+    Idempotent: safe to call multiple times.
+    """
+    from seed.seed_strategies import seed_strategies_async
+
+    results = await seed_strategies_async(db)
+    created = sum(1 for r in results if r["status"] == "created")
+    skipped = sum(1 for r in results if r["status"] == "exists")
+
+    return SeedStrategiesResponse(
+        strategies=results,
+        message=f"Seed complete: {created} created, {skipped} already existed.",
+    )
+
+
 @router.post(
     "/retrain",
     response_model=RetrainResponse,
