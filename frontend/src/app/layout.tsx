@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Space_Mono } from "next/font/google";
+import { Lato } from "next/font/google";
 import "./globals.css";
 import { AppProviders } from "@/components/layout/providers";
 
-// Space Mono — free, open-source monospace typeface loaded via
-// next/font/google. Only ships weights 400 and 700.
-const spaceMono = Space_Mono({
+// Lato — free, open-source humanist sans loaded via next/font/google
+// for automatic self-hosting and zero layout shift.
+const lato = Lato({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["300", "400", "700", "900"],
   variable: "--font-brand",
   display: "swap",
 });
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={spaceMono.variable}>
+    <html lang="en" suppressHydrationWarning className={lato.variable}>
       <body className="min-h-screen font-sans font-normal antialiased">
         <AppProviders>{children}</AppProviders>
       </body>
