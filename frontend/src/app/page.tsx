@@ -192,13 +192,30 @@ function PickCard({
 // ─── Landing Page ───────────────────────────────────────────────────────────
 
 export default function LandingPage() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* ── Navigation ── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#0a0e1a]/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 md:py-1">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#0a0e1a]/80 backdrop-blur-xl transition-all duration-300">
+        <div className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-300 ${isScrolled ? "py-1 md:py-0.5" : "py-3 md:py-1"}`}>
           <Link href="/" className="flex items-center">
-            <img src="/logo.webp" alt="Betsplug" className="h-10 sm:h-14 md:h-20 lg:h-24 w-auto drop-shadow-[0_0_20px_rgba(16,185,129,0.4)]" />
+            <img
+              src="/logo.webp"
+              alt="Betsplug"
+              className={`w-auto drop-shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all duration-300 ${
+                isScrolled
+                  ? "h-8 sm:h-10 md:h-12 lg:h-14"
+                  : "h-10 sm:h-14 md:h-16 lg:h-20"
+              }`}
+            />
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">
