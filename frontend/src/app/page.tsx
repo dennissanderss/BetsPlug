@@ -24,6 +24,7 @@ import {
 import { GetStartedButton } from "@/components/ui/get-started-button";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { TestimonialsSection } from "@/components/ui/testimonials-section";
+import { SocialProofPopup } from "@/components/ui/social-proof-popup";
 
 // ─── Animated counter ────────────────────────────────────────────────────────
 
@@ -747,6 +748,9 @@ export default function LandingPage() {
           FOOTER
          ═══════════════════════════════════════════════════════════════════ */}
       <BetsPlugFooter />
+
+      {/* Social proof popup */}
+      <SocialProofPopup />
     </div>
   );
 }
