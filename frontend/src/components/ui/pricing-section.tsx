@@ -343,7 +343,7 @@ export function PricingSection() {
                 {/* CTA */}
                 <Link
                   href={pricingHref}
-                  className={`relative mb-6 flex w-full items-center justify-center rounded-2xl px-6 py-3.5 text-sm font-bold transition-all duration-300 ${
+                  className={`relative mb-6 flex w-full items-center justify-center rounded-2xl px-6 py-3.5 text-sm font-extrabold tracking-tight transition-all duration-300 ${
                     isHighlight
                       ? "btn-gradient text-black shadow-lg shadow-green-500/30 hover:shadow-green-500/50"
                       : "border border-white/[0.12] bg-white/[0.04] text-white hover:border-green-500/40 hover:bg-green-500/[0.08]"

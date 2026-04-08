@@ -9,7 +9,7 @@ interface GetStartedButtonProps {
 
 export function GetStartedButton({ children = "Get Started", className }: GetStartedButtonProps) {
   return (
-    <Button className={`group relative overflow-hidden ${className ?? ""}`} size="lg">
+    <Button className={`group relative overflow-hidden font-extrabold tracking-tight ${className ?? ""}`} size="lg">
       <span className="mr-8 transition-opacity duration-500 group-hover:opacity-0">
         {children}
       </span>
