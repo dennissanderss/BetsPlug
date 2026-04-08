@@ -414,7 +414,7 @@ export default function SubscriptionsPage() {
       <footer className="border-t border-white/[0.06] py-8">
         <div className="mx-auto max-w-5xl px-6 text-center">
           <p className="text-xs text-slate-600">
-            &copy; {new Date().getFullYear()} SportBetTool. All rights reserved.
+            &copy; {new Date().getFullYear()} Betsplug. All rights reserved.
             Predictions are for informational purposes only.
           </p>
         </div>

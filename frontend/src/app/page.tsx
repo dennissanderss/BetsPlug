@@ -495,7 +495,7 @@ export default function LandingPage() {
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-white sm:text-4xl">Why Choose SportBetTool?</h2>
+            <h2 className="text-3xl font-bold text-white sm:text-4xl">Why Choose Betsplug?</h2>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -562,13 +562,13 @@ export default function LandingPage() {
             </div>
 
             <p className="text-xs text-slate-600">
-              &copy; {new Date().getFullYear()} SportBetTool. All rights reserved.
+              &copy; {new Date().getFullYear()} Betsplug. All rights reserved.
             </p>
           </div>
 
           <div className="mt-8 rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4 text-center">
             <p className="text-xs text-slate-500 leading-relaxed">
-              <span className="font-semibold text-amber-400">Disclaimer:</span> SportBetTool is a data analytics
+              <span className="font-semibold text-amber-400">Disclaimer:</span> Betsplug is a data analytics
               platform. We calculate probabilities using statistical models. This is{" "}
               <span className="font-semibold text-slate-300">not gambling advice</span>. All outputs are simulated
               and hypothetical. Always make your own informed decisions.

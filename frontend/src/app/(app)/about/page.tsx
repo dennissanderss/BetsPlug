@@ -317,7 +317,7 @@ export default function AboutPage() {
         </div>
 
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
-          <span className="gradient-text">How BetsPlug Works</span>
+          <span className="gradient-text">How Betsplug Works</span>
         </h1>
 
         <p className="text-xl md:text-2xl text-slate-300 font-light max-w-3xl mx-auto leading-relaxed">
@@ -325,7 +325,7 @@ export default function AboutPage() {
         </p>
 
         <p className="text-slate-400 max-w-2xl mx-auto leading-relaxed text-base">
-          BetsPlug combines real-time data from multiple verified sources
+          Betsplug combines real-time data from multiple verified sources
           with advanced machine learning models to deliver probability-based match analysis.
           Every prediction is traceable, every model is backtested, and every result is tracked.
         </p>

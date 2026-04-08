@@ -230,7 +230,7 @@ function StatPill({
 const PLANS: PricingPlan[] = [
   {
     id: "annual",
-    name: "BetsPlug Pro — Annual",
+    name: "Betsplug Pro — Annual",
     badge: "Best value",
     regularPrice: "$29.99/mo",
     memberPrice:  "$23.99/mo",
@@ -250,7 +250,7 @@ const PLANS: PricingPlan[] = [
   },
   {
     id: "monthly",
-    name: "BetsPlug Pro — Monthly",
+    name: "Betsplug Pro — Monthly",
     regularPrice: "$39.99/mo",
     memberPrice:  "$31.99/mo",
     saving:       "Save $8/month",
@@ -268,7 +268,7 @@ const PLANS: PricingPlan[] = [
   },
   {
     id: "enterprise",
-    name: "BetsPlug Enterprise",
+    name: "Betsplug Enterprise",
     regularPrice: "—",
     memberPrice:  null,
     saving:       null,
@@ -299,7 +299,7 @@ export default function DealsPage() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-4xl font-bold tracking-tight gradient-text">Exclusive Deals</h1>
-          <p className="mt-1.5 text-sm text-slate-400">Special offers for BetsPlug members</p>
+          <p className="mt-1.5 text-sm text-slate-400">Special offers for Betsplug members</p>
         </div>
         <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-400">
           <Lock className="h-3 w-3" />
@@ -345,7 +345,7 @@ export default function DealsPage() {
             <h2 className="text-2xl font-extrabold text-slate-100 leading-tight">
               Get{" "}
               <span className="gradient-text">20% OFF</span>
-              {" "}your BetsPlug Pro subscription
+              {" "}your Betsplug Pro subscription
             </h2>
             <p className="text-sm text-slate-400 max-w-md">
               Exclusive discount unlocked for your account. Share your referral link with
@@ -391,7 +391,7 @@ export default function DealsPage() {
           <div>
             <h2 className="text-sm font-semibold text-slate-100">Referral Program</h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Earn credits by inviting friends to BetsPlug
+              Earn credits by inviting friends to Betsplug
             </p>
           </div>
         </div>
@@ -415,7 +415,7 @@ export default function DealsPage() {
             <ReferralStep
               step={2}
               title="Friend signs up and subscribes"
-              description="Your friend creates an account and picks any paid BetsPlug plan"
+              description="Your friend creates an account and picks any paid Betsplug plan"
             />
             <ReferralStep
               step={3}
@@ -453,7 +453,7 @@ export default function DealsPage() {
           <span className="text-slate-400 font-medium">Disclaimer: </span>
           Affiliate links and referral programs are subject to terms and conditions. Discounts
           apply to new and renewing subscriptions only. Credits are non-transferable and may not
-          be exchanged for cash. BetsPlug reserves the right to modify or terminate the referral program
+          be exchanged for cash. Betsplug reserves the right to modify or terminate the referral program
           at any time with prior notice.
         </p>
       </div>
