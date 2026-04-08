@@ -87,7 +87,7 @@ function ProbCircle({
 function BotdSkeleton() {
   return (
     <div className="space-y-8 animate-fade-in">
-      <div className="h-12 w-64 animate-pulse rounded-lg bg-white/[0.06]" />
+      <div className="h-12 w-64 animate-pulse rounded-full bg-white/[0.06]" />
       <div className="glass-card p-12">
         <div className="flex flex-col items-center gap-6">
           <div className="h-24 w-24 animate-pulse rounded-full bg-white/[0.06]" />
@@ -142,7 +142,7 @@ export default function BetOfTheDayPage() {
       {/* ── Header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10 shadow-lg shadow-amber-500/10">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/10 shadow-lg shadow-amber-500/10">
             <Trophy className="h-6 w-6 text-amber-400" />
           </div>
           <div>
@@ -263,7 +263,7 @@ export default function BetOfTheDayPage() {
 
               {/* Predicted outcome badge */}
               <div className="mt-8 flex justify-center">
-                <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-6 py-3">
+                <div className="rounded-full border border-emerald-500/25 bg-emerald-500/10 px-6 py-3">
                   <p className="text-center text-xs font-semibold uppercase tracking-widest text-emerald-400">
                     Predicted Outcome
                   </p>
@@ -278,7 +278,7 @@ export default function BetOfTheDayPage() {
           {/* ── Info Cards ── */}
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="glass-card p-5">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
+              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10">
                 <TrendingUp className="h-5 w-5 text-blue-400" />
               </div>
               <h3 className="text-sm font-bold text-white">Value Detection</h3>
@@ -289,7 +289,7 @@ export default function BetOfTheDayPage() {
             </div>
 
             <div className="glass-card p-5">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
+              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10">
                 <Shield className="h-5 w-5 text-emerald-400" />
               </div>
               <h3 className="text-sm font-bold text-white">4 Models Agree</h3>
@@ -300,7 +300,7 @@ export default function BetOfTheDayPage() {
             </div>
 
             <div className="glass-card p-5">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10">
+              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-amber-500/10">
                 <Star className="h-5 w-5 text-amber-400" />
               </div>
               <h3 className="text-sm font-bold text-white">Daily Selection</h3>
@@ -314,7 +314,7 @@ export default function BetOfTheDayPage() {
       )}
 
       {/* ── Disclaimer ── */}
-      <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-5">
+      <div className="rounded-full border border-amber-500/20 bg-amber-500/[0.04] p-5">
         <div className="flex items-start gap-3">
           <AlertTriangle className="h-5 w-5 shrink-0 text-amber-400 mt-0.5" />
           <div>

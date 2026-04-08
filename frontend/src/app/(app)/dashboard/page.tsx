@@ -46,7 +46,7 @@ function ChartTooltip({
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-lg border border-white/[0.08] bg-[#111827] px-3 py-2 shadow-xl">
+    <div className="rounded-full border border-white/[0.08] bg-[#111827] px-3 py-2 shadow-xl">
       <p className="mb-1 text-xs font-semibold text-slate-400">{label}</p>
       {payload.map((entry, i) => (
         <p key={i} className="text-sm font-medium" style={{ color: entry.color }}>
@@ -70,7 +70,7 @@ function KpiSkeletonRow() {
               <div className="h-8 w-20 rounded bg-white/[0.06]" />
               <div className="h-3 w-16 rounded bg-white/[0.06]" />
             </div>
-            <div className="h-10 w-10 rounded-lg bg-white/[0.06]" />
+            <div className="h-10 w-10 rounded-full bg-white/[0.06]" />
           </div>
         </div>
       ))}
@@ -124,10 +124,10 @@ function SystemStatusList({ sources }: { sources: DataSourceHealth[] }) {
         return (
           <li
             key={src.id}
-            className="flex items-center gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 transition-colors hover:bg-white/[0.04]"
+            className="flex items-center gap-4 rounded-full border border-white/[0.06] bg-white/[0.02] px-4 py-3 transition-colors hover:bg-white/[0.04]"
           >
             {/* Icon */}
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-500/10">
               <Database className="h-4 w-4 text-blue-400" />
             </div>
 
@@ -429,7 +429,7 @@ export default function DashboardPage() {
                     <span className="text-xs text-slate-500">{sub}</span>
                   </div>
                 </div>
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 glow-blue-sm">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500/10 glow-blue-sm">
                   <Icon className="h-5 w-5 text-blue-400" />
                 </div>
               </div>
@@ -467,7 +467,7 @@ export default function DashboardPage() {
           </div>
 
           {sportLoading ? (
-            <div className="h-[220px] animate-pulse rounded-lg bg-white/[0.04]" />
+            <div className="h-[220px] animate-pulse rounded-full bg-white/[0.04]" />
           ) : sportChartData.length === 0 ? (
             <div className="flex h-[220px] items-center justify-center text-sm text-slate-500">
               No segment data available yet.
@@ -520,7 +520,7 @@ export default function DashboardPage() {
           </div>
 
           {monthLoading ? (
-            <div className="h-[220px] animate-pulse rounded-lg bg-white/[0.04]" />
+            <div className="h-[220px] animate-pulse rounded-full bg-white/[0.04]" />
           ) : monthChartData.length === 0 ? (
             <div className="flex h-[220px] items-center justify-center text-sm text-slate-500">
               No monthly data available yet.
@@ -597,7 +597,7 @@ export default function DashboardPage() {
           {sourcesLoading ? (
             <ul className="space-y-3">
               {Array.from({ length: 3 }).map((_, i) => (
-                <li key={i} className="h-[70px] animate-pulse rounded-xl bg-white/[0.04]" />
+                <li key={i} className="h-[70px] animate-pulse rounded-full bg-white/[0.04]" />
               ))}
             </ul>
           ) : !dataSources || dataSources.length === 0 ? (

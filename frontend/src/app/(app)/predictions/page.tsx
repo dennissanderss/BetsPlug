@@ -254,7 +254,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
           </div>
 
           <button
-            className="flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-slate-300 transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-300"
+            className="flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-slate-300 transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-300"
             aria-label={`View details for ${fixture.home_team_name} vs ${fixture.away_team_name}`}
           >
             <Eye className="h-3.5 w-3.5" />
@@ -427,12 +427,12 @@ function FilterBar({
     <div className="glass-card p-4">
       <div className="flex flex-wrap items-center gap-4">
         {/* League tabs */}
-        <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1 flex-wrap">
+        <div className="flex items-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.03] p-1 flex-wrap">
           {leagueTabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setLeagueFilter(tab)}
-              className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-all ${
                 leagueFilter === tab
                   ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                   : "text-slate-400 hover:text-slate-200"
@@ -446,12 +446,12 @@ function FilterBar({
         {/* Confidence filter */}
         <div className="flex items-center gap-2">
           <Filter className="h-3.5 w-3.5 text-slate-500" />
-          <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
+          <div className="flex items-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.03] p-1">
             {confOptions.map((opt) => (
               <button
                 key={opt}
                 onClick={() => setConfidenceFilter(opt)}
-                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-all ${
                   confidenceFilter === opt
                     ? opt === "High"
                       ? "bg-emerald-600/80 text-white"
@@ -475,12 +475,12 @@ function FilterBar({
         {/* Sort */}
         <div className="flex items-center gap-2 ml-auto">
           <ArrowUpDown className="h-3.5 w-3.5 text-slate-500" />
-          <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
+          <div className="flex items-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.03] p-1">
             {sortOptions.map(({ key, label }) => (
               <button
                 key={key}
                 onClick={() => setSortKey(key)}
-                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-all ${
                   sortKey === key
                     ? "bg-white/[0.08] text-slate-100"
                     : "text-slate-400 hover:text-slate-200"
@@ -504,7 +504,7 @@ function FilterBar({
 function DisclaimerBanner() {
   return (
     <div
-      className="rounded-xl border p-5"
+      className="rounded-full border p-5"
       style={{
         background: "rgba(245,158,11,0.04)",
         borderColor: "rgba(245,158,11,0.25)",
@@ -512,7 +512,7 @@ function DisclaimerBanner() {
       }}
     >
       <div className="flex items-start gap-3">
-        <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/10">
+        <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-500/10">
           <AlertTriangle className="h-4 w-4 text-amber-400" />
         </div>
         <div>
@@ -606,7 +606,7 @@ export default function PredictionsPage() {
       {/* ── Header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 glow-blue-sm">
+          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500/10 glow-blue-sm">
             <Sparkles className="h-5 w-5 text-blue-400" />
           </div>
           <div>
@@ -641,7 +641,7 @@ export default function PredictionsPage() {
       {isLoading && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 animate-pulse">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="glass-card h-20 rounded-xl bg-white/[0.03]" />
+            <div key={i} className="glass-card h-20 rounded-full bg-white/[0.03]" />
           ))}
         </div>
       )}
@@ -649,7 +649,7 @@ export default function PredictionsPage() {
       {/* ── Error banner ── */}
       {hasError && (
         <div
-          className="rounded-xl border p-4 flex items-start gap-3"
+          className="rounded-full border p-4 flex items-start gap-3"
           style={{ background: "rgba(239,68,68,0.04)", borderColor: "rgba(239,68,68,0.25)" }}
         >
           <AlertTriangle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
@@ -693,7 +693,7 @@ export default function PredictionsPage() {
           </p>
           <button
             onClick={() => { setLeagueFilter("All"); setConfidenceFilter("All"); }}
-            className="btn-gradient mt-2 rounded-lg px-4 py-2 text-sm font-semibold text-white"
+            className="btn-gradient mt-2 rounded-full px-4 py-2 text-sm font-semibold text-white"
           >
             Clear filters
           </button>

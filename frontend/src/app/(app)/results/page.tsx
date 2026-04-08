@@ -142,7 +142,7 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
       style={{ border: "1px solid rgba(16,185,129,0.18)" }}
     >
       <div className="flex items-center gap-2 mb-5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/10">
           <Trophy className="h-4 w-4 text-emerald-400" />
         </div>
         <h2 className="text-sm font-semibold text-slate-200">This Week&apos;s Performance</h2>
@@ -153,7 +153,7 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
         {statItems.map(({ label, value, color }) => (
           <div
             key={label}
-            className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center"
+            className="flex flex-col items-center justify-center gap-1 rounded-full bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center"
           >
             <span
               className="text-2xl font-extrabold leading-none tabular-nums"
@@ -183,7 +183,7 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
                 {data.best_performers.map((p) => (
                   <div
                     key={p.name}
-                    className="flex items-center justify-between rounded-lg bg-emerald-500/5 border border-emerald-500/10 px-3 py-1.5"
+                    className="flex items-center justify-between rounded-full bg-emerald-500/5 border border-emerald-500/10 px-3 py-1.5"
                   >
                     <span className="text-xs text-slate-300 truncate">{p.name}</span>
                     <span className="text-xs font-bold text-emerald-400 shrink-0 ml-2">
@@ -207,7 +207,7 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
                 {data.worst_performers.map((p) => (
                   <div
                     key={p.name}
-                    className="flex items-center justify-between rounded-lg bg-red-500/5 border border-red-500/10 px-3 py-1.5"
+                    className="flex items-center justify-between rounded-full bg-red-500/5 border border-red-500/10 px-3 py-1.5"
                   >
                     <span className="text-xs text-slate-300 truncate">{p.name}</span>
                     <span className="text-xs font-bold text-red-400 shrink-0 ml-2">
@@ -260,12 +260,12 @@ function ResultsFilterBar({
       <div className="flex flex-wrap items-center gap-3">
 
         {/* Period */}
-        <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
+        <div className="flex items-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.03] p-1">
           {periods.map(({ value, label }) => (
             <button
               key={value}
               onClick={() => setPeriod(value)}
-              className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-all ${
                 period === value
                   ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                   : "text-slate-400 hover:text-slate-200"
@@ -279,12 +279,12 @@ function ResultsFilterBar({
         {/* Result filter */}
         <div className="flex items-center gap-1.5">
           <Filter className="h-3.5 w-3.5 text-slate-500" />
-          <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
+          <div className="flex items-center gap-1 rounded-full border border-white/[0.06] bg-white/[0.03] p-1">
             {resultOptions.map((opt) => (
               <button
                 key={opt}
                 onClick={() => setResultFilter(opt)}
-                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-all ${
                   resultFilter === opt
                     ? opt === "Correct"
                       ? "bg-emerald-600/80 text-white"
@@ -308,7 +308,7 @@ function ResultsFilterBar({
               <select
                 value={leagueFilter}
                 onChange={(e) => setLeagueFilter(e.target.value)}
-                className="appearance-none rounded-lg border border-white/[0.06] bg-white/[0.03] pl-3 pr-7 py-1.5 text-xs font-semibold text-slate-300 focus:outline-none focus:border-blue-500/40 cursor-pointer"
+                className="appearance-none rounded-full border border-white/[0.06] bg-white/[0.03] pl-3 pr-7 py-1.5 text-xs font-semibold text-slate-300 focus:outline-none focus:border-blue-500/40 cursor-pointer"
               >
                 <option value="">All Leagues</option>
                 {leagues.map((l) => (
@@ -482,14 +482,14 @@ function SkeletonCard() {
 function Disclaimer() {
   return (
     <div
-      className="rounded-xl border p-4 flex items-start gap-3"
+      className="rounded-full border p-4 flex items-start gap-3"
       style={{
         background: "rgba(245,158,11,0.04)",
         borderColor: "rgba(245,158,11,0.22)",
         backdropFilter: "blur(20px)",
       }}
     >
-      <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/10">
+      <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-500/10">
         <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
       </div>
       <p className="text-xs leading-relaxed text-slate-400">
@@ -582,7 +582,7 @@ export default function ResultsPage() {
       {/* ── Header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10">
+          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/10">
             <Trophy className="h-5 w-5 text-emerald-400" />
           </div>
           <div>
@@ -618,7 +618,7 @@ export default function ResultsPage() {
       {/* ── Error banner ── */}
       {hasError && (
         <div
-          className="rounded-xl border p-4 flex items-start gap-3"
+          className="rounded-full border p-4 flex items-start gap-3"
           style={{ background: "rgba(239,68,68,0.04)", borderColor: "rgba(239,68,68,0.25)" }}
         >
           <AlertTriangle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
@@ -643,7 +643,7 @@ export default function ResultsPage() {
           {period < 30 && (
             <button
               onClick={() => setPeriod(30)}
-              className="btn-gradient mt-2 rounded-lg px-4 py-2 text-sm font-semibold text-white"
+              className="btn-gradient mt-2 rounded-full px-4 py-2 text-sm font-semibold text-white"
             >
               Expand to 30 days
             </button>
@@ -658,7 +658,7 @@ export default function ResultsPage() {
           </p>
           <button
             onClick={() => { setResultFilter("All"); setLeagueFilter(""); }}
-            className="btn-gradient mt-2 rounded-lg px-4 py-2 text-sm font-semibold text-white"
+            className="btn-gradient mt-2 rounded-full px-4 py-2 text-sm font-semibold text-white"
           >
             Clear filters
           </button>

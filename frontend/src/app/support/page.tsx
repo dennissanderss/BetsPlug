@@ -13,7 +13,7 @@ export default function SupportPage() {
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-6 py-20 text-center">
         {/* Icon */}
-        <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-green-500/15 shadow-[0_0_40px_rgba(74,222,128,0.25)]">
+        <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/15 shadow-[0_0_40px_rgba(74,222,128,0.25)]">
           <LifeBuoy className="h-8 w-8 text-green-400" />
         </div>
 

@@ -48,7 +48,7 @@ function ReferralLinkBox({ link }: { link: string }) {
   };
 
   return (
-    <div className="flex items-stretch gap-0 overflow-hidden rounded-xl border border-white/[0.1]">
+    <div className="flex items-stretch gap-0 overflow-hidden rounded-full border border-white/[0.1]">
       <div className="flex-1 bg-white/[0.04] px-4 py-2.5 font-mono text-sm text-slate-300 truncate min-w-0 flex items-center">
         {link}
       </div>
@@ -117,7 +117,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
 
       {/* Plan header */}
       <div className="flex items-start justify-between gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/10">
           <Icon className="h-5 w-5 text-blue-400" />
         </div>
         {plan.badge && (
@@ -156,7 +156,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
       <div className="mt-6 flex-1 flex items-end">
         <button
           className={cn(
-            "w-full inline-flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all duration-150",
+            "w-full inline-flex items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold transition-all duration-150",
             plan.ctaVariant === "gradient" &&
               "btn-gradient text-white",
             plan.ctaVariant === "outline" &&
@@ -218,7 +218,7 @@ function StatPill({
   };
 
   return (
-    <div className={cn("rounded-xl border px-5 py-4 text-center", styles[color])}>
+    <div className={cn("rounded-full border px-5 py-4 text-center", styles[color])}>
       <p className="text-2xl font-extrabold">{value}</p>
       <p className="mt-0.5 text-xs font-medium opacity-80">{label}</p>
     </div>
@@ -385,7 +385,7 @@ export default function DealsPage() {
       {/* ── Referral Program ─────────────────────────────────────────────────── */}
       <div className="glass-card p-6 animate-slide-up">
         <div className="flex items-start gap-3 border-b border-white/[0.06] pb-5 mb-6">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-500/10">
             <Users className="h-4 w-4 text-blue-400" />
           </div>
           <div>
@@ -447,7 +447,7 @@ export default function DealsPage() {
       </div>
 
       {/* ── FAQ teaser ───────────────────────────────────────────────────────── */}
-      <div className="rounded-xl border border-white/[0.05] bg-white/[0.02] p-5 flex items-start gap-3 animate-slide-up">
+      <div className="rounded-full border border-white/[0.05] bg-white/[0.02] p-5 flex items-start gap-3 animate-slide-up">
         <ExternalLink className="h-4 w-4 shrink-0 mt-0.5 text-slate-500" />
         <p className="text-xs text-slate-500 leading-relaxed">
           <span className="text-slate-400 font-medium">Disclaimer: </span>

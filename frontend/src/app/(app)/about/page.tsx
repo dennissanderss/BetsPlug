@@ -359,14 +359,14 @@ export default function AboutPage() {
               return (
                 <div
                   key={pillar.title}
-                  className="flex gap-4 p-5 rounded-xl transition-all duration-200"
+                  className="flex gap-4 p-5 rounded-full transition-all duration-200"
                   style={{
                     background: "rgba(255,255,255,0.03)",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
                   <div
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl mt-0.5"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full mt-0.5"
                     style={{
                       background: pillar.glowColor,
                       border: `1px solid ${pillar.color}40`,
@@ -416,7 +416,7 @@ export default function AboutPage() {
                 >
                   {/* Step indicator */}
                   <div
-                    className="relative flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-2xl z-10 transition-all duration-200 group-hover:scale-105"
+                    className="relative flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-full z-10 transition-all duration-200 group-hover:scale-105"
                     style={{
                       background: `linear-gradient(135deg, ${step.color}30 0%, ${step.color}15 100%)`,
                       border: `2px solid ${step.color}50`,
@@ -434,7 +434,7 @@ export default function AboutPage() {
 
                   {/* Content card */}
                   <div
-                    className="flex-1 glass-card-hover p-5 rounded-xl"
+                    className="flex-1 glass-card-hover p-5 rounded-full"
                     style={{ borderColor: `${step.color}20` }}
                   >
                     <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
@@ -486,14 +486,14 @@ export default function AboutPage() {
             return (
               <div
                 key={model.title}
-                className="glass-card-hover p-6 rounded-xl space-y-4 group"
+                className="glass-card-hover p-6 rounded-full space-y-4 group"
                 style={{ borderColor: model.borderColor }}
               >
                 {/* Header */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <div
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
                       style={{
                         background: `${model.color}20`,
                         border: `1px solid ${model.color}40`,
@@ -619,7 +619,7 @@ export default function AboutPage() {
                   href={ref.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start gap-3 p-3.5 rounded-lg transition-all duration-200 group"
+                  className="flex items-start gap-3 p-3.5 rounded-full transition-all duration-200 group"
                   style={{
                     background: "rgba(255,255,255,0.03)",
                     border: "1px solid rgba(255,255,255,0.06)",
@@ -680,7 +680,7 @@ export default function AboutPage() {
             return (
               <div
                 key={meta.label}
-                className="glass-card-hover p-6 text-center rounded-xl space-y-2"
+                className="glass-card-hover p-6 text-center rounded-full space-y-2"
                 style={{ borderColor: `${meta.color}25` }}
               >
                 <div
@@ -734,7 +734,7 @@ export default function AboutPage() {
           {/* Warning header */}
           <div className="flex items-center gap-3 pb-2 border-b" style={{ borderColor: "rgba(245,158,11,0.2)" }}>
             <div
-              className="flex h-9 w-9 items-center justify-center rounded-xl"
+              className="flex h-9 w-9 items-center justify-center rounded-full"
               style={{
                 background: "rgba(245,158,11,0.15)",
                 border: "1px solid rgba(245,158,11,0.4)",
@@ -778,7 +778,7 @@ export default function AboutPage() {
 
           {/* Responsible gambling notice */}
           <div
-            className="rounded-xl p-4 flex items-start gap-3"
+            className="rounded-full p-4 flex items-start gap-3"
             style={{
               background: "rgba(245,158,11,0.08)",
               border: "1px solid rgba(245,158,11,0.2)",
@@ -803,7 +803,7 @@ export default function AboutPage() {
       {/* ── 8. CTA ───────────────────────────────────────────────────────────── */}
       <section className="text-center space-y-6 pb-10">
         <div
-          className="glass-card p-8 md:p-12 rounded-2xl space-y-6"
+          className="glass-card p-8 md:p-12 rounded-full space-y-6"
           style={{
             background:
               "linear-gradient(135deg, rgba(59,130,246,0.06) 0%, rgba(16,185,129,0.04) 100%)",
@@ -822,7 +822,7 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/predictions">
               <button
-                className="btn-gradient inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-white glow-blue-sm"
+                className="btn-gradient inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white glow-blue-sm"
               >
                 <SparklesIcon className="h-4 w-4" />
                 View Live Predictions
@@ -831,7 +831,7 @@ export default function AboutPage() {
 
             <Link href="/strategy">
               <button
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold text-slate-200 border transition-all duration-200 hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-white"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-slate-200 border transition-all duration-200 hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-white"
                 style={{ borderColor: "rgba(255,255,255,0.12)" }}
               >
                 <FlaskConical className="h-4 w-4" />

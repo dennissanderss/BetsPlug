@@ -136,7 +136,7 @@ function ResultCard({ result }: { result: SearchResult }) {
         {/* Icon */}
         <div
           className={cn(
-            "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg",
+            "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
             cfg.iconBg
           )}
         >
@@ -201,12 +201,12 @@ function SearchSkeleton() {
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
-          className="flex items-center gap-4 rounded-xl border border-white/[0.06] bg-white/[0.04] px-4 py-3.5"
+          className="flex items-center gap-4 rounded-full border border-white/[0.06] bg-white/[0.04] px-4 py-3.5"
         >
-          <div className="h-10 w-10 rounded-lg bg-white/[0.06] animate-pulse shrink-0" />
+          <div className="h-10 w-10 rounded-full bg-white/[0.06] animate-pulse shrink-0" />
           <div className="flex-1 space-y-2">
-            <div className="h-4 w-48 rounded-md bg-white/[0.06] animate-pulse" />
-            <div className="h-3 w-32 rounded-md bg-white/[0.04] animate-pulse" />
+            <div className="h-4 w-48 rounded-full bg-white/[0.06] animate-pulse" />
+            <div className="h-3 w-32 rounded-full bg-white/[0.04] animate-pulse" />
           </div>
           <div className="h-5 w-16 rounded-full bg-white/[0.06] animate-pulse hidden sm:block" />
         </div>
@@ -402,7 +402,7 @@ function SearchPageInner() {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           className={cn(
-            "h-14 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] pl-12 pr-12 text-base text-slate-100",
+            "h-14 w-full rounded-full border border-white/[0.08] bg-white/[0.04] pl-12 pr-12 text-base text-slate-100",
             "placeholder:text-slate-500 backdrop-blur-md",
             "transition-all duration-200",
             "focus:outline-none focus:border-blue-500/60 focus:bg-white/[0.06] focus:shadow-[0_0_0_3px_rgba(59,130,246,0.15),0_0_20px_rgba(59,130,246,0.08)]"
@@ -464,10 +464,10 @@ export default function SearchPage() {
       fallback={
         <div className="mx-auto max-w-3xl space-y-8">
           <div className="space-y-2 text-center pt-2">
-            <div className="mx-auto h-9 w-36 rounded-lg bg-white/[0.06] animate-pulse" />
-            <div className="mx-auto h-4 w-56 rounded-md bg-white/[0.04] animate-pulse" />
+            <div className="mx-auto h-9 w-36 rounded-full bg-white/[0.06] animate-pulse" />
+            <div className="mx-auto h-4 w-56 rounded-full bg-white/[0.04] animate-pulse" />
           </div>
-          <div className="h-14 w-full rounded-xl bg-white/[0.04] animate-pulse" />
+          <div className="h-14 w-full rounded-full bg-white/[0.04] animate-pulse" />
           <SearchSkeleton />
         </div>
       }

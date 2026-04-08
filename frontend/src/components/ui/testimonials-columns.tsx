@@ -41,7 +41,7 @@ export const TestimonialsColumn = ({
             {testimonials.map(({ text, image, name, role }, i) => (
               <div
                 key={i}
-                className="group relative w-full max-w-xs rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-8 shadow-xl shadow-green-500/[0.04] backdrop-blur-sm transition-all duration-300 hover:border-green-500/30 hover:shadow-green-500/[0.15]"
+                className="group relative w-full max-w-xs rounded-full border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-8 shadow-xl shadow-green-500/[0.04] backdrop-blur-sm transition-all duration-300 hover:border-green-500/30 hover:shadow-green-500/[0.15]"
               >
                 {/* Stars */}
                 <div className="mb-4 flex gap-0.5">

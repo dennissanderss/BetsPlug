@@ -154,7 +154,7 @@ function MatchHeader({ match }: { match: Match }) {
       </div>
 
       {/* Score / Fixture display */}
-      <div className="rounded-xl border border-border bg-card p-6">
+      <div className="rounded-full border border-border bg-card p-6">
         <div className="flex items-center justify-center gap-6 sm:gap-10">
           {/* Home team */}
           <div className="flex-1 text-right">
@@ -269,15 +269,15 @@ function TeamFormCard({
 
         {/* W/D/L mini cards */}
         <div className="grid grid-cols-3 gap-2">
-          <div className="rounded-md bg-green-50 p-2 text-center dark:bg-green-950/30">
+          <div className="rounded-full bg-green-50 p-2 text-center dark:bg-green-950/30">
             <p className="text-lg font-bold text-green-600 dark:text-green-400">{form.wins}</p>
             <p className="text-xs text-green-700 dark:text-green-500">W</p>
           </div>
-          <div className="rounded-md bg-amber-50 p-2 text-center dark:bg-amber-950/30">
+          <div className="rounded-full bg-amber-50 p-2 text-center dark:bg-amber-950/30">
             <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{form.draws}</p>
             <p className="text-xs text-amber-700 dark:text-amber-500">D</p>
           </div>
-          <div className="rounded-md bg-red-50 p-2 text-center dark:bg-red-950/30">
+          <div className="rounded-full bg-red-50 p-2 text-center dark:bg-red-950/30">
             <p className="text-lg font-bold text-red-600 dark:text-red-400">{form.losses}</p>
             <p className="text-xs text-red-700 dark:text-red-500">L</p>
           </div>
@@ -522,7 +522,7 @@ function ForecastTab({
   return (
     <div className="space-y-5">
       {/* Simulation disclaimer - always prominent */}
-      <div className="rounded-md border-2 border-amber-400 bg-amber-50 px-4 py-3 dark:border-amber-600 dark:bg-amber-950/30">
+      <div className="rounded-full border-2 border-amber-400 bg-amber-50 px-4 py-3 dark:border-amber-600 dark:bg-amber-950/30">
         <div className="flex items-start gap-2">
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
           <p className="text-sm font-bold text-amber-800 dark:text-amber-300">
@@ -595,7 +595,7 @@ function ForecastTab({
           <CardContent className="space-y-5">
             {/* Summary text */}
             {explanation.summary && (
-              <div className="rounded-md bg-muted/50 px-4 py-3">
+              <div className="rounded-full bg-muted/50 px-4 py-3">
                 <p className="text-sm leading-relaxed text-foreground">
                   {explanation.summary}
                 </p>
@@ -666,7 +666,7 @@ function HeadToHeadTab({
         <CardContent className="space-y-5">
           {/* Three-way stat */}
           <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/30">
+            <div className="rounded-full border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/30">
               <p className="text-3xl font-black text-blue-600 dark:text-blue-400">
                 {h2h.home_wins}
               </p>
@@ -677,7 +677,7 @@ function HeadToHeadTab({
                 {formatPercent(homeWinPct)}
               </p>
             </div>
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+            <div className="rounded-full border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40">
               <p className="text-3xl font-black text-slate-600 dark:text-slate-400">
                 {h2h.draws}
               </p>
@@ -688,7 +688,7 @@ function HeadToHeadTab({
                 {formatPercent(drawPct)}
               </p>
             </div>
-            <div className="rounded-lg border border-orange-200 bg-orange-50 p-4 dark:border-orange-800 dark:bg-orange-950/30">
+            <div className="rounded-full border border-orange-200 bg-orange-50 p-4 dark:border-orange-800 dark:bg-orange-950/30">
               <p className="text-3xl font-black text-orange-600 dark:text-orange-400">
                 {h2h.away_wins}
               </p>
@@ -721,7 +721,7 @@ function HeadToHeadTab({
 
           {/* Summary */}
           {h2h.summary && (
-            <div className="rounded-md bg-muted/50 px-4 py-3">
+            <div className="rounded-full bg-muted/50 px-4 py-3">
               <p className="text-sm text-foreground">{h2h.summary}</p>
             </div>
           )}
@@ -781,7 +781,7 @@ export default function MatchDetailPage() {
 
   if (matchError) {
     return (
-      <div className="flex h-64 flex-col items-center justify-center gap-3 rounded-lg border border-destructive/30 bg-destructive/5">
+      <div className="flex h-64 flex-col items-center justify-center gap-3 rounded-full border border-destructive/30 bg-destructive/5">
         <p className="text-sm font-medium text-destructive">Failed to load match data.</p>
         <p className="text-xs text-muted-foreground">
           {matchError instanceof Error ? matchError.message : "Unknown error"}

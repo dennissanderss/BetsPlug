@@ -55,7 +55,7 @@ export function DataTable<T>({
   return (
     <div className={cn("space-y-3", className)}>
       {/* Table wrapper */}
-      <div className="w-full overflow-auto rounded-md border border-border">
+      <div className="w-full overflow-auto rounded-full border border-border">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border bg-muted/50">

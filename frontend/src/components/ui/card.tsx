@@ -10,13 +10,13 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const variantStyles: Record<CardVariant, string> = {
   default:
-    "rounded-2xl border bg-[#111827] text-slate-100 shadow-sm " +
+    "rounded-full border bg-[#111827] text-slate-100 shadow-sm " +
     "border-white/[0.06] hover:border-white/[0.10] transition-colors duration-200",
   glass:
-    "rounded-2xl text-slate-100 transition-all duration-200 " +
+    "rounded-full text-slate-100 transition-all duration-200 " +
     "glass-card-hover",
   elevated:
-    "rounded-2xl border bg-[#1e293b] text-slate-100 shadow-lg " +
+    "rounded-full border bg-[#1e293b] text-slate-100 shadow-lg " +
     "border-white/[0.08] hover:border-white/[0.14] hover:shadow-xl transition-all duration-200",
 };
 

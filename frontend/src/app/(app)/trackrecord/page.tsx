@@ -85,7 +85,7 @@ function KpiCard({ title, value, icon: Icon, accent = "blue" }: KpiCardProps) {
     <div className="glass-card-hover p-5 space-y-3">
       <div className="flex items-center justify-between">
         <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">{title}</p>
-        <div className={cn("flex h-8 w-8 items-center justify-center rounded-lg ring-1", a.bg, a.ring)}>
+        <div className={cn("flex h-8 w-8 items-center justify-center rounded-full ring-1", a.bg, a.ring)}>
           <Icon className={cn("h-4 w-4", a.icon)} />
         </div>
       </div>
@@ -102,10 +102,10 @@ function KpiSkeletons() {
       {Array.from({ length: 5 }).map((_, i) => (
         <div key={i} className="glass-card p-5 space-y-3">
           <div className="flex items-center justify-between">
-            <div className="h-3 w-28 rounded-md bg-white/[0.06] animate-pulse" />
-            <div className="h-8 w-8 rounded-lg bg-white/[0.06] animate-pulse" />
+            <div className="h-3 w-28 rounded-full bg-white/[0.06] animate-pulse" />
+            <div className="h-8 w-8 rounded-full bg-white/[0.06] animate-pulse" />
           </div>
-          <div className="h-7 w-20 rounded-md bg-white/[0.08] animate-pulse" />
+          <div className="h-7 w-20 rounded-full bg-white/[0.08] animate-pulse" />
         </div>
       ))}
     </div>
@@ -132,7 +132,7 @@ function SummaryStatsTable({ summary }: { summary: TrackrecordSummary }) {
   ];
 
   return (
-    <div className="overflow-hidden rounded-xl border border-white/[0.06]">
+    <div className="overflow-hidden rounded-full border border-white/[0.06]">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-white/[0.06] bg-white/[0.03]">
@@ -176,7 +176,7 @@ function SegmentTable({ data, loading, emptyMessage }: {
     return (
       <div className="space-y-2">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="flex items-center gap-4 px-4 py-3 rounded-lg bg-white/[0.03]">
+          <div key={i} className="flex items-center gap-4 px-4 py-3 rounded-full bg-white/[0.03]">
             <div className="h-4 w-32 rounded bg-white/[0.06] animate-pulse" />
             <div className="flex-1" />
             <div className="h-4 w-16 rounded bg-white/[0.06] animate-pulse" />
@@ -195,7 +195,7 @@ function SegmentTable({ data, loading, emptyMessage }: {
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-white/[0.06]">
+    <div className="overflow-hidden rounded-full border border-white/[0.06]">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-white/[0.06] bg-white/[0.03]">
@@ -480,7 +480,7 @@ function RecentPredictionsFeed() {
         </div>
         <div className="space-y-2">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-14 w-full rounded-lg bg-white/[0.03] animate-pulse" />
+            <div key={i} className="h-14 w-full rounded-full bg-white/[0.03] animate-pulse" />
           ))}
         </div>
       </div>
@@ -632,7 +632,7 @@ function ProfitabilityChart({
     return (
       <div className="glass-card p-6 space-y-4">
         <div className="h-4 w-48 rounded bg-white/[0.06] animate-pulse" />
-        <div className="h-72 w-full rounded-xl bg-white/[0.03] animate-pulse" />
+        <div className="h-72 w-full rounded-full bg-white/[0.03] animate-pulse" />
       </div>
     );
   }
@@ -923,7 +923,7 @@ export default function TrackrecordPage() {
 
       {/* No-data notice when system is new */}
       {!summaryLoading && (!summary || summary.total_predictions === 0) && (
-        <div className="flex items-start gap-3 rounded-xl border border-blue-500/20 bg-blue-500/[0.04] p-5">
+        <div className="flex items-start gap-3 rounded-full border border-blue-500/20 bg-blue-500/[0.04] p-5">
           <AlertTriangle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
           <div className="space-y-1">
             <p className="text-sm font-semibold text-blue-400">No prediction data yet</p>
@@ -956,7 +956,7 @@ export default function TrackrecordPage() {
                 value={dateFrom}
                 onChange={(e) => setDateFrom(e.target.value)}
                 className={cn(
-                  "h-8 w-36 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-slate-200",
+                  "h-8 w-36 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-slate-200",
                   "placeholder:text-slate-500",
                   "focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.06]",
                   "transition-colors [color-scheme:dark]"
@@ -972,7 +972,7 @@ export default function TrackrecordPage() {
                 value={dateTo}
                 onChange={(e) => setDateTo(e.target.value)}
                 className={cn(
-                  "h-8 w-36 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-slate-200",
+                  "h-8 w-36 rounded-full border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-slate-200",
                   "placeholder:text-slate-500",
                   "focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.06]",
                   "transition-colors [color-scheme:dark]"
@@ -1050,7 +1050,7 @@ export default function TrackrecordPage() {
               <p className="text-sm text-slate-500 mt-0.5">Monthly rolling accuracy over the selected period</p>
             </div>
             {monthLoading ? (
-              <div className="h-72 w-full rounded-xl bg-white/[0.03] animate-pulse" />
+              <div className="h-72 w-full rounded-full bg-white/[0.03] animate-pulse" />
             ) : rollingData.length === 0 ? (
               <div className="flex h-72 items-center justify-center text-sm text-slate-500">
                 No monthly data available for the selected filters.
@@ -1075,7 +1075,7 @@ export default function TrackrecordPage() {
             {summaryLoading ? (
               <div className="space-y-1.5">
                 {Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i} className="h-9 w-full rounded-lg bg-white/[0.04] animate-pulse" />
+                  <div key={i} className="h-9 w-full rounded-full bg-white/[0.04] animate-pulse" />
                 ))}
               </div>
             ) : !summary ? (
@@ -1100,7 +1100,7 @@ export default function TrackrecordPage() {
                 <p className="text-sm text-slate-500 mt-0.5">Predicted probability vs. actual frequency</p>
               </div>
               {calibrationLoading ? (
-                <div className="h-80 w-full rounded-xl bg-white/[0.03] animate-pulse" />
+                <div className="h-80 w-full rounded-full bg-white/[0.03] animate-pulse" />
               ) : calibrationPoints.length === 0 ? (
                 <div className="flex h-80 items-center justify-center text-sm text-slate-500">
                   No calibration data available for the selected filters.
@@ -1133,7 +1133,7 @@ export default function TrackrecordPage() {
               </p>
 
               {/* Key metrics box */}
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.04] p-4 space-y-2">
+              <div className="rounded-full border border-white/[0.06] bg-white/[0.04] p-4 space-y-2">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
                   Key Metrics
                 </p>

@@ -185,19 +185,19 @@ function OverviewTab({
               <Separator />
               {/* Form summary mini-stats */}
               <div className="grid grid-cols-3 gap-3 pt-1">
-                <div className="rounded-md bg-green-50 p-3 text-center dark:bg-green-950/30">
+                <div className="rounded-full bg-green-50 p-3 text-center dark:bg-green-950/30">
                   <p className="text-xl font-bold text-green-600 dark:text-green-400">
                     {form.wins}
                   </p>
                   <p className="text-xs text-green-700 dark:text-green-500">Wins</p>
                 </div>
-                <div className="rounded-md bg-amber-50 p-3 text-center dark:bg-amber-950/30">
+                <div className="rounded-full bg-amber-50 p-3 text-center dark:bg-amber-950/30">
                   <p className="text-xl font-bold text-amber-600 dark:text-amber-400">
                     {form.draws}
                   </p>
                   <p className="text-xs text-amber-700 dark:text-amber-500">Draws</p>
                 </div>
-                <div className="rounded-md bg-red-50 p-3 text-center dark:bg-red-950/30">
+                <div className="rounded-full bg-red-50 p-3 text-center dark:bg-red-950/30">
                   <p className="text-xl font-bold text-red-600 dark:text-red-400">
                     {form.losses}
                   </p>
@@ -224,12 +224,12 @@ function OverviewTab({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 {/* Played */}
-                <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
+                <div className="rounded-full border border-border bg-muted/30 p-3 text-center">
                   <p className="text-2xl font-bold text-foreground">{s.matches_played}</p>
                   <p className="text-xs text-muted-foreground">Played</p>
                 </div>
                 {/* Goal Diff */}
-                <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
+                <div className="rounded-full border border-border bg-muted/30 p-3 text-center">
                   <p
                     className={cn(
                       "text-2xl font-bold",
@@ -323,15 +323,15 @@ function OverviewTab({
                     </div>
                     <div className="mt-1.5 flex gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
-                        <span className="inline-block h-2 w-2 rounded-sm bg-green-500" />
+                        <span className="inline-block h-2 w-2 rounded-full bg-green-500" />
                         W {formatPercent(winRate ?? 0)}
                       </span>
                       <span className="flex items-center gap-1">
-                        <span className="inline-block h-2 w-2 rounded-sm bg-amber-400" />
+                        <span className="inline-block h-2 w-2 rounded-full bg-amber-400" />
                         D {formatPercent(drawRate ?? 0)}
                       </span>
                       <span className="flex items-center gap-1">
-                        <span className="inline-block h-2 w-2 rounded-sm bg-red-500" />
+                        <span className="inline-block h-2 w-2 rounded-full bg-red-500" />
                         L {formatPercent(lossRate ?? 0)}
                       </span>
                     </div>
@@ -479,7 +479,7 @@ function StatsTab({ stats }: { stats: TeamStatsData | null }) {
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-100 dark:bg-blue-900/30">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
               <Shield className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
@@ -506,7 +506,7 @@ function StatsTab({ stats }: { stats: TeamStatsData | null }) {
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-orange-100 dark:bg-orange-900/30">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30">
               <Globe className="h-4 w-4 text-orange-600 dark:text-orange-400" />
             </div>
             <div>
@@ -533,7 +533,7 @@ function StatsTab({ stats }: { stats: TeamStatsData | null }) {
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-green-100 dark:bg-green-900/30">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
               <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
             </div>
             <div>
@@ -585,7 +585,7 @@ function StatsTab({ stats }: { stats: TeamStatsData | null }) {
             ].map(({ label, value, color }) => (
               <div
                 key={label}
-                className="rounded-lg border border-border bg-muted/30 p-4 text-center"
+                className="rounded-full border border-border bg-muted/30 p-4 text-center"
               >
                 <p className={cn("text-3xl font-bold tabular-nums", color ?? "text-foreground")}>
                   {value}
@@ -626,7 +626,7 @@ export default function TeamDetailPage() {
 
   if (teamError) {
     return (
-      <div className="flex h-64 flex-col items-center justify-center gap-3 rounded-lg border border-destructive/30 bg-destructive/5">
+      <div className="flex h-64 flex-col items-center justify-center gap-3 rounded-full border border-destructive/30 bg-destructive/5">
         <p className="text-sm font-medium text-destructive">Failed to load team data.</p>
         <p className="text-xs text-muted-foreground">
           {teamError instanceof Error ? teamError.message : "Unknown error"}

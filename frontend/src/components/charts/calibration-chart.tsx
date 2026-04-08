@@ -43,7 +43,7 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
   return (
-    <div className="rounded-md border border-border bg-popover px-3 py-2 text-sm shadow-md">
+    <div className="rounded-full border border-border bg-popover px-3 py-2 text-sm shadow-md">
       <p className="font-medium">
         Predicted: {(d.predicted * 100).toFixed(1)}%
       </p>
