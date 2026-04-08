@@ -46,21 +46,27 @@ async def list_predictions(
     from app.models.league import League
     from app.models.sport import Sport
 
-    q = (
-        select(Prediction)
-        .join(Match, Match.id == Prediction.match_id)
-        .join(League, League.id == Match.league_id)
-        .join(Sport, Sport.id == League.sport_id)
+    from sqlalchemy.orm import selectinload
+
+    q = select(Prediction).options(
+        selectinload(Prediction.match),
+        selectinload(Prediction.explanation),
+        selectinload(Prediction.evaluation),
+        selectinload(Prediction.model_version),
     )
 
-    if sport is not None:
-        q = q.where(Sport.slug == sport)
-    if league_id is not None:
-        q = q.where(Match.league_id == league_id)
-    if date_from is not None:
-        q = q.where(Match.scheduled_at >= date_from)
-    if date_to is not None:
-        q = q.where(Match.scheduled_at <= date_to)
+    if sport is not None or league_id is not None or date_from is not None or date_to is not None:
+        q = q.join(Match, Match.id == Prediction.match_id)
+        if sport is not None:
+            q = q.join(League, League.id == Match.league_id).join(Sport, Sport.id == League.sport_id)
+            q = q.where(Sport.slug == sport)
+        if league_id is not None:
+            q = q.where(Match.league_id == league_id)
+        if date_from is not None:
+            q = q.where(Match.scheduled_at >= date_from)
+        if date_to is not None:
+            q = q.where(Match.scheduled_at <= date_to)
+
     if model_version_id is not None:
         q = q.where(Prediction.model_version_id == model_version_id)
 
@@ -68,7 +74,28 @@ async def list_predictions(
 
     result = await db.execute(q)
     predictions = result.scalars().all()
-    return [PredictionResponse.model_validate(p) for p in predictions]
+
+    try:
+        return [PredictionResponse.model_validate(p) for p in predictions]
+    except Exception:
+        # Fallback: return minimal response if validation fails
+        return [
+            PredictionResponse(
+                id=p.id,
+                match_id=p.match_id,
+                model_version_id=p.model_version_id,
+                predicted_at=p.predicted_at,
+                prediction_type=p.prediction_type,
+                home_win_prob=p.home_win_prob,
+                draw_prob=p.draw_prob,
+                away_win_prob=p.away_win_prob,
+                confidence=p.confidence,
+                is_simulation=p.is_simulation,
+                created_at=p.created_at,
+                updated_at=p.updated_at,
+            )
+            for p in predictions
+        ]
 
 
 @router.get(

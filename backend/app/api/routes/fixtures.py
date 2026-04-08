@@ -143,15 +143,23 @@ class WeeklySummaryItem(BaseModel):
     points: int
 
 
-class WeeklySummaryResponse(BaseModel):
-    """Response envelope for /fixtures/results/weekly-summary."""
+class WeeklyPerformer(BaseModel):
+    name: str
+    accuracy: float
+    total: int
 
-    week_start: str
-    week_end: str
-    total_matches: int
+
+class WeeklySummaryResponse(BaseModel):
+    """Response matching frontend WeeklySummary type."""
+
+    total_calls: int = 0
+    won: int = 0
+    lost: int = 0
+    win_rate: float = 0.0
+    pl_units: float = 0.0
+    best_performers: List[WeeklyPerformer] = []
+    worst_performers: List[WeeklyPerformer] = []
     disclaimer: str = _SIMULATION_DISCLAIMER
-    top_teams: List[WeeklySummaryItem]
-    bottom_teams: List[WeeklySummaryItem]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -365,93 +373,59 @@ async def get_today_fixtures(
 async def get_weekly_summary(
     db: AsyncSession = Depends(get_db),
 ) -> WeeklySummaryResponse:
-    from sqlalchemy import func
+    """Weekly prediction performance summary matching frontend WeeklySummary type."""
+    from app.models.prediction import Prediction, PredictionEvaluation
 
     now = datetime.now(timezone.utc)
     week_ago = now - timedelta(days=7)
 
-    # Fetch all finished matches this week
+    # Get all evaluated predictions from last 7 days
     stmt = (
-        select(Match)
+        select(Prediction, PredictionEvaluation)
+        .join(Match, Match.id == Prediction.match_id)
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
         .where(
             and_(
-                Match.status == MatchStatus.FINISHED,
                 Match.scheduled_at >= week_ago,
                 Match.scheduled_at <= now,
+                Match.status == MatchStatus.FINISHED,
             )
         )
-        .order_by(Match.scheduled_at)
     )
-    matches = (await db.execute(stmt)).scalars().all()
+    rows = (await db.execute(stmt)).all()
 
-    # Aggregate per team
-    team_stats: dict[str, dict] = {}
+    total_calls = len(rows)
+    won = sum(1 for _, ev in rows if ev.is_correct)
+    lost = total_calls - won
+    win_rate = won / total_calls if total_calls > 0 else 0.0
+    # P/L: flat staking 1 unit, assume avg odds ~1.9 for wins
+    pl_units = (won * 0.9) - (lost * 1.0) if total_calls > 0 else 0.0
 
-    for m in matches:
-        if m.result is None:
-            continue
+    # Best/worst by league
+    league_stats: dict[str, dict] = {}
+    for pred, ev in rows:
+        league = pred.match.league.name if pred.match and pred.match.league else "Unknown"
+        if league not in league_stats:
+            league_stats[league] = {"name": league, "correct": 0, "total": 0}
+        league_stats[league]["total"] += 1
+        if ev.is_correct:
+            league_stats[league]["correct"] += 1
 
-        home_id = str(m.home_team_id)
-        away_id = str(m.away_team_id)
+    for s in league_stats.values():
+        s["accuracy"] = s["correct"] / s["total"] if s["total"] > 0 else 0.0
 
-        for team_id, is_home in [(home_id, True), (away_id, False)]:
-            if team_id not in team_stats:
-                team_obj = m.home_team if is_home else m.away_team
-                team_stats[team_id] = {
-                    "team_id": team_id,
-                    "team_name": team_obj.name if team_obj else None,
-                    "team_slug": team_obj.slug if team_obj else None,
-                    "matches_played": 0,
-                    "wins": 0,
-                    "draws": 0,
-                    "losses": 0,
-                    "goals_for": 0,
-                    "goals_against": 0,
-                    "goal_difference": 0,
-                    "points": 0,
-                }
-            entry = team_stats[team_id]
-            entry["matches_played"] += 1
-
-            if is_home:
-                gf = m.result.home_score
-                ga = m.result.away_score
-                winner = m.result.winner
-                outcome = "home" if winner == "home" else ("draw" if winner == "draw" else "loss")
-            else:
-                gf = m.result.away_score
-                ga = m.result.home_score
-                winner = m.result.winner
-                outcome = "away" if winner == "away" else ("draw" if winner == "draw" else "loss")
-
-            entry["goals_for"] += gf
-            entry["goals_against"] += ga
-            entry["goal_difference"] = entry["goals_for"] - entry["goals_against"]
-
-            if outcome in ("home", "away"):
-                entry["wins"] += 1
-                entry["points"] += 3
-            elif outcome == "draw":
-                entry["draws"] += 1
-                entry["points"] += 1
-            else:
-                entry["losses"] += 1
-
-    ranked = sorted(
-        team_stats.values(),
-        key=lambda t: (t["points"], t["goal_difference"], t["goals_for"]),
-        reverse=True,
-    )
-
-    top = [WeeklySummaryItem(**t) for t in ranked[:5]]
-    bottom = [WeeklySummaryItem(**t) for t in ranked[-5:]] if len(ranked) >= 5 else []
+    sorted_leagues = sorted(league_stats.values(), key=lambda x: x["accuracy"], reverse=True)
+    best = [WeeklyPerformer(name=s["name"], accuracy=s["accuracy"], total=s["total"]) for s in sorted_leagues[:3]]
+    worst = [WeeklyPerformer(name=s["name"], accuracy=s["accuracy"], total=s["total"]) for s in sorted_leagues[-3:]] if len(sorted_leagues) > 3 else []
 
     return WeeklySummaryResponse(
-        week_start=week_ago.date().isoformat(),
-        week_end=now.date().isoformat(),
-        total_matches=len(matches),
-        top_teams=top,
-        bottom_teams=bottom,
+        total_calls=total_calls,
+        won=won,
+        lost=lost,
+        win_rate=round(win_rate, 4),
+        pl_units=round(pl_units, 2),
+        best_performers=best,
+        worst_performers=worst,
     )
 
 
