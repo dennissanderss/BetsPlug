@@ -29,6 +29,8 @@ import { SeoSection } from "@/components/ui/seo-section";
 import { FloatingSports } from "@/components/ui/floating-sports";
 import { LeaguesTicker } from "@/components/ui/leagues-ticker";
 import { HowItWorks } from "@/components/ui/how-it-works";
+import { ComparisonTable } from "@/components/ui/comparison-table";
+import { PricingSection } from "@/components/ui/pricing-section";
 
 // ─── Animated counter ────────────────────────────────────────────────────────
 
@@ -92,7 +94,7 @@ export default function LandingPage() {
     { href: "#predictions", label: "Predictions" },
     { href: "#how-it-works", label: "How It Works" },
     { href: "#track-record", label: "Track Record" },
-    { href: "/subscriptions", label: "Pricing" },
+    { href: "#pricing", label: "Pricing" },
   ];
 
   return (
@@ -739,6 +741,11 @@ export default function LandingPage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
+          COMPARISON TABLE — BetsPlug vs competitors (funnel: differentiation)
+         ═══════════════════════════════════════════════════════════════════ */}
+      <ComparisonTable />
+
+      {/* ═══════════════════════════════════════════════════════════════════
           HOW IT WORKS — 3 step process (funnel: action prep)
          ═══════════════════════════════════════════════════════════════════ */}
       <section id="how-it-works">
@@ -749,6 +756,11 @@ export default function LandingPage() {
           TESTIMONIALS
          ═══════════════════════════════════════════════════════════════════ */}
       <TestimonialsSection />
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          PRICING — plans + lifetime Platinum deal
+         ═══════════════════════════════════════════════════════════════════ */}
+      <PricingSection />
 
       {/* ═══════════════════════════════════════════════════════════════════
           SEO CONTENT
