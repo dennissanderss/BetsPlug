@@ -6,21 +6,21 @@
   /* ── Dark theme by default ── */
   :root {
     /* Base surfaces */
-    --background: 222 47% 7%;        /* #0a0e1a */
+    --background: 222 47% 5%;        /* #080b14 */
     --foreground: 210 40% 98%;       /* #f8fafc */
 
     /* Card surfaces */
-    --card: 221 39% 11%;             /* #111827 */
+    --card: 222 39% 8%;              /* #0d1220 */
     --card-foreground: 210 40% 98%;
 
     /* Elevated surface */
-    --elevated: 217 33% 17%;         /* #1e293b */
+    --elevated: 217 33% 12%;         /* #141b2e */
 
-    /* Primary: electric blue */
-    --primary: 217 91% 60%;          /* #3b82f6 */
-    --primary-foreground: 210 40% 98%;
+    /* Primary: neon green (from logo) */
+    --primary: 142 76% 55%;          /* #4ADE80 neon green */
+    --primary-foreground: 222 47% 5%;
 
-    /* Secondary: emerald */
+    /* Secondary: deeper green */
     --secondary: 160 84% 39%;        /* #10b981 */
     --secondary-foreground: 210 40% 98%;
 
@@ -46,9 +46,9 @@
     --draw: 38 92% 50%;
 
     /* Borders */
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 217 91% 60%;
+    --border: 217 33% 15%;
+    --input: 217 33% 15%;
+    --ring: 142 76% 55%;
 
     --radius: 0.75rem;
 
@@ -96,7 +96,7 @@
   }
 
   body {
-    background: linear-gradient(135deg, #0a0e1a 0%, #111827 50%, #0f172a 100%);
+    background: radial-gradient(ellipse at top, #0d1220 0%, #080b14 50%, #060912 100%);
     background-attachment: fixed;
     @apply text-foreground antialiased;
     font-feature-settings: "cv11", "ss01";
@@ -148,14 +148,14 @@
 
   .glass-card-hover:hover {
     background: rgba(255, 255, 255, 0.07);
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.12),
+    box-shadow: 0 0 30px rgba(74, 222, 128, 0.15),
                 0 8px 32px rgba(0, 0, 0, 0.4);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
   }
 
   /* ── Gradient text ── */
   .gradient-text {
-    background: linear-gradient(135deg, #60a5fa 0%, #a5f3fc 100%);
+    background: linear-gradient(135deg, #4ade80 0%, #a7f3d0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -187,10 +187,10 @@
   /* ── Nav item active gradient ── */
   .nav-active {
     background: linear-gradient(90deg,
-      rgba(59, 130, 246, 0.25) 0%,
-      rgba(59, 130, 246, 0.08) 100%);
-    border-left: 2px solid #3b82f6;
-    color: #60a5fa;
+      rgba(74, 222, 128, 0.2) 0%,
+      rgba(74, 222, 128, 0.05) 100%);
+    border-left: 2px solid #4ade80;
+    color: #4ade80;
   }
 
   .nav-item {
@@ -199,21 +199,46 @@
   }
 
   .nav-item:hover {
-    background: rgba(59, 130, 246, 0.08);
-    border-left-color: rgba(59, 130, 246, 0.4);
+    background: rgba(74, 222, 128, 0.06);
+    border-left-color: rgba(74, 222, 128, 0.4);
     color: #e2e8f0;
   }
 
-  /* ── Primary gradient button ── */
+  /* ── Primary gradient button (neon green) ── */
   .btn-gradient {
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    color: #0a0e1a;
     transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
   }
 
   .btn-gradient:hover {
-    opacity: 0.92;
+    opacity: 0.95;
     transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 8px 32px rgba(74, 222, 128, 0.4);
+  }
+
+  /* ── Highlighted feature card (like crypto design middle card) ── */
+  .card-highlight {
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    color: #0a0e1a;
+    border-radius: var(--radius);
+    box-shadow: 0 0 40px rgba(74, 222, 128, 0.25),
+                0 20px 60px rgba(0, 0, 0, 0.4);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .card-highlight:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 60px rgba(74, 222, 128, 0.4),
+                0 24px 72px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ── Grid background pattern ── */
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(74, 222, 128, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 222, 128, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
   }
 
   /* ── Live pulse dot ── */
@@ -291,6 +316,6 @@
 
 /* ── Focus ring override for dark theme ── */
 :focus-visible {
-  outline: 2px solid rgba(59, 130, 246, 0.7);
+  outline: 2px solid rgba(74, 222, 128, 0.7);
   outline-offset: 2px;
 }
