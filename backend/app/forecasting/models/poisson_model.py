@@ -114,15 +114,17 @@ class PoissonModel(ForecastModel):
         away_atk = self.attack_ratings.get(away_id, None)
         away_def = self.defence_ratings.get(away_id, None)
 
-        # Seed from standings/stats if no trained ratings
+        # Seed from team seeds / standings / stats if no trained ratings
         if home_atk is None:
             home_atk, home_def = self._seed_from_context(
+                str(match_context.get("home_team_name", "")),
                 match_context.get("home_standing"),
                 match_context.get("home_stats"),
                 match_context.get("total_teams_in_league", 20),
             )
         if away_atk is None:
             away_atk, away_def = self._seed_from_context(
+                str(match_context.get("away_team_name", "")),
                 match_context.get("away_standing"),
                 match_context.get("away_stats"),
                 match_context.get("total_teams_in_league", 20),
@@ -333,16 +335,27 @@ class PoissonModel(ForecastModel):
 
     @staticmethod
     def _seed_from_context(
+        team_name: str,
         standing: dict | None,
         stats: dict | None,
         total_teams: int,
     ) -> tuple[float, float]:
-        """Derive attack/defence ratings from standings or stats.
+        """Derive attack/defence ratings from seed data, standings, or stats.
 
         Returns (attack_rating, defence_rating) where 1.0 = league average.
-        Top teams get attack > 1.0 and defence < 1.0 (strong).
-        Bottom teams get attack < 1.0 and defence > 1.0 (weak).
         """
+        # Try hardcoded seed Elo first → derive attack/defence from it
+        from app.forecasting.team_seeds import get_seed_elo
+        slug = team_name.lower().replace(" ", "-")
+        seed_elo = get_seed_elo(slug)
+        if seed_elo is not None:
+            # Convert Elo (1200-1800) to attack/defence ratings
+            # 1500 = 1.0/1.0, 1800 = 1.5/0.6, 1200 = 0.6/1.5
+            strength = (seed_elo - 1500) / 300  # -1.0 to +1.0
+            atk = 1.0 + strength * 0.5   # 0.5 to 1.5
+            dfc = 1.0 - strength * 0.4   # 1.4 to 0.6
+            return max(0.4, min(2.0, atk)), max(0.4, min(2.0, dfc))
+
         atk = 1.0
         dfc = 1.0
 
