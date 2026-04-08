@@ -66,8 +66,8 @@ export function Sidebar() {
   const NavContent = () => (
     <div className="flex h-full flex-col">
       {/* ── Logo ── */}
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-white/[0.06]">
-        <img src="/logo.webp" alt="Betsplug" className="h-10 w-auto" />
+      <div className="flex items-center px-4 py-4 border-b border-white/[0.06]">
+        <img src="/logo.webp" alt="Betsplug" className="h-12 w-auto drop-shadow-[0_0_12px_rgba(16,185,129,0.3)]" />
       </div>
 
       {/* ── Nav section label ── */}
