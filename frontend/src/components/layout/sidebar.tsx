@@ -67,39 +67,7 @@ export function Sidebar() {
     <div className="flex h-full flex-col">
       {/* ── Logo ── */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-white/[0.06]">
-        <div
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-          style={{
-            background: "linear-gradient(135deg, #10b981 0%, #059669 50%, #3b82f6 100%)",
-            boxShadow: "0 0 20px rgba(16,185,129,0.4), 0 0 40px rgba(59,130,246,0.2), 0 2px 8px rgba(0,0,0,0.4)",
-          }}
-        >
-          <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2v6" />
-            <path d="M8 2v6" />
-            <path d="M16 2v6" />
-            <rect x="6" y="8" width="12" height="6" rx="2" />
-            <path d="M10 14v4a2 2 0 0 0 4 0v-4" />
-            <circle cx="12" cy="21" r="1" fill="white" />
-          </svg>
-        </div>
-        <div className="flex flex-col leading-tight">
-          <span className="text-base font-extrabold tracking-tight" style={{
-            background: "linear-gradient(135deg, #ffffff 0%, #10b981 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}>
-            BETS
-            <span style={{
-              background: "linear-gradient(135deg, #10b981 0%, #34d399 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}>PLUG</span>
-          </span>
-          <span className="text-[9px] text-slate-500 tracking-[0.2em] uppercase font-medium">
-            AI Sports Analytics
-          </span>
-        </div>
+        <img src="/logo.webp" alt="Betsplug" className="h-10 w-auto" />
       </div>
 
       {/* ── Nav section label ── */}
