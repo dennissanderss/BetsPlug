@@ -51,7 +51,7 @@ _SIMULATION_DISCLAIMER = (
 
 
 class PredictionSummary(BaseModel):
-    """Slim prediction summary embedded in a fixture response."""
+    """Rich prediction summary embedded in a fixture response."""
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -64,6 +64,12 @@ class PredictionSummary(BaseModel):
     confidence: float
     model_name: Optional[str] = None
     predicted_at: Optional[str] = None
+    pick: Optional[str] = None  # HOME / DRAW / AWAY
+    reasoning: Optional[str] = None
+    edge: Optional[Dict[str, float]] = None  # {home: 0.04, draw: -0.02, away: -0.02}
+    implied_probabilities: Optional[Dict[str, float]] = None
+    top_features: Optional[List[Dict[str, Any]]] = None
+    strategies_matched: Optional[List[str]] = None
     disclaimer: str = _SIMULATION_DISCLAIMER
     is_simulation: bool = True
 
@@ -187,6 +193,54 @@ def _build_fixture_item(
         model_name = None
         if latest_prediction.model_version:
             model_name = latest_prediction.model_version.name
+
+        # Determine pick
+        probs = {
+            "HOME": latest_prediction.home_win_prob,
+            "DRAW": latest_prediction.draw_prob or 0,
+            "AWAY": latest_prediction.away_win_prob,
+        }
+        pick = max(probs, key=lambda k: probs[k])
+
+        # Generate reasoning from explanation if available
+        reasoning = None
+        if latest_prediction.explanation:
+            reasoning = latest_prediction.explanation.summary
+        else:
+            # Template-based reasoning
+            home_name = match.home_team.name if match.home_team else "Home"
+            away_name = match.away_team.name if match.away_team else "Away"
+            if pick == "HOME":
+                reasoning = f"{home_name} favored with {latest_prediction.home_win_prob:.0%} win probability. Confidence: {latest_prediction.confidence:.0%}."
+            elif pick == "AWAY":
+                reasoning = f"{away_name} favored with {latest_prediction.away_win_prob:.0%} win probability. Confidence: {latest_prediction.confidence:.0%}."
+            else:
+                reasoning = f"Draw most likely at {(latest_prediction.draw_prob or 0):.0%}. Confidence: {latest_prediction.confidence:.0%}."
+
+        # Edge vs uniform market (33% baseline)
+        edge = {
+            "home": round(latest_prediction.home_win_prob - 1/3, 4),
+            "draw": round((latest_prediction.draw_prob or 0) - 1/3, 4),
+            "away": round(latest_prediction.away_win_prob - 1/3, 4),
+        }
+
+        # Top features from raw_output
+        top_features = None
+        if latest_prediction.raw_output and isinstance(latest_prediction.raw_output, dict):
+            sub_models = latest_prediction.raw_output.get("sub_models", [])
+            features_list = []
+            for sm in sub_models:
+                if "error" not in sm:
+                    features_list.append({
+                        "name": sm.get("model", "Unknown"),
+                        "home": round(sm.get("home_win_prob", 0), 4),
+                        "draw": round(sm.get("draw_prob", 0), 4),
+                        "away": round(sm.get("away_win_prob", 0), 4),
+                        "weight": round(sm.get("weight", 0), 2),
+                    })
+            if features_list:
+                top_features = features_list
+
         pred_summary = PredictionSummary(
             id=str(latest_prediction.id),
             home_win_prob=latest_prediction.home_win_prob,
@@ -197,6 +251,10 @@ def _build_fixture_item(
             confidence=latest_prediction.confidence,
             model_name=model_name,
             predicted_at=latest_prediction.predicted_at.isoformat() if latest_prediction.predicted_at else None,
+            pick=pick,
+            reasoning=reasoning,
+            edge=edge,
+            top_features=top_features,
         )
 
     return FixtureItem(

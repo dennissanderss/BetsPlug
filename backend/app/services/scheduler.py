@@ -321,6 +321,43 @@ async def job_backfill_results():
         log.error("CRON: Backfill failed: %s", exc, exc_info=True)
 
 
+async def job_sync_odds():
+    """Sync bookmaker odds from The Odds API every 2 hours for upcoming matches."""
+    log.info("CRON: Starting odds sync...")
+    try:
+        from app.core.config import get_settings
+        from app.ingestion.adapters.the_odds_api import TheOddsAPIAdapter, LEAGUE_TO_SPORT_KEY
+
+        settings = get_settings()
+        key = getattr(settings, "the_odds_api_key", "")
+        if not key:
+            log.info("CRON: THE_ODDS_API_KEY not set, skipping odds sync.")
+            return
+
+        adapter = TheOddsAPIAdapter(api_key=key)
+        leagues = ["premier-league", "la-liga", "bundesliga", "serie-a", "ligue-1", "eredivisie"]
+        total = 0
+
+        import httpx
+        async with httpx.AsyncClient(timeout=15) as client:
+            for league in leagues:
+                try:
+                    odds = await adapter.fetch_odds_for_league(league, client=client)
+                    total += len(odds)
+                    log.info("CRON: Odds %s: %d matches", league, len(odds))
+                    # Rate limit between calls
+                    import asyncio
+                    await asyncio.sleep(1)
+                except Exception as exc:
+                    log.warning("CRON: Odds %s failed: %s", league, exc)
+
+        remaining = adapter.remaining_requests
+        log.info("CRON: Odds sync done — %d matches, %s requests remaining.", total, remaining)
+
+    except Exception as exc:
+        log.error("CRON: Odds sync failed: %s", exc, exc_info=True)
+
+
 def start_scheduler():
     """Register jobs and start the scheduler."""
     # Sync data every 6 hours
@@ -361,6 +398,16 @@ def start_scheduler():
         name="Live fixture sync",
         replace_existing=True,
         next_run_time=datetime.now(timezone.utc) + timedelta(seconds=30),
+    )
+
+    # Sync odds every 2 hours (The Odds API, 500 req/month budget)
+    scheduler.add_job(
+        job_sync_odds,
+        trigger=IntervalTrigger(hours=2),
+        id="sync_odds",
+        name="Sync bookmaker odds",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=15),
     )
 
     # Sync results daily at 06:00 UTC
