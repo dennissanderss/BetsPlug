@@ -80,7 +80,7 @@ export function BetsPlugFooter() {
               {/* Newsletter CTA trigger */}
               <div className="mt-2 max-w-sm rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.06] to-transparent p-5 backdrop-blur-sm">
                 <div className="mb-3 flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-green-500/15">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/15">
                     <Send className="h-4 w-4 text-green-400" />
                   </div>
                   <div>
@@ -153,7 +153,7 @@ export function BetsPlugFooter() {
           </div>
 
           {/* Disclaimer */}
-          <div className="mb-6 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
+          <div className="mb-6 rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
             <p className="text-center text-xs leading-relaxed text-slate-500">
               <span className="font-semibold text-amber-400">Disclaimer:</span> BetsPlug is a data
               analytics platform. We calculate probabilities using statistical models. This is{" "}
