@@ -62,6 +62,8 @@ class PredictionSummary(BaseModel):
     predicted_home_score: Optional[float] = None
     predicted_away_score: Optional[float] = None
     confidence: float
+    model_name: Optional[str] = None
+    predicted_at: Optional[str] = None
     disclaimer: str = _SIMULATION_DISCLAIMER
     is_simulation: bool = True
 
@@ -174,6 +176,9 @@ def _build_fixture_item(
 
     pred_summary: Optional[PredictionSummary] = None
     if latest_prediction:
+        model_name = None
+        if latest_prediction.model_version:
+            model_name = latest_prediction.model_version.name
         pred_summary = PredictionSummary(
             id=str(latest_prediction.id),
             home_win_prob=latest_prediction.home_win_prob,
@@ -182,6 +187,8 @@ def _build_fixture_item(
             predicted_home_score=latest_prediction.predicted_home_score,
             predicted_away_score=latest_prediction.predicted_away_score,
             confidence=latest_prediction.confidence,
+            model_name=model_name,
+            predicted_at=latest_prediction.predicted_at.isoformat() if latest_prediction.predicted_at else None,
         )
 
     return FixtureItem(
@@ -226,12 +233,19 @@ async def _load_latest_predictions(
         .subquery()
     )
 
-    stmt = select(Prediction).join(
-        subq,
-        and_(
-            Prediction.match_id == subq.c.match_id,
-            Prediction.predicted_at == subq.c.latest_at,
-        ),
+    from sqlalchemy.orm import selectinload
+    from app.models.model_version import ModelVersion
+
+    stmt = (
+        select(Prediction)
+        .options(selectinload(Prediction.model_version))
+        .join(
+            subq,
+            and_(
+                Prediction.match_id == subq.c.match_id,
+                Prediction.predicted_at == subq.c.latest_at,
+            ),
+        )
     )
     rows = (await db.execute(stmt)).scalars().all()
     return {p.match_id: p for p in rows}

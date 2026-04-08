@@ -44,6 +44,17 @@ def create_app() -> FastAPI:
     if settings.frontend_url and settings.frontend_url not in origins:
         origins.append(settings.frontend_url)
 
+    # Always allow known frontend origins
+    _known = [
+        "https://bets-plug.vercel.app",
+        "https://betsplug.com",
+        "https://www.betsplug.com",
+        "http://localhost:3000",
+    ]
+    for o in _known:
+        if o not in origins:
+            origins.append(o)
+
     application.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
