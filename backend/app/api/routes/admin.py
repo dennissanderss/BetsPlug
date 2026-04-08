@@ -239,6 +239,171 @@ async def trigger_sync(
         return SyncResponse(accepted=False, message=f"Sync failed: {str(exc)}", task_id=None)
 
 
+class FullSyncResponse(BaseModel):
+    total_created: int
+    total_updated: int
+    total_errors: int
+    leagues_synced: int
+    details: List[str]
+
+
+@router.post(
+    "/full-sync",
+    response_model=FullSyncResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Sync ALL leagues: fixtures, results, standings",
+)
+async def full_sync(
+    db: AsyncSession = Depends(get_db),
+) -> FullSyncResponse:
+    """
+    Sync all 6 leagues in one call. Takes ~30 seconds.
+    Syncs: upcoming matches, recent results, and standings for each league.
+    """
+    import asyncio
+    import logging
+    from app.services.data_sync_service import DataSyncService
+
+    log = logging.getLogger(__name__)
+    total_created, total_updated, total_errors = 0, 0, 0
+    details: List[str] = []
+
+    for i in range(6):
+        try:
+            async with DataSyncService() as svc:
+                r1 = await svc.sync_upcoming_matches(db)
+                details.append(f"Upcoming [{r1.get('competition', '?')}]: +{r1.get('created', 0)} new, {r1.get('updated', 0)} upd")
+                total_created += r1.get("created", 0)
+                total_updated += r1.get("updated", 0)
+                total_errors += r1.get("errors", 0)
+
+                await asyncio.sleep(1.5)
+
+                r2 = await svc.sync_recent_results(db)
+                details.append(f"Results [{r2.get('competition', '?')}]: {r2.get('created_results', 0)} results, {r2.get('updated_matches', r2.get('updated', 0))} upd")
+                total_updated += r2.get("created_results", 0)
+                total_errors += r2.get("errors", 0)
+
+                await asyncio.sleep(1.5)
+
+                r3 = await svc.sync_standings(db)
+                details.append(f"Standings [{r3.get('competition', '?')}]: {r3.get('rows_saved', 0)} rows")
+                total_updated += r3.get("rows_saved", 0)
+                total_errors += r3.get("errors", 0)
+
+                await db.commit()
+                await asyncio.sleep(1.5)
+        except Exception as exc:
+            details.append(f"League {i+1} FAILED: {exc}")
+            total_errors += 1
+            log.error("Full sync league %d failed: %s", i+1, exc)
+
+    return FullSyncResponse(
+        total_created=total_created,
+        total_updated=total_updated,
+        total_errors=total_errors,
+        leagues_synced=6,
+        details=details,
+    )
+
+
+@router.post(
+    "/regenerate-predictions",
+    status_code=status.HTTP_200_OK,
+    summary="Delete all predictions and regenerate with current data",
+)
+async def regenerate_predictions(
+    days: int = Body(default=7, embed=True),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Delete ALL existing predictions and regenerate from scratch.
+    Use after a full data sync to get predictions based on real form/standings.
+    """
+    import logging
+    from datetime import datetime, timedelta, timezone
+    from app.forecasting.forecast_service import ForecastService
+    from app.models.match import Match, MatchStatus
+    from app.models.model_version import ModelVersion
+    from app.models.prediction import Prediction, PredictionExplanation
+
+    log = logging.getLogger(__name__)
+
+    # Delete all existing predictions + explanations
+    del_expl = await db.execute(
+        select(PredictionExplanation.id).join(
+            Prediction, Prediction.id == PredictionExplanation.prediction_id
+        )
+    )
+    expl_ids = del_expl.scalars().all()
+
+    from sqlalchemy import delete
+    if expl_ids:
+        await db.execute(
+            delete(PredictionExplanation).where(PredictionExplanation.id.in_(expl_ids))
+        )
+    await db.execute(delete(Prediction))
+    await db.flush()
+    log.info("Deleted all predictions for regeneration")
+
+    # Ensure ModelVersion
+    mv_result = await db.execute(
+        select(ModelVersion).where(ModelVersion.is_active.is_(True)).limit(1)
+    )
+    if mv_result.scalar_one_or_none() is None:
+        mv = ModelVersion(
+            id=uuid.uuid4(),
+            name="BetsPlug Ensemble v1",
+            version="1.0.0",
+            model_type="ensemble",
+            sport_scope="all",
+            description="Default ensemble: Elo + Poisson + Logistic",
+            hyperparameters={"weights": {"elo": 1.0, "poisson": 1.5, "logistic": 1.0}},
+            training_metrics={"note": "cold-start defaults"},
+            trained_at=datetime.now(timezone.utc),
+            is_active=True,
+        )
+        db.add(mv)
+        await db.flush()
+
+    # Generate fresh predictions
+    now = datetime.now(timezone.utc)
+    cutoff = now + timedelta(days=days)
+    matches_result = await db.execute(
+        select(Match).where(
+            Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
+            Match.scheduled_at >= now,
+            Match.scheduled_at <= cutoff,
+        ).order_by(Match.scheduled_at)
+    )
+    matches = matches_result.scalars().all()
+
+    service = ForecastService()
+    generated, errors = 0, 0
+    details = []
+
+    for match in matches:
+        try:
+            home = match.home_team.name if match.home_team else "?"
+            away = match.away_team.name if match.away_team else "?"
+            await service.generate_forecast(match.id, db)
+            generated += 1
+            details.append(f"OK: {home} vs {away}")
+        except Exception as exc:
+            errors += 1
+            details.append(f"FAIL: {match.id} — {exc}")
+
+    await db.commit()
+
+    return {
+        "deleted_old": True,
+        "total_matches": len(matches),
+        "predictions_generated": generated,
+        "errors": errors,
+        "details": details[:20],
+    }
+
+
 class GeneratePredictionsResponse(BaseModel):
     total_matches: int
     predictions_generated: int

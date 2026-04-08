@@ -54,8 +54,35 @@ async def health_check() -> dict:
         checks["redis"] = "error"
 
     # --- Sports API config check ---
-    has_api = bool(settings.api_football_key or settings.football_data_api_key)
-    checks["sports_api"] = "configured" if has_api else "missing"
+    checks["api_football"] = "configured" if settings.api_football_key else "missing"
+    checks["football_data"] = "configured" if settings.football_data_api_key else "missing"
+
+    # --- DB row counts ---
+    fixtures_count = 0
+    predictions_count = 0
+    finished_count = 0
+    try:
+        from app.db.session import async_session_factory as _sf
+        from sqlalchemy import func, select as sel
+        from app.models.match import Match, MatchStatus
+        from app.models.prediction import Prediction
+
+        async with _sf() as s:
+            fixtures_count = (await s.execute(
+                sel(func.count()).select_from(Match).where(Match.status == MatchStatus.SCHEDULED)
+            )).scalar() or 0
+            predictions_count = (await s.execute(
+                sel(func.count()).select_from(Prediction)
+            )).scalar() or 0
+            finished_count = (await s.execute(
+                sel(func.count()).select_from(Match).where(Match.status == MatchStatus.FINISHED)
+            )).scalar() or 0
+    except Exception:
+        pass
+
+    checks["fixtures_scheduled"] = fixtures_count
+    checks["fixtures_finished"] = finished_count
+    checks["predictions_in_db"] = predictions_count
 
     # --- Overall status ---
     if checks["database"] == "error":

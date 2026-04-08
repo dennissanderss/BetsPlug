@@ -23,30 +23,46 @@ scheduler = AsyncIOScheduler(timezone="UTC")
 
 
 async def job_sync_data():
-    """Sync upcoming matches and standings from the sports API."""
-    log.info("CRON: Starting data sync...")
+    """Sync ALL leagues: upcoming matches, recent results, and standings."""
+    log.info("CRON: Starting full data sync (all leagues)...")
     try:
+        import asyncio
         from app.db.session import async_session_factory
         from app.services.data_sync_service import DataSyncService
 
-        async with DataSyncService() as svc:
-            async with async_session_factory() as db:
-                created, updated, errors = 0, 0, 0
+        total_created, total_updated, total_errors = 0, 0, 0
 
-                c, u, e = await svc.sync_upcoming_matches(db)
-                created += c; updated += u; errors += e
+        # Sync all 6 leagues sequentially (respects rate limits)
+        for i in range(6):
+            async with DataSyncService() as svc:
+                async with async_session_factory() as db:
+                    # Each call rotates to next league
+                    r1 = await svc.sync_upcoming_matches(db)
+                    total_created += r1.get("created", 0)
+                    total_updated += r1.get("updated", 0)
+                    total_errors += r1.get("errors", 0)
 
-                c, u, e = await svc.sync_recent_results(db)
-                created += c; updated += u; errors += e
+                    # Rate limit pause between API calls
+                    await asyncio.sleep(2)
 
-                c, u, e = await svc.sync_standings(db)
-                created += c; updated += u; errors += e
+                    r2 = await svc.sync_recent_results(db)
+                    total_created += r2.get("created_results", 0)
+                    total_updated += r2.get("updated_matches", r2.get("updated", 0))
+                    total_errors += r2.get("errors", 0)
 
-                await db.commit()
-                log.info(
-                    "CRON: Data sync done — created=%d updated=%d errors=%d",
-                    created, updated, errors,
-                )
+                    await asyncio.sleep(2)
+
+                    r3 = await svc.sync_standings(db)
+                    total_updated += r3.get("rows_saved", 0)
+                    total_errors += r3.get("errors", 0)
+
+                    await db.commit()
+                    await asyncio.sleep(2)
+
+        log.info(
+            "CRON: Full sync done — created=%d updated=%d errors=%d",
+            total_created, total_updated, total_errors,
+        )
     except Exception as exc:
         log.error("CRON: Data sync failed: %s", exc, exc_info=True)
 
