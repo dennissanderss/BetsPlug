@@ -24,6 +24,29 @@ async def lifespan(app: FastAPI):
         import logging
         logging.getLogger(__name__).warning("Auto-migration skipped: %s", exc)
 
+    # Ensure all tables exist (creates any missing tables like strategies)
+    try:
+        from app.db.session import engine, Base
+        # Import all models so Base.metadata knows about them
+        import app.models.strategy  # noqa: F401
+        import app.models.prediction  # noqa: F401
+        import app.models.match  # noqa: F401
+        import app.models.league  # noqa: F401
+        import app.models.team  # noqa: F401
+        import app.models.model_version  # noqa: F401
+        import app.models.backtest  # noqa: F401
+        import app.models.report  # noqa: F401
+        import app.models.ingestion  # noqa: F401
+
+        from sqlalchemy import text
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        import logging
+        logging.getLogger(__name__).info("Ensured all DB tables exist.")
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).warning("Table creation check failed: %s", exc)
+
     # Start background scheduler (data sync + prediction generation)
     from app.services.scheduler import start_scheduler, stop_scheduler
     start_scheduler()
