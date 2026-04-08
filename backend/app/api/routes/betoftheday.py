@@ -78,7 +78,7 @@ async def get_bet_of_the_day(
             and_(
                 Match.scheduled_at >= day_start,
                 Match.scheduled_at <= day_end,
-                Prediction.confidence >= 0.65,  # Minimum confidence threshold
+                Prediction.confidence >= 0.55,  # Minimum confidence threshold
             )
         )
         .order_by(Prediction.confidence.desc())
@@ -99,22 +99,33 @@ async def get_bet_of_the_day(
     }
     predicted_outcome = max(probs, key=probs.get)  # type: ignore[arg-type]
 
-    # Get match details
-    match_result = await db.execute(select(Match).where(Match.id == prediction.match_id))
-    match = match_result.scalar_one_or_none()
+    # Get match details via relationship
+    match = prediction.match
+    if match is None:
+        match_result = await db.execute(select(Match).where(Match.id == prediction.match_id))
+        match = match_result.scalar_one_or_none()
+
+    home_name = match.home_team.name if match and match.home_team else None
+    away_name = match.away_team.name if match and match.away_team else None
+    league_name = match.league.name if match and match.league else None
+
+    # Get explanation if available
+    explanation = None
+    if prediction.explanation:
+        explanation = prediction.explanation.summary
 
     return BetOfTheDayResponse(
         available=True,
         match_id=str(prediction.match_id),
-        home_team=match.home_team_name if match else None,
-        away_team=match.away_team_name if match else None,
-        league=match.league_slug if match and hasattr(match, "league_slug") else None,
+        home_team=home_name,
+        away_team=away_name,
+        league=league_name,
         scheduled_at=match.scheduled_at.isoformat() if match else None,
         home_win_prob=prediction.home_win_prob,
         draw_prob=prediction.draw_prob,
         away_win_prob=prediction.away_win_prob,
         confidence=prediction.confidence,
         predicted_outcome=predicted_outcome,
-        explanation_summary=None,  # Would come from PredictionExplanation
+        explanation_summary=explanation,
         prediction_id=str(prediction.id),
     )
