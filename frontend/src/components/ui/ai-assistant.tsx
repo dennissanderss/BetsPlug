@@ -129,8 +129,18 @@ export function AiAssistant({
               <div className="pointer-events-none absolute -left-20 -top-20 h-[280px] w-[280px] rounded-full bg-green-500/[0.12] blur-[120px]" />
               <div className="pointer-events-none absolute -right-20 -bottom-20 h-[280px] w-[280px] rounded-full bg-emerald-500/[0.10] blur-[120px]" />
 
+              {/* Floating close button — always visible, guaranteed clickable */}
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Close chat"
+                className="absolute right-3 top-3 z-20 flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.12] bg-black/60 text-white shadow-lg shadow-black/30 backdrop-blur-md transition-all hover:border-red-500/50 hover:bg-red-500/20 hover:text-white"
+              >
+                <X className="h-5 w-5" strokeWidth={2.5} />
+              </button>
+
               {/* Header */}
-              <div className="relative flex items-center justify-between border-b border-white/[0.08] bg-white/[0.02] p-4 backdrop-blur-sm">
+              <div className="relative flex items-center justify-between border-b border-white/[0.08] bg-white/[0.03] p-4 pr-16 backdrop-blur-sm">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.25)] ring-1 ring-green-500/30">
                     <Sparkles className="h-5 w-5 text-green-400" />
@@ -150,25 +160,15 @@ export function AiAssistant({
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  {messages.length > 0 && (
-                    <button
-                      type="button"
-                      onClick={clearChat}
-                      className="rounded-lg px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-400 transition-colors hover:bg-white/[0.05] hover:text-white"
-                    >
-                      {t("chatbot.clear")}
-                    </button>
-                  )}
+                {messages.length > 0 && (
                   <button
                     type="button"
-                    onClick={onClose}
-                    aria-label="Close chat"
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-white/[0.06] hover:text-white"
+                    onClick={clearChat}
+                    className="rounded-lg px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-slate-400 transition-colors hover:bg-white/[0.05] hover:text-white"
                   >
-                    <X className="h-4 w-4" />
+                    {t("chatbot.clear")}
                   </button>
-                </div>
+                )}
               </div>
 
               {/* Messages */}
