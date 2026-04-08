@@ -174,7 +174,7 @@ export default function LandingPage() {
                   <p className="text-lg font-extrabold text-white">
                     <AnimatedNumber target={168} suffix="K+" />
                   </p>
-                  <p className="text-xs text-slate-500">Active Analysts</p>
+                  <p className="text-xs text-slate-500">Active Users</p>
                 </div>
               </div>
 
