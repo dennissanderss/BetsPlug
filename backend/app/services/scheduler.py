@@ -227,6 +227,100 @@ async def job_evaluate_predictions():
         log.error("CRON: Prediction evaluation failed: %s", exc, exc_info=True)
 
 
+async def job_sync_live_fixtures():
+    """Sync live fixtures every 60s during match hours (12:00-24:00 UTC)."""
+    now = datetime.now(timezone.utc)
+
+    # Only run during match hours
+    if now.hour < 12:
+        return
+
+    try:
+        from sqlalchemy import and_
+        from app.db.session import async_session_factory
+        from app.models.match import Match, MatchResult, MatchStatus
+        from app.services.data_sync_service import DataSyncService
+
+        async with async_session_factory() as db:
+            # Find matches that should be live (kickoff in last 3 hours, not finished)
+            cutoff_start = now - timedelta(hours=3)
+            stmt = (
+                select(Match)
+                .where(
+                    and_(
+                        Match.scheduled_at >= cutoff_start,
+                        Match.scheduled_at <= now,
+                        Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
+                    )
+                )
+            )
+            matches = (await db.execute(stmt)).scalars().all()
+
+            if not matches:
+                return  # No matches to check, save API calls
+
+            log.info("CRON: Checking %d potentially live matches...", len(matches))
+
+            async with DataSyncService() as svc:
+                # Sync results for the leagues of these matches
+                r = await svc.sync_recent_results(db)
+                log.info("CRON: Live sync results: %s", r)
+
+            await db.commit()
+
+    except Exception as exc:
+        log.error("CRON: Live fixture sync failed: %s", exc, exc_info=True)
+
+
+async def job_backfill_results():
+    """One-time backfill: find all matches past their kickoff that aren't finished and try to update."""
+    log.info("CRON: Running results backfill...")
+    try:
+        import math
+        from sqlalchemy import and_
+        from app.db.session import async_session_factory
+        from app.models.match import Match, MatchResult, MatchStatus
+        from app.models.prediction import Prediction, PredictionEvaluation
+        from app.services.data_sync_service import DataSyncService
+
+        now = datetime.now(timezone.utc)
+
+        async with async_session_factory() as db:
+            # Find all matches that should be finished (kickoff > 3h ago, still scheduled/live)
+            cutoff = now - timedelta(hours=3)
+            stmt = (
+                select(Match)
+                .where(
+                    and_(
+                        Match.scheduled_at < cutoff,
+                        Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
+                    )
+                )
+            )
+            stale_matches = (await db.execute(stmt)).scalars().all()
+
+            if not stale_matches:
+                log.info("CRON: No stale matches to backfill.")
+                return
+
+            log.info("CRON: Found %d stale matches to backfill.", len(stale_matches))
+
+            # Try to sync results
+            async with DataSyncService() as svc:
+                for _ in range(6):  # Rotate through all leagues
+                    r = await svc.sync_recent_results(db)
+                    import asyncio
+                    await asyncio.sleep(2)
+
+            await db.commit()
+
+            # Now evaluate any newly finished predictions
+            await job_evaluate_predictions()
+
+    except Exception as exc:
+        log.error("CRON: Backfill failed: %s", exc, exc_info=True)
+
+
 def start_scheduler():
     """Register jobs and start the scheduler."""
     # Sync data every 6 hours
@@ -259,6 +353,16 @@ def start_scheduler():
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=10),
     )
 
+    # Live fixture sync every 60 seconds during match hours
+    scheduler.add_job(
+        job_sync_live_fixtures,
+        trigger=IntervalTrigger(seconds=60),
+        id="sync_live_fixtures",
+        name="Live fixture sync",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(seconds=30),
+    )
+
     # Sync results daily at 06:00 UTC
     scheduler.add_job(
         job_sync_data,
@@ -266,6 +370,16 @@ def start_scheduler():
         id="daily_results_sync",
         name="Daily results sync",
         replace_existing=True,
+    )
+
+    # One-time backfill on startup (3 min after start)
+    scheduler.add_job(
+        job_backfill_results,
+        trigger=None,  # run once
+        id="backfill_results",
+        name="Backfill stale results",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=3),
     )
 
     scheduler.start()
