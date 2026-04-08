@@ -31,6 +31,8 @@ import { LeaguesTicker } from "@/components/ui/leagues-ticker";
 import { HowItWorks } from "@/components/ui/how-it-works";
 import { ComparisonTable } from "@/components/ui/comparison-table";
 import { PricingSection } from "@/components/ui/pricing-section";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { useTranslations } from "@/i18n/locale-provider";
 
 // ─── Animated counter ────────────────────────────────────────────────────────
 
@@ -63,6 +65,7 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
 // ─── Landing Page ───────────────────────────────────────────────────────────
 
 export default function LandingPage() {
+  const { t } = useTranslations();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -91,10 +94,10 @@ export default function LandingPage() {
   }, []);
 
   const navLinks = [
-    { href: "#predictions", label: "Predictions" },
-    { href: "#how-it-works", label: "How It Works" },
-    { href: "#track-record", label: "Track Record" },
-    { href: "#pricing", label: "Pricing" },
+    { href: "#predictions", label: t("nav.predictions") },
+    { href: "#how-it-works", label: t("nav.howItWorks") },
+    { href: "#track-record", label: t("nav.trackRecord") },
+    { href: "#pricing", label: t("nav.pricing") },
   ];
 
   return (
@@ -133,6 +136,11 @@ export default function LandingPage() {
 
           {/* Right side: desktop buttons + mobile hamburger */}
           <div className="flex items-center gap-3">
+            {/* Language switcher (desktop) */}
+            <div className="hidden lg:block">
+              <LanguageSwitcher variant="compact" />
+            </div>
+
             {/* Desktop buttons (lg+) */}
             <Link
               href="/dashboard"
@@ -140,7 +148,7 @@ export default function LandingPage() {
                 isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
               }`}
             >
-              Login
+              {t("nav.login")}
             </Link>
             <Link
               href="/subscriptions"
@@ -148,7 +156,7 @@ export default function LandingPage() {
                 isScrolled ? "px-4 py-1.5 text-xs" : "px-5 py-2.5 text-sm"
               }`}
             >
-              Start Free Trial
+              {t("nav.startFreeTrial")}
             </Link>
 
             {/* Mobile/Tablet CTA button */}
@@ -158,7 +166,7 @@ export default function LandingPage() {
                 isScrolled ? "px-3 py-1.5 text-[11px]" : "px-4 py-2 text-xs sm:text-sm"
               }`}
             >
-              Start Free Trial
+              {t("nav.startFreeTrial")}
             </Link>
 
             {/* Mobile/Tablet hamburger button */}
@@ -222,7 +230,7 @@ export default function LandingPage() {
           {/* Middle: menu items */}
           <nav className="relative flex flex-1 flex-col gap-1 overflow-y-auto px-6 py-8">
             <span className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-widest text-slate-600">
-              Menu
+              {t("nav.menu")}
             </span>
             {navLinks.map((link) => (
               <Link
@@ -242,12 +250,20 @@ export default function LandingPage() {
             {/* Divider */}
             <div className="my-6 border-t border-white/[0.06]" />
 
+            {/* Language switcher (mobile) */}
+            <div className="mb-4">
+              <span className="mb-2 block font-mono text-[10px] font-semibold uppercase tracking-widest text-slate-600">
+                {t("lang.label")}
+              </span>
+              <LanguageSwitcher variant="full" />
+            </div>
+
             <Link
               href="/dashboard"
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center justify-between rounded-2xl border border-white/[0.08] bg-white/[0.02] px-4 py-4 text-base font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white"
             >
-              <span>Login</span>
+              <span>{t("nav.login")}</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </nav>
@@ -258,18 +274,18 @@ export default function LandingPage() {
               <div className="mb-3 flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-green-400" />
                 <span className="text-xs font-bold uppercase tracking-wider text-green-400">
-                  Get Started
+                  {t("nav.getStarted")}
                 </span>
               </div>
               <p className="mb-4 text-sm leading-relaxed text-slate-400">
-                Join 1,500+ analysts and get data-driven predictions today.
+                {t("nav.joinBlurb")}
               </p>
               <Link
                 href="/subscriptions"
                 onClick={() => setMobileMenuOpen(false)}
                 className="btn-gradient flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-bold shadow-lg shadow-green-500/20"
               >
-                Start Free Trial
+                {t("nav.startFreeTrial")}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -299,22 +315,20 @@ export default function LandingPage() {
               <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-2 backdrop-blur-sm">
                 <span className="live-dot" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-green-300">
-                  Be ahead of the bookmakers
+                  {t("hero.badge")}
                 </span>
               </div>
 
               <h1 className="text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
-                Best AI-driven
+                {t("hero.titleLine1")}
                 <br />
-                <span className="gradient-text">sports predictions</span>
+                <span className="gradient-text">{t("hero.titleLine2")}</span>
                 <br />
-                for your edge.
+                {t("hero.titleLine3")}
               </h1>
 
               <p className="mt-8 max-w-xl text-lg leading-relaxed text-slate-400">
-                BetsPlug unites data, Elo ratings, Poisson models and machine learning
-                into one platform. Live probabilities, deep insights, proven track record —
-                built for serious sports analysts.
+                {t("hero.subtitle")}
               </p>
 
               {/* Users trust bar */}
@@ -339,14 +353,14 @@ export default function LandingPage() {
                   <p className="text-lg font-extrabold text-white">
                     <AnimatedNumber target={1500} suffix="+" />
                   </p>
-                  <p className="text-xs text-slate-500">Active Users</p>
+                  <p className="text-xs text-slate-500">{t("hero.activeUsers")}</p>
                 </div>
               </div>
 
               {/* CTAs */}
               <div className="mt-10 flex flex-wrap items-center gap-4">
                 <Link href="/predictions">
-                  <GetStartedButton>View Predictions</GetStartedButton>
+                  <GetStartedButton>{t("hero.ctaPrimary")}</GetStartedButton>
                 </Link>
                 <Link
                   href="#how-it-works"
@@ -355,7 +369,7 @@ export default function LandingPage() {
                   <span className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10">
                     <ArrowRight className="h-3.5 w-3.5 -rotate-45" />
                   </span>
-                  How it works
+                  {t("hero.ctaSecondary")}
                 </Link>
               </div>
             </div>
@@ -371,35 +385,35 @@ export default function LandingPage() {
                   <div className="mb-5 flex items-center justify-between">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                        Live Pick
+                        {t("hero.livePick")}
                       </p>
                       <p className="mt-1 text-xl font-extrabold text-white">Arsenal vs Chelsea</p>
                     </div>
                     <span className="flex items-center gap-1.5 rounded-full bg-green-500/15 px-3 py-1 text-[10px] font-bold uppercase text-green-400">
-                      <Sparkles className="h-3 w-3" /> Hot
+                      <Sparkles className="h-3 w-3" /> {t("hero.hot")}
                     </span>
                   </div>
 
                   <div className="mb-4 rounded-2xl border border-white/5 bg-black/30 p-4">
                     <div className="mb-2 flex items-baseline justify-between">
-                      <span className="text-sm text-slate-400">Home win</span>
+                      <span className="text-sm text-slate-400">{t("hero.homeWin")}</span>
                       <span className="text-2xl font-extrabold text-green-400">52%</span>
                     </div>
                     <div className="h-2 w-full overflow-hidden rounded-full bg-white/[0.06]">
                       <div className="h-full w-[52%] rounded-full bg-gradient-to-r from-green-400 to-emerald-400 shadow-[0_0_12px_rgba(74,222,128,0.6)]" />
                     </div>
                     <div className="mt-3 flex gap-2 text-xs text-slate-500">
-                      <span>Draw 24%</span>
+                      <span>{t("hero.draw")} 24%</span>
                       <span>·</span>
-                      <span>Away 24%</span>
+                      <span>{t("hero.away")} 24%</span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { label: "Confidence", value: "78%" },
+                      { label: t("hero.confidence"), value: "78%" },
                       { label: "Elo Δ", value: "+24" },
-                      { label: "Edge", value: "+6.2%" },
+                      { label: t("hero.edge"), value: "+6.2%" },
                     ].map((s) => (
                       <div
                         key={s.label}
@@ -415,7 +429,7 @@ export default function LandingPage() {
                     href="/predictions"
                     className="btn-gradient mt-5 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold"
                   >
-                    Join Now <ChevronRight className="h-4 w-4" />
+                    {t("hero.joinNow")} <ChevronRight className="h-4 w-4" />
                   </Link>
                 </div>
 
@@ -426,7 +440,7 @@ export default function LandingPage() {
                       <TrendingUp className="h-4 w-4 text-green-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] text-slate-500">Win Rate</p>
+                      <p className="text-[10px] text-slate-500">{t("hero.winRate")}</p>
                       <p className="text-sm font-extrabold text-white">75.4%</p>
                     </div>
                   </div>
@@ -439,8 +453,8 @@ export default function LandingPage() {
                       <Trophy className="h-4 w-4 text-green-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] text-slate-500">Today</p>
-                      <p className="text-sm font-extrabold text-white">12 Wins</p>
+                      <p className="text-[10px] text-slate-500">{t("hero.today")}</p>
+                      <p className="text-sm font-extrabold text-white">12 {t("hero.wins")}</p>
                     </div>
                   </div>
                 </div>
