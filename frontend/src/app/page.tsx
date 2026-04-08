@@ -28,6 +28,7 @@ import { SocialProofPopup } from "@/components/ui/social-proof-popup";
 import { SeoSection } from "@/components/ui/seo-section";
 import { FloatingSports } from "@/components/ui/floating-sports";
 import { LeaguesTicker } from "@/components/ui/leagues-ticker";
+import { HowItWorks } from "@/components/ui/how-it-works";
 
 // ─── Animated counter ────────────────────────────────────────────────────────
 
@@ -453,9 +454,16 @@ export default function LandingPage() {
       <LeaguesTicker />
 
       {/* ═══════════════════════════════════════════════════════════════════
+          HOW IT WORKS — 3 step process
+         ═══════════════════════════════════════════════════════════════════ */}
+      <section id="how-it-works">
+        <HowItWorks />
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
           TRUSTED PARTNER SECTION — 3 cards with middle highlighted
          ═══════════════════════════════════════════════════════════════════ */}
-      <section id="how-it-works" className="relative py-20 md:py-28">
+      <section id="trusted-partner" className="relative py-20 md:py-28">
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-14 grid gap-8 md:grid-cols-2 md:items-end">
             <div>
@@ -524,9 +532,20 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════════════════════════════════
           STATS / CHART SECTION
          ═══════════════════════════════════════════════════════════════════ */}
-      <section id="track-record" className="relative py-20 md:py-28">
+      <section id="track-record" className="relative overflow-hidden py-20 md:py-28">
+        {/* Unique background: subtle grid pattern + off-center glow */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#070a12] via-[#0a1220] to-[#070a12]" />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(74,222,128,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.5) 1px, transparent 1px)",
+            backgroundSize: "48px 48px",
+          }}
+        />
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-green-500/[0.05] blur-[140px]" />
+          <div className="absolute left-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-green-500/[0.06] blur-[140px]" />
+          <div className="absolute right-[10%] top-10 h-[320px] w-[320px] rounded-full bg-emerald-500/[0.05] blur-[120px]" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-6">
@@ -655,8 +674,23 @@ export default function LandingPage() {
       {/* ═══════════════════════════════════════════════════════════════════
           FEATURES GRID
          ═══════════════════════════════════════════════════════════════════ */}
-      <section id="predictions" className="relative py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-6">
+      <section id="predictions" className="relative overflow-hidden py-20 md:py-28">
+        {/* Unique background: dotted pattern + twin side glows */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14] via-[#0a0f1a] to-[#080b14]" />
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "radial-gradient(rgba(74,222,128,0.55) 1px, transparent 1px)",
+            backgroundSize: "26px 26px",
+          }}
+        />
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute -left-20 top-1/3 h-[420px] w-[420px] rounded-full bg-green-500/[0.06] blur-[130px]" />
+          <div className="absolute -right-20 bottom-1/4 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.05] blur-[130px]" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl px-6">
           <div className="mb-14 text-center">
             <span className="mb-4 inline-block rounded-full bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
               Features
