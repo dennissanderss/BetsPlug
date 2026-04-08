@@ -109,10 +109,24 @@ class PoissonModel(ForecastModel):
             league_avg_home = self.league_avg_home
             league_avg_away = self.league_avg_away
 
-        home_atk = self.attack_ratings.get(home_id, 1.0)
-        home_def = self.defence_ratings.get(home_id, 1.0)
-        away_atk = self.attack_ratings.get(away_id, 1.0)
-        away_def = self.defence_ratings.get(away_id, 1.0)
+        home_atk = self.attack_ratings.get(home_id, None)
+        home_def = self.defence_ratings.get(home_id, None)
+        away_atk = self.attack_ratings.get(away_id, None)
+        away_def = self.defence_ratings.get(away_id, None)
+
+        # Seed from standings/stats if no trained ratings
+        if home_atk is None:
+            home_atk, home_def = self._seed_from_context(
+                match_context.get("home_standing"),
+                match_context.get("home_stats"),
+                match_context.get("total_teams_in_league", 20),
+            )
+        if away_atk is None:
+            away_atk, away_def = self._seed_from_context(
+                match_context.get("away_standing"),
+                match_context.get("away_stats"),
+                match_context.get("total_teams_in_league", 20),
+            )
 
         lambda_home = np.clip(
             home_atk * away_def * league_avg_home * self.home_advantage,
@@ -316,6 +330,48 @@ class PoissonModel(ForecastModel):
     # ------------------------------------------------------------------ #
     # Poisson grid computation                                             #
     # ------------------------------------------------------------------ #
+
+    @staticmethod
+    def _seed_from_context(
+        standing: dict | None,
+        stats: dict | None,
+        total_teams: int,
+    ) -> tuple[float, float]:
+        """Derive attack/defence ratings from standings or stats.
+
+        Returns (attack_rating, defence_rating) where 1.0 = league average.
+        Top teams get attack > 1.0 and defence < 1.0 (strong).
+        Bottom teams get attack < 1.0 and defence > 1.0 (weak).
+        """
+        atk = 1.0
+        dfc = 1.0
+
+        if stats and stats.get("matches_played", 0) > 0:
+            mp = stats["matches_played"]
+            gf = stats.get("goals_scored", 0)
+            ga = stats.get("goals_conceded", 0)
+            # Avg goals per game relative to ~1.35 (typical league avg per team)
+            atk = max(0.5, min(2.0, (gf / mp) / 1.35))
+            dfc = max(0.5, min(2.0, (ga / mp) / 1.35))
+            return atk, dfc
+
+        if standing and standing.get("position"):
+            pos = standing["position"]
+            n = max(total_teams, 2)
+            # Position 1 → atk=1.4, def=0.7 | Last → atk=0.7, def=1.4
+            rank_factor = (pos - 1) / (n - 1)  # 0.0 (top) → 1.0 (bottom)
+            atk = 1.4 - rank_factor * 0.7   # 1.4 → 0.7
+            dfc = 0.7 + rank_factor * 0.7   # 0.7 → 1.4
+
+            # Use goal difference for fine-tuning
+            gd = standing.get("goal_difference", 0)
+            atk += gd * 0.005
+            dfc -= gd * 0.003
+
+            atk = max(0.4, min(2.0, atk))
+            dfc = max(0.4, min(2.0, dfc))
+
+        return atk, dfc
 
     def _poisson_grid(
         self, lambda_home: float, lambda_away: float

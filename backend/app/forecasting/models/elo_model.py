@@ -73,16 +73,47 @@ class EloModel(ForecastModel):
             "away_expected_score",
         ]
 
+    def _seed_elo_from_standings(self, team_id: str, standing: dict | None, total_teams: int) -> float:
+        """Derive an initial Elo rating from standings position.
+
+        Position 1 → ~1700 Elo, last place → ~1300 Elo.
+        Falls back to default_elo (1500) if no standing is available.
+        """
+        if standing is None or not standing.get("position"):
+            return self.default_elo
+
+        pos = standing["position"]
+        n = max(total_teams, 2)
+        # Linear interpolation: position 1 = 1700, position n = 1300
+        elo = 1700 - (pos - 1) * (400 / (n - 1))
+
+        # Boost based on points and goal difference if available
+        points = standing.get("points", 0)
+        gd = standing.get("goal_difference", 0)
+        elo += gd * 1.5  # Goal difference bonus
+        elo += points * 0.5  # Points bonus
+
+        return max(1200, min(1900, elo))
+
     def predict(self, match_context: dict) -> ForecastResult:
         """Predict match outcome probabilities from Elo ratings.
 
-        Parameters
-        ----------
-        match_context:
-            Must contain ``home_team_id`` and ``away_team_id`` (as strings).
+        Uses standings data to seed initial ratings when no training
+        history is available.
         """
         home_id = str(match_context.get("home_team_id", ""))
         away_id = str(match_context.get("away_team_id", ""))
+        total_teams = match_context.get("total_teams_in_league", 20)
+
+        # Seed Elo from standings if we don't have trained ratings
+        if home_id not in self.ratings:
+            self.ratings[home_id] = self._seed_elo_from_standings(
+                home_id, match_context.get("home_standing"), total_teams
+            )
+        if away_id not in self.ratings:
+            self.ratings[away_id] = self._seed_elo_from_standings(
+                away_id, match_context.get("away_standing"), total_teams
+            )
 
         home_elo = self.get_rating(home_id)
         away_elo = self.get_rating(away_id)
