@@ -68,10 +68,8 @@ class HealthChecker:
             settings = get_settings()
 
             def _ping() -> bool:
-                client = sync_redis.Redis(
-                    host=settings.redis_host,
-                    port=settings.redis_port,
-                    db=settings.redis_db,
+                client = sync_redis.from_url(
+                    settings.redis_url,
                     socket_connect_timeout=3,
                     socket_timeout=3,
                 )

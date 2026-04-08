@@ -1,3 +1,4 @@
+from pydantic import Field
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
@@ -9,8 +10,8 @@ class Settings(BaseSettings):
     debug: bool = False
     log_level: str = "INFO"
 
-    # Database - supports both Docker (individual vars) and production (full URL)
-    database_url_override: str = ""  # Set DATABASE_URL for production (Supabase etc.)
+    # Database - supports both Railway (DATABASE_URL) and Docker (individual vars)
+    database_url_env: str = Field(default="", validation_alias="DATABASE_URL")  # Railway/Supabase
     postgres_host: str = "db"
     postgres_port: int = 5432
     postgres_db: str = "sports_intelligence"
@@ -19,8 +20,8 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self) -> str:
-        if self.database_url_override:
-            url = self.database_url_override
+        if self.database_url_env:
+            url = self.database_url_env
             # Convert postgresql:// to postgresql+asyncpg://
             if url.startswith("postgresql://"):
                 return url.replace("postgresql://", "postgresql+asyncpg://", 1)
@@ -32,8 +33,8 @@ class Settings(BaseSettings):
 
     @property
     def database_url_sync(self) -> str:
-        if self.database_url_override:
-            url = self.database_url_override
+        if self.database_url_env:
+            url = self.database_url_env
             # Convert to psycopg2 format
             if url.startswith("postgresql://"):
                 return url.replace("postgresql://", "postgresql+psycopg2://", 1)
@@ -45,13 +46,16 @@ class Settings(BaseSettings):
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
         )
 
-    # Redis
+    # Redis - supports both Railway (REDIS_URL) and Docker (individual vars)
+    redis_url_env: str = Field(default="", validation_alias="REDIS_URL")  # Railway
     redis_host: str = "redis"
     redis_port: int = 6379
     redis_db: int = 0
 
     @property
     def redis_url(self) -> str:
+        if self.redis_url_env:
+            return self.redis_url_env
         return f"redis://{self.redis_host}:{self.redis_port}/{self.redis_db}"
 
     # Auth
@@ -60,6 +64,7 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 60
 
     # CORS
+    frontend_url: str = ""  # Used by Railway for CORS; appended to cors_origins
     cors_origins: str = "http://localhost:3000"
 
     # Celery
