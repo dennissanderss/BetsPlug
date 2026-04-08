@@ -295,6 +295,93 @@ const en = {
     "Can't find the answer you're looking for? Our support team is here to help.",
   "faq.contactSupport": "Contact Support",
   "faq.articles": "articles",
+
+  /* Contact page */
+  "contact.backHome": "Back to home",
+  "contact.badge": "We're here to help",
+  "contact.titleA": "How can we",
+  "contact.titleB": "help you?",
+  "contact.subtitle":
+    "Get instant answers from our AI assistant, browse the FAQ, or reach our team directly — whichever works best for you.",
+  "contact.chatPlaceholder": "Ask our AI anything about BetsPlug…",
+  "contact.chatStart": "Start chat",
+  "contact.chatHint": "Powered by BetsPlug AI · Usually responds in seconds",
+
+  "contact.card1Title": "Chat with AI Assistant",
+  "contact.card1Desc":
+    "Get instant answers about pricing, models, predictions and anything else — 24/7, no waiting.",
+  "contact.card1Cta": "Open chat",
+  "contact.card2Title": "Join Telegram Community",
+  "contact.card2Desc":
+    "1,200+ members online, daily picks, live Q&A with analysts and instant edge alerts.",
+  "contact.card2Cta": "Join Telegram",
+  "contact.card3Title": "Email Support",
+  "contact.card3Desc":
+    "Prefer email? Drop us a line and a real human will reply within 24 hours on business days.",
+  "contact.card3Cta": "Send email",
+
+  "contact.faqBadge": "Help Center",
+  "contact.faqTitleA": "Answers at your",
+  "contact.faqTitleB": "fingertips.",
+  "contact.faqSubtitle":
+    "Search our knowledge base or browse the most common questions below.",
+  "contact.faqSearch": "Search the help center…",
+  "contact.faqEmpty":
+    "No results. Try a different keyword or start a chat with our AI assistant.",
+
+  "contact.faqGroup1": "Getting Started",
+  "contact.faq1Q": "What exactly is BetsPlug?",
+  "contact.faq1A":
+    "BetsPlug is a pure sports analytics platform. We publish AI-driven predictions, Elo ratings, Poisson models and transparent track records so you can make data-backed decisions. We're not a bookmaker — you cannot place bets with us.",
+  "contact.faq2Q": "Do I need to pay to try BetsPlug?",
+  "contact.faq2A":
+    "No. Our Bronze tier is 100% free and gives you a daily AI pick, basic predictions and access to our public track record. Upgrade to Silver or Gold only when you want live probabilities, backtesting and advanced markets.",
+  "contact.faq3Q": "Which sports and leagues do you cover?",
+  "contact.faq3A":
+    "Football (Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, UEFA competitions and 20+ more), basketball (NBA), and tennis. We're adding new leagues and sports every month as our models mature.",
+
+  "contact.faqGroup2": "Account & Billing",
+  "contact.faq4Q": "Can I cancel my subscription anytime?",
+  "contact.faq4A":
+    "Yes, all Silver and Gold plans are month-to-month with zero lock-in. Cancel from your dashboard and keep access until the end of your current billing period — no questions asked.",
+  "contact.faq5Q": "Do you offer refunds?",
+  "contact.faq5A":
+    "We offer a 7-day money-back guarantee on all paid plans. If BetsPlug isn't right for you, email support within your first week and we'll refund in full.",
+  "contact.faq6Q": "Is my payment information secure?",
+  "contact.faq6A":
+    "Absolutely. All payments are processed through PCI-DSS compliant providers with 256-bit SSL encryption. We never see or store your card details on our servers.",
+
+  "contact.stillNeedTitle": "Still need a hand?",
+  "contact.stillNeedDesc":
+    "Our AI assistant answers instantly. For complex account issues, a real human is one email away.",
+  "contact.trust1": "Avg. reply under 2 min",
+  "contact.trust2": "GDPR compliant",
+  "contact.trust3": "1,500+ happy users",
+
+  /* Chatbot */
+  "chatbot.title": "BetsPlug AI Assistant",
+  "chatbot.online": "Online",
+  "chatbot.clear": "Clear",
+  "chatbot.greetingTitle": "How can I help you?",
+  "chatbot.greetingDesc":
+    "Ask me about pricing, our AI models, the track record, or anything else BetsPlug-related.",
+  "chatbot.placeholder": "Type your message…",
+  "chatbot.footer": "AI responses are simulated — for urgent issues, email support@betsplug.com",
+  "chatbot.suggestion1": "How does the Bet of the Day work?",
+  "chatbot.suggestion2": "What's the difference between Silver and Gold?",
+  "chatbot.suggestion3": "How accurate are your predictions?",
+  "chatbot.replyDefault":
+    "Thanks for reaching out! A BetsPlug analyst will get back to you shortly. In the meantime, check our FAQ or drop us a line at support@betsplug.com.",
+  "chatbot.replyHello":
+    "Hey there! 👋 I'm the BetsPlug AI. Ask me anything about our models, pricing or predictions — I'll do my best to help.",
+  "chatbot.replyPricing":
+    "We have three plans: Bronze (free forever), Silver (€9.99/mo) and Gold (€14.99/mo). There's also a Platinum lifetime deal at €199 one-time. All paid plans come with a 7-day money-back guarantee.",
+  "chatbot.replyRefund":
+    "All Silver and Gold plans can be cancelled anytime from your dashboard — you keep access until the end of your billing period. We also offer a 7-day money-back guarantee on all paid plans, no questions asked.",
+  "chatbot.replyAccuracy":
+    "Every prediction is logged in our public track record with hit-rate, ROI and confidence scores. You can filter by league, market and date range. No cherry-picking, no hidden losses — transparency is the whole point.",
+  "chatbot.replyTelegram":
+    "Our Telegram community has 1,200+ active members with daily picks, edge alerts and live Q&A with our analysts. Join at t.me/betsplug — free for Bronze users, VIP channels for Silver/Gold.",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -571,6 +658,94 @@ const nl: Dictionary = {
     "Vind je niet wat je zoekt? Ons supportteam helpt je graag verder.",
   "faq.contactSupport": "Neem contact op",
   "faq.articles": "artikelen",
+
+  /* Contact page */
+  "contact.backHome": "Terug naar home",
+  "contact.badge": "We helpen je graag",
+  "contact.titleA": "Hoe kunnen wij je",
+  "contact.titleB": "helpen?",
+  "contact.subtitle":
+    "Krijg direct antwoord van onze AI-assistent, blader door de FAQ of bereik ons team persoonlijk — wat het beste voor jou werkt.",
+  "contact.chatPlaceholder": "Vraag onze AI iets over BetsPlug…",
+  "contact.chatStart": "Start chat",
+  "contact.chatHint": "Powered by BetsPlug AI · Antwoord binnen seconden",
+
+  "contact.card1Title": "Chat met AI-assistent",
+  "contact.card1Desc":
+    "Direct antwoord op vragen over prijzen, modellen, voorspellingen en meer — 24/7, zonder wachttijd.",
+  "contact.card1Cta": "Open chat",
+  "contact.card2Title": "Word lid van Telegram",
+  "contact.card2Desc":
+    "1.200+ leden online, dagelijkse picks, live Q&A met analisten en directe edge-meldingen.",
+  "contact.card2Cta": "Join Telegram",
+  "contact.card3Title": "E-mail support",
+  "contact.card3Desc":
+    "Liever mailen? Stuur ons een bericht en een echte medewerker reageert binnen 24 uur op werkdagen.",
+  "contact.card3Cta": "Mail versturen",
+
+  "contact.faqBadge": "Helpcentrum",
+  "contact.faqTitleA": "Antwoorden binnen",
+  "contact.faqTitleB": "handbereik.",
+  "contact.faqSubtitle":
+    "Doorzoek onze kennisbank of bekijk hieronder de meest gestelde vragen.",
+  "contact.faqSearch": "Zoek in het helpcentrum…",
+  "contact.faqEmpty":
+    "Geen resultaten. Probeer een ander zoekwoord of start een chat met onze AI.",
+
+  "contact.faqGroup1": "Aan de slag",
+  "contact.faq1Q": "Wat is BetsPlug precies?",
+  "contact.faq1A":
+    "BetsPlug is een puur sport-analyseplatform. We publiceren AI-gedreven voorspellingen, Elo-ratings, Poisson-modellen en transparante track records zodat jij datagedreven beslissingen kunt nemen. We zijn geen bookmaker — je kunt bij ons geen weddenschappen plaatsen.",
+  "contact.faq2Q": "Moet ik betalen om BetsPlug te proberen?",
+  "contact.faq2A":
+    "Nee. Onze Bronze tier is 100% gratis en geeft je een dagelijkse AI-pick, basisvoorspellingen en toegang tot ons publieke track record. Upgrade pas naar Silver of Gold als je live-kansen, backtesting en geavanceerde markten wilt.",
+  "contact.faq3Q": "Welke sporten en competities dekken jullie?",
+  "contact.faq3A":
+    "Voetbal (Eredivisie, Premier League, La Liga, Serie A, Bundesliga, Ligue 1, UEFA-competities en 20+ meer), basketbal (NBA) en tennis. Elke maand voegen we nieuwe competities en sporten toe naarmate onze modellen rijpen.",
+
+  "contact.faqGroup2": "Account & facturatie",
+  "contact.faq4Q": "Kan ik mijn abonnement op elk moment opzeggen?",
+  "contact.faq4A":
+    "Ja, alle Silver- en Gold-plannen zijn per maand opzegbaar zonder lock-in. Annuleer in je dashboard en behoud toegang tot het einde van je huidige factureringsperiode — geen gedoe.",
+  "contact.faq5Q": "Bieden jullie restituties?",
+  "contact.faq5A":
+    "We hanteren een 7-daagse niet-goed-geld-terug-garantie op alle betaalde plannen. Is BetsPlug niks voor jou? Mail support binnen de eerste week en je krijgt volledige restitutie.",
+  "contact.faq6Q": "Zijn mijn betaalgegevens veilig?",
+  "contact.faq6A":
+    "Absoluut. Alle betalingen gaan via PCI-DSS-gecertificeerde providers met 256-bit SSL-encryptie. Wij zien of bewaren je kaartgegevens nooit op onze servers.",
+
+  "contact.stillNeedTitle": "Toch nog hulp nodig?",
+  "contact.stillNeedDesc":
+    "Onze AI-assistent antwoordt direct. Voor complexe accountzaken is een echte medewerker één e-mail verderop.",
+  "contact.trust1": "Gem. reactie onder 2 min",
+  "contact.trust2": "AVG-compliant",
+  "contact.trust3": "1.500+ tevreden gebruikers",
+
+  /* Chatbot */
+  "chatbot.title": "BetsPlug AI-assistent",
+  "chatbot.online": "Online",
+  "chatbot.clear": "Wissen",
+  "chatbot.greetingTitle": "Hoe kan ik je helpen?",
+  "chatbot.greetingDesc":
+    "Stel me vragen over prijzen, onze AI-modellen, het track record of alles rondom BetsPlug.",
+  "chatbot.placeholder": "Typ je bericht…",
+  "chatbot.footer":
+    "AI-antwoorden zijn gesimuleerd — voor urgente zaken mail support@betsplug.com",
+  "chatbot.suggestion1": "Hoe werkt de Bet of the Day?",
+  "chatbot.suggestion2": "Wat is het verschil tussen Silver en Gold?",
+  "chatbot.suggestion3": "Hoe nauwkeurig zijn jullie voorspellingen?",
+  "chatbot.replyDefault":
+    "Bedankt voor je bericht! Een BetsPlug-analist neemt snel contact op. Bekijk ondertussen onze FAQ of stuur een mail naar support@betsplug.com.",
+  "chatbot.replyHello":
+    "Hey! 👋 Ik ben de BetsPlug AI. Vraag me alles over onze modellen, prijzen of voorspellingen — ik help je graag verder.",
+  "chatbot.replyPricing":
+    "We hebben drie plannen: Bronze (altijd gratis), Silver (€9,99/mnd) en Gold (€14,99/mnd). Er is ook een Platinum lifetime deal voor eenmalig €199. Alle betaalde plannen komen met een 7-daagse niet-goed-geld-terug-garantie.",
+  "chatbot.replyRefund":
+    "Silver- en Gold-plannen kun je op elk moment opzeggen in je dashboard — je behoudt toegang tot het einde van je factureringsperiode. We bieden ook een 7-daagse niet-goed-geld-terug-garantie op alle betaalde plannen.",
+  "chatbot.replyAccuracy":
+    "Elke voorspelling wordt gelogd in ons publieke track record met hit-rate, ROI en confidence scores. Filter op competitie, markt en datum. Geen cherry-picking, geen verborgen verliezen — transparantie staat voorop.",
+  "chatbot.replyTelegram":
+    "Onze Telegram-community heeft 1.200+ actieve leden met dagelijkse picks, edge-meldingen en live Q&A met onze analisten. Join via t.me/betsplug — gratis voor Bronze, VIP-kanalen voor Silver/Gold.",
 };
 
 /* ── German ────────────────────────────────────────────────── */

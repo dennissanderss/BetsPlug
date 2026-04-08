@@ -147,7 +147,7 @@ export function BetsPlugFooter() {
     { text: "Our Models", href: loc("/about") + "#models" },
     { text: "Blog", href: "/blog" },
     { text: "Careers", href: "/careers" },
-    { text: "Contact", href: loc("/support") },
+    { text: "Contact", href: loc("/contact") },
   ];
   const legalLinksT = [
     { text: "Terms of Service", href: "/terms" },

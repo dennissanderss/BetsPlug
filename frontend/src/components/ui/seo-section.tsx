@@ -379,6 +379,7 @@ export function SeoSection() {
 
 function FaqBlock() {
   const { t } = useTranslations();
+  const loc = useLocalizedHref();
   const [activeCategory, setActiveCategory] = useState<string>(
     faqCategories[0].id,
   );
@@ -490,7 +491,7 @@ function FaqBlock() {
                 {t("faq.supportBlurb")}
               </p>
               <Link
-                href="/support"
+                href={loc("/contact")}
                 className="btn-gradient flex w-full items-center justify-center rounded-xl px-4 py-2.5 text-xs font-bold shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/30"
               >
                 {t("faq.contactSupport")}
