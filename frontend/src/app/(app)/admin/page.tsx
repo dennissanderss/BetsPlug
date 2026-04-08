@@ -73,7 +73,7 @@ interface TabsProps {
 
 function TabPills({ tabs, active, onChange }: TabsProps) {
   return (
-    <div className="flex flex-wrap gap-1 rounded-full border border-white/[0.06] bg-white/[0.02] p-1">
+    <div className="flex flex-wrap gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1">
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = tab.id === active;
@@ -82,7 +82,7 @@ function TabPills({ tabs, active, onChange }: TabsProps) {
             key={tab.id}
             onClick={() => onChange(tab.id)}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition-all",
+              "inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-all",
               isActive
                 ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25"
                 : "text-slate-400 hover:bg-white/[0.04] hover:text-slate-200"
@@ -138,7 +138,7 @@ function DataSourcesTab() {
     return (
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="glass-card rounded-full p-5 space-y-3">
+          <div key={i} className="glass-card rounded-xl p-5 space-y-3">
             <Skeleton className="h-5 w-3/4 bg-white/[0.06]" />
             <Skeleton className="h-4 w-1/2 bg-white/[0.04]" />
             <Skeleton className="h-2 w-full rounded-full bg-white/[0.04]" />
@@ -151,7 +151,7 @@ function DataSourcesTab() {
 
   if (!sources || sources.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-full border border-dashed border-white/[0.08] py-16 text-center">
+      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/[0.08] py-16 text-center">
         <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/[0.04]">
           <Database className="h-6 w-6 text-slate-500" />
         </div>
@@ -176,14 +176,14 @@ function DataSourcesTab() {
           <div
             key={src.id}
             className={cn(
-              "glass-card-hover rounded-full p-5 space-y-4 transition-all",
+              "glass-card-hover rounded-xl p-5 space-y-4 transition-all",
               !src.is_active && "opacity-50"
             )}
           >
             {/* Header row */}
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-500/10">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
                   <Database className="h-4 w-4 text-blue-400" />
                 </div>
                 <div className="min-w-0">
@@ -237,7 +237,7 @@ function IngestionTab() {
   });
 
   return (
-    <div className="glass-card rounded-full overflow-hidden">
+    <div className="glass-card rounded-xl overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
         <div>
@@ -297,7 +297,7 @@ function IngestionTab() {
                       {String(run.data_source_id).slice(0, 8)}…
                     </td>
                     <td className="px-5 py-3">
-                      <span className="rounded-full border border-white/[0.06] bg-white/[0.04] px-2 py-0.5 text-xs capitalize text-slate-300">
+                      <span className="rounded-md border border-white/[0.06] bg-white/[0.04] px-2 py-0.5 text-xs capitalize text-slate-300">
                         {run.job_type}
                       </span>
                     </td>
@@ -363,7 +363,7 @@ function ErrorsTab() {
   const errorCount = errors?.length ?? 0;
 
   return (
-    <div className="glass-card rounded-full overflow-hidden">
+    <div className="glass-card rounded-xl overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
         <div className="flex items-center gap-2">
@@ -420,7 +420,7 @@ function ErrorsTab() {
                     className="border-b border-white/[0.04] transition-colors hover:bg-white/[0.02]"
                   >
                     <td className="px-5 py-3 whitespace-nowrap">
-                      <span className="rounded-full bg-red-500/15 px-2 py-0.5 text-xs font-semibold text-red-400">
+                      <span className="rounded-md bg-red-500/15 px-2 py-0.5 text-xs font-semibold text-red-400">
                         {err.error_type}
                       </span>
                     </td>
@@ -482,7 +482,7 @@ function ActionButton({
         onClick={() => mutation.mutate()}
         disabled={mutation.isPending}
         className={cn(
-          "inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed",
+          "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed",
           variant === "gradient"
             ? "btn-gradient text-white shadow-lg shadow-blue-500/20"
             : "border border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.08] hover:border-white/20"
@@ -515,7 +515,7 @@ function ActionButton({
 // ─── Actions Tab ──────────────────────────────────────────────────────────────
 
 const darkSelectCls =
-  "h-9 w-full rounded-full border border-white/10 bg-white/[0.04] px-3 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors";
+  "h-9 w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors";
 
 function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
   const [syncSourceId, setSyncSourceId] = React.useState("all");
@@ -524,9 +524,9 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Sync data */}
-      <div className="glass-card rounded-full p-6 space-y-4">
+      <div className="glass-card rounded-xl p-6 space-y-4">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
             <RefreshCw className="h-4 w-4 text-blue-400" />
           </div>
           <div>
@@ -563,9 +563,9 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
       </div>
 
       {/* Retrain models */}
-      <div className="glass-card rounded-full p-6 space-y-4">
+      <div className="glass-card rounded-xl p-6 space-y-4">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
             <Zap className="h-4 w-4 text-blue-400" />
           </div>
           <div>
@@ -600,9 +600,9 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
       </div>
 
       {/* Scheduler status */}
-      <div className="glass-card rounded-full overflow-hidden lg:col-span-2">
+      <div className="glass-card rounded-xl overflow-hidden lg:col-span-2">
         <div className="flex items-center gap-2.5 border-b border-white/[0.06] px-6 py-4">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
             <Clock className="h-4 w-4 text-blue-400" />
           </div>
           <div>

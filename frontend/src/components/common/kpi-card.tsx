@@ -90,7 +90,7 @@ export function KpiCard({
         {/* Icon */}
         {Icon && (
           <div
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-all duration-200 group-hover:scale-110"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-all duration-200 group-hover:scale-110"
             style={{
               background: "rgba(59, 130, 246, 0.12)",
               border: "1px solid rgba(59, 130, 246, 0.2)",

@@ -91,7 +91,7 @@ export function Sidebar() {
               href={item.href}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                "nav-item group flex items-center gap-3 rounded-full px-3 py-2.5 text-sm font-medium",
+                "nav-item group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium",
                 isActive
                   ? "nav-active"
                   : "text-slate-400"
@@ -153,7 +153,7 @@ export function Sidebar() {
               href={item.href}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                "nav-item group flex items-center gap-3 rounded-full px-3 py-2.5 text-sm font-medium",
+                "nav-item group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium",
                 isActive
                   ? "nav-active"
                   : "text-slate-400"
@@ -229,7 +229,7 @@ export function Sidebar() {
           size="icon"
           onClick={() => setMobileOpen((prev) => !prev)}
           aria-label="Toggle navigation"
-          className="h-9 w-9 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10"
+          className="h-9 w-9 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10"
         >
           {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </Button>

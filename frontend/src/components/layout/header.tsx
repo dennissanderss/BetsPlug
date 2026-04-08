@@ -81,7 +81,7 @@ export function Header({ className }: HeaderProps) {
             onBlur={() => setSearchFocused(false)}
             className={cn(
               "pl-9 h-8 text-sm bg-white/[0.04] border-white/10 text-slate-200 placeholder:text-slate-600",
-              "rounded-full transition-all duration-200",
+              "rounded-lg transition-all duration-200",
               searchFocused
                 ? "border-blue-500/50 bg-white/[0.07] ring-2 ring-blue-500/20"
                 : "hover:bg-white/[0.06] hover:border-white/15"
@@ -101,7 +101,7 @@ export function Header({ className }: HeaderProps) {
             size="icon"
             onClick={() => setNotifOpen((prev) => !prev)}
             aria-label="Notifications"
-            className="relative h-8 w-8 rounded-full text-slate-400 hover:text-slate-200 hover:bg-white/[0.06]"
+            className="relative h-8 w-8 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.06]"
           >
             <Bell className="h-4 w-4" />
             <span
@@ -112,7 +112,7 @@ export function Header({ className }: HeaderProps) {
 
           {notifOpen && (
             <div
-              className="absolute right-0 top-full mt-2 w-72 rounded-full p-3 z-50 animate-slide-up"
+              className="absolute right-0 top-full mt-2 w-72 rounded-xl p-3 z-50 animate-slide-up"
               style={{
                 background: "rgba(17, 24, 39, 0.95)",
                 backdropFilter: "blur(20px)",
@@ -128,11 +128,11 @@ export function Header({ className }: HeaderProps) {
                 </span>
               </div>
               <div className="space-y-2">
-                <div className="flex items-start gap-2.5 p-2 rounded-full bg-white/[0.03] border border-white/[0.05]">
+                <div className="flex items-start gap-2.5 p-2 rounded-lg bg-white/[0.03] border border-white/[0.05]">
                   <div className="h-1.5 w-1.5 rounded-full bg-blue-400 mt-1.5 shrink-0" />
                   <p className="text-xs text-slate-300">Model training completed successfully.</p>
                 </div>
-                <div className="flex items-start gap-2.5 p-2 rounded-full bg-white/[0.03] border border-white/[0.05]">
+                <div className="flex items-start gap-2.5 p-2 rounded-lg bg-white/[0.03] border border-white/[0.05]">
                   <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
                   <p className="text-xs text-slate-300">New match data available for 3 leagues.</p>
                 </div>
@@ -147,14 +147,14 @@ export function Header({ className }: HeaderProps) {
             onClick={() => setUserMenuOpen((prev) => !prev)}
             aria-label="User menu"
             className={cn(
-              "flex items-center gap-2 px-2.5 py-1.5 rounded-full transition-all duration-150",
+              "flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all duration-150",
               "text-slate-300 hover:text-slate-100 hover:bg-white/[0.06]",
               userMenuOpen && "bg-white/[0.06]"
             )}
           >
             {/* Avatar */}
             <div
-              className="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-white"
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold text-white"
               style={{
                 background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
                 boxShadow: "0 0 10px rgba(59,130,246,0.4)",
@@ -173,7 +173,7 @@ export function Header({ className }: HeaderProps) {
 
           {userMenuOpen && (
             <div
-              className="absolute right-0 top-full mt-2 w-48 rounded-full py-1 z-50 animate-slide-up"
+              className="absolute right-0 top-full mt-2 w-48 rounded-xl py-1 z-50 animate-slide-up"
               style={{
                 background: "rgba(17, 24, 39, 0.95)",
                 backdropFilter: "blur(20px)",

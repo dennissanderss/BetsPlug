@@ -227,7 +227,7 @@ export default function LandingPage() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="group flex items-center justify-between rounded-full border border-transparent px-4 py-4 text-lg font-semibold text-white transition-all hover:border-green-500/20 hover:bg-green-500/[0.06]"
+                className="group flex items-center justify-between rounded-2xl border border-transparent px-4 py-4 text-lg font-semibold text-white transition-all hover:border-green-500/20 hover:bg-green-500/[0.06]"
               >
                 <span className="flex items-center gap-3">
                   <span className="h-1.5 w-1.5 rounded-full bg-slate-700 transition-all group-hover:w-4 group-hover:bg-green-400" />
@@ -243,7 +243,7 @@ export default function LandingPage() {
             <Link
               href="/dashboard"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-between rounded-full border border-white/[0.08] bg-white/[0.02] px-4 py-4 text-base font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white"
+              className="flex items-center justify-between rounded-2xl border border-white/[0.08] bg-white/[0.02] px-4 py-4 text-base font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white"
             >
               <span>Login</span>
               <ArrowRight className="h-4 w-4" />
@@ -252,7 +252,7 @@ export default function LandingPage() {
 
           {/* Bottom: CTA */}
           <div className="relative border-t border-white/[0.06] px-6 py-6">
-            <div className="rounded-full border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] to-transparent p-5 backdrop-blur-sm">
+            <div className="rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] to-transparent p-5 backdrop-blur-sm">
               <div className="mb-3 flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-green-400" />
                 <span className="text-xs font-bold uppercase tracking-wider text-green-400">
@@ -265,7 +265,7 @@ export default function LandingPage() {
               <Link
                 href="/subscriptions"
                 onClick={() => setMobileMenuOpen(false)}
-                className="btn-gradient flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-bold shadow-lg shadow-green-500/20"
+                className="btn-gradient flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-bold shadow-lg shadow-green-500/20"
               >
                 Start Free Trial
                 <ArrowRight className="h-4 w-4" />
@@ -348,7 +348,7 @@ export default function LandingPage() {
                 </Link>
                 <Link
                   href="#how-it-works"
-                  className="inline-flex h-11 items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-6 text-sm font-medium text-slate-300 backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-white/[0.06] hover:text-white"
+                  className="inline-flex h-11 items-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-6 text-sm font-medium text-slate-300 backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-white/[0.06] hover:text-white"
                 >
                   <span className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10">
                     <ArrowRight className="h-3.5 w-3.5 -rotate-45" />
@@ -378,7 +378,7 @@ export default function LandingPage() {
                     </span>
                   </div>
 
-                  <div className="mb-4 rounded-full border border-white/5 bg-black/30 p-4">
+                  <div className="mb-4 rounded-2xl border border-white/5 bg-black/30 p-4">
                     <div className="mb-2 flex items-baseline justify-between">
                       <span className="text-sm text-slate-400">Home win</span>
                       <span className="text-2xl font-extrabold text-green-400">52%</span>
@@ -401,7 +401,7 @@ export default function LandingPage() {
                     ].map((s) => (
                       <div
                         key={s.label}
-                        className="rounded-full border border-white/5 bg-black/20 p-3 text-center"
+                        className="rounded-xl border border-white/5 bg-black/20 p-3 text-center"
                       >
                         <p className="text-[10px] font-medium uppercase text-slate-500">{s.label}</p>
                         <p className="mt-1 text-sm font-bold text-white">{s.value}</p>
@@ -411,16 +411,16 @@ export default function LandingPage() {
 
                   <Link
                     href="/predictions"
-                    className="btn-gradient mt-5 flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-bold"
+                    className="btn-gradient mt-5 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold"
                   >
                     Join Now <ChevronRight className="h-4 w-4" />
                   </Link>
                 </div>
 
                 {/* Floating mini-card */}
-                <div className="absolute -left-10 -top-6 rotate-[-6deg] rounded-full border border-white/10 bg-[#0d1220]/90 p-3 backdrop-blur-xl shadow-xl">
+                <div className="absolute -left-10 -top-6 rotate-[-6deg] rounded-2xl border border-white/10 bg-[#0d1220]/90 p-3 backdrop-blur-xl shadow-xl">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500/15">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/15">
                       <TrendingUp className="h-4 w-4 text-green-400" />
                     </div>
                     <div>
@@ -431,9 +431,9 @@ export default function LandingPage() {
                 </div>
 
                 {/* Floating bottom card */}
-                <div className="absolute -right-6 -bottom-4 rotate-[5deg] rounded-full border border-white/10 bg-[#0d1220]/90 p-3 backdrop-blur-xl shadow-xl">
+                <div className="absolute -right-6 -bottom-4 rotate-[5deg] rounded-2xl border border-white/10 bg-[#0d1220]/90 p-3 backdrop-blur-xl shadow-xl">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500/15">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/15">
                       <Trophy className="h-4 w-4 text-green-400" />
                     </div>
                     <div>
@@ -477,7 +477,7 @@ export default function LandingPage() {
             {/* Card 1 */}
             <div className="glass-card-hover relative overflow-hidden p-8">
               <p className="mb-8 text-5xl font-extrabold text-white/10">01.</p>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-500/10">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10">
                 <Shield className="h-6 w-6 text-green-400" />
               </div>
               <h3 className="mb-3 text-xl font-bold text-white">Service for Any Level of Expertise.</h3>
@@ -490,7 +490,7 @@ export default function LandingPage() {
             {/* Card 2 — HIGHLIGHTED */}
             <div className="card-highlight relative overflow-hidden p-8">
               <p className="mb-8 text-5xl font-extrabold text-black/15">02.</p>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-black/15">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-black/15">
                 <Brain className="h-6 w-6 text-black" />
               </div>
               <h3 className="mb-3 text-xl font-bold text-black">Industry best practices.</h3>
@@ -509,7 +509,7 @@ export default function LandingPage() {
             {/* Card 3 */}
             <div className="glass-card-hover relative overflow-hidden p-8">
               <p className="mb-8 text-5xl font-extrabold text-white/10">03.</p>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-500/10">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10">
                 <CheckCircle2 className="h-6 w-6 text-green-400" />
               </div>
               <h3 className="mb-3 text-xl font-bold text-white">Protected by transparency.</h3>
@@ -545,7 +545,7 @@ export default function LandingPage() {
           <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
             {/* Left: chart visualization */}
             <div className="relative">
-              <div className="relative rounded-full border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-xl">
+              <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-xl">
                 {/* Top stat */}
                 <div className="mb-6 flex items-start justify-between">
                   <div>
@@ -609,7 +609,7 @@ export default function LandingPage() {
               </div>
 
               {/* Floating mini card */}
-              <div className="absolute -right-4 -top-4 rotate-3 rounded-full border border-white/10 bg-[#0d1220]/95 p-4 backdrop-blur-xl shadow-xl">
+              <div className="absolute -right-4 -top-4 rotate-3 rounded-2xl border border-white/10 bg-[#0d1220]/95 p-4 backdrop-blur-xl shadow-xl">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                   This week
                 </p>
@@ -727,7 +727,7 @@ export default function LandingPage() {
               },
             ].map(({ icon: Icon, title, desc }) => (
               <div key={title} className="glass-card-hover group p-6">
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-500/10 transition-all group-hover:bg-green-500/20">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/10 transition-all group-hover:bg-green-500/20">
                   <Icon className="h-5 w-5 text-green-400" />
                 </div>
                 <h3 className="mb-2 text-lg font-bold text-white">{title}</h3>
@@ -760,7 +760,7 @@ export default function LandingPage() {
          ═══════════════════════════════════════════════════════════════════ */}
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-6">
-          <div className="relative overflow-hidden rounded-full border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] via-emerald-500/[0.04] to-transparent p-10 backdrop-blur-xl md:p-16">
+          <div className="relative overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] via-emerald-500/[0.04] to-transparent p-10 backdrop-blur-xl md:p-16">
             <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-500/20 blur-[100px]" />
             <div className="pointer-events-none absolute -left-20 -bottom-20 h-[300px] w-[300px] rounded-full bg-emerald-500/10 blur-[100px]" />
 

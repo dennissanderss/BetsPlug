@@ -241,7 +241,7 @@ function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
 
         {/* Scheduled: kick-off block */}
         {isScheduled && (
-          <div className="mt-3 flex items-center justify-center gap-2 rounded-full border border-white/[0.05] bg-white/[0.03] py-2">
+          <div className="mt-3 flex items-center justify-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.03] py-2">
             <Clock className="h-3.5 w-3.5 text-slate-500" />
             <span className="text-xs font-medium text-slate-400">
               Kick-off {formatTime(fixture.scheduled_at)} · {formatDate(fixture.scheduled_at)}
@@ -264,7 +264,7 @@ function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
         {/* View Analysis button */}
         <Link
           href={`/matches/${fixture.id}`}
-          className="group flex w-full items-center justify-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-xs font-semibold text-slate-400 transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-400"
+          className="group flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-xs font-semibold text-slate-400 transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-400"
         >
           View Analysis
           <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -296,7 +296,7 @@ function StatStrip({ fixtures }: { fixtures: Fixture[] }) {
   const finishedCount = fixtures.filter((f) => f.status === "finished").length;
 
   return (
-    <div className="flex items-center gap-3 rounded-full border border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
+    <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
       <div className="flex items-center gap-1.5">
         <span className="live-dot-red" style={{ width: 6, height: 6 }} />
         <span className="text-xs font-semibold text-blue-400">{liveCount} Live</span>
@@ -342,7 +342,7 @@ function MatchGridSkeleton() {
 
 function EmptyState({ message, onClearFilters }: { message: string; onClearFilters?: () => void }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 rounded-full border border-white/[0.06] bg-white/[0.02] py-20">
+    <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] py-20">
       <Activity className="h-10 w-10 text-slate-700" />
       <p className="text-sm font-medium text-slate-500">{message}</p>
       {onClearFilters && (
@@ -479,7 +479,7 @@ export default function LiveMatchesPage() {
 
       {/* ── Error banner ── */}
       {hasError && (
-        <div className="flex items-center gap-3 rounded-full border border-red-500/20 bg-red-500/5 px-4 py-3">
+        <div className="flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3">
           <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
           <p className="text-sm text-red-400">
             Could not reach the backend API. Showing cached data if available — retrying automatically.
@@ -489,7 +489,7 @@ export default function LiveMatchesPage() {
 
       {/* ── No games today notice ── */}
       {noTodayMsg && allFixtures.length > 0 && (
-        <div className="flex items-center gap-3 rounded-full border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+        <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
           <Clock className="h-4 w-4 shrink-0 text-slate-500" />
           <p className="text-sm text-slate-400">
             No matches scheduled for today. Next fixtures:
@@ -541,7 +541,7 @@ export default function LiveMatchesPage() {
       )}
 
       {/* ── Disclaimer ── */}
-      <div className="flex items-start gap-2 rounded-full border border-white/[0.04] bg-white/[0.02] px-4 py-3">
+      <div className="flex items-start gap-2 rounded-xl border border-white/[0.04] bg-white/[0.02] px-4 py-3">
         <Zap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-600" />
         <p className="text-[11px] leading-relaxed text-slate-600">
           Match data is loaded directly from the database and refreshed every 60 seconds.

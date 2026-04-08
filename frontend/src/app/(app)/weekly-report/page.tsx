@@ -156,7 +156,7 @@ function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
         <div className="h-4 w-48 rounded bg-white/[0.06] mb-5" />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-24 rounded-full bg-white/[0.04]" />
+            <div key={i} className="h-24 rounded-xl bg-white/[0.04]" />
           ))}
         </div>
       </div>
@@ -223,7 +223,7 @@ function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
   return (
     <div className="glass-card p-6" style={{ border: "1px solid rgba(59,130,246,0.14)" }}>
       <div className="flex items-center gap-2 mb-5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/10">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
           <FileBarChart2 className="h-4 w-4 text-blue-400" />
         </div>
         <h2 className="text-sm font-semibold text-slate-200">Performance Overview</h2>
@@ -233,7 +233,7 @@ function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
         {kpis.map(({ label, value, color, bg, border, wow }) => (
           <div
             key={label}
-            className="flex flex-col items-center justify-center gap-1.5 rounded-full py-4 px-2 text-center"
+            className="flex flex-col items-center justify-center gap-1.5 rounded-xl py-4 px-2 text-center"
             style={{ background: bg, border: `1px solid ${border}` }}
           >
             <span
@@ -264,7 +264,7 @@ function WinnerCard({ fixture }: { fixture: Fixture }) {
 
   return (
     <div
-      className="rounded-full p-4 border space-y-2"
+      className="rounded-xl p-4 border space-y-2"
       style={{ background: "rgba(16,185,129,0.05)", borderColor: "rgba(16,185,129,0.2)" }}
     >
       <div className="flex items-start justify-between gap-2">
@@ -313,7 +313,7 @@ function LossCard({ fixture }: { fixture: Fixture }) {
 
   return (
     <div
-      className="rounded-full p-4 border space-y-2"
+      className="rounded-xl p-4 border space-y-2"
       style={{ background: "rgba(239,68,68,0.05)", borderColor: "rgba(239,68,68,0.2)" }}
     >
       <div className="flex items-start justify-between gap-2">
@@ -374,7 +374,7 @@ function WinnersLosersSection({ fixtures }: { fixtures: Fixture[] }) {
       {/* Winners */}
       <div className="glass-card p-5" style={{ border: "1px solid rgba(16,185,129,0.14)" }}>
         <div className="flex items-center gap-2 mb-4">
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/10">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10">
             <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
           </div>
           <h3 className="text-sm font-semibold text-slate-200">Top Winners</h3>
@@ -395,7 +395,7 @@ function WinnersLosersSection({ fixtures }: { fixtures: Fixture[] }) {
       {/* Losers */}
       <div className="glass-card p-5" style={{ border: "1px solid rgba(239,68,68,0.14)" }}>
         <div className="flex items-center gap-2 mb-4">
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-red-500/10">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-500/10">
             <TrendingDown className="h-3.5 w-3.5 text-red-400" />
           </div>
           <h3 className="text-sm font-semibold text-slate-200">Losses</h3>
@@ -589,7 +589,7 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
                   </td>
                   <td className="px-3 py-2.5 font-medium">
                     <span
-                      className="rounded-full px-2 py-0.5 text-[10px] font-semibold"
+                      className="rounded-md px-2 py-0.5 text-[10px] font-semibold"
                       style={{
                         background:
                           predicted === "home_win"
@@ -673,12 +673,12 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
 function PageSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
-      <div className="h-10 w-56 rounded-full bg-white/[0.06]" />
+      <div className="h-10 w-56 rounded-lg bg-white/[0.06]" />
       <div className="glass-card p-6">
         <div className="h-4 w-40 rounded bg-white/[0.06] mb-5" />
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="h-24 rounded-full bg-white/[0.04]" />
+            <div key={i} className="h-24 rounded-xl bg-white/[0.04]" />
           ))}
         </div>
       </div>
@@ -696,14 +696,14 @@ function PageSkeleton() {
 function Disclaimer() {
   return (
     <div
-      className="rounded-full border p-4 flex items-start gap-3"
+      className="rounded-xl border p-4 flex items-start gap-3"
       style={{
         background: "rgba(245,158,11,0.04)",
         borderColor: "rgba(245,158,11,0.22)",
         backdropFilter: "blur(20px)",
       }}
     >
-      <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-amber-500/10">
+      <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/10">
         <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
       </div>
       <p className="text-xs leading-relaxed text-slate-400">
@@ -746,7 +746,7 @@ export default function WeeklyReportPage() {
       {/* ── Header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500/10">
+          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/10">
             <FileBarChart2 className="h-5 w-5 text-blue-400" />
           </div>
           <div>
@@ -767,7 +767,7 @@ export default function WeeklyReportPage() {
       {/* ── Error banner ── */}
       {hasError && (
         <div
-          className="rounded-full border p-4 flex items-start gap-3"
+          className="rounded-xl border p-4 flex items-start gap-3"
           style={{ background: "rgba(239,68,68,0.04)", borderColor: "rgba(239,68,68,0.25)" }}
         >
           <AlertTriangle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />

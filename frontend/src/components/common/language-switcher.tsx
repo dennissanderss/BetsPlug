@@ -37,7 +37,7 @@ export function LanguageSwitcher() {
         aria-haspopup="listbox"
         aria-expanded={open}
         className={cn(
-          "flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-sm transition-all duration-150",
+          "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm transition-all duration-150",
           "text-slate-300 hover:text-slate-100 hover:bg-white/[0.06]",
           "border border-transparent hover:border-white/[0.08]",
           open && "bg-white/[0.06] border-white/[0.08]"
@@ -60,7 +60,7 @@ export function LanguageSwitcher() {
         <div
           role="listbox"
           aria-label="Select language"
-          className="absolute right-0 top-full mt-2 w-44 rounded-full py-1 z-50 animate-slide-up"
+          className="absolute right-0 top-full mt-2 w-44 rounded-xl py-1 z-50 animate-slide-up"
           style={{
             background: "rgba(17, 24, 39, 0.97)",
             backdropFilter: "blur(20px)",

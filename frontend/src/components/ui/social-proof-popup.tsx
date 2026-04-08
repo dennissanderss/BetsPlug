@@ -154,12 +154,12 @@ export function SocialProofPopup() {
       role="status"
       aria-live="polite"
     >
-      <div className="group relative flex items-center gap-3 overflow-hidden rounded-full border border-green-500/20 bg-gradient-to-br from-[#0d1220]/95 to-[#080b14]/95 p-3 pr-9 shadow-2xl shadow-green-500/10 backdrop-blur-xl sm:p-4 sm:pr-10">
+      <div className="group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-green-500/20 bg-gradient-to-br from-[#0d1220]/95 to-[#080b14]/95 p-3 pr-9 shadow-2xl shadow-green-500/10 backdrop-blur-xl sm:p-4 sm:pr-10">
         {/* Glow */}
         <div className="pointer-events-none absolute -left-10 -top-10 h-28 w-28 rounded-full bg-green-500/20 blur-2xl" />
 
         {/* Icon */}
-        <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.25)] sm:h-11 sm:w-11">
+        <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.25)] sm:h-11 sm:w-11">
           <CheckCircle2 className="h-5 w-5 text-green-400 sm:h-6 sm:w-6" />
           <span className="absolute -right-0.5 -top-0.5 flex h-2.5 w-2.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
@@ -193,7 +193,7 @@ export function SocialProofPopup() {
         </button>
 
         {/* Progress bar */}
-        <div className="absolute bottom-0 left-0 h-[2px] w-full overflow-hidden rounded-b-full bg-white/5">
+        <div className="absolute bottom-0 left-0 h-[2px] w-full overflow-hidden rounded-b-2xl bg-white/5">
           <div
             className={`h-full bg-gradient-to-r from-green-400 to-emerald-500 ${
               visible ? "animate-[shrink_6s_linear_forwards]" : ""

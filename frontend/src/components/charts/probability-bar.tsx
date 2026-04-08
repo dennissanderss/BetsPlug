@@ -42,7 +42,7 @@ export function ProbabilityBar({
       )}
 
       {/* Stacked bar */}
-      <div className="flex h-7 w-full overflow-hidden rounded-full">
+      <div className="flex h-7 w-full overflow-hidden rounded-md">
         {/* Home - blue */}
         <div
           className="flex items-center justify-center bg-blue-500 text-white text-xs font-semibold transition-all duration-300"
@@ -74,15 +74,15 @@ export function ProbabilityBar({
       {/* Legend */}
       <div className="flex items-center gap-4 text-xs text-muted-foreground">
         <span className="flex items-center gap-1">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-blue-500" />
+          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-blue-500" />
           {homeLabel} {formatPct(home)}
         </span>
         <span className="flex items-center gap-1">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-slate-400" />
+          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-slate-400" />
           Draw {formatPct(draw)}
         </span>
         <span className="flex items-center gap-1">
-          <span className="inline-block h-2.5 w-2.5 rounded-full bg-orange-500" />
+          <span className="inline-block h-2.5 w-2.5 rounded-sm bg-orange-500" />
           {awayLabel} {formatPct(away)}
         </span>
       </div>

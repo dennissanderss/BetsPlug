@@ -112,7 +112,7 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-start gap-3 border-b border-white/[0.06] pb-4 mb-5">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-500/10">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
         <Icon className="h-4 w-4 text-blue-400" />
       </div>
       <div>
@@ -137,7 +137,7 @@ function NotificationRow({
   onChange: (v: boolean) => void;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-full border border-white/[0.05] bg-white/[0.02] px-4 py-3 transition-colors hover:bg-white/[0.04]">
+    <div className="flex items-center justify-between gap-4 rounded-xl border border-white/[0.05] bg-white/[0.02] px-4 py-3 transition-colors hover:bg-white/[0.04]">
       <div className="min-w-0">
         <p className="text-sm font-medium text-slate-200">{label}</p>
         <p className="text-xs text-slate-500 mt-0.5">{description}</p>
@@ -153,7 +153,7 @@ function SaveToast({ visible }: { visible: boolean }) {
   return (
     <div
       className={cn(
-        "fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-400 shadow-xl backdrop-blur-sm transition-all duration-300",
+        "fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-400 shadow-xl backdrop-blur-sm transition-all duration-300",
         visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0 pointer-events-none"
       )}
     >
@@ -261,7 +261,7 @@ export default function SettingsPage() {
 
         <div className="flex items-center gap-5">
           {/* Avatar */}
-          <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500/30 to-cyan-500/20 text-xl font-bold text-blue-300 glow-blue-sm border border-blue-500/20">
+          <div className="relative flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/30 to-cyan-500/20 text-xl font-bold text-blue-300 glow-blue-sm border border-blue-500/20">
             {initials}
           </div>
 
@@ -271,7 +271,7 @@ export default function SettingsPage() {
               <input
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                className="w-full rounded-full border border-white/[0.1] bg-white/[0.05] px-3 py-1.5 text-sm font-semibold text-slate-100 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 mb-1"
+                className="w-full rounded-lg border border-white/[0.1] bg-white/[0.05] px-3 py-1.5 text-sm font-semibold text-slate-100 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 mb-1"
               />
             ) : (
               <p className="text-base font-semibold text-slate-100">{displayName}</p>
@@ -288,7 +288,7 @@ export default function SettingsPage() {
           {/* Edit button */}
           <button
             onClick={() => setEditingProfile((v) => !v)}
-            className="shrink-0 rounded-full border border-white/[0.1] bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-white/[0.08] hover:text-slate-100"
+            className="shrink-0 rounded-lg border border-white/[0.1] bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-white/[0.08] hover:text-slate-100"
           >
             {editingProfile ? "Done" : "Edit profile"}
           </button>
@@ -311,7 +311,7 @@ export default function SettingsPage() {
                 key={sport.id}
                 onClick={() => toggleSport(sport.id)}
                 className={cn(
-                  "group flex flex-col items-center gap-2 rounded-full border px-3 py-4 text-center transition-all duration-200 hover:-translate-y-0.5",
+                  "group flex flex-col items-center gap-2 rounded-xl border px-3 py-4 text-center transition-all duration-200 hover:-translate-y-0.5",
                   active
                     ? "border-blue-500/40 bg-blue-500/10 glow-blue-sm"
                     : "border-white/[0.07] bg-white/[0.02] hover:bg-white/[0.05] hover:border-white/[0.12]"
@@ -336,7 +336,7 @@ export default function SettingsPage() {
           })}
         </div>
 
-        <div className="mt-5 flex items-center justify-between rounded-full border border-white/[0.05] bg-white/[0.02] px-4 py-3">
+        <div className="mt-5 flex items-center justify-between rounded-xl border border-white/[0.05] bg-white/[0.02] px-4 py-3">
           <div>
             <p className="text-sm font-medium text-slate-200">Receive alerts for followed sports only</p>
             <p className="text-xs text-slate-500 mt-0.5">
@@ -373,7 +373,7 @@ export default function SettingsPage() {
                         key={league.id}
                         onClick={() => toggleLeague(league.id)}
                         className={cn(
-                          "flex items-center justify-between rounded-full border px-3 py-2.5 text-sm transition-all duration-150",
+                          "flex items-center justify-between rounded-lg border px-3 py-2.5 text-sm transition-all duration-150",
                           active
                             ? "border-blue-500/30 bg-blue-500/10 text-blue-300"
                             : "border-white/[0.06] bg-white/[0.02] text-slate-400 hover:bg-white/[0.05] hover:text-slate-300"
@@ -462,7 +462,7 @@ export default function SettingsPage() {
                   key={fmt}
                   onClick={() => setOddsFormat(fmt)}
                   className={cn(
-                    "rounded-full border px-4 py-2 text-sm font-medium capitalize transition-all",
+                    "rounded-lg border px-4 py-2 text-sm font-medium capitalize transition-all",
                     oddsFormat === fmt
                       ? "border-blue-500/40 bg-blue-500/15 text-blue-300 glow-blue-sm"
                       : "border-white/[0.08] bg-white/[0.03] text-slate-400 hover:border-white/[0.15] hover:text-slate-300"
@@ -487,7 +487,7 @@ export default function SettingsPage() {
                 <select
                   value={language}
                   onChange={(e) => setLanguage(e.target.value)}
-                  className="w-full appearance-none rounded-full border border-white/[0.1] bg-white/[0.04] px-3 py-2.5 pr-8 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors"
+                  className="w-full appearance-none rounded-lg border border-white/[0.1] bg-white/[0.04] px-3 py-2.5 pr-8 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors"
                 >
                   {[
                     { code: "EN", label: "English" },
@@ -514,7 +514,7 @@ export default function SettingsPage() {
                 <select
                   value={timezone}
                   onChange={(e) => setTimezone(e.target.value)}
-                  className="w-full appearance-none rounded-full border border-white/[0.1] bg-white/[0.04] px-3 py-2.5 pr-8 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors"
+                  className="w-full appearance-none rounded-lg border border-white/[0.1] bg-white/[0.04] px-3 py-2.5 pr-8 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors"
                 >
                   {TIMEZONES.map((tz) => (
                     <option key={tz} value={tz}>{tz}</option>
@@ -526,7 +526,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Dark/Light mode */}
-          <div className="flex items-center justify-between rounded-full border border-white/[0.05] bg-white/[0.02] px-4 py-3">
+          <div className="flex items-center justify-between rounded-xl border border-white/[0.05] bg-white/[0.02] px-4 py-3">
             <div>
               <p className="text-sm font-medium text-slate-200">
                 {lightMode ? "Light mode" : "Dark mode"}
@@ -544,12 +544,12 @@ export default function SettingsPage() {
 
       {/* ── Save button ──────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-end gap-3 pb-8">
-        <button className="rounded-full border border-white/[0.1] bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-white/[0.08] hover:text-slate-200">
+        <button className="rounded-lg border border-white/[0.1] bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-white/[0.08] hover:text-slate-200">
           Discard
         </button>
         <button
           onClick={handleSave}
-          className="btn-gradient inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-semibold text-white shadow-lg"
+          className="btn-gradient inline-flex items-center gap-2 rounded-lg px-6 py-2.5 text-sm font-semibold text-white shadow-lg"
         >
           <Save className="h-4 w-4" />
           Save settings

@@ -27,7 +27,7 @@ function formatTypeLabel(type: string): string {
 
 function EmptyReports() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-full border border-dashed border-white/[0.08] py-16 text-center">
+    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/[0.08] py-16 text-center">
       <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/[0.04]">
         <FileText className="h-6 w-6 text-slate-500" />
       </div>
@@ -70,10 +70,10 @@ function GenerateReportCard() {
   };
 
   return (
-    <div className="glass-card rounded-full p-6 animate-fade-in">
+    <div className="glass-card rounded-xl p-6 animate-fade-in">
       {/* Card header */}
       <div className="mb-5 flex items-center gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/20">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/20">
           <Play className="h-4 w-4 text-blue-400" />
         </div>
         <div>
@@ -94,7 +94,7 @@ function GenerateReportCard() {
           <select
             value={form.report_type}
             onChange={(e) => setForm((f) => ({ ...f, report_type: e.target.value }))}
-            className="h-9 w-44 rounded-full border border-white/10 bg-white/[0.04] px-3 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors"
+            className="h-9 w-44 rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors"
           >
             <option value="weekly" className="bg-[#111827]">Weekly Summary</option>
             <option value="monthly" className="bg-[#111827]">Monthly Summary</option>
@@ -108,7 +108,7 @@ function GenerateReportCard() {
           <select
             value={form.format}
             onChange={(e) => setForm((f) => ({ ...f, format: e.target.value }))}
-            className="h-9 w-36 rounded-full border border-white/10 bg-white/[0.04] px-3 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors"
+            className="h-9 w-36 rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors"
           >
             <option value="pdf" className="bg-[#111827]">PDF</option>
             <option value="csv" className="bg-[#111827]">CSV</option>
@@ -120,7 +120,7 @@ function GenerateReportCard() {
         <button
           onClick={handleGenerate}
           disabled={mutation.isPending}
-          className="btn-gradient inline-flex h-9 items-center gap-2 rounded-full px-4 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-opacity"
+          className="btn-gradient inline-flex h-9 items-center gap-2 rounded-lg px-4 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed transition-opacity"
         >
           {mutation.isPending ? (
             <>
@@ -138,7 +138,7 @@ function GenerateReportCard() {
 
       {/* Status feedback */}
       {mutation.isSuccess && (
-        <div className="mt-4 flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm animate-fade-in">
+        <div className="mt-4 flex items-center gap-2 rounded-lg border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm animate-fade-in">
           <span className="h-2 w-2 shrink-0 rounded-full bg-green-400" />
           <p className="text-green-300">
             Report job queued successfully. The report will appear in the list below once ready.
@@ -146,7 +146,7 @@ function GenerateReportCard() {
         </div>
       )}
       {mutation.isError && (
-        <div className="mt-4 flex items-center gap-2 rounded-full border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm animate-fade-in">
+        <div className="mt-4 flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm animate-fade-in">
           <AlertTriangle className="h-4 w-4 shrink-0 text-red-400" />
           <p className="text-red-300">
             {mutation.error instanceof Error
@@ -163,10 +163,10 @@ function GenerateReportCard() {
 
 function ReportRow({ report }: { report: GeneratedReport }) {
   return (
-    <div className="glass-card-hover flex items-center gap-4 rounded-full px-5 py-4 transition-all">
+    <div className="glass-card-hover flex items-center gap-4 rounded-xl px-5 py-4 transition-all">
       {/* Icon + title */}
       <div className="flex min-w-0 flex-1 items-center gap-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-500/10">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
           <FileText className="h-4 w-4 text-blue-400" />
         </div>
         <div className="min-w-0">
@@ -179,7 +179,7 @@ function ReportRow({ report }: { report: GeneratedReport }) {
       </div>
 
       {/* Type badge */}
-      <span className="hidden shrink-0 rounded-full border border-white/[0.06] bg-white/[0.04] px-2.5 py-1 text-xs font-medium capitalize text-slate-300 sm:inline-block">
+      <span className="hidden shrink-0 rounded-md border border-white/[0.06] bg-white/[0.04] px-2.5 py-1 text-xs font-medium capitalize text-slate-300 sm:inline-block">
         {formatTypeLabel(report.file_format)}
       </span>
 
@@ -204,7 +204,7 @@ function ReportRow({ report }: { report: GeneratedReport }) {
         download
         target="_blank"
         rel="noreferrer"
-        className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-400 transition-colors hover:border-blue-400/50 hover:bg-blue-500/20 hover:text-blue-300"
+        className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-blue-500/30 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-400 transition-colors hover:border-blue-400/50 hover:bg-blue-500/20 hover:text-blue-300"
       >
         <Download className="h-3.5 w-3.5" />
         Download
@@ -215,7 +215,7 @@ function ReportRow({ report }: { report: GeneratedReport }) {
 
 function ReportsList({ reports, isLoading }: { reports?: GeneratedReport[]; isLoading: boolean }) {
   return (
-    <div className="glass-card rounded-full p-6 animate-slide-up">
+    <div className="glass-card rounded-xl p-6 animate-slide-up">
       {/* Header */}
       <div className="mb-5 flex items-center justify-between">
         <div>
@@ -236,7 +236,7 @@ function ReportsList({ reports, isLoading }: { reports?: GeneratedReport[]; isLo
       {isLoading ? (
         <div className="space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-16 w-full rounded-full bg-white/[0.04]" />
+            <Skeleton key={i} className="h-16 w-full rounded-xl bg-white/[0.04]" />
           ))}
         </div>
       ) : !reports || reports.length === 0 ? (
@@ -279,7 +279,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Disclaimer banner */}
-      <div className="flex items-start gap-3 rounded-full border border-amber-500/20 bg-amber-500/[0.06] px-5 py-4 animate-fade-in">
+      <div className="flex items-start gap-3 rounded-xl border border-amber-500/20 bg-amber-500/[0.06] px-5 py-4 animate-fade-in">
         <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
         <p className="text-xs leading-relaxed text-slate-300">
           <span className="font-semibold text-amber-400">SIMULATION ONLY</span> — All reports and

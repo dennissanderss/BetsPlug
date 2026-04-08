@@ -53,7 +53,7 @@ export function BetsPlugFooter() {
 
   return (
     <>
-      <footer className="relative mx-auto mt-10 max-w-7xl overflow-hidden rounded-t-full border border-white/[0.06] border-b-0 bg-gradient-to-b from-white/[0.02] to-transparent px-6 pb-8 pt-16 backdrop-blur-sm">
+      <footer className="relative mx-auto mt-10 max-w-7xl overflow-hidden rounded-t-3xl border border-white/[0.06] border-b-0 bg-gradient-to-b from-white/[0.02] to-transparent px-6 pb-8 pt-16 backdrop-blur-sm">
         {/* Background grid pattern with radial mask */}
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(74,222,128,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(74,222,128,0.04)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_center,black,transparent_80%)]" />
 
@@ -78,9 +78,9 @@ export function BetsPlugFooter() {
               </p>
 
               {/* Newsletter CTA trigger */}
-              <div className="mt-2 max-w-sm rounded-full border border-green-500/20 bg-gradient-to-br from-green-500/[0.06] to-transparent p-5 backdrop-blur-sm">
+              <div className="mt-2 max-w-sm rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.06] to-transparent p-5 backdrop-blur-sm">
                 <div className="mb-3 flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500/15">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-green-500/15">
                     <Send className="h-4 w-4 text-green-400" />
                   </div>
                   <div>
@@ -153,7 +153,7 @@ export function BetsPlugFooter() {
           </div>
 
           {/* Disclaimer */}
-          <div className="mb-6 rounded-full border border-amber-500/20 bg-amber-500/[0.04] p-4">
+          <div className="mb-6 rounded-2xl border border-amber-500/20 bg-amber-500/[0.04] p-4">
             <p className="text-center text-xs leading-relaxed text-slate-500">
               <span className="font-semibold text-amber-400">Disclaimer:</span> BetsPlug is a data
               analytics platform. We calculate probabilities using statistical models. This is{" "}
@@ -215,7 +215,7 @@ export function BetsPlugFooter() {
           />
 
           {/* Modal content */}
-          <div className="relative w-full max-w-md animate-slide-up overflow-hidden rounded-full border border-green-500/20 bg-gradient-to-br from-[#0d1220] to-[#080b14] p-8 shadow-2xl">
+          <div className="relative w-full max-w-md animate-slide-up overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-[#0d1220] to-[#080b14] p-8 shadow-2xl">
             {/* Glow */}
             <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-500/20 blur-[100px]" />
             <div className="pointer-events-none absolute -left-20 -bottom-20 h-[300px] w-[300px] rounded-full bg-emerald-500/10 blur-[100px]" />
@@ -233,7 +233,7 @@ export function BetsPlugFooter() {
             {!submitted ? (
               <div className="relative">
                 {/* Icon */}
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-green-500/15 shadow-[0_0_30px_rgba(74,222,128,0.25)]">
+                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-green-500/15 shadow-[0_0_30px_rgba(74,222,128,0.25)]">
                   <Sparkles className="h-7 w-7 text-green-400" />
                 </div>
 
@@ -269,7 +269,7 @@ export function BetsPlugFooter() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="your@email.com"
-                      className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white placeholder:text-slate-600 backdrop-blur-sm transition-colors focus:border-green-500/60 focus:outline-none focus:ring-2 focus:ring-green-500/20"
+                      className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-white placeholder:text-slate-600 backdrop-blur-sm transition-colors focus:border-green-500/60 focus:outline-none focus:ring-2 focus:ring-green-500/20"
                     />
                   </div>
                   <button type="submit" className="w-full">

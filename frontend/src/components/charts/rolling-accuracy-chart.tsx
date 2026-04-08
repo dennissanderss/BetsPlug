@@ -39,7 +39,7 @@ interface CustomTooltipProps {
 function CustomTooltip({ active, label, payload }: CustomTooltipProps) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-full border border-border bg-popover px-3 py-2 text-sm shadow-md space-y-1">
+    <div className="rounded-md border border-border bg-popover px-3 py-2 text-sm shadow-md space-y-1">
       <p className="font-medium text-foreground">{label}</p>
       {payload.map((entry, i) => (
         <p key={i} style={{ color: entry.color }} className="text-xs">

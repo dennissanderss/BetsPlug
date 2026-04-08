@@ -284,7 +284,7 @@ function BacktestPanel({
         <div className="space-y-4">
           {/* Status indicator */}
           <div className={cn(
-            "flex items-start gap-3 rounded-full border p-4",
+            "flex items-start gap-3 rounded-lg border p-4",
             status.ready
               ? "border-emerald-500/20 bg-emerald-500/[0.05]"
               : "border-amber-500/20 bg-amber-500/[0.05]"
@@ -304,15 +304,15 @@ function BacktestPanel({
 
           {/* Stats row */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-full border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
+            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
               <p className="text-[10px] uppercase tracking-wider text-slate-500">Predictions</p>
               <p className="text-lg font-bold text-slate-100 tabular-nums">{status.count.toLocaleString()}</p>
             </div>
-            <div className="rounded-full border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
+            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
               <p className="text-[10px] uppercase tracking-wider text-slate-500">Required</p>
               <p className="text-lg font-bold text-slate-400 tabular-nums">{BACKTEST_MINIMUM}</p>
             </div>
-            <div className="rounded-full border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
+            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
               <p className="text-[10px] uppercase tracking-wider text-slate-500">Remaining</p>
               <p className={cn("text-lg font-bold tabular-nums", status.ready ? "text-emerald-400" : "text-amber-400")}>
                 {status.ready ? "0" : (BACKTEST_MINIMUM - status.count).toLocaleString()}
@@ -325,7 +325,7 @@ function BacktestPanel({
             onClick={handleRunBacktest}
             disabled={!status.ready || running}
             className={cn(
-              "flex w-full items-center justify-center gap-2 rounded-full px-4 py-3 text-sm font-semibold transition-all",
+              "flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold transition-all",
               status.ready && !running
                 ? "bg-blue-600 text-white hover:bg-blue-500 shadow-lg"
                 : "bg-white/[0.04] border border-white/[0.06] text-slate-500 cursor-not-allowed"
@@ -346,7 +346,7 @@ function BacktestPanel({
 
           {runResult && (
             <div className={cn(
-              "rounded-full border p-3 text-xs",
+              "rounded-lg border p-3 text-xs",
               runResult.startsWith("Error")
                 ? "border-red-500/20 bg-red-500/[0.05] text-red-400"
                 : "border-emerald-500/20 bg-emerald-500/[0.05] text-emerald-400"
@@ -372,7 +372,7 @@ function SimulatedDemoSection() {
   return (
     <div className="space-y-4 animate-fade-in">
       {/* Prominent demo label */}
-      <div className="rounded-full border-2 border-dashed border-amber-500/40 bg-amber-500/[0.04] p-5 space-y-2">
+      <div className="rounded-xl border-2 border-dashed border-amber-500/40 bg-amber-500/[0.04] p-5 space-y-2">
         <div className="flex items-center gap-2">
           <AlertTriangle className="h-5 w-5 text-amber-400 flex-shrink-0" />
           <p className="text-sm font-bold text-amber-400 uppercase tracking-wide">
@@ -431,7 +431,7 @@ function SimulatedDemoSection() {
                     <p className="text-[10px] text-slate-600">EXAMPLE ONLY</p>
                   </td>
                   <td className="px-4 py-2.5">
-                    <span className="rounded-full bg-slate-500/10 border border-slate-500/15 px-2 py-0.5 text-[11px] font-medium text-slate-500">
+                    <span className="rounded-md bg-slate-500/10 border border-slate-500/15 px-2 py-0.5 text-[11px] font-medium text-slate-500">
                       {entry.selection}
                     </span>
                   </td>
@@ -514,7 +514,7 @@ export default function StrategyPage() {
         </div>
 
         {/* Disclaimer bar */}
-        <div className="mt-4 flex items-start gap-2 rounded-full border border-amber-500/20 bg-amber-500/[0.04] px-4 py-3">
+        <div className="mt-4 flex items-start gap-2 rounded-lg border border-amber-500/20 bg-amber-500/[0.04] px-4 py-3">
           <AlertTriangle className="h-4 w-4 flex-shrink-0 text-amber-400 mt-0.5" />
           <p className="text-xs text-slate-400 leading-relaxed">
             <span className="font-semibold text-amber-400">No backtest results exist yet.</span>{" "}
@@ -630,7 +630,7 @@ export default function StrategyPage() {
                 red: "text-red-400",
               };
               return (
-                <div key={stat.label} className="rounded-full border border-white/[0.06] bg-white/[0.02] p-4 space-y-1">
+                <div key={stat.label} className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-4 space-y-1">
                   <p className="text-[10px] uppercase tracking-wider text-slate-500">{stat.label}</p>
                   <p className={cn("text-xl font-bold tabular-nums", colorMap[stat.accent])}>{stat.value}</p>
                 </div>
@@ -656,7 +656,7 @@ export default function StrategyPage() {
       </div>
 
       {/* ── Bottom Disclaimer ─────────────────────────────────────────────────── */}
-      <div className="rounded-full border border-amber-500/20 bg-amber-500/[0.04] p-5 animate-fade-in">
+      <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-5 animate-fade-in">
         <div className="flex gap-3">
           <AlertTriangle className="h-5 w-5 flex-shrink-0 text-amber-400 mt-0.5" />
           <div className="space-y-1.5">

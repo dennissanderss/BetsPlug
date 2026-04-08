@@ -113,7 +113,7 @@ export function HowItWorks() {
                   </div>
 
                   {/* Card content */}
-                  <div className="relative overflow-hidden rounded-full border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-sm transition-all duration-300 group-hover:border-green-500/30 group-hover:shadow-xl group-hover:shadow-green-500/[0.08] md:text-center">
+                  <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-sm transition-all duration-300 group-hover:border-green-500/30 group-hover:shadow-xl group-hover:shadow-green-500/[0.08] md:text-center">
                     <h3 className="mb-3 text-xl font-bold text-white">
                       {step.title}
                     </h3>

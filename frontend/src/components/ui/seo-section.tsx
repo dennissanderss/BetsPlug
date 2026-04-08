@@ -198,9 +198,9 @@ export function SeoSection() {
                   ease: [0.16, 1, 0.3, 1],
                 }}
                 viewport={{ once: true }}
-                className="group relative overflow-hidden rounded-full border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-sm transition-all duration-300 hover:border-green-500/30 hover:shadow-xl hover:shadow-green-500/[0.08]"
+                className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-sm transition-all duration-300 hover:border-green-500/30 hover:shadow-xl hover:shadow-green-500/[0.08]"
               >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.15)] transition-transform duration-300 group-hover:scale-110">
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.15)] transition-transform duration-300 group-hover:scale-110">
                   <Icon className="h-5 w-5 text-green-400" />
                 </div>
                 <h3 className="mb-2 text-lg font-bold text-white">{p.title}</h3>
@@ -218,7 +218,7 @@ export function SeoSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="mt-20 rounded-full border border-white/[0.08] bg-gradient-to-br from-white/[0.03] to-transparent p-8 backdrop-blur-sm sm:p-12"
+          className="mt-20 rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.03] to-transparent p-8 backdrop-blur-sm sm:p-12"
         >
           <div className="prose prose-invert max-w-none">
             <h3 className="text-2xl font-extrabold text-white sm:text-3xl">
@@ -431,7 +431,7 @@ function FaqBlock() {
       </div>
 
       {/* Grid: sidebar + accordion */}
-      <div className="relative overflow-hidden rounded-full border border-white/[0.08] bg-gradient-to-br from-white/[0.03] to-transparent p-5 backdrop-blur-sm sm:p-8">
+      <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.03] to-transparent p-5 backdrop-blur-sm sm:p-8">
         {/* Ambient glow */}
         <div className="pointer-events-none absolute -left-20 top-0 h-[300px] w-[300px] rounded-full bg-green-500/[0.08] blur-[100px]" />
         <div className="pointer-events-none absolute -right-20 bottom-0 h-[300px] w-[300px] rounded-full bg-emerald-500/[0.06] blur-[100px]" />
@@ -454,14 +454,14 @@ function FaqBlock() {
                     setActiveCategory(cat.id);
                     setOpenQuestion(cat.items[0].q);
                   }}
-                  className={`group relative flex items-center gap-3 rounded-full border px-4 py-3.5 text-left transition-all duration-300 ${
+                  className={`group relative flex items-center gap-3 rounded-2xl border px-4 py-3.5 text-left transition-all duration-300 ${
                     isActive
                       ? "border-green-500/40 bg-gradient-to-r from-green-500/[0.12] to-green-500/[0.04] shadow-lg shadow-green-500/10"
                       : "border-white/[0.08] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
                   }`}
                 >
                   <div
-                    className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full transition-all ${
+                    className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl transition-all ${
                       isActive
                         ? "bg-green-500/20 shadow-[0_0_20px_rgba(74,222,128,0.25)]"
                         : "bg-white/[0.05] group-hover:bg-white/[0.08]"
@@ -495,9 +495,9 @@ function FaqBlock() {
             })}
 
             {/* Contact Support card */}
-            <div className="mt-4 rounded-full border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] to-emerald-500/[0.03] p-5 backdrop-blur-sm">
+            <div className="mt-4 rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] to-emerald-500/[0.03] p-5 backdrop-blur-sm">
               <div className="mb-3 flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-500/15">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-green-500/15">
                   <LifeBuoy className="h-4 w-4 text-green-400" />
                 </div>
                 <p className="text-sm font-bold text-white">
@@ -533,7 +533,7 @@ function FaqBlock() {
                   return (
                     <div
                       key={item.q}
-                      className={`overflow-hidden rounded-full border backdrop-blur-sm transition-all duration-300 ${
+                      className={`overflow-hidden rounded-2xl border backdrop-blur-sm transition-all duration-300 ${
                         isOpen
                           ? "border-green-500/30 bg-gradient-to-br from-green-500/[0.05] to-transparent shadow-lg shadow-green-500/[0.06]"
                           : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.15] hover:bg-white/[0.03]"
