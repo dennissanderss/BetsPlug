@@ -6,6 +6,13 @@ import { AppProviders } from "@/components/layout/providers";
 export const metadata: Metadata = {
   title: "Betsplug - AI-Powered Sports Analytics",
   description: "Premium AI-powered sports analytics. Data-driven predictions, live match tracking, and deep performance insights.",
+  icons: {
+    icon: [
+      { url: "/logo.webp", type: "image/webp" },
+    ],
+    shortcut: "/logo.webp",
+    apple: "/logo.webp",
+  },
 };
 
 export default function RootLayout({
