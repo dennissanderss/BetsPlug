@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { TestimonialsColumn, type Testimonial } from "@/components/ui/testimonials-columns";
+import { useTranslations } from "@/i18n/locale-provider";
 
 const testimonials: Testimonial[] = [
   {
@@ -65,6 +66,7 @@ const secondColumn = testimonials.slice(3, 6);
 const thirdColumn = testimonials.slice(6, 9);
 
 export const TestimonialsSection = () => {
+  const { t } = useTranslations();
   return (
     <section className="relative overflow-hidden py-20 md:py-28">
       {/* Background glow */}
@@ -82,14 +84,16 @@ export const TestimonialsSection = () => {
           className="mx-auto flex max-w-2xl flex-col items-center justify-center text-center"
         >
           <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
-            Testimonials
+            {t("testimonials.badge")}
           </span>
 
           <h2 className="text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
-            What our <span className="gradient-text">analysts</span> say
+            {t("testimonials.titleA")}{" "}
+            <span className="gradient-text">{t("testimonials.titleHighlight")}</span>{" "}
+            {t("testimonials.titleB")}
           </h2>
           <p className="mt-5 text-base text-slate-400">
-            Join 1,500+ data-driven bettors who trust BetsPlug for their edge over the bookmakers.
+            {t("testimonials.subtitle")}
           </p>
         </motion.div>
 

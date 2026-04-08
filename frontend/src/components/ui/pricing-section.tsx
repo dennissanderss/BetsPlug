@@ -31,103 +31,101 @@ type Plan = {
   features: string[];
 };
 
-// Charm pricing applied end-to-end:
-// Silver €9,99/mo  →  yearly 20% off  →  €7,99/mo  (billed €95,90/year)
-// Gold   €14,99/mo →  yearly 20% off  →  €11,99/mo (billed €143,90/year)
-const plans: Plan[] = [
-  {
-    id: "bronze",
-    name: "Bronze",
-    icon: Shield,
-    tagline: "Start exploring, free forever",
-    fixed: true,
-    monthly: { main: "0", period: "/ forever" },
-    yearly: { main: "0", period: "/ forever" },
-    cta: "Get Started Free",
-    features: [
-      "1 Bet of the Day (free pick)",
-      "3 daily AI predictions",
-      "Access to public track record",
-      "Community insights",
-      "Email support",
-    ],
-  },
-  {
-    id: "silver",
-    name: "Silver",
-    icon: Zap,
-    tagline: "For serious analysts",
-    monthly: {
-      main: "9",
-      cents: "99",
-      period: "/ month",
-      footnote: "Billed monthly",
-    },
-    yearly: {
-      main: "7",
-      cents: "99",
-      period: "/ month",
-      footnote: "Billed €95,90 yearly",
-    },
-    cta: "Start Silver",
-    features: [
-      "Unlimited AI predictions",
-      "All 4 AI models (Ensemble)",
-      "Live probability tracking",
-      "Strategy backtesting",
-      "Priority email support",
-    ],
-  },
-  {
-    id: "gold",
-    name: "Gold",
-    icon: Sparkles,
-    tagline: "Most popular choice",
-    monthly: {
-      main: "14",
-      cents: "99",
-      period: "/ month",
-      footnote: "Billed monthly",
-    },
-    yearly: {
-      main: "11",
-      cents: "99",
-      period: "/ month",
-      footnote: "Billed €143,90 yearly",
-    },
-    highlight: true,
-    cta: "Start Gold",
-    features: [
-      "Everything in Silver, plus:",
-      "Exclusive Gold Telegram channel",
-      "Early access to Bet of the Day",
-      "Personal AI strategy advisor",
-      "VIP leaderboard & analytics",
-      "24/7 priority support",
-    ],
-  },
-];
-
-// Platinum is a fixed one-time payment and ignores the billing toggle
-const platinum = {
-  name: "Platinum",
-  icon: Crown,
-  tagline: "One-time payment. Lifetime access.",
-  priceMain: "199",
-  period: "one-time",
-  cta: "Claim Lifetime Access",
-  features: [
-    "Lifetime access to every feature",
-    "All future releases included forever",
-    "Direct line to our analyst team",
-    "Founder-tier leaderboard badge",
-    "Limited to 100 members per year",
-  ],
-};
-
 export function PricingSection() {
   const { t } = useTranslations();
   const [billing, setBilling] = useState<Billing>("monthly");
+
+  // Charm pricing — Silver €9,99/mo (yearly 20% off €7,99/mo)
+  // Gold €14,99/mo (yearly 20% off €11,99/mo)
+  const plans: Plan[] = [
+    {
+      id: "bronze",
+      name: "Bronze",
+      icon: Shield,
+      tagline: t("pricing.bronzeTagline"),
+      fixed: true,
+      monthly: { main: "0", period: t("pricing.forever") },
+      yearly: { main: "0", period: t("pricing.forever") },
+      cta: t("pricing.bronzeCta"),
+      features: [
+        t("pricing.bronzeF1"),
+        t("pricing.bronzeF2"),
+        t("pricing.bronzeF3"),
+        t("pricing.bronzeF4"),
+        t("pricing.bronzeF5"),
+      ],
+    },
+    {
+      id: "silver",
+      name: "Silver",
+      icon: Zap,
+      tagline: t("pricing.silverTagline"),
+      monthly: {
+        main: "9",
+        cents: "99",
+        period: t("pricing.perMonth"),
+        footnote: t("pricing.billedMonthly"),
+      },
+      yearly: {
+        main: "7",
+        cents: "99",
+        period: t("pricing.perMonth"),
+        footnote: t("pricing.billedYearlySilver"),
+      },
+      cta: t("pricing.silverCta"),
+      features: [
+        t("pricing.silverF1"),
+        t("pricing.silverF2"),
+        t("pricing.silverF3"),
+        t("pricing.silverF4"),
+        t("pricing.silverF5"),
+      ],
+    },
+    {
+      id: "gold",
+      name: "Gold",
+      icon: Sparkles,
+      tagline: t("pricing.goldTagline"),
+      monthly: {
+        main: "14",
+        cents: "99",
+        period: t("pricing.perMonth"),
+        footnote: t("pricing.billedMonthly"),
+      },
+      yearly: {
+        main: "11",
+        cents: "99",
+        period: t("pricing.perMonth"),
+        footnote: t("pricing.billedYearlyGold"),
+      },
+      highlight: true,
+      cta: t("pricing.goldCta"),
+      features: [
+        t("pricing.goldF1"),
+        t("pricing.goldF2"),
+        t("pricing.goldF3"),
+        t("pricing.goldF4"),
+        t("pricing.goldF5"),
+        t("pricing.goldF6"),
+      ],
+    },
+  ];
+
+  const platinum = {
+    name: "Platinum",
+    icon: Crown,
+    tagline: t("pricing.platTagline"),
+    priceMain: "199",
+    period: "one-time",
+    cta: t("pricing.platCta"),
+    features: [
+      t("pricing.platF1"),
+      t("pricing.platF2"),
+      t("pricing.platF3"),
+      t("pricing.platF4"),
+      t("pricing.platF5"),
+    ],
+  };
 
   return (
     <section
@@ -401,10 +399,10 @@ export function PricingSection() {
               <div className="mb-4 flex flex-wrap items-center gap-3">
                 <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-widest text-amber-300 shadow-[0_0_25px_rgba(251,191,36,0.25)]">
                   <Crown className="h-3 w-3" />
-                  Lifetime Deal
+                  {t("pricing.platBadgeLifetime")}
                 </span>
                 <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-300">
-                  Limited to 100/year
+                  {t("pricing.platLimited")}
                 </span>
               </div>
 
@@ -415,8 +413,7 @@ export function PricingSection() {
                 Lifetime
               </h3>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-base">
-                {platinum.tagline} Pay once, own your edge forever — every
-                current feature and every future upgrade, included.
+                {platinum.tagline} {t("pricing.platPitch")}
               </p>
 
               <ul className="mt-6 grid gap-2.5 sm:grid-cols-2">
@@ -439,7 +436,7 @@ export function PricingSection() {
             <div className="flex flex-col items-start gap-5 lg:items-end lg:text-right">
               <div>
                 <p className="text-xs font-bold uppercase tracking-widest text-amber-300/80">
-                  One-time payment
+                  {t("pricing.platOneTime")}
                 </p>
                 <div className="mt-2 flex items-baseline gap-1 lg:justify-end">
                   <span className="text-2xl font-bold text-slate-300">€</span>
@@ -448,7 +445,7 @@ export function PricingSection() {
                   </span>
                 </div>
                 <p className="mt-1 text-xs text-slate-500">
-                  No subscription. No renewals. Ever.
+                  {t("pricing.platNoSub")}
                 </p>
               </div>
 
@@ -467,15 +464,15 @@ export function PricingSection() {
         <div className="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-slate-500">
           <div className="flex items-center gap-1.5">
             <Check className="h-4 w-4 text-green-400" strokeWidth={3} />
-            <span>3-Day Money-Back Guarantee</span>
+            <span>{t("pricing.trust1")}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <Check className="h-4 w-4 text-green-400" strokeWidth={3} />
-            <span>Cancel Anytime</span>
+            <span>{t("pricing.trust2")}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <Check className="h-4 w-4 text-green-400" strokeWidth={3} />
-            <span>Secure payment by Stripe</span>
+            <span>{t("pricing.trust3")}</span>
           </div>
         </div>
       </div>

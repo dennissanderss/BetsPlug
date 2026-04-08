@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useTranslations } from "@/i18n/locale-provider";
 
 type League = {
   name: string;
@@ -28,6 +29,7 @@ const leagues: League[] = [
 ];
 
 export function LeaguesTicker() {
+  const { t } = useTranslations();
   // Triple for a seamless infinite loop
   const tripled = [...leagues, ...leagues, ...leagues];
 
@@ -62,13 +64,14 @@ export function LeaguesTicker() {
       {/* Title */}
       <div className="relative z-10 mb-8 text-center">
         <span className="mb-3 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
-          Global Coverage
+          {t("leagues.badge")}
         </span>
         <h2
           id="leagues-heading"
           className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-4xl"
         >
-          Leagues We <span className="gradient-text">Cover</span>
+          {t("leagues.titleA")}{" "}
+          <span className="gradient-text">{t("leagues.titleB")}</span>
         </h2>
       </div>
 

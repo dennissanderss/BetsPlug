@@ -7,7 +7,7 @@
  * locale provider.
  */
 
-export const locales = ["en", "nl", "de", "fr", "es", "it"] as const;
+export const locales = ["en", "nl", "de", "fr", "es", "it", "sw", "id"] as const;
 export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = "en";
@@ -23,6 +23,8 @@ export const localeMeta: Record<
   fr: { label: "French", native: "Français", flag: "🇫🇷", hreflang: "fr" },
   es: { label: "Spanish", native: "Español", flag: "🇪🇸", hreflang: "es" },
   it: { label: "Italian", native: "Italiano", flag: "🇮🇹", hreflang: "it" },
+  sw: { label: "Swahili", native: "Kiswahili", flag: "🇰🇪", hreflang: "sw" },
+  id: { label: "Indonesian", native: "Bahasa Indonesia", flag: "🇮🇩", hreflang: "id" },
 };
 
 export const LOCALE_COOKIE = "NEXT_LOCALE";

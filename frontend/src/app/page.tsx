@@ -509,15 +509,15 @@ export default function LandingPage() {
           <div className="mb-14 grid gap-8 md:grid-cols-2 md:items-end">
             <div>
               <h2 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl">
-                Your <span className="gradient-text">trusted</span> partner
+                {t("trusted.titleA")}{" "}
+                <span className="gradient-text">{t("trusted.titleHighlight")}</span>{" "}
+                {t("trusted.titleB")}
                 <br />
-                in sports analytics.
+                {t("trusted.titleC")}
               </h2>
             </div>
             <p className="text-base leading-relaxed text-slate-400">
-              BetsPlug unites and secures a growing ecosystem of data sources, AI models,
-              and proven strategies. One platform for data-driven sports analysts who refuse
-              to guess.
+              {t("trusted.subtitle")}
             </p>
           </div>
 
@@ -528,10 +528,9 @@ export default function LandingPage() {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10">
                 <Shield className="h-6 w-6 text-green-400" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-white">Service for Any Level of Expertise.</h3>
+              <h3 className="mb-3 text-xl font-bold text-white">{t("trusted.card1Title")}</h3>
               <p className="text-sm leading-relaxed text-slate-400">
-                From beginner to pro-analyst — our dashboards, tutorials, and transparent stats
-                make it easy to understand every prediction.
+                {t("trusted.card1Desc")}
               </p>
             </div>
 
@@ -541,16 +540,15 @@ export default function LandingPage() {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-black/15">
                 <Brain className="h-6 w-6 text-black" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-black">Industry best practices.</h3>
+              <h3 className="mb-3 text-xl font-bold text-black">{t("trusted.card2Title")}</h3>
               <p className="mb-6 text-sm leading-relaxed text-black/80">
-                Four AI models (Elo, Poisson, Logistic, Ensemble) combine to deliver predictions
-                you can trust. Proven methods, transparent results.
+                {t("trusted.card2Desc")}
               </p>
               <Link
                 href="#track-record"
                 className="inline-flex items-center gap-1 text-sm font-bold text-black hover:gap-2 transition-all"
               >
-                Learn More <ArrowRight className="h-4 w-4" />
+                {t("trusted.learnMore")} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
@@ -560,10 +558,9 @@ export default function LandingPage() {
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10">
                 <CheckCircle2 className="h-6 w-6 text-green-400" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-white">Protected by transparency.</h3>
+              <h3 className="mb-3 text-xl font-bold text-white">{t("trusted.card3Title")}</h3>
               <p className="text-sm leading-relaxed text-slate-400">
-                Every prediction is logged, tracked, and publicly verified. No hidden results,
-                no cherry-picking — just data you can audit yourself.
+                {t("trusted.card3Desc")}
               </p>
             </div>
           </div>
@@ -598,10 +595,10 @@ export default function LandingPage() {
                 <div className="mb-6 flex items-start justify-between">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-green-400">
-                      Track Record
+                      {t("track.label")}
                     </p>
                     <p className="mt-1 text-3xl font-extrabold text-white">75.4%</p>
-                    <p className="text-xs text-slate-500">Overall accuracy</p>
+                    <p className="text-xs text-slate-500">{t("track.accuracy")}</p>
                   </div>
                   <span className="rounded-full bg-green-500/15 px-3 py-1 text-[11px] font-bold text-green-400">
                     ▲ +5.45%
@@ -644,9 +641,9 @@ export default function LandingPage() {
                 {/* Bottom metrics */}
                 <div className="mt-4 grid grid-cols-3 gap-2 border-t border-white/5 pt-4">
                   {[
-                    { label: "Predictions", value: "1,284" },
-                    { label: "Models", value: "4" },
-                    { label: "Leagues", value: "15+" },
+                    { label: t("track.metricPredictions"), value: "1,284" },
+                    { label: t("track.metricModels"), value: "4" },
+                    { label: t("track.metricLeagues"), value: "15+" },
                   ].map((s) => (
                     <div key={s.label} className="text-center">
                       <p className="text-lg font-extrabold text-white">{s.value}</p>
@@ -659,7 +656,7 @@ export default function LandingPage() {
               {/* Floating mini card */}
               <div className="absolute -right-4 -top-4 rotate-3 rounded-2xl border border-white/10 bg-[#0d1220]/95 p-4 backdrop-blur-xl shadow-xl">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-                  This week
+                  {t("track.thisWeek")}
                 </p>
                 <p className="mt-1 text-xl font-extrabold text-green-400">+12.4%</p>
                 <p className="text-[10px] text-slate-500">ROI</p>
@@ -669,42 +666,39 @@ export default function LandingPage() {
             {/* Right: copy */}
             <div>
               <span className="mb-4 inline-block rounded-full bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
-                Proven Results
+                {t("track.badge")}
               </span>
               <h2 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl">
-                Trusted <span className="gradient-text">platform</span>
+                {t("track.titleA")}{" "}
+                <span className="gradient-text">{t("track.titleHighlight")}</span>
                 <br />
-                anytime &amp; anywhere.
+                {t("track.titleB")}
               </h2>
 
               <div className="mt-6 flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="h-5 w-5 fill-green-400 text-green-400" />
                 ))}
-                <span className="ml-2 text-sm text-slate-400">4.9 / 5 from 1,200+ analysts</span>
+                <span className="ml-2 text-sm text-slate-400">{t("track.rating")}</span>
               </div>
 
               <p className="mt-6 text-base leading-relaxed text-slate-400">
-                This is a unified platform that secures a{" "}
-                <span className="font-semibold text-white">growing ecosystem</span> of sports data,
-                AI predictions, and strategy backtesting tools. All predictions are logged and
-                publicly tracked — full transparency, always.
+                {t("track.desc1")}
               </p>
 
               <p className="mt-4 text-base leading-relaxed text-slate-400">
-                Whether you follow football, basketball, or tennis, BetsPlug unites data and
-                machine learning into insights you can actually use.
+                {t("track.desc2")}
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <Link href={loc("/predictions")}>
-                  <GetStartedButton>Learn More</GetStartedButton>
+                  <GetStartedButton>{t("track.cta")}</GetStartedButton>
                 </Link>
                 <Link
                   href="#faq"
                   className="text-sm font-semibold text-slate-400 underline underline-offset-4 transition-colors hover:text-white"
                 >
-                  Ask question?
+                  {t("track.askQuestion")}
                 </Link>
               </div>
             </div>
@@ -734,45 +728,22 @@ export default function LandingPage() {
         <div className="relative z-10 mx-auto max-w-7xl px-6">
           <div className="mb-14 text-center">
             <span className="mb-4 inline-block rounded-full bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
-              Features
+              {t("features.badge")}
             </span>
             <h2 className="text-4xl font-extrabold text-white sm:text-5xl">
-              Everything you need to <span className="gradient-text">win smart.</span>
+              {t("features.titleA")}{" "}
+              <span className="gradient-text">{t("features.titleB")}</span>
             </h2>
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              {
-                icon: Zap,
-                title: "Real-Time Predictions",
-                desc: "Live probability updates as match conditions change. Never miss a value opportunity.",
-              },
-              {
-                icon: Brain,
-                title: "4 AI Models Combined",
-                desc: "Elo, Poisson, Logistic Regression, and our proprietary Ensemble model for maximum accuracy.",
-              },
-              {
-                icon: LineChart,
-                title: "Strategy Backtesting",
-                desc: "Test your betting strategies against historical data. Know your edge before you place a bet.",
-              },
-              {
-                icon: Shield,
-                title: "Verified Data Sources",
-                desc: "We only use official APIs and verified data providers. No scraped or unreliable data.",
-              },
-              {
-                icon: Star,
-                title: "Bet of the Day",
-                desc: "Our algorithm picks the single highest-value prediction each day. Premium members get it first.",
-              },
-              {
-                icon: Users,
-                title: "Growing Community",
-                desc: "Join a community of data-driven sports analysts who share insights and strategies.",
-              },
+              { icon: Zap, title: t("features.f1Title"), desc: t("features.f1Desc") },
+              { icon: Brain, title: t("features.f2Title"), desc: t("features.f2Desc") },
+              { icon: LineChart, title: t("features.f3Title"), desc: t("features.f3Desc") },
+              { icon: Shield, title: t("features.f4Title"), desc: t("features.f4Desc") },
+              { icon: Star, title: t("features.f5Title"), desc: t("features.f5Desc") },
+              { icon: Users, title: t("features.f6Title"), desc: t("features.f6Desc") },
             ].map(({ icon: Icon, title, desc }) => (
               <div key={title} className="glass-card-hover group p-6">
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/10 transition-all group-hover:bg-green-500/20">
@@ -824,32 +795,36 @@ export default function LandingPage() {
 
             <div className="relative text-center">
               <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
-                Ready to win?
+                {t("finalCta.badge")}
               </span>
               <h2 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl">
-                Start making <span className="gradient-text">smarter picks</span>
+                {t("finalCta.titleA")}{" "}
+                <span className="gradient-text">{t("finalCta.titleHighlight")}</span>
                 <br />
-                today.
+                {t("finalCta.titleB")}
               </h2>
               <p className="mx-auto mt-5 max-w-xl text-base text-slate-400">
-                Join thousands of sports analysts who use BetsPlug&apos;s AI-driven predictions.
-                Free trial — no credit card required.
+                {t("finalCta.subtitle")}
               </p>
 
               <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Link href={loc("/subscriptions")}>
-                  <GetStartedButton>Start Free Trial</GetStartedButton>
+                  <GetStartedButton>{t("finalCta.primary")}</GetStartedButton>
                 </Link>
                 <Link
                   href={loc("/about")}
                   className="text-sm font-semibold text-slate-400 underline underline-offset-4 transition-colors hover:text-white"
                 >
-                  Learn more →
+                  {t("finalCta.secondary")}
                 </Link>
               </div>
 
               <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500">
-                {["3-Day Money-Back", "Cancel Anytime", "Instant Access"].map((item) => (
+                {[
+                  t("finalCta.moneyBack"),
+                  t("finalCta.cancelAnytime"),
+                  t("finalCta.instantAccess"),
+                ].map((item) => (
                   <div key={item} className="flex items-center gap-1.5">
                     <CheckCircle2 className="h-4 w-4 text-green-400" />
                     <span>{item}</span>

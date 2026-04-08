@@ -27,6 +27,8 @@ export const routeTable = {
     fr: "/",
     es: "/",
     it: "/",
+    sw: "/",
+    id: "/",
   },
   "/predictions": {
     en: "/predictions",
@@ -35,6 +37,8 @@ export const routeTable = {
     fr: "/predictions",
     es: "/predicciones",
     it: "/pronostici",
+    sw: "/utabiri",
+    id: "/prediksi",
   },
   "/live": {
     en: "/live",
@@ -43,6 +47,8 @@ export const routeTable = {
     fr: "/en-direct",
     es: "/en-vivo",
     it: "/live",
+    sw: "/moja-kwa-moja",
+    id: "/langsung",
   },
   "/dashboard": {
     en: "/dashboard",
@@ -51,6 +57,8 @@ export const routeTable = {
     fr: "/tableau-de-bord",
     es: "/panel",
     it: "/pannello",
+    sw: "/dashibodi",
+    id: "/dasbor",
   },
   "/subscriptions": {
     en: "/subscriptions",
@@ -59,6 +67,8 @@ export const routeTable = {
     fr: "/abonnements",
     es: "/suscripciones",
     it: "/abbonamenti",
+    sw: "/usajili",
+    id: "/langganan",
   },
   "/trackrecord": {
     en: "/trackrecord",
@@ -67,6 +77,8 @@ export const routeTable = {
     fr: "/historique",
     es: "/historial",
     it: "/storico",
+    sw: "/rekodi",
+    id: "/riwayat",
   },
   "/about": {
     en: "/about",
@@ -75,6 +87,8 @@ export const routeTable = {
     fr: "/a-propos",
     es: "/sobre-nosotros",
     it: "/chi-siamo",
+    sw: "/kuhusu",
+    id: "/tentang",
   },
   "/support": {
     en: "/support",
@@ -83,6 +97,8 @@ export const routeTable = {
     fr: "/assistance",
     es: "/ayuda",
     it: "/assistenza",
+    sw: "/msaada",
+    id: "/bantuan",
   },
   "/deals": {
     en: "/deals",
@@ -91,6 +107,8 @@ export const routeTable = {
     fr: "/offres",
     es: "/ofertas",
     it: "/offerte",
+    sw: "/ofa",
+    id: "/penawaran",
   },
   "/strategy": {
     en: "/strategy",
@@ -99,6 +117,8 @@ export const routeTable = {
     fr: "/strategie",
     es: "/estrategia",
     it: "/strategia",
+    sw: "/mikakati",
+    id: "/strategi",
   },
   "/reports": {
     en: "/reports",
@@ -107,6 +127,8 @@ export const routeTable = {
     fr: "/rapports",
     es: "/informes",
     it: "/report",
+    sw: "/ripoti",
+    id: "/laporan",
   },
   "/weekly-report": {
     en: "/weekly-report",
@@ -115,6 +137,8 @@ export const routeTable = {
     fr: "/rapport-hebdomadaire",
     es: "/informe-semanal",
     it: "/report-settimanale",
+    sw: "/ripoti-ya-wiki",
+    id: "/laporan-mingguan",
   },
   "/bet-of-the-day": {
     en: "/bet-of-the-day",
@@ -123,6 +147,8 @@ export const routeTable = {
     fr: "/pick-du-jour",
     es: "/pick-del-dia",
     it: "/pick-del-giorno",
+    sw: "/chaguo-la-siku",
+    id: "/pilihan-hari-ini",
   },
   "/settings": {
     en: "/settings",
@@ -131,6 +157,8 @@ export const routeTable = {
     fr: "/parametres",
     es: "/ajustes",
     it: "/impostazioni",
+    sw: "/mipangilio",
+    id: "/pengaturan",
   },
   "/search": {
     en: "/search",
@@ -139,6 +167,8 @@ export const routeTable = {
     fr: "/recherche",
     es: "/buscar",
     it: "/cerca",
+    sw: "/tafuta",
+    id: "/cari",
   },
   "/results": {
     en: "/results",
@@ -147,6 +177,8 @@ export const routeTable = {
     fr: "/resultats",
     es: "/resultados",
     it: "/risultati",
+    sw: "/matokeo",
+    id: "/hasil",
   },
   "/admin": {
     en: "/admin",
@@ -155,6 +187,8 @@ export const routeTable = {
     fr: "/admin",
     es: "/admin",
     it: "/admin",
+    sw: "/admin",
+    id: "/admin",
   },
 } as const satisfies Record<string, Record<Locale, string>>;
 
@@ -170,6 +204,8 @@ const reverseBySegment: Record<Locale, Map<string, string>> = {
   fr: new Map(),
   es: new Map(),
   it: new Map(),
+  sw: new Map(),
+  id: new Map(),
 };
 
 (Object.keys(routeTable) as CanonicalPath[]).forEach((canonical) => {

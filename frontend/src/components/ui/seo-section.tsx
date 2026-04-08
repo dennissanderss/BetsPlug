@@ -17,38 +17,21 @@ import {
   ChevronDown,
   LifeBuoy,
 } from "lucide-react";
+import { useTranslations } from "@/i18n/locale-provider";
 
-const pillars = [
-  {
-    icon: Brain,
-    title: "AI Sports Prediction Engine",
-    text: "Our AI sports prediction engine combines Elo ratings, Poisson goal models, and machine learning to forecast match outcomes across football, basketball, and tennis with data-driven accuracy.",
-  },
-  {
-    icon: LineChart,
-    title: "Data-Backed Betting Predictions",
-    text: "Every AI betting prediction on BetsPlug is backed by thousands of historical matches, live form data, and expected-goals metrics — giving you the sharpest sports picks online.",
-  },
-  {
-    icon: Trophy,
-    title: "Verified Track Record",
-    text: "Transparency first. Explore our public track record to see every AI sports pick we've ever published, with full ROI, hit-rate and confidence scores logged and timestamped.",
-  },
-  {
-    icon: Target,
-    title: "Bet of the Day",
-    text: "Short on time? Our daily AI-powered Bet of the Day highlights the single highest-confidence value pick across all leagues — hand-picked by our algorithm, not by feeling.",
-  },
-  {
-    icon: Zap,
-    title: "Live AI Probabilities",
-    text: "Watch probabilities shift in real-time as matches unfold. Our live AI sports predictor recalculates win probabilities every second so you can spot value the moment it appears.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Analytics, Not Gambling",
-    text: "BetsPlug is a sports analytics platform — not a bookmaker. We deliver AI-driven sports predictions and data insights so you can make informed decisions, without ever placing a bet on our site.",
-  },
+import type { TranslationKey } from "@/i18n/messages";
+
+const pillarDefs: Array<{
+  icon: typeof Brain;
+  titleKey: TranslationKey;
+  descKey: TranslationKey;
+}> = [
+  { icon: Brain, titleKey: "seo.pillar1Title", descKey: "seo.pillar1Desc" },
+  { icon: LineChart, titleKey: "seo.pillar2Title", descKey: "seo.pillar2Desc" },
+  { icon: Trophy, titleKey: "seo.pillar3Title", descKey: "seo.pillar3Desc" },
+  { icon: Target, titleKey: "seo.pillar4Title", descKey: "seo.pillar4Desc" },
+  { icon: Zap, titleKey: "seo.pillar5Title", descKey: "seo.pillar5Desc" },
+  { icon: ShieldCheck, titleKey: "seo.pillar6Title", descKey: "seo.pillar6Desc" },
 ];
 
 type FaqItem = { q: string; a: string };
@@ -142,6 +125,7 @@ const faqCategories: FaqCategory[] = [
 const faqs: FaqItem[] = faqCategories.flatMap((c) => c.items);
 
 export function SeoSection() {
+  const { t } = useTranslations();
   return (
     <section
       className="relative overflow-hidden py-20 md:py-28"
@@ -163,33 +147,29 @@ export function SeoSection() {
           className="mx-auto max-w-3xl text-center"
         >
           <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
-            The Smart Way to Research Bets
+            {t("seo.badge")}
           </span>
           <h2
             id="seo-heading"
             className="text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl"
           >
-            AI Sports Predictions &{" "}
-            <span className="gradient-text">Data-Driven Betting Picks</span>
+            {t("seo.titleA")}{" "}
+            <span className="gradient-text">{t("seo.titleB")}</span>
           </h2>
           <p className="mt-5 text-base leading-relaxed text-slate-400 sm:text-lg">
-            BetsPlug is the data-driven home for{" "}
-            <strong className="text-slate-200">AI sports predictions</strong>,
-            machine-learning betting picks and statistical match forecasts.
-            Whether you&apos;re researching your next football accumulator,
-            hunting value in NBA player props, or backtesting a new strategy —
-            our AI sports predictor gives you the edge you need to beat the
-            closing line.
+            {t("seo.subtitle")}
           </p>
         </motion.div>
 
         {/* Pillars grid */}
         <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {pillars.map((p, i) => {
+          {pillarDefs.map((p, i) => {
             const Icon = p.icon;
+            const title = t(p.titleKey);
+            const desc = t(p.descKey);
             return (
               <motion.article
-                key={p.title}
+                key={p.titleKey}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{
@@ -203,9 +183,9 @@ export function SeoSection() {
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.15)] transition-transform duration-300 group-hover:scale-110">
                   <Icon className="h-5 w-5 text-green-400" />
                 </div>
-                <h3 className="mb-2 text-lg font-bold text-white">{p.title}</h3>
+                <h3 className="mb-2 text-lg font-bold text-white">{title}</h3>
                 <p className="text-sm leading-relaxed text-slate-400">
-                  {p.text}
+                  {desc}
                 </p>
               </motion.article>
             );
@@ -396,6 +376,7 @@ export function SeoSection() {
 // ─── FAQ Block (categorized accordion) ──────────────────────────────────────
 
 function FaqBlock() {
+  const { t } = useTranslations();
   const [activeCategory, setActiveCategory] = useState<string>(
     faqCategories[0].id,
   );
@@ -416,17 +397,16 @@ function FaqBlock() {
       {/* Header */}
       <div className="mb-12 text-center">
         <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
-          Frequently Asked Questions
+          {t("faq.badge")}
         </span>
         <h3 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
-          Got Questions?
+          {t("faq.titleA")}
         </h3>
         <h3 className="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">
-          <span className="gradient-text">We&apos;ve Got Answers</span>
+          <span className="gradient-text">{t("faq.titleB")}</span>
         </h3>
         <p className="mx-auto mt-5 max-w-xl text-base text-slate-400">
-          Everything you need to know about our AI sports prediction platform,
-          from getting started to advanced integrations.
+          {t("faq.subtitle")}
         </p>
       </div>
 
@@ -440,7 +420,7 @@ function FaqBlock() {
           {/* Sidebar: categories + contact support */}
           <aside className="flex flex-col gap-3">
             <h4 className="mb-1 font-mono text-xs font-semibold uppercase tracking-widest text-white/60">
-              Browse by Category
+              {t("faq.browseBy")}
             </h4>
 
             {faqCategories.map((cat) => {
@@ -482,7 +462,7 @@ function FaqBlock() {
                       {cat.label}
                     </p>
                     <p className="text-[11px] text-slate-500">
-                      {cat.items.length} articles
+                      {cat.items.length} {t("faq.articles")}
                     </p>
                   </div>
                   <ChevronDown
@@ -501,18 +481,17 @@ function FaqBlock() {
                   <LifeBuoy className="h-4 w-4 text-green-400" />
                 </div>
                 <p className="text-sm font-bold text-white">
-                  Still have questions?
+                  {t("faq.stillQuestions")}
                 </p>
               </div>
               <p className="mb-4 text-xs leading-relaxed text-slate-400">
-                Can&apos;t find the answer you&apos;re looking for? Our support
-                team is here to help.
+                {t("faq.supportBlurb")}
               </p>
               <Link
                 href="/support"
                 className="btn-gradient flex w-full items-center justify-center rounded-xl px-4 py-2.5 text-xs font-bold shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/30"
               >
-                Contact Support
+                {t("faq.contactSupport")}
               </Link>
             </div>
           </aside>
