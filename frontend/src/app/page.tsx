@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { GetStartedButton } from "@/components/ui/get-started-button";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
+import { TestimonialsSection } from "@/components/ui/testimonials-section";
 
 // ─── Animated counter ────────────────────────────────────────────────────────
 
@@ -544,6 +545,11 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          TESTIMONIALS
+         ═══════════════════════════════════════════════════════════════════ */}
+      <TestimonialsSection />
 
       {/* ═══════════════════════════════════════════════════════════════════
           FINAL CTA
