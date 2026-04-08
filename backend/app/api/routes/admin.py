@@ -199,28 +199,44 @@ async def trigger_sync(
     db: AsyncSession = Depends(get_db),
 ) -> SyncResponse:
     """
-    Enqueue a data ingestion / sync task.
+    Run data sync directly (no Celery required).
 
-    If ``data_source_id`` is provided, only that source is synced.
-    Otherwise all active sources are synced.
-
-    # TODO: delegate to Celery task: sync_data_source.delay(data_source_id)
+    Syncs upcoming matches, recent results, and standings for one
+    competition (rotating through all 6 top leagues).
     """
-    if data_source_id is not None:
-        src_result = await db.execute(
-            select(DataSource).where(DataSource.id == data_source_id)
-        )
-        if src_result.scalar_one_or_none() is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"DataSource {data_source_id} not found.",
-            )
-        msg = f"Sync enqueued for data source {data_source_id}."
-    else:
-        msg = "Sync enqueued for all active data sources."
+    import logging
 
-    # TODO: task_id = sync_data_source.delay(str(data_source_id)).id
-    return SyncResponse(accepted=True, message=msg, task_id=None)
+    log = logging.getLogger(__name__)
+
+    try:
+        from app.services.data_sync_service import DataSyncService
+
+        async with DataSyncService() as sync_service:
+            # Sync upcoming matches
+            matches_result = await sync_service.sync_upcoming_matches(db)
+            log.info("Sync matches result: %s", matches_result)
+
+            # Sync recent results
+            results_result = await sync_service.sync_recent_results(db)
+            log.info("Sync results result: %s", results_result)
+
+            # Sync standings
+            standings_result = await sync_service.sync_standings(db)
+            log.info("Sync standings result: %s", standings_result)
+
+        await db.commit()
+
+        msg = (
+            f"Sync complete. "
+            f"Matches: {matches_result.get('created', 0)} new, {matches_result.get('updated', 0)} updated. "
+            f"Results: {results_result.get('created_results', 0)} new. "
+            f"Standings: {standings_result.get('rows_upserted', 0)} rows."
+        )
+        return SyncResponse(accepted=True, message=msg, task_id=None)
+
+    except Exception as exc:
+        log.error("Sync failed: %s", exc, exc_info=True)
+        return SyncResponse(accepted=False, message=f"Sync failed: {str(exc)}", task_id=None)
 
 
 @router.post(

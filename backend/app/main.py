@@ -11,6 +11,18 @@ from app.api.routes import router as api_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     setup_logging()
+    # Auto-run database migrations on startup
+    try:
+        from alembic.config import Config as AlembicConfig
+        from alembic import command
+        import os
+
+        alembic_cfg = AlembicConfig(os.path.join(os.path.dirname(__file__), "..", "alembic.ini"))
+        alembic_cfg.set_main_option("script_location", os.path.join(os.path.dirname(__file__), "..", "alembic"))
+        command.upgrade(alembic_cfg, "head")
+    except Exception as exc:
+        import logging
+        logging.getLogger(__name__).warning("Auto-migration skipped: %s", exc)
     yield
 
 
