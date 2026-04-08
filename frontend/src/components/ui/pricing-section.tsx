@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { Check, Crown, Sparkles, Zap, Shield } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useTranslations } from "@/i18n/locale-provider";
+import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 
 type Billing = "monthly" | "yearly";
 
@@ -33,6 +33,8 @@ type Plan = {
 
 export function PricingSection() {
   const { t } = useTranslations();
+  const loc = useLocalizedHref();
+  const pricingHref = `${loc("/")}#pricing`;
   const [billing, setBilling] = useState<Billing>("monthly");
 
   // Charm pricing — Silver €9,99/mo (yearly 20% off €7,99/mo)
@@ -340,7 +342,7 @@ export function PricingSection() {
 
                 {/* CTA */}
                 <Link
-                  href="/subscriptions"
+                  href={pricingHref}
                   className={`relative mb-6 flex w-full items-center justify-center rounded-2xl px-6 py-3.5 text-sm font-bold transition-all duration-300 ${
                     isHighlight
                       ? "btn-gradient text-black shadow-lg shadow-green-500/30 hover:shadow-green-500/50"
@@ -450,7 +452,7 @@ export function PricingSection() {
               </div>
 
               <Link
-                href="/subscriptions"
+                href={pricingHref}
                 className="group/btn relative inline-flex w-full items-center justify-center overflow-hidden rounded-2xl border border-amber-400/40 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 px-8 py-4 text-sm font-extrabold uppercase tracking-wider text-black shadow-[0_0_40px_rgba(251,191,36,0.35)] transition-all duration-300 hover:shadow-[0_0_60px_rgba(251,191,36,0.55)] sm:w-auto"
               >
                 <Crown className="mr-2 h-4 w-4" />

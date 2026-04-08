@@ -17,7 +17,7 @@ import {
   ChevronDown,
   LifeBuoy,
 } from "lucide-react";
-import { useTranslations } from "@/i18n/locale-provider";
+import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 
 import type { TranslationKey } from "@/i18n/messages";
 
@@ -126,6 +126,8 @@ const faqs: FaqItem[] = faqCategories.flatMap((c) => c.items);
 
 export function SeoSection() {
   const { t } = useTranslations();
+  const loc = useLocalizedHref();
+  const pricingHref = `${loc("/")}#pricing`;
   return (
     <section
       className="relative overflow-hidden py-20 md:py-28"
@@ -311,7 +313,7 @@ export function SeoSection() {
               </Link>{" "}
               or browse{" "}
               <Link
-                href="/subscriptions"
+                href={pricingHref}
                 className="font-semibold text-green-400 underline decoration-green-500/30 underline-offset-4 transition-colors hover:text-green-300"
               >
                 pricing plans
@@ -337,7 +339,7 @@ export function SeoSection() {
             { href: "/bet-of-the-day", label: "Bet of the Day" },
             { href: "/live", label: "Live Probabilities" },
             { href: "/trackrecord", label: "Track Record" },
-            { href: "/subscriptions", label: "Pricing" },
+            { href: pricingHref, label: "Pricing" },
             { href: "/deals", label: "Exclusive Deals" },
           ].map((link) => (
             <Link

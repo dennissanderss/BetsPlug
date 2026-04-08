@@ -60,16 +60,6 @@ export const routeTable = {
     sw: "/dashibodi",
     id: "/dasbor",
   },
-  "/subscriptions": {
-    en: "/subscriptions",
-    nl: "/abonnementen",
-    de: "/abonnements",
-    fr: "/abonnements",
-    es: "/suscripciones",
-    it: "/abbonamenti",
-    sw: "/usajili",
-    id: "/langganan",
-  },
   "/trackrecord": {
     en: "/trackrecord",
     nl: "/prestaties",
