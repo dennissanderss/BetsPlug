@@ -1,32 +1,47 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { Check, Crown, Sparkles, Zap, Shield } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+
+type Billing = "monthly" | "yearly";
+
+type PriceBreakdown = {
+  main: string;
+  cents?: string;
+  period: string;
+  /** Small line rendered below the big price (e.g. "Billed €95,90 yearly") */
+  footnote?: string;
+};
 
 type Plan = {
   id: string;
   name: string;
   icon: LucideIcon;
   tagline: string;
-  priceMain: string;
-  priceCents?: string;
-  period: string;
+  /** When true this plan ignores the billing toggle (e.g. Bronze free tier) */
+  fixed?: boolean;
+  monthly: PriceBreakdown;
+  yearly: PriceBreakdown;
   highlight?: boolean;
   cta: string;
   features: string[];
 };
 
-// Monthly plans — charm pricing applied (9 & 14 end in "value" digits)
+// Charm pricing applied end-to-end:
+// Silver €9,99/mo  →  yearly 20% off  →  €7,99/mo  (billed €95,90/year)
+// Gold   €14,99/mo →  yearly 20% off  →  €11,99/mo (billed €143,90/year)
 const plans: Plan[] = [
   {
     id: "bronze",
     name: "Bronze",
     icon: Shield,
     tagline: "Start exploring, free forever",
-    priceMain: "0",
-    period: "/ forever",
+    fixed: true,
+    monthly: { main: "0", period: "/ forever" },
+    yearly: { main: "0", period: "/ forever" },
     cta: "Get Started Free",
     features: [
       "1 Bet of the Day (free pick)",
@@ -41,9 +56,18 @@ const plans: Plan[] = [
     name: "Silver",
     icon: Zap,
     tagline: "For serious analysts",
-    priceMain: "9",
-    priceCents: "99",
-    period: "/ month",
+    monthly: {
+      main: "9",
+      cents: "99",
+      period: "/ month",
+      footnote: "Billed monthly",
+    },
+    yearly: {
+      main: "7",
+      cents: "99",
+      period: "/ month",
+      footnote: "Billed €95,90 yearly",
+    },
     cta: "Start Silver",
     features: [
       "Unlimited AI predictions",
@@ -58,9 +82,18 @@ const plans: Plan[] = [
     name: "Gold",
     icon: Sparkles,
     tagline: "Most popular choice",
-    priceMain: "14",
-    priceCents: "99",
-    period: "/ month",
+    monthly: {
+      main: "14",
+      cents: "99",
+      period: "/ month",
+      footnote: "Billed monthly",
+    },
+    yearly: {
+      main: "11",
+      cents: "99",
+      period: "/ month",
+      footnote: "Billed €143,90 yearly",
+    },
     highlight: true,
     cta: "Start Gold",
     features: [
@@ -74,8 +107,8 @@ const plans: Plan[] = [
   },
 ];
 
-const platinum: Plan = {
-  id: "platinum",
+// Platinum is a fixed one-time payment and ignores the billing toggle
+const platinum = {
   name: "Platinum",
   icon: Crown,
   tagline: "One-time payment. Lifetime access.",
@@ -92,6 +125,8 @@ const platinum: Plan = {
 };
 
 export function PricingSection() {
+  const [billing, setBilling] = useState<Billing>("monthly");
+
   return (
     <section
       id="pricing"
@@ -137,6 +172,84 @@ export function PricingSection() {
             Start free, upgrade whenever you&apos;re ready. No hidden fees, no
             lock-in contracts — cancel anytime.
           </p>
+        </motion.div>
+
+        {/* ── Billing toggle ─────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true }}
+          className="mb-12 flex flex-col items-center gap-3"
+        >
+          <div
+            role="tablist"
+            aria-label="Billing period"
+            className="relative inline-flex items-center rounded-full border border-white/[0.08] bg-white/[0.03] p-1 backdrop-blur-xl"
+          >
+            {/* Animated slider pill */}
+            <motion.div
+              aria-hidden="true"
+              className="absolute top-1 bottom-1 rounded-full bg-gradient-to-r from-green-500/90 to-emerald-500/90 shadow-[0_0_25px_rgba(74,222,128,0.45)]"
+              initial={false}
+              animate={{
+                left: billing === "monthly" ? "0.25rem" : "50%",
+                right: billing === "monthly" ? "50%" : "0.25rem",
+              }}
+              transition={{ type: "spring", stiffness: 360, damping: 32 }}
+            />
+            <button
+              type="button"
+              role="tab"
+              aria-selected={billing === "monthly"}
+              onClick={() => setBilling("monthly")}
+              className={`relative z-10 rounded-full px-6 py-2.5 text-sm font-bold transition-colors duration-200 sm:px-8 ${
+                billing === "monthly"
+                  ? "text-black"
+                  : "text-slate-300 hover:text-white"
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={billing === "yearly"}
+              onClick={() => setBilling("yearly")}
+              className={`relative z-10 flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold transition-colors duration-200 sm:px-8 ${
+                billing === "yearly"
+                  ? "text-black"
+                  : "text-slate-300 hover:text-white"
+              }`}
+            >
+              Yearly
+              <span
+                className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider transition-colors duration-200 ${
+                  billing === "yearly"
+                    ? "bg-black/20 text-black"
+                    : "bg-green-500/15 text-green-300"
+                }`}
+              >
+                −20%
+              </span>
+            </button>
+          </div>
+          <AnimatePresence mode="wait">
+            {billing === "yearly" && (
+              <motion.p
+                key="save-line"
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.25 }}
+                className="text-xs text-slate-400"
+              >
+                You&apos;re saving{" "}
+                <span className="font-bold text-green-400">2 months</span>{" "}
+                with yearly billing.
+              </motion.p>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         {/* 3-plan grid */}
@@ -190,20 +303,44 @@ export function PricingSection() {
                 </div>
 
                 {/* Price */}
-                <div className="relative mb-6 flex items-baseline gap-1">
-                  <span className="text-xl font-bold text-slate-300">€</span>
-                  <span className="text-6xl font-extrabold tracking-tight text-white">
-                    {plan.priceMain}
-                  </span>
-                  {plan.priceCents && (
-                    <span className="mt-2 text-xl font-bold text-slate-300">
-                      ,{plan.priceCents}
-                    </span>
-                  )}
-                  <span className="ml-2 text-sm text-slate-500">
-                    {plan.period}
-                  </span>
-                </div>
+                {(() => {
+                  const price = plan.fixed ? plan.monthly : plan[billing];
+                  return (
+                    <div className="relative mb-6 min-h-[92px]">
+                      <AnimatePresence mode="wait" initial={false}>
+                        <motion.div
+                          key={`${plan.id}-${plan.fixed ? "fixed" : billing}`}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -8 }}
+                          transition={{ duration: 0.25, ease: "easeOut" }}
+                        >
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-xl font-bold text-slate-300">
+                              €
+                            </span>
+                            <span className="text-6xl font-extrabold tracking-tight text-white">
+                              {price.main}
+                            </span>
+                            {price.cents && (
+                              <span className="mt-2 text-xl font-bold text-slate-300">
+                                ,{price.cents}
+                              </span>
+                            )}
+                            <span className="ml-2 text-sm text-slate-500">
+                              {price.period}
+                            </span>
+                          </div>
+                          {price.footnote && (
+                            <p className="mt-2 text-xs text-slate-500">
+                              {price.footnote}
+                            </p>
+                          )}
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
+                  );
+                })()}
 
                 {/* CTA */}
                 <Link
