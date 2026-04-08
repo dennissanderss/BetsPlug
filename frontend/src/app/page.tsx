@@ -26,6 +26,7 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { TestimonialsSection } from "@/components/ui/testimonials-section";
 import { SocialProofPopup } from "@/components/ui/social-proof-popup";
 import { SeoSection } from "@/components/ui/seo-section";
+import { FloatingSports } from "@/components/ui/floating-sports";
 
 // ─── Animated counter ────────────────────────────────────────────────────────
 
@@ -283,6 +284,8 @@ export default function LandingPage() {
           <div className="absolute right-10 top-40 h-[400px] w-[400px] rounded-full bg-emerald-500/[0.06] blur-[120px]" />
           <div className="absolute left-10 top-80 h-[300px] w-[300px] rounded-full bg-lime-500/[0.04] blur-[100px]" />
         </div>
+        {/* Floating sports elements */}
+        <FloatingSports />
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
