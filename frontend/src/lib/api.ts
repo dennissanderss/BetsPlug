@@ -279,6 +279,73 @@ class ApiClient {
       current_period_end: string | null;
     }>("/subscriptions/status");
   }
+
+  // Dashboard
+  getDashboardMetrics() {
+    return this.request<import("@/types/api").DashboardMetrics>("/dashboard/metrics");
+  }
+
+  // Strategies
+  getStrategies(activeOnly = false) {
+    const qs = activeOnly ? "?active_only=true" : "";
+    return this.request<import("@/types/api").StrategyResponse[]>(`/strategies${qs}`);
+  }
+  getStrategyPicks(id: string, limit = 50, offset = 0) {
+    return this.request<import("@/types/api").StrategyPicksResponse>(
+      `/strategies/${id}/picks?limit=${limit}&offset=${offset}`
+    );
+  }
+
+  // Admin Blog
+  getAdminBlogPosts(status?: string, limit = 50, offset = 0) {
+    const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+    if (status) params.set("status", status);
+    return this.request<import("@/types/api").BlogPost[]>(`/admin/blog?${params}`);
+  }
+  createBlogPost(data: import("@/types/api").BlogPostCreate) {
+    return this.request<import("@/types/api").BlogPost>("/admin/blog", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+  }
+  updateBlogPost(id: string, data: import("@/types/api").BlogPostUpdate) {
+    return this.request<import("@/types/api").BlogPost>(`/admin/blog/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+  }
+  deleteBlogPost(id: string) {
+    return this.request<{ ok: boolean }>(`/admin/blog/${id}`, { method: "DELETE" });
+  }
+
+  // Admin Users
+  getAdminUsers(limit = 50, offset = 0) {
+    return this.request<import("@/types/api").AdminUser[]>(
+      `/admin/users?limit=${limit}&offset=${offset}`
+    );
+  }
+  updateAdminUserStatus(userId: string, isActive: boolean) {
+    return this.request<import("@/types/api").AdminUser>(`/admin/users/${userId}/status`, {
+      method: "PUT",
+      body: JSON.stringify({ is_active: isActive }),
+    });
+  }
+
+  // Admin Settings
+  getAdminSettings() {
+    return this.request<import("@/types/api").SiteSettings>("/admin/settings");
+  }
+  updateAdminSettings(settings: Record<string, string>) {
+    return this.request<import("@/types/api").SiteSettings>("/admin/settings", {
+      method: "PUT",
+      body: JSON.stringify(settings),
+    });
+  }
+
+  // Admin SEO
+  getAdminSeoAudit() {
+    return this.request<import("@/types/api").PageSeoScore[]>("/admin/seo/audit");
+  }
 }
 
 export const api = new ApiClient(API_BASE);

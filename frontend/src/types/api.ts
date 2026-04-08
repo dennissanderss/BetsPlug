@@ -335,3 +335,124 @@ export interface MatchAnalysis {
   };
   forecast: ForecastOutput | null;
 }
+
+// Dashboard
+export interface DashboardMetrics {
+  total_forecasts: number;
+  evaluated_count: number;
+  pending_count: number;
+  correct_predictions: number;
+  accuracy: number;
+  avg_brier_score: number;
+  avg_confidence: number;
+  has_data: boolean;
+  generated_at: string;
+}
+
+// Strategies
+export interface StrategyRule {
+  feature: string;
+  operator: string;
+  value: number | [number, number];
+}
+
+export interface StrategyStaking {
+  type: string;
+  amount: number;
+}
+
+export interface StrategyResponse {
+  id: string;
+  name: string;
+  description: string | null;
+  rules: StrategyRule[];
+  staking: StrategyStaking;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface StrategyPickPrediction {
+  id: string;
+  match_id: string;
+  predicted_at: string;
+  home_win_prob: number;
+  draw_prob: number | null;
+  away_win_prob: number;
+  confidence: number;
+  prediction_type: string;
+  home_team_name: string | null;
+  away_team_name: string | null;
+  scheduled_at: string | null;
+  league_name: string | null;
+}
+
+export interface StrategyPicksResponse {
+  strategy: StrategyResponse;
+  total: number;
+  picks: StrategyPickPrediction[];
+}
+
+// Blog
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  meta_description: string | null;
+  featured_image_url: string | null;
+  status: "draft" | "published" | "archived";
+  author_id: string | null;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogPostCreate {
+  title: string;
+  slug?: string;
+  content: string;
+  meta_description?: string;
+  featured_image_url?: string;
+  status?: "draft" | "published" | "archived";
+}
+
+export interface BlogPostUpdate {
+  title?: string;
+  slug?: string;
+  content?: string;
+  meta_description?: string;
+  featured_image_url?: string;
+  status?: "draft" | "published" | "archived";
+}
+
+// Admin Users
+export interface AdminUser {
+  id: string;
+  email: string;
+  username: string;
+  full_name: string | null;
+  role: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Site Settings
+export interface SiteSettings {
+  [key: string]: string;
+}
+
+// SEO Audit
+export interface PageSeoScore {
+  path: string;
+  title: string;
+  title_length: number;
+  title_score: "good" | "needs_improvement" | "poor";
+  meta_description: string;
+  meta_length: number;
+  meta_score: "good" | "needs_improvement" | "poor";
+  has_og_tags: boolean;
+  has_schema: boolean;
+  overall_score: number;
+}

@@ -18,6 +18,10 @@ from app.api.routes.betoftheday import router as betoftheday_router
 from app.api.routes.fixtures import router as fixtures_router
 from app.api.routes.dashboard import router as dashboard_router
 from app.api.routes.strategies import router as strategies_router
+from app.api.routes.admin_blog import router as admin_blog_router
+from app.api.routes.admin_users import router as admin_users_router
+from app.api.routes.admin_settings import router as admin_settings_router
+from app.api.routes.admin_seo import router as admin_seo_router
 
 router = APIRouter()
 
@@ -39,3 +43,7 @@ router.include_router(betoftheday_router, prefix="/bet-of-the-day", tags=["bet-o
 router.include_router(fixtures_router, prefix="/fixtures", tags=["fixtures"])
 router.include_router(dashboard_router, prefix="/dashboard", tags=["dashboard"])
 router.include_router(strategies_router, prefix="/strategies", tags=["strategies"])
+router.include_router(admin_blog_router, prefix="/admin/blog", tags=["admin-blog"])
+router.include_router(admin_users_router, prefix="/admin/users", tags=["admin-users"])
+router.include_router(admin_settings_router, prefix="/admin/settings", tags=["admin-settings"])
+router.include_router(admin_seo_router, prefix="/admin/seo", tags=["admin-seo"])

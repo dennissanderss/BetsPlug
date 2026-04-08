@@ -10,6 +10,10 @@ import {
   Zap,
   RefreshCw,
   CheckCircle2,
+  FileText,
+  Users,
+  Search,
+  BarChart3,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -17,6 +21,11 @@ import { cn, formatDateTime } from "@/lib/utils";
 import type { DataSourceHealth, IngestionRun } from "@/types/api";
 
 import { Skeleton } from "@/components/ui/skeleton";
+
+import BlogManager from "@/components/admin/blog-manager";
+import UserManager from "@/components/admin/user-manager";
+import SeoDashboard from "@/components/admin/seo-dashboard";
+import AnalyticsSettings from "@/components/admin/analytics-settings";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -728,6 +737,26 @@ export default function AdminPage() {
       label: "Actions",
       icon: Zap,
     },
+    {
+      id: "blog",
+      label: "Blog",
+      icon: FileText,
+    },
+    {
+      id: "users",
+      label: "Users",
+      icon: Users,
+    },
+    {
+      id: "seo",
+      label: "SEO",
+      icon: Search,
+    },
+    {
+      id: "analytics",
+      label: "Analytics",
+      icon: BarChart3,
+    },
   ];
 
   return (
@@ -777,6 +806,10 @@ export default function AdminPage() {
         {activeTab === "ingestion" && <IngestionTab />}
         {activeTab === "errors" && <ErrorsTab />}
         {activeTab === "actions" && <ActionsTab sources={sources} />}
+        {activeTab === "blog" && <BlogManager />}
+        {activeTab === "users" && <UserManager />}
+        {activeTab === "seo" && <SeoDashboard />}
+        {activeTab === "analytics" && <AnalyticsSettings />}
       </div>
     </div>
   );
