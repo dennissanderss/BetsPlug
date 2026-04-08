@@ -135,7 +135,7 @@ export default function LandingPage() {
               <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-2 backdrop-blur-sm">
                 <span className="live-dot" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-green-300">
-                  Keep Your Bets Smart
+                  Be ahead of the bookmakers
                 </span>
               </div>
 
