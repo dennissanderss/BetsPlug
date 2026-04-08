@@ -30,7 +30,7 @@ const en = {
   "hero.subtitle":
     "BetsPlug unites data, Elo ratings, Poisson models and machine learning into one platform. Live probabilities, deep insights, proven track record — built for serious sports analysts.",
   "hero.activeUsers": "Active Users",
-  "hero.ctaPrimary": "Get My Edge",
+  "hero.ctaPrimary": "Start Free Trial",
   "hero.ctaSecondary": "How it works",
   "hero.livePick": "Live Pick",
   "hero.hot": "Hot",
@@ -321,7 +321,7 @@ const nl: Dictionary = {
   "hero.subtitle":
     "BetsPlug combineert data, Elo-ratings, Poisson-modellen en machine learning in één platform. Live kansen, diepgaande inzichten en een bewezen track record — gemaakt voor serieuze sportanalisten.",
   "hero.activeUsers": "Actieve gebruikers",
-  "hero.ctaPrimary": "Pak mijn edge",
+  "hero.ctaPrimary": "Gratis proberen",
   "hero.ctaSecondary": "Hoe het werkt",
   "hero.livePick": "Live pick",
   "hero.hot": "Hot",
@@ -593,7 +593,7 @@ const de: Dictionary = {
   "hero.subtitle":
     "BetsPlug vereint Daten, Elo-Ratings, Poisson-Modelle und maschinelles Lernen auf einer Plattform. Live-Wahrscheinlichkeiten, tiefe Einblicke und nachgewiesene Ergebnisse — für ernsthafte Sportanalysten.",
   "hero.activeUsers": "Aktive Nutzer",
-  "hero.ctaPrimary": "Vorteil sichern",
+  "hero.ctaPrimary": "Kostenlos testen",
   "hero.ctaSecondary": "So funktioniert's",
   "hero.livePick": "Live-Tipp",
   "hero.hot": "Hot",
@@ -865,7 +865,7 @@ const fr: Dictionary = {
   "hero.subtitle":
     "BetsPlug réunit données, classements Elo, modèles de Poisson et machine learning sur une seule plateforme. Probabilités en direct, analyses approfondies, historique prouvé — pensé pour les analystes sportifs exigeants.",
   "hero.activeUsers": "Utilisateurs actifs",
-  "hero.ctaPrimary": "Prendre l'avantage",
+  "hero.ctaPrimary": "Essai gratuit",
   "hero.ctaSecondary": "Comment ça marche",
   "hero.livePick": "Pick en direct",
   "hero.hot": "Hot",
@@ -1137,7 +1137,7 @@ const es: Dictionary = {
   "hero.subtitle":
     "BetsPlug combina datos, Elo, modelos de Poisson y machine learning en una sola plataforma. Probabilidades en vivo, análisis profundos y un historial comprobado — creado para analistas deportivos serios.",
   "hero.activeUsers": "Usuarios activos",
-  "hero.ctaPrimary": "Consigue tu ventaja",
+  "hero.ctaPrimary": "Prueba gratis",
   "hero.ctaSecondary": "Cómo funciona",
   "hero.livePick": "Pick en vivo",
   "hero.hot": "Hot",
@@ -1409,7 +1409,7 @@ const it: Dictionary = {
   "hero.subtitle":
     "BetsPlug combina dati, Elo, modelli di Poisson e machine learning in un'unica piattaforma. Probabilità live, analisi approfondite e uno storico comprovato — pensato per analisti sportivi seri.",
   "hero.activeUsers": "Utenti attivi",
-  "hero.ctaPrimary": "Prendi il vantaggio",
+  "hero.ctaPrimary": "Prova gratis",
   "hero.ctaSecondary": "Come funziona",
   "hero.livePick": "Pick live",
   "hero.hot": "Hot",
@@ -1681,7 +1681,7 @@ const sw: Dictionary = {
   "hero.subtitle":
     "BetsPlug inaunganisha data, ukadiriaji wa Elo, miundo ya Poisson na machine learning katika jukwaa moja. Uwezekano wa moja kwa moja, maarifa ya kina, rekodi iliyothibitishwa — imetengenezwa kwa wachambuzi wa michezo wa kweli.",
   "hero.activeUsers": "Watumiaji hai",
-  "hero.ctaPrimary": "Pata faida yako",
+  "hero.ctaPrimary": "Anza bure",
   "hero.ctaSecondary": "Jinsi inavyofanya kazi",
   "hero.livePick": "Chaguo la moja kwa moja",
   "hero.hot": "Moto",
@@ -1888,7 +1888,7 @@ const id: Dictionary = {
   "hero.subtitle":
     "BetsPlug menyatukan data, peringkat Elo, model Poisson, dan machine learning dalam satu platform. Probabilitas langsung, wawasan mendalam, rekam jejak terbukti — dibangun untuk analis olahraga serius.",
   "hero.activeUsers": "Pengguna aktif",
-  "hero.ctaPrimary": "Raih keunggulanmu",
+  "hero.ctaPrimary": "Coba gratis",
   "hero.ctaSecondary": "Cara kerja",
   "hero.livePick": "Pilihan Langsung",
   "hero.hot": "Panas",
