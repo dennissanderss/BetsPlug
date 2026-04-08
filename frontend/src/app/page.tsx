@@ -202,7 +202,7 @@ export default function LandingPage() {
               <Activity className="h-5 w-5 text-white" />
             </div>
             <span className="text-xl font-bold text-white">
-              Sport<span className="text-blue-400">Bet</span>Tool
+              Bets<span className="text-emerald-400">plug</span>
             </span>
           </Link>
 
@@ -550,7 +550,7 @@ export default function LandingPage() {
                 <Activity className="h-4 w-4 text-white" />
               </div>
               <span className="text-lg font-bold text-white">
-                Sport<span className="text-blue-400">Bet</span>Tool
+                Bets<span className="text-emerald-400">plug</span>
               </span>
             </div>
 
