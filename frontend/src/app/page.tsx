@@ -391,7 +391,7 @@ export default function LandingPage() {
 
               {/* CTAs */}
               <div className="mt-10 flex flex-wrap items-center gap-4">
-                <Link href={loc("/predictions")}>
+                <Link href={`${loc("/")}#pricing`}>
                   <GetStartedButton>{t("hero.ctaPrimary")}</GetStartedButton>
                 </Link>
                 <Link
