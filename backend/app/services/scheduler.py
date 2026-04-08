@@ -130,6 +130,87 @@ async def job_generate_predictions():
         log.error("CRON: Prediction generation failed: %s", exc, exc_info=True)
 
 
+async def job_evaluate_predictions():
+    """Evaluate predictions for finished matches that haven't been scored yet."""
+    log.info("CRON: Starting prediction evaluation...")
+    try:
+        import math
+        from sqlalchemy import and_
+        from app.db.session import async_session_factory
+        from app.models.match import Match, MatchResult, MatchStatus
+        from app.models.prediction import Prediction, PredictionEvaluation
+
+        async with async_session_factory() as db:
+            # Find predictions for finished matches without evaluations
+            stmt = (
+                select(Prediction, MatchResult)
+                .join(Match, Match.id == Prediction.match_id)
+                .join(MatchResult, MatchResult.match_id == Match.id)
+                .outerjoin(
+                    PredictionEvaluation,
+                    PredictionEvaluation.prediction_id == Prediction.id,
+                )
+                .where(
+                    and_(
+                        Match.status == MatchStatus.FINISHED,
+                        PredictionEvaluation.id.is_(None),
+                    )
+                )
+                .limit(200)
+            )
+            rows = (await db.execute(stmt)).all()
+
+            if not rows:
+                log.info("CRON: No predictions to evaluate.")
+                return
+
+            evaluated = 0
+            for pred, result in rows:
+                # Determine actual outcome
+                if result.home_score > result.away_score:
+                    actual = "home"
+                elif result.home_score < result.away_score:
+                    actual = "away"
+                else:
+                    actual = "draw"
+
+                # Check if prediction was correct
+                probs = {"home": pred.home_win_prob, "draw": pred.draw_prob or 0.0, "away": pred.away_win_prob}
+                predicted = max(probs, key=lambda k: probs[k])
+                is_correct = predicted == actual
+
+                # Brier score
+                brier = sum(
+                    (probs.get(o, 0.0) - (1.0 if o == actual else 0.0)) ** 2
+                    for o in ["home", "draw", "away"]
+                ) / 3
+
+                # Log loss
+                _CLIP = 1e-15
+                p_actual = max(probs.get(actual, _CLIP), _CLIP)
+                log_loss = -math.log(p_actual)
+
+                evaluation = PredictionEvaluation(
+                    id=uuid.uuid4(),
+                    prediction_id=pred.id,
+                    actual_outcome=actual,
+                    actual_home_score=result.home_score,
+                    actual_away_score=result.away_score,
+                    is_correct=is_correct,
+                    brier_score=round(brier, 6),
+                    log_loss=round(log_loss, 6),
+                    evaluated_at=datetime.now(timezone.utc),
+                )
+                db.add(evaluation)
+                evaluated += 1
+
+            await db.commit()
+            log.info("CRON: Evaluated %d predictions.", evaluated)
+
+    except Exception as exc:
+        log.error("CRON: Prediction evaluation failed: %s", exc, exc_info=True)
+
+
 def start_scheduler():
     """Register jobs and start the scheduler."""
     # Sync data every 6 hours
@@ -150,6 +231,16 @@ def start_scheduler():
         name="Generate predictions",
         replace_existing=True,
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=5),
+    )
+
+    # Evaluate predictions every 6 hours (1 hour after sync)
+    scheduler.add_job(
+        job_evaluate_predictions,
+        trigger=IntervalTrigger(hours=6),
+        id="evaluate_predictions",
+        name="Evaluate predictions",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=10),
     )
 
     # Sync results daily at 06:00 UTC

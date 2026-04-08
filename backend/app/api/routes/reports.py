@@ -26,21 +26,35 @@ async def generate_report(
     payload: ReportJobCreate,
     db: AsyncSession = Depends(get_db),
 ) -> ReportJobResponse:
-    """
-    Enqueue a report generation job and return the pending job record.
+    """Generate a PDF report synchronously and return the job record."""
+    from datetime import datetime, timezone
+    from app.services.report_service import ReportService
 
-    # TODO: delegate report rendering to Celery task / reporting service
-    """
     new_job = ReportJob(
         report_type=payload.report_type,
         config=payload.config,
-        status="pending",
+        status="running",
+        started_at=datetime.now(timezone.utc),
     )
     db.add(new_job)
     await db.flush()
-    await db.refresh(new_job)
 
-    # TODO: enqueue celery task: generate_report.delay(str(new_job.id))
+    try:
+        service = ReportService()
+        report = await service.generate(new_job, db)
+        new_job.status = "completed"
+        new_job.completed_at = datetime.now(timezone.utc)
+        await db.flush()
+    except Exception as exc:
+        new_job.status = "failed"
+        new_job.error_message = str(exc)
+        new_job.completed_at = datetime.now(timezone.utc)
+        await db.flush()
+        await db.commit()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Report generation failed: {exc}",
+        )
 
     return ReportJobResponse.model_validate(new_job)
 
