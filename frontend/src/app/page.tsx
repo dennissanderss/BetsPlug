@@ -18,6 +18,8 @@ import {
   Brain,
   LineChart,
   Sparkles,
+  Menu,
+  X,
 } from "lucide-react";
 import { GetStartedButton } from "@/components/ui/get-started-button";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -55,6 +57,7 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
 
 export default function LandingPage() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -62,6 +65,30 @@ export default function LandingPage() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
+  // Close mobile menu on escape
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const navLinks = [
+    { href: "#predictions", label: "Predictions" },
+    { href: "#how-it-works", label: "How It Works" },
+    { href: "#track-record", label: "Track Record" },
+    { href: "/subscriptions", label: "Pricing" },
+  ];
 
   return (
     <div className="min-h-screen bg-[#080b14] text-white">
@@ -84,37 +111,154 @@ export default function LandingPage() {
             />
           </Link>
 
-          <div className="hidden items-center gap-8 md:flex">
-            <Link href="#predictions" className="text-sm font-medium text-slate-400 transition-colors hover:text-white">
-              Predictions
-            </Link>
-            <Link href="#how-it-works" className="text-sm font-medium text-slate-400 transition-colors hover:text-white">
-              How It Works
-            </Link>
-            <Link href="#track-record" className="text-sm font-medium text-slate-400 transition-colors hover:text-white">
-              Track Record
-            </Link>
-            <Link href="/subscriptions" className="text-sm font-medium text-slate-400 transition-colors hover:text-white">
-              Pricing
-            </Link>
+          {/* Desktop nav links */}
+          <div className="hidden items-center gap-8 lg:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-slate-400 transition-colors hover:text-white"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
+          {/* Right side: desktop buttons + mobile hamburger */}
           <div className="flex items-center gap-3">
+            {/* Desktop buttons (lg+) */}
             <Link
               href="/dashboard"
-              className="hidden rounded-lg border border-white/[0.1] px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white sm:inline-block"
+              className={`hidden rounded-lg border border-white/[0.1] font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white lg:inline-block ${
+                isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
+              }`}
             >
               Login
             </Link>
             <Link
               href="/subscriptions"
-              className="btn-gradient rounded-full px-5 py-2.5 text-sm font-bold shadow-lg shadow-green-500/20"
+              className={`btn-gradient hidden rounded-full font-bold shadow-lg shadow-green-500/20 transition-all duration-300 lg:inline-block ${
+                isScrolled ? "px-4 py-1.5 text-xs" : "px-5 py-2.5 text-sm"
+              }`}
             >
               Start Free Trial
             </Link>
+
+            {/* Mobile/Tablet hamburger button */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open menu"
+              className={`flex items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.03] text-white backdrop-blur-sm transition-all duration-300 hover:border-green-500/40 hover:bg-white/[0.06] lg:hidden ${
+                isScrolled ? "h-9 w-9" : "h-11 w-11"
+              }`}
+            >
+              <Menu className={isScrolled ? "h-4 w-4" : "h-5 w-5"} />
+            </button>
           </div>
         </div>
       </nav>
+
+      {/* ── Mobile slide-out menu ── */}
+      <div
+        className={`fixed inset-0 z-[60] lg:hidden ${
+          mobileMenuOpen ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+        aria-hidden={!mobileMenuOpen}
+      >
+        {/* Backdrop */}
+        <div
+          onClick={() => setMobileMenuOpen(false)}
+          className={`absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-300 ${
+            mobileMenuOpen ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
+        {/* Slide-out panel */}
+        <aside
+          className={`absolute right-0 top-0 flex h-full w-full max-w-sm flex-col border-l border-white/[0.08] bg-gradient-to-b from-[#0d1220] via-[#080b14] to-[#060912] shadow-2xl transition-transform duration-300 ease-out ${
+            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          {/* Glow */}
+          <div className="pointer-events-none absolute -right-20 top-0 h-[400px] w-[300px] rounded-full bg-green-500/[0.08] blur-[120px]" />
+
+          {/* Top: Logo + close */}
+          <div className="relative flex items-center justify-between border-b border-white/[0.06] px-6 py-5">
+            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center">
+              <img
+                src="/logo.webp"
+                alt="Betsplug"
+                className="h-12 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)]"
+              />
+            </Link>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close menu"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.03] text-slate-400 transition-all hover:border-green-500/40 hover:bg-white/[0.06] hover:text-white"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Middle: menu items */}
+          <nav className="relative flex flex-1 flex-col gap-1 overflow-y-auto px-6 py-8">
+            <span className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-widest text-slate-600">
+              Menu
+            </span>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="group flex items-center justify-between rounded-2xl border border-transparent px-4 py-4 text-lg font-semibold text-white transition-all hover:border-green-500/20 hover:bg-green-500/[0.06]"
+              >
+                <span className="flex items-center gap-3">
+                  <span className="h-1.5 w-1.5 rounded-full bg-slate-700 transition-all group-hover:w-4 group-hover:bg-green-400" />
+                  {link.label}
+                </span>
+                <ChevronRight className="h-5 w-5 text-slate-600 transition-transform group-hover:translate-x-1 group-hover:text-green-400" />
+              </Link>
+            ))}
+
+            {/* Divider */}
+            <div className="my-6 border-t border-white/[0.06]" />
+
+            <Link
+              href="/dashboard"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-between rounded-2xl border border-white/[0.08] bg-white/[0.02] px-4 py-4 text-base font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white"
+            >
+              <span>Login</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </nav>
+
+          {/* Bottom: CTA */}
+          <div className="relative border-t border-white/[0.06] px-6 py-6">
+            <div className="rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] to-transparent p-5 backdrop-blur-sm">
+              <div className="mb-3 flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-green-400" />
+                <span className="text-xs font-bold uppercase tracking-wider text-green-400">
+                  Get Started
+                </span>
+              </div>
+              <p className="mb-4 text-sm leading-relaxed text-slate-400">
+                Join 1,500+ analysts and get data-driven predictions today.
+              </p>
+              <Link
+                href="/subscriptions"
+                onClick={() => setMobileMenuOpen(false)}
+                className="btn-gradient flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-bold shadow-lg shadow-green-500/20"
+              >
+                Start Free Trial
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </aside>
+      </div>
 
       {/* ═══════════════════════════════════════════════════════════════════
           HERO SECTION
