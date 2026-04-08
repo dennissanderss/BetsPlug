@@ -19,6 +19,7 @@ from typing import TYPE_CHECKING
 
 from app.ingestion.adapters.sample_football import SampleFootballAdapter
 from app.ingestion.adapters.sample_basketball import SampleBasketballAdapter
+from app.ingestion.adapters.api_football import APIFootballAdapter
 from app.ingestion.adapters.football_data_org import FootballDataOrgAdapter
 from app.ingestion.adapters.openligadb import OpenLigaDBAdapter
 from app.ingestion.adapters.thesportsdb import TheSportsDBAdapter
@@ -36,6 +37,7 @@ ADAPTER_REGISTRY: dict[str, type[DataSourceAdapter]] = {
     "sample_football":    SampleFootballAdapter,
     "sample_basketball":  SampleBasketballAdapter,
     # Live data adapters
+    "api_football":       APIFootballAdapter,
     "openligadb":         OpenLigaDBAdapter,
     "football_data_org":  FootballDataOrgAdapter,
     "thesportsdb":        TheSportsDBAdapter,
@@ -43,6 +45,7 @@ ADAPTER_REGISTRY: dict[str, type[DataSourceAdapter]] = {
 
 __all__ = [
     "ADAPTER_REGISTRY",
+    "APIFootballAdapter",
     "SampleFootballAdapter",
     "SampleBasketballAdapter",
     "FootballDataOrgAdapter",

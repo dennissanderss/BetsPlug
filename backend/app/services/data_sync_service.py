@@ -35,6 +35,12 @@ from sqlalchemy import and_, exists, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
+from app.ingestion.adapters.api_football import (
+    APIFootballAdapter,
+    ID_TO_LEAGUE_SLUG as APIFB_ID_TO_SLUG,
+    LEAGUE_SLUG_TO_ID as APIFB_SLUG_TO_ID,
+    LEAGUE_META as APIFB_LEAGUE_META,
+)
 from app.ingestion.adapters.football_data_org import (
     CODE_TO_LEAGUE_SLUG,
     COMPETITION_META,
@@ -55,6 +61,11 @@ _settings = get_settings()
 
 # ── Ordered list of competition codes to rotate through ──────────────────────
 _COMPETITION_ROTATION: list[str] = ["PL", "PD", "BL1", "SA", "FL1", "CL"]
+
+# ── League slugs shared by both adapters ─────────────────────────────────────
+_LEAGUE_SLUG_ROTATION: list[str] = [
+    "premier-league", "la-liga", "bundesliga", "serie-a", "ligue-1", "champions-league",
+]
 
 # Simple in-process rotation counter (survives per-worker; good enough for
 # round-robin when only one beat worker is running).
@@ -90,19 +101,32 @@ class DataSyncService:
     """
 
     def __init__(self) -> None:
-        self._api_key: str = _settings.football_data_api_key
+        self._fdorg_key: str = _settings.football_data_api_key
+        self._apifb_key: str = _settings.api_football_key
         self._client: Optional[httpx.AsyncClient] = None
-        self._adapter: Optional[FootballDataOrgAdapter] = None
+        self._adapter = None  # type: ignore[assignment]
+        self._adapter_name: str = ""
         self.log = structlog.get_logger(self.__class__.__name__)
 
     # ── Context manager ──────────────────────────────────────────────────────
 
     async def __aenter__(self) -> "DataSyncService":
         self._client = httpx.AsyncClient(timeout=30)
-        self._adapter = FootballDataOrgAdapter(
-            config={"api_key": self._api_key},
-            http_client=self._client,
-        )
+        # Prefer API-Football (more leagues, odds, stats) when key is available
+        if self._apifb_key:
+            self._adapter = APIFootballAdapter(
+                config={"api_key": self._apifb_key},
+                http_client=self._client,
+            )
+            self._adapter_name = "api_football"
+            self.log.info("data_sync_using_adapter", adapter="api_football")
+        else:
+            self._adapter = FootballDataOrgAdapter(
+                config={"api_key": self._fdorg_key},
+                http_client=self._client,
+            )
+            self._adapter_name = "football_data_org"
+            self.log.info("data_sync_using_adapter", adapter="football_data_org")
         return self
 
     async def __aexit__(self, *_) -> None:
@@ -230,6 +254,23 @@ class DataSyncService:
         _rotation_index += 1
         return code
 
+    def _next_league_slug(self) -> str:
+        """Return the next league slug in the rotation (adapter-agnostic)."""
+        global _rotation_index
+        slug = _LEAGUE_SLUG_ROTATION[_rotation_index % len(_LEAGUE_SLUG_ROTATION)]
+        _rotation_index += 1
+        return slug
+
+    def _slug_for_sync(self) -> tuple[str, str]:
+        """Return (competition_code, league_slug) for the next sync cycle."""
+        if self._adapter_name == "api_football":
+            slug = self._next_league_slug()
+            return slug, slug
+        else:
+            code = self._next_competition_code()
+            slug = CODE_TO_LEAGUE_SLUG.get(code, _slugify(code))
+            return code, slug
+
     # ── Public sync methods ───────────────────────────────────────────────────
 
     async def sync_upcoming_matches(self, db: AsyncSession) -> dict:
@@ -244,8 +285,7 @@ class DataSyncService:
         if not self._adapter:
             raise RuntimeError("Use DataSyncService as an async context manager.")
 
-        code = self._next_competition_code()
-        league_slug = CODE_TO_LEAGUE_SLUG.get(code, _slugify(code))
+        code, league_slug = self._slug_for_sync()
         self.log.info("sync_upcoming_matches_start", competition=code, league=league_slug)
 
         today = date.today()
@@ -357,8 +397,7 @@ class DataSyncService:
         if not self._adapter:
             raise RuntimeError("Use DataSyncService as an async context manager.")
 
-        code = self._next_competition_code()
-        league_slug = CODE_TO_LEAGUE_SLUG.get(code, _slugify(code))
+        code, league_slug = self._slug_for_sync()
         self.log.info("sync_recent_results_start", competition=code, league=league_slug)
 
         today = date.today()
@@ -477,8 +516,7 @@ class DataSyncService:
         if not self._adapter:
             raise RuntimeError("Use DataSyncService as an async context manager.")
 
-        code = self._next_competition_code()
-        league_slug = CODE_TO_LEAGUE_SLUG.get(code, _slugify(code))
+        code, league_slug = self._slug_for_sync()
         today = date.today()
 
         self.log.info("sync_standings_start", competition=code, league=league_slug)

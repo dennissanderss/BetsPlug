@@ -79,8 +79,9 @@ class Settings(BaseSettings):
     stripe_price_premium: str = ""    # Create in Stripe Dashboard: €56.94 every 6 months recurring
     stripe_price_lifetime: str = ""   # Create in Stripe Dashboard: €199.99 one-time
 
-    # Football Data API
-    football_data_api_key: str = ""
+    # Sports Data APIs
+    football_data_api_key: str = ""   # football-data.org (free, 10 req/min)
+    api_football_key: str = ""        # api-football.com (free, 100 req/day)
 
     # Reports
     reports_output_dir: str = "/app/reports"
