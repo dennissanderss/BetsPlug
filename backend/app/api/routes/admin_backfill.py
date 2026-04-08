@@ -1,0 +1,420 @@
+"""Admin backfill endpoint: fetch historical data, generate predictions, evaluate.
+
+This is the critical endpoint that populates the database with historical
+finished matches and evaluated predictions, unblocking dashboard, results,
+trackrecord, weekly-report, and strategy metrics.
+
+Uses football-data.org (no daily limit, 10 req/min) to avoid API-Football quota.
+"""
+
+import asyncio
+import logging
+import math
+import re
+import uuid
+from datetime import date, datetime, timedelta, timezone
+from typing import Optional
+
+import httpx
+from fastapi import APIRouter, Body, Depends
+from pydantic import BaseModel
+from sqlalchemy import and_, select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.db.session import get_db
+from app.models.league import League
+from app.models.match import Match, MatchResult, MatchStatus
+from app.models.model_version import ModelVersion
+from app.models.prediction import Prediction, PredictionEvaluation, PredictionExplanation
+from app.models.season import Season
+from app.models.sport import Sport
+from app.models.team import Team
+
+router = APIRouter()
+log = logging.getLogger(__name__)
+
+FDORG_BASE = "https://api.football-data.org/v4"
+LEAGUES = {
+    "PL": {"name": "Premier League", "country": "England", "slug": "premier-league"},
+    "PD": {"name": "La Liga", "country": "Spain", "slug": "la-liga"},
+    "BL1": {"name": "Bundesliga", "country": "Germany", "slug": "bundesliga"},
+    "SA": {"name": "Serie A", "country": "Italy", "slug": "serie-a"},
+    "FL1": {"name": "Ligue 1", "country": "France", "slug": "ligue-1"},
+    "DED": {"name": "Eredivisie", "country": "Netherlands", "slug": "eredivisie"},
+}
+
+
+def _slugify(text: str) -> str:
+    text = text.lower().strip()
+    text = re.sub(r"[^\w\s-]", "", text)
+    text = re.sub(r"[\s_]+", "-", text)
+    return re.sub(r"-+", "-", text).strip("-")
+
+
+class BackfillResponse(BaseModel):
+    fixtures_created: int
+    fixtures_updated: int
+    results_created: int
+    predictions_generated: int
+    predictions_evaluated: int
+    errors: int
+    details: list[str]
+
+
+@router.post(
+    "/backfill-historical",
+    response_model=BackfillResponse,
+    summary="Backfill 90 days of historical data from football-data.org",
+)
+async def backfill_historical(
+    days: int = Body(default=90, embed=True),
+    db: AsyncSession = Depends(get_db),
+) -> BackfillResponse:
+    """
+    Complete backfill pipeline:
+    1. Fetch finished matches from football-data.org (last N days, 6 leagues)
+    2. Upsert fixtures + results
+    3. Generate predictions with anti-leakage (simulated_now = kickoff - 1h)
+    4. Evaluate predictions against actual results
+
+    Uses football-data.org (10 req/min, no daily limit).
+    """
+    from app.core.config import get_settings
+    from app.forecasting.forecast_service import ForecastService
+
+    settings = get_settings()
+    api_key = settings.football_data_api_key
+    if not api_key:
+        return BackfillResponse(
+            fixtures_created=0, fixtures_updated=0, results_created=0,
+            predictions_generated=0, predictions_evaluated=0, errors=1,
+            details=["FOOTBALL_DATA_API_KEY not configured"],
+        )
+
+    headers = {"X-Auth-Token": api_key}
+    today = date.today()
+    date_from = today - timedelta(days=days)
+
+    total_fixtures = 0
+    total_updated = 0
+    total_results = 0
+    total_predictions = 0
+    total_evaluated = 0
+    total_errors = 0
+    details: list[str] = []
+
+    # Ensure sport exists
+    sport = await _get_or_create_sport(db)
+
+    async with httpx.AsyncClient(timeout=30, headers=headers) as client:
+        for code, meta in LEAGUES.items():
+            try:
+                log.info("Backfill: fetching %s (%s)...", code, meta["name"])
+
+                # Fetch matches
+                resp = await client.get(
+                    f"{FDORG_BASE}/competitions/{code}/matches",
+                    params={
+                        "dateFrom": date_from.isoformat(),
+                        "dateTo": today.isoformat(),
+                        "status": "FINISHED",
+                    },
+                )
+                if resp.status_code == 429:
+                    details.append(f"{code}: rate limited, waiting 60s...")
+                    await asyncio.sleep(60)
+                    resp = await client.get(
+                        f"{FDORG_BASE}/competitions/{code}/matches",
+                        params={
+                            "dateFrom": date_from.isoformat(),
+                            "dateTo": today.isoformat(),
+                            "status": "FINISHED",
+                        },
+                    )
+
+                if resp.status_code != 200:
+                    details.append(f"{code}: HTTP {resp.status_code}")
+                    total_errors += 1
+                    continue
+
+                data = resp.json()
+                matches_raw = data.get("matches", [])
+                details.append(f"{code}: {len(matches_raw)} finished matches from API")
+
+                # Get/create league + season
+                league = await _get_or_create_league(db, sport.id, code, meta)
+                season_name = f"{today.year - 1}-{today.year}" if today.month >= 8 else f"{today.year - 1}-{today.year}"
+                season = await _get_or_create_season(db, league.id, season_name)
+
+                created_this_league = 0
+                for m in matches_raw:
+                    try:
+                        home_raw = m.get("homeTeam", {})
+                        away_raw = m.get("awayTeam", {})
+                        home_name = home_raw.get("name", "Unknown")
+                        away_name = away_raw.get("name", "Unknown")
+                        home_slug = _slugify(home_raw.get("shortName") or home_name)
+                        away_slug = _slugify(away_raw.get("shortName") or away_name)
+
+                        home_team = await _get_or_create_team(db, league.id, home_slug, home_name)
+                        away_team = await _get_or_create_team(db, league.id, away_slug, away_name)
+
+                        external_id = f"fdorg_{m['id']}"
+                        kickoff_str = m.get("utcDate", "")
+                        kickoff = datetime.fromisoformat(kickoff_str.replace("Z", "+00:00"))
+
+                        score = m.get("score", {})
+                        ft = score.get("fullTime", {})
+                        ht = score.get("halfTime", {})
+                        home_score = ft.get("home")
+                        away_score = ft.get("away")
+
+                        if home_score is None or away_score is None:
+                            continue
+
+                        # Upsert fixture
+                        existing = await db.execute(
+                            select(Match).where(Match.external_id == external_id)
+                        )
+                        match_obj = existing.scalar_one_or_none()
+
+                        if match_obj is None:
+                            match_obj = Match(
+                                id=uuid.uuid4(),
+                                league_id=league.id,
+                                season_id=season.id,
+                                home_team_id=home_team.id,
+                                away_team_id=away_team.id,
+                                external_id=external_id,
+                                status=MatchStatus.FINISHED,
+                                scheduled_at=kickoff,
+                                round_name=m.get("stage"),
+                                matchday=m.get("matchday"),
+                            )
+                            db.add(match_obj)
+                            await db.flush()
+                            total_fixtures += 1
+                            created_this_league += 1
+                        else:
+                            match_obj.status = MatchStatus.FINISHED
+                            total_updated += 1
+
+                        # Upsert result
+                        existing_result = await db.execute(
+                            select(MatchResult).where(MatchResult.match_id == match_obj.id)
+                        )
+                        result_obj = existing_result.scalar_one_or_none()
+
+                        winner = "home" if home_score > away_score else ("away" if away_score > home_score else "draw")
+
+                        if result_obj is None:
+                            result_obj = MatchResult(
+                                id=uuid.uuid4(),
+                                match_id=match_obj.id,
+                                home_score=home_score,
+                                away_score=away_score,
+                                home_score_ht=ht.get("home"),
+                                away_score_ht=ht.get("away"),
+                                winner=winner,
+                            )
+                            db.add(result_obj)
+                            total_results += 1
+
+                    except Exception as exc:
+                        total_errors += 1
+                        log.warning("Backfill fixture error: %s", exc)
+
+                details.append(f"{code}: {created_this_league} new fixtures created")
+                await db.commit()
+
+                # Rate limit: 10 req/min
+                await asyncio.sleep(7)
+
+            except Exception as exc:
+                details.append(f"{code}: FAILED — {exc}")
+                total_errors += 1
+                log.error("Backfill league %s failed: %s", code, exc)
+
+    # Phase 2: Generate predictions for finished matches without predictions
+    log.info("Backfill: generating predictions for historical matches...")
+    try:
+        # Ensure model version
+        mv_result = await db.execute(
+            select(ModelVersion).where(ModelVersion.is_active.is_(True)).limit(1)
+        )
+        mv = mv_result.scalar_one_or_none()
+        if mv is None:
+            mv = ModelVersion(
+                id=uuid.uuid4(),
+                name="BetsPlug Ensemble v1",
+                version="1.0.0",
+                model_type="ensemble",
+                sport_scope="all",
+                description="Default ensemble",
+                hyperparameters={"weights": {"elo": 1.0, "poisson": 1.5, "logistic": 1.0}},
+                training_metrics={"note": "cold-start backfill"},
+                trained_at=datetime.now(timezone.utc),
+                is_active=True,
+            )
+            db.add(mv)
+            await db.flush()
+
+        # Find finished matches without predictions
+        stmt = (
+            select(Match)
+            .where(
+                Match.status == MatchStatus.FINISHED,
+                ~Match.id.in_(select(Prediction.match_id).distinct()),
+            )
+            .order_by(Match.scheduled_at)
+            .limit(300)
+        )
+        matches_to_predict = (await db.execute(stmt)).scalars().all()
+
+        forecast_service = ForecastService()
+        for match_obj in matches_to_predict:
+            try:
+                pred = await forecast_service.generate_forecast(match_obj.id, db)
+                total_predictions += 1
+            except Exception as exc:
+                total_errors += 1
+                log.warning("Backfill prediction error for %s: %s", match_obj.id, exc)
+
+        await db.commit()
+        details.append(f"Predictions generated: {total_predictions}")
+
+    except Exception as exc:
+        details.append(f"Prediction generation FAILED: {exc}")
+        log.error("Backfill predictions failed: %s", exc)
+
+    # Phase 3: Evaluate predictions
+    log.info("Backfill: evaluating predictions...")
+    try:
+        stmt = (
+            select(Prediction, MatchResult)
+            .join(Match, Match.id == Prediction.match_id)
+            .join(MatchResult, MatchResult.match_id == Match.id)
+            .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+            .where(
+                and_(
+                    Match.status == MatchStatus.FINISHED,
+                    PredictionEvaluation.id.is_(None),
+                )
+            )
+            .limit(500)
+        )
+        rows = (await db.execute(stmt)).all()
+
+        for pred, result in rows:
+            try:
+                if result.home_score > result.away_score:
+                    actual = "home"
+                elif result.home_score < result.away_score:
+                    actual = "away"
+                else:
+                    actual = "draw"
+
+                probs = {
+                    "home": pred.home_win_prob,
+                    "draw": pred.draw_prob or 0.0,
+                    "away": pred.away_win_prob,
+                }
+                predicted = max(probs, key=lambda k: probs[k])
+                is_correct = predicted == actual
+
+                brier = sum(
+                    (probs.get(o, 0.0) - (1.0 if o == actual else 0.0)) ** 2
+                    for o in ["home", "draw", "away"]
+                ) / 3
+
+                _CLIP = 1e-15
+                p_actual = max(probs.get(actual, _CLIP), _CLIP)
+                log_loss_val = -math.log(p_actual)
+
+                evaluation = PredictionEvaluation(
+                    id=uuid.uuid4(),
+                    prediction_id=pred.id,
+                    actual_outcome=actual,
+                    actual_home_score=result.home_score,
+                    actual_away_score=result.away_score,
+                    is_correct=is_correct,
+                    brier_score=round(brier, 6),
+                    log_loss=round(log_loss_val, 6),
+                    evaluated_at=datetime.now(timezone.utc),
+                )
+                db.add(evaluation)
+                total_evaluated += 1
+            except Exception as exc:
+                total_errors += 1
+
+        await db.commit()
+        details.append(f"Predictions evaluated: {total_evaluated}")
+
+    except Exception as exc:
+        details.append(f"Evaluation FAILED: {exc}")
+        log.error("Backfill evaluation failed: %s", exc)
+
+    return BackfillResponse(
+        fixtures_created=total_fixtures,
+        fixtures_updated=total_updated,
+        results_created=total_results,
+        predictions_generated=total_predictions,
+        predictions_evaluated=total_evaluated,
+        errors=total_errors,
+        details=details,
+    )
+
+
+# ── Helpers ──────────────────────────────────────────────────────────────────
+
+async def _get_or_create_sport(db: AsyncSession) -> Sport:
+    result = await db.execute(select(Sport).where(Sport.slug == "football"))
+    sport = result.scalar_one_or_none()
+    if sport is None:
+        sport = Sport(id=uuid.uuid4(), name="Football", slug="football", icon="⚽", is_active=True)
+        db.add(sport)
+        await db.flush()
+    return sport
+
+
+async def _get_or_create_league(db: AsyncSession, sport_id, code: str, meta: dict) -> League:
+    slug = meta["slug"]
+    result = await db.execute(select(League).where(League.slug == slug))
+    league = result.scalar_one_or_none()
+    if league is None:
+        league = League(
+            id=uuid.uuid4(), sport_id=sport_id, name=meta["name"],
+            slug=slug, country=meta["country"], tier=1, is_active=True,
+        )
+        db.add(league)
+        await db.flush()
+    return league
+
+
+async def _get_or_create_season(db: AsyncSession, league_id, season_name: str) -> Season:
+    result = await db.execute(
+        select(Season).where(and_(Season.league_id == league_id, Season.name == season_name))
+    )
+    season = result.scalar_one_or_none()
+    if season is None:
+        parts = season_name.split("-")
+        start_year = int(parts[0])
+        end_year = int(parts[1]) if len(parts) > 1 else start_year + 1
+        season = Season(
+            id=uuid.uuid4(), league_id=league_id, name=season_name,
+            start_date=date(start_year, 8, 1), end_date=date(end_year, 5, 31),
+            is_current=True,
+        )
+        db.add(season)
+        await db.flush()
+    return season
+
+
+async def _get_or_create_team(db: AsyncSession, league_id, slug: str, name: str) -> Team:
+    result = await db.execute(select(Team).where(Team.slug == slug))
+    team = result.scalar_one_or_none()
+    if team is None:
+        team = Team(id=uuid.uuid4(), league_id=league_id, name=name, slug=slug, is_active=True)
+        db.add(team)
+        await db.flush()
+    return team
