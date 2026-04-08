@@ -7,7 +7,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: [
-          '"TT Lakes Neue"',
+          "var(--font-brand)",
           "system-ui",
           "-apple-system",
           '"Segoe UI"',
@@ -17,7 +17,7 @@ const config: Config = {
           "sans-serif",
         ],
         display: [
-          '"TT Lakes Neue"',
+          "var(--font-brand)",
           "system-ui",
           "-apple-system",
           '"Segoe UI"',
