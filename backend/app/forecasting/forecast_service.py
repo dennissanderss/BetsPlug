@@ -432,7 +432,7 @@ class ForecastService:
             ),
             features_snapshot=match_context,
             raw_output=forecast_result.raw_output,
-            is_simulation=False,
+            is_simulation=True,
         )
         db.add(prediction)
         await db.flush()  # get prediction.id without committing
@@ -459,7 +459,18 @@ class ForecastService:
 
     @staticmethod
     async def _load_match(match_id: uuid.UUID, db: AsyncSession) -> Optional[Match]:
-        result = await db.execute(select(Match).where(Match.id == match_id))
+        from sqlalchemy.orm import selectinload
+        from app.models.league import League
+
+        result = await db.execute(
+            select(Match)
+            .options(
+                selectinload(Match.league).selectinload(League.sport),
+                selectinload(Match.home_team),
+                selectinload(Match.away_team),
+            )
+            .where(Match.id == match_id)
+        )
         return result.scalar_one_or_none()
 
     @staticmethod

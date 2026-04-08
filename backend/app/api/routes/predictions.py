@@ -120,11 +120,37 @@ async def run_forecast(
             detail=f"Match {match_id} not found.",
         )
 
-    # TODO: call forecasting_service.run(match, db) and persist the result
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail=(
-            "Forecasting service is not yet wired in. "
-            "Implement app.services.forecasting and call it here."
-        ),
+    from app.forecasting.forecast_service import ForecastService
+
+    try:
+        service = ForecastService()
+        prediction = await service.generate_forecast(match_id, db)
+        await db.commit()
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(exc),
+        )
+    except Exception as exc:
+        await db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Forecast generation failed: {exc}",
+        )
+
+    return ForecastOutput(
+        match_id=prediction.match_id,
+        model_version_id=prediction.model_version_id,
+        predicted_at=prediction.predicted_at,
+        home_win_prob=prediction.home_win_prob,
+        draw_prob=prediction.draw_prob,
+        away_win_prob=prediction.away_win_prob,
+        predicted_home_score=prediction.predicted_home_score,
+        predicted_away_score=prediction.predicted_away_score,
+        confidence=prediction.confidence,
+        confidence_interval_low=prediction.confidence_interval_low,
+        confidence_interval_high=prediction.confidence_interval_high,
+        explanation=prediction.explanation.summary if prediction.explanation else None,
+        features_snapshot=prediction.features_snapshot,
+        raw_output=prediction.raw_output,
     )

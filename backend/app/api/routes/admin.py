@@ -239,6 +239,118 @@ async def trigger_sync(
         return SyncResponse(accepted=False, message=f"Sync failed: {str(exc)}", task_id=None)
 
 
+class GeneratePredictionsResponse(BaseModel):
+    total_matches: int
+    predictions_generated: int
+    errors: int
+    details: List[str]
+
+
+@router.post(
+    "/generate-predictions",
+    response_model=GeneratePredictionsResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Generate predictions for all upcoming matches without one",
+)
+async def generate_predictions(
+    days: int = Body(default=7, embed=True, description="Days ahead to look for matches"),
+    db: AsyncSession = Depends(get_db),
+) -> GeneratePredictionsResponse:
+    """
+    Batch-generate predictions for all upcoming matches that don't have one yet.
+    Creates a default ModelVersion (ensemble) if none exists.
+    """
+    import logging
+    from datetime import datetime, timedelta, timezone
+
+    from app.forecasting.forecast_service import ForecastService
+    from app.models.match import Match, MatchStatus
+    from app.models.model_version import ModelVersion
+    from app.models.prediction import Prediction
+
+    log = logging.getLogger(__name__)
+
+    # --- Ensure a default ModelVersion exists ----------------------------- #
+    mv_result = await db.execute(
+        select(ModelVersion).where(ModelVersion.is_active.is_(True)).limit(1)
+    )
+    model_version = mv_result.scalar_one_or_none()
+
+    if model_version is None:
+        log.info("No active ModelVersion found — creating default ensemble.")
+        model_version = ModelVersion(
+            id=uuid.uuid4(),
+            name="BetsPlug Ensemble v1",
+            version="1.0.0",
+            model_type="ensemble",
+            sport_scope="all",
+            description="Default ensemble: Elo + Poisson + Logistic weighted average",
+            hyperparameters={
+                "weights": {"elo": 1.0, "poisson": 1.5, "logistic": 1.0},
+            },
+            training_metrics={"note": "cold-start defaults, no trained weights"},
+            trained_at=datetime.now(timezone.utc),
+            is_active=True,
+        )
+        db.add(model_version)
+        await db.flush()
+
+    # --- Find upcoming matches without predictions ------------------------ #
+    now = datetime.now(timezone.utc)
+    cutoff = now + timedelta(days=days)
+
+    # Get matches that are scheduled and within range
+    matches_result = await db.execute(
+        select(Match)
+        .where(
+            Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
+            Match.scheduled_at >= now,
+            Match.scheduled_at <= cutoff,
+        )
+        .order_by(Match.scheduled_at)
+    )
+    all_matches = matches_result.scalars().all()
+
+    # Filter out matches that already have predictions
+    match_ids = [m.id for m in all_matches]
+    if match_ids:
+        existing_result = await db.execute(
+            select(Prediction.match_id).where(Prediction.match_id.in_(match_ids)).distinct()
+        )
+        existing_match_ids = set(existing_result.scalars().all())
+    else:
+        existing_match_ids = set()
+
+    matches_to_predict = [m for m in all_matches if m.id not in existing_match_ids]
+
+    # --- Generate predictions ---------------------------------------------- #
+    service = ForecastService()
+    generated = 0
+    errors = 0
+    details: List[str] = []
+
+    for match in matches_to_predict:
+        try:
+            home_name = match.home_team.name if match.home_team else "?"
+            away_name = match.away_team.name if match.away_team else "?"
+            await service.generate_forecast(match.id, db)
+            generated += 1
+            details.append(f"OK: {home_name} vs {away_name}")
+        except Exception as exc:
+            errors += 1
+            details.append(f"FAIL: {match.id} — {exc}")
+            log.warning("Prediction failed for match %s: %s", match.id, exc)
+
+    await db.commit()
+
+    return GeneratePredictionsResponse(
+        total_matches=len(all_matches),
+        predictions_generated=generated,
+        errors=errors,
+        details=details,
+    )
+
+
 @router.post(
     "/retrain",
     response_model=RetrainResponse,
