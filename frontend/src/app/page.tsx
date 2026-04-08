@@ -134,7 +134,7 @@ export default function LandingPage() {
             {/* Desktop buttons (lg+) */}
             <Link
               href="/dashboard"
-              className={`hidden rounded-lg border border-white/[0.1] font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white lg:inline-block ${
+              className={`hidden rounded-full border border-white/[0.1] font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white lg:inline-block ${
                 isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
               }`}
             >

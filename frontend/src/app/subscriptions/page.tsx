@@ -241,7 +241,7 @@ export default function SubscriptionsPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#0a0e1a]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link href="/" className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/25">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/25">
               <Activity className="h-5 w-5 text-white" />
             </div>
             <span className="text-xl font-bold text-white">
@@ -386,7 +386,7 @@ export default function SubscriptionsPage() {
                   console.error("Checkout error:", err);
                 }
               }}
-              className="btn-gradient mt-6 flex w-full items-center justify-center gap-2 rounded-xl py-4 text-base font-bold text-white shadow-lg shadow-blue-500/25"
+              className="btn-gradient mt-6 flex w-full items-center justify-center gap-2 rounded-full py-4 text-base font-bold text-white shadow-lg shadow-blue-500/25"
             >
               Proceed to Payment
               <ChevronRight className="h-5 w-5" />
