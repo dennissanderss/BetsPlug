@@ -4,39 +4,30 @@ import { motion } from "motion/react";
 
 type League = {
   name: string;
-  short: string; // short badge label
-  sport: "football" | "basketball" | "americanfootball" | "baseball" | "hockey";
+  slug: string;
 };
 
 const leagues: League[] = [
-  { name: "Premier League", short: "EPL", sport: "football" },
-  { name: "La Liga", short: "LaLiga", sport: "football" },
-  { name: "Bundesliga", short: "BL", sport: "football" },
-  { name: "Serie A", short: "Serie A", sport: "football" },
-  { name: "Ligue 1", short: "L1", sport: "football" },
-  { name: "Eredivisie", short: "ED", sport: "football" },
-  { name: "Champions League", short: "UCL", sport: "football" },
-  { name: "Europa League", short: "UEL", sport: "football" },
-  { name: "Conference League", short: "UECL", sport: "football" },
-  { name: "Liga Portugal", short: "LP", sport: "football" },
-  { name: "Brazil Série A", short: "BRA", sport: "football" },
-  { name: "Allsvenskan", short: "SWE", sport: "football" },
-  { name: "NBA", short: "NBA", sport: "basketball" },
-  { name: "NFL", short: "NFL", sport: "americanfootball" },
-  { name: "MLB", short: "MLB", sport: "baseball" },
-  { name: "NHL", short: "NHL", sport: "hockey" },
+  { name: "Premier League", slug: "premier-league" },
+  { name: "La Liga", slug: "laliga" },
+  { name: "Bundesliga", slug: "bundesliga" },
+  { name: "Serie A", slug: "serie-a" },
+  { name: "Ligue 1", slug: "ligue-1" },
+  { name: "Eredivisie", slug: "eredivisie" },
+  { name: "Champions League", slug: "champions-league" },
+  { name: "Europa League", slug: "europa-league" },
+  { name: "Conference League", slug: "conference-league" },
+  { name: "Liga Portugal", slug: "liga-portugal" },
+  { name: "Brasileirão", slug: "brazil-serie-a" },
+  { name: "Allsvenskan", slug: "allsvenskan" },
+  { name: "NBA", slug: "nba" },
+  { name: "NFL", slug: "nfl" },
+  { name: "MLB", slug: "mlb" },
+  { name: "NHL", slug: "nhl" },
 ];
 
-const sportIcons: Record<League["sport"], string> = {
-  football: "⚽",
-  basketball: "🏀",
-  americanfootball: "🏈",
-  baseball: "⚾",
-  hockey: "🏒",
-};
-
 export function LeaguesTicker() {
-  // Triple the list for a seamless infinite loop
+  // Triple for a seamless infinite loop
   const tripled = [...leagues, ...leagues, ...leagues];
 
   return (
@@ -68,30 +59,27 @@ export function LeaguesTicker() {
 
         <div className="overflow-hidden">
           <motion.div
-            className="flex gap-3 sm:gap-4"
-            animate={{
-              x: ["0%", "-33.3333%"],
-            }}
+            className="flex items-center gap-8 sm:gap-12 md:gap-16"
+            animate={{ x: ["0%", "-33.3333%"] }}
             transition={{
-              duration: 40,
+              duration: 45,
               ease: "linear",
               repeat: Infinity,
             }}
           >
             {tripled.map((league, i) => (
               <div
-                key={`${league.name}-${i}`}
-                className="group flex flex-shrink-0 items-center gap-2.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 backdrop-blur-sm transition-all duration-300 hover:border-green-500/40 hover:bg-green-500/[0.06] hover:shadow-[0_0_20px_rgba(74,222,128,0.15)] sm:gap-3 sm:px-5 sm:py-3"
+                key={`${league.slug}-${i}`}
+                className="group flex h-14 flex-shrink-0 items-center justify-center sm:h-16 md:h-20"
+                title={league.name}
               >
-                <span
-                  className="text-lg sm:text-xl"
-                  aria-hidden="true"
-                >
-                  {sportIcons[league.sport]}
-                </span>
-                <span className="whitespace-nowrap text-xs font-bold uppercase tracking-wider text-slate-300 transition-colors group-hover:text-white sm:text-sm">
-                  {league.name}
-                </span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/leagues/${league.slug}.png`}
+                  alt={league.name}
+                  className="h-full w-auto max-w-[120px] object-contain opacity-70 grayscale transition-all duration-300 group-hover:scale-110 group-hover:opacity-100 group-hover:grayscale-0 sm:max-w-[140px] md:max-w-[160px]"
+                  loading="lazy"
+                />
               </div>
             ))}
           </motion.div>
