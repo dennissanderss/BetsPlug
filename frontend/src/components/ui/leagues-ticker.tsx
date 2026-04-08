@@ -33,7 +33,7 @@ export function LeaguesTicker() {
 
   return (
     <section
-      className="relative overflow-hidden py-16 md:py-20"
+      className="relative overflow-hidden py-10 md:py-12"
       aria-labelledby="leagues-heading"
     >
       {/* ── Unique background ─────────────────────────────────────────── */}
@@ -60,16 +60,15 @@ export function LeaguesTicker() {
       <div className="pointer-events-none absolute left-0 right-0 bottom-0 h-px bg-gradient-to-r from-transparent via-green-500/30 to-transparent" />
 
       {/* Title */}
-      <div className="relative z-10 mb-12 text-center">
-        <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
+      <div className="relative z-10 mb-8 text-center">
+        <span className="mb-3 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
           Global Coverage
         </span>
         <h2
           id="leagues-heading"
-          className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl"
+          className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-4xl"
         >
-          Leagues We{" "}
-          <span className="gradient-text">Cover</span>
+          Leagues We <span className="gradient-text">Cover</span>
         </h2>
       </div>
 
@@ -92,7 +91,7 @@ export function LeaguesTicker() {
             {tripled.map((league, i) => (
               <div
                 key={`${league.slug}-${i}`}
-                className="group flex h-14 flex-shrink-0 items-center justify-center sm:h-16 md:h-20"
+                className="group flex h-10 flex-shrink-0 items-center justify-center sm:h-12 md:h-14"
                 title={league.name}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
