@@ -142,10 +142,17 @@ async def create_checkout_session(
     """
     settings = get_settings()
 
-    if body.plan not in PLANS:
+    # Map frontend plan names to backend plan names
+    plan_name_map = {
+        "bronze": "basic", "silver": "standard", "gold": "premium", "platinum": "lifetime",
+        "basic": "basic", "standard": "standard", "premium": "premium", "lifetime": "lifetime",
+    }
+    mapped_plan = plan_name_map.get(body.plan.lower(), body.plan)
+
+    if mapped_plan not in PLANS:
         raise HTTPException(status_code=400, detail=f"Invalid plan: {body.plan}")
 
-    plan = PLANS[body.plan]
+    plan = PLANS[mapped_plan]
     stripe_key = getattr(settings, "stripe_secret_key", None)
 
     # ── Production: Real Stripe checkout ─────────────────────────────────
@@ -161,7 +168,7 @@ async def create_checkout_session(
                 "premium": getattr(settings, "stripe_price_premium", ""),
                 "lifetime": getattr(settings, "stripe_price_lifetime", ""),
             }
-            price_id = price_id_map.get(body.plan, "")
+            price_id = price_id_map.get(mapped_plan, "")
 
             if not price_id:
                 raise HTTPException(
@@ -169,7 +176,7 @@ async def create_checkout_session(
                     detail=f"Stripe price not configured for plan: {body.plan}",
                 )
 
-            mode = "payment" if body.plan == "lifetime" else "subscription"
+            mode = "payment" if mapped_plan in ("lifetime", "basic") else "subscription"
 
             session = stripe.checkout.Session.create(
                 payment_method_types=["card", "ideal"],

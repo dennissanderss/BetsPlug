@@ -35,8 +35,35 @@ export function PricingSection() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const [billing, setBilling] = useState<Billing>("monthly");
+  const [loading, setLoading] = useState<string | null>(null);
+
   const checkoutHref = (planId: string) =>
     `${loc("/checkout")}?plan=${planId}&billing=${billing}`;
+
+  const handleStripeCheckout = async (planId: string) => {
+    setLoading(planId);
+    try {
+      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+      const successUrl = `${window.location.origin}/welcome?plan=${planId}&success=true`;
+      const cancelUrl = `${window.location.origin}/checkout?plan=${planId}&cancelled=true`;
+      const resp = await fetch(`${API}/subscriptions/create-checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: planId, success_url: successUrl, cancel_url: cancelUrl }),
+      });
+      const data = await resp.json();
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        // Fallback to checkout page
+        window.location.href = checkoutHref(planId);
+      }
+    } catch {
+      window.location.href = checkoutHref(planId);
+    } finally {
+      setLoading(null);
+    }
+  };
 
   // Charm pricing — Silver €9,99/mo (yearly 20% off €7,99/mo)
   // Gold €14,99/mo (yearly 20% off €11,99/mo)
@@ -334,16 +361,17 @@ export function PricingSection() {
                 })()}
 
                 {/* CTA */}
-                <Link
-                  href={checkoutHref(plan.id)}
+                <button
+                  onClick={() => handleStripeCheckout(plan.id)}
+                  disabled={loading === plan.id}
                   className={`relative mb-6 flex w-full items-center justify-center rounded-2xl px-6 py-3.5 text-sm font-extrabold tracking-tight transition-all duration-300 ${
                     isHighlight
                       ? "btn-gradient text-black shadow-lg shadow-green-500/30 hover:shadow-green-500/50"
                       : "border border-white/[0.12] bg-white/[0.04] text-white hover:border-green-500/40 hover:bg-green-500/[0.08]"
-                  }`}
+                  } ${loading === plan.id ? "opacity-50 cursor-wait" : ""}`}
                 >
-                  {plan.cta}
-                </Link>
+                  {loading === plan.id ? "Redirecting..." : plan.cta}
+                </button>
 
                 {/* Features */}
                 <ul className="relative flex flex-col gap-3">
