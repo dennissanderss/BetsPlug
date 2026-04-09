@@ -24,6 +24,14 @@ import {
   Eye,
   Rocket,
   Clock,
+  LayoutDashboard,
+  LineChart,
+  History,
+  Radio,
+  MessageCircle,
+  Settings,
+  Command,
+  ChevronRight,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -289,6 +297,9 @@ export function WelcomeContent() {
 
         {/* ── Quickstart timeline ── */}
         <QuickstartSection />
+
+        {/* ── Dashboard tour ── */}
+        <DashboardTourSection />
 
         {/* ── Stats strip ── */}
         <section className="mx-auto mt-24 max-w-5xl px-6">
@@ -626,6 +637,193 @@ function QuickstartSection() {
           ))}
         </div>
       </div>
+    </section>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+ * Dashboard tour
+ *
+ * A visual "lay of the land" grid that shows newcomers where to
+ * find the 6 most important areas of the dashboard. Each card
+ * mimics the dashboard sidebar: icon tile on the left, title +
+ * short description, and a "where to find it" breadcrumb pill
+ * at the bottom. A mock browser chrome frames the whole grid so
+ * it looks like a preview of the actual app. A pro-tip banner
+ * at the bottom highlights the ⌘K command palette shortcut.
+ * ────────────────────────────────────────────────────────────── */
+function DashboardTourSection() {
+  const { t } = useTranslations();
+
+  const tourItems = [
+    {
+      icon: LayoutDashboard,
+      title: t("welcome.tour1Title"),
+      body: t("welcome.tour1Body"),
+      where: t("welcome.tour1Where"),
+      accent: "from-green-400 to-emerald-600",
+    },
+    {
+      icon: LineChart,
+      title: t("welcome.tour2Title"),
+      body: t("welcome.tour2Body"),
+      where: t("welcome.tour2Where"),
+      accent: "from-emerald-400 to-teal-600",
+    },
+    {
+      icon: History,
+      title: t("welcome.tour3Title"),
+      body: t("welcome.tour3Body"),
+      where: t("welcome.tour3Where"),
+      accent: "from-lime-400 to-green-600",
+    },
+    {
+      icon: Radio,
+      title: t("welcome.tour4Title"),
+      body: t("welcome.tour4Body"),
+      where: t("welcome.tour4Where"),
+      accent: "from-teal-400 to-emerald-600",
+    },
+    {
+      icon: MessageCircle,
+      title: t("welcome.tour5Title"),
+      body: t("welcome.tour5Body"),
+      where: t("welcome.tour5Where"),
+      accent: "from-green-400 to-lime-600",
+    },
+    {
+      icon: Settings,
+      title: t("welcome.tour6Title"),
+      body: t("welcome.tour6Body"),
+      where: t("welcome.tour6Where"),
+      accent: "from-emerald-400 to-green-600",
+    },
+  ];
+
+  return (
+    <section className="relative mx-auto mt-28 max-w-6xl px-6 sm:mt-32">
+      {/* Eyebrow + title */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6 }}
+        className="mb-12 text-center"
+      >
+        <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-3 py-1.5 backdrop-blur-sm">
+          <LayoutDashboard className="h-3.5 w-3.5 text-green-400" />
+          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-green-300">
+            {t("welcome.tourEyebrow")}
+          </span>
+        </div>
+        <h2 className="mx-auto max-w-3xl text-balance text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+          {t("welcome.tourTitle")}
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-balance text-sm leading-relaxed text-slate-400 sm:text-base">
+          {t("welcome.tourSubtitle")}
+        </p>
+      </motion.div>
+
+      {/* ── Mock browser chrome wrapper ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.7 }}
+        className="relative overflow-hidden rounded-3xl border border-white/[0.1] bg-gradient-to-br from-white/[0.04] to-white/[0.01] shadow-2xl shadow-green-500/[0.05] backdrop-blur-xl"
+      >
+        {/* Glow */}
+        <div className="pointer-events-none absolute -left-32 -top-32 h-[360px] w-[360px] rounded-full bg-green-500/[0.08] blur-[120px]" />
+        <div className="pointer-events-none absolute -right-32 -bottom-32 h-[360px] w-[360px] rounded-full bg-emerald-500/[0.06] blur-[120px]" />
+
+        {/* Browser chrome top bar */}
+        <div className="relative flex items-center justify-between gap-4 border-b border-white/[0.06] bg-white/[0.02] px-5 py-3">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-green-400/70" />
+          </div>
+          <div className="flex flex-1 items-center justify-center">
+            <div className="inline-flex max-w-[320px] items-center gap-2 truncate rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-[11px] font-medium text-slate-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
+              <span className="truncate">app.betsplug.com/dashboard</span>
+            </div>
+          </div>
+          <div className="hidden h-5 w-12 sm:block" />
+        </div>
+
+        {/* Grid of tour items */}
+        <div className="relative grid grid-cols-1 gap-px bg-white/[0.04] md:grid-cols-2 lg:grid-cols-3">
+          {tourItems.map((item, i) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
+              className="group relative overflow-hidden bg-[#060912] p-6 transition-all hover:bg-white/[0.02]"
+            >
+              {/* Hover glow */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/[0.06] to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+
+              <div className="relative">
+                {/* Header: icon tile + step number */}
+                <div className="mb-4 flex items-center justify-between">
+                  <div
+                    className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${item.accent} shadow-lg shadow-green-500/20 ring-1 ring-green-300/20`}
+                  >
+                    <item.icon className="h-5 w-5 text-[#060912]" />
+                  </div>
+                  <span className="font-mono text-[10px] font-bold text-slate-700">
+                    0{i + 1}
+                  </span>
+                </div>
+
+                {/* Title + body */}
+                <h3 className="mb-2 text-base font-bold leading-tight text-white">
+                  {item.title}
+                </h3>
+                <p className="mb-4 text-sm leading-relaxed text-slate-400">
+                  {item.body}
+                </p>
+
+                {/* "Where to find it" breadcrumb */}
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/[0.06] px-3 py-1 font-mono text-[10px] font-semibold text-green-300 transition-all group-hover:border-green-500/40 group-hover:bg-green-500/[0.1]">
+                  <ChevronRight className="h-3 w-3" />
+                  {item.where}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Pro-tip banner */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="relative mt-6 flex flex-col items-start gap-4 overflow-hidden rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.1] via-green-500/[0.04] to-transparent p-5 backdrop-blur-sm sm:flex-row sm:items-center sm:p-6"
+      >
+        <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-green-500/[0.12] blur-[80px]" />
+        <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-green-500/30 bg-green-500/[0.1]">
+          <Command className="h-5 w-5 text-green-400" />
+        </div>
+        <div className="relative flex-1">
+          <div className="mb-1 flex items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-300">
+              {t("welcome.tourProTipTitle")}
+            </span>
+            <span className="inline-flex items-center gap-0.5 rounded-md border border-white/[0.1] bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] font-bold text-slate-300">
+              ⌘ K
+            </span>
+          </div>
+          <p className="text-sm leading-relaxed text-slate-300">
+            {t("welcome.tourProTipBody")}
+          </p>
+        </div>
+      </motion.div>
     </section>
   );
 }

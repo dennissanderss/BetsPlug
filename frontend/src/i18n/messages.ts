@@ -1047,6 +1047,46 @@ const en = {
     "Pick the tip that fits you, place the wager at your sportsbook, then mark it in your tracker. That's it — you're live.",
   "welcome.qs5Duration": "3 min",
 
+  /* Dashboard tour */
+  "welcome.tourEyebrow": "Dashboard tour",
+  "welcome.tourTitle": "Where to find what, once you're inside",
+  "welcome.tourSubtitle":
+    "A quick lay of the land. The dashboard has everything organised into 6 simple areas — here's what each one does so you feel at home from minute one.",
+
+  "welcome.tour1Title": "Today's Picks",
+  "welcome.tour1Body":
+    "The first thing you see after login. Every data-backed pick of the day, sorted by confidence score, with full reasoning, odds and recommended stake.",
+  "welcome.tour1Where": "Sidebar → Picks",
+
+  "welcome.tour2Title": "Bankroll Tracker",
+  "welcome.tour2Body":
+    "Your personal P&L. Set a starting bankroll, log your bets with one click and watch your ROI climb in real-time charts.",
+  "welcome.tour2Where": "Sidebar → Bankroll",
+
+  "welcome.tour3Title": "Track Record",
+  "welcome.tour3Body":
+    "The full, unfiltered history of every pick we've ever posted. Filter by sport, market, tipster or date range — nothing is hidden.",
+  "welcome.tour3Where": "Sidebar → Track Record",
+
+  "welcome.tour4Title": "Live Matches",
+  "welcome.tour4Body":
+    "Real-time odds, form and in-play alerts for every game we're watching. Spot value as it happens, not after the final whistle.",
+  "welcome.tour4Where": "Sidebar → Live",
+
+  "welcome.tour5Title": "Community & Telegram",
+  "welcome.tour5Body":
+    "Chat with other members, ask the experts and get instant pick notifications the moment they're posted — even when you're off the site.",
+  "welcome.tour5Where": "Top bar → Community",
+
+  "welcome.tour6Title": "Account & Billing",
+  "welcome.tour6Body":
+    "Manage your plan, update payment details, switch billing cycle, download invoices or cancel any time — all in one place.",
+  "welcome.tour6Where": "Top-right avatar → Settings",
+
+  "welcome.tourProTipTitle": "Pro tip",
+  "welcome.tourProTipBody":
+    "Press ⌘K (or Ctrl+K on Windows) anywhere in the dashboard to jump straight to any section in two keystrokes.",
+
   /* ─── Login page ──────────────────────────────────────── */
   "login.meta.title": "Log in — BetsPlug",
   "login.meta.description":
@@ -2093,6 +2133,46 @@ const nl: Dictionary = {
   "welcome.qs5Body":
     "Kies de tip die bij je past, plaats de inzet bij je bookmaker en voeg hem toe aan je tracker. Klaar — je bent live.",
   "welcome.qs5Duration": "3 min",
+
+  /* Dashboard tour */
+  "welcome.tourEyebrow": "Dashboard-tour",
+  "welcome.tourTitle": "Waar vind je wat, zodra je binnen bent",
+  "welcome.tourSubtitle":
+    "Even de weg wijzen. Het dashboard is opgedeeld in 6 overzichtelijke secties — hier lees je wat elke sectie doet zodat je je vanaf minuut één thuis voelt.",
+
+  "welcome.tour1Title": "Picks van vandaag",
+  "welcome.tour1Body":
+    "Het eerste wat je ziet na het inloggen. Alle data-gedreven picks van de dag, gesorteerd op confidence-score, met volledige onderbouwing, odds en aanbevolen inzet.",
+  "welcome.tour1Where": "Sidebar → Picks",
+
+  "welcome.tour2Title": "Bankroll-tracker",
+  "welcome.tour2Body":
+    "Jouw persoonlijke winst/verlies. Stel een startbankroll in, log je weddenschappen met één klik en zie je ROI live groeien in grafieken.",
+  "welcome.tour2Where": "Sidebar → Bankroll",
+
+  "welcome.tour3Title": "Track record",
+  "welcome.tour3Body":
+    "De volledige, ongefilterde historie van elke pick die we ooit hebben gepost. Filter op sport, markt, tipster of datum — niets wordt verborgen.",
+  "welcome.tour3Where": "Sidebar → Track record",
+
+  "welcome.tour4Title": "Live wedstrijden",
+  "welcome.tour4Body":
+    "Real-time odds, vorm en in-play alerts voor elke wedstrijd die we volgen. Spot waarde terwijl het gebeurt, niet na het laatste fluitsignaal.",
+  "welcome.tour4Where": "Sidebar → Live",
+
+  "welcome.tour5Title": "Community & Telegram",
+  "welcome.tour5Body":
+    "Chat met andere leden, stel vragen aan de experts en ontvang direct een melding zodra er een nieuwe pick online komt — ook als je niet op de site bent.",
+  "welcome.tour5Where": "Bovenbalk → Community",
+
+  "welcome.tour6Title": "Account & facturering",
+  "welcome.tour6Body":
+    "Beheer je pakket, werk je betaalgegevens bij, wissel van maandelijks naar jaarlijks, download facturen of zeg altijd direct op — allemaal op één plek.",
+  "welcome.tour6Where": "Rechtsboven avatar → Instellingen",
+
+  "welcome.tourProTipTitle": "Pro tip",
+  "welcome.tourProTipBody":
+    "Druk overal in het dashboard op ⌘K (of Ctrl+K op Windows) om in twee toetsaanslagen naar elke sectie te springen.",
 
   /* Login */
   "login.meta.title": "Inloggen — BetsPlug",
