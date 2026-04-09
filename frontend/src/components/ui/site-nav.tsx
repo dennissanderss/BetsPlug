@@ -52,7 +52,7 @@ export function SiteNav() {
   // from sub-pages like /contact as well.
   const home = loc("/");
   const navLinks = [
-    { href: `${home}#predictions`, label: t("nav.predictions") },
+    { href: loc("/match-predictions"), label: t("nav.predictions") },
     { href: loc("/how-it-works"), label: t("nav.howItWorks") },
     { href: loc("/track-record"), label: t("nav.trackRecord") },
     { href: loc("/about-us"), label: t("nav.about") },

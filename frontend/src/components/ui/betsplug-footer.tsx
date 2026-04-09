@@ -140,7 +140,7 @@ export function BetsPlugFooter() {
   const loc = useLocalizedHref();
 
   const productLinksT = [
-    { text: t("nav.predictions"), href: "#predictions" },
+    { text: t("nav.predictions"), href: loc("/match-predictions") },
     { text: t("nav.trackRecord"), href: "#track-record" },
     { text: t("nav.howItWorks"), href: "#how-it-works" },
     { text: t("nav.pricing"), href: "#pricing" },
