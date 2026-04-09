@@ -46,8 +46,9 @@ class Settings(BaseSettings):
             f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
         )
 
-    # Redis - supports both Railway (REDIS_URL) and Docker (individual vars)
+    # Redis - supports Railway (REDIS_URL or REDIS_PRIVATE_URL) and Docker
     redis_url_env: str = Field(default="", validation_alias="REDIS_URL")  # Railway
+    redis_private_url: str = Field(default="", validation_alias="REDIS_PRIVATE_URL")
     redis_host: str = "redis"
     redis_port: int = 6379
     redis_db: int = 0
@@ -56,6 +57,8 @@ class Settings(BaseSettings):
     def redis_url(self) -> str:
         if self.redis_url_env:
             return self.redis_url_env
+        if self.redis_private_url:
+            return self.redis_private_url
         return f"redis://{self.redis_host}:{self.redis_port}/{self.redis_db}"
 
     # Auth

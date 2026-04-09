@@ -197,9 +197,17 @@ async def get_strategy_metrics(
 ):
     """
     Calculate performance metrics for a strategy based on evaluated predictions.
+    Results are cached in Redis for 15 minutes.
     Returns: sample_size, winrate, roi, max_drawdown, profit_factor.
     """
+    from app.core.cache import cache_get, cache_set
     from app.models.prediction import PredictionEvaluation
+
+    # Check cache first
+    cache_key = f"strategy:metrics:{strategy_id}"
+    cached = await cache_get(cache_key)
+    if cached is not None:
+        return cached
 
     # Fetch strategy
     strat_result = await db.execute(select(Strategy).where(Strategy.id == strategy_id))
@@ -273,7 +281,7 @@ async def get_strategy_metrics(
 
     avg_brier = sum(ev.brier_score for _, ev in matched_and_evaluated) / sample_size
 
-    return {
+    result = {
         "strategy_id": str(strategy_id),
         "strategy_name": strategy.name,
         "sample_size": sample_size,
@@ -286,3 +294,7 @@ async def get_strategy_metrics(
         "incorrect": losses,
         "has_data": True,
     }
+
+    # Cache for 15 minutes
+    await cache_set(cache_key, result, ttl=900)
+    return result

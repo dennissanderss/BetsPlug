@@ -45,6 +45,7 @@ async def get_dashboard_metrics(
 ) -> DashboardMetrics:
     """
     Return high-level prediction accuracy and volume metrics.
+    Cached in Redis for 5 minutes.
 
     - total_forecasts: total rows in the predictions table
     - evaluated_count: total rows in prediction_evaluations
@@ -55,6 +56,11 @@ async def get_dashboard_metrics(
     - avg_confidence: mean confidence across predictions (0.0 when none)
     - has_data: whether any predictions exist
     """
+    from app.core.cache import cache_get, cache_set
+
+    cached = await cache_get("dashboard:metrics")
+    if cached is not None:
+        return DashboardMetrics(**cached)
 
     # Total predictions
     total_result = await db.execute(select(func.count(Prediction.id)))
@@ -93,7 +99,7 @@ async def get_dashboard_metrics(
     avg_brier_score = round(float(avg_brier_raw), 4) if avg_brier_raw is not None else 0.0
     avg_confidence = round(float(avg_confidence_raw), 2) if avg_confidence_raw is not None else 0.0
 
-    return DashboardMetrics(
+    result = DashboardMetrics(
         total_forecasts=total_forecasts,
         evaluated_count=evaluated_count,
         pending_count=pending_count,
@@ -104,3 +110,7 @@ async def get_dashboard_metrics(
         has_data=total_forecasts > 0,
         generated_at=datetime.now(timezone.utc),
     )
+
+    # Cache for 5 minutes
+    await cache_set("dashboard:metrics", result.model_dump(), ttl=300)
+    return result

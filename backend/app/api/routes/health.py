@@ -30,8 +30,13 @@ async def health_check() -> dict:
         logger.warning("Health: DB check failed: %s", exc)
         checks["database"] = "error"
 
-    # --- Redis check skipped (no Redis configured; was wasting ~200ms) ---
-    checks["redis"] = "skipped"
+    # --- Redis check (async, fast) ---
+    try:
+        from app.core.cache import redis_ping
+        pong = await redis_ping()
+        checks["redis"] = "ok" if pong else "error"
+    except Exception:
+        checks["redis"] = "error"
 
     # --- Sports API config check ---
     checks["api_football"] = "configured" if settings.api_football_key else "missing"
@@ -69,6 +74,8 @@ async def health_check() -> dict:
     # --- Overall status ---
     if checks["database"] == "error":
         status = "error"
+    elif checks.get("redis") == "error":
+        status = "degraded"
     else:
         status = "ok"
 
