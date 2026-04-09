@@ -127,8 +127,8 @@ export default function LandingPage() {
 
   const navLinks = [
     { href: "#predictions", label: t("nav.predictions") },
-    { href: "#how-it-works", label: t("nav.howItWorks") },
-    { href: "#track-record", label: t("nav.trackRecord") },
+    { href: loc("/how-it-works"), label: t("nav.howItWorks") },
+    { href: loc("/track-record"), label: t("nav.trackRecord") },
     { href: loc("/about-us"), label: t("nav.about") },
     { href: "#pricing", label: t("nav.pricing") },
     { href: loc("/contact"), label: t("nav.contact") },
@@ -397,7 +397,7 @@ export default function LandingPage() {
                   <GetStartedButton>{t("hero.ctaPrimary")}</GetStartedButton>
                 </Link>
                 <Link
-                  href="#how-it-works"
+                  href={loc("/how-it-works")}
                   className="inline-flex h-11 items-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-6 text-sm font-medium text-slate-300 backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-white/[0.06] hover:text-white"
                 >
                   <span className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10">

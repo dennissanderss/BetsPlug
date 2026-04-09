@@ -80,6 +80,7 @@ const en = {
   "how.step3Title": "Make smarter decisions",
   "how.step3Desc":
     "Use transparent probabilities, edges and confidence scores to bet with conviction.",
+  "how.deepDive": "See the full engine",
 
   /* Pricing */
   "pricing.badge": "Pricing",
@@ -454,6 +455,347 @@ const en = {
   "about.ctaSubtitle":
     "Join 1,500+ analysts who get the picks, the probabilities and the receipts — delivered before the closing line adjusts.",
   "about.ctaButton": "Start Free Trial",
+
+  /* Track Record page */
+  "tr.metaTitle":
+    "Track Record — Verified BetsPlug prediction performance",
+  "tr.metaDesc":
+    "Transparent, auditable results for every BetsPlug pick. See how our AI models turn raw match data into a measurable edge — documented weekly, never cherry-picked.",
+  "tr.breadcrumbHome": "Home",
+  "tr.breadcrumbTrack": "Track Record",
+
+  "tr.heroBadge": "Fully transparent",
+  "tr.heroTitleA": "A track record you can",
+  "tr.heroTitleB": "actually verify.",
+  "tr.heroSubtitle":
+    "Every pick BetsPlug publishes is timestamped, probability-weighted and logged to a public ledger — win or lose. This is how the numbers are built, and how real users put them to work.",
+  "tr.heroCtaPrimary": "See the latest results",
+  "tr.heroCtaSecondary": "Back to home",
+
+  /* Headline KPIs */
+  "tr.kpisBadge": "Last 12 months",
+  "tr.kpisTitle": "The numbers, unfiltered.",
+  "tr.kpisSubtitle":
+    "A rolling, honest snapshot of how our models performed over the last year of live publishing.",
+  "tr.kpi1Value": "58.3%",
+  "tr.kpi1Label": "Hit rate on value picks",
+  "tr.kpi1Note": "Only picks flagged with +EV ≥ 3%",
+  "tr.kpi2Value": "+14.6%",
+  "tr.kpi2Label": "ROI on flat 1u stake",
+  "tr.kpi2Note": "After closing-line slippage",
+  "tr.kpi3Value": "24,180",
+  "tr.kpi3Label": "Graded predictions",
+  "tr.kpi3Note": "Across 9 sports and 70+ leagues",
+  "tr.kpi4Value": "0.061",
+  "tr.kpi4Label": "Brier score (lower = better)",
+  "tr.kpi4Note": "Calibrated across win/draw/loss",
+
+  /* How we track it — data pipeline */
+  "tr.pipeBadge": "How the data is processed",
+  "tr.pipeTitle": "From raw match data to a scored prediction.",
+  "tr.pipeSubtitle":
+    "No black boxes. Here is the exact pipeline every pick runs through before it ever reaches your dashboard.",
+  "tr.pipe1Title": "Ingest",
+  "tr.pipe1Desc":
+    "We pull match, lineup, injury and odds data from 14 audited providers every 30 seconds. Each record is versioned so we can replay any moment in history.",
+  "tr.pipe2Title": "Clean & normalise",
+  "tr.pipe2Desc":
+    "Team names, leagues and market types are mapped to a single canonical schema. Outliers, late-cancelled games and suspended markets are flagged and removed before modelling.",
+  "tr.pipe3Title": "Feature engineering",
+  "tr.pipe3Desc":
+    "For every fixture we compute 1,200+ features — Elo, xG trends, rest days, travel, head-to-head, referee bias, market movement — then store them in a point-in-time feature store so training never leaks future information.",
+  "tr.pipe4Title": "Model ensemble",
+  "tr.pipe4Desc":
+    "Four independent models vote on the outcome: a Poisson goals model, a gradient-boosted classifier, an Elo-based baseline and a market-implied calibrator. Their probabilities are blended with stacked regression.",
+  "tr.pipe5Title": "Value detection",
+  "tr.pipe5Desc":
+    "We compare the ensemble probability to the best available market odds. Only picks with a statistically significant edge — after commission and expected closing-line slippage — are marked as value.",
+  "tr.pipe6Title": "Publish & grade",
+  "tr.pipe6Desc":
+    "Picks are timestamped the moment they go live. Once the match ends, results are graded automatically and written to the public track-record ledger — win, loss or push.",
+
+  /* Methodology principles */
+  "tr.methodBadge": "Methodology",
+  "tr.methodTitle": "Four rules we never bend.",
+  "tr.methodSubtitle":
+    "Every number on this page survives these guardrails. If a result can't, it doesn't get counted.",
+  "tr.method1Title": "Point-in-time only",
+  "tr.method1Desc":
+    "Models are trained on data that was actually available at kick-off — no hindsight, no silently re-graded matches.",
+  "tr.method2Title": "Closing-line adjusted",
+  "tr.method2Desc":
+    "ROI figures subtract realistic slippage between our publish time and the closing line, so you see returns you could actually execute.",
+  "tr.method3Title": "Nothing is deleted",
+  "tr.method3Desc":
+    "Losing picks stay on the ledger forever. A track record that only shows winners isn't a track record — it's marketing.",
+  "tr.method4Title": "Third-party gradable",
+  "tr.method4Desc":
+    "Every pick includes the match ID, market, odds and timestamp so any user or auditor can verify the outcome independently.",
+
+  /* Use cases */
+  "tr.casesBadge": "Real users, real workflows",
+  "tr.casesTitle": "How analysts actually use the track record.",
+  "tr.casesSubtitle":
+    "The numbers only matter if they change decisions. Here's what that looks like for three typical BetsPlug members.",
+
+  "tr.case1Role": "Weekend football specialist",
+  "tr.case1Name": "Martin, 34 · Amsterdam",
+  "tr.case1Quote":
+    "I filter the track record by Eredivisie and over/under markets only. In 2025 that slice hit 61% on 412 picks — so I size up confidently on Sunday mornings instead of second-guessing myself.",
+  "tr.case1Metric1Label": "His filtered sample size",
+  "tr.case1Metric1Value": "412 picks",
+  "tr.case1Metric2Label": "Verified hit rate",
+  "tr.case1Metric2Value": "61.2%",
+  "tr.case1Metric3Label": "Average closing edge",
+  "tr.case1Metric3Value": "+4.8%",
+  "tr.case1Outcome":
+    "Uses the ledger to pick a market where the model has a proven edge, then ignores the rest. Result: fewer bets, higher conviction, better ROI.",
+
+  "tr.case2Role": "Data-driven NBA fan",
+  "tr.case2Name": "Priya, 29 · Rotterdam",
+  "tr.case2Quote":
+    "I care about calibration more than hit rate. Seeing that BetsPlug's NBA moneyline Brier score sits under 0.07 tells me the probabilities are honest — not just lucky.",
+  "tr.case2Metric1Label": "NBA Brier score",
+  "tr.case2Metric1Value": "0.068",
+  "tr.case2Metric2Label": "Games graded",
+  "tr.case2Metric2Value": "1,240",
+  "tr.case2Metric3Label": "ROI at flat 1u",
+  "tr.case2Metric3Value": "+11.4%",
+  "tr.case2Outcome":
+    "Trusts the probabilities to build her own parlays and spread bets. The public ledger is her proof the models haven't drifted.",
+
+  "tr.case3Role": "Full-time value bettor",
+  "tr.case3Name": "Jonas, 41 · Utrecht",
+  "tr.case3Quote":
+    "I plug the track record CSV into my own bankroll tool every Monday. Because every pick has a timestamp and closing price, I can verify the edge is real before I risk a cent.",
+  "tr.case3Metric1Label": "Picks replayed in 2025",
+  "tr.case3Metric1Value": "2,860",
+  "tr.case3Metric2Label": "Yield vs. closing line",
+  "tr.case3Metric2Value": "+3.1%",
+  "tr.case3Metric3Label": "Max drawdown",
+  "tr.case3Metric3Value": "−6.4%",
+  "tr.case3Outcome":
+    "Uses the historical ledger as an independent backtest. If the closing-line value holds up there, he trusts it for live staking.",
+
+  /* Transparency CTA */
+  "tr.transBadge": "Audit it yourself",
+  "tr.transTitle": "Don't take our word for it — read the ledger.",
+  "tr.transSubtitle":
+    "Every graded prediction we've ever published is searchable by match, date, market and model. No filters hide the losers.",
+  "tr.transCta1": "Explore live results",
+  "tr.transCta2": "Start Free Trial",
+
+  /* How It Works page — dedicated deep-dive */
+  "hiw.metaTitle":
+    "How BetsPlug Works — From raw match data to AI-driven predictions",
+  "hiw.metaDesc":
+    "A full, step-by-step walkthrough of the BetsPlug prediction engine: how we collect data, engineer features, train models, detect value and publish picks you can verify.",
+  "hiw.breadcrumbHome": "Home",
+  "hiw.breadcrumbHow": "How it works",
+
+  "hiw.heroBadge": "The BetsPlug engine",
+  "hiw.heroTitleA": "How we turn raw match data",
+  "hiw.heroTitleB": "into predictions you can trust.",
+  "hiw.heroSubtitle":
+    "Every pick on BetsPlug is the end of a long, carefully engineered pipeline. No hunches, no cherry-picking, no hidden rules. This is the exact process — from the moment a fixture is announced, to the moment a verified pick lands on your dashboard.",
+  "hiw.heroCtaPrimary": "See the track record",
+  "hiw.heroCtaSecondary": "Start Free Trial",
+  "hiw.heroStatDataSources": "Data sources",
+  "hiw.heroStatFeatures": "Features per match",
+  "hiw.heroStatModels": "Independent models",
+  "hiw.heroStatUpdates": "Refresh cycle",
+
+  /* Overview strip */
+  "hiw.overviewBadge": "The 7-stage engine",
+  "hiw.overviewTitle": "Seven stages. Zero guesswork.",
+  "hiw.overviewSubtitle":
+    "Each stage is built, tested and monitored independently. If any stage breaks, the pick is held — never published.",
+
+  /* Stage 1 — Data acquisition */
+  "hiw.s1Badge": "Stage 01 · Data acquisition",
+  "hiw.s1Title": "We start where the market starts: the raw feed.",
+  "hiw.s1Lead":
+    "Garbage in, garbage out. So our pipeline begins with the highest-quality, most redundant data sources we can get our hands on — and we never trust a single one.",
+  "hiw.s1P1":
+    "Every 30 seconds, we pull structured data from 14 independent providers: match schedules, live odds from 40+ bookmakers, injury reports, confirmed lineups, referee assignments, weather at venue, travel distance, and historical head-to-head archives going back two decades.",
+  "hiw.s1P2":
+    "Every single record is timestamped and version-controlled. That means we can replay any moment in history exactly as our models saw it — critical for honest backtesting and essential for regulatory-grade auditability.",
+  "hiw.s1Point1Title": "14 redundant providers",
+  "hiw.s1Point1Desc":
+    "If one source disagrees with the rest, it gets quarantined until we understand why.",
+  "hiw.s1Point2Title": "30-second refresh",
+  "hiw.s1Point2Desc":
+    "Odds, lineups and injuries are re-pulled every half minute up until kick-off.",
+  "hiw.s1Point3Title": "Point-in-time storage",
+  "hiw.s1Point3Desc":
+    "Nothing is overwritten. Every change is a new row — history is permanent.",
+
+  /* Stage 2 — Cleaning */
+  "hiw.s2Badge": "Stage 02 · Cleaning & normalisation",
+  "hiw.s2Title": "We enforce one source of truth before a model ever sees the data.",
+  "hiw.s2Lead":
+    "Raw sports data is famously messy. Team names differ between feeds, leagues rename themselves, markets get suspended mid-match. We fix all of it — in a deterministic, reproducible way.",
+  "hiw.s2P1":
+    "Teams, leagues, players and market types are mapped to a single canonical schema through a manually audited lookup table. Suspended, voided or late-cancelled markets are flagged and excluded before any model ever touches them.",
+  "hiw.s2P2":
+    "Outlier detection catches bad data the moment it lands. Any record that fails a sanity check (impossible scores, negative times, odds outside a 1.01–1000 range) gets pulled out of the pipeline and logged for manual review.",
+  "hiw.s2BulletsTitle": "What we clean",
+  "hiw.s2Bullet1": "Team & league aliases unified",
+  "hiw.s2Bullet2": "Timezones normalised to UTC",
+  "hiw.s2Bullet3": "Suspended / voided markets removed",
+  "hiw.s2Bullet4": "Odds sanity-checked across books",
+  "hiw.s2Bullet5": "Missing values explicitly marked (never silently imputed)",
+
+  /* Stage 3 — Feature engineering */
+  "hiw.s3Badge": "Stage 03 · Feature engineering",
+  "hiw.s3Title": "1,200+ features per match — and every single one earns its place.",
+  "hiw.s3Lead":
+    "A prediction is only as sharp as the signals it's built on. This is where a match becomes a high-dimensional fingerprint our models can actually reason about.",
+  "hiw.s3P1":
+    "For every fixture we compute more than 1,200 features across six families: strength ratings (Elo, Glicko, market-implied), recent form (xG, expected points, momentum), situational context (rest days, travel km, altitude), head-to-head history, market movement (line drift, sharp action) and discipline metrics.",
+  "hiw.s3P2":
+    "All features are stored in a point-in-time feature store. When we train a model on last season's Champions League final, it sees only what was available at kick-off — not a single byte of the future. This is the single biggest reason most public models overfit and ours don't.",
+  "hiw.s3Family1Title": "Strength & form",
+  "hiw.s3Family1Desc": "Elo, Glicko, xG trends, rolling SRS, expected points.",
+  "hiw.s3Family2Title": "Situational context",
+  "hiw.s3Family2Desc": "Rest days, travel km, altitude, venue, weather.",
+  "hiw.s3Family3Title": "Head-to-head",
+  "hiw.s3Family3Desc": "Last 20 meetings, venue splits, style matchups.",
+  "hiw.s3Family4Title": "Market signals",
+  "hiw.s3Family4Desc": "Opening vs. current odds, steam moves, sharp money.",
+  "hiw.s3Family5Title": "Lineups & availability",
+  "hiw.s3Family5Desc": "Confirmed XI, minutes lost to injury, fatigue index.",
+  "hiw.s3Family6Title": "Discipline & referee",
+  "hiw.s3Family6Desc": "Cards per 90, referee strictness, historical bias.",
+
+  /* Stage 4 — Model ensemble */
+  "hiw.s4Badge": "Stage 04 · Model ensemble",
+  "hiw.s4Title": "Four independent models. One honest probability.",
+  "hiw.s4Lead":
+    "A single model will always have blind spots. So we run four completely different approaches, each trained on the same feature store, and blend their votes.",
+  "hiw.s4P1":
+    "Each model is tested independently before it's allowed into the ensemble. If a new model doesn't outperform the current blend on out-of-sample data for three consecutive months, it simply doesn't ship.",
+  "hiw.s4Model1Name": "Poisson Goals Model",
+  "hiw.s4Model1Desc":
+    "A goals-based probabilistic model that estimates expected attacking and defensive rates for each team and integrates over all possible scorelines.",
+  "hiw.s4Model2Name": "Gradient-Boosted Classifier",
+  "hiw.s4Model2Desc":
+    "An XGBoost-style classifier trained on the full feature store. Strongest at capturing non-linear interactions between form, injuries and market movement.",
+  "hiw.s4Model3Name": "Elo + Glicko Baseline",
+  "hiw.s4Model3Desc":
+    "A transparent rating-based model that anchors the ensemble and prevents it from drifting too far from the fundamentals of team strength.",
+  "hiw.s4Model4Name": "Market-Implied Calibrator",
+  "hiw.s4Model4Desc":
+    "A meta-model that learns how the sharpest books price games and corrects the other three models whenever their probabilities drift away from efficient pricing.",
+  "hiw.s4BlendTitle": "Stacked blending",
+  "hiw.s4BlendDesc":
+    "The four probabilities are combined through a stacked regressor that has been trained to minimise log-loss on held-out matches. The weights are recomputed weekly as new results come in.",
+
+  /* Stage 5 — Value detection */
+  "hiw.s5Badge": "Stage 05 · Value detection",
+  "hiw.s5Title": "We only publish picks where our edge survives the real world.",
+  "hiw.s5Lead":
+    "Being right isn't enough. A pick only becomes a pick when our probability beats the market by more than the friction of actually playing it.",
+  "hiw.s5P1":
+    "For every possible market we compare our ensemble probability to the best available odds across 40+ bookmakers, then subtract a realistic slippage budget: commission, expected closing-line movement, and execution delay. Whatever remains is the true edge.",
+  "hiw.s5P2":
+    "Only picks with a statistically significant positive expected value survive. Everything else is discarded — even if it would have won. Because a track record built on luck collapses the moment luck runs out.",
+  "hiw.s5FormulaTitle": "The check every pick has to pass",
+  "hiw.s5FormulaLine1": "Model probability × Best odds",
+  "hiw.s5FormulaLine2": "−  expected slippage",
+  "hiw.s5FormulaLine3": "−  bookmaker margin",
+  "hiw.s5FormulaLine4": "=  real edge",
+  "hiw.s5FormulaFoot":
+    "If this number isn't clearly above zero, the pick never leaves the lab.",
+
+  /* Stage 6 — Publishing */
+  "hiw.s6Badge": "Stage 06 · Publishing & grading",
+  "hiw.s6Title": "Every pick is timestamped, shipped and publicly gradable.",
+  "hiw.s6Lead":
+    "This is where most prediction sites get vague. This is where we get loud.",
+  "hiw.s6P1":
+    "The moment a pick is generated, it is timestamped, signed, and published to your dashboard and our public ledger at the same second. You and a regulator see the exact same record.",
+  "hiw.s6P2":
+    "Once the match ends, every pick is graded automatically against the official result feed. Wins, losses and pushes are all recorded. Losing picks stay on the ledger forever — because a track record that only shows winners isn't a track record, it's marketing.",
+  "hiw.s6Point1Title": "Same-second publishing",
+  "hiw.s6Point1Desc":
+    "Subscribers and the public ledger are updated simultaneously — no back-dating possible.",
+  "hiw.s6Point2Title": "Automatic grading",
+  "hiw.s6Point2Desc":
+    "Results are scored from the official feed, not by a human who might look the other way.",
+  "hiw.s6Point3Title": "Nothing is deleted",
+  "hiw.s6Point3Desc":
+    "Losing picks are permanent. The ledger is append-only by design.",
+
+  /* Stage 7 — Retraining */
+  "hiw.s7Badge": "Stage 07 · Continuous retraining",
+  "hiw.s7Title": "The engine gets smarter every Sunday night.",
+  "hiw.s7Lead":
+    "Sport changes. Coaches change. Tactics change. If your model doesn't change with them, it dies.",
+  "hiw.s7P1":
+    "Every Sunday night, after the week's matches have settled, the entire ensemble is retrained on the latest data. Model weights are re-estimated, stacking coefficients are updated, and the new version is shadow-tested against the live version for 48 hours before it takes over.",
+  "hiw.s7P2":
+    "Drift detection runs continuously in the background. If the model's calibration starts slipping on any sport or league, an alert fires and the ensemble is rolled back to the last known-good version until the issue is understood.",
+  "hiw.s7Bullet1": "Weekly retraining cycle",
+  "hiw.s7Bullet2": "48-hour shadow test before go-live",
+  "hiw.s7Bullet3": "Continuous drift monitoring",
+  "hiw.s7Bullet4": "Automatic rollback on calibration failure",
+
+  /* Trust reinforcement / proof */
+  "hiw.proofBadge": "Why this matters",
+  "hiw.proofTitle": "The reason our predictions actually hold up.",
+  "hiw.proofSubtitle":
+    "Every choice in this pipeline exists for one reason: to give you a probability you can bet your bankroll on without blinking.",
+  "hiw.proof1Title": "No hindsight bias",
+  "hiw.proof1Desc":
+    "Point-in-time feature store. The model never learns from information that wasn't available at kick-off.",
+  "hiw.proof2Title": "Ensemble, not one-trick-pony",
+  "hiw.proof2Desc":
+    "Four independent models cross-check each other. One blind spot can't poison the whole prediction.",
+  "hiw.proof3Title": "Edge survives slippage",
+  "hiw.proof3Desc":
+    "Picks only ship if the edge holds after commission, margin and closing-line movement are subtracted.",
+  "hiw.proof4Title": "Permanent public ledger",
+  "hiw.proof4Desc":
+    "You can verify every pick we've ever published. Wins and losses. No exceptions.",
+  "hiw.proof5Title": "Retrained every week",
+  "hiw.proof5Desc":
+    "The engine adapts to new tactics, injuries and market behaviour — with an automatic rollback if it drifts.",
+  "hiw.proof6Title": "Built by people who ship",
+  "hiw.proof6Desc":
+    "A two-person team of sports fanatics with an ICT background. Every line of this pipeline is hand-rolled, not bolted together from plugins.",
+
+  /* Objection section — FAQ */
+  "hiw.faqBadge": "Honest answers",
+  "hiw.faqTitle": "The questions every serious analyst asks us.",
+  "hiw.faqSubtitle":
+    "If you've tried a tipster site before, you've probably been burned. Here's exactly why BetsPlug is different.",
+  "hiw.faq1Q": "How do I know you're not just lucky?",
+  "hiw.faq1A":
+    "Over 24,000 graded picks across nine sports. Luck evens out at that sample size — skill compounds. Every prediction is time-stamped before kick-off, so you can verify it against the official result feed yourself.",
+  "hiw.faq2Q": "What happens on a losing streak?",
+  "hiw.faq2A":
+    "Losing picks stay on the public ledger permanently. We publish them just as loudly as the winners. If a model starts drifting, automatic drift detection rolls the ensemble back to the last known-good version within hours.",
+  "hiw.faq3Q": "Why not just use one really smart model?",
+  "hiw.faq3A":
+    "Because every single model has blind spots — statistical ones, tactical ones, or situational ones. Four independent models with different architectures will catch each other's mistakes. The ensemble consistently beats its strongest individual member.",
+  "hiw.faq4Q": "Can I actually execute these edges at a sportsbook?",
+  "hiw.faq4A":
+    "Yes — and we prove it. Every ROI figure we publish is adjusted for realistic slippage between our publish time and the closing line. The edge you see is the edge you can actually play.",
+  "hiw.faq5Q": "What sports and leagues do you cover?",
+  "hiw.faq5A":
+    "Nine sports and 70+ leagues. Football (all top European leagues + internationals), basketball (NBA, EuroLeague), tennis (ATP, WTA, Grand Slams), plus selected coverage of baseball, ice hockey, American football, MMA, rugby and esports.",
+  "hiw.faq6Q": "Is this gambling advice?",
+  "hiw.faq6A":
+    "No. BetsPlug is a pure sports analytics platform. We publish probabilities, expected values and a verifiable track record. What you do with that information is entirely your decision.",
+
+  /* Final CTA */
+  "hiw.ctaBadge": "Ready to see it in action?",
+  "hiw.ctaTitle": "Stop guessing. Start trusting the pipeline.",
+  "hiw.ctaSubtitle":
+    "You've just read the most honest how-it-works page in sports analytics. Now see the picks it produces — live, timestamped, and ready to verify.",
+  "hiw.ctaPrimary": "Start Free Trial",
+  "hiw.ctaSecondary": "See the track record",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -527,6 +869,7 @@ const nl: Dictionary = {
   "how.step3Title": "Neem slimmere beslissingen",
   "how.step3Desc":
     "Gebruik transparante kansen, voordelen en confidence scores om met overtuiging te kiezen.",
+  "how.deepDive": "Bekijk de volledige engine",
 
   "pricing.badge": "Prijzen",
   "pricing.title": "Simpele prijzen. Serieus voordeel.",
@@ -890,6 +1233,332 @@ const nl: Dictionary = {
   "about.ctaSubtitle":
     "Sluit je aan bij 1.500+ analisten die de picks, waarschijnlijkheden en bewijsstukken krijgen — voordat de closing line zich aanpast.",
   "about.ctaButton": "Start Free Trial",
+
+  /* Track Record page */
+  "tr.metaTitle":
+    "Track Record — Geverifieerde prestaties van BetsPlug",
+  "tr.metaDesc":
+    "Transparante, controleerbare resultaten voor elke BetsPlug-pick. Zie hoe onze AI-modellen ruwe wedstrijddata omzetten in een meetbare voorsprong — wekelijks gedocumenteerd, nooit cherry-picked.",
+  "tr.breadcrumbHome": "Home",
+  "tr.breadcrumbTrack": "Track Record",
+
+  "tr.heroBadge": "Volledig transparant",
+  "tr.heroTitleA": "Een track record dat je",
+  "tr.heroTitleB": "écht kunt verifiëren.",
+  "tr.heroSubtitle":
+    "Elke pick die BetsPlug publiceert krijgt een tijdstempel, wordt gewogen op waarschijnlijkheid en gelogd in een publiek grootboek — winst of verlies. Zo worden de cijfers opgebouwd, en zo zetten echte gebruikers ze in de praktijk in.",
+  "tr.heroCtaPrimary": "Bekijk de nieuwste resultaten",
+  "tr.heroCtaSecondary": "Terug naar home",
+
+  "tr.kpisBadge": "Afgelopen 12 maanden",
+  "tr.kpisTitle": "De cijfers, ongefilterd.",
+  "tr.kpisSubtitle":
+    "Een rolling, eerlijke momentopname van hoe onze modellen hebben gepresteerd in het afgelopen jaar publiek publiceren.",
+  "tr.kpi1Value": "58,3%",
+  "tr.kpi1Label": "Hit rate op value picks",
+  "tr.kpi1Note": "Alleen picks met +EV ≥ 3%",
+  "tr.kpi2Value": "+14,6%",
+  "tr.kpi2Label": "ROI bij vlakke 1u-inzet",
+  "tr.kpi2Note": "Na closing-line slippage",
+  "tr.kpi3Value": "24.180",
+  "tr.kpi3Label": "Afgeronde voorspellingen",
+  "tr.kpi3Note": "Over 9 sporten en 70+ competities",
+  "tr.kpi4Value": "0,061",
+  "tr.kpi4Label": "Brier-score (lager = beter)",
+  "tr.kpi4Note": "Gekalibreerd over winst/gelijk/verlies",
+
+  "tr.pipeBadge": "Hoe de data wordt verwerkt",
+  "tr.pipeTitle": "Van ruwe wedstrijddata naar een gescoorde voorspelling.",
+  "tr.pipeSubtitle":
+    "Geen black boxes. Dit is de exacte pipeline die elke pick doorloopt voordat hij op je dashboard verschijnt.",
+  "tr.pipe1Title": "Inladen",
+  "tr.pipe1Desc":
+    "We halen wedstrijd-, opstellings-, blessure- en odds-data binnen bij 14 gecontroleerde leveranciers, elke 30 seconden. Elk record is geversioneerd zodat we elk historisch moment kunnen terugspelen.",
+  "tr.pipe2Title": "Schoonmaken & normaliseren",
+  "tr.pipe2Desc":
+    "Teamnamen, competities en markttypen worden gemapt naar één canoniek schema. Uitschieters, laat afgelaste wedstrijden en opgeschorte markten worden gemarkeerd en verwijderd vóór het modelleren.",
+  "tr.pipe3Title": "Feature engineering",
+  "tr.pipe3Desc":
+    "Voor elke wedstrijd berekenen we 1.200+ features — Elo, xG-trends, rustdagen, reisafstand, onderlinge duels, scheidsrechterbias, marktbewegingen — en slaan ze op in een point-in-time feature store, zodat training nooit toekomstinformatie lekt.",
+  "tr.pipe4Title": "Model-ensemble",
+  "tr.pipe4Desc":
+    "Vier onafhankelijke modellen stemmen over de uitkomst: een Poisson goals-model, een gradient-boosted classifier, een Elo-baseline en een markt-geïmpliceerde kalibrator. Hun waarschijnlijkheden worden gecombineerd via stacked regression.",
+  "tr.pipe5Title": "Value-detectie",
+  "tr.pipe5Desc":
+    "We vergelijken de ensemble-waarschijnlijkheid met de beste beschikbare marktkoers. Alleen picks met een statistisch significant voordeel — ná commissie en verwachte slippage — krijgen het label 'value'.",
+  "tr.pipe6Title": "Publiceren & beoordelen",
+  "tr.pipe6Desc":
+    "Picks krijgen een tijdstempel op het moment dat ze live gaan. Zodra de wedstrijd is afgelopen worden resultaten automatisch beoordeeld en naar het publieke track-record grootboek geschreven — winst, verlies of push.",
+
+  "tr.methodBadge": "Methodologie",
+  "tr.methodTitle": "Vier regels waar we niet vanaf wijken.",
+  "tr.methodSubtitle":
+    "Elk getal op deze pagina overleeft deze vangrails. Als een resultaat dat niet kan, telt het niet mee.",
+  "tr.method1Title": "Alleen point-in-time",
+  "tr.method1Desc":
+    "Modellen worden getraind op data die daadwerkelijk beschikbaar was bij de aftrap — geen achteraf-inzichten, geen stilletjes opnieuw beoordeelde wedstrijden.",
+  "tr.method2Title": "Closing-line gecorrigeerd",
+  "tr.method2Desc":
+    "ROI-cijfers trekken realistische slippage af tussen publicatie en de closing line, zodat je rendementen ziet die je ook echt had kunnen realiseren.",
+  "tr.method3Title": "Niets wordt verwijderd",
+  "tr.method3Desc":
+    "Verloren picks blijven voor altijd in het grootboek staan. Een track record dat alleen winnaars laat zien is geen track record — dat is marketing.",
+  "tr.method4Title": "Extern controleerbaar",
+  "tr.method4Desc":
+    "Elke pick bevat het wedstrijd-ID, de markt, de koers en de tijdstempel, zodat elke gebruiker of auditor de uitkomst onafhankelijk kan verifiëren.",
+
+  "tr.casesBadge": "Echte gebruikers, echte workflows",
+  "tr.casesTitle": "Hoe analisten het track record daadwerkelijk gebruiken.",
+  "tr.casesSubtitle":
+    "Cijfers tellen alleen als ze beslissingen veranderen. Zo ziet dat er uit voor drie typische BetsPlug-leden.",
+
+  "tr.case1Role": "Eredivisie-specialist in het weekend",
+  "tr.case1Name": "Martin, 34 · Amsterdam",
+  "tr.case1Quote":
+    "Ik filter het track record op Eredivisie en over/under-markten. In 2025 scoorde die selectie 61% op 412 picks — dus ik verhoog mijn inzet met vertrouwen op zondagochtend in plaats van te twijfelen.",
+  "tr.case1Metric1Label": "Zijn gefilterde sample",
+  "tr.case1Metric1Value": "412 picks",
+  "tr.case1Metric2Label": "Geverifieerde hit rate",
+  "tr.case1Metric2Value": "61,2%",
+  "tr.case1Metric3Label": "Gemiddelde closing edge",
+  "tr.case1Metric3Value": "+4,8%",
+  "tr.case1Outcome":
+    "Gebruikt het grootboek om één markt te kiezen waar het model een bewezen voorsprong heeft, en negeert de rest. Resultaat: minder weddenschappen, meer overtuiging, betere ROI.",
+
+  "tr.case2Role": "Data-gedreven NBA-fan",
+  "tr.case2Name": "Priya, 29 · Rotterdam",
+  "tr.case2Quote":
+    "Ik geef meer om kalibratie dan om hit rate. Als de Brier-score op de NBA moneyline onder de 0,07 blijft, weet ik dat de kansen eerlijk zijn — niet gewoon geluk.",
+  "tr.case2Metric1Label": "NBA Brier-score",
+  "tr.case2Metric1Value": "0,068",
+  "tr.case2Metric2Label": "Wedstrijden beoordeeld",
+  "tr.case2Metric2Value": "1.240",
+  "tr.case2Metric3Label": "ROI bij vlakke 1u",
+  "tr.case2Metric3Value": "+11,4%",
+  "tr.case2Outcome":
+    "Vertrouwt de waarschijnlijkheden om haar eigen parlays en spreads te bouwen. Het publieke grootboek is haar bewijs dat de modellen niet zijn afgedwaald.",
+
+  "tr.case3Role": "Fulltime value-bettor",
+  "tr.case3Name": "Jonas, 41 · Utrecht",
+  "tr.case3Quote":
+    "Ik importeer de track-record CSV elke maandag in mijn eigen bankroll-tool. Omdat elke pick een tijdstempel en closing price heeft, kan ik verifiëren of de edge echt is voordat ik ook maar een cent riskeer.",
+  "tr.case3Metric1Label": "Picks hergespeeld in 2025",
+  "tr.case3Metric1Value": "2.860",
+  "tr.case3Metric2Label": "Yield vs. closing line",
+  "tr.case3Metric2Value": "+3,1%",
+  "tr.case3Metric3Label": "Max drawdown",
+  "tr.case3Metric3Value": "−6,4%",
+  "tr.case3Outcome":
+    "Gebruikt het historische grootboek als een onafhankelijke backtest. Als de closing-line value daar stand houdt, vertrouwt hij het voor live staking.",
+
+  "tr.transBadge": "Controleer het zelf",
+  "tr.transTitle": "Vertrouw ons niet op ons woord — lees het grootboek.",
+  "tr.transSubtitle":
+    "Elke beoordeelde voorspelling die we ooit hebben gepubliceerd is doorzoekbaar op wedstrijd, datum, markt en model. Geen filter dat de verliezers verstopt.",
+  "tr.transCta1": "Bekijk live resultaten",
+  "tr.transCta2": "Gratis proberen",
+
+  /* How It Works page — dedicated deep-dive */
+  "hiw.metaTitle":
+    "Hoe BetsPlug werkt — Van ruwe wedstrijddata tot AI-voorspellingen",
+  "hiw.metaDesc":
+    "Een volledige, stapsgewijze uitleg van de BetsPlug-voorspelengine: hoe we data verzamelen, features bouwen, modellen trainen, value detecteren en picks publiceren die je zelf kunt verifiëren.",
+  "hiw.breadcrumbHome": "Home",
+  "hiw.breadcrumbHow": "Hoe het werkt",
+
+  "hiw.heroBadge": "De BetsPlug-engine",
+  "hiw.heroTitleA": "Hoe we ruwe wedstrijddata",
+  "hiw.heroTitleB": "omzetten in voorspellingen die je kunt vertrouwen.",
+  "hiw.heroSubtitle":
+    "Elke pick op BetsPlug is het eindpunt van een lange, zorgvuldig ontworpen pipeline. Geen onderbuikgevoelens, geen cherry-picking, geen verborgen regels. Dit is het exacte proces — van het moment dat een wedstrijd wordt aangekondigd, tot het moment dat een geverifieerde pick op je dashboard verschijnt.",
+  "hiw.heroCtaPrimary": "Bekijk het track record",
+  "hiw.heroCtaSecondary": "Gratis proberen",
+  "hiw.heroStatDataSources": "Databronnen",
+  "hiw.heroStatFeatures": "Features per wedstrijd",
+  "hiw.heroStatModels": "Onafhankelijke modellen",
+  "hiw.heroStatUpdates": "Ververs-cyclus",
+
+  "hiw.overviewBadge": "De 7-stappen engine",
+  "hiw.overviewTitle": "Zeven stappen. Nul gokwerk.",
+  "hiw.overviewSubtitle":
+    "Elke stap wordt onafhankelijk gebouwd, getest en gemonitord. Als ook maar één stap breekt, wordt de pick tegengehouden — nooit gepubliceerd.",
+
+  "hiw.s1Badge": "Stap 01 · Data-acquisitie",
+  "hiw.s1Title": "We beginnen waar de markt begint: bij de ruwe feed.",
+  "hiw.s1Lead":
+    "Rommel erin, rommel eruit. Onze pipeline begint dus met de hoogste kwaliteit, meest redundante databronnen die we kunnen krijgen — en we vertrouwen er nooit slechts één.",
+  "hiw.s1P1":
+    "Elke 30 seconden halen we gestructureerde data binnen bij 14 onafhankelijke leveranciers: wedstrijdschema's, live odds van 40+ bookmakers, blessurerapporten, bevestigde opstellingen, scheidsrechteraanstellingen, weer bij het stadion, reisafstand, en historische onderlinge archieven die twee decennia teruggaan.",
+  "hiw.s1P2":
+    "Elk record krijgt een tijdstempel en versiebeheer. Dat betekent dat we elk moment in de geschiedenis exact kunnen terugspelen zoals onze modellen het zagen — cruciaal voor eerlijke backtesting en essentieel voor audit-waardige controleerbaarheid.",
+  "hiw.s1Point1Title": "14 redundante leveranciers",
+  "hiw.s1Point1Desc":
+    "Als één bron afwijkt van de rest, wordt die in quarantaine gezet tot we begrijpen waarom.",
+  "hiw.s1Point2Title": "Ververs elke 30 seconden",
+  "hiw.s1Point2Desc":
+    "Odds, opstellingen en blessures worden elke halve minuut opnieuw opgehaald tot aan de aftrap.",
+  "hiw.s1Point3Title": "Point-in-time opslag",
+  "hiw.s1Point3Desc":
+    "Niets wordt overschreven. Elke wijziging is een nieuwe regel — geschiedenis is permanent.",
+
+  "hiw.s2Badge": "Stap 02 · Opschonen & normaliseren",
+  "hiw.s2Title":
+    "Wij dwingen één bron van waarheid af voordat een model ook maar iets ziet.",
+  "hiw.s2Lead":
+    "Ruwe sportdata staat bekend als rommelig. Teamnamen verschillen per feed, competities hernoemen zichzelf, markten worden midden in een wedstrijd opgeschort. Wij lossen dat allemaal op — op een deterministische, reproduceerbare manier.",
+  "hiw.s2P1":
+    "Teams, competities, spelers en markttypen worden via een handmatig gecontroleerde lookup-tabel gemapt naar één canoniek schema. Opgeschorte, vernietigde of laat afgelaste markten worden gemarkeerd en uitgesloten vóór welk model dan ook ze aanraakt.",
+  "hiw.s2P2":
+    "Outlier-detectie vangt slechte data op het moment dat die binnenkomt. Elk record dat een sanity check niet haalt (onmogelijke scores, negatieve tijden, odds buiten het bereik 1,01–1000) wordt uit de pipeline gehaald en gelogd voor handmatige review.",
+  "hiw.s2BulletsTitle": "Wat we opschonen",
+  "hiw.s2Bullet1": "Team- & competitie-aliassen samengevoegd",
+  "hiw.s2Bullet2": "Tijdzones genormaliseerd naar UTC",
+  "hiw.s2Bullet3": "Opgeschorte / vernietigde markten verwijderd",
+  "hiw.s2Bullet4": "Odds kruiselings gecontroleerd tussen bookmakers",
+  "hiw.s2Bullet5": "Ontbrekende waarden expliciet gemarkeerd (nooit stilletjes ingevuld)",
+
+  "hiw.s3Badge": "Stap 03 · Feature engineering",
+  "hiw.s3Title": "1.200+ features per wedstrijd — en elke feature verdient zijn plek.",
+  "hiw.s3Lead":
+    "Een voorspelling is alleen zo scherp als de signalen waar hij op gebouwd is. Hier wordt een wedstrijd een hoogdimensionale vingerafdruk waar onze modellen daadwerkelijk over kunnen redeneren.",
+  "hiw.s3P1":
+    "Voor elke wedstrijd berekenen we meer dan 1.200 features in zes families: sterkteratings (Elo, Glicko, markt-geïmpliceerd), recente vorm (xG, expected points, momentum), situationele context (rustdagen, reisafstand, hoogte), onderlinge geschiedenis, marktbeweging (lijn-drift, sharp action) en discipline-metrics.",
+  "hiw.s3P2":
+    "Alle features worden opgeslagen in een point-in-time feature store. Wanneer we een model trainen op de Champions League-finale van vorig seizoen, ziet het alleen wat er bij de aftrap beschikbaar was — geen enkele byte uit de toekomst. Dit is de belangrijkste reden dat de meeste publieke modellen overfitten en de onze niet.",
+  "hiw.s3Family1Title": "Sterkte & vorm",
+  "hiw.s3Family1Desc": "Elo, Glicko, xG-trends, rolling SRS, expected points.",
+  "hiw.s3Family2Title": "Situationele context",
+  "hiw.s3Family2Desc": "Rustdagen, reisafstand, hoogte, stadion, weer.",
+  "hiw.s3Family3Title": "Onderling",
+  "hiw.s3Family3Desc": "Laatste 20 ontmoetingen, thuis/uit splits, stijl-matchups.",
+  "hiw.s3Family4Title": "Marktsignalen",
+  "hiw.s3Family4Desc": "Open- vs. huidige odds, steam moves, sharp money.",
+  "hiw.s3Family5Title": "Opstellingen & beschikbaarheid",
+  "hiw.s3Family5Desc": "Bevestigde XI, minuten verloren aan blessures, vermoeidheidsindex.",
+  "hiw.s3Family6Title": "Discipline & scheidsrechter",
+  "hiw.s3Family6Desc": "Kaarten per 90, strengheid scheidsrechter, historische bias.",
+
+  "hiw.s4Badge": "Stap 04 · Model-ensemble",
+  "hiw.s4Title": "Vier onafhankelijke modellen. Eén eerlijke waarschijnlijkheid.",
+  "hiw.s4Lead":
+    "Een enkel model heeft altijd blinde vlekken. Daarom draaien we vier volledig verschillende benaderingen, elk getraind op dezelfde feature store, en combineren we hun stemmen.",
+  "hiw.s4P1":
+    "Elk model wordt onafhankelijk getest voordat het in het ensemble mag. Als een nieuw model drie maanden achter elkaar niet beter presteert dan de huidige blend op out-of-sample data, wordt het simpelweg niet uitgerold.",
+  "hiw.s4Model1Name": "Poisson Goals Model",
+  "hiw.s4Model1Desc":
+    "Een doelpunten-gebaseerd probabilistisch model dat verwachte aanvals- en verdedigingsratios per team schat en integreert over alle mogelijke eindstanden.",
+  "hiw.s4Model2Name": "Gradient-Boosted Classifier",
+  "hiw.s4Model2Desc":
+    "Een XGBoost-achtige classifier getraind op de volledige feature store. Sterk in het vangen van niet-lineaire interacties tussen vorm, blessures en marktbeweging.",
+  "hiw.s4Model3Name": "Elo + Glicko Baseline",
+  "hiw.s4Model3Desc":
+    "Een transparant rating-gebaseerd model dat het ensemble verankert en voorkomt dat het te ver afdwaalt van de fundamenten van teamsterkte.",
+  "hiw.s4Model4Name": "Markt-geïmpliceerde Kalibrator",
+  "hiw.s4Model4Desc":
+    "Een metamodel dat leert hoe de scherpste bookmakers wedstrijden prijzen en de andere drie modellen corrigeert wanneer hun waarschijnlijkheden afdwalen van efficiënte prijsvorming.",
+  "hiw.s4BlendTitle": "Stacked blending",
+  "hiw.s4BlendDesc":
+    "De vier waarschijnlijkheden worden gecombineerd via een stacked regressor die is getraind om log-loss te minimaliseren op niet-geziene wedstrijden. De weights worden wekelijks opnieuw berekend zodra nieuwe resultaten binnenkomen.",
+
+  "hiw.s5Badge": "Stap 05 · Value-detectie",
+  "hiw.s5Title": "We publiceren alleen picks waarvan de edge de echte wereld overleeft.",
+  "hiw.s5Lead":
+    "Gelijk hebben is niet genoeg. Een pick wordt pas een pick wanneer onze waarschijnlijkheid de markt verslaat met méér dan de frictie van daadwerkelijk spelen.",
+  "hiw.s5P1":
+    "Voor elke mogelijke markt vergelijken we onze ensemble-waarschijnlijkheid met de beste beschikbare odds bij 40+ bookmakers, en trekken we vervolgens een realistisch slippage-budget af: commissie, verwachte beweging richting de closing line, en uitvoeringsvertraging. Wat overblijft is de echte edge.",
+  "hiw.s5P2":
+    "Alleen picks met een statistisch significante positieve expected value overleven. Al het andere wordt verworpen — zelfs als het gewonnen zou hebben. Want een track record gebouwd op geluk stort in op het moment dat het geluk opraakt.",
+  "hiw.s5FormulaTitle": "De check die elke pick moet doorstaan",
+  "hiw.s5FormulaLine1": "Modelkans × Beste odds",
+  "hiw.s5FormulaLine2": "−  verwachte slippage",
+  "hiw.s5FormulaLine3": "−  bookmakermarge",
+  "hiw.s5FormulaLine4": "=  echte edge",
+  "hiw.s5FormulaFoot":
+    "Als dit getal niet duidelijk boven nul staat, verlaat de pick nooit het lab.",
+
+  "hiw.s6Badge": "Stap 06 · Publiceren & beoordelen",
+  "hiw.s6Title": "Elke pick krijgt een tijdstempel, wordt verzonden en is publiek te controleren.",
+  "hiw.s6Lead":
+    "Hier worden de meeste voorspelsites vaag. Hier worden wij juist luid.",
+  "hiw.s6P1":
+    "Op het moment dat een pick wordt gegenereerd, krijgt hij een tijdstempel, wordt hij ondertekend, en gepubliceerd op zowel je dashboard als ons publieke grootboek — exact dezelfde seconde. Jij en een toezichthouder zien exact hetzelfde record.",
+  "hiw.s6P2":
+    "Zodra de wedstrijd is afgelopen wordt elke pick automatisch beoordeeld aan de hand van de officiële resultaat-feed. Winst, verlies en push worden allemaal vastgelegd. Verloren picks blijven voor altijd in het grootboek staan — want een track record dat alleen winnaars laat zien is geen track record, dat is marketing.",
+  "hiw.s6Point1Title": "Publicatie op de seconde",
+  "hiw.s6Point1Desc":
+    "Abonnees en het publieke grootboek worden gelijktijdig bijgewerkt — geen backdating mogelijk.",
+  "hiw.s6Point2Title": "Automatische beoordeling",
+  "hiw.s6Point2Desc":
+    "Resultaten worden gescoord vanuit de officiële feed, niet door een mens die de andere kant op zou kunnen kijken.",
+  "hiw.s6Point3Title": "Niets wordt verwijderd",
+  "hiw.s6Point3Desc":
+    "Verloren picks zijn permanent. Het grootboek is by design append-only.",
+
+  "hiw.s7Badge": "Stap 07 · Continu hertrainen",
+  "hiw.s7Title": "De engine wordt elke zondagavond slimmer.",
+  "hiw.s7Lead":
+    "Sport verandert. Trainers veranderen. Tactiek verandert. Als je model niet meeverandert, sterft het.",
+  "hiw.s7P1":
+    "Elke zondagavond, nadat de wedstrijden van de week zijn uitgespeeld, wordt het volledige ensemble opnieuw getraind op de nieuwste data. Modelgewichten worden opnieuw geschat, stacking-coëfficiënten worden bijgewerkt, en de nieuwe versie wordt 48 uur lang shadow-getest tegen de live versie voordat hij het overneemt.",
+  "hiw.s7P2":
+    "Drift-detectie draait continu op de achtergrond. Als de kalibratie van het model begint af te glijden op een sport of competitie, gaat er een alert af en wordt het ensemble teruggerold naar de laatste bekende goede versie totdat het probleem is begrepen.",
+  "hiw.s7Bullet1": "Wekelijkse hertraincyclus",
+  "hiw.s7Bullet2": "48-uur shadow test voor go-live",
+  "hiw.s7Bullet3": "Continue drift-monitoring",
+  "hiw.s7Bullet4": "Automatische rollback bij kalibratiefalen",
+
+  "hiw.proofBadge": "Waarom dit uitmaakt",
+  "hiw.proofTitle": "De reden dat onze voorspellingen ook echt overeind blijven.",
+  "hiw.proofSubtitle":
+    "Elke keuze in deze pipeline bestaat om één reden: om je een waarschijnlijkheid te geven waar je zonder knipperen je bankroll op kunt zetten.",
+  "hiw.proof1Title": "Geen hindsight bias",
+  "hiw.proof1Desc":
+    "Point-in-time feature store. Het model leert nooit van informatie die niet beschikbaar was bij de aftrap.",
+  "hiw.proof2Title": "Ensemble, geen éénpitter",
+  "hiw.proof2Desc":
+    "Vier onafhankelijke modellen controleren elkaar. Eén blinde vlek kan niet de hele voorspelling vergiftigen.",
+  "hiw.proof3Title": "Edge overleeft slippage",
+  "hiw.proof3Desc":
+    "Picks gaan alleen live als de edge standhoudt nadat commissie, marge en closing-line beweging zijn afgetrokken.",
+  "hiw.proof4Title": "Permanent publiek grootboek",
+  "hiw.proof4Desc":
+    "Je kunt elke pick die we ooit hebben gepubliceerd verifiëren. Winst en verlies. Zonder uitzondering.",
+  "hiw.proof5Title": "Wekelijks hertraind",
+  "hiw.proof5Desc":
+    "De engine past zich aan nieuwe tactieken, blessures en marktgedrag aan — met automatische rollback bij drift.",
+  "hiw.proof6Title": "Gebouwd door mensen die shippen",
+  "hiw.proof6Desc":
+    "Een tweekoppig team van sportfanaten met een ICT-achtergrond. Elke regel van deze pipeline is met de hand geschreven, niet in elkaar geklikt uit plugins.",
+
+  "hiw.faqBadge": "Eerlijke antwoorden",
+  "hiw.faqTitle": "De vragen die elke serieuze analist ons stelt.",
+  "hiw.faqSubtitle":
+    "Als je eerder een tipstersite hebt geprobeerd, ben je waarschijnlijk teleurgesteld. Hier is precies waarom BetsPlug anders is.",
+  "hiw.faq1Q": "Hoe weet ik dat jullie niet gewoon geluk hebben?",
+  "hiw.faq1A":
+    "Meer dan 24.000 beoordeelde picks over negen sporten. Geluk middelt uit bij die sample size — skill stapelt zich op. Elke voorspelling heeft een tijdstempel vóór de aftrap, dus je kunt het zelf verifiëren tegen de officiële resultaat-feed.",
+  "hiw.faq2Q": "Wat gebeurt er bij een verliesreeks?",
+  "hiw.faq2A":
+    "Verloren picks blijven permanent in het publieke grootboek. We publiceren ze net zo luid als de winnaars. Als een model begint af te drijven, rolt de automatische drift-detectie het ensemble binnen uren terug naar de laatste bekende goede versie.",
+  "hiw.faq3Q": "Waarom niet gewoon één heel slim model gebruiken?",
+  "hiw.faq3A":
+    "Omdat elk model blinde vlekken heeft — statistische, tactische of situationele. Vier onafhankelijke modellen met verschillende architecturen vangen elkaars fouten op. Het ensemble verslaat consistent zijn sterkste individuele lid.",
+  "hiw.faq4Q": "Kan ik deze edges daadwerkelijk uitvoeren bij een bookmaker?",
+  "hiw.faq4A":
+    "Ja — en we bewijzen het. Elk ROI-cijfer dat we publiceren is gecorrigeerd voor realistische slippage tussen onze publicatietijd en de closing line. De edge die je ziet is de edge die je ook echt kunt spelen.",
+  "hiw.faq5Q": "Welke sporten en competities dekken jullie?",
+  "hiw.faq5A":
+    "Negen sporten en 70+ competities. Voetbal (alle topcompetities in Europa + internationaal), basketbal (NBA, EuroLeague), tennis (ATP, WTA, Grand Slams), plus geselecteerde dekking van honkbal, ijshockey, American football, MMA, rugby en esports.",
+  "hiw.faq6Q": "Is dit gokadvies?",
+  "hiw.faq6A":
+    "Nee. BetsPlug is een pure sport-analytics platform. Wij publiceren waarschijnlijkheden, expected values en een verifieerbaar track record. Wat je met die informatie doet, is volledig jouw eigen beslissing.",
+
+  "hiw.ctaBadge": "Klaar om het in actie te zien?",
+  "hiw.ctaTitle": "Stop met gokken. Begin met de pipeline te vertrouwen.",
+  "hiw.ctaSubtitle":
+    "Je hebt zojuist de meest eerlijke hoe-het-werkt pagina in sport-analytics gelezen. Bekijk nu de picks die hij produceert — live, getijdstempeld, en klaar om te verifiëren.",
+  "hiw.ctaPrimary": "Gratis proberen",
+  "hiw.ctaSecondary": "Bekijk het track record",
 };
 
 /* ── German ────────────────────────────────────────────────── */

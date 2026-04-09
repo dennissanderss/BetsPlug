@@ -1,11 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "motion/react";
-import { UserPlus, Search, Trophy } from "lucide-react";
-import { useTranslations } from "@/i18n/locale-provider";
+import { UserPlus, Search, Trophy, ArrowRight } from "lucide-react";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 export function HowItWorks() {
   const { t } = useTranslations();
+  const loc = useLocalizedHref();
   const steps = [
     {
       number: "01",
@@ -123,6 +125,23 @@ export function HowItWorks() {
             })}
           </div>
         </div>
+
+        {/* Deep-dive CTA — links to the full dedicated page */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="mt-14 flex justify-center"
+        >
+          <Link
+            href={loc("/how-it-works")}
+            className="group inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.06] px-6 py-3 text-sm font-bold text-green-300 backdrop-blur-sm transition-all hover:border-green-500/50 hover:bg-green-500/[0.12] hover:text-green-200"
+          >
+            {t("how.deepDive")}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
