@@ -474,6 +474,49 @@ function SimulatedDemoSection() {
 
 // ─── Strategy Metrics Card (real data from backend) ─────────────────────────
 
+// ─── Human-readable rule translations ───────────────────────────────────────
+
+const RULE_LABELS: Record<string, string> = {
+  home_win_prob: "Home win probability",
+  away_win_prob: "Away win probability",
+  draw_prob: "Draw probability",
+  confidence: "Model confidence",
+  edge_home: "Home edge vs bookmaker",
+  edge_away: "Away edge vs bookmaker",
+  edge_pick: "Pick edge vs bookmaker",
+  odds_home: "Home odds",
+  odds_away: "Away odds",
+  odds_pick: "Pick odds",
+  form_diff: "Form difference",
+};
+
+const OP_LABELS: Record<string, string> = {
+  ">": "higher than",
+  "<": "lower than",
+  ">=": "at least",
+  "<=": "at most",
+  "==": "exactly",
+  "between": "between",
+};
+
+function humanizeRule(rule: { feature: string; operator: string; value: unknown }): string {
+  const feat = RULE_LABELS[rule.feature] || rule.feature;
+  const op = OP_LABELS[rule.operator] || rule.operator;
+  if (rule.operator === "between" && Array.isArray(rule.value)) {
+    return `${feat} ${rule.value[0]} – ${rule.value[1]}`;
+  }
+  const val = typeof rule.value === "number" && rule.value < 1 ? `${(rule.value as number * 100).toFixed(0)}%` : String(rule.value);
+  return `${feat} ${op} ${val}`;
+}
+
+// Color based on ROI
+function getStrategyColor(roi: number | undefined) {
+  if (roi === undefined) return { accent: "text-blue-400", header: "from-blue-500/10 to-blue-500/0" };
+  if (roi > 0.05) return { accent: "text-emerald-400", header: "from-emerald-500/10 to-emerald-500/0" };
+  if (roi > -0.02) return { accent: "text-amber-400", header: "from-amber-500/10 to-amber-500/0" };
+  return { accent: "text-red-400", header: "from-red-500/10 to-red-500/0" };
+}
+
 function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
   const { data: metrics, isLoading } = useQuery({
     queryKey: ["strategy-metrics", strategy.id],
@@ -486,13 +529,12 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
     staleTime: 60_000,
   });
 
-  const colors: Record<string, { accent: string; bg: string; bar: string; header: string }> = {
-    "Value Home": { accent: "text-blue-400", bg: "bg-blue-500/10", bar: "bg-blue-500", header: "from-blue-500/10 to-blue-500/0" },
-    "High Confidence Favorites": { accent: "text-emerald-400", bg: "bg-emerald-500/10", bar: "bg-emerald-500", header: "from-emerald-500/10 to-emerald-500/0" },
-    "Underdog Edge": { accent: "text-amber-400", bg: "bg-amber-500/10", bar: "bg-amber-500", header: "from-amber-500/10 to-amber-500/0" },
-    "Form Mismatch": { accent: "text-purple-400", bg: "bg-purple-500/10", bar: "bg-purple-500", header: "from-purple-500/10 to-purple-500/0" },
-  };
-  const c = colors[strategy.name] || colors["Value Home"];
+  // Hide strategies with 0 picks
+  if (!isLoading && (!metrics?.has_data || metrics?.sample_size === 0)) {
+    return null;
+  }
+
+  const c = getStrategyColor(metrics?.roi);
 
   return (
     <div className="glass-card flex flex-col overflow-hidden animate-fade-in">
@@ -502,15 +544,19 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
             <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">Football · Match Result</p>
             <h3 className="text-base font-bold text-slate-100">{strategy.name}</h3>
           </div>
-          {metrics?.has_data ? (
+          {metrics?.roi !== undefined && metrics?.roi > 0 ? (
             <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-400">
-              <CheckCircle2 className="h-3 w-3" /> Backtested
+              <TrendingUp className="h-3 w-3" /> Profitable
             </span>
-          ) : (
+          ) : metrics?.has_data ? (
+            <span className="flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-2.5 py-1 text-[11px] font-semibold text-red-400">
+              <TrendingUp className="h-3 w-3 rotate-180" /> Unprofitable
+            </span>
+          ) : isLoading ? (
             <span className="flex items-center gap-1.5 rounded-full border border-slate-500/30 bg-slate-500/10 px-2.5 py-1 text-[11px] font-semibold text-slate-400">
-              <Clock className="h-3 w-3" /> {isLoading ? "Loading..." : "No picks yet"}
+              <Clock className="h-3 w-3" /> Loading...
             </span>
-          )}
+          ) : null}
         </div>
         <p className="text-xs leading-relaxed text-slate-400">{strategy.description}</p>
       </div>
@@ -541,24 +587,26 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
         </div>
       )}
 
-      {/* Rules */}
+      {/* Rules — human readable */}
       <div className="px-5 pb-5 flex-1">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 mt-3">Rules</p>
-        <ul className="space-y-1">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 mt-3">How it works</p>
+        <ul className="space-y-1.5">
           {(strategy.rules as { feature: string; operator: string; value: unknown }[]).map((rule, i) => (
             <li key={i} className="flex items-start gap-2 text-xs text-slate-400">
-              <span className={cn("flex-shrink-0 font-bold tabular-nums mt-px", c.accent)}>·</span>
-              {rule.feature} {rule.operator} {Array.isArray(rule.value) ? `[${rule.value.join(", ")}]` : String(rule.value)}
+              <CheckCircle2 className={cn("h-3.5 w-3.5 flex-shrink-0 mt-0.5", c.accent)} />
+              {humanizeRule(rule)}
             </li>
           ))}
         </ul>
-        <Link
-          href={`/strategy/${strategy.id}`}
-          className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-2.5 text-xs font-semibold text-blue-400 hover:bg-blue-500/20 transition-all"
-        >
-          <BarChart3 className="h-3.5 w-3.5" />
-          View All Picks & Results
-        </Link>
+        {metrics?.has_data && (
+          <Link
+            href={`/strategy/${strategy.id}`}
+            className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-2.5 text-xs font-semibold text-blue-400 hover:bg-blue-500/20 transition-all"
+          >
+            <BarChart3 className="h-3.5 w-3.5" />
+            View All Picks & Results
+          </Link>
+        )}
       </div>
     </div>
   );
