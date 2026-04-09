@@ -160,6 +160,16 @@ export const routeTable = {
     sw: "/ingia",
     id: "/masuk",
   },
+  "/articles": {
+    en: "/articles",
+    nl: "/artikelen",
+    de: "/artikel",
+    fr: "/articles",
+    es: "/articulos",
+    it: "/articoli",
+    sw: "/makala",
+    id: "/artikel",
+  },
   "/deals": {
     en: "/deals",
     nl: "/aanbiedingen",

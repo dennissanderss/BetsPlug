@@ -95,9 +95,11 @@ const PLANS: PlanDef[] = [
     name: "Bronze",
     tagline: "pricing.bronzeTagline",
     icon: Shield,
-    // Symbolic €0,01 — technically a paid plan so the checkout
-    // treats it like any other purchase (payment step required),
-    // but effectively free.
+    // Symbolic €0,01 trial: the user MUST provide a real payment
+    // method and is charged one cent. This is deliberate fraud
+    // protection — a fake card will be rejected by Stripe, which
+    // stops people from farming free trials with throwaway cards.
+    // Checkout renders all steps including payment.
     monthly: 0.01,
     featuresKey: [
       "pricing.bronzeF1",
@@ -143,7 +145,7 @@ const PLANS: PlanDef[] = [
     tagline: "pricing.platTagline",
     icon: Crown,
     monthly: 0,
-    oneTime: 199,
+    oneTime: 299,
     featuresKey: [
       "pricing.platF1",
       "pricing.platF2",

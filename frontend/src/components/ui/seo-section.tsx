@@ -54,7 +54,7 @@ const faqCategories: FaqCategory[] = [
       },
       {
         q: "How do I get started with BetsPlug?",
-        a: "Simply create a free account to unlock daily AI sports picks, browse upcoming match predictions, and explore our verified track record. No credit card required to try the platform — upgrade only when you need advanced features.",
+        a: "Start with our Bronze plan — a symbolic €0.01 trial that unlocks 7 days of full Gold-level access: daily AI sports picks, upcoming match predictions, our verified track record and every model output. We charge one cent through Stripe so we can verify the card is real (this is how we keep the platform fraud-free). Upgrade to Silver, Gold or Platinum when you're ready.",
       },
       {
         q: "Which sports does the AI predictor cover?",
@@ -96,7 +96,7 @@ const faqCategories: FaqCategory[] = [
       },
       {
         q: "Do you offer refunds?",
-        a: "We offer a 7-day money-back guarantee on all paid plans. If BetsPlug isn't right for you, contact support within your first week and we'll issue a full refund — no questions asked.",
+        a: "We offer a 14-day money-back guarantee on all paid plans under EU consumer law. If BetsPlug isn't right for you, contact support within the first 14 days and we'll issue a full refund — no questions asked. Platinum Lifetime is final-sale after the 14-day window.",
       },
     ],
   },

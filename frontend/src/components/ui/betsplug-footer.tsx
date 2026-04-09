@@ -149,7 +149,7 @@ export function BetsPlugFooter() {
   const companyLinksT = [
     { text: "About Us", href: loc("/about") },
     { text: "Our Models", href: loc("/about") + "#models" },
-    { text: "Blog", href: "/blog" },
+    { text: t("nav.articles"), href: loc("/articles") },
     { text: "Careers", href: "/careers" },
     { text: "Contact", href: loc("/contact") },
   ];

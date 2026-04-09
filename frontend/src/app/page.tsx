@@ -29,6 +29,7 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { TestimonialsSection } from "@/components/ui/testimonials-section";
 import { SocialProofPopup } from "@/components/ui/social-proof-popup";
 import { SeoSection } from "@/components/ui/seo-section";
+import { LatestArticlesSection } from "@/components/ui/latest-articles-section";
 import { FloatingSports } from "@/components/ui/floating-sports";
 import { LeaguesTicker } from "@/components/ui/leagues-ticker";
 import { HowItWorks } from "@/components/ui/how-it-works";
@@ -1152,6 +1153,11 @@ export default function LandingPage() {
           SEO CONTENT
          ═══════════════════════════════════════════════════════════════════ */}
       <SeoSection />
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          LATEST ARTICLES — 3 most recent posts + light "see all" link
+         ═══════════════════════════════════════════════════════════════════ */}
+      <LatestArticlesSection />
 
       {/* ═══════════════════════════════════════════════════════════════════
           FINAL CTA — last push before footer
