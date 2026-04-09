@@ -94,6 +94,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       window.localStorage.removeItem(TOKEN_KEY);
       window.localStorage.removeItem(USER_KEY);
+      window.localStorage.removeItem("betsplug_tier");
     } catch {
       // Ignore storage failures.
     }

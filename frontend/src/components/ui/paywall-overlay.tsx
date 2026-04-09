@@ -159,16 +159,47 @@ export function PaywallOverlay({
 }: PaywallOverlayProps) {
   const [hasAccess, setHasAccess] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [userTier, setUserTier] = useState("free");
 
   useEffect(() => {
-    const storedTier =
-      typeof window !== "undefined"
-        ? localStorage.getItem("betsplug_tier") || "free"
-        : "free";
-    const userRank = TIER_RANK[storedTier] ?? 0;
     const requiredRank = TIER_RANK[requiredTier] ?? 0;
-    if (userRank >= requiredRank) setHasAccess(true);
-    setChecked(true);
+
+    // First check localStorage (set by admin or after login)
+    const stored = localStorage.getItem("betsplug_tier");
+    if (stored) {
+      setUserTier(stored);
+      const userRank = TIER_RANK[stored] ?? 0;
+      if (userRank >= requiredRank) setHasAccess(true);
+      setChecked(true);
+      return;
+    }
+
+    // Then check API for subscription status
+    const checkSubscription = async () => {
+      try {
+        const raw = localStorage.getItem("betsplug_user");
+        if (!raw) {
+          setChecked(true);
+          return;
+        }
+        const user = JSON.parse(raw);
+        const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+        const resp = await fetch(`${API}/subscriptions/status?email=${encodeURIComponent(user.email || "")}`);
+        const data = await resp.json();
+        if (data.plan) {
+          const tierMap: Record<string, string> = { basic: "silver", standard: "silver", premium: "gold", lifetime: "platinum" };
+          const tier = tierMap[data.plan] || "free";
+          setUserTier(tier);
+          localStorage.setItem("betsplug_tier", tier);
+          const userRank = TIER_RANK[tier] ?? 0;
+          if (userRank >= requiredRank) setHasAccess(true);
+        }
+      } catch {
+        // Keep free tier on error
+      }
+      setChecked(true);
+    };
+    checkSubscription();
   }, [requiredTier]);
 
   // Avoid a flash of paywall during first paint

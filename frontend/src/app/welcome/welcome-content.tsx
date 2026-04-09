@@ -73,6 +73,17 @@ export function WelcomeContent() {
     return () => clearTimeout(t);
   }, []);
 
+  // After successful Stripe checkout, persist the subscription tier
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("success") === "true") {
+      const plan = urlParams.get("plan") || "gold";
+      const tierMap: Record<string, string> = { bronze: "silver", silver: "silver", gold: "gold", platinum: "platinum" };
+      const tier = tierMap[plan] || "gold";
+      localStorage.setItem("betsplug_tier", tier);
+    }
+  }, []);
+
   const planLabel = useMemo(() => {
     const map: Record<string, string> = {
       bronze: "Bronze",

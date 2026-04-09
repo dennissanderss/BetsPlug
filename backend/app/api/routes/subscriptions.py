@@ -25,6 +25,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
 from app.db.session import get_db
+from app.models.user import User
+from app.models.subscription import Subscription, SubscriptionStatus, PlanType
 
 logger = logging.getLogger(__name__)
 
@@ -206,6 +208,12 @@ async def create_checkout_session(
     )
 
 
+# Webhook URL: https://betsplug-production.up.railway.app/api/subscriptions/webhook
+# Configure in Stripe Dashboard → Developers → Webhooks
+# Events to listen for: checkout.session.completed, customer.subscription.updated,
+#                        customer.subscription.deleted, invoice.payment_failed
+
+
 @router.post("/webhook")
 async def stripe_webhook(
     request: Request,
@@ -248,43 +256,191 @@ async def stripe_webhook(
         plan = data.get("metadata", {}).get("plan", "unknown")
         customer_id = data.get("customer")
         subscription_id = data.get("subscription")
+        customer_email = data.get("customer_details", {}).get("email") or data.get("customer_email")
         logger.info(
             f"Checkout completed: plan={plan}, customer={customer_id}, "
-            f"subscription={subscription_id}"
+            f"subscription={subscription_id}, email={customer_email}"
         )
-        # TODO: Create/update Subscription record in DB
-        # TODO: Activate user's premium access
+
+        if customer_email:
+            # Find or create user by email
+            result = await db.execute(select(User).where(User.email == customer_email))
+            user = result.scalar_one_or_none()
+
+            if not user:
+                user = User(
+                    email=customer_email,
+                    username=customer_email.split("@")[0],
+                    hashed_password="stripe_managed",
+                    is_active=True,
+                )
+                db.add(user)
+                await db.flush()
+                logger.info(f"Created new user for Stripe customer: {customer_email}")
+
+            # Map plan string to PlanType enum
+            plan_map = {
+                "basic": PlanType.BASIC, "bronze": PlanType.BASIC,
+                "standard": PlanType.STANDARD, "silver": PlanType.STANDARD,
+                "premium": PlanType.PREMIUM, "gold": PlanType.PREMIUM,
+                "lifetime": PlanType.LIFETIME, "platinum": PlanType.LIFETIME,
+            }
+            plan_type = plan_map.get(plan.lower(), PlanType.BASIC)
+            is_lifetime = plan_type == PlanType.LIFETIME
+
+            # Check for existing subscription
+            result = await db.execute(
+                select(Subscription).where(Subscription.user_id == user.id)
+            )
+            existing_sub = result.scalar_one_or_none()
+
+            if existing_sub:
+                existing_sub.plan_type = plan_type
+                existing_sub.status = SubscriptionStatus.ACTIVE
+                existing_sub.stripe_customer_id = customer_id
+                existing_sub.stripe_subscription_id = subscription_id
+                existing_sub.is_lifetime = is_lifetime
+                existing_sub.current_period_start = datetime.now(timezone.utc)
+            else:
+                new_sub = Subscription(
+                    user_id=user.id,
+                    plan_type=plan_type,
+                    status=SubscriptionStatus.ACTIVE,
+                    stripe_customer_id=customer_id,
+                    stripe_subscription_id=subscription_id,
+                    is_lifetime=is_lifetime,
+                    current_period_start=datetime.now(timezone.utc),
+                )
+                db.add(new_sub)
+
+            await db.commit()
+            logger.info(f"Subscription activated: user={customer_email}, plan={plan}")
 
     elif event_type == "customer.subscription.updated":
+        stripe_sub_id = data.get("id")
         status = data.get("status")
-        logger.info(f"Subscription updated: status={status}")
-        # TODO: Update subscription status in DB
+        logger.info(f"Subscription updated: id={stripe_sub_id}, status={status}")
+
+        if stripe_sub_id:
+            result = await db.execute(
+                select(Subscription).where(
+                    Subscription.stripe_subscription_id == stripe_sub_id
+                )
+            )
+            sub = result.scalar_one_or_none()
+
+            if sub:
+                status_map = {
+                    "active": SubscriptionStatus.ACTIVE,
+                    "past_due": SubscriptionStatus.PAST_DUE,
+                    "canceled": SubscriptionStatus.CANCELLED,
+                    "unpaid": SubscriptionStatus.PAST_DUE,
+                    "trialing": SubscriptionStatus.TRIALING,
+                }
+                sub.status = status_map.get(status, SubscriptionStatus.ACTIVE)
+
+                # Update period end from Stripe data
+                period_end = data.get("current_period_end")
+                if period_end:
+                    sub.current_period_end = datetime.fromtimestamp(
+                        period_end, tz=timezone.utc
+                    )
+
+                sub.cancel_at_period_end = data.get("cancel_at_period_end", False)
+                await db.commit()
+                logger.info(f"Subscription {stripe_sub_id} updated to status={status}")
 
     elif event_type == "customer.subscription.deleted":
-        logger.info("Subscription deleted/cancelled")
-        # TODO: Mark subscription as expired
+        stripe_sub_id = data.get("id")
+        logger.info(f"Subscription deleted/cancelled: id={stripe_sub_id}")
+
+        if stripe_sub_id:
+            result = await db.execute(
+                select(Subscription).where(
+                    Subscription.stripe_subscription_id == stripe_sub_id
+                )
+            )
+            sub = result.scalar_one_or_none()
+
+            if sub:
+                sub.status = SubscriptionStatus.EXPIRED
+                sub.current_period_end = datetime.now(timezone.utc)
+                await db.commit()
+                logger.info(f"Subscription {stripe_sub_id} marked as expired")
 
     elif event_type == "invoice.payment_failed":
-        logger.info("Payment failed")
-        # TODO: Mark subscription as past_due
+        stripe_sub_id = data.get("subscription")
+        logger.info(f"Payment failed: subscription={stripe_sub_id}")
+
+        if stripe_sub_id:
+            result = await db.execute(
+                select(Subscription).where(
+                    Subscription.stripe_subscription_id == stripe_sub_id
+                )
+            )
+            sub = result.scalar_one_or_none()
+
+            if sub:
+                sub.status = SubscriptionStatus.PAST_DUE
+                await db.commit()
+                logger.info(f"Subscription {stripe_sub_id} marked as past_due")
 
     return {"status": "ok"}
 
 
 @router.get("/status", response_model=SubscriptionStatusResponse)
 async def get_subscription_status(
+    email: str | None = None,
     db: AsyncSession = Depends(get_db),
 ):
     """
-    Get the current user's subscription status.
-    Returns whether user has active subscription and plan details.
+    Get subscription status for a user.
+    Pass ?email=user@example.com to look up by email.
+    Will switch to JWT-based lookup once full auth is wired up.
     """
-    # TODO: Get actual user from JWT token and query subscription
-    # For now, return free tier (no subscription)
+    if not email:
+        return SubscriptionStatusResponse(
+            has_subscription=False,
+            plan=None,
+            status=None,
+            is_lifetime=False,
+            current_period_end=None,
+        )
+
+    # Find user by email
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+
+    if not user:
+        return SubscriptionStatusResponse(
+            has_subscription=False,
+            plan=None,
+            status=None,
+            is_lifetime=False,
+            current_period_end=None,
+        )
+
+    # Find active subscription for user
+    result = await db.execute(
+        select(Subscription)
+        .where(Subscription.user_id == user.id)
+        .order_by(Subscription.created_at.desc())
+    )
+    sub = result.scalar_one_or_none()
+
+    if not sub:
+        return SubscriptionStatusResponse(
+            has_subscription=False,
+            plan=None,
+            status=None,
+            is_lifetime=False,
+            current_period_end=None,
+        )
+
     return SubscriptionStatusResponse(
-        has_subscription=False,
-        plan=None,
-        status=None,
-        is_lifetime=False,
-        current_period_end=None,
+        has_subscription=sub.status in (SubscriptionStatus.ACTIVE, SubscriptionStatus.TRIALING),
+        plan=sub.plan_type.value,
+        status=sub.status.value,
+        is_lifetime=sub.is_lifetime,
+        current_period_end=sub.current_period_end.isoformat() if sub.current_period_end else None,
     )
