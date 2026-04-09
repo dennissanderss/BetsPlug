@@ -33,6 +33,12 @@ import {
 } from "lucide-react";
 import { CheckoutHeader } from "@/components/checkout/checkout-header";
 import { CheckoutFooter } from "@/components/checkout/checkout-footer";
+import {
+  PayPalBadge,
+  StripeBadge,
+  VisaBadge,
+  MastercardBadge,
+} from "@/components/ui/payment-badges";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { TranslationKey } from "@/i18n/messages";
 import {
@@ -599,39 +605,19 @@ export function CheckoutContent() {
                         </Link>
                       </p>
 
-                      {/* Payment reassurance — show the accepted
-                          payment methods already on step 1 so the
-                          visitor knows what to expect. */}
-                      <div className="mt-6 flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-4 sm:flex-row sm:gap-4">
+                      {/* Payment reassurance — dark tile badges
+                          matching the footer so the trust signals
+                          look consistent across the site. */}
+                      <div className="mt-6 flex flex-col items-center justify-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-4 sm:flex-row sm:gap-5">
                         <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-slate-500">
                           <Lock className="h-3.5 w-3.5 text-green-400" />
                           {t("checkout.weAccept")}
                         </div>
-                        <div className="flex items-center gap-2">
-                          <PaymentBadge label="VISA">
-                            <span className="text-[10px] font-extrabold italic text-blue-700">
-                              VISA
-                            </span>
-                          </PaymentBadge>
-                          <PaymentBadge label="Mastercard">
-                            <span className="flex gap-0.5">
-                              <span className="h-3 w-3 rounded-full bg-red-500" />
-                              <span className="-ml-1.5 h-3 w-3 rounded-full bg-amber-400" />
-                            </span>
-                          </PaymentBadge>
-                          <PaymentBadge label="American Express">
-                            <span className="text-[9px] font-extrabold tracking-tight text-[#2671b9]">
-                              AMEX
-                            </span>
-                          </PaymentBadge>
-                          <PaymentBadge label="PayPal">
-                            <PayPalMark />
-                          </PaymentBadge>
-                          <PaymentBadge label="Apple Pay">
-                            <span className="text-[10px] font-extrabold tracking-tight text-black">
-                               Pay
-                            </span>
-                          </PaymentBadge>
+                        <div className="flex flex-wrap items-center justify-center gap-3">
+                          <PayPalBadge />
+                          <StripeBadge />
+                          <VisaBadge />
+                          <MastercardBadge />
                         </div>
                       </div>
                     </motion.div>
@@ -1251,25 +1237,6 @@ function PaymentOption({
         {active && <Check className="h-3 w-3 text-black" strokeWidth={4} />}
       </div>
     </button>
-  );
-}
-
-/** Small white pill used to display a payment brand mark. */
-function PaymentBadge({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      aria-label={label}
-      title={label}
-      className="flex h-7 w-10 items-center justify-center rounded-md border border-white/[0.1] bg-white shadow-sm"
-    >
-      {children}
-    </div>
   );
 }
 
