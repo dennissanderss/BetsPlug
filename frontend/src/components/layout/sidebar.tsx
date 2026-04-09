@@ -5,20 +5,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  Search,
   ClipboardList,
   FileBarChart2,
   ShieldCheck,
   Menu,
   X,
-  TrendingUp,
-  Radio,
   Sparkles,
   ChevronRight,
   FlaskConical,
   Settings,
-  Gift,
-  BookOpen,
   Trophy,
   MapPin,
 } from "lucide-react";
@@ -36,24 +31,20 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { labelKey: "nav.jouwRoute", fallback: "Jouw Route", href: "/jouw-route", icon: MapPin, badge: "START", badgeColor: "bg-emerald-500" },
-  { labelKey: "nav.about",          fallback: "About",          href: "/about",          icon: BookOpen },
-  { labelKey: "nav.dashboard",      fallback: "Dashboard",      href: "/dashboard",      icon: LayoutDashboard },
-  { labelKey: "nav.search",         fallback: "Search",         href: "/search",         icon: Search },
-  { labelKey: "nav.live_matches",   fallback: "Live Matches",   href: "/live",           icon: Radio,         badge: "LIVE" },
+  { labelKey: "nav.jouwRoute",      fallback: "Jouw Route",      href: "/jouw-route",     icon: MapPin,        badge: "START", badgeColor: "bg-emerald-500" },
+  { labelKey: "nav.dashboard",      fallback: "Dashboard",       href: "/dashboard",      icon: LayoutDashboard },
+  { labelKey: "nav.strategy_lab",   fallback: "Strategy Lab",    href: "/strategy",       icon: FlaskConical },
+  { labelKey: "nav.predictions",    fallback: "Predictions",     href: "/predictions",    icon: Sparkles },
   { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy,        badge: "HOT" },
-  { labelKey: "nav.predictions",    fallback: "Predictions",    href: "/predictions",    icon: Sparkles },
-  { labelKey: "nav.results",         fallback: "Results",         href: "/results",        icon: Trophy },
-  { labelKey: "nav.weekly_report",  fallback: "Weekly Report",  href: "/weekly-report",  icon: FileBarChart2 },
-  { labelKey: "nav.strategy_lab",   fallback: "Strategy Lab",   href: "/strategy",       icon: FlaskConical },
-  { labelKey: "nav.trackrecord",    fallback: "Trackrecord",    href: "/trackrecord",    icon: ClipboardList },
-  { labelKey: "nav.reports",        fallback: "Reports",        href: "/reports",        icon: FileBarChart2 },
-  { labelKey: "nav.admin",          fallback: "Admin",          href: "/admin",          icon: ShieldCheck },
+  { labelKey: "nav.results",        fallback: "Results",         href: "/results",        icon: Trophy },
+  { labelKey: "nav.weekly_report",  fallback: "Weekly Report",   href: "/weekly-report",  icon: FileBarChart2 },
+  { labelKey: "nav.trackrecord",    fallback: "Trackrecord",     href: "/trackrecord",    icon: ClipboardList },
+  { labelKey: "nav.reports",        fallback: "Reports",         href: "/reports",        icon: FileBarChart2 },
 ];
 
 const bottomNavItems: NavItem[] = [
+  { labelKey: "nav.admin",    fallback: "Admin",    href: "/admin",    icon: ShieldCheck },
   { labelKey: "nav.settings", fallback: "Settings", href: "/settings", icon: Settings },
-  { labelKey: "nav.deals",    fallback: "Deals",    href: "/deals",    icon: Gift,    badge: "NEW" },
 ];
 
 export function Sidebar() {
@@ -88,7 +79,6 @@ export function Sidebar() {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");
           const Icon = item.icon;
-          const isLive = item.badge === "LIVE";
 
           return (
             <Link
@@ -111,16 +101,6 @@ export function Sidebar() {
               <span className={cn("flex-1", isActive ? "text-blue-300" : "group-hover:text-slate-200")}>
                 {getLabel(item)}
               </span>
-
-              {/* LIVE badge with pulsing dot */}
-              {isLive && (
-                <span className="flex items-center gap-1.5">
-                  <span className="live-dot-red" />
-                  <span className="text-[10px] font-bold text-red-400 tracking-wider">
-                    LIVE
-                  </span>
-                </span>
-              )}
 
               {/* START badge */}
               {item.badge === "START" && (
@@ -149,7 +129,7 @@ export function Sidebar() {
               )}
 
               {/* Active chevron */}
-              {isActive && !isLive && !item.badge && (
+              {isActive && !item.badge && (
                 <ChevronRight className="h-3.5 w-3.5 text-blue-400/60" />
               )}
             </Link>
@@ -163,7 +143,6 @@ export function Sidebar() {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");
           const Icon = item.icon;
-          const isNew = item.badge === "NEW";
 
           return (
             <Link
@@ -187,21 +166,8 @@ export function Sidebar() {
                 {getLabel(item)}
               </span>
 
-              {/* NEW badge — blue gradient */}
-              {isNew && (
-                <span
-                  className="text-[10px] font-bold tracking-wider text-white px-1.5 py-0.5 rounded"
-                  style={{
-                    background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
-                    boxShadow: "0 0 8px rgba(59,130,246,0.45)",
-                  }}
-                >
-                  NEW
-                </span>
-              )}
-
               {/* Active chevron */}
-              {isActive && !isNew && (
+              {isActive && (
                 <ChevronRight className="h-3.5 w-3.5 text-blue-400/60" />
               )}
             </Link>

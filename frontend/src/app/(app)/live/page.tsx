@@ -8,7 +8,6 @@ import {
   CheckCircle2,
   TrendingUp,
   ChevronRight,
-  Zap,
   RefreshCw,
   AlertCircle,
 } from "lucide-react";
@@ -540,16 +539,6 @@ export default function LiveMatchesPage() {
         </div>
       )}
 
-      {/* ── Disclaimer ── */}
-      <div className="flex items-start gap-2 rounded-xl border border-white/[0.04] bg-white/[0.02] px-4 py-3">
-        <Zap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-600" />
-        <p className="text-[11px] leading-relaxed text-slate-600">
-          Match data is loaded directly from the database and refreshed every 60 seconds.
-          Probability calculations are model-generated simulations for analytical purposes
-          only. Predictions do not constitute betting advice. Match times are shown in your
-          local timezone.
-        </p>
-      </div>
     </div>
   );
 }

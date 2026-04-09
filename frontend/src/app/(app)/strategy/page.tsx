@@ -6,7 +6,6 @@ import { useQuery, useQueries } from "@tanstack/react-query";
 import {
   FlaskConical,
   ShieldCheck,
-  AlertTriangle,
   Clock,
   PlayCircle,
   CheckCircle2,
@@ -405,18 +404,6 @@ export default function StrategyPage() {
           </div>
         </div>
 
-        {/* Disclaimer bar */}
-        <div className="mt-4 flex items-start gap-2 rounded-lg border border-amber-500/20 bg-amber-500/[0.04] px-4 py-3">
-          <AlertTriangle className="h-4 w-4 flex-shrink-0 text-amber-400 mt-0.5" />
-          <p className="text-xs text-slate-400 leading-relaxed">
-            <span className="font-semibold text-amber-400">Past performance is not a guarantee of future results.</span>{" "}
-            Strategy metrics are calculated from real historical predictions. There are currently{" "}
-            <span className="font-semibold text-slate-300">
-              {summaryLoading ? "..." : dataStatus.count.toLocaleString()}
-            </span>{" "}
-            predictions in the database (minimum {BACKTEST_MINIMUM} required for backtesting).
-          </p>
-        </div>
       </div>
 
       {/* ── Model vs Strategy explanation ─────────────────────────────────────── */}
@@ -580,22 +567,6 @@ export default function StrategyPage() {
         </div>
       )}
 
-
-      {/* ── Bottom Disclaimer ─────────────────────────────────────────────────── */}
-      <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.04] p-5 animate-fade-in">
-        <div className="flex gap-3">
-          <AlertTriangle className="h-5 w-5 flex-shrink-0 text-amber-400 mt-0.5" />
-          <div className="space-y-1.5">
-            <p className="text-xs font-bold uppercase tracking-wider text-amber-400">Important Notice</p>
-            <p className="text-xs leading-relaxed text-slate-400">
-              Strategy performance metrics are based on historical backtested data and{" "}
-              <span className="font-semibold text-amber-400">do not guarantee future results</span>.
-              Do not use any figures on this page as the basis for financial, investment, or wagering decisions.
-              Past performance is not indicative of future outcomes.
-            </p>
-          </div>
-        </div>
-      </div>
 
     </div>
   );

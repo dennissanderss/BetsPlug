@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import {
-  Users,
+  LayoutDashboard,
   FlaskConical,
   Sparkles,
   Trophy,
@@ -26,11 +26,11 @@ interface Step {
 const STEPS: Step[] = [
   {
     number: 1,
-    title: "Welcome to BetsPlug",
-    href: "/about",
-    icon: Users,
+    title: "Your Dashboard",
+    href: "/dashboard",
+    icon: LayoutDashboard,
     description:
-      "Learn who we are and how our AI model analyzes thousands of data points to predict match outcomes.",
+      "Get an overview of your prediction performance, accuracy metrics, and system status.",
   },
   {
     number: 2,
@@ -184,7 +184,7 @@ export default function JouwRoutePage() {
       {/* Bottom CTA */}
       <div className="text-center pt-10 pb-4 animate-fade-in">
         <Link
-          href="/about"
+          href="/dashboard"
           className="btn-gradient inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-sm font-bold"
         >
           Begin bij Stap 1 <ChevronRight className="h-4 w-4" />

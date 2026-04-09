@@ -477,30 +477,6 @@ function SkeletonCard() {
   );
 }
 
-// ─── Disclaimer ───────────────────────────────────────────────────────────────
-
-function Disclaimer() {
-  return (
-    <div
-      className="rounded-xl border p-4 flex items-start gap-3"
-      style={{
-        background: "rgba(245,158,11,0.04)",
-        borderColor: "rgba(245,158,11,0.22)",
-        backdropFilter: "blur(20px)",
-      }}
-    >
-      <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/10">
-        <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
-      </div>
-      <p className="text-xs leading-relaxed text-slate-400">
-        All predictions shown are{" "}
-        <span className="font-semibold text-slate-300">historical model outputs</span> for educational
-        purposes only. Past accuracy does not guarantee future performance.
-        This is not financial advice. Always gamble responsibly.
-      </p>
-    </div>
-  );
-}
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -527,11 +503,13 @@ export default function ResultsPage() {
   // Unwrap the fixtures array from the response
   const allResults: Fixture[] = resultsQuery.data?.fixtures ?? [];
 
-  // ── Derived league list ────────────────────────────────────────────────────
+  // ── Derived league list — only show leagues that have at least 1 finished fixture with a result ──
   const leagues = useMemo(() => {
     const seen = new Set<string>();
     for (const f of allResults) {
-      if (f.league_name) seen.add(f.league_name);
+      if (f.league_name && f.status === "finished" && f.result) {
+        seen.add(f.league_name);
+      }
     }
     return Array.from(seen).sort();
   }, [allResults]);
@@ -540,8 +518,8 @@ export default function ResultsPage() {
   const filtered = useMemo(() => {
     let items = [...allResults];
 
-    // Only show finished fixtures on the results page
-    items = items.filter((f) => f.status === "finished");
+    // Only show finished fixtures that have actual result data
+    items = items.filter((f) => f.status === "finished" && f.result);
 
     if (leagueFilter) {
       items = items.filter((f) => f.league_name === leagueFilter);
@@ -633,7 +611,7 @@ export default function ResultsPage() {
         <div className="space-y-3">
           {[1, 2, 3, 4, 5].map((i) => <SkeletonCard key={i} />)}
         </div>
-      ) : allResults.filter((f) => f.status === "finished").length === 0 ? (
+      ) : allResults.filter((f) => f.status === "finished" && f.result).length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
           <Trophy className="h-8 w-8 text-slate-600" />
           <p className="text-base font-medium text-slate-400">No results found</p>
@@ -671,8 +649,6 @@ export default function ResultsPage() {
         </div>
       )}
 
-      {/* ── Disclaimer ── */}
-      <Disclaimer />
     </div>
   );
 }

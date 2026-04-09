@@ -691,30 +691,6 @@ function PageSkeleton() {
   );
 }
 
-// ─── Disclaimer ───────────────────────────────────────────────────────────────
-
-function Disclaimer() {
-  return (
-    <div
-      className="rounded-xl border p-4 flex items-start gap-3"
-      style={{
-        background: "rgba(245,158,11,0.04)",
-        borderColor: "rgba(245,158,11,0.22)",
-        backdropFilter: "blur(20px)",
-      }}
-    >
-      <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/10">
-        <AlertTriangle className="h-3.5 w-3.5 text-amber-400" />
-      </div>
-      <p className="text-xs leading-relaxed text-slate-400">
-        <span className="font-semibold text-slate-300">Simulated paper performance only.</span>{" "}
-        P/L figures use a flat 1-unit stake per call at implied model odds. Past
-        performance does not guarantee future results. This is not financial advice.
-        Always gamble responsibly.
-      </p>
-    </div>
-  );
-}
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -796,8 +772,6 @@ export default function WeeklyReportPage() {
         <AllCallsTable fixtures={fixtures} />
       </div>
 
-      {/* ── Disclaimer ── */}
-      <Disclaimer />
     </div>
   );
 }

@@ -358,6 +358,7 @@ export default function DashboardPage() {
       icon: Activity,
       trend: null as null | "up" | "down",
       sub: "All time",
+      tooltip: "Total number of predictions our AI model has generated across all leagues",
     },
     {
       label: "Overall Accuracy",
@@ -365,6 +366,7 @@ export default function DashboardPage() {
       icon: Target,
       trend: "up" as const,
       sub: "vs last period",
+      tooltip: "Percentage of predictions where our model correctly predicted the match outcome (home/draw/away)",
     },
     {
       label: "Avg Brier Score",
@@ -372,6 +374,7 @@ export default function DashboardPage() {
       icon: BarChart3,
       trend: "down" as const,
       sub: "Lower is better",
+      tooltip: "Model calibration metric (0-1, lower is better). Measures how well our probabilities match actual outcomes. Below 0.25 is good.",
     },
     {
       label: "Avg Confidence",
@@ -379,6 +382,7 @@ export default function DashboardPage() {
       icon: TrendingUp,
       trend: null,
       sub: "Model certainty",
+      tooltip: "Average confidence level across all predictions. Higher means the model was more certain about its picks.",
     },
   ];
 
@@ -409,8 +413,8 @@ export default function DashboardPage() {
         <KpiSkeletonRow />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {kpis.map(({ label, value, icon: Icon, trend, sub }) => (
-            <div key={label} className="glass-card-hover p-6">
+          {kpis.map(({ label, value, icon: Icon, trend, sub, tooltip }) => (
+            <div key={label} className="glass-card-hover p-6" title={tooltip}>
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
                   <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">

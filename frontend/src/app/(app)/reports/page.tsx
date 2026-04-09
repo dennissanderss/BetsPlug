@@ -33,7 +33,7 @@ function EmptyReports() {
       </div>
       <p className="text-sm font-medium text-slate-400">No reports generated yet</p>
       <p className="mt-1 text-xs text-slate-500">
-        Use the form above to generate your first simulation report.
+        Use the form above to generate your first report.
       </p>
     </div>
   );
@@ -79,9 +79,7 @@ function GenerateReportCard() {
         <div>
           <h2 className="text-sm font-semibold text-slate-100">Generate Report</h2>
           <p className="text-xs text-slate-400">
-            Produce a new simulation export —{" "}
-            <span className="font-semibold text-amber-400">SIMULATION ONLY</span>
-            , all outputs are hypothetical.
+            Generate a new performance report based on model predictions.
           </p>
         </div>
       </div>
@@ -221,8 +219,7 @@ function ReportsList({ reports, isLoading }: { reports?: GeneratedReport[]; isLo
         <div>
           <h2 className="text-sm font-semibold text-slate-100">Generated Reports</h2>
           <p className="text-xs text-slate-400">
-            All available simulation reports —{" "}
-            <span className="font-medium text-amber-400">SIMULATION ONLY</span>
+            All available performance reports
           </p>
         </div>
         {!isLoading && reports && reports.length > 0 && (
@@ -269,22 +266,9 @@ export default function ReportsPage() {
             Reports &amp; Exports
           </h1>
           <p className="mt-1 text-sm text-slate-400">
-            Generate and download simulation performance reports
+            Generate and download performance reports
           </p>
         </div>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-400">
-          <AlertTriangle className="h-3 w-3" />
-          Simulation Only
-        </span>
-      </div>
-
-      {/* Disclaimer banner */}
-      <div className="flex items-start gap-3 rounded-xl border border-amber-500/20 bg-amber-500/[0.06] px-5 py-4 animate-fade-in">
-        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
-        <p className="text-xs leading-relaxed text-slate-300">
-          <span className="font-semibold text-amber-400">SIMULATION ONLY</span> — All reports and
-          exports are based on historical model simulations. Not financial or betting advice.
-        </p>
       </div>
 
       {/* Generate form */}

@@ -43,7 +43,6 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { DisclaimerBanner } from "@/components/common/disclaimer-banner";
 import { CalibrationChart, type CalibrationPoint } from "@/components/charts/calibration-chart";
 import {
   RollingAccuracyChart,
@@ -861,9 +860,6 @@ export default function TrackrecordPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Disclaimer */}
-      <DisclaimerBanner message="All performance metrics shown are based on historical model predictions against real match outcomes. Not financial or betting advice." />
-
       {/* Page header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>

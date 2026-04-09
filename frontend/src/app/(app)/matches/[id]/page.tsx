@@ -8,7 +8,6 @@ import {
   Clock,
   TrendingUp,
   BarChart2,
-  AlertTriangle,
   CheckCircle2,
   XCircle,
   Minus,
@@ -40,7 +39,6 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DisclaimerBanner } from "@/components/common/disclaimer-banner";
 import { ProbabilityBar } from "@/components/charts/probability-bar";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -521,21 +519,11 @@ function ForecastTab({
 
   return (
     <div className="space-y-5">
-      {/* Simulation disclaimer - always prominent */}
-      <div className="rounded-md border-2 border-amber-400 bg-amber-50 px-4 py-3 dark:border-amber-600 dark:bg-amber-950/30">
-        <div className="flex items-start gap-2">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
-          <p className="text-sm font-bold text-amber-800 dark:text-amber-300">
-            This is a simulated model output for educational purposes only. Not financial or betting advice.
-          </p>
-        </div>
-      </div>
-
       {/* Probability bar */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base font-semibold">Win Probabilities</CardTitle>
-          <CardDescription>Model output — simulated</CardDescription>
+          <CardDescription>Model output</CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
           <ProbabilityBar
@@ -795,8 +783,6 @@ export default function MatchDetailPage() {
 
   return (
     <div className="space-y-6">
-      {/* Disclaimer */}
-      <DisclaimerBanner />
 
       {/* Match Header */}
       {matchLoading && !displayMatch ? (
