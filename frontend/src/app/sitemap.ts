@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { articles } from "@/data/articles";
 import { LEAGUE_HUBS } from "@/data/league-hubs";
+import { BET_TYPE_HUBS } from "@/data/bet-type-hubs";
 import { defaultLocale, locales, localeMeta } from "@/i18n/config";
 import { localizePath } from "@/i18n/routes";
 
@@ -27,6 +28,7 @@ type PublicPath = {
 const PUBLIC_PATHS: PublicPath[] = [
   { canonical: "/", priority: 1.0, changeFrequency: "daily" },
   { canonical: "/match-predictions", priority: 0.9, changeFrequency: "daily" },
+  { canonical: "/bet-types", priority: 0.8, changeFrequency: "monthly" },
   { canonical: "/articles", priority: 0.8, changeFrequency: "weekly" },
   { canonical: "/how-it-works", priority: 0.7, changeFrequency: "monthly" },
   { canonical: "/track-record", priority: 0.7, changeFrequency: "weekly" },
@@ -98,6 +100,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
+  const betTypeHubEntries: MetadataRoute.Sitemap = BET_TYPE_HUBS.map((hub) => {
+    const canonical = `/bet-types/${hub.slug}`;
+    return {
+      url: absoluteUrl(localizePath(canonical, defaultLocale)),
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.75,
+      alternates: { languages: languageAlternatesFor(canonical) },
+    };
+  });
+
   const legalEntries: MetadataRoute.Sitemap = LEGAL_PATHS.map(
     ({ path, priority }) => ({
       url: absoluteUrl(path),
@@ -107,5 +120,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })
   );
 
-  return [...pageEntries, ...leagueHubEntries, ...articleEntries, ...legalEntries];
+  return [
+    ...pageEntries,
+    ...leagueHubEntries,
+    ...betTypeHubEntries,
+    ...articleEntries,
+    ...legalEntries,
+  ];
 }
