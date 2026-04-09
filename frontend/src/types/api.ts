@@ -381,10 +381,17 @@ export interface StrategyPickPrediction {
   away_win_prob: number;
   confidence: number;
   prediction_type: string;
+  pick: string | null;
   home_team_name: string | null;
   away_team_name: string | null;
   scheduled_at: string | null;
   league_name: string | null;
+  match_status: string | null;
+  actual_outcome: string | null;
+  is_correct: boolean | null;
+  home_score: number | null;
+  away_score: number | null;
+  pnl: number | null;
 }
 
 export interface StrategyPicksResponse {
