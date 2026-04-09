@@ -1130,6 +1130,47 @@ const en = {
   "login.trust1": "256-bit SSL encrypted",
   "login.trust2": "GDPR-compliant",
   "login.trust3": "Cancel anytime",
+
+  /* Dashboard Preview (homepage) */
+  "dashPrev.badge": "Your command center",
+  "dashPrev.titleA": "Every premium feature,",
+  "dashPrev.titleHighlight": "one click away",
+  "dashPrev.titleB": ".",
+  "dashPrev.subtitle":
+    "Log in and step straight into your personal BetsPlug dashboard — a clean, distraction-free command center where every daily pick, model insight, live match and historical result lives in a single view. No spreadsheets, no guesswork, no jumping between tabs.",
+  "dashPrev.feature1Title": "Daily picks at a glance",
+  "dashPrev.feature1Desc":
+    "See today's highest-confidence predictions the moment you sign in — sorted by edge, confidence and kick-off time.",
+  "dashPrev.feature2Title": "Live model accuracy",
+  "dashPrev.feature2Desc":
+    "Real-time accuracy per sport, per league and per model. Watch your edge update as results come in.",
+  "dashPrev.feature3Title": "Transparent track record",
+  "dashPrev.feature3Desc":
+    "Every pick we've ever made — wins, losses and ROI — logged publicly and filterable by date or strategy.",
+  "dashPrev.feature4Title": "Strategy Lab & alerts",
+  "dashPrev.feature4Desc":
+    "Build custom filters, bookmark your favorite leagues and get notified the second a premium pick drops.",
+  "dashPrev.cta": "Explore the dashboard",
+  "dashPrev.mockTitle": "Dashboard",
+  "dashPrev.mockSubtitle": "Model performance overview and real-time system status",
+  "dashPrev.mockLive": "Live data",
+  "dashPrev.mockKpi1Label": "Total forecasts",
+  "dashPrev.mockKpi2Label": "Overall accuracy",
+  "dashPrev.mockKpi2Note": "vs last period",
+  "dashPrev.mockKpi3Label": "Avg edge",
+  "dashPrev.mockKpi3Note": "higher is better",
+  "dashPrev.mockKpi4Label": "Avg confidence",
+  "dashPrev.mockKpi4Note": "Model certainty",
+  "dashPrev.mockNavDashboard": "Dashboard",
+  "dashPrev.mockNavPredictions": "Predictions",
+  "dashPrev.mockNavResults": "Results",
+  "dashPrev.mockNavBet": "Bet of the day",
+  "dashPrev.mockNavTrack": "Track record",
+  "dashPrev.mockNavLive": "Live matches",
+  "dashPrev.mockChartTitle": "Model performance trend",
+  "dashPrev.mockChartSub": "Rolling accuracy over time",
+  "dashPrev.mockAccuracyTitle": "Accuracy by sport",
+  "dashPrev.mockAccuracySub": "Prediction accuracy segmented by sport",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -2217,6 +2258,47 @@ const nl: Dictionary = {
   "login.trust1": "256-bit SSL versleuteld",
   "login.trust2": "AVG-proof",
   "login.trust3": "Altijd opzegbaar",
+
+  /* Dashboard Preview */
+  "dashPrev.badge": "Jouw commandocentrum",
+  "dashPrev.titleA": "Elke premium feature,",
+  "dashPrev.titleHighlight": "binnen één klik",
+  "dashPrev.titleB": ".",
+  "dashPrev.subtitle":
+    "Log in en stap direct in jouw persoonlijke BetsPlug-dashboard — een overzichtelijk, afleidingsvrij commandocentrum waar elke dagelijkse pick, elk model-inzicht, elke live wedstrijd en elk historisch resultaat op één plek samenkomt. Geen spreadsheets, geen gokwerk, geen tabjes meer wisselen.",
+  "dashPrev.feature1Title": "Dagelijkse picks in één oogopslag",
+  "dashPrev.feature1Desc":
+    "Zie direct bij het inloggen de picks met de hoogste confidence van vandaag — gesorteerd op edge, zekerheid en aftraptijd.",
+  "dashPrev.feature2Title": "Live modelnauwkeurigheid",
+  "dashPrev.feature2Desc":
+    "Realtime accuracy per sport, per competitie en per model. Zie je edge updaten terwijl de resultaten binnenkomen.",
+  "dashPrev.feature3Title": "Transparante track record",
+  "dashPrev.feature3Desc":
+    "Elke pick die we ooit hebben gemaakt — winst, verlies en ROI — publiekelijk gelogd en filterbaar op datum of strategie.",
+  "dashPrev.feature4Title": "Strategy Lab & alerts",
+  "dashPrev.feature4Desc":
+    "Bouw eigen filters, bookmark je favoriete competities en ontvang direct een melding zodra er een premium pick live staat.",
+  "dashPrev.cta": "Ontdek het dashboard",
+  "dashPrev.mockTitle": "Dashboard",
+  "dashPrev.mockSubtitle": "Modelprestaties en realtime systeemstatus in één overzicht",
+  "dashPrev.mockLive": "Live data",
+  "dashPrev.mockKpi1Label": "Totaal voorspellingen",
+  "dashPrev.mockKpi2Label": "Totale nauwkeurigheid",
+  "dashPrev.mockKpi2Note": "t.o.v. vorige periode",
+  "dashPrev.mockKpi3Label": "Gem. edge",
+  "dashPrev.mockKpi3Note": "hoger is beter",
+  "dashPrev.mockKpi4Label": "Gem. confidence",
+  "dashPrev.mockKpi4Note": "Zekerheid van het model",
+  "dashPrev.mockNavDashboard": "Dashboard",
+  "dashPrev.mockNavPredictions": "Voorspellingen",
+  "dashPrev.mockNavResults": "Resultaten",
+  "dashPrev.mockNavBet": "Pick van de dag",
+  "dashPrev.mockNavTrack": "Track record",
+  "dashPrev.mockNavLive": "Live wedstrijden",
+  "dashPrev.mockChartTitle": "Trend modelprestaties",
+  "dashPrev.mockChartSub": "Rollende nauwkeurigheid over tijd",
+  "dashPrev.mockAccuracyTitle": "Nauwkeurigheid per sport",
+  "dashPrev.mockAccuracySub": "Voorspelnauwkeurigheid gesegmenteerd per sport",
 };
 
 /* ── German ────────────────────────────────────────────────── */

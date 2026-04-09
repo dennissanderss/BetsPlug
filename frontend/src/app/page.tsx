@@ -20,6 +20,9 @@ import {
   Sparkles,
   Menu,
   X,
+  Bell,
+  Flame,
+  LayoutDashboard,
 } from "lucide-react";
 import { GetStartedButton } from "@/components/ui/get-started-button";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -89,6 +92,351 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
       {count.toLocaleString()}
       {suffix}
     </span>
+  );
+}
+
+// ─── Dashboard Preview Section ──────────────────────────────────────────────
+// Shows off the real product inside a stylized browser mock — copy on the
+// left, mock on the right. Purely presentational: no data fetching.
+
+function DashboardPreviewSection() {
+  const { t } = useTranslations();
+  const loc = useLocalizedHref();
+
+  const features = [
+    {
+      icon: Target,
+      title: t("dashPrev.feature1Title"),
+      desc: t("dashPrev.feature1Desc"),
+    },
+    {
+      icon: Activity,
+      title: t("dashPrev.feature2Title"),
+      desc: t("dashPrev.feature2Desc"),
+    },
+    {
+      icon: Shield,
+      title: t("dashPrev.feature3Title"),
+      desc: t("dashPrev.feature3Desc"),
+    },
+    {
+      icon: Bell,
+      title: t("dashPrev.feature4Title"),
+      desc: t("dashPrev.feature4Desc"),
+    },
+  ];
+
+  const navItems = [
+    { icon: LayoutDashboard, label: t("dashPrev.mockNavDashboard"), active: true },
+    { icon: Target, label: t("dashPrev.mockNavPredictions") },
+    { icon: Trophy, label: t("dashPrev.mockNavResults") },
+    { icon: Flame, label: t("dashPrev.mockNavBet"), badge: "HOT" },
+    { icon: BarChart3, label: t("dashPrev.mockNavTrack") },
+    { icon: Activity, label: t("dashPrev.mockNavLive"), badge: "LIVE" },
+  ];
+
+  const kpis = [
+    {
+      label: t("dashPrev.mockKpi1Label"),
+      value: "3.939",
+      note: "All time",
+      icon: Activity,
+    },
+    {
+      label: t("dashPrev.mockKpi2Label"),
+      value: "50.3%",
+      note: t("dashPrev.mockKpi2Note"),
+      icon: Target,
+      accent: true,
+    },
+    {
+      label: t("dashPrev.mockKpi3Label"),
+      value: "+12.0%",
+      note: t("dashPrev.mockKpi3Note"),
+      icon: TrendingUp,
+    },
+    {
+      label: t("dashPrev.mockKpi4Label"),
+      value: "62.7%",
+      note: t("dashPrev.mockKpi4Note"),
+      icon: Sparkles,
+    },
+  ];
+
+  const accuracyBars = [
+    { label: "Premier", value: 58 },
+    { label: "La Liga", value: 54 },
+    { label: "Bundes.", value: 52 },
+    { label: "Serie A", value: 57 },
+    { label: "Ligue 1", value: 50 },
+    { label: "Eredivisie", value: 55 },
+  ];
+
+  return (
+    <section className="relative overflow-hidden py-20 md:py-28">
+      {/* Ambient glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500/[0.06] blur-[140px]"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-6">
+        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.25fr] lg:gap-16">
+          {/* ─── Left: copy ─── */}
+          <div>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-2 backdrop-blur-sm">
+              <LayoutDashboard className="h-4 w-4 text-green-400" />
+              <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-300">
+                {t("dashPrev.badge")}
+              </span>
+            </div>
+
+            <h2 className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+              {t("dashPrev.titleA")}{" "}
+              <span className="gradient-text">{t("dashPrev.titleHighlight")}</span>
+              {t("dashPrev.titleB")}
+            </h2>
+
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-400 sm:text-lg">
+              {t("dashPrev.subtitle")}
+            </p>
+
+            {/* Feature list */}
+            <ul className="mt-8 grid max-w-xl gap-4 sm:grid-cols-2">
+              {features.map(({ icon: Icon, title, desc }) => (
+                <li
+                  key={title}
+                  className="flex gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 backdrop-blur-sm transition hover:border-green-500/30 hover:bg-green-500/[0.04]"
+                >
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-green-500/20 bg-green-500/[0.08]">
+                    <Icon className="h-4 w-4 text-green-400" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-sm font-bold text-white">{title}</div>
+                    <div className="mt-1 text-xs leading-relaxed text-slate-400">
+                      {desc}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+
+            {/* CTA */}
+            <div className="mt-8">
+              <Link
+                href={loc("/login")}
+                className="btn-gradient inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold"
+              >
+                {t("dashPrev.cta")}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+
+          {/* ─── Right: browser mock with dashboard ─── */}
+          <div className="relative">
+            {/* Outer glow */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-gradient-to-br from-green-500/20 via-emerald-500/10 to-transparent blur-2xl"
+            />
+
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a0e1a] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]">
+              {/* Browser chrome */}
+              <div className="flex items-center gap-2 border-b border-white/[0.06] bg-white/[0.02] px-4 py-3">
+                <div className="flex gap-1.5">
+                  <span className="h-3 w-3 rounded-full bg-red-500/70" />
+                  <span className="h-3 w-3 rounded-full bg-yellow-500/70" />
+                  <span className="h-3 w-3 rounded-full bg-green-500/70" />
+                </div>
+                <div className="mx-auto flex max-w-[240px] items-center gap-2 rounded-md border border-white/[0.06] bg-white/[0.03] px-3 py-1 text-[11px] text-slate-400">
+                  <Shield className="h-3 w-3 text-green-400" />
+                  <span className="truncate">betsplug.com/dashboard</span>
+                </div>
+              </div>
+
+              {/* Dashboard body */}
+              <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[150px_1fr]">
+                {/* Sidebar */}
+                <aside className="border-r border-white/[0.06] bg-black/20 p-3 sm:p-4">
+                  <div className="mb-5 flex items-center gap-2">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-green-400 to-emerald-500 text-[10px] font-black text-black">
+                      B
+                    </div>
+                    <span className="text-[11px] font-bold text-white">BETS<span className="text-green-400">PLUG</span></span>
+                  </div>
+
+                  <div className="space-y-1">
+                    {navItems.map((item) => (
+                      <div
+                        key={item.label}
+                        className={`flex items-center gap-2 rounded-md px-2 py-2 text-[10px] sm:text-[11px] ${
+                          item.active
+                            ? "bg-green-500/[0.12] text-green-300"
+                            : "text-slate-400"
+                        }`}
+                      >
+                        <item.icon
+                          className={`h-3 w-3 shrink-0 ${
+                            item.active ? "text-green-400" : "text-slate-500"
+                          }`}
+                        />
+                        <span className="truncate">{item.label}</span>
+                        {item.badge === "HOT" && (
+                          <span className="ml-auto rounded bg-orange-500/20 px-1 text-[8px] font-bold text-orange-300">
+                            HOT
+                          </span>
+                        )}
+                        {item.badge === "LIVE" && (
+                          <span className="ml-auto flex items-center gap-0.5 rounded bg-red-500/20 px-1 text-[8px] font-bold text-red-300">
+                            <span className="h-1 w-1 animate-pulse rounded-full bg-red-400" />
+                            LIVE
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </aside>
+
+                {/* Main */}
+                <div className="space-y-4 p-4 sm:p-5">
+                  {/* Header row */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="gradient-text text-xl font-extrabold leading-tight sm:text-2xl">
+                        {t("dashPrev.mockTitle")}
+                      </div>
+                      <div className="mt-0.5 truncate text-[10px] text-slate-500 sm:text-[11px]">
+                        {t("dashPrev.mockSubtitle")}
+                      </div>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/[0.08] px-2 py-1 text-[9px] font-semibold text-green-300 sm:text-[10px]">
+                      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" />
+                      {t("dashPrev.mockLive")}
+                    </div>
+                  </div>
+
+                  {/* KPI grid */}
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                    {kpis.map((kpi) => (
+                      <div
+                        key={kpi.label}
+                        className={`rounded-lg border p-2.5 sm:p-3 ${
+                          kpi.accent
+                            ? "border-green-500/30 bg-green-500/[0.06]"
+                            : "border-white/[0.06] bg-white/[0.02]"
+                        }`}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="text-[8px] font-bold uppercase tracking-wider text-slate-500 sm:text-[9px]">
+                            {kpi.label}
+                          </div>
+                          <kpi.icon
+                            className={`h-3 w-3 ${
+                              kpi.accent ? "text-green-400" : "text-slate-500"
+                            }`}
+                          />
+                        </div>
+                        <div
+                          className={`mt-1 text-base font-extrabold leading-tight sm:text-xl ${
+                            kpi.accent ? "text-green-300" : "text-white"
+                          }`}
+                        >
+                          {kpi.value}
+                        </div>
+                        <div className="mt-0.5 text-[9px] text-slate-500 sm:text-[10px]">
+                          {kpi.note}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Chart + Bars row */}
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                    {/* Trend chart */}
+                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
+                      <div className="text-[10px] font-bold text-white sm:text-[11px]">
+                        {t("dashPrev.mockChartTitle")}
+                      </div>
+                      <div className="mt-0.5 text-[9px] text-slate-500">
+                        {t("dashPrev.mockChartSub")}
+                      </div>
+                      <svg
+                        viewBox="0 0 200 60"
+                        className="mt-2 h-14 w-full"
+                        preserveAspectRatio="none"
+                      >
+                        <defs>
+                          <linearGradient id="dp-line" x1="0" x2="1" y1="0" y2="0">
+                            <stop offset="0%" stopColor="#4ade80" />
+                            <stop offset="100%" stopColor="#10b981" />
+                          </linearGradient>
+                          <linearGradient id="dp-fill" x1="0" x2="0" y1="0" y2="1">
+                            <stop offset="0%" stopColor="#4ade80" stopOpacity="0.35" />
+                            <stop offset="100%" stopColor="#4ade80" stopOpacity="0" />
+                          </linearGradient>
+                        </defs>
+                        <path
+                          d="M0 45 L30 38 L60 42 L90 28 L120 32 L150 18 L180 22 L200 12 L200 60 L0 60 Z"
+                          fill="url(#dp-fill)"
+                        />
+                        <path
+                          d="M0 45 L30 38 L60 42 L90 28 L120 32 L150 18 L180 22 L200 12"
+                          fill="none"
+                          stroke="url(#dp-line)"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+
+                    {/* Accuracy bars */}
+                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
+                      <div className="text-[10px] font-bold text-white sm:text-[11px]">
+                        {t("dashPrev.mockAccuracyTitle")}
+                      </div>
+                      <div className="mt-0.5 text-[9px] text-slate-500">
+                        {t("dashPrev.mockAccuracySub")}
+                      </div>
+                      <div className="mt-3 flex h-14 items-end gap-1.5">
+                        {accuracyBars.map((b) => (
+                          <div
+                            key={b.label}
+                            className="flex flex-1 flex-col items-center gap-1"
+                          >
+                            <div
+                              className="w-full rounded-sm bg-gradient-to-t from-green-500/70 to-green-400"
+                              style={{ height: `${b.value}%` }}
+                            />
+                            <span className="text-[7px] text-slate-500 sm:text-[8px]">
+                              {b.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Floating stat chip */}
+            <div className="absolute -left-4 top-1/3 hidden rounded-xl border border-green-500/30 bg-[#0d1220]/90 p-3 shadow-xl backdrop-blur-xl sm:block">
+              <div className="flex items-center gap-2">
+                <Trophy className="h-4 w-4 text-green-400" />
+                <div>
+                  <div className="text-[9px] uppercase tracking-wider text-slate-500">
+                    Today
+                  </div>
+                  <div className="text-sm font-extrabold text-white">12 wins</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -777,6 +1125,11 @@ export default function LandingPage() {
           COMPARISON TABLE — BetsPlug vs competitors (funnel: differentiation)
          ═══════════════════════════════════════════════════════════════════ */}
       <ComparisonTable />
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          DASHBOARD PREVIEW — show off the product inside a browser mock
+         ═══════════════════════════════════════════════════════════════════ */}
+      <DashboardPreviewSection />
 
       {/* ═══════════════════════════════════════════════════════════════════
           HOW IT WORKS — 3 step process (funnel: action prep)
