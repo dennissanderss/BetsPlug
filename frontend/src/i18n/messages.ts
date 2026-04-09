@@ -375,7 +375,8 @@ const en = {
   "chatbot.greetingDesc":
     "Ask me about pricing, our AI models, the track record, or anything else BetsPlug-related.",
   "chatbot.placeholder": "Type your message…",
-  "chatbot.footer": "AI responses are simulated — for urgent issues, email support@betsplug.com",
+  "chatbot.close": "Close chat",
+  "chatbot.footer": "AI assistant grounded on BetsPlug docs — for anything else, email support@betsplug.com",
   "chatbot.suggestion1": "How does the Bet of the Day work?",
   "chatbot.suggestion2": "What's the difference between Silver and Gold?",
   "chatbot.suggestion3": "How accurate are your predictions?",
@@ -1527,8 +1528,9 @@ const nl: Dictionary = {
   "chatbot.greetingDesc":
     "Stel me vragen over prijzen, onze AI-modellen, het track record of alles rondom BetsPlug.",
   "chatbot.placeholder": "Typ je bericht…",
+  "chatbot.close": "Chat sluiten",
   "chatbot.footer":
-    "AI-antwoorden zijn gesimuleerd — voor urgente zaken mail support@betsplug.com",
+    "AI-assistent gebaseerd op BetsPlug-info — voor alles daarbuiten mail support@betsplug.com",
   "chatbot.suggestion1": "Hoe werkt de Bet of the Day?",
   "chatbot.suggestion2": "Wat is het verschil tussen Silver en Gold?",
   "chatbot.suggestion3": "Hoe nauwkeurig zijn jullie voorspellingen?",
