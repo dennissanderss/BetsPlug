@@ -16,6 +16,8 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { BET_TYPE_HUBS } from "@/data/bet-type-hubs";
+import { LEARN_PILLARS } from "@/data/learn-pillars";
 import {
   VisaBadge,
   MastercardBadge,
@@ -50,8 +52,22 @@ const socials = [
    ───────────────────────────────────────────────────────────────── */
 
 export function BetsPlugFooter() {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
+
+  // Bet-type hubs and learn pillars currently ship EN + NL copy;
+  // every other locale falls back to EN until handwritten
+  // translations land. Slugs are always English.
+  const hubLocale: "en" | "nl" = locale === "nl" ? "nl" : "en";
+
+  const betTypeLinks = BET_TYPE_HUBS.map((hub) => ({
+    text: hub.name[hubLocale],
+    href: loc(`/bet-types/${hub.slug}`),
+  }));
+  const learnLinks = LEARN_PILLARS.map((pillar) => ({
+    text: pillar.title[hubLocale],
+    href: loc(`/learn/${pillar.slug}`),
+  }));
 
   const productLinksT = [
     { text: t("nav.predictions"), href: loc("/match-predictions") },
@@ -290,6 +306,65 @@ export function BetsPlugFooter() {
             <ul className="space-y-3">
               {legalLinksT.map(({ text, href }) => (
                 <li key={text}>
+                  <Link
+                    href={href}
+                    className="text-sm text-slate-400 transition-colors hover:text-green-400"
+                  >
+                    {text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* ═══════════════════════════════════════════════════════════
+            RESOURCES — bet-type hubs + learn pillars (SEO link block)
+            ═══════════════════════════════════════════════════════════ */}
+        <div className="mt-14 grid gap-10 border-t border-white/[0.06] pt-10 sm:grid-cols-2">
+          {/* Bet Types */}
+          <div>
+            <div className="mb-5 flex items-center justify-between">
+              <h4 className="text-sm font-bold uppercase tracking-widest text-white">
+                {locale === "nl" ? "Wedmarkten" : "Bet Types"}
+              </h4>
+              <Link
+                href={loc("/bet-types")}
+                className="text-[11px] font-semibold uppercase tracking-wider text-green-400 transition-colors hover:text-green-300"
+              >
+                {locale === "nl" ? "Bekijk alles" : "View all"} →
+              </Link>
+            </div>
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {betTypeLinks.map(({ text, href }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-sm text-slate-400 transition-colors hover:text-green-400"
+                  >
+                    {text}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Learn */}
+          <div>
+            <div className="mb-5 flex items-center justify-between">
+              <h4 className="text-sm font-bold uppercase tracking-widest text-white">
+                {locale === "nl" ? "Leer" : "Learn"}
+              </h4>
+              <Link
+                href={loc("/learn")}
+                className="text-[11px] font-semibold uppercase tracking-wider text-green-400 transition-colors hover:text-green-300"
+              >
+                {locale === "nl" ? "Bekijk alles" : "View all"} →
+              </Link>
+            </div>
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {learnLinks.map(({ text, href }) => (
+                <li key={href}>
                   <Link
                     href={href}
                     className="text-sm text-slate-400 transition-colors hover:text-green-400"
