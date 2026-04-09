@@ -160,12 +160,12 @@ def evaluate_strategy(
     strategy: Strategy,
     prediction: Prediction,
     odds: Optional[dict] = None,
+    strict: bool = True,
 ) -> bool:
     """
     Evaluate whether a prediction matches a strategy.
 
-    All rules are combined with AND logic.  If a rule's feature is unavailable
-    (get_feature_value returns None), that rule is skipped (treated as pass).
+    All rules are combined with AND logic.
 
     Parameters
     ----------
@@ -175,6 +175,9 @@ def evaluate_strategy(
         The prediction to evaluate against.
     odds : dict | None
         Optional odds dict: {"home_odds": float, "draw_odds": float, "away_odds": float}.
+    strict : bool
+        If True (default), a missing feature value causes the strategy to NOT match.
+        If False, missing features are skipped (legacy lenient mode).
 
     Returns
     -------
@@ -185,6 +188,7 @@ def evaluate_strategy(
     if not isinstance(rules, list):
         raise ValueError(f"Strategy rules must be a list, got {type(rules).__name__}")
 
+    evaluable_rules = 0
     for rule in rules:
         feature_name = rule.get("feature")
         operator = rule.get("operator")
@@ -195,11 +199,14 @@ def evaluate_strategy(
 
         feature_value = get_feature_value(feature_name, prediction, odds)
 
-        # If the feature is not available, skip this rule (treat as pass)
         if feature_value is None:
-            continue
+            if strict:
+                return False  # Missing data = no match
+            continue  # lenient: skip unavailable features
 
+        evaluable_rules += 1
         if not _evaluate_rule(feature_value, operator, value):
             return False
 
-    return True
+    # Must have at least 1 evaluable rule to match
+    return evaluable_rules > 0
