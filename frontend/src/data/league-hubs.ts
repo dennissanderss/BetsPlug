@@ -469,6 +469,90 @@ export const LEAGUE_HUBS: LeagueHub[] = [
     },
   },
   {
+    slug: "eredivisie",
+    sportSlug: "football",
+    countryCode: "NL",
+    countryFlag: "🇳🇱",
+    name: {
+      en: "Eredivisie",
+      nl: "Eredivisie",
+    },
+    country: {
+      en: "Netherlands",
+      nl: "Nederland",
+    },
+    tagline: {
+      en: "Free AI predictions for every Eredivisie matchday",
+      nl: "Gratis AI-voorspellingen voor elke Eredivisie-speelronde",
+    },
+    intro: {
+      en: "The Eredivisie is our home league — BetsPlug is built in the Netherlands and the Dutch football calendar is the one our research desk watches most closely. It is also one of the most interesting leagues in Europe to model: attacking, high-scoring, pressed hard, and dominated by a handful of clubs that play completely differently from the rest of the table. Our ensemble treats PSV, Ajax and Feyenoord with a separate calibration head because their xG output is so far above the league average that a single lambda would distort every other fixture. We pull live data via API-Football, refresh it every five minutes during the match-day window, and run the same four-model ensemble we use for the Premier League. The three matches with the biggest expected edge on every speelronde are published here for free; members get the full slate plus Kelly stakes and the closing-line value report.",
+      nl: "De Eredivisie is onze thuiscompetitie — BetsPlug is gebouwd in Nederland en de Eredivisie is de competitie die ons research-team het nauwkeurigst volgt. Het is ook een van de interessantste competities van Europa om te modelleren: aanvallend, veel goals, hoog druk, en gedomineerd door een handjevol clubs die compleet anders spelen dan de rest. Ons ensemble geeft PSV, Ajax en Feyenoord een aparte kalibratie-kop omdat hun xG-productie zo ver boven het competitiegemiddelde ligt dat één enkele lambda elke andere wedstrijd zou vertekenen. Live data halen we via API-Football, elke vijf minuten ververst tijdens de matchday-window, en we draaien dezelfde ensemble van vier modellen die we ook op de Premier League loslaten. De drie wedstrijden met het hoogste verwachte edge per speelronde zetten we hier gratis neer; members krijgen het volledige programma plus Kelly-inzetten en het closing-line rapport.",
+    },
+    metaTitle: {
+      en: "Eredivisie AI Predictions & Odds 2025/26 — Free Picks | BetsPlug",
+      nl: "Eredivisie AI Voorspellingen & Odds 2025/26 — Gratis Picks | BetsPlug",
+    },
+    metaDescription: {
+      en: "Free AI-powered Eredivisie predictions, win probabilities and confidence scores for every Dutch football matchday. Built in the Netherlands on Elo, Poisson and XGBoost models.",
+      nl: "Gratis AI-voorspellingen voor de Eredivisie: winstkansen, confidence-scores en odds voor elke speelronde. Gebouwd in Nederland op Elo-, Poisson- en XGBoost-modellen.",
+    },
+    faqs: {
+      en: [
+        {
+          q: "Why does the Eredivisie need a different model calibration?",
+          a: "The Eredivisie averages around 3.2 goals per match — comfortably the highest of Europe's top ten leagues — and three clubs (PSV, Ajax, Feyenoord) sit on xG numbers that would be outliers anywhere else. A single league-wide Poisson lambda would overestimate goals in the bottom half and underestimate them at the top, so we fit a separate head for the top three and another for the chasing pack.",
+        },
+        {
+          q: "Do you cover every Eredivisie fixture?",
+          a: "Yes — all 306 matches per season get a full ensemble run as soon as lineups become predictable. The three fixtures with the sharpest model edge per speelronde are shown here for free; the rest sit inside the BetsPlug members dashboard.",
+        },
+        {
+          q: "How accurate are your Eredivisie predictions?",
+          a: "Rolling 30-day calibration on the favourite-to-win market lands between 72% and 76% — slightly above the Premier League because PSV, Ajax and Feyenoord win a larger share of their home games than the Premier League big six. The full breakdown is published at /track-record.",
+        },
+        {
+          q: "How do you handle European midweek fatigue for clubs like AZ and Twente?",
+          a: "Our logistic regressor applies a short-term-form decay for any club playing a Conference or Europa League tie in the 72 hours before an Eredivisie kick-off. The effect is bigger for squads with less rotation depth, which is usually AZ, FC Twente, Utrecht and Heerenveen.",
+        },
+        {
+          q: "Which betting markets do you cover for the Eredivisie?",
+          a: "The free preview shows the 1X2 market (thuis / gelijk / uit). Members also get over/under 2.5 goals, BTTS, Asian handicap and a Kelly stake recommendation per pick.",
+        },
+        {
+          q: "Can I use BetsPlug from the Netherlands?",
+          a: "Yes — BetsPlug is an analytics platform, not a bookmaker, so we don't take bets. In the Netherlands you can only legally wager at Kansspelautoriteit-licensed operators. Our predictions help you decide how to allocate your bankroll once you're on a licensed site. Gamble responsibly.",
+        },
+      ],
+      nl: [
+        {
+          q: "Waarom heeft de Eredivisie een aparte model-kalibratie nodig?",
+          a: "De Eredivisie scoort gemiddeld rond de 3.2 doelpunten per wedstrijd — ruim het hoogste van de top-tien competities in Europa — en drie clubs (PSV, Ajax, Feyenoord) draaien op xG-cijfers die elders als outliers zouden gelden. Eén enkele lambda voor de hele competitie zou goals in de onderste helft overschatten en aan de top onderschatten, dus we fitten een aparte kop voor de top drie en een andere voor de achtervolgers.",
+        },
+        {
+          q: "Voorspellen jullie elke Eredivisie-wedstrijd?",
+          a: "Ja — alle 306 wedstrijden per seizoen krijgen een volledige ensemble-run zodra de opstellingen voorspelbaar worden. De drie wedstrijden met het scherpste edge per speelronde laten we hier gratis zien; de rest staat in het BetsPlug-dashboard voor members.",
+        },
+        {
+          q: "Hoe accuraat zijn jullie Eredivisie-voorspellingen?",
+          a: "Onze rollende 30-daagse kalibratie op de favoriet-wint markt ligt tussen 72% en 76% — iets boven de Premier League, omdat PSV, Ajax en Feyenoord een groter aandeel van hun thuiswedstrijden winnen dan de Premier League big six. De volledige uitsplitsing vind je op /trackrecord-resultaten.",
+        },
+        {
+          q: "Hoe gaan jullie om met Europese midweek-vermoeidheid bij clubs als AZ en Twente?",
+          a: "Onze logistische regressor past een korte-termijn vormdecay toe voor elke club die binnen 72 uur voor een Eredivisie-aftrap een Conference of Europa League-duel heeft. Het effect is groter voor selecties met minder rotatiediepte — meestal AZ, FC Twente, Utrecht en Heerenveen.",
+        },
+        {
+          q: "Welke wedmarkten dekken jullie voor de Eredivisie?",
+          a: "De gratis preview toont de 1X2-markt (thuis / gelijk / uit). Members krijgen ook over/under 2.5 goals, BTTS, Asian handicap en een Kelly-inzetadvies per pick.",
+        },
+        {
+          q: "Mag ik BetsPlug gebruiken vanuit Nederland?",
+          a: "Ja — BetsPlug is een analyseplatform, geen bookmaker, dus we nemen geen weddenschappen aan. In Nederland mag je alleen wedden bij vergunninghouders van de Kansspelautoriteit. Onze voorspellingen helpen je beslissen hoe je je bankroll verdeelt zodra je op een legale site zit. Speel bewust.",
+        },
+      ],
+    },
+  },
+  {
     slug: "champions-league",
     sportSlug: "football",
     countryCode: "EU",

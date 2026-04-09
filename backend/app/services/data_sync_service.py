@@ -60,11 +60,22 @@ logger = structlog.get_logger(__name__)
 _settings = get_settings()
 
 # ── Ordered list of competition codes to rotate through ──────────────────────
+# Only leagues supported on the football-data.org free tier. Eredivisie is
+# deliberately excluded here because fdorg's free plan does not ship it; it
+# only syncs through the API-Football path below.
 _COMPETITION_ROTATION: list[str] = ["PL", "PD", "BL1", "SA", "FL1", "CL"]
 
-# ── League slugs shared by both adapters ─────────────────────────────────────
+# ── League slugs used by the API-Football adapter path ───────────────────────
+# API-Football covers Eredivisie (id 88), so when that adapter is active the
+# rotation includes it alongside the big-five + Champions League.
 _LEAGUE_SLUG_ROTATION: list[str] = [
-    "premier-league", "la-liga", "bundesliga", "serie-a", "ligue-1", "champions-league",
+    "premier-league",
+    "la-liga",
+    "bundesliga",
+    "serie-a",
+    "ligue-1",
+    "eredivisie",
+    "champions-league",
 ]
 
 # Simple in-process rotation counter (survives per-worker; good enough for
@@ -158,12 +169,24 @@ class DataSyncService:
         sport_id: uuid.UUID,
         code: str,
     ) -> League:
-        """Ensure a League row exists for *code* and return it."""
+        """Ensure a League row exists for *code* and return it.
+
+        ``code`` is either a football-data.org competition code (PL, PD, …)
+        when the fdorg adapter is active, or an internal league slug
+        (premier-league, eredivisie, …) when the API-Football adapter is
+        active. Metadata is pulled from whichever source knows the league.
+        """
         slug = CODE_TO_LEAGUE_SLUG.get(code, _slugify(code))
         result = await db.execute(select(League).where(League.slug == slug))
         league = result.scalar_one_or_none()
         if league is None:
+            # Try football-data.org metadata first (keyed by competition code),
+            # then fall back to API-Football metadata (keyed by slug → id).
             meta = COMPETITION_META.get(code, {})
+            if not meta:
+                apifb_id = APIFB_SLUG_TO_ID.get(slug)
+                if apifb_id is not None:
+                    meta = APIFB_LEAGUE_META.get(apifb_id, {})
             league = League(
                 id=uuid.uuid4(),
                 sport_id=sport_id,
