@@ -64,14 +64,12 @@ export function BetsPlugFooter() {
     { text: "About Us", href: loc("/about") },
     { text: "Our Models", href: loc("/about") + "#models" },
     { text: t("nav.articles"), href: loc("/articles") },
-    { text: "Careers", href: "/careers" },
     { text: "Contact", href: loc("/contact") },
   ];
   const legalLinksT = [
     { text: "Terms of Service", href: "/terms" },
     { text: "Privacy Policy", href: "/privacy" },
-    { text: "Cookie Settings", href: "/cookies" },
-    { text: "Responsible Play", href: "/responsible-play" },
+    { text: "Cookie Policy", href: "/cookies" },
   ];
 
   return (
