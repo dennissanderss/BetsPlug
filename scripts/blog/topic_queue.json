@@ -1,0 +1,74 @@
+{
+  "topics": [
+    {
+      "title": "How Bookmakers Set Premier League Odds (and Where They Get It Wrong)",
+      "angle": "Walk readers through the actual workflow inside a sportsbook trading desk — opening line from an in-house model, bias adjustments, market reaction, late-money moves. End by showing where sharp bettors find edge in mid-week games when the trading desk is thin.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/match-predictions/premier-league"
+    },
+    {
+      "title": "Expected Goals vs Actual Goals: Why Variance Kills Most Bettors",
+      "angle": "Explain the gap between xG and actual goals over a 38-game season. Use a worked example (e.g. Brighton vs Burnley) showing how a team can outperform xG for 10 games then collapse. Tie it back to the gambler's fallacy and why fading xG-overperformers is a real edge.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/bet-types/over-2-5-goals"
+    },
+    {
+      "title": "Kelly Criterion in Practice: Why Half-Kelly Beats Full-Kelly Long-Term",
+      "angle": "Take the Kelly formula and show with a 1000-bet Monte Carlo simulation why fractional Kelly outperforms full Kelly when the edge is uncertain (which it always is). Include a worked example with realistic numbers (5% edge, 2.0 odds).",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/bet-types/double-chance"
+    },
+    {
+      "title": "BTTS vs Over 2.5: Which Market Is Actually More Profitable?",
+      "angle": "Compare BTTS and Over 2.5 goals as parallel ways to bet on goals. Show the correlation between the two, where they diverge (defensive teams that score many goals), and which one BetsPlug's Poisson model finds more value in.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/bet-types/both-teams-to-score"
+    },
+    {
+      "title": "Elo Ratings vs Market Odds: A 2000-Match Backtest",
+      "angle": "Compare a pure Elo model against the closing line across 2000 historical matches. Show where Elo wins (mid-table teams the market underrates), where it loses (post-injury news), and why the BetsPlug ensemble blends both signals.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/match-predictions/la-liga"
+    },
+    {
+      "title": "The Math of Bankroll Survival: Drawdowns You Will Definitely Hit",
+      "angle": "Use risk-of-ruin formulas to show what drawdowns a 5% edge bettor should expect over 100, 500, and 1000 bets. Include the brutal math: even a profitable model has a ~95% chance of hitting a 15% drawdown at some point.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/bet-types/draw-no-bet"
+    },
+    {
+      "title": "Why the Champions League Is Harder to Model Than Domestic Leagues",
+      "angle": "Knockout football, neutral venues, lineup rotation, two-legged ties — all the reasons CL is a different problem from a 38-game league. How BetsPlug's separate calibration head adjusts for it.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/match-predictions/champions-league"
+    },
+    {
+      "title": "Closing Line Value: The Only Metric That Predicts Long-Term Profit",
+      "angle": "Explain CLV from first principles. Show why beating the closing line (Pinnacle reference) over 100+ bets is a stronger leading indicator than ROI. Worked example with three bet logs — two profitable on luck, one losing on bad luck but with positive CLV.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/bet-types/draw-no-bet"
+    },
+    {
+      "title": "Dixon-Coles in Plain English: Fixing the Poisson 0-0 Problem",
+      "angle": "Show why a vanilla Poisson model under-prices 0-0, 1-0, 0-1 and 1-1 in low-scoring leagues. Walk through the Dixon-Coles 1997 correction with concrete numbers and show how it shifts BTTS / Over 2.5 prices.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/bet-types/over-2-5-goals"
+    },
+    {
+      "title": "Eredivisie Edge: Why Smaller Leagues Have More Inefficient Lines",
+      "angle": "Make the case that smaller leagues like the Eredivisie have softer markets — less liquidity, fewer sharp bettors, more reliance on regional bookmaker guesswork. Show where BetsPlug's Eredivisie-specific calibration finds value PSG/Ajax-style upsets.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/match-predictions/eredivisie"
+    }
+  ]
+}
