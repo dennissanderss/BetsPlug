@@ -145,6 +145,8 @@ export function ArticleTemplate({ article }: { article: Article }) {
                   pattern={article.coverPattern}
                   sport={article.sport}
                   size="lg"
+                  imageUrl={article.coverImage}
+                  imageAlt={article.coverImageAlt ?? article.title}
                 />
               </motion.div>
 
@@ -262,12 +264,16 @@ function BlockRenderer({ block }: { block: ArticleBlock }) {
         </h2>
       );
     case "paragraph":
-      return <p>{block.text}</p>;
+      return (
+        <p>
+          <RichText text={block.text} />
+        </p>
+      );
     case "quote":
       return (
         <blockquote className="relative my-8 rounded-2xl border-l-4 border-green-500/60 bg-white/[0.02] py-5 pl-6 pr-4 text-slate-200">
           <p className="text-lg font-medium italic leading-relaxed">
-            &ldquo;{block.text}&rdquo;
+            &ldquo;<RichText text={block.text} />&rdquo;
           </p>
           {block.cite && (
             <footer className="mt-3 text-xs font-semibold uppercase tracking-wider text-green-300/80">
@@ -285,7 +291,9 @@ function BlockRenderer({ block }: { block: ArticleBlock }) {
                 className="mt-1 h-4 w-4 flex-shrink-0 text-green-400"
                 strokeWidth={2.5}
               />
-              <span>{item}</span>
+              <span>
+                <RichText text={item} />
+              </span>
             </li>
           ))}
         </ul>
@@ -293,6 +301,70 @@ function BlockRenderer({ block }: { block: ArticleBlock }) {
     default:
       return null;
   }
+}
+
+/* ── Inline markdown-link parser ─────────────────────────────
+ * Parses `[text](/path)` and `[text](https://example.com)` into
+ * real links. Internal paths (starting with "/") use Next.js
+ * <Link> for client-side navigation + localized href, while
+ * external URLs render as <a target="_blank" rel="noopener">.
+ *
+ * This is intentionally minimal — no bold/italic/inline-code —
+ * because the block editor can always be extended with dedicated
+ * block types later. The goal is to make automated articles able
+ * to include internal links for link-juice distribution without
+ * restructuring the content model.
+ * ────────────────────────────────────────────────────────── */
+
+const INLINE_LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+
+function RichText({ text }: { text: string }) {
+  const loc = useLocalizedHref();
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let key = 0;
+
+  // Reset regex state in case the pattern is reused across renders
+  INLINE_LINK_RE.lastIndex = 0;
+
+  while ((match = INLINE_LINK_RE.exec(text)) !== null) {
+    const [full, label, href] = match;
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    const isExternal = /^https?:\/\//i.test(href);
+    if (isExternal) {
+      parts.push(
+        <a
+          key={`link-${key++}`}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-green-300 underline-offset-4 transition-colors hover:text-green-200 hover:underline"
+        >
+          {label}
+        </a>
+      );
+    } else {
+      parts.push(
+        <Link
+          key={`link-${key++}`}
+          href={loc(href)}
+          className="font-semibold text-green-300 underline-offset-4 transition-colors hover:text-green-200 hover:underline"
+        >
+          {label}
+        </Link>
+      );
+    }
+    lastIndex = match.index + full.length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return <>{parts}</>;
 }
 
 /* ── Sticky promo banner (vertical, sidebar) ─────────────── */

@@ -107,11 +107,21 @@ export function CoverArt({
   pattern = "dots",
   sport,
   size = "md",
+  imageUrl,
+  imageAlt,
 }: {
   gradient: string;
   pattern?: "dots" | "grid" | "diagonal";
   sport: Sport;
   size?: "sm" | "md" | "lg";
+  /**
+   * Optional raster image overlay (WebP / PNG / JPG). When
+   * provided, it replaces the oversized sport icon. The layered
+   * gradient + ambient glow still render underneath so the card
+   * looks cohesive while the image loads or if it 404s.
+   */
+  imageUrl?: string;
+  imageAlt?: string;
 }) {
   const meta = SPORT_META[sport];
   const Icon = meta.icon;
@@ -148,7 +158,7 @@ export function CoverArt({
     <div
       className="absolute inset-0"
       style={{ background: gradient }}
-      aria-hidden="true"
+      aria-hidden={imageUrl ? undefined : "true"}
     >
       {/* Pattern overlay */}
       <div
@@ -166,16 +176,27 @@ export function CoverArt({
       {/* Corner ambient */}
       <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-green-500/10 blur-[80px]" />
       <div className="absolute -right-10 -bottom-10 h-48 w-48 rounded-full bg-emerald-500/10 blur-[90px]" />
-      {/* Oversized sport icon */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative">
-          <div className="absolute inset-0 rounded-full bg-white/[0.04] blur-2xl" />
-          <Icon
-            className={`${iconSize} ${meta.textClass} drop-shadow-[0_0_30px_rgba(74,222,128,0.35)]`}
-            strokeWidth={1.3}
-          />
+      {imageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={imageUrl}
+          alt={imageAlt ?? ""}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover mix-blend-luminosity opacity-90"
+        />
+      ) : (
+        // Oversized sport icon (gradient-only fallback)
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="relative">
+            <div className="absolute inset-0 rounded-full bg-white/[0.04] blur-2xl" />
+            <Icon
+              className={`${iconSize} ${meta.textClass} drop-shadow-[0_0_30px_rgba(74,222,128,0.35)]`}
+              strokeWidth={1.3}
+            />
+          </div>
         </div>
-      </div>
+      )}
       {/* Bottom fade so text below reads cleanly */}
       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/40 to-transparent" />
     </div>

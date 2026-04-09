@@ -197,9 +197,11 @@ class ApiClient {
   getFixturesToday() {
     return this.request<import("@/types/api").FixturesResponse>("/fixtures/today");
   }
-  getFixturesUpcoming(days = 7) {
+  getFixturesUpcoming(days = 7, leagueSlug?: string) {
+    const params = new URLSearchParams({ days: String(days) });
+    if (leagueSlug) params.set("league_slug", leagueSlug);
     return this.request<import("@/types/api").FixturesResponse>(
-      `/fixtures/upcoming?days=${days}`
+      `/fixtures/upcoming?${params}`
     );
   }
 

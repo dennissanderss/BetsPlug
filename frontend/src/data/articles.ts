@@ -29,6 +29,12 @@ export type Article = {
   author: string;
   /** ISO date string */
   publishedAt: string;
+  /**
+   * Optional ISO date string for the last modification. When set,
+   * it's emitted in the JSON-LD `dateModified` field and used by
+   * the sitemap's `lastModified`. Defaults to `publishedAt`.
+   */
+  updatedAt?: string;
   /** Rough reading time in minutes */
   readingMinutes: number;
   /**
@@ -39,6 +45,15 @@ export type Article = {
    */
   coverGradient: string;
   coverPattern?: "dots" | "grid" | "diagonal";
+  /**
+   * Optional raster cover image (typically a .webp under
+   * /public/articles/). When present, it is used for OpenGraph,
+   * Twitter cards and the JSON-LD Article schema. The gradient
+   * still renders as a fallback behind the image.
+   */
+  coverImage?: string;
+  /** Optional alt text for the raster cover image */
+  coverImageAlt?: string;
   /** Optional pull-quote to surface in the article header */
   tldr?: string;
   blocks: ArticleBlock[];
