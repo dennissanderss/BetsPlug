@@ -186,3 +186,25 @@ export function getRelatedArticles(
   );
   return [...sameSport, ...rest].slice(0, limit);
 }
+
+/**
+ * Returns the chronologically adjacent articles for the given post.
+ * Articles are sorted from newest to oldest, so:
+ *   - prev = the OLDER article (further down the list)
+ *   - next = the NEWER article (further up the list)
+ * Either side can be undefined if the current article is at an edge.
+ */
+export function getAdjacentArticles(current: Article): {
+  prev?: Article;
+  next?: Article;
+} {
+  const sorted = [...articles].sort((a, b) =>
+    b.publishedAt.localeCompare(a.publishedAt)
+  );
+  const idx = sorted.findIndex((a) => a.slug === current.slug);
+  if (idx === -1) return {};
+  return {
+    next: idx > 0 ? sorted[idx - 1] : undefined,
+    prev: idx < sorted.length - 1 ? sorted[idx + 1] : undefined,
+  };
+}
