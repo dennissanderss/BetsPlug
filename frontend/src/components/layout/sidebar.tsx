@@ -86,8 +86,12 @@ export function Sidebar() {
         </Link>
       </div>
 
-      {/* ── Nav sections ── */}
-      <nav className="flex-1 overflow-y-auto px-3 pb-4 pt-3">
+      {/* ── Nav sections ──
+          min-h-0 is required so this flex child can shrink below its
+          intrinsic content height. Without it, overflow-y-auto is a
+          no-op on shorter viewports (tablet landscape, etc.) and the
+          nav list cannot be scrolled. */}
+      <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-4 pt-3">
         {navSections.map((section, sIdx) => (
           <div key={section.label}>
             {/* Section divider (not on first section) */}

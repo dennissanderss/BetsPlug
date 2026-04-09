@@ -187,8 +187,15 @@ export function SiteNav() {
             </button>
           </div>
 
-          {/* Middle: menu items */}
-          <nav className="relative flex flex-1 flex-col gap-1 overflow-y-auto px-6 py-8">
+          {/* Middle: menu items
+              NOTE: min-h-0 is critical. Without it, the default
+              min-height: auto on flex children prevents this <nav>
+              from shrinking below its intrinsic content height, so
+              on tablet landscape (and any viewport shorter than the
+              menu content) the overflow-y-auto never kicks in and
+              the list can't be scrolled. overscroll-contain stops
+              rubber-band chaining into the locked body. */}
+          <nav className="relative flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto overscroll-contain px-6 py-8">
             <span className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-widest text-slate-600">
               {t("nav.menu")}
             </span>
