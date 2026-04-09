@@ -288,7 +288,7 @@ class ApiClient {
   // Strategies
   getStrategies(activeOnly = false) {
     const qs = activeOnly ? "?active_only=true" : "";
-    return this.request<import("@/types/api").StrategyResponse[]>(`/strategies${qs}`);
+    return this.request<import("@/types/api").StrategyResponse[]>(`/strategies/${qs}`);
   }
   getStrategyPicks(id: string, limit = 50, offset = 0) {
     return this.request<import("@/types/api").StrategyPicksResponse>(
@@ -300,7 +300,7 @@ class ApiClient {
   getAdminBlogPosts(status?: string, limit = 50, offset = 0) {
     const params = new URLSearchParams({ limit: String(limit), offset: String(offset) });
     if (status) params.set("status", status);
-    return this.request<import("@/types/api").BlogPost[]>(`/admin/blog?${params}`);
+    return this.request<import("@/types/api").BlogPost[]>(`/admin/blog/?${params}`);
   }
   createBlogPost(data: import("@/types/api").BlogPostCreate) {
     return this.request<import("@/types/api").BlogPost>("/admin/blog", {
@@ -321,7 +321,7 @@ class ApiClient {
   // Admin Users
   getAdminUsers(limit = 50, offset = 0) {
     return this.request<import("@/types/api").AdminUser[]>(
-      `/admin/users?limit=${limit}&offset=${offset}`
+      `/admin/users/?limit=${limit}&offset=${offset}`
     );
   }
   updateAdminUserStatus(userId: string, isActive: boolean) {
@@ -333,10 +333,10 @@ class ApiClient {
 
   // Admin Settings
   getAdminSettings() {
-    return this.request<import("@/types/api").SiteSettings>("/admin/settings");
+    return this.request<import("@/types/api").SiteSettings>("/admin/settings/");
   }
   updateAdminSettings(settings: Record<string, string>) {
-    return this.request<import("@/types/api").SiteSettings>("/admin/settings", {
+    return this.request<import("@/types/api").SiteSettings>("/admin/settings/", {
       method: "PUT",
       body: JSON.stringify(settings),
     });
