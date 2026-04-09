@@ -192,18 +192,19 @@ export function ArticleTemplate({ article }: { article: Article }) {
               </div>
             </article>
 
-            {/* ── Right sticky sidebar (≥lg only) ── */}
+            {/* ── Right sticky sidebar (≥lg only) ──
+                top-32 (= 8rem / 128px) clears the fixed SiteNav
+                (lg height ≈ 96–108px) plus a comfortable gap so the
+                card never touches the header on scroll. */}
             <aside className="hidden lg:block">
-              <div className="sticky top-28">
+              <div className="sticky top-32">
                 <StickyPromoBanner />
               </div>
             </aside>
           </div>
 
-          {/* ── Prev / Next navigation ── */}
-          {(prev || next) && (
-            <PrevNextNav prev={prev} next={next} />
-          )}
+          {/* ── Prev / Next navigation (always rendered) ── */}
+          <PrevNextNav prev={prev} next={next} />
 
           {/* ── Related articles ── */}
           {related.length > 0 && (
@@ -482,6 +483,35 @@ function PrevNextNav({
 }) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
+
+  // No prev AND no next → render a single wide "Browse all articles"
+  // CTA so the bottom of every article still has a navigation hand-off,
+  // even when only one article exists in the archive.
+  if (!prev && !next) {
+    return (
+      <motion.nav
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        aria-label={t("articles.navLabel")}
+        className="mt-16"
+      >
+        <Link
+          href={loc("/articles")}
+          className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-8 text-center backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-[0_0_40px_rgba(74,222,128,0.12)]"
+        >
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-green-300">
+            <ArrowLeft className="h-3 w-3" />
+            {t("articles.back")}
+          </span>
+          <h3 className="text-lg font-extrabold leading-snug tracking-tight text-white transition-colors group-hover:text-green-300 sm:text-xl">
+            {t("articles.related")}
+          </h3>
+        </Link>
+      </motion.nav>
+    );
+  }
 
   return (
     <motion.nav
