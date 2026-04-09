@@ -47,8 +47,8 @@ const navSections: NavSection[] = [
     label: "Strategies & Picks",
     items: [
       { labelKey: "nav.strategy_lab", fallback: "Strategy Lab", href: "/strategy", icon: FlaskConical },
+      { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy },
       { labelKey: "nav.predictions", fallback: "Predictions", href: "/predictions", icon: Sparkles },
-      { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy, badge: "HOT" },
     ],
   },
   {

@@ -182,7 +182,7 @@ export default function JouwRoutePage() {
         <div className="flex items-center justify-center gap-2 mb-3">
           <MapPin className="h-7 w-7 text-emerald-400" />
           <h1 className="text-3xl font-extrabold tracking-tight gradient-text">
-            Jouw Route
+            Your Route
           </h1>
         </div>
         <p className="text-slate-400 text-sm max-w-xl mx-auto">
