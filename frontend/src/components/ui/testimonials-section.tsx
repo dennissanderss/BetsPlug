@@ -87,7 +87,7 @@ export const TestimonialsSection = () => {
             {t("testimonials.badge")}
           </span>
 
-          <h2 className="text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
+          <h2 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
             {t("testimonials.titleA")}{" "}
             <span className="gradient-text">{t("testimonials.titleHighlight")}</span>{" "}
             {t("testimonials.titleB")}

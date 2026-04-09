@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Lato } from "next/font/google";
 import { cookies } from "next/headers";
@@ -36,6 +36,18 @@ const languageAlternates: Record<string, string> = locales.reduce(
   },
   { "x-default": SITE_URL } as Record<string, string>
 );
+
+/* ── Viewport ─────────────────────────────────────────────
+   Explicit viewport so iOS Safari never auto-zooms on form
+   focus. We intentionally allow user pinch-zoom (no
+   maximumScale) for accessibility — the zoom-on-focus
+   prevention is handled by the 16px font-size rule in
+   globals.css. */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

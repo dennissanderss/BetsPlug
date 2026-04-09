@@ -211,7 +211,7 @@ export function WelcomeContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mx-auto max-w-4xl text-balance text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
+            className="mx-auto max-w-4xl text-balance break-words text-[2rem] font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
           >
             {t("welcome.title")}{" "}
             <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
@@ -486,7 +486,7 @@ function QuickstartSection() {
             {t("welcome.quickstartEyebrow")}
           </span>
         </div>
-        <h2 className="mx-auto max-w-3xl text-balance text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+        <h2 className="mx-auto max-w-3xl text-balance break-words text-2xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
           {t("welcome.quickstartTitle")}
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-balance text-sm leading-relaxed text-slate-400 sm:text-base">
@@ -716,7 +716,7 @@ function DashboardTourSection() {
             {t("welcome.tourEyebrow")}
           </span>
         </div>
-        <h2 className="mx-auto max-w-3xl text-balance text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+        <h2 className="mx-auto max-w-3xl text-balance break-words text-2xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
           {t("welcome.tourTitle")}
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-balance text-sm leading-relaxed text-slate-400 sm:text-base">
@@ -744,7 +744,7 @@ function DashboardTourSection() {
             <span className="h-2.5 w-2.5 rounded-full bg-green-400/70" />
           </div>
           <div className="flex flex-1 items-center justify-center">
-            <div className="inline-flex max-w-[320px] items-center gap-2 truncate rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-[11px] font-medium text-slate-400">
+            <div className="inline-flex max-w-full items-center gap-2 truncate rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-[11px] font-medium text-slate-400 sm:max-w-xs">
               <span className="h-1.5 w-1.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
               <span className="truncate">app.betsplug.com/dashboard</span>
             </div>

@@ -353,7 +353,7 @@ export default function LandingPage() {
                 </span>
               </div>
 
-              <h1 className="text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+              <h1 className="text-balance break-words text-[2.25rem] font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
                 {t("hero.titleLine1")}
                 <br />
                 <span className="gradient-text">{t("hero.titleLine2")}</span>

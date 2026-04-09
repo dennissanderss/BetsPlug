@@ -1376,7 +1376,7 @@ function OrderSummary({
         </div>
 
         {/* Plan quick-switch */}
-        <div className="mt-4 grid grid-cols-3 gap-1.5">
+        <div className="mt-4 grid grid-cols-1 gap-1.5 sm:grid-cols-3">
           {PLANS.filter((p) => p.id !== "bronze" && p.id !== "platinum").map(
             (p) => (
               <button
@@ -1396,7 +1396,7 @@ function OrderSummary({
           <button
             type="button"
             onClick={() => onChangePlan("platinum")}
-            className={`col-span-3 rounded-xl border px-2 py-2 text-[11px] font-bold uppercase tracking-wider transition-all ${
+            className={`col-span-1 rounded-xl border px-2 py-2 text-[11px] font-bold uppercase tracking-wider transition-all sm:col-span-3 ${
               plan.id === "platinum"
                 ? "border-amber-400/60 bg-amber-400/15 text-amber-300"
                 : "border-white/[0.08] bg-white/[0.02] text-slate-400 hover:border-amber-400/30 hover:text-amber-200"

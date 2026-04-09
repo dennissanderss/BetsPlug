@@ -68,7 +68,7 @@ export function LeaguesTicker() {
         </span>
         <h2
           id="leagues-heading"
-          className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-4xl"
+          className="text-balance break-words text-2xl font-extrabold tracking-tight text-white sm:text-3xl md:text-4xl"
         >
           {t("leagues.titleA")}{" "}
           <span className="gradient-text">{t("leagues.titleB")}</span>

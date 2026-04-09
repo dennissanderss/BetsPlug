@@ -201,7 +201,7 @@ export function LoginContent() {
                       {t("login.badge")}
                     </span>
                   </div>
-                  <h1 className="text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+                  <h1 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
                     {t("login.title")}{" "}
                     <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
                       {t("login.titleHighlight")}

@@ -164,7 +164,7 @@ export function HowItWorksContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl"
+            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl"
           >
             {t("hiw.heroTitleA")}
             <br />
@@ -269,7 +269,7 @@ export function HowItWorksContent() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7"
+            className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7"
           >
             {overview.map((o, i) => {
               const Icon = o.icon;

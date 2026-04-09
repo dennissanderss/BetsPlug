@@ -318,7 +318,7 @@ export function PricingSection() {
                             <span className="text-xl font-bold text-slate-300">
                               €
                             </span>
-                            <span className="text-6xl font-extrabold tracking-tight text-white">
+                            <span className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
                               {price.main}
                             </span>
                             {price.cents && (

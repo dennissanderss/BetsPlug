@@ -283,7 +283,7 @@ export function BetsPlugFooter() {
         {/* ═══════════════════════════════════════════════════════════
             MAIN FOOTER GRID
             ═══════════════════════════════════════════════════════════ */}
-        <div className="grid grid-cols-2 gap-10 md:grid-cols-4 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {/* Brand column */}
           <div className="col-span-2 lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2">

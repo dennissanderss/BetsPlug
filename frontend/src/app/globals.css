@@ -100,6 +100,10 @@
 
   html {
     color-scheme: dark;
+    /* Prevent any accidental horizontal scroll on mobile (the #1
+       cause of bad mobile layouts is a single element that's a
+       few pixels too wide and pushes the whole page). */
+    overflow-x: hidden;
   }
 
   body {
@@ -113,15 +117,52 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    /* Force the body to respect the viewport width, even if a
+       child is wider than expected. */
+    max-width: 100vw;
   }
 
-  /* ── Headings — Lato Bold ── */
+  /* ── Headings — Lato Bold ──
+     All headings break long words instead of overflowing the
+     viewport. This is critical for NL/DE where single words
+     can be 15+ characters (e.g. "sportvoorspellingen"). */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-brand), system-ui, -apple-system, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif;
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.15;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+
+  /* ── Generic text overflow safety net ──
+     Any paragraph or inline text also gets safe wrapping so
+     long URLs, emails and compound words never push the layout. */
+  p, span, a, li, label, input, textarea, select, button {
+    overflow-wrap: break-word;
+  }
+
+  /* ── iOS Safari: prevent zoom-on-focus ──
+     iOS Safari automatically zooms in when focusing a form field
+     whose computed font-size is less than 16px. On mobile we force
+     every form control to at least 16px — `!important` is required
+     because Tailwind utilities like `text-sm` (14px) otherwise win.
+     Above 640px we let the original sizing take over. */
+  @media (max-width: 639.98px) {
+    input,
+    textarea,
+    select {
+      font-size: 16px !important;
+    }
+  }
+
+  /* Images should never exceed their container on mobile. */
+  img, video, svg {
+    max-width: 100%;
+    height: auto;
   }
 
   /* ── Scrollbar styling ── */
