@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -13,13 +12,12 @@ import {
   ChevronDown,
   Clock,
   Shield,
-  ArrowLeft,
   BookOpen,
   CreditCard,
   Users,
 } from "lucide-react";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
-import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { SiteNav } from "@/components/ui/site-nav";
 import { AiAssistant } from "@/components/ui/ai-assistant";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
@@ -100,39 +98,11 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-[#080b14] text-white">
-      {/* ───── Top bar ───── */}
-      <header className="relative z-40 border-b border-white/[0.06] bg-[#080b14]/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-4">
-            <Link
-              href={loc("/")}
-              className="flex items-center gap-2 text-slate-400 transition-colors hover:text-white"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              <span className="text-xs font-semibold uppercase tracking-widest">
-                {t("contact.backHome")}
-              </span>
-            </Link>
-          </div>
-          <Link href={loc("/")} className="flex items-center gap-2">
-            <Image
-              src="/logo.webp"
-              alt="BetsPlug"
-              width={28}
-              height={28}
-              priority
-              className="h-7 w-7"
-            />
-            <span className="text-sm font-extrabold tracking-tight text-white">
-              BetsPlug
-            </span>
-          </Link>
-          <LanguageSwitcher />
-        </div>
-      </header>
+      {/* Shared site navigation (same as landing) */}
+      <SiteNav />
 
       {/* ───── HERO ───── */}
-      <section className="relative overflow-hidden pt-20 pb-16 md:pt-28 md:pb-20">
+      <section className="relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-20">
         {/* Background */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.08] blur-[140px]" />
