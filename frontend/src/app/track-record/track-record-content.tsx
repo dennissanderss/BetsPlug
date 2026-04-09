@@ -127,7 +127,7 @@ export function TrackRecordContent() {
       name: t("tr.case1Name"),
       quote: t("tr.case1Quote"),
       outcome: t("tr.case1Outcome"),
-      initial: "M",
+      initial: "L",
       metrics: [
         { label: t("tr.case1Metric1Label"), value: t("tr.case1Metric1Value") },
         { label: t("tr.case1Metric2Label"), value: t("tr.case1Metric2Value") },
@@ -151,7 +151,7 @@ export function TrackRecordContent() {
       name: t("tr.case3Name"),
       quote: t("tr.case3Quote"),
       outcome: t("tr.case3Outcome"),
-      initial: "J",
+      initial: "M",
       metrics: [
         { label: t("tr.case3Metric1Label"), value: t("tr.case3Metric1Value") },
         { label: t("tr.case3Metric2Label"), value: t("tr.case3Metric2Value") },

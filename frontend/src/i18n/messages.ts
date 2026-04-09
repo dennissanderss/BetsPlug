@@ -45,6 +45,12 @@ const en = {
   "hero.winRate": "Win Rate",
   "hero.today": "Today",
   "hero.wins": "Wins",
+  "hero.usp1Title": "4-Model AI Ensemble",
+  "hero.usp1Desc": "Poisson, XGBoost, Elo & market-implied — blended.",
+  "hero.usp2Title": "Verified +EV Picks",
+  "hero.usp2Desc": "Only published when the edge beats real-world slippage.",
+  "hero.usp3Title": "Public Track Record",
+  "hero.usp3Desc": "Every pick timestamped. Wins and losses, forever.",
 
   /* Language switcher */
   "lang.label": "Language",
@@ -539,9 +545,9 @@ const en = {
     "The numbers only matter if they change decisions. Here's what that looks like for three typical BetsPlug members.",
 
   "tr.case1Role": "Weekend football specialist",
-  "tr.case1Name": "Martin, 34 · Amsterdam",
+  "tr.case1Name": "Luca, 34 · Milan",
   "tr.case1Quote":
-    "I filter the track record by Eredivisie and over/under markets only. In 2025 that slice hit 61% on 412 picks — so I size up confidently on Sunday mornings instead of second-guessing myself.",
+    "I filter the track record by Serie A and over/under markets only. In 2025 that slice hit 61% on 412 picks — so I size up confidently on Sunday mornings instead of second-guessing myself.",
   "tr.case1Metric1Label": "His filtered sample size",
   "tr.case1Metric1Value": "412 picks",
   "tr.case1Metric2Label": "Verified hit rate",
@@ -552,7 +558,7 @@ const en = {
     "Uses the ledger to pick a market where the model has a proven edge, then ignores the rest. Result: fewer bets, higher conviction, better ROI.",
 
   "tr.case2Role": "Data-driven NBA fan",
-  "tr.case2Name": "Priya, 29 · Rotterdam",
+  "tr.case2Name": "Priya, 29 · London",
   "tr.case2Quote":
     "I care about calibration more than hit rate. Seeing that BetsPlug's NBA moneyline Brier score sits under 0.07 tells me the probabilities are honest — not just lucky.",
   "tr.case2Metric1Label": "NBA Brier score",
@@ -565,7 +571,7 @@ const en = {
     "Trusts the probabilities to build her own parlays and spread bets. The public ledger is her proof the models haven't drifted.",
 
   "tr.case3Role": "Full-time value bettor",
-  "tr.case3Name": "Jonas, 41 · Utrecht",
+  "tr.case3Name": "Mikael, 41 · Stockholm",
   "tr.case3Quote":
     "I plug the track record CSV into my own bankroll tool every Monday. Because every pick has a timestamp and closing price, I can verify the edge is real before I risk a cent.",
   "tr.case3Metric1Label": "Picks replayed in 2025",
@@ -837,6 +843,12 @@ const nl: Dictionary = {
   "hero.winRate": "Winst %",
   "hero.today": "Vandaag",
   "hero.wins": "Gewonnen",
+  "hero.usp1Title": "4-modellen AI-ensemble",
+  "hero.usp1Desc": "Poisson, XGBoost, Elo & markt-geïmpliceerd — gemengd.",
+  "hero.usp2Title": "Geverifieerde +EV picks",
+  "hero.usp2Desc": "Alleen gepubliceerd als de edge echte slippage verslaat.",
+  "hero.usp3Title": "Publiek track record",
+  "hero.usp3Desc": "Elke pick krijgt een tijdstempel. Winst én verlies, voor altijd.",
 
   "lang.label": "Taal",
   "lang.switch": "Wissel taal",
@@ -1312,10 +1324,10 @@ const nl: Dictionary = {
   "tr.casesSubtitle":
     "Cijfers tellen alleen als ze beslissingen veranderen. Zo ziet dat er uit voor drie typische BetsPlug-leden.",
 
-  "tr.case1Role": "Eredivisie-specialist in het weekend",
-  "tr.case1Name": "Martin, 34 · Amsterdam",
+  "tr.case1Role": "Voetbal-specialist in het weekend",
+  "tr.case1Name": "Luca, 34 · Milaan",
   "tr.case1Quote":
-    "Ik filter het track record op Eredivisie en over/under-markten. In 2025 scoorde die selectie 61% op 412 picks — dus ik verhoog mijn inzet met vertrouwen op zondagochtend in plaats van te twijfelen.",
+    "Ik filter het track record op Serie A en over/under-markten. In 2025 scoorde die selectie 61% op 412 picks — dus ik verhoog mijn inzet met vertrouwen op zondagochtend in plaats van te twijfelen.",
   "tr.case1Metric1Label": "Zijn gefilterde sample",
   "tr.case1Metric1Value": "412 picks",
   "tr.case1Metric2Label": "Geverifieerde hit rate",
@@ -1326,7 +1338,7 @@ const nl: Dictionary = {
     "Gebruikt het grootboek om één markt te kiezen waar het model een bewezen voorsprong heeft, en negeert de rest. Resultaat: minder weddenschappen, meer overtuiging, betere ROI.",
 
   "tr.case2Role": "Data-gedreven NBA-fan",
-  "tr.case2Name": "Priya, 29 · Rotterdam",
+  "tr.case2Name": "Priya, 29 · Londen",
   "tr.case2Quote":
     "Ik geef meer om kalibratie dan om hit rate. Als de Brier-score op de NBA moneyline onder de 0,07 blijft, weet ik dat de kansen eerlijk zijn — niet gewoon geluk.",
   "tr.case2Metric1Label": "NBA Brier-score",
@@ -1339,7 +1351,7 @@ const nl: Dictionary = {
     "Vertrouwt de waarschijnlijkheden om haar eigen parlays en spreads te bouwen. Het publieke grootboek is haar bewijs dat de modellen niet zijn afgedwaald.",
 
   "tr.case3Role": "Fulltime value-bettor",
-  "tr.case3Name": "Jonas, 41 · Utrecht",
+  "tr.case3Name": "Mikael, 41 · Stockholm",
   "tr.case3Quote":
     "Ik importeer de track-record CSV elke maandag in mijn eigen bankroll-tool. Omdat elke pick een tijdstempel en closing price heeft, kan ik verifiëren of de edge echt is voordat ik ook maar een cent riskeer.",
   "tr.case3Metric1Label": "Picks hergespeeld in 2025",
