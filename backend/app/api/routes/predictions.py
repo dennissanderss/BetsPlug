@@ -75,12 +75,23 @@ async def list_predictions(
     result = await db.execute(q)
     predictions = result.scalars().all()
 
-    try:
-        return [PredictionResponse.model_validate(p) for p in predictions]
-    except Exception:
-        # Fallback: return minimal response if validation fails
-        return [
-            PredictionResponse(
+    results = []
+    for p in predictions:
+        # Determine pick
+        probs = {"HOME": p.home_win_prob, "DRAW": p.draw_prob or 0, "AWAY": p.away_win_prob}
+        pick = max(probs, key=lambda k: probs[k])
+
+        # Generate reasoning
+        reasoning = None
+        if p.explanation:
+            reasoning = p.explanation.summary
+
+        try:
+            resp = PredictionResponse.model_validate(p)
+            resp.pick = pick
+            resp.reasoning = reasoning
+        except Exception:
+            resp = PredictionResponse(
                 id=p.id,
                 match_id=p.match_id,
                 model_version_id=p.model_version_id,
@@ -91,11 +102,13 @@ async def list_predictions(
                 away_win_prob=p.away_win_prob,
                 confidence=p.confidence,
                 is_simulation=p.is_simulation,
+                pick=pick,
+                reasoning=reasoning,
                 created_at=p.created_at,
                 updated_at=p.updated_at,
             )
-            for p in predictions
-        ]
+        results.append(resp)
+    return results
 
 
 @router.get(

@@ -163,6 +163,8 @@ class PredictionResponse(PredictionBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID = Field(description="Unique prediction identifier (UUID v4).")
+    pick: Optional[str] = Field(default=None, description="Predicted outcome: HOME, DRAW, or AWAY.")
+    reasoning: Optional[str] = Field(default=None, description="Natural language reasoning.")
     explanation: Optional[PredictionExplanationSchema] = Field(
         default=None,
         description="Feature-level explanation for this prediction (if generated).",

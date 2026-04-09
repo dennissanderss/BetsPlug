@@ -154,3 +154,104 @@ async def get_strategy_picks(
         total=total,
         picks=paginated,
     )
+
+
+@router.get(
+    "/{strategy_id}/metrics",
+    summary="Get performance metrics for a strategy",
+)
+async def get_strategy_metrics(
+    strategy_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Calculate performance metrics for a strategy based on evaluated predictions.
+    Returns: sample_size, winrate, roi, max_drawdown, profit_factor.
+    """
+    from app.models.prediction import PredictionEvaluation
+
+    # Fetch strategy
+    strat_result = await db.execute(select(Strategy).where(Strategy.id == strategy_id))
+    strategy = strat_result.scalar_one_or_none()
+    if strategy is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Strategy not found")
+
+    # Get all evaluated predictions
+    HomeTeam = aliased(Team)
+    AwayTeam = aliased(Team)
+
+    q = (
+        select(Prediction, PredictionEvaluation)
+        .join(Match, Match.id == Prediction.match_id)
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .join(HomeTeam, HomeTeam.id == Match.home_team_id)
+        .join(AwayTeam, AwayTeam.id == Match.away_team_id)
+        .join(League, League.id == Match.league_id)
+        .order_by(Match.scheduled_at)
+    )
+    rows = (await db.execute(q)).all()
+
+    # Filter for strategy matches
+    matched_and_evaluated = []
+    for pred, evaluation in rows:
+        if evaluate_strategy(strategy, pred, odds=None):
+            matched_and_evaluated.append((pred, evaluation))
+
+    sample_size = len(matched_and_evaluated)
+    if sample_size == 0:
+        return {
+            "strategy_id": str(strategy_id),
+            "strategy_name": strategy.name,
+            "sample_size": 0,
+            "winrate": 0.0,
+            "roi": 0.0,
+            "max_drawdown": 0.0,
+            "profit_factor": 0.0,
+            "avg_brier": 0.0,
+            "has_data": False,
+        }
+
+    # Calculate metrics
+    correct = sum(1 for _, ev in matched_and_evaluated if ev.is_correct)
+    winrate = correct / sample_size
+
+    # ROI: flat staking 1 unit, assume avg odds ~1.9 for correct picks
+    wins_profit = correct * 0.9  # win 0.9 units per correct (avg odds 1.9 - 1.0 stake)
+    losses = sample_size - correct
+    roi = (wins_profit - losses) / sample_size if sample_size > 0 else 0.0
+
+    # Max drawdown from equity curve
+    equity = 0.0
+    peak = 0.0
+    max_dd = 0.0
+    for _, ev in matched_and_evaluated:
+        if ev.is_correct:
+            equity += 0.9
+        else:
+            equity -= 1.0
+        if equity > peak:
+            peak = equity
+        dd = peak - equity
+        if dd > max_dd:
+            max_dd = dd
+
+    # Profit factor
+    gross_profit = wins_profit
+    gross_loss = losses * 1.0
+    profit_factor = gross_profit / gross_loss if gross_loss > 0 else 0.0
+
+    avg_brier = sum(ev.brier_score for _, ev in matched_and_evaluated) / sample_size
+
+    return {
+        "strategy_id": str(strategy_id),
+        "strategy_name": strategy.name,
+        "sample_size": sample_size,
+        "winrate": round(winrate, 4),
+        "roi": round(roi, 4),
+        "max_drawdown": round(max_dd, 2),
+        "profit_factor": round(profit_factor, 4),
+        "avg_brier": round(avg_brier, 6),
+        "correct": correct,
+        "incorrect": losses,
+        "has_data": True,
+    }
