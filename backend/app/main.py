@@ -39,6 +39,7 @@ async def lifespan(app: FastAPI):
         import app.models.ingestion  # noqa: F401
         import app.models.blog  # noqa: F401
         import app.models.site_settings  # noqa: F401
+        import app.models.admin_note  # noqa: F401
 
         from sqlalchemy import text
         async with engine.begin() as conn:

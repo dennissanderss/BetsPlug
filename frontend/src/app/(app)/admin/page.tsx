@@ -14,6 +14,7 @@ import {
   Users,
   Search,
   BarChart3,
+  ClipboardList,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -26,6 +27,7 @@ import BlogManager from "@/components/admin/blog-manager";
 import UserManager from "@/components/admin/user-manager";
 import SeoDashboard from "@/components/admin/seo-dashboard";
 import AnalyticsSettings from "@/components/admin/analytics-settings";
+import GoalsNotesTab from "@/components/admin/goals-notes-tab";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -757,6 +759,11 @@ export default function AdminPage() {
       label: "Analytics",
       icon: BarChart3,
     },
+    {
+      id: "goals",
+      label: "Goals & Notes",
+      icon: ClipboardList,
+    },
   ];
 
   return (
@@ -810,6 +817,7 @@ export default function AdminPage() {
         {activeTab === "users" && <UserManager />}
         {activeTab === "seo" && <SeoDashboard />}
         {activeTab === "analytics" && <AnalyticsSettings />}
+        {activeTab === "goals" && <GoalsNotesTab />}
       </div>
     </div>
   );

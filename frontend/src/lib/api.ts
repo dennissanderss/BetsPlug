@@ -351,6 +351,31 @@ class ApiClient {
   getAdminSeoAudit() {
     return this.request<import("@/types/api").PageSeoScore[]>("/admin/seo/audit");
   }
+
+  // Admin Goals
+  getAdminGoals() {
+    return this.request<any[]>("/admin/goals/");
+  }
+  createAdminGoal(data: { title: string; description?: string; priority?: number; due_date?: string }) {
+    return this.request<any>("/admin/goals/", { method: "POST", body: JSON.stringify(data) });
+  }
+  updateAdminGoal(id: string, data: any) {
+    return this.request<any>(`/admin/goals/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  }
+  deleteAdminGoal(id: string) {
+    return this.request<any>(`/admin/goals/${id}`, { method: "DELETE" });
+  }
+
+  // Admin Notes
+  getAdminNotes() {
+    return this.request<any[]>("/admin/notes/");
+  }
+  createAdminNote(data: { content: string; category?: string }) {
+    return this.request<any>("/admin/notes/", { method: "POST", body: JSON.stringify(data) });
+  }
+  deleteAdminNote(id: string) {
+    return this.request<any>(`/admin/notes/${id}`, { method: "DELETE" });
+  }
 }
 
 export const api = new ApiClient(API_BASE);
