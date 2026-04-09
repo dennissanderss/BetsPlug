@@ -389,9 +389,9 @@ export function BetsPlugFooter() {
         {/* ═══════════════════════════════════════════════════════════
             PAYMENT / SECURITY STRIP
             ═══════════════════════════════════════════════════════════ */}
-        <div className="mt-16 flex flex-col items-center gap-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-6 backdrop-blur-sm md:grid md:grid-cols-3 md:gap-4">
+        <div className="relative mt-16 flex flex-col items-center gap-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-6 backdrop-blur-sm md:flex-row md:justify-between">
           {/* Secure payments label */}
-          <div className="flex items-center gap-3 md:justify-self-start">
+          <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/15 ring-1 ring-green-500/30">
               <ShieldCheck className="h-5 w-5 text-green-400" />
             </div>
@@ -404,8 +404,8 @@ export function BetsPlugFooter() {
             </div>
           </div>
 
-          {/* Payment badges */}
-          <div className="flex flex-wrap items-center justify-center gap-3 md:justify-self-center">
+          {/* Payment badges — absolutely centered on md+, inline stack on mobile */}
+          <div className="flex flex-wrap items-center justify-center gap-3 md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
             <PayPalBadge />
             <StripeBadge />
             <VisaBadge />
@@ -413,7 +413,7 @@ export function BetsPlugFooter() {
           </div>
 
           {/* Trust seal */}
-          <div className="flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/[0.06] px-4 py-2 md:justify-self-end">
+          <div className="flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/[0.06] px-4 py-2">
             <span className="live-dot" />
             <span className="text-xs font-bold uppercase tracking-wider text-green-400">
               {t("footer.pciCompliant")}

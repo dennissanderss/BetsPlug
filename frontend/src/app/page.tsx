@@ -365,43 +365,18 @@ export default function LandingPage() {
                 {t("hero.subtitle")}
               </p>
 
-              {/* USP row — 3 horizontal conviction points */}
-              <div className="mt-8 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+              {/* USP row — icon + short heading, no box */}
+              <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
                 {[
-                  {
-                    icon: Brain,
-                    title: t("hero.usp1Title"),
-                    desc: t("hero.usp1Desc"),
-                  },
-                  {
-                    icon: Target,
-                    title: t("hero.usp2Title"),
-                    desc: t("hero.usp2Desc"),
-                  },
-                  {
-                    icon: CheckCircle2,
-                    title: t("hero.usp3Title"),
-                    desc: t("hero.usp3Desc"),
-                  },
-                ].map(({ icon: Icon, title, desc }) => (
-                  <div
-                    key={title}
-                    className="group relative overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.03] p-3 backdrop-blur-sm transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
-                  >
-                    <div className="pointer-events-none absolute -right-8 -top-8 h-[100px] w-[100px] rounded-full bg-green-500/[0.06] blur-[50px] transition-all group-hover:bg-green-500/[0.14]" />
-                    <div className="relative flex items-start gap-2.5">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-500/15 ring-1 ring-green-500/30">
-                        <Icon className="h-4 w-4 text-green-400" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-xs font-bold leading-tight text-white">
-                          {title}
-                        </div>
-                        <div className="mt-1 text-[11px] leading-snug text-slate-400">
-                          {desc}
-                        </div>
-                      </div>
-                    </div>
+                  { icon: Brain, title: t("hero.usp1Title") },
+                  { icon: Target, title: t("hero.usp2Title") },
+                  { icon: CheckCircle2, title: t("hero.usp3Title") },
+                ].map(({ icon: Icon, title }) => (
+                  <div key={title} className="flex items-center gap-2.5">
+                    <Icon className="h-5 w-5 shrink-0 text-green-400" />
+                    <span className="text-sm font-semibold text-white">
+                      {title}
+                    </span>
                   </div>
                 ))}
               </div>
