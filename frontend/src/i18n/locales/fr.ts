@@ -221,7 +221,7 @@ const fr = {
   "articles.ctaBadge": "Membres BetsPlug",
   "articles.ctaTitle": "Transformez cette analyse en véritable avantage.",
   "articles.ctaSubtitle": "Accédez aux probabilités IA en direct, au Bet of the Day et au modèle Ensemble complet — 7 jours gratuits.",
-  "articles.ctaButton": "Démarrer l'essai 0,01 €",
+  "articles.ctaButton": "Démarrer l'essai gratuit",
   "articles.ctaNoCard": "0,01 € symbolique pour activer votre essai 7 jours",
   "articles.tldr": "En bref",
   "articles.publishedOn": "Publié",

@@ -221,7 +221,7 @@ const id = {
   "articles.ctaBadge": "Anggota BetsPlug",
   "articles.ctaTitle": "Ubah analisis ini menjadi keunggulan nyata.",
   "articles.ctaSubtitle": "Dapatkan probabilitas AI langsung, Bet of the Day, dan output Ensemble lengkap — gratis 7 hari.",
-  "articles.ctaButton": "Mulai uji coba €0,01",
+  "articles.ctaButton": "Mulai Uji Coba Gratis",
   "articles.ctaNoCard": "€0,01 simbolis untuk mengaktifkan uji coba 7 hari",
   "articles.tldr": "Ringkasan",
   "articles.publishedOn": "Dipublikasikan",

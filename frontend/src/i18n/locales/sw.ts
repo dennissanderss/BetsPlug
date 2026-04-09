@@ -221,7 +221,7 @@ const sw = {
   "articles.ctaBadge": "Wanachama wa BetsPlug",
   "articles.ctaTitle": "Geuza uchambuzi huu kuwa faida halisi.",
   "articles.ctaSubtitle": "Pata uwezekano wa AI moja kwa moja, Bet of the Day na matokeo kamili ya Ensemble — bure kwa siku 7.",
-  "articles.ctaButton": "Anza jaribio la €0.01",
+  "articles.ctaButton": "Anza Jaribio Bure",
   "articles.ctaNoCard": "€0.01 ya ishara kuwezesha jaribio lako la siku 7",
   "articles.tldr": "Muhtasari",
   "articles.publishedOn": "Imechapishwa",

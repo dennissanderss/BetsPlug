@@ -221,7 +221,7 @@ const it = {
   "articles.ctaBadge": "Membri BetsPlug",
   "articles.ctaTitle": "Trasforma questa analisi in un vero vantaggio.",
   "articles.ctaSubtitle": "Ottieni probabilità IA in tempo reale, Bet of the Day e l'output Ensemble completo — 7 giorni gratis.",
-  "articles.ctaButton": "Avvia prova 0,01 €",
+  "articles.ctaButton": "Inizia la prova gratuita",
   "articles.ctaNoCard": "0,01 € simbolici per attivare la prova 7 giorni",
   "articles.tldr": "In breve",
   "articles.publishedOn": "Pubblicato",

@@ -221,7 +221,7 @@ const de = {
   "articles.ctaBadge": "BetsPlug-Mitglieder",
   "articles.ctaTitle": "Verwandle diese Analyse in einen echten Vorteil.",
   "articles.ctaSubtitle": "Erhalte Live-KI-Wahrscheinlichkeiten, Bet of the Day und die komplette Ensemble-Ausgabe — 7 Tage gratis.",
-  "articles.ctaButton": "€0,01-Testphase starten",
+  "articles.ctaButton": "Kostenlose Testphase starten",
   "articles.ctaNoCard": "Symbolische €0,01 aktiviert deine 7-Tage-Testphase",
   "articles.tldr": "Kurzfassung",
   "articles.publishedOn": "Veröffentlicht",
