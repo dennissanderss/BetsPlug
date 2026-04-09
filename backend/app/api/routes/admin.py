@@ -239,6 +239,115 @@ async def trigger_sync(
         return SyncResponse(accepted=False, message=f"Sync failed: {str(exc)}", task_id=None)
 
 
+@router.post("/batch-predictions", summary="Generate predictions for 100 historical matches")
+async def batch_predictions(
+    batch_size: int = Body(default=100, embed=True),
+    db: AsyncSession = Depends(get_db),
+):
+    """Generate predictions + evaluations for finished matches without predictions. Call repeatedly."""
+    import math
+    from app.forecasting.forecast_service import ForecastService
+    from app.models.match import Match, MatchResult, MatchStatus
+    from app.models.model_version import ModelVersion
+    from app.models.prediction import Prediction, PredictionEvaluation
+
+    # Ensure model version
+    mv_result = await db.execute(select(ModelVersion).where(ModelVersion.is_active.is_(True)).limit(1))
+    if mv_result.scalar_one_or_none() is None:
+        mv = ModelVersion(
+            id=uuid.uuid4(), name="BetsPlug Ensemble v1", version="1.0.0",
+            model_type="ensemble", sport_scope="all",
+            hyperparameters={"weights": {"elo": 1.0, "poisson": 1.5, "logistic": 1.0}},
+            training_metrics={}, trained_at=datetime.now(timezone.utc), is_active=True,
+        )
+        db.add(mv)
+        await db.flush()
+
+    # Find finished matches without predictions
+    from sqlalchemy import and_
+    stmt = (
+        select(Match).where(
+            and_(
+                Match.status == MatchStatus.FINISHED,
+                ~Match.id.in_(select(Prediction.match_id).distinct()),
+            )
+        ).order_by(Match.scheduled_at).limit(batch_size)
+    )
+    matches = (await db.execute(stmt)).scalars().all()
+    remaining = 0
+
+    # Count total remaining
+    count_stmt = select(Match).where(
+        and_(
+            Match.status == MatchStatus.FINISHED,
+            ~Match.id.in_(select(Prediction.match_id).distinct()),
+        )
+    )
+    remaining_result = await db.execute(select(Match.id).where(
+        and_(
+            Match.status == MatchStatus.FINISHED,
+            ~Match.id.in_(select(Prediction.match_id).distinct()),
+        )
+    ))
+    remaining = len(remaining_result.scalars().all())
+
+    if not matches:
+        return {"generated": 0, "evaluated": 0, "remaining": 0, "message": "All matches have predictions"}
+
+    svc = ForecastService()
+    generated = 0
+    for m in matches:
+        try:
+            await svc.generate_forecast(m.id, db)
+            generated += 1
+        except Exception:
+            pass
+    await db.commit()
+
+    # Evaluate
+    eval_stmt = (
+        select(Prediction, MatchResult)
+        .join(Match, Match.id == Prediction.match_id)
+        .join(MatchResult, MatchResult.match_id == Match.id)
+        .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .where(and_(Match.status == MatchStatus.FINISHED, PredictionEvaluation.id.is_(None)))
+        .limit(batch_size * 2)
+    )
+    eval_rows = (await db.execute(eval_stmt)).all()
+    evaluated = 0
+    for pred, result in eval_rows:
+        try:
+            if result.home_score > result.away_score:
+                actual = "home"
+            elif result.home_score < result.away_score:
+                actual = "away"
+            else:
+                actual = "draw"
+            probs = {"home": pred.home_win_prob, "draw": pred.draw_prob or 0.0, "away": pred.away_win_prob}
+            predicted = max(probs, key=lambda k: probs[k])
+            brier = sum((probs.get(o, 0.0) - (1.0 if o == actual else 0.0)) ** 2 for o in ["home", "draw", "away"]) / 3
+            log_loss_val = -math.log(max(probs.get(actual, 1e-15), 1e-15))
+            evaluation = PredictionEvaluation(
+                id=uuid.uuid4(), prediction_id=pred.id,
+                actual_outcome=actual, actual_home_score=result.home_score,
+                actual_away_score=result.away_score, is_correct=(predicted == actual),
+                brier_score=round(brier, 6), log_loss=round(log_loss_val, 6),
+                evaluated_at=datetime.now(timezone.utc),
+            )
+            db.add(evaluation)
+            evaluated += 1
+        except Exception:
+            pass
+    await db.commit()
+
+    return {
+        "generated": generated,
+        "evaluated": evaluated,
+        "remaining": remaining - generated,
+        "message": f"Batch done. Call again to process more. ~{(remaining - generated) // batch_size} batches left.",
+    }
+
+
 class FullSyncResponse(BaseModel):
     total_created: int
     total_updated: int
