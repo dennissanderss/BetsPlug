@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import {
   FlaskConical,
@@ -551,6 +552,13 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
             </li>
           ))}
         </ul>
+        <Link
+          href={`/strategy/${strategy.id}`}
+          className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-2.5 text-xs font-semibold text-blue-400 hover:bg-blue-500/20 transition-all"
+        >
+          <BarChart3 className="h-3.5 w-3.5" />
+          View All Picks & Results
+        </Link>
       </div>
     </div>
   );

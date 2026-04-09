@@ -94,7 +94,10 @@ async def get_strategy_picks(
             detail=f"Strategy {strategy_id} not found.",
         )
 
-    # Fetch predictions with match context
+    # Fetch predictions with match context + evaluation
+    from app.models.prediction import PredictionEvaluation
+    from app.models.match import MatchResult, MatchStatus as MS
+
     HomeTeam = aliased(Team)
     AwayTeam = aliased(Team)
 
@@ -102,15 +105,22 @@ async def get_strategy_picks(
         select(
             Prediction,
             Match.scheduled_at,
+            Match.status.label("match_status"),
             HomeTeam.name.label("home_team_name"),
             AwayTeam.name.label("away_team_name"),
             League.name.label("league_name"),
+            PredictionEvaluation.actual_outcome,
+            PredictionEvaluation.is_correct,
+            MatchResult.home_score,
+            MatchResult.away_score,
         )
         .join(Match, Match.id == Prediction.match_id)
         .join(HomeTeam, HomeTeam.id == Match.home_team_id)
         .join(AwayTeam, AwayTeam.id == Match.away_team_id)
         .join(League, League.id == Match.league_id)
-        .order_by(Prediction.predicted_at.desc())
+        .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .outerjoin(MatchResult, MatchResult.match_id == Match.id)
+        .order_by(Match.scheduled_at.desc())
     )
 
     result = await db.execute(q)
@@ -121,14 +131,28 @@ async def get_strategy_picks(
     for row in rows:
         prediction = row[0]
         scheduled_at = row[1]
-        home_team_name = row[2]
-        away_team_name = row[3]
-        league_name = row[4]
+        match_status = row[2]
+        home_team_name = row[3]
+        away_team_name = row[4]
+        league_name = row[5]
+        actual_outcome = row[6]
+        is_correct = row[7]
+        home_score = row[8]
+        away_score = row[9]
 
-        # TODO: fetch actual odds for this match when available
         odds = None
-
         if evaluate_strategy(strategy, prediction, odds):
+            # Determine pick
+            probs = {"HOME": prediction.home_win_prob, "DRAW": prediction.draw_prob or 0, "AWAY": prediction.away_win_prob}
+            pick = max(probs, key=lambda k: probs[k])
+
+            # Calculate P/L (flat 1u stake, assume avg odds ~1.9)
+            pnl = None
+            if is_correct is not None:
+                pnl = 0.9 if is_correct else -1.0
+
+            status_str = match_status.value if hasattr(match_status, "value") else str(match_status)
+
             matched_picks.append(
                 StrategyPickPrediction(
                     id=prediction.id,
@@ -139,10 +163,17 @@ async def get_strategy_picks(
                     away_win_prob=prediction.away_win_prob,
                     confidence=prediction.confidence,
                     prediction_type=prediction.prediction_type,
+                    pick=pick,
                     home_team_name=home_team_name,
                     away_team_name=away_team_name,
                     scheduled_at=scheduled_at,
                     league_name=league_name,
+                    match_status=status_str,
+                    actual_outcome=actual_outcome,
+                    is_correct=is_correct,
+                    home_score=home_score,
+                    away_score=away_score,
+                    pnl=pnl,
                 )
             )
 

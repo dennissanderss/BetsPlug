@@ -82,11 +82,21 @@ class StrategyPickPrediction(BaseModel):
     confidence: float = Field(description="Model confidence (0-1).")
     prediction_type: str = Field(description="Type of prediction.")
 
+    pick: Optional[str] = Field(default=None, description="Predicted outcome: HOME, DRAW, AWAY.")
+
     # Match context (populated from joined Match)
     home_team_name: Optional[str] = Field(default=None, description="Home team name.")
     away_team_name: Optional[str] = Field(default=None, description="Away team name.")
     scheduled_at: Optional[datetime] = Field(default=None, description="Match kickoff time.")
     league_name: Optional[str] = Field(default=None, description="League name.")
+
+    # Evaluation (if match is finished)
+    match_status: Optional[str] = Field(default=None, description="Match status.")
+    actual_outcome: Optional[str] = Field(default=None, description="Actual outcome: home/draw/away.")
+    is_correct: Optional[bool] = Field(default=None, description="Whether prediction was correct.")
+    home_score: Optional[int] = Field(default=None, description="Actual home score.")
+    away_score: Optional[int] = Field(default=None, description="Actual away score.")
+    pnl: Optional[float] = Field(default=None, description="P/L in units (flat 1u stake).")
 
 
 class StrategyPicksResponse(BaseModel):
