@@ -299,7 +299,7 @@ export function AboutContent() {
           </motion.div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map((stat, i) => {
+            {stats.map((stat) => {
               const Icon = stat.icon;
               return (
                 <motion.div
@@ -307,7 +307,7 @@ export function AboutContent() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
+                  transition={{ duration: 0.5 }}
                   className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
                 >
                   <div className="pointer-events-none absolute -right-10 -top-10 h-[120px] w-[120px] rounded-full bg-green-500/[0.06] blur-[60px] transition-all group-hover:bg-green-500/[0.12]" />
@@ -353,7 +353,7 @@ export function AboutContent() {
           </motion.div>
 
           <div className="grid gap-5 md:grid-cols-2">
-            {values.map((v, i) => {
+            {values.map((v) => {
               const Icon = v.icon;
               return (
                 <motion.div
@@ -361,7 +361,7 @@ export function AboutContent() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
+                  transition={{ duration: 0.5 }}
                   className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-7 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
                 >
                   <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-500/[0.06] blur-[80px] transition-all group-hover:bg-green-500/[0.12]" />
@@ -407,13 +407,13 @@ export function AboutContent() {
           </motion.div>
 
           <div className="grid gap-6 md:grid-cols-2">
-            {founders.map((f, i) => (
+            {founders.map((f) => (
               <motion.div
                 key={f.name}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: i * 0.12 }}
+                transition={{ duration: 0.6 }}
                 className="group relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent p-8 transition-all hover:border-green-500/30"
               >
                 <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-500/[0.06] blur-[100px] transition-all group-hover:bg-green-500/[0.14]" />

@@ -165,14 +165,16 @@ export function ComparisonTable() {
           </p>
         </motion.div>
 
-        {/* ── Table ─────────────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true }}
-          className="relative"
-        >
+        {/* ── Table ───────────────────────────────────────────────
+            The table itself, crown-icon spring, per-row stagger, score
+            summary and caption all used to animate independently on
+            scroll. Each row added its own IntersectionObserver and the
+            stagger delays meant the table was still revealing rows
+            hundreds of milliseconds after the user scrolled past. All
+            of that is gone — the heading above still reveals once to
+            mark the section transition, then everything below is
+            static. */}
+        <div className="relative">
           {/* Ambient glow behind the BetsPlug column */}
           <div
             className="pointer-events-none absolute inset-y-0 left-[calc(58.33%-10px)] hidden w-[18%] rounded-[3rem] bg-gradient-to-b from-green-500/[0.12] via-green-500/[0.06] to-transparent blur-2xl sm:block"
@@ -190,21 +192,15 @@ export function ComparisonTable() {
 
               {/* BetsPlug header — floating column top */}
               <div className="relative flex flex-col items-center gap-2 rounded-t-[1.5rem] border-x-2 border-t-2 border-green-500/50 bg-gradient-to-b from-green-500/[0.15] to-green-500/[0.02] px-3 pb-5 pt-5 shadow-[0_-8px_40px_-12px_rgba(74,222,128,0.35)]">
-                <motion.div
-                  initial={{ rotate: -20, scale: 0, opacity: 0 }}
-                  whileInView={{ rotate: 0, scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  viewport={{ once: true }}
-                  className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 shadow-[0_0_24px_rgba(74,222,128,0.5)]"
-                >
+                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 shadow-[0_0_24px_rgba(74,222,128,0.5)]">
                   <Crown className="h-5 w-5 text-[#04130a]" strokeWidth={2.5} />
-                </motion.div>
+                </div>
                 <div className="text-center">
                   <div className="text-sm font-extrabold tracking-tight text-white sm:text-base">
                     BetsPlug
                   </div>
                   <div className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-green-400">
-                    <span className="h-1 w-1 animate-pulse rounded-full bg-green-400" />
+                    <span className="h-1 w-1 rounded-full bg-green-400" />
                     {t("comparison.winner")}
                   </div>
                 </div>
@@ -229,16 +225,8 @@ export function ComparisonTable() {
             {/* Rows */}
             <div>
               {rows.map((row, i) => (
-                <motion.div
+                <div
                   key={row.feature}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: i * 0.04,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  viewport={{ once: true }}
                   className="group grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] items-center gap-1.5 px-1.5 sm:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] sm:gap-2 sm:px-4"
                 >
                   {/* Feature label */}
@@ -270,16 +258,12 @@ export function ComparisonTable() {
                   >
                     <CompetitorCell value={row.others} />
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
 
             {/* Score summary row */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              viewport={{ once: true }}
+            <div
               className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] items-stretch gap-1.5 px-1.5 pb-2 sm:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] sm:gap-2 sm:px-4"
             >
               <div className="flex items-center border-t border-white/[0.08] py-6 pr-2">
@@ -309,20 +293,14 @@ export function ComparisonTable() {
                   {t("comparison.fallsShort")}
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* Caption below */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            viewport={{ once: true }}
-            className="mt-6 text-center text-xs text-slate-500"
-          >
+          <p className="mt-6 text-center text-xs text-slate-500">
             {t("comparison.caption")}
-          </motion.p>
-        </motion.div>
+          </p>
+        </div>
       </div>
     </section>
   );

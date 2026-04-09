@@ -275,7 +275,7 @@ export function TrackRecordContent() {
           </motion.div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {kpis.map((k, i) => {
+            {kpis.map((k) => {
               const Icon = k.icon;
               return (
                 <motion.div
@@ -283,7 +283,7 @@ export function TrackRecordContent() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
+                  transition={{ duration: 0.5 }}
                   className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
                 >
                   <div className="pointer-events-none absolute -right-10 -top-10 h-[140px] w-[140px] rounded-full bg-green-500/[0.06] blur-[70px] transition-all group-hover:bg-green-500/[0.14]" />
@@ -347,7 +347,7 @@ export function TrackRecordContent() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.5, delay: i * 0.06 }}
+                    transition={{ duration: 0.5 }}
                     className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-7 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
                   >
                     <div className="pointer-events-none absolute -right-16 -top-16 h-[220px] w-[220px] rounded-full bg-green-500/[0.06] blur-[90px] transition-all group-hover:bg-green-500/[0.14]" />
@@ -400,7 +400,7 @@ export function TrackRecordContent() {
           </motion.div>
 
           <div className="grid gap-5 md:grid-cols-2">
-            {methodology.map((m, i) => {
+            {methodology.map((m) => {
               const Icon = m.icon;
               return (
                 <motion.div
@@ -408,7 +408,7 @@ export function TrackRecordContent() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: i * 0.08 }}
+                  transition={{ duration: 0.5 }}
                   className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-7 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
                 >
                   <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-500/[0.06] blur-[80px] transition-all group-hover:bg-green-500/[0.12]" />
@@ -456,13 +456,13 @@ export function TrackRecordContent() {
           </motion.div>
 
           <div className="grid gap-6 lg:grid-cols-3">
-            {cases.map((c, i) => (
+            {cases.map((c) => (
               <motion.article
                 key={c.name}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: i * 0.12 }}
+                transition={{ duration: 0.6 }}
                 className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent p-8 transition-all hover:border-green-500/30"
               >
                 <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-500/[0.06] blur-[100px] transition-all group-hover:bg-green-500/[0.14]" />

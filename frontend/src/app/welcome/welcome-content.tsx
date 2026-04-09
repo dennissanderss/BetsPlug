@@ -310,7 +310,7 @@ export function WelcomeContent() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                transition={{ duration: 0.5 }}
                 className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 backdrop-blur-sm transition-all hover:border-green-500/20 hover:bg-white/[0.04]"
               >
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/[0.05] to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
@@ -357,7 +357,7 @@ export function WelcomeContent() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                transition={{ duration: 0.5 }}
                 className="group relative rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 backdrop-blur-sm transition-all hover:border-green-500/20 hover:bg-white/[0.04]"
               >
                 {/* Step number */}
@@ -542,7 +542,7 @@ function QuickstartSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
+              transition={{ duration: 0.5 }}
               className="flex flex-col items-center"
             >
               {/* Pin marker */}
@@ -600,7 +600,7 @@ function QuickstartSection() {
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.5, delay: i * 0.08 }}
+              transition={{ duration: 0.5 }}
               className="relative flex gap-5 sm:gap-6"
             >
               {/* Pin */}
@@ -760,7 +760,7 @@ function DashboardTourSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.4, delay: i * 0.06 }}
+              transition={{ duration: 0.4 }}
               className="group relative overflow-hidden bg-[#060912] p-6 transition-all hover:bg-white/[0.02]"
             >
               {/* Hover glow */}

@@ -173,7 +173,7 @@ export default function ContactPage() {
       {/* ───── Help options grid ───── */}
       <section className="relative px-6 pb-16">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-5 md:grid-cols-3">
-          {helpOptions.map((opt, i) => {
+          {helpOptions.map((opt) => {
             const Icon = opt.icon;
             const Inner = (
               <>
@@ -219,7 +219,7 @@ export default function ContactPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
+                transition={{ duration: 0.5 }}
               >
                 {opt.onClick ? (
                   <button

@@ -165,21 +165,16 @@ export function SeoSection() {
 
         {/* Pillars grid */}
         <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {pillarDefs.map((p, i) => {
+          {pillarDefs.map((p) => {
             const Icon = p.icon;
             const title = t(p.titleKey);
             const desc = t(p.descKey);
+            // Pillar cards render statically — the old per-card
+            // whileInView + i*0.08 stagger was decorative and added
+            // ~400ms of cascading reveals on scroll-in.
             return (
-              <motion.article
+              <article
                 key={p.titleKey}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.6,
-                  delay: i * 0.08,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                viewport={{ once: true }}
                 className="group relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-sm transition-all duration-300 hover:border-green-500/30 hover:shadow-xl hover:shadow-green-500/[0.08]"
               >
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.15)] transition-transform duration-300 group-hover:scale-110">
@@ -189,7 +184,7 @@ export function SeoSection() {
                 <p className="text-sm leading-relaxed text-slate-400">
                   {desc}
                 </p>
-              </motion.article>
+              </article>
             );
           })}
         </div>

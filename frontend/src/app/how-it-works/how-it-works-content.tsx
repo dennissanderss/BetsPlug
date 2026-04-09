@@ -616,7 +616,7 @@ export function HowItWorksContent() {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: i * 0.06 }}
+                  transition={{ duration: 0.5 }}
                   className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
                 >
                   <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-500/[0.06] blur-[80px] transition-all group-hover:bg-green-500/[0.12]" />
@@ -668,7 +668,7 @@ export function HowItWorksContent() {
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.4, delay: i * 0.04 }}
+                transition={{ duration: 0.4 }}
                 className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] transition-all hover:border-green-500/30 hover:bg-green-500/[0.03] open:border-green-500/30 open:bg-green-500/[0.04]"
               >
                 <summary className="flex cursor-pointer items-center justify-between gap-4 px-6 py-5 text-left list-none">

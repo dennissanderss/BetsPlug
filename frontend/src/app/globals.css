@@ -271,25 +271,23 @@
     color: #e2e8f0;
   }
 
-  /* ── Primary gradient button (neon green) ── */
+  /* ── Primary gradient button (neon green) ──
+     Previously ran an infinite `btn-pulse` keyframe on every CTA in the
+     viewport — nice flourish, but it repainted every ~2s on a dozen
+     buttons even when the user was just reading. Replaced with a
+     static green glow + an opacity/lift on hover: same visual weight,
+     zero continuous repaint cost. */
   .btn-gradient {
     background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
     color: #0a0e1a;
     transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-    animation: btn-pulse 2.4s ease-in-out infinite;
+    box-shadow: 0 6px 24px rgba(74, 222, 128, 0.28);
   }
 
   .btn-gradient:hover {
     opacity: 0.95;
     transform: translateY(-1px);
     box-shadow: 0 8px 32px rgba(74, 222, 128, 0.4);
-    animation: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .btn-gradient {
-      animation: none;
-    }
   }
 
   /* ── Highlighted feature card (like crypto design middle card) ── */
@@ -316,14 +314,16 @@
     background-size: 60px 60px;
   }
 
-  /* ── Live pulse dot ── */
+  /* ── Live status dot ──
+     Static soft-glow replacement for the old pulse-live keyframe, which
+     ran infinitely wherever a "LIVE" label was shown. The colour itself
+     already carries the semantic meaning — the pulse was pure flair. */
   .live-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
     background: #10b981;
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
-    animation: pulse-live 2s infinite;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
   }
 
   .live-dot-red {
@@ -331,8 +331,7 @@
     height: 8px;
     border-radius: 50%;
     background: #ef4444;
-    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
-    animation: pulse-live 2s infinite;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18);
   }
 }
 
@@ -351,30 +350,12 @@
   }
 }
 
-/* ── Keyframes ── */
-@keyframes btn-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55),
-                0 10px 30px rgba(74, 222, 128, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 0 10px rgba(74, 222, 128, 0),
-                0 10px 30px rgba(74, 222, 128, 0.35);
-  }
-}
-
-@keyframes pulse-live {
-  0% {
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
-  }
-  70% {
-    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-  }
-}
-
+/* ── Keyframes ──
+   The only keyframes that survive the 2026-04 animation purge are the
+   short one-shot ones used by component entrances (fade-in, slide-up)
+   and the slow opacity pulse that still powers a handful of skeleton
+   highlights. `btn-pulse` and `pulse-live` were removed — their owners
+   now use static shadows. */
 @keyframes pulse-slow {
   0%, 100% {
     opacity: 1;
@@ -397,6 +378,22 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ── Global reduced-motion kill-switch ──
+   When the OS/browser asks for reduced motion we clamp every CSS
+   animation and transition to effectively zero — one place to enforce
+   accessibility instead of chasing it per-component. Framer Motion
+   listens to the same media query automatically. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

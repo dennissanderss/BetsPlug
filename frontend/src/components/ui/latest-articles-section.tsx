@@ -14,6 +14,12 @@ import { CoverArt, SportBadge } from "@/app/articles/article-visuals";
  * homepage (right before the final CTA). Shows the three most
  * recent articles and a light "check all articles" link so
  * casual visitors discover the blog without leaving the page.
+ *
+ * Performance: previously every heading + CTA + card had its own
+ * whileInView with a per-card i*0.08 delay. That meant 5 separate
+ * IntersectionObservers and the last card only finished revealing
+ * ~400ms after the first. Now only the section heading fades in
+ * once; everything else is static.
  */
 export function LatestArticlesSection() {
   const { t } = useTranslations();
@@ -63,14 +69,8 @@ export function LatestArticlesSection() {
             </p>
           </motion.div>
 
-          {/* Light CTA — desktop only */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden sm:block"
-          >
+          {/* Light CTA — desktop only, static */}
+          <div className="hidden sm:block">
             <Link
               href={loc("/articles")}
               className="group inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.03] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-300 backdrop-blur-xl transition-all duration-300 hover:border-green-500/40 hover:bg-green-500/[0.08] hover:text-white"
@@ -78,54 +78,43 @@ export function LatestArticlesSection() {
               {t("articles.checkAll")}
               <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
-          </motion.div>
+          </div>
         </div>
 
-        {/* Article cards */}
+        {/* Article cards — static */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {latest.map((article, i) => (
-            <motion.div
+          {latest.map((article) => (
+            <Link
               key={article.slug}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{
-                duration: 0.6,
-                delay: i * 0.08,
-                ease: [0.16, 1, 0.3, 1],
-              }}
+              href={loc(`/articles/${article.slug}`)}
+              className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-[0_0_40px_rgba(74,222,128,0.12)]"
             >
-              <Link
-                href={loc(`/articles/${article.slug}`)}
-                className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-[0_0_40px_rgba(74,222,128,0.12)]"
-              >
-                <div className="relative aspect-[16/9] overflow-hidden">
-                  <CoverArt
-                    gradient={article.coverGradient}
-                    pattern={article.coverPattern}
-                    sport={article.sport}
-                    size="md"
-                  />
+              <div className="relative aspect-[16/9] overflow-hidden">
+                <CoverArt
+                  gradient={article.coverGradient}
+                  pattern={article.coverPattern}
+                  sport={article.sport}
+                  size="md"
+                />
+              </div>
+              <div className="flex flex-1 flex-col gap-4 p-6">
+                <SportBadge sport={article.sport} />
+                <h3 className="text-lg font-extrabold leading-snug tracking-tight text-white group-hover:text-green-50 sm:text-xl">
+                  {article.title}
+                </h3>
+                <p className="line-clamp-2 flex-1 text-sm leading-relaxed text-slate-400">
+                  {article.excerpt}
+                </p>
+                <div className="mt-2 flex items-center gap-3 border-t border-white/[0.05] pt-4 text-xs text-slate-500">
+                  <span>{formatDate(article.publishedAt)}</span>
+                  <span className="text-slate-700">·</span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5" />
+                    {article.readingMinutes} {t("articles.readTime")}
+                  </span>
                 </div>
-                <div className="flex flex-1 flex-col gap-4 p-6">
-                  <SportBadge sport={article.sport} />
-                  <h3 className="text-lg font-extrabold leading-snug tracking-tight text-white group-hover:text-green-50 sm:text-xl">
-                    {article.title}
-                  </h3>
-                  <p className="line-clamp-2 flex-1 text-sm leading-relaxed text-slate-400">
-                    {article.excerpt}
-                  </p>
-                  <div className="mt-2 flex items-center gap-3 border-t border-white/[0.05] pt-4 text-xs text-slate-500">
-                    <span>{formatDate(article.publishedAt)}</span>
-                    <span className="text-slate-700">·</span>
-                    <span className="inline-flex items-center gap-1.5">
-                      <Clock className="h-3.5 w-3.5" />
-                      {article.readingMinutes} {t("articles.readTime")}
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
+              </div>
+            </Link>
           ))}
         </div>
 

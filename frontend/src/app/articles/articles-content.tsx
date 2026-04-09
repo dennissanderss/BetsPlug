@@ -163,7 +163,7 @@ export function ArticlesContent() {
           {rest.length > 0 && (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               <AnimatePresence mode="popLayout">
-                {rest.map((article, i) => (
+                {rest.map((article) => (
                   <motion.div
                     key={`${activeTab}-${article.slug}`}
                     layout
@@ -171,8 +171,7 @@ export function ArticlesContent() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{
-                      duration: 0.45,
-                      delay: i * 0.05,
+                      duration: 0.35,
                       ease: [0.16, 1, 0.3, 1],
                     }}
                   >

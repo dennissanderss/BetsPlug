@@ -175,14 +175,12 @@ export function PricingSection() {
           </p>
         </motion.div>
 
-        {/* ── Billing toggle ─────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true }}
-          className="mb-12 flex flex-col items-center gap-3"
-        >
+        {/* ── Billing toggle ───────────────────────────────────────
+            Entrance animation dropped — the toggle is a purely
+            interactive control and the section heading just above
+            already handles the reveal. Removing this motion wrapper
+            removes one more IntersectionObserver + reflow on scroll. */}
+        <div className="mb-12 flex flex-col items-center gap-3">
           <div
             role="tablist"
             aria-label="Billing period"
@@ -249,24 +247,18 @@ export function PricingSection() {
               </motion.p>
             )}
           </AnimatePresence>
-        </motion.div>
+        </div>
 
-        {/* 3-plan grid */}
+        {/* 3-plan grid — individual card reveal animations dropped.
+            Three cards fading in staggered was a ~300ms decorative
+            delay with no UX value; the grid now just renders. */}
         <div className="grid gap-6 md:grid-cols-3 md:gap-5 lg:gap-6">
-          {plans.map((plan, i) => {
+          {plans.map((plan) => {
             const Icon = plan.icon;
             const isHighlight = plan.highlight;
             return (
-              <motion.div
+              <div
                 key={plan.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.7,
-                  delay: i * 0.1,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                viewport={{ once: true }}
                 className={`group relative flex flex-col overflow-hidden rounded-3xl p-8 backdrop-blur-xl transition-all duration-300 ${
                   isHighlight
                     ? "border-2 border-green-500/50 bg-gradient-to-br from-green-500/[0.12] via-emerald-500/[0.05] to-transparent shadow-[0_0_60px_rgba(74,222,128,0.18)] md:-translate-y-4 md:scale-[1.03]"
@@ -370,17 +362,13 @@ export function PricingSection() {
                     </li>
                   ))}
                 </ul>
-              </motion.div>
+              </div>
             );
           })}
         </div>
 
         {/* ── Platinum lifetime card (wide, below) ───────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true }}
+        <div
           className="relative mt-10 overflow-hidden rounded-3xl border border-amber-400/25 bg-gradient-to-br from-amber-500/[0.08] via-yellow-500/[0.03] to-transparent p-8 backdrop-blur-xl md:p-10"
         >
           {/* Ambient gold glow */}
@@ -461,7 +449,7 @@ export function PricingSection() {
               </Link>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Trust row */}
         <div className="mt-12 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-slate-500">

@@ -5,6 +5,19 @@ import { motion } from "motion/react";
 import { UserPlus, Search, Trophy, ArrowRight } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
+/*
+ * HowItWorks — 3-step explainer.
+ *
+ * Previously every step card had its own whileInView + i*0.15 delay
+ * stagger and the CTA had an additional 0.2s delay. On a slow device
+ * that meant the last card reveal landed ~450ms after the first, and
+ * each card registered its own IntersectionObserver.
+ *
+ * Current version: only the section heading gets a single reveal.
+ * Step cards render statically — hover interactions (scale, glow) are
+ * preserved because they're CSS-only and cost nothing until you
+ * actually hover.
+ */
 export function HowItWorks() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
@@ -49,11 +62,11 @@ export function HowItWorks() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-6xl px-6">
-        {/* Header */}
+        {/* Header — single, non-staggered reveal */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
           className="mx-auto mb-16 max-w-3xl text-center"
         >
@@ -80,21 +93,10 @@ export function HowItWorks() {
           />
 
           <div className="grid gap-8 md:grid-cols-3 md:gap-6">
-            {steps.map((step, i) => {
+            {steps.map((step) => {
               const Icon = step.icon;
               return (
-                <motion.div
-                  key={step.number}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.7,
-                    delay: i * 0.15,
-                    ease: [0.16, 1, 0.3, 1],
-                  }}
-                  viewport={{ once: true }}
-                  className="group relative"
-                >
+                <div key={step.number} className="group relative">
                   {/* Numbered circle */}
                   <div className="relative mb-6 flex md:justify-center">
                     <div className="relative">
@@ -102,7 +104,7 @@ export function HowItWorks() {
                       <div className="absolute inset-0 rounded-full bg-green-500/20 blur-xl transition-all duration-500 group-hover:bg-green-500/30" />
                       {/* Circle */}
                       <div className="relative flex h-16 w-16 items-center justify-center rounded-full border border-green-500/40 bg-gradient-to-br from-green-500/20 to-emerald-500/10 shadow-[0_0_30px_rgba(74,222,128,0.2)] backdrop-blur-sm transition-all duration-500 group-hover:scale-110 group-hover:border-green-500/60 group-hover:shadow-[0_0_40px_rgba(74,222,128,0.35)]">
-                        <Icon className="h-6 w-6 text-green-400 transition-transform duration-500 group-hover:rotate-[-8deg]" />
+                        <Icon className="h-6 w-6 text-green-400" />
                       </div>
                       {/* Step number badge */}
                       <div className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full border border-green-500/40 bg-[#0a1018] font-mono text-xs font-bold text-green-400 shadow-lg">
@@ -120,20 +122,14 @@ export function HowItWorks() {
                       {step.description}
                     </p>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
         </div>
 
-        {/* Deep-dive CTA — links to the full dedicated page */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="mt-14 flex justify-center"
-        >
+        {/* Deep-dive CTA — static, no entrance animation */}
+        <div className="mt-14 flex justify-center">
           <Link
             href={loc("/how-it-works")}
             className="group inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.06] px-6 py-3 text-sm font-bold text-green-300 backdrop-blur-sm transition-all hover:border-green-500/50 hover:bg-green-500/[0.12] hover:text-green-200"
@@ -141,7 +137,7 @@ export function HowItWorks() {
             {t("how.deepDive")}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
