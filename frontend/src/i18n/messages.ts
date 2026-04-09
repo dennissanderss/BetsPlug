@@ -892,7 +892,7 @@ const en = {
     "Try BetsPlug risk-free or skip the trial and get full access immediately.",
   "checkout.trialOption1Title": "7-day free trial",
   "checkout.trialOption1Desc":
-    "Full access for 7 days, €0 today. First charge on {date} if you don't cancel.",
+    "Full access for 7 days, just €0.01 today to verify your card. First full charge on {date} if you don't cancel.",
   "checkout.trialOption1Badge": "Recommended",
   "checkout.trialOption2Title": "Subscribe now",
   "checkout.trialOption2Desc":
@@ -900,17 +900,17 @@ const en = {
   "checkout.trialPausedNote":
     "Cancel during the trial and your account is paused — not deleted. You can resume any time.",
   "checkout.trialBadge": "7-day free trial active",
-  "checkout.trialDueToday": "€0.00 today",
+  "checkout.trialDueToday": "€0.01 today",
   "checkout.trialFirstCharge": "First charge on {date}",
   "checkout.trialNotAvailable":
     "The free trial is only available on monthly and yearly plans.",
   "checkout.trialPaymentNote":
-    "Your payment details are required to activate the trial, but you will not be charged today. Cancel any time before {date} and nothing will be billed.",
+    "We charge a symbolic €0.01 today through Stripe to verify your card and prevent fake-trial abuse. Cancel any time before {date} and nothing else is billed.",
   "checkout.submitTrial": "Start my 7-day free trial",
 
   "checkout.freeTrial": "14-day free trial",
   "checkout.trialNote":
-    "You won't be charged today. Cancel any time during the trial.",
+    "Symbolic €0.01 charged today to verify your card. Cancel any time during the trial.",
   "checkout.couponQuestion": "Have a coupon?",
   "checkout.couponPlaceholder": "Enter code",
   "checkout.couponApply": "Apply",
@@ -2104,7 +2104,7 @@ const nl: Dictionary = {
     "Probeer BetsPlug risicovrij of sla de proefperiode over voor directe volledige toegang.",
   "checkout.trialOption1Title": "7 dagen gratis proberen",
   "checkout.trialOption1Desc":
-    "Volledige toegang 7 dagen lang, €0 vandaag. Eerste afschrijving op {date} als je niet opzegt.",
+    "Volledige toegang 7 dagen lang, slechts €0,01 vandaag om je kaart te verifiëren. Eerste volledige afschrijving op {date} als je niet opzegt.",
   "checkout.trialOption1Badge": "Aanbevolen",
   "checkout.trialOption2Title": "Direct abonneren",
   "checkout.trialOption2Desc":
@@ -2112,17 +2112,17 @@ const nl: Dictionary = {
   "checkout.trialPausedNote":
     "Zeg je op tijdens de proefperiode? Dan wordt je account gepauzeerd — niet verwijderd. Je kunt altijd hervatten.",
   "checkout.trialBadge": "7 dagen gratis proberen actief",
-  "checkout.trialDueToday": "€0,00 vandaag",
+  "checkout.trialDueToday": "€0,01 vandaag",
   "checkout.trialFirstCharge": "Eerste afschrijving op {date}",
   "checkout.trialNotAvailable":
     "De gratis proefperiode is alleen beschikbaar bij maandelijkse en jaarlijkse abonnementen.",
   "checkout.trialPaymentNote":
-    "Je betaalgegevens zijn nodig om de proefperiode te activeren, maar je wordt vandaag niet afgeschreven. Zeg je op vóór {date}? Dan wordt er niets in rekening gebracht.",
+    "We schrijven vandaag een symbolische €0,01 af via Stripe om je kaart te verifiëren en misbruik van de proefperiode te voorkomen. Zeg je op vóór {date}? Dan wordt er verder niets in rekening gebracht.",
   "checkout.submitTrial": "Start mijn 7 dagen gratis proberen",
 
   "checkout.freeTrial": "14 dagen gratis proberen",
   "checkout.trialNote":
-    "Je wordt vandaag niet afgeschreven. Altijd opzegbaar tijdens de proefperiode.",
+    "Symbolische €0,01 vandaag om je kaart te verifiëren. Altijd opzegbaar tijdens de proefperiode.",
   "checkout.couponQuestion": "Heb je een kortingscode?",
   "checkout.couponPlaceholder": "Code invoeren",
   "checkout.couponApply": "Toepassen",

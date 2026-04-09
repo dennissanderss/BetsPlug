@@ -354,8 +354,11 @@ export function CheckoutContent() {
       planTotal,
       addons,
       recurring,
-      // When trial is active the user pays €0 today.
-      dueToday: trialActive ? 0 : recurring,
+      // When the trial is active we still take a symbolic €0.01 charge
+      // today via Stripe so we can verify the card is real. This is the
+      // same fraud-protection mechanism as the Bronze tier — it stops
+      // people from farming free trials with throwaway / fake cards.
+      dueToday: trialActive ? 0.01 : recurring,
       yearlySavings,
       period: billing,
     };
@@ -1516,7 +1519,7 @@ function OrderSummary({
                   {t("checkout.total")}
                 </span>
                 <span className="text-2xl font-extrabold text-green-400">
-                  €0.00
+                  {formatEUR(0.01)}
                 </span>
               </div>
               <div className="mt-2 flex items-start gap-2 rounded-xl border border-green-500/25 bg-green-500/[0.06] p-3">
