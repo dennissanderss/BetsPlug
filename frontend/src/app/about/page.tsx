@@ -1,0 +1,25 @@
+import type { Metadata } from "next";
+import { AboutContent } from "./about-content";
+
+/* ── Per-page SEO metadata ─────────────────────────────────────
+   Overrides the root layout defaults so the About page has its
+   own title, description and canonical URL — essential for
+   indexability and rich-result eligibility.                     */
+export const metadata: Metadata = {
+  title: "About BetsPlug — The team behind the AI sports analytics platform",
+  description:
+    "Meet the two engineers building BetsPlug. Sports fanatics with an ICT background, turning raw match data into transparent, probability-driven predictions for football, basketball, tennis and more.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "About BetsPlug — The team behind the edge",
+    description:
+      "Two engineers. 20+ years of combined ICT experience. One obsession: turning sports data into a measurable edge.",
+    type: "website",
+  },
+};
+
+export default function AboutPage() {
+  return <AboutContent />;
+}

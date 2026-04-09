@@ -383,6 +383,76 @@ const en = {
     "Every prediction is logged in our public track record with hit-rate, ROI and confidence scores. You can filter by league, market and date range. No cherry-picking, no hidden losses — transparency is the whole point.",
   "chatbot.replyTelegram":
     "Our Telegram community has 1,200+ active members with daily picks, edge alerts and live Q&A with our analysts. Join at t.me/betsplug — free for Bronze users, VIP channels for Silver/Gold.",
+
+  /* About Us page */
+  "about.metaTitle":
+    "About BetsPlug — The team behind the AI sports analytics platform",
+  "about.metaDesc":
+    "Meet the two engineers building BetsPlug. Sports fanatics with an ICT background, turning raw match data into transparent, probability-driven predictions for football, basketball, tennis and more.",
+  "about.breadcrumbHome": "Home",
+  "about.breadcrumbAbout": "About",
+
+  "about.heroBadge": "Our Story",
+  "about.heroTitleA": "Built by sports fanatics.",
+  "about.heroTitleB": "Engineered by data obsessives.",
+  "about.heroSubtitle":
+    "BetsPlug is an AI-powered sports analytics platform built by two engineers who got tired of hot takes, armchair tipsters and influencer noise. We replaced gut feeling with statistical models, and loud opinions with transparent probabilities.",
+
+  "about.missionBadge": "The Mission",
+  "about.missionTitle": "We turn raw match data into a measurable edge.",
+  "about.missionBody1":
+    "For too long the sports prediction market has run on hype. YouTube gurus chasing clout, Telegram channels selling \"locks of the week,\" paid tipsters with no verifiable history. As lifelong football, basketball and tennis fans, it drove us up the wall — because we knew the underlying data was far better than the noise surrounding it.",
+  "about.missionBody2":
+    "So we built the tool we always wished existed: a platform that ingests thousands of matches per week, runs them through Elo ratings, Poisson scoring models and gradient-boosted classifiers, and only surfaces the picks where our models genuinely disagree with the closing line. No vibes. No survivorship bias. Just math, published in the open.",
+  "about.missionCta": "See how it works",
+
+  "about.statsBadge": "By the Numbers",
+  "about.statsTitle": "A decade of engineering. A lifetime of sport.",
+  "about.stat1Value": "20+",
+  "about.stat1Label": "Combined years in ICT & data engineering",
+  "about.stat2Value": "450+",
+  "about.stat2Label": "Matches analysed every week",
+  "about.stat3Value": "1,200+",
+  "about.stat3Label": "Data points evaluated per match",
+  "about.stat4Value": "1,500+",
+  "about.stat4Label": "Active analysts & subscribers",
+
+  "about.valuesBadge": "What We Believe",
+  "about.valuesTitle": "Four principles behind every pick.",
+  "about.valuesSubtitle":
+    "BetsPlug isn't a tipster. It's a disciplined system. These are the rules we wrote for ourselves — and the ones we refuse to break.",
+  "about.value1Title": "Data over opinion",
+  "about.value1Desc":
+    "Every recommendation comes from a model, not a mood. We publish the explicit probability, the expected value and the confidence score so you can verify the reasoning instead of trusting a face on a screen.",
+  "about.value2Title": "Track record in public",
+  "about.value2Desc":
+    "Every pick we call lives forever on our public track record — wins, losses and pushes, never deleted. If we don't beat the market over the long run, we don't deserve a cent of your money. Transparency is the whole point.",
+  "about.value3Title": "Continuous retraining",
+  "about.value3Desc":
+    "Football evolves. Managers get sacked, rosters reshuffle, new leagues surface. Our models retrain weekly on fresh results so they never stagnate, and we publish the retraining notes alongside the picks.",
+  "about.value4Title": "Your edge, not ours",
+  "about.value4Desc":
+    "We're analysts, not bookmakers. When the market moves in your favour, you're the one who benefits — not a platform skimming a vig off your losses. That alignment shapes every product decision we make.",
+
+  "about.teamBadge": "Meet the Founders",
+  "about.teamTitle": "Two founders. Zero armchair experts.",
+  "about.teamSubtitle":
+    "We're not influencers and we're not tipsters. We're engineers who ship. Everything on BetsPlug was built, broken and rebuilt by the two of us.",
+
+  "about.founder1Name": "Dennis",
+  "about.founder1Role": "Co-founder · Engineering & Product",
+  "about.founder1Bio":
+    "Backend engineer for 12+ years, with a career spent building data-heavy systems for fintech platforms and large marketplaces. Ajax season ticket holder, reluctant Formula 1 encyclopedia, and the reason our scraping and match-ingestion engine hums 24/7. If it logs a match on BetsPlug, Dennis wrote the pipeline.",
+
+  "about.founder2Name": "Alex",
+  "about.founder2Role": "Co-founder · Data Science & Modelling",
+  "about.founder2Bio":
+    "Systems architect with a decade in ICT and a decade-long side obsession with statistical modelling. Lives and breathes the NBA, has strong opinions about the Premier League title race, and runs the gradient-boosted classifiers that turn historical match data into tomorrow's probabilities. Believes every number deserves a confidence interval.",
+
+  "about.ctaTitle": "Ready to trade guesswork for data?",
+  "about.ctaSubtitle":
+    "Join 1,500+ analysts who get the picks, the probabilities and the receipts — delivered before the closing line adjusts.",
+  "about.ctaButton": "Start Free Trial",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -748,6 +818,76 @@ const nl: Dictionary = {
     "Elke voorspelling wordt gelogd in ons publieke track record met hit-rate, ROI en confidence scores. Filter op competitie, markt en datum. Geen cherry-picking, geen verborgen verliezen — transparantie staat voorop.",
   "chatbot.replyTelegram":
     "Onze Telegram-community heeft 1.200+ actieve leden met dagelijkse picks, edge-meldingen en live Q&A met onze analisten. Join via t.me/betsplug — gratis voor Bronze, VIP-kanalen voor Silver/Gold.",
+
+  /* About Us page */
+  "about.metaTitle":
+    "Over BetsPlug — Het team achter het AI-sportanalyseplatform",
+  "about.metaDesc":
+    "Maak kennis met de twee engineers die BetsPlug bouwen. Sportfanaten met een ICT-achtergrond die ruwe wedstrijddata omzetten in transparante, datagedreven voorspellingen voor voetbal, basketbal, tennis en meer.",
+  "about.breadcrumbHome": "Home",
+  "about.breadcrumbAbout": "Over ons",
+
+  "about.heroBadge": "Ons Verhaal",
+  "about.heroTitleA": "Gebouwd door sportfanaten.",
+  "about.heroTitleB": "Ontwikkeld door data-obsessieven.",
+  "about.heroSubtitle":
+    "BetsPlug is een AI-gedreven sportanalyseplatform, gebouwd door twee engineers die klaar waren met meningen, tipsters en influencer-ruis. Wij vervingen buikgevoel door statistische modellen, en luide meningen door transparante waarschijnlijkheden.",
+
+  "about.missionBadge": "De Missie",
+  "about.missionTitle": "Wij maken van ruwe wedstrijddata een meetbare voorsprong.",
+  "about.missionBody1":
+    "De voorspellingsmarkt draait al veel te lang op hype. YouTube-goeroes die views achternajagen, Telegram-kanalen die \"locks of the week\" verkopen, betaalde tipsters zonder verifieerbare historie. Als levenslange voetbal-, basketbal- en tennisfans werden we daar helemaal gek van — want we wisten dat de onderliggende data veel beter was dan de ruis eromheen.",
+  "about.missionBody2":
+    "Dus bouwden we het product dat we altijd al wilden hebben: een platform dat duizenden wedstrijden per week verwerkt, ze doorrekent met Elo-ratings, Poisson-scoremodellen en gradient-boosted classifiers, en alleen de picks toont waar onze modellen écht afwijken van de closing line. Geen onderbuik. Geen cherry picking. Alleen statistiek, open gepubliceerd.",
+  "about.missionCta": "Zie hoe het werkt",
+
+  "about.statsBadge": "In Cijfers",
+  "about.statsTitle": "Een decennium engineering. Een leven lang sport.",
+  "about.stat1Value": "20+",
+  "about.stat1Label": "Jaar gecombineerde ICT- & data-ervaring",
+  "about.stat2Value": "450+",
+  "about.stat2Label": "Wedstrijden per week geanalyseerd",
+  "about.stat3Value": "1.200+",
+  "about.stat3Label": "Datapunten per wedstrijd",
+  "about.stat4Value": "1.500+",
+  "about.stat4Label": "Actieve analisten & abonnees",
+
+  "about.valuesBadge": "Waar We In Geloven",
+  "about.valuesTitle": "Vier principes achter elke pick.",
+  "about.valuesSubtitle":
+    "BetsPlug is geen tipster. Het is een gedisciplineerd systeem. Dit zijn de regels die we voor onszelf schreven — en die we weigeren te breken.",
+  "about.value1Title": "Data boven mening",
+  "about.value1Desc":
+    "Elke aanbeveling komt uit een model, niet uit een onderbuikgevoel. We publiceren de expliciete waarschijnlijkheid, verwachte waarde en confidence score zodat je de redenering kunt verifiëren in plaats van blind op een gezicht te vertrouwen.",
+  "about.value2Title": "Track record openbaar",
+  "about.value2Desc":
+    "Elke pick die we publiceren staat voor altijd op onze publieke track record-pagina — winsten, verliezen, pushes, nooit verwijderd. Als we op lange termijn de markt niet verslaan, verdienen we geen cent van jouw geld. Transparantie is het hele punt.",
+  "about.value3Title": "Doorlopend hertrainen",
+  "about.value3Desc":
+    "Voetbal verandert. Coaches worden ontslagen, selecties worden geschud, nieuwe competities komen op. Onze modellen hertrainen wekelijks op verse resultaten zodat ze nooit verouderen, en we publiceren de retraining-notes naast de picks.",
+  "about.value4Title": "Jouw voordeel, niet het onze",
+  "about.value4Desc":
+    "Wij zijn analisten, geen bookmakers. Als de markt in jouw voordeel beweegt, profiteer jij — geen platform dat commissie pakt op jouw verliezen. Die alignment vormt elke product-beslissing die we maken.",
+
+  "about.teamBadge": "Ontmoet de Oprichters",
+  "about.teamTitle": "Twee oprichters. Nul fauteuil-experts.",
+  "about.teamSubtitle":
+    "Wij zijn geen influencers en geen tipsters. Wij zijn engineers die leveren. Alles op BetsPlug is gebouwd, gesloopt en herbouwd door ons tweeën.",
+
+  "about.founder1Name": "Dennis",
+  "about.founder1Role": "Mede-oprichter · Engineering & Product",
+  "about.founder1Bio":
+    "Backend engineer met 12+ jaar ervaring in data-intensieve systemen voor fintech-platforms en grote marktplaatsen. Ajax-seizoenkaarthouder, onvrijwillige Formule 1-encyclopedie, en de reden dat onze scraping- en match-ingestion engine 24/7 draait. Elke wedstrijd die op BetsPlug wordt gelogd, loopt door een pipeline die Dennis heeft geschreven.",
+
+  "about.founder2Name": "Alex",
+  "about.founder2Role": "Mede-oprichter · Data Science & Modellering",
+  "about.founder2Bio":
+    "Systeemarchitect met tien jaar ICT-ervaring en een even oude obsessie met statistisch modelleren. Leeft en ademt de NBA, heeft scherpe meningen over de titelrace in de Premier League, en runt de gradient-boosted classifiers die historische wedstrijddata omzetten in de waarschijnlijkheden van morgen. Gelooft dat elk getal een betrouwbaarheidsinterval verdient.",
+
+  "about.ctaTitle": "Klaar om gokken te vervangen door data?",
+  "about.ctaSubtitle":
+    "Sluit je aan bij 1.500+ analisten die de picks, waarschijnlijkheden en bewijsstukken krijgen — voordat de closing line zich aanpast.",
+  "about.ctaButton": "Start Free Trial",
 };
 
 /* ── German ────────────────────────────────────────────────── */
