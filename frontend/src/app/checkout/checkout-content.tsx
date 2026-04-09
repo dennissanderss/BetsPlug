@@ -171,12 +171,10 @@ export function CheckoutContent() {
 
   const [plan, setPlan] = useState<PlanDef>(initialPlan);
   const [billing, setBilling] = useState<Billing>(initialBilling);
-  // Pre-select the two most-adopted add-ons so the total reflects
-  // what most members actually end up buying; users can uncheck.
-  const [selectedUpsells, setSelectedUpsells] = useState<UpsellId[]>([
-    "telegram",
-    "tipOfDay",
-  ]);
+  // Add-ons are opt-in on Silver/Gold — users start with nothing
+  // pre-selected and can tick whichever extras they want.
+  // (Tip of the Day is still shown as "Included" on Platinum.)
+  const [selectedUpsells, setSelectedUpsells] = useState<UpsellId[]>([]);
   // Trial is the default path (maximises free-trial conversions),
   // but users who already trust us can pick "Subscribe now".
   const [startWithTrial, setStartWithTrial] = useState<boolean>(true);
