@@ -844,9 +844,9 @@ const en = {
   "checkout.upsellsTitle": "Supercharge your subscription",
   "checkout.upsellsSubtitle":
     "Optional extras that most members add to get the full edge. Cancel any add-on independently at any time.",
-  "checkout.upsell1Title": "Instant Telegram Alerts",
+  "checkout.upsell1Title": "VIP Telegram Alerts",
   "checkout.upsell1Desc":
-    "Get every high-value pick pushed to your phone the second it drops — before the line moves.",
+    "Get every pick pushed straight to your Telegram — no need to log in, every edge the moment it drops.",
   "checkout.upsell1Badge": "Most popular",
   "checkout.upsell2Title": "Weekly Deep-Dive Report",
   "checkout.upsell2Desc":
@@ -854,7 +854,34 @@ const en = {
   "checkout.upsell3Title": "Priority 1-on-1 Support",
   "checkout.upsell3Desc":
     "Skip the queue with a direct line to our analysts — replies within 2 hours, 7 days a week.",
+  "checkout.upsell4Title": "Tip of the Day Access",
+  "checkout.upsell4Desc":
+    "One high-confidence pick delivered to your inbox every single day — our single highest-edge bet for the next 24 hours.",
+  "checkout.upsellIncluded": "Included with Platinum",
   "checkout.upsellPerMonth": "/mo",
+
+  /* Trial picker */
+  "checkout.trialSectionTitle": "How do you want to start?",
+  "checkout.trialSectionSubtitle":
+    "Try BetsPlug risk-free or skip the trial and get full access immediately.",
+  "checkout.trialOption1Title": "7-day free trial",
+  "checkout.trialOption1Desc":
+    "Full access for 7 days, €0 today. First charge on {date} if you don't cancel.",
+  "checkout.trialOption1Badge": "Recommended",
+  "checkout.trialOption2Title": "Subscribe now",
+  "checkout.trialOption2Desc":
+    "Charged today, no trial period. Ideal if you already know our track record.",
+  "checkout.trialPausedNote":
+    "Cancel during the trial and your account is paused — not deleted. You can resume any time.",
+  "checkout.trialBadge": "7-day free trial active",
+  "checkout.trialDueToday": "€0.00 today",
+  "checkout.trialFirstCharge": "First charge on {date}",
+  "checkout.trialNotAvailable":
+    "The free trial is only available on monthly and yearly plans.",
+  "checkout.trialPaymentNote":
+    "Your payment details are required to activate the trial, but you will not be charged today. Cancel any time before {date} and nothing will be billed.",
+  "checkout.submitTrial": "Start my 7-day free trial",
+
   "checkout.freeTrial": "14-day free trial",
   "checkout.trialNote":
     "You won't be charged today. Cancel any time during the trial.",
@@ -1748,9 +1775,9 @@ const nl: Dictionary = {
   "checkout.upsellsTitle": "Haal alles uit je abonnement",
   "checkout.upsellsSubtitle":
     "Optionele extra's die de meeste leden toevoegen voor de volledige edge. Elke extra is apart opzegbaar.",
-  "checkout.upsell1Title": "Instant Telegram-alerts",
+  "checkout.upsell1Title": "VIP Telegram Alerts",
   "checkout.upsell1Desc":
-    "Krijg elke hoge-waarde pick direct op je telefoon — voordat de lijn beweegt.",
+    "Ontvang alle tips direct via Telegram — je hoeft niet in te loggen om op de hoogte te blijven van elke edge.",
   "checkout.upsell1Badge": "Meest gekozen",
   "checkout.upsell2Title": "Wekelijks Strategie-rapport",
   "checkout.upsell2Desc":
@@ -1758,7 +1785,34 @@ const nl: Dictionary = {
   "checkout.upsell3Title": "Priority 1-op-1 Support",
   "checkout.upsell3Desc":
     "Direct contact met onze analisten — reactie binnen 2 uur, 7 dagen per week.",
+  "checkout.upsell4Title": "Tip van de Dag toegang",
+  "checkout.upsell4Desc":
+    "Elke dag één high-confidence pick in je inbox — onze hoogste-edge weddenschap voor de komende 24 uur.",
+  "checkout.upsellIncluded": "Inbegrepen bij Platinum",
   "checkout.upsellPerMonth": "/mnd",
+
+  /* Trial picker */
+  "checkout.trialSectionTitle": "Hoe wil je starten?",
+  "checkout.trialSectionSubtitle":
+    "Probeer BetsPlug risicovrij of sla de proefperiode over voor directe volledige toegang.",
+  "checkout.trialOption1Title": "7 dagen gratis proberen",
+  "checkout.trialOption1Desc":
+    "Volledige toegang 7 dagen lang, €0 vandaag. Eerste afschrijving op {date} als je niet opzegt.",
+  "checkout.trialOption1Badge": "Aanbevolen",
+  "checkout.trialOption2Title": "Direct abonneren",
+  "checkout.trialOption2Desc":
+    "Vandaag afgeschreven, geen proefperiode. Ideaal als je ons track record al kent.",
+  "checkout.trialPausedNote":
+    "Zeg je op tijdens de proefperiode? Dan wordt je account gepauzeerd — niet verwijderd. Je kunt altijd hervatten.",
+  "checkout.trialBadge": "7 dagen gratis proberen actief",
+  "checkout.trialDueToday": "€0,00 vandaag",
+  "checkout.trialFirstCharge": "Eerste afschrijving op {date}",
+  "checkout.trialNotAvailable":
+    "De gratis proefperiode is alleen beschikbaar bij maandelijkse en jaarlijkse abonnementen.",
+  "checkout.trialPaymentNote":
+    "Je betaalgegevens zijn nodig om de proefperiode te activeren, maar je wordt vandaag niet afgeschreven. Zeg je op vóór {date}? Dan wordt er niets in rekening gebracht.",
+  "checkout.submitTrial": "Start mijn 7 dagen gratis proberen",
+
   "checkout.freeTrial": "14 dagen gratis proberen",
   "checkout.trialNote":
     "Je wordt vandaag niet afgeschreven. Altijd opzegbaar tijdens de proefperiode.",

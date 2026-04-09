@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Bell,
+  CalendarClock,
   Check,
   CheckCircle2,
   ChevronRight,
@@ -13,8 +14,12 @@ import {
   CreditCard,
   Crown,
   FileText,
+  Flame,
+  Gift,
   Headphones,
+  Info,
   Lock,
+  PauseCircle,
   Shield,
   Sparkles,
   Tag,
@@ -49,7 +54,7 @@ type PlanDef = {
 };
 
 /* ── Upsell catalog ─────────────────────────────────────────── */
-type UpsellId = "telegram" | "report" | "support";
+type UpsellId = "telegram" | "tipOfDay";
 
 type UpsellDef = {
   id: UpsellId;
@@ -68,21 +73,14 @@ const UPSELLS: UpsellDef[] = [
     titleKey: "checkout.upsell1Title",
     descKey: "checkout.upsell1Desc",
     badgeKey: "checkout.upsell1Badge",
-    monthly: 2.99,
+    monthly: 4.99,
   },
   {
-    id: "report",
-    icon: FileText,
-    titleKey: "checkout.upsell2Title",
-    descKey: "checkout.upsell2Desc",
+    id: "tipOfDay",
+    icon: Flame,
+    titleKey: "checkout.upsell4Title",
+    descKey: "checkout.upsell4Desc",
     monthly: 1.99,
-  },
-  {
-    id: "support",
-    icon: Headphones,
-    titleKey: "checkout.upsell3Title",
-    descKey: "checkout.upsell3Desc",
-    monthly: 0.99,
   },
 ];
 
@@ -173,9 +171,15 @@ export function CheckoutContent() {
 
   const [plan, setPlan] = useState<PlanDef>(initialPlan);
   const [billing, setBilling] = useState<Billing>(initialBilling);
+  // Pre-select the two most-adopted add-ons so the total reflects
+  // what most members actually end up buying; users can uncheck.
   const [selectedUpsells, setSelectedUpsells] = useState<UpsellId[]>([
     "telegram",
+    "tipOfDay",
   ]);
+  // Trial is the default path (maximises free-trial conversions),
+  // but users who already trust us can pick "Subscribe now".
+  const [startWithTrial, setStartWithTrial] = useState<boolean>(true);
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [paymentMethod, setPaymentMethod] =
     useState<"card" | "paypal">("card");
@@ -274,21 +278,36 @@ export function CheckoutContent() {
   const step2Valid = Object.keys(addressErrors).length === 0;
   const step3Valid = Object.keys(paymentErrors).length === 0;
 
+  // Which upsells are actually chargeable for this plan.
+  // "Tip of the Day" is bundled into Platinum, so it's displayed
+  // as "Included" and removed from the billable list.
+  const isPlatinum = plan.id === "platinum";
+  const chargeableUpsellIds = selectedUpsells.filter(
+    (id) => !(isPlatinum && id === "tipOfDay")
+  );
+
+  // Free trial is only offered on recurring plans (not Bronze/free,
+  // not Platinum lifetime).
+  const trialAvailable = plan.monthly > 0 && plan.oneTime == null;
+  const trialActive = trialAvailable && startWithTrial;
+
   /* ── Price derivation (all figures are VAT-inclusive) ─────── */
   const pricing = useMemo(() => {
     // Add-ons: billed at the same cadence as the plan
     const addonsMonthly = UPSELLS.filter((u) =>
-      selectedUpsells.includes(u.id)
+      chargeableUpsellIds.includes(u.id)
     ).reduce((sum, u) => sum + u.monthly, 0);
     const addons =
       billing === "yearly" ? addonsMonthly * 12 : addonsMonthly;
 
     if (plan.oneTime != null) {
       const planTotal = plan.oneTime;
+      const recurring = planTotal + addons;
       return {
         planTotal,
         addons,
-        total: planTotal + addons,
+        recurring,
+        dueToday: recurring,
         yearlySavings: 0,
         period: "one-time" as const,
       };
@@ -298,16 +317,31 @@ export function CheckoutContent() {
       billing === "yearly" ? baseMonthly * 0.8 : baseMonthly;
     const planTotal =
       billing === "yearly" ? effectiveMonthly * 12 : effectiveMonthly;
+    const recurring = planTotal + addons;
     // How much the user saves by picking yearly vs 12 monthly payments
     const yearlySavings = baseMonthly * 12 * 0.2;
     return {
       planTotal,
       addons,
-      total: planTotal + addons,
+      recurring,
+      // When trial is active the user pays €0 today.
+      dueToday: trialActive ? 0 : recurring,
       yearlySavings,
       period: billing,
     };
-  }, [plan, billing, selectedUpsells]);
+  }, [plan, billing, chargeableUpsellIds, trialActive]);
+
+  // Trial end date (7 days from now), for copy like "first charge on X"
+  const trialEndDate = useMemo(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    return d;
+  }, []);
+  const trialEndLabel = trialEndDate.toLocaleDateString(undefined, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 
   const isFreePlan = plan.monthly === 0 && plan.oneTime == null;
 
@@ -376,6 +410,17 @@ export function CheckoutContent() {
           <div className="mt-12 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
             {/* ── Left column: stepper + form ───────────────── */}
             <div className="order-2 lg:order-1">
+              {/* Trial picker — only on step 1 and only when
+                  the selected plan actually supports a trial */}
+              {step === 1 && trialAvailable && (
+                <TrialPicker
+                  startWithTrial={startWithTrial}
+                  onChange={setStartWithTrial}
+                  trialEndLabel={trialEndLabel}
+                  recurring={pricing.recurring}
+                />
+              )}
+
               {/* Stepper */}
               <Stepper step={step} />
 
@@ -664,6 +709,7 @@ export function CheckoutContent() {
                         selected={selectedUpsells}
                         onToggle={toggleUpsell}
                         billing={billing}
+                        isPlatinum={isPlatinum}
                       />
                     </motion.div>
                   )}
@@ -682,8 +728,27 @@ export function CheckoutContent() {
                         subtitle={t("checkout.paymentSubtitle")}
                       />
 
+                      {/* Trial reassurance — payment is still
+                          required but no charge today */}
+                      {trialActive && (
+                        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-green-500/30 bg-green-500/[0.06] p-4">
+                          <Gift className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
+                          <div>
+                            <p className="text-xs font-bold uppercase tracking-wider text-green-300">
+                              {t("checkout.trialBadge")}
+                            </p>
+                            <p className="mt-1 text-xs leading-relaxed text-slate-300">
+                              {t("checkout.trialPaymentNote").replace(
+                                "{date}",
+                                trialEndLabel
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Demo notice */}
-                      <div className="mt-6 flex items-start gap-3 rounded-2xl border border-amber-400/25 bg-amber-500/[0.06] p-4">
+                      <div className="mt-4 flex items-start gap-3 rounded-2xl border border-amber-400/25 bg-amber-500/[0.06] p-4">
                         <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-400" />
                         <div>
                           <p className="text-xs font-bold uppercase tracking-wider text-amber-300">
@@ -890,6 +955,8 @@ export function CheckoutContent() {
                     >
                       {submitting
                         ? t("checkout.processing")
+                        : trialActive
+                        ? t("checkout.submitTrial")
                         : t("checkout.submit")}
                       {!submitting && <ChevronRight className="h-4 w-4" />}
                     </button>
@@ -913,7 +980,9 @@ export function CheckoutContent() {
                   }}
                   pricing={pricing}
                   isFreePlan={isFreePlan}
-                  selectedUpsells={selectedUpsells}
+                  selectedUpsells={chargeableUpsellIds}
+                  trialActive={trialActive}
+                  trialEndLabel={trialEndLabel}
                 />
 
                 {/* Trust strip */}
@@ -1133,6 +1202,8 @@ function OrderSummary({
   pricing,
   isFreePlan,
   selectedUpsells,
+  trialActive,
+  trialEndLabel,
 }: {
   plan: PlanDef;
   billing: Billing;
@@ -1141,12 +1212,15 @@ function OrderSummary({
   pricing: {
     planTotal: number;
     addons: number;
-    total: number;
+    recurring: number;
+    dueToday: number;
     yearlySavings: number;
     period: string;
   };
   isFreePlan: boolean;
   selectedUpsells: UpsellId[];
+  trialActive: boolean;
+  trialEndLabel: string;
 }) {
   const { t } = useTranslations();
   const Icon = plan.icon;
@@ -1326,12 +1400,53 @@ function OrderSummary({
               </span>
             </div>
           )}
-          <div className="flex items-center justify-between border-t border-white/[0.06] pt-3 text-base">
-            <span className="font-bold text-white">{t("checkout.total")}</span>
-            <span className="text-xl font-extrabold text-white">
-              {formatEUR(pricing.total)}
-            </span>
-          </div>
+
+          {/* When trial is active, show both the €0 due today and
+              the next charge to set expectations clearly. */}
+          {trialActive ? (
+            <>
+              <div className="flex items-center justify-between border-t border-white/[0.06] pt-3 text-sm text-slate-400">
+                <span>After trial ({trialEndLabel})</span>
+                <span className="font-semibold text-slate-200 line-through decoration-slate-600">
+                  {formatEUR(pricing.recurring)}
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-base">
+                <span className="font-bold text-white">
+                  {t("checkout.total")}
+                </span>
+                <span className="text-2xl font-extrabold text-green-400">
+                  €0.00
+                </span>
+              </div>
+              <div className="mt-2 flex items-start gap-2 rounded-xl border border-green-500/25 bg-green-500/[0.06] p-3">
+                <CalendarClock className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
+                <span className="text-[11px] leading-snug text-green-200">
+                  {t("checkout.trialBadge")}.{" "}
+                  {t("checkout.trialFirstCharge").replace(
+                    "{date}",
+                    trialEndLabel
+                  )}{" "}
+                  · {formatEUR(pricing.recurring)}.
+                </span>
+              </div>
+              <div className="mt-2 flex items-start gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+                <PauseCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400" />
+                <span className="text-[11px] leading-snug text-slate-400">
+                  {t("checkout.trialPausedNote")}
+                </span>
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center justify-between border-t border-white/[0.06] pt-3 text-base">
+              <span className="font-bold text-white">
+                {t("checkout.total")}
+              </span>
+              <span className="text-xl font-extrabold text-white">
+                {formatEUR(pricing.dueToday)}
+              </span>
+            </div>
+          )}
           <p className="text-[10px] text-slate-600">
             {t("checkout.vatIncluded")}
           </p>
@@ -1365,15 +1480,135 @@ function OrderSummary({
   );
 }
 
+/* ── Trial picker ───────────────────────────────────────────── */
+function TrialPicker({
+  startWithTrial,
+  onChange,
+  trialEndLabel,
+  recurring,
+}: {
+  startWithTrial: boolean;
+  onChange: (v: boolean) => void;
+  trialEndLabel: string;
+  recurring: number;
+}) {
+  const { t } = useTranslations();
+
+  return (
+    <div className="mb-6 rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-xl">
+      <div className="flex items-start gap-4">
+        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-green-500/20 bg-green-500/[0.08]">
+          <Gift className="h-5 w-5 text-green-400" />
+        </div>
+        <div className="flex-1">
+          <h3 className="text-lg font-extrabold text-white sm:text-xl">
+            {t("checkout.trialSectionTitle")}
+          </h3>
+          <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+            {t("checkout.trialSectionSubtitle")}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        {/* Option 1 — Free trial (recommended) */}
+        <button
+          type="button"
+          onClick={() => onChange(true)}
+          className={`group relative flex flex-col gap-2 rounded-2xl border p-4 text-left transition-all ${
+            startWithTrial
+              ? "border-green-500/60 bg-green-500/[0.08] shadow-[0_0_30px_rgba(74,222,128,0.15)]"
+              : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.2]"
+          }`}
+        >
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <div
+                className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border transition-all ${
+                  startWithTrial
+                    ? "border-green-400 bg-green-500"
+                    : "border-white/25"
+                }`}
+              >
+                {startWithTrial && (
+                  <Check className="h-3 w-3 text-black" strokeWidth={4} />
+                )}
+              </div>
+              <h4 className="text-sm font-extrabold text-white">
+                {t("checkout.trialOption1Title")}
+              </h4>
+            </div>
+            <span className="inline-flex items-center rounded-full border border-green-500/40 bg-green-500/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-green-300">
+              {t("checkout.trialOption1Badge")}
+            </span>
+          </div>
+          <p className="text-xs leading-relaxed text-slate-400">
+            {t("checkout.trialOption1Desc").replace("{date}", trialEndLabel)}
+          </p>
+          <div className="mt-1 text-xs font-bold text-green-400">
+            {t("checkout.trialDueToday")}
+          </div>
+        </button>
+
+        {/* Option 2 — Subscribe now */}
+        <button
+          type="button"
+          onClick={() => onChange(false)}
+          className={`group relative flex flex-col gap-2 rounded-2xl border p-4 text-left transition-all ${
+            !startWithTrial
+              ? "border-green-500/60 bg-green-500/[0.08] shadow-[0_0_30px_rgba(74,222,128,0.15)]"
+              : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.2]"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <div
+              className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border transition-all ${
+                !startWithTrial
+                  ? "border-green-400 bg-green-500"
+                  : "border-white/25"
+              }`}
+            >
+              {!startWithTrial && (
+                <Check className="h-3 w-3 text-black" strokeWidth={4} />
+              )}
+            </div>
+            <h4 className="text-sm font-extrabold text-white">
+              {t("checkout.trialOption2Title")}
+            </h4>
+          </div>
+          <p className="text-xs leading-relaxed text-slate-400">
+            {t("checkout.trialOption2Desc")}
+          </p>
+          <div className="mt-1 text-xs font-bold text-white">
+            {formatEUR(recurring)} today
+          </div>
+        </button>
+      </div>
+
+      {/* Side note — cancelling during trial pauses the account */}
+      {startWithTrial && (
+        <div className="mt-4 flex items-start gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+          <PauseCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400" />
+          <span className="text-[11px] leading-snug text-slate-400">
+            {t("checkout.trialPausedNote")}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── Upsells block ──────────────────────────────────────────── */
 function UpsellsBlock({
   selected,
   onToggle,
   billing,
+  isPlatinum,
 }: {
   selected: UpsellId[];
   onToggle: (id: UpsellId) => void;
   billing: Billing;
+  isPlatinum: boolean;
 }) {
   const { t } = useTranslations();
   return (
@@ -1395,14 +1630,21 @@ function UpsellsBlock({
       <div className="mt-5 grid gap-3">
         {UPSELLS.map((u) => {
           const Icon = u.icon;
-          const active = selected.includes(u.id);
+          const included = isPlatinum && u.id === "tipOfDay";
+          const active = included || selected.includes(u.id);
+          const disabled = included;
           return (
             <button
               key={u.id}
               type="button"
-              onClick={() => onToggle(u.id)}
+              disabled={disabled}
+              onClick={() => {
+                if (!disabled) onToggle(u.id);
+              }}
               className={`group relative flex items-start gap-4 rounded-2xl border p-4 text-left transition-all ${
-                active
+                disabled
+                  ? "cursor-default border-amber-400/30 bg-amber-400/[0.05]"
+                  : active
                   ? "border-green-500/60 bg-green-500/[0.08] shadow-[0_0_30px_rgba(74,222,128,0.12)]"
                   : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.2] hover:bg-white/[0.04]"
               }`}
@@ -1410,7 +1652,9 @@ function UpsellsBlock({
               {/* Checkbox */}
               <div
                 className={`mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md border transition-all ${
-                  active
+                  disabled
+                    ? "border-amber-400 bg-amber-400/80"
+                    : active
                     ? "border-green-400 bg-green-500"
                     : "border-white/25 bg-transparent group-hover:border-white/50"
                 }`}
@@ -1423,14 +1667,20 @@ function UpsellsBlock({
               {/* Icon */}
               <div
                 className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl transition-colors ${
-                  active
+                  disabled
+                    ? "bg-amber-400/15"
+                    : active
                     ? "bg-green-500/20"
                     : "bg-white/[0.04] group-hover:bg-white/[0.08]"
                 }`}
               >
                 <Icon
                   className={`h-5 w-5 ${
-                    active ? "text-green-400" : "text-slate-400"
+                    disabled
+                      ? "text-amber-300"
+                      : active
+                      ? "text-green-400"
+                      : "text-slate-400"
                   }`}
                 />
               </div>
@@ -1441,10 +1691,17 @@ function UpsellsBlock({
                   <h4 className="text-sm font-extrabold text-white">
                     {t(u.titleKey)}
                   </h4>
-                  {u.badgeKey && (
-                    <span className="inline-flex items-center rounded-full border border-green-500/40 bg-green-500/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-green-300">
-                      {t(u.badgeKey)}
+                  {disabled ? (
+                    <span className="inline-flex items-center gap-1 rounded-full border border-amber-400/40 bg-amber-400/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-amber-300">
+                      <Crown className="h-2.5 w-2.5" />
+                      {t("checkout.upsellIncluded")}
                     </span>
+                  ) : (
+                    u.badgeKey && (
+                      <span className="inline-flex items-center rounded-full border border-green-500/40 bg-green-500/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-green-300">
+                        {t(u.badgeKey)}
+                      </span>
+                    )
                   )}
                 </div>
                 <p className="mt-1 text-xs leading-relaxed text-slate-400">
@@ -1454,12 +1711,20 @@ function UpsellsBlock({
 
               {/* Price */}
               <div className="flex-shrink-0 text-right">
-                <div className="text-sm font-extrabold text-white">
-                  +{formatEUR(u.monthly)}
-                </div>
-                <div className="text-[10px] text-slate-500">
-                  {t("checkout.upsellPerMonth")}
-                </div>
+                {disabled ? (
+                  <div className="text-xs font-extrabold uppercase tracking-wider text-amber-300">
+                    Free
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-sm font-extrabold text-white">
+                      +{formatEUR(u.monthly)}
+                    </div>
+                    <div className="text-[10px] text-slate-500">
+                      {t("checkout.upsellPerMonth")}
+                    </div>
+                  </>
+                )}
               </div>
             </button>
           );
