@@ -231,12 +231,20 @@
     background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
     color: #0a0e1a;
     transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    animation: btn-pulse 2.4s ease-in-out infinite;
   }
 
   .btn-gradient:hover {
     opacity: 0.95;
     transform: translateY(-1px);
     box-shadow: 0 8px 32px rgba(74, 222, 128, 0.4);
+    animation: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-gradient {
+      animation: none;
+    }
   }
 
   /* ── Highlighted feature card (like crypto design middle card) ── */
@@ -299,6 +307,17 @@
 }
 
 /* ── Keyframes ── */
+@keyframes btn-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55),
+                0 10px 30px rgba(74, 222, 128, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(74, 222, 128, 0),
+                0 10px 30px rgba(74, 222, 128, 0.35);
+  }
+}
+
 @keyframes pulse-live {
   0% {
     box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);

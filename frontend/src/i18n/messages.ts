@@ -443,12 +443,12 @@ const en = {
   "about.founder1Name": "Cas",
   "about.founder1Role": "Co-founder · Engineering & Product",
   "about.founder1Bio":
-    "Backend engineer for 12+ years, with a career spent building data-heavy systems for fintech platforms and large marketplaces. Feyenoord season ticket holder, reluctant Formula 1 encyclopedia, and the reason our scraping and match-ingestion engine hums 24/7. If it logs a match on BetsPlug, Cas wrote the pipeline.",
+    "Lifelong sports fan with a background in ICT. Builds the systems that keep BetsPlug running and makes sure the data flows cleanly from source to screen.",
 
   "about.founder2Name": "Dennis",
   "about.founder2Role": "Co-founder · Data Science & Modelling",
   "about.founder2Bio":
-    "Systems architect with a decade in ICT and a decade-long side obsession with statistical modelling. Lives and breathes the NBA, has strong opinions about the Premier League title race, and runs the gradient-boosted classifiers that turn historical match data into tomorrow's probabilities. Believes every number deserves a confidence interval.",
+    "Sports enthusiast turned data nerd with years of ICT experience. Focuses on the models and statistics that turn match data into useful insights.",
 
   "about.ctaTitle": "Ready to trade guesswork for data?",
   "about.ctaSubtitle":
@@ -879,12 +879,12 @@ const nl: Dictionary = {
   "about.founder1Name": "Cas",
   "about.founder1Role": "Mede-oprichter · Engineering & Product",
   "about.founder1Bio":
-    "Backend engineer met 12+ jaar ervaring in data-intensieve systemen voor fintech-platforms en grote marktplaatsen. Feyenoord-seizoenkaarthouder, onvrijwillige Formule 1-encyclopedie, en de reden dat onze scraping- en match-ingestion engine 24/7 draait. Elke wedstrijd die op BetsPlug wordt gelogd, loopt door een pipeline die Cas heeft geschreven.",
+    "Sportliefhebber in hart en nieren met een achtergrond in ICT. Bouwt de systemen die BetsPlug draaiende houden en zorgt dat data netjes van bron naar scherm stroomt.",
 
   "about.founder2Name": "Dennis",
   "about.founder2Role": "Mede-oprichter · Data Science & Modellering",
   "about.founder2Bio":
-    "Systeemarchitect met tien jaar ICT-ervaring en een even oude obsessie met statistisch modelleren. Leeft en ademt de NBA, heeft scherpe meningen over de titelrace in de Premier League, en runt de gradient-boosted classifiers die historische wedstrijddata omzetten in de waarschijnlijkheden van morgen. Gelooft dat elk getal een betrouwbaarheidsinterval verdient.",
+    "Sportfanaat en data-enthousiasteling met jarenlange ICT-ervaring. Richt zich op de modellen en statistieken die wedstrijddata omzetten in bruikbare inzichten.",
 
   "about.ctaTitle": "Klaar om gokken te vervangen door data?",
   "about.ctaSubtitle":
