@@ -65,10 +65,459 @@
     },
     {
       "title": "Eredivisie Edge: Why Smaller Leagues Have More Inefficient Lines",
-      "angle": "Make the case that smaller leagues like the Eredivisie have softer markets — less liquidity, fewer sharp bettors, more reliance on regional bookmaker guesswork. Show where BetsPlug's Eredivisie-specific calibration finds value PSG/Ajax-style upsets.",
+      "angle": "Make the case that smaller leagues like the Eredivisie have softer markets — less liquidity, fewer sharp bettors, more reliance on regional bookmaker guesswork. Show where BetsPlug's Eredivisie-specific calibration finds value.",
       "primarySport": "football",
       "primaryPillar": "what-is-value-betting",
       "secondaryHub": "/match-predictions/eredivisie"
+    },
+
+    {
+      "title": "The Overround Explained: How Bookmakers Bake In Their Margin",
+      "angle": "Show how raw decimal odds always sum to more than 100% implied probability — that overhead is the bookmaker's margin. Use a real Premier League 1X2 line to compute the overround, then show how to back it out to get the bookmaker's true probability estimate. Conclude with why the lowest-margin books (Pinnacle ~2%, soft books 6–8%) are where you should price-shop.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/match-predictions/premier-league"
+    },
+    {
+      "title": "Why Implied Probability Lies — And How to Adjust For It",
+      "angle": "The standard '1/odds = probability' shortcut ignores margin and the favourite-longshot bias. Walk through Shin's method and the power method as two practical fair-odds adjustments. Show why naive implied probability is wrong by 3–5% in the 1X2 market and how that error compounds across a 200-bet sample.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/match-predictions/la-liga"
+    },
+    {
+      "title": "Public Money vs Sharp Money: Reading Line Moves That Matter",
+      "angle": "Not every line move is signal. Distinguish between square-money moves (line drifts toward the favourite as recreational bettors pile on) and sharp-money moves (line moves on small volume because a respected account fired). Show how Pinnacle limits and steam-screen tools help separate the two.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/match-predictions/serie-a"
+    },
+    {
+      "title": "Reverse Line Movement: When the Line Moves Against the Volume",
+      "angle": "Reverse line movement is when 70% of bets are on Team A but the line moves toward Team B. That's the clearest fingerprint of sharp action overriding public money. Use a worked Premier League example, explain why bookmakers respect those accounts, and how to find RLM data without paying for screen tools.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/match-predictions/premier-league"
+    },
+    {
+      "title": "The Steam Move Playbook: How to Spot a Sharp Action Wave",
+      "angle": "A 'steam move' is when the line shifts simultaneously across multiple books in the space of minutes — that's syndicates hammering the soft books. Explain how to spot one in real time, how late you can chase it before the value evaporates, and why steam-chasing is its own discipline (and not always +EV).",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/bet-types/double-chance"
+    },
+    {
+      "title": "Soft Books vs Pinnacle: Where Real Edges Still Exist",
+      "angle": "Pinnacle is the sharpest book and rarely has beatable lines, but they post fast and limit late. Soft books (Bet365, Unibet, etc) post slower with bigger margins but tolerate winners longer. Lay out the trade-off, the closing-line gap between the two, and why a serious bettor needs accounts at both kinds.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/match-predictions/eredivisie"
+    },
+    {
+      "title": "Why Pre-Match Lines Are More Beatable Than Live Lines",
+      "angle": "Live lines are priced by automated risk engines that react in seconds and clamp limits hard. Pre-match lines sit for hours and absorb information slowly. Make the case that the sharpest edge is in the 24–48 hours before kickoff, especially for second-tier leagues where overnight news (lineup leaks, weather) hasn't been priced yet.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/match-predictions/ligue-1"
+    },
+    {
+      "title": "The Smart Money's Favourite Market: Why Asian Handicap Beats 1X2",
+      "angle": "Asian handicap is a two-way market with no draw, so the bookmaker margin is much lower (typically 2–3% vs 6–8% for 1X2). Walk through the math of why a lower-margin market is mathematically easier to beat, and use a Premier League example to show how the same opinion expresses better as an AH bet than a 1X2 bet.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/bet-types/draw-no-bet"
+    },
+    {
+      "title": "Mid-Week Cup Ties: The Best Soft-Line Window of the Season",
+      "angle": "Trading desks are thin on Tuesday and Wednesday nights, especially for cup competitions where rotation makes lineups uncertain until 60 minutes before kickoff. Make the contrarian case that mid-week cup ties — usually written off as gamble fixtures — are actually the softest-line spot of the week for a disciplined bettor.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/match-predictions/champions-league"
+    },
+    {
+      "title": "The Halftime Adjustment: Where Live Bookmakers Get It Wrong",
+      "angle": "Halftime is when live algorithms re-price every match in 60 seconds based on shot count, possession and current score. That speed leaves systematic errors — particularly when xG diverges from the scoreline. Show how to spot a mispriced halftime line and how to enter live markets without giving back the spread on entry.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/bet-types/over-2-5-goals"
+    },
+    {
+      "title": "Why Most Bettors Lose to the Vig Before They Even Pick Wrong",
+      "angle": "Even a 50/50 coin-flipper loses ~5% per year to a typical 1X2 margin. Show with simple math that price discipline matters more than pick discipline for the average recreational bettor — and that the single biggest improvement most punters could make is just shopping every line at three books.",
+      "primarySport": "football",
+      "primaryPillar": "what-is-value-betting",
+      "secondaryHub": "/bet-types/double-chance"
+    },
+    {
+      "title": "The xG Per Shot Trap: Why Big Numbers Mislead in Short Samples",
+      "angle": "An xG of 2.4 from 24 shots tells a very different story from 2.4 from 6 shots. Show how shot-quality variance dominates over small samples and why xG per shot is the more honest single-game metric. Use a real Champions League knockout where one team had all the chances but lost.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/match-predictions/champions-league"
+    },
+    {
+      "title": "Post-Shot xG: The Goalkeeper Metric Every Bettor Should Know",
+      "angle": "Standard xG measures the chance from the shooter's perspective. Post-shot xG measures it from after the ball leaves the boot — i.e. how hard the keeper had to work. The gap is goalkeeper performance. Explain how PSxG helps you spot underperforming keepers (= regression risk) and why that matters for over/under markets.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/bet-types/over-2-5-goals"
+    },
+    {
+      "title": "xG From Set Pieces: The Hidden Source of Premier League Goals",
+      "angle": "Roughly 25–30% of Premier League goals come from set pieces, but most amateur xG analyses lump set-piece chances in with open play. Break out set-piece xG separately and show how teams with strong corner routines (Arsenal under Arteta is the canonical example) consistently overperform their open-play xG.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/match-predictions/premier-league"
+    },
+    {
+      "title": "xGA Decomposed: Where Defensive Errors Actually Cost Goals",
+      "angle": "Expected goals against is a defensive metric — but it doesn't tell you whether the goals came from individual errors, set-piece weakness or pressing collapses. Show how decomposing xGA by source helps you predict which defensive issues are sticky and which will regress.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/match-predictions/serie-a"
+    },
+    {
+      "title": "The xG Differential: Predicting Form Reversals Before They Happen",
+      "angle": "xG differential (xG for minus xG against) is the cleanest leading indicator of mean reversion. Teams sitting top of the table on a +5 xGD will regress; teams 12th on a +8 xGD will surge. Use a worked example from a recent season and show how BetsPlug uses xGD as a Bayesian prior in its ensemble.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/match-predictions/bundesliga"
+    },
+    {
+      "title": "xG by Game State: Why Trailing Teams Inflate Their Numbers",
+      "angle": "A team chasing a 2-0 deficit will rack up shots against an opponent parked in their own box. Those chances inflate xG without representing the team's actual quality. Show why state-adjusted xG (i.e. xG only when the game is level) is the more useful metric for predicting future performance.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/match-predictions/la-liga"
+    },
+    {
+      "title": "Set-Piece xG vs Open-Play xG in Low-Scoring Leagues",
+      "angle": "In Serie A and Ligue 1, set-piece goals account for a larger share of total goals than in higher-scoring leagues. Show how this changes the xG profile of teams like Atalanta and Lille and why a Poisson model that ignores set-piece weighting will systematically misprice Under 2.5 markets.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/match-predictions/ligue-1"
+    },
+    {
+      "title": "The Brentford Problem: Outperforming xG for an Entire Season",
+      "angle": "Brentford under Thomas Frank consistently outperformed their xG for multiple seasons, which 'should' have regressed but didn't. Explore the systematic reasons (set-piece coaching, finisher quality, manager press structure) and how a model should treat repeat outperformers — not as luck, but as a model deficiency.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/match-predictions/premier-league"
+    },
+    {
+      "title": "Why Cup Ties Break xG Models (And What to Use Instead)",
+      "angle": "xG is built from league data where teams play to win 3 points. In cup ties, especially second legs, the incentive structure changes — a 1-0 lead is defended differently. Show how xG over-predicts goals in two-legged knockouts and which alternative signals (Elo, lineup rotation, away-goal rules) actually work.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/match-predictions/champions-league"
+    },
+    {
+      "title": "xG and Home Advantage: How Much Is Crowd vs How Much Is Travel",
+      "angle": "Home teams generate ~10% more xG than away teams across the top European leagues, but the source of that advantage is contested. Decompose home advantage into travel fatigue, referee bias, crowd noise, and pitch familiarity. Show what survived COVID's empty-stadium experiment and what didn't.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/match-predictions/bundesliga"
+    },
+    {
+      "title": "The xG Calibration Problem: Why Two Sources Disagree by 0.4 Goals",
+      "angle": "Opta, StatsBomb, Understat and Wyscout all publish xG numbers — and they don't agree. Walk through why (different shot databases, different shot features, different model parameters) and how to use multiple xG sources defensively rather than picking the one that confirms your bet.",
+      "primarySport": "football",
+      "primaryPillar": "expected-goals-explained",
+      "secondaryHub": "/bet-types/both-teams-to-score"
+    },
+    {
+      "title": "K-Factor Tuning: Why Elo Updates Differ Across Leagues",
+      "angle": "Elo's K-factor controls how fast ratings update after each match. Too high and the model whipsaws on noisy results; too low and it lags real form changes. Show empirically what K-factor settles after a Brier-score-minimisation grid search across the top five European leagues and why the optimal K is different for each.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/match-predictions/la-liga"
+    },
+    {
+      "title": "The Promoted-Team Elo Puzzle: How to Rate a Team With No History",
+      "angle": "When a team is promoted to a new tier, their previous Elo from the lower league is meaningless against the new opponents. Walk through three approaches (carry-over with discount, league-average start, hybrid) and show which one minimises Brier loss across the first 10 matches of a promoted team's season.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/match-predictions/premier-league"
+    },
+    {
+      "title": "Elo and the International Break: Why Ratings Should Decay Over Pauses",
+      "angle": "Two-week international breaks scramble club form — players come back fatigued, injured, or in different mental states. Show why a small Elo decay during long pauses (regressing toward league mean) marginally improves predictive accuracy in the first two matchdays after the break.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/match-predictions/serie-a"
+    },
+    {
+      "title": "The Margin-of-Victory Multiplier: How 4-0 Wins Should Move Elo",
+      "angle": "Vanilla Elo treats every win the same — 4-0 against the league leader is the same rating change as 1-0 against the bottom side. Show why a goal-difference multiplier (calibrated, not arbitrary) materially improves predictive accuracy and makes the model more responsive to true performance jumps.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/match-predictions/bundesliga"
+    },
+    {
+      "title": "Elo Across Tiers: How to Compare Premier League and Championship",
+      "angle": "Cup ties and promotion/relegation make cross-tier Elo necessary, but a 1700-rated Championship team is not the same as a 1700-rated Premier League team. Walk through how to anchor tier offsets using FA Cup and EFL Cup results, and show the empirical gap between the average team in each English tier.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/match-predictions/premier-league"
+    },
+    {
+      "title": "Home Field Bonus in Elo: The Empirical Right Number for Football",
+      "angle": "How big should the home advantage bump be in an Elo model? Survey the literature (Hvattum, Hueter, Constantinou) and show that ~65 Elo points for top-flight football is the convergent answer. Discuss why different leagues warrant different home bonuses and how COVID empty stadiums shifted the number.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/match-predictions/la-liga"
+    },
+    {
+      "title": "Elo vs Glicko: When the Uncertainty Term Actually Matters",
+      "angle": "Glicko adds a rating-uncertainty (RD) term that Elo doesn't have. Show with concrete examples where the extra term materially changes predictions — promoted teams, returning-from-injury squads, post-international-break — and where it's just decoration that adds compute cost without accuracy.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/match-predictions/eredivisie"
+    },
+    {
+      "title": "The Elo Reset Question: Should Ratings Carry Over Each Season?",
+      "angle": "End-of-season Elo ratings are a strong prior for next season, but transfers, retirements, and managerial changes break the continuity. Walk through three approaches (full carry-over, partial regression to league mean, full reset) and show which minimises Brier loss across the first 10 matchdays of a new season.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/match-predictions/ligue-1"
+    },
+    {
+      "title": "Travel Distance and Elo: Quantifying the Long-Trip Penalty",
+      "angle": "An away team travelling 1500 km for a midweek Champions League fixture has measurably lower performance than the same team after a 200 km Saturday domestic trip. Quantify the empirical penalty in Elo points per 1000 km and show how it stacks with the standard home-advantage adjustment.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/match-predictions/champions-league"
+    },
+    {
+      "title": "Elo Convergence: How Many Matches Until a New Team's Rating Settles",
+      "angle": "When a brand-new team enters the dataset, how many matches does it take before its Elo is reliable? Use a synthetic experiment to show convergence rates under different K-factors, and explain why the first 8–10 matches of a season are the riskiest betting window for promoted sides.",
+      "primarySport": "football",
+      "primaryPillar": "elo-rating-explained",
+      "secondaryHub": "/bet-types/double-chance"
+    },
+    {
+      "title": "The Kelly Multi-Bet Problem: Why Correlated Bets Need Smaller Stakes",
+      "angle": "Kelly's formula assumes independent bets. When you bet Manchester City to win AND Over 2.5 goals in the same match, those bets are heavily correlated — and full Kelly on both massively over-stakes the position. Show the math for partial correlation and a practical 'Kelly haircut' rule for same-match parlays.",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/bet-types/over-2-5-goals"
+    },
+    {
+      "title": "Kelly With Uncertain Edge: A Practical Decision Framework",
+      "angle": "Kelly assumes you know your edge exactly. In reality your edge estimate has its own confidence interval. Walk through Bayesian Kelly (Davis, 2008) and show how the optimal stake collapses fast when your edge confidence is wide — which it almost always is.",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/bet-types/draw-no-bet"
+    },
+    {
+      "title": "Why Most Pros Cap Kelly at 2% of Bankroll",
+      "angle": "Even with positive edge and disciplined tracking, the volatility of full Kelly destroys most bettors' nerves. Walk through why 2% of bankroll has emerged as the de-facto cap among professional accounts — it's not a Kelly fraction, it's a hard ceiling that survives drawdowns.",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/match-predictions/premier-league"
+    },
+    {
+      "title": "Kelly vs Flat Staking: A 10,000-Bet Simulation",
+      "angle": "Run a Monte Carlo with 10,000 bets at a stable 4% edge and compare flat 1% staking against Kelly, half-Kelly and quarter-Kelly. Show the median, the 90th percentile, and the 10th percentile outcomes for each. The conclusion: flat 1% beats full Kelly on every percentile except the absolute median.",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/match-predictions/serie-a"
+    },
+    {
+      "title": "Quarter-Kelly: The Conservative Default Most Bettors Should Use",
+      "angle": "Quarter-Kelly retains ~94% of Kelly's growth rate with one-quarter the variance. Show the math using the standard Kelly growth formula and argue that for 99% of recreational bettors, quarter-Kelly is the right starting point because it tolerates edge-estimation errors that full Kelly punishes brutally.",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/bet-types/double-chance"
+    },
+    {
+      "title": "Kelly at 1.50 vs Kelly at 5.00: How Odds Shape the Stake",
+      "angle": "The Kelly fraction depends on both edge and odds. Show that for the same 5% edge, the Kelly stake is dramatically larger at 1.50 odds than at 5.00 odds — and explain why that math pushes serious bettors toward favourite-side markets even when underdog upside looks juicier.",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/match-predictions/la-liga"
+    },
+    {
+      "title": "The Edge-Inflation Problem: Why Self-Reported Edges Are Always Wrong",
+      "angle": "Bettors who self-report a 7% edge usually have a 2% edge after you correct for selection bias, regression to the mean, and survivorship in their bet log. Walk through the math and propose a 'shrinkage factor' to apply to your own edge estimates before plugging them into Kelly.",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/match-predictions/bundesliga"
+    },
+    {
+      "title": "Kelly After a Drawdown: Should You Scale Up or Stay Flat?",
+      "angle": "When your bankroll drops 20%, Kelly says you should reduce stakes proportionally — but that locks in losses. The other extreme (martingale) compounds them. Walk through the actual math and explain why Kelly's prescription is correct even though it feels emotionally wrong.",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/bet-types/draw-no-bet"
+    },
+    {
+      "title": "Kelly and the Closing-Line Adjustment",
+      "angle": "If you systematically beat the closing line by 2%, that's your effective edge — not the price you took at open. Show how to feed CLV into Kelly as the edge term and why this is more stable than self-estimating edges from your win/loss record.",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/match-predictions/champions-league"
+    },
+    {
+      "title": "Kelly for Live Betting: How Speed Changes the Math",
+      "angle": "Live betting Kelly is a different animal — your edge window is seconds, the odds move continuously, and you can't realistically rebalance after every shot. Walk through a simplified live-Kelly framework and explain why most pros default to flat stakes on live markets despite the theoretical optimality of dynamic Kelly.",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/bet-types/over-2-5-goals"
+    },
+    {
+      "title": "Why Kelly Goes to Zero When Edge Is Small Enough",
+      "angle": "There is a minimum edge threshold below which Kelly recommends a stake so small it's effectively zero. Show the breakeven math, frame it in terms of bookmaker margin, and explain why this is the correct answer — sub-1% edges should not be bet, no matter how confident the model is.",
+      "primarySport": "football",
+      "primaryPillar": "kelly-criterion-guide",
+      "secondaryHub": "/match-predictions/eredivisie"
+    },
+    {
+      "title": "From Lambda to BTTS: How a Goal Model Generates Market Prices",
+      "angle": "A Poisson goal model gives you two lambdas (home expected goals, away expected goals). Show step by step how those two numbers generate a full scoreline matrix, then how to roll the matrix into 1X2, BTTS, Over/Under and Asian Handicap prices. By the end the reader can do this with a calculator.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/bet-types/both-teams-to-score"
+    },
+    {
+      "title": "The Maher 1982 Paper: Why Poisson Models Still Dominate Football",
+      "angle": "Mike Maher's 1982 paper 'Modelling Association Football Scores' is the foundational document of football analytics. Walk through what Maher actually said, why it took 15 years to gain traction, and why a paper from before the Premier League era is still the conceptual basis of every modern goal model.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/match-predictions/premier-league"
+    },
+    {
+      "title": "Negative Binomial vs Poisson: When Goal Variance Breaks the Model",
+      "angle": "Poisson assumes mean = variance. Real football data is overdispersed — variance exceeds the mean. Show empirically why this matters in high-scoring matches (5+ goals), introduce the negative binomial as a fix, and demonstrate which leagues benefit most from the switch.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/bet-types/over-2-5-goals"
+    },
+    {
+      "title": "Bivariate Poisson: Modeling Score Correlation Between Teams",
+      "angle": "Standard Poisson treats each team's goals as independent — which is wrong, because goals at one end change tempo at the other. Walk through bivariate Poisson (Karlis & Ntzoufras, 2003), show how it handles the correlation, and discuss when the extra parameter is worth it and when it's overfitting.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/match-predictions/serie-a"
+    },
+    {
+      "title": "The Time-Decay Weighting Problem in Poisson Models",
+      "angle": "Recent matches matter more than old ones — but how much more? Walk through exponential decay vs step-function weighting, show how the optimal half-life varies between leagues (Premier League: ~30 matches, Serie A: ~40), and demonstrate the Brier-score impact of getting it wrong.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/match-predictions/bundesliga"
+    },
+    {
+      "title": "League Strength Adjustment: Comparing Bundesliga and Serie A",
+      "angle": "Goal models built on a single league can't easily handle Champions League ties, where Bundesliga teams play Serie A teams. Walk through Elo-anchored league strength multipliers and show how BetsPlug normalises lambdas across competitions for the knockout rounds.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/match-predictions/champions-league"
+    },
+    {
+      "title": "The Manchester City Problem: Modeling Teams That Score 5+",
+      "angle": "Vanilla Poisson under-predicts the right tail — i.e. it never sees the 5-0 hammerings coming. Walk through why and show how a zero-inflated or right-truncated Poisson handles dominant sides better. Tie it back to the Asian Handicap market, where these mispricings translate to real edge.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/match-predictions/premier-league"
+    },
+    {
+      "title": "Goal Model vs Match Model: When Each Approach Wins",
+      "angle": "A goal model (Poisson) decomposes into lambdas; a match model (logistic) goes straight from features to a 1X2 probability. They're not competitors — they're complementary. Show empirically which one wins in which market and why the BetsPlug ensemble blends both.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/bet-types/double-chance"
+    },
+    {
+      "title": "How Many Matches of History Do Poisson Models Need?",
+      "angle": "Train on too little data and the lambdas are noisy; train on too much and recent form drowns. Use a learning-curve experiment to show that the sweet spot for top European leagues is roughly 60–80 most-recent matches per team, and explain why this translates to a half-season window.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/match-predictions/la-liga"
+    },
+    {
+      "title": "The Asian Handicap Advantage of Poisson Models Over 1X2",
+      "angle": "Goal models naturally generate Asian Handicap probabilities because they have the full scoreline matrix. 1X2 models can fake AH prices via decomposition, but they lose information. Show concretely why Poisson-derived AH lines are sharper than logistic-derived AH lines.",
+      "primarySport": "football",
+      "primaryPillar": "poisson-goal-models",
+      "secondaryHub": "/bet-types/draw-no-bet"
+    },
+    {
+      "title": "The 1% Rule: Why Most Pros Stake Smaller Than You Think",
+      "angle": "The most common professional staking rule is also the dullest: 1% of bankroll, flat. Walk through why — variance, tilt resistance, longevity — and use a worked example to show how a 1% staking model with a 3% edge generates the same long-run growth as half-Kelly with two-thirds the heart attacks.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/match-predictions/premier-league"
+    },
+    {
+      "title": "Risk of Ruin: The Formula Every Bettor Should Memorize",
+      "angle": "Risk of ruin is the probability your bankroll hits zero before you cash out. Walk through the formula (edge, variance, bankroll size, target) and show concrete numbers — e.g. a 3% edge with flat 2% stakes has a ~5% risk of ruin over 1000 bets, which is too high for a hobby and unacceptable for a career.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/bet-types/draw-no-bet"
+    },
+    {
+      "title": "Drawdown Psychology: Why Hitting -15% Feels Like -50%",
+      "angle": "Behavioural economics is crueler than the math. A 15% drawdown is recoverable in 4–6 months at a 3% edge, but it feels existential while you're in it. Walk through the loss-aversion math (Kahneman & Tversky), explain why most bettors quit during recoverable drawdowns, and offer concrete pre-commitment rules to survive them.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/match-predictions/serie-a"
+    },
+    {
+      "title": "The Stop-Loss Trap: When Walking Away Costs You More",
+      "angle": "Stop-losses sound disciplined but often work against bettors with positive edge. Show that a stop-loss is correct when your edge is unstable but actively destroys value when your edge is real. The right stopping rule is based on bankroll fraction, not on losing-streak count.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/bet-types/double-chance"
+    },
+    {
+      "title": "Monthly Bankroll Reviews: A Concrete Ritual That Actually Works",
+      "angle": "Every serious bettor benefits from a monthly review — but most reviews devolve into dwelling on losses. Walk through a concrete five-question template: ROI, CLV, market exposure, drawdown depth, and discipline incidents. Show that the discipline incidents column is the one that actually predicts next month's returns.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/match-predictions/bundesliga"
+    },
+    {
+      "title": "Tilt Management for Data-Driven Bettors",
+      "angle": "Tilt isn't just an emotional problem — it's a model-discipline problem. When data-driven bettors tilt, they don't suddenly start picking Manchester United for vibes; they start over-staking, deviating from their model, and chasing CLV losses. Walk through three concrete tilt-fingerprints that show up in a bet log.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/match-predictions/la-liga"
+    },
+    {
+      "title": "The Win-Streak Inflation Problem",
+      "angle": "Hitting six bets in a row is a feeling, not a signal — but it convinces almost every bettor to scale up the next bet. Walk through why win streaks are statistically meaningless at any reasonable edge and offer a pre-committed rule to ignore the streak entirely.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/match-predictions/ligue-1"
+    },
+    {
+      "title": "Bankroll Segregation: Sportsbook vs Exchange vs Reserve",
+      "angle": "Holding your full bankroll on a single bookmaker concentrates two risks: account closure and platform failure. Walk through a three-bucket system (active book, exchange, cold reserve) and show why splitting bankroll across them costs you nothing in expected return but materially reduces tail risk.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/match-predictions/eredivisie"
+    },
+    {
+      "title": "Position Sizing for High-Variance Cup Ties",
+      "angle": "Cup ties are higher-variance than league fixtures (rotation, motivation, knockout format). Argue that even if your model says 'edge,' you should reduce stake size on cup ties relative to league bets — the correct multiplier is 0.5 to 0.7, and the math works out via a confidence-interval widening on the edge estimate.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/match-predictions/champions-league"
+    },
+    {
+      "title": "The Withdrawal Strategy That Protects Your Bankroll",
+      "angle": "Most bettors either never withdraw (and lose everything in a drawdown) or withdraw too aggressively (and never compound). Walk through a rule-based withdrawal strategy: take 25% of profits over each new high-water mark, leave the rest to grow. Show why this beats both extremes on the math.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/bet-types/over-2-5-goals"
+    },
+    {
+      "title": "ROI vs CLV: Which Metric to Trust on a Bad Month",
+      "angle": "After a -10% month, ROI says 'you're losing,' but CLV might say 'you're beating the closing line by 1.5%.' Which one do you trust? Walk through why CLV is the leading indicator and ROI is the lagging indicator, and explain the discipline of acting on CLV even when ROI is screaming the other way.",
+      "primarySport": "football",
+      "primaryPillar": "bankroll-management",
+      "secondaryHub": "/bet-types/both-teams-to-score"
     }
   ]
 }
