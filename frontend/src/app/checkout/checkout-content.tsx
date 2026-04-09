@@ -152,7 +152,7 @@ const PLANS: PlanDef[] = [
     tagline: "pricing.platTagline",
     icon: Crown,
     monthly: 0,
-    oneTime: 299,
+    oneTime: 199,
     featuresKey: [
       "pricing.platF1",
       "pricing.platF2",

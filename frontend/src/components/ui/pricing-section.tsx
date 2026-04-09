@@ -118,7 +118,7 @@ export function PricingSection() {
     name: "Platinum",
     icon: Crown,
     tagline: t("pricing.platTagline"),
-    priceMain: "299",
+    priceMain: "199",
     period: "one-time",
     cta: t("pricing.platCta"),
     features: [
@@ -444,7 +444,7 @@ export function PricingSection() {
                 <div className="mt-2 flex items-baseline gap-1 lg:justify-end">
                   <span className="text-2xl font-bold text-slate-300">€</span>
                   <span className="bg-gradient-to-b from-white to-amber-200 bg-clip-text text-7xl font-extrabold tracking-tight text-transparent">
-                    299
+                    199
                   </span>
                 </div>
                 <p className="mt-1 text-xs text-slate-500">
