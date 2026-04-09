@@ -183,10 +183,96 @@ export function CheckoutContent() {
   const [submitted, setSubmitted] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
+  // Tracks whether the user has tried to advance past each step.
+  // We only highlight validation errors after they've tried to move
+  // forward, so the form doesn't feel aggressive on first render.
+  const [triedAdvance, setTriedAdvance] = useState<Record<1 | 2 | 3, boolean>>({
+    1: false,
+    2: false,
+    3: false,
+  });
+
+  /* ── Controlled form state ────────────────────────────────── */
+  const [account, setAccount] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [address, setAddress] = useState({
+    country: "",
+    street: "",
+    city: "",
+    postalCode: "",
+    state: "",
+    company: "",
+    vatId: "",
+  });
+  const [card, setCard] = useState({
+    number: "",
+    expiry: "",
+    cvc: "",
+    name: "",
+  });
+
+  const setAccountField = <K extends keyof typeof account>(
+    k: K,
+    v: string
+  ) => setAccount((p) => ({ ...p, [k]: v }));
+  const setAddressField = <K extends keyof typeof address>(
+    k: K,
+    v: string
+  ) => setAddress((p) => ({ ...p, [k]: v }));
+  const setCardField = <K extends keyof typeof card>(k: K, v: string) =>
+    setCard((p) => ({ ...p, [k]: v }));
+
   const toggleUpsell = (id: UpsellId) =>
     setSelectedUpsells((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
+
+  /* ── Per-step validation ──────────────────────────────────── */
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const accountErrors = useMemo(() => {
+    const e: Partial<Record<keyof typeof account, string>> = {};
+    if (!account.firstName.trim()) e.firstName = "required";
+    if (!account.lastName.trim()) e.lastName = "required";
+    if (!account.email.trim()) e.email = "required";
+    else if (!emailRe.test(account.email.trim())) e.email = "invalid";
+    if (!account.password) e.password = "required";
+    else if (account.password.length < 8) e.password = "short";
+    if (!account.confirmPassword) e.confirmPassword = "required";
+    else if (account.confirmPassword !== account.password)
+      e.confirmPassword = "mismatch";
+    return e;
+  }, [account]);
+
+  const addressErrors = useMemo(() => {
+    const e: Partial<Record<keyof typeof address, string>> = {};
+    if (!address.country) e.country = "required";
+    if (!address.street.trim()) e.street = "required";
+    if (!address.city.trim()) e.city = "required";
+    if (!address.postalCode.trim()) e.postalCode = "required";
+    return e;
+  }, [address]);
+
+  const paymentErrors = useMemo(() => {
+    const e: Partial<Record<keyof typeof card | "terms", string>> = {};
+    if (paymentMethod === "card") {
+      if (!card.number.trim()) e.number = "required";
+      if (!card.expiry.trim()) e.expiry = "required";
+      if (!card.cvc.trim()) e.cvc = "required";
+      if (!card.name.trim()) e.name = "required";
+    }
+    if (!agreed) e.terms = "required";
+    return e;
+  }, [card, paymentMethod, agreed]);
+
+  const step1Valid = Object.keys(accountErrors).length === 0;
+  const step2Valid = Object.keys(addressErrors).length === 0;
+  const step3Valid = Object.keys(paymentErrors).length === 0;
 
   /* ── Price derivation (all figures are VAT-inclusive) ─────── */
   const pricing = useMemo(() => {
@@ -227,6 +313,11 @@ export function CheckoutContent() {
 
   /* ── Step navigation ──────────────────────────────────────── */
   const next = () => {
+    // Mark the current step as "tried" so validation errors become
+    // visible, then only advance if the step is valid.
+    setTriedAdvance((prev) => ({ ...prev, [step]: true }));
+    if (step === 1 && !step1Valid) return;
+    if (step === 2 && !step2Valid) return;
     if (step < 3) setStep(((step + 1) as 1 | 2 | 3));
   };
   const back = () => {
@@ -235,7 +326,8 @@ export function CheckoutContent() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!agreed) return;
+    setTriedAdvance((prev) => ({ ...prev, 3: true }));
+    if (!step3Valid) return;
     setSubmitting(true);
     // Simulate processing
     setTimeout(() => {
@@ -306,52 +398,110 @@ export function CheckoutContent() {
                         subtitle={t("checkout.accountSubtitle")}
                       />
                       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                        <Field label={t("checkout.firstName")}>
+                        <Field
+                          label={t("checkout.firstName")}
+                          error={
+                            triedAdvance[1] && accountErrors.firstName
+                              ? true
+                              : false
+                          }
+                        >
                           <input
-                            required
                             type="text"
                             placeholder={t("checkout.firstNamePh")}
-                            className={inputCls}
+                            value={account.firstName}
+                            onChange={(e) =>
+                              setAccountField("firstName", e.target.value)
+                            }
+                            className={inputClsFor(
+                              triedAdvance[1] && !!accountErrors.firstName
+                            )}
                           />
                         </Field>
-                        <Field label={t("checkout.lastName")}>
+                        <Field
+                          label={t("checkout.lastName")}
+                          error={
+                            triedAdvance[1] && accountErrors.lastName
+                              ? true
+                              : false
+                          }
+                        >
                           <input
-                            required
                             type="text"
                             placeholder={t("checkout.lastNamePh")}
-                            className={inputCls}
+                            value={account.lastName}
+                            onChange={(e) =>
+                              setAccountField("lastName", e.target.value)
+                            }
+                            className={inputClsFor(
+                              triedAdvance[1] && !!accountErrors.lastName
+                            )}
                           />
                         </Field>
                         <Field
                           label={t("checkout.email")}
                           className="sm:col-span-2"
+                          error={
+                            triedAdvance[1] && accountErrors.email
+                              ? true
+                              : false
+                          }
                         >
                           <input
-                            required
                             type="email"
                             placeholder={t("checkout.emailPh")}
-                            className={inputCls}
+                            value={account.email}
+                            onChange={(e) =>
+                              setAccountField("email", e.target.value)
+                            }
+                            className={inputClsFor(
+                              triedAdvance[1] && !!accountErrors.email
+                            )}
                           />
                         </Field>
                         <Field
                           label={t("checkout.password")}
                           hint={t("checkout.passwordHint")}
+                          error={
+                            triedAdvance[1] && accountErrors.password
+                              ? true
+                              : false
+                          }
                         >
                           <input
-                            required
                             type="password"
-                            minLength={8}
                             placeholder={t("checkout.passwordPh")}
-                            className={inputCls}
+                            value={account.password}
+                            onChange={(e) =>
+                              setAccountField("password", e.target.value)
+                            }
+                            className={inputClsFor(
+                              triedAdvance[1] && !!accountErrors.password
+                            )}
                           />
                         </Field>
-                        <Field label={t("checkout.confirmPassword")}>
+                        <Field
+                          label={t("checkout.confirmPassword")}
+                          error={
+                            triedAdvance[1] && accountErrors.confirmPassword
+                              ? true
+                              : false
+                          }
+                        >
                           <input
-                            required
                             type="password"
-                            minLength={8}
                             placeholder={t("checkout.passwordPh")}
-                            className={inputCls}
+                            value={account.confirmPassword}
+                            onChange={(e) =>
+                              setAccountField(
+                                "confirmPassword",
+                                e.target.value
+                              )
+                            }
+                            className={inputClsFor(
+                              triedAdvance[1] &&
+                                !!accountErrors.confirmPassword
+                            )}
                           />
                         </Field>
                       </div>
@@ -384,11 +534,20 @@ export function CheckoutContent() {
                         <Field
                           label={t("checkout.country")}
                           className="sm:col-span-2"
+                          error={
+                            triedAdvance[2] && addressErrors.country
+                              ? true
+                              : false
+                          }
                         >
                           <select
-                            required
-                            className={inputCls}
-                            defaultValue=""
+                            value={address.country}
+                            onChange={(e) =>
+                              setAddressField("country", e.target.value)
+                            }
+                            className={inputClsFor(
+                              triedAdvance[2] && !!addressErrors.country
+                            )}
                           >
                             <option value="" disabled>
                               {t("checkout.countryPh")}
@@ -407,41 +566,96 @@ export function CheckoutContent() {
                         <Field
                           label={t("checkout.address")}
                           className="sm:col-span-2"
+                          error={
+                            triedAdvance[2] && addressErrors.street
+                              ? true
+                              : false
+                          }
                         >
                           <input
-                            required
                             type="text"
                             placeholder={t("checkout.addressPh")}
-                            className={inputCls}
+                            value={address.street}
+                            onChange={(e) =>
+                              setAddressField("street", e.target.value)
+                            }
+                            className={inputClsFor(
+                              triedAdvance[2] && !!addressErrors.street
+                            )}
                           />
                         </Field>
-                        <Field label={t("checkout.city")}>
+                        <Field
+                          label={t("checkout.city")}
+                          error={
+                            triedAdvance[2] && addressErrors.city
+                              ? true
+                              : false
+                          }
+                        >
                           <input
-                            required
                             type="text"
                             placeholder={t("checkout.cityPh")}
-                            className={inputCls}
+                            value={address.city}
+                            onChange={(e) =>
+                              setAddressField("city", e.target.value)
+                            }
+                            className={inputClsFor(
+                              triedAdvance[2] && !!addressErrors.city
+                            )}
                           />
                         </Field>
-                        <Field label={t("checkout.postalCode")}>
+                        <Field
+                          label={t("checkout.postalCode")}
+                          error={
+                            triedAdvance[2] && addressErrors.postalCode
+                              ? true
+                              : false
+                          }
+                        >
                           <input
-                            required
                             type="text"
                             placeholder={t("checkout.postalCodePh")}
-                            className={inputCls}
+                            value={address.postalCode}
+                            onChange={(e) =>
+                              setAddressField("postalCode", e.target.value)
+                            }
+                            className={inputClsFor(
+                              triedAdvance[2] && !!addressErrors.postalCode
+                            )}
                           />
                         </Field>
                         <Field
                           label={t("checkout.state")}
                           className="sm:col-span-2"
                         >
-                          <input type="text" className={inputCls} />
+                          <input
+                            type="text"
+                            value={address.state}
+                            onChange={(e) =>
+                              setAddressField("state", e.target.value)
+                            }
+                            className={inputCls}
+                          />
                         </Field>
                         <Field label={t("checkout.company")}>
-                          <input type="text" className={inputCls} />
+                          <input
+                            type="text"
+                            value={address.company}
+                            onChange={(e) =>
+                              setAddressField("company", e.target.value)
+                            }
+                            className={inputCls}
+                          />
                         </Field>
                         <Field label={t("checkout.vatId")}>
-                          <input type="text" className={inputCls} />
+                          <input
+                            type="text"
+                            value={address.vatId}
+                            onChange={(e) =>
+                              setAddressField("vatId", e.target.value)
+                            }
+                            className={inputCls}
+                          />
                         </Field>
                       </div>
 
@@ -505,40 +719,88 @@ export function CheckoutContent() {
                           <Field
                             label={t("checkout.cardNumber")}
                             className="sm:col-span-2"
+                            error={
+                              triedAdvance[3] && paymentErrors.number
+                                ? true
+                                : false
+                            }
                           >
                             <div className="relative">
                               <input
                                 type="text"
                                 inputMode="numeric"
                                 placeholder={t("checkout.cardNumberPh")}
-                                className={`${inputCls} pr-12`}
+                                value={card.number}
+                                onChange={(e) =>
+                                  setCardField("number", e.target.value)
+                                }
+                                className={`${inputClsFor(
+                                  triedAdvance[3] && !!paymentErrors.number
+                                )} pr-12`}
                               />
                               <CreditCard className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
                             </div>
                           </Field>
-                          <Field label={t("checkout.cardExpiry")}>
+                          <Field
+                            label={t("checkout.cardExpiry")}
+                            error={
+                              triedAdvance[3] && paymentErrors.expiry
+                                ? true
+                                : false
+                            }
+                          >
                             <input
                               type="text"
                               placeholder={t("checkout.cardExpiryPh")}
-                              className={inputCls}
+                              value={card.expiry}
+                              onChange={(e) =>
+                                setCardField("expiry", e.target.value)
+                              }
+                              className={inputClsFor(
+                                triedAdvance[3] && !!paymentErrors.expiry
+                              )}
                             />
                           </Field>
-                          <Field label={t("checkout.cardCvc")}>
+                          <Field
+                            label={t("checkout.cardCvc")}
+                            error={
+                              triedAdvance[3] && paymentErrors.cvc
+                                ? true
+                                : false
+                            }
+                          >
                             <input
                               type="text"
                               inputMode="numeric"
                               placeholder={t("checkout.cardCvcPh")}
-                              className={inputCls}
+                              value={card.cvc}
+                              onChange={(e) =>
+                                setCardField("cvc", e.target.value)
+                              }
+                              className={inputClsFor(
+                                triedAdvance[3] && !!paymentErrors.cvc
+                              )}
                             />
                           </Field>
                           <Field
                             label={t("checkout.cardName")}
                             className="sm:col-span-2"
+                            error={
+                              triedAdvance[3] && paymentErrors.name
+                                ? true
+                                : false
+                            }
                           >
                             <input
                               type="text"
                               placeholder={t("checkout.cardNamePh")}
-                              className={inputCls}
+                              value={card.name}
+                              onChange={(e) =>
+                                setCardField("name", e.target.value)
+                              }
+                              className={inputClsFor(
+                                triedAdvance[3] && !!paymentErrors.name
+                              )}
                             />
                           </Field>
                         </div>
@@ -554,7 +816,13 @@ export function CheckoutContent() {
                       )}
 
                       {/* Terms */}
-                      <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
+                      <label
+                        className={`mt-6 flex cursor-pointer items-start gap-3 rounded-2xl border bg-white/[0.02] p-4 transition-colors ${
+                          triedAdvance[3] && paymentErrors.terms
+                            ? "border-red-500/60 bg-red-500/[0.05]"
+                            : "border-white/[0.06]"
+                        }`}
+                      >
                         <input
                           type="checkbox"
                           checked={agreed}
@@ -599,19 +867,26 @@ export function CheckoutContent() {
                   )}
 
                   {step < 3 ? (
-                    <button
-                      type="button"
-                      onClick={next}
-                      className="btn-gradient flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20"
-                    >
-                      {t("checkout.next")}
-                      <ChevronRight className="h-4 w-4" />
-                    </button>
+                    (() => {
+                      const currentValid =
+                        step === 1 ? step1Valid : step2Valid;
+                      return (
+                        <button
+                          type="button"
+                          onClick={next}
+                          disabled={!currentValid}
+                          className="btn-gradient flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
+                        >
+                          {t("checkout.next")}
+                          <ChevronRight className="h-4 w-4" />
+                        </button>
+                      );
+                    })()
                   ) : (
                     <button
                       type="submit"
-                      disabled={!agreed || submitting}
-                      className="btn-gradient flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+                      disabled={!step3Valid || submitting}
+                      className="btn-gradient flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
                     >
                       {submitting
                         ? t("checkout.processing")
@@ -668,24 +943,43 @@ export function CheckoutContent() {
 const inputCls =
   "w-full rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-green-500/40 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-colors";
 
+const inputClsError =
+  "w-full rounded-xl border border-red-500/60 bg-red-500/[0.05] px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-colors";
+
+const inputClsFor = (hasError: boolean) =>
+  hasError ? inputClsError : inputCls;
+
 function Field({
   label,
   hint,
   className = "",
+  error = false,
   children,
 }: {
   label: string;
   hint?: string;
   className?: string;
+  error?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <label className={`flex flex-col gap-1.5 ${className}`}>
-      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+      <span
+        className={`text-xs font-semibold uppercase tracking-wider ${
+          error ? "text-red-400" : "text-slate-500"
+        }`}
+      >
         {label}
       </span>
       {children}
-      {hint && <span className="text-[11px] text-slate-600">{hint}</span>}
+      {hint && !error && (
+        <span className="text-[11px] text-slate-600">{hint}</span>
+      )}
+      {error && (
+        <span className="text-[11px] font-semibold text-red-400">
+          {error === true ? "This field is required" : error}
+        </span>
+      )}
     </label>
   );
 }
