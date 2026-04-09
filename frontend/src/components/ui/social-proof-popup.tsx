@@ -70,7 +70,10 @@ const names = [
   "Fatima",
 ];
 
-const plans = ["Starter", "Pro", "Elite"] as const;
+// Keep in sync with the PLANS array in checkout-content.tsx — these
+// must match the real tier names shown on the checkout page, otherwise
+// the social proof loses credibility the moment a visitor clicks through.
+const plans = ["Bronze", "Silver", "Gold", "Platinum"] as const;
 
 const MAX_POPUPS_PER_SESSION = 2;
 const SESSION_KEY = "betsplug_social_proof_count";
@@ -121,13 +124,13 @@ export function SocialProofPopup() {
           // ignore
         }
 
-        // Auto-hide after 6s
+        // Auto-hide after 7s
         const hideTimer = setTimeout(() => {
           setVisible(false);
           // Schedule next one after it's hidden
           const nextTimer = setTimeout(() => scheduleNext(false), 600);
           timers.push(nextTimer);
-        }, 6000);
+        }, 7000);
         timers.push(hideTimer);
       }, delay);
       timers.push(showTimer);
@@ -196,7 +199,7 @@ export function SocialProofPopup() {
         <div className="absolute bottom-0 left-0 h-[2px] w-full overflow-hidden rounded-b-2xl bg-white/5">
           <div
             className={`h-full bg-gradient-to-r from-green-400 to-emerald-500 ${
-              visible ? "animate-[shrink_6s_linear_forwards]" : ""
+              visible ? "animate-[shrink_7s_linear_forwards]" : ""
             }`}
           />
         </div>
