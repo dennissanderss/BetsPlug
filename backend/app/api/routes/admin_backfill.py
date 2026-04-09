@@ -64,20 +64,25 @@ class BackfillResponse(BaseModel):
 @router.post(
     "/backfill-historical",
     response_model=BackfillResponse,
-    summary="Backfill 90 days of historical data from football-data.org",
+    summary="Backfill historical data from football-data.org (by season or days)",
 )
 async def backfill_historical(
     days: int = Body(default=90, embed=True),
+    season: Optional[str] = Body(default=None, embed=True),
     db: AsyncSession = Depends(get_db),
 ) -> BackfillResponse:
     """
     Complete backfill pipeline:
-    1. Fetch finished matches from football-data.org (last N days, 6 leagues)
+    1. Fetch finished matches from football-data.org (last N days or full season, 6 leagues)
     2. Upsert fixtures + results
     3. Generate predictions with anti-leakage (simulated_now = kickoff - 1h)
     4. Evaluate predictions against actual results
 
     Uses football-data.org (10 req/min, no daily limit).
+
+    Parameters:
+        days: fallback – fetch last N days (default 90)
+        season: "2024-2025" or "2025-2026" to fetch a full season
     """
     from app.core.config import get_settings
     from app.forecasting.forecast_service import ForecastService
@@ -93,7 +98,20 @@ async def backfill_historical(
 
     headers = {"X-Auth-Token": api_key}
     today = date.today()
-    date_from = today - timedelta(days=days)
+
+    # Resolve date range from season or days
+    season_year: Optional[int] = None
+    if season == "2024-2025":
+        date_from = date(2024, 8, 1)
+        date_to = date(2025, 5, 31)
+        season_year = 2024
+    elif season == "2025-2026":
+        date_from = date(2025, 8, 1)
+        date_to = today
+        season_year = 2025
+    else:
+        date_from = today - timedelta(days=days)
+        date_to = today
 
     total_fixtures = 0
     total_updated = 0
@@ -111,25 +129,27 @@ async def backfill_historical(
             try:
                 log.info("Backfill: fetching %s (%s)...", code, meta["name"])
 
+                # Build query params
+                params = {
+                    "dateFrom": date_from.isoformat(),
+                    "dateTo": date_to.isoformat(),
+                    "status": "FINISHED",
+                }
+                # For historical seasons, add season param
+                if season_year:
+                    params["season"] = str(season_year)
+
                 # Fetch matches
                 resp = await client.get(
                     f"{FDORG_BASE}/competitions/{code}/matches",
-                    params={
-                        "dateFrom": date_from.isoformat(),
-                        "dateTo": today.isoformat(),
-                        "status": "FINISHED",
-                    },
+                    params=params,
                 )
                 if resp.status_code == 429:
                     details.append(f"{code}: rate limited, waiting 60s...")
                     await asyncio.sleep(60)
                     resp = await client.get(
                         f"{FDORG_BASE}/competitions/{code}/matches",
-                        params={
-                            "dateFrom": date_from.isoformat(),
-                            "dateTo": today.isoformat(),
-                            "status": "FINISHED",
-                        },
+                        params=params,
                     )
 
                 if resp.status_code != 200:
@@ -143,7 +163,12 @@ async def backfill_historical(
 
                 # Get/create league + season
                 league = await _get_or_create_league(db, sport.id, code, meta)
-                season_name = f"{today.year - 1}-{today.year}" if today.month >= 8 else f"{today.year - 1}-{today.year}"
+                if season_year:
+                    season_name = f"{season_year}-{season_year + 1}"
+                elif today.month >= 8:
+                    season_name = f"{today.year}-{today.year + 1}"
+                else:
+                    season_name = f"{today.year - 1}-{today.year}"
                 season = await _get_or_create_season(db, league.id, season_name)
 
                 created_this_league = 0
@@ -267,7 +292,7 @@ async def backfill_historical(
                 ~Match.id.in_(select(Prediction.match_id).distinct()),
             )
             .order_by(Match.scheduled_at)
-            .limit(300)
+            .limit(1000)
         )
         matches_to_predict = (await db.execute(stmt)).scalars().all()
 
