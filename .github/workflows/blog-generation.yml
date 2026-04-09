@@ -1,0 +1,83 @@
+name: Blog generation
+
+# Phase 3 — automated blog post pipeline.
+# Runs once a week (Mondays at 09:00 UTC) and after every push to
+# scripts/blog/* on main, so updates to the topic queue or the
+# generator script can be exercised on demand. The job calls
+# scripts/blog/generate_post.py, which appends one new post to
+# frontend/src/data/blog-posts.json + drops a hero image under
+# frontend/public/articles/blog/, then commits the diff straight
+# back to main. The next deploy picks up the new post automatically.
+#
+# Required repo secrets:
+#   ANTHROPIC_API_KEY  — Claude (Sonnet 4.6) for the body
+#   OPENAI_API_KEY     — gpt-image-1 for the hero image
+#
+# Manual trigger: Actions tab → Blog generation → Run workflow.
+#   Inputs: topic_index (optional) — force a specific topic instead
+#   of using the round-robin cursor in scripts/blog/state.json.
+
+on:
+  schedule:
+    # Mondays 09:00 UTC — early enough to land before EU markets open
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+    inputs:
+      topic_index:
+        description: "Force a specific topic index (overrides cursor)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: blog-generation
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Need full history so the bot commit can be pushed cleanly
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: scripts/blog/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/blog/requirements.txt
+
+      - name: Generate blog post
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          BLOG_TOPIC_INDEX: ${{ inputs.topic_index }}
+        run: python scripts/blog/generate_post.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "betsplug-blog-bot"
+          git config user.email "blog-bot@betsplug.com"
+
+          # Stage everything the script touches
+          git add frontend/src/data/blog-posts.json
+          git add frontend/public/articles/blog/
+          git add scripts/blog/state.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit (likely a duplicate slug — see job logs)"
+            exit 0
+          fi
+
+          SLUG=$(python -c "import json; print(json.load(open('scripts/blog/state.json'))['lastSlug'])")
+          git commit -m "blog: auto-publish ${SLUG}"
+          git push origin HEAD:main
