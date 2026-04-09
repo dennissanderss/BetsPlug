@@ -159,7 +159,7 @@ export function AiAssistant({
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="relative mx-auto flex h-[92vh] w-full max-w-xl flex-col overflow-hidden rounded-t-3xl border border-green-500/20 bg-gradient-to-br from-[#0a1220] via-[#0b1624] to-[#081019] shadow-2xl shadow-green-500/10 sm:h-[640px] sm:rounded-3xl"
+              className="relative mx-auto flex h-[100dvh] max-h-[100dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-3xl border border-green-500/20 bg-gradient-to-br from-[#0a1220] via-[#0b1624] to-[#081019] shadow-2xl shadow-green-500/10 sm:h-[640px] sm:max-h-[640px] sm:rounded-3xl"
             >
               {/* Ambient glow */}
               <div className="pointer-events-none absolute -left-20 -top-20 h-[280px] w-[280px] rounded-full bg-green-500/[0.12] blur-[120px]" />
@@ -167,7 +167,7 @@ export function AiAssistant({
 
               {/* Header — close button lives INLINE here so it can never
                   be hidden by absolute positioning or z-index issues. */}
-              <div className="relative z-10 flex shrink-0 items-center justify-between gap-2 border-b border-white/[0.08] bg-white/[0.03] p-3 backdrop-blur-sm sm:p-4">
+              <div className="sticky top-0 z-20 flex shrink-0 items-center justify-between gap-2 border-b border-white/[0.08] bg-[#0a1220]/95 p-3 backdrop-blur-sm sm:p-4">
                 <div className="flex min-w-0 items-center gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.25)] ring-1 ring-green-500/30">
                     <Sparkles className="h-5 w-5 text-green-400" />
