@@ -180,10 +180,10 @@ function DashboardPreviewSection() {
         className="pointer-events-none absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500/[0.06] blur-[140px]"
       />
 
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.25fr] lg:gap-16">
           {/* ─── Left: copy ─── */}
-          <div>
+          <div className="min-w-0">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-2 backdrop-blur-sm">
               <LayoutDashboard className="h-4 w-4 text-green-400" />
               <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-300">
@@ -234,7 +234,7 @@ function DashboardPreviewSection() {
           </div>
 
           {/* ─── Right: browser mock with dashboard ─── */}
-          <div className="relative">
+          <div className="relative min-w-0">
             {/* Outer glow */}
             <div
               aria-hidden
@@ -256,7 +256,7 @@ function DashboardPreviewSection() {
               </div>
 
               {/* Dashboard body */}
-              <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[150px_1fr]">
+              <div className="grid grid-cols-[92px_minmax(0,1fr)] sm:grid-cols-[150px_minmax(0,1fr)]">
                 {/* Sidebar */}
                 <aside className="border-r border-white/[0.06] bg-black/20 p-3 sm:p-4">
                   <div className="mb-5 flex items-center gap-2">
@@ -299,7 +299,7 @@ function DashboardPreviewSection() {
                 </aside>
 
                 {/* Main */}
-                <div className="space-y-4 p-4 sm:p-5">
+                <div className="min-w-0 space-y-4 p-3 sm:p-5">
                   {/* Header row */}
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
@@ -321,14 +321,14 @@ function DashboardPreviewSection() {
                     {kpis.map((kpi) => (
                       <div
                         key={kpi.label}
-                        className={`rounded-lg border p-2.5 sm:p-3 ${
+                        className={`min-w-0 rounded-lg border p-2 sm:p-3 ${
                           kpi.accent
                             ? "border-green-500/30 bg-green-500/[0.06]"
                             : "border-white/[0.06] bg-white/[0.02]"
                         }`}
                       >
-                        <div className="flex items-start justify-between">
-                          <div className="text-[8px] font-bold uppercase tracking-wider text-slate-500 sm:text-[9px]">
+                        <div className="flex items-start justify-between gap-1">
+                          <div className="min-w-0 truncate text-[8px] font-bold uppercase tracking-wider text-slate-500 sm:text-[9px]">
                             {kpi.label}
                           </div>
                           <kpi.icon
@@ -483,7 +483,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#080b14] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#080b14] text-white">
       {/* ── Navigation ── */}
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#080b14]/80 backdrop-blur-xl transition-all duration-300">
         <div
@@ -583,7 +583,7 @@ export default function LandingPage() {
 
         {/* Slide-out panel */}
         <aside
-          className={`absolute right-0 top-0 flex h-full w-full max-w-sm flex-col border-l border-white/[0.08] bg-gradient-to-b from-[#0d1220] via-[#080b14] to-[#060912] shadow-2xl transition-transform duration-300 ease-out ${
+          className={`absolute right-0 top-0 flex h-full w-[92vw] max-w-sm flex-col overflow-hidden border-l border-white/[0.08] bg-gradient-to-b from-[#0d1220] via-[#080b14] to-[#060912] shadow-2xl transition-transform duration-300 ease-out ${
             mobileMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >

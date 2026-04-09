@@ -181,7 +181,7 @@ export function ComparisonTable() {
 
           <div className="relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-2 backdrop-blur-xl sm:p-4">
             {/* Header row */}
-            <div className="grid grid-cols-[1.3fr_1fr_1fr] items-stretch gap-2 px-2 pb-3 pt-4 sm:grid-cols-[1.7fr_1fr_1fr] sm:px-4 sm:pb-4 sm:pt-5">
+            <div className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] items-stretch gap-1.5 px-1.5 pb-3 pt-4 sm:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] sm:gap-2 sm:px-4 sm:pb-4 sm:pt-5">
               <div className="flex items-end">
                 <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
                   {t("comparison.feature")}
@@ -239,7 +239,7 @@ export function ComparisonTable() {
                     ease: [0.16, 1, 0.3, 1],
                   }}
                   viewport={{ once: true }}
-                  className="group grid grid-cols-[1.3fr_1fr_1fr] items-center gap-2 px-2 sm:grid-cols-[1.7fr_1fr_1fr] sm:px-4"
+                  className="group grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] items-center gap-1.5 px-1.5 sm:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] sm:gap-2 sm:px-4"
                 >
                   {/* Feature label */}
                   <div
@@ -280,7 +280,7 @@ export function ComparisonTable() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
               viewport={{ once: true }}
-              className="grid grid-cols-[1.3fr_1fr_1fr] items-stretch gap-2 px-2 pb-2 sm:grid-cols-[1.7fr_1fr_1fr] sm:px-4 sm:pb-2"
+              className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] items-stretch gap-1.5 px-1.5 pb-2 sm:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] sm:gap-2 sm:px-4"
             >
               <div className="flex items-center border-t border-white/[0.08] py-6 pr-2">
                 <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">

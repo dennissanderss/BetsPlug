@@ -406,7 +406,7 @@ export function CheckoutContent() {
 
   /* ── Render ───────────────────────────────────────────────── */
   return (
-    <div className="relative min-h-screen bg-[#060912] text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#060912] text-white">
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.06] blur-[160px]" />

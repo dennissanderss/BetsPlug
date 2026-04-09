@@ -161,7 +161,7 @@ export function SiteNav() {
 
         {/* Slide-out panel */}
         <aside
-          className={`absolute right-0 top-0 flex h-full w-full max-w-sm flex-col border-l border-white/[0.08] bg-gradient-to-b from-[#0d1220] via-[#080b14] to-[#060912] shadow-2xl transition-transform duration-300 ease-out ${
+          className={`absolute right-0 top-0 flex h-full w-[92vw] max-w-sm flex-col overflow-hidden border-l border-white/[0.08] bg-gradient-to-b from-[#0d1220] via-[#080b14] to-[#060912] shadow-2xl transition-transform duration-300 ease-out ${
             mobileMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >

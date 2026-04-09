@@ -134,7 +134,7 @@ function ProbBar({
         {segments.map((seg) => (
           <div
             key={seg.key}
-            className="flex min-w-0 flex-col items-center"
+            className="flex min-w-0 flex-col items-center overflow-hidden"
             style={{ width: seg.width }}
           >
             <span
@@ -146,7 +146,7 @@ function ProbBar({
               {seg.prob}%
             </span>
             <span
-              className="mt-0.5 max-w-[56px] truncate text-[9px] uppercase tracking-wide"
+              className="mt-0.5 w-full truncate text-center text-[9px] uppercase tracking-wide"
               style={{
                 color: predicted === seg.key ? seg.color : "#334155",
               }}
@@ -184,23 +184,25 @@ function FreeMatchCard({ fixture }: { fixture: Fixture }) {
         Free
       </div>
 
-      <div className="flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:gap-6">
+      <div className="flex flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-center lg:gap-6">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-green-400/80">
+          <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-green-400/80">
             {fixture.league_name}
           </span>
-          <p className="text-base font-extrabold leading-tight text-white sm:text-lg">
+          <p className="break-words text-base font-extrabold leading-tight text-white sm:text-lg">
             {fixture.home_team_name}{" "}
             <span className="font-normal text-slate-500">vs</span>{" "}
             {fixture.away_team_name}
           </p>
           <p className="flex items-center gap-1 text-xs text-slate-400">
             <Clock className="h-3 w-3 shrink-0" />
-            {formatKickoff(fixture.scheduled_at, locale)}
+            <span className="truncate">
+              {formatKickoff(fixture.scheduled_at, locale)}
+            </span>
           </p>
         </div>
 
-        <div className="w-full max-w-[280px] lg:mx-4">
+        <div className="w-full min-w-0 lg:max-w-[280px] lg:mx-4">
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
             {t("matchPred.winProbLabel")}
           </p>
@@ -261,24 +263,26 @@ function LockedMatchCard({ fixture }: { fixture: Fixture }) {
       {/* Blurred content underneath */}
       <div
         aria-hidden="true"
-        className="pointer-events-none select-none p-5 blur-[6px]"
+        className="pointer-events-none select-none p-4 blur-[6px] sm:p-5"
       >
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
           <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+            <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-slate-500">
               {fixture.league_name}
             </span>
-            <p className="text-base font-semibold leading-tight text-white">
+            <p className="break-words text-base font-semibold leading-tight text-white">
               {fixture.home_team_name}{" "}
               <span className="font-normal text-slate-600">vs</span>{" "}
               {fixture.away_team_name}
             </p>
             <p className="flex items-center gap-1 text-xs text-slate-500">
               <Clock className="h-3 w-3 shrink-0" />
-              {formatKickoff(fixture.scheduled_at, locale)}
+              <span className="truncate">
+                {formatKickoff(fixture.scheduled_at, locale)}
+              </span>
             </p>
           </div>
-          <div className="w-full max-w-[260px]">
+          <div className="w-full min-w-0 lg:max-w-[260px]">
             <div className="mb-2 h-2.5 rounded bg-white/[0.06]" />
             <div className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full bg-white/[0.06]">
               <div className="h-full w-[45%] rounded-full bg-blue-500/60" />
@@ -599,7 +603,7 @@ export function MatchPredictionsContent() {
   ];
 
   return (
-    <div className="relative min-h-screen bg-[#0a1220] text-slate-100">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#0a1220] text-slate-100">
       <SiteNav />
 
       {/* ── Hero ── */}

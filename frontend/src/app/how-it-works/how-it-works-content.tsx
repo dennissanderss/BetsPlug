@@ -129,7 +129,7 @@ export function HowItWorksContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#080b14] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#080b14] text-white">
       {/* Shared site navigation */}
       <SiteNav />
 

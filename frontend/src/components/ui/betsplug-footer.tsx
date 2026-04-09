@@ -283,9 +283,9 @@ export function BetsPlugFooter() {
         {/* ═══════════════════════════════════════════════════════════
             MAIN FOOTER GRID
             ═══════════════════════════════════════════════════════════ */}
-        <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-8 sm:gap-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {/* Brand column */}
-          <div className="col-span-2 lg:col-span-2">
+          <div className="col-span-2 min-w-0 lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2">
               <img
                 src="/logo.webp"
@@ -300,11 +300,11 @@ export function BetsPlugFooter() {
 
             {/* Contact */}
             <ul className="mt-6 space-y-2 text-sm">
-              <li className="flex items-center gap-2 text-slate-400">
-                <Mail className="h-4 w-4 text-green-400" />
+              <li className="flex min-w-0 items-center gap-2 text-slate-400">
+                <Mail className="h-4 w-4 shrink-0 text-green-400" />
                 <a
                   href="mailto:support@betsplug.com"
-                  className="transition-colors hover:text-white"
+                  className="min-w-0 truncate transition-colors hover:text-white"
                 >
                   support@betsplug.com
                 </a>
