@@ -70,27 +70,8 @@ export default function RootLayout({
       className={lato.variable}
     >
       <body className="min-h-screen font-sans font-normal antialiased">
-        {/* Google Consent Mode v2 — defaults (must load BEFORE GTM) */}
-        <Script id="gcm-defaults" strategy="beforeInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag("consent", "default", {
-              ad_storage: "denied",
-              ad_user_data: "denied",
-              ad_personalization: "denied",
-              analytics_storage: "denied",
-              functionality_storage: "denied",
-              personalization_storage: "denied",
-              security_storage: "granted",
-              wait_for_update: 2000,
-            });
-            gtag("set", "ads_data_redaction", true);
-            gtag("set", "url_passthrough", true);
-          `}
-        </Script>
-
-        {/* Google Tag Manager */}
+        {/* Google Tag Manager — CookieYes CMP template (inside GTM) handles
+            Google Consent Mode v2 defaults; do NOT add a custom gcm script. */}
         <Script id="gtm-init" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -109,19 +90,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
 
-        {/* Google Analytics 4 (gtag) */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-8G6DRPYZ0E"
-          strategy="afterInteractive"
-        />
-        <Script id="ga4-init" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-8G6DRPYZ0E');
-          `}
-        </Script>
+        {/* GA4 is deployed as a tag inside GTM (with CookieYes consent
+            trigger), so there's no hardcoded gtag here. */}
 
         <LocaleProvider locale={locale}>
           <AppProviders>{children}</AppProviders>
