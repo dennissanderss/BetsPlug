@@ -1,6 +1,6 @@
 # Blog automation pipeline (Phase 3)
 
-Generates one BetsPlug blog post end-to-end on a weekly cron, no
+Generates one BetsPlug blog post end-to-end on a daily cron, no
 human in the loop. Articles are written by Claude Sonnet 4.6, hero
 images by OpenAI `gpt-image-1`, and the result is committed straight
 to `main` so the next deploy picks it up.
@@ -8,7 +8,7 @@ to `main` so the next deploy picks it up.
 ## How it fits together
 
 ```
-.github/workflows/blog-generation.yml   ← cron + push
+.github/workflows/blog-generation.yml   ← daily cron + push
         │
         ▼
 scripts/blog/generate_post.py           ← orchestrator
@@ -44,6 +44,14 @@ are auto-generated — they share the same `Article` type and the same
 Each pillar should be referenced by 1–3 topics so PageRank flows
 back to the evergreen `/learn` URLs. Add new topics to the bottom
 of the array — the cursor wraps around modulo the array length.
+
+**Cadence note:** the workflow runs daily, so a 10-topic queue
+cycles every 10 days. The duplicate-slug guard in
+`generate_post.py` will skip a topic if Claude returns a slug
+that already exists in `blog-posts.json`, but that's a safety net,
+not a refresh strategy. Aim to keep the queue at 30+ topics so the
+same angle isn't republished within a month, and rotate stale
+topics out as the model's framing diverges from the original brief.
 
 ## State file
 
@@ -88,7 +96,9 @@ The workflow needs two repo secrets:
 - Claude Sonnet 4.6 at 1100–1400 words ≈ 4k input + 4k output tokens
   per run. ~$0.04 per post.
 - gpt-image-1 at 1536x1024 ≈ $0.04 per image.
-- Weekly cron = ~$4/year in API spend. Negligible.
+- Daily cron = ~$30/year in API spend. Still negligible against
+  the SEO upside, but watch the OpenAI bill if image-quality tier
+  changes (the high-quality `gpt-image-1` tier is ~5× the cost).
 
 ## Manual override
 
@@ -99,5 +109,5 @@ if you want to force a specific topic; leave blank to use the cursor.
 
 1. Append to `scripts/blog/topic_queue.json`.
 2. Commit and push to `main`.
-3. Either wait for Monday's cron or trigger the workflow manually
-   with the new topic's index.
+3. Either wait for the next 09:00 UTC cron tick or trigger the
+   workflow manually with the new topic's index.
