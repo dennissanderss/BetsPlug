@@ -30,16 +30,36 @@ interface NavItem {
   badgeColor?: string;
 }
 
-const navItems: NavItem[] = [
-  { labelKey: "nav.jouwRoute",      fallback: "Jouw Route",      href: "/jouw-route",     icon: MapPin,        badge: "START", badgeColor: "bg-emerald-500" },
-  { labelKey: "nav.dashboard",      fallback: "Dashboard",       href: "/dashboard",      icon: LayoutDashboard },
-  { labelKey: "nav.strategy_lab",   fallback: "Strategy Lab",    href: "/strategy",       icon: FlaskConical },
-  { labelKey: "nav.predictions",    fallback: "Predictions",     href: "/predictions",    icon: Sparkles },
-  { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy,        badge: "HOT" },
-  { labelKey: "nav.results",        fallback: "Results",         href: "/results",        icon: Trophy },
-  { labelKey: "nav.weekly_report",  fallback: "Weekly Report",   href: "/weekly-report",  icon: FileBarChart2 },
-  { labelKey: "nav.trackrecord",    fallback: "Trackrecord",     href: "/trackrecord",    icon: ClipboardList },
-  { labelKey: "nav.reports",        fallback: "Reports",         href: "/reports",        icon: FileBarChart2 },
+interface NavSection {
+  label: string;
+  items: NavItem[];
+}
+
+const navSections: NavSection[] = [
+  {
+    label: "Getting Started",
+    items: [
+      { labelKey: "nav.jouwRoute", fallback: "Your Route", href: "/jouw-route", icon: MapPin, badge: "START", badgeColor: "bg-emerald-500" },
+      { labelKey: "nav.dashboard", fallback: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    ],
+  },
+  {
+    label: "Strategies & Picks",
+    items: [
+      { labelKey: "nav.strategy_lab", fallback: "Strategy Lab", href: "/strategy", icon: FlaskConical },
+      { labelKey: "nav.predictions", fallback: "Predictions", href: "/predictions", icon: Sparkles },
+      { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy, badge: "HOT" },
+    ],
+  },
+  {
+    label: "Performance",
+    items: [
+      { labelKey: "nav.results", fallback: "Results", href: "/results", icon: Trophy },
+      { labelKey: "nav.weekly_report", fallback: "Weekly Report", href: "/weekly-report", icon: FileBarChart2 },
+      { labelKey: "nav.trackrecord", fallback: "Trackrecord", href: "/trackrecord", icon: ClipboardList },
+      { labelKey: "nav.reports", fallback: "Reports", href: "/reports", icon: FileBarChart2 },
+    ],
+  },
 ];
 
 const bottomNavItems: NavItem[] = [
@@ -66,16 +86,23 @@ export function Sidebar() {
         </Link>
       </div>
 
-      {/* ── Nav section label ── */}
-      <div className="px-5 pt-5 pb-2">
-        <span className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
-          Navigation
-        </span>
-      </div>
+      {/* ── Nav sections ── */}
+      <nav className="flex-1 overflow-y-auto px-3 pb-4 pt-3">
+        {navSections.map((section, sIdx) => (
+          <div key={section.label}>
+            {/* Section divider (not on first section) */}
+            {sIdx > 0 && <div className="mx-2 my-3 border-t border-white/[0.06]" />}
 
-      {/* ── Nav links ── */}
-      <nav className="flex-1 space-y-0.5 px-3 pb-4">
-        {navItems.map((item) => {
+            {/* Section label */}
+            <div className="px-2 pb-2 pt-1">
+              <span className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
+                {section.label}
+              </span>
+            </div>
+
+            {/* Section items */}
+            <div className="space-y-0.5">
+        {section.items.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");
           const Icon = item.icon;
@@ -135,9 +162,17 @@ export function Sidebar() {
             </Link>
           );
         })}
+            </div>
+          </div>
+        ))}
 
-        {/* ── Separator before Settings / Deals ── */}
-        <div className="mx-2 my-2 border-t border-white/[0.06]" />
+        {/* ── Separator before Admin / Settings ── */}
+        <div className="mx-2 my-3 border-t border-white/[0.06]" />
+        <div className="px-2 pb-2 pt-1">
+          <span className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
+            System
+          </span>
+        </div>
 
         {bottomNavItems.map((item) => {
           const isActive =
