@@ -29,7 +29,11 @@ const bottomLinks = [
 
 const socials = [
   { icon: Twitter, label: "Twitter", href: "https://twitter.com/betsplug" },
-  { icon: Instagram, label: "Instagram", href: "https://instagram.com/betsplug" },
+  {
+    icon: Instagram,
+    label: "Instagram",
+    href: "https://www.instagram.com/betsplug_com?igsh=dzE0ZWJ5ZWlmczIz&utm_source=qr",
+  },
   { icon: Youtube, label: "YouTube", href: "https://youtube.com/@betsplug" },
   { icon: Send, label: "Telegram", href: "https://t.me/betsplug" },
 ];

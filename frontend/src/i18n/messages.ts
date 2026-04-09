@@ -956,6 +956,7 @@ const en = {
   "checkout.back": "Back",
   "checkout.submit": "Start my subscription",
   "checkout.processing": "Processing…",
+  "checkout.weAccept": "We accept",
 
   /* Footer */
   "checkout.footer.secure": "256-bit SSL encrypted checkout",
@@ -1928,6 +1929,7 @@ const nl: Dictionary = {
   "checkout.back": "Terug",
   "checkout.submit": "Start mijn abonnement",
   "checkout.processing": "Bezig…",
+  "checkout.weAccept": "Wij accepteren",
 
   "checkout.footer.secure": "256-bit SSL versleutelde checkout",
   "checkout.footer.guarantee": "14 dagen niet-goed-geld-terug",

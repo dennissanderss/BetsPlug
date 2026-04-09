@@ -95,7 +95,10 @@ const PLANS: PlanDef[] = [
     name: "Bronze",
     tagline: "pricing.bronzeTagline",
     icon: Shield,
-    monthly: 0,
+    // Symbolic €0,01 — technically a paid plan so the checkout
+    // treats it like any other purchase (payment step required),
+    // but effectively free.
+    monthly: 0.01,
     featuresKey: [
       "pricing.bronzeF1",
       "pricing.bronzeF2",
@@ -310,7 +313,10 @@ export function CheckoutContent() {
 
   // Free trial is only offered on recurring plans (not Bronze/free,
   // not Platinum lifetime).
-  const trialAvailable = plan.monthly > 0 && plan.oneTime == null;
+  // Trial is only offered on real paid plans — Bronze (€0,01) is
+  // effectively free and already skips most of the pricing friction.
+  const trialAvailable =
+    plan.monthly > 0.5 && plan.oneTime == null;
   const trialActive = trialAvailable && startWithTrial;
 
   /* ── Price derivation (all figures are VAT-inclusive) ─────── */
@@ -587,6 +593,42 @@ export function CheckoutContent() {
                           {t("checkout.signIn")}
                         </Link>
                       </p>
+
+                      {/* Payment reassurance — show the accepted
+                          payment methods already on step 1 so the
+                          visitor knows what to expect. */}
+                      <div className="mt-6 flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-4 sm:flex-row sm:gap-4">
+                        <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-slate-500">
+                          <Lock className="h-3.5 w-3.5 text-green-400" />
+                          {t("checkout.weAccept")}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <PaymentBadge label="VISA">
+                            <span className="text-[10px] font-extrabold italic text-blue-700">
+                              VISA
+                            </span>
+                          </PaymentBadge>
+                          <PaymentBadge label="Mastercard">
+                            <span className="flex gap-0.5">
+                              <span className="h-3 w-3 rounded-full bg-red-500" />
+                              <span className="-ml-1.5 h-3 w-3 rounded-full bg-amber-400" />
+                            </span>
+                          </PaymentBadge>
+                          <PaymentBadge label="American Express">
+                            <span className="text-[9px] font-extrabold tracking-tight text-[#2671b9]">
+                              AMEX
+                            </span>
+                          </PaymentBadge>
+                          <PaymentBadge label="PayPal">
+                            <PayPalMark />
+                          </PaymentBadge>
+                          <PaymentBadge label="Apple Pay">
+                            <span className="text-[10px] font-extrabold tracking-tight text-black">
+                               Pay
+                            </span>
+                          </PaymentBadge>
+                        </div>
+                      </div>
                     </motion.div>
                   )}
 
@@ -1204,6 +1246,25 @@ function PaymentOption({
         {active && <Check className="h-3 w-3 text-black" strokeWidth={4} />}
       </div>
     </button>
+  );
+}
+
+/** Small white pill used to display a payment brand mark. */
+function PaymentBadge({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      aria-label={label}
+      title={label}
+      className="flex h-7 w-10 items-center justify-center rounded-md border border-white/[0.1] bg-white shadow-sm"
+    >
+      {children}
+    </div>
   );
 }
 

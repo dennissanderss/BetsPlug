@@ -47,8 +47,8 @@ export function PricingSection() {
       icon: Shield,
       tagline: t("pricing.bronzeTagline"),
       fixed: true,
-      monthly: { main: "0", period: t("pricing.forever") },
-      yearly: { main: "0", period: t("pricing.forever") },
+      monthly: { main: "0", cents: "01", period: t("pricing.forever") },
+      yearly: { main: "0", cents: "01", period: t("pricing.forever") },
       cta: t("pricing.bronzeCta"),
       features: [
         t("pricing.bronzeF1"),
