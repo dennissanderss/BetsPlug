@@ -10,6 +10,16 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 @layer base {
+  /* ── Text selection colors (dark theme friendly) ── */
+  ::selection {
+    background-color: rgba(16, 185, 129, 0.4);
+    color: #ffffff;
+  }
+  ::-moz-selection {
+    background-color: rgba(16, 185, 129, 0.4);
+    color: #ffffff;
+  }
+
   /* ── Dark theme by default ── */
   :root {
     /* Base surfaces */
