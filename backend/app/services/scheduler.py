@@ -272,6 +272,109 @@ async def job_sync_live_fixtures():
         log.error("CRON: Live fixture sync failed: %s", exc, exc_info=True)
 
 
+async def job_generate_historical_predictions():
+    """Generate predictions for finished matches that don't have one yet. Runs in batches."""
+    log.info("CRON: Generating historical predictions (batch)...")
+    try:
+        import uuid as _uuid
+        import math as _math
+        from sqlalchemy import and_
+        from app.db.session import async_session_factory
+        from app.models.match import Match, MatchResult, MatchStatus
+        from app.models.prediction import Prediction, PredictionEvaluation
+        from app.models.model_version import ModelVersion
+        from app.forecasting.forecast_service import ForecastService
+
+        async with async_session_factory() as db:
+            # Ensure model version exists
+            mv_result = await db.execute(
+                select(ModelVersion).where(ModelVersion.is_active.is_(True)).limit(1)
+            )
+            if mv_result.scalar_one_or_none() is None:
+                mv = ModelVersion(
+                    id=_uuid.uuid4(), name="BetsPlug Ensemble v1", version="1.0.0",
+                    model_type="ensemble", sport_scope="all",
+                    hyperparameters={"weights": {"elo": 1.0, "poisson": 1.5, "logistic": 1.0}},
+                    training_metrics={}, trained_at=datetime.now(timezone.utc), is_active=True,
+                )
+                db.add(mv)
+                await db.flush()
+
+            # Find finished matches without predictions (batch of 100)
+            stmt = (
+                select(Match)
+                .where(
+                    and_(
+                        Match.status == MatchStatus.FINISHED,
+                        ~Match.id.in_(select(Prediction.match_id).distinct()),
+                    )
+                )
+                .order_by(Match.scheduled_at)
+                .limit(100)
+            )
+            matches = (await db.execute(stmt)).scalars().all()
+
+            if not matches:
+                log.info("CRON: No historical matches need predictions.")
+                return
+
+            log.info("CRON: Generating predictions for %d historical matches...", len(matches))
+
+            svc = ForecastService()
+            generated = 0
+            for match in matches:
+                try:
+                    await svc.generate_forecast(match.id, db)
+                    generated += 1
+                except Exception as exc:
+                    log.warning("CRON: Historical prediction failed for %s: %s", match.id, exc)
+
+            await db.commit()
+
+            # Now evaluate them
+            eval_stmt = (
+                select(Prediction, MatchResult)
+                .join(Match, Match.id == Prediction.match_id)
+                .join(MatchResult, MatchResult.match_id == Match.id)
+                .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+                .where(and_(Match.status == MatchStatus.FINISHED, PredictionEvaluation.id.is_(None)))
+                .limit(200)
+            )
+            eval_rows = (await db.execute(eval_stmt)).all()
+            evaluated = 0
+            for pred, result in eval_rows:
+                try:
+                    if result.home_score > result.away_score:
+                        actual = "home"
+                    elif result.home_score < result.away_score:
+                        actual = "away"
+                    else:
+                        actual = "draw"
+                    probs = {"home": pred.home_win_prob, "draw": pred.draw_prob or 0.0, "away": pred.away_win_prob}
+                    predicted = max(probs, key=lambda k: probs[k])
+                    brier = sum((probs.get(o, 0.0) - (1.0 if o == actual else 0.0)) ** 2 for o in ["home", "draw", "away"]) / 3
+                    _CLIP = 1e-15
+                    log_loss_val = -_math.log(max(probs.get(actual, _CLIP), _CLIP))
+
+                    evaluation = PredictionEvaluation(
+                        id=_uuid.uuid4(), prediction_id=pred.id,
+                        actual_outcome=actual, actual_home_score=result.home_score,
+                        actual_away_score=result.away_score, is_correct=(predicted == actual),
+                        brier_score=round(brier, 6), log_loss=round(log_loss_val, 6),
+                        evaluated_at=datetime.now(timezone.utc),
+                    )
+                    db.add(evaluation)
+                    evaluated += 1
+                except Exception:
+                    pass
+
+            await db.commit()
+            log.info("CRON: Generated %d predictions, evaluated %d.", generated, evaluated)
+
+    except Exception as exc:
+        log.error("CRON: Historical prediction generation failed: %s", exc, exc_info=True)
+
+
 async def job_backfill_results():
     """One-time backfill: find all matches past their kickoff that aren't finished and try to update."""
     log.info("CRON: Running results backfill...")
@@ -417,6 +520,16 @@ def start_scheduler():
         id="daily_results_sync",
         name="Daily results sync",
         replace_existing=True,
+    )
+
+    # Historical predictions: generate 100 per run until all done
+    scheduler.add_job(
+        job_generate_historical_predictions,
+        trigger=IntervalTrigger(minutes=5),
+        id="historical_predictions",
+        name="Generate historical predictions (batch 100)",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=1),
     )
 
     # One-time backfill on startup (3 min after start)
