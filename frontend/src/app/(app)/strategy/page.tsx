@@ -7,7 +7,6 @@ import {
   FlaskConical,
   ShieldCheck,
   Clock,
-  PlayCircle,
   CheckCircle2,
   Info,
   BarChart3,
@@ -43,130 +42,6 @@ function getDataStatus(summary: TrackrecordSummary | undefined): {
 }
 
 
-// ─── Backtest Panel ───────────────────────────────────────────────────────────
-
-function BacktestPanel({
-  summary,
-  loading,
-}: {
-  summary: TrackrecordSummary | undefined;
-  loading: boolean;
-}) {
-  const [running, setRunning] = React.useState(false);
-  const [runResult, setRunResult] = React.useState<string | null>(null);
-  const status = getDataStatus(summary);
-
-  async function handleRunBacktest() {
-    setRunning(true);
-    setRunResult(null);
-    try {
-      await api.runBacktest({ strategy: "all", min_predictions: BACKTEST_MINIMUM });
-      setRunResult("Backtest job queued successfully. Results will appear in the Track Record page once complete.");
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Unknown error";
-      setRunResult(`Error: ${msg}`);
-    } finally {
-      setRunning(false);
-    }
-  }
-
-  return (
-    <div className="glass-card p-6 space-y-5 animate-fade-in">
-      <div className="flex items-center gap-2">
-        <PlayCircle className="h-5 w-5 text-blue-400" />
-        <h2 className="text-base font-bold text-slate-100">Backtest Status</h2>
-      </div>
-
-      {loading ? (
-        <div className="space-y-3">
-          <div className="h-4 w-48 rounded bg-white/[0.06] animate-pulse" />
-          <div className="h-4 w-32 rounded bg-white/[0.06] animate-pulse" />
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {/* Status indicator */}
-          <div className={cn(
-            "flex items-start gap-3 rounded-lg border p-4",
-            status.ready
-              ? "border-emerald-500/20 bg-emerald-500/[0.05]"
-              : "border-amber-500/20 bg-amber-500/[0.05]"
-          )}>
-            {status.ready ? (
-              <CheckCircle2 className="h-5 w-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-            ) : (
-              <Clock className="h-5 w-5 text-amber-400 flex-shrink-0 mt-0.5" />
-            )}
-            <div className="space-y-1">
-              <p className={cn("text-sm font-semibold", status.ready ? "text-emerald-400" : "text-amber-400")}>
-                {status.ready ? "Ready to backtest" : "Awaiting sufficient historical data"}
-              </p>
-              <p className="text-xs text-slate-400">{status.label}</p>
-            </div>
-          </div>
-
-          {/* Stats row */}
-          <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">Predictions</p>
-              <p className="text-lg font-bold text-slate-100 tabular-nums">{status.count.toLocaleString()}</p>
-            </div>
-            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">Required</p>
-              <p className="text-lg font-bold text-slate-400 tabular-nums">{BACKTEST_MINIMUM}</p>
-            </div>
-            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">Remaining</p>
-              <p className={cn("text-lg font-bold tabular-nums", status.ready ? "text-emerald-400" : "text-amber-400")}>
-                {status.ready ? "0" : (BACKTEST_MINIMUM - status.count).toLocaleString()}
-              </p>
-            </div>
-          </div>
-
-          {/* Run button */}
-          <button
-            onClick={handleRunBacktest}
-            disabled={!status.ready || running}
-            className={cn(
-              "flex w-full items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold transition-all",
-              status.ready && !running
-                ? "bg-blue-600 text-white hover:bg-blue-500 shadow-lg"
-                : "bg-white/[0.04] border border-white/[0.06] text-slate-500 cursor-not-allowed"
-            )}
-          >
-            {running ? (
-              <>
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                Running backtest...
-              </>
-            ) : (
-              <>
-                <PlayCircle className="h-4 w-4" />
-                {status.ready ? "Run Backtest Now" : `Collect ${BACKTEST_MINIMUM - status.count} more predictions first`}
-              </>
-            )}
-          </button>
-
-          {runResult && (
-            <div className={cn(
-              "rounded-lg border p-3 text-xs",
-              runResult.startsWith("Error")
-                ? "border-red-500/20 bg-red-500/[0.05] text-red-400"
-                : "border-emerald-500/20 bg-emerald-500/[0.05] text-emerald-400"
-            )}>
-              {runResult}
-            </div>
-          )}
-
-          <p className="text-[11px] text-slate-500 leading-relaxed">
-            Once run, backtest results will populate the Track Record page with real performance
-            metrics. The system requires a minimum of {BACKTEST_MINIMUM} resolved predictions to
-            produce statistically meaningful results.
-          </p>
-        </div>
-      )}
-    </div>
-  );
-}
 
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
@@ -406,26 +281,52 @@ export default function StrategyPage() {
 
       </div>
 
-      {/* ── Model vs Strategy explanation ─────────────────────────────────────── */}
+      {/* ── How Our System Works — 3-step explanation ────────────────────────── */}
       <div className="glass-card p-6 animate-fade-in">
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2 mb-4">
           <Info className="h-5 w-5 text-blue-400" />
-          <h2 className="text-base font-bold text-slate-100">How it works: Model vs Strategy</h2>
+          <h2 className="text-base font-bold text-slate-100">How Our System Works</h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="rounded-lg border border-blue-500/20 bg-blue-500/[0.05] p-4">
-            <p className="text-sm font-bold text-blue-400 mb-2">The Model</p>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Step 1: The AI Model */}
+          <div className="rounded-lg border border-blue-500/20 bg-blue-500/[0.05] p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">1</div>
+              <p className="text-sm font-bold text-blue-400">Our AI Model Analyzes</p>
+            </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Our AI model analyzes thousands of data points per match — team form, head-to-head records,
-              Elo ratings — to calculate win probabilities. It's the brain that powers all predictions.
+              Our ensemble combines 3 proven models — <span className="text-slate-200 font-medium">Elo ratings</span> (team strength),
+              <span className="text-slate-200 font-medium"> Poisson distribution</span> (goal prediction), and
+              <span className="text-slate-200 font-medium"> Logistic regression</span> (pattern recognition) — to calculate
+              win/draw/loss probabilities for every upcoming match.
             </p>
           </div>
-          <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] p-4">
-            <p className="text-sm font-bold text-emerald-400 mb-2">The Strategy</p>
+
+          {/* Step 2: Strategy Filters */}
+          <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">2</div>
+              <p className="text-sm font-bold text-emerald-400">A Strategy Filters</p>
+            </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              A strategy is a filter on top of the model. It decides WHICH predictions to follow based on
-              rules like "only follow picks where the model is very confident" or "only back strong home teams".
-              Different strategies suit different risk appetites.
+              A strategy is a set of rules that selects only the <span className="text-slate-200 font-medium">best opportunities</span> from the model{"'"}s output.
+              For example: {"\""}only follow picks where the home team has {">"} 60% predicted win probability{"\""}
+              or {"\""}only back matches with low draw probability{"\""}.  Each strategy has a different risk/reward profile.
+            </p>
+          </div>
+
+          {/* Step 3: You Follow */}
+          <div className="rounded-lg border border-amber-500/20 bg-amber-500/[0.05] p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">3</div>
+              <p className="text-sm font-bold text-amber-400">You Follow the Picks</p>
+            </div>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              <span className="text-slate-200 font-medium">Pick a strategy below</span>, then click
+              <span className="text-slate-200 font-medium"> {"\""}View All Picks & Results{"\""}</span> to see which upcoming matches
+              it recommends. Each strategy shows its <span className="text-slate-200 font-medium">historical win rate and ROI</span> so you can
+              choose based on real backtested data.
             </p>
           </div>
         </div>
@@ -471,66 +372,6 @@ export default function StrategyPage() {
       )}
 
 
-      {/* ── Backtest Panel + Data metrics ─────────────────────────────────────── */}
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6">
-
-        {/* Left: What happens next */}
-        <div className="glass-card p-6 space-y-5 animate-fade-in">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-blue-400" />
-            <h2 className="text-base font-bold text-slate-100">What Happens Next</h2>
-          </div>
-
-          <div className="space-y-4">
-            {[
-              {
-                step: "1",
-                title: "Data collection continues",
-                desc: "The system generates predictions for each upcoming match. Every resolved match is recorded with the actual outcome.",
-                done: dataStatus.count > 0,
-              },
-              {
-                step: "2",
-                title: `Reach ${BACKTEST_MINIMUM} resolved predictions`,
-                desc: `Once ${BACKTEST_MINIMUM} predictions have been evaluated against real outcomes, the backtest threshold is met.`,
-                done: dataStatus.ready,
-              },
-              {
-                step: "3",
-                title: "Run the backtest",
-                desc: "Click 'Run Backtest' to evaluate each strategy template against historical predictions. Metrics are computed from real data only.",
-                done: false,
-              },
-              {
-                step: "4",
-                title: "Results appear on Track Record",
-                desc: "Real win rates, ROI, P/L curves and calibration data will populate the Track Record page.",
-                done: false,
-              },
-            ].map((item) => (
-              <div key={item.step} className="flex items-start gap-3">
-                <div className={cn(
-                  "flex-shrink-0 h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-bold mt-0.5",
-                  item.done
-                    ? "bg-emerald-500/20 text-emerald-400"
-                    : "bg-white/[0.06] text-slate-500"
-                )}>
-                  {item.done ? <CheckCircle2 className="h-4 w-4" /> : item.step}
-                </div>
-                <div>
-                  <p className={cn("text-sm font-semibold", item.done ? "text-emerald-400" : "text-slate-300")}>
-                    {item.title}
-                  </p>
-                  <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right: Backtest panel */}
-        <BacktestPanel summary={summary} loading={summaryLoading} />
-      </div>
 
       {/* ── Real prediction stats (from API) ─────────────────────────────────── */}
       {!summaryLoading && summary && summary.total_predictions > 0 && (
