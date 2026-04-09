@@ -440,12 +440,12 @@ const en = {
   "about.teamSubtitle":
     "We're not influencers and we're not tipsters. We're engineers who ship. Everything on BetsPlug was built, broken and rebuilt by the two of us.",
 
-  "about.founder1Name": "Dennis",
+  "about.founder1Name": "Cas",
   "about.founder1Role": "Co-founder · Engineering & Product",
   "about.founder1Bio":
-    "Backend engineer for 12+ years, with a career spent building data-heavy systems for fintech platforms and large marketplaces. Ajax season ticket holder, reluctant Formula 1 encyclopedia, and the reason our scraping and match-ingestion engine hums 24/7. If it logs a match on BetsPlug, Dennis wrote the pipeline.",
+    "Backend engineer for 12+ years, with a career spent building data-heavy systems for fintech platforms and large marketplaces. Feyenoord season ticket holder, reluctant Formula 1 encyclopedia, and the reason our scraping and match-ingestion engine hums 24/7. If it logs a match on BetsPlug, Cas wrote the pipeline.",
 
-  "about.founder2Name": "Alex",
+  "about.founder2Name": "Dennis",
   "about.founder2Role": "Co-founder · Data Science & Modelling",
   "about.founder2Bio":
     "Systems architect with a decade in ICT and a decade-long side obsession with statistical modelling. Lives and breathes the NBA, has strong opinions about the Premier League title race, and runs the gradient-boosted classifiers that turn historical match data into tomorrow's probabilities. Believes every number deserves a confidence interval.",
@@ -876,12 +876,12 @@ const nl: Dictionary = {
   "about.teamSubtitle":
     "Wij zijn geen influencers en geen tipsters. Wij zijn engineers die leveren. Alles op BetsPlug is gebouwd, gesloopt en herbouwd door ons tweeën.",
 
-  "about.founder1Name": "Dennis",
+  "about.founder1Name": "Cas",
   "about.founder1Role": "Mede-oprichter · Engineering & Product",
   "about.founder1Bio":
-    "Backend engineer met 12+ jaar ervaring in data-intensieve systemen voor fintech-platforms en grote marktplaatsen. Ajax-seizoenkaarthouder, onvrijwillige Formule 1-encyclopedie, en de reden dat onze scraping- en match-ingestion engine 24/7 draait. Elke wedstrijd die op BetsPlug wordt gelogd, loopt door een pipeline die Dennis heeft geschreven.",
+    "Backend engineer met 12+ jaar ervaring in data-intensieve systemen voor fintech-platforms en grote marktplaatsen. Feyenoord-seizoenkaarthouder, onvrijwillige Formule 1-encyclopedie, en de reden dat onze scraping- en match-ingestion engine 24/7 draait. Elke wedstrijd die op BetsPlug wordt gelogd, loopt door een pipeline die Cas heeft geschreven.",
 
-  "about.founder2Name": "Alex",
+  "about.founder2Name": "Dennis",
   "about.founder2Role": "Mede-oprichter · Data Science & Modellering",
   "about.founder2Bio":
     "Systeemarchitect met tien jaar ICT-ervaring en een even oude obsessie met statistisch modelleren. Leeft en ademt de NBA, heeft scherpe meningen over de titelrace in de Premier League, en runt de gradient-boosted classifiers die historische wedstrijddata omzetten in de waarschijnlijkheden van morgen. Gelooft dat elk getal een betrouwbaarheidsinterval verdient.",

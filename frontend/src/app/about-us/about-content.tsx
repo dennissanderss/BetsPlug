@@ -64,13 +64,13 @@ export function AboutContent() {
       name: t("about.founder1Name"),
       role: t("about.founder1Role"),
       bio: t("about.founder1Bio"),
-      initial: "D",
+      initial: "C",
     },
     {
       name: t("about.founder2Name"),
       role: t("about.founder2Role"),
       bio: t("about.founder2Bio"),
-      initial: "A",
+      initial: "D",
     },
   ];
 
