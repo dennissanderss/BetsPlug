@@ -34,10 +34,11 @@ import {
 import { CheckoutHeader } from "@/components/checkout/checkout-header";
 import { CheckoutFooter } from "@/components/checkout/checkout-footer";
 import {
-  PayPalBadge,
-  StripeBadge,
   VisaBadge,
   MastercardBadge,
+  AmexBadge,
+  PayPalBadge,
+  ApplePayBadge,
 } from "@/components/ui/payment-badges";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { TranslationKey } from "@/i18n/messages";
@@ -605,19 +606,20 @@ export function CheckoutContent() {
                         </Link>
                       </p>
 
-                      {/* Payment reassurance — dark tile badges
+                      {/* Payment reassurance — white pill badges
                           matching the footer so the trust signals
                           look consistent across the site. */}
-                      <div className="mt-6 flex flex-col items-center justify-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-4 sm:flex-row sm:gap-5">
+                      <div className="mt-6 flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-4 sm:flex-row sm:gap-4">
                         <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-slate-500">
                           <Lock className="h-3.5 w-3.5 text-green-400" />
                           {t("checkout.weAccept")}
                         </div>
-                        <div className="flex flex-wrap items-center justify-center gap-3">
-                          <PayPalBadge />
-                          <StripeBadge />
+                        <div className="flex flex-wrap items-center justify-center gap-2">
                           <VisaBadge />
                           <MastercardBadge />
+                          <AmexBadge />
+                          <PayPalBadge />
+                          <ApplePayBadge />
                         </div>
                       </div>
                     </motion.div>

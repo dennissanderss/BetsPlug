@@ -17,10 +17,11 @@ import {
 } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import {
-  PayPalBadge,
-  StripeBadge,
   VisaBadge,
   MastercardBadge,
+  AmexBadge,
+  PayPalBadge,
+  ApplePayBadge,
 } from "./payment-badges";
 
 /* ─────────────────────────────────────────────────────────────────
@@ -322,11 +323,12 @@ export function BetsPlugFooter() {
           </div>
 
           {/* Payment badges — absolutely centered on md+, inline stack on mobile */}
-          <div className="flex flex-wrap items-center justify-center gap-3 md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
-            <PayPalBadge />
-            <StripeBadge />
+          <div className="flex flex-wrap items-center justify-center gap-2 md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
             <VisaBadge />
             <MastercardBadge />
+            <AmexBadge />
+            <PayPalBadge />
+            <ApplePayBadge />
           </div>
 
           {/* Trust seal */}
