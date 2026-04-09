@@ -2,10 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Send, Sparkles, X, Loader2 } from "lucide-react";
+import { Send, Sparkles, X, Loader2, Mail } from "lucide-react";
 import { useTranslations } from "@/i18n/locale-provider";
 
-type Message = { text: string; isUser: boolean };
+type Message = { text: string; isUser: boolean; isFallback?: boolean };
 
 type AiAssistantProps = {
   isOpen: boolean;
@@ -20,7 +20,7 @@ export function AiAssistant({
   title,
   description,
 }: AiAssistantProps) {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const [input, setInput] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState<boolean>(false);
@@ -57,37 +57,67 @@ export function AiAssistant({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  const simulateResponse = (userMessage: string) => {
+  /**
+   * Call the real AI endpoint (/api/chat). The backend is
+   * grounded on a static BetsPlug knowledge base and replies
+   * in the user's locale. If the model can't confidently
+   * answer, the response comes back with `fallback: true`
+   * and we render a support@betsplug.com mail-link card.
+   */
+  const askAssistant = async (history: Message[]) => {
     setIsTyping(true);
-    const lower = userMessage.toLowerCase();
-
-    let response = t("chatbot.replyDefault");
-
-    if (lower.includes("price") || lower.includes("prijs") || lower.includes("cost") || lower.includes("abonnement") || lower.includes("plan")) {
-      response = t("chatbot.replyPricing");
-    } else if (lower.includes("refund") || lower.includes("cancel") || lower.includes("opzeg") || lower.includes("terugbetal")) {
-      response = t("chatbot.replyRefund");
-    } else if (lower.includes("accuracy") || lower.includes("hit") || lower.includes("track") || lower.includes("record") || lower.includes("nauwkeurig")) {
-      response = t("chatbot.replyAccuracy");
-    } else if (lower.includes("telegram") || lower.includes("community") || lower.includes("vip")) {
-      response = t("chatbot.replyTelegram");
-    } else if (lower.includes("hello") || lower.includes("hi ") || lower.includes("hey") || lower.includes("hallo")) {
-      response = t("chatbot.replyHello");
-    }
-
-    setTimeout(() => {
+    try {
+      const payload = {
+        locale,
+        messages: history.map((m) => ({
+          role: m.isUser ? "user" : "assistant",
+          content: m.text,
+        })),
+      };
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await res.json()) as {
+        reply?: string;
+        answered?: boolean;
+        fallback?: boolean;
+      };
+      const reply =
+        (data.reply && data.reply.trim()) || t("chatbot.replyDefault");
+      setMessages((prev) => [
+        ...prev,
+        { text: reply, isUser: false, isFallback: Boolean(data.fallback) },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: t("chatbot.replyDefault"),
+          isUser: false,
+          isFallback: true,
+        },
+      ]);
+    } finally {
       setIsTyping(false);
-      setMessages((prev) => [...prev, { text: response, isUser: false }]);
-    }, 1200);
+    }
+  };
+
+  const sendMessage = (raw: string) => {
+    const userMessage = raw.trim();
+    if (userMessage === "") return;
+    const next: Message[] = [...messages, { text: userMessage, isUser: true }];
+    setMessages(next);
+    askAssistant(next);
   };
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (input.trim() === "") return;
+    if (input.trim() === "" || isTyping) return;
     const userMessage = input.trim();
-    setMessages((prev) => [...prev, { text: userMessage, isUser: true }]);
     setInput("");
-    simulateResponse(userMessage);
+    sendMessage(userMessage);
   };
 
   const clearChat = () => setMessages([]);
@@ -189,10 +219,7 @@ export function AiAssistant({
                         <button
                           key={s}
                           type="button"
-                          onClick={() => {
-                            setMessages((prev) => [...prev, { text: s, isUser: true }]);
-                            simulateResponse(s);
-                          }}
+                          onClick={() => sendMessage(s)}
                           className="group flex items-center justify-between gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-left text-xs text-slate-300 transition-all hover:border-green-500/30 hover:bg-green-500/[0.06] hover:text-white"
                         >
                           <span className="truncate">{s}</span>
@@ -215,10 +242,21 @@ export function AiAssistant({
                           className={`max-w-[82%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed shadow-sm ${
                             msg.isUser
                               ? "rounded-tr-sm bg-gradient-to-br from-green-500 to-emerald-500 font-semibold text-black shadow-green-500/20"
-                              : "rounded-tl-sm border border-white/[0.08] bg-white/[0.04] text-slate-100 backdrop-blur-sm"
+                              : msg.isFallback
+                                ? "rounded-tl-sm border border-green-500/25 bg-green-500/[0.06] text-slate-100 backdrop-blur-sm"
+                                : "rounded-tl-sm border border-white/[0.08] bg-white/[0.04] text-slate-100 backdrop-blur-sm"
                           }`}
                         >
-                          {msg.text}
+                          <div className="whitespace-pre-wrap">{msg.text}</div>
+                          {msg.isFallback && !msg.isUser && (
+                            <a
+                              href="mailto:support@betsplug.com"
+                              className="mt-3 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/[0.12] px-3 py-1.5 text-xs font-bold text-green-300 transition-all hover:border-green-500/60 hover:bg-green-500/20 hover:text-white"
+                            >
+                              <Mail className="h-3.5 w-3.5" />
+                              support@betsplug.com
+                            </a>
+                          )}
                         </div>
                       </motion.div>
                     ))}
