@@ -9,19 +9,18 @@ type League = {
   ext?: "png" | "svg";
 };
 
+// Curated shortlist of the 10 biggest leagues by global audience:
+// the European "Big Five" football leagues + UEFA Champions League
+// + all four major US sports leagues. Intentionally excludes regional
+// leagues (Eredivisie, Liga Portugal, Brasileirão, Allsvenskan) and
+// secondary European tournaments (Europa League, Conference League).
 const leagues: League[] = [
   { name: "Premier League", slug: "premier-league" },
   { name: "La Liga", slug: "laliga" },
   { name: "Bundesliga", slug: "bundesliga" },
   { name: "Serie A", slug: "serie-a" },
   { name: "Ligue 1", slug: "ligue-1" },
-  { name: "Eredivisie", slug: "eredivisie" },
   { name: "Champions League", slug: "champions-league" },
-  { name: "Europa League", slug: "europa-league" },
-  { name: "Conference League", slug: "conference-league" },
-  { name: "Liga Portugal", slug: "liga-portugal" },
-  { name: "Brasileirão", slug: "brazil-serie-a" },
-  { name: "Allsvenskan", slug: "allsvenskan" },
   { name: "NBA", slug: "nba" },
   { name: "NFL", slug: "nfl", ext: "svg" },
   { name: "MLB", slug: "mlb" },
@@ -86,7 +85,10 @@ export function LeaguesTicker() {
             className="flex items-center gap-8 sm:gap-12 md:gap-16"
             animate={{ x: ["0%", "-33.3333%"] }}
             transition={{
-              duration: 45,
+              // Scaled from the old 45s/16-leagues config so each logo
+              // still takes ~2.8s to traverse the viewport at this list
+              // size. 45 * (10/16) ≈ 28s.
+              duration: 28,
               ease: "linear",
               repeat: Infinity,
             }}

@@ -137,9 +137,9 @@ const en = {
   "footer.responsible": "18+ Play responsibly",
 
   /* Leagues ticker */
-  "leagues.badge": "Global Coverage",
-  "leagues.titleA": "Leagues We",
-  "leagues.titleB": "Cover",
+  "leagues.badge": "Top Leagues",
+  "leagues.titleA": "The biggest",
+  "leagues.titleB": "leagues",
 
   /* Trusted Partner */
   "trusted.titleA": "Your",
@@ -1372,9 +1372,9 @@ const nl: Dictionary = {
     "Alle rechten voorbehouden. BetsPlug is een data- & analyseplatform — geen gokaanbieder.",
   "footer.responsible": "18+ Speel verantwoord",
 
-  "leagues.badge": "Wereldwijde dekking",
-  "leagues.titleA": "Competities die wij",
-  "leagues.titleB": "dekken",
+  "leagues.badge": "Top competities",
+  "leagues.titleA": "De grootste",
+  "leagues.titleB": "competities",
 
   "trusted.titleA": "Jouw",
   "trusted.titleHighlight": "vertrouwde",
