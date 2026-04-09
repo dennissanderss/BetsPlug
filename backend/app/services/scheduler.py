@@ -23,23 +23,39 @@ scheduler = AsyncIOScheduler(timezone="UTC")
 
 
 async def job_sync_data():
-    """Sync ONE league per run (rotates). Memory-efficient for Railway free tier."""
-    log.info("CRON: Starting data sync (1 league rotation)...")
+    """Sync ALL leagues: upcoming matches, recent results, and standings."""
+    log.info("CRON: Starting full data sync (all leagues)...")
     try:
         import asyncio
         from app.db.session import async_session_factory
         from app.services.data_sync_service import DataSyncService
 
-        async with DataSyncService() as svc:
-            async with async_session_factory() as db:
-                r1 = await svc.sync_upcoming_matches(db)
-                await asyncio.sleep(2)
-                r2 = await svc.sync_recent_results(db)
-                await asyncio.sleep(2)
-                r3 = await svc.sync_standings(db)
-                await db.commit()
+        total_created, total_updated, total_errors = 0, 0, 0
 
-        log.info("CRON: Sync done — %s / %s / %s", r1, r2, r3)
+        for i in range(6):
+            async with DataSyncService() as svc:
+                async with async_session_factory() as db:
+                    r1 = await svc.sync_upcoming_matches(db)
+                    total_created += r1.get("created", 0)
+                    total_updated += r1.get("updated", 0)
+                    total_errors += r1.get("errors", 0)
+                    await asyncio.sleep(2)
+
+                    r2 = await svc.sync_recent_results(db)
+                    total_created += r2.get("created_results", 0)
+                    total_updated += r2.get("updated_matches", r2.get("updated", 0))
+                    total_errors += r2.get("errors", 0)
+                    await asyncio.sleep(2)
+
+                    r3 = await svc.sync_standings(db)
+                    total_updated += r3.get("rows_saved", 0)
+                    total_errors += r3.get("errors", 0)
+
+                    await db.commit()
+                    await asyncio.sleep(2)
+
+        log.info("CRON: Full sync done — created=%d updated=%d errors=%d",
+                 total_created, total_updated, total_errors)
     except Exception as exc:
         log.error("CRON: Data sync failed: %s", exc, exc_info=True)
 
@@ -470,14 +486,14 @@ def start_scheduler():
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=10),
     )
 
-    # Live fixture sync every 5 minutes during match hours (memory-friendly)
+    # Live fixture sync every 60 seconds during match hours
     scheduler.add_job(
         job_sync_live_fixtures,
-        trigger=IntervalTrigger(minutes=5),
+        trigger=IntervalTrigger(seconds=60),
         id="sync_live_fixtures",
         name="Live fixture sync",
         replace_existing=True,
-        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=2),
+        next_run_time=datetime.now(timezone.utc) + timedelta(seconds=30),
     )
 
     # Sync odds every 2 hours (The Odds API, 500 req/month budget)
@@ -499,12 +515,25 @@ def start_scheduler():
         replace_existing=True,
     )
 
-    # Historical predictions: DISABLED — backfill is complete (2725/2725)
-    # Re-enable if new historical data is added
-    # scheduler.add_job(job_generate_historical_predictions, ...)
+    # Historical predictions: generate batch of 100 every 5 min until all done
+    scheduler.add_job(
+        job_generate_historical_predictions,
+        trigger=IntervalTrigger(minutes=5),
+        id="historical_predictions",
+        name="Generate historical predictions (batch 100)",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=1),
+    )
 
-    # Backfill: DISABLED — all matches are up to date
-    # scheduler.add_job(job_backfill_results, ...)
+    # One-time backfill on startup
+    scheduler.add_job(
+        job_backfill_results,
+        trigger=None,
+        id="backfill_results",
+        name="Backfill stale results",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=3),
+    )
 
     scheduler.start()
     log.info("CRON: Scheduler started with %d jobs.", len(scheduler.get_jobs()))
