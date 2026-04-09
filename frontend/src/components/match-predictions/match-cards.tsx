@@ -92,7 +92,7 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
               </span>
             </>
           ) : (
-            <span className="text-xs italic text-slate-500">—</span>
+            <span className="text-xs italic text-slate-500"> - </span>
           )}
         </div>
       </div>

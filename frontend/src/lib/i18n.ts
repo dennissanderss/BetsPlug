@@ -484,7 +484,7 @@ export function t(key: TranslationKey): string {
   return dict[key] ?? translations[DEFAULT_LANG][key] ?? key;
 }
 
-/** React hook — returns a stable `t` function that re-renders on language change. */
+/** React hook - returns a stable `t` function that re-renders on language change. */
 export function useTranslation(): { t: (key: TranslationKey) => string; lang: string } {
   const [lang, setLang] = React.useState<string>(DEFAULT_LANG);
 

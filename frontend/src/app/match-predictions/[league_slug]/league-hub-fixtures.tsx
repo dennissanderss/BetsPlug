@@ -108,7 +108,7 @@ export function LeagueHubFixtures({ leagueSlug }: { leagueSlug: string }) {
     },
     {
       label: t("matchPred.statAvgConf"),
-      value: avgConf !== null ? `${avgConf}%` : "—",
+      value: avgConf !== null ? `${avgConf}%` : " - ",
       icon: TrendingUp,
       color: "#a855f7",
     },

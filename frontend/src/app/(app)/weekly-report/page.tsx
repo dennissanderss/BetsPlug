@@ -260,7 +260,7 @@ function WinnerCard({ fixture }: { fixture: Fixture }) {
   const predicted = getPredictedOutcome(fixture);
   const home = fixture.home_team_name;
   const away = fixture.away_team_name;
-  const league = fixture.league_name || (fixture.league_slug ? slugToTitle(fixture.league_slug) : "—");
+  const league = fixture.league_name || (fixture.league_slug ? slugToTitle(fixture.league_slug) : " - ");
 
   return (
     <div
@@ -282,7 +282,7 @@ function WinnerCard({ fixture }: { fixture: Fixture }) {
         <span className="text-slate-500">
           Our call:{" "}
           <span className="text-slate-300 font-medium">
-            {predicted ? formatOutcomeLabel(predicted) : "—"}
+            {predicted ? formatOutcomeLabel(predicted) : " - "}
           </span>
         </span>
         <span className="font-bold text-emerald-400">+1.0u</span>
@@ -309,7 +309,7 @@ function LossCard({ fixture }: { fixture: Fixture }) {
   const predicted = getPredictedOutcome(fixture);
   const home = fixture.home_team_name;
   const away = fixture.away_team_name;
-  const league = fixture.league_name || (fixture.league_slug ? slugToTitle(fixture.league_slug) : "—");
+  const league = fixture.league_name || (fixture.league_slug ? slugToTitle(fixture.league_slug) : " - ");
 
   return (
     <div
@@ -331,7 +331,7 @@ function LossCard({ fixture }: { fixture: Fixture }) {
         <span className="text-slate-500">
           Our call:{" "}
           <span className="text-slate-300 font-medium">
-            {predicted ? formatOutcomeLabel(predicted) : "—"}
+            {predicted ? formatOutcomeLabel(predicted) : " - "}
           </span>
         </span>
         <span className="font-bold text-red-400">-1.0u</span>
@@ -555,7 +555,7 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
               const actual = getActualOutcome(fixture);
               const isCorrect = isPredictionCorrect(fixture);
               const pl = estimatePL(fixture);
-              const league = fixture.league_name || (fixture.league_slug ? slugToTitle(fixture.league_slug) : "—");
+              const league = fixture.league_name || (fixture.league_slug ? slugToTitle(fixture.league_slug) : " - ");
 
               const rowBg =
                 isCorrect === true
@@ -572,7 +572,7 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
                   ? pred.away_win_prob
                   : (pred.draw_prob ?? 0.33);
               const impliedOdds =
-                predOutcomeProb > 0 ? (1 / predOutcomeProb).toFixed(2) : "—";
+                predOutcomeProb > 0 ? (1 / predOutcomeProb).toFixed(2) : " - ";
 
               return (
                 <tr key={fixture.id} className={`transition-colors ${rowBg}`}>
@@ -605,14 +605,14 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
                             : "#94a3b8",
                       }}
                     >
-                      {predicted ? formatOutcomeLabel(predicted) : "—"}
+                      {predicted ? formatOutcomeLabel(predicted) : " - "}
                     </span>
                   </td>
                   <td className="px-3 py-2.5 text-slate-400 hidden md:table-cell tabular-nums">
                     {impliedOdds}
                   </td>
                   <td className="px-3 py-2.5 text-slate-500 hidden sm:table-cell">
-                    {actual ? formatOutcomeLabel(actual) : "—"}
+                    {actual ? formatOutcomeLabel(actual) : " - "}
                     {fixture.result && (
                       <span className="ml-1 text-slate-600">
                         ({fixture.result.home_score}–{fixture.result.away_score})
@@ -629,12 +629,12 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
                         <XCircle className="h-3.5 w-3.5" /> No
                       </span>
                     ) : (
-                      <span className="text-slate-600">—</span>
+                      <span className="text-slate-600"> - </span>
                     )}
                   </td>
                   <td className="px-3 py-2.5 font-bold tabular-nums">
                     {pl === null ? (
-                      <span className="text-slate-600">—</span>
+                      <span className="text-slate-600"> - </span>
                     ) : pl > 0 ? (
                       <span className="text-emerald-400">+{pl.toFixed(1)}u</span>
                     ) : (

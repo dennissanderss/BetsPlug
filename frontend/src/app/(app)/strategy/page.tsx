@@ -36,7 +36,7 @@ function getDataStatus(summary: TrackrecordSummary | undefined): {
   const ready = count >= BACKTEST_MINIMUM;
   const pct = Math.min(100, Math.round((count / BACKTEST_MINIMUM) * 100));
   const label = ready
-    ? `${count.toLocaleString()} predictions — ready to backtest`
+    ? `${count.toLocaleString()} predictions - ready to backtest`
     : `${count.toLocaleString()} / ${BACKTEST_MINIMUM} predictions needed`;
   return { count, label, ready, pct };
 }
@@ -144,7 +144,7 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
               <p className={cn("text-lg font-bold tabular-nums", c.accent)}>{(metrics.winrate * 100).toFixed(1)}%</p>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500" title="Return on Investment — profit/loss as percentage of total staked">ROI</p>
+              <p className="text-[10px] uppercase tracking-wider text-slate-500" title="Return on Investment - profit/loss as percentage of total staked">ROI</p>
               <p className={cn("text-lg font-bold tabular-nums", metrics.roi >= 0 ? "text-emerald-400" : "text-red-400")}>
                 {metrics.roi >= 0 ? "+" : ""}{(metrics.roi * 100).toFixed(1)}%
               </p>
@@ -173,15 +173,21 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
           ))}
         </ul>
         {metrics?.has_data && (
-          <PaywallOverlay feature="strategy_lab_full" requiredTier="gold">
-            <Link
-              href={`/strategy/${strategy.id}`}
-              className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-2.5 text-xs font-semibold text-blue-400 hover:bg-blue-500/20 transition-all"
+          <div className="mt-4">
+            <PaywallOverlay
+              feature="strategy_lab_full"
+              requiredTier="gold"
+              variant="inline"
             >
-              <BarChart3 className="h-3.5 w-3.5" />
-              View All Picks & Results
-            </Link>
-          </PaywallOverlay>
+              <Link
+                href={`/strategy/${strategy.id}`}
+                className="flex items-center justify-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-2.5 text-xs font-semibold text-blue-400 hover:bg-blue-500/20 transition-all"
+              >
+                <BarChart3 className="h-3.5 w-3.5" />
+                View All Picks & Results
+              </Link>
+            </PaywallOverlay>
+          </div>
         )}
       </div>
     </div>
@@ -296,9 +302,9 @@ export default function StrategyPage() {
               <p className="text-sm font-bold text-blue-400">Our AI Model Analyzes</p>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Our ensemble combines 3 proven models — <span className="text-slate-200 font-medium">Elo ratings</span> (team strength),
+              Our ensemble combines 3 proven models - <span className="text-slate-200 font-medium">Elo ratings</span> (team strength),
               <span className="text-slate-200 font-medium"> Poisson distribution</span> (goal prediction), and
-              <span className="text-slate-200 font-medium"> Logistic regression</span> (pattern recognition) — to calculate
+              <span className="text-slate-200 font-medium"> Logistic regression</span> (pattern recognition) - to calculate
               win/draw/loss probabilities for every upcoming match.
             </p>
           </div>
@@ -361,7 +367,7 @@ export default function StrategyPage() {
             className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-300 transition-colors"
           >
             <ChevronRight className={cn("h-4 w-4 transition-transform", showArchived && "rotate-90")} />
-            Archived — Not Profitable ({archivedStrategies.length})
+            Archived - Not Profitable ({archivedStrategies.length})
           </button>
           {showArchived && (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -403,7 +409,7 @@ export default function StrategyPage() {
           </div>
           <p className="text-xs text-slate-500">
             These figures are real model outputs from the database. They reflect prediction accuracy
-            metrics only — not betting P/L, which requires backtest analysis.
+            metrics only - not betting P/L, which requires backtest analysis.
           </p>
         </div>
       )}

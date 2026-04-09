@@ -230,7 +230,7 @@ function StatPill({
 const PLANS: PricingPlan[] = [
   {
     id: "annual",
-    name: "BetsPlug Pro — Annual",
+    name: "BetsPlug Pro - Annual",
     badge: "Best value",
     regularPrice: "$29.99/mo",
     memberPrice:  "$23.99/mo",
@@ -250,7 +250,7 @@ const PLANS: PricingPlan[] = [
   },
   {
     id: "monthly",
-    name: "BetsPlug Pro — Monthly",
+    name: "BetsPlug Pro - Monthly",
     regularPrice: "$39.99/mo",
     memberPrice:  "$31.99/mo",
     saving:       "Save $8/month",
@@ -269,7 +269,7 @@ const PLANS: PricingPlan[] = [
   {
     id: "enterprise",
     name: "BetsPlug Enterprise",
-    regularPrice: "—",
+    regularPrice: " - ",
     memberPrice:  null,
     saving:       null,
     isCustom:     true,
@@ -371,7 +371,7 @@ export default function DealsPage() {
         <div className="mb-5">
           <h2 className="text-base font-semibold text-slate-100">Partner Deals</h2>
           <p className="mt-0.5 text-xs text-slate-500">
-            Choose the plan that fits your workflow — all prices reflect your member discount
+            Choose the plan that fits your workflow - all prices reflect your member discount
           </p>
         </div>
 

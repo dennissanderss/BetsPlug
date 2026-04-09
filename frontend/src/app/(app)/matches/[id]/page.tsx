@@ -229,8 +229,8 @@ function TeamFormCard({
 
   const total = form.wins + form.draws + form.losses;
   const winRate = total > 0 ? form.wins / total : 0;
-  const avgScored = total > 0 ? (form.goals_scored / total).toFixed(2) : "—";
-  const avgConceded = total > 0 ? (form.goals_conceded / total).toFixed(2) : "—";
+  const avgScored = total > 0 ? (form.goals_scored / total).toFixed(2) : " - ";
+  const avgConceded = total > 0 ? (form.goals_conceded / total).toFixed(2) : " - ";
 
   return (
     <Card className={cn("border-t-4", side === "home" ? "border-t-blue-500" : "border-t-orange-500")}>

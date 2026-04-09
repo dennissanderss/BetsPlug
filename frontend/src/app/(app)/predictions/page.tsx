@@ -434,7 +434,7 @@ function StatsBar({ fixtures }: { fixtures: Fixture[] }) {
     { label: "Upcoming Matches", value: String(total) },
     { label: "Predictions Ready", value: String(withPred) },
     { label: "Analysis Pending",  value: String(pending) },
-    { label: "Avg Confidence",    value: avgConf !== null ? `${avgConf}%` : "—" },
+    { label: "Avg Confidence",    value: avgConf !== null ? `${avgConf}%` : " - " },
   ];
 
   return (
@@ -648,7 +648,7 @@ export default function PredictionsPage() {
               Predictions
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              AI-powered match analysis and probability forecasting — next 7 days
+              AI-powered match analysis and probability forecasting - next 7 days
             </p>
           </div>
         </div>
@@ -742,7 +742,7 @@ export default function PredictionsPage() {
 
       {/* ── Upgrade prompt for more predictions ── */}
       {!isLoading && upcomingFixtures.length > 0 && (
-        <PaywallOverlay feature="all_predictions" requiredTier="silver">
+        <PaywallOverlay feature="all_predictions" requiredTier="silver" variant="inline">
           <div className="glass-card p-8 text-center">
             <p className="text-slate-400">See all {upcomingFixtures.length} predictions with our Silver plan or higher.</p>
           </div>

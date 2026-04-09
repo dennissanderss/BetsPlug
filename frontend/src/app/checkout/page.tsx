@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { CheckoutContent } from "./checkout-content";
 
 export const metadata: Metadata = {
-  title: "Checkout — Start your BetsPlug subscription",
+  title: "Checkout - Start your BetsPlug subscription",
   description:
     "Complete your BetsPlug subscription in three quick steps. 14-day money-back guarantee, SSL-encrypted checkout, cancel any time.",
   alternates: {

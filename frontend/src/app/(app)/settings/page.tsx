@@ -497,7 +497,7 @@ export default function SettingsPage() {
                     { code: "ES", label: "Español" },
                   ].map(({ code, label }) => (
                     <option key={code} value={code}>
-                      {code} — {label}
+                      {code} - {label}
                     </option>
                   ))}
                 </select>
@@ -534,7 +534,7 @@ export default function SettingsPage() {
               <p className="text-xs text-slate-500 mt-0.5">
                 {lightMode
                   ? "Switch back to the premium dark interface"
-                  : "Dark theme active — easy on the eyes"}
+                  : "Dark theme active - easy on the eyes"}
               </p>
             </div>
             <Toggle checked={lightMode} onChange={setLightMode} />

@@ -69,19 +69,19 @@ ${CHAT_KB}
 function fallbackMessage(locale: string): string {
   switch (locale) {
     case "nl":
-      return "Hier kan ik geen betrouwbaar antwoord op geven. Stuur je vraag naar support@betsplug.com — we reageren binnen 12 uur op werkdagen.";
+      return "Hier kan ik geen betrouwbaar antwoord op geven. Stuur je vraag naar support@betsplug.com - we reageren binnen 12 uur op werkdagen.";
     case "de":
-      return "Darauf habe ich leider keine zuverlässige Antwort. Bitte schreiben Sie an support@betsplug.com — wir antworten an Werktagen innerhalb von 12 Stunden.";
+      return "Darauf habe ich leider keine zuverlässige Antwort. Bitte schreiben Sie an support@betsplug.com - wir antworten an Werktagen innerhalb von 12 Stunden.";
     case "fr":
-      return "Je n'ai pas de réponse fiable à cette question. Envoyez votre demande à support@betsplug.com — nous répondons en moins de 12 heures les jours ouvrés.";
+      return "Je n'ai pas de réponse fiable à cette question. Envoyez votre demande à support@betsplug.com - nous répondons en moins de 12 heures les jours ouvrés.";
     case "es":
-      return "No tengo una respuesta fiable a eso. Envía tu pregunta a support@betsplug.com — respondemos en menos de 12 horas en días laborables.";
+      return "No tengo una respuesta fiable a eso. Envía tu pregunta a support@betsplug.com - respondemos en menos de 12 horas en días laborables.";
     case "it":
-      return "Non ho una risposta affidabile a questa domanda. Invia la tua richiesta a support@betsplug.com — rispondiamo entro 12 ore nei giorni feriali.";
+      return "Non ho una risposta affidabile a questa domanda. Invia la tua richiesta a support@betsplug.com - rispondiamo entro 12 ore nei giorni feriali.";
     case "sw":
-      return "Sina jibu la uhakika kwa swali hili. Tuma swali lako kwa support@betsplug.com — tunajibu ndani ya saa 12 siku za kazi.";
+      return "Sina jibu la uhakika kwa swali hili. Tuma swali lako kwa support@betsplug.com - tunajibu ndani ya saa 12 siku za kazi.";
     case "id":
-      return "Saya tidak punya jawaban pasti untuk itu. Kirim pertanyaan Anda ke support@betsplug.com — kami membalas dalam 12 jam di hari kerja.";
+      return "Saya tidak punya jawaban pasti untuk itu. Kirim pertanyaan Anda ke support@betsplug.com - kami membalas dalam 12 jam di hari kerja.";
     default:
       return "I don't have a reliable answer for that. Please email support@betsplug.com and our team will reply within 12 hours on business days.";
   }
@@ -90,7 +90,7 @@ function fallbackMessage(locale: string): string {
 function errorFallback(locale: string): string {
   switch (locale) {
     case "nl":
-      return "Sorry, de assistent is op dit moment niet bereikbaar. Stuur je vraag naar support@betsplug.com — we helpen je zo snel mogelijk verder.";
+      return "Sorry, de assistent is op dit moment niet bereikbaar. Stuur je vraag naar support@betsplug.com - we helpen je zo snel mogelijk verder.";
     case "de":
       return "Der Assistent ist gerade nicht erreichbar. Schreiben Sie uns an support@betsplug.com und wir melden uns so schnell wie möglich.";
     case "fr":

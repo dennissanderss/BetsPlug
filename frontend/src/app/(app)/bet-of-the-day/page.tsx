@@ -323,7 +323,7 @@ export default function BetOfTheDayPage() {
                     Predicted Outcome
                   </p>
                   <p className="mt-1 text-center text-xl font-extrabold text-emerald-300">
-                    {botd.predicted_outcome ?? "—"}
+                    {botd.predicted_outcome ?? " - "}
                   </p>
                 </div>
               </div>
@@ -372,7 +372,7 @@ export default function BetOfTheDayPage() {
               </div>
               <h3 className="text-sm font-bold text-white">Daily Selection</h3>
               <p className="mt-1 text-xs text-slate-400 leading-relaxed">
-                Only one pick per day — we choose quality over quantity.
+                Only one pick per day - we choose quality over quantity.
                 Minimum 65% confidence required for selection.
               </p>
             </div>

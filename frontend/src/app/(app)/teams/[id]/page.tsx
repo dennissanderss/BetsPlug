@@ -240,7 +240,7 @@ function OverviewTab({
                         : "text-foreground"
                     )}
                   >
-                    {gd !== null ? (gd > 0 ? `+${gd}` : gd) : "—"}
+                    {gd !== null ? (gd > 0 ? `+${gd}` : gd) : " - "}
                   </p>
                   <p className="text-xs text-muted-foreground">Goal Diff</p>
                 </div>
@@ -353,7 +353,7 @@ function OverviewTab({
 // ─── Matches Tab ─────────────────────────────────────────────────────────────
 
 function matchResultBadge(match: Match, teamId: string): React.ReactNode {
-  if (!match.result) return <span className="text-xs text-muted-foreground">—</span>;
+  if (!match.result) return <span className="text-xs text-muted-foreground"> - </span>;
 
   const isHome = match.home_team_id === teamId;
   const { winner } = match.result;
@@ -415,7 +415,7 @@ function MatchesTab({ matches, teamId }: { matches: Match[]; teamId: string }) {
       label: "Score",
       accessor: "result",
       render: (_, row) => {
-        if (!row.result) return <span className="text-muted-foreground">—</span>;
+        if (!row.result) return <span className="text-muted-foreground"> - </span>;
         return (
           <span className="font-mono font-semibold">
             {row.result.home_score}–{row.result.away_score}
@@ -432,7 +432,7 @@ function MatchesTab({ matches, teamId }: { matches: Match[]; teamId: string }) {
       label: "Round",
       accessor: "round_name",
       className: "text-muted-foreground text-xs",
-      render: (v) => (v ? String(v) : "—"),
+      render: (v) => (v ? String(v) : " - "),
     },
   ];
 

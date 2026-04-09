@@ -187,7 +187,7 @@ export default function JouwRoutePage() {
         </div>
         <p className="text-slate-400 text-sm max-w-xl mx-auto">
           Choose your path to get the most out of BetsPlug. Each route leads to
-          smarter picks — pick the one that fits your style.
+          smarter picks - pick the one that fits your style.
         </p>
       </div>
 

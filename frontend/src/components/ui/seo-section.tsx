@@ -50,11 +50,11 @@ const faqCategories: FaqCategory[] = [
     items: [
       {
         q: "What is an AI sports prediction platform?",
-        a: "An AI sports prediction platform uses machine learning models, historical data, and statistical engines (like Elo and Poisson) to forecast the most likely outcome of sporting events. BetsPlug is built as a pure analytics tool — we show you the numbers, probabilities and expected value, so you can decide which bets to place with a bookmaker of your choice.",
+        a: "An AI sports prediction platform uses machine learning models, historical data, and statistical engines (like Elo and Poisson) to forecast the most likely outcome of sporting events. BetsPlug is built as a pure analytics tool - we show you the numbers, probabilities and expected value, so you can decide which bets to place with a bookmaker of your choice.",
       },
       {
         q: "How do I get started with BetsPlug?",
-        a: "Start with our Bronze plan — a symbolic €0.01 trial that unlocks 7 days of full Gold-level access: daily AI sports picks, upcoming match predictions, our verified track record and every model output. We charge one cent through Stripe so we can verify the card is real (this is how we keep the platform fraud-free). Upgrade to Silver, Gold or Platinum when you're ready.",
+        a: "Start with our Bronze plan - a symbolic €0.01 trial that unlocks 7 days of full Gold-level access: daily AI sports picks, upcoming match predictions, our verified track record and every model output. We charge one cent through Stripe so we can verify the card is real (this is how we keep the platform fraud-free). Upgrade to Silver, Gold or Platinum when you're ready.",
       },
       {
         q: "Which sports does the AI predictor cover?",
@@ -69,7 +69,7 @@ const faqCategories: FaqCategory[] = [
     items: [
       {
         q: "How accurate are AI sports betting predictions?",
-        a: "Accuracy depends on the sport, the market and the model. Our AI betting predictions are continuously benchmarked against closing lines and logged in our public track record. You can see the exact hit-rate, ROI and confidence distribution of every model we run — no cherry-picking, no hidden losses.",
+        a: "Accuracy depends on the sport, the market and the model. Our AI betting predictions are continuously benchmarked against closing lines and logged in our public track record. You can see the exact hit-rate, ROI and confidence distribution of every model we run - no cherry-picking, no hidden losses.",
       },
       {
         q: "Which models power BetsPlug predictions?",
@@ -96,7 +96,7 @@ const faqCategories: FaqCategory[] = [
       },
       {
         q: "Do you offer refunds?",
-        a: "We offer a 14-day money-back guarantee on all paid plans under EU consumer law. If BetsPlug isn't right for you, contact support within the first 14 days and we'll issue a full refund — no questions asked. Platinum Lifetime is final-sale after the 14-day window.",
+        a: "We offer a 14-day money-back guarantee on all paid plans under EU consumer law. If BetsPlug isn't right for you, contact support within the first 14 days and we'll issue a full refund - no questions asked. Platinum Lifetime is final-sale after the 14-day window.",
       },
     ],
   },
@@ -107,7 +107,7 @@ const faqCategories: FaqCategory[] = [
     items: [
       {
         q: "Is BetsPlug a betting or gambling website?",
-        a: "No. BetsPlug is a data analytics platform for sports fans, traders and researchers. We provide AI sports predictions, statistics and insights. You cannot gamble, deposit or place bets on BetsPlug — we exist to inform your decisions, not to take them.",
+        a: "No. BetsPlug is a data analytics platform for sports fans, traders and researchers. We provide AI sports predictions, statistics and insights. You cannot gamble, deposit or place bets on BetsPlug - we exist to inform your decisions, not to take them.",
       },
       {
         q: "How is my data protected?",
@@ -209,7 +209,7 @@ export function SeoSection() {
               , you&apos;ve landed in the right place. BetsPlug blends
               artificial intelligence, machine learning and decades of
               statistical modeling into a single platform that tells you which
-              bets carry real value — and which ones are traps set by the
+              bets carry real value - and which ones are traps set by the
               bookmakers. Our AI sports betting predictions are transparent,
               mathematically grounded and updated live, so you can stop
               guessing and start researching like a professional.
@@ -229,7 +229,7 @@ export function SeoSection() {
               trained on hundreds of thousands of historical matches. The
               result: AI betting predictions that quantify win probability,
               draw probability, expected goals and edge over the bookmaker line
-              — all in a single dashboard. Dive into our{" "}
+ - all in a single dashboard. Dive into our{" "}
               <Link
                 href="/predictions"
                 className="font-semibold text-green-400 underline decoration-green-500/30 underline-offset-4 transition-colors hover:text-green-300"
@@ -252,7 +252,7 @@ export function SeoSection() {
               >
                 Pick of the Day
               </Link>{" "}
-              — a single curated AI pick our algorithm rates as the best value
+ - a single curated AI pick our algorithm rates as the best value
               across all monitored leagues. Want to go deeper? Our{" "}
               <Link
                 href="/live"
@@ -266,7 +266,7 @@ export function SeoSection() {
             </p>
 
             <h4 className="mt-8 text-xl font-bold text-white">
-              Transparent Track Record — Verify Every AI Pick
+              Transparent Track Record - Verify Every AI Pick
             </h4>
             <p className="mt-3 text-base leading-relaxed text-slate-400">
               Most sports prediction websites hide their losses. We don&apos;t.
@@ -279,7 +279,7 @@ export function SeoSection() {
                 verified track record
               </Link>
               . You can filter by league, market, confidence tier and date
-              range to see exactly how the models have performed — no edits,
+              range to see exactly how the models have performed - no edits,
               no deletions, no cherry-picking.
             </p>
 
@@ -296,7 +296,7 @@ export function SeoSection() {
               <strong className="text-slate-200">
                 sports analytics and AI prediction platform
               </strong>{" "}
-              — think of us as the quant desk you can rent by the month. Our
+ - think of us as the quant desk you can rent by the month. Our
               job is to give you the data, probabilities and machine-learning
               outputs; the decision to place a bet (and with whom) is entirely
               yours. Learn more{" "}

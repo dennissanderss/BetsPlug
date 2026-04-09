@@ -47,8 +47,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const editorialLocale = readLocaleFromCookie();
   const title =
     editorialLocale === "nl"
-      ? "Wed-types Uitgelegd — BTTS, Over 2.5, DC, DNB | BetsPlug"
-      : "Bet Types Explained — BTTS, Over 2.5, DC, DNB | BetsPlug";
+      ? "Wed-types Uitgelegd - BTTS, Over 2.5, DC, DNB | BetsPlug"
+      : "Bet Types Explained - BTTS, Over 2.5, DC, DNB | BetsPlug";
   const description =
     editorialLocale === "nl"
       ? "Hoe populaire voetbalwedmarkten werken, hoe bookmakers ze prijzen en wanneer de markt value biedt. Uitleg bij BTTS, Over 2.5 goals, Double Chance en Draw No Bet."
@@ -108,8 +108,8 @@ export default function BetTypesIndexPage() {
 
             <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-300 sm:text-lg">
               {t(
-                "Deep dives into the most popular football betting markets — how they're priced, when they offer value, and how BetsPlug's ensemble reads them.",
-                "Diepgaande uitleg over de populairste wedmarkten in het voetbal — hoe ze geprijsd worden, wanneer ze value bieden en hoe het BetsPlug-ensemble ze leest.",
+                "Deep dives into the most popular football betting markets - how they're priced, when they offer value, and how BetsPlug's ensemble reads them.",
+                "Diepgaande uitleg over de populairste wedmarkten in het voetbal - hoe ze geprijsd worden, wanneer ze value bieden en hoe het BetsPlug-ensemble ze leest.",
               )}
             </p>
           </div>

@@ -7,7 +7,7 @@ import { HowItWorksContent } from "./how-it-works-content";
    description, canonical URL and OpenGraph tags.               */
 export const metadata: Metadata = {
   title:
-    "How BetsPlug Works — From raw match data to AI-driven predictions",
+    "How BetsPlug Works - From raw match data to AI-driven predictions",
   description:
     "A full, step-by-step walkthrough of the BetsPlug prediction engine: how we collect data, engineer features, train models, detect value and publish picks you can verify.",
   alternates: {
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title:
-      "How BetsPlug works — the honest, step-by-step prediction engine",
+      "How BetsPlug works - the honest, step-by-step prediction engine",
     description:
       "14 data sources. 1,200+ features. 4 independent models. Every pick timestamped and publicly verifiable. This is the exact pipeline.",
     type: "website",

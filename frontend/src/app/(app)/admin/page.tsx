@@ -215,7 +215,7 @@ function DataSourcesTab() {
               <div className="flex items-center justify-between text-xs">
                 <span className="text-slate-500">Reliability</span>
                 <span className="font-medium tabular-nums text-slate-300">
-                  {src.reliability_score !== null ? `${reliabilityPct}%` : "—"}
+                  {src.reliability_score !== null ? `${reliabilityPct}%` : " - "}
                 </span>
               </div>
               <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
@@ -324,7 +324,7 @@ function IngestionTab() {
                       {Number(run.records_inserted).toLocaleString()}
                     </td>
                     <td className="px-5 py-3 text-right font-mono text-xs tabular-nums text-slate-400">
-                      {run.duration_seconds != null ? `${Number(run.duration_seconds).toFixed(1)}s` : "—"}
+                      {run.duration_seconds != null ? `${Number(run.duration_seconds).toFixed(1)}s` : " - "}
                     </td>
                     <td className="px-5 py-3 whitespace-nowrap">
                       <div className="flex items-center gap-1.5 text-xs text-slate-500">
@@ -446,7 +446,7 @@ function ErrorsTab() {
                           {String(err.run_id).slice(0, 8)}…
                         </span>
                       ) : (
-                        <span className="text-xs text-slate-600">—</span>
+                        <span className="text-xs text-slate-600"> - </span>
                       )}
                     </td>
                     <td className="px-5 py-3 whitespace-nowrap">
@@ -456,7 +456,7 @@ function ErrorsTab() {
                           {formatDateTime(String(err.created_at))}
                         </div>
                       ) : (
-                        <span className="text-xs text-slate-600">—</span>
+                        <span className="text-xs text-slate-600"> - </span>
                       )}
                     </td>
                   </tr>
@@ -620,7 +620,7 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
           </div>
           <div>
             <h3 className="text-sm font-semibold text-slate-100">Scheduler Status</h3>
-            <p className="text-xs text-slate-400">Celery beat schedule — background task cadence</p>
+            <p className="text-xs text-slate-400">Celery beat schedule - background task cadence</p>
           </div>
         </div>
         <div className="overflow-x-auto">

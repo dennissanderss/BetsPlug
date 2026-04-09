@@ -49,7 +49,7 @@ const rows: Row[] = [
     others: "partial",
   },
   {
-    feature: "Data-first — zero hype, zero guessing",
+    feature: "Data-first - zero hype, zero guessing",
     betsplug: "yes",
     others: "no",
   },

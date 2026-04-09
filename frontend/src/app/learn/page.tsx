@@ -48,12 +48,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const editorialLocale = readLocaleFromCookie();
   const title =
     editorialLocale === "nl"
-      ? "Leer Sportwedden — Value, xG, Elo, Kelly, Poisson | BetsPlug"
-      : "Learn Sports Betting — Value, xG, Elo, Kelly, Poisson | BetsPlug";
+      ? "Leer Sportwedden - Value, xG, Elo, Kelly, Poisson | BetsPlug"
+      : "Learn Sports Betting - Value, xG, Elo, Kelly, Poisson | BetsPlug";
   const description =
     editorialLocale === "nl"
-      ? "Diepgaande pillar-gidsen over de wiskunde achter scherpe sportwedden — value betting, expected goals, Elo-ratings, Kelly-criterium, Poisson-modellen en bankroll management."
-      : "In-depth pillar guides on the math behind sharp sports betting — value betting, expected goals, Elo ratings, the Kelly criterion, Poisson models, and bankroll management.";
+      ? "Diepgaande pillar-gidsen over de wiskunde achter scherpe sportwedden - value betting, expected goals, Elo-ratings, Kelly-criterium, Poisson-modellen en bankroll management."
+      : "In-depth pillar guides on the math behind sharp sports betting - value betting, expected goals, Elo ratings, the Kelly criterion, Poisson models, and bankroll management.";
   return {
     title,
     description,
@@ -107,8 +107,8 @@ export default function LearnIndexPage() {
 
             <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-300 sm:text-lg">
               {t(
-                "Six handwritten deep-dives into the concepts that anchor BetsPlug's ensemble — value betting, expected goals, Elo, Kelly, Poisson, and bankroll management.",
-                "Zes handgeschreven deep-dives in de concepten die het ensemble van BetsPlug verankeren — value betting, expected goals, Elo, Kelly, Poisson en bankroll management.",
+                "Six handwritten deep-dives into the concepts that anchor BetsPlug's ensemble - value betting, expected goals, Elo, Kelly, Poisson, and bankroll management.",
+                "Zes handgeschreven deep-dives in de concepten die het ensemble van BetsPlug verankeren - value betting, expected goals, Elo, Kelly, Poisson en bankroll management.",
               )}
             </p>
           </div>

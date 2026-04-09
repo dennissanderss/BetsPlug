@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal/legal-page";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — BetsPlug",
+  title: "Terms of Service - BetsPlug",
   description:
     "The terms and conditions that apply when you use BetsPlug. Please read them before creating an account.",
   alternates: { canonical: "/terms" },
   openGraph: {
-    title: "Terms of Service — BetsPlug",
+    title: "Terms of Service - BetsPlug",
     description:
       "The terms and conditions that apply when you use BetsPlug.",
     type: "website",
@@ -31,7 +31,7 @@ export default function TermsOfServicePage() {
         terms.
       </p>
 
-      <h2>2. What BetsPlug is — and what it isn&apos;t</h2>
+      <h2>2. What BetsPlug is - and what it isn&apos;t</h2>
       <p>
         BetsPlug is an AI-driven sports analytics platform. We use statistical
         models to surface probability-weighted predictions for football,
@@ -40,7 +40,7 @@ export default function TermsOfServicePage() {
       <p>
         <strong>BetsPlug is not a bookmaker.</strong> We do not accept bets, we
         do not handle any betting funds, and we are not affiliated with any
-        sportsbook. Our predictions are informational only — they are not
+        sportsbook. Our predictions are informational only - they are not
         financial advice and they are not a guarantee of any outcome.
       </p>
       <p>
@@ -80,7 +80,7 @@ export default function TermsOfServicePage() {
       <h3>Free trials</h3>
       <p>
         Some plans offer a free trial. To start a trial we charge a symbolic{" "}
-        <strong>€0.01</strong> to verify your card is valid — this is a
+        <strong>€0.01</strong> to verify your card is valid - this is a
         fraud-prevention measure, not a real charge of the plan price. The
         full subscription price is only charged when the trial ends, unless
         you cancel before then.
@@ -89,7 +89,7 @@ export default function TermsOfServicePage() {
       <p>
         Subscriptions renew automatically at the end of each billing cycle
         until you cancel. You authorise us to charge your payment method on
-        each renewal. You can cancel at any time from your account settings —
+        each renewal. You can cancel at any time from your account settings - 
         cancellation takes effect at the end of the current billing cycle.
       </p>
       <h3>Refunds</h3>
@@ -98,7 +98,7 @@ export default function TermsOfServicePage() {
         2011/83/EU. By starting to use the predictions content during the
         14-day period, you expressly waive this right (as permitted by the
         Directive for digital content). Outside that exception, refunds are
-        handled case by case — contact support if you have a problem.
+        handled case by case - contact support if you have a problem.
       </p>
 
       <h2>6. Acceptable use</h2>
@@ -113,8 +113,8 @@ export default function TermsOfServicePage() {
 
       <h2>7. Intellectual property</h2>
       <p>
-        All content on BetsPlug — including the models, the website, the
-        articles and the predictions — is owned by BetsPlug or its licensors
+        All content on BetsPlug - including the models, the website, the
+        articles and the predictions - is owned by BetsPlug or its licensors
         and is protected by copyright, trademark and other intellectual
         property laws. We grant you a limited, personal, non-transferable,
         revocable licence to use the service for your own non-commercial
@@ -139,7 +139,7 @@ export default function TermsOfServicePage() {
       <h2>9. Limitation of liability</h2>
       <p>
         To the maximum extent permitted by law, BetsPlug is not liable for any
-        indirect, incidental, special, consequential or punitive damages —
+        indirect, incidental, special, consequential or punitive damages - 
         including any losses incurred from wagers placed based on our content.
         Our total aggregate liability to you for any claim arising out of or
         relating to these terms or the service is limited to the amount you

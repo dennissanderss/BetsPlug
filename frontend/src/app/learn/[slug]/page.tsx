@@ -300,8 +300,8 @@ export default async function LearnPillarPage(props: {
           <div className="mx-auto max-w-3xl">
             <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
               {t(
-                `${pillar.title.en} — FAQ`,
-                `${pillar.title.nl} — Veelgestelde vragen`,
+                `${pillar.title.en} - FAQ`,
+                `${pillar.title.nl} - Veelgestelde vragen`,
               )}
             </h2>
             <p className="mt-1 text-sm text-slate-400">

@@ -245,7 +245,7 @@ export default function StrategyDetailPage() {
                           month: "short",
                           year: "numeric",
                         })
-                      : "—";
+                      : " - ";
 
                     return (
                       <tr
@@ -263,12 +263,12 @@ export default function StrategyDetailPage() {
                         </td>
                         <td className="px-4 py-3">
                           <span className="rounded-md bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 text-[11px] text-slate-400">
-                            {pick.league_name ?? "—"}
+                            {pick.league_name ?? " - "}
                           </span>
                         </td>
                         <td className="px-4 py-3">
                           <span className="rounded-md bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 text-[11px] font-semibold text-blue-400">
-                            {pick.pick ?? "—"}
+                            {pick.pick ?? " - "}
                           </span>
                         </td>
                         <td className="px-4 py-3 font-mono text-slate-300">
@@ -277,7 +277,7 @@ export default function StrategyDetailPage() {
                         <td className="px-4 py-3 font-mono text-slate-400">
                           {pick.home_score != null && pick.away_score != null
                             ? `${pick.home_score} - ${pick.away_score}`
-                            : "—"}
+                            : " - "}
                         </td>
                         <td className="px-4 py-3">
                           {pick.is_correct === true && (
@@ -302,7 +302,7 @@ export default function StrategyDetailPage() {
                               {pick.pnl >= 0 ? "+" : ""}{pick.pnl.toFixed(2)}u
                             </span>
                           ) : (
-                            <span className="text-slate-600">—</span>
+                            <span className="text-slate-600"> - </span>
                           )}
                         </td>
                       </tr>

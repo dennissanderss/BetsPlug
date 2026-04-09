@@ -12,13 +12,13 @@ const testimonials: Testimonial[] = [
     role: "Semi-pro Bettor",
   },
   {
-    text: "The transparency of their track record is what sold me. Every prediction is logged and verifiable — no cherry-picking like other tipster sites. I finally trust the numbers.",
+    text: "The transparency of their track record is what sold me. Every prediction is logged and verifiable - no cherry-picking like other tipster sites. I finally trust the numbers.",
     image: "https://randomuser.me/api/portraits/women/44.jpg",
     name: "Sophie Hendriks",
     role: "Data Analyst",
   },
   {
-    text: "As a data nerd, I love that BetsPlug shows the math behind every pick. Confidence scores, Elo deltas, edge percentages — it's like having a quant desk in my pocket.",
+    text: "As a data nerd, I love that BetsPlug shows the math behind every pick. Confidence scores, Elo deltas, edge percentages - it's like having a quant desk in my pocket.",
     image: "https://randomuser.me/api/portraits/men/52.jpg",
     name: "Mark Jansen",
     role: "Sports Trader",

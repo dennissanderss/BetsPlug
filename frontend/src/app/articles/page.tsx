@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     canonical: "/articles",
   },
   openGraph: {
-    title: "Latest Sports Analysis — BetsPlug",
+    title: "Latest Sports Analysis - BetsPlug",
     description:
       "AI match breakdowns and data-driven betting insights from the BetsPlug research team.",
     type: "website",

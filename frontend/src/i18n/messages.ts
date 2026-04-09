@@ -31,7 +31,7 @@ const en = {
   "hero.titleLine2": "sports predictions",
   "hero.titleLine3": "for your edge.",
   "hero.subtitle":
-    "BetsPlug unites data, Elo ratings, Poisson models and machine learning into one platform. Live probabilities, deep insights, proven track record — built for serious sports analysts.",
+    "BetsPlug unites data, Elo ratings, Poisson models and machine learning into one platform. Live probabilities, deep insights, proven track record - built for serious sports analysts.",
   "hero.activeUsers": "Active Users",
   "hero.ctaPrimary": "Start Free Trial",
   "hero.ctaSecondary": "How it works",
@@ -47,7 +47,7 @@ const en = {
   "hero.today": "Today",
   "hero.wins": "Wins",
   "hero.usp1Title": "4-Model AI Ensemble",
-  "hero.usp1Desc": "Poisson, XGBoost, Elo & market-implied — blended.",
+  "hero.usp1Desc": "Poisson, XGBoost, Elo & market-implied - blended.",
   "hero.usp2Title": "Verified +EV Picks",
   "hero.usp2Desc": "Only published when the edge beats real-world slippage.",
   "hero.usp3Title": "Public Track Record",
@@ -62,7 +62,7 @@ const en = {
   "comparison.titleA": "Not all prediction sites",
   "comparison.titleB": "are built the same.",
   "comparison.subtitle":
-    "Here's exactly what separates BetsPlug from typical tipster sites — no fine print, no cherry-picked wins.",
+    "Here's exactly what separates BetsPlug from typical tipster sites - no fine print, no cherry-picked wins.",
   "comparison.feature": "Feature",
   "comparison.winner": "Winner",
   "comparison.others": "Others",
@@ -77,9 +77,9 @@ const en = {
   "how.badge": "How it works",
   "how.title": "From signup to smarter picks in 3 steps.",
   "how.subtitle":
-    "A simple, transparent workflow built around data — no hype, no guesswork.",
+    "A simple, transparent workflow built around data - no hype, no guesswork.",
   "how.step1Title": "Create your account",
-  "how.step1Desc": "Sign up in seconds. A symbolic €0.01 activates your 7-day full-access trial — we only charge real cards to keep the platform fraud-free.",
+  "how.step1Desc": "Sign up in seconds. A symbolic €0.01 activates your 7-day full-access trial - we only charge real cards to keep the platform fraud-free.",
   "how.step2Title": "Explore AI predictions",
   "how.step2Desc":
     "Four AI models combine live odds, Elo, form and historical data to surface real edges.",
@@ -116,7 +116,7 @@ const en = {
   "footer.premiumTitleB": "Premium Telegram",
   "footer.premiumTitleC": "group",
   "footer.premiumSubtitle":
-    "Get real-time picks, edge alerts and live chat with our AI analysts. Be the first to know when a high-value match hits the board — straight in your pocket.",
+    "Get real-time picks, edge alerts and live chat with our AI analysts. Be the first to know when a high-value match hits the board - straight in your pocket.",
   "footer.perk1": "Instant value alerts",
   "footer.perk2": "Private analyst Q&A",
   "footer.perk3": "Daily free picks",
@@ -125,7 +125,7 @@ const en = {
   "footer.limited": "Limited spots · Members only",
   "footer.onlineNow": "1,200+ members online",
   "footer.brandTagline":
-    "BetsPlug unites data, Elo ratings, Poisson models and machine learning into one platform — built for serious sports analysts who refuse to guess.",
+    "BetsPlug unites data, Elo ratings, Poisson models and machine learning into one platform - built for serious sports analysts who refuse to guess.",
   "footer.product": "Product",
   "footer.company": "Company",
   "footer.legal": "Legal",
@@ -133,7 +133,7 @@ const en = {
   "footer.secureDesc": "256-bit SSL encrypted checkout",
   "footer.pciCompliant": "PCI DSS compliant",
   "footer.copyright":
-    "All rights reserved. BetsPlug is a data & analytics platform — not a gambling operator.",
+    "All rights reserved. BetsPlug is a data & analytics platform - not a gambling operator.",
   "footer.responsible": "18+ Play responsibly",
 
   /* Leagues ticker */
@@ -150,14 +150,14 @@ const en = {
     "BetsPlug unites and secures a growing ecosystem of data sources, AI models, and proven strategies. One platform for data-driven sports analysts who refuse to guess.",
   "trusted.card1Title": "Service for Any Level of Expertise.",
   "trusted.card1Desc":
-    "From beginner to pro-analyst — our dashboards, tutorials, and transparent stats make it easy to understand every prediction.",
+    "From beginner to pro-analyst - our dashboards, tutorials, and transparent stats make it easy to understand every prediction.",
   "trusted.card2Title": "Industry best practices.",
   "trusted.card2Desc":
     "Four AI models (Elo, Poisson, Logistic, Ensemble) combine to deliver predictions you can trust. Proven methods, transparent results.",
   "trusted.learnMore": "Learn More",
   "trusted.card3Title": "Protected by transparency.",
   "trusted.card3Desc":
-    "Every prediction is logged, tracked, and publicly verified. No hidden results, no cherry-picking — just data you can audit yourself.",
+    "Every prediction is logged, tracked, and publicly verified. No hidden results, no cherry-picking - just data you can audit yourself.",
 
   /* Track record section */
   "track.label": "Track Record",
@@ -172,7 +172,7 @@ const en = {
   "track.titleB": "anytime & anywhere.",
   "track.rating": "4.9 / 5 from 1,200+ analysts",
   "track.desc1":
-    "This is a unified platform that secures a growing ecosystem of sports data, AI predictions, and strategy backtesting tools. All predictions are logged and publicly tracked — full transparency, always.",
+    "This is a unified platform that secures a growing ecosystem of sports data, AI predictions, and strategy backtesting tools. All predictions are logged and publicly tracked - full transparency, always.",
   "track.desc2":
     "Whether you follow football, basketball, or tennis, BetsPlug unites data and machine learning into insights you can actually use.",
   "track.cta": "Learn More",
@@ -221,7 +221,7 @@ const en = {
   "finalCta.cancelAnytime": "Cancel Anytime",
   "finalCta.instantAccess": "Instant Access",
 
-  /* Pricing — plan details */
+  /* Pricing - plan details */
   "pricing.bronzeTagline": "Full access trial for just €0.01",
   "pricing.bronzeCta": "Start €0.01 Trial",
   "pricing.bronzeF1": "Full Gold access for 7 days",
@@ -250,13 +250,13 @@ const en = {
   "pricing.billedYearlySilver": "Billed €95,90 yearly",
   "pricing.billedYearlyGold": "Billed €143,90 yearly",
   "pricing.platTagline": "Lifetime access. Founder-tier perks.",
-  "pricing.platPitch": "Pay once, unlock every current and future Gold feature — plus private perks you won't find on any plan.",
+  "pricing.platPitch": "Pay once, unlock every current and future Gold feature - plus private perks you won't find on any plan.",
   "pricing.platBadgeLifetime": "Lifetime Deal",
   "pricing.platLimited": "Limited to 100/year",
   "pricing.platOneTime": "One-time payment",
   "pricing.platNoSub": "No subscription. No renewals. Ever.",
   "pricing.platCta": "Claim Lifetime Access",
-  "pricing.platF1": "Lifetime Gold — every current & future feature",
+  "pricing.platF1": "Lifetime Gold - every current & future feature",
   "pricing.platF2": "Private Platinum Telegram (max 20 seats)",
   "pricing.platF3": "1-on-1 onboarding call with our founders",
   "pricing.platF4": "Monthly personal strategy review",
@@ -276,7 +276,7 @@ const en = {
   "articles.sportMlb": "MLB",
   "articles.sportNhl": "NHL",
   "articles.readTime": "min read",
-  "articles.empty": "No articles in this category yet — check back soon.",
+  "articles.empty": "No articles in this category yet - check back soon.",
   "articles.back": "Back to all articles",
   "articles.breadcrumbHome": "Home",
   "articles.breadcrumbBlog": "Articles",
@@ -284,7 +284,7 @@ const en = {
   "articles.related": "Related Articles",
   "articles.ctaBadge": "BetsPlug members",
   "articles.ctaTitle": "Turn this analysis into a real edge.",
-  "articles.ctaSubtitle": "Get live AI probabilities, Pick of the Day and the full Ensemble model output — free for 7 days.",
+  "articles.ctaSubtitle": "Get live AI probabilities, Pick of the Day and the full Ensemble model output - free for 7 days.",
   "articles.ctaButton": "Start Free Trial",
   "articles.ctaNoCard": "Symbolic €0.01 to activate your 7-day trial",
   "articles.tldr": "TL;DR",
@@ -300,25 +300,25 @@ const en = {
   "seo.titleA": "AI Sports Predictions &",
   "seo.titleB": "Data-Driven Betting Picks",
   "seo.subtitle":
-    "BetsPlug is the data-driven home for AI sports predictions, machine-learning betting picks and statistical match forecasts. Whether you're researching your next football accumulator, hunting value in NBA player props, or backtesting a new strategy — our AI sports predictor gives you the edge you need to beat the closing line.",
+    "BetsPlug is the data-driven home for AI sports predictions, machine-learning betting picks and statistical match forecasts. Whether you're researching your next football accumulator, hunting value in NBA player props, or backtesting a new strategy - our AI sports predictor gives you the edge you need to beat the closing line.",
   "seo.pillar1Title": "AI Sports Prediction Engine",
   "seo.pillar1Desc":
     "Our AI sports prediction engine combines Elo ratings, Poisson goal models, and machine learning to forecast match outcomes across football, basketball, and tennis with data-driven accuracy.",
   "seo.pillar2Title": "Data-Backed Betting Predictions",
   "seo.pillar2Desc":
-    "Every AI betting prediction on BetsPlug is backed by thousands of historical matches, live form data, and expected-goals metrics — giving you the sharpest sports picks online.",
+    "Every AI betting prediction on BetsPlug is backed by thousands of historical matches, live form data, and expected-goals metrics - giving you the sharpest sports picks online.",
   "seo.pillar3Title": "Verified Track Record",
   "seo.pillar3Desc":
     "Transparency first. Explore our public track record to see every AI sports pick we've ever published, with full ROI, hit-rate and confidence scores logged and timestamped.",
   "seo.pillar4Title": "Pick of the Day",
   "seo.pillar4Desc":
-    "Short on time? Our daily AI-powered Pick of the Day highlights the single highest-confidence value pick across all leagues — selected by our algorithm, not by feeling.",
+    "Short on time? Our daily AI-powered Pick of the Day highlights the single highest-confidence value pick across all leagues - selected by our algorithm, not by feeling.",
   "seo.pillar5Title": "Live AI Probabilities",
   "seo.pillar5Desc":
     "Watch probabilities shift in real-time as matches unfold. Our live AI sports predictor recalculates win probabilities every second so you can spot value the moment it appears.",
   "seo.pillar6Title": "Analytics, Not Gambling",
   "seo.pillar6Desc":
-    "BetsPlug is a sports analytics platform — not a bookmaker. We deliver AI-driven sports predictions and data insights so you can make informed decisions, without ever placing a bet on our site.",
+    "BetsPlug is a sports analytics platform - not a bookmaker. We deliver AI-driven sports predictions and data insights so you can make informed decisions, without ever placing a bet on our site.",
 
   /* FAQ */
   "faq.badge": "Frequently Asked Questions",
@@ -339,14 +339,14 @@ const en = {
   "contact.titleA": "How can we",
   "contact.titleB": "help you?",
   "contact.subtitle":
-    "Get instant answers from our AI assistant, browse the FAQ, or reach our team directly — whichever works best for you.",
+    "Get instant answers from our AI assistant, browse the FAQ, or reach our team directly - whichever works best for you.",
   "contact.chatPlaceholder": "Ask our AI anything about BetsPlug…",
   "contact.chatStart": "Start chat",
   "contact.chatHint": "Powered by BetsPlug AI · Usually responds in seconds",
 
   "contact.card1Title": "Chat with AI Assistant",
   "contact.card1Desc":
-    "Get instant answers about pricing, models, predictions and anything else — 24/7, no waiting.",
+    "Get instant answers about pricing, models, predictions and anything else - 24/7, no waiting.",
   "contact.card1Cta": "Open chat",
   "contact.card2Title": "Join Telegram Community",
   "contact.card2Desc":
@@ -369,7 +369,7 @@ const en = {
   "contact.faqGroup1": "Getting Started",
   "contact.faq1Q": "What exactly is BetsPlug?",
   "contact.faq1A":
-    "BetsPlug is a pure sports analytics platform. We publish AI-driven predictions, Elo ratings, Poisson models and transparent track records so you can make data-backed decisions. We're not a bookmaker — you cannot place bets with us.",
+    "BetsPlug is a pure sports analytics platform. We publish AI-driven predictions, Elo ratings, Poisson models and transparent track records so you can make data-backed decisions. We're not a bookmaker - you cannot place bets with us.",
   "contact.faq2Q": "Do I need to pay to try BetsPlug?",
   "contact.faq2A":
     "No. Our Bronze tier is 100% free and gives you a daily AI pick, basic predictions and access to our public track record. Upgrade to Silver or Gold only when you want live probabilities, backtesting and advanced markets.",
@@ -380,7 +380,7 @@ const en = {
   "contact.faqGroup2": "Account & Billing",
   "contact.faq4Q": "Can I cancel my subscription anytime?",
   "contact.faq4A":
-    "Yes, all Silver and Gold plans are month-to-month with zero lock-in. Cancel from your dashboard and keep access until the end of your current billing period — no questions asked.",
+    "Yes, all Silver and Gold plans are month-to-month with zero lock-in. Cancel from your dashboard and keep access until the end of your current billing period - no questions asked.",
   "contact.faq5Q": "Do you offer refunds?",
   "contact.faq5A": "We offer a 14-day money-back guarantee on all paid plans under EU consumer law. If BetsPlug isn't right for you, email support within the first 14 days and we'll refund in full. Platinum Lifetime is final-sale after the 14-day window.",
   "contact.faq6Q": "Is my payment information secure?",
@@ -403,24 +403,24 @@ const en = {
     "Ask me about pricing, our AI models, the track record, or anything else BetsPlug-related.",
   "chatbot.placeholder": "Type your message…",
   "chatbot.close": "Close chat",
-  "chatbot.footer": "AI assistant grounded on BetsPlug docs — for anything else, email support@betsplug.com",
+  "chatbot.footer": "AI assistant grounded on BetsPlug docs - for anything else, email support@betsplug.com",
   "chatbot.suggestion1": "How does the Pick of the Day work?",
   "chatbot.suggestion2": "What's the difference between Silver and Gold?",
   "chatbot.suggestion3": "How accurate are your predictions?",
   "chatbot.replyDefault":
     "Thanks for reaching out! A BetsPlug analyst will get back to you shortly. In the meantime, check our FAQ or drop us a line at support@betsplug.com.",
   "chatbot.replyHello":
-    "Hey there! 👋 I'm the BetsPlug AI. Ask me anything about our models, pricing or predictions — I'll do my best to help.",
-  "chatbot.replyPricing": "We have four tiers. Bronze is a symbolic €0.01 trial — full access for 7 days, real card required (this keeps the platform fraud-free). Silver (€9.99/mo) is an entry-level plan limited to the top 5 European leagues and Ensemble-only picks with a 2h delay. Gold (€14.99/mo) is our most popular — all 30+ leagues worldwide, all 4 AI models, instant picks, daily Pick of the Day, Gold Telegram and Strategy Lab. Platinum (€199 one-time lifetime) adds private Telegram, 1-on-1 onboarding and a lifetime price lock. All paid plans are backed by a 14-day EU money-back guarantee.",
-  "chatbot.replyRefund": "All Silver and Gold plans can be cancelled anytime from your dashboard — you keep access until the end of your billing period. We also offer a 14-day money-back guarantee on all paid plans under EU consumer law. Platinum Lifetime is final-sale after the 14-day refund window.",
+    "Hey there! 👋 I'm the BetsPlug AI. Ask me anything about our models, pricing or predictions - I'll do my best to help.",
+  "chatbot.replyPricing": "We have four tiers. Bronze is a symbolic €0.01 trial - full access for 7 days, real card required (this keeps the platform fraud-free). Silver (€9.99/mo) is an entry-level plan limited to the top 5 European leagues and Ensemble-only picks with a 2h delay. Gold (€14.99/mo) is our most popular - all 30+ leagues worldwide, all 4 AI models, instant picks, daily Pick of the Day, Gold Telegram and Strategy Lab. Platinum (€199 one-time lifetime) adds private Telegram, 1-on-1 onboarding and a lifetime price lock. All paid plans are backed by a 14-day EU money-back guarantee.",
+  "chatbot.replyRefund": "All Silver and Gold plans can be cancelled anytime from your dashboard - you keep access until the end of your billing period. We also offer a 14-day money-back guarantee on all paid plans under EU consumer law. Platinum Lifetime is final-sale after the 14-day refund window.",
   "chatbot.replyAccuracy":
-    "Every prediction is logged in our public track record with hit-rate, ROI and confidence scores. You can filter by league, market and date range. No cherry-picking, no hidden losses — transparency is the whole point.",
+    "Every prediction is logged in our public track record with hit-rate, ROI and confidence scores. You can filter by league, market and date range. No cherry-picking, no hidden losses - transparency is the whole point.",
   "chatbot.replyTelegram":
-    "Our Telegram community has 1,200+ active members with daily picks, edge alerts and live Q&A with our analysts. Join at t.me/betsplug — free for Bronze users, VIP channels for Silver/Gold.",
+    "Our Telegram community has 1,200+ active members with daily picks, edge alerts and live Q&A with our analysts. Join at t.me/betsplug - free for Bronze users, VIP channels for Silver/Gold.",
 
   /* About Us page */
   "about.metaTitle":
-    "About BetsPlug — The team behind the AI sports analytics platform",
+    "About BetsPlug - The team behind the AI sports analytics platform",
   "about.metaDesc":
     "Meet the two engineers building BetsPlug. Sports fanatics with an ICT background, turning raw match data into transparent, probability-driven predictions for football, basketball, tennis and more.",
   "about.breadcrumbHome": "Home",
@@ -435,7 +435,7 @@ const en = {
   "about.missionBadge": "The Mission",
   "about.missionTitle": "We turn raw match data into a measurable edge.",
   "about.missionBody1":
-    "For too long the sports prediction market has run on hype. YouTube gurus chasing clout, Telegram channels selling \"locks of the week,\" paid tipsters with no verifiable history. As lifelong football, basketball and tennis fans, it drove us up the wall — because we knew the underlying data was far better than the noise surrounding it.",
+    "For too long the sports prediction market has run on hype. YouTube gurus chasing clout, Telegram channels selling \"locks of the week,\" paid tipsters with no verifiable history. As lifelong football, basketball and tennis fans, it drove us up the wall - because we knew the underlying data was far better than the noise surrounding it.",
   "about.missionBody2":
     "So we built the tool we always wished existed: a platform that ingests thousands of matches per week, runs them through Elo ratings, Poisson scoring models and gradient-boosted classifiers, and only surfaces the picks where our models genuinely disagree with the closing line. No vibes. No survivorship bias. Just math, published in the open.",
   "about.missionCta": "See how it works",
@@ -454,19 +454,19 @@ const en = {
   "about.valuesBadge": "What We Believe",
   "about.valuesTitle": "Four principles behind every pick.",
   "about.valuesSubtitle":
-    "BetsPlug isn't a tipster. It's a disciplined system. These are the rules we wrote for ourselves — and the ones we refuse to break.",
+    "BetsPlug isn't a tipster. It's a disciplined system. These are the rules we wrote for ourselves - and the ones we refuse to break.",
   "about.value1Title": "Data over opinion",
   "about.value1Desc":
     "Every recommendation comes from a model, not a mood. We publish the explicit probability, the expected value and the confidence score so you can verify the reasoning instead of trusting a face on a screen.",
   "about.value2Title": "Track record in public",
   "about.value2Desc":
-    "Every pick we call lives forever on our public track record — wins, losses and pushes, never deleted. If we don't beat the market over the long run, we don't deserve a cent of your money. Transparency is the whole point.",
+    "Every pick we call lives forever on our public track record - wins, losses and pushes, never deleted. If we don't beat the market over the long run, we don't deserve a cent of your money. Transparency is the whole point.",
   "about.value3Title": "Continuous retraining",
   "about.value3Desc":
     "Football evolves. Managers get sacked, rosters reshuffle, new leagues surface. Our models retrain weekly on fresh results so they never stagnate, and we publish the retraining notes alongside the picks.",
   "about.value4Title": "Your edge, not ours",
   "about.value4Desc":
-    "We're analysts, not bookmakers. When the market moves in your favour, you're the one who benefits — not a platform skimming a vig off your losses. That alignment shapes every product decision we make.",
+    "We're analysts, not bookmakers. When the market moves in your favour, you're the one who benefits - not a platform skimming a vig off your losses. That alignment shapes every product decision we make.",
 
   "about.teamBadge": "Meet the Founders",
   "about.teamTitle": "Two founders. Zero armchair experts.",
@@ -485,14 +485,14 @@ const en = {
 
   "about.ctaTitle": "Ready to trade guesswork for data?",
   "about.ctaSubtitle":
-    "Join 1,500+ analysts who get the picks, the probabilities and the receipts — delivered before the closing line adjusts.",
+    "Join 1,500+ analysts who get the picks, the probabilities and the receipts - delivered before the closing line adjusts.",
   "about.ctaButton": "Start Free Trial",
 
   /* Track Record page */
   "tr.metaTitle":
-    "Track Record — Verified BetsPlug prediction performance",
+    "Track Record - Verified BetsPlug prediction performance",
   "tr.metaDesc":
-    "Transparent, auditable results for every BetsPlug pick. See how our AI models turn raw match data into a measurable edge — documented weekly, never cherry-picked.",
+    "Transparent, auditable results for every BetsPlug pick. See how our AI models turn raw match data into a measurable edge - documented weekly, never cherry-picked.",
   "tr.breadcrumbHome": "Home",
   "tr.breadcrumbTrack": "Track Record",
 
@@ -500,7 +500,7 @@ const en = {
   "tr.heroTitleA": "A track record you can",
   "tr.heroTitleB": "actually verify.",
   "tr.heroSubtitle":
-    "Every pick BetsPlug publishes is timestamped, probability-weighted and logged to a public ledger — win or lose. This is how the numbers are built, and how real users put them to work.",
+    "Every pick BetsPlug publishes is timestamped, probability-weighted and logged to a public ledger - win or lose. This is how the numbers are built, and how real users put them to work.",
   "tr.heroCtaPrimary": "See the latest results",
   "tr.heroCtaSecondary": "Back to home",
 
@@ -522,7 +522,7 @@ const en = {
   "tr.kpi4Label": "Brier score (lower = better)",
   "tr.kpi4Note": "Calibrated across win/draw/loss",
 
-  /* How we track it — data pipeline */
+  /* How we track it - data pipeline */
   "tr.pipeBadge": "How the data is processed",
   "tr.pipeTitle": "From raw match data to a scored prediction.",
   "tr.pipeSubtitle":
@@ -535,16 +535,16 @@ const en = {
     "Team names, leagues and market types are mapped to a single canonical schema. Outliers, late-cancelled games and suspended markets are flagged and removed before modelling.",
   "tr.pipe3Title": "Feature engineering",
   "tr.pipe3Desc":
-    "For every fixture we compute 1,200+ features — Elo, xG trends, rest days, travel, head-to-head, referee bias, market movement — then store them in a point-in-time feature store so training never leaks future information.",
+    "For every fixture we compute 1,200+ features - Elo, xG trends, rest days, travel, head-to-head, referee bias, market movement - then store them in a point-in-time feature store so training never leaks future information.",
   "tr.pipe4Title": "Model ensemble",
   "tr.pipe4Desc":
     "Four independent models vote on the outcome: a Poisson goals model, a gradient-boosted classifier, an Elo-based baseline and a market-implied calibrator. Their probabilities are blended with stacked regression.",
   "tr.pipe5Title": "Value detection",
   "tr.pipe5Desc":
-    "We compare the ensemble probability to the best available market odds. Only picks with a statistically significant edge — after commission and expected closing-line slippage — are marked as value.",
+    "We compare the ensemble probability to the best available market odds. Only picks with a statistically significant edge - after commission and expected closing-line slippage - are marked as value.",
   "tr.pipe6Title": "Publish & grade",
   "tr.pipe6Desc":
-    "Picks are timestamped the moment they go live. Once the match ends, results are graded automatically and written to the public track-record ledger — win, loss or push.",
+    "Picks are timestamped the moment they go live. Once the match ends, results are graded automatically and written to the public track-record ledger - win, loss or push.",
 
   /* Methodology principles */
   "tr.methodBadge": "Methodology",
@@ -553,13 +553,13 @@ const en = {
     "Every number on this page survives these guardrails. If a result can't, it doesn't get counted.",
   "tr.method1Title": "Point-in-time only",
   "tr.method1Desc":
-    "Models are trained on data that was actually available at kick-off — no hindsight, no silently re-graded matches.",
+    "Models are trained on data that was actually available at kick-off - no hindsight, no silently re-graded matches.",
   "tr.method2Title": "Closing-line adjusted",
   "tr.method2Desc":
     "ROI figures subtract realistic slippage between our publish time and the closing line, so you see returns you could actually execute.",
   "tr.method3Title": "Nothing is deleted",
   "tr.method3Desc":
-    "Losing picks stay on the ledger forever. A track record that only shows winners isn't a track record — it's marketing.",
+    "Losing picks stay on the ledger forever. A track record that only shows winners isn't a track record - it's marketing.",
   "tr.method4Title": "Third-party gradable",
   "tr.method4Desc":
     "Every pick includes the match ID, market, odds and timestamp so any user or auditor can verify the outcome independently.",
@@ -573,7 +573,7 @@ const en = {
   "tr.case1Role": "Weekend football specialist",
   "tr.case1Name": "Luca, 34 · Milan",
   "tr.case1Quote":
-    "I filter the track record by Serie A and over/under markets only. In 2025 that slice hit 61% on 412 picks — so I size up confidently on Sunday mornings instead of second-guessing myself.",
+    "I filter the track record by Serie A and over/under markets only. In 2025 that slice hit 61% on 412 picks - so I size up confidently on Sunday mornings instead of second-guessing myself.",
   "tr.case1Metric1Label": "His filtered sample size",
   "tr.case1Metric1Value": "412 picks",
   "tr.case1Metric2Label": "Verified hit rate",
@@ -586,7 +586,7 @@ const en = {
   "tr.case2Role": "Data-driven NBA fan",
   "tr.case2Name": "Priya, 29 · London",
   "tr.case2Quote":
-    "I care about calibration more than hit rate. Seeing that BetsPlug's NBA moneyline Brier score sits under 0.07 tells me the probabilities are honest — not just lucky.",
+    "I care about calibration more than hit rate. Seeing that BetsPlug's NBA moneyline Brier score sits under 0.07 tells me the probabilities are honest - not just lucky.",
   "tr.case2Metric1Label": "NBA Brier score",
   "tr.case2Metric1Value": "0.068",
   "tr.case2Metric2Label": "Games graded",
@@ -611,15 +611,15 @@ const en = {
 
   /* Transparency CTA */
   "tr.transBadge": "Audit it yourself",
-  "tr.transTitle": "Don't take our word for it — read the ledger.",
+  "tr.transTitle": "Don't take our word for it - read the ledger.",
   "tr.transSubtitle":
     "Every graded prediction we've ever published is searchable by match, date, market and model. No filters hide the losers.",
   "tr.transCta1": "Explore live results",
   "tr.transCta2": "Start Free Trial",
 
-  /* How It Works page — dedicated deep-dive */
+  /* How It Works page - dedicated deep-dive */
   "hiw.metaTitle":
-    "How BetsPlug Works — From raw match data to AI-driven predictions",
+    "How BetsPlug Works - From raw match data to AI-driven predictions",
   "hiw.metaDesc":
     "A full, step-by-step walkthrough of the BetsPlug prediction engine: how we collect data, engineer features, train models, detect value and publish picks you can verify.",
   "hiw.breadcrumbHome": "Home",
@@ -629,7 +629,7 @@ const en = {
   "hiw.heroTitleA": "How we turn raw match data",
   "hiw.heroTitleB": "into predictions you can trust.",
   "hiw.heroSubtitle":
-    "Every pick on BetsPlug is the end of a long, carefully engineered pipeline. No hunches, no cherry-picking, no hidden rules. This is the exact process — from the moment a fixture is announced, to the moment a verified pick lands on your dashboard.",
+    "Every pick on BetsPlug is the end of a long, carefully engineered pipeline. No hunches, no cherry-picking, no hidden rules. This is the exact process - from the moment a fixture is announced, to the moment a verified pick lands on your dashboard.",
   "hiw.heroCtaPrimary": "See the track record",
   "hiw.heroCtaSecondary": "Start Free Trial",
   "hiw.heroStatDataSources": "Data sources",
@@ -643,7 +643,7 @@ const en = {
   "hiw.overviewSubtitle":
     "Each stage is built and monitored independently. Here's exactly what happens under the hood.",
 
-  /* Stage 1 — Data acquisition */
+  /* Stage 1 - Data acquisition */
   "hiw.s1Badge": "Stage 01 · Data acquisition",
   "hiw.s1Title": "We start where the market starts: the raw feed.",
   "hiw.s1Lead":
@@ -651,22 +651,22 @@ const en = {
   "hiw.s1P1":
     "Every 6 hours we sync fixtures, results and standings from API-Football and football-data.org for 6 European leagues. Bookmaker odds are fetched from The Odds API every 2 hours. During match hours (12:00-24:00 UTC), live scores update every 5 minutes so your dashboard stays current.",
   "hiw.s1P2":
-    "Every record is timestamped so we can replay any moment in history exactly as our models saw it — critical for honest backtesting.",
+    "Every record is timestamped so we can replay any moment in history exactly as our models saw it - critical for honest backtesting.",
   "hiw.s1Point1Title": "3 data providers",
   "hiw.s1Point1Desc":
-    "API-Football, football-data.org and The Odds API — each covering different aspects of the match.",
+    "API-Football, football-data.org and The Odds API - each covering different aspects of the match.",
   "hiw.s1Point2Title": "6-hour sync cycle",
   "hiw.s1Point2Desc":
     "Fixtures and predictions refresh every 6 hours. Live scores update every 5 minutes during match hours.",
   "hiw.s1Point3Title": "Point-in-time storage",
   "hiw.s1Point3Desc":
-    "Nothing is overwritten. Every change is a new row — history is permanent.",
+    "Nothing is overwritten. Every change is a new row - history is permanent.",
 
-  /* Stage 2 — Cleaning */
+  /* Stage 2 - Cleaning */
   "hiw.s2Badge": "Stage 02 · Cleaning & normalisation",
   "hiw.s2Title": "We enforce one source of truth before a model ever sees the data.",
   "hiw.s2Lead":
-    "Raw sports data is famously messy. Team names differ between feeds, leagues rename themselves, markets get suspended mid-match. We fix all of it — in a deterministic, reproducible way.",
+    "Raw sports data is famously messy. Team names differ between feeds, leagues rename themselves, markets get suspended mid-match. We fix all of it - in a deterministic, reproducible way.",
   "hiw.s2P1":
     "Teams, leagues, players and market types are mapped to a single canonical schema through a manually audited lookup table. Suspended, voided or late-cancelled markets are flagged and excluded before any model ever touches them.",
   "hiw.s2P2":
@@ -678,15 +678,15 @@ const en = {
   "hiw.s2Bullet4": "Odds sanity-checked across books",
   "hiw.s2Bullet5": "Missing values explicitly marked (never silently imputed)",
 
-  /* Stage 3 — Feature engineering */
+  /* Stage 3 - Feature engineering */
   "hiw.s3Badge": "Stage 03 · Feature engineering",
-  "hiw.s3Title": "Multiple signal families per match — each one earns its place.",
+  "hiw.s3Title": "Multiple signal families per match - each one earns its place.",
   "hiw.s3Lead":
     "A prediction is only as sharp as the signals it's built on. This is where a match becomes a structured profile our models can reason about.",
   "hiw.s3P1":
     "For every fixture we compute features across several families: Elo ratings, Poisson goal rates, league standings, recent form, head-to-head history and bookmaker odds. These feed into three independent models that each look at the data differently.",
   "hiw.s3P2":
-    "All features use only data available before kick-off. Our models never see the future when generating a prediction — a key safeguard against overfitting.",
+    "All features use only data available before kick-off. Our models never see the future when generating a prediction - a key safeguard against overfitting.",
   "hiw.s3Family1Title": "Elo ratings",
   "hiw.s3Family1Desc": "Dynamic team strength ratings updated after every match result.",
   "hiw.s3Family2Title": "Poisson goal rates",
@@ -700,7 +700,7 @@ const en = {
   "hiw.s3Family6Title": "Match context",
   "hiw.s3Family6Desc": "Home/away status, scheduling and fixture details.",
 
-  /* Stage 4 — Model ensemble */
+  /* Stage 4 - Model ensemble */
   "hiw.s4Badge": "Stage 04 · Model ensemble",
   "hiw.s4Title": "Three independent models. One honest probability.",
   "hiw.s4Lead":
@@ -715,20 +715,20 @@ const en = {
     "Estimates expected attacking and defensive goal rates for each team and integrates over all possible scorelines to produce match outcome probabilities.",
   "hiw.s4Model3Name": "Logistic Regression",
   "hiw.s4Model3Desc":
-    "A statistical classifier that uses multiple match features — form, standings, home advantage — to predict match outcomes directly.",
+    "A statistical classifier that uses multiple match features - form, standings, home advantage - to predict match outcomes directly.",
   "hiw.s4BlendTitle": "Weighted averaging",
   "hiw.s4BlendDesc":
     "The three probabilities are combined through weighted averaging. The current weights (Elo 1.0, Poisson 1.5, Logistic 1.0) give slightly more influence to the Poisson model.",
 
-  /* Stage 5 — Value detection */
+  /* Stage 5 - Value detection */
   "hiw.s5Badge": "Stage 05 · Value detection",
   "hiw.s5Title": "We only publish picks where our edge survives the real world.",
   "hiw.s5Lead":
     "Being right isn't enough. A pick only becomes a pick when our probability suggests value compared to the available odds.",
   "hiw.s5P1":
-    "We compare our ensemble probabilities to bookmaker odds fetched from The Odds API. Our Strategy Lab filters predictions using rules validated through walk-forward backtesting — such as requiring high home-win probability or low draw probability.",
+    "We compare our ensemble probabilities to bookmaker odds fetched from The Odds API. Our Strategy Lab filters predictions using rules validated through walk-forward backtesting - such as requiring high home-win probability or low draw probability.",
   "hiw.s5P2":
-    "Currently 3 strategies have passed statistical validation with positive backtested ROI over 90 days. But these are backtested results on a limited sample — real-world performance will vary. We are honest about that.",
+    "Currently 3 strategies have passed statistical validation with positive backtested ROI over 90 days. But these are backtested results on a limited sample - real-world performance will vary. We are honest about that.",
   "hiw.s5FormulaTitle": "The check every pick has to pass",
   "hiw.s5FormulaLine1": "Model probability × Best odds",
   "hiw.s5FormulaLine2": "−  expected slippage",
@@ -737,7 +737,7 @@ const en = {
   "hiw.s5FormulaFoot":
     "If this number isn't clearly above zero, the pick never leaves the lab.",
 
-  /* Stage 6 — Publishing */
+  /* Stage 6 - Publishing */
   "hiw.s6Badge": "Stage 06 · Publishing & grading",
   "hiw.s6Title": "Every pick is timestamped, shipped and publicly gradable.",
   "hiw.s6Lead":
@@ -745,10 +745,10 @@ const en = {
   "hiw.s6P1":
     "The moment a pick is generated, it is timestamped, signed, and published to your dashboard and our public ledger at the same second. You and a regulator see the exact same record.",
   "hiw.s6P2":
-    "Once the match ends, every pick is graded automatically against the official result feed. Wins, losses and pushes are all recorded. Losing picks stay on the ledger forever — because a track record that only shows winners isn't a track record, it's marketing.",
+    "Once the match ends, every pick is graded automatically against the official result feed. Wins, losses and pushes are all recorded. Losing picks stay on the ledger forever - because a track record that only shows winners isn't a track record, it's marketing.",
   "hiw.s6Point1Title": "Same-second publishing",
   "hiw.s6Point1Desc":
-    "Subscribers and the public ledger are updated simultaneously — no back-dating possible.",
+    "Subscribers and the public ledger are updated simultaneously - no back-dating possible.",
   "hiw.s6Point2Title": "Automatic grading",
   "hiw.s6Point2Desc":
     "Results are scored from the official feed, not by a human who might look the other way.",
@@ -756,7 +756,7 @@ const en = {
   "hiw.s6Point3Desc":
     "Losing picks are permanent. The ledger is append-only by design.",
 
-  /* Stage 7 — Continuous evaluation */
+  /* Stage 7 - Continuous evaluation */
   "hiw.s7Badge": "Stage 07 · Continuous evaluation",
   "hiw.s7Title": "Every prediction is graded against the real result.",
   "hiw.s7Lead":
@@ -764,7 +764,7 @@ const en = {
   "hiw.s7P1":
     "Every 6 hours, after results are synced, the system scores all finished predictions. Each pick is evaluated with Brier score and log-loss metrics, and marked as correct or incorrect. This lets us track real accuracy over time.",
   "hiw.s7P2":
-    "Current 3-way accuracy (home/draw/away) is around 50% — above the 33% random baseline, but not extraordinary. We publish all results, wins and losses alike, so you can verify the track record yourself.",
+    "Current 3-way accuracy (home/draw/away) is around 50% - above the 33% random baseline, but not extraordinary. We publish all results, wins and losses alike, so you can verify the track record yourself.",
   "hiw.s7Bullet1": "6-hour evaluation cycle",
   "hiw.s7Bullet2": "Brier score and log-loss tracking",
   "hiw.s7Bullet3": "All predictions graded automatically",
@@ -774,7 +774,7 @@ const en = {
   "hiw.proofBadge": "Why this matters",
   "hiw.proofTitle": "The reason our predictions actually hold up.",
   "hiw.proofSubtitle":
-    "Every choice in this pipeline exists for one reason: to give you an honest, data-driven probability — not a guess.",
+    "Every choice in this pipeline exists for one reason: to give you an honest, data-driven probability - not a guess.",
   "hiw.proof1Title": "No hindsight bias",
   "hiw.proof1Desc":
     "Models only see data available before kick-off. Predictions are generated and timestamped before the match starts.",
@@ -794,23 +794,23 @@ const en = {
   "hiw.proof6Desc":
     "A two-person team of sports fanatics with an ICT background. Every line of this pipeline is hand-rolled, not bolted together from plugins.",
 
-  /* Objection section — FAQ */
+  /* Objection section - FAQ */
   "hiw.faqBadge": "Honest answers",
   "hiw.faqTitle": "The questions every serious analyst asks us.",
   "hiw.faqSubtitle":
     "If you've tried a tipster site before, you've probably been burned. Here's exactly why BetsPlug is different.",
   "hiw.faq1Q": "How accurate are your predictions?",
   "hiw.faq1A":
-    "Our 3-way match predictions (home/draw/away) hit around 50% accuracy. That's above the 33% random baseline, but we're honest — it's not a magic number. Every prediction is timestamped before kick-off and graded automatically after the match, so you can verify the track record yourself.",
+    "Our 3-way match predictions (home/draw/away) hit around 50% accuracy. That's above the 33% random baseline, but we're honest - it's not a magic number. Every prediction is timestamped before kick-off and graded automatically after the match, so you can verify the track record yourself.",
   "hiw.faq2Q": "What happens on a losing streak?",
   "hiw.faq2A":
-    "Losing predictions stay visible permanently. We publish them just as openly as the winners. Our Strategy Lab strategies were backtested on a 90-day sample, so we expect variance. Losing streaks happen — that's sport.",
+    "Losing predictions stay visible permanently. We publish them just as openly as the winners. Our Strategy Lab strategies were backtested on a 90-day sample, so we expect variance. Losing streaks happen - that's sport.",
   "hiw.faq3Q": "Why not just use one really smart model?",
   "hiw.faq3A":
-    "Because every model has blind spots. Our three models — Elo ratings, Poisson goal model and Logistic regression — each capture different patterns. The ensemble with weighted averaging consistently outperforms any single member.",
+    "Because every model has blind spots. Our three models - Elo ratings, Poisson goal model and Logistic regression - each capture different patterns. The ensemble with weighted averaging consistently outperforms any single member.",
   "hiw.faq4Q": "Can I actually profit from these predictions?",
   "hiw.faq4A":
-    "Our backtested strategies show positive ROI over 90 days, but backtesting is not a guarantee. Real-world performance depends on odds you get, timing, and variance. We provide the data and analysis — the rest is your call.",
+    "Our backtested strategies show positive ROI over 90 days, but backtesting is not a guarantee. Real-world performance depends on odds you get, timing, and variance. We provide the data and analysis - the rest is your call.",
   "hiw.faq5Q": "What sports and leagues do you cover?",
   "hiw.faq5A":
     "Football only, covering 6 European leagues: Premier League, La Liga, Bundesliga, Serie A, Ligue 1 and Eredivisie. We plan to expand, but we'd rather do a few leagues well than many leagues poorly.",
@@ -822,7 +822,7 @@ const en = {
   "hiw.ctaBadge": "Ready to see it in action?",
   "hiw.ctaTitle": "Stop guessing. Start trusting the pipeline.",
   "hiw.ctaSubtitle":
-    "Now you know exactly how the pipeline works. See the predictions it produces — live, timestamped and ready to verify.",
+    "Now you know exactly how the pipeline works. See the predictions it produces - live, timestamped and ready to verify.",
   "hiw.ctaPrimary": "Start Free Trial",
   "hiw.ctaSecondary": "See the track record",
 
@@ -860,7 +860,7 @@ const en = {
   "checkout.total": "Total due today",
   "checkout.yearlySaveBadge": "Save 20%",
   "checkout.yearlySaveCallout":
-    "Switch to yearly billing and save 20% — that's {amount} off every year.",
+    "Switch to yearly billing and save 20% - that's {amount} off every year.",
   "checkout.yearlySaving": "You're saving {amount} / year",
 
   /* Upsells */
@@ -869,17 +869,17 @@ const en = {
     "Optional extras that most members add to get the full edge. Cancel any add-on independently at any time.",
   "checkout.upsell1Title": "VIP Telegram Alerts",
   "checkout.upsell1Desc":
-    "Get every pick pushed straight to your Telegram — no need to log in, every edge the moment it drops.",
+    "Get every pick pushed straight to your Telegram - no need to log in, every edge the moment it drops.",
   "checkout.upsell1Badge": "Most popular",
   "checkout.upsell2Title": "Weekly Deep-Dive Report",
   "checkout.upsell2Desc":
     "Every Monday: a 20-page PDF breaking down the past week's ROI, model drift and upcoming edges.",
   "checkout.upsell3Title": "Priority 1-on-1 Support",
   "checkout.upsell3Desc":
-    "Skip the queue with a direct line to our analysts — replies within 2 hours, 7 days a week.",
+    "Skip the queue with a direct line to our analysts - replies within 2 hours, 7 days a week.",
   "checkout.upsell4Title": "Tip of the Day Access",
   "checkout.upsell4Desc":
-    "One high-confidence pick delivered to your inbox every single day — our single highest-edge bet for the next 24 hours.",
+    "One high-confidence pick delivered to your inbox every single day - our single highest-edge bet for the next 24 hours.",
   "checkout.upsellIncluded": "Included with Platinum",
   "checkout.upsellPerMonth": "/mo",
 
@@ -895,7 +895,7 @@ const en = {
   "checkout.trialOption2Desc":
     "Charged today, no trial period. Ideal if you already know our track record.",
   "checkout.trialPausedNote":
-    "Cancel during the trial and your account is paused — not deleted. You can resume any time.",
+    "Cancel during the trial and your account is paused - not deleted. You can resume any time.",
   "checkout.trialBadge": "7-day free trial active",
   "checkout.trialDueToday": "€0.01 today",
   "checkout.trialFirstCharge": "First charge on {date}",
@@ -915,7 +915,7 @@ const en = {
   "checkout.perMonth": "/month",
   "checkout.perYear": "/year",
 
-  /* Step 1 — Account */
+  /* Step 1 - Account */
   "checkout.accountTitle": "Create your account",
   "checkout.accountSubtitle":
     "You'll use these details to sign in to BetsPlug.",
@@ -932,7 +932,7 @@ const en = {
   "checkout.alreadyHaveAccount": "Already have an account?",
   "checkout.signIn": "Sign in",
 
-  /* Step 2 — Billing */
+  /* Step 2 - Billing */
   "checkout.billingTitle": "Billing address",
   "checkout.billingSubtitle":
     "We use this only for VAT calculation and your invoice.",
@@ -948,10 +948,10 @@ const en = {
   "checkout.company": "Company name (optional)",
   "checkout.vatId": "VAT ID (optional)",
 
-  /* Step 3 — Payment */
+  /* Step 3 - Payment */
   "checkout.paymentTitle": "Payment method",
   "checkout.paymentSubtitle":
-    "Choose how you'd like to pay. A real payment provider will be connected soon — this is a demo checkout.",
+    "Choose how you'd like to pay. A real payment provider will be connected soon - this is a demo checkout.",
   "checkout.payCard": "Credit card",
   "checkout.payCardDesc": "Visa, Mastercard, Amex",
   "checkout.payPaypal": "PayPal",
@@ -990,26 +990,26 @@ const en = {
   /* Success */
   "checkout.successTitle": "Welcome to BetsPlug!",
   "checkout.successBody":
-    "Your demo checkout was received. In production you'd now be redirected to your dashboard — for now, explore the site.",
+    "Your demo checkout was received. In production you'd now be redirected to your dashboard - for now, explore the site.",
   "checkout.successCta": "Go to dashboard",
 
   /* ─── Welcome / thank-you page ─────────────────────────── */
-  "welcome.meta.title": "Welcome aboard — You're officially a BetsPlug member",
+  "welcome.meta.title": "Welcome aboard - You're officially a BetsPlug member",
   "welcome.meta.description":
-    "Your BetsPlug membership is active. Log in to see today's picks, track your ROI and start winning smarter — we've got your back.",
+    "Your BetsPlug membership is active. Log in to see today's picks, track your ROI and start winning smarter - we've got your back.",
 
   "welcome.badge": "You're in.",
   "welcome.title": "Welcome to the inside circle.",
   "welcome.titleHighlight": "This is where it starts.",
   "welcome.subtitle":
-    "No more chasing tipsters, no more second-guessing. You're now part of a community that wins with data, discipline and a little bit of swagger. Let's make this the year you stop gambling — and start investing.",
+    "No more chasing tipsters, no more second-guessing. You're now part of a community that wins with data, discipline and a little bit of swagger. Let's make this the year you stop gambling - and start investing.",
 
   "welcome.trialTitle": "Your 7-day free trial is active",
   "welcome.trialBody":
-    "You won't be charged today. Cancel anytime in the next 7 days and your account quietly pauses — no questions, no pressure.",
+    "You won't be charged today. Cancel anytime in the next 7 days and your account quietly pauses - no questions, no pressure.",
   "welcome.paidTitle": "Your membership is active",
   "welcome.paidBody":
-    "Your account is fully unlocked. Every pick, every stat, every edge — it's all waiting for you inside the dashboard.",
+    "Your account is fully unlocked. Every pick, every stat, every edge - it's all waiting for you inside the dashboard.",
 
   "welcome.ctaPrimary": "Log in to your dashboard",
   "welcome.ctaSecondary": "Back to homepage",
@@ -1033,16 +1033,16 @@ const en = {
 
   "welcome.quote":
     "\"Finally a service that treats betting like a craft, not a lottery ticket. BetsPlug turned my weekends around.\"",
-  "welcome.quoteAuthor": "— Thomas R., member since 2024",
+  "welcome.quoteAuthor": " - Thomas R., member since 2024",
 
   "welcome.footerNote":
-    "Questions? Reach us at support@betsplug.com — a real human will answer.",
+    "Questions? Reach us at support@betsplug.com - a real human will answer.",
 
   /* Quickstart timeline */
   "welcome.quickstartEyebrow": "Quickstart",
   "welcome.quickstartTitle": "Your first 10 minutes with BetsPlug",
   "welcome.quickstartSubtitle":
-    "Five simple steps from here to your first data-backed pick. Follow the path — we'll guide you the whole way.",
+    "Five simple steps from here to your first data-backed pick. Follow the path - we'll guide you the whole way.",
   "welcome.quickstartDuration": "≈ 10 minutes total",
 
   "welcome.qs1Title": "Confirm your email",
@@ -1067,14 +1067,14 @@ const en = {
 
   "welcome.qs5Title": "Place your first bet",
   "welcome.qs5Body":
-    "Pick the tip that fits you, place the wager at your sportsbook, then mark it in your tracker. That's it — you're live.",
+    "Pick the tip that fits you, place the wager at your sportsbook, then mark it in your tracker. That's it - you're live.",
   "welcome.qs5Duration": "3 min",
 
   /* Dashboard tour */
   "welcome.tourEyebrow": "Dashboard tour",
   "welcome.tourTitle": "Where to find what, once you're inside",
   "welcome.tourSubtitle":
-    "A quick lay of the land. The dashboard has everything organised into 6 simple areas — here's what each one does so you feel at home from minute one.",
+    "A quick lay of the land. The dashboard has everything organised into 6 simple areas - here's what each one does so you feel at home from minute one.",
 
   "welcome.tour1Title": "Today's Picks",
   "welcome.tour1Body":
@@ -1088,7 +1088,7 @@ const en = {
 
   "welcome.tour3Title": "Track Record",
   "welcome.tour3Body":
-    "The full, unfiltered history of every pick we've ever posted. Filter by sport, market, tipster or date range — nothing is hidden.",
+    "The full, unfiltered history of every pick we've ever posted. Filter by sport, market, tipster or date range - nothing is hidden.",
   "welcome.tour3Where": "Sidebar → Track Record",
 
   "welcome.tour4Title": "Live Matches",
@@ -1098,12 +1098,12 @@ const en = {
 
   "welcome.tour5Title": "Community & Telegram",
   "welcome.tour5Body":
-    "Chat with other members, ask the experts and get instant pick notifications the moment they're posted — even when you're off the site.",
+    "Chat with other members, ask the experts and get instant pick notifications the moment they're posted - even when you're off the site.",
   "welcome.tour5Where": "Top bar → Community",
 
   "welcome.tour6Title": "Account & Billing",
   "welcome.tour6Body":
-    "Manage your plan, update payment details, switch billing cycle, download invoices or cancel any time — all in one place.",
+    "Manage your plan, update payment details, switch billing cycle, download invoices or cancel any time - all in one place.",
   "welcome.tour6Where": "Top-right avatar → Settings",
 
   "welcome.tourProTipTitle": "Pro tip",
@@ -1111,7 +1111,7 @@ const en = {
     "Press ⌘K (or Ctrl+K on Windows) anywhere in the dashboard to jump straight to any section in two keystrokes.",
 
   /* ─── Login page ──────────────────────────────────────── */
-  "login.meta.title": "Log in — BetsPlug",
+  "login.meta.title": "Log in - BetsPlug",
   "login.meta.description":
     "Log in to your BetsPlug account to see today's picks, track your ROI and manage your subscription.",
 
@@ -1160,16 +1160,16 @@ const en = {
   "dashPrev.titleHighlight": "one click away",
   "dashPrev.titleB": ".",
   "dashPrev.subtitle":
-    "Log in and step straight into your personal BetsPlug dashboard — a clean, distraction-free command center where every daily pick, model insight, live match and historical result lives in a single view. No spreadsheets, no guesswork, no jumping between tabs.",
+    "Log in and step straight into your personal BetsPlug dashboard - a clean, distraction-free command center where every daily pick, model insight, live match and historical result lives in a single view. No spreadsheets, no guesswork, no jumping between tabs.",
   "dashPrev.feature1Title": "Daily picks at a glance",
   "dashPrev.feature1Desc":
-    "See today's highest-confidence predictions the moment you sign in — sorted by edge, confidence and kick-off time.",
+    "See today's highest-confidence predictions the moment you sign in - sorted by edge, confidence and kick-off time.",
   "dashPrev.feature2Title": "Live model accuracy",
   "dashPrev.feature2Desc":
     "Real-time accuracy per sport, per league and per model. Watch your edge update as results come in.",
   "dashPrev.feature3Title": "Transparent track record",
   "dashPrev.feature3Desc":
-    "Every pick we've ever made — wins, losses and ROI — logged publicly and filterable by date or strategy.",
+    "Every pick we've ever made - wins, losses and ROI - logged publicly and filterable by date or strategy.",
   "dashPrev.feature4Title": "Strategy Lab & alerts",
   "dashPrev.feature4Desc":
     "Build custom filters, bookmark your favorite leagues and get notified the second a premium pick drops.",
@@ -1196,13 +1196,13 @@ const en = {
   "dashPrev.mockAccuracySub": "Prediction accuracy segmented by sport",
 
   /* ── Match Predictions (public teaser) ─────────────────── */
-  "matchPred.metaTitle": "Free AI Match Predictions — Upcoming Games | BetsPlug",
+  "matchPred.metaTitle": "Free AI Match Predictions - Upcoming Games | BetsPlug",
   "matchPred.metaDesc":
     "Preview 3 free AI-powered match predictions with win probabilities and confidence scores. Unlock the full slate of upcoming games with a BetsPlug subscription.",
   "matchPred.eyebrow": "Free preview",
   "matchPred.title": "AI match predictions for upcoming games",
   "matchPred.subtitle":
-    "A preview of the matches our Ensemble model is crunching right now. See 3 full predictions for free — unlock the rest with a trial.",
+    "A preview of the matches our Ensemble model is crunching right now. See 3 full predictions for free - unlock the rest with a trial.",
   "matchPred.trust1": "4-model Ensemble",
   "matchPred.trust2": "Live probabilities",
   "matchPred.trust3": "Public track record",
@@ -1212,24 +1212,24 @@ const en = {
   "matchPred.statAvgConf": "Avg confidence",
   "matchPred.freeHeading": "Your 3 free predictions",
   "matchPred.freeSub":
-    "Full win probabilities, confidence scores and model details — on the house.",
+    "Full win probabilities, confidence scores and model details - on the house.",
   "matchPred.lockedHeading": "Premium match pool",
   "matchPred.lockedSub":
     "These matches are reserved for members. Unlock every pick, every league, every day.",
   "matchPred.bannerBadge": "Members only",
   "matchPred.bannerTitle": "Unlock every game",
   "matchPred.bannerDesc":
-    "Join BetsPlug to see all upcoming predictions across the top leagues — with confidence scores, live updates and our full public track record.",
+    "Join BetsPlug to see all upcoming predictions across the top leagues - with confidence scores, live updates and our full public track record.",
   "matchPred.bannerBullet1": "Unlimited daily AI predictions",
   "matchPred.bannerBullet2": "All 4 models + Ensemble output",
   "matchPred.bannerBullet3": "Live probability tracking",
-  "matchPred.bannerBullet4": "Cancel anytime — 14-day refund",
+  "matchPred.bannerBullet4": "Cancel anytime - 14-day refund",
   "matchPred.bannerCta": "Unlock all games",
   "matchPred.bannerCtaSecondary": "See pricing",
   "matchPred.bannerNote": "Just €0.01 activates your 7-day full-access trial.",
   "matchPred.ctaFinalTitle": "Stop guessing. Start deciding with data.",
   "matchPred.ctaFinalDesc":
-    "Every upcoming match, every model, every confidence score — unlocked in seconds. Join the bettors who trust transparent analytics.",
+    "Every upcoming match, every model, every confidence score - unlocked in seconds. Join the bettors who trust transparent analytics.",
   "matchPred.ctaFinalButton": "Start your free trial",
   "matchPred.ctaFinalSecondary": "Browse plans",
   "matchPred.loadingTitle": "Loading upcoming matches…",
@@ -1273,7 +1273,7 @@ const nl: Dictionary = {
   "hero.titleLine2": "sportvoorspellingen",
   "hero.titleLine3": "voor jouw voordeel.",
   "hero.subtitle":
-    "BetsPlug combineert data, Elo-ratings, Poisson-modellen en machine learning in één platform. Live kansen, diepgaande inzichten en een bewezen track record — gemaakt voor serieuze sportanalisten.",
+    "BetsPlug combineert data, Elo-ratings, Poisson-modellen en machine learning in één platform. Live kansen, diepgaande inzichten en een bewezen track record - gemaakt voor serieuze sportanalisten.",
   "hero.activeUsers": "Actieve gebruikers",
   "hero.ctaPrimary": "Gratis proberen",
   "hero.ctaSecondary": "Hoe het werkt",
@@ -1289,7 +1289,7 @@ const nl: Dictionary = {
   "hero.today": "Vandaag",
   "hero.wins": "Gewonnen",
   "hero.usp1Title": "4-modellen AI-ensemble",
-  "hero.usp1Desc": "Poisson, XGBoost, Elo & markt-geïmpliceerd — gemengd.",
+  "hero.usp1Desc": "Poisson, XGBoost, Elo & markt-geïmpliceerd - gemengd.",
   "hero.usp2Title": "Geverifieerde +EV picks",
   "hero.usp2Desc": "Alleen gepubliceerd als de edge echte slippage verslaat.",
   "hero.usp3Title": "Publiek track record",
@@ -1302,7 +1302,7 @@ const nl: Dictionary = {
   "comparison.titleA": "Niet elke voorspelsite",
   "comparison.titleB": "is hetzelfde gebouwd.",
   "comparison.subtitle":
-    "Dit is precies wat BetsPlug onderscheidt van gewone tipstersites — geen kleine lettertjes, geen uitgekozen successen.",
+    "Dit is precies wat BetsPlug onderscheidt van gewone tipstersites - geen kleine lettertjes, geen uitgekozen successen.",
   "comparison.feature": "Functie",
   "comparison.winner": "Winnaar",
   "comparison.others": "Anderen",
@@ -1316,9 +1316,9 @@ const nl: Dictionary = {
   "how.badge": "Hoe het werkt",
   "how.title": "Van aanmelden tot slimmere picks in 3 stappen.",
   "how.subtitle":
-    "Een eenvoudig, transparant proces rond data — geen hype, geen gokken.",
+    "Een eenvoudig, transparant proces rond data - geen hype, geen gokken.",
   "how.step1Title": "Maak een account",
-  "how.step1Desc": "Registreer in enkele seconden. Een symbolische €0,01 activeert je 7-daagse volledige-toegang-proef — we rekenen alleen echte kaarten af om fraude te voorkomen.",
+  "how.step1Desc": "Registreer in enkele seconden. Een symbolische €0,01 activeert je 7-daagse volledige-toegang-proef - we rekenen alleen echte kaarten af om fraude te voorkomen.",
   "how.step2Title": "Bekijk AI-voorspellingen",
   "how.step2Desc":
     "Vier AI-modellen combineren live odds, Elo, vorm en historische data voor echte voordelen.",
@@ -1352,7 +1352,7 @@ const nl: Dictionary = {
   "footer.premiumTitleB": "Premium Telegram",
   "footer.premiumTitleC": "groep",
   "footer.premiumSubtitle":
-    "Krijg realtime picks, value-alerts en live chat met onze AI-analisten. Wees de eerste die weet wanneer er een hoge-waarde wedstrijd langskomt — direct in je zak.",
+    "Krijg realtime picks, value-alerts en live chat met onze AI-analisten. Wees de eerste die weet wanneer er een hoge-waarde wedstrijd langskomt - direct in je zak.",
   "footer.perk1": "Directe value-alerts",
   "footer.perk2": "Privé Q&A met analisten",
   "footer.perk3": "Dagelijkse gratis picks",
@@ -1361,7 +1361,7 @@ const nl: Dictionary = {
   "footer.limited": "Beperkte plekken · Alleen voor leden",
   "footer.onlineNow": "1.200+ leden online",
   "footer.brandTagline":
-    "BetsPlug combineert data, Elo-ratings, Poisson-modellen en machine learning in één platform — gemaakt voor serieuze sportanalisten die niet willen gokken.",
+    "BetsPlug combineert data, Elo-ratings, Poisson-modellen en machine learning in één platform - gemaakt voor serieuze sportanalisten die niet willen gokken.",
   "footer.product": "Product",
   "footer.company": "Bedrijf",
   "footer.legal": "Juridisch",
@@ -1369,7 +1369,7 @@ const nl: Dictionary = {
   "footer.secureDesc": "256-bit SSL versleutelde checkout",
   "footer.pciCompliant": "PCI DSS gecertificeerd",
   "footer.copyright":
-    "Alle rechten voorbehouden. BetsPlug is een data- & analyseplatform — geen gokaanbieder.",
+    "Alle rechten voorbehouden. BetsPlug is een data- & analyseplatform - geen gokaanbieder.",
   "footer.responsible": "18+ Speel verantwoord",
 
   "leagues.badge": "Top competities",
@@ -1384,14 +1384,14 @@ const nl: Dictionary = {
     "BetsPlug bundelt en beveiligt een groeiend ecosysteem van databronnen, AI-modellen en bewezen strategieën. Eén platform voor datagedreven sportanalisten die niet willen gokken.",
   "trusted.card1Title": "Voor elk kennisniveau.",
   "trusted.card1Desc":
-    "Van beginner tot pro-analist — onze dashboards, tutorials en transparante statistieken maken elke voorspelling makkelijk te begrijpen.",
+    "Van beginner tot pro-analist - onze dashboards, tutorials en transparante statistieken maken elke voorspelling makkelijk te begrijpen.",
   "trusted.card2Title": "Beste werkwijzen in de sector.",
   "trusted.card2Desc":
     "Vier AI-modellen (Elo, Poisson, Logistic, Ensemble) leveren samen voorspellingen die je kunt vertrouwen. Bewezen methodes, transparante resultaten.",
   "trusted.learnMore": "Meer lezen",
   "trusted.card3Title": "Beschermd door transparantie.",
   "trusted.card3Desc":
-    "Elke voorspelling wordt gelogd, bijgehouden en openbaar geverifieerd. Geen verborgen resultaten, geen selectief kiezen — gewoon data die jijzelf kunt controleren.",
+    "Elke voorspelling wordt gelogd, bijgehouden en openbaar geverifieerd. Geen verborgen resultaten, geen selectief kiezen - gewoon data die jijzelf kunt controleren.",
 
   "track.label": "Track record",
   "track.accuracy": "Totale nauwkeurigheid",
@@ -1405,7 +1405,7 @@ const nl: Dictionary = {
   "track.titleB": "altijd & overal.",
   "track.rating": "4.9 / 5 van 1.200+ analisten",
   "track.desc1":
-    "Eén platform dat een groeiend ecosysteem van sportdata, AI-voorspellingen en strategie-backtesting tools bij elkaar brengt. Alle voorspellingen worden gelogd en publiek bijgehouden — altijd volledig transparant.",
+    "Eén platform dat een groeiend ecosysteem van sportdata, AI-voorspellingen en strategie-backtesting tools bij elkaar brengt. Alle voorspellingen worden gelogd en publiek bijgehouden - altijd volledig transparant.",
   "track.desc2":
     "Of je nu voetbal, basketbal of tennis volgt, BetsPlug verenigt data en machine learning tot inzichten die je écht kunt gebruiken.",
   "track.cta": "Meer lezen",
@@ -1479,13 +1479,13 @@ const nl: Dictionary = {
   "pricing.billedYearlySilver": "€95,90 per jaar gefactureerd",
   "pricing.billedYearlyGold": "€143,90 per jaar gefactureerd",
   "pricing.platTagline": "Levenslange toegang. Founder-voordelen.",
-  "pricing.platPitch": "Betaal één keer, ontgrendel elke huidige en toekomstige Gold-functie — plus privévoordelen die je op geen enkel ander plan vindt.",
+  "pricing.platPitch": "Betaal één keer, ontgrendel elke huidige en toekomstige Gold-functie - plus privévoordelen die je op geen enkel ander plan vindt.",
   "pricing.platBadgeLifetime": "Levenslange deal",
   "pricing.platLimited": "Beperkt tot 100/jaar",
   "pricing.platOneTime": "Eenmalige betaling",
   "pricing.platNoSub": "Geen abonnement. Geen verlengingen. Nooit.",
   "pricing.platCta": "Claim levenslange toegang",
-  "pricing.platF1": "Levenslang Gold — elke huidige & toekomstige functie",
+  "pricing.platF1": "Levenslang Gold - elke huidige & toekomstige functie",
   "pricing.platF2": "Privé Platinum Telegram (max 20 plekken)",
   "pricing.platF3": "1-op-1 onboarding met onze oprichters",
   "pricing.platF4": "Maandelijkse persoonlijke strategiereview",
@@ -1505,7 +1505,7 @@ const nl: Dictionary = {
   "articles.sportMlb": "MLB",
   "articles.sportNhl": "NHL",
   "articles.readTime": "min leestijd",
-  "articles.empty": "Nog geen artikelen in deze categorie — kom snel terug.",
+  "articles.empty": "Nog geen artikelen in deze categorie - kom snel terug.",
   "articles.back": "Terug naar alle artikelen",
   "articles.breadcrumbHome": "Home",
   "articles.breadcrumbBlog": "Artikelen",
@@ -1513,7 +1513,7 @@ const nl: Dictionary = {
   "articles.related": "Gerelateerde artikelen",
   "articles.ctaBadge": "BetsPlug leden",
   "articles.ctaTitle": "Zet deze analyse om in een echt voordeel.",
-  "articles.ctaSubtitle": "Krijg live AI-kansen, Analyse van de Dag en de volledige Ensemble-output — 7 dagen gratis.",
+  "articles.ctaSubtitle": "Krijg live AI-kansen, Analyse van de Dag en de volledige Ensemble-output - 7 dagen gratis.",
   "articles.ctaButton": "Start gratis proefperiode",
   "articles.ctaNoCard": "Symbolische €0,01 om je 7-daagse proef te activeren",
   "articles.tldr": "TL;DR",
@@ -1528,25 +1528,25 @@ const nl: Dictionary = {
   "seo.titleA": "AI-sportvoorspellingen &",
   "seo.titleB": "datagedreven betting picks",
   "seo.subtitle":
-    "BetsPlug is het datagedreven thuis voor AI-sportvoorspellingen, machine-learning picks en statistische match-analyses. Of je nu een voetbalaccu onderzoekt, value zoekt in NBA player props of een nieuwe strategie backtest — onze AI-predictor geeft je het voordeel dat je nodig hebt.",
+    "BetsPlug is het datagedreven thuis voor AI-sportvoorspellingen, machine-learning picks en statistische match-analyses. Of je nu een voetbalaccu onderzoekt, value zoekt in NBA player props of een nieuwe strategie backtest - onze AI-predictor geeft je het voordeel dat je nodig hebt.",
   "seo.pillar1Title": "AI Sportvoorspelling Engine",
   "seo.pillar1Desc":
     "Onze AI-engine combineert Elo-ratings, Poisson-modellen en machine learning om uitslagen in voetbal, basketbal en tennis datagedreven te voorspellen.",
   "seo.pillar2Title": "Data-gestaafde voorspellingen",
   "seo.pillar2Desc":
-    "Elke AI-voorspelling op BetsPlug is gebaseerd op duizenden historische wedstrijden, live vormdata en xG-metrics — voor de scherpste picks online.",
+    "Elke AI-voorspelling op BetsPlug is gebaseerd op duizenden historische wedstrijden, live vormdata en xG-metrics - voor de scherpste picks online.",
   "seo.pillar3Title": "Geverifieerd track record",
   "seo.pillar3Desc":
-    "Transparantie voorop. Bekijk ons openbare track record met elke AI-pick die we ooit publiceerden — volledige ROI, hit-rate en confidence gelogd en getimestampt.",
+    "Transparantie voorop. Bekijk ons openbare track record met elke AI-pick die we ooit publiceerden - volledige ROI, hit-rate en confidence gelogd en getimestampt.",
   "seo.pillar4Title": "Analyse van de Dag",
   "seo.pillar4Desc":
-    "Weinig tijd? Onze dagelijkse AI-Analyse van de Dag geeft de pick met de hoogste confidence uit alle competities — gekozen door ons algoritme, niet op gevoel.",
+    "Weinig tijd? Onze dagelijkse AI-Analyse van de Dag geeft de pick met de hoogste confidence uit alle competities - gekozen door ons algoritme, niet op gevoel.",
   "seo.pillar5Title": "Live AI-kansen",
   "seo.pillar5Desc":
     "Zie kansen realtime verschuiven tijdens een match. Onze live AI-predictor herberekent winstkansen elke seconde zodat je value spot zodra die verschijnt.",
   "seo.pillar6Title": "Analyse, geen gokken",
   "seo.pillar6Desc":
-    "BetsPlug is een sportanalyse-platform — geen bookmaker. We leveren AI-voorspellingen en data-inzichten zodat jij geïnformeerd kunt beslissen, zonder ooit op onze site te wedden.",
+    "BetsPlug is een sportanalyse-platform - geen bookmaker. We leveren AI-voorspellingen en data-inzichten zodat jij geïnformeerd kunt beslissen, zonder ooit op onze site te wedden.",
 
   "faq.badge": "Veelgestelde vragen",
   "faq.titleA": "Vragen?",
@@ -1566,14 +1566,14 @@ const nl: Dictionary = {
   "contact.titleA": "Hoe kunnen wij je",
   "contact.titleB": "helpen?",
   "contact.subtitle":
-    "Krijg direct antwoord van onze AI-assistent, blader door de FAQ of bereik ons team persoonlijk — wat het beste voor jou werkt.",
+    "Krijg direct antwoord van onze AI-assistent, blader door de FAQ of bereik ons team persoonlijk - wat het beste voor jou werkt.",
   "contact.chatPlaceholder": "Vraag onze AI iets over BetsPlug…",
   "contact.chatStart": "Start chat",
   "contact.chatHint": "Powered by BetsPlug AI · Antwoord binnen seconden",
 
   "contact.card1Title": "Chat met AI-assistent",
   "contact.card1Desc":
-    "Direct antwoord op vragen over prijzen, modellen, voorspellingen en meer — 24/7, zonder wachttijd.",
+    "Direct antwoord op vragen over prijzen, modellen, voorspellingen en meer - 24/7, zonder wachttijd.",
   "contact.card1Cta": "Open chat",
   "contact.card2Title": "Word lid van Telegram",
   "contact.card2Desc":
@@ -1596,7 +1596,7 @@ const nl: Dictionary = {
   "contact.faqGroup1": "Aan de slag",
   "contact.faq1Q": "Wat is BetsPlug precies?",
   "contact.faq1A":
-    "BetsPlug is een puur sport-analyseplatform. We publiceren AI-gedreven voorspellingen, Elo-ratings, Poisson-modellen en transparante track records zodat jij datagedreven beslissingen kunt nemen. We zijn geen bookmaker — je kunt bij ons geen weddenschappen plaatsen.",
+    "BetsPlug is een puur sport-analyseplatform. We publiceren AI-gedreven voorspellingen, Elo-ratings, Poisson-modellen en transparante track records zodat jij datagedreven beslissingen kunt nemen. We zijn geen bookmaker - je kunt bij ons geen weddenschappen plaatsen.",
   "contact.faq2Q": "Moet ik betalen om BetsPlug te proberen?",
   "contact.faq2A":
     "Nee. Onze Bronze tier is 100% gratis en geeft je een dagelijkse AI-pick, basisvoorspellingen en toegang tot ons publieke track record. Upgrade pas naar Silver of Gold als je live-kansen, backtesting en geavanceerde markten wilt.",
@@ -1607,7 +1607,7 @@ const nl: Dictionary = {
   "contact.faqGroup2": "Account & facturatie",
   "contact.faq4Q": "Kan ik mijn abonnement op elk moment opzeggen?",
   "contact.faq4A":
-    "Ja, alle Silver- en Gold-plannen zijn per maand opzegbaar zonder lock-in. Annuleer in je dashboard en behoud toegang tot het einde van je huidige factureringsperiode — geen gedoe.",
+    "Ja, alle Silver- en Gold-plannen zijn per maand opzegbaar zonder lock-in. Annuleer in je dashboard en behoud toegang tot het einde van je huidige factureringsperiode - geen gedoe.",
   "contact.faq5Q": "Bieden jullie restituties?",
   "contact.faq5A": "We bieden een 14 dagen niet-goed-geld-terug-garantie op alle betaalde plannen conform EU-consumentenrecht. Is BetsPlug niks voor jou? Mail support binnen 14 dagen en je krijgt volledige restitutie. Platinum Lifetime is final-sale na de 14 dagen.",
   "contact.faq6Q": "Zijn mijn betaalgegevens veilig?",
@@ -1631,24 +1631,24 @@ const nl: Dictionary = {
   "chatbot.placeholder": "Typ je bericht…",
   "chatbot.close": "Chat sluiten",
   "chatbot.footer":
-    "AI-assistent gebaseerd op BetsPlug-info — voor alles daarbuiten mail support@betsplug.com",
+    "AI-assistent gebaseerd op BetsPlug-info - voor alles daarbuiten mail support@betsplug.com",
   "chatbot.suggestion1": "Hoe werkt de Analyse van de Dag?",
   "chatbot.suggestion2": "Wat is het verschil tussen Silver en Gold?",
   "chatbot.suggestion3": "Hoe nauwkeurig zijn jullie voorspellingen?",
   "chatbot.replyDefault":
     "Bedankt voor je bericht! Een BetsPlug-analist neemt snel contact op. Bekijk ondertussen onze FAQ of stuur een mail naar support@betsplug.com.",
   "chatbot.replyHello":
-    "Hey! 👋 Ik ben de BetsPlug AI. Vraag me alles over onze modellen, prijzen of voorspellingen — ik help je graag verder.",
-  "chatbot.replyPricing": "We hebben vier tiers. Bronze is een symbolische €0,01 proef — volledige toegang voor 7 dagen, echte kaart vereist (dit houdt het platform fraudevrij). Silver (€9,99/mnd) is een instapplan beperkt tot de top 5 Europese competities met alleen Ensemble-picks en 2u vertraging. Gold (€14,99/mnd) is onze populairste — alle 30+ competities wereldwijd, alle 4 AI-modellen, directe picks, dagelijkse Analyse van de Dag, Gold Telegram en Strategy Lab. Platinum (eenmalig €199 levenslang) voegt privé Telegram toe, 1-op-1 onboarding en levenslange prijs-lock. Alle betaalde plannen hebben een 14 dagen EU geld-terug-garantie.",
-  "chatbot.replyRefund": "Silver- en Gold-plannen kun je op elk moment opzeggen in je dashboard — je behoudt toegang tot het einde van je factureringsperiode. We bieden ook een 14 dagen niet-goed-geld-terug-garantie op alle betaalde plannen conform EU-recht. Platinum Lifetime is final-sale na de 14-dagen.",
+    "Hey! 👋 Ik ben de BetsPlug AI. Vraag me alles over onze modellen, prijzen of voorspellingen - ik help je graag verder.",
+  "chatbot.replyPricing": "We hebben vier tiers. Bronze is een symbolische €0,01 proef - volledige toegang voor 7 dagen, echte kaart vereist (dit houdt het platform fraudevrij). Silver (€9,99/mnd) is een instapplan beperkt tot de top 5 Europese competities met alleen Ensemble-picks en 2u vertraging. Gold (€14,99/mnd) is onze populairste - alle 30+ competities wereldwijd, alle 4 AI-modellen, directe picks, dagelijkse Analyse van de Dag, Gold Telegram en Strategy Lab. Platinum (eenmalig €199 levenslang) voegt privé Telegram toe, 1-op-1 onboarding en levenslange prijs-lock. Alle betaalde plannen hebben een 14 dagen EU geld-terug-garantie.",
+  "chatbot.replyRefund": "Silver- en Gold-plannen kun je op elk moment opzeggen in je dashboard - je behoudt toegang tot het einde van je factureringsperiode. We bieden ook een 14 dagen niet-goed-geld-terug-garantie op alle betaalde plannen conform EU-recht. Platinum Lifetime is final-sale na de 14-dagen.",
   "chatbot.replyAccuracy":
-    "Elke voorspelling wordt gelogd in ons publieke track record met hit-rate, ROI en confidence scores. Filter op competitie, markt en datum. Geen cherry-picking, geen verborgen verliezen — transparantie staat voorop.",
+    "Elke voorspelling wordt gelogd in ons publieke track record met hit-rate, ROI en confidence scores. Filter op competitie, markt en datum. Geen cherry-picking, geen verborgen verliezen - transparantie staat voorop.",
   "chatbot.replyTelegram":
-    "Onze Telegram-community heeft 1.200+ actieve leden met dagelijkse picks, edge-meldingen en live Q&A met onze analisten. Join via t.me/betsplug — gratis voor Bronze, VIP-kanalen voor Silver/Gold.",
+    "Onze Telegram-community heeft 1.200+ actieve leden met dagelijkse picks, edge-meldingen en live Q&A met onze analisten. Join via t.me/betsplug - gratis voor Bronze, VIP-kanalen voor Silver/Gold.",
 
   /* About Us page */
   "about.metaTitle":
-    "Over BetsPlug — Het team achter het AI-sportanalyseplatform",
+    "Over BetsPlug - Het team achter het AI-sportanalyseplatform",
   "about.metaDesc":
     "Maak kennis met de twee engineers die BetsPlug bouwen. Sportfanaten met een ICT-achtergrond die ruwe wedstrijddata omzetten in transparante, datagedreven voorspellingen voor voetbal, basketbal, tennis en meer.",
   "about.breadcrumbHome": "Home",
@@ -1663,7 +1663,7 @@ const nl: Dictionary = {
   "about.missionBadge": "De Missie",
   "about.missionTitle": "Wij maken van ruwe wedstrijddata een meetbare voorsprong.",
   "about.missionBody1":
-    "De voorspellingsmarkt draait al veel te lang op hype. YouTube-goeroes die views achternajagen, Telegram-kanalen die \"locks of the week\" verkopen, betaalde tipsters zonder verifieerbare historie. Als levenslange voetbal-, basketbal- en tennisfans werden we daar helemaal gek van — want we wisten dat de onderliggende data veel beter was dan de ruis eromheen.",
+    "De voorspellingsmarkt draait al veel te lang op hype. YouTube-goeroes die views achternajagen, Telegram-kanalen die \"locks of the week\" verkopen, betaalde tipsters zonder verifieerbare historie. Als levenslange voetbal-, basketbal- en tennisfans werden we daar helemaal gek van - want we wisten dat de onderliggende data veel beter was dan de ruis eromheen.",
   "about.missionBody2":
     "Dus bouwden we het product dat we altijd al wilden hebben: een platform dat duizenden wedstrijden per week verwerkt, ze doorrekent met Elo-ratings, Poisson-scoremodellen en gradient-boosted classifiers, en alleen de picks toont waar onze modellen écht afwijken van de closing line. Geen onderbuik. Geen cherry picking. Alleen statistiek, open gepubliceerd.",
   "about.missionCta": "Zie hoe het werkt",
@@ -1682,19 +1682,19 @@ const nl: Dictionary = {
   "about.valuesBadge": "Waar We In Geloven",
   "about.valuesTitle": "Vier principes achter elke pick.",
   "about.valuesSubtitle":
-    "BetsPlug is geen tipster. Het is een gedisciplineerd systeem. Dit zijn de regels die we voor onszelf schreven — en die we weigeren te breken.",
+    "BetsPlug is geen tipster. Het is een gedisciplineerd systeem. Dit zijn de regels die we voor onszelf schreven - en die we weigeren te breken.",
   "about.value1Title": "Data boven mening",
   "about.value1Desc":
     "Elke aanbeveling komt uit een model, niet uit een onderbuikgevoel. We publiceren de expliciete waarschijnlijkheid, verwachte waarde en confidence score zodat je de redenering kunt verifiëren in plaats van blind op een gezicht te vertrouwen.",
   "about.value2Title": "Track record openbaar",
   "about.value2Desc":
-    "Elke pick die we publiceren staat voor altijd op onze publieke track record-pagina — winsten, verliezen, pushes, nooit verwijderd. Als we op lange termijn de markt niet verslaan, verdienen we geen cent van jouw geld. Transparantie is het hele punt.",
+    "Elke pick die we publiceren staat voor altijd op onze publieke track record-pagina - winsten, verliezen, pushes, nooit verwijderd. Als we op lange termijn de markt niet verslaan, verdienen we geen cent van jouw geld. Transparantie is het hele punt.",
   "about.value3Title": "Doorlopend hertrainen",
   "about.value3Desc":
     "Voetbal verandert. Coaches worden ontslagen, selecties worden geschud, nieuwe competities komen op. Onze modellen hertrainen wekelijks op verse resultaten zodat ze nooit verouderen, en we publiceren de retraining-notes naast de picks.",
   "about.value4Title": "Jouw voordeel, niet het onze",
   "about.value4Desc":
-    "Wij zijn analisten, geen bookmakers. Als de markt in jouw voordeel beweegt, profiteer jij — geen platform dat commissie pakt op jouw verliezen. Die alignment vormt elke product-beslissing die we maken.",
+    "Wij zijn analisten, geen bookmakers. Als de markt in jouw voordeel beweegt, profiteer jij - geen platform dat commissie pakt op jouw verliezen. Die alignment vormt elke product-beslissing die we maken.",
 
   "about.teamBadge": "Ontmoet de Oprichters",
   "about.teamTitle": "Twee oprichters. Nul fauteuil-experts.",
@@ -1713,14 +1713,14 @@ const nl: Dictionary = {
 
   "about.ctaTitle": "Klaar om gokken te vervangen door data?",
   "about.ctaSubtitle":
-    "Sluit je aan bij 1.500+ analisten die de picks, waarschijnlijkheden en bewijsstukken krijgen — voordat de closing line zich aanpast.",
+    "Sluit je aan bij 1.500+ analisten die de picks, waarschijnlijkheden en bewijsstukken krijgen - voordat de closing line zich aanpast.",
   "about.ctaButton": "Start Free Trial",
 
   /* Track Record page */
   "tr.metaTitle":
-    "Track Record — Geverifieerde prestaties van BetsPlug",
+    "Track Record - Geverifieerde prestaties van BetsPlug",
   "tr.metaDesc":
-    "Transparante, controleerbare resultaten voor elke BetsPlug-pick. Zie hoe onze AI-modellen ruwe wedstrijddata omzetten in een meetbare voorsprong — wekelijks gedocumenteerd, nooit cherry-picked.",
+    "Transparante, controleerbare resultaten voor elke BetsPlug-pick. Zie hoe onze AI-modellen ruwe wedstrijddata omzetten in een meetbare voorsprong - wekelijks gedocumenteerd, nooit cherry-picked.",
   "tr.breadcrumbHome": "Home",
   "tr.breadcrumbTrack": "Track Record",
 
@@ -1728,7 +1728,7 @@ const nl: Dictionary = {
   "tr.heroTitleA": "Een track record dat je",
   "tr.heroTitleB": "écht kunt verifiëren.",
   "tr.heroSubtitle":
-    "Elke pick die BetsPlug publiceert krijgt een tijdstempel, wordt gewogen op waarschijnlijkheid en gelogd in een publiek grootboek — winst of verlies. Zo worden de cijfers opgebouwd, en zo zetten echte gebruikers ze in de praktijk in.",
+    "Elke pick die BetsPlug publiceert krijgt een tijdstempel, wordt gewogen op waarschijnlijkheid en gelogd in een publiek grootboek - winst of verlies. Zo worden de cijfers opgebouwd, en zo zetten echte gebruikers ze in de praktijk in.",
   "tr.heroCtaPrimary": "Bekijk de nieuwste resultaten",
   "tr.heroCtaSecondary": "Terug naar home",
 
@@ -1761,16 +1761,16 @@ const nl: Dictionary = {
     "Teamnamen, competities en markttypen worden gemapt naar één canoniek schema. Uitschieters, laat afgelaste wedstrijden en opgeschorte markten worden gemarkeerd en verwijderd vóór het modelleren.",
   "tr.pipe3Title": "Feature engineering",
   "tr.pipe3Desc":
-    "Voor elke wedstrijd berekenen we 1.200+ features — Elo, xG-trends, rustdagen, reisafstand, onderlinge duels, scheidsrechterbias, marktbewegingen — en slaan ze op in een point-in-time feature store, zodat training nooit toekomstinformatie lekt.",
+    "Voor elke wedstrijd berekenen we 1.200+ features - Elo, xG-trends, rustdagen, reisafstand, onderlinge duels, scheidsrechterbias, marktbewegingen - en slaan ze op in een point-in-time feature store, zodat training nooit toekomstinformatie lekt.",
   "tr.pipe4Title": "Model-ensemble",
   "tr.pipe4Desc":
     "Vier onafhankelijke modellen stemmen over de uitkomst: een Poisson goals-model, een gradient-boosted classifier, een Elo-baseline en een markt-geïmpliceerde kalibrator. Hun waarschijnlijkheden worden gecombineerd via stacked regression.",
   "tr.pipe5Title": "Value-detectie",
   "tr.pipe5Desc":
-    "We vergelijken de ensemble-waarschijnlijkheid met de beste beschikbare marktkoers. Alleen picks met een statistisch significant voordeel — ná commissie en verwachte slippage — krijgen het label 'value'.",
+    "We vergelijken de ensemble-waarschijnlijkheid met de beste beschikbare marktkoers. Alleen picks met een statistisch significant voordeel - ná commissie en verwachte slippage - krijgen het label 'value'.",
   "tr.pipe6Title": "Publiceren & beoordelen",
   "tr.pipe6Desc":
-    "Picks krijgen een tijdstempel op het moment dat ze live gaan. Zodra de wedstrijd is afgelopen worden resultaten automatisch beoordeeld en naar het publieke track-record grootboek geschreven — winst, verlies of push.",
+    "Picks krijgen een tijdstempel op het moment dat ze live gaan. Zodra de wedstrijd is afgelopen worden resultaten automatisch beoordeeld en naar het publieke track-record grootboek geschreven - winst, verlies of push.",
 
   "tr.methodBadge": "Methodologie",
   "tr.methodTitle": "Vier regels waar we niet vanaf wijken.",
@@ -1778,13 +1778,13 @@ const nl: Dictionary = {
     "Elk getal op deze pagina overleeft deze vangrails. Als een resultaat dat niet kan, telt het niet mee.",
   "tr.method1Title": "Alleen point-in-time",
   "tr.method1Desc":
-    "Modellen worden getraind op data die daadwerkelijk beschikbaar was bij de aftrap — geen achteraf-inzichten, geen stilletjes opnieuw beoordeelde wedstrijden.",
+    "Modellen worden getraind op data die daadwerkelijk beschikbaar was bij de aftrap - geen achteraf-inzichten, geen stilletjes opnieuw beoordeelde wedstrijden.",
   "tr.method2Title": "Closing-line gecorrigeerd",
   "tr.method2Desc":
     "ROI-cijfers trekken realistische slippage af tussen publicatie en de closing line, zodat je rendementen ziet die je ook echt had kunnen realiseren.",
   "tr.method3Title": "Niets wordt verwijderd",
   "tr.method3Desc":
-    "Verloren picks blijven voor altijd in het grootboek staan. Een track record dat alleen winnaars laat zien is geen track record — dat is marketing.",
+    "Verloren picks blijven voor altijd in het grootboek staan. Een track record dat alleen winnaars laat zien is geen track record - dat is marketing.",
   "tr.method4Title": "Extern controleerbaar",
   "tr.method4Desc":
     "Elke pick bevat het wedstrijd-ID, de markt, de koers en de tijdstempel, zodat elke gebruiker of auditor de uitkomst onafhankelijk kan verifiëren.",
@@ -1797,7 +1797,7 @@ const nl: Dictionary = {
   "tr.case1Role": "Voetbal-specialist in het weekend",
   "tr.case1Name": "Luca, 34 · Milaan",
   "tr.case1Quote":
-    "Ik filter het track record op Serie A en over/under-markten. In 2025 scoorde die selectie 61% op 412 picks — dus ik verhoog mijn inzet met vertrouwen op zondagochtend in plaats van te twijfelen.",
+    "Ik filter het track record op Serie A en over/under-markten. In 2025 scoorde die selectie 61% op 412 picks - dus ik verhoog mijn inzet met vertrouwen op zondagochtend in plaats van te twijfelen.",
   "tr.case1Metric1Label": "Zijn gefilterde sample",
   "tr.case1Metric1Value": "412 picks",
   "tr.case1Metric2Label": "Geverifieerde hit rate",
@@ -1810,7 +1810,7 @@ const nl: Dictionary = {
   "tr.case2Role": "Data-gedreven NBA-fan",
   "tr.case2Name": "Priya, 29 · Londen",
   "tr.case2Quote":
-    "Ik geef meer om kalibratie dan om hit rate. Als de Brier-score op de NBA moneyline onder de 0,07 blijft, weet ik dat de kansen eerlijk zijn — niet gewoon geluk.",
+    "Ik geef meer om kalibratie dan om hit rate. Als de Brier-score op de NBA moneyline onder de 0,07 blijft, weet ik dat de kansen eerlijk zijn - niet gewoon geluk.",
   "tr.case2Metric1Label": "NBA Brier-score",
   "tr.case2Metric1Value": "0,068",
   "tr.case2Metric2Label": "Wedstrijden beoordeeld",
@@ -1834,15 +1834,15 @@ const nl: Dictionary = {
     "Gebruikt het historische grootboek als een onafhankelijke backtest. Als de closing-line value daar stand houdt, vertrouwt hij het voor live staking.",
 
   "tr.transBadge": "Controleer het zelf",
-  "tr.transTitle": "Vertrouw ons niet op ons woord — lees het grootboek.",
+  "tr.transTitle": "Vertrouw ons niet op ons woord - lees het grootboek.",
   "tr.transSubtitle":
     "Elke beoordeelde voorspelling die we ooit hebben gepubliceerd is doorzoekbaar op wedstrijd, datum, markt en model. Geen filter dat de verliezers verstopt.",
   "tr.transCta1": "Bekijk live resultaten",
   "tr.transCta2": "Gratis proberen",
 
-  /* How It Works page — dedicated deep-dive */
+  /* How It Works page - dedicated deep-dive */
   "hiw.metaTitle":
-    "Hoe BetsPlug werkt — Van ruwe wedstrijddata tot AI-voorspellingen",
+    "Hoe BetsPlug werkt - Van ruwe wedstrijddata tot AI-voorspellingen",
   "hiw.metaDesc":
     "Een volledige, stapsgewijze uitleg van de BetsPlug-voorspelengine: hoe we data verzamelen, features bouwen, modellen trainen, value detecteren en picks publiceren die je zelf kunt verifiëren.",
   "hiw.breadcrumbHome": "Home",
@@ -1852,7 +1852,7 @@ const nl: Dictionary = {
   "hiw.heroTitleA": "Hoe we ruwe wedstrijddata",
   "hiw.heroTitleB": "omzetten in voorspellingen die je kunt vertrouwen.",
   "hiw.heroSubtitle":
-    "Elke pick op BetsPlug is het eindpunt van een lange, zorgvuldig ontworpen pipeline. Geen onderbuikgevoelens, geen cherry-picking, geen verborgen regels. Dit is het exacte proces — van het moment dat een wedstrijd wordt aangekondigd, tot het moment dat een geverifieerde pick op je dashboard verschijnt.",
+    "Elke pick op BetsPlug is het eindpunt van een lange, zorgvuldig ontworpen pipeline. Geen onderbuikgevoelens, geen cherry-picking, geen verborgen regels. Dit is het exacte proces - van het moment dat een wedstrijd wordt aangekondigd, tot het moment dat een geverifieerde pick op je dashboard verschijnt.",
   "hiw.heroCtaPrimary": "Bekijk het track record",
   "hiw.heroCtaSecondary": "Gratis proberen",
   "hiw.heroStatDataSources": "Databronnen",
@@ -1872,22 +1872,22 @@ const nl: Dictionary = {
   "hiw.s1P1":
     "Elke 6 uur synchroniseren we wedstrijden, uitslagen en standen van API-Football en football-data.org voor 6 Europese competities. Bookmaker-odds worden elke 2 uur opgehaald via The Odds API. Tijdens wedstrijduren (12:00-24:00 UTC) worden live scores elke 5 minuten bijgewerkt zodat je dashboard actueel blijft.",
   "hiw.s1P2":
-    "Elk record krijgt een tijdstempel zodat we elk moment in de geschiedenis exact kunnen terugspelen zoals onze modellen het zagen — cruciaal voor eerlijke backtesting.",
+    "Elk record krijgt een tijdstempel zodat we elk moment in de geschiedenis exact kunnen terugspelen zoals onze modellen het zagen - cruciaal voor eerlijke backtesting.",
   "hiw.s1Point1Title": "3 dataleveranciers",
   "hiw.s1Point1Desc":
-    "API-Football, football-data.org en The Odds API — elk voor een ander aspect van de wedstrijd.",
+    "API-Football, football-data.org en The Odds API - elk voor een ander aspect van de wedstrijd.",
   "hiw.s1Point2Title": "6-uur sync-cyclus",
   "hiw.s1Point2Desc":
     "Wedstrijden en voorspellingen worden elke 6 uur ververst. Live scores updaten elke 5 minuten tijdens wedstrijduren.",
   "hiw.s1Point3Title": "Point-in-time opslag",
   "hiw.s1Point3Desc":
-    "Niets wordt overschreven. Elke wijziging is een nieuwe regel — geschiedenis is permanent.",
+    "Niets wordt overschreven. Elke wijziging is een nieuwe regel - geschiedenis is permanent.",
 
   "hiw.s2Badge": "Stap 02 · Opschonen & normaliseren",
   "hiw.s2Title":
     "Wij dwingen één bron van waarheid af voordat een model ook maar iets ziet.",
   "hiw.s2Lead":
-    "Ruwe sportdata staat bekend als rommelig. Teamnamen verschillen per feed, competities hernoemen zichzelf, markten worden midden in een wedstrijd opgeschort. Wij lossen dat allemaal op — op een deterministische, reproduceerbare manier.",
+    "Ruwe sportdata staat bekend als rommelig. Teamnamen verschillen per feed, competities hernoemen zichzelf, markten worden midden in een wedstrijd opgeschort. Wij lossen dat allemaal op - op een deterministische, reproduceerbare manier.",
   "hiw.s2P1":
     "Teams, competities, spelers en markttypen worden via een handmatig gecontroleerde lookup-tabel gemapt naar één canoniek schema. Opgeschorte, vernietigde of laat afgelaste markten worden gemarkeerd en uitgesloten vóór welk model dan ook ze aanraakt.",
   "hiw.s2P2":
@@ -1900,13 +1900,13 @@ const nl: Dictionary = {
   "hiw.s2Bullet5": "Ontbrekende waarden expliciet gemarkeerd (nooit stilletjes ingevuld)",
 
   "hiw.s3Badge": "Stap 03 · Feature engineering",
-  "hiw.s3Title": "Meerdere signalfamilies per wedstrijd — elk verdient zijn plek.",
+  "hiw.s3Title": "Meerdere signalfamilies per wedstrijd - elk verdient zijn plek.",
   "hiw.s3Lead":
     "Een voorspelling is alleen zo scherp als de signalen waar hij op gebouwd is. Hier wordt een wedstrijd een gestructureerd profiel waar onze modellen over kunnen redeneren.",
   "hiw.s3P1":
     "Voor elke wedstrijd berekenen we features in verschillende families: Elo-ratings, Poisson-doelkansratios, competitiestanden, recente vorm, onderlinge geschiedenis en bookmaker-odds. Deze voeden drie onafhankelijke modellen die elk op een andere manier naar de data kijken.",
   "hiw.s3P2":
-    "Alle features gebruiken alleen data die beschikbaar is vóór de aftrap. Onze modellen zien nooit de toekomst bij het genereren van een voorspelling — een essentiële bescherming tegen overfitting.",
+    "Alle features gebruiken alleen data die beschikbaar is vóór de aftrap. Onze modellen zien nooit de toekomst bij het genereren van een voorspelling - een essentiële bescherming tegen overfitting.",
   "hiw.s3Family1Title": "Elo-ratings",
   "hiw.s3Family1Desc": "Dynamische teamsterkte-ratings die na elke wedstrijduitslag worden bijgewerkt.",
   "hiw.s3Family2Title": "Poisson-doelkansen",
@@ -1934,7 +1934,7 @@ const nl: Dictionary = {
     "Schat verwachte aanvals- en verdedigingsratio's per team en integreert over alle mogelijke eindstanden om wedstrijduitkomst-waarschijnlijkheden te produceren.",
   "hiw.s4Model3Name": "Logistische Regressie",
   "hiw.s4Model3Desc":
-    "Een statistische classifier die meerdere wedstrijdfeatures — vorm, stand, thuisvoordeel — gebruikt om wedstrijduitslagen direct te voorspellen.",
+    "Een statistische classifier die meerdere wedstrijdfeatures - vorm, stand, thuisvoordeel - gebruikt om wedstrijduitslagen direct te voorspellen.",
   "hiw.s4BlendTitle": "Gewogen middeling",
   "hiw.s4BlendDesc":
     "De drie waarschijnlijkheden worden gecombineerd via gewogen middeling. De huidige weights (Elo 1.0, Poisson 1.5, Logistic 1.0) geven iets meer invloed aan het Poisson-model.",
@@ -1944,9 +1944,9 @@ const nl: Dictionary = {
   "hiw.s5Lead":
     "Gelijk hebben is niet genoeg. Een pick wordt pas een pick wanneer onze waarschijnlijkheid waarde suggereert ten opzichte van de beschikbare odds.",
   "hiw.s5P1":
-    "We vergelijken onze ensemble-waarschijnlijkheden met bookmaker-odds opgehaald via The Odds API. Onze Strategy Lab filtert voorspellingen met regels die gevalideerd zijn door walk-forward backtesting — zoals het vereisen van hoge thuiswinstkans of lage gelijkspeelkans.",
+    "We vergelijken onze ensemble-waarschijnlijkheden met bookmaker-odds opgehaald via The Odds API. Onze Strategy Lab filtert voorspellingen met regels die gevalideerd zijn door walk-forward backtesting - zoals het vereisen van hoge thuiswinstkans of lage gelijkspeelkans.",
   "hiw.s5P2":
-    "Momenteel hebben 3 strategieën de statistische validatie doorstaan met positieve backtested ROI over 90 dagen. Maar dit zijn backtested resultaten op een beperkte steekproef — de werkelijke prestaties zullen variëren. Daar zijn we eerlijk over.",
+    "Momenteel hebben 3 strategieën de statistische validatie doorstaan met positieve backtested ROI over 90 dagen. Maar dit zijn backtested resultaten op een beperkte steekproef - de werkelijke prestaties zullen variëren. Daar zijn we eerlijk over.",
   "hiw.s5FormulaTitle": "De check die elke pick moet doorstaan",
   "hiw.s5FormulaLine1": "Modelkans × Beste odds",
   "hiw.s5FormulaLine2": "−  verwachte slippage",
@@ -1960,12 +1960,12 @@ const nl: Dictionary = {
   "hiw.s6Lead":
     "Hier worden de meeste voorspelsites vaag. Hier worden wij juist luid.",
   "hiw.s6P1":
-    "Op het moment dat een pick wordt gegenereerd, krijgt hij een tijdstempel, wordt hij ondertekend, en gepubliceerd op zowel je dashboard als ons publieke grootboek — exact dezelfde seconde. Jij en een toezichthouder zien exact hetzelfde record.",
+    "Op het moment dat een pick wordt gegenereerd, krijgt hij een tijdstempel, wordt hij ondertekend, en gepubliceerd op zowel je dashboard als ons publieke grootboek - exact dezelfde seconde. Jij en een toezichthouder zien exact hetzelfde record.",
   "hiw.s6P2":
-    "Zodra de wedstrijd is afgelopen wordt elke pick automatisch beoordeeld aan de hand van de officiële resultaat-feed. Winst, verlies en push worden allemaal vastgelegd. Verloren picks blijven voor altijd in het grootboek staan — want een track record dat alleen winnaars laat zien is geen track record, dat is marketing.",
+    "Zodra de wedstrijd is afgelopen wordt elke pick automatisch beoordeeld aan de hand van de officiële resultaat-feed. Winst, verlies en push worden allemaal vastgelegd. Verloren picks blijven voor altijd in het grootboek staan - want een track record dat alleen winnaars laat zien is geen track record, dat is marketing.",
   "hiw.s6Point1Title": "Publicatie op de seconde",
   "hiw.s6Point1Desc":
-    "Abonnees en het publieke grootboek worden gelijktijdig bijgewerkt — geen backdating mogelijk.",
+    "Abonnees en het publieke grootboek worden gelijktijdig bijgewerkt - geen backdating mogelijk.",
   "hiw.s6Point2Title": "Automatische beoordeling",
   "hiw.s6Point2Desc":
     "Resultaten worden gescoord vanuit de officiële feed, niet door een mens die de andere kant op zou kunnen kijken.",
@@ -1980,7 +1980,7 @@ const nl: Dictionary = {
   "hiw.s7P1":
     "Elke 6 uur, nadat resultaten zijn gesynchroniseerd, scoort het systeem alle afgelopen voorspellingen. Elke pick wordt geëvalueerd met Brier-score en log-loss metrics, en gemarkeerd als correct of incorrect. Zo kunnen we de werkelijke nauwkeurigheid in de tijd volgen.",
   "hiw.s7P2":
-    "De huidige 3-way nauwkeurigheid (thuis/gelijk/uit) ligt rond de 50% — boven de 33% willekeurige baseline, maar niet buitengewoon. We publiceren alle resultaten, winst en verlies, zodat je het track record zelf kunt verifiëren.",
+    "De huidige 3-way nauwkeurigheid (thuis/gelijk/uit) ligt rond de 50% - boven de 33% willekeurige baseline, maar niet buitengewoon. We publiceren alle resultaten, winst en verlies, zodat je het track record zelf kunt verifiëren.",
   "hiw.s7Bullet1": "6-uur evaluatiecyclus",
   "hiw.s7Bullet2": "Brier-score en log-loss tracking",
   "hiw.s7Bullet3": "Alle voorspellingen automatisch beoordeeld",
@@ -1989,7 +1989,7 @@ const nl: Dictionary = {
   "hiw.proofBadge": "Waarom dit uitmaakt",
   "hiw.proofTitle": "De reden dat onze voorspellingen ook echt overeind blijven.",
   "hiw.proofSubtitle":
-    "Elke keuze in deze pipeline bestaat om één reden: om je een eerlijke, datagedreven waarschijnlijkheid te geven — geen gok.",
+    "Elke keuze in deze pipeline bestaat om één reden: om je een eerlijke, datagedreven waarschijnlijkheid te geven - geen gok.",
   "hiw.proof1Title": "Geen hindsight bias",
   "hiw.proof1Desc":
     "Modellen zien alleen data die beschikbaar is vóór de aftrap. Voorspellingen worden gegenereerd en getijdstempeld voordat de wedstrijd begint.",
@@ -2015,16 +2015,16 @@ const nl: Dictionary = {
     "Als je eerder een tipstersite hebt geprobeerd, ben je waarschijnlijk teleurgesteld. Hier is precies waarom BetsPlug anders is.",
   "hiw.faq1Q": "Hoe nauwkeurig zijn jullie voorspellingen?",
   "hiw.faq1A":
-    "Onze 3-way wedstrijdvoorspellingen (thuis/gelijk/uit) scoren rond de 50% nauwkeurigheid. Dat is boven de 33% willekeurige baseline, maar we zijn eerlijk — het is geen magisch getal. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld na de wedstrijd, dus je kunt het track record zelf verifiëren.",
+    "Onze 3-way wedstrijdvoorspellingen (thuis/gelijk/uit) scoren rond de 50% nauwkeurigheid. Dat is boven de 33% willekeurige baseline, maar we zijn eerlijk - het is geen magisch getal. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld na de wedstrijd, dus je kunt het track record zelf verifiëren.",
   "hiw.faq2Q": "Wat gebeurt er bij een verliesreeks?",
   "hiw.faq2A":
-    "Verloren voorspellingen blijven permanent zichtbaar. We publiceren ze net zo openlijk als de winnaars. Onze Strategy Lab-strategieën zijn backtested op een steekproef van 90 dagen, dus we verwachten variantie. Verliesreeksen komen voor — dat is sport.",
+    "Verloren voorspellingen blijven permanent zichtbaar. We publiceren ze net zo openlijk als de winnaars. Onze Strategy Lab-strategieën zijn backtested op een steekproef van 90 dagen, dus we verwachten variantie. Verliesreeksen komen voor - dat is sport.",
   "hiw.faq3Q": "Waarom niet gewoon één heel slim model gebruiken?",
   "hiw.faq3A":
-    "Omdat elk model blinde vlekken heeft. Onze drie modellen — Elo-ratings, Poisson-doelmodel en Logistische regressie — vangen elk andere patronen. Het ensemble met gewogen middeling presteert consistent beter dan elk individueel lid.",
+    "Omdat elk model blinde vlekken heeft. Onze drie modellen - Elo-ratings, Poisson-doelmodel en Logistische regressie - vangen elk andere patronen. Het ensemble met gewogen middeling presteert consistent beter dan elk individueel lid.",
   "hiw.faq4Q": "Kan ik daadwerkelijk winst maken met deze voorspellingen?",
   "hiw.faq4A":
-    "Onze backtested strategieën tonen positieve ROI over 90 dagen, maar backtesting is geen garantie. De werkelijke prestaties hangen af van de odds die je krijgt, timing en variantie. Wij leveren de data en analyse — de rest is aan jou.",
+    "Onze backtested strategieën tonen positieve ROI over 90 dagen, maar backtesting is geen garantie. De werkelijke prestaties hangen af van de odds die je krijgt, timing en variantie. Wij leveren de data en analyse - de rest is aan jou.",
   "hiw.faq5Q": "Welke sporten en competities dekken jullie?",
   "hiw.faq5A":
     "Alleen voetbal, met dekking van 6 Europese competities: Premier League, La Liga, Bundesliga, Serie A, Ligue 1 en Eredivisie. We zijn van plan uit te breiden, maar we doen liever een paar competities goed dan veel competities slecht.",
@@ -2035,7 +2035,7 @@ const nl: Dictionary = {
   "hiw.ctaBadge": "Klaar om het in actie te zien?",
   "hiw.ctaTitle": "Stop met gokken. Begin met de pipeline te vertrouwen.",
   "hiw.ctaSubtitle":
-    "Nu weet je precies hoe de pipeline werkt. Bekijk de voorspellingen die hij produceert — live, getijdstempeld en klaar om te verifiëren.",
+    "Nu weet je precies hoe de pipeline werkt. Bekijk de voorspellingen die hij produceert - live, getijdstempeld en klaar om te verifiëren.",
   "hiw.ctaPrimary": "Gratis proberen",
   "hiw.ctaSecondary": "Bekijk het track record",
 
@@ -2069,7 +2069,7 @@ const nl: Dictionary = {
   "checkout.total": "Nu te betalen",
   "checkout.yearlySaveBadge": "Bespaar 20%",
   "checkout.yearlySaveCallout":
-    "Schakel over naar jaarlijks en bespaar 20% — dat is {amount} per jaar korting.",
+    "Schakel over naar jaarlijks en bespaar 20% - dat is {amount} per jaar korting.",
   "checkout.yearlySaving": "Je bespaart {amount} per jaar",
 
   /* Upsells */
@@ -2078,17 +2078,17 @@ const nl: Dictionary = {
     "Optionele extra's die de meeste leden toevoegen voor de volledige edge. Elke extra is apart opzegbaar.",
   "checkout.upsell1Title": "VIP Telegram Alerts",
   "checkout.upsell1Desc":
-    "Ontvang alle tips direct via Telegram — je hoeft niet in te loggen om op de hoogte te blijven van elke edge.",
+    "Ontvang alle tips direct via Telegram - je hoeft niet in te loggen om op de hoogte te blijven van elke edge.",
   "checkout.upsell1Badge": "Meest gekozen",
   "checkout.upsell2Title": "Wekelijks Strategie-rapport",
   "checkout.upsell2Desc":
     "Elke maandag: een 20-pagina PDF met ROI-analyse, modeldrift en aankomende edges.",
   "checkout.upsell3Title": "Priority 1-op-1 Support",
   "checkout.upsell3Desc":
-    "Direct contact met onze analisten — reactie binnen 2 uur, 7 dagen per week.",
+    "Direct contact met onze analisten - reactie binnen 2 uur, 7 dagen per week.",
   "checkout.upsell4Title": "Tip van de Dag toegang",
   "checkout.upsell4Desc":
-    "Elke dag één high-confidence pick in je inbox — onze hoogste-edge weddenschap voor de komende 24 uur.",
+    "Elke dag één high-confidence pick in je inbox - onze hoogste-edge weddenschap voor de komende 24 uur.",
   "checkout.upsellIncluded": "Inbegrepen bij Platinum",
   "checkout.upsellPerMonth": "/mnd",
 
@@ -2104,7 +2104,7 @@ const nl: Dictionary = {
   "checkout.trialOption2Desc":
     "Vandaag afgeschreven, geen proefperiode. Ideaal als je ons track record al kent.",
   "checkout.trialPausedNote":
-    "Zeg je op tijdens de proefperiode? Dan wordt je account gepauzeerd — niet verwijderd. Je kunt altijd hervatten.",
+    "Zeg je op tijdens de proefperiode? Dan wordt je account gepauzeerd - niet verwijderd. Je kunt altijd hervatten.",
   "checkout.trialBadge": "7 dagen gratis proberen actief",
   "checkout.trialDueToday": "€0,01 vandaag",
   "checkout.trialFirstCharge": "Eerste afschrijving op {date}",
@@ -2157,7 +2157,7 @@ const nl: Dictionary = {
 
   "checkout.paymentTitle": "Betaalmethode",
   "checkout.paymentSubtitle":
-    "Kies hoe je wilt betalen. Een echte betaalprovider wordt binnenkort gekoppeld — dit is een demo-checkout.",
+    "Kies hoe je wilt betalen. Een echte betaalprovider wordt binnenkort gekoppeld - dit is een demo-checkout.",
   "checkout.payCard": "Creditcard",
   "checkout.payCardDesc": "Visa, Mastercard, Amex",
   "checkout.payPaypal": "PayPal",
@@ -2193,11 +2193,11 @@ const nl: Dictionary = {
 
   "checkout.successTitle": "Welkom bij BetsPlug!",
   "checkout.successBody":
-    "Je demo-checkout is ontvangen. In productie zou je nu worden doorgestuurd naar je dashboard — verken voor nu de site.",
+    "Je demo-checkout is ontvangen. In productie zou je nu worden doorgestuurd naar je dashboard - verken voor nu de site.",
   "checkout.successCta": "Naar dashboard",
 
   /* Welcome / thank-you */
-  "welcome.meta.title": "Welkom aan boord — Je bent nu officieel BetsPlug-lid",
+  "welcome.meta.title": "Welkom aan boord - Je bent nu officieel BetsPlug-lid",
   "welcome.meta.description":
     "Je BetsPlug-lidmaatschap staat klaar. Log in om de picks van vandaag te zien, je ROI bij te houden en slimmer te beginnen winnen.",
 
@@ -2205,14 +2205,14 @@ const nl: Dictionary = {
   "welcome.title": "Welkom in de inner circle.",
   "welcome.titleHighlight": "Hier begint het.",
   "welcome.subtitle":
-    "Geen tipsters meer achterna zitten, geen twijfels meer. Je maakt nu deel uit van een community die wint met data, discipline en een beetje lef. Laat dit het jaar worden waarin je stopt met gokken — en start met investeren.",
+    "Geen tipsters meer achterna zitten, geen twijfels meer. Je maakt nu deel uit van een community die wint met data, discipline en een beetje lef. Laat dit het jaar worden waarin je stopt met gokken - en start met investeren.",
 
   "welcome.trialTitle": "Je 7-daagse gratis proefperiode is actief",
   "welcome.trialBody":
-    "Je wordt vandaag nog niets in rekening gebracht. Annuleer binnen 7 dagen en je account wordt rustig gepauzeerd — geen vragen, geen druk.",
+    "Je wordt vandaag nog niets in rekening gebracht. Annuleer binnen 7 dagen en je account wordt rustig gepauzeerd - geen vragen, geen druk.",
   "welcome.paidTitle": "Je lidmaatschap is actief",
   "welcome.paidBody":
-    "Je account is volledig ontgrendeld. Elke pick, elke statistiek, elke edge — het staat klaar in het dashboard.",
+    "Je account is volledig ontgrendeld. Elke pick, elke statistiek, elke edge - het staat klaar in het dashboard.",
 
   "welcome.ctaPrimary": "Log in op je dashboard",
   "welcome.ctaSecondary": "Terug naar de homepage",
@@ -2236,16 +2236,16 @@ const nl: Dictionary = {
 
   "welcome.quote":
     "\"Eindelijk een dienst die wedden behandelt als een vak, niet als een loterij. BetsPlug heeft mijn weekends compleet veranderd.\"",
-  "welcome.quoteAuthor": "— Thomas R., lid sinds 2024",
+  "welcome.quoteAuthor": " - Thomas R., lid sinds 2024",
 
   "welcome.footerNote":
-    "Vragen? Mail ons op support@betsplug.com — er antwoordt een echt mens.",
+    "Vragen? Mail ons op support@betsplug.com - er antwoordt een echt mens.",
 
   /* Quickstart timeline */
   "welcome.quickstartEyebrow": "Quickstart",
   "welcome.quickstartTitle": "Jouw eerste 10 minuten met BetsPlug",
   "welcome.quickstartSubtitle":
-    "Vijf simpele stappen van hier tot je eerste data-gedreven pick. Volg het pad — wij begeleiden je van begin tot eind.",
+    "Vijf simpele stappen van hier tot je eerste data-gedreven pick. Volg het pad - wij begeleiden je van begin tot eind.",
   "welcome.quickstartDuration": "± 10 minuten totaal",
 
   "welcome.qs1Title": "Bevestig je e-mail",
@@ -2270,14 +2270,14 @@ const nl: Dictionary = {
 
   "welcome.qs5Title": "Plaats je eerste weddenschap",
   "welcome.qs5Body":
-    "Kies de tip die bij je past, plaats de inzet bij je bookmaker en voeg hem toe aan je tracker. Klaar — je bent live.",
+    "Kies de tip die bij je past, plaats de inzet bij je bookmaker en voeg hem toe aan je tracker. Klaar - je bent live.",
   "welcome.qs5Duration": "3 min",
 
   /* Dashboard tour */
   "welcome.tourEyebrow": "Dashboard-tour",
   "welcome.tourTitle": "Waar vind je wat, zodra je binnen bent",
   "welcome.tourSubtitle":
-    "Even de weg wijzen. Het dashboard is opgedeeld in 6 overzichtelijke secties — hier lees je wat elke sectie doet zodat je je vanaf minuut één thuis voelt.",
+    "Even de weg wijzen. Het dashboard is opgedeeld in 6 overzichtelijke secties - hier lees je wat elke sectie doet zodat je je vanaf minuut één thuis voelt.",
 
   "welcome.tour1Title": "Picks van vandaag",
   "welcome.tour1Body":
@@ -2291,7 +2291,7 @@ const nl: Dictionary = {
 
   "welcome.tour3Title": "Track record",
   "welcome.tour3Body":
-    "De volledige, ongefilterde historie van elke pick die we ooit hebben gepost. Filter op sport, markt, tipster of datum — niets wordt verborgen.",
+    "De volledige, ongefilterde historie van elke pick die we ooit hebben gepost. Filter op sport, markt, tipster of datum - niets wordt verborgen.",
   "welcome.tour3Where": "Sidebar → Track record",
 
   "welcome.tour4Title": "Live wedstrijden",
@@ -2301,12 +2301,12 @@ const nl: Dictionary = {
 
   "welcome.tour5Title": "Community & Telegram",
   "welcome.tour5Body":
-    "Chat met andere leden, stel vragen aan de experts en ontvang direct een melding zodra er een nieuwe pick online komt — ook als je niet op de site bent.",
+    "Chat met andere leden, stel vragen aan de experts en ontvang direct een melding zodra er een nieuwe pick online komt - ook als je niet op de site bent.",
   "welcome.tour5Where": "Bovenbalk → Community",
 
   "welcome.tour6Title": "Account & facturering",
   "welcome.tour6Body":
-    "Beheer je pakket, werk je betaalgegevens bij, wissel van maandelijks naar jaarlijks, download facturen of zeg altijd direct op — allemaal op één plek.",
+    "Beheer je pakket, werk je betaalgegevens bij, wissel van maandelijks naar jaarlijks, download facturen of zeg altijd direct op - allemaal op één plek.",
   "welcome.tour6Where": "Rechtsboven avatar → Instellingen",
 
   "welcome.tourProTipTitle": "Pro tip",
@@ -2314,7 +2314,7 @@ const nl: Dictionary = {
     "Druk overal in het dashboard op ⌘K (of Ctrl+K op Windows) om in twee toetsaanslagen naar elke sectie te springen.",
 
   /* Login */
-  "login.meta.title": "Inloggen — BetsPlug",
+  "login.meta.title": "Inloggen - BetsPlug",
   "login.meta.description":
     "Log in op je BetsPlug-account om de picks van vandaag te bekijken, je ROI te volgen en je abonnement te beheren.",
 
@@ -2363,16 +2363,16 @@ const nl: Dictionary = {
   "dashPrev.titleHighlight": "binnen één klik",
   "dashPrev.titleB": ".",
   "dashPrev.subtitle":
-    "Log in en stap direct in jouw persoonlijke BetsPlug-dashboard — een overzichtelijk, afleidingsvrij commandocentrum waar elke dagelijkse pick, elk model-inzicht, elke live wedstrijd en elk historisch resultaat op één plek samenkomt. Geen spreadsheets, geen gokwerk, geen tabjes meer wisselen.",
+    "Log in en stap direct in jouw persoonlijke BetsPlug-dashboard - een overzichtelijk, afleidingsvrij commandocentrum waar elke dagelijkse pick, elk model-inzicht, elke live wedstrijd en elk historisch resultaat op één plek samenkomt. Geen spreadsheets, geen gokwerk, geen tabjes meer wisselen.",
   "dashPrev.feature1Title": "Dagelijkse picks in één oogopslag",
   "dashPrev.feature1Desc":
-    "Zie direct bij het inloggen de picks met de hoogste confidence van vandaag — gesorteerd op edge, zekerheid en aftraptijd.",
+    "Zie direct bij het inloggen de picks met de hoogste confidence van vandaag - gesorteerd op edge, zekerheid en aftraptijd.",
   "dashPrev.feature2Title": "Live modelnauwkeurigheid",
   "dashPrev.feature2Desc":
     "Realtime accuracy per sport, per competitie en per model. Zie je edge updaten terwijl de resultaten binnenkomen.",
   "dashPrev.feature3Title": "Transparante track record",
   "dashPrev.feature3Desc":
-    "Elke pick die we ooit hebben gemaakt — winst, verlies en ROI — publiekelijk gelogd en filterbaar op datum of strategie.",
+    "Elke pick die we ooit hebben gemaakt - winst, verlies en ROI - publiekelijk gelogd en filterbaar op datum of strategie.",
   "dashPrev.feature4Title": "Strategy Lab & alerts",
   "dashPrev.feature4Desc":
     "Bouw eigen filters, bookmark je favoriete competities en ontvang direct een melding zodra er een premium pick live staat.",
@@ -2399,13 +2399,13 @@ const nl: Dictionary = {
   "dashPrev.mockAccuracySub": "Voorspelnauwkeurigheid gesegmenteerd per sport",
 
   /* ── Match Predictions (publieke teaser) ─────────────────── */
-  "matchPred.metaTitle": "Gratis AI-wedstrijdvoorspellingen — Aankomende wedstrijden | BetsPlug",
+  "matchPred.metaTitle": "Gratis AI-wedstrijdvoorspellingen - Aankomende wedstrijden | BetsPlug",
   "matchPred.metaDesc":
     "Bekijk 3 gratis AI-wedstrijdvoorspellingen met winkansen en betrouwbaarheidsscores. Ontgrendel alle aankomende wedstrijden met een BetsPlug-abonnement.",
   "matchPred.eyebrow": "Gratis preview",
   "matchPred.title": "AI-wedstrijdvoorspellingen voor aankomende wedstrijden",
   "matchPred.subtitle":
-    "Een preview van de wedstrijden die ons Ensemble-model nu analyseert. Bekijk 3 volledige voorspellingen gratis — ontgrendel de rest met een proefperiode.",
+    "Een preview van de wedstrijden die ons Ensemble-model nu analyseert. Bekijk 3 volledige voorspellingen gratis - ontgrendel de rest met een proefperiode.",
   "matchPred.trust1": "4-model Ensemble",
   "matchPred.trust2": "Live kansberekening",
   "matchPred.trust3": "Openbaar track record",
@@ -2415,24 +2415,24 @@ const nl: Dictionary = {
   "matchPred.statAvgConf": "Gem. betrouwbaarheid",
   "matchPred.freeHeading": "Jouw 3 gratis voorspellingen",
   "matchPred.freeSub":
-    "Volledige winkansen, betrouwbaarheidsscores en modeldetails — van het huis.",
+    "Volledige winkansen, betrouwbaarheidsscores en modeldetails - van het huis.",
   "matchPred.lockedHeading": "Premium wedstrijdpool",
   "matchPred.lockedSub":
     "Deze wedstrijden zijn voorbehouden aan leden. Ontgrendel elke pick, elke competitie, elke dag.",
   "matchPred.bannerBadge": "Alleen voor leden",
   "matchPred.bannerTitle": "Ontgrendel elke wedstrijd",
   "matchPred.bannerDesc":
-    "Sluit je aan bij BetsPlug en zie alle aankomende voorspellingen uit de topcompetities — met betrouwbaarheidsscores, live updates en ons volledige publieke track record.",
+    "Sluit je aan bij BetsPlug en zie alle aankomende voorspellingen uit de topcompetities - met betrouwbaarheidsscores, live updates en ons volledige publieke track record.",
   "matchPred.bannerBullet1": "Onbeperkte dagelijkse AI-voorspellingen",
   "matchPred.bannerBullet2": "Alle 4 modellen + Ensemble-output",
   "matchPred.bannerBullet3": "Live kansberekening",
-  "matchPred.bannerBullet4": "Altijd opzegbaar — 14 dagen retour",
+  "matchPred.bannerBullet4": "Altijd opzegbaar - 14 dagen retour",
   "matchPred.bannerCta": "Ontgrendel alle wedstrijden",
   "matchPred.bannerCtaSecondary": "Bekijk prijzen",
   "matchPred.bannerNote": "Slechts €0,01 activeert je 7-daagse volledige-toegang-proef.",
   "matchPred.ctaFinalTitle": "Stop met gokken. Beslis met data.",
   "matchPred.ctaFinalDesc":
-    "Elke aankomende wedstrijd, elk model, elke betrouwbaarheidsscore — in enkele seconden ontgrendeld. Sluit je aan bij wedders die transparante analyses vertrouwen.",
+    "Elke aankomende wedstrijd, elk model, elke betrouwbaarheidsscore - in enkele seconden ontgrendeld. Sluit je aan bij wedders die transparante analyses vertrouwen.",
   "matchPred.ctaFinalButton": "Start je gratis proefperiode",
   "matchPred.ctaFinalSecondary": "Bekijk abonnementen",
   "matchPred.loadingTitle": "Aankomende wedstrijden laden…",

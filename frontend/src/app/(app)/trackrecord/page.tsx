@@ -120,8 +120,8 @@ interface StatRow {
 
 function SummaryStatsTable({ summary }: { summary: TrackrecordSummary }) {
   const rows: StatRow[] = [
-    { label: "Period Start", value: summary.period_start ? formatDate(summary.period_start) : "—" },
-    { label: "Period End", value: summary.period_end ? formatDate(summary.period_end) : "—" },
+    { label: "Period Start", value: summary.period_start ? formatDate(summary.period_start) : " - " },
+    { label: "Period End", value: summary.period_end ? formatDate(summary.period_end) : " - " },
     { label: "Total Predictions", value: summary.total_predictions.toLocaleString() },
     { label: "Accuracy", value: formatPercent(summary.accuracy) },
     { label: "Brier Score", value: summary.brier_score.toFixed(4) },
@@ -513,7 +513,7 @@ function RecentPredictionsFeed() {
         <div>
           <h2 className="text-base font-semibold text-slate-100">Recent Predictions &amp; Results</h2>
           <p className="text-sm text-slate-500 mt-0.5">
-            Last {predictions.length} model calls — real data from database
+            Last {predictions.length} model calls - real data from database
           </p>
         </div>
         <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
@@ -532,8 +532,8 @@ function RecentPredictionsFeed() {
             ? "#10b981"
             : "#ef4444";
 
-          const homeTeam = pred.match?.home_team_name ?? "—";
-          const awayTeam = pred.match?.away_team_name ?? "—";
+          const homeTeam = pred.match?.home_team_name ?? " - ";
+          const awayTeam = pred.match?.away_team_name ?? " - ";
           const matchLabel = pred.match ? `${homeTeam} vs ${awayTeam}` : `Match ${pred.match_id}`;
           const scheduledAt = pred.match?.scheduled_at
             ? new Date(pred.match.scheduled_at).toLocaleString("en-GB", {
@@ -589,7 +589,7 @@ function RecentPredictionsFeed() {
               <span className="text-xs font-mono tabular-nums w-20 text-right text-slate-500">
                 {pred.evaluation?.brier_score !== undefined
                   ? `BS: ${pred.evaluation.brier_score.toFixed(3)}`
-                  : "—"}
+                  : " - "}
               </span>
             </div>
           );
@@ -666,7 +666,7 @@ function ProfitabilityChart({
       <div>
         <h2 className="text-base font-semibold text-slate-100">Accuracy Over Time</h2>
         <p className="text-sm text-slate-500 mt-0.5">
-          Monthly model accuracy — real data ({monthSegments.length} months)
+          Monthly model accuracy - real data ({monthSegments.length} months)
         </p>
       </div>
       <div className="h-72">
@@ -886,31 +886,31 @@ export default function TrackrecordPage() {
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5 animate-slide-up">
           <KpiCard
             title="Total Predictions"
-            value={summary?.total_predictions.toLocaleString() ?? "—"}
+            value={summary?.total_predictions.toLocaleString() ?? " - "}
             icon={Target}
             accent="blue"
           />
           <KpiCard
             title="Accuracy"
-            value={summary ? formatPercent(summary.accuracy) : "—"}
+            value={summary ? formatPercent(summary.accuracy) : " - "}
             icon={TrendingUp}
             accent="green"
           />
           <KpiCard
             title="Brier Score"
-            value={summary ? summary.brier_score.toFixed(3) : "—"}
+            value={summary ? summary.brier_score.toFixed(3) : " - "}
             icon={BarChart3}
             accent="blue"
           />
           <KpiCard
             title="Log Loss"
-            value={summary ? summary.log_loss.toFixed(3) : "—"}
+            value={summary ? summary.log_loss.toFixed(3) : " - "}
             icon={BarChart3}
             accent="amber"
           />
           <KpiCard
             title="Calibration Error"
-            value={summary ? summary.calibration_error.toFixed(3) : "—"}
+            value={summary ? summary.calibration_error.toFixed(3) : " - "}
             icon={Target}
             accent="blue"
           />
@@ -1033,7 +1033,7 @@ export default function TrackrecordPage() {
             <div className="mb-4">
               <h2 className="text-base font-semibold text-slate-100">Accuracy by Sport</h2>
               <p className="text-sm text-slate-500 mt-0.5">
-                Prediction accuracy broken down by sport — real data
+                Prediction accuracy broken down by sport - real data
               </p>
             </div>
             <SportAccuracySection filterParams={filterParams} />
@@ -1136,7 +1136,7 @@ export default function TrackrecordPage() {
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-slate-400">ECE</span>
                   <span className="font-mono font-semibold text-slate-100">
-                    {summary ? summary.calibration_error.toFixed(4) : "—"}
+                    {summary ? summary.calibration_error.toFixed(4) : " - "}
                   </span>
                 </div>
                 <p className="text-xs text-slate-500">

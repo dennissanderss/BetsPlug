@@ -354,7 +354,7 @@ export default function DashboardPage() {
   const kpis = [
     {
       label: "Total Forecasts",
-      value: summaryLoading ? null : (summary?.total_predictions.toLocaleString() ?? "—"),
+      value: summaryLoading ? null : (summary?.total_predictions.toLocaleString() ?? " - "),
       icon: Activity,
       trend: null as null | "up" | "down",
       sub: "All time",
@@ -362,7 +362,7 @@ export default function DashboardPage() {
     },
     {
       label: "Overall Accuracy",
-      value: summaryLoading ? null : (summary ? formatPercent(summary.accuracy) : "—"),
+      value: summaryLoading ? null : (summary ? formatPercent(summary.accuracy) : " - "),
       icon: Target,
       trend: "up" as const,
       sub: "vs last period",
@@ -370,7 +370,7 @@ export default function DashboardPage() {
     },
     {
       label: "Avg Brier Score",
-      value: summaryLoading ? null : (summary ? summary.brier_score.toFixed(3) : "—"),
+      value: summaryLoading ? null : (summary ? summary.brier_score.toFixed(3) : " - "),
       icon: BarChart3,
       trend: "down" as const,
       sub: "Lower is better",
@@ -378,7 +378,7 @@ export default function DashboardPage() {
     },
     {
       label: "Avg Confidence",
-      value: summaryLoading ? null : (summary ? formatPercent(summary.avg_confidence) : "—"),
+      value: summaryLoading ? null : (summary ? formatPercent(summary.avg_confidence) : " - "),
       icon: TrendingUp,
       trend: null,
       sub: "Model certainty",
@@ -421,7 +421,7 @@ export default function DashboardPage() {
                     {label}
                   </p>
                   <p className="text-3xl font-bold gradient-text leading-none">
-                    {value ?? "—"}
+                    {value ?? " - "}
                   </p>
                   <div className="flex items-center gap-1">
                     {trend === "up" && (

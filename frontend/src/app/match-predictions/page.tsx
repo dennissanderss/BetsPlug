@@ -9,14 +9,14 @@ import { MatchPredictionsContent } from "./match-predictions-content";
  * used on the members-only /predictions page.
  */
 export const metadata: Metadata = {
-  title: "Free AI Match Predictions — Upcoming Games | BetsPlug",
+  title: "Free AI Match Predictions - Upcoming Games | BetsPlug",
   description:
     "Preview 3 free AI-powered match predictions with win probabilities and confidence scores. Unlock the full slate of upcoming games with a BetsPlug subscription.",
   alternates: {
     canonical: "/match-predictions",
   },
   openGraph: {
-    title: "Free AI Match Predictions — BetsPlug",
+    title: "Free AI Match Predictions - BetsPlug",
     description:
       "Preview 3 free AI-powered match predictions. Unlock the rest with a trial.",
     type: "website",

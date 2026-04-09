@@ -278,7 +278,7 @@ function BlockRenderer({ block }: { block: ArticleBlock }) {
           </p>
           {block.cite && (
             <footer className="mt-3 text-xs font-semibold uppercase tracking-wider text-green-300/80">
-              — {block.cite}
+ - {block.cite}
             </footer>
           )}
         </blockquote>

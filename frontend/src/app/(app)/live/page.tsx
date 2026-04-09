@@ -207,7 +207,7 @@ function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
                 isLive ? "gradient-text" : "text-slate-200"
               )}
             >
-              {fixture.result ? fixture.result.home_score : "—"}
+              {fixture.result ? fixture.result.home_score : " - "}
             </span>
           )}
         </div>
@@ -233,7 +233,7 @@ function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
                 isLive ? "gradient-text" : "text-slate-200"
               )}
             >
-              {fixture.result ? fixture.result.away_score : "—"}
+              {fixture.result ? fixture.result.away_score : " - "}
             </span>
           )}
         </div>
@@ -452,7 +452,7 @@ export default function LiveMatchesPage() {
             </div>
           </div>
           <p className="mt-1.5 text-sm text-slate-400">
-            Today&apos;s matches and upcoming fixtures — next 3 days
+            Today&apos;s matches and upcoming fixtures - next 3 days
           </p>
           {/* Last updated */}
           <div className="mt-2 flex items-center gap-1.5">
@@ -481,7 +481,7 @@ export default function LiveMatchesPage() {
         <div className="flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3">
           <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
           <p className="text-sm text-red-400">
-            Could not reach the backend API. Showing cached data if available — retrying automatically.
+            Could not reach the backend API. Showing cached data if available - retrying automatically.
           </p>
         </div>
       )}
@@ -520,7 +520,7 @@ export default function LiveMatchesPage() {
         <EmptyState
           message={
             hasError
-              ? "No data available — backend unreachable."
+              ? "No data available - backend unreachable."
               : allFixtures.length === 0
               ? "No matches found. Check back when fixtures are scheduled."
               : "No matches found for the selected filter."

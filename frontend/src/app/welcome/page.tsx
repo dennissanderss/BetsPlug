@@ -3,9 +3,9 @@ import { Suspense } from "react";
 import { WelcomeContent } from "./welcome-content";
 
 export const metadata: Metadata = {
-  title: "Welcome aboard — You're officially a BetsPlug member",
+  title: "Welcome aboard - You're officially a BetsPlug member",
   description:
-    "Your BetsPlug membership is active. Log in to see today's picks, track your ROI and start winning smarter — we've got your back.",
+    "Your BetsPlug membership is active. Log in to see today's picks, track your ROI and start winning smarter - we've got your back.",
   alternates: {
     canonical: "/welcome",
   },

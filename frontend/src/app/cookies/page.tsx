@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal/legal-page";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy — BetsPlug",
+  title: "Cookie Policy - BetsPlug",
   description:
     "Which cookies BetsPlug uses, why we use them, and how you can manage your preferences.",
   alternates: { canonical: "/cookies" },
   openGraph: {
-    title: "Cookie Policy — BetsPlug",
+    title: "Cookie Policy - BetsPlug",
     description:
       "Which cookies BetsPlug uses, why we use them, and how you can manage your preferences.",
     type: "website",
@@ -26,8 +26,8 @@ export default function CookiePolicyPage() {
       <p>
         Cookies are small text files that websites store on your device.
         They&apos;re used to remember your preferences, keep you signed in, and
-        understand how the site is used. Some cookies are essential — without
-        them the site simply wouldn&apos;t work — and others are optional.
+        understand how the site is used. Some cookies are essential - without
+        them the site simply wouldn&apos;t work - and others are optional.
       </p>
 
       <h2>2. The cookies we use</h2>
@@ -39,16 +39,16 @@ export default function CookiePolicyPage() {
       </p>
       <ul>
         <li>
-          <strong>session</strong> — keeps you signed in across pages
+          <strong>session</strong> - keeps you signed in across pages
         </li>
         <li>
-          <strong>csrf_token</strong> — protects against cross-site request forgery
+          <strong>csrf_token</strong> - protects against cross-site request forgery
         </li>
         <li>
-          <strong>locale</strong> — remembers your selected language
+          <strong>locale</strong> - remembers your selected language
         </li>
         <li>
-          <strong>cookie_consent</strong> — remembers your cookie preferences
+          <strong>cookie_consent</strong> - remembers your cookie preferences
         </li>
       </ul>
 
@@ -60,11 +60,11 @@ export default function CookiePolicyPage() {
       </p>
       <ul>
         <li>
-          <strong>_va_*</strong> — Vercel Analytics (privacy-friendly, no
+          <strong>_va_*</strong> - Vercel Analytics (privacy-friendly, no
           fingerprinting, no third-party sharing)
         </li>
         <li>
-          <strong>_perf_*</strong> — Speed Insights (Core Web Vitals)
+          <strong>_perf_*</strong> - Speed Insights (Core Web Vitals)
         </li>
       </ul>
 
@@ -74,10 +74,10 @@ export default function CookiePolicyPage() {
       </p>
       <ul>
         <li>
-          <strong>theme</strong> — your dark/light mode preference
+          <strong>theme</strong> - your dark/light mode preference
         </li>
         <li>
-          <strong>onboarding_seen</strong> — hides the welcome tour after you&apos;ve
+          <strong>onboarding_seen</strong> - hides the welcome tour after you&apos;ve
           completed it
         </li>
       </ul>
@@ -96,11 +96,11 @@ export default function CookiePolicyPage() {
       </p>
       <ul>
         <li>
-          <strong>Stripe</strong> — fraud prevention and payment processing on
+          <strong>Stripe</strong> - fraud prevention and payment processing on
           the checkout page only
         </li>
         <li>
-          <strong>PayPal</strong> — fraud prevention and payment processing on
+          <strong>PayPal</strong> - fraud prevention and payment processing on
           the checkout page only
         </li>
       </ul>
@@ -112,13 +112,13 @@ export default function CookiePolicyPage() {
       <h2>4. How long they last</h2>
       <ul>
         <li>
-          <strong>Session cookies</strong> — deleted when you close your browser
+          <strong>Session cookies</strong> - deleted when you close your browser
         </li>
         <li>
-          <strong>Functional cookies</strong> — up to 12 months
+          <strong>Functional cookies</strong> - up to 12 months
         </li>
         <li>
-          <strong>Analytics cookies</strong> — up to 24 months
+          <strong>Analytics cookies</strong> - up to 24 months
         </li>
       </ul>
 

@@ -59,7 +59,7 @@ const OG_IMAGE = {
   url: "/og-image.png",
   width: 2000,
   height: 2000,
-  alt: "BetsPlug — AI-Powered Sports Analytics",
+  alt: "BetsPlug - AI-Powered Sports Analytics",
 } as const;
 
 export const metadata: Metadata = {

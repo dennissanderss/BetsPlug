@@ -454,17 +454,34 @@ export function CheckoutContent() {
           <SuccessState />
         ) : (
           <div className="mt-12 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
-            {/* ── Left column: stepper + form ───────────────── */}
-            <div className="order-2 lg:order-1">
-              {/* Trial picker — only on step 1 and only when
-                  the selected plan actually supports a trial */}
-              {step === 1 && trialAvailable && (
+            {/* Mobile-first TrialPicker — must appear above the order
+                summary on mobile. On desktop it's hidden here and
+                rendered inside the left column further below so the
+                existing two-column layout stays untouched. */}
+            {step === 1 && trialAvailable && (
+              <div className="order-first lg:hidden">
                 <TrialPicker
                   startWithTrial={startWithTrial}
                   onChange={setStartWithTrial}
                   trialEndLabel={trialEndLabel}
                   recurring={pricing.recurring}
                 />
+              </div>
+            )}
+
+            {/* ── Left column: stepper + form ───────────────── */}
+            <div className="order-2 lg:order-1">
+              {/* Desktop-only TrialPicker — keeps the current lg layout
+                  where the picker sits at the top of the left column */}
+              {step === 1 && trialAvailable && (
+                <div className="hidden lg:block">
+                  <TrialPicker
+                    startWithTrial={startWithTrial}
+                    onChange={setStartWithTrial}
+                    trialEndLabel={trialEndLabel}
+                    recurring={pricing.recurring}
+                  />
+                </div>
               )}
 
               {/* Stepper */}

@@ -45,7 +45,7 @@ const trustPillars = [
     glowColor: "rgba(16,185,129,0.25)",
     title: "Transparent Models",
     description:
-      "Our forecasting engine uses well-documented statistical methods (Elo ratings, Poisson regression, logistic regression) — not black-box algorithms. You can see exactly which factors drive each prediction.",
+      "Our forecasting engine uses well-documented statistical methods (Elo ratings, Poisson regression, logistic regression) - not black-box algorithms. You can see exactly which factors drive each prediction.",
   },
   {
     icon: FlaskConical,
@@ -53,7 +53,7 @@ const trustPillars = [
     glowColor: "rgba(168,85,247,0.25)",
     title: "Backtested on 1000+ Matches",
     description:
-      "Every strategy is rigorously backtested using walk-forward validation on historical data. No data leakage, no cherry-picking — just honest performance metrics.",
+      "Every strategy is rigorously backtested using walk-forward validation on historical data. No data leakage, no cherry-picking - just honest performance metrics.",
   },
   {
     icon: BarChart3,
@@ -232,17 +232,17 @@ const academicRefs = [
   },
   {
     name: "Elo Rating System",
-    description: "Arpad Elo (1978) — The Rating of Chessplayers",
+    description: "Arpad Elo (1978) - The Rating of Chessplayers",
     url: "https://en.wikipedia.org/wiki/Elo_rating_system",
   },
   {
     name: "Brier Score",
-    description: "Glenn Brier (1950) — Verification of Forecasts Expressed in Terms of Probability",
+    description: "Glenn Brier (1950) - Verification of Forecasts Expressed in Terms of Probability",
     url: "https://en.wikipedia.org/wiki/Brier_score",
   },
   {
     name: "FiveThirtyEight Sports Methodology",
-    description: "Nate Silver — Elo-based sports forecasting methodology",
+    description: "Nate Silver - Elo-based sports forecasting methodology",
     url: "https://fivethirtyeight.com/methodology/",
   },
 ];
@@ -392,7 +392,7 @@ export default function AboutPage() {
             Our Data Pipeline
           </h2>
           <p className="text-slate-400 text-sm">
-            From raw data to calibrated probability — every step documented
+            From raw data to calibrated probability - every step documented
           </p>
         </div>
 
@@ -476,7 +476,7 @@ export default function AboutPage() {
             Our Models Explained
           </h2>
           <p className="text-slate-400 text-sm">
-            Four independent forecasting engines — not a black box
+            Four independent forecasting engines - not a black box
           </p>
         </div>
 
@@ -551,7 +551,7 @@ export default function AboutPage() {
             Data Sources & References
           </h2>
           <p className="text-slate-400 text-sm">
-            Where our data comes from — full transparency on every feed
+            Where our data comes from - full transparency on every feed
           </p>
         </div>
 
@@ -675,7 +675,7 @@ export default function AboutPage() {
             const displayValue =
               rawValue !== undefined && rawValue !== null
                 ? meta.format(rawValue)
-                : "—";
+                : " - ";
 
             return (
               <div

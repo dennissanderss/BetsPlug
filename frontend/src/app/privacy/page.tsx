@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal/legal-page";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — BetsPlug",
+  title: "Privacy Policy - BetsPlug",
   description:
     "How BetsPlug collects, uses and protects your personal data. GDPR-compliant privacy policy for our AI sports analytics platform.",
   alternates: { canonical: "/privacy" },
   openGraph: {
-    title: "Privacy Policy — BetsPlug",
+    title: "Privacy Policy - BetsPlug",
     description:
       "How BetsPlug collects, uses and protects your personal data.",
     type: "website",
@@ -47,7 +47,7 @@ export default function PrivacyPolicyPage() {
         <li>
           Payment is handled by <strong>Stripe</strong> and{" "}
           <strong>PayPal</strong>. We never see or store your full card number,
-          CVC or bank details — these go directly to our payment processors.
+          CVC or bank details - these go directly to our payment processors.
         </li>
         <li>
           We do store the last four digits of your card, the card brand, and a
@@ -65,19 +65,19 @@ export default function PrivacyPolicyPage() {
       <h2>3. Why we collect it</h2>
       <ol>
         <li>
-          <strong>To deliver the service</strong> — your account, predictions,
+          <strong>To deliver the service</strong> - your account, predictions,
           notifications, customer support.
         </li>
         <li>
-          <strong>To process payments</strong> — recurring subscription billing
+          <strong>To process payments</strong> - recurring subscription billing
           via Stripe and PayPal.
         </li>
         <li>
-          <strong>To improve the product</strong> — anonymised analytics on
+          <strong>To improve the product</strong> - anonymised analytics on
           which features get used so we know what to build next.
         </li>
         <li>
-          <strong>To meet legal obligations</strong> — tax records, fraud
+          <strong>To meet legal obligations</strong> - tax records, fraud
           prevention, regulatory requests.
         </li>
       </ol>
@@ -89,18 +89,18 @@ export default function PrivacyPolicyPage() {
       </p>
       <ul>
         <li>
-          <strong>Stripe</strong> &amp; <strong>PayPal</strong> — payment
+          <strong>Stripe</strong> &amp; <strong>PayPal</strong> - payment
           processing
         </li>
         <li>
-          <strong>Vercel</strong> — hosting and edge delivery (data center in
+          <strong>Vercel</strong> - hosting and edge delivery (data center in
           Frankfurt, EU)
         </li>
         <li>
-          <strong>Cloudflare</strong> — DDoS protection and CDN
+          <strong>Cloudflare</strong> - DDoS protection and CDN
         </li>
         <li>
-          <strong>Sendgrid / Postmark</strong> — transactional email (account
+          <strong>Sendgrid / Postmark</strong> - transactional email (account
           confirmations, receipts)
         </li>
       </ul>
