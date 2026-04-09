@@ -1015,6 +1015,38 @@ const en = {
   "welcome.footerNote":
     "Questions? Reach us at support@betsplug.com — a real human will answer.",
 
+  /* Quickstart timeline */
+  "welcome.quickstartEyebrow": "Quickstart",
+  "welcome.quickstartTitle": "Your first 10 minutes with BetsPlug",
+  "welcome.quickstartSubtitle":
+    "Five simple steps from here to your first data-backed pick. Follow the path — we'll guide you the whole way.",
+  "welcome.quickstartDuration": "≈ 10 minutes total",
+
+  "welcome.qs1Title": "Confirm your email",
+  "welcome.qs1Body":
+    "Open the confirmation email we just sent you and tap the green button to verify your account.",
+  "welcome.qs1Duration": "1 min",
+
+  "welcome.qs2Title": "Log in to your dashboard",
+  "welcome.qs2Body":
+    "Use the email and password you just created. Enable \"Remember this device\" for instant access next time.",
+  "welcome.qs2Duration": "30 sec",
+
+  "welcome.qs3Title": "Set up your bankroll",
+  "welcome.qs3Body":
+    "Tell us your starting budget and unit size. We'll calculate stake recommendations that match your risk profile.",
+  "welcome.qs3Duration": "2 min",
+
+  "welcome.qs4Title": "See today's picks",
+  "welcome.qs4Body":
+    "Browse the daily selections, filter by sport or odds range, and read the data-driven reasoning behind every tip.",
+  "welcome.qs4Duration": "3 min",
+
+  "welcome.qs5Title": "Place your first bet",
+  "welcome.qs5Body":
+    "Pick the tip that fits you, place the wager at your sportsbook, then mark it in your tracker. That's it — you're live.",
+  "welcome.qs5Duration": "3 min",
+
   /* ─── Login page ──────────────────────────────────────── */
   "login.meta.title": "Log in — BetsPlug",
   "login.meta.description":
@@ -2029,6 +2061,38 @@ const nl: Dictionary = {
 
   "welcome.footerNote":
     "Vragen? Mail ons op support@betsplug.com — er antwoordt een echt mens.",
+
+  /* Quickstart timeline */
+  "welcome.quickstartEyebrow": "Quickstart",
+  "welcome.quickstartTitle": "Jouw eerste 10 minuten met BetsPlug",
+  "welcome.quickstartSubtitle":
+    "Vijf simpele stappen van hier tot je eerste data-gedreven pick. Volg het pad — wij begeleiden je van begin tot eind.",
+  "welcome.quickstartDuration": "± 10 minuten totaal",
+
+  "welcome.qs1Title": "Bevestig je e-mail",
+  "welcome.qs1Body":
+    "Open de bevestigingsmail die we net hebben gestuurd en klik op de groene knop om je account te verifiëren.",
+  "welcome.qs1Duration": "1 min",
+
+  "welcome.qs2Title": "Log in op je dashboard",
+  "welcome.qs2Body":
+    "Gebruik het e-mailadres en wachtwoord dat je net hebt aangemaakt. Zet \"Onthoud dit apparaat\" aan voor directe toegang de volgende keer.",
+  "welcome.qs2Duration": "30 sec",
+
+  "welcome.qs3Title": "Stel je bankroll in",
+  "welcome.qs3Body":
+    "Vertel ons je startbudget en unit-grootte. Wij berekenen stake-adviezen die passen bij jouw risicoprofiel.",
+  "welcome.qs3Duration": "2 min",
+
+  "welcome.qs4Title": "Bekijk de picks van vandaag",
+  "welcome.qs4Body":
+    "Blader door de dagelijkse picks, filter op sport of odds-range, en lees de onderbouwing achter elke tip.",
+  "welcome.qs4Duration": "3 min",
+
+  "welcome.qs5Title": "Plaats je eerste weddenschap",
+  "welcome.qs5Body":
+    "Kies de tip die bij je past, plaats de inzet bij je bookmaker en voeg hem toe aan je tracker. Klaar — je bent live.",
+  "welcome.qs5Duration": "3 min",
 
   /* Login */
   "login.meta.title": "Inloggen — BetsPlug",

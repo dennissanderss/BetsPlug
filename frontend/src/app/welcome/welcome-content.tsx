@@ -19,6 +19,11 @@ import {
   Trophy,
   Flame,
   Quote,
+  MailCheck,
+  Wallet,
+  Eye,
+  Rocket,
+  Clock,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -282,6 +287,9 @@ export function WelcomeContent() {
           </motion.p>
         </section>
 
+        {/* ── Quickstart timeline ── */}
+        <QuickstartSection />
+
         {/* ── Stats strip ── */}
         <section className="mx-auto mt-24 max-w-5xl px-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -386,7 +394,7 @@ export function WelcomeContent() {
         {/* ── Bottom CTA + support note ── */}
         <section className="mx-auto mt-24 max-w-3xl px-6 text-center">
           <Link
-            href={loc("/dashboard")}
+            href={loc("/login")}
             className="btn-gradient group inline-flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-extrabold tracking-tight shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50"
           >
             <LogIn className="h-4 w-4" />
@@ -402,6 +410,223 @@ export function WelcomeContent() {
 
       <BetsPlugFooter />
     </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+ * Quickstart timeline
+ *
+ * A visual "roadmap" that sits directly under the hero and walks
+ * new members through their first 10 minutes on BetsPlug. The
+ * desktop version uses an SVG winding path with numbered pin
+ * markers above each step card (echoing the classic infographic
+ * "road" metaphor). The mobile version collapses into a clean
+ * vertical timeline with a dashed green connector.
+ * ────────────────────────────────────────────────────────────── */
+function QuickstartSection() {
+  const { t } = useTranslations();
+
+  const steps = [
+    {
+      icon: MailCheck,
+      title: t("welcome.qs1Title"),
+      body: t("welcome.qs1Body"),
+      duration: t("welcome.qs1Duration"),
+    },
+    {
+      icon: LogIn,
+      title: t("welcome.qs2Title"),
+      body: t("welcome.qs2Body"),
+      duration: t("welcome.qs2Duration"),
+    },
+    {
+      icon: Wallet,
+      title: t("welcome.qs3Title"),
+      body: t("welcome.qs3Body"),
+      duration: t("welcome.qs3Duration"),
+    },
+    {
+      icon: Eye,
+      title: t("welcome.qs4Title"),
+      body: t("welcome.qs4Body"),
+      duration: t("welcome.qs4Duration"),
+    },
+    {
+      icon: Rocket,
+      title: t("welcome.qs5Title"),
+      body: t("welcome.qs5Body"),
+      duration: t("welcome.qs5Duration"),
+    },
+  ];
+
+  return (
+    <section className="relative mx-auto mt-28 max-w-6xl px-6 sm:mt-32">
+      {/* Eyebrow + title */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6 }}
+        className="mb-14 text-center"
+      >
+        <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-3 py-1.5 backdrop-blur-sm">
+          <Rocket className="h-3.5 w-3.5 text-green-400" />
+          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-green-300">
+            {t("welcome.quickstartEyebrow")}
+          </span>
+        </div>
+        <h2 className="mx-auto max-w-3xl text-balance text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+          {t("welcome.quickstartTitle")}
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-balance text-sm leading-relaxed text-slate-400 sm:text-base">
+          {t("welcome.quickstartSubtitle")}
+        </p>
+        <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-[11px] font-semibold text-slate-400">
+          <Clock className="h-3.5 w-3.5 text-green-400" />
+          {t("welcome.quickstartDuration")}
+        </div>
+      </motion.div>
+
+      {/* ── Desktop: winding road with pins ── */}
+      <div className="relative hidden lg:block">
+        {/* SVG winding path — sits behind the cards and connects
+            each step. The path is purely decorative and uses a
+            dashed white stroke to evoke a road. */}
+        <svg
+          className="pointer-events-none absolute inset-x-0 top-[92px] h-[140px] w-full"
+          viewBox="0 0 1200 140"
+          preserveAspectRatio="none"
+          aria-hidden
+        >
+          <defs>
+            <linearGradient id="qs-road-grad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#4ade80" stopOpacity="0.1" />
+              <stop offset="50%" stopColor="#4ade80" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#4ade80" stopOpacity="0.1" />
+            </linearGradient>
+          </defs>
+          {/* Road base */}
+          <path
+            d="M 60 70 Q 180 10, 300 70 T 540 70 T 780 70 T 1020 70 T 1140 70"
+            fill="none"
+            stroke="rgba(255,255,255,0.08)"
+            strokeWidth="14"
+            strokeLinecap="round"
+          />
+          {/* Center dashed line */}
+          <path
+            d="M 60 70 Q 180 10, 300 70 T 540 70 T 780 70 T 1020 70 T 1140 70"
+            fill="none"
+            stroke="url(#qs-road-grad)"
+            strokeWidth="2"
+            strokeDasharray="10 10"
+            strokeLinecap="round"
+          />
+        </svg>
+
+        <div className="relative grid grid-cols-5 gap-5">
+          {steps.map((step, i) => (
+            <motion.div
+              key={step.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="flex flex-col items-center"
+            >
+              {/* Pin marker */}
+              <div className="relative mb-10 flex flex-col items-center">
+                <div className="relative flex h-16 w-12 items-end justify-center">
+                  {/* Pin body */}
+                  <div className="absolute inset-x-0 top-0 mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-emerald-600 shadow-lg shadow-green-500/40 ring-2 ring-green-300/30">
+                    <span className="text-sm font-black text-[#060912]">
+                      {i + 1}
+                    </span>
+                  </div>
+                  {/* Pin tail */}
+                  <div className="h-4 w-4 rotate-45 bg-gradient-to-br from-green-500 to-emerald-600 shadow-md shadow-green-500/40" />
+                </div>
+                {/* Ground dot on the "road" */}
+                <div className="mt-1 h-2 w-2 rounded-full bg-green-400 shadow-[0_0_12px_rgba(74,222,128,0.8)]" />
+              </div>
+
+              {/* Step card */}
+              <div className="group relative w-full flex-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 text-center backdrop-blur-sm transition-all hover:border-green-500/25 hover:bg-white/[0.04]">
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/[0.06] to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                <div className="relative">
+                  <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-green-500/20 bg-green-500/[0.08]">
+                    <step.icon className="h-4 w-4 text-green-400" />
+                  </div>
+                  <h3 className="mb-2 text-sm font-bold leading-tight text-white">
+                    {step.title}
+                  </h3>
+                  <p className="text-xs leading-relaxed text-slate-400">
+                    {step.body}
+                  </p>
+                  <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 text-[10px] font-semibold text-slate-500">
+                    <Clock className="h-3 w-3 text-green-400/80" />
+                    {step.duration}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Mobile / tablet: vertical timeline ── */}
+      <div className="relative lg:hidden">
+        {/* Vertical dashed connector */}
+        <div
+          className="pointer-events-none absolute bottom-10 left-[27px] top-10 w-px border-l-2 border-dashed border-green-500/20 sm:left-[35px]"
+          aria-hidden
+        />
+
+        <div className="space-y-6">
+          {steps.map((step, i) => (
+            <motion.div
+              key={step.title}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="relative flex gap-5 sm:gap-6"
+            >
+              {/* Pin */}
+              <div className="relative z-10 flex shrink-0 flex-col items-center">
+                <div className="flex h-[54px] w-[54px] items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-emerald-600 shadow-lg shadow-green-500/40 ring-2 ring-green-300/30 sm:h-[70px] sm:w-[70px]">
+                  <div className="flex flex-col items-center">
+                    <step.icon className="h-4 w-4 text-[#060912] sm:h-5 sm:w-5" />
+                    <span className="text-[9px] font-black tracking-wider text-[#060912] sm:text-[10px]">
+                      STEP {i + 1}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card */}
+              <div className="group relative min-w-0 flex-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 backdrop-blur-sm transition-all hover:border-green-500/25 hover:bg-white/[0.04]">
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/[0.06] to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                <div className="relative">
+                  <div className="mb-2 flex flex-wrap items-center gap-2">
+                    <h3 className="text-base font-bold leading-tight text-white">
+                      {step.title}
+                    </h3>
+                    <span className="inline-flex items-center gap-1 rounded-full border border-green-500/20 bg-green-500/[0.08] px-2 py-0.5 text-[10px] font-semibold text-green-300">
+                      <Clock className="h-2.5 w-2.5" />
+                      {step.duration}
+                    </span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-slate-400">
+                    {step.body}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
