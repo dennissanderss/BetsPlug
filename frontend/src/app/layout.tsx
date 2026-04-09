@@ -57,8 +57,8 @@ export const viewport: Viewport = {
    served as a static asset under the canonical SITE_URL. */
 const OG_IMAGE = {
   url: "/og-image.png",
-  width: 2048,
-  height: 2048,
+  width: 2000,
+  height: 2000,
   alt: "BetsPlug — AI-Powered Sports Analytics",
 } as const;
 
