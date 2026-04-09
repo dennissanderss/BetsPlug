@@ -291,6 +291,9 @@ const en = {
   "articles.publishedOn": "Published",
   "articles.byline": "By",
   "articles.checkAll": "Check all articles",
+  "articles.prevPost": "Previous article",
+  "articles.nextPost": "Next article",
+  "articles.navLabel": "Continue reading",
 
   /* SEO section */
   "seo.badge": "The Smart Way to Research Bets",
@@ -1520,6 +1523,9 @@ const nl: Dictionary = {
   "articles.publishedOn": "Gepubliceerd",
   "articles.byline": "Door",
   "articles.checkAll": "Bekijk alle artikelen",
+  "articles.prevPost": "Vorig artikel",
+  "articles.nextPost": "Volgend artikel",
+  "articles.navLabel": "Verder lezen",
 
   "seo.badge": "De slimme manier om bets te onderzoeken",
   "seo.titleA": "AI-sportvoorspellingen &",
@@ -2451,6 +2457,7 @@ const nl: Dictionary = {
   "matchPred.unlockThis": "Ontgrendel deze pick",
 };
 
+
 /* ── Lazy-loaded locale dictionaries ──────────────────────────
  * de, fr, es, it, sw, id are loaded on-demand to keep the
  * main JS bundle small. Only en + nl are bundled inline.
@@ -2478,7 +2485,6 @@ export const messages: Record<string, Dictionary> = {
   get id() { return loadedLocales["id"] ?? en; },
 };
 
-/** Pre-load a locale dictionary. Call this when user switches language. */
 export async function preloadLocale(locale: string): Promise<void> {
   if (locale === "en" || locale === "nl" || loadedLocales[locale]) return;
   const loader = lazyLocales[locale];
@@ -2489,7 +2495,6 @@ export async function preloadLocale(locale: string): Promise<void> {
   }
 }
 
-/** Resolve a key for a locale, falling back to English if missing. */
 export function translate(locale: string, key: TranslationKey): string {
   const dict = messages[locale];
   return dict?.[key] ?? en[key];
