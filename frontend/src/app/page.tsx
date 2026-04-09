@@ -130,6 +130,7 @@ export default function LandingPage() {
     { href: "#how-it-works", label: t("nav.howItWorks") },
     { href: "#track-record", label: t("nav.trackRecord") },
     { href: "#pricing", label: t("nav.pricing") },
+    { href: loc("/contact"), label: t("nav.contact") },
   ];
 
   return (

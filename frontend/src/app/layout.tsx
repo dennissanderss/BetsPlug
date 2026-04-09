@@ -69,7 +69,27 @@ export default function RootLayout({
       suppressHydrationWarning
       className={lato.variable}
     >
-      <head>
+      <body className="min-h-screen font-sans font-normal antialiased">
+        {/* Google Consent Mode v2 — defaults (must load BEFORE GTM) */}
+        <Script id="gcm-defaults" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag("consent", "default", {
+              ad_storage: "denied",
+              ad_user_data: "denied",
+              ad_personalization: "denied",
+              analytics_storage: "denied",
+              functionality_storage: "denied",
+              personalization_storage: "denied",
+              security_storage: "granted",
+              wait_for_update: 2000,
+            });
+            gtag("set", "ads_data_redaction", true);
+            gtag("set", "url_passthrough", true);
+          `}
+        </Script>
+
         {/* Google Tag Manager */}
         <Script id="gtm-init" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -78,8 +98,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-N7K574H7');`}
         </Script>
-      </head>
-      <body className="min-h-screen font-sans font-normal antialiased">
+
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe
