@@ -831,9 +831,30 @@ const en = {
   "checkout.monthly": "Monthly",
   "checkout.yearly": "Yearly",
   "checkout.changePlan": "Change plan",
-  "checkout.subtotal": "Subtotal",
-  "checkout.vat": "VAT (21%)",
+  "checkout.subtotal": "Plan",
+  "checkout.addons": "Add-ons",
+  "checkout.vatIncluded": "All prices include 21% VAT",
   "checkout.total": "Total due today",
+  "checkout.yearlySaveBadge": "Save 20%",
+  "checkout.yearlySaveCallout":
+    "Switch to yearly billing and save 20% — that's {amount} off every year.",
+  "checkout.yearlySaving": "You're saving {amount} / year",
+
+  /* Upsells */
+  "checkout.upsellsTitle": "Supercharge your subscription",
+  "checkout.upsellsSubtitle":
+    "Optional extras that most members add to get the full edge. Cancel any add-on independently at any time.",
+  "checkout.upsell1Title": "Instant Telegram Alerts",
+  "checkout.upsell1Desc":
+    "Get every high-value pick pushed to your phone the second it drops — before the line moves.",
+  "checkout.upsell1Badge": "Most popular",
+  "checkout.upsell2Title": "Weekly Deep-Dive Report",
+  "checkout.upsell2Desc":
+    "Every Monday: a 20-page PDF breaking down the past week's ROI, model drift and upcoming edges.",
+  "checkout.upsell3Title": "Priority 1-on-1 Support",
+  "checkout.upsell3Desc":
+    "Skip the queue with a direct line to our analysts — replies within 2 hours, 7 days a week.",
+  "checkout.upsellPerMonth": "/mo",
   "checkout.freeTrial": "14-day free trial",
   "checkout.trialNote":
     "You won't be charged today. Cancel any time during the trial.",
@@ -1714,9 +1735,30 @@ const nl: Dictionary = {
   "checkout.monthly": "Maandelijks",
   "checkout.yearly": "Jaarlijks",
   "checkout.changePlan": "Pakket wijzigen",
-  "checkout.subtotal": "Subtotaal",
-  "checkout.vat": "BTW (21%)",
+  "checkout.subtotal": "Pakket",
+  "checkout.addons": "Extra's",
+  "checkout.vatIncluded": "Alle prijzen zijn inclusief 21% BTW",
   "checkout.total": "Nu te betalen",
+  "checkout.yearlySaveBadge": "Bespaar 20%",
+  "checkout.yearlySaveCallout":
+    "Schakel over naar jaarlijks en bespaar 20% — dat is {amount} per jaar korting.",
+  "checkout.yearlySaving": "Je bespaart {amount} per jaar",
+
+  /* Upsells */
+  "checkout.upsellsTitle": "Haal alles uit je abonnement",
+  "checkout.upsellsSubtitle":
+    "Optionele extra's die de meeste leden toevoegen voor de volledige edge. Elke extra is apart opzegbaar.",
+  "checkout.upsell1Title": "Instant Telegram-alerts",
+  "checkout.upsell1Desc":
+    "Krijg elke hoge-waarde pick direct op je telefoon — voordat de lijn beweegt.",
+  "checkout.upsell1Badge": "Meest gekozen",
+  "checkout.upsell2Title": "Wekelijks Strategie-rapport",
+  "checkout.upsell2Desc":
+    "Elke maandag: een 20-pagina PDF met ROI-analyse, modeldrift en aankomende edges.",
+  "checkout.upsell3Title": "Priority 1-op-1 Support",
+  "checkout.upsell3Desc":
+    "Direct contact met onze analisten — reactie binnen 2 uur, 7 dagen per week.",
+  "checkout.upsellPerMonth": "/mnd",
   "checkout.freeTrial": "14 dagen gratis proberen",
   "checkout.trialNote":
     "Je wordt vandaag niet afgeschreven. Altijd opzegbaar tijdens de proefperiode.",

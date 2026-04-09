@@ -5,16 +5,20 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import {
+  Bell,
   Check,
   CheckCircle2,
   ChevronRight,
   ChevronLeft,
   CreditCard,
   Crown,
+  FileText,
+  Headphones,
   Lock,
   Shield,
   Sparkles,
   Tag,
+  TrendingDown,
   User,
   MapPin,
   Wallet,
@@ -43,6 +47,44 @@ type PlanDef = {
   featuresKey: TranslationKey[];
   highlight?: boolean;
 };
+
+/* ── Upsell catalog ─────────────────────────────────────────── */
+type UpsellId = "telegram" | "report" | "support";
+
+type UpsellDef = {
+  id: UpsellId;
+  icon: typeof Bell;
+  titleKey: TranslationKey;
+  descKey: TranslationKey;
+  badgeKey?: TranslationKey;
+  /** Price per month — VAT included */
+  monthly: number;
+};
+
+const UPSELLS: UpsellDef[] = [
+  {
+    id: "telegram",
+    icon: Bell,
+    titleKey: "checkout.upsell1Title",
+    descKey: "checkout.upsell1Desc",
+    badgeKey: "checkout.upsell1Badge",
+    monthly: 2.99,
+  },
+  {
+    id: "report",
+    icon: FileText,
+    titleKey: "checkout.upsell2Title",
+    descKey: "checkout.upsell2Desc",
+    monthly: 1.99,
+  },
+  {
+    id: "support",
+    icon: Headphones,
+    titleKey: "checkout.upsell3Title",
+    descKey: "checkout.upsell3Desc",
+    monthly: 0.99,
+  },
+];
 
 const PLANS: PlanDef[] = [
   {
@@ -131,6 +173,9 @@ export function CheckoutContent() {
 
   const [plan, setPlan] = useState<PlanDef>(initialPlan);
   const [billing, setBilling] = useState<Billing>(initialBilling);
+  const [selectedUpsells, setSelectedUpsells] = useState<UpsellId[]>([
+    "telegram",
+  ]);
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [paymentMethod, setPaymentMethod] =
     useState<"card" | "paypal">("card");
@@ -138,26 +183,45 @@ export function CheckoutContent() {
   const [submitted, setSubmitted] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
-  /* ── Price derivation ─────────────────────────────────────── */
+  const toggleUpsell = (id: UpsellId) =>
+    setSelectedUpsells((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+
+  /* ── Price derivation (all figures are VAT-inclusive) ─────── */
   const pricing = useMemo(() => {
+    // Add-ons: billed at the same cadence as the plan
+    const addonsMonthly = UPSELLS.filter((u) =>
+      selectedUpsells.includes(u.id)
+    ).reduce((sum, u) => sum + u.monthly, 0);
+    const addons =
+      billing === "yearly" ? addonsMonthly * 12 : addonsMonthly;
+
     if (plan.oneTime != null) {
-      const sub = plan.oneTime;
-      const vat = sub * 0.21;
-      return { sub, vat, total: sub + vat, period: "one-time" as const };
+      const planTotal = plan.oneTime;
+      return {
+        planTotal,
+        addons,
+        total: planTotal + addons,
+        yearlySavings: 0,
+        period: "one-time" as const,
+      };
     }
     const baseMonthly = plan.monthly;
-    const monthlyAfterDiscount =
+    const effectiveMonthly =
       billing === "yearly" ? baseMonthly * 0.8 : baseMonthly;
-    const sub =
-      billing === "yearly" ? monthlyAfterDiscount * 12 : monthlyAfterDiscount;
-    const vat = sub * 0.21;
+    const planTotal =
+      billing === "yearly" ? effectiveMonthly * 12 : effectiveMonthly;
+    // How much the user saves by picking yearly vs 12 monthly payments
+    const yearlySavings = baseMonthly * 12 * 0.2;
     return {
-      sub,
-      vat,
-      total: sub + vat,
+      planTotal,
+      addons,
+      total: planTotal + addons,
+      yearlySavings,
       period: billing,
     };
-  }, [plan, billing]);
+  }, [plan, billing, selectedUpsells]);
 
   const isFreePlan = plan.monthly === 0 && plan.oneTime == null;
 
@@ -380,6 +444,13 @@ export function CheckoutContent() {
                           <input type="text" className={inputCls} />
                         </Field>
                       </div>
+
+                      {/* ── Upsells ─────────────────────────── */}
+                      <UpsellsBlock
+                        selected={selectedUpsells}
+                        onToggle={toggleUpsell}
+                        billing={billing}
+                      />
                     </motion.div>
                   )}
 
@@ -567,6 +638,7 @@ export function CheckoutContent() {
                   }}
                   pricing={pricing}
                   isFreePlan={isFreePlan}
+                  selectedUpsells={selectedUpsells}
                 />
 
                 {/* Trust strip */}
@@ -766,13 +838,21 @@ function OrderSummary({
   onChangePlan,
   pricing,
   isFreePlan,
+  selectedUpsells,
 }: {
   plan: PlanDef;
   billing: Billing;
   onToggleBilling: () => void;
   onChangePlan: (id: PlanId) => void;
-  pricing: { sub: number; vat: number; total: number; period: string };
+  pricing: {
+    planTotal: number;
+    addons: number;
+    total: number;
+    yearlySavings: number;
+    period: string;
+  };
   isFreePlan: boolean;
+  selectedUpsells: UpsellId[];
 }) {
   const { t } = useTranslations();
   const Icon = plan.icon;
@@ -863,29 +943,71 @@ function OrderSummary({
 
         {/* Billing toggle (hide for one-time / free) */}
         {!isOneTime && !isFreePlan && (
-          <div className="mt-5 flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-            <div>
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                {t("checkout.billingLabel")}
-              </div>
-              <div className="text-sm font-bold text-white">
-                {billing === "yearly"
-                  ? t("checkout.yearly")
-                  : t("checkout.monthly")}
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={onToggleBilling}
-              className="relative inline-flex h-6 w-11 items-center rounded-full border border-white/[0.1] bg-white/[0.04] transition-colors"
-              aria-label="Toggle billing period"
+          <div className="mt-5">
+            <div
+              className={`flex items-center justify-between rounded-xl border p-3 transition-colors ${
+                billing === "yearly"
+                  ? "border-green-500/30 bg-green-500/[0.06]"
+                  : "border-white/[0.06] bg-white/[0.02]"
+              }`}
             >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.6)] transition-transform ${
-                  billing === "yearly" ? "translate-x-6" : "translate-x-1"
+              <div>
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400">
+                  {t("checkout.billingLabel")}
+                  <span className="inline-flex items-center rounded-full border border-green-500/40 bg-green-500/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-green-300">
+                    {t("checkout.yearlySaveBadge")}
+                  </span>
+                </div>
+                <div className="text-sm font-bold text-white">
+                  {billing === "yearly"
+                    ? t("checkout.yearly")
+                    : t("checkout.monthly")}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={onToggleBilling}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full border transition-colors ${
+                  billing === "yearly"
+                    ? "border-green-500/60 bg-green-500/20"
+                    : "border-white/[0.1] bg-white/[0.04]"
                 }`}
-              />
-            </button>
+                aria-label="Toggle billing period"
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.6)] transition-transform ${
+                    billing === "yearly" ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+            </div>
+
+            {/* Savings callout */}
+            {billing === "monthly" ? (
+              <button
+                type="button"
+                onClick={onToggleBilling}
+                className="mt-2 flex w-full items-start gap-2 rounded-xl border border-green-500/25 bg-green-500/[0.06] px-3 py-2.5 text-left transition-all hover:border-green-500/50 hover:bg-green-500/[0.1]"
+              >
+                <TrendingDown className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
+                <span className="text-[11px] leading-snug text-slate-300">
+                  {t("checkout.yearlySaveCallout").replace(
+                    "{amount}",
+                    formatEUR(pricing.yearlySavings)
+                  )}
+                </span>
+              </button>
+            ) : (
+              <div className="mt-2 flex items-center gap-2 rounded-xl border border-green-500/25 bg-green-500/[0.06] px-3 py-2.5">
+                <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-green-400" />
+                <span className="text-[11px] font-semibold leading-snug text-green-300">
+                  {t("checkout.yearlySaving").replace(
+                    "{amount}",
+                    formatEUR(pricing.yearlySavings)
+                  )}
+                </span>
+              </div>
+            )}
           </div>
         )}
 
@@ -894,21 +1016,31 @@ function OrderSummary({
           <div className="flex items-center justify-between text-slate-400">
             <span>{t("checkout.subtotal")}</span>
             <span className="font-semibold text-slate-200">
-              {formatEUR(pricing.sub)}
+              {formatEUR(pricing.planTotal)}
             </span>
           </div>
-          <div className="flex items-center justify-between text-slate-400">
-            <span>{t("checkout.vat")}</span>
-            <span className="font-semibold text-slate-200">
-              {formatEUR(pricing.vat)}
-            </span>
-          </div>
+          {pricing.addons > 0 && (
+            <div className="flex items-center justify-between text-slate-400">
+              <span>
+                {t("checkout.addons")}{" "}
+                <span className="text-[10px] text-slate-600">
+                  ({selectedUpsells.length})
+                </span>
+              </span>
+              <span className="font-semibold text-slate-200">
+                {formatEUR(pricing.addons)}
+              </span>
+            </div>
+          )}
           <div className="flex items-center justify-between border-t border-white/[0.06] pt-3 text-base">
             <span className="font-bold text-white">{t("checkout.total")}</span>
             <span className="text-xl font-extrabold text-white">
               {formatEUR(pricing.total)}
             </span>
           </div>
+          <p className="text-[10px] text-slate-600">
+            {t("checkout.vatIncluded")}
+          </p>
         </div>
 
         {/* Coupon */}
@@ -935,6 +1067,116 @@ function OrderSummary({
           {t("checkout.trialNote")}
         </p>
       </div>
+    </div>
+  );
+}
+
+/* ── Upsells block ──────────────────────────────────────────── */
+function UpsellsBlock({
+  selected,
+  onToggle,
+  billing,
+}: {
+  selected: UpsellId[];
+  onToggle: (id: UpsellId) => void;
+  billing: Billing;
+}) {
+  const { t } = useTranslations();
+  return (
+    <div className="mt-8 border-t border-white/[0.06] pt-8">
+      <div className="flex items-start gap-4">
+        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-green-500/20 bg-green-500/[0.08]">
+          <Sparkles className="h-5 w-5 text-green-400" />
+        </div>
+        <div>
+          <h3 className="text-lg font-extrabold text-white sm:text-xl">
+            {t("checkout.upsellsTitle")}
+          </h3>
+          <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+            {t("checkout.upsellsSubtitle")}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-3">
+        {UPSELLS.map((u) => {
+          const Icon = u.icon;
+          const active = selected.includes(u.id);
+          return (
+            <button
+              key={u.id}
+              type="button"
+              onClick={() => onToggle(u.id)}
+              className={`group relative flex items-start gap-4 rounded-2xl border p-4 text-left transition-all ${
+                active
+                  ? "border-green-500/60 bg-green-500/[0.08] shadow-[0_0_30px_rgba(74,222,128,0.12)]"
+                  : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.2] hover:bg-white/[0.04]"
+              }`}
+            >
+              {/* Checkbox */}
+              <div
+                className={`mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-md border transition-all ${
+                  active
+                    ? "border-green-400 bg-green-500"
+                    : "border-white/25 bg-transparent group-hover:border-white/50"
+                }`}
+              >
+                {active && (
+                  <Check className="h-3 w-3 text-black" strokeWidth={4} />
+                )}
+              </div>
+
+              {/* Icon */}
+              <div
+                className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl transition-colors ${
+                  active
+                    ? "bg-green-500/20"
+                    : "bg-white/[0.04] group-hover:bg-white/[0.08]"
+                }`}
+              >
+                <Icon
+                  className={`h-5 w-5 ${
+                    active ? "text-green-400" : "text-slate-400"
+                  }`}
+                />
+              </div>
+
+              {/* Copy */}
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h4 className="text-sm font-extrabold text-white">
+                    {t(u.titleKey)}
+                  </h4>
+                  {u.badgeKey && (
+                    <span className="inline-flex items-center rounded-full border border-green-500/40 bg-green-500/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-green-300">
+                      {t(u.badgeKey)}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-1 text-xs leading-relaxed text-slate-400">
+                  {t(u.descKey)}
+                </p>
+              </div>
+
+              {/* Price */}
+              <div className="flex-shrink-0 text-right">
+                <div className="text-sm font-extrabold text-white">
+                  +{formatEUR(u.monthly)}
+                </div>
+                <div className="text-[10px] text-slate-500">
+                  {t("checkout.upsellPerMonth")}
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      <p className="mt-3 text-[10px] text-slate-600">
+        {billing === "yearly"
+          ? t("checkout.vatIncluded")
+          : t("checkout.vatIncluded")}
+      </p>
     </div>
   );
 }
