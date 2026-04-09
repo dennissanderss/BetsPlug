@@ -1172,6 +1172,58 @@ const en = {
   "dashPrev.mockChartSub": "Rolling accuracy over time",
   "dashPrev.mockAccuracyTitle": "Accuracy by sport",
   "dashPrev.mockAccuracySub": "Prediction accuracy segmented by sport",
+
+  /* ── Match Predictions (public teaser) ─────────────────── */
+  "matchPred.metaTitle": "Free AI Match Predictions — Upcoming Games | BetsPlug",
+  "matchPred.metaDesc":
+    "Preview 3 free AI-powered match predictions with win probabilities and confidence scores. Unlock the full slate of upcoming games with a BetsPlug subscription.",
+  "matchPred.eyebrow": "Free preview",
+  "matchPred.title": "AI match predictions for upcoming games",
+  "matchPred.subtitle":
+    "A preview of the matches our Ensemble model is crunching right now. See 3 full predictions for free — unlock the rest with a trial.",
+  "matchPred.trust1": "4-model Ensemble",
+  "matchPred.trust2": "Live probabilities",
+  "matchPred.trust3": "Public track record",
+  "matchPred.statFree": "Free previews",
+  "matchPred.statUpcoming": "Upcoming matches",
+  "matchPred.statLocked": "Locked predictions",
+  "matchPred.statAvgConf": "Avg confidence",
+  "matchPred.freeHeading": "Your 3 free predictions",
+  "matchPred.freeSub":
+    "Full win probabilities, confidence scores and model details — on the house.",
+  "matchPred.lockedHeading": "Premium match pool",
+  "matchPred.lockedSub":
+    "These matches are reserved for members. Unlock every pick, every league, every day.",
+  "matchPred.bannerBadge": "Members only",
+  "matchPred.bannerTitle": "Unlock every game",
+  "matchPred.bannerDesc":
+    "Join BetsPlug to see all upcoming predictions across the top leagues — with confidence scores, live updates and our full public track record.",
+  "matchPred.bannerBullet1": "Unlimited daily AI predictions",
+  "matchPred.bannerBullet2": "All 4 models + Ensemble output",
+  "matchPred.bannerBullet3": "Live probability tracking",
+  "matchPred.bannerBullet4": "Cancel anytime — 14-day refund",
+  "matchPred.bannerCta": "Unlock all games",
+  "matchPred.bannerCtaSecondary": "See pricing",
+  "matchPred.bannerNote": "No credit card required to start your trial.",
+  "matchPred.ctaFinalTitle": "Stop guessing. Start deciding with data.",
+  "matchPred.ctaFinalDesc":
+    "Every upcoming match, every model, every confidence score — unlocked in seconds. Join the bettors who trust transparent analytics.",
+  "matchPred.ctaFinalButton": "Start your free trial",
+  "matchPred.ctaFinalSecondary": "Browse plans",
+  "matchPred.loadingTitle": "Loading upcoming matches…",
+  "matchPred.emptyTitle": "No upcoming matches in the window",
+  "matchPred.emptyDesc":
+    "New fixtures are scheduled every morning. Check back shortly or explore our track record.",
+  "matchPred.emptyCta": "View track record",
+  "matchPred.errorTitle": "Couldn't load live fixtures",
+  "matchPred.errorDesc":
+    "Our fixture feed is temporarily unavailable. The full dashboard still works for members.",
+  "matchPred.refresh": "Refresh",
+  "matchPred.lockedLabel": "Locked",
+  "matchPred.confidenceLabel": "Confidence",
+  "matchPred.winProbLabel": "Win probability",
+  "matchPred.kickoffLabel": "Kickoff",
+  "matchPred.unlockThis": "Unlock this pick",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -2301,6 +2353,58 @@ const nl: Dictionary = {
   "dashPrev.mockChartSub": "Rollende nauwkeurigheid over tijd",
   "dashPrev.mockAccuracyTitle": "Nauwkeurigheid per sport",
   "dashPrev.mockAccuracySub": "Voorspelnauwkeurigheid gesegmenteerd per sport",
+
+  /* ── Match Predictions (publieke teaser) ─────────────────── */
+  "matchPred.metaTitle": "Gratis AI-wedstrijdvoorspellingen — Aankomende wedstrijden | BetsPlug",
+  "matchPred.metaDesc":
+    "Bekijk 3 gratis AI-wedstrijdvoorspellingen met winkansen en betrouwbaarheidsscores. Ontgrendel alle aankomende wedstrijden met een BetsPlug-abonnement.",
+  "matchPred.eyebrow": "Gratis preview",
+  "matchPred.title": "AI-wedstrijdvoorspellingen voor aankomende wedstrijden",
+  "matchPred.subtitle":
+    "Een preview van de wedstrijden die ons Ensemble-model nu analyseert. Bekijk 3 volledige voorspellingen gratis — ontgrendel de rest met een proefperiode.",
+  "matchPred.trust1": "4-model Ensemble",
+  "matchPred.trust2": "Live kansberekening",
+  "matchPred.trust3": "Openbaar track record",
+  "matchPred.statFree": "Gratis previews",
+  "matchPred.statUpcoming": "Aankomende wedstrijden",
+  "matchPred.statLocked": "Vergrendelde picks",
+  "matchPred.statAvgConf": "Gem. betrouwbaarheid",
+  "matchPred.freeHeading": "Jouw 3 gratis voorspellingen",
+  "matchPred.freeSub":
+    "Volledige winkansen, betrouwbaarheidsscores en modeldetails — van het huis.",
+  "matchPred.lockedHeading": "Premium wedstrijdpool",
+  "matchPred.lockedSub":
+    "Deze wedstrijden zijn voorbehouden aan leden. Ontgrendel elke pick, elke competitie, elke dag.",
+  "matchPred.bannerBadge": "Alleen voor leden",
+  "matchPred.bannerTitle": "Ontgrendel elke wedstrijd",
+  "matchPred.bannerDesc":
+    "Sluit je aan bij BetsPlug en zie alle aankomende voorspellingen uit de topcompetities — met betrouwbaarheidsscores, live updates en ons volledige publieke track record.",
+  "matchPred.bannerBullet1": "Onbeperkte dagelijkse AI-voorspellingen",
+  "matchPred.bannerBullet2": "Alle 4 modellen + Ensemble-output",
+  "matchPred.bannerBullet3": "Live kansberekening",
+  "matchPred.bannerBullet4": "Altijd opzegbaar — 14 dagen retour",
+  "matchPred.bannerCta": "Ontgrendel alle wedstrijden",
+  "matchPred.bannerCtaSecondary": "Bekijk prijzen",
+  "matchPred.bannerNote": "Geen creditcard nodig om je proefperiode te starten.",
+  "matchPred.ctaFinalTitle": "Stop met gokken. Beslis met data.",
+  "matchPred.ctaFinalDesc":
+    "Elke aankomende wedstrijd, elk model, elke betrouwbaarheidsscore — in enkele seconden ontgrendeld. Sluit je aan bij wedders die transparante analyses vertrouwen.",
+  "matchPred.ctaFinalButton": "Start je gratis proefperiode",
+  "matchPred.ctaFinalSecondary": "Bekijk abonnementen",
+  "matchPred.loadingTitle": "Aankomende wedstrijden laden…",
+  "matchPred.emptyTitle": "Geen aankomende wedstrijden in dit venster",
+  "matchPred.emptyDesc":
+    "Elke ochtend worden nieuwe wedstrijden ingepland. Kom later terug of bekijk ons track record.",
+  "matchPred.emptyCta": "Bekijk track record",
+  "matchPred.errorTitle": "Kan live fixtures niet laden",
+  "matchPred.errorDesc":
+    "Onze wedstrijdfeed is tijdelijk niet beschikbaar. Het volledige dashboard werkt nog steeds voor leden.",
+  "matchPred.refresh": "Vernieuwen",
+  "matchPred.lockedLabel": "Vergrendeld",
+  "matchPred.confidenceLabel": "Betrouwbaarheid",
+  "matchPred.winProbLabel": "Winkans",
+  "matchPred.kickoffLabel": "Aftrap",
+  "matchPred.unlockThis": "Ontgrendel deze pick",
 };
 
 /* ── German ────────────────────────────────────────────────── */

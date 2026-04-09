@@ -40,6 +40,16 @@ export const routeTable = {
     sw: "/utabiri",
     id: "/prediksi",
   },
+  "/match-predictions": {
+    en: "/match-predictions",
+    nl: "/wedstrijd-voorspellingen",
+    de: "/spiel-vorhersagen",
+    fr: "/predictions-match",
+    es: "/predicciones-partidos",
+    it: "/previsioni-partite",
+    sw: "/utabiri-mechi",
+    id: "/prediksi-pertandingan",
+  },
   "/live": {
     en: "/live",
     nl: "/live",
