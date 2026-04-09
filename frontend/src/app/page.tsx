@@ -224,7 +224,7 @@ function DashboardPreviewSection() {
             {/* CTA */}
             <div className="mt-8">
               <Link
-                href={loc("/login")}
+                href={loc("/checkout")}
                 className="btn-gradient inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold"
               >
                 {t("dashPrev.cta")}
