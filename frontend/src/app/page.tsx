@@ -185,7 +185,7 @@ export default function LandingPage() {
               {t("nav.login")}
             </Link>
             <Link
-              href={`${loc("/")}#pricing`}
+              href={`${loc("/checkout")}?plan=gold`}
               className={`btn-gradient hidden rounded-full font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:inline-block ${
                 isScrolled ? "px-4 py-1.5 text-xs" : "px-5 py-2.5 text-sm"
               }`}
@@ -195,7 +195,7 @@ export default function LandingPage() {
 
             {/* Mobile/Tablet CTA button */}
             <Link
-              href={`${loc("/")}#pricing`}
+              href={`${loc("/checkout")}?plan=gold`}
               className={`btn-gradient flex items-center justify-center rounded-full font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:hidden ${
                 isScrolled ? "px-3 py-1.5 text-[11px]" : "px-4 py-2 text-xs sm:text-sm"
               }`}
@@ -315,7 +315,7 @@ export default function LandingPage() {
                 {t("nav.joinBlurb")}
               </p>
               <Link
-                href={`${loc("/")}#pricing`}
+                href={`${loc("/checkout")}?plan=gold`}
                 onClick={() => setMobileMenuOpen(false)}
                 className="btn-gradient flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/20"
               >
@@ -409,7 +409,7 @@ export default function LandingPage() {
 
               {/* CTAs */}
               <div className="mt-10 flex flex-wrap items-center gap-4">
-                <Link href={`${loc("/")}#pricing`}>
+                <Link href={`${loc("/checkout")}?plan=gold`}>
                   <GetStartedButton>{t("hero.ctaPrimary")}</GetStartedButton>
                 </Link>
                 <Link
@@ -826,7 +826,7 @@ export default function LandingPage() {
               </p>
 
               <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link href={`${loc("/")}#pricing`}>
+                <Link href={`${loc("/checkout")}?plan=gold`}>
                   <GetStartedButton>{t("finalCta.primary")}</GetStartedButton>
                 </Link>
                 <Link

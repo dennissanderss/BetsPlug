@@ -120,6 +120,16 @@ export const routeTable = {
     sw: "/wasiliana",
     id: "/kontak",
   },
+  "/checkout": {
+    en: "/checkout",
+    nl: "/afrekenen",
+    de: "/kasse",
+    fr: "/paiement",
+    es: "/pago",
+    it: "/checkout",
+    sw: "/malipo",
+    id: "/pembayaran",
+  },
   "/deals": {
     en: "/deals",
     nl: "/aanbiedingen",

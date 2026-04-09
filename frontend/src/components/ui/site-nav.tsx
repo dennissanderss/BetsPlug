@@ -111,7 +111,7 @@ export function SiteNav() {
               {t("nav.login")}
             </Link>
             <Link
-              href={`${home}#pricing`}
+              href={loc("/checkout") + "?plan=gold"}
               className={`btn-gradient hidden rounded-full font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:inline-block ${
                 isScrolled ? "px-4 py-1.5 text-xs" : "px-5 py-2.5 text-sm"
               }`}
@@ -121,7 +121,7 @@ export function SiteNav() {
 
             {/* Mobile/Tablet CTA button */}
             <Link
-              href={`${home}#pricing`}
+              href={loc("/checkout") + "?plan=gold"}
               className={`btn-gradient flex items-center justify-center rounded-full font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:hidden ${
                 isScrolled ? "px-3 py-1.5 text-[11px]" : "px-4 py-2 text-xs sm:text-sm"
               }`}
@@ -241,7 +241,7 @@ export function SiteNav() {
                 {t("nav.joinBlurb")}
               </p>
               <Link
-                href={`${home}#pricing`}
+                href={loc("/checkout") + "?plan=gold"}
                 onClick={() => setMobileMenuOpen(false)}
                 className="btn-gradient flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/20"
               >

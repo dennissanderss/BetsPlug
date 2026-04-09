@@ -802,6 +802,124 @@ const en = {
     "You've just read the most honest how-it-works page in sports analytics. Now see the picks it produces — live, timestamped, and ready to verify.",
   "hiw.ctaPrimary": "Start Free Trial",
   "hiw.ctaSecondary": "See the track record",
+
+  /* ── Checkout flow ────────────────────────────────────────── */
+  /* Header */
+  "checkout.backToSite": "Back to site",
+  "checkout.header.usp1Title": "Secure payments",
+  "checkout.header.usp1Desc": "256-bit SSL encryption",
+  "checkout.header.usp2Title": "Cancel anytime",
+  "checkout.header.usp2Desc": "No questions asked",
+  "checkout.header.usp3Title": "Instant access",
+  "checkout.header.usp3Desc": "Picks unlocked in seconds",
+
+  /* Page heading */
+  "checkout.pageTitle": "Complete your subscription",
+  "checkout.pageSubtitle":
+    "You're seconds away from unlocking data-driven picks. All plans come with a 14-day no-risk guarantee.",
+
+  /* Stepper labels */
+  "checkout.step1": "Account",
+  "checkout.step2": "Billing",
+  "checkout.step3": "Payment",
+  "checkout.stepOf": "Step {current} of {total}",
+
+  /* Plan summary (right column) */
+  "checkout.summaryTitle": "Order summary",
+  "checkout.planLabel": "Plan",
+  "checkout.billingLabel": "Billing",
+  "checkout.monthly": "Monthly",
+  "checkout.yearly": "Yearly",
+  "checkout.changePlan": "Change plan",
+  "checkout.subtotal": "Subtotal",
+  "checkout.vat": "VAT (21%)",
+  "checkout.total": "Total due today",
+  "checkout.freeTrial": "14-day free trial",
+  "checkout.trialNote":
+    "You won't be charged today. Cancel any time during the trial.",
+  "checkout.couponQuestion": "Have a coupon?",
+  "checkout.couponPlaceholder": "Enter code",
+  "checkout.couponApply": "Apply",
+  "checkout.summaryIncluded": "What's included",
+  "checkout.perMonth": "/month",
+  "checkout.perYear": "/year",
+
+  /* Step 1 — Account */
+  "checkout.accountTitle": "Create your account",
+  "checkout.accountSubtitle":
+    "You'll use these details to sign in to BetsPlug.",
+  "checkout.firstName": "First name",
+  "checkout.firstNamePh": "John",
+  "checkout.lastName": "Last name",
+  "checkout.lastNamePh": "Doe",
+  "checkout.email": "Email address",
+  "checkout.emailPh": "you@example.com",
+  "checkout.password": "Password",
+  "checkout.passwordPh": "At least 8 characters",
+  "checkout.passwordHint": "Minimum 8 characters, 1 number.",
+  "checkout.confirmPassword": "Confirm password",
+  "checkout.alreadyHaveAccount": "Already have an account?",
+  "checkout.signIn": "Sign in",
+
+  /* Step 2 — Billing */
+  "checkout.billingTitle": "Billing address",
+  "checkout.billingSubtitle":
+    "We use this only for VAT calculation and your invoice.",
+  "checkout.country": "Country",
+  "checkout.countryPh": "Select country",
+  "checkout.address": "Street address",
+  "checkout.addressPh": "123 Main Street",
+  "checkout.city": "City",
+  "checkout.cityPh": "Amsterdam",
+  "checkout.postalCode": "Postal code",
+  "checkout.postalCodePh": "1012 AB",
+  "checkout.state": "State / Province (optional)",
+  "checkout.company": "Company name (optional)",
+  "checkout.vatId": "VAT ID (optional)",
+
+  /* Step 3 — Payment */
+  "checkout.paymentTitle": "Payment method",
+  "checkout.paymentSubtitle":
+    "Choose how you'd like to pay. A real payment provider will be connected soon — this is a demo checkout.",
+  "checkout.payCard": "Credit card",
+  "checkout.payCardDesc": "Visa, Mastercard, Amex",
+  "checkout.payPaypal": "PayPal",
+  "checkout.payPaypalDesc": "Pay with your PayPal balance",
+  "checkout.cardNumber": "Card number",
+  "checkout.cardNumberPh": "1234 5678 9012 3456",
+  "checkout.cardExpiry": "Expiry",
+  "checkout.cardExpiryPh": "MM/YY",
+  "checkout.cardCvc": "CVC",
+  "checkout.cardCvcPh": "123",
+  "checkout.cardName": "Name on card",
+  "checkout.cardNamePh": "John Doe",
+  "checkout.paypalNote":
+    "You'll be redirected to PayPal to complete the payment.",
+  "checkout.demoBadge": "Demo mode",
+  "checkout.demoNote":
+    "Payments are not processed yet. We'll connect a real provider (Stripe / PayPal) before launch.",
+
+  /* Terms & action row */
+  "checkout.agreeTerms": "I agree to the",
+  "checkout.termsLink": "Terms & Conditions",
+  "checkout.and": "and",
+  "checkout.privacyLink": "Privacy Policy",
+  "checkout.next": "Continue",
+  "checkout.back": "Back",
+  "checkout.submit": "Start my subscription",
+  "checkout.processing": "Processing…",
+
+  /* Footer */
+  "checkout.footer.secure": "256-bit SSL encrypted checkout",
+  "checkout.footer.guarantee": "14-day money-back guarantee",
+  "checkout.footer.support": "Need help? support@betsplug.com",
+  "checkout.footer.copy": "© {year} BetsPlug. All rights reserved.",
+
+  /* Success */
+  "checkout.successTitle": "Welcome to BetsPlug!",
+  "checkout.successBody":
+    "Your demo checkout was received. In production you'd now be redirected to your dashboard — for now, explore the site.",
+  "checkout.successCta": "Go to dashboard",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -1571,6 +1689,114 @@ const nl: Dictionary = {
     "Je hebt zojuist de meest eerlijke hoe-het-werkt pagina in sport-analytics gelezen. Bekijk nu de picks die hij produceert — live, getijdstempeld, en klaar om te verifiëren.",
   "hiw.ctaPrimary": "Gratis proberen",
   "hiw.ctaSecondary": "Bekijk het track record",
+
+  /* ── Checkout flow ────────────────────────────────────────── */
+  "checkout.backToSite": "Terug naar site",
+  "checkout.header.usp1Title": "Veilige betalingen",
+  "checkout.header.usp1Desc": "256-bit SSL-versleuteling",
+  "checkout.header.usp2Title": "Altijd opzegbaar",
+  "checkout.header.usp2Desc": "Geen vragen gesteld",
+  "checkout.header.usp3Title": "Direct toegang",
+  "checkout.header.usp3Desc": "Picks binnen seconden ontgrendeld",
+
+  "checkout.pageTitle": "Rond je abonnement af",
+  "checkout.pageSubtitle":
+    "Je bent seconden verwijderd van datagedreven picks. Alle plannen hebben een 14-daagse niet-goed-geld-terug garantie.",
+
+  "checkout.step1": "Account",
+  "checkout.step2": "Facturatie",
+  "checkout.step3": "Betaling",
+  "checkout.stepOf": "Stap {current} van {total}",
+
+  "checkout.summaryTitle": "Overzicht",
+  "checkout.planLabel": "Pakket",
+  "checkout.billingLabel": "Facturatie",
+  "checkout.monthly": "Maandelijks",
+  "checkout.yearly": "Jaarlijks",
+  "checkout.changePlan": "Pakket wijzigen",
+  "checkout.subtotal": "Subtotaal",
+  "checkout.vat": "BTW (21%)",
+  "checkout.total": "Nu te betalen",
+  "checkout.freeTrial": "14 dagen gratis proberen",
+  "checkout.trialNote":
+    "Je wordt vandaag niet afgeschreven. Altijd opzegbaar tijdens de proefperiode.",
+  "checkout.couponQuestion": "Heb je een kortingscode?",
+  "checkout.couponPlaceholder": "Code invoeren",
+  "checkout.couponApply": "Toepassen",
+  "checkout.summaryIncluded": "Wat krijg je",
+  "checkout.perMonth": "/maand",
+  "checkout.perYear": "/jaar",
+
+  "checkout.accountTitle": "Maak je account aan",
+  "checkout.accountSubtitle":
+    "Je gebruikt deze gegevens om in te loggen bij BetsPlug.",
+  "checkout.firstName": "Voornaam",
+  "checkout.firstNamePh": "Jan",
+  "checkout.lastName": "Achternaam",
+  "checkout.lastNamePh": "Jansen",
+  "checkout.email": "E-mailadres",
+  "checkout.emailPh": "jij@voorbeeld.nl",
+  "checkout.password": "Wachtwoord",
+  "checkout.passwordPh": "Minstens 8 tekens",
+  "checkout.passwordHint": "Minimaal 8 tekens, 1 cijfer.",
+  "checkout.confirmPassword": "Bevestig wachtwoord",
+  "checkout.alreadyHaveAccount": "Heb je al een account?",
+  "checkout.signIn": "Inloggen",
+
+  "checkout.billingTitle": "Factuuradres",
+  "checkout.billingSubtitle":
+    "Alleen gebruikt voor BTW-berekening en je factuur.",
+  "checkout.country": "Land",
+  "checkout.countryPh": "Selecteer land",
+  "checkout.address": "Straat en huisnummer",
+  "checkout.addressPh": "Damstraat 1",
+  "checkout.city": "Stad",
+  "checkout.cityPh": "Amsterdam",
+  "checkout.postalCode": "Postcode",
+  "checkout.postalCodePh": "1012 AB",
+  "checkout.state": "Provincie (optioneel)",
+  "checkout.company": "Bedrijfsnaam (optioneel)",
+  "checkout.vatId": "BTW-nummer (optioneel)",
+
+  "checkout.paymentTitle": "Betaalmethode",
+  "checkout.paymentSubtitle":
+    "Kies hoe je wilt betalen. Een echte betaalprovider wordt binnenkort gekoppeld — dit is een demo-checkout.",
+  "checkout.payCard": "Creditcard",
+  "checkout.payCardDesc": "Visa, Mastercard, Amex",
+  "checkout.payPaypal": "PayPal",
+  "checkout.payPaypalDesc": "Betaal met je PayPal-saldo",
+  "checkout.cardNumber": "Kaartnummer",
+  "checkout.cardNumberPh": "1234 5678 9012 3456",
+  "checkout.cardExpiry": "Vervaldatum",
+  "checkout.cardExpiryPh": "MM/JJ",
+  "checkout.cardCvc": "CVC",
+  "checkout.cardCvcPh": "123",
+  "checkout.cardName": "Naam op kaart",
+  "checkout.cardNamePh": "Jan Jansen",
+  "checkout.paypalNote":
+    "Je wordt doorgestuurd naar PayPal om de betaling af te ronden.",
+  "checkout.demoBadge": "Demo modus",
+  "checkout.demoNote":
+    "Betalingen worden nog niet verwerkt. We koppelen een echte provider (Stripe / PayPal) vóór de lancering.",
+
+  "checkout.agreeTerms": "Ik ga akkoord met de",
+  "checkout.termsLink": "Algemene Voorwaarden",
+  "checkout.and": "en het",
+  "checkout.privacyLink": "Privacybeleid",
+  "checkout.next": "Doorgaan",
+  "checkout.back": "Terug",
+  "checkout.submit": "Start mijn abonnement",
+  "checkout.processing": "Bezig…",
+
+  "checkout.footer.secure": "256-bit SSL versleutelde checkout",
+  "checkout.footer.guarantee": "14 dagen niet-goed-geld-terug",
+  "checkout.footer.support": "Hulp nodig? support@betsplug.com",
+  "checkout.footer.copy": "© {year} BetsPlug. Alle rechten voorbehouden.",
+
+  "checkout.successTitle": "Welkom bij BetsPlug!",
+  "checkout.successBody":
+    "Je demo-checkout is ontvangen. In productie zou je nu worden doorgestuurd naar je dashboard — verken voor nu de site.",
+  "checkout.successCta": "Naar dashboard",
 };
 
 /* ── German ────────────────────────────────────────────────── */
