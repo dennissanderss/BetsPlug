@@ -133,6 +133,342 @@ export const LEAGUE_HUBS: LeagueHub[] = [
     },
   },
   {
+    slug: "la-liga",
+    sportSlug: "football",
+    countryCode: "ES",
+    countryFlag: "🇪🇸",
+    name: {
+      en: "La Liga",
+      nl: "La Liga",
+    },
+    country: {
+      en: "Spain",
+      nl: "Spanje",
+    },
+    tagline: {
+      en: "Free AI predictions for every La Liga matchday",
+      nl: "Gratis AI-voorspellingen voor elke La Liga-speeldag",
+    },
+    intro: {
+      en: "La Liga is the most tactically diverse league in our model — Real Madrid and Barcelona pull averages upward, but the bottom half routinely produces sub-2.0-goal grinds where xG and Elo disagree the most. BetsPlug treats every Spanish fixture as its own micro-problem: we run a Poisson model trained on the league's lower scoring baseline, an Elo curve that rates the top six separately from the rest, and a logistic regressor that picks up rest-day and travel effects (Sevilla, Cadiz, the Canary Islands). Our XGBoost meta-model resolves the disagreements and produces calibrated probabilities for home / draw / away. Match-day predictions are pulled from the same football-data.org feed our research desk uses, refreshed every 5 minutes during the active window. The three highest-edge picks of every gameweek go up here for free; members see the full slate and the closing-line value report.",
+      nl: "La Liga is de tactisch meest diverse competitie in ons model — Real Madrid en Barcelona trekken het gemiddelde omhoog, maar de onderste helft levert steevast wedstrijden onder de 2.0 doelpunten op, waar xG en Elo het meest van elkaar verschillen. BetsPlug behandelt elke Spaanse wedstrijd als een apart micro-probleem: een Poisson-model getraind op het lagere scoringsniveau van de competitie, een Elo-curve die de top zes apart waardeert en een logistische regressor die rust- en reisdageffecten oppikt (Sevilla, Cadiz, de Canarische Eilanden). Het XGBoost-metamodel lost de meningsverschillen op en produceert gekalibreerde kansen voor thuis / gelijk / uit. Voorspellingen worden geladen uit dezelfde football-data.org feed die onze research desk gebruikt, elke 5 minuten ververst tijdens de actieve window. De drie picks met het hoogste edge per speelronde staan hier gratis; members zien het volledige programma en het closing-line value rapport.",
+    },
+    metaTitle: {
+      en: "La Liga AI Predictions & Odds 2025/26 — Free Picks | BetsPlug",
+      nl: "La Liga AI Voorspellingen & Odds 2025/26 — Gratis Picks | BetsPlug",
+    },
+    metaDescription: {
+      en: "Free AI La Liga predictions, win probabilities and confidence scores for every Spanish football matchday. Built on Elo, Poisson and XGBoost models.",
+      nl: "Gratis AI-voorspellingen voor La Liga: winstkansen, confidence-scores en odds voor elke Spaanse speeldag. Gebouwd op Elo-, Poisson- en XGBoost-modellen.",
+    },
+    faqs: {
+      en: [
+        {
+          q: "Why do La Liga predictions sometimes look different from Premier League ones?",
+          a: "La Liga averages roughly 0.3 fewer goals per match than the Premier League, so our Poisson lambda runs lower and draw probabilities sit a few points higher. The model rebalances automatically per league rather than using one global tuning.",
+        },
+        {
+          q: "Do you cover Real Madrid and Barcelona Clásico-grade fixtures?",
+          a: "Yes — every Clásico, derbi madrileño and Sevilla derby gets the full ensemble run plus a manual sanity-check by our research desk on the day of the match. Big matches get pinned at the top of the free preview when they qualify.",
+        },
+        {
+          q: "How do you handle promoted teams with no top-flight history?",
+          a: "Promoted sides start each season with a Bayesian prior derived from their final Segunda División Elo plus a regression-to-mean adjustment. After 5 La Liga matches the prior is replaced by live results, which is why early-season predictions for promoted clubs carry a slightly lower confidence score.",
+        },
+        {
+          q: "Which betting markets do you cover for La Liga?",
+          a: "The free preview shows the 1X2 market. Members get over/under 2.5 goals, BTTS, Asian handicap and a Kelly stake recommendation per pick.",
+        },
+        {
+          q: "How accurate are your La Liga predictions?",
+          a: "Rolling 30-day calibration on the favourite-to-win market typically lands between 68% and 73% — slightly below the Premier League because of the higher draw rate. The full breakdown is published at /track-record.",
+        },
+        {
+          q: "Are your predictions affected by VAR decisions and late lineup changes?",
+          a: "Lineup changes (especially keepers) feed back into the model up to 60 minutes before kick-off via our sync task. VAR-driven result swings are surfaced post-match in the track record, but we don't try to predict referee decisions.",
+        },
+      ],
+      nl: [
+        {
+          q: "Waarom zien La Liga-voorspellingen er soms anders uit dan Premier League?",
+          a: "La Liga scoort gemiddeld zo'n 0.3 doelpunten per wedstrijd minder dan de Premier League, dus onze Poisson-lambda ligt lager en gelijkspelkansen liggen een paar procent hoger. Het model herschaalt automatisch per competitie in plaats van één globale tuning te gebruiken.",
+        },
+        {
+          q: "Voorspellen jullie ook Real Madrid en Barcelona Clásico-wedstrijden?",
+          a: "Ja — elke Clásico, Madrileense derby en Sevilla-derby krijgt de volledige ensemble-run plus een handmatige sanity-check door ons research-team op de dag zelf. Topwedstrijden worden bovenaan de gratis preview vastgepind wanneer ze in aanmerking komen.",
+        },
+        {
+          q: "Hoe gaan jullie om met gepromoveerde clubs zonder geschiedenis op het hoogste niveau?",
+          a: "Gepromoveerde clubs starten elk seizoen met een Bayesian prior op basis van hun eind-Elo in de Segunda División plus een regressie-naar-gemiddelde-correctie. Na 5 La Liga-wedstrijden vervangen we die prior door live resultaten — daarom hebben vroege seizoensvoorspellingen voor promovendi een iets lagere confidence-score.",
+        },
+        {
+          q: "Welke wedmarkten dekken jullie voor La Liga?",
+          a: "De gratis preview toont de 1X2-markt. Members krijgen over/under 2.5 goals, BTTS, Asian handicap en een Kelly-inzetadvies per pick.",
+        },
+        {
+          q: "Hoe accuraat zijn jullie La Liga-voorspellingen?",
+          a: "Onze rollende 30-daagse kalibratie op de favoriet-wint markt ligt typisch tussen 68% en 73% — iets onder de Premier League door het hogere gelijkspelpercentage. De volledige uitsplitsing staat op /trackrecord-resultaten.",
+        },
+        {
+          q: "Zijn jullie voorspellingen gevoelig voor VAR-beslissingen en late opstellingswijzigingen?",
+          a: "Opstellingswijzigingen (met name keepers) vloeien tot 60 minuten voor de aftrap terug in het model via onze sync-task. VAR-gedreven uitslagomslagen tonen we achteraf in het trackrecord, maar we proberen geen scheidsrechtersbeslissingen te voorspellen.",
+        },
+      ],
+    },
+  },
+  {
+    slug: "bundesliga",
+    sportSlug: "football",
+    countryCode: "DE",
+    countryFlag: "🇩🇪",
+    name: {
+      en: "Bundesliga",
+      nl: "Bundesliga",
+    },
+    country: {
+      en: "Germany",
+      nl: "Duitsland",
+    },
+    tagline: {
+      en: "Free AI predictions for every Bundesliga matchday",
+      nl: "Gratis AI-voorspellingen voor elke Bundesliga-speeldag",
+    },
+    intro: {
+      en: "The Bundesliga is the highest-scoring of Europe's top five leagues, and that goal-scoring volume is exactly what makes Poisson-based models shine. With an average of 3.1 goals per match — meaningfully above the Premier League — Bundesliga fixtures generate tighter, more reliable lambda estimates per team. BetsPlug feeds that into a four-model ensemble: an Elo curve that gives Bayern Munich its true ceiling without flattening the surprise factor, Poisson goal expectations cross-checked against OpenLigaDB event data, a logistic regressor for short-term form and an XGBoost meta-model resolving the rest. Friday Night Bundesliga, Saturday's English-language window and Sunday's traditional 17:30 fixture all feed the same pipeline. The three sharpest edges of each matchday are published here for free, and the full slate sits inside the BetsPlug member dashboard with Kelly stakes and closing-line value tracking.",
+      nl: "De Bundesliga is de hoogst-scorende van Europa's top vijf competities, en juist die doelpuntenproductie zorgt ervoor dat Poisson-modellen schitteren. Met gemiddeld 3.1 doelpunten per wedstrijd — duidelijk boven de Premier League — leveren Bundesliga-duels strakkere en betrouwbaardere lambda-schattingen per team op. BetsPlug voert dat door een ensemble van vier modellen: een Elo-curve die Bayern München zijn echte plafond geeft zonder de verrassingsfactor weg te middelen, Poisson goalverwachtingen kruisgecontroleerd met OpenLigaDB event-data, een logistische regressor voor de korte vorm en een XGBoost meta-model dat de rest oplost. Friday Night Bundesliga, het Engelstalige Saturday-window en het traditionele zondag 17:30 duel voeden allemaal dezelfde pipeline. De drie scherpste edges per speeldag publiceren we hier gratis, het volledige programma zit in het BetsPlug-dashboard voor members met Kelly-inzetten en closing-line value tracking.",
+    },
+    metaTitle: {
+      en: "Bundesliga AI Predictions & Odds 2025/26 — Free Picks | BetsPlug",
+      nl: "Bundesliga AI Voorspellingen & Odds 2025/26 — Gratis Picks | BetsPlug",
+    },
+    metaDescription: {
+      en: "Free AI Bundesliga predictions, win probabilities and goal expectations for every German football matchday. Cross-checked against OpenLigaDB event data.",
+      nl: "Gratis AI-voorspellingen voor de Bundesliga: winstkansen en goalverwachtingen voor elke Duitse speeldag. Kruisgecontroleerd met OpenLigaDB event-data.",
+    },
+    faqs: {
+      en: [
+        {
+          q: "Why is Bayern Munich so often the favourite in your model?",
+          a: "Bayern's Elo rating sits structurally 100+ points above the next German club, which translates to a high pre-match win probability against most of the league. Our model doesn't artificially flatten dominance — but it does raise the implied draw probability away from home and against Champions League opponents, which is where Bayern actually drops points.",
+        },
+        {
+          q: "How do you handle the Bundesliga's higher goal totals?",
+          a: "Our Poisson model is league-aware. Bundesliga fixtures get a higher base lambda than Premier League ones, which increases over-2.5 probabilities and reduces draw frequency — both empirically validated against the last 10 seasons of historical data.",
+        },
+        {
+          q: "Do you cross-check goals with OpenLigaDB?",
+          a: "Yes — in addition to football-data.org we sync goal-event timestamps from OpenLigaDB. When the two sources disagree on a result we flag the fixture and hold the model run until reconciliation. This reduces the impact of late corrections on settled picks.",
+        },
+        {
+          q: "Are 2. Bundesliga and DFB-Pokal predictions covered too?",
+          a: "Not on this hub yet. They're seeded in our database but not in our automated rotation, which means picks for those competitions aren't reliable enough to publish. We'll add them when the OpenLigaDB sync task is in production.",
+        },
+        {
+          q: "How accurate are your Bundesliga predictions?",
+          a: "Bundesliga calibration has been one of our stronger surfaces — typically 71-76% on the favourite-to-win market over rolling 30-day windows, helped by the larger goal samples per fixture. Full breakdown at /track-record.",
+        },
+        {
+          q: "Do you adjust for the Englische Woche?",
+          a: "Yes. Midweek European duty for clubs in Champions / Europa / Conference League pulls down our short-term form rating for the following weekend, and our logistic regressor weights recent travel + minutes. This is one of the more impactful Bundesliga-specific adjustments.",
+        },
+      ],
+      nl: [
+        {
+          q: "Waarom is Bayern München zo vaak de favoriet in jullie model?",
+          a: "Bayern's Elo-rating ligt structureel 100+ punten boven de volgende Duitse club, wat zich vertaalt in een hoge winstkans tegen het grootste deel van de competitie. Het model vlakt dominantie niet kunstmatig af — wel verhoogt het de impliciete gelijkspelkans uit en tegen Champions League-tegenstanders, want daar verliest Bayern in de praktijk punten.",
+        },
+        {
+          q: "Hoe gaan jullie om met de hogere doelpuntenproductie van de Bundesliga?",
+          a: "Ons Poisson-model is competitie-bewust. Bundesliga-wedstrijden krijgen een hogere basis-lambda dan Premier League-wedstrijden, wat de over-2.5 kansen verhoogt en de gelijkspelfrequentie verlaagt — beide empirisch gevalideerd tegen 10 seizoenen historische data.",
+        },
+        {
+          q: "Kruisen jullie doelpunten met OpenLigaDB?",
+          a: "Ja — naast football-data.org synchroniseren we goal-event timestamps uit OpenLigaDB. Als de twee bronnen het niet eens zijn over een uitslag flaggen we de wedstrijd en houden we de modelrun aan totdat het is rechtgezet. Dit beperkt de impact van late correcties op afgewikkelde picks.",
+        },
+        {
+          q: "Voorspellen jullie ook 2. Bundesliga en DFB-Pokal?",
+          a: "Nog niet op deze hub. Ze zitten wel in onze database, maar niet in onze automatische rotatie — picks voor die competities zijn nog niet betrouwbaar genoeg om te publiceren. We voegen ze toe zodra de OpenLigaDB sync-task in productie staat.",
+        },
+        {
+          q: "Hoe accuraat zijn jullie Bundesliga-voorspellingen?",
+          a: "Bundesliga-kalibratie is een van onze sterkste oppervlakken — typisch 71-76% op de favoriet-wint markt over rollende 30-daagse vensters, geholpen door de grotere doelpuntsamples per wedstrijd. Volledige uitsplitsing op /trackrecord-resultaten.",
+        },
+        {
+          q: "Houden jullie rekening met de Engelse Week?",
+          a: "Ja. Doordeweekse Europese verplichtingen voor clubs in Champions / Europa / Conference League trekken onze korte-termijn vormrating voor het daaropvolgende weekend omlaag, en onze logistische regressor weegt recente reizen + minuten mee. Dit is een van de meest impactvolle Bundesliga-specifieke aanpassingen.",
+        },
+      ],
+    },
+  },
+  {
+    slug: "serie-a",
+    sportSlug: "football",
+    countryCode: "IT",
+    countryFlag: "🇮🇹",
+    name: {
+      en: "Serie A",
+      nl: "Serie A",
+    },
+    country: {
+      en: "Italy",
+      nl: "Italië",
+    },
+    tagline: {
+      en: "Free AI predictions for every Serie A matchday",
+      nl: "Gratis AI-voorspellingen voor elke Serie A-speeldag",
+    },
+    intro: {
+      en: "Serie A is the lowest-scoring of the top five — and that's exactly why AI models earn their keep here. Italian football still rewards tactical discipline over open transitions, which means more sub-2.5 finishes, more 1-0 results and a structurally higher draw rate than the Premier League or Bundesliga. BetsPlug calibrates for that explicitly: our Poisson lambdas run lower for Italian fixtures, our Elo gives a deserved-but-not-inflated edge to the top three, and our logistic regressor weights defensive metrics (xGA, clean-sheet rate, goalkeeper xG-prevented) more aggressively than for any other league. The result is a model that systematically beats books on draw and under-2.5 markets where they over-correct toward the public's love of goals. Three free picks per matchday are published here; the full Calcio slate plus Coppa Italia ties sit in the member dashboard.",
+      nl: "Serie A is de laagst-scorende van de top vijf — en juist daarom verdienen AI-modellen hier hun geld. Italiaans voetbal beloont nog steeds tactische discipline boven open omschakelingen, wat resulteert in meer wedstrijden onder de 2.5 doelpunten, meer 1-0 uitslagen en een structureel hoger gelijkspelpercentage dan de Premier League of Bundesliga. BetsPlug kalibreert daar expliciet voor: onze Poisson-lambdas liggen lager voor Italiaanse duels, onze Elo geeft een verdiende maar niet opgeblazen voorsprong aan de top drie, en onze logistische regressor weegt defensieve statistieken (xGA, clean-sheet rate, keeper xG-prevented) agressiever dan voor enige andere competitie. Het resultaat is een model dat boekmakers systematisch verslaat op de gelijkspel- en onder-2.5 markten, waar zij overcorrigeren naar de liefde van het publiek voor doelpunten. Drie gratis picks per speeldag publiceren we hier; het volledige Calcio-programma plus Coppa Italia-duels zit in het member-dashboard.",
+    },
+    metaTitle: {
+      en: "Serie A AI Predictions & Odds 2025/26 — Free Picks | BetsPlug",
+      nl: "Serie A AI Voorspellingen & Odds 2025/26 — Gratis Picks | BetsPlug",
+    },
+    metaDescription: {
+      en: "Free AI Serie A predictions, win probabilities and confidence scores for every Italian football matchday. Calibrated for Serie A's lower goal averages.",
+      nl: "Gratis AI-voorspellingen voor Serie A: winstkansen en confidence-scores voor elke Italiaanse speeldag. Gekalibreerd voor de lagere doelpuntenproductie.",
+    },
+    faqs: {
+      en: [
+        {
+          q: "Why does your model predict more draws in Serie A?",
+          a: "Italian football has historically produced ~25-27% draws compared to ~22-24% in the Premier League. Our Poisson model picks this up directly through the lower league-wide goal lambda, so draw probabilities come out 2-4 percentage points higher per fixture. We don't add a manual fudge factor on top.",
+        },
+        {
+          q: "Do you cover Coppa Italia fixtures?",
+          a: "Coppa Italia ties are seeded in the database but not on this hub yet. Knockout football requires a different calibration (extra time, penalty shootouts) which we'll add to the dynamic route once we have a full season of historical Coppa data.",
+        },
+        {
+          q: "How do you handle relegation battles late in the season?",
+          a: "Late-season fixtures involving relegation-threatened clubs get a separate motivation adjustment. Our logistic regressor weights recent xG more heavily than Elo for these matches, because struggling clubs often outperform their long-term rating in the run-in.",
+        },
+        {
+          q: "Which markets are predicted for Serie A?",
+          a: "The free preview covers the 1X2 market. Members also get over/under 2.5 goals (where Serie A is structurally interesting because of the under-2.5 edge), BTTS, Asian handicap and a Kelly stake recommendation.",
+        },
+        {
+          q: "How accurate are your Serie A predictions?",
+          a: "Calibration on the favourite-to-win market typically sits at 67-72% — slightly below the Premier League because of the higher draw rate, but our under-2.5 market accuracy is one of our best surfaces league-wide. Full breakdown at /track-record.",
+        },
+        {
+          q: "Do you account for Italian referee tendencies?",
+          a: "Indirectly — referee identity feeds into our cards-and-fouls module which informs the over/under 2.5 cards market for members. We don't claim to predict refereeing decisions in real time, but historical referee profiles do inform pre-match goal expectations slightly.",
+        },
+      ],
+      nl: [
+        {
+          q: "Waarom voorspelt jullie model meer gelijkspelen in Serie A?",
+          a: "Italiaans voetbal levert historisch ~25-27% gelijkspelen op tegenover ~22-24% in de Premier League. Ons Poisson-model pikt dit direct op via de lagere competitiebrede goal-lambda, waardoor gelijkspelkansen 2-4 procentpunt hoger uitkomen per wedstrijd. We voegen er geen handmatige correctie bovenop toe.",
+        },
+        {
+          q: "Voorspellen jullie ook Coppa Italia-wedstrijden?",
+          a: "Coppa Italia-duels zitten in de database maar nog niet op deze hub. Knock-outvoetbal vraagt een andere kalibratie (verlenging, strafschoppen) die we toevoegen aan de dynamische route zodra we een volledig seizoen historische Coppa-data hebben.",
+        },
+        {
+          q: "Hoe gaan jullie om met degradatieduels laat in het seizoen?",
+          a: "Late seizoensduels met clubs in degradatiegevaar krijgen een aparte motivatiecorrectie. Onze logistische regressor weegt recente xG zwaarder dan Elo voor deze wedstrijden, omdat worstelende clubs vaak beter presteren dan hun langetermijnrating in de slotfase.",
+        },
+        {
+          q: "Welke markten worden voorspeld voor Serie A?",
+          a: "De gratis preview dekt de 1X2-markt. Members krijgen ook over/under 2.5 goals (waar Serie A structureel interessant is vanwege de onder-2.5 edge), BTTS, Asian handicap en een Kelly-inzetadvies.",
+        },
+        {
+          q: "Hoe accuraat zijn jullie Serie A-voorspellingen?",
+          a: "Kalibratie op de favoriet-wint markt ligt typisch op 67-72% — iets onder de Premier League door het hogere gelijkspelpercentage, maar onze nauwkeurigheid op de onder-2.5 markt is een van onze sterkste oppervlakken competitiebreed. Volledige uitsplitsing op /trackrecord-resultaten.",
+        },
+        {
+          q: "Houden jullie rekening met Italiaanse scheidsrechterstendensen?",
+          a: "Indirect — scheidsrechteridentiteit voedt onze kaarten-en-fouten module die de over/under 2.5 kaartenmarkt voor members informeert. We claimen niet realtime scheidsrechtersbeslissingen te voorspellen, maar historische scheidsrechtersprofielen sturen pre-match goalverwachtingen wel licht bij.",
+        },
+      ],
+    },
+  },
+  {
+    slug: "ligue-1",
+    sportSlug: "football",
+    countryCode: "FR",
+    countryFlag: "🇫🇷",
+    name: {
+      en: "Ligue 1",
+      nl: "Ligue 1",
+    },
+    country: {
+      en: "France",
+      nl: "Frankrijk",
+    },
+    tagline: {
+      en: "Free AI predictions for every Ligue 1 matchday",
+      nl: "Gratis AI-voorspellingen voor elke Ligue 1-speeldag",
+    },
+    intro: {
+      en: "Ligue 1 is the most lopsided of the top five — Paris Saint-Germain has historically dominated the title race in a way that none of England, Spain, Italy or Germany can match. That makes the modelling challenge interesting: PSG fixtures need a heavy Elo prior with a specific overconfidence correction, while the rest of the league is wide open. BetsPlug treats Ligue 1 in two halves: PSG matches use a separate calibration trained on \"dominant favourite\" historical fixtures (where the implied win probability tends to be too high), and non-PSG matches use the standard four-model ensemble with a slight upward draw adjustment. The new league format and broadcast schedule (Sunday-night marquee, Friday opener, Saturday afternoon spread) are all syncronised through our football-data.org pipeline. Three free picks per matchday show up here; the full slate including Trophée des Champions is in the member dashboard.",
+      nl: "Ligue 1 is de meest scheve van de top vijf — Paris Saint-Germain heeft de titelstrijd historisch gedomineerd op een manier die Engeland, Spanje, Italië noch Duitsland kan evenaren. Dat maakt de modelleeruitdaging interessant: PSG-duels vragen een zware Elo-prior met een specifieke over-confidence correctie, terwijl de rest van de competitie wijd openligt. BetsPlug behandelt Ligue 1 in twee helften: PSG-wedstrijden gebruiken een aparte kalibratie getraind op \"dominante favoriet\" historische data (waar de impliciete winstkans meestal te hoog uitvalt), en niet-PSG wedstrijden gebruiken het standaard vier-modellen ensemble met een lichte gelijkspelcorrectie naar boven. Het nieuwe competitieformat en uitzendschema (zondagavond topwedstrijd, vrijdagopener, zaterdagmiddag-spreiding) lopen allemaal via onze football-data.org pipeline. Drie gratis picks per speeldag verschijnen hier; het volledige programma inclusief Trophée des Champions zit in het member-dashboard.",
+    },
+    metaTitle: {
+      en: "Ligue 1 AI Predictions & Odds 2025/26 — Free Picks | BetsPlug",
+      nl: "Ligue 1 AI Voorspellingen & Odds 2025/26 — Gratis Picks | BetsPlug",
+    },
+    metaDescription: {
+      en: "Free AI Ligue 1 predictions, win probabilities and confidence scores for every French football matchday. PSG-aware calibration and live odds tracking.",
+      nl: "Gratis AI-voorspellingen voor Ligue 1: winstkansen en confidence-scores voor elke Franse speeldag. PSG-bewuste kalibratie en live odds tracking.",
+    },
+    faqs: {
+      en: [
+        {
+          q: "How does PSG affect your Ligue 1 predictions?",
+          a: "PSG fixtures use a separate calibration head trained on historical \"dominant favourite\" data, because the public + bookmaker market consistently overprices PSG home wins. Our model trims the implied win probability by 3-5 percentage points relative to the closing line, which is one of the steadier sources of edge in Ligue 1.",
+        },
+        {
+          q: "Is the new Ligue 1 format reflected in your sync?",
+          a: "Yes. The current 18-team format and broadcast schedule are pulled from football-data.org with each fixture's kick-off time synchronised every 5 minutes during the active window. No manual schedule entry — if Ligue de Football Professionnel updates the slot, our model picks it up automatically.",
+        },
+        {
+          q: "Do you predict French Cup (Coupe de France) matches?",
+          a: "Not on this hub. Cup ties are knock-out football with their own calibration challenges (extra time, penalty shootouts, lower-tier opponents) and we'd rather not publish predictions until we have a full season of historical cup data through the model.",
+        },
+        {
+          q: "How accurate are your Ligue 1 predictions?",
+          a: "Rolling 30-day calibration on the favourite-to-win market sits between 70% and 75% — broadly comparable to the Premier League, helped by the structural edge against PSG over-pricing. Full breakdown at /track-record.",
+        },
+        {
+          q: "Which betting markets do you cover for Ligue 1?",
+          a: "The free preview shows the 1X2 market. Members get over/under 2.5 goals, BTTS, Asian handicap and a Kelly stake recommendation per pick.",
+        },
+        {
+          q: "How do you handle clubs with European obligations?",
+          a: "Clubs in Champions / Europa / Conference League get a fatigue-aware short-term form weighting. Our logistic regressor reduces the implied win probability for the weekend after a midweek European tie, which mostly affects PSG, Marseille, Monaco and Lyon.",
+        },
+      ],
+      nl: [
+        {
+          q: "Hoe beïnvloedt PSG jullie Ligue 1-voorspellingen?",
+          a: "PSG-wedstrijden gebruiken een aparte kalibratiekop getraind op historische \"dominante favoriet\" data, omdat het publiek + de bookmakermarkt PSG-thuiswinsten consistent overprijst. Ons model trimt de impliciete winstkans met 3-5 procentpunt ten opzichte van de closing line — een van de stabielere edge-bronnen in de Ligue 1.",
+        },
+        {
+          q: "Wordt het nieuwe Ligue 1-format meegenomen in jullie sync?",
+          a: "Ja. Het huidige 18-team format en uitzendschema worden via football-data.org geladen, met de aftraptijd per wedstrijd elke 5 minuten gesynchroniseerd tijdens de actieve window. Geen handmatige invoer — als de Ligue de Football Professionnel het slot wijzigt, pikt ons model dat automatisch op.",
+        },
+        {
+          q: "Voorspellen jullie ook Coupe de France-wedstrijden?",
+          a: "Niet op deze hub. Bekerwedstrijden zijn knock-outvoetbal met hun eigen kalibratie-uitdagingen (verlenging, strafschoppen, tegenstanders uit lagere divisies) en we publiceren liever geen voorspellingen totdat we een volledig seizoen historische bekerdata door het model hebben.",
+        },
+        {
+          q: "Hoe accuraat zijn jullie Ligue 1-voorspellingen?",
+          a: "Rollende 30-daagse kalibratie op de favoriet-wint markt ligt tussen 70% en 75% — grofweg vergelijkbaar met de Premier League, geholpen door de structurele edge tegen PSG-overpricing. Volledige uitsplitsing op /trackrecord-resultaten.",
+        },
+        {
+          q: "Welke wedmarkten dekken jullie voor Ligue 1?",
+          a: "De gratis preview toont de 1X2-markt. Members krijgen over/under 2.5 goals, BTTS, Asian handicap en een Kelly-inzetadvies per pick.",
+        },
+        {
+          q: "Hoe gaan jullie om met clubs met Europese verplichtingen?",
+          a: "Clubs in Champions / Europa / Conference League krijgen een vermoeidheidsbewuste korte-termijn vormweging. Onze logistische regressor verlaagt de impliciete winstkans voor het weekend na een doordeweeks Europees duel, wat vooral PSG, Marseille, Monaco en Lyon raakt.",
+        },
+      ],
+    },
+  },
+  {
     slug: "champions-league",
     sportSlug: "football",
     countryCode: "EU",
