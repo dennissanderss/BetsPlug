@@ -295,6 +295,11 @@ class ApiClient {
       `/strategies/${id}/picks?limit=${limit}&offset=${offset}`
     );
   }
+  getStrategyTodayPicks(id: string) {
+    return this.request<{ strategy_name: string; picks_count: number; picks: any[] }>(
+      `/strategies/${id}/today-picks`
+    );
+  }
 
   // Admin Blog
   getAdminBlogPosts(status?: string, limit = 50, offset = 0) {

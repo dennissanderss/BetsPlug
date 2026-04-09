@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { api } from "@/lib/api";
 import type { Fixture, FixturePrediction } from "@/types/api";
+import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -704,6 +705,15 @@ export default function PredictionsPage() {
             <MatchCard key={fixture.id} fixture={fixture} />
           ))}
         </div>
+      )}
+
+      {/* ── Upgrade prompt for more predictions ── */}
+      {!isLoading && upcomingFixtures.length > 0 && (
+        <PaywallOverlay feature="all_predictions" requiredTier="silver">
+          <div className="glass-card p-8 text-center">
+            <p className="text-slate-400">See all {upcomingFixtures.length} predictions with our Silver plan or higher.</p>
+          </div>
+        </PaywallOverlay>
       )}
 
       {/* ── Disclaimer ── */}

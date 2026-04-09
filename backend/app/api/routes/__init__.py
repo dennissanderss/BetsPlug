@@ -27,6 +27,7 @@ from app.api.routes.homepage import router as homepage_router
 from app.api.routes.odds import router as odds_router
 from app.api.routes.admin_research import router as admin_research_router
 from app.api.routes.admin_cleanup import router as admin_cleanup_router
+from app.api.routes.subscription_gate import router as subscription_gate_router
 
 router = APIRouter()
 
@@ -57,3 +58,4 @@ router.include_router(homepage_router, prefix="/homepage", tags=["homepage"])
 router.include_router(odds_router, prefix="/odds", tags=["odds"])
 router.include_router(admin_research_router, prefix="/admin/research", tags=["admin-research"])
 router.include_router(admin_cleanup_router, prefix="/admin", tags=["admin-cleanup"])
+router.include_router(subscription_gate_router, prefix="/subscription", tags=["subscription"])

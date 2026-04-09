@@ -188,6 +188,92 @@ async def get_strategy_picks(
 
 
 @router.get(
+    "/{strategy_id}/today-picks",
+    summary="Get upcoming matches that match this strategy",
+)
+async def get_strategy_today_picks(
+    strategy_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+):
+    """Return upcoming scheduled matches that pass this strategy's filters."""
+    from app.core.cache import cache_get, cache_set
+    from datetime import datetime, timedelta, timezone
+    from app.models.match import MatchStatus
+
+    # Check cache
+    cache_key = f"strategy:today:{strategy_id}"
+    cached = await cache_get(cache_key)
+    if cached is not None:
+        return cached
+
+    # Get strategy
+    strat_result = await db.execute(select(Strategy).where(Strategy.id == strategy_id))
+    strategy = strat_result.scalar_one_or_none()
+    if strategy is None:
+        raise HTTPException(status_code=404, detail="Strategy not found")
+
+    # Get upcoming predictions
+    now = datetime.now(timezone.utc)
+    cutoff = now + timedelta(hours=72)
+
+    HomeTeam = aliased(Team)
+    AwayTeam = aliased(Team)
+
+    q = (
+        select(
+            Prediction,
+            Match.scheduled_at,
+            HomeTeam.name.label("home"),
+            AwayTeam.name.label("away"),
+            League.name.label("league"),
+        )
+        .join(Match, Match.id == Prediction.match_id)
+        .join(HomeTeam, HomeTeam.id == Match.home_team_id)
+        .join(AwayTeam, AwayTeam.id == Match.away_team_id)
+        .join(League, League.id == Match.league_id)
+        .where(
+            Match.status == MatchStatus.SCHEDULED,
+            Match.scheduled_at >= now,
+            Match.scheduled_at <= cutoff,
+        )
+        .order_by(Match.scheduled_at)
+    )
+    rows = (await db.execute(q)).all()
+
+    picks = []
+    for pred, scheduled_at, home, away, league in rows:
+        if evaluate_strategy(strategy, pred, odds=None):
+            probs = {
+                "HOME": pred.home_win_prob,
+                "DRAW": pred.draw_prob or 0,
+                "AWAY": pred.away_win_prob,
+            }
+            pick = max(probs, key=lambda k: probs[k])
+            picks.append(
+                {
+                    "match_id": str(pred.match_id),
+                    "home_team": home,
+                    "away_team": away,
+                    "league": league,
+                    "kickoff": scheduled_at.isoformat(),
+                    "pick": pick,
+                    "home_win_prob": round(pred.home_win_prob, 4),
+                    "draw_prob": round(pred.draw_prob or 0, 4),
+                    "away_win_prob": round(pred.away_win_prob, 4),
+                    "confidence": round(pred.confidence, 4),
+                }
+            )
+
+    result = {
+        "strategy_name": strategy.name,
+        "picks_count": len(picks),
+        "picks": picks,
+    }
+    await cache_set(cache_key, result, ttl=600)  # 10 min cache
+    return result
+
+
+@router.get(
     "/{strategy_id}/metrics",
     summary="Get performance metrics for a strategy",
 )

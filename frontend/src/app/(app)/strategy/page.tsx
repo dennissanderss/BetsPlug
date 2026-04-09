@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
+import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import type { TrackrecordSummary, StrategyResponse } from "@/types/api";
 
 // ─── Minimum predictions required before a backtest is meaningful ────────────
@@ -298,13 +299,15 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
           ))}
         </ul>
         {metrics?.has_data && (
-          <Link
-            href={`/strategy/${strategy.id}`}
-            className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-2.5 text-xs font-semibold text-blue-400 hover:bg-blue-500/20 transition-all"
-          >
-            <BarChart3 className="h-3.5 w-3.5" />
-            View All Picks & Results
-          </Link>
+          <PaywallOverlay feature="strategy_lab_full" requiredTier="gold">
+            <Link
+              href={`/strategy/${strategy.id}`}
+              className="mt-4 flex items-center justify-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-2.5 text-xs font-semibold text-blue-400 hover:bg-blue-500/20 transition-all"
+            >
+              <BarChart3 className="h-3.5 w-3.5" />
+              View All Picks & Results
+            </Link>
+          </PaywallOverlay>
         )}
       </div>
     </div>
