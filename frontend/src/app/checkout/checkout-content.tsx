@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
@@ -35,6 +35,11 @@ import { CheckoutHeader } from "@/components/checkout/checkout-header";
 import { CheckoutFooter } from "@/components/checkout/checkout-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { TranslationKey } from "@/i18n/messages";
+import {
+  detectCountryCode,
+  getOrderedCountries,
+  POPULAR_COUNTRY_CODES,
+} from "@/lib/countries";
 
 /* ── Plan catalog (mirrors pricing-section.tsx) ─────────────── */
 type PlanId = "bronze" | "silver" | "gold" | "platinum";
@@ -218,6 +223,24 @@ export function CheckoutContent() {
     cvc: "",
     name: "",
   });
+
+  // Ordered country list (popular on top) — memoized once.
+  const countryOptions = useMemo(() => getOrderedCountries(), []);
+  const popularCount = POPULAR_COUNTRY_CODES.length;
+
+  // Auto-detect the visitor's country once on mount and pre-fill
+  // the select. If the user already picked something manually we
+  // don't overwrite it.
+  useEffect(() => {
+    let cancelled = false;
+    detectCountryCode().then((code) => {
+      if (cancelled || !code) return;
+      setAddress((prev) => (prev.country ? prev : { ...prev, country: code }));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const setAccountField = <K extends keyof typeof account>(
     k: K,
@@ -602,15 +625,24 @@ export function CheckoutContent() {
                             <option value="" disabled>
                               {t("checkout.countryPh")}
                             </option>
-                            <option value="NL">Netherlands</option>
-                            <option value="BE">Belgium</option>
-                            <option value="DE">Germany</option>
-                            <option value="FR">France</option>
-                            <option value="ES">Spain</option>
-                            <option value="IT">Italy</option>
-                            <option value="GB">United Kingdom</option>
-                            <option value="US">United States</option>
-                            <option value="OTHER">Other</option>
+                            <optgroup label="★ Popular">
+                              {countryOptions
+                                .slice(0, popularCount)
+                                .map((c) => (
+                                  <option key={c.code} value={c.code}>
+                                    {c.flag} {c.name}
+                                  </option>
+                                ))}
+                            </optgroup>
+                            <optgroup label="All countries">
+                              {countryOptions
+                                .slice(popularCount)
+                                .map((c) => (
+                                  <option key={c.code} value={c.code}>
+                                    {c.flag} {c.name}
+                                  </option>
+                                ))}
+                            </optgroup>
                           </select>
                         </Field>
                         <Field
