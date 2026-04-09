@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "Meet the two engineers building BetsPlug. Sports fanatics with an ICT background, turning raw match data into transparent, probability-driven predictions for football, basketball, tennis and more.",
   alternates: {
-    canonical: "/about",
+    canonical: "/about-us",
   },
   openGraph: {
     title: "About BetsPlug — The team behind the edge",

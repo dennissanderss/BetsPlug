@@ -80,6 +80,16 @@ export const routeTable = {
     sw: "/kuhusu",
     id: "/tentang",
   },
+  "/about-us": {
+    en: "/about-us",
+    nl: "/over-ons-team",
+    de: "/ueber-uns-team",
+    fr: "/notre-equipe",
+    es: "/nuestro-equipo",
+    it: "/il-nostro-team",
+    sw: "/timu-yetu",
+    id: "/tim-kami",
+  },
   "/contact": {
     en: "/contact",
     nl: "/contact",
