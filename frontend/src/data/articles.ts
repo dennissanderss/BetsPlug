@@ -8,22 +8,7 @@
  *
  * Content is rendered by a single reusable template so every
  * post has an identical layout, typography and CTA banner.
- *
- * Two sources are merged into the exported `articles` array:
- *   1. Handwritten editorial pieces declared in `EDITORIAL_ARTICLES`
- *      below. These are the original launch posts and any future
- *      hand-curated long-form pieces.
- *   2. Auto-generated blog posts loaded from `blog-posts.json`.
- *      That file is appended to (and committed) by the Phase 3
- *      blog automation pipeline at `scripts/blog/generate_post.py`,
- *      driven on a weekly GitHub Actions cron.
- *
- * Both sources share the same `Article` type and are sorted
- * newest-first before export, so consumers (sitemap, archive
- * page, single-post template) need no awareness of the source.
  */
-
-import generatedPostsRaw from "./blog-posts.json";
 
 export type Sport = "football" | "nba" | "nfl" | "mlb" | "nhl";
 
@@ -88,7 +73,7 @@ export const SPORTS: {
 
 /* ── Articles ──────────────────────────────────────────────── */
 
-const EDITORIAL_ARTICLES: Article[] = [
+export const articles: Article[] = [
   {
     slug: "ai-edge-matchday-research",
     title:
@@ -197,21 +182,6 @@ const EDITORIAL_ARTICLES: Article[] = [
     ],
   },
 ];
-
-/* ── Auto-generated blog posts ─────────────────────────────── */
-// Merged in from blog-posts.json. The JSON file is the write
-// target of scripts/blog/generate_post.py and is shaped exactly
-// like Article. We narrow it via `as Article[]` because TypeScript
-// can't statically prove the union shapes for ArticleBlock.
-
-const GENERATED_ARTICLES: Article[] = generatedPostsRaw as Article[];
-
-/* ── Final merged + sorted array ───────────────────────────── */
-
-export const articles: Article[] = [
-  ...EDITORIAL_ARTICLES,
-  ...GENERATED_ARTICLES,
-].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 
 /* ── Helpers ───────────────────────────────────────────────── */
 
