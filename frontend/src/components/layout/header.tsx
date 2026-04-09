@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LanguageSwitcher } from "@/components/common/language-switcher";
+import { useAuth } from "@/lib/auth";
 
 interface HeaderProps {
   className?: string;
@@ -14,6 +15,7 @@ interface HeaderProps {
 
 export function Header({ className }: HeaderProps) {
   const router = useRouter();
+  const { user, logout } = useAuth();
   const [query, setQuery] = React.useState("");
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
   const [notifOpen, setNotifOpen] = React.useState(false);
@@ -160,9 +162,9 @@ export function Header({ className }: HeaderProps) {
                 boxShadow: "0 0 10px rgba(59,130,246,0.4)",
               }}
             >
-              A
+              {(user?.name?.[0] ?? "A").toUpperCase()}
             </div>
-            <span className="hidden sm:inline text-sm font-medium">Admin</span>
+            <span className="hidden sm:inline text-sm font-medium">{user?.name ?? "Admin"}</span>
             <ChevronDown
               className={cn(
                 "h-3.5 w-3.5 text-slate-500 transition-transform duration-150",
@@ -173,7 +175,7 @@ export function Header({ className }: HeaderProps) {
 
           {userMenuOpen && (
             <div
-              className="absolute right-0 top-full mt-2 w-48 rounded-xl py-1 z-50 animate-slide-up"
+              className="absolute right-0 top-full mt-2 w-48 rounded-xl overflow-hidden z-[60] animate-slide-up"
               style={{
                 background: "rgba(17, 24, 39, 0.95)",
                 backdropFilter: "blur(20px)",
@@ -183,31 +185,38 @@ export function Header({ className }: HeaderProps) {
               }}
             >
               {/* User info */}
-              <div className="px-3 py-2.5 border-b border-white/[0.06] mb-1">
-                <p className="text-sm font-semibold text-slate-200">Admin User</p>
-                <p className="text-xs text-slate-500">admin@betsplug.io</p>
+              <div className="px-3 py-2.5 border-b border-white/[0.06]">
+                <p className="text-sm font-semibold text-slate-200">{user?.name ?? "Admin User"}</p>
+                <p className="text-xs text-slate-500">{user?.email ?? "admin@betsplug.io"}</p>
               </div>
 
-              <button
-                onClick={() => {
-                  setUserMenuOpen(false);
-                  router.push("/admin");
-                }}
-                className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-slate-300 hover:text-slate-100 hover:bg-white/[0.06] transition-colors"
-              >
-                <Settings className="h-4 w-4 text-slate-500" />
-                Settings
-              </button>
+              <div className="py-1">
+                <button
+                  onClick={() => {
+                    setUserMenuOpen(false);
+                    router.push("/admin");
+                  }}
+                  className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-slate-300 hover:text-slate-100 hover:bg-white/[0.06] transition-colors"
+                >
+                  <Settings className="h-4 w-4 text-slate-500" />
+                  Settings
+                </button>
+              </div>
 
-              <div className="my-1 mx-2 h-px bg-white/[0.06]" />
+              <div className="mx-2 h-px bg-white/[0.06]" />
 
-              <button
-                onClick={() => setUserMenuOpen(false)}
-                className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/[0.08] transition-colors"
-              >
-                <LogOut className="h-4 w-4" />
-                Sign out
-              </button>
+              <div className="py-1">
+                <button
+                  onClick={() => {
+                    setUserMenuOpen(false);
+                    logout();
+                  }}
+                  className="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/[0.08] transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Sign out
+                </button>
+              </div>
             </div>
           )}
         </div>

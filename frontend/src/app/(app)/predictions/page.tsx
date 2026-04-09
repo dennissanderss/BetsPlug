@@ -166,10 +166,10 @@ function ProbabilityPending() {
 
 function MatchCard({ fixture }: { fixture: Fixture }) {
   const [expanded, setExpanded] = useState(false);
-  const pred: FixturePrediction | null = fixture.prediction;
-  const hasPrediction = pred !== null;
+  const pred: FixturePrediction | null = fixture.prediction ?? null;
+  const hasPrediction = pred !== null && typeof pred.confidence === "number";
 
-  const confidenceScore = hasPrediction ? Math.round(pred!.confidence * 100) : null;
+  const confidenceScore = hasPrediction ? Math.round((pred.confidence ?? 0) * 100) : null;
   const confidenceLevel = confidenceScore !== null ? getConfidenceLevel(confidenceScore) : null;
   const confidenceColor = confidenceLevel ? getConfidenceColor(confidenceLevel) : "#475569";
   const confidenceBg    = confidenceLevel ? getConfidenceBg(confidenceLevel) : "bg-slate-500/10 text-slate-500";
@@ -216,9 +216,9 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
           </p>
           {hasPrediction ? (
             <ProbabilityBar
-              homeProb={Math.round(pred!.home_win_prob * 100)}
-              drawProb={pred!.draw_prob !== null ? Math.round(pred!.draw_prob * 100) : null}
-              awayProb={Math.round(pred!.away_win_prob * 100)}
+              homeProb={Math.round((pred.home_win_prob ?? 0) * 100)}
+              drawProb={pred.draw_prob != null ? Math.round(pred.draw_prob * 100) : null}
+              awayProb={Math.round((pred.away_win_prob ?? 0) * 100)}
               homeTeam={fixture.home_team_name}
               awayTeam={fixture.away_team_name}
             />
@@ -242,9 +242,9 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
                 <span className={`mt-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${confidenceBg}`}>
                   {confidenceLevel} Confidence
                 </span>
-                {pred!.model_name && (
+                {pred?.model_name && (
                   <span className="mt-1 text-[9px] text-slate-600 uppercase tracking-wider">
-                    {pred!.model_name}
+                    {pred.model_name}
                   </span>
                 )}
               </>
@@ -278,15 +278,15 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
                   <span className="font-medium text-slate-500">Venue:</span> {fixture.venue}
                 </p>
               )}
-              {pred!.predicted_at && (
+              {pred?.predicted_at && (
                 <p className="text-[10px] text-slate-700 truncate mt-0.5">
-                  Predicted {new Date(pred!.predicted_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
+                  Predicted {new Date(pred.predicted_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
                 </p>
               )}
             </div>
-            {pred!.pick && (
+            {pred?.pick && (
               <span className="shrink-0 rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400 border border-emerald-500/20">
-                {pred!.pick}
+                {pred.pick}
               </span>
             )}
           </div>
@@ -302,75 +302,75 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
         <div className="border-t border-white/[0.05] bg-white/[0.015] px-5 py-4 animate-fade-in space-y-4">
 
           {/* Pick badge */}
-          {pred!.pick && (
+          {pred?.pick && (
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600">Model Pick</span>
               <span className="rounded-md bg-emerald-500/20 px-2.5 py-0.5 text-xs font-bold text-emerald-400 border border-emerald-500/30">
-                {pred!.pick}
+                {pred.pick}
               </span>
               <span className="text-[10px] text-slate-600 ml-auto">
-                Confidence: {Math.round(pred!.confidence * 100)}%
+                Confidence: {Math.round((pred.confidence ?? 0) * 100)}%
               </span>
             </div>
           )}
 
           {/* Probability breakdown */}
-          <div className="grid grid-cols-3 gap-3 text-center">
+          <div className={`grid gap-3 text-center ${pred?.draw_prob != null ? 'grid-cols-3' : 'grid-cols-2'}`}>
             <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] p-3">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Home Win</p>
-              <p className="text-xl font-bold text-blue-400">{Math.round(pred!.home_win_prob * 100)}%</p>
-              {pred!.edge?.home != null && (
-                <p className={`text-[10px] font-medium mt-1 ${pred!.edge.home > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                  {pred!.edge.home > 0 ? '+' : ''}{(pred!.edge.home * 100).toFixed(1)}% edge
+              <p className="text-xl font-bold text-blue-400">{Math.round((pred?.home_win_prob ?? 0) * 100)}%</p>
+              {pred?.edge?.home != null && (
+                <p className={`text-[10px] font-medium mt-1 ${pred.edge.home > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                  {pred.edge.home > 0 ? '+' : ''}{(pred.edge.home * 100).toFixed(1)}% edge
                 </p>
               )}
             </div>
-            {pred!.draw_prob !== null && (
+            {pred?.draw_prob != null && (
               <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] p-3">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Draw</p>
-                <p className="text-xl font-bold text-amber-400">{Math.round(pred!.draw_prob * 100)}%</p>
-                {pred!.edge?.draw != null && (
-                  <p className={`text-[10px] font-medium mt-1 ${pred!.edge.draw > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                    {pred!.edge.draw > 0 ? '+' : ''}{(pred!.edge.draw * 100).toFixed(1)}% edge
+                <p className="text-xl font-bold text-amber-400">{Math.round(pred.draw_prob * 100)}%</p>
+                {pred.edge?.draw != null && (
+                  <p className={`text-[10px] font-medium mt-1 ${pred.edge.draw > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                    {pred.edge.draw > 0 ? '+' : ''}{(pred.edge.draw * 100).toFixed(1)}% edge
                   </p>
                 )}
               </div>
             )}
             <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] p-3">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Away Win</p>
-              <p className="text-xl font-bold text-red-400">{Math.round(pred!.away_win_prob * 100)}%</p>
-              {pred!.edge?.away != null && (
-                <p className={`text-[10px] font-medium mt-1 ${pred!.edge.away > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                  {pred!.edge.away > 0 ? '+' : ''}{(pred!.edge.away * 100).toFixed(1)}% edge
+              <p className="text-xl font-bold text-red-400">{Math.round((pred?.away_win_prob ?? 0) * 100)}%</p>
+              {pred?.edge?.away != null && (
+                <p className={`text-[10px] font-medium mt-1 ${pred.edge.away > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                  {pred.edge.away > 0 ? '+' : ''}{(pred.edge.away * 100).toFixed(1)}% edge
                 </p>
               )}
             </div>
           </div>
 
           {/* Reasoning */}
-          {pred!.reasoning && (
+          {pred?.reasoning && (
             <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] px-4 py-3">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1.5">Model Reasoning</p>
-              <p className="text-xs text-slate-300 leading-relaxed">{pred!.reasoning}</p>
+              <p className="text-xs text-slate-300 leading-relaxed">{pred.reasoning}</p>
             </div>
           )}
 
           {/* Top features */}
-          {pred!.top_features && pred!.top_features.length > 0 && (
+          {pred?.top_features && pred.top_features.length > 0 && (
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-2">Key Factors</p>
               <div className="space-y-1.5">
-                {pred!.top_features.slice(0, 5).map((f, i) => (
+                {pred.top_features.slice(0, 5).map((f, i) => (
                   <div key={i} className="flex items-center gap-2">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between text-[11px] mb-0.5">
-                        <span className="text-slate-400 truncate capitalize">{f.feature.replace(/_/g, ' ')}</span>
-                        <span className="text-slate-300 font-medium ml-2 shrink-0">{(f.importance * 100).toFixed(0)}%</span>
+                        <span className="text-slate-400 truncate capitalize">{f.feature?.replace(/_/g, ' ') ?? ''}</span>
+                        <span className="text-slate-300 font-medium ml-2 shrink-0">{((f.importance ?? 0) * 100).toFixed(0)}%</span>
                       </div>
                       <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
                         <div
                           className="h-full rounded-full bg-blue-500/70 transition-all duration-500"
-                          style={{ width: `${Math.min(f.importance * 100, 100)}%` }}
+                          style={{ width: `${Math.min((f.importance ?? 0) * 100, 100)}%` }}
                         />
                       </div>
                     </div>

@@ -633,31 +633,31 @@ const en = {
   "hiw.heroCtaPrimary": "See the track record",
   "hiw.heroCtaSecondary": "Start Free Trial",
   "hiw.heroStatDataSources": "Data sources",
-  "hiw.heroStatFeatures": "Features per match",
-  "hiw.heroStatModels": "Independent models",
-  "hiw.heroStatUpdates": "Refresh cycle",
+  "hiw.heroStatLeagues": "European leagues",
+  "hiw.heroStatModels": "Ensemble models",
+  "hiw.heroStatUpdates": "Sync cycle",
 
   /* Overview strip */
-  "hiw.overviewBadge": "The 7-stage engine",
-  "hiw.overviewTitle": "Seven stages. Zero guesswork.",
+  "hiw.overviewBadge": "The pipeline",
+  "hiw.overviewTitle": "Seven stages. Full transparency.",
   "hiw.overviewSubtitle":
-    "Each stage is built, tested and monitored independently. If any stage breaks, the pick is held — never published.",
+    "Each stage is built and monitored independently. Here's exactly what happens under the hood.",
 
   /* Stage 1 — Data acquisition */
   "hiw.s1Badge": "Stage 01 · Data acquisition",
   "hiw.s1Title": "We start where the market starts: the raw feed.",
   "hiw.s1Lead":
-    "Garbage in, garbage out. So our pipeline begins with the highest-quality, most redundant data sources we can get our hands on — and we never trust a single one.",
+    "Garbage in, garbage out. So our pipeline begins with reliable data sources covering fixtures, results, standings and bookmaker odds.",
   "hiw.s1P1":
-    "Every 30 seconds, we pull structured data from 14 independent providers: match schedules, live odds from 40+ bookmakers, injury reports, confirmed lineups, referee assignments, weather at venue, travel distance, and historical head-to-head archives going back two decades.",
+    "Every 6 hours we sync fixtures, results and standings from API-Football and football-data.org for 6 European leagues. Bookmaker odds are fetched from The Odds API every 2 hours. During match hours (12:00-24:00 UTC), live scores update every 5 minutes so your dashboard stays current.",
   "hiw.s1P2":
-    "Every single record is timestamped and version-controlled. That means we can replay any moment in history exactly as our models saw it — critical for honest backtesting and essential for regulatory-grade auditability.",
-  "hiw.s1Point1Title": "14 redundant providers",
+    "Every record is timestamped so we can replay any moment in history exactly as our models saw it — critical for honest backtesting.",
+  "hiw.s1Point1Title": "3 data providers",
   "hiw.s1Point1Desc":
-    "If one source disagrees with the rest, it gets quarantined until we understand why.",
-  "hiw.s1Point2Title": "30-second refresh",
+    "API-Football, football-data.org and The Odds API — each covering different aspects of the match.",
+  "hiw.s1Point2Title": "6-hour sync cycle",
   "hiw.s1Point2Desc":
-    "Odds, lineups and injuries are re-pulled every half minute up until kick-off.",
+    "Fixtures and predictions refresh every 6 hours. Live scores update every 5 minutes during match hours.",
   "hiw.s1Point3Title": "Point-in-time storage",
   "hiw.s1Point3Desc":
     "Nothing is overwritten. Every change is a new row — history is permanent.",
@@ -680,58 +680,55 @@ const en = {
 
   /* Stage 3 — Feature engineering */
   "hiw.s3Badge": "Stage 03 · Feature engineering",
-  "hiw.s3Title": "1,200+ features per match — and every single one earns its place.",
+  "hiw.s3Title": "Multiple signal families per match — each one earns its place.",
   "hiw.s3Lead":
-    "A prediction is only as sharp as the signals it's built on. This is where a match becomes a high-dimensional fingerprint our models can actually reason about.",
+    "A prediction is only as sharp as the signals it's built on. This is where a match becomes a structured profile our models can reason about.",
   "hiw.s3P1":
-    "For every fixture we compute more than 1,200 features across six families: strength ratings (Elo, Glicko, market-implied), recent form (xG, expected points, momentum), situational context (rest days, travel km, altitude), head-to-head history, market movement (line drift, sharp action) and discipline metrics.",
+    "For every fixture we compute features across several families: Elo ratings, Poisson goal rates, league standings, recent form, head-to-head history and bookmaker odds. These feed into three independent models that each look at the data differently.",
   "hiw.s3P2":
-    "All features are stored in a point-in-time feature store. When we train a model on last season's Champions League final, it sees only what was available at kick-off — not a single byte of the future. This is the single biggest reason most public models overfit and ours don't.",
-  "hiw.s3Family1Title": "Strength & form",
-  "hiw.s3Family1Desc": "Elo, Glicko, xG trends, rolling SRS, expected points.",
-  "hiw.s3Family2Title": "Situational context",
-  "hiw.s3Family2Desc": "Rest days, travel km, altitude, venue, weather.",
+    "All features use only data available before kick-off. Our models never see the future when generating a prediction — a key safeguard against overfitting.",
+  "hiw.s3Family1Title": "Elo ratings",
+  "hiw.s3Family1Desc": "Dynamic team strength ratings updated after every match result.",
+  "hiw.s3Family2Title": "Poisson goal rates",
+  "hiw.s3Family2Desc": "Expected attacking and defensive rates for each team based on recent matches.",
   "hiw.s3Family3Title": "Head-to-head",
-  "hiw.s3Family3Desc": "Last 20 meetings, venue splits, style matchups.",
-  "hiw.s3Family4Title": "Market signals",
-  "hiw.s3Family4Desc": "Opening vs. current odds, steam moves, sharp money.",
-  "hiw.s3Family5Title": "Lineups & availability",
-  "hiw.s3Family5Desc": "Confirmed XI, minutes lost to injury, fatigue index.",
-  "hiw.s3Family6Title": "Discipline & referee",
-  "hiw.s3Family6Desc": "Cards per 90, referee strictness, historical bias.",
+  "hiw.s3Family3Desc": "Historical meetings between the two teams, home and away.",
+  "hiw.s3Family4Title": "Bookmaker odds",
+  "hiw.s3Family4Desc": "Pre-match odds from major bookmakers via The Odds API.",
+  "hiw.s3Family5Title": "League standings",
+  "hiw.s3Family5Desc": "Current league position, points, goal difference and recent form.",
+  "hiw.s3Family6Title": "Match context",
+  "hiw.s3Family6Desc": "Home/away status, scheduling and fixture details.",
 
   /* Stage 4 — Model ensemble */
   "hiw.s4Badge": "Stage 04 · Model ensemble",
-  "hiw.s4Title": "Four independent models. One honest probability.",
+  "hiw.s4Title": "Three independent models. One honest probability.",
   "hiw.s4Lead":
-    "A single model will always have blind spots. So we run four completely different approaches, each trained on the same feature store, and blend their votes.",
+    "A single model will always have blind spots. So we run three different statistical approaches and combine their predictions with weighted averaging.",
   "hiw.s4P1":
-    "Each model is tested independently before it's allowed into the ensemble. If a new model doesn't outperform the current blend on out-of-sample data for three consecutive months, it simply doesn't ship.",
-  "hiw.s4Model1Name": "Poisson Goals Model",
+    "Each model captures a different aspect of match dynamics. Their predictions are combined into a single set of win/draw/loss probabilities plus a confidence score for every upcoming match.",
+  "hiw.s4Model1Name": "Elo Rating Model",
   "hiw.s4Model1Desc":
-    "A goals-based probabilistic model that estimates expected attacking and defensive rates for each team and integrates over all possible scorelines.",
-  "hiw.s4Model2Name": "Gradient-Boosted Classifier",
+    "A dynamic team strength rating that updates after every result. Converts the rating gap between two teams into win probabilities.",
+  "hiw.s4Model2Name": "Poisson Goal Model",
   "hiw.s4Model2Desc":
-    "An XGBoost-style classifier trained on the full feature store. Strongest at capturing non-linear interactions between form, injuries and market movement.",
-  "hiw.s4Model3Name": "Elo + Glicko Baseline",
+    "Estimates expected attacking and defensive goal rates for each team and integrates over all possible scorelines to produce match outcome probabilities.",
+  "hiw.s4Model3Name": "Logistic Regression",
   "hiw.s4Model3Desc":
-    "A transparent rating-based model that anchors the ensemble and prevents it from drifting too far from the fundamentals of team strength.",
-  "hiw.s4Model4Name": "Market-Implied Calibrator",
-  "hiw.s4Model4Desc":
-    "A meta-model that learns how the sharpest books price games and corrects the other three models whenever their probabilities drift away from efficient pricing.",
-  "hiw.s4BlendTitle": "Stacked blending",
+    "A statistical classifier that uses multiple match features — form, standings, home advantage — to predict match outcomes directly.",
+  "hiw.s4BlendTitle": "Weighted averaging",
   "hiw.s4BlendDesc":
-    "The four probabilities are combined through a stacked regressor that has been trained to minimise log-loss on held-out matches. The weights are recomputed weekly as new results come in.",
+    "The three probabilities are combined through weighted averaging. The current weights (Elo 1.0, Poisson 1.5, Logistic 1.0) give slightly more influence to the Poisson model.",
 
   /* Stage 5 — Value detection */
   "hiw.s5Badge": "Stage 05 · Value detection",
   "hiw.s5Title": "We only publish picks where our edge survives the real world.",
   "hiw.s5Lead":
-    "Being right isn't enough. A pick only becomes a pick when our probability beats the market by more than the friction of actually playing it.",
+    "Being right isn't enough. A pick only becomes a pick when our probability suggests value compared to the available odds.",
   "hiw.s5P1":
-    "For every possible market we compare our ensemble probability to the best available odds across 40+ bookmakers, then subtract a realistic slippage budget: commission, expected closing-line movement, and execution delay. Whatever remains is the true edge.",
+    "We compare our ensemble probabilities to bookmaker odds fetched from The Odds API. Our Strategy Lab filters predictions using rules validated through walk-forward backtesting — such as requiring high home-win probability or low draw probability.",
   "hiw.s5P2":
-    "Only picks with a statistically significant positive expected value survive. Everything else is discarded — even if it would have won. Because a track record built on luck collapses the moment luck runs out.",
+    "Currently 3 strategies have passed statistical validation with positive backtested ROI over 90 days. But these are backtested results on a limited sample — real-world performance will vary. We are honest about that.",
   "hiw.s5FormulaTitle": "The check every pick has to pass",
   "hiw.s5FormulaLine1": "Model probability × Best odds",
   "hiw.s5FormulaLine2": "−  expected slippage",
@@ -759,40 +756,40 @@ const en = {
   "hiw.s6Point3Desc":
     "Losing picks are permanent. The ledger is append-only by design.",
 
-  /* Stage 7 — Retraining */
-  "hiw.s7Badge": "Stage 07 · Continuous retraining",
-  "hiw.s7Title": "The engine gets smarter every Sunday night.",
+  /* Stage 7 — Continuous evaluation */
+  "hiw.s7Badge": "Stage 07 · Continuous evaluation",
+  "hiw.s7Title": "Every prediction is graded against the real result.",
   "hiw.s7Lead":
-    "Sport changes. Coaches change. Tactics change. If your model doesn't change with them, it dies.",
+    "Predictions mean nothing if you don't check them. Our system automatically evaluates every prediction once the match is finished.",
   "hiw.s7P1":
-    "Every Sunday night, after the week's matches have settled, the entire ensemble is retrained on the latest data. Model weights are re-estimated, stacking coefficients are updated, and the new version is shadow-tested against the live version for 48 hours before it takes over.",
+    "Every 6 hours, after results are synced, the system scores all finished predictions. Each pick is evaluated with Brier score and log-loss metrics, and marked as correct or incorrect. This lets us track real accuracy over time.",
   "hiw.s7P2":
-    "Drift detection runs continuously in the background. If the model's calibration starts slipping on any sport or league, an alert fires and the ensemble is rolled back to the last known-good version until the issue is understood.",
-  "hiw.s7Bullet1": "Weekly retraining cycle",
-  "hiw.s7Bullet2": "48-hour shadow test before go-live",
-  "hiw.s7Bullet3": "Continuous drift monitoring",
-  "hiw.s7Bullet4": "Automatic rollback on calibration failure",
+    "Current 3-way accuracy (home/draw/away) is around 50% — above the 33% random baseline, but not extraordinary. We publish all results, wins and losses alike, so you can verify the track record yourself.",
+  "hiw.s7Bullet1": "6-hour evaluation cycle",
+  "hiw.s7Bullet2": "Brier score and log-loss tracking",
+  "hiw.s7Bullet3": "All predictions graded automatically",
+  "hiw.s7Bullet4": "Wins and losses both published permanently",
 
   /* Trust reinforcement / proof */
   "hiw.proofBadge": "Why this matters",
   "hiw.proofTitle": "The reason our predictions actually hold up.",
   "hiw.proofSubtitle":
-    "Every choice in this pipeline exists for one reason: to give you a probability you can bet your bankroll on without blinking.",
+    "Every choice in this pipeline exists for one reason: to give you an honest, data-driven probability — not a guess.",
   "hiw.proof1Title": "No hindsight bias",
   "hiw.proof1Desc":
-    "Point-in-time feature store. The model never learns from information that wasn't available at kick-off.",
+    "Models only see data available before kick-off. Predictions are generated and timestamped before the match starts.",
   "hiw.proof2Title": "Ensemble, not one-trick-pony",
   "hiw.proof2Desc":
-    "Four independent models cross-check each other. One blind spot can't poison the whole prediction.",
-  "hiw.proof3Title": "Edge survives slippage",
+    "Three independent models (Elo, Poisson, Logistic) cross-check each other. One blind spot can't poison the whole prediction.",
+  "hiw.proof3Title": "Backtested strategies",
   "hiw.proof3Desc":
-    "Picks only ship if the edge holds after commission, margin and closing-line movement are subtracted.",
-  "hiw.proof4Title": "Permanent public ledger",
+    "Strategy Lab filters are validated with walk-forward backtesting and bootstrap confidence intervals before being published.",
+  "hiw.proof4Title": "Full transparency",
   "hiw.proof4Desc":
-    "You can verify every pick we've ever published. Wins and losses. No exceptions.",
-  "hiw.proof5Title": "Retrained every week",
+    "You can verify every prediction we've published. Wins and losses. Current 3-way accuracy is around 50%.",
+  "hiw.proof5Title": "Evaluated every 6 hours",
   "hiw.proof5Desc":
-    "The engine adapts to new tactics, injuries and market behaviour — with an automatic rollback if it drifts.",
+    "Every finished match is scored automatically. Brier score and log-loss track calibration over time.",
   "hiw.proof6Title": "Built by people who ship",
   "hiw.proof6Desc":
     "A two-person team of sports fanatics with an ICT background. Every line of this pipeline is hand-rolled, not bolted together from plugins.",
@@ -802,30 +799,30 @@ const en = {
   "hiw.faqTitle": "The questions every serious analyst asks us.",
   "hiw.faqSubtitle":
     "If you've tried a tipster site before, you've probably been burned. Here's exactly why BetsPlug is different.",
-  "hiw.faq1Q": "How do I know you're not just lucky?",
+  "hiw.faq1Q": "How accurate are your predictions?",
   "hiw.faq1A":
-    "Over 24,000 graded picks across nine sports. Luck evens out at that sample size — skill compounds. Every prediction is time-stamped before kick-off, so you can verify it against the official result feed yourself.",
+    "Our 3-way match predictions (home/draw/away) hit around 50% accuracy. That's above the 33% random baseline, but we're honest — it's not a magic number. Every prediction is timestamped before kick-off and graded automatically after the match, so you can verify the track record yourself.",
   "hiw.faq2Q": "What happens on a losing streak?",
   "hiw.faq2A":
-    "Losing picks stay on the public ledger permanently. We publish them just as loudly as the winners. If a model starts drifting, automatic drift detection rolls the ensemble back to the last known-good version within hours.",
+    "Losing predictions stay visible permanently. We publish them just as openly as the winners. Our Strategy Lab strategies were backtested on a 90-day sample, so we expect variance. Losing streaks happen — that's sport.",
   "hiw.faq3Q": "Why not just use one really smart model?",
   "hiw.faq3A":
-    "Because every single model has blind spots — statistical ones, tactical ones, or situational ones. Four independent models with different architectures will catch each other's mistakes. The ensemble consistently beats its strongest individual member.",
-  "hiw.faq4Q": "Can I actually execute these edges at a sportsbook?",
+    "Because every model has blind spots. Our three models — Elo ratings, Poisson goal model and Logistic regression — each capture different patterns. The ensemble with weighted averaging consistently outperforms any single member.",
+  "hiw.faq4Q": "Can I actually profit from these predictions?",
   "hiw.faq4A":
-    "Yes — and we prove it. Every ROI figure we publish is adjusted for realistic slippage between our publish time and the closing line. The edge you see is the edge you can actually play.",
+    "Our backtested strategies show positive ROI over 90 days, but backtesting is not a guarantee. Real-world performance depends on odds you get, timing, and variance. We provide the data and analysis — the rest is your call.",
   "hiw.faq5Q": "What sports and leagues do you cover?",
   "hiw.faq5A":
-    "Nine sports and 70+ leagues. Football (all top European leagues + internationals), basketball (NBA, EuroLeague), tennis (ATP, WTA, Grand Slams), plus selected coverage of baseball, ice hockey, American football, MMA, rugby and esports.",
+    "Football only, covering 6 European leagues: Premier League, La Liga, Bundesliga, Serie A, Ligue 1 and Eredivisie. We plan to expand, but we'd rather do a few leagues well than many leagues poorly.",
   "hiw.faq6Q": "Is this gambling advice?",
   "hiw.faq6A":
-    "No. BetsPlug is a pure sports analytics platform. We publish probabilities, expected values and a verifiable track record. What you do with that information is entirely your decision.",
+    "No. BetsPlug is a sports analytics platform. We publish probabilities, confidence scores and a verifiable track record. What you do with that information is entirely your decision.",
 
   /* Final CTA */
   "hiw.ctaBadge": "Ready to see it in action?",
   "hiw.ctaTitle": "Stop guessing. Start trusting the pipeline.",
   "hiw.ctaSubtitle":
-    "You've just read the most honest how-it-works page in sports analytics. Now see the picks it produces — live, timestamped, and ready to verify.",
+    "Now you know exactly how the pipeline works. See the predictions it produces — live, timestamped and ready to verify.",
   "hiw.ctaPrimary": "Start Free Trial",
   "hiw.ctaSecondary": "See the track record",
 
@@ -1859,29 +1856,29 @@ const nl: Dictionary = {
   "hiw.heroCtaPrimary": "Bekijk het track record",
   "hiw.heroCtaSecondary": "Gratis proberen",
   "hiw.heroStatDataSources": "Databronnen",
-  "hiw.heroStatFeatures": "Features per wedstrijd",
-  "hiw.heroStatModels": "Onafhankelijke modellen",
-  "hiw.heroStatUpdates": "Ververs-cyclus",
+  "hiw.heroStatLeagues": "Europese competities",
+  "hiw.heroStatModels": "Ensemble-modellen",
+  "hiw.heroStatUpdates": "Sync-cyclus",
 
-  "hiw.overviewBadge": "De 7-stappen engine",
-  "hiw.overviewTitle": "Zeven stappen. Nul gokwerk.",
+  "hiw.overviewBadge": "De pipeline",
+  "hiw.overviewTitle": "Zeven stappen. Volledige transparantie.",
   "hiw.overviewSubtitle":
-    "Elke stap wordt onafhankelijk gebouwd, getest en gemonitord. Als ook maar één stap breekt, wordt de pick tegengehouden — nooit gepubliceerd.",
+    "Elke stap wordt onafhankelijk gebouwd en gemonitord. Dit is precies wat er onder de motorkap gebeurt.",
 
   "hiw.s1Badge": "Stap 01 · Data-acquisitie",
   "hiw.s1Title": "We beginnen waar de markt begint: bij de ruwe feed.",
   "hiw.s1Lead":
-    "Rommel erin, rommel eruit. Onze pipeline begint dus met de hoogste kwaliteit, meest redundante databronnen die we kunnen krijgen — en we vertrouwen er nooit slechts één.",
+    "Rommel erin, rommel eruit. Onze pipeline begint dus met betrouwbare databronnen voor wedstrijden, uitslagen, standen en bookmaker-odds.",
   "hiw.s1P1":
-    "Elke 30 seconden halen we gestructureerde data binnen bij 14 onafhankelijke leveranciers: wedstrijdschema's, live odds van 40+ bookmakers, blessurerapporten, bevestigde opstellingen, scheidsrechteraanstellingen, weer bij het stadion, reisafstand, en historische onderlinge archieven die twee decennia teruggaan.",
+    "Elke 6 uur synchroniseren we wedstrijden, uitslagen en standen van API-Football en football-data.org voor 6 Europese competities. Bookmaker-odds worden elke 2 uur opgehaald via The Odds API. Tijdens wedstrijduren (12:00-24:00 UTC) worden live scores elke 5 minuten bijgewerkt zodat je dashboard actueel blijft.",
   "hiw.s1P2":
-    "Elk record krijgt een tijdstempel en versiebeheer. Dat betekent dat we elk moment in de geschiedenis exact kunnen terugspelen zoals onze modellen het zagen — cruciaal voor eerlijke backtesting en essentieel voor audit-waardige controleerbaarheid.",
-  "hiw.s1Point1Title": "14 redundante leveranciers",
+    "Elk record krijgt een tijdstempel zodat we elk moment in de geschiedenis exact kunnen terugspelen zoals onze modellen het zagen — cruciaal voor eerlijke backtesting.",
+  "hiw.s1Point1Title": "3 dataleveranciers",
   "hiw.s1Point1Desc":
-    "Als één bron afwijkt van de rest, wordt die in quarantaine gezet tot we begrijpen waarom.",
-  "hiw.s1Point2Title": "Ververs elke 30 seconden",
+    "API-Football, football-data.org en The Odds API — elk voor een ander aspect van de wedstrijd.",
+  "hiw.s1Point2Title": "6-uur sync-cyclus",
   "hiw.s1Point2Desc":
-    "Odds, opstellingen en blessures worden elke halve minuut opnieuw opgehaald tot aan de aftrap.",
+    "Wedstrijden en voorspellingen worden elke 6 uur ververst. Live scores updaten elke 5 minuten tijdens wedstrijduren.",
   "hiw.s1Point3Title": "Point-in-time opslag",
   "hiw.s1Point3Desc":
     "Niets wordt overschreven. Elke wijziging is een nieuwe regel — geschiedenis is permanent.",
@@ -1903,56 +1900,53 @@ const nl: Dictionary = {
   "hiw.s2Bullet5": "Ontbrekende waarden expliciet gemarkeerd (nooit stilletjes ingevuld)",
 
   "hiw.s3Badge": "Stap 03 · Feature engineering",
-  "hiw.s3Title": "1.200+ features per wedstrijd — en elke feature verdient zijn plek.",
+  "hiw.s3Title": "Meerdere signalfamilies per wedstrijd — elk verdient zijn plek.",
   "hiw.s3Lead":
-    "Een voorspelling is alleen zo scherp als de signalen waar hij op gebouwd is. Hier wordt een wedstrijd een hoogdimensionale vingerafdruk waar onze modellen daadwerkelijk over kunnen redeneren.",
+    "Een voorspelling is alleen zo scherp als de signalen waar hij op gebouwd is. Hier wordt een wedstrijd een gestructureerd profiel waar onze modellen over kunnen redeneren.",
   "hiw.s3P1":
-    "Voor elke wedstrijd berekenen we meer dan 1.200 features in zes families: sterkteratings (Elo, Glicko, markt-geïmpliceerd), recente vorm (xG, expected points, momentum), situationele context (rustdagen, reisafstand, hoogte), onderlinge geschiedenis, marktbeweging (lijn-drift, sharp action) en discipline-metrics.",
+    "Voor elke wedstrijd berekenen we features in verschillende families: Elo-ratings, Poisson-doelkansratios, competitiestanden, recente vorm, onderlinge geschiedenis en bookmaker-odds. Deze voeden drie onafhankelijke modellen die elk op een andere manier naar de data kijken.",
   "hiw.s3P2":
-    "Alle features worden opgeslagen in een point-in-time feature store. Wanneer we een model trainen op de Champions League-finale van vorig seizoen, ziet het alleen wat er bij de aftrap beschikbaar was — geen enkele byte uit de toekomst. Dit is de belangrijkste reden dat de meeste publieke modellen overfitten en de onze niet.",
-  "hiw.s3Family1Title": "Sterkte & vorm",
-  "hiw.s3Family1Desc": "Elo, Glicko, xG-trends, rolling SRS, expected points.",
-  "hiw.s3Family2Title": "Situationele context",
-  "hiw.s3Family2Desc": "Rustdagen, reisafstand, hoogte, stadion, weer.",
+    "Alle features gebruiken alleen data die beschikbaar is vóór de aftrap. Onze modellen zien nooit de toekomst bij het genereren van een voorspelling — een essentiële bescherming tegen overfitting.",
+  "hiw.s3Family1Title": "Elo-ratings",
+  "hiw.s3Family1Desc": "Dynamische teamsterkte-ratings die na elke wedstrijduitslag worden bijgewerkt.",
+  "hiw.s3Family2Title": "Poisson-doelkansen",
+  "hiw.s3Family2Desc": "Verwachte aanvals- en verdedigingsratio's per team op basis van recente wedstrijden.",
   "hiw.s3Family3Title": "Onderling",
-  "hiw.s3Family3Desc": "Laatste 20 ontmoetingen, thuis/uit splits, stijl-matchups.",
-  "hiw.s3Family4Title": "Marktsignalen",
-  "hiw.s3Family4Desc": "Open- vs. huidige odds, steam moves, sharp money.",
-  "hiw.s3Family5Title": "Opstellingen & beschikbaarheid",
-  "hiw.s3Family5Desc": "Bevestigde XI, minuten verloren aan blessures, vermoeidheidsindex.",
-  "hiw.s3Family6Title": "Discipline & scheidsrechter",
-  "hiw.s3Family6Desc": "Kaarten per 90, strengheid scheidsrechter, historische bias.",
+  "hiw.s3Family3Desc": "Historische ontmoetingen tussen de twee teams, thuis en uit.",
+  "hiw.s3Family4Title": "Bookmaker-odds",
+  "hiw.s3Family4Desc": "Pre-match odds van grote bookmakers via The Odds API.",
+  "hiw.s3Family5Title": "Competitiestanden",
+  "hiw.s3Family5Desc": "Huidige positie, punten, doelsaldo en recente vorm.",
+  "hiw.s3Family6Title": "Wedstrijdcontext",
+  "hiw.s3Family6Desc": "Thuis/uit-status, schema en wedstrijddetails.",
 
   "hiw.s4Badge": "Stap 04 · Model-ensemble",
-  "hiw.s4Title": "Vier onafhankelijke modellen. Eén eerlijke waarschijnlijkheid.",
+  "hiw.s4Title": "Drie onafhankelijke modellen. Eén eerlijke waarschijnlijkheid.",
   "hiw.s4Lead":
-    "Een enkel model heeft altijd blinde vlekken. Daarom draaien we vier volledig verschillende benaderingen, elk getraind op dezelfde feature store, en combineren we hun stemmen.",
+    "Een enkel model heeft altijd blinde vlekken. Daarom draaien we drie verschillende statistische benaderingen en combineren hun voorspellingen met gewogen middeling.",
   "hiw.s4P1":
-    "Elk model wordt onafhankelijk getest voordat het in het ensemble mag. Als een nieuw model drie maanden achter elkaar niet beter presteert dan de huidige blend op out-of-sample data, wordt het simpelweg niet uitgerold.",
-  "hiw.s4Model1Name": "Poisson Goals Model",
+    "Elk model vangt een ander aspect van de wedstrijddynamiek. Hun voorspellingen worden gecombineerd tot één set win/gelijk/verlies-waarschijnlijkheden plus een confidence-score voor elke aankomende wedstrijd.",
+  "hiw.s4Model1Name": "Elo Rating Model",
   "hiw.s4Model1Desc":
-    "Een doelpunten-gebaseerd probabilistisch model dat verwachte aanvals- en verdedigingsratios per team schat en integreert over alle mogelijke eindstanden.",
-  "hiw.s4Model2Name": "Gradient-Boosted Classifier",
+    "Een dynamische teamsterkte-rating die na elk resultaat wordt bijgewerkt. Zet het ratingverschil tussen twee teams om in winstkansen.",
+  "hiw.s4Model2Name": "Poisson Goal Model",
   "hiw.s4Model2Desc":
-    "Een XGBoost-achtige classifier getraind op de volledige feature store. Sterk in het vangen van niet-lineaire interacties tussen vorm, blessures en marktbeweging.",
-  "hiw.s4Model3Name": "Elo + Glicko Baseline",
+    "Schat verwachte aanvals- en verdedigingsratio's per team en integreert over alle mogelijke eindstanden om wedstrijduitkomst-waarschijnlijkheden te produceren.",
+  "hiw.s4Model3Name": "Logistische Regressie",
   "hiw.s4Model3Desc":
-    "Een transparant rating-gebaseerd model dat het ensemble verankert en voorkomt dat het te ver afdwaalt van de fundamenten van teamsterkte.",
-  "hiw.s4Model4Name": "Markt-geïmpliceerde Kalibrator",
-  "hiw.s4Model4Desc":
-    "Een metamodel dat leert hoe de scherpste bookmakers wedstrijden prijzen en de andere drie modellen corrigeert wanneer hun waarschijnlijkheden afdwalen van efficiënte prijsvorming.",
-  "hiw.s4BlendTitle": "Stacked blending",
+    "Een statistische classifier die meerdere wedstrijdfeatures — vorm, stand, thuisvoordeel — gebruikt om wedstrijduitslagen direct te voorspellen.",
+  "hiw.s4BlendTitle": "Gewogen middeling",
   "hiw.s4BlendDesc":
-    "De vier waarschijnlijkheden worden gecombineerd via een stacked regressor die is getraind om log-loss te minimaliseren op niet-geziene wedstrijden. De weights worden wekelijks opnieuw berekend zodra nieuwe resultaten binnenkomen.",
+    "De drie waarschijnlijkheden worden gecombineerd via gewogen middeling. De huidige weights (Elo 1.0, Poisson 1.5, Logistic 1.0) geven iets meer invloed aan het Poisson-model.",
 
   "hiw.s5Badge": "Stap 05 · Value-detectie",
   "hiw.s5Title": "We publiceren alleen picks waarvan de edge de echte wereld overleeft.",
   "hiw.s5Lead":
-    "Gelijk hebben is niet genoeg. Een pick wordt pas een pick wanneer onze waarschijnlijkheid de markt verslaat met méér dan de frictie van daadwerkelijk spelen.",
+    "Gelijk hebben is niet genoeg. Een pick wordt pas een pick wanneer onze waarschijnlijkheid waarde suggereert ten opzichte van de beschikbare odds.",
   "hiw.s5P1":
-    "Voor elke mogelijke markt vergelijken we onze ensemble-waarschijnlijkheid met de beste beschikbare odds bij 40+ bookmakers, en trekken we vervolgens een realistisch slippage-budget af: commissie, verwachte beweging richting de closing line, en uitvoeringsvertraging. Wat overblijft is de echte edge.",
+    "We vergelijken onze ensemble-waarschijnlijkheden met bookmaker-odds opgehaald via The Odds API. Onze Strategy Lab filtert voorspellingen met regels die gevalideerd zijn door walk-forward backtesting — zoals het vereisen van hoge thuiswinstkans of lage gelijkspeelkans.",
   "hiw.s5P2":
-    "Alleen picks met een statistisch significante positieve expected value overleven. Al het andere wordt verworpen — zelfs als het gewonnen zou hebben. Want een track record gebouwd op geluk stort in op het moment dat het geluk opraakt.",
+    "Momenteel hebben 3 strategieën de statistische validatie doorstaan met positieve backtested ROI over 90 dagen. Maar dit zijn backtested resultaten op een beperkte steekproef — de werkelijke prestaties zullen variëren. Daar zijn we eerlijk over.",
   "hiw.s5FormulaTitle": "De check die elke pick moet doorstaan",
   "hiw.s5FormulaLine1": "Modelkans × Beste odds",
   "hiw.s5FormulaLine2": "−  verwachte slippage",
@@ -1979,38 +1973,38 @@ const nl: Dictionary = {
   "hiw.s6Point3Desc":
     "Verloren picks zijn permanent. Het grootboek is by design append-only.",
 
-  "hiw.s7Badge": "Stap 07 · Continu hertrainen",
-  "hiw.s7Title": "De engine wordt elke zondagavond slimmer.",
+  "hiw.s7Badge": "Stap 07 · Continue evaluatie",
+  "hiw.s7Title": "Elke voorspelling wordt beoordeeld aan het echte resultaat.",
   "hiw.s7Lead":
-    "Sport verandert. Trainers veranderen. Tactiek verandert. Als je model niet meeverandert, sterft het.",
+    "Voorspellingen betekenen niets als je ze niet controleert. Ons systeem evalueert automatisch elke voorspelling zodra de wedstrijd is afgelopen.",
   "hiw.s7P1":
-    "Elke zondagavond, nadat de wedstrijden van de week zijn uitgespeeld, wordt het volledige ensemble opnieuw getraind op de nieuwste data. Modelgewichten worden opnieuw geschat, stacking-coëfficiënten worden bijgewerkt, en de nieuwe versie wordt 48 uur lang shadow-getest tegen de live versie voordat hij het overneemt.",
+    "Elke 6 uur, nadat resultaten zijn gesynchroniseerd, scoort het systeem alle afgelopen voorspellingen. Elke pick wordt geëvalueerd met Brier-score en log-loss metrics, en gemarkeerd als correct of incorrect. Zo kunnen we de werkelijke nauwkeurigheid in de tijd volgen.",
   "hiw.s7P2":
-    "Drift-detectie draait continu op de achtergrond. Als de kalibratie van het model begint af te glijden op een sport of competitie, gaat er een alert af en wordt het ensemble teruggerold naar de laatste bekende goede versie totdat het probleem is begrepen.",
-  "hiw.s7Bullet1": "Wekelijkse hertraincyclus",
-  "hiw.s7Bullet2": "48-uur shadow test voor go-live",
-  "hiw.s7Bullet3": "Continue drift-monitoring",
-  "hiw.s7Bullet4": "Automatische rollback bij kalibratiefalen",
+    "De huidige 3-way nauwkeurigheid (thuis/gelijk/uit) ligt rond de 50% — boven de 33% willekeurige baseline, maar niet buitengewoon. We publiceren alle resultaten, winst en verlies, zodat je het track record zelf kunt verifiëren.",
+  "hiw.s7Bullet1": "6-uur evaluatiecyclus",
+  "hiw.s7Bullet2": "Brier-score en log-loss tracking",
+  "hiw.s7Bullet3": "Alle voorspellingen automatisch beoordeeld",
+  "hiw.s7Bullet4": "Winst en verlies beide permanent gepubliceerd",
 
   "hiw.proofBadge": "Waarom dit uitmaakt",
   "hiw.proofTitle": "De reden dat onze voorspellingen ook echt overeind blijven.",
   "hiw.proofSubtitle":
-    "Elke keuze in deze pipeline bestaat om één reden: om je een waarschijnlijkheid te geven waar je zonder knipperen je bankroll op kunt zetten.",
+    "Elke keuze in deze pipeline bestaat om één reden: om je een eerlijke, datagedreven waarschijnlijkheid te geven — geen gok.",
   "hiw.proof1Title": "Geen hindsight bias",
   "hiw.proof1Desc":
-    "Point-in-time feature store. Het model leert nooit van informatie die niet beschikbaar was bij de aftrap.",
+    "Modellen zien alleen data die beschikbaar is vóór de aftrap. Voorspellingen worden gegenereerd en getijdstempeld voordat de wedstrijd begint.",
   "hiw.proof2Title": "Ensemble, geen éénpitter",
   "hiw.proof2Desc":
-    "Vier onafhankelijke modellen controleren elkaar. Eén blinde vlek kan niet de hele voorspelling vergiftigen.",
-  "hiw.proof3Title": "Edge overleeft slippage",
+    "Drie onafhankelijke modellen (Elo, Poisson, Logistisch) controleren elkaar. Eén blinde vlek kan niet de hele voorspelling vergiftigen.",
+  "hiw.proof3Title": "Backtested strategieën",
   "hiw.proof3Desc":
-    "Picks gaan alleen live als de edge standhoudt nadat commissie, marge en closing-line beweging zijn afgetrokken.",
-  "hiw.proof4Title": "Permanent publiek grootboek",
+    "Strategy Lab-filters worden gevalideerd met walk-forward backtesting en bootstrap-betrouwbaarheidsintervallen voordat ze worden gepubliceerd.",
+  "hiw.proof4Title": "Volledige transparantie",
   "hiw.proof4Desc":
-    "Je kunt elke pick die we ooit hebben gepubliceerd verifiëren. Winst en verlies. Zonder uitzondering.",
-  "hiw.proof5Title": "Wekelijks hertraind",
+    "Je kunt elke voorspelling die we hebben gepubliceerd verifiëren. Winst en verlies. De huidige 3-way nauwkeurigheid is circa 50%.",
+  "hiw.proof5Title": "Elke 6 uur geëvalueerd",
   "hiw.proof5Desc":
-    "De engine past zich aan nieuwe tactieken, blessures en marktgedrag aan — met automatische rollback bij drift.",
+    "Elke afgelopen wedstrijd wordt automatisch gescoord. Brier-score en log-loss volgen de kalibratie in de tijd.",
   "hiw.proof6Title": "Gebouwd door mensen die shippen",
   "hiw.proof6Desc":
     "Een tweekoppig team van sportfanaten met een ICT-achtergrond. Elke regel van deze pipeline is met de hand geschreven, niet in elkaar geklikt uit plugins.",
@@ -2019,21 +2013,21 @@ const nl: Dictionary = {
   "hiw.faqTitle": "De vragen die elke serieuze analist ons stelt.",
   "hiw.faqSubtitle":
     "Als je eerder een tipstersite hebt geprobeerd, ben je waarschijnlijk teleurgesteld. Hier is precies waarom BetsPlug anders is.",
-  "hiw.faq1Q": "Hoe weet ik dat jullie niet gewoon geluk hebben?",
+  "hiw.faq1Q": "Hoe nauwkeurig zijn jullie voorspellingen?",
   "hiw.faq1A":
-    "Meer dan 24.000 beoordeelde picks over negen sporten. Geluk middelt uit bij die sample size — skill stapelt zich op. Elke voorspelling heeft een tijdstempel vóór de aftrap, dus je kunt het zelf verifiëren tegen de officiële resultaat-feed.",
+    "Onze 3-way wedstrijdvoorspellingen (thuis/gelijk/uit) scoren rond de 50% nauwkeurigheid. Dat is boven de 33% willekeurige baseline, maar we zijn eerlijk — het is geen magisch getal. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld na de wedstrijd, dus je kunt het track record zelf verifiëren.",
   "hiw.faq2Q": "Wat gebeurt er bij een verliesreeks?",
   "hiw.faq2A":
-    "Verloren picks blijven permanent in het publieke grootboek. We publiceren ze net zo luid als de winnaars. Als een model begint af te drijven, rolt de automatische drift-detectie het ensemble binnen uren terug naar de laatste bekende goede versie.",
+    "Verloren voorspellingen blijven permanent zichtbaar. We publiceren ze net zo openlijk als de winnaars. Onze Strategy Lab-strategieën zijn backtested op een steekproef van 90 dagen, dus we verwachten variantie. Verliesreeksen komen voor — dat is sport.",
   "hiw.faq3Q": "Waarom niet gewoon één heel slim model gebruiken?",
   "hiw.faq3A":
-    "Omdat elk model blinde vlekken heeft — statistische, tactische of situationele. Vier onafhankelijke modellen met verschillende architecturen vangen elkaars fouten op. Het ensemble verslaat consistent zijn sterkste individuele lid.",
-  "hiw.faq4Q": "Kan ik deze edges daadwerkelijk uitvoeren bij een bookmaker?",
+    "Omdat elk model blinde vlekken heeft. Onze drie modellen — Elo-ratings, Poisson-doelmodel en Logistische regressie — vangen elk andere patronen. Het ensemble met gewogen middeling presteert consistent beter dan elk individueel lid.",
+  "hiw.faq4Q": "Kan ik daadwerkelijk winst maken met deze voorspellingen?",
   "hiw.faq4A":
-    "Ja — en we bewijzen het. Elk ROI-cijfer dat we publiceren is gecorrigeerd voor realistische slippage tussen onze publicatietijd en de closing line. De edge die je ziet is de edge die je ook echt kunt spelen.",
+    "Onze backtested strategieën tonen positieve ROI over 90 dagen, maar backtesting is geen garantie. De werkelijke prestaties hangen af van de odds die je krijgt, timing en variantie. Wij leveren de data en analyse — de rest is aan jou.",
   "hiw.faq5Q": "Welke sporten en competities dekken jullie?",
   "hiw.faq5A":
-    "Negen sporten en 70+ competities. Voetbal (alle topcompetities in Europa + internationaal), basketbal (NBA, EuroLeague), tennis (ATP, WTA, Grand Slams), plus geselecteerde dekking van honkbal, ijshockey, American football, MMA, rugby en esports.",
+    "Alleen voetbal, met dekking van 6 Europese competities: Premier League, La Liga, Bundesliga, Serie A, Ligue 1 en Eredivisie. We zijn van plan uit te breiden, maar we doen liever een paar competities goed dan veel competities slecht.",
   "hiw.faq6Q": "Is dit gokadvies?",
   "hiw.faq6A":
     "Nee. BetsPlug is een pure sport-analytics platform. Wij publiceren waarschijnlijkheden, expected values en een verifieerbaar track record. Wat je met die informatie doet, is volledig jouw eigen beslissing.",
@@ -2041,7 +2035,7 @@ const nl: Dictionary = {
   "hiw.ctaBadge": "Klaar om het in actie te zien?",
   "hiw.ctaTitle": "Stop met gokken. Begin met de pipeline te vertrouwen.",
   "hiw.ctaSubtitle":
-    "Je hebt zojuist de meest eerlijke hoe-het-werkt pagina in sport-analytics gelezen. Bekijk nu de picks die hij produceert — live, getijdstempeld, en klaar om te verifiëren.",
+    "Nu weet je precies hoe de pipeline werkt. Bekijk de voorspellingen die hij produceert — live, getijdstempeld en klaar om te verifiëren.",
   "hiw.ctaPrimary": "Gratis proberen",
   "hiw.ctaSecondary": "Bekijk het track record",
 

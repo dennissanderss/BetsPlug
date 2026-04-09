@@ -70,7 +70,9 @@ export function Sidebar() {
     <div className="flex h-full flex-col">
       {/* ── Logo ── */}
       <div className="flex items-center px-4 py-3 border-b border-white/[0.06]">
-        <img src="/logo.webp" alt="BetsPlug" className="h-12 md:h-16 lg:h-20 w-auto drop-shadow-[0_0_15px_rgba(16,185,129,0.35)]" />
+        <Link href="/" onClick={() => setMobileOpen(false)}>
+          <img src="/logo.webp" alt="BetsPlug" className="h-12 md:h-16 lg:h-20 w-auto drop-shadow-[0_0_15px_rgba(16,185,129,0.35)]" />
+        </Link>
       </div>
 
       {/* ── Nav section label ── */}

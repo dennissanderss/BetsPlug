@@ -101,37 +101,75 @@ function BotdSkeleton() {
 
 // ─── Page ───────────────────────────────────────────────────────────────────
 
+/** Try today, then the next 3 days, returning the first day with a pick. */
+async function fetchBotdWithFallback(): Promise<BetOfTheDay & { target_date?: string }> {
+  const dates: string[] = [];
+  for (let i = 0; i < 4; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() + i);
+    dates.push(d.toISOString().slice(0, 10)); // YYYY-MM-DD
+  }
+
+  for (const date of dates) {
+    const result = await api.getBetOfTheDay(date);
+    if (result.available && result.home_team) {
+      return { ...result, target_date: date };
+    }
+  }
+
+  // Nothing found for any of the 4 days — return the last response
+  return api.getBetOfTheDay();
+}
+
 export default function BetOfTheDayPage() {
-  const { data, isLoading, isError } = useQuery<BetOfTheDay>({
+  const { data, isLoading, isError } = useQuery<BetOfTheDay & { target_date?: string }>({
     queryKey: ["bet-of-the-day"],
-    queryFn: async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/bet-of-the-day/`
-      );
-      if (!res.ok) throw new Error("Failed to fetch BOTD");
-      return res.json();
-    },
+    queryFn: fetchBotdWithFallback,
     staleTime: 5 * 60_000,
     refetchInterval: 5 * 60_000,
   });
 
   if (isLoading) return <BotdSkeleton />;
 
+  if (isError) {
+    return (
+      <div className="glass-card flex flex-col items-center justify-center gap-4 py-20 text-center">
+        <AlertTriangle className="h-12 w-12 text-red-400" />
+        <h2 className="text-xl font-bold text-slate-300">Failed to load Pick of the Day</h2>
+        <p className="max-w-md text-sm text-slate-500">
+          Could not reach the prediction API. Please try refreshing.
+        </p>
+      </div>
+    );
+  }
+
   const botd = data;
   const hasData = botd?.available && botd.home_team;
+
+  // Determine if the pick is for a future date (not today)
+  const today = new Date().toISOString().slice(0, 10);
+  const pickDate = botd?.target_date;
+  const isFutureDate = pickDate && pickDate !== today;
 
   const homeProb = botd?.home_win_prob ?? 0;
   const drawProb = botd?.draw_prob ?? 0;
   const awayProb = botd?.away_win_prob ?? 0;
   const confidence = botd?.confidence ?? 0;
 
-  const formatTime = (iso?: string) => {
+  const formatDateTime = (iso?: string) => {
     if (!iso) return "--:--";
     try {
-      return new Date(iso).toLocaleTimeString("en-GB", {
+      const d = new Date(iso);
+      const dateStr = d.toLocaleDateString("en-GB", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+      });
+      const timeStr = d.toLocaleTimeString("en-GB", {
         hour: "2-digit",
         minute: "2-digit",
       });
+      return `${dateStr}, ${timeStr}`;
     } catch {
       return "--:--";
     }
@@ -150,7 +188,7 @@ export default function BetOfTheDayPage() {
               Pick of the Day
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              Our AI&apos;s highest-conviction pick for today
+              Our AI&apos;s highest-conviction pick{isFutureDate ? "" : " for today"}
             </p>
           </div>
         </div>
@@ -166,15 +204,32 @@ export default function BetOfTheDayPage() {
         <div className="glass-card flex flex-col items-center justify-center gap-4 py-20 text-center">
           <Trophy className="h-12 w-12 text-slate-600" />
           <h2 className="text-xl font-bold text-slate-300">
-            No Pick of the Day Yet
+            No Pick Available
           </h2>
           <p className="max-w-md text-sm text-slate-500">
             Our AI hasn&apos;t found a match meeting the minimum confidence threshold (65%)
-            for today. Check back as more matches get analysed.
+            for the next few days. Check back as more matches get analysed.
           </p>
         </div>
       ) : (
         <>
+          {/* Future-date banner */}
+          {isFutureDate && (
+            <div className="flex items-center gap-2 rounded-xl border border-blue-500/20 bg-blue-500/[0.06] px-4 py-3">
+              <Clock className="h-4 w-4 text-blue-400 shrink-0" />
+              <p className="text-sm text-blue-300">
+                No high-confidence pick for today &mdash; showing the best pick for{" "}
+                <span className="font-semibold text-blue-200">
+                  {new Date(pickDate + "T12:00:00").toLocaleDateString("en-GB", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                  })}
+                </span>
+              </p>
+            </div>
+          )}
+
           {/* The Pick */}
           <div className="glass-card relative overflow-hidden">
             {/* Background glow */}
@@ -190,7 +245,7 @@ export default function BetOfTheDayPage() {
                 )}
                 <span className="flex items-center gap-1.5 text-sm text-slate-500">
                   <Clock className="h-4 w-4" />
-                  {formatTime(botd.scheduled_at)}
+                  {formatDateTime(botd.scheduled_at)}
                 </span>
               </div>
 
@@ -272,6 +327,18 @@ export default function BetOfTheDayPage() {
                   </p>
                 </div>
               </div>
+
+              {/* Explanation / reasoning */}
+              {botd.explanation_summary && (
+                <div className="mt-8 mx-auto max-w-lg rounded-xl bg-white/[0.04] border border-white/[0.06] px-5 py-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-2">
+                    Model Reasoning
+                  </p>
+                  <p className="text-sm text-slate-300 leading-relaxed">
+                    {botd.explanation_summary}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 

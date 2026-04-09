@@ -10,6 +10,7 @@ import {
   StickyNote,
   Calendar,
   ChevronDown,
+  Pencil,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -110,6 +111,13 @@ function GoalsSection() {
   const [priority, setPriority] = React.useState(1);
   const [dueDate, setDueDate] = React.useState("");
 
+  // Edit mode state
+  const [editingId, setEditingId] = React.useState<string | null>(null);
+  const [editTitle, setEditTitle] = React.useState("");
+  const [editDescription, setEditDescription] = React.useState("");
+  const [editPriority, setEditPriority] = React.useState(1);
+  const [editDueDate, setEditDueDate] = React.useState("");
+
   const { data: goals, isLoading } = useQuery<Goal[]>({
     queryKey: ["admin-goals"],
     queryFn: () => api.getAdminGoals(),
@@ -167,6 +175,34 @@ function GoalsSection() {
     updateMutation.mutate({ id: goal.id, data: { status: next } });
   }
 
+  function startEditing(goal: Goal) {
+    setEditingId(goal.id);
+    setEditTitle(goal.title);
+    setEditDescription(goal.description ?? "");
+    setEditPriority(goal.priority);
+    setEditDueDate(goal.due_date ?? "");
+  }
+
+  function cancelEditing() {
+    setEditingId(null);
+  }
+
+  function handleSaveEdit() {
+    if (!editingId || !editTitle.trim()) return;
+    updateMutation.mutate(
+      {
+        id: editingId,
+        data: {
+          title: editTitle.trim(),
+          description: editDescription.trim() || undefined,
+          priority: editPriority,
+          due_date: editDueDate || undefined,
+        },
+      },
+      { onSuccess: () => setEditingId(null) }
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="space-y-3">
@@ -220,7 +256,7 @@ function GoalsSection() {
             placeholder="Description (optional)..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            rows={2}
+            rows={3}
             className={cn(inputCls, "resize-none")}
           />
           <div className="flex gap-3">
@@ -294,76 +330,158 @@ function GoalsSection() {
         </div>
       ) : (
         <div className="space-y-2">
-          {goals.map((goal) => (
-            <div
-              key={goal.id}
-              className={cn(
-                "glass-card rounded-xl p-4 transition-all hover:bg-white/[0.03]",
-                goal.status === "done" && "opacity-60"
-              )}
-            >
-              <div className="flex items-start gap-3">
-                {/* Checkbox */}
-                <button
-                  onClick={() => toggleDone(goal)}
-                  className={cn(
-                    "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors",
-                    goal.status === "done"
-                      ? "border-green-500/50 bg-green-500/20 text-green-400"
-                      : "border-white/20 bg-white/[0.04] text-transparent hover:border-white/30"
-                  )}
-                >
-                  <Check className="h-3 w-3" />
-                </button>
-
-                {/* Content */}
-                <div className="min-w-0 flex-1 space-y-1.5">
-                  <div className="flex items-start justify-between gap-2">
-                    <p
-                      className={cn(
-                        "text-sm font-medium text-slate-100",
-                        goal.status === "done" && "line-through text-slate-500"
-                      )}
+          {goals.map((goal) =>
+            editingId === goal.id ? (
+              /* ── Inline edit form ── */
+              <div
+                key={goal.id}
+                className="glass-card rounded-xl p-4 space-y-3 border border-blue-500/20"
+              >
+                <input
+                  type="text"
+                  placeholder="Goal title..."
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  className={inputCls}
+                  onKeyDown={(e) => e.key === "Enter" && handleSaveEdit()}
+                />
+                <textarea
+                  placeholder="Description (optional)..."
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  rows={3}
+                  className={cn(inputCls, "resize-none")}
+                />
+                <div className="flex gap-3">
+                  <div className="space-y-1 flex-1">
+                    <label className="text-xs font-medium text-slate-400">
+                      Priority
+                    </label>
+                    <select
+                      value={editPriority}
+                      onChange={(e) => setEditPriority(Number(e.target.value))}
+                      className={cn(selectCls, "w-full")}
                     >
-                      {goal.title}
-                    </p>
-                    <button
-                      onClick={() => deleteMutation.mutate(goal.id)}
-                      className="shrink-0 rounded p-0.5 text-slate-600 transition-colors hover:text-red-400"
-                    >
-                      <X className="h-3.5 w-3.5" />
-                    </button>
+                      <option value={0} className="bg-[#111827]">Low</option>
+                      <option value={1} className="bg-[#111827]">Medium</option>
+                      <option value={2} className="bg-[#111827]">High</option>
+                    </select>
                   </div>
-
-                  {goal.description && (
-                    <p className="text-xs text-slate-500 line-clamp-2">
-                      {goal.description}
-                    </p>
-                  )}
-
-                  {/* Badges row */}
-                  <div className="flex flex-wrap items-center gap-2">
-                    <button onClick={() => cycleStatus(goal)}>
-                      <Badge
-                        label={statusLabels[goal.status] ?? goal.status}
-                        colorCls={statusColors[goal.status] ?? "bg-slate-500/15 text-slate-400"}
-                      />
-                    </button>
-                    <Badge
-                      label={priorityLabels[goal.priority] ?? "Low"}
-                      colorCls={priorityColors[goal.priority] ?? priorityColors[0]}
+                  <div className="space-y-1 flex-1">
+                    <label className="text-xs font-medium text-slate-400">
+                      Due date
+                    </label>
+                    <input
+                      type="date"
+                      value={editDueDate}
+                      onChange={(e) => setEditDueDate(e.target.value)}
+                      className={cn(selectCls, "w-full")}
                     />
-                    {goal.due_date && (
-                      <span className="inline-flex items-center gap-1 text-[11px] text-slate-500">
-                        <Calendar className="h-3 w-3" />
-                        {formatDate(goal.due_date)}
-                      </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 pt-1">
+                  <button
+                    onClick={handleSaveEdit}
+                    disabled={!editTitle.trim() || updateMutation.isPending}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-blue-500 disabled:opacity-50"
+                  >
+                    {updateMutation.isPending ? (
+                      <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                    ) : (
+                      <Check className="h-3 w-3" />
                     )}
+                    Save
+                  </button>
+                  <button
+                    onClick={cancelEditing}
+                    className="rounded-lg px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              /* ── Normal goal card ── */
+              <div
+                key={goal.id}
+                className={cn(
+                  "glass-card rounded-xl p-4 transition-all hover:bg-white/[0.03]",
+                  goal.status === "done" && "opacity-60"
+                )}
+              >
+                <div className="flex items-start gap-3">
+                  {/* Checkbox */}
+                  <button
+                    onClick={() => toggleDone(goal)}
+                    className={cn(
+                      "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors",
+                      goal.status === "done"
+                        ? "border-green-500/50 bg-green-500/20 text-green-400"
+                        : "border-white/20 bg-white/[0.04] text-transparent hover:border-white/30"
+                    )}
+                  >
+                    <Check className="h-3 w-3" />
+                  </button>
+
+                  {/* Content */}
+                  <div className="min-w-0 flex-1 space-y-1.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <p
+                        className={cn(
+                          "text-sm font-medium text-slate-100",
+                          goal.status === "done" && "line-through text-slate-500"
+                        )}
+                      >
+                        {goal.title}
+                      </p>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          onClick={() => startEditing(goal)}
+                          className="rounded p-0.5 text-slate-600 transition-colors hover:text-blue-400"
+                          title="Edit goal"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          onClick={() => deleteMutation.mutate(goal.id)}
+                          className="rounded p-0.5 text-slate-600 transition-colors hover:text-red-400"
+                          title="Delete goal"
+                        >
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {goal.description && (
+                      <p className="text-xs text-slate-500 line-clamp-2">
+                        {goal.description}
+                      </p>
+                    )}
+
+                    {/* Badges row */}
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button onClick={() => cycleStatus(goal)}>
+                        <Badge
+                          label={statusLabels[goal.status] ?? goal.status}
+                          colorCls={statusColors[goal.status] ?? "bg-slate-500/15 text-slate-400"}
+                        />
+                      </button>
+                      <Badge
+                        label={priorityLabels[goal.priority] ?? "Low"}
+                        colorCls={priorityColors[goal.priority] ?? priorityColors[0]}
+                      />
+                      {goal.due_date && (
+                        <span className="inline-flex items-center gap-1 text-[11px] text-slate-500">
+                          <Calendar className="h-3 w-3" />
+                          {formatDate(goal.due_date)}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       )}
     </div>

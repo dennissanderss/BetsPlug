@@ -460,7 +460,7 @@ const sw = {
   "hiw.heroCtaPrimary": "Ona rekodi",
   "hiw.heroCtaSecondary": "Anza Jaribio la Bure",
   "hiw.heroStatDataSources": "Vyanzo vya data",
-  "hiw.heroStatFeatures": "Vipengele kwa mechi",
+  "hiw.heroStatLeagues": "Ligi za Ulaya",
   "hiw.heroStatModels": "Modeli huru",
   "hiw.heroStatUpdates": "Mzunguko wa kuburudisha",
   "hiw.overviewBadge": "Injini ya hatua 7",

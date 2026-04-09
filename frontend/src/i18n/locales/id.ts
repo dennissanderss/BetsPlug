@@ -460,7 +460,7 @@ const id = {
   "hiw.heroCtaPrimary": "Lihat rekam jejak",
   "hiw.heroCtaSecondary": "Mulai Uji Coba Gratis",
   "hiw.heroStatDataSources": "Sumber data",
-  "hiw.heroStatFeatures": "Fitur per pertandingan",
+  "hiw.heroStatLeagues": "Liga Eropa",
   "hiw.heroStatModels": "Model independen",
   "hiw.heroStatUpdates": "Siklus refresh",
   "hiw.overviewBadge": "Engine 7 tahap",

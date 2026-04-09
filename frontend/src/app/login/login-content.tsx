@@ -21,6 +21,7 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { useAuth } from "@/lib/auth";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -48,6 +49,7 @@ export function LoginContent() {
   const loc = useLocalizedHref();
   const router = useRouter();
   const params = useSearchParams();
+  const auth = useAuth();
 
   // Pre-fill the email when the user previously opted into
   // "remember this device". This is a progressive enhancement —
@@ -98,12 +100,20 @@ export function LoginContent() {
       // Ignore storage failures (e.g. private browsing on Safari).
     }
 
-    // Demo: simulate a short round-trip, then redirect.
-    // A real integration can replace this setTimeout with the
-    // fetch/auth call and surface any error via setServerError.
+    // Demo: simulate a short round-trip, then persist session
+    // and redirect. A real integration can replace this
+    // setTimeout with a fetch/auth call and surface any error
+    // via setServerError.
     setTimeout(() => {
+      // Persist the session so it survives page reloads.
+      const demoToken = `demo_${Date.now()}`;
+      auth.login(demoToken, {
+        email: email.trim(),
+        name: email.trim().split("@")[0],
+      });
+
       const next = params?.get("next");
-      router.push(next ?? loc("/dashboard"));
+      router.push(next ?? loc("/jouw-route"));
     }, 900);
   };
 

@@ -42,10 +42,10 @@ export function HowItWorksContent() {
   const home = loc("/");
 
   const heroStats = [
-    { value: "14", label: t("hiw.heroStatDataSources") },
-    { value: "1,200+", label: t("hiw.heroStatFeatures") },
-    { value: "4", label: t("hiw.heroStatModels") },
-    { value: "30s", label: t("hiw.heroStatUpdates") },
+    { value: "3", label: t("hiw.heroStatDataSources") },
+    { value: "6", label: t("hiw.heroStatLeagues") },
+    { value: "3", label: t("hiw.heroStatModels") },
+    { value: "6h", label: t("hiw.heroStatUpdates") },
   ];
 
   const overview = [
@@ -103,10 +103,6 @@ export function HowItWorksContent() {
     {
       name: t("hiw.s4Model3Name"),
       desc: t("hiw.s4Model3Desc"),
-    },
-    {
-      name: t("hiw.s4Model4Name"),
-      desc: t("hiw.s4Model4Desc"),
     },
   ];
 
