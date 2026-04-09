@@ -255,7 +255,7 @@ export function WelcomeContent() {
             className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
             <Link
-              href={loc("/dashboard")}
+              href={loc("/login")}
               className="btn-gradient group inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50 sm:w-auto sm:text-base"
             >
               {t("welcome.ctaPrimary")}

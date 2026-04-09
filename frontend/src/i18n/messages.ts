@@ -1014,6 +1014,50 @@ const en = {
 
   "welcome.footerNote":
     "Questions? Reach us at support@betsplug.com — a real human will answer.",
+
+  /* ─── Login page ──────────────────────────────────────── */
+  "login.meta.title": "Log in — BetsPlug",
+  "login.meta.description":
+    "Log in to your BetsPlug account to see today's picks, track your ROI and manage your subscription.",
+
+  "login.badge": "Members area",
+  "login.title": "Welcome back.",
+  "login.titleHighlight": "Let's get that edge.",
+  "login.subtitle":
+    "Sign in to see today's picks, your live bankroll tracker and the latest wins from the community.",
+
+  "login.email": "Email address",
+  "login.emailPh": "you@example.com",
+  "login.emailError": "Enter a valid email address",
+
+  "login.password": "Password",
+  "login.passwordPh": "Your password",
+  "login.passwordError": "Password is required",
+  "login.showPassword": "Show password",
+  "login.hidePassword": "Hide password",
+
+  "login.rememberDevice": "Remember this device",
+  "login.rememberHint":
+    "Stay signed in on this device for 30 days. Don't enable on shared computers.",
+
+  "login.forgot": "Forgot password?",
+  "login.submit": "Log in",
+  "login.submitting": "Signing you in…",
+
+  "login.orDivider": "or continue with",
+  "login.google": "Continue with Google",
+  "login.apple": "Continue with Apple",
+
+  "login.noAccount": "Don't have an account yet?",
+  "login.createAccount": "Start your free trial",
+
+  "login.errorTitle": "We couldn't sign you in",
+  "login.errorGeneric":
+    "The email or password you entered is incorrect. Double-check and try again.",
+
+  "login.trust1": "256-bit SSL encrypted",
+  "login.trust2": "GDPR-compliant",
+  "login.trust3": "Cancel anytime",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -1985,6 +2029,50 @@ const nl: Dictionary = {
 
   "welcome.footerNote":
     "Vragen? Mail ons op support@betsplug.com — er antwoordt een echt mens.",
+
+  /* Login */
+  "login.meta.title": "Inloggen — BetsPlug",
+  "login.meta.description":
+    "Log in op je BetsPlug-account om de picks van vandaag te bekijken, je ROI te volgen en je abonnement te beheren.",
+
+  "login.badge": "Ledengedeelte",
+  "login.title": "Welkom terug.",
+  "login.titleHighlight": "Tijd voor je edge.",
+  "login.subtitle":
+    "Log in om de picks van vandaag te bekijken, je live bankroll-tracker en de nieuwste winsten uit de community.",
+
+  "login.email": "E-mailadres",
+  "login.emailPh": "jij@voorbeeld.nl",
+  "login.emailError": "Vul een geldig e-mailadres in",
+
+  "login.password": "Wachtwoord",
+  "login.passwordPh": "Je wachtwoord",
+  "login.passwordError": "Wachtwoord is verplicht",
+  "login.showPassword": "Wachtwoord tonen",
+  "login.hidePassword": "Wachtwoord verbergen",
+
+  "login.rememberDevice": "Onthoud dit apparaat",
+  "login.rememberHint":
+    "Blijf 30 dagen ingelogd op dit apparaat. Niet gebruiken op gedeelde computers.",
+
+  "login.forgot": "Wachtwoord vergeten?",
+  "login.submit": "Inloggen",
+  "login.submitting": "Bezig met inloggen…",
+
+  "login.orDivider": "of ga verder met",
+  "login.google": "Verder met Google",
+  "login.apple": "Verder met Apple",
+
+  "login.noAccount": "Nog geen account?",
+  "login.createAccount": "Start je gratis proefperiode",
+
+  "login.errorTitle": "Inloggen mislukt",
+  "login.errorGeneric":
+    "Het e-mailadres of wachtwoord dat je hebt ingevuld klopt niet. Controleer het en probeer het opnieuw.",
+
+  "login.trust1": "256-bit SSL versleuteld",
+  "login.trust2": "AVG-proof",
+  "login.trust3": "Altijd opzegbaar",
 };
 
 /* ── German ────────────────────────────────────────────────── */

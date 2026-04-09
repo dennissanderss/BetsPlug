@@ -587,7 +587,7 @@ export function CheckoutContent() {
                       <p className="mt-5 text-xs text-slate-500">
                         {t("checkout.alreadyHaveAccount")}{" "}
                         <Link
-                          href={loc("/dashboard")}
+                          href={loc("/login")}
                           className="font-semibold text-green-400 hover:text-green-300"
                         >
                           {t("checkout.signIn")}

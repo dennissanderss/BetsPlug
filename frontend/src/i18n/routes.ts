@@ -140,6 +140,16 @@ export const routeTable = {
     sw: "/karibu",
     id: "/selamat-datang",
   },
+  "/login": {
+    en: "/login",
+    nl: "/inloggen",
+    de: "/anmelden",
+    fr: "/connexion",
+    es: "/iniciar-sesion",
+    it: "/accedi",
+    sw: "/ingia",
+    id: "/masuk",
+  },
   "/deals": {
     en: "/deals",
     nl: "/aanbiedingen",

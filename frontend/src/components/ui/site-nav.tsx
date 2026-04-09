@@ -103,7 +103,7 @@ export function SiteNav() {
 
             {/* Desktop buttons (lg+) */}
             <Link
-              href={loc("/dashboard")}
+              href={loc("/login")}
               className={`hidden rounded-lg border border-white/[0.1] font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white lg:inline-block ${
                 isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
               }`}
@@ -219,7 +219,7 @@ export function SiteNav() {
             </div>
 
             <Link
-              href={loc("/dashboard")}
+              href={loc("/login")}
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center justify-between rounded-2xl border border-white/[0.08] bg-white/[0.02] px-4 py-4 text-base font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white"
             >
