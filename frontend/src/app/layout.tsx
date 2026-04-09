@@ -49,6 +49,19 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+/* ── Site-wide OpenGraph image ─────────────────────────────────
+   Square BetsPlug logo on dark navy background. Per-page metadata
+   (articles, league hubs, learn pillars, …) can still override
+   this with a more specific image; pages that don't override fall
+   back to this brand card. Lives in /public/og-image.png so it's
+   served as a static asset under the canonical SITE_URL. */
+const OG_IMAGE = {
+  url: "/og-image.png",
+  width: 2048,
+  height: 2048,
+  alt: "BetsPlug — AI-Powered Sports Analytics",
+} as const;
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "BetsPlug - AI-Powered Sports Analytics",
@@ -62,6 +75,24 @@ export const metadata: Metadata = {
     icon: [{ url: "/logo.webp", type: "image/webp" }],
     shortcut: "/logo.webp",
     apple: "/logo.webp",
+  },
+  openGraph: {
+    type: "website",
+    siteName: "BetsPlug",
+    url: SITE_URL,
+    title: "BetsPlug - AI-Powered Sports Analytics",
+    description:
+      "Premium AI-powered sports analytics. Data-driven predictions, live match tracking, and deep performance insights.",
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@betsplug",
+    creator: "@betsplug",
+    title: "BetsPlug - AI-Powered Sports Analytics",
+    description:
+      "Premium AI-powered sports analytics. Data-driven predictions, live match tracking, and deep performance insights.",
+    images: [OG_IMAGE.url],
   },
 };
 
