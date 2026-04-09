@@ -15,6 +15,7 @@ from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 from sqlalchemy import select, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload, noload
 
 from app.db.session import get_db
 from app.models.match import Match
@@ -70,10 +71,22 @@ async def get_bet_of_the_day(
     day_start = datetime.combine(target_date, time.min, tzinfo=timezone.utc)
     day_end = datetime.combine(target_date, time.max, tzinfo=timezone.utc)
 
-    # Find the highest-confidence prediction for today's matches
+    # Find the highest-confidence prediction for today's matches.
+    # Eager-load match + its teams/league and explanation in one go;
+    # suppress evaluation and model_version (not needed here).
     stmt = (
         select(Prediction)
         .join(Match, Match.id == Prediction.match_id)
+        .options(
+            joinedload(Prediction.match)
+            .joinedload(Match.home_team),
+            joinedload(Prediction.match)
+            .joinedload(Match.away_team),
+            joinedload(Prediction.match)
+            .joinedload(Match.league),
+            noload(Prediction.evaluation),
+            noload(Prediction.model_version),
+        )
         .where(
             and_(
                 Match.scheduled_at >= day_start,
@@ -86,7 +99,7 @@ async def get_bet_of_the_day(
     )
 
     result = await db.execute(stmt)
-    prediction = result.scalar_one_or_none()
+    prediction = result.unique().scalar_one_or_none()
 
     if prediction is None:
         return BetOfTheDayResponse(available=False)
@@ -99,17 +112,14 @@ async def get_bet_of_the_day(
     }
     predicted_outcome = max(probs, key=probs.get)  # type: ignore[arg-type]
 
-    # Get match details via relationship
+    # Match and related objects already eager-loaded above
     match = prediction.match
-    if match is None:
-        match_result = await db.execute(select(Match).where(Match.id == prediction.match_id))
-        match = match_result.scalar_one_or_none()
 
     home_name = match.home_team.name if match and match.home_team else None
     away_name = match.away_team.name if match and match.away_team else None
     league_name = match.league.name if match and match.league else None
 
-    # Get explanation if available
+    # Explanation already eager-loaded via selectin default on model
     explanation = None
     if prediction.explanation:
         explanation = prediction.explanation.summary

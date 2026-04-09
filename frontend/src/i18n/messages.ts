@@ -1230,13 +1230,58 @@ export type TranslationKey = keyof typeof en;
 
 type Dictionary = Partial<Record<TranslationKey, string>>;
 
-/* ── Dutch ─────────────────────────────────────────────────── */
-const nl: Dictionary = {
-  "nav.predictions": "Voorspellingen",
-  "nav.howItWorks": "Hoe het werkt",
-  "nav.trackRecord": "Track Record",
-  "nav.pricing": "Prijzen",
-  "nav.contact": "Contact",
+/* ── Lazy-loaded locale dictionaries ──────────────────────── */
+/*
+ * Non-English translations live in ./messages/<locale>.ts and
+ * are loaded on demand via dynamic import(). This keeps the
+ * initial JS bundle small: only English ships with every page.
+ * The first call for a locale loads & caches the dictionary.
+ */
+
+const cache: Partial<Record<string, Dictionary>> = {};
+
+async function loadDictionary(locale: string): Promise<Dictionary> {
+  if (cache[locale]) return cache[locale]!;
+
+  let dict: Dictionary = {};
+  switch (locale) {
+    case "nl":
+      dict = (await import("./messages/nl")).default;
+      break;
+    case "de":
+      dict = (await import("./messages/de")).default;
+      break;
+    case "fr":
+      dict = (await import("./messages/fr")).default;
+      break;
+    case "es":
+      dict = (await import("./messages/es")).default;
+      break;
+    case "it":
+      dict = (await import("./messages/it")).default;
+      break;
+    default:
+      break;
+  }
+  cache[locale] = dict;
+  return dict;
+}
+
+/**
+ * Pre-load a locale dictionary into the cache.
+ * Call this once from the locale provider so `translate()` can
+ * stay synchronous.
+ */
+export async function preloadLocale(locale: string): Promise<void> {
+  if (locale !== "en") await loadDictionary(locale);
+}
+
+/** Resolve a key for a locale, falling back to English if missing. */
+export function translate(locale: string, key: TranslationKey): string {
+  return cache[locale]?.[key] ?? en[key];
+}
+
+/* --- DEAD CODE BELOW REMOVED ---
   "nav.about": "Over ons",
   "nav.login": "Inloggen",
   "nav.startFreeTrial": "Gratis proberen",

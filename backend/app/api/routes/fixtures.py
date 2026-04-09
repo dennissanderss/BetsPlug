@@ -299,12 +299,14 @@ async def _load_latest_predictions(
         .subquery()
     )
 
-    from sqlalchemy.orm import selectinload
-    from app.models.model_version import ModelVersion
+    from sqlalchemy.orm import noload
 
+    # model_version already uses lazy="selectin" on the ORM model,
+    # so no explicit selectinload needed.  Suppress evaluation loading
+    # since we only need model_version and explanation here.
     stmt = (
         select(Prediction)
-        .options(selectinload(Prediction.model_version))
+        .options(noload(Prediction.evaluation))
         .join(
             subq,
             and_(

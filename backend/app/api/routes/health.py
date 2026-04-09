@@ -30,52 +30,34 @@ async def health_check() -> dict:
         logger.warning("Health: DB check failed: %s", exc)
         checks["database"] = "error"
 
-    # --- Redis check ---
-    try:
-        import asyncio
-        import redis as sync_redis
-
-        def _ping() -> bool:
-            client = sync_redis.from_url(
-                settings.redis_url,
-                socket_connect_timeout=3,
-                socket_timeout=3,
-            )
-            try:
-                return client.ping()
-            finally:
-                client.close()
-
-        loop = asyncio.get_event_loop()
-        pong = await loop.run_in_executor(None, _ping)
-        checks["redis"] = "ok" if pong else "error"
-    except Exception as exc:
-        logger.warning("Health: Redis check failed: %s", exc)
-        checks["redis"] = "error"
+    # --- Redis check skipped (no Redis configured; was wasting ~200ms) ---
+    checks["redis"] = "skipped"
 
     # --- Sports API config check ---
     checks["api_football"] = "configured" if settings.api_football_key else "missing"
     checks["football_data"] = "configured" if settings.football_data_api_key else "missing"
 
-    # --- DB row counts ---
+    # --- DB row counts (single query instead of 3 separate round-trips) ---
     fixtures_count = 0
     predictions_count = 0
     finished_count = 0
     try:
         from app.db.session import async_session_factory as _sf
-        from sqlalchemy import func, select as sel
+        from sqlalchemy import func, select as sel, case
         from app.models.match import Match, MatchStatus
         from app.models.prediction import Prediction
 
         async with _sf() as s:
-            fixtures_count = (await s.execute(
-                sel(func.count()).select_from(Match).where(Match.status == MatchStatus.SCHEDULED)
-            )).scalar() or 0
+            row = (await s.execute(
+                sel(
+                    func.count(case((Match.status == MatchStatus.SCHEDULED, 1))).label("scheduled"),
+                    func.count(case((Match.status == MatchStatus.FINISHED, 1))).label("finished"),
+                ).select_from(Match)
+            )).one()
+            fixtures_count = row.scheduled or 0
+            finished_count = row.finished or 0
             predictions_count = (await s.execute(
                 sel(func.count()).select_from(Prediction)
-            )).scalar() or 0
-            finished_count = (await s.execute(
-                sel(func.count()).select_from(Match).where(Match.status == MatchStatus.FINISHED)
             )).scalar() or 0
     except Exception:
         pass
@@ -87,8 +69,6 @@ async def health_check() -> dict:
     # --- Overall status ---
     if checks["database"] == "error":
         status = "error"
-    elif checks["redis"] == "error":
-        status = "degraded"
     else:
         status = "ok"
 

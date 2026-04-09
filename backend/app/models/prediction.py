@@ -60,6 +60,10 @@ class Prediction(UUIDPrimaryKey, TimestampMixin, Base):
         Index("ix_predictions_model_version_id", "model_version_id"),
         Index("ix_predictions_predicted_at", "predicted_at"),
         Index("ix_predictions_type", "prediction_type"),
+        # Composite index for fast "latest prediction per match" subquery
+        Index("ix_predictions_match_predicted_at", "match_id", "predicted_at"),
+        # Composite index for bet-of-the-day: confidence DESC scan filtered by match date
+        Index("ix_predictions_confidence", "confidence"),
     )
 
 

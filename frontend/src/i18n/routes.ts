@@ -27,8 +27,6 @@ export const routeTable = {
     fr: "/",
     es: "/",
     it: "/",
-    sw: "/",
-    id: "/",
   },
   "/predictions": {
     en: "/predictions",
@@ -37,8 +35,6 @@ export const routeTable = {
     fr: "/predictions",
     es: "/predicciones",
     it: "/pronostici",
-    sw: "/utabiri",
-    id: "/prediksi",
   },
   "/match-predictions": {
     en: "/match-predictions",
@@ -47,8 +43,6 @@ export const routeTable = {
     fr: "/predictions-match",
     es: "/predicciones-partidos",
     it: "/previsioni-partite",
-    sw: "/utabiri-mechi",
-    id: "/prediksi-pertandingan",
   },
   "/live": {
     en: "/live",
@@ -57,8 +51,6 @@ export const routeTable = {
     fr: "/en-direct",
     es: "/en-vivo",
     it: "/live",
-    sw: "/moja-kwa-moja",
-    id: "/langsung",
   },
   "/dashboard": {
     en: "/dashboard",
@@ -67,8 +59,6 @@ export const routeTable = {
     fr: "/tableau-de-bord",
     es: "/panel",
     it: "/pannello",
-    sw: "/dashibodi",
-    id: "/dasbor",
   },
   "/trackrecord": {
     en: "/trackrecord",
@@ -77,8 +67,6 @@ export const routeTable = {
     fr: "/historique",
     es: "/historial",
     it: "/storico",
-    sw: "/rekodi",
-    id: "/riwayat",
   },
   "/track-record": {
     en: "/track-record",
@@ -87,8 +75,6 @@ export const routeTable = {
     fr: "/track-record-resultats",
     es: "/track-record-resultados",
     it: "/track-record-risultati",
-    sw: "/track-record-matokeo",
-    id: "/track-record-hasil",
   },
   "/how-it-works": {
     en: "/how-it-works",
@@ -97,8 +83,6 @@ export const routeTable = {
     fr: "/comment-ca-marche",
     es: "/como-funciona",
     it: "/come-funziona",
-    sw: "/jinsi-inavyofanya-kazi",
-    id: "/cara-kerjanya",
   },
   "/about": {
     en: "/about",
@@ -107,8 +91,6 @@ export const routeTable = {
     fr: "/a-propos",
     es: "/sobre-nosotros",
     it: "/chi-siamo",
-    sw: "/kuhusu",
-    id: "/tentang",
   },
   "/about-us": {
     en: "/about-us",
@@ -117,8 +99,6 @@ export const routeTable = {
     fr: "/notre-equipe",
     es: "/nuestro-equipo",
     it: "/il-nostro-team",
-    sw: "/timu-yetu",
-    id: "/tim-kami",
   },
   "/contact": {
     en: "/contact",
@@ -127,8 +107,6 @@ export const routeTable = {
     fr: "/contact",
     es: "/contacto",
     it: "/contatti",
-    sw: "/wasiliana",
-    id: "/kontak",
   },
   "/checkout": {
     en: "/checkout",
@@ -137,8 +115,6 @@ export const routeTable = {
     fr: "/paiement",
     es: "/pago",
     it: "/checkout",
-    sw: "/malipo",
-    id: "/pembayaran",
   },
   "/welcome": {
     en: "/welcome",
@@ -147,8 +123,6 @@ export const routeTable = {
     fr: "/bienvenue",
     es: "/bienvenida",
     it: "/benvenuto",
-    sw: "/karibu",
-    id: "/selamat-datang",
   },
   "/login": {
     en: "/login",
@@ -157,8 +131,6 @@ export const routeTable = {
     fr: "/connexion",
     es: "/iniciar-sesion",
     it: "/accedi",
-    sw: "/ingia",
-    id: "/masuk",
   },
   "/deals": {
     en: "/deals",
@@ -167,8 +139,6 @@ export const routeTable = {
     fr: "/offres",
     es: "/ofertas",
     it: "/offerte",
-    sw: "/ofa",
-    id: "/penawaran",
   },
   "/strategy": {
     en: "/strategy",
@@ -177,8 +147,6 @@ export const routeTable = {
     fr: "/strategie",
     es: "/estrategia",
     it: "/strategia",
-    sw: "/mikakati",
-    id: "/strategi",
   },
   "/reports": {
     en: "/reports",
@@ -187,8 +155,6 @@ export const routeTable = {
     fr: "/rapports",
     es: "/informes",
     it: "/report",
-    sw: "/ripoti",
-    id: "/laporan",
   },
   "/weekly-report": {
     en: "/weekly-report",
@@ -197,8 +163,6 @@ export const routeTable = {
     fr: "/rapport-hebdomadaire",
     es: "/informe-semanal",
     it: "/report-settimanale",
-    sw: "/ripoti-ya-wiki",
-    id: "/laporan-mingguan",
   },
   "/bet-of-the-day": {
     en: "/bet-of-the-day",
@@ -207,8 +171,6 @@ export const routeTable = {
     fr: "/pick-du-jour",
     es: "/pick-del-dia",
     it: "/pick-del-giorno",
-    sw: "/chaguo-la-siku",
-    id: "/pilihan-hari-ini",
   },
   "/settings": {
     en: "/settings",
@@ -217,8 +179,6 @@ export const routeTable = {
     fr: "/parametres",
     es: "/ajustes",
     it: "/impostazioni",
-    sw: "/mipangilio",
-    id: "/pengaturan",
   },
   "/search": {
     en: "/search",
@@ -227,8 +187,6 @@ export const routeTable = {
     fr: "/recherche",
     es: "/buscar",
     it: "/cerca",
-    sw: "/tafuta",
-    id: "/cari",
   },
   "/results": {
     en: "/results",
@@ -237,8 +195,6 @@ export const routeTable = {
     fr: "/resultats",
     es: "/resultados",
     it: "/risultati",
-    sw: "/matokeo",
-    id: "/hasil",
   },
   "/admin": {
     en: "/admin",
@@ -247,8 +203,6 @@ export const routeTable = {
     fr: "/admin",
     es: "/admin",
     it: "/admin",
-    sw: "/admin",
-    id: "/admin",
   },
 } as const satisfies Record<string, Record<Locale, string>>;
 
@@ -264,8 +218,6 @@ const reverseBySegment: Record<Locale, Map<string, string>> = {
   fr: new Map(),
   es: new Map(),
   it: new Map(),
-  sw: new Map(),
-  id: new Map(),
 };
 
 (Object.keys(routeTable) as CanonicalPath[]).forEach((canonical) => {

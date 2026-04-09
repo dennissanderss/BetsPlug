@@ -8,9 +8,10 @@ settings = get_settings()
 engine = create_async_engine(
     settings.database_url,
     echo=settings.debug,
-    pool_size=20,
-    max_overflow=10,
-    pool_pre_ping=True,
+    pool_size=5,
+    max_overflow=2,
+    pool_pre_ping=False,  # saves 1 round-trip per query; connections are stable on Railway
+    pool_recycle=300,  # recycle connections every 5 min to avoid stale connections
 )
 
 async_session_factory = async_sessionmaker(

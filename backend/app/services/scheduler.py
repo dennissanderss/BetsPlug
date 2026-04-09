@@ -10,6 +10,7 @@ Jobs
 3. sync_results     — daily at 06:00 UTC: fetch results and evaluate predictions
 """
 
+import gc
 import logging
 from datetime import datetime, timedelta, timezone
 
@@ -33,6 +34,7 @@ async def job_sync_data():
         total_created, total_updated, total_errors = 0, 0, 0
 
         for i in range(6):
+            # Each league gets its own client + session, closed before the next
             async with DataSyncService() as svc:
                 async with async_session_factory() as db:
                     r1 = await svc.sync_upcoming_matches(db)
@@ -52,7 +54,12 @@ async def job_sync_data():
                     total_errors += r3.get("errors", 0)
 
                     await db.commit()
+                    db.expire_all()
                     await asyncio.sleep(2)
+            # Explicit cleanup: drop references and force GC between leagues
+            del svc
+            gc.collect()
+            log.debug("CRON: League %d/6 synced, memory released.", i + 1)
 
         log.info("CRON: Full sync done — created=%d updated=%d errors=%d",
                  total_created, total_updated, total_errors)
@@ -61,7 +68,10 @@ async def job_sync_data():
 
 
 async def job_generate_predictions():
-    """Generate predictions for all upcoming matches that don't have one yet."""
+    """Generate predictions for all upcoming matches that don't have one yet.
+
+    Processes in batches of 50 to limit peak memory usage.
+    """
     log.info("CRON: Starting prediction generation...")
     try:
         import uuid
@@ -71,6 +81,8 @@ async def job_generate_predictions():
         from app.models.match import Match, MatchStatus
         from app.models.model_version import ModelVersion
         from app.models.prediction import Prediction
+
+        BATCH_SIZE = 50
 
         async with async_session_factory() as db:
             # Ensure default model version exists
@@ -92,59 +104,75 @@ async def job_generate_predictions():
                 )
                 db.add(mv)
                 await db.flush()
+                await db.commit()
+                db.expire_all()
 
-            # Find upcoming matches
+            # Collect IDs of upcoming matches that need predictions
             now = datetime.now(timezone.utc)
             cutoff = now + timedelta(days=7)
             matches_result = await db.execute(
-                select(Match).where(
+                select(Match.id).where(
                     Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
                     Match.scheduled_at >= now,
                     Match.scheduled_at <= cutoff,
                 ).order_by(Match.scheduled_at)
             )
-            all_matches = matches_result.scalars().all()
+            all_match_ids = [row[0] for row in matches_result.all()]
 
-            # Filter out those with predictions already
-            match_ids = [m.id for m in all_matches]
-            if match_ids:
+            if all_match_ids:
                 existing = await db.execute(
                     select(Prediction.match_id)
-                    .where(Prediction.match_id.in_(match_ids))
+                    .where(Prediction.match_id.in_(all_match_ids))
                     .distinct()
                 )
                 existing_ids = set(existing.scalars().all())
             else:
                 existing_ids = set()
 
-            to_predict = [m for m in all_matches if m.id not in existing_ids]
+            ids_to_predict = [mid for mid in all_match_ids if mid not in existing_ids]
 
-            if not to_predict:
+            if not ids_to_predict:
                 log.info("CRON: No new matches need predictions.")
                 return
 
+            log.info("CRON: %d matches need predictions, processing in batches of %d.",
+                     len(ids_to_predict), BATCH_SIZE)
+
+            # Process in batches of BATCH_SIZE
             service = ForecastService()
             generated = 0
-            for match in to_predict:
-                try:
-                    await service.generate_forecast(match.id, db)
-                    generated += 1
-                except Exception as exc:
-                    log.warning("CRON: Prediction failed for %s: %s", match.id, exc)
+            for batch_start in range(0, len(ids_to_predict), BATCH_SIZE):
+                batch_ids = ids_to_predict[batch_start:batch_start + BATCH_SIZE]
+                for match_id in batch_ids:
+                    try:
+                        await service.generate_forecast(match_id, db)
+                        generated += 1
+                    except Exception as exc:
+                        log.warning("CRON: Prediction failed for %s: %s", match_id, exc)
 
-            await db.commit()
-            log.info("CRON: Generated %d predictions for %d new matches.", generated, len(to_predict))
+                await db.commit()
+                db.expire_all()
+                gc.collect()
+                log.debug("CRON: Prediction batch committed (%d-%d).",
+                          batch_start, batch_start + len(batch_ids))
+
+            log.info("CRON: Generated %d predictions for %d new matches.",
+                     generated, len(ids_to_predict))
 
     except Exception as exc:
         log.error("CRON: Prediction generation failed: %s", exc, exc_info=True)
 
 
 async def job_evaluate_predictions():
-    """Evaluate predictions for finished matches that haven't been scored yet."""
+    """Evaluate predictions for finished matches that haven't been scored yet.
+
+    Processes up to 200 at a time with session cleanup after commit.
+    """
     log.info("CRON: Starting prediction evaluation...")
     try:
+        import uuid
         import math
-        from sqlalchemy import and_
+        from sqlalchemy import and_, select
         from app.db.session import async_session_factory
         from app.models.match import Match, MatchResult, MatchStatus
         from app.models.prediction import Prediction, PredictionEvaluation
@@ -214,6 +242,7 @@ async def job_evaluate_predictions():
                 evaluated += 1
 
             await db.commit()
+            db.expire_all()
             log.info("CRON: Evaluated %d predictions.", evaluated)
 
     except Exception as exc:
@@ -229,7 +258,7 @@ async def job_sync_live_fixtures():
         return
 
     try:
-        from sqlalchemy import and_
+        from sqlalchemy import and_, select
         from app.db.session import async_session_factory
         from app.models.match import Match, MatchResult, MatchStatus
         from app.services.data_sync_service import DataSyncService
@@ -260,18 +289,22 @@ async def job_sync_live_fixtures():
                 log.info("CRON: Live sync results: %s", r)
 
             await db.commit()
+            db.expire_all()
 
     except Exception as exc:
         log.error("CRON: Live fixture sync failed: %s", exc, exc_info=True)
 
 
 async def job_generate_historical_predictions():
-    """Generate predictions for finished matches that don't have one yet. Runs in batches."""
+    """Generate predictions for finished matches that don't have one yet.
+
+    Runs in batches of 100 with session cleanup after each commit.
+    """
     log.info("CRON: Generating historical predictions (batch)...")
     try:
         import uuid as _uuid
         import math as _math
-        from sqlalchemy import and_
+        from sqlalchemy import and_, select
         from app.db.session import async_session_factory
         from app.models.match import Match, MatchResult, MatchStatus
         from app.models.prediction import Prediction, PredictionEvaluation
@@ -292,6 +325,8 @@ async def job_generate_historical_predictions():
                 )
                 db.add(mv)
                 await db.flush()
+                await db.commit()
+                db.expire_all()
 
             # Find finished matches without predictions (batch of 100)
             stmt = (
@@ -313,16 +348,22 @@ async def job_generate_historical_predictions():
 
             log.info("CRON: Generating predictions for %d historical matches...", len(matches))
 
+            # Collect IDs so we can drop the full ORM objects
+            match_ids = [m.id for m in matches]
+            del matches
+
             svc = ForecastService()
             generated = 0
-            for match in matches:
+            for match_id in match_ids:
                 try:
-                    await svc.generate_forecast(match.id, db)
+                    await svc.generate_forecast(match_id, db)
                     generated += 1
                 except Exception as exc:
-                    log.warning("CRON: Historical prediction failed for %s: %s", match.id, exc)
+                    log.warning("CRON: Historical prediction failed for %s: %s", match_id, exc)
 
             await db.commit()
+            db.expire_all()
+            gc.collect()
 
             # Now evaluate them
             eval_stmt = (
@@ -362,6 +403,8 @@ async def job_generate_historical_predictions():
                     pass
 
             await db.commit()
+            db.expire_all()
+            gc.collect()
             log.info("CRON: Generated %d predictions, evaluated %d.", generated, evaluated)
 
     except Exception as exc:
@@ -372,11 +415,10 @@ async def job_backfill_results():
     """One-time backfill: find all matches past their kickoff that aren't finished and try to update."""
     log.info("CRON: Running results backfill...")
     try:
-        import math
-        from sqlalchemy import and_
+        import asyncio
+        from sqlalchemy import and_, select
         from app.db.session import async_session_factory
-        from app.models.match import Match, MatchResult, MatchStatus
-        from app.models.prediction import Prediction, PredictionEvaluation
+        from app.models.match import Match, MatchStatus
         from app.services.data_sync_service import DataSyncService
 
         now = datetime.now(timezone.utc)
@@ -385,7 +427,7 @@ async def job_backfill_results():
             # Find all matches that should be finished (kickoff > 3h ago, still scheduled/live)
             cutoff = now - timedelta(hours=3)
             stmt = (
-                select(Match)
+                select(Match.id)
                 .where(
                     and_(
                         Match.scheduled_at < cutoff,
@@ -393,22 +435,24 @@ async def job_backfill_results():
                     )
                 )
             )
-            stale_matches = (await db.execute(stmt)).scalars().all()
+            stale_ids = [row[0] for row in (await db.execute(stmt)).all()]
 
-            if not stale_matches:
+            if not stale_ids:
                 log.info("CRON: No stale matches to backfill.")
                 return
 
-            log.info("CRON: Found %d stale matches to backfill.", len(stale_matches))
+            log.info("CRON: Found %d stale matches to backfill.", len(stale_ids))
 
-            # Try to sync results
-            async with DataSyncService() as svc:
-                for _ in range(6):  # Rotate through all leagues
+            # Try to sync results -- one DataSyncService per league iteration
+            for i in range(6):
+                async with DataSyncService() as svc:
                     r = await svc.sync_recent_results(db)
-                    import asyncio
-                    await asyncio.sleep(2)
-
-            await db.commit()
+                    log.debug("CRON: Backfill league %d/6: %s", i + 1, r)
+                del svc
+                await db.commit()
+                db.expire_all()
+                gc.collect()
+                await asyncio.sleep(2)
 
             # Now evaluate any newly finished predictions
             await job_evaluate_predictions()

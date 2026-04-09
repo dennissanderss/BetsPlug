@@ -46,13 +46,14 @@ async def list_predictions(
     from app.models.league import League
     from app.models.sport import Sport
 
-    from sqlalchemy.orm import selectinload
+    from sqlalchemy.orm import noload
 
+    # Only load explanation and evaluation (needed for PredictionResponse).
+    # Skip match (not in response schema) and model_version (not serialized)
+    # to avoid unnecessary JOIN + deserialization of teams/league/result.
     q = select(Prediction).options(
-        selectinload(Prediction.match),
-        selectinload(Prediction.explanation),
-        selectinload(Prediction.evaluation),
-        selectinload(Prediction.model_version),
+        noload(Prediction.match),
+        noload(Prediction.model_version),
     )
 
     if sport is not None or league_id is not None or date_from is not None or date_to is not None:
