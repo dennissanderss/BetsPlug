@@ -162,7 +162,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "If you'd rather skip the manual work and let our AI do it for you, every BetsPlug subscription includes the full Ensemble output, live probability tracking, and a daily Bet of the Day — picked automatically by the same framework you just read. Start your free 7-day trial and see the edge in action.",
+        text: "If you'd rather skip the manual work and let our AI do it for you, every BetsPlug subscription includes the full Ensemble output, live probability tracking, and a daily Pick of the Day — selected automatically by the same framework you just read. Start your free 7-day trial and see the edge in action.",
       },
     ],
   },

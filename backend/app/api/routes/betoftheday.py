@@ -1,5 +1,5 @@
 """
-Bet of the Day route.
+Pick of the Day route.
 
 Selects the single highest-confidence prediction for today's matches.
 This is the premium "killer feature" — the one prediction that stands out.
@@ -62,8 +62,8 @@ async def get_bet_of_the_day(
     3. Prediction with highest confidence score wins
     4. Minimum confidence threshold: 0.65 (65%)
 
-    This endpoint is designed to be the "dopamine hit" — one clear,
-    high-conviction pick that users can act on quickly.
+    This endpoint surfaces the single top-confidence analytical pick
+    of the day for educational and informational purposes.
     """
     if target_date is None:
         target_date = datetime.now(timezone.utc).date()

@@ -266,21 +266,21 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
         <div className="px-5 py-4 border-t border-white/[0.06]">
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">Win Rate</p>
+              <p className="text-[10px] uppercase tracking-wider text-slate-500" title="Percentage of picks that were correct">Win Rate</p>
               <p className={cn("text-lg font-bold tabular-nums", c.accent)}>{(metrics.winrate * 100).toFixed(1)}%</p>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">ROI</p>
+              <p className="text-[10px] uppercase tracking-wider text-slate-500" title="Return on Investment — profit/loss as percentage of total staked">ROI</p>
               <p className={cn("text-lg font-bold tabular-nums", metrics.roi >= 0 ? "text-emerald-400" : "text-red-400")}>
                 {metrics.roi >= 0 ? "+" : ""}{(metrics.roi * 100).toFixed(1)}%
               </p>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">Sample Size</p>
+              <p className="text-[10px] uppercase tracking-wider text-slate-500" title="Total number of evaluated picks for this strategy">Sample Size</p>
               <p className="text-lg font-bold tabular-nums text-slate-100">{metrics.sample_size}</p>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500">Max Drawdown</p>
+              <p className="text-[10px] uppercase tracking-wider text-slate-500" title="Largest peak-to-trough loss in units (1 unit = 1 stake). E.g., 4.3u means at worst you'd be down 4.3 stakes">Max Drawdown</p>
               <p className="text-lg font-bold tabular-nums text-red-400">{metrics.max_drawdown.toFixed(1)}u</p>
             </div>
           </div>

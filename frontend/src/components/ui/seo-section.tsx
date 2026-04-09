@@ -245,7 +245,7 @@ export function SeoSection() {
             </p>
 
             <h4 className="mt-8 text-xl font-bold text-white">
-              Free AI Sports Picks, Live Probabilities &amp; Bet of the Day
+              Free AI Sports Picks, Live Probabilities &amp; Pick of the Day
             </h4>
             <p className="mt-3 text-base leading-relaxed text-slate-400">
               Looking for{" "}
@@ -255,10 +255,10 @@ export function SeoSection() {
                 href="/bet-of-the-day"
                 className="font-semibold text-green-400 underline decoration-green-500/30 underline-offset-4 transition-colors hover:text-green-300"
               >
-                Bet of the Day
+                Pick of the Day
               </Link>{" "}
               — a single curated AI pick our algorithm rates as the best value
-              bet across all monitored leagues. Want to go deeper? Our{" "}
+              across all monitored leagues. Want to go deeper? Our{" "}
               <Link
                 href="/live"
                 className="font-semibold text-green-400 underline decoration-green-500/30 underline-offset-4 transition-colors hover:text-green-300"
@@ -275,7 +275,7 @@ export function SeoSection() {
             </h4>
             <p className="mt-3 text-base leading-relaxed text-slate-400">
               Most sports prediction websites hide their losses. We don&apos;t.
-              Every AI sports pick, every Bet of the Day, every confidence
+              Every AI sports pick, every Pick of the Day, every confidence
               score is logged publicly in our{" "}
               <Link
                 href="/trackrecord"
@@ -336,7 +336,7 @@ export function SeoSection() {
         >
           {[
             { href: "/predictions", label: "AI Predictions" },
-            { href: "/bet-of-the-day", label: "Bet of the Day" },
+            { href: "/bet-of-the-day", label: "Pick of the Day" },
             { href: "/live", label: "Live Probabilities" },
             { href: "/trackrecord", label: "Track Record" },
             { href: pricingHref, label: "Pricing" },

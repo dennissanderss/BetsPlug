@@ -104,7 +104,7 @@ const translations: Record<string, Translations> = {
     // Navigation
     "nav.about":          "About",
     "nav.dashboard":     "Dashboard",
-    "nav.bet_of_the_day": "Bet of the Day",
+    "nav.bet_of_the_day": "Pick of the Day",
     "nav.search":        "Search",
     "nav.live_matches":  "Live Matches",
     "nav.predictions":   "Predictions",

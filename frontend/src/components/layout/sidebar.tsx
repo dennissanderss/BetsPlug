@@ -41,7 +41,7 @@ const navItems: NavItem[] = [
   { labelKey: "nav.dashboard",      fallback: "Dashboard",      href: "/dashboard",      icon: LayoutDashboard },
   { labelKey: "nav.search",         fallback: "Search",         href: "/search",         icon: Search },
   { labelKey: "nav.live_matches",   fallback: "Live Matches",   href: "/live",           icon: Radio,         badge: "LIVE" },
-  { labelKey: "nav.bet_of_the_day", fallback: "Bet of the Day", href: "/bet-of-the-day", icon: Trophy,        badge: "HOT" },
+  { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy,        badge: "HOT" },
   { labelKey: "nav.predictions",    fallback: "Predictions",    href: "/predictions",    icon: Sparkles },
   { labelKey: "nav.results",         fallback: "Results",         href: "/results",        icon: Trophy },
   { labelKey: "nav.weekly_report",  fallback: "Weekly Report",  href: "/weekly-report",  icon: FileBarChart2 },

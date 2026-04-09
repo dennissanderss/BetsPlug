@@ -24,10 +24,10 @@ const testimonials: Testimonial[] = [
     role: "Sports Trader",
   },
   {
-    text: "I was skeptical at first, but the Bet of the Day feature alone paid for my subscription ten times over. The AI picks consistently outperform my own gut calls.",
+    text: "I was skeptical at first, but the Pick of the Day feature alone paid for my subscription ten times over. The AI picks consistently outperform my own gut calls.",
     image: "https://randomuser.me/api/portraits/women/68.jpg",
     name: "Emma Dekker",
-    role: "Casual Bettor",
+    role: "Sports Analyst",
   },
   {
     text: "Running my own tipping community used to take hours of research. BetsPlug gives me data-backed insights in seconds. My subscribers have never been happier.",

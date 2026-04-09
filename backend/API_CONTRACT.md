@@ -75,5 +75,5 @@ All backend endpoints return shapes that match the frontend TypeScript types.
 - Backend returns `is_simulation: true` and `disclaimer` string on all prediction-related endpoints
 - Frontend should always display disclaimer when showing predictions
 - Empty states: Backend returns `count: 0` with empty arrays, never errors. Frontend should check `count` or array length.
-- Bet of the Day: when `available: false`, all other fields are null. Frontend should show "No bet today" message.
+- Pick of the Day: when `available: false`, all other fields are null. Frontend should show "No pick today" message.
 - Dashboard metrics: when no data exists, backend returns zeros with the response structure intact.

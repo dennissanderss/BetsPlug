@@ -194,7 +194,7 @@ const en = {
   "features.f4Title": "Verified Data Sources",
   "features.f4Desc":
     "We only use official APIs and verified data providers. No scraped or unreliable data.",
-  "features.f5Title": "Bet of the Day",
+  "features.f5Title": "Pick of the Day",
   "features.f5Desc":
     "Our algorithm picks the single highest-value prediction each day. Premium members get it first.",
   "features.f6Title": "Growing Community",
@@ -227,7 +227,7 @@ const en = {
   "pricing.bronzeF1": "Full Gold access for 7 days",
   "pricing.bronzeF2": "All 30+ leagues & 4 AI models",
   "pricing.bronzeF3": "Unlimited daily AI predictions",
-  "pricing.bronzeF4": "Instant Bet of the Day + alerts",
+  "pricing.bronzeF4": "Instant Pick of the Day + alerts",
   "pricing.bronzeF5": "Just €0.01 · Cancel anytime",
   "pricing.silverTagline": "Essentials for casual analysts",
   "pricing.silverCta": "Start Silver",
@@ -240,7 +240,7 @@ const en = {
   "pricing.goldCta": "Start Gold",
   "pricing.goldF1": "All 30+ leagues worldwide (CL, UEL, MLS…)",
   "pricing.goldF2": "All 4 AI models + Ensemble breakdown",
-  "pricing.goldF3": "Instant picks + daily Bet of the Day",
+  "pricing.goldF3": "Instant picks + daily Pick of the Day",
   "pricing.goldF4": "Live probability tracking & alerts",
   "pricing.goldF5": "Exclusive Gold Telegram + Strategy Lab",
   "pricing.goldF6": "Priority support (12h) + monthly strategy review",
@@ -284,7 +284,7 @@ const en = {
   "articles.related": "Related Articles",
   "articles.ctaBadge": "BetsPlug members",
   "articles.ctaTitle": "Turn this analysis into a real edge.",
-  "articles.ctaSubtitle": "Get live AI probabilities, Bet of the Day and the full Ensemble model output — free for 7 days.",
+  "articles.ctaSubtitle": "Get live AI probabilities, Pick of the Day and the full Ensemble model output — free for 7 days.",
   "articles.ctaButton": "Start Free Trial",
   "articles.ctaNoCard": "Symbolic €0.01 to activate your 7-day trial",
   "articles.tldr": "TL;DR",
@@ -310,9 +310,9 @@ const en = {
   "seo.pillar3Title": "Verified Track Record",
   "seo.pillar3Desc":
     "Transparency first. Explore our public track record to see every AI sports pick we've ever published, with full ROI, hit-rate and confidence scores logged and timestamped.",
-  "seo.pillar4Title": "Bet of the Day",
+  "seo.pillar4Title": "Pick of the Day",
   "seo.pillar4Desc":
-    "Short on time? Our daily AI-powered Bet of the Day highlights the single highest-confidence value pick across all leagues — hand-picked by our algorithm, not by feeling.",
+    "Short on time? Our daily AI-powered Pick of the Day highlights the single highest-confidence value pick across all leagues — selected by our algorithm, not by feeling.",
   "seo.pillar5Title": "Live AI Probabilities",
   "seo.pillar5Desc":
     "Watch probabilities shift in real-time as matches unfold. Our live AI sports predictor recalculates win probabilities every second so you can spot value the moment it appears.",
@@ -404,14 +404,14 @@ const en = {
   "chatbot.placeholder": "Type your message…",
   "chatbot.close": "Close chat",
   "chatbot.footer": "AI assistant grounded on BetsPlug docs — for anything else, email support@betsplug.com",
-  "chatbot.suggestion1": "How does the Bet of the Day work?",
+  "chatbot.suggestion1": "How does the Pick of the Day work?",
   "chatbot.suggestion2": "What's the difference between Silver and Gold?",
   "chatbot.suggestion3": "How accurate are your predictions?",
   "chatbot.replyDefault":
     "Thanks for reaching out! A BetsPlug analyst will get back to you shortly. In the meantime, check our FAQ or drop us a line at support@betsplug.com.",
   "chatbot.replyHello":
     "Hey there! 👋 I'm the BetsPlug AI. Ask me anything about our models, pricing or predictions — I'll do my best to help.",
-  "chatbot.replyPricing": "We have four tiers. Bronze is a symbolic €0.01 trial — full access for 7 days, real card required (this keeps the platform fraud-free). Silver (€9.99/mo) is an entry-level plan limited to the top 5 European leagues and Ensemble-only picks with a 2h delay. Gold (€14.99/mo) is our most popular — all 30+ leagues worldwide, all 4 AI models, instant picks, daily Bet of the Day, Gold Telegram and Strategy Lab. Platinum (€299 one-time lifetime) adds private Telegram, 1-on-1 onboarding and a lifetime price lock. All paid plans are backed by a 14-day EU money-back guarantee.",
+  "chatbot.replyPricing": "We have four tiers. Bronze is a symbolic €0.01 trial — full access for 7 days, real card required (this keeps the platform fraud-free). Silver (€9.99/mo) is an entry-level plan limited to the top 5 European leagues and Ensemble-only picks with a 2h delay. Gold (€14.99/mo) is our most popular — all 30+ leagues worldwide, all 4 AI models, instant picks, daily Pick of the Day, Gold Telegram and Strategy Lab. Platinum (€299 one-time lifetime) adds private Telegram, 1-on-1 onboarding and a lifetime price lock. All paid plans are backed by a 14-day EU money-back guarantee.",
   "chatbot.replyRefund": "All Silver and Gold plans can be cancelled anytime from your dashboard — you keep access until the end of your billing period. We also offer a 14-day money-back guarantee on all paid plans under EU consumer law. Platinum Lifetime is final-sale after the 14-day refund window.",
   "chatbot.replyAccuracy":
     "Every prediction is logged in our public track record with hit-rate, ROI and confidence scores. You can filter by league, market and date range. No cherry-picking, no hidden losses — transparency is the whole point.",
@@ -1429,7 +1429,7 @@ const nl: Dictionary = {
   "features.f4Title": "Geverifieerde databronnen",
   "features.f4Desc":
     "Wij gebruiken alleen officiële API's en geverifieerde data. Geen gescrapte of onbetrouwbare bronnen.",
-  "features.f5Title": "Bet of the Day",
+  "features.f5Title": "Analyse van de Dag",
   "features.f5Desc":
     "Ons algoritme kiest elke dag de pick met de hoogste waarde. Premium-leden zien hem als eerste.",
   "features.f6Title": "Groeiende community",
@@ -1459,7 +1459,7 @@ const nl: Dictionary = {
   "pricing.bronzeF1": "Volledige Gold-toegang voor 7 dagen",
   "pricing.bronzeF2": "Alle 30+ competities & 4 AI-modellen",
   "pricing.bronzeF3": "Onbeperkt dagelijkse AI-voorspellingen",
-  "pricing.bronzeF4": "Direct Bet of the Day + meldingen",
+  "pricing.bronzeF4": "Direct Analyse van de Dag + meldingen",
   "pricing.bronzeF5": "Slechts €0,01 · Altijd opzegbaar",
   "pricing.silverTagline": "Basis voor gelegenheidsanalisten",
   "pricing.silverCta": "Start Silver",
@@ -1472,7 +1472,7 @@ const nl: Dictionary = {
   "pricing.goldCta": "Start Gold",
   "pricing.goldF1": "Alle 30+ competities wereldwijd (CL, UEL, MLS…)",
   "pricing.goldF2": "Alle 4 AI-modellen + Ensemble-details",
-  "pricing.goldF3": "Directe picks + dagelijkse Bet of the Day",
+  "pricing.goldF3": "Directe picks + dagelijkse Analyse van de Dag",
   "pricing.goldF4": "Live kansberekening & meldingen",
   "pricing.goldF5": "Exclusief Gold Telegram + Strategy Lab",
   "pricing.goldF6": "Prioriteitsupport (12u) + maandelijkse strategiereview",
@@ -1516,7 +1516,7 @@ const nl: Dictionary = {
   "articles.related": "Gerelateerde artikelen",
   "articles.ctaBadge": "BetsPlug leden",
   "articles.ctaTitle": "Zet deze analyse om in een echt voordeel.",
-  "articles.ctaSubtitle": "Krijg live AI-kansen, Bet of the Day en de volledige Ensemble-output — 7 dagen gratis.",
+  "articles.ctaSubtitle": "Krijg live AI-kansen, Analyse van de Dag en de volledige Ensemble-output — 7 dagen gratis.",
   "articles.ctaButton": "Start gratis proefperiode",
   "articles.ctaNoCard": "Symbolische €0,01 om je 7-daagse proef te activeren",
   "articles.tldr": "TL;DR",
@@ -1541,9 +1541,9 @@ const nl: Dictionary = {
   "seo.pillar3Title": "Geverifieerd track record",
   "seo.pillar3Desc":
     "Transparantie voorop. Bekijk ons openbare track record met elke AI-pick die we ooit publiceerden — volledige ROI, hit-rate en confidence gelogd en getimestampt.",
-  "seo.pillar4Title": "Bet of the Day",
+  "seo.pillar4Title": "Analyse van de Dag",
   "seo.pillar4Desc":
-    "Weinig tijd? Onze dagelijkse AI-Bet of the Day geeft de pick met de hoogste confidence uit alle competities — gekozen door ons algoritme, niet op gevoel.",
+    "Weinig tijd? Onze dagelijkse AI-Analyse van de Dag geeft de pick met de hoogste confidence uit alle competities — gekozen door ons algoritme, niet op gevoel.",
   "seo.pillar5Title": "Live AI-kansen",
   "seo.pillar5Desc":
     "Zie kansen realtime verschuiven tijdens een match. Onze live AI-predictor herberekent winstkansen elke seconde zodat je value spot zodra die verschijnt.",
@@ -1635,14 +1635,14 @@ const nl: Dictionary = {
   "chatbot.close": "Chat sluiten",
   "chatbot.footer":
     "AI-assistent gebaseerd op BetsPlug-info — voor alles daarbuiten mail support@betsplug.com",
-  "chatbot.suggestion1": "Hoe werkt de Bet of the Day?",
+  "chatbot.suggestion1": "Hoe werkt de Analyse van de Dag?",
   "chatbot.suggestion2": "Wat is het verschil tussen Silver en Gold?",
   "chatbot.suggestion3": "Hoe nauwkeurig zijn jullie voorspellingen?",
   "chatbot.replyDefault":
     "Bedankt voor je bericht! Een BetsPlug-analist neemt snel contact op. Bekijk ondertussen onze FAQ of stuur een mail naar support@betsplug.com.",
   "chatbot.replyHello":
     "Hey! 👋 Ik ben de BetsPlug AI. Vraag me alles over onze modellen, prijzen of voorspellingen — ik help je graag verder.",
-  "chatbot.replyPricing": "We hebben vier tiers. Bronze is een symbolische €0,01 proef — volledige toegang voor 7 dagen, echte kaart vereist (dit houdt het platform fraudevrij). Silver (€9,99/mnd) is een instapplan beperkt tot de top 5 Europese competities met alleen Ensemble-picks en 2u vertraging. Gold (€14,99/mnd) is onze populairste — alle 30+ competities wereldwijd, alle 4 AI-modellen, directe picks, dagelijkse Bet of the Day, Gold Telegram en Strategy Lab. Platinum (eenmalig €299 levenslang) voegt privé Telegram toe, 1-op-1 onboarding en levenslange prijs-lock. Alle betaalde plannen hebben een 14 dagen EU geld-terug-garantie.",
+  "chatbot.replyPricing": "We hebben vier tiers. Bronze is een symbolische €0,01 proef — volledige toegang voor 7 dagen, echte kaart vereist (dit houdt het platform fraudevrij). Silver (€9,99/mnd) is een instapplan beperkt tot de top 5 Europese competities met alleen Ensemble-picks en 2u vertraging. Gold (€14,99/mnd) is onze populairste — alle 30+ competities wereldwijd, alle 4 AI-modellen, directe picks, dagelijkse Analyse van de Dag, Gold Telegram en Strategy Lab. Platinum (eenmalig €299 levenslang) voegt privé Telegram toe, 1-op-1 onboarding en levenslange prijs-lock. Alle betaalde plannen hebben een 14 dagen EU geld-terug-garantie.",
   "chatbot.replyRefund": "Silver- en Gold-plannen kun je op elk moment opzeggen in je dashboard — je behoudt toegang tot het einde van je factureringsperiode. We bieden ook een 14 dagen niet-goed-geld-terug-garantie op alle betaalde plannen conform EU-recht. Platinum Lifetime is final-sale na de 14-dagen.",
   "chatbot.replyAccuracy":
     "Elke voorspelling wordt gelogd in ons publieke track record met hit-rate, ROI en confidence scores. Filter op competitie, markt en datum. Geen cherry-picking, geen verborgen verliezen — transparantie staat voorop.",

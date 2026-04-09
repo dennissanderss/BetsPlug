@@ -85,7 +85,7 @@ PLANS = {
         features=[
             "All daily predictions",
             "Win probability analysis",
-            "Bet of the Day highlights",
+            "Pick of the Day highlights",
             "Strategy backtesting",
             "Priority email support",
         ],
@@ -99,7 +99,7 @@ PLANS = {
         features=[
             "All daily predictions",
             "Win probability analysis",
-            "Bet of the Day highlights",
+            "Pick of the Day highlights",
             "Strategy backtesting",
             "Advanced analytics & API",
             "Priority support",

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Lock, Sparkles } from "lucide-react";
 
@@ -9,11 +10,19 @@ interface PaywallOverlayProps {
   children: React.ReactNode;
 }
 
+const TIER_RANK: Record<string, number> = { free: 0, silver: 1, gold: 2, platinum: 3 };
+
 export function PaywallOverlay({ feature, requiredTier, children }: PaywallOverlayProps) {
-  // For now, always show paywall (no auth system yet)
-  // Later: check user's actual subscription tier
-  const userTier = "free"; // TODO: get from auth context
-  const hasAccess = userTier !== "free"; // Simplest check
+  const [hasAccess, setHasAccess] = useState(false);
+
+  useEffect(() => {
+    const storedTier = typeof window !== "undefined"
+      ? (localStorage.getItem("betsplug_tier") || "free")
+      : "free";
+    const userRank = TIER_RANK[storedTier] ?? 0;
+    const requiredRank = TIER_RANK[requiredTier] ?? 0;
+    if (userRank >= requiredRank) setHasAccess(true);
+  }, [requiredTier]);
 
   if (hasAccess) {
     return <>{children}</>;

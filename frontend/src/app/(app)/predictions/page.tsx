@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Sparkles,
-  ChevronDown,
   ChevronUp,
   Eye,
   AlertTriangle,
@@ -255,11 +254,16 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
           </div>
 
           <button
+            onClick={() => setExpanded((v) => !v)}
             className="flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-slate-300 transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-300"
             aria-label={`View details for ${fixture.home_team_name} vs ${fixture.away_team_name}`}
+            aria-expanded={expanded}
           >
-            <Eye className="h-3.5 w-3.5" />
-            View Details
+            {expanded ? (
+              <><ChevronUp className="h-3.5 w-3.5" />Hide Details</>
+            ) : (
+              <><Eye className="h-3.5 w-3.5" />View Details</>
+            )}
           </button>
         </div>
       </div>
@@ -267,7 +271,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
       {/* ── Bottom: venue / pending note ── */}
       <div className="border-t border-white/[0.05] bg-white/[0.02] px-5 py-2.5">
         {hasPrediction ? (
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
             <div className="min-w-0 flex-1">
               {fixture.venue && (
                 <p className="text-[10px] text-slate-600 truncate">
@@ -280,17 +284,11 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
                 </p>
               )}
             </div>
-            <button
-              onClick={() => setExpanded((v) => !v)}
-              className="flex shrink-0 items-center gap-1 text-[11px] font-medium text-blue-400 hover:text-blue-300 transition-colors"
-              aria-expanded={expanded}
-            >
-              {expanded ? (
-                <>Show less <ChevronUp className="h-3 w-3" /></>
-              ) : (
-                <>Show more <ChevronDown className="h-3 w-3" /></>
-              )}
-            </button>
+            {pred!.pick && (
+              <span className="shrink-0 rounded-md bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400 border border-emerald-500/20">
+                {pred!.pick}
+              </span>
+            )}
           </div>
         ) : (
           <p className="text-xs text-slate-600 italic">
@@ -299,27 +297,92 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
         )}
       </div>
 
-      {/* ── Expanded: venue / extra detail ── */}
+      {/* ── Expanded: rich prediction detail panel ── */}
       {hasPrediction && expanded && (
-        <div className="border-t border-white/[0.05] bg-white/[0.015] px-5 py-3 animate-fade-in">
+        <div className="border-t border-white/[0.05] bg-white/[0.015] px-5 py-4 animate-fade-in space-y-4">
+
+          {/* Pick badge */}
+          {pred!.pick && (
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600">Model Pick</span>
+              <span className="rounded-md bg-emerald-500/20 px-2.5 py-0.5 text-xs font-bold text-emerald-400 border border-emerald-500/30">
+                {pred!.pick}
+              </span>
+              <span className="text-[10px] text-slate-600 ml-auto">
+                Confidence: {Math.round(pred!.confidence * 100)}%
+              </span>
+            </div>
+          )}
+
+          {/* Probability breakdown */}
           <div className="grid grid-cols-3 gap-3 text-center">
-            <div>
+            <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] p-3">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Home Win</p>
-              <p className="text-lg font-bold text-blue-400">{Math.round(pred!.home_win_prob * 100)}%</p>
+              <p className="text-xl font-bold text-blue-400">{Math.round(pred!.home_win_prob * 100)}%</p>
+              {pred!.edge?.home != null && (
+                <p className={`text-[10px] font-medium mt-1 ${pred!.edge.home > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                  {pred!.edge.home > 0 ? '+' : ''}{(pred!.edge.home * 100).toFixed(1)}% edge
+                </p>
+              )}
             </div>
             {pred!.draw_prob !== null && (
-              <div>
+              <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] p-3">
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Draw</p>
-                <p className="text-lg font-bold text-amber-400">{Math.round(pred!.draw_prob * 100)}%</p>
+                <p className="text-xl font-bold text-amber-400">{Math.round(pred!.draw_prob * 100)}%</p>
+                {pred!.edge?.draw != null && (
+                  <p className={`text-[10px] font-medium mt-1 ${pred!.edge.draw > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                    {pred!.edge.draw > 0 ? '+' : ''}{(pred!.edge.draw * 100).toFixed(1)}% edge
+                  </p>
+                )}
               </div>
             )}
-            <div>
+            <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] p-3">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Away Win</p>
-              <p className="text-lg font-bold text-red-400">{Math.round(pred!.away_win_prob * 100)}%</p>
+              <p className="text-xl font-bold text-red-400">{Math.round(pred!.away_win_prob * 100)}%</p>
+              {pred!.edge?.away != null && (
+                <p className={`text-[10px] font-medium mt-1 ${pred!.edge.away > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                  {pred!.edge.away > 0 ? '+' : ''}{(pred!.edge.away * 100).toFixed(1)}% edge
+                </p>
+              )}
             </div>
           </div>
+
+          {/* Reasoning */}
+          {pred!.reasoning && (
+            <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] px-4 py-3">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1.5">Model Reasoning</p>
+              <p className="text-xs text-slate-300 leading-relaxed">{pred!.reasoning}</p>
+            </div>
+          )}
+
+          {/* Top features */}
+          {pred!.top_features && pred!.top_features.length > 0 && (
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-2">Key Factors</p>
+              <div className="space-y-1.5">
+                {pred!.top_features.slice(0, 5).map((f, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between text-[11px] mb-0.5">
+                        <span className="text-slate-400 truncate capitalize">{f.feature.replace(/_/g, ' ')}</span>
+                        <span className="text-slate-300 font-medium ml-2 shrink-0">{(f.importance * 100).toFixed(0)}%</span>
+                      </div>
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
+                        <div
+                          className="h-full rounded-full bg-blue-500/70 transition-all duration-500"
+                          style={{ width: `${Math.min(f.importance * 100, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Venue */}
           {fixture.venue && (
-            <p className="mt-3 text-[11px] text-slate-600 text-center">
+            <p className="text-[10px] text-slate-600 text-center pt-1 border-t border-white/[0.05]">
               <span className="font-medium text-slate-500">Venue:</span> {fixture.venue}
             </p>
           )}

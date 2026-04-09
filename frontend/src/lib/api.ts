@@ -224,7 +224,7 @@ class ApiClient {
     return this.request<{ status: string; version: string }>("/health");
   }
 
-  // Bet of the Day
+  // Pick of the Day
   getBetOfTheDay(targetDate?: string) {
     const params = targetDate ? `?target_date=${targetDate}` : "";
     return this.request<{

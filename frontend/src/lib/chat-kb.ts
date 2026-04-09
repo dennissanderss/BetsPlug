@@ -19,7 +19,7 @@ BetsPlug is a premium AI-powered sports analytics platform for serious bettors a
 - Tracks every pick publicly (wins, losses, ROI) so users can see real performance.
 - Offers a live dashboard with model accuracy, confidence scores and per-league breakdowns.
 - Includes a Strategy Lab for backtesting and custom filters.
-- Provides a "Bet of the Day" — the single highest-confidence pick.
+- Provides a "Pick of the Day" — the single highest-confidence pick.
 - Sends alerts when premium picks go live.
 - Covers: Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League and more top leagues.
 
@@ -39,9 +39,9 @@ They are combined into a single Ensemble output with a confidence score.
 ## Pricing plans (VAT-inclusive)
 BetsPlug has four tiers. Silver and Gold bill monthly or yearly (yearly saves ~20%).
 
-- **Bronze — Symbolic €0.01 trial** (real card required): Full Gold-level access for 7 days — all 30+ leagues, all 4 AI models, unlimited predictions, Bet of the Day and real-time alerts. We charge a symbolic one cent through Stripe so we can verify the card is real; this is a deliberate fraud-protection measure that stops bad actors from farming trials with throwaway cards. New users get to try the entire product risk-free for 7 days; after the window they can choose Silver, Gold or Platinum to continue.
-- **Silver — €9.99/month or €7.99/month billed yearly (€95.88/year)**: The entry-level paid plan for casual analysts. Deliberately limited vs Gold: only the top 5 European leagues (Premier League, La Liga, Serie A, Bundesliga, Ligue 1), Ensemble output only (no per-model breakdown), picks delivered with a 2-hour delay versus Gold, basic confidence scores, email support with 48h response. No Telegram, no Bet of the Day, no Strategy Lab, no live tracking.
-- **Gold — €14.99/month or €11.99/month billed yearly (€143.88/year) — most popular**: The full product. All 30+ leagues worldwide (Champions League, Europa League, MLS, Eredivisie, etc.), all 4 AI models plus the Ensemble breakdown, instant picks with zero delay, daily Bet of the Day, live probability tracking and real-time alerts, exclusive Gold-tier Telegram channel, Strategy Lab with backtesting, priority support (12h response), one personal strategy review per month. This is the plan we recommend for anyone who takes their edge seriously.
+- **Bronze — Symbolic €0.01 trial** (real card required): Full Gold-level access for 7 days — all 30+ leagues, all 4 AI models, unlimited predictions, Pick of the Day and real-time alerts. We charge a symbolic one cent through Stripe so we can verify the card is real; this is a deliberate fraud-protection measure that stops bad actors from farming trials with throwaway cards. New users get to try the entire product risk-free for 7 days; after the window they can choose Silver, Gold or Platinum to continue.
+- **Silver — €9.99/month or €7.99/month billed yearly (€95.88/year)**: The entry-level paid plan for casual analysts. Deliberately limited vs Gold: only the top 5 European leagues (Premier League, La Liga, Serie A, Bundesliga, Ligue 1), Ensemble output only (no per-model breakdown), picks delivered with a 2-hour delay versus Gold, basic confidence scores, email support with 48h response. No Telegram, no Pick of the Day, no Strategy Lab, no live tracking.
+- **Gold — €14.99/month or €11.99/month billed yearly (€143.88/year) — most popular**: The full product. All 30+ leagues worldwide (Champions League, Europa League, MLS, Eredivisie, etc.), all 4 AI models plus the Ensemble breakdown, instant picks with zero delay, daily Pick of the Day, live probability tracking and real-time alerts, exclusive Gold-tier Telegram channel, Strategy Lab with backtesting, priority support (12h response), one personal strategy review per month. This is the plan we recommend for anyone who takes their edge seriously.
 - **Platinum Lifetime — €299 one-time** (limited to 100 members per year): Everything in Gold for life (current and all future features), plus founder-tier perks: private Platinum-only Telegram channel capped at 20 seats, 1-on-1 onboarding call with the founders, monthly personal strategy review, early access to new features, read-only API access, and a lifetime price lock. Final-sale after the 14-day refund window.
 
 Bronze IS the free trial — Silver and Gold do not have a separate trial path. Add-ons on Silver/Gold are opt-in during checkout (Telegram VIP, Tip of the Day, etc).
@@ -83,7 +83,7 @@ BetsPlug is an analytics and educational tool. It does not guarantee profit and 
 - Accuracy broken down by sport and league.
 - Rolling accuracy trend chart over time.
 - System status panel showing data source health.
-- Sidebar navigation: Dashboard, Predictions, Results, Bet of the Day, Track Record, Live Matches, Weekly Report, Strategy Lab, Reports, Admin (internal only), Settings, Deals.
+- Sidebar navigation: Dashboard, Predictions, Results, Pick of the Day, Track Record, Live Matches, Weekly Report, Strategy Lab, Reports, Admin (internal only), Settings, Deals.
 
 ## Languages supported
 The BetsPlug website is available in English, Dutch, German, French, Spanish, Italian, Swahili and Indonesian.

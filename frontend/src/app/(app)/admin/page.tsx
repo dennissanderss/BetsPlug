@@ -15,6 +15,7 @@ import {
   Search,
   BarChart3,
   ClipboardList,
+  FlaskConical,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -28,6 +29,7 @@ import UserManager from "@/components/admin/user-manager";
 import SeoDashboard from "@/components/admin/seo-dashboard";
 import AnalyticsSettings from "@/components/admin/analytics-settings";
 import GoalsNotesTab from "@/components/admin/goals-notes-tab";
+import StrategyTiersTab from "@/components/admin/strategy-tiers-tab";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -699,6 +701,11 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
 export default function AdminPage() {
   const [activeTab, setActiveTab] = React.useState("datasources");
 
+  // Grant admin tier so paywall is bypassed when browsing from admin
+  React.useEffect(() => {
+    localStorage.setItem("betsplug_tier", "platinum");
+  }, []);
+
   const { data: sources = [] } = useQuery<DataSourceHealth[]>({
     queryKey: ["data-sources"],
     queryFn: () => api.getDataSources(),
@@ -764,6 +771,11 @@ export default function AdminPage() {
       label: "Goals & Notes",
       icon: ClipboardList,
     },
+    {
+      id: "strategy-tiers",
+      label: "Strategy Tiers",
+      icon: FlaskConical,
+    },
   ];
 
   return (
@@ -818,6 +830,7 @@ export default function AdminPage() {
         {activeTab === "seo" && <SeoDashboard />}
         {activeTab === "analytics" && <AnalyticsSettings />}
         {activeTab === "goals" && <GoalsNotesTab />}
+        {activeTab === "strategy-tiers" && <StrategyTiersTab />}
       </div>
     </div>
   );

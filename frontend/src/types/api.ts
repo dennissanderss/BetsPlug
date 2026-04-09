@@ -284,6 +284,11 @@ export interface FixturePrediction {
   confidence: number;
   model_name: string | null;
   predicted_at?: string;
+  pick?: string | null;
+  reasoning?: string | null;
+  edge?: Record<string, number> | null;
+  implied_probabilities?: Record<string, number> | null;
+  top_features?: Array<{ feature: string; importance: number }> | null;
 }
 
 /** Shape returned by /api/fixtures/today, /upcoming, /results */

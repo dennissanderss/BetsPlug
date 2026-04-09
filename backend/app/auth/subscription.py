@@ -6,13 +6,13 @@ subscription before allowing access to premium features.
 
 Free tier gets:
 - Limited predictions (last 3 days, max 5 per page)
-- No Bet of the Day
+- No Pick of the Day
 - No strategy/backtest access
 - No advanced analytics
 
 Paid tier gets:
 - All predictions (unlimited)
-- Bet of the Day
+- Pick of the Day
 - Full strategy lab + backtesting
 - Advanced analytics & API access
 - PDF reports

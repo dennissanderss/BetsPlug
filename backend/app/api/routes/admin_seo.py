@@ -57,7 +57,7 @@ _SEO_PAGES: List[dict] = [
     },
     {
         "path": "/bet-of-the-day",
-        "title": "Bet of the Day - Betsplug",
+        "title": "Pick of the Day - Betsplug",
         "title_length": 26,
         "title_score": "good",
         "meta_description": "Our highest-confidence pick each day, backed by data analysis.",

@@ -147,7 +147,7 @@ export default function BetOfTheDayPage() {
           </div>
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight gradient-text">
-              Bet of the Day
+              Pick of the Day
             </h1>
             <p className="mt-1 text-sm text-slate-400">
               Our AI&apos;s highest-conviction pick for today
@@ -166,7 +166,7 @@ export default function BetOfTheDayPage() {
         <div className="glass-card flex flex-col items-center justify-center gap-4 py-20 text-center">
           <Trophy className="h-12 w-12 text-slate-600" />
           <h2 className="text-xl font-bold text-slate-300">
-            No Bet of the Day Yet
+            No Pick of the Day Yet
           </h2>
           <p className="max-w-md text-sm text-slate-500">
             Our AI hasn&apos;t found a match meeting the minimum confidence threshold (65%)
