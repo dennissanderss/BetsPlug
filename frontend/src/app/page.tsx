@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import {
@@ -25,18 +26,19 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 import { GetStartedButton } from "@/components/ui/get-started-button";
-import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
-import { TestimonialsSection } from "@/components/ui/testimonials-section";
-import { SocialProofPopup } from "@/components/ui/social-proof-popup";
-import { SeoSection } from "@/components/ui/seo-section";
-import { LatestArticlesSection } from "@/components/ui/latest-articles-section";
-import { FloatingSports } from "@/components/ui/floating-sports";
 import { LeaguesTicker } from "@/components/ui/leagues-ticker";
-import { HowItWorks } from "@/components/ui/how-it-works";
-import { ComparisonTable } from "@/components/ui/comparison-table";
-import { PricingSection } from "@/components/ui/pricing-section";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+
+const BetsPlugFooter = dynamic(() => import("@/components/ui/betsplug-footer").then(m => m.BetsPlugFooter), { ssr: true });
+const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section").then(m => m.TestimonialsSection), { ssr: false });
+const SocialProofPopup = dynamic(() => import("@/components/ui/social-proof-popup").then(m => m.SocialProofPopup), { ssr: false });
+const SeoSection = dynamic(() => import("@/components/ui/seo-section").then(m => m.SeoSection), { ssr: false });
+const FloatingSports = dynamic(() => import("@/components/ui/floating-sports").then(m => m.FloatingSports), { ssr: false });
+const HowItWorks = dynamic(() => import("@/components/ui/how-it-works").then(m => m.HowItWorks), { ssr: false });
+const ComparisonTable = dynamic(() => import("@/components/ui/comparison-table").then(m => m.ComparisonTable), { ssr: false });
+const PricingSection = dynamic(() => import("@/components/ui/pricing-section").then(m => m.PricingSection), { ssr: false });
+const LatestArticlesSection = dynamic(() => import("@/components/ui/latest-articles-section").then(m => m.LatestArticlesSection), { ssr: false });
 
 // ─── Featured match data ─────────────────────────────────────────────────────
 
