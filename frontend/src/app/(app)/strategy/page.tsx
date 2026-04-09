@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
-import type { TrackrecordSummary } from "@/types/api";
+import type { TrackrecordSummary, StrategyResponse } from "@/types/api";
 
 // ─── Minimum predictions required before a backtest is meaningful ────────────
 
@@ -471,10 +471,101 @@ function SimulatedDemoSection() {
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
+// ─── Strategy Metrics Card (real data from backend) ─────────────────────────
+
+function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
+  const { data: metrics, isLoading } = useQuery({
+    queryKey: ["strategy-metrics", strategy.id],
+    queryFn: async () => {
+      const resp = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/strategies/${strategy.id}/metrics`
+      );
+      return resp.json();
+    },
+    staleTime: 60_000,
+  });
+
+  const colors: Record<string, { accent: string; bg: string; bar: string; header: string }> = {
+    "Value Home": { accent: "text-blue-400", bg: "bg-blue-500/10", bar: "bg-blue-500", header: "from-blue-500/10 to-blue-500/0" },
+    "High Confidence Favorites": { accent: "text-emerald-400", bg: "bg-emerald-500/10", bar: "bg-emerald-500", header: "from-emerald-500/10 to-emerald-500/0" },
+    "Underdog Edge": { accent: "text-amber-400", bg: "bg-amber-500/10", bar: "bg-amber-500", header: "from-amber-500/10 to-amber-500/0" },
+    "Form Mismatch": { accent: "text-purple-400", bg: "bg-purple-500/10", bar: "bg-purple-500", header: "from-purple-500/10 to-purple-500/0" },
+  };
+  const c = colors[strategy.name] || colors["Value Home"];
+
+  return (
+    <div className="glass-card flex flex-col overflow-hidden animate-fade-in">
+      <div className={cn("bg-gradient-to-r p-5", c.header)}>
+        <div className="flex items-start justify-between gap-3 mb-2">
+          <div>
+            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">Football · Match Result</p>
+            <h3 className="text-base font-bold text-slate-100">{strategy.name}</h3>
+          </div>
+          {metrics?.has_data ? (
+            <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-400">
+              <CheckCircle2 className="h-3 w-3" /> Backtested
+            </span>
+          ) : (
+            <span className="flex items-center gap-1.5 rounded-full border border-slate-500/30 bg-slate-500/10 px-2.5 py-1 text-[11px] font-semibold text-slate-400">
+              <Clock className="h-3 w-3" /> {isLoading ? "Loading..." : "No picks yet"}
+            </span>
+          )}
+        </div>
+        <p className="text-xs leading-relaxed text-slate-400">{strategy.description}</p>
+      </div>
+
+      {/* Metrics */}
+      {metrics?.has_data && (
+        <div className="px-5 py-4 border-t border-white/[0.06]">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
+              <p className="text-[10px] uppercase tracking-wider text-slate-500">Win Rate</p>
+              <p className={cn("text-lg font-bold tabular-nums", c.accent)}>{(metrics.winrate * 100).toFixed(1)}%</p>
+            </div>
+            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
+              <p className="text-[10px] uppercase tracking-wider text-slate-500">ROI</p>
+              <p className={cn("text-lg font-bold tabular-nums", metrics.roi >= 0 ? "text-emerald-400" : "text-red-400")}>
+                {metrics.roi >= 0 ? "+" : ""}{(metrics.roi * 100).toFixed(1)}%
+              </p>
+            </div>
+            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
+              <p className="text-[10px] uppercase tracking-wider text-slate-500">Sample Size</p>
+              <p className="text-lg font-bold tabular-nums text-slate-100">{metrics.sample_size}</p>
+            </div>
+            <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
+              <p className="text-[10px] uppercase tracking-wider text-slate-500">Max Drawdown</p>
+              <p className="text-lg font-bold tabular-nums text-red-400">{metrics.max_drawdown.toFixed(1)}u</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rules */}
+      <div className="px-5 pb-5 flex-1">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 mt-3">Rules</p>
+        <ul className="space-y-1">
+          {(strategy.rules as { feature: string; operator: string; value: unknown }[]).map((rule, i) => (
+            <li key={i} className="flex items-start gap-2 text-xs text-slate-400">
+              <span className={cn("flex-shrink-0 font-bold tabular-nums mt-px", c.accent)}>·</span>
+              {rule.feature} {rule.operator} {Array.isArray(rule.value) ? `[${rule.value.join(", ")}]` : String(rule.value)}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 export default function StrategyPage() {
   const { data: summary, isLoading: summaryLoading } = useQuery({
     queryKey: ["trackrecord-summary"],
     queryFn: () => api.getTrackrecordSummary(),
+  });
+
+  const { data: realStrategies, isLoading: strategiesLoading } = useQuery({
+    queryKey: ["strategies"],
+    queryFn: () => api.getStrategies(),
+    staleTime: 60_000,
   });
 
   const dataStatus = getDataStatus(summary);
@@ -529,12 +620,33 @@ export default function StrategyPage() {
         </div>
       </div>
 
+      {/* ── Real Strategies from Backend ─────────────────────────────────────── */}
+      {realStrategies && realStrategies.length > 0 && (
+        <>
+          <div className="flex items-center gap-3">
+            <BarChart3 className="h-5 w-5 text-emerald-400" />
+            <div>
+              <h2 className="text-lg font-bold text-slate-100">Active Strategies</h2>
+              <p className="text-xs text-slate-500">Real strategies with live performance metrics</p>
+            </div>
+            <span className="ml-auto text-[10px] font-semibold uppercase tracking-widest text-emerald-600 border border-emerald-700 rounded px-2 py-0.5">
+              Live data
+            </span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            {realStrategies.map((s) => (
+              <RealStrategyCard key={s.id} strategy={s} />
+            ))}
+          </div>
+        </>
+      )}
+
       {/* ── Strategy Templates Section Header ─────────────────────────────────── */}
       <div className="flex items-center gap-3">
         <BarChart3 className="h-5 w-5 text-blue-400" />
         <div>
           <h2 className="text-lg font-bold text-slate-100">Strategy Templates</h2>
-          <p className="text-xs text-slate-500">Not yet backtested on live data</p>
+          <p className="text-xs text-slate-500">Additional templates for future backtesting</p>
         </div>
         <span className="ml-auto text-[10px] font-semibold uppercase tracking-widest text-slate-600 border border-slate-700 rounded px-2 py-0.5">
           Templates only
