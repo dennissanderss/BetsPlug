@@ -968,6 +968,51 @@ const en = {
   "checkout.successBody":
     "Your demo checkout was received. In production you'd now be redirected to your dashboard — for now, explore the site.",
   "checkout.successCta": "Go to dashboard",
+
+  /* ─── Welcome / thank-you page ─────────────────────────── */
+  "welcome.meta.title": "Welcome aboard — You're officially a BetsPlug member",
+  "welcome.meta.description":
+    "Your BetsPlug membership is active. Log in to see today's picks, track your ROI and start winning smarter — we've got your back.",
+
+  "welcome.badge": "You're in.",
+  "welcome.title": "Welcome to the inside circle.",
+  "welcome.titleHighlight": "This is where it starts.",
+  "welcome.subtitle":
+    "No more chasing tipsters, no more second-guessing. You're now part of a community that wins with data, discipline and a little bit of swagger. Let's make this the year you stop gambling — and start investing.",
+
+  "welcome.trialTitle": "Your 7-day free trial is active",
+  "welcome.trialBody":
+    "You won't be charged today. Cancel anytime in the next 7 days and your account quietly pauses — no questions, no pressure.",
+  "welcome.paidTitle": "Your membership is active",
+  "welcome.paidBody":
+    "Your account is fully unlocked. Every pick, every stat, every edge — it's all waiting for you inside the dashboard.",
+
+  "welcome.ctaPrimary": "Log in to your dashboard",
+  "welcome.ctaSecondary": "Back to homepage",
+  "welcome.emailHint":
+    "A confirmation email is on its way. Check your inbox (and spam, just in case).",
+
+  "welcome.nextTitle": "What happens next",
+  "welcome.next1Title": "Log in with your new account",
+  "welcome.next1Body":
+    "Use the email and password you just created to unlock the member dashboard.",
+  "welcome.next2Title": "See today's picks",
+  "welcome.next2Body":
+    "Curated, data-driven selections land every morning. No fluff, just value.",
+  "welcome.next3Title": "Track your ROI",
+  "welcome.next3Body":
+    "Watch the numbers go up with our live bankroll tracker and weekly performance reports.",
+
+  "welcome.statMembers": "active members",
+  "welcome.statRoi": "average monthly ROI",
+  "welcome.statPicks": "picks posted in the last 30 days",
+
+  "welcome.quote":
+    "\"Finally a service that treats betting like a craft, not a lottery ticket. BetsPlug turned my weekends around.\"",
+  "welcome.quoteAuthor": "— Thomas R., member since 2024",
+
+  "welcome.footerNote":
+    "Questions? Reach us at support@betsplug.com — a real human will answer.",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -1893,6 +1938,51 @@ const nl: Dictionary = {
   "checkout.successBody":
     "Je demo-checkout is ontvangen. In productie zou je nu worden doorgestuurd naar je dashboard — verken voor nu de site.",
   "checkout.successCta": "Naar dashboard",
+
+  /* Welcome / thank-you */
+  "welcome.meta.title": "Welkom aan boord — Je bent nu officieel BetsPlug-lid",
+  "welcome.meta.description":
+    "Je BetsPlug-lidmaatschap staat klaar. Log in om de picks van vandaag te zien, je ROI bij te houden en slimmer te beginnen winnen.",
+
+  "welcome.badge": "Je bent binnen.",
+  "welcome.title": "Welkom in de inner circle.",
+  "welcome.titleHighlight": "Hier begint het.",
+  "welcome.subtitle":
+    "Geen tipsters meer achterna zitten, geen twijfels meer. Je maakt nu deel uit van een community die wint met data, discipline en een beetje lef. Laat dit het jaar worden waarin je stopt met gokken — en start met investeren.",
+
+  "welcome.trialTitle": "Je 7-daagse gratis proefperiode is actief",
+  "welcome.trialBody":
+    "Je wordt vandaag nog niets in rekening gebracht. Annuleer binnen 7 dagen en je account wordt rustig gepauzeerd — geen vragen, geen druk.",
+  "welcome.paidTitle": "Je lidmaatschap is actief",
+  "welcome.paidBody":
+    "Je account is volledig ontgrendeld. Elke pick, elke statistiek, elke edge — het staat klaar in het dashboard.",
+
+  "welcome.ctaPrimary": "Log in op je dashboard",
+  "welcome.ctaSecondary": "Terug naar de homepage",
+  "welcome.emailHint":
+    "Er is een bevestigingsmail onderweg. Check je inbox (en voor de zekerheid ook je spam).",
+
+  "welcome.nextTitle": "Dit is wat er nu gebeurt",
+  "welcome.next1Title": "Log in met je nieuwe account",
+  "welcome.next1Body":
+    "Gebruik het e-mailadres en wachtwoord dat je net hebt aangemaakt om het dashboard te openen.",
+  "welcome.next2Title": "Bekijk de picks van vandaag",
+  "welcome.next2Body":
+    "Elke ochtend verschijnen zorgvuldig geselecteerde, data-gedreven picks. Geen ruis, alleen waarde.",
+  "welcome.next3Title": "Volg je ROI",
+  "welcome.next3Body":
+    "Zie je bankroll groeien met onze live tracker en wekelijkse performance-rapporten.",
+
+  "welcome.statMembers": "actieve leden",
+  "welcome.statRoi": "gemiddelde maandelijkse ROI",
+  "welcome.statPicks": "picks de afgelopen 30 dagen",
+
+  "welcome.quote":
+    "\"Eindelijk een dienst die wedden behandelt als een vak, niet als een loterij. BetsPlug heeft mijn weekends compleet veranderd.\"",
+  "welcome.quoteAuthor": "— Thomas R., lid sinds 2024",
+
+  "welcome.footerNote":
+    "Vragen? Mail ons op support@betsplug.com — er antwoordt een echt mens.",
 };
 
 /* ── German ────────────────────────────────────────────────── */

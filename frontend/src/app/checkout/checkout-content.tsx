@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Bell,
@@ -159,6 +159,7 @@ export function CheckoutContent() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const params = useSearchParams();
+  const router = useRouter();
 
   // Plan from URL (default Gold, the popular plan)
   const planParam = (params?.get("plan") ?? "gold").toLowerCase() as PlanId;
@@ -361,11 +362,17 @@ export function CheckoutContent() {
     setTriedAdvance((prev) => ({ ...prev, 3: true }));
     if (!step3Valid) return;
     setSubmitting(true);
-    // Simulate processing
+    // Simulate processing, then redirect to the welcome page.
+    // The welcome page is the post-purchase "thank you" experience
+    // and handles its own CTA back into the app.
     setTimeout(() => {
-      setSubmitting(false);
-      setSubmitted(true);
-    }, 1400);
+      const params = new URLSearchParams({
+        plan: plan.id,
+        billing,
+        trial: trialActive ? "1" : "0",
+      });
+      router.push(`${loc("/welcome")}?${params.toString()}`);
+    }, 1200);
   };
 
   /* ── Render ───────────────────────────────────────────────── */

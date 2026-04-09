@@ -130,6 +130,16 @@ export const routeTable = {
     sw: "/malipo",
     id: "/pembayaran",
   },
+  "/welcome": {
+    en: "/welcome",
+    nl: "/welkom",
+    de: "/willkommen",
+    fr: "/bienvenue",
+    es: "/bienvenida",
+    it: "/benvenuto",
+    sw: "/karibu",
+    id: "/selamat-datang",
+  },
   "/deals": {
     en: "/deals",
     nl: "/aanbiedingen",
