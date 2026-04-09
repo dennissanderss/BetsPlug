@@ -20,6 +20,7 @@ import {
   Gift,
   BookOpen,
   Trophy,
+  MapPin,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/lib/i18n";
@@ -31,9 +32,11 @@ interface NavItem {
   href: string;
   icon: React.ElementType;
   badge?: string;
+  badgeColor?: string;
 }
 
 const navItems: NavItem[] = [
+  { labelKey: "nav.jouwRoute", fallback: "Jouw Route", href: "/jouw-route", icon: MapPin, badge: "START", badgeColor: "bg-emerald-500" },
   { labelKey: "nav.about",          fallback: "About",          href: "/about",          icon: BookOpen },
   { labelKey: "nav.dashboard",      fallback: "Dashboard",      href: "/dashboard",      icon: LayoutDashboard },
   { labelKey: "nav.search",         fallback: "Search",         href: "/search",         icon: Search },
@@ -114,6 +117,19 @@ export function Sidebar() {
                   <span className="text-[10px] font-bold text-red-400 tracking-wider">
                     LIVE
                   </span>
+                </span>
+              )}
+
+              {/* START badge */}
+              {item.badge === "START" && (
+                <span
+                  className="text-[10px] font-bold tracking-wider text-white px-1.5 py-0.5 rounded"
+                  style={{
+                    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                    boxShadow: "0 0 8px rgba(16,185,129,0.45)",
+                  }}
+                >
+                  START
                 </span>
               )}
 
