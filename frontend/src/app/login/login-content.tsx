@@ -149,7 +149,7 @@ export function LoginContent() {
                 </span>
               </div>
 
-              <h1 className="max-w-xl text-balance text-5xl font-extrabold leading-[1.05] tracking-tight xl:text-6xl">
+              <h1 className="max-w-xl text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight xl:text-5xl">
                 {t("login.title")}{" "}
                 <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
                   {t("login.titleHighlight")}

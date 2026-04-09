@@ -133,9 +133,13 @@
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.15;
+    /* Allow long compound words (NL/DE) to wrap gracefully
+       without the ugly soft-hyphen breaks that `hyphens: auto`
+       produces on huge display type. `break-words` is still
+       the safety net if a word truly exceeds the container. */
     overflow-wrap: break-word;
     word-wrap: break-word;
-    hyphens: auto;
+    hyphens: manual;
   }
 
   /* ── Generic text overflow safety net ──

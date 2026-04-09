@@ -211,7 +211,7 @@ export function WelcomeContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mx-auto max-w-4xl text-balance break-words text-[2rem] font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
+            className="mx-auto max-w-4xl text-balance break-words text-[2rem] font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl"
           >
             {t("welcome.title")}{" "}
             <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
