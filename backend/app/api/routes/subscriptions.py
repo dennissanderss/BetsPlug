@@ -54,6 +54,12 @@ class CreateCheckoutRequest(BaseModel):
     plan: str  # bronze, silver, gold, platinum (legacy: basic, standard, premium, lifetime)
     billing: str = "monthly"  # "monthly" or "yearly"
     addons: list[str] = []    # ["telegram", "tipOfDay"]
+    # When True we wrap the subscription in a 7-day Stripe-native trial:
+    # the customer enters a payment method but is charged €0,00 today,
+    # then the full plan price kicks in on day 8. Only valid for the
+    # recurring plans (silver/gold). Bronze/Platinum are one-time so a
+    # trial makes no sense for them.
+    with_trial: bool = False
     success_url: str = "http://localhost:3000/subscriptions?success=true"
     cancel_url: str = "http://localhost:3000/subscriptions?cancelled=true"
 
@@ -335,6 +341,11 @@ async def create_checkout_session(
     if mode == "payment":
         billing = "monthly"  # canonical value; mode=payment ignores cadence
 
+    # Trial flag is only valid for recurring plans (silver/gold). Bronze
+    # is already a €0,01 one-time charge and Platinum is a one-time
+    # lifetime purchase, neither has any meaningful "trial" concept.
+    with_trial = bool(body.with_trial) and mode == "subscription"
+
     # De-duplicate and validate add-on IDs.
     requested_addons = list(dict.fromkeys(body.addons or []))
     unknown = [a for a in requested_addons if a not in VALID_ADDON_IDS]
@@ -385,6 +396,7 @@ async def create_checkout_session(
                 "addons": ",".join(requested_addons),
                 "user_id": str(current_user.id),
                 "user_email": current_user.email,
+                "with_trial": "1" if with_trial else "0",
             }
 
             # Explicit list so the customer always sees a real choice on the
@@ -396,8 +408,8 @@ async def create_checkout_session(
             # Link on supported devices — they don't need separate entries.
             #
             # `revolut_pay` only supports one-time payments, not recurring,
-            # so we add it for `mode="payment"` (Bronze trial / Platinum
-            # lifetime) but not for `mode="subscription"` (Silver / Gold).
+            # so we add it for `mode="payment"` (Platinum lifetime) but
+            # not for `mode="subscription"` (Silver / Gold).
             #
             # Each method MUST be enabled in the Stripe Dashboard under
             # Settings → Payments → Payment methods, otherwise Stripe will
@@ -406,16 +418,39 @@ async def create_checkout_session(
             if mode == "payment":
                 payment_method_types.append("revolut_pay")
 
-            session = stripe.checkout.Session.create(
-                line_items=line_items,
-                mode=mode,
-                success_url=body.success_url,
-                cancel_url=body.cancel_url,
-                metadata=metadata,
-                client_reference_id=str(current_user.id),
-                customer_email=current_user.email,
-                payment_method_types=payment_method_types,
-            )
+            session_kwargs: dict = {
+                "line_items": line_items,
+                "mode": mode,
+                "success_url": body.success_url,
+                "cancel_url": body.cancel_url,
+                "metadata": metadata,
+                "client_reference_id": str(current_user.id),
+                "customer_email": current_user.email,
+                "payment_method_types": payment_method_types,
+            }
+
+            # Stripe-native 7-day trial. The customer enters a payment
+            # method but is charged €0,00 today; Stripe verifies the card
+            # via SetupIntent (so fake / declined cards are still rejected
+            # — same fraud protection as the old €0,01 Bronze workaround,
+            # but now Card / PayPal / Apple Pay all work because the
+            # amount-minimum filter doesn't kick in).
+            if with_trial:
+                session_kwargs["subscription_data"] = {
+                    "trial_period_days": 7,
+                    "metadata": {
+                        "plan": plan,
+                        "billing": billing,
+                        "user_id": str(current_user.id),
+                    },
+                }
+                # Force collection of a payment method even though nothing
+                # is charged today — without this Stripe could allow the
+                # trial without a card on file, which defeats the
+                # anti-fraud purpose.
+                session_kwargs["payment_method_collection"] = "always"
+
+            session = stripe.checkout.Session.create(**session_kwargs)
 
             return CheckoutResponse(
                 checkout_url=session.url,

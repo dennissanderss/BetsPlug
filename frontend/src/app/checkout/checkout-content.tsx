@@ -463,11 +463,11 @@ export function CheckoutContent() {
       planTotal,
       addons,
       recurring,
-      // When the trial is active we still take a symbolic €0.01 charge
-      // today via Stripe so we can verify the card is real. This is the
-      // same fraud-protection mechanism as the Bronze tier — it stops
-      // people from farming free trials with throwaway / fake cards.
-      dueToday: trialActive ? 0.01 : recurring,
+      // Trial flow uses Stripe's native `trial_period_days`, so the
+      // customer is charged €0,00 today and the full plan price kicks
+      // in on day 8. Stripe still verifies the card via SetupIntent so
+      // fake / declined cards are rejected up-front.
+      dueToday: trialActive ? 0 : recurring,
       yearlySavings,
       period: billing,
     };
@@ -582,17 +582,18 @@ export function CheckoutContent() {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
-          // When the user opted for the 7-day trial we send the Bronze
-          // plan id so Stripe charges only €0.01 (the Bronze Trial price).
-          // On "direct subscribe" we send the real plan.
-          plan: trialActive ? "bronze" : plan.id,
-          // Trial is always treated as monthly because it converts into a
-          // monthly subscription. Bronze itself has no yearly option either.
-          billing: trialActive ? "monthly" : billing,
-          // Add-ons are billed at the same cadence as the plan. Platinum
-          // already filters these out via chargeableUpsellIds (everything
-          // is included), and trial flow buys Bronze which has no add-ons.
+          // Always send the real plan id. The 7-day trial is now wrapped
+          // around the real subscription via Stripe's native
+          // `trial_period_days`, so the customer is charged €0,00 today
+          // and the full plan price kicks in on day 8.
+          plan: plan.id,
+          billing,
+          // Add-ons are not bundled into the trial flow — keeping the
+          // trial scope to "just the base plan" matches the old UX and
+          // means the post-trial charge is exactly the plan price the
+          // user agreed to, with no surprise add-ons on day 8.
           addons: trialActive ? [] : chargeableUpsellIds,
+          with_trial: trialActive,
           // Post-purchase landing page. Stripe will interpolate the
           // session id into {CHECKOUT_SESSION_ID} so the thank-you
           // page can poll /subscriptions/me until the webhook has
@@ -1713,7 +1714,7 @@ function OrderSummary({
                   {t("checkout.total")}
                 </span>
                 <span className="text-2xl font-extrabold text-green-400">
-                  {formatEUR(0.01)}
+                  {formatEUR(0)}
                 </span>
               </div>
               <div className="mt-2 flex items-start gap-2 rounded-xl border border-green-500/25 bg-green-500/[0.06] p-3">

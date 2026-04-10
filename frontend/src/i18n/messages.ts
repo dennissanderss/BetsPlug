@@ -897,12 +897,12 @@ const en = {
   "checkout.trialPausedNote":
     "Cancel during the trial and your account is paused - not deleted. You can resume any time.",
   "checkout.trialBadge": "7-day free trial active",
-  "checkout.trialDueToday": "€0.01 today",
+  "checkout.trialDueToday": "€0.00 today",
   "checkout.trialFirstCharge": "First charge on {date}",
   "checkout.trialNotAvailable":
     "The free trial is only available on monthly and yearly plans.",
   "checkout.trialPaymentNote":
-    "We charge a symbolic €0.01 today through Stripe to verify your card and prevent fake-trial abuse. Cancel any time before {date} and nothing else is billed.",
+    "Nothing is charged today — Stripe verifies your card so we can start your subscription on {date}. Cancel any time before then and you won't be billed.",
   "checkout.submitTrial": "Start my 7-day free trial",
 
   "checkout.freeTrial": "14-day free trial",
@@ -2092,12 +2092,12 @@ const nl: Dictionary = {
   "checkout.trialPausedNote":
     "Zeg je op tijdens de proefperiode? Dan wordt je account gepauzeerd - niet verwijderd. Je kunt altijd hervatten.",
   "checkout.trialBadge": "7 dagen gratis proberen actief",
-  "checkout.trialDueToday": "€0,01 vandaag",
+  "checkout.trialDueToday": "€0,00 vandaag",
   "checkout.trialFirstCharge": "Eerste afschrijving op {date}",
   "checkout.trialNotAvailable":
     "De gratis proefperiode is alleen beschikbaar bij maandelijkse en jaarlijkse abonnementen.",
   "checkout.trialPaymentNote":
-    "We schrijven vandaag een symbolische €0,01 af via Stripe om je kaart te verifiëren en misbruik van de proefperiode te voorkomen. Zeg je op vóór {date}? Dan wordt er verder niets in rekening gebracht.",
+    "Vandaag wordt er niets afgeschreven — Stripe verifieert alleen je kaart zodat je abonnement op {date} kan starten. Zeg je op vóór die datum? Dan wordt er nooit iets in rekening gebracht.",
   "checkout.submitTrial": "Start mijn 7 dagen gratis proberen",
 
   "checkout.freeTrial": "14 dagen gratis proberen",
