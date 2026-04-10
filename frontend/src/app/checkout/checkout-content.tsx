@@ -386,7 +386,10 @@ export function CheckoutContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          plan: plan.id,
+          // When the user opted for the 7-day trial we send the Bronze
+          // plan id so Stripe charges only €0.01 (the Bronze Trial price).
+          // On "direct subscribe" we send the real plan.
+          plan: trialActive ? "bronze" : plan.id,
           success_url: `${window.location.origin}${loc("/welcome")}?plan=${plan.id}&billing=${billing}&trial=${trialActive ? "1" : "0"}&success=true`,
           cancel_url: `${window.location.origin}${loc("/checkout")}?plan=${plan.id}&billing=${billing}&cancelled=true`,
         }),
