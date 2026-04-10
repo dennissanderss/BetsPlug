@@ -93,8 +93,19 @@ export default function RegisterPage() {
         full_name: fullName.trim() || undefined,
       });
       auth.login(res.access_token, res.user);
+      // After signup we send new users to /jouw-route ("Your
+      // Route"), the intended onboarding hub with a START badge
+      // in the sidebar. It's a friendlier landing than the old
+      // /dashboard redirect and crucially avoids pushing people
+      // straight into the subscription/checkout wizard — users
+      // complained about landing in a paywall instead of a
+      // welcome screen. If an explicit `?next=` query param was
+      // provided (e.g. the user clicked Upgrade first and got
+      // bounced through register), we honour it so upgrade flows
+      // still work. We use router.replace so the Back button
+      // doesn't take the user back to the register form.
       const next = params?.get("next");
-      router.push(next || loc("/dashboard"));
+      router.replace(next || loc("/jouw-route"));
     } catch (err) {
       if (err instanceof ApiError) {
         // Map common cases to friendlier copy — the backend may
