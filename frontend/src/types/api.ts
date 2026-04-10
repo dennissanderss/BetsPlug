@@ -439,6 +439,13 @@ export interface BlogPostUpdate {
 }
 
 // Admin Users
+export interface AdminUserSubscription {
+  plan: string;
+  status: string;
+  current_period_end: string | null;
+  is_lifetime: boolean;
+}
+
 export interface AdminUser {
   id: string;
   email: string;
@@ -448,6 +455,7 @@ export interface AdminUser {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  subscription: AdminUserSubscription | null;
 }
 
 // Site Settings

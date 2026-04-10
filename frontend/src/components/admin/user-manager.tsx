@@ -41,6 +41,62 @@ function RoleBadge({ role }: { role: string }) {
   );
 }
 
+function PlanBadge({ plan }: { plan: string | null }) {
+  if (!plan) {
+    return (
+      <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold bg-slate-500/15 text-slate-400">
+        Free
+      </span>
+    );
+  }
+  const colorMap: Record<string, string> = {
+    basic: "bg-slate-500/15 text-slate-400",
+    standard: "bg-slate-500/15 text-slate-400",
+    premium: "bg-amber-500/15 text-amber-400",
+    lifetime: "bg-purple-500/15 text-purple-400",
+  };
+  const cls = colorMap[plan.toLowerCase()] ?? "bg-slate-500/15 text-slate-400";
+
+  return (
+    <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize", cls)}>
+      {plan}
+    </span>
+  );
+}
+
+function SubscriptionStatusBadge({ status }: { status: string | null }) {
+  if (!status) return <span className="text-xs text-slate-600">--</span>;
+  const colorMap: Record<string, string> = {
+    active: "bg-green-500/15 text-green-400",
+    trialing: "bg-green-500/15 text-green-400",
+    cancelled: "bg-amber-500/15 text-amber-400",
+    expired: "bg-red-500/15 text-red-400",
+    past_due: "bg-red-500/15 text-red-400",
+  };
+  const labelMap: Record<string, string> = {
+    active: "Active",
+    trialing: "Trialing",
+    cancelled: "Cancelled",
+    expired: "Expired",
+    past_due: "Past Due",
+  };
+  const cls = colorMap[status.toLowerCase()] ?? "bg-slate-500/15 text-slate-400";
+  const label = labelMap[status.toLowerCase()] ?? status;
+
+  return (
+    <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold", cls)}>
+      {label}
+    </span>
+  );
+}
+
+function formatExpiry(sub: AdminUser["subscription"]): string {
+  if (!sub) return "\u2014";
+  if (sub.is_lifetime) return "Lifetime";
+  if (!sub.current_period_end) return "\u2014";
+  return new Date(sub.current_period_end).toLocaleDateString();
+}
+
 // ─── User Manager ────────────────────────────────────────────────────────────
 
 export default function UserManager() {
@@ -113,7 +169,7 @@ export default function UserManager() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-white/[0.06]">
-              {["Email", "Username", "Role", "Status", "Joined", "Actions"].map((h) => (
+              {["Email", "Username", "Role", "Plan", "Sub Status", "Expires", "Status", "Joined", "Actions"].map((h) => (
                 <th
                   key={h}
                   className={cn(
@@ -128,9 +184,9 @@ export default function UserManager() {
           </thead>
           <tbody>
             {isLoading
-              ? Array.from({ length: 6 }).map((_, i) => (
+              ? Array.from({ length: 9 }).map((_, i) => (
                   <tr key={i} className="border-b border-white/[0.04]">
-                    {Array.from({ length: 6 }).map((__, j) => (
+                    {Array.from({ length: 9 }).map((__, j) => (
                       <td key={j} className="px-5 py-3">
                         <Skeleton className="h-4 w-full bg-white/[0.04]" />
                       </td>
@@ -140,7 +196,7 @@ export default function UserManager() {
               : (users ?? []).length === 0
               ? (
                   <tr>
-                    <td colSpan={6} className="px-5 py-12 text-center">
+                    <td colSpan={9} className="px-5 py-12 text-center">
                       <div className="flex flex-col items-center justify-center">
                         <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/[0.04]">
                           <Users className="h-6 w-6 text-slate-500" />
@@ -163,6 +219,23 @@ export default function UserManager() {
                     </td>
                     <td className="px-5 py-3">
                       <RoleBadge role={user.role} />
+                    </td>
+                    <td className="px-5 py-3">
+                      <PlanBadge plan={user.subscription?.plan ?? null} />
+                    </td>
+                    <td className="px-5 py-3">
+                      <SubscriptionStatusBadge status={user.subscription?.status ?? null} />
+                    </td>
+                    <td className="px-5 py-3 whitespace-nowrap">
+                      {user.subscription?.is_lifetime ? (
+                        <span className="rounded-full px-2.5 py-0.5 text-xs font-semibold bg-purple-500/15 text-purple-400">
+                          Lifetime
+                        </span>
+                      ) : (
+                        <span className="text-xs text-slate-500">
+                          {formatExpiry(user.subscription)}
+                        </span>
+                      )}
                     </td>
                     <td className="px-5 py-3">
                       <StatusPill status={user.is_active ? "active" : "suspended"} />
