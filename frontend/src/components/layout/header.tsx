@@ -97,9 +97,17 @@ export function Header({ className }: HeaderProps) {
   const isPlatinum = tier?.toLowerCase() === "platinum";
 
   return (
+    // ── Stacking-context fix ─────────────────────────────────────────────
+    // The ``backdrop-filter`` on this header creates its own stacking
+    // context. Without an explicit ``z-index`` it ends up painted *behind*
+    // the sibling ``<main>`` element (which comes later in DOM order), so
+    // any ``glass-card`` or ``backdrop-blur`` in the page content would
+    // swallow clicks aimed at the user-menu dropdown.
+    // ``relative z-50`` promotes the whole header (and therefore the
+    // dropdown inside it) above ``<main>`` in the parent stacking context.
     <header
       className={cn(
-        "flex h-14 shrink-0 items-center gap-4 px-4 md:px-6",
+        "relative z-50 flex h-14 shrink-0 items-center gap-4 px-4 md:px-6",
         className
       )}
       style={{
