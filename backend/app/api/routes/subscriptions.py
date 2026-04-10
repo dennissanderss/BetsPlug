@@ -387,15 +387,24 @@ async def create_checkout_session(
                 "user_email": current_user.email,
             }
 
-            # Without an explicit list Stripe's "dynamic payment methods"
-            # picks just one option for NL/EUR customers (iDEAL), so the
-            # customer never sees a card option. Listing them here forces
-            # Stripe to show all three as a real choice on the hosted
-            # checkout page. Each of these works in both `payment` and
-            # `subscription` mode for EUR. Add more (e.g. "paypal", "sofort",
-            # "sepa_debit") only after enabling them in the Stripe Dashboard
-            # under Settings → Payment methods.
-            payment_method_types = ["card", "ideal", "bancontact"]
+            # Explicit list so the customer always sees a real choice on the
+            # hosted Stripe Checkout page. Without this, Stripe's "dynamic
+            # payment methods" picks just one option for NL/EUR customers
+            # (iDEAL) and the card option disappears.
+            #
+            # `card` automatically also surfaces Apple Pay, Google Pay and
+            # Link on supported devices — they don't need separate entries.
+            #
+            # `revolut_pay` only supports one-time payments, not recurring,
+            # so we add it for `mode="payment"` (Bronze trial / Platinum
+            # lifetime) but not for `mode="subscription"` (Silver / Gold).
+            #
+            # Each method MUST be enabled in the Stripe Dashboard under
+            # Settings → Payments → Payment methods, otherwise Stripe will
+            # reject the session with `Invalid payment_method_type`.
+            payment_method_types = ["card", "ideal", "paypal"]
+            if mode == "payment":
+                payment_method_types.append("revolut_pay")
 
             session = stripe.checkout.Session.create(
                 line_items=line_items,
