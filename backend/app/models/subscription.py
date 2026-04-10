@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import enum
+import uuid
 from datetime import datetime, timezone
 
 from sqlalchemy import (
@@ -79,5 +80,3 @@ class Payment(UUIDPrimaryKey, TimestampMixin, Base):
     plan_type: Mapped[PlanType] = mapped_column(SAEnum(PlanType), nullable=False)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
 
-
-import uuid  # noqa: E402 — needed for type annotation above
