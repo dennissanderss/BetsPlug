@@ -260,7 +260,7 @@ class ApiClient {
   }
 
   adminDeleteExpense(id: string) {
-    return this.request<{ message: string }>(
+    return this.request<{ status: string; id: string }>(
       `/admin/finance/expenses/${id}`,
       { method: "DELETE" }
     );

@@ -327,16 +327,19 @@ async def update_expense(
     return ExpenseOut.model_validate(row)
 
 
-@router.delete(
-    "/expenses/{expense_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-)
+@router.delete("/expenses/{expense_id}")
 async def delete_expense(
     expense_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(require_admin),
-) -> None:
-    """Delete a manual expense."""
+) -> dict:
+    """Delete a manual expense.
+
+    Returns a small JSON body instead of 204 No Content because newer
+    FastAPI versions refuse to create a route with ``status_code=204`` and
+    a non-``None`` return annotation — the assertion fires at import time
+    and brings the whole app down.
+    """
     result = await db.execute(
         select(ManualExpense).where(ManualExpense.id == expense_id)
     )
@@ -345,4 +348,4 @@ async def delete_expense(
         raise HTTPException(status_code=404, detail="Expense not found")
     await db.delete(row)
     await db.flush()
-    return None
+    return {"status": "deleted", "id": str(expense_id)}

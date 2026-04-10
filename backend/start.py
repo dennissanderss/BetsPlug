@@ -21,8 +21,104 @@ import time
 import uvicorn
 
 
+def bootstrap_alembic_if_needed() -> None:
+    """If the DB already has tables but no ``alembic_version``, stamp head.
+
+    Handles the edge case where a previous deploy populated the schema via
+    ``Base.metadata.create_all`` (before alembic was wired up), and now we
+    want to run migrations for the first time. Without this step
+    ``alembic upgrade head`` would try to re-run the initial migration and
+    crash with ``DuplicateTable: relation "data_sources" already exists``.
+
+    Strategy:
+      - If ``alembic_version`` already exists → do nothing (normal flow).
+      - If the DB is empty → do nothing (normal flow; all migrations run).
+      - Otherwise → ``alembic stamp head`` so alembic assumes the schema is
+        already current. Any tables added later (e.g. ``subscriptions``) are
+        created by the ``Base.metadata.create_all`` safety net in
+        ``app/main.py`` lifespan.
+    """
+    try:
+        from sqlalchemy import create_engine, inspect
+    except Exception as exc:  # pragma: no cover
+        print(f"[start.py] Cannot import SQLAlchemy for bootstrap: {exc}", flush=True)
+        return
+
+    db_url = os.environ.get("DATABASE_URL", "")
+    if not db_url:
+        print("[start.py] No DATABASE_URL — skipping alembic bootstrap check", flush=True)
+        return
+
+    # Normalise the URL to a sync psycopg2 URL
+    sync_url = db_url.replace("+asyncpg", "")
+    if sync_url.startswith("postgres://"):
+        sync_url = sync_url.replace("postgres://", "postgresql://", 1)
+
+    try:
+        engine = create_engine(sync_url)
+        try:
+            with engine.connect() as conn:
+                inspector = inspect(conn)
+                tables = set(inspector.get_table_names())
+        finally:
+            engine.dispose()
+    except Exception as exc:
+        print(
+            f"[start.py] WARNING: alembic bootstrap DB probe failed: {exc}",
+            file=sys.stderr,
+            flush=True,
+        )
+        return
+
+    if "alembic_version" in tables:
+        print("[start.py] alembic_version exists — normal migration flow", flush=True)
+        return
+
+    if not tables:
+        print("[start.py] Empty database — normal migration flow", flush=True)
+        return
+
+    print(
+        f"[start.py] Found {len(tables)} pre-existing tables but no "
+        f"alembic_version — stamping head to reconcile",
+        flush=True,
+    )
+
+    try:
+        result = subprocess.run(
+            ["alembic", "stamp", "head"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+    except Exception as exc:
+        print(
+            f"[start.py] WARNING: alembic stamp subprocess failed: {exc}",
+            file=sys.stderr,
+            flush=True,
+        )
+        return
+
+    if result.stdout:
+        print(result.stdout, flush=True)
+    if result.returncode != 0:
+        print(result.stderr, file=sys.stderr, flush=True)
+        print(
+            "[start.py] WARNING: alembic stamp head failed — upgrade will likely "
+            "also fail, but we'll try anyway",
+            flush=True,
+        )
+    else:
+        print(
+            "[start.py] alembic stamp head OK — existing schema marked current",
+            flush=True,
+        )
+
+
 def run_migrations() -> None:
     """Run ``alembic upgrade head``; log + continue on failure."""
+    bootstrap_alembic_if_needed()
+
     t0 = time.time()
     print("[start.py] Running alembic upgrade head...", flush=True)
     try:
