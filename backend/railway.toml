@@ -3,8 +3,15 @@ builder = "DOCKERFILE"
 dockerfilePath = "./Dockerfile"
 
 [deploy]
+# start.py runs `alembic upgrade head` then launches uvicorn.
 startCommand = "python start.py"
-healthcheckPath = "/api/health"
-healthcheckTimeout = 120
+
+# /api/ping is a zero-dependency liveness probe that only checks the Python
+# process is running. /api/health still exists for the admin dashboard but
+# it queries the DB + Redis, which can be slow and briefly return 503 during
+# cold starts — not a great signal for Railway's automatic restart policy.
+healthcheckPath = "/api/ping"
+healthcheckTimeout = 300
+
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3

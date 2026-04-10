@@ -10,21 +10,26 @@ from app.api.routes import router as api_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """Application lifespan.
+
+    IMPORTANT: Every step in here must be fast + non-blocking. Railway starts
+    healthchecking /api/health the moment the container binds its port, so we
+    cannot afford to block inside the lifespan hook.
+
+    Migrations live in ``start.py`` now (they run BEFORE uvicorn boots), so we
+    only do a best-effort ``create_all`` here as a safety net for tables that
+    don't have a migration yet (e.g. newer models added during development).
+    Every branch below is wrapped in try/except so a single failure cannot
+    prevent the app from serving requests.
+    """
     setup_logging()
-    # Auto-run database migrations on startup
-    try:
-        from alembic.config import Config as AlembicConfig
-        from alembic import command
-        import os
+    import logging
+    logger = logging.getLogger(__name__)
 
-        alembic_cfg = AlembicConfig(os.path.join(os.path.dirname(__file__), "..", "alembic.ini"))
-        alembic_cfg.set_main_option("script_location", os.path.join(os.path.dirname(__file__), "..", "alembic"))
-        command.upgrade(alembic_cfg, "head")
-    except Exception as exc:
-        import logging
-        logging.getLogger(__name__).warning("Auto-migration skipped: %s", exc)
-
-    # Ensure all tables exist (creates any missing tables like strategies)
+    # ── Safety net: create any tables that don't exist yet ──────────────────
+    # Runs inside a tight try/except so schema issues can never take the
+    # service offline. Migrations are the source of truth; this is only here
+    # to paper over models that were added without an Alembic revision.
     try:
         from app.db.session import engine, Base
         # Import all models so Base.metadata knows about them
@@ -41,23 +46,30 @@ async def lifespan(app: FastAPI):
         import app.models.site_settings  # noqa: F401
         import app.models.admin_note  # noqa: F401
         import app.models.subscription  # noqa: F401
+        import app.models.manual_expense  # noqa: F401
 
-        from sqlalchemy import text
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-        import logging
-        logging.getLogger(__name__).info("Ensured all DB tables exist.")
+        logger.info("Ensured all DB tables exist.")
     except Exception as exc:
-        import logging
-        logging.getLogger(__name__).warning("Table creation check failed: %s", exc)
+        logger.warning("Table creation check failed: %s", exc)
 
-    # Start background scheduler (data sync + prediction generation)
-    from app.services.scheduler import start_scheduler, stop_scheduler
-    start_scheduler()
+    # ── Start background scheduler (never blocks boot) ──────────────────────
+    try:
+        from app.services.scheduler import start_scheduler
+        start_scheduler()
+        logger.info("Background scheduler started.")
+    except Exception as exc:
+        logger.warning("Failed to start scheduler: %s", exc)
 
     yield
 
-    stop_scheduler()
+    # ── Shutdown ────────────────────────────────────────────────────────────
+    try:
+        from app.services.scheduler import stop_scheduler
+        stop_scheduler()
+    except Exception:
+        pass
 
 
 def create_app() -> FastAPI:
@@ -96,6 +108,15 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    # ── Ultra-light liveness probe ──────────────────────────────────────────
+    # /api/ping is a zero-dependency endpoint used as a fallback healthcheck
+    # so Railway has a fast "is this process alive?" signal even if the DB
+    # is temporarily unreachable. /api/health still does the full dependency
+    # dance for the admin dashboard.
+    @application.get("/api/ping", include_in_schema=False)
+    async def ping() -> dict:
+        return {"status": "ok"}
 
     application.include_router(api_router, prefix="/api")
 
