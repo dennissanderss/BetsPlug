@@ -1,5 +1,66 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
+/* ── LocalStorage keys (shared with auth.tsx) ──────────────── */
+const TOKEN_KEY = "betsplug_token";
+const USER_KEY = "betsplug_user";
+const TIER_KEY = "betsplug_tier";
+
+/**
+ * Custom error that exposes the HTTP status code alongside the
+ * human-readable detail. Callers can discriminate on
+ * `err.status === 403` to e.g. surface a "resend verification"
+ * CTA on the login page.
+ */
+export class ApiError extends Error {
+  status: number;
+  detail: string;
+
+  constructor(status: number, detail: string) {
+    super(detail);
+    this.name = "ApiError";
+    this.status = status;
+    this.detail = detail;
+  }
+}
+
+/**
+ * Read the current auth token. We go through localStorage
+ * directly so non-React code (e.g. server-action fetchers) can
+ * still benefit from auto-auth.
+ */
+function readToken(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem(TOKEN_KEY);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * On 401 the server is telling us the token has expired or was
+ * revoked. Clear every auth-related key, emit a `auth:expired`
+ * event so the <AuthProvider> can react, and let the caller
+ * handle the thrown error. We intentionally do NOT redirect
+ * here — the event listener in AuthProvider decides where to go
+ * which keeps this module testable.
+ */
+function handleUnauthorized(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.removeItem(TOKEN_KEY);
+    window.localStorage.removeItem(USER_KEY);
+    window.localStorage.removeItem(TIER_KEY);
+  } catch {
+    // Ignore storage failures.
+  }
+  try {
+    window.dispatchEvent(new CustomEvent("auth:expired"));
+  } catch {
+    // Ignore: older browsers without CustomEvent constructor.
+  }
+}
+
 class ApiClient {
   private baseUrl: string;
 
@@ -9,18 +70,200 @@ class ApiClient {
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
     const url = `${this.baseUrl}${path}`;
+
+    // Build headers with auto-attached bearer token. We do NOT
+    // force JSON content-type when the caller supplied their own
+    // (e.g. login's form-url-encoded body).
+    const headers: Record<string, string> = {};
+    const incoming = options?.headers as Record<string, string> | undefined;
+    const hasCustomContentType =
+      incoming &&
+      Object.keys(incoming).some((k) => k.toLowerCase() === "content-type");
+    if (!hasCustomContentType) {
+      headers["Content-Type"] = "application/json";
+    }
+    if (incoming) {
+      Object.assign(headers, incoming);
+    }
+    const token = readToken();
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
     const res = await fetch(url, {
-      headers: {
-        "Content-Type": "application/json",
-        ...options?.headers,
-      },
       ...options,
+      headers,
     });
+
+    if (res.status === 401) {
+      handleUnauthorized();
+      throw new ApiError(401, "unauthorized");
+    }
+
     if (!res.ok) {
-      const error = await res.json().catch(() => ({ detail: res.statusText }));
-      throw new Error(error.detail || `API error: ${res.status}`);
+      const body = await res.json().catch(() => ({ detail: res.statusText }));
+      const detail =
+        typeof body?.detail === "string"
+          ? body.detail
+          : body?.detail?.message || `API error: ${res.status}`;
+      throw new ApiError(res.status, detail);
+    }
+
+    // 204 No Content
+    if (res.status === 204) {
+      return undefined as T;
     }
     return res.json();
+  }
+
+  /* ── Authentication ──────────────────────────────────────── */
+
+  /**
+   * Log in via OAuth2PasswordRequestForm. The backend expects
+   * `application/x-www-form-urlencoded` with `username` +
+   * `password` fields — the username may actually be an email
+   * address.
+   */
+  login(username: string, password: string) {
+    const body = new URLSearchParams();
+    body.set("username", username);
+    body.set("password", password);
+    return this.request<import("@/types/api").AuthTokenResponse>(
+      "/auth/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: body.toString(),
+      }
+    );
+  }
+
+  register(input: {
+    email: string;
+    username: string;
+    password: string;
+    full_name?: string;
+  }) {
+    return this.request<{
+      user: import("@/types/api").User;
+      message: string;
+    }>("/auth/register", {
+      method: "POST",
+      body: JSON.stringify(input),
+    });
+  }
+
+  getMe() {
+    return this.request<import("@/types/api").User>("/auth/me");
+  }
+
+  verifyEmail(token: string) {
+    return this.request<import("@/types/api").AuthTokenResponse>(
+      "/auth/verify-email",
+      {
+        method: "POST",
+        body: JSON.stringify({ token }),
+      }
+    );
+  }
+
+  resendVerification(email: string) {
+    return this.request<{ message: string }>("/auth/resend-verification", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  }
+
+  forgotPassword(email: string) {
+    return this.request<{ message: string }>("/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  }
+
+  resetPassword(token: string, new_password: string) {
+    return this.request<{ message: string }>("/auth/reset-password", {
+      method: "POST",
+      body: JSON.stringify({ token, new_password }),
+    });
+  }
+
+  /* ── Current-user subscription ────────────────────────────── */
+
+  getMySubscription() {
+    return this.request<import("@/types/api").MySubscription>(
+      "/subscriptions/me"
+    );
+  }
+
+  cancelMySubscription() {
+    return this.request<import("@/types/api").MySubscription>(
+      "/subscriptions/me/cancel",
+      { method: "POST" }
+    );
+  }
+
+  /* ── Admin Finance ────────────────────────────────────────── */
+
+  adminFinanceOverview(params?: { period?: string; months?: number }) {
+    const qs = new URLSearchParams();
+    if (params?.period) qs.set("period", params.period);
+    if (typeof params?.months === "number")
+      qs.set("months", String(params.months));
+    const suffix = qs.toString() ? `?${qs.toString()}` : "";
+    return this.request<import("@/types/api").FinanceOverview>(
+      `/admin/finance/overview${suffix}`
+    );
+  }
+
+  adminListExpenses() {
+    return this.request<import("@/types/api").AdminExpense[]>(
+      "/admin/finance/expenses"
+    );
+  }
+
+  adminCreateExpense(input: {
+    amount: number;
+    currency: string;
+    description: string;
+    category: string;
+    expense_date: string;
+    notes?: string;
+  }) {
+    return this.request<import("@/types/api").AdminExpense>(
+      "/admin/finance/expenses",
+      {
+        method: "POST",
+        body: JSON.stringify(input),
+      }
+    );
+  }
+
+  adminUpdateExpense(
+    id: string,
+    input: {
+      amount: number;
+      currency: string;
+      description: string;
+      category: string;
+      expense_date: string;
+      notes?: string;
+    }
+  ) {
+    return this.request<import("@/types/api").AdminExpense>(
+      `/admin/finance/expenses/${id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(input),
+      }
+    );
+  }
+
+  adminDeleteExpense(id: string) {
+    return this.request<{ message: string }>(
+      `/admin/finance/expenses/${id}`,
+      { method: "DELETE" }
+    );
   }
 
   // Search

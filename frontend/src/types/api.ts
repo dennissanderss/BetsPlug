@@ -2,6 +2,72 @@
 // BetsPlug - API Types
 // ============================================
 
+// ─── Authentication ──────────────────────────────────────────
+
+export interface User {
+  id: string;
+  email: string;
+  username: string;
+  full_name: string | null;
+  role: string;
+  is_active: boolean;
+  email_verified: boolean;
+  created_at: string;
+}
+
+export interface AuthTokenResponse {
+  access_token: string;
+  token_type: "bearer";
+  expires_in: number;
+  user: User;
+}
+
+// ─── Subscription (for my own account) ───────────────────────
+
+export interface MySubscription {
+  has_subscription: boolean;
+  plan: string | null;
+  status: string | null;
+  is_lifetime: boolean;
+  current_period_end: string | null;
+  cancel_at_period_end: boolean;
+  stripe_customer_id: string | null;
+}
+
+// ─── Admin Finance ───────────────────────────────────────────
+
+export interface AdminExpense {
+  id: string;
+  amount: number;
+  currency: string;
+  description: string;
+  category: string;
+  expense_date: string;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface FinancePoint {
+  period: string;
+  revenue: number;
+  expenses: number;
+  profit: number;
+  payments_count: number;
+}
+
+export interface FinanceOverview {
+  range_start: string;
+  range_end: string;
+  granularity: "day" | "week" | "month";
+  total_revenue: number;
+  total_expenses: number;
+  total_profit: number;
+  currency: string;
+  timeline: FinancePoint[];
+  by_plan: Record<string, number>;
+  expenses_by_category: Record<string, number>;
+}
+
 export interface Sport {
   id: string;
   name: string;

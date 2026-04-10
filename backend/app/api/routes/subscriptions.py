@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import logging
 import time
+import uuid
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request
@@ -27,10 +28,21 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth.dependencies import get_current_user
 from app.core.config import get_settings
 from app.db.session import get_db
 from app.models.user import User
-from app.models.subscription import Subscription, SubscriptionStatus, PlanType
+from app.models.subscription import (
+    Payment,
+    PaymentStatus,
+    PlanType,
+    Subscription,
+    SubscriptionStatus,
+)
+from app.services.email import (
+    send_payment_receipt_email,
+    send_welcome_email,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -276,9 +288,14 @@ async def list_plans():
 async def create_checkout_session(
     body: CreateCheckoutRequest,
     db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ):
     """
     Create a Stripe Checkout Session for the selected plan.
+
+    Requires an authenticated user — the user's id and email are attached
+    to the Stripe session via ``client_reference_id`` and metadata so the
+    webhook can upsert the subscription against the correct account.
 
     When Stripe is not configured, returns a mock session for development.
     In production, this creates a real Stripe checkout URL.
@@ -350,6 +367,8 @@ async def create_checkout_session(
                 "plan": plan,
                 "billing": billing,
                 "addons": ",".join(requested_addons),
+                "user_id": str(current_user.id),
+                "user_email": current_user.email,
             }
 
             # Let Stripe auto-select best payment methods per customer country
@@ -359,6 +378,8 @@ async def create_checkout_session(
                 success_url=body.success_url,
                 cancel_url=body.cancel_url,
                 metadata=metadata,
+                client_reference_id=str(current_user.id),
+                customer_email=current_user.email,
                 automatic_payment_methods={"enabled": True},
             )
 
@@ -432,30 +453,74 @@ async def stripe_webhook(
     logger.info(f"Stripe webhook received: {event_type}")
 
     if event_type == "checkout.session.completed":
-        plan = data.get("metadata", {}).get("plan", "unknown")
-        customer_id = data.get("customer")
-        subscription_id = data.get("subscription")
-        customer_email = data.get("customer_details", {}).get("email") or data.get("customer_email")
-        logger.info(
-            f"Checkout completed: plan={plan}, customer={customer_id}, "
-            f"subscription={subscription_id}, email={customer_email}"
-        )
+        try:
+            metadata = data.get("metadata") or {}
+            plan = metadata.get("plan", "unknown")
+            customer_id = data.get("customer")
+            subscription_id = data.get("subscription")
+            checkout_session_id = data.get("id")
+            payment_intent_id = data.get("payment_intent")
+            amount_total = data.get("amount_total") or 0
+            currency = (data.get("currency") or "eur").lower()
+            customer_email = (
+                data.get("customer_details", {}).get("email")
+                or data.get("customer_email")
+                or metadata.get("user_email")
+            )
 
-        if customer_email:
-            # Find or create user by email
-            result = await db.execute(select(User).where(User.email == customer_email))
-            user = result.scalar_one_or_none()
+            # Prefer explicit user_id (client_reference_id or metadata) so
+            # the checkout is always pinned to the account that initiated
+            # it, even when Stripe strips the email on the way back.
+            user_id_str = (
+                data.get("client_reference_id")
+                or metadata.get("user_id")
+            )
 
-            if not user:
+            logger.info(
+                "Checkout completed: plan=%s, customer=%s, subscription=%s, "
+                "email=%s, user_id=%s",
+                plan, customer_id, subscription_id, customer_email, user_id_str,
+            )
+
+            user: User | None = None
+            if user_id_str:
+                try:
+                    user_uuid = uuid.UUID(user_id_str)
+                    result = await db.execute(
+                        select(User).where(User.id == user_uuid)
+                    )
+                    user = result.scalar_one_or_none()
+                except ValueError:
+                    logger.warning(
+                        "Stripe webhook sent invalid user_id=%r, falling back to email",
+                        user_id_str,
+                    )
+
+            if user is None and customer_email:
+                result = await db.execute(
+                    select(User).where(User.email == customer_email)
+                )
+                user = result.scalar_one_or_none()
+
+            if user is None and customer_email:
+                # Legacy path — create a shell user if we really can't find one.
                 user = User(
                     email=customer_email,
                     username=customer_email.split("@")[0],
                     hashed_password="stripe_managed",
                     is_active=True,
+                    email_verified=True,
                 )
                 db.add(user)
                 await db.flush()
-                logger.info(f"Created new user for Stripe customer: {customer_email}")
+                logger.info("Created new user for Stripe customer: %s", customer_email)
+
+            if user is None:
+                logger.error(
+                    "Could not resolve user for Stripe session %s — skipping upsert",
+                    checkout_session_id,
+                )
+                return {"status": "ok"}
 
             # Map plan string to PlanType enum
             plan_map = {
@@ -464,10 +529,10 @@ async def stripe_webhook(
                 "premium": PlanType.PREMIUM, "gold": PlanType.PREMIUM,
                 "lifetime": PlanType.LIFETIME, "platinum": PlanType.LIFETIME,
             }
-            plan_type = plan_map.get(plan.lower(), PlanType.BASIC)
+            plan_type = plan_map.get(str(plan).lower(), PlanType.BASIC)
             is_lifetime = plan_type == PlanType.LIFETIME
 
-            # Check for existing subscription
+            # Upsert subscription for the resolved user
             result = await db.execute(
                 select(Subscription).where(Subscription.user_id == user.id)
             )
@@ -492,8 +557,59 @@ async def stripe_webhook(
                 )
                 db.add(new_sub)
 
+            # Record the payment for the finance dashboard / user invoices.
+            try:
+                amount_eur = float(amount_total) / 100.0
+                payment_row = Payment(
+                    user_id=user.id,
+                    stripe_payment_intent_id=payment_intent_id,
+                    stripe_checkout_session_id=checkout_session_id,
+                    amount=amount_eur,
+                    currency=currency,
+                    status=PaymentStatus.SUCCEEDED,
+                    plan_type=plan_type,
+                    description=f"{plan_type.value.title()} plan subscription",
+                )
+                db.add(payment_row)
+            except Exception as payment_exc:  # noqa: BLE001
+                logger.error(
+                    "Failed to record payment for user=%s session=%s err=%s",
+                    user.id, checkout_session_id, payment_exc,
+                )
+
             await db.commit()
-            logger.info(f"Subscription activated: user={customer_email}, plan={plan}")
+            logger.info(
+                "Subscription activated: user=%s, plan=%s, payment=%s",
+                user.email, plan, checkout_session_id,
+            )
+
+            # Fire-and-forget notification emails. Any failure here is
+            # swallowed so the webhook still returns 200.
+            try:
+                await send_welcome_email(
+                    to=user.email,
+                    username=user.username,
+                    plan=plan_type.value,
+                )
+            except Exception as email_exc:  # noqa: BLE001
+                logger.error("Welcome email failed: %s", email_exc)
+            try:
+                if amount_total:
+                    await send_payment_receipt_email(
+                        to=user.email,
+                        username=user.username,
+                        plan=plan_type.value,
+                        amount=float(amount_total) / 100.0,
+                        currency=currency,
+                    )
+            except Exception as email_exc:  # noqa: BLE001
+                logger.error("Receipt email failed: %s", email_exc)
+        except Exception as outer_exc:  # noqa: BLE001
+            logger.error(
+                "checkout.session.completed handler failed: %s",
+                outer_exc,
+                exc_info=True,
+            )
 
     elif event_type == "customer.subscription.updated":
         stripe_sub_id = data.get("id")
@@ -622,4 +738,114 @@ async def get_subscription_status(
         status=sub.status.value,
         is_lifetime=sub.is_lifetime,
         current_period_end=sub.current_period_end.isoformat() if sub.current_period_end else None,
+    )
+
+
+# ─── Authenticated /me endpoints ────────────────────────────────────────────
+
+
+class MySubscriptionResponse(BaseModel):
+    """Detailed subscription view for the logged-in user.
+
+    Returned by ``GET /subscriptions/me`` — used by the frontend to render
+    the billing / account page.
+    """
+
+    has_subscription: bool
+    plan: str | None = None
+    status: str | None = None
+    is_lifetime: bool = False
+    current_period_end: datetime | None = None
+    cancel_at_period_end: bool = False
+    stripe_customer_id: str | None = None
+
+
+@router.get("/me", response_model=MySubscriptionResponse)
+async def get_my_subscription(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> MySubscriptionResponse:
+    """Return the authenticated user's subscription status."""
+    result = await db.execute(
+        select(Subscription)
+        .where(Subscription.user_id == current_user.id)
+        .order_by(Subscription.created_at.desc())
+    )
+    sub = result.scalar_one_or_none()
+
+    if sub is None:
+        return MySubscriptionResponse(has_subscription=False)
+
+    return MySubscriptionResponse(
+        has_subscription=sub.status in (SubscriptionStatus.ACTIVE, SubscriptionStatus.TRIALING)
+        or sub.is_lifetime,
+        plan=sub.plan_type.value,
+        status=sub.status.value,
+        is_lifetime=sub.is_lifetime,
+        current_period_end=sub.current_period_end,
+        cancel_at_period_end=sub.cancel_at_period_end,
+        stripe_customer_id=sub.stripe_customer_id,
+    )
+
+
+@router.post("/me/cancel", response_model=MySubscriptionResponse)
+async def cancel_my_subscription(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> MySubscriptionResponse:
+    """Schedule the user's active subscription for cancellation at period end.
+
+    Does NOT cancel immediately — the user keeps access until the current
+    billing period ends. Mirrors the change to Stripe via
+    ``Subscription.modify(sub_id, cancel_at_period_end=True)``.
+    """
+    result = await db.execute(
+        select(Subscription)
+        .where(Subscription.user_id == current_user.id)
+        .order_by(Subscription.created_at.desc())
+    )
+    sub = result.scalar_one_or_none()
+
+    if sub is None:
+        raise HTTPException(
+            status_code=404, detail="No subscription found for this account"
+        )
+
+    if sub.is_lifetime:
+        raise HTTPException(
+            status_code=400, detail="Lifetime plans cannot be cancelled"
+        )
+
+    # Mirror to Stripe if we have a subscription id. Don't fail the whole
+    # call on Stripe errors — we still flag the local row and the webhook
+    # will converge eventually.
+    settings = get_settings()
+    stripe_key = getattr(settings, "stripe_secret_key", None)
+    if stripe_key and stripe_key != "sk_test_placeholder" and sub.stripe_subscription_id:
+        try:
+            import stripe
+
+            stripe.api_key = stripe_key
+            stripe.Subscription.modify(
+                sub.stripe_subscription_id,
+                cancel_at_period_end=True,
+            )
+        except Exception as exc:  # noqa: BLE001
+            logger.error(
+                "Failed to cancel Stripe subscription %s: %s",
+                sub.stripe_subscription_id, exc,
+            )
+
+    sub.cancel_at_period_end = True
+    await db.flush()
+
+    return MySubscriptionResponse(
+        has_subscription=sub.status in (SubscriptionStatus.ACTIVE, SubscriptionStatus.TRIALING)
+        or sub.is_lifetime,
+        plan=sub.plan_type.value,
+        status=sub.status.value,
+        is_lifetime=sub.is_lifetime,
+        current_period_end=sub.current_period_end,
+        cancel_at_period_end=sub.cancel_at_period_end,
+        stripe_customer_id=sub.stripe_customer_id,
     )

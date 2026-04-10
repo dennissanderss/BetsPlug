@@ -59,6 +59,10 @@ class UserResponse(BaseModel):
     is_active: bool = Field(
         description="Whether the account is currently active and able to log in."
     )
+    email_verified: bool = Field(
+        default=False,
+        description="Whether the user's email address has been verified.",
+    )
     created_at: datetime = Field(description="Timestamp when the account was created (UTC).")
     updated_at: datetime = Field(description="Timestamp of the most recent account update (UTC).")
 

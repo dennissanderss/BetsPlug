@@ -16,6 +16,7 @@ from app.models.ingestion import DataSource, IngestionRun, IngestionError
 from app.models.user import User, Role
 from app.models.audit import AuditLog
 from app.models.strategy import Strategy, PredictionStrategy
+from app.models.manual_expense import ManualExpense
 
 __all__ = [
     "Sport", "League", "Season", "Team", "Player",
@@ -28,4 +29,5 @@ __all__ = [
     "DataSource", "IngestionRun", "IngestionError",
     "User", "Role", "AuditLog",
     "Strategy", "PredictionStrategy",
+    "ManualExpense",
 ]

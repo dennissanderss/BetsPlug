@@ -16,6 +16,7 @@ import {
   BarChart3,
   ClipboardList,
   FlaskConical,
+  DollarSign,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -26,6 +27,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import BlogManager from "@/components/admin/blog-manager";
 import UserManager from "@/components/admin/user-manager";
+import FinanceTab from "@/components/admin/finance-tab";
 import SeoDashboard from "@/components/admin/seo-dashboard";
 import AnalyticsSettings from "@/components/admin/analytics-settings";
 import GoalsNotesTab from "@/components/admin/goals-notes-tab";
@@ -757,6 +759,11 @@ export default function AdminPage() {
       icon: Users,
     },
     {
+      id: "finance",
+      label: "Finance",
+      icon: DollarSign,
+    },
+    {
       id: "seo",
       label: "SEO",
       icon: Search,
@@ -827,6 +834,7 @@ export default function AdminPage() {
         {activeTab === "actions" && <ActionsTab sources={sources} />}
         {activeTab === "blog" && <BlogManager />}
         {activeTab === "users" && <UserManager />}
+        {activeTab === "finance" && <FinanceTab />}
         {activeTab === "seo" && <SeoDashboard />}
         {activeTab === "analytics" && <AnalyticsSettings />}
         {activeTab === "goals" && <GoalsNotesTab />}

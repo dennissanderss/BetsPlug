@@ -17,11 +17,13 @@ import {
   LogIn,
   AlertTriangle,
   Loader2,
+  CheckCircle2,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { useAuth } from "@/lib/auth";
+import { api, ApiError } from "@/lib/api";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -73,15 +75,25 @@ export function LoginContent() {
   const [submitting, setSubmitting] = useState(false);
   const [tried, setTried] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  // When the backend rejects login with 403 email_not_verified
+  // we surface a dedicated banner that lets the user resend
+  // the verification email without leaving the page.
+  const [needsVerification, setNeedsVerification] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendStatus, setResendStatus] = useState<
+    null | "success" | "error"
+  >(null);
 
   const emailOk = EMAIL_RE.test(email.trim());
   const passwordOk = password.length > 0;
   const formOk = emailOk && passwordOk;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTried(true);
     setServerError(null);
+    setNeedsVerification(false);
+    setResendStatus(null);
     if (!formOk) return;
 
     setSubmitting(true);
@@ -100,21 +112,46 @@ export function LoginContent() {
       // Ignore storage failures (e.g. private browsing on Safari).
     }
 
-    // Demo: simulate a short round-trip, then persist session
-    // and redirect. A real integration can replace this
-    // setTimeout with a fetch/auth call and surface any error
-    // via setServerError.
-    setTimeout(() => {
-      // Persist the session so it survives page reloads.
-      const demoToken = `demo_${Date.now()}`;
-      auth.login(demoToken, {
-        email: email.trim(),
-        name: email.trim().split("@")[0],
-      });
+    try {
+      // Real backend call — OAuth2 form body, username may be
+      // either an email or a username on the backend side.
+      const res = await api.login(email.trim(), password);
+      auth.login(res.access_token, res.user);
 
       const next = params?.get("next");
-      router.push(next ?? loc("/jouw-route"));
-    }, 900);
+      router.push(next || loc("/dashboard"));
+    } catch (err) {
+      if (err instanceof ApiError) {
+        if (err.status === 403 && err.detail === "email_not_verified") {
+          setNeedsVerification(true);
+          setServerError(
+            "Please verify your email address before signing in."
+          );
+        } else if (err.status === 401 || err.status === 400) {
+          setServerError(t("login.errorGeneric"));
+        } else {
+          setServerError(err.detail || t("login.errorGeneric"));
+        }
+      } else {
+        setServerError(t("login.errorGeneric"));
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleResendVerification = async () => {
+    if (!emailOk) return;
+    setResending(true);
+    setResendStatus(null);
+    try {
+      await api.resendVerification(email.trim());
+      setResendStatus("success");
+    } catch {
+      setResendStatus("error");
+    } finally {
+      setResending(false);
+    }
   };
 
   const inputCls = (hasError: boolean) =>
@@ -228,7 +265,7 @@ export function LoginContent() {
                   noValidate
                 >
                   {/* Server error banner */}
-                  {serverError && (
+                  {serverError && !needsVerification && (
                     <div className="flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/[0.08] px-4 py-3 backdrop-blur-sm">
                       <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
                       <div>
@@ -238,6 +275,50 @@ export function LoginContent() {
                         <p className="mt-0.5 text-xs text-red-200/80">
                           {serverError}
                         </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Email-not-verified banner with resend CTA */}
+                  {needsVerification && (
+                    <div className="flex flex-col gap-3 rounded-xl border border-amber-500/30 bg-amber-500/[0.08] px-4 py-3 backdrop-blur-sm">
+                      <div className="flex items-start gap-3">
+                        <Mail className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
+                        <div className="flex-1">
+                          <p className="text-xs font-bold text-amber-200">
+                            Verify your email
+                          </p>
+                          <p className="mt-0.5 text-xs text-amber-100/80">
+                            We sent a verification link to {email.trim()}.
+                            Click it to finish activating your account.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between gap-3">
+                        <button
+                          type="button"
+                          onClick={handleResendVerification}
+                          disabled={resending || !emailOk}
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-amber-400/40 bg-amber-500/[0.12] px-3 py-1.5 text-xs font-semibold text-amber-100 transition-all hover:bg-amber-500/[0.2] disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {resending ? (
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                          ) : (
+                            <RefreshCw className="h-3 w-3" />
+                          )}
+                          Resend verification email
+                        </button>
+                        {resendStatus === "success" && (
+                          <span className="inline-flex items-center gap-1 text-xs text-green-300">
+                            <CheckCircle2 className="h-3 w-3" />
+                            Sent
+                          </span>
+                        )}
+                        {resendStatus === "error" && (
+                          <span className="text-xs text-red-300">
+                            Try again
+                          </span>
+                        )}
                       </div>
                     </div>
                   )}
@@ -280,7 +361,7 @@ export function LoginContent() {
                         {t("login.password")}
                       </label>
                       <Link
-                        href={loc("/contact")}
+                        href={loc("/forgot-password")}
                         className="text-xs font-semibold text-green-400 transition-colors hover:text-green-300"
                       >
                         {t("login.forgot")}
@@ -416,7 +497,7 @@ export function LoginContent() {
                     {t("login.noAccount")}{" "}
                   </span>
                   <Link
-                    href={loc("/checkout") + "?plan=gold"}
+                    href={loc("/register")}
                     className="text-sm font-bold text-green-400 transition-colors hover:text-green-300"
                   >
                     {t("login.createAccount")}

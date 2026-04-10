@@ -10,31 +10,51 @@ import {
   type ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
+import { api, ApiError } from "@/lib/api";
+import type { User } from "@/types/api";
 
 /* ── Types ─────────────────────────────────────────────────── */
 
+/**
+ * Public shape of the authenticated user exposed to the rest
+ * of the app. We keep this separate from the full `User` type
+ * so we can add convenience fields (`name`) derived from the
+ * server shape without leaking raw DB rows into components.
+ */
 export interface AuthUser {
+  id: string;
   email: string;
-  name: string;
+  username: string;
+  name: string; // full_name ?? username ?? email local-part
+  role: string;
+  email_verified: boolean;
+  raw: User;
 }
 
 interface AuthContextValue {
   /** The currently authenticated user, or null when logged out. */
   user: AuthUser | null;
-  /** A dummy token string (replace with a real JWT later). */
+  /** The JWT (or similar) token used for bearer auth. */
   token: string | null;
   /** Whether the initial hydration from localStorage is complete. */
   ready: boolean;
   /** Persist credentials after a successful login. */
-  login: (token: string, user: AuthUser) => void;
+  login: (token: string, user: User) => void;
   /** Clear credentials and redirect to the login page. */
   logout: () => void;
+  /**
+   * Re-fetch `/auth/me` and update the in-memory user. Used
+   * after register/verify flows and after server-side role
+   * changes so the UI stays in sync without a full reload.
+   */
+  refresh: () => Promise<void>;
 }
 
 /* ── Storage keys ──────────────────────────────────────────── */
 
 const TOKEN_KEY = "betsplug_token";
 const USER_KEY = "betsplug_user";
+const TIER_KEY = "betsplug_tier";
 
 /* ── Helpers ───────────────────────────────────────────────── */
 
@@ -46,14 +66,35 @@ function readStoredToken(): string | null {
   }
 }
 
-function readStoredUser(): AuthUser | null {
+function readStoredUser(): User | null {
   try {
     const raw = window.localStorage.getItem(USER_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as AuthUser;
+    const parsed = JSON.parse(raw);
+    // Accept both new shape (User) and the legacy `{email, name}`
+    // shape so existing sessions don't get nuked on upgrade. A
+    // legacy session will be validated against /auth/me and
+    // replaced with the proper server response.
+    if (parsed && typeof parsed === "object" && "id" in parsed) {
+      return parsed as User;
+    }
+    return null;
   } catch {
     return null;
   }
+}
+
+function toAuthUser(u: User): AuthUser {
+  const fallback = u.username || u.email.split("@")[0] || "Member";
+  return {
+    id: u.id,
+    email: u.email,
+    username: u.username,
+    name: u.full_name || fallback,
+    role: u.role,
+    email_verified: u.email_verified,
+    raw: u,
+  };
 }
 
 /* ── Context ───────────────────────────────────────────────── */
@@ -68,18 +109,106 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [ready, setReady] = useState(false);
 
-  // Hydrate from localStorage on first mount (client only).
-  useEffect(() => {
-    const storedToken = readStoredToken();
-    const storedUser = readStoredUser();
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(storedUser);
+  /**
+   * Clear state + storage. We keep this as an internal helper
+   * so `logout()` and the `auth:expired` event handler can
+   * share the same teardown logic without triggering loops.
+   */
+  const clearSession = useCallback(() => {
+    try {
+      window.localStorage.removeItem(TOKEN_KEY);
+      window.localStorage.removeItem(USER_KEY);
+      window.localStorage.removeItem(TIER_KEY);
+    } catch {
+      // Ignore storage failures.
     }
-    setReady(true);
+    setToken(null);
+    setUser(null);
   }, []);
 
-  const login = useCallback((newToken: string, newUser: AuthUser) => {
+  /* ── Initial hydration ───────────────────────────────────
+     On mount, read any token from storage and call /auth/me
+     to validate it. If the server says 401, we clear the
+     session and mark ready. If the server returns a user, we
+     hydrate from the fresh server response (not the stale
+     localStorage copy) so role changes etc. propagate. */
+  useEffect(() => {
+    let cancelled = false;
+
+    const run = async () => {
+      const storedToken = readStoredToken();
+      if (!storedToken) {
+        // No token → already logged out, render login-aware UI.
+        if (!cancelled) setReady(true);
+        return;
+      }
+
+      // Keep the stored user around while we validate so
+      // consumers that render on token presence alone (e.g.
+      // navbar skeletons) don't flicker.
+      const staleUser = readStoredUser();
+      if (staleUser && !cancelled) {
+        setToken(storedToken);
+        setUser(toAuthUser(staleUser));
+      }
+
+      try {
+        const fresh = await api.getMe();
+        if (cancelled) return;
+        setToken(storedToken);
+        setUser(toAuthUser(fresh));
+        try {
+          window.localStorage.setItem(USER_KEY, JSON.stringify(fresh));
+        } catch {
+          // Ignore storage failures.
+        }
+      } catch (err) {
+        if (cancelled) return;
+        // ApiError(401) has already cleared storage via
+        // handleUnauthorized(). For any other error we still
+        // want to clear so the user isn't left in a half-valid
+        // state (e.g. backend down → force login).
+        if (err instanceof ApiError && err.status === 401) {
+          // Storage already cleared by api.ts — just update state.
+          setToken(null);
+          setUser(null);
+        } else {
+          clearSession();
+        }
+      } finally {
+        if (!cancelled) setReady(true);
+      }
+    };
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [clearSession]);
+
+  /* ── auth:expired event listener ────────────────────────
+     api.ts dispatches this whenever any request returns 401.
+     We clear the in-memory session and bounce to /login so
+     the user can re-authenticate. We guard against loops by
+     only redirecting when we still had a user. */
+  useEffect(() => {
+    const onExpired = () => {
+      setToken((prev) => {
+        if (prev) {
+          setUser(null);
+          // Use replace so the back button doesn't loop.
+          router.replace("/login");
+        }
+        return null;
+      });
+    };
+    window.addEventListener("auth:expired", onExpired);
+    return () => {
+      window.removeEventListener("auth:expired", onExpired);
+    };
+  }, [router]);
+
+  const login = useCallback((newToken: string, newUser: User) => {
     try {
       window.localStorage.setItem(TOKEN_KEY, newToken);
       window.localStorage.setItem(USER_KEY, JSON.stringify(newUser));
@@ -87,25 +216,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Ignore storage failures (e.g. private browsing).
     }
     setToken(newToken);
-    setUser(newUser);
+    setUser(toAuthUser(newUser));
   }, []);
 
   const logout = useCallback(() => {
-    try {
-      window.localStorage.removeItem(TOKEN_KEY);
-      window.localStorage.removeItem(USER_KEY);
-      window.localStorage.removeItem("betsplug_tier");
-    } catch {
-      // Ignore storage failures.
-    }
-    setToken(null);
-    setUser(null);
+    clearSession();
     router.push("/login");
-  }, [router]);
+  }, [clearSession, router]);
+
+  const refresh = useCallback(async () => {
+    const storedToken = readStoredToken();
+    if (!storedToken) {
+      setToken(null);
+      setUser(null);
+      return;
+    }
+    try {
+      const fresh = await api.getMe();
+      setToken(storedToken);
+      setUser(toAuthUser(fresh));
+      try {
+        window.localStorage.setItem(USER_KEY, JSON.stringify(fresh));
+      } catch {
+        // Ignore storage failures.
+      }
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) {
+        setToken(null);
+        setUser(null);
+      } else {
+        throw err;
+      }
+    }
+  }, []);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ user, token, ready, login, logout }),
-    [user, token, ready, login, logout],
+    () => ({ user, token, ready, login, logout, refresh }),
+    [user, token, ready, login, logout, refresh],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

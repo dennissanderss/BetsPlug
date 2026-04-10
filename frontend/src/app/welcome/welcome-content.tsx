@@ -1,14 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
   Sparkles,
   PartyPopper,
   ArrowRight,
-  Home,
   LogIn,
   ShieldCheck,
   Mail,
@@ -16,7 +14,6 @@ import {
   TrendingUp,
   Target,
   CheckCircle2,
-  Trophy,
   Flame,
   Quote,
   MailCheck,
@@ -36,70 +33,54 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { useAuth } from "@/lib/auth";
 
 /**
- * WelcomeContent — post-checkout thank-you / welcome page.
+ * WelcomeContent — post-registration / email-verification welcome.
  *
- * This is the first thing a visitor sees the moment after they
- * finish checkout. The goal is unapologetically emotional:
- *   1. Validate the decision ("you made the right choice")
- *   2. Make them feel like they just joined an exclusive club
- *   3. Remove any remaining doubts about what happens next
- *   4. Drive one clear action: log into the dashboard
+ * This page is now the first thing a visitor sees AFTER they
+ * verify their email / create an account. It is NOT the
+ * post-payment page anymore — that lives at `/thank-you`.
+ *
+ * The goals for the welcome page:
+ *   1. Greet them by name ("Your account is ready, Alex!")
+ *   2. Walk them through the three next steps: browse
+ *      predictions → pick a subscription → start winning
+ *   3. Drop a quickstart timeline + dashboard tour so they know
+ *      where everything lives before they commit to a plan
+ *   4. Provide one clear primary CTA: "Browse predictions"
  *
  * The flow mirrors the rest of the BetsPlug marketing pages
  * (dark ambient background, green accent gradient, motion
  * reveals, SiteNav + BetsPlugFooter) so the brand feels
- * consistent from landing → checkout → welcome.
- *
- * Query params:
- *   plan     — which plan was purchased (bronze/silver/gold/platinum)
- *   billing  — monthly | yearly
- *   trial    — "1" if the user is on the free trial, "0" otherwise
+ * consistent from landing → register → welcome.
  */
 export function WelcomeContent() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
-  const params = useSearchParams();
-
-  const isTrial = (params?.get("trial") ?? "0") === "1";
-  const planId = (params?.get("plan") ?? "gold").toLowerCase();
+  const { user } = useAuth();
 
   // Tiny confetti-style burst on mount — not a full library, just a
   // handful of CSS particles that fade and drift upward for ~2s.
   const [burst, setBurst] = useState(true);
   useEffect(() => {
-    const t = setTimeout(() => setBurst(false), 2400);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setBurst(false), 2400);
+    return () => clearTimeout(timer);
   }, []);
 
-  // After successful Stripe checkout, persist the subscription tier
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("success") === "true") {
-      const plan = urlParams.get("plan") || "gold";
-      const tierMap: Record<string, string> = { bronze: "silver", silver: "silver", gold: "gold", platinum: "platinum" };
-      const tier = tierMap[plan] || "gold";
-      localStorage.setItem("betsplug_tier", tier);
-    }
-  }, []);
+  // Pick the best display name we can find. `AuthUser` carries
+  // `name` (set by the login flow to the username half of the
+  // email). Fall back to the email prefix, then "there".
+  const displayName =
+    (user?.name && user.name.trim()) ||
+    (user?.email && user.email.split("@")[0]) ||
+    "there";
 
-  const planLabel = useMemo(() => {
-    const map: Record<string, string> = {
-      bronze: "Bronze",
-      silver: "Silver",
-      gold: "Gold",
-      platinum: "Platinum",
-    };
-    return map[planId] ?? "Gold";
-  }, [planId]);
-
-  const statusTitle = isTrial
-    ? t("welcome.trialTitle")
-    : t("welcome.paidTitle");
-  const statusBody = isTrial
-    ? t("welcome.trialBody")
-    : t("welcome.paidBody");
+  const statusTitle = `Your account is ready${
+    user ? `, ${displayName}` : ""
+  }!`;
+  const statusBody =
+    "Here's what to do next: browse today's predictions, pick the subscription that fits you, and start winning smarter with the rest of the crew.";
 
   const nextSteps = [
     {
@@ -240,7 +221,7 @@ export function WelcomeContent() {
             {t("welcome.subtitle")}
           </motion.p>
 
-          {/* Status card — trial vs paid */}
+          {/* Status card — "account is ready" (post-registration) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -259,8 +240,8 @@ export function WelcomeContent() {
                       {statusTitle}
                     </h2>
                     <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/[0.1] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-300">
-                      <Trophy className="h-3 w-3" />
-                      {planLabel}
+                      <CheckCircle2 className="h-3 w-3" />
+                      Verified
                     </span>
                   </div>
                   <p className="mt-2 text-sm leading-relaxed text-slate-400">
@@ -271,7 +252,10 @@ export function WelcomeContent() {
             </div>
           </motion.div>
 
-          {/* CTAs */}
+          {/* CTAs — welcome is now post-registration, so instead of
+              pushing people to /login (they already are logged in)
+              we push them to predictions (discovery) with a
+              secondary link to the checkout to pick a plan. */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -279,18 +263,18 @@ export function WelcomeContent() {
             className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
             <Link
-              href={loc("/login")}
+              href={loc("/predictions")}
               className="btn-gradient group inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50 sm:w-auto sm:text-base"
             >
-              {t("welcome.ctaPrimary")}
+              Browse today&apos;s predictions
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
-              href={loc("/")}
+              href={loc("/checkout")}
               className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-6 py-4 text-sm font-semibold text-slate-300 backdrop-blur-sm transition-all hover:border-white/[0.25] hover:bg-white/[0.06] hover:text-white sm:w-auto"
             >
-              <Home className="h-4 w-4" />
-              {t("welcome.ctaSecondary")}
+              <Sparkles className="h-4 w-4 text-green-400" />
+              Pick your subscription
             </Link>
           </motion.div>
 
@@ -416,11 +400,11 @@ export function WelcomeContent() {
         {/* ── Bottom CTA + support note ── */}
         <section className="mx-auto mt-24 max-w-3xl px-6 text-center">
           <Link
-            href={loc("/login")}
+            href={loc("/predictions")}
             className="btn-gradient group inline-flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-extrabold tracking-tight shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50"
           >
-            <LogIn className="h-4 w-4" />
-            {t("welcome.ctaPrimary")}
+            <Rocket className="h-4 w-4" />
+            Start exploring predictions
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
           <p className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-500">

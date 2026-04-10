@@ -92,6 +92,15 @@ class Settings(BaseSettings):
     # Reports
     reports_output_dir: str = "/app/reports"
 
+    # Email (SMTP) — when smtp_host is empty, email bodies are logged to
+    # stdout instead of being sent (dev fallback so tokens can be copied).
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_from: str = "BetsPlug <noreply@betsplug.com>"
+    smtp_use_tls: bool = True
+
     class Config:
         env_file = ".env"
         extra = "ignore"

@@ -4,23 +4,28 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Bell,
   CalendarClock,
   Check,
   CheckCircle2,
+  ChevronDown,
   ChevronRight,
   ChevronLeft,
   Crown,
   Flame,
   Gift,
+  LogIn,
   Lock,
+  Mail,
   PauseCircle,
   Shield,
   Sparkles,
   Tag,
   TrendingDown,
   User,
+  UserPlus,
   MapPin,
   Wallet,
   ShieldCheck,
@@ -29,6 +34,8 @@ import {
 } from "lucide-react";
 import { CheckoutHeader } from "@/components/checkout/checkout-header";
 import { CheckoutFooter } from "@/components/checkout/checkout-footer";
+import { useAuth } from "@/lib/auth";
+import { api } from "@/lib/api";
 import {
   VisaBadge,
   MastercardBadge,
@@ -172,6 +179,24 @@ export function CheckoutContent() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const params = useSearchParams();
+  // Auth state — gate anonymous users before they can fill the form.
+  // Once the backend starts requiring a bearer token on
+  // /subscriptions/checkout, anonymous POSTs will 401 — we want
+  // people to log in BEFORE typing any payment info.
+  const { user, ready: authReady } = useAuth();
+
+  // Subscription check — if the logged-in user already has an
+  // active subscription we show a friendly "you already have a
+  // plan" notice instead of the form. Only runs when there's an
+  // auth token so anonymous visitors don't fire a useless request.
+  const mySub = useQuery({
+    queryKey: ["my-subscription", "checkout-gate"],
+    queryFn: () => api.getMySubscription(),
+    enabled: authReady && !!user,
+    staleTime: 10_000,
+    retry: false,
+  });
+
   // Plan from URL (default Gold, the popular plan)
   const planParam = (params?.get("plan") ?? "gold").toLowerCase() as PlanId;
   const initialPlan =
@@ -381,13 +406,33 @@ export function CheckoutContent() {
 
   const handleStripeCheckout = async () => {
     if (!agreed) return;
+    // Sanity: gate also guarantees this, but belt & braces.
+    if (!user) {
+      setCheckoutError("Please log in before completing your subscription.");
+      return;
+    }
     setSubmitting(true);
     setCheckoutError(null);
     try {
       const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+      // Pull the bearer token from localStorage — same mechanism
+      // that the rest of the app uses via `api.request`. We call
+      // fetch directly here (instead of api.createCheckout) because
+      // the checkout endpoint takes a richer payload (billing +
+      // addons) that the shared helper does not expose.
+      let token: string | null = null;
+      try {
+        token = window.localStorage.getItem("betsplug_token");
+      } catch {
+        // localStorage unavailable (private mode); fall through and
+        // let the backend reject with 401 so we surface a clear error.
+      }
       const resp = await fetch(`${API}/subscriptions/create-checkout`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           // When the user opted for the 7-day trial we send the Bronze
           // plan id so Stripe charges only €0.01 (the Bronze Trial price).
@@ -400,10 +445,21 @@ export function CheckoutContent() {
           // already filters these out via chargeableUpsellIds (everything
           // is included), and trial flow buys Bronze which has no add-ons.
           addons: trialActive ? [] : chargeableUpsellIds,
-          success_url: `${window.location.origin}${loc("/welcome")}?plan=${plan.id}&billing=${billing}&trial=${trialActive ? "1" : "0"}&success=true`,
+          // Post-purchase landing page. Stripe will interpolate the
+          // session id into {CHECKOUT_SESSION_ID} so the thank-you
+          // page can poll /subscriptions/me until the webhook has
+          // marked the subscription as active.
+          success_url: `${window.location.origin}${loc("/thank-you")}?plan=${plan.id}&billing=${billing}&trial=${trialActive ? "1" : "0"}&session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: `${window.location.origin}${loc("/checkout")}?plan=${plan.id}&billing=${billing}&cancelled=true`,
         }),
       });
+      if (resp.status === 401) {
+        setCheckoutError(
+          "Your session expired. Please log in again to continue."
+        );
+        setSubmitting(false);
+        return;
+      }
       const data = await resp.json();
       if (data.checkout_url) {
         window.location.href = data.checkout_url;
@@ -459,7 +515,37 @@ export function CheckoutContent() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
+        {/* ── Login gate ─────────────────────────────────────────
+            Anonymous users see a "log in first" panel before any
+            payment fields are rendered. The backend enforces this
+            too (JWT required on /subscriptions/create-checkout),
+            but gating on the client gives a much nicer flow than
+            a 401 after the user filled in their details. */}
+        {!authReady && (
+          <div className="mt-12">
+            <CheckoutGateSkeleton />
+          </div>
+        )}
+        {authReady && !user && (
+          <div className="mt-12">
+            <LoginGate
+              plan={plan.id}
+              billing={billing}
+              loc={loc}
+            />
+          </div>
+        )}
+        {authReady && user && mySub.data?.has_subscription && (
+          <div className="mt-12">
+            <ActiveSubscriptionNotice
+              planName={mySub.data.plan ?? ""}
+              loc={loc}
+            />
+          </div>
+        )}
+
+        {authReady && user && !mySub.data?.has_subscription && (
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
             {/* Mobile-first TrialPicker — must appear above the order
                 summary on mobile. On desktop it's hidden here and
                 rendered inside the left column further below so the
@@ -497,6 +583,24 @@ export function CheckoutContent() {
                 onSubmit={handleSubmit}
                 className="mt-6 rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-xl sm:p-8"
               >
+                {/* Logged-in badge — confirms the session is attached so
+                    the user knows this subscription will end up on the
+                    right account. */}
+                {user && (
+                  <div className="mb-6 flex items-center gap-3 rounded-2xl border border-green-500/20 bg-green-500/[0.05] px-4 py-3">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-green-500/30 bg-green-500/[0.12]">
+                      <CheckCircle2 className="h-4 w-4 text-green-400" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-300">
+                        Logged in
+                      </p>
+                      <p className="truncate text-sm font-semibold text-white">
+                        {user.email}
+                      </p>
+                    </div>
+                  </div>
+                )}
                 <AnimatePresence mode="wait">
                   {step === 1 && (
                     <motion.div
@@ -1001,6 +1105,7 @@ export function CheckoutContent() {
               </div>
             </aside>
           </div>
+        )}
       </main>
 
       <CheckoutFooter />
@@ -1671,6 +1776,217 @@ function UpsellsBlock({
           ? t("checkout.vatIncluded")
           : t("checkout.vatIncluded")}
       </p>
+    </div>
+  );
+}
+
+/* ── Login gate ─────────────────────────────────────────────── */
+/**
+ * Loading skeleton shown while the auth context is still
+ * hydrating from localStorage. Matches the gradient/glass look
+ * of the real checkout card so the layout doesn't jump.
+ */
+function CheckoutGateSkeleton() {
+  return (
+    <div className="mx-auto max-w-2xl animate-pulse rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-8 backdrop-blur-xl">
+      <div className="mx-auto h-12 w-12 rounded-2xl bg-white/[0.06]" />
+      <div className="mx-auto mt-6 h-6 w-3/4 rounded-full bg-white/[0.06]" />
+      <div className="mx-auto mt-3 h-4 w-2/3 rounded-full bg-white/[0.04]" />
+      <div className="mt-8 grid gap-3 sm:grid-cols-2">
+        <div className="h-12 rounded-xl bg-white/[0.05]" />
+        <div className="h-12 rounded-xl bg-white/[0.05]" />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * LoginGate — blocks anonymous users from reaching the checkout
+ * form. Pushes them to /login or /register with a `next` param
+ * that round-trips the current plan/billing selection so they
+ * land back on the same checkout config after signing in.
+ */
+function LoginGate({
+  plan,
+  billing,
+  loc,
+}: {
+  plan: PlanId;
+  billing: Billing;
+  loc: (path: string) => string;
+}) {
+  const [whyOpen, setWhyOpen] = useState(false);
+
+  // Preserve the current plan + billing through the auth flow so
+  // users aren't forced to re-pick after logging in.
+  const nextPath = `/checkout?plan=${plan}&billing=${billing}`;
+  const loginHref = `${loc("/login")}?next=${encodeURIComponent(nextPath)}`;
+  const registerHref = `${loc("/register")}?next=${encodeURIComponent(
+    nextPath
+  )}`;
+
+  return (
+    <div className="mx-auto max-w-2xl">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] to-white/[0.01] p-8 backdrop-blur-xl sm:p-10"
+      >
+        {/* Glow */}
+        <div className="pointer-events-none absolute -left-24 -top-24 h-[260px] w-[260px] rounded-full bg-green-500/[0.12] blur-[110px]" />
+        <div className="pointer-events-none absolute -right-24 -bottom-24 h-[260px] w-[260px] rounded-full bg-emerald-500/[0.1] blur-[110px]" />
+
+        <div className="relative">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-green-500/30 bg-green-500/[0.1]">
+            <Lock className="h-6 w-6 text-green-400" />
+          </div>
+
+          <h2 className="mt-6 text-center text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+            Almost there —{" "}
+            <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
+              log in to complete your subscription
+            </span>
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-center text-sm leading-relaxed text-slate-400 sm:text-base">
+            For your safety, we require an account before processing
+            payment. It takes less than a minute.
+          </p>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <Link
+              href={loginHref}
+              className="btn-gradient group inline-flex items-center justify-center gap-2 rounded-xl px-6 py-4 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40"
+            >
+              <LogIn className="h-4 w-4" />
+              Log in
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+            <Link
+              href={registerHref}
+              className="group inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-4 text-sm font-bold text-white backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-white/[0.08]"
+            >
+              <UserPlus className="h-4 w-4 text-green-400" />
+              Create account
+              <ChevronRight className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+
+          {/* "Why?" expandable note */}
+          <div className="mt-6">
+            <button
+              type="button"
+              onClick={() => setWhyOpen((v) => !v)}
+              className="mx-auto flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 transition-all hover:border-white/[0.18] hover:text-white"
+              aria-expanded={whyOpen}
+            >
+              Why do I need an account?
+              <ChevronDown
+                className={`h-3.5 w-3.5 transition-transform ${
+                  whyOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+            <AnimatePresence initial={false}>
+              {whyOpen && (
+                <motion.div
+                  key="why"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <p className="mx-auto mt-4 max-w-md text-center text-xs leading-relaxed text-slate-400">
+                    This lets us tie your subscription to your account,
+                    send you receipts, and give you access to your
+                    dashboard.
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Trust strip */}
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-4 sm:flex-row sm:gap-6">
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-400">
+              <ShieldCheck className="h-3.5 w-3.5 text-green-400" />
+              14-day money-back guarantee
+            </div>
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-400">
+              <Lock className="h-3.5 w-3.5 text-green-400" />
+              SSL-encrypted checkout
+            </div>
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-400">
+              <Mail className="h-3.5 w-3.5 text-green-400" />
+              Receipts by email
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+/**
+ * ActiveSubscriptionNotice — shown when a logged-in user lands
+ * on /checkout but already has an active subscription. Gives them
+ * a direct path to the subscription management page instead of
+ * letting them accidentally stack plans.
+ */
+function ActiveSubscriptionNotice({
+  planName,
+  loc,
+}: {
+  planName: string;
+  loc: (path: string) => string;
+}) {
+  const prettyPlan = planName
+    ? planName.charAt(0).toUpperCase() + planName.slice(1)
+    : "";
+  return (
+    <div className="mx-auto max-w-2xl">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+        className="relative overflow-hidden rounded-3xl border border-green-500/25 bg-gradient-to-br from-green-500/[0.08] via-white/[0.02] to-white/[0.01] p-8 backdrop-blur-xl sm:p-10"
+      >
+        <div className="pointer-events-none absolute -right-24 -top-24 h-[260px] w-[260px] rounded-full bg-green-500/[0.14] blur-[110px]" />
+        <div className="relative text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-green-500/30 bg-green-500/[0.12]">
+            <CheckCircle2 className="h-6 w-6 text-green-400" />
+          </div>
+          <h2 className="mt-6 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+            You already have an active{" "}
+            {prettyPlan && (
+              <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
+                {prettyPlan}
+              </span>
+            )}{" "}
+            subscription
+          </h2>
+          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-slate-400">
+            Manage it — change plan, update payment, or cancel — from
+            your subscription page.
+          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              href={loc("/subscription")}
+              className="btn-gradient inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40"
+            >
+              Go to my subscription
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href={loc("/dashboard")}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3 text-sm font-bold text-white transition-all hover:border-white/[0.25] hover:bg-white/[0.08]"
+            >
+              Open dashboard
+            </Link>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }
