@@ -289,12 +289,15 @@ export function CheckoutContent() {
   const step3Valid = Object.keys(paymentErrors).length === 0;
 
   // Which upsells are actually chargeable for this plan.
-  // "Tip of the Day" is bundled into Platinum, so it's displayed
-  // as "Included" and removed from the billable list.
+  // Platinum is the lifetime "everything included" tier — both
+  // Telegram Alerts and Tip of the Day are bundled in for free,
+  // so they're shown as "Included" and removed from the billable list.
+  // Stripe also can't mix one-time (Platinum) with recurring (addons)
+  // in a single checkout, which makes "all included" the cleanest path.
   const isPlatinum = plan.id === "platinum";
-  const chargeableUpsellIds = selectedUpsells.filter(
-    (id) => !(isPlatinum && id === "tipOfDay")
-  );
+  const chargeableUpsellIds = isPlatinum
+    ? []
+    : selectedUpsells;
 
   // Free trial is only offered on recurring plans (not Bronze/free,
   // not Platinum lifetime).
@@ -390,6 +393,13 @@ export function CheckoutContent() {
           // plan id so Stripe charges only €0.01 (the Bronze Trial price).
           // On "direct subscribe" we send the real plan.
           plan: trialActive ? "bronze" : plan.id,
+          // Trial is always treated as monthly because it converts into a
+          // monthly subscription. Bronze itself has no yearly option either.
+          billing: trialActive ? "monthly" : billing,
+          // Add-ons are billed at the same cadence as the plan. Platinum
+          // already filters these out via chargeableUpsellIds (everything
+          // is included), and trial flow buys Bronze which has no add-ons.
+          addons: trialActive ? [] : chargeableUpsellIds,
           success_url: `${window.location.origin}${loc("/welcome")}?plan=${plan.id}&billing=${billing}&trial=${trialActive ? "1" : "0"}&success=true`,
           cancel_url: `${window.location.origin}${loc("/checkout")}?plan=${plan.id}&billing=${billing}&cancelled=true`,
         }),
@@ -1554,7 +1564,8 @@ function UpsellsBlock({
       <div className="mt-5 grid gap-3">
         {UPSELLS.map((u) => {
           const Icon = u.icon;
-          const included = isPlatinum && u.id === "tipOfDay";
+          // On Platinum every add-on is bundled in for free.
+          const included = isPlatinum;
           const active = included || selected.includes(u.id);
           const disabled = included;
           return (

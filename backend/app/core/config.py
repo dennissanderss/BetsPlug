@@ -75,12 +75,14 @@ class Settings(BaseSettings):
     celery_result_backend: str = "redis://redis:6379/2"
 
     # Stripe (free to set up — only pay per transaction: 1.5% + €0.25 EU)
+    #
+    # Prices are NOT configured here anymore — they're resolved at runtime
+    # via Stripe lookup keys (set per Price in Stripe Dashboard). This means
+    # price changes are a 2-click operation in Stripe with no redeploy.
+    # See backend/app/api/routes/subscriptions.py → PLAN_LOOKUP_KEYS for the
+    # full list of keys this app expects to find in your Stripe account.
     stripe_secret_key: str = "sk_test_placeholder"
     stripe_webhook_secret: str = ""
-    stripe_price_basic: str = ""      # Create in Stripe Dashboard: €15.99/month recurring
-    stripe_price_standard: str = ""   # Create in Stripe Dashboard: €35.97 every 3 months recurring
-    stripe_price_premium: str = ""    # Create in Stripe Dashboard: €56.94 every 6 months recurring
-    stripe_price_lifetime: str = ""   # Create in Stripe Dashboard: €199.99 one-time
 
     # Sports Data APIs
     football_data_api_key: str = ""   # football-data.org (free, 10 req/min)
