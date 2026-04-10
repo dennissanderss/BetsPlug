@@ -87,6 +87,17 @@ async def send_email(
         )
         message.add_alternative(html, subtype="html")
 
+    # Port 465 uses *implicit* TLS (connection is SSL from byte 0), while
+    # port 587 uses STARTTLS (upgrades a plaintext connection to TLS).
+    # aiosmtplib exposes these as two different flags (``use_tls`` vs
+    # ``start_tls``) that must not both be true at the same time, so we
+    # pick based on the port. Providers that matter:
+    #   - Hostinger / Gmail SSL:  465 → use_tls=True
+    #   - SendGrid / Mailgun:     587 → start_tls=True
+    # ``smtp_use_tls`` still gates whether we negotiate TLS at all, so
+    # setting it to False disables encryption entirely (dev/loopback only).
+    use_ssl = settings.smtp_port == 465 and settings.smtp_use_tls
+    use_starttls = settings.smtp_port != 465 and settings.smtp_use_tls
     try:
         await aiosmtplib.send(
             message,
@@ -94,7 +105,8 @@ async def send_email(
             port=settings.smtp_port,
             username=settings.smtp_user or None,
             password=settings.smtp_password or None,
-            start_tls=settings.smtp_use_tls,
+            start_tls=use_starttls,
+            use_tls=use_ssl,
         )
         logger.info("Email sent to=%s subject=%r", to, subject)
         return True
