@@ -326,7 +326,7 @@ class ApiClient {
   }
 
   // Admin Users
-  getAdminUsers(limit = 50, offset = 0) {
+  getAdminUsers(limit = 200, offset = 0) {
     return this.request<import("@/types/api").AdminUser[]>(
       `/admin/users/?limit=${limit}&offset=${offset}`
     );
@@ -336,6 +336,15 @@ class ApiClient {
       method: "PUT",
       body: JSON.stringify({ is_active: isActive }),
     });
+  }
+  deleteAdminUser(userId: string) {
+    return this.request<{
+      id: string;
+      email: string;
+      deleted_subscriptions: number;
+      deleted_payments: number;
+      message: string;
+    }>(`/admin/users/${userId}`, { method: "DELETE" });
   }
 
   // Admin Settings

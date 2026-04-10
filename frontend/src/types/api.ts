@@ -440,10 +440,22 @@ export interface BlogPostUpdate {
 
 // Admin Users
 export interface AdminUserSubscription {
-  plan: string;
-  status: string;
+  plan: string | null;
+  status: string | null;
   current_period_end: string | null;
   is_lifetime: boolean;
+  cancel_at_period_end: boolean;
+  stripe_customer_id: string | null;
+  stripe_subscription_id: string | null;
+}
+
+export interface AdminUserPayment {
+  last_amount: number | null;
+  currency: string | null;
+  last_payment_at: string | null;
+  last_payment_status: string | null;
+  total_paid: number;
+  payments_count: number;
 }
 
 export interface AdminUser {
@@ -456,6 +468,7 @@ export interface AdminUser {
   created_at: string;
   updated_at: string;
   subscription: AdminUserSubscription | null;
+  payment: AdminUserPayment | null;
 }
 
 // Site Settings
