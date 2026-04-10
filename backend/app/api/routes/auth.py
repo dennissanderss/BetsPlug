@@ -232,8 +232,8 @@ PASSWORD_RESET_TTL = timedelta(hours=1)
 #
 # These helpers are added to a FastAPI ``BackgroundTasks`` instance so the
 # HTTP response is returned to the user **before** the SMTP handshake even
-# starts. On Hostinger (or any slow upstream SMTP) the send can take several
-# seconds, so blocking the request on it made /auth/register hang for
+# starts. A slow upstream SMTP server can take several seconds per message,
+# so blocking the request on it previously made /auth/register hang for
 # 1–2 minutes and left the user staring at a spinner. The email delivery
 # itself is unchanged; only *when* it runs moves.
 #
@@ -352,10 +352,10 @@ async def register(
         token is generated + stored.
       • A verification email is queued as a **FastAPI background task**,
         so the HTTP response is returned to the user *before* the SMTP
-        handshake even starts. Hostinger's SMTP handshake + TLS + send
-        was previously blocking the endpoint for 1–2 minutes, which made
-        the "Create account" button appear dead. Moving the send off the
-        request path is the fix.
+        handshake even starts. A slow upstream SMTP handshake + TLS +
+        send was previously blocking the endpoint for 1–2 minutes, which
+        made the "Create account" button appear dead. Moving the send
+        off the request path is the fix.
       • The response includes a valid JWT so the frontend can store the
         token and the user can start browsing immediately — no "check
         your inbox, then come back to log in" friction loop.
@@ -844,13 +844,35 @@ async def admin_test_email(
     whether the SMTP submission succeeded, and if not, which exception
     type was raised (SMTPAuthenticationError, SMTPServerDisconnected, etc.).
 
-    ⚠️  Remember: a successful SMTP submission does NOT guarantee inbox
-    delivery. Gmail can silently drop messages from domains without SPF
-    or DKIM records. If this endpoint reports success but the mail never
-    arrives, the next step is setting up SPF + DKIM on betsplug.com DNS.
+    ⚠️  A successful SMTP submission does NOT guarantee inbox delivery.
+    Gmail and Outlook silently drop messages from domains without SPF /
+    DKIM records. If this endpoint reports success but the mail never
+    arrives, check your domain's DNS records.
     """
     config = _build_smtp_config_snapshot()
     start = time.perf_counter()
+
+    # If no SMTP host is configured, ``send_email`` takes the dev-mode
+    # path that logs to stdout and returns True. That would make this
+    # endpoint report a misleading "success" to the admin. Fail fast and
+    # explicit instead so the diagnostics UI clearly shows the state.
+    settings = get_settings()
+    if not settings.smtp_host:
+        return TestEmailResponse(
+            success=False,
+            error_type="SMTPNotConfigured",
+            error_message=(
+                "No SMTP_HOST is set in the backend environment. The "
+                "register / verification / password-reset flows currently "
+                "only log the action URL to the server logs instead of "
+                "sending real email. Configure an SMTP provider (any "
+                "provider — SendGrid, Mailgun, Resend, Postmark, Amazon "
+                "SES, etc.) and set the SMTP_* env vars on the backend "
+                "to enable real delivery."
+            ),
+            duration_ms=0,
+            config=config,
+        )
 
     subject = "BetsPlug SMTP test"
     html = (

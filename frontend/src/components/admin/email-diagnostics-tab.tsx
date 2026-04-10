@@ -281,9 +281,8 @@ function TestEmailCard() {
                       A successful SMTP submission does <strong>not</strong>{" "}
                       guarantee the message reaches the inbox. Gmail and
                       Outlook silently drop mail from domains without SPF /
-                      DKIM records. If the test email never arrives, you need
-                      to set SPF + DKIM records on <code>betsplug.com</code>{" "}
-                      DNS at your registrar.
+                      DKIM records. If the test email never arrives, check
+                      your sending domain's DNS records.
                     </p>
                   </div>
                 </div>
@@ -609,47 +608,85 @@ function VerificationHelperCard() {
   );
 }
 
-// ─── SPF / DKIM cheat sheet ────────────────────────────────────────────────
+// ─── Provider setup guide ──────────────────────────────────────────────────
 
-function DnsCheatSheetCard() {
+function ProviderSetupCard() {
   return (
     <Section
       icon={AlertTriangle}
-      title="If SMTP works but mail still doesn't arrive"
-      description="This means Gmail/Outlook is silently dropping your messages because your domain has no sender authentication. Fix it at your DNS registrar."
+      title="How to enable real email delivery"
+      description="The backend currently runs in dev mode — it logs the verification / password-reset links to the server logs instead of sending them. Pick any SMTP provider below, set the env vars, and real mail will start flowing."
     >
-      <div className="space-y-3 text-xs text-slate-300 leading-relaxed">
+      <div className="space-y-4 text-xs text-slate-300 leading-relaxed">
         <p>
-          <strong className="text-slate-100">SPF record</strong> — Tells
-          Gmail that Hostinger is allowed to send mail for{" "}
-          <code>betsplug.com</code>.
+          Any SMTP provider works — the backend is provider-agnostic. The
+          code expects these five env vars on the backend:
         </p>
-        <div className="rounded-md bg-black/40 px-3 py-2 font-mono text-[11px] text-emerald-200 break-all">
-          TXT @ → <code>v=spf1 include:_spf.mail.hostinger.com ~all</code>
+        <div className="rounded-md bg-black/40 px-3 py-2 font-mono text-[11px] text-emerald-200 break-all space-y-0.5">
+          <div>SMTP_HOST=smtp.provider.com</div>
+          <div>SMTP_PORT=465   # or 587</div>
+          <div>SMTP_USER=...</div>
+          <div>SMTP_PASSWORD=...</div>
+          <div>SMTP_FROM="Your Brand &lt;noreply@yourdomain.com&gt;"</div>
         </div>
 
         <p className="mt-3">
-          <strong className="text-slate-100">DKIM record</strong> — Hostinger
-          generates this for you. In hPanel, go to <em>Emails → Email
-          Accounts → DNS settings</em>, copy the DKIM selector + value and
-          add the TXT record to your DNS.
+          Recommended providers for transactional app mail (all have
+          generous free tiers):
         </p>
-
-        <p className="mt-3">
-          <strong className="text-slate-100">DMARC record</strong> — optional
-          but recommended.
-        </p>
-        <div className="rounded-md bg-black/40 px-3 py-2 font-mono text-[11px] text-emerald-200 break-all">
-          TXT _dmarc →{" "}
-          <code>
-            v=DMARC1; p=none; rua=mailto:postmaster@betsplug.com
-          </code>
-        </div>
+        <ul className="list-disc list-inside space-y-1 text-slate-400">
+          <li>
+            <a
+              href="https://resend.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 underline"
+            >
+              Resend
+            </a>{" "}
+            — 3000/month free, 5-minute setup, great Gmail deliverability
+          </li>
+          <li>
+            <a
+              href="https://www.mailgun.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 underline"
+            >
+              Mailgun
+            </a>{" "}
+            — 5000/month free for 3 months, then 100/day
+          </li>
+          <li>
+            <a
+              href="https://postmarkapp.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 underline"
+            >
+              Postmark
+            </a>{" "}
+            — 100/month free, best-in-class deliverability
+          </li>
+          <li>
+            <a
+              href="https://sendgrid.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 underline"
+            >
+              SendGrid
+            </a>{" "}
+            — 100/day free
+          </li>
+        </ul>
 
         <p className="mt-4 text-[11px] text-slate-500">
-          After adding the records, wait ~15 minutes, then re-run the "Send
-          test email" button above. Gmail usually honours fresh SPF/DKIM
-          within an hour. You can verify everything is set up correctly at{" "}
+          Whatever provider you choose, they will ask you to add SPF and
+          DKIM records to your sending domain's DNS. This is non-optional
+          for reliable delivery to Gmail / Outlook. After the DNS
+          propagates (usually within an hour), re-run the "Send test
+          email" button above. You can independently verify the setup at{" "}
           <a
             href="https://www.mail-tester.com/"
             target="_blank"
@@ -675,7 +712,7 @@ export default function EmailDiagnosticsTab() {
       <FindUsersCard />
       <PasswordResetLinkCard />
       <VerificationHelperCard />
-      <DnsCheatSheetCard />
+      <ProviderSetupCard />
     </div>
   );
 }

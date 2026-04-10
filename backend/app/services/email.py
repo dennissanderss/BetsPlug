@@ -98,11 +98,9 @@ async def send_email(
     # port 587 uses STARTTLS (upgrades a plaintext connection to TLS).
     # aiosmtplib exposes these as two different flags (``use_tls`` vs
     # ``start_tls``) that must not both be true at the same time, so we
-    # pick based on the port. Providers that matter:
-    #   - Hostinger / Gmail SSL:  465 → use_tls=True
-    #   - SendGrid / Mailgun:     587 → start_tls=True
-    # ``smtp_use_tls`` still gates whether we negotiate TLS at all, so
-    # setting it to False disables encryption entirely (dev/loopback only).
+    # pick based on the port. ``smtp_use_tls`` still gates whether we
+    # negotiate TLS at all, so setting it to False disables encryption
+    # entirely (dev/loopback only).
     use_ssl = settings.smtp_port == 465 and settings.smtp_use_tls
     use_starttls = settings.smtp_port != 465 and settings.smtp_use_tls
     # Verbose handshake log so Railway logs clearly show every SMTP attempt
@@ -120,8 +118,8 @@ async def send_email(
         to,
         subject,
     )
-    # Hard ceiling on the SMTP round-trip. Hostinger occasionally takes
-    # 30+ seconds to even finish the TLS handshake; past that the send is
+    # Hard ceiling on the SMTP round-trip. A slow upstream SMTP server
+    # can hang the TLS handshake for 30+ seconds; past that the send is
     # almost certainly lost and we'd rather fail fast and log the
     # [ACTION URL] fallback than pile up stalled background workers.
     try:
