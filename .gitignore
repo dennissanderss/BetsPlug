@@ -48,3 +48,4 @@ htmlcov/
 # Claude
 .claude/
 .vercel
+backend/celerybeat-schedule
