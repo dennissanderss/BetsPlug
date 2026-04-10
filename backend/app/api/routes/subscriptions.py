@@ -23,7 +23,7 @@ import time
 import uuid
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -293,14 +293,30 @@ async def create_checkout_session(
     """
     Create a Stripe Checkout Session for the selected plan.
 
-    Requires an authenticated user — the user's id and email are attached
-    to the Stripe session via ``client_reference_id`` and metadata so the
-    webhook can upsert the subscription against the correct account.
+    Requires an authenticated user AND a verified email — users can
+    register + browse without verifying, but they must verify before
+    they can pay for a subscription. Unverified users get a 403 with
+    ``detail="email_not_verified"`` which the frontend matches on to
+    show a "verify your email" banner + resend button.
+
+    The user's id and email are attached to the Stripe session via
+    ``client_reference_id`` and metadata so the webhook can upsert
+    the subscription against the correct account.
 
     When Stripe is not configured, returns a mock session for development.
     In production, this creates a real Stripe checkout URL.
     """
     settings = get_settings()
+
+    # ── Email verification gate ───────────────────────────────────────────
+    # We intentionally block at *checkout* creation time rather than at
+    # login so users can explore the app before verifying, but can't
+    # reach Stripe without a confirmed email.
+    if not current_user.email_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="email_not_verified",
+        )
 
     # ── Validate + normalise the request ─────────────────────────────────
     plan = PLAN_ALIASES.get(body.plan.lower())

@@ -144,10 +144,13 @@ class ApiClient {
     password: string;
     full_name?: string;
   }) {
-    return this.request<{
-      user: import("@/types/api").User;
-      message: string;
-    }>("/auth/register", {
+    // Register now returns the full login shape (access_token + user)
+    // plus a `message` field describing the verification-email status,
+    // so the frontend can auto-login and skip the old "check your
+    // inbox, then go back to login" friction loop.
+    return this.request<
+      import("@/types/api").AuthTokenResponse & { message: string }
+    >("/auth/register", {
       method: "POST",
       body: JSON.stringify(input),
     });

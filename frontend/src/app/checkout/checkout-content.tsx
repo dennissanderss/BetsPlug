@@ -403,6 +403,31 @@ export function CheckoutContent() {
   };
 
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  // ── Email-verification gate state ─────────────────────────
+  // The backend returns HTTP 403 with ``detail = "email_not_verified"``
+  // when an unverified user tries to pay. We flip this flag so the UI
+  // can swap the plain error banner for a richer "verify your email"
+  // call-to-action with an inline "resend" button.
+  const [needsVerification, setNeedsVerification] = useState(false);
+  const [resendingVerification, setResendingVerification] = useState(false);
+  const [resendStatus, setResendStatus] = useState<
+    "idle" | "sent" | "error"
+  >("idle");
+
+  const handleResendVerification = async () => {
+    if (!user?.email) return;
+    setResendingVerification(true);
+    setResendStatus("idle");
+    try {
+      await api.resendVerification(user.email);
+      setResendStatus("sent");
+    } catch (err) {
+      console.error("Resend verification failed:", err);
+      setResendStatus("error");
+    } finally {
+      setResendingVerification(false);
+    }
+  };
 
   const handleStripeCheckout = async () => {
     if (!agreed) return;
@@ -413,6 +438,8 @@ export function CheckoutContent() {
     }
     setSubmitting(true);
     setCheckoutError(null);
+    setNeedsVerification(false);
+    setResendStatus("idle");
     try {
       const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
       // Pull the bearer token from localStorage — same mechanism
@@ -456,6 +483,23 @@ export function CheckoutContent() {
       if (resp.status === 401) {
         setCheckoutError(
           "Your session expired. Please log in again to continue."
+        );
+        setSubmitting(false);
+        return;
+      }
+      // Email verification gate — backend replies 403 with
+      // detail="email_not_verified" when the user hasn't clicked
+      // the verification link yet. Show a friendly CTA so they
+      // can resend the email without leaving the checkout flow.
+      if (resp.status === 403) {
+        const data = await resp.json().catch(() => ({}));
+        if (data?.detail === "email_not_verified") {
+          setNeedsVerification(true);
+          setSubmitting(false);
+          return;
+        }
+        setCheckoutError(
+          data?.detail || "You do not have permission to complete this checkout."
         );
         setSubmitting(false);
         return;
@@ -974,8 +1018,62 @@ export function CheckoutContent() {
                         </div>
                       </div>
 
+                      {/* Email verification required banner */}
+                      {needsVerification && (
+                        <div className="mt-4 flex items-start gap-3 rounded-2xl border border-amber-500/30 bg-amber-500/[0.06] p-4">
+                          <Mail className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-400" />
+                          <div className="flex-1">
+                            <p className="text-sm font-bold text-amber-300">
+                              Verify your email to continue
+                            </p>
+                            <p className="mt-1 text-xs leading-relaxed text-amber-200/80">
+                              We sent a verification link to{" "}
+                              <span className="font-semibold text-amber-100">
+                                {user?.email}
+                              </span>
+                              . Please click the link in that email to activate
+                              your account before subscribing.
+                            </p>
+                            {resendStatus === "sent" ? (
+                              <p className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-green-500/[0.1] px-3 py-1.5 text-xs font-semibold text-green-300">
+                                <CheckCircle2 className="h-3.5 w-3.5" />
+                                Verification email sent. Check your inbox.
+                              </p>
+                            ) : resendStatus === "error" ? (
+                              <p className="mt-3 text-xs text-red-300">
+                                Could not resend the email. Please try again in
+                                a moment or contact support.
+                              </p>
+                            ) : null}
+                            <div className="mt-3 flex flex-wrap gap-2">
+                              <button
+                                type="button"
+                                onClick={handleResendVerification}
+                                disabled={
+                                  resendingVerification ||
+                                  resendStatus === "sent"
+                                }
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/40 bg-amber-500/[0.1] px-3 py-1.5 text-xs font-bold text-amber-200 transition-colors hover:bg-amber-500/[0.2] disabled:cursor-not-allowed disabled:opacity-60"
+                              >
+                                {resendingVerification
+                                  ? "Sending…"
+                                  : resendStatus === "sent"
+                                  ? "Sent"
+                                  : "Resend verification email"}
+                              </button>
+                              <a
+                                href={`mailto:${user?.email ?? ""}`}
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.1] bg-white/[0.03] px-3 py-1.5 text-xs font-bold text-slate-300 transition-colors hover:border-white/[0.2] hover:text-white"
+                              >
+                                Open inbox
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Checkout error */}
-                      {checkoutError && (
+                      {checkoutError && !needsVerification && (
                         <div className="mt-4 flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/[0.06] p-4">
                           <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-400" />
                           <p className="text-xs leading-relaxed text-red-300">

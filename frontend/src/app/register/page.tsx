@@ -6,12 +6,14 @@
  * Flow:
  *   1. User fills in email, username, optional full name and
  *      a password + confirmation.
- *   2. On submit we call POST /api/auth/register. The account
- *      is created with email_verified = false so the user
- *      CANNOT log in yet.
- *   3. We show a success state telling them to check their
- *      inbox for the verification link, with a "Resend" CTA
- *      and a back-to-login link.
+ *   2. On submit we call POST /api/auth/register, which now
+ *      returns an access_token + user object just like /auth/login.
+ *      The account is created with email_verified = false but the
+ *      user is logged in immediately and redirected to /dashboard.
+ *   3. Email verification is still sent in the background, and the
+ *      user is still required to verify their email before they
+ *      can subscribe (the checkout endpoint returns 403 with
+ *      detail="email_not_verified" until they click the link).
  *
  * Design matches login-content.tsx — same ambient background,
  * glass card, gradient headline, etc. All text is in English
@@ -21,7 +23,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
 import {
   Mail,
@@ -34,15 +36,15 @@ import {
   Sparkles,
   ShieldCheck,
   BadgeCheck,
-  RefreshCw,
   AlertTriangle,
   Loader2,
-  CheckCircle2,
   UserPlus,
+  RefreshCw,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref } from "@/i18n/locale-provider";
+import { useAuth } from "@/lib/auth";
 import { api, ApiError } from "@/lib/api";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -51,6 +53,8 @@ const USERNAME_RE = /^[a-zA-Z0-9_.-]{3,32}$/;
 export default function RegisterPage() {
   const loc = useLocalizedHref();
   const router = useRouter();
+  const params = useSearchParams();
+  const auth = useAuth();
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -61,15 +65,6 @@ export default function RegisterPage() {
   const [submitting, setSubmitting] = useState(false);
   const [tried, setTried] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
-
-  // Success state — we only show the "check your inbox" card
-  // once the backend confirms the account was created. Storing
-  // the created email lets us wire up the "Resend" button.
-  const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
-  const [resending, setResending] = useState(false);
-  const [resendStatus, setResendStatus] = useState<
-    null | "success" | "error"
-  >(null);
 
   // ── Client-side validation ──────────────────────────────
   const emailOk = EMAIL_RE.test(email.trim());
@@ -86,13 +81,20 @@ export default function RegisterPage() {
 
     setSubmitting(true);
     try {
-      await api.register({
+      // The backend returns { access_token, user, message, ... }
+      // now — register behaves like login + a status message. We
+      // store the token, log the user in and redirect immediately
+      // so the user lands in the app instead of bouncing between
+      // /register → inbox → /login.
+      const res = await api.register({
         email: email.trim(),
         username: username.trim(),
         password,
         full_name: fullName.trim() || undefined,
       });
-      setRegisteredEmail(email.trim());
+      auth.login(res.access_token, res.user);
+      const next = params?.get("next");
+      router.push(next || loc("/dashboard"));
     } catch (err) {
       if (err instanceof ApiError) {
         // Map common cases to friendlier copy — the backend may
@@ -122,20 +124,6 @@ export default function RegisterPage() {
       }
     } finally {
       setSubmitting(false);
-    }
-  };
-
-  const handleResend = async () => {
-    if (!registeredEmail) return;
-    setResending(true);
-    setResendStatus(null);
-    try {
-      await api.resendVerification(registeredEmail);
-      setResendStatus("success");
-    } catch {
-      setResendStatus("error");
-    } finally {
-      setResending(false);
     }
   };
 
@@ -214,7 +202,7 @@ export default function RegisterPage() {
               </div>
             </motion.div>
 
-            {/* Right: form card / success state */}
+            {/* Right: form card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -224,10 +212,9 @@ export default function RegisterPage() {
               <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-7 backdrop-blur-xl sm:p-9">
                 <div className="pointer-events-none absolute -right-20 -top-20 h-[260px] w-[260px] rounded-full bg-green-500/[0.12] blur-[100px]" />
 
-                {!registeredEmail && (
-                  <>
-                    {/* Mobile headline */}
-                    <div className="relative mb-6 lg:hidden">
+                {/* Form */}
+                {/* Mobile headline */}
+                <div className="relative mb-6 lg:hidden">
                       <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-3 py-1.5">
                         <Sparkles className="h-3.5 w-3.5 text-green-400" />
                         <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-300">
@@ -451,75 +438,17 @@ export default function RegisterPage() {
                       </p>
                     </form>
 
-                    <div className="relative mt-7 border-t border-white/[0.06] pt-5 text-center">
-                      <span className="text-sm text-slate-500">
-                        Already have an account?{" "}
-                      </span>
-                      <Link
-                        href={loc("/login")}
-                        className="text-sm font-bold text-green-400 transition-colors hover:text-green-300"
-                      >
-                        Log in
-                      </Link>
-                    </div>
-                  </>
-                )}
-
-                {/* ── Success state ──────────────────────── */}
-                {registeredEmail && (
-                  <div className="relative space-y-5 text-center">
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-green-500/30 bg-green-500/[0.12]">
-                      <Mail className="h-6 w-6 text-green-300" />
-                    </div>
-                    <h2 className="text-2xl font-extrabold tracking-tight text-white">
-                      Check your inbox
-                    </h2>
-                    <p className="text-sm leading-relaxed text-slate-400">
-                      We sent a verification link to{" "}
-                      <span className="font-semibold text-white">
-                        {registeredEmail}
-                      </span>
-                      . Click it to activate your account and sign in.
-                    </p>
-
-                    <div className="mx-auto flex max-w-xs flex-col items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={handleResend}
-                        disabled={resending}
-                        className="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-5 py-2.5 text-sm font-semibold text-green-200 transition-all hover:bg-green-500/[0.16] disabled:cursor-not-allowed disabled:opacity-60"
-                      >
-                        {resending ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <RefreshCw className="h-4 w-4" />
-                        )}
-                        Resend verification email
-                      </button>
-                      {resendStatus === "success" && (
-                        <span className="inline-flex items-center gap-1 text-xs text-green-300">
-                          <CheckCircle2 className="h-3 w-3" />
-                          Email sent — check your inbox again.
-                        </span>
-                      )}
-                      {resendStatus === "error" && (
-                        <span className="text-xs text-red-300">
-                          Something went wrong. Please try again.
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="border-t border-white/[0.06] pt-5">
-                      <button
-                        type="button"
-                        onClick={() => router.push(loc("/login"))}
-                        className="text-sm font-bold text-green-400 transition-colors hover:text-green-300"
-                      >
-                        ← Back to login
-                      </button>
-                    </div>
-                  </div>
-                )}
+                <div className="relative mt-7 border-t border-white/[0.06] pt-5 text-center">
+                  <span className="text-sm text-slate-500">
+                    Already have an account?{" "}
+                  </span>
+                  <Link
+                    href={loc("/login")}
+                    className="text-sm font-bold text-green-400 transition-colors hover:text-green-300"
+                  >
+                    Log in
+                  </Link>
+                </div>
               </div>
             </motion.div>
           </div>

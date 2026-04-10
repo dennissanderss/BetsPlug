@@ -32,6 +32,7 @@ async def send_email(
     subject: str,
     html: str,
     text: str | None = None,
+    action_url: str | None = None,
 ) -> bool:
     """Send an email via async SMTP.
 
@@ -40,18 +41,37 @@ async def send_email(
     local development. Always returns ``True`` on the dev path; returns
     ``False`` on SMTP failures (but never raises) so the calling endpoint
     can decide whether to surface the error to the user.
+
+    Parameters
+    ----------
+    action_url:
+        Optional canonical action URL (e.g. verification or reset link).
+        When supplied and SMTP is in dev-mode, the URL is logged on its
+        own highly-visible line so admins can ``grep '[ACTION URL]'``
+        Railway logs and copy the link directly to the user.
     """
     settings = get_settings()
 
     if not settings.smtp_host:
-        logger.info(
-            "[EMAIL DEV MODE] SMTP not configured — email would have been sent:"
+        # Log a fat banner that's trivial to grep for in Railway logs.
+        # Admin workflow: `railway logs | grep -A 3 "EMAIL DEV MODE"` or
+        # just scroll once and copy the URL from the highlighted block.
+        banner = "=" * 72
+        logger.warning(
+            "\n%s\n[EMAIL DEV MODE] SMTP not configured — NO real email sent\n%s",
+            banner, banner,
         )
-        logger.info("  To:      %s", to)
-        logger.info("  Subject: %s", subject)
+        logger.warning("  To:      %s", to)
+        logger.warning("  Subject: %s", subject)
+        if action_url:
+            logger.warning("  [ACTION URL] %s", action_url)
+        logger.warning(
+            "  Configure SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASSWORD "
+            "/ SMTP_FROM in Railway env to actually send emails."
+        )
+        logger.warning("%s", banner)
         if text:
-            logger.info("  Text body:\n%s", text)
-        logger.info("  HTML body:\n%s", html)
+            logger.info("Text body:\n%s", text)
         return True
 
     message = EmailMessage()
@@ -79,7 +99,16 @@ async def send_email(
         logger.info("Email sent to=%s subject=%r", to, subject)
         return True
     except Exception as exc:  # noqa: BLE001 — never break callers
-        logger.error("Email send failed to=%s subject=%r err=%s", to, subject, exc)
+        logger.error(
+            "Email send failed to=%s subject=%r err=%s", to, subject, exc
+        )
+        if action_url:
+            # Even when send fails, still log the URL so admin can
+            # share it manually while the SMTP issue is being fixed.
+            logger.warning(
+                "[ACTION URL — SMTP failed, please share manually] %s",
+                action_url,
+            )
         return False
 
 
@@ -176,7 +205,13 @@ async def send_verification_email(to: str, token: str, username: str) -> bool:
       <p style="text-align:center;">{_button("E-mail bevestigen", verify_url)}</p>
       <p style="font-size:13px;color:#9ca3af;">Deze link is 24 uur geldig.</p>
     """
-    return await send_email(to, subject, _layout("Verify your email", body), text)
+    return await send_email(
+        to,
+        subject,
+        _layout("Verify your email", body),
+        text,
+        action_url=verify_url,
+    )
 
 
 async def send_password_reset_email(to: str, token: str, username: str) -> bool:
@@ -216,7 +251,13 @@ async def send_password_reset_email(to: str, token: str, username: str) -> bool:
       <p style="text-align:center;">{_button("Wachtwoord resetten", reset_url)}</p>
       <p style="font-size:13px;color:#9ca3af;">Deze link is 1 uur geldig.</p>
     """
-    return await send_email(to, subject, _layout("Reset your password", body), text)
+    return await send_email(
+        to,
+        subject,
+        _layout("Reset your password", body),
+        text,
+        action_url=reset_url,
+    )
 
 
 async def send_welcome_email(to: str, username: str, plan: str) -> bool:

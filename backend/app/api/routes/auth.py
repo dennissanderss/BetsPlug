@@ -8,16 +8,25 @@ April 2026 drop are:
 - POST /auth/forgot-password       — issue password reset token by email
 - POST /auth/reset-password        — consume token and set new password
 
-``POST /auth/register`` now creates users with ``email_verified=False`` and
-fires a verification email; ``POST /auth/login`` refuses to issue a JWT
-for unverified accounts with the machine-readable detail string
-``"email_not_verified"`` so the frontend can prompt to resend.
+``POST /auth/register`` creates users with ``email_verified=False`` and
+fires a verification email in the background, but **immediately issues a
+JWT** so the user can start browsing without waiting for email delivery
+(Critical: SMTP sometimes isn't configured / lands in spam / etc.). The
+verification requirement is instead enforced at **subscription purchase
+time** by ``/subscriptions/create-checkout``, which returns 403 with
+``detail="email_not_verified"`` until the user has clicked the link.
+
+Admin helper endpoints (added because SMTP delivery is unreliable):
+
+- GET /auth/admin/verification-link/{email}  — copy the verification URL
+- POST /auth/admin/verify-user/{email}       — force-verify out-of-band
 """
 
 from __future__ import annotations
 
 import logging
 import secrets
+import uuid
 from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -26,6 +35,7 @@ from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth.dependencies import require_admin
 from app.core.config import get_settings
 from app.core.security import (
     create_access_token,
@@ -111,17 +121,6 @@ def _issue_token(user: User) -> Token:
 # ---------------------------------------------------------------------------
 
 
-class RegisterResponse(BaseModel):
-    """Response returned by POST /auth/register.
-
-    The user is created but ``email_verified`` is still False. The frontend
-    should show a "check your inbox" message.
-    """
-
-    user: UserResponse
-    message: str
-
-
 class VerifyEmailRequest(BaseModel):
     token: str = Field(min_length=10, max_length=128)
 
@@ -149,6 +148,27 @@ class LoginTokenResponse(Token):
     user: UserResponse
 
 
+class RegisterTokenResponse(LoginTokenResponse):
+    """Register response — same shape as login + a human-readable message.
+
+    The message tells the user that a verification email was sent (so the
+    frontend can show a subtle reminder), but the client should treat this
+    exactly like a login response and store the token immediately.
+    """
+
+    message: str
+
+
+class AdminVerificationInfo(BaseModel):
+    """Admin-only view of a user's verification state."""
+
+    user_id: uuid.UUID
+    email: EmailStr
+    email_verified: bool
+    verification_url: str | None = None
+    verification_sent_at: datetime | None = None
+
+
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
@@ -174,10 +194,13 @@ async def login(
 ) -> LoginTokenResponse:
     """Authenticate with username or email + password, return JWT + user.
 
-    Returns HTTP 403 with ``detail="email_not_verified"`` (a
-    machine-readable string the frontend matches on) when the account
-    exists and the password is correct but the email has not been
-    verified yet.
+    Email verification is **no longer required to log in** — unverified
+    users can still sign in and browse the app. The verification gate
+    has been moved to ``/subscriptions/create-checkout`` so it only
+    blocks the critical path (paying for a plan), not exploration.
+
+    The ``email_verified`` flag is still returned on the ``user`` object
+    so the frontend can render a "please verify" reminder banner.
     """
     # Support login by username OR email
     result = await db.execute(
@@ -200,12 +223,6 @@ async def login(
             detail="Inactive user account",
         )
 
-    if not user.email_verified:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="email_not_verified",
-        )
-
     user.last_login_at = datetime.now(timezone.utc)
     await db.flush()
 
@@ -225,19 +242,33 @@ async def login(
 
 @router.post(
     "/register",
-    response_model=RegisterResponse,
+    response_model=RegisterTokenResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Register a new user",
 )
 async def register(
     payload: UserCreate,
     db: AsyncSession = Depends(get_db),
-) -> RegisterResponse:
-    """Create an inactive-until-verified user and send a verification email.
+) -> RegisterTokenResponse:
+    """Create a new user and immediately log them in.
 
-    Registration no longer logs the user in directly — they receive a
-    verification email and must click the link before they can sign in.
-    Email delivery failures are logged but do not break registration.
+    Design:
+      • User is created with ``email_verified=False`` and a verification
+        token is generated + stored.
+      • A verification email is sent in the background (stdout in dev).
+      • The response includes a valid JWT so the frontend can store the
+        token and the user can start browsing immediately — no "check
+        your inbox, then come back to log in" friction loop.
+      • Email verification is still enforced at subscription purchase
+        time (``/subscriptions/create-checkout`` returns 403 with
+        ``detail="email_not_verified"`` if ``email_verified`` is False),
+        so the critical money path is still protected.
+
+    This is the tradeoff that matters: users who can't receive their
+    verification email (spam, wrong address, SMTP outage) can still use
+    the free parts of the app and only get blocked when they try to
+    pay — at which point admin can force-verify them via the admin
+    endpoint below.
     """
     existing = await db.execute(
         select(User).where(
@@ -261,6 +292,7 @@ async def register(
         email_verified=False,
         email_verification_token=verification_token,
         email_verification_sent_at=datetime.now(timezone.utc),
+        last_login_at=datetime.now(timezone.utc),
     )
     db.add(new_user)
     await db.flush()
@@ -276,9 +308,17 @@ async def register(
     except Exception as exc:  # noqa: BLE001
         logger.error("Verification email failed for %s: %s", new_user.email, exc)
 
-    return RegisterResponse(
+    token = _issue_token(new_user)
+    return RegisterTokenResponse(
+        access_token=token.access_token,
+        token_type=token.token_type,
+        expires_in=token.expires_in,
         user=UserResponse.model_validate(new_user),
-        message="Check your email to verify your account",
+        message=(
+            "Account created. We've sent a verification email — you can "
+            "explore the app now, but you'll need to verify before you "
+            "can subscribe."
+        ),
     )
 
 
@@ -482,3 +522,123 @@ async def get_me(
 ) -> UserResponse:
     """Return the profile of the currently authenticated user."""
     return UserResponse.model_validate(current_user)
+
+
+# ---------------------------------------------------------------------------
+# Admin helpers — used when SMTP delivery is unreliable
+# ---------------------------------------------------------------------------
+
+
+@router.get(
+    "/admin/verification-link/{email}",
+    response_model=AdminVerificationInfo,
+    summary="Copy the verification URL for a user (admin-only)",
+)
+async def admin_get_verification_link(
+    email: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_admin),
+) -> AdminVerificationInfo:
+    """Return the verification URL for a user so admin can share it manually.
+
+    Useful when SMTP is down, lands in spam, or the user typoed their
+    email. Returns ``verification_url=None`` if the user is already
+    verified or no token has been issued.
+    """
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    settings = get_settings()
+    verification_url: str | None = None
+    if user.email_verification_token:
+        base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
+        verification_url = (
+            f"{base}/auth/verify-email?token={user.email_verification_token}"
+        )
+
+    return AdminVerificationInfo(
+        user_id=user.id,
+        email=user.email,
+        email_verified=user.email_verified,
+        verification_url=verification_url,
+        verification_sent_at=user.email_verification_sent_at,
+    )
+
+
+@router.post(
+    "/admin/verify-user/{email}",
+    response_model=UserResponse,
+    summary="Force-verify a user's email (admin-only)",
+)
+async def admin_force_verify_user(
+    email: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_admin),
+) -> UserResponse:
+    """Mark a user's email as verified, bypassing the token flow.
+
+    Safety hatch for support cases: user reports they can't receive
+    their verification email → admin verifies them out-of-band →
+    they can buy a subscription. The old token is cleared so it can
+    no longer be used.
+    """
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user.email_verified = True
+    user.email_verification_token = None
+    user.email_verification_sent_at = None
+    await db.flush()
+    await db.refresh(user)
+    logger.info(
+        "Admin %s force-verified user %s", current_user.email, user.email
+    )
+    return UserResponse.model_validate(user)
+
+
+@router.post(
+    "/admin/resend-verification/{email}",
+    response_model=AuthMessageResponse,
+    summary="Re-send verification email from admin (admin-only)",
+)
+async def admin_resend_verification(
+    email: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_admin),
+) -> AuthMessageResponse:
+    """Issue a fresh verification token and re-send the email as admin.
+
+    Unlike the public ``/resend-verification`` endpoint, this returns a
+    404 if the user doesn't exist so admin can tell right away whether
+    the account is registered.
+    """
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalar_one_or_none()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    if user.email_verified:
+        return AuthMessageResponse(message="User is already verified.")
+
+    user.email_verification_token = secrets.token_urlsafe(32)
+    user.email_verification_sent_at = datetime.now(timezone.utc)
+    await db.flush()
+
+    try:
+        await send_verification_email(
+            to=user.email,
+            token=user.email_verification_token,
+            username=user.username,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.error("Admin resend verification failed for %s: %s", user.email, exc)
+        raise HTTPException(
+            status_code=500, detail=f"Email send failed: {exc}"
+        )
+
+    return AuthMessageResponse(
+        message=f"Verification email re-sent to {user.email}."
+    )
