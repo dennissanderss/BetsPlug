@@ -29,7 +29,7 @@ import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import select
@@ -179,6 +179,52 @@ PASSWORD_RESET_TTL = timedelta(hours=1)
 
 
 # ---------------------------------------------------------------------------
+# Background-task wrappers — NEVER let SMTP failures crash the worker
+# ---------------------------------------------------------------------------
+#
+# These helpers are added to a FastAPI ``BackgroundTasks`` instance so the
+# HTTP response is returned to the user **before** the SMTP handshake even
+# starts. On Hostinger (or any slow upstream SMTP) the send can take several
+# seconds, so blocking the request on it made /auth/register hang for
+# 1–2 minutes and left the user staring at a spinner. The email delivery
+# itself is unchanged; only *when* it runs moves.
+#
+# Every task is wrapped in a broad try/except so an SMTP outage, DNS
+# failure, or bad credentials cannot kill the background worker with an
+# unhandled exception. Errors are logged at ERROR level so they are still
+# visible in Railway logs.
+
+
+async def _send_verification_email_safe(
+    to: str, token: str, username: str
+) -> None:
+    """Background wrapper around ``send_verification_email`` that logs
+    but never raises. Used by :func:`register`, :func:`resend_verification`
+    and :func:`admin_resend_verification`.
+    """
+    try:
+        await send_verification_email(to=to, token=token, username=username)
+    except Exception as exc:  # noqa: BLE001 — must never crash the worker
+        logger.error(
+            "Background verification email failed to=%s err=%s", to, exc
+        )
+
+
+async def _send_password_reset_email_safe(
+    to: str, token: str, username: str
+) -> None:
+    """Background wrapper around ``send_password_reset_email`` that logs
+    but never raises. Used by :func:`forgot_password`.
+    """
+    try:
+        await send_password_reset_email(to=to, token=token, username=username)
+    except Exception as exc:  # noqa: BLE001 — must never crash the worker
+        logger.error(
+            "Background password reset email failed to=%s err=%s", to, exc
+        )
+
+
+# ---------------------------------------------------------------------------
 # POST /auth/login
 # ---------------------------------------------------------------------------
 
@@ -248,6 +294,7 @@ async def login(
 )
 async def register(
     payload: UserCreate,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
 ) -> RegisterTokenResponse:
     """Create a new user and immediately log them in.
@@ -255,7 +302,12 @@ async def register(
     Design:
       • User is created with ``email_verified=False`` and a verification
         token is generated + stored.
-      • A verification email is sent in the background (stdout in dev).
+      • A verification email is queued as a **FastAPI background task**,
+        so the HTTP response is returned to the user *before* the SMTP
+        handshake even starts. Hostinger's SMTP handshake + TLS + send
+        was previously blocking the endpoint for 1–2 minutes, which made
+        the "Create account" button appear dead. Moving the send off the
+        request path is the fix.
       • The response includes a valid JWT so the frontend can store the
         token and the user can start browsing immediately — no "check
         your inbox, then come back to log in" friction loop.
@@ -298,15 +350,16 @@ async def register(
     await db.flush()
     await db.refresh(new_user)
 
-    # Fire the verification email; don't let SMTP errors fail the request.
-    try:
-        await send_verification_email(
-            to=new_user.email,
-            token=verification_token,
-            username=new_user.username,
-        )
-    except Exception as exc:  # noqa: BLE001
-        logger.error("Verification email failed for %s: %s", new_user.email, exc)
+    # Queue the verification email as a background task. The request
+    # returns immediately with a valid JWT; the SMTP send happens after
+    # the response has been flushed to the client. ``_send_verification_email_safe``
+    # swallows and logs any errors so an SMTP outage cannot crash the worker.
+    background_tasks.add_task(
+        _send_verification_email_safe,
+        new_user.email,
+        verification_token,
+        new_user.username,
+    )
 
     token = _issue_token(new_user)
     return RegisterTokenResponse(
@@ -390,13 +443,15 @@ async def verify_email(
 )
 async def resend_verification(
     payload: ResendVerificationRequest,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
 ) -> AuthMessageResponse:
     """Issue a fresh verification token and re-send the email.
 
     Always returns 200 to avoid leaking whether an email address is
     registered. If the user does not exist, or is already verified, the
-    endpoint silently returns success.
+    endpoint silently returns success. The email send is performed in
+    a background task so the user does not wait for the SMTP round-trip.
     """
     result = await db.execute(select(User).where(User.email == payload.email))
     user = result.scalar_one_or_none()
@@ -405,14 +460,12 @@ async def resend_verification(
         user.email_verification_token = secrets.token_urlsafe(32)
         user.email_verification_sent_at = datetime.now(timezone.utc)
         await db.flush()
-        try:
-            await send_verification_email(
-                to=user.email,
-                token=user.email_verification_token,
-                username=user.username,
-            )
-        except Exception as exc:  # noqa: BLE001
-            logger.error("Resend verification failed for %s: %s", user.email, exc)
+        background_tasks.add_task(
+            _send_verification_email_safe,
+            user.email,
+            user.email_verification_token,
+            user.username,
+        )
 
     return AuthMessageResponse(
         message="If that account exists, a new verification email has been sent."
@@ -431,12 +484,14 @@ async def resend_verification(
 )
 async def forgot_password(
     payload: ForgotPasswordRequest,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
 ) -> AuthMessageResponse:
     """Issue a password-reset token (1h TTL) and email it to the user.
 
     Always returns 200 regardless of whether the email exists in the
-    database, to avoid account-enumeration leaks.
+    database, to avoid account-enumeration leaks. The email send runs
+    in a background task so slow SMTP cannot hang this endpoint.
     """
     result = await db.execute(select(User).where(User.email == payload.email))
     user = result.scalar_one_or_none()
@@ -445,14 +500,12 @@ async def forgot_password(
         user.reset_password_token = secrets.token_urlsafe(32)
         user.reset_password_expires_at = datetime.now(timezone.utc) + PASSWORD_RESET_TTL
         await db.flush()
-        try:
-            await send_password_reset_email(
-                to=user.email,
-                token=user.reset_password_token,
-                username=user.username,
-            )
-        except Exception as exc:  # noqa: BLE001
-            logger.error("Password reset email failed for %s: %s", user.email, exc)
+        background_tasks.add_task(
+            _send_password_reset_email_safe,
+            user.email,
+            user.reset_password_token,
+            user.username,
+        )
 
     return AuthMessageResponse(
         message="If that email exists, a password reset link has been sent."
@@ -607,6 +660,7 @@ async def admin_force_verify_user(
 )
 async def admin_resend_verification(
     email: str,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(require_admin),
 ) -> AuthMessageResponse:
@@ -614,7 +668,11 @@ async def admin_resend_verification(
 
     Unlike the public ``/resend-verification`` endpoint, this returns a
     404 if the user doesn't exist so admin can tell right away whether
-    the account is registered.
+    the account is registered. The actual email send runs in a
+    background task so this endpoint never hangs on a slow SMTP server.
+    Admin can look at Railway logs (``grep 'Background verification'``)
+    to confirm delivery, or use ``GET /auth/admin/verification-link/{email}``
+    to copy the URL directly without relying on SMTP at all.
     """
     result = await db.execute(select(User).where(User.email == email))
     user = result.scalar_one_or_none()
@@ -627,18 +685,13 @@ async def admin_resend_verification(
     user.email_verification_sent_at = datetime.now(timezone.utc)
     await db.flush()
 
-    try:
-        await send_verification_email(
-            to=user.email,
-            token=user.email_verification_token,
-            username=user.username,
-        )
-    except Exception as exc:  # noqa: BLE001
-        logger.error("Admin resend verification failed for %s: %s", user.email, exc)
-        raise HTTPException(
-            status_code=500, detail=f"Email send failed: {exc}"
-        )
+    background_tasks.add_task(
+        _send_verification_email_safe,
+        user.email,
+        user.email_verification_token,
+        user.username,
+    )
 
     return AuthMessageResponse(
-        message=f"Verification email re-sent to {user.email}."
+        message=f"Verification email queued for {user.email}."
     )

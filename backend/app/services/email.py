@@ -98,6 +98,10 @@ async def send_email(
     # setting it to False disables encryption entirely (dev/loopback only).
     use_ssl = settings.smtp_port == 465 and settings.smtp_use_tls
     use_starttls = settings.smtp_port != 465 and settings.smtp_use_tls
+    # Hard ceiling on the SMTP round-trip. Hostinger occasionally takes
+    # 30+ seconds to even finish the TLS handshake; past that the send is
+    # almost certainly lost and we'd rather fail fast and log the
+    # [ACTION URL] fallback than pile up stalled background workers.
     try:
         await aiosmtplib.send(
             message,
@@ -107,6 +111,7 @@ async def send_email(
             password=settings.smtp_password or None,
             start_tls=use_starttls,
             use_tls=use_ssl,
+            timeout=20,
         )
         logger.info("Email sent to=%s subject=%r", to, subject)
         return True
