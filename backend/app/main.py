@@ -47,6 +47,7 @@ async def lifespan(app: FastAPI):
         import app.models.admin_note  # noqa: F401
         import app.models.subscription  # noqa: F401
         import app.models.manual_expense  # noqa: F401
+        import app.models.abandoned_checkout  # noqa: F401
 
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)

@@ -461,6 +461,30 @@ async def job_backfill_results():
         log.error("CRON: Backfill failed: %s", exc, exc_info=True)
 
 
+async def job_process_abandoned_checkouts():
+    """Find abandoned checkouts and send a single reminder email with a 5% coupon.
+
+    Runs every 30 minutes. A checkout is considered abandoned when:
+      - status = STARTED
+      - abandoned_email_sent_at IS NULL
+      - checkout_started_at < now() - ABANDONED_CHECKOUT_DELAY_MINUTES
+
+    Idempotent: only processes sessions that haven't received an email yet.
+    """
+    log.info("CRON: Starting abandoned checkout processing...")
+    try:
+        import asyncio
+        from app.services.abandoned_checkout_service import process_abandoned_checkouts_sync
+
+        # Run the synchronous DB + SMTP work in a thread so we don't
+        # block the asyncio event loop.
+        loop = asyncio.get_running_loop()
+        stats = await loop.run_in_executor(None, process_abandoned_checkouts_sync)
+        log.info("CRON: Abandoned checkout result: %s", stats)
+    except Exception as exc:
+        log.error("CRON: Abandoned checkout processing failed: %s", exc, exc_info=True)
+
+
 async def job_sync_odds():
     """Sync bookmaker odds from The Odds API every 2 hours for upcoming matches."""
     log.info("CRON: Starting odds sync...")
@@ -567,6 +591,16 @@ def start_scheduler():
         name="Generate historical predictions (batch 100)",
         replace_existing=True,
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=1),
+    )
+
+    # Abandoned checkout emails every 30 minutes
+    scheduler.add_job(
+        job_process_abandoned_checkouts,
+        trigger=IntervalTrigger(minutes=30),
+        id="abandoned_checkout_emails",
+        name="Process abandoned checkout emails",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=20),
     )
 
     # One-time backfill on startup
