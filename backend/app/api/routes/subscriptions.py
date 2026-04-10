@@ -387,7 +387,10 @@ async def create_checkout_session(
                 "user_email": current_user.email,
             }
 
-            # Let Stripe auto-select best payment methods per customer country
+            # Checkout Sessions auto-select payment methods based on what's
+            # enabled in the Stripe Dashboard for your account — no explicit
+            # parameter needed. (`automatic_payment_methods` is for
+            # PaymentIntents/SetupIntents, not Checkout Sessions.)
             session = stripe.checkout.Session.create(
                 line_items=line_items,
                 mode=mode,
@@ -396,7 +399,6 @@ async def create_checkout_session(
                 metadata=metadata,
                 client_reference_id=str(current_user.id),
                 customer_email=current_user.email,
-                automatic_payment_methods={"enabled": True},
             )
 
             return CheckoutResponse(
