@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
@@ -50,6 +50,48 @@ import {
   getOrderedCountries,
   POPULAR_COUNTRY_CODES,
 } from "@/lib/countries";
+
+/* ── Abandoned checkout tracking ─────────────────────────────
+   Fire-and-forget API calls that never block the checkout UX.
+   If the backend is unreachable the checkout still works fine. */
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+
+async function trackCheckoutSession(data: {
+  email: string;
+  first_name: string | null;
+  plan_id: string;
+  billing_cycle: string;
+  with_trial: boolean;
+  locale: string | null;
+}): Promise<{ session_id: string; recovery_token: string } | null> {
+  try {
+    const res = await fetch(`${API}/checkout-sessions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) return res.json();
+  } catch { /* silent */ }
+  return null;
+}
+
+async function trackCheckoutStep(sessionId: string, step: number) {
+  try {
+    await fetch(`${API}/checkout-sessions/${sessionId}/step`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ step }),
+    });
+  } catch { /* silent */ }
+}
+
+async function trackCheckoutComplete(sessionId: string) {
+  try {
+    await fetch(`${API}/checkout-sessions/${sessionId}/complete`, {
+      method: "POST",
+    });
+  } catch { /* silent */ }
+}
 
 /* ── Plan catalog (mirrors pricing-section.tsx) ─────────────── */
 type PlanId = "bronze" | "silver" | "gold" | "platinum";
@@ -223,6 +265,15 @@ export function CheckoutContent() {
   const [submitting, setSubmitting] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
+  // Abandoned checkout tracking
+  const checkoutSessionId = useRef<string | null>(null);
+  const recoveryParam = params?.get("recovery");
+  const couponParam = params?.get("coupon");
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    discount_percent: number;
+  } | null>(null);
+
   // Tracks whether the user has tried to advance past each step.
   // We only highlight validation errors after they've tried to move
   // forward, so the form doesn't feel aggressive on first render.
@@ -278,6 +329,33 @@ export function CheckoutContent() {
       setStep(2);
     }
   }, [authReady, user, step]);
+
+  // Recovery flow: validate recovery token + auto-apply coupon from URL
+  useEffect(() => {
+    if (!couponParam) return;
+    fetch(`${API}/checkout-sessions/coupon/${encodeURIComponent(couponParam)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.is_valid) {
+          setAppliedCoupon({ code: data.code, discount_percent: data.discount_percent });
+        }
+      })
+      .catch(() => {});
+  }, [couponParam]);
+
+  useEffect(() => {
+    if (!recoveryParam) return;
+    fetch(`${API}/checkout-sessions/recover/${encodeURIComponent(recoveryParam)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data) {
+          if (data.first_name) {
+            setAccount((prev) => ({ ...prev, firstName: data.first_name }));
+          }
+        }
+      })
+      .catch(() => {});
+  }, [recoveryParam]);
 
   const setAccountField = <K extends keyof typeof account>(
     k: K,
@@ -416,7 +494,30 @@ export function CheckoutContent() {
     setTriedAdvance((prev) => ({ ...prev, [step]: true }));
     if (step === 1 && !step1Valid) return;
     if (step === 2 && !step2Valid) return;
-    if (step < 3) setStep(((step + 1) as 1 | 2 | 3));
+
+    const nextStep = (step + 1) as 1 | 2 | 3;
+
+    // Track: create checkout session when advancing past step 1
+    // (email is captured at this point). Fire-and-forget.
+    if (step === 1 && account.email) {
+      trackCheckoutSession({
+        email: account.email,
+        first_name: account.firstName || null,
+        plan_id: plan.id,
+        billing_cycle: billing,
+        with_trial: startWithTrial,
+        locale: null,
+      }).then((result) => {
+        if (result) checkoutSessionId.current = result.session_id;
+      });
+    }
+
+    // Track step progress for existing sessions
+    if (checkoutSessionId.current && step >= 2) {
+      trackCheckoutStep(checkoutSessionId.current, nextStep);
+    }
+
+    if (step < 3) setStep(nextStep);
   };
   const back = () => {
     if (step > 1) setStep(((step - 1) as 1 | 2 | 3));
@@ -542,6 +643,12 @@ export function CheckoutContent() {
     e.preventDefault();
     setTriedAdvance((prev) => ({ ...prev, 3: true }));
     if (!step3Valid) return;
+    // Mark the checkout session as completed so no
+    // abandoned-checkout email gets sent.
+    if (checkoutSessionId.current) {
+      trackCheckoutComplete(checkoutSessionId.current);
+    }
+
     handleStripeCheckout();
   };
 
@@ -1222,6 +1329,7 @@ export function CheckoutContent() {
                   selectedUpsells={chargeableUpsellIds}
                   trialActive={trialActive}
                   trialEndLabel={trialEndLabel}
+                  appliedCoupon={appliedCoupon}
                 />
 
                 {/* Trust strip */}
@@ -1376,6 +1484,7 @@ function OrderSummary({
   selectedUpsells,
   trialActive,
   trialEndLabel,
+  appliedCoupon,
 }: {
   plan: PlanDef;
   billing: Billing;
@@ -1393,6 +1502,7 @@ function OrderSummary({
   selectedUpsells: UpsellId[];
   trialActive: boolean;
   trialEndLabel: string;
+  appliedCoupon?: { code: string; discount_percent: number } | null;
 }) {
   const { t } = useTranslations();
   const Icon = plan.icon;
@@ -1569,6 +1679,21 @@ function OrderSummary({
               </span>
               <span className="font-semibold text-slate-200">
                 {formatEUR(pricing.addons)}
+              </span>
+            </div>
+          )}
+
+          {/* Applied coupon */}
+          {appliedCoupon && (
+            <div className="flex items-center justify-between rounded-xl border border-amber-400/30 bg-amber-500/[0.06] p-2.5">
+              <div className="flex items-center gap-2">
+                <Tag className="h-3.5 w-3.5 text-amber-400" />
+                <span className="text-xs font-bold text-amber-300">
+                  {appliedCoupon.code}
+                </span>
+              </div>
+              <span className="text-xs font-bold text-amber-400">
+                -{appliedCoupon.discount_percent}%
               </span>
             </div>
           )}

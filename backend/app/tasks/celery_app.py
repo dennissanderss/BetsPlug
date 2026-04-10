@@ -49,6 +49,7 @@ def create_celery_app() -> Celery:
         include=[
             "app.tasks.celery_app",
             "app.tasks.sync_tasks",
+            "app.tasks.email_tasks",
         ],
     )
 
@@ -129,6 +130,14 @@ def create_celery_app() -> Celery:
                 "task": "app.tasks.sync_tasks.task_weekly_report",
                 "schedule": crontab(hour=8, minute=0, day_of_week=1),
                 "options": {"queue": "reports"},
+            },
+            # ── Abandoned checkout emails ─────────────────────────────
+            # Runs every 30 minutes. The task is idempotent: it only
+            # processes sessions that haven't received an email yet.
+            "abandoned-checkout-emails-every-30m": {
+                "task": "app.tasks.email_tasks.task_process_abandoned_checkouts",
+                "schedule": crontab(minute="*/30"),
+                "options": {"queue": "emails"},
             },
         },
     )

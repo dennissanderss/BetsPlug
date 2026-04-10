@@ -162,7 +162,7 @@ export default function StrategyTiersTab() {
                               {(m.winrate * 100).toFixed(1)}%
                             </span>
                           ) : (
-                            <span className="text-slate-600">—</span>
+                            <span className="text-slate-600">-</span>
                           )}
                         </td>
                         <td className="px-4 py-3 font-mono text-sm">
@@ -172,11 +172,11 @@ export default function StrategyTiersTab() {
                               {(m.roi * 100).toFixed(1)}%
                             </span>
                           ) : (
-                            <span className="text-slate-600">—</span>
+                            <span className="text-slate-600">-</span>
                           )}
                         </td>
                         <td className="px-4 py-3 font-mono text-sm text-slate-400">
-                          {m?.has_data ? m.sample_size : "—"}
+                          {m?.has_data ? m.sample_size : "-"}
                         </td>
                         <td className="px-4 py-3">
                           <select

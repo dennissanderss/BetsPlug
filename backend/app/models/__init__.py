@@ -17,6 +17,7 @@ from app.models.user import User, Role
 from app.models.audit import AuditLog
 from app.models.strategy import Strategy, PredictionStrategy
 from app.models.manual_expense import ManualExpense
+from app.models.abandoned_checkout import AbandonedCheckout, Coupon
 
 __all__ = [
     "Sport", "League", "Season", "Team", "Player",
@@ -30,4 +31,5 @@ __all__ = [
     "User", "Role", "AuditLog",
     "Strategy", "PredictionStrategy",
     "ManualExpense",
+    "AbandonedCheckout", "Coupon",
 ]

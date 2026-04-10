@@ -89,6 +89,21 @@ class Settings(BaseSettings):
     api_football_key: str = ""        # api-football.com (free, 100 req/day)
     the_odds_api_key: str = ""        # the-odds-api.com (free, 500 req/month)
 
+    # SMTP (Hostinger)
+    smtp_host: str = "smtp.hostinger.com"
+    smtp_port: int = 465
+    smtp_user: str = ""
+    smtp_pass: str = ""
+    mail_from_address: str = ""
+    mail_from_name: str = "BetsPlug"
+
+    # Abandoned Checkout
+    abandoned_checkout_delay_minutes: int = 60   # wait before sending email
+    coupon_discount_percent: float = 5.0         # 5% off
+    coupon_expiry_days: int = 7                  # coupon valid for 7 days
+    recovery_token_expiry_hours: int = 168       # recovery link valid 7 days
+    site_url: str = "https://www.betsplug.com"   # used in email links
+
     # Reports
     reports_output_dir: str = "/app/reports"
 
