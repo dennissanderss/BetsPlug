@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Bell,
@@ -11,13 +11,9 @@ import {
   CheckCircle2,
   ChevronRight,
   ChevronLeft,
-  CreditCard,
   Crown,
-  FileText,
   Flame,
   Gift,
-  Headphones,
-  Info,
   Lock,
   PauseCircle,
   Shield,
@@ -176,8 +172,6 @@ export function CheckoutContent() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const params = useSearchParams();
-  const router = useRouter();
-
   // Plan from URL (default Gold, the popular plan)
   const planParam = (params?.get("plan") ?? "gold").toLowerCase() as PlanId;
   const initialPlan =
@@ -197,10 +191,7 @@ export function CheckoutContent() {
   // but users who already trust us can pick "Subscribe now".
   const [startWithTrial, setStartWithTrial] = useState<boolean>(true);
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [paymentMethod, setPaymentMethod] =
-    useState<"card" | "paypal">("card");
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
   // Tracks whether the user has tried to advance past each step.
@@ -229,12 +220,6 @@ export function CheckoutContent() {
     company: "",
     vatId: "",
   });
-  const [card, setCard] = useState({
-    number: "",
-    expiry: "",
-    cvc: "",
-    name: "",
-  });
 
   // Ordered country list (popular on top) — memoized once.
   const countryOptions = useMemo(() => getOrderedCountries(), []);
@@ -262,9 +247,6 @@ export function CheckoutContent() {
     k: K,
     v: string
   ) => setAddress((p) => ({ ...p, [k]: v }));
-  const setCardField = <K extends keyof typeof card>(k: K, v: string) =>
-    setCard((p) => ({ ...p, [k]: v }));
-
   const toggleUpsell = (id: UpsellId) =>
     setSelectedUpsells((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -297,16 +279,10 @@ export function CheckoutContent() {
   }, [address]);
 
   const paymentErrors = useMemo(() => {
-    const e: Partial<Record<keyof typeof card | "terms", string>> = {};
-    if (paymentMethod === "card") {
-      if (!card.number.trim()) e.number = "required";
-      if (!card.expiry.trim()) e.expiry = "required";
-      if (!card.cvc.trim()) e.cvc = "required";
-      if (!card.name.trim()) e.name = "required";
-    }
+    const e: Partial<Record<"terms", string>> = {};
     if (!agreed) e.terms = "required";
     return e;
-  }, [card, paymentMethod, agreed]);
+  }, [agreed]);
 
   const step1Valid = Object.keys(accountErrors).length === 0;
   const step2Valid = Object.keys(addressErrors).length === 0;
@@ -398,22 +374,42 @@ export function CheckoutContent() {
     if (step > 1) setStep(((step - 1) as 1 | 2 | 3));
   };
 
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+
+  const handleStripeCheckout = async () => {
+    if (!agreed) return;
+    setSubmitting(true);
+    setCheckoutError(null);
+    try {
+      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+      const resp = await fetch(`${API}/subscriptions/create-checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plan: plan.id,
+          success_url: `${window.location.origin}${loc("/welcome")}?plan=${plan.id}&billing=${billing}&trial=${trialActive ? "1" : "0"}&success=true`,
+          cancel_url: `${window.location.origin}${loc("/checkout")}?plan=${plan.id}&billing=${billing}&cancelled=true`,
+        }),
+      });
+      const data = await resp.json();
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+      } else {
+        setCheckoutError(data.detail || "Failed to create checkout session.");
+        setSubmitting(false);
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+      setCheckoutError("Something went wrong. Please try again.");
+      setSubmitting(false);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setTriedAdvance((prev) => ({ ...prev, 3: true }));
     if (!step3Valid) return;
-    setSubmitting(true);
-    // Simulate processing, then redirect to the welcome page.
-    // The welcome page is the post-purchase "thank you" experience
-    // and handles its own CTA back into the app.
-    setTimeout(() => {
-      const params = new URLSearchParams({
-        plan: plan.id,
-        billing,
-        trial: trialActive ? "1" : "0",
-      });
-      router.push(`${loc("/welcome")}?${params.toString()}`);
-    }, 1200);
+    handleStripeCheckout();
   };
 
   /* ── Render ───────────────────────────────────────────────── */
@@ -440,7 +436,7 @@ export function CheckoutContent() {
         <div className="mx-auto max-w-3xl text-center">
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-400">
             <Lock className="h-3 w-3" />
-            {t("checkout.demoBadge")}
+            {t("checkout.footer.secure")}
           </span>
           <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl">
             {t("checkout.pageTitle")}
@@ -450,10 +446,7 @@ export function CheckoutContent() {
           </p>
         </div>
 
-        {submitted ? (
-          <SuccessState />
-        ) : (
-          <div className="mt-12 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
+        <div className="mt-12 grid gap-8 lg:grid-cols-[1.4fr_1fr]">
             {/* Mobile-first TrialPicker — must appear above the order
                 summary on mobile. On desktop it's hidden here and
                 rendered inside the left column further below so the
@@ -836,135 +829,40 @@ export function CheckoutContent() {
                         </div>
                       )}
 
-                      {/* Demo notice */}
-                      <div className="mt-4 flex items-start gap-3 rounded-2xl border border-amber-400/25 bg-amber-500/[0.06] p-4">
-                        <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-400" />
+                      {/* Stripe redirect info */}
+                      <div className="mt-6 flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5">
+                        <Lock className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
                         <div>
-                          <p className="text-xs font-bold uppercase tracking-wider text-amber-300">
-                            {t("checkout.demoBadge")}
+                          <p className="text-sm font-semibold text-white">
+                            {t("checkout.stripeRedirectTitle")}
                           </p>
-                          <p className="mt-1 text-xs leading-relaxed text-slate-300">
-                            {t("checkout.demoNote")}
+                          <p className="mt-1 text-xs leading-relaxed text-slate-400">
+                            {t("checkout.stripeRedirectDesc")}
                           </p>
                         </div>
                       </div>
 
-                      {/* Method selector */}
-                      <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                        <PaymentOption
-                          active={paymentMethod === "card"}
-                          onClick={() => setPaymentMethod("card")}
-                          title={t("checkout.payCard")}
-                          desc={t("checkout.payCardDesc")}
-                          icon={<CardBrandRow />}
-                        />
-                        <PaymentOption
-                          active={paymentMethod === "paypal"}
-                          onClick={() => setPaymentMethod("paypal")}
-                          title={t("checkout.payPaypal")}
-                          desc={t("checkout.payPaypalDesc")}
-                          icon={<PayPalMark />}
-                        />
+                      {/* Payment method badges */}
+                      <div className="mt-4 flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-4 sm:flex-row sm:gap-4">
+                        <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-slate-500">
+                          <Lock className="h-3.5 w-3.5 text-green-400" />
+                          {t("checkout.weAccept")}
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-2">
+                          <VisaBadge />
+                          <MastercardBadge />
+                          <AmexBadge />
+                          <PayPalBadge />
+                          <ApplePayBadge />
+                        </div>
                       </div>
 
-                      {/* Card form */}
-                      {paymentMethod === "card" && (
-                        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                          <Field
-                            label={t("checkout.cardNumber")}
-                            className="sm:col-span-2"
-                            error={
-                              triedAdvance[3] && paymentErrors.number
-                                ? true
-                                : false
-                            }
-                          >
-                            <div className="relative">
-                              <input
-                                type="text"
-                                inputMode="numeric"
-                                placeholder={t("checkout.cardNumberPh")}
-                                value={card.number}
-                                onChange={(e) =>
-                                  setCardField("number", e.target.value)
-                                }
-                                className={`${inputClsFor(
-                                  triedAdvance[3] && !!paymentErrors.number
-                                )} pr-12`}
-                              />
-                              <CreditCard className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                            </div>
-                          </Field>
-                          <Field
-                            label={t("checkout.cardExpiry")}
-                            error={
-                              triedAdvance[3] && paymentErrors.expiry
-                                ? true
-                                : false
-                            }
-                          >
-                            <input
-                              type="text"
-                              placeholder={t("checkout.cardExpiryPh")}
-                              value={card.expiry}
-                              onChange={(e) =>
-                                setCardField("expiry", e.target.value)
-                              }
-                              className={inputClsFor(
-                                triedAdvance[3] && !!paymentErrors.expiry
-                              )}
-                            />
-                          </Field>
-                          <Field
-                            label={t("checkout.cardCvc")}
-                            error={
-                              triedAdvance[3] && paymentErrors.cvc
-                                ? true
-                                : false
-                            }
-                          >
-                            <input
-                              type="text"
-                              inputMode="numeric"
-                              placeholder={t("checkout.cardCvcPh")}
-                              value={card.cvc}
-                              onChange={(e) =>
-                                setCardField("cvc", e.target.value)
-                              }
-                              className={inputClsFor(
-                                triedAdvance[3] && !!paymentErrors.cvc
-                              )}
-                            />
-                          </Field>
-                          <Field
-                            label={t("checkout.cardName")}
-                            className="sm:col-span-2"
-                            error={
-                              triedAdvance[3] && paymentErrors.name
-                                ? true
-                                : false
-                            }
-                          >
-                            <input
-                              type="text"
-                              placeholder={t("checkout.cardNamePh")}
-                              value={card.name}
-                              onChange={(e) =>
-                                setCardField("name", e.target.value)
-                              }
-                              className={inputClsFor(
-                                triedAdvance[3] && !!paymentErrors.name
-                              )}
-                            />
-                          </Field>
-                        </div>
-                      )}
-
-                      {paymentMethod === "paypal" && (
-                        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5">
-                          <PayPalMark />
-                          <p className="text-sm text-slate-300">
-                            {t("checkout.paypalNote")}
+                      {/* Checkout error */}
+                      {checkoutError && (
+                        <div className="mt-4 flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/[0.06] p-4">
+                          <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-400" />
+                          <p className="text-xs leading-relaxed text-red-300">
+                            {checkoutError}
                           </p>
                         </div>
                       )}
@@ -986,14 +884,16 @@ export function CheckoutContent() {
                         <span className="text-xs leading-relaxed text-slate-400">
                           {t("checkout.agreeTerms")}{" "}
                           <Link
-                            href={loc("/")}
+                            href={loc("/terms")}
+                            target="_blank"
                             className="font-semibold text-green-400 hover:text-green-300"
                           >
                             {t("checkout.termsLink")}
                           </Link>{" "}
                           {t("checkout.and")}{" "}
                           <Link
-                            href={loc("/")}
+                            href={loc("/privacy")}
+                            target="_blank"
                             className="font-semibold text-green-400 hover:text-green-300"
                           >
                             {t("checkout.privacyLink")}
@@ -1088,7 +988,6 @@ export function CheckoutContent() {
               </div>
             </aside>
           </div>
-        )}
       </main>
 
       <CheckoutFooter />
@@ -1212,73 +1111,6 @@ function Stepper({ step }: { step: 1 | 2 | 3 }) {
         );
       })}
     </ol>
-  );
-}
-
-/* ── Payment method option tile ─────────────────────────────── */
-function PaymentOption({
-  active,
-  onClick,
-  title,
-  desc,
-  icon,
-}: {
-  active: boolean;
-  onClick: () => void;
-  title: string;
-  desc: string;
-  icon: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`group relative flex items-center gap-4 rounded-2xl border p-4 text-left transition-all ${
-        active
-          ? "border-green-500/60 bg-green-500/[0.08] shadow-[0_0_30px_rgba(74,222,128,0.15)]"
-          : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.2]"
-      }`}
-    >
-      <div className="flex h-10 w-14 flex-shrink-0 items-center justify-center rounded-lg bg-white/[0.04]">
-        {icon}
-      </div>
-      <div className="flex-1">
-        <div className="text-sm font-bold text-white">{title}</div>
-        <div className="text-xs text-slate-400">{desc}</div>
-      </div>
-      <div
-        className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border transition-all ${
-          active
-            ? "border-green-400 bg-green-500"
-            : "border-white/20 bg-transparent"
-        }`}
-      >
-        {active && <Check className="h-3 w-3 text-black" strokeWidth={4} />}
-      </div>
-    </button>
-  );
-}
-
-function CardBrandRow() {
-  return (
-    <div className="flex items-center gap-0.5">
-      <span className="rounded bg-white px-1 py-0.5 text-[8px] font-extrabold italic text-blue-700">
-        VISA
-      </span>
-      <span className="flex gap-0.5">
-        <span className="h-2.5 w-2.5 rounded-full bg-red-500 opacity-90" />
-        <span className="-ml-1.5 h-2.5 w-2.5 rounded-full bg-amber-400 opacity-90" />
-      </span>
-    </div>
-  );
-}
-
-function PayPalMark() {
-  return (
-    <span className="text-[10px] font-extrabold">
-      <span className="text-[#003087]">Pay</span>
-      <span className="text-[#009cde]">Pal</span>
-    </span>
   );
 }
 
@@ -1826,37 +1658,6 @@ function UpsellsBlock({
           : t("checkout.vatIncluded")}
       </p>
     </div>
-  );
-}
-
-/* ── Success state ──────────────────────────────────────────── */
-function SuccessState() {
-  const { t } = useTranslations();
-  const loc = useLocalizedHref();
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="mx-auto mt-14 max-w-2xl rounded-3xl border border-green-500/30 bg-gradient-to-br from-green-500/[0.12] via-emerald-500/[0.05] to-transparent p-10 text-center backdrop-blur-xl"
-    >
-      <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20 shadow-[0_0_40px_rgba(74,222,128,0.35)]">
-        <CheckCircle2 className="h-8 w-8 text-green-400" />
-      </div>
-      <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
-        {t("checkout.successTitle")}
-      </h2>
-      <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-slate-300">
-        {t("checkout.successBody")}
-      </p>
-      <Link
-        href={loc("/dashboard")}
-        className="btn-gradient mt-8 inline-flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20"
-      >
-        {t("checkout.successCta")}
-        <ChevronRight className="h-4 w-4" />
-      </Link>
-    </motion.div>
   );
 }
 

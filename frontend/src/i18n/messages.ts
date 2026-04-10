@@ -949,26 +949,12 @@ const en = {
   "checkout.vatId": "VAT ID (optional)",
 
   /* Step 3 - Payment */
-  "checkout.paymentTitle": "Payment method",
+  "checkout.paymentTitle": "Payment",
   "checkout.paymentSubtitle":
-    "Choose how you'd like to pay. A real payment provider will be connected soon - this is a demo checkout.",
-  "checkout.payCard": "Credit card",
-  "checkout.payCardDesc": "Visa, Mastercard, Amex",
-  "checkout.payPaypal": "PayPal",
-  "checkout.payPaypalDesc": "Pay with your PayPal balance",
-  "checkout.cardNumber": "Card number",
-  "checkout.cardNumberPh": "1234 5678 9012 3456",
-  "checkout.cardExpiry": "Expiry",
-  "checkout.cardExpiryPh": "MM/YY",
-  "checkout.cardCvc": "CVC",
-  "checkout.cardCvcPh": "123",
-  "checkout.cardName": "Name on card",
-  "checkout.cardNamePh": "John Doe",
-  "checkout.paypalNote":
-    "You'll be redirected to PayPal to complete the payment.",
-  "checkout.demoBadge": "Demo mode",
-  "checkout.demoNote":
-    "Payments are not processed yet. We'll connect a real provider (Stripe / PayPal) before launch.",
+    "Review your order and proceed to our secure payment page.",
+  "checkout.stripeRedirectTitle": "Secure payment via Stripe",
+  "checkout.stripeRedirectDesc":
+    "After clicking the button below, you will be redirected to Stripe's secure checkout page to complete your payment. We accept all major credit cards, debit cards, and PayPal.",
 
   /* Terms & action row */
   "checkout.agreeTerms": "I agree to the",
@@ -990,7 +976,7 @@ const en = {
   /* Success */
   "checkout.successTitle": "Welcome to BetsPlug!",
   "checkout.successBody":
-    "Your demo checkout was received. In production you'd now be redirected to your dashboard - for now, explore the site.",
+    "Your subscription is now active! You will be redirected to your dashboard.",
   "checkout.successCta": "Go to dashboard",
 
   /* ─── Welcome / thank-you page ─────────────────────────── */
@@ -2155,26 +2141,12 @@ const nl: Dictionary = {
   "checkout.company": "Bedrijfsnaam (optioneel)",
   "checkout.vatId": "BTW-nummer (optioneel)",
 
-  "checkout.paymentTitle": "Betaalmethode",
+  "checkout.paymentTitle": "Betaling",
   "checkout.paymentSubtitle":
-    "Kies hoe je wilt betalen. Een echte betaalprovider wordt binnenkort gekoppeld - dit is een demo-checkout.",
-  "checkout.payCard": "Creditcard",
-  "checkout.payCardDesc": "Visa, Mastercard, Amex",
-  "checkout.payPaypal": "PayPal",
-  "checkout.payPaypalDesc": "Betaal met je PayPal-saldo",
-  "checkout.cardNumber": "Kaartnummer",
-  "checkout.cardNumberPh": "1234 5678 9012 3456",
-  "checkout.cardExpiry": "Vervaldatum",
-  "checkout.cardExpiryPh": "MM/JJ",
-  "checkout.cardCvc": "CVC",
-  "checkout.cardCvcPh": "123",
-  "checkout.cardName": "Naam op kaart",
-  "checkout.cardNamePh": "Jan Jansen",
-  "checkout.paypalNote":
-    "Je wordt doorgestuurd naar PayPal om de betaling af te ronden.",
-  "checkout.demoBadge": "Demo modus",
-  "checkout.demoNote":
-    "Betalingen worden nog niet verwerkt. We koppelen een echte provider (Stripe / PayPal) vóór de lancering.",
+    "Controleer je bestelling en ga verder naar onze beveiligde betaalpagina.",
+  "checkout.stripeRedirectTitle": "Veilig betalen via Stripe",
+  "checkout.stripeRedirectDesc":
+    "Na het klikken op de onderstaande knop word je doorgestuurd naar de beveiligde betaalpagina van Stripe. We accepteren alle gangbare creditcards, betaalpassen en PayPal.",
 
   "checkout.agreeTerms": "Ik ga akkoord met de",
   "checkout.termsLink": "Algemene Voorwaarden",
@@ -2193,7 +2165,7 @@ const nl: Dictionary = {
 
   "checkout.successTitle": "Welkom bij BetsPlug!",
   "checkout.successBody":
-    "Je demo-checkout is ontvangen. In productie zou je nu worden doorgestuurd naar je dashboard - verken voor nu de site.",
+    "Je abonnement is geactiveerd! Je wordt nu doorgestuurd naar je dashboard.",
   "checkout.successCta": "Naar dashboard",
 
   /* Welcome / thank-you */
