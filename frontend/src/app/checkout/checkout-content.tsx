@@ -215,7 +215,11 @@ export function CheckoutContent() {
   // Trial is the default path (maximises free-trial conversions),
   // but users who already trust us can pick "Subscribe now".
   const [startWithTrial, setStartWithTrial] = useState<boolean>(true);
-  const [step, setStep] = useState<1 | 2 | 3>(1);
+  // Already-logged-in visitors skip the Account step entirely —
+  // they land straight on Billing. Anonymous visitors start at
+  // step 1 as before (though they'll see LoginGate instead of the
+  // form, because of the `authReady && !user` branch above).
+  const [step, setStep] = useState<1 | 2 | 3>(user ? 2 : 1);
   const [submitting, setSubmitting] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
@@ -264,6 +268,17 @@ export function CheckoutContent() {
     };
   }, []);
 
+  // If the user finishes logging in after the component mounted
+  // (e.g. they arrived anonymous, then came back from /login) and
+  // we're still sitting on the Account step, skip straight to
+  // Billing — the Account step is only meaningful for anonymous
+  // visitors and we'd otherwise render an empty shell.
+  useEffect(() => {
+    if (authReady && user && step === 1) {
+      setStep(2);
+    }
+  }, [authReady, user, step]);
+
   const setAccountField = <K extends keyof typeof account>(
     k: K,
     v: string
@@ -282,6 +297,11 @@ export function CheckoutContent() {
 
   const accountErrors = useMemo(() => {
     const e: Partial<Record<keyof typeof account, string>> = {};
+    // When the user is already logged in the Account step has
+    // nothing to validate — they don't need to (re)create an
+    // account. Returning an empty error object keeps step1Valid
+    // true so the Continue button advances straight to Billing.
+    if (user) return e;
     if (!account.firstName.trim()) e.firstName = "required";
     if (!account.lastName.trim()) e.lastName = "required";
     if (!account.email.trim()) e.email = "required";
@@ -292,7 +312,7 @@ export function CheckoutContent() {
     else if (account.confirmPassword !== account.password)
       e.confirmPassword = "mismatch";
     return e;
-  }, [account]);
+  }, [account, user]);
 
   const addressErrors = useMemo(() => {
     const e: Partial<Record<keyof typeof address, string>> = {};
@@ -659,123 +679,138 @@ export function CheckoutContent() {
                         title={t("checkout.accountTitle")}
                         subtitle={t("checkout.accountSubtitle")}
                       />
-                      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                        <Field
-                          label={t("checkout.firstName")}
-                          error={
-                            triedAdvance[1] && accountErrors.firstName
-                              ? true
-                              : false
-                          }
-                        >
-                          <input
-                            type="text"
-                            placeholder={t("checkout.firstNamePh")}
-                            value={account.firstName}
-                            onChange={(e) =>
-                              setAccountField("firstName", e.target.value)
-                            }
-                            className={inputClsFor(
-                              triedAdvance[1] && !!accountErrors.firstName
-                            )}
-                          />
-                        </Field>
-                        <Field
-                          label={t("checkout.lastName")}
-                          error={
-                            triedAdvance[1] && accountErrors.lastName
-                              ? true
-                              : false
-                          }
-                        >
-                          <input
-                            type="text"
-                            placeholder={t("checkout.lastNamePh")}
-                            value={account.lastName}
-                            onChange={(e) =>
-                              setAccountField("lastName", e.target.value)
-                            }
-                            className={inputClsFor(
-                              triedAdvance[1] && !!accountErrors.lastName
-                            )}
-                          />
-                        </Field>
-                        <Field
-                          label={t("checkout.email")}
-                          className="sm:col-span-2"
-                          error={
-                            triedAdvance[1] && accountErrors.email
-                              ? true
-                              : false
-                          }
-                        >
-                          <input
-                            type="email"
-                            placeholder={t("checkout.emailPh")}
-                            value={account.email}
-                            onChange={(e) =>
-                              setAccountField("email", e.target.value)
-                            }
-                            className={inputClsFor(
-                              triedAdvance[1] && !!accountErrors.email
-                            )}
-                          />
-                        </Field>
-                        <Field
-                          label={t("checkout.password")}
-                          hint={t("checkout.passwordHint")}
-                          error={
-                            triedAdvance[1] && accountErrors.password
-                              ? true
-                              : false
-                          }
-                        >
-                          <input
-                            type="password"
-                            placeholder={t("checkout.passwordPh")}
-                            value={account.password}
-                            onChange={(e) =>
-                              setAccountField("password", e.target.value)
-                            }
-                            className={inputClsFor(
-                              triedAdvance[1] && !!accountErrors.password
-                            )}
-                          />
-                        </Field>
-                        <Field
-                          label={t("checkout.confirmPassword")}
-                          error={
-                            triedAdvance[1] && accountErrors.confirmPassword
-                              ? true
-                              : false
-                          }
-                        >
-                          <input
-                            type="password"
-                            placeholder={t("checkout.passwordPh")}
-                            value={account.confirmPassword}
-                            onChange={(e) =>
-                              setAccountField(
-                                "confirmPassword",
-                                e.target.value
-                              )
-                            }
-                            className={inputClsFor(
-                              triedAdvance[1] &&
-                                !!accountErrors.confirmPassword
-                            )}
-                          />
-                        </Field>
-                      </div>
-                      <p className="mt-5 text-xs text-slate-500">
-                        {t("checkout.alreadyHaveAccount")}{" "}
-                        <Link
-                          href={loc("/login")}
-                          className="font-semibold text-green-400 hover:text-green-300"
-                        >
-                          {t("checkout.signIn")}
-                        </Link>
-                      </p>
+                      {/* Create-account form — only shown to anonymous
+                          visitors. When the user is already logged in
+                          the LOGGED IN badge above is the only thing
+                          the Account step needs, and the Continue
+                          button advances straight to Billing. The
+                          outer `{authReady && user && !mySub.data?.has_subscription}`
+                          branch means we will effectively never land
+                          here while logged in (the useEffect auto-
+                          bumps to step 2), but we still guard the
+                          form so a stale render never leaks the
+                          registration fields. */}
+                      {!user && (
+                        <>
+                          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                            <Field
+                              label={t("checkout.firstName")}
+                              error={
+                                triedAdvance[1] && accountErrors.firstName
+                                  ? true
+                                  : false
+                              }
+                            >
+                              <input
+                                type="text"
+                                placeholder={t("checkout.firstNamePh")}
+                                value={account.firstName}
+                                onChange={(e) =>
+                                  setAccountField("firstName", e.target.value)
+                                }
+                                className={inputClsFor(
+                                  triedAdvance[1] && !!accountErrors.firstName
+                                )}
+                              />
+                            </Field>
+                            <Field
+                              label={t("checkout.lastName")}
+                              error={
+                                triedAdvance[1] && accountErrors.lastName
+                                  ? true
+                                  : false
+                              }
+                            >
+                              <input
+                                type="text"
+                                placeholder={t("checkout.lastNamePh")}
+                                value={account.lastName}
+                                onChange={(e) =>
+                                  setAccountField("lastName", e.target.value)
+                                }
+                                className={inputClsFor(
+                                  triedAdvance[1] && !!accountErrors.lastName
+                                )}
+                              />
+                            </Field>
+                            <Field
+                              label={t("checkout.email")}
+                              className="sm:col-span-2"
+                              error={
+                                triedAdvance[1] && accountErrors.email
+                                  ? true
+                                  : false
+                              }
+                            >
+                              <input
+                                type="email"
+                                placeholder={t("checkout.emailPh")}
+                                value={account.email}
+                                onChange={(e) =>
+                                  setAccountField("email", e.target.value)
+                                }
+                                className={inputClsFor(
+                                  triedAdvance[1] && !!accountErrors.email
+                                )}
+                              />
+                            </Field>
+                            <Field
+                              label={t("checkout.password")}
+                              hint={t("checkout.passwordHint")}
+                              error={
+                                triedAdvance[1] && accountErrors.password
+                                  ? true
+                                  : false
+                              }
+                            >
+                              <input
+                                type="password"
+                                placeholder={t("checkout.passwordPh")}
+                                value={account.password}
+                                onChange={(e) =>
+                                  setAccountField("password", e.target.value)
+                                }
+                                className={inputClsFor(
+                                  triedAdvance[1] && !!accountErrors.password
+                                )}
+                              />
+                            </Field>
+                            <Field
+                              label={t("checkout.confirmPassword")}
+                              error={
+                                triedAdvance[1] && accountErrors.confirmPassword
+                                  ? true
+                                  : false
+                              }
+                            >
+                              <input
+                                type="password"
+                                placeholder={t("checkout.passwordPh")}
+                                value={account.confirmPassword}
+                                onChange={(e) =>
+                                  setAccountField(
+                                    "confirmPassword",
+                                    e.target.value
+                                  )
+                                }
+                                className={inputClsFor(
+                                  triedAdvance[1] &&
+                                    !!accountErrors.confirmPassword
+                                )}
+                              />
+                            </Field>
+                          </div>
+                          <p className="mt-5 text-xs text-slate-500">
+                            {t("checkout.alreadyHaveAccount")}{" "}
+                            <Link
+                              href={loc("/login")}
+                              className="font-semibold text-green-400 hover:text-green-300"
+                            >
+                              {t("checkout.signIn")}
+                            </Link>
+                          </p>
+                        </>
+                      )}
 
                       {/* Payment reassurance — white pill badges
                           matching the footer so the trust signals
