@@ -387,10 +387,16 @@ async def create_checkout_session(
                 "user_email": current_user.email,
             }
 
-            # Checkout Sessions auto-select payment methods based on what's
-            # enabled in the Stripe Dashboard for your account — no explicit
-            # parameter needed. (`automatic_payment_methods` is for
-            # PaymentIntents/SetupIntents, not Checkout Sessions.)
+            # Without an explicit list Stripe's "dynamic payment methods"
+            # picks just one option for NL/EUR customers (iDEAL), so the
+            # customer never sees a card option. Listing them here forces
+            # Stripe to show all three as a real choice on the hosted
+            # checkout page. Each of these works in both `payment` and
+            # `subscription` mode for EUR. Add more (e.g. "paypal", "sofort",
+            # "sepa_debit") only after enabling them in the Stripe Dashboard
+            # under Settings → Payment methods.
+            payment_method_types = ["card", "ideal", "bancontact"]
+
             session = stripe.checkout.Session.create(
                 line_items=line_items,
                 mode=mode,
@@ -399,6 +405,7 @@ async def create_checkout_session(
                 metadata=metadata,
                 client_reference_id=str(current_user.id),
                 customer_email=current_user.email,
+                payment_method_types=payment_method_types,
             )
 
             return CheckoutResponse(
