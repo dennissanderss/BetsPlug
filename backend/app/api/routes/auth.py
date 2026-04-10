@@ -26,13 +26,14 @@ from __future__ import annotations
 
 import logging
 import secrets
+import time
 import uuid
 from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr, Field
-from sqlalchemy import select
+from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.dependencies import require_admin
@@ -48,6 +49,7 @@ from app.db.session import get_db
 from app.models.user import User
 from app.schemas.user import Token, UserCreate, UserResponse
 from app.services.email import (
+    send_email,
     send_password_reset_email,
     send_verification_email,
 )
@@ -167,6 +169,52 @@ class AdminVerificationInfo(BaseModel):
     email_verified: bool
     verification_url: str | None = None
     verification_sent_at: datetime | None = None
+
+
+class AdminPasswordResetInfo(BaseModel):
+    """Admin-only view of a freshly-issued password reset token."""
+
+    user_id: uuid.UUID
+    email: EmailStr
+    reset_url: str
+    expires_at: datetime
+
+
+class AdminUserSummary(BaseModel):
+    """Compact user row used by the admin diagnostics find-users endpoint."""
+
+    id: uuid.UUID
+    email: EmailStr
+    username: str
+    role: str
+    email_verified: bool
+    is_active: bool
+    created_at: datetime | None = None
+    last_login_at: datetime | None = None
+
+
+class AdminSMTPConfig(BaseModel):
+    """Redacted view of the current SMTP config — never exposes the password."""
+
+    smtp_host: str
+    smtp_port: int
+    smtp_user: str
+    smtp_from: str
+    smtp_use_tls: bool
+    effective_mode: str  # "disabled", "implicit-tls (465)", "starttls (587)", "plain"
+    password_set: bool   # True if smtp_password is not empty
+
+
+class TestEmailRequest(BaseModel):
+    to: EmailStr
+
+
+class TestEmailResponse(BaseModel):
+    success: bool
+    error_type: str | None = None
+    error_message: str | None = None
+    duration_ms: int
+    config: AdminSMTPConfig
 
 
 # ---------------------------------------------------------------------------
@@ -492,14 +540,38 @@ async def forgot_password(
     Always returns 200 regardless of whether the email exists in the
     database, to avoid account-enumeration leaks. The email send runs
     in a background task so slow SMTP cannot hang this endpoint.
+
+    The endpoint logs at WARNING level whether the user was actually
+    found — so when a user complains "I clicked forgot password and
+    never got a mail", operators can grep Railway logs for
+    ``[FORGOT_PASSWORD]`` and immediately see if the issue is a typo
+    (``user not found``) or an SMTP delivery problem (``task queued``
+    but no subsequent ``[EMAIL SMTP] ✓ Sent OK``).
     """
-    result = await db.execute(select(User).where(User.email == payload.email))
+    # Case-insensitive lookup so "Dennis@…" matches "dennis@…".
+    normalized = payload.email.strip().lower()
+    result = await db.execute(
+        select(User).where(func.lower(User.email) == normalized)
+    )
     user = result.scalar_one_or_none()
 
-    if user is not None:
+    if user is None:
+        logger.warning(
+            "[FORGOT_PASSWORD] No user for email=%r — silently returning 200 "
+            "(account-enumeration protection). If this was *you*, check for "
+            "typos: call GET /auth/admin/find-users?q=<partial> as admin.",
+            payload.email,
+        )
+    else:
         user.reset_password_token = secrets.token_urlsafe(32)
         user.reset_password_expires_at = datetime.now(timezone.utc) + PASSWORD_RESET_TTL
         await db.flush()
+        logger.warning(
+            "[FORGOT_PASSWORD] User found email=%s username=%s — queued "
+            "background email task. Look for '[EMAIL SMTP] ✓ Sent OK to=%s' "
+            "in subsequent log lines.",
+            user.email, user.username, user.email,
+        )
         background_tasks.add_task(
             _send_password_reset_email_safe,
             user.email,
@@ -694,4 +766,248 @@ async def admin_resend_verification(
 
     return AuthMessageResponse(
         message=f"Verification email queued for {user.email}."
+    )
+
+
+# ---------------------------------------------------------------------------
+# Admin diagnostics — SMTP test, user search, password-reset link
+# ---------------------------------------------------------------------------
+#
+# These endpoints exist because SMTP failures disappear into Railway logs and
+# the public ``/forgot-password`` endpoint silently returns 200 on unknown
+# emails. When a user complains "I never got my mail" we need to distinguish
+# between (a) typo in the email address, (b) SMTP auth failure, (c) Gmail
+# silently dropping the message because betsplug.com has no SPF/DKIM. The
+# endpoints below let an admin answer all three questions from the browser
+# instead of SSH-ing into Railway.
+
+
+def _build_smtp_config_snapshot() -> AdminSMTPConfig:
+    """Build a redacted view of the current SMTP config.
+
+    Never exposes the password — only whether it's set or not. ``effective_mode``
+    summarises the port/TLS combo so operators don't have to mentally decode
+    ``use_tls=True, start_tls=False`` again.
+    """
+    settings = get_settings()
+    if not settings.smtp_host:
+        mode = "disabled (dev log mode)"
+    elif settings.smtp_port == 465 and settings.smtp_use_tls:
+        mode = "implicit-tls (465)"
+    elif settings.smtp_port != 465 and settings.smtp_use_tls:
+        mode = f"starttls ({settings.smtp_port})"
+    else:
+        mode = f"plain ({settings.smtp_port})"
+    return AdminSMTPConfig(
+        smtp_host=settings.smtp_host or "(not configured)",
+        smtp_port=settings.smtp_port,
+        smtp_user=settings.smtp_user or "(not set)",
+        smtp_from=settings.smtp_from or "(not set)",
+        smtp_use_tls=settings.smtp_use_tls,
+        effective_mode=mode,
+        password_set=bool(settings.smtp_password),
+    )
+
+
+@router.get(
+    "/admin/smtp-config",
+    response_model=AdminSMTPConfig,
+    summary="Show the current SMTP config (admin-only, redacted)",
+)
+async def admin_get_smtp_config(
+    current_user: User = Depends(require_admin),
+) -> AdminSMTPConfig:
+    """Return the currently active SMTP config without exposing the password.
+
+    Useful sanity-check before firing a test email — if ``smtp_host`` is
+    ``(not configured)`` or ``password_set`` is ``False``, no amount of
+    DNS tweaking will help.
+    """
+    return _build_smtp_config_snapshot()
+
+
+@router.post(
+    "/admin/test-email",
+    response_model=TestEmailResponse,
+    summary="Send a synchronous test email (admin-only)",
+)
+async def admin_test_email(
+    payload: TestEmailRequest,
+    current_user: User = Depends(require_admin),
+) -> TestEmailResponse:
+    """Try to send a minimal test email RIGHT NOW and return the real result.
+
+    Unlike the production email paths (which queue the send in a background
+    task to keep the user request fast), this endpoint awaits the full
+    SMTP round-trip and captures any exception. That's exactly what's
+    needed to debug "emails don't arrive" issues: the response tells you
+    whether the SMTP submission succeeded, and if not, which exception
+    type was raised (SMTPAuthenticationError, SMTPServerDisconnected, etc.).
+
+    ⚠️  Remember: a successful SMTP submission does NOT guarantee inbox
+    delivery. Gmail can silently drop messages from domains without SPF
+    or DKIM records. If this endpoint reports success but the mail never
+    arrives, the next step is setting up SPF + DKIM on betsplug.com DNS.
+    """
+    config = _build_smtp_config_snapshot()
+    start = time.perf_counter()
+
+    subject = "BetsPlug SMTP test"
+    html = (
+        "<html><body style='font-family: sans-serif;'>"
+        "<h1 style='color: #f97316;'>✅ SMTP works</h1>"
+        "<p>If you're reading this, the BetsPlug backend can reach "
+        f"<code>{config.smtp_host}:{config.smtp_port}</code>, authenticate "
+        f"as <code>{config.smtp_user}</code>, and successfully submit mail "
+        "to the queue.</p>"
+        "<p>Note that successful submission does <strong>not</strong> "
+        "guarantee inbox delivery — Gmail and Outlook may still drop "
+        "messages from domains without SPF/DKIM records.</p>"
+        f"<p><small>Triggered by: {current_user.email}</small></p>"
+        "</body></html>"
+    )
+    text = (
+        "BetsPlug SMTP test — if you're reading this, the backend can "
+        "reach and authenticate against your SMTP server. Note that a "
+        "successful SMTP submission does not guarantee inbox delivery: "
+        "Gmail may still drop mail from domains without SPF/DKIM.\n\n"
+        f"Triggered by: {current_user.email}"
+    )
+
+    try:
+        await send_email(
+            to=payload.to,
+            subject=subject,
+            html=html,
+            text=text,
+            raise_on_failure=True,
+        )
+        elapsed_ms = int((time.perf_counter() - start) * 1000)
+        logger.warning(
+            "[ADMIN TEST EMAIL] ✓ %s sent test email to %s in %d ms",
+            current_user.email, payload.to, elapsed_ms,
+        )
+        return TestEmailResponse(
+            success=True,
+            error_type=None,
+            error_message=None,
+            duration_ms=elapsed_ms,
+            config=config,
+        )
+    except Exception as exc:  # noqa: BLE001 — surface the real error to admin
+        elapsed_ms = int((time.perf_counter() - start) * 1000)
+        logger.error(
+            "[ADMIN TEST EMAIL] ✗ %s test email to %s failed after %d ms: "
+            "%s: %s",
+            current_user.email, payload.to, elapsed_ms,
+            type(exc).__name__, exc,
+        )
+        return TestEmailResponse(
+            success=False,
+            error_type=type(exc).__name__,
+            error_message=str(exc) or repr(exc),
+            duration_ms=elapsed_ms,
+            config=config,
+        )
+
+
+@router.get(
+    "/admin/find-users",
+    response_model=list[AdminUserSummary],
+    summary="Search users by partial email or username (admin-only)",
+)
+async def admin_find_users(
+    q: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_admin),
+) -> list[AdminUserSummary]:
+    """Case-insensitive partial match on email and username, up to 25 results.
+
+    Primary use case: a user says "I registered with dennissanders1002@…"
+    but can't log in — admin searches ``dennissan`` and sees whether it's
+    actually ``dennissanders`` (single s) or ``dennissanderss`` (double s)
+    or ``dennissanders1002`` vs ``dennisanders1002``, etc.
+    """
+    stripped = q.strip()
+    if len(stripped) < 2:
+        raise HTTPException(
+            status_code=400,
+            detail="Query must be at least 2 characters.",
+        )
+    pattern = f"%{stripped.lower()}%"
+    result = await db.execute(
+        select(User)
+        .where(
+            or_(
+                func.lower(User.email).like(pattern),
+                func.lower(User.username).like(pattern),
+            )
+        )
+        .limit(25)
+    )
+    users = list(result.scalars().all())
+    logger.info(
+        "[ADMIN FIND USERS] %s searched q=%r found=%d",
+        current_user.email, stripped, len(users),
+    )
+    return [
+        AdminUserSummary(
+            id=u.id,
+            email=u.email,
+            username=u.username,
+            role=u.role.value,
+            email_verified=u.email_verified,
+            is_active=u.is_active,
+            created_at=getattr(u, "created_at", None),
+            last_login_at=u.last_login_at,
+        )
+        for u in users
+    ]
+
+
+@router.get(
+    "/admin/password-reset-link/{email}",
+    response_model=AdminPasswordResetInfo,
+    summary="Issue and return a password-reset URL (admin-only)",
+)
+async def admin_get_password_reset_link(
+    email: str,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_admin),
+) -> AdminPasswordResetInfo:
+    """Issue a fresh password-reset token and return the URL directly.
+
+    Bypasses SMTP entirely so admin can hand the reset link to a user
+    via chat/support while the email delivery issue is being fixed.
+    Every call rotates the token (the previous reset link, if any, is
+    invalidated) so it is safe to call repeatedly.
+    """
+    normalized = email.strip().lower()
+    result = await db.execute(
+        select(User).where(func.lower(User.email) == normalized)
+    )
+    user = result.scalar_one_or_none()
+    if user is None:
+        raise HTTPException(
+            status_code=404, detail=f"User not found: {email}"
+        )
+
+    user.reset_password_token = secrets.token_urlsafe(32)
+    user.reset_password_expires_at = datetime.now(timezone.utc) + PASSWORD_RESET_TTL
+    await db.flush()
+
+    settings = get_settings()
+    base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
+    reset_url = f"{base}/auth/reset-password?token={user.reset_password_token}"
+
+    logger.warning(
+        "[ADMIN PASSWORD RESET LINK] %s issued reset link for %s",
+        current_user.email, user.email,
+    )
+
+    return AdminPasswordResetInfo(
+        user_id=user.id,
+        email=user.email,
+        reset_url=reset_url,
+        expires_at=user.reset_password_expires_at,
     )

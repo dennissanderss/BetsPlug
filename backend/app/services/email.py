@@ -33,6 +33,8 @@ async def send_email(
     html: str,
     text: str | None = None,
     action_url: str | None = None,
+    *,
+    raise_on_failure: bool = False,
 ) -> bool:
     """Send an email via async SMTP.
 
@@ -49,6 +51,11 @@ async def send_email(
         When supplied and SMTP is in dev-mode, the URL is logged on its
         own highly-visible line so admins can ``grep '[ACTION URL]'``
         Railway logs and copy the link directly to the user.
+    raise_on_failure:
+        When True, the underlying ``aiosmtplib`` exception is re-raised
+        instead of being swallowed. Used by the admin diagnostics
+        endpoint (``POST /auth/admin/test-email``) so the real SMTP error
+        reaches the browser rather than disappearing into Railway logs.
     """
     settings = get_settings()
 
@@ -98,6 +105,21 @@ async def send_email(
     # setting it to False disables encryption entirely (dev/loopback only).
     use_ssl = settings.smtp_port == 465 and settings.smtp_use_tls
     use_starttls = settings.smtp_port != 465 and settings.smtp_use_tls
+    # Verbose handshake log so Railway logs clearly show every SMTP attempt
+    # and operators can tell whether the problem is at connect, auth, or
+    # data-transfer time.
+    logger.warning(
+        "[EMAIL SMTP] Attempting send host=%s port=%d user=%s from=%r "
+        "tls=%s starttls=%s to=%s subject=%r",
+        settings.smtp_host,
+        settings.smtp_port,
+        settings.smtp_user or "(none)",
+        settings.smtp_from,
+        use_ssl,
+        use_starttls,
+        to,
+        subject,
+    )
     # Hard ceiling on the SMTP round-trip. Hostinger occasionally takes
     # 30+ seconds to even finish the TLS handshake; past that the send is
     # almost certainly lost and we'd rather fail fast and log the
@@ -113,11 +135,15 @@ async def send_email(
             use_tls=use_ssl,
             timeout=20,
         )
-        logger.info("Email sent to=%s subject=%r", to, subject)
+        logger.warning(
+            "[EMAIL SMTP] ✓ Sent OK to=%s subject=%r", to, subject
+        )
         return True
     except Exception as exc:  # noqa: BLE001 — never break callers
         logger.error(
-            "Email send failed to=%s subject=%r err=%s", to, subject, exc
+            "[EMAIL SMTP] ✗ Send FAILED to=%s subject=%r "
+            "err_type=%s err=%s",
+            to, subject, type(exc).__name__, exc,
         )
         if action_url:
             # Even when send fails, still log the URL so admin can
@@ -126,6 +152,8 @@ async def send_email(
                 "[ACTION URL — SMTP failed, please share manually] %s",
                 action_url,
             )
+        if raise_on_failure:
+            raise
         return False
 
 

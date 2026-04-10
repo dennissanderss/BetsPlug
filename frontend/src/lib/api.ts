@@ -633,6 +633,92 @@ class ApiClient {
   deleteAdminNote(id: string) {
     return this.request<any>(`/admin/notes/${id}`, { method: "DELETE" });
   }
+
+  // ── Admin Diagnostics (SMTP test, user search, password-reset link) ──
+  //
+  // These wrap the `/auth/admin/*` endpoints used by the Email Diagnostics
+  // tab in the admin panel. Every endpoint requires an admin JWT.
+
+  getAdminSmtpConfig() {
+    return this.request<{
+      smtp_host: string;
+      smtp_port: number;
+      smtp_user: string;
+      smtp_from: string;
+      smtp_use_tls: boolean;
+      effective_mode: string;
+      password_set: boolean;
+    }>("/auth/admin/smtp-config");
+  }
+
+  adminTestEmail(to: string) {
+    return this.request<{
+      success: boolean;
+      error_type: string | null;
+      error_message: string | null;
+      duration_ms: number;
+      config: {
+        smtp_host: string;
+        smtp_port: number;
+        smtp_user: string;
+        smtp_from: string;
+        smtp_use_tls: boolean;
+        effective_mode: string;
+        password_set: boolean;
+      };
+    }>("/auth/admin/test-email", {
+      method: "POST",
+      body: JSON.stringify({ to }),
+    });
+  }
+
+  adminFindUsers(q: string) {
+    return this.request<
+      Array<{
+        id: string;
+        email: string;
+        username: string;
+        role: string;
+        email_verified: boolean;
+        is_active: boolean;
+        created_at: string | null;
+        last_login_at: string | null;
+      }>
+    >(`/auth/admin/find-users?q=${encodeURIComponent(q)}`);
+  }
+
+  adminGetPasswordResetLink(email: string) {
+    return this.request<{
+      user_id: string;
+      email: string;
+      reset_url: string;
+      expires_at: string;
+    }>(`/auth/admin/password-reset-link/${encodeURIComponent(email)}`);
+  }
+
+  adminGetVerificationLink(email: string) {
+    return this.request<{
+      user_id: string;
+      email: string;
+      email_verified: boolean;
+      verification_url: string | null;
+      verification_sent_at: string | null;
+    }>(`/auth/admin/verification-link/${encodeURIComponent(email)}`);
+  }
+
+  adminResendVerification(email: string) {
+    return this.request<{ message: string }>(
+      `/auth/admin/resend-verification/${encodeURIComponent(email)}`,
+      { method: "POST" }
+    );
+  }
+
+  adminForceVerifyUser(email: string) {
+    return this.request<import("@/types/api").AdminUser>(
+      `/auth/admin/verify-user/${encodeURIComponent(email)}`,
+      { method: "POST" }
+    );
+  }
 }
 
 export const api = new ApiClient(API_BASE);

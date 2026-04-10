@@ -17,6 +17,7 @@ import {
   ClipboardList,
   FlaskConical,
   DollarSign,
+  Mail,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -32,6 +33,7 @@ import SeoDashboard from "@/components/admin/seo-dashboard";
 import AnalyticsSettings from "@/components/admin/analytics-settings";
 import GoalsNotesTab from "@/components/admin/goals-notes-tab";
 import StrategyTiersTab from "@/components/admin/strategy-tiers-tab";
+import EmailDiagnosticsTab from "@/components/admin/email-diagnostics-tab";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -783,6 +785,11 @@ export default function AdminPage() {
       label: "Strategy Tiers",
       icon: FlaskConical,
     },
+    {
+      id: "email-diagnostics",
+      label: "Email Diagnostics",
+      icon: Mail,
+    },
   ];
 
   return (
@@ -839,6 +846,7 @@ export default function AdminPage() {
         {activeTab === "analytics" && <AnalyticsSettings />}
         {activeTab === "goals" && <GoalsNotesTab />}
         {activeTab === "strategy-tiers" && <StrategyTiersTab />}
+        {activeTab === "email-diagnostics" && <EmailDiagnosticsTab />}
       </div>
     </div>
   );
