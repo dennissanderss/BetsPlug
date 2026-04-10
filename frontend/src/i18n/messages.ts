@@ -889,7 +889,7 @@ const en = {
     "Try BetsPlug risk-free or skip the trial and get full access immediately.",
   "checkout.trialOption1Title": "7-day free trial",
   "checkout.trialOption1Desc":
-    "Full access for 7 days, just €0.01 today to verify your card. First full charge on {date} if you don't cancel.",
+    "Full access for 7 days. Nothing is charged today — Stripe just verifies your card. First charge on {date} if you don't cancel.",
   "checkout.trialOption1Badge": "Recommended",
   "checkout.trialOption2Title": "Subscribe now",
   "checkout.trialOption2Desc":
@@ -907,7 +907,7 @@ const en = {
 
   "checkout.freeTrial": "14-day free trial",
   "checkout.trialNote":
-    "Symbolic €0.01 charged today to verify your card. Cancel any time during the trial.",
+    "Nothing is charged today — Stripe verifies your card so we can start your subscription. Cancel any time during the trial.",
   "checkout.couponQuestion": "Have a coupon?",
   "checkout.couponPlaceholder": "Enter code",
   "checkout.couponApply": "Apply",
@@ -2084,7 +2084,7 @@ const nl: Dictionary = {
     "Probeer BetsPlug risicovrij of sla de proefperiode over voor directe volledige toegang.",
   "checkout.trialOption1Title": "7 dagen gratis proberen",
   "checkout.trialOption1Desc":
-    "Volledige toegang 7 dagen lang, slechts €0,01 vandaag om je kaart te verifiëren. Eerste volledige afschrijving op {date} als je niet opzegt.",
+    "7 dagen volledige toegang. Vandaag wordt er niets afgeschreven — Stripe verifieert alleen je kaart. Eerste afschrijving op {date} als je niet opzegt.",
   "checkout.trialOption1Badge": "Aanbevolen",
   "checkout.trialOption2Title": "Direct abonneren",
   "checkout.trialOption2Desc":
@@ -2102,7 +2102,7 @@ const nl: Dictionary = {
 
   "checkout.freeTrial": "14 dagen gratis proberen",
   "checkout.trialNote":
-    "Symbolische €0,01 vandaag om je kaart te verifiëren. Altijd opzegbaar tijdens de proefperiode.",
+    "Vandaag wordt er niets afgeschreven — Stripe verifieert alleen je kaart zodat je abonnement kan starten. Altijd opzegbaar tijdens de proefperiode.",
   "checkout.couponQuestion": "Heb je een kortingscode?",
   "checkout.couponPlaceholder": "Code invoeren",
   "checkout.couponApply": "Toepassen",
