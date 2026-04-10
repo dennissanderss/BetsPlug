@@ -180,19 +180,16 @@ async def create_checkout_session(
 
             mode = "payment" if mapped_plan in ("lifetime", "basic") else "subscription"
 
-            # iDEAL only works with payment mode, not subscription
-            if mode == "subscription":
-                payment_methods = ["card"]
-            else:
-                payment_methods = ["card", "ideal"]
+            mode = "payment" if mapped_plan in ("lifetime", "basic") else "subscription"
 
+            # Let Stripe auto-select best payment methods per customer country
             session = stripe.checkout.Session.create(
-                payment_method_types=payment_methods,
                 line_items=[{"price": price_id, "quantity": 1}],
                 mode=mode,
                 success_url=body.success_url,
                 cancel_url=body.cancel_url,
                 metadata={"plan": mapped_plan},
+                automatic_payment_methods={"enabled": True},
             )
 
             return CheckoutResponse(
