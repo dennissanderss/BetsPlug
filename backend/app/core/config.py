@@ -100,8 +100,8 @@ class Settings(BaseSettings):
     # Abandoned Checkout
     abandoned_checkout_delay_minutes: int = 60   # wait before sending email
     coupon_discount_percent: float = 5.0         # 5% off
-    coupon_expiry_days: int = 7                  # coupon valid for 7 days
-    recovery_token_expiry_hours: int = 168       # recovery link valid 7 days
+    coupon_expiry_days: int = 1                  # coupon valid for 24 hours
+    recovery_token_expiry_hours: int = 24        # recovery link valid 24 hours
     site_url: str = "https://www.betsplug.com"   # used in email links
 
     # Reports
