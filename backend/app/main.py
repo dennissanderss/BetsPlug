@@ -54,99 +54,175 @@ async def lifespan(app: FastAPI):
     except Exception as exc:
         logger.warning("Table creation check failed: %s", exc)
 
-    # ── Bootstrap admins from env var (idempotent) ──────────────────────────
+    # ── Bootstrap admins from env var (idempotent + self-healing) ───────────
     # ``BOOTSTRAP_ADMIN_EMAILS`` is a comma-separated list of email
-    # addresses that should be promoted to ``Role.ADMIN`` on every boot.
-    # This is the only way to get an initial admin without DB access —
-    # register normally via the UI, set the env var in Railway, redeploy,
-    # and the listed users are promoted + their email is auto-verified.
-    # Safe to leave the var set: the loop is a no-op when nothing needs
-    # to change, and never downgrades existing admins.
+    # addresses that should exist as ADMIN on every boot. Behaviour:
+    #   • Existing users → promoted to Role.ADMIN, email_verified=True,
+    #     and (if ``BOOTSTRAP_ADMIN_PASSWORD`` is set) their password is
+    #     reset to that value.
+    #   • Missing users → auto-created with Role.ADMIN, email_verified=True
+    #     and the given ``BOOTSTRAP_ADMIN_PASSWORD`` (required for creation).
+    # The feature never downgrades existing admins and logs every decision
+    # at WARNING so operators can see exactly what happened in Railway logs.
     try:
         settings = get_settings()
         raw = (settings.bootstrap_admin_emails or "").strip()
-        if raw:
+
+        if not raw:
+            logger.info(
+                "[BOOTSTRAP ADMIN] BOOTSTRAP_ADMIN_EMAILS not set — skipping."
+            )
+        else:
+            logger.warning("[BOOTSTRAP ADMIN] ===== Starting bootstrap =====")
+
+            import re
+            import secrets as _secrets
             from sqlalchemy import func, select
             from app.db.session import async_session_factory
             from app.models.user import User, Role
+            from app.core.security import hash_password
 
             emails = [
                 e.strip().lower()
                 for e in raw.split(",")
                 if e.strip()
             ]
-            if emails:
+            logger.warning(
+                "[BOOTSTRAP ADMIN] Configured emails: %s",
+                ", ".join(emails) or "(empty)",
+            )
+
+            pw_set = bool(settings.bootstrap_admin_password)
+            logger.warning(
+                "[BOOTSTRAP ADMIN] Password reset: %s",
+                "ENABLED (will reset existing + create missing users)"
+                if pw_set
+                else "DISABLED (existing users promoted only; missing users "
+                "cannot be created without a password)",
+            )
+
+            if not emails:
+                logger.warning("[BOOTSTRAP ADMIN] Email list empty — skipping.")
+            else:
                 async with async_session_factory() as session:
-                    # Case-insensitive lookup — Pydantic EmailStr only
-                    # normalises the domain, so the local part may have
-                    # been stored with any casing. ``func.lower`` sidesteps
-                    # that entirely.
+                    # Case-insensitive lookup of existing users.
                     result = await session.execute(
                         select(User).where(func.lower(User.email).in_(emails))
                     )
-                    users = result.scalars().all()
-                    found_emails = {u.email.lower() for u in users}
-                    missing = [e for e in emails if e not in found_emails]
-                    if missing:
-                        logger.warning(
-                            "[BOOTSTRAP ADMIN] Skipping %d email(s) with no "
-                            "matching user — register them via the UI first: %s",
-                            len(missing), ", ".join(missing),
-                        )
-                    # Optional: reset the bootstrap admins' password to a
-                    # known value so the operator can log in even after
-                    # losing the original password. This is a **one-time**
-                    # escape hatch — the env var should be removed from
-                    # Railway immediately after the first successful login.
+                    existing_users = list(result.scalars().all())
+                    found_emails = {u.email.lower() for u in existing_users}
+                    missing_emails = [e for e in emails if e not in found_emails]
+
+                    logger.warning(
+                        "[BOOTSTRAP ADMIN] Lookup: %d existing, %d missing. "
+                        "Existing=%s Missing=%s",
+                        len(existing_users),
+                        len(missing_emails),
+                        [u.email for u in existing_users] or "[]",
+                        missing_emails or "[]",
+                    )
+
+                    # Hash the bootstrap password once (used for both existing
+                    # user resets and new user creation).
                     new_password_hash: str | None = None
-                    if settings.bootstrap_admin_password:
-                        from app.core.security import hash_password
+                    if pw_set:
                         new_password_hash = hash_password(
                             settings.bootstrap_admin_password
                         )
 
-                    promoted = 0
-                    for user in users:
-                        changed = False
+                    any_change = False
+
+                    # ── Auto-create missing admins ─────────────────────────
+                    if missing_emails:
+                        if new_password_hash is None:
+                            logger.warning(
+                                "[BOOTSTRAP ADMIN] Cannot auto-create %d missing "
+                                "user(s) — BOOTSTRAP_ADMIN_PASSWORD is not set. "
+                                "Missing: %s",
+                                len(missing_emails),
+                                ", ".join(missing_emails),
+                            )
+                        else:
+                            for email in missing_emails:
+                                # Derive a safe username from the email local
+                                # part. Strip anything the USERNAME_RE on the
+                                # register endpoint wouldn't accept and fall
+                                # back to "admin" if nothing is left.
+                                local = email.split("@")[0] or "admin"
+                                username = re.sub(
+                                    r"[^a-zA-Z0-9_.-]", "", local
+                                ) or "admin"
+                                username = username[:24]  # leave room for suffix
+                                # Unique-username guard — if the derived name is
+                                # already taken by an unrelated user, append a
+                                # short random suffix so INSERT doesn't fail.
+                                existing_username = await session.execute(
+                                    select(User).where(User.username == username)
+                                )
+                                if existing_username.scalar_one_or_none() is not None:
+                                    username = f"{username}-{_secrets.token_hex(3)}"
+                                new_user = User(
+                                    email=email,
+                                    username=username,
+                                    hashed_password=new_password_hash,
+                                    role=Role.ADMIN,
+                                    email_verified=True,
+                                    is_active=True,
+                                    full_name="BetsPlug Admin",
+                                )
+                                session.add(new_user)
+                                any_change = True
+                                logger.warning(
+                                    "[BOOTSTRAP ADMIN] CREATED new admin user "
+                                    "email=%s username=%s (from "
+                                    "BOOTSTRAP_ADMIN_PASSWORD)",
+                                    email, username,
+                                )
+
+                    # ── Promote / update existing users ────────────────────
+                    for user in existing_users:
+                        changed_this = False
                         if user.role != Role.ADMIN:
                             user.role = Role.ADMIN
-                            changed = True
+                            changed_this = True
                         if not user.email_verified:
                             user.email_verified = True
                             user.email_verification_token = None
                             user.email_verification_sent_at = None
-                            changed = True
+                            changed_this = True
                         if new_password_hash is not None:
-                            # Rehash every boot so operators can rotate by
-                            # just changing the env var. The compare is a
-                            # constant-time bcrypt check upstream.
                             user.hashed_password = new_password_hash
-                            changed = True
+                            changed_this = True
+                        if changed_this:
+                            any_change = True
                             logger.warning(
-                                "[BOOTSTRAP ADMIN] Reset password for %s "
-                                "(BOOTSTRAP_ADMIN_PASSWORD is set — remove "
-                                "this env var after you log in).",
+                                "[BOOTSTRAP ADMIN] PROMOTED existing user "
+                                "email=%s role=admin email_verified=True%s",
+                                user.email,
+                                " password=reset" if new_password_hash else "",
+                            )
+                        else:
+                            logger.info(
+                                "[BOOTSTRAP ADMIN] %s already at desired state.",
                                 user.email,
                             )
-                        if changed:
-                            promoted += 1
-                            logger.warning(
-                                "[BOOTSTRAP ADMIN] Promoted %s to admin "
-                                "(email_verified=True)", user.email,
-                            )
-                    if promoted:
+
+                    if any_change:
                         await session.commit()
                         logger.warning(
-                            "[BOOTSTRAP ADMIN] Committed %d user change(s).",
-                            promoted,
+                            "[BOOTSTRAP ADMIN] ===== COMMIT OK — bootstrap "
+                            "complete. Log in at /login with the email(s) "
+                            "above and BOOTSTRAP_ADMIN_PASSWORD. Remove the "
+                            "env var after first login. ====="
                         )
                     else:
-                        logger.info(
-                            "[BOOTSTRAP ADMIN] No changes — %d user(s) "
-                            "already at desired state.", len(users),
+                        logger.warning(
+                            "[BOOTSTRAP ADMIN] No changes needed — all %d "
+                            "user(s) already at desired state.",
+                            len(existing_users),
                         )
     except Exception as exc:
-        logger.warning("Bootstrap admin step failed: %s", exc)
+        logger.exception("[BOOTSTRAP ADMIN] Bootstrap step failed: %s", exc)
 
     # ── Start background scheduler (never blocks boot) ──────────────────────
     try:
