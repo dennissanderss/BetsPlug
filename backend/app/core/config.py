@@ -101,6 +101,15 @@ class Settings(BaseSettings):
     smtp_from: str = "BetsPlug <noreply@betsplug.com>"
     smtp_use_tls: bool = True
 
+    # Admin bootstrap — comma-separated list of emails that are promoted
+    # to ``Role.ADMIN`` (and auto-marked email_verified=True) on every boot.
+    # Idempotent: missing users are skipped with a warning, existing admins
+    # are left untouched. Use this to promote your own account once without
+    # needing DB access; clear the env var after the first successful boot
+    # if you want. Example:
+    #   BOOTSTRAP_ADMIN_EMAILS=dennis@betsplug.com,friend@betsplug.com
+    bootstrap_admin_emails: str = ""
+
     class Config:
         env_file = ".env"
         extra = "ignore"

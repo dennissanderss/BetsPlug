@@ -54,6 +54,76 @@ async def lifespan(app: FastAPI):
     except Exception as exc:
         logger.warning("Table creation check failed: %s", exc)
 
+    # ── Bootstrap admins from env var (idempotent) ──────────────────────────
+    # ``BOOTSTRAP_ADMIN_EMAILS`` is a comma-separated list of email
+    # addresses that should be promoted to ``Role.ADMIN`` on every boot.
+    # This is the only way to get an initial admin without DB access —
+    # register normally via the UI, set the env var in Railway, redeploy,
+    # and the listed users are promoted + their email is auto-verified.
+    # Safe to leave the var set: the loop is a no-op when nothing needs
+    # to change, and never downgrades existing admins.
+    try:
+        settings = get_settings()
+        raw = (settings.bootstrap_admin_emails or "").strip()
+        if raw:
+            from sqlalchemy import func, select
+            from app.db.session import async_session_factory
+            from app.models.user import User, Role
+
+            emails = [
+                e.strip().lower()
+                for e in raw.split(",")
+                if e.strip()
+            ]
+            if emails:
+                async with async_session_factory() as session:
+                    # Case-insensitive lookup — Pydantic EmailStr only
+                    # normalises the domain, so the local part may have
+                    # been stored with any casing. ``func.lower`` sidesteps
+                    # that entirely.
+                    result = await session.execute(
+                        select(User).where(func.lower(User.email).in_(emails))
+                    )
+                    users = result.scalars().all()
+                    found_emails = {u.email.lower() for u in users}
+                    missing = [e for e in emails if e not in found_emails]
+                    if missing:
+                        logger.warning(
+                            "[BOOTSTRAP ADMIN] Skipping %d email(s) with no "
+                            "matching user — register them via the UI first: %s",
+                            len(missing), ", ".join(missing),
+                        )
+                    promoted = 0
+                    for user in users:
+                        changed = False
+                        if user.role != Role.ADMIN:
+                            user.role = Role.ADMIN
+                            changed = True
+                        if not user.email_verified:
+                            user.email_verified = True
+                            user.email_verification_token = None
+                            user.email_verification_sent_at = None
+                            changed = True
+                        if changed:
+                            promoted += 1
+                            logger.warning(
+                                "[BOOTSTRAP ADMIN] Promoted %s to admin "
+                                "(email_verified=True)", user.email,
+                            )
+                    if promoted:
+                        await session.commit()
+                        logger.warning(
+                            "[BOOTSTRAP ADMIN] Committed %d user change(s).",
+                            promoted,
+                        )
+                    else:
+                        logger.info(
+                            "[BOOTSTRAP ADMIN] No changes — %d user(s) "
+                            "already at desired state.", len(users),
+                        )
+    except Exception as exc:
+        logger.warning("Bootstrap admin step failed: %s", exc)
+
     # ── Start background scheduler (never blocks boot) ──────────────────────
     try:
         from app.services.scheduler import start_scheduler
