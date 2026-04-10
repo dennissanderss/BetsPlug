@@ -320,6 +320,7 @@ def process_abandoned_checkouts_sync() -> dict:
 
 def _process_single_session(db, session: AbandonedCheckout) -> None:
     """Generate coupon + send email for one abandoned checkout."""
+    from app.models.user import User
 
     # 1. Mark as abandoned
     session.status = CheckoutStatus.ABANDONED
@@ -342,16 +343,31 @@ def _process_single_session(db, session: AbandonedCheckout) -> None:
     # 4. Build recovery URL
     recovery_url = f"{settings.site_url}/checkout?plan={session.plan_id}&billing={session.billing_cycle}&recovery={session.recovery_token}&coupon={coupon.code}"
 
-    # 5. Render email
-    first_name = session.first_name or "there"
+    # 5. Look up username from registered users (if they have an account)
+    display_name = None
+    try:
+        user_row = db.execute(
+            select(User.username).where(User.email == session.email.lower().strip())
+        ).scalar_one_or_none()
+        if user_row:
+            display_name = user_row
+    except Exception:
+        pass
+
+    # Fallback chain: username -> first_name -> locale default
+    if not display_name:
+        display_name = session.first_name or None
+
+    # 6. Render email (locale-aware)
+    locale = session.locale
     plan_name = PLAN_NAMES.get(session.plan_id, session.plan_id.title())
     discount_pct = str(int(settings.coupon_discount_percent))
     expiry_date = coupon.expires_at.strftime("%-d %B %Y")
 
     support_email = settings.mail_from_address or "support@betsplug.com"
 
-    html_body = render_html(
-        first_name=first_name,
+    template_params = dict(
+        first_name=display_name or "",
         plan_name=plan_name,
         coupon_code=coupon.code,
         discount_pct=discount_pct,
@@ -359,20 +375,17 @@ def _process_single_session(db, session: AbandonedCheckout) -> None:
         recovery_url=recovery_url,
         site_url=settings.site_url,
         support_email=support_email,
-    )
-    text_body = render_text(
-        first_name=first_name,
-        plan_name=plan_name,
-        coupon_code=coupon.code,
-        discount_pct=discount_pct,
-        expiry_date=expiry_date,
-        recovery_url=recovery_url,
-        site_url=settings.site_url,
-        support_email=support_email,
+        locale=locale,
     )
 
-    # 6. Send email
-    subject = f"Je {plan_name}-abonnement staat nog klaar - {discount_pct}% korting"
+    html_body = render_html(**template_params)
+    text_body = render_text(**template_params)
+
+    # 7. Send email (subject also locale-aware)
+    from app.services.email_templates.abandoned_checkout import _get_copy
+    copy = _get_copy(locale)
+    subject = copy["subject"].format(first_name=display_name or copy["fallback_name"])
+
     success = send_email_sync(
         to=session.email,
         subject=subject,
