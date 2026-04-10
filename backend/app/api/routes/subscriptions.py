@@ -180,13 +180,19 @@ async def create_checkout_session(
 
             mode = "payment" if mapped_plan in ("lifetime", "basic") else "subscription"
 
+            # iDEAL only works with payment mode, not subscription
+            if mode == "subscription":
+                payment_methods = ["card"]
+            else:
+                payment_methods = ["card", "ideal"]
+
             session = stripe.checkout.Session.create(
-                payment_method_types=["card", "ideal"],
+                payment_method_types=payment_methods,
                 line_items=[{"price": price_id, "quantity": 1}],
                 mode=mode,
                 success_url=body.success_url,
                 cancel_url=body.cancel_url,
-                metadata={"plan": body.plan},
+                metadata={"plan": mapped_plan},
             )
 
             return CheckoutResponse(
@@ -197,8 +203,8 @@ async def create_checkout_session(
         except ImportError:
             logger.warning("stripe package not installed, falling back to dev mode")
         except Exception as e:
-            logger.error(f"Stripe error: {e}")
-            raise HTTPException(status_code=500, detail="Payment service error")
+            logger.error(f"Stripe error: {e}", exc_info=True)
+            raise HTTPException(status_code=500, detail=f"Payment service error: {str(e)}")
 
     # ── Development: Mock checkout ───────────────────────────────────────
     logger.info(f"[DEV MODE] Mock checkout for plan={body.plan}, total={plan.price_total}€")
