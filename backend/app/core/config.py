@@ -110,6 +110,13 @@ class Settings(BaseSettings):
     #   BOOTSTRAP_ADMIN_EMAILS=dennis@betsplug.com,friend@betsplug.com
     bootstrap_admin_emails: str = ""
 
+    # Optional one-time password reset for the bootstrap admin(s).
+    # When set, every user listed in ``BOOTSTRAP_ADMIN_EMAILS`` gets their
+    # password rehashed to this value on each boot. **Remove this var
+    # immediately after you have successfully logged in** so the plaintext
+    # password is no longer sitting in your Railway config.
+    bootstrap_admin_password: str = ""
+
     class Config:
         env_file = ".env"
         extra = "ignore"

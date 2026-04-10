@@ -93,6 +93,18 @@ async def lifespan(app: FastAPI):
                             "matching user — register them via the UI first: %s",
                             len(missing), ", ".join(missing),
                         )
+                    # Optional: reset the bootstrap admins' password to a
+                    # known value so the operator can log in even after
+                    # losing the original password. This is a **one-time**
+                    # escape hatch — the env var should be removed from
+                    # Railway immediately after the first successful login.
+                    new_password_hash: str | None = None
+                    if settings.bootstrap_admin_password:
+                        from app.core.security import hash_password
+                        new_password_hash = hash_password(
+                            settings.bootstrap_admin_password
+                        )
+
                     promoted = 0
                     for user in users:
                         changed = False
@@ -104,6 +116,18 @@ async def lifespan(app: FastAPI):
                             user.email_verification_token = None
                             user.email_verification_sent_at = None
                             changed = True
+                        if new_password_hash is not None:
+                            # Rehash every boot so operators can rotate by
+                            # just changing the env var. The compare is a
+                            # constant-time bcrypt check upstream.
+                            user.hashed_password = new_password_hash
+                            changed = True
+                            logger.warning(
+                                "[BOOTSTRAP ADMIN] Reset password for %s "
+                                "(BOOTSTRAP_ADMIN_PASSWORD is set — remove "
+                                "this env var after you log in).",
+                                user.email,
+                            )
                         if changed:
                             promoted += 1
                             logger.warning(
