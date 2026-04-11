@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "translate": "node scripts/translate.mjs",
+    "translate:force": "node scripts/translate.mjs --force",
+    "translate:dry": "node scripts/translate.mjs --dry-run",
+    "postinstall": "sh scripts/setup-hooks.sh 2>/dev/null || true"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.0",
