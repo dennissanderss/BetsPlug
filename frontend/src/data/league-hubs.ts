@@ -24,7 +24,7 @@ export type LeagueHub = {
   /** Must match `League.slug` in the backend DB */
   slug: string;
   /** Sport slug for breadcrumbs / future filtering */
-  sportSlug: "football" | "basketball" | "tennis";
+  sportSlug: "football";
   /** ISO-3166-1 alpha-2 country code (or "EU" for UEFA tournaments) */
   countryCode: string;
   /** Emoji flag for inline display */

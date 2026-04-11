@@ -10,7 +10,7 @@
  * post has an identical layout, typography and CTA banner.
  */
 
-export type Sport = "football" | "nba" | "nfl" | "mlb" | "nhl";
+export type Sport = "football";
 
 export type ArticleBlock =
   | { type: "paragraph"; text: string }
@@ -65,10 +65,6 @@ export const SPORTS: {
 }[] = [
   { id: "all", label: "All Articles" },
   { id: "football", label: "Football" },
-  { id: "nba", label: "NBA" },
-  { id: "nfl", label: "NFL" },
-  { id: "mlb", label: "MLB" },
-  { id: "nhl", label: "NHL" },
 ];
 
 /* ── Articles ──────────────────────────────────────────────── */
@@ -79,7 +75,7 @@ export const articles: Article[] = [
     title:
       "How to Find a Real Edge on Matchday: An AI Research Framework for Modern Bettors",
     excerpt:
-      "Most bettors burn their bankroll on gut calls and recency bias. Here's the exact 5-step research framework our AI models use to isolate a repeatable edge on every matchday - across football, basketball and beyond.",
+      "Most bettors burn their bankroll on gut calls and recency bias. Here's the exact 5-step research framework our AI models use to isolate a repeatable edge on every football matchday.",
     metaTitle:
       "How to Find a Real Edge on Matchday - AI Research Framework | BetsPlug",
     metaDescription:

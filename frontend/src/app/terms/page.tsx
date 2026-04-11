@@ -33,9 +33,9 @@ export default function TermsOfServicePage() {
 
       <h2>2. What BetsPlug is - and what it isn&apos;t</h2>
       <p>
-        BetsPlug is an AI-driven sports analytics platform. We use statistical
-        models to surface probability-weighted predictions for football,
-        basketball, tennis and other sports.
+        BetsPlug is an AI-driven football analytics platform. We use statistical
+        models to surface probability-weighted predictions for football
+        competitions worldwide.
       </p>
       <p>
         <strong>BetsPlug is not a bookmaker.</strong> We do not accept bets, we

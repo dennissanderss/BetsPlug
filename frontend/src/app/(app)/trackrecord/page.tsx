@@ -749,8 +749,6 @@ function SportAccuracySection({
   const sportColors: Record<string, string> = {
     football: "#3b82f6",
     soccer: "#3b82f6",
-    basketball: "#f59e0b",
-    tennis: "#10b981",
   };
 
   return (

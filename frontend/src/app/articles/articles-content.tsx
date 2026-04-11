@@ -31,10 +31,6 @@ export function ArticlesContent() {
   const tabs: { id: TabId; label: string; icon: typeof LayoutGrid }[] = [
     { id: "all", label: t("articles.allArticles"), icon: LayoutGrid },
     { id: "football", label: t("articles.sportFootball"), icon: Trophy },
-    { id: "nba", label: t("articles.sportNba"), icon: Trophy },
-    { id: "nfl", label: t("articles.sportNfl"), icon: Trophy },
-    { id: "mlb", label: t("articles.sportMlb"), icon: Trophy },
-    { id: "nhl", label: t("articles.sportNhl"), icon: Trophy },
   ];
 
   // Sort newest first

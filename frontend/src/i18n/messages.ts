@@ -28,10 +28,10 @@ const en = {
   /* Hero */
   "hero.badge": "Be ahead of the bookmakers",
   "hero.titleLine1": "Best AI-driven",
-  "hero.titleLine2": "sports predictions",
+  "hero.titleLine2": "football predictions",
   "hero.titleLine3": "for your edge.",
   "hero.subtitle":
-    "BetsPlug unites data, Elo ratings, Poisson models and machine learning into one platform. Live probabilities, deep insights, proven track record - built for serious sports analysts.",
+    "BetsPlug unites data, Elo ratings, Poisson models and machine learning into one platform. Live probabilities, deep insights, proven track record - built for serious football analysts.",
   "hero.activeUsers": "Active Users",
   "hero.ctaPrimary": "Start Free Trial",
   "hero.ctaSecondary": "How it works",
@@ -125,7 +125,7 @@ const en = {
   "footer.limited": "Limited spots · Members only",
   "footer.onlineNow": "1,200+ members online",
   "footer.brandTagline":
-    "BetsPlug unites data, Elo ratings, Poisson models and machine learning into one platform - built for serious sports analysts who refuse to guess.",
+    "BetsPlug unites data, Elo ratings, Poisson models and machine learning into one platform - built for serious football analysts who refuse to guess.",
   "footer.product": "Product",
   "footer.company": "Company",
   "footer.legal": "Legal",
@@ -147,7 +147,7 @@ const en = {
   "trusted.titleB": "partner",
   "trusted.titleC": "in sports analytics.",
   "trusted.subtitle":
-    "BetsPlug unites and secures a growing ecosystem of data sources, AI models, and proven strategies. One platform for data-driven sports analysts who refuse to guess.",
+    "BetsPlug unites and secures a growing ecosystem of data sources, AI models, and proven strategies. One platform for data-driven football analysts who refuse to guess.",
   "trusted.card1Title": "Service for Any Level of Expertise.",
   "trusted.card1Desc":
     "From beginner to pro-analyst - our dashboards, tutorials, and transparent stats make it easy to understand every prediction.",
@@ -174,7 +174,7 @@ const en = {
   "track.desc1":
     "This is a unified platform that secures a growing ecosystem of sports data, AI predictions, and strategy backtesting tools. All predictions are logged and publicly tracked - full transparency, always.",
   "track.desc2":
-    "Whether you follow football, basketball, or tennis, BetsPlug unites data and machine learning into insights you can actually use.",
+    "Whether you follow the Premier League, La Liga or the Champions League, BetsPlug unites data and machine learning into insights you can actually use.",
   "track.cta": "Learn More",
   "track.askQuestion": "Ask a question?",
 
@@ -199,7 +199,7 @@ const en = {
     "Our algorithm picks the single highest-value prediction each day. Premium members get it first.",
   "features.f6Title": "Growing Community",
   "features.f6Desc":
-    "Join a community of data-driven sports analysts who share insights and strategies.",
+    "Join a community of data-driven football analysts who share insights and strategies.",
 
   /* Testimonials */
   "testimonials.badge": "Testimonials",
@@ -214,7 +214,7 @@ const en = {
   "finalCta.titleA": "Start making",
   "finalCta.titleHighlight": "smarter picks",
   "finalCta.titleB": "today.",
-  "finalCta.subtitle": "Join thousands of sports analysts who use BetsPlug's AI-driven predictions. €0.01 activates your 7-day full-access trial.",
+  "finalCta.subtitle": "Join thousands of football analysts who use BetsPlug's AI-driven predictions. €0.01 activates your 7-day full-access trial.",
   "finalCta.primary": "Start Free Trial",
   "finalCta.secondary": "Learn more →",
   "finalCta.moneyBack": "14-Day Money-Back",
@@ -271,10 +271,6 @@ const en = {
   "articles.subtitle": "Sports news, AI match breakdowns and data-driven betting insights.",
   "articles.allArticles": "All Articles",
   "articles.sportFootball": "Football",
-  "articles.sportNba": "NBA",
-  "articles.sportNfl": "NFL",
-  "articles.sportMlb": "MLB",
-  "articles.sportNhl": "NHL",
   "articles.readTime": "min read",
   "articles.empty": "No articles in this category yet - check back soon.",
   "articles.back": "Back to all articles",
@@ -300,10 +296,10 @@ const en = {
   "seo.titleA": "AI Sports Predictions &",
   "seo.titleB": "Data-Driven Betting Picks",
   "seo.subtitle":
-    "BetsPlug is the data-driven home for AI sports predictions, machine-learning betting picks and statistical match forecasts. Whether you're researching your next football accumulator, hunting value in NBA player props, or backtesting a new strategy - our AI sports predictor gives you the edge you need to beat the closing line.",
-  "seo.pillar1Title": "AI Sports Prediction Engine",
+    "BetsPlug is the data-driven home for AI football predictions, machine-learning betting picks and statistical match forecasts. Whether you're researching your next accumulator, analysing league form or backtesting a new strategy - our AI football predictor gives you the edge you need to beat the closing line.",
+  "seo.pillar1Title": "AI Football Prediction Engine",
   "seo.pillar1Desc":
-    "Our AI sports prediction engine combines Elo ratings, Poisson goal models, and machine learning to forecast match outcomes across football, basketball, and tennis with data-driven accuracy.",
+    "Our AI football prediction engine combines Elo ratings, Poisson goal models, and machine learning to forecast match outcomes across all major football leagues with data-driven accuracy.",
   "seo.pillar2Title": "Data-Backed Betting Predictions",
   "seo.pillar2Desc":
     "Every AI betting prediction on BetsPlug is backed by thousands of historical matches, live form data, and expected-goals metrics - giving you the sharpest sports picks online.",
@@ -325,7 +321,7 @@ const en = {
   "faq.titleA": "Got Questions?",
   "faq.titleB": "We've Got Answers",
   "faq.subtitle":
-    "Everything you need to know about our AI sports prediction platform, from getting started to advanced integrations.",
+    "Everything you need to know about our AI football prediction platform, from getting started to advanced integrations.",
   "faq.browseBy": "Browse by Category",
   "faq.stillQuestions": "Still have questions?",
   "faq.supportBlurb":
@@ -373,9 +369,9 @@ const en = {
   "contact.faq2Q": "Do I need to pay to try BetsPlug?",
   "contact.faq2A":
     "No. Our Bronze tier is 100% free and gives you a daily AI pick, basic predictions and access to our public track record. Upgrade to Silver or Gold only when you want live probabilities, backtesting and advanced markets.",
-  "contact.faq3Q": "Which sports and leagues do you cover?",
+  "contact.faq3Q": "Which leagues do you cover?",
   "contact.faq3A":
-    "Football (Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, UEFA competitions and 20+ more), basketball (NBA), and tennis. We're adding new leagues and sports every month as our models mature.",
+    "We cover 70+ football competitions worldwide, including the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, UEFA Champions League, Europa League and 20+ more. We're adding new football leagues every month as our models mature.",
 
   "contact.faqGroup2": "Account & Billing",
   "contact.faq4Q": "Can I cancel my subscription anytime?",
@@ -422,12 +418,12 @@ const en = {
   "about.metaTitle":
     "About BetsPlug - The team behind the AI sports analytics platform",
   "about.metaDesc":
-    "Meet the two engineers building BetsPlug. Sports fanatics with an ICT background, turning raw match data into transparent, probability-driven predictions for football, basketball, tennis and more.",
+    "Meet the two engineers building BetsPlug. Football fanatics with an ICT background, turning raw match data into transparent, probability-driven predictions for all major football leagues.",
   "about.breadcrumbHome": "Home",
   "about.breadcrumbAbout": "About",
 
   "about.heroBadge": "Our Story",
-  "about.heroTitleA": "Built by sports fanatics.",
+  "about.heroTitleA": "Built by football fanatics.",
   "about.heroTitleB": "Engineered by data obsessives.",
   "about.heroSubtitle":
     "BetsPlug is an AI-powered sports analytics platform built by two engineers who got tired of hot takes, armchair tipsters and influencer noise. We replaced gut feeling with statistical models, and loud opinions with transparent probabilities.",
@@ -435,7 +431,7 @@ const en = {
   "about.missionBadge": "The Mission",
   "about.missionTitle": "We turn raw match data into a measurable edge.",
   "about.missionBody1":
-    "For too long the sports prediction market has run on hype. YouTube gurus chasing clout, Telegram channels selling \"locks of the week,\" paid tipsters with no verifiable history. As lifelong football, basketball and tennis fans, it drove us up the wall - because we knew the underlying data was far better than the noise surrounding it.",
+    "For too long the sports prediction market has run on hype. YouTube gurus chasing clout, Telegram channels selling \"locks of the week,\" paid tipsters with no verifiable history. As lifelong football fans, it drove us up the wall - because we knew the underlying data was far better than the noise surrounding it.",
   "about.missionBody2":
     "So we built the tool we always wished existed: a platform that ingests thousands of matches per week, runs them through Elo ratings, Poisson scoring models and gradient-boosted classifiers, and only surfaces the picks where our models genuinely disagree with the closing line. No vibes. No survivorship bias. Just math, published in the open.",
   "about.missionCta": "See how it works",
@@ -517,7 +513,7 @@ const en = {
   "tr.kpi2Note": "After closing-line slippage",
   "tr.kpi3Value": "24,180",
   "tr.kpi3Label": "Graded predictions",
-  "tr.kpi3Note": "Across 9 sports and 70+ leagues",
+  "tr.kpi3Note": "Across 70+ football competitions",
   "tr.kpi4Value": "0.061",
   "tr.kpi4Label": "Brier score (lower = better)",
   "tr.kpi4Note": "Calibrated across win/draw/loss",
@@ -583,11 +579,11 @@ const en = {
   "tr.case1Outcome":
     "Uses the ledger to pick a market where the model has a proven edge, then ignores the rest. Result: fewer bets, higher conviction, better ROI.",
 
-  "tr.case2Role": "Data-driven NBA fan",
+  "tr.case2Role": "Data-driven football analyst",
   "tr.case2Name": "Priya, 29 · London",
   "tr.case2Quote":
-    "I care about calibration more than hit rate. Seeing that BetsPlug's NBA moneyline Brier score sits under 0.07 tells me the probabilities are honest - not just lucky.",
-  "tr.case2Metric1Label": "NBA Brier score",
+    "I care about calibration more than hit rate. Seeing that BetsPlug's match-result Brier score sits under 0.07 tells me the probabilities are honest - not just lucky.",
+  "tr.case2Metric1Label": "Match-result Brier score",
   "tr.case2Metric1Value": "0.068",
   "tr.case2Metric2Label": "Games graded",
   "tr.case2Metric2Value": "1,240",
@@ -792,7 +788,7 @@ const en = {
     "Every finished match is scored automatically. Brier score and log-loss track calibration over time.",
   "hiw.proof6Title": "Built by people who ship",
   "hiw.proof6Desc":
-    "A two-person team of sports fanatics with an ICT background. Every line of this pipeline is hand-rolled, not bolted together from plugins.",
+    "A two-person team of football fanatics with an ICT background. Every line of this pipeline is hand-rolled, not bolted together from plugins.",
 
   /* Objection section - FAQ */
   "hiw.faqBadge": "Honest answers",
@@ -811,9 +807,9 @@ const en = {
   "hiw.faq4Q": "Can I actually profit from these predictions?",
   "hiw.faq4A":
     "Our backtested strategies show positive ROI over 90 days, but backtesting is not a guarantee. Real-world performance depends on odds you get, timing, and variance. We provide the data and analysis - the rest is your call.",
-  "hiw.faq5Q": "What sports and leagues do you cover?",
+  "hiw.faq5Q": "Which football leagues do you cover?",
   "hiw.faq5A":
-    "Football only, covering 6 European leagues: Premier League, La Liga, Bundesliga, Serie A, Ligue 1 and Eredivisie. We plan to expand, but we'd rather do a few leagues well than many leagues poorly.",
+    "We cover 70+ football competitions worldwide, including the Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie and all major UEFA competitions. We're always adding more leagues as our models mature.",
   "hiw.faq6Q": "Is this gambling advice?",
   "hiw.faq6A":
     "No. BetsPlug is a sports analytics platform. We publish probabilities, confidence scores and a verifiable track record. What you do with that information is entirely your decision.",
@@ -1256,10 +1252,10 @@ const nl: Dictionary = {
 
   "hero.badge": "Wees de bookmaker voor",
   "hero.titleLine1": "De beste AI-gedreven",
-  "hero.titleLine2": "sportvoorspellingen",
+  "hero.titleLine2": "voetbalvoorspellingen",
   "hero.titleLine3": "voor jouw voordeel.",
   "hero.subtitle":
-    "BetsPlug combineert data, Elo-ratings, Poisson-modellen en machine learning in één platform. Live kansen, diepgaande inzichten en een bewezen track record - gemaakt voor serieuze sportanalisten.",
+    "BetsPlug combineert data, Elo-ratings, Poisson-modellen en machine learning in één platform. Live kansen, diepgaande inzichten en een bewezen track record - gemaakt voor serieuze voetbalanalisten.",
   "hero.activeUsers": "Actieve gebruikers",
   "hero.ctaPrimary": "Gratis proberen",
   "hero.ctaSecondary": "Hoe het werkt",
@@ -1347,7 +1343,7 @@ const nl: Dictionary = {
   "footer.limited": "Beperkte plekken · Alleen voor leden",
   "footer.onlineNow": "1.200+ leden online",
   "footer.brandTagline":
-    "BetsPlug combineert data, Elo-ratings, Poisson-modellen en machine learning in één platform - gemaakt voor serieuze sportanalisten die niet willen gokken.",
+    "BetsPlug combineert data, Elo-ratings, Poisson-modellen en machine learning in één platform - gemaakt voor serieuze voetbalanalisten die niet willen gokken.",
   "footer.product": "Product",
   "footer.company": "Bedrijf",
   "footer.legal": "Juridisch",
@@ -1367,7 +1363,7 @@ const nl: Dictionary = {
   "trusted.titleB": "partner",
   "trusted.titleC": "in sportanalyse.",
   "trusted.subtitle":
-    "BetsPlug bundelt en beveiligt een groeiend ecosysteem van databronnen, AI-modellen en bewezen strategieën. Eén platform voor datagedreven sportanalisten die niet willen gokken.",
+    "BetsPlug bundelt en beveiligt een groeiend ecosysteem van databronnen, AI-modellen en bewezen strategieën. Eén platform voor datagedreven voetbalanalisten die niet willen gokken.",
   "trusted.card1Title": "Voor elk kennisniveau.",
   "trusted.card1Desc":
     "Van beginner tot pro-analist - onze dashboards, tutorials en transparante statistieken maken elke voorspelling makkelijk te begrijpen.",
@@ -1393,7 +1389,7 @@ const nl: Dictionary = {
   "track.desc1":
     "Eén platform dat een groeiend ecosysteem van sportdata, AI-voorspellingen en strategie-backtesting tools bij elkaar brengt. Alle voorspellingen worden gelogd en publiek bijgehouden - altijd volledig transparant.",
   "track.desc2":
-    "Of je nu voetbal, basketbal of tennis volgt, BetsPlug verenigt data en machine learning tot inzichten die je écht kunt gebruiken.",
+    "Of je nu de Premier League, La Liga of de Champions League volgt, BetsPlug verenigt data en machine learning tot inzichten die je écht kunt gebruiken.",
   "track.cta": "Meer lezen",
   "track.askQuestion": "Vraag stellen?",
 
@@ -1417,7 +1413,7 @@ const nl: Dictionary = {
     "Ons algoritme kiest elke dag de pick met de hoogste waarde. Premium-leden zien hem als eerste.",
   "features.f6Title": "Groeiende community",
   "features.f6Desc":
-    "Sluit je aan bij datagedreven sportanalisten die inzichten en strategieën delen.",
+    "Sluit je aan bij datagedreven voetbalanalisten die inzichten en strategieën delen.",
 
   "testimonials.badge": "Ervaringen",
   "testimonials.titleA": "Wat onze",
@@ -1430,7 +1426,7 @@ const nl: Dictionary = {
   "finalCta.titleA": "Begin vandaag met",
   "finalCta.titleHighlight": "slimmere picks",
   "finalCta.titleB": "maken.",
-  "finalCta.subtitle": "Sluit je aan bij duizenden sportanalisten die BetsPlug's AI-voorspellingen gebruiken. €0,01 activeert je 7-daagse volledige-toegang-proef.",
+  "finalCta.subtitle": "Sluit je aan bij duizenden voetbalanalisten die BetsPlug's AI-voorspellingen gebruiken. €0,01 activeert je 7-daagse volledige-toegang-proef.",
   "finalCta.primary": "Gratis proberen",
   "finalCta.secondary": "Meer info →",
   "finalCta.moneyBack": "14 dagen geld-terug",
@@ -1486,10 +1482,6 @@ const nl: Dictionary = {
   "articles.subtitle": "Sportnieuws, AI-wedstrijdanalyses en datagedreven inzichten.",
   "articles.allArticles": "Alle artikelen",
   "articles.sportFootball": "Voetbal",
-  "articles.sportNba": "NBA",
-  "articles.sportNfl": "NFL",
-  "articles.sportMlb": "MLB",
-  "articles.sportNhl": "NHL",
   "articles.readTime": "min leestijd",
   "articles.empty": "Nog geen artikelen in deze categorie - kom snel terug.",
   "articles.back": "Terug naar alle artikelen",
@@ -1514,10 +1506,10 @@ const nl: Dictionary = {
   "seo.titleA": "AI-sportvoorspellingen &",
   "seo.titleB": "datagedreven betting picks",
   "seo.subtitle":
-    "BetsPlug is het datagedreven thuis voor AI-sportvoorspellingen, machine-learning picks en statistische match-analyses. Of je nu een voetbalaccu onderzoekt, value zoekt in NBA player props of een nieuwe strategie backtest - onze AI-predictor geeft je het voordeel dat je nodig hebt.",
-  "seo.pillar1Title": "AI Sportvoorspelling Engine",
+    "BetsPlug is het datagedreven thuis voor AI-voetbalvoorspellingen, machine-learning picks en statistische match-analyses. Of je nu een voetbalaccu onderzoekt, competitievorm analyseert of een nieuwe strategie backtest - onze AI-predictor geeft je het voordeel dat je nodig hebt.",
+  "seo.pillar1Title": "AI Voetbalvoorspelling Engine",
   "seo.pillar1Desc":
-    "Onze AI-engine combineert Elo-ratings, Poisson-modellen en machine learning om uitslagen in voetbal, basketbal en tennis datagedreven te voorspellen.",
+    "Onze AI-engine combineert Elo-ratings, Poisson-modellen en machine learning om uitslagen in alle grote voetbalcompetities datagedreven te voorspellen.",
   "seo.pillar2Title": "Data-gestaafde voorspellingen",
   "seo.pillar2Desc":
     "Elke AI-voorspelling op BetsPlug is gebaseerd op duizenden historische wedstrijden, live vormdata en xG-metrics - voor de scherpste picks online.",
@@ -1586,9 +1578,9 @@ const nl: Dictionary = {
   "contact.faq2Q": "Moet ik betalen om BetsPlug te proberen?",
   "contact.faq2A":
     "Nee. Onze Bronze tier is 100% gratis en geeft je een dagelijkse AI-pick, basisvoorspellingen en toegang tot ons publieke track record. Upgrade pas naar Silver of Gold als je live-kansen, backtesting en geavanceerde markten wilt.",
-  "contact.faq3Q": "Welke sporten en competities dekken jullie?",
+  "contact.faq3Q": "Welke competities dekken jullie?",
   "contact.faq3A":
-    "Voetbal (Eredivisie, Premier League, La Liga, Serie A, Bundesliga, Ligue 1, UEFA-competities en 20+ meer), basketbal (NBA) en tennis. Elke maand voegen we nieuwe competities en sporten toe naarmate onze modellen rijpen.",
+    "We dekken 70+ voetbalcompetities wereldwijd, waaronder de Eredivisie, Premier League, La Liga, Serie A, Bundesliga, Ligue 1, UEFA Champions League, Europa League en 20+ meer. Elke maand voegen we nieuwe voetbalcompetities toe naarmate onze modellen rijpen.",
 
   "contact.faqGroup2": "Account & facturatie",
   "contact.faq4Q": "Kan ik mijn abonnement op elk moment opzeggen?",
@@ -1636,12 +1628,12 @@ const nl: Dictionary = {
   "about.metaTitle":
     "Over BetsPlug - Het team achter het AI-sportanalyseplatform",
   "about.metaDesc":
-    "Maak kennis met de twee engineers die BetsPlug bouwen. Sportfanaten met een ICT-achtergrond die ruwe wedstrijddata omzetten in transparante, datagedreven voorspellingen voor voetbal, basketbal, tennis en meer.",
+    "Maak kennis met de twee engineers die BetsPlug bouwen. Voetbalfanaten met een ICT-achtergrond die ruwe wedstrijddata omzetten in transparante, datagedreven voorspellingen voor alle grote voetbalcompetities.",
   "about.breadcrumbHome": "Home",
   "about.breadcrumbAbout": "Over ons",
 
   "about.heroBadge": "Ons Verhaal",
-  "about.heroTitleA": "Gebouwd door sportfanaten.",
+  "about.heroTitleA": "Gebouwd door voetbalfanaten.",
   "about.heroTitleB": "Ontwikkeld door data-obsessieven.",
   "about.heroSubtitle":
     "BetsPlug is een AI-gedreven sportanalyseplatform, gebouwd door twee engineers die klaar waren met meningen, tipsters en influencer-ruis. Wij vervingen buikgevoel door statistische modellen, en luide meningen door transparante waarschijnlijkheden.",
@@ -1649,7 +1641,7 @@ const nl: Dictionary = {
   "about.missionBadge": "De Missie",
   "about.missionTitle": "Wij maken van ruwe wedstrijddata een meetbare voorsprong.",
   "about.missionBody1":
-    "De voorspellingsmarkt draait al veel te lang op hype. YouTube-goeroes die views achternajagen, Telegram-kanalen die \"locks of the week\" verkopen, betaalde tipsters zonder verifieerbare historie. Als levenslange voetbal-, basketbal- en tennisfans werden we daar helemaal gek van - want we wisten dat de onderliggende data veel beter was dan de ruis eromheen.",
+    "De voorspellingsmarkt draait al veel te lang op hype. YouTube-goeroes die views achternajagen, Telegram-kanalen die \"locks of the week\" verkopen, betaalde tipsters zonder verifieerbare historie. Als levenslange voetbalfans werden we daar helemaal gek van - want we wisten dat de onderliggende data veel beter was dan de ruis eromheen.",
   "about.missionBody2":
     "Dus bouwden we het product dat we altijd al wilden hebben: een platform dat duizenden wedstrijden per week verwerkt, ze doorrekent met Elo-ratings, Poisson-scoremodellen en gradient-boosted classifiers, en alleen de picks toont waar onze modellen écht afwijken van de closing line. Geen onderbuik. Geen cherry picking. Alleen statistiek, open gepubliceerd.",
   "about.missionCta": "Zie hoe het werkt",
@@ -1730,7 +1722,7 @@ const nl: Dictionary = {
   "tr.kpi2Note": "Na closing-line slippage",
   "tr.kpi3Value": "24.180",
   "tr.kpi3Label": "Afgeronde voorspellingen",
-  "tr.kpi3Note": "Over 9 sporten en 70+ competities",
+  "tr.kpi3Note": "Over 70+ voetbalcompetities",
   "tr.kpi4Value": "0,061",
   "tr.kpi4Label": "Brier-score (lager = beter)",
   "tr.kpi4Note": "Gekalibreerd over winst/gelijk/verlies",
@@ -1793,11 +1785,11 @@ const nl: Dictionary = {
   "tr.case1Outcome":
     "Gebruikt het grootboek om één markt te kiezen waar het model een bewezen voorsprong heeft, en negeert de rest. Resultaat: minder weddenschappen, meer overtuiging, betere ROI.",
 
-  "tr.case2Role": "Data-gedreven NBA-fan",
+  "tr.case2Role": "Data-gedreven voetbalanalist",
   "tr.case2Name": "Priya, 29 · Londen",
   "tr.case2Quote":
-    "Ik geef meer om kalibratie dan om hit rate. Als de Brier-score op de NBA moneyline onder de 0,07 blijft, weet ik dat de kansen eerlijk zijn - niet gewoon geluk.",
-  "tr.case2Metric1Label": "NBA Brier-score",
+    "Ik geef meer om kalibratie dan om hit rate. Als de Brier-score op de wedstrijduitslag onder de 0,07 blijft, weet ik dat de kansen eerlijk zijn - niet gewoon geluk.",
+  "tr.case2Metric1Label": "Wedstrijduitslag Brier-score",
   "tr.case2Metric1Value": "0,068",
   "tr.case2Metric2Label": "Wedstrijden beoordeeld",
   "tr.case2Metric2Value": "1.240",
@@ -1993,7 +1985,7 @@ const nl: Dictionary = {
     "Elke afgelopen wedstrijd wordt automatisch gescoord. Brier-score en log-loss volgen de kalibratie in de tijd.",
   "hiw.proof6Title": "Gebouwd door mensen die shippen",
   "hiw.proof6Desc":
-    "Een tweekoppig team van sportfanaten met een ICT-achtergrond. Elke regel van deze pipeline is met de hand geschreven, niet in elkaar geklikt uit plugins.",
+    "Een tweekoppig team van voetbalfanaten met een ICT-achtergrond. Elke regel van deze pipeline is met de hand geschreven, niet in elkaar geklikt uit plugins.",
 
   "hiw.faqBadge": "Eerlijke antwoorden",
   "hiw.faqTitle": "De vragen die elke serieuze analist ons stelt.",
@@ -2011,9 +2003,9 @@ const nl: Dictionary = {
   "hiw.faq4Q": "Kan ik daadwerkelijk winst maken met deze voorspellingen?",
   "hiw.faq4A":
     "Onze backtested strategieën tonen positieve ROI over 90 dagen, maar backtesting is geen garantie. De werkelijke prestaties hangen af van de odds die je krijgt, timing en variantie. Wij leveren de data en analyse - de rest is aan jou.",
-  "hiw.faq5Q": "Welke sporten en competities dekken jullie?",
+  "hiw.faq5Q": "Welke voetbalcompetities dekken jullie?",
   "hiw.faq5A":
-    "Alleen voetbal, met dekking van 6 Europese competities: Premier League, La Liga, Bundesliga, Serie A, Ligue 1 en Eredivisie. We zijn van plan uit te breiden, maar we doen liever een paar competities goed dan veel competities slecht.",
+    "We dekken 70+ voetbalcompetities wereldwijd, waaronder de Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie en alle grote UEFA-competities. We voegen voortdurend nieuwe competities toe naarmate onze modellen rijpen.",
   "hiw.faq6Q": "Is dit gokadvies?",
   "hiw.faq6A":
     "Nee. BetsPlug is een pure sport-analytics platform. Wij publiceren waarschijnlijkheden, expected values en een verifieerbaar track record. Wat je met die informatie doet, is volledig jouw eigen beslissing.",

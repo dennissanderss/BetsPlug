@@ -26,12 +26,7 @@ type SportMeta = {
   textClass: string;
   /** Tailwind background + border for the badge pill */
   badgeClass: string;
-  labelKey:
-    | "articles.sportFootball"
-    | "articles.sportNba"
-    | "articles.sportNfl"
-    | "articles.sportMlb"
-    | "articles.sportNhl";
+  labelKey: "articles.sportFootball";
 };
 
 const SPORT_META: Record<Sport, SportMeta> = {
@@ -40,30 +35,6 @@ const SPORT_META: Record<Sport, SportMeta> = {
     textClass: "text-green-300",
     badgeClass: "border-green-500/30 bg-green-500/10 text-green-300",
     labelKey: "articles.sportFootball",
-  },
-  nba: {
-    icon: Dribbble,
-    textClass: "text-purple-300",
-    badgeClass: "border-purple-500/30 bg-purple-500/10 text-purple-300",
-    labelKey: "articles.sportNba",
-  },
-  nfl: {
-    icon: Zap,
-    textClass: "text-sky-300",
-    badgeClass: "border-sky-500/30 bg-sky-500/10 text-sky-300",
-    labelKey: "articles.sportNfl",
-  },
-  mlb: {
-    icon: Disc,
-    textClass: "text-amber-300",
-    badgeClass: "border-amber-500/30 bg-amber-500/10 text-amber-300",
-    labelKey: "articles.sportMlb",
-  },
-  nhl: {
-    icon: Disc,
-    textClass: "text-cyan-300",
-    badgeClass: "border-cyan-500/30 bg-cyan-500/10 text-cyan-300",
-    labelKey: "articles.sportNhl",
   },
 };
 

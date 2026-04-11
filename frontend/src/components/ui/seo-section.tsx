@@ -58,7 +58,7 @@ const faqCategories: FaqCategory[] = [
       },
       {
         q: "Which sports does the AI predictor cover?",
-        a: "Our AI sports predictor currently covers football (Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Champions League and more), basketball, and tennis. New leagues and sports are added regularly as our models are trained and validated.",
+        a: "Our AI predictor is focused exclusively on football, covering the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Champions League and more. New football leagues are added regularly as our models are trained and validated.",
       },
     ],
   },

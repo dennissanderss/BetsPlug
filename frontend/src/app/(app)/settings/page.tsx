@@ -31,14 +31,6 @@ interface League {
 
 const SPORTS: Sport[] = [
   { id: "football",         label: "Football",         emoji: "⚽" },
-  { id: "basketball",       label: "Basketball",       emoji: "🏀" },
-  { id: "tennis",           label: "Tennis",           emoji: "🎾" },
-  { id: "baseball",         label: "Baseball",         emoji: "⚾" },
-  { id: "american-football",label: "American Football",emoji: "🏈" },
-  { id: "ice-hockey",       label: "Ice Hockey",       emoji: "🏒" },
-  { id: "cricket",          label: "Cricket",          emoji: "🏏" },
-  { id: "f1",               label: "Formula 1",        emoji: "🏎️" },
-  { id: "esports",          label: "Esports",          emoji: "🎮" },
 ];
 
 const LEAGUES: League[] = [
@@ -48,8 +40,6 @@ const LEAGUES: League[] = [
   { id: "seriea",      label: "Serie A",            sportId: "football" },
   { id: "ligue1",      label: "Ligue 1",            sportId: "football" },
   { id: "ucl",         label: "Champions League",   sportId: "football" },
-  { id: "nba",         label: "NBA",                sportId: "basketball" },
-  { id: "euroleague",  label: "EuroLeague",         sportId: "basketball" },
 ];
 
 const TIMEZONES = [
@@ -173,13 +163,13 @@ export default function SettingsPage() {
 
   // Sport preferences
   const [followedSports, setFollowedSports] = useState<Set<string>>(
-    new Set(["football", "basketball", "tennis"])
+    new Set(["football"])
   );
   const [alertFollowedOnly, setAlertFollowedOnly] = useState(true);
 
   // League preferences
   const [followedLeagues, setFollowedLeagues] = useState<Set<string>>(
-    new Set(["pl", "bundesliga", "ucl", "nba"])
+    new Set(["pl", "bundesliga", "ucl"])
   );
 
   // Notifications

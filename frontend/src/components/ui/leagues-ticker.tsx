@@ -21,10 +21,7 @@ const leagues: League[] = [
   { name: "Serie A", slug: "serie-a" },
   { name: "Ligue 1", slug: "ligue-1" },
   { name: "Champions League", slug: "champions-league" },
-  { name: "NBA", slug: "nba" },
-  { name: "NFL", slug: "nfl", ext: "svg" },
-  { name: "MLB", slug: "mlb" },
-  { name: "NHL", slug: "nhl" },
+  { name: "Eredivisie", slug: "eredivisie" },
 ];
 
 export function LeaguesTicker() {

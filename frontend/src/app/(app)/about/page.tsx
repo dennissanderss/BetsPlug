@@ -209,16 +209,9 @@ const dataSources = [
     typeColor: "#a855f7",
   },
   {
-    name: "Basketball Reference",
-    url: "https://basketball-reference.com",
-    description: "Comprehensive NBA statistics and historical data",
-    type: "NBA",
-    typeColor: "#f59e0b",
-  },
-  {
     name: "Official League APIs",
     url: "#",
-    description: "Direct feeds from Premier League, La Liga, NBA where available",
+    description: "Direct feeds from Premier League, La Liga, Bundesliga and other top football leagues where available",
     type: "Official",
     typeColor: "#ef4444",
   },

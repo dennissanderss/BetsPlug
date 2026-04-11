@@ -8,7 +8,7 @@ import { AboutContent } from "./about-content";
 export const metadata: Metadata = {
   title: "About BetsPlug - The team behind the AI sports analytics platform",
   description:
-    "Meet the two engineers building BetsPlug. Sports fanatics with an ICT background, turning raw match data into transparent, probability-driven predictions for football, basketball, tennis and more.",
+    "Meet the two engineers building BetsPlug. Football fanatics with an ICT background, turning raw match data into transparent, probability-driven football predictions.",
   alternates: {
     canonical: "/about-us",
   },

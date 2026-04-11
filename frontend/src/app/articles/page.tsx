@@ -9,16 +9,16 @@ import { ArticlesContent } from "./articles-content";
  */
 export const metadata: Metadata = {
   title:
-    "Latest Sports Analysis & AI Betting Articles | BetsPlug",
+    "Latest Football Analysis & AI Betting Articles | BetsPlug",
   description:
-    "Sports news, AI match breakdowns and data-driven betting insights across football, NBA, NFL, MLB and NHL. Read the latest analysis from the BetsPlug research team.",
+    "Football news, AI match breakdowns and data-driven betting insights across the Premier League, La Liga, Bundesliga, Serie A and more. Read the latest analysis from the BetsPlug research team.",
   alternates: {
     canonical: "/articles",
   },
   openGraph: {
-    title: "Latest Sports Analysis - BetsPlug",
+    title: "Latest Football Analysis - BetsPlug",
     description:
-      "AI match breakdowns and data-driven betting insights from the BetsPlug research team.",
+      "AI football match breakdowns and data-driven betting insights from the BetsPlug research team.",
     type: "website",
   },
 };

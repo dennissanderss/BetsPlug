@@ -42,7 +42,7 @@ const balls: FloatingBall[] = [
     depth: 40,
   },
   {
-    emoji: "🎾",
+    emoji: "🥅",
     size: "text-4xl sm:text-5xl",
     top: "20%",
     right: "10%",
@@ -51,7 +51,7 @@ const balls: FloatingBall[] = [
     depth: 55,
   },
   {
-    emoji: "🏀",
+    emoji: "⚽",
     size: "text-5xl sm:text-6xl",
     top: "55%",
     left: "4%",
@@ -61,7 +61,7 @@ const balls: FloatingBall[] = [
     depth: 25,
   },
   {
-    emoji: "🏈",
+    emoji: "🏟️",
     size: "text-4xl sm:text-5xl",
     top: "70%",
     right: "8%",
@@ -70,7 +70,7 @@ const balls: FloatingBall[] = [
     depth: 45,
   },
   {
-    emoji: "⚾",
+    emoji: "🏆",
     size: "text-3xl sm:text-4xl",
     top: "35%",
     left: "18%",
@@ -80,7 +80,7 @@ const balls: FloatingBall[] = [
     depth: 15,
   },
   {
-    emoji: "🏐",
+    emoji: "⚽",
     size: "text-4xl sm:text-5xl",
     top: "42%",
     right: "22%",
