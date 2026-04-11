@@ -110,6 +110,28 @@ class ForecastService:
         # 4. Instantiate + run model ------------------------------------ #
         forecast_result = self._run_model(mv, match_context)
 
+        # 4b. v5: also run the Over/Under 2.5 model and stuff its
+        # output into match_context so it lands in features_snapshot
+        # and is available to the strategy engine.
+        try:
+            from app.forecasting.models.over_under_model import predict_over_under_2_5
+            ou = predict_over_under_2_5(match_context)
+            # Compute market edge if odds are in context — right now
+            # they aren't, so edge stays 0 until /odds lookups feed in.
+            ou_market_over = float(match_context.get("market_over_odds") or 0)
+            ou_market_under = float(match_context.get("market_under_odds") or 0)
+            over_implied = 1.0 / ou_market_over if ou_market_over > 1.0 else None
+            under_implied = 1.0 / ou_market_under if ou_market_under > 1.0 else None
+            ou["over_2_5_edge"] = (
+                ou["over_2_5_prob"] - over_implied if over_implied is not None else 0.0
+            )
+            ou["under_2_5_edge"] = (
+                ou["under_2_5_prob"] - under_implied if under_implied is not None else 0.0
+            )
+            match_context["over_under_2_5"] = ou
+        except Exception as exc:
+            match_context["over_under_2_5"] = {"error": str(exc)}
+
         # 5. Persist ---------------------------------------------------- #
         prediction = await self._persist(
             match=match,

@@ -125,6 +125,30 @@ def get_feature_value(
     if feature_name == "form_diff":
         return None
 
+    # -- v5: Over/Under 2.5 features from features_snapshot --
+    # These are populated by ForecastService.generate_forecast via the
+    # predict_over_under_2_5 call (see forecast_service.py). Older
+    # predictions without the snapshot return None and the rule is
+    # skipped.
+    if feature_name in (
+        "expected_total_goals",
+        "expected_home_goals",
+        "expected_away_goals",
+        "over_2_5_prob",
+        "under_2_5_prob",
+        "over_2_5_edge",
+        "under_2_5_edge",
+    ):
+        snapshot = prediction.features_snapshot or {}
+        ou = snapshot.get("over_under_2_5") or {}
+        value = ou.get(feature_name)
+        if value is None:
+            return None
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
+
     return None
 
 

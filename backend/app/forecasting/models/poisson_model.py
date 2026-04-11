@@ -90,11 +90,17 @@ class PoissonModel(ForecastModel):
     def predict(self, match_context: dict) -> ForecastResult:
         """Compute 1X2 probabilities via a Poisson goal grid.
 
-        Parameters
-        ----------
-        match_context:
-            Expects ``home_team_id``, ``away_team_id`` (str / UUID).
-            Optionally ``league_avg_goals`` to override the league average.
+        **v5 rebuild:** This used to call ``_seed_from_context`` which
+        in turn called ``team_seeds.get_seed_elo`` — a now-deprecated
+        function that raises ``NotImplementedError``. That meant every
+        Poisson ``predict`` call was silently crashing inside the
+        ensemble's per-sub-model try/except, and the "ensemble"
+        effectively became a pure Elo model. This version reads the
+        same point-in-time ``home_form`` / ``away_form`` data the
+        LogisticModel uses (provided by
+        ``ForecastService.build_match_context`` with a strict
+        ``before=scheduled_at`` filter) and derives attack/defence
+        strengths on the fly. No history table, no seeds, no leakage.
         """
         home_id = str(match_context.get("home_team_id", ""))
         away_id = str(match_context.get("away_team_id", ""))
@@ -114,20 +120,23 @@ class PoissonModel(ForecastModel):
         away_atk = self.attack_ratings.get(away_id, None)
         away_def = self.defence_ratings.get(away_id, None)
 
-        # Seed from team seeds / standings / stats if no trained ratings
-        if home_atk is None:
-            home_atk, home_def = self._seed_from_context(
-                str(match_context.get("home_team_name", "")),
-                match_context.get("home_standing"),
-                match_context.get("home_stats"),
-                match_context.get("total_teams_in_league", 20),
+        # Derive from point-in-time form data if no trained ratings.
+        # ``home_form`` / ``away_form`` are lists of the last N finished
+        # matches BEFORE the fixture's kickoff, already filtered by
+        # ForecastService._get_team_form.
+        if home_atk is None or home_def is None:
+            home_atk, home_def = self._strength_from_form(
+                form=match_context.get("home_form") or [],
+                team_id=home_id,
+                league_avg_home=league_avg_home,
+                league_avg_away=league_avg_away,
             )
-        if away_atk is None:
-            away_atk, away_def = self._seed_from_context(
-                str(match_context.get("away_team_name", "")),
-                match_context.get("away_standing"),
-                match_context.get("away_stats"),
-                match_context.get("total_teams_in_league", 20),
+        if away_atk is None or away_def is None:
+            away_atk, away_def = self._strength_from_form(
+                form=match_context.get("away_form") or [],
+                team_id=away_id,
+                league_avg_home=league_avg_home,
+                league_avg_away=league_avg_away,
             )
 
         lambda_home = np.clip(
@@ -334,57 +343,101 @@ class PoissonModel(ForecastModel):
     # ------------------------------------------------------------------ #
 
     @staticmethod
+    def _strength_from_form(
+        form: list[dict],
+        team_id: str,
+        league_avg_home: float,
+        league_avg_away: float,
+    ) -> tuple[float, float]:
+        """Derive (attack, defence) multipliers from the team's recent form.
+
+        ``form`` is a list of match dicts (the last ~5 finished matches
+        for the team before kickoff), produced by
+        ``ForecastService._get_team_form``. Each dict has
+        ``home_team_id``, ``away_team_id``, ``home_score``, ``away_score``.
+
+        Output:
+          - attack multiplier: 1.0 = league average. >1 = better than
+            average at scoring.
+          - defence multiplier: 1.0 = league average. <1 = better than
+            average at keeping goals out.
+
+        This is a pure form-derived heuristic with no hardcoded team
+        knowledge — **no leakage possible** because ``form`` only
+        contains matches whose kickoff was strictly before the fixture
+        we're predicting.
+        """
+        if not form or not team_id:
+            return 1.0, 1.0
+
+        scored: list[float] = []
+        conceded: list[float] = []
+        for m in form:
+            hid = str(m.get("home_team_id", ""))
+            aid = str(m.get("away_team_id", ""))
+            try:
+                hs = float(m.get("home_score") or 0)
+                aws = float(m.get("away_score") or 0)
+            except (TypeError, ValueError):
+                continue
+            if hid == team_id:
+                # Team was at home in this past match
+                scored.append(hs)
+                conceded.append(aws)
+            elif aid == team_id:
+                # Team was away
+                scored.append(aws)
+                conceded.append(hs)
+
+        if not scored:
+            return 1.0, 1.0
+
+        avg_scored = sum(scored) / len(scored)
+        avg_conceded = sum(conceded) / len(conceded)
+
+        # Use the midpoint of league_avg_home / league_avg_away as the
+        # baseline. 1.35 is the typical top-five-leagues average goals
+        # per team per match.
+        baseline = max(0.5, (league_avg_home + league_avg_away) / 2)
+
+        atk = avg_scored / baseline
+        # Defence strength is inverse: fewer goals conceded → higher
+        # "defensive strength" → LOWER multiplier in the lambda formula
+        # (since lambda_home = home_atk × away_def × league_avg).
+        # A team conceding 0.5 goals gets defence ≈ 0.37; a team
+        # conceding 2.0 gets defence ≈ 1.48.
+        dfc = avg_conceded / baseline
+
+        return max(0.4, min(2.5, atk)), max(0.4, min(2.5, dfc))
+
+    # Legacy entry point kept as a thin shim so any external caller
+    # that still reaches for ``_seed_from_context`` gets a sane answer
+    # instead of a NotImplementedError from the deprecated team_seeds.
+    @staticmethod
     def _seed_from_context(
         team_name: str,
         standing: dict | None,
         stats: dict | None,
         total_teams: int,
     ) -> tuple[float, float]:
-        """Derive attack/defence ratings from seed data, standings, or stats.
-
-        Returns (attack_rating, defence_rating) where 1.0 = league average.
-        """
-        # Try hardcoded seed Elo first → derive attack/defence from it
-        from app.forecasting.team_seeds import get_seed_elo
-        slug = team_name.lower().replace(" ", "-")
-        seed_elo = get_seed_elo(slug)
-        if seed_elo is not None:
-            # Convert Elo (1200-1800) to attack/defence ratings
-            # 1500 = 1.0/1.0, 1800 = 1.5/0.6, 1200 = 0.6/1.5
-            strength = (seed_elo - 1500) / 300  # -1.0 to +1.0
-            atk = 1.0 + strength * 0.5   # 0.5 to 1.5
-            dfc = 1.0 - strength * 0.4   # 1.4 to 0.6
-            return max(0.4, min(2.0, atk)), max(0.4, min(2.0, dfc))
-
-        atk = 1.0
-        dfc = 1.0
-
+        # Stats / standings are present-day aggregates (potentially
+        # leaky), but they're our only fallback if the caller doesn't
+        # supply form data. Prefer stats if available.
         if stats and stats.get("matches_played", 0) > 0:
-            mp = stats["matches_played"]
-            gf = stats.get("goals_scored", 0)
-            ga = stats.get("goals_conceded", 0)
-            # Avg goals per game relative to ~1.35 (typical league avg per team)
+            mp = float(stats["matches_played"])
+            gf = float(stats.get("goals_scored", 0) or 0)
+            ga = float(stats.get("goals_conceded", 0) or 0)
             atk = max(0.5, min(2.0, (gf / mp) / 1.35))
             dfc = max(0.5, min(2.0, (ga / mp) / 1.35))
             return atk, dfc
-
         if standing and standing.get("position"):
-            pos = standing["position"]
-            n = max(total_teams, 2)
-            # Position 1 → atk=1.4, def=0.7 | Last → atk=0.7, def=1.4
-            rank_factor = (pos - 1) / (n - 1)  # 0.0 (top) → 1.0 (bottom)
-            atk = 1.4 - rank_factor * 0.7   # 1.4 → 0.7
-            dfc = 0.7 + rank_factor * 0.7   # 0.7 → 1.4
-
-            # Use goal difference for fine-tuning
-            gd = standing.get("goal_difference", 0)
-            atk += gd * 0.005
-            dfc -= gd * 0.003
-
-            atk = max(0.4, min(2.0, atk))
-            dfc = max(0.4, min(2.0, dfc))
-
-        return atk, dfc
+            pos = float(standing["position"])
+            n = max(float(total_teams or 20), 2)
+            rank_factor = (pos - 1) / (n - 1)
+            atk = max(0.4, min(2.0, 1.4 - rank_factor * 0.7))
+            dfc = max(0.4, min(2.0, 0.7 + rank_factor * 0.7))
+            return atk, dfc
+        return 1.0, 1.0
 
     def _poisson_grid(
         self, lambda_home: float, lambda_away: float
