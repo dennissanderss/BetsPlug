@@ -370,6 +370,8 @@ async def backfill_odds(
     limit: int = 300,
     db: AsyncSession = Depends(get_db),
 ):
+    import traceback
+    fatal_error: Optional[str] = None
     adapter = await _api_football()
 
     # Subquery: match_ids that already have a 1x2 odds row.
@@ -471,6 +473,13 @@ async def backfill_odds(
                 await db.commit()
 
         await db.commit()
+    except Exception as exc:
+        log.exception("backfill_odds_fatal")
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        fatal_error = f"{type(exc).__name__}: {exc}\n{traceback.format_exc()[:2000]}"
     finally:
         try:
             await adapter.http_client.aclose()
@@ -482,6 +491,7 @@ async def backfill_odds(
         "api_calls": calls,
         "rows_inserted": rows_inserted,
         "errors": errors[:10],
+        "fatal_error": fatal_error,
     }
 
 
