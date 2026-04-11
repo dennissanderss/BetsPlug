@@ -84,6 +84,24 @@ class ResultSummary(BaseModel):
     winner: Optional[str] = None  # "home" | "away" | "draw"
 
 
+class OddsSummary(BaseModel):
+    """v6: pre-match odds embedded in a fixture response.
+
+    Only populated when an ``odds_history`` row exists for the match.
+    When no odds are on file, the ``odds`` field on FixtureItem is
+    left as None and the frontend should render nothing — NOT a "—"
+    placeholder. See docs/v6_bugfix_report.md §B1.
+    """
+
+    home: Optional[float] = None
+    draw: Optional[float] = None
+    away: Optional[float] = None
+    over_2_5: Optional[float] = None
+    under_2_5: Optional[float] = None
+    bookmaker: Optional[str] = None
+    fetched_at: Optional[str] = None
+
+
 class FixtureItem(BaseModel):
     """A single fixture row as returned by the /fixtures endpoints."""
 
@@ -105,6 +123,7 @@ class FixtureItem(BaseModel):
     matchday: Optional[int] = None
     result: Optional[ResultSummary] = None
     prediction: Optional[PredictionSummary] = None
+    odds: Optional[OddsSummary] = None
 
 
 class UpcomingFixturesResponse(BaseModel):
@@ -173,9 +192,109 @@ class WeeklySummaryResponse(BaseModel):
 # ─────────────────────────────────────────────────────────────────────────────
 
 
+async def _load_latest_odds(
+    match_ids: list,
+    db: AsyncSession,
+) -> dict:
+    """v6: return ``{match_id: OddsSummary}`` mapping for the most
+    recent 1x2 odds row per match. Also looks up over/under 2.5
+    odds from the same table and merges them into a single summary.
+    """
+    if not match_ids:
+        return {}
+
+    from app.models.odds import OddsHistory
+
+    # 1x2 rows per match — pick the most recent recorded_at
+    from sqlalchemy import func as sfunc
+
+    subq_1x2 = (
+        select(
+            OddsHistory.match_id,
+            sfunc.max(OddsHistory.recorded_at).label("latest_at"),
+        )
+        .where(
+            and_(
+                OddsHistory.match_id.in_(match_ids),
+                OddsHistory.market.in_(["1x2", "1X2"]),
+            )
+        )
+        .group_by(OddsHistory.match_id)
+        .subquery()
+    )
+    stmt_1x2 = (
+        select(OddsHistory)
+        .join(
+            subq_1x2,
+            and_(
+                OddsHistory.match_id == subq_1x2.c.match_id,
+                OddsHistory.recorded_at == subq_1x2.c.latest_at,
+                OddsHistory.market.in_(["1x2", "1X2"]),
+            ),
+        )
+    )
+    rows_1x2 = (await db.execute(stmt_1x2)).scalars().all()
+
+    # Over/Under 2.5 rows per match
+    subq_ou = (
+        select(
+            OddsHistory.match_id,
+            sfunc.max(OddsHistory.recorded_at).label("latest_at"),
+        )
+        .where(
+            and_(
+                OddsHistory.match_id.in_(match_ids),
+                OddsHistory.market == "over_under_2_5",
+            )
+        )
+        .group_by(OddsHistory.match_id)
+        .subquery()
+    )
+    stmt_ou = (
+        select(OddsHistory)
+        .join(
+            subq_ou,
+            and_(
+                OddsHistory.match_id == subq_ou.c.match_id,
+                OddsHistory.recorded_at == subq_ou.c.latest_at,
+                OddsHistory.market == "over_under_2_5",
+            ),
+        )
+    )
+    rows_ou = (await db.execute(stmt_ou)).scalars().all()
+    ou_by_match = {r.match_id: r for r in rows_ou}
+
+    result: dict = {}
+    for row in rows_1x2:
+        ou_row = ou_by_match.get(row.match_id)
+        result[row.match_id] = OddsSummary(
+            home=row.home_odds,
+            draw=row.draw_odds,
+            away=row.away_odds,
+            over_2_5=(ou_row.over_odds if ou_row else None),
+            under_2_5=(ou_row.under_odds if ou_row else None),
+            bookmaker=row.source,
+            fetched_at=row.recorded_at.isoformat() if row.recorded_at else None,
+        )
+
+    # Also include matches that only have O/U rows but no 1x2 — rare
+    # but possible during the snapshot accumulation period.
+    for mid, ou_row in ou_by_match.items():
+        if mid not in result:
+            result[mid] = OddsSummary(
+                over_2_5=ou_row.over_odds,
+                under_2_5=ou_row.under_odds,
+                bookmaker=ou_row.source,
+                fetched_at=ou_row.recorded_at.isoformat() if ou_row.recorded_at else None,
+            )
+
+    return result
+
+
 def _build_fixture_item(
     match: Match,
     latest_prediction: Optional[Prediction] = None,
+    odds: Optional[OddsSummary] = None,
 ) -> FixtureItem:
     """Convert a Match ORM object to a FixtureItem response schema."""
     result_summary: Optional[ResultSummary] = None
@@ -276,6 +395,7 @@ def _build_fixture_item(
         matchday=match.matchday,
         result=result_summary,
         prediction=pred_summary,
+        odds=odds,
     )
 
 
@@ -371,9 +491,11 @@ async def get_upcoming_fixtures(
     matches = (await db.execute(stmt)).scalars().all()
     match_ids = [m.id for m in matches]
     pred_map = await _load_latest_predictions(match_ids, db)
+    odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
-        _build_fixture_item(m, pred_map.get(m.id)) for m in matches
+        _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
+        for m in matches
     ]
 
     return UpcomingFixturesResponse(count=len(fixtures), fixtures=fixtures)
@@ -409,9 +531,11 @@ async def get_today_fixtures(
     matches = (await db.execute(stmt)).scalars().all()
     match_ids = [m.id for m in matches]
     pred_map = await _load_latest_predictions(match_ids, db)
+    odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
-        _build_fixture_item(m, pred_map.get(m.id)) for m in matches
+        _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
+        for m in matches
     ]
 
     return TodayFixturesResponse(
@@ -536,9 +660,11 @@ async def get_results(
     matches = (await db.execute(stmt)).scalars().all()
     match_ids = [m.id for m in matches]
     pred_map = await _load_latest_predictions(match_ids, db)
+    odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
-        _build_fixture_item(m, pred_map.get(m.id)) for m in matches
+        _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
+        for m in matches
     ]
 
     return ResultsResponse(days=days, count=len(fixtures), fixtures=fixtures)

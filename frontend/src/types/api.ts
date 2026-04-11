@@ -358,6 +358,20 @@ export interface FixturePrediction {
 }
 
 /** Shape returned by /api/fixtures/today, /upcoming, /results */
+/** v6: pre-match odds embedded in a fixture card. Only populated
+ * when odds_history has a row for the match. The frontend should
+ * render NOTHING when `odds` is null — no "—" placeholder.
+ */
+export interface FixtureOdds {
+  home?: number | null;
+  draw?: number | null;
+  away?: number | null;
+  over_2_5?: number | null;
+  under_2_5?: number | null;
+  bookmaker?: string | null;
+  fetched_at?: string | null;
+}
+
 export interface Fixture {
   id: string;
   league_id?: string;
@@ -383,6 +397,7 @@ export interface Fixture {
     away_score_ht?: number | null;
   } | null;
   prediction: FixturePrediction | null;
+  odds?: FixtureOdds | null;
 }
 
 export interface FixturesResponse {

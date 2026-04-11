@@ -96,6 +96,41 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
           )}
         </div>
       </div>
+
+      {/* v6: pre-match odds row. Rendered only when backend returned
+          an `odds` object. No placeholder when null — we'd rather
+          hide the row than show fake data. */}
+      {fixture.odds &&
+        (fixture.odds.home != null ||
+          fixture.odds.draw != null ||
+          fixture.odds.away != null) && (
+          <div className="flex flex-wrap items-center gap-2 border-t border-white/[0.06] bg-white/[0.02] px-4 py-2 sm:px-5">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+              Pre-match odds
+            </span>
+            {fixture.odds.home != null && (
+              <span className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-200">
+                1 {fixture.odds.home.toFixed(2)}
+              </span>
+            )}
+            {fixture.odds.draw != null && (
+              <span className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-200">
+                X {fixture.odds.draw.toFixed(2)}
+              </span>
+            )}
+            {fixture.odds.away != null && (
+              <span className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-200">
+                2 {fixture.odds.away.toFixed(2)}
+              </span>
+            )}
+            {fixture.odds.over_2_5 != null && fixture.odds.under_2_5 != null && (
+              <span className="ml-auto text-[10px] text-slate-500">
+                O/U 2.5: {fixture.odds.over_2_5.toFixed(2)} /{" "}
+                {fixture.odds.under_2_5.toFixed(2)}
+              </span>
+            )}
+          </div>
+        )}
     </motion.div>
   );
 }
