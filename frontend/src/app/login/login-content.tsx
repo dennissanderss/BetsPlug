@@ -118,8 +118,13 @@ export function LoginContent() {
       const res = await api.login(email.trim(), password);
       auth.login(res.access_token, res.user);
 
+      // v6 B4: default landing for logged-in users is the "Your
+      // Route" selector, NOT the Dashboard. Rationale: new users
+      // should pick their path (Strategy Follower / Quick Pick /
+      // Explorer) before drowning in the analytics firehose. Power
+      // users can still override via the ``?next=`` query param.
       const next = params?.get("next");
-      router.push(next || loc("/dashboard"));
+      router.push(next || loc("/jouw-route"));
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.status === 403 && err.detail === "email_not_verified") {

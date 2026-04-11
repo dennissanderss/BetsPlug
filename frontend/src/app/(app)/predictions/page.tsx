@@ -566,15 +566,62 @@ function FilterBar({
 
 // ─── Main page ───────────────────────────────────────────────────────────────
 
+// v6 B3 helper — local YYYY-MM-DD of today, in the browser's TZ,
+// so the date picker's default matches what the user sees on their
+// calendar. Using UTC here would misfire at midnight local.
+function todayIsoDate(): string {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function addDaysIso(iso: string, delta: number): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  const date = new Date(y, m - 1, d);
+  date.setDate(date.getDate() + delta);
+  const yy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+  return `${yy}-${mm}-${dd}`;
+}
+
+function daysBetweenIso(from: string, to: string): number {
+  const [yF, mF, dF] = from.split("-").map(Number);
+  const [yT, mT, dT] = to.split("-").map(Number);
+  const fromMs = Date.UTC(yF, mF - 1, dF);
+  const toMs = Date.UTC(yT, mT - 1, dT);
+  return Math.round((toMs - fromMs) / (24 * 60 * 60 * 1000));
+}
+
 export default function PredictionsPage() {
   const [leagueFilter,     setLeagueFilter]     = useState<LeagueFilter>("All");
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("All");
   const [sortKey,          setSortKey]          = useState<SortKey>("confidence");
 
-  // ── Fetch upcoming fixtures from DB (fast) ────────────────────────────────
+  // v6 B3: date picker state. Default = today. min = 30 days back,
+  // max = 7 days ahead — same bounds Dennis specified.
+  const today = useMemo(() => todayIsoDate(), []);
+  const minDate = useMemo(() => addDaysIso(today, -30), [today]);
+  const maxDate = useMemo(() => addDaysIso(today, 7), [today]);
+  const [selectedDate, setSelectedDate] = useState<string>(today);
+
+  const isHistorical = selectedDate < today;
+  const daysAhead = Math.max(1, daysBetweenIso(today, selectedDate) + 1);
+  const daysBack = Math.max(1, daysBetweenIso(selectedDate, today) + 1);
+
+  // ── Fetch upcoming OR results depending on selected date ──────────────────
   const fixturesQuery = useQuery({
-    queryKey: ["fixtures-upcoming", 7],
-    queryFn:  () => api.getFixturesUpcoming(7),
+    queryKey: ["predictions-by-date", selectedDate],
+    queryFn: () => {
+      if (isHistorical) {
+        return api.getFixtureResults(daysBack);
+      }
+      // Default "upcoming" query wants at least 7 days so the default
+      // experience (user lands on today) still shows a busy list.
+      return api.getFixturesUpcoming(Math.max(7, daysAhead));
+    },
     staleTime: 60_000,
     refetchInterval: 60_000,
     retry: 2,
@@ -583,11 +630,25 @@ export default function PredictionsPage() {
   const isLoading = fixturesQuery.isLoading;
   const hasError  = fixturesQuery.isError;
 
-  // ── Only show SCHEDULED (upcoming) fixtures ───────────────────────────────
+  // ── Filter the returned fixtures to the exact selected date ───────────────
   const upcomingFixtures = useMemo<Fixture[]>(() => {
     const all = fixturesQuery.data?.fixtures ?? [];
-    return all.filter((f) => f.status === "scheduled");
-  }, [fixturesQuery.data]);
+    // For "today" and future dates we also keep the default "next 7
+    // days" behaviour when the user hasn't touched the picker, so the
+    // page isn't empty.
+    if (selectedDate === today) {
+      return all;
+    }
+    return all.filter((f) => {
+      if (!f.scheduled_at) return false;
+      // Compare YYYY-MM-DD in local time.
+      const d = new Date(f.scheduled_at);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${dd}` === selectedDate;
+    });
+  }, [fixturesQuery.data, selectedDate, today]);
 
   // ── Derived leagues list for filter tabs ─────────────────────────────────
   const availableLeagues = useMemo(() => {
@@ -668,6 +729,55 @@ export default function PredictionsPage() {
             </span>
           </div>
         </div>
+      </div>
+
+      {/* ── v6 B3: date picker ── */}
+      <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4">
+        <div className="flex items-center gap-2">
+          <Clock className="h-4 w-4 text-slate-500" />
+          <label htmlFor="predictions-date" className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+            Datum
+          </label>
+        </div>
+        <input
+          id="predictions-date"
+          type="date"
+          value={selectedDate}
+          min={minDate}
+          max={maxDate}
+          onChange={(e) => setSelectedDate(e.target.value || today)}
+          className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-sm text-slate-100 focus:border-blue-500/50 focus:outline-none"
+        />
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setSelectedDate((d) => addDaysIso(d, -1))}
+            disabled={selectedDate <= minDate}
+            className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 text-xs font-semibold text-slate-300 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            ← Vorige dag
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedDate(today)}
+            className="rounded-md border border-blue-500/30 bg-blue-500/10 px-2 py-1 text-xs font-semibold text-blue-300 hover:bg-blue-500/20"
+          >
+            Vandaag
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedDate((d) => addDaysIso(d, 1))}
+            disabled={selectedDate >= maxDate}
+            className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 text-xs font-semibold text-slate-300 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Volgende dag →
+          </button>
+        </div>
+        {isHistorical && (
+          <span className="ml-auto rounded-full border border-slate-500/25 bg-slate-500/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+            Historisch
+          </span>
+        )}
       </div>
 
       {/* ── Stats bar ── */}

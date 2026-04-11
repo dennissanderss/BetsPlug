@@ -339,19 +339,54 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
 
   // Determine correctness from result vs prediction
   let isCorrect: boolean | null = null;
+  let predictedSide: "home" | "draw" | "away" | null = null;
   if (hasPrediction && fixture.result) {
     const { home_score, away_score } = fixture.result;
     const actualOutcome =
       home_score > away_score ? "home_win" :
       away_score > home_score ? "away_win" : "draw";
-    const predicted =
+    if (
       pred!.home_win_prob >= pred!.away_win_prob &&
       pred!.home_win_prob >= (pred!.draw_prob ?? 0)
+    ) {
+      predictedSide = "home";
+    } else if ((pred!.draw_prob ?? 0) >= pred!.away_win_prob) {
+      predictedSide = "draw";
+    } else {
+      predictedSide = "away";
+    }
+    const predicted =
+      predictedSide === "home"
         ? "home_win"
-        : (pred!.draw_prob ?? 0) >= pred!.away_win_prob
-        ? "draw"
-        : "away_win";
+        : predictedSide === "away"
+        ? "away_win"
+        : "draw";
     isCorrect = actualOutcome === predicted;
+  }
+
+  // v6 B2: compute realised P/L for this pick using the pre-match
+  // odds from fixture.odds when available. Falls back to a flat 1.90
+  // assumption ONLY if we have no odds row at all — matches the
+  // backend ROI calculator's fallback behaviour.
+  let realisedPnl: number | null = null;
+  let pnlSource: "real" | "estimated" | null = null;
+  if (isCorrect !== null && predictedSide !== null) {
+    const odds = fixture.odds;
+    let oddsUsed: number | null = null;
+    if (odds && predictedSide === "home" && odds.home != null) {
+      oddsUsed = odds.home;
+    } else if (odds && predictedSide === "draw" && odds.draw != null) {
+      oddsUsed = odds.draw;
+    } else if (odds && predictedSide === "away" && odds.away != null) {
+      oddsUsed = odds.away;
+    }
+    if (oddsUsed != null && oddsUsed > 1) {
+      pnlSource = "real";
+    } else {
+      oddsUsed = 1.9;
+      pnlSource = "estimated";
+    }
+    realisedPnl = isCorrect ? oddsUsed - 1 : -1;
   }
 
   const homeScore = fixture.result?.home_score ?? null;
@@ -442,6 +477,30 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
               >
                 {Math.round(pred!.confidence * 100)}% confidence
               </span>
+
+              {/* v6 B2: realised P/L per pick */}
+              {realisedPnl !== null && (
+                <span
+                  className={`flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tabular-nums ${
+                    realisedPnl > 0
+                      ? "border-emerald-500/25 bg-emerald-500/10 text-emerald-400"
+                      : "border-red-500/25 bg-red-500/10 text-red-400"
+                  }`}
+                  title={
+                    pnlSource === "real"
+                      ? "Realised P/L computed from the actual pre-match odds stored for this fixture."
+                      : "Realised P/L estimated at a flat 1.90 odds because no real odds row is on file yet."
+                  }
+                >
+                  {realisedPnl > 0 ? "+" : ""}
+                  {realisedPnl.toFixed(2)}u
+                  {pnlSource === "estimated" ? (
+                    <span className="text-[9px] font-normal opacity-70">
+                      est.
+                    </span>
+                  ) : null}
+                </span>
+              )}
             </>
           ) : (
             <span className="text-xs text-slate-600 italic">No prediction made</span>
