@@ -507,3 +507,186 @@ api_usage_log rows:      ~2 000 (all outbound calls tracked)
 
 The site is more honest than it was 24 hours ago, and is now on
 a foundation where honest strategies can eventually emerge.
+
+---
+
+## v5 Phase 2 addendum — 2026-04-11 later that day
+
+After the initial v5 rebuild, a follow-up session in the same day
+found and fixed a **silent crash** in two of three sub-models, ran
+Fase 1 (odds snapshot infra, team dedupe, daily cron), Fase 2
+(PoissonModel rewrite + Over/Under wiring), and Fase 3 (full
+regenerate of all predictions and re-validation). Everything
+described above is still correct; this addendum describes the
+additional findings and the new state.
+
+### The silent Poisson crash
+
+The v5 Elo fix deprecated `team_seeds.get_seed_elo()` so it raises
+`NotImplementedError` on import. The Poisson sub-model still called
+it from `_seed_from_context`, and the ensemble's per-sub-model
+try/except was silently catching the exception and excluding
+Poisson from the weighted average on every prediction. The
+LogisticModel was also effectively a no-op because it returns
+`1/3, 1/3, 1/3` until it's trained (which it isn't). So the v5
+"honest ensemble" was in reality **pure Elo output dressed up**.
+
+**Fix** (commit `d471016`):
+- `PoissonModel.predict` now reads `home_form` / `away_form` from
+  `match_context` directly and computes attack/defence multipliers
+  via a new `_strength_from_form` helper. The form data is
+  already point-in-time (filtered by `_get_team_form` with
+  `before=scheduled_at`).
+- Removed the `team_seeds.get_seed_elo` dependency entirely.
+- `ForecastService.generate_forecast` now also runs
+  `predict_over_under_2_5` after the ensemble and stores the O/U
+  output in `match_context["over_under_2_5"]`, which flows into
+  `features_snapshot` on the persisted Prediction row.
+- `strategy_engine.get_feature_value` learns the new feature
+  names (`expected_total_goals`, `over_2_5_prob`,
+  `under_2_5_prob`, etc.) so strategy rules can filter on them.
+
+Verified on production:
+```
+Lille OSC vs OGC Nice  → home_win_prob=0.70  (Elo alone would give ~0.55)
+Fortuna Sittard vs NAC Breda  → O/U over=0.456 under=0.544 xG_total=2.5
+Genoa CFC vs US Sassuolo Calcio  → O/U over=0.35 under=0.65 xG_total=2.1
+```
+
+Poisson is now actually contributing to predictions. The ensemble
+skews more toward favorites when form data and Elo agree.
+
+### Phase 2 validation results
+
+After regenerating all 5 053 predictions with the full honest
+ensemble (0 leakage failures again, as expected) and running
+`/api/strategies/validation-refresh`:
+
+| Strategy              | Sample | Winrate | ROI     | odds_cov | Status              |
+|-----------------------|-------:|--------:|--------:|---------:|---------------------|
+| Balanced Match Away   | 3 072  | 42.8%   | -18.4%  | 1.1%     | rejected            |
+| **High-Scoring Match** | 2 551  | 49.8%   | -5.2%   | 1.1%     | **rejected** (O/U Over) |
+| Underdog Hunter       | 1 624  | 45.7%   | -12.9%  | 1.6%     | rejected            |
+| Home Value Medium Odds | 1 118 | 49.0%   | -6.6%   | 1.3%     | rejected            |
+| Anti-Draw Filter      | 1 100  | 63.0%   | +19.6%  | 1.0%     | under_investigation |
+| Strong Home Favorite  | 1 068  | 61.8%   | +17.1%  | 1.3%     | under_investigation |
+| Draw Specialist       | 975    | 42.0%   | -20.1%  | 0.4%     | rejected            |
+| Away Upset Value      | 849    | 49.9%   | -5.1%   | 1.5%     | rejected            |
+| **Defensive Battle**  | 695    | 46.3%   | -12.2%  | 1.3%     | **rejected** (O/U Under) |
+| Low Draw High Home    | 659    | 65.7%   | +24.6%  | 1.5%     | under_investigation |
+| Home Dominant         | 655    | 66.3%   | +25.6%  | 1.4%     | under_investigation |
+| Conservative Favorite | 524    | 67.0%   | +26.9%  | 1.3%     | under_investigation |
+| Model Confidence Elite | 77    | 55.8%   | +6.1%   | 0.0%     | **validated**        |
+| High Confidence Any   | 0      | —       | —       | —        | insufficient_data   |
+
+**Final tally:** 1 validated · 5 under_investigation · 7 rejected
+· 1 insufficient_data.
+
+### The two big surprises in Phase 2
+
+**1. The home-favorite strategies are BACK with high numbers — but
+it's not leakage.**
+
+Low Draw High Home, Home Dominant, Conservative Favorite, Strong
+Home Favorite, Anti-Draw Filter all come back with 61-67% winrate
+on 500-1100 samples. In Phase 1 they had 0 samples because pure
+Elo produces moderate home probabilities. Now with Poisson
+contributing form-based lambda amplification, the ensemble
+confidently picks heavy home favorites (Bayern vs Werder,
+Barcelona vs Celta) with `home_win_prob > 0.60` again.
+
+Crucially, **this is NOT leakage.** Point-in-time assertions still
+fire 0 times. The winrates are real: heavy home favorites in the
+top European leagues DO win ~65% of the time. That's what makes
+them "favorites" in the first place.
+
+The +20-27% ROI numbers are still wrong, but for a different
+reason than v4. Not leakage — the **1.90 flat-odds fallback**.
+Real market odds on "Bayern home vs Werder Bremen" are 1.30-1.40.
+A 66% strike rate at 1.35 odds gives a real ROI of
+`0.66 × 0.35 - 0.34 × 1.0 = -10.9%`. So these strategies actually
+lose money at real market prices. The plausibility gates correctly
+flag them as under_investigation.
+
+**This is why historical odds coverage is the single most
+important remaining gap.** Without it, we can't tell a genuinely
+profitable strategy from one that just picks the favourite.
+
+**2. The two Over/Under strategies BOTH rejected.**
+
+The form-derived Poisson lambdas successfully distinguish
+high-scoring and low-scoring matches — 2 551 picks for Over,
+695 for Under. But the strike rates are 49.8% and 46.3%
+respectively, both just below break-even at 1.90 flat odds.
+That means **our current Poisson lambdas have no edge on the
+O/U 2.5 market.** A more sophisticated Poisson (Dixon-Coles
+correlation, team-by-team strength adjustments, league-specific
+priors) might do better, but the baseline form-average approach
+doesn't beat the market.
+
+This is a **useful negative result** — it tells us exactly where
+the model is weak and where the next round of modelling work
+should focus. The v4 fake Profitable numbers told us nothing;
+these honest numbers tell us something real.
+
+### What else happened in Phase 2
+
+- **Team dedupe**: 87 duplicate team groups merged (dual-ingestion
+  artifacts from fd + apifb). Winner = oldest row. Matches,
+  team_elo_history, team_stats FKs all repointed.
+- **Odds snapshot endpoint + daily cron**: 116 fixtures → 264
+  odds rows in a single run. Daily cron runs at 05:30 UTC from
+  now on. Over 2 weeks this accumulates real historical odds for
+  every upcoming fixture without any extra API spend.
+- **Elo history regenerated post-dedupe**: 5 053 matches
+  processed (up from 4 411), 10 106 rating rows. Top 10 still
+  shows Bayern/Barcelona/PSG/PSV/Inter at the top (~1700
+  ratings), which is plausible.
+
+### API usage after Phase 2
+
+```
+api_football: 2 680 / 7 500 daily (35.7%)
+football_data: 0 / 14 400
+the_odds_api: 0 / 16
+```
+
+Still comfortably inside budget. The daily snapshot cron will add
+~400 calls/day from now on, sustained.
+
+### Where we stand at end of Phase 2
+
+**What is genuinely true:**
+- All 3 forecast sub-models now produce point-in-time, non-leaky
+  predictions. Elo: history table. Poisson: form-derived.
+  Logistic: uniform prior (safe, but no signal).
+- The regenerated predictions have 0 leakage assertion failures
+  across 5 053 matches.
+- Two of the v5 seed O/U strategies finally have real samples
+  and both are honestly rejected.
+- The v4 fake-Profitable strategies are flagged as
+  under_investigation on the new gates — not because the
+  winrates are wrong (they're real), but because the 1.90
+  fallback ROI math overestimates their market performance.
+
+**What still needs to happen:**
+1. **Odds coverage growth** — the daily snapshot cron is now
+   active but needs 2-3 weeks to accumulate meaningful history.
+   Until then the 1.90 fallback dominates and real ROI can't be
+   measured.
+2. **Logistic model training** — currently returns uniform
+   probabilities. Could be trained on the regenerated v5 samples
+   to add model diversity. Not urgent.
+3. **Match dedupe** — team dedupe fixed teams but duplicate match
+   rows still exist (explorer endpoint shows some fixtures twice).
+   Same pattern, different table.
+4. **Dixon-Coles / Poisson improvements** — the baseline
+   form-average model clearly doesn't beat O/U markets. Team-
+   specific home/away strength split + the Dixon-Coles low-score
+   correction would be the standard next step.
+5. **Walk-forward validation endpoint** — a proper backtest
+   framework that splits train/test windows rolling through
+   time. Currently we just compute overall metrics. Walk-forward
+   is what separates "honest single-sample number" from "robust
+   out-of-sample performance".
+
