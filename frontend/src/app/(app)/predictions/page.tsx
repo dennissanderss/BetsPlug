@@ -5,12 +5,16 @@ import { useQuery } from "@tanstack/react-query";
 import {
   Sparkles,
   ChevronUp,
+  ChevronDown,
   Eye,
   AlertTriangle,
   Filter,
   ArrowUpDown,
   Clock,
   RefreshCw,
+  Radio,
+  CalendarDays,
+  Trophy,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import type { Fixture, FixturePrediction } from "@/types/api";
@@ -22,6 +26,7 @@ type ConfidenceLevel = "High" | "Medium" | "Low";
 type SortKey = "confidence" | "time" | "league";
 type LeagueFilter = "All" | string;
 type ConfidenceFilter = "All" | ConfidenceLevel;
+type ViewMode = "upcoming" | "live" | "results";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -58,6 +63,9 @@ function getConfidenceBg(level: ConfidenceLevel): string {
   if (level === "Medium") return "bg-amber-500/10 text-amber-400";
   return "bg-red-500/10 text-red-400";
 }
+
+// v6.2: kept exported-ish for any deep import; silence unused-var lint.
+void getConfidenceBg;
 
 // ─── Probability Bar ─────────────────────────────────────────────────────────
 
@@ -163,7 +171,9 @@ function ProbabilityPending() {
 }
 
 // ─── Match Card ───────────────────────────────────────────────────────────────
-
+// NOTE: replaced in v6.2 by CompactMatchRow + LeagueSection. Kept here
+// for a safe rollback window; slated for deletion in v6.3.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function MatchCard({ fixture }: { fixture: Fixture }) {
   const [expanded, setExpanded] = useState(false);
   const pred: FixturePrediction | null = fixture.prediction ?? null;
@@ -468,6 +478,390 @@ function SkeletonCard() {
   );
 }
 
+// ─── Compact Match Row (v6.2 redesign) ───────────────────────────────────────
+//
+// One compact row per fixture, replaces the large MatchCard. Groups
+// under a LeagueSection accordion. Clicking the row expands a detail
+// panel with probabilities, reasoning and top features.
+
+function formatTimeOnly(iso: string): string {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  } catch {
+    return "--:--";
+  }
+}
+
+function formatDateShort(iso: string): string {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+    });
+  } catch {
+    return "";
+  }
+}
+
+function CompactMatchRow({ fixture }: { fixture: Fixture }) {
+  const [expanded, setExpanded] = useState(false);
+  const pred: FixturePrediction | null = fixture.prediction ?? null;
+  const hasPrediction = pred !== null && typeof pred.confidence === "number";
+
+  const isLive = fixture.status === "live";
+  const isFinished = fixture.status === "finished";
+
+  const confScore = hasPrediction ? Math.round((pred.confidence ?? 0) * 100) : null;
+  const confLevel = confScore !== null ? getConfidenceLevel(confScore) : null;
+  const confColor = confLevel ? getConfidenceColor(confLevel) : "#475569";
+
+  const homeProb = pred?.home_win_prob != null ? Math.round(pred.home_win_prob * 100) : null;
+  const drawProb = pred?.draw_prob != null ? Math.round(pred.draw_prob * 100) : null;
+  const awayProb = pred?.away_win_prob != null ? Math.round(pred.away_win_prob * 100) : null;
+
+  // Highlight which of the 3 odds buttons matches the model's pick
+  let modelPick: "home" | "draw" | "away" | null = null;
+  if (hasPrediction && homeProb != null && awayProb != null) {
+    const d = drawProb ?? -1;
+    if (homeProb >= d && homeProb >= awayProb) modelPick = "home";
+    else if (awayProb >= d && awayProb >= homeProb) modelPick = "away";
+    else modelPick = "draw";
+  }
+
+  return (
+    <div className="border-b border-white/[0.04] last:border-b-0">
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2.5 sm:px-4 sm:py-3 hover:bg-white/[0.02] transition-colors text-left"
+        aria-expanded={expanded}
+      >
+        {/* Time block */}
+        <div className="flex w-16 shrink-0 flex-col items-start sm:w-20">
+          <span className="text-xs font-bold text-slate-100 tabular-nums">
+            {formatTimeOnly(fixture.scheduled_at)}
+          </span>
+          {isLive ? (
+            <span className="mt-0.5 inline-flex items-center gap-1 rounded-full border border-red-500/30 bg-red-500/10 px-1.5 py-0 text-[8px] font-bold uppercase tracking-wider text-red-400">
+              <span className="h-1 w-1 rounded-full bg-red-400 animate-pulse" />
+              Live
+            </span>
+          ) : isFinished ? (
+            <span className="mt-0.5 inline-flex items-center rounded-full border border-slate-500/20 bg-slate-500/10 px-1.5 py-0 text-[8px] font-bold uppercase tracking-wider text-slate-500">
+              FT
+            </span>
+          ) : (
+            <span className="mt-0.5 inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/10 px-1.5 py-0 text-[8px] font-bold uppercase tracking-wider text-blue-400">
+              Upcoming
+            </span>
+          )}
+        </div>
+
+        {/* Teams — stacked or inline */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 text-sm text-slate-100 font-medium">
+            <span className="truncate">{fixture.home_team_name}</span>
+            <span className="text-slate-600 text-xs font-normal shrink-0">vs</span>
+            <span className="truncate">{fixture.away_team_name}</span>
+          </div>
+          {isFinished && fixture.result && (
+            <p className="text-[10px] text-slate-500 mt-0.5 tabular-nums">
+              Final: {fixture.result.home_score} - {fixture.result.away_score}
+            </p>
+          )}
+        </div>
+
+        {/* Odds buttons (1 / X / 2) */}
+        <div className="hidden sm:flex items-center gap-1 shrink-0">
+          <OddButton
+            label="1"
+            value={fixture.odds?.home ?? null}
+            highlighted={modelPick === "home"}
+          />
+          <OddButton
+            label="X"
+            value={fixture.odds?.draw ?? null}
+            highlighted={modelPick === "draw"}
+          />
+          <OddButton
+            label="2"
+            value={fixture.odds?.away ?? null}
+            highlighted={modelPick === "away"}
+          />
+        </div>
+
+        {/* Confidence pill */}
+        {confScore != null && (
+          <div
+            className="hidden md:flex shrink-0 items-center gap-1 rounded-md border px-2 py-1 text-[10px] font-semibold tabular-nums"
+            style={{
+              color: confColor,
+              borderColor: `${confColor}40`,
+              background: `${confColor}12`,
+            }}
+          >
+            {confScore}%
+          </div>
+        )}
+
+        {/* Expand chevron */}
+        {expanded ? (
+          <ChevronUp className="h-4 w-4 text-slate-500 shrink-0" />
+        ) : (
+          <ChevronDown className="h-4 w-4 text-slate-500 shrink-0" />
+        )}
+      </button>
+
+      {/* Expand panel */}
+      {expanded && (
+        <div className="px-3 pb-4 pt-1 sm:px-6 bg-white/[0.015] animate-fade-in space-y-3">
+          {/* Mobile: show odds buttons here too (hidden above sm) */}
+          <div className="sm:hidden flex items-center gap-1 pt-2">
+            <OddButton
+              label="1"
+              value={fixture.odds?.home ?? null}
+              highlighted={modelPick === "home"}
+            />
+            <OddButton
+              label="X"
+              value={fixture.odds?.draw ?? null}
+              highlighted={modelPick === "draw"}
+            />
+            <OddButton
+              label="2"
+              value={fixture.odds?.away ?? null}
+              highlighted={modelPick === "away"}
+            />
+            {confScore != null && (
+              <div
+                className="ml-auto shrink-0 rounded-md border px-2 py-1 text-[10px] font-semibold tabular-nums"
+                style={{
+                  color: confColor,
+                  borderColor: `${confColor}40`,
+                  background: `${confColor}12`,
+                }}
+              >
+                {confScore}%
+              </div>
+            )}
+          </div>
+
+          {/* Probability breakdown */}
+          {hasPrediction ? (
+            <>
+              <div
+                className={`grid gap-2 text-center ${
+                  drawProb != null ? "grid-cols-3" : "grid-cols-2"
+                }`}
+              >
+                <div className="rounded-md bg-white/[0.03] border border-white/[0.05] p-2">
+                  <p className="text-[9px] uppercase tracking-widest text-slate-600">Home</p>
+                  <p className="text-base font-bold text-blue-400 tabular-nums">
+                    {homeProb}%
+                  </p>
+                </div>
+                {drawProb != null && (
+                  <div className="rounded-md bg-white/[0.03] border border-white/[0.05] p-2">
+                    <p className="text-[9px] uppercase tracking-widest text-slate-600">Draw</p>
+                    <p className="text-base font-bold text-amber-400 tabular-nums">
+                      {drawProb}%
+                    </p>
+                  </div>
+                )}
+                <div className="rounded-md bg-white/[0.03] border border-white/[0.05] p-2">
+                  <p className="text-[9px] uppercase tracking-widest text-slate-600">Away</p>
+                  <p className="text-base font-bold text-red-400 tabular-nums">
+                    {awayProb}%
+                  </p>
+                </div>
+              </div>
+
+              {/* Reasoning */}
+              {pred?.reasoning && (
+                <div className="rounded-md border border-white/[0.05] bg-white/[0.02] px-3 py-2">
+                  <p className="text-[9px] font-semibold uppercase tracking-widest text-slate-600 mb-1">
+                    Model reasoning
+                  </p>
+                  <p className="text-xs text-slate-300 leading-relaxed">{pred.reasoning}</p>
+                </div>
+              )}
+
+              {/* Top features */}
+              {pred?.top_features && pred.top_features.length > 0 && (
+                <div>
+                  <p className="text-[9px] font-semibold uppercase tracking-widest text-slate-600 mb-1.5">
+                    Top features
+                  </p>
+                  <div className="space-y-1">
+                    {pred.top_features.slice(0, 5).map((f, i) => (
+                      <div key={i} className="flex items-center gap-2 text-[11px]">
+                        <span className="flex-1 truncate text-slate-400 capitalize">
+                          {f.feature?.replace(/_/g, " ") ?? ""}
+                        </span>
+                        <div className="h-1 w-16 rounded-full bg-white/[0.05] overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-blue-500/70"
+                            style={{
+                              width: `${Math.min((f.importance ?? 0) * 100, 100)}%`,
+                            }}
+                          />
+                        </div>
+                        <span className="w-10 text-right tabular-nums text-slate-300 font-medium">
+                          {((f.importance ?? 0) * 100).toFixed(0)}%
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Over/Under odds if available */}
+              {(fixture.odds?.over_2_5 != null || fixture.odds?.under_2_5 != null) && (
+                <div className="flex items-center gap-2 pt-1 border-t border-white/[0.04]">
+                  <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-600">
+                    Goals 2.5
+                  </span>
+                  {fixture.odds?.over_2_5 != null && (
+                    <span className="rounded border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[11px] tabular-nums text-slate-300">
+                      <span className="text-slate-500 mr-1">Over</span>
+                      {fixture.odds.over_2_5.toFixed(2)}
+                    </span>
+                  )}
+                  {fixture.odds?.under_2_5 != null && (
+                    <span className="rounded border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[11px] tabular-nums text-slate-300">
+                      <span className="text-slate-500 mr-1">Under</span>
+                      {fixture.odds.under_2_5.toFixed(2)}
+                    </span>
+                  )}
+                  {fixture.odds?.bookmaker && (
+                    <span className="ml-auto text-[9px] text-slate-700 uppercase tracking-wider">
+                      {fixture.odds.bookmaker}
+                    </span>
+                  )}
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="text-xs text-slate-500 italic">
+              Deze wedstrijd is nog niet verwerkt door het voorspellings­model.
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function OddButton({
+  label,
+  value,
+  highlighted,
+}: {
+  label: string;
+  value: number | null;
+  highlighted: boolean;
+}) {
+  if (value == null) {
+    return (
+      <div className="flex h-10 w-14 flex-col items-center justify-center rounded-md border border-white/[0.05] bg-white/[0.015]">
+        <span className="text-[8px] uppercase text-slate-700">{label}</span>
+        <span className="text-[10px] text-slate-700">-</span>
+      </div>
+    );
+  }
+  return (
+    <div
+      className={`flex h-10 w-14 flex-col items-center justify-center rounded-md border tabular-nums transition-colors ${
+        highlighted
+          ? "border-blue-500/40 bg-blue-500/10"
+          : "border-white/[0.08] bg-white/[0.03]"
+      }`}
+    >
+      <span
+        className={`text-[8px] uppercase ${
+          highlighted ? "text-blue-300" : "text-slate-500"
+        }`}
+      >
+        {label}
+      </span>
+      <span
+        className={`text-xs font-bold ${
+          highlighted ? "text-blue-200" : "text-slate-200"
+        }`}
+      >
+        {value.toFixed(2)}
+      </span>
+    </div>
+  );
+}
+
+// ─── League Section (v6.2 accordion grouping) ────────────────────────────────
+
+function LeagueSection({
+  leagueName,
+  fixtures,
+  defaultOpen = true,
+}: {
+  leagueName: string;
+  fixtures: Fixture[];
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="glass-card overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between px-4 py-3 bg-white/[0.03] border-b border-white/[0.05] hover:bg-white/[0.05] transition-colors"
+        aria-expanded={open}
+      >
+        <div className="flex items-center gap-2">
+          <Trophy className="h-4 w-4 text-blue-400" />
+          <span className="text-sm font-bold text-slate-100">{leagueName}</span>
+          <span className="rounded-full border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[10px] font-semibold text-slate-400">
+            {fixtures.length}
+          </span>
+        </div>
+        {open ? (
+          <ChevronUp className="h-4 w-4 text-slate-500" />
+        ) : (
+          <ChevronDown className="h-4 w-4 text-slate-500" />
+        )}
+      </button>
+      {open && (
+        <div>
+          {fixtures.map((f) => (
+            <CompactMatchRow key={f.id} fixture={f} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function groupFixturesByLeague(
+  fixtures: Fixture[]
+): Array<{ name: string; fixtures: Fixture[] }> {
+  const map = new Map<string, Fixture[]>();
+  for (const f of fixtures) {
+    const key = f.league_name || "Unknown league";
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)!.push(f);
+  }
+  return Array.from(map.entries())
+    .map(([name, items]) => ({
+      name,
+      fixtures: items.sort((a, b) => a.scheduled_at.localeCompare(b.scheduled_at)),
+    }))
+    .sort((a, b) => b.fixtures.length - a.fixtures.length || a.name.localeCompare(b.name));
+}
+
 // ─── Stats Bar ───────────────────────────────────────────────────────────────
 
 function StatsBar({ fixtures }: { fixtures: Fixture[] }) {
@@ -652,6 +1046,9 @@ export default function PredictionsPage() {
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("All");
   const [sortKey,          setSortKey]          = useState<SortKey>("confidence");
 
+  // v6.2: view mode tabs (Upcoming / Live Now / Results)
+  const [viewMode, setViewMode] = useState<ViewMode>("upcoming");
+
   // v6 B3: date picker state. Default = today. min = 30 days back,
   // max = 7 days ahead — same bounds Dennis specified.
   const today = useMemo(() => todayIsoDate(), []);
@@ -659,7 +1056,7 @@ export default function PredictionsPage() {
   const maxDate = useMemo(() => addDaysIso(today, 7), [today]);
   const [selectedDate, setSelectedDate] = useState<string>(today);
 
-  const isHistorical = selectedDate < today;
+  const isHistorical = viewMode === "results" || selectedDate < today;
   const daysAhead = Math.max(1, daysBetweenIso(today, selectedDate) + 1);
   const daysBack = Math.max(1, daysBetweenIso(selectedDate, today) + 1);
 
@@ -671,19 +1068,22 @@ export default function PredictionsPage() {
     staleTime: 5 * 60_000,
   });
 
-  // ── Fetch upcoming OR results depending on selected date ──────────────────
+  // ── Fetch upcoming / live / results depending on view mode + date ─────────
   const fixturesQuery = useQuery({
-    queryKey: ["predictions-by-date", selectedDate],
+    queryKey: ["predictions-view", viewMode, selectedDate],
     queryFn: () => {
-      if (isHistorical) {
+      if (viewMode === "live") {
+        return api.getFixturesLive();
+      }
+      if (viewMode === "results" || selectedDate < today) {
         return api.getFixtureResults(daysBack);
       }
       // Default "upcoming" query wants at least 7 days so the default
       // experience (user lands on today) still shows a busy list.
       return api.getFixturesUpcoming(Math.max(7, daysAhead));
     },
-    staleTime: 60_000,
-    refetchInterval: 60_000,
+    staleTime: viewMode === "live" ? 30_000 : 60_000,
+    refetchInterval: viewMode === "live" ? 30_000 : 60_000,
     retry: 2,
   });
 
@@ -691,8 +1091,10 @@ export default function PredictionsPage() {
   const hasError  = fixturesQuery.isError;
 
   // ── Filter the returned fixtures to the exact selected date ───────────────
+  // Live view skips the date filter entirely — all LIVE matches are shown.
   const upcomingFixtures = useMemo<Fixture[]>(() => {
     const all = fixturesQuery.data?.fixtures ?? [];
+    if (viewMode === "live") return all;
     // For "today" and future dates we also keep the default "next 7
     // days" behaviour when the user hasn't touched the picker, so the
     // page isn't empty.
@@ -708,7 +1110,7 @@ export default function PredictionsPage() {
       const dd = String(d.getDate()).padStart(2, "0");
       return `${y}-${m}-${dd}` === selectedDate;
     });
-  }, [fixturesQuery.data, selectedDate, today]);
+  }, [fixturesQuery.data, selectedDate, today, viewMode]);
 
   // ── Derived leagues list for filter tabs ─────────────────────────────────
   const availableLeagues = useMemo(() => {
@@ -747,6 +1149,12 @@ export default function PredictionsPage() {
 
     return items;
   }, [upcomingFixtures, leagueFilter, confidenceFilter, sortKey]);
+
+  // v6.2: group filtered fixtures by league for accordion rendering
+  const groupedByLeague = useMemo(
+    () => groupFixturesByLeague(filtered),
+    [filtered]
+  );
 
   // ── Auto-refresh indicator ────────────────────────────────────────────────
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
@@ -821,54 +1229,95 @@ export default function PredictionsPage() {
         </div>
       )}
 
-      {/* ── v6 B3: date picker ── */}
-      <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4">
-        <div className="flex items-center gap-2">
-          <Clock className="h-4 w-4 text-slate-500" />
-          <label htmlFor="predictions-date" className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-            Datum
-          </label>
-        </div>
-        <input
-          id="predictions-date"
-          type="date"
-          value={selectedDate}
-          min={minDate}
-          max={maxDate}
-          onChange={(e) => setSelectedDate(e.target.value || today)}
-          className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-sm text-slate-100 focus:border-blue-500/50 focus:outline-none"
-        />
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => setSelectedDate((d) => addDaysIso(d, -1))}
-            disabled={selectedDate <= minDate}
-            className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 text-xs font-semibold text-slate-300 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            ← Vorige dag
-          </button>
-          <button
-            type="button"
-            onClick={() => setSelectedDate(today)}
-            className="rounded-md border border-blue-500/30 bg-blue-500/10 px-2 py-1 text-xs font-semibold text-blue-300 hover:bg-blue-500/20"
-          >
-            Vandaag
-          </button>
-          <button
-            type="button"
-            onClick={() => setSelectedDate((d) => addDaysIso(d, 1))}
-            disabled={selectedDate >= maxDate}
-            className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 text-xs font-semibold text-slate-300 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Volgende dag →
-          </button>
-        </div>
-        {isHistorical && (
-          <span className="ml-auto rounded-full border border-slate-500/25 bg-slate-500/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
-            Historisch
-          </span>
-        )}
+      {/* ── v6.2: View Mode Tabs ── */}
+      <div className="flex items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1">
+        {(
+          [
+            { key: "upcoming" as const, label: "Upcoming", icon: CalendarDays },
+            { key: "live" as const, label: "Live Now", icon: Radio },
+            { key: "results" as const, label: "Results", icon: Trophy },
+          ]
+        ).map(({ key, label, icon: Icon }) => {
+          const active = viewMode === key;
+          const isLiveTab = key === "live";
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setViewMode(key)}
+              className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
+                active
+                  ? isLiveTab
+                    ? "bg-red-600 text-white shadow-md shadow-red-500/20"
+                    : "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+              aria-pressed={active}
+            >
+              <Icon className={`h-4 w-4 ${isLiveTab && active ? "animate-pulse" : ""}`} />
+              <span>{label}</span>
+              {isLiveTab &&
+                viewMode === "live" &&
+                upcomingFixtures.length > 0 && (
+                  <span className="rounded-full bg-white/20 px-1.5 py-0.5 text-[10px] tabular-nums">
+                    {upcomingFixtures.length}
+                  </span>
+                )}
+            </button>
+          );
+        })}
       </div>
+
+      {/* ── v6 B3: date picker (hidden in Live Now) ── */}
+      {viewMode !== "live" && (
+        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4">
+          <div className="flex items-center gap-2">
+            <Clock className="h-4 w-4 text-slate-500" />
+            <label htmlFor="predictions-date" className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+              Datum
+            </label>
+          </div>
+          <input
+            id="predictions-date"
+            type="date"
+            value={selectedDate}
+            min={minDate}
+            max={maxDate}
+            onChange={(e) => setSelectedDate(e.target.value || today)}
+            className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-sm text-slate-100 focus:border-blue-500/50 focus:outline-none"
+          />
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setSelectedDate((d) => addDaysIso(d, -1))}
+              disabled={selectedDate <= minDate}
+              className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 text-xs font-semibold text-slate-300 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              ← Vorige dag
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedDate(today)}
+              className="rounded-md border border-blue-500/30 bg-blue-500/10 px-2 py-1 text-xs font-semibold text-blue-300 hover:bg-blue-500/20"
+            >
+              Vandaag
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedDate((d) => addDaysIso(d, 1))}
+              disabled={selectedDate >= maxDate}
+              className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 text-xs font-semibold text-slate-300 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Volgende dag →
+            </button>
+          </div>
+          {isHistorical && (
+            <span className="ml-auto rounded-full border border-slate-500/25 bg-slate-500/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+              Historisch
+            </span>
+          )}
+        </div>
+      )}
 
       {/* ── Stats bar ── */}
       {!isLoading && <StatsBar fixtures={upcomingFixtures} />}
@@ -912,11 +1361,30 @@ export default function PredictionsPage() {
         </div>
       ) : upcomingFixtures.length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
-          <Sparkles className="h-8 w-8 text-slate-600" />
-          <p className="text-base font-medium text-slate-400">No upcoming matches in the next 7 days</p>
-          <p className="text-sm text-slate-600">
-            No scheduled fixtures were found in the database. Check back shortly.
-          </p>
+          {viewMode === "live" ? (
+            <>
+              <Radio className="h-8 w-8 text-slate-600" />
+              <p className="text-base font-medium text-slate-400">
+                Geen live wedstrijden op dit moment
+              </p>
+              <p className="text-sm text-slate-600">
+                Check later terug of wissel naar <strong>Upcoming</strong> om
+                aankomende wedstrijden te zien.
+              </p>
+            </>
+          ) : (
+            <>
+              <Sparkles className="h-8 w-8 text-slate-600" />
+              <p className="text-base font-medium text-slate-400">
+                {viewMode === "results"
+                  ? "Geen recente resultaten"
+                  : "No upcoming matches in the next 7 days"}
+              </p>
+              <p className="text-sm text-slate-600">
+                No scheduled fixtures were found in the database. Check back shortly.
+              </p>
+            </>
+          )}
         </div>
       ) : filtered.length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
@@ -933,9 +1401,15 @@ export default function PredictionsPage() {
           </button>
         </div>
       ) : (
+        // v6.2: grouped-by-league accordion view
         <div className="space-y-3">
-          {filtered.map((fixture) => (
-            <MatchCard key={fixture.id} fixture={fixture} />
+          {groupedByLeague.map((group) => (
+            <LeagueSection
+              key={group.name}
+              leagueName={group.name}
+              fixtures={group.fixtures}
+              defaultOpen
+            />
           ))}
         </div>
       )}

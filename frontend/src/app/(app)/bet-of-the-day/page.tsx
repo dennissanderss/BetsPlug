@@ -17,6 +17,16 @@ import { api } from "@/lib/api";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
+interface BetOfTheDayOddsShape {
+  home?: number | null;
+  draw?: number | null;
+  away?: number | null;
+  over_2_5?: number | null;
+  under_2_5?: number | null;
+  bookmaker?: string | null;
+  fetched_at?: string | null;
+}
+
 interface BetOfTheDay {
   available: boolean;
   match_id?: string;
@@ -31,6 +41,8 @@ interface BetOfTheDay {
   predicted_outcome?: string;
   explanation_summary?: string;
   prediction_id?: string;
+  // v6.2 — optional pre-match odds (null when no odds row on file)
+  odds?: BetOfTheDayOddsShape | null;
 }
 
 // ─── Large Probability Display ──────────────────────────────────────────────
@@ -339,6 +351,73 @@ export default function BetOfTheDayPage() {
                   </p>
                 </div>
               )}
+
+              {/* v6.2: Pre-match odds (only when backend supplied them) */}
+              {botd.odds && (
+                botd.odds.home != null ||
+                botd.odds.draw != null ||
+                botd.odds.away != null ||
+                botd.odds.over_2_5 != null ||
+                botd.odds.under_2_5 != null
+              ) ? (
+                <div className="mt-6 mx-auto max-w-lg rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600">
+                      Pre-match odds
+                    </p>
+                    {botd.odds.bookmaker && (
+                      <span className="text-[9px] text-slate-700 uppercase tracking-wider">
+                        {botd.odds.bookmaker}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    {botd.odds.home != null && (
+                      <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-center min-w-[56px]">
+                        <p className="text-[9px] text-slate-500 uppercase">1</p>
+                        <p className="text-sm font-bold tabular-nums text-slate-100">
+                          {botd.odds.home.toFixed(2)}
+                        </p>
+                      </div>
+                    )}
+                    {botd.odds.draw != null && (
+                      <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-center min-w-[56px]">
+                        <p className="text-[9px] text-slate-500 uppercase">X</p>
+                        <p className="text-sm font-bold tabular-nums text-slate-100">
+                          {botd.odds.draw.toFixed(2)}
+                        </p>
+                      </div>
+                    )}
+                    {botd.odds.away != null && (
+                      <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-center min-w-[56px]">
+                        <p className="text-[9px] text-slate-500 uppercase">2</p>
+                        <p className="text-sm font-bold tabular-nums text-slate-100">
+                          {botd.odds.away.toFixed(2)}
+                        </p>
+                      </div>
+                    )}
+                    {(botd.odds.over_2_5 != null || botd.odds.under_2_5 != null) && (
+                      <span className="text-slate-700 mx-1">|</span>
+                    )}
+                    {botd.odds.over_2_5 != null && (
+                      <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-center min-w-[56px]">
+                        <p className="text-[9px] text-slate-500 uppercase">O 2.5</p>
+                        <p className="text-sm font-bold tabular-nums text-slate-100">
+                          {botd.odds.over_2_5.toFixed(2)}
+                        </p>
+                      </div>
+                    )}
+                    {botd.odds.under_2_5 != null && (
+                      <div className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-center min-w-[56px]">
+                        <p className="text-[9px] text-slate-500 uppercase">U 2.5</p>
+                        <p className="text-sm font-bold tabular-nums text-slate-100">
+                          {botd.odds.under_2_5.toFixed(2)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
 

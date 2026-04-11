@@ -15,7 +15,11 @@ import {
   Zap,
   Database,
   AlertTriangle,
+  Info,
+  Cpu,
+  Sparkles,
 } from "lucide-react";
+import Link from "next/link";
 import {
   AreaChart,
   Area,
@@ -35,6 +39,7 @@ import type {
   Prediction,
   Sport,
   League,
+  ModelOverview,
 } from "@/types/api";
 import {
   Select,
@@ -470,6 +475,163 @@ function ConfidenceBadge({ value }: { value: number }) {
   );
 }
 
+// ─── Models Overview Panel (v6.2 transparency) ───────────────────────────────
+//
+// Shows which models are currently powering predictions on the platform.
+// Keeps the payload light — only public fields are rendered, raw
+// hyperparameter VALUES stay server-side (only the keys are shown).
+
+const MODEL_TYPE_ICON: Record<string, React.ElementType> = {
+  elo: Activity,
+  poisson: BarChart3,
+  logistic: TrendingUp,
+  ensemble: Sparkles,
+};
+
+function ModelsOverviewPanel() {
+  const { data: models, isLoading } = useQuery({
+    queryKey: ["models-overview"],
+    queryFn: () => api.getModels(true),
+    staleTime: 5 * 60 * 1000, // 5 min — cached server-side too
+  });
+
+  if (isLoading) {
+    return (
+      <div className="glass-card p-6 space-y-4 animate-slide-up">
+        <div className="h-4 w-48 rounded bg-white/[0.06] animate-pulse" />
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-32 w-full rounded-xl bg-white/[0.04] animate-pulse" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const list: ModelOverview[] = models ?? [];
+  if (list.length === 0) return null;
+
+  return (
+    <div className="glass-card p-6 space-y-4 animate-slide-up">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="text-base font-semibold text-slate-100 flex items-center gap-2">
+            <Cpu className="h-4 w-4 text-blue-400" />
+            Active Models
+          </h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            {list.length} model{list.length !== 1 ? "s" : ""} currently powering predictions on the platform
+          </p>
+        </div>
+        <Link
+          href="/about#methodology"
+          className="text-[11px] text-blue-400 hover:text-blue-300 underline-offset-2 hover:underline"
+        >
+          How these models work →
+        </Link>
+      </div>
+
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {list.map((m) => {
+          const Icon = MODEL_TYPE_ICON[m.model_type] ?? Cpu;
+          return (
+            <div
+              key={m.id}
+              className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 space-y-2 hover:border-blue-500/30 transition-colors"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 ring-1 ring-blue-500/20">
+                    <Icon className="h-4 w-4 text-blue-400" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-slate-100 truncate">
+                      {m.name}
+                    </p>
+                    <p className="text-[10px] text-slate-500 uppercase tracking-wider">
+                      v{m.version} · {m.model_type}
+                    </p>
+                  </div>
+                </div>
+                {m.is_active && (
+                  <span className="shrink-0 inline-flex items-center rounded-full bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-400 uppercase tracking-wider">
+                    Active
+                  </span>
+                )}
+              </div>
+
+              {m.description && (
+                <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2">
+                  {m.description}
+                </p>
+              )}
+
+              <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/[0.04]">
+                <div>
+                  <p className="text-[9px] text-slate-600 uppercase tracking-wider">Accuracy</p>
+                  <p className="text-sm font-bold tabular-nums text-slate-100">
+                    {m.accuracy != null ? `${(m.accuracy * 100).toFixed(1)}%` : "—"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[9px] text-slate-600 uppercase tracking-wider">Brier</p>
+                  <p className="text-sm font-bold tabular-nums text-slate-100">
+                    {m.brier_score != null ? m.brier_score.toFixed(3) : "—"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-[9px] text-slate-600 pt-1">
+                <span>
+                  {m.sample_size != null ? `${m.sample_size.toLocaleString()} samples` : ""}
+                </span>
+                <span>
+                  Trained {new Date(m.trained_at).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Methodology Banner (v6.2) ────────────────────────────────────────────────
+//
+// Small infobanner that links to the full About/Methodology page. We
+// intentionally don't duplicate the rich content that's already on the
+// About page — a one-line nudge is enough.
+
+function MethodologyBanner() {
+  return (
+    <div className="flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 ring-1 ring-blue-500/20">
+        <Info className="h-4 w-4 text-blue-400" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-semibold text-slate-200">
+          Hoe interpreteer ik deze cijfers?
+        </p>
+        <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+          Brier score, calibration error en walk-forward validatie uitgelegd —{" "}
+          <Link
+            href="/about#methodology"
+            className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
+          >
+            bekijk de methodology sectie
+          </Link>
+          .
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // ─── Recent Predictions Feed (real data) ──────────────────────────────────────
 
 function RecentPredictionsFeed() {
@@ -480,6 +642,9 @@ function RecentPredictionsFeed() {
 
   const predictions: Prediction[] = response?.items ?? [];
   const pendingCount = predictions.filter((p) => !p.evaluation).length;
+
+  // v6.2: click-to-expand for transparency ("Why this pick")
+  const [expandedId, setExpandedId] = React.useState<string | null>(null);
 
   if (isLoading) {
     return (
@@ -565,45 +730,174 @@ function RecentPredictionsFeed() {
             ? `H ${homeProb}% · D ${drawProb}% · A ${awayProb}%`
             : `H ${homeProb}% · A ${awayProb}%`;
 
+          const isExpanded = expandedId === pred.id;
+          const modelLabel = pred.model ? `${pred.model.name} ${pred.model.version}` : null;
+          const reasoning = pred.reasoning ?? pred.explanation?.summary ?? null;
+
+          const factorsFor = pred.explanation?.top_factors_for
+            ? Object.entries(pred.explanation.top_factors_for as Record<string, number>)
+                .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+                .slice(0, 3)
+            : [];
+          const factorsAgainst = pred.explanation?.top_factors_against
+            ? Object.entries(pred.explanation.top_factors_against as Record<string, number>)
+                .sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]))
+                .slice(0, 3)
+            : [];
+
           return (
             <div
               key={pred.id}
-              className="glass-card-hover px-4 py-3 flex flex-wrap items-center gap-3"
+              className="glass-card-hover overflow-hidden"
               style={{ borderLeft: `3px solid ${borderColor}` }}
             >
-              {/* Time */}
-              <span className="text-xs text-slate-500 w-28 shrink-0">{scheduledAt}</span>
+              <button
+                type="button"
+                onClick={() => setExpandedId(isExpanded ? null : pred.id)}
+                className="w-full px-4 py-3 flex flex-wrap items-center gap-3 text-left"
+                aria-expanded={isExpanded}
+                aria-label={`${matchLabel} — klik voor details`}
+              >
+                {/* Time */}
+                <span className="text-xs text-slate-500 w-28 shrink-0">{scheduledAt}</span>
 
-              {/* Match */}
-              <div className="flex-1 min-w-[180px]">
-                <p className="text-sm font-medium text-slate-100 leading-tight">{matchLabel}</p>
-                {pred.match && (
-                  <p className="text-xs text-slate-500">{pred.match.status}</p>
-                )}
-              </div>
+                {/* Match */}
+                <div className="flex-1 min-w-[180px]">
+                  <p className="text-sm font-medium text-slate-100 leading-tight">{matchLabel}</p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    {pred.match && (
+                      <p className="text-[10px] text-slate-500">{pred.match.status}</p>
+                    )}
+                    {modelLabel && (
+                      <span className="inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/10 px-1.5 py-0.5 text-[9px] font-semibold text-blue-300 uppercase tracking-wide">
+                        {modelLabel}
+                      </span>
+                    )}
+                  </div>
+                </div>
 
-              {/* Probabilities */}
-              <span className="text-sm text-slate-300 font-medium min-w-[150px] font-mono text-xs">
-                {callSummary}
-              </span>
+                {/* Probabilities */}
+                <span className="text-slate-300 font-medium min-w-[150px] font-mono text-xs">
+                  {callSummary}
+                </span>
 
-              {/* Confidence */}
-              <div className="flex items-center gap-1.5 min-w-[90px]">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wide">Conf.</span>
-                <ConfidenceBadge value={pred.confidence} />
-              </div>
+                {/* Confidence */}
+                <div className="flex items-center gap-1.5 min-w-[90px]">
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wide">Conf.</span>
+                  <ConfidenceBadge value={pred.confidence} />
+                </div>
 
-              {/* Status */}
-              <div className="min-w-[90px]">
-                <PredictionStatusBadge correct={correct} evaluated={evaluated} />
-              </div>
+                {/* Status */}
+                <div className="min-w-[90px]">
+                  <PredictionStatusBadge correct={correct} evaluated={evaluated} />
+                </div>
 
-              {/* Brier score if available */}
-              <span className="text-xs font-mono tabular-nums w-20 text-right text-slate-500">
-                {pred.evaluation?.brier_score != null
-                  ? `BS: ${fmt(pred.evaluation.brier_score, 3)}`
-                  : " - "}
-              </span>
+                {/* Brier score if available */}
+                <span className="text-xs font-mono tabular-nums w-20 text-right text-slate-500">
+                  {pred.evaluation?.brier_score != null
+                    ? `BS: ${fmt(pred.evaluation.brier_score, 3)}`
+                    : " - "}
+                </span>
+              </button>
+
+              {/* v6.2: Expanded "Why this pick" panel */}
+              {isExpanded && (
+                <div className="border-t border-white/[0.05] bg-white/[0.015] px-4 py-4 space-y-3 animate-fade-in">
+                  {/* Probability bars */}
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                      Win probabilities
+                    </p>
+                    {[
+                      { label: "Home", value: pred.home_win_prob, color: "#3b82f6" },
+                      ...(pred.draw_prob != null
+                        ? [{ label: "Draw", value: pred.draw_prob, color: "#f59e0b" }]
+                        : []),
+                      { label: "Away", value: pred.away_win_prob, color: "#ef4444" },
+                    ].map((p) => (
+                      <div key={p.label} className="flex items-center gap-2 text-xs">
+                        <span className="w-12 text-slate-400">{p.label}</span>
+                        <div className="flex-1 h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
+                          <div
+                            className="h-full rounded-full transition-all"
+                            style={{ width: `${(p.value ?? 0) * 100}%`, background: p.color }}
+                          />
+                        </div>
+                        <span className="w-12 text-right tabular-nums text-slate-300 font-medium">
+                          {((p.value ?? 0) * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Reasoning */}
+                  {reasoning && (
+                    <div className="rounded-md border border-white/[0.05] bg-white/[0.02] px-3 py-2">
+                      <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-1">
+                        Model reasoning
+                      </p>
+                      <p className="text-xs text-slate-300 leading-relaxed">{reasoning}</p>
+                    </div>
+                  )}
+
+                  {/* Top factors for / against */}
+                  {(factorsFor.length > 0 || factorsAgainst.length > 0) && (
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {factorsFor.length > 0 && (
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-widest text-emerald-400 mb-1.5">
+                            Supporting factors
+                          </p>
+                          <ul className="space-y-1">
+                            {factorsFor.map(([feature, weight]) => (
+                              <li
+                                key={`for-${feature}`}
+                                className="flex items-center justify-between text-[11px] text-slate-300"
+                              >
+                                <span className="capitalize truncate">
+                                  {feature.replace(/_/g, " ")}
+                                </span>
+                                <span className="font-mono tabular-nums text-emerald-400 ml-2 shrink-0">
+                                  +{(Math.abs(weight) * 100).toFixed(0)}%
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {factorsAgainst.length > 0 && (
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-widest text-red-400 mb-1.5">
+                            Opposing factors
+                          </p>
+                          <ul className="space-y-1">
+                            {factorsAgainst.map(([feature, weight]) => (
+                              <li
+                                key={`against-${feature}`}
+                                className="flex items-center justify-between text-[11px] text-slate-300"
+                              >
+                                <span className="capitalize truncate">
+                                  {feature.replace(/_/g, " ")}
+                                </span>
+                                <span className="font-mono tabular-nums text-red-400 ml-2 shrink-0">
+                                  -{(Math.abs(weight) * 100).toFixed(0)}%
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Fallback when nothing is populated */}
+                  {!reasoning && factorsFor.length === 0 && factorsAgainst.length === 0 && (
+                    <p className="text-xs text-slate-500 italic text-center py-2">
+                      Geen expliciete verklaring beschikbaar voor deze pick.
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           );
         })}
@@ -891,6 +1185,12 @@ export default function TrackrecordPage() {
           Real API data
         </span>
       </div>
+
+      {/* v6.2: Methodology nudge */}
+      <MethodologyBanner />
+
+      {/* v6.2: Active Models panel (transparency) */}
+      <ModelsOverviewPanel />
 
       {/* 1. Live Performance Banner — real data only */}
       <LivePerformanceBanner summary={summary} loading={summaryLoading} />
