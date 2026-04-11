@@ -25,6 +25,7 @@ from sqlalchemy import and_, desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.forecasting.base_model import ForecastModel, ForecastResult
+from app.forecasting.elo_history import EloHistoryService
 from app.forecasting.models import MODEL_REGISTRY, EnsembleModel
 from app.models.match import Match, MatchResult
 from app.models.model_version import ModelVersion
@@ -199,6 +200,23 @@ class ForecastService:
         )
         total_teams = await self._get_total_teams(league_id, season_id, db)
 
+        # --- Point-in-time Elo (v5) ------------------------------------ #
+        # Read the most recent rating for each team whose ``effective_at``
+        # is strictly before kickoff. Also run the anti-leakage tripwire
+        # — if somehow a rating with effective_at >= kickoff exists for
+        # either team, this raises FeatureLeakageError and the whole
+        # prediction path aborts instead of silently producing a leaky
+        # forecast.
+        elo_svc = EloHistoryService(db)
+        await elo_svc.assert_rating_predates_kickoff(
+            home_id, scheduled_at, label="home"
+        )
+        await elo_svc.assert_rating_predates_kickoff(
+            away_id, scheduled_at, label="away"
+        )
+        home_elo_snap = await elo_svc.get_rating_at(home_id, scheduled_at)
+        away_elo_snap = await elo_svc.get_rating_at(away_id, scheduled_at)
+
         return {
             "match_id": str(match.id),
             "home_team_id": str(home_id),
@@ -217,6 +235,15 @@ class ForecastService:
             "away_standing": away_standing,
             "league_avg_goals": league_avg_goals,
             "total_teams_in_league": total_teams,
+            # v5: point-in-time Elo ratings read from team_elo_history.
+            # The model side reads these keys — see app/forecasting/models/
+            # elo_model.py::predict.
+            "home_elo_at_kickoff": home_elo_snap.rating,
+            "away_elo_at_kickoff": away_elo_snap.rating,
+            "home_elo_source": home_elo_snap.source,
+            "away_elo_source": away_elo_snap.source,
+            "home_elo_effective_at": home_elo_snap.effective_at.isoformat(),
+            "away_elo_effective_at": away_elo_snap.effective_at.isoformat(),
         }
 
     # ------------------------------------------------------------------ #
