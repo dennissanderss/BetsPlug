@@ -118,15 +118,25 @@ interface StatRow {
   value: string;
 }
 
+// v6.1: small helper so every `.toFixed` call in the trackrecord
+// page is null-safe. The backend returns `null` for log_loss /
+// calibration_error when there isn't enough data yet; the old code
+// crashed the whole page with "Cannot read properties of null
+// (reading 'toFixed')".
+function fmt(n: number | null | undefined, digits: number): string {
+  if (n == null || Number.isNaN(n)) return " - ";
+  return n.toFixed(digits);
+}
+
 function SummaryStatsTable({ summary }: { summary: TrackrecordSummary }) {
   const rows: StatRow[] = [
     { label: "Period Start", value: summary.period_start ? formatDate(summary.period_start) : " - " },
     { label: "Period End", value: summary.period_end ? formatDate(summary.period_end) : " - " },
     { label: "Total Predictions", value: summary.total_predictions.toLocaleString() },
     { label: "Accuracy", value: formatPercent(summary.accuracy) },
-    { label: "Brier Score", value: summary.brier_score.toFixed(4) },
-    { label: "Log Loss", value: summary.log_loss.toFixed(4) },
-    { label: "Calibration Error (ECE)", value: summary.calibration_error.toFixed(4) },
+    { label: "Brier Score", value: fmt(summary.brier_score, 4) },
+    { label: "Log Loss", value: fmt(summary.log_loss, 4) },
+    { label: "Calibration Error (ECE)", value: fmt(summary.calibration_error, 4) },
     { label: "Avg Confidence", value: formatPercent(summary.avg_confidence) },
   ];
 
@@ -234,7 +244,10 @@ function SegmentTable({ data, loading, emptyMessage }: {
                 {accuracyCell(Number(row.accuracy))}
               </td>
               <td className="px-4 py-3 text-right tabular-nums text-slate-400">
-                {Number(row.brier_score).toFixed(3)}
+                {fmt(
+                  row.brier_score == null ? null : Number(row.brier_score),
+                  3
+                )}
               </td>
               <td className="px-4 py-3 text-right">
                 <div className="flex items-center justify-end gap-2">
@@ -395,7 +408,7 @@ function LivePerformanceBanner({
           <div className="text-center">
             <p className="text-[10px] uppercase tracking-wide text-slate-500 mb-0.5">Brier Score</p>
             <p className="text-sm font-bold text-blue-400 tabular-nums">
-              {summary.brier_score.toFixed(3)}
+              {fmt(summary.brier_score, 3)}
             </p>
           </div>
           <div className="text-center">
@@ -587,8 +600,8 @@ function RecentPredictionsFeed() {
 
               {/* Brier score if available */}
               <span className="text-xs font-mono tabular-nums w-20 text-right text-slate-500">
-                {pred.evaluation?.brier_score !== undefined
-                  ? `BS: ${pred.evaluation.brier_score.toFixed(3)}`
+                {pred.evaluation?.brier_score != null
+                  ? `BS: ${fmt(pred.evaluation.brier_score, 3)}`
                   : " - "}
               </span>
             </div>
@@ -896,19 +909,19 @@ export default function TrackrecordPage() {
           />
           <KpiCard
             title="Brier Score"
-            value={summary ? summary.brier_score.toFixed(3) : " - "}
+            value={fmt(summary?.brier_score, 3)}
             icon={BarChart3}
             accent="blue"
           />
           <KpiCard
             title="Log Loss"
-            value={summary ? summary.log_loss.toFixed(3) : " - "}
+            value={fmt(summary?.log_loss, 3)}
             icon={BarChart3}
             accent="amber"
           />
           <KpiCard
             title="Calibration Error"
-            value={summary ? summary.calibration_error.toFixed(3) : " - "}
+            value={fmt(summary?.calibration_error, 3)}
             icon={Target}
             accent="blue"
           />
@@ -1134,7 +1147,7 @@ export default function TrackrecordPage() {
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-slate-400">ECE</span>
                   <span className="font-mono font-semibold text-slate-100">
-                    {summary ? summary.calibration_error.toFixed(4) : " - "}
+                    {fmt(summary?.calibration_error, 4)}
                   </span>
                 </div>
                 <p className="text-xs text-slate-500">
