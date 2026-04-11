@@ -280,6 +280,16 @@ export const routeTable = {
     sw: "/admin",
     id: "/admin",
   },
+  "/b2b": {
+    en: "/b2b",
+    nl: "/b2b",
+    de: "/b2b",
+    fr: "/b2b",
+    es: "/b2b",
+    it: "/b2b",
+    sw: "/b2b",
+    id: "/b2b",
+  },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type CanonicalPath = keyof typeof routeTable;

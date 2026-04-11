@@ -1,26 +1,31 @@
 import type { Metadata } from "next";
 import { HowItWorksContent } from "./how-it-works-content";
+import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { PAGE_META } from "@/data/page-meta";
 
 /* ── Per-page SEO metadata ─────────────────────────────────────
    The How-It-Works page is the main trust-building entry point
    for prospects doing due diligence. It gets dedicated title,
    description, canonical URL and OpenGraph tags.               */
-export const metadata: Metadata = {
-  title:
-    "How BetsPlug Works - From raw match data to AI-driven predictions",
-  description:
-    "A full, step-by-step walkthrough of the BetsPlug prediction engine: how we collect data, engineer features, train models, detect value and publish picks you can verify.",
-  alternates: {
-    canonical: "/how-it-works",
-  },
-  openGraph: {
-    title:
-      "How BetsPlug works - the honest, step-by-step prediction engine",
-    description:
-      "14 data sources. 1,200+ features. 4 independent models. Every pick timestamped and publicly verifiable. This is the exact pipeline.",
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getServerLocale();
+  const meta = PAGE_META["/how-it-works"]?.[locale] ?? PAGE_META["/how-it-works"].en;
+  const alternates = getLocalizedAlternates("/how-it-works");
+
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
+    openGraph: {
+      title: meta.ogTitle ?? meta.title,
+      description: meta.ogDescription ?? meta.description,
+      type: "website",
+    },
+  };
+}
 
 export default function HowItWorksPage() {
   return <HowItWorksContent />;

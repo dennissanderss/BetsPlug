@@ -1,19 +1,27 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { WelcomeContent } from "./welcome-content";
+import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { PAGE_META } from "@/data/page-meta";
 
-export const metadata: Metadata = {
-  title: "Welcome aboard - You're officially a BetsPlug member",
-  description:
-    "Your BetsPlug membership is active. Log in to see today's picks, track your ROI and start winning smarter - we've got your back.",
-  alternates: {
-    canonical: "/welcome",
-  },
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getServerLocale();
+  const meta = PAGE_META["/welcome"]?.[locale] ?? PAGE_META["/welcome"].en;
+  const alternates = getLocalizedAlternates("/welcome");
+
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}
 
 export default function WelcomePage() {
   return (

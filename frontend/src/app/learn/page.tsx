@@ -8,15 +8,14 @@ import {
   defaultLocale,
   isLocale,
   LOCALE_COOKIE,
-  locales,
-  localeMeta,
 } from "@/i18n/config";
-import { localizePath } from "@/i18n/routes";
 import {
   LEARN_PILLARS,
   pickLearnPillarLocale,
   type LearnPillarLocale,
 } from "@/data/learn-pillars";
+import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { PAGE_META } from "@/data/page-meta";
 
 /**
  * /learn — index page listing every evergreen learn pillar.
@@ -25,47 +24,29 @@ import {
  * to EN.
  */
 
-const SITE_URL = "https://betsplug.com";
-
 function readLocaleFromCookie(): LearnPillarLocale {
   const raw = cookies().get(LOCALE_COOKIE)?.value;
   const uiLocale = isLocale(raw) ? raw : defaultLocale;
   return pickLearnPillarLocale(uiLocale);
 }
 
-function languageAlternates(): Record<string, string> {
-  const map: Record<string, string> = {};
-  const canonical = "/learn";
-  for (const l of locales) {
-    const tag = localeMeta[l].hreflang;
-    map[tag] = `${SITE_URL}${localizePath(canonical, l)}`;
-  }
-  map["x-default"] = `${SITE_URL}${localizePath(canonical, defaultLocale)}`;
-  return map;
-}
-
 export async function generateMetadata(): Promise<Metadata> {
-  const editorialLocale = readLocaleFromCookie();
-  const title =
-    editorialLocale === "nl"
-      ? "Leer Sportwedden - Value, xG, Elo, Kelly, Poisson | BetsPlug"
-      : "Learn Football Betting - Value, xG, Elo, Kelly, Poisson | BetsPlug";
-  const description =
-    editorialLocale === "nl"
-      ? "Diepgaande pillar-gidsen over de wiskunde achter scherpe sportwedden - value betting, expected goals, Elo-ratings, Kelly-criterium, Poisson-modellen en bankroll management."
-      : "In-depth pillar guides on the math behind sharp football betting - value betting, expected goals, Elo ratings, the Kelly criterion, Poisson models, and bankroll management.";
+  const locale = getServerLocale();
+  const meta = PAGE_META["/learn"]?.[locale] ?? PAGE_META["/learn"].en;
+  const alternates = getLocalizedAlternates("/learn");
+
   return {
-    title,
-    description,
+    title: meta.title,
+    description: meta.description,
     alternates: {
-      canonical: "/learn",
-      languages: languageAlternates(),
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
     openGraph: {
-      title,
-      description,
+      title: meta.ogTitle ?? meta.title,
+      description: meta.ogDescription ?? meta.description,
       type: "website",
-      url: `${SITE_URL}/learn`,
+      url: alternates.canonical,
     },
   };
 }

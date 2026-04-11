@@ -30,11 +30,11 @@ import {
    Footer data
    ───────────────────────────────────────────────────────────────── */
 
-const bottomLinks = [
-  { text: "Privacy", href: "/privacy" },
-  { text: "Terms", href: "/terms" },
-  { text: "Cookies", href: "/cookies" },
-];
+const bottomLinkKeys = [
+  { key: "footer.bottomPrivacy", href: "/privacy" },
+  { key: "footer.bottomTerms", href: "/terms" },
+  { key: "footer.bottomCookies", href: "/cookies" },
+] as const;
 
 const socials = [
   { icon: Twitter, label: "Twitter", href: "https://twitter.com/betsplug" },
@@ -74,18 +74,18 @@ export function BetsPlugFooter() {
     { text: t("nav.trackRecord"), href: "#track-record" },
     { text: t("nav.howItWorks"), href: "#how-it-works" },
     { text: t("nav.pricing"), href: "#pricing" },
-    { text: "Comparison", href: "#comparison" },
+    { text: t("footer.comparison"), href: "#comparison" },
   ];
   const companyLinksT = [
-    { text: "About Us", href: loc("/about") },
-    { text: "Our Models", href: loc("/about") + "#models" },
+    { text: t("footer.aboutUs"), href: loc("/about") },
+    { text: t("footer.ourModels"), href: loc("/about") + "#models" },
     { text: t("nav.articles"), href: loc("/articles") },
-    { text: "Contact", href: loc("/contact") },
+    { text: t("footer.contact"), href: loc("/contact") },
   ];
   const legalLinksT = [
-    { text: "Terms of Service", href: "/terms" },
-    { text: "Privacy Policy", href: "/privacy" },
-    { text: "Cookie Policy", href: "/cookies" },
+    { text: t("footer.termsOfService"), href: "/terms" },
+    { text: t("footer.privacyPolicy"), href: "/privacy" },
+    { text: t("footer.cookiePolicy"), href: "/cookies" },
   ];
 
   return (
@@ -326,13 +326,13 @@ export function BetsPlugFooter() {
           <div>
             <div className="mb-5 flex items-center justify-between">
               <h4 className="text-sm font-bold uppercase tracking-widest text-white">
-                {locale === "nl" ? "Wedmarkten" : "Bet Types"}
+                {t("footer.betTypes")}
               </h4>
               <Link
                 href={loc("/bet-types")}
                 className="text-[11px] font-semibold uppercase tracking-wider text-green-400 transition-colors hover:text-green-300"
               >
-                {locale === "nl" ? "Bekijk alles" : "View all"} →
+                {t("footer.viewAll")} →
               </Link>
             </div>
             <ul className="grid gap-3 sm:grid-cols-2">
@@ -353,13 +353,13 @@ export function BetsPlugFooter() {
           <div>
             <div className="mb-5 flex items-center justify-between">
               <h4 className="text-sm font-bold uppercase tracking-widest text-white">
-                {locale === "nl" ? "Leer" : "Learn"}
+                {t("footer.learn")}
               </h4>
               <Link
                 href={loc("/learn")}
                 className="text-[11px] font-semibold uppercase tracking-wider text-green-400 transition-colors hover:text-green-300"
               >
-                {locale === "nl" ? "Bekijk alles" : "View all"} →
+                {t("footer.viewAll")} →
               </Link>
             </div>
             <ul className="grid gap-3 sm:grid-cols-2">
@@ -421,13 +421,13 @@ export function BetsPlugFooter() {
             © {new Date().getFullYear()} BetsPlug. {t("footer.copyright")}
           </p>
           <div className="flex items-center gap-5">
-            {bottomLinks.map(({ text, href }) => (
+            {bottomLinkKeys.map(({ key, href }) => (
               <Link
-                key={text}
+                key={key}
                 href={href}
                 className="text-xs text-slate-500 transition-colors hover:text-green-400"
               >
-                {text}
+                {t(key)}
               </Link>
             ))}
             <div className="hidden items-center gap-1.5 rounded-full bg-white/[0.03] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 md:flex">

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { ArticlesContent } from "./articles-content";
+import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { PAGE_META } from "@/data/page-meta";
 
 /**
  * Public articles archive page.
@@ -7,21 +9,25 @@ import { ArticlesContent } from "./articles-content";
  * featured post at the top. Data comes from the static
  * src/data/articles.ts source so the page is fully SSG-friendly.
  */
-export const metadata: Metadata = {
-  title:
-    "Latest Football Analysis & AI Betting Articles | BetsPlug",
-  description:
-    "Football news, AI match breakdowns and data-driven betting insights across the Premier League, La Liga, Bundesliga, Serie A and more. Read the latest analysis from the BetsPlug research team.",
-  alternates: {
-    canonical: "/articles",
-  },
-  openGraph: {
-    title: "Latest Football Analysis - BetsPlug",
-    description:
-      "AI football match breakdowns and data-driven betting insights from the BetsPlug research team.",
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getServerLocale();
+  const meta = PAGE_META["/articles"]?.[locale] ?? PAGE_META["/articles"].en;
+  const alternates = getLocalizedAlternates("/articles");
+
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
+    openGraph: {
+      title: meta.ogTitle ?? meta.title,
+      description: meta.ogDescription ?? meta.description,
+      type: "website",
+    },
+  };
+}
 
 export default function ArticlesPage() {
   return <ArticlesContent />;

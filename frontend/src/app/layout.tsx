@@ -10,9 +10,9 @@ import {
   defaultLocale,
   isLocale,
   LOCALE_COOKIE,
-  locales,
-  localeMeta,
 } from "@/i18n/config";
+import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { PAGE_META } from "@/data/page-meta";
 
 // Lato — free, open-source humanist sans loaded via next/font/google
 // for automatic self-hosting and zero layout shift.
@@ -24,18 +24,6 @@ const lato = Lato({
 });
 
 const SITE_URL = "https://betsplug.com";
-
-/* ── hreflang alternates for SEO ──────────────────────────────
-   Emits <link rel="alternate" hreflang="nl" href="…/nl" /> etc.
-   plus x-default pointing to the canonical English URL.       */
-const languageAlternates: Record<string, string> = locales.reduce(
-  (acc, l) => {
-    const tag = localeMeta[l].hreflang;
-    acc[tag] = l === defaultLocale ? SITE_URL : `${SITE_URL}/${l}`;
-    return acc;
-  },
-  { "x-default": SITE_URL } as Record<string, string>
-);
 
 /* ── Viewport ─────────────────────────────────────────────
    Explicit viewport so iOS Safari never auto-zooms on form
@@ -51,7 +39,7 @@ export const viewport: Viewport = {
 
 /* ── Site-wide OpenGraph image ─────────────────────────────────
    Square BetsPlug logo on dark navy background. Per-page metadata
-   (articles, league hubs, learn pillars, …) can still override
+   (articles, league hubs, learn pillars, ...) can still override
    this with a more specific image; pages that don't override fall
    back to this brand card. Lives in /public/og-image.png so it's
    served as a static asset under the canonical SITE_URL. */
@@ -62,39 +50,46 @@ const OG_IMAGE = {
   alt: "BetsPlug - AI-Powered Football Analytics",
 } as const;
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: "BetsPlug - AI-Powered Football Analytics",
-  description:
-    "Premium AI-powered football analytics. Data-driven predictions, live match tracking, and deep performance insights.",
-  alternates: {
-    canonical: "/",
-    languages: languageAlternates,
-  },
-  icons: {
-    icon: [{ url: "/logo.webp", type: "image/webp" }],
-    shortcut: "/logo.webp",
-    apple: "/logo.webp",
-  },
-  openGraph: {
-    type: "website",
-    siteName: "BetsPlug",
-    url: SITE_URL,
-    title: "BetsPlug - AI-Powered Football Analytics",
-    description:
-      "Premium AI-powered football analytics. Data-driven predictions, live match tracking, and deep performance insights.",
-    images: [OG_IMAGE],
-  },
-  twitter: {
-    card: "summary_large_image",
-    site: "@betsplug",
-    creator: "@betsplug",
-    title: "BetsPlug - AI-Powered Football Analytics",
-    description:
-      "Premium AI-powered football analytics. Data-driven predictions, live match tracking, and deep performance insights.",
-    images: [OG_IMAGE.url],
-  },
-};
+/* ── Locale-aware metadata ────────────────────────────────────
+   Reads the NEXT_LOCALE cookie (set by the middleware before
+   every request) and builds canonical + hreflang + translated
+   title/description accordingly. */
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getServerLocale();
+  const meta = PAGE_META["/"]?.[locale] ?? PAGE_META["/"].en;
+  const alternates = getLocalizedAlternates("/");
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: meta.title,
+    description: meta.description,
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
+    icons: {
+      icon: [{ url: "/logo.webp", type: "image/webp" }],
+      shortcut: "/logo.webp",
+      apple: "/logo.webp",
+    },
+    openGraph: {
+      type: "website",
+      siteName: "BetsPlug",
+      url: alternates.canonical,
+      title: meta.ogTitle ?? meta.title,
+      description: meta.ogDescription ?? meta.description,
+      images: [OG_IMAGE],
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@betsplug",
+      creator: "@betsplug",
+      title: meta.ogTitle ?? meta.title,
+      description: meta.ogDescription ?? meta.description,
+      images: [OG_IMAGE.url],
+    },
+  };
+}
 
 export default function RootLayout({
   children,

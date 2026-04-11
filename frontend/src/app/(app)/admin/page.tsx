@@ -18,6 +18,7 @@ import {
   FlaskConical,
   DollarSign,
   Mail,
+  Globe,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -34,6 +35,7 @@ import AnalyticsSettings from "@/components/admin/analytics-settings";
 import GoalsNotesTab from "@/components/admin/goals-notes-tab";
 import StrategyTiersTab from "@/components/admin/strategy-tiers-tab";
 import EmailDiagnosticsTab from "@/components/admin/email-diagnostics-tab";
+import SeoMetaEditor from "@/components/admin/seo-meta-editor";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -771,6 +773,11 @@ export default function AdminPage() {
       icon: Search,
     },
     {
+      id: "seo-meta",
+      label: "SEO Meta",
+      icon: Globe,
+    },
+    {
       id: "analytics",
       label: "Analytics",
       icon: BarChart3,
@@ -843,6 +850,7 @@ export default function AdminPage() {
         {activeTab === "users" && <UserManager />}
         {activeTab === "finance" && <FinanceTab />}
         {activeTab === "seo" && <SeoDashboard />}
+        {activeTab === "seo-meta" && <SeoMetaEditor />}
         {activeTab === "analytics" && <AnalyticsSettings />}
         {activeTab === "goals" && <GoalsNotesTab />}
         {activeTab === "strategy-tiers" && <StrategyTiersTab />}

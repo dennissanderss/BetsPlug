@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
-import { LoginContent } from "./login-content";
+import { B2BContent } from "./b2b-content";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
-  const meta = PAGE_META["/login"]?.[locale] ?? PAGE_META["/login"].en;
-  const alternates = getLocalizedAlternates("/login");
+  const meta = PAGE_META["/b2b"]?.[locale] ?? PAGE_META["/b2b"].en;
+  const alternates = getLocalizedAlternates("/b2b");
 
   return {
     title: meta.title,
@@ -16,17 +15,9 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: alternates.canonical,
       languages: alternates.languages,
     },
-    robots: {
-      index: false,
-      follow: false,
-    },
   };
 }
 
-export default function LoginPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-[#060912]" />}>
-      <LoginContent />
-    </Suspense>
-  );
+export default function B2BPage() {
+  return <B2BContent />;
 }

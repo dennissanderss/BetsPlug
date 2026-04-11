@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal/legal-page";
+import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { PAGE_META } from "@/data/page-meta";
 
-export const metadata: Metadata = {
-  title: "Terms of Service - BetsPlug",
-  description:
-    "The terms and conditions that apply when you use BetsPlug. Please read them before creating an account.",
-  alternates: { canonical: "/terms" },
-  openGraph: {
-    title: "Terms of Service - BetsPlug",
-    description:
-      "The terms and conditions that apply when you use BetsPlug.",
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getServerLocale();
+  const meta = PAGE_META["/terms"]?.[locale] ?? PAGE_META["/terms"].en;
+  const alternates = getLocalizedAlternates("/terms");
+
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
+    openGraph: {
+      title: meta.ogTitle ?? meta.title,
+      description: meta.ogDescription ?? meta.description,
+      type: "website",
+    },
+  };
+}
 
 export default function TermsOfServicePage() {
   return (

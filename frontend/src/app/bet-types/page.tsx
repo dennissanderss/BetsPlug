@@ -8,15 +8,14 @@ import {
   defaultLocale,
   isLocale,
   LOCALE_COOKIE,
-  locales,
-  localeMeta,
 } from "@/i18n/config";
-import { localizePath } from "@/i18n/routes";
 import {
   BET_TYPE_HUBS,
   pickBetTypeHubLocale,
   type BetTypeHubLocale,
 } from "@/data/bet-type-hubs";
+import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { PAGE_META } from "@/data/page-meta";
 
 /**
  * /bet-types — index page listing every bet-type hub.
@@ -24,47 +23,29 @@ import {
  * Localized EN + NL today; other locales fall back to EN.
  */
 
-const SITE_URL = "https://betsplug.com";
-
 function readLocaleFromCookie(): BetTypeHubLocale {
   const raw = cookies().get(LOCALE_COOKIE)?.value;
   const uiLocale = isLocale(raw) ? raw : defaultLocale;
   return pickBetTypeHubLocale(uiLocale);
 }
 
-function languageAlternates(): Record<string, string> {
-  const map: Record<string, string> = {};
-  const canonical = "/bet-types";
-  for (const l of locales) {
-    const tag = localeMeta[l].hreflang;
-    map[tag] = `${SITE_URL}${localizePath(canonical, l)}`;
-  }
-  map["x-default"] = `${SITE_URL}${localizePath(canonical, defaultLocale)}`;
-  return map;
-}
-
 export async function generateMetadata(): Promise<Metadata> {
-  const editorialLocale = readLocaleFromCookie();
-  const title =
-    editorialLocale === "nl"
-      ? "Wed-types Uitgelegd - BTTS, Over 2.5, DC, DNB | BetsPlug"
-      : "Bet Types Explained - BTTS, Over 2.5, DC, DNB | BetsPlug";
-  const description =
-    editorialLocale === "nl"
-      ? "Hoe populaire voetbalwedmarkten werken, hoe bookmakers ze prijzen en wanneer de markt value biedt. Uitleg bij BTTS, Over 2.5 goals, Double Chance en Draw No Bet."
-      : "How popular football betting markets work, how books price them and when the market offers value. Explainers for BTTS, Over 2.5 goals, Double Chance and Draw No Bet.";
+  const locale = getServerLocale();
+  const meta = PAGE_META["/bet-types"]?.[locale] ?? PAGE_META["/bet-types"].en;
+  const alternates = getLocalizedAlternates("/bet-types");
+
   return {
-    title,
-    description,
+    title: meta.title,
+    description: meta.description,
     alternates: {
-      canonical: "/bet-types",
-      languages: languageAlternates(),
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
     openGraph: {
-      title,
-      description,
+      title: meta.ogTitle ?? meta.title,
+      description: meta.ogDescription ?? meta.description,
       type: "website",
-      url: `${SITE_URL}/bet-types`,
+      url: alternates.canonical,
     },
   };
 }

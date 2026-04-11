@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal/legal-page";
+import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { PAGE_META } from "@/data/page-meta";
 
-export const metadata: Metadata = {
-  title: "Cookie Policy - BetsPlug",
-  description:
-    "Which cookies BetsPlug uses, why we use them, and how you can manage your preferences.",
-  alternates: { canonical: "/cookies" },
-  openGraph: {
-    title: "Cookie Policy - BetsPlug",
-    description:
-      "Which cookies BetsPlug uses, why we use them, and how you can manage your preferences.",
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getServerLocale();
+  const meta = PAGE_META["/cookies"]?.[locale] ?? PAGE_META["/cookies"].en;
+  const alternates = getLocalizedAlternates("/cookies");
+
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
+    openGraph: {
+      title: meta.ogTitle ?? meta.title,
+      description: meta.ogDescription ?? meta.description,
+      type: "website",
+    },
+  };
+}
 
 export default function CookiePolicyPage() {
   return (

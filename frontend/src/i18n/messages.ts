@@ -135,6 +135,19 @@ const en = {
   "footer.copyright":
     "All rights reserved. BetsPlug is a data & analytics platform - not a gambling operator.",
   "footer.responsible": "18+ Play responsibly",
+  "footer.aboutUs": "About Us",
+  "footer.ourModels": "Our Models",
+  "footer.contact": "Contact",
+  "footer.termsOfService": "Terms of Service",
+  "footer.privacyPolicy": "Privacy Policy",
+  "footer.cookiePolicy": "Cookie Policy",
+  "footer.comparison": "Comparison",
+  "footer.betTypes": "Bet Types",
+  "footer.viewAll": "View all",
+  "footer.learn": "Learn",
+  "footer.bottomPrivacy": "Privacy",
+  "footer.bottomTerms": "Terms",
+  "footer.bottomCookies": "Cookies",
 
   /* Leagues ticker */
   "leagues.badge": "Top Leagues",
@@ -1228,6 +1241,40 @@ const en = {
   "matchPred.winProbLabel": "Win probability",
   "matchPred.kickoffLabel": "Kickoff",
   "matchPred.unlockThis": "Unlock this pick",
+
+  /* B2B Partnerships */
+  "b2b.badge": "Business Partnerships",
+  "b2b.titleA": "Partner with BetsPlug",
+  "b2b.titleB": "for smarter football analytics",
+  "b2b.subtitle":
+    "We collaborate with businesses across the football analytics ecosystem. From data licensing to white-label solutions \u2014 let\u2019s build something together.",
+  "b2b.partnershipsBadge": "Partnership models",
+  "b2b.partnershipsTitle": "How we work together",
+  "b2b.partnershipsSubtitle":
+    "Whether you need raw data, a turnkey prediction engine, or a revenue-sharing model \u2014 we have a partnership track for you.",
+  "b2b.dataLicensing": "Data Licensing",
+  "b2b.dataLicensingDesc":
+    "Access our AI predictions, Elo ratings, and match data through a robust API. Perfect for sportsbooks, media companies, and analytics platforms.",
+  "b2b.whiteLabel": "White-Label Solutions",
+  "b2b.whiteLabelDesc":
+    "Integrate BetsPlug\u2019s prediction engine into your own platform. Custom branding, dedicated support, and flexible pricing.",
+  "b2b.affiliate": "Affiliate Program",
+  "b2b.affiliateDesc":
+    "Earn competitive commissions by referring users to BetsPlug. We provide marketing materials, tracking, and timely payouts.",
+  "b2b.media": "Media & Content",
+  "b2b.mediaDesc":
+    "Collaborate on football analytics content, research papers, and data journalism. Perfect for sports media and publishers.",
+  "b2b.whyPartner": "Why partner with us",
+  "b2b.whyPartnerTitle": "Built for scale, proven in public",
+  "b2b.usp1": "AI models combined into one ensemble",
+  "b2b.usp2": "Football leagues covered",
+  "b2b.usp3": "Active analysts on the platform",
+  "b2b.usp4": "Public transparency on results",
+  "b2b.contactTitle": "Let\u2019s talk business",
+  "b2b.contactSubtitle":
+    "Interested in a partnership? Reach out to our business team and we\u2019ll get back to you within 24 hours.",
+  "b2b.contactCta": "Contact Business Team",
+  "b2b.email": "business@betsplug.com",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -1353,6 +1400,19 @@ const nl: Dictionary = {
   "footer.copyright":
     "Alle rechten voorbehouden. BetsPlug is een data- & analyseplatform - geen gokaanbieder.",
   "footer.responsible": "18+ Speel verantwoord",
+  "footer.aboutUs": "Over Ons",
+  "footer.ourModels": "Onze Modellen",
+  "footer.contact": "Contact",
+  "footer.termsOfService": "Algemene Voorwaarden",
+  "footer.privacyPolicy": "Privacybeleid",
+  "footer.cookiePolicy": "Cookiebeleid",
+  "footer.comparison": "Vergelijking",
+  "footer.betTypes": "Wedmarkten",
+  "footer.viewAll": "Bekijk alles",
+  "footer.learn": "Leren",
+  "footer.bottomPrivacy": "Privacy",
+  "footer.bottomTerms": "Voorwaarden",
+  "footer.bottomCookies": "Cookies",
 
   "leagues.badge": "Top competities",
   "leagues.titleA": "De grootste",
@@ -1361,7 +1421,7 @@ const nl: Dictionary = {
   "trusted.titleA": "Jouw",
   "trusted.titleHighlight": "vertrouwde",
   "trusted.titleB": "partner",
-  "trusted.titleC": "in sportanalyse.",
+  "trusted.titleC": "in voetbalanalyse.",
   "trusted.subtitle":
     "BetsPlug bundelt en beveiligt een groeiend ecosysteem van databronnen, AI-modellen en bewezen strategieën. Eén platform voor datagedreven voetbalanalisten die niet willen gokken.",
   "trusted.card1Title": "Voor elk kennisniveau.",
@@ -1387,7 +1447,7 @@ const nl: Dictionary = {
   "track.titleB": "altijd & overal.",
   "track.rating": "4.9 / 5 van 1.200+ analisten",
   "track.desc1":
-    "Eén platform dat een groeiend ecosysteem van sportdata, AI-voorspellingen en strategie-backtesting tools bij elkaar brengt. Alle voorspellingen worden gelogd en publiek bijgehouden - altijd volledig transparant.",
+    "Eén platform dat een groeiend ecosysteem van voetbaldata, AI-voorspellingen en strategie-backtesting tools bij elkaar brengt. Alle voorspellingen worden gelogd en publiek bijgehouden - altijd volledig transparant.",
   "track.desc2":
     "Of je nu de Premier League, La Liga of de Champions League volgt, BetsPlug verenigt data en machine learning tot inzichten die je écht kunt gebruiken.",
   "track.cta": "Meer lezen",
@@ -1477,9 +1537,9 @@ const nl: Dictionary = {
   "pricing.trust3": "Veilige betaling via Stripe",
 
   /* Articles */
-  "articles.badge": "Sportanalyse",
+  "articles.badge": "Voetbalanalyse",
   "articles.title": "Laatste analyses",
-  "articles.subtitle": "Sportnieuws, AI-wedstrijdanalyses en datagedreven inzichten.",
+  "articles.subtitle": "Voetbalnieuws, AI-wedstrijdanalyses en datagedreven inzichten.",
   "articles.allArticles": "Alle artikelen",
   "articles.sportFootball": "Voetbal",
   "articles.readTime": "min leestijd",
@@ -1626,7 +1686,7 @@ const nl: Dictionary = {
 
   /* About Us page */
   "about.metaTitle":
-    "Over BetsPlug - Het team achter het AI-sportanalyseplatform",
+    "Over BetsPlug - Het team achter het AI-voetbalanalyseplatform",
   "about.metaDesc":
     "Maak kennis met de twee engineers die BetsPlug bouwen. Voetbalfanaten met een ICT-achtergrond die ruwe wedstrijddata omzetten in transparante, datagedreven voorspellingen voor alle grote voetbalcompetities.",
   "about.breadcrumbHome": "Home",
@@ -1636,7 +1696,7 @@ const nl: Dictionary = {
   "about.heroTitleA": "Gebouwd door voetbalfanaten.",
   "about.heroTitleB": "Ontwikkeld door data-obsessieven.",
   "about.heroSubtitle":
-    "BetsPlug is een AI-gedreven sportanalyseplatform, gebouwd door twee engineers die klaar waren met meningen, tipsters en influencer-ruis. Wij vervingen buikgevoel door statistische modellen, en luide meningen door transparante waarschijnlijkheden.",
+    "BetsPlug is een AI-gedreven voetbalanalyseplatform, gebouwd door twee engineers die klaar waren met meningen, tipsters en influencer-ruis. Wij vervingen buikgevoel door statistische modellen, en luide meningen door transparante waarschijnlijkheden.",
 
   "about.missionBadge": "De Missie",
   "about.missionTitle": "Wij maken van ruwe wedstrijddata een meetbare voorsprong.",
@@ -1682,12 +1742,12 @@ const nl: Dictionary = {
   "about.founder1Name": "Cas",
   "about.founder1Role": "Mede-oprichter · Engineering & Product",
   "about.founder1Bio":
-    "Sportliefhebber in hart en nieren met een achtergrond in ICT. Bouwt de systemen die BetsPlug draaiende houden en zorgt dat data netjes van bron naar scherm stroomt.",
+    "Voetballiefhebber in hart en nieren met een achtergrond in ICT. Bouwt de systemen die BetsPlug draaiende houden en zorgt dat data netjes van bron naar scherm stroomt.",
 
   "about.founder2Name": "Dennis",
   "about.founder2Role": "Mede-oprichter · Data Science & Modellering",
   "about.founder2Bio":
-    "Sportfanaat en data-enthousiasteling met jarenlange ICT-ervaring. Richt zich op de modellen en statistieken die wedstrijddata omzetten in bruikbare inzichten.",
+    "Voetbalfanaat en data-enthousiasteling met jarenlange ICT-ervaring. Richt zich op de modellen en statistieken die wedstrijddata omzetten in bruikbare inzichten.",
 
   "about.ctaTitle": "Klaar om gokken te vervangen door data?",
   "about.ctaSubtitle":
@@ -1865,7 +1925,7 @@ const nl: Dictionary = {
   "hiw.s2Title":
     "Wij dwingen één bron van waarheid af voordat een model ook maar iets ziet.",
   "hiw.s2Lead":
-    "Ruwe sportdata staat bekend als rommelig. Teamnamen verschillen per feed, competities hernoemen zichzelf, markten worden midden in een wedstrijd opgeschort. Wij lossen dat allemaal op - op een deterministische, reproduceerbare manier.",
+    "Ruwe voetbaldata staat bekend als rommelig. Teamnamen verschillen per feed, competities hernoemen zichzelf, markten worden midden in een wedstrijd opgeschort. Wij lossen dat allemaal op - op een deterministische, reproduceerbare manier.",
   "hiw.s2P1":
     "Teams, competities, spelers en markttypen worden via een handmatig gecontroleerde lookup-tabel gemapt naar één canoniek schema. Opgeschorte, vernietigde of laat afgelaste markten worden gemarkeerd en uitgesloten vóór welk model dan ook ze aanraakt.",
   "hiw.s2P2":
@@ -2413,6 +2473,40 @@ const nl: Dictionary = {
   "matchPred.winProbLabel": "Winkans",
   "matchPred.kickoffLabel": "Aftrap",
   "matchPred.unlockThis": "Ontgrendel deze pick",
+
+  /* B2B Partnerships */
+  "b2b.badge": "Zakelijke samenwerkingen",
+  "b2b.titleA": "Werk samen met BetsPlug",
+  "b2b.titleB": "voor slimmere voetbalanalyses",
+  "b2b.subtitle":
+    "We werken samen met bedrijven in het voetbalanalyse-ecosysteem. Van datalicenties tot white-label oplossingen \u2014 laten we samen iets bouwen.",
+  "b2b.partnershipsBadge": "Samenwerkingsmodellen",
+  "b2b.partnershipsTitle": "Hoe we samenwerken",
+  "b2b.partnershipsSubtitle":
+    "Of je nu ruwe data nodig hebt, een kant-en-klare voorspellingsmotor of een omzetdelingsmodel \u2014 we hebben een passend partnerschap voor je.",
+  "b2b.dataLicensing": "Datalicenties",
+  "b2b.dataLicensingDesc":
+    "Toegang tot onze AI-voorspellingen, Elo-ratings en wedstrijddata via een robuuste API. Ideaal voor bookmakers, mediabedrijven en analyseplatforms.",
+  "b2b.whiteLabel": "White-Label Oplossingen",
+  "b2b.whiteLabelDesc":
+    "Integreer de voorspellingsmotor van BetsPlug in je eigen platform. Eigen branding, dedicated support en flexibele prijzen.",
+  "b2b.affiliate": "Partnerprogramma",
+  "b2b.affiliateDesc":
+    "Verdien competitieve commissies door gebruikers naar BetsPlug te verwijzen. Wij bieden marketingmaterialen, tracking en tijdige uitbetalingen.",
+  "b2b.media": "Media & Content",
+  "b2b.mediaDesc":
+    "Werk samen aan voetbalanalyse-content, onderzoeksrapporten en datajournalistiek. Ideaal voor voetbalmedia en uitgevers.",
+  "b2b.whyPartner": "Waarom samenwerken",
+  "b2b.whyPartnerTitle": "Gebouwd voor schaal, bewezen in het openbaar",
+  "b2b.usp1": "AI-modellen gecombineerd in \u00e9\u00e9n ensemble",
+  "b2b.usp2": "Voetbalcompetities gedekt",
+  "b2b.usp3": "Actieve analisten op het platform",
+  "b2b.usp4": "Publieke transparantie over resultaten",
+  "b2b.contactTitle": "Laten we zaken doen",
+  "b2b.contactSubtitle":
+    "Ge\u00efnteresseerd in een samenwerking? Neem contact op met ons zakelijke team en we reageren binnen 24 uur.",
+  "b2b.contactCta": "Neem contact op",
+  "b2b.email": "business@betsplug.com",
 };
 
 

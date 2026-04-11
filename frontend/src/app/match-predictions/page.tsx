@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { MatchPredictionsContent } from "./match-predictions-content";
+import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { PAGE_META } from "@/data/page-meta";
 
 /**
  * Public marketing teaser for the prediction engine.
@@ -8,20 +10,25 @@ import { MatchPredictionsContent } from "./match-predictions-content";
  * Data comes from the same public /fixtures/upcoming endpoint
  * used on the members-only /predictions page.
  */
-export const metadata: Metadata = {
-  title: "Free AI Match Predictions - Upcoming Games | BetsPlug",
-  description:
-    "Preview 3 free AI-powered match predictions with win probabilities and confidence scores. Unlock the full slate of upcoming games with a BetsPlug subscription.",
-  alternates: {
-    canonical: "/match-predictions",
-  },
-  openGraph: {
-    title: "Free AI Match Predictions - BetsPlug",
-    description:
-      "Preview 3 free AI-powered match predictions. Unlock the rest with a trial.",
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getServerLocale();
+  const meta = PAGE_META["/match-predictions"]?.[locale] ?? PAGE_META["/match-predictions"].en;
+  const alternates = getLocalizedAlternates("/match-predictions");
+
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
+    openGraph: {
+      title: meta.ogTitle ?? meta.title,
+      description: meta.ogDescription ?? meta.description,
+      type: "website",
+    },
+  };
+}
 
 export default function MatchPredictionsPage() {
   return <MatchPredictionsContent />;
