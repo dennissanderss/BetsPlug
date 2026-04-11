@@ -888,8 +888,13 @@ async def train_logistic_collect(
             ctx["away_score"] = int(mr.away_score)
             _pending_logistic_samples.append(ctx)
             samples_appended += 1
-            if samples_appended % 50 == 0:
-                db.expire_all()
+            # NOTE: do NOT call db.expire_all() here — it invalidates
+            # all lazily-loaded relationships and the next iteration's
+            # ``match.home_team.name`` access raises
+            # ``MissingGreenlet: greenlet_spawn has not been called``
+            # from inside the sync ORM path. We tolerate the larger
+            # memory footprint (~300 match contexts in Python dicts)
+            # for the duration of the chunk.
     except Exception as exc:
         log.exception("train_logistic_collect_fatal")
         error = f"{type(exc).__name__}: {exc}\n{traceback.format_exc()[:1200]}"
