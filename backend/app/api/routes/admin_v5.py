@@ -809,6 +809,92 @@ async def regenerate_predictions(
 
 
 @router.post(
+    "/train-logistic",
+    summary="Train the LogisticModel on recent finished matches",
+)
+async def train_logistic(
+    limit: int = 2000,
+    db: AsyncSession = Depends(get_db),
+):
+    """Fit a LogisticModel using the most recent *limit* finished
+    matches + their full ``build_match_context``. Caches the trained
+    instance on ``ForecastService._cached_logistic`` so future
+    predictions in this Python process use it. Returns training
+    metrics. Idempotent — retrains on every call.
+
+    Note: the trained model is in-process only. When the Railway
+    container restarts the cache is lost and Logistic falls back to
+    uniform priors until this endpoint is called again. Good enough
+    for our needs; persistence can be added later via pickling to a
+    mounted volume or S3.
+    """
+    import traceback
+    from app.forecasting.forecast_service import ForecastService
+    from app.forecasting.models.logistic_model import LogisticModel
+    from uuid import UUID, uuid4
+
+    fatal_error: Optional[str] = None
+    samples_built = 0
+    try:
+        stmt = (
+            select(Match)
+            .join(MatchResult, MatchResult.match_id == Match.id)
+            .where(Match.status == MatchStatus.FINISHED)
+            .order_by(Match.scheduled_at.desc())
+            .limit(limit)
+        )
+        matches = list((await db.execute(stmt)).scalars().all())
+
+        forecast_service = ForecastService()
+        training_data: list[dict] = []
+        for match in matches:
+            try:
+                ctx = await forecast_service.build_match_context(match, db)
+            except Exception as exc:
+                continue
+            mr = (
+                await db.execute(
+                    select(MatchResult).where(MatchResult.match_id == match.id)
+                )
+            ).scalar_one_or_none()
+            if mr is None:
+                continue
+            ctx["home_score"] = int(mr.home_score)
+            ctx["away_score"] = int(mr.away_score)
+            training_data.append(ctx)
+            samples_built += 1
+            if samples_built % 100 == 0:
+                # Free ORM state periodically so we don't blow memory
+                db.expire_all()
+
+        if not training_data:
+            return {
+                "samples_built": 0,
+                "trained": False,
+                "reason": "no_training_data",
+            }
+
+        model = LogisticModel(uuid4(), config={})
+        metrics = model.train(training_data)
+        ForecastService.set_cached_logistic(model)
+
+        return {
+            "samples_built": samples_built,
+            "trained": True,
+            "metrics": metrics,
+            "feature_count": len(LogisticModel._FEATURE_NAMES),
+        }
+    except Exception as exc:
+        log.exception("train_logistic_fatal")
+        fatal_error = f"{type(exc).__name__}: {exc}\n{traceback.format_exc()[:1500]}"
+        return {
+            "samples_built": samples_built,
+            "trained": False,
+            "fatal_error": fatal_error,
+        }
+
+
+@router.post(
     "/force-schema-patch",
     summary="Emergency: ADD COLUMN IF NOT EXISTS on odds_history to unblock backfill",
 )
@@ -1027,6 +1113,75 @@ async def snapshot_upcoming_odds(
         "fixtures_with_odds": fixtures_with_odds,
         "errors": errors[:5],
         "fatal_error": fatal_error,
+    }
+
+
+@router.post(
+    "/dedupe-matches",
+    summary="Delete duplicate Match rows (same teams + same kickoff date)",
+)
+async def dedupe_matches(
+    db: AsyncSession = Depends(get_db),
+):
+    """After team dedupe, there are still duplicate Match rows: the
+    same fixture ingested via two providers with different
+    ``external_id`` values. We group by
+    ``(home_team_id, away_team_id, scheduled_at::date)`` and keep the
+    oldest row as the winner. Losers get deleted — their
+    ``match_results``, ``predictions``, ``odds_history``,
+    ``match_statistics`` children all cascade-delete via the ``ondelete=CASCADE``
+    FK clauses in the model.
+
+    Data loss is acceptable here because the losing rows are
+    duplicates of data we already have (or can re-fetch via the
+    backfill endpoints).
+    """
+    from sqlalchemy import func as sfunc, text as sqltext
+
+    # Find groups where more than one match has the same (home, away, date).
+    group_stmt = sqltext(
+        """
+        SELECT home_team_id, away_team_id, DATE(scheduled_at AT TIME ZONE 'UTC') AS d, COUNT(*) AS n
+        FROM matches
+        GROUP BY home_team_id, away_team_id, d
+        HAVING COUNT(*) > 1
+        """
+    )
+    groups = (await db.execute(group_stmt)).all()
+
+    total_deleted = 0
+    merge_examples: list[dict] = []
+    for home_id, away_id, d, n in groups:
+        rows = (
+            await db.execute(
+                select(Match).where(
+                    and_(
+                        Match.home_team_id == home_id,
+                        Match.away_team_id == away_id,
+                        sfunc.date(Match.scheduled_at) == d,
+                    )
+                ).order_by(Match.created_at.asc())
+            )
+        ).scalars().all()
+        if len(rows) < 2:
+            continue
+        winner = rows[0]
+        losers = rows[1:]
+        for loser in losers:
+            await db.delete(loser)
+            total_deleted += 1
+        if len(merge_examples) < 10:
+            merge_examples.append({
+                "date": str(d),
+                "winner_id": str(winner.id),
+                "winner_external_id": winner.external_id,
+                "deleted": len(losers),
+            })
+    await db.commit()
+    return {
+        "groups_found": len(groups),
+        "matches_deleted": total_deleted,
+        "examples": merge_examples,
     }
 
 

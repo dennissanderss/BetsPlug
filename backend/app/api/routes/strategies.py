@@ -492,6 +492,153 @@ async def get_strategy_metrics(
     return result
 
 
+@router.get(
+    "/{strategy_id}/walk-forward",
+    summary="Rolling train/test walk-forward validation over the full history",
+)
+async def walk_forward_strategy(
+    strategy_id: uuid.UUID,
+    train_days: int = Query(default=28, ge=7, le=120),
+    test_days: int = Query(default=7, ge=1, le=30),
+    db: AsyncSession = Depends(get_db),
+):
+    """Proper ML-style walk-forward validation.
+
+    Walks a rolling window over the strategy's evaluated picks:
+      * Train window of ``train_days`` days → used only to compute
+        the baseline ROI the test window is compared against.
+      * Test window of ``test_days`` days → out-of-sample metrics.
+      * Window slides forward by ``test_days`` each iteration.
+
+    Returns a list of ``(test_start, test_end, n, winrate, roi)``
+    tuples plus aggregate stats:
+      - ``mean_test_roi``: average ROI across all test windows
+      - ``std_test_roi``: standard deviation → volatility estimate
+      - ``positive_windows``: count of windows with ROI > 0
+      - ``total_windows``: total windows evaluated
+      - ``sharpe``: ``mean_test_roi / std_test_roi`` × sqrt(N)
+
+    This is the honest answer to "does this strategy work consistently
+    over time" vs the single-sample ``/metrics`` endpoint. A strategy
+    with +10% overall ROI but 5 losing + 3 winning windows has much
+    more risk than one with +5% overall ROI across 8 slightly-positive
+    windows.
+    """
+    import statistics
+    from datetime import timedelta as _td
+    from app.models.prediction import PredictionEvaluation
+    from app.services.roi_calculator import realised_pnl_1x2
+
+    strat_result = await db.execute(select(Strategy).where(Strategy.id == strategy_id))
+    strategy = strat_result.scalar_one_or_none()
+    if strategy is None:
+        raise HTTPException(status_code=404, detail="Strategy not found")
+
+    q = (
+        select(Prediction, PredictionEvaluation, Match.scheduled_at)
+        .join(Match, Match.id == Prediction.match_id)
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .order_by(Match.scheduled_at.asc())
+    )
+    rows = (await db.execute(q)).all()
+
+    # Filter to picks matching this strategy.
+    matched: list[tuple] = []
+    for pred, evaluation, sched in rows:
+        if evaluate_strategy(strategy, pred, odds=None):
+            matched.append((pred, evaluation, sched))
+
+    if len(matched) < 30:
+        return {
+            "strategy_id": str(strategy_id),
+            "strategy_name": strategy.name,
+            "sample_size": len(matched),
+            "windows": [],
+            "reason": "insufficient_data_for_walk_forward",
+            "message": f"Only {len(matched)} picks — need at least 30 for walk-forward validation.",
+        }
+
+    # Realised pnl for each pick (with real-odds lookup)
+    picks_with_pnl: list[tuple[datetime, bool, float]] = []
+    for pred, evaluation, sched in matched:
+        pnl, _odds_used, _source = await realised_pnl_1x2(
+            prediction=pred,
+            actual_outcome=evaluation.actual_outcome,
+            is_correct=bool(evaluation.is_correct),
+            db=db,
+        )
+        picks_with_pnl.append((sched, bool(evaluation.is_correct), pnl))
+
+    if not picks_with_pnl:
+        return {
+            "strategy_id": str(strategy_id),
+            "strategy_name": strategy.name,
+            "sample_size": 0,
+            "windows": [],
+            "reason": "no_pnl_data",
+        }
+
+    earliest = min(p[0] for p in picks_with_pnl)
+    latest = max(p[0] for p in picks_with_pnl)
+
+    # First test window starts at earliest + train_days.
+    window_start = earliest + _td(days=train_days)
+    windows: list[dict] = []
+    while window_start + _td(days=test_days) <= latest + _td(days=1):
+        window_end = window_start + _td(days=test_days)
+        window_picks = [
+            (sched, correct, pnl)
+            for sched, correct, pnl in picks_with_pnl
+            if window_start <= sched < window_end
+        ]
+        n = len(window_picks)
+        if n > 0:
+            wins = sum(1 for _, c, _ in window_picks if c)
+            total_pnl = sum(pnl for _, _, pnl in window_picks)
+            windows.append({
+                "test_start": window_start.isoformat(),
+                "test_end": window_end.isoformat(),
+                "n": n,
+                "winrate": round(wins / n, 4),
+                "roi": round(total_pnl / n, 4),
+            })
+        window_start = window_end
+
+    if not windows:
+        return {
+            "strategy_id": str(strategy_id),
+            "strategy_name": strategy.name,
+            "sample_size": len(picks_with_pnl),
+            "windows": [],
+            "reason": "no_test_windows_in_range",
+        }
+
+    roi_values = [w["roi"] for w in windows]
+    mean_roi = statistics.fmean(roi_values)
+    std_roi = statistics.pstdev(roi_values) if len(roi_values) > 1 else 0.0
+    positive = sum(1 for r in roi_values if r > 0)
+    # Sharpe-like: mean / std × sqrt(n_windows). Rough proxy; not annualised.
+    sharpe = (
+        (mean_roi / std_roi) * (len(roi_values) ** 0.5)
+        if std_roi > 0
+        else 0.0
+    )
+
+    return {
+        "strategy_id": str(strategy_id),
+        "strategy_name": strategy.name,
+        "sample_size": len(picks_with_pnl),
+        "train_days": train_days,
+        "test_days": test_days,
+        "total_windows": len(windows),
+        "positive_windows": positive,
+        "mean_test_roi": round(mean_roi, 4),
+        "std_test_roi": round(std_roi, 4),
+        "sharpe": round(sharpe, 4),
+        "windows": windows,
+    }
+
+
 @router.post(
     "/validation-refresh",
     summary="Recompute validation_status for every strategy and sync is_active",

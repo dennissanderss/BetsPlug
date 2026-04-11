@@ -239,6 +239,14 @@ class ForecastService:
         home_elo_snap = await elo_svc.get_rating_at(home_id, scheduled_at)
         away_elo_snap = await elo_svc.get_rating_at(away_id, scheduled_at)
 
+        # --- Recent-form match statistics averages (v5.2) -------------- #
+        # For each team, average shots_on_target / possession / corners
+        # over the same form window used above. All point-in-time.
+        form_stats = {
+            "home": await self._avg_form_match_stats(home_form, home_id, db),
+            "away": await self._avg_form_match_stats(away_form, away_id, db),
+        }
+
         return {
             "match_id": str(match.id),
             "home_team_id": str(home_id),
@@ -266,6 +274,9 @@ class ForecastService:
             "away_elo_source": away_elo_snap.source,
             "home_elo_effective_at": home_elo_snap.effective_at.isoformat(),
             "away_elo_effective_at": away_elo_snap.effective_at.isoformat(),
+            # v5.2: per-side averages of match statistics from the
+            # same form window. Used by LogisticModel feature vector.
+            "form_stats": form_stats,
         }
 
     # ------------------------------------------------------------------ #
@@ -418,11 +429,31 @@ class ForecastService:
 
         return model.predict(match_context)
 
-    @staticmethod
+    # Process-level cache for the trained Logistic model. Training is
+    # expensive (scikit-learn fit over ~5000 samples + calibration) so
+    # we cache the fitted instance per Python process. Re-populated via
+    # ``POST /api/admin/v5/train-logistic`` on demand.
+    _cached_logistic: "Optional[LogisticModel]" = None
+
+    @classmethod
+    def set_cached_logistic(cls, model) -> None:
+        cls._cached_logistic = model
+
+    @classmethod
+    def get_cached_logistic(cls):
+        return cls._cached_logistic
+
+    @classmethod
     def _build_default_ensemble(
-        model_version_id: uuid.UUID, config: dict
+        cls, model_version_id: uuid.UUID, config: dict
     ) -> EnsembleModel:
-        """Build an ensemble with one instance of each base model type."""
+        """Build an ensemble with one instance of each base model type.
+
+        If a trained LogisticModel has been cached via
+        ``set_cached_logistic``, reuse it so it produces real
+        (non-uniform) probabilities. Otherwise a fresh uniform-prior
+        LogisticModel is instantiated.
+        """
         from app.forecasting.models.elo_model import EloModel
         from app.forecasting.models.poisson_model import PoissonModel
         from app.forecasting.models.logistic_model import LogisticModel
@@ -430,10 +461,16 @@ class ForecastService:
         sub_config = config.get("sub_model_config", {})
         weights = config.get("weights", {"elo": 1.0, "poisson": 1.5, "logistic": 1.0})
 
+        logistic_model = cls._cached_logistic
+        if logistic_model is None:
+            logistic_model = LogisticModel(
+                model_version_id, sub_config.get("logistic", {})
+            )
+
         sub_models = [
             (EloModel(model_version_id, sub_config.get("elo", {})), weights.get("elo", 1.0)),
             (PoissonModel(model_version_id, sub_config.get("poisson", {})), weights.get("poisson", 1.5)),
-            (LogisticModel(model_version_id, sub_config.get("logistic", {})), weights.get("logistic", 1.0)),
+            (logistic_model, weights.get("logistic", 1.0)),
         ]
         return EnsembleModel(
             model_version_id=model_version_id,
@@ -552,6 +589,83 @@ class ForecastService:
             .limit(1)
         )
         return result.scalar_one_or_none()
+
+    @staticmethod
+    async def _avg_form_match_stats(
+        form: list[dict],
+        team_id: uuid.UUID,
+        db: AsyncSession,
+    ) -> dict:
+        """Average shots_on_target / possession / corners across the
+        matches in *form*, from the team's perspective.
+
+        ``form`` is the list returned by ``_get_team_form`` — dicts
+        with ``match_id``, ``home_team_id``, ``away_team_id``. For
+        each match_id we look up the ``match_statistics`` row and
+        pick the side that matches *team_id*.
+
+        Returns a dict with keys ``shots_on_target``,
+        ``possession_pct``, ``corners``. Missing values default to
+        None so the caller can fall through to LogisticModel's
+        internal defaults.
+        """
+        from app.models.match_statistics import MatchStatistics
+
+        if not form:
+            return {}
+        match_ids = [m["match_id"] for m in form if m.get("match_id")]
+        if not match_ids:
+            return {}
+        team_id_str = str(team_id)
+
+        # Convert to proper UUID list for the IN clause
+        try:
+            uuid_list = [uuid.UUID(m) for m in match_ids]
+        except Exception:
+            return {}
+
+        stmt = select(MatchStatistics).where(
+            MatchStatistics.match_id.in_(uuid_list)
+        )
+        stats_rows = list((await db.execute(stmt)).scalars().all())
+        if not stats_rows:
+            return {}
+
+        # Index by match_id for fast lookup
+        by_match = {str(row.match_id): row for row in stats_rows}
+
+        sot_vals: list[float] = []
+        pos_vals: list[float] = []
+        cor_vals: list[float] = []
+        for m in form:
+            mid = m.get("match_id")
+            if not mid or mid not in by_match:
+                continue
+            stats = by_match[mid]
+            is_home = str(m.get("home_team_id", "")) == team_id_str
+            if is_home:
+                sot = stats.home_shots_on_target
+                pos = stats.home_possession_pct
+                cor = stats.home_corners
+            else:
+                sot = stats.away_shots_on_target
+                pos = stats.away_possession_pct
+                cor = stats.away_corners
+            if sot is not None:
+                sot_vals.append(float(sot))
+            if pos is not None:
+                pos_vals.append(float(pos))
+            if cor is not None:
+                cor_vals.append(float(cor))
+
+        def _mean(xs: list[float]) -> float | None:
+            return sum(xs) / len(xs) if xs else None
+
+        return {
+            "shots_on_target": _mean(sot_vals),
+            "possession_pct": _mean(pos_vals),
+            "corners": _mean(cor_vals),
+        }
 
     @staticmethod
     async def _get_team_form(

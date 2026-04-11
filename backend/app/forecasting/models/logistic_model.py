@@ -80,7 +80,10 @@ class LogisticModel(ForecastModel):
         How many recent matches to use for form features (default 5).
     """
 
-    # Feature names in the exact order they are assembled in _build_feature_vector
+    # Feature names in the exact order they are assembled in
+    # _build_feature_vector. v5.2 additions: Elo difference + match
+    # statistics averages from the team's recent form (shots on
+    # target, possession, corners).
     _FEATURE_NAMES: list[str] = [
         "home_form_pts",
         "away_form_pts",
@@ -107,6 +110,16 @@ class LogisticModel(ForecastModel):
         "standing_diff",
         "avg_scored_diff",
         "avg_conceded_diff",
+        # v5.2 additions
+        "elo_diff",                       # home_elo_at_kickoff - away_elo_at_kickoff
+        "home_form_shots_on_target",
+        "away_form_shots_on_target",
+        "home_form_possession_pct",
+        "away_form_possession_pct",
+        "home_form_corners",
+        "away_form_corners",
+        "shots_on_target_diff",
+        "possession_diff",
     ]
 
     def __init__(self, model_version_id: UUID, config: dict) -> None:
@@ -344,6 +357,35 @@ class LogisticModel(ForecastModel):
         avg_scored_diff = home_avg_scored - away_avg_scored
         avg_conceded_diff = home_avg_conceded - away_avg_conceded
 
+        # --- v5.2 Elo diff from context ---
+        home_elo = float(ctx.get("home_elo_at_kickoff") or 1500.0)
+        away_elo = float(ctx.get("away_elo_at_kickoff") or 1500.0)
+        elo_diff = (home_elo - away_elo) / 100.0  # scale to units of 100 Elo
+
+        # --- v5.2 Match statistics averages from recent form ---
+        # ``form_stats`` is populated by ForecastService.build_match_context
+        # with per-team averages over their last N finished matches.
+        form_stats = ctx.get("form_stats", {}) or {}
+        h_stats = (form_stats.get("home") or {})
+        a_stats = (form_stats.get("away") or {})
+
+        def _fs(d: dict, key: str, default: float) -> float:
+            v = d.get(key)
+            try:
+                return float(v) if v is not None else default
+            except (TypeError, ValueError):
+                return default
+
+        home_form_sot = _fs(h_stats, "shots_on_target", 4.0)
+        away_form_sot = _fs(a_stats, "shots_on_target", 4.0)
+        home_form_pos = _fs(h_stats, "possession_pct", 50.0)
+        away_form_pos = _fs(a_stats, "possession_pct", 50.0)
+        home_form_cor = _fs(h_stats, "corners", 5.0)
+        away_form_cor = _fs(a_stats, "corners", 5.0)
+
+        shots_on_target_diff = home_form_sot - away_form_sot
+        possession_diff = home_form_pos - away_form_pos
+
         return [
             home_form_pts,
             away_form_pts,
@@ -370,6 +412,16 @@ class LogisticModel(ForecastModel):
             standing_diff,
             avg_scored_diff,
             avg_conceded_diff,
+            # v5.2
+            elo_diff,
+            home_form_sot,
+            away_form_sot,
+            home_form_pos,
+            away_form_pos,
+            home_form_cor,
+            away_form_cor,
+            shots_on_target_diff,
+            possession_diff,
         ]
 
     # ------------------------------------------------------------------ #

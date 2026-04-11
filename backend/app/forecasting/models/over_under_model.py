@@ -91,15 +91,29 @@ def predict_over_under_2_5(match_context: dict) -> dict:
     lam_home = _clip((home_scored + away_conceded) / 2.0, _MIN_LAMBDA, _MAX_LAMBDA)
     lam_away = _clip((away_scored + home_conceded) / 2.0, _MIN_LAMBDA, _MAX_LAMBDA)
 
-    # P(total goals <= 2) under independent Poissons.
-    # We enumerate home=0..5 and away=0..5 which covers >99.9% of the mass.
+    # Build a 6×6 score grid with Dixon-Coles low-score correction —
+    # same logic as PoissonModel._poisson_grid so Over/Under probabilities
+    # are consistent with the 1X2 Poisson output.
+    grid: list[list[float]] = [
+        [_poisson_pmf(h, lam_home) * _poisson_pmf(a, lam_away) for a in range(6)]
+        for h in range(6)
+    ]
+    rho = -0.15
+    grid[0][0] *= 1 - lam_home * lam_away * rho
+    grid[1][0] *= 1 + lam_away * rho
+    grid[0][1] *= 1 + lam_home * rho
+    grid[1][1] *= 1 - rho
+
+    total_mass = sum(sum(row) for row in grid)
+    if total_mass > 0:
+        grid = [[v / total_mass for v in row] for row in grid]
+
+    # P(total goals <= 2) over the corrected grid.
     p_under_or_equal_2 = 0.0
-    for h in range(0, 6):
-        for a in range(0, 6):
+    for h in range(6):
+        for a in range(6):
             if h + a <= 2:
-                p_under_or_equal_2 += (
-                    _poisson_pmf(h, lam_home) * _poisson_pmf(a, lam_away)
-                )
+                p_under_or_equal_2 += grid[h][a]
 
     p_over = max(0.0, min(1.0, 1.0 - p_under_or_equal_2))
     p_under = 1.0 - p_over
