@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LanguageSwitcher } from "@/components/common/language-switcher";
 import { useAuth } from "@/lib/auth";
+import { useTranslations } from "@/i18n/locale-provider";
 
 interface HeaderProps {
   className?: string;
@@ -35,6 +36,7 @@ interface HeaderProps {
 export function Header({ className }: HeaderProps) {
   const router = useRouter();
   const { user, logout } = useAuth();
+  const { t } = useTranslations();
   const [query, setQuery] = React.useState("");
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
   const [notifOpen, setNotifOpen] = React.useState(false);
@@ -120,7 +122,7 @@ export function Header({ className }: HeaderProps) {
       {/* Live status indicator */}
       <div className="hidden md:flex items-center gap-2 shrink-0">
         <span className="live-dot" />
-        <span className="text-xs font-semibold text-emerald-400 tracking-wide">Live</span>
+        <span className="text-xs font-semibold text-emerald-400 tracking-wide">{t("header.live" as any)}</span>
       </div>
 
       {/* Search bar */}
@@ -137,7 +139,7 @@ export function Header({ className }: HeaderProps) {
           />
           <Input
             type="search"
-            placeholder="Search teams, matches, leagues..."
+            placeholder={t("header.searchPlaceholder" as any)}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setSearchFocused(true)}
@@ -185,7 +187,7 @@ export function Header({ className }: HeaderProps) {
               }}
             >
               <div className="flex items-center justify-between mb-3">
-                <p className="text-sm font-semibold text-slate-200">Notifications</p>
+                <p className="text-sm font-semibold text-slate-200">{t("header.notifications" as any)}</p>
                 <span className="text-[10px] font-medium text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full">
                   2 new
                 </span>
@@ -289,29 +291,29 @@ export function Header({ className }: HeaderProps) {
               <div className="py-1">
                 <MenuItem
                   icon={UserIcon}
-                  label="My Account"
+                  label={t("header.myAccount" as any)}
                   onClick={() => navigate("/myaccount")}
                 />
                 <MenuItem
                   icon={Star}
-                  label="Favorites"
+                  label={t("header.favorites" as any)}
                   onClick={() => navigate("/favorites")}
                 />
                 <MenuItem
                   icon={Crown}
-                  label="Subscription"
+                  label={t("header.subscription" as any)}
                   onClick={() => navigate("/subscription")}
                   accent={isPlatinum ? "amber" : undefined}
                 />
                 <MenuItem
                   icon={Settings}
-                  label="Settings"
+                  label={t("header.settings" as any)}
                   onClick={() => navigate("/settings")}
                 />
                 {isAdmin && (
                   <MenuItem
                     icon={Shield}
-                    label="Admin Panel"
+                    label={t("header.adminPanel" as any)}
                     onClick={() => navigate("/admin")}
                     accent="blue"
                   />
@@ -330,7 +332,7 @@ export function Header({ className }: HeaderProps) {
                   className="flex w-full items-center gap-2.5 px-3.5 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/[0.08] transition-colors"
                 >
                   <LogOut className="h-4 w-4" />
-                  <span className="flex-1 text-left font-medium">Logout</span>
+                  <span className="flex-1 text-left font-medium">{t("header.logout" as any)}</span>
                 </button>
               </div>
             </div>

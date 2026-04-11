@@ -18,7 +18,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "@/lib/i18n";
+import { useTranslations } from "@/i18n/locale-provider";
 import { Button } from "@/components/ui/button";
 
 interface NavItem {
@@ -31,20 +31,23 @@ interface NavItem {
 }
 
 interface NavSection {
-  label: string;
+  labelKey: string;
+  fallbackLabel: string;
   items: NavItem[];
 }
 
 const navSections: NavSection[] = [
   {
-    label: "Getting Started",
+    labelKey: "sidebar.gettingStarted",
+    fallbackLabel: "Getting Started",
     items: [
       { labelKey: "nav.jouwRoute", fallback: "Your Route", href: "/jouw-route", icon: MapPin, badge: "START", badgeColor: "bg-emerald-500" },
       { labelKey: "nav.dashboard", fallback: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     ],
   },
   {
-    label: "Strategies & Picks",
+    labelKey: "sidebar.strategiesAndPicks",
+    fallbackLabel: "Strategies & Picks",
     items: [
       { labelKey: "nav.strategy_lab", fallback: "Strategy Lab", href: "/strategy", icon: FlaskConical },
       { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy },
@@ -52,7 +55,8 @@ const navSections: NavSection[] = [
     ],
   },
   {
-    label: "Performance",
+    labelKey: "sidebar.performance",
+    fallbackLabel: "Performance",
     items: [
       { labelKey: "nav.results", fallback: "Results", href: "/results", icon: Trophy },
       { labelKey: "nav.weekly_report", fallback: "Weekly Report", href: "/weekly-report", icon: FileBarChart2 },
@@ -70,11 +74,16 @@ const bottomNavItems: NavItem[] = [
 export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const { t } = useTranslation();
+  const { t } = useTranslations();
 
   const getLabel = (item: NavItem) => {
     const translated = t(item.labelKey as any);
     return translated === item.labelKey ? item.fallback : translated;
+  };
+
+  const getSectionLabel = (section: NavSection) => {
+    const translated = t(section.labelKey as any);
+    return translated === section.labelKey ? section.fallbackLabel : translated;
   };
 
   const NavContent = () => (
@@ -93,14 +102,14 @@ export function Sidebar() {
           nav list cannot be scrolled. */}
       <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-4 pt-3">
         {navSections.map((section, sIdx) => (
-          <div key={section.label}>
+          <div key={section.labelKey}>
             {/* Section divider (not on first section) */}
             {sIdx > 0 && <div className="mx-2 my-3 border-t border-white/[0.06]" />}
 
             {/* Section label */}
             <div className="px-2 pb-2 pt-1">
               <span className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
-                {section.label}
+                {getSectionLabel(section)}
               </span>
             </div>
 
@@ -174,7 +183,7 @@ export function Sidebar() {
         <div className="mx-2 my-3 border-t border-white/[0.06]" />
         <div className="px-2 pb-2 pt-1">
           <span className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
-            System
+            {(() => { const v = t("sidebar.system" as any); return v === "sidebar.system" ? "System" : v; })()}
           </span>
         </div>
 

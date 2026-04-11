@@ -3,14 +3,15 @@
 import * as React from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { LANGUAGES, setLanguage, useTranslation } from "@/lib/i18n";
+import { useTranslations } from "@/i18n/locale-provider";
+import { locales, localeMeta, type Locale } from "@/i18n/config";
 
 export function LanguageSwitcher() {
-  const { lang } = useTranslation();
+  const { locale, t, setLocale } = useTranslations();
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
 
-  const current = LANGUAGES.find((l) => l.code === lang) ?? LANGUAGES[0];
+  const current = localeMeta[locale];
 
   // Close on outside click
   React.useEffect(() => {
@@ -23,8 +24,8 @@ export function LanguageSwitcher() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  function handleSelect(code: string) {
-    setLanguage(code);
+  function handleSelect(code: Locale) {
+    setLocale(code);
     setOpen(false);
   }
 
@@ -33,7 +34,7 @@ export function LanguageSwitcher() {
       {/* Trigger button */}
       <button
         onClick={() => setOpen((prev) => !prev)}
-        aria-label="Switch language"
+        aria-label={t("lang.switch")}
         aria-haspopup="listbox"
         aria-expanded={open}
         className={cn(
@@ -45,7 +46,7 @@ export function LanguageSwitcher() {
       >
         <span className="text-base leading-none select-none">{current.flag}</span>
         <span className="hidden sm:inline text-xs font-medium text-slate-400 tracking-wide uppercase">
-          {current.code}
+          {locale}
         </span>
         <ChevronDown
           className={cn(
@@ -59,7 +60,7 @@ export function LanguageSwitcher() {
       {open && (
         <div
           role="listbox"
-          aria-label="Select language"
+          aria-label={t("lang.label")}
           className="absolute right-0 top-full mt-2 w-44 rounded-xl py-1 z-50 animate-slide-up"
           style={{
             background: "rgba(17, 24, 39, 0.97)",
@@ -73,18 +74,19 @@ export function LanguageSwitcher() {
           {/* Header label */}
           <div className="px-3 pt-2 pb-1.5 border-b border-white/[0.06] mb-1">
             <p className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
-              Language
+              {t("lang.label")}
             </p>
           </div>
 
-          {LANGUAGES.map((language) => {
-            const isSelected = language.code === lang;
+          {locales.map((code) => {
+            const meta = localeMeta[code];
+            const isSelected = code === locale;
             return (
               <button
-                key={language.code}
+                key={code}
                 role="option"
                 aria-selected={isSelected}
-                onClick={() => handleSelect(language.code)}
+                onClick={() => handleSelect(code)}
                 className={cn(
                   "flex w-full items-center gap-2.5 px-3 py-2 text-sm transition-colors duration-100",
                   isSelected
@@ -93,9 +95,9 @@ export function LanguageSwitcher() {
                 )}
               >
                 <span className="text-base leading-none select-none w-5 shrink-0">
-                  {language.flag}
+                  {meta.flag}
                 </span>
-                <span className="flex-1 text-left">{language.name}</span>
+                <span className="flex-1 text-left">{meta.native}</span>
                 {isSelected && (
                   <Check className="h-3.5 w-3.5 text-blue-400 shrink-0" />
                 )}
