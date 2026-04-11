@@ -49,11 +49,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const title =
     editorialLocale === "nl"
       ? "Leer Sportwedden - Value, xG, Elo, Kelly, Poisson | BetsPlug"
-      : "Learn Sports Betting - Value, xG, Elo, Kelly, Poisson | BetsPlug";
+      : "Learn Football Betting - Value, xG, Elo, Kelly, Poisson | BetsPlug";
   const description =
     editorialLocale === "nl"
       ? "Diepgaande pillar-gidsen over de wiskunde achter scherpe sportwedden - value betting, expected goals, Elo-ratings, Kelly-criterium, Poisson-modellen en bankroll management."
-      : "In-depth pillar guides on the math behind sharp sports betting - value betting, expected goals, Elo ratings, the Kelly criterion, Poisson models, and bankroll management.";
+      : "In-depth pillar guides on the math behind sharp football betting - value betting, expected goals, Elo ratings, the Kelly criterion, Poisson models, and bankroll management.";
   return {
     title,
     description,

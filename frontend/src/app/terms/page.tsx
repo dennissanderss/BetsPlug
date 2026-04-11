@@ -44,7 +44,7 @@ export default function TermsOfServicePage() {
         financial advice and they are not a guarantee of any outcome.
       </p>
       <p>
-        Sports outcomes are inherently uncertain. Past performance of our
+        Football outcomes are inherently uncertain. Past performance of our
         models does not guarantee future results. Any decision to place a
         wager based on our content is yours alone, and you accept full
         responsibility for it.

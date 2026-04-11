@@ -289,8 +289,8 @@ export default function SettingsPage() {
       <div className="glass-card p-6 animate-slide-up">
         <SectionHeader
           icon={Trophy}
-          title="Followed Sports"
-          description="Select the sports you want to track and receive intelligence for"
+          title="Followed Leagues"
+          description="Select the leagues you want to track and receive intelligence for"
         />
 
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
@@ -328,9 +328,9 @@ export default function SettingsPage() {
 
         <div className="mt-5 flex items-center justify-between rounded-xl border border-white/[0.05] bg-white/[0.02] px-4 py-3">
           <div>
-            <p className="text-sm font-medium text-slate-200">Receive alerts for followed sports only</p>
+            <p className="text-sm font-medium text-slate-200">Receive alerts for followed leagues only</p>
             <p className="text-xs text-slate-500 mt-0.5">
-              Suppress notifications from sports you don&apos;t follow
+              Suppress notifications from leagues you don&apos;t follow
             </p>
           </div>
           <Toggle checked={alertFollowedOnly} onChange={setAlertFollowedOnly} />
@@ -343,7 +343,7 @@ export default function SettingsPage() {
           <SectionHeader
             icon={Trophy}
             title="League Preferences"
-            description="Choose specific competitions within your followed sports"
+            description="Choose specific competitions within your followed leagues"
           />
 
           <div className="space-y-5">

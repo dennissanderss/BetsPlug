@@ -12,7 +12,7 @@
 export const CHAT_KB = `
 # BetsPlug - Product Knowledge Base
 
-BetsPlug is a premium AI-powered sports analytics platform for serious bettors and sports analysts. It combines data, Elo ratings, Poisson models, XGBoost and an ensemble to produce transparent, data-driven predictions.
+BetsPlug is a premium AI-powered football analytics platform for serious bettors and football analysts. It combines data, Elo ratings, Poisson models, XGBoost and an ensemble to produce transparent, data-driven predictions.
 
 ## What BetsPlug does
 - Publishes daily AI-driven predictions and picks across top leagues.
@@ -58,7 +58,7 @@ BetsPlug accepts major credit cards (Visa, Mastercard, American Express), iDEAL,
 
 ## Track record and transparency
 - Every prediction ever published is logged on the public Track Record page.
-- Users can filter by date range, sport, league, model or strategy.
+- Users can filter by date range, league, model or strategy.
 - Overall accuracy, ROI, Brier score and confidence calibration are shown live.
 - BetsPlug does not cherry-pick results. Losing picks are shown alongside winners.
 
@@ -80,7 +80,7 @@ BetsPlug is an analytics and educational tool. It does not guarantee profit and 
 ## Dashboard features
 - Real-time "Live data" indicator.
 - KPIs: Total forecasts, overall accuracy, average edge, average confidence.
-- Accuracy broken down by sport and league.
+- Accuracy broken down by league.
 - Rolling accuracy trend chart over time.
 - System status panel showing data source health.
 - Sidebar navigation: Dashboard, Predictions, Results, Pick of the Day, Track Record, Live Matches, Weekly Report, Strategy Lab, Reports, Admin (internal only), Settings, Deals.

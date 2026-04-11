@@ -101,7 +101,7 @@ export function ArticlesContent() {
           >
             <div
               role="tablist"
-              aria-label="Filter articles by sport"
+              aria-label="Filter articles by category"
               className="no-scrollbar flex w-full max-w-full items-center gap-2 overflow-x-auto rounded-full border border-white/[0.08] bg-white/[0.03] p-1.5 backdrop-blur-xl sm:w-auto sm:gap-1"
             >
               {tabs.map((tab) => {

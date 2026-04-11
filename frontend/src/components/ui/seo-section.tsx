@@ -49,15 +49,15 @@ const faqCategories: FaqCategory[] = [
     icon: Rocket,
     items: [
       {
-        q: "What is an AI sports prediction platform?",
-        a: "An AI sports prediction platform uses machine learning models, historical data, and statistical engines (like Elo and Poisson) to forecast the most likely outcome of sporting events. BetsPlug is built as a pure analytics tool - we show you the numbers, probabilities and expected value, so you can decide which bets to place with a bookmaker of your choice.",
+        q: "What is an AI football prediction platform?",
+        a: "An AI football prediction platform uses machine learning models, historical data, and statistical engines (like Elo and Poisson) to forecast the most likely outcome of football matches. BetsPlug is built as a pure analytics tool - we show you the numbers, probabilities and expected value, so you can decide which bets to place with a bookmaker of your choice.",
       },
       {
         q: "How do I get started with BetsPlug?",
-        a: "Start with our Bronze plan - a symbolic €0.01 trial that unlocks 7 days of full Gold-level access: daily AI sports picks, upcoming match predictions, our verified track record and every model output. We charge one cent through Stripe so we can verify the card is real (this is how we keep the platform fraud-free). Upgrade to Silver, Gold or Platinum when you're ready.",
+        a: "Start with our Bronze plan - a symbolic €0.01 trial that unlocks 7 days of full Gold-level access: daily AI football picks, upcoming match predictions, our verified track record and every model output. We charge one cent through Stripe so we can verify the card is real (this is how we keep the platform fraud-free). Upgrade to Silver, Gold or Platinum when you're ready.",
       },
       {
-        q: "Which sports does the AI predictor cover?",
+        q: "Which football leagues does the AI predictor cover?",
         a: "Our AI predictor is focused exclusively on football, covering the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Champions League and more. New football leagues are added regularly as our models are trained and validated.",
       },
     ],
@@ -68,15 +68,15 @@ const faqCategories: FaqCategory[] = [
     icon: Sparkles,
     items: [
       {
-        q: "How accurate are AI sports betting predictions?",
-        a: "Accuracy depends on the sport, the market and the model. Our AI betting predictions are continuously benchmarked against closing lines and logged in our public track record. You can see the exact hit-rate, ROI and confidence distribution of every model we run - no cherry-picking, no hidden losses.",
+        q: "How accurate are AI football betting predictions?",
+        a: "Accuracy depends on the league, the market and the model. Our AI betting predictions are continuously benchmarked against closing lines and logged in our public track record. You can see the exact hit-rate, ROI and confidence distribution of every model we run - no cherry-picking, no hidden losses.",
       },
       {
         q: "Which models power BetsPlug predictions?",
         a: "We combine Elo ratings, Poisson goal models, and machine-learning classifiers trained on hundreds of thousands of historical matches. Each prediction includes win probability, expected goals, confidence score, and edge over the current bookmaker line.",
       },
       {
-        q: "Can I use AI for sports betting research?",
+        q: "Can I use AI for football betting research?",
         a: "Absolutely. Thousands of data-driven bettors use BetsPlug as their research layer: compare our AI predictions against bookmaker odds, filter by confidence, backtest strategies, and identify value bets before the market corrects.",
       },
     ],
@@ -88,7 +88,7 @@ const faqCategories: FaqCategory[] = [
     items: [
       {
         q: "Do I need a subscription to see AI picks?",
-        a: "We offer a free tier with daily AI sports picks so you can try the platform. For full access to live probabilities, strategy backtesting and the complete track record, check our subscription plans.",
+        a: "We offer a free tier with daily AI football picks so you can try the platform. For full access to live probabilities, strategy backtesting and the complete track record, check our subscription plans.",
       },
       {
         q: "Can I cancel my subscription anytime?",
@@ -107,15 +107,15 @@ const faqCategories: FaqCategory[] = [
     items: [
       {
         q: "Is BetsPlug a betting or gambling website?",
-        a: "No. BetsPlug is a data analytics platform for sports fans, traders and researchers. We provide AI sports predictions, statistics and insights. You cannot gamble, deposit or place bets on BetsPlug - we exist to inform your decisions, not to take them.",
+        a: "No. BetsPlug is a data analytics platform for football fans, traders and researchers. We provide AI football predictions, statistics and insights. You cannot gamble, deposit or place bets on BetsPlug - we exist to inform your decisions, not to take them.",
       },
       {
         q: "How is my data protected?",
         a: "Your data is encrypted in transit (TLS 1.3) and at rest (AES-256). We never sell or share personal information, and we process payments through PCI-compliant providers so we never store your card details on our servers.",
       },
       {
-        q: "Where does your sports data come from?",
-        a: "We aggregate data from licensed sports data providers, official league feeds, and public statistical sources. Every data point feeding our models is verified and timestamped for full reproducibility in our track record.",
+        q: "Where does your football data come from?",
+        a: "We aggregate data from licensed football data providers, official league feeds, and public statistical sources. Every data point feeding our models is verified and timestamped for full reproducibility in our track record.",
       },
     ],
   },
@@ -199,18 +199,18 @@ export function SeoSection() {
         >
           <div className="prose prose-invert max-w-none">
             <h3 className="text-2xl font-extrabold text-white sm:text-3xl">
-              The Best AI Sports Prediction Website for Data-Driven Bettors
+              The Best AI Football Prediction Website for Data-Driven Bettors
             </h3>
             <p className="mt-4 text-base leading-relaxed text-slate-400">
               If you&apos;ve been searching for the{" "}
               <strong className="text-slate-200">
-                best sports prediction website
+                best football prediction website
               </strong>
               , you&apos;ve landed in the right place. BetsPlug blends
               artificial intelligence, machine learning and decades of
               statistical modeling into a single platform that tells you which
               bets carry real value - and which ones are traps set by the
-              bookmakers. Our AI sports betting predictions are transparent,
+              bookmakers. Our AI football betting predictions are transparent,
               mathematically grounded and updated live, so you can stop
               guessing and start researching like a professional.
             </p>
@@ -240,11 +240,11 @@ export function SeoSection() {
             </p>
 
             <h4 className="mt-8 text-xl font-bold text-white">
-              Free AI Sports Picks, Live Probabilities &amp; Pick of the Day
+              Free AI Football Picks, Live Probabilities &amp; Pick of the Day
             </h4>
             <p className="mt-3 text-base leading-relaxed text-slate-400">
               Looking for{" "}
-              <strong className="text-slate-200">free AI sports picks</strong>?
+              <strong className="text-slate-200">free AI football picks</strong>?
               Every day we publish a highest-confidence{" "}
               <Link
                 href="/bet-of-the-day"
@@ -269,8 +269,8 @@ export function SeoSection() {
               Transparent Track Record - Verify Every AI Pick
             </h4>
             <p className="mt-3 text-base leading-relaxed text-slate-400">
-              Most sports prediction websites hide their losses. We don&apos;t.
-              Every AI sports pick, every Pick of the Day, every confidence
+              Most football prediction websites hide their losses. We don&apos;t.
+              Every AI football pick, every Pick of the Day, every confidence
               score is logged publicly in our{" "}
               <Link
                 href="/trackrecord"
@@ -294,7 +294,7 @@ export function SeoSection() {
               . We do not accept wagers, handle money, or promote irresponsible
               play. We&apos;re a pure{" "}
               <strong className="text-slate-200">
-                sports analytics and AI prediction platform
+                football analytics and AI prediction platform
               </strong>{" "}
  - think of us as the quant desk you can rent by the month. Our
               job is to give you the data, probabilities and machine-learning
@@ -313,7 +313,7 @@ export function SeoSection() {
               >
                 pricing plans
               </Link>{" "}
-              to unlock the full AI sports predictor.
+              to unlock the full AI football predictor.
             </p>
           </div>
         </motion.div>

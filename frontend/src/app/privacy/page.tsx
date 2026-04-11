@@ -4,7 +4,7 @@ import { LegalPage } from "@/components/legal/legal-page";
 export const metadata: Metadata = {
   title: "Privacy Policy - BetsPlug",
   description:
-    "How BetsPlug collects, uses and protects your personal data. GDPR-compliant privacy policy for our AI sports analytics platform.",
+    "How BetsPlug collects, uses and protects your personal data. GDPR-compliant privacy policy for our AI football analytics platform.",
   alternates: { canonical: "/privacy" },
   openGraph: {
     title: "Privacy Policy - BetsPlug",
@@ -24,7 +24,7 @@ export default function PrivacyPolicyPage() {
     >
       <h2>1. Who we are</h2>
       <p>
-        BetsPlug (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is an AI-driven sports analytics
+        BetsPlug (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is an AI-driven football analytics
         platform operated from the Netherlands. We are the data controller for
         the personal information described in this policy. You can reach us at{" "}
         <a href="mailto:support@betsplug.com">support@betsplug.com</a>.

@@ -9,9 +9,9 @@ type League = {
   ext?: "png" | "svg";
 };
 
-// Curated shortlist of the 10 biggest leagues by global audience:
-// the European "Big Five" football leagues + UEFA Champions League
-// + all four major US sports leagues. Intentionally excludes regional
+// Curated shortlist of the biggest leagues by global audience:
+// the European "Big Five" football leagues + UEFA Champions League.
+// Intentionally excludes regional
 // leagues (Eredivisie, Liga Portugal, Brasileirão, Allsvenskan) and
 // secondary European tournaments (Europa League, Conference League).
 const leagues: League[] = [

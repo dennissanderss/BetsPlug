@@ -21,13 +21,13 @@ const testimonials: Testimonial[] = [
     text: "As a data nerd, I love that BetsPlug shows the math behind every pick. Confidence scores, Elo deltas, edge percentages - it's like having a quant desk in my pocket.",
     image: "https://randomuser.me/api/portraits/men/52.jpg",
     name: "Mark Jansen",
-    role: "Sports Trader",
+    role: "Football Trader",
   },
   {
     text: "I was skeptical at first, but the Pick of the Day feature alone paid for my subscription ten times over. The AI picks consistently outperform my own gut calls.",
     image: "https://randomuser.me/api/portraits/women/68.jpg",
     name: "Emma Dekker",
-    role: "Sports Analyst",
+    role: "Football Analyst",
   },
   {
     text: "Running my own tipping community used to take hours of research. BetsPlug gives me data-backed insights in seconds. My subscribers have never been happier.",
@@ -54,7 +54,7 @@ const testimonials: Testimonial[] = [
     role: "Subscriber",
   },
   {
-    text: "Finally a predictions platform that treats sports betting like the science it should be. Every claim is backed by data, and the results are on the board for everyone to see.",
+    text: "Finally a predictions platform that treats football betting like the science it should be. Every claim is backed by data, and the results are on the board for everyone to see.",
     image: "https://randomuser.me/api/portraits/men/41.jpg",
     name: "Thomas Bergström",
     role: "Professional Handicapper",

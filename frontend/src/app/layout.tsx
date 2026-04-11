@@ -59,14 +59,14 @@ const OG_IMAGE = {
   url: "/og-image.png",
   width: 2000,
   height: 2000,
-  alt: "BetsPlug - AI-Powered Sports Analytics",
+  alt: "BetsPlug - AI-Powered Football Analytics",
 } as const;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "BetsPlug - AI-Powered Sports Analytics",
+  title: "BetsPlug - AI-Powered Football Analytics",
   description:
-    "Premium AI-powered sports analytics. Data-driven predictions, live match tracking, and deep performance insights.",
+    "Premium AI-powered football analytics. Data-driven predictions, live match tracking, and deep performance insights.",
   alternates: {
     canonical: "/",
     languages: languageAlternates,
@@ -80,18 +80,18 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "BetsPlug",
     url: SITE_URL,
-    title: "BetsPlug - AI-Powered Sports Analytics",
+    title: "BetsPlug - AI-Powered Football Analytics",
     description:
-      "Premium AI-powered sports analytics. Data-driven predictions, live match tracking, and deep performance insights.",
+      "Premium AI-powered football analytics. Data-driven predictions, live match tracking, and deep performance insights.",
     images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     site: "@betsplug",
     creator: "@betsplug",
-    title: "BetsPlug - AI-Powered Sports Analytics",
+    title: "BetsPlug - AI-Powered Football Analytics",
     description:
-      "Premium AI-powered sports analytics. Data-driven predictions, live match tracking, and deep performance insights.",
+      "Premium AI-powered football analytics. Data-driven predictions, live match tracking, and deep performance insights.",
     images: [OG_IMAGE.url],
   },
 };

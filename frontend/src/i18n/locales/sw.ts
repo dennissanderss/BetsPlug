@@ -729,7 +729,7 @@ const sw = {
   "welcome.qs3Body": "Tuambie bajeti yako ya kuanzia na ukubwa wa kitengo. Tutakokotoa mapendekezo ya dau yanayofaa wasifu wako wa hatari.",
   "welcome.qs3Duration": "dakika 2",
   "welcome.qs4Title": "Ona chaguo za leo",
-  "welcome.qs4Body": "Vinjari chaguo za kila siku, chuja kwa mchezo au viwango, na soma mantiki inayoegemea data nyuma ya kila kidokezo.",
+  "welcome.qs4Body": "Vinjari chaguo za kila siku, chuja kwa ligi au viwango, na soma mantiki inayoegemea data nyuma ya kila kidokezo.",
   "welcome.qs4Duration": "dakika 3",
   "welcome.qs5Title": "Weka beti yako ya kwanza",
   "welcome.qs5Body": "Chagua kidokezo kinachokufaa, weka dau kwenye sportsbook yako, kisha kiweke alama kwenye kifuatiliaji chako. Hivyo ndivyo - uko moja kwa moja.",
@@ -744,7 +744,7 @@ const sw = {
   "welcome.tour2Body": "P&L yako binafsi. Weka bankroll ya kuanzia, rekodi beti zako kwa bofyo moja na tazama ROI yako ikipanda katika chati za moja kwa moja.",
   "welcome.tour2Where": "Upau wa kando → Bankroll",
   "welcome.tour3Title": "Rekodi",
-  "welcome.tour3Body": "Historia kamili, isiyochujwa ya kila chaguo tuliwahi kuweka. Chuja kwa mchezo, soko, mshauri au tarehe - hakuna kilichofichwa.",
+  "welcome.tour3Body": "Historia kamili, isiyochujwa ya kila chaguo tuliwahi kuweka. Chuja kwa ligi, soko, mshauri au tarehe - hakuna kilichofichwa.",
   "welcome.tour3Where": "Upau wa kando → Rekodi",
   "welcome.tour4Title": "Mechi za Moja kwa Moja",
   "welcome.tour4Body": "Viwango vya wakati halisi, fomu na tahadhari za mchezo kwa kila mechi tunayoangalia. Gundua thamani inapotokea, si baada ya filimbi ya mwisho.",
@@ -794,7 +794,7 @@ const sw = {
   "dashPrev.feature1Title": "Chaguo za kila siku kwa jicho moja",
   "dashPrev.feature1Desc": "Ona utabiri wa leo wenye uhakika wa juu zaidi wakati unapoingia - zikipangwa kwa faida, uhakika na wakati wa kuanza.",
   "dashPrev.feature2Title": "Usahihi wa modeli wa moja kwa moja",
-  "dashPrev.feature2Desc": "Usahihi wa wakati halisi kwa kila mchezo, ligi na modeli. Tazama faida yako ikisasishwa matokeo yanapokuja.",
+  "dashPrev.feature2Desc": "Usahihi wa wakati halisi kwa kila ligi na modeli. Tazama faida yako ikisasishwa matokeo yanapokuja.",
   "dashPrev.feature3Title": "Rekodi ya uwazi",
   "dashPrev.feature3Desc": "Kila chaguo tuliwahi kulifanya - ushindi, hasara na ROI - limewekwa kwa umma na linaweza kuchujwa kwa tarehe au mkakati.",
   "dashPrev.feature4Title": "Maabara ya Mkakati na tahadhari",
@@ -818,8 +818,8 @@ const sw = {
   "dashPrev.mockNavLive": "Mechi za moja kwa moja",
   "dashPrev.mockChartTitle": "Mwelekeo wa utendaji wa modeli",
   "dashPrev.mockChartSub": "Usahihi unaozunguka kwa muda",
-  "dashPrev.mockAccuracyTitle": "Usahihi kwa mchezo",
-  "dashPrev.mockAccuracySub": "Usahihi wa utabiri uliogawanywa kwa mchezo",
+  "dashPrev.mockAccuracyTitle": "Usahihi kwa ligi",
+  "dashPrev.mockAccuracySub": "Usahihi wa utabiri uliogawanywa kwa ligi",
 };
 
 export default sw as Partial<Record<TranslationKey, string>>;

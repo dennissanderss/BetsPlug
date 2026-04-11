@@ -741,7 +741,7 @@ function SportAccuracySection({
     return (
       <div className="flex items-center justify-center gap-2 py-8 text-sm text-slate-500">
         <Database className="h-4 w-4" />
-        No sport breakdown data available yet.
+        No league breakdown data available yet.
       </div>
     );
   }
@@ -977,10 +977,10 @@ export default function TrackrecordPage() {
             {/* Sport select */}
             <Select value={sportId} onValueChange={(v) => { setSportId(v); setLeagueId("all"); }}>
               <SelectTrigger className="h-8 w-40 text-sm border-white/[0.08] bg-white/[0.04] text-slate-200 focus:border-blue-500/50">
-                <SelectValue placeholder="All Sports" />
+                <SelectValue placeholder="All Leagues" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Sports</SelectItem>
+                <SelectItem value="all">All Leagues</SelectItem>
                 {(sports ?? []).map((s) => (
                   <SelectItem key={s.id} value={s.id}>
                     {s.name}
@@ -1026,12 +1026,12 @@ export default function TrackrecordPage() {
           {/* Accuracy over time — real data from monthSegments */}
           <ProfitabilityChart monthSegments={monthSegments} loading={monthLoading} />
 
-          {/* Accuracy by sport — real data */}
+          {/* Accuracy by league — real data */}
           <div className="glass-card p-6">
             <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">Accuracy by Sport</h2>
+              <h2 className="text-base font-semibold text-slate-100">Accuracy by League</h2>
               <p className="text-sm text-slate-500 mt-0.5">
-                Prediction accuracy broken down by sport - real data
+                Prediction accuracy broken down by league - real data
               </p>
             </div>
             <SportAccuracySection filterParams={filterParams} />
@@ -1154,13 +1154,13 @@ export default function TrackrecordPage() {
       {/* ── Segments Tab ── */}
       {activeTab === "segments" && (
         <div className="space-y-6 animate-slide-up">
-          {/* By Sport */}
+          {/* By League */}
           <div className="glass-card p-6">
             <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">Performance by Sport</h2>
-              <p className="text-sm text-slate-500 mt-0.5">Prediction accuracy broken down by sport</p>
+              <h2 className="text-base font-semibold text-slate-100">Performance by League</h2>
+              <p className="text-sm text-slate-500 mt-0.5">Prediction accuracy broken down by league</p>
             </div>
-            <SegmentSection title="Sport" groupBy="sport" filterParams={filterParams} />
+            <SegmentSection title="League" groupBy="sport" filterParams={filterParams} />
           </div>
 
           {/* By League */}

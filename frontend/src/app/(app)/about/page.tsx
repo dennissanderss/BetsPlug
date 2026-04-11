@@ -37,7 +37,7 @@ const trustPillars = [
     glowColor: "rgba(59,130,246,0.25)",
     title: "Verified Data Sources",
     description:
-      "We aggregate data from official league APIs, established sports data providers, and historical databases. Every data point is cross-referenced and validated before entering our models.",
+      "We aggregate data from official league APIs, established football data providers, and historical databases. Every data point is cross-referenced and validated before entering our models.",
   },
   {
     icon: Eye,
@@ -74,7 +74,7 @@ const pipelineSteps = [
     color: "#3b82f6",
     title: "Data Collection",
     description:
-      "Match data, team statistics, player information, historical results, and standings are collected from multiple sources including official league feeds, established sports data aggregators (API-Football, TheSportsDB, Football-Data.org), and historical archives.",
+      "Match data, team statistics, player information, historical results, and standings are collected from multiple sources including official league feeds, established football data aggregators (API-Football, TheSportsDB, Football-Data.org), and historical archives.",
     tags: ["Official APIs", "Historical Archives", "Real-time Feeds"],
   },
   {
@@ -126,7 +126,7 @@ const models = [
     badge: "Classic",
     badgeColor: "#3b82f6",
     description:
-      "Originally developed for chess rankings, adapted for team sports. Each team maintains a dynamic rating that updates after every match. Win probability is derived from the rating difference between opponents.",
+      "Originally developed for chess rankings, adapted for football. Each team maintains a dynamic rating that updates after every match. Win probability is derived from the rating difference between opponents.",
     details: [
       "Accounts for home advantage and margin of victory",
       "Continuous rating updates after every match result",
@@ -148,7 +148,7 @@ const models = [
       "Models attacking and defensive strength independently",
       "Handles over/under and correct score markets",
     ],
-    usedBy: "Foundation: Dixon-Coles method (1997), widely used in academic sports analytics",
+    usedBy: "Foundation: Dixon-Coles method (1997), widely used in academic football analytics",
   },
   {
     icon: Target,
@@ -204,7 +204,7 @@ const dataSources = [
   {
     name: "TheSportsDB",
     url: "https://thesportsdb.com",
-    description: "Open sports database with team and player metadata",
+    description: "Open football database with team and player metadata",
     type: "Metadata",
     typeColor: "#a855f7",
   },
@@ -234,8 +234,8 @@ const academicRefs = [
     url: "https://en.wikipedia.org/wiki/Brier_score",
   },
   {
-    name: "FiveThirtyEight Sports Methodology",
-    description: "Nate Silver - Elo-based sports forecasting methodology",
+    name: "FiveThirtyEight Football Methodology",
+    description: "Nate Silver - Elo-based football forecasting methodology",
     url: "https://fivethirtyeight.com/methodology/",
   },
 ];
@@ -282,7 +282,7 @@ const notItems = [
 ];
 
 const isItems = [
-  { text: "We ARE a data analytics platform for sports enthusiasts and researchers", isNot: false },
+  { text: "We ARE a data analytics platform for football enthusiasts and researchers", isNot: false },
   { text: "All model outputs are simulations and should be treated as educational content", isNot: false },
 ];
 
@@ -314,7 +314,7 @@ export default function AboutPage() {
         </h1>
 
         <p className="text-xl md:text-2xl text-slate-300 font-light max-w-3xl mx-auto leading-relaxed">
-          Transparent, data-driven sports analysis built on proven statistical methods
+          Transparent, data-driven football analysis built on proven statistical methods
         </p>
 
         <p className="text-slate-400 max-w-2xl mx-auto leading-relaxed text-base">

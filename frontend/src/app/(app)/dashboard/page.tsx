@@ -463,11 +463,11 @@ export default function DashboardPage() {
 
       {/* ── Two-column charts ────────────────────────────────────────────── */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Accuracy by Sport */}
+        {/* Accuracy by League */}
         <div className="glass-card p-6">
           <div className="mb-4">
-            <h2 className="text-base font-semibold text-slate-100">Accuracy by Sport</h2>
-            <p className="mt-0.5 text-xs text-slate-500">Prediction accuracy segmented by sport</p>
+            <h2 className="text-base font-semibold text-slate-100">Accuracy by League</h2>
+            <p className="mt-0.5 text-xs text-slate-500">Prediction accuracy segmented by league</p>
           </div>
 
           {sportLoading ? (

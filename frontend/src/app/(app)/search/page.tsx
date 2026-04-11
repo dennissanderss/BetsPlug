@@ -48,7 +48,7 @@ const TYPE_CONFIG: Record<
     iconColor: "text-blue-400",
     badgeBg: "bg-blue-500/15",
     badgeText: "text-blue-300",
-    label: "Sport",
+    label: "Football",
   },
   league: {
     icon: BarChart3,
@@ -227,12 +227,12 @@ function EmptyState({ query }: { query: string }) {
         <div>
           <p className="text-base font-semibold text-slate-100">Search the platform</p>
           <p className="mt-1.5 text-sm text-slate-400 max-w-xs mx-auto">
-            Type at least 2 characters to search across all sports, leagues, teams, and matches
+            Type at least 2 characters to search across leagues, teams, and matches
           </p>
         </div>
         <div className="flex flex-wrap justify-center gap-2">
           {[
-            { label: "Sports", color: "text-blue-400 border-blue-500/30 bg-blue-500/10" },
+            { label: "Football", color: "text-blue-400 border-blue-500/30 bg-blue-500/10" },
             { label: "Leagues", color: "text-purple-400 border-purple-500/30 bg-purple-500/10" },
             { label: "Teams", color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10" },
             { label: "Matches", color: "text-amber-400 border-amber-500/30 bg-amber-500/10" },
@@ -364,7 +364,7 @@ function SearchPageInner() {
 
   const tabConfig: { key: string; label: string }[] = [
     { key: "all", label: "All" },
-    { key: "sport", label: "Sports" },
+    { key: "sport", label: "Football" },
     { key: "league", label: "Leagues" },
     { key: "team", label: "Teams" },
     { key: "match", label: "Matches" },
@@ -388,7 +388,7 @@ function SearchPageInner() {
           <span className="gradient-text">Search</span>
         </h1>
         <p className="text-sm text-slate-400">
-          Find sports, leagues, teams, and matches
+          Find leagues, teams, and matches
         </p>
       </div>
 
@@ -398,7 +398,7 @@ function SearchPageInner() {
         <input
           autoFocus
           type="search"
-          placeholder="Search across all sports, leagues, teams, and matches…"
+          placeholder="Search across leagues, teams, and matches…"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           className={cn(

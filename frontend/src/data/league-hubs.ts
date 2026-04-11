@@ -101,7 +101,7 @@ export const LEAGUE_HUBS: LeagueHub[] = [
         },
         {
           q: "Is BetsPlug legal in the UK and EU?",
-          a: "BetsPlug is an analytics platform, not a bookmaker - we don't take bets or process wagers. You're free to use our predictions wherever sports betting is legal in your jurisdiction. Always check your local regulator and gamble responsibly.",
+          a: "BetsPlug is an analytics platform, not a bookmaker - we don't take bets or process wagers. You're free to use our predictions wherever football betting is legal in your jurisdiction. Always check your local regulator and gamble responsibly.",
         },
       ],
       nl: [

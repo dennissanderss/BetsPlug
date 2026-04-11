@@ -4,7 +4,7 @@
  * Horizontal probability bar with 3 (or 2) segments for the
  * 1X2 markets. The predicted outcome is highlighted; losing
  * outcomes render at reduced opacity. Draw segment is omitted
- * for sports that don't support draws (set `draw={null}`).
+ * for competitions that don't support draws (set `draw={null}`).
  */
 
 export function ProbBar({

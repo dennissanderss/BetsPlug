@@ -379,8 +379,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "Hoe het Elo-ratingsysteem werkt, waarom het zo'n sterke baseline is voor voetbalvoorspelling en welke aanpassingen BetsPlug in ons ensemble gebruikt.",
     },
     intro: {
-      en: "The Elo rating system was invented in 1960 by the Hungarian-American physicist Árpád Élő to rank chess players, and it has quietly become the backbone of sports analytics for every game where two opponents face off. The elegance of Elo is that it is self-correcting: each team starts with an arbitrary rating, wins gain points, losses lose points, and the number of points exchanged depends on the gap between the two ratings at the time of the match. Over enough games, the ratings converge to a stable estimate of each team's true strength.",
-      nl: "Het Elo-ratingsysteem werd in 1960 uitgevonden door de Hongaars-Amerikaanse natuurkundige Árpád Élő om schakers te rangschikken, en het is stilletjes de ruggengraat geworden van sportanalytics voor elk spel waar twee tegenstanders tegen elkaar staan. De elegantie van Elo is dat het zelfcorrigerend is: elke ploeg begint met een willekeurige rating, winsten leveren punten op, verliezen kosten punten, en het aantal uitgewisselde punten hangt af van het verschil tussen de twee ratings op het moment van de wedstrijd. Over voldoende wedstrijden convergeren de ratings naar een stabiele schatting van de echte sterkte van elke ploeg.",
+      en: "The Elo rating system was invented in 1960 by the Hungarian-American physicist Árpád Élő to rank chess players, and it has quietly become the backbone of football analytics for every competition where two opponents face off. The elegance of Elo is that it is self-correcting: each team starts with an arbitrary rating, wins gain points, losses lose points, and the number of points exchanged depends on the gap between the two ratings at the time of the match. Over enough games, the ratings converge to a stable estimate of each team's true strength.",
+      nl: "Het Elo-ratingsysteem werd in 1960 uitgevonden door de Hongaars-Amerikaanse natuurkundige Árpád Élő om schakers te rangschikken, en het is stilletjes de ruggengraat geworden van voetbalanalytics voor elke competitie waar twee tegenstanders tegen elkaar staan. De elegantie van Elo is dat het zelfcorrigerend is: elke ploeg begint met een willekeurige rating, winsten leveren punten op, verliezen kosten punten, en het aantal uitgewisselde punten hangt af van het verschil tussen de twee ratings op het moment van de wedstrijd. Over voldoende wedstrijden convergeren de ratings naar een stabiele schatting van de echte sterkte van elke ploeg.",
     },
     sections: [
       {
@@ -523,8 +523,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "Hoe het Kelly Criterion optimale stakes berekent, waarom full Kelly te agressief is en de fractional-Kelly sizing die BetsPlug in member-tools gebruikt.",
     },
     intro: {
-      en: "The Kelly Criterion is a stake-sizing formula derived by information theorist John Kelly in 1956, originally to maximise the long-run growth rate of wealth in repeated independent gambles with known edge. It's the only mathematically optimal answer to the question 'how much should I bet?' - but it's also famously aggressive, and the gap between the theory and the practical reality of sports betting is where most people get burned. This guide explains the formula, the intuition behind it, and why professional bettors almost always size at some fraction of full Kelly.",
-      nl: "Het Kelly Criterion is een stake-sizing formule die werd afgeleid door informatietheoreticus John Kelly in 1956, oorspronkelijk om de lange-termijn groeisnelheid van vermogen te maximaliseren in herhaalde onafhankelijke gokken met bekende edge. Het is het enige wiskundig optimale antwoord op de vraag 'hoeveel moet ik inzetten?' - maar het is ook berucht agressief, en het gat tussen de theorie en de praktische realiteit van sportweddenschappen is waar de meeste mensen zich branden. Deze gids legt de formule uit, de intuïtie erachter, en waarom professionele spelers bijna altijd op een fractie van volle Kelly inzetten.",
+      en: "The Kelly Criterion is a stake-sizing formula derived by information theorist John Kelly in 1956, originally to maximise the long-run growth rate of wealth in repeated independent gambles with known edge. It's the only mathematically optimal answer to the question 'how much should I bet?' - but it's also famously aggressive, and the gap between the theory and the practical reality of football betting is where most people get burned. This guide explains the formula, the intuition behind it, and why professional bettors almost always size at some fraction of full Kelly.",
+      nl: "Het Kelly Criterion is een stake-sizing formule die werd afgeleid door informatietheoreticus John Kelly in 1956, oorspronkelijk om de lange-termijn groeisnelheid van vermogen te maximaliseren in herhaalde onafhankelijke gokken met bekende edge. Het is het enige wiskundig optimale antwoord op de vraag 'hoeveel moet ik inzetten?' - maar het is ook berucht agressief, en het gat tussen de theorie en de praktische realiteit van voetbalweddenschappen is waar de meeste mensen zich branden. Deze gids legt de formule uit, de intuïtie erachter, en waarom professionele spelers bijna altijd op een fractie van volle Kelly inzetten.",
     },
     sections: [
       {
@@ -570,7 +570,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
         },
         body: {
           en: [
-            "Pure Kelly assumes one bet at a time, but sports bettors often place multiple bets on the same day or weekend. If the bets are uncorrelated (different leagues, different markets), you can scale them independently using their individual Kelly fractions - with one important caveat: the sum of all fractions should never exceed 1, or you risk running out of bankroll before all the bets settle.",
+            "Pure Kelly assumes one bet at a time, but football bettors often place multiple bets on the same day or weekend. If the bets are uncorrelated (different leagues, different markets), you can scale them independently using their individual Kelly fractions - with one important caveat: the sum of all fractions should never exceed 1, or you risk running out of bankroll before all the bets settle.",
             "If the bets are correlated (three Premier League matches on the same Saturday - all influenced by general Premier League variance that weekend), pure Kelly over-allocates because it double-counts the risk. The correct move is to size down proportionally, or to use a constrained-Kelly optimisation that respects the correlation matrix.",
             "BetsPlug member tools ship a built-in multi-bet Kelly calculator that accounts for correlation between simultaneous fixtures. For the free preview, the confidence score is the raw signal - if you want to sizing-size yourself, divide by 4 (quarter-Kelly) and you'll be close to a safe baseline without needing the correlation math.",
           ],
@@ -795,7 +795,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
   {
     slug: "bankroll-management",
     title: {
-      en: "Bankroll Management for Sports Bettors",
+      en: "Bankroll Management for Football Bettors",
       nl: "Bankroll Management voor Sportwedders",
     },
     tagline: {
@@ -803,7 +803,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "Het verschil tussen een model dat werkt en een dat uitbetaalt",
     },
     metaTitle: {
-      en: "Bankroll Management for Sports Bettors (2026 Guide) | BetsPlug",
+      en: "Bankroll Management for Football Bettors (2026 Guide) | BetsPlug",
       nl: "Bankroll Management voor Sportwedders (2026 Gids) | BetsPlug",
     },
     metaDescription: {
