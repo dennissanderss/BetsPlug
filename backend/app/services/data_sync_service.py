@@ -8,11 +8,11 @@ API inline.
 
 Rate limiting strategy
 ----------------------
-Football-Data.org free tier: 10 requests / minute.
+Football-Data.org free TIER_ONE tier: 10 requests / minute.
 We deliberately fetch ONE competition per sync cycle and rotate through all
-six (PL, PD, BL1, SA, FL1, CL) using a Redis counter stored in Celery's
-result backend.  This keeps us well inside the 10 req/min ceiling even when
-multiple tasks run concurrently.
+seven (PL, PD, BL1, SA, FL1, CL, DED) using an in-process counter. This keeps
+us well inside the 10 req/min ceiling even when multiple tasks run
+concurrently.
 
 Public methods
 --------------
@@ -60,10 +60,9 @@ logger = structlog.get_logger(__name__)
 _settings = get_settings()
 
 # ── Ordered list of competition codes to rotate through ──────────────────────
-# Only leagues supported on the football-data.org free tier. Eredivisie is
-# deliberately excluded here because fdorg's free plan does not ship it; it
-# only syncs through the API-Football path below.
-_COMPETITION_ROTATION: list[str] = ["PL", "PD", "BL1", "SA", "FL1", "CL"]
+# Free TIER_ONE fdorg plan covers all seven. DED (Eredivisie) was added
+# 2026-04-11 after live verification that the free tier actually serves it.
+_COMPETITION_ROTATION: list[str] = ["PL", "PD", "BL1", "SA", "FL1", "CL", "DED"]
 
 # ── League slugs used by the API-Football adapter path ───────────────────────
 # API-Football covers Eredivisie (id 88), so when that adapter is active the
@@ -123,21 +122,48 @@ class DataSyncService:
 
     async def __aenter__(self) -> "DataSyncService":
         self._client = httpx.AsyncClient(timeout=30)
-        # Prefer API-Football (more leagues, odds, stats) when key is available
-        if self._apifb_key:
-            self._adapter = APIFootballAdapter(
-                config={"api_key": self._apifb_key},
-                http_client=self._client,
-            )
-            self._adapter_name = "api_football"
-            self.log.info("data_sync_using_adapter", adapter="api_football")
-        else:
+        # ── Adapter preference ───────────────────────────────────────────────
+        # As of the 2025/26 season, the API-Football free plan refuses to
+        # serve any season past 2024 ("Free plans do not have access to
+        # this season, try from 2022 to 2024"). That makes it useless as a
+        # primary source for *current* fixtures, which is the whole point
+        # of this sync job. Football-Data.org's free TIER_ONE plan serves
+        # the current season for all seven leagues we care about, so we
+        # prefer it by default.
+        #
+        # If ``FOOTBALL_DATA_FORCE_API_FOOTBALL=true`` is set (e.g. when
+        # Dennis upgrades to an API-Football paid plan), the old
+        # preference order is restored.
+        import os
+        force_apifb = os.environ.get("FOOTBALL_DATA_FORCE_API_FOOTBALL", "").lower() in ("1", "true", "yes")
+
+        if self._fdorg_key and not force_apifb:
             self._adapter = FootballDataOrgAdapter(
                 config={"api_key": self._fdorg_key},
                 http_client=self._client,
             )
             self._adapter_name = "football_data_org"
-            self.log.info("data_sync_using_adapter", adapter="football_data_org")
+            self.log.info(
+                "data_sync_using_adapter",
+                adapter="football_data_org",
+                reason="free_tier_current_season_coverage",
+            )
+        elif self._apifb_key:
+            self._adapter = APIFootballAdapter(
+                config={"api_key": self._apifb_key},
+                http_client=self._client,
+            )
+            self._adapter_name = "api_football"
+            self.log.info(
+                "data_sync_using_adapter",
+                adapter="api_football",
+                reason="forced_or_no_fd_key",
+            )
+        else:
+            raise RuntimeError(
+                "No data-source API key configured. Set either "
+                "FOOTBALL_DATA_API_KEY or API_FOOTBALL_KEY."
+            )
         return self
 
     async def __aexit__(self, *_) -> None:

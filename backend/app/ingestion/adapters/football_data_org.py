@@ -3,7 +3,11 @@ Football-Data.org Adapter
 =========================
 Fetches LIVE football data from the football-data.org v4 API.
 
-Free tier: 10 requests/minute, covers top 5 European leagues + Champions League.
+Free tier: 10 requests/minute. As of 2026 the free "TIER_ONE" plan also
+includes Eredivisie (DED) alongside the big-five leagues + Champions League,
+so we enable all seven. The exhaustive list is:
+  PL  (Premier League), PD (La Liga), BL1 (Bundesliga), SA (Serie A),
+  FL1 (Ligue 1), CL  (Champions League), DED (Eredivisie).
 Requires an API key set in the adapter config as ``api_key``.
 
 Sign up free at: https://www.football-data.org/client/register
@@ -36,6 +40,11 @@ LEAGUE_SLUG_TO_CODE: dict[str, str] = {
     "serie-a": "SA",
     "ligue-1": "FL1",
     "champions-league": "CL",
+    # Eredivisie — available on the free TIER_ONE plan. Verified live
+    # 2026-04-11 returning 38 scheduled matches. Earlier versions of this
+    # adapter deliberately excluded DED on the (no longer accurate) belief
+    # that the free tier didn't ship Dutch top-flight fixtures.
+    "eredivisie": "DED",
 }
 
 # Map competition codes → internal league slugs
@@ -43,12 +52,13 @@ CODE_TO_LEAGUE_SLUG: dict[str, str] = {v: k for k, v in LEAGUE_SLUG_TO_CODE.item
 
 # Map competition codes → country / display info
 COMPETITION_META: dict[str, dict] = {
-    "PL":  {"name": "Premier League",    "country": "England", "tier": 1},
-    "PD":  {"name": "La Liga",           "country": "Spain",   "tier": 1},
-    "BL1": {"name": "Bundesliga",        "country": "Germany", "tier": 1},
-    "SA":  {"name": "Serie A",           "country": "Italy",   "tier": 1},
-    "FL1": {"name": "Ligue 1",           "country": "France",  "tier": 1},
-    "CL":  {"name": "Champions League",  "country": "Europe",  "tier": None},
+    "PL":  {"name": "Premier League",    "country": "England",     "tier": 1},
+    "PD":  {"name": "La Liga",           "country": "Spain",       "tier": 1},
+    "BL1": {"name": "Bundesliga",        "country": "Germany",     "tier": 1},
+    "SA":  {"name": "Serie A",           "country": "Italy",       "tier": 1},
+    "FL1": {"name": "Ligue 1",           "country": "France",      "tier": 1},
+    "CL":  {"name": "Champions League",  "country": "Europe",      "tier": None},
+    "DED": {"name": "Eredivisie",        "country": "Netherlands", "tier": 1},
 }
 
 # Free tier: 10 req/min → 1 request per 6 seconds to be safe
