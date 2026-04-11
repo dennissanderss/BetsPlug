@@ -531,6 +531,149 @@ async def job_sync_odds():
         log.error("CRON: Odds sync failed: %s", exc, exc_info=True)
 
 
+async def job_snapshot_upcoming_odds():
+    """v5 daily odds-snapshot cron.
+
+    For every scheduled fixture in the next 14 days sourced via
+    API-Football, call ``/odds?fixture=<id>`` and write rows into
+    ``odds_history``. Skips fixtures that already got a row today so
+    it's safe to run multiple times per day. Caps at 400 fixtures per
+    run to stay comfortably inside the Pro budget (~400 calls / day
+    ≈ 5.3% of the 7 500 limit).
+
+    This is the single biggest long-term investment for honest
+    strategy ROI — real odds snapshots accumulate naturally over
+    time and replace the hardcoded 1.90 fallback in roi_calculator.
+    """
+    import httpx
+    import uuid as _uuid
+    from datetime import date as _date
+    from sqlalchemy import and_, select
+
+    from app.core.config import get_settings
+    from app.db.session import async_session_factory
+    from app.ingestion.adapters.api_football import APIFootballAdapter
+    from app.models.match import Match, MatchStatus
+    from app.models.odds import OddsHistory
+    from app.services.api_usage_tracker import record_api_call
+
+    settings = get_settings()
+    if not settings.api_football_key:
+        log.warning("CRON: snapshot_upcoming_odds skipped — no API_FOOTBALL_KEY")
+        return
+
+    log.info("CRON: Starting v5 odds snapshot...")
+    now = datetime.now(timezone.utc)
+    cutoff = now + timedelta(days=14)
+    today_start = datetime.combine(
+        _date.today(), datetime.min.time()
+    ).replace(tzinfo=timezone.utc)
+
+    client = httpx.AsyncClient(timeout=30)
+    adapter = APIFootballAdapter(
+        config={"api_key": settings.api_football_key, "rate_limit_seconds": 0.3},
+        http_client=client,
+    )
+
+    try:
+        async with async_session_factory() as db:
+            already_stmt = select(OddsHistory.match_id).where(
+                and_(
+                    OddsHistory.market.in_(["1x2", "1X2"]),
+                    OddsHistory.recorded_at >= today_start,
+                )
+            )
+            already = {row[0] for row in (await db.execute(already_stmt)).all()}
+
+            targets_stmt = (
+                select(Match.id, Match.external_id)
+                .where(
+                    and_(
+                        Match.status == MatchStatus.SCHEDULED,
+                        Match.scheduled_at >= now,
+                        Match.scheduled_at <= cutoff,
+                        Match.external_id.is_not(None),
+                        Match.external_id.like("apifb_match_%"),
+                    )
+                )
+                .order_by(Match.scheduled_at.asc())
+                .limit(800)
+            )
+            rows = (await db.execute(targets_stmt)).all()
+            targets = [(mid, ext) for mid, ext in rows if mid not in already][:400]
+
+            inserted = 0
+            for match_id, external_id in targets:
+                raw_id = external_id.replace("apifb_match_", "")
+                try:
+                    t0 = datetime.now(timezone.utc)
+                    odds = await adapter.fetch_pre_match_odds_raw(raw_id)
+                    await record_api_call(
+                        "api_football",
+                        "/odds",
+                        200,
+                        int((datetime.now(timezone.utc) - t0).total_seconds() * 1000),
+                    )
+                except Exception as exc:
+                    log.warning(
+                        "CRON: snapshot_odds fetch failed match=%s err=%s",
+                        match_id, exc,
+                    )
+                    continue
+                if not odds:
+                    continue
+                recorded_at = datetime.now(timezone.utc)
+                if odds.get("home_odds") and odds.get("away_odds"):
+                    db.add(OddsHistory(
+                        id=_uuid.uuid4(),
+                        match_id=match_id,
+                        source="api_football_avg",
+                        market="1x2",
+                        home_odds=odds.get("home_odds"),
+                        draw_odds=odds.get("draw_odds"),
+                        away_odds=odds.get("away_odds"),
+                        recorded_at=recorded_at,
+                    ))
+                    inserted += 1
+                if odds.get("over_odds") and odds.get("under_odds"):
+                    db.add(OddsHistory(
+                        id=_uuid.uuid4(),
+                        match_id=match_id,
+                        source="api_football_avg",
+                        market="over_under_2_5",
+                        over_odds=odds.get("over_odds"),
+                        under_odds=odds.get("under_odds"),
+                        total_line=2.5,
+                        recorded_at=recorded_at,
+                    ))
+                    inserted += 1
+                if odds.get("btts_yes_odds") and odds.get("btts_no_odds"):
+                    db.add(OddsHistory(
+                        id=_uuid.uuid4(),
+                        match_id=match_id,
+                        source="api_football_avg",
+                        market="btts",
+                        btts_yes_odds=odds.get("btts_yes_odds"),
+                        btts_no_odds=odds.get("btts_no_odds"),
+                        recorded_at=recorded_at,
+                    ))
+                    inserted += 1
+                if inserted % 40 == 0:
+                    await db.commit()
+            await db.commit()
+            log.info(
+                "CRON: snapshot_upcoming_odds done — fixtures=%d rows=%d",
+                len(targets), inserted,
+            )
+    except Exception as exc:
+        log.error("CRON: snapshot_upcoming_odds failed: %s", exc, exc_info=True)
+    finally:
+        try:
+            await client.aclose()
+        except Exception:
+            pass
+
+
 def start_scheduler():
     """Register jobs and start the scheduler."""
     # Sync data every 6 hours
@@ -581,6 +724,19 @@ def start_scheduler():
         name="Sync bookmaker odds",
         replace_existing=True,
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=15),
+    )
+
+    # v5: Snapshot upcoming-fixture odds from API-Football once a day.
+    # Accumulates real historical odds over time — after 2 weeks every
+    # fixture has a 14-row odds history, after a month it's 30. That's
+    # what finally unblocks honest strategy ROI.
+    scheduler.add_job(
+        job_snapshot_upcoming_odds,
+        trigger=CronTrigger(hour=5, minute=30),
+        id="snapshot_upcoming_odds",
+        name="v5 daily snapshot of upcoming odds",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=8),
     )
 
     # Sync results daily at 06:00 UTC

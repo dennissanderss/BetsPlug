@@ -866,6 +866,259 @@ async def force_schema_patch(
 
 
 @router.post(
+    "/snapshot-upcoming-odds",
+    summary="Snapshot current odds for upcoming fixtures (run daily)",
+)
+async def snapshot_upcoming_odds(
+    limit: int = 400,
+    hours_ahead: int = 336,
+    db: AsyncSession = Depends(get_db),
+):
+    """For every scheduled fixture in the next *hours_ahead* hours, pull
+    the current pre-match 1X2 / O-U / BTTS odds from API-Football and
+    write them into ``odds_history``. Designed to be called daily by a
+    cron job so the odds accumulate naturally over time — a fixture
+    kicked off yesterday that was first snapshotted 3 days ago now has
+    3 rows in the history, the earliest of which qualifies as "the
+    closing line we could have seen".
+
+    Idempotent in the weak sense: re-running within the same day will
+    re-insert identical rows. That's fine — the metrics endpoint just
+    picks the most recent ``recorded_at``. We skip fixtures that
+    already have a 1x2 row written *today* so the cron can safely run
+    multiple times per day.
+    """
+    import traceback
+    from datetime import date as _date
+
+    fatal_error: Optional[str] = None
+    adapter = await _api_football()
+
+    now = datetime.now(timezone.utc)
+    cutoff = now + timedelta(hours=hours_ahead)
+
+    # Upcoming fixtures within the window that came from API-Football
+    # (external_id starts with apifb_match_) and don't already have an
+    # odds row from today.
+    today_start = datetime.combine(_date.today(), datetime.min.time()).replace(tzinfo=timezone.utc)
+    recent_odds_stmt = select(OddsHistory.match_id).where(
+        and_(
+            OddsHistory.market.in_(["1x2", "1X2"]),
+            OddsHistory.recorded_at >= today_start,
+        )
+    )
+    already_snapshotted_today = {
+        row[0] for row in (await db.execute(recent_odds_stmt)).all()
+    }
+
+    targets_stmt = (
+        select(Match.id, Match.external_id)
+        .where(
+            and_(
+                Match.status == MatchStatus.SCHEDULED,
+                Match.scheduled_at >= now,
+                Match.scheduled_at <= cutoff,
+                Match.external_id.is_not(None),
+                Match.external_id.like("apifb_match_%"),
+            )
+        )
+        .order_by(Match.scheduled_at.asc())
+        .limit(limit * 2)
+    )
+    all_rows = (await db.execute(targets_stmt)).all()
+    targets = [
+        (mid, ext) for mid, ext in all_rows if mid not in already_snapshotted_today
+    ][:limit]
+
+    calls = 0
+    rows_inserted = 0
+    fixtures_with_odds = 0
+    errors: list[dict] = []
+
+    try:
+        for match_id, external_id in targets:
+            raw_id = external_id.replace("apifb_match_", "")
+            try:
+                t0 = datetime.now(timezone.utc)
+                odds = await adapter.fetch_pre_match_odds_raw(raw_id)
+                calls += 1
+                await record_api_call(
+                    "api_football",
+                    "/odds",
+                    200,
+                    int((datetime.now(timezone.utc) - t0).total_seconds() * 1000),
+                )
+            except Exception as exc:
+                errors.append({"match_id": str(match_id), "err": str(exc)})
+                continue
+
+            if not odds:
+                continue
+
+            had_any = False
+            recorded_at = datetime.now(timezone.utc)
+            if odds.get("home_odds") and odds.get("away_odds"):
+                db.add(
+                    OddsHistory(
+                        id=uuid.uuid4(),
+                        match_id=match_id,
+                        source="api_football_avg",
+                        market="1x2",
+                        home_odds=odds.get("home_odds"),
+                        draw_odds=odds.get("draw_odds"),
+                        away_odds=odds.get("away_odds"),
+                        recorded_at=recorded_at,
+                    )
+                )
+                rows_inserted += 1
+                had_any = True
+            if odds.get("over_odds") and odds.get("under_odds"):
+                db.add(
+                    OddsHistory(
+                        id=uuid.uuid4(),
+                        match_id=match_id,
+                        source="api_football_avg",
+                        market="over_under_2_5",
+                        over_odds=odds.get("over_odds"),
+                        under_odds=odds.get("under_odds"),
+                        total_line=2.5,
+                        recorded_at=recorded_at,
+                    )
+                )
+                rows_inserted += 1
+                had_any = True
+            if odds.get("btts_yes_odds") and odds.get("btts_no_odds"):
+                db.add(
+                    OddsHistory(
+                        id=uuid.uuid4(),
+                        match_id=match_id,
+                        source="api_football_avg",
+                        market="btts",
+                        btts_yes_odds=odds.get("btts_yes_odds"),
+                        btts_no_odds=odds.get("btts_no_odds"),
+                        recorded_at=recorded_at,
+                    )
+                )
+                rows_inserted += 1
+                had_any = True
+            if had_any:
+                fixtures_with_odds += 1
+            if rows_inserted % 30 == 0:
+                await db.commit()
+
+        await db.commit()
+    except Exception as exc:
+        log.exception("snapshot_upcoming_odds_fatal")
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        fatal_error = f"{type(exc).__name__}: {exc}\n{traceback.format_exc()[:1500]}"
+    finally:
+        try:
+            await adapter.http_client.aclose()
+        except Exception:
+            pass
+
+    return {
+        "fixtures_targeted": len(targets),
+        "api_calls": calls,
+        "rows_inserted": rows_inserted,
+        "fixtures_with_odds": fixtures_with_odds,
+        "errors": errors[:5],
+        "fatal_error": fatal_error,
+    }
+
+
+@router.post(
+    "/dedupe-teams",
+    summary="Merge duplicate team rows into the canonical one",
+)
+async def dedupe_teams(
+    db: AsyncSession = Depends(get_db),
+):
+    """Some teams were ingested twice — once via football-data.org and
+    once via API-Football — because their slugs differed slightly. The
+    top-10 Elo leaderboard shows ``FC Internazionale Milano`` and
+    ``SSC Napoli`` twice for this reason. This endpoint groups teams
+    by ``lower(name)`` and, where it finds duplicates, merges all
+    child rows (matches, elo history, stats) onto the team with the
+    oldest ``created_at`` timestamp. The losing duplicates are then
+    deleted.
+
+    Idempotent. Safe to re-run.
+    """
+    from sqlalchemy import func as sfunc, text as sqltext
+    from app.models.team import Team
+
+    # 1. Find groups of duplicates by lower(name).
+    stmt = (
+        select(sfunc.lower(Team.name).label("key"), sfunc.count().label("n"))
+        .group_by("key")
+        .having(sfunc.count() > 1)
+    )
+    groups = (await db.execute(stmt)).all()
+
+    merges: list[dict] = []
+    for key, _count in groups:
+        team_rows = (
+            await db.execute(
+                select(Team)
+                .where(sfunc.lower(Team.name) == key)
+                .order_by(Team.created_at.asc())
+            )
+        ).scalars().all()
+        if len(team_rows) < 2:
+            continue
+
+        # The oldest row wins; the rest lose.
+        winner = team_rows[0]
+        losers = team_rows[1:]
+        loser_ids = [t.id for t in losers]
+
+        # Repoint every child table's FK to the winner.
+        # Every UPDATE uses a SQL bindparam list so no parameter
+        # injection is possible.
+        for sql in [
+            "UPDATE matches SET home_team_id = :w WHERE home_team_id = ANY(:l)",
+            "UPDATE matches SET away_team_id = :w WHERE away_team_id = ANY(:l)",
+            "UPDATE team_elo_history SET team_id = :w WHERE team_id = ANY(:l)",
+            "UPDATE team_stats SET team_id = :w WHERE team_id = ANY(:l)",
+        ]:
+            try:
+                await db.execute(
+                    sqltext(sql),
+                    {"w": winner.id, "l": loser_ids},
+                )
+            except Exception as exc:
+                log.warning("dedupe_update_failed sql=%s err=%s", sql[:60], exc)
+
+        # Delete the losers.
+        for t in losers:
+            try:
+                await db.delete(t)
+            except Exception as exc:
+                log.warning("dedupe_delete_failed id=%s err=%s", t.id, exc)
+
+        merges.append(
+            {
+                "key": key,
+                "winner_id": str(winner.id),
+                "winner_name": winner.name,
+                "losers_merged": len(losers),
+                "loser_ids": [str(x) for x in loser_ids],
+            }
+        )
+
+    await db.commit()
+
+    return {
+        "groups_found": len(groups),
+        "merges": merges,
+    }
+
+
+@router.post(
     "/seed-ou-strategies",
     summary="Insert the two v5 Over/Under seed strategies",
 )
