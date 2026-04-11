@@ -420,52 +420,39 @@ async def get_strategy_metrics(
             "max_drawdown": 0.0,
             "profit_factor": 0.0,
             "avg_brier": 0.0,
+            "odds_coverage_pct": 0.0,
+            "avg_odds_used": 0.0,
             "has_data": False,
             "validation_status": "insufficient_data",
             "validation_notes": "No evaluated predictions yet for this strategy.",
         }
 
-    # Calculate metrics
-    correct = sum(1 for _, ev in matched_and_evaluated if ev.is_correct)
-    winrate = correct / sample_size
+    # v5: use real historical odds from odds_history when available.
+    # Falls back to 1.90 flat for picks with no odds row.
+    from app.services.roi_calculator import compute_strategy_metrics_with_real_odds
+    metrics = await compute_strategy_metrics_with_real_odds(
+        picks=matched_and_evaluated,
+        db=db,
+    )
+    winrate = metrics["winrate"]
+    roi = metrics["roi"]
+    correct = metrics["wins"]
+    losses = metrics["losses"]
 
-    # ROI: flat staking 1 unit, assume avg odds ~1.9 for correct picks
-    wins_profit = correct * 0.9  # win 0.9 units per correct (avg odds 1.9 - 1.0 stake)
-    losses = sample_size - correct
-    roi = (wins_profit - losses) / sample_size if sample_size > 0 else 0.0
-
-    # Max drawdown from equity curve
-    equity = 0.0
-    peak = 0.0
-    max_dd = 0.0
-    for _, ev in matched_and_evaluated:
-        if ev.is_correct:
-            equity += 0.9
-        else:
-            equity -= 1.0
-        if equity > peak:
-            peak = equity
-        dd = peak - equity
-        if dd > max_dd:
-            max_dd = dd
-
-    # Profit factor
-    gross_profit = wins_profit
-    gross_loss = losses * 1.0
-    profit_factor = gross_profit / gross_loss if gross_loss > 0 else 0.0
-
-    avg_brier = sum(ev.brier_score for _, ev in matched_and_evaluated) / sample_size
+    avg_brier = sum(
+        (ev.brier_score or 0.0) for _, ev in matched_and_evaluated
+    ) / sample_size
 
     validation_status, validation_notes = _compute_validation_status(
         sample_size=sample_size, winrate=winrate, roi=roi
     )
 
     # For strategies flagged as under_investigation we deliberately clamp the
-    # displayed numbers so that downstream clients (e.g. the current frontend
+    # displayed numbers so downstream clients (e.g. the current frontend
     # which renders a "Profitable" badge from ``roi > 0``) don't show glowing
     # metrics while the underlying feature leakage is still being fixed. The
     # *raw* computed numbers are preserved under ``raw_winrate`` / ``raw_roi``
-    # so that the upcoming strategy-lab rebuild can still show them behind a
+    # so the upcoming strategy-lab rebuild can still show them behind a
     # "disputed" treatment.
     raw_winrate = round(winrate, 4)
     raw_roi = round(roi, 4)
@@ -487,18 +474,17 @@ async def get_strategy_metrics(
         "roi": display_roi,
         "raw_winrate": raw_winrate,
         "raw_roi": raw_roi,
-        "max_drawdown": round(max_dd, 2),
-        "profit_factor": round(profit_factor, 4),
+        "max_drawdown": metrics["max_drawdown"],
+        "profit_factor": metrics["profit_factor"],
         "avg_brier": round(avg_brier, 6),
         "correct": correct,
         "incorrect": losses,
         "has_data": True,
-        # New fields — see API_CONTRACT.md for semantics. The frontend should
-        # render a "Under Investigation" badge when ``validation_status`` is
-        # anything other than "validated", and should NOT display the
-        # ``raw_*`` numbers next to a positive label.
+        # v5 additions — see API_CONTRACT.md for semantics.
         "validation_status": validation_status,
         "validation_notes": validation_notes,
+        "odds_coverage_pct": metrics["odds_coverage_pct"],
+        "avg_odds_used": metrics["avg_odds_used"],
     }
 
     # Cache for 15 minutes
@@ -538,6 +524,11 @@ async def refresh_strategy_validation(
         )
     ).all()
 
+    # v5: use the real-odds ROI helper for the refresh too, so
+    # ``validation_status`` is decided on the same numbers the user sees
+    # on the metrics endpoint.
+    from app.services.roi_calculator import compute_strategy_metrics_with_real_odds
+
     summary: list[dict] = []
     for strat in strategies:
         matched: list[tuple] = []
@@ -548,12 +539,17 @@ async def refresh_strategy_validation(
         if sample_size == 0:
             winrate = 0.0
             roi = 0.0
+            odds_coverage_pct = 0.0
+            avg_odds_used = 0.0
         else:
-            correct = sum(1 for _, ev in matched if ev.is_correct)
-            winrate = correct / sample_size
-            wins_profit = correct * 0.9
-            losses = sample_size - correct
-            roi = (wins_profit - losses) / sample_size
+            metrics = await compute_strategy_metrics_with_real_odds(
+                picks=matched,
+                db=db,
+            )
+            winrate = metrics["winrate"]
+            roi = metrics["roi"]
+            odds_coverage_pct = metrics["odds_coverage_pct"]
+            avg_odds_used = metrics["avg_odds_used"]
 
         validation_status, notes = _compute_validation_status(
             sample_size=sample_size, winrate=winrate, roi=roi
@@ -571,6 +567,8 @@ async def refresh_strategy_validation(
                 "sample_size": sample_size,
                 "raw_winrate": round(winrate, 4),
                 "raw_roi": round(roi, 4),
+                "odds_coverage_pct": odds_coverage_pct,
+                "avg_odds_used": avg_odds_used,
                 "validation_status": validation_status,
                 "validation_notes": notes,
                 "was_active": was_active,
