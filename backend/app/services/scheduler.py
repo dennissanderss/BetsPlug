@@ -33,7 +33,16 @@ async def job_sync_data():
 
         total_created, total_updated, total_errors = 0, 0, 0
 
-        for i in range(6):
+        # Number of league-batch iterations per scheduled run. Each iteration
+        # performs 3 sync method calls (upcoming + results + standings), each
+        # advancing the rotation by 1. We now have 7 leagues in the fd
+        # rotation (PL, PD, BL1, SA, FL1, CL, DED) as of 2026-04-11, so 7
+        # iterations × 3 method calls = 21 rotations, covering every league
+        # ~3 times per run. If you shrink _COMPETITION_ROTATION, shrink this
+        # too (or the tail-end leagues will be hit disproportionately often).
+        from app.services.data_sync_service import _COMPETITION_ROTATION
+        iterations = max(len(_COMPETITION_ROTATION), 7)
+        for i in range(iterations):
             # Each league gets its own client + session, closed before the next
             async with DataSyncService() as svc:
                 async with async_session_factory() as db:
@@ -59,7 +68,7 @@ async def job_sync_data():
             # Explicit cleanup: drop references and force GC between leagues
             del svc
             gc.collect()
-            log.debug("CRON: League %d/6 synced, memory released.", i + 1)
+            log.debug("CRON: League batch %d/%d synced, memory released.", i + 1, iterations)
 
         log.info("CRON: Full sync done — created=%d updated=%d errors=%d",
                  total_created, total_updated, total_errors)
