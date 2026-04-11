@@ -169,6 +169,22 @@ export interface PredictionExplanation {
   similar_historical: Record<string, unknown> | null;
 }
 
+/** Lightweight match summary embedded in PredictionResponse (v6.1 /predictions).
+ * Only the fields the feed/table UIs actually need — not a full Match. */
+export interface PredictionMatchSummary {
+  id: string;
+  home_team_name: string;
+  away_team_name: string;
+  scheduled_at: string;
+  status: string;
+  league_name: string | null;
+  result: {
+    home_score: number | null;
+    away_score: number | null;
+    winner: "home" | "away" | "draw" | null;
+  } | null;
+}
+
 export interface Prediction {
   id: string;
   match_id: string;
@@ -179,9 +195,11 @@ export interface Prediction {
   away_win_prob: number;
   confidence: number;
   is_simulation: boolean;
+  pick?: string | null;
+  reasoning?: string | null;
   explanation: PredictionExplanation | null;
   evaluation: PredictionEvaluation | null;
-  match: Match | null;
+  match: PredictionMatchSummary | null;
 }
 
 export interface PredictionEvaluation {

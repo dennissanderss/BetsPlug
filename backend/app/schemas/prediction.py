@@ -157,6 +157,33 @@ class PredictionCreate(PredictionBase):
     )
 
 
+class PredictionMatchResult(BaseModel):
+    """Final score info attached to the inline match summary (v6.1)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    home_score: Optional[int] = Field(default=None, ge=0)
+    away_score: Optional[int] = Field(default=None, ge=0)
+    winner: Optional[str] = Field(
+        default=None,
+        description="'home' | 'draw' | 'away' | None when unknown.",
+    )
+
+
+class PredictionMatchSummary(BaseModel):
+    """Inline match summary embedded in PredictionResponse for feed/list UIs (v6.1)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    home_team_name: str
+    away_team_name: str
+    scheduled_at: datetime
+    status: str
+    league_name: Optional[str] = None
+    result: Optional[PredictionMatchResult] = None
+
+
 class PredictionResponse(PredictionBase):
     """Full prediction representation returned by the API."""
 
@@ -172,6 +199,10 @@ class PredictionResponse(PredictionBase):
     evaluation: Optional[PredictionEvaluationSchema] = Field(
         default=None,
         description="Post-match evaluation (populated after the match finishes).",
+    )
+    match: Optional[PredictionMatchSummary] = Field(
+        default=None,
+        description="Lightweight match summary so feed/list UIs can show teams without a second fetch (v6.1).",
     )
     created_at: datetime = Field(description="Timestamp when the record was created (UTC).")
     updated_at: datetime = Field(description="Timestamp of the most recent update (UTC).")

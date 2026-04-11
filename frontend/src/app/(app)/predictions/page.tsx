@@ -297,6 +297,58 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
         )}
       </div>
 
+      {/* ── Pre-match odds row (v6 B1) — rendered ONLY when backend supplies odds ── */}
+      {fixture.odds && (
+        fixture.odds.home != null ||
+        fixture.odds.draw != null ||
+        fixture.odds.away != null ||
+        fixture.odds.over_2_5 != null ||
+        fixture.odds.under_2_5 != null
+      ) ? (
+        <div className="border-t border-white/[0.05] bg-white/[0.015] px-5 py-2">
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-600">
+              Pre-match odds
+            </span>
+            <div className="flex items-center gap-1.5 flex-wrap text-[11px]">
+              {fixture.odds.home != null && (
+                <span className="rounded border border-white/[0.08] bg-white/[0.03] px-1.5 py-0.5 tabular-nums text-slate-300">
+                  <span className="text-slate-500 mr-1">1</span>{fixture.odds.home.toFixed(2)}
+                </span>
+              )}
+              {fixture.odds.draw != null && (
+                <span className="rounded border border-white/[0.08] bg-white/[0.03] px-1.5 py-0.5 tabular-nums text-slate-300">
+                  <span className="text-slate-500 mr-1">X</span>{fixture.odds.draw.toFixed(2)}
+                </span>
+              )}
+              {fixture.odds.away != null && (
+                <span className="rounded border border-white/[0.08] bg-white/[0.03] px-1.5 py-0.5 tabular-nums text-slate-300">
+                  <span className="text-slate-500 mr-1">2</span>{fixture.odds.away.toFixed(2)}
+                </span>
+              )}
+              {(fixture.odds.over_2_5 != null || fixture.odds.under_2_5 != null) && (
+                <span className="mx-1 text-slate-700">|</span>
+              )}
+              {fixture.odds.over_2_5 != null && (
+                <span className="rounded border border-white/[0.08] bg-white/[0.03] px-1.5 py-0.5 tabular-nums text-slate-400">
+                  <span className="text-slate-500 mr-1">O2.5</span>{fixture.odds.over_2_5.toFixed(2)}
+                </span>
+              )}
+              {fixture.odds.under_2_5 != null && (
+                <span className="rounded border border-white/[0.08] bg-white/[0.03] px-1.5 py-0.5 tabular-nums text-slate-400">
+                  <span className="text-slate-500 mr-1">U2.5</span>{fixture.odds.under_2_5.toFixed(2)}
+                </span>
+              )}
+            </div>
+            {fixture.odds.bookmaker && (
+              <span className="ml-auto text-[9px] text-slate-700 uppercase tracking-wider">
+                {fixture.odds.bookmaker}
+              </span>
+            )}
+          </div>
+        </div>
+      ) : null}
+
       {/* ── Expanded: rich prediction detail panel ── */}
       {hasPrediction && expanded && (
         <div className="border-t border-white/[0.05] bg-white/[0.015] px-5 py-4 animate-fade-in space-y-4">
