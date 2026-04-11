@@ -86,19 +86,26 @@ async def get_trackrecord_summary(
     summary="Performance breakdown by sport, league, period or confidence bucket",
 )
 async def get_trackrecord_segments(
-    segment_type: str = Query(
-        default="league",
+    segment_type: Optional[str] = Query(
+        default=None,
         description="Dimension to slice on: 'sport', 'league', or 'month'",
+    ),
+    group_by: Optional[str] = Query(
+        default=None,
+        description="Alias for segment_type (frontend uses this name)",
     ),
     db: AsyncSession = Depends(get_db),
 ) -> List[SegmentPerformance]:
     """
     Return per-segment accuracy and Brier scores.
 
-    Supported segment_type values: ``sport``, ``league``, ``month``.
-
-    # TODO: delegate heavy aggregation to analytics service layer
+    Supported values for ``segment_type`` / ``group_by``: ``sport``,
+    ``league``, ``month``. Both parameter names are accepted because
+    the frontend was sending ``group_by`` while the original
+    endpoint only recognised ``segment_type``; as of v6 both work
+    and default to ``league``.
     """
+    segment_type = segment_type or group_by or "league"
     if segment_type == "sport":
         q = (
             select(
@@ -176,7 +183,10 @@ async def get_trackrecord_segments(
     summary="Calibration buckets (reliability diagram data)",
 )
 async def get_calibration(
-    model_version_id: uuid.UUID = Query(..., description="Model version to analyse"),
+    model_version_id: Optional[uuid.UUID] = Query(
+        default=None,
+        description="Model version to analyse. If omitted, uses the currently-active model.",
+    ),
     num_buckets: int = Query(
         default=_NUM_CALIBRATION_BUCKETS, ge=2, le=20, description="Number of probability bins"
     ),
@@ -185,17 +195,40 @@ async def get_calibration(
     """
     Compute a reliability diagram for a model version.
 
-    Predictions are binned by their home_win_prob into ``num_buckets`` equal-width
-    buckets. For each bucket the observed win frequency is computed.
+    v6: ``model_version_id`` is now optional. When omitted we pick
+    the most recently-trained active ``ModelVersion`` so the
+    frontend Track Record page can hit the endpoint with no query
+    string and still get a valid reliability diagram.
 
-    # TODO: delegate binning + ECE computation to analytics service layer
+    Predictions are binned by their home_win_prob into ``num_buckets``
+    equal-width buckets. For each bucket the observed win frequency is
+    computed.
     """
-    # Load all evaluated predictions for this model version
-    result = await db.execute(
+    from app.models.model_version import ModelVersion
+
+    # v6: if no model_version_id was supplied, default to the most
+    # recently-trained active model.
+    if model_version_id is None:
+        from sqlalchemy import desc as sql_desc
+        mv_row = (
+            await db.execute(
+                select(ModelVersion)
+                .where(ModelVersion.is_active.is_(True))
+                .order_by(sql_desc(ModelVersion.trained_at))
+                .limit(1)
+            )
+        ).scalar_one_or_none()
+        if mv_row is not None:
+            model_version_id = mv_row.id
+
+    # Load all evaluated predictions (optionally filtered to a model version)
+    base_q = (
         select(Prediction, PredictionEvaluation)
         .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
-        .where(Prediction.model_version_id == model_version_id)
     )
+    if model_version_id is not None:
+        base_q = base_q.where(Prediction.model_version_id == model_version_id)
+    result = await db.execute(base_q)
     rows = result.all()
 
     # Build buckets
@@ -248,13 +281,13 @@ async def get_calibration(
     overall_ece = ece_numerator / total_samples if total_samples > 0 else 0.0
 
     # Retrieve model version label
-    from app.models.model_version import ModelVersion
-
-    mv_result = await db.execute(
-        select(ModelVersion).where(ModelVersion.id == model_version_id)
-    )
-    mv = mv_result.scalar_one_or_none()
-    mv_label = f"{mv.name} v{mv.version}" if mv else None
+    mv_label = None
+    if model_version_id is not None:
+        mv_result = await db.execute(
+            select(ModelVersion).where(ModelVersion.id == model_version_id)
+        )
+        mv = mv_result.scalar_one_or_none()
+        mv_label = f"{mv.name} v{mv.version}" if mv else None
 
     return CalibrationReport(
         model_version_id=model_version_id,

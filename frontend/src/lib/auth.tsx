@@ -164,16 +164,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       } catch (err) {
         if (cancelled) return;
-        // ApiError(401) has already cleared storage via
-        // handleUnauthorized(). For any other error we still
-        // want to clear so the user isn't left in a half-valid
-        // state (e.g. backend down → force login).
+        // v6 fix: only clear the session when the server has
+        // explicitly told us the token is invalid (401). For any
+        // other error (network down, 500, timeout, trackrecord
+        // endpoint returning 422, …) we KEEP the stale session so
+        // a refresh doesn't log the user out just because a
+        // single page crashed. The auth:expired event listener
+        // still handles the real "token revoked" case via api.ts.
         if (err instanceof ApiError && err.status === 401) {
           // Storage already cleared by api.ts — just update state.
           setToken(null);
           setUser(null);
         } else {
-          clearSession();
+          // Network / server error — hold on to the stale user so
+          // the UI keeps the user logged in. Nothing to do here:
+          // token + user stay populated from the staleUser hydration
+          // above.
         }
       } finally {
         if (!cancelled) setReady(true);

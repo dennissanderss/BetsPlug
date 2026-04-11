@@ -181,23 +181,24 @@ async def strategy_follower(
 async def quick_pick(
     db: AsyncSession = Depends(get_db),
 ):
-    """Pick the highest-confidence upcoming prediction that also matches
-    at least one validated strategy. If no such pick exists, return an
-    honest empty state with a reason."""
+    """Return a "quick pick" — the highest-confidence upcoming pick,
+    preferring picks that match a validated strategy when possible.
+
+    v6 softened behaviour: even when zero strategies have been
+    promoted to ``is_active=true`` (the v5.3 gate is strict until
+    odds coverage grows), we still show the single
+    highest-confidence upcoming prediction so the UI has something
+    to display. The response ``source`` field tells the frontend
+    whether the pick is backed by a validated strategy or is just
+    the model's top pick.
+    """
     validated_result = await db.execute(
         select(Strategy).where(Strategy.is_active.is_(True))
     )
     validated_strategies = list(validated_result.scalars().all())
 
-    if not validated_strategies:
-        return {
-            "data": None,
-            "reason": "no_validated_strategies",
-            "message": "Geen gevalideerde strategieën om een quick pick op te baseren.",
-        }
-
     now = datetime.now(timezone.utc)
-    cutoff = now + timedelta(hours=48)
+    cutoff = now + timedelta(hours=72)
 
     HomeTeam = aliased(Team)
     AwayTeam = aliased(Team)
@@ -217,7 +218,7 @@ async def quick_pick(
         .where(
             and_(
                 Match.status == MatchStatus.SCHEDULED,
-                Match.scheduled_at >= now,
+                Match.scheduled_at > now,
                 Match.scheduled_at <= cutoff,
             )
         )
@@ -227,18 +228,31 @@ async def quick_pick(
 
     chosen = None
     chosen_matched_strategies: list[Strategy] = []
-    for pred, match, home_name, away_name, league_name in rows:
-        matched_strats = [
-            s for s in validated_strategies if evaluate_strategy(s, pred, odds=None)
-        ]
-        if matched_strats:
+    # Phase 1: look for a pick that matches a validated strategy.
+    if validated_strategies:
+        for pred, match, home_name, away_name, league_name in rows:
+            matched_strats = [
+                s for s in validated_strategies if evaluate_strategy(s, pred, odds=None)
+            ]
+            if matched_strats:
+                chosen = (pred, match, home_name, away_name, league_name)
+                chosen_matched_strategies = matched_strats
+                break
+
+    # Phase 2 (v6): fallback to the model's top-confidence upcoming
+    # pick. The response source field signals that no validated
+    # strategy vouched for this pick.
+    source = "validated_strategy"
+    if chosen is None and rows:
+        pred, match, home_name, away_name, league_name = rows[0]
+        if float(pred.confidence or 0) >= 0.55:
             chosen = (pred, match, home_name, away_name, league_name)
-            chosen_matched_strategies = matched_strats
-            break
+            source = "top_confidence_fallback"
 
     if chosen is None:
         return {
             "data": None,
+            "source": None,
             "reason": "no_qualifying_pick_today",
             "message": (
                 "Geen upcoming wedstrijd voldoet vandaag aan een gevalideerde strategie. "
@@ -259,6 +273,7 @@ async def quick_pick(
                 }
                 for s in chosen_matched_strategies
             ],
+            "source": source,
             "analysis": {
                 "reasoning": (
                     pred.features_snapshot or {}

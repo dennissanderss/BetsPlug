@@ -17,8 +17,10 @@ from sqlalchemy import select, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, noload
 
+from datetime import timedelta
+
 from app.db.session import get_db
-from app.models.match import Match
+from app.models.match import Match, MatchStatus
 from app.models.prediction import Prediction
 
 logger = logging.getLogger(__name__)
@@ -65,15 +67,39 @@ async def get_bet_of_the_day(
     This endpoint surfaces the single top-confidence analytical pick
     of the day for educational and informational purposes.
     """
+    now = datetime.now(timezone.utc)
+
+    # v6 fix: when no target_date is specified we want "the best
+    # pick for the NEXT 72h", not "the best pick from the whole of
+    # today even if it already kicked off". Otherwise the page shows
+    # a match with a final score sitting under a "Pick of the Day"
+    # header, which confuses users. When a target_date IS specified
+    # (e.g. browse history), we keep the day-window behaviour.
     if target_date is None:
-        target_date = datetime.now(timezone.utc).date()
+        window_start = now
+        window_end = now + timedelta(hours=72)
+        status_filter = Match.status == MatchStatus.SCHEDULED
+    else:
+        day_start = datetime.combine(target_date, time.min, tzinfo=timezone.utc)
+        day_end = datetime.combine(target_date, time.max, tzinfo=timezone.utc)
+        # For historical browsing, accept any status (finished included)
+        # so the user can see what the pick WAS that day.
+        if target_date >= now.date():
+            window_start = max(day_start, now)
+            status_filter = Match.status == MatchStatus.SCHEDULED
+        else:
+            window_start = day_start
+            status_filter = None
+        window_end = day_end
 
-    day_start = datetime.combine(target_date, time.min, tzinfo=timezone.utc)
-    day_end = datetime.combine(target_date, time.max, tzinfo=timezone.utc)
+    where_clauses = [
+        Match.scheduled_at >= window_start,
+        Match.scheduled_at <= window_end,
+        Prediction.confidence >= 0.55,
+    ]
+    if status_filter is not None:
+        where_clauses.append(status_filter)
 
-    # Find the highest-confidence prediction for today's matches.
-    # Eager-load match + its teams/league and explanation in one go;
-    # suppress evaluation and model_version (not needed here).
     stmt = (
         select(Prediction)
         .join(Match, Match.id == Prediction.match_id)
@@ -87,13 +113,7 @@ async def get_bet_of_the_day(
             noload(Prediction.evaluation),
             noload(Prediction.model_version),
         )
-        .where(
-            and_(
-                Match.scheduled_at >= day_start,
-                Match.scheduled_at <= day_end,
-                Prediction.confidence >= 0.55,  # Minimum confidence threshold
-            )
-        )
+        .where(and_(*where_clauses))
         .order_by(Prediction.confidence.desc())
         .limit(1)
     )
