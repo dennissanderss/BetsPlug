@@ -81,6 +81,7 @@ export function BetsPlugFooter() {
     { text: t("footer.ourModels"), href: loc("/about") + "#models" },
     { text: t("nav.articles"), href: loc("/articles") },
     { text: t("footer.contact"), href: loc("/contact") },
+    { text: t("b2b.badge"), href: loc("/b2b") },
   ];
   const legalLinksT = [
     { text: t("footer.termsOfService"), href: "/terms" },
