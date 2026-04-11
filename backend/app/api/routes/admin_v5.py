@@ -791,6 +791,63 @@ async def regenerate_predictions(
 
 
 @router.post(
+    "/force-schema-patch",
+    summary="Emergency: ADD COLUMN IF NOT EXISTS on odds_history to unblock backfill",
+)
+async def force_schema_patch(
+    db: AsyncSession = Depends(get_db),
+):
+    """Last-resort schema patch that bypasses alembic entirely.
+
+    Runs raw ``ALTER TABLE ... ADD COLUMN IF NOT EXISTS`` statements
+    against odds_history so the v5 columns exist even if the formal
+    migration didn't run for some reason. Safe — uses IF NOT EXISTS
+    on every statement.
+    """
+    from sqlalchemy import text
+
+    stmts = [
+        "ALTER TABLE odds_history ADD COLUMN IF NOT EXISTS over_odds DOUBLE PRECISION",
+        "ALTER TABLE odds_history ADD COLUMN IF NOT EXISTS under_odds DOUBLE PRECISION",
+        "ALTER TABLE odds_history ADD COLUMN IF NOT EXISTS total_line DOUBLE PRECISION",
+        "ALTER TABLE odds_history ADD COLUMN IF NOT EXISTS btts_yes_odds DOUBLE PRECISION",
+        "ALTER TABLE odds_history ADD COLUMN IF NOT EXISTS btts_no_odds DOUBLE PRECISION",
+        "ALTER TABLE odds_history ALTER COLUMN home_odds DROP NOT NULL",
+        "ALTER TABLE odds_history ALTER COLUMN away_odds DROP NOT NULL",
+        "CREATE INDEX IF NOT EXISTS ix_odds_match_market ON odds_history (match_id, market)",
+    ]
+
+    executed: list[str] = []
+    errors: list[dict] = []
+    for sql in stmts:
+        try:
+            await db.execute(text(sql))
+            executed.append(sql)
+        except Exception as exc:
+            errors.append({"sql": sql, "err": str(exc)})
+
+    await db.commit()
+
+    # Verify the new columns are present.
+    verify = await db.execute(
+        text(
+            """
+            SELECT column_name, is_nullable FROM information_schema.columns
+            WHERE table_name='odds_history'
+            ORDER BY ordinal_position
+            """
+        )
+    )
+    columns = [{"name": r[0], "nullable": r[1]} for r in verify.all()]
+
+    return {
+        "executed": executed,
+        "errors": errors,
+        "odds_history_columns": columns,
+    }
+
+
+@router.post(
     "/seed-ou-strategies",
     summary="Insert the two v5 Over/Under seed strategies",
 )
