@@ -735,7 +735,7 @@ async def _walk_forward_for_strategy(
 
 
 @router.get(
-    "/walk-forward-all",
+    "/all/walk-forward",
     summary="Walk-forward validation for every strategy, ranked by Sharpe",
 )
 async def walk_forward_all(
