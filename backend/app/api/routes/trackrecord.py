@@ -126,21 +126,61 @@ async def get_trackrecord_segments(
             .order_by(Sport.name)
         )
     elif segment_type == "month":
-        q = (
+        # v6 fix: Python-side aggregation. The previous SQL version
+        # used func.to_char(..., 'YYYY-MM') for both SELECT and
+        # GROUP BY which triggered a 500 on asyncpg. Running the
+        # aggregation in Python is trivial for ~5 000 rows and
+        # avoids the SQL quirk entirely.
+        rows = (await db.execute(
             select(
-                func.to_char(Prediction.predicted_at, "YYYY-MM").label("segment_value"),
-                func.count(PredictionEvaluation.id).label("total"),
-                func.avg(
-                    func.cast(PredictionEvaluation.is_correct, Integer)
-                ).label("accuracy"),
-                func.avg(PredictionEvaluation.brier_score).label("avg_brier"),
-                func.avg(PredictionEvaluation.log_loss).label("avg_log_loss"),
-                func.avg(Prediction.confidence).label("avg_confidence"),
+                Prediction.predicted_at,
+                PredictionEvaluation.is_correct,
+                PredictionEvaluation.brier_score,
+                PredictionEvaluation.log_loss,
+                Prediction.confidence,
             )
-            .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
-            .group_by(func.to_char(Prediction.predicted_at, "YYYY-MM"))
-            .order_by(func.to_char(Prediction.predicted_at, "YYYY-MM"))
-        )
+            .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        )).all()
+
+        buckets: dict[str, dict] = {}
+        for pred_at, is_correct, brier, log_loss, conf in rows:
+            if pred_at is None:
+                continue
+            key = pred_at.strftime("%Y-%m")
+            b = buckets.setdefault(key, {
+                "total": 0,
+                "correct": 0,
+                "brier_sum": 0.0,
+                "log_loss_sum": 0.0,
+                "log_loss_n": 0,
+                "conf_sum": 0.0,
+            })
+            b["total"] += 1
+            b["correct"] += 1 if is_correct else 0
+            if brier is not None:
+                b["brier_sum"] += float(brier)
+            if log_loss is not None:
+                b["log_loss_sum"] += float(log_loss)
+                b["log_loss_n"] += 1
+            if conf is not None:
+                b["conf_sum"] += float(conf)
+
+        return [
+            SegmentPerformance(
+                segment_type="month",
+                segment_value=key,
+                total_predictions=b["total"],
+                accuracy=b["correct"] / b["total"] if b["total"] else 0.0,
+                brier_score=b["brier_sum"] / b["total"] if b["total"] else 0.0,
+                log_loss=(
+                    b["log_loss_sum"] / b["log_loss_n"]
+                    if b["log_loss_n"]
+                    else None
+                ),
+                avg_confidence=b["conf_sum"] / b["total"] if b["total"] else 0.0,
+            )
+            for key, b in sorted(buckets.items())
+        ]
     else:
         # Default: league
         q = (
