@@ -429,7 +429,7 @@ const en = {
 
   /* About Us page */
   "about.metaTitle":
-    "About BetsPlug - The team behind the AI football analytics platform",
+    "About Us · BetsPlug AI Football Analytics Team",
   "about.metaDesc":
     "Meet the two engineers building BetsPlug. Football fanatics with an ICT background, turning raw match data into transparent, probability-driven predictions for all major football leagues.",
   "about.breadcrumbHome": "Home",
@@ -499,7 +499,7 @@ const en = {
 
   /* Track Record page */
   "tr.metaTitle":
-    "Track Record - Verified BetsPlug prediction performance",
+    "Track Record · Verified AI Prediction Results · BetsPlug",
   "tr.metaDesc":
     "Transparent, auditable results for every BetsPlug pick. See how our AI models turn raw match data into a measurable edge - documented weekly, never cherry-picked.",
   "tr.breadcrumbHome": "Home",
@@ -628,7 +628,7 @@ const en = {
 
   /* How It Works page - dedicated deep-dive */
   "hiw.metaTitle":
-    "How BetsPlug Works - From raw match data to AI-driven predictions",
+    "How It Works · BetsPlug AI Prediction Engine",
   "hiw.metaDesc":
     "A full, step-by-step walkthrough of the BetsPlug prediction engine: how we collect data, engineer features, train models, detect value and publish picks you can verify.",
   "hiw.breadcrumbHome": "Home",
@@ -1106,7 +1106,7 @@ const en = {
     "Press ⌘K (or Ctrl+K on Windows) anywhere in the dashboard to jump straight to any section in two keystrokes.",
 
   /* ─── Login page ──────────────────────────────────────── */
-  "login.meta.title": "Log in - BetsPlug",
+  "login.meta.title": "Log In · BetsPlug",
   "login.meta.description":
     "Log in to your BetsPlug account to see today's picks, track your ROI and manage your subscription.",
 
@@ -1191,7 +1191,7 @@ const en = {
   "dashPrev.mockAccuracySub": "Prediction accuracy segmented by league",
 
   /* ── Match Predictions (public teaser) ─────────────────── */
-  "matchPred.metaTitle": "Free AI Match Predictions - Upcoming Games | BetsPlug",
+  "matchPred.metaTitle": "AI Match Predictions · Free Football Picks · BetsPlug",
   "matchPred.metaDesc":
     "Preview 3 free AI-powered match predictions with win probabilities and confidence scores. Unlock the full slate of upcoming games with a BetsPlug subscription.",
   "matchPred.eyebrow": "Free preview",
@@ -1686,7 +1686,7 @@ const nl: Dictionary = {
 
   /* About Us page */
   "about.metaTitle":
-    "Over BetsPlug - Het team achter het AI-voetbalanalyseplatform",
+    "Over Ons · BetsPlug AI Voetbalanalyse Team",
   "about.metaDesc":
     "Maak kennis met de twee engineers die BetsPlug bouwen. Voetbalfanaten met een ICT-achtergrond die ruwe wedstrijddata omzetten in transparante, datagedreven voorspellingen voor alle grote voetbalcompetities.",
   "about.breadcrumbHome": "Home",
@@ -1756,7 +1756,7 @@ const nl: Dictionary = {
 
   /* Track Record page */
   "tr.metaTitle":
-    "Track Record - Geverifieerde prestaties van BetsPlug",
+    "Trackrecord · Geverifieerde AI-Voorspellingsresultaten · BetsPlug",
   "tr.metaDesc":
     "Transparante, controleerbare resultaten voor elke BetsPlug-pick. Zie hoe onze AI-modellen ruwe wedstrijddata omzetten in een meetbare voorsprong - wekelijks gedocumenteerd, nooit cherry-picked.",
   "tr.breadcrumbHome": "Home",
@@ -1880,7 +1880,7 @@ const nl: Dictionary = {
 
   /* How It Works page - dedicated deep-dive */
   "hiw.metaTitle":
-    "Hoe BetsPlug werkt - Van ruwe wedstrijddata tot AI-voorspellingen",
+    "Hoe Het Werkt · BetsPlug AI-Voorspellingsmotor",
   "hiw.metaDesc":
     "Een volledige, stapsgewijze uitleg van de BetsPlug-voorspelengine: hoe we data verzamelen, features bouwen, modellen trainen, value detecteren en picks publiceren die je zelf kunt verifiëren.",
   "hiw.breadcrumbHome": "Home",
@@ -2221,7 +2221,7 @@ const nl: Dictionary = {
   "checkout.successCta": "Naar dashboard",
 
   /* Welcome / thank-you */
-  "welcome.meta.title": "Welkom aan boord - Je bent nu officieel BetsPlug-lid",
+  "welcome.meta.title": "Welkom aan Boord · BetsPlug",
   "welcome.meta.description":
     "Je BetsPlug-lidmaatschap staat klaar. Log in om de picks van vandaag te zien, je ROI bij te houden en slimmer te beginnen winnen.",
 
@@ -2338,7 +2338,7 @@ const nl: Dictionary = {
     "Druk overal in het dashboard op ⌘K (of Ctrl+K op Windows) om in twee toetsaanslagen naar elke sectie te springen.",
 
   /* Login */
-  "login.meta.title": "Inloggen - BetsPlug",
+  "login.meta.title": "Inloggen · BetsPlug",
   "login.meta.description":
     "Log in op je BetsPlug-account om de picks van vandaag te bekijken, je ROI te volgen en je abonnement te beheren.",
 
@@ -2423,7 +2423,7 @@ const nl: Dictionary = {
   "dashPrev.mockAccuracySub": "Voorspelnauwkeurigheid gesegmenteerd per competitie",
 
   /* ── Match Predictions (publieke teaser) ─────────────────── */
-  "matchPred.metaTitle": "Gratis AI-wedstrijdvoorspellingen - Aankomende wedstrijden | BetsPlug",
+  "matchPred.metaTitle": "AI Wedstrijdvoorspellingen · Gratis Picks · BetsPlug",
   "matchPred.metaDesc":
     "Bekijk 3 gratis AI-wedstrijdvoorspellingen met winkansen en betrouwbaarheidsscores. Ontgrendel alle aankomende wedstrijden met een BetsPlug-abonnement.",
   "matchPred.eyebrow": "Gratis preview",
@@ -2510,42 +2510,30 @@ const nl: Dictionary = {
 };
 
 
-/* ── Lazy-loaded locale dictionaries ──────────────────────────
- * de, fr, es, it, sw, id are loaded on-demand to keep the
- * main JS bundle small. Only en + nl are bundled inline.
+/* ── Locale dictionaries ──────────────────────────────────────
+ * All locales are statically imported so translations are
+ * available immediately on first render — no async loading,
+ * no flash of English content. The total bundle overhead is
+ * ~200 KB of strings which gzips to ~25 KB.
  */
 
-const lazyLocales: Record<string, () => Promise<{ default: Dictionary }>> = {
-  de: () => import("./locales/de"),
-  fr: () => import("./locales/fr"),
-  es: () => import("./locales/es"),
-  it: () => import("./locales/it"),
-  sw: () => import("./locales/sw"),
-  id: () => import("./locales/id"),
-};
-
-const loadedLocales: Record<string, Dictionary> = {};
+import deDict from "./locales/de";
+import frDict from "./locales/fr";
+import esDict from "./locales/es";
+import itDict from "./locales/it";
+import swDict from "./locales/sw";
+import idDict from "./locales/id";
 
 export const messages: Record<string, Dictionary> = {
   en,
   nl,
-  get de() { return loadedLocales["de"] ?? en; },
-  get fr() { return loadedLocales["fr"] ?? en; },
-  get es() { return loadedLocales["es"] ?? en; },
-  get it() { return loadedLocales["it"] ?? en; },
-  get sw() { return loadedLocales["sw"] ?? en; },
-  get id() { return loadedLocales["id"] ?? en; },
+  de: deDict,
+  fr: frDict,
+  es: esDict,
+  it: itDict,
+  sw: swDict,
+  id: idDict,
 };
-
-export async function preloadLocale(locale: string): Promise<void> {
-  if (locale === "en" || locale === "nl" || loadedLocales[locale]) return;
-  const loader = lazyLocales[locale];
-  if (loader) {
-    const mod = await loader();
-    loadedLocales[locale] = mod.default;
-    (messages as any)[locale] = mod.default;
-  }
-}
 
 export function translate(locale: string, key: TranslationKey): string {
   const dict = messages[locale];

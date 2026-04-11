@@ -8,6 +8,7 @@
  * Guidelines followed:
  *   - Titles: under 60 characters, brand name at the end
  *   - Descriptions: 120-160 characters, compelling + keyword-rich
+ *   - Separator: middle dot (·) everywhere
  *   - OG title / description optional overrides (shorter, punchier)
  */
 
@@ -24,202 +25,202 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
   /* ─────────────────────────── HOME ─────────────────────────── */
   "/": {
     en: {
-      title: "BetsPlug - AI-Powered Football Analytics",
+      title: "AI-Powered Football Predictions · BetsPlug",
       description:
-        "Premium AI-powered football analytics. Data-driven predictions, live match tracking, and deep performance insights for smarter betting decisions.",
-      ogTitle: "BetsPlug - AI Football Analytics & Predictions",
+        "AI-powered football predictions with 4 models. Live probabilities, Elo ratings, and a verified track record across 15+ leagues. Start your free trial today.",
+      ogTitle: "AI-Powered Football Predictions · BetsPlug",
       ogDescription:
-        "Data-driven football predictions powered by AI. Live tracking, performance insights and a verified track record.",
+        "AI-powered football predictions with live probabilities, Elo ratings, and a verified track record across 15+ leagues.",
     },
     nl: {
-      title: "BetsPlug - AI-gestuurde Voetbalanalyse",
+      title: "AI-gedreven Voetbalvoorspellingen · BetsPlug",
       description:
-        "Premium AI-gestuurde voetbalanalyse. Datagedreven voorspellingen, live wedstrijdtracking en diepgaande prestatie-inzichten voor slimmere weddenschappen.",
-      ogTitle: "BetsPlug - AI Voetbalanalyse & Voorspellingen",
+        "AI-gedreven voetbalvoorspellingen met 4 modellen. Live kansen, Elo-ratings en een geverifieerd track record voor 15+ competities. Start vandaag je gratis proefperiode.",
+      ogTitle: "AI-gedreven Voetbalvoorspellingen · BetsPlug",
       ogDescription:
-        "Datagedreven voetbalvoorspellingen aangedreven door AI. Live tracking, prestatie-inzichten en een geverifieerd trackrecord.",
+        "AI-gedreven voetbalvoorspellingen met live kansen, Elo-ratings en een geverifieerd track record voor 15+ competities.",
     },
     de: {
-      title: "BetsPlug - KI-gestuetzte Fussballanalyse",
+      title: "KI-gestützte Fußballvorhersagen · BetsPlug",
       description:
-        "Premium KI-gestuetzte Fussballanalysen. Datenbasierte Vorhersagen, Live-Tracking und tiefgehende Leistungseinblicke fuer kluge Wettentscheidungen.",
-      ogTitle: "BetsPlug - KI Fussballanalyse & Prognosen",
+        "KI-gestützte Fußballvorhersagen mit 4 Modellen. Live-Wahrscheinlichkeiten, Elo-Ratings und verifizierte Bilanz für 15+ Ligen. Jetzt kostenlos testen.",
+      ogTitle: "KI-gestützte Fußballvorhersagen · BetsPlug",
       ogDescription:
-        "Datenbasierte Fussballprognosen mit kuenstlicher Intelligenz. Live-Tracking, Leistungsanalysen und verifizierte Ergebnisse.",
+        "KI-gestützte Fußballvorhersagen mit Live-Wahrscheinlichkeiten, Elo-Ratings und verifizierter Bilanz für 15+ Ligen.",
     },
     fr: {
-      title: "BetsPlug - Analyse Football par IA",
+      title: "Prédictions Football par IA · BetsPlug",
       description:
-        "Analyse football premium par IA. Predictions basees sur les donnees, suivi en direct et analyses de performances approfondies pour des paris plus intelligents.",
-      ogTitle: "BetsPlug - Analyse & Predictions Football IA",
+        "Prédictions football par IA avec 4 modèles. Probabilités en direct, classements Elo et historique vérifié pour 15+ ligues. Commencez votre essai gratuit.",
+      ogTitle: "Prédictions Football par IA · BetsPlug",
       ogDescription:
-        "Predictions football basees sur l'IA. Suivi en direct, analyses de performance et resultats verifies.",
+        "Prédictions football par IA avec probabilités en direct, classements Elo et historique vérifié pour 15+ ligues.",
     },
     es: {
-      title: "BetsPlug - Analisis de Futbol con IA",
+      title: "Predicciones de Fútbol con IA · BetsPlug",
       description:
-        "Analisis de futbol premium con IA. Predicciones basadas en datos, seguimiento en vivo e insights de rendimiento para apuestas mas inteligentes.",
-      ogTitle: "BetsPlug - Analisis y Predicciones de Futbol con IA",
+        "Predicciones de fútbol con IA y 4 modelos. Probabilidades en vivo, ratings Elo e historial verificado en 15+ ligas. Comienza tu prueba gratis hoy.",
+      ogTitle: "Predicciones de Fútbol con IA · BetsPlug",
       ogDescription:
-        "Predicciones de futbol impulsadas por IA. Seguimiento en vivo, analisis de rendimiento y resultados verificados.",
+        "Predicciones de fútbol con IA, probabilidades en vivo, ratings Elo e historial verificado en 15+ ligas.",
     },
     it: {
-      title: "BetsPlug - Analisi Calcio con IA",
+      title: "Pronostici Calcio con IA · BetsPlug",
       description:
-        "Analisi calcistica premium con IA. Previsioni basate sui dati, monitoraggio live e approfondimenti sulle prestazioni per scommesse piu intelligenti.",
-      ogTitle: "BetsPlug - Analisi & Pronostici Calcio con IA",
+        "Pronostici calcio con IA e 4 modelli. Probabilità in tempo reale, rating Elo e storico verificato per 15+ campionati. Inizia la prova gratuita oggi.",
+      ogTitle: "Pronostici Calcio con IA · BetsPlug",
       ogDescription:
-        "Pronostici calcistici basati sull'IA. Monitoraggio live, analisi delle prestazioni e risultati verificati.",
+        "Pronostici calcio con IA, probabilità in tempo reale, rating Elo e storico verificato per 15+ campionati.",
     },
     sw: {
-      title: "BetsPlug - Uchambuzi wa Mpira kwa AI",
+      title: "Utabiri wa Soka kwa AI · BetsPlug",
       description:
-        "Uchambuzi wa mpira wa miguu wa hali ya juu kwa AI. Utabiri unaotegemea data, ufuatiliaji wa mechi za moja kwa moja na maarifa ya kina ya utendaji.",
-      ogTitle: "BetsPlug - Uchambuzi & Utabiri wa Mpira kwa AI",
+        "Utabiri wa soka kwa AI na mifano 4. Uwezekano wa moja kwa moja, ukadiriaji wa Elo na rekodi iliyothibitishwa kwa ligi 15+. Anza majaribio yako ya bure.",
+      ogTitle: "Utabiri wa Soka kwa AI · BetsPlug",
       ogDescription:
-        "Utabiri wa mpira wa miguu unaotegemea AI. Ufuatiliaji wa moja kwa moja na matokeo yaliyothibitishwa.",
+        "Utabiri wa soka kwa AI na uwezekano wa moja kwa moja, ukadiriaji wa Elo na rekodi iliyothibitishwa kwa ligi 15+.",
     },
     id: {
-      title: "BetsPlug - Analisis Sepak Bola Bertenaga AI",
+      title: "Prediksi Sepak Bola Bertenaga AI · BetsPlug",
       description:
-        "Analisis sepak bola premium bertenaga AI. Prediksi berbasis data, pelacakan pertandingan langsung, dan wawasan performa mendalam untuk taruhan lebih cerdas.",
-      ogTitle: "BetsPlug - Analisis & Prediksi Sepak Bola AI",
+        "Prediksi sepak bola bertenaga AI dengan 4 model. Probabilitas langsung, peringkat Elo, dan rekam jejak terverifikasi untuk 15+ liga. Mulai uji coba gratis.",
+      ogTitle: "Prediksi Sepak Bola Bertenaga AI · BetsPlug",
       ogDescription:
-        "Prediksi sepak bola berbasis AI. Pelacakan langsung, analisis performa, dan rekam jejak terverifikasi.",
+        "Prediksi sepak bola bertenaga AI dengan probabilitas langsung, peringkat Elo, dan rekam jejak terverifikasi untuk 15+ liga.",
     },
   },
 
   /* ─────────────────────────── ARTICLES ─────────────────────── */
   "/articles": {
     en: {
-      title: "Football Analysis & AI Betting Articles | BetsPlug",
+      title: "AI Football Predictions & Betting Tips · BetsPlug",
       description:
-        "Football news, AI match breakdowns and data-driven betting insights across the Premier League, La Liga, Bundesliga, Serie A and more from the BetsPlug research team.",
-      ogTitle: "Latest Football Analysis - BetsPlug",
+        "Football news, AI match predictions and data-driven betting tips across the Premier League, La Liga, Bundesliga, Serie A and more from the BetsPlug research team.",
+      ogTitle: "AI Football Analysis & Betting Tips · BetsPlug",
       ogDescription:
-        "AI football match breakdowns and data-driven betting insights from the BetsPlug research team.",
+        "AI football match breakdowns and data-driven betting tips from the BetsPlug research team.",
     },
     nl: {
-      title: "Voetbalanalyse & AI Wedartikelen | BetsPlug",
+      title: "AI Voetbalvoorspellingen & Wedtips · BetsPlug",
       description:
-        "Voetbalnieuws, AI-wedstrijdanalyses en datagedreven wedinzichten voor de Premier League, La Liga, Bundesliga, Serie A en meer van het BetsPlug-team.",
-      ogTitle: "Laatste Voetbalanalyse - BetsPlug",
+        "Voetbalnieuws, AI wedstrijdvoorspellingen en datagedreven wedtips voor de Premier League, La Liga, Bundesliga, Serie A en meer van het BetsPlug-team.",
+      ogTitle: "AI Voetbalanalyse & Wedtips · BetsPlug",
       ogDescription:
-        "AI-voetbalanalyses en datagedreven wedinzichten van het BetsPlug-onderzoeksteam.",
+        "AI voetbalvoorspellingen en datagedreven wedinzichten van het BetsPlug-onderzoeksteam.",
     },
     de: {
-      title: "Fussballanalyse & KI-Wettartikel | BetsPlug",
+      title: "KI Fußballprognosen & Wett-Tipps · BetsPlug",
       description:
-        "Fussballnews, KI-Spielanalysen und datenbasierte Wett-Einblicke fuer Premier League, La Liga, Bundesliga, Serie A und mehr vom BetsPlug-Team.",
-      ogTitle: "Aktuelle Fussballanalyse - BetsPlug",
+        "Fußballnews, KI Fußballprognosen und datenbasierte Wett-Tipps für Premier League, La Liga, Bundesliga, Serie A und mehr vom BetsPlug-Team.",
+      ogTitle: "KI Fußballanalyse & Wett-Tipps · BetsPlug",
       ogDescription:
-        "KI-Fussballanalysen und datenbasierte Wett-Einblicke vom BetsPlug-Forschungsteam.",
+        "KI Fußballprognosen und datenbasierte Wett-Tipps vom BetsPlug-Forschungsteam.",
     },
     fr: {
-      title: "Analyse Football & Articles Paris IA | BetsPlug",
+      title: "Prédictions Football IA & Pronostics · BetsPlug",
       description:
-        "Actualites football, analyses de matchs par IA et conseils de paris bases sur les donnees pour la Premier League, la Liga, la Bundesliga et la Serie A.",
-      ogTitle: "Derniere Analyse Football - BetsPlug",
+        "Actualités football, prédictions football IA et pronostics basés sur les données pour la Premier League, la Liga, la Bundesliga et la Serie A par BetsPlug.",
+      ogTitle: "Analyse Football IA & Pronostics · BetsPlug",
       ogDescription:
-        "Analyses de matchs football par IA et conseils de paris bases sur les donnees par BetsPlug.",
+        "Prédictions football IA et pronostics basés sur les données par l'équipe de recherche BetsPlug.",
     },
     es: {
-      title: "Analisis de Futbol & Articulos IA | BetsPlug",
+      title: "Predicciones Fútbol IA & Apuestas · BetsPlug",
       description:
-        "Noticias de futbol, analisis de partidos con IA e insights de apuestas basados en datos para la Premier League, La Liga, Bundesliga y Serie A.",
-      ogTitle: "Ultimo Analisis de Futbol - BetsPlug",
+        "Noticias de fútbol, predicciones fútbol IA e insights de apuestas basados en datos para la Premier League, La Liga, Bundesliga y Serie A por BetsPlug.",
+      ogTitle: "Análisis de Fútbol IA & Apuestas · BetsPlug",
       ogDescription:
-        "Analisis de partidos de futbol con IA e insights de apuestas basados en datos del equipo BetsPlug.",
+        "Predicciones fútbol IA e insights de apuestas basados en datos del equipo BetsPlug.",
     },
     it: {
-      title: "Analisi Calcio & Articoli Scommesse IA | BetsPlug",
+      title: "Pronostici Calcio IA & Scommesse · BetsPlug",
       description:
-        "News calcistiche, analisi delle partite con IA e approfondimenti sulle scommesse basati sui dati per Premier League, Liga, Bundesliga e Serie A.",
-      ogTitle: "Ultime Analisi Calcio - BetsPlug",
+        "News calcistiche, pronostici calcio IA e approfondimenti sulle scommesse basati sui dati per Premier League, Liga, Bundesliga e Serie A da BetsPlug.",
+      ogTitle: "Analisi Calcistica IA & Scommesse · BetsPlug",
       ogDescription:
-        "Analisi delle partite di calcio con IA e approfondimenti sulle scommesse dal team di ricerca BetsPlug.",
+        "Pronostici calcio IA e approfondimenti sulle scommesse dal team di ricerca BetsPlug.",
     },
     sw: {
-      title: "Uchambuzi wa Mpira & Makala za AI | BetsPlug",
+      title: "Utabiri wa Soka kwa AI & Makala · BetsPlug",
       description:
-        "Habari za mpira, uchambuzi wa mechi kwa AI na maarifa ya kamari yanayotegemea data kwa Premier League, La Liga, Bundesliga na Serie A.",
-      ogTitle: "Uchambuzi Mpya wa Mpira - BetsPlug",
+        "Habari za soka, utabiri wa soka kwa AI na uchambuzi wa soka unaotegemea data kwa Premier League, La Liga, Bundesliga na Serie A kutoka BetsPlug.",
+      ogTitle: "Uchambuzi wa Soka kwa AI · BetsPlug",
       ogDescription:
-        "Uchambuzi wa mechi za mpira kwa AI na maarifa ya kamari kutoka timu ya utafiti ya BetsPlug.",
+        "Utabiri wa soka kwa AI na maarifa ya kamari kutoka timu ya utafiti ya BetsPlug.",
     },
     id: {
-      title: "Analisis Sepak Bola & Artikel AI | BetsPlug",
+      title: "Prediksi Sepak Bola AI & Artikel · BetsPlug",
       description:
-        "Berita sepak bola, analisis pertandingan AI dan wawasan taruhan berbasis data untuk Premier League, La Liga, Bundesliga, dan Serie A dari tim BetsPlug.",
-      ogTitle: "Analisis Sepak Bola Terbaru - BetsPlug",
+        "Berita sepak bola, prediksi sepak bola AI dan analisis sepak bola berbasis data untuk Premier League, La Liga, Bundesliga, dan Serie A dari tim BetsPlug.",
+      ogTitle: "Analisis Sepak Bola AI · BetsPlug",
       ogDescription:
-        "Analisis pertandingan sepak bola AI dan wawasan taruhan berbasis data dari tim riset BetsPlug.",
+        "Prediksi sepak bola AI dan wawasan taruhan berbasis data dari tim riset BetsPlug.",
     },
   },
 
   /* ─────────────────────────── ABOUT US ─────────────────────── */
   "/about-us": {
     en: {
-      title: "About BetsPlug - AI Football Analytics Team",
+      title: "About Us · BetsPlug AI Football Analytics Team",
       description:
         "Meet the two engineers building BetsPlug. Football fanatics with an ICT background, turning raw match data into transparent, probability-driven football predictions.",
-      ogTitle: "About BetsPlug - The team behind the edge",
+      ogTitle: "About BetsPlug · The Team Behind the Edge",
       ogDescription:
         "Two engineers. 20+ years of combined ICT experience. One obsession: turning football data into a measurable edge.",
     },
     nl: {
-      title: "Over BetsPlug - Het AI-voetbalanalyse Team",
+      title: "Over Ons · BetsPlug AI Voetbalanalyse Team",
       description:
-        "Maak kennis met de twee engineers achter BetsPlug. Voetbalfanaten met een ICT-achtergrond die ruwe wedstrijddata omzetten in transparante, kansgedreven voorspellingen.",
-      ogTitle: "Over BetsPlug - Het team achter de voorsprong",
+        "Maak kennis met de twee engineers achter BetsPlug. Voetbalfanaten met een ICT-achtergrond die ruwe data omzetten in transparante AI voetbalvoorspellingen.",
+      ogTitle: "Over BetsPlug · Het Team Achter de Voorsprong",
       ogDescription:
-        "Twee engineers. 20+ jaar gecombineerde ICT-ervaring. Een obsessie: voetbaldata omzetten in meetbaar voordeel.",
+        "Twee engineers. 20+ jaar gecombineerde ICT-ervaring. Eén obsessie: voetbaldata omzetten in meetbaar voordeel.",
     },
     de: {
-      title: "Ueber BetsPlug - Das KI-Fussballanalyse-Team",
+      title: "Über Uns · BetsPlug KI Fußballanalyse-Team",
       description:
-        "Lernen Sie die zwei Ingenieure hinter BetsPlug kennen. Fussballfans mit IT-Hintergrund, die Rohdaten in transparente, wahrscheinlichkeitsbasierte Prognosen verwandeln.",
-      ogTitle: "Ueber BetsPlug - Das Team hinter dem Vorsprung",
+        "Lernen Sie die zwei Ingenieure hinter BetsPlug kennen. Fußballfans mit IT-Hintergrund, die Rohdaten in transparente KI Fußballprognosen verwandeln.",
+      ogTitle: "Über BetsPlug · Das Team Hinter dem Vorsprung",
       ogDescription:
-        "Zwei Ingenieure. Ueber 20 Jahre IT-Erfahrung. Eine Leidenschaft: Fussballdaten in messbaren Vorsprung verwandeln.",
+        "Zwei Ingenieure. Über 20 Jahre IT-Erfahrung. Eine Leidenschaft: Fußballdaten in messbaren Vorsprung verwandeln.",
     },
     fr: {
-      title: "A propos de BetsPlug - Equipe Analyse Football IA",
+      title: "À Propos · Équipe BetsPlug Analyse Football IA",
       description:
-        "Decouvrez les deux ingenieurs derriere BetsPlug. Des passionnes de football avec une expertise en IT, transformant les donnees brutes en predictions transparentes.",
-      ogTitle: "A propos de BetsPlug - L'equipe derriere l'avantage",
+        "Découvrez les deux ingénieurs derrière BetsPlug. Des passionnés de football avec une expertise en IT, créant des prédictions football IA transparentes et fiables.",
+      ogTitle: "À Propos de BetsPlug · L'Équipe Derrière l'Avantage",
       ogDescription:
-        "Deux ingenieurs. Plus de 20 ans d'experience IT combinee. Une obsession : transformer les donnees en avantage mesurable.",
+        "Deux ingénieurs. Plus de 20 ans d'expérience IT combinée. Une obsession : transformer les données en avantage mesurable.",
     },
     es: {
-      title: "Sobre BetsPlug - Equipo de Analisis Futbol IA",
+      title: "Sobre Nosotros · Equipo BetsPlug Análisis Fútbol",
       description:
-        "Conoce a los dos ingenieros que construyen BetsPlug. Fanaticos del futbol con formacion en TI, convirtiendo datos en predicciones transparentes basadas en probabilidades.",
-      ogTitle: "Sobre BetsPlug - El equipo detras de la ventaja",
+        "Conoce a los dos ingenieros que construyen BetsPlug. Fanáticos del fútbol con formación en TI, convirtiendo datos en predicciones fútbol IA transparentes.",
+      ogTitle: "Sobre BetsPlug · El Equipo Detrás de la Ventaja",
       ogDescription:
-        "Dos ingenieros. Mas de 20 anos de experiencia combinada en TI. Una obsesion: convertir datos de futbol en ventaja medible.",
+        "Dos ingenieros. Más de 20 años de experiencia combinada en TI. Una obsesión: convertir datos de fútbol en ventaja medible.",
     },
     it: {
-      title: "Chi Siamo - Il Team BetsPlug di Analisi Calcio IA",
+      title: "Chi Siamo · Team BetsPlug Analisi Calcistica IA",
       description:
-        "Scopri i due ingegneri dietro BetsPlug. Appassionati di calcio con background IT, che trasformano dati grezzi in pronostici trasparenti basati sulle probabilita.",
-      ogTitle: "Chi Siamo - Il team dietro il vantaggio",
+        "Scopri i due ingegneri dietro BetsPlug. Appassionati di calcio con background IT, che trasformano dati grezzi in pronostici calcio IA trasparenti e verificabili.",
+      ogTitle: "Chi Siamo · Il Team Dietro il Vantaggio",
       ogDescription:
         "Due ingegneri. Oltre 20 anni di esperienza IT combinata. Un'ossessione: trasformare i dati calcistici in vantaggio misurabile.",
     },
     sw: {
-      title: "Kuhusu BetsPlug - Timu ya Uchambuzi wa Mpira kwa AI",
+      title: "Kuhusu Sisi · Timu ya BetsPlug Uchambuzi wa Soka",
       description:
-        "Fahamu wahandisi wawili wanaojenga BetsPlug. Wapenda mpira wenye ujuzi wa ICT, wanaobadilisha data mbichi kuwa utabiri unaotegemea uwezekano.",
-      ogTitle: "Kuhusu BetsPlug - Timu nyuma ya ubora",
+        "Fahamu wahandisi wawili wanaojenga BetsPlug. Wapenda soka wenye ujuzi wa ICT, wanaobadilisha data mbichi kuwa utabiri wa soka unaotegemea uwezekano.",
+      ogTitle: "Kuhusu BetsPlug · Timu Nyuma ya Ubora",
       ogDescription:
-        "Wahandisi wawili. Zaidi ya miaka 20 ya uzoefu wa ICT. Shauku moja: kubadilisha data ya mpira kuwa faida inayopimika.",
+        "Wahandisi wawili. Zaidi ya miaka 20 ya uzoefu wa ICT. Shauku moja: kubadilisha data ya soka kuwa faida inayopimika.",
     },
     id: {
-      title: "Tentang BetsPlug - Tim Analisis Sepak Bola AI",
+      title: "Tentang Kami · Tim BetsPlug Analisis Sepak Bola AI",
       description:
-        "Kenali dua engineer di balik BetsPlug. Penggemar sepak bola dengan latar belakang TI, mengubah data mentah menjadi prediksi transparan berbasis probabilitas.",
-      ogTitle: "Tentang BetsPlug - Tim di balik keunggulan",
+        "Kenali dua engineer di balik BetsPlug. Penggemar sepak bola dengan latar belakang TI, mengubah data mentah menjadi prediksi sepak bola AI yang transparan.",
+      ogTitle: "Tentang BetsPlug · Tim di Balik Keunggulan",
       ogDescription:
         "Dua engineer. Lebih dari 20 tahun pengalaman TI gabungan. Satu obsesi: mengubah data sepak bola menjadi keunggulan terukur.",
     },
@@ -228,202 +229,202 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
   /* ─────────────────────────── PRIVACY ──────────────────────── */
   "/privacy": {
     en: {
-      title: "Privacy Policy - BetsPlug",
+      title: "Privacy Policy · BetsPlug",
       description:
-        "How BetsPlug collects, uses and protects your personal data. GDPR-compliant privacy policy for our AI football analytics platform.",
-      ogTitle: "Privacy Policy - BetsPlug",
+        "How BetsPlug collects, uses and protects your personal data. GDPR-compliant privacy policy for our AI football predictions and analytics platform.",
+      ogTitle: "Privacy Policy · BetsPlug",
       ogDescription:
-        "How BetsPlug collects, uses and protects your personal data.",
+        "How BetsPlug collects, uses and protects your personal data. Fully GDPR-compliant.",
     },
     nl: {
-      title: "Privacybeleid - BetsPlug",
+      title: "Privacybeleid · BetsPlug",
       description:
-        "Hoe BetsPlug uw persoonsgegevens verzamelt, gebruikt en beschermt. AVG-conform privacybeleid voor ons AI-voetbalanalyseplatform.",
-      ogTitle: "Privacybeleid - BetsPlug",
+        "Hoe BetsPlug uw persoonsgegevens verzamelt, gebruikt en beschermt. AVG-conform privacybeleid voor ons AI voetbalvoorspellingen en analyseplatform.",
+      ogTitle: "Privacybeleid · BetsPlug",
       ogDescription:
-        "Hoe BetsPlug uw persoonsgegevens verzamelt, gebruikt en beschermt.",
+        "Hoe BetsPlug uw persoonsgegevens verzamelt, gebruikt en beschermt. Volledig AVG-conform.",
     },
     de: {
-      title: "Datenschutzrichtlinie - BetsPlug",
+      title: "Datenschutzrichtlinie · BetsPlug",
       description:
-        "Wie BetsPlug Ihre personenbezogenen Daten erhebt, nutzt und schuetzt. DSGVO-konforme Datenschutzrichtlinie fuer unsere KI-Fussballanalyseplattform.",
-      ogTitle: "Datenschutzrichtlinie - BetsPlug",
+        "Wie BetsPlug Ihre personenbezogenen Daten erhebt, nutzt und schützt. DSGVO-konforme Datenschutzrichtlinie für unsere KI Fußballprognosen-Plattform.",
+      ogTitle: "Datenschutzrichtlinie · BetsPlug",
       ogDescription:
-        "Wie BetsPlug Ihre personenbezogenen Daten erhebt, nutzt und schuetzt.",
+        "Wie BetsPlug Ihre personenbezogenen Daten erhebt, nutzt und schützt. DSGVO-konform.",
     },
     fr: {
-      title: "Politique de Confidentialite - BetsPlug",
+      title: "Politique de Confidentialité · BetsPlug",
       description:
-        "Comment BetsPlug collecte, utilise et protege vos donnees personnelles. Politique de confidentialite conforme au RGPD pour notre plateforme d'analyse football IA.",
-      ogTitle: "Politique de Confidentialite - BetsPlug",
+        "Comment BetsPlug collecte, utilise et protège vos données personnelles. Politique conforme au RGPD pour notre plateforme de prédictions football IA.",
+      ogTitle: "Politique de Confidentialité · BetsPlug",
       ogDescription:
-        "Comment BetsPlug collecte, utilise et protege vos donnees personnelles.",
+        "Comment BetsPlug collecte, utilise et protège vos données personnelles. Conforme au RGPD.",
     },
     es: {
-      title: "Politica de Privacidad - BetsPlug",
+      title: "Política de Privacidad · BetsPlug",
       description:
-        "Como BetsPlug recopila, utiliza y protege sus datos personales. Politica de privacidad conforme al RGPD para nuestra plataforma de analisis de futbol con IA.",
-      ogTitle: "Politica de Privacidad - BetsPlug",
+        "Cómo BetsPlug recopila, utiliza y protege sus datos personales. Política de privacidad conforme al RGPD para nuestra plataforma de predicciones fútbol IA.",
+      ogTitle: "Política de Privacidad · BetsPlug",
       ogDescription:
-        "Como BetsPlug recopila, utiliza y protege sus datos personales.",
+        "Cómo BetsPlug recopila, utiliza y protege sus datos personales. Conforme al RGPD.",
     },
     it: {
-      title: "Informativa sulla Privacy - BetsPlug",
+      title: "Informativa sulla Privacy · BetsPlug",
       description:
-        "Come BetsPlug raccoglie, utilizza e protegge i tuoi dati personali. Informativa sulla privacy conforme al GDPR per la nostra piattaforma di analisi calcio con IA.",
-      ogTitle: "Informativa sulla Privacy - BetsPlug",
+        "Come BetsPlug raccoglie, utilizza e protegge i tuoi dati personali. Informativa conforme al GDPR per la nostra piattaforma di pronostici calcio IA.",
+      ogTitle: "Informativa sulla Privacy · BetsPlug",
       ogDescription:
-        "Come BetsPlug raccoglie, utilizza e protegge i tuoi dati personali.",
+        "Come BetsPlug raccoglie, utilizza e protegge i tuoi dati personali. Conforme al GDPR.",
     },
     sw: {
-      title: "Sera ya Faragha - BetsPlug",
+      title: "Sera ya Faragha · BetsPlug",
       description:
-        "Jinsi BetsPlug inavyokusanya, kutumia na kulinda data yako binafsi. Sera ya faragha inayozingatia GDPR kwa jukwaa letu la uchambuzi wa mpira kwa AI.",
-      ogTitle: "Sera ya Faragha - BetsPlug",
+        "Jinsi BetsPlug inavyokusanya, kutumia na kulinda data yako binafsi. Sera ya faragha inayozingatia GDPR kwa jukwaa letu la utabiri wa soka kwa AI.",
+      ogTitle: "Sera ya Faragha · BetsPlug",
       ogDescription:
-        "Jinsi BetsPlug inavyokusanya, kutumia na kulinda data yako binafsi.",
+        "Jinsi BetsPlug inavyokusanya, kutumia na kulinda data yako binafsi. Inazingatia GDPR.",
     },
     id: {
-      title: "Kebijakan Privasi - BetsPlug",
+      title: "Kebijakan Privasi · BetsPlug",
       description:
-        "Bagaimana BetsPlug mengumpulkan, menggunakan, dan melindungi data pribadi Anda. Kebijakan privasi sesuai GDPR untuk platform analisis sepak bola AI kami.",
-      ogTitle: "Kebijakan Privasi - BetsPlug",
+        "Bagaimana BetsPlug mengumpulkan, menggunakan, dan melindungi data pribadi Anda. Kebijakan privasi sesuai GDPR untuk platform prediksi sepak bola AI kami.",
+      ogTitle: "Kebijakan Privasi · BetsPlug",
       ogDescription:
-        "Bagaimana BetsPlug mengumpulkan, menggunakan, dan melindungi data pribadi Anda.",
+        "Bagaimana BetsPlug mengumpulkan, menggunakan, dan melindungi data pribadi Anda. Sesuai GDPR.",
     },
   },
 
   /* ─────────────────────────── TERMS ────────────────────────── */
   "/terms": {
     en: {
-      title: "Terms of Service - BetsPlug",
+      title: "Terms of Service · BetsPlug",
       description:
         "The terms and conditions that apply when you use BetsPlug. Please read them before creating an account or subscribing to our AI football analytics platform.",
-      ogTitle: "Terms of Service - BetsPlug",
+      ogTitle: "Terms of Service · BetsPlug",
       ogDescription:
-        "The terms and conditions that apply when you use BetsPlug.",
+        "The terms and conditions that apply when you use BetsPlug. Read before subscribing.",
     },
     nl: {
-      title: "Algemene Voorwaarden - BetsPlug",
+      title: "Algemene Voorwaarden · BetsPlug",
       description:
-        "De voorwaarden die van toepassing zijn wanneer u BetsPlug gebruikt. Lees ze voordat u een account aanmaakt of een abonnement afsluit.",
-      ogTitle: "Algemene Voorwaarden - BetsPlug",
+        "De voorwaarden die van toepassing zijn wanneer u BetsPlug gebruikt. Lees ze voordat u een account aanmaakt of een abonnement afsluit op ons analyseplatform.",
+      ogTitle: "Algemene Voorwaarden · BetsPlug",
       ogDescription:
-        "De voorwaarden die van toepassing zijn wanneer u BetsPlug gebruikt.",
+        "De voorwaarden die van toepassing zijn wanneer u BetsPlug gebruikt. Lees voor registratie.",
     },
     de: {
-      title: "Nutzungsbedingungen - BetsPlug",
+      title: "Nutzungsbedingungen · BetsPlug",
       description:
-        "Die Nutzungsbedingungen fuer BetsPlug. Bitte lesen Sie diese, bevor Sie ein Konto erstellen oder ein Abonnement fuer unsere KI-Fussballanalyseplattform abschliessen.",
-      ogTitle: "Nutzungsbedingungen - BetsPlug",
+        "Die Nutzungsbedingungen für BetsPlug. Bitte lesen Sie diese, bevor Sie ein Konto erstellen oder ein Abonnement für unsere KI Fußballprognosen-Plattform abschließen.",
+      ogTitle: "Nutzungsbedingungen · BetsPlug",
       ogDescription:
-        "Die Nutzungsbedingungen, die bei der Nutzung von BetsPlug gelten.",
+        "Die Nutzungsbedingungen, die bei der Nutzung von BetsPlug gelten. Vor Registrierung lesen.",
     },
     fr: {
-      title: "Conditions d'Utilisation - BetsPlug",
+      title: "Conditions d'Utilisation · BetsPlug",
       description:
-        "Les conditions generales applicables lors de l'utilisation de BetsPlug. Veuillez les lire avant de creer un compte ou de vous abonner a notre plateforme.",
-      ogTitle: "Conditions d'Utilisation - BetsPlug",
+        "Les conditions générales applicables lors de l'utilisation de BetsPlug. Veuillez les lire avant de créer un compte ou de vous abonner à notre plateforme.",
+      ogTitle: "Conditions d'Utilisation · BetsPlug",
       ogDescription:
-        "Les conditions generales applicables lors de l'utilisation de BetsPlug.",
+        "Les conditions générales applicables lors de l'utilisation de BetsPlug. À lire avant inscription.",
     },
     es: {
-      title: "Terminos de Servicio - BetsPlug",
+      title: "Términos de Servicio · BetsPlug",
       description:
-        "Los terminos y condiciones que se aplican al usar BetsPlug. Lealos antes de crear una cuenta o suscribirse a nuestra plataforma de analisis de futbol con IA.",
-      ogTitle: "Terminos de Servicio - BetsPlug",
+        "Los términos y condiciones que se aplican al usar BetsPlug. Léalos antes de crear una cuenta o suscribirse a nuestra plataforma de predicciones fútbol IA.",
+      ogTitle: "Términos de Servicio · BetsPlug",
       ogDescription:
-        "Los terminos y condiciones que se aplican al usar BetsPlug.",
+        "Los términos y condiciones que se aplican al usar BetsPlug. Leer antes de suscribirse.",
     },
     it: {
-      title: "Termini di Servizio - BetsPlug",
+      title: "Termini di Servizio · BetsPlug",
       description:
-        "I termini e le condizioni applicabili quando si utilizza BetsPlug. Si prega di leggerli prima di creare un account o sottoscrivere un abbonamento.",
-      ogTitle: "Termini di Servizio - BetsPlug",
+        "I termini e le condizioni applicabili quando si utilizza BetsPlug. Si prega di leggerli prima di creare un account o sottoscrivere un abbonamento alla piattaforma.",
+      ogTitle: "Termini di Servizio · BetsPlug",
       ogDescription:
-        "I termini e le condizioni applicabili quando si utilizza BetsPlug.",
+        "I termini e le condizioni applicabili quando si utilizza BetsPlug. Leggere prima dell'iscrizione.",
     },
     sw: {
-      title: "Masharti ya Huduma - BetsPlug",
+      title: "Masharti ya Huduma · BetsPlug",
       description:
-        "Masharti yanayotumika unapotumia BetsPlug. Tafadhali yasome kabla ya kuunda akaunti au kujisajili kwenye jukwaa letu la uchambuzi wa mpira kwa AI.",
-      ogTitle: "Masharti ya Huduma - BetsPlug",
+        "Masharti yanayotumika unapotumia BetsPlug. Tafadhali yasome kabla ya kuunda akaunti au kujisajili kwenye jukwaa letu la utabiri wa soka kwa AI.",
+      ogTitle: "Masharti ya Huduma · BetsPlug",
       ogDescription:
-        "Masharti yanayotumika unapotumia BetsPlug.",
+        "Masharti yanayotumika unapotumia BetsPlug. Soma kabla ya kujisajili.",
     },
     id: {
-      title: "Ketentuan Layanan - BetsPlug",
+      title: "Ketentuan Layanan · BetsPlug",
       description:
-        "Syarat dan ketentuan yang berlaku saat Anda menggunakan BetsPlug. Harap baca sebelum membuat akun atau berlangganan platform analisis sepak bola AI kami.",
-      ogTitle: "Ketentuan Layanan - BetsPlug",
+        "Syarat dan ketentuan yang berlaku saat Anda menggunakan BetsPlug. Harap baca sebelum membuat akun atau berlangganan platform prediksi sepak bola AI kami.",
+      ogTitle: "Ketentuan Layanan · BetsPlug",
       ogDescription:
-        "Syarat dan ketentuan yang berlaku saat Anda menggunakan BetsPlug.",
+        "Syarat dan ketentuan yang berlaku saat Anda menggunakan BetsPlug. Baca sebelum berlangganan.",
     },
   },
 
   /* ─────────────────────────── COOKIES ──────────────────────── */
   "/cookies": {
     en: {
-      title: "Cookie Policy - BetsPlug",
+      title: "Cookie Policy · BetsPlug",
       description:
-        "Which cookies BetsPlug uses, why we use them, and how you can manage your cookie preferences on our AI football analytics platform.",
-      ogTitle: "Cookie Policy - BetsPlug",
+        "Which cookies BetsPlug uses, why we use them, and how you can manage your cookie preferences on our AI football predictions and analytics platform.",
+      ogTitle: "Cookie Policy · BetsPlug",
       ogDescription:
         "Which cookies BetsPlug uses, why we use them, and how you can manage your preferences.",
     },
     nl: {
-      title: "Cookiebeleid - BetsPlug",
+      title: "Cookiebeleid · BetsPlug",
       description:
-        "Welke cookies BetsPlug gebruikt, waarom we ze gebruiken en hoe u uw cookievoorkeuren kunt beheren op ons AI-voetbalanalyseplatform.",
-      ogTitle: "Cookiebeleid - BetsPlug",
+        "Welke cookies BetsPlug gebruikt, waarom we ze gebruiken en hoe u uw cookievoorkeuren kunt beheren op ons AI voetbalvoorspellingen en analyseplatform.",
+      ogTitle: "Cookiebeleid · BetsPlug",
       ogDescription:
         "Welke cookies BetsPlug gebruikt, waarom we ze gebruiken en hoe u uw voorkeuren kunt beheren.",
     },
     de: {
-      title: "Cookie-Richtlinie - BetsPlug",
+      title: "Cookie-Richtlinie · BetsPlug",
       description:
-        "Welche Cookies BetsPlug verwendet, warum wir sie verwenden und wie Sie Ihre Cookie-Einstellungen auf unserer KI-Fussballanalyseplattform verwalten koennen.",
-      ogTitle: "Cookie-Richtlinie - BetsPlug",
+        "Welche Cookies BetsPlug verwendet, warum wir sie verwenden und wie Sie Ihre Cookie-Einstellungen auf unserer KI Fußballprognosen-Plattform verwalten können.",
+      ogTitle: "Cookie-Richtlinie · BetsPlug",
       ogDescription:
-        "Welche Cookies BetsPlug verwendet und wie Sie Ihre Einstellungen verwalten koennen.",
+        "Welche Cookies BetsPlug verwendet und wie Sie Ihre Einstellungen verwalten können.",
     },
     fr: {
-      title: "Politique des Cookies - BetsPlug",
+      title: "Politique des Cookies · BetsPlug",
       description:
-        "Quels cookies BetsPlug utilise, pourquoi nous les utilisons et comment vous pouvez gerer vos preferences sur notre plateforme d'analyse football IA.",
-      ogTitle: "Politique des Cookies - BetsPlug",
+        "Quels cookies BetsPlug utilise, pourquoi nous les utilisons et comment gérer vos préférences sur notre plateforme de prédictions football IA et d'analyse.",
+      ogTitle: "Politique des Cookies · BetsPlug",
       ogDescription:
-        "Quels cookies BetsPlug utilise, pourquoi nous les utilisons et comment gerer vos preferences.",
+        "Quels cookies BetsPlug utilise, pourquoi nous les utilisons et comment gérer vos préférences.",
     },
     es: {
-      title: "Politica de Cookies - BetsPlug",
+      title: "Política de Cookies · BetsPlug",
       description:
-        "Que cookies usa BetsPlug, por que las usamos y como puede gestionar sus preferencias de cookies en nuestra plataforma de analisis de futbol con IA.",
-      ogTitle: "Politica de Cookies - BetsPlug",
+        "Qué cookies usa BetsPlug, por qué las usamos y cómo puede gestionar sus preferencias de cookies en nuestra plataforma de predicciones fútbol IA y análisis.",
+      ogTitle: "Política de Cookies · BetsPlug",
       ogDescription:
-        "Que cookies usa BetsPlug, por que las usamos y como gestionar sus preferencias.",
+        "Qué cookies usa BetsPlug, por qué las usamos y cómo gestionar sus preferencias.",
     },
     it: {
-      title: "Politica sui Cookie - BetsPlug",
+      title: "Politica sui Cookie · BetsPlug",
       description:
-        "Quali cookie utilizza BetsPlug, perche li utilizziamo e come gestire le preferenze sui cookie sulla nostra piattaforma di analisi calcio con IA.",
-      ogTitle: "Politica sui Cookie - BetsPlug",
+        "Quali cookie utilizza BetsPlug, perché li utilizziamo e come gestire le preferenze sui cookie sulla nostra piattaforma di pronostici calcio IA e analisi.",
+      ogTitle: "Politica sui Cookie · BetsPlug",
       ogDescription:
-        "Quali cookie utilizza BetsPlug, perche li utilizziamo e come gestire le preferenze.",
+        "Quali cookie utilizza BetsPlug, perché li utilizziamo e come gestire le preferenze.",
     },
     sw: {
-      title: "Sera ya Vidakuzi - BetsPlug",
+      title: "Sera ya Vidakuzi · BetsPlug",
       description:
-        "Vidakuzi gani BetsPlug inatumia, kwa nini tunazitumia na jinsi unavyoweza kudhibiti mapendeleo yako kwenye jukwaa letu la uchambuzi wa mpira kwa AI.",
-      ogTitle: "Sera ya Vidakuzi - BetsPlug",
+        "Vidakuzi gani BetsPlug inatumia, kwa nini tunazitumia na jinsi unavyoweza kudhibiti mapendeleo yako kwenye jukwaa letu la utabiri wa soka na uchambuzi wa soka.",
+      ogTitle: "Sera ya Vidakuzi · BetsPlug",
       ogDescription:
         "Vidakuzi gani BetsPlug inatumia na jinsi unavyoweza kudhibiti mapendeleo yako.",
     },
     id: {
-      title: "Kebijakan Cookie - BetsPlug",
+      title: "Kebijakan Cookie · BetsPlug",
       description:
-        "Cookie apa yang digunakan BetsPlug, mengapa kami menggunakannya, dan bagaimana Anda dapat mengelola preferensi cookie di platform analisis sepak bola AI kami.",
-      ogTitle: "Kebijakan Cookie - BetsPlug",
+        "Cookie apa yang digunakan BetsPlug, mengapa kami menggunakannya, dan bagaimana Anda dapat mengelola preferensi cookie di platform prediksi sepak bola AI kami.",
+      ogTitle: "Kebijakan Cookie · BetsPlug",
       ogDescription:
         "Cookie apa yang digunakan BetsPlug dan bagaimana Anda dapat mengelola preferensi Anda.",
     },
@@ -432,66 +433,66 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
   /* ─────────────────────────── HOW IT WORKS ─────────────────── */
   "/how-it-works": {
     en: {
-      title: "How BetsPlug Works - AI Prediction Engine",
+      title: "How It Works · BetsPlug AI Prediction Engine",
       description:
-        "A full, step-by-step walkthrough of the BetsPlug prediction engine: how we collect data, engineer features, train models, detect value and publish verifiable picks.",
-      ogTitle: "How BetsPlug Works - Step-by-Step Prediction Engine",
+        "Step-by-step walkthrough of the BetsPlug AI prediction engine: data collection, feature engineering, model training, value detection and verifiable match predictions.",
+      ogTitle: "How BetsPlug Works · AI Prediction Engine",
       ogDescription:
         "14 data sources. 1,200+ features. 4 independent models. Every pick timestamped and publicly verifiable.",
     },
     nl: {
-      title: "Hoe BetsPlug Werkt - AI-voorspellingsmotor",
+      title: "Hoe Het Werkt · BetsPlug AI-Voorspellingsmotor",
       description:
-        "Een volledige stapsgewijze uitleg van de BetsPlug-voorspellingsmotor: hoe we data verzamelen, features engineeren, modellen trainen en verifieerbare picks publiceren.",
-      ogTitle: "Hoe BetsPlug Werkt - Stap-voor-stap Voorspellingsmotor",
+        "Stapsgewijze uitleg van de BetsPlug AI-voorspellingsmotor: dataverzameling, feature-engineering, modeltraining en verifieerbare wedstrijdvoorspellingen.",
+      ogTitle: "Hoe BetsPlug Werkt · AI-Voorspellingsmotor",
       ogDescription:
         "14 databronnen. 1.200+ features. 4 onafhankelijke modellen. Elke pick met tijdstempel en publiek verifieerbaar.",
     },
     de: {
-      title: "So Funktioniert BetsPlug - KI-Prognosemaschine",
+      title: "So Funktioniert Es · BetsPlug KI-Prognosemaschine",
       description:
-        "Eine vollstaendige Schritt-fuer-Schritt-Erklaerung der BetsPlug-Prognosemaschine: Datenerhebung, Feature-Engineering, Modelltraining und verifizierbare Tipps.",
-      ogTitle: "So Funktioniert BetsPlug - Schritt fuer Schritt",
+        "Schritt-für-Schritt-Erklärung der BetsPlug KI-Prognosemaschine: Datenerhebung, Feature-Engineering, Modelltraining und verifizierbare Fußballprognosen.",
+      ogTitle: "So Funktioniert BetsPlug · KI-Prognosemaschine",
       ogDescription:
-        "14 Datenquellen. Ueber 1.200 Features. 4 unabhaengige Modelle. Jeder Tipp mit Zeitstempel und oeffentlich verifizierbar.",
+        "14 Datenquellen. Über 1.200 Features. 4 unabhängige Modelle. Jeder Tipp mit Zeitstempel und öffentlich verifizierbar.",
     },
     fr: {
-      title: "Comment Fonctionne BetsPlug - Moteur IA",
+      title: "Comment Ça Marche · Moteur BetsPlug IA",
       description:
-        "Presentation complete du moteur de prediction BetsPlug : collecte de donnees, feature engineering, entrainement des modeles et publication de picks verifiables.",
-      ogTitle: "Comment Fonctionne BetsPlug - Etape par Etape",
+        "Présentation complète du moteur de prédictions football IA BetsPlug : collecte de données, feature engineering, entraînement des modèles et pronostics vérifiables.",
+      ogTitle: "Comment Fonctionne BetsPlug · Moteur IA",
       ogDescription:
-        "14 sources de donnees. Plus de 1 200 features. 4 modeles independants. Chaque pick horodate et publiquement verifiable.",
+        "14 sources de données. Plus de 1 200 features. 4 modèles indépendants. Chaque pick horodaté et vérifiable.",
     },
     es: {
-      title: "Como Funciona BetsPlug - Motor de Prediccion IA",
+      title: "Cómo Funciona · Motor de Predicción BetsPlug IA",
       description:
-        "Guia completa paso a paso del motor de prediccion BetsPlug: recopilacion de datos, ingenieria de features, entrenamiento de modelos y picks verificables.",
-      ogTitle: "Como Funciona BetsPlug - Paso a Paso",
+        "Guía completa paso a paso del motor de predicciones fútbol IA BetsPlug: recopilación de datos, ingeniería de features, entrenamiento de modelos y picks verificables.",
+      ogTitle: "Cómo Funciona BetsPlug · Motor de Predicción IA",
       ogDescription:
-        "14 fuentes de datos. Mas de 1.200 features. 4 modelos independientes. Cada pick con marca de tiempo y verificable.",
+        "14 fuentes de datos. Más de 1.200 features. 4 modelos independientes. Cada pick con marca de tiempo y verificable.",
     },
     it: {
-      title: "Come Funziona BetsPlug - Motore di Previsione IA",
+      title: "Come Funziona · Motore di Previsione BetsPlug IA",
       description:
-        "Una guida completa passo dopo passo del motore di previsione BetsPlug: raccolta dati, feature engineering, addestramento modelli e pronostici verificabili.",
-      ogTitle: "Come Funziona BetsPlug - Passo dopo Passo",
+        "Guida completa passo dopo passo del motore di pronostici calcio IA BetsPlug: raccolta dati, feature engineering, addestramento modelli e pronostici verificabili.",
+      ogTitle: "Come Funziona BetsPlug · Motore di Previsione IA",
       ogDescription:
         "14 fonti di dati. Oltre 1.200 feature. 4 modelli indipendenti. Ogni pronostico con timestamp e verificabile pubblicamente.",
     },
     sw: {
-      title: "BetsPlug Inavyofanya Kazi - Injini ya Utabiri ya AI",
+      title: "Jinsi Inavyofanya Kazi · Injini ya BetsPlug AI",
       description:
-        "Mwongozo kamili wa hatua kwa hatua wa injini ya utabiri ya BetsPlug: ukusanyaji data, uhandisi wa vipengele, mafunzo ya mifano na utabiri unaothibitishika.",
-      ogTitle: "BetsPlug Inavyofanya Kazi - Hatua kwa Hatua",
+        "Mwongozo kamili wa hatua kwa hatua wa injini ya utabiri wa soka ya BetsPlug AI: ukusanyaji data, uhandisi wa vipengele na utabiri unaothibitishika.",
+      ogTitle: "BetsPlug Inavyofanya Kazi · Injini ya Utabiri AI",
       ogDescription:
         "Vyanzo 14 vya data. Vipengele zaidi ya 1,200. Mifano 4 huru. Kila utabiri una muhuri wa wakati na unathibitishika.",
     },
     id: {
-      title: "Cara Kerja BetsPlug - Mesin Prediksi AI",
+      title: "Cara Kerja · Mesin Prediksi BetsPlug AI",
       description:
-        "Panduan lengkap langkah demi langkah mesin prediksi BetsPlug: pengumpulan data, feature engineering, pelatihan model, dan publikasi prediksi yang dapat diverifikasi.",
-      ogTitle: "Cara Kerja BetsPlug - Langkah demi Langkah",
+        "Panduan lengkap langkah demi langkah mesin prediksi sepak bola AI BetsPlug: pengumpulan data, feature engineering, pelatihan model, dan prediksi yang dapat diverifikasi.",
+      ogTitle: "Cara Kerja BetsPlug · Mesin Prediksi AI",
       ogDescription:
         "14 sumber data. 1.200+ fitur. 4 model independen. Setiap prediksi memiliki stempel waktu dan dapat diverifikasi publik.",
     },
@@ -500,66 +501,66 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
   /* ─────────────────────────── TRACK RECORD ─────────────────── */
   "/track-record": {
     en: {
-      title: "Track Record - Verified AI Prediction Results",
+      title: "Track Record · Verified AI Prediction Results",
       description:
-        "Transparent, auditable results for every BetsPlug pick. See how our AI models turn raw match data into a measurable edge - documented weekly, never cherry-picked.",
-      ogTitle: "BetsPlug Track Record - Auditable, Never Cherry-Picked",
+        "Transparent, auditable results for every BetsPlug AI football prediction. See how our models turn match data into a measurable edge - documented weekly, never cherry-picked.",
+      ogTitle: "BetsPlug Track Record · Auditable Results",
       ogDescription:
         "58.3% hit rate. +14.6% ROI. 24,180 graded predictions. Every pick timestamped and logged to a public ledger.",
     },
     nl: {
-      title: "Trackrecord - Geverifieerde AI-voorspellingsresultaten",
+      title: "Trackrecord · Geverifieerde AI-Voorspellingsresultaten",
       description:
-        "Transparante, controleerbare resultaten voor elke BetsPlug-pick. Zie hoe onze AI-modellen ruwe data omzetten in meetbaar voordeel - wekelijks gedocumenteerd.",
-      ogTitle: "BetsPlug Trackrecord - Controleerbaar, Nooit Selectief",
+        "Transparante, controleerbare resultaten voor elke BetsPlug AI voetbalvoorspelling. Zie hoe onze modellen data omzetten in meetbaar voordeel - wekelijks gedocumenteerd.",
+      ogTitle: "BetsPlug Trackrecord · Controleerbare Resultaten",
       ogDescription:
         "58,3% hitrate. +14,6% ROI. 24.180 beoordeelde voorspellingen. Elke pick met tijdstempel op een publiek register.",
     },
     de: {
-      title: "Bilanz - Verifizierte KI-Prognoseergebnisse",
+      title: "Bilanz · Verifizierte KI-Prognoseergebnisse",
       description:
-        "Transparente, pruefbare Ergebnisse fuer jeden BetsPlug-Tipp. Sehen Sie, wie unsere KI-Modelle Rohdaten in messbaren Vorsprung verwandeln - woechentlich dokumentiert.",
-      ogTitle: "BetsPlug Bilanz - Pruefbar, Nie Selektiv",
+        "Transparente, prüfbare Ergebnisse für jeden BetsPlug KI Fußballprognose-Tipp. Sehen Sie, wie unsere Modelle Daten in messbaren Vorsprung verwandeln - wöchentlich dokumentiert.",
+      ogTitle: "BetsPlug Bilanz · Prüfbare Ergebnisse",
       ogDescription:
-        "58,3% Trefferquote. +14,6% ROI. 24.180 bewertete Prognosen. Jeder Tipp mit Zeitstempel im oeffentlichen Register.",
+        "58,3% Trefferquote. +14,6% ROI. 24.180 bewertete Prognosen. Jeder Tipp mit Zeitstempel im öffentlichen Register.",
     },
     fr: {
-      title: "Historique - Resultats de Predictions IA Verifies",
+      title: "Historique · Résultats Prédictions IA Vérifiés",
       description:
-        "Des resultats transparents et verifiables pour chaque pick BetsPlug. Decouvrez comment nos modeles IA transforment les donnees brutes en avantage mesurable.",
-      ogTitle: "Historique BetsPlug - Verifiable, Jamais Selectif",
+        "Des résultats transparents et vérifiables pour chaque prédiction football IA BetsPlug. Découvrez comment nos modèles transforment les données en avantage mesurable.",
+      ogTitle: "Historique BetsPlug · Résultats Vérifiables",
       ogDescription:
-        "58,3% de reussite. +14,6% ROI. 24 180 predictions evaluees. Chaque pick horodate dans un registre public.",
+        "58,3% de réussite. +14,6% ROI. 24 180 pronostics évalués. Chaque pick horodaté dans un registre public.",
     },
     es: {
-      title: "Historial - Resultados de Predicciones IA Verificados",
+      title: "Historial · Resultados Predicciones IA Verificados",
       description:
-        "Resultados transparentes y auditables para cada pick de BetsPlug. Vea como nuestros modelos IA convierten datos brutos en ventaja medible - documentado semanalmente.",
-      ogTitle: "Historial BetsPlug - Auditable, Nunca Selectivo",
+        "Resultados transparentes y auditables para cada predicción fútbol IA BetsPlug. Vea cómo nuestros modelos convierten datos en ventaja medible - documentado semanalmente.",
+      ogTitle: "Historial BetsPlug · Resultados Auditables",
       ogDescription:
-        "58,3% de acierto. +14,6% ROI. 24.180 predicciones calificadas. Cada pick con marca de tiempo en registro publico.",
+        "58,3% de acierto. +14,6% ROI. 24.180 predicciones calificadas. Cada pick con marca de tiempo en registro público.",
     },
     it: {
-      title: "Storico - Risultati Pronostici IA Verificati",
+      title: "Storico · Risultati Pronostici IA Verificati",
       description:
-        "Risultati trasparenti e verificabili per ogni pronostico BetsPlug. Scopri come i nostri modelli IA trasformano dati grezzi in vantaggio misurabile - documentato settimanalmente.",
-      ogTitle: "Storico BetsPlug - Verificabile, Mai Selettivo",
+        "Risultati trasparenti e verificabili per ogni pronostico calcio IA BetsPlug. Scopri come i nostri modelli trasformano dati in vantaggio misurabile - documentato settimanalmente.",
+      ogTitle: "Storico BetsPlug · Risultati Verificabili",
       ogDescription:
         "58,3% di successo. +14,6% ROI. 24.180 pronostici valutati. Ogni pronostico con timestamp nel registro pubblico.",
     },
     sw: {
-      title: "Rekodi ya Matokeo - Matokeo ya Utabiri wa AI",
+      title: "Rekodi ya Matokeo · Utabiri wa AI Uliothibitishwa",
       description:
-        "Matokeo ya uwazi na yanayokaguliwa kwa kila chaguo la BetsPlug. Angalia jinsi mifano yetu ya AI inavyobadilisha data kuwa faida inayopimika - imeandikwa kila wiki.",
-      ogTitle: "Rekodi ya BetsPlug - Inakaguliwa, Haijachanganywa",
+        "Matokeo ya uwazi na yanayokaguliwa kwa kila utabiri wa soka wa BetsPlug AI. Angalia jinsi mifano yetu inavyobadilisha data kuwa faida inayopimika kila wiki.",
+      ogTitle: "Rekodi ya BetsPlug · Matokeo Yanayokaguliwa",
       ogDescription:
         "58.3% kiwango cha mafanikio. +14.6% ROI. Utabiri 24,180 uliokadiriwa. Kila chaguo lina muhuri wa wakati.",
     },
     id: {
-      title: "Rekam Jejak - Hasil Prediksi AI Terverifikasi",
+      title: "Rekam Jejak · Hasil Prediksi AI Terverifikasi",
       description:
-        "Hasil transparan dan dapat diaudit untuk setiap prediksi BetsPlug. Lihat bagaimana model AI kami mengubah data mentah menjadi keunggulan terukur - didokumentasikan mingguan.",
-      ogTitle: "Rekam Jejak BetsPlug - Dapat Diaudit, Tidak Selektif",
+        "Hasil transparan dan dapat diaudit untuk setiap prediksi sepak bola AI BetsPlug. Lihat bagaimana model AI kami mengubah data menjadi keunggulan terukur - didokumentasikan mingguan.",
+      ogTitle: "Rekam Jejak BetsPlug · Hasil yang Dapat Diaudit",
       ogDescription:
         "58,3% tingkat akurasi. +14,6% ROI. 24.180 prediksi dinilai. Setiap prediksi memiliki stempel waktu di register publik.",
     },
@@ -568,178 +569,178 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
   /* ─────────────────────────── LOGIN ────────────────────────── */
   "/login": {
     en: {
-      title: "Log In - BetsPlug",
+      title: "Log In · BetsPlug",
       description:
-        "Log in to your BetsPlug account to see today's picks, track your ROI and manage your subscription.",
+        "Log in to your BetsPlug account to see today's AI football predictions, track your ROI, and manage your subscription for match predictions and betting tips.",
     },
     nl: {
-      title: "Inloggen - BetsPlug",
+      title: "Inloggen · BetsPlug",
       description:
-        "Log in op uw BetsPlug-account om de picks van vandaag te zien, uw ROI te volgen en uw abonnement te beheren.",
+        "Log in op uw BetsPlug-account om de AI voetbalvoorspellingen van vandaag te zien, uw ROI te volgen en uw abonnement voor wedstrijdvoorspellingen te beheren.",
     },
     de: {
-      title: "Anmelden - BetsPlug",
+      title: "Anmelden · BetsPlug",
       description:
-        "Melden Sie sich bei Ihrem BetsPlug-Konto an, um die heutigen Tipps zu sehen, Ihren ROI zu verfolgen und Ihr Abo zu verwalten.",
+        "Melden Sie sich bei Ihrem BetsPlug-Konto an, um die heutigen KI Fußballprognosen zu sehen, Ihren ROI zu verfolgen und Ihr Abo für Wett-Tipps zu verwalten.",
     },
     fr: {
-      title: "Connexion - BetsPlug",
+      title: "Connexion · BetsPlug",
       description:
-        "Connectez-vous a votre compte BetsPlug pour voir les picks du jour, suivre votre ROI et gerer votre abonnement.",
+        "Connectez-vous à votre compte BetsPlug pour voir les prédictions football IA du jour, suivre votre ROI et gérer votre abonnement aux pronostics.",
     },
     es: {
-      title: "Iniciar Sesion - BetsPlug",
+      title: "Iniciar Sesión · BetsPlug",
       description:
-        "Inicie sesion en su cuenta BetsPlug para ver las selecciones de hoy, seguir su ROI y gestionar su suscripcion.",
+        "Inicie sesión en su cuenta BetsPlug para ver las predicciones fútbol IA de hoy, seguir su ROI y gestionar su suscripción de apuestas y análisis de fútbol.",
     },
     it: {
-      title: "Accedi - BetsPlug",
+      title: "Accedi · BetsPlug",
       description:
-        "Accedi al tuo account BetsPlug per vedere le selezioni di oggi, monitorare il tuo ROI e gestire il tuo abbonamento.",
+        "Accedi al tuo account BetsPlug per vedere i pronostici calcio IA di oggi, monitorare il tuo ROI e gestire il tuo abbonamento per analisi calcistica e scommesse.",
     },
     sw: {
-      title: "Ingia - BetsPlug",
+      title: "Ingia · BetsPlug",
       description:
-        "Ingia kwenye akaunti yako ya BetsPlug kuona chaguzi za leo, kufuatilia ROI yako na kudhibiti usajili wako.",
+        "Ingia kwenye akaunti yako ya BetsPlug kuona utabiri wa soka wa AI wa leo, kufuatilia ROI yako na kudhibiti usajili wako wa uchambuzi wa soka.",
     },
     id: {
-      title: "Masuk - BetsPlug",
+      title: "Masuk · BetsPlug",
       description:
-        "Masuk ke akun BetsPlug Anda untuk melihat prediksi hari ini, melacak ROI, dan mengelola langganan Anda.",
+        "Masuk ke akun BetsPlug Anda untuk melihat prediksi sepak bola AI hari ini, melacak ROI, dan mengelola langganan analisis sepak bola Anda.",
     },
   },
 
   /* ─────────────────────── MATCH PREDICTIONS ────────────────── */
   "/match-predictions": {
     en: {
-      title: "Free AI Match Predictions - Upcoming Games | BetsPlug",
+      title: "AI Match Predictions · Free Football Picks · BetsPlug",
       description:
-        "Preview 3 free AI-powered match predictions with win probabilities and confidence scores. Unlock the full slate of upcoming games with a BetsPlug subscription.",
-      ogTitle: "Free AI Match Predictions - BetsPlug",
+        "Preview 3 free AI football predictions with win probabilities and confidence scores. Unlock the full slate of upcoming match predictions with a BetsPlug subscription.",
+      ogTitle: "Free AI Match Predictions · BetsPlug",
       ogDescription:
         "Preview 3 free AI-powered match predictions. Unlock the rest with a trial.",
     },
     nl: {
-      title: "Gratis AI-Wedstrijdvoorspellingen | BetsPlug",
+      title: "AI Wedstrijdvoorspellingen · Gratis Picks · BetsPlug",
       description:
-        "Bekijk 3 gratis AI-gestuurde wedstrijdvoorspellingen met winstkansen en vertrouwensscores. Ontgrendel alle komende wedstrijden met een BetsPlug-abonnement.",
-      ogTitle: "Gratis AI-Wedstrijdvoorspellingen - BetsPlug",
+        "Bekijk 3 gratis AI voetbalvoorspellingen met winstkansen en vertrouwensscores. Ontgrendel alle wedstrijdvoorspellingen met een BetsPlug-abonnement.",
+      ogTitle: "Gratis AI Wedstrijdvoorspellingen · BetsPlug",
       ogDescription:
-        "Bekijk 3 gratis AI-voorspellingen. Ontgrendel de rest met een proefabonnement.",
+        "Bekijk 3 gratis AI voetbalvoorspellingen. Ontgrendel de rest met een proefabonnement.",
     },
     de: {
-      title: "Kostenlose KI-Spielvorhersagen | BetsPlug",
+      title: "KI Spielvorhersagen · Gratis Fußball-Tipps · BetsPlug",
       description:
-        "Vorschau auf 3 kostenlose KI-gestuetzte Spielvorhersagen mit Siegwahrscheinlichkeiten und Vertrauenswerten. Alle Spiele freischalten mit einem BetsPlug-Abo.",
-      ogTitle: "Kostenlose KI-Spielvorhersagen - BetsPlug",
+        "Vorschau auf 3 kostenlose KI Fußballprognosen mit Siegwahrscheinlichkeiten und Vertrauenswerten. Alle Spielvorhersagen freischalten mit einem BetsPlug-Abo.",
+      ogTitle: "Kostenlose KI Spielvorhersagen · BetsPlug",
       ogDescription:
-        "Vorschau auf 3 kostenlose KI-Vorhersagen. Den Rest freischalten mit einem Probeabo.",
+        "Vorschau auf 3 kostenlose KI Fußballprognosen. Den Rest freischalten mit einem Probeabo.",
     },
     fr: {
-      title: "Predictions de Matchs IA Gratuites | BetsPlug",
+      title: "Prédictions de Matchs IA · Pronostics Gratuits · BetsPlug",
       description:
-        "Apercu de 3 predictions de matchs gratuites par IA avec probabilites de victoire et scores de confiance. Debloquez tous les matchs avec un abonnement BetsPlug.",
-      ogTitle: "Predictions de Matchs IA Gratuites - BetsPlug",
+        "Aperçu de 3 prédictions football IA gratuites avec probabilités de victoire et scores de confiance. Débloquez tous les pronostics avec un abonnement BetsPlug.",
+      ogTitle: "Prédictions Football IA Gratuites · BetsPlug",
       ogDescription:
-        "Apercu de 3 predictions IA gratuites. Debloquez le reste avec un essai.",
+        "Aperçu de 3 prédictions football IA gratuites. Débloquez le reste avec un essai.",
     },
     es: {
-      title: "Predicciones de Partidos IA Gratis | BetsPlug",
+      title: "Predicciones IA · Picks de Fútbol Gratis · BetsPlug",
       description:
-        "Vista previa de 3 predicciones gratuitas de partidos con IA, con probabilidades de victoria y puntuaciones de confianza. Desbloquee todos los partidos con BetsPlug.",
-      ogTitle: "Predicciones de Partidos IA Gratis - BetsPlug",
+        "Vista previa de 3 predicciones fútbol IA gratuitas con probabilidades de victoria y puntuaciones de confianza. Desbloquee todas las apuestas con BetsPlug.",
+      ogTitle: "Predicciones Fútbol IA Gratis · BetsPlug",
       ogDescription:
-        "Vista previa de 3 predicciones IA gratuitas. Desbloquee el resto con una prueba.",
+        "Vista previa de 3 predicciones fútbol IA gratuitas. Desbloquee el resto con una prueba.",
     },
     it: {
-      title: "Pronostici Partite IA Gratuiti | BetsPlug",
+      title: "Pronostici Partite IA · Pick Gratuiti · BetsPlug",
       description:
-        "Anteprima di 3 pronostici gratuiti con IA con probabilita di vittoria e punteggi di affidabilita. Sblocca tutte le partite con un abbonamento BetsPlug.",
-      ogTitle: "Pronostici Partite IA Gratuiti - BetsPlug",
+        "Anteprima di 3 pronostici calcio IA gratuiti con probabilità di vittoria e punteggi di affidabilità. Sblocca tutte le scommesse con un abbonamento BetsPlug.",
+      ogTitle: "Pronostici Calcio IA Gratuiti · BetsPlug",
       ogDescription:
-        "Anteprima di 3 pronostici IA gratuiti. Sblocca il resto con una prova.",
+        "Anteprima di 3 pronostici calcio IA gratuiti. Sblocca il resto con una prova.",
     },
     sw: {
-      title: "Utabiri wa Mechi kwa AI Bure | BetsPlug",
+      title: "Utabiri wa Mechi kwa AI · Picks Bure · BetsPlug",
       description:
-        "Hakiki utabiri 3 wa mechi bure unaotegemea AI na uwezekano wa kushinda na alama za kujiamini. Fungua mechi zote na usajili wa BetsPlug.",
-      ogTitle: "Utabiri wa Mechi kwa AI Bure - BetsPlug",
+        "Hakiki utabiri 3 wa soka bure kwa AI na uwezekano wa kushinda na alama za kujiamini. Fungua utabiri wote wa mechi na usajili wa BetsPlug.",
+      ogTitle: "Utabiri wa Soka kwa AI Bure · BetsPlug",
       ogDescription:
-        "Hakiki utabiri 3 bure wa AI. Fungua zingine na majaribio.",
+        "Hakiki utabiri 3 bure wa soka kwa AI. Fungua zingine na majaribio.",
     },
     id: {
-      title: "Prediksi Pertandingan AI Gratis | BetsPlug",
+      title: "Prediksi Pertandingan AI · Picks Gratis · BetsPlug",
       description:
-        "Pratinjau 3 prediksi pertandingan AI gratis dengan probabilitas kemenangan dan skor kepercayaan. Buka semua pertandingan dengan langganan BetsPlug.",
-      ogTitle: "Prediksi Pertandingan AI Gratis - BetsPlug",
+        "Pratinjau 3 prediksi sepak bola AI gratis dengan probabilitas kemenangan dan skor kepercayaan. Buka semua prediksi pertandingan dengan langganan BetsPlug.",
+      ogTitle: "Prediksi Sepak Bola AI Gratis · BetsPlug",
       ogDescription:
-        "Pratinjau 3 prediksi AI gratis. Buka sisanya dengan uji coba.",
+        "Pratinjau 3 prediksi sepak bola AI gratis. Buka sisanya dengan uji coba.",
     },
   },
 
   /* ─────────────────────────── LEARN ────────────────────────── */
   "/learn": {
     en: {
-      title: "Learn Football Betting - Value, xG, Elo | BetsPlug",
+      title: "Learn Football Betting · Value, xG, Elo · BetsPlug",
       description:
         "In-depth pillar guides on the math behind sharp football betting - value betting, expected goals, Elo ratings, the Kelly criterion, Poisson models, and bankroll management.",
-      ogTitle: "Learn Football Betting - BetsPlug",
+      ogTitle: "Learn Football Betting · BetsPlug",
       ogDescription:
         "Six deep-dive pillar guides covering value betting, xG, Elo, Kelly, Poisson and bankroll management.",
     },
     nl: {
-      title: "Leer Voetbalwedden - Value, xG, Elo | BetsPlug",
+      title: "Leer Voetbalwedden · Value, xG, Elo · BetsPlug",
       description:
-        "Diepgaande pillar-gidsen over de wiskunde achter scherpe voetbalwedden - value betting, expected goals, Elo-ratings, Kelly-criterium, Poisson-modellen en bankroll management.",
-      ogTitle: "Leer Voetbalwedden - BetsPlug",
+        "Diepgaande pillar-gidsen over de wiskunde achter scherpe wedtips - value betting, expected goals, Elo-ratings, Kelly-criterium, Poisson-modellen en bankroll management.",
+      ogTitle: "Leer Voetbalwedden · BetsPlug",
       ogDescription:
         "Zes diepgaande pillar-gidsen over value betting, xG, Elo, Kelly, Poisson en bankroll management.",
     },
     de: {
-      title: "Fussballwetten Lernen - Value, xG, Elo | BetsPlug",
+      title: "Fußballwetten Lernen · Value, xG, Elo · BetsPlug",
       description:
-        "Ausfuehrliche Pillar-Guides zur Mathematik hinter klugen Fussballwetten - Value Betting, Expected Goals, Elo-Ratings, Kelly-Kriterium, Poisson-Modelle und Bankroll-Management.",
-      ogTitle: "Fussballwetten Lernen - BetsPlug",
+        "Ausführliche Pillar-Guides zur Mathematik hinter klugen Wett-Tipps - Value Betting, Expected Goals, Elo-Ratings, Kelly-Kriterium, Poisson und Bankroll-Management.",
+      ogTitle: "Fußballwetten Lernen · BetsPlug",
       ogDescription:
         "Sechs tiefgehende Pillar-Guides zu Value Betting, xG, Elo, Kelly, Poisson und Bankroll-Management.",
     },
     fr: {
-      title: "Apprendre les Paris - Value, xG, Elo | BetsPlug",
+      title: "Apprendre les Paris · Value, xG, Elo · BetsPlug",
       description:
-        "Guides approfondis sur les maths derriere les paris football intelligents - value betting, expected goals, classements Elo, critere de Kelly, modeles de Poisson.",
-      ogTitle: "Apprendre les Paris Football - BetsPlug",
+        "Guides approfondis sur les maths derrière les pronostics football intelligents - value betting, expected goals, classements Elo, critère de Kelly, modèles de Poisson.",
+      ogTitle: "Apprendre les Paris Football · BetsPlug",
       ogDescription:
         "Six guides approfondis sur le value betting, xG, Elo, Kelly, Poisson et la gestion de bankroll.",
     },
     es: {
-      title: "Aprende Apuestas de Futbol - Value, xG | BetsPlug",
+      title: "Aprende Apuestas Fútbol · Value, xG · BetsPlug",
       description:
-        "Guias en profundidad sobre las matematicas detras de las apuestas inteligentes - value betting, goles esperados, ratings Elo, criterio Kelly y modelos Poisson.",
-      ogTitle: "Aprende Apuestas de Futbol - BetsPlug",
+        "Guías en profundidad sobre las matemáticas detrás de las apuestas inteligentes - value betting, goles esperados, ratings Elo, criterio Kelly y modelos Poisson.",
+      ogTitle: "Aprende Apuestas de Fútbol · BetsPlug",
       ogDescription:
-        "Seis guias en profundidad sobre value betting, xG, Elo, Kelly, Poisson y gestion de bankroll.",
+        "Seis guías en profundidad sobre value betting, xG, Elo, Kelly, Poisson y gestión de bankroll.",
     },
     it: {
-      title: "Impara le Scommesse Calcio - Value, xG | BetsPlug",
+      title: "Impara le Scommesse Calcio · Value, xG · BetsPlug",
       description:
         "Guide approfondite sulla matematica delle scommesse calcistiche intelligenti - value betting, expected goals, rating Elo, criterio di Kelly, modelli Poisson.",
-      ogTitle: "Impara le Scommesse Calcio - BetsPlug",
+      ogTitle: "Impara le Scommesse Calcio · BetsPlug",
       ogDescription:
         "Sei guide approfondite su value betting, xG, Elo, Kelly, Poisson e gestione del bankroll.",
     },
     sw: {
-      title: "Jifunze Kamari ya Mpira - Value, xG, Elo | BetsPlug",
+      title: "Jifunze Kamari ya Soka · Value, xG, Elo · BetsPlug",
       description:
-        "Miongozo ya kina kuhusu hesabu nyuma ya kamari bora za mpira - value betting, expected goals, Elo ratings, Kelly criterion, Poisson models na usimamizi wa bankroll.",
-      ogTitle: "Jifunze Kamari ya Mpira - BetsPlug",
+        "Miongozo ya kina kuhusu hesabu nyuma ya uchambuzi wa soka - value betting, expected goals, Elo ratings, Kelly criterion, Poisson models na usimamizi wa bankroll.",
+      ogTitle: "Jifunze Kamari ya Soka · BetsPlug",
       ogDescription:
         "Miongozo sita ya kina kuhusu value betting, xG, Elo, Kelly, Poisson na usimamizi wa bankroll.",
     },
     id: {
-      title: "Belajar Taruhan Sepak Bola - Value, xG | BetsPlug",
+      title: "Belajar Taruhan Sepak Bola · Value, xG · BetsPlug",
       description:
         "Panduan mendalam tentang matematika di balik taruhan sepak bola cerdas - value betting, expected goals, rating Elo, kriteria Kelly, model Poisson, dan manajemen bankroll.",
-      ogTitle: "Belajar Taruhan Sepak Bola - BetsPlug",
+      ogTitle: "Belajar Taruhan Sepak Bola · BetsPlug",
       ogDescription:
         "Enam panduan mendalam tentang value betting, xG, Elo, Kelly, Poisson, dan manajemen bankroll.",
     },
@@ -748,66 +749,66 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
   /* ─────────────────────────── BET TYPES ────────────────────── */
   "/bet-types": {
     en: {
-      title: "Bet Types Explained - BTTS, Over 2.5, DC | BetsPlug",
+      title: "Bet Types Explained · BTTS, Over 2.5, DC · BetsPlug",
       description:
         "How popular football betting markets work, how books price them and when the market offers value. Explainers for BTTS, Over 2.5 goals, Double Chance and Draw No Bet.",
-      ogTitle: "Bet Types Explained - BetsPlug",
+      ogTitle: "Bet Types Explained · BetsPlug",
       ogDescription:
         "Deep dives into BTTS, Over 2.5, Double Chance, Draw No Bet and more popular football markets.",
     },
     nl: {
-      title: "Wed-types Uitgelegd - BTTS, Over 2.5, DC | BetsPlug",
+      title: "Wedtypes Uitgelegd · BTTS, Over 2.5, DC · BetsPlug",
       description:
         "Hoe populaire voetbalwedmarkten werken, hoe bookmakers ze prijzen en wanneer de markt value biedt. Uitleg bij BTTS, Over 2.5 goals, Double Chance en Draw No Bet.",
-      ogTitle: "Wed-types Uitgelegd - BetsPlug",
+      ogTitle: "Wedtypes Uitgelegd · BetsPlug",
       ogDescription:
         "Diepgaande uitleg over BTTS, Over 2.5, Double Chance, Draw No Bet en meer populaire wedmarkten.",
     },
     de: {
-      title: "Wettarten Erklaert - BTTS, Over 2.5, DC | BetsPlug",
+      title: "Wettarten Erklärt · BTTS, Over 2.5, DC · BetsPlug",
       description:
-        "Wie beliebte Fussball-Wettmaerkte funktionieren, wie Buchmacher sie bepreisen und wann der Markt Value bietet. Erklaerungen fuer BTTS, Over 2.5 Tore und mehr.",
-      ogTitle: "Wettarten Erklaert - BetsPlug",
+        "Wie beliebte Fußball-Wettmärkte funktionieren, wie Buchmacher sie bepreisen und wann der Markt Value bietet. Erklärungen für BTTS, Over 2.5 Tore und mehr.",
+      ogTitle: "Wettarten Erklärt · BetsPlug",
       ogDescription:
-        "Tiefgehende Erklaerungen zu BTTS, Over 2.5, Double Chance, Draw No Bet und weiteren Fussball-Maerkten.",
+        "Tiefgehende Erklärungen zu BTTS, Over 2.5, Double Chance, Draw No Bet und weiteren Fußball-Märkten.",
     },
     fr: {
-      title: "Types de Paris Expliques - BTTS, Over 2.5 | BetsPlug",
+      title: "Types de Paris Expliqués · BTTS, Over 2.5 · BetsPlug",
       description:
-        "Comment fonctionnent les marches de paris football populaires, comment les bookmakers les tarifent et quand le marche offre de la valeur. BTTS, Over 2.5, Double Chance.",
-      ogTitle: "Types de Paris Expliques - BetsPlug",
+        "Comment fonctionnent les marchés de pronostics football populaires, comment les bookmakers les tarifent et quand le marché offre de la valeur. BTTS, Over 2.5 et plus.",
+      ogTitle: "Types de Paris Expliqués · BetsPlug",
       ogDescription:
-        "Analyses approfondies de BTTS, Over 2.5, Double Chance, Draw No Bet et d'autres marches populaires.",
+        "Analyses approfondies de BTTS, Over 2.5, Double Chance, Draw No Bet et d'autres marchés populaires.",
     },
     es: {
-      title: "Tipos de Apuesta Explicados - BTTS, Over 2.5 | BetsPlug",
+      title: "Tipos de Apuesta Explicados · BTTS, Over 2.5 · BetsPlug",
       description:
-        "Como funcionan los mercados de apuestas de futbol populares, como los fijan los bookmakers y cuando el mercado ofrece valor. BTTS, Over 2.5, Double Chance y mas.",
-      ogTitle: "Tipos de Apuesta Explicados - BetsPlug",
+        "Cómo funcionan los mercados de apuestas de fútbol populares, cómo los fijan los bookmakers y cuándo el mercado ofrece valor. BTTS, Over 2.5, Double Chance y más.",
+      ogTitle: "Tipos de Apuesta Explicados · BetsPlug",
       ogDescription:
-        "Analisis detallados de BTTS, Over 2.5, Double Chance, Draw No Bet y mas mercados populares de futbol.",
+        "Análisis detallados de BTTS, Over 2.5, Double Chance, Draw No Bet y más mercados populares de fútbol.",
     },
     it: {
-      title: "Tipi di Scommessa Spiegati - BTTS, Over 2.5 | BetsPlug",
+      title: "Tipi di Scommessa Spiegati · BTTS, Over 2.5 · BetsPlug",
       description:
         "Come funzionano i mercati delle scommesse calcistiche, come i bookmaker li quotano e quando il mercato offre valore. BTTS, Over 2.5, Double Chance e Draw No Bet.",
-      ogTitle: "Tipi di Scommessa Spiegati - BetsPlug",
+      ogTitle: "Tipi di Scommessa Spiegati · BetsPlug",
       ogDescription:
         "Approfondimenti su BTTS, Over 2.5, Double Chance, Draw No Bet e altri mercati calcistici popolari.",
     },
     sw: {
-      title: "Aina za Kamari Zimeelezwa - BTTS, Over 2.5 | BetsPlug",
+      title: "Aina za Kamari Zimeelezwa · BTTS, Over 2.5 · BetsPlug",
       description:
-        "Jinsi masoko maarufu ya kamari za mpira yanavyofanya kazi, jinsi bukumeka zinavyoweka bei na masoko yanapotoa thamani. BTTS, Over 2.5, Double Chance na Draw No Bet.",
-      ogTitle: "Aina za Kamari Zimeelezwa - BetsPlug",
+        "Jinsi masoko maarufu ya kamari za soka yanavyofanya kazi, jinsi bukumeka zinavyoweka bei na masoko yanapotoa thamani. BTTS, Over 2.5, Double Chance na zaidi.",
+      ogTitle: "Aina za Kamari Zimeelezwa · BetsPlug",
       ogDescription:
         "Uchambuzi wa kina wa BTTS, Over 2.5, Double Chance, Draw No Bet na masoko mengine maarufu.",
     },
     id: {
-      title: "Jenis Taruhan Dijelaskan - BTTS, Over 2.5 | BetsPlug",
+      title: "Jenis Taruhan Dijelaskan · BTTS, Over 2.5 · BetsPlug",
       description:
-        "Bagaimana pasar taruhan sepak bola populer bekerja, bagaimana bandar menetapkan harga, dan kapan pasar menawarkan nilai. BTTS, Over 2.5, Double Chance dan Draw No Bet.",
-      ogTitle: "Jenis Taruhan Dijelaskan - BetsPlug",
+        "Bagaimana pasar taruhan sepak bola populer bekerja, bagaimana bandar menetapkan harga, dan kapan pasar menawarkan nilai. BTTS, Over 2.5, Double Chance dan lebih.",
+      ogTitle: "Jenis Taruhan Dijelaskan · BetsPlug",
       ogDescription:
         "Pembahasan mendalam tentang BTTS, Over 2.5, Double Chance, Draw No Bet, dan pasar sepak bola populer lainnya.",
     },
@@ -816,132 +817,132 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
   /* ─────────────────────────── WELCOME ──────────────────────── */
   "/welcome": {
     en: {
-      title: "Welcome Aboard - BetsPlug",
+      title: "Welcome Aboard · BetsPlug",
       description:
-        "Your BetsPlug membership is active. Log in to see today's picks, track your ROI and start winning smarter.",
+        "Your BetsPlug membership is active. Log in to see today's AI football predictions, track your ROI, and start winning smarter with data-driven match predictions.",
     },
     nl: {
-      title: "Welkom aan Boord - BetsPlug",
+      title: "Welkom aan Boord · BetsPlug",
       description:
-        "Uw BetsPlug-lidmaatschap is actief. Log in om de picks van vandaag te zien, uw ROI te volgen en slimmer te beginnen winnen.",
+        "Uw BetsPlug-lidmaatschap is actief. Log in om de AI voetbalvoorspellingen van vandaag te zien, uw ROI te volgen en slimmer te beginnen winnen met wedtips.",
     },
     de: {
-      title: "Willkommen an Bord - BetsPlug",
+      title: "Willkommen an Bord · BetsPlug",
       description:
-        "Ihre BetsPlug-Mitgliedschaft ist aktiv. Melden Sie sich an, um die heutigen Tipps zu sehen und Ihren ROI zu verfolgen.",
+        "Ihre BetsPlug-Mitgliedschaft ist aktiv. Melden Sie sich an, um die heutigen KI Fußballprognosen zu sehen, Ihren ROI zu verfolgen und klügere Wett-Tipps zu nutzen.",
     },
     fr: {
-      title: "Bienvenue a Bord - BetsPlug",
+      title: "Bienvenue à Bord · BetsPlug",
       description:
-        "Votre abonnement BetsPlug est actif. Connectez-vous pour voir les picks du jour, suivre votre ROI et commencer a gagner plus intelligemment.",
+        "Votre abonnement BetsPlug est actif. Connectez-vous pour voir les prédictions football IA du jour, suivre votre ROI et gagner plus intelligemment avec nos pronostics.",
     },
     es: {
-      title: "Bienvenido a Bordo - BetsPlug",
+      title: "Bienvenido a Bordo · BetsPlug",
       description:
-        "Su membresia BetsPlug esta activa. Inicie sesion para ver las selecciones de hoy, seguir su ROI y comenzar a ganar de forma mas inteligente.",
+        "Su membresía BetsPlug está activa. Inicie sesión para ver las predicciones fútbol IA de hoy, seguir su ROI y ganar de forma más inteligente con nuestras apuestas.",
     },
     it: {
-      title: "Benvenuto a Bordo - BetsPlug",
+      title: "Benvenuto a Bordo · BetsPlug",
       description:
-        "La tua iscrizione BetsPlug e attiva. Accedi per vedere le selezioni di oggi, monitorare il tuo ROI e iniziare a vincere in modo piu intelligente.",
+        "La tua iscrizione BetsPlug è attiva. Accedi per vedere i pronostici calcio IA di oggi, monitorare il tuo ROI e iniziare a vincere con le scommesse più intelligenti.",
     },
     sw: {
-      title: "Karibu Ndani - BetsPlug",
+      title: "Karibu Ndani · BetsPlug",
       description:
-        "Uanachama wako wa BetsPlug umewashwa. Ingia kuona chaguzi za leo, kufuatilia ROI yako na kuanza kushinda kwa akili zaidi.",
+        "Uanachama wako wa BetsPlug umewashwa. Ingia kuona utabiri wa soka wa AI wa leo, kufuatilia ROI yako na kuanza kushinda kwa akili zaidi na uchambuzi wa soka.",
     },
     id: {
-      title: "Selamat Datang - BetsPlug",
+      title: "Selamat Datang · BetsPlug",
       description:
-        "Keanggotaan BetsPlug Anda aktif. Masuk untuk melihat prediksi hari ini, melacak ROI, dan mulai menang lebih cerdas.",
+        "Keanggotaan BetsPlug Anda aktif. Masuk untuk melihat prediksi sepak bola AI hari ini, melacak ROI, dan mulai menang lebih cerdas dengan analisis sepak bola kami.",
     },
   },
 
   /* ─────────────────────────── B2B ────────────────────────────── */
   "/b2b": {
     en: {
-      title: "B2B Partnerships - BetsPlug",
+      title: "B2B Partnerships · BetsPlug",
       description:
-        "Partner with BetsPlug for AI-powered football analytics. Data licensing, white-label solutions, and affiliate partnerships for businesses.",
+        "Partner with BetsPlug for AI football predictions and analytics. Data licensing, white-label solutions, and affiliate partnerships for businesses seeking betting tips.",
     },
     nl: {
-      title: "B2B Partnerschappen - BetsPlug",
+      title: "B2B Partnerschappen · BetsPlug",
       description:
-        "Word partner van BetsPlug voor AI-gestuurde voetbalanalyse. Datalicenties, white-label oplossingen en affiliate-partnerschappen voor bedrijven.",
+        "Word partner van BetsPlug voor AI voetbalvoorspellingen en voetbalanalyse. Datalicenties, white-label oplossingen en affiliate-partnerschappen voor bedrijven.",
     },
     de: {
-      title: "B2B Partnerschaften - BetsPlug",
+      title: "B2B Partnerschaften · BetsPlug",
       description:
-        "Werden Sie Partner von BetsPlug fuer KI-gestuetzte Fussballanalyse. Datenlizenzen, White-Label-Loesungen und Affiliate-Partnerschaften fuer Unternehmen.",
+        "Werden Sie Partner von BetsPlug für KI Fußballprognosen und Fußballanalyse. Datenlizenzen, White-Label-Lösungen und Affiliate-Partnerschaften für Unternehmen.",
     },
     fr: {
-      title: "Partenariats B2B - BetsPlug",
+      title: "Partenariats B2B · BetsPlug",
       description:
-        "Devenez partenaire de BetsPlug pour l'analyse football par IA. Licences de donnees, solutions en marque blanche et partenariats d'affiliation pour les entreprises.",
+        "Devenez partenaire de BetsPlug pour les prédictions football IA et l'analyse football. Licences de données, solutions en marque blanche et partenariats d'affiliation.",
     },
     es: {
-      title: "Asociaciones B2B - BetsPlug",
+      title: "Asociaciones B2B · BetsPlug",
       description:
-        "Asociese con BetsPlug para analisis de futbol con IA. Licencias de datos, soluciones de marca blanca y asociaciones de afiliados para empresas.",
+        "Asóciese con BetsPlug para predicciones fútbol IA y análisis de fútbol. Licencias de datos, soluciones de marca blanca y asociaciones de afiliados para empresas.",
     },
     it: {
-      title: "Partnership B2B - BetsPlug",
+      title: "Partnership B2B · BetsPlug",
       description:
-        "Diventa partner di BetsPlug per analisi calcistiche con IA. Licenze dati, soluzioni white-label e partnership di affiliazione per aziende.",
+        "Diventa partner di BetsPlug per pronostici calcio IA e analisi calcistica. Licenze dati, soluzioni white-label e partnership di affiliazione per aziende.",
     },
     sw: {
-      title: "Ushirikiano wa B2B - BetsPlug",
+      title: "Ushirikiano wa B2B · BetsPlug",
       description:
-        "Shirikiana na BetsPlug kwa uchambuzi wa mpira kwa AI. Leseni za data, suluhisho za white-label na ushirikiano wa washirika kwa biashara.",
+        "Shirikiana na BetsPlug kwa utabiri wa soka kwa AI na uchambuzi wa soka. Leseni za data, suluhisho za white-label na ushirikiano wa washirika kwa biashara.",
     },
     id: {
-      title: "Kemitraan B2B - BetsPlug",
+      title: "Kemitraan B2B · BetsPlug",
       description:
-        "Bermitra dengan BetsPlug untuk analisis sepak bola bertenaga AI. Lisensi data, solusi white-label, dan kemitraan afiliasi untuk bisnis.",
+        "Bermitra dengan BetsPlug untuk prediksi sepak bola AI dan analisis sepak bola. Lisensi data, solusi white-label, dan kemitraan afiliasi untuk bisnis.",
     },
   },
 
   /* ─────────────────────────── CHECKOUT ─────────────────────── */
   "/checkout": {
     en: {
-      title: "Checkout - Start Your BetsPlug Subscription",
+      title: "Checkout · Start Your BetsPlug Subscription",
       description:
-        "Complete your BetsPlug subscription in three quick steps. 14-day money-back guarantee, SSL-encrypted checkout, cancel any time.",
+        "Complete your BetsPlug subscription in three quick steps. Get AI football predictions and match analytics with a 14-day money-back guarantee. Cancel any time.",
     },
     nl: {
-      title: "Afrekenen - Start Uw BetsPlug-abonnement",
+      title: "Afrekenen · Start Uw BetsPlug-Abonnement",
       description:
-        "Voltooi uw BetsPlug-abonnement in drie snelle stappen. 14 dagen geld-terug-garantie, SSL-versleutelde checkout, op elk moment opzegbaar.",
+        "Voltooi uw BetsPlug-abonnement in drie snelle stappen. Krijg AI voetbalvoorspellingen en wedstrijdvoorspellingen met 14 dagen geld-terug-garantie. Op elk moment opzegbaar.",
     },
     de: {
-      title: "Kasse - Starten Sie Ihr BetsPlug-Abo",
+      title: "Kasse · Starten Sie Ihr BetsPlug-Abo",
       description:
-        "Schliessen Sie Ihr BetsPlug-Abonnement in drei schnellen Schritten ab. 14 Tage Geld-zurueck-Garantie, SSL-verschluesselter Checkout, jederzeit kuendbar.",
+        "Schließen Sie Ihr BetsPlug-Abonnement in drei schnellen Schritten ab. Erhalten Sie KI Fußballprognosen und Wett-Tipps mit 14 Tage Geld-zurück-Garantie.",
     },
     fr: {
-      title: "Paiement - Demarrez Votre Abonnement BetsPlug",
+      title: "Paiement · Démarrez Votre Abonnement BetsPlug",
       description:
-        "Finalisez votre abonnement BetsPlug en trois etapes rapides. Garantie de remboursement de 14 jours, paiement crypte SSL, resiliation a tout moment.",
+        "Finalisez votre abonnement BetsPlug en trois étapes rapides. Accédez aux prédictions football IA et pronostics avec garantie de remboursement de 14 jours.",
     },
     es: {
-      title: "Pago - Comience Su Suscripcion BetsPlug",
+      title: "Pago · Comience Su Suscripción BetsPlug",
       description:
-        "Complete su suscripcion BetsPlug en tres pasos rapidos. Garantia de devolucion de 14 dias, pago encriptado SSL, cancele en cualquier momento.",
+        "Complete su suscripción BetsPlug en tres pasos rápidos. Obtenga predicciones fútbol IA y análisis de fútbol con garantía de devolución de 14 días. Cancele cuando quiera.",
     },
     it: {
-      title: "Checkout - Inizia il Tuo Abbonamento BetsPlug",
+      title: "Checkout · Inizia il Tuo Abbonamento BetsPlug",
       description:
-        "Completa il tuo abbonamento BetsPlug in tre rapidi passaggi. Garanzia di rimborso di 14 giorni, checkout crittografato SSL, cancella quando vuoi.",
+        "Completa il tuo abbonamento BetsPlug in tre rapidi passaggi. Ottieni pronostici calcio IA e analisi calcistica con garanzia di rimborso di 14 giorni.",
     },
     sw: {
-      title: "Malipo - Anza Usajili Wako wa BetsPlug",
+      title: "Malipo · Anza Usajili Wako wa BetsPlug",
       description:
-        "Kamilisha usajili wako wa BetsPlug kwa hatua tatu za haraka. Dhamana ya kurudishiwa pesa siku 14, malipo yaliyosimbwa kwa SSL, futa wakati wowote.",
+        "Kamilisha usajili wako wa BetsPlug kwa hatua tatu za haraka. Pata utabiri wa soka kwa AI na uchambuzi wa soka na dhamana ya kurudishiwa pesa siku 14.",
     },
     id: {
-      title: "Pembayaran - Mulai Langganan BetsPlug Anda",
+      title: "Pembayaran · Mulai Langganan BetsPlug Anda",
       description:
-        "Selesaikan langganan BetsPlug Anda dalam tiga langkah cepat. Jaminan uang kembali 14 hari, checkout terenkripsi SSL, batalkan kapan saja.",
+        "Selesaikan langganan BetsPlug Anda dalam tiga langkah cepat. Dapatkan prediksi sepak bola AI dan analisis sepak bola dengan jaminan uang kembali 14 hari.",
     },
   },
 };

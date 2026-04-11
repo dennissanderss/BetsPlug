@@ -5,12 +5,18 @@
  * Uses google-translate-api-x (free, no API key, no credit card)
  * to translate missing/new English keys to all target locales.
  *
+ * Handles three translation targets:
+ *   1. Locale files (de.ts, fr.ts, es.ts, it.ts, sw.ts, id.ts)
+ *   2. NL translations inline in messages.ts
+ *   3. Page metadata in page-meta.ts (all 8 locales)
+ *
  * Usage:
  *   node scripts/translate.mjs              # translate all missing keys
  *   node scripts/translate.mjs --force      # re-translate ALL keys
  *   node scripts/translate.mjs --keys "b2b.*,footer.*"  # only specific key patterns
  *   node scripts/translate.mjs --locales "de,fr"         # only specific locales
  *   node scripts/translate.mjs --dry-run    # preview without writing
+ *   node scripts/translate.mjs --skip-page-meta           # skip page-meta.ts
  */
 
 import fs from "fs";
@@ -22,11 +28,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const I18N_DIR = path.join(__dirname, "../src/i18n");
 const MESSAGES_FILE = path.join(I18N_DIR, "messages.ts");
 const LOCALES_DIR = path.join(I18N_DIR, "locales");
+const PAGE_META_FILE = path.join(__dirname, "../src/data/page-meta.ts");
 
 /* ── Config ────────────────────────────────────────────────── */
 
 const TARGET_LOCALES = ["de", "fr", "es", "it", "sw", "id"];
-// NL is inline in messages.ts — handled separately
+const ALL_LOCALES = ["nl", "de", "fr", "es", "it", "sw", "id"];
 
 const LOCALE_CODES = {
   de: "de",
@@ -47,6 +54,7 @@ const DELAY_MS = 1500;       // delay between batches
 const args = process.argv.slice(2);
 const forceAll = args.includes("--force");
 const dryRun = args.includes("--dry-run");
+const skipPageMeta = args.includes("--skip-page-meta");
 const keysArg = args.find((a) => a.startsWith("--keys="))?.split("=")[1]
   ?? (args.includes("--keys") ? args[args.indexOf("--keys") + 1] : null);
 const localesArg = args.find((a) => a.startsWith("--locales="))?.split("=")[1]
@@ -64,8 +72,18 @@ function sleep(ms) {
 }
 
 /**
+ * Escape a string for use in a TypeScript double-quoted string literal.
+ */
+function escapeForTS(value) {
+  return value
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, "\\n");
+}
+
+/**
  * Parse a TypeScript file containing a flat key-value object.
- * Returns a Map of key → value strings.
+ * Returns a Map of key -> value strings.
  */
 function parseTranslationFile(content) {
   const entries = new Map();
@@ -87,31 +105,49 @@ function parseTranslationFile(content) {
 }
 
 /**
- * Extract the English dictionary from messages.ts
+ * Find a top-level object block in TypeScript source by its declaration prefix.
+ * Returns { start, bodyStart, bodyEnd, end } character offsets.
+ *   start     = first char of the declaration (e.g. "const en")
+ *   bodyStart = char after opening "{"
+ *   bodyEnd   = char of closing "}"
+ *   end       = char after closing "}" (may include ";")
  */
-function extractEnglishDict() {
-  const content = fs.readFileSync(MESSAGES_FILE, "utf-8");
+function findObjectBlock(content, prefix) {
+  const idx = content.indexOf(prefix);
+  if (idx === -1) throw new Error(`Could not find '${prefix}' in file`);
 
-  // Find the `const en = {` block — it ends at the next `};` at column 0
-  const enStart = content.indexOf("const en = {");
-  if (enStart === -1) throw new Error("Could not find 'const en = {' in messages.ts");
+  const braceStart = content.indexOf("{", idx);
+  if (braceStart === -1) throw new Error(`No opening brace found for '${prefix}'`);
 
-  // Find the matching closing brace
   let depth = 0;
-  let enEnd = -1;
-  for (let i = content.indexOf("{", enStart); i < content.length; i++) {
+  let braceEnd = -1;
+  for (let i = braceStart; i < content.length; i++) {
     if (content[i] === "{") depth++;
     if (content[i] === "}") {
       depth--;
       if (depth === 0) {
-        enEnd = i + 1;
+        braceEnd = i;
         break;
       }
     }
   }
-  if (enEnd === -1) throw new Error("Could not find end of en object");
+  if (braceEnd === -1) throw new Error(`Could not find closing brace for '${prefix}'`);
 
-  const enBlock = content.slice(enStart, enEnd);
+  return {
+    start: idx,
+    bodyStart: braceStart + 1,
+    bodyEnd: braceEnd,
+    end: braceEnd + 1,
+  };
+}
+
+/**
+ * Extract the English dictionary from messages.ts
+ */
+function extractEnglishDict() {
+  const content = fs.readFileSync(MESSAGES_FILE, "utf-8");
+  const block = findObjectBlock(content, "const en = {");
+  const enBlock = content.slice(block.start, block.end);
   return parseTranslationFile(enBlock);
 }
 
@@ -120,25 +156,37 @@ function extractEnglishDict() {
  */
 function extractNlDict() {
   const content = fs.readFileSync(MESSAGES_FILE, "utf-8");
-  const nlStart = content.indexOf("const nl");
-  if (nlStart === -1) throw new Error("Could not find 'const nl' in messages.ts");
-
-  let depth = 0;
-  let nlEnd = -1;
-  for (let i = content.indexOf("{", nlStart); i < content.length; i++) {
-    if (content[i] === "{") depth++;
-    if (content[i] === "}") {
-      depth--;
-      if (depth === 0) {
-        nlEnd = i + 1;
-        break;
-      }
-    }
-  }
-  if (nlEnd === -1) throw new Error("Could not find end of nl object");
-
-  const nlBlock = content.slice(nlStart, nlEnd);
+  const block = findObjectBlock(content, "const nl");
+  const nlBlock = content.slice(block.start, block.end);
   return parseTranslationFile(nlBlock);
+}
+
+/**
+ * Insert new NL key-value pairs into the nl block in messages.ts.
+ * Appends them just before the closing "}" of the nl object.
+ */
+function insertNlKeys(newEntries) {
+  let content = fs.readFileSync(MESSAGES_FILE, "utf-8");
+  const block = findObjectBlock(content, "const nl");
+
+  // Build the new lines to insert
+  const lines = [];
+  for (const [key, value] of newEntries) {
+    const escaped = escapeForTS(value);
+    lines.push(`  "${key}": "${escaped}",`);
+  }
+
+  // Insert before the closing brace of the nl block
+  const insertPoint = block.bodyEnd;
+  const before = content.slice(0, insertPoint);
+  const after = content.slice(insertPoint);
+
+  // Add a newline before the new entries if the last char isn't one
+  const needsNewline = before.length > 0 && before[before.length - 1] !== "\n";
+  const insertion = (needsNewline ? "\n" : "") + lines.join("\n") + "\n";
+
+  content = before + insertion + after;
+  fs.writeFileSync(MESSAGES_FILE, content, "utf-8");
 }
 
 /**
@@ -172,11 +220,7 @@ function writeLocaleFile(locale, translations) {
     lastPrefix = prefix;
 
     const value = translations.get(key);
-    // Escape for TypeScript string
-    const escaped = value
-      .replace(/\\/g, "\\\\")
-      .replace(/"/g, '\\"')
-      .replace(/\n/g, "\\n");
+    const escaped = escapeForTS(value);
     lines.push(`  "${key}": "${escaped}",`);
   }
 
@@ -224,6 +268,276 @@ async function translateBatch(texts, targetLang) {
   }
 }
 
+/* ── page-meta.ts helpers ─────────────────────────────────── */
+
+const PAGE_META_LOCALES = ["en", "nl", "de", "fr", "es", "it", "sw", "id"];
+
+/**
+ * Parse page-meta.ts and return a structured representation.
+ * Returns an array of { route, locales: { [locale]: { title, description, ogTitle?, ogDescription? } } }
+ * along with the raw file content for rewriting.
+ */
+function parsePageMeta() {
+  const content = fs.readFileSync(PAGE_META_FILE, "utf-8");
+
+  // Find each route entry by matching the pattern:  "/route": {
+  const routeRegex = /^(\s*)"(\/[^"]*)":\s*\{/gm;
+  const routes = [];
+  let match;
+
+  while ((match = routeRegex.exec(content)) !== null) {
+    const route = match[2];
+    const indent = match[1];
+    const routeStart = match.index;
+
+    // Find the matching closing brace for this route block
+    const braceStart = content.indexOf("{", routeStart + match[0].indexOf("{"));
+    let depth = 0;
+    let routeEnd = -1;
+    for (let i = braceStart; i < content.length; i++) {
+      if (content[i] === "{") depth++;
+      if (content[i] === "}") {
+        depth--;
+        if (depth === 0) {
+          routeEnd = i + 1;
+          break;
+        }
+      }
+    }
+    if (routeEnd === -1) continue;
+
+    const routeBlock = content.slice(braceStart, routeEnd);
+
+    // Parse each locale within this route block
+    const locales = {};
+    for (const locale of PAGE_META_LOCALES) {
+      const localeRegex = new RegExp(`(\\s*)${locale}:\\s*\\{`, "g");
+      const lm = localeRegex.exec(routeBlock);
+      if (!lm) continue;
+
+      // Find matching closing brace
+      const lBraceStart = routeBlock.indexOf("{", lm.index + lm[0].indexOf("{"));
+      let ld = 0;
+      let lBraceEnd = -1;
+      for (let i = lBraceStart; i < routeBlock.length; i++) {
+        if (routeBlock[i] === "{") ld++;
+        if (routeBlock[i] === "}") {
+          ld--;
+          if (ld === 0) {
+            lBraceEnd = i + 1;
+            break;
+          }
+        }
+      }
+      if (lBraceEnd === -1) continue;
+
+      const localeBlock = routeBlock.slice(lBraceStart, lBraceEnd);
+
+      // Extract fields
+      const getField = (field) => {
+        // Match field: "value" or field:\n  "value"
+        const fRegex = new RegExp(`${field}:\\s*"((?:[^"\\\\]|\\\\.)*)"`, "s");
+        const fm = fRegex.exec(localeBlock);
+        return fm ? fm[1].replace(/\\"/g, '"').replace(/\\n/g, "\n").replace(/\\\\/g, "\\") : undefined;
+      };
+
+      locales[locale] = {
+        title: getField("title"),
+        description: getField("description"),
+        ogTitle: getField("ogTitle"),
+        ogDescription: getField("ogDescription"),
+      };
+    }
+
+    routes.push({ route, indent, locales, blockStart: routeStart, blockEnd: routeEnd });
+  }
+
+  return { routes, content };
+}
+
+/**
+ * Generate a locale block string for page-meta.ts
+ */
+function formatLocaleBlock(locale, meta, indent) {
+  const inner = indent + "    ";
+  const lines = [`${indent}  ${locale}: {`];
+  lines.push(`${inner}title: "${escapeForTS(meta.title)}",`);
+  lines.push(`${inner}description:`);
+  lines.push(`${inner}  "${escapeForTS(meta.description)}",`);
+  if (meta.ogTitle) {
+    lines.push(`${inner}ogTitle: "${escapeForTS(meta.ogTitle)}",`);
+  }
+  if (meta.ogDescription) {
+    lines.push(`${inner}ogDescription:`);
+    lines.push(`${inner}  "${escapeForTS(meta.ogDescription)}",`);
+  }
+  lines.push(`${indent}  },`);
+  return lines.join("\n");
+}
+
+/**
+ * Translate missing locale entries in page-meta.ts
+ */
+async function translatePageMeta() {
+  console.log("\n  ── PAGE-META.TS ────────────────────────────");
+
+  const { routes, content } = parsePageMeta();
+  console.log(`  Found ${routes.length} page routes`);
+
+  // Collect all missing translations
+  const missing = []; // { route, locale, enMeta }
+  for (const route of routes) {
+    const enMeta = route.locales.en;
+    if (!enMeta || !enMeta.title) {
+      console.log(`  Warning: no EN entry for ${route.route}, skipping`);
+      continue;
+    }
+
+    for (const locale of PAGE_META_LOCALES) {
+      if (locale === "en") continue;
+      if (!forceAll && route.locales[locale]?.title) continue;
+      // If filtering by locale, only translate those
+      if (localesArg && !localesArg.split(",").map(l => l.trim()).includes(locale)) continue;
+      missing.push({ route: route.route, locale, enMeta });
+    }
+  }
+
+  if (missing.length === 0) {
+    console.log("  Nothing to translate ✓\n");
+    return 0;
+  }
+
+  console.log(`  Missing entries: ${missing.length}`);
+
+  // Group by locale for efficient batch translation
+  const byLocale = {};
+  for (const m of missing) {
+    if (!byLocale[m.locale]) byLocale[m.locale] = [];
+    byLocale[m.locale].push(m);
+  }
+
+  // Translate each locale batch
+  const translations = new Map(); // "route|locale" -> { title, description, ogTitle?, ogDescription? }
+  let totalDone = 0;
+
+  for (const [locale, entries] of Object.entries(byLocale)) {
+    const langCode = LOCALE_CODES[locale];
+    if (!langCode) continue;
+
+    console.log(`  Translating ${entries.length} entries to ${locale.toUpperCase()}...`);
+
+    // Build flat text array: [title1, desc1, ogTitle1?, ogDesc1?, title2, ...]
+    const textItems = [];
+    const textMap = []; // track which entry + field each text belongs to
+    for (const entry of entries) {
+      textItems.push(entry.enMeta.title);
+      textMap.push({ route: entry.route, locale, field: "title" });
+
+      textItems.push(entry.enMeta.description);
+      textMap.push({ route: entry.route, locale, field: "description" });
+
+      if (entry.enMeta.ogTitle) {
+        textItems.push(entry.enMeta.ogTitle);
+        textMap.push({ route: entry.route, locale, field: "ogTitle" });
+      }
+      if (entry.enMeta.ogDescription) {
+        textItems.push(entry.enMeta.ogDescription);
+        textMap.push({ route: entry.route, locale, field: "ogDescription" });
+      }
+    }
+
+    // Translate in batches
+    for (let i = 0; i < textItems.length; i += BATCH_SIZE) {
+      const batch = textItems.slice(i, i + BATCH_SIZE);
+      const batchMap = textMap.slice(i, i + BATCH_SIZE);
+
+      const results = await translateBatch(batch, langCode);
+
+      for (let j = 0; j < batchMap.length; j++) {
+        const { route, locale: loc, field } = batchMap[j];
+        const key = `${route}|${loc}`;
+        if (!translations.has(key)) {
+          translations.set(key, {});
+        }
+        translations.get(key)[field] = results[j];
+      }
+
+      totalDone += batch.length;
+      if (i + BATCH_SIZE < textItems.length) {
+        await sleep(DELAY_MS);
+      }
+    }
+  }
+
+  if (dryRun) {
+    console.log(`  Would write ${translations.size} locale entries to page-meta.ts`);
+    for (const [key, meta] of translations) {
+      const [route, locale] = key.split("|");
+      console.log(`    ${route} -> ${locale}: "${meta.title}"`);
+    }
+    console.log("");
+    return missing.length;
+  }
+
+  // Re-read and rebuild page-meta.ts with new translations inserted
+  let updated = fs.readFileSync(PAGE_META_FILE, "utf-8");
+  const freshParsed = parsePageMeta();
+
+  // Process routes in reverse order so character offsets stay valid
+  for (let ri = freshParsed.routes.length - 1; ri >= 0; ri--) {
+    const route = freshParsed.routes[ri];
+    const indent = route.indent || "  ";
+
+    // Collect new locale blocks to insert for this route
+    const newBlocks = [];
+    for (const locale of PAGE_META_LOCALES) {
+      if (locale === "en") continue;
+      const key = `${route.route}|${locale}`;
+      if (!translations.has(key)) continue;
+
+      // Only insert if this locale was truly missing
+      if (!forceAll && route.locales[locale]?.title) continue;
+
+      newBlocks.push({ locale, meta: translations.get(key) });
+    }
+
+    if (newBlocks.length === 0) continue;
+
+    // Find the closing brace of the route block
+    const routeBlockContent = updated.slice(route.blockStart, route.blockEnd);
+    const outerBraceStart = routeBlockContent.indexOf("{");
+    let depth = 0;
+    let outerBraceEnd = -1;
+    for (let i = outerBraceStart; i < routeBlockContent.length; i++) {
+      if (routeBlockContent[i] === "{") depth++;
+      if (routeBlockContent[i] === "}") {
+        depth--;
+        if (depth === 0) {
+          outerBraceEnd = i;
+          break;
+        }
+      }
+    }
+    if (outerBraceEnd === -1) continue;
+
+    const insertPos = route.blockStart + outerBraceEnd;
+
+    // Build insertion text
+    const insertLines = newBlocks.map(({ locale, meta }) =>
+      formatLocaleBlock(locale, meta, indent)
+    );
+    const insertText = "\n" + insertLines.join("\n");
+
+    updated = updated.slice(0, insertPos) + insertText + "\n" + updated.slice(insertPos);
+  }
+
+  fs.writeFileSync(PAGE_META_FILE, updated, "utf-8");
+  console.log(`  Written: ${translations.size} new locale entries to page-meta.ts`);
+  console.log("");
+
+  return missing.length;
+}
+
 /* ── Main ──────────────────────────────────────────────────── */
 
 async function main() {
@@ -237,11 +551,13 @@ async function main() {
   const enDict = extractEnglishDict();
   console.log(`  English source: ${enDict.size} keys\n`);
 
-  // 2. Process each locale
+  // 2. Process each locale file (de, fr, es, it, sw, id)
   let totalTranslated = 0;
   let totalSkipped = 0;
 
   for (const locale of targetLocales) {
+    if (locale === "nl") continue; // NL handled separately below
+
     const langCode = LOCALE_CODES[locale];
     if (!langCode) {
       console.log(`  Skipping unknown locale: ${locale}`);
@@ -251,10 +567,7 @@ async function main() {
     console.log(`  ── ${locale.toUpperCase()} ──────────────────────────────────`);
 
     // Read existing translations
-    const existing = locale === "nl"
-      ? extractNlDict()
-      : readLocaleFile(locale);
-
+    const existing = readLocaleFile(locale);
     console.log(`  Existing: ${existing.size} keys`);
 
     // Find keys that need translation
@@ -299,13 +612,7 @@ async function main() {
 
     console.log(""); // newline after progress
 
-    // Write file (skip NL — it's inline in messages.ts)
-    if (locale === "nl") {
-      console.log(`  NL is inline in messages.ts — output to console:`);
-      for (const { key } of toTranslate) {
-        console.log(`    "${key}": "${translated.get(key)}",`);
-      }
-    } else if (!dryRun) {
+    if (!dryRun) {
       writeLocaleFile(locale, translated);
       console.log(`  Written: ${translated.size} keys → locales/${locale}.ts`);
     } else {
@@ -314,6 +621,68 @@ async function main() {
 
     totalTranslated += toTranslate.length;
     console.log("");
+  }
+
+  // 3. NL auto-translation (inline in messages.ts)
+  console.log("  ── NL (inline) ──────────────────────────────");
+
+  const nlDict = extractNlDict();
+  console.log(`  Existing NL: ${nlDict.size} keys`);
+
+  const nlToTranslate = [];
+  for (const [key, enValue] of enDict) {
+    if (!matchesKeyPattern(key)) continue;
+    if (!forceAll && nlDict.has(key)) continue;
+    nlToTranslate.push({ key, text: enValue });
+  }
+
+  if (nlToTranslate.length === 0) {
+    console.log("  Nothing to translate ✓\n");
+  } else {
+    console.log(`  To translate: ${nlToTranslate.length} keys`);
+
+    const nlTranslated = new Map();
+    let done = 0;
+
+    for (let i = 0; i < nlToTranslate.length; i += BATCH_SIZE) {
+      const batch = nlToTranslate.slice(i, i + BATCH_SIZE);
+      const texts = batch.map((b) => b.text);
+
+      const results = await translateBatch(texts, "nl");
+
+      for (let j = 0; j < batch.length; j++) {
+        nlTranslated.set(batch[j].key, results[j]);
+      }
+
+      done += batch.length;
+      const pct = Math.round((done / nlToTranslate.length) * 100);
+      process.stdout.write(`\r  Progress: ${done}/${nlToTranslate.length} (${pct}%)`);
+
+      if (i + BATCH_SIZE < nlToTranslate.length) {
+        await sleep(DELAY_MS);
+      }
+    }
+
+    console.log(""); // newline after progress
+
+    if (!dryRun) {
+      insertNlKeys(nlTranslated);
+      console.log(`  Inserted ${nlTranslated.size} keys into NL block in messages.ts`);
+    } else {
+      console.log(`  Would insert ${nlTranslated.size} keys into NL block:`);
+      for (const [key, value] of nlTranslated) {
+        console.log(`    "${key}": "${escapeForTS(value)}",`);
+      }
+    }
+
+    totalTranslated += nlToTranslate.length;
+    console.log("");
+  }
+
+  // 4. page-meta.ts translations
+  if (!skipPageMeta) {
+    const pageMetaCount = await translatePageMeta();
+    totalTranslated += pageMetaCount;
   }
 
   console.log("  ─────────────────────────────────────────");
