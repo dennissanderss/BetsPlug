@@ -362,7 +362,10 @@ class ApiClient {
   }
   getCalibration(params?: Record<string, string>) {
     const qs = params ? `?${new URLSearchParams(params)}` : "";
-    return this.request<import("@/types/api").CalibrationBucket[]>(
+    // v6.2: backend returns the full CalibrationReport object (with
+    // a buckets array inside), NOT a bare array. The old typing was
+    // wrong and hid the mismatch when the endpoint was 404'ing.
+    return this.request<import("@/types/api").CalibrationReport>(
       `/trackrecord/calibration${qs}`
     );
   }

@@ -852,12 +852,17 @@ export default function TrackrecordPage() {
     [monthSegments]
   );
 
-  // Transform calibration buckets to CalibrationChart format
+  // Transform calibration buckets to CalibrationChart format.
+  // v6.2: the backend returns a full CalibrationReport object with
+  // a `buckets` array inside. The old code assumed the response
+  // was a bare CalibrationBucket[] which crashed with
+  // ".map is not a function" the moment the endpoint started
+  // returning real data.
   const calibrationPoints: CalibrationPoint[] = React.useMemo(
     () =>
-      (calibrationData ?? []).map((b: CalibrationBucket) => ({
-        predicted: b.predicted_prob,
-        actual: b.actual_freq,
+      (calibrationData?.buckets ?? []).map((b: CalibrationBucket) => ({
+        predicted: b.predicted_avg,
+        actual: b.observed_freq,
         count: b.count,
       })),
     [calibrationData]

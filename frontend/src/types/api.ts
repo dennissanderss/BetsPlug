@@ -213,11 +213,22 @@ export interface SegmentPerformance {
 }
 
 export interface CalibrationBucket {
-  bucket_start: number;
-  bucket_end: number;
-  predicted_prob: number;
-  actual_freq: number;
+  bucket_index: number;
+  lower_bound: number;
+  upper_bound: number;
+  predicted_avg: number;
+  observed_freq: number;
   count: number;
+  calibration_gap: number;
+}
+
+export interface CalibrationReport {
+  model_version_id: string | null;
+  model_version_label: string | null;
+  num_buckets: number;
+  buckets: CalibrationBucket[];
+  overall_ece: number;
+  generated_at: string;
 }
 
 export interface BacktestRun {
