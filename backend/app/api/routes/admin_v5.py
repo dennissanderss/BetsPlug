@@ -1125,27 +1125,34 @@ async def dedupe_teams(
 async def seed_ou_strategies(
     db: AsyncSession = Depends(get_db),
 ):
+    # v5.1: rules no longer require the edge feature because historical
+    # odds coverage is < 2% — the edge would be 0 for every pick and the
+    # strategy would match nothing. Once the daily odds snapshot has
+    # accumulated ~2 weeks of data we can add an `edge > 0.04` variant.
     defs = [
         {
             "name": "High-Scoring Match",
             "description": (
-                "Over 2.5 goals pick when both sides have strong attacking "
-                "form and our Poisson lambda sees value over the market."
+                "Over 2.5 goals pick when our Poisson lambda sees a high "
+                "expected total. Until real historical odds are available, "
+                "we don't enforce a market-edge check — treat the strike "
+                "rate as a calibration signal, not a profit claim."
             ),
             "rules": [
                 {"feature": "expected_total_goals", "operator": ">", "value": 2.8},
-                {"feature": "over_2_5_edge", "operator": ">", "value": 0.04},
+                {"feature": "over_2_5_prob", "operator": ">", "value": 0.55},
             ],
         },
         {
             "name": "Defensive Battle",
             "description": (
-                "Under 2.5 goals pick when both sides are defensively tight "
-                "and the market overestimates the total."
+                "Under 2.5 goals pick when our Poisson lambda sees a low "
+                "expected total. Same caveat as High-Scoring Match about "
+                "the market-edge check."
             ),
             "rules": [
                 {"feature": "expected_total_goals", "operator": "<", "value": 2.2},
-                {"feature": "under_2_5_edge", "operator": ">", "value": 0.04},
+                {"feature": "under_2_5_prob", "operator": ">", "value": 0.55},
             ],
         },
     ]
@@ -1171,6 +1178,9 @@ async def seed_ou_strategies(
             created += 1
         else:
             existing.description = d["description"]
+            # v5.1: also update rules when reseeding so old seeds can
+            # be upgraded in place without manual DB editing.
+            existing.rules = d["rules"]
             updated += 1
     await db.commit()
     return {"created": created, "updated": updated}
