@@ -808,6 +808,144 @@ async def regenerate_predictions(
 # ──────────────────────────────────────────────────────────────────────────────
 
 
+# Process-level pending training samples — drained by /train-logistic-fit.
+_pending_logistic_samples: list[dict] = []
+
+
+@router.post(
+    "/train-logistic-collect",
+    summary="Chunked: collect training samples into in-memory cache",
+)
+async def train_logistic_collect(
+    offset: int = 0,
+    limit: int = 300,
+    reset: bool = False,
+    db: AsyncSession = Depends(get_db),
+):
+    """Build training samples for LogisticModel in chunks.
+
+    Call sequence (typical):
+        POST /train-logistic-collect?offset=0&limit=300&reset=true
+        POST /train-logistic-collect?offset=300&limit=300
+        POST /train-logistic-collect?offset=600&limit=300
+        ... (until the response shows matches_fetched < limit)
+        POST /train-logistic-fit
+
+    Each chunk pulls ``limit`` finished matches starting at
+    ``offset``, builds their match_context via ForecastService, and
+    appends to a module-level list (``_pending_logistic_samples``).
+    ``reset=true`` clears the list before collecting — always pass
+    it on the first call.
+
+    Why chunked: ``build_match_context`` is expensive (~300ms per
+    match × 7 queries) and a full 2 000-match run exceeds Railway's
+    180 s request budget. 300 per chunk fits in ~90 s.
+    """
+    import traceback
+    from app.forecasting.forecast_service import ForecastService
+
+    global _pending_logistic_samples
+    if reset:
+        _pending_logistic_samples = []
+
+    matches_fetched = 0
+    samples_appended = 0
+    error: Optional[str] = None
+    try:
+        stmt = (
+            select(Match)
+            .join(MatchResult, MatchResult.match_id == Match.id)
+            .where(Match.status == MatchStatus.FINISHED)
+            .order_by(Match.scheduled_at.desc())
+            .offset(offset)
+            .limit(limit)
+        )
+        matches = list((await db.execute(stmt)).scalars().all())
+        matches_fetched = len(matches)
+
+        forecast_service = ForecastService()
+        for match in matches:
+            try:
+                ctx = await forecast_service.build_match_context(match, db)
+            except Exception:
+                continue
+            mr = (
+                await db.execute(
+                    select(MatchResult).where(MatchResult.match_id == match.id)
+                )
+            ).scalar_one_or_none()
+            if mr is None:
+                continue
+            ctx["home_score"] = int(mr.home_score)
+            ctx["away_score"] = int(mr.away_score)
+            _pending_logistic_samples.append(ctx)
+            samples_appended += 1
+            if samples_appended % 50 == 0:
+                db.expire_all()
+    except Exception as exc:
+        log.exception("train_logistic_collect_fatal")
+        error = f"{type(exc).__name__}: {exc}\n{traceback.format_exc()[:1200]}"
+
+    return {
+        "offset": offset,
+        "limit": limit,
+        "reset": reset,
+        "matches_fetched": matches_fetched,
+        "samples_appended": samples_appended,
+        "pending_total": len(_pending_logistic_samples),
+        "error": error,
+    }
+
+
+@router.post(
+    "/train-logistic-fit",
+    summary="Chunked: fit LogisticModel on the collected pending samples",
+)
+async def train_logistic_fit(
+    clear_after: bool = True,
+    db: AsyncSession = Depends(get_db),
+):
+    """Fit LogisticModel using every sample collected by
+    ``/train-logistic-collect``. Caches the trained instance on
+    ``ForecastService._cached_logistic`` so the ensemble reuses it.
+    Clears the pending list after a successful fit by default.
+    """
+    import traceback
+    from uuid import uuid4
+    from app.forecasting.forecast_service import ForecastService
+    from app.forecasting.models.logistic_model import LogisticModel
+
+    global _pending_logistic_samples
+    pending = _pending_logistic_samples
+    if not pending:
+        return {
+            "trained": False,
+            "reason": "no_pending_samples",
+            "hint": "Run /train-logistic-collect with reset=true first.",
+        }
+
+    try:
+        model = LogisticModel(uuid4(), config={})
+        metrics = model.train(pending)
+        ForecastService.set_cached_logistic(model)
+        if clear_after:
+            _pending_logistic_samples = []
+        return {
+            "trained": True,
+            "samples_fitted": len(pending),
+            "metrics": metrics,
+            "feature_count": len(LogisticModel._FEATURE_NAMES),
+            "cache_cleared": clear_after,
+        }
+    except Exception as exc:
+        log.exception("train_logistic_fit_fatal")
+        return {
+            "trained": False,
+            "fatal_error": f"{type(exc).__name__}: {exc}\n{traceback.format_exc()[:1200]}",
+            "samples_attempted": len(pending),
+        }
+
+
 @router.post(
     "/train-logistic",
     summary="Train the LogisticModel on recent finished matches",

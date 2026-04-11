@@ -63,6 +63,110 @@ router = APIRouter()
 _LEAKAGE_WINRATE_CEILING = 0.58
 _LEAKAGE_ROI_CEILING = 0.08
 
+# v5.3: walk-forward-based validation thresholds. These replace the
+# winrate / roi ceilings as the primary signal once walk-forward data
+# is available for a strategy.
+_WF_MIN_SAMPLE = 100
+_WF_MIN_POSITIVE_RATIO = 0.60     # ≥ 60% of rolling test windows positive
+_WF_MIN_SHARPE = 1.0              # sharpe floor for "validated"
+_WF_MIN_MEAN_ROI = 0.02           # mean test ROI must exceed +2%
+_WF_MIN_ODDS_COVERAGE_PCT = 30.0  # at least 30% of picks have real odds
+
+
+def _compute_walk_forward_status(
+    sample_size: int,
+    winrate: float,
+    roi: float,
+    odds_coverage_pct: float,
+    wf: Optional[dict],
+) -> tuple[str, str]:
+    """v5.3 validation logic that uses walk-forward metrics as the
+    primary signal and falls back to the v5.0 winrate/ROI gates when
+    walk-forward data is not available.
+
+    Decision tree:
+      1. sample_size < 30 → insufficient_data
+      2. wf is None or wf.total_windows == 0 → fall back to v5.0 gate
+      3. wf.total_windows >= 3 AND wf.positive_windows_ratio >= 0.6
+         AND wf.sharpe >= 1.0 AND wf.mean_test_roi >= 0.02
+         AND odds_coverage_pct >= 30% → validated
+      4. wf.mean_test_roi < -0.02 → rejected
+      5. winrate > 58% or roi > 8% (v5.0 implausibility ceilings)
+         AND odds_coverage_pct < 30% → under_investigation
+      6. roi > 0.02 → break_even_promising
+      7. otherwise → break_even
+    """
+    if sample_size < 30:
+        return (
+            "insufficient_data",
+            f"Only {sample_size} picks — need ≥30 before we trust any number.",
+        )
+
+    # If walk-forward data exists, use it as the primary signal.
+    if wf is not None and wf.get("total_windows", 0) >= 3:
+        ratio = float(wf.get("positive_windows_ratio") or 0.0)
+        sharpe = float(wf.get("sharpe") or 0.0)
+        mean_roi = float(wf.get("mean_test_roi") or 0.0)
+
+        if mean_roi < -0.02:
+            return (
+                "rejected",
+                f"Walk-forward mean ROI {mean_roi:+.1%} is materially negative "
+                f"over {wf['total_windows']} rolling windows.",
+            )
+
+        if (
+            ratio >= _WF_MIN_POSITIVE_RATIO
+            and sharpe >= _WF_MIN_SHARPE
+            and mean_roi >= _WF_MIN_MEAN_ROI
+            and odds_coverage_pct >= _WF_MIN_ODDS_COVERAGE_PCT
+        ):
+            return (
+                "validated",
+                f"Walk-forward: {wf['positive_windows']}/{wf['total_windows']} "
+                f"positive windows, Sharpe {sharpe:.2f}, mean ROI {mean_roi:+.1%}, "
+                f"real-odds coverage {odds_coverage_pct:.0f}%.",
+            )
+
+        # Consistently positive but missing odds coverage or threshold.
+        if (
+            ratio >= _WF_MIN_POSITIVE_RATIO
+            and sharpe >= _WF_MIN_SHARPE
+            and mean_roi >= _WF_MIN_MEAN_ROI
+            and odds_coverage_pct < _WF_MIN_ODDS_COVERAGE_PCT
+        ):
+            return (
+                "under_investigation",
+                f"Walk-forward looks strong ({wf['positive_windows']}/{wf['total_windows']} "
+                f"positive, Sharpe {sharpe:.2f}), but real-odds coverage is only "
+                f"{odds_coverage_pct:.0f}% — ROI math still relies on the 1.90 "
+                f"fallback. Re-check after the odds snapshot cron has run for 2+ weeks.",
+            )
+
+        if mean_roi >= _WF_MIN_MEAN_ROI:
+            return (
+                "under_investigation",
+                f"Walk-forward mean ROI {mean_roi:+.1%} is positive but the pattern "
+                f"isn't robust: {wf['positive_windows']}/{wf['total_windows']} positive "
+                f"windows, Sharpe {sharpe:.2f}. Needs more data or tighter rule.",
+            )
+
+        if abs(mean_roi) <= 0.02:
+            return (
+                "break_even",
+                f"Walk-forward mean ROI {mean_roi:+.1%} is within the ±2% break-even band.",
+            )
+
+        # Negative but not extreme.
+        return (
+            "rejected",
+            f"Walk-forward mean ROI {mean_roi:+.1%} is negative.",
+        )
+
+    # Fallback to the v5.0 gate when walk-forward data is not available
+    # (e.g. sample too small for windows, or walk-forward wasn't run).
+    return _compute_validation_status(sample_size, winrate, roi)
+
 
 def _compute_validation_status(
     sample_size: int, winrate: float, roi: float
@@ -492,57 +596,36 @@ async def get_strategy_metrics(
     return result
 
 
-@router.get(
-    "/{strategy_id}/walk-forward",
-    summary="Rolling train/test walk-forward validation over the full history",
-)
-async def walk_forward_strategy(
-    strategy_id: uuid.UUID,
-    train_days: int = Query(default=28, ge=7, le=120),
-    test_days: int = Query(default=7, ge=1, le=30),
-    db: AsyncSession = Depends(get_db),
-):
-    """Proper ML-style walk-forward validation.
+async def _walk_forward_for_strategy(
+    strategy: Strategy,
+    train_days: int,
+    test_days: int,
+    db: AsyncSession,
+    pre_fetched_rows: Optional[list] = None,
+) -> dict:
+    """Pure helper that runs walk-forward for a single strategy.
 
-    Walks a rolling window over the strategy's evaluated picks:
-      * Train window of ``train_days`` days → used only to compute
-        the baseline ROI the test window is compared against.
-      * Test window of ``test_days`` days → out-of-sample metrics.
-      * Window slides forward by ``test_days`` each iteration.
-
-    Returns a list of ``(test_start, test_end, n, winrate, roi)``
-    tuples plus aggregate stats:
-      - ``mean_test_roi``: average ROI across all test windows
-      - ``std_test_roi``: standard deviation → volatility estimate
-      - ``positive_windows``: count of windows with ROI > 0
-      - ``total_windows``: total windows evaluated
-      - ``sharpe``: ``mean_test_roi / std_test_roi`` × sqrt(N)
-
-    This is the honest answer to "does this strategy work consistently
-    over time" vs the single-sample ``/metrics`` endpoint. A strategy
-    with +10% overall ROI but 5 losing + 3 winning windows has much
-    more risk than one with +5% overall ROI across 8 slightly-positive
-    windows.
+    Used by both ``GET /{id}/walk-forward`` (single) and the new
+    ``GET /walk-forward-all`` (batch). When called from the batch
+    endpoint, ``pre_fetched_rows`` avoids re-querying all
+    Prediction+Evaluation rows for every strategy.
     """
     import statistics
     from datetime import timedelta as _td
     from app.models.prediction import PredictionEvaluation
     from app.services.roi_calculator import realised_pnl_1x2
 
-    strat_result = await db.execute(select(Strategy).where(Strategy.id == strategy_id))
-    strategy = strat_result.scalar_one_or_none()
-    if strategy is None:
-        raise HTTPException(status_code=404, detail="Strategy not found")
+    if pre_fetched_rows is None:
+        q = (
+            select(Prediction, PredictionEvaluation, Match.scheduled_at)
+            .join(Match, Match.id == Prediction.match_id)
+            .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+            .order_by(Match.scheduled_at.asc())
+        )
+        rows = (await db.execute(q)).all()
+    else:
+        rows = pre_fetched_rows
 
-    q = (
-        select(Prediction, PredictionEvaluation, Match.scheduled_at)
-        .join(Match, Match.id == Prediction.match_id)
-        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
-        .order_by(Match.scheduled_at.asc())
-    )
-    rows = (await db.execute(q)).all()
-
-    # Filter to picks matching this strategy.
     matched: list[tuple] = []
     for pred, evaluation, sched in rows:
         if evaluate_strategy(strategy, pred, odds=None):
@@ -550,18 +633,21 @@ async def walk_forward_strategy(
 
     if len(matched) < 30:
         return {
-            "strategy_id": str(strategy_id),
+            "strategy_id": str(strategy.id),
             "strategy_name": strategy.name,
             "sample_size": len(matched),
+            "total_windows": 0,
+            "positive_windows": 0,
+            "mean_test_roi": 0.0,
+            "std_test_roi": 0.0,
+            "sharpe": 0.0,
             "windows": [],
             "reason": "insufficient_data_for_walk_forward",
-            "message": f"Only {len(matched)} picks — need at least 30 for walk-forward validation.",
         }
 
-    # Realised pnl for each pick (with real-odds lookup)
     picks_with_pnl: list[tuple[datetime, bool, float]] = []
     for pred, evaluation, sched in matched:
-        pnl, _odds_used, _source = await realised_pnl_1x2(
+        pnl, _odds, _src = await realised_pnl_1x2(
             prediction=pred,
             actual_outcome=evaluation.actual_outcome,
             is_correct=bool(evaluation.is_correct),
@@ -571,9 +657,14 @@ async def walk_forward_strategy(
 
     if not picks_with_pnl:
         return {
-            "strategy_id": str(strategy_id),
+            "strategy_id": str(strategy.id),
             "strategy_name": strategy.name,
             "sample_size": 0,
+            "total_windows": 0,
+            "positive_windows": 0,
+            "mean_test_roi": 0.0,
+            "std_test_roi": 0.0,
+            "sharpe": 0.0,
             "windows": [],
             "reason": "no_pnl_data",
         }
@@ -581,20 +672,19 @@ async def walk_forward_strategy(
     earliest = min(p[0] for p in picks_with_pnl)
     latest = max(p[0] for p in picks_with_pnl)
 
-    # First test window starts at earliest + train_days.
     window_start = earliest + _td(days=train_days)
     windows: list[dict] = []
     while window_start + _td(days=test_days) <= latest + _td(days=1):
         window_end = window_start + _td(days=test_days)
-        window_picks = [
+        win_picks = [
             (sched, correct, pnl)
             for sched, correct, pnl in picks_with_pnl
             if window_start <= sched < window_end
         ]
-        n = len(window_picks)
+        n = len(win_picks)
         if n > 0:
-            wins = sum(1 for _, c, _ in window_picks if c)
-            total_pnl = sum(pnl for _, _, pnl in window_picks)
+            wins = sum(1 for _, c, _ in win_picks if c)
+            total_pnl = sum(pnl for _, _, pnl in win_picks)
             windows.append({
                 "test_start": window_start.isoformat(),
                 "test_end": window_end.isoformat(),
@@ -606,9 +696,14 @@ async def walk_forward_strategy(
 
     if not windows:
         return {
-            "strategy_id": str(strategy_id),
+            "strategy_id": str(strategy.id),
             "strategy_name": strategy.name,
             "sample_size": len(picks_with_pnl),
+            "total_windows": 0,
+            "positive_windows": 0,
+            "mean_test_roi": 0.0,
+            "std_test_roi": 0.0,
+            "sharpe": 0.0,
             "windows": [],
             "reason": "no_test_windows_in_range",
         }
@@ -617,7 +712,6 @@ async def walk_forward_strategy(
     mean_roi = statistics.fmean(roi_values)
     std_roi = statistics.pstdev(roi_values) if len(roi_values) > 1 else 0.0
     positive = sum(1 for r in roi_values if r > 0)
-    # Sharpe-like: mean / std × sqrt(n_windows). Rough proxy; not annualised.
     sharpe = (
         (mean_roi / std_roi) * (len(roi_values) ** 0.5)
         if std_roi > 0
@@ -625,17 +719,261 @@ async def walk_forward_strategy(
     )
 
     return {
-        "strategy_id": str(strategy_id),
+        "strategy_id": str(strategy.id),
         "strategy_name": strategy.name,
         "sample_size": len(picks_with_pnl),
         "train_days": train_days,
         "test_days": test_days,
         "total_windows": len(windows),
         "positive_windows": positive,
+        "positive_windows_ratio": round(positive / len(windows), 4) if windows else 0.0,
         "mean_test_roi": round(mean_roi, 4),
         "std_test_roi": round(std_roi, 4),
         "sharpe": round(sharpe, 4),
         "windows": windows,
+    }
+
+
+@router.get(
+    "/walk-forward-all",
+    summary="Walk-forward validation for every strategy, ranked by Sharpe",
+)
+async def walk_forward_all(
+    train_days: int = Query(default=28, ge=7, le=120),
+    test_days: int = Query(default=14, ge=1, le=30),
+    db: AsyncSession = Depends(get_db),
+):
+    """Run walk-forward validation for every strategy in one call and
+    return a ranked list. Ranking is primarily by Sharpe (consistency)
+    and secondarily by positive_windows_ratio.
+
+    This is the v5.3 replacement for the winrate-based plausibility
+    gate: a strategy with 63% winrate but 37/37 positive windows is
+    far more trustworthy than one with 55% winrate but 15/30
+    positive windows. Gate logic in ``_compute_validation_status``
+    is updated to use these metrics.
+
+    Heavy: pre-fetches all Prediction+Evaluation rows ONCE and reuses
+    them across strategies. For ~5 000 picks × 15 strategies this
+    comes in under Railway's 180s timeout.
+    """
+    from app.models.prediction import PredictionEvaluation
+    import statistics
+
+    pre_fetch_stmt = (
+        select(Prediction, PredictionEvaluation, Match.scheduled_at)
+        .join(Match, Match.id == Prediction.match_id)
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .order_by(Match.scheduled_at.asc())
+    )
+    pre_fetched = (await db.execute(pre_fetch_stmt)).all()
+
+    strategies_stmt = select(Strategy).order_by(Strategy.name)
+    strategies = list((await db.execute(strategies_stmt)).scalars().all())
+
+    results: list[dict] = []
+    for strat in strategies:
+        result = await _walk_forward_for_strategy(
+            strategy=strat,
+            train_days=train_days,
+            test_days=test_days,
+            db=db,
+            pre_fetched_rows=pre_fetched,
+        )
+        # Drop the full windows list to keep the payload small.
+        # Callers can hit /{id}/walk-forward for per-window details.
+        result_slim = {k: v for k, v in result.items() if k != "windows"}
+        results.append(result_slim)
+
+    # Rank by: positive_windows_ratio desc, then Sharpe desc, then mean_roi desc
+    ranked = sorted(
+        results,
+        key=lambda r: (
+            r.get("positive_windows_ratio", 0.0),
+            r.get("sharpe", 0.0),
+            r.get("mean_test_roi", 0.0),
+        ),
+        reverse=True,
+    )
+
+    return {
+        "train_days": train_days,
+        "test_days": test_days,
+        "total_strategies": len(ranked),
+        "ranked": ranked,
+    }
+
+
+@router.get(
+    "/{strategy_id}/walk-forward",
+    summary="Rolling train/test walk-forward validation over the full history",
+)
+async def walk_forward_strategy(
+    strategy_id: uuid.UUID,
+    train_days: int = Query(default=28, ge=7, le=120),
+    test_days: int = Query(default=7, ge=1, le=30),
+    db: AsyncSession = Depends(get_db),
+):
+    """Proper ML-style walk-forward validation for a single strategy.
+
+    Delegates to ``_walk_forward_for_strategy`` so the logic stays in
+    one place. The single-strategy endpoint returns the full window
+    list; the batch endpoint (``/walk-forward-all``) strips it to
+    keep the payload small.
+    """
+    strat_result = await db.execute(select(Strategy).where(Strategy.id == strategy_id))
+    strategy = strat_result.scalar_one_or_none()
+    if strategy is None:
+        raise HTTPException(status_code=404, detail="Strategy not found")
+    return await _walk_forward_for_strategy(
+        strategy=strategy,
+        train_days=train_days,
+        test_days=test_days,
+        db=db,
+    )
+
+
+@router.post(
+    "/validation-refresh-v2",
+    summary="v5.3 refresh: walk-forward is primary signal, then gate",
+)
+async def refresh_strategy_validation_v2(
+    train_days: int = Query(default=28, ge=7, le=120),
+    test_days: int = Query(default=14, ge=1, le=30),
+    db: AsyncSession = Depends(get_db),
+):
+    """v5.3 replacement for the winrate-ceiling gate.
+
+    For every strategy:
+      1. Compute baseline metrics (winrate, roi, odds_coverage) via
+         ``compute_strategy_metrics_with_real_odds``.
+      2. Run walk-forward validation on the same picks.
+      3. Pass BOTH into ``_compute_walk_forward_status`` which
+         prefers the walk-forward signal when available.
+      4. Set is_active only for strategies with status == "validated".
+
+    Returns a ranked per-strategy summary plus the totals counter.
+    """
+    from app.models.prediction import PredictionEvaluation
+    from app.services.roi_calculator import compute_strategy_metrics_with_real_odds
+
+    result = await db.execute(select(Strategy).order_by(Strategy.name))
+    strategies = list(result.scalars().all())
+
+    # Pre-fetch every evaluated prediction + schedule once.
+    pre_fetch_stmt = (
+        select(Prediction, PredictionEvaluation, Match.scheduled_at)
+        .join(Match, Match.id == Prediction.match_id)
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .order_by(Match.scheduled_at.asc())
+    )
+    pre_fetched = (await db.execute(pre_fetch_stmt)).all()
+    # Picks-only tuples for the metrics call
+    base_picks_by_strategy: dict = {}
+
+    summary: list[dict] = []
+    for strat in strategies:
+        matched: list[tuple] = []
+        for pred, evaluation, _sched in pre_fetched:
+            if evaluate_strategy(strat, pred, odds=None):
+                matched.append((pred, evaluation))
+        sample_size = len(matched)
+
+        if sample_size == 0:
+            winrate = 0.0
+            roi = 0.0
+            odds_coverage_pct = 0.0
+            avg_odds_used = 0.0
+        else:
+            metrics = await compute_strategy_metrics_with_real_odds(
+                picks=matched,
+                db=db,
+            )
+            winrate = metrics["winrate"]
+            roi = metrics["roi"]
+            odds_coverage_pct = metrics["odds_coverage_pct"]
+            avg_odds_used = metrics["avg_odds_used"]
+
+        # Walk-forward pass — reuse the pre-fetched rows.
+        wf_result = await _walk_forward_for_strategy(
+            strategy=strat,
+            train_days=train_days,
+            test_days=test_days,
+            db=db,
+            pre_fetched_rows=pre_fetched,
+        )
+
+        validation_status, notes = _compute_walk_forward_status(
+            sample_size=sample_size,
+            winrate=winrate,
+            roi=roi,
+            odds_coverage_pct=odds_coverage_pct,
+            wf=wf_result,
+        )
+
+        was_active = bool(strat.is_active)
+        should_be_active = validation_status == "validated"
+        if was_active != should_be_active:
+            strat.is_active = should_be_active
+
+        summary.append(
+            {
+                "id": str(strat.id),
+                "name": strat.name,
+                "sample_size": sample_size,
+                "raw_winrate": round(winrate, 4),
+                "raw_roi": round(roi, 4),
+                "odds_coverage_pct": odds_coverage_pct,
+                "avg_odds_used": avg_odds_used,
+                "walk_forward": {
+                    "total_windows": wf_result.get("total_windows", 0),
+                    "positive_windows": wf_result.get("positive_windows", 0),
+                    "positive_windows_ratio": wf_result.get("positive_windows_ratio", 0.0),
+                    "mean_test_roi": wf_result.get("mean_test_roi", 0.0),
+                    "std_test_roi": wf_result.get("std_test_roi", 0.0),
+                    "sharpe": wf_result.get("sharpe", 0.0),
+                },
+                "validation_status": validation_status,
+                "validation_notes": notes,
+                "was_active": was_active,
+                "is_active": bool(strat.is_active),
+                "flipped": was_active != should_be_active,
+            }
+        )
+
+    await db.commit()
+
+    # Bust caches
+    from app.core.cache import cache_delete
+    for row in summary:
+        try:
+            await cache_delete(f"strategy:metrics:{row['id']}")
+            await cache_delete(f"strategy:today:{row['id']}")
+        except Exception:
+            pass
+
+    # Rank by positive_windows_ratio desc, then Sharpe desc.
+    summary.sort(
+        key=lambda r: (
+            r["walk_forward"]["positive_windows_ratio"],
+            r["walk_forward"]["sharpe"],
+            r["raw_roi"],
+        ),
+        reverse=True,
+    )
+
+    return {
+        "total_strategies": len(summary),
+        "validated": sum(1 for r in summary if r["validation_status"] == "validated"),
+        "under_investigation": sum(
+            1 for r in summary if r["validation_status"] == "under_investigation"
+        ),
+        "rejected": sum(1 for r in summary if r["validation_status"] == "rejected"),
+        "break_even": sum(1 for r in summary if r["validation_status"] == "break_even"),
+        "insufficient_data": sum(
+            1 for r in summary if r["validation_status"] == "insufficient_data"
+        ),
+        "results": summary,
     }
 
 
