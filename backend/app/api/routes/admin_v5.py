@@ -118,6 +118,7 @@ async def backfill_fixtures(
 ):
     """Pull finished fixtures for the last *days* days. Idempotent
     upsert on ``external_id``."""
+    import traceback
     adapter = await _api_football()
     today = date.today()
     date_from = today - timedelta(days=days)
@@ -127,6 +128,7 @@ async def backfill_fixtures(
     created_results = 0
     api_calls = 0
     per_league: list[dict] = []
+    fatal_error: Optional[str] = None
 
     try:
         # Make sure every target league exists first
@@ -217,6 +219,13 @@ async def backfill_fixtures(
                     "results_upserted": league_results,
                 }
             )
+    except Exception as exc:
+        log.exception("backfill_fixtures_fatal")
+        try:
+            await db.rollback()
+        except Exception:
+            pass
+        fatal_error = f"{type(exc).__name__}: {exc}\n{traceback.format_exc()[:2000]}"
     finally:
         try:
             await adapter.http_client.aclose()
@@ -230,6 +239,7 @@ async def backfill_fixtures(
         "updated_matches": updated_matches,
         "created_results": created_results,
         "per_league": per_league,
+        "fatal_error": fatal_error,
     }
 
 
@@ -942,24 +952,51 @@ async def _upsert_team(db: AsyncSession, league: League, team_raw: dict):
 
 
 async def _ensure_season(db: AsyncSession, league_id: uuid.UUID, season_name: str):
+    """Find-or-create a Season row.
+
+    API-Football returns the season as a single year integer ("2025"),
+    but the existing DataSyncService writes names like "2025-2026".
+    We normalise to the "YYYY-YYYY" format so both code paths share
+    the same rows. start_date / end_date are NOT NULL in the schema —
+    we derive them from the year.
+    """
+    from datetime import date as _date
     from app.models.season import Season
+
     if not season_name:
         return None
+
+    # Normalise "2025" → "2025-2026". Leave strings that already have
+    # a dash alone.
+    normalised = season_name
+    if "-" not in normalised:
+        try:
+            year = int(normalised)
+            normalised = f"{year}-{year + 1}"
+        except ValueError:
+            normalised = season_name
+
     existing = (
         await db.execute(
             select(Season).where(
-                and_(Season.league_id == league_id, Season.name == season_name)
+                and_(Season.league_id == league_id, Season.name == normalised)
             )
         )
     ).scalar_one_or_none()
     if existing is not None:
         return existing
+
+    # Derive start/end from the first year of the normalised name.
+    try:
+        start_year = int(normalised.split("-")[0])
+    except (ValueError, IndexError):
+        start_year = _date.today().year
     season = Season(
         id=uuid.uuid4(),
         league_id=league_id,
-        name=season_name,
-        start_date=None,
-        end_date=None,
+        name=normalised,
+        start_date=_date(start_year, 8, 1),
+        end_date=_date(start_year + 1, 5, 31),
         is_current=True,
     )
     db.add(season)
