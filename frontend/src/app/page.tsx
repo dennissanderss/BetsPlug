@@ -682,12 +682,16 @@ export default function LandingPage() {
           HERO SECTION
          ═══════════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32">
-        {/* Background layers */}
-        <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
+        {/* Stadium background image */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+        />
+        {/* Dark overlay gradient for readability */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14]/80 via-[#080b14]/70 to-[#080b14]" />
+        {/* Green ambient glow on top of photo */}
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.08] blur-[140px]" />
-          <div className="absolute right-10 top-40 h-[400px] w-[400px] rounded-full bg-emerald-500/[0.06] blur-[120px]" />
-          <div className="absolute left-10 top-80 h-[300px] w-[300px] rounded-full bg-lime-500/[0.04] blur-[100px]" />
+          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.06] blur-[140px]" />
         </div>
         {/* Floating sports elements */}
         <FloatingSports />
