@@ -260,6 +260,12 @@ async def backfill_statistics(
     API-Football's ``/fixtures/statistics`` endpoint. Respects *limit*
     to cap the number of API calls per invocation."""
     adapter = await _api_football()
+    # Only target matches that were ingested via API-Football (their
+    # external_id starts with ``apifb_match_``). Anything synced via
+    # football-data.org uses a different prefix and can't be looked up
+    # in API-Football's /fixtures/statistics endpoint anyway.
+    # Order by scheduled_at DESC so the most recent matches get
+    # enriched first — most valuable for the strategy metrics.
     target_ids_stmt = (
         select(Match.id, Match.external_id)
         .outerjoin(MatchStatistics, MatchStatistics.match_id == Match.id)
@@ -268,8 +274,10 @@ async def backfill_statistics(
                 Match.status == MatchStatus.FINISHED,
                 MatchStatistics.id.is_(None),
                 Match.external_id.is_not(None),
+                Match.external_id.like("apifb_match_%"),
             )
         )
+        .order_by(Match.scheduled_at.desc())
         .limit(limit)
     )
     rows = (await db.execute(target_ids_stmt)).all()
