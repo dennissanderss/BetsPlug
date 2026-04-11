@@ -34,7 +34,7 @@ const BetsPlugFooter = dynamic(() => import("@/components/ui/betsplug-footer").t
 const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section").then(m => m.TestimonialsSection), { ssr: false });
 const SocialProofPopup = dynamic(() => import("@/components/ui/social-proof-popup").then(m => m.SocialProofPopup), { ssr: false });
 const SeoSection = dynamic(() => import("@/components/ui/seo-section").then(m => m.SeoSection), { ssr: false });
-const FloatingSports = dynamic(() => import("@/components/ui/floating-sports").then(m => m.FloatingSports), { ssr: false });
+// FloatingSports removed — stadium background replaces floating icons
 const HowItWorks = dynamic(() => import("@/components/ui/how-it-works").then(m => m.HowItWorks), { ssr: false });
 const ComparisonTable = dynamic(() => import("@/components/ui/comparison-table").then(m => m.ComparisonTable), { ssr: false });
 const PricingSection = dynamic(() => import("@/components/ui/pricing-section").then(m => m.PricingSection), { ssr: false });
@@ -688,13 +688,7 @@ export default function LandingPage() {
           style={{ backgroundImage: "url('/hero-bg.jpg')" }}
         />
         {/* Dark overlay gradient for readability */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14]/80 via-[#080b14]/70 to-[#080b14]" />
-        {/* Green ambient glow on top of photo */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.06] blur-[140px]" />
-        </div>
-        {/* Floating sports elements */}
-        <FloatingSports />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14]/90 via-[#080b14]/85 to-[#080b14]" />
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
