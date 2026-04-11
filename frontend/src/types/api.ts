@@ -185,6 +185,31 @@ export interface PredictionMatchSummary {
   } | null;
 }
 
+/** Lightweight model summary embedded in PredictionResponse (v6.2).
+ * Surfaces which model produced each prediction for transparency. */
+export interface PredictionModelSummary {
+  id: string;
+  name: string;
+  version: string;
+  model_type: string;
+}
+
+/** Public view of a ModelVersion row returned by GET /api/models (v6.2). */
+export interface ModelOverview {
+  id: string;
+  name: string;
+  version: string;
+  model_type: string;
+  sport_scope: string;
+  description: string | null;
+  trained_at: string;
+  is_active: boolean;
+  accuracy: number | null;
+  brier_score: number | null;
+  sample_size: number | null;
+  hyperparameter_keys: string[];
+}
+
 export interface Prediction {
   id: string;
   match_id: string;
@@ -200,6 +225,35 @@ export interface Prediction {
   explanation: PredictionExplanation | null;
   evaluation: PredictionEvaluation | null;
   match: PredictionMatchSummary | null;
+  model: PredictionModelSummary | null;
+}
+
+/** v6.2: BOTD response now includes optional pre-match odds. */
+export interface BetOfTheDayOdds {
+  home: number | null;
+  draw: number | null;
+  away: number | null;
+  over_2_5: number | null;
+  under_2_5: number | null;
+  bookmaker: string | null;
+  fetched_at: string | null;
+}
+
+export interface BetOfTheDayResponse {
+  available: boolean;
+  match_id: string | null;
+  home_team: string | null;
+  away_team: string | null;
+  league: string | null;
+  scheduled_at: string | null;
+  home_win_prob: number | null;
+  draw_prob: number | null;
+  away_win_prob: number | null;
+  confidence: number | null;
+  predicted_outcome: string | null;
+  explanation_summary: string | null;
+  prediction_id: string | null;
+  odds: BetOfTheDayOdds | null;
 }
 
 export interface PredictionEvaluation {

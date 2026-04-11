@@ -8,6 +8,7 @@ from app.api.routes.leagues import router as leagues_router
 from app.api.routes.teams import router as teams_router
 from app.api.routes.matches import router as matches_router
 from app.api.routes.predictions import router as predictions_router
+from app.api.routes.models import router as models_router
 from app.api.routes.trackrecord import router as trackrecord_router
 from app.api.routes.backtests import router as backtests_router
 from app.api.routes.reports import router as reports_router
@@ -46,6 +47,7 @@ router.include_router(leagues_router, prefix="/leagues", tags=["leagues"])
 router.include_router(teams_router, prefix="/teams", tags=["teams"])
 router.include_router(matches_router, prefix="/matches", tags=["matches"])
 router.include_router(predictions_router, prefix="/predictions", tags=["predictions"])
+router.include_router(models_router, prefix="/models", tags=["models"])
 router.include_router(trackrecord_router, prefix="/trackrecord", tags=["trackrecord"])
 router.include_router(backtests_router, prefix="/backtests", tags=["backtests"])
 router.include_router(reports_router, prefix="/reports", tags=["reports"])

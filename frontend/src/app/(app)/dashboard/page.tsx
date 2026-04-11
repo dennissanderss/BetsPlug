@@ -324,9 +324,12 @@ export default function DashboardPage() {
     queryFn: () => api.getPredictions({ limit: "10", page: "1" }),
   });
 
+  // v6.2 Bug #3 fix: the chart is labelled "Accuracy by League" so the
+  // segmentation should be "league", not "sport". Previously this
+  // returned a single bar ("Football") because there's only one sport.
   const { data: sportSegments, isLoading: sportLoading } = useQuery({
-    queryKey: ["segments-sport"],
-    queryFn: () => api.getTrackrecordSegments("sport"),
+    queryKey: ["segments-league"],
+    queryFn: () => api.getTrackrecordSegments("league"),
   });
 
   const { data: monthSegments, isLoading: monthLoading } = useQuery({

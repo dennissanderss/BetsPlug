@@ -18,6 +18,7 @@ from app.schemas.prediction import (
     ForecastOutput,
     PredictionMatchResult,
     PredictionMatchSummary,
+    PredictionModelSummary,
     PredictionResponse,
 )
 
@@ -68,14 +69,16 @@ async def list_predictions(
         current_page = (offset // size) + 1 if size > 0 else 1
         current_offset = offset
 
-    # Load the match relationship eagerly so the inline match summary
-    # can be built without triggering extra queries. home_team, away_team,
-    # league and result are all `lazy="selectin"` on the Match model, so
-    # they cascade automatically once Prediction.match is loaded.
-    # `model_version` is still skipped because it's not part of the response.
+    # Load the match + model_version relationships eagerly so the inline
+    # match and model summaries can be built without triggering extra
+    # queries. home_team, away_team, league and result are all
+    # `lazy="selectin"` on the Match model, so they cascade automatically
+    # once Prediction.match is loaded.
+    # v6.2: model_version now IS part of the response (transparency),
+    # so it's loaded instead of nullified.
     q = select(Prediction).options(
         selectinload(Prediction.match),
-        noload(Prediction.model_version),
+        selectinload(Prediction.model_version),
     )
     count_q = select(func.count(Prediction.id))
 
@@ -139,6 +142,18 @@ async def list_predictions(
                 result=match_result,
             )
 
+        # v6.2: Inline model summary so the frontend can show model
+        # name/version on each prediction without a separate /models fetch.
+        model_summary: Optional[PredictionModelSummary] = None
+        if p.model_version is not None:
+            mv = p.model_version
+            model_summary = PredictionModelSummary(
+                id=mv.id,
+                name=mv.name,
+                version=mv.version,
+                model_type=mv.model_type,
+            )
+
         # Construct the response explicitly. We avoid
         # `PredictionResponse.model_validate(p)` because pydantic would try
         # to coerce the ORM `match` relationship (which has the Team objects
@@ -187,6 +202,7 @@ async def list_predictions(
                 else None
             ),
             match=match_summary,
+            model=model_summary,
             created_at=p.created_at,
             updated_at=p.updated_at,
         )
@@ -216,7 +232,7 @@ async def get_prediction(
         select(Prediction)
         .options(
             selectinload(Prediction.match),
-            noload(Prediction.model_version),
+            selectinload(Prediction.model_version),
         )
         .where(Prediction.id == prediction_id)
     )
@@ -249,6 +265,16 @@ async def get_prediction(
             status=(m.status.value if hasattr(m.status, "value") else str(m.status)),
             league_name=(m.league.name if m.league else None),
             result=match_result,
+        )
+
+    model_summary: Optional[PredictionModelSummary] = None
+    if p.model_version is not None:
+        mv = p.model_version
+        model_summary = PredictionModelSummary(
+            id=mv.id,
+            name=mv.name,
+            version=mv.version,
+            model_type=mv.model_type,
         )
 
     return PredictionResponse(
@@ -295,6 +321,7 @@ async def get_prediction(
             else None
         ),
         match=match_summary,
+        model=model_summary,
         created_at=p.created_at,
         updated_at=p.updated_at,
     )

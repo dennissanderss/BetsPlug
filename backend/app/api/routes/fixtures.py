@@ -502,6 +502,47 @@ async def get_upcoming_fixtures(
 
 
 @router.get(
+    "/live",
+    response_model=UpcomingFixturesResponse,
+    summary="Live/in-play matches (v6.2)",
+    description=(
+        "Returns matches that currently have ``status = 'live'`` in the "
+        "local DB. Populated by the background ingestion job as matches "
+        "kick off. Safe to call as often as once every 30 seconds.\n\n"
+        "**" + _SIMULATION_DISCLAIMER + "**"
+    ),
+)
+async def get_live_fixtures(
+    league_slug: Optional[str] = Query(
+        default=None, description="Filter by league slug."
+    ),
+    db: AsyncSession = Depends(get_db),
+) -> UpcomingFixturesResponse:
+    """All matches currently flagged as LIVE in the DB, ordered by kickoff."""
+    stmt = (
+        select(Match)
+        .where(Match.status == MatchStatus.LIVE)
+        .order_by(Match.scheduled_at)
+    )
+    if league_slug:
+        stmt = stmt.join(League, League.id == Match.league_id).where(
+            League.slug == league_slug
+        )
+
+    matches = (await db.execute(stmt)).scalars().all()
+    match_ids = [m.id for m in matches]
+    pred_map = await _load_latest_predictions(match_ids, db)
+    odds_map = await _load_latest_odds(match_ids, db)
+
+    fixtures = [
+        _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
+        for m in matches
+    ]
+
+    return UpcomingFixturesResponse(count=len(fixtures), fixtures=fixtures)
+
+
+@router.get(
     "/today",
     response_model=TodayFixturesResponse,
     summary="Today's matches from the local DB",

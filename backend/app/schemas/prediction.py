@@ -184,10 +184,29 @@ class PredictionMatchSummary(BaseModel):
     result: Optional[PredictionMatchResult] = None
 
 
+class PredictionModelSummary(BaseModel):
+    """Inline model summary embedded in PredictionResponse for transparency (v6.2).
+
+    Lets feed/list UIs show which model produced a given pick without a
+    second fetch, without exposing the full ModelVersion row (hyperparameters,
+    raw training metrics, etc.) to end users.
+    """
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    name: str            # "Ensemble v1"
+    version: str         # "1.0.0"
+    model_type: str      # "elo" | "poisson" | "logistic" | "ensemble"
+
+
 class PredictionResponse(PredictionBase):
     """Full prediction representation returned by the API."""
 
-    model_config = ConfigDict(from_attributes=True)
+    # protected_namespaces=() silences the pydantic warning about the
+    # `model` field name (pydantic reserves `model_*` by default). The
+    # name `model` is user-facing and intentional here.
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 
     id: uuid.UUID = Field(description="Unique prediction identifier (UUID v4).")
     pick: Optional[str] = Field(default=None, description="Predicted outcome: HOME, DRAW, or AWAY.")
@@ -203,6 +222,10 @@ class PredictionResponse(PredictionBase):
     match: Optional[PredictionMatchSummary] = Field(
         default=None,
         description="Lightweight match summary so feed/list UIs can show teams without a second fetch (v6.1).",
+    )
+    model: Optional[PredictionModelSummary] = Field(
+        default=None,
+        description="Lightweight model summary for transparency: which model produced this pick (v6.2).",
     )
     created_at: datetime = Field(description="Timestamp when the record was created (UTC).")
     updated_at: datetime = Field(description="Timestamp of the most recent update (UTC).")

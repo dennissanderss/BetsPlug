@@ -347,6 +347,12 @@ class ApiClient {
     );
   }
 
+  // Models (v6.2 transparency)
+  getModels(activeOnly = true) {
+    const qs = `?active_only=${activeOnly ? "true" : "false"}`;
+    return this.request<import("@/types/api").ModelOverview[]>(`/models${qs}`);
+  }
+
   // Trackrecord
   getTrackrecordSummary(params?: Record<string, string>) {
     const qs = params ? `?${new URLSearchParams(params)}` : "";
@@ -451,6 +457,15 @@ class ApiClient {
     if (leagueSlug) params.set("league_slug", leagueSlug);
     return this.request<import("@/types/api").FixturesResponse>(
       `/fixtures/upcoming?${params}`
+    );
+  }
+  // v6.2: live matches — matches currently flagged as status=LIVE in the DB.
+  getFixturesLive(leagueSlug?: string) {
+    const params = new URLSearchParams();
+    if (leagueSlug) params.set("league_slug", leagueSlug);
+    const qs = params.toString() ? `?${params}` : "";
+    return this.request<import("@/types/api").FixturesResponse>(
+      `/fixtures/live${qs}`
     );
   }
 

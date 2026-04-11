@@ -67,6 +67,7 @@ from app.schemas.prediction import (
     PredictionExplanationSchema,
     PredictionMatchResult,
     PredictionMatchSummary,
+    PredictionModelSummary,
     PredictionResponse,
 )
 
@@ -143,6 +144,7 @@ __all__ = [
     "PredictionExplanationSchema",
     "PredictionMatchResult",
     "PredictionMatchSummary",
+    "PredictionModelSummary",
     "PredictionResponse",
     # trackrecord
     "CalibrationBucket",

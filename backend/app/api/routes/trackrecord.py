@@ -131,22 +131,31 @@ async def get_trackrecord_segments(
         # GROUP BY which triggered a 500 on asyncpg. Running the
         # aggregation in Python is trivial for ~5 000 rows and
         # avoids the SQL quirk entirely.
+        #
+        # v6.2 Bug #4 fix: previously bucketed on Prediction.predicted_at,
+        # but all current predictions were generated in a single bulk
+        # run so they ALL landed in one bucket. The Model Performance
+        # Trend chart is meant to show how the model performed across
+        # calendar time, which maps to when the MATCH was played — not
+        # when the prediction was generated. Bucketing on
+        # Match.scheduled_at gives us one point per real match month.
         rows = (await db.execute(
             select(
-                Prediction.predicted_at,
+                Match.scheduled_at,
                 PredictionEvaluation.is_correct,
                 PredictionEvaluation.brier_score,
                 PredictionEvaluation.log_loss,
                 Prediction.confidence,
             )
             .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+            .join(Match, Match.id == Prediction.match_id)
         )).all()
 
         buckets: dict[str, dict] = {}
-        for pred_at, is_correct, brier, log_loss, conf in rows:
-            if pred_at is None:
+        for match_at, is_correct, brier, log_loss, conf in rows:
+            if match_at is None:
                 continue
-            key = pred_at.strftime("%Y-%m")
+            key = match_at.strftime("%Y-%m")
             b = buckets.setdefault(key, {
                 "total": 0,
                 "correct": 0,

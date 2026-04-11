@@ -28,6 +28,23 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
+class BOTDOdds(BaseModel):
+    """Pre-match odds embedded in the BOTD response (v6.2).
+
+    Mirrors the `OddsSummary` shape from fixtures.py. Duplicated as a
+    separate type only to keep betoftheday.py self-contained — same
+    field names so the frontend can reuse the OddsRow component.
+    """
+
+    home: float | None = None
+    draw: float | None = None
+    away: float | None = None
+    over_2_5: float | None = None
+    under_2_5: float | None = None
+    bookmaker: str | None = None
+    fetched_at: str | None = None
+
+
 class BetOfTheDayResponse(BaseModel):
     available: bool
     match_id: str | None = None
@@ -42,6 +59,8 @@ class BetOfTheDayResponse(BaseModel):
     predicted_outcome: str | None = None
     explanation_summary: str | None = None
     prediction_id: str | None = None
+    # v6.2 transparency: expose the latest pre-match odds if available.
+    odds: BOTDOdds | None = None
 
     class Config:
         from_attributes = True
@@ -144,6 +163,27 @@ async def get_bet_of_the_day(
     if prediction.explanation:
         explanation = prediction.explanation.summary
 
+    # v6.2: pull the latest pre-match odds for this match using the same
+    # helper the fixtures endpoints use. Yields None when no odds row is
+    # on file — the frontend renders nothing in that case (no placeholder).
+    botd_odds: BOTDOdds | None = None
+    try:
+        from app.api.routes.fixtures import _load_latest_odds  # noqa: WPS433
+        odds_map = await _load_latest_odds([prediction.match_id], db)
+        summary = odds_map.get(prediction.match_id)
+        if summary is not None:
+            botd_odds = BOTDOdds(
+                home=summary.home,
+                draw=summary.draw,
+                away=summary.away,
+                over_2_5=summary.over_2_5,
+                under_2_5=summary.under_2_5,
+                bookmaker=summary.bookmaker,
+                fetched_at=summary.fetched_at,
+            )
+    except Exception as exc:  # pragma: no cover — odds are nice-to-have
+        logger.debug("BOTD odds fetch failed (non-fatal): %s", exc)
+
     return BetOfTheDayResponse(
         available=True,
         match_id=str(prediction.match_id),
@@ -158,4 +198,5 @@ async def get_bet_of_the_day(
         predicted_outcome=predicted_outcome,
         explanation_summary=explanation,
         prediction_id=str(prediction.id),
+        odds=botd_odds,
     )
