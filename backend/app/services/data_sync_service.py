@@ -122,33 +122,24 @@ class DataSyncService:
 
     async def __aenter__(self) -> "DataSyncService":
         self._client = httpx.AsyncClient(timeout=30)
-        # ── Adapter preference ───────────────────────────────────────────────
-        # As of the 2025/26 season, the API-Football free plan refuses to
-        # serve any season past 2024 ("Free plans do not have access to
-        # this season, try from 2022 to 2024"). That makes it useless as a
-        # primary source for *current* fixtures, which is the whole point
-        # of this sync job. Football-Data.org's free TIER_ONE plan serves
-        # the current season for all seven leagues we care about, so we
-        # prefer it by default.
+        # ── Adapter preference (v5: Pro tier) ────────────────────────────────
+        # We are now on API-Football Pro which serves every season, all the
+        # richer endpoints (statistics, injuries, odds, top scorers), and
+        # 7 500 requests/day. API-Football is therefore the primary adapter
+        # for everything except the once-a-day standings sync which we keep
+        # on football-data.org for predictability.
         #
-        # If ``FOOTBALL_DATA_FORCE_API_FOOTBALL=true`` is set (e.g. when
-        # Dennis upgrades to an API-Football paid plan), the old
-        # preference order is restored.
+        # Fallback order, from most to least preferred:
+        #   1. API-Football (Pro)
+        #   2. football-data.org (free, reliable for fixtures + standings)
+        #
+        # If ``FORCE_FOOTBALL_DATA_PRIMARY=true`` is set we flip back to the
+        # v4 behaviour (fd as primary). That's the escape hatch in case the
+        # API-Football key gets rate-limited or the subscription lapses.
         import os
-        force_apifb = os.environ.get("FOOTBALL_DATA_FORCE_API_FOOTBALL", "").lower() in ("1", "true", "yes")
+        force_fd = os.environ.get("FORCE_FOOTBALL_DATA_PRIMARY", "").lower() in ("1", "true", "yes")
 
-        if self._fdorg_key and not force_apifb:
-            self._adapter = FootballDataOrgAdapter(
-                config={"api_key": self._fdorg_key},
-                http_client=self._client,
-            )
-            self._adapter_name = "football_data_org"
-            self.log.info(
-                "data_sync_using_adapter",
-                adapter="football_data_org",
-                reason="free_tier_current_season_coverage",
-            )
-        elif self._apifb_key:
+        if self._apifb_key and not force_fd:
             self._adapter = APIFootballAdapter(
                 config={"api_key": self._apifb_key},
                 http_client=self._client,
@@ -157,12 +148,23 @@ class DataSyncService:
             self.log.info(
                 "data_sync_using_adapter",
                 adapter="api_football",
-                reason="forced_or_no_fd_key",
+                reason="v5_pro_primary",
+            )
+        elif self._fdorg_key:
+            self._adapter = FootballDataOrgAdapter(
+                config={"api_key": self._fdorg_key},
+                http_client=self._client,
+            )
+            self._adapter_name = "football_data_org"
+            self.log.info(
+                "data_sync_using_adapter",
+                adapter="football_data_org",
+                reason="forced_or_no_apifb_key",
             )
         else:
             raise RuntimeError(
                 "No data-source API key configured. Set either "
-                "FOOTBALL_DATA_API_KEY or API_FOOTBALL_KEY."
+                "API_FOOTBALL_KEY or FOOTBALL_DATA_API_KEY."
             )
         return self
 

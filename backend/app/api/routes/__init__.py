@@ -31,6 +31,10 @@ from app.api.routes.admin_notes import router as admin_notes_router
 from app.api.routes.admin_finance import router as admin_finance_router
 from app.api.routes.subscription_gate import router as subscription_gate_router
 from app.api.routes.checkout_sessions import router as checkout_sessions_router
+# v5
+from app.api.routes.route import router as route_router
+from app.api.routes.admin_api_usage import router as admin_api_usage_router
+from app.api.routes.admin_v5 import router as admin_v5_router
 
 router = APIRouter()
 
@@ -65,3 +69,7 @@ router.include_router(admin_notes_router, prefix="/admin", tags=["admin-notes"])
 router.include_router(admin_finance_router, prefix="/admin/finance", tags=["admin-finance"])
 router.include_router(subscription_gate_router, prefix="/subscription", tags=["subscription"])
 router.include_router(checkout_sessions_router, tags=["checkout"])
+# v5
+router.include_router(route_router, prefix="/route", tags=["route"])
+router.include_router(admin_api_usage_router, prefix="/admin", tags=["admin-api-usage"])
+router.include_router(admin_v5_router, prefix="/admin/v5", tags=["admin-v5"])

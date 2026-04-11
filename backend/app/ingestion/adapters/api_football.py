@@ -3,10 +3,16 @@ API-Football Adapter
 ====================
 Fetches LIVE football data from the API-Football v3 API (api-football.com).
 
-Free tier: 100 requests/day, covers 900+ leagues worldwide.
-Requires an API key set in the adapter config as ``api_key``.
+Pro tier: 7500 requests/day, full feature set including statistics,
+line-ups, historical odds, and all seasons. This is the adapter the
+v5 rebuild treats as the primary source for everything except league
+standings (fd stays primary for those because it's free and reliable).
 
-Sign up free at: https://www.api-football.com/
+Free tier (for reference): 100 requests/day, seasons limited to 2022-2024,
+``last`` parameter and current-season fixtures blocked. See the v4 audit
+report for details on why we reversed preference back to Pro in v5.
+
+Sign up at: https://www.api-football.com/
 """
 from __future__ import annotations
 
@@ -57,8 +63,13 @@ LEAGUE_META: dict[int, dict] = {
     144: {"name": "Jupiler Pro League",  "country": "Belgium",     "tier": 1},
 }
 
-# Free tier: 100 requests/day → be conservative
-FREE_TIER_RATE_LIMIT = 1.5  # seconds between requests
+# Pro tier: 7500 requests/day = 5.2 req/min sustained, but bursts are fine.
+# 0.3s between requests = 200 req/min peak, still well inside Pro rate limit.
+# The adapter defaults to this; free-tier callers can pass
+# ``rate_limit_seconds=1.5`` via config.
+DEFAULT_RATE_LIMIT = 0.3  # seconds between requests
+# Legacy alias used by existing imports.
+FREE_TIER_RATE_LIMIT = DEFAULT_RATE_LIMIT
 
 
 def _slugify(text: str) -> str:
@@ -140,7 +151,7 @@ class APIFootballAdapter(DataSourceAdapter):
         super().__init__(config, http_client)
         self._api_key: str = self.config.get("api_key", "")
         self._rate_limit_seconds = float(
-            self.config.get("rate_limit_seconds", FREE_TIER_RATE_LIMIT)
+            self.config.get("rate_limit_seconds", DEFAULT_RATE_LIMIT)
         )
         self._enabled_leagues: list[str] = self.config.get(
             "leagues", list(LEAGUE_SLUG_TO_ID.keys())
@@ -592,3 +603,215 @@ class APIFootballAdapter(DataSourceAdapter):
 
         self._log_fetch("odds", len(odds_list), match_id=raw_id)
         return odds_list
+
+    # ------------------------------------------------------------------
+    # Pro-tier methods (v5)
+    # ------------------------------------------------------------------
+
+    async def fetch_fixtures_raw(
+        self,
+        league_id: int,
+        season: int,
+        date_from: date,
+        date_to: date,
+        status: str | None = None,
+    ) -> list[dict]:
+        """Low-level fixtures fetch that returns the raw items with their
+        numeric API-Football id. Used by the v5 backfill endpoints so they
+        can cross-reference ``/fixtures/statistics`` and ``/odds`` without
+        needing to strip the ``apifb_match_`` prefix every time.
+        """
+        params: dict = {
+            "league": league_id,
+            "season": season,
+            "from": date_from.isoformat(),
+            "to": date_to.isoformat(),
+        }
+        if status:
+            params["status"] = status
+        data = await self._fetch_with_retry(self._get, "fixtures", params)
+        return data or []
+
+    async def fetch_fixture_statistics(self, fixture_id_raw: int | str) -> dict:
+        """Per-match shots/possession/corners/cards breakdown.
+
+        Returns a dict with keys ``home`` and ``away``, each containing
+        numeric stats. API-Football returns a list with two entries
+        (one per team) so we collapse it into a side-indexed dict.
+        """
+        data = await self._fetch_with_retry(
+            self._get, "fixtures/statistics", {"fixture": fixture_id_raw}
+        )
+        if not data:
+            return {"home": {}, "away": {}}
+
+        def _as_int(v) -> int | None:
+            if v is None:
+                return None
+            if isinstance(v, str):
+                v = v.strip().rstrip("%")
+                if not v:
+                    return None
+            try:
+                return int(float(v))
+            except (TypeError, ValueError):
+                return None
+
+        def _as_float(v) -> float | None:
+            if v is None:
+                return None
+            if isinstance(v, str):
+                v = v.strip().rstrip("%")
+                if not v:
+                    return None
+            try:
+                return float(v)
+            except (TypeError, ValueError):
+                return None
+
+        # Map API-Football statistic type labels to our column names.
+        TYPE_MAP_INT = {
+            "Shots on Goal": "shots_on_target",
+            "Total Shots": "shots_total",
+            "Corner Kicks": "corners",
+            "Yellow Cards": "yellow_cards",
+            "Red Cards": "red_cards",
+            "Fouls": "fouls",
+            "Offsides": "offsides",
+            "Passes accurate": "passes_accurate",
+        }
+
+        sides: dict[str, dict] = {}
+        for i, entry in enumerate(data[:2]):
+            side = "home" if i == 0 else "away"
+            side_stats: dict = {}
+            for stat in entry.get("statistics", []):
+                label = stat.get("type", "")
+                value = stat.get("value")
+                if label == "Ball Possession":
+                    side_stats["possession_pct"] = _as_float(value)
+                elif label in TYPE_MAP_INT:
+                    side_stats[TYPE_MAP_INT[label]] = _as_int(value)
+            sides[side] = side_stats
+
+        return sides
+
+    async def fetch_top_scorers(
+        self, league_id: int, season: int
+    ) -> list[dict]:
+        """Return the top-scorer leaderboard for a league/season.
+
+        One entry per player with rank, goals, assists, and basic bio.
+        """
+        data = await self._fetch_with_retry(
+            self._get, "players/topscorers",
+            {"league": league_id, "season": season},
+        )
+        if not data:
+            return []
+
+        scorers: list[dict] = []
+        for rank, entry in enumerate(data, start=1):
+            player = entry.get("player", {})
+            stats = entry.get("statistics", [{}])[0] or {}
+            games = stats.get("games", {}) or {}
+            goal_data = stats.get("goals", {}) or {}
+            team = stats.get("team", {}) or {}
+
+            scorers.append({
+                "rank": rank,
+                "player_external_id": str(player.get("id") or ""),
+                "player_name": player.get("name") or "",
+                "team_name": team.get("name") or "",
+                "team_external_id": str(team.get("id") or ""),
+                "nationality": player.get("nationality"),
+                "photo_url": player.get("photo"),
+                "goals": int(goal_data.get("total") or 0),
+                "assists": goal_data.get("assists"),
+                "appearances": games.get("appearences"),
+                "minutes_played": games.get("minutes"),
+            })
+        return scorers
+
+    async def fetch_pre_match_odds_raw(self, fixture_id_raw: int | str) -> dict:
+        """Pre-match odds aggregated across bookmakers for a fixture.
+
+        Returns a dict with markets keyed as ``1x2``, ``over_under_2_5``,
+        ``btts``. Each market has average odds across every bookmaker
+        that quoted it. This is what gets stored in ``odds_history`` for
+        the ROI calculation.
+        """
+        data = await self._fetch_with_retry(
+            self._get, "odds", {"fixture": fixture_id_raw}
+        )
+        if not data:
+            return {}
+
+        h_probs: list[float] = []
+        d_probs: list[float] = []
+        a_probs: list[float] = []
+        over_probs: list[float] = []
+        under_probs: list[float] = []
+        yes_probs: list[float] = []
+        no_probs: list[float] = []
+
+        # Collect odds from every bookmaker, then average.
+        for item in data:
+            for bookmaker in item.get("bookmakers", []):
+                for bet in bookmaker.get("bets", []):
+                    name = (bet.get("name") or "").strip()
+                    values = bet.get("values", []) or []
+
+                    if name in ("Match Winner", "Full Time Result", "1X2"):
+                        for v in values:
+                            label = (v.get("value") or "").strip().lower()
+                            try:
+                                odd = float(v.get("odd"))
+                            except (TypeError, ValueError):
+                                continue
+                            if label in ("home", "1"):
+                                h_probs.append(odd)
+                            elif label in ("draw", "x"):
+                                d_probs.append(odd)
+                            elif label in ("away", "2"):
+                                a_probs.append(odd)
+
+                    elif name in ("Goals Over/Under", "Over/Under"):
+                        for v in values:
+                            label = (v.get("value") or "").strip().lower()
+                            try:
+                                odd = float(v.get("odd"))
+                            except (TypeError, ValueError):
+                                continue
+                            if label == "over 2.5":
+                                over_probs.append(odd)
+                            elif label == "under 2.5":
+                                under_probs.append(odd)
+
+                    elif name in ("Both Teams Score", "Both Teams To Score"):
+                        for v in values:
+                            label = (v.get("value") or "").strip().lower()
+                            try:
+                                odd = float(v.get("odd"))
+                            except (TypeError, ValueError):
+                                continue
+                            if label in ("yes",):
+                                yes_probs.append(odd)
+                            elif label in ("no",):
+                                no_probs.append(odd)
+
+        def _avg(lst: list[float]) -> float | None:
+            return round(sum(lst) / len(lst), 3) if lst else None
+
+        return {
+            "home_odds": _avg(h_probs),
+            "draw_odds": _avg(d_probs),
+            "away_odds": _avg(a_probs),
+            "over_odds": _avg(over_probs),
+            "under_odds": _avg(under_probs),
+            "btts_yes_odds": _avg(yes_probs),
+            "btts_no_odds": _avg(no_probs),
+            "bookmaker_count": max(
+                len(h_probs), len(over_probs), len(yes_probs), 1
+            ),
+        }
