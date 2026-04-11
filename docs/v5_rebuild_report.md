@@ -936,3 +936,181 @@ After a full day of v4 → v5 → v5.1 → v5.2 rebuild:
    (Understat scrape) to give the ensemble more signal in
    O/U markets.
 
+---
+
+## v5.3 Phase 4 addendum — same day, even later
+
+After Phase 3 landed we kept going with the walk-forward framework,
+the chunked Logistic training, and a new validation-refresh-v2 that
+uses walk-forward as the primary signal (not the crude 58% winrate
+ceiling). This addendum documents what changed.
+
+### What shipped in Phase 4
+
+1. **GET `/api/strategies/all/walk-forward`** — runs walk-forward for
+   every strategy in a single request, returns a ranked list sorted
+   by positive_windows_ratio → Sharpe → mean_test_roi. Pre-fetches
+   all Prediction+Evaluation rows ONCE so ~15 strategies × 5000
+   picks run inside the Railway 180s budget.
+
+2. **POST `/api/strategies/validation-refresh-v2`** — new refresh
+   endpoint with a new gate function `_compute_walk_forward_status`.
+   Decision tree:
+   - Fewer than 30 picks → `insufficient_data`
+   - Walk-forward exists AND mean_test_roi < -2% → `rejected`
+   - Walk-forward strong (≥60% positive, Sharpe ≥1.0, mean_roi ≥+2%)
+     AND odds_coverage ≥30% → `validated`
+   - Walk-forward strong but odds_coverage <30% → `under_investigation`
+     with a clear note about the missing odds
+   - Mean ROI within ±2% → `break_even`
+   - Falls back to the v5.0 winrate/ROI ceilings if no walk-forward
+     data is available
+
+3. **POST `/api/admin/v5/train-logistic-collect`** + **`/train-logistic-fit`**
+   — chunked training flow. Each `/collect?offset=N&limit=300` call
+   builds 300 match contexts and appends to a process-level pending
+   list, then `/fit` runs the sklearn training once the pending list
+   is full. Fixed a latent bug where the old single-shot endpoint's
+   `db.expire_all()` invalidated lazy-loaded relationships and killed
+   every subsequent iteration with `MissingGreenlet`.
+
+### The Phase 4 sequence on production
+
+```
+1. train-logistic-collect (7 × 300) →  2100 samples appended
+2. train-logistic-fit                  →  trained: accuracy 51.2%,
+                                          brier 0.596, 34 features
+                                          (vs Phase 3's 100-sample
+                                          run @ 70% accuracy — that
+                                          was clearly overfit)
+3. regenerate-predictions (12 chunks + tail) → 4 680 predictions,
+                                                 0 leakage failures
+4. walk-forward-all                    →  full ranking
+5. validation-refresh-v2               →  new honest gate applied
+```
+
+### Walk-forward ranking — the most readable picture of the model
+
+After the trained Logistic started contributing, the ensemble
+became noticeably more confident, and the confidence-filtered
+strategies grew in sample size. Sorted by `positive_windows_ratio`:
+
+| Strategy              | Sample | Windows     | Ratio  | Sharpe | Mean ROI | Status              |
+|-----------------------|-------:|:-----------:|:------:|-------:|---------:|---------------------|
+| **Home Dominant**     | 1 134  | **34/37**   | 92%    | **7.22** | +22.7%   | under_investigation |
+| Conservative Favorite | 1 270  | 33/37       | 89%    | 6.24   | +20.2%   | under_investigation |
+| Low Draw High Home    | 971    | 32/37       | 86%    | 6.48   | +22.4%   | under_investigation |
+| Anti-Draw Filter      | 1 581  | 31/36       | 86%    | 5.98   | +15.8%   | under_investigation |
+| Strong Home Favorite  | 1 511  | 31/37       | 84%    | 5.13   | +16.1%   | under_investigation |
+| High Confidence Any   | 2 717  | 24/36       | 67%    | 3.96   | +8.5%    | under_investigation |
+| High-Scoring Match    | 2 107  | 22/37       | 59%    | -0.35  | -0.9%    | break_even (O/U)    |
+| Model Confidence Elite | 3 052  | 21/36       | 58%    | 2.80   | +5.9%    | under_investigation |
+| Defensive Battle      | 612    | 18/36       | 50%    | -1.06  | -6.4%    | rejected (O/U)      |
+| Away Upset Value      | 936    | 16/35       | 46%    | 0.09   | +0.4%    | break_even          |
+| Home Value Medium Odds | 1 040 | 12/36       | 33%    | -2.43  | -9.6%    | rejected            |
+| Underdog Hunter       | 1 328  | 12/37       | 32%    | -0.85  | -3.2%    | rejected            |
+| Draw Specialist       | 643    | 9/36        | 25%    | -2.78  | -13.8%   | rejected            |
+| Balanced Match Away   | 2 272  | 9/37        | 24%    | -3.78  | -11.2%   | rejected            |
+
+**Phase 4 tally**: 0 validated · 7 under_investigation · 5 rejected
+· 2 break_even · 0 insufficient_data.
+
+### The v4 → v5.3 arc, in one picture
+
+This is a full-day transformation of the same set of strategies:
+
+| Strategy              | v4 "Profitable" label | v5.3 verdict (walk-forward) |
+|-----------------------|----------------------|-----------------------------|
+| Home Dominant         | 74.2% / +40.9%       | 34/37 positive windows, Sharpe 7.22 — real consistent signal but ROI inflated by fallback odds |
+| Conservative Favorite | 70.4% / +33.7%       | 33/37, Sharpe 6.24 — same |
+| Low Draw High Home    | 72.6% / +38.0%       | 32/37, Sharpe 6.48 — same |
+| Anti-Draw Filter      | 67.3% / +27.8%       | 31/36, Sharpe 5.98 — same |
+| Strong Home Favorite  | 68.3% / +29.8%       | 31/37, Sharpe 5.13 — same |
+| Underdog Hunter       | 55.6% / +5.7%        | 12/37, Sharpe -0.85, rejected |
+
+**The honest answer we couldn't see in v4:** five of the six
+"Profitable" strategies are actually **picking winners
+consistently** — that part was real. But the big +30-40% ROI
+numbers were a combination of (a) point-in-time Elo leakage
+(fixed in v5.0) and (b) flat 1.90 odds assumption for picks
+whose real market odds are 1.30-1.40 (still unfixed — waiting
+on odds snapshot cron). What IS real is that the model finds
+heavy favorites reliably. What ISN'T real is that you can
+profit from them at market prices.
+
+The sixth strategy (Underdog Hunter) looked promising in v4 at
+55.6% / +5.7% but walk-forward reveals it as genuinely noisy
+with 12/37 positive windows and Sharpe -0.85 — a random walk
+dressed up as a strategy.
+
+### The honest explanation for under_investigation on top strategies
+
+The new gate returns this exact message for the top 5:
+
+> "Walk-forward looks strong ({X}/{Y} positive, Sharpe {Z}), but
+> real-odds coverage is only 1% — ROI math still relies on the
+> 1.90 fallback. Re-check after the odds snapshot cron has run
+> for 2+ weeks."
+
+That is a **fundamentally different** kind of under_investigation
+than v5.0's crude "winrate > 58% so something must be wrong":
+- v5.0 couldn't distinguish a leaky strategy from a real one.
+- v5.3 says "this strategy IS consistent but we can't verify
+  profit yet". It tells Dennis WHAT to do next (wait for odds
+  snapshots) instead of just flagging and walking away.
+
+### Phase 4 API usage
+
+```
+api_football: 2 680 / 7 500 daily (35.7%) — unchanged
+              (Phase 4 was all in-process, no outbound calls)
+```
+
+### What still needs to happen
+
+The same two things as Phase 3, but with specific owners:
+
+1. **Wait for odds snapshot coverage.** The daily cron at 05:30
+   UTC pulls ~400 odds/day. After 14 days we'll have ~5 600 odds
+   rows, most of which will be for matches played in that window.
+   Then walk-forward can compute real ROI and the top 6 strategies
+   will either flip to `validated` (if real edge exists) or drop
+   to `rejected` (if the bookies price them correctly, which is
+   the more likely outcome).
+
+2. **Frontend widget for walk-forward visualization** — each
+   strategy card on the Strategy Lab should show a sparkline of
+   `mean_test_roi` over time windows. The ranked list from
+   `/api/strategies/all/walk-forward` is the perfect data source.
+
+### Final session-wide API budget
+
+```
+api_football: 2 680 / 7 500 daily (35.7%)
+football_data: 0 / 14 400 (0.0%)
+the_odds_api: 0 / 16 (0.0%)
+```
+
+Three full phases (v5.0 → v5.1 → v5.2 → v5.3) used just over a
+third of the daily API-Football budget. Plenty of headroom for
+the daily snapshot cron + scheduled sync jobs.
+
+### Bottom line after Phase 4
+
+- ✅ Walk-forward is the primary validation signal (not winrate
+      ceilings).
+- ✅ Three forecast sub-models all contributing: Elo (point-in-time
+      history), Poisson (Dixon-Coles + form-split), Logistic
+      (trained on 2 100 samples with 34 features incl. match
+      statistics and Elo diff).
+- ✅ Zero leakage failures across every regenerate pass today.
+- ✅ Match + team dedupe clean.
+- ✅ Daily odds snapshot cron active.
+- ✅ `/api/strategies/all/walk-forward` gives Dennis a single-call
+      honest ranking.
+- ✅ `/api/strategies/validation-refresh-v2` applies the new
+      walk-forward gate automatically.
+- ❌ No strategy is `validated` YET — all top-5 are blocked by
+      `odds_coverage_pct < 30%`. That's the honest verdict. 
+      Resolved by time, not by code.
+
