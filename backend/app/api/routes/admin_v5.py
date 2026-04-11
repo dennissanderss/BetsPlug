@@ -657,17 +657,22 @@ async def backfill_elo_history(
 
 @router.post(
     "/regenerate-predictions",
-    summary="Wipe predictions + evaluate against real results using v5 Elo",
+    summary="Wipe + evaluate predictions using v5 Elo, in chunks",
 )
 async def regenerate_predictions(
-    limit: int = 1000,
+    limit: int = 400,
+    wipe_first: bool = False,
     db: AsyncSession = Depends(get_db),
 ):
-    """Drop every existing prediction (they were generated with leaky
-    Elo seeds) and regenerate them chronologically for every finished
-    match using the new EloHistoryService-backed ensemble. Each new
-    prediction is then evaluated against the actual result so the
-    strategy metrics see a fresh sample immediately.
+    """Chunked regenerate. Call once with ``wipe_first=true`` to clear
+    every existing prediction (they were generated with leaky Elo
+    seeds), then call repeatedly with ``wipe_first=false`` (the
+    default) until the response reports ``remaining_matches = 0``.
+
+    Each call processes up to *limit* matches. Default 400 fits
+    inside the ~120s Railway request budget comfortably. The
+    response includes ``remaining_matches`` so a simple shell loop
+    can drive the whole backfill.
     """
     from app.forecasting.forecast_service import ForecastService
     from app.models.model_version import ModelVersion
@@ -695,22 +700,32 @@ async def regenerate_predictions(
         db.add(mv_row)
         await db.commit()
 
-    # Wipe existing predictions / evaluations / explanations / strategy links.
-    await db.execute(delete(PredictionStrategy))
-    await db.execute(delete(PredictionEvaluation))
-    await db.execute(delete(PredictionExplanation))
-    await db.execute(delete(Prediction))
-    await db.commit()
+    # Optionally wipe existing predictions on the first call.
+    if wipe_first:
+        await db.execute(delete(PredictionStrategy))
+        await db.execute(delete(PredictionEvaluation))
+        await db.execute(delete(PredictionExplanation))
+        await db.execute(delete(Prediction))
+        await db.commit()
 
-    # Walk every finished match chronologically.
-    stmt = (
+    # Subquery: matches that already have a prediction.
+    existing_pred_stmt = select(Prediction.match_id).distinct()
+    existing_match_ids = {
+        row[0] for row in (await db.execute(existing_pred_stmt)).all()
+    }
+
+    # Walk finished matches chronologically, skipping the ones we've
+    # already predicted on.
+    all_matches_stmt = (
         select(Match)
         .join(MatchResult, MatchResult.match_id == Match.id)
         .where(Match.status == MatchStatus.FINISHED)
         .order_by(Match.scheduled_at.asc())
-        .limit(limit)
     )
-    matches = list((await db.execute(stmt)).scalars().all())
+    all_matches = list((await db.execute(all_matches_stmt)).scalars().all())
+    todo = [m for m in all_matches if m.id not in existing_match_ids]
+    total_remaining_before = len(todo)
+    matches = todo[:limit]
 
     forecast_service = ForecastService()
 
@@ -777,7 +792,10 @@ async def regenerate_predictions(
 
     return {
         "model_version_id": str(mv_row.id),
-        "matches_considered": len(matches),
+        "wipe_first": wipe_first,
+        "matches_in_chunk": len(matches),
+        "total_remaining_before": total_remaining_before,
+        "remaining_matches": max(0, total_remaining_before - generated),
         "predictions_generated": generated,
         "predictions_evaluated": evaluated,
         "leakage_failures": leakage_failures,
