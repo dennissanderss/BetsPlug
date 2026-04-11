@@ -611,6 +611,14 @@ export default function PredictionsPage() {
   const daysAhead = Math.max(1, daysBetweenIso(today, selectedDate) + 1);
   const daysBack = Math.max(1, daysBetweenIso(selectedDate, today) + 1);
 
+  // v6 C1: headline counters — reuse existing dashboard metrics
+  // endpoint. Cached separately so it doesn't re-fire on date change.
+  const metricsQuery = useQuery({
+    queryKey: ["dashboard-metrics-headline"],
+    queryFn: () => api.getDashboardMetrics(),
+    staleTime: 5 * 60_000,
+  });
+
   // ── Fetch upcoming OR results depending on selected date ──────────────────
   const fixturesQuery = useQuery({
     queryKey: ["predictions-by-date", selectedDate],
@@ -730,6 +738,36 @@ export default function PredictionsPage() {
           </div>
         </div>
       </div>
+
+      {/* ── v6 C1: headline counters ── */}
+      {metricsQuery.data && (
+        <div className="grid grid-cols-3 gap-3 sm:gap-4">
+          <div className="glass-card px-4 py-3 sm:px-5 sm:py-4">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+              Predicted
+            </p>
+            <p className="mt-1 text-xl font-extrabold tabular-nums text-slate-100 sm:text-2xl">
+              {metricsQuery.data.total_forecasts.toLocaleString("nl-NL")}
+            </p>
+          </div>
+          <div className="glass-card px-4 py-3 sm:px-5 sm:py-4">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+              Upcoming
+            </p>
+            <p className="mt-1 text-xl font-extrabold tabular-nums text-blue-400 sm:text-2xl">
+              {metricsQuery.data.pending_count.toLocaleString("nl-NL")}
+            </p>
+          </div>
+          <div className="glass-card px-4 py-3 sm:px-5 sm:py-4">
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+              Correct so far
+            </p>
+            <p className="mt-1 text-xl font-extrabold tabular-nums text-emerald-400 sm:text-2xl">
+              {metricsQuery.data.correct_predictions.toLocaleString("nl-NL")}
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* ── v6 B3: date picker ── */}
       <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4">
