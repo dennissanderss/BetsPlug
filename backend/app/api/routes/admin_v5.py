@@ -851,6 +851,9 @@ async def train_logistic_collect(
     matches_fetched = 0
     samples_appended = 0
     error: Optional[str] = None
+    error_counts: dict[str, int] = {}
+    error_samples: list[str] = []
+    skipped_no_result = 0
     try:
         stmt = (
             select(Match)
@@ -867,7 +870,11 @@ async def train_logistic_collect(
         for match in matches:
             try:
                 ctx = await forecast_service.build_match_context(match, db)
-            except Exception:
+            except Exception as exc:
+                err_type = type(exc).__name__
+                error_counts[err_type] = error_counts.get(err_type, 0) + 1
+                if len(error_samples) < 5:
+                    error_samples.append(f"{err_type}: {str(exc)[:200]}")
                 continue
             mr = (
                 await db.execute(
@@ -875,6 +882,7 @@ async def train_logistic_collect(
                 )
             ).scalar_one_or_none()
             if mr is None:
+                skipped_no_result += 1
                 continue
             ctx["home_score"] = int(mr.home_score)
             ctx["away_score"] = int(mr.away_score)
@@ -893,6 +901,9 @@ async def train_logistic_collect(
         "matches_fetched": matches_fetched,
         "samples_appended": samples_appended,
         "pending_total": len(_pending_logistic_samples),
+        "skipped_no_result": skipped_no_result,
+        "error_counts": error_counts,
+        "error_samples": error_samples,
         "error": error,
     }
 
