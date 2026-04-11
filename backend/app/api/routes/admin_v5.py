@@ -378,15 +378,19 @@ async def backfill_odds(
     )
     existing_ids = {row[0] for row in (await db.execute(existing_stmt)).all()}
 
+    # Only target matches whose external_id is an API-Football id — we
+    # can't look up odds for a football-data.org-sourced match here.
     target_stmt = (
         select(Match.id, Match.external_id)
         .where(
             and_(
                 Match.status == MatchStatus.FINISHED,
                 Match.external_id.is_not(None),
+                Match.external_id.like("apifb_match_%"),
             )
         )
-        .limit(limit * 2)  # fetch more then filter in Python below
+        .order_by(Match.scheduled_at.desc())
+        .limit(limit * 2)
     )
     all_rows = (await db.execute(target_stmt)).all()
     targets = [(mid, ext) for mid, ext in all_rows if mid not in existing_ids][:limit]
