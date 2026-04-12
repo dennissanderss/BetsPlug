@@ -32,6 +32,7 @@ import {
 
 import { api } from "@/lib/api";
 import { cn, formatPercent, formatDate } from "@/lib/utils";
+import { useTranslations } from "@/i18n/locale-provider";
 import type {
   TrackrecordSummary,
   SegmentPerformance,
@@ -134,15 +135,16 @@ function fmt(n: number | null | undefined, digits: number): string {
 }
 
 function SummaryStatsTable({ summary }: { summary: TrackrecordSummary }) {
+  const { t } = useTranslations();
   const rows: StatRow[] = [
-    { label: "Period Start", value: summary.period_start ? formatDate(summary.period_start) : " - " },
-    { label: "Period End", value: summary.period_end ? formatDate(summary.period_end) : " - " },
-    { label: "Total Predictions", value: summary.total_predictions.toLocaleString() },
-    { label: "Accuracy", value: formatPercent(summary.accuracy) },
-    { label: "Brier Score", value: fmt(summary.brier_score, 4) },
-    { label: "Log Loss", value: fmt(summary.log_loss, 4) },
-    { label: "Calibration Error (ECE)", value: fmt(summary.calibration_error, 4) },
-    { label: "Avg Confidence", value: formatPercent(summary.avg_confidence) },
+    { label: t("trackrecord.periodStart"), value: summary.period_start ? formatDate(summary.period_start) : " - " },
+    { label: t("trackrecord.periodEnd"), value: summary.period_end ? formatDate(summary.period_end) : " - " },
+    { label: t("trackrecord.totalPredictions"), value: summary.total_predictions.toLocaleString() },
+    { label: t("trackrecord.accuracy"), value: formatPercent(summary.accuracy) },
+    { label: t("trackrecord.brierScore"), value: fmt(summary.brier_score, 4) },
+    { label: t("trackrecord.logLoss"), value: fmt(summary.log_loss, 4) },
+    { label: t("trackrecord.calibrationErrorECE"), value: fmt(summary.calibration_error, 4) },
+    { label: t("trackrecord.avgConfidence"), value: formatPercent(summary.avg_confidence) },
   ];
 
   return (
@@ -151,10 +153,10 @@ function SummaryStatsTable({ summary }: { summary: TrackrecordSummary }) {
         <thead>
           <tr className="border-b border-white/[0.06] bg-white/[0.03]">
             <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Metric
+              {t("trackrecord.metric")}
             </th>
             <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Value
+              {t("trackrecord.value")}
             </th>
           </tr>
         </thead>
@@ -186,6 +188,7 @@ function SegmentTable({ data, loading, emptyMessage }: {
   loading: boolean;
   emptyMessage: string;
 }) {
+  const { t } = useTranslations();
   if (loading) {
     return (
       <div className="space-y-2">
@@ -214,19 +217,19 @@ function SegmentTable({ data, loading, emptyMessage }: {
         <thead>
           <tr className="border-b border-white/[0.06] bg-white/[0.03]">
             <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Segment
+              {t("trackrecord.segment")}
             </th>
             <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Total
+              {t("trackrecord.total")}
             </th>
             <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Accuracy
+              {t("trackrecord.accuracy")}
             </th>
             <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Brier Score
+              {t("trackrecord.brierScore")}
             </th>
             <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Avg Confidence
+              {t("trackrecord.avgConfidence")}
             </th>
           </tr>
         </thead>
@@ -286,6 +289,7 @@ function SegmentSection({
   groupBy: string;
   filterParams: Record<string, string>;
 }) {
+  const { t } = useTranslations();
   const { data, isLoading } = useQuery({
     queryKey: ["trackrecord-segments", groupBy, filterParams],
     queryFn: () => api.getTrackrecordSegments(groupBy, filterParams),
@@ -296,7 +300,7 @@ function SegmentSection({
       <SegmentTable
         data={data ?? []}
         loading={isLoading}
-        emptyMessage={`No segment data available for ${title.toLowerCase()}.`}
+        emptyMessage={t("trackrecord.noSegmentData").replace("{segment}", title.toLowerCase())}
       />
     </div>
   );
@@ -340,6 +344,7 @@ function LivePerformanceBanner({
   summary: TrackrecordSummary | undefined;
   loading: boolean;
 }) {
+  const { t } = useTranslations();
   if (loading) {
     return (
       <div className="glass-card p-5 animate-pulse" style={{ borderLeft: "3px solid #334155" }}>
@@ -373,10 +378,9 @@ function LivePerformanceBanner({
         <div className="flex items-center gap-3">
           <Database className="h-4 w-4 text-slate-500" />
           <div>
-            <h2 className="text-sm font-semibold text-slate-400">No predictions recorded yet</h2>
+            <h2 className="text-sm font-semibold text-slate-400">{t("trackrecord.noPredictionsYet")}</h2>
             <p className="text-xs text-slate-600 mt-0.5">
-              Data collection is in progress. Prediction statistics will appear here once the first
-              model evaluations are complete.
+              {t("trackrecord.noPredictionsYetDesc")}
             </p>
           </div>
         </div>
@@ -393,31 +397,31 @@ function LivePerformanceBanner({
         <div className="flex items-center gap-3">
           <span className="live-dot" />
           <div>
-            <h2 className="text-sm font-semibold text-slate-100">Real Model Performance</h2>
-            <p className="text-xs text-slate-500 mt-0.5">Live data from the database</p>
+            <h2 className="text-sm font-semibold text-slate-100">{t("trackrecord.realModelPerformance")}</h2>
+            <p className="text-xs text-slate-500 mt-0.5">{t("trackrecord.liveDataFromDb")}</p>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-6">
           <div className="text-center">
-            <p className="text-[10px] uppercase tracking-wide text-slate-500 mb-0.5">Predictions</p>
+            <p className="text-[10px] uppercase tracking-wide text-slate-500 mb-0.5">{t("trackrecord.predictions")}</p>
             <p className="text-sm font-bold text-slate-100 tabular-nums">
               {summary.total_predictions.toLocaleString()}
             </p>
           </div>
           <div className="text-center">
-            <p className="text-[10px] uppercase tracking-wide text-slate-500 mb-0.5">Accuracy</p>
+            <p className="text-[10px] uppercase tracking-wide text-slate-500 mb-0.5">{t("trackrecord.accuracy")}</p>
             <p className="text-sm font-bold text-emerald-400 tabular-nums">
               {(summary.accuracy * 100).toFixed(1)}%
             </p>
           </div>
           <div className="text-center">
-            <p className="text-[10px] uppercase tracking-wide text-slate-500 mb-0.5">Brier Score</p>
+            <p className="text-[10px] uppercase tracking-wide text-slate-500 mb-0.5">{t("trackrecord.brierScore")}</p>
             <p className="text-sm font-bold text-blue-400 tabular-nums">
               {fmt(summary.brier_score, 3)}
             </p>
           </div>
           <div className="text-center">
-            <p className="text-[10px] uppercase tracking-wide text-slate-500 mb-0.5">Avg Confidence</p>
+            <p className="text-[10px] uppercase tracking-wide text-slate-500 mb-0.5">{t("trackrecord.avgConfidence")}</p>
             <p className="text-sm font-bold text-slate-100 tabular-nums">
               {(summary.avg_confidence * 100).toFixed(1)}%
             </p>
@@ -425,8 +429,7 @@ function LivePerformanceBanner({
         </div>
       </div>
       <p className="mt-3 text-[11px] text-slate-500 border-t border-white/[0.04] pt-2">
-        These figures are real model outputs. Brier score measures probabilistic accuracy (lower is better). This is
-        not financial or betting advice.
+        {t("trackrecord.disclaimer")}
       </p>
     </div>
   );
@@ -435,12 +438,13 @@ function LivePerformanceBanner({
 // ─── Prediction status badges ─────────────────────────────────────────────────
 
 function PredictionStatusBadge({ correct, evaluated }: { correct: boolean | null; evaluated: boolean }) {
+  const { t } = useTranslations();
   if (!evaluated) {
     return (
       <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
         <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse-slow inline-block" />
         <Clock className="h-3 w-3" />
-        Pending
+        {t("trackrecord.pending")}
       </span>
     );
   }
@@ -448,14 +452,14 @@ function PredictionStatusBadge({ correct, evaluated }: { correct: boolean | null
     return (
       <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
         <CheckCircle2 className="h-3 w-3" />
-        Correct
+        {t("trackrecord.correct")}
       </span>
     );
   }
   return (
     <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold bg-red-500/10 text-red-400 border border-red-500/20">
       <XCircle className="h-3 w-3" />
-      Incorrect
+      {t("trackrecord.incorrect")}
     </span>
   );
 }
@@ -689,6 +693,7 @@ function DataTransparencyCard({
 // ─── Recent Predictions Feed (real data) ──────────────────────────────────────
 
 function RecentPredictionsFeed() {
+  const { t } = useTranslations();
   const { data: response, isLoading } = useQuery({
     queryKey: ["predictions-recent"],
     queryFn: () => api.getPredictions({ limit: "15" }),
@@ -723,16 +728,15 @@ function RecentPredictionsFeed() {
       <div className="glass-card p-6 space-y-3 animate-slide-up">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-base font-semibold text-slate-100">Recent Predictions</h2>
-            <p className="text-sm text-slate-500 mt-0.5">Last 15 model calls</p>
+            <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.recentPredictions")}</h2>
+            <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.last15ModelCalls")}</p>
           </div>
         </div>
         <div className="flex flex-col items-center justify-center gap-3 py-10 text-center">
           <Database className="h-8 w-8 text-slate-600" />
-          <p className="text-sm font-medium text-slate-500">No predictions yet</p>
+          <p className="text-sm font-medium text-slate-500">{t("trackrecord.noPredictionsYet")}</p>
           <p className="text-xs text-slate-600 max-w-sm">
-            Predictions will appear here once the model has generated forecasts for upcoming matches.
-            Data collection is in progress.
+            {t("trackrecord.noPredictionsEmptyDesc")}
           </p>
         </div>
       </div>
@@ -743,14 +747,14 @@ function RecentPredictionsFeed() {
     <div className="glass-card p-6 space-y-4 animate-slide-up">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-base font-semibold text-slate-100">Recent Predictions &amp; Results</h2>
+          <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.recentPredictionsResults")}</h2>
           <p className="text-sm text-slate-500 mt-0.5">
-            Last {predictions.length} model calls - real data from database
+            {t("trackrecord.lastNModelCalls").replace("{n}", String(predictions.length))}
           </p>
         </div>
         <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
           <Zap className="h-3 w-3 text-amber-400" />
-          {pendingCount} pending
+          {pendingCount} {t("trackrecord.pending")}
         </span>
       </div>
 
@@ -766,7 +770,7 @@ function RecentPredictionsFeed() {
 
           const homeTeam = pred.match?.home_team_name ?? " - ";
           const awayTeam = pred.match?.away_team_name ?? " - ";
-          const matchLabel = pred.match ? `${homeTeam} vs ${awayTeam}` : `Match ${pred.match_id}`;
+          const matchLabel = pred.match ? `${homeTeam} ${t("trackrecord.vs")} ${awayTeam}` : `${t("trackrecord.match")} ${pred.match_id}`;
           const scheduledAt = pred.match?.scheduled_at
             ? new Date(pred.match.scheduled_at).toLocaleString("en-GB", {
                 day: "numeric",
@@ -837,7 +841,7 @@ function RecentPredictionsFeed() {
 
                 {/* Confidence */}
                 <div className="flex items-center gap-1.5 min-w-[90px]">
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wide">Conf.</span>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wide">{t("trackrecord.conf")}</span>
                   <ConfidenceBadge value={pred.confidence} />
                 </div>
 
@@ -967,13 +971,14 @@ const PlCustomTooltip = ({ active, payload, label }: {
   payload?: Array<{ value: number }>;
   label?: string;
 }) => {
+  const { t } = useTranslations();
   if (active && payload && payload.length) {
     const val = payload[0].value as number;
     return (
       <div className="glass-card border border-white/[0.10] px-3 py-2 text-sm">
         <p className="text-slate-400 text-xs mb-1">{label}</p>
         <p className={cn("font-bold tabular-nums", val >= 0.5 ? "text-emerald-400" : "text-amber-400")}>
-          Accuracy: {(val * 100).toFixed(1)}%
+          {t("trackrecord.accuracy")}: {(val * 100).toFixed(1)}%
         </p>
       </div>
     );
@@ -988,6 +993,7 @@ function ProfitabilityChart({
   monthSegments: SegmentPerformance[] | undefined;
   loading: boolean;
 }) {
+  const { t } = useTranslations();
   if (loading) {
     return (
       <div className="glass-card p-6 space-y-4">
@@ -1001,15 +1007,14 @@ function ProfitabilityChart({
     return (
       <div className="glass-card p-6 space-y-4">
         <div>
-          <h2 className="text-base font-semibold text-slate-100">Accuracy Over Time</h2>
-          <p className="text-sm text-slate-500 mt-0.5">Monthly model accuracy</p>
+          <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.accuracyOverTime")}</h2>
+          <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.monthlyModelAccuracy")}</p>
         </div>
         <div className="flex h-72 flex-col items-center justify-center gap-3 text-center">
           <Database className="h-8 w-8 text-slate-600" />
-          <p className="text-sm font-medium text-slate-500">Not enough data yet</p>
+          <p className="text-sm font-medium text-slate-500">{t("trackrecord.notEnoughData")}</p>
           <p className="text-xs text-slate-600 max-w-xs">
-            Monthly accuracy trends will appear here once sufficient prediction data has been
-            collected and resolved across multiple months.
+            {t("trackrecord.notEnoughDataDesc")}
           </p>
         </div>
       </div>
@@ -1025,9 +1030,9 @@ function ProfitabilityChart({
   return (
     <div className="glass-card p-6 space-y-4">
       <div>
-        <h2 className="text-base font-semibold text-slate-100">Accuracy Over Time</h2>
+        <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.accuracyOverTime")}</h2>
         <p className="text-sm text-slate-500 mt-0.5">
-          Monthly model accuracy - real data ({monthSegments.length} months)
+          {t("trackrecord.monthlyModelAccuracyReal").replace("{n}", String(monthSegments.length))}
         </p>
       </div>
       <div className="h-72">
@@ -1079,6 +1084,7 @@ function SportAccuracySection({
 }: {
   filterParams: Record<string, string>;
 }) {
+  const { t } = useTranslations();
   const { data, isLoading } = useQuery({
     queryKey: ["trackrecord-segments", "sport", filterParams],
     queryFn: () => api.getTrackrecordSegments("sport", filterParams),
@@ -1102,7 +1108,7 @@ function SportAccuracySection({
     return (
       <div className="flex items-center justify-center gap-2 py-8 text-sm text-slate-500">
         <Database className="h-4 w-4" />
-        No league breakdown data available yet.
+        {t("trackrecord.noLeagueBreakdownData")}
       </div>
     );
   }
@@ -1124,7 +1130,7 @@ function SportAccuracySection({
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-slate-100 capitalize">{String(s.segment_value)}</p>
-                <p className="text-xs text-slate-500">{Number(s.total).toLocaleString()} predictions</p>
+                <p className="text-xs text-slate-500">{Number(s.total).toLocaleString()} {t("trackrecord.predictions")}</p>
               </div>
               <span className="text-base font-bold tabular-nums" style={{ color }}>
                 {accuracyPct.toFixed(1)}%
@@ -1137,7 +1143,7 @@ function SportAccuracySection({
               />
             </div>
             <p className="text-[10px] text-slate-500 uppercase tracking-wide">
-              Accuracy (correct predictions)
+              {t("trackrecord.accuracyCorrectPredictions")}
             </p>
           </div>
         );
@@ -1149,6 +1155,7 @@ function SportAccuracySection({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function TrackrecordPage() {
+  const { t } = useTranslations();
   const [dateFrom, setDateFrom] = React.useState("");
   const [dateTo, setDateTo] = React.useState("");
   const [sportId, setSportId] = React.useState("all");
@@ -1217,9 +1224,9 @@ export default function TrackrecordPage() {
   );
 
   const tabs = [
-    { key: "performance", label: "Performance", icon: TrendingUp },
-    { key: "calibration", label: "Calibration", icon: Activity },
-    { key: "segments", label: "Segments", icon: Layers },
+    { key: "performance", label: t("trackrecord.performance"), icon: TrendingUp },
+    { key: "calibration", label: t("trackrecord.calibration"), icon: Activity },
+    { key: "segments", label: t("trackrecord.segments"), icon: Layers },
   ];
 
   return (
@@ -1228,15 +1235,15 @@ export default function TrackrecordPage() {
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            <span className="gradient-text">Track Record</span>
+            <span className="gradient-text">{t("trackrecord.title")}</span>
           </h1>
           <p className="mt-1 text-sm text-slate-400">
-            Historical model performance, calibration, and segment analysis
+            {t("trackrecord.subtitle")}
           </p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-400">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse-slow inline-block" />
-          Real API data
+          {t("trackrecord.realApiData")}
         </span>
       </div>
 
@@ -1255,31 +1262,31 @@ export default function TrackrecordPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5 animate-slide-up">
           <KpiCard
-            title="Total Predictions"
+            title={t("trackrecord.totalPredictions")}
             value={summary?.total_predictions.toLocaleString() ?? " - "}
             icon={Target}
             accent="blue"
           />
           <KpiCard
-            title="Accuracy"
+            title={t("trackrecord.accuracy")}
             value={summary ? formatPercent(summary.accuracy) : " - "}
             icon={TrendingUp}
             accent="green"
           />
           <KpiCard
-            title="Brier Score"
+            title={t("trackrecord.brierScore")}
             value={fmt(summary?.brier_score, 3)}
             icon={BarChart3}
             accent="blue"
           />
           <KpiCard
-            title="Log Loss"
+            title={t("trackrecord.logLoss")}
             value={fmt(summary?.log_loss, 3)}
             icon={BarChart3}
             accent="amber"
           />
           <KpiCard
-            title="Calibration Error"
+            title={t("trackrecord.calibrationError")}
             value={fmt(summary?.calibration_error, 3)}
             icon={Target}
             accent="blue"
@@ -1292,11 +1299,9 @@ export default function TrackrecordPage() {
         <div className="flex items-start gap-3 rounded-xl border border-blue-500/20 bg-blue-500/[0.04] p-5">
           <AlertTriangle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <p className="text-sm font-semibold text-blue-400">No prediction data yet</p>
+            <p className="text-sm font-semibold text-blue-400">{t("trackrecord.noPredictionDataYet")}</p>
             <p className="text-xs leading-relaxed text-slate-400">
-              The system has not yet generated or evaluated any predictions. KPI cards, charts, and
-              tables below will populate automatically as the model runs and match outcomes are
-              recorded. Check back after the first batch of predictions has been processed.
+              {t("trackrecord.noPredictionDataYetDesc")}
             </p>
           </div>
         </div>
@@ -1310,13 +1315,13 @@ export default function TrackrecordPage() {
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2 text-slate-400">
             <Filter className="h-4 w-4" />
-            <span className="text-sm font-medium">Filters</span>
+            <span className="text-sm font-medium">{t("trackrecord.filters")}</span>
           </div>
 
           <div className="flex flex-wrap items-center gap-3 flex-1">
             {/* Date From */}
             <div className="flex items-center gap-2">
-              <label className="text-xs text-slate-500 whitespace-nowrap">From</label>
+              <label className="text-xs text-slate-500 whitespace-nowrap">{t("trackrecord.from")}</label>
               <input
                 type="date"
                 value={dateFrom}
@@ -1332,7 +1337,7 @@ export default function TrackrecordPage() {
 
             {/* Date To */}
             <div className="flex items-center gap-2">
-              <label className="text-xs text-slate-500 whitespace-nowrap">To</label>
+              <label className="text-xs text-slate-500 whitespace-nowrap">{t("trackrecord.to")}</label>
               <input
                 type="date"
                 value={dateTo}
@@ -1349,10 +1354,10 @@ export default function TrackrecordPage() {
             {/* Sport select */}
             <Select value={sportId} onValueChange={(v) => { setSportId(v); setLeagueId("all"); }}>
               <SelectTrigger className="h-8 w-40 text-sm border-white/[0.08] bg-white/[0.04] text-slate-200 focus:border-blue-500/50">
-                <SelectValue placeholder="All Leagues" />
+                <SelectValue placeholder={t("trackrecord.allLeagues")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Leagues</SelectItem>
+                <SelectItem value="all">{t("trackrecord.allLeagues")}</SelectItem>
                 {(sports ?? []).map((s) => (
                   <SelectItem key={s.id} value={s.id}>
                     {s.name}
@@ -1364,10 +1369,10 @@ export default function TrackrecordPage() {
             {/* League select */}
             <Select value={leagueId} onValueChange={setLeagueId}>
               <SelectTrigger className="h-8 w-48 text-sm border-white/[0.08] bg-white/[0.04] text-slate-200 focus:border-blue-500/50">
-                <SelectValue placeholder="All Leagues" />
+                <SelectValue placeholder={t("trackrecord.allLeagues")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Leagues</SelectItem>
+                <SelectItem value="all">{t("trackrecord.allLeagues")}</SelectItem>
                 {(leagues ?? []).map((l) => (
                   <SelectItem key={l.id} value={l.id}>
                     {l.name}
@@ -1401,9 +1406,9 @@ export default function TrackrecordPage() {
           {/* Accuracy by league — real data */}
           <div className="glass-card p-6">
             <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">Accuracy by League</h2>
+              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.accuracyByLeague")}</h2>
               <p className="text-sm text-slate-500 mt-0.5">
-                Prediction accuracy broken down by league - real data
+                {t("trackrecord.accuracyByLeagueDesc")}
               </p>
             </div>
             <SportAccuracySection filterParams={filterParams} />
@@ -1412,20 +1417,20 @@ export default function TrackrecordPage() {
           {/* Rolling accuracy chart */}
           <div className="glass-card p-6">
             <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">Accuracy Trend</h2>
-              <p className="text-sm text-slate-500 mt-0.5">Monthly rolling accuracy over the selected period</p>
+              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.accuracyTrend")}</h2>
+              <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.accuracyTrendDesc")}</p>
             </div>
             {monthLoading ? (
               <div className="h-72 w-full rounded-xl bg-white/[0.03] animate-pulse" />
             ) : rollingData.length === 0 ? (
               <div className="flex h-72 items-center justify-center text-sm text-slate-500">
-                No monthly data available for the selected filters.
+                {t("trackrecord.noMonthlyData")}
               </div>
             ) : (
               <RollingAccuracyChart
                 data={rollingData}
                 title=""
-                windowLabel="Monthly Accuracy"
+                windowLabel={t("trackrecord.monthlyAccuracy")}
                 showBaseline={false}
                 targetAccuracy={0.6}
               />
@@ -1435,8 +1440,8 @@ export default function TrackrecordPage() {
           {/* Summary stats */}
           <div className="glass-card p-6">
             <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">Summary Statistics</h2>
-              <p className="text-sm text-slate-500 mt-0.5">Aggregate metrics for the selected period and filters</p>
+              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.summaryStatistics")}</h2>
+              <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.summaryStatisticsDesc")}</p>
             </div>
             {summaryLoading ? (
               <div className="space-y-1.5">
@@ -1446,7 +1451,7 @@ export default function TrackrecordPage() {
               </div>
             ) : !summary ? (
               <p className="py-8 text-center text-sm text-slate-500">
-                No summary data available.
+                {t("trackrecord.noSummaryData")}
               </p>
             ) : (
               <SummaryStatsTable summary={summary} />
@@ -1462,14 +1467,14 @@ export default function TrackrecordPage() {
             {/* Chart */}
             <div className="glass-card p-6 lg:col-span-2">
               <div className="mb-4">
-                <h2 className="text-base font-semibold text-slate-100">Calibration Chart</h2>
-                <p className="text-sm text-slate-500 mt-0.5">Predicted probability vs. actual frequency</p>
+                <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.calibrationChart")}</h2>
+                <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.calibrationChartDesc")}</p>
               </div>
               {calibrationLoading ? (
                 <div className="h-80 w-full rounded-xl bg-white/[0.03] animate-pulse" />
               ) : calibrationPoints.length === 0 ? (
                 <div className="flex h-80 items-center justify-center text-sm text-slate-500">
-                  No calibration data available for the selected filters.
+                  {t("trackrecord.noCalibrationData")}
                 </div>
               ) : (
                 <CalibrationChart
@@ -1482,26 +1487,18 @@ export default function TrackrecordPage() {
 
             {/* Explanation panel */}
             <div className="glass-card border border-blue-500/[0.12] p-6 space-y-4">
-              <h2 className="text-base font-semibold text-slate-100">What is Calibration?</h2>
+              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.whatIsCalibration")}</h2>
               <p className="text-sm text-slate-400">
-                A perfectly calibrated model is one where, among all predictions
-                assigned probability{" "}
-                <span className="font-semibold text-slate-200">p</span>, exactly{" "}
-                <span className="font-semibold text-slate-200">p × 100%</span> of events
-                actually occur.
+                {t("trackrecord.calibrationExplanation1")}
               </p>
               <p className="text-sm text-slate-400">
-                The diagonal dashed line represents perfect calibration. Points{" "}
-                <span className="text-amber-400 font-medium">above</span> the line mean the
-                model is under-confident; points{" "}
-                <span className="text-red-400 font-medium">below</span> mean the model is
-                over-confident.
+                {t("trackrecord.calibrationExplanation2")}
               </p>
 
               {/* Key metrics box */}
               <div className="rounded-xl border border-white/[0.06] bg-white/[0.04] p-4 space-y-2">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
-                  Key Metrics
+                  {t("trackrecord.keyMetrics")}
                 </p>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-slate-400">ECE</span>
@@ -1510,13 +1507,12 @@ export default function TrackrecordPage() {
                   </span>
                 </div>
                 <p className="text-xs text-slate-500">
-                  Lower is better. Values near 0 indicate excellent calibration.
+                  {t("trackrecord.eceExplanation")}
                 </p>
               </div>
 
               <p className="text-xs text-slate-500">
-                Calibration is measured using equal-width probability buckets. Each point in
-                the scatter represents one bucket of predictions.
+                {t("trackrecord.calibrationMeasurement")}
               </p>
             </div>
           </div>
@@ -1529,29 +1525,29 @@ export default function TrackrecordPage() {
           {/* By League */}
           <div className="glass-card p-6">
             <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">Performance by League</h2>
-              <p className="text-sm text-slate-500 mt-0.5">Prediction accuracy broken down by league</p>
+              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.performanceByLeague")}</h2>
+              <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.performanceByLeagueDesc")}</p>
             </div>
-            <SegmentSection title="League" groupBy="sport" filterParams={filterParams} />
+            <SegmentSection title={t("trackrecord.league")} groupBy="sport" filterParams={filterParams} />
           </div>
 
           {/* By League */}
           <div className="glass-card p-6">
             <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">Performance by League</h2>
-              <p className="text-sm text-slate-500 mt-0.5">Prediction accuracy broken down by league</p>
+              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.performanceByLeague")}</h2>
+              <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.performanceByLeagueDesc")}</p>
             </div>
-            <SegmentSection title="League" groupBy="league" filterParams={filterParams} />
+            <SegmentSection title={t("trackrecord.league")} groupBy="league" filterParams={filterParams} />
           </div>
 
           {/* By Confidence Bucket */}
           <div className="glass-card p-6">
             <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">Performance by Confidence Bucket</h2>
-              <p className="text-sm text-slate-500 mt-0.5">How accuracy varies across model confidence levels</p>
+              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.performanceByConfidence")}</h2>
+              <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.performanceByConfidenceDesc")}</p>
             </div>
             <SegmentSection
-              title="Confidence Bucket"
+              title={t("trackrecord.confidenceBucket")}
               groupBy="confidence_bucket"
               filterParams={filterParams}
             />

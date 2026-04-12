@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
+import { useTranslations } from "@/i18n/locale-provider";
 import type { Fixture } from "@/types/api";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -66,6 +67,7 @@ function lastUpdatedLabel(ts: number): string {
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
 function StatusBadge({ fixture }: { fixture: Fixture }) {
+  const { t } = useTranslations();
   if (fixture.status === "live") {
     return (
       <span className="flex items-center gap-1.5 rounded-full bg-blue-500/10 px-2.5 py-0.5 text-[11px] font-bold text-blue-400 ring-1 ring-blue-500/30">
@@ -93,18 +95,19 @@ function StatusBadge({ fixture }: { fixture: Fixture }) {
   if (fixture.status === "postponed") {
     return (
       <span className="flex items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-amber-400">
-        Postponed
+        {t("live.postponed")}
       </span>
     );
   }
   return (
     <span className="flex items-center gap-1.5 rounded-full bg-red-900/20 px-2.5 py-0.5 text-[11px] font-semibold text-red-400">
-      Cancelled
+      {t("live.cancelled")}
     </span>
   );
 }
 
 function ProbabilitySection({ fixture }: { fixture: Fixture }) {
+  const { t } = useTranslations();
   const pred = fixture.prediction;
 
   if (!pred) {
@@ -113,7 +116,7 @@ function ProbabilitySection({ fixture }: { fixture: Fixture }) {
         <div className="flex items-center gap-1.5">
           <TrendingUp className="h-3 w-3 text-slate-600" />
           <span className="text-[10px] font-medium text-slate-600">
-            Analysis pending
+            {t("live.analysisPending")}
           </span>
         </div>
         <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.04]">
@@ -133,7 +136,7 @@ function ProbabilitySection({ fixture }: { fixture: Fixture }) {
       <div className="flex items-center gap-1.5">
         <TrendingUp className="h-3 w-3 text-blue-500" />
         <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
-          Win probability
+          {t("live.winProbability")}
         </span>
       </div>
       <div className="flex h-2 w-full overflow-hidden rounded-full bg-white/[0.06] gap-0.5">
@@ -168,6 +171,7 @@ function ProbabilitySection({ fixture }: { fixture: Fixture }) {
 }
 
 function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
+  const { t } = useTranslations();
   const isLive      = fixture.status === "live";
   const isFinished  = fixture.status === "finished";
   const isScheduled = fixture.status === "scheduled";
@@ -243,7 +247,7 @@ function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
           <div className="mt-3 flex items-center justify-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.03] py-2">
             <Clock className="h-3.5 w-3.5 text-slate-500" />
             <span className="text-xs font-medium text-slate-400">
-              Kick-off {formatTime(fixture.scheduled_at)} · {formatDate(fixture.scheduled_at)}
+              {t("live.kickOff")} {formatTime(fixture.scheduled_at)} · {formatDate(fixture.scheduled_at)}
             </span>
           </div>
         )}
@@ -265,7 +269,7 @@ function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
           href={`/matches/${fixture.id}`}
           className="group flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-xs font-semibold text-slate-400 transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-400"
         >
-          View Analysis
+          {t("live.viewAnalysis")}
           <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </div>
@@ -290,6 +294,7 @@ function FilterPill({ label, active, onClick }: { label: string; active: boolean
 }
 
 function StatStrip({ fixtures }: { fixtures: Fixture[] }) {
+  const { t } = useTranslations();
   const liveCount     = fixtures.filter((f) => f.status === "live").length;
   const upcomingCount = fixtures.filter((f) => f.status === "scheduled").length;
   const finishedCount = fixtures.filter((f) => f.status === "finished").length;
@@ -298,17 +303,17 @@ function StatStrip({ fixtures }: { fixtures: Fixture[] }) {
     <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
       <div className="flex items-center gap-1.5">
         <span className="live-dot-red" style={{ width: 6, height: 6 }} />
-        <span className="text-xs font-semibold text-blue-400">{liveCount} Live</span>
+        <span className="text-xs font-semibold text-blue-400">{liveCount} {t("live.statusLive")}</span>
       </div>
       <div className="h-3 w-px bg-white/[0.08]" />
       <div className="flex items-center gap-1.5">
         <Clock className="h-3 w-3 text-slate-500" />
-        <span className="text-xs text-slate-400">{upcomingCount} Upcoming</span>
+        <span className="text-xs text-slate-400">{upcomingCount} {t("live.statusUpcoming")}</span>
       </div>
       <div className="h-3 w-px bg-white/[0.08]" />
       <div className="flex items-center gap-1.5">
         <CheckCircle2 className="h-3 w-3 text-emerald-500" />
-        <span className="text-xs text-slate-400">{finishedCount} Finished</span>
+        <span className="text-xs text-slate-400">{finishedCount} {t("live.statusFinished")}</span>
       </div>
     </div>
   );
@@ -339,7 +344,7 @@ function MatchGridSkeleton() {
   );
 }
 
-function EmptyState({ message, onClearFilters }: { message: string; onClearFilters?: () => void }) {
+function EmptyState({ message, onClearFilters, clearLabel }: { message: string; onClearFilters?: () => void; clearLabel?: string }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] py-20">
       <Activity className="h-10 w-10 text-slate-700" />
@@ -349,7 +354,7 @@ function EmptyState({ message, onClearFilters }: { message: string; onClearFilte
           onClick={onClearFilters}
           className="mt-1 text-xs font-semibold text-blue-400 hover:text-blue-300 transition-colors"
         >
-          Clear filters
+          {clearLabel ?? "Clear filters"}
         </button>
       )}
     </div>
@@ -359,6 +364,7 @@ function EmptyState({ message, onClearFilters }: { message: string; onClearFilte
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function LiveMatchesPage() {
+  const { t } = useTranslations();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
 
   // ── Today's matches (DB-only, instant) ──
@@ -442,17 +448,17 @@ export default function LiveMatchesPage() {
         <div>
           <div className="flex items-center gap-3">
             <h1 className="text-4xl font-bold tracking-tight gradient-text">
-              Live Matches
+              {t("live.title")}
             </h1>
             <div className="flex items-center gap-1.5 rounded-full bg-red-500/10 px-3 py-1 ring-1 ring-red-500/30">
               <span className="live-dot-red" />
               <span className="text-xs font-bold uppercase tracking-widest text-red-400">
-                Live
+                {t("live.statusLive")}
               </span>
             </div>
           </div>
           <p className="mt-1.5 text-sm text-slate-400">
-            Today&apos;s matches and upcoming fixtures - next 3 days
+            {t("live.subtitle")}
           </p>
           {/* Last updated */}
           <div className="mt-2 flex items-center gap-1.5">
@@ -464,8 +470,8 @@ export default function LiveMatchesPage() {
             />
             <span className="text-[11px] text-slate-600">
               {dataUpdatedAt
-                ? `Last updated: ${lastUpdatedLabel(dataUpdatedAt)}`
-                : "Fetching data…"}
+                ? `${t("live.lastUpdated")}: ${lastUpdatedLabel(dataUpdatedAt)}`
+                : t("live.fetchingData")}
             </span>
           </div>
         </div>
@@ -481,7 +487,7 @@ export default function LiveMatchesPage() {
         <div className="flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3">
           <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
           <p className="text-sm text-red-400">
-            Could not reach the backend API. Showing cached data if available - retrying automatically.
+            {t("live.errorBackend")}
           </p>
         </div>
       )}
@@ -491,7 +497,7 @@ export default function LiveMatchesPage() {
         <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
           <Clock className="h-4 w-4 shrink-0 text-slate-500" />
           <p className="text-sm text-slate-400">
-            No matches scheduled for today. Next fixtures:
+            {t("live.noMatchesToday")}
           </p>
         </div>
       )}
@@ -500,16 +506,24 @@ export default function LiveMatchesPage() {
       {!isLoading && (
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-600 mr-1">
-            Status
+            {t("live.status")}
           </span>
-          {STATUS_FILTERS.map((s) => (
-            <FilterPill
-              key={s}
-              label={s}
-              active={statusFilter === s}
-              onClick={() => setStatusFilter(s)}
-            />
-          ))}
+          {STATUS_FILTERS.map((s) => {
+            const filterLabels: Record<StatusFilter, string> = {
+              All: t("live.filterAll"),
+              Live: t("live.filterLive"),
+              Upcoming: t("live.filterUpcoming"),
+              Finished: t("live.filterFinished"),
+            };
+            return (
+              <FilterPill
+                key={s}
+                label={filterLabels[s]}
+                active={statusFilter === s}
+                onClick={() => setStatusFilter(s)}
+              />
+            );
+          })}
         </div>
       )}
 
@@ -520,16 +534,17 @@ export default function LiveMatchesPage() {
         <EmptyState
           message={
             hasError
-              ? "No data available - backend unreachable."
+              ? t("live.noDataBackendUnreachable")
               : allFixtures.length === 0
-              ? "No matches found. Check back when fixtures are scheduled."
-              : "No matches found for the selected filter."
+              ? t("live.noMatchesFound")
+              : t("live.noMatchesForFilter")
           }
           onClearFilters={
             statusFilter !== "All"
               ? () => setStatusFilter("All")
               : undefined
           }
+          clearLabel={t("live.clearFilters")}
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

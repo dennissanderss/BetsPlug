@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "@/i18n/locale-provider";
 import {
   Trophy,
   Zap,
@@ -58,6 +59,7 @@ function ProbCircle({
   isHighest: boolean;
   color: string;
 }) {
+  const { t } = useTranslations();
   const pct = Math.round(prob * 100);
   return (
     <div className="flex flex-col items-center gap-2">
@@ -87,7 +89,7 @@ function ProbCircle({
           className="flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-bold uppercase"
           style={{ background: `${color}20`, color }}
         >
-          <Star className="h-3 w-3" /> Predicted
+          <Star className="h-3 w-3" /> {t("botd.predicted")}
         </span>
       )}
     </div>
@@ -134,6 +136,7 @@ async function fetchBotdWithFallback(): Promise<BetOfTheDay & { target_date?: st
 }
 
 export default function BetOfTheDayPage() {
+  const { t } = useTranslations();
   const { data, isLoading, isError } = useQuery<BetOfTheDay & { target_date?: string }>({
     queryKey: ["bet-of-the-day"],
     queryFn: fetchBotdWithFallback,
@@ -147,9 +150,9 @@ export default function BetOfTheDayPage() {
     return (
       <div className="glass-card flex flex-col items-center justify-center gap-4 py-20 text-center">
         <AlertTriangle className="h-12 w-12 text-red-400" />
-        <h2 className="text-xl font-bold text-slate-300">Failed to load Pick of the Day</h2>
+        <h2 className="text-xl font-bold text-slate-300">{t("botd.failedToLoad")}</h2>
         <p className="max-w-md text-sm text-slate-500">
-          Could not reach the prediction API. Please try refreshing.
+          {t("botd.failedToLoadDesc")}
         </p>
       </div>
     );
@@ -197,17 +200,17 @@ export default function BetOfTheDayPage() {
           </div>
           <div>
             <h1 className="text-4xl font-extrabold tracking-tight gradient-text">
-              Pick of the Day
+              {t("botd.title")}
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              Our AI&apos;s highest-conviction pick{isFutureDate ? "" : " for today"}
+              {isFutureDate ? t("botd.subtitleFuture") : t("botd.subtitle")}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 rounded-full border border-amber-500/25 bg-amber-500/10 px-4 py-2">
           <Zap className="h-4 w-4 text-amber-400" />
-          <span className="text-xs font-bold text-amber-300">Premium Feature</span>
+          <span className="text-xs font-bold text-amber-300">{t("botd.premiumFeature")}</span>
         </div>
       </div>
 
@@ -216,11 +219,10 @@ export default function BetOfTheDayPage() {
         <div className="glass-card flex flex-col items-center justify-center gap-4 py-20 text-center">
           <Trophy className="h-12 w-12 text-slate-600" />
           <h2 className="text-xl font-bold text-slate-300">
-            No Pick Available
+            {t("botd.noPickAvailable")}
           </h2>
           <p className="max-w-md text-sm text-slate-500">
-            Our AI hasn&apos;t found a match meeting the minimum confidence threshold (65%)
-            for the next few days. Check back as more matches get analysed.
+            {t("botd.noPickAvailableDesc")}
           </p>
         </div>
       ) : (
@@ -230,7 +232,7 @@ export default function BetOfTheDayPage() {
             <div className="flex items-center gap-2 rounded-xl border border-blue-500/20 bg-blue-500/[0.06] px-4 py-3">
               <Clock className="h-4 w-4 text-blue-400 shrink-0" />
               <p className="text-sm text-blue-300">
-                No high-confidence pick for today &mdash; showing the best pick for{" "}
+                {t("botd.futureDateBanner")}{" "}
                 <span className="font-semibold text-blue-200">
                   {new Date(pickDate + "T12:00:00").toLocaleDateString("en-GB", {
                     weekday: "long",
@@ -277,7 +279,7 @@ export default function BetOfTheDayPage() {
                   color="#3b82f6"
                 />
                 <ProbCircle
-                  label="Draw"
+                  label={t("botd.draw")}
                   prob={drawProb}
                   isHighest={drawProb > homeProb && drawProb >= awayProb}
                   color="#f59e0b"
@@ -293,7 +295,7 @@ export default function BetOfTheDayPage() {
               {/* Confidence meter */}
               <div className="mx-auto max-w-sm">
                 <div className="mb-2 flex items-center justify-between text-xs">
-                  <span className="font-semibold text-slate-500">Model Confidence</span>
+                  <span className="font-semibold text-slate-500">{t("botd.modelConfidence")}</span>
                   <span
                     className={`text-lg font-extrabold ${
                       confidence >= 0.8
@@ -332,7 +334,7 @@ export default function BetOfTheDayPage() {
               <div className="mt-8 flex justify-center">
                 <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/10 px-6 py-3">
                   <p className="text-center text-xs font-semibold uppercase tracking-widest text-emerald-400">
-                    Predicted Outcome
+                    {t("botd.predictedOutcome")}
                   </p>
                   <p className="mt-1 text-center text-xl font-extrabold text-emerald-300">
                     {botd.predicted_outcome ?? " - "}
@@ -344,7 +346,7 @@ export default function BetOfTheDayPage() {
               {botd.explanation_summary && (
                 <div className="mt-8 mx-auto max-w-lg rounded-xl bg-white/[0.04] border border-white/[0.06] px-5 py-4">
                   <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-2">
-                    Model Reasoning
+                    {t("botd.modelReasoning")}
                   </p>
                   <p className="text-sm text-slate-300 leading-relaxed">
                     {botd.explanation_summary}
@@ -427,10 +429,9 @@ export default function BetOfTheDayPage() {
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
                 <TrendingUp className="h-5 w-5 text-blue-400" />
               </div>
-              <h3 className="text-sm font-bold text-white">Value Detection</h3>
+              <h3 className="text-sm font-bold text-white">{t("botd.valueDetection")}</h3>
               <p className="mt-1 text-xs text-slate-400 leading-relaxed">
-                This pick was selected because our ensemble model identified a significant
-                edge in the probability vs market odds.
+                {t("botd.valueDetectionDesc")}
               </p>
             </div>
 
@@ -438,10 +439,9 @@ export default function BetOfTheDayPage() {
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
                 <Shield className="h-5 w-5 text-emerald-400" />
               </div>
-              <h3 className="text-sm font-bold text-white">4 Models Agree</h3>
+              <h3 className="text-sm font-bold text-white">{t("botd.modelsAgree")}</h3>
               <p className="mt-1 text-xs text-slate-400 leading-relaxed">
-                Elo, Poisson, Logistic Regression, and our Ensemble model all contribute
-                to this prediction for maximum reliability.
+                {t("botd.modelsAgreeDesc")}
               </p>
             </div>
 
@@ -449,10 +449,9 @@ export default function BetOfTheDayPage() {
               <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10">
                 <Star className="h-5 w-5 text-amber-400" />
               </div>
-              <h3 className="text-sm font-bold text-white">Daily Selection</h3>
+              <h3 className="text-sm font-bold text-white">{t("botd.dailySelection")}</h3>
               <p className="mt-1 text-xs text-slate-400 leading-relaxed">
-                Only one pick per day - we choose quality over quantity.
-                Minimum 65% confidence required for selection.
+                {t("botd.dailySelectionDesc")}
               </p>
             </div>
           </div>

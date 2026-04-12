@@ -15,6 +15,7 @@ import {
 
 import { api } from "@/lib/api";
 import { cn, getStatusBadgeColor } from "@/lib/utils";
+import { useTranslations } from "@/i18n/locale-provider";
 import type { SearchResult, SearchResultGroup } from "@/types/api";
 
 
@@ -119,10 +120,21 @@ function MatchSubtitle({ subtitle }: { subtitle: string }) {
 
 // ─── Result card ─────────────────────────────────────────────────────────────
 
+const TYPE_LABEL_KEYS: Record<string, string> = {
+  sport: "search.tagFootball",
+  league: "search.typeLeague",
+  team: "search.typeTeam",
+  match: "search.typeMatch",
+};
+
 function ResultCard({ result }: { result: SearchResult }) {
+  const { t } = useTranslations();
   const cfg = getTypeConfig(result.type);
   const Icon = cfg.icon;
   const isMatch = result.type === "match";
+  const translatedLabel = TYPE_LABEL_KEYS[result.type]
+    ? t(TYPE_LABEL_KEYS[result.type] as any)
+    : cfg.label;
 
   return (
     <Link href={getHref(result)} className="block animate-slide-up">
@@ -167,7 +179,7 @@ function ResultCard({ result }: { result: SearchResult }) {
             cfg.badgeText
           )}
         >
-          {cfg.label}
+          {translatedLabel}
         </span>
       </div>
     </Link>
@@ -177,10 +189,11 @@ function ResultCard({ result }: { result: SearchResult }) {
 // ─── Group content ────────────────────────────────────────────────────────────
 
 function GroupContent({ items }: { items: SearchResult[] }) {
+  const { t } = useTranslations();
   if (items.length === 0) {
     return (
       <div className="py-10 text-center text-sm text-slate-500">
-        No results in this category.
+        {t("search.noResultsInCategory")}
       </div>
     );
   }
@@ -218,6 +231,7 @@ function SearchSkeleton() {
 // ─── Empty state ──────────────────────────────────────────────────────────────
 
 function EmptyState({ query }: { query: string }) {
+  const { t } = useTranslations();
   if (!query) {
     return (
       <div className="flex flex-col items-center justify-center gap-5 py-20 text-center animate-fade-in">
@@ -225,17 +239,17 @@ function EmptyState({ query }: { query: string }) {
           <Search className="h-8 w-8 text-slate-500" />
         </div>
         <div>
-          <p className="text-base font-semibold text-slate-100">Search the platform</p>
+          <p className="text-base font-semibold text-slate-100">{t("search.searchThePlatform")}</p>
           <p className="mt-1.5 text-sm text-slate-400 max-w-xs mx-auto">
-            Type at least 2 characters to search across leagues, teams, and matches
+            {t("search.typeAtLeast2Chars")}
           </p>
         </div>
         <div className="flex flex-wrap justify-center gap-2">
           {[
-            { label: "Football", color: "text-blue-400 border-blue-500/30 bg-blue-500/10" },
-            { label: "Leagues", color: "text-purple-400 border-purple-500/30 bg-purple-500/10" },
-            { label: "Teams", color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10" },
-            { label: "Matches", color: "text-amber-400 border-amber-500/30 bg-amber-500/10" },
+            { label: t("search.tagFootball"), color: "text-blue-400 border-blue-500/30 bg-blue-500/10" },
+            { label: t("search.tagLeagues"), color: "text-purple-400 border-purple-500/30 bg-purple-500/10" },
+            { label: t("search.tagTeams"), color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10" },
+            { label: t("search.tagMatches"), color: "text-amber-400 border-amber-500/30 bg-amber-500/10" },
           ].map(({ label, color }) => (
             <span
               key={label}
@@ -258,11 +272,10 @@ function EmptyState({ query }: { query: string }) {
         <AlertTriangle className="h-8 w-8 text-amber-400" />
       </div>
       <div>
-        <p className="text-base font-semibold text-slate-100">No results found</p>
+        <p className="text-base font-semibold text-slate-100">{t("search.noResultsFound")}</p>
         <p className="mt-1.5 text-sm text-slate-400">
-          Nothing matched{" "}
-          <span className="font-semibold text-slate-200">&ldquo;{query}&rdquo;</span>. Try a
-          different term.
+          {t("search.nothingMatched")}{" "}
+          <span className="font-semibold text-slate-200">&ldquo;{query}&rdquo;</span>. {t("search.tryDifferentTerm")}
         </p>
       </div>
     </div>
@@ -310,6 +323,7 @@ function TabPill({
 // ─── Inner search page ────────────────────────────────────────────────────────
 
 function SearchPageInner() {
+  const { t } = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQ = searchParams.get("q") ?? "";
@@ -363,11 +377,11 @@ function SearchPageInner() {
   );
 
   const tabConfig: { key: string; label: string }[] = [
-    { key: "all", label: "All" },
-    { key: "sport", label: "Football" },
-    { key: "league", label: "Leagues" },
-    { key: "team", label: "Teams" },
-    { key: "match", label: "Matches" },
+    { key: "all", label: t("search.tabAll") },
+    { key: "sport", label: t("search.tagFootball") },
+    { key: "league", label: t("search.tagLeagues") },
+    { key: "team", label: t("search.tagTeams") },
+    { key: "match", label: t("search.tagMatches") },
   ];
 
   const allItems = groups.flatMap((g) => g.items);
@@ -385,10 +399,10 @@ function SearchPageInner() {
       {/* Header */}
       <div className="space-y-2 text-center pt-2">
         <h1 className="text-3xl font-bold tracking-tight">
-          <span className="gradient-text">Search</span>
+          <span className="gradient-text">{t("search.title")}</span>
         </h1>
         <p className="text-sm text-slate-400">
-          Find leagues, teams, and matches
+          {t("search.subtitle")}
         </p>
       </div>
 
@@ -398,7 +412,7 @@ function SearchPageInner() {
         <input
           autoFocus
           type="search"
-          placeholder="Search across leagues, teams, and matches…"
+          placeholder={t("search.placeholder")}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           className={cn(
@@ -419,7 +433,7 @@ function SearchPageInner() {
       {showResults && (
         <p className="text-xs text-slate-500 animate-fade-in">
           <span className="text-slate-300 font-semibold tabular-nums">{totalResults}</span>{" "}
-          result{totalResults !== 1 ? "s" : ""} for{" "}
+          {totalResults !== 1 ? t("search.results") : t("search.result")} {t("search.for")}{" "}
           <span className="text-slate-200 font-medium">&ldquo;{debouncedQ}&rdquo;</span>
         </p>
       )}

@@ -6,6 +6,7 @@ import { Download, FileText, Play, AlertTriangle, Clock } from "lucide-react";
 
 import { api } from "@/lib/api";
 import { cn, formatDateTime } from "@/lib/utils";
+import { useTranslations } from "@/i18n/locale-provider";
 import type { GeneratedReport } from "@/types/api";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -26,14 +27,15 @@ function formatTypeLabel(type: string): string {
 // ─── Empty state ──────────────────────────────────────────────────────────────
 
 function EmptyReports() {
+  const { t } = useTranslations();
   return (
     <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/[0.08] py-16 text-center">
       <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/[0.04]">
         <FileText className="h-6 w-6 text-slate-500" />
       </div>
-      <p className="text-sm font-medium text-slate-400">No reports generated yet</p>
+      <p className="text-sm font-medium text-slate-400">{t("reports.noReportsYet")}</p>
       <p className="mt-1 text-xs text-slate-500">
-        Use the form above to generate your first report.
+        {t("reports.noReportsHint")}
       </p>
     </div>
   );
@@ -47,6 +49,7 @@ interface GenerateFormState {
 }
 
 function GenerateReportCard() {
+  const { t } = useTranslations();
   const queryClient = useQueryClient();
   const [form, setForm] = React.useState<GenerateFormState>({
     report_type: "weekly",
@@ -77,9 +80,9 @@ function GenerateReportCard() {
           <Play className="h-4 w-4 text-blue-400" />
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-slate-100">Generate Report</h2>
+          <h2 className="text-sm font-semibold text-slate-100">{t("reports.generateReport")}</h2>
           <p className="text-xs text-slate-400">
-            Generate a new performance report based on model predictions.
+            {t("reports.generateReportDescription")}
           </p>
         </div>
       </div>
@@ -88,21 +91,21 @@ function GenerateReportCard() {
       <div className="flex flex-wrap items-end gap-4">
         {/* Report type */}
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-slate-400">Report Type</label>
+          <label className="text-xs font-medium text-slate-400">{t("reports.reportType")}</label>
           <select
             value={form.report_type}
             onChange={(e) => setForm((f) => ({ ...f, report_type: e.target.value }))}
             className="h-9 w-44 rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors"
           >
-            <option value="weekly" className="bg-[#111827]">Weekly Summary</option>
-            <option value="monthly" className="bg-[#111827]">Monthly Summary</option>
-            <option value="custom" className="bg-[#111827]">Custom Range</option>
+            <option value="weekly" className="bg-[#111827]">{t("reports.weeklySummary")}</option>
+            <option value="monthly" className="bg-[#111827]">{t("reports.monthlySummary")}</option>
+            <option value="custom" className="bg-[#111827]">{t("reports.customRange")}</option>
           </select>
         </div>
 
         {/* Format */}
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-slate-400">Format</label>
+          <label className="text-xs font-medium text-slate-400">{t("reports.format")}</label>
           <select
             value={form.format}
             onChange={(e) => setForm((f) => ({ ...f, format: e.target.value }))}
@@ -123,12 +126,12 @@ function GenerateReportCard() {
           {mutation.isPending ? (
             <>
               <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-              Generating…
+              {t("reports.generating")}
             </>
           ) : (
             <>
               <Play className="h-4 w-4" />
-              Generate Report
+              {t("reports.generateReport")}
             </>
           )}
         </button>
@@ -139,7 +142,7 @@ function GenerateReportCard() {
         <div className="mt-4 flex items-center gap-2 rounded-lg border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm animate-fade-in">
           <span className="h-2 w-2 shrink-0 rounded-full bg-green-400" />
           <p className="text-green-300">
-            Report job queued successfully. The report will appear in the list below once ready.
+            {t("reports.reportQueued")}
           </p>
         </div>
       )}
@@ -149,7 +152,7 @@ function GenerateReportCard() {
           <p className="text-red-300">
             {mutation.error instanceof Error
               ? mutation.error.message
-              : "Failed to generate report. Please try again."}
+              : t("reports.generateFailed")}
           </p>
         </div>
       )}
@@ -160,6 +163,7 @@ function GenerateReportCard() {
 // ─── Reports list ─────────────────────────────────────────────────────────────
 
 function ReportRow({ report }: { report: GeneratedReport }) {
+  const { t } = useTranslations();
   return (
     <div className="glass-card-hover flex items-center gap-4 rounded-xl px-5 py-4 transition-all">
       {/* Icon + title */}
@@ -193,7 +197,7 @@ function ReportRow({ report }: { report: GeneratedReport }) {
 
       {/* Status pill */}
       <span className="shrink-0 rounded-full bg-green-500/15 px-2.5 py-0.5 text-xs font-semibold text-green-400">
-        Ready
+        {t("reports.ready")}
       </span>
 
       {/* Download */}
@@ -205,26 +209,27 @@ function ReportRow({ report }: { report: GeneratedReport }) {
         className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-blue-500/30 bg-blue-500/10 px-3 py-1.5 text-xs font-semibold text-blue-400 transition-colors hover:border-blue-400/50 hover:bg-blue-500/20 hover:text-blue-300"
       >
         <Download className="h-3.5 w-3.5" />
-        Download
+        {t("reports.download")}
       </a>
     </div>
   );
 }
 
 function ReportsList({ reports, isLoading }: { reports?: GeneratedReport[]; isLoading: boolean }) {
+  const { t } = useTranslations();
   return (
     <div className="glass-card rounded-xl p-6 animate-slide-up">
       {/* Header */}
       <div className="mb-5 flex items-center justify-between">
         <div>
-          <h2 className="text-sm font-semibold text-slate-100">Generated Reports</h2>
+          <h2 className="text-sm font-semibold text-slate-100">{t("reports.generatedReports")}</h2>
           <p className="text-xs text-slate-400">
-            All available performance reports
+            {t("reports.allAvailableReports")}
           </p>
         </div>
         {!isLoading && reports && reports.length > 0 && (
           <span className="rounded-full bg-white/[0.06] px-3 py-1 text-xs font-medium tabular-nums text-slate-300">
-            {reports.length} {reports.length === 1 ? "report" : "reports"}
+            {reports.length} {reports.length === 1 ? t("reports.reportSingular") : t("reports.reportPlural")}
           </span>
         )}
       </div>
@@ -252,6 +257,7 @@ function ReportsList({ reports, isLoading }: { reports?: GeneratedReport[]; isLo
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ReportsPage() {
+  const { t } = useTranslations();
   const { data: reports, isLoading } = useQuery<GeneratedReport[]>({
     queryKey: ["reports"],
     queryFn: () => api.getReports(),
@@ -263,10 +269,10 @@ export default function ReportsPage() {
       <div className="flex items-start justify-between animate-fade-in">
         <div>
           <h1 className="gradient-text text-2xl font-bold tracking-tight">
-            Reports &amp; Exports
+            {t("reports.title")}
           </h1>
           <p className="mt-1 text-sm text-slate-400">
-            Generate and download performance reports
+            {t("reports.subtitle")}
           </p>
         </div>
       </div>

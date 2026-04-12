@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "@/i18n/locale-provider";
 import {
   FlaskConical,
   Sparkles,
@@ -38,92 +39,7 @@ interface CommonLink {
 
 /* ─── Data ─────────────────────────────────────────────────────────────── */
 
-const PATHS: PathCard[] = [
-  {
-    title: "Strategy Follower",
-    subtitle: "For serious analysts",
-    icon: FlaskConical,
-    accentColor: "emerald",
-    href: "/strategy",
-    steps: [
-      {
-        label: "Go to Strategy Lab",
-        description: "Pick a proven strategy",
-      },
-      {
-        label: "Check Today's Picks",
-        description: "See which matches your strategy recommends",
-      },
-      {
-        label: "Track Results",
-        description: "Monitor your strategy's performance",
-      },
-    ],
-  },
-  {
-    title: "Quick Pick",
-    subtitle: "For daily insights",
-    icon: Trophy,
-    accentColor: "amber",
-    href: "/bet-of-the-day",
-    steps: [
-      {
-        label: "Check Pick of the Day",
-        description: "Our AI's #1 recommendation",
-      },
-      {
-        label: "See the analysis",
-        description: "Probabilities, reasoning, key factors",
-      },
-      {
-        label: "Track Results",
-        description: "Was it correct?",
-      },
-    ],
-  },
-  {
-    title: "Explorer",
-    subtitle: "Browse everything",
-    icon: Sparkles,
-    accentColor: "blue",
-    href: "/predictions",
-    steps: [
-      {
-        label: "Browse Predictions",
-        description: "All upcoming matches with AI analysis",
-      },
-      {
-        label: "Click View Details",
-        description: "Deep dive into any match",
-      },
-      {
-        label: "Make your own picks",
-        description: "Compare with our model",
-      },
-    ],
-  },
-];
-
-const COMMON_LINKS: CommonLink[] = [
-  {
-    title: "Track Results",
-    description: "See outcomes of all predictions",
-    href: "/results",
-    icon: Trophy,
-  },
-  {
-    title: "Weekly Report",
-    description: "Performance summary",
-    href: "/weekly-report",
-    icon: CalendarCheck,
-  },
-  {
-    title: "Trackrecord",
-    description: "Long-term accuracy data",
-    href: "/trackrecord",
-    icon: BarChart3,
-  },
-];
+/* Data arrays are built inside the component so they have access to t() */
 
 /* ─── Accent helpers ───────────────────────────────────────────────────── */
 
@@ -175,6 +91,53 @@ const ACCENT_MAP: Record<
 /* ─── Page ─────────────────────────────────────────────────────────────── */
 
 export default function JouwRoutePage() {
+  const { t } = useTranslations();
+
+  const PATHS: PathCard[] = [
+    {
+      title: t("route.path1Title"),
+      subtitle: t("route.path1Subtitle"),
+      icon: FlaskConical,
+      accentColor: "emerald",
+      href: "/strategy",
+      steps: [
+        { label: t("route.path1Step1Label"), description: t("route.path1Step1Desc") },
+        { label: t("route.path1Step2Label"), description: t("route.path1Step2Desc") },
+        { label: t("route.path1Step3Label"), description: t("route.path1Step3Desc") },
+      ],
+    },
+    {
+      title: t("route.path2Title"),
+      subtitle: t("route.path2Subtitle"),
+      icon: Trophy,
+      accentColor: "amber",
+      href: "/bet-of-the-day",
+      steps: [
+        { label: t("route.path2Step1Label"), description: t("route.path2Step1Desc") },
+        { label: t("route.path2Step2Label"), description: t("route.path2Step2Desc") },
+        { label: t("route.path2Step3Label"), description: t("route.path2Step3Desc") },
+      ],
+    },
+    {
+      title: t("route.path3Title"),
+      subtitle: t("route.path3Subtitle"),
+      icon: Sparkles,
+      accentColor: "blue",
+      href: "/predictions",
+      steps: [
+        { label: t("route.path3Step1Label"), description: t("route.path3Step1Desc") },
+        { label: t("route.path3Step2Label"), description: t("route.path3Step2Desc") },
+        { label: t("route.path3Step3Label"), description: t("route.path3Step3Desc") },
+      ],
+    },
+  ];
+
+  const COMMON_LINKS: CommonLink[] = [
+    { title: t("route.commonTrackResults"), description: t("route.commonTrackResultsDesc"), href: "/results", icon: Trophy },
+    { title: t("route.commonWeeklyReport"), description: t("route.commonWeeklyReportDesc"), href: "/weekly-report", icon: CalendarCheck },
+    { title: t("route.commonTrackrecord"), description: t("route.commonTrackrecordDesc"), href: "/trackrecord", icon: BarChart3 },
+  ];
+
   return (
     <div className="min-h-screen px-4 py-8 md:px-8 max-w-[1100px] mx-auto">
       {/* ── Header ─────────────────────────────────────────────────────── */}
@@ -182,12 +145,11 @@ export default function JouwRoutePage() {
         <div className="flex items-center justify-center gap-2 mb-3">
           <MapPin className="h-7 w-7 text-emerald-400" />
           <h1 className="text-3xl font-extrabold tracking-tight gradient-text">
-            Your Route
+            {t("route.title")}
           </h1>
         </div>
         <p className="text-slate-400 text-sm max-w-xl mx-auto">
-          Choose your path to get the most out of BetsPlug. Each route leads to
-          smarter picks - pick the one that fits your style.
+          {t("route.subtitle")}
         </p>
       </div>
 
@@ -271,7 +233,7 @@ export default function JouwRoutePage() {
                     <span
                       className={`text-xs font-semibold ${a.text} group-hover:underline`}
                     >
-                      Start this path &rarr;
+                      {t("route.startThisPath")} &rarr;
                     </span>
                   </div>
                 </div>
@@ -287,7 +249,7 @@ export default function JouwRoutePage() {
         <div className="flex items-center gap-3 mb-6">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
           <span className="text-[11px] font-bold uppercase tracking-widest text-slate-500">
-            Common for all paths
+            {t("route.commonForAllPaths")}
           </span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
         </div>

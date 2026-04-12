@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "@/i18n/locale-provider";
 import {
   Sparkles,
   ChevronUp,
@@ -158,13 +159,14 @@ function ProbabilityBar({ homeProb, drawProb, awayProb, homeTeam, awayTeam }: Pr
 // ─── Pending Probability placeholder ─────────────────────────────────────────
 
 function ProbabilityPending() {
+  const { t } = useTranslations();
   return (
     <div className="w-full min-w-[200px]">
       <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/[0.06]">
         <div className="h-full w-full rounded-full bg-white/[0.04] animate-pulse" />
       </div>
       <p className="mt-2.5 text-[10px] font-medium text-slate-600 italic text-center">
-        Analysis pending
+        {t("pred.analysisPending")}
       </p>
     </div>
   );
@@ -175,6 +177,7 @@ function ProbabilityPending() {
 // for a safe rollback window; slated for deletion in v6.3.
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function MatchCard({ fixture }: { fixture: Fixture }) {
+  const { t } = useTranslations();
   const [expanded, setExpanded] = useState(false);
   const pred: FixturePrediction | null = fixture.prediction ?? null;
   const hasPrediction = pred !== null && typeof pred.confidence === "number";
@@ -222,7 +225,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
         {/* ── Center: Probability ── */}
         <div className="w-full max-w-[260px] lg:mx-6">
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-600">
-            Win Probability
+            {t("pred.winProbability")}
           </p>
           {hasPrediction ? (
             <ProbabilityBar
@@ -250,7 +253,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
                   <span className="text-xl font-semibold">%</span>
                 </span>
                 <span className={`mt-1 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${confidenceBg}`}>
-                  {confidenceLevel} Confidence
+                  {confidenceLevel} {t("pred.confidence")}
                 </span>
                 {pred?.model_name && (
                   <span className="mt-1 text-[9px] text-slate-600 uppercase tracking-wider">
@@ -259,7 +262,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
                 )}
               </>
             ) : (
-              <span className="text-sm font-medium text-slate-600 italic">Analysis pending</span>
+              <span className="text-sm font-medium text-slate-600 italic">{t("pred.analysisPending")}</span>
             )}
           </div>
 
@@ -270,9 +273,9 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
             aria-expanded={expanded}
           >
             {expanded ? (
-              <><ChevronUp className="h-3.5 w-3.5" />Hide Details</>
+              <><ChevronUp className="h-3.5 w-3.5" />{t("pred.hideDetails")}</>
             ) : (
-              <><Eye className="h-3.5 w-3.5" />View Details</>
+              <><Eye className="h-3.5 w-3.5" />{t("pred.viewDetails")}</>
             )}
           </button>
         </div>
@@ -285,12 +288,12 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
             <div className="min-w-0 flex-1">
               {fixture.venue && (
                 <p className="text-[10px] text-slate-600 truncate">
-                  <span className="font-medium text-slate-500">Venue:</span> {fixture.venue}
+                  <span className="font-medium text-slate-500">{t("pred.venue")}:</span> {fixture.venue}
                 </p>
               )}
               {pred?.predicted_at && (
                 <p className="text-[10px] text-slate-700 truncate mt-0.5">
-                  Predicted {new Date(pred.predicted_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
+                  {t("pred.predictedOn")} {new Date(pred.predicted_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
                 </p>
               )}
             </div>
@@ -302,7 +305,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
           </div>
         ) : (
           <p className="text-xs text-slate-600 italic">
-            This match has not yet been processed by the prediction engine. Check back closer to kick-off.
+            {t("pred.notProcessed")}
           </p>
         )}
       </div>
@@ -318,7 +321,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
         <div className="border-t border-white/[0.05] bg-white/[0.015] px-5 py-2">
           <div className="flex items-center gap-3 flex-wrap">
             <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-600">
-              Pre-match odds
+              {t("pred.preMatchOdds")}
             </span>
             <div className="flex items-center gap-1.5 flex-wrap text-[11px]">
               {fixture.odds.home != null && (
@@ -366,12 +369,12 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
           {/* Pick badge */}
           {pred?.pick && (
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600">Model Pick</span>
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-600">{t("pred.modelPick")}</span>
               <span className="rounded-md bg-emerald-500/20 px-2.5 py-0.5 text-xs font-bold text-emerald-400 border border-emerald-500/30">
                 {pred.pick}
               </span>
               <span className="text-[10px] text-slate-600 ml-auto">
-                Confidence: {Math.round((pred.confidence ?? 0) * 100)}%
+                {t("pred.confidence")}: {Math.round((pred.confidence ?? 0) * 100)}%
               </span>
             </div>
           )}
@@ -379,7 +382,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
           {/* Probability breakdown */}
           <div className={`grid gap-3 text-center ${pred?.draw_prob != null ? 'grid-cols-3' : 'grid-cols-2'}`}>
             <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] p-3">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Home Win</p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">{t("pred.homeWin")}</p>
               <p className="text-xl font-bold text-blue-400">{Math.round((pred?.home_win_prob ?? 0) * 100)}%</p>
               {pred?.edge?.home != null && (
                 <p className={`text-[10px] font-medium mt-1 ${pred.edge.home > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
@@ -389,7 +392,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
             </div>
             {pred?.draw_prob != null && (
               <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] p-3">
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Draw</p>
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">{t("pred.draw")}</p>
                 <p className="text-xl font-bold text-amber-400">{Math.round(pred.draw_prob * 100)}%</p>
                 {pred.edge?.draw != null && (
                   <p className={`text-[10px] font-medium mt-1 ${pred.edge.draw > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
@@ -399,7 +402,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
               </div>
             )}
             <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] p-3">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">Away Win</p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1">{t("pred.awayWin")}</p>
               <p className="text-xl font-bold text-red-400">{Math.round((pred?.away_win_prob ?? 0) * 100)}%</p>
               {pred?.edge?.away != null && (
                 <p className={`text-[10px] font-medium mt-1 ${pred.edge.away > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
@@ -412,7 +415,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
           {/* Reasoning */}
           {pred?.reasoning && (
             <div className="rounded-lg bg-white/[0.04] border border-white/[0.06] px-4 py-3">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1.5">Model Reasoning</p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-1.5">{t("pred.modelReasoning")}</p>
               <p className="text-xs text-slate-300 leading-relaxed">{pred.reasoning}</p>
             </div>
           )}
@@ -420,7 +423,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
           {/* Top features */}
           {pred?.top_features && pred.top_features.length > 0 && (
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-2">Key Factors</p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600 mb-2">{t("pred.keyFactors")}</p>
               <div className="space-y-1.5">
                 {pred.top_features.slice(0, 5).map((f, i) => (
                   <div key={i} className="flex items-center gap-2">
@@ -445,7 +448,7 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
           {/* Venue */}
           {fixture.venue && (
             <p className="text-[10px] text-slate-600 text-center pt-1 border-t border-white/[0.05]">
-              <span className="font-medium text-slate-500">Venue:</span> {fixture.venue}
+              <span className="font-medium text-slate-500">{t("pred.venue")}:</span> {fixture.venue}
             </p>
           )}
         </div>
@@ -865,6 +868,7 @@ function groupFixturesByLeague(
 // ─── Stats Bar ───────────────────────────────────────────────────────────────
 
 function StatsBar({ fixtures }: { fixtures: Fixture[] }) {
+  const { t } = useTranslations();
   const total      = fixtures.length;
   const withPred   = fixtures.filter((f) => f.prediction !== null).length;
   const pending    = total - withPred;
@@ -877,10 +881,10 @@ function StatsBar({ fixtures }: { fixtures: Fixture[] }) {
     : null;
 
   const stats = [
-    { label: "Upcoming Matches", value: String(total) },
-    { label: "Predictions Ready", value: String(withPred) },
-    { label: "Analysis Pending",  value: String(pending) },
-    { label: "Avg Confidence",    value: avgConf !== null ? `${avgConf}%` : " - " },
+    { label: t("pred.upcomingMatches"), value: String(total) },
+    { label: t("pred.predictionsReady"), value: String(withPred) },
+    { label: t("pred.analysisPendingStat"),  value: String(pending) },
+    { label: t("pred.avgConfidence"),    value: avgConf !== null ? `${avgConf}%` : " - " },
   ];
 
   return (
@@ -925,12 +929,13 @@ function FilterBar({
   total,
   availableLeagues,
 }: FilterBarProps) {
+  const { t } = useTranslations();
   const leagueTabs: LeagueFilter[] = ["All", ...availableLeagues];
   const confOptions: ConfidenceFilter[] = ["All", "High", "Medium", "Low"];
   const sortOptions: { key: SortKey; label: string }[] = [
-    { key: "confidence", label: "Confidence" },
-    { key: "time",       label: "Time" },
-    { key: "league",     label: "League" },
+    { key: "confidence", label: t("pred.sortConfidence") },
+    { key: "time",       label: t("pred.sortTime") },
+    { key: "league",     label: t("pred.sortLeague") },
   ];
 
   return (
@@ -1042,6 +1047,7 @@ function daysBetweenIso(from: string, to: string): number {
 }
 
 export default function PredictionsPage() {
+  const { t } = useTranslations();
   const [leagueFilter,     setLeagueFilter]     = useState<LeagueFilter>("All");
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("All");
   const [sortKey,          setSortKey]          = useState<SortKey>("confidence");
@@ -1174,10 +1180,10 @@ export default function PredictionsPage() {
           </div>
           <div>
             <h1 className="text-4xl font-bold tracking-tight gradient-text leading-tight">
-              Predictions
+              {t("pred.title")}
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              AI-powered match analysis and probability forecasting - next 7 days
+              {t("pred.subtitle")}
             </p>
           </div>
         </div>
@@ -1186,13 +1192,13 @@ export default function PredictionsPage() {
           {/* Model badge */}
           <div className="flex items-center gap-2 rounded-full border border-blue-500/25 bg-blue-500/10 px-4 py-2">
             <span className="h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
-            <span className="text-xs font-semibold text-blue-300">Model: Ensemble</span>
+            <span className="text-xs font-semibold text-blue-300">{t("pred.modelEnsemble")}</span>
           </div>
           {/* Last refresh */}
           <div className="flex items-center gap-1.5 text-[10px] text-slate-600">
             <RefreshCw className="h-3 w-3" />
             <span>
-              Auto-refreshes every 60s · Last:{" "}
+              {t("pred.autoRefresh")}{" "}
               {lastRefresh.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}
             </span>
           </div>
@@ -1204,7 +1210,7 @@ export default function PredictionsPage() {
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
           <div className="glass-card px-4 py-3 sm:px-5 sm:py-4">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-              Predicted
+              {t("pred.predicted")}
             </p>
             <p className="mt-1 text-xl font-extrabold tabular-nums text-slate-100 sm:text-2xl">
               {metricsQuery.data.total_forecasts.toLocaleString("nl-NL")}
@@ -1212,7 +1218,7 @@ export default function PredictionsPage() {
           </div>
           <div className="glass-card px-4 py-3 sm:px-5 sm:py-4">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-              Upcoming
+              {t("pred.upcoming")}
             </p>
             <p className="mt-1 text-xl font-extrabold tabular-nums text-blue-400 sm:text-2xl">
               {metricsQuery.data.pending_count.toLocaleString("nl-NL")}
@@ -1220,7 +1226,7 @@ export default function PredictionsPage() {
           </div>
           <div className="glass-card px-4 py-3 sm:px-5 sm:py-4">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-              Correct so far
+              {t("pred.correctSoFar")}
             </p>
             <p className="mt-1 text-xl font-extrabold tabular-nums text-emerald-400 sm:text-2xl">
               {metricsQuery.data.correct_predictions.toLocaleString("nl-NL")}
@@ -1233,9 +1239,9 @@ export default function PredictionsPage() {
       <div className="flex items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1">
         {(
           [
-            { key: "upcoming" as const, label: "Upcoming", icon: CalendarDays },
-            { key: "live" as const, label: "Live Now", icon: Radio },
-            { key: "results" as const, label: "Results", icon: Trophy },
+            { key: "upcoming" as const, label: t("pred.upcoming"), icon: CalendarDays },
+            { key: "live" as const, label: t("live.statusLive"), icon: Radio },
+            { key: "results" as const, label: t("results.title"), icon: Trophy },
           ]
         ).map(({ key, label, icon: Icon }) => {
           const active = viewMode === key;
@@ -1337,7 +1343,7 @@ export default function PredictionsPage() {
         >
           <AlertTriangle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
           <p className="text-sm text-slate-400">
-            Could not load fixture data from the database. Please try refreshing.
+            {t("pred.errorLoading")}
           </p>
         </div>
       )}
@@ -1361,43 +1367,24 @@ export default function PredictionsPage() {
         </div>
       ) : upcomingFixtures.length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
-          {viewMode === "live" ? (
-            <>
-              <Radio className="h-8 w-8 text-slate-600" />
-              <p className="text-base font-medium text-slate-400">
-                Geen live wedstrijden op dit moment
-              </p>
-              <p className="text-sm text-slate-600">
-                Check later terug of wissel naar <strong>Upcoming</strong> om
-                aankomende wedstrijden te zien.
-              </p>
-            </>
-          ) : (
-            <>
-              <Sparkles className="h-8 w-8 text-slate-600" />
-              <p className="text-base font-medium text-slate-400">
-                {viewMode === "results"
-                  ? "Geen recente resultaten"
-                  : "No upcoming matches in the next 7 days"}
-              </p>
-              <p className="text-sm text-slate-600">
-                No scheduled fixtures were found in the database. Check back shortly.
-              </p>
-            </>
-          )}
+          <Sparkles className="h-8 w-8 text-slate-600" />
+          <p className="text-base font-medium text-slate-400">{t("pred.noUpcomingMatches")}</p>
+          <p className="text-sm text-slate-600">
+            {t("pred.noUpcomingMatchesDesc")}
+          </p>
         </div>
       ) : filtered.length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
           <Sparkles className="h-8 w-8 text-slate-600" />
-          <p className="text-base font-medium text-slate-400">No predictions match your filters</p>
+          <p className="text-base font-medium text-slate-400">{t("pred.noMatchingPredictions")}</p>
           <p className="text-sm text-slate-600">
-            Try adjusting the league or confidence filters above.
+            {t("pred.noMatchingPredictionsDesc")}
           </p>
           <button
             onClick={() => { setLeagueFilter("All"); setConfidenceFilter("All"); }}
             className="btn-gradient mt-2 rounded-lg px-4 py-2 text-sm font-semibold text-white"
           >
-            Clear filters
+            {t("pred.clearFilters")}
           </button>
         </div>
       ) : (
@@ -1418,7 +1405,7 @@ export default function PredictionsPage() {
       {!isLoading && upcomingFixtures.length > 0 && (
         <PaywallOverlay feature="all_predictions" requiredTier="silver" variant="inline">
           <div className="glass-card p-8 text-center">
-            <p className="text-slate-400">See all {upcomingFixtures.length} predictions with our Silver plan or higher.</p>
+            <p className="text-slate-400">{t("pred.upgradePrompt")}</p>
           </div>
         </PaywallOverlay>
       )}

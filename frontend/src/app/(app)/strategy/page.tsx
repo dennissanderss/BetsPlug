@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useQuery, useQueries } from "@tanstack/react-query";
+import { useTranslations } from "@/i18n/locale-provider";
 import {
   FlaskConical,
   ShieldCheck,
@@ -92,6 +93,7 @@ function getStrategyColor(roi: number | undefined) {
 }
 
 function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
+  const { t } = useTranslations();
   const { data: metrics, isLoading } = useQuery({
     queryKey: ["strategy-metrics", strategy.id],
     queryFn: async () => {
@@ -115,20 +117,20 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
       <div className={cn("bg-gradient-to-r p-5", c.header)}>
         <div className="flex items-start justify-between gap-3 mb-2">
           <div>
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">Football · Match Result</p>
+            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">{t("strategy.cardCategory")}</p>
             <h3 className="text-base font-bold text-slate-100">{strategy.name}</h3>
           </div>
           {metrics?.roi !== undefined && metrics?.roi > 0 ? (
             <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-400">
-              <TrendingUp className="h-3 w-3" /> Profitable
+              <TrendingUp className="h-3 w-3" /> {t("strategy.profitable")}
             </span>
           ) : metrics?.has_data ? (
             <span className="flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-2.5 py-1 text-[11px] font-semibold text-red-400">
-              <TrendingUp className="h-3 w-3 rotate-180" /> Unprofitable
+              <TrendingUp className="h-3 w-3 rotate-180" /> {t("strategy.unprofitable")}
             </span>
           ) : isLoading ? (
             <span className="flex items-center gap-1.5 rounded-full border border-slate-500/30 bg-slate-500/10 px-2.5 py-1 text-[11px] font-semibold text-slate-400">
-              <Clock className="h-3 w-3" /> Loading...
+              <Clock className="h-3 w-3" /> {t("strategy.loading")}
             </span>
           ) : null}
         </div>
@@ -140,21 +142,21 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
         <div className="px-5 py-4 border-t border-white/[0.06]">
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500" title="Percentage of picks that were correct">Win Rate</p>
+              <p className="text-[10px] uppercase tracking-wider text-slate-500" title={t("strategy.winRateTooltip")}>{t("strategy.winRate")}</p>
               <p className={cn("text-lg font-bold tabular-nums", c.accent)}>{(metrics.winrate * 100).toFixed(1)}%</p>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500" title="Return on Investment - profit/loss as percentage of total staked">ROI</p>
+              <p className="text-[10px] uppercase tracking-wider text-slate-500" title={t("strategy.roiTooltip")}>ROI</p>
               <p className={cn("text-lg font-bold tabular-nums", metrics.roi >= 0 ? "text-emerald-400" : "text-red-400")}>
                 {metrics.roi >= 0 ? "+" : ""}{(metrics.roi * 100).toFixed(1)}%
               </p>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500" title="Total number of evaluated picks for this strategy">Sample Size</p>
+              <p className="text-[10px] uppercase tracking-wider text-slate-500" title={t("strategy.sampleSizeTooltip")}>{t("strategy.sampleSize")}</p>
               <p className="text-lg font-bold tabular-nums text-slate-100">{metrics.sample_size}</p>
             </div>
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 space-y-0.5">
-              <p className="text-[10px] uppercase tracking-wider text-slate-500" title="Largest peak-to-trough loss in units (1 unit = 1 stake). E.g., 4.3u means at worst you'd be down 4.3 stakes">Max Drawdown</p>
+              <p className="text-[10px] uppercase tracking-wider text-slate-500" title={t("strategy.maxDrawdownTooltip")}>{t("strategy.maxDrawdown")}</p>
               <p className="text-lg font-bold tabular-nums text-red-400">{metrics.max_drawdown.toFixed(1)}u</p>
             </div>
           </div>
@@ -163,7 +165,7 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
 
       {/* Rules — human readable */}
       <div className="px-5 pb-5 flex-1">
-        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 mt-3">How it works</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-2 mt-3">{t("strategy.howItWorksCard")}</p>
         <ul className="space-y-1.5">
           {(strategy.rules as { feature: string; operator: string; value: unknown }[]).map((rule, i) => (
             <li key={i} className="flex items-start gap-2 text-xs text-slate-400">
@@ -184,7 +186,7 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
                 className="flex items-center justify-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-4 py-2.5 text-xs font-semibold text-blue-400 hover:bg-blue-500/20 transition-all"
               >
                 <BarChart3 className="h-3.5 w-3.5" />
-                View All Picks & Results
+                {t("strategy.viewAllPicks")}
               </Link>
             </PaywallOverlay>
           </div>
@@ -195,6 +197,7 @@ function RealStrategyCard({ strategy }: { strategy: StrategyResponse }) {
 }
 
 export default function StrategyPage() {
+  const { t } = useTranslations();
   const { data: summary, isLoading: summaryLoading } = useQuery({
     queryKey: ["trackrecord-summary"],
     queryFn: () => api.getTrackrecordSummary(),
@@ -261,10 +264,10 @@ export default function StrategyPage() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <FlaskConical className="h-6 w-6 text-blue-400" />
-              <h1 className="text-3xl font-extrabold tracking-tight gradient-text">Strategy Lab</h1>
+              <h1 className="text-3xl font-extrabold tracking-tight gradient-text">{t("strategy.title")}</h1>
             </div>
             <p className="text-slate-400 text-sm max-w-xl">
-              Explore and compare quantitative betting strategies powered by our AI model.
+              {t("strategy.subtitle")}
             </p>
           </div>
 
@@ -277,9 +280,9 @@ export default function StrategyPage() {
                 : "border-amber-500/25 bg-amber-500/10 text-amber-400"
             )}>
               {dataStatus.ready ? (
-                <><ShieldCheck className="h-3.5 w-3.5" /> Ready to backtest</>
+                <><ShieldCheck className="h-3.5 w-3.5" /> {t("strategy.readyToBacktest")}</>
               ) : (
-                <><Clock className="h-3.5 w-3.5" /> Awaiting data</>
+                <><Clock className="h-3.5 w-3.5" /> {t("strategy.awaitingData")}</>
               )}
             </span>
           </div>
@@ -291,7 +294,7 @@ export default function StrategyPage() {
       <div className="glass-card p-6 animate-fade-in">
         <div className="flex items-center gap-2 mb-4">
           <Info className="h-5 w-5 text-blue-400" />
-          <h2 className="text-base font-bold text-slate-100">How Our System Works</h2>
+          <h2 className="text-base font-bold text-slate-100">{t("strategy.howItWorks")}</h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -299,13 +302,10 @@ export default function StrategyPage() {
           <div className="rounded-lg border border-blue-500/20 bg-blue-500/[0.05] p-5">
             <div className="flex items-center gap-2 mb-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/20 text-blue-400 font-bold text-sm">1</div>
-              <p className="text-sm font-bold text-blue-400">Our AI Model Analyzes</p>
+              <p className="text-sm font-bold text-blue-400">{t("strategy.step1Title")}</p>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Our ensemble combines 3 proven models - <span className="text-slate-200 font-medium">Elo ratings</span> (team strength),
-              <span className="text-slate-200 font-medium"> Poisson distribution</span> (goal prediction), and
-              <span className="text-slate-200 font-medium"> Logistic regression</span> (pattern recognition) - to calculate
-              win/draw/loss probabilities for every upcoming match.
+              {t("strategy.step1Desc")}
             </p>
           </div>
 
@@ -313,12 +313,10 @@ export default function StrategyPage() {
           <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] p-5">
             <div className="flex items-center gap-2 mb-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-sm">2</div>
-              <p className="text-sm font-bold text-emerald-400">A Strategy Filters</p>
+              <p className="text-sm font-bold text-emerald-400">{t("strategy.step2Title")}</p>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              A strategy is a set of rules that selects only the <span className="text-slate-200 font-medium">best opportunities</span> from the model{"'"}s output.
-              For example: {"\""}only follow picks where the home team has {">"} 60% predicted win probability{"\""}
-              or {"\""}only back matches with low draw probability{"\""}.  Each strategy has a different risk/reward profile.
+              {t("strategy.step2Desc")}
             </p>
           </div>
 
@@ -326,13 +324,10 @@ export default function StrategyPage() {
           <div className="rounded-lg border border-amber-500/20 bg-amber-500/[0.05] p-5">
             <div className="flex items-center gap-2 mb-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/20 text-amber-400 font-bold text-sm">3</div>
-              <p className="text-sm font-bold text-amber-400">You Follow the Picks</p>
+              <p className="text-sm font-bold text-amber-400">{t("strategy.step3Title")}</p>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              <span className="text-slate-200 font-medium">Pick a strategy below</span>, then click
-              <span className="text-slate-200 font-medium"> {"\""}View All Picks & Results{"\""}</span> to see which upcoming matches
-              it recommends. Each strategy shows its <span className="text-slate-200 font-medium">historical win rate and ROI</span> so you can
-              choose based on real backtested data.
+              {t("strategy.step3Desc")}
             </p>
           </div>
         </div>
@@ -344,11 +339,11 @@ export default function StrategyPage() {
           <div className="flex items-center gap-3">
             <TrendingUp className="h-5 w-5 text-emerald-400" />
             <div>
-              <h2 className="text-lg font-bold text-slate-100">Profitable Strategies</h2>
-              <p className="text-xs text-slate-500">Strategies with a positive ROI based on live data</p>
+              <h2 className="text-lg font-bold text-slate-100">{t("strategy.profitableStrategies")}</h2>
+              <p className="text-xs text-slate-500">{t("strategy.profitableStrategiesDesc")}</p>
             </div>
             <span className="ml-auto text-[10px] font-semibold uppercase tracking-widest text-emerald-600 border border-emerald-700 rounded px-2 py-0.5">
-              Live data
+              {t("strategy.liveData")}
             </span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -367,7 +362,7 @@ export default function StrategyPage() {
             className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-300 transition-colors"
           >
             <ChevronRight className={cn("h-4 w-4 transition-transform", showArchived && "rotate-90")} />
-            Archived - Not Profitable ({archivedStrategies.length})
+            {t("strategy.archivedNotProfitable")} ({archivedStrategies.length})
           </button>
           {showArchived && (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -384,14 +379,14 @@ export default function StrategyPage() {
         <div className="glass-card p-6 space-y-4 animate-fade-in">
           <div className="flex items-center gap-2">
             <Target className="h-5 w-5 text-blue-400" />
-            <h2 className="text-base font-bold text-slate-100">Real Prediction Data (from database)</h2>
+            <h2 className="text-base font-bold text-slate-100">{t("strategy.realPredictionData")}</h2>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
-              { label: "Total Predictions", value: summary.total_predictions.toLocaleString(), accent: "blue" as const },
-              { label: "Accuracy", value: `${(summary.accuracy * 100).toFixed(1)}%`, accent: "green" as const },
-              { label: "Brier Score", value: summary.brier_score.toFixed(3), accent: "blue" as const },
-              { label: "Avg Confidence", value: `${(summary.avg_confidence * 100).toFixed(1)}%`, accent: "amber" as const },
+              { label: t("strategy.totalPredictions"), value: summary.total_predictions.toLocaleString(), accent: "blue" as const },
+              { label: t("strategy.accuracy"), value: `${(summary.accuracy * 100).toFixed(1)}%`, accent: "green" as const },
+              { label: t("strategy.brierScore"), value: summary.brier_score.toFixed(3), accent: "blue" as const },
+              { label: t("strategy.avgConfidence"), value: `${(summary.avg_confidence * 100).toFixed(1)}%`, accent: "amber" as const },
             ].map((stat) => {
               const colorMap = {
                 blue: "text-blue-400",
@@ -408,8 +403,7 @@ export default function StrategyPage() {
             })}
           </div>
           <p className="text-xs text-slate-500">
-            These figures are real model outputs from the database. They reflect prediction accuracy
-            metrics only - not betting P/L, which requires backtest analysis.
+            {t("strategy.realPredictionDisclaimer")}
           </p>
         </div>
       )}

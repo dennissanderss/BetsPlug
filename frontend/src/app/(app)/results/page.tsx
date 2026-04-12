@@ -14,6 +14,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { api } from "@/lib/api";
+import { useTranslations } from "@/i18n/locale-provider";
 import type { Fixture, WeeklySummary } from "@/types/api";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -63,14 +64,15 @@ function formatPredictedOutcome(
   outcome: string,
   homeProb: number,
   drawProb: number | null,
-  awayProb: number
+  awayProb: number,
+  t: (key: any) => string
 ): string {
   const label = outcome === "home_win"
-    ? "Home Win"
+    ? t("results.outcomeHomeWin")
     : outcome === "away_win"
-    ? "Away Win"
+    ? t("results.outcomeAwayWin")
     : outcome === "draw"
-    ? "Draw"
+    ? t("results.outcomeDraw")
     : slugToTitle(outcome);
 
   const prob = outcome === "home_win"
@@ -89,6 +91,7 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
   isLoading: boolean;
   isError: boolean;
 }) {
+  const { t } = useTranslations();
   if (isLoading) {
     return (
       <div
@@ -114,9 +117,9 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
       >
         <div className="flex items-center gap-2 mb-3">
           <Trophy className="h-4 w-4 text-emerald-400" />
-          <h2 className="text-sm font-semibold text-slate-200">This Week&apos;s Performance</h2>
+          <h2 className="text-sm font-semibold text-slate-200">{t("results.thisWeekPerformance")}</h2>
         </div>
-        <p className="text-sm text-slate-500 italic">No results this week yet.</p>
+        <p className="text-sm text-slate-500 italic">{t("results.noResultsThisWeek")}</p>
       </div>
     );
   }
@@ -125,12 +128,12 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
   const plSign = data.pl_units >= 0 ? "+" : "";
 
   const statItems = [
-    { label: "Total Calls", value: String(data.total_calls), color: "#3b82f6" },
-    { label: "Won", value: String(data.won), color: "#10b981" },
-    { label: "Lost", value: String(data.lost), color: "#ef4444" },
-    { label: "Win Rate", value: `${winRatePct}%`, color: winRatePct >= 50 ? "#10b981" : "#ef4444" },
+    { label: t("results.statTotalCalls"), value: String(data.total_calls), color: "#3b82f6" },
+    { label: t("results.statWon"), value: String(data.won), color: "#10b981" },
+    { label: t("results.statLost"), value: String(data.lost), color: "#ef4444" },
+    { label: t("results.statWinRate"), value: `${winRatePct}%`, color: winRatePct >= 50 ? "#10b981" : "#ef4444" },
     {
-      label: "P/L Units",
+      label: t("results.statPLUnits"),
       value: `${plSign}${data.pl_units.toFixed(1)}u`,
       color: data.pl_units >= 0 ? "#10b981" : "#ef4444",
     },
@@ -145,7 +148,7 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
           <Trophy className="h-4 w-4 text-emerald-400" />
         </div>
-        <h2 className="text-sm font-semibold text-slate-200">This Week&apos;s Performance</h2>
+        <h2 className="text-sm font-semibold text-slate-200">{t("results.thisWeekPerformance")}</h2>
       </div>
 
       {/* Stats row */}
@@ -176,7 +179,7 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
               <div className="flex items-center gap-1.5 mb-2">
                 <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
                 <span className="text-[11px] font-semibold uppercase tracking-widest text-emerald-500">
-                  Best Performers
+                  {t("results.bestPerformers")}
                 </span>
               </div>
               <div className="space-y-1.5">
@@ -200,7 +203,7 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
               <div className="flex items-center gap-1.5 mb-2">
                 <TrendingDown className="h-3.5 w-3.5 text-red-400" />
                 <span className="text-[11px] font-semibold uppercase tracking-widest text-red-500">
-                  Worst Performers
+                  {t("results.worstPerformers")}
                 </span>
               </div>
               <div className="space-y-1.5">
@@ -247,13 +250,18 @@ function ResultsFilterBar({
   leagues,
   total,
 }: FilterBarProps) {
+  const { t } = useTranslations();
   const periods: { value: PeriodFilter; label: string }[] = [
-    { value: 7,  label: "Last 7 days" },
-    { value: 14, label: "Last 14 days" },
-    { value: 30, label: "Last 30 days" },
+    { value: 7,  label: t("results.last7Days") },
+    { value: 14, label: t("results.last14Days") },
+    { value: 30, label: t("results.last30Days") },
   ];
 
-  const resultOptions: ResultFilter[] = ["All", "Correct", "Incorrect"];
+  const resultOptions: { value: ResultFilter; label: string }[] = [
+    { value: "All", label: t("results.filterAll") },
+    { value: "Correct", label: t("results.filterCorrect") },
+    { value: "Incorrect", label: t("results.filterIncorrect") },
+  ];
 
   return (
     <div className="glass-card p-4">
@@ -282,19 +290,19 @@ function ResultsFilterBar({
           <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
             {resultOptions.map((opt) => (
               <button
-                key={opt}
-                onClick={() => setResultFilter(opt)}
+                key={opt.value}
+                onClick={() => setResultFilter(opt.value)}
                 className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                  resultFilter === opt
-                    ? opt === "Correct"
+                  resultFilter === opt.value
+                    ? opt.value === "Correct"
                       ? "bg-emerald-600/80 text-white"
-                      : opt === "Incorrect"
+                      : opt.value === "Incorrect"
                       ? "bg-red-600/80 text-white"
                       : "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                {opt}
+                {opt.label}
               </button>
             ))}
           </div>
@@ -310,7 +318,7 @@ function ResultsFilterBar({
                 onChange={(e) => setLeagueFilter(e.target.value)}
                 className="appearance-none rounded-lg border border-white/[0.06] bg-white/[0.03] pl-3 pr-7 py-1.5 text-xs font-semibold text-slate-300 focus:outline-none focus:border-blue-500/40 cursor-pointer"
               >
-                <option value="">All Leagues</option>
+                <option value="">{t("results.allLeagues")}</option>
                 {leagues.map((l) => (
                   <option key={l} value={l}>
                     {l}
@@ -324,7 +332,7 @@ function ResultsFilterBar({
 
         {/* Count */}
         <span className="ml-auto text-xs text-slate-500 whitespace-nowrap">
-          {total} result{total !== 1 ? "s" : ""}
+          {total} {total !== 1 ? t("results.resultsPlural") : t("results.resultSingular")}
         </span>
       </div>
     </div>
@@ -334,6 +342,7 @@ function ResultsFilterBar({
 // ─── Result Card ──────────────────────────────────────────────────────────────
 
 function ResultCard({ fixture }: { fixture: Fixture }) {
+  const { t } = useTranslations();
   const pred = fixture.prediction;
   const hasPrediction = pred !== null;
 
@@ -438,7 +447,7 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
             <>
               {/* Predicted outcome */}
               <p className="text-xs text-slate-400 text-right">
-                <span className="text-slate-500">Prediction: </span>
+                <span className="text-slate-500">{t("results.prediction")}: </span>
                 {formatPredictedOutcome(
                   pred!.home_win_prob >= pred!.away_win_prob &&
                   pred!.home_win_prob >= (pred!.draw_prob ?? 0)
@@ -448,7 +457,8 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
                     : "away_win",
                   pred!.home_win_prob,
                   pred!.draw_prob,
-                  pred!.away_win_prob
+                  pred!.away_win_prob,
+                  t
                 )}
               </p>
 
@@ -456,18 +466,18 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
               {isCorrect === true && (
                 <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 px-3 py-1 text-xs font-bold text-emerald-400">
                   <CheckCircle2 className="h-3.5 w-3.5" />
-                  CORRECT
+                  {t("results.correct")}
                 </span>
               )}
               {isCorrect === false && (
                 <span className="flex items-center gap-1.5 rounded-full bg-red-500/10 border border-red-500/25 px-3 py-1 text-xs font-bold text-red-400">
                   <XCircle className="h-3.5 w-3.5" />
-                  INCORRECT
+                  {t("results.incorrect")}
                 </span>
               )}
               {isCorrect === null && (
                 <span className="rounded-full bg-slate-500/10 border border-slate-500/20 px-3 py-1 text-xs font-medium text-slate-500">
-                  Pending eval
+                  {t("results.pendingEval")}
                 </span>
               )}
 
@@ -475,7 +485,7 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
               <span
                 className={`rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${getConfidenceBg(pred!.confidence)}`}
               >
-                {Math.round(pred!.confidence * 100)}% confidence
+                {Math.round(pred!.confidence * 100)}% {t("results.confidence")}
               </span>
 
               {/* v6 B2: realised P/L per pick */}
@@ -488,8 +498,8 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
                   }`}
                   title={
                     pnlSource === "real"
-                      ? "Realised P/L computed from the actual pre-match odds stored for this fixture."
-                      : "Realised P/L estimated at a flat 1.90 odds because no real odds row is on file yet."
+                      ? t("results.pnlRealTooltip")
+                      : t("results.pnlEstimatedTooltip")
                   }
                 >
                   {realisedPnl > 0 ? "+" : ""}
@@ -503,7 +513,7 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
               )}
             </>
           ) : (
-            <span className="text-xs text-slate-600 italic">No prediction made</span>
+            <span className="text-xs text-slate-600 italic">{t("results.noPredictionMade")}</span>
           )}
         </div>
       </div>
@@ -540,6 +550,7 @@ function SkeletonCard() {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function ResultsPage() {
+  const { t } = useTranslations();
   const [period, setPeriod] = useState<PeriodFilter>(7);
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
@@ -624,10 +635,10 @@ export default function ResultsPage() {
           </div>
           <div>
             <h1 className="text-4xl font-bold tracking-tight gradient-text leading-tight">
-              Results &amp; Outcomes
+              {t("results.title")}
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              Match results and prediction accuracy
+              {t("results.subtitle")}
             </p>
           </div>
         </div>
@@ -660,7 +671,7 @@ export default function ResultsPage() {
         >
           <AlertTriangle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
           <p className="text-sm text-slate-400">
-            Could not load results data. The API may be temporarily unavailable.
+            {t("results.errorLoading")}
           </p>
         </div>
       )}
@@ -673,31 +684,31 @@ export default function ResultsPage() {
       ) : allResults.filter((f) => f.status === "finished" && f.result).length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
           <Trophy className="h-8 w-8 text-slate-600" />
-          <p className="text-base font-medium text-slate-400">No results found</p>
+          <p className="text-base font-medium text-slate-400">{t("results.noResults")}</p>
           <p className="text-sm text-slate-600">
-            No finished matches with results in the selected period. Try a wider date range.
+            {t("results.noResultsHint")}
           </p>
           {period < 30 && (
             <button
               onClick={() => setPeriod(30)}
               className="btn-gradient mt-2 rounded-lg px-4 py-2 text-sm font-semibold text-white"
             >
-              Expand to 30 days
+              {t("results.expandTo30Days")}
             </button>
           )}
         </div>
       ) : filtered.length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
           <Trophy className="h-8 w-8 text-slate-600" />
-          <p className="text-base font-medium text-slate-400">No results match your filters</p>
+          <p className="text-base font-medium text-slate-400">{t("results.noResultsMatchFilters")}</p>
           <p className="text-sm text-slate-600">
-            Try adjusting the period or result filter above.
+            {t("results.noResultsMatchFiltersHint")}
           </p>
           <button
             onClick={() => { setResultFilter("All"); setLeagueFilter(""); }}
             className="btn-gradient mt-2 rounded-lg px-4 py-2 text-sm font-semibold text-white"
           >
-            Clear filters
+            {t("results.clearFilters")}
           </button>
         </div>
       ) : (

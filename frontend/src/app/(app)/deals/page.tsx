@@ -14,6 +14,7 @@ import {
   Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "@/i18n/locale-provider";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -35,6 +36,7 @@ interface PricingPlan {
 // ─── Referral link box ────────────────────────────────────────────────────────
 
 function ReferralLinkBox({ link }: { link: string }) {
+  const { t } = useTranslations();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -64,12 +66,12 @@ function ReferralLinkBox({ link }: { link: string }) {
         {copied ? (
           <>
             <Check className="h-3.5 w-3.5" />
-            Copied!
+            {t("deals.copied")}
           </>
         ) : (
           <>
             <Copy className="h-3.5 w-3.5" />
-            Copy
+            {t("deals.copy")}
           </>
         )}
       </button>
@@ -95,6 +97,7 @@ function FeatureList({ features }: { features: string[] }) {
 // ─── Pricing card ─────────────────────────────────────────────────────────────
 
 function PricingCard({ plan }: { plan: PricingPlan }) {
+  const { t } = useTranslations();
   const Icon = plan.icon;
 
   return (
@@ -110,7 +113,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
           <span className="inline-flex items-center gap-1 rounded-full border border-blue-500/40 bg-[#0a0e1a] px-3 py-1 text-[11px] font-bold text-blue-400">
             <Star className="h-3 w-3" />
-            Most Popular
+            {t("deals.mostPopular")}
           </span>
         </div>
       )}
@@ -132,7 +135,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
       {/* Pricing */}
       <div className="mt-3">
         {plan.isCustom ? (
-          <p className="text-2xl font-extrabold gradient-text">Custom pricing</p>
+          <p className="text-2xl font-extrabold gradient-text">{t("deals.customPricing")}</p>
         ) : (
           <div className="flex items-end gap-2">
             <p className="text-2xl font-extrabold gradient-text">{plan.memberPrice}</p>
@@ -140,7 +143,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
           </div>
         )}
         {!plan.isCustom && (
-          <p className="text-xs text-slate-500 mt-0.5">per month</p>
+          <p className="text-xs text-slate-500 mt-0.5">{t("deals.perMonth")}</p>
         )}
         {plan.saving && (
           <span className="mt-2 inline-block rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-xs font-semibold text-emerald-400">
@@ -227,83 +230,86 @@ function StatPill({
 
 // ─── Plans data ───────────────────────────────────────────────────────────────
 
-const PLANS: PricingPlan[] = [
-  {
-    id: "annual",
-    name: "BetsPlug Pro - Annual",
-    badge: "Best value",
-    regularPrice: "$29.99/mo",
-    memberPrice:  "$23.99/mo",
-    saving:       "Save $72/year",
-    features: [
-      "Unlimited predictions",
-      "All betting strategies",
-      "Priority match alerts",
-      "Full API access",
-      "Advanced analytics",
-      "Priority support",
-    ],
-    cta: "Claim Discount",
-    ctaVariant: "gradient",
-    icon: Zap,
-    highlight: true,
-  },
-  {
-    id: "monthly",
-    name: "BetsPlug Pro - Monthly",
-    regularPrice: "$39.99/mo",
-    memberPrice:  "$31.99/mo",
-    saving:       "Save $8/month",
-    features: [
-      "Unlimited predictions",
-      "All betting strategies",
-      "Priority match alerts",
-      "Advanced analytics",
-      "Priority support",
-    ],
-    cta: "Claim Discount",
-    ctaVariant: "outline",
-    icon: Star,
-    highlight: false,
-  },
-  {
-    id: "enterprise",
-    name: "BetsPlug Enterprise",
-    regularPrice: " - ",
-    memberPrice:  null,
-    saving:       null,
-    isCustom:     true,
-    features: [
-      "Custom ML models",
-      "Dedicated account support",
-      "White-label integration",
-      "Bulk API access",
-      "SLA guarantee",
-      "Team management",
-    ],
-    cta: "Contact Sales",
-    ctaVariant: "ghost",
-    icon: Building2,
-    highlight: false,
-  },
-];
+function getPlans(t: (key: any) => string): PricingPlan[] {
+  return [
+    {
+      id: "annual",
+      name: "BetsPlug Pro - Annual",
+      badge: t("deals.bestValue"),
+      regularPrice: "$29.99/mo",
+      memberPrice:  "$23.99/mo",
+      saving:       t("deals.saveAnnual"),
+      features: [
+        t("deals.featureUnlimitedPredictions"),
+        t("deals.featureAllStrategies"),
+        t("deals.featurePriorityAlerts"),
+        t("deals.featureFullApi"),
+        t("deals.featureAdvancedAnalytics"),
+        t("deals.featurePrioritySupport"),
+      ],
+      cta: t("deals.claimDiscount"),
+      ctaVariant: "gradient",
+      icon: Zap,
+      highlight: true,
+    },
+    {
+      id: "monthly",
+      name: "BetsPlug Pro - Monthly",
+      regularPrice: "$39.99/mo",
+      memberPrice:  "$31.99/mo",
+      saving:       t("deals.saveMonthly"),
+      features: [
+        t("deals.featureUnlimitedPredictions"),
+        t("deals.featureAllStrategies"),
+        t("deals.featurePriorityAlerts"),
+        t("deals.featureAdvancedAnalytics"),
+        t("deals.featurePrioritySupport"),
+      ],
+      cta: t("deals.claimDiscount"),
+      ctaVariant: "outline",
+      icon: Star,
+      highlight: false,
+    },
+    {
+      id: "enterprise",
+      name: "BetsPlug Enterprise",
+      regularPrice: " - ",
+      memberPrice:  null,
+      saving:       null,
+      isCustom:     true,
+      features: [
+        t("deals.featureCustomModels"),
+        t("deals.featureDedicatedSupport"),
+        t("deals.featureWhiteLabel"),
+        t("deals.featureBulkApi"),
+        t("deals.featureSlaGuarantee"),
+        t("deals.featureTeamManagement"),
+      ],
+      cta: t("deals.contactSales"),
+      ctaVariant: "ghost",
+      icon: Building2,
+      highlight: false,
+    },
+  ];
+}
 
 const REFERRAL_LINK = "https://betsplug.io/ref/DVB_2024";
 
 // ─── Deals page ───────────────────────────────────────────────────────────────
 
 export default function DealsPage() {
+  const { t } = useTranslations();
   return (
     <div className="max-w-5xl space-y-10 animate-fade-in">
       {/* ── Page header ─────────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight gradient-text">Exclusive Deals</h1>
-          <p className="mt-1.5 text-sm text-slate-400">Special offers for BetsPlug members</p>
+          <h1 className="text-4xl font-bold tracking-tight gradient-text">{t("deals.title")}</h1>
+          <p className="mt-1.5 text-sm text-slate-400">{t("deals.subtitle")}</p>
         </div>
         <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-400">
           <Lock className="h-3 w-3" />
-          Members Only
+          {t("deals.membersOnly")}
         </span>
       </div>
 
@@ -339,28 +345,25 @@ export default function DealsPage() {
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-400">
                 <Gift className="h-3 w-3" />
-                Member reward
+                {t("deals.memberReward")}
               </span>
             </div>
             <h2 className="text-2xl font-extrabold text-slate-100 leading-tight">
-              Get{" "}
-              <span className="gradient-text">20% OFF</span>
-              {" "}your BetsPlug Pro subscription
+              {t("deals.heroTitle")}
             </h2>
             <p className="text-sm text-slate-400 max-w-md">
-              Exclusive discount unlocked for your account. Share your referral link with
-              friends and earn credits for every successful sign-up.
+              {t("deals.heroDescription")}
             </p>
           </div>
 
           {/* Referral link */}
           <div className="shrink-0 w-full sm:max-w-sm space-y-2">
             <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-              Your referral link
+              {t("deals.yourReferralLink")}
             </p>
             <ReferralLinkBox link={REFERRAL_LINK} />
             <p className="text-[11px] text-slate-600">
-              Both you and your friend get 1 month free
+              {t("deals.bothGetFreeMonth")}
             </p>
           </div>
         </div>
@@ -369,14 +372,14 @@ export default function DealsPage() {
       {/* ── Partner Deals ────────────────────────────────────────────────────── */}
       <div className="animate-slide-up">
         <div className="mb-5">
-          <h2 className="text-base font-semibold text-slate-100">Partner Deals</h2>
+          <h2 className="text-base font-semibold text-slate-100">{t("deals.partnerDeals")}</h2>
           <p className="mt-0.5 text-xs text-slate-500">
-            Choose the plan that fits your workflow - all prices reflect your member discount
+            {t("deals.partnerDealsDescription")}
           </p>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {PLANS.map((plan) => (
+          {getPlans(t).map((plan) => (
             <PricingCard key={plan.id} plan={plan} />
           ))}
         </div>
@@ -389,9 +392,9 @@ export default function DealsPage() {
             <Users className="h-4 w-4 text-blue-400" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold text-slate-100">Referral Program</h2>
+            <h2 className="text-sm font-semibold text-slate-100">{t("deals.referralProgram")}</h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Earn credits by inviting friends to BetsPlug
+              {t("deals.referralProgramDescription")}
             </p>
           </div>
         </div>
@@ -399,7 +402,7 @@ export default function DealsPage() {
         {/* How it works */}
         <div className="mb-8">
           <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-5">
-            How it works
+            {t("deals.howItWorks")}
           </p>
           <div className="grid gap-8 sm:grid-cols-3 relative">
             {/* Connector line (decorative) */}
@@ -409,18 +412,18 @@ export default function DealsPage() {
             />
             <ReferralStep
               step={1}
-              title="Share your unique link"
-              description="Copy and send your personal referral URL to friends or post on socials"
+              title={t("deals.step1Title")}
+              description={t("deals.step1Description")}
             />
             <ReferralStep
               step={2}
-              title="Friend signs up and subscribes"
-              description="Your friend creates an account and picks any paid BetsPlug plan"
+              title={t("deals.step2Title")}
+              description={t("deals.step2Description")}
             />
             <ReferralStep
               step={3}
-              title="Both get 1 month free"
-              description="Credits are applied automatically to both accounts within 24 hours"
+              title={t("deals.step3Title")}
+              description={t("deals.step3Description")}
             />
           </div>
         </div>
@@ -428,19 +431,19 @@ export default function DealsPage() {
         {/* Stats */}
         <div className="mb-6">
           <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-3">
-            Your referral stats
+            {t("deals.yourReferralStats")}
           </p>
           <div className="grid grid-cols-3 gap-3">
-            <StatPill label="Total Referrals" value="3"      color="blue"  />
-            <StatPill label="Active"           value="2"      color="green" />
-            <StatPill label="Credits Earned"   value="$47.98" color="amber" />
+            <StatPill label={t("deals.totalReferrals")} value="3"      color="blue"  />
+            <StatPill label={t("deals.active")}           value="2"      color="green" />
+            <StatPill label={t("deals.creditsEarned")}   value="$47.98" color="amber" />
           </div>
         </div>
 
         {/* Referral link in section */}
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-            Your referral link
+            {t("deals.yourReferralLink")}
           </p>
           <ReferralLinkBox link={REFERRAL_LINK} />
         </div>
@@ -450,11 +453,8 @@ export default function DealsPage() {
       <div className="rounded-xl border border-white/[0.05] bg-white/[0.02] p-5 flex items-start gap-3 animate-slide-up">
         <ExternalLink className="h-4 w-4 shrink-0 mt-0.5 text-slate-500" />
         <p className="text-xs text-slate-500 leading-relaxed">
-          <span className="text-slate-400 font-medium">Disclaimer: </span>
-          Affiliate links and referral programs are subject to terms and conditions. Discounts
-          apply to new and renewing subscriptions only. Credits are non-transferable and may not
-          be exchanged for cash. BetsPlug reserves the right to modify or terminate the referral program
-          at any time with prior notice.
+          <span className="text-slate-400 font-medium">{t("deals.disclaimer")}: </span>
+          {t("deals.disclaimerText")}
         </p>
       </div>
     </div>

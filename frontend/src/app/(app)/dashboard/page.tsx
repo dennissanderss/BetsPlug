@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "@/i18n/locale-provider";
 import {
   Activity,
   TrendingUp,
@@ -184,12 +185,13 @@ function PredictionsTable({
   predictions: Prediction[];
   loading: boolean;
 }) {
+  const { t } = useTranslations();
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-white/[0.05] bg-white/[0.03]">
-            {["Match", "Date", "Predicted", "Confidence", "Result"].map((h) => (
+            {[t("dash.thMatch"), t("dash.thDate"), t("dash.thPredicted"), t("dash.thConfidence"), t("dash.thResult")].map((h) => (
               <th
                 key={h}
                 className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-widest text-slate-500"
@@ -205,7 +207,7 @@ function PredictionsTable({
           ) : predictions.length === 0 ? (
             <tr>
               <td colSpan={5} className="px-4 py-10 text-center text-sm text-slate-500">
-                No predictions recorded yet.
+                {t("dash.noPredictions")}
               </td>
             </tr>
           ) : (
@@ -290,14 +292,14 @@ function PredictionsTable({
                   {/* Result */}
                   <td className="px-4 py-3">
                     {!row.evaluation ? (
-                      <span className="text-xs italic text-slate-500">Pending</span>
+                      <span className="text-xs italic text-slate-500">{t("dash.pending")}</span>
                     ) : row.evaluation.is_correct ? (
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
-                        Correct
+                        {t("dash.correct")}
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 rounded-full bg-red-500/10 px-2.5 py-0.5 text-xs font-semibold text-red-400">
-                        Incorrect
+                        {t("dash.incorrect")}
                       </span>
                     )}
                   </td>
@@ -314,6 +316,7 @@ function PredictionsTable({
 // ─── Dashboard page ─────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
+  const { t } = useTranslations();
   const { data: summary, isLoading: summaryLoading } = useQuery({
     queryKey: ["trackrecord-summary"],
     queryFn: () => api.getTrackrecordSummary(),
@@ -356,36 +359,36 @@ export default function DashboardPage() {
   // KPI definitions
   const kpis = [
     {
-      label: "Total Forecasts",
+      label: t("dash.totalForecasts"),
       value: summaryLoading ? null : (summary?.total_predictions.toLocaleString() ?? " - "),
       icon: Activity,
       trend: null as null | "up" | "down",
-      sub: "All time",
-      tooltip: "Total number of predictions our AI model has generated across all leagues",
+      sub: t("dash.allTime"),
+      tooltip: t("dash.totalForecastsTooltip"),
     },
     {
-      label: "Overall Accuracy",
+      label: t("dash.overallAccuracy"),
       value: summaryLoading ? null : (summary ? formatPercent(summary.accuracy) : " - "),
       icon: Target,
       trend: "up" as const,
-      sub: "vs last period",
-      tooltip: "Percentage of predictions where our model correctly predicted the match outcome (home/draw/away)",
+      sub: t("dash.vsLastPeriod"),
+      tooltip: t("dash.overallAccuracyTooltip"),
     },
     {
-      label: "Avg Brier Score",
+      label: t("dash.avgBrierScore"),
       value: summaryLoading ? null : (summary ? summary.brier_score.toFixed(3) : " - "),
       icon: BarChart3,
       trend: "down" as const,
-      sub: "Lower is better",
-      tooltip: "Model calibration metric (0-1, lower is better). Measures how well our probabilities match actual outcomes. Below 0.25 is good.",
+      sub: t("dash.lowerIsBetter"),
+      tooltip: t("dash.avgBrierScoreTooltip"),
     },
     {
-      label: "Avg Confidence",
+      label: t("dash.avgConfidence"),
       value: summaryLoading ? null : (summary ? formatPercent(summary.avg_confidence) : " - "),
       icon: TrendingUp,
       trend: null,
-      sub: "Model certainty",
-      tooltip: "Average confidence level across all predictions. Higher means the model was more certain about its picks.",
+      sub: t("dash.modelCertainty"),
+      tooltip: t("dash.avgConfidenceTooltip"),
     },
   ];
 
@@ -398,16 +401,16 @@ export default function DashboardPage() {
       {/* ── Hero section ─────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight gradient-text">Dashboard</h1>
+          <h1 className="text-4xl font-bold tracking-tight gradient-text">{t("dash.title")}</h1>
           <p className="mt-1.5 text-sm text-slate-400">
-            Model performance overview and real-time system status
+            {t("dash.subtitle")}
           </p>
         </div>
 
         {/* Live badge */}
         <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2 text-xs font-medium text-slate-300 backdrop-blur-sm">
           <span className="live-dot" />
-          <span>Live data</span>
+          <span>{t("dash.liveData")}</span>
         </div>
       </div>
 
@@ -450,11 +453,11 @@ export default function DashboardPage() {
         {/* Card header */}
         <div className="flex items-center justify-between border-b border-white/[0.05] px-6 py-4">
           <div>
-            <h2 className="text-base font-semibold text-slate-100">Recent Predictions</h2>
-            <p className="mt-0.5 text-xs text-slate-500">Latest model outputs with evaluation</p>
+            <h2 className="text-base font-semibold text-slate-100">{t("dash.recentPredictions")}</h2>
+            <p className="mt-0.5 text-xs text-slate-500">{t("dash.recentPredictionsDesc")}</p>
           </div>
           <span className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-medium text-slate-400">
-            Last 10
+            {t("dash.lastTen")}
           </span>
         </div>
 
@@ -469,15 +472,15 @@ export default function DashboardPage() {
         {/* Accuracy by League */}
         <div className="glass-card p-6">
           <div className="mb-4">
-            <h2 className="text-base font-semibold text-slate-100">Accuracy by League</h2>
-            <p className="mt-0.5 text-xs text-slate-500">Prediction accuracy segmented by league</p>
+            <h2 className="text-base font-semibold text-slate-100">{t("dash.accuracyByLeague")}</h2>
+            <p className="mt-0.5 text-xs text-slate-500">{t("dash.accuracyByLeagueDesc")}</p>
           </div>
 
           {sportLoading ? (
             <div className="h-[220px] animate-pulse rounded-lg bg-white/[0.04]" />
           ) : sportChartData.length === 0 ? (
             <div className="flex h-[220px] items-center justify-center text-sm text-slate-500">
-              No segment data available yet.
+              {t("dash.noSegmentData")}
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={220}>
@@ -522,15 +525,15 @@ export default function DashboardPage() {
         {/* Model Performance Trend */}
         <div className="glass-card p-6">
           <div className="mb-4">
-            <h2 className="text-base font-semibold text-slate-100">Model Performance Trend</h2>
-            <p className="mt-0.5 text-xs text-slate-500">Rolling accuracy over time (monthly)</p>
+            <h2 className="text-base font-semibold text-slate-100">{t("dash.modelPerformanceTrend")}</h2>
+            <p className="mt-0.5 text-xs text-slate-500">{t("dash.modelPerformanceTrendDesc")}</p>
           </div>
 
           {monthLoading ? (
             <div className="h-[220px] animate-pulse rounded-lg bg-white/[0.04]" />
           ) : monthChartData.length === 0 ? (
             <div className="flex h-[220px] items-center justify-center text-sm text-slate-500">
-              No monthly data available yet.
+              {t("dash.noMonthlyData")}
             </div>
           ) : (
             <ResponsiveContainer width="100%" height={220}>
@@ -583,15 +586,15 @@ export default function DashboardPage() {
         {/* Card header */}
         <div className="flex items-center justify-between border-b border-white/[0.05] px-6 py-4">
           <div>
-            <h2 className="text-base font-semibold text-slate-100">System Status</h2>
-            <p className="mt-0.5 text-xs text-slate-500">Data source health and last sync times</p>
+            <h2 className="text-base font-semibold text-slate-100">{t("dash.systemStatus")}</h2>
+            <p className="mt-0.5 text-xs text-slate-500">{t("dash.systemStatusDesc")}</p>
           </div>
           {!sourcesLoading && dataSources && (
             <div className="flex items-center gap-2">
               <span className="text-xs text-slate-400">
                 <span className="font-semibold text-emerald-400">{healthyCount}</span>
                 <span className="text-slate-600">/{totalCount}</span>
-                <span className="ml-1 text-slate-500">healthy</span>
+                <span className="ml-1 text-slate-500">{t("dash.healthy")}</span>
               </span>
               {hasIssues && (
                 <AlertTriangle className="h-4 w-4 text-amber-400" />
@@ -609,7 +612,7 @@ export default function DashboardPage() {
             </ul>
           ) : !dataSources || dataSources.length === 0 ? (
             <p className="py-6 text-center text-sm text-slate-500">
-              No data sources configured.
+              {t("dash.noDataSources")}
             </p>
           ) : (
             <SystemStatusList sources={dataSources} />

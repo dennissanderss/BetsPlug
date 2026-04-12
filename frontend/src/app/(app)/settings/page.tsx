@@ -12,6 +12,7 @@ import {
   Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "@/i18n/locale-provider";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -140,6 +141,7 @@ function NotificationRow({
 // ─── Save toast ───────────────────────────────────────────────────────────────
 
 function SaveToast({ visible }: { visible: boolean }) {
+  const { t } = useTranslations();
   return (
     <div
       className={cn(
@@ -148,7 +150,7 @@ function SaveToast({ visible }: { visible: boolean }) {
       )}
     >
       <Check className="h-4 w-4" />
-      Settings saved successfully
+      {t("settings.savedSuccessfully")}
     </div>
   );
 }
@@ -156,6 +158,7 @@ function SaveToast({ visible }: { visible: boolean }) {
 // ─── Settings page ────────────────────────────────────────────────────────────
 
 export default function SettingsPage() {
+  const { t } = useTranslations();
   // Profile
   const [displayName, setDisplayName] = useState("Dennis van der Berg");
   const [email]                        = useState("dennis@betsplug.io");
@@ -237,16 +240,16 @@ export default function SettingsPage() {
     <div className="max-w-3xl space-y-8 animate-fade-in">
       {/* ── Page header ─────────────────────────────────────────────────────── */}
       <div>
-        <h1 className="text-4xl font-bold tracking-tight gradient-text">Settings</h1>
-        <p className="mt-1.5 text-sm text-slate-400">Customize your experience</p>
+        <h1 className="text-4xl font-bold tracking-tight gradient-text">{t("settings.title")}</h1>
+        <p className="mt-1.5 text-sm text-slate-400">{t("settings.subtitle")}</p>
       </div>
 
       {/* ── Profile ─────────────────────────────────────────────────────────── */}
       <div className="glass-card p-6 animate-slide-up">
         <SectionHeader
           icon={User}
-          title="Profile"
-          description="Your personal information and account role"
+          title={t("settings.profile")}
+          description={t("settings.profileDesc")}
         />
 
         <div className="flex items-center gap-5">
@@ -270,7 +273,7 @@ export default function SettingsPage() {
             <div className="mt-1.5 flex items-center gap-2">
               <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 border border-blue-500/20 px-2.5 py-0.5 text-[11px] font-semibold text-blue-400">
                 <Shield className="h-3 w-3" />
-                Admin
+                {t("settings.admin")}
               </span>
             </div>
           </div>
@@ -280,7 +283,7 @@ export default function SettingsPage() {
             onClick={() => setEditingProfile((v) => !v)}
             className="shrink-0 rounded-lg border border-white/[0.1] bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-white/[0.08] hover:text-slate-100"
           >
-            {editingProfile ? "Done" : "Edit profile"}
+            {editingProfile ? t("settings.done") : t("settings.editProfile")}
           </button>
         </div>
       </div>
@@ -289,8 +292,8 @@ export default function SettingsPage() {
       <div className="glass-card p-6 animate-slide-up">
         <SectionHeader
           icon={Trophy}
-          title="Followed Leagues"
-          description="Select the leagues you want to track and receive intelligence for"
+          title={t("settings.followedLeagues")}
+          description={t("settings.followedLeaguesDesc")}
         />
 
         <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5">
@@ -328,9 +331,9 @@ export default function SettingsPage() {
 
         <div className="mt-5 flex items-center justify-between rounded-xl border border-white/[0.05] bg-white/[0.02] px-4 py-3">
           <div>
-            <p className="text-sm font-medium text-slate-200">Receive alerts for followed leagues only</p>
+            <p className="text-sm font-medium text-slate-200">{t("settings.alertsFollowedOnly")}</p>
             <p className="text-xs text-slate-500 mt-0.5">
-              Suppress notifications from leagues you don&apos;t follow
+              {t("settings.alertsFollowedOnlyDesc")}
             </p>
           </div>
           <Toggle checked={alertFollowedOnly} onChange={setAlertFollowedOnly} />
@@ -342,8 +345,8 @@ export default function SettingsPage() {
         <div className="glass-card p-6 animate-slide-up">
           <SectionHeader
             icon={Trophy}
-            title="League Preferences"
-            description="Choose specific competitions within your followed leagues"
+            title={t("settings.leaguePreferences")}
+            description={t("settings.leaguePreferencesDesc")}
           />
 
           <div className="space-y-5">
@@ -394,38 +397,38 @@ export default function SettingsPage() {
       <div className="glass-card p-6 animate-slide-up">
         <SectionHeader
           icon={Bell}
-          title="Notification Preferences"
-          description="Control which alerts and reports you receive"
+          title={t("settings.notificationPreferences")}
+          description={t("settings.notificationPreferencesDesc")}
         />
 
         <div className="space-y-2.5">
           <NotificationRow
-            label="Match start alerts"
-            description="Get notified when followed matches kick off"
+            label={t("settings.matchStartAlerts")}
+            description={t("settings.matchStartAlertsDesc")}
             checked={notifs.matchStart}
             onChange={setNotif("matchStart")}
           />
           <NotificationRow
-            label="Prediction updates"
-            description="Receive updates when model predictions change significantly"
+            label={t("settings.predictionUpdates")}
+            description={t("settings.predictionUpdatesDesc")}
             checked={notifs.predUpdates}
             onChange={setNotif("predUpdates")}
           />
           <NotificationRow
-            label="Strategy calls"
-            description="Alerts when a strategy generates a new betting signal"
+            label={t("settings.strategyCalls")}
+            description={t("settings.strategyCallsDesc")}
             checked={notifs.strategyCalls}
             onChange={setNotif("strategyCalls")}
           />
           <NotificationRow
-            label="Weekly report emails"
-            description="A summary of model performance every Monday morning"
+            label={t("settings.weeklyReportEmails")}
+            description={t("settings.weeklyReportEmailsDesc")}
             checked={notifs.weeklyReport}
             onChange={setNotif("weeklyReport")}
           />
           <NotificationRow
-            label="Model performance alerts"
-            description="Notify when accuracy drops below your threshold"
+            label={t("settings.modelPerformanceAlerts")}
+            description={t("settings.modelPerformanceAlertsDesc")}
             checked={notifs.modelAlerts}
             onChange={setNotif("modelAlerts")}
           />
@@ -436,15 +439,15 @@ export default function SettingsPage() {
       <div className="glass-card p-6 animate-slide-up">
         <SectionHeader
           icon={Monitor}
-          title="Display Preferences"
-          description="Adjust how data and the interface appears to you"
+          title={t("settings.displayPreferences")}
+          description={t("settings.displayPreferencesDesc")}
         />
 
         <div className="space-y-5">
           {/* Odds format */}
           <div>
             <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-slate-500">
-              Odds Format
+              {t("settings.oddsFormat")}
             </label>
             <div className="flex gap-2">
               {(["decimal", "fractional", "american"] as const).map((fmt) => (
@@ -458,9 +461,9 @@ export default function SettingsPage() {
                       : "border-white/[0.08] bg-white/[0.03] text-slate-400 hover:border-white/[0.15] hover:text-slate-300"
                   )}
                 >
-                  {fmt === "decimal"    && "Decimal (2.10)"}
-                  {fmt === "fractional" && "Fractional (11/10)"}
-                  {fmt === "american"   && "American (+110)"}
+                  {fmt === "decimal"    && t("settings.oddsDecimal")}
+                  {fmt === "fractional" && t("settings.oddsFractional")}
+                  {fmt === "american"   && t("settings.oddsAmerican")}
                 </button>
               ))}
             </div>
@@ -471,7 +474,7 @@ export default function SettingsPage() {
             {/* Language */}
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-slate-500">
-                Language
+                {t("settings.language")}
               </label>
               <div className="relative">
                 <select
@@ -498,7 +501,7 @@ export default function SettingsPage() {
             {/* Timezone */}
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-slate-500">
-                Timezone
+                {t("settings.timezone")}
               </label>
               <div className="relative">
                 <select
@@ -519,12 +522,12 @@ export default function SettingsPage() {
           <div className="flex items-center justify-between rounded-xl border border-white/[0.05] bg-white/[0.02] px-4 py-3">
             <div>
               <p className="text-sm font-medium text-slate-200">
-                {lightMode ? "Light mode" : "Dark mode"}
+                {lightMode ? t("settings.lightMode") : t("settings.darkMode")}
               </p>
               <p className="text-xs text-slate-500 mt-0.5">
                 {lightMode
-                  ? "Switch back to the premium dark interface"
-                  : "Dark theme active - easy on the eyes"}
+                  ? t("settings.switchToDark")
+                  : t("settings.darkThemeActive")}
               </p>
             </div>
             <Toggle checked={lightMode} onChange={setLightMode} />
@@ -535,14 +538,14 @@ export default function SettingsPage() {
       {/* ── Save button ──────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-end gap-3 pb-8">
         <button className="rounded-lg border border-white/[0.1] bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-white/[0.08] hover:text-slate-200">
-          Discard
+          {t("settings.discard")}
         </button>
         <button
           onClick={handleSave}
           className="btn-gradient inline-flex items-center gap-2 rounded-lg px-6 py-2.5 text-sm font-semibold text-white shadow-lg"
         >
           <Save className="h-4 w-4" />
-          Save settings
+          {t("settings.saveSettings")}
         </button>
       </div>
 

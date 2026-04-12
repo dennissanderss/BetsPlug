@@ -17,6 +17,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { api } from "@/lib/api";
+import { useTranslations } from "@/i18n/locale-provider";
 import type { Fixture, WeeklySummary } from "@/types/api";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -55,10 +56,16 @@ function getWeekRange(): string {
   return `${fmt(monday)} – ${fmt(sunday)}`;
 }
 
-function formatOutcomeLabel(outcome: string): string {
-  if (outcome === "home_win") return "Home Win";
-  if (outcome === "away_win") return "Away Win";
-  if (outcome === "draw") return "Draw";
+function formatOutcomeLabel(outcome: string, t?: (key: any) => string): string {
+  if (t) {
+    if (outcome === "home_win") return t("weeklyReport.outcomeHomeWin");
+    if (outcome === "away_win") return t("weeklyReport.outcomeAwayWin");
+    if (outcome === "draw") return t("weeklyReport.outcomeDraw");
+  } else {
+    if (outcome === "home_win") return "Home Win";
+    if (outcome === "away_win") return "Away Win";
+    if (outcome === "draw") return "Draw";
+  }
   return slugToTitle(outcome);
 }
 
@@ -120,11 +127,12 @@ function WoWBadge({ current, previous, isPercent = false }: {
   previous: number;
   isPercent?: boolean;
 }) {
+  const { t } = useTranslations();
   const diff = current - previous;
   if (Math.abs(diff) < 0.001) {
     return (
       <span className="flex items-center gap-0.5 text-[10px] font-semibold text-slate-500">
-        <Minus className="h-3 w-3" /> vs last week
+        <Minus className="h-3 w-3" /> {t("weeklyReport.vsLastWeek")}
       </span>
     );
   }
@@ -144,12 +152,13 @@ function WoWBadge({ current, previous, isPercent = false }: {
       ) : (
         <ArrowDownRight className="h-3 w-3" />
       )}
-      {label} vs last week
+      {label} {t("weeklyReport.vsLastWeek")}
     </span>
   );
 }
 
 function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
+  const { t } = useTranslations();
   if (isLoading) {
     return (
       <div className="glass-card animate-pulse p-6">
@@ -167,8 +176,8 @@ function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
     return (
       <div className="glass-card p-8 flex flex-col items-center gap-3 text-center">
         <FileBarChart2 className="h-8 w-8 text-slate-600" />
-        <p className="text-sm font-medium text-slate-400">No performance data for this week yet.</p>
-        <p className="text-xs text-slate-600">Check back once matches with predictions have finished.</p>
+        <p className="text-sm font-medium text-slate-400">{t("weeklyReport.noPerformanceData")}</p>
+        <p className="text-xs text-slate-600">{t("weeklyReport.noPerformanceDataHint")}</p>
       </div>
     );
   }
@@ -179,7 +188,7 @@ function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
 
   const kpis = [
     {
-      label: "Total Calls",
+      label: t("weeklyReport.totalCalls"),
       value: String(summary.total_calls),
       color: "#3b82f6",
       bg: "rgba(59,130,246,0.08)",
@@ -187,7 +196,7 @@ function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
       wow: <WoWBadge current={summary.total_calls} previous={lastWeek.total_calls} />,
     },
     {
-      label: "Wins",
+      label: t("weeklyReport.wins"),
       value: String(summary.won),
       color: "#10b981",
       bg: "rgba(16,185,129,0.08)",
@@ -195,7 +204,7 @@ function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
       wow: <WoWBadge current={summary.won} previous={lastWeek.won} />,
     },
     {
-      label: "Losses",
+      label: t("weeklyReport.losses"),
       value: String(summary.lost),
       color: "#ef4444",
       bg: "rgba(239,68,68,0.08)",
@@ -203,7 +212,7 @@ function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
       wow: <WoWBadge current={summary.lost} previous={lastWeek.lost} />,
     },
     {
-      label: "Win Rate",
+      label: t("weeklyReport.winRate"),
       value: `${Math.round(winRatePct)}%`,
       color: winRatePct >= 50 ? "#10b981" : "#ef4444",
       bg: winRatePct >= 50 ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.08)",
@@ -211,7 +220,7 @@ function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
       wow: <WoWBadge current={summary.win_rate} previous={lastWeek.win_rate} isPercent />,
     },
     {
-      label: "Net P/L",
+      label: t("weeklyReport.netPL"),
       value: `${profitable ? "+" : ""}${summary.pl_units.toFixed(1)}u`,
       color: profitable ? "#10b981" : "#ef4444",
       bg: profitable ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.08)",
@@ -226,7 +235,7 @@ function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
           <FileBarChart2 className="h-4 w-4 text-blue-400" />
         </div>
-        <h2 className="text-sm font-semibold text-slate-200">Performance Overview</h2>
+        <h2 className="text-sm font-semibold text-slate-200">{t("weeklyReport.performanceOverview")}</h2>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
@@ -256,6 +265,7 @@ function KpiOverviewSection({ summary, isLoading }: KpiOverviewProps) {
 // ─── Section: Winners & Losers ────────────────────────────────────────────────
 
 function WinnerCard({ fixture }: { fixture: Fixture }) {
+  const { t } = useTranslations();
   const pred = fixture.prediction!;
   const predicted = getPredictedOutcome(fixture);
   const home = fixture.home_team_name;
@@ -275,21 +285,21 @@ function WinnerCard({ fixture }: { fixture: Fixture }) {
           <p className="text-[10px] text-slate-500 mt-0.5 truncate">{league}</p>
         </div>
         <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 px-2.5 py-0.5 text-[10px] font-bold text-emerald-400 shrink-0">
-          <CheckCircle2 className="h-3 w-3" /> WIN
+          <CheckCircle2 className="h-3 w-3" /> {t("weeklyReport.win")}
         </span>
       </div>
       <div className="flex items-center justify-between text-xs">
         <span className="text-slate-500">
-          Our call:{" "}
+          {t("weeklyReport.ourCall")}:{" "}
           <span className="text-slate-300 font-medium">
-            {predicted ? formatOutcomeLabel(predicted) : " - "}
+            {predicted ? formatOutcomeLabel(predicted, t) : " - "}
           </span>
         </span>
         <span className="font-bold text-emerald-400">+1.0u</span>
       </div>
       {fixture.result && (
         <p className="text-[10px] text-slate-600">
-          Result: {formatOutcomeLabel(getActualOutcome(fixture) ?? "")}
+          {t("weeklyReport.result")}: {formatOutcomeLabel(getActualOutcome(fixture) ?? "", t)}
           <span className="ml-1">
             ({fixture.result.home_score}–{fixture.result.away_score})
           </span>
@@ -297,7 +307,7 @@ function WinnerCard({ fixture }: { fixture: Fixture }) {
       )}
       {pred.confidence !== undefined && (
         <p className="text-[10px] text-slate-600">
-          Confidence: {Math.round(pred.confidence * 100)}%
+          {t("weeklyReport.confidence")}: {Math.round(pred.confidence * 100)}%
         </p>
       )}
     </div>
@@ -305,6 +315,7 @@ function WinnerCard({ fixture }: { fixture: Fixture }) {
 }
 
 function LossCard({ fixture }: { fixture: Fixture }) {
+  const { t } = useTranslations();
   const pred = fixture.prediction!;
   const predicted = getPredictedOutcome(fixture);
   const home = fixture.home_team_name;
@@ -324,21 +335,21 @@ function LossCard({ fixture }: { fixture: Fixture }) {
           <p className="text-[10px] text-slate-500 mt-0.5 truncate">{league}</p>
         </div>
         <span className="flex items-center gap-1 rounded-full bg-red-500/10 border border-red-500/25 px-2.5 py-0.5 text-[10px] font-bold text-red-400 shrink-0">
-          <XCircle className="h-3 w-3" /> LOSS
+          <XCircle className="h-3 w-3" /> {t("weeklyReport.loss")}
         </span>
       </div>
       <div className="flex items-center justify-between text-xs">
         <span className="text-slate-500">
-          Our call:{" "}
+          {t("weeklyReport.ourCall")}:{" "}
           <span className="text-slate-300 font-medium">
-            {predicted ? formatOutcomeLabel(predicted) : " - "}
+            {predicted ? formatOutcomeLabel(predicted, t) : " - "}
           </span>
         </span>
         <span className="font-bold text-red-400">-1.0u</span>
       </div>
       {fixture.result && (
         <p className="text-[10px] text-slate-600">
-          Result: {formatOutcomeLabel(getActualOutcome(fixture) ?? "")}
+          {t("weeklyReport.result")}: {formatOutcomeLabel(getActualOutcome(fixture) ?? "", t)}
           <span className="ml-1">
             ({fixture.result.home_score}–{fixture.result.away_score})
           </span>
@@ -346,7 +357,7 @@ function LossCard({ fixture }: { fixture: Fixture }) {
       )}
       {pred.confidence !== undefined && (
         <p className="text-[10px] text-slate-600">
-          Confidence: {Math.round(pred.confidence * 100)}%
+          {t("weeklyReport.confidence")}: {Math.round(pred.confidence * 100)}%
         </p>
       )}
     </div>
@@ -354,6 +365,7 @@ function LossCard({ fixture }: { fixture: Fixture }) {
 }
 
 function WinnersLosersSection({ fixtures }: { fixtures: Fixture[] }) {
+  const { t } = useTranslations();
   const withPrediction = fixtures.filter(
     (f) => f.prediction !== null && f.status === "finished" && f.result !== null
   );
@@ -364,7 +376,7 @@ function WinnersLosersSection({ fixtures }: { fixtures: Fixture[] }) {
     return (
       <div className="glass-card p-6 flex flex-col items-center gap-3 text-center py-12">
         <TrendingUp className="h-7 w-7 text-slate-600" />
-        <p className="text-sm text-slate-500">No evaluated predictions this week yet.</p>
+        <p className="text-sm text-slate-500">{t("weeklyReport.noEvaluatedPredictions")}</p>
       </div>
     );
   }
@@ -377,12 +389,12 @@ function WinnersLosersSection({ fixtures }: { fixtures: Fixture[] }) {
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-500/10">
             <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
           </div>
-          <h3 className="text-sm font-semibold text-slate-200">Top Winners</h3>
+          <h3 className="text-sm font-semibold text-slate-200">{t("weeklyReport.topWinners")}</h3>
           <span className="ml-auto text-xs text-emerald-400 font-bold">{winners.length}</span>
         </div>
 
         {winners.length === 0 ? (
-          <p className="text-xs text-slate-600 italic py-4 text-center">No correct calls this week.</p>
+          <p className="text-xs text-slate-600 italic py-4 text-center">{t("weeklyReport.noCorrectCalls")}</p>
         ) : (
           <div className="space-y-2.5">
             {winners.map((fixture) => (
@@ -398,12 +410,12 @@ function WinnersLosersSection({ fixtures }: { fixtures: Fixture[] }) {
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-500/10">
             <TrendingDown className="h-3.5 w-3.5 text-red-400" />
           </div>
-          <h3 className="text-sm font-semibold text-slate-200">Losses</h3>
+          <h3 className="text-sm font-semibold text-slate-200">{t("weeklyReport.lossesTitle")}</h3>
           <span className="ml-auto text-xs text-red-400 font-bold">{losers.length}</span>
         </div>
 
         {losers.length === 0 ? (
-          <p className="text-xs text-slate-600 italic py-4 text-center">No incorrect calls this week.</p>
+          <p className="text-xs text-slate-600 italic py-4 text-center">{t("weeklyReport.noIncorrectCalls")}</p>
         ) : (
           <div className="space-y-2.5">
             {losers.map((fixture) => (
@@ -422,6 +434,7 @@ type SortKey = "date" | "match" | "league" | "call" | "result" | "correct" | "pl
 type SortDir = "asc" | "desc";
 
 function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
+  const { t } = useTranslations();
   const [sortKey, setSortKey] = useState<SortKey>("date");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
 
@@ -505,7 +518,7 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
     return (
       <div className="glass-card p-8 flex flex-col items-center gap-3 text-center">
         <Calendar className="h-7 w-7 text-slate-600" />
-        <p className="text-sm text-slate-500">No calls with predictions this week.</p>
+        <p className="text-sm text-slate-500">{t("weeklyReport.noCallsThisWeek")}</p>
       </div>
     );
   }
@@ -514,8 +527,8 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
     <div className="glass-card overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
       <div className="flex items-center gap-2 px-5 py-4 border-b border-white/[0.06]">
         <Calendar className="h-4 w-4 text-blue-400" />
-        <h3 className="text-sm font-semibold text-slate-200">All Calls This Week</h3>
-        <span className="ml-auto text-xs text-slate-500">{withPrediction.length} calls</span>
+        <h3 className="text-sm font-semibold text-slate-200">{t("weeklyReport.allCallsThisWeek")}</h3>
+        <span className="ml-auto text-xs text-slate-500">{withPrediction.length} {t("weeklyReport.calls")}</span>
       </div>
 
       <div className="overflow-x-auto">
@@ -523,28 +536,28 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
           <thead>
             <tr className="border-b border-white/[0.06] bg-white/[0.02]">
               <th className={thClass} onClick={() => handleSort("date")}>
-                Date <SortIcon col="date" />
+                {t("weeklyReport.colDate")} <SortIcon col="date" />
               </th>
               <th className={thClass} onClick={() => handleSort("match")}>
-                Match <SortIcon col="match" />
+                {t("weeklyReport.colMatch")} <SortIcon col="match" />
               </th>
               <th className={thClass + " hidden sm:table-cell"} onClick={() => handleSort("league")}>
-                League <SortIcon col="league" />
+                {t("weeklyReport.colLeague")} <SortIcon col="league" />
               </th>
               <th className={thClass} onClick={() => handleSort("call")}>
-                Our Call <SortIcon col="call" />
+                {t("weeklyReport.colOurCall")} <SortIcon col="call" />
               </th>
               <th className={thClass + " hidden md:table-cell"}>
-                Odds
+                {t("weeklyReport.colOdds")}
               </th>
               <th className={thClass + " hidden sm:table-cell"} onClick={() => handleSort("result")}>
-                Result <SortIcon col="result" />
+                {t("weeklyReport.colResult")} <SortIcon col="result" />
               </th>
               <th className={thClass} onClick={() => handleSort("correct")}>
-                Correct? <SortIcon col="correct" />
+                {t("weeklyReport.colCorrect")} <SortIcon col="correct" />
               </th>
               <th className={thClass} onClick={() => handleSort("pl")}>
-                P/L <SortIcon col="pl" />
+                {t("weeklyReport.colPL")} <SortIcon col="pl" />
               </th>
             </tr>
           </thead>
@@ -605,14 +618,14 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
                             : "#94a3b8",
                       }}
                     >
-                      {predicted ? formatOutcomeLabel(predicted) : " - "}
+                      {predicted ? formatOutcomeLabel(predicted, t) : " - "}
                     </span>
                   </td>
                   <td className="px-3 py-2.5 text-slate-400 hidden md:table-cell tabular-nums">
                     {impliedOdds}
                   </td>
                   <td className="px-3 py-2.5 text-slate-500 hidden sm:table-cell">
-                    {actual ? formatOutcomeLabel(actual) : " - "}
+                    {actual ? formatOutcomeLabel(actual, t) : " - "}
                     {fixture.result && (
                       <span className="ml-1 text-slate-600">
                         ({fixture.result.home_score}–{fixture.result.away_score})
@@ -622,11 +635,11 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
                   <td className="px-3 py-2.5">
                     {isCorrect === true ? (
                       <span className="flex items-center gap-1 text-emerald-400 font-semibold">
-                        <CheckCircle2 className="h-3.5 w-3.5" /> Yes
+                        <CheckCircle2 className="h-3.5 w-3.5" /> {t("weeklyReport.yes")}
                       </span>
                     ) : isCorrect === false ? (
                       <span className="flex items-center gap-1 text-red-400 font-semibold">
-                        <XCircle className="h-3.5 w-3.5" /> No
+                        <XCircle className="h-3.5 w-3.5" /> {t("weeklyReport.no")}
                       </span>
                     ) : (
                       <span className="text-slate-600"> - </span>
@@ -649,10 +662,10 @@ function AllCallsTable({ fixtures }: { fixtures: Fixture[] }) {
           <tfoot>
             <tr className="border-t border-white/[0.1] bg-white/[0.03]">
               <td colSpan={6} className="px-3 py-3 text-xs font-semibold text-slate-400 text-right hidden md:table-cell">
-                Weekly Total
+                {t("weeklyReport.weeklyTotal")}
               </td>
               <td colSpan={6} className="px-3 py-3 text-xs font-semibold text-slate-400 text-right md:hidden">
-                Weekly Total
+                {t("weeklyReport.weeklyTotal")}
               </td>
               <td className="px-3 py-3 font-extrabold tabular-nums text-sm" colSpan={2}>
                 <span className={totalPL >= 0 ? "text-emerald-400" : "text-red-400"}>
@@ -695,6 +708,7 @@ function PageSkeleton() {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function WeeklyReportPage() {
+  const { t } = useTranslations();
   const summaryQuery = useQuery({
     queryKey: ["weekly-summary"],
     queryFn: () => api.getWeeklySummary(),
@@ -727,10 +741,10 @@ export default function WeeklyReportPage() {
           </div>
           <div>
             <h1 className="text-4xl font-bold tracking-tight gradient-text leading-tight">
-              Weekly Report
+              {t("weeklyReport.title")}
             </h1>
             <p className="mt-1 text-sm text-slate-400">
-              Performance summary for the past 7 days
+              {t("weeklyReport.subtitle")}
             </p>
             <div className="mt-1.5 flex items-center gap-1.5 text-xs text-slate-500">
               <Calendar className="h-3 w-3" />
@@ -748,7 +762,7 @@ export default function WeeklyReportPage() {
         >
           <AlertTriangle className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
           <p className="text-sm text-slate-400">
-            Could not load report data. The API may be temporarily unavailable.
+            {t("weeklyReport.errorLoading")}
           </p>
         </div>
       )}
@@ -759,7 +773,7 @@ export default function WeeklyReportPage() {
       {/* ── Winners & Losers ── */}
       <div>
         <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3 px-1">
-          Winners &amp; Losses
+          {t("weeklyReport.winnersAndLosses")}
         </h2>
         <WinnersLosersSection fixtures={fixtures} />
       </div>
@@ -767,7 +781,7 @@ export default function WeeklyReportPage() {
       {/* ── All Calls Table ── */}
       <div>
         <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-3 px-1">
-          Call Log
+          {t("weeklyReport.callLog")}
         </h2>
         <AllCallsTable fixtures={fixtures} />
       </div>
