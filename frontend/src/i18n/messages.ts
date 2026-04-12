@@ -126,7 +126,7 @@ const en = {
   "footer.limited": "Limited spots · Members only",
   "footer.onlineNow": "1,200+ members online",
   "footer.brandTagline":
-    "BetsPlug unites data, Elo ratings, Poisson models and machine learning into one platform - built for serious football analysts who refuse to guess.",
+    "BetsPlug Pulse uses AI to analyse every football match — giving you transparent, data-driven predictions you can verify yourself.",
   "footer.product": "Product",
   "footer.company": "Company",
   "footer.legal": "Legal",
@@ -2051,7 +2051,7 @@ const nl: Dictionary = {
   "footer.limited": "Beperkte plekken · Alleen voor leden",
   "footer.onlineNow": "1.200+ leden online",
   "footer.brandTagline":
-    "BetsPlug combineert data, Elo-ratings, Poisson-modellen en machine learning in één platform - gemaakt voor serieuze voetbalanalisten die niet willen gokken.",
+    "BetsPlug Pulse gebruikt AI om elke voetbalwedstrijd te analyseren — transparante, datagedreven voorspellingen die je zelf kunt verifiëren.",
   "footer.product": "Product",
   "footer.company": "Bedrijf",
   "footer.legal": "Juridisch",
