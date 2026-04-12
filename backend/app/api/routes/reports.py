@@ -1,5 +1,6 @@
 """Reports routes."""
 
+import logging
 import os
 import uuid
 from typing import List
@@ -13,7 +14,12 @@ from app.db.session import get_db
 from app.models.report import GeneratedReport, ReportJob
 from app.schemas.report import GeneratedReportResponse, ReportJobCreate, ReportJobResponse
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter()
+
+_ALLOWED_FORMATS = {"pdf", "csv", "json"}
+_ALLOWED_REPORT_TYPES = {"weekly", "monthly", "custom"}
 
 
 @router.post(
@@ -26,13 +32,39 @@ async def generate_report(
     payload: ReportJobCreate,
     db: AsyncSession = Depends(get_db),
 ) -> ReportJobResponse:
-    """Generate a PDF report synchronously and return the job record."""
+    """Generate a report synchronously in the requested format and return the
+    job record. v6.2.2 fixes the long-standing bug where the `format` field
+    from the frontend was silently dropped and every report was a PDF.
+    """
     from datetime import datetime, timezone
     from app.services.report_service import ReportService
 
+    fmt = (payload.format or "pdf").lower()
+    if fmt not in _ALLOWED_FORMATS:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Unsupported format: {fmt!r}. Must be one of {sorted(_ALLOWED_FORMATS)}.",
+        )
+
+    report_type = (payload.report_type or "weekly").lower()
+    if report_type not in _ALLOWED_REPORT_TYPES:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                f"Unsupported report_type: {report_type!r}. Must be one of "
+                f"{sorted(_ALLOWED_REPORT_TYPES)}."
+            ),
+        )
+
+    # Carry the chosen format inside the job config so it survives a
+    # restart / audit log. We don't add a dedicated `format` column on
+    # ReportJob to keep the migration footprint zero.
+    merged_config = dict(payload.config or {})
+    merged_config["format"] = fmt
+
     new_job = ReportJob(
-        report_type=payload.report_type,
-        config=payload.config,
+        report_type=report_type,
+        config=merged_config,
         status="running",
         started_at=datetime.now(timezone.utc),
     )
@@ -41,13 +73,19 @@ async def generate_report(
 
     try:
         service = ReportService()
-        report = await service.generate(new_job, db)
+        report = await service.generate(new_job, db, fmt=fmt)
         new_job.status = "completed"
         new_job.completed_at = datetime.now(timezone.utc)
         await db.flush()
     except Exception as exc:
+        logger.exception(
+            "Report generation failed (type=%s fmt=%s job=%s)",
+            report_type,
+            fmt,
+            new_job.id,
+        )
         new_job.status = "failed"
-        new_job.error_message = str(exc)
+        new_job.error_message = str(exc)[:500]
         new_job.completed_at = datetime.now(timezone.utc)
         await db.flush()
         await db.commit()

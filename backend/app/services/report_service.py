@@ -1,11 +1,24 @@
-"""Report generation service — renders PDF reports from prediction data.
+"""Report generation service — renders performance reports from prediction
+data.
 
 Supports report types:
 - weekly: Last 7 days performance summary
 - monthly: Last 30 days performance summary
 - custom: Date range specified in config
+
+Supports output formats (v6.2.2):
+- pdf: reportlab-rendered A4 document with tables
+- csv: one row per evaluated prediction, easy to open in Excel / Sheets
+- json: structured machine-readable payload with summary + rows
+
+Previously only PDF was supported — the format dropdown on the frontend
+was silently ignored because the ReportJobCreate schema dropped the field.
 """
 
+import csv as csv_mod
+import io
+import json
+import logging
 import os
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -24,18 +37,36 @@ from reportlab.platypus import (
 )
 from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.core.config import get_settings
 from app.models.match import Match, MatchResult, MatchStatus
 from app.models.prediction import Prediction, PredictionEvaluation
 from app.models.report import GeneratedReport, ReportJob
 
+logger = logging.getLogger(__name__)
+
 
 class ReportService:
-    """Generates PDF reports from prediction performance data."""
+    """Generates performance reports (PDF / CSV / JSON) from prediction data."""
 
-    async def generate(self, job: ReportJob, db: AsyncSession) -> GeneratedReport:
-        """Generate a report for the given job and return the GeneratedReport row."""
+    async def generate(
+        self,
+        job: ReportJob,
+        db: AsyncSession,
+        fmt: str = "pdf",
+    ) -> GeneratedReport:
+        """Generate a report for the given job in the requested format.
+
+        ``fmt`` is one of ``'pdf' | 'csv' | 'json'``. Raises ValueError on
+        unknown format. The caller is expected to catch + translate to a
+        404/500 response — we let the exception bubble so the route handler
+        can mark the job as failed.
+        """
+        fmt = (fmt or "pdf").lower()
+        if fmt not in {"pdf", "csv", "json"}:
+            raise ValueError(f"Unsupported report format: {fmt!r}")
+
         config = job.config or {}
         report_type = job.report_type
 
@@ -49,29 +80,65 @@ class ReportService:
         end_date = datetime.now(timezone.utc)
         start_date = end_date - timedelta(days=days)
 
-        # Gather data
+        # Gather data — include raw rows for CSV/JSON output
         data = await self._gather_performance_data(start_date, end_date, db)
 
-        # Render PDF
+        # Resolve a writable output dir. On Railway the default
+        # /app/reports is writable within a container instance; if for
+        # any reason it isn't (permission, mount issue, local dev), we
+        # fall back to /tmp which is always writable.
         settings = get_settings()
         output_dir = settings.reports_output_dir
-        os.makedirs(output_dir, exist_ok=True)
+        try:
+            os.makedirs(output_dir, exist_ok=True)
+            # Probe writability by creating a tiny test file
+            probe_path = os.path.join(output_dir, ".write_probe")
+            with open(probe_path, "w") as f:
+                f.write("ok")
+            os.remove(probe_path)
+        except OSError as exc:
+            fallback = "/tmp/betsplug-reports"
+            logger.warning(
+                "reports_output_dir %s not writable (%s); falling back to %s",
+                output_dir,
+                exc,
+                fallback,
+            )
+            output_dir = fallback
+            os.makedirs(output_dir, exist_ok=True)
 
-        filename = f"betsplug-{report_type}-{end_date.strftime('%Y%m%d')}-{uuid.uuid4().hex[:8]}.pdf"
+        ext = fmt  # file extension always matches format
+        filename = (
+            f"betsplug-{report_type}-{end_date.strftime('%Y%m%d')}-"
+            f"{uuid.uuid4().hex[:8]}.{ext}"
+        )
         file_path = os.path.join(output_dir, filename)
 
-        self._render_pdf(file_path, report_type, data, start_date, end_date)
+        # Dispatch to the right renderer
+        if fmt == "pdf":
+            self._render_pdf(file_path, report_type, data, start_date, end_date)
+        elif fmt == "csv":
+            self._render_csv(file_path, report_type, data, start_date, end_date)
+        elif fmt == "json":
+            self._render_json(file_path, report_type, data, start_date, end_date)
 
         file_size = os.path.getsize(file_path)
 
         report = GeneratedReport(
             id=uuid.uuid4(),
             job_id=job.id,
-            title=f"Betsplug {report_type.capitalize()} Report — {end_date.strftime('%d %b %Y')}",
+            title=(
+                f"Betsplug {report_type.capitalize()} Report "
+                f"— {end_date.strftime('%d %b %Y')}"
+            ),
             file_path=file_path,
-            file_format="pdf",
+            file_format=fmt,
             file_size_bytes=file_size,
-            summary=f"{data['total_predictions']} predictions, {data['accuracy']:.1%} accuracy, Brier {data['avg_brier']:.4f}",
+            summary=(
+                f"{data['total_predictions']} predictions, "
+                f"{data['accuracy']:.1%} accuracy, "
+                f"Brier {data['avg_brier']:.4f}"
+            ),
         )
         db.add(report)
         return report
@@ -80,13 +147,21 @@ class ReportService:
         self, start: datetime, end: datetime, db: AsyncSession
     ) -> dict:
         """Gather prediction performance metrics for the date range."""
-        # Get all predictions with evaluations in range
+        # v6.2.2: eager-load match + teams + league so CSV / JSON rows can
+        # render human-readable team names without firing N extra queries.
         stmt = (
             select(Prediction, PredictionEvaluation)
             .join(Match, Match.id == Prediction.match_id)
             .outerjoin(
                 PredictionEvaluation,
                 PredictionEvaluation.prediction_id == Prediction.id,
+            )
+            .options(
+                selectinload(Prediction.match).selectinload(Match.home_team),
+                selectinload(Prediction.match).selectinload(Match.away_team),
+                selectinload(Prediction.match).selectinload(Match.league),
+                selectinload(Prediction.match).selectinload(Match.result),
+                selectinload(Prediction.model_version),
             )
             .where(
                 and_(
@@ -101,7 +176,7 @@ class ReportService:
         total = len(rows)
         evaluated = [r for r in rows if r[1] is not None]
         correct = sum(1 for _, ev in evaluated if ev.is_correct)
-        brier_scores = [ev.brier_score for _, ev in evaluated]
+        brier_scores = [ev.brier_score for _, ev in evaluated if ev.brier_score is not None]
 
         # Get top predictions (highest confidence that were correct)
         top_correct = sorted(
@@ -132,6 +207,8 @@ class ReportService:
             "avg_brier": sum(brier_scores) / len(brier_scores) if brier_scores else 0.0,
             "confidence_buckets": confidence_buckets,
             "top_correct": top_correct,
+            # Full rows so CSV / JSON renderers have the complete dataset.
+            "rows": rows,
         }
 
     def _render_pdf(
@@ -225,3 +302,223 @@ class ReportService:
         ))
 
         doc.build(elements)
+
+    # ───────────────────────── CSV renderer (v6.2.2) ─────────────────────────
+
+    _CSV_COLUMNS = [
+        "prediction_id",
+        "predicted_at_utc",
+        "match_scheduled_at_utc",
+        "league_name",
+        "home_team",
+        "away_team",
+        "model_name",
+        "model_version",
+        "home_win_prob",
+        "draw_prob",
+        "away_win_prob",
+        "confidence",
+        "predicted_pick",
+        "actual_outcome",
+        "is_correct",
+        "home_score",
+        "away_score",
+        "brier_score",
+        "log_loss",
+    ]
+
+    def _render_csv(
+        self,
+        file_path: str,
+        report_type: str,
+        data: dict,
+        start: datetime,
+        end: datetime,
+    ) -> None:
+        """Write the report's prediction rows as CSV.
+
+        Format mirrors the /api/trackrecord/export.csv shape so downstream
+        tools (Excel / BI) can reuse the same column mapping.
+        """
+        with open(file_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv_mod.writer(f)
+            # Header block: metadata comment-style rows on the top, then
+            # the actual CSV header. Excel + Sheets treat the first row
+            # as the header, so we put the metadata in a separate
+            # "meta" column pair that's easy to skip.
+            writer.writerow(["# betsplug report", f"{report_type.capitalize()}"])
+            writer.writerow(
+                [
+                    "# period",
+                    f"{start.date().isoformat()} to {end.date().isoformat()}",
+                ]
+            )
+            writer.writerow(
+                [
+                    "# total_predictions",
+                    str(data["total_predictions"]),
+                ]
+            )
+            writer.writerow(
+                [
+                    "# accuracy",
+                    f"{data['accuracy']:.4f}",
+                ]
+            )
+            writer.writerow(
+                [
+                    "# avg_brier",
+                    f"{data['avg_brier']:.4f}",
+                ]
+            )
+            writer.writerow([])  # blank row separating metadata from data
+
+            writer.writerow(self._CSV_COLUMNS)
+
+            for pred, evaluation in data.get("rows", []):
+                m = pred.match
+                mv = getattr(pred, "model_version", None)
+
+                if pred.draw_prob is not None:
+                    probs = {
+                        "home": pred.home_win_prob,
+                        "draw": pred.draw_prob,
+                        "away": pred.away_win_prob,
+                    }
+                else:
+                    probs = {"home": pred.home_win_prob, "away": pred.away_win_prob}
+                pick = max(probs, key=lambda k: probs[k])
+
+                home_score = m.result.home_score if m and m.result else None
+                away_score = m.result.away_score if m and m.result else None
+
+                writer.writerow(
+                    [
+                        str(pred.id),
+                        pred.predicted_at.isoformat() if pred.predicted_at else "",
+                        m.scheduled_at.isoformat() if m and m.scheduled_at else "",
+                        (m.league.name if m and m.league else ""),
+                        (m.home_team.name if m and m.home_team else ""),
+                        (m.away_team.name if m and m.away_team else ""),
+                        (mv.name if mv else ""),
+                        (mv.version if mv else ""),
+                        f"{pred.home_win_prob:.6f}",
+                        f"{pred.draw_prob:.6f}" if pred.draw_prob is not None else "",
+                        f"{pred.away_win_prob:.6f}",
+                        f"{pred.confidence:.6f}",
+                        pick,
+                        (evaluation.actual_outcome if evaluation else ""),
+                        ("1" if evaluation and evaluation.is_correct else "0")
+                        if evaluation
+                        else "",
+                        str(home_score) if home_score is not None else "",
+                        str(away_score) if away_score is not None else "",
+                        f"{evaluation.brier_score:.6f}"
+                        if evaluation and evaluation.brier_score is not None
+                        else "",
+                        f"{evaluation.log_loss:.6f}"
+                        if evaluation and evaluation.log_loss is not None
+                        else "",
+                    ]
+                )
+
+    # ───────────────────────── JSON renderer (v6.2.2) ────────────────────────
+
+    def _render_json(
+        self,
+        file_path: str,
+        report_type: str,
+        data: dict,
+        start: datetime,
+        end: datetime,
+    ) -> None:
+        """Write the full report as a structured JSON document.
+
+        Shape:
+            {
+              "report_type": "weekly",
+              "period": {"start": ..., "end": ...},
+              "summary": {total_predictions, evaluated, correct, accuracy, avg_brier, confidence_buckets},
+              "predictions": [ { ... per prediction ... } ],
+              "disclaimer": "..."
+            }
+        """
+        predictions_out: list[dict] = []
+        for pred, evaluation in data.get("rows", []):
+            m = pred.match
+            mv = getattr(pred, "model_version", None)
+
+            if pred.draw_prob is not None:
+                probs = {
+                    "home": pred.home_win_prob,
+                    "draw": pred.draw_prob,
+                    "away": pred.away_win_prob,
+                }
+            else:
+                probs = {"home": pred.home_win_prob, "away": pred.away_win_prob}
+            pick = max(probs, key=lambda k: probs[k])
+
+            predictions_out.append(
+                {
+                    "prediction_id": str(pred.id),
+                    "predicted_at_utc": pred.predicted_at.isoformat()
+                    if pred.predicted_at
+                    else None,
+                    "match_scheduled_at_utc": m.scheduled_at.isoformat()
+                    if m and m.scheduled_at
+                    else None,
+                    "league_name": (m.league.name if m and m.league else None),
+                    "home_team": (m.home_team.name if m and m.home_team else None),
+                    "away_team": (m.away_team.name if m and m.away_team else None),
+                    "model": {
+                        "name": (mv.name if mv else None),
+                        "version": (mv.version if mv else None),
+                        "model_type": (mv.model_type if mv else None),
+                    },
+                    "probabilities": {
+                        "home": pred.home_win_prob,
+                        "draw": pred.draw_prob,
+                        "away": pred.away_win_prob,
+                    },
+                    "confidence": pred.confidence,
+                    "predicted_pick": pick,
+                    "result": {
+                        "actual_outcome": evaluation.actual_outcome if evaluation else None,
+                        "is_correct": bool(evaluation.is_correct) if evaluation else None,
+                        "home_score": (
+                            m.result.home_score if m and m.result else None
+                        ),
+                        "away_score": (
+                            m.result.away_score if m and m.result else None
+                        ),
+                        "brier_score": (evaluation.brier_score if evaluation else None),
+                        "log_loss": (evaluation.log_loss if evaluation else None),
+                    },
+                }
+            )
+
+        payload = {
+            "report_type": report_type,
+            "period": {
+                "start": start.isoformat(),
+                "end": end.isoformat(),
+            },
+            "summary": {
+                "total_predictions": data["total_predictions"],
+                "total_evaluated": data["total_evaluated"],
+                "correct": data["correct"],
+                "accuracy": data["accuracy"],
+                "avg_brier": data["avg_brier"],
+                "confidence_buckets": data["confidence_buckets"],
+            },
+            "predictions": predictions_out,
+            "disclaimer": (
+                "SIMULATION / EDUCATIONAL USE ONLY. All probability estimates "
+                "are generated by a statistical model for research and "
+                "educational purposes. They do NOT constitute financial, "
+                "betting, or investment advice."
+            ),
+        }
+
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2, default=str)

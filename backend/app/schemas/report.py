@@ -24,6 +24,14 @@ class ReportJobCreate(BaseModel):
             "Determines which template and date-range logic is applied."
         ),
     )
+    # v6.2.2: frontend selects pdf / csv / json. Previously this field was
+    # silently dropped because the schema didn't declare it, which made
+    # the Report Generator always write PDF regardless of the dropdown.
+    format: str = Field(
+        default="pdf",
+        max_length=10,
+        description="Output file format: 'pdf', 'csv', or 'json'.",
+    )
     config: Optional[Dict[str, Any]] = Field(
         default=None,
         description=(
