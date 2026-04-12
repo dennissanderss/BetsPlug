@@ -91,7 +91,7 @@ export function SiteNav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-slate-400 transition-colors hover:text-white"
+                className="text-sm font-semibold text-slate-400 transition-colors hover:text-white"
               >
                 {link.label}
               </Link>
