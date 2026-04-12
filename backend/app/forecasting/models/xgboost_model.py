@@ -118,17 +118,11 @@ class XGBoostModel(LogisticModel):
             verbosity=0,
         )
 
-        # Calibrate probabilities with CalibratedClassifierCV
-        if len(X_scaled) >= 100:
-            n_folds = min(5, max(2, len(X_scaled) // 50))
-            self._model = CalibratedClassifierCV(
-                base_model,
-                method="isotonic",
-                cv=n_folds,
-            )
-        else:
-            self._model = base_model
-
+        # Train XGBoost directly — CalibratedClassifierCV has sklearn
+        # compatibility issues with XGBClassifier on some versions.
+        # XGBoost's softprob objective already produces calibrated
+        # probabilities via its own internal regularization.
+        self._model = base_model
         self._model.fit(X_scaled, y_arr)
 
         # Training accuracy
