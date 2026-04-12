@@ -665,7 +665,7 @@ function DataTransparencyCard({
               afgelopen zijn — geen handmatige update nodig.
             </p>
             <p className="mt-2 text-[11px] text-slate-500 leading-relaxed">
-              Wil je zelf de accuracy, Brier score of calibratie narekenen?
+              Wil je zelf de accuracy of voorspellingskwaliteit narekenen?
               Download de volledige dataset als CSV.{" "}
               <Link
                 href="/about#methodology"
@@ -854,10 +854,10 @@ function RecentPredictionsFeed() {
                   <PredictionStatusBadge correct={correct} evaluated={evaluated} />
                 </div>
 
-                {/* Brier score if available */}
+                {/* Prediction quality score */}
                 <span className="text-xs font-mono tabular-nums w-20 text-right text-slate-500">
                   {pred.evaluation?.brier_score != null
-                    ? `BS: ${fmt(pred.evaluation.brier_score, 3)}`
+                    ? `PQ: ${fmt(pred.evaluation.brier_score, 3)}`
                     : " - "}
                 </span>
               </button>

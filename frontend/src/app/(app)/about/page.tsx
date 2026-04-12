@@ -110,8 +110,8 @@ const pipelineSteps = [
     color: "#ef4444",
     title: "Evaluation & Tracking",
     description:
-      "Every prediction is stored immutably with its full feature snapshot. After the match, results are automatically evaluated using Brier Score, Log Loss, and calibration metrics. Nothing is deleted or modified.",
-    tags: ["Brier Score", "Log Loss", "Immutable Records"],
+      "Every prediction is stored immutably with its full feature snapshot. After the match, results are automatically evaluated against the actual outcome. Nothing is deleted or modified.",
+    tags: ["Accuracy Tracking", "Transparent Results", "Immutable Records"],
   },
 ];
 
@@ -180,7 +180,7 @@ const models = [
       "Confidence = degree of model agreement across all three",
       "Reduces variance inherent in any single model approach",
     ],
-    usedBy: "Consistently lowest Brier Score and highest calibration across backtests",
+    usedBy: "Consistently best prediction quality and highest reliability across backtests",
   },
 ];
 

@@ -96,7 +96,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "At BetsPlug we built four AI models - Elo, Poisson, Logistic Regression and an XGBoost Ensemble - because the raw research work required to beat the closing line is genuinely exhausting to do by hand. But even with machines doing the heavy lifting, the humans who get the most out of our platform all share the same pre-match routine. This is that routine, written down, so you can steal it.",
+        text: "At BetsPlug we built four AI models - Elo, Poisson, Logistic Regression and an XGBoost BetsPlug Pulse - because the raw research work required to beat the closing line is genuinely exhausting to do by hand. But even with machines doing the heavy lifting, the humans who get the most out of our platform all share the same pre-match routine. This is that routine, written down, so you can steal it.",
       },
       {
         type: "heading",
@@ -140,15 +140,15 @@ export const articles: Article[] = [
       },
       {
         type: "heading",
-        text: "Step 4 - Let the Ensemble call the shots",
+        text: "Step 4 - Let the BetsPlug Pulse call the shots",
       },
       {
         type: "paragraph",
-        text: "No single model should ever make a final decision. Our Ensemble stacks Elo, Poisson, Logistic and XGBoost on top of each other and lets them vote, weighted by each model's recent calibration. The result is a single probability per outcome that is almost always better calibrated than any individual model - we publish Brier scores on our public track record to prove it.",
+        text: "No single model should ever make a final decision. Our BetsPlug Pulse stacks Elo, Poisson, Logistic and XGBoost on top of each other and lets them vote, weighted by each model's recent calibration. The result is a single probability per outcome that is almost always better calibrated than any individual model - we publish our prediction quality metrics on our public track record to prove it.",
       },
       {
         type: "quote",
-        text: "If the Ensemble confidence is below 60%, you don't have a pick. You have an opinion. There's a difference.",
+        text: "If the BetsPlug Pulse confidence is below 60%, you don't have a pick. You have an opinion. There's a difference.",
         cite: "BetsPlug research log",
       },
       {
@@ -161,7 +161,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "Once the eye test agrees with the Ensemble - only then do you place the bet. And even then, only at the stake your bankroll rules allow. Discipline is the moat. The models just make the moat wider.",
+        text: "Once the eye test agrees with the BetsPlug Pulse - only then do you place the bet. And even then, only at the stake your bankroll rules allow. Discipline is the moat. The models just make the moat wider.",
       },
       {
         type: "heading",
@@ -173,7 +173,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "If you'd rather skip the manual work and let our AI do it for you, every BetsPlug subscription includes the full Ensemble output, live probability tracking, and a daily Pick of the Day - selected automatically by the same framework you just read. Start your free 7-day trial and see the edge in action.",
+        text: "If you'd rather skip the manual work and let our AI do it for you, every BetsPlug subscription includes the full BetsPlug Pulse output, live probability tracking, and a daily Pick of the Day - selected automatically by the same framework you just read. Start your free 7-day trial and see the edge in action.",
       },
     ],
   },

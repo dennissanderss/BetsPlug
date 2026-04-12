@@ -1401,7 +1401,7 @@ const en = {
   "strategy.realPredictionData": "Real Prediction Data (from database)",
   "strategy.totalPredictions": "Total Predictions",
   "strategy.accuracy": "Accuracy",
-  "strategy.brierScore": "Brier Score",
+  "strategy.brierScore": "Prediction Quality",
   "strategy.avgConfidence": "Avg Confidence",
   "strategy.realPredictionDisclaimer": "These figures are real model outputs from the database. They reflect prediction accuracy metrics only - not betting P/L, which requires backtest analysis.",
 
@@ -3325,9 +3325,9 @@ const nl: Dictionary = {
   "strategy.realPredictionData": "Echte voorspellingsdata (uit database)",
   "strategy.totalPredictions": "Totaal voorspellingen",
   "strategy.accuracy": "Nauwkeurigheid",
-  "strategy.brierScore": "Brier Score",
+  "strategy.brierScore": "Voorspellingskwaliteit",
   "strategy.avgConfidence": "Gem. betrouwbaarheid",
-  "strategy.realPredictionDisclaimer": "Deze cijfers zijn echte modeluitvoer uit de database. Ze weerspiegelen alleen de nauwkeurigheid van voorspellingen - niet de W/V van weddenschappen, waarvoor backtestanalyse nodig is.",
+  "strategy.realPredictionDisclaimer": "Deze cijfers zijn echte modelresultaten uit de database. Ze weerspiegelen alleen de nauwkeurigheid van voorspellingen - niet de W/V van weddenschappen, waarvoor backtestanalyse nodig is.",
 
   /* ── Route page ───────────────────────────────────── */
   "route.title": "Jouw route",
