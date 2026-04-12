@@ -16,6 +16,7 @@ import {
 import { api } from "@/lib/api";
 import { useTranslations } from "@/i18n/locale-provider";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
+import { UpsellBanner } from "@/components/ui/upsell-banner";
 import type { Fixture, WeeklySummary } from "@/types/api";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -736,6 +737,14 @@ function ResultsPageContent() {
           ))}
         </div>
       )}
+
+      {/* Upsell: Platinum lifetime */}
+      <UpsellBanner
+        targetTier="platinum"
+        headline="Levenslange toegang — betaal één keer, nooit meer"
+        subtext="Alle Gold features + privé Telegram + early access. Beperkt tot 100/jaar."
+        variant="inline"
+      />
 
     </div>
   );

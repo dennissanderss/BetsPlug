@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "@/i18n/locale-provider";
+import { UpsellBanner } from "@/components/ui/upsell-banner";
 import {
   Activity,
   TrendingUp,
@@ -447,6 +448,14 @@ export default function DashboardPage() {
           ))}
         </div>
       )}
+
+      {/* ── Upsell: Gold for BOTD ─────────────────────────────────────────── */}
+      <UpsellBanner
+        targetTier="gold"
+        headline="Pick van de Dag — 66.7% trefzekerheid"
+        subtext="Onze AI selecteert dagelijks de wedstrijd met de hoogste zekerheid. Alleen voor Gold members."
+        variant="banner"
+      />
 
       {/* ── Recent Predictions ───────────────────────────────────────────── */}
       <div className="glass-card overflow-hidden">

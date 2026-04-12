@@ -20,6 +20,7 @@ import {
 import { api } from "@/lib/api";
 import type { Fixture, FixturePrediction } from "@/types/api";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
+import { UpsellBanner } from "@/components/ui/upsell-banner";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -1434,6 +1435,16 @@ export default function PredictionsPage() {
             />
           ))}
         </div>
+      )}
+
+      {/* ── Upsell: Gold for BOTD ── */}
+      {!isLoading && upcomingFixtures.length > 0 && (
+        <UpsellBanner
+          targetTier="gold"
+          headline="Wil je alleen de beste pick? → Pick van de Dag"
+          subtext="66.7% trefzekerheid op 346 picks. Onze AI kiest dagelijks de wedstrijd met de hoogste zekerheid."
+          variant="card"
+        />
       )}
 
       {/* ── Upgrade prompt for more predictions ── */}
