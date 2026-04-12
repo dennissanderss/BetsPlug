@@ -528,7 +528,6 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
   const drawProb = pred?.draw_prob != null ? Math.round(pred.draw_prob * 100) : null;
   const awayProb = pred?.away_win_prob != null ? Math.round(pred.away_win_prob * 100) : null;
 
-  // Highlight which of the 3 odds buttons matches the model's pick
   let modelPick: "home" | "draw" | "away" | null = null;
   if (hasPrediction && homeProb != null && awayProb != null) {
     const d = drawProb ?? -1;
@@ -537,95 +536,111 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
     else modelPick = "draw";
   }
 
+  const pickLabel = modelPick === "home" ? "1" : modelPick === "draw" ? "X" : modelPick === "away" ? "2" : null;
+
   return (
     <div className="border-b border-white/[0.04] last:border-b-0">
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
-        className="w-full flex items-center gap-2 sm:gap-3 px-3 py-2.5 sm:px-4 sm:py-3 hover:bg-white/[0.02] transition-colors text-left"
+        className="w-full grid grid-cols-12 items-center gap-2 px-4 py-3.5 hover:bg-white/[0.02] transition-colors text-left"
         aria-expanded={expanded}
       >
-        {/* Time block */}
-        <div className="flex w-16 shrink-0 flex-col items-start sm:w-20">
-          <span className="text-xs font-bold text-slate-100 tabular-nums">
+        {/* Time + Status — col 1 */}
+        <div className="col-span-2 sm:col-span-1 flex flex-col items-center">
+          <span className="text-sm font-bold text-slate-100 tabular-nums">
             {formatTimeOnly(fixture.scheduled_at)}
           </span>
           {isLive ? (
-            <span className="mt-0.5 inline-flex items-center gap-1 rounded-full border border-red-500/30 bg-red-500/10 px-1.5 py-0 text-[8px] font-bold uppercase tracking-wider text-red-400">
-              <span className="h-1 w-1 rounded-full bg-red-400 animate-pulse" />
-              {(fixture as any).live_score?.elapsed ? `${(fixture as any).live_score.elapsed}'` : "Live"}
+            <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-red-500/15 px-2 py-0.5 text-[9px] font-bold text-red-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" />
+              {(fixture as any).live_score?.elapsed ? `${(fixture as any).live_score.elapsed}'` : "LIVE"}
             </span>
           ) : isFinished ? (
-            <span className="mt-0.5 inline-flex items-center rounded-full border border-slate-500/20 bg-slate-500/10 px-1.5 py-0 text-[8px] font-bold uppercase tracking-wider text-slate-500">
-              FT
-            </span>
+            <span className="mt-1 text-[9px] font-bold text-slate-500">FT</span>
           ) : (
-            <span className="mt-0.5 inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/10 px-1.5 py-0 text-[8px] font-bold uppercase tracking-wider text-blue-400">
-              Upcoming
+            <span className="mt-1 text-[9px] font-medium text-blue-400/70">
+              {formatDateShort(fixture.scheduled_at)}
             </span>
           )}
         </div>
 
-        {/* Teams + live score */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 text-sm text-slate-100 font-medium">
-            <span className="truncate">{fixture.home_team_name}</span>
-            {/* Live score between team names */}
-            {isLive && (fixture as any).live_score?.home_goals != null ? (
-              <span className="shrink-0 rounded bg-red-500/20 border border-red-500/30 px-2 py-0.5 text-sm font-bold tabular-nums text-red-300 animate-pulse">
-                {(fixture as any).live_score.home_goals} - {(fixture as any).live_score.away_goals}
-              </span>
-            ) : (
-              <span className="text-slate-600 text-xs font-normal shrink-0">vs</span>
+        {/* Teams — col 2 */}
+        <div className="col-span-5 sm:col-span-4 min-w-0">
+          {/* Home team */}
+          <div className="flex items-center gap-2">
+            <span className={`text-sm font-semibold truncate ${modelPick === "home" ? "text-emerald-300" : "text-slate-100"}`}>
+              {fixture.home_team_name}
+            </span>
+            {isLive && (fixture as any).live_score?.home_goals != null && (
+              <span className="text-sm font-bold tabular-nums text-red-300">{(fixture as any).live_score.home_goals}</span>
             )}
-            <span className="truncate">{fixture.away_team_name}</span>
+            {isFinished && fixture.result && (
+              <span className="text-sm font-bold tabular-nums text-slate-400">{fixture.result.home_score}</span>
+            )}
           </div>
-          {isFinished && fixture.result && (
-            <p className="text-[10px] text-slate-500 mt-0.5 tabular-nums">
-              Final: {fixture.result.home_score} - {fixture.result.away_score}
-            </p>
+          {/* Away team */}
+          <div className="flex items-center gap-2 mt-0.5">
+            <span className={`text-sm font-semibold truncate ${modelPick === "away" ? "text-emerald-300" : "text-slate-100"}`}>
+              {fixture.away_team_name}
+            </span>
+            {isLive && (fixture as any).live_score?.away_goals != null && (
+              <span className="text-sm font-bold tabular-nums text-red-300">{(fixture as any).live_score.away_goals}</span>
+            )}
+            {isFinished && fixture.result && (
+              <span className="text-sm font-bold tabular-nums text-slate-400">{fixture.result.away_score}</span>
+            )}
+          </div>
+        </div>
+
+        {/* Prediction pick badge — col 3 */}
+        <div className="col-span-1 flex justify-center">
+          {pickLabel && (
+            <span
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold"
+              style={{
+                background: `${confColor}18`,
+                color: confColor,
+                border: `1px solid ${confColor}35`,
+              }}
+            >
+              {pickLabel}
+            </span>
           )}
         </div>
 
-        {/* Odds buttons (1 / X / 2) */}
-        <div className="hidden sm:flex items-center gap-1 shrink-0">
-          <OddButton
-            label="1"
-            value={fixture.odds?.home ?? null}
-            highlighted={modelPick === "home"}
-          />
-          <OddButton
-            label="X"
-            value={fixture.odds?.draw ?? null}
-            highlighted={modelPick === "draw"}
-          />
-          <OddButton
-            label="2"
-            value={fixture.odds?.away ?? null}
-            highlighted={modelPick === "away"}
-          />
+        {/* Odds — col 4 (desktop only) */}
+        <div className="hidden sm:flex col-span-3 items-center justify-center gap-1.5">
+          <OddButton label="1" value={fixture.odds?.home ?? null} highlighted={modelPick === "home"} />
+          <OddButton label="X" value={fixture.odds?.draw ?? null} highlighted={modelPick === "draw"} />
+          <OddButton label="2" value={fixture.odds?.away ?? null} highlighted={modelPick === "away"} />
         </div>
 
-        {/* Confidence pill */}
-        {confScore != null && (
-          <div
-            className="hidden md:flex shrink-0 items-center gap-1 rounded-md border px-2 py-1 text-[10px] font-semibold tabular-nums"
-            style={{
-              color: confColor,
-              borderColor: `${confColor}40`,
-              background: `${confColor}12`,
-            }}
-          >
-            {confScore}%
-          </div>
-        )}
+        {/* Confidence bar — col 5 */}
+        <div className="col-span-3 sm:col-span-2 flex items-center gap-2">
+          {confScore != null && (
+            <>
+              <div className="flex-1 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all"
+                  style={{ width: `${confScore}%`, background: confColor }}
+                />
+              </div>
+              <span className="text-[11px] font-bold tabular-nums shrink-0" style={{ color: confColor }}>
+                {confScore}%
+              </span>
+            </>
+          )}
+        </div>
 
-        {/* Expand chevron */}
-        {expanded ? (
-          <ChevronUp className="h-4 w-4 text-slate-500 shrink-0" />
-        ) : (
-          <ChevronDown className="h-4 w-4 text-slate-500 shrink-0" />
-        )}
+        {/* Chevron — col 6 */}
+        <div className="col-span-1 flex justify-end">
+          {expanded ? (
+            <ChevronUp className="h-4 w-4 text-slate-500" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-slate-500" />
+          )}
+        </div>
       </button>
 
       {/* Expand panel */}
@@ -779,32 +794,24 @@ function OddButton({
 }) {
   if (value == null) {
     return (
-      <div className="flex h-10 w-14 flex-col items-center justify-center rounded-md border border-white/[0.05] bg-white/[0.015]">
+      <div className="flex h-9 w-[52px] flex-col items-center justify-center rounded-lg border border-white/[0.04] bg-white/[0.01]">
         <span className="text-[8px] uppercase text-slate-700">{label}</span>
-        <span className="text-[10px] text-slate-700">-</span>
+        <span className="text-[10px] text-slate-700">—</span>
       </div>
     );
   }
   return (
     <div
-      className={`flex h-10 w-14 flex-col items-center justify-center rounded-md border tabular-nums transition-colors ${
+      className={`flex h-9 w-[52px] flex-col items-center justify-center rounded-lg border tabular-nums transition-all ${
         highlighted
-          ? "border-blue-500/40 bg-blue-500/10"
-          : "border-white/[0.08] bg-white/[0.03]"
+          ? "border-emerald-500/40 bg-emerald-500/10 shadow-[0_0_8px_rgba(16,185,129,0.1)]"
+          : "border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04]"
       }`}
     >
-      <span
-        className={`text-[8px] uppercase ${
-          highlighted ? "text-blue-300" : "text-slate-500"
-        }`}
-      >
+      <span className={`text-[8px] uppercase tracking-wide ${highlighted ? "text-emerald-300" : "text-slate-500"}`}>
         {label}
       </span>
-      <span
-        className={`text-xs font-bold ${
-          highlighted ? "text-blue-200" : "text-slate-200"
-        }`}
-      >
+      <span className={`text-xs font-bold ${highlighted ? "text-emerald-200" : "text-slate-200"}`}>
         {value.toFixed(2)}
       </span>
     </div>
@@ -823,20 +830,32 @@ function LeagueSection({
   defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
+
+  // Count live matches in this league
+  const liveCount = fixtures.filter((f) => f.status === "live").length;
+
   return (
     <div className="glass-card overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-white/[0.03] border-b border-white/[0.05] hover:bg-white/[0.05] transition-colors"
+        className="w-full flex items-center justify-between px-5 py-3.5 bg-gradient-to-r from-white/[0.03] to-transparent border-b border-white/[0.05] hover:from-white/[0.05] transition-colors"
         aria-expanded={open}
       >
-        <div className="flex items-center gap-2">
-          <Trophy className="h-4 w-4 text-blue-400" />
+        <div className="flex items-center gap-3">
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-500/10">
+            <Trophy className="h-3.5 w-3.5 text-blue-400" />
+          </div>
           <span className="text-sm font-bold text-slate-100">{leagueName}</span>
-          <span className="rounded-full border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 text-[10px] font-semibold text-slate-400">
+          <span className="rounded-full bg-white/[0.06] px-2.5 py-0.5 text-[10px] font-semibold tabular-nums text-slate-400">
             {fixtures.length}
           </span>
+          {liveCount > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-red-500/10 px-2 py-0.5 text-[9px] font-bold text-red-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" />
+              {liveCount} live
+            </span>
+          )}
         </div>
         {open ? (
           <ChevronUp className="h-4 w-4 text-slate-500" />
@@ -845,7 +864,16 @@ function LeagueSection({
         )}
       </button>
       {open && (
-        <div>
+        <div className="divide-y divide-white/[0.03]">
+          {/* Column headers */}
+          <div className="hidden sm:grid grid-cols-12 items-center gap-2 px-4 py-2 text-[9px] uppercase tracking-widest text-slate-600">
+            <span className="col-span-1 text-center">Time</span>
+            <span className="col-span-4">Match</span>
+            <span className="col-span-1 text-center">Pick</span>
+            <span className="col-span-3 text-center">Odds</span>
+            <span className="col-span-2">Confidence</span>
+            <span className="col-span-1" />
+          </div>
           {fixtures.map((f) => (
             <CompactMatchRow key={f.id} fixture={f} />
           ))}
