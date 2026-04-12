@@ -79,6 +79,7 @@ async def list_predictions(
     # explicitly load the match relationship (overrides its noload).
     q = select(Prediction).options(
         selectinload(Prediction.match),
+        noload(Prediction.model_version),  # v6.1: skip model_version loading
     )
     count_q = select(func.count(Prediction.id))
 
@@ -219,7 +220,7 @@ async def get_prediction(
         select(Prediction)
         .options(
             selectinload(Prediction.match),
-            # model_version auto-loads via lazy="selectin" on the model
+            noload(Prediction.model_version),
         )
         .where(Prediction.id == prediction_id)
     )
