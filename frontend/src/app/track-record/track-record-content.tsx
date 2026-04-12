@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import {
@@ -28,6 +29,52 @@ import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
+/* ── Live API data hook ─────────────────────────────────── */
+interface LiveStats {
+  totalPredictions: number | null;
+  accuracy: number | null;
+  brierScore: number | null;
+  botdTotal: number | null;
+  botdAccuracy: number | null;
+}
+
+function useLiveTrackRecordStats(): LiveStats {
+  const [stats, setStats] = useState<LiveStats>({
+    totalPredictions: null,
+    accuracy: null,
+    brierScore: null,
+    botdTotal: null,
+    botdAccuracy: null,
+  });
+
+  useEffect(() => {
+    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+
+    // Fetch both endpoints in parallel
+    Promise.allSettled([
+      fetch(`${API}/trackrecord/summary`).then((r) => r.json()),
+      fetch(`${API}/bet-of-the-day/track-record`).then((r) => r.json()),
+    ]).then(([summaryResult, botdResult]) => {
+      const next: LiveStats = { ...stats };
+      if (summaryResult.status === "fulfilled" && summaryResult.value) {
+        const s = summaryResult.value;
+        next.totalPredictions = s.total_predictions ?? null;
+        next.accuracy = s.accuracy ?? null;
+        next.brierScore = s.brier_score ?? s.avg_brier_score ?? null;
+      }
+      if (botdResult.status === "fulfilled" && botdResult.value) {
+        const b = botdResult.value;
+        next.botdTotal = b.total ?? b.total_picks ?? null;
+        next.botdAccuracy = b.accuracy ?? b.win_rate ?? null;
+      }
+      setStats(next);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return stats;
+}
+
 /**
  * Track Record page — dedicated deep-dive on how BetsPlug's results
  * are produced, audited, and used in practice. Shares the sitewide
@@ -37,29 +84,46 @@ export function TrackRecordContent() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
+  const live = useLiveTrackRecordStats();
 
+  // Build KPIs: prefer live API data, fall back to i18n static values
   const kpis = [
     {
       icon: Percent,
-      value: t("tr.kpi1Value"),
+      value:
+        live.accuracy != null
+          ? `${(live.accuracy * 100).toFixed(1)}%`
+          : t("tr.kpi1Value"),
       label: t("tr.kpi1Label"),
       note: t("tr.kpi1Note"),
     },
     {
       icon: TrendingUp,
-      value: t("tr.kpi2Value"),
-      label: t("tr.kpi2Label"),
+      value:
+        live.botdAccuracy != null
+          ? `${(live.botdAccuracy * 100).toFixed(1)}%`
+          : t("tr.kpi2Value"),
+      label:
+        live.botdAccuracy != null
+          ? `Pick of the Day accuracy (${live.botdTotal ?? "..."} picks)`
+          : t("tr.kpi2Label"),
       note: t("tr.kpi2Note"),
     },
     {
       icon: Hash,
-      value: t("tr.kpi3Value"),
+      value:
+        live.totalPredictions != null
+          ? live.totalPredictions.toLocaleString()
+          : t("tr.kpi3Value"),
       label: t("tr.kpi3Label"),
       note: t("tr.kpi3Note"),
     },
     {
       icon: Gauge,
-      value: t("tr.kpi4Value"),
+      value:
+        live.brierScore != null
+          ? live.brierScore.toFixed(3)
+          : t("tr.kpi4Value"),
       label: t("tr.kpi4Label"),
       note: t("tr.kpi4Note"),
     },

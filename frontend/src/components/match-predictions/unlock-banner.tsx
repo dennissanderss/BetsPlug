@@ -108,11 +108,11 @@ export function UnlockBanner() {
               <div className="flex items-center gap-2">
                 <Activity className="h-4 w-4 text-green-400" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-green-300">
-                  Ensemble
+                  BetsPlug Pulse
                 </span>
               </div>
               <p className="mt-2 text-3xl font-extrabold tabular-nums text-white">
-                4<span className="text-lg text-slate-400"> models</span>
+                3<span className="text-lg text-slate-400"> models</span>
               </p>
               <p className="text-[10px] text-slate-400">
                 Elo · Poisson · Logistic · XGBoost

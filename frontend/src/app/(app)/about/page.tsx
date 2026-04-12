@@ -101,8 +101,8 @@ const pipelineSteps = [
     color: "#f59e0b",
     title: "Model Prediction",
     description:
-      "Four independent models analyze each match: Elo Rating System, Poisson Score Model, Logistic Regression, and a weighted Ensemble combining all three. Each model produces calibrated probability outputs.",
-    tags: ["Elo Model", "Poisson Model", "Ensemble"],
+      "Three independent models analyze each match: Elo Rating System, Poisson Score Model, and Logistic Regression. BetsPlug Pulse combines them via weighted averaging into calibrated probability outputs.",
+    tags: ["Elo Model", "Poisson Model", "BetsPlug Pulse"],
   },
   {
     number: "05",
@@ -828,7 +828,7 @@ export default function AboutPage() {
                 style={{ borderColor: "rgba(255,255,255,0.12)" }}
               >
                 <FlaskConical className="h-4 w-4" />
-                Explore Strategy Lab
+                Strategy Lab (Coming Soon)
               </button>
             </Link>
           </div>

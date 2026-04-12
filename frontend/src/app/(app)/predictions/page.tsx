@@ -1055,6 +1055,7 @@ export default function PredictionsPage() {
   }, []);
 
   return (
+    <PaywallOverlay feature="all_predictions" requiredTier="silver">
     <div className="space-y-6 animate-fade-in">
 
       {/* ── Header ── */}
@@ -1296,15 +1297,7 @@ export default function PredictionsPage() {
         />
       )}
 
-      {/* ── Upgrade prompt for more predictions ── */}
-      {!isLoading && upcomingFixtures.length > 0 && (
-        <PaywallOverlay feature="all_predictions" requiredTier="silver" variant="inline">
-          <div className="glass-card p-8 text-center">
-            <p className="text-slate-400">{t("pred.upgradePrompt")}</p>
-          </div>
-        </PaywallOverlay>
-      )}
-
     </div>
+    </PaywallOverlay>
   );
 }

@@ -9,8 +9,6 @@ import {
   TrendingUp,
   Clock,
   Shield,
-  Lock,
-  ChevronRight,
   Star,
   AlertTriangle,
   Target,
@@ -371,6 +369,7 @@ export default function BetOfTheDayPage() {
   };
 
   return (
+    <PaywallOverlay feature="pick_of_the_day" requiredTier="gold">
     <div className="space-y-8 animate-fade-in">
       {/* ── Header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -643,13 +642,7 @@ export default function BetOfTheDayPage() {
           </div>
         </>
       )}
-
-      {/* Gold+ required — BOTD is our strongest product */}
-      <PaywallOverlay feature="pick_of_the_day" requiredTier="gold" variant="inline">
-        <div className="glass-card p-8 text-center">
-          <p className="text-slate-400">Upgrade naar Silver voor dagelijkse toegang tot de Pick van de Dag.</p>
-        </div>
-      </PaywallOverlay>
     </div>
+    </PaywallOverlay>
   );
 }

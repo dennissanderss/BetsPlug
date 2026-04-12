@@ -16,10 +16,10 @@ type Row = {
 
 const rows: Row[] = [
   {
-    feature: "AI-powered predictions (4 models)",
+    feature: "BetsPlug Pulse AI predictions",
     betsplug: "yes",
     others: "no",
-    note: "Elo, Poisson, Logistic & Ensemble combined",
+    note: "Elo, Poisson & Logistic combined via BetsPlug Pulse",
   },
   {
     feature: "Fully transparent public track record",
