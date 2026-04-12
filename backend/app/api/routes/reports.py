@@ -76,7 +76,13 @@ async def generate_report(
         report = await service.generate(new_job, db, fmt=fmt)
         new_job.status = "completed"
         new_job.completed_at = datetime.now(timezone.utc)
-        await db.flush()
+        # Explicit commit so the GeneratedReport row is visible to the
+        # frontend's immediate re-fetch of /reports/. Without this, the
+        # get_db dependency commits AFTER the response is sent, which
+        # creates a race condition: the client invalidates the query
+        # and re-fetches before the commit lands → the new report
+        # doesn't appear in the list.
+        await db.commit()
     except Exception as exc:
         logger.exception(
             "Report generation failed (type=%s fmt=%s job=%s)",

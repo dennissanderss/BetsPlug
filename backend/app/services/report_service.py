@@ -718,12 +718,12 @@ class ReportService:
         Format mirrors the /api/trackrecord/export.csv shape so downstream
         tools (Excel / BI) can reuse the same column mapping.
         """
-        with open(file_path, "w", newline="", encoding="utf-8") as f:
+        with open(file_path, "w", newline="", encoding="utf-8-sig") as f:
+            # utf-8-sig writes a BOM so Excel detects encoding. The
+            # "sep=," magic line tells European Excel (NL/DE locale) to
+            # use comma as delimiter instead of semicolon.
+            f.write("sep=,\r\n")
             writer = csv_mod.writer(f)
-            # Header block: metadata comment-style rows on the top, then
-            # the actual CSV header. Excel + Sheets treat the first row
-            # as the header, so we put the metadata in a separate
-            # "meta" column pair that's easy to skip.
             writer.writerow(["# betsplug report", f"{report_type.capitalize()}"])
             writer.writerow(
                 [

@@ -373,7 +373,12 @@ async def _stream_trackrecord_csv(
     model_version_id: Optional[uuid.UUID] = None,
 ) -> AsyncIterator[bytes]:
     """Yield CSV rows for every prediction, one at a time."""
-    # Header row
+    # UTF-8 BOM so Excel (all locales) detects encoding correctly, plus
+    # the magic "sep=," line that tells Excel to use comma as delimiter
+    # even on European locales that default to semicolon.
+    yield b"\xef\xbb\xbf"  # BOM
+    yield b"sep=,\r\n"
+
     buffer = io.StringIO()
     writer = csv.writer(buffer)
     writer.writerow(
