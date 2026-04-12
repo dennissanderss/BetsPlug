@@ -99,10 +99,15 @@ async def list_models(
         if isinstance(mv.hyperparameters, dict):
             hp_keys = sorted(mv.hyperparameters.keys())
 
+        # Rebrand: internal "Ensemble" → user-facing "BetsPlug Pulse"
+        display_name = mv.name
+        if "ensemble" in (mv.model_type or "").lower() or "ensemble" in (mv.name or "").lower():
+            display_name = "BetsPlug Pulse"
+
         items.append(
             ModelOverview(
                 id=mv.id,
-                name=mv.name,
+                name=display_name,
                 version=mv.version,
                 model_type=mv.model_type,
                 sport_scope=mv.sport_scope,

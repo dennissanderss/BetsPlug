@@ -170,11 +170,11 @@ const models = [
     icon: Layers,
     color: "#f59e0b",
     borderColor: "rgba(245,158,11,0.3)",
-    title: "Ensemble Model",
-    badge: "Best Performer",
+    title: "BetsPlug Pulse",
+    badge: "Our AI Engine",
     badgeColor: "#f59e0b",
     description:
-      "Combines predictions from all three models using optimized weights. The ensemble consistently outperforms individual models because different models capture different aspects of match dynamics.",
+      "Our main AI engine that combines all three models into one prediction per match. Pulse consistently outperforms individual models because it captures different aspects of match dynamics from multiple angles.",
     details: [
       "Weights optimized via cross-validation on holdout data",
       "Confidence = degree of model agreement across all three",

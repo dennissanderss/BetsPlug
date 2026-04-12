@@ -641,7 +641,7 @@ function DataTransparencyCard({
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-sm sm:text-base font-semibold text-slate-100">
-                Live data transparantie
+                BetsPlug Pulse — Track Record
               </h2>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -649,7 +649,11 @@ function DataTransparencyCard({
               </span>
             </div>
             <p className="mt-1 text-xs sm:text-sm text-slate-400 leading-relaxed">
-              De cijfers op deze pagina zijn berekend op{" "}
+              BetsPlug Pulse is onze AI die elke wedstrijd analyseert.
+              Eén model, één voorspelling per wedstrijd. De Tip van de Dag
+              is steeds de pick waar Pulse het meest zeker van is. Strategy
+              Lab filtert dezelfde voorspellingen op jouw criteria.
+              Alle cijfers hieronder zijn berekend op{" "}
               <strong className="tabular-nums text-slate-200">
                 {loading || total == null ? "…" : total.toLocaleString("nl-NL")}
               </strong>{" "}
