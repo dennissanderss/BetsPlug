@@ -195,7 +195,11 @@ export function PaywallOverlay({
       const userRank = TIER_RANK[stored] ?? 0;
       if (userRank >= requiredRank) setHasAccess(true);
       setChecked(true);
-      return;
+      // If admin is testing a tier, DON'T let the subscription API
+      // overwrite it — return early.
+      const testingTier = localStorage.getItem("betsplug_admin_testing_tier");
+      if (testingTier) return;
+      if (stored !== "free") return; // Only check API if tier is free/unset
     }
 
     // Then check API for subscription status
