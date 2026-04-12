@@ -74,11 +74,12 @@ async def list_predictions(
     # queries. home_team, away_team, league and result are all
     # `lazy="selectin"` on the Match model, so they cascade automatically
     # once Prediction.match is loaded.
-    # v6.2: model_version now IS part of the response (transparency),
-    # so it's loaded instead of nullified.
+    # v6.2: model_version is accessed for the inline model summary.
+    # The ORM relationship already has `lazy="selectin"` which auto-
+    # loads it without needing an explicit option. We only need to
+    # explicitly load the match relationship (overrides its noload).
     q = select(Prediction).options(
         selectinload(Prediction.match),
-        selectinload(Prediction.model_version),
     )
     count_q = select(func.count(Prediction.id))
 
@@ -232,7 +233,7 @@ async def get_prediction(
         select(Prediction)
         .options(
             selectinload(Prediction.match),
-            selectinload(Prediction.model_version),
+            # model_version auto-loads via lazy="selectin" on the model
         )
         .where(Prediction.id == prediction_id)
     )
