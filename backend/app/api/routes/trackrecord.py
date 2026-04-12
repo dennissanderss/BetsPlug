@@ -382,12 +382,13 @@ async def _stream_trackrecord_csv(
     yield b"\xef\xbb\xbf"  # BOM
     yield b"sep=,\r\n"
 
-    # ── Precompute period from Match.scheduled_at ────────────────────
+    # ── Precompute summary stats ────────────────────────────────────
     summary_q = (
         select(
+            func.count(PredictionEvaluation.id).label("total"),
+            func.sum(func.cast(PredictionEvaluation.is_correct, Integer)).label("correct"),
             func.min(Match.scheduled_at).label("period_start"),
             func.max(Match.scheduled_at).label("period_end"),
-            func.avg(PredictionEvaluation.brier_score).label("avg_brier"),
         )
         .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
         .join(Match, Match.id == Prediction.match_id)
@@ -395,49 +396,32 @@ async def _stream_trackrecord_csv(
     if model_version_id is not None:
         summary_q = summary_q.where(Prediction.model_version_id == model_version_id)
     sr = (await db.execute(summary_q)).one()
-    s_period_start = sr.period_start.strftime("%d %b %Y") if sr.period_start else "—"
-    s_period_end = sr.period_end.strftime("%d %b %Y") if sr.period_end else "—"
-    s_brier = float(sr.avg_brier or 0)
+    s_total = sr.total or 0
+    s_correct = int(sr.correct or 0)
+    s_accuracy = (s_correct / s_total * 100) if s_total > 0 else 0.0
+    s_period_start = sr.period_start.strftime("%d %b %Y") if sr.period_start else "-"
+    s_period_end = sr.period_end.strftime("%d %b %Y") if sr.period_end else "-"
 
     buffer = io.StringIO()
     writer = csv.writer(buffer)
 
-    # ── Dashboard header with LIVE Excel formulas ────────────────────
-    # Data starts at row 16 (0-indexed: row 15 in the file). The formulas
-    # reference column K ("Correct?" = "Yes"/"No") so the user can verify
-    # every number by clicking the formula cell. This is the transparency
-    # Dennis asked for — nothing is hardcoded, everything computable.
-    #
-    # Row layout (1-indexed for Excel):
-    # Excel treats "sep=," as a meta-directive, NOT as row 1.
-    # So csv writer rows start counting from row 1 in Excel.
-    #
-    #   1: blank
-    #   2: BETSPLUG TRACK RECORD
-    #   3: blank
-    #   4: Period
-    #   5: Total Predictions (formula)
-    #   6: Correct Predictions (formula)
-    #   7: Accuracy % (formula)
-    #   8: Generated
-    #   9: blank
-    #  10: Disclaimer
-    #  11: blank
-    #  12: blank
-    #  13: Column headers
-    #  14+: data rows
-    writer.writerow([])                                          # row 1
-    writer.writerow(["BETSPLUG — TRACK RECORD"])                 # row 2
-    writer.writerow([])                                          # row 3
-    writer.writerow(["Period", f"{s_period_start}  to  {s_period_end}"])  # row 4
-    writer.writerow(["Total Predictions", '=COUNTA(A14:A99999)'])        # row 5
-    writer.writerow(["Correct Predictions", '=COUNTIF(K14:K99999,"Yes")'])  # row 6
-    writer.writerow(["Accuracy (%)", '=IF(B5>0,ROUND(B6/B5*100,1),0)'])    # row 7
-    writer.writerow(["Generated", datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC")])   # row 8
-    writer.writerow([])                                          # row 9
-    writer.writerow(["Disclaimer", "All data is for educational and simulation purposes only. Not financial or betting advice."])  # row 10
-    writer.writerow([])                                          # row 11
-    writer.writerow([])                                          # row 12
+    # ── Dashboard header — hardcoded values (no Excel formulas) ──────
+    # Formulas like =COUNTA / =COUNTIF break on non-English Excel
+    # because function names are locale-specific (COUNTA = AANTALARG
+    # in Dutch). Hardcoded values are always readable everywhere.
+    # Users can still verify by filtering the Correct? column.
+    writer.writerow([])
+    writer.writerow(["BETSPLUG TRACK RECORD"])
+    writer.writerow([])
+    writer.writerow(["Period", f"{s_period_start} to {s_period_end}"])
+    writer.writerow(["Total Predictions", s_total])
+    writer.writerow(["Correct Predictions", s_correct])
+    writer.writerow(["Accuracy", f"{s_accuracy:.1f}%"])
+    writer.writerow(["Generated", datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC")])
+    writer.writerow([])
+    writer.writerow(["All data is for educational and simulation purposes only. Not financial or betting advice."])
+    writer.writerow([])
+    writer.writerow([])
 
     # Column headers — English, clear, simple
     writer.writerow(
@@ -501,9 +485,9 @@ async def _stream_trackrecord_csv(
             home_score = m.result.home_score if m and m.result else None
             away_score = m.result.away_score if m and m.result else None
 
-            # User-friendly date
+            # Short date format that fits in a narrow Excel column
             match_date = (
-                m.scheduled_at.strftime("%d %b %Y")
+                m.scheduled_at.strftime("%Y-%m-%d")
                 if m and m.scheduled_at else ""
             )
 

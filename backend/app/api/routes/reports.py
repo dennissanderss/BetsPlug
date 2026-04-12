@@ -20,6 +20,50 @@ router = APIRouter()
 
 _ALLOWED_FORMATS = {"pdf", "csv", "json"}
 _ALLOWED_REPORT_TYPES = {"weekly", "monthly", "custom"}
+_REPORT_TTL_HOURS = 12  # auto-delete reports older than this
+
+
+async def _cleanup_old_reports(db: AsyncSession) -> int:
+    """Delete generated reports (DB rows + files on disk) older than
+    _REPORT_TTL_HOURS. Runs before each new generation to keep the
+    database and filesystem clean. Returns number of deleted reports.
+    """
+    from datetime import datetime, timedelta, timezone
+
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=_REPORT_TTL_HOURS)
+
+    # Fetch old reports so we can delete files from disk
+    old_reports_result = await db.execute(
+        select(GeneratedReport).where(GeneratedReport.created_at < cutoff)
+    )
+    old_reports = old_reports_result.scalars().all()
+
+    deleted = 0
+    for report in old_reports:
+        # Delete file from disk (best-effort, file may already be gone)
+        try:
+            if report.file_path and os.path.isfile(report.file_path):
+                os.remove(report.file_path)
+        except OSError:
+            pass
+        await db.delete(report)
+        deleted += 1
+
+    # Also clean up orphaned ReportJob rows (completed/failed, older than cutoff)
+    old_jobs_result = await db.execute(
+        select(ReportJob).where(
+            ReportJob.created_at < cutoff,
+            ReportJob.status.in_(["completed", "failed"]),
+        )
+    )
+    for job in old_jobs_result.scalars().all():
+        await db.delete(job)
+
+    if deleted > 0:
+        await db.flush()
+        logger.info("Cleaned up %d old reports (older than %dh)", deleted, _REPORT_TTL_HOURS)
+
+    return deleted
 
 
 @router.post(
@@ -61,6 +105,9 @@ async def generate_report(
     # ReportJob to keep the migration footprint zero.
     merged_config = dict(payload.config or {})
     merged_config["format"] = fmt
+
+    # Auto-cleanup: delete reports older than 12h to keep DB + disk clean
+    await _cleanup_old_reports(db)
 
     new_job = ReportJob(
         report_type=report_type,
