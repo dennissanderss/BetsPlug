@@ -225,7 +225,7 @@ export interface Prediction {
   explanation: PredictionExplanation | null;
   evaluation: PredictionEvaluation | null;
   match: PredictionMatchSummary | null;
-  model: PredictionModelSummary | null;
+  model_info: PredictionModelSummary | null;
 }
 
 /** v6.2: BOTD response now includes optional pre-match odds. */

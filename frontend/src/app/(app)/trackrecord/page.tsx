@@ -789,7 +789,7 @@ function RecentPredictionsFeed() {
             : `H ${homeProb}% · A ${awayProb}%`;
 
           const isExpanded = expandedId === pred.id;
-          const modelLabel = pred.model ? `${pred.model.name} ${pred.model.version}` : null;
+          const modelLabel = pred.model_info ? `${pred.model_info.name} ${pred.model_info.version}` : null;
           const reasoning = pred.reasoning ?? pred.explanation?.summary ?? null;
 
           const factorsFor = pred.explanation?.top_factors_for

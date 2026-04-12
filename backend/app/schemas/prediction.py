@@ -203,10 +203,7 @@ class PredictionModelSummary(BaseModel):
 class PredictionResponse(PredictionBase):
     """Full prediction representation returned by the API."""
 
-    # protected_namespaces=() silences the pydantic warning about the
-    # `model` field name (pydantic reserves `model_*` by default). The
-    # name `model` is user-facing and intentional here.
-    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
+    model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID = Field(description="Unique prediction identifier (UUID v4).")
     pick: Optional[str] = Field(default=None, description="Predicted outcome: HOME, DRAW, or AWAY.")
@@ -223,7 +220,7 @@ class PredictionResponse(PredictionBase):
         default=None,
         description="Lightweight match summary so feed/list UIs can show teams without a second fetch (v6.1).",
     )
-    model: Optional[PredictionModelSummary] = Field(
+    model_info: Optional[PredictionModelSummary] = Field(
         default=None,
         description="Lightweight model summary for transparency: which model produced this pick (v6.2).",
     )

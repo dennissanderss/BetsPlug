@@ -202,7 +202,7 @@ async def list_predictions(
                 else None
             ),
             match=match_summary,
-            model=model_summary,
+            model_info=model_summary,
             created_at=p.created_at,
             updated_at=p.updated_at,
         )
