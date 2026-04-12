@@ -135,7 +135,7 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
     { label: t("results.statWinRate"), value: `${winRatePct}%`, color: winRatePct >= 50 ? "#10b981" : "#ef4444" },
     {
       label: t("results.statPLUnits"),
-      value: `${plSign}${data.pl_units.toFixed(1)}u`,
+      value: `${plSign}${data.pl_units.toFixed(1)}`,
       color: data.pl_units >= 0 ? "#10b981" : "#ef4444",
     },
   ];
@@ -504,7 +504,7 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
                   }
                 >
                   {realisedPnl > 0 ? "+" : ""}
-                  {realisedPnl.toFixed(2)}u
+                  {realisedPnl.toFixed(2)}
                   {pnlSource === "estimated" ? (
                     <span className="text-[9px] font-normal opacity-70">
                       est.

@@ -277,6 +277,34 @@ async def job_sync_live_fixtures():
     if now.hour < 11:
         return
 
+    # ── Cleanup stale LIVE matches ───────────────────────────────────
+    # Matches stuck on LIVE status for 4+ hours are almost certainly
+    # finished — API-Football may not have returned them in the last
+    # /fixtures?live=all call. Force them to FINISHED.
+    try:
+        from sqlalchemy import and_, select
+        from app.db.session import async_session_factory
+        from app.models.match import Match, MatchStatus
+
+        stale_cutoff = now - timedelta(hours=4)
+        async with async_session_factory() as db:
+            stale = (await db.execute(
+                select(Match).where(
+                    and_(
+                        Match.status == MatchStatus.LIVE,
+                        Match.scheduled_at < stale_cutoff,
+                    )
+                )
+            )).scalars().all()
+
+            if stale:
+                for m in stale:
+                    m.status = MatchStatus.FINISHED
+                await db.commit()
+                log.info("CRON: Cleaned up %d stale LIVE matches → FINISHED", len(stale))
+    except Exception as exc:
+        log.error("CRON: Stale LIVE cleanup failed: %s", exc)
+
     try:
         import json as _json
         import uuid

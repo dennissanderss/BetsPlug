@@ -103,6 +103,82 @@ function BOTDTrackRecordCard() {
   );
 }
 
+import { CheckCircle2, XCircle, Clock as ClockIcon } from "lucide-react";
+
+// ─── BOTD History List ──────────────────────────────────────────────────────
+
+function BOTDHistoryList() {
+  const { data: history, isLoading } = useQuery({
+    queryKey: ["botd-history"],
+    queryFn: async () => {
+      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+      const resp = await fetch(`${API}/bet-of-the-day/history?limit=20`);
+      if (!resp.ok) return [];
+      return resp.json();
+    },
+    staleTime: 5 * 60_000,
+  });
+
+  if (isLoading || !history || history.length === 0) return null;
+
+  return (
+    <div className="glass-card p-5 sm:p-6">
+      <h3 className="text-sm font-bold text-slate-100 mb-4 flex items-center gap-2">
+        <ClockIcon className="h-4 w-4 text-blue-400" />
+        Recent Picks
+      </h3>
+      <div className="space-y-1">
+        {/* Header */}
+        <div className="grid grid-cols-12 gap-2 px-3 py-2 text-[10px] uppercase tracking-widest text-slate-600 border-b border-white/[0.05]">
+          <span className="col-span-2">Date</span>
+          <span className="col-span-4">Match</span>
+          <span className="col-span-2 text-center">Pick</span>
+          <span className="col-span-2 text-center">Score</span>
+          <span className="col-span-2 text-center">Result</span>
+        </div>
+        {/* Rows */}
+        {history.map((item: any, idx: number) => (
+          <div
+            key={idx}
+            className="grid grid-cols-12 gap-2 px-3 py-2.5 text-xs items-center hover:bg-white/[0.02] rounded-md transition-colors"
+            style={{
+              borderLeft: `3px solid ${item.correct === true ? "#10b981" : item.correct === false ? "#ef4444" : "#64748b"}`,
+            }}
+          >
+            <span className="col-span-2 text-slate-500 tabular-nums">
+              {new Date(item.date).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
+            </span>
+            <span className="col-span-4 text-slate-200 font-medium truncate">
+              {item.home_team} vs {item.away_team}
+            </span>
+            <span className="col-span-2 text-center">
+              <span className="inline-flex items-center rounded-md bg-blue-500/10 border border-blue-500/20 px-1.5 py-0.5 text-[10px] font-semibold text-blue-300">
+                {item.prediction} {item.confidence}%
+              </span>
+            </span>
+            <span className="col-span-2 text-center tabular-nums text-slate-300 font-medium">
+              {item.home_score != null ? `${item.home_score} - ${item.away_score}` : "—"}
+            </span>
+            <span className="col-span-2 text-center">
+              {item.correct === true ? (
+                <span className="inline-flex items-center gap-1 text-emerald-400 text-[10px] font-semibold">
+                  <CheckCircle2 className="h-3.5 w-3.5" /> Correct
+                </span>
+              ) : item.correct === false ? (
+                <span className="inline-flex items-center gap-1 text-red-400 text-[10px] font-semibold">
+                  <XCircle className="h-3.5 w-3.5" /> Wrong
+                </span>
+              ) : (
+                <span className="text-slate-500 text-[10px]">Pending</span>
+              )}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Types ──────────────────────────────────────────────────────────────────
 
 interface BetOfTheDayOddsShape {
@@ -512,6 +588,9 @@ export default function BetOfTheDayPage() {
 
           {/* ── BOTD Track Record (v6.3) ── */}
           <BOTDTrackRecordCard />
+
+          {/* ── BOTD History List ── */}
+          <BOTDHistoryList />
 
           {/* ── Info Cards ── */}
           <div className="grid gap-4 sm:grid-cols-3">

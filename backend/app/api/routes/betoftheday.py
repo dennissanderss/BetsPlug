@@ -33,6 +33,87 @@ router = APIRouter()
 # ─────────────────────────────────────────────────────────────────────────────
 
 
+class BOTDHistoryItem(BaseModel):
+    """A single past BOTD pick with its result."""
+    date: str
+    home_team: str
+    away_team: str
+    league: str
+    prediction: str  # "Home" / "Draw" / "Away"
+    confidence: float
+    correct: bool | None = None  # None = pending
+    home_score: int | None = None
+    away_score: int | None = None
+    odds_used: float | None = None
+
+
+@router.get("/history", response_model=list[BOTDHistoryItem])
+async def get_botd_history(
+    limit: int = Query(default=30, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+) -> list[BOTDHistoryItem]:
+    """Return the last N BOTD picks with their results."""
+    from app.models.prediction import PredictionEvaluation
+    from collections import defaultdict
+
+    stmt = (
+        select(Prediction, PredictionEvaluation)
+        .join(Match, Match.id == Prediction.match_id)
+        .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .where(Prediction.confidence >= 0.55)
+        .order_by(Match.scheduled_at.desc())
+    )
+    rows = (await db.execute(stmt)).all()
+
+    # Group by date, keep highest confidence per day
+    by_date: dict[str, tuple] = {}
+    for pred, evaluation in rows:
+        if pred.match is None:
+            continue
+        date_key = pred.match.scheduled_at.strftime("%Y-%m-%d") if pred.match.scheduled_at else ""
+        if not date_key:
+            continue
+        existing = by_date.get(date_key)
+        if existing is None or pred.confidence > existing[0].confidence:
+            by_date[date_key] = (pred, evaluation)
+
+    # Sort by date descending, take last N
+    sorted_picks = sorted(by_date.items(), key=lambda x: x[0], reverse=True)[:limit]
+
+    pick_labels = {"home": "Home", "draw": "Draw", "away": "Away"}
+    result = []
+    for date_key, (pred, evaluation) in sorted_picks:
+        probs = {"home": pred.home_win_prob, "draw": pred.draw_prob or 0, "away": pred.away_win_prob}
+        pick = max(probs, key=lambda k: probs[k])
+
+        m = pred.match
+        home_name = m.home_team.name if m and m.home_team else "?"
+        away_name = m.away_team.name if m and m.away_team else "?"
+        league_name = m.league.name if m and m.league else ""
+
+        home_score = m.result.home_score if m and m.result else None
+        away_score = m.result.away_score if m and m.result else None
+
+        # Implied odds for transparency
+        pick_prob = probs.get(pick, 0.5)
+        implied_odds = round(1.0 / (pick_prob * 0.95), 2) if pick_prob > 0.05 else None
+
+        result.append(BOTDHistoryItem(
+            date=date_key,
+            home_team=home_name,
+            away_team=away_name,
+            league=league_name,
+            prediction=pick_labels.get(pick, pick),
+            confidence=round(pred.confidence * 100, 1),
+            correct=bool(evaluation.is_correct) if evaluation else None,
+            home_score=home_score,
+            away_score=away_score,
+            odds_used=implied_odds,
+        ))
+
+    return result
+
+
 class BOTDTrackRecord(BaseModel):
     """Historical accuracy of the Pick of the Day feature."""
     total_picks: int = 0
