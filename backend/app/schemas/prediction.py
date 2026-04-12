@@ -185,14 +185,11 @@ class PredictionMatchSummary(BaseModel):
 
 
 class PredictionModelSummary(BaseModel):
-    """Inline model summary embedded in PredictionResponse for transparency (v6.2).
+    """Inline model summary embedded in PredictionResponse for transparency (v6.2)."""
 
-    Lets feed/list UIs show which model produced a given pick without a
-    second fetch, without exposing the full ModelVersion row (hyperparameters,
-    raw training metrics, etc.) to end users.
-    """
-
-    model_config = ConfigDict(from_attributes=True)
+    # protected_namespaces=() required because `model_type` starts with
+    # `model_` which pydantic v2.10+ treats as a namespace violation.
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 
     id: uuid.UUID
     name: str            # "Ensemble v1"
@@ -203,7 +200,9 @@ class PredictionModelSummary(BaseModel):
 class PredictionResponse(PredictionBase):
     """Full prediction representation returned by the API."""
 
-    model_config = ConfigDict(from_attributes=True)
+    # protected_namespaces=() needed because PredictionBase has
+    # model_version_id (inherited) which starts with `model_`.
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 
     id: uuid.UUID = Field(description="Unique prediction identifier (UUID v4).")
     pick: Optional[str] = Field(default=None, description="Predicted outcome: HOME, DRAW, or AWAY.")

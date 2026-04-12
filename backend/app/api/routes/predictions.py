@@ -143,17 +143,20 @@ async def list_predictions(
                 result=match_result,
             )
 
-        # v6.2: Inline model summary so the frontend can show model
-        # name/version on each prediction without a separate /models fetch.
+        # v6.2: Inline model summary — defensive: if model_version
+        # isn't loaded or crashes, we still return the prediction.
         model_summary: Optional[PredictionModelSummary] = None
-        if p.model_version is not None:
-            mv = p.model_version
-            model_summary = PredictionModelSummary(
-                id=mv.id,
-                name=mv.name,
-                version=mv.version,
-                model_type=mv.model_type,
-            )
+        try:
+            mv = getattr(p, "model_version", None)
+            if mv is not None:
+                model_summary = PredictionModelSummary(
+                    id=mv.id,
+                    name=mv.name,
+                    version=mv.version,
+                    model_type=mv.model_type,
+                )
+        except Exception:
+            pass  # non-fatal: model_info will be null
 
         # Construct the response explicitly. We avoid
         # `PredictionResponse.model_validate(p)` because pydantic would try
