@@ -1,291 +1,230 @@
 "use client";
 
 import Link from "next/link";
-import { useTranslations } from "@/i18n/locale-provider";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import {
-  FlaskConical,
-  Sparkles,
   Trophy,
-  LineChart,
+  Sparkles,
+  FlaskConical,
   MapPin,
   ChevronRight,
   BarChart3,
   CalendarCheck,
+  Lock,
+  Target,
+  Flame,
+  TrendingUp,
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-
-/* ─── Types ────────────────────────────────────────────────────────────── */
-
-interface PathStep {
-  label: string;
-  description: string;
-}
-
-interface PathCard {
-  title: string;
-  subtitle: string;
-  icon: LucideIcon;
-  accentColor: string; // tailwind color token, e.g. "emerald"
-  href: string;
-  steps: PathStep[];
-}
-
-interface CommonLink {
-  title: string;
-  description: string;
-  href: string;
-  icon: LucideIcon;
-}
-
-/* ─── Data ─────────────────────────────────────────────────────────────── */
-
-/* Data arrays are built inside the component so they have access to t() */
-
-/* ─── Accent helpers ───────────────────────────────────────────────────── */
-
-const ACCENT_MAP: Record<
-  string,
-  {
-    border: string;
-    bg: string;
-    text: string;
-    glow: string;
-    gradient: string;
-    stepDot: string;
-    stepLine: string;
-    hoverBorder: string;
-  }
-> = {
-  emerald: {
-    border: "border-emerald-500/40",
-    bg: "bg-emerald-500/15",
-    text: "text-emerald-400",
-    glow: "shadow-[0_-2px_20px_rgba(16,185,129,0.15)]",
-    gradient: "from-emerald-500 to-emerald-600",
-    stepDot: "bg-emerald-500",
-    stepLine: "bg-emerald-500/20",
-    hoverBorder: "group-hover:border-emerald-500/30",
-  },
-  amber: {
-    border: "border-amber-500/40",
-    bg: "bg-amber-500/15",
-    text: "text-amber-400",
-    glow: "shadow-[0_-2px_20px_rgba(245,158,11,0.15)]",
-    gradient: "from-amber-500 to-amber-600",
-    stepDot: "bg-amber-500",
-    stepLine: "bg-amber-500/20",
-    hoverBorder: "group-hover:border-amber-500/30",
-  },
-  blue: {
-    border: "border-blue-500/40",
-    bg: "bg-blue-500/15",
-    text: "text-blue-400",
-    glow: "shadow-[0_-2px_20px_rgba(59,130,246,0.15)]",
-    gradient: "from-blue-500 to-blue-600",
-    stepDot: "bg-blue-500",
-    stepLine: "bg-blue-500/20",
-    hoverBorder: "group-hover:border-blue-500/30",
-  },
-};
+import { api } from "@/lib/api";
 
 /* ─── Page ─────────────────────────────────────────────────────────────── */
 
 export default function JouwRoutePage() {
   const { t } = useTranslations();
+  const loc = useLocalizedHref();
 
-  const PATHS: PathCard[] = [
-    {
-      title: t("route.path1Title"),
-      subtitle: t("route.path1Subtitle"),
-      icon: FlaskConical,
-      accentColor: "emerald",
-      href: "/strategy",
-      steps: [
-        { label: t("route.path1Step1Label"), description: t("route.path1Step1Desc") },
-        { label: t("route.path1Step2Label"), description: t("route.path1Step2Desc") },
-        { label: t("route.path1Step3Label"), description: t("route.path1Step3Desc") },
-      ],
+  // Fetch BOTD track record for live stats
+  const { data: botdStats } = useQuery({
+    queryKey: ["botd-track-record-route"],
+    queryFn: async () => {
+      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+      const resp = await fetch(`${API}/bet-of-the-day/track-record`);
+      if (!resp.ok) return null;
+      return resp.json();
     },
-    {
-      title: t("route.path2Title"),
-      subtitle: t("route.path2Subtitle"),
-      icon: Trophy,
-      accentColor: "amber",
-      href: "/bet-of-the-day",
-      steps: [
-        { label: t("route.path2Step1Label"), description: t("route.path2Step1Desc") },
-        { label: t("route.path2Step2Label"), description: t("route.path2Step2Desc") },
-        { label: t("route.path2Step3Label"), description: t("route.path2Step3Desc") },
-      ],
-    },
-    {
-      title: t("route.path3Title"),
-      subtitle: t("route.path3Subtitle"),
-      icon: Sparkles,
-      accentColor: "blue",
-      href: "/predictions",
-      steps: [
-        { label: t("route.path3Step1Label"), description: t("route.path3Step1Desc") },
-        { label: t("route.path3Step2Label"), description: t("route.path3Step2Desc") },
-        { label: t("route.path3Step3Label"), description: t("route.path3Step3Desc") },
-      ],
-    },
-  ];
+    staleTime: 5 * 60_000,
+  });
 
-  const COMMON_LINKS: CommonLink[] = [
-    { title: t("route.commonTrackResults"), description: t("route.commonTrackResultsDesc"), href: "/results", icon: Trophy },
-    { title: t("route.commonWeeklyReport"), description: t("route.commonWeeklyReportDesc"), href: "/weekly-report", icon: CalendarCheck },
-    { title: t("route.commonTrackrecord"), description: t("route.commonTrackrecordDesc"), href: "/trackrecord", icon: BarChart3 },
-  ];
+  // Fetch dashboard metrics for predictions stats
+  const { data: metrics } = useQuery({
+    queryKey: ["dashboard-metrics-route"],
+    queryFn: () => api.getDashboardMetrics(),
+    staleTime: 5 * 60_000,
+  });
+
+  const botdAccuracy = botdStats?.accuracy_pct ?? null;
+  const botdPicks = botdStats?.total_picks ?? null;
+  const botdStreak = botdStats?.current_streak ?? 0;
+  const totalPredictions = metrics?.total_forecasts ?? null;
+  const overallAccuracy = metrics?.accuracy ? Math.round(metrics.accuracy * 100) : null;
 
   return (
-    <div className="min-h-screen px-4 py-8 md:px-8 max-w-[1100px] mx-auto">
+    <div className="min-h-screen px-4 py-8 md:px-8 max-w-[900px] mx-auto">
       {/* ── Header ─────────────────────────────────────────────────────── */}
-      <div className="text-center mb-14 animate-fade-in">
+      <div className="text-center mb-10 animate-fade-in">
         <div className="flex items-center justify-center gap-2 mb-3">
           <MapPin className="h-7 w-7 text-emerald-400" />
           <h1 className="text-3xl font-extrabold tracking-tight gradient-text">
             {t("route.title")}
           </h1>
         </div>
-        <p className="text-slate-400 text-sm max-w-xl mx-auto">
-          {t("route.subtitle")}
+        <p className="text-slate-400 text-sm max-w-lg mx-auto">
+          BetsPlug Pulse analyseert elke wedstrijd. Kies hoe je de resultaten wilt gebruiken.
         </p>
       </div>
 
-      {/* ── Three Path Cards ───────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-        {PATHS.map((path, idx) => {
-          const Icon = path.icon;
-          const a = ACCENT_MAP[path.accentColor];
-
-          return (
-            <Link
-              key={path.title}
-              href={path.href}
-              className="group"
-              style={{ animationDelay: `${idx * 100}ms` }}
-            >
-              <div
-                className={`glass-card relative overflow-hidden transition-all duration-300 ${a.hoverBorder} animate-fade-in h-full flex flex-col`}
-              >
-                {/* Top accent bar */}
-                <div
-                  className={`h-1 w-full bg-gradient-to-r ${a.gradient}`}
-                />
-
-                {/* Card body */}
-                <div className="p-6 flex flex-col flex-1">
-                  {/* Icon + title row */}
-                  <div className="flex items-center gap-3 mb-1">
-                    <div
-                      className={`flex h-11 w-11 items-center justify-center rounded-xl ${a.bg}`}
-                    >
-                      <Icon className={`h-5 w-5 ${a.text}`} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-bold text-slate-100 leading-tight">
-                        {path.title}
-                      </h3>
-                      <p className={`text-xs font-medium ${a.text}`}>
-                        {path.subtitle}
-                      </p>
-                    </div>
-                    <ChevronRight className="h-5 w-5 text-slate-600 group-hover:text-slate-300 group-hover:translate-x-1 transition-all shrink-0" />
-                  </div>
-
-                  {/* Divider */}
-                  <div className="h-px bg-white/[0.06] my-4" />
-
-                  {/* Steps */}
-                  <ol className="space-y-4 flex-1">
-                    {path.steps.map((step, sIdx) => (
-                      <li key={sIdx} className="flex gap-3">
-                        {/* Step indicator + line */}
-                        <div className="flex flex-col items-center">
-                          <div
-                            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold text-white ${a.stepDot}`}
-                          >
-                            {sIdx + 1}
-                          </div>
-                          {sIdx < path.steps.length - 1 && (
-                            <div
-                              className={`w-px flex-1 mt-1 ${a.stepLine}`}
-                            />
-                          )}
-                        </div>
-
-                        {/* Step text */}
-                        <div className="pb-1">
-                          <p className="text-sm font-semibold text-slate-200 leading-tight">
-                            {step.label}
-                          </p>
-                          <p className="text-xs text-slate-500 mt-0.5">
-                            {step.description}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-
-                  {/* CTA hint */}
-                  <div className="mt-5 pt-4 border-t border-white/[0.06]">
-                    <span
-                      className={`text-xs font-semibold ${a.text} group-hover:underline`}
-                    >
-                      {t("route.startThisPath")} &rarr;
-                    </span>
-                  </div>
-                </div>
+      {/* ── #1 Pick van de Dag — Hero Card ──────────────────────────── */}
+      <Link href={loc("/bet-of-the-day")} className="group block mb-6">
+        <div className="glass-card overflow-hidden transition-all duration-300 group-hover:border-amber-500/30 animate-fade-in">
+          <div className="h-1 w-full bg-gradient-to-r from-amber-500 to-amber-600" />
+          <div className="p-6 sm:p-8">
+            <div className="flex items-start gap-4">
+              {/* Icon */}
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-amber-500/15">
+                <Trophy className="h-7 w-7 text-amber-400" />
               </div>
-            </Link>
-          );
-        })}
-      </div>
 
-      {/* ── Common for all paths ───────────────────────────────────────── */}
-      <div className="animate-fade-in">
-        {/* Section header with road motif */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
-          <span className="text-[11px] font-bold uppercase tracking-widest text-slate-500">
-            {t("route.commonForAllPaths")}
-          </span>
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
-        </div>
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <h2 className="text-xl font-extrabold text-slate-100">
+                    Pick van de Dag
+                  </h2>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-400 uppercase tracking-wider">
+                    <Target className="h-3 w-3" />
+                    #1 Aanbeveling
+                  </span>
+                </div>
+                <p className="text-sm text-slate-400 mb-4">
+                  Elke dag selecteert Pulse automatisch de wedstrijd waar het model het meest zeker van is.
+                  Eén pick, maximale overtuiging.
+                </p>
 
-        {/* Winding road visual connector */}
-        <div className="relative">
-          {/* Dashed center line */}
-          <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-px border-l-2 border-dashed border-emerald-500/15 hidden md:block" />
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {COMMON_LINKS.map((link) => {
-              const Icon = link.icon;
-              return (
-                <Link key={link.href} href={link.href} className="group">
-                  <div className="glass-card p-5 group-hover:border-emerald-500/20 transition-all duration-300 h-full">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10">
-                        <Icon className="h-4 w-4 text-emerald-400" />
-                      </div>
-                      <h4 className="text-sm font-bold text-slate-200">
-                        {link.title}
-                      </h4>
-                      <ChevronRight className="h-4 w-4 text-slate-600 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all ml-auto shrink-0" />
+                {/* Live stats row */}
+                {botdAccuracy !== null && (
+                  <div className="flex flex-wrap gap-3">
+                    <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-center min-w-[80px]">
+                      <p className="text-[9px] uppercase tracking-widest text-slate-500">Trefzekerheid</p>
+                      <p className="text-lg font-extrabold tabular-nums text-amber-400">{botdAccuracy}%</p>
                     </div>
-                    <p className="text-xs text-slate-500 leading-relaxed">
-                      {link.description}
-                    </p>
+                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-center min-w-[80px]">
+                      <p className="text-[9px] uppercase tracking-widest text-slate-500">Picks</p>
+                      <p className="text-lg font-extrabold tabular-nums text-slate-100">{botdPicks}</p>
+                    </div>
+                    {botdStreak > 0 && (
+                      <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-center min-w-[80px]">
+                        <p className="text-[9px] uppercase tracking-widest text-slate-500">Streak</p>
+                        <p className="text-lg font-extrabold tabular-nums text-emerald-400">
+                          <Flame className="inline h-4 w-4 -mt-0.5 mr-0.5" />{botdStreak}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                </Link>
-              );
-            })}
+                )}
+              </div>
+
+              {/* Arrow */}
+              <ChevronRight className="h-6 w-6 text-slate-600 group-hover:text-amber-400 group-hover:translate-x-1 transition-all shrink-0 mt-2" />
+            </div>
+          </div>
+        </div>
+      </Link>
+
+      {/* ── Alle Voorspellingen ─────────────────────────────────────── */}
+      <Link href={loc("/predictions")} className="group block mb-6">
+        <div className="glass-card overflow-hidden transition-all duration-300 group-hover:border-blue-500/30 animate-fade-in" style={{ animationDelay: "100ms" }}>
+          <div className="h-1 w-full bg-gradient-to-r from-blue-500 to-blue-600" />
+          <div className="p-6 sm:p-8">
+            <div className="flex items-start gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-500/15">
+                <Sparkles className="h-7 w-7 text-blue-400" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <h2 className="text-xl font-extrabold text-slate-100">
+                    Alle Voorspellingen
+                  </h2>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 text-[10px] font-bold text-blue-400 uppercase tracking-wider">
+                    Live + Upcoming
+                  </span>
+                </div>
+                <p className="text-sm text-slate-400 mb-4">
+                  Bekijk alle wedstrijden met AI-analyse, live scores, odds en kansberekeningen. Filter per competitie en sorteer op zekerheid.
+                </p>
+
+                {totalPredictions !== null && (
+                  <div className="flex flex-wrap gap-3">
+                    <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-center min-w-[80px]">
+                      <p className="text-[9px] uppercase tracking-widest text-slate-500">Voorspeld</p>
+                      <p className="text-lg font-extrabold tabular-nums text-blue-400">{totalPredictions?.toLocaleString("nl-NL")}</p>
+                    </div>
+                    {overallAccuracy !== null && (
+                      <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-center min-w-[80px]">
+                        <p className="text-[9px] uppercase tracking-widest text-slate-500">Nauwkeurigheid</p>
+                        <p className="text-lg font-extrabold tabular-nums text-slate-100">{overallAccuracy}%</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+              <ChevronRight className="h-6 w-6 text-slate-600 group-hover:text-blue-400 group-hover:translate-x-1 transition-all shrink-0 mt-2" />
+            </div>
+          </div>
+        </div>
+      </Link>
+
+      {/* ── Strategy Lab — Coming Soon ──────────────────────────────── */}
+      <div className="glass-card overflow-hidden opacity-50 cursor-not-allowed mb-12 animate-fade-in" style={{ animationDelay: "200ms" }}>
+        <div className="h-1 w-full bg-gradient-to-r from-slate-600 to-slate-700" />
+        <div className="p-6 sm:p-8">
+          <div className="flex items-start gap-4">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-slate-500/10">
+              <FlaskConical className="h-7 w-7 text-slate-500" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap mb-1">
+                <h2 className="text-xl font-extrabold text-slate-400">
+                  Strategy Lab
+                </h2>
+                <span className="inline-flex items-center gap-1 rounded-full bg-slate-700/50 border border-slate-600/30 px-2 py-0.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  <Lock className="h-3 w-3" />
+                  Coming Soon
+                </span>
+              </div>
+              <p className="text-sm text-slate-500">
+                Bouw je eigen strategie met filters op zekerheid, competitie en markt. We verzamelen data om dit eerlijk en transparant te valideren.
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom spacer */}
+      {/* ── Common links ───────────────────────────────────────────── */}
+      <div className="animate-fade-in" style={{ animationDelay: "300ms" }}>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
+          <span className="text-[11px] font-bold uppercase tracking-widest text-slate-500">
+            Prestaties & Overzicht
+          </span>
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[
+            { title: "Resultaten", desc: "Bekijk uitslagen van alle voorspellingen", href: "/results", icon: Trophy },
+            { title: "Weekrapport", desc: "Prestatie-overzicht per week", href: "/weekly-report", icon: CalendarCheck },
+            { title: "Trackrecord", desc: "Langetermijn nauwkeurigheidsdata", href: "/trackrecord", icon: BarChart3 },
+          ].map((link) => {
+            const Icon = link.icon;
+            return (
+              <Link key={link.href} href={loc(link.href)} className="group">
+                <div className="glass-card p-5 group-hover:border-emerald-500/20 transition-all duration-300 h-full">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-500/10">
+                      <Icon className="h-4 w-4 text-emerald-400" />
+                    </div>
+                    <h4 className="text-sm font-bold text-slate-200">{link.title}</h4>
+                    <ChevronRight className="h-4 w-4 text-slate-600 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all ml-auto shrink-0" />
+                  </div>
+                  <p className="text-xs text-slate-500 leading-relaxed">{link.desc}</p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="h-8" />
     </div>
   );
