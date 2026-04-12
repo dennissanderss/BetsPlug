@@ -31,6 +31,7 @@ import { LeaguesTicker } from "@/components/ui/leagues-ticker";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
+const FreePredictions = dynamic(() => import("@/components/ui/free-predictions").then(m => m.FreePredictions), { ssr: false });
 const BetsPlugFooter = dynamic(() => import("@/components/ui/betsplug-footer").then(m => m.BetsPlugFooter), { ssr: true });
 const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section").then(m => m.TestimonialsSection), { ssr: false });
 const SocialProofPopup = dynamic(() => import("@/components/ui/social-proof-popup").then(m => m.SocialProofPopup), { ssr: false });
@@ -873,6 +874,11 @@ export function HomeContent() {
           LEAGUES WE COVER — infinite ticker
          ═══════════════════════════════════════════════════════════════════ */}
       <LeaguesTicker />
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          FREE PREDICTIONS — 3 AI picks to demonstrate value (reciprocity)
+         ═══════════════════════════════════════════════════════════════════ */}
+      <FreePredictions />
 
       {/* ═══════════════════════════════════════════════════════════════════
           TRUSTED PARTNER SECTION — 3 cards with middle highlighted

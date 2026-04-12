@@ -1865,6 +1865,14 @@ const en = {
   "search.result": "result",
   "search.for": "for",
 
+  /* ── Free Predictions section (homepage) ────────────────── */
+  "home.freePredBadge": "Free predictions",
+  "home.freePredTitle": "Today's AI",
+  "home.freePredTitleHighlight": "predictions",
+  "home.freePredSubtitle": "See our models in action. Three free AI-powered match predictions — updated daily, no sign-up required.",
+  "home.freePredCta": "View all predictions",
+  "home.freePredCtaSub": "Unlock full access to 50+ daily predictions with a free trial.",
+
   /* ── Breadcrumb labels ──────────────────────────────────── */
   "bc.home": "Home",
   "bc.aboutUs": "About Us",
@@ -3780,6 +3788,14 @@ const nl: Dictionary = {
   "search.results": "resultaten",
   "search.result": "resultaat",
   "search.for": "voor",
+
+  /* ── Free Predictions section (homepage) ────────────────── */
+  "home.freePredBadge": "Gratis voorspellingen",
+  "home.freePredTitle": "AI-voorspellingen",
+  "home.freePredTitleHighlight": "van vandaag",
+  "home.freePredSubtitle": "Bekijk onze modellen in actie. Drie gratis AI-voorspellingen — dagelijks bijgewerkt, geen registratie nodig.",
+  "home.freePredCta": "Bekijk alle voorspellingen",
+  "home.freePredCtaSub": "Ontgrendel volledige toegang tot 50+ dagelijkse voorspellingen met een gratis proefperiode.",
 
   /* ── Breadcrumb labels ──────────────────────────────────── */
   "bc.home": "Home",
