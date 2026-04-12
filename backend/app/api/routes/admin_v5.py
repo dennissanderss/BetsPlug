@@ -963,6 +963,51 @@ async def train_logistic_fit(
 
 
 @router.post(
+    "/train-xgboost-fit",
+    summary="v3: fit XGBoostModel on the same collected pending samples",
+)
+async def train_xgboost_fit(
+    db: AsyncSession = Depends(get_db),
+):
+    """Fit XGBoostModel using the same samples collected by
+    ``/train-logistic-collect``. Does NOT clear pending samples so
+    you can train both logistic + xgboost on the same data.
+    Caches the trained instance on ``ForecastService._cached_xgboost``.
+    """
+    import traceback
+    from uuid import uuid4
+    from app.forecasting.forecast_service import ForecastService
+    from app.forecasting.models.xgboost_model import XGBoostModel
+
+    global _pending_logistic_samples
+    pending = _pending_logistic_samples
+    if not pending:
+        return {
+            "trained": False,
+            "reason": "no_pending_samples",
+            "hint": "Run /train-logistic-collect first, then call this.",
+        }
+
+    try:
+        model = XGBoostModel(uuid4(), config={})
+        metrics = model.train(pending)
+        ForecastService.set_cached_xgboost(model)
+        return {
+            "trained": True,
+            "model_type": "xgboost",
+            "samples_fitted": len(pending),
+            "metrics": metrics,
+        }
+    except Exception as exc:
+        log.exception("train_xgboost_fit_fatal")
+        return {
+            "trained": False,
+            "fatal_error": f"{type(exc).__name__}: {exc}\n{traceback.format_exc()[:1200]}",
+            "samples_attempted": len(pending),
+        }
+
+
+@router.post(
     "/train-logistic",
     summary="Train the LogisticModel on recent finished matches",
 )
