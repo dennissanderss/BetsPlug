@@ -200,9 +200,7 @@ class PredictionModelSummary(BaseModel):
 class PredictionResponse(PredictionBase):
     """Full prediction representation returned by the API."""
 
-    # protected_namespaces=() needed because PredictionBase has
-    # model_version_id (inherited) which starts with `model_`.
-    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
+    model_config = ConfigDict(from_attributes=True)
 
     id: uuid.UUID = Field(description="Unique prediction identifier (UUID v4).")
     pick: Optional[str] = Field(default=None, description="Predicted outcome: HOME, DRAW, or AWAY.")
@@ -218,10 +216,6 @@ class PredictionResponse(PredictionBase):
     match: Optional[PredictionMatchSummary] = Field(
         default=None,
         description="Lightweight match summary so feed/list UIs can show teams without a second fetch (v6.1).",
-    )
-    model_info: Optional[PredictionModelSummary] = Field(
-        default=None,
-        description="Lightweight model summary for transparency: which model produced this pick (v6.2).",
     )
     created_at: datetime = Field(description="Timestamp when the record was created (UTC).")
     updated_at: datetime = Field(description="Timestamp of the most recent update (UTC).")

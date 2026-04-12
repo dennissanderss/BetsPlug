@@ -18,7 +18,6 @@ from app.schemas.prediction import (
     ForecastOutput,
     PredictionMatchResult,
     PredictionMatchSummary,
-    PredictionModelSummary,
     PredictionResponse,
 )
 
@@ -143,21 +142,6 @@ async def list_predictions(
                 result=match_result,
             )
 
-        # v6.2: Inline model summary — defensive: if model_version
-        # isn't loaded or crashes, we still return the prediction.
-        model_summary: Optional[PredictionModelSummary] = None
-        try:
-            mv = getattr(p, "model_version", None)
-            if mv is not None:
-                model_summary = PredictionModelSummary(
-                    id=mv.id,
-                    name=mv.name,
-                    version=mv.version,
-                    model_type=mv.model_type,
-                )
-        except Exception:
-            pass  # non-fatal: model_info will be null
-
         # Construct the response explicitly. We avoid
         # `PredictionResponse.model_validate(p)` because pydantic would try
         # to coerce the ORM `match` relationship (which has the Team objects
@@ -206,7 +190,6 @@ async def list_predictions(
                 else None
             ),
             match=match_summary,
-            model_info=model_summary,
             created_at=p.created_at,
             updated_at=p.updated_at,
         )
@@ -269,16 +252,6 @@ async def get_prediction(
             status=(m.status.value if hasattr(m.status, "value") else str(m.status)),
             league_name=(m.league.name if m.league else None),
             result=match_result,
-        )
-
-    model_summary: Optional[PredictionModelSummary] = None
-    if p.model_version is not None:
-        mv = p.model_version
-        model_summary = PredictionModelSummary(
-            id=mv.id,
-            name=mv.name,
-            version=mv.version,
-            model_type=mv.model_type,
         )
 
     return PredictionResponse(
