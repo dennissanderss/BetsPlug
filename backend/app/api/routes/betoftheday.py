@@ -49,7 +49,7 @@ class BOTDHistoryItem(BaseModel):
 
 @router.get("/history", response_model=list[BOTDHistoryItem])
 async def get_botd_history(
-    limit: int = Query(default=30, ge=1, le=100),
+    limit: int = Query(default=50, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
 ) -> list[BOTDHistoryItem]:
     """Return the last N BOTD picks with their results."""

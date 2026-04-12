@@ -164,17 +164,24 @@ export function PaywallOverlay({
   useEffect(() => {
     const requiredRank = TIER_RANK[requiredTier] ?? 0;
 
-    // Admin users bypass ALL paywalls — they need full access to
-    // test and review every feature on the platform.
+    // Admin users bypass ALL paywalls — unless they are actively
+    // testing a specific tier via the admin tier switcher.
     try {
       const raw = localStorage.getItem("betsplug_user");
       if (raw) {
         const user = JSON.parse(raw);
         if (user.role === "admin") {
-          setHasAccess(true);
-          setUserTier("platinum");
-          setChecked(true);
-          return;
+          const testingTier = localStorage.getItem("betsplug_admin_testing_tier");
+          if (testingTier) {
+            // Admin is testing as a specific tier — skip the bypass
+            // and let normal tier logic below handle it using the
+            // betsplug_tier value that the admin page already sets.
+          } else {
+            setHasAccess(true);
+            setUserTier("platinum");
+            setChecked(true);
+            return;
+          }
         }
       }
     } catch {

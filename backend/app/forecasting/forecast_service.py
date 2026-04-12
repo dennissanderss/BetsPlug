@@ -415,43 +415,63 @@ class ForecastService:
         predicted_outcome = max(outcomes, key=lambda k: outcomes[k])
         outcome_prob = outcomes[predicted_outcome]
 
-        # Natural language summary
-        if predicted_outcome == "home":
-            summary = (
-                f"{home_name} are predicted to WIN with {hp:.1%} probability "
-                f"(draw: {dp:.1%}, {away_name} win: {ap:.1%}). "
-            )
-        elif predicted_outcome == "away":
-            summary = (
-                f"{away_name} are predicted to WIN with {ap:.1%} probability "
-                f"(draw: {dp:.1%}, {home_name} win: {hp:.1%}). "
-            )
-        else:
-            summary = (
-                f"A DRAW is the most likely result ({dp:.1%}), "
-                f"ahead of {home_name} win ({hp:.1%}) and "
-                f"{away_name} win ({ap:.1%}). "
-            )
-
-        # Append score prediction if available
-        if (
-            forecast_result.predicted_home_score is not None
-            and forecast_result.predicted_away_score is not None
-        ):
-            summary += (
-                f"Predicted score: {home_name} "
-                f"{forecast_result.predicted_home_score:.1f} – "
-                f"{forecast_result.predicted_away_score:.1f} {away_name}. "
-            )
-
-        # Confidence qualifier
+        # ── Build analyst-style reasoning (max 2 sentences) ──────────
+        ef = forecast_result.explanation_factors or {}
+        feats = ef.get("features", {})
         conf = forecast_result.confidence
-        if conf >= 0.7:
-            summary += "The model has HIGH confidence in this prediction."
-        elif conf >= 0.4:
-            summary += "The model has MODERATE confidence in this prediction."
+
+        # Determine home/away form descriptors from match_context data
+        home_form_matches = match_context.get("home_form", [])
+        away_form_matches = match_context.get("away_form", [])
+        home_ppg = feats.get("home_ppg_last5")
+        away_ppg = feats.get("away_ppg_last5")
+        home_standing = match_context.get("home_standing") or {}
+        away_standing = match_context.get("away_standing") or {}
+        h_pos = home_standing.get("position")
+        a_pos = away_standing.get("position")
+
+        def _form_word(ppg) -> str:
+            if ppg is None:
+                return "mixed"
+            if ppg >= 2.2:
+                return "excellent"
+            if ppg >= 1.8:
+                return "strong"
+            if ppg >= 1.2:
+                return "decent"
+            return "poor"
+
+        def _conf_word(c: float) -> str:
+            if c >= 0.7:
+                return "HIGH"
+            if c >= 0.4:
+                return "MODERATE"
+            return "LOW"
+
+        if predicted_outcome == "home":
+            home_form_desc = _form_word(home_ppg)
+            parts = [f"{home_name} show {home_form_desc} form at home"]
+            # Mention opponent weakness if applicable
+            if away_ppg is not None and away_ppg < 1.4:
+                parts.append(f"while {away_name} have struggled on the road")
+            elif a_pos is not None and h_pos is not None and a_pos > h_pos + 4:
+                parts.append(f"and sit well above {away_name} in the table")
+            summary = ", ".join(parts) + f" — our AI gives {home_name} a clear edge. "
+        elif predicted_outcome == "away":
+            away_form_desc = _form_word(away_ppg)
+            parts = [f"{away_name} carry {away_form_desc} away form into this one"]
+            if home_ppg is not None and home_ppg < 1.4:
+                parts.append(f"against a {home_name} side lacking consistency at home")
+            elif h_pos is not None and a_pos is not None and h_pos > a_pos + 4:
+                parts.append(f"and their league position reflects their quality")
+            summary = ", ".join(parts) + f" — the data favours {away_name} here. "
         else:
-            summary += "The model has LOW confidence — the match is highly uncertain."
+            summary = (
+                f"Both sides are closely matched with little separating them in recent form. "
+                f"A draw looks the most likely outcome in this evenly-balanced contest. "
+            )
+
+        summary += f"Confidence: {_conf_word(conf)}."
 
         # Extract top factors from explanation_factors
         ef = forecast_result.explanation_factors or {}

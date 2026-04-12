@@ -19,6 +19,8 @@ import {
   DollarSign,
   Mail,
   Globe,
+  Eye,
+  RotateCcw,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -702,14 +704,100 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
   );
 }
 
+// ─── Tier Switcher ───────────────────────────────────────────────────────────
+
+const TIERS = ["free", "silver", "gold", "platinum"] as const;
+
+const TIER_COLORS: Record<string, { active: string; idle: string }> = {
+  free:     { active: "bg-slate-600 text-white ring-2 ring-slate-400/50", idle: "text-slate-400 hover:bg-white/[0.06]" },
+  silver:   { active: "bg-gradient-to-r from-slate-300 to-slate-500 text-[#14181f] ring-2 ring-slate-300/50", idle: "text-slate-300 hover:bg-white/[0.06]" },
+  gold:     { active: "bg-gradient-to-r from-amber-400 to-yellow-500 text-[#1a1408] ring-2 ring-amber-300/50", idle: "text-amber-300/70 hover:bg-white/[0.06]" },
+  platinum: { active: "bg-gradient-to-r from-cyan-300 to-indigo-400 text-[#0b1220] ring-2 ring-cyan-300/50", idle: "text-cyan-300/70 hover:bg-white/[0.06]" },
+};
+
+function TierSwitcher() {
+  const [activeTier, setActiveTier] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const testing = localStorage.getItem("betsplug_admin_testing_tier");
+    setActiveTier(testing);
+  }, []);
+
+  const handleTierClick = (tier: string) => {
+    localStorage.setItem("betsplug_tier", tier);
+    localStorage.setItem("betsplug_admin_testing_tier", tier);
+    setActiveTier(tier);
+    window.location.reload();
+  };
+
+  const handleReset = () => {
+    localStorage.removeItem("betsplug_admin_testing_tier");
+    localStorage.setItem("betsplug_tier", "platinum");
+    setActiveTier(null);
+    window.location.reload();
+  };
+
+  return (
+    <div className="glass-card rounded-xl p-4">
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex items-center gap-2 text-sm font-semibold text-slate-300">
+          <Eye className="h-4 w-4 text-blue-400" />
+          <span>Test as Tier</span>
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          {TIERS.map((tier) => {
+            const isActive = activeTier === tier;
+            const colors = TIER_COLORS[tier];
+            return (
+              <button
+                key={tier}
+                onClick={() => handleTierClick(tier)}
+                className={cn(
+                  "rounded-lg px-3 py-1.5 text-xs font-bold capitalize transition-all",
+                  isActive ? colors.active : colors.idle
+                )}
+              >
+                {tier}
+              </button>
+            );
+          })}
+        </div>
+
+        <button
+          onClick={handleReset}
+          className={cn(
+            "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all",
+            activeTier === null
+              ? "bg-green-500/15 text-green-400 ring-1 ring-green-500/30"
+              : "text-slate-400 hover:bg-white/[0.06] hover:text-slate-200"
+          )}
+        >
+          <RotateCcw className="h-3 w-3" />
+          {activeTier === null ? "Admin (default)" : "Reset to Admin"}
+        </button>
+
+        {activeTier && (
+          <span className="text-xs text-amber-400/80">
+            Paywalls active — viewing as {activeTier} user
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = React.useState("datasources");
 
-  // Grant admin tier so paywall is bypassed when browsing from admin
+  // Set tier to platinum only if admin is NOT actively testing a specific tier
   React.useEffect(() => {
-    localStorage.setItem("betsplug_tier", "platinum");
+    const testing = localStorage.getItem("betsplug_admin_testing_tier");
+    if (!testing) {
+      localStorage.setItem("betsplug_tier", "platinum");
+    }
   }, []);
 
   const { data: sources = [] } = useQuery<DataSourceHealth[]>({
@@ -833,6 +921,11 @@ export default function AdminPage() {
             </span>
           )}
         </div>
+      </div>
+
+      {/* Tier switcher for testing paywalls */}
+      <div className="animate-slide-up">
+        <TierSwitcher />
       </div>
 
       {/* Tab pills */}

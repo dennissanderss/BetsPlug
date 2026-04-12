@@ -76,17 +76,34 @@ function BOTDTrackRecordCard() {
           </p>
         </div>
 
-        {/* Current Streak */}
-        <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Streak</p>
-          <p className="text-2xl font-extrabold tabular-nums text-amber-400">
-            <Flame className="inline h-5 w-5 mr-0.5 -mt-1" />
-            {data.current_streak}
-          </p>
-          <p className="text-[10px] text-slate-500 mt-0.5">
-            consecutive wins
-          </p>
-        </div>
+        {/* Current Streak — visually prominent */}
+        {data.current_streak > 0 ? (
+          <div className="rounded-lg border border-emerald-500/30 p-3 text-center relative overflow-hidden"
+            style={{
+              background: "radial-gradient(ellipse at center, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.03) 70%, transparent 100%)",
+              boxShadow: "0 0 24px rgba(16,185,129,0.15), inset 0 0 24px rgba(16,185,129,0.05)",
+            }}
+          >
+            <p className="text-[9px] uppercase tracking-widest text-emerald-400/80 mb-1">Streak</p>
+            <p className="text-3xl font-extrabold tabular-nums text-emerald-300">
+              <Flame className="inline h-7 w-7 mr-1 -mt-1 text-orange-400 drop-shadow-[0_0_6px_rgba(251,146,60,0.5)]" />
+              {data.current_streak}
+            </p>
+            <p className="text-[10px] text-emerald-400/70 mt-0.5 font-semibold">
+              consecutive wins
+            </p>
+          </div>
+        ) : (
+          <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+            <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Streak</p>
+            <p className="text-2xl font-extrabold tabular-nums text-slate-600">
+              —
+            </p>
+            <p className="text-[10px] text-slate-600 mt-0.5">
+              building...
+            </p>
+          </div>
+        )}
 
         {/* Avg Confidence */}
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
@@ -112,7 +129,7 @@ function BOTDHistoryList() {
     queryKey: ["botd-history"],
     queryFn: async () => {
       const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-      const resp = await fetch(`${API}/bet-of-the-day/history?limit=20`);
+      const resp = await fetch(`${API}/bet-of-the-day/history?limit=50`);
       if (!resp.ok) return [];
       return resp.json();
     },
