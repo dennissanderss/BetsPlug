@@ -1771,3 +1771,61 @@ async def _upsert_result_from_api_football(db: AsyncSession, item: dict) -> bool
         )
     )
     return True
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Engine comparison: v2 vs v3
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+@router.get(
+    "/engine-comparison",
+    summary="Compare old (v2) vs new (v3) prediction accuracy",
+)
+async def engine_comparison(
+    cutoff: str = Query(
+        default="2026-04-12T22:00:00",
+        description="ISO datetime marking the v3 deploy. Predictions before = v2, after = v3.",
+    ),
+    db: AsyncSession = Depends(get_db),
+):
+    """Compare accuracy of predictions made BEFORE the v3 engine deploy
+    vs predictions made AFTER. Both must be evaluated (have results).
+    """
+    from datetime import datetime as dt
+    from app.models.prediction import PredictionEvaluation
+
+    cutoff_dt = dt.fromisoformat(cutoff.replace("Z", "+00:00"))
+
+    stmt = (
+        select(Prediction, PredictionEvaluation)
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+    )
+    rows = (await db.execute(stmt)).all()
+
+    v2_correct = v2_total = v3_correct = v3_total = 0
+    for pred, ev in rows:
+        if pred.predicted_at < cutoff_dt:
+            v2_total += 1
+            if ev.is_correct:
+                v2_correct += 1
+        else:
+            v3_total += 1
+            if ev.is_correct:
+                v3_correct += 1
+
+    v2_acc = (v2_correct / v2_total * 100) if v2_total > 0 else 0.0
+    v3_acc = (v3_correct / v3_total * 100) if v3_total > 0 else 0.0
+
+    return {
+        "cutoff": cutoff,
+        "v2_old_engine": {"predictions": v2_total, "correct": v2_correct, "accuracy_pct": round(v2_acc, 1)},
+        "v3_new_engine": {"predictions": v3_total, "correct": v3_correct, "accuracy_pct": round(v3_acc, 1)},
+        "difference_pct": round(v3_acc - v2_acc, 1),
+        "verdict": (
+            "v3 is better" if (v3_acc - v2_acc) > 1
+            else "v3 is worse" if (v3_acc - v2_acc) < -1
+            else "too close to call" if v3_total >= 30
+            else f"need more data ({v3_total} evaluated, need 30+)"
+        ),
+    }

@@ -649,11 +649,10 @@ function DataTransparencyCard({
               </span>
             </div>
             <p className="mt-1 text-xs sm:text-sm text-slate-400 leading-relaxed">
-              BetsPlug Pulse is onze AI die elke wedstrijd analyseert.
-              Eén model, één voorspelling per wedstrijd. De Tip van de Dag
-              is steeds de pick waar Pulse het meest zeker van is. Strategy
-              Lab filtert dezelfde voorspellingen op jouw criteria.
-              Alle cijfers hieronder zijn berekend op{" "}
+              BetsPlug Pulse analyses every match with AI. One model,
+              one prediction per match. The Pick of the Day is always the
+              pick Pulse is most confident about.
+              All figures below are calculated on{" "}
               <strong className="tabular-nums text-slate-200">
                 {loading || total == null ? "…" : total.toLocaleString("nl-NL")}
               </strong>{" "}
