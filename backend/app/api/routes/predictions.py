@@ -26,8 +26,9 @@ router = APIRouter()
 
 @router.get(
     "/",
-    response_model=PaginatedResponse[PredictionResponse],
     summary="List predictions with optional filters (paginated)",
+    # response_model disabled — we return a dict manually to avoid
+    # pydantic v2 generic serialization issues on Railway.
 )
 async def list_predictions(
     sport: Optional[str] = Query(default=None, description="Filter by sport slug"),
@@ -197,21 +198,17 @@ async def list_predictions(
         items.append(resp)
 
     total_pages = math.ceil(total / size) if size > 0 else 1
-    # Use the base PaginatedResponse (not the generic parameterized
-    # PaginatedResponse[PredictionResponse]) for construction to avoid
-    # pydantic v2 generic class instantiation issues on Railway.
-    return PaginatedResponse(
-        items=[r.model_dump(mode="json") for r in items],
-        total=total,
-        page=current_page,
-        page_size=size,
-        pages=max(total_pages, 1),
-    )
+    return {
+        "items": [r.model_dump(mode="json") for r in items],
+        "total": total,
+        "page": current_page,
+        "page_size": size,
+        "pages": max(total_pages, 1),
+    }
 
 
 @router.get(
     "/{prediction_id}",
-    response_model=PredictionResponse,
     summary="Get a single prediction with explanation",
 )
 async def get_prediction(
@@ -258,7 +255,7 @@ async def get_prediction(
             result=match_result,
         )
 
-    return PredictionResponse(
+    resp = PredictionResponse(
         id=p.id,
         match_id=p.match_id,
         model_version_id=p.model_version_id,
@@ -302,10 +299,10 @@ async def get_prediction(
             else None
         ),
         match=match_summary,
-        model=model_summary,
         created_at=p.created_at,
         updated_at=p.updated_at,
     )
+    return resp.model_dump(mode="json")
 
 
 @router.post(
