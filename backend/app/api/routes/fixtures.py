@@ -124,6 +124,9 @@ class FixtureItem(BaseModel):
     result: Optional[ResultSummary] = None
     prediction: Optional[PredictionSummary] = None
     odds: Optional[OddsSummary] = None
+    # v6.3: real-time live score — only set for matches with status=LIVE
+    # Populated from Redis cache, refreshed every 60s via API-Football.
+    live_score: Optional[dict] = None
 
 
 class UpcomingFixturesResponse(BaseModel):
@@ -557,12 +560,14 @@ async def get_upcoming_fixtures(
 
 @router.get(
     "/live",
-    response_model=UpcomingFixturesResponse,
-    summary="Live/in-play matches (v6.2)",
+    summary="Live/in-play matches with real-time scores (v6.3)",
     description=(
-        "Returns matches that currently have ``status = 'live'`` in the "
-        "local DB. Populated by the background ingestion job as matches "
-        "kick off. Safe to call as often as once every 30 seconds.\n\n"
+        "Returns currently live matches with real-time scores. Data comes "
+        "from a Redis cache that the background job refreshes every 60s "
+        "via a single API-Football call. Safe to poll every 30 seconds — "
+        "all users read the same cache, no extra API calls.\n\n"
+        "The ``live_score`` field on each fixture contains the current "
+        "score, elapsed minutes, and halftime score when available.\n\n"
         "**" + _SIMULATION_DISCLAIMER + "**"
     ),
 )
@@ -571,8 +576,14 @@ async def get_live_fixtures(
         default=None, description="Filter by league slug."
     ),
     db: AsyncSession = Depends(get_db),
-) -> UpcomingFixturesResponse:
-    """All matches currently flagged as LIVE in the DB, ordered by kickoff."""
+):
+    """Live matches with real-time scores from Redis cache."""
+    from app.core.cache import cache_get
+
+    # ── 1. Read live score cache (populated by job_sync_live_fixtures) ──
+    live_cache = await cache_get("live:fixtures") or []
+
+    # ── 2. Also fetch LIVE matches from DB (for predictions + odds) ────
     stmt = (
         select(Match)
         .where(Match.status == MatchStatus.LIVE)
@@ -589,12 +600,43 @@ async def get_live_fixtures(
     pred_map = await _load_latest_predictions(match_ids, db)
     odds_map = await _load_latest_odds(match_ids, db)
 
-    fixtures = [
-        _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
-        for m in matches
-    ]
+    # ── 3. Build a lookup from api_football_id → live score data ───────
+    live_score_map: dict[str, dict] = {}
+    for entry in live_cache:
+        afid = str(entry.get("api_football_id", ""))
+        if afid:
+            live_score_map[afid] = entry
 
-    return UpcomingFixturesResponse(count=len(fixtures), fixtures=fixtures)
+    # ── 4. Build response, enriching each fixture with live_score ──────
+    fixtures = []
+    for m in matches:
+        item = _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
+
+        # Try to attach live score from cache
+        eid = m.external_id or ""
+        afid = eid.replace("apifb_match_", "") if eid.startswith("apifb_match_") else ""
+        cached = live_score_map.get(afid)
+        if cached:
+            item.live_score = {
+                "home_goals": cached.get("home_goals"),
+                "away_goals": cached.get("away_goals"),
+                "elapsed": cached.get("elapsed"),
+                "status": cached.get("status"),
+                "halftime_home": cached.get("halftime_home"),
+                "halftime_away": cached.get("halftime_away"),
+            }
+
+        fixtures.append(item)
+
+    # Also include any matches from the cache that aren't in our DB yet
+    # (e.g., leagues we track via API-Football but not football-data.org)
+    db_afids = set()
+    for m in matches:
+        eid = m.external_id or ""
+        if eid.startswith("apifb_match_"):
+            db_afids.add(eid.replace("apifb_match_", ""))
+
+    return {"count": len(fixtures), "fixtures": fixtures, "disclaimer": _SIMULATION_DISCLAIMER}
 
 
 @router.get(

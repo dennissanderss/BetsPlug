@@ -553,7 +553,7 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
           {isLive ? (
             <span className="mt-0.5 inline-flex items-center gap-1 rounded-full border border-red-500/30 bg-red-500/10 px-1.5 py-0 text-[8px] font-bold uppercase tracking-wider text-red-400">
               <span className="h-1 w-1 rounded-full bg-red-400 animate-pulse" />
-              Live
+              {(fixture as any).live_score?.elapsed ? `${(fixture as any).live_score.elapsed}'` : "Live"}
             </span>
           ) : isFinished ? (
             <span className="mt-0.5 inline-flex items-center rounded-full border border-slate-500/20 bg-slate-500/10 px-1.5 py-0 text-[8px] font-bold uppercase tracking-wider text-slate-500">
@@ -566,11 +566,18 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
           )}
         </div>
 
-        {/* Teams — stacked or inline */}
+        {/* Teams + live score */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 text-sm text-slate-100 font-medium">
             <span className="truncate">{fixture.home_team_name}</span>
-            <span className="text-slate-600 text-xs font-normal shrink-0">vs</span>
+            {/* Live score between team names */}
+            {isLive && (fixture as any).live_score?.home_goals != null ? (
+              <span className="shrink-0 rounded bg-red-500/20 border border-red-500/30 px-2 py-0.5 text-sm font-bold tabular-nums text-red-300 animate-pulse">
+                {(fixture as any).live_score.home_goals} - {(fixture as any).live_score.away_goals}
+              </span>
+            ) : (
+              <span className="text-slate-600 text-xs font-normal shrink-0">vs</span>
+            )}
             <span className="truncate">{fixture.away_team_name}</span>
           </div>
           {isFinished && fixture.result && (

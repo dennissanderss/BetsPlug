@@ -259,46 +259,172 @@ async def job_evaluate_predictions():
 
 
 async def job_sync_live_fixtures():
-    """Sync live fixtures every 60s during match hours (12:00-24:00 UTC)."""
+    """Fetch live scores from API-Football every 60s during match hours.
+
+    v6.3: Rewritten to use API-Football's /fixtures?live=all endpoint
+    which returns ALL currently live matches in a SINGLE API call.
+    Scores are written to both:
+      1. Redis cache (30s TTL) — for instant reads by the /fixtures/live endpoint
+      2. DB (MatchResult + Match.status) — for persistence + trackrecord
+
+    Cost: 1 API call per minute × 12 hours = 720 calls/day (fits easily
+    in the Pro tier's 7,500/day limit). User count doesn't matter because
+    all users read from the same cache.
+    """
     now = datetime.now(timezone.utc)
 
-    # Only run during match hours
-    if now.hour < 12:
+    # Only run during match hours (11:00-23:59 UTC covers European football)
+    if now.hour < 11:
         return
 
     try:
+        import json as _json
+        import uuid
         from sqlalchemy import and_, select
         from app.db.session import async_session_factory
         from app.models.match import Match, MatchResult, MatchStatus
-        from app.services.data_sync_service import DataSyncService
+        from app.core.config import get_settings
+        from app.core.cache import cache_set, cache_get
+
+        settings = get_settings()
+        api_key = settings.api_football_key
+        if not api_key:
+            return  # No API key configured — skip silently
+
+        # ── 1. Single API call: fetch all live fixtures ──────────────
+        import httpx
+        async with httpx.AsyncClient(timeout=15) as client:
+            resp = await client.get(
+                "https://v3.football.api-sports.io/fixtures",
+                params={"live": "all"},
+                headers={"x-apisports-key": api_key},
+            )
+            if resp.status_code != 200:
+                log.warning("CRON: Live scores API returned %d", resp.status_code)
+                return
+            data = resp.json().get("response", [])
+
+        if not data:
+            # No live matches right now — cache empty list so frontend
+            # doesn't hit DB needlessly.
+            await cache_set("live:fixtures", [], ttl=45)
+            return
+
+        log.info("CRON: %d live fixtures from API-Football", len(data))
+
+        # ── 2. Build a clean cache payload + update DB ───────────────
+        live_cache = []  # list of dicts for Redis
 
         async with async_session_factory() as db:
-            # Find matches that should be live (kickoff in last 3 hours, not finished)
-            cutoff_start = now - timedelta(hours=3)
-            stmt = (
-                select(Match)
-                .where(
-                    and_(
-                        Match.scheduled_at >= cutoff_start,
-                        Match.scheduled_at <= now,
-                        Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
+            for item in data:
+                fixture = item.get("fixture", {}) or {}
+                teams = item.get("teams", {}) or {}
+                goals = item.get("goals", {}) or {}
+                score = item.get("score", {}) or {}
+                league_info = item.get("league", {}) or {}
+
+                api_id = fixture.get("id")
+                if not api_id:
+                    continue
+
+                home_goals = goals.get("home")  # int or None
+                away_goals = goals.get("away")
+                status_short = (fixture.get("status") or {}).get("short", "")
+                elapsed = (fixture.get("status") or {}).get("elapsed")  # minutes
+
+                # Determine match status
+                finished_codes = {"FT", "AET", "PEN", "WO", "AWD"}
+                halftime_codes = {"HT"}
+                live_codes = {"1H", "2H", "ET", "BT", "P", "SUSP", "INT", "LIVE"}
+
+                if status_short in finished_codes:
+                    match_status = MatchStatus.FINISHED
+                elif status_short in live_codes or status_short in halftime_codes:
+                    match_status = MatchStatus.LIVE
+                else:
+                    match_status = MatchStatus.SCHEDULED
+
+                # Build cache entry (for Redis → frontend)
+                home_name = (teams.get("home") or {}).get("name", "?")
+                away_name = (teams.get("away") or {}).get("name", "?")
+                league_name = league_info.get("name", "")
+                ht = score.get("halftime", {}) or {}
+
+                live_cache.append({
+                    "api_football_id": api_id,
+                    "home_team": home_name,
+                    "away_team": away_name,
+                    "home_goals": home_goals,
+                    "away_goals": away_goals,
+                    "elapsed": elapsed,
+                    "status": status_short,
+                    "league": league_name,
+                    "halftime_home": ht.get("home"),
+                    "halftime_away": ht.get("away"),
+                })
+
+                # ── Update DB: find the match by apifb external_id ───
+                external_id = f"apifb_match_{api_id}"
+                match_row = (
+                    await db.execute(
+                        select(Match).where(Match.external_id == external_id)
                     )
-                )
-            )
-            matches = (await db.execute(stmt)).scalars().all()
+                ).scalar_one_or_none()
 
-            if not matches:
-                return  # No matches to check, save API calls
+                if match_row is None:
+                    continue  # Match not in our DB — skip
 
-            log.info("CRON: Checking %d potentially live matches...", len(matches))
+                # Update status
+                if match_row.status != match_status:
+                    match_row.status = match_status
 
-            async with DataSyncService() as svc:
-                # Sync results for the leagues of these matches
-                r = await svc.sync_recent_results(db)
-                log.info("CRON: Live sync results: %s", r)
+                # Upsert live score into MatchResult
+                if home_goals is not None and away_goals is not None:
+                    result_row = (
+                        await db.execute(
+                            select(MatchResult).where(
+                                MatchResult.match_id == match_row.id
+                            )
+                        )
+                    ).scalar_one_or_none()
+
+                    ht_home = ht.get("home")
+                    ht_away = ht.get("away")
+                    winner = None
+                    if match_status == MatchStatus.FINISHED:
+                        if home_goals > away_goals:
+                            winner = "home"
+                        elif away_goals > home_goals:
+                            winner = "away"
+                        else:
+                            winner = "draw"
+
+                    if result_row is None:
+                        result_row = MatchResult(
+                            id=uuid.uuid4(),
+                            match_id=match_row.id,
+                            home_score=home_goals,
+                            away_score=away_goals,
+                            home_score_ht=ht_home,
+                            away_score_ht=ht_away,
+                            winner=winner,
+                        )
+                        db.add(result_row)
+                    else:
+                        result_row.home_score = home_goals
+                        result_row.away_score = away_goals
+                        if ht_home is not None:
+                            result_row.home_score_ht = ht_home
+                        if ht_away is not None:
+                            result_row.away_score_ht = ht_away
+                        if winner:
+                            result_row.winner = winner
 
             await db.commit()
-            db.expire_all()
+
+        # ── 3. Cache the live data for 45s (frontend reads this) ─────
+        await cache_set("live:fixtures", live_cache, ttl=45)
+        log.info("CRON: Cached %d live scores", len(live_cache))
 
     except Exception as exc:
         log.error("CRON: Live fixture sync failed: %s", exc, exc_info=True)
