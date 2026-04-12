@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -18,7 +19,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "@/i18n/locale-provider";
+import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { Button } from "@/components/ui/button";
 
 interface NavItem {
@@ -75,6 +76,7 @@ export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { t } = useTranslations();
+  const loc = useLocalizedHref();
 
   const getLabel = (item: NavItem) => {
     const translated = t(item.labelKey as any);
@@ -91,7 +93,7 @@ export function Sidebar() {
       {/* ── Logo ── */}
       <div className="flex items-center px-4 py-3 border-b border-white/[0.06]">
         <Link href="/" onClick={() => setMobileOpen(false)}>
-          <img src="/logo.webp" alt="BetsPlug" className="h-12 md:h-16 lg:h-20 w-auto drop-shadow-[0_0_15px_rgba(16,185,129,0.35)]" />
+          <Image src="/logo.webp" alt="BetsPlug logo" width={200} height={80} className="h-12 md:h-16 lg:h-20 w-auto drop-shadow-[0_0_15px_rgba(16,185,129,0.35)]" />
         </Link>
       </div>
 
@@ -116,14 +118,16 @@ export function Sidebar() {
             {/* Section items */}
             <div className="space-y-0.5">
         {section.items.map((item) => {
+          const localizedHref = loc(item.href);
           const isActive =
-            pathname === item.href || pathname.startsWith(item.href + "/");
+            pathname === item.href || pathname.startsWith(item.href + "/") ||
+            pathname === localizedHref || pathname.startsWith(localizedHref + "/");
           const Icon = item.icon;
 
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={localizedHref}
               onClick={() => setMobileOpen(false)}
               className={cn(
                 "nav-item group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium",
@@ -188,14 +192,16 @@ export function Sidebar() {
         </div>
 
         {bottomNavItems.map((item) => {
+          const localizedHref = loc(item.href);
           const isActive =
-            pathname === item.href || pathname.startsWith(item.href + "/");
+            pathname === item.href || pathname.startsWith(item.href + "/") ||
+            pathname === localizedHref || pathname.startsWith(localizedHref + "/");
           const Icon = item.icon;
 
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={localizedHref}
               onClick={() => setMobileOpen(false)}
               className={cn(
                 "nav-item group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium",

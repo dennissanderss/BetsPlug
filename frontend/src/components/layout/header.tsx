@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LanguageSwitcher } from "@/components/common/language-switcher";
 import { useAuth } from "@/lib/auth";
-import { useTranslations } from "@/i18n/locale-provider";
+import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 
 interface HeaderProps {
   className?: string;
@@ -37,6 +37,7 @@ export function Header({ className }: HeaderProps) {
   const router = useRouter();
   const { user, logout } = useAuth();
   const { t } = useTranslations();
+  const loc = useLocalizedHref();
   const [query, setQuery] = React.useState("");
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
   const [notifOpen, setNotifOpen] = React.useState(false);
@@ -72,13 +73,13 @@ export function Header({ className }: HeaderProps) {
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+      router.push(`${loc("/search")}?q=${encodeURIComponent(query.trim())}`);
     }
   }
 
   const navigate = (path: string) => {
     setUserMenuOpen(false);
-    router.push(path);
+    router.push(loc(path));
   };
 
   // We type `user` loosely because the auth context currently exposes

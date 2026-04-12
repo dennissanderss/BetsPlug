@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import {
   Send,
@@ -216,9 +217,11 @@ export function BetsPlugFooter() {
           {/* Brand column */}
           <div className="col-span-2 min-w-0 lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-2">
-              <img
+              <Image
                 src="/logo.webp"
-                alt="BetsPlug"
+                alt="BetsPlug logo"
+                width={100}
+                height={40}
                 className="h-10 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)]"
               />
             </Link>

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Lock, RefreshCw, Zap } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
@@ -39,9 +40,11 @@ export function CheckoutHeader() {
         {/* Logo + back-to-site */}
         <div className="flex items-center gap-6">
           <Link href={home} className="flex items-center">
-            <img
+            <Image
               src="/logo.webp"
-              alt="BetsPlug"
+              alt="BetsPlug logo"
+              width={120}
+              height={48}
               className="h-10 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)] sm:h-12"
             />
           </Link>

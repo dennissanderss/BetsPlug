@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ArticlesContent } from "./articles-content";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
+import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 
 /**
  * Public articles archive page.
@@ -30,5 +31,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function ArticlesPage() {
-  return <ArticlesContent />;
+  return (
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", href: "/" },
+          { name: "Articles", href: "/articles" },
+        ]}
+      />
+      <ArticlesContent />
+    </>
+  );
 }

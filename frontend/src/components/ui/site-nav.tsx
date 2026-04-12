@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -70,9 +71,12 @@ export function SiteNav() {
           }`}
         >
           <Link href={home} className="flex items-center">
-            <img
+            <Image
               src="/logo.webp"
-              alt="BetsPlug"
+              alt="BetsPlug logo"
+              width={200}
+              height={80}
+              priority
               className={`w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)] transition-all duration-300 ${
                 isScrolled
                   ? "h-8 sm:h-10 md:h-12 lg:h-14"
@@ -171,9 +175,11 @@ export function SiteNav() {
           {/* Top: Logo + close */}
           <div className="relative flex items-center justify-between border-b border-white/[0.06] px-6 py-5">
             <Link href={home} onClick={() => setMobileMenuOpen(false)} className="flex items-center">
-              <img
+              <Image
                 src="/logo.webp"
-                alt="BetsPlug"
+                alt="BetsPlug logo"
+                width={120}
+                height={48}
                 className="h-12 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)]"
               />
             </Link>

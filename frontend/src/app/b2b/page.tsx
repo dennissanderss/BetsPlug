@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { B2BContent } from "./b2b-content";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
+import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
@@ -19,5 +20,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function B2BPage() {
-  return <B2BContent />;
+  return (
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", href: "/" },
+          { name: "B2B", href: "/b2b" },
+        ]}
+      />
+      <B2BContent />
+    </>
+  );
 }
