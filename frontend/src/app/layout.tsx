@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { Lato } from "next/font/google";
+import { Exo_2 } from "next/font/google";
 import { cookies } from "next/headers";
 import Script from "next/script";
 import "./globals.css";
@@ -14,11 +14,12 @@ import {
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 
-// Lato — free, open-source humanist sans loaded via next/font/google
+// Exo 2 — geometric sans with sport/tech feel, loaded via next/font/google
 // for automatic self-hosting and zero layout shift.
-const lato = Lato({
+// letter-spacing is tightened slightly to keep text compact like Lato.
+const exo2 = Exo_2({
   subsets: ["latin"],
-  weight: ["300", "400", "700", "900"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-brand",
   display: "swap",
 });
@@ -105,7 +106,7 @@ export default function RootLayout({
     <html
       lang={locale}
       suppressHydrationWarning
-      className={lato.variable}
+      className={exo2.variable}
     >
       <body className="min-h-screen font-sans font-normal antialiased">
         {/* Google Tag Manager — CookieYes CMP template (inside GTM) handles

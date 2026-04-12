@@ -5,11 +5,18 @@
 /* ═══════════════════════════════════════════════════════════════════
    Brand typeface
    ─────────────────────────────────────────────────────────────────
-   Lato — open-source humanist sans loaded via next/font/google.
+   Exo 2 — geometric sport/tech sans loaded via next/font/google.
    Exposed as the CSS variable --font-brand from src/app/layout.tsx.
    ═══════════════════════════════════════════════════════════════════ */
 
 @layer base {
+  /* ── Tighten Exo 2 letter-spacing to match Lato compactness ── */
+  body {
+    letter-spacing: -0.011em;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.02em;
+  }
   /* ── Text selection colors (dark theme friendly) ── */
   ::selection {
     background-color: rgba(16, 185, 129, 0.4);
