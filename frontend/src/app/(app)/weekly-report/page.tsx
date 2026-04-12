@@ -17,6 +17,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { api } from "@/lib/api";
+import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import { useTranslations } from "@/i18n/locale-provider";
 import type { Fixture, WeeklySummary } from "@/types/api";
 
@@ -708,6 +709,14 @@ function PageSkeleton() {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function WeeklyReportPage() {
+  return (
+    <PaywallOverlay feature="weekly_report" requiredTier="silver">
+      <WeeklyReportContent />
+    </PaywallOverlay>
+  );
+}
+
+function WeeklyReportContent() {
   const { t } = useTranslations();
   const summaryQuery = useQuery({
     queryKey: ["weekly-summary"],

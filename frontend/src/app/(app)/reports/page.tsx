@@ -7,6 +7,7 @@ import { Download, FileText, Play, AlertTriangle, Clock } from "lucide-react";
 import { api } from "@/lib/api";
 import { cn, formatDateTime } from "@/lib/utils";
 import { useTranslations } from "@/i18n/locale-provider";
+import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import type { GeneratedReport } from "@/types/api";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -257,6 +258,14 @@ function ReportsList({ reports, isLoading }: { reports?: GeneratedReport[]; isLo
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ReportsPage() {
+  return (
+    <PaywallOverlay feature="reports_exports" requiredTier="gold">
+      <ReportsPageContent />
+    </PaywallOverlay>
+  );
+}
+
+function ReportsPageContent() {
   const { t } = useTranslations();
   const { data: reports, isLoading } = useQuery<GeneratedReport[]>({
     queryKey: ["reports"],

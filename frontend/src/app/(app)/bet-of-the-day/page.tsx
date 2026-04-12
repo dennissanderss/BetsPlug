@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "@/i18n/locale-provider";
+import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import {
   Trophy,
   Zap,
@@ -547,6 +548,12 @@ export default function BetOfTheDayPage() {
         </>
       )}
 
+      {/* Gold+ required — BOTD is our strongest product */}
+      <PaywallOverlay feature="pick_of_the_day" requiredTier="gold" variant="inline">
+        <div className="glass-card p-8 text-center">
+          <p className="text-slate-400">Upgrade naar Silver voor dagelijkse toegang tot de Pick van de Dag.</p>
+        </div>
+      </PaywallOverlay>
     </div>
   );
 }

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { api } from "@/lib/api";
 import { useTranslations } from "@/i18n/locale-provider";
+import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import type { Fixture, WeeklySummary } from "@/types/api";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -550,6 +551,14 @@ function SkeletonCard() {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function ResultsPage() {
+  return (
+    <PaywallOverlay feature="results" requiredTier="silver">
+      <ResultsPageContent />
+    </PaywallOverlay>
+  );
+}
+
+function ResultsPageContent() {
   const { t } = useTranslations();
   const [period, setPeriod] = useState<PeriodFilter>(7);
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
