@@ -399,9 +399,11 @@ class ApiClient {
     });
   }
 
-  // Reports
+  // Reports — trailing slash required: FastAPI redirects /reports → /reports/
+  // (307), but Railway's CDN downgrades the redirect to HTTP which browsers
+  // block as mixed content. Using /reports/ avoids the redirect entirely.
   getReports() {
-    return this.request<import("@/types/api").GeneratedReport[]>("/reports");
+    return this.request<import("@/types/api").GeneratedReport[]>("/reports/");
   }
   getReport(id: string) {
     return this.request<import("@/types/api").GeneratedReport>(`/reports/${id}`);

@@ -378,22 +378,16 @@ async def _stream_trackrecord_csv(
     model_version_id: Optional[uuid.UUID] = None,
 ) -> AsyncIterator[bytes]:
     """Yield CSV rows for every prediction, one at a time."""
-    # UTF-8 BOM so Excel (all locales) detects encoding correctly, plus
-    # the magic "sep=," line that tells Excel to use comma as delimiter
-    # even on European locales that default to semicolon.
+    # UTF-8 BOM + Excel sep hint so European Excel opens correctly
     yield b"\xef\xbb\xbf"  # BOM
     yield b"sep=,\r\n"
 
-    # ── Dashboard summary header ──────────────────────────────────────
-    # First compute the aggregate stats so the CSV opens with a clear
-    # "report card" that any user can read without scrolling down.
+    # ── Precompute period from Match.scheduled_at ────────────────────
     summary_q = (
         select(
-            func.count(PredictionEvaluation.id).label("total"),
-            func.sum(func.cast(PredictionEvaluation.is_correct, Integer)).label("correct"),
-            func.avg(PredictionEvaluation.brier_score).label("avg_brier"),
             func.min(Match.scheduled_at).label("period_start"),
             func.max(Match.scheduled_at).label("period_end"),
+            func.avg(PredictionEvaluation.brier_score).label("avg_brier"),
         )
         .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
         .join(Match, Match.id == Prediction.match_id)
@@ -401,61 +395,78 @@ async def _stream_trackrecord_csv(
     if model_version_id is not None:
         summary_q = summary_q.where(Prediction.model_version_id == model_version_id)
     sr = (await db.execute(summary_q)).one()
-
-    s_total = sr.total or 0
-    s_correct = int(sr.correct or 0)
-    s_accuracy = (s_correct / s_total * 100) if s_total > 0 else 0.0
-    s_brier = float(sr.avg_brier or 0)
     s_period_start = sr.period_start.strftime("%d %b %Y") if sr.period_start else "—"
     s_period_end = sr.period_end.strftime("%d %b %Y") if sr.period_end else "—"
+    s_brier = float(sr.avg_brier or 0)
 
     buffer = io.StringIO()
     writer = csv.writer(buffer)
 
-    # Dashboard header block — easily readable by non-technical users
-    writer.writerow([])
-    writer.writerow(["BETSPLUG — TRACK RECORD EXPORT"])
-    writer.writerow([])
-    writer.writerow(["Periode", f"{s_period_start}  t/m  {s_period_end}"])
-    writer.writerow(["Totaal voorspellingen", s_total])
-    writer.writerow(["Waarvan correct", s_correct])
-    writer.writerow(["Nauwkeurigheid", f"{s_accuracy:.1f}%"])
-    writer.writerow(["Voorspellingskwaliteit (Brier)", f"{s_brier:.4f}", "(lager = beter, 0 = perfect)"])
-    writer.writerow(["Gegenereerd op", datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC")])
-    writer.writerow([])
-    writer.writerow(["Disclaimer", "Alle data is voor educatieve en simulatiedoeleinden. Geen financieel of gokadvies."])
-    writer.writerow([])
-    writer.writerow(["─" * 40])
-    writer.writerow([])
+    # ── Dashboard header with LIVE Excel formulas ────────────────────
+    # Data starts at row 16 (0-indexed: row 15 in the file). The formulas
+    # reference column K ("Correct?" = "Yes"/"No") so the user can verify
+    # every number by clicking the formula cell. This is the transparency
+    # Dennis asked for — nothing is hardcoded, everything computable.
+    #
+    # Row layout (1-indexed for Excel):
+    #   1: sep=,
+    #   2: blank
+    #   3: BETSPLUG TRACK RECORD
+    #   4: blank
+    #   5: Period
+    #   6: Total Predictions (formula)
+    #   7: Correct Predictions (formula)
+    #   8: Accuracy % (formula)
+    #   9: Prediction Quality (hardcoded avg, too complex for formula)
+    #  10: Generated
+    #  11: blank
+    #  12: Disclaimer
+    #  13: ────
+    #  14: blank
+    #  15: Column headers
+    #  16+: data rows
+    writer.writerow([])                                          # row 2
+    writer.writerow(["BETSPLUG — TRACK RECORD"])                 # row 3
+    writer.writerow([])                                          # row 4
+    writer.writerow(["Period", f"{s_period_start}  to  {s_period_end}"])  # row 5
+    writer.writerow(["Total Predictions", '=COUNTA(A16:A99999)'])        # row 6
+    writer.writerow(["Correct Predictions", '=COUNTIF(K16:K99999,"Yes")'])  # row 7
+    writer.writerow(["Accuracy (%)", '=IF(B6>0,ROUND(B7/B6*100,1),0)'])    # row 8
+    writer.writerow(["Prediction Quality", f"{s_brier:.4f}", "(lower = better; 0 = perfect)"])  # row 9
+    writer.writerow(["Generated", datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC")])   # row 10
+    writer.writerow([])                                          # row 11
+    writer.writerow(["Disclaimer", "All data is for educational and simulation purposes only. Not financial or betting advice."])  # row 12
+    writer.writerow(["─" * 50])                                  # row 13
+    writer.writerow([])                                          # row 14
 
-    # Column headers — user-friendly Dutch labels
+    # Column headers — English, clear, simple
     writer.writerow(
         [
-            "Datum wedstrijd",
-            "Competitie",
-            "Thuisteam",
-            "Uitteam",
-            "Thuiskans %",
-            "Gelijkkans %",
-            "Uitkans %",
-            "Zekerheid %",
-            "Voorspelling",
-            "Uitslag",
-            "Correct?",
-            "Thuisscore",
-            "Uitscore",
-            "Model",
+            "Match Date",       # A
+            "League",           # B
+            "Home Team",        # C
+            "Away Team",        # D
+            "Home %",           # E
+            "Draw %",           # F
+            "Away %",           # G
+            "Confidence %",     # H
+            "Prediction",       # I
+            "Actual Outcome",   # J
+            "Correct?",         # K  ← formulas reference this column
+            "Home Score",       # L
+            "Away Score",       # M
+            "Model",            # N
         ]
-    )
+    )  # row 15
     yield buffer.getvalue().encode("utf-8")
     buffer.seek(0)
     buffer.truncate(0)
 
-    # Build the data query. We eager-load match (+ teams + league + result)
-    # and model_version so the row writer doesn't emit one query per row.
+    # ── Data query ───────────────────────────────────────────────────
     q = (
         select(Prediction, PredictionEvaluation)
         .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .join(Match, Match.id == Prediction.match_id)
         .options(
             selectinload(Prediction.match).selectinload(Match.home_team),
             selectinload(Prediction.match).selectinload(Match.away_team),
@@ -463,21 +474,17 @@ async def _stream_trackrecord_csv(
             selectinload(Prediction.match).selectinload(Match.result),
             selectinload(Prediction.model_version),
         )
-        .order_by(Prediction.predicted_at.desc())
+        .order_by(Match.scheduled_at)  # chronological: oldest first
     )
     if model_version_id is not None:
         q = q.where(Prediction.model_version_id == model_version_id)
-
-    # Sort by match date (oldest first) so the CSV reads chronologically
-    q = q.join(Match, Match.id == Prediction.match_id).order_by(Match.scheduled_at)
 
     result = await db.stream(q)
     flush_every = 200
     row_count = 0
 
-    # Friendly pick labels
-    pick_labels = {"home": "Thuis", "draw": "Gelijk", "away": "Uit"}
-    outcome_labels = {"home": "Thuis wint", "draw": "Gelijk", "away": "Uit wint"}
+    pick_labels = {"home": "Home", "draw": "Draw", "away": "Away"}
+    outcome_labels = {"home": "Home Win", "draw": "Draw", "away": "Away Win"}
 
     async for chunk in result.partitions(flush_every):
         for pred, evaluation in chunk:
@@ -512,7 +519,7 @@ async def _stream_trackrecord_csv(
                     f"{pred.confidence * 100:.1f}",
                     pick_labels.get(pick, pick),
                     outcome_labels.get(evaluation.actual_outcome, evaluation.actual_outcome or ""),
-                    "Ja" if evaluation.is_correct else "Nee",
+                    "Yes" if evaluation.is_correct else "No",
                     str(home_score) if home_score is not None else "",
                     str(away_score) if away_score is not None else "",
                     f"{mv.name} v{mv.version}" if mv else "",
