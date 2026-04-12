@@ -249,32 +249,45 @@ class ForecastService:
 
         # --- v3 derived features from existing data -------------------- #
         # All computed from form matches already loaded above. Zero API calls.
+        # Helpers to safely access .result / .home_team_id on ORM objects
+        # that may have relationships loaded or may be plain dicts.
+        def _get(obj, attr, default=None):
+            if isinstance(obj, dict):
+                return obj.get(attr, default)
+            return getattr(obj, attr, default)
+
+        def _get_result(fm):
+            r = _get(fm, "result")
+            if r is None:
+                return None
+            return r
+
         def _clean_sheet_pct(form_matches, team_id):
-            """% of form matches where team conceded 0 goals."""
             if not form_matches:
                 return 0.0
             clean = 0
             for fm in form_matches:
-                if not fm.result:
+                r = _get_result(fm)
+                if r is None:
                     continue
-                if str(fm.home_team_id) == str(team_id):
-                    if fm.result.away_score == 0:
+                if str(_get(fm, "home_team_id", "")) == str(team_id):
+                    if _get(r, "away_score", 1) == 0:
                         clean += 1
                 else:
-                    if fm.result.home_score == 0:
+                    if _get(r, "home_score", 1) == 0:
                         clean += 1
             return clean / len(form_matches) if form_matches else 0.0
 
         def _scoring_consistency(form_matches, team_id):
-            """Std dev of goals scored — low = consistent, high = volatile."""
             goals = []
             for fm in form_matches:
-                if not fm.result:
+                r = _get_result(fm)
+                if r is None:
                     continue
-                if str(fm.home_team_id) == str(team_id):
-                    goals.append(fm.result.home_score)
+                if str(_get(fm, "home_team_id", "")) == str(team_id):
+                    goals.append(_get(r, "home_score", 0) or 0)
                 else:
-                    goals.append(fm.result.away_score)
+                    goals.append(_get(r, "away_score", 0) or 0)
             if len(goals) < 2:
                 return 0.0
             avg = sum(goals) / len(goals)
@@ -282,29 +295,32 @@ class ForecastService:
             return variance ** 0.5
 
         def _ht_goals_avg(form_matches, team_id):
-            """Avg goals scored in the first half."""
             ht_goals = []
             for fm in form_matches:
-                if not fm.result:
+                r = _get_result(fm)
+                if r is None:
                     continue
-                if str(fm.home_team_id) == str(team_id):
-                    if fm.result.home_score_ht is not None:
-                        ht_goals.append(fm.result.home_score_ht)
+                if str(_get(fm, "home_team_id", "")) == str(team_id):
+                    v = _get(r, "home_score_ht")
+                    if v is not None:
+                        ht_goals.append(v)
                 else:
-                    if fm.result.away_score_ht is not None:
-                        ht_goals.append(fm.result.away_score_ht)
+                    v = _get(r, "away_score_ht")
+                    if v is not None:
+                        ht_goals.append(v)
             return sum(ht_goals) / len(ht_goals) if ht_goals else 0.0
 
         def _ppg_last5(form_matches, team_id):
-            """Points per game over last 5 form matches."""
             pts = 0
             counted = 0
             for fm in form_matches[:5]:
-                if not fm.result:
+                r = _get_result(fm)
+                if r is None:
                     continue
                 counted += 1
-                is_home = str(fm.home_team_id) == str(team_id)
-                hs, as_ = fm.result.home_score, fm.result.away_score
+                is_home = str(_get(fm, "home_team_id", "")) == str(team_id)
+                hs = _get(r, "home_score", 0) or 0
+                as_ = _get(r, "away_score", 0) or 0
                 if is_home:
                     pts += 3 if hs > as_ else (1 if hs == as_ else 0)
                 else:
