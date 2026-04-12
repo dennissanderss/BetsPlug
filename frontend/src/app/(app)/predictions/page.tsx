@@ -514,7 +514,6 @@ function formatDateShort(iso: string): string {
 }
 
 function CompactMatchRow({ fixture }: { fixture: Fixture }) {
-  const [expanded, setExpanded] = useState(false);
   const pred: FixturePrediction | null = fixture.prediction ?? null;
   const hasPrediction = pred !== null && typeof pred.confidence === "number";
 
@@ -541,13 +540,8 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
 
   return (
     <div className="border-b border-white/[0.04] last:border-b-0">
-      <button
-        type="button"
-        onClick={() => setExpanded((v) => !v)}
-        className="w-full grid grid-cols-12 items-center gap-2 px-4 py-3.5 hover:bg-white/[0.02] transition-colors text-left"
-        aria-expanded={expanded}
-      >
-        {/* Time + Status — col 1 */}
+      <div className="grid grid-cols-11 items-center gap-2 px-4 py-3.5 hover:bg-white/[0.02] transition-colors">
+        {/* Time + Status */}
         <div className="col-span-2 sm:col-span-1 flex flex-col items-center">
           <span className="text-sm font-bold text-slate-100 tabular-nums">
             {formatTimeOnly(fixture.scheduled_at)}
@@ -617,7 +611,7 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
           <OddButton label="2" value={fixture.odds?.away ?? null} highlighted={modelPick === "away"} />
         </div>
 
-        {/* Confidence bar — col 5 */}
+        {/* Confidence bar */}
         <div className="col-span-3 sm:col-span-2 flex items-center gap-2">
           {confScore != null && (
             <>
@@ -634,152 +628,8 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
           )}
         </div>
 
-        {/* Chevron — col 6 */}
-        <div className="col-span-1 flex justify-end">
-          {expanded ? (
-            <ChevronUp className="h-4 w-4 text-slate-500" />
-          ) : (
-            <ChevronDown className="h-4 w-4 text-slate-500" />
-          )}
-        </div>
-      </button>
+      </div>
 
-      {/* Expand panel */}
-      {expanded && (
-        <div className="px-3 pb-4 pt-1 sm:px-6 bg-white/[0.015] animate-fade-in space-y-3">
-          {/* Mobile: show odds buttons here too (hidden above sm) */}
-          <div className="sm:hidden flex items-center gap-1 pt-2">
-            <OddButton
-              label="1"
-              value={fixture.odds?.home ?? null}
-              highlighted={modelPick === "home"}
-            />
-            <OddButton
-              label="X"
-              value={fixture.odds?.draw ?? null}
-              highlighted={modelPick === "draw"}
-            />
-            <OddButton
-              label="2"
-              value={fixture.odds?.away ?? null}
-              highlighted={modelPick === "away"}
-            />
-            {confScore != null && (
-              <div
-                className="ml-auto shrink-0 rounded-md border px-2 py-1 text-[10px] font-semibold tabular-nums"
-                style={{
-                  color: confColor,
-                  borderColor: `${confColor}40`,
-                  background: `${confColor}12`,
-                }}
-              >
-                {confScore}%
-              </div>
-            )}
-          </div>
-
-          {/* Probability breakdown */}
-          {hasPrediction ? (
-            <>
-              <div
-                className={`grid gap-2 text-center ${
-                  drawProb != null ? "grid-cols-3" : "grid-cols-2"
-                }`}
-              >
-                <div className="rounded-md bg-white/[0.03] border border-white/[0.05] p-2">
-                  <p className="text-[9px] uppercase tracking-widest text-slate-600">Home</p>
-                  <p className="text-base font-bold text-blue-400 tabular-nums">
-                    {homeProb}%
-                  </p>
-                </div>
-                {drawProb != null && (
-                  <div className="rounded-md bg-white/[0.03] border border-white/[0.05] p-2">
-                    <p className="text-[9px] uppercase tracking-widest text-slate-600">Draw</p>
-                    <p className="text-base font-bold text-amber-400 tabular-nums">
-                      {drawProb}%
-                    </p>
-                  </div>
-                )}
-                <div className="rounded-md bg-white/[0.03] border border-white/[0.05] p-2">
-                  <p className="text-[9px] uppercase tracking-widest text-slate-600">Away</p>
-                  <p className="text-base font-bold text-red-400 tabular-nums">
-                    {awayProb}%
-                  </p>
-                </div>
-              </div>
-
-              {/* Reasoning */}
-              {pred?.reasoning && (
-                <div className="rounded-md border border-white/[0.05] bg-white/[0.02] px-3 py-2">
-                  <p className="text-[9px] font-semibold uppercase tracking-widest text-slate-600 mb-1">
-                    Model reasoning
-                  </p>
-                  <p className="text-xs text-slate-300 leading-relaxed">{pred.reasoning}</p>
-                </div>
-              )}
-
-              {/* Top features */}
-              {pred?.top_features && pred.top_features.length > 0 && (
-                <div>
-                  <p className="text-[9px] font-semibold uppercase tracking-widest text-slate-600 mb-1.5">
-                    Top features
-                  </p>
-                  <div className="space-y-1">
-                    {pred.top_features.slice(0, 5).map((f, i) => (
-                      <div key={i} className="flex items-center gap-2 text-[11px]">
-                        <span className="flex-1 truncate text-slate-400 capitalize">
-                          {f.feature?.replace(/_/g, " ") ?? ""}
-                        </span>
-                        <div className="h-1 w-16 rounded-full bg-white/[0.05] overflow-hidden">
-                          <div
-                            className="h-full rounded-full bg-blue-500/70"
-                            style={{
-                              width: `${Math.min((f.importance ?? 0) * 100, 100)}%`,
-                            }}
-                          />
-                        </div>
-                        <span className="w-10 text-right tabular-nums text-slate-300 font-medium">
-                          {((f.importance ?? 0) * 100).toFixed(0)}%
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Over/Under odds if available */}
-              {(fixture.odds?.over_2_5 != null || fixture.odds?.under_2_5 != null) && (
-                <div className="flex items-center gap-2 pt-1 border-t border-white/[0.04]">
-                  <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-600">
-                    Goals 2.5
-                  </span>
-                  {fixture.odds?.over_2_5 != null && (
-                    <span className="rounded border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[11px] tabular-nums text-slate-300">
-                      <span className="text-slate-500 mr-1">Over</span>
-                      {fixture.odds.over_2_5.toFixed(2)}
-                    </span>
-                  )}
-                  {fixture.odds?.under_2_5 != null && (
-                    <span className="rounded border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[11px] tabular-nums text-slate-300">
-                      <span className="text-slate-500 mr-1">Under</span>
-                      {fixture.odds.under_2_5.toFixed(2)}
-                    </span>
-                  )}
-                  {fixture.odds?.bookmaker && (
-                    <span className="ml-auto text-[9px] text-slate-700 uppercase tracking-wider">
-                      {fixture.odds.bookmaker}
-                    </span>
-                  )}
-                </div>
-              )}
-            </>
-          ) : (
-            <p className="text-xs text-slate-500 italic">
-              Deze wedstrijd is nog niet verwerkt door het voorspellings­model.
-            </p>
-          )}
-        </div>
-      )}
     </div>
   );
 }
@@ -797,7 +647,7 @@ function OddButton({
     return (
       <div className="flex h-9 w-[52px] flex-col items-center justify-center rounded-lg border border-white/[0.04] bg-white/[0.01]">
         <span className="text-[8px] uppercase text-slate-700">{label}</span>
-        <span className="text-[10px] text-slate-700">—</span>
+        <span className="text-[8px] text-slate-600 italic">soon</span>
       </div>
     );
   }
@@ -867,13 +717,12 @@ function LeagueSection({
       {open && (
         <div className="divide-y divide-white/[0.03]">
           {/* Column headers */}
-          <div className="hidden sm:grid grid-cols-12 items-center gap-2 px-4 py-2 text-[9px] uppercase tracking-widest text-slate-600">
+          <div className="hidden sm:grid grid-cols-11 items-center gap-2 px-4 py-2 text-[9px] uppercase tracking-widest text-slate-600">
             <span className="col-span-1 text-center">Time</span>
             <span className="col-span-4">Match</span>
             <span className="col-span-1 text-center">Pick</span>
-            <span className="col-span-3 text-center">Odds</span>
+            <span className="col-span-3 text-center">Pre-match Odds</span>
             <span className="col-span-2">Confidence</span>
-            <span className="col-span-1" />
           </div>
           {fixtures.map((f) => (
             <CompactMatchRow key={f.id} fixture={f} />
