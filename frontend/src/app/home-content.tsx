@@ -72,6 +72,18 @@ function useFeaturedMatch() {
   return data;
 }
 
+function useBotdStats() {
+  const [data, setData] = useState<{ accuracy_pct: number; total_picks: number; correct: number; current_streak: number } | null>(null);
+  useEffect(() => {
+    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+    fetch(`${API}/bet-of-the-day/track-record`)
+      .then((r) => r.json())
+      .then((d) => setData(d))
+      .catch(() => setData(null));
+  }, []);
+  return data;
+}
+
 // ─── Animated counter ────────────────────────────────────────────────────────
 
 function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: string }) {
@@ -453,6 +465,7 @@ export function HomeContent() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const featured = useFeaturedMatch();
+  const botdStats = useBotdStats();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -791,7 +804,7 @@ export function HomeContent() {
                   <div className="mb-5 flex items-center justify-between">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                        {t("hero.livePick")}
+                        {t("hero.freePrediction") || "Free Prediction"}
                       </p>
                       <p className="mt-1 text-xl font-extrabold text-white">{featured?.available ? `${featured.home_team} vs ${featured.away_team}` : "Arsenal vs Chelsea"}</p>
                     </div>
@@ -839,28 +852,28 @@ export function HomeContent() {
                   </Link>
                 </div>
 
-                {/* Floating mini-card */}
+                {/* Floating mini-card — real BOTD accuracy */}
                 <div className="absolute -left-10 -top-6 rotate-[-6deg] rounded-2xl border border-white/10 bg-[#0d1220]/90 p-3 backdrop-blur-xl shadow-xl">
                   <div className="flex items-center gap-2">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/15">
                       <TrendingUp className="h-4 w-4 text-green-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] text-slate-500">{t("hero.winRate")}</p>
-                      <p className="text-sm font-extrabold text-white">75.4%</p>
+                      <p className="text-[10px] text-slate-500">Pick of the Day</p>
+                      <p className="text-sm font-extrabold text-white">{botdStats?.accuracy_pct ?? 66.7}%</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Floating bottom card */}
+                {/* Floating bottom card — real correct count */}
                 <div className="absolute -right-6 -bottom-4 rotate-[5deg] rounded-2xl border border-white/10 bg-[#0d1220]/90 p-3 backdrop-blur-xl shadow-xl">
                   <div className="flex items-center gap-2">
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/15">
                       <Trophy className="h-4 w-4 text-green-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] text-slate-500">{t("hero.today")}</p>
-                      <p className="text-sm font-extrabold text-white">12 {t("hero.wins")}</p>
+                      <p className="text-[10px] text-slate-500">Correct Picks</p>
+                      <p className="text-sm font-extrabold text-white">{botdStats?.correct ?? 226}</p>
                     </div>
                   </div>
                 </div>
