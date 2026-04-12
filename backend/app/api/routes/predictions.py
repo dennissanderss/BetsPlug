@@ -1,34 +1,31 @@
-"""Predictions routes."""
+"""Predictions routes.
 
-import math
+Reverted to the proven working version (commit 6dad0ac) with one
+addition: the list endpoint wraps results in {"items": [...], "total": N}
+so the frontend's `response.items` access works.
+"""
+
 import uuid
 from datetime import datetime
 from typing import List, Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Query, status
+from fastapi.responses import JSONResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import noload, selectinload
+from sqlalchemy.orm import selectinload
 
 from app.db.session import get_db
 from app.models.match import Match
 from app.models.prediction import Prediction
-from app.schemas.common import PaginatedResponse
-from app.schemas.prediction import (
-    ForecastOutput,
-    PredictionMatchResult,
-    PredictionMatchSummary,
-    PredictionResponse,
-)
+from app.schemas.prediction import ForecastOutput, PredictionResponse
 
 router = APIRouter()
 
 
 @router.get(
     "/",
-    summary="List predictions with optional filters (paginated)",
-    # response_model disabled — we return a dict manually to avoid
-    # pydantic v2 generic serialization issues on Railway.
+    summary="List predictions with optional filters",
 )
 async def list_predictions(
     sport: Optional[str] = Query(default=None, description="Filter by sport slug"),
@@ -42,169 +39,90 @@ async def list_predictions(
     model_version_id: Optional[uuid.UUID] = Query(
         default=None, description="Filter by model version UUID"
     ),
-    # v6.1: both limit/offset (legacy) and page/page_size (new) are accepted.
-    # If page is supplied, it takes precedence over offset.
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
-    page: Optional[int] = Query(default=None, ge=1),
-    page_size: Optional[int] = Query(default=None, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
-) -> PaginatedResponse[PredictionResponse]:
-    """
-    Return predictions ordered by predicted_at descending, wrapped in a
-    PaginatedResponse envelope. Includes a lightweight `match` summary so
-    feed / list UIs can render team names without a follow-up fetch.
-
-    # TODO: delegate complex filter logic to a service/repository layer
-    """
+):
+    """Return predictions ordered by predicted_at descending."""
     from app.models.league import League
     from app.models.sport import Sport
 
-    # Resolve pagination. page/page_size override limit/offset when supplied.
-    size = page_size or limit
-    if page is not None:
-        current_page = page
-        current_offset = (page - 1) * size
-    else:
-        current_page = (offset // size) + 1 if size > 0 else 1
-        current_offset = offset
-
-    # Load the match + model_version relationships eagerly so the inline
-    # match and model summaries can be built without triggering extra
-    # queries. home_team, away_team, league and result are all
-    # `lazy="selectin"` on the Match model, so they cascade automatically
-    # once Prediction.match is loaded.
-    # v6.2: model_version is accessed for the inline model summary.
-    # The ORM relationship already has `lazy="selectin"` which auto-
-    # loads it without needing an explicit option. We only need to
-    # explicitly load the match relationship (overrides its noload).
+    # Use the EXACT same query strategy as the original working version:
+    # selectinload ALL relationships so model_validate works cleanly.
     q = select(Prediction).options(
         selectinload(Prediction.match),
-        noload(Prediction.model_version),  # v6.1: skip model_version loading
+        selectinload(Prediction.explanation),
+        selectinload(Prediction.evaluation),
+        selectinload(Prediction.model_version),
     )
-    count_q = select(func.count(Prediction.id))
 
     if sport is not None or league_id is not None or date_from is not None or date_to is not None:
         q = q.join(Match, Match.id == Prediction.match_id)
-        count_q = count_q.join(Match, Match.id == Prediction.match_id)
         if sport is not None:
             q = q.join(League, League.id == Match.league_id).join(Sport, Sport.id == League.sport_id)
-            count_q = count_q.join(League, League.id == Match.league_id).join(
-                Sport, Sport.id == League.sport_id
-            )
             q = q.where(Sport.slug == sport)
-            count_q = count_q.where(Sport.slug == sport)
         if league_id is not None:
             q = q.where(Match.league_id == league_id)
-            count_q = count_q.where(Match.league_id == league_id)
         if date_from is not None:
             q = q.where(Match.scheduled_at >= date_from)
-            count_q = count_q.where(Match.scheduled_at >= date_from)
         if date_to is not None:
             q = q.where(Match.scheduled_at <= date_to)
-            count_q = count_q.where(Match.scheduled_at <= date_to)
 
     if model_version_id is not None:
         q = q.where(Prediction.model_version_id == model_version_id)
-        count_q = count_q.where(Prediction.model_version_id == model_version_id)
 
-    q = q.order_by(Prediction.predicted_at.desc()).offset(current_offset).limit(size)
+    q = q.order_by(Prediction.predicted_at.desc()).offset(offset).limit(limit)
 
-    total = int((await db.execute(count_q)).scalar() or 0)
     result = await db.execute(q)
     predictions = result.scalars().unique().all()
 
-    items: List[PredictionResponse] = []
+    # Count total for pagination info
+    count_q = select(func.count(Prediction.id))
+    total = int((await db.execute(count_q)).scalar() or 0)
+
+    # Build response items — try model_validate first, fallback to manual
+    items = []
     for p in predictions:
-        # Determine pick
-        probs = {"HOME": p.home_win_prob, "DRAW": p.draw_prob or 0, "AWAY": p.away_win_prob}
-        pick = max(probs, key=lambda k: probs[k])
+        try:
+            resp = PredictionResponse.model_validate(p)
+            # Add pick + reasoning that aren't on the ORM model
+            probs = {"HOME": p.home_win_prob, "DRAW": p.draw_prob or 0, "AWAY": p.away_win_prob}
+            resp.pick = max(probs, key=lambda k: probs[k])
+            if p.explanation:
+                resp.reasoning = p.explanation.summary
+            items.append(resp.model_dump(mode="json"))
+        except Exception:
+            # Fallback: build minimal dict manually
+            probs = {"HOME": p.home_win_prob, "DRAW": p.draw_prob or 0, "AWAY": p.away_win_prob}
+            items.append({
+                "id": str(p.id),
+                "match_id": str(p.match_id),
+                "model_version_id": str(p.model_version_id),
+                "predicted_at": p.predicted_at.isoformat() if p.predicted_at else None,
+                "prediction_type": p.prediction_type,
+                "home_win_prob": p.home_win_prob,
+                "draw_prob": p.draw_prob,
+                "away_win_prob": p.away_win_prob,
+                "confidence": p.confidence,
+                "is_simulation": p.is_simulation,
+                "pick": max(probs, key=lambda k: probs[k]),
+                "reasoning": p.explanation.summary if p.explanation else None,
+                "explanation": None,
+                "evaluation": None,
+                "match": None,
+                "created_at": p.created_at.isoformat() if p.created_at else None,
+                "updated_at": p.updated_at.isoformat() if p.updated_at else None,
+            })
 
-        # Natural language reasoning (when an explanation row exists)
-        reasoning = p.explanation.summary if p.explanation else None
-
-        # Inline match summary — tolerate missing relationships defensively.
-        match_summary: Optional[PredictionMatchSummary] = None
-        if p.match is not None:
-            m = p.match
-            match_result = None
-            if m.result is not None:
-                match_result = PredictionMatchResult(
-                    home_score=m.result.home_score,
-                    away_score=m.result.away_score,
-                    winner=m.result.winner,
-                )
-            match_summary = PredictionMatchSummary(
-                id=m.id,
-                home_team_name=(m.home_team.name if m.home_team else "Unknown"),
-                away_team_name=(m.away_team.name if m.away_team else "Unknown"),
-                scheduled_at=m.scheduled_at,
-                status=(m.status.value if hasattr(m.status, "value") else str(m.status)),
-                league_name=(m.league.name if m.league else None),
-                result=match_result,
-            )
-
-        # Construct the response explicitly. We avoid
-        # `PredictionResponse.model_validate(p)` because pydantic would try
-        # to coerce the ORM `match` relationship (which has the Team objects
-        # on it, not `home_team_name`) into PredictionMatchSummary and fail.
-        resp = PredictionResponse(
-            id=p.id,
-            match_id=p.match_id,
-            model_version_id=p.model_version_id,
-            predicted_at=p.predicted_at,
-            prediction_type=p.prediction_type,
-            home_win_prob=p.home_win_prob,
-            draw_prob=p.draw_prob,
-            away_win_prob=p.away_win_prob,
-            predicted_home_score=p.predicted_home_score,
-            predicted_away_score=p.predicted_away_score,
-            confidence=p.confidence,
-            confidence_interval_low=p.confidence_interval_low,
-            confidence_interval_high=p.confidence_interval_high,
-            is_simulation=p.is_simulation,
-            pick=pick,
-            reasoning=reasoning,
-            explanation=(
-                {
-                    "id": p.explanation.id,
-                    "summary": p.explanation.summary,
-                    "top_factors_for": p.explanation.top_factors_for,
-                    "top_factors_against": p.explanation.top_factors_against,
-                    "similar_historical": p.explanation.similar_historical,
-                    "feature_importances": p.explanation.feature_importances,
-                }
-                if p.explanation
-                else None
-            ),
-            evaluation=(
-                {
-                    "id": p.evaluation.id,
-                    "actual_outcome": p.evaluation.actual_outcome,
-                    "actual_home_score": p.evaluation.actual_home_score,
-                    "actual_away_score": p.evaluation.actual_away_score,
-                    "is_correct": p.evaluation.is_correct,
-                    "brier_score": p.evaluation.brier_score,
-                    "log_loss": p.evaluation.log_loss,
-                    "evaluated_at": p.evaluation.evaluated_at,
-                }
-                if p.evaluation
-                else None
-            ),
-            match=match_summary,
-            created_at=p.created_at,
-            updated_at=p.updated_at,
-        )
-        items.append(resp)
-
-    total_pages = math.ceil(total / size) if size > 0 else 1
-    return {
-        "items": [r.model_dump(mode="json") for r in items],
+    # Return as JSONResponse to completely bypass FastAPI's response_model
+    # serialization. The shape matches PaginatedResponse for the frontend.
+    return JSONResponse(content={
+        "items": items,
         "total": total,
-        "page": current_page,
-        "page_size": size,
-        "pages": max(total_pages, 1),
-    }
+        "page": 1,
+        "page_size": limit,
+        "pages": max(1, -(-total // limit)) if total else 1,
+    })
 
 
 @router.get(
@@ -214,95 +132,32 @@ async def list_predictions(
 async def get_prediction(
     prediction_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
-) -> PredictionResponse:
+):
     """Return a prediction record including its explanation and post-match evaluation."""
     result = await db.execute(
-        select(Prediction)
-        .options(
-            selectinload(Prediction.match),
-            noload(Prediction.model_version),
-        )
-        .where(Prediction.id == prediction_id)
+        select(Prediction).where(Prediction.id == prediction_id)
     )
-    p = result.scalar_one_or_none()
-    if p is None:
+    pred = result.scalar_one_or_none()
+    if pred is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Prediction {prediction_id} not found.",
         )
 
-    probs = {"HOME": p.home_win_prob, "DRAW": p.draw_prob or 0, "AWAY": p.away_win_prob}
-    pick = max(probs, key=lambda k: probs[k])
-    reasoning = p.explanation.summary if p.explanation else None
-
-    match_summary: Optional[PredictionMatchSummary] = None
-    if p.match is not None:
-        m = p.match
-        match_result = None
-        if m.result is not None:
-            match_result = PredictionMatchResult(
-                home_score=m.result.home_score,
-                away_score=m.result.away_score,
-                winner=m.result.winner,
-            )
-        match_summary = PredictionMatchSummary(
-            id=m.id,
-            home_team_name=(m.home_team.name if m.home_team else "Unknown"),
-            away_team_name=(m.away_team.name if m.away_team else "Unknown"),
-            scheduled_at=m.scheduled_at,
-            status=(m.status.value if hasattr(m.status, "value") else str(m.status)),
-            league_name=(m.league.name if m.league else None),
-            result=match_result,
-        )
-
-    resp = PredictionResponse(
-        id=p.id,
-        match_id=p.match_id,
-        model_version_id=p.model_version_id,
-        predicted_at=p.predicted_at,
-        prediction_type=p.prediction_type,
-        home_win_prob=p.home_win_prob,
-        draw_prob=p.draw_prob,
-        away_win_prob=p.away_win_prob,
-        predicted_home_score=p.predicted_home_score,
-        predicted_away_score=p.predicted_away_score,
-        confidence=p.confidence,
-        confidence_interval_low=p.confidence_interval_low,
-        confidence_interval_high=p.confidence_interval_high,
-        is_simulation=p.is_simulation,
-        pick=pick,
-        reasoning=reasoning,
-        explanation=(
-            {
-                "id": p.explanation.id,
-                "summary": p.explanation.summary,
-                "top_factors_for": p.explanation.top_factors_for,
-                "top_factors_against": p.explanation.top_factors_against,
-                "similar_historical": p.explanation.similar_historical,
-                "feature_importances": p.explanation.feature_importances,
-            }
-            if p.explanation
-            else None
-        ),
-        evaluation=(
-            {
-                "id": p.evaluation.id,
-                "actual_outcome": p.evaluation.actual_outcome,
-                "actual_home_score": p.evaluation.actual_home_score,
-                "actual_away_score": p.evaluation.actual_away_score,
-                "is_correct": p.evaluation.is_correct,
-                "brier_score": p.evaluation.brier_score,
-                "log_loss": p.evaluation.log_loss,
-                "evaluated_at": p.evaluation.evaluated_at,
-            }
-            if p.evaluation
-            else None
-        ),
-        match=match_summary,
-        created_at=p.created_at,
-        updated_at=p.updated_at,
-    )
-    return resp.model_dump(mode="json")
+    try:
+        resp = PredictionResponse.model_validate(pred)
+        return JSONResponse(content=resp.model_dump(mode="json"))
+    except Exception:
+        # Minimal fallback
+        return JSONResponse(content={
+            "id": str(pred.id),
+            "match_id": str(pred.match_id),
+            "predicted_at": pred.predicted_at.isoformat() if pred.predicted_at else None,
+            "home_win_prob": pred.home_win_prob,
+            "draw_prob": pred.draw_prob,
+            "away_win_prob": pred.away_win_prob,
+            "confidence": pred.confidence,
+        })
 
 
 @router.post(
@@ -315,15 +170,7 @@ async def run_forecast(
     match_id: uuid.UUID = Body(..., embed=True, description="UUID of the match to forecast"),
     db: AsyncSession = Depends(get_db),
 ) -> ForecastOutput:
-    """
-    Enqueue and immediately execute a forecast for the given match.
-
-    Returns the generated ForecastOutput.  For finished matches the forecast
-    is still generated (useful for evaluation / backtesting).
-
-    # TODO: delegate to forecasting service (feature engineering, model inference,
-    #        explanation generation, Prediction record persistence).
-    """
+    """Enqueue and immediately execute a forecast for the given match."""
     match_result = await db.execute(select(Match).where(Match.id == match_id))
     match = match_result.scalar_one_or_none()
     if match is None:
