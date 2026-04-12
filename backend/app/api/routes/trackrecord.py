@@ -45,6 +45,10 @@ async def get_trackrecord_summary(
 
     Metrics include accuracy, mean Brier score, mean log-loss, and average confidence.
     """
+    # v6.2.1: period_start/end now uses Match.scheduled_at (when the
+    # match was played) rather than Prediction.predicted_at (when the
+    # model generated the forecast). Predictions may be generated in a
+    # single bulk run but cover matches spanning 2+ years.
     q = (
         select(
             func.count(PredictionEvaluation.id).label("total"),
@@ -54,10 +58,11 @@ async def get_trackrecord_summary(
             func.avg(PredictionEvaluation.brier_score).label("avg_brier"),
             func.avg(PredictionEvaluation.log_loss).label("avg_log_loss"),
             func.avg(Prediction.confidence).label("avg_confidence"),
-            func.min(Prediction.predicted_at).label("period_start"),
-            func.max(Prediction.predicted_at).label("period_end"),
+            func.min(Match.scheduled_at).label("period_start"),
+            func.max(Match.scheduled_at).label("period_end"),
         )
         .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
+        .join(Match, Match.id == Prediction.match_id)
     )
     if model_version_id is not None:
         q = q.where(Prediction.model_version_id == model_version_id)
@@ -379,32 +384,67 @@ async def _stream_trackrecord_csv(
     yield b"\xef\xbb\xbf"  # BOM
     yield b"sep=,\r\n"
 
+    # ── Dashboard summary header ──────────────────────────────────────
+    # First compute the aggregate stats so the CSV opens with a clear
+    # "report card" that any user can read without scrolling down.
+    summary_q = (
+        select(
+            func.count(PredictionEvaluation.id).label("total"),
+            func.sum(func.cast(PredictionEvaluation.is_correct, Integer)).label("correct"),
+            func.avg(PredictionEvaluation.brier_score).label("avg_brier"),
+            func.min(Match.scheduled_at).label("period_start"),
+            func.max(Match.scheduled_at).label("period_end"),
+        )
+        .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
+        .join(Match, Match.id == Prediction.match_id)
+    )
+    if model_version_id is not None:
+        summary_q = summary_q.where(Prediction.model_version_id == model_version_id)
+    sr = (await db.execute(summary_q)).one()
+
+    s_total = sr.total or 0
+    s_correct = int(sr.correct or 0)
+    s_accuracy = (s_correct / s_total * 100) if s_total > 0 else 0.0
+    s_brier = float(sr.avg_brier or 0)
+    s_period_start = sr.period_start.strftime("%d %b %Y") if sr.period_start else "—"
+    s_period_end = sr.period_end.strftime("%d %b %Y") if sr.period_end else "—"
+
     buffer = io.StringIO()
     writer = csv.writer(buffer)
+
+    # Dashboard header block — easily readable by non-technical users
+    writer.writerow([])
+    writer.writerow(["BETSPLUG — TRACK RECORD EXPORT"])
+    writer.writerow([])
+    writer.writerow(["Periode", f"{s_period_start}  t/m  {s_period_end}"])
+    writer.writerow(["Totaal voorspellingen", s_total])
+    writer.writerow(["Waarvan correct", s_correct])
+    writer.writerow(["Nauwkeurigheid", f"{s_accuracy:.1f}%"])
+    writer.writerow(["Voorspellingskwaliteit (Brier)", f"{s_brier:.4f}", "(lager = beter, 0 = perfect)"])
+    writer.writerow(["Gegenereerd op", datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC")])
+    writer.writerow([])
+    writer.writerow(["Disclaimer", "Alle data is voor educatieve en simulatiedoeleinden. Geen financieel of gokadvies."])
+    writer.writerow([])
+    writer.writerow(["─" * 40])
+    writer.writerow([])
+
+    # Column headers — user-friendly Dutch labels
     writer.writerow(
         [
-            "prediction_id",
-            "predicted_at_utc",
-            "match_id",
-            "match_scheduled_at_utc",
-            "league_name",
-            "home_team",
-            "away_team",
-            "model_name",
-            "model_version",
-            "model_type",
-            "home_win_prob",
-            "draw_prob",
-            "away_win_prob",
-            "confidence",
-            "predicted_pick",
-            "actual_outcome",
-            "is_correct",
-            "home_score",
-            "away_score",
-            "brier_score",
-            "log_loss",
-            "evaluated_at_utc",
+            "Datum wedstrijd",
+            "Competitie",
+            "Thuisteam",
+            "Uitteam",
+            "Thuiskans %",
+            "Gelijkkans %",
+            "Uitkans %",
+            "Zekerheid %",
+            "Voorspelling",
+            "Uitslag",
+            "Correct?",
+            "Thuisscore",
+            "Uitscore",
+            "Model",
         ]
     )
     yield buffer.getvalue().encode("utf-8")
@@ -428,23 +468,25 @@ async def _stream_trackrecord_csv(
     if model_version_id is not None:
         q = q.where(Prediction.model_version_id == model_version_id)
 
+    # Sort by match date (oldest first) so the CSV reads chronologically
+    q = q.join(Match, Match.id == Prediction.match_id).order_by(Match.scheduled_at)
+
     result = await db.stream(q)
-    # Flush every N rows to keep memory bounded
     flush_every = 200
     row_count = 0
+
+    # Friendly pick labels
+    pick_labels = {"home": "Thuis", "draw": "Gelijk", "away": "Uit"}
+    outcome_labels = {"home": "Thuis wint", "draw": "Gelijk", "away": "Uit wint"}
+
     async for chunk in result.partitions(flush_every):
         for pred, evaluation in chunk:
             m = pred.match
             mv = pred.model_version
 
             # Determine the model's pick
-            pick: str
             if pred.draw_prob is not None:
-                probs = {
-                    "home": pred.home_win_prob,
-                    "draw": pred.draw_prob,
-                    "away": pred.away_win_prob,
-                }
+                probs = {"home": pred.home_win_prob, "draw": pred.draw_prob, "away": pred.away_win_prob}
             else:
                 probs = {"home": pred.home_win_prob, "away": pred.away_win_prob}
             pick = max(probs, key=lambda k: probs[k])
@@ -452,34 +494,28 @@ async def _stream_trackrecord_csv(
             home_score = m.result.home_score if m and m.result else None
             away_score = m.result.away_score if m and m.result else None
 
+            # User-friendly date
+            match_date = (
+                m.scheduled_at.strftime("%d %b %Y")
+                if m and m.scheduled_at else ""
+            )
+
             writer.writerow(
                 [
-                    str(pred.id),
-                    pred.predicted_at.isoformat() if pred.predicted_at else "",
-                    str(pred.match_id),
-                    m.scheduled_at.isoformat() if m and m.scheduled_at else "",
+                    match_date,
                     (m.league.name if m and m.league else ""),
                     (m.home_team.name if m and m.home_team else ""),
                     (m.away_team.name if m and m.away_team else ""),
-                    (mv.name if mv else ""),
-                    (mv.version if mv else ""),
-                    (mv.model_type if mv else ""),
-                    f"{pred.home_win_prob:.6f}",
-                    f"{pred.draw_prob:.6f}" if pred.draw_prob is not None else "",
-                    f"{pred.away_win_prob:.6f}",
-                    f"{pred.confidence:.6f}",
-                    pick,
-                    evaluation.actual_outcome or "",
-                    "1" if evaluation.is_correct else "0",
+                    f"{pred.home_win_prob * 100:.1f}",
+                    f"{pred.draw_prob * 100:.1f}" if pred.draw_prob is not None else "",
+                    f"{pred.away_win_prob * 100:.1f}",
+                    f"{pred.confidence * 100:.1f}",
+                    pick_labels.get(pick, pick),
+                    outcome_labels.get(evaluation.actual_outcome, evaluation.actual_outcome or ""),
+                    "Ja" if evaluation.is_correct else "Nee",
                     str(home_score) if home_score is not None else "",
                     str(away_score) if away_score is not None else "",
-                    f"{evaluation.brier_score:.6f}"
-                    if evaluation.brier_score is not None
-                    else "",
-                    f"{evaluation.log_loss:.6f}"
-                    if evaluation.log_loss is not None
-                    else "",
-                    evaluation.evaluated_at.isoformat() if evaluation.evaluated_at else "",
+                    f"{mv.name} v{mv.version}" if mv else "",
                 ]
             )
             row_count += 1
