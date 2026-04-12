@@ -28,6 +28,105 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# v6.3: Historical accuracy endpoint for BOTD picks
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+class BOTDTrackRecord(BaseModel):
+    """Historical accuracy of the Pick of the Day feature."""
+    total_picks: int = 0
+    evaluated: int = 0
+    correct: int = 0
+    accuracy_pct: float = 0.0
+    current_streak: int = 0          # consecutive correct (positive) or wrong (negative)
+    best_streak: int = 0
+    avg_confidence: float = 0.0
+    last_updated: str | None = None
+
+
+@router.get("/track-record", response_model=BOTDTrackRecord)
+async def get_botd_track_record(
+    db: AsyncSession = Depends(get_db),
+) -> BOTDTrackRecord:
+    """Return historical accuracy for the highest-confidence daily pick.
+
+    The BOTD is defined as the prediction with confidence >= 0.55 on any
+    given day. This endpoint looks at ALL such picks historically and
+    computes accuracy, streaks, and average confidence.
+    """
+    from app.models.prediction import PredictionEvaluation
+
+    # Find all predictions that qualified as BOTD (confidence >= 0.55)
+    # grouped by match date, taking the highest confidence per day.
+    stmt = (
+        select(Prediction, PredictionEvaluation)
+        .join(Match, Match.id == Prediction.match_id)
+        .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .where(Prediction.confidence >= 0.55)
+        .order_by(Match.scheduled_at)
+    )
+    rows = (await db.execute(stmt)).all()
+
+    if not rows:
+        return BOTDTrackRecord()
+
+    # Group by date, keep highest confidence per day
+    from collections import defaultdict
+    by_date: dict[str, tuple] = {}  # date_key → (pred, eval) with highest conf
+    for pred, evaluation in rows:
+        if pred.match is None:
+            continue
+        date_key = pred.match.scheduled_at.strftime("%Y-%m-%d") if pred.match.scheduled_at else ""
+        if not date_key:
+            continue
+        existing = by_date.get(date_key)
+        if existing is None or pred.confidence > existing[0].confidence:
+            by_date[date_key] = (pred, evaluation)
+
+    picks = list(by_date.values())
+    total = len(picks)
+    evaluated_picks = [(p, e) for p, e in picks if e is not None]
+    evaluated = len(evaluated_picks)
+    correct = sum(1 for _, e in evaluated_picks if e.is_correct)
+    accuracy = (correct / evaluated * 100) if evaluated > 0 else 0.0
+    avg_conf = sum(p.confidence for p, _ in picks) / total if total > 0 else 0.0
+
+    # Compute streaks
+    current_streak = 0
+    best_streak = 0
+    temp_streak = 0
+    for _, e in evaluated_picks:
+        if e.is_correct:
+            temp_streak += 1
+            best_streak = max(best_streak, temp_streak)
+        else:
+            temp_streak = 0
+    # Current streak: count from the end
+    for _, e in reversed(evaluated_picks):
+        if e.is_correct:
+            current_streak += 1
+        else:
+            break
+
+    last_date = None
+    if picks:
+        last_pred = picks[-1][0]
+        if last_pred.match and last_pred.match.scheduled_at:
+            last_date = last_pred.match.scheduled_at.isoformat()
+
+    return BOTDTrackRecord(
+        total_picks=total,
+        evaluated=evaluated,
+        correct=correct,
+        accuracy_pct=round(accuracy, 1),
+        current_streak=current_streak,
+        best_streak=best_streak,
+        avg_confidence=round(avg_conf * 100, 1),
+        last_updated=last_date,
+    )
+
+
 class BOTDOdds(BaseModel):
     """Pre-match odds embedded in the BOTD response (v6.2).
 

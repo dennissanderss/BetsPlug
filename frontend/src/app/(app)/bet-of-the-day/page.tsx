@@ -12,9 +12,95 @@ import {
   ChevronRight,
   Star,
   AlertTriangle,
+  Target,
+  Flame,
 } from "lucide-react";
 import Link from "next/link";
 import { api } from "@/lib/api";
+
+// ─── BOTD Track Record Card (v6.3) ──────────────────────────────────────────
+
+function BOTDTrackRecordCard() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["botd-track-record"],
+    queryFn: async () => {
+      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+      const resp = await fetch(`${API}/bet-of-the-day/track-record`);
+      if (!resp.ok) return null;
+      return resp.json();
+    },
+    staleTime: 5 * 60_000,
+  });
+
+  if (isLoading || !data || data.total_picks === 0) return null;
+
+  const accColor =
+    data.accuracy_pct >= 55
+      ? "text-emerald-400"
+      : data.accuracy_pct >= 45
+      ? "text-amber-400"
+      : "text-red-400";
+
+  return (
+    <div className="glass-card p-5 sm:p-6">
+      <div className="flex items-center gap-2 mb-4">
+        <Target className="h-5 w-5 text-blue-400" />
+        <h3 className="text-sm font-bold text-slate-100">Pick of the Day — Track Record</h3>
+        <span className="ml-auto inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          Live
+        </span>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {/* Accuracy */}
+        <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Accuracy</p>
+          <p className={`text-2xl font-extrabold tabular-nums ${accColor}`}>
+            {data.accuracy_pct}%
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">
+            {data.correct} / {data.evaluated} correct
+          </p>
+        </div>
+
+        {/* Total Picks */}
+        <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Total Picks</p>
+          <p className="text-2xl font-extrabold tabular-nums text-blue-400">
+            {data.total_picks}
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">
+            {data.evaluated} evaluated
+          </p>
+        </div>
+
+        {/* Current Streak */}
+        <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Streak</p>
+          <p className="text-2xl font-extrabold tabular-nums text-amber-400">
+            <Flame className="inline h-5 w-5 mr-0.5 -mt-1" />
+            {data.current_streak}
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">
+            consecutive wins
+          </p>
+        </div>
+
+        {/* Avg Confidence */}
+        <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Avg Confidence</p>
+          <p className="text-2xl font-extrabold tabular-nums text-slate-100">
+            {data.avg_confidence}%
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">
+            best streak: {data.best_streak}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -422,6 +508,9 @@ export default function BetOfTheDayPage() {
               ) : null}
             </div>
           </div>
+
+          {/* ── BOTD Track Record (v6.3) ── */}
+          <BOTDTrackRecordCard />
 
           {/* ── Info Cards ── */}
           <div className="grid gap-4 sm:grid-cols-3">

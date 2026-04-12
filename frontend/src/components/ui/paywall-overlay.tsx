@@ -164,6 +164,23 @@ export function PaywallOverlay({
   useEffect(() => {
     const requiredRank = TIER_RANK[requiredTier] ?? 0;
 
+    // Admin users bypass ALL paywalls — they need full access to
+    // test and review every feature on the platform.
+    try {
+      const raw = localStorage.getItem("betsplug_user");
+      if (raw) {
+        const user = JSON.parse(raw);
+        if (user.role === "admin") {
+          setHasAccess(true);
+          setUserTier("platinum");
+          setChecked(true);
+          return;
+        }
+      }
+    } catch {
+      // Corrupted localStorage — continue with normal flow
+    }
+
     // First check localStorage (set by admin or after login)
     const stored = localStorage.getItem("betsplug_tier");
     if (stored) {

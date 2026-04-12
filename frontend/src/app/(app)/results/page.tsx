@@ -651,6 +651,15 @@ export default function ResultsPage() {
         isError={summaryQuery.isError}
       />
 
+      {/* ── Strategy context banner ── */}
+      <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-xs text-slate-400 leading-relaxed">
+        <strong className="text-slate-300">Hoe lees je deze resultaten?</strong>{" "}
+        Alle voorspellingen komen uit hetzelfde AI-ensemble model. De <em>Tip van de Dag</em> is
+        steeds de pick met de hoogste zekerheid. <em>Strategy Lab</em> filtert dezelfde
+        voorspellingen op jouw criteria (bijv. alleen hoge zekerheid of specifieke competities).
+        Gebruik de filters hieronder om te zien welke picks bij jouw strategie passen.
+      </div>
+
       {/* ── Filter bar ── */}
       <ResultsFilterBar
         period={period}
