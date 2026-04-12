@@ -409,35 +409,35 @@ async def _stream_trackrecord_csv(
     # Dennis asked for — nothing is hardcoded, everything computable.
     #
     # Row layout (1-indexed for Excel):
-    #   1: sep=,
-    #   2: blank
-    #   3: BETSPLUG TRACK RECORD
-    #   4: blank
-    #   5: Period
-    #   6: Total Predictions (formula)
-    #   7: Correct Predictions (formula)
-    #   8: Accuracy % (formula)
-    #   9: Prediction Quality (hardcoded avg, too complex for formula)
-    #  10: Generated
+    # Excel treats "sep=," as a meta-directive, NOT as row 1.
+    # So csv writer rows start counting from row 1 in Excel.
+    #
+    #   1: blank
+    #   2: BETSPLUG TRACK RECORD
+    #   3: blank
+    #   4: Period
+    #   5: Total Predictions (formula)
+    #   6: Correct Predictions (formula)
+    #   7: Accuracy % (formula)
+    #   8: Generated
+    #   9: blank
+    #  10: Disclaimer
     #  11: blank
-    #  12: Disclaimer
-    #  13: ────
-    #  14: blank
-    #  15: Column headers
-    #  16+: data rows
-    writer.writerow([])                                          # row 2
-    writer.writerow(["BETSPLUG — TRACK RECORD"])                 # row 3
-    writer.writerow([])                                          # row 4
-    writer.writerow(["Period", f"{s_period_start}  to  {s_period_end}"])  # row 5
-    writer.writerow(["Total Predictions", '=COUNTA(A16:A99999)'])        # row 6
-    writer.writerow(["Correct Predictions", '=COUNTIF(K16:K99999,"Yes")'])  # row 7
-    writer.writerow(["Accuracy (%)", '=IF(B6>0,ROUND(B7/B6*100,1),0)'])    # row 8
-    writer.writerow(["Prediction Quality", f"{s_brier:.4f}", "(lower = better; 0 = perfect)"])  # row 9
-    writer.writerow(["Generated", datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC")])   # row 10
+    #  12: blank
+    #  13: Column headers
+    #  14+: data rows
+    writer.writerow([])                                          # row 1
+    writer.writerow(["BETSPLUG — TRACK RECORD"])                 # row 2
+    writer.writerow([])                                          # row 3
+    writer.writerow(["Period", f"{s_period_start}  to  {s_period_end}"])  # row 4
+    writer.writerow(["Total Predictions", '=COUNTA(A14:A99999)'])        # row 5
+    writer.writerow(["Correct Predictions", '=COUNTIF(K14:K99999,"Yes")'])  # row 6
+    writer.writerow(["Accuracy (%)", '=IF(B5>0,ROUND(B6/B5*100,1),0)'])    # row 7
+    writer.writerow(["Generated", datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC")])   # row 8
+    writer.writerow([])                                          # row 9
+    writer.writerow(["Disclaimer", "All data is for educational and simulation purposes only. Not financial or betting advice."])  # row 10
     writer.writerow([])                                          # row 11
-    writer.writerow(["Disclaimer", "All data is for educational and simulation purposes only. Not financial or betting advice."])  # row 12
-    writer.writerow(["─" * 50])                                  # row 13
-    writer.writerow([])                                          # row 14
+    writer.writerow([])                                          # row 12
 
     # Column headers — English, clear, simple
     writer.writerow(
@@ -457,7 +457,7 @@ async def _stream_trackrecord_csv(
             "Away Score",       # M
             "Model",            # N
         ]
-    )  # row 15
+    )  # row 13
     yield buffer.getvalue().encode("utf-8")
     buffer.seek(0)
     buffer.truncate(0)

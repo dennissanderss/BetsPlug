@@ -471,16 +471,16 @@ class ReportService:
                 ],
                 [
                     self._hero_card(
-                        "Avg Brier Score",
-                        f"{brier:.4f}" if evaluated else "—",
-                        self._COLOR_ACCENT,
-                        subtitle="lower is better · perfect = 0.0",
+                        "Correct",
+                        f"{correct:,}",
+                        self._COLOR_PRIMARY,
+                        subtitle=f"out of {evaluated:,} evaluated",
                     ),
                     self._hero_card(
-                        "Total Picks per Day",
-                        f"{(total_preds / max((end - start).days, 1)):.1f}",
-                        self._COLOR_PRIMARY,
-                        subtitle=f"{(end - start).days}-day period",
+                        "Wrong",
+                        f"{(evaluated - correct):,}" if evaluated else "—",
+                        self._COLOR_RED,
+                        subtitle=f"{pending:,} still pending",
                     ),
                 ],
             ],
@@ -500,169 +500,93 @@ class ReportService:
         elements.append(hero_grid)
         elements.append(Spacer(1, 22))
 
-        # ── Performance summary table ────────────────────────────────
-        elements.extend(self._section_header("Performance Details", styles))
+        # ── Match Results scoreboard ─────────────────────────────────
+        # Dennis feedback: "je wilt een overzicht van alle wedstrijden,
+        # welke wins/verlies zijn". No technical metrics — just a simple
+        # table showing every prediction with its outcome.
+        elements.extend(self._section_header("Match Results", styles))
 
-        summary_rows = [
-            ["Metric", "Value"],
-            ["Total predictions", f"{total_preds:,}"],
-            ["Evaluated predictions", f"{evaluated:,}"],
-            ["Pending evaluation", f"{pending:,}"],
-            ["Correct predictions", f"{correct:,}"],
-            ["Accuracy", f"{accuracy:.2%}" if evaluated else "—"],
-            ["Average Brier score", f"{brier:.4f}" if evaluated else "—"],
-        ]
-        perf_table = Table(summary_rows, colWidths=[110 * mm, 60 * mm])
-        perf_table.setStyle(
-            TableStyle(
-                [
-                    ("BACKGROUND", (0, 0), (-1, 0), self._COLOR_DARK),
-                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-                    ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                    ("FONTSIZE", (0, 0), (-1, -1), 9),
-                    ("ALIGN", (0, 0), (0, -1), "LEFT"),
-                    ("ALIGN", (1, 0), (1, -1), "RIGHT"),
-                    ("LEFTPADDING", (0, 0), (-1, -1), 10),
-                    ("RIGHTPADDING", (0, 0), (-1, -1), 10),
-                    ("TOPPADDING", (0, 0), (-1, -1), 6),
-                    ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-                    ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, self._COLOR_LIGHT_BG]),
-                    ("LINEBELOW", (0, 0), (-1, -1), 0.4, self._COLOR_BORDER),
-                    ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ]
+        all_rows = data.get("rows", [])
+        result_rows = [["Date", "Match", "League", "Prediction", "Result", "Score", ""]]
+        for pred, evaluation in all_rows:
+            m = getattr(pred, "match", None)
+            if m is None:
+                continue
+
+            date_str = m.scheduled_at.strftime("%d %b") if m.scheduled_at else ""
+            home = m.home_team.name if m.home_team else "?"
+            away = m.away_team.name if m.away_team else "?"
+            match_label = f"{home} vs {away}"
+            if len(match_label) > 35:
+                match_label = match_label[:33] + ".."
+            league = m.league.name if m.league else ""
+            if len(league) > 14:
+                league = league[:12] + ".."
+
+            # Determine pick
+            probs_map = {"home": pred.home_win_prob, "draw": pred.draw_prob or 0, "away": pred.away_win_prob}
+            pick_key = max(probs_map, key=lambda k: probs_map[k])
+            pick_labels = {"home": "Home", "draw": "Draw", "away": "Away"}
+            pick_label = pick_labels.get(pick_key, pick_key)
+
+            # Score
+            score_str = ""
+            if m.result:
+                score_str = f"{m.result.home_score} - {m.result.away_score}"
+
+            # Result badge text
+            if evaluation is None:
+                result_text = "Pending"
+                badge = "..."
+            elif evaluation.is_correct:
+                result_text = "Correct"
+                badge = "WIN"
+            else:
+                result_text = "Wrong"
+                badge = "LOSS"
+
+            result_rows.append([date_str, match_label, league, pick_label, result_text, score_str, badge])
+
+        if len(result_rows) > 1:
+            results_table = Table(
+                result_rows,
+                colWidths=[18 * mm, 60 * mm, 24 * mm, 18 * mm, 16 * mm, 16 * mm, 16 * mm],
             )
-        )
-        elements.append(perf_table)
-        elements.append(Spacer(1, 18))
-
-        # ── Confidence distribution ──────────────────────────────────
-        elements.extend(self._section_header("Confidence Distribution", styles))
-
-        conf_rows = [["Confidence level", "Predictions", "Share"]]
-        cb = data["confidence_buckets"]
-        total_for_share = max(total_preds, 1)
-        bucket_labels_pretty = {
-            "high (>0.7)": "High  (> 70%)",
-            "medium (0.4-0.7)": "Medium  (40 – 70%)",
-            "low (<0.4)": "Low  (< 40%)",
-        }
-        bucket_colors = {
-            "high (>0.7)": self._COLOR_PRIMARY,
-            "medium (0.4-0.7)": self._COLOR_AMBER,
-            "low (<0.4)": self._COLOR_RED,
-        }
-        row_styles = []
-        for bucket_key, (level, count) in enumerate(cb.items()):
-            share = count / total_for_share
-            conf_rows.append(
-                [
-                    bucket_labels_pretty.get(level, level),
-                    f"{count:,}",
-                    f"{share:.1%}",
-                ]
-            )
-            row_styles.append(
-                ("LINEBEFORE", (0, bucket_key + 1), (0, bucket_key + 1), 3, bucket_colors.get(level, self._COLOR_MID))
-            )
-
-        conf_table = Table(conf_rows, colWidths=[90 * mm, 40 * mm, 40 * mm])
-        conf_table.setStyle(
-            TableStyle(
-                [
-                    ("BACKGROUND", (0, 0), (-1, 0), self._COLOR_DARK),
-                    ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-                    ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                    ("FONTSIZE", (0, 0), (-1, -1), 9),
-                    ("ALIGN", (1, 0), (-1, -1), "RIGHT"),
-                    ("LEFTPADDING", (0, 0), (-1, -1), 10),
-                    ("RIGHTPADDING", (0, 0), (-1, -1), 10),
-                    ("TOPPADDING", (0, 0), (-1, -1), 6),
-                    ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-                    ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, self._COLOR_LIGHT_BG]),
-                    ("LINEBELOW", (0, 0), (-1, -1), 0.4, self._COLOR_BORDER),
-                    ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                    *row_styles,
-                ]
-            )
-        )
-        elements.append(conf_table)
-        elements.append(Spacer(1, 18))
-
-        # ── Top correct picks ────────────────────────────────────────
-        top_correct = data.get("top_correct") or []
-        if top_correct:
-            elements.extend(self._section_header("Top Correct Picks", styles))
-
-            top_rows = [["Date", "Match", "Pick", "Confidence"]]
-            for pred, _ev in top_correct[:10]:
-                m = getattr(pred, "match", None)
-                date_str = (
-                    m.scheduled_at.strftime("%d %b %Y")
-                    if m and m.scheduled_at
-                    else ""
-                )
-                home = m.home_team.name if m and m.home_team else "—"
-                away = m.away_team.name if m and m.away_team else "—"
-                # Match column can get wide so truncate
-                match_label = f"{home} vs {away}"
-                if len(match_label) > 42:
-                    match_label = match_label[:40] + "…"
-
-                probs = {
-                    "HOME": pred.home_win_prob,
-                    "DRAW": pred.draw_prob or 0,
-                    "AWAY": pred.away_win_prob,
-                }
-                pick_label = max(probs, key=lambda k: probs[k])
-
-                top_rows.append(
-                    [
-                        date_str,
-                        match_label,
-                        pick_label,
-                        f"{pred.confidence * 100:.0f}%",
-                    ]
-                )
-
-            top_table = Table(
-                top_rows,
-                colWidths=[26 * mm, 94 * mm, 22 * mm, 28 * mm],
-            )
-            top_table.setStyle(
-                TableStyle(
-                    [
-                        ("BACKGROUND", (0, 0), (-1, 0), self._COLOR_DARK),
-                        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-                        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                        ("FONTSIZE", (0, 0), (-1, -1), 8.5),
-                        ("ALIGN", (0, 0), (0, -1), "LEFT"),
-                        ("ALIGN", (1, 0), (1, -1), "LEFT"),
-                        ("ALIGN", (2, 0), (-1, -1), "CENTER"),
-                        ("LEFTPADDING", (0, 0), (-1, -1), 8),
-                        ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-                        ("TOPPADDING", (0, 0), (-1, -1), 5),
-                        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-                        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, self._COLOR_LIGHT_BG]),
-                        ("LINEBELOW", (0, 0), (-1, -1), 0.4, self._COLOR_BORDER),
-                        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                        # Green "correct" tick bar on the left of every data row
-                        ("LINEBEFORE", (0, 1), (0, -1), 3, self._COLOR_PRIMARY),
-                    ]
-                )
-            )
-            elements.append(top_table)
-            elements.append(Spacer(1, 16))
+            style_cmds = [
+                ("BACKGROUND", (0, 0), (-1, 0), self._COLOR_DARK),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, -1), 7.5),
+                ("LEFTPADDING", (0, 0), (-1, -1), 4),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+                ("TOPPADDING", (0, 0), (-1, -1), 4),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, self._COLOR_LIGHT_BG]),
+                ("LINEBELOW", (0, 0), (-1, -1), 0.3, self._COLOR_BORDER),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("ALIGN", (3, 0), (-1, -1), "CENTER"),
+            ]
+            # Color the badge column: green for WIN, red for LOSS
+            for row_idx in range(1, len(result_rows)):
+                badge = result_rows[row_idx][6]
+                if badge == "WIN":
+                    style_cmds.append(("TEXTCOLOR", (6, row_idx), (6, row_idx), self._COLOR_PRIMARY))
+                    style_cmds.append(("TEXTCOLOR", (4, row_idx), (4, row_idx), self._COLOR_PRIMARY))
+                    style_cmds.append(("FONTNAME", (6, row_idx), (6, row_idx), "Helvetica-Bold"))
+                elif badge == "LOSS":
+                    style_cmds.append(("TEXTCOLOR", (6, row_idx), (6, row_idx), self._COLOR_RED))
+                    style_cmds.append(("TEXTCOLOR", (4, row_idx), (4, row_idx), self._COLOR_RED))
+                    style_cmds.append(("FONTNAME", (6, row_idx), (6, row_idx), "Helvetica-Bold"))
+                else:
+                    style_cmds.append(("TEXTCOLOR", (6, row_idx), (6, row_idx), self._COLOR_MID))
+            results_table.setStyle(TableStyle(style_cmds))
+            elements.append(results_table)
         else:
-            elements.extend(self._section_header("Top Correct Picks", styles))
-            elements.append(
-                Paragraph(
-                    "No correct picks were evaluated in this period yet.",
-                    muted_style,
-                )
-            )
-            elements.append(Spacer(1, 16))
+            elements.append(Paragraph("No match data available for this period.", muted_style))
 
-        # ── Disclaimer (detailed) ────────────────────────────────────
+        elements.append(Spacer(1, 18))
+
+        # ── Disclaimer ────────────────────────────────────────────────
         elements.extend(self._section_header("Disclaimer", styles))
         elements.append(
             Paragraph(
