@@ -15,9 +15,9 @@ import {
   Zap,
   Database,
   AlertTriangle,
-  Info,
   Cpu,
   Sparkles,
+  Download,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -601,32 +601,86 @@ function ModelsOverviewPanel() {
   );
 }
 
-// ─── Methodology Banner (v6.2) ────────────────────────────────────────────────
+// ─── Data Transparency Card (v6.2.1) ─────────────────────────────────────────
 //
-// Small infobanner that links to the full About/Methodology page. We
-// intentionally don't duplicate the rich content that's already on the
-// About page — a one-line nudge is enough.
+// Replaces the earlier "Hoe interpreteer ik deze cijfers?" banner. Dennis
+// asked for REAL data transparency — not an explanation of Brier scores,
+// but a way for users to see exactly WHICH predictions the trackrecord is
+// computed on, and to download the full dataset themselves. This card
+// shows the live count + period coverage and offers a CSV download.
 
-function MethodologyBanner() {
+function DataTransparencyCard({
+  summary,
+  loading,
+}: {
+  summary: TrackrecordSummary | undefined;
+  loading: boolean;
+}) {
+  const total = summary?.total_predictions ?? null;
+  const periodStart = summary?.period_start ? new Date(summary.period_start) : null;
+  const periodEnd = summary?.period_end ? new Date(summary.period_end) : null;
+  const fmtDate = (d: Date | null) =>
+    d
+      ? d.toLocaleDateString("nl-NL", { day: "numeric", month: "short", year: "numeric" })
+      : "—";
+
+  const exportUrl = api.getTrackrecordExportUrl();
+
   return (
-    <div className="flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 ring-1 ring-blue-500/20">
-        <Info className="h-4 w-4 text-blue-400" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-slate-200">
-          Hoe interpreteer ik deze cijfers?
-        </p>
-        <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
-          Brier score, calibration error en walk-forward validatie uitgelegd —{" "}
-          <Link
-            href="/about#methodology"
-            className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
+    <div className="glass-card p-5 sm:p-6 animate-slide-up">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        {/* Left: live counts */}
+        <div className="flex items-start gap-3 min-w-0 flex-1">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 ring-1 ring-blue-500/20">
+            <Database className="h-5 w-5 text-blue-400" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-sm sm:text-base font-semibold text-slate-100">
+                Live data transparantie
+              </h2>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Live
+              </span>
+            </div>
+            <p className="mt-1 text-xs sm:text-sm text-slate-400 leading-relaxed">
+              De cijfers op deze pagina zijn berekend op{" "}
+              <strong className="tabular-nums text-slate-200">
+                {loading || total == null ? "…" : total.toLocaleString("nl-NL")}
+              </strong>{" "}
+              geëvalueerde voorspellingen uit de periode{" "}
+              <strong className="text-slate-200">
+                {fmtDate(periodStart)} – {fmtDate(periodEnd)}
+              </strong>
+              . Het trackrecord werkt zichzelf bij zodra nieuwe wedstrijden
+              afgelopen zijn — geen handmatige update nodig.
+            </p>
+            <p className="mt-2 text-[11px] text-slate-500 leading-relaxed">
+              Wil je zelf de accuracy, Brier score of calibratie narekenen?
+              Download de volledige dataset als CSV.{" "}
+              <Link
+                href="/about#methodology"
+                className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
+              >
+                Hoe het model werkt →
+              </Link>
+            </p>
+          </div>
+        </div>
+
+        {/* Right: download button */}
+        <div className="flex shrink-0 sm:ml-4">
+          <a
+            href={exportUrl}
+            download
+            className="inline-flex items-center gap-2 rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-2.5 text-sm font-semibold text-blue-200 hover:bg-blue-500/20 hover:border-blue-500/50 transition-colors"
+            aria-label="Download alle voorspellingen als CSV"
           >
-            bekijk de methodology sectie
-          </Link>
-          .
-        </p>
+            <Download className="h-4 w-4" />
+            Download CSV
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -1186,8 +1240,8 @@ export default function TrackrecordPage() {
         </span>
       </div>
 
-      {/* v6.2: Methodology nudge */}
-      <MethodologyBanner />
+      {/* v6.2.1: Data transparency card (replaces the old methodology banner) */}
+      <DataTransparencyCard summary={summary} loading={summaryLoading} />
 
       {/* v6.2: Active Models panel (transparency) */}
       <ModelsOverviewPanel />

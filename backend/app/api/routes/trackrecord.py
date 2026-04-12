@@ -1,12 +1,16 @@
 """Track-record routes: accuracy, calibration and segment performance."""
 
+import csv
+import io
 import uuid
 from datetime import datetime, timezone
-from typing import List, Optional
+from typing import AsyncIterator, List, Optional
 
 from fastapi import APIRouter, Depends, Query
+from fastapi.responses import StreamingResponse
 from sqlalchemy import Integer, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.db.session import get_db
 from app.models.league import League
@@ -345,4 +349,172 @@ async def get_calibration(
         buckets=calibration_buckets,
         overall_ece=round(overall_ece, 6),
         generated_at=datetime.now(timezone.utc),
+    )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# v6.2.1 — Data transparency: raw predictions export
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# Users want to verify the numbers on the Track Record page themselves.
+# Rather than showing a single "how to interpret these numbers" banner,
+# we expose the raw prediction set as a downloadable CSV so anyone can
+# recompute accuracy, Brier, log-loss, calibration ECE — exactly what
+# the platform reports.
+#
+# The CSV is streamed (not loaded into memory) so this scales as the
+# trackrecord grows beyond the current ~5k rows. Columns are stable;
+# never rename them without bumping a version query param, third-party
+# spreadsheets will break.
+
+
+async def _stream_trackrecord_csv(
+    db: AsyncSession,
+    model_version_id: Optional[uuid.UUID] = None,
+) -> AsyncIterator[bytes]:
+    """Yield CSV rows for every prediction, one at a time."""
+    # Header row
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(
+        [
+            "prediction_id",
+            "predicted_at_utc",
+            "match_id",
+            "match_scheduled_at_utc",
+            "league_name",
+            "home_team",
+            "away_team",
+            "model_name",
+            "model_version",
+            "model_type",
+            "home_win_prob",
+            "draw_prob",
+            "away_win_prob",
+            "confidence",
+            "predicted_pick",
+            "actual_outcome",
+            "is_correct",
+            "home_score",
+            "away_score",
+            "brier_score",
+            "log_loss",
+            "evaluated_at_utc",
+        ]
+    )
+    yield buffer.getvalue().encode("utf-8")
+    buffer.seek(0)
+    buffer.truncate(0)
+
+    # Build the data query. We eager-load match (+ teams + league + result)
+    # and model_version so the row writer doesn't emit one query per row.
+    q = (
+        select(Prediction, PredictionEvaluation)
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .options(
+            selectinload(Prediction.match).selectinload(Match.home_team),
+            selectinload(Prediction.match).selectinload(Match.away_team),
+            selectinload(Prediction.match).selectinload(Match.league),
+            selectinload(Prediction.match).selectinload(Match.result),
+            selectinload(Prediction.model_version),
+        )
+        .order_by(Prediction.predicted_at.desc())
+    )
+    if model_version_id is not None:
+        q = q.where(Prediction.model_version_id == model_version_id)
+
+    result = await db.stream(q)
+    # Flush every N rows to keep memory bounded
+    flush_every = 200
+    row_count = 0
+    async for chunk in result.partitions(flush_every):
+        for pred, evaluation in chunk:
+            m = pred.match
+            mv = pred.model_version
+
+            # Determine the model's pick
+            pick: str
+            if pred.draw_prob is not None:
+                probs = {
+                    "home": pred.home_win_prob,
+                    "draw": pred.draw_prob,
+                    "away": pred.away_win_prob,
+                }
+            else:
+                probs = {"home": pred.home_win_prob, "away": pred.away_win_prob}
+            pick = max(probs, key=lambda k: probs[k])
+
+            home_score = m.result.home_score if m and m.result else None
+            away_score = m.result.away_score if m and m.result else None
+
+            writer.writerow(
+                [
+                    str(pred.id),
+                    pred.predicted_at.isoformat() if pred.predicted_at else "",
+                    str(pred.match_id),
+                    m.scheduled_at.isoformat() if m and m.scheduled_at else "",
+                    (m.league.name if m and m.league else ""),
+                    (m.home_team.name if m and m.home_team else ""),
+                    (m.away_team.name if m and m.away_team else ""),
+                    (mv.name if mv else ""),
+                    (mv.version if mv else ""),
+                    (mv.model_type if mv else ""),
+                    f"{pred.home_win_prob:.6f}",
+                    f"{pred.draw_prob:.6f}" if pred.draw_prob is not None else "",
+                    f"{pred.away_win_prob:.6f}",
+                    f"{pred.confidence:.6f}",
+                    pick,
+                    evaluation.actual_outcome or "",
+                    "1" if evaluation.is_correct else "0",
+                    str(home_score) if home_score is not None else "",
+                    str(away_score) if away_score is not None else "",
+                    f"{evaluation.brier_score:.6f}"
+                    if evaluation.brier_score is not None
+                    else "",
+                    f"{evaluation.log_loss:.6f}"
+                    if evaluation.log_loss is not None
+                    else "",
+                    evaluation.evaluated_at.isoformat() if evaluation.evaluated_at else "",
+                ]
+            )
+            row_count += 1
+
+        # Flush the buffer once per partition
+        yield buffer.getvalue().encode("utf-8")
+        buffer.seek(0)
+        buffer.truncate(0)
+
+    # Trailing yield to close the stream cleanly
+    if buffer.tell() > 0:
+        yield buffer.getvalue().encode("utf-8")
+
+
+@router.get(
+    "/export.csv",
+    summary="Download every evaluated prediction as CSV (v6.2.1 transparency)",
+    response_class=StreamingResponse,
+)
+async def export_trackrecord_csv(
+    model_version_id: Optional[uuid.UUID] = Query(
+        default=None,
+        description="Restrict to a single model version. Omit to export all models.",
+    ),
+    db: AsyncSession = Depends(get_db),
+) -> StreamingResponse:
+    """Stream all evaluated predictions as CSV.
+
+    One row per prediction/evaluation pair; columns cover enough data
+    for a user to recompute accuracy, Brier, log-loss and calibration
+    ECE themselves. This is the primary transparency artefact for the
+    Track Record page.
+    """
+    filename = f"betsplug-trackrecord-{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.csv"
+    headers = {
+        "Content-Disposition": f'attachment; filename="{filename}"',
+        "Cache-Control": "no-store",
+    }
+    return StreamingResponse(
+        _stream_trackrecord_csv(db, model_version_id=model_version_id),
+        media_type="text/csv; charset=utf-8",
+        headers=headers,
     )

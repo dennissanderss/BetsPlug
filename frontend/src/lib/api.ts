@@ -375,6 +375,15 @@ class ApiClient {
       `/trackrecord/calibration${qs}`
     );
   }
+  /**
+   * v6.2.1: resolve the trackrecord CSV export URL so a plain <a href>
+   * download link can use it. We return the URL rather than a fetched
+   * Blob so browsers handle the filename + progress indicator natively.
+   */
+  getTrackrecordExportUrl(modelVersionId?: string): string {
+    const qs = modelVersionId ? `?model_version_id=${modelVersionId}` : "";
+    return `${this.baseUrl}/trackrecord/export.csv${qs}`;
+  }
 
   // Backtests
   getBacktests() {
