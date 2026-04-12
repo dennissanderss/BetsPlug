@@ -167,6 +167,9 @@ export default function JouwRoutePage() {
                   <Lock className="h-3 w-3" />
                   {t("route.strategyLabBadge")}
                 </span>
+                <span className="inline-flex items-center rounded-full bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-400 uppercase tracking-wider">
+                  Gold
+                </span>
               </div>
               <p className="text-sm text-slate-500">
                 {t("route.strategyLabDesc")}

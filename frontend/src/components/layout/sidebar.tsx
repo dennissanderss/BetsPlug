@@ -135,9 +135,10 @@ export function Sidebar() {
               >
                 <Icon className="h-4 w-4 shrink-0 text-slate-600" />
                 <span className="flex-1">{getLabel(item)}</span>
-                <span
-                  className="text-[9px] font-bold tracking-wider text-slate-400 px-1.5 py-0.5 rounded border border-slate-700 bg-slate-800/50"
-                >
+                <span className="text-[8px] font-bold tracking-wider text-amber-400 px-1 py-0.5 rounded border border-amber-500/20 bg-amber-500/10">
+                  GOLD
+                </span>
+                <span className="text-[8px] font-bold tracking-wider text-slate-500 px-1 py-0.5 rounded border border-slate-700 bg-slate-800/50">
                   SOON
                 </span>
               </div>
