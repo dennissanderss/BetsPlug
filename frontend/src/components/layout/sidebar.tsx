@@ -29,6 +29,7 @@ interface NavItem {
   icon: React.ElementType;
   badge?: string;
   badgeColor?: string;
+  comingSoon?: boolean;  // v3: locks the link and shows "Coming Soon" badge
 }
 
 interface NavSection {
@@ -50,7 +51,7 @@ const navSections: NavSection[] = [
     labelKey: "sidebar.strategiesAndPicks",
     fallbackLabel: "Strategies & Picks",
     items: [
-      { labelKey: "nav.strategy_lab", fallback: "Strategy Lab", href: "/strategy", icon: FlaskConical },
+      { labelKey: "nav.strategy_lab", fallback: "Strategy Lab", href: "/strategy", icon: FlaskConical, comingSoon: true, badge: "SOON", badgeColor: "bg-slate-500" },
       { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy },
       { labelKey: "nav.predictions", fallback: "Predictions", href: "/predictions", icon: Sparkles },
     ],
@@ -123,6 +124,25 @@ export function Sidebar() {
             pathname === item.href || pathname.startsWith(item.href + "/") ||
             pathname === localizedHref || pathname.startsWith(localizedHref + "/");
           const Icon = item.icon;
+
+          // v3: Coming Soon items are rendered as locked (not clickable)
+          if (item.comingSoon) {
+            return (
+              <div
+                key={item.href}
+                className="nav-item group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 cursor-not-allowed opacity-60"
+                title="Coming Soon — we're collecting data to validate this feature"
+              >
+                <Icon className="h-4 w-4 shrink-0 text-slate-600" />
+                <span className="flex-1">{getLabel(item)}</span>
+                <span
+                  className="text-[9px] font-bold tracking-wider text-slate-400 px-1.5 py-0.5 rounded border border-slate-700 bg-slate-800/50"
+                >
+                  SOON
+                </span>
+              </div>
+            );
+          }
 
           return (
             <Link
