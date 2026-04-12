@@ -423,7 +423,7 @@ async def _stream_trackrecord_csv(
     writer.writerow([])
     writer.writerow([])
 
-    # Column headers — English, clear, simple
+    # Column headers — English, clear, simple, with odds for transparency
     writer.writerow(
         [
             "Match Date",       # A
@@ -435,11 +435,14 @@ async def _stream_trackrecord_csv(
             "Away %",           # G
             "Confidence %",     # H
             "Prediction",       # I
-            "Actual Outcome",   # J
-            "Correct?",         # K  ← formulas reference this column
-            "Home Score",       # L
-            "Away Score",       # M
-            "Model",            # N
+            "Odds Used",        # J  ← NEW: implied or real odds
+            "Odds Source",      # K  ← NEW: "real" / "implied" / "estimated"
+            "Actual Outcome",   # L
+            "Correct?",         # M
+            "Home Score",       # N
+            "Away Score",       # O
+            "P/L (units)",      # P  ← NEW: profit/loss per pick
+            "Model",            # Q
         ]
     )  # row 13
     yield buffer.getvalue().encode("utf-8")
@@ -491,6 +494,39 @@ async def _stream_trackrecord_csv(
                 if m and m.scheduled_at else ""
             )
 
+            # Compute odds + P/L for this pick (transparency)
+            pick_prob = probs.get(pick, 0.0)
+            # Check if real odds exist in odds_history for this match
+            odds_val = None
+            odds_source_label = "Implied"
+            if m:
+                from app.models.odds import OddsHistory
+                odds_row = (await db.execute(
+                    select(OddsHistory)
+                    .where(OddsHistory.match_id == m.id, OddsHistory.market.in_(["1x2", "1X2"]))
+                    .order_by(OddsHistory.recorded_at.desc())
+                    .limit(1)
+                )).scalar_one_or_none()
+                if odds_row:
+                    if pick == "home" and odds_row.home_odds:
+                        odds_val = odds_row.home_odds
+                        odds_source_label = "Real"
+                    elif pick == "draw" and odds_row.draw_odds:
+                        odds_val = odds_row.draw_odds
+                        odds_source_label = "Real"
+                    elif pick == "away" and odds_row.away_odds:
+                        odds_val = odds_row.away_odds
+                        odds_source_label = "Real"
+
+            if odds_val is None and pick_prob > 0.05:
+                odds_val = round(1.0 / (pick_prob * 0.95), 2)
+                odds_source_label = "Implied"
+            elif odds_val is None:
+                odds_val = 1.90
+                odds_source_label = "Estimated"
+
+            pnl = round(odds_val - 1.0, 2) if evaluation.is_correct else -1.0
+
             writer.writerow(
                 [
                     match_date,
@@ -502,10 +538,13 @@ async def _stream_trackrecord_csv(
                     f"{pred.away_win_prob * 100:.1f}",
                     f"{pred.confidence * 100:.1f}",
                     pick_labels.get(pick, pick),
+                    f"{odds_val:.2f}",
+                    odds_source_label,
                     outcome_labels.get(evaluation.actual_outcome, evaluation.actual_outcome or ""),
                     "Yes" if evaluation.is_correct else "No",
                     str(home_score) if home_score is not None else "",
                     str(away_score) if away_score is not None else "",
+                    f"{pnl:+.2f}",
                     f"{mv.name} v{mv.version}" if mv else "",
                 ]
             )
