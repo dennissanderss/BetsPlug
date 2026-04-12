@@ -197,8 +197,11 @@ async def list_predictions(
         items.append(resp)
 
     total_pages = math.ceil(total / size) if size > 0 else 1
-    return PaginatedResponse[PredictionResponse](
-        items=items,
+    # Use the base PaginatedResponse (not the generic parameterized
+    # PaginatedResponse[PredictionResponse]) for construction to avoid
+    # pydantic v2 generic class instantiation issues on Railway.
+    return PaginatedResponse(
+        items=[r.model_dump(mode="json") for r in items],
         total=total,
         page=current_page,
         page_size=size,
