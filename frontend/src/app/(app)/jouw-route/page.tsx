@@ -14,17 +14,13 @@ import {
   Lock,
   Target,
   Flame,
-  TrendingUp,
 } from "lucide-react";
 import { api } from "@/lib/api";
-
-/* ─── Page ─────────────────────────────────────────────────────────────── */
 
 export default function JouwRoutePage() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
 
-  // Fetch BOTD track record for live stats
   const { data: botdStats } = useQuery({
     queryKey: ["botd-track-record-route"],
     queryFn: async () => {
@@ -36,7 +32,6 @@ export default function JouwRoutePage() {
     staleTime: 5 * 60_000,
   });
 
-  // Fetch dashboard metrics for predictions stats
   const { data: metrics } = useQuery({
     queryKey: ["dashboard-metrics-route"],
     queryFn: () => api.getDashboardMetrics(),
@@ -51,7 +46,7 @@ export default function JouwRoutePage() {
 
   return (
     <div className="min-h-screen px-4 py-8 md:px-8 max-w-[900px] mx-auto">
-      {/* ── Header ─────────────────────────────────────────────────────── */}
+      {/* Header */}
       <div className="text-center mb-10 animate-fade-in">
         <div className="flex items-center justify-center gap-2 mb-3">
           <MapPin className="h-7 w-7 text-emerald-400" />
@@ -60,51 +55,45 @@ export default function JouwRoutePage() {
           </h1>
         </div>
         <p className="text-slate-400 text-sm max-w-lg mx-auto">
-          BetsPlug Pulse analyseert elke wedstrijd. Kies hoe je de resultaten wilt gebruiken.
+          {t("route.subtitle")}
         </p>
       </div>
 
-      {/* ── #1 Pick van de Dag — Hero Card ──────────────────────────── */}
+      {/* #1 Pick van de Dag */}
       <Link href={loc("/bet-of-the-day")} className="group block mb-6">
         <div className="glass-card overflow-hidden transition-all duration-300 group-hover:border-amber-500/30 animate-fade-in">
           <div className="h-1 w-full bg-gradient-to-r from-amber-500 to-amber-600" />
           <div className="p-6 sm:p-8">
             <div className="flex items-start gap-4">
-              {/* Icon */}
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-amber-500/15">
                 <Trophy className="h-7 w-7 text-amber-400" />
               </div>
-
-              {/* Content */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-1">
                   <h2 className="text-xl font-extrabold text-slate-100">
-                    Pick van de Dag
+                    {t("route.botdTitle")}
                   </h2>
                   <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-400 uppercase tracking-wider">
                     <Target className="h-3 w-3" />
-                    #1 Aanbeveling
+                    {t("route.botdBadge")}
                   </span>
                 </div>
                 <p className="text-sm text-slate-400 mb-4">
-                  Elke dag selecteert Pulse automatisch de wedstrijd waar het model het meest zeker van is.
-                  Eén pick, maximale overtuiging.
+                  {t("route.botdDesc")}
                 </p>
-
-                {/* Live stats row */}
                 {botdAccuracy !== null && (
                   <div className="flex flex-wrap gap-3">
                     <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-center min-w-[80px]">
-                      <p className="text-[9px] uppercase tracking-widest text-slate-500">Trefzekerheid</p>
+                      <p className="text-[9px] uppercase tracking-widest text-slate-500">{t("route.botdAccuracy")}</p>
                       <p className="text-lg font-extrabold tabular-nums text-amber-400">{botdAccuracy}%</p>
                     </div>
                     <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-center min-w-[80px]">
-                      <p className="text-[9px] uppercase tracking-widest text-slate-500">Picks</p>
+                      <p className="text-[9px] uppercase tracking-widest text-slate-500">{t("route.botdPicks")}</p>
                       <p className="text-lg font-extrabold tabular-nums text-slate-100">{botdPicks}</p>
                     </div>
                     {botdStreak > 0 && (
                       <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-center min-w-[80px]">
-                        <p className="text-[9px] uppercase tracking-widest text-slate-500">Streak</p>
+                        <p className="text-[9px] uppercase tracking-widest text-slate-500">{t("route.botdStreak")}</p>
                         <p className="text-lg font-extrabold tabular-nums text-emerald-400">
                           <Flame className="inline h-4 w-4 -mt-0.5 mr-0.5" />{botdStreak}
                         </p>
@@ -113,15 +102,13 @@ export default function JouwRoutePage() {
                   </div>
                 )}
               </div>
-
-              {/* Arrow */}
               <ChevronRight className="h-6 w-6 text-slate-600 group-hover:text-amber-400 group-hover:translate-x-1 transition-all shrink-0 mt-2" />
             </div>
           </div>
         </div>
       </Link>
 
-      {/* ── Alle Voorspellingen ─────────────────────────────────────── */}
+      {/* Alle Voorspellingen */}
       <Link href={loc("/predictions")} className="group block mb-6">
         <div className="glass-card overflow-hidden transition-all duration-300 group-hover:border-blue-500/30 animate-fade-in" style={{ animationDelay: "100ms" }}>
           <div className="h-1 w-full bg-gradient-to-r from-blue-500 to-blue-600" />
@@ -133,25 +120,24 @@ export default function JouwRoutePage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-1">
                   <h2 className="text-xl font-extrabold text-slate-100">
-                    Alle Voorspellingen
+                    {t("route.predictionsTitle")}
                   </h2>
                   <span className="inline-flex items-center gap-1 rounded-full bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 text-[10px] font-bold text-blue-400 uppercase tracking-wider">
-                    Live + Upcoming
+                    {t("route.predictionsBadge")}
                   </span>
                 </div>
                 <p className="text-sm text-slate-400 mb-4">
-                  Bekijk alle wedstrijden met AI-analyse, live scores, odds en kansberekeningen. Filter per competitie en sorteer op zekerheid.
+                  {t("route.predictionsDesc")}
                 </p>
-
                 {totalPredictions !== null && (
                   <div className="flex flex-wrap gap-3">
                     <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-center min-w-[80px]">
-                      <p className="text-[9px] uppercase tracking-widest text-slate-500">Voorspeld</p>
+                      <p className="text-[9px] uppercase tracking-widest text-slate-500">{t("route.predictionsPredicted")}</p>
                       <p className="text-lg font-extrabold tabular-nums text-blue-400">{totalPredictions?.toLocaleString("nl-NL")}</p>
                     </div>
                     {overallAccuracy !== null && (
                       <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-center min-w-[80px]">
-                        <p className="text-[9px] uppercase tracking-widest text-slate-500">Nauwkeurigheid</p>
+                        <p className="text-[9px] uppercase tracking-widest text-slate-500">{t("route.predictionsAccuracy")}</p>
                         <p className="text-lg font-extrabold tabular-nums text-slate-100">{overallAccuracy}%</p>
                       </div>
                     )}
@@ -164,7 +150,7 @@ export default function JouwRoutePage() {
         </div>
       </Link>
 
-      {/* ── Strategy Lab — Coming Soon ──────────────────────────────── */}
+      {/* Strategy Lab — Coming Soon */}
       <div className="glass-card overflow-hidden opacity-50 cursor-not-allowed mb-12 animate-fade-in" style={{ animationDelay: "200ms" }}>
         <div className="h-1 w-full bg-gradient-to-r from-slate-600 to-slate-700" />
         <div className="p-6 sm:p-8">
@@ -175,36 +161,36 @@ export default function JouwRoutePage() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap mb-1">
                 <h2 className="text-xl font-extrabold text-slate-400">
-                  Strategy Lab
+                  {t("route.strategyLabTitle")}
                 </h2>
                 <span className="inline-flex items-center gap-1 rounded-full bg-slate-700/50 border border-slate-600/30 px-2 py-0.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   <Lock className="h-3 w-3" />
-                  Coming Soon
+                  {t("route.strategyLabBadge")}
                 </span>
               </div>
               <p className="text-sm text-slate-500">
-                Bouw je eigen strategie met filters op zekerheid, competitie en markt. We verzamelen data om dit eerlijk en transparant te valideren.
+                {t("route.strategyLabDesc")}
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── Common links ───────────────────────────────────────────── */}
+      {/* Common links */}
       <div className="animate-fade-in" style={{ animationDelay: "300ms" }}>
         <div className="flex items-center gap-3 mb-6">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
           <span className="text-[11px] font-bold uppercase tracking-widest text-slate-500">
-            Prestaties & Overzicht
+            {t("route.performanceTitle")}
           </span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent" />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
-            { title: "Resultaten", desc: "Bekijk uitslagen van alle voorspellingen", href: "/results", icon: Trophy },
-            { title: "Weekrapport", desc: "Prestatie-overzicht per week", href: "/weekly-report", icon: CalendarCheck },
-            { title: "Trackrecord", desc: "Langetermijn nauwkeurigheidsdata", href: "/trackrecord", icon: BarChart3 },
+            { title: t("route.commonResults"), desc: t("route.commonResultsDesc"), href: "/results", icon: Trophy },
+            { title: t("route.commonWeeklyReport"), desc: t("route.commonWeeklyReportDesc"), href: "/weekly-report", icon: CalendarCheck },
+            { title: t("route.commonTrackrecord"), desc: t("route.commonTrackrecordDesc"), href: "/trackrecord", icon: BarChart3 },
           ].map((link) => {
             const Icon = link.icon;
             return (
