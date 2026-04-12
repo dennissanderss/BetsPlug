@@ -43,7 +43,7 @@ const ORGANIZATION = {
     "@type": "ContactPoint",
     email: "support@betsplug.com",
     contactType: "customer support",
-    availableLanguage: ["English", "Dutch", "German", "French", "Spanish", "Italian"],
+    availableLanguage: ["English", "Dutch", "German", "French", "Spanish", "Italian", "Swahili", "Indonesian"],
   },
 };
 

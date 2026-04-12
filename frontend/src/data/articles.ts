@@ -77,7 +77,7 @@ export const articles: Article[] = [
     excerpt:
       "Most bettors burn their bankroll on gut calls and recency bias. Here's the exact 5-step research framework our AI models use to isolate a repeatable edge on every football matchday.",
     metaTitle:
-      "How to Find a Real Edge on Matchday - AI Research Framework | BetsPlug",
+      "How to Find a Real Edge on Matchday · AI Research Framework · BetsPlug",
     metaDescription:
       "Learn the exact 5-step AI research framework BetsPlug uses to find a repeatable betting edge on every matchday. Elo, Poisson, XGBoost, live odds and disciplined bankroll - explained.",
     sport: "football",

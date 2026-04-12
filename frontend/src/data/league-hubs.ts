@@ -70,8 +70,8 @@ export const LEAGUE_HUBS: LeagueHub[] = [
       nl: "De Premier League is de meest gemodelleerde voetbalcompetitie ter wereld - en tegelijk een van de moeilijkste om te verslaan. Twintig clubs, 380 wedstrijden en gemiddeld negen scorende momenten per duel leveren precies het soort dataset op waar ons ensemble voor gebouwd is. BetsPlug haalt elke wedstrijd door vier onafhankelijke modellen: Elo voor de structurele krachtsverhouding, Poisson voor goalverwachting, logistische regressie voor de korte vorm en een XGBoost meta-model dat de verschillen oplost. Het resultaat is een gekalibreerde kans voor thuiswinst, gelijkspel en uitwinst plus een confidence-score waarmee we elke pick wegen. De drie wedstrijden met het hoogste verwachte edge in elke speelronde publiceren we hier gratis, automatisch bijgewerkt zodra nieuwe opstellingen, blessures of oddsverschuivingen onze pipeline binnenkomen. Members krijgen het volledige programma plus Kelly-inzetten en het closing-line rapport.",
     },
     metaTitle: {
-      en: "Premier League AI Predictions & Odds 2025/26 - Free Picks | BetsPlug",
-      nl: "Premier League AI Voorspellingen & Odds 2025/26 - Gratis Picks | BetsPlug",
+      en: "Premier League AI Predictions & Odds 2025/26 · BetsPlug",
+      nl: "Premier League AI Voorspellingen & Odds 2025/26 · BetsPlug",
     },
     metaDescription: {
       en: "Free AI-powered Premier League predictions, win probabilities and confidence scores for every upcoming gameweek. Built on Elo, Poisson and XGBoost models.",
@@ -154,8 +154,8 @@ export const LEAGUE_HUBS: LeagueHub[] = [
       nl: "La Liga is de tactisch meest diverse competitie in ons model - Real Madrid en Barcelona trekken het gemiddelde omhoog, maar de onderste helft levert steevast wedstrijden onder de 2.0 doelpunten op, waar xG en Elo het meest van elkaar verschillen. BetsPlug behandelt elke Spaanse wedstrijd als een apart micro-probleem: een Poisson-model getraind op het lagere scoringsniveau van de competitie, een Elo-curve die de top zes apart waardeert en een logistische regressor die rust- en reisdageffecten oppikt (Sevilla, Cadiz, de Canarische Eilanden). Het XGBoost-metamodel lost de meningsverschillen op en produceert gekalibreerde kansen voor thuis / gelijk / uit. Voorspellingen worden geladen uit dezelfde football-data.org feed die onze research desk gebruikt, elke 5 minuten ververst tijdens de actieve window. De drie picks met het hoogste edge per speelronde staan hier gratis; members zien het volledige programma en het closing-line value rapport.",
     },
     metaTitle: {
-      en: "La Liga AI Predictions & Odds 2025/26 - Free Picks | BetsPlug",
-      nl: "La Liga AI Voorspellingen & Odds 2025/26 - Gratis Picks | BetsPlug",
+      en: "La Liga AI Predictions & Odds 2025/26 · BetsPlug",
+      nl: "La Liga AI Voorspellingen & Odds 2025/26 · BetsPlug",
     },
     metaDescription: {
       en: "Free AI La Liga predictions, win probabilities and confidence scores for every Spanish football matchday. Built on Elo, Poisson and XGBoost models.",
@@ -238,8 +238,8 @@ export const LEAGUE_HUBS: LeagueHub[] = [
       nl: "De Bundesliga is de hoogst-scorende van Europa's top vijf competities, en juist die doelpuntenproductie zorgt ervoor dat Poisson-modellen schitteren. Met gemiddeld 3.1 doelpunten per wedstrijd - duidelijk boven de Premier League - leveren Bundesliga-duels strakkere en betrouwbaardere lambda-schattingen per team op. BetsPlug voert dat door een ensemble van vier modellen: een Elo-curve die Bayern München zijn echte plafond geeft zonder de verrassingsfactor weg te middelen, Poisson goalverwachtingen kruisgecontroleerd met OpenLigaDB event-data, een logistische regressor voor de korte vorm en een XGBoost meta-model dat de rest oplost. Friday Night Bundesliga, het Engelstalige Saturday-window en het traditionele zondag 17:30 duel voeden allemaal dezelfde pipeline. De drie scherpste edges per speeldag publiceren we hier gratis, het volledige programma zit in het BetsPlug-dashboard voor members met Kelly-inzetten en closing-line value tracking.",
     },
     metaTitle: {
-      en: "Bundesliga AI Predictions & Odds 2025/26 - Free Picks | BetsPlug",
-      nl: "Bundesliga AI Voorspellingen & Odds 2025/26 - Gratis Picks | BetsPlug",
+      en: "Bundesliga AI Predictions & Odds 2025/26 · BetsPlug",
+      nl: "Bundesliga AI Voorspellingen & Odds 2025/26 · BetsPlug",
     },
     metaDescription: {
       en: "Free AI Bundesliga predictions, win probabilities and goal expectations for every German football matchday. Cross-checked against OpenLigaDB event data.",
@@ -322,8 +322,8 @@ export const LEAGUE_HUBS: LeagueHub[] = [
       nl: "Serie A is de laagst-scorende van de top vijf - en juist daarom verdienen AI-modellen hier hun geld. Italiaans voetbal beloont nog steeds tactische discipline boven open omschakelingen, wat resulteert in meer wedstrijden onder de 2.5 doelpunten, meer 1-0 uitslagen en een structureel hoger gelijkspelpercentage dan de Premier League of Bundesliga. BetsPlug kalibreert daar expliciet voor: onze Poisson-lambdas liggen lager voor Italiaanse duels, onze Elo geeft een verdiende maar niet opgeblazen voorsprong aan de top drie, en onze logistische regressor weegt defensieve statistieken (xGA, clean-sheet rate, keeper xG-prevented) agressiever dan voor enige andere competitie. Het resultaat is een model dat boekmakers systematisch verslaat op de gelijkspel- en onder-2.5 markten, waar zij overcorrigeren naar de liefde van het publiek voor doelpunten. Drie gratis picks per speeldag publiceren we hier; het volledige Calcio-programma plus Coppa Italia-duels zit in het member-dashboard.",
     },
     metaTitle: {
-      en: "Serie A AI Predictions & Odds 2025/26 - Free Picks | BetsPlug",
-      nl: "Serie A AI Voorspellingen & Odds 2025/26 - Gratis Picks | BetsPlug",
+      en: "Serie A AI Predictions & Odds 2025/26 · BetsPlug",
+      nl: "Serie A AI Voorspellingen & Odds 2025/26 · BetsPlug",
     },
     metaDescription: {
       en: "Free AI Serie A predictions, win probabilities and confidence scores for every Italian football matchday. Calibrated for Serie A's lower goal averages.",
@@ -406,8 +406,8 @@ export const LEAGUE_HUBS: LeagueHub[] = [
       nl: "Ligue 1 is de meest scheve van de top vijf - Paris Saint-Germain heeft de titelstrijd historisch gedomineerd op een manier die Engeland, Spanje, Italië noch Duitsland kan evenaren. Dat maakt de modelleeruitdaging interessant: PSG-duels vragen een zware Elo-prior met een specifieke over-confidence correctie, terwijl de rest van de competitie wijd openligt. BetsPlug behandelt Ligue 1 in twee helften: PSG-wedstrijden gebruiken een aparte kalibratie getraind op \"dominante favoriet\" historische data (waar de impliciete winstkans meestal te hoog uitvalt), en niet-PSG wedstrijden gebruiken het standaard vier-modellen ensemble met een lichte gelijkspelcorrectie naar boven. Het nieuwe competitieformat en uitzendschema (zondagavond topwedstrijd, vrijdagopener, zaterdagmiddag-spreiding) lopen allemaal via onze football-data.org pipeline. Drie gratis picks per speeldag verschijnen hier; het volledige programma inclusief Trophée des Champions zit in het member-dashboard.",
     },
     metaTitle: {
-      en: "Ligue 1 AI Predictions & Odds 2025/26 - Free Picks | BetsPlug",
-      nl: "Ligue 1 AI Voorspellingen & Odds 2025/26 - Gratis Picks | BetsPlug",
+      en: "Ligue 1 AI Predictions & Odds 2025/26 · BetsPlug",
+      nl: "Ligue 1 AI Voorspellingen & Odds 2025/26 · BetsPlug",
     },
     metaDescription: {
       en: "Free AI Ligue 1 predictions, win probabilities and confidence scores for every French football matchday. PSG-aware calibration and live odds tracking.",
@@ -490,8 +490,8 @@ export const LEAGUE_HUBS: LeagueHub[] = [
       nl: "De Eredivisie is onze thuiscompetitie - BetsPlug is gebouwd in Nederland en de Eredivisie is de competitie die ons research-team het nauwkeurigst volgt. Het is ook een van de interessantste competities van Europa om te modelleren: aanvallend, veel goals, hoog druk, en gedomineerd door een handjevol clubs die compleet anders spelen dan de rest. Ons ensemble geeft PSV, Ajax en Feyenoord een aparte kalibratie-kop omdat hun xG-productie zo ver boven het competitiegemiddelde ligt dat één enkele lambda elke andere wedstrijd zou vertekenen. Live data halen we via API-Football, elke vijf minuten ververst tijdens de matchday-window, en we draaien dezelfde ensemble van vier modellen die we ook op de Premier League loslaten. De drie wedstrijden met het hoogste verwachte edge per speelronde zetten we hier gratis neer; members krijgen het volledige programma plus Kelly-inzetten en het closing-line rapport.",
     },
     metaTitle: {
-      en: "Eredivisie AI Predictions & Odds 2025/26 - Free Picks | BetsPlug",
-      nl: "Eredivisie AI Voorspellingen & Odds 2025/26 - Gratis Picks | BetsPlug",
+      en: "Eredivisie AI Predictions & Odds 2025/26 · BetsPlug",
+      nl: "Eredivisie AI Voorspellingen & Odds 2025/26 · BetsPlug",
     },
     metaDescription: {
       en: "Free AI-powered Eredivisie predictions, win probabilities and confidence scores for every Dutch football matchday. Built in the Netherlands on Elo, Poisson and XGBoost models.",
@@ -574,8 +574,8 @@ export const LEAGUE_HUBS: LeagueHub[] = [
       nl: "Champions League-avonden zijn de moeilijkste wedstrijden in het voetbal om te voorspellen - en de meest lonende als je ze goed hebt. Tweeluiken in de knock-out, finales op neutraal terrein en de nieuwe Zwitsers-format competitiefase zetten clubs uit verschillende landen tegen elkaar, waar Elo-verschillen maar de helft van het verhaal vertellen. BetsPlug lost dit op door elke modelrun te herwegen met cross-league sterkteschattingen, gekalibreerd op historische Europese prestaties, en daar locatie-, reisafstand- en rustdagdata bovenop te leggen. Het resultaat is een kansenset die respecteert dat een uitresultaat op Bernabéu zwaarder is dan eentje in Brentford. Elke poule- en knock-outwedstrijd modelleren we zodra de aftraptijden bekend zijn; de drie scherpste edges per speeldag publiceren we hier gratis, het volledige Europese programma zit in het BetsPlug-dashboard voor members.",
     },
     metaTitle: {
-      en: "UEFA Champions League AI Predictions - Free Picks Tonight | BetsPlug",
-      nl: "UEFA Champions League AI Voorspellingen - Gratis Picks Vanavond | BetsPlug",
+      en: "Champions League AI Predictions · Free Picks · BetsPlug",
+      nl: "Champions League AI Voorspellingen · Gratis Picks · BetsPlug",
     },
     metaDescription: {
       en: "Free AI Champions League predictions for tonight's matches: win probabilities, confidence scores and model reasoning for every group-stage and knockout fixture.",

@@ -33,7 +33,7 @@ export async function generateMetadata(props: {
   const article = getArticleBySlug(slug);
   if (!article) {
     return {
-      title: "Article not found | BetsPlug",
+      title: "Article Not Found · BetsPlug",
       description: "The article you're looking for could not be found.",
     };
   }

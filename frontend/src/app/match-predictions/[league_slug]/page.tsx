@@ -72,7 +72,7 @@ export async function generateMetadata(props: {
   const hub = getLeagueHub(league_slug);
   if (!hub) {
     return {
-      title: "League not found | BetsPlug",
+      title: "League Not Found · BetsPlug",
       description: "The league predictions page you're looking for could not be found.",
     };
   }

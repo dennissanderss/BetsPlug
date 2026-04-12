@@ -72,7 +72,7 @@ export async function generateMetadata(props: {
   const hub = getBetTypeHub(slug);
   if (!hub) {
     return {
-      title: "Bet type not found | BetsPlug",
+      title: "Bet Type Not Found · BetsPlug",
       description:
         "The betting market page you're looking for could not be found.",
     };

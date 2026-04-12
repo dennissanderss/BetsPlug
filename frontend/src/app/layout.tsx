@@ -47,7 +47,7 @@ const OG_IMAGE = {
   url: "/og-image.png",
   width: 2000,
   height: 2000,
-  alt: "BetsPlug - AI-Powered Football Analytics",
+  alt: "BetsPlug · AI Football Predictions & Analytics",
 } as const;
 
 /* ── Locale-aware metadata ────────────────────────────────────

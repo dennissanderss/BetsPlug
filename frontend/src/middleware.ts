@@ -87,13 +87,17 @@ export function middleware(req: NextRequest) {
     ? cookieLocale
     : headerLocale ?? defaultLocale;
 
+  // Canonicalize the unprefixed path first. English slugs may
+  // differ from the filesystem path (e.g. /your-route → /jouw-route).
+  const parsed = parseLocalizedPath(pathname, defaultLocale);
+
   // If the visitor prefers a non-default locale, redirect them
   // to the localized URL so they see translated slugs + content.
   if (preferred !== defaultLocale) {
     // Only redirect if this is a GET navigation to an HTML doc.
     const accept = req.headers.get("accept") ?? "";
     if (req.method === "GET" && accept.includes("text/html")) {
-      const localizedPath = localizePath(pathname, preferred);
+      const localizedPath = localizePath(parsed.canonical, preferred);
       if (localizedPath !== pathname) {
         const url = req.nextUrl.clone();
         url.pathname = localizedPath;
@@ -105,7 +109,18 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // Default locale (or non-HTML) → serve as-is, just refresh cookie.
+  // Default locale — if the English slug differs from the canonical
+  // filesystem path, rewrite internally so Next.js finds the page.
+  // (e.g. /your-route → /jouw-route where the page file lives)
+  if (parsed.canonical !== pathname) {
+    const url = req.nextUrl.clone();
+    url.pathname = parsed.canonical;
+    const res = NextResponse.rewrite(url);
+    setLocaleCookie(res, defaultLocale);
+    return res;
+  }
+
+  // Path already matches filesystem — serve as-is, just refresh cookie.
   const res = NextResponse.next();
   if (!cookieLocale || cookieLocale !== preferred) {
     setLocaleCookie(res, preferred);

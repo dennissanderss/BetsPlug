@@ -1,50 +1,25 @@
 import type { Metadata } from "next";
 import { MatchPredictionsContent } from "./match-predictions-content";
-import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import {
+  getServerLocale,
+  getLocalizedAlternates,
+  getLocalizedFaq,
+  getLocalizedBreadcrumbs,
+} from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { FaqSection } from "@/components/seo/faq-section";
+import { translate } from "@/i18n/messages";
 
-const MATCH_PREDICTIONS_FAQS = [
-  {
-    question: "How are match predictions generated?",
-    answer:
-      "Our engine combines Elo ratings, expected goals (xG), recent form, and dozens of contextual features. A machine-learning pipeline processes these inputs to produce calibrated AI predictions for every fixture.",
-  },
-  {
-    question: "How accurate are the predictions?",
-    answer:
-      "Accuracy varies by league and market, but our models consistently beat naive baselines and bookmaker-implied odds. Check our public track record and Brier scores for detailed, independently verifiable stats.",
-  },
-  {
-    question: "When are predictions published?",
-    answer:
-      "AI predictions are typically available 24-48 hours before kick-off once team news and the latest Elo ratings have been factored in. Odds and value flags update right up until the match starts.",
-  },
-  {
-    question: "Which markets are covered?",
-    answer:
-      "We cover 1X2 (match result), over/under goals, both teams to score, and Asian handicap markets. Each market shows win probabilities derived from our expected goals and football analytics models.",
-  },
-  {
-    question: "Can I get predictions for free?",
-    answer:
-      "Yes — a selection of upcoming match predictions is available for free on this page. Premium members unlock every fixture, full probability breakdowns, value betting alerts, and advanced Elo analytics.",
-  },
-  {
-    question: "How do I interpret the probability scores?",
-    answer:
-      "Each prediction shows a percentage reflecting the model's confidence. Compare these AI-generated probabilities with bookmaker odds to spot value bets where the true chance exceeds the implied odds.",
-  },
+const PRED_FAQ_KEYS = [
+  { q: "faq.pred.q1", a: "faq.pred.a1" },
+  { q: "faq.pred.q2", a: "faq.pred.a2" },
+  { q: "faq.pred.q3", a: "faq.pred.a3" },
+  { q: "faq.pred.q4", a: "faq.pred.a4" },
+  { q: "faq.pred.q5", a: "faq.pred.a5" },
+  { q: "faq.pred.q6", a: "faq.pred.a6" },
 ];
 
-/**
- * Public marketing teaser for the prediction engine.
- * Shows 3 upcoming matches with full probabilities, then
- * blurs the rest behind an "Unlock all games" paywall CTA.
- * Data comes from the same public /fixtures/upcoming endpoint
- * used on the members-only /predictions page.
- */
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
   const meta = PAGE_META["/match-predictions"]?.[locale] ?? PAGE_META["/match-predictions"].en;
@@ -66,19 +41,21 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function MatchPredictionsPage() {
+  const locale = getServerLocale();
+  const faqItems = getLocalizedFaq(PRED_FAQ_KEYS);
+  const breadcrumbs = getLocalizedBreadcrumbs([
+    { labelKey: "bc.home", canonicalPath: "/" },
+    { labelKey: "bc.matchPredictions", canonicalPath: "/match-predictions" },
+  ]);
+
   return (
     <>
-      <BreadcrumbJsonLd
-        items={[
-          { name: "Home", href: "/" },
-          { name: "Match Predictions", href: "/match-predictions" },
-        ]}
-      />
+      <BreadcrumbJsonLd items={breadcrumbs} />
       <MatchPredictionsContent />
       <FaqSection
-        title="Football Predictions FAQ"
-        subtitle="Everything you need to know about our AI match predictions."
-        items={MATCH_PREDICTIONS_FAQS}
+        title={translate(locale, "faqTitle.predictions" as any)}
+        subtitle={translate(locale, "faqTitle.predictionsSub" as any)}
+        items={faqItems}
       />
     </>
   );

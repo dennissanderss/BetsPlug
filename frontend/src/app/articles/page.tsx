@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
 import { ArticlesContent } from "./articles-content";
-import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import {
+  getServerLocale,
+  getLocalizedAlternates,
+  getLocalizedBreadcrumbs,
+} from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 
-/**
- * Public articles archive page.
- * Lists every article with tab filters per sport and a hero
- * featured post at the top. Data comes from the static
- * src/data/articles.ts source so the page is fully SSG-friendly.
- */
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
   const meta = PAGE_META["/articles"]?.[locale] ?? PAGE_META["/articles"].en;
@@ -31,14 +29,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function ArticlesPage() {
+  const breadcrumbs = getLocalizedBreadcrumbs([
+    { labelKey: "bc.home", canonicalPath: "/" },
+    { labelKey: "bc.articles", canonicalPath: "/articles" },
+  ]);
+
   return (
     <>
-      <BreadcrumbJsonLd
-        items={[
-          { name: "Home", href: "/" },
-          { name: "Articles", href: "/articles" },
-        ]}
-      />
+      <BreadcrumbJsonLd items={breadcrumbs} />
       <ArticlesContent />
     </>
   );

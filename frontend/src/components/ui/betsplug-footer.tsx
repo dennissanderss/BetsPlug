@@ -85,9 +85,9 @@ export function BetsPlugFooter() {
     { text: t("b2b.badge"), href: loc("/b2b") },
   ];
   const legalLinksT = [
-    { text: t("footer.termsOfService"), href: "/terms" },
-    { text: t("footer.privacyPolicy"), href: "/privacy" },
-    { text: t("footer.cookiePolicy"), href: "/cookies" },
+    { text: t("footer.termsOfService"), href: loc("/terms") },
+    { text: t("footer.privacyPolicy"), href: loc("/privacy") },
+    { text: t("footer.cookiePolicy"), href: loc("/cookies") },
   ];
 
   return (
@@ -428,7 +428,7 @@ export function BetsPlugFooter() {
             {bottomLinkKeys.map(({ key, href }) => (
               <Link
                 key={key}
-                href={href}
+                href={loc(href)}
                 className="text-xs text-slate-500 transition-colors hover:text-green-400"
               >
                 {t(key)}

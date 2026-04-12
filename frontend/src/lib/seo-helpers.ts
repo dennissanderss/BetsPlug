@@ -20,6 +20,7 @@ import {
   type Locale,
 } from "@/i18n/config";
 import { localizePath } from "@/i18n/routes";
+import { translate } from "@/i18n/messages";
 
 const SITE_URL = "https://betsplug.com";
 
@@ -71,4 +72,42 @@ export function getLocalizedAlternates(canonicalPath: string): {
   languages["x-default"] = `${SITE_URL}${localizePath(canonicalPath, defaultLocale) === "/" ? "" : localizePath(canonicalPath, defaultLocale)}`;
 
   return { canonical, languages };
+}
+
+/* ── Locale-aware FAQ builder ──────────────────────────────── */
+
+type FaqKeySet = { q: string; a: string }[];
+
+/**
+ * Build a locale-aware FAQ items array from translation keys.
+ * Each entry in `keys` is { q: "faq.home.q1", a: "faq.home.a1" }.
+ */
+export function getLocalizedFaq(keys: FaqKeySet) {
+  const locale = getServerLocale();
+  return keys.map(({ q, a }) => ({
+    question: translate(locale, q as any),
+    answer: translate(locale, a as any),
+  }));
+}
+
+/* ── Locale-aware breadcrumb builder ───────────────────────── */
+
+/**
+ * Build locale-aware breadcrumbs with translated names and
+ * localized hrefs.
+ *
+ * @param items Array of { labelKey, canonicalPath } pairs
+ * @returns BreadcrumbItem[] with translated name + localized href
+ */
+export function getLocalizedBreadcrumbs(
+  items: { labelKey: string; canonicalPath: string }[]
+) {
+  const locale = getServerLocale();
+  return items.map(({ labelKey, canonicalPath }) => ({
+    name: translate(locale, labelKey as any),
+    href:
+      canonicalPath === "/"
+        ? `${SITE_URL}/`
+        : `${SITE_URL}${localizePath(canonicalPath, locale)}`,
+  }));
 }

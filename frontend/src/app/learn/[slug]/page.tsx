@@ -80,7 +80,7 @@ export async function generateMetadata(props: {
   const pillar = getLearnPillar(slug);
   if (!pillar) {
     return {
-      title: "Topic not found | BetsPlug",
+      title: "Topic Not Found · BetsPlug",
       description: "The learn topic you're looking for could not be found.",
     };
   }

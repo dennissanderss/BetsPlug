@@ -77,8 +77,8 @@ export const BET_TYPE_HUBS: BetTypeHub[] = [
       nl: "Top 3 wedstrijden waar ons ensemble de hoogste confidence heeft - een nuttige shortlist voor BTTS-research.",
     },
     metaTitle: {
-      en: "Both Teams To Score Predictions & BTTS Tips Today | BetsPlug",
-      nl: "Beide Teams Scoren Voorspellingen & BTTS Tips Vandaag | BetsPlug",
+      en: "Both Teams To Score Predictions & BTTS Tips · BetsPlug",
+      nl: "Beide Teams Scoren Voorspellingen & BTTS Tips · BetsPlug",
     },
     metaDescription: {
       en: "Free BTTS predictions, model reasoning and a shortlist of today's most confident fixtures. How Both Teams To Score is priced and when the market overreacts.",
@@ -167,8 +167,8 @@ export const BET_TYPE_HUBS: BetTypeHub[] = [
       nl: "Top 3 wedstrijden waar ons ensemble de hoogste confidence heeft - een nuttige shortlist voor totals-markt research.",
     },
     metaTitle: {
-      en: "Over 2.5 Goals Predictions & Tips Today | BetsPlug",
-      nl: "Over 2.5 Goals Voorspellingen & Tips Vandaag | BetsPlug",
+      en: "Over 2.5 Goals Predictions & Tips Today · BetsPlug",
+      nl: "Over 2.5 Goals Voorspellingen & Tips Vandaag · BetsPlug",
     },
     metaDescription: {
       en: "Free Over 2.5 goals predictions and model reasoning. How Poisson-based totals pricing works and when the market overreacts to low-scoring narratives.",
@@ -257,8 +257,8 @@ export const BET_TYPE_HUBS: BetTypeHub[] = [
       nl: "Top 3 wedstrijden waar onze ensemble 1X2-confidence het hoogst is - een betrouwbare startplek voor Double Chance value research.",
     },
     metaTitle: {
-      en: "Double Chance Predictions Explained (1X, X2, 12) | BetsPlug",
-      nl: "Double Chance Voorspellingen Uitgelegd (1X, X2, 12) | BetsPlug",
+      en: "Double Chance Predictions Explained (1X, X2, 12) · BetsPlug",
+      nl: "Double Chance Voorspellingen Uitgelegd (1X, X2, 12) · BetsPlug",
     },
     metaDescription: {
       en: "How Double Chance betting works, why 1X and X2 prices look the way they do, and when the market misprices the draw. Plus today's highest-confidence fixtures.",
@@ -347,8 +347,8 @@ export const BET_TYPE_HUBS: BetTypeHub[] = [
       nl: "Top 3 wedstrijden waar ons ensemble de hoogste confidence heeft - de beste kandidaten voor Draw No Bet value-plays.",
     },
     metaTitle: {
-      en: "Draw No Bet Explained - DNB Tips Today | BetsPlug",
-      nl: "Draw No Bet Uitgelegd - DNB Tips Vandaag | BetsPlug",
+      en: "Draw No Bet Explained · DNB Tips Today · BetsPlug",
+      nl: "Draw No Bet Uitgelegd · DNB Tips Vandaag · BetsPlug",
     },
     metaDescription: {
       en: "What Draw No Bet means, how it's priced versus 1X2 and Double Chance, and when the market gives DNB value. Plus today's most confident fixtures.",

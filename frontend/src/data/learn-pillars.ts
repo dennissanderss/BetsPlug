@@ -65,8 +65,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "Waarom de bookmaker verslaan om prijs gaat, niet om voorspelling",
     },
     metaTitle: {
-      en: "What is Value Betting? A Complete Guide (2026) | BetsPlug",
-      nl: "Wat is Value Betting? Een Complete Gids (2026) | BetsPlug",
+      en: "What is Value Betting? A Complete Guide (2026) · BetsPlug",
+      nl: "Wat is Value Betting? Een Complete Gids (2026) · BetsPlug",
     },
     metaDescription: {
       en: "Value betting isn't picking winners - it's spotting prices that are higher than their true probability. Full guide to EV, Kelly sizing, and real examples.",
@@ -227,8 +227,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "Hoe shot-kwaliteit modellering scorelijn-analyse verving in het moderne voetbal",
     },
     metaTitle: {
-      en: "Expected Goals (xG) Explained - Complete 2026 Guide | BetsPlug",
-      nl: "Expected Goals (xG) Uitgelegd - Complete Gids 2026 | BetsPlug",
+      en: "Expected Goals (xG) Explained · Complete 2026 Guide · BetsPlug",
+      nl: "Expected Goals (xG) Uitgelegd · Complete Gids 2026 · BetsPlug",
     },
     metaDescription: {
       en: "What xG actually measures, how it's calculated from shot data, why pundits argue about it, and how BetsPlug uses it inside our Poisson goal model.",
@@ -371,8 +371,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "Van schaken tot voetbal - hoe een 60 jaar oud algoritme nog steeds moderne modellen verankert",
     },
     metaTitle: {
-      en: "Elo Rating Explained (Chess & Football) | BetsPlug",
-      nl: "Elo Rating Uitgelegd (Schaken & Voetbal) | BetsPlug",
+      en: "Elo Rating Explained (Chess & Football) · BetsPlug",
+      nl: "Elo Rating Uitgelegd (Schaken & Voetbal) · BetsPlug",
     },
     metaDescription: {
       en: "How the Elo rating system works, why it's such a strong baseline for football prediction, and the modifications BetsPlug uses inside our ensemble.",
@@ -515,8 +515,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "Optimale inzet-sizing, uitgelegd zonder de calculus",
     },
     metaTitle: {
-      en: "Kelly Criterion Guide - Optimal Bet Sizing 2026 | BetsPlug",
-      nl: "Kelly Criterion Gids - Optimale Bet Sizing 2026 | BetsPlug",
+      en: "Kelly Criterion Guide · Optimal Bet Sizing 2026 · BetsPlug",
+      nl: "Kelly Criterion Gids · Optimale Bet Sizing 2026 · BetsPlug",
     },
     metaDescription: {
       en: "How the Kelly Criterion calculates optimal stakes, why full Kelly is too aggressive, and the fractional-Kelly sizing BetsPlug uses in member tools.",
@@ -659,8 +659,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "De statistische werkpaard die verwachte goals omzet in wedstrijdkansen",
     },
     metaTitle: {
-      en: "Poisson Goal Models Explained - Football Predictions | BetsPlug",
-      nl: "Poisson Goalmodellen Uitgelegd - Voetbalvoorspellingen | BetsPlug",
+      en: "Poisson Goal Models Explained · Football Predictions · BetsPlug",
+      nl: "Poisson Goalmodellen Uitgelegd · Voetbalvoorspellingen · BetsPlug",
     },
     metaDescription: {
       en: "How Poisson distributions translate expected goals into match-result probabilities, the Dixon-Coles adjustment, and how BetsPlug's Poisson head actually works.",
@@ -803,8 +803,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "Het verschil tussen een model dat werkt en een dat uitbetaalt",
     },
     metaTitle: {
-      en: "Bankroll Management for Football Bettors (2026 Guide) | BetsPlug",
-      nl: "Bankroll Management voor Sportwedders (2026 Gids) | BetsPlug",
+      en: "Bankroll Management for Football Bettors (2026) · BetsPlug",
+      nl: "Bankroll Management voor Sportwedders (2026) · BetsPlug",
     },
     metaDescription: {
       en: "How to size your bankroll, survive variance, and avoid the psychological traps that wipe out +EV bettors. Practical rules and worked examples.",
