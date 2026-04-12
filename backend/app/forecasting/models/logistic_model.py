@@ -120,6 +120,17 @@ class LogisticModel(ForecastModel):
         "away_form_corners",
         "shots_on_target_diff",
         "possession_diff",
+        # v3 additions — derived from existing form data, zero API calls
+        "home_clean_sheets_pct",
+        "away_clean_sheets_pct",
+        "home_scoring_consistency",
+        "away_scoring_consistency",
+        "home_goals_first_half",
+        "away_goals_first_half",
+        "home_ppg_last5",
+        "away_ppg_last5",
+        "league_position_diff",
+        "match_importance",
     ]
 
     def __init__(self, model_version_id: UUID, config: dict) -> None:
@@ -422,6 +433,17 @@ class LogisticModel(ForecastModel):
             away_form_cor,
             shots_on_target_diff,
             possession_diff,
+            # v3: derived features from existing form data
+            float(ctx.get("home_clean_sheets_pct", 0.0) or 0.0),
+            float(ctx.get("away_clean_sheets_pct", 0.0) or 0.0),
+            float(ctx.get("home_scoring_consistency", 0.0) or 0.0),
+            float(ctx.get("away_scoring_consistency", 0.0) or 0.0),
+            float(ctx.get("home_goals_first_half", 0.0) or 0.0),
+            float(ctx.get("away_goals_first_half", 0.0) or 0.0),
+            float(ctx.get("home_ppg_last5", 0.0) or 0.0),
+            float(ctx.get("away_ppg_last5", 0.0) or 0.0),
+            float(ctx.get("league_position_diff", 0.0) or 0.0),
+            float(ctx.get("match_importance", 0.5) or 0.5),
         ]
 
     # ------------------------------------------------------------------ #

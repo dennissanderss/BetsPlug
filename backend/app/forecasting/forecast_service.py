@@ -247,6 +247,89 @@ class ForecastService:
             "away": await self._avg_form_match_stats(away_form, away_id, db),
         }
 
+        # --- v3 derived features from existing data -------------------- #
+        # All computed from form matches already loaded above. Zero API calls.
+        def _clean_sheet_pct(form_matches, team_id):
+            """% of form matches where team conceded 0 goals."""
+            if not form_matches:
+                return 0.0
+            clean = 0
+            for fm in form_matches:
+                if not fm.result:
+                    continue
+                if str(fm.home_team_id) == str(team_id):
+                    if fm.result.away_score == 0:
+                        clean += 1
+                else:
+                    if fm.result.home_score == 0:
+                        clean += 1
+            return clean / len(form_matches) if form_matches else 0.0
+
+        def _scoring_consistency(form_matches, team_id):
+            """Std dev of goals scored — low = consistent, high = volatile."""
+            goals = []
+            for fm in form_matches:
+                if not fm.result:
+                    continue
+                if str(fm.home_team_id) == str(team_id):
+                    goals.append(fm.result.home_score)
+                else:
+                    goals.append(fm.result.away_score)
+            if len(goals) < 2:
+                return 0.0
+            avg = sum(goals) / len(goals)
+            variance = sum((g - avg) ** 2 for g in goals) / len(goals)
+            return variance ** 0.5
+
+        def _ht_goals_avg(form_matches, team_id):
+            """Avg goals scored in the first half."""
+            ht_goals = []
+            for fm in form_matches:
+                if not fm.result:
+                    continue
+                if str(fm.home_team_id) == str(team_id):
+                    if fm.result.home_score_ht is not None:
+                        ht_goals.append(fm.result.home_score_ht)
+                else:
+                    if fm.result.away_score_ht is not None:
+                        ht_goals.append(fm.result.away_score_ht)
+            return sum(ht_goals) / len(ht_goals) if ht_goals else 0.0
+
+        def _ppg_last5(form_matches, team_id):
+            """Points per game over last 5 form matches."""
+            pts = 0
+            counted = 0
+            for fm in form_matches[:5]:
+                if not fm.result:
+                    continue
+                counted += 1
+                is_home = str(fm.home_team_id) == str(team_id)
+                hs, as_ = fm.result.home_score, fm.result.away_score
+                if is_home:
+                    pts += 3 if hs > as_ else (1 if hs == as_ else 0)
+                else:
+                    pts += 3 if as_ > hs else (1 if hs == as_ else 0)
+            return pts / counted if counted > 0 else 0.0
+
+        home_clean_sheets_pct = _clean_sheet_pct(home_form, home_id)
+        away_clean_sheets_pct = _clean_sheet_pct(away_form, away_id)
+        home_scoring_consistency = _scoring_consistency(home_form, home_id)
+        away_scoring_consistency = _scoring_consistency(away_form, away_id)
+        home_goals_first_half = _ht_goals_avg(home_form, home_id)
+        away_goals_first_half = _ht_goals_avg(away_form, away_id)
+        home_ppg_last5 = _ppg_last5(home_form, home_id)
+        away_ppg_last5 = _ppg_last5(away_form, away_id)
+
+        # League position difference (home advantage in position)
+        h_pos = home_standing.get("position", 10) if home_standing else 10
+        a_pos = away_standing.get("position", 10) if away_standing else 10
+        league_position_diff = a_pos - h_pos  # positive = home higher in table
+
+        # Match importance: later in season = more important
+        matchday_val = match.matchday or 19  # default mid-season
+        total_matchdays = 34 if total_teams and total_teams >= 18 else 38
+        match_importance = matchday_val / total_matchdays
+
         return {
             "match_id": str(match.id),
             "home_team_id": str(home_id),
@@ -265,18 +348,26 @@ class ForecastService:
             "away_standing": away_standing,
             "league_avg_goals": league_avg_goals,
             "total_teams_in_league": total_teams,
-            # v5: point-in-time Elo ratings read from team_elo_history.
-            # The model side reads these keys — see app/forecasting/models/
-            # elo_model.py::predict.
+            # v5: point-in-time Elo ratings
             "home_elo_at_kickoff": home_elo_snap.rating,
             "away_elo_at_kickoff": away_elo_snap.rating,
             "home_elo_source": home_elo_snap.source,
             "away_elo_source": away_elo_snap.source,
             "home_elo_effective_at": home_elo_snap.effective_at.isoformat(),
             "away_elo_effective_at": away_elo_snap.effective_at.isoformat(),
-            # v5.2: per-side averages of match statistics from the
-            # same form window. Used by LogisticModel feature vector.
+            # v5.2: per-side match statistics averages
             "form_stats": form_stats,
+            # v3: derived features from form data (zero extra API calls)
+            "home_clean_sheets_pct": home_clean_sheets_pct,
+            "away_clean_sheets_pct": away_clean_sheets_pct,
+            "home_scoring_consistency": home_scoring_consistency,
+            "away_scoring_consistency": away_scoring_consistency,
+            "home_goals_first_half": home_goals_first_half,
+            "away_goals_first_half": away_goals_first_half,
+            "home_ppg_last5": home_ppg_last5,
+            "away_ppg_last5": away_ppg_last5,
+            "league_position_diff": league_position_diff,
+            "match_importance": match_importance,
         }
 
     # ------------------------------------------------------------------ #
@@ -434,6 +525,7 @@ class ForecastService:
     # we cache the fitted instance per Python process. Re-populated via
     # ``POST /api/admin/v5/train-logistic`` on demand.
     _cached_logistic: "Optional[LogisticModel]" = None
+    _cached_xgboost = None  # v3: XGBoost model cache slot
 
     @classmethod
     def set_cached_logistic(cls, model) -> None:
@@ -442,6 +534,15 @@ class ForecastService:
     @classmethod
     def get_cached_logistic(cls):
         return cls._cached_logistic
+
+    @classmethod
+    def set_cached_xgboost(cls, model) -> None:
+        """Cache a trained XGBoost model for the ensemble."""
+        cls._cached_xgboost = model
+
+    @classmethod
+    def get_cached_xgboost(cls):
+        return cls._cached_xgboost
 
     @classmethod
     def _build_default_ensemble(
@@ -459,7 +560,14 @@ class ForecastService:
         from app.forecasting.models.logistic_model import LogisticModel
 
         sub_config = config.get("sub_model_config", {})
-        weights = config.get("weights", {"elo": 1.0, "poisson": 1.5, "logistic": 1.0})
+        # v3: updated default weights — XGBoost gets the heaviest weight
+        # when it's trained, otherwise falls back to the v2 3-model ensemble.
+        weights = config.get("weights", {
+            "elo": 0.8,
+            "poisson": 1.2,
+            "logistic": 0.8,
+            "xgboost": 1.5,
+        })
 
         logistic_model = cls._cached_logistic
         if logistic_model is None:
@@ -468,10 +576,15 @@ class ForecastService:
             )
 
         sub_models = [
-            (EloModel(model_version_id, sub_config.get("elo", {})), weights.get("elo", 1.0)),
-            (PoissonModel(model_version_id, sub_config.get("poisson", {})), weights.get("poisson", 1.5)),
-            (logistic_model, weights.get("logistic", 1.0)),
+            (EloModel(model_version_id, sub_config.get("elo", {})), weights.get("elo", 0.8)),
+            (PoissonModel(model_version_id, sub_config.get("poisson", {})), weights.get("poisson", 1.2)),
+            (logistic_model, weights.get("logistic", 0.8)),
         ]
+
+        # v3: add XGBoost as 4th model if trained and cached
+        xgb_model = cls._cached_xgboost if hasattr(cls, "_cached_xgboost") else None
+        if xgb_model is not None:
+            sub_models.append((xgb_model, weights.get("xgboost", 1.5)))
         return EnsembleModel(
             model_version_id=model_version_id,
             config=config,
