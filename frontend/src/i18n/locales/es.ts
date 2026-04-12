@@ -794,12 +794,12 @@ const es = {
   "hiw.s7P2": "La precisión 3-way actual (local/empate/visitante) ronda el 50% - por encima de la baseline aleatoria del 33%, pero no extraordinaria. Publicamos todos los resultados, victorias y derrotas, para que puedas verificar el historial tú mismo.",
   "hiw.s7Title": "Cada predicción se califica contra el resultado real.",
 
-  "home.freePredBadge": "Predicciones gratis",
+  "home.freePredBadge": "No es necesario registrarse",
   "home.freePredCta": "Ver todas las predicciones",
   "home.freePredCtaSub": "Desbloquee acceso completo a más de 50 predicciones diarias con una prueba gratuita.",
   "home.freePredSubtitle": "Vea nuestros modelos en acción. Tres predicciones de partidos gratuitas basadas en IA: actualizadas diariamente, no es necesario registrarse.",
-  "home.freePredTitle": "La IA de hoy",
-  "home.freePredTitleHighlight": "predicciones",
+  "home.freePredTitle": "GRATIS de hoy",
+  "home.freePredTitleHighlight": "Predicciones de IA",
 
   "how.badge": "Cómo funciona",
   "how.deepDive": "Ver el motor completo",

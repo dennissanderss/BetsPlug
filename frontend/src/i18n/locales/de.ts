@@ -794,12 +794,12 @@ const de = {
   "hiw.s7P2": "Die aktuelle 3-Way-Genauigkeit (Heim/Unentschieden/Auswärts) liegt bei etwa 50% - über der 33%-Zufallsbaseline, aber nicht außergewöhnlich. Wir veröffentlichen alle Ergebnisse, Gewinne und Verluste, damit Sie die Erfolgsbilanz selbst überprüfen können.",
   "hiw.s7Title": "Jede Vorhersage wird am realen Ergebnis gemessen.",
 
-  "home.freePredBadge": "Kostenlose Vorhersagen",
+  "home.freePredBadge": "Keine Anmeldung erforderlich",
   "home.freePredCta": "Alle Vorhersagen anzeigen",
   "home.freePredCtaSub": "Erhalten Sie mit einer kostenlosen Testversion vollen Zugriff auf über 50 tägliche Vorhersagen.",
   "home.freePredSubtitle": "Sehen Sie unsere Modelle in Aktion. Drei kostenlose KI-gestützte Spielvorhersagen – täglich aktualisiert, keine Anmeldung erforderlich.",
-  "home.freePredTitle": "Die heutige KI",
-  "home.freePredTitleHighlight": "Vorhersagen",
+  "home.freePredTitle": "Heute KOSTENLOS",
+  "home.freePredTitleHighlight": "KI-Vorhersagen",
 
   "how.badge": "So funktioniert's",
   "how.deepDive": "Die gesamte Engine ansehen",

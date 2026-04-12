@@ -794,12 +794,12 @@ const sw = {
   "hiw.s7P2": "Ugunduzi wa mabadiliko unaendelea kwa muda wote. Ikiwa ukadiriaji wa modeli unaanza kuteleza kwa mchezo wowote au ligi, tahadhari inawaka na ensemble inarudishwa kwenye toleo la mwisho linalojulikana hadi suala lielewike.",
   "hiw.s7Title": "Injini inakuwa nadhifu zaidi kila Jumapili usiku.",
 
-  "home.freePredBadge": "Utabiri wa bure",
+  "home.freePredBadge": "Hakuna kujisajili kunahitajika",
   "home.freePredCta": "Tazama utabiri wote",
   "home.freePredCtaSub": "Fungua ufikiaji kamili wa ubashiri wa kila siku 50+ na jaribio lisilolipishwa.",
   "home.freePredSubtitle": "Tazama mifano yetu inavyofanya kazi. Utabiri wa mechi tatu bila malipo unaoendeshwa na AI - unasasishwa kila siku, hakuna kujisajili kunahitajika.",
-  "home.freePredTitle": "AI ya leo",
-  "home.freePredTitleHighlight": "utabiri",
+  "home.freePredTitle": "Leo BURE",
+  "home.freePredTitleHighlight": "Utabiri wa AI",
 
   "how.badge": "Jinsi inavyofanya kazi",
   "how.deepDive": "Ona injini kamili",

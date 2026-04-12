@@ -794,12 +794,12 @@ const it = {
   "hiw.s7P2": "La precisione 3-way attuale (casa/pareggio/trasferta) si aggira intorno al 50% - sopra la baseline casuale del 33%, ma non straordinaria. Pubblichiamo tutti i risultati, vittorie e sconfitte, così può verificare il track record lei stesso.",
   "hiw.s7Title": "Ogni previsione viene valutata rispetto al risultato reale.",
 
-  "home.freePredBadge": "Pronostici gratuiti",
+  "home.freePredBadge": "Non è richiesta la registrazione",
   "home.freePredCta": "Visualizza tutti i pronostici",
   "home.freePredCtaSub": "Sblocca l'accesso completo a oltre 50 pronostici giornalieri con una prova gratuita.",
   "home.freePredSubtitle": "Guarda i nostri modelli in azione. Tre pronostici gratuiti sulle partite basati sull'intelligenza artificiale: aggiornati quotidianamente, non è richiesta la registrazione.",
-  "home.freePredTitle": "L'intelligenza artificiale di oggi",
-  "home.freePredTitleHighlight": "previsioni",
+  "home.freePredTitle": "Oggi è GRATUITO",
+  "home.freePredTitleHighlight": "Previsioni dell'intelligenza artificiale",
 
   "how.badge": "Come funziona",
   "how.deepDive": "Scopri il motore completo",

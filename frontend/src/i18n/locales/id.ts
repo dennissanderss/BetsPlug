@@ -794,12 +794,12 @@ const id = {
   "hiw.s7P2": "Deteksi drift berjalan terus menerus di latar belakang. Jika kalibrasi model mulai tergelincir di liga mana pun, peringatan menyala dan ensemble di-rollback ke versi terakhir yang diketahui baik sampai masalahnya dipahami.",
   "hiw.s7Title": "Engine menjadi lebih pintar setiap Minggu malam.",
 
-  "home.freePredBadge": "Prediksi gratis",
+  "home.freePredBadge": "Tidak perlu mendaftar",
   "home.freePredCta": "Lihat semua prediksi",
   "home.freePredCtaSub": "Buka akses penuh ke 50+ prediksi harian dengan uji coba gratis.",
   "home.freePredSubtitle": "Lihat model kami beraksi. Tiga prediksi pertandingan gratis yang didukung AI — diperbarui setiap hari, tidak perlu mendaftar.",
-  "home.freePredTitle": "AI hari ini",
-  "home.freePredTitleHighlight": "prediksi",
+  "home.freePredTitle": "Hari ini GRATIS",
+  "home.freePredTitleHighlight": "prediksi AI",
 
   "how.badge": "Cara kerja",
   "how.deepDive": "Lihat engine lengkap",
