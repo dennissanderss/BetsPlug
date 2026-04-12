@@ -1,162 +1,224 @@
-# v5 Rebuild Report — 12 April 2026
+# BetsPlug Platform — Volledige Status Rapportage
+**Datum:** 12 april 2026
+**Versie:** v5 Foundation + v6.x UX verbeteringen
 
-## Executive Summary
+---
 
-The v5 Foundation Rebuild on API-Football Pro is **95% complete**. All
-infrastructure is built and running in production. The one blocking issue
-preventing strategies from reaching "validated" status is **low real-odds
-coverage** (0.6-1%) — the ROI calculation still falls back to a hardcoded
-1.90 multiplier for ~99% of picks because historical pre-match odds were
-not collected at the time predictions were generated. This will self-heal
-as the daily odds snapshot cron (`job_snapshot_upcoming_odds`, 05:30 UTC)
-accumulates data over the coming 2-4 weeks.
+## 1. Executive Summary
 
-## Foundation Status
+Het BetsPlug platform is **operationeel in productie** op Railway (backend) + Vercel (frontend). De AI engine "BetsPlug Pulse" genereert voorspellingen, live scores werken, gebruikers kunnen predictions bekijken, resultaten volgen en rapporten downloaden.
 
-| Component | Status | Notes |
-|---|---|---|
-| API-Football Pro key | LIVE | 7,500 req/day Pro tier confirmed |
-| Provider router | DONE | API-Football primary, football-data.org fallback |
-| Database schema | DONE | team_elo_history, match_statistics, top_scorers, api_usage_log, odds_history all exist |
-| Historical fixtures | DONE | 4,694 finished + 243 scheduled fixtures across 6 leagues |
-| Predictions | DONE | 5,108 predictions generated with Pulse (Ensemble) engine |
-| Live scores | DONE | Real-time via API-Football /fixtures?live=all, Redis cached (v6.3) |
+**Het kritieke openstaande probleem:** de Strategy Lab toont strategieën als "Profitable" terwijl de backend ze als "Under Investigation" classificeert. De ROI-cijfers zijn **onbetrouwbaar** omdat ze berekend zijn met nep-odds (1.90 fallback) in plaats van echte marktodds. Dit moet gefixt worden voordat het platform naar echte gebruikers gaat.
 
-## Elo Engine
+---
 
-| Item | Status |
+## 2. Wat Werkt (Productie)
+
+### Platform Infrastructure
+| Component | Status |
 |---|---|
-| team_seeds.py deprecated | DONE — hard-fails on import |
-| TeamEloHistory table | DONE — point-in-time ratings |
-| EloHistoryService | DONE — get_rating_at(team_id, timestamp) |
-| Anti-leakage assertions | ACTIVE — elo_timestamp < fixture.kickoff enforced |
-| Backfill complete | YES — all finished fixtures processed sequentially |
+| Backend (FastAPI op Railway) | Live, stabiel |
+| Frontend (Next.js op Vercel) | Live, 8 talen |
+| Database (PostgreSQL) | 4.699 wedstrijden, 5.108 voorspellingen |
+| Redis cache | Live (live scores, API cache) |
+| API-Football Pro (7.500 req/dag) | Geconfigureerd, ~25% gebruikt |
+| football-data.org (gratis) | Dagelijkse fixture sync |
 
-## Prediction Engine (BetsPlug Pulse)
-
+### BetsPlug Pulse AI Engine
 | Feature | Status |
 |---|---|
-| Ensemble model with new Elo | DONE |
-| Over/Under 2.5 model (Poisson) | DONE |
-| Dixon-Coles low-score correction | DONE |
-| Logistic Regression (CalibratedClassifierCV) | DONE |
-| Predictions include: pick, confidence, probabilities, reasoning | DONE |
-| Anti-leakage assertions in predict() | ACTIVE |
+| Elo Rating Model | Werkend, leak-vrij (point-in-time history) |
+| Poisson Goal Model | Werkend (Dixon-Coles correctie) |
+| Logistic Regression | Werkend (CalibratedClassifierCV) |
+| Ensemble (Pulse) | Combineert alle 3 modellen |
+| Over/Under 2.5 voorspellingen | Werkend |
+| Anti-leakage assertions | Actief (hard fail) |
 
-## Strategy Validation Results (12 April 2026)
+### Frontend Features
+| Pagina | Status |
+|---|---|
+| Jouw Route (3 paden) | Werkend |
+| Dashboard (KPI's + charts) | Werkend, live data |
+| Voorspellingen (compact per league) | Werkend, 3 tabs (Upcoming/Live/Results) |
+| Live Scores | Werkend (60s refresh via API-Football) |
+| Tip van de Dag | Werkend + track record stats |
+| Resultaten & uitslagen | Werkend + strategie context uitleg |
+| Weekrapport | Werkend |
+| Trackrecord | Werkend + CSV download + Models panel |
+| Rapporten & exports (PDF/CSV/JSON) | Werkend + auto-cleanup 12u |
+| Strategie Lab | **Problematisch** (zie sectie 3) |
+| Instellingen | Werkend |
 
-Revalidation run with walk-forward (28-day train, 14-day test, rolling windows):
+---
 
-| Strategy | Picks | Winrate | ROI | Odds Coverage | Walk-Forward | Status |
+## 3. Wat NIET Klopt — Strategy Lab (KRITIEK)
+
+### Het Probleem
+De Strategy Lab toont op dit moment:
+
+```
+"High Confidence Any"    → "Profitable" badge, 55.6% WR, +5.6% ROI
+"Model Confidence Elite" → "Profitable" badge, 54.8% WR, +4.0% ROI
+```
+
+**Dit is misleidend.** De backend classificeert ALLE 14 strategieën als:
+- 0 validated
+- 7 under_investigation
+- 5 rejected
+- 2 break_even
+
+### Waarom de ROI Cijfers Onbetrouwbaar Zijn
+
+De ROI wordt berekend als: `(winrate × odds) - 1.0`
+
+Het probleem zit in de **odds**:
+- 99% van de voorspellingen heeft GEEN echte pre-match odds
+- Het systeem valt terug op een **hardcoded 1.90** als nep-odds
+- Bij favorites (echte odds ~1.50) is de werkelijke ROI NEGATIEF
+
+**Rekenvoorbeeld:**
+```
+Strategy "High Confidence Any" — 55.6% winrate
+
+Met nep-odds 1.90:  55.6% × 1.90 = 1.056 → ROI = +5.6% (WINST)
+Met echte odds 1.55: 55.6% × 1.55 = 0.862 → ROI = -13.8% (VERLIES)
+Met echte odds 1.70: 55.6% × 1.70 = 0.945 → ROI = -5.5% (VERLIES)
+Met echte odds 1.90: 55.6% × 1.90 = 1.056 → ROI = +5.6% (WINST)
+
+De ROI hangt VOLLEDIG af van welke odds je gebruikt.
+Zonder echte odds is het getal betekenisloos.
+```
+
+### Waarom Er Geen Echte Odds Zijn
+
+1. De 5.108 voorspellingen zijn gegenereerd in een **bulk backfill** op basis van historische wedstrijden (aug 2024 - apr 2026)
+2. Op het moment van generatie werden er geen pre-match odds opgeslagen
+3. De dagelijkse odds cron (`job_snapshot_upcoming_odds`) was nog niet actief toen deze wedstrijden plaatsvonden
+4. Een poging om historische odds via API-Football te backfillen leverde slechts **27 rijen op uit 300 pogingen** — de API bewaart geen oude odds
+
+### Frontend vs Backend Disconnect
+
+| Wat de gebruiker ziet | Wat het backend zegt |
+|---|---|
+| "Profitable" groene badge | "under_investigation" |
+| ROI: +5.6% | ROI: onbetrouwbaar (nep-odds) |
+| 2 strategieën zichtbaar | 0 gevalideerde strategieën |
+
+**De frontend Strategy Lab pagina gebruikt een simpelere logica** (ROI > 0 = Profitable) dan de backend validatie engine (die echte odds coverage eist).
+
+---
+
+## 4. Strategie Hervalidatie Resultaten (12 april 2026)
+
+Walk-forward validatie: 28 dagen training, 14 dagen test, rollende windows.
+
+| Strategie | Picks | Winrate | ROI (nep) | Odds Coverage | Walk-Forward | Backend Status |
 |---|---|---|---|---|---|---|
-| Home Dominant | 1,136 | 63.3% | +20.0% | 0.7% | 34/37 pos (Sharpe 7.22) | under_investigation |
-| Conservative Favorite | 1,272 | 61.6% | +16.8% | 0.6% | 33/37 pos (Sharpe 6.24) | under_investigation |
-| Low Draw High Home | 973 | 62.9% | +19.2% | 0.9% | 32/37 pos (Sharpe 6.48) | under_investigation |
-| Anti-Draw Filter | 1,584 | 60.6% | +15.0% | 0.7% | 31/37 pos | under_investigation |
-| Model Confidence Elite | 300 | 64.3% | +22.1% | 1.0% | ? | under_investigation |
-| Underdog Hunter | ~200 | ~55% | ~+5% | <1% | ? | under_investigation |
-| High Confidence Any | ~800 | ~58% | ? | <1% | ? | under_investigation |
-| Defensive Battle | ? | ? | ? | <1% | ? | rejected/break_even |
-| High-Scoring Match | ? | ? | ? | <1% | ? | rejected/break_even |
-| Draw Specialist | ? | ? | ? | <1% | ? | rejected |
-| Home Value Medium Odds | ? | ? | ? | <1% | ? | rejected |
+| Home Dominant | 1.136 | 63.3% | +20.0% | 1.1% | 34/37 positief, Sharpe 7.22 | under_investigation |
+| Conservative Favorite | 1.272 | 61.6% | +16.7% | 1.0% | 33/37 positief, Sharpe 6.24 | under_investigation |
+| Low Draw High Home | 973 | 62.9% | +19.2% | 1.3% | 32/37 positief, Sharpe 6.48 | under_investigation |
+| Anti-Draw Filter | 1.584 | 60.6% | +14.9% | 1.1% | 31/37 positief | under_investigation |
+| Strong Home Favorite | ~800 | 59.6% | +13.1% | 1.0% | ? | under_investigation |
+| High Confidence Any | ~2.719 | 55.6% | +5.6% | 0.9% | ? | under_investigation |
+| Model Confidence Elite | ~3.054 | 54.8% | +3.9% | 0.9% | ? | under_investigation |
+| High-Scoring Match | ? | 51.1% | -2.8% | 1.3% | ? | break_even |
+| Away Upset Value | ? | 51.8% | -1.7% | 1.3% | ? | break_even |
+| Underdog Hunter | ? | 48.5% | -7.9% | 1.5% | ? | rejected |
+| Defensive Battle | ? | 48.3% | -8.1% | 0.7% | ? | rejected |
+| Home Value Medium Odds | ? | 46.5% | -11.5% | 1.1% | ? | rejected |
+| Draw Specialist | ? | 44.1% | -16.0% | 1.1% | ? | rejected |
+| Balanced Match Away | ? | 44.9% | -14.7% | 1.3% | ? | rejected |
 
-**Totals: 0 validated, 7 under_investigation, 5 rejected, 2 break_even**
+**Observatie:** De winrates zijn BETROUWBAAR (gebaseerd op echte uitslagen). De ROI is NIET betrouwbaar (gebaseerd op nep-odds). De walk-forward signalen zijn HOOPVOL maar niet verifieerbaar zonder echte odds.
 
-### Why Zero Validated?
+---
 
-The validation engine correctly refuses to mark strategies as "validated"
-when real-odds coverage is below 5%. Nearly all ROI calculations use the
-1.90 fallback odds because historical pre-match odds were not collected
-at prediction time. The walk-forward signals look strong (most strategies
-have 80%+ positive windows with high Sharpe ratios), but without real
-odds data the ROI numbers are unreliable.
+## 5. Trackrecord Cijfers (Betrouwbaar)
 
-**This is by design** — the v4 audit specifically flagged the 1.90
-hardcoded odds as a problem. The validation engine now catches this
-honestly rather than reporting fake profitable strategies.
+Deze cijfers zijn WEL betrouwbaar — ze zijn gebaseerd op echte wedstrijduitslagen, niet op odds:
 
-### Self-Healing Timeline
-
-The `job_snapshot_upcoming_odds` cron runs daily at 05:30 UTC and
-collects pre-match odds for all upcoming fixtures. After 2-4 weeks:
-- New predictions will have real odds attached
-- Walk-forward validation can use real ROI
-- Strategies should either validate honestly or be rejected honestly
-
-## ROI Formula Fix
-
-| Before (v4) | After (v5) |
+| Metriek | Waarde |
 |---|---|
-| Hardcoded 1.90 for all picks | Looks up real odds from odds_history table |
-| Strategies appeared profitable even when picking 1.30 favorites | ROI = real_odds - 1.0 (win) or -1.0 (loss) |
-| Fallback: still 1.90 when no odds found | Coverage flag warns when <5% real odds |
+| Totaal voorspellingen | 5.108 |
+| Geëvalueerd | 4.983 |
+| Correct | 2.472 |
+| Nauwkeurigheid | 49.6% |
+| Periode | aug 2024 — apr 2026 |
+| Competities | Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie |
+| Model | BetsPlug Pulse (Elo + Poisson + Logistic ensemble) |
 
-## Backend Endpoints for "Your Route" UI
+**49.6% nauwkeurigheid** is realistisch voor een 3-way football prediction model. Een model dat boven 52-53% consistent uitkomt op 1X2 voorspellingen is al uitzonderlijk in de academische literatuur.
 
-| Endpoint | Status | Notes |
-|---|---|---|
-| GET /api/route/strategy-follower | DONE | Returns validated strategies + today's picks (currently empty because 0 validated) |
-| GET /api/route/quick-pick | DONE | Returns highest-confidence pick with fallback |
-| GET /api/route/explorer | DONE | Via /api/fixtures/upcoming with predictions |
-| GET /api/admin/api-usage | DONE | Today's usage per provider |
+---
 
-## Scaling Monitor
+## 6. API Budget Status
 
-| Metric | Value |
+| API | Limiet | Gebruikt/dag | Percentage |
+|---|---|---|---|
+| API-Football Pro | 7.500/dag | ~1.900 | 25% |
+| football-data.org | Gratis (10/min) | ~84 | N/A |
+| The Odds API | 500/maand | ~16 | 3% |
+
+**Ruim binnen budget.** Live scores kosten ~720 calls/dag. Schaalbaar naar 1000+ gebruikers zonder extra API kosten (alle users lezen uit dezelfde Redis cache).
+
+---
+
+## 7. Bekende Issues & Notities
+
+### Moet gefixt worden (blokkend):
+1. **Strategy Lab badges tonen "Profitable" terwijl backend "under_investigation" zegt** — frontend badges moeten de echte validation_status gebruiken
+2. **ROI berekening op nep-odds** — strategieën kunnen pas eerlijk gevalideerd worden als echte odds beschikbaar zijn
+
+### Moet gefixt worden (niet-blokkend):
+3. "Brier Score" label nog hardcoded op Strategie Lab pagina (moet "Voorspellingskwaliteit" zijn)
+4. Trackrecord transparency tekst vermeldt nog "Brier score"
+5. Dubbele wedstrijden in DB van twee API sources (verborgen via dedup filter, DB niet opgeschoond)
+6. Blog/articles bevatten nog "Ensemble" referenties (moet "BetsPlug Pulse" zijn)
+
+### Nice-to-have:
+7. Visueel diagram van BetsPlug Pulse op de About pagina (hoe de 3 modellen samenwerken)
+8. DB cleanup van oude `apifb_match_` duplicate fixtures
+
+---
+
+## 8. Wat Lost Zichzelf Op
+
+De dagelijkse odds cron (`job_snapshot_upcoming_odds`, 05:30 UTC) verzamelt elke dag pre-match odds voor aankomende wedstrijden. Over 2-4 weken:
+- Elke nieuwe voorspelling heeft echte odds erbij
+- Walk-forward validatie kan echte ROI berekenen
+- Strategieën valideren eerlijk OF worden eerlijk afgewezen
+
+---
+
+## 9. Aanbevolen Volgende Stappen
+
+### Prioriteit 1 — Eerlijkheid (nu)
+- Fix Strategy Lab frontend: badges moeten backend `validation_status` tonen
+- ROI kolom tonen met disclaimer "op basis van geschatte odds" zolang coverage < 50%
+- OF: Strategy Lab tijdelijk verbergen totdat er eerlijke data is
+
+### Prioriteit 2 — Data Accumulatie (2-4 weken wachten)
+- Odds cron laten draaien
+- Na 2 weken: hervalidatie triggeren
+- Strategieën die dan validated zijn → activeren
+- Strategieën die rejected worden → eerlijk communiceren
+
+### Prioriteit 3 — Polish (daarna)
+- Pulse diagram op About pagina
+- Blog content updaten
+- DB cleanup duplicaten
+- Overige label fixes
+
+---
+
+## 10. Technische Referenties
+
+| Bestand | Beschrijving |
 |---|---|
-| API-Football Pro daily budget | 7,500 calls |
-| Estimated daily usage | ~1,900 calls (25%) |
-| — Fixture sync (football-data.org) | ~84 calls |
-| — Odds snapshot (API-Football) | ~400 calls |
-| — Live scores (API-Football) | ~720 calls |
-| — Live fixture sync | ~720 calls |
-| Headroom | ~5,600 calls/day (75%) |
-
-## What Was Added Beyond v5 Scope (v6.x)
-
-| Feature | Version |
-|---|---|
-| Compact match cards per league | v6.2 |
-| Live Now / Upcoming / Results tabs | v6.2 |
-| Real-time live scores via Redis | v6.3 |
-| BetsPlug Pulse rebrand (was Ensemble) | v6.3 |
-| Trackrecord data transparency + CSV export | v6.2.1 |
-| Reports & Exports (PDF/CSV/JSON) | v6.2.2 |
-| BOTD historical accuracy track record | v6.3 |
-| Admin paywall bypass | v6.3 |
-| Fixture deduplication (dual API sources) | v6.3 |
-| User-friendly terminology (no Brier/LogLoss) | v6.2 |
-
-## Honest Assessment
-
-### What works well:
-- Foundation is solid: 5,108 predictions across 6 leagues, Elo engine leak-free
-- Walk-forward validation framework catches dishonest ROI
-- Live scores, live data transparency, CSV/PDF exports all working
-- User-facing product (predictions, BOTD, results) is polished
-- API budget is 75% unused — plenty of headroom
-
-### What's still problematic:
-- **Zero validated strategies** due to low odds coverage (<1%)
-- Historical predictions lack real pre-match odds
-- Some duplicate fixtures from dual API sources (dedup filter hides them but DB isn't clean)
-- About page still has some "Ensemble" references in articles/blog content
-
-### What fixes itself over time:
-- Odds coverage will improve as daily snapshot cron runs (2-4 weeks)
-- New predictions will automatically have real odds attached
-- Strategy validation will re-run and produce honest verdicts
-
-### What needs manual intervention:
-- Old predictions with 1.90 fallback odds should eventually be re-evaluated once real odds backfill is possible
-- DB cleanup of apifb duplicate fixtures (currently hidden by dedup filter)
-- Blog/article content update from "Ensemble" to "BetsPlug Pulse"
-
-## Next Steps Recommended
-
-1. **Wait 2-4 weeks** for odds data to accumulate via the daily cron
-2. **Re-run validation** after odds coverage exceeds 50%
-3. **Clean up duplicate fixtures** in DB (apifb_match_ entries)
-4. **Build visual Pulse diagram** on the About page
-5. **Complete the Pulse rebrand** in blog articles and marketing content
+| `backend/app/forecasting/elo_history.py` | Point-in-time Elo engine |
+| `backend/app/forecasting/forecast_service.py` | Pulse prediction pipeline |
+| `backend/app/services/scheduler.py` | Alle cron jobs (odds, live scores, sync) |
+| `backend/app/api/routes/strategies.py` | Validatie engine (walk-forward + bootstrap) |
+| `backend/app/services/research/strategy_harness.py` | Walk-forward + bootstrap CI |
+| `backend/app/api/routes/fixtures.py` | Dedup filter + fixtures endpoints |
+| `backend/app/api/routes/predictions.py` | Predictions API (JSONResponse) |
