@@ -440,6 +440,59 @@ async def _load_latest_predictions(
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Dedup helper — filter out API-Football duplicates
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# The database contains fixtures from two sources:
+#   1. football-data.org (external_id like "fd_org_..." or NULL) — ongoing sync
+#   2. API-Football (external_id like "apifb_match_...") — one-time batch import
+#
+# Both created the same matches with slightly different team names
+# (e.g. "Toulouse" vs "Toulouse FC"). This dedup function keeps only the
+# football-data.org version when a duplicate exists, by matching on
+# (league_id, scheduled_at within 2h). The apifb fixture is hidden, not
+# deleted, so predictions linked to it are unaffected.
+
+
+def _dedup_fixtures(matches: list) -> list:
+    """Remove API-Football duplicates when a football-data.org version exists."""
+    # Group by (league_id, rounded scheduled_at to nearest 2h)
+    seen: dict[tuple, object] = {}  # (league_id, time_bucket) → first match
+    result = []
+
+    for m in matches:
+        eid = m.external_id or ""
+        # Time bucket: round to nearest 2 hours to catch ±1h scheduling diffs
+        bucket = None
+        if m.scheduled_at:
+            ts = m.scheduled_at.timestamp()
+            bucket = int(ts // 7200)  # 7200s = 2h
+        key = (str(m.league_id), bucket)
+
+        if key in seen:
+            existing = seen[key]
+            existing_eid = existing.external_id or ""
+            # If the existing one is apifb and current one is NOT apifb,
+            # replace existing with the non-apifb (prefer fd_org).
+            if existing_eid.startswith("apifb_match_") and not eid.startswith("apifb_match_"):
+                # Swap: remove existing from result, add current
+                result = [r for r in result if r.id != existing.id]
+                seen[key] = m
+                result.append(m)
+            elif not existing_eid.startswith("apifb_match_") and eid.startswith("apifb_match_"):
+                # Current is apifb duplicate, skip it
+                continue
+            else:
+                # Both same source or both apifb — keep both (no dupe)
+                result.append(m)
+        else:
+            seen[key] = m
+            result.append(m)
+
+    return result
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Routes
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -488,7 +541,8 @@ async def get_upcoming_fixtures(
             League.slug == league_slug
         )
 
-    matches = (await db.execute(stmt)).scalars().all()
+    raw_matches = (await db.execute(stmt)).scalars().all()
+    matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
     pred_map = await _load_latest_predictions(match_ids, db)
     odds_map = await _load_latest_odds(match_ids, db)
@@ -529,7 +583,8 @@ async def get_live_fixtures(
             League.slug == league_slug
         )
 
-    matches = (await db.execute(stmt)).scalars().all()
+    raw_matches = (await db.execute(stmt)).scalars().all()
+    matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
     pred_map = await _load_latest_predictions(match_ids, db)
     odds_map = await _load_latest_odds(match_ids, db)
@@ -569,7 +624,8 @@ async def get_today_fixtures(
         )
         .order_by(Match.scheduled_at)
     )
-    matches = (await db.execute(stmt)).scalars().all()
+    raw_matches = (await db.execute(stmt)).scalars().all()
+    matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
     pred_map = await _load_latest_predictions(match_ids, db)
     odds_map = await _load_latest_odds(match_ids, db)
@@ -698,7 +754,8 @@ async def get_results(
             League.slug == league_slug
         )
 
-    matches = (await db.execute(stmt)).scalars().all()
+    raw_matches = (await db.execute(stmt)).scalars().all()
+    matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
     pred_map = await _load_latest_predictions(match_ids, db)
     odds_map = await _load_latest_odds(match_ids, db)
