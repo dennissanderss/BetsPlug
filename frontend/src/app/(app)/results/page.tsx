@@ -403,122 +403,59 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
   const homeScore = fixture.result?.home_score ?? null;
   const awayScore = fixture.result?.away_score ?? null;
 
+  // Compact pick label
+  let pickLabel = "—";
+  if (hasPrediction) {
+    if (pred!.home_win_prob >= pred!.away_win_prob && pred!.home_win_prob >= (pred!.draw_prob ?? 0)) pickLabel = "1";
+    else if ((pred!.draw_prob ?? 0) >= pred!.away_win_prob) pickLabel = "X";
+    else pickLabel = "2";
+  }
+
+  const borderColor = isCorrect === true ? "#10b981" : isCorrect === false ? "#ef4444" : "#334155";
+
   return (
-    <div className="glass-card-hover overflow-hidden animate-slide-up">
-      <div className="flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:gap-6">
+    <div
+      className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.02] transition-colors"
+      style={{ borderLeft: `3px solid ${borderColor}` }}
+    >
+      {/* Date */}
+      <span className="w-16 shrink-0 text-xs text-slate-500 tabular-nums">
+        {new Date(fixture.scheduled_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
+      </span>
 
-        {/* ── Left: League + date ── */}
-        <div className="flex min-w-0 shrink-0 flex-col gap-1 lg:w-44">
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 truncate">
-            {fixture.league_name}
-          </span>
-          <span className="text-[11px] text-slate-500 flex items-center gap-1">
-            <Calendar className="h-3 w-3 shrink-0" />
-            {formatMatchDate(fixture.scheduled_at)}
-          </span>
-        </div>
+      {/* Home team */}
+      <span className={`flex-1 text-sm font-medium truncate ${isCorrect === true && pickLabel === "1" ? "text-emerald-300" : "text-slate-200"}`}>
+        {fixture.home_team_name}
+      </span>
 
-        {/* ── Center: Score ── */}
-        <div className="flex flex-1 items-center justify-center gap-3 min-w-0">
-          <span className="text-base font-semibold text-slate-200 text-right flex-1 truncate">
-            {fixture.home_team_name}
-          </span>
-          <div className="flex shrink-0 items-center gap-2">
-            <span
-              className="text-2xl font-extrabold tabular-nums leading-none"
-              style={{ color: "#e2e8f0" }}
-            >
-              {homeScore ?? "–"}
-            </span>
-            <span className="text-lg font-bold text-slate-500">–</span>
-            <span
-              className="text-2xl font-extrabold tabular-nums leading-none"
-              style={{ color: "#e2e8f0" }}
-            >
-              {awayScore ?? "–"}
-            </span>
-          </div>
-          <span className="text-base font-semibold text-slate-200 text-left flex-1 truncate">
-            {fixture.away_team_name}
-          </span>
-        </div>
+      {/* Score */}
+      <span className="w-14 text-center text-sm font-bold tabular-nums text-slate-100">
+        {homeScore ?? "–"} - {awayScore ?? "–"}
+      </span>
 
-        {/* ── Right: Prediction info + badges ── */}
-        <div className="flex shrink-0 flex-col items-end gap-2 lg:w-52">
-          {hasPrediction ? (
-            <>
-              {/* Predicted outcome */}
-              <p className="text-xs text-slate-400 text-right">
-                <span className="text-slate-500">{t("results.prediction")}: </span>
-                {formatPredictedOutcome(
-                  pred!.home_win_prob >= pred!.away_win_prob &&
-                  pred!.home_win_prob >= (pred!.draw_prob ?? 0)
-                    ? "home_win"
-                    : (pred!.draw_prob ?? 0) >= pred!.away_win_prob
-                    ? "draw"
-                    : "away_win",
-                  pred!.home_win_prob,
-                  pred!.draw_prob,
-                  pred!.away_win_prob,
-                  t
-                )}
-              </p>
+      {/* Away team */}
+      <span className={`flex-1 text-sm font-medium truncate ${isCorrect === true && pickLabel === "2" ? "text-emerald-300" : "text-slate-200"}`}>
+        {fixture.away_team_name}
+      </span>
 
-              {/* Result badge */}
-              {isCorrect === true && (
-                <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 px-3 py-1 text-xs font-bold text-emerald-400">
-                  <CheckCircle2 className="h-3.5 w-3.5" />
-                  {t("results.correct")}
-                </span>
-              )}
-              {isCorrect === false && (
-                <span className="flex items-center gap-1.5 rounded-full bg-red-500/10 border border-red-500/25 px-3 py-1 text-xs font-bold text-red-400">
-                  <XCircle className="h-3.5 w-3.5" />
-                  {t("results.incorrect")}
-                </span>
-              )}
-              {isCorrect === null && (
-                <span className="rounded-full bg-slate-500/10 border border-slate-500/20 px-3 py-1 text-xs font-medium text-slate-500">
-                  {t("results.pendingEval")}
-                </span>
-              )}
+      {/* Pick */}
+      <span
+        className="w-8 text-center text-xs font-bold rounded"
+        style={{ color: isCorrect === true ? "#10b981" : isCorrect === false ? "#ef4444" : "#64748b" }}
+      >
+        {pickLabel}
+      </span>
 
-              {/* Confidence badge */}
-              <span
-                className={`rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${getConfidenceBg(pred!.confidence)}`}
-              >
-                {Math.round(pred!.confidence * 100)}% {t("results.confidence")}
-              </span>
-
-              {/* v6 B2: realised P/L per pick */}
-              {realisedPnl !== null && (
-                <span
-                  className={`flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold tabular-nums ${
-                    realisedPnl > 0
-                      ? "border-emerald-500/25 bg-emerald-500/10 text-emerald-400"
-                      : "border-red-500/25 bg-red-500/10 text-red-400"
-                  }`}
-                  title={
-                    pnlSource === "real"
-                      ? t("results.pnlRealTooltip")
-                      : t("results.pnlEstimatedTooltip")
-                  }
-                >
-                  {realisedPnl > 0 ? "+" : ""}
-                  {realisedPnl.toFixed(2)}
-                  {pnlSource === "estimated" ? (
-                    <span className="text-[9px] font-normal opacity-70">
-                      est.
-                    </span>
-                  ) : null}
-                </span>
-              )}
-            </>
-          ) : (
-            <span className="text-xs text-slate-600 italic">{t("results.noPredictionMade")}</span>
-          )}
-        </div>
-      </div>
+      {/* Result icon */}
+      <span className="w-8 text-center">
+        {isCorrect === true ? (
+          <CheckCircle2 className="h-4 w-4 text-emerald-400 inline" />
+        ) : isCorrect === false ? (
+          <XCircle className="h-4 w-4 text-red-400 inline" />
+        ) : (
+          <span className="text-xs text-slate-600">—</span>
+        )}
+      </span>
     </div>
   );
 }
@@ -661,14 +598,54 @@ function ResultsPageContent() {
         isError={summaryQuery.isError}
       />
 
-      {/* ── Strategy context banner ── */}
-      <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 text-xs text-slate-400 leading-relaxed">
-        <strong className="text-slate-300">Hoe lees je deze resultaten?</strong>{" "}
-        Alle voorspellingen komen uit hetzelfde AI-ensemble model. De <em>Tip van de Dag</em> is
-        steeds de pick met de hoogste zekerheid. <em>Strategy Lab</em> filtert dezelfde
-        voorspellingen op jouw criteria (bijv. alleen hoge zekerheid of specifieke competities).
-        Gebruik de filters hieronder om te zien welke picks bij jouw strategie passen.
-      </div>
+      {/* ── Streak Stats ── */}
+      {filtered.length > 0 && (() => {
+        // Compute streaks from the visible results
+        const evaluated = filtered.filter(f => f.prediction && f.result);
+        let currentStreak = 0;
+        let maxWinStreak = 0;
+        let maxLoseStreak = 0;
+        let tempWin = 0;
+        let tempLose = 0;
+        for (const f of evaluated) {
+          const pred = f.prediction!;
+          const probs = { home: pred.home_win_prob, draw: pred.draw_prob ?? 0, away: pred.away_win_prob };
+          const pick = Object.entries(probs).sort((a, b) => b[1] - a[1])[0][0];
+          const winner = f.result!.home_score > f.result!.away_score ? "home" : f.result!.home_score < f.result!.away_score ? "away" : "draw";
+          const correct = pick === winner;
+          if (correct) { tempWin++; tempLose = 0; maxWinStreak = Math.max(maxWinStreak, tempWin); }
+          else { tempLose++; tempWin = 0; maxLoseStreak = Math.max(maxLoseStreak, tempLose); }
+        }
+        // Current streak from end
+        currentStreak = 0;
+        for (let i = evaluated.length - 1; i >= 0; i--) {
+          const f = evaluated[i];
+          const pred = f.prediction!;
+          const probs = { home: pred.home_win_prob, draw: pred.draw_prob ?? 0, away: pred.away_win_prob };
+          const pick = Object.entries(probs).sort((a, b) => b[1] - a[1])[0][0];
+          const winner = f.result!.home_score > f.result!.away_score ? "home" : f.result!.home_score < f.result!.away_score ? "away" : "draw";
+          if (pick === winner) currentStreak++;
+          else break;
+        }
+        return (
+          <div className="grid grid-cols-3 gap-3">
+            <div className="glass-card p-3 text-center">
+              <p className="text-[9px] uppercase tracking-widest text-slate-500">Current Streak</p>
+              <p className={`text-xl font-extrabold tabular-nums ${currentStreak > 0 ? "text-emerald-400" : "text-slate-400"}`}>
+                {currentStreak > 0 ? `🔥 ${currentStreak}` : "0"}
+              </p>
+            </div>
+            <div className="glass-card p-3 text-center">
+              <p className="text-[9px] uppercase tracking-widest text-slate-500">Best Win Streak</p>
+              <p className="text-xl font-extrabold tabular-nums text-emerald-400">{maxWinStreak}</p>
+            </div>
+            <div className="glass-card p-3 text-center">
+              <p className="text-[9px] uppercase tracking-widest text-slate-500">Max Losing Streak</p>
+              <p className="text-xl font-extrabold tabular-nums text-red-400">{maxLoseStreak}</p>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ── Filter bar ── */}
       <ResultsFilterBar
@@ -731,10 +708,22 @@ function ResultsPageContent() {
           </button>
         </div>
       ) : (
-        <div className="space-y-3">
-          {filtered.map((fixture) => (
-            <ResultCard key={fixture.id} fixture={fixture} />
-          ))}
+        <div className="glass-card overflow-hidden">
+          {/* Column headers */}
+          <div className="flex items-center gap-3 px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.05] text-[9px] uppercase tracking-widest text-slate-600">
+            <span className="w-16 shrink-0">Date</span>
+            <span className="flex-1">Home</span>
+            <span className="w-14 text-center">Score</span>
+            <span className="flex-1">Away</span>
+            <span className="w-8 text-center">Pick</span>
+            <span className="w-8 text-center">Result</span>
+          </div>
+          {/* Rows */}
+          <div className="divide-y divide-white/[0.03]">
+            {filtered.map((fixture) => (
+              <ResultCard key={fixture.id} fixture={fixture} />
+            ))}
+          </div>
         </div>
       )}
 
