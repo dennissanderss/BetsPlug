@@ -31,7 +31,17 @@ from app.models.prediction import Prediction
 # ──────────────────────────────────────────────────────────────────────────────
 
 FLAT_FALLBACK_ODDS = 1.90
-"""Used only when no real odds row exists for a match."""
+"""Legacy fallback — only used when implied odds can't be computed."""
+
+# v6.3: When no real bookmaker odds exist, we compute implied odds
+# from the model's own probability estimate: odds = 1 / probability.
+# This is fairer than a flat 1.90 because:
+#   - A 65% favorite gets implied odds of 1.54 (not 1.90)
+#   - A 30% underdog gets implied odds of 3.33 (not 1.90)
+# The result is a more realistic ROI that reflects the actual risk
+# profile of each pick rather than treating all picks equally.
+# We add a 5% margin (÷ 0.95) to simulate a bookmaker's cut.
+BOOKMAKER_MARGIN = 0.95
 
 Outcome = Literal["home", "draw", "away"]
 
@@ -138,7 +148,15 @@ async def realised_pnl_1x2(
             odds_used = None  # invalid data, fall through
 
     if odds_used is None:
-        odds_used = FLAT_FALLBACK_ODDS
+        # v6.3: compute implied odds from the model's probability for
+        # the predicted outcome. This is fairer than the flat 1.90
+        # fallback because it respects each pick's risk profile.
+        pick_prob = probs.get(pick, 0.0)
+        if pick_prob > 0.05:  # sanity: don't divide by near-zero
+            odds_used = round(1.0 / (pick_prob * BOOKMAKER_MARGIN), 3)
+            source = "implied_from_model"
+        else:
+            odds_used = FLAT_FALLBACK_ODDS
 
     if is_correct:
         pnl = round(odds_used - 1.0, 4)
@@ -213,6 +231,8 @@ async def compute_strategy_metrics_with_real_odds(
         total_pnl += pnl
         if source == "historical_odds":
             with_real_odds += 1
+        # implied_from_model is not counted as "real" odds — it's better
+        # than 1.90 but still an estimate, not market data.
         if is_correct:
             odds_values.append(odds_used)
             gross_profit += pnl
