@@ -711,8 +711,8 @@ export function HomeContent() {
 
               <h1 className="text-balance break-words text-[2.25rem] font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.75rem] xl:text-6xl">
                 {t("hero.titleLine1")}{" "}
-                <span className="gradient-text">{t("hero.titleLine2")}</span>{" "}
-                {t("hero.titleLine3")}
+                <span className="gradient-text">{t("hero.titleLine2")}</span>
+                {t("hero.titleLine3") ? ` ${t("hero.titleLine3")}` : ""}
               </h1>
 
               <p className="mt-8 max-w-xl text-lg leading-relaxed text-slate-400">
@@ -879,6 +879,13 @@ export function HomeContent() {
           FREE PREDICTIONS — 3 AI picks to demonstrate value (reciprocity)
          ═══════════════════════════════════════════════════════════════════ */}
       <FreePredictions />
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          HOW IT WORKS — 3 steps, moved up for AIDA Interest phase
+         ═══════════════════════════════════════════════════════════════════ */}
+      <section id="how-it-works">
+        <HowItWorks />
+      </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
           TRUSTED PARTNER SECTION — 3 cards with middle highlighted
@@ -1145,13 +1152,6 @@ export function HomeContent() {
           DASHBOARD PREVIEW — show off the product inside a browser mock
          ═══════════════════════════════════════════════════════════════════ */}
       <DashboardPreviewSection />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          HOW IT WORKS — 3 step process (funnel: action prep)
-         ═══════════════════════════════════════════════════════════════════ */}
-      <section id="how-it-works">
-        <HowItWorks />
-      </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
           TESTIMONIALS

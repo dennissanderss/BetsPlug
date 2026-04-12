@@ -16,6 +16,8 @@ import {
   Lock,
   ChevronDown,
   LifeBuoy,
+  Globe,
+  Cpu,
 } from "lucide-react";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 
@@ -32,6 +34,8 @@ const pillarDefs: Array<{
   { icon: Target, titleKey: "seo.pillar4Title", descKey: "seo.pillar4Desc" },
   { icon: Zap, titleKey: "seo.pillar5Title", descKey: "seo.pillar5Desc" },
   { icon: ShieldCheck, titleKey: "seo.pillar6Title", descKey: "seo.pillar6Desc" },
+  { icon: Globe, titleKey: "seo.pillar7Title", descKey: "seo.pillar7Desc" },
+  { icon: Cpu, titleKey: "seo.pillar8Title", descKey: "seo.pillar8Desc" },
 ];
 
 type FaqItem = { q: string; a: string };
@@ -164,7 +168,7 @@ export function SeoSection() {
         </motion.div>
 
         {/* Pillars grid */}
-        <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {pillarDefs.map((p) => {
             const Icon = p.icon;
             const title = t(p.titleKey);
