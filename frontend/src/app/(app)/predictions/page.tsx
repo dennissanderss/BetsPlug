@@ -16,6 +16,9 @@ import {
   Radio,
   CalendarDays,
   Trophy,
+  ChevronsUpDown,
+  Check,
+  Search,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import type { Fixture, FixturePrediction } from "@/types/api";
@@ -29,6 +32,35 @@ type SortKey = "confidence" | "time" | "league";
 type LeagueFilter = "All" | string;
 type ConfidenceFilter = "All" | ConfidenceLevel;
 type ViewMode = "upcoming" | "live" | "results";
+
+/** Leagues ranked by popularity — top entries become quick-filter chips. */
+const LEAGUE_POPULARITY: string[] = [
+  "Premier League",
+  "Champions League",
+  "La Liga",
+  "Bundesliga",
+  "Serie A",
+  "Ligue 1",
+  "Eredivisie",
+  "Europa League",
+  "Conference League",
+  "Süper Lig",
+  "Primeira Liga",
+  "Jupiler Pro League",
+  "Scottish Premiership",
+  "Championship",
+  "Liga Portugal",
+  "Brasileirão Serie A",
+  "MLS",
+  "Saudi Pro League",
+  "A-League",
+  "J1 League",
+  "K League 1",
+  "Chinese Super League",
+];
+
+/** How many leagues to show as quick-filter chips. */
+const QUICK_CHIPS = 6;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -815,7 +847,39 @@ function FilterBar({
   availableLeagues,
 }: FilterBarProps) {
   const { t } = useTranslations();
-  const leagueTabs: LeagueFilter[] = ["All", ...availableLeagues];
+  const [leagueDropdownOpen, setLeagueDropdownOpen] = useState(false);
+  const [leagueSearch, setLeagueSearch] = useState("");
+
+  // Split leagues: quick chips (top N) vs the rest in dropdown
+  const quickChipLeagues = availableLeagues.slice(0, QUICK_CHIPS);
+  const allLeagues = availableLeagues;
+
+  // Filtered list for search inside dropdown
+  const dropdownLeagues = allLeagues.filter((l) =>
+    l.toLowerCase().includes(leagueSearch.toLowerCase())
+  );
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    if (!leagueDropdownOpen) return;
+    const close = (e: MouseEvent) => {
+      const el = (e.target as HTMLElement).closest("[data-league-dropdown]");
+      if (!el) setLeagueDropdownOpen(false);
+    };
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, [leagueDropdownOpen]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!leagueDropdownOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLeagueDropdownOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [leagueDropdownOpen]);
+
   const confOptions: ConfidenceFilter[] = ["All", "High", "Medium", "Low"];
   const sortOptions: { key: SortKey; label: string }[] = [
     { key: "confidence", label: t("pred.sortConfidence") },
@@ -823,24 +887,127 @@ function FilterBar({
     { key: "league",     label: t("pred.sortLeague") },
   ];
 
+  // Is the current filter a league NOT in the quick chips?
+  const isDropdownLeagueActive =
+    leagueFilter !== "All" && !quickChipLeagues.includes(leagueFilter);
+
   return (
     <div className="glass-card p-4">
       <div className="flex flex-wrap items-center gap-4">
-        {/* League tabs */}
-        <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1 flex-wrap">
-          {leagueTabs.map((tab) => (
+        {/* League filter: quick chips + dropdown */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1 flex-wrap">
+            {/* "All" chip */}
             <button
-              key={tab}
-              onClick={() => setLeagueFilter(tab)}
+              onClick={() => setLeagueFilter("All")}
               className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                leagueFilter === tab
+                leagueFilter === "All"
                   ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                   : "text-slate-400 hover:text-slate-200"
               }`}
             >
-              {tab}
+              All
             </button>
-          ))}
+
+            {/* Quick league chips */}
+            {quickChipLeagues.map((league) => (
+              <button
+                key={league}
+                onClick={() => setLeagueFilter(league)}
+                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                  leagueFilter === league
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                {league}
+              </button>
+            ))}
+          </div>
+
+          {/* "More leagues" dropdown — only rendered when there are leagues beyond quick chips */}
+          {allLeagues.length > QUICK_CHIPS && (
+            <div className="relative" data-league-dropdown>
+              <button
+                onClick={() => {
+                  setLeagueDropdownOpen((v) => !v);
+                  setLeagueSearch("");
+                }}
+                className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all ${
+                  isDropdownLeagueActive
+                    ? "border-blue-500/40 bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                    : "border-white/[0.06] bg-white/[0.03] text-slate-400 hover:text-slate-200 hover:border-white/[0.12]"
+                }`}
+              >
+                {isDropdownLeagueActive ? leagueFilter : t("pred.moreLeagues")}
+                <ChevronsUpDown className="h-3.5 w-3.5" />
+              </button>
+
+              {leagueDropdownOpen && (
+                <div className="absolute left-0 top-full z-50 mt-2 w-64 rounded-lg border border-white/[0.08] bg-[#0d1220] shadow-xl shadow-black/40 overflow-hidden animate-fade-in">
+                  {/* Search */}
+                  <div className="flex items-center gap-2 border-b border-white/[0.06] px-3 py-2">
+                    <Search className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+                    <input
+                      type="text"
+                      value={leagueSearch}
+                      onChange={(e) => setLeagueSearch(e.target.value)}
+                      placeholder={t("pred.searchLeague")}
+                      className="w-full bg-transparent text-xs text-white placeholder:text-slate-600 outline-none"
+                      autoFocus
+                    />
+                  </div>
+
+                  {/* League list */}
+                  <div className="max-h-60 overflow-y-auto overscroll-contain py-1">
+                    {/* "All" option */}
+                    <button
+                      onClick={() => {
+                        setLeagueFilter("All");
+                        setLeagueDropdownOpen(false);
+                      }}
+                      className={`flex w-full items-center justify-between px-3 py-2 text-xs transition-colors ${
+                        leagueFilter === "All"
+                          ? "bg-blue-600/15 text-blue-300"
+                          : "text-slate-300 hover:bg-white/[0.04]"
+                      }`}
+                    >
+                      <span className="font-medium">All</span>
+                      {leagueFilter === "All" && (
+                        <Check className="h-3.5 w-3.5 text-blue-400" />
+                      )}
+                    </button>
+
+                    {dropdownLeagues.map((league) => (
+                      <button
+                        key={league}
+                        onClick={() => {
+                          setLeagueFilter(league);
+                          setLeagueDropdownOpen(false);
+                        }}
+                        className={`flex w-full items-center justify-between px-3 py-2 text-xs transition-colors ${
+                          leagueFilter === league
+                            ? "bg-blue-600/15 text-blue-300"
+                            : "text-slate-300 hover:bg-white/[0.04]"
+                        }`}
+                      >
+                        <span className="font-medium">{league}</span>
+                        {leagueFilter === league && (
+                          <Check className="h-3.5 w-3.5 text-blue-400" />
+                        )}
+                      </button>
+                    ))}
+
+                    {dropdownLeagues.length === 0 && (
+                      <p className="px-3 py-4 text-center text-xs text-slate-600">
+                        {t("pred.noLeaguesFound")}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Confidence filter */}
@@ -1004,10 +1171,19 @@ export default function PredictionsPage() {
   }, [fixturesQuery.data, selectedDate, today, viewMode]);
 
   // ── Derived leagues list for filter tabs ─────────────────────────────────
+  // Sort available leagues by popularity rank; unknown leagues go to the end
+  // alphabetically so the dropdown always feels intentionally ordered.
   const availableLeagues = useMemo(() => {
     const s = new Set<string>();
     upcomingFixtures.forEach((f) => s.add(f.league_name));
-    return Array.from(s).sort();
+    return Array.from(s).sort((a, b) => {
+      const ia = LEAGUE_POPULARITY.indexOf(a);
+      const ib = LEAGUE_POPULARITY.indexOf(b);
+      const ra = ia === -1 ? 999 : ia;
+      const rb = ib === -1 ? 999 : ib;
+      if (ra !== rb) return ra - rb;
+      return a.localeCompare(b);
+    });
   }, [upcomingFixtures]);
 
   // ── Filter + sort ─────────────────────────────────────────────────────────

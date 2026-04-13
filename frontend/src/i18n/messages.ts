@@ -1451,6 +1451,9 @@ const en = {
   "pred.sortConfidence": "Confidence",
   "pred.sortTime": "Time",
   "pred.sortLeague": "League",
+  "pred.moreLeagues": "More leagues",
+  "pred.searchLeague": "Search league...",
+  "pred.noLeaguesFound": "No leagues found",
   "pred.errorLoading": "Could not load fixture data from the database. Please try refreshing.",
   "pred.noUpcomingMatches": "No upcoming matches in the next 7 days",
   "pred.noUpcomingMatchesDesc": "No scheduled fixtures were found in the database. Check back shortly.",
@@ -3727,6 +3730,9 @@ const nl: Dictionary = {
   "topbar.winRate": "winstpercentage",
   "topbar.picksAnalyzed": "keuzes geanalyseerd",
   "topbar.cta": "Probeer het voor € 0,01",
+  "pred.moreLeagues": "Meer competities",
+  "pred.searchLeague": "Zoek competitie...",
+  "pred.noLeaguesFound": "Geen competities gevonden",
 };
 
 
