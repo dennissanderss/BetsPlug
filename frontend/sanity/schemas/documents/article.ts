@@ -1,11 +1,12 @@
 import { defineType, defineField } from "sanity";
 import { FileTextIcon } from "lucide-react";
+import { sanityIcon } from "../../icon-wrapper";
 
 export const article = defineType({
   name: "article",
   title: "Article",
   type: "document",
-  icon: FileTextIcon,
+  icon: sanityIcon(FileTextIcon),
   fieldsets: [
     { name: "seo", title: "SEO", options: { collapsible: true, collapsed: true } },
     { name: "cover", title: "Cover", options: { collapsible: true, collapsed: true } },

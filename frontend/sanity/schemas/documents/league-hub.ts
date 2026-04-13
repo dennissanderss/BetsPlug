@@ -1,11 +1,12 @@
 import { defineType, defineField } from "sanity";
 import { TrophyIcon } from "lucide-react";
+import { sanityIcon } from "../../icon-wrapper";
 
 export const leagueHub = defineType({
   name: "leagueHub",
   title: "League Hub",
   type: "document",
-  icon: TrophyIcon,
+  icon: sanityIcon(TrophyIcon),
   fieldsets: [
     { name: "seo", title: "SEO", options: { collapsible: true, collapsed: true } },
   ],

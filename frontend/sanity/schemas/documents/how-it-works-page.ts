@@ -1,11 +1,12 @@
 import { defineType, defineField } from "sanity";
 import { BookOpenIcon } from "lucide-react";
+import { sanityIcon } from "../../icon-wrapper";
 
 export const howItWorksPage = defineType({
   name: "howItWorksPage",
   title: "How It Works Page",
   type: "document",
-  icon: BookOpenIcon,
+  icon: sanityIcon(BookOpenIcon),
   fields: [
     defineField({
       name: "heroStats",

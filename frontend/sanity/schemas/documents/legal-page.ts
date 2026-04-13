@@ -1,11 +1,12 @@
 import { defineType, defineField } from "sanity";
 import { ShieldIcon } from "lucide-react";
+import { sanityIcon } from "../../icon-wrapper";
 
 export const legalPage = defineType({
   name: "legalPage",
   title: "Legal Page",
   type: "document",
-  icon: ShieldIcon,
+  icon: sanityIcon(ShieldIcon),
   fieldsets: [
     { name: "seo", title: "SEO", options: { collapsible: true, collapsed: true } },
   ],

@@ -1,11 +1,12 @@
 import { defineType, defineField } from "sanity";
 import { HomeIcon } from "lucide-react";
+import { sanityIcon } from "../../icon-wrapper";
 
 export const homepage = defineType({
   name: "homepage",
   title: "Homepage",
   type: "document",
-  icon: HomeIcon,
+  icon: sanityIcon(HomeIcon),
   fieldsets: [
     { name: "hero", title: "Hero Section", options: { collapsible: true } },
     { name: "comparison", title: "Comparison Table", options: { collapsible: true, collapsed: true } },

@@ -1,11 +1,12 @@
 import { defineType, defineField } from "sanity";
 import { TagIcon } from "lucide-react";
+import { sanityIcon } from "../../icon-wrapper";
 
 export const pricingConfig = defineType({
   name: "pricingConfig",
   title: "Pricing",
   type: "document",
-  icon: TagIcon,
+  icon: sanityIcon(TagIcon),
   fields: [
     defineField({
       name: "plans",

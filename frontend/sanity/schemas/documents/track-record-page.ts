@@ -1,11 +1,12 @@
 import { defineType, defineField } from "sanity";
 import { BarChart3Icon } from "lucide-react";
+import { sanityIcon } from "../../icon-wrapper";
 
 export const trackRecordPage = defineType({
   name: "trackRecordPage",
   title: "Track Record Page",
   type: "document",
-  icon: BarChart3Icon,
+  icon: sanityIcon(BarChart3Icon),
   fields: [
     defineField({
       name: "faqs",

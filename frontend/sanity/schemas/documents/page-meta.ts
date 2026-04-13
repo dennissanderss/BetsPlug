@@ -1,11 +1,12 @@
 import { defineType, defineField } from "sanity";
 import { SearchIcon } from "lucide-react";
+import { sanityIcon } from "../../icon-wrapper";
 
 export const pageMeta = defineType({
   name: "pageMeta",
   title: "Page SEO",
   type: "document",
-  icon: SearchIcon,
+  icon: sanityIcon(SearchIcon),
   fields: [
     defineField({
       name: "pageKey",
