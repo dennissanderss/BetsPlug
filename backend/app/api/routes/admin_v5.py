@@ -1854,3 +1854,180 @@ async def engine_comparison(
             else f"need more data ({v3_total} evaluated, need 30+)"
         ),
     }
+
+
+# ── Ensemble weight optimizer ────────────────────────────────────────────────
+
+
+@router.post(
+    "/optimize-ensemble",
+    summary="Grid search over ensemble weights using stored sub-model outputs",
+)
+async def optimize_ensemble(
+    backtest_cutoff: str = Query(
+        default="2026-01-01",
+        description="ISO date: matches before = backtest, after = validation",
+    ),
+    min_confidence: float = Query(default=0.0, description="Min confidence filter for BOTD sim"),
+    db: AsyncSession = Depends(get_db),
+):
+    """Re-weight the ensemble using sub-model outputs stored in raw_output.
+
+    For each weight combination, re-compute the ensemble probability,
+    determine the pick, and evaluate against actual results. Returns
+    accuracy metrics for both backtest (pre-cutoff) and validation
+    (post-cutoff) periods.
+
+    This does NOT re-run models — it reads existing raw_output and
+    re-combines with different weights. Very fast (~seconds).
+    """
+    from app.models.prediction import PredictionEvaluation
+    from itertools import product
+
+    cutoff_dt = datetime.fromisoformat(backtest_cutoff).replace(tzinfo=timezone.utc)
+
+    # Load all evaluated predictions with raw_output
+    stmt = (
+        select(Prediction, PredictionEvaluation, Match.scheduled_at)
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .join(Match, Match.id == Prediction.match_id)
+        .where(Prediction.raw_output.isnot(None))
+    )
+    rows = (await db.execute(stmt)).all()
+
+    if not rows:
+        return {"error": "No evaluated predictions with raw_output found"}
+
+    # Parse sub-model outputs
+    parsed = []
+    for pred, ev, sched_at in rows:
+        raw = pred.raw_output or {}
+        subs = raw.get("sub_models", [])
+        if not subs:
+            continue
+        models = {}
+        for sm in subs:
+            name = sm.get("model", "")
+            if "error" in sm:
+                continue
+            models[name] = {
+                "home": sm.get("home_win_prob", 0),
+                "draw": sm.get("draw_prob", 0),
+                "away": sm.get("away_win_prob", 0),
+            }
+        if not models:
+            continue
+        parsed.append({
+            "models": models,
+            "actual": ev.actual_outcome,
+            "is_backtest": sched_at < cutoff_dt,
+            "confidence_orig": pred.confidence,
+            "scheduled_at": sched_at,
+        })
+
+    # Define weight grid
+    weight_options = [0.0, 0.4, 0.8, 1.2, 1.6, 2.0]
+    model_names = ["EloModel", "PoissonModel", "LogisticModel", "XGBoostModel"]
+
+    # Generate combinations (skip all-zero)
+    combos = [
+        dict(zip(model_names, w))
+        for w in product(weight_options, repeat=4)
+        if sum(w) > 0
+    ]
+
+    results = []
+    for weights in combos:
+        bt_correct = bt_total = val_correct = val_total = 0
+        bt_botd_correct = bt_botd_total = val_botd_correct = val_botd_total = 0
+
+        for p in parsed:
+            # Re-compute ensemble with these weights
+            weighted_probs = {"home": 0, "draw": 0, "away": 0}
+            total_weight = 0
+            for model_name, w in weights.items():
+                if w == 0 or model_name not in p["models"]:
+                    continue
+                mp = p["models"][model_name]
+                for outcome in ("home", "draw", "away"):
+                    weighted_probs[outcome] += w * mp.get(outcome, 0)
+                total_weight += w
+
+            if total_weight == 0:
+                continue
+
+            # Normalize
+            for outcome in ("home", "draw", "away"):
+                weighted_probs[outcome] /= total_weight
+
+            pick = max(weighted_probs, key=lambda k: weighted_probs[k])
+            correct = pick == p["actual"]
+
+            # Confidence proxy: max prob
+            conf = max(weighted_probs.values())
+
+            if p["is_backtest"]:
+                bt_total += 1
+                if correct:
+                    bt_correct += 1
+                if conf >= 0.60:
+                    bt_botd_total += 1
+                    if correct:
+                        bt_botd_correct += 1
+            else:
+                val_total += 1
+                if correct:
+                    val_correct += 1
+                if conf >= 0.60:
+                    val_botd_total += 1
+                    if correct:
+                        val_botd_correct += 1
+
+        bt_acc = bt_correct / bt_total * 100 if bt_total else 0
+        val_acc = val_correct / val_total * 100 if val_total else 0
+        bt_botd_acc = bt_botd_correct / bt_botd_total * 100 if bt_botd_total else 0
+        val_botd_acc = val_botd_correct / val_botd_total * 100 if val_botd_total else 0
+
+        results.append({
+            "weights": weights,
+            "backtest": {
+                "accuracy": round(bt_acc, 1),
+                "total": bt_total,
+                "correct": bt_correct,
+                "botd_accuracy": round(bt_botd_acc, 1),
+                "botd_total": bt_botd_total,
+            },
+            "validation": {
+                "accuracy": round(val_acc, 1),
+                "total": val_total,
+                "correct": val_correct,
+                "botd_accuracy": round(val_botd_acc, 1),
+                "botd_total": val_botd_total,
+            },
+        })
+
+    # Sort by validation accuracy (primary), backtest accuracy (secondary)
+    results.sort(
+        key=lambda r: (r["validation"]["accuracy"], r["backtest"]["accuracy"]),
+        reverse=True,
+    )
+
+    # Top 20 configurations
+    top_20 = results[:20]
+
+    # Also find best BOTD config
+    botd_sorted = sorted(
+        [r for r in results if r["validation"]["botd_total"] >= 5],
+        key=lambda r: (r["validation"]["botd_accuracy"], r["backtest"]["botd_accuracy"]),
+        reverse=True,
+    )
+
+    return {
+        "total_predictions_analyzed": len(parsed),
+        "backtest_period": f"before {backtest_cutoff}",
+        "validation_period": f"from {backtest_cutoff}",
+        "configurations_tested": len(combos),
+        "current_weights": {"EloModel": 0.8, "PoissonModel": 1.2, "LogisticModel": 0.8, "XGBoostModel": 1.5},
+        "top_20_overall": top_20,
+        "top_5_botd": botd_sorted[:5],
+    }
