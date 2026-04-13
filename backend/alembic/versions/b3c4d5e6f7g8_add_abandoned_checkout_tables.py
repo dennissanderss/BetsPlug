@@ -19,11 +19,27 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    # Enums
+    # Enums — create only if they don't already exist (idempotent)
+    bind = op.get_bind()
+    existing_enums = {
+        row[0]
+        for row in bind.execute(
+            sa.text("SELECT typname FROM pg_type WHERE typtype = 'e'")
+        )
+    }
+
     checkout_status = sa.Enum('started', 'completed', 'abandoned', name='checkoutstatus')
     coupon_status = sa.Enum('active', 'redeemed', 'expired', name='couponstatus')
 
-    # abandoned_checkouts table
+    if 'checkoutstatus' not in existing_enums:
+        checkout_status.create(bind, checkfirst=True)
+    if 'couponstatus' not in existing_enums:
+        coupon_status.create(bind, checkfirst=True)
+
+    # abandoned_checkouts table (IF NOT EXISTS via checkfirst)
+    if 'abandoned_checkouts' in {t for t in sa.inspect(bind).get_table_names()}:
+        return  # Tables already exist — skip
+
     op.create_table(
         'abandoned_checkouts',
         sa.Column('id', postgresql.UUID(as_uuid=True), primary_key=True),
