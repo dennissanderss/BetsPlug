@@ -1,12 +1,11 @@
 import { defineType, defineField } from "sanity";
-import { CreditCardIcon } from "lucide-react";
-import { sanityIcon } from "../../icon-wrapper";
+import { CreditCardIcon } from "@sanity/icons";
 
 export const checkoutPage = defineType({
   name: "checkoutPage",
   title: "Checkout Page",
   type: "document",
-  icon: sanityIcon(CreditCardIcon),
+  icon: CreditCardIcon,
   fields: [
     defineField({
       name: "trustStrip",

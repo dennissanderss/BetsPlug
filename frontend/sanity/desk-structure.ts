@@ -1,11 +1,10 @@
 import type { StructureBuilder } from "sanity/structure";
 import {
-  NewspaperIcon,
-  GlobeIcon,
-  LayoutDashboardIcon,
-  SettingsIcon,
-} from "lucide-react";
-import { sanityIcon } from "./icon-wrapper";
+  DocumentTextIcon,
+  EarthGlobeIcon,
+  DashboardIcon,
+  CogIcon,
+} from "@sanity/icons";
 
 /** Helper: show a singleton document (one fixed document, no list). */
 function singleton(S: StructureBuilder, type: string, title: string, id?: string) {
@@ -22,7 +21,7 @@ export const structure = (S: StructureBuilder) =>
     .items([
       S.listItem()
         .title("Editorial")
-        .icon(sanityIcon(NewspaperIcon))
+        .icon(DocumentTextIcon)
         .child(
           S.list()
             .title("Editorial")
@@ -34,7 +33,7 @@ export const structure = (S: StructureBuilder) =>
       S.divider(),
       S.listItem()
         .title("SEO Hubs")
-        .icon(sanityIcon(GlobeIcon))
+        .icon(EarthGlobeIcon)
         .child(
           S.list()
             .title("SEO Hubs")
@@ -46,7 +45,7 @@ export const structure = (S: StructureBuilder) =>
       S.divider(),
       S.listItem()
         .title("Pages")
-        .icon(sanityIcon(LayoutDashboardIcon))
+        .icon(DashboardIcon)
         .child(
           S.list()
             .title("Pages")
@@ -66,7 +65,7 @@ export const structure = (S: StructureBuilder) =>
       S.divider(),
       S.listItem()
         .title("Site")
-        .icon(sanityIcon(SettingsIcon))
+        .icon(CogIcon)
         .child(
           S.list()
             .title("Site")

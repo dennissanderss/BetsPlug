@@ -1,12 +1,11 @@
 import { defineType, defineField } from "sanity";
-import { MailIcon } from "lucide-react";
-import { sanityIcon } from "../../icon-wrapper";
+import { EnvelopeIcon } from "@sanity/icons";
 
 export const contactPage = defineType({
   name: "contactPage",
   title: "Contact Page",
   type: "document",
-  icon: sanityIcon(MailIcon),
+  icon: EnvelopeIcon,
   fields: [
     defineField({
       name: "helpOptions",

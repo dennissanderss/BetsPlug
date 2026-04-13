@@ -1,12 +1,11 @@
 import { defineType, defineField } from "sanity";
-import { MessageSquareQuoteIcon } from "lucide-react";
-import { sanityIcon } from "../../icon-wrapper";
+import { BlockquoteIcon } from "@sanity/icons";
 
 export const testimonial = defineType({
   name: "testimonial",
   title: "Testimonial",
   type: "document",
-  icon: sanityIcon(MessageSquareQuoteIcon),
+  icon: BlockquoteIcon,
   fields: [
     defineField({
       name: "name",
