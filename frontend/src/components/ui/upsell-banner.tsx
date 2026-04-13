@@ -50,10 +50,11 @@ export function UpsellBanner({
 }: UpsellBannerProps) {
   const loc = useLocalizedHref();
   const style = TIER_STYLES[targetTier];
+  const checkoutHref = loc(`/checkout?plan=${targetTier}`);
 
   if (variant === "inline") {
     return (
-      <Link href={loc("/pricing")} className="group block">
+      <Link href={checkoutHref} className="group block">
         <div className={`flex items-center gap-3 rounded-xl border ${style.border} ${style.bg} px-4 py-3 transition-all hover:border-opacity-50`}>
           <Lock className={`h-4 w-4 shrink-0 ${style.text}`} />
           <div className="flex-1 min-w-0">
@@ -70,7 +71,7 @@ export function UpsellBanner({
 
   if (variant === "card") {
     return (
-      <Link href={loc("/pricing")} className="group block">
+      <Link href={checkoutHref} className="group block">
         <div className={`glass-card overflow-hidden transition-all group-hover:${style.border}`}>
           <div className={`h-1 w-full bg-gradient-to-r ${style.gradient}`} />
           <div className="p-5 sm:p-6 flex items-start gap-4">
@@ -92,7 +93,7 @@ export function UpsellBanner({
 
   // Default: banner variant
   return (
-    <Link href={loc("/pricing")} className="group block">
+    <Link href={checkoutHref} className="group block">
       <div className={`relative overflow-hidden rounded-xl border ${style.border} ${style.bg} px-5 py-4 transition-all group-hover:border-opacity-60`}>
         {/* Subtle glow */}
         <div className={`absolute -right-8 -top-8 h-24 w-24 rounded-full bg-gradient-to-br ${style.gradient} opacity-10 blur-2xl`} />

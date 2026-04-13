@@ -83,27 +83,25 @@ async def list_predictions(
     count_q = select(func.count(Prediction.id))
     total = int((await db.execute(count_q)).scalar() or 0)
 
-    # Build response items — try model_validate first, fallback to manual
+    # Build response items — always use the safe manual builder so match
+    # data is never silently dropped by a pydantic validation error.
+    import logging
+    _log = logging.getLogger("predictions.list")
+
     items = []
     for p in predictions:
-        try:
-            resp = PredictionResponse.model_validate(p)
-            # Add pick + reasoning that aren't on the ORM model
-            probs = {"HOME": p.home_win_prob, "DRAW": p.draw_prob or 0, "AWAY": p.away_win_prob}
-            resp.pick = max(probs, key=lambda k: probs[k])
-            if p.explanation:
-                resp.reasoning = p.explanation.summary
-            items.append(resp.model_dump(mode="json"))
-        except Exception:
-            # Fallback: build minimal dict manually — include match data
-            probs = {"HOME": p.home_win_prob, "DRAW": p.draw_prob or 0, "AWAY": p.away_win_prob}
-            match_data = None
-            m = getattr(p, "match", None)
-            if m is not None:
+        probs = {"HOME": p.home_win_prob, "DRAW": p.draw_prob or 0, "AWAY": p.away_win_prob}
+        pick = max(probs, key=lambda k: probs[k])
+
+        # ── Match data ──────────────────────────────────────────────
+        match_data = None
+        m = getattr(p, "match", None)
+        if m is not None:
+            try:
                 match_data = {
                     "id": str(m.id),
-                    "home_team_name": m.home_team.name if m.home_team else "Unknown",
-                    "away_team_name": m.away_team.name if m.away_team else "Unknown",
+                    "home_team_name": getattr(m.home_team, "name", None) or "Unknown" if m.home_team else "Unknown",
+                    "away_team_name": getattr(m.away_team, "name", None) or "Unknown" if m.away_team else "Unknown",
                     "scheduled_at": m.scheduled_at.isoformat() if m.scheduled_at else None,
                     "status": m.status.value if hasattr(m.status, "value") else str(m.status),
                     "league_name": m.league.name if getattr(m, "league", None) else None,
@@ -113,9 +111,16 @@ async def list_predictions(
                         "winner": m.result.winner,
                     } if getattr(m, "result", None) else None,
                 }
-            eval_data = None
-            ev = getattr(p, "evaluation", None)
-            if ev is not None:
+            except Exception as exc:
+                _log.warning("Failed to build match_data for prediction %s: %s", p.id, exc)
+        else:
+            _log.warning("Prediction %s has match_id=%s but match is None (orphaned?)", p.id, p.match_id)
+
+        # ── Evaluation data ─────────────────────────────────────────
+        eval_data = None
+        ev = getattr(p, "evaluation", None)
+        if ev is not None:
+            try:
                 eval_data = {
                     "id": str(ev.id),
                     "actual_outcome": ev.actual_outcome,
@@ -126,25 +131,36 @@ async def list_predictions(
                     "log_loss": ev.log_loss,
                     "evaluated_at": ev.evaluated_at.isoformat() if ev.evaluated_at else None,
                 }
-            items.append({
-                "id": str(p.id),
-                "match_id": str(p.match_id),
-                "model_version_id": str(p.model_version_id),
-                "predicted_at": p.predicted_at.isoformat() if p.predicted_at else None,
-                "prediction_type": p.prediction_type,
-                "home_win_prob": p.home_win_prob,
-                "draw_prob": p.draw_prob,
-                "away_win_prob": p.away_win_prob,
-                "confidence": p.confidence,
-                "is_simulation": p.is_simulation,
-                "pick": max(probs, key=lambda k: probs[k]),
-                "reasoning": p.explanation.summary if p.explanation else None,
-                "explanation": None,
-                "evaluation": eval_data,
-                "match": match_data,
-                "created_at": p.created_at.isoformat() if p.created_at else None,
-                "updated_at": p.updated_at.isoformat() if p.updated_at else None,
-            })
+            except Exception as exc:
+                _log.warning("Failed to build eval_data for prediction %s: %s", p.id, exc)
+
+        # ── Reasoning ───────────────────────────────────────────────
+        reasoning = None
+        try:
+            if p.explanation:
+                reasoning = p.explanation.summary
+        except Exception:
+            pass
+
+        items.append({
+            "id": str(p.id),
+            "match_id": str(p.match_id),
+            "model_version_id": str(p.model_version_id),
+            "predicted_at": p.predicted_at.isoformat() if p.predicted_at else None,
+            "prediction_type": getattr(p, "prediction_type", "match_result"),
+            "home_win_prob": p.home_win_prob,
+            "draw_prob": p.draw_prob,
+            "away_win_prob": p.away_win_prob,
+            "confidence": p.confidence,
+            "is_simulation": getattr(p, "is_simulation", True),
+            "pick": pick,
+            "reasoning": reasoning,
+            "explanation": None,
+            "evaluation": eval_data,
+            "match": match_data,
+            "created_at": p.created_at.isoformat() if getattr(p, "created_at", None) else None,
+            "updated_at": p.updated_at.isoformat() if getattr(p, "updated_at", None) else None,
+        })
 
     # Return as JSONResponse to completely bypass FastAPI's response_model
     # serialization. The shape matches PaginatedResponse for the frontend.
