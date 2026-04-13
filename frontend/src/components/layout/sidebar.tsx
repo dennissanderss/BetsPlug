@@ -43,7 +43,7 @@ const navSections: NavSection[] = [
     labelKey: "sidebar.overview",
     fallbackLabel: "Overview",
     items: [
-      { labelKey: "nav.jouwRoute", fallback: "How It Works", href: "/jouw-route", icon: MapPin },
+      { labelKey: "nav.jouwRoute", fallback: "How It Works", href: "/jouw-route", icon: MapPin, badge: "START", badgeColor: "bg-emerald-500" },
       { labelKey: "nav.dashboard", fallback: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     ],
   },

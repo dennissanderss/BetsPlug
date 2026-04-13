@@ -616,9 +616,9 @@ function ResultsPageContent() {
           if (correct) { tempWin++; tempLose = 0; maxWinStreak = Math.max(maxWinStreak, tempWin); }
           else { tempLose++; tempWin = 0; maxLoseStreak = Math.max(maxLoseStreak, tempLose); }
         }
-        // Current streak from end
+        // Current streak from most recent match (index 0 = newest)
         currentStreak = 0;
-        for (let i = evaluated.length - 1; i >= 0; i--) {
+        for (let i = 0; i < evaluated.length; i++) {
           const f = evaluated[i];
           const pred = f.prediction!;
           const probs = { home: pred.home_win_prob, draw: pred.draw_prob ?? 0, away: pred.away_win_prob };

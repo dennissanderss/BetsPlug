@@ -10,6 +10,7 @@ import {
   Target,
   ArrowUpRight,
   ArrowDownRight,
+  Info,
 } from "lucide-react";
 import {
   BarChart,
@@ -346,12 +347,17 @@ export default function DashboardPage() {
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {kpis.map(({ label, value, icon: Icon, trend, sub, tooltip }) => (
-            <div key={label} className="glass-card-hover p-6" title={tooltip}>
+            <div key={label} className="glass-card-hover p-6">
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
-                  <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-                    {label}
-                  </p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+                      {label}
+                    </p>
+                    <span title={tooltip} className="cursor-help">
+                      <Info className="h-3 w-3 text-slate-600 hover:text-slate-400 transition-colors" />
+                    </span>
+                  </div>
                   <p className="text-3xl font-bold gradient-text leading-none">
                     {value ?? " - "}
                   </p>
@@ -382,16 +388,15 @@ export default function DashboardPage() {
         variant="banner"
       />
 
-      {/* ── Recent Predictions ───────────────────────────────────────────── */}
+      {/* ── BOTD Recent Results ────────────────────────────────────────── */}
       <div className="glass-card overflow-hidden">
-        {/* Card header */}
         <div className="flex items-center justify-between border-b border-white/[0.05] px-6 py-4">
           <div>
-            <h2 className="text-base font-semibold text-slate-100">{t("dash.recentPredictions")}</h2>
-            <p className="mt-0.5 text-xs text-slate-500">{t("dash.recentPredictionsDesc")}</p>
+            <h2 className="text-base font-semibold text-slate-100">{t("dash.botdRecent")}</h2>
+            <p className="mt-0.5 text-xs text-slate-500">{t("dash.botdRecentDesc")}</p>
           </div>
-          <span className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-xs font-medium text-slate-400">
-            {t("dash.lastTen")}
+          <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
+            {botdStats?.accuracy_pct != null ? `${botdStats.accuracy_pct}% ${t("dash.accurate")}` : "—"}
           </span>
         </div>
 
