@@ -168,9 +168,7 @@ export function FreePredictions() {
   const stats = data?.stats ?? { total: 0, correct: 0, winrate: 0 };
   const hasPicks = todayPicks.length > 0 || yesterdayPicks.length > 0;
 
-  // Don't render section if no predictions available and done loading
-  if (!loading && !hasPicks) return null;
-
+  // Always render section — show skeleton/empty state when no data
   const winratePct = Math.round(stats.winrate * 100);
 
   return (
@@ -261,8 +259,8 @@ export function FreePredictions() {
           </div>
         )}
 
-        {/* Loading skeleton */}
-        {loading && (
+        {/* Loading skeleton — also shown when API returned no picks */}
+        {(loading || !hasPicks) && (
           <div className="grid gap-5 md:grid-cols-3">
             <PredictionSkeleton />
             <PredictionSkeleton />
