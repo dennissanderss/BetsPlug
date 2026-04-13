@@ -5,19 +5,6 @@ import { motion } from "motion/react";
 import { Zap, Star, Eye, ArrowRight } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
-/*
- * HowItWorks — 3-step explainer.
- *
- * Previously every step card had its own whileInView + i*0.15 delay
- * stagger and the CTA had an additional 0.2s delay. On a slow device
- * that meant the last card reveal landed ~450ms after the first, and
- * each card registered its own IntersectionObserver.
- *
- * Current version: only the section heading gets a single reveal.
- * Step cards render statically — hover interactions (scale, glow) are
- * preserved because they're CSS-only and cost nothing until you
- * actually hover.
- */
 export function HowItWorks() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
@@ -27,27 +14,34 @@ export function HowItWorks() {
       icon: Zap,
       title: t("how.step1Title"),
       description: t("how.step1Desc"),
+      gradient: "from-green-400 to-emerald-500",
+      glow: "bg-green-500/20",
     },
     {
       number: "02",
       icon: Star,
       title: t("how.step2Title"),
       description: t("how.step2Desc"),
+      gradient: "from-emerald-400 to-teal-500",
+      glow: "bg-emerald-500/20",
     },
     {
       number: "03",
       icon: Eye,
       title: t("how.step3Title"),
       description: t("how.step3Desc"),
+      gradient: "from-teal-400 to-cyan-500",
+      glow: "bg-teal-500/20",
     },
   ];
+
   return (
     <section
       id="how-it-works-process"
       className="relative overflow-hidden py-20 md:py-28"
       aria-labelledby="how-it-works-heading"
     >
-      {/* Unique background: dual radial + subtle diagonal lines */}
+      {/* Background */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14] via-[#0b1220] to-[#080b14]" />
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.05]"
@@ -62,7 +56,7 @@ export function HowItWorks() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-6xl px-6">
-        {/* Header — single, non-staggered reveal */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -85,50 +79,74 @@ export function HowItWorks() {
         </motion.div>
 
         {/* Steps */}
-        <div className="relative">
-          {/* Vertical connecting line (desktop: horizontal, mobile: vertical) */}
-          <div
-            className="pointer-events-none absolute left-8 top-10 bottom-10 w-px bg-gradient-to-b from-transparent via-green-500/30 to-transparent md:left-0 md:right-0 md:top-10 md:bottom-auto md:h-px md:w-auto md:bg-gradient-to-r"
-            aria-hidden="true"
-          />
+        <div className="grid gap-6 md:grid-cols-3 md:gap-8">
+          {steps.map((step, i) => {
+            const Icon = step.icon;
+            return (
+              <div
+                key={step.number}
+                className="group relative"
+                style={{ transform: i === 1 ? "translateY(-8px)" : undefined }}
+              >
+                  {/* Card */}
+                  <div className="relative h-full overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] to-white/[0.02] p-7 backdrop-blur-sm transition-all duration-500 hover:border-green-500/30 hover:shadow-[0_8px_40px_rgba(74,222,128,0.1)] sm:p-8">
+                    {/* Top gradient accent line */}
+                    <div
+                      className={`absolute left-0 right-0 top-0 h-[2px] bg-gradient-to-r ${step.gradient} opacity-40 transition-opacity duration-500 group-hover:opacity-100`}
+                    />
 
-          <div className="grid gap-8 md:grid-cols-3 md:gap-6">
-            {steps.map((step) => {
-              const Icon = step.icon;
-              return (
-                <div key={step.number} className="group relative">
-                  {/* Numbered circle */}
-                  <div className="relative mb-6 flex md:justify-center">
-                    <div className="relative">
-                      {/* Outer glow */}
-                      <div className="absolute inset-0 rounded-full bg-green-500/20 blur-xl transition-all duration-500 group-hover:bg-green-500/30" />
-                      {/* Circle */}
-                      <div className="relative flex h-16 w-16 items-center justify-center rounded-full border border-green-500/40 bg-gradient-to-br from-green-500/20 to-emerald-500/10 shadow-[0_0_30px_rgba(74,222,128,0.2)] backdrop-blur-sm transition-all duration-500 group-hover:scale-110 group-hover:border-green-500/60 group-hover:shadow-[0_0_40px_rgba(74,222,128,0.35)]">
-                        <Icon className="h-6 w-6 text-green-400" />
-                      </div>
-                      {/* Step number badge */}
-                      <div className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full border border-green-500/40 bg-[#0a1018] font-mono text-xs font-bold text-green-400 shadow-lg">
-                        {step.number}
+                    {/* Corner glow on hover */}
+                    <div
+                      className={`pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full ${step.glow} opacity-0 blur-[60px] transition-opacity duration-500 group-hover:opacity-100`}
+                    />
+
+                    {/* Step number — large watermark */}
+                    <span className="pointer-events-none absolute right-5 top-4 font-mono text-6xl font-black text-white/[0.04] transition-colors duration-500 group-hover:text-green-500/[0.08] sm:text-7xl">
+                      {step.number}
+                    </span>
+
+                    {/* Icon */}
+                    <div className="relative mb-5">
+                      <div className="relative inline-flex">
+                        <div
+                          className={`absolute inset-0 rounded-xl ${step.glow} blur-lg transition-all duration-500 group-hover:blur-xl group-hover:scale-125`}
+                        />
+                        <div
+                          className={`relative flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${step.gradient} shadow-lg transition-transform duration-500 group-hover:scale-110`}
+                        >
+                          <Icon className="h-5 w-5 text-[#0a1018]" strokeWidth={2.5} />
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Card content */}
-                  <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-sm transition-all duration-300 group-hover:border-green-500/30 group-hover:shadow-xl group-hover:shadow-green-500/[0.08] md:text-center">
-                    <h3 className="mb-3 text-xl font-bold text-white">
+                    {/* Content */}
+                    <h3 className="relative mb-3 text-lg font-bold text-white sm:text-xl">
                       {step.title}
                     </h3>
-                    <p className="text-sm leading-relaxed text-slate-400">
+                    <p className="relative text-sm leading-relaxed text-slate-400">
                       {step.description}
                     </p>
+
+                    {/* Bottom decorative dots */}
+                    <div className="mt-6 flex gap-1.5">
+                      {[...Array(3)].map((_, j) => (
+                        <div
+                          key={j}
+                          className={`h-1 rounded-full transition-all duration-500 ${
+                            j === i
+                              ? `w-6 bg-gradient-to-r ${step.gradient}`
+                              : "w-1 bg-white/10 group-hover:bg-white/20"
+                          }`}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
 
-        {/* Deep-dive CTA — static, no entrance animation */}
+        {/* CTA */}
         <div className="mt-14 flex justify-center">
           <Link
             href={loc("/how-it-works")}

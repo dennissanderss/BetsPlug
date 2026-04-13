@@ -10,13 +10,14 @@ import {
   Gift,
   TrendingUp,
   XCircle,
+  Trophy,
 } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { FreePickItem, FreePicksResponse } from "@/types/api";
 import { ProbBar } from "@/components/match-predictions/prob-bar";
 import { confColor, confLevel, formatKickoff } from "@/components/match-predictions/shared";
 
-/* ── Mini prediction card (homepage variant) ─────────────────── */
+/* ── Match card — sports-style design ──────────────────────────── */
 
 function PredictionCard({
   pick,
@@ -38,35 +39,68 @@ function PredictionCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.45, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative overflow-hidden rounded-2xl border border-green-500/20 bg-white/[0.02] backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-white/[0.04]"
+      className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#0d1424] to-[#0a0f1a] transition-all hover:border-green-500/30 hover:shadow-[0_8px_40px_rgba(74,222,128,0.08)]"
     >
-      {/* Top bar: league + kickoff */}
-      <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-3">
-        <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-green-400/80">
-          {pick.league}
-        </span>
-        <span className="flex shrink-0 items-center gap-1 text-[11px] text-slate-500">
+      {/* Diagonal accent stripes */}
+      <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rotate-45 bg-gradient-to-b from-green-500/[0.08] to-transparent" />
+      <div className="pointer-events-none absolute -right-4 -top-4 h-24 w-24 rotate-45 bg-gradient-to-b from-emerald-500/[0.06] to-transparent" />
+
+      {/* League banner */}
+      <div className="relative flex items-center justify-between px-5 py-3">
+        <div className="flex items-center gap-2">
+          <div className="h-4 w-1 rounded-full bg-green-500" />
+          <span className="text-[11px] font-bold uppercase tracking-widest text-green-400">
+            {pick.league}
+          </span>
+        </div>
+        <span className="flex items-center gap-1.5 text-[11px] text-slate-500">
           <Clock className="h-3 w-3" />
           {formatKickoff(pick.scheduled_at, locale)}
         </span>
       </div>
 
-      {/* Teams + Score */}
-      <div className="px-5 pt-4 pb-1">
-        <p className="text-lg font-extrabold leading-tight text-white">
-          {pick.home_team}{" "}
-          <span className="font-normal text-slate-500">vs</span>{" "}
-          {pick.away_team}
-        </p>
+      {/* Divider line with glow */}
+      <div className="mx-5 h-px bg-gradient-to-r from-green-500/30 via-green-500/10 to-transparent" />
+
+      {/* Teams — VS layout */}
+      <div className="px-5 py-5">
+        <div className="flex items-center justify-between gap-3">
+          {/* Home team */}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-lg font-extrabold leading-tight text-white">
+              {pick.home_team}
+            </p>
+          </div>
+
+          {/* VS badge */}
+          <div className="relative flex-shrink-0">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 ring-1 ring-green-500/30">
+              <span className="text-xs font-black tracking-wider text-green-400">VS</span>
+            </div>
+          </div>
+
+          {/* Away team */}
+          <div className="min-w-0 flex-1 text-right">
+            <p className="truncate text-lg font-extrabold leading-tight text-white">
+              {pick.away_team}
+            </p>
+          </div>
+        </div>
+
+        {/* Score (finished matches) */}
         {isFinished && pick.home_score != null && pick.away_score != null && (
-          <p className="mt-1.5 text-sm font-bold tabular-nums text-slate-300">
-            {pick.home_score} - {pick.away_score}
-          </p>
+          <div className="mt-3 flex items-center justify-center">
+            <div className="rounded-lg bg-white/[0.05] px-4 py-1.5 ring-1 ring-white/[0.08]">
+              <span className="text-xl font-black tabular-nums text-white">
+                {pick.home_score} — {pick.away_score}
+              </span>
+            </div>
+          </div>
         )}
       </div>
 
-      {/* Probability bar OR "analysis pending" */}
-      <div className="px-5 pt-3 pb-4">
+      {/* Probability bar */}
+      <div className="px-5 pb-4">
         {hasPrediction ? (
           <>
             <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
@@ -90,8 +124,8 @@ function PredictionCard({
         )}
       </div>
 
-      {/* Bottom: confidence + correctness badge */}
-      <div className="flex items-center justify-between border-t border-white/[0.06] px-5 py-3">
+      {/* Bottom bar: confidence + result */}
+      <div className="flex items-center justify-between border-t border-white/[0.06] bg-white/[0.02] px-5 py-3">
         {isFinished && pick.is_correct !== null ? (
           <span
             className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
@@ -141,19 +175,22 @@ function PredictionCard({
 
 function PredictionSkeleton() {
   return (
-    <div className="animate-pulse overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02]">
-      <div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-3">
+    <div className="animate-pulse overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#0d1424] to-[#0a0f1a]">
+      <div className="flex items-center justify-between px-5 py-3">
         <div className="h-3 w-28 rounded bg-white/[0.06]" />
         <div className="h-3 w-20 rounded bg-white/[0.06]" />
       </div>
-      <div className="px-5 pt-4 pb-1">
-        <div className="h-5 w-48 rounded bg-white/[0.06]" />
+      <div className="mx-5 h-px bg-white/[0.06]" />
+      <div className="flex items-center justify-between px-5 py-5">
+        <div className="h-5 w-24 rounded bg-white/[0.06]" />
+        <div className="h-10 w-10 rounded-xl bg-white/[0.04]" />
+        <div className="h-5 w-24 rounded bg-white/[0.06]" />
       </div>
-      <div className="px-5 pt-3 pb-4 space-y-2">
+      <div className="px-5 pb-4 space-y-2">
         <div className="h-2.5 w-20 rounded bg-white/[0.04]" />
         <div className="h-3 w-full rounded-full bg-white/[0.06]" />
       </div>
-      <div className="flex items-center justify-between border-t border-white/[0.06] px-5 py-3">
+      <div className="flex items-center justify-between border-t border-white/[0.06] bg-white/[0.02] px-5 py-3">
         <div className="h-3 w-20 rounded bg-white/[0.04]" />
         <div className="h-7 w-14 rounded bg-white/[0.06]" />
       </div>
@@ -277,17 +314,22 @@ export function FreePredictions() {
   const todayPicks = data?.today ?? [];
   const yesterdayPicks = data?.yesterday ?? [];
   const stats = data?.stats ?? { total: 0, correct: 0, winrate: 0 };
-  const hasPicks = todayPicks.length > 0 || yesterdayPicks.length > 0;
-
-  // Always render section — show skeleton/empty state when no data
   const winratePct = Math.round(stats.winrate * 100);
 
   return (
     <section className="relative py-20 md:py-28 overflow-hidden">
-      {/* Background glow */}
+      {/* Background */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-green-500/[0.04] blur-[120px]" />
       </div>
+      {/* Diagonal accent lines in background */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(-45deg, rgba(74,222,128,0.8) 0 1px, transparent 1px 40px)",
+        }}
+      />
 
       <div className="relative mx-auto max-w-7xl px-6">
         {/* Header */}
@@ -342,7 +384,7 @@ export function FreePredictions() {
           )}
         </motion.div>
 
-        {/* Upcoming picks — always 3 cards */}
+        {/* Picks */}
         {loading ? (
           <div className="grid gap-5 md:grid-cols-3">
             <PredictionSkeleton />
@@ -353,9 +395,13 @@ export function FreePredictions() {
           <>
             {todayPicks.length > 0 && (
               <div className="mb-10">
-                <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-400">
-                  {t("home.freePredToday")}
-                </h3>
+                <div className="mb-5 flex items-center gap-3">
+                  <Trophy className="h-4 w-4 text-green-400" />
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-300">
+                    {t("home.freePredToday")}
+                  </h3>
+                  <div className="h-px flex-1 bg-gradient-to-r from-green-500/20 to-transparent" />
+                </div>
                 <div className="grid gap-5 md:grid-cols-3">
                   {todayPicks.map((pick, i) => (
                     <PredictionCard key={pick.match_id || pick.id} pick={pick} index={i} />
@@ -366,9 +412,13 @@ export function FreePredictions() {
 
             {yesterdayPicks.length > 0 && (
               <div className="mb-10">
-                <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-400">
-                  {t("home.freePredYesterday")}
-                </h3>
+                <div className="mb-5 flex items-center gap-3">
+                  <Clock className="h-4 w-4 text-slate-400" />
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-300">
+                    {t("home.freePredYesterday")}
+                  </h3>
+                  <div className="h-px flex-1 bg-gradient-to-r from-slate-500/20 to-transparent" />
+                </div>
                 <div className="grid gap-5 md:grid-cols-3">
                   {yesterdayPicks.map((pick, i) => (
                     <PredictionCard key={pick.match_id || pick.id} pick={pick} index={i} />
