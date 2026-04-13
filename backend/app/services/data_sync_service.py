@@ -65,17 +65,9 @@ _settings = get_settings()
 _COMPETITION_ROTATION: list[str] = ["PL", "PD", "BL1", "SA", "FL1", "CL", "DED"]
 
 # ── League slugs used by the API-Football adapter path ───────────────────────
-# API-Football covers Eredivisie (id 88), so when that adapter is active the
-# rotation includes it alongside the big-five + Champions League.
-_LEAGUE_SLUG_ROTATION: list[str] = [
-    "premier-league",
-    "la-liga",
-    "bundesliga",
-    "serie-a",
-    "ligue-1",
-    "eredivisie",
-    "champions-league",
-]
+# All 30 supported leagues. Pro tier (7500 req/day) easily accommodates
+# rotating through all of them every 5 min. Full cycle ≈ 75 minutes.
+_LEAGUE_SLUG_ROTATION: list[str] = list(APIFB_SLUG_TO_ID.keys())
 
 # Simple in-process rotation counter (survives per-worker; good enough for
 # round-robin when only one beat worker is running).

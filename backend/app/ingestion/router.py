@@ -21,27 +21,38 @@ import httpx
 
 from app.core.config import get_settings
 from app.ingestion.base_adapter import DataSourceAdapter
-from app.ingestion.adapters.api_football import APIFootballAdapter
+from app.ingestion.adapters.api_football import APIFootballAdapter, LEAGUE_SLUG_TO_ID
 from app.ingestion.adapters.football_data_org import FootballDataOrgAdapter
 
 log = logging.getLogger(__name__)
 
 # ── Per-league provider configuration ────────────────────────────────────────
 # primary: tried first. fallback: tried in order if primary fails.
-
-LEAGUE_PROVIDER_CONFIG: dict[str, dict] = {
-    "premier-league":    {"primary": "api_football",  "fallback": ["football_data"]},
-    "la-liga":           {"primary": "api_football",  "fallback": ["football_data"]},
-    "bundesliga":        {"primary": "api_football",  "fallback": ["football_data"]},
-    "serie-a":           {"primary": "api_football",  "fallback": ["football_data"]},
-    "ligue-1":           {"primary": "api_football",  "fallback": ["football_data"]},
-    "eredivisie":        {"primary": "football_data", "fallback": ["api_football"]},
-    "champions-league":  {"primary": "api_football",  "fallback": ["football_data"]},
-    "championship":      {"primary": "football_data", "fallback": ["api_football"]},
-    "primeira-liga":     {"primary": "football_data", "fallback": ["api_football"]},
-    "belgian-pro-league": {"primary": "api_football", "fallback": []},
-    "super-lig":         {"primary": "api_football",  "fallback": []},
+# Leagues covered by football-data.org free tier get fd as primary/fallback.
+_FD_COVERED = {
+    "premier-league", "la-liga", "bundesliga", "serie-a", "ligue-1",
+    "eredivisie", "champions-league", "championship", "primeira-liga",
 }
+
+# Build config for ALL 30 API-Football leagues dynamically.
+LEAGUE_PROVIDER_CONFIG: dict[str, dict] = {}
+for _slug in LEAGUE_SLUG_TO_ID:
+    if _slug in _FD_COVERED:
+        LEAGUE_PROVIDER_CONFIG[_slug] = {
+            "primary": "api_football",
+            "fallback": ["football_data"],
+        }
+    else:
+        LEAGUE_PROVIDER_CONFIG[_slug] = {
+            "primary": "api_football",
+            "fallback": [],
+        }
+# Override: for these fd-primary leagues, prefer fd with apifb fallback
+for _slug in ("eredivisie", "championship", "primeira-liga"):
+    LEAGUE_PROVIDER_CONFIG[_slug] = {
+        "primary": "football_data",
+        "fallback": ["api_football"],
+    }
 
 # Default for unknown leagues
 _DEFAULT_CONFIG = {"primary": "api_football", "fallback": ["football_data"]}

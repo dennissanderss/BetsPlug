@@ -35,13 +35,12 @@ async def job_sync_data():
 
         # Number of league-batch iterations per scheduled run. Each iteration
         # performs 3 sync method calls (upcoming + results + standings), each
-        # advancing the rotation by 1. We now have 7 leagues in the fd
-        # rotation (PL, PD, BL1, SA, FL1, CL, DED) as of 2026-04-11, so 7
-        # iterations × 3 method calls = 21 rotations, covering every league
-        # ~3 times per run. If you shrink _COMPETITION_ROTATION, shrink this
-        # too (or the tail-end leagues will be hit disproportionately often).
-        from app.services.data_sync_service import _COMPETITION_ROTATION
-        iterations = max(len(_COMPETITION_ROTATION), 7)
+        # advancing the rotation by 1. With 30 API-Football leagues and 3
+        # calls/iteration we need ceil(30/3) = 10 iterations minimum to cover
+        # every league once per run. Using the rotation list length directly
+        # ensures we always scale automatically when leagues are added.
+        from app.services.data_sync_service import _LEAGUE_SLUG_ROTATION
+        iterations = max(len(_LEAGUE_SLUG_ROTATION) // 3 + 1, 7)
         for i in range(iterations):
             # Each league gets its own client + session, closed before the next
             async with DataSyncService() as svc:
