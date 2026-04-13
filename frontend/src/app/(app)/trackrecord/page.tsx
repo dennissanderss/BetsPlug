@@ -18,6 +18,9 @@ import {
   Cpu,
   Sparkles,
   Download,
+  Star,
+  Calendar,
+  Trophy,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -36,7 +39,6 @@ import { useTranslations } from "@/i18n/locale-provider";
 import type {
   TrackrecordSummary,
   SegmentPerformance,
-  CalibrationBucket,
   Prediction,
   Sport,
   League,
@@ -49,7 +51,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { CalibrationChart, type CalibrationPoint } from "@/components/charts/calibration-chart";
+// CalibrationChart removed — too technical for user-facing page
 import {
   RollingAccuracyChart,
   type RollingAccuracyPoint,
@@ -73,21 +75,27 @@ function accuracyCell(accuracy: number) {
 interface KpiCardProps {
   title: string;
   value: string;
+  subtitle?: string;
   icon: React.ElementType;
-  accent?: "blue" | "green" | "amber" | "red";
+  accent?: "blue" | "green" | "amber" | "red" | "gold";
+  highlight?: boolean;
 }
 
-function KpiCard({ title, value, icon: Icon, accent = "blue" }: KpiCardProps) {
+function KpiCard({ title, value, subtitle, icon: Icon, accent = "blue", highlight = false }: KpiCardProps) {
   const accentMap = {
     blue: { icon: "text-blue-400", bg: "bg-blue-500/10", ring: "ring-blue-500/20" },
     green: { icon: "text-emerald-400", bg: "bg-emerald-500/10", ring: "ring-emerald-500/20" },
     amber: { icon: "text-amber-400", bg: "bg-amber-500/10", ring: "ring-amber-500/20" },
     red: { icon: "text-red-400", bg: "bg-red-500/10", ring: "ring-red-500/20" },
+    gold: { icon: "text-yellow-400", bg: "bg-yellow-500/10", ring: "ring-yellow-500/20" },
   };
   const a = accentMap[accent];
 
   return (
-    <div className="glass-card-hover p-5 space-y-3">
+    <div className={cn(
+      "glass-card-hover p-5 space-y-3",
+      highlight && "ring-1 ring-yellow-500/30 border-yellow-500/20"
+    )}>
       <div className="flex items-center justify-between">
         <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">{title}</p>
         <div className={cn("flex h-8 w-8 items-center justify-center rounded-lg ring-1", a.bg, a.ring)}>
@@ -95,6 +103,9 @@ function KpiCard({ title, value, icon: Icon, accent = "blue" }: KpiCardProps) {
         </div>
       </div>
       <p className="text-2xl font-bold gradient-text tabular-nums">{value}</p>
+      {subtitle && (
+        <p className="text-[11px] text-slate-500 leading-relaxed">{subtitle}</p>
+      )}
     </div>
   );
 }
@@ -103,8 +114,8 @@ function KpiCard({ title, value, icon: Icon, accent = "blue" }: KpiCardProps) {
 
 function KpiSkeletons() {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-      {Array.from({ length: 5 }).map((_, i) => (
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {Array.from({ length: 4 }).map((_, i) => (
         <div key={i} className="glass-card p-5 space-y-3">
           <div className="flex items-center justify-between">
             <div className="h-3 w-28 rounded-md bg-white/[0.06] animate-pulse" />
@@ -649,28 +660,34 @@ function DataTransparencyCard({
               </span>
             </div>
             <p className="mt-1 text-xs sm:text-sm text-slate-400 leading-relaxed">
-              BetsPlug Pulse analyses every match with AI. One model,
-              one prediction per match. The Pick of the Day is always the
-              pick Pulse is most confident about.
-              All figures below are calculated on{" "}
+              Our accuracy on 3-way predictions (home / draw / away) is
+              competitive — predicting football is one of the hardest
+              challenges in sports analytics. Even the best models in the
+              world hover around 50% on three-outcome markets. What matters
+              more is <strong className="text-slate-200">how we pick</strong>: our{" "}
+              <strong className="text-yellow-400">Pick of the Day</strong> selects
+              only the highest-confidence match, achieving significantly
+              higher accuracy.
+            </p>
+            <p className="mt-2 text-xs sm:text-sm text-slate-400 leading-relaxed">
+              All figures are calculated on{" "}
               <strong className="tabular-nums text-slate-200">
-                {loading || total == null ? "…" : total.toLocaleString("nl-NL")}
+                {loading || total == null ? "..." : total.toLocaleString("nl-NL")}
               </strong>{" "}
-              geëvalueerde voorspellingen uit de periode{" "}
+              evaluated predictions from{" "}
               <strong className="text-slate-200">
                 {fmtDate(periodStart)} – {fmtDate(periodEnd)}
               </strong>
-              . Het trackrecord werkt zichzelf bij zodra nieuwe wedstrijden
-              afgelopen zijn — geen handmatige update nodig.
+              . The track record updates automatically as matches finish
+              — no manual intervention needed.
             </p>
             <p className="mt-2 text-[11px] text-slate-500 leading-relaxed">
-              Wil je zelf de accuracy of voorspellingskwaliteit narekenen?
-              Download de volledige dataset als CSV.{" "}
+              Want to verify the numbers yourself? Download the full dataset as CSV.{" "}
               <Link
                 href="/about#methodology"
                 className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
               >
-                Hoe het model werkt →
+                How the model works →
               </Link>
             </p>
           </div>
@@ -1185,11 +1202,6 @@ export default function TrackrecordPage() {
     queryFn: () => api.getTrackrecordSegments("month", filterParams),
   });
 
-  const { data: calibrationData, isLoading: calibrationLoading } = useQuery({
-    queryKey: ["trackrecord-calibration", filterParams],
-    queryFn: () => api.getCalibration(filterParams),
-  });
-
   const { data: sports } = useQuery<Sport[]>({
     queryKey: ["sports"],
     queryFn: () => api.getSports(),
@@ -1198,6 +1210,23 @@ export default function TrackrecordPage() {
   const { data: leagues } = useQuery<League[]>({
     queryKey: ["leagues", sportId],
     queryFn: () => api.getLeagues(sportId !== "all" ? sportId : undefined),
+  });
+
+  // BOTD (Pick of the Day) track record — hero stat
+  const { data: botdStats } = useQuery({
+    queryKey: ["botd-track-record-trackrecord"],
+    queryFn: async () => {
+      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+      const resp = await fetch(`${API}/bet-of-the-day/track-record`);
+      if (!resp.ok) return null;
+      return resp.json() as Promise<{
+        accuracy_pct: number;
+        total_picks: number;
+        correct: number;
+        current_streak: number;
+        avg_confidence: number;
+      }>;
+    },
   });
 
   // Transform monthly segments to RollingAccuracyChart format
@@ -1210,25 +1239,8 @@ export default function TrackrecordPage() {
     [monthSegments]
   );
 
-  // Transform calibration buckets to CalibrationChart format.
-  // v6.2: the backend returns a full CalibrationReport object with
-  // a `buckets` array inside. The old code assumed the response
-  // was a bare CalibrationBucket[] which crashed with
-  // ".map is not a function" the moment the endpoint started
-  // returning real data.
-  const calibrationPoints: CalibrationPoint[] = React.useMemo(
-    () =>
-      (calibrationData?.buckets ?? []).map((b: CalibrationBucket) => ({
-        predicted: b.predicted_avg,
-        actual: b.observed_freq,
-        count: b.count,
-      })),
-    [calibrationData]
-  );
-
   const tabs = [
     { key: "performance", label: t("trackrecord.performance"), icon: TrendingUp },
-    { key: "calibration", label: t("trackrecord.calibration"), icon: Activity },
     { key: "segments", label: t("trackrecord.segments"), icon: Layers },
   ];
 
@@ -1253,47 +1265,81 @@ export default function TrackrecordPage() {
       {/* v6.2.1: Data transparency card (replaces the old methodology banner) */}
       <DataTransparencyCard summary={summary} loading={summaryLoading} />
 
-      {/* v6.2: Active Models panel (transparency) */}
-      <ModelsOverviewPanel />
-
       {/* 1. Live Performance Banner — real data only */}
       <LivePerformanceBanner summary={summary} loading={summaryLoading} />
 
-      {/* KPI row — real data */}
+      {/* KPI row — simplified, user-friendly */}
       {summaryLoading ? (
         <KpiSkeletons />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5 animate-slide-up">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 animate-slide-up">
           <KpiCard
-            title={t("trackrecord.totalPredictions")}
+            title="Total Predictions"
             value={summary?.total_predictions.toLocaleString() ?? " - "}
+            subtitle="Verified match predictions"
             icon={Target}
             accent="blue"
           />
           <KpiCard
-            title={t("trackrecord.accuracy")}
+            title="Accuracy"
             value={summary ? formatPercent(summary.accuracy) : " - "}
+            subtitle="On all 3-way predictions"
             icon={TrendingUp}
             accent="green"
           />
           <KpiCard
-            title={t("trackrecord.brierScore")}
-            value={fmt(summary?.brier_score, 3)}
-            icon={BarChart3}
-            accent="blue"
+            title="Pick of the Day"
+            value={botdStats ? `${botdStats.accuracy_pct}%` : " - "}
+            subtitle={botdStats ? `${botdStats.total_picks} picks, ${botdStats.correct} correct` : "Loading..."}
+            icon={Star}
+            accent="gold"
+            highlight
           />
           <KpiCard
-            title={t("trackrecord.logLoss")}
-            value={fmt(summary?.log_loss, 3)}
-            icon={BarChart3}
-            accent="amber"
-          />
-          <KpiCard
-            title={t("trackrecord.calibrationError")}
-            value={fmt(summary?.calibration_error, 3)}
-            icon={Target}
+            title="Matches Analysed"
+            value={summary?.period_start ? "Aug 2024 - Present" : " - "}
+            subtitle="Continuous AI analysis every matchday"
+            icon={Calendar}
             accent="blue"
           />
+        </div>
+      )}
+
+      {/* BOTD Highlight Section — hero USP */}
+      {botdStats && botdStats.total_picks > 0 && (
+        <div className="relative overflow-hidden rounded-2xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/[0.08] via-amber-500/[0.05] to-transparent p-6 sm:p-8 animate-slide-up">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/[0.03] rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-yellow-500/15 ring-1 ring-yellow-500/30">
+              <Trophy className="h-7 w-7 text-yellow-400" />
+            </div>
+            <div className="flex-1 space-y-2">
+              <div className="flex items-center gap-3 flex-wrap">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-100">
+                  Pick of the Day:{" "}
+                  <span className="text-yellow-400">{botdStats.accuracy_pct}% accuracy</span>
+                </h2>
+                {botdStats.current_streak > 0 && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
+                    <Zap className="h-3 w-3" />
+                    {botdStats.current_streak} streak
+                  </span>
+                )}
+              </div>
+              <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl">
+                {botdStats.correct} correct out of {botdStats.total_picks} picks.
+                Every day, our AI selects the single match it is most confident about.
+                High-confidence picks only — that is our edge.
+              </p>
+            </div>
+            <Link
+              href="/bet-of-the-day"
+              className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-yellow-500/15 border border-yellow-500/30 px-5 py-2.5 text-sm font-semibold text-yellow-200 hover:bg-yellow-500/25 hover:border-yellow-500/40 transition-colors"
+            >
+              <Star className="h-4 w-4" />
+              View Today&apos;s Pick
+            </Link>
+          </div>
         </div>
       )}
 
@@ -1459,65 +1505,6 @@ export default function TrackrecordPage() {
             ) : (
               <SummaryStatsTable summary={summary} />
             )}
-          </div>
-        </div>
-      )}
-
-      {/* ── Calibration Tab ── */}
-      {activeTab === "calibration" && (
-        <div className="space-y-6 animate-slide-up">
-          <div className="grid gap-6 lg:grid-cols-3">
-            {/* Chart */}
-            <div className="glass-card p-6 lg:col-span-2">
-              <div className="mb-4">
-                <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.calibrationChart")}</h2>
-                <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.calibrationChartDesc")}</p>
-              </div>
-              {calibrationLoading ? (
-                <div className="h-80 w-full rounded-xl bg-white/[0.03] animate-pulse" />
-              ) : calibrationPoints.length === 0 ? (
-                <div className="flex h-80 items-center justify-center text-sm text-slate-500">
-                  {t("trackrecord.noCalibrationData")}
-                </div>
-              ) : (
-                <CalibrationChart
-                  data={calibrationPoints}
-                  title=""
-                  className="pt-2"
-                />
-              )}
-            </div>
-
-            {/* Explanation panel */}
-            <div className="glass-card border border-blue-500/[0.12] p-6 space-y-4">
-              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.whatIsCalibration")}</h2>
-              <p className="text-sm text-slate-400">
-                {t("trackrecord.calibrationExplanation1")}
-              </p>
-              <p className="text-sm text-slate-400">
-                {t("trackrecord.calibrationExplanation2")}
-              </p>
-
-              {/* Key metrics box */}
-              <div className="rounded-xl border border-white/[0.06] bg-white/[0.04] p-4 space-y-2">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
-                  {t("trackrecord.keyMetrics")}
-                </p>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-400">ECE</span>
-                  <span className="font-mono font-semibold text-slate-100">
-                    {fmt(summary?.calibration_error, 4)}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500">
-                  {t("trackrecord.eceExplanation")}
-                </p>
-              </div>
-
-              <p className="text-xs text-slate-500">
-                {t("trackrecord.calibrationMeasurement")}
-              </p>
-            </div>
           </div>
         </div>
       )}
