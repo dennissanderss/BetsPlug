@@ -330,11 +330,13 @@ class ApiClient {
     );
   }
 
-  // Predictions
+  // Predictions — trailing slash required: FastAPI redirects /predictions → /predictions/
+  // (307), but Railway's CDN downgrades the redirect to HTTP which browsers
+  // block as mixed content. Using /predictions/ avoids the redirect entirely.
   getPredictions(params?: Record<string, string>) {
     const qs = params ? `?${new URLSearchParams(params)}` : "";
     return this.request<import("@/types/api").PaginatedResponse<import("@/types/api").Prediction>>(
-      `/predictions${qs}`
+      `/predictions/${qs}`
     );
   }
   getPrediction(id: string) {

@@ -831,8 +831,8 @@ export function HomeContent() {
                   <div className="grid grid-cols-3 gap-2">
                     {[
                       { label: t("hero.confidence"), value: featured?.available ? `${Math.round((featured.confidence ?? 0.78) * 100)}%` : "78%" },
-                      { label: "Elo Δ", value: featured?.available && featured.elo_diff != null ? `${featured.elo_diff > 0 ? "+" : ""}${featured.elo_diff}` : "+24" },
-                      { label: t("hero.edge"), value: featured?.available ? `+${((featured.edge ?? 0.062) * 100).toFixed(1)}%` : "+6.2%" },
+                      { label: "ACCURACY", value: `${botdStats?.accuracy_pct ?? 66.5}%` },
+                      { label: "PICKS TODAY", value: "5+" },
                     ].map((s) => (
                       <div
                         key={s.label}

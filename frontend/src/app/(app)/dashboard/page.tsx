@@ -6,7 +6,7 @@ import { UpsellBanner } from "@/components/ui/upsell-banner";
 import {
   Activity,
   TrendingUp,
-  BarChart3,
+  Star,
   Target,
   Database,
   AlertTriangle,
@@ -346,6 +346,16 @@ export default function DashboardPage() {
     queryFn: () => api.getDataSources(),
   });
 
+  const { data: botdStats } = useQuery({
+    queryKey: ["botd-track-record-dash"],
+    queryFn: async () => {
+      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+      const resp = await fetch(`${API}/bet-of-the-day/track-record`);
+      if (!resp.ok) return null;
+      return resp.json() as Promise<{ accuracy_pct: number; total_picks: number; correct: number; current_streak: number }>;
+    },
+  });
+
   // Chart data
   const sportChartData = (sportSegments ?? []).map((s: SegmentPerformance) => ({
     sport: s.segment_value,
@@ -376,12 +386,12 @@ export default function DashboardPage() {
       tooltip: t("dash.overallAccuracyTooltip"),
     },
     {
-      label: t("dash.avgBrierScore"),
-      value: summaryLoading ? null : (summary ? summary.brier_score.toFixed(3) : " - "),
-      icon: BarChart3,
-      trend: "down" as const,
-      sub: t("dash.lowerIsBetter"),
-      tooltip: t("dash.avgBrierScoreTooltip"),
+      label: "Pick of the Day",
+      value: botdStats?.accuracy_pct != null ? `${botdStats.accuracy_pct}%` : " - ",
+      icon: Star,
+      trend: "up" as const,
+      sub: "Daily top pick accuracy",
+      tooltip: "Accuracy of the AI-selected best pick each day",
     },
     {
       label: t("dash.avgConfidence"),
