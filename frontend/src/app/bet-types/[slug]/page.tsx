@@ -24,7 +24,7 @@ import {
 import { pickBetTypeHubLocale } from "@/data/bet-type-hubs";
 import { BetTypeHubFixtures } from "./bet-type-hub-fixtures";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 /**
  * Bet-type hub — public SEO landing page for one betting market.

@@ -2,7 +2,7 @@ import { fetchAllSlugsForSitemap } from "@/lib/sanity-data";
 import { defaultLocale, locales, localeMeta } from "@/i18n/config";
 import { localizePath } from "@/i18n/routes";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 /**
  * Custom sitemap route — served at /sitemap.xml

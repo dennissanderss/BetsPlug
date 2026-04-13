@@ -23,7 +23,7 @@ import {
 import { pickHubLocale } from "@/data/league-hubs";
 import { LeagueHubFixtures } from "./league-hub-fixtures";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 /**
  * League hub — public SEO landing page for one competition.

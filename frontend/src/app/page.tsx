@@ -8,7 +8,7 @@ import {
 import { getLocalizedFaq } from "@/lib/seo-helpers";
 import { fetchAllArticles } from "@/lib/sanity-data";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 /* ── Homepage FAQ keys (resolved per-locale at render time) ── */
 

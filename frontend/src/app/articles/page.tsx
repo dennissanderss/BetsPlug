@@ -9,7 +9,7 @@ import { PAGE_META } from "@/data/page-meta";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { fetchAllArticles } from "@/lib/sanity-data";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();

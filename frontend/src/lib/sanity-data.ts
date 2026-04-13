@@ -5,7 +5,7 @@
  * it to match the existing TypeScript interfaces. Every function
  * falls back to the hardcoded data files if Sanity is unreachable.
  *
- * ISR: pages importing these should set `revalidate = 3600`.
+ * ISR: pages importing these should set `revalidate = 60`.
  */
 import { client } from "../../sanity/lib/client";
 import {

@@ -17,7 +17,7 @@ import {
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 /**
  * /bet-types — index page listing every bet-type hub.

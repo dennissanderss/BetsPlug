@@ -43,7 +43,7 @@ import { fetchLearnPillarSlugs, fetchLearnPillarBySlug } from "@/lib/sanity-data
 
 const SITE_URL = "https://betsplug.com";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 type Params = { slug: string };
 

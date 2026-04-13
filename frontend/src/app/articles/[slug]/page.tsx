@@ -7,7 +7,7 @@ import {
 } from "@/lib/sanity-data";
 import { ArticleTemplate } from "../article-template";
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 /**
  * Single article page — uses the shared ArticleTemplate so every
