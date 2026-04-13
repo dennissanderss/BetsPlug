@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { UsersIcon } from "lucide-react";
 
 export const aboutPage = defineType({
   name: "aboutPage",
   title: "About Page",
   type: "document",
+  icon: UsersIcon,
   fieldsets: [
     { name: "team", title: "Team", options: { collapsible: true } },
     { name: "stats", title: "Statistics", options: { collapsible: true, collapsed: true } },

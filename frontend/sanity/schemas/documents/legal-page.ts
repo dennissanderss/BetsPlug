@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { ShieldIcon } from "lucide-react";
 
 export const legalPage = defineType({
   name: "legalPage",
   title: "Legal Page",
   type: "document",
+  icon: ShieldIcon,
   fieldsets: [
     { name: "seo", title: "SEO", options: { collapsible: true, collapsed: true } },
   ],

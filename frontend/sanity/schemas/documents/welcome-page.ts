@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { SparklesIcon } from "lucide-react";
 
 export const welcomePage = defineType({
   name: "welcomePage",
   title: "Welcome Page",
   type: "document",
+  icon: SparklesIcon,
   fields: [
     defineField({
       name: "nextSteps",

@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { TrophyIcon } from "lucide-react";
 
 export const leagueHub = defineType({
   name: "leagueHub",
   title: "League Hub",
   type: "document",
+  icon: TrophyIcon,
   fieldsets: [
     { name: "seo", title: "SEO", options: { collapsible: true, collapsed: true } },
   ],

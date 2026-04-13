@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { TagIcon } from "lucide-react";
 
 export const pricingConfig = defineType({
   name: "pricingConfig",
   title: "Pricing",
   type: "document",
+  icon: TagIcon,
   fields: [
     defineField({
       name: "plans",

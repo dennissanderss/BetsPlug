@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { SearchIcon } from "lucide-react";
 
 export const pageMeta = defineType({
   name: "pageMeta",
   title: "Page SEO",
   type: "document",
+  icon: SearchIcon,
   fields: [
     defineField({
       name: "pageKey",

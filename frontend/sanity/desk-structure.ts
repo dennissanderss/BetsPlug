@@ -1,4 +1,10 @@
 import type { StructureBuilder } from "sanity/structure";
+import {
+  NewspaperIcon,
+  GlobeIcon,
+  LayoutDashboardIcon,
+  SettingsIcon,
+} from "lucide-react";
 
 /** Helper: show a singleton document (one fixed document, no list). */
 function singleton(S: StructureBuilder, type: string, title: string, id?: string) {
@@ -15,6 +21,7 @@ export const structure = (S: StructureBuilder) =>
     .items([
       S.listItem()
         .title("Editorial")
+        .icon(NewspaperIcon)
         .child(
           S.list()
             .title("Editorial")
@@ -26,6 +33,7 @@ export const structure = (S: StructureBuilder) =>
       S.divider(),
       S.listItem()
         .title("SEO Hubs")
+        .icon(GlobeIcon)
         .child(
           S.list()
             .title("SEO Hubs")
@@ -37,6 +45,7 @@ export const structure = (S: StructureBuilder) =>
       S.divider(),
       S.listItem()
         .title("Pages")
+        .icon(LayoutDashboardIcon)
         .child(
           S.list()
             .title("Pages")
@@ -56,6 +65,7 @@ export const structure = (S: StructureBuilder) =>
       S.divider(),
       S.listItem()
         .title("Site")
+        .icon(SettingsIcon)
         .child(
           S.list()
             .title("Site")

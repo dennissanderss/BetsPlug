@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { GraduationCapIcon } from "lucide-react";
 
 export const learnPillar = defineType({
   name: "learnPillar",
   title: "Learn Pillar",
   type: "document",
+  icon: GraduationCapIcon,
   fieldsets: [
     { name: "seo", title: "SEO", options: { collapsible: true, collapsed: true } },
   ],

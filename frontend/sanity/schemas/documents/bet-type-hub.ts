@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { TargetIcon } from "lucide-react";
 
 export const betTypeHub = defineType({
   name: "betTypeHub",
   title: "Bet Type Hub",
   type: "document",
+  icon: TargetIcon,
   fieldsets: [
     { name: "seo", title: "SEO", options: { collapsible: true, collapsed: true } },
   ],

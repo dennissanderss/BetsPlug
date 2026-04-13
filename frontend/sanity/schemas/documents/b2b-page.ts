@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { BriefcaseIcon } from "lucide-react";
 
 export const b2bPage = defineType({
   name: "b2bPage",
   title: "B2B Page",
   type: "document",
+  icon: BriefcaseIcon,
   fields: [
     defineField({
       name: "partnershipTypes",

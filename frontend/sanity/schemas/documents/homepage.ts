@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { HomeIcon } from "lucide-react";
 
 export const homepage = defineType({
   name: "homepage",
   title: "Homepage",
   type: "document",
+  icon: HomeIcon,
   fieldsets: [
     { name: "hero", title: "Hero Section", options: { collapsible: true } },
     { name: "comparison", title: "Comparison Table", options: { collapsible: true, collapsed: true } },

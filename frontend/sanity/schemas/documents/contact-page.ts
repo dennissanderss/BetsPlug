@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { MailIcon } from "lucide-react";
 
 export const contactPage = defineType({
   name: "contactPage",
   title: "Contact Page",
   type: "document",
+  icon: MailIcon,
   fields: [
     defineField({
       name: "helpOptions",

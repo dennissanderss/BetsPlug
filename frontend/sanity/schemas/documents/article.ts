@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { FileTextIcon } from "lucide-react";
 
 export const article = defineType({
   name: "article",
   title: "Article",
   type: "document",
+  icon: FileTextIcon,
   fieldsets: [
     { name: "seo", title: "SEO", options: { collapsible: true, collapsed: true } },
     { name: "cover", title: "Cover", options: { collapsible: true, collapsed: true } },

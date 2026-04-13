@@ -1,9 +1,11 @@
 import { defineType, defineField } from "sanity";
+import { CreditCardIcon } from "lucide-react";
 
 export const checkoutPage = defineType({
   name: "checkoutPage",
   title: "Checkout Page",
   type: "document",
+  icon: CreditCardIcon,
   fields: [
     defineField({
       name: "trustStrip",
