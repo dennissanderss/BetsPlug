@@ -21,44 +21,40 @@ const leagues: League[] = [
 
 const BG = "#080b14";
 
+/* Reversed order for the second row */
+const leaguesReversed = [...leagues].reverse();
+
 export function LeaguesTicker() {
   const { t } = useTranslations();
-  const tripled = [...leagues, ...leagues, ...leagues];
+  const row1 = [...leagues, ...leagues, ...leagues];
+  const row2 = [...leaguesReversed, ...leaguesReversed, ...leaguesReversed];
 
   return (
     <section
-      className="relative overflow-hidden py-10 md:py-14"
+      className="relative overflow-hidden py-14 md:py-20"
       aria-labelledby="leagues-heading"
       style={{ background: BG }}
     >
-      {/* ── Unique background ── */}
-      {/* Honeycomb / hex dot pattern */}
+      {/* ── Background ── */}
+      {/* Subtle grid */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.07]"
-        style={{
-          backgroundImage: `radial-gradient(circle, rgba(74,222,128,0.9) 1px, transparent 1px)`,
-          backgroundSize: "28px 28px",
-          backgroundPosition: "0 0, 14px 14px",
-        }}
-      />
-      {/* Diagonal accent lines */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(135deg, rgba(74,222,128,0.8) 0 1px, transparent 1px 24px)",
+            "linear-gradient(rgba(74,222,128,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.5) 1px, transparent 1px)",
+          backgroundSize: "60px 60px",
         }}
       />
-      {/* Radial glow */}
+      {/* Center glow */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/2 h-[500px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500/[0.04] blur-[120px]" />
+        <div className="absolute left-1/2 top-1/2 h-[600px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500/[0.06] blur-[150px]" />
       </div>
-      {/* Top/bottom accent lines */}
-      <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-green-500/25 to-transparent" />
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-500/25 to-transparent" />
+      {/* Edge lines */}
+      <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-green-500/20 to-transparent" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-500/20 to-transparent" />
 
       {/* Title */}
-      <div className="relative z-10 mb-8 text-center md:mb-10">
+      <div className="relative z-10 mb-10 text-center md:mb-14">
         <span className="mb-3 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
           {t("leagues.badge")}
         </span>
@@ -71,77 +67,82 @@ export function LeaguesTicker() {
         </h2>
       </div>
 
-      {/* Marquee — flat on mobile, 3D perspective on md+ */}
-      <div
-        className="perspective-marquee relative flex items-center justify-center overflow-hidden"
-      >
-        {/* Track — no tilt on mobile, tilted on desktop */}
-        <div className="marquee-track flex w-full items-center justify-start">
-          {/* Scrolling row */}
-          <motion.div
-            className="flex items-center whitespace-nowrap"
-            animate={{ x: ["0%", "-33.3333%"] }}
-            transition={{
-              duration: 30,
-              ease: "linear",
-              repeat: Infinity,
-            }}
-          >
-            {tripled.map((league, i) => (
-              <div
-                key={`${league.slug}-${i}`}
-                className="flex flex-shrink-0 items-center justify-center px-5 sm:px-8 md:px-12"
-                title={league.name}
-              >
-                <div className="rounded-xl bg-white/[0.12] p-2.5 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-white/[0.18] sm:rounded-2xl sm:p-3">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`/leagues/${league.slug}.${league.ext ?? "png"}`}
-                    alt={league.name}
-                    className="h-8 w-auto max-w-[80px] object-contain brightness-125 drop-shadow-[0_0_12px_rgba(255,255,255,0.15)] sm:h-10 sm:max-w-[100px] md:h-11 md:max-w-[120px]"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            ))}
-          </motion.div>
+      {/* 3D Marquee container */}
+      <div className="leagues-stage relative z-10">
+        <div className="leagues-rotator space-y-4 md:space-y-5">
+          {/* ── Row 1: scrolls left ── */}
+          <div className="relative overflow-hidden">
+            <motion.div
+              className="flex w-max items-center"
+              animate={{ x: ["0%", "-33.3333%"] }}
+              transition={{ duration: 35, ease: "linear", repeat: Infinity }}
+            >
+              {row1.map((league, i) => (
+                <LeagueCard key={`r1-${league.slug}-${i}`} league={league} />
+              ))}
+            </motion.div>
+
+            {/* Side fades */}
+            <SideFades />
+          </div>
+
+          {/* ── Row 2: scrolls right ── */}
+          <div className="relative overflow-hidden">
+            <motion.div
+              className="flex w-max items-center"
+              animate={{ x: ["-33.3333%", "0%"] }}
+              transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+            >
+              {row2.map((league, i) => (
+                <LeagueCard key={`r2-${league.slug}-${i}`} league={league} />
+              ))}
+            </motion.div>
+
+            {/* Side fades */}
+            <SideFades />
+          </div>
         </div>
-
-        {/* Side fades */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: `linear-gradient(90deg, ${BG} 0%, transparent 10%, transparent 90%, ${BG} 100%)`,
-          }}
-        />
-
-        {/* Vertical fade — only on md+ for the 3D effect */}
-        <div
-          className="pointer-events-none absolute inset-0 hidden md:block"
-          style={{
-            background: `linear-gradient(180deg, ${BG} 0%, transparent 18%, transparent 82%, ${BG} 100%)`,
-          }}
-        />
       </div>
 
       <style jsx>{`
-        .perspective-marquee {
-          height: 70px;
+        .leagues-stage {
+          perspective: 900px;
+          perspective-origin: 50% 50%;
         }
-        .marquee-track {
-          transform: none;
-        }
-        @media (min-width: 768px) {
-          .perspective-marquee {
-            perspective: 1200px;
-            height: 160px;
-          }
-          .marquee-track {
-            transform: rotateX(6deg) rotateY(-24deg);
-            transform-style: preserve-3d;
-          }
+        .leagues-rotator {
+          transform: rotateX(16deg) rotateZ(-1deg);
+          transform-style: preserve-3d;
         }
       `}</style>
     </section>
+  );
+}
+
+/* ── Logo card ── */
+function LeagueCard({ league }: { league: League }) {
+  return (
+    <div className="mx-2 flex-shrink-0 sm:mx-3" title={league.name}>
+      <div className="group flex h-14 w-24 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.04] p-3 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-300 hover:border-green-500/30 hover:bg-white/[0.08] hover:shadow-[0_4px_30px_rgba(74,222,128,0.15)] sm:h-16 sm:w-28 sm:rounded-2xl md:h-[72px] md:w-32 md:p-4">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`/leagues/${league.slug}.${league.ext ?? "png"}`}
+          alt={league.name}
+          className="h-full w-auto max-w-full object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.1)] transition-transform duration-300 group-hover:scale-110"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ── Side gradient fades ── */
+function SideFades() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0"
+      style={{
+        background: `linear-gradient(90deg, ${BG} 0%, transparent 8%, transparent 92%, ${BG} 100%)`,
+      }}
+    />
   );
 }
