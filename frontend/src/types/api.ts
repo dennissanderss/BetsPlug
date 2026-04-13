@@ -434,6 +434,8 @@ export interface FreePickItem {
   match_id: string;
   home_team: string;
   away_team: string;
+  home_team_logo?: string | null;
+  away_team_logo?: string | null;
   league: string;
   scheduled_at: string;
   pick: string | null;

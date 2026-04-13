@@ -130,6 +130,8 @@ class FreePickItem(BaseModel):
     match_id: str  # match UUID — single source of truth for free-pick gating across all pages
     home_team: str
     away_team: str
+    home_team_logo: Optional[str] = None
+    away_team_logo: Optional[str] = None
     league: str
     scheduled_at: str
     pick: Optional[str] = None
@@ -161,6 +163,8 @@ def _build_free_pick(pred: Prediction) -> FreePickItem:
     m = pred.match
     home = m.home_team.name if m and m.home_team else "TBD"
     away = m.away_team.name if m and m.away_team else "TBD"
+    home_logo = m.home_team.logo_url if m and m.home_team else None
+    away_logo = m.away_team.logo_url if m and m.away_team else None
     league = m.league.name if m and m.league else ""
 
     pick = _pick_from_probs(pred)
@@ -183,6 +187,8 @@ def _build_free_pick(pred: Prediction) -> FreePickItem:
         match_id=str(m.id) if m else "",
         home_team=home,
         away_team=away,
+        home_team_logo=home_logo,
+        away_team_logo=away_logo,
         league=league,
         scheduled_at=m.scheduled_at.isoformat() if m else "",
         pick=pick,
@@ -273,6 +279,8 @@ async def get_free_picks(
                 match_id=str(m.id),
                 home_team=m.home_team.name if m and m.home_team else "TBD",
                 away_team=m.away_team.name if m and m.away_team else "TBD",
+                home_team_logo=m.home_team.logo_url if m and m.home_team else None,
+                away_team_logo=m.away_team.logo_url if m and m.away_team else None,
                 league=m.league.name if m and m.league else "",
                 scheduled_at=m.scheduled_at.isoformat() if m else "",
                 status=m.status.value if hasattr(m.status, "value") else str(m.status),

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import {
@@ -78,7 +79,12 @@ function PredictionCard({
           <div className="flex items-center gap-3">
             {/* Home team */}
             <div className="min-w-0 flex-1 text-center">
-              <p className="truncate text-base font-extrabold uppercase leading-tight tracking-wide text-white sm:text-lg">
+              {pick.home_team_logo && (
+                <div className="relative mx-auto mb-2 h-10 w-10 sm:h-12 sm:w-12">
+                  <Image src={pick.home_team_logo} alt={pick.home_team} fill className="object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]" sizes="48px" />
+                </div>
+              )}
+              <p className="truncate text-sm font-extrabold uppercase leading-tight tracking-wide text-white sm:text-base">
                 {pick.home_team}
               </p>
             </div>
@@ -93,7 +99,12 @@ function PredictionCard({
 
             {/* Away team */}
             <div className="min-w-0 flex-1 text-center">
-              <p className="truncate text-base font-extrabold uppercase leading-tight tracking-wide text-white sm:text-lg">
+              {pick.away_team_logo && (
+                <div className="relative mx-auto mb-2 h-10 w-10 sm:h-12 sm:w-12">
+                  <Image src={pick.away_team_logo} alt={pick.away_team} fill className="object-contain drop-shadow-[0_2px_8px_rgba(255,255,255,0.15)]" sizes="48px" />
+                </div>
+              )}
+              <p className="truncate text-sm font-extrabold uppercase leading-tight tracking-wide text-white sm:text-base">
                 {pick.away_team}
               </p>
             </div>
