@@ -580,6 +580,7 @@ function formatDateShort(iso: string): string {
 }
 
 function CompactMatchRow({ fixture }: { fixture: Fixture }) {
+  const { t } = useTranslations();
   const pred: FixturePrediction | null = fixture.prediction ?? null;
   const hasPrediction = pred !== null && typeof pred.confidence === "number";
 
@@ -695,7 +696,7 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
         </div>
 
         {/* Confidence bar + correctness */}
-        <div className="col-span-3 sm:col-span-2 flex items-center gap-2">
+        <div className="col-span-3 sm:col-span-2 flex items-center gap-2" title={t("pred.confidenceTooltip")}>
           {isCorrect !== null ? (
             <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
               isCorrect
