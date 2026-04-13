@@ -41,6 +41,16 @@ const TYPES_WITH_LOCALE = [
   "betTypeHub",
   "pageMeta",
   "legalPage",
+  "homepage",
+  "pricingConfig",
+  "aboutPage",
+  "thankYouPage",
+  "b2bPage",
+  "howItWorksPage",
+  "contactPage",
+  "welcomePage",
+  "checkoutPage",
+  "trackRecordPage",
 ] as const;
 
 // ── DeepL ─────────────────────────────────────────────────
