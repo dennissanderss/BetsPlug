@@ -111,7 +111,7 @@ export function SiteNav() {
             {/* Desktop buttons (lg+) */}
             <Link
               href={loc("/login")}
-              className={`hidden rounded-lg border border-white/[0.1] font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white lg:inline-block ${
+              className={`hidden rounded-md border border-white/[0.1] font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white lg:inline-block ${
                 isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
               }`}
             >
@@ -119,7 +119,7 @@ export function SiteNav() {
             </Link>
             <Link
               href={loc("/checkout") + "?plan=gold"}
-              className={`btn-gradient hidden rounded-full font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:inline-block ${
+              className={`btn-gradient hidden rounded-md font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:inline-block ${
                 isScrolled ? "px-4 py-1.5 text-xs" : "px-5 py-2.5 text-sm"
               }`}
             >
@@ -129,7 +129,7 @@ export function SiteNav() {
             {/* Mobile/Tablet CTA button */}
             <Link
               href={loc("/checkout") + "?plan=gold"}
-              className={`btn-gradient flex items-center justify-center rounded-full font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:hidden ${
+              className={`btn-gradient flex items-center justify-center rounded-md font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:hidden ${
                 isScrolled ? "px-3 py-1.5 text-[11px]" : "px-4 py-2 text-xs sm:text-sm"
               }`}
             >
@@ -260,7 +260,7 @@ export function SiteNav() {
               <Link
                 href={loc("/checkout") + "?plan=gold"}
                 onClick={() => setMobileMenuOpen(false)}
-                className="btn-gradient flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/20"
+                className="btn-gradient flex w-full items-center justify-center gap-2 rounded-md px-6 py-3.5 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/20"
               >
                 {t("nav.startFreeTrial")}
                 <ArrowRight className="h-4 w-4" />

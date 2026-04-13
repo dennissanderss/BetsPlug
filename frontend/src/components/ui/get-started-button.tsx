@@ -9,7 +9,7 @@ interface GetStartedButtonProps {
 
 export function GetStartedButton({ children = "Get Started", className }: GetStartedButtonProps) {
   return (
-    <Button variant="glow" size="xl" className={className}>
+    <Button variant="glow" size="lg" className={className}>
       {children}
       <ArrowRight className="ml-1.5 h-4 w-4" />
     </Button>

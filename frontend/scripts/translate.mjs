@@ -245,6 +245,30 @@ function matchesKeyPattern(key) {
 }
 
 /**
+ * Dutch formality post-processor
+ * ──────────────────────────────────────────────────────────────
+ * Google Translate defaults to the formal "u" register for Dutch.
+ * BetsPlug uses the informal "je/jij/jouw" register site-wide.
+ * This function converts common formal patterns to informal ones.
+ */
+function enforceInformalDutch(text) {
+  return text
+    // "uw" (possessive) → "je" (but not inside words like "nieuw", "duw")
+    .replace(/\bUw\b/g, "Je")
+    .replace(/\buw\b/g, "je")
+    // "u" (subject/object) → "je" (careful with word boundaries)
+    .replace(/\bU\b(?!\.\w)/g, "Je")
+    .replace(/\b u\b/g, " je")
+    // Common verb+u patterns
+    .replace(/\bheeft u\b/gi, "heb je")
+    .replace(/\bkunt u\b/gi, "kun je")
+    .replace(/\bwilt u\b/gi, "wil je")
+    .replace(/\bzult u\b/gi, "zul je")
+    .replace(/\bgaat u\b/gi, "ga je")
+    .replace(/\baan u\b/gi, "aan jou");
+}
+
+/**
  * Translate a batch of strings using google-translate-api-x
  */
 async function translateBatch(texts, targetLang) {
@@ -256,11 +280,20 @@ async function translateBatch(texts, targetLang) {
       autoCorrect: false,
     });
 
+    let translated;
     if (Array.isArray(results)) {
-      return results.map((r) => r.text);
+      translated = results.map((r) => r.text);
+    } else {
+      // Single string result
+      translated = [results.text];
     }
-    // Single string result
-    return [results.text];
+
+    // Enforce informal register for Dutch
+    if (targetLang === "nl") {
+      translated = translated.map(enforceInformalDutch);
+    }
+
+    return translated;
   } catch (err) {
     console.error(`  Error translating to ${targetLang}: ${err.message}`);
     // Return originals on error
