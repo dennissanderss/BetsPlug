@@ -11,6 +11,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { TopBar } from "@/components/ui/top-bar";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 /**
@@ -63,13 +64,15 @@ export function SiteNav() {
 
   return (
     <>
-      {/* ── Navigation ── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-[#080b14]/80 backdrop-blur-xl transition-all duration-300">
-        <div
-          className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-300 ${
-            isScrolled ? "py-1 md:py-0.5" : "py-3 md:py-1"
-          }`}
-        >
+      {/* ── Top Bar + Navigation ── */}
+      <header className="fixed top-0 left-0 right-0 z-50">
+        <TopBar />
+        <nav className="border-b border-white/[0.06] bg-[#080b14]/80 backdrop-blur-xl transition-all duration-300">
+          <div
+            className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-300 ${
+              isScrolled ? "py-1 md:py-0.5" : "py-3 md:py-1"
+            }`}
+          >
           <Link href={home} className="flex items-center">
             <Image
               src="/logo.webp"
@@ -147,6 +150,7 @@ export function SiteNav() {
           </div>
         </div>
       </nav>
+      </header>
 
       {/* ── Mobile slide-out menu ── */}
       <div

@@ -25,6 +25,11 @@ const en = {
   "nav.getStarted": "Get Started",
   "nav.joinBlurb": "Join 1,500+ analysts and get data-driven predictions today.",
 
+  /* Top Bar */
+  "topbar.winRate": "win rate",
+  "topbar.picksAnalyzed": "picks analyzed",
+  "topbar.cta": "Try for €0.01",
+
   /* Hero */
   "hero.badge": "AI predictions for every match",
   "hero.titleLine1": "Know which team wins",
@@ -3911,6 +3916,9 @@ const nl: Dictionary = {
   "seo.pillar7Desc": "Van Premier League-voorspellingen tot Champions League-tips, van Eredivisie-voorspellingen tot Süper Lig-wedstrijdanalyses: BetsPlug omvat meer dan 30 voetbalcompetities wereldwijd. Onze AI-modellen zijn getraind op jarenlange historische wedstrijdgegevens, formuliertabellen, onderlinge records en verwachte doelpunten (xG) om betrouwbare voorspellingen van voetbalweddenschappen te leveren voor elke competitie die we behandelen.",
   "seo.pillar8Title": "Hoe de AI-voorspellingen van BetsPlug werken",
   "seo.pillar8Desc": "BetsPlug Pulse, onze AI-engine, combineert Elo-beoordelingen voor teamsterkte, Poisson-verdeling voor doelpuntvoorspelling en logistieke regressie voor patroonherkenning - en mixt alle signalen via gewogen middeling tot definitieve wedstrijdkansen. Het resultaat: nauwkeurige, op data gebaseerde voetbalvoorspellingen die vóór elke speeldag in alle ondersteunde competities worden bijgewerkt.",
+  "topbar.winRate": "winstpercentage",
+  "topbar.picksAnalyzed": "keuzes geanalyseerd",
+  "topbar.cta": "Probeer het voor € 0,01",
 };
 
 
