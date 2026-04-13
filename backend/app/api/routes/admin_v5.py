@@ -71,15 +71,38 @@ log = logging.getLogger(__name__)
 _settings = get_settings()
 
 
-# Leagues the v5 rebuild targets. Mirrors LEAGUE_PROVIDER_CONFIG minus
-# leagues API-Football doesn't cover (championship, belgian, super-lig).
+# All tier-1 domestic leagues + European cups targeted by the prediction engine.
+# API-Football Pro tier (7 500 req/day) easily covers all of these.
 V5_LEAGUES = [
+    # Top 6 domestic
     ("premier-league", "Premier League", 39),
     ("la-liga", "La Liga", 140),
     ("bundesliga", "Bundesliga", 78),
     ("serie-a", "Serie A", 135),
     ("ligue-1", "Ligue 1", 61),
     ("eredivisie", "Eredivisie", 88),
+    # European cups
+    ("champions-league", "Champions League", 2),
+    ("europa-league", "Europa League", 3),
+    ("conference-league", "Conference League", 848),
+    # Additional tier-1 domestic
+    ("championship", "Championship", 40),
+    ("primeira-liga", "Primeira Liga", 94),
+    ("super-lig", "Süper Lig", 203),
+    ("jupiler-pro-league", "Jupiler Pro League", 144),
+    ("scottish-premiership", "Scottish Premiership", 179),
+    ("swiss-super-league", "Swiss Super League", 207),
+    # Americas
+    ("brasileirao-serie-a", "Brasileirão Série A", 71),
+    ("liga-mx", "Liga MX", 262),
+    ("mls", "MLS", 253),
+    ("copa-libertadores", "Copa Libertadores", 13),
+    ("liga-profesional-argentina", "Liga Profesional Argentina", 128),
+    # Rest of world
+    ("saudi-pro-league", "Saudi Pro League", 307),
+    ("j1-league", "J1 League", 98),
+    ("a-league", "A-League", 188),
+    ("k-league-1", "K League 1", 292),
 ]
 
 
