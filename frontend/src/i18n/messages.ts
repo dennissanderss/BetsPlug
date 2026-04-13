@@ -81,18 +81,18 @@ const en = {
 
   /* How it works */
   "how.badge": "How it works",
-  "how.title": "Start in under 2 minutes.",
+  "how.title": "Three steps. Full transparency.",
   "how.subtitle":
-    "No complicated setup. No learning curve. Three simple steps to smarter football decisions.",
-  "how.step1Title": "1. Create your account",
-  "how.step1Desc": "Sign up in seconds. Start with a 7-day full-access trial for just €0.01 — cancel anytime, no strings attached.",
-  "how.step2Title": "2. Browse today's predictions",
+    "One AI engine, one daily pick, one verifiable track record. No black boxes.",
+  "how.step1Title": "1. Pulse analyses every match",
+  "how.step1Desc": "Our AI looks at form, standings, head-to-head and 40+ factors. One prediction per match, updated daily.",
+  "how.step2Title": "2. Get our best pick daily",
   "how.step2Desc":
-    "See win probabilities, confidence scores and our AI's top picks for every match — updated daily across 30+ leagues.",
-  "how.step3Title": "3. Make your own call",
+    "Pick of the Day: 66.7% accuracy on 346 picks. Or browse all predictions yourself.",
+  "how.step3Title": "3. Track everything transparently",
   "how.step3Desc":
-    "We give you the data. You decide what to do with it. No pressure, no obligation — just clear, honest information.",
-  "how.deepDive": "See the full engine",
+    "Every prediction is stored and evaluated. Download the full dataset as CSV. Nothing hidden, nothing deleted.",
+  "how.deepDive": "Learn more about how it works",
 
   /* Pricing */
   "pricing.badge": "Pricing",
@@ -640,210 +640,108 @@ const en = {
 
   /* How It Works page - dedicated deep-dive */
   "hiw.metaTitle":
-    "How It Works · BetsPlug AI Prediction Engine",
+    "How It Works · BetsPlug Pulse AI Predictions",
   "hiw.metaDesc":
-    "A full, step-by-step walkthrough of the BetsPlug prediction engine: how we collect data, engineer features, train models, detect value and publish picks you can verify.",
+    "See how BetsPlug Pulse analyses every match, delivers a daily Pick of the Day with 66.7% accuracy, and lets you track every prediction transparently.",
   "hiw.breadcrumbHome": "Home",
   "hiw.breadcrumbHow": "How it works",
 
-  "hiw.heroBadge": "The BetsPlug engine",
-  "hiw.heroTitleA": "How we turn raw match data",
-  "hiw.heroTitleB": "into predictions you can trust.",
+  "hiw.heroBadge": "BetsPlug Pulse",
+  "hiw.heroTitleA": "One AI. Every match.",
+  "hiw.heroTitleB": "Fully transparent predictions.",
   "hiw.heroSubtitle":
-    "Every pick on BetsPlug is the end of a long, carefully engineered pipeline. No hunches, no cherry-picking, no hidden rules. This is the exact process - from the moment a fixture is announced, to the moment a verified pick lands on your dashboard.",
+    "BetsPlug Pulse analyses form, standings, head-to-head and 40+ factors for every match. You get the predictions, we keep the track record public. Three steps, nothing hidden.",
   "hiw.heroCtaPrimary": "See the track record",
   "hiw.heroCtaSecondary": "Start Free Trial",
-  "hiw.heroStatDataSources": "Data sources",
-  "hiw.heroStatLeagues": "European leagues",
-  "hiw.heroStatModels": "Prediction models",
-  "hiw.heroStatUpdates": "Sync cycle",
+  "hiw.heroStat1Value": "66.7%",
+  "hiw.heroStat1Label": "BOTD accuracy",
+  "hiw.heroStat2Value": "346",
+  "hiw.heroStat2Label": "Picks tracked",
+  "hiw.heroStat3Value": "70+",
+  "hiw.heroStat3Label": "Leagues covered",
+  "hiw.heroStat4Value": "CSV",
+  "hiw.heroStat4Label": "Downloadable data",
 
-  /* Overview strip */
-  "hiw.overviewBadge": "The pipeline",
-  "hiw.overviewTitle": "Seven stages. Full transparency.",
-  "hiw.overviewSubtitle":
-    "Each stage is built and monitored independently. Here's exactly what happens under the hood.",
+  /* Step 1 */
+  "hiw.step1Badge": "Step 01",
+  "hiw.step1Title": "Pulse analyses every match",
+  "hiw.step1Lead":
+    "Our AI engine looks at form, standings, head-to-head history and 40+ other factors for every fixture. One prediction per match, updated daily.",
+  "hiw.step1P1":
+    "BetsPlug Pulse combines multiple statistical models into a single probability for each match outcome. All predictions are generated before kick-off - our models never see the future.",
+  "hiw.step1Point1Title": "40+ factors per match",
+  "hiw.step1Point1Desc":
+    "Form, Elo ratings, Poisson goal rates, standings, head-to-head, bookmaker odds and more.",
+  "hiw.step1Point2Title": "Updated daily",
+  "hiw.step1Point2Desc":
+    "New predictions are published every day as fixtures are confirmed.",
+  "hiw.step1Point3Title": "70+ competitions",
+  "hiw.step1Point3Desc":
+    "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie and all major UEFA competitions.",
 
-  /* Stage 1 - Data acquisition */
-  "hiw.s1Badge": "Stage 01 · Data acquisition",
-  "hiw.s1Title": "We start where the market starts: the raw feed.",
-  "hiw.s1Lead":
-    "Garbage in, garbage out. So our pipeline begins with reliable data sources covering fixtures, results, standings and bookmaker odds.",
-  "hiw.s1P1":
-    "Every 6 hours we sync fixtures, results and standings from API-Football and football-data.org for 6 European leagues. Bookmaker odds are fetched from The Odds API every 2 hours. During match hours (12:00-24:00 UTC), live scores update every 5 minutes so your dashboard stays current.",
-  "hiw.s1P2":
-    "Every record is timestamped so we can replay any moment in history exactly as our models saw it - critical for honest backtesting.",
-  "hiw.s1Point1Title": "3 data providers",
-  "hiw.s1Point1Desc":
-    "API-Football, football-data.org and The Odds API - each covering different aspects of the match.",
-  "hiw.s1Point2Title": "6-hour sync cycle",
-  "hiw.s1Point2Desc":
-    "Fixtures and predictions refresh every 6 hours. Live scores update every 5 minutes during match hours.",
-  "hiw.s1Point3Title": "Point-in-time storage",
-  "hiw.s1Point3Desc":
-    "Nothing is overwritten. Every change is a new row - history is permanent.",
+  /* Step 2 */
+  "hiw.step2Badge": "Step 02",
+  "hiw.step2Title": "Get our best pick daily",
+  "hiw.step2Lead":
+    "Every day we highlight one pick: the Pick of the Day. Currently at 66.7% accuracy over 346 picks. Or browse all predictions yourself - grouped by league, with live scores and odds.",
+  "hiw.step2P1":
+    "The Pick of the Day is selected based on the strongest confidence signal from BetsPlug Pulse. You can also explore all predictions, filter by league, and see live scores as matches are being played.",
+  "hiw.step2Point1Title": "Pick of the Day",
+  "hiw.step2Point1Desc":
+    "66.7% accuracy on 346 picks. Our strongest daily recommendation.",
+  "hiw.step2Point2Title": "All Predictions",
+  "hiw.step2Point2Desc":
+    "Browse every match prediction grouped by league, with live scores and odds.",
+  "hiw.step2Point3Title": "Strategy Lab",
+  "hiw.step2Point3Desc":
+    "Coming soon: filter predictions using backtested strategies.",
 
-  /* Stage 2 - Cleaning */
-  "hiw.s2Badge": "Stage 02 · Cleaning & normalisation",
-  "hiw.s2Title": "We enforce one source of truth before a model ever sees the data.",
-  "hiw.s2Lead":
-    "Raw football data is famously messy. Team names differ between feeds, leagues rename themselves, markets get suspended mid-match. We fix all of it - in a deterministic, reproducible way.",
-  "hiw.s2P1":
-    "Teams, leagues, players and market types are mapped to a single canonical schema through a manually audited lookup table. Suspended, voided or late-cancelled markets are flagged and excluded before any model ever touches them.",
-  "hiw.s2P2":
-    "Outlier detection catches bad data the moment it lands. Any record that fails a sanity check (impossible scores, negative times, odds outside a 1.01–1000 range) gets pulled out of the pipeline and logged for manual review.",
-  "hiw.s2BulletsTitle": "What we clean",
-  "hiw.s2Bullet1": "Team & league aliases unified",
-  "hiw.s2Bullet2": "Timezones normalised to UTC",
-  "hiw.s2Bullet3": "Suspended / voided markets removed",
-  "hiw.s2Bullet4": "Odds sanity-checked across books",
-  "hiw.s2Bullet5": "Missing values explicitly marked (never silently imputed)",
-
-  /* Stage 3 - Feature engineering */
-  "hiw.s3Badge": "Stage 03 · Feature engineering",
-  "hiw.s3Title": "Multiple signal families per match - each one earns its place.",
-  "hiw.s3Lead":
-    "A prediction is only as sharp as the signals it's built on. This is where a match becomes a structured profile our models can reason about.",
-  "hiw.s3P1":
-    "For every fixture we compute features across several families: Elo ratings, Poisson goal rates, league standings, recent form, head-to-head history and bookmaker odds. These feed into three independent models that each look at the data differently.",
-  "hiw.s3P2":
-    "All features use only data available before kick-off. Our models never see the future when generating a prediction - a key safeguard against overfitting.",
-  "hiw.s3Family1Title": "Elo ratings",
-  "hiw.s3Family1Desc": "Dynamic team strength ratings updated after every match result.",
-  "hiw.s3Family2Title": "Poisson goal rates",
-  "hiw.s3Family2Desc": "Expected attacking and defensive rates for each team based on recent matches.",
-  "hiw.s3Family3Title": "Head-to-head",
-  "hiw.s3Family3Desc": "Historical meetings between the two teams, home and away.",
-  "hiw.s3Family4Title": "Bookmaker odds",
-  "hiw.s3Family4Desc": "Pre-match odds from major bookmakers via The Odds API.",
-  "hiw.s3Family5Title": "League standings",
-  "hiw.s3Family5Desc": "Current league position, points, goal difference and recent form.",
-  "hiw.s3Family6Title": "Match context",
-  "hiw.s3Family6Desc": "Home/away status, scheduling and fixture details.",
-
-  /* Stage 4 - Model ensemble */
-  "hiw.s4Badge": "Stage 04 · BetsPlug Pulse",
-  "hiw.s4Title": "Three independent models. One honest probability.",
-  "hiw.s4Lead":
-    "A single model will always have blind spots. So we run three different statistical approaches and combine their predictions with weighted averaging.",
-  "hiw.s4P1":
-    "Each model captures a different aspect of match dynamics. Their predictions are combined into a single set of win/draw/loss probabilities plus a confidence score for every upcoming match.",
-  "hiw.s4Model1Name": "Elo Rating Model",
-  "hiw.s4Model1Desc":
-    "A dynamic team strength rating that updates after every result. Converts the rating gap between two teams into win probabilities.",
-  "hiw.s4Model2Name": "Poisson Goal Model",
-  "hiw.s4Model2Desc":
-    "Estimates expected attacking and defensive goal rates for each team and integrates over all possible scorelines to produce match outcome probabilities.",
-  "hiw.s4Model3Name": "Logistic Regression",
-  "hiw.s4Model3Desc":
-    "A statistical classifier that uses multiple match features - form, standings, home advantage - to predict match outcomes directly.",
-  "hiw.s4BlendTitle": "Weighted averaging",
-  "hiw.s4BlendDesc":
-    "The three probabilities are combined through weighted averaging. The current weights (Elo 1.0, Poisson 1.5, Logistic 1.0) give slightly more influence to the Poisson model.",
-
-  /* Stage 5 - Value detection */
-  "hiw.s5Badge": "Stage 05 · Value detection",
-  "hiw.s5Title": "We only publish picks where our edge survives the real world.",
-  "hiw.s5Lead":
-    "Being right isn't enough. A pick only becomes a pick when our probability suggests value compared to the available odds.",
-  "hiw.s5P1":
-    "We compare our BetsPlug Pulse probabilities to bookmaker odds fetched from The Odds API. Our upcoming Strategy Lab will filter predictions using rules validated through walk-forward backtesting - such as requiring high home-win probability or low draw probability.",
-  "hiw.s5P2":
-    "Currently 3 strategies have passed statistical validation with positive backtested ROI over 90 days. But these are backtested results on a limited sample - real-world performance will vary. We are honest about that.",
-  "hiw.s5FormulaTitle": "The check every pick has to pass",
-  "hiw.s5FormulaLine1": "Model probability × Best odds",
-  "hiw.s5FormulaLine2": "−  expected slippage",
-  "hiw.s5FormulaLine3": "−  bookmaker margin",
-  "hiw.s5FormulaLine4": "=  real edge",
-  "hiw.s5FormulaFoot":
-    "If this number isn't clearly above zero, the pick never leaves the lab.",
-
-  /* Stage 6 - Publishing */
-  "hiw.s6Badge": "Stage 06 · Publishing & grading",
-  "hiw.s6Title": "Every pick is timestamped, shipped and publicly gradable.",
-  "hiw.s6Lead":
-    "This is where most prediction sites get vague. This is where we get loud.",
-  "hiw.s6P1":
-    "The moment a pick is generated, it is timestamped, signed, and published to your dashboard and our public ledger at the same second. You and a regulator see the exact same record.",
-  "hiw.s6P2":
-    "Once the match ends, every pick is graded automatically against the official result feed. Wins, losses and pushes are all recorded. Losing picks stay on the ledger forever - because a track record that only shows winners isn't a track record, it's marketing.",
-  "hiw.s6Point1Title": "Same-second publishing",
-  "hiw.s6Point1Desc":
-    "Subscribers and the public ledger are updated simultaneously - no back-dating possible.",
-  "hiw.s6Point2Title": "Automatic grading",
-  "hiw.s6Point2Desc":
-    "Results are scored from the official feed, not by a human who might look the other way.",
-  "hiw.s6Point3Title": "Nothing is deleted",
-  "hiw.s6Point3Desc":
-    "Losing picks are permanent. The ledger is append-only by design.",
-
-  /* Stage 7 - Continuous evaluation */
-  "hiw.s7Badge": "Stage 07 · Continuous evaluation",
-  "hiw.s7Title": "Every prediction is graded against the real result.",
-  "hiw.s7Lead":
-    "Predictions mean nothing if you don't check them. Our system automatically evaluates every prediction once the match is finished.",
-  "hiw.s7P1":
-    "Every 6 hours, after results are synced, the system scores all finished predictions. Each pick is evaluated with Brier score and log-loss metrics, and marked as correct or incorrect. This lets us track real accuracy over time.",
-  "hiw.s7P2":
-    "Current 3-way accuracy (home/draw/away) is around 50% - above the 33% random baseline, but not extraordinary. We publish all results, wins and losses alike, so you can verify the track record yourself.",
-  "hiw.s7Bullet1": "6-hour evaluation cycle",
-  "hiw.s7Bullet2": "Brier score and log-loss tracking",
-  "hiw.s7Bullet3": "All predictions graded automatically",
-  "hiw.s7Bullet4": "Wins and losses both published permanently",
-
-  /* Trust reinforcement / proof */
-  "hiw.proofBadge": "Why this matters",
-  "hiw.proofTitle": "The reason our predictions actually hold up.",
-  "hiw.proofSubtitle":
-    "Every choice in this pipeline exists for one reason: to give you an honest, data-driven probability - not a guess.",
-  "hiw.proof1Title": "No hindsight bias",
-  "hiw.proof1Desc":
-    "Models only see data available before kick-off. Predictions are generated and timestamped before the match starts.",
-  "hiw.proof2Title": "BetsPlug Pulse, not a one-trick-pony",
-  "hiw.proof2Desc":
-    "Three independent models (Elo, Poisson, Logistic) cross-check each other. One blind spot can't poison the whole prediction.",
-  "hiw.proof3Title": "Backtested strategies",
-  "hiw.proof3Desc":
-    "Strategy Lab filters (coming soon) will be validated with walk-forward backtesting and bootstrap confidence intervals before being published.",
-  "hiw.proof4Title": "Full transparency",
-  "hiw.proof4Desc":
-    "You can verify every prediction we've published. Wins and losses. Current 3-way accuracy is around 50%.",
-  "hiw.proof5Title": "Evaluated every 6 hours",
-  "hiw.proof5Desc":
-    "Every finished match is scored automatically. Brier score and log-loss track calibration over time.",
-  "hiw.proof6Title": "Built by people who ship",
-  "hiw.proof6Desc":
-    "A two-person team of football fanatics with an ICT background. Every line of this pipeline is hand-rolled, not bolted together from plugins.",
+  /* Step 3 */
+  "hiw.step3Badge": "Step 03",
+  "hiw.step3Title": "Track everything transparently",
+  "hiw.step3Lead":
+    "Every prediction is stored, timestamped and evaluated after the match. Wins and losses are published permanently. Download the full dataset as CSV.",
+  "hiw.step3P1":
+    "Our track record page shows every prediction we have ever made. Nothing is hidden, nothing is deleted. You can download the complete dataset and verify the numbers yourself.",
+  "hiw.step3Point1Title": "Every pick is graded",
+  "hiw.step3Point1Desc":
+    "Results are evaluated automatically against the official result feed. No human cherry-picking.",
+  "hiw.step3Point2Title": "Download as CSV",
+  "hiw.step3Point2Desc":
+    "Export the full prediction history and do your own analysis.",
+  "hiw.step3Point3Title": "Nothing deleted",
+  "hiw.step3Point3Desc":
+    "Losing picks stay forever. A track record that only shows winners is marketing, not transparency.",
 
   /* Objection section - FAQ */
   "hiw.faqBadge": "Honest answers",
-  "hiw.faqTitle": "The questions every serious analyst asks us.",
+  "hiw.faqTitle": "Frequently asked questions",
   "hiw.faqSubtitle":
-    "If you've tried a tipster site before, you've probably been burned. Here's exactly why BetsPlug is different.",
+    "If you've tried a tipster site before, you've probably been burned. Here's why BetsPlug is different.",
   "hiw.faq1Q": "How accurate are your predictions?",
   "hiw.faq1A":
-    "Our 3-way match predictions (home/draw/away) hit around 50% accuracy. That's above the 33% random baseline, but we're honest - it's not a magic number. Every prediction is timestamped before kick-off and graded automatically after the match, so you can verify the track record yourself.",
-  "hiw.faq2Q": "What happens on a losing streak?",
+    "Our Pick of the Day has 66.7% accuracy over 346 picks. Overall 3-way match predictions (home/draw/away) hit around 50%. Every prediction is timestamped before kick-off and graded automatically, so you can verify the track record yourself.",
+  "hiw.faq2Q": "What is Pick of the Day?",
   "hiw.faq2A":
-    "Losing predictions stay visible permanently. We publish them just as openly as the winners. Our strategies were backtested on a 90-day sample, so we expect variance. Losing streaks happen - that's football.",
-  "hiw.faq3Q": "Why not just use one really smart model?",
+    "Each day BetsPlug Pulse selects the match with the strongest confidence signal. This is our Pick of the Day - currently at 66.7% accuracy. You can also browse all other predictions on the platform.",
+  "hiw.faq3Q": "Can I download the data?",
   "hiw.faq3A":
-    "Because every model has blind spots. Our BetsPlug Pulse engine combines three models - Elo ratings, Poisson goal model and Logistic regression - each capturing different patterns. The combined output with weighted averaging consistently outperforms any single member.",
-  "hiw.faq4Q": "Can I actually profit from these predictions?",
+    "Yes. The track record page lets you download the full prediction history as a CSV file. Every prediction, every result - nothing hidden.",
+  "hiw.faq4Q": "Which football leagues do you cover?",
   "hiw.faq4A":
-    "Our backtested strategies show positive ROI over 90 days, but backtesting is not a guarantee. Real-world performance depends on odds you get, timing, and variance. We provide the data and analysis - the rest is your call.",
-  "hiw.faq5Q": "Which football leagues do you cover?",
+    "We cover 70+ football competitions worldwide, including the Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie and all major UEFA competitions.",
+  "hiw.faq5Q": "What is Strategy Lab?",
   "hiw.faq5A":
-    "We cover 70+ football competitions worldwide, including the Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie and all major UEFA competitions. We're always adding more leagues as our models mature.",
+    "Strategy Lab is an upcoming feature that will let you filter predictions using backtested strategies. It is currently locked and marked as Coming Soon.",
   "hiw.faq6Q": "Is this gambling advice?",
   "hiw.faq6A":
-    "No. BetsPlug is a football analytics platform. We publish probabilities, confidence scores and a verifiable track record. What you do with that information is entirely your decision.",
+    "No. BetsPlug is a football analytics platform. We publish probabilities and a verifiable track record. What you do with that information is entirely your decision.",
 
   /* Final CTA */
-  "hiw.ctaBadge": "Ready to see it in action?",
-  "hiw.ctaTitle": "Stop guessing. Start trusting the pipeline.",
+  "hiw.ctaBadge": "Ready to see the predictions?",
+  "hiw.ctaTitle": "Stop guessing. Start with data.",
   "hiw.ctaSubtitle":
-    "Now you know exactly how the pipeline works. See the predictions it produces - live, timestamped and ready to verify.",
+    "See our predictions live, check the track record, and decide for yourself.",
   "hiw.ctaPrimary": "Start Free Trial",
   "hiw.ctaSecondary": "See the track record",
 
@@ -1509,6 +1407,7 @@ const en = {
   "dash.systemStatusDesc": "Data source health and last sync times",
   "dash.healthy": "healthy",
   "dash.noDataSources": "No data sources configured.",
+  "dash.matchLoading": "Match details loading...",
 
   /* ── Botd page ───────────────────────────────────── */
   "botd.title": "Pick of the Day",
@@ -1986,17 +1885,17 @@ const en = {
 
   /* ── How It Works FAQ ───────────────────────────────────── */
   "faq.how.q1": "How accurate are your predictions?",
-  "faq.how.a1": "Our 3-way match predictions (home/draw/away) hit around 50% accuracy. That's above the 33% random baseline, but we're honest - it's not a magic number. Every prediction is timestamped before kick-off and graded automatically after the match, so you can verify the track record yourself.",
-  "faq.how.q2": "What happens on a losing streak?",
-  "faq.how.a2": "Losing predictions stay visible permanently. We publish them just as openly as the winners. Our strategies were backtested on a 90-day sample, so we expect variance. Losing streaks happen - that's football.",
-  "faq.how.q3": "Why not just use one really smart model?",
-  "faq.how.a3": "Because every model has blind spots. Our three models - Elo ratings, Poisson goal model and Logistic regression - each capture different patterns. The ensemble with weighted averaging consistently outperforms any single member.",
-  "faq.how.q4": "Can I actually profit from these predictions?",
-  "faq.how.a4": "Our backtested strategies show positive ROI over 90 days, but backtesting is not a guarantee. Real-world performance depends on odds you get, timing, and variance. We provide the data and analysis - the rest is your call.",
-  "faq.how.q5": "Which football leagues do you cover?",
-  "faq.how.a5": "We cover 70+ football competitions worldwide, including the Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie and all major UEFA competitions. We're always adding more leagues as our models mature.",
+  "faq.how.a1": "Our Pick of the Day has 66.7% accuracy over 346 picks. Overall 3-way match predictions (home/draw/away) hit around 50%. Every prediction is timestamped before kick-off and graded automatically, so you can verify the track record yourself.",
+  "faq.how.q2": "What is Pick of the Day?",
+  "faq.how.a2": "Each day BetsPlug Pulse selects the match with the strongest confidence signal. This is our Pick of the Day - currently at 66.7% accuracy. You can also browse all other predictions on the platform.",
+  "faq.how.q3": "Can I download the data?",
+  "faq.how.a3": "Yes. The track record page lets you download the full prediction history as a CSV file. Every prediction, every result - nothing hidden.",
+  "faq.how.q4": "Which football leagues do you cover?",
+  "faq.how.a4": "We cover 70+ football competitions worldwide, including the Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie and all major UEFA competitions.",
+  "faq.how.q5": "What is Strategy Lab?",
+  "faq.how.a5": "Strategy Lab is an upcoming feature that will let you filter predictions using backtested strategies. It is currently locked and marked as Coming Soon.",
   "faq.how.q6": "Is this gambling advice?",
-  "faq.how.a6": "No. BetsPlug is a football analytics platform. We publish probabilities, confidence scores and a verifiable track record. What you do with that information is entirely your decision.",
+  "faq.how.a6": "No. BetsPlug is a football analytics platform. We publish probabilities and a verifiable track record. What you do with that information is entirely your decision.",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -2453,200 +2352,108 @@ const nl: Dictionary = {
 
   /* How It Works page - dedicated deep-dive */
   "hiw.metaTitle":
-    "Hoe Het Werkt · BetsPlug AI-Voorspellingsmotor",
+    "Hoe Het Werkt · BetsPlug Pulse AI-Voorspellingen",
   "hiw.metaDesc":
-    "Een volledige, stapsgewijze uitleg van de BetsPlug-voorspelengine: hoe we data verzamelen, features bouwen, modellen trainen, value detecteren en picks publiceren die je zelf kunt verifiëren.",
+    "Ontdek hoe BetsPlug Pulse elke wedstrijd analyseert, dagelijks een Pick of the Day levert met 66,7% nauwkeurigheid, en je elke voorspelling transparant laat volgen.",
   "hiw.breadcrumbHome": "Home",
   "hiw.breadcrumbHow": "Hoe het werkt",
 
-  "hiw.heroBadge": "De BetsPlug-engine",
-  "hiw.heroTitleA": "Hoe we ruwe wedstrijddata",
-  "hiw.heroTitleB": "omzetten in voorspellingen die je kunt vertrouwen.",
+  "hiw.heroBadge": "BetsPlug Pulse",
+  "hiw.heroTitleA": "Eén AI. Elke wedstrijd.",
+  "hiw.heroTitleB": "Volledig transparante voorspellingen.",
   "hiw.heroSubtitle":
-    "Elke pick op BetsPlug is het eindpunt van een lange, zorgvuldig ontworpen pipeline. Geen onderbuikgevoelens, geen cherry-picking, geen verborgen regels. Dit is het exacte proces - van het moment dat een wedstrijd wordt aangekondigd, tot het moment dat een geverifieerde pick op je dashboard verschijnt.",
+    "BetsPlug Pulse analyseert vorm, standen, onderlinge historie en 40+ factoren voor elke wedstrijd. Jij krijgt de voorspellingen, wij houden het track record openbaar. Drie stappen, niets verborgen.",
   "hiw.heroCtaPrimary": "Bekijk het track record",
   "hiw.heroCtaSecondary": "Gratis proberen",
-  "hiw.heroStatDataSources": "Databronnen",
-  "hiw.heroStatLeagues": "Europese competities",
-  "hiw.heroStatModels": "Voorspellingsmodellen",
-  "hiw.heroStatUpdates": "Sync-cyclus",
+  "hiw.heroStat1Value": "66,7%",
+  "hiw.heroStat1Label": "BOTD nauwkeurigheid",
+  "hiw.heroStat2Value": "346",
+  "hiw.heroStat2Label": "Picks gevolgd",
+  "hiw.heroStat3Value": "70+",
+  "hiw.heroStat3Label": "Competities",
+  "hiw.heroStat4Value": "CSV",
+  "hiw.heroStat4Label": "Downloadbare data",
 
-  "hiw.overviewBadge": "De pipeline",
-  "hiw.overviewTitle": "Zeven stappen. Volledige transparantie.",
-  "hiw.overviewSubtitle":
-    "Elke stap wordt onafhankelijk gebouwd en gemonitord. Dit is precies wat er onder de motorkap gebeurt.",
+  /* Stap 1 */
+  "hiw.step1Badge": "Stap 01",
+  "hiw.step1Title": "Pulse analyseert elke wedstrijd",
+  "hiw.step1Lead":
+    "Onze AI-engine bekijkt vorm, standen, onderlinge historie en 40+ andere factoren voor elke wedstrijd. Eén voorspelling per wedstrijd, dagelijks bijgewerkt.",
+  "hiw.step1P1":
+    "BetsPlug Pulse combineert meerdere statistische modellen tot één waarschijnlijkheid per wedstrijduitkomst. Alle voorspellingen worden gegenereerd vóór de aftrap - onze modellen zien nooit de toekomst.",
+  "hiw.step1Point1Title": "40+ factoren per wedstrijd",
+  "hiw.step1Point1Desc":
+    "Vorm, Elo-ratings, Poisson-doelkansen, standen, onderlinge historie, bookmaker-odds en meer.",
+  "hiw.step1Point2Title": "Dagelijks bijgewerkt",
+  "hiw.step1Point2Desc":
+    "Nieuwe voorspellingen worden elke dag gepubliceerd zodra wedstrijden bevestigd zijn.",
+  "hiw.step1Point3Title": "70+ competities",
+  "hiw.step1Point3Desc":
+    "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie en alle grote UEFA-competities.",
 
-  "hiw.s1Badge": "Stap 01 · Data-acquisitie",
-  "hiw.s1Title": "We beginnen waar de markt begint: bij de ruwe feed.",
-  "hiw.s1Lead":
-    "Rommel erin, rommel eruit. Onze pipeline begint dus met betrouwbare databronnen voor wedstrijden, uitslagen, standen en bookmaker-odds.",
-  "hiw.s1P1":
-    "Elke 6 uur synchroniseren we wedstrijden, uitslagen en standen van API-Football en football-data.org voor 6 Europese competities. Bookmaker-odds worden elke 2 uur opgehaald via The Odds API. Tijdens wedstrijduren (12:00-24:00 UTC) worden live scores elke 5 minuten bijgewerkt zodat je dashboard actueel blijft.",
-  "hiw.s1P2":
-    "Elk record krijgt een tijdstempel zodat we elk moment in de geschiedenis exact kunnen terugspelen zoals onze modellen het zagen - cruciaal voor eerlijke backtesting.",
-  "hiw.s1Point1Title": "3 dataleveranciers",
-  "hiw.s1Point1Desc":
-    "API-Football, football-data.org en The Odds API - elk voor een ander aspect van de wedstrijd.",
-  "hiw.s1Point2Title": "6-uur sync-cyclus",
-  "hiw.s1Point2Desc":
-    "Wedstrijden en voorspellingen worden elke 6 uur ververst. Live scores updaten elke 5 minuten tijdens wedstrijduren.",
-  "hiw.s1Point3Title": "Point-in-time opslag",
-  "hiw.s1Point3Desc":
-    "Niets wordt overschreven. Elke wijziging is een nieuwe regel - geschiedenis is permanent.",
+  /* Stap 2 */
+  "hiw.step2Badge": "Stap 02",
+  "hiw.step2Title": "Ontvang onze beste pick dagelijks",
+  "hiw.step2Lead":
+    "Elke dag selecteren we één pick: de Pick of the Day. Momenteel op 66,7% nauwkeurigheid over 346 picks. Of bekijk zelf alle voorspellingen - gegroepeerd per competitie, met live scores en odds.",
+  "hiw.step2P1":
+    "De Pick of the Day wordt geselecteerd op basis van het sterkste confidence-signaal van BetsPlug Pulse. Je kunt ook alle voorspellingen verkennen, filteren per competitie en live scores bekijken terwijl wedstrijden gespeeld worden.",
+  "hiw.step2Point1Title": "Pick of the Day",
+  "hiw.step2Point1Desc":
+    "66,7% nauwkeurigheid op 346 picks. Onze sterkste dagelijkse aanbeveling.",
+  "hiw.step2Point2Title": "Alle Voorspellingen",
+  "hiw.step2Point2Desc":
+    "Bekijk elke wedstrijdvoorspelling gegroepeerd per competitie, met live scores en odds.",
+  "hiw.step2Point3Title": "Strategy Lab",
+  "hiw.step2Point3Desc":
+    "Binnenkort: filter voorspellingen met backtested strategieën.",
 
-  "hiw.s2Badge": "Stap 02 · Opschonen & normaliseren",
-  "hiw.s2Title":
-    "Wij dwingen één bron van waarheid af voordat een model ook maar iets ziet.",
-  "hiw.s2Lead":
-    "Ruwe voetbaldata staat bekend als rommelig. Teamnamen verschillen per feed, competities hernoemen zichzelf, markten worden midden in een wedstrijd opgeschort. Wij lossen dat allemaal op - op een deterministische, reproduceerbare manier.",
-  "hiw.s2P1":
-    "Teams, competities, spelers en markttypen worden via een handmatig gecontroleerde lookup-tabel gemapt naar één canoniek schema. Opgeschorte, vernietigde of laat afgelaste markten worden gemarkeerd en uitgesloten vóór welk model dan ook ze aanraakt.",
-  "hiw.s2P2":
-    "Outlier-detectie vangt slechte data op het moment dat die binnenkomt. Elk record dat een sanity check niet haalt (onmogelijke scores, negatieve tijden, odds buiten het bereik 1,01–1000) wordt uit de pipeline gehaald en gelogd voor handmatige review.",
-  "hiw.s2BulletsTitle": "Wat we opschonen",
-  "hiw.s2Bullet1": "Team- & competitie-aliassen samengevoegd",
-  "hiw.s2Bullet2": "Tijdzones genormaliseerd naar UTC",
-  "hiw.s2Bullet3": "Opgeschorte / vernietigde markten verwijderd",
-  "hiw.s2Bullet4": "Odds kruiselings gecontroleerd tussen bookmakers",
-  "hiw.s2Bullet5": "Ontbrekende waarden expliciet gemarkeerd (nooit stilletjes ingevuld)",
+  /* Stap 3 */
+  "hiw.step3Badge": "Stap 03",
+  "hiw.step3Title": "Volg alles transparant",
+  "hiw.step3Lead":
+    "Elke voorspelling wordt opgeslagen, getijdstempeld en na de wedstrijd geëvalueerd. Winst en verlies worden permanent gepubliceerd. Download de volledige dataset als CSV.",
+  "hiw.step3P1":
+    "Onze track record-pagina toont elke voorspelling die we ooit hebben gedaan. Niets is verborgen, niets is verwijderd. Je kunt de complete dataset downloaden en de cijfers zelf verifiëren.",
+  "hiw.step3Point1Title": "Elke pick wordt beoordeeld",
+  "hiw.step3Point1Desc":
+    "Resultaten worden automatisch geëvalueerd aan de hand van de officiële resultaat-feed. Geen menselijke cherry-picking.",
+  "hiw.step3Point2Title": "Download als CSV",
+  "hiw.step3Point2Desc":
+    "Exporteer de volledige voorspellingshistorie en doe je eigen analyse.",
+  "hiw.step3Point3Title": "Niets verwijderd",
+  "hiw.step3Point3Desc":
+    "Verloren picks blijven voor altijd. Een track record dat alleen winnaars toont is marketing, geen transparantie.",
 
-  "hiw.s3Badge": "Stap 03 · Feature engineering",
-  "hiw.s3Title": "Meerdere signalfamilies per wedstrijd - elk verdient zijn plek.",
-  "hiw.s3Lead":
-    "Een voorspelling is alleen zo scherp als de signalen waar hij op gebouwd is. Hier wordt een wedstrijd een gestructureerd profiel waar onze modellen over kunnen redeneren.",
-  "hiw.s3P1":
-    "Voor elke wedstrijd berekenen we features in verschillende families: Elo-ratings, Poisson-doelkansratios, competitiestanden, recente vorm, onderlinge geschiedenis en bookmaker-odds. Deze voeden drie onafhankelijke modellen die elk op een andere manier naar de data kijken.",
-  "hiw.s3P2":
-    "Alle features gebruiken alleen data die beschikbaar is vóór de aftrap. Onze modellen zien nooit de toekomst bij het genereren van een voorspelling - een essentiële bescherming tegen overfitting.",
-  "hiw.s3Family1Title": "Elo-ratings",
-  "hiw.s3Family1Desc": "Dynamische teamsterkte-ratings die na elke wedstrijduitslag worden bijgewerkt.",
-  "hiw.s3Family2Title": "Poisson-doelkansen",
-  "hiw.s3Family2Desc": "Verwachte aanvals- en verdedigingsratio's per team op basis van recente wedstrijden.",
-  "hiw.s3Family3Title": "Onderling",
-  "hiw.s3Family3Desc": "Historische ontmoetingen tussen de twee teams, thuis en uit.",
-  "hiw.s3Family4Title": "Bookmaker-odds",
-  "hiw.s3Family4Desc": "Pre-match odds van grote bookmakers via The Odds API.",
-  "hiw.s3Family5Title": "Competitiestanden",
-  "hiw.s3Family5Desc": "Huidige positie, punten, doelsaldo en recente vorm.",
-  "hiw.s3Family6Title": "Wedstrijdcontext",
-  "hiw.s3Family6Desc": "Thuis/uit-status, schema en wedstrijddetails.",
-
-  "hiw.s4Badge": "Stap 04 · BetsPlug Pulse",
-  "hiw.s4Title": "Drie onafhankelijke modellen. Eén eerlijke waarschijnlijkheid.",
-  "hiw.s4Lead":
-    "Een enkel model heeft altijd blinde vlekken. Daarom draaien we drie verschillende statistische benaderingen en combineren hun voorspellingen met gewogen middeling.",
-  "hiw.s4P1":
-    "Elk model vangt een ander aspect van de wedstrijddynamiek. Hun voorspellingen worden gecombineerd tot één set win/gelijk/verlies-waarschijnlijkheden plus een confidence-score voor elke aankomende wedstrijd.",
-  "hiw.s4Model1Name": "Elo Rating Model",
-  "hiw.s4Model1Desc":
-    "Een dynamische teamsterkte-rating die na elk resultaat wordt bijgewerkt. Zet het ratingverschil tussen twee teams om in winstkansen.",
-  "hiw.s4Model2Name": "Poisson Goal Model",
-  "hiw.s4Model2Desc":
-    "Schat verwachte aanvals- en verdedigingsratio's per team en integreert over alle mogelijke eindstanden om wedstrijduitkomst-waarschijnlijkheden te produceren.",
-  "hiw.s4Model3Name": "Logistische Regressie",
-  "hiw.s4Model3Desc":
-    "Een statistische classifier die meerdere wedstrijdfeatures - vorm, stand, thuisvoordeel - gebruikt om wedstrijduitslagen direct te voorspellen.",
-  "hiw.s4BlendTitle": "Gewogen middeling",
-  "hiw.s4BlendDesc":
-    "De drie waarschijnlijkheden worden gecombineerd via gewogen middeling. De huidige weights (Elo 1.0, Poisson 1.5, Logistic 1.0) geven iets meer invloed aan het Poisson-model.",
-
-  "hiw.s5Badge": "Stap 05 · Value-detectie",
-  "hiw.s5Title": "We publiceren alleen picks waarvan de edge de echte wereld overleeft.",
-  "hiw.s5Lead":
-    "Gelijk hebben is niet genoeg. Een pick wordt pas een pick wanneer onze waarschijnlijkheid waarde suggereert ten opzichte van de beschikbare odds.",
-  "hiw.s5P1":
-    "We vergelijken onze BetsPlug Pulse-waarschijnlijkheden met bookmaker-odds opgehaald via The Odds API. Onze aankomende Strategy Lab zal voorspellingen filteren met regels die gevalideerd zijn door walk-forward backtesting - zoals het vereisen van hoge thuiswinstkans of lage gelijkspeelkans.",
-  "hiw.s5P2":
-    "Momenteel hebben 3 strategieën de statistische validatie doorstaan met positieve backtested ROI over 90 dagen. Maar dit zijn backtested resultaten op een beperkte steekproef - de werkelijke prestaties zullen variëren. Daar zijn we eerlijk over.",
-  "hiw.s5FormulaTitle": "De check die elke pick moet doorstaan",
-  "hiw.s5FormulaLine1": "Modelkans × Beste odds",
-  "hiw.s5FormulaLine2": "−  verwachte slippage",
-  "hiw.s5FormulaLine3": "−  bookmakermarge",
-  "hiw.s5FormulaLine4": "=  echte edge",
-  "hiw.s5FormulaFoot":
-    "Als dit getal niet duidelijk boven nul staat, verlaat de pick nooit het lab.",
-
-  "hiw.s6Badge": "Stap 06 · Publiceren & beoordelen",
-  "hiw.s6Title": "Elke pick krijgt een tijdstempel, wordt verzonden en is publiek te controleren.",
-  "hiw.s6Lead":
-    "Hier worden de meeste voorspelsites vaag. Hier worden wij juist luid.",
-  "hiw.s6P1":
-    "Op het moment dat een pick wordt gegenereerd, krijgt hij een tijdstempel, wordt hij ondertekend, en gepubliceerd op zowel je dashboard als ons publieke grootboek - exact dezelfde seconde. Jij en een toezichthouder zien exact hetzelfde record.",
-  "hiw.s6P2":
-    "Zodra de wedstrijd is afgelopen wordt elke pick automatisch beoordeeld aan de hand van de officiële resultaat-feed. Winst, verlies en push worden allemaal vastgelegd. Verloren picks blijven voor altijd in het grootboek staan - want een track record dat alleen winnaars laat zien is geen track record, dat is marketing.",
-  "hiw.s6Point1Title": "Publicatie op de seconde",
-  "hiw.s6Point1Desc":
-    "Abonnees en het publieke grootboek worden gelijktijdig bijgewerkt - geen backdating mogelijk.",
-  "hiw.s6Point2Title": "Automatische beoordeling",
-  "hiw.s6Point2Desc":
-    "Resultaten worden gescoord vanuit de officiële feed, niet door een mens die de andere kant op zou kunnen kijken.",
-  "hiw.s6Point3Title": "Niets wordt verwijderd",
-  "hiw.s6Point3Desc":
-    "Verloren picks zijn permanent. Het grootboek is by design append-only.",
-
-  "hiw.s7Badge": "Stap 07 · Continue evaluatie",
-  "hiw.s7Title": "Elke voorspelling wordt beoordeeld aan het echte resultaat.",
-  "hiw.s7Lead":
-    "Voorspellingen betekenen niets als je ze niet controleert. Ons systeem evalueert automatisch elke voorspelling zodra de wedstrijd is afgelopen.",
-  "hiw.s7P1":
-    "Elke 6 uur, nadat resultaten zijn gesynchroniseerd, scoort het systeem alle afgelopen voorspellingen. Elke pick wordt geëvalueerd met Brier-score en log-loss metrics, en gemarkeerd als correct of incorrect. Zo kunnen we de werkelijke nauwkeurigheid in de tijd volgen.",
-  "hiw.s7P2":
-    "De huidige 3-way nauwkeurigheid (thuis/gelijk/uit) ligt rond de 50% - boven de 33% willekeurige baseline, maar niet buitengewoon. We publiceren alle resultaten, winst en verlies, zodat je het track record zelf kunt verifiëren.",
-  "hiw.s7Bullet1": "6-uur evaluatiecyclus",
-  "hiw.s7Bullet2": "Brier-score en log-loss tracking",
-  "hiw.s7Bullet3": "Alle voorspellingen automatisch beoordeeld",
-  "hiw.s7Bullet4": "Winst en verlies beide permanent gepubliceerd",
-
-  "hiw.proofBadge": "Waarom dit uitmaakt",
-  "hiw.proofTitle": "De reden dat onze voorspellingen ook echt overeind blijven.",
-  "hiw.proofSubtitle":
-    "Elke keuze in deze pipeline bestaat om één reden: om je een eerlijke, datagedreven waarschijnlijkheid te geven - geen gok.",
-  "hiw.proof1Title": "Geen hindsight bias",
-  "hiw.proof1Desc":
-    "Modellen zien alleen data die beschikbaar is vóór de aftrap. Voorspellingen worden gegenereerd en getijdstempeld voordat de wedstrijd begint.",
-  "hiw.proof2Title": "BetsPlug Pulse, geen eenpitter",
-  "hiw.proof2Desc":
-    "Drie onafhankelijke modellen (Elo, Poisson, Logistisch) controleren elkaar. Eén blinde vlek kan niet de hele voorspelling vergiftigen.",
-  "hiw.proof3Title": "Backtested strategieën",
-  "hiw.proof3Desc":
-    "Strategy Lab-filters (binnenkort) worden gevalideerd met walk-forward backtesting en bootstrap-betrouwbaarheidsintervallen voordat ze worden gepubliceerd.",
-  "hiw.proof4Title": "Volledige transparantie",
-  "hiw.proof4Desc":
-    "Je kunt elke voorspelling die we hebben gepubliceerd verifiëren. Winst en verlies. De huidige 3-way nauwkeurigheid is circa 50%.",
-  "hiw.proof5Title": "Elke 6 uur geëvalueerd",
-  "hiw.proof5Desc":
-    "Elke afgelopen wedstrijd wordt automatisch gescoord. Brier-score en log-loss volgen de kalibratie in de tijd.",
-  "hiw.proof6Title": "Gebouwd door mensen die shippen",
-  "hiw.proof6Desc":
-    "Een tweekoppig team van voetbalfanaten met een ICT-achtergrond. Elke regel van deze pipeline is met de hand geschreven, niet in elkaar geklikt uit plugins.",
-
+  /* FAQ */
   "hiw.faqBadge": "Eerlijke antwoorden",
-  "hiw.faqTitle": "De vragen die elke serieuze analist ons stelt.",
+  "hiw.faqTitle": "Veelgestelde vragen",
   "hiw.faqSubtitle":
-    "Als je eerder een tipstersite hebt geprobeerd, ben je waarschijnlijk teleurgesteld. Hier is precies waarom BetsPlug anders is.",
+    "Als je eerder een tipstersite hebt geprobeerd, ben je waarschijnlijk teleurgesteld. Hier is waarom BetsPlug anders is.",
   "hiw.faq1Q": "Hoe nauwkeurig zijn jullie voorspellingen?",
   "hiw.faq1A":
-    "Onze 3-way wedstrijdvoorspellingen (thuis/gelijk/uit) scoren rond de 50% nauwkeurigheid. Dat is boven de 33% willekeurige baseline, maar we zijn eerlijk - het is geen magisch getal. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld na de wedstrijd, dus je kunt het track record zelf verifiëren.",
-  "hiw.faq2Q": "Wat gebeurt er bij een verliesreeks?",
+    "Onze Pick of the Day heeft 66,7% nauwkeurigheid over 346 picks. De totale 3-way wedstrijdvoorspellingen (thuis/gelijk/uit) scoren rond de 50%. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld, dus je kunt het track record zelf verifiëren.",
+  "hiw.faq2Q": "Wat is Pick of the Day?",
   "hiw.faq2A":
-    "Verloren voorspellingen blijven permanent zichtbaar. We publiceren ze net zo openlijk als de winnaars. Onze strategieën zijn backtested op een steekproef van 90 dagen, dus we verwachten variantie. Verliesreeksen komen voor - dat is voetbal.",
-  "hiw.faq3Q": "Waarom niet gewoon één heel slim model gebruiken?",
+    "Elke dag selecteert BetsPlug Pulse de wedstrijd met het sterkste confidence-signaal. Dit is onze Pick of the Day - momenteel op 66,7% nauwkeurigheid. Je kunt ook alle andere voorspellingen op het platform bekijken.",
+  "hiw.faq3Q": "Kan ik de data downloaden?",
   "hiw.faq3A":
-    "Omdat elk model blinde vlekken heeft. Onze BetsPlug Pulse engine combineert drie modellen - Elo-ratings, Poisson-doelmodel en Logistische regressie - die elk andere patronen vangen. De gecombineerde output met gewogen middeling presteert consistent beter dan elk individueel model.",
-  "hiw.faq4Q": "Kan ik daadwerkelijk winst maken met deze voorspellingen?",
+    "Ja. Op de track record-pagina kun je de volledige voorspellingshistorie downloaden als CSV-bestand. Elke voorspelling, elk resultaat - niets verborgen.",
+  "hiw.faq4Q": "Welke voetbalcompetities dekken jullie?",
   "hiw.faq4A":
-    "Onze backtested strategieën tonen positieve ROI over 90 dagen, maar backtesting is geen garantie. De werkelijke prestaties hangen af van de odds die je krijgt, timing en variantie. Wij leveren de data en analyse - de rest is aan jou.",
-  "hiw.faq5Q": "Welke voetbalcompetities dekken jullie?",
+    "We dekken 70+ voetbalcompetities wereldwijd, waaronder de Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie en alle grote UEFA-competities.",
+  "hiw.faq5Q": "Wat is Strategy Lab?",
   "hiw.faq5A":
-    "We dekken 70+ voetbalcompetities wereldwijd, waaronder de Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie en alle grote UEFA-competities. We voegen voortdurend nieuwe competities toe naarmate onze modellen rijpen.",
+    "Strategy Lab is een aankomende functie waarmee je voorspellingen kunt filteren met backtested strategieën. Het is momenteel vergrendeld en gemarkeerd als Binnenkort Beschikbaar.",
   "hiw.faq6Q": "Is dit gokadvies?",
   "hiw.faq6A":
-    "Nee. BetsPlug is een pure voetbal-analytics platform. Wij publiceren waarschijnlijkheden, expected values en een verifieerbaar track record. Wat je met die informatie doet, is volledig jouw eigen beslissing.",
+    "Nee. BetsPlug is een voetbal-analytics platform. Wij publiceren waarschijnlijkheden en een verifieerbaar track record. Wat je met die informatie doet, is volledig jouw eigen beslissing.",
 
-  "hiw.ctaBadge": "Klaar om het in actie te zien?",
-  "hiw.ctaTitle": "Stop met gokken. Begin met de pipeline te vertrouwen.",
+  /* Final CTA */
+  "hiw.ctaBadge": "Klaar om de voorspellingen te zien?",
+  "hiw.ctaTitle": "Stop met gokken. Begin met data.",
   "hiw.ctaSubtitle":
-    "Nu weet je precies hoe de pipeline werkt. Bekijk de voorspellingen die hij produceert - live, getijdstempeld en klaar om te verifiëren.",
+    "Bekijk onze voorspellingen live, controleer het track record en beslis zelf.",
   "hiw.ctaPrimary": "Gratis proberen",
   "hiw.ctaSecondary": "Bekijk het track record",
 
@@ -3301,6 +3108,7 @@ const nl: Dictionary = {
   "dash.systemStatusDesc": "Status van databronnen en laatste synchronisatietijden",
   "dash.healthy": "gezond",
   "dash.noDataSources": "Geen databronnen geconfigureerd.",
+  "dash.matchLoading": "Wedstrijddetails laden...",
 
   /* ── Botd page ───────────────────────────────────── */
   "botd.title": "Tip van de Dag",
@@ -3777,18 +3585,18 @@ const nl: Dictionary = {
   "faq.pred.a6": "Onze kansen geven de geschatte waarschijnlijkheid van elke uitkomst weer. Een thuiswinstkans van 65% betekent dat ons model verwacht dat het thuisteam in vergelijkbare situaties ongeveer 65 van de 100 keer wint.",
 
   /* ── How It Works FAQ ───────────────────────────────────── */
-  "faq.how.q1": "Hoe nauwkeurig zijn AI-voorspellingen voor voetbal eigenlijk?",
-  "faq.how.a1": "Geen enkel model voorspelt voetbal perfect — de sport is inherent onvoorspelbaar. Onze modellen presteren consistent beter dan willekeurig gokken en zijn competitief met de beste benchmarks in de industrie.",
-  "faq.how.q2": "Hoe gaan jullie om met verliesreeksen?",
-  "faq.how.a2": "Verliesreeksen horen erbij. Zelfs het beste model heeft slechte periodes. Wat telt is de prestatie over honderden wedstrijden. Daarom publiceren we ons volledige track record.",
-  "faq.how.q3": "Waarom gebruiken jullie een ensemble-model in plaats van één AI?",
-  "faq.how.a3": "Elk model heeft blinde vlekken. Door Elo, Poisson en XGBoost te combineren vullen ze elkaars zwaktes aan. Het ensemble levert stabielere en betrouwbaardere voorspellingen op dan elk model afzonderlijk.",
-  "faq.how.q4": "Kan ik winstgevend wedden met BetsPlug?",
-  "faq.how.a4": "Winstgevendheid hangt af van veel factoren, waaronder odds, bankroll-beheer en discipline. Onze modellen helpen value te identificeren, maar we garanderen geen winst en raden verantwoord spelen aan.",
-  "faq.how.q5": "Voor welke competities werken de modellen het best?",
-  "faq.how.a5": "Over het algemeen presteren onze modellen het best bij competities met veel beschikbare data, zoals de top vijf Europese competities. Hoe meer historische data, hoe betrouwbaarder de voorspellingen.",
-  "faq.how.q6": "Is BetsPlug gokadvies?",
-  "faq.how.a6": "Nee. BetsPlug biedt datagedreven analyses en kansschattingen. Het is geen gokadvies. Je bent altijd zelf verantwoordelijk voor je beslissingen. Gok nooit met geld dat je niet kunt missen.",
+  "faq.how.q1": "Hoe nauwkeurig zijn jullie voorspellingen?",
+  "faq.how.a1": "Onze Pick of the Day heeft 66,7% nauwkeurigheid over 346 picks. De totale 3-way wedstrijdvoorspellingen (thuis/gelijk/uit) scoren rond de 50%. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld, dus je kunt het track record zelf verifiëren.",
+  "faq.how.q2": "Wat is Pick of the Day?",
+  "faq.how.a2": "Elke dag selecteert BetsPlug Pulse de wedstrijd met het sterkste confidence-signaal. Dit is onze Pick of the Day - momenteel op 66,7% nauwkeurigheid. Je kunt ook alle andere voorspellingen op het platform bekijken.",
+  "faq.how.q3": "Kan ik de data downloaden?",
+  "faq.how.a3": "Ja. Op de track record-pagina kun je de volledige voorspellingshistorie downloaden als CSV-bestand. Elke voorspelling, elk resultaat - niets verborgen.",
+  "faq.how.q4": "Welke voetbalcompetities dekken jullie?",
+  "faq.how.a4": "We dekken 70+ voetbalcompetities wereldwijd, waaronder de Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie en alle grote UEFA-competities.",
+  "faq.how.q5": "Wat is Strategy Lab?",
+  "faq.how.a5": "Strategy Lab is een aankomende functie waarmee je voorspellingen kunt filteren met backtested strategieën. Het is momenteel vergrendeld en gemarkeerd als Binnenkort Beschikbaar.",
+  "faq.how.q6": "Is dit gokadvies?",
+  "faq.how.a6": "Nee. BetsPlug is een voetbal-analytics platform. Wij publiceren waarschijnlijkheden en een verifieerbaar track record. Wat je met die informatie doet, is volledig jouw eigen beslissing.",
   "hero.badge": "AI-voorspellingen voor elke wedstrijd",
   "hero.titleLine1": "AI-voetbalvoorspellingen —",
   "hero.titleLine2": "Weet het voordat je gokt",
@@ -3828,15 +3636,15 @@ const nl: Dictionary = {
   "comparison.fallsShort": "Valt tekort",
   "comparison.caption": "Vergelijking gebaseerd op openbaar beschikbare informatie van toonaangevende tipgeverplatforms uit 2026.",
   "how.badge": "Hoe het werkt",
-  "how.title": "Begin binnen 2 minuten.",
-  "how.subtitle": "Geen ingewikkelde installatie. Geen leercurve. Drie eenvoudige stappen naar slimmere voetbalbeslissingen.",
-  "how.step1Title": "1. Maak je account aan",
-  "how.step1Desc": "Meld je binnen enkele seconden aan. Begin met een proefperiode van zeven dagen met volledige toegang voor slechts € 0,01. Je kunt op elk gewenst moment en zonder verplichtingen opzeggen.",
-  "how.step2Title": "2. Blader door de voorspellingen van vandaag",
-  "how.step2Desc": "Bekijk de winstkansen, vertrouwensscores en de topkeuzes van onze AI voor elke wedstrijd - dagelijks bijgewerkt in meer dan 30 competities.",
-  "how.step3Title": "3. Maak je eigen keuze",
-  "how.step3Desc": "Wij geven je de gegevens. Jij beslist wat je ermee doet. Geen druk, geen verplichting – alleen duidelijke, eerlijke informatie.",
-  "how.deepDive": "Bekijk de volledige motor",
+  "how.title": "Drie stappen. Volledige transparantie.",
+  "how.subtitle": "Eén AI-engine, één dagelijkse pick, één verifieerbaar track record. Geen black boxes.",
+  "how.step1Title": "1. Pulse analyseert elke wedstrijd",
+  "how.step1Desc": "Onze AI bekijkt vorm, standen, onderlinge historie en 40+ factoren. Eén voorspelling per wedstrijd, dagelijks bijgewerkt.",
+  "how.step2Title": "2. Ontvang onze beste pick dagelijks",
+  "how.step2Desc": "Pick of the Day: 66,7% nauwkeurigheid op 346 picks. Of bekijk zelf alle voorspellingen.",
+  "how.step3Title": "3. Volg alles transparant",
+  "how.step3Desc": "Elke voorspelling wordt opgeslagen en geëvalueerd. Download de volledige dataset als CSV. Niets verborgen, niets verwijderd.",
+  "how.deepDive": "Lees meer over hoe het werkt",
   "pricing.title": "Probeer alles voor € 0,01.",
   "pricing.subtitle": "Begin met een proefperiode van zeven dagen met volledige toegang voor slechts één cent. Geen lock-in, geen verborgen kosten. Annuleer op elk gewenst moment.",
   "trusted.titleA": "Waarom",

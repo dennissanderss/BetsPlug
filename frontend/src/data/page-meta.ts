@@ -438,20 +438,20 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
   /* ─────────────────────────── HOW IT WORKS ─────────────────── */
   "/how-it-works": {
     en: {
-      title: "How It Works · BetsPlug AI Prediction Engine",
+      title: "How It Works · BetsPlug Pulse AI Predictions",
       description:
-        "Step-by-step walkthrough of the BetsPlug AI prediction engine: data collection, feature engineering, model training, value detection and verifiable match predictions.",
-      ogTitle: "How BetsPlug Works · AI Prediction Engine",
+        "See how BetsPlug Pulse analyses every match, delivers a daily Pick of the Day with 66.7% accuracy, and lets you track every prediction transparently.",
+      ogTitle: "How BetsPlug Works · Pulse AI Predictions",
       ogDescription:
-        "14 data sources. 1,200+ features. 4 independent models. Every pick timestamped and publicly verifiable.",
+        "One AI engine. 66.7% Pick of the Day accuracy. 70+ leagues. Full CSV download. Every prediction tracked and verifiable.",
     },
     nl: {
-      title: "Hoe Het Werkt · BetsPlug AI-Voorspellingsmotor",
+      title: "Hoe Het Werkt · BetsPlug Pulse AI-Voorspellingen",
       description:
-        "Stapsgewijze uitleg van de BetsPlug AI-voorspellingsmotor: dataverzameling, feature-engineering, modeltraining en verifieerbare wedstrijdvoorspellingen.",
-      ogTitle: "Hoe BetsPlug Werkt · AI-Voorspellingsmotor",
+        "Ontdek hoe BetsPlug Pulse elke wedstrijd analyseert, dagelijks een Pick of the Day levert met 66,7% nauwkeurigheid en je elke voorspelling transparant laat volgen.",
+      ogTitle: "Hoe BetsPlug Werkt · Pulse AI-Voorspellingen",
       ogDescription:
-        "14 databronnen. 1.200+ features. 4 onafhankelijke modellen. Elke pick met tijdstempel en publiek verifieerbaar.",
+        "Eén AI-engine. 66,7% Pick of the Day nauwkeurigheid. 70+ competities. Volledige CSV-download. Elke voorspelling gevolgd en verifieerbaar.",
     },
     de: {
       title: "So Funktioniert Es · BetsPlug KI-Prognosemaschine",

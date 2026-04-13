@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { UserPlus, Search, Trophy, ArrowRight } from "lucide-react";
+import { Zap, Star, Eye, ArrowRight } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 /*
@@ -24,19 +24,19 @@ export function HowItWorks() {
   const steps = [
     {
       number: "01",
-      icon: UserPlus,
+      icon: Zap,
       title: t("how.step1Title"),
       description: t("how.step1Desc"),
     },
     {
       number: "02",
-      icon: Search,
+      icon: Star,
       title: t("how.step2Title"),
       description: t("how.step2Desc"),
     },
     {
       number: "03",
-      icon: Trophy,
+      icon: Eye,
       title: t("how.step3Title"),
       description: t("how.step3Desc"),
     },

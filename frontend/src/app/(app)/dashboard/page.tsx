@@ -8,8 +8,6 @@ import {
   TrendingUp,
   Star,
   Target,
-  Database,
-  AlertTriangle,
   ArrowUpRight,
   ArrowDownRight,
 } from "lucide-react";
@@ -26,8 +24,8 @@ import {
 } from "recharts";
 
 import { api } from "@/lib/api";
-import { cn, formatPercent, formatDateTime } from "@/lib/utils";
-import type { Prediction, SegmentPerformance, DataSourceHealth } from "@/types/api";
+import { formatPercent, formatDateTime } from "@/lib/utils";
+import type { Prediction, SegmentPerformance } from "@/types/api";
 
 // ─── Custom chart tooltip ───────────────────────────────────────────────────
 
@@ -98,85 +96,6 @@ function TableSkeletonRows() {
   );
 }
 
-// ─── Status dot helper ───────────────────────────────────────────────────────
-
-function StatusDot({ status }: { status: string }) {
-  const color =
-    status === "healthy"
-      ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"
-      : status === "degraded"
-      ? "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.6)]"
-      : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]";
-  return <span className={cn("inline-block h-2 w-2 rounded-full shrink-0", color)} />;
-}
-
-// ─── System Status list ─────────────────────────────────────────────────────
-
-function SystemStatusList({ sources }: { sources: DataSourceHealth[] }) {
-  return (
-    <ul className="space-y-3">
-      {sources.map((src) => {
-        const reliability = src.reliability_score ?? 0;
-        const barColor =
-          reliability >= 0.8
-            ? "bg-emerald-500"
-            : reliability >= 0.5
-            ? "bg-amber-500"
-            : "bg-red-500";
-        return (
-          <li
-            key={src.id}
-            className="flex items-center gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 transition-colors hover:bg-white/[0.04]"
-          >
-            {/* Icon */}
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
-              <Database className="h-4 w-4 text-blue-400" />
-            </div>
-
-            {/* Name + sync time */}
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2">
-                <StatusDot status={src.status} />
-                <p className="truncate text-sm font-medium text-slate-100">{src.name}</p>
-              </div>
-              <p className="mt-0.5 truncate text-xs text-slate-500 capitalize">
-                {src.adapter_type}
-                {src.last_sync_at
-                  ? ` · synced ${formatDateTime(src.last_sync_at)}`
-                  : " · never synced"}
-              </p>
-              {/* Reliability bar */}
-              <div className="mt-2 flex items-center gap-2">
-                <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
-                  <div
-                    className={cn("h-full rounded-full transition-all", barColor)}
-                    style={{ width: `${reliability * 100}%` }}
-                  />
-                </div>
-                <span className="text-xs text-slate-500">{formatPercent(reliability, 0)}</span>
-              </div>
-            </div>
-
-            {/* Status badge */}
-            <span
-              className={cn(
-                "shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize",
-                src.status === "healthy"
-                  ? "bg-emerald-500/10 text-emerald-400"
-                  : src.status === "degraded"
-                  ? "bg-amber-500/10 text-amber-400"
-                  : "bg-red-500/10 text-red-400"
-              )}
-            >
-              {src.status}
-            </span>
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
-
 // ─── Predictions table ───────────────────────────────────────────────────────
 
 function PredictionsTable({
@@ -233,8 +152,13 @@ function PredictionsTable({
                     <span className="font-medium text-slate-100">
                       {row.match
                         ? `${row.match.home_team_name} vs ${row.match.away_team_name}`
-                        : row.match_id}
+                        : t("dash.matchLoading")}
                     </span>
+                    {row.match?.league_name && (
+                      <span className="block text-[10px] text-slate-500 mt-0.5">
+                        {row.match.league_name}
+                      </span>
+                    )}
                   </td>
 
                   {/* Date */}
@@ -341,11 +265,6 @@ export default function DashboardPage() {
     queryFn: () => api.getTrackrecordSegments("month"),
   });
 
-  const { data: dataSources, isLoading: sourcesLoading } = useQuery({
-    queryKey: ["data-sources"],
-    queryFn: () => api.getDataSources(),
-  });
-
   const { data: botdStats } = useQuery({
     queryKey: ["botd-track-record-dash"],
     queryFn: async () => {
@@ -402,10 +321,6 @@ export default function DashboardPage() {
       tooltip: t("dash.avgConfidenceTooltip"),
     },
   ];
-
-  const healthyCount = dataSources?.filter((s) => s.status === "healthy").length ?? 0;
-  const totalCount = dataSources?.length ?? 0;
-  const hasIssues = dataSources?.some((s) => s.status === "degraded" || s.status === "unknown") ?? false;
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -600,44 +515,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* ── System Status ─────────────────────────────────────────────────── */}
-      <div className="glass-card overflow-hidden">
-        {/* Card header */}
-        <div className="flex items-center justify-between border-b border-white/[0.05] px-6 py-4">
-          <div>
-            <h2 className="text-base font-semibold text-slate-100">{t("dash.systemStatus")}</h2>
-            <p className="mt-0.5 text-xs text-slate-500">{t("dash.systemStatusDesc")}</p>
-          </div>
-          {!sourcesLoading && dataSources && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">
-                <span className="font-semibold text-emerald-400">{healthyCount}</span>
-                <span className="text-slate-600">/{totalCount}</span>
-                <span className="ml-1 text-slate-500">{t("dash.healthy")}</span>
-              </span>
-              {hasIssues && (
-                <AlertTriangle className="h-4 w-4 text-amber-400" />
-              )}
-            </div>
-          )}
-        </div>
-
-        <div className="p-6">
-          {sourcesLoading ? (
-            <ul className="space-y-3">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <li key={i} className="h-[70px] animate-pulse rounded-xl bg-white/[0.04]" />
-              ))}
-            </ul>
-          ) : !dataSources || dataSources.length === 0 ? (
-            <p className="py-6 text-center text-sm text-slate-500">
-              {t("dash.noDataSources")}
-            </p>
-          ) : (
-            <SystemStatusList sources={dataSources} />
-          )}
-        </div>
-      </div>
     </div>
   );
 }

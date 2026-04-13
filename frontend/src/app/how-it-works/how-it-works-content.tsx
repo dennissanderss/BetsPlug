@@ -7,34 +7,26 @@ import {
   ArrowRight,
   ChevronRight,
   Database,
-  Filter,
-  Sliders,
-  Layers,
-  Target,
+  Trophy,
+  Star,
+  BarChart3,
+  Download,
+  Lock,
+  Eye,
   CheckCircle2,
   RefreshCw,
-  ShieldCheck,
   Zap,
-  Eye,
-  Lock,
-  Gauge,
-  Activity,
-  Users,
-  Trophy,
-  TrendingUp,
-  GitBranch,
-  CircleCheck,
-  LineChart as LineChartIcon,
+  Globe,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 /**
- * How It Works — dedicated deep-dive on the BetsPlug prediction
- * engine. Designed to eliminate every reasonable objection a
- * serious analyst might have. Uses the sitewide dark/green design
- * language, motion reveals, and stays readable as a long scroll.
+ * How It Works — simplified 3-step explainer for BetsPlug.
+ * Step 1: Pulse analyses every match
+ * Step 2: Get our best pick daily
+ * Step 3: Track everything transparently
  */
 export function HowItWorksContent() {
   const { t } = useTranslations();
@@ -42,77 +34,10 @@ export function HowItWorksContent() {
   const home = loc("/");
 
   const heroStats = [
-    { value: "3", label: t("hiw.heroStatDataSources") },
-    { value: "6", label: t("hiw.heroStatLeagues") },
-    { value: "3", label: t("hiw.heroStatModels") },
-    { value: "6h", label: t("hiw.heroStatUpdates") },
-  ];
-
-  const overview = [
-    { icon: Database, title: t("hiw.s1Badge") },
-    { icon: Filter, title: t("hiw.s2Badge") },
-    { icon: Sliders, title: t("hiw.s3Badge") },
-    { icon: Layers, title: t("hiw.s4Badge") },
-    { icon: Target, title: t("hiw.s5Badge") },
-    { icon: CheckCircle2, title: t("hiw.s6Badge") },
-    { icon: RefreshCw, title: t("hiw.s7Badge") },
-  ];
-
-  const featureFamilies = [
-    {
-      icon: TrendingUp,
-      title: t("hiw.s3Family1Title"),
-      desc: t("hiw.s3Family1Desc"),
-    },
-    {
-      icon: Activity,
-      title: t("hiw.s3Family2Title"),
-      desc: t("hiw.s3Family2Desc"),
-    },
-    {
-      icon: GitBranch,
-      title: t("hiw.s3Family3Title"),
-      desc: t("hiw.s3Family3Desc"),
-    },
-    {
-      icon: LineChartIcon,
-      title: t("hiw.s3Family4Title"),
-      desc: t("hiw.s3Family4Desc"),
-    },
-    {
-      icon: Users,
-      title: t("hiw.s3Family5Title"),
-      desc: t("hiw.s3Family5Desc"),
-    },
-    {
-      icon: ShieldCheck,
-      title: t("hiw.s3Family6Title"),
-      desc: t("hiw.s3Family6Desc"),
-    },
-  ];
-
-  const models = [
-    {
-      name: t("hiw.s4Model1Name"),
-      desc: t("hiw.s4Model1Desc"),
-    },
-    {
-      name: t("hiw.s4Model2Name"),
-      desc: t("hiw.s4Model2Desc"),
-    },
-    {
-      name: t("hiw.s4Model3Name"),
-      desc: t("hiw.s4Model3Desc"),
-    },
-  ];
-
-  const proofs = [
-    { icon: Lock, title: t("hiw.proof1Title"), desc: t("hiw.proof1Desc") },
-    { icon: Layers, title: t("hiw.proof2Title"), desc: t("hiw.proof2Desc") },
-    { icon: Target, title: t("hiw.proof3Title"), desc: t("hiw.proof3Desc") },
-    { icon: Eye, title: t("hiw.proof4Title"), desc: t("hiw.proof4Desc") },
-    { icon: RefreshCw, title: t("hiw.proof5Title"), desc: t("hiw.proof5Desc") },
-    { icon: Zap, title: t("hiw.proof6Title"), desc: t("hiw.proof6Desc") },
+    { value: t("hiw.heroStat1Value"), label: t("hiw.heroStat1Label") },
+    { value: t("hiw.heroStat2Value"), label: t("hiw.heroStat2Label") },
+    { value: t("hiw.heroStat3Value"), label: t("hiw.heroStat3Label") },
+    { value: t("hiw.heroStat4Value"), label: t("hiw.heroStat4Label") },
   ];
 
   const faqs = [
@@ -238,66 +163,13 @@ export function HowItWorksContent() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          OVERVIEW — 7-stage strip
-         ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-white/[0.06] bg-gradient-to-b from-transparent via-white/[0.02] to-transparent py-16 md:py-20">
-        <div className="relative mx-auto max-w-6xl px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mx-auto mb-10 max-w-2xl text-center"
-          >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
-              {t("hiw.overviewBadge")}
-            </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
-              {t("hiw.overviewTitle")}
-            </h2>
-            <p className="mt-4 text-base leading-relaxed text-slate-400 sm:text-lg">
-              {t("hiw.overviewSubtitle")}
-            </p>
-          </motion.div>
-
-          <motion.ol
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7"
-          >
-            {overview.map((o, i) => {
-              const Icon = o.icon;
-              return (
-                <li
-                  key={o.title}
-                  className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
-                >
-                  <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/15 ring-1 ring-green-500/30">
-                    <Icon className="h-4 w-4 text-green-400" />
-                  </div>
-                  <div className="font-mono text-[10px] font-bold uppercase tracking-widest text-slate-500">
-                    {String(i + 1).padStart(2, "0")}
-                  </div>
-                  <div className="mt-1 text-xs font-bold leading-tight text-white">
-                    {o.title.split("·")[1]?.trim() ?? o.title}
-                  </div>
-                </li>
-              );
-            })}
-          </motion.ol>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          STAGE 1 — Data acquisition
+          STEP 1 — Pulse analyses every match
          ═══════════════════════════════════════════════════════════════════ */}
       <StageSection
-        badge={t("hiw.s1Badge")}
-        title={t("hiw.s1Title")}
-        lead={t("hiw.s1Lead")}
-        paragraphs={[t("hiw.s1P1"), t("hiw.s1P2")]}
+        badge={t("hiw.step1Badge")}
+        title={t("hiw.step1Title")}
+        lead={t("hiw.step1Lead")}
+        paragraphs={[t("hiw.step1P1")]}
         side={
           <div className="relative overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-[#0d1624] via-[#0a1220] to-[#060912] p-8 shadow-2xl shadow-green-500/[0.08]">
             <div className="pointer-events-none absolute -left-20 -top-20 h-[250px] w-[250px] rounded-full bg-green-500/[0.12] blur-[100px]" />
@@ -313,23 +185,23 @@ export function HowItWorksContent() {
               <div className="flex items-center gap-2">
                 <span className="live-dot" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">
-                  Live ingestion
+                  BetsPlug Pulse
                 </span>
               </div>
               <StagePoint
                 icon={Database}
-                title={t("hiw.s1Point1Title")}
-                desc={t("hiw.s1Point1Desc")}
+                title={t("hiw.step1Point1Title")}
+                desc={t("hiw.step1Point1Desc")}
               />
               <StagePoint
                 icon={RefreshCw}
-                title={t("hiw.s1Point2Title")}
-                desc={t("hiw.s1Point2Desc")}
+                title={t("hiw.step1Point2Title")}
+                desc={t("hiw.step1Point2Desc")}
               />
               <StagePoint
-                icon={Lock}
-                title={t("hiw.s1Point3Title")}
-                desc={t("hiw.s1Point3Desc")}
+                icon={Globe}
+                title={t("hiw.step1Point3Title")}
+                desc={t("hiw.step1Point3Desc")}
               />
             </div>
           </div>
@@ -338,305 +210,71 @@ export function HowItWorksContent() {
       />
 
       {/* ═══════════════════════════════════════════════════════════════════
-          STAGE 2 — Cleaning
+          STEP 2 — Get our best pick daily
          ═══════════════════════════════════════════════════════════════════ */}
       <StageSection
         reverse
-        badge={t("hiw.s2Badge")}
-        title={t("hiw.s2Title")}
-        lead={t("hiw.s2Lead")}
-        paragraphs={[t("hiw.s2P1"), t("hiw.s2P2")]}
+        badge={t("hiw.step2Badge")}
+        title={t("hiw.step2Title")}
+        lead={t("hiw.step2Lead")}
+        paragraphs={[t("hiw.step2P1")]}
         side={
-          <div className="relative overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-[#0d1624] via-[#0a1220] to-[#060912] p-8 shadow-2xl shadow-green-500/[0.08]">
-            <div className="pointer-events-none absolute -right-20 -bottom-20 h-[250px] w-[250px] rounded-full bg-emerald-500/[0.10] blur-[100px]" />
-            <div className="relative">
-              <div className="mb-5 flex items-center gap-2">
-                <Filter className="h-4 w-4 text-green-400" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">
-                  {t("hiw.s2BulletsTitle")}
-                </span>
-              </div>
-              <ul className="space-y-3">
-                {[
-                  t("hiw.s2Bullet1"),
-                  t("hiw.s2Bullet2"),
-                  t("hiw.s2Bullet3"),
-                  t("hiw.s2Bullet4"),
-                  t("hiw.s2Bullet5"),
-                ].map((b) => (
-                  <li
-                    key={b}
-                    className="flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3"
-                  >
-                    <CircleCheck className="h-4 w-4 shrink-0 translate-y-0.5 text-green-400" />
-                    <span className="text-sm leading-snug text-slate-300">{b}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="space-y-3">
+            <StagePoint
+              icon={Star}
+              title={t("hiw.step2Point1Title")}
+              desc={t("hiw.step2Point1Desc")}
+              card
+            />
+            <StagePoint
+              icon={BarChart3}
+              title={t("hiw.step2Point2Title")}
+              desc={t("hiw.step2Point2Desc")}
+              card
+            />
+            <StagePoint
+              icon={Lock}
+              title={t("hiw.step2Point3Title")}
+              desc={t("hiw.step2Point3Desc")}
+              card
+            />
           </div>
         }
         stageNumber={2}
       />
 
       {/* ═══════════════════════════════════════════════════════════════════
-          STAGE 3 — Feature engineering
+          STEP 3 — Track everything transparently
          ═══════════════════════════════════════════════════════════════════ */}
       <StageSection
-        badge={t("hiw.s3Badge")}
-        title={t("hiw.s3Title")}
-        lead={t("hiw.s3Lead")}
-        paragraphs={[t("hiw.s3P1"), t("hiw.s3P2")]}
+        badge={t("hiw.step3Badge")}
+        title={t("hiw.step3Title")}
+        lead={t("hiw.step3Lead")}
+        paragraphs={[t("hiw.step3P1")]}
         side={
-          <div className="grid grid-cols-2 gap-3">
-            {featureFamilies.map((f) => {
-              const Icon = f.icon;
-              return (
-                <div
-                  key={f.title}
-                  className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
-                >
-                  <div className="pointer-events-none absolute -right-8 -top-8 h-[120px] w-[120px] rounded-full bg-green-500/[0.06] blur-[60px] transition-all group-hover:bg-green-500/[0.14]" />
-                  <div className="relative">
-                    <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-green-500/15 ring-1 ring-green-500/30">
-                      <Icon className="h-4 w-4 text-green-400" />
-                    </div>
-                    <h4 className="text-xs font-bold text-white">{f.title}</h4>
-                    <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
-                      {f.desc}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="space-y-3">
+            <StagePoint
+              icon={CheckCircle2}
+              title={t("hiw.step3Point1Title")}
+              desc={t("hiw.step3Point1Desc")}
+              card
+            />
+            <StagePoint
+              icon={Download}
+              title={t("hiw.step3Point2Title")}
+              desc={t("hiw.step3Point2Desc")}
+              card
+            />
+            <StagePoint
+              icon={Eye}
+              title={t("hiw.step3Point3Title")}
+              desc={t("hiw.step3Point3Desc")}
+              card
+            />
           </div>
         }
         stageNumber={3}
       />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          STAGE 4 — Model ensemble
-         ═══════════════════════════════════════════════════════════════════ */}
-      <StageSection
-        reverse
-        badge={t("hiw.s4Badge")}
-        title={t("hiw.s4Title")}
-        lead={t("hiw.s4Lead")}
-        paragraphs={[t("hiw.s4P1")]}
-        side={
-          <div className="space-y-3">
-            {models.map((m, i) => (
-              <div
-                key={m.name}
-                className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-5 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
-              >
-                <div className="pointer-events-none absolute -right-10 -top-10 h-[140px] w-[140px] rounded-full bg-green-500/[0.06] blur-[70px] transition-all group-hover:bg-green-500/[0.14]" />
-                <div className="relative flex gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500/15 ring-1 ring-green-500/30">
-                    <span className="font-mono text-xs font-bold text-green-400">
-                      M{i + 1}
-                    </span>
-                  </div>
-                  <div>
-                    <h4 className="mb-1 text-sm font-bold text-white">
-                      {m.name}
-                    </h4>
-                    <p className="text-xs leading-relaxed text-slate-400">
-                      {m.desc}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-            <div className="relative mt-4 overflow-hidden rounded-2xl border border-green-500/30 bg-gradient-to-br from-green-500/[0.12] to-emerald-500/[0.06] p-5">
-              <div className="pointer-events-none absolute -right-10 -top-10 h-[200px] w-[200px] rounded-full bg-green-500/[0.14] blur-[80px]" />
-              <div className="relative">
-                <div className="mb-2 flex items-center gap-2">
-                  <Layers className="h-4 w-4 text-green-300" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-green-300">
-                    {t("hiw.s4BlendTitle")}
-                  </span>
-                </div>
-                <p className="text-xs leading-relaxed text-slate-200">
-                  {t("hiw.s4BlendDesc")}
-                </p>
-              </div>
-            </div>
-          </div>
-        }
-        stageNumber={4}
-      />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          STAGE 5 — Value detection
-         ═══════════════════════════════════════════════════════════════════ */}
-      <StageSection
-        badge={t("hiw.s5Badge")}
-        title={t("hiw.s5Title")}
-        lead={t("hiw.s5Lead")}
-        paragraphs={[t("hiw.s5P1"), t("hiw.s5P2")]}
-        side={
-          <div className="relative overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-[#0d1624] via-[#0a1220] to-[#060912] p-8 shadow-2xl shadow-green-500/[0.08]">
-            <div className="pointer-events-none absolute -left-20 -top-20 h-[250px] w-[250px] rounded-full bg-green-500/[0.12] blur-[100px]" />
-            <div className="relative">
-              <div className="mb-5 flex items-center gap-2">
-                <Target className="h-4 w-4 text-green-400" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">
-                  {t("hiw.s5FormulaTitle")}
-                </span>
-              </div>
-              <div className="space-y-2 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 font-mono">
-                <div className="text-sm text-slate-200">
-                  {t("hiw.s5FormulaLine1")}
-                </div>
-                <div className="text-sm text-slate-400">
-                  {t("hiw.s5FormulaLine2")}
-                </div>
-                <div className="text-sm text-slate-400">
-                  {t("hiw.s5FormulaLine3")}
-                </div>
-                <div className="mt-3 border-t border-green-500/20 pt-3 text-base font-bold text-green-400">
-                  {t("hiw.s5FormulaLine4")}
-                </div>
-              </div>
-              <p className="mt-5 text-xs italic leading-relaxed text-slate-500">
-                {t("hiw.s5FormulaFoot")}
-              </p>
-            </div>
-          </div>
-        }
-        stageNumber={5}
-      />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          STAGE 6 — Publishing
-         ═══════════════════════════════════════════════════════════════════ */}
-      <StageSection
-        reverse
-        badge={t("hiw.s6Badge")}
-        title={t("hiw.s6Title")}
-        lead={t("hiw.s6Lead")}
-        paragraphs={[t("hiw.s6P1"), t("hiw.s6P2")]}
-        side={
-          <div className="space-y-3">
-            <StagePoint
-              icon={Zap}
-              title={t("hiw.s6Point1Title")}
-              desc={t("hiw.s6Point1Desc")}
-              card
-            />
-            <StagePoint
-              icon={CheckCircle2}
-              title={t("hiw.s6Point2Title")}
-              desc={t("hiw.s6Point2Desc")}
-              card
-            />
-            <StagePoint
-              icon={Lock}
-              title={t("hiw.s6Point3Title")}
-              desc={t("hiw.s6Point3Desc")}
-              card
-            />
-          </div>
-        }
-        stageNumber={6}
-      />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          STAGE 7 — Continuous retraining
-         ═══════════════════════════════════════════════════════════════════ */}
-      <StageSection
-        badge={t("hiw.s7Badge")}
-        title={t("hiw.s7Title")}
-        lead={t("hiw.s7Lead")}
-        paragraphs={[t("hiw.s7P1"), t("hiw.s7P2")]}
-        side={
-          <div className="relative overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-[#0d1624] via-[#0a1220] to-[#060912] p-8 shadow-2xl shadow-green-500/[0.08]">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-[250px] w-[250px] rounded-full bg-green-500/[0.12] blur-[100px]" />
-            <div className="relative">
-              <div className="mb-5 flex items-center gap-2">
-                <Gauge className="h-4 w-4 text-green-400" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">
-                  Quality gates
-                </span>
-              </div>
-              <ul className="space-y-3">
-                {[
-                  t("hiw.s7Bullet1"),
-                  t("hiw.s7Bullet2"),
-                  t("hiw.s7Bullet3"),
-                  t("hiw.s7Bullet4"),
-                ].map((b) => (
-                  <li
-                    key={b}
-                    className="flex items-start gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3"
-                  >
-                    <CircleCheck className="h-4 w-4 shrink-0 translate-y-0.5 text-green-400" />
-                    <span className="text-sm leading-snug text-slate-300">
-                      {b}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        }
-        stageNumber={7}
-      />
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          PROOF / TRUST BUILDER
-         ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-white/[0.06] bg-gradient-to-b from-transparent via-white/[0.02] to-transparent py-20 md:py-24">
-        <div className="relative mx-auto max-w-6xl px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mx-auto mb-14 max-w-2xl text-center"
-          >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
-              {t("hiw.proofBadge")}
-            </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
-              {t("hiw.proofTitle")}
-            </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-400 sm:text-lg">
-              {t("hiw.proofSubtitle")}
-            </p>
-          </motion.div>
-
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {proofs.map((p, i) => {
-              const Icon = p.icon;
-              return (
-                <motion.div
-                  key={p.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
-                >
-                  <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-500/[0.06] blur-[80px] transition-all group-hover:bg-green-500/[0.12]" />
-                  <div className="relative">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.2)] ring-1 ring-green-500/30">
-                      <Icon className="h-5 w-5 text-green-400" />
-                    </div>
-                    <h3 className="mb-2 text-lg font-extrabold tracking-tight text-white">
-                      {p.title}
-                    </h3>
-                    <p className="text-sm leading-relaxed text-slate-400">
-                      {p.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
           FAQ
@@ -662,7 +300,7 @@ export function HowItWorksContent() {
           </motion.div>
 
           <div className="space-y-4">
-            {faqs.map((f, i) => (
+            {faqs.map((f) => (
               <motion.details
                 key={f.q}
                 initial={{ opacity: 0, y: 15 }}
@@ -853,5 +491,3 @@ function StagePoint({
     </div>
   );
 }
-
-export default HowItWorksContent;
