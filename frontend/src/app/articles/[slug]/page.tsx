@@ -5,6 +5,7 @@ import {
   fetchArticleBySlug,
   type Article,
 } from "@/lib/sanity-data";
+import { getLocalizedAlternates } from "@/lib/seo-helpers";
 import { ArticleTemplate } from "../article-template";
 
 export const revalidate = 60;
@@ -46,12 +47,14 @@ export async function generateMetadata(props: {
   }
 
   const ogImage = absoluteCoverImage(article);
+  const alternates = getLocalizedAlternates(`/articles/${article.slug}`);
 
   return {
     title: article.metaTitle,
     description: article.metaDescription,
     alternates: {
-      canonical: `/articles/${article.slug}`,
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
     openGraph: {
       title: article.metaTitle,
