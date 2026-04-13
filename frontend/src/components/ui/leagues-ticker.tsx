@@ -9,11 +9,6 @@ type League = {
   ext?: "png" | "svg";
 };
 
-// Curated shortlist of the biggest leagues by global audience:
-// the European "Big Five" football leagues + UEFA Champions League.
-// Intentionally excludes regional
-// leagues (Eredivisie, Liga Portugal, Brasileirão, Allsvenskan) and
-// secondary European tournaments (Europa League, Conference League).
 const leagues: League[] = [
   { name: "Premier League", slug: "premier-league" },
   { name: "La Liga", slug: "laliga" },
@@ -24,41 +19,20 @@ const leagues: League[] = [
   { name: "Eredivisie", slug: "eredivisie" },
 ];
 
+const BG = "#080b14";
+
 export function LeaguesTicker() {
   const { t } = useTranslations();
-  // Triple for a seamless infinite loop
   const tripled = [...leagues, ...leagues, ...leagues];
 
   return (
     <section
-      className="relative overflow-hidden py-10 md:py-12"
+      className="relative overflow-hidden py-10 md:py-14"
       aria-labelledby="leagues-heading"
+      style={{ background: BG }}
     >
-      {/* ── Unique background ─────────────────────────────────────────── */}
-      {/* Base gradient */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14] via-[#0a1018] to-[#080b14]" />
-
-      {/* Diagonal striped pattern */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(135deg, rgba(74,222,128,0.8) 0 1px, transparent 1px 18px)",
-        }}
-      />
-
-      {/* Soft radial glows — asymmetric (different from hero) */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[15%] top-0 h-[380px] w-[380px] rounded-full bg-emerald-500/[0.06] blur-[120px]" />
-        <div className="absolute right-[10%] bottom-0 h-[320px] w-[320px] rounded-full bg-green-500/[0.05] blur-[110px]" />
-      </div>
-
-      {/* Thin green top/bottom accent lines */}
-      <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-green-500/30 to-transparent" />
-      <div className="pointer-events-none absolute left-0 right-0 bottom-0 h-px bg-gradient-to-r from-transparent via-green-500/30 to-transparent" />
-
       {/* Title */}
-      <div className="relative z-10 mb-8 text-center">
+      <div className="relative z-10 mb-10 text-center">
         <span className="mb-3 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
           {t("leagues.badge")}
         </span>
@@ -71,21 +45,28 @@ export function LeaguesTicker() {
         </h2>
       </div>
 
-      {/* Ticker */}
-      <div className="relative">
-        {/* Gradient masks on the sides */}
-        <div className="pointer-events-none absolute left-0 top-0 z-20 h-full w-16 bg-gradient-to-r from-[#0a1018] to-transparent sm:w-32" />
-        <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-16 bg-gradient-to-l from-[#0a1018] to-transparent sm:w-32" />
-
-        <div className="overflow-hidden">
+      {/* 3D Perspective marquee */}
+      <div
+        className="relative flex items-center justify-center overflow-hidden"
+        style={{
+          perspective: "1200px",
+          height: "180px",
+        }}
+      >
+        {/* Tilted track */}
+        <div
+          className="flex w-full items-center justify-start"
+          style={{
+            transform: "rotateX(6deg) rotateY(-24deg)",
+            transformStyle: "preserve-3d",
+          }}
+        >
+          {/* Scrolling row */}
           <motion.div
-            className="flex items-center gap-8 sm:gap-12 md:gap-16"
+            className="flex items-center whitespace-nowrap"
             animate={{ x: ["0%", "-33.3333%"] }}
             transition={{
-              // Scaled from the old 45s/16-leagues config so each logo
-              // still takes ~2.8s to traverse the viewport at this list
-              // size. 45 * (10/16) ≈ 28s.
-              duration: 28,
+              duration: 30,
               ease: "linear",
               repeat: Infinity,
             }}
@@ -93,20 +74,35 @@ export function LeaguesTicker() {
             {tripled.map((league, i) => (
               <div
                 key={`${league.slug}-${i}`}
-                className="group flex h-10 flex-shrink-0 items-center justify-center sm:h-12 md:h-14"
+                className="flex flex-shrink-0 items-center justify-center px-6 sm:px-10 md:px-14"
                 title={league.name}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/leagues/${league.slug}.${league.ext ?? "png"}`}
                   alt={league.name}
-                  className="h-full w-auto max-w-[120px] object-contain opacity-90 drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)] transition-all duration-300 group-hover:scale-110 group-hover:opacity-100 sm:max-w-[140px] md:max-w-[160px]"
+                  className="h-14 w-auto max-w-[140px] object-contain opacity-80 drop-shadow-[0_4px_16px_rgba(74,222,128,0.15)] transition-all duration-300 hover:scale-110 hover:opacity-100 sm:h-16 md:h-20 md:max-w-[180px]"
                   loading="lazy"
                 />
               </div>
             ))}
           </motion.div>
         </div>
+
+        {/* Horizontal fade */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `linear-gradient(90deg, ${BG} 0%, transparent 20%, transparent 80%, ${BG} 100%)`,
+          }}
+        />
+        {/* Vertical fade */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `linear-gradient(180deg, ${BG} 0%, transparent 30%, transparent 70%, ${BG} 100%)`,
+          }}
+        />
       </div>
     </section>
   );
