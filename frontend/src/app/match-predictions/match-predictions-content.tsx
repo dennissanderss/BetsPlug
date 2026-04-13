@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -40,7 +41,7 @@ import {
 
 /* ── Main page content ─────────────────────────────────────── */
 
-export function MatchPredictionsContent() {
+export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
 
@@ -134,7 +135,7 @@ export function MatchPredictionsContent() {
       <SiteNav />
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden px-4 pb-10 pt-28 sm:pt-32">
+      <section className="relative overflow-hidden px-4 pb-10 pt-36 sm:pt-40">
         <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.12] blur-[140px]" />
         <div className="pointer-events-none absolute -right-40 -top-20 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.10] blur-[140px]" />
 
@@ -367,6 +368,7 @@ export function MatchPredictionsContent() {
         </motion.div>
       </section>
 
+      {faqSlot}
       <BetsPlugFooter />
     </div>
   );

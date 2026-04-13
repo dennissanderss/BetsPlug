@@ -51,11 +51,14 @@ export default function AboutPage() {
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
-      <AboutContent />
-      <FaqSection
-        title={translate(locale, "faqTitle.about" as any)}
-        subtitle={translate(locale, "faqTitle.aboutSub" as any)}
-        items={faqItems}
+      <AboutContent
+        faqSlot={
+          <FaqSection
+            title={translate(locale, "faqTitle.about" as any)}
+            subtitle={translate(locale, "faqTitle.aboutSub" as any)}
+            items={faqItems}
+          />
+        }
       />
     </>
   );

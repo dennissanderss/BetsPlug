@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import {
@@ -24,7 +25,7 @@ import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
  * About Us page — BetsPlug's story, mission, principles and founders.
  * Dark/green design language, motion-driven reveals, SEO-optimized copy.
  */
-export function AboutContent() {
+export function AboutContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
@@ -82,7 +83,7 @@ export function AboutContent() {
       {/* ═══════════════════════════════════════════════════════════════════
           HERO
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-20">
+      <section className="relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
         {/* Ambient background */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.08] blur-[140px]" />
@@ -486,6 +487,7 @@ export function AboutContent() {
         </div>
       </section>
 
+      {faqSlot}
       <BetsPlugFooter />
     </div>
   );

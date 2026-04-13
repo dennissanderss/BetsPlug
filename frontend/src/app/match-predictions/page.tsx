@@ -51,11 +51,14 @@ export default function MatchPredictionsPage() {
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
-      <MatchPredictionsContent />
-      <FaqSection
-        title={translate(locale, "faqTitle.predictions" as any)}
-        subtitle={translate(locale, "faqTitle.predictionsSub" as any)}
-        items={faqItems}
+      <MatchPredictionsContent
+        faqSlot={
+          <FaqSection
+            title={translate(locale, "faqTitle.predictions" as any)}
+            subtitle={translate(locale, "faqTitle.predictionsSub" as any)}
+            items={faqItems}
+          />
+        }
       />
     </>
   );

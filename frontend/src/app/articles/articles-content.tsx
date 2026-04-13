@@ -71,7 +71,7 @@ export function ArticlesContent() {
 
       <SiteNav />
 
-      <main className="relative z-10 pt-28 pb-24 sm:pt-32">
+      <main className="relative z-10 pt-36 pb-24 sm:pt-40">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
           {/* Hero heading */}
           <motion.div

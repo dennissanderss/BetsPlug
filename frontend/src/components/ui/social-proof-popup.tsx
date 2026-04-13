@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { CheckCircle2, X } from "lucide-react";
+import { useTranslations } from "@/i18n/locale-provider";
 
 interface Notification {
   name: string;
@@ -91,6 +92,7 @@ function generateNotification(): Notification {
 }
 
 export function SocialProofPopup() {
+  const { t } = useTranslations();
   const [notification, setNotification] = useState<Notification | null>(null);
   const [visible, setVisible] = useState(false);
 
@@ -174,14 +176,14 @@ export function SocialProofPopup() {
         <div className="relative flex min-w-0 flex-col">
           <p className="max-w-[240px] truncate text-xs leading-tight text-slate-200 sm:max-w-[280px] sm:text-sm">
             <span className="font-semibold text-white">{notification.name}</span>{" "}
-            just subscribed to the{" "}
+            {t("socialProof.subscribed")}{" "}
             <span className="font-semibold text-green-400">
               {notification.plan}
             </span>{" "}
-            plan
+            {t("socialProof.plan")}
           </p>
           <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-slate-500 sm:text-[11px]">
-            {notification.minutesAgo} min ago · Verified purchase
+            {notification.minutesAgo} {t("socialProof.minAgo")} · {t("socialProof.verified")}
           </p>
         </div>
 
@@ -189,7 +191,7 @@ export function SocialProofPopup() {
         <button
           type="button"
           onClick={handleClose}
-          aria-label="Dismiss notification"
+          aria-label={t("socialProof.dismiss")}
           className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-white/10 hover:text-white"
         >
           <X size={12} />

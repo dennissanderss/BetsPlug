@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
@@ -80,7 +81,7 @@ function useLiveTrackRecordStats(): LiveStats {
  * are produced, audited, and used in practice. Shares the sitewide
  * dark/green design language with motion-driven reveals.
  */
-export function TrackRecordContent() {
+export function TrackRecordContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
@@ -232,7 +233,7 @@ export function TrackRecordContent() {
       {/* ═══════════════════════════════════════════════════════════════════
           HERO
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden pt-32 pb-16 md:pt-40 md:pb-20">
+      <section className="relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
         {/* Ambient background */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.08] blur-[140px]" />
@@ -634,6 +635,7 @@ export function TrackRecordContent() {
         </div>
       </section>
 
+      {faqSlot}
       <BetsPlugFooter />
     </div>
   );

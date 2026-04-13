@@ -183,7 +183,7 @@ export function WelcomeContent() {
       )}
 
       {/* ── Hero ── */}
-      <main className="relative z-10 pt-36 pb-24 sm:pt-44">
+      <main className="relative z-10 pt-44 pb-24 sm:pt-52">
         <section className="mx-auto max-w-5xl px-6 text-center">
           {/* Badge */}
           <motion.div

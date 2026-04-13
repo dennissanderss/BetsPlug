@@ -51,11 +51,14 @@ export default function TrackRecordPage() {
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
-      <TrackRecordContent />
-      <FaqSection
-        title={translate(locale, "faqTitle.trackRecord" as any)}
-        subtitle={translate(locale, "faqTitle.trackRecordSub" as any)}
-        items={faqItems}
+      <TrackRecordContent
+        faqSlot={
+          <FaqSection
+            title={translate(locale, "faqTitle.trackRecord" as any)}
+            subtitle={translate(locale, "faqTitle.trackRecordSub" as any)}
+            items={faqItems}
+          />
+        }
       />
     </>
   );

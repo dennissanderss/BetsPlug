@@ -30,6 +30,13 @@ const en = {
   "topbar.picksAnalyzed": "picks analyzed",
   "topbar.cta": "Try for €0.01",
 
+  /* Social proof popup */
+  "socialProof.subscribed": "just subscribed to the",
+  "socialProof.plan": "plan",
+  "socialProof.minAgo": "min ago",
+  "socialProof.verified": "Verified purchase",
+  "socialProof.dismiss": "Dismiss notification",
+
   /* Hero */
   "hero.badge": "AI predictions for every match",
   "hero.titleLine1": "AI Football Predictions —",
@@ -3733,6 +3740,11 @@ const nl: Dictionary = {
   "pred.moreLeagues": "Meer competities",
   "pred.searchLeague": "Zoek competitie...",
   "pred.noLeaguesFound": "Geen competities gevonden",
+  "socialProof.subscribed": "zojuist geabonneerd op de",
+  "socialProof.plan": "plan",
+  "socialProof.minAgo": "min geleden",
+  "socialProof.verified": "Geverifieerde aankoop",
+  "socialProof.dismiss": "Melding afwijzen",
 };
 
 

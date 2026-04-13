@@ -184,7 +184,7 @@ export function LoginContent() {
 
       <SiteNav />
 
-      <main className="relative z-10 pt-32 pb-24 sm:pt-40">
+      <main className="relative z-10 pt-40 pb-24 sm:pt-48">
         <section className="mx-auto max-w-6xl px-6">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
             {/* ─── Left: promo / trust column ────────────── */}
