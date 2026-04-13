@@ -17,6 +17,21 @@ const leagues: League[] = [
   { name: "Ligue 1", slug: "ligue-1" },
   { name: "Champions League", slug: "champions-league" },
   { name: "Eredivisie", slug: "eredivisie" },
+  { name: "Europa League", slug: "europa-league" },
+  { name: "Conference League", slug: "conference-league" },
+  { name: "Liga Portugal", slug: "liga-portugal" },
+  { name: "Allsvenskan", slug: "allsvenskan" },
+  { name: "Brasileirão Serie A", slug: "brazil-serie-a" },
+  { name: "Süper Lig", slug: "super-lig" },
+  { name: "Jupiler Pro League", slug: "jupiler-pro-league" },
+  { name: "Scottish Premiership", slug: "scottish-premiership" },
+  { name: "Swiss Super League", slug: "swiss-super-league" },
+  { name: "Liga Profesional Argentina", slug: "liga-profesional-argentina" },
+  { name: "Liga MX", slug: "liga-mx" },
+  { name: "Copa Libertadores", slug: "copa-libertadores" },
+  { name: "MLS", slug: "mls" },
+  { name: "Saudi Pro League", slug: "saudi-pro-league" },
+  { name: "Championship", slug: "championship" },
 ];
 
 const BG = "#080b14";
@@ -122,7 +137,7 @@ export function LeaguesTicker() {
 function LeagueCard({ league }: { league: League }) {
   return (
     <div className="mx-2 flex-shrink-0 sm:mx-3" title={league.name}>
-      <div className="group flex h-14 w-24 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.04] p-3 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-300 hover:border-green-500/30 hover:bg-white/[0.08] hover:shadow-[0_4px_30px_rgba(74,222,128,0.15)] sm:h-16 sm:w-28 sm:rounded-2xl md:h-[72px] md:w-32 md:p-4">
+      <div className="group flex h-14 w-24 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.07] p-3 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-300 hover:border-green-500/30 hover:bg-white/[0.12] hover:shadow-[0_4px_30px_rgba(74,222,128,0.15)] sm:h-16 sm:w-28 sm:rounded-2xl md:h-[72px] md:w-32 md:p-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`/leagues/${league.slug}.${league.ext ?? "png"}`}
