@@ -8,6 +8,7 @@ const {
 
 const BLUE = "1a365d";
 const LIGHT_BLUE = "e8f0fe";
+const GRAY_BG = "f5f5f5";
 const border = { style: BorderStyle.SINGLE, size: 1, color: "cccccc" };
 const borders = { top: border, bottom: border, left: border, right: border };
 const cellMargins = { top: 80, bottom: 80, left: 120, right: 120 };
@@ -28,23 +29,26 @@ function h2(text) {
 }
 function p(text, opts = {}) {
   return new Paragraph({
-    spacing: { after: 120 },
+    spacing: { after: 140, line: 320 },
     children: [new TextRun({ text, size: 22, font: "Arial", ...opts })],
   });
 }
 function bullet(text) {
   return new Paragraph({
     numbering: { reference: "bullets", level: 0 },
-    spacing: { after: 60 },
+    spacing: { after: 80, line: 320 },
     children: [new TextRun({ text, size: 22, font: "Arial" })],
   });
 }
-function boldP(label, value) {
+// Explanation box — gray background paragraph for "what does this mean?" context
+function explainBox(text) {
   return new Paragraph({
-    spacing: { after: 80 },
+    spacing: { before: 80, after: 160, line: 320 },
+    shading: { fill: GRAY_BG, type: ShadingType.CLEAR },
+    indent: { left: 200, right: 200 },
     children: [
-      new TextRun({ text: label, bold: true, size: 22, font: "Arial" }),
-      new TextRun({ text: value, size: 22, font: "Arial" }),
+      new TextRun({ text: "Wat betekent dit? ", bold: true, size: 20, font: "Arial", color: BLUE }),
+      new TextRun({ text, size: 20, font: "Arial", color: "444444" }),
     ],
   });
 }
@@ -177,147 +181,165 @@ const doc = new Document({
       children: [
         // 1. Samenvatting
         h1("1. Samenvatting"),
-        p("BetsPlug is een AI-gestuurd voetbalvoorspellingsplatform dat uitsluitend is ontworpen voor educatieve en simulatiedoeleinden. Het platform faciliteert GEEN gokken, accepteert geen inzetten en verwerkt geen weddenschappen. Alle voorspellingen worden duidelijk gelabeld als simulaties met verplichte disclaimers op elke uitvoer."),
-        p("De voorspellingsengine maakt gebruik van een statistisch gevalideerd ensemble van wiskundige modellen, rigoureus getoetst aan historische data met strikte temporele scheiding tussen trainings- en validatieperioden. Een grid search over 1.295 gewichtsconfiguraties bevestigde de optimale modelopstelling, gevalideerd op out-of-sample data uit 2026."),
+        p("BetsPlug is een online platform dat met behulp van kunstmatige intelligentie (AI) voorspellingen maakt over de uitslag van voetbalwedstrijden. Het platform is uitsluitend bedoeld voor educatieve en informatieve doeleinden. BetsPlug organiseert geen gokactiviteiten, accepteert geen inzetten en verwerkt geen weddenschappen."),
+        p("Het systeem analyseert jarenlange wedstrijddata \u2014 denk aan uitslagen, teamvorm, onderlinge resultaten en competitiestanden \u2014 om een inschatting te maken van de meest waarschijnlijke uitslag van een aankomende wedstrijd. Elke voorspelling wordt vergezeld van een duidelijke vermelding dat het om een simulatie gaat en geen garantie op winst biedt."),
+        p("Om de betrouwbaarheid van het systeem aan te tonen, is het uitvoerig getest: 1.295 verschillende configuraties zijn getoetst op meer dan 6.500 historische wedstrijden. De resultaten op data die het systeem nooit eerder had gezien (het jaar 2026) komen overeen met de resultaten op trainingsdata \u2014 dit bevestigt dat het systeem betrouwbaar werkt en niet is \u201Coverfitted\u201D (te specifiek afgestemd op historische data)."),
 
         // 2. Platformoverzicht
-        h1("2. Platformoverzicht"),
+        h1("2. Wat is BetsPlug?"),
+        p("BetsPlug is een webapplicatie waar gebruikers kunnen inloggen om AI-gegenereerde voetbalvoorspellingen te bekijken. Het platform werkt als een abonnementsdienst met verschillende niveaus:"),
         table2col([
-          ["Component", "Details"],
-          ["Architectuur", "Next.js 14 frontend, FastAPI (Python) backend"],
-          ["Abonnementsniveaus", "Gratis, Silver, Gold, Platinum"],
-          ["Competitiedekking", "24 voetbalcompetities wereldwijd"],
-          ["Databronnen", "API-Football (Pro), Football-Data.org, The Odds API"],
-          ["Infrastructuur", "Railway (backend), Vercel (frontend), PostgreSQL, Redis"],
-          ["Betalingen", "Stripe (PCI-DSS gecertificeerd, geen kaartgegevens opgeslagen)"],
+          ["Onderdeel", "Uitleg"],
+          ["Gratis niveau", "Beperkte toegang: 3 dagelijkse voorspellingen, basisstatistieken"],
+          ["Silver / Gold / Platinum", "Uitgebreide toegang: alle voorspellingen, track record, exports, Pick van de Dag"],
+          ["Competities", "24 voetbalcompetities wereldwijd, waaronder Eredivisie, Premier League, Champions League"],
+          ["Databronnen", "Professionele sportdata-API\u2019s (API-Football, Football-Data.org, The Odds API)"],
+          ["Betalingen", "Via Stripe \u2014 BetsPlug slaat zelf geen creditcardgegevens op"],
         ]),
+        explainBox("BetsPlug is vergelijkbaar met een weerstation dat het weer voorspelt: het geeft een inschatting op basis van data, maar kan het weer niet garanderen. Net zo geeft BetsPlug een inschatting van wedstrijduitslagen, maar garandeert geen resultaat."),
 
-        // 3. Voorspellingsengine
-        h1("3. Voorspellingsengine \u2014 Technische Specificatie"),
+        // 3. Hoe werkt de voorspelling?
+        h1("3. Hoe werkt de voorspelling?"),
 
-        h2("3.1 Modelarchitectuur"),
-        p("De engine gebruikt een gewogen ensemble van twee actieve statistische modellen:"),
-        bullet("Elo-ratingsysteem (gewicht: 1,2) \u2014 Adaptieve teamsterkte-ratings met 65-punts thuisvoordeel-calibratie, point-in-time handhaving en K-factor van 20."),
-        bullet("Logistische Regressie (gewicht: 2,0) \u2014 Classifier met 43 kenmerken, getraind op historische wedstrijddata inclusief teamvorm, onderlinge resultaten, competitiestanden en Elo-verschil."),
-        p("Twee extra modellen (Poisson en XGBoost) zijn getest maar uitgeschakeld na grid search-optimalisatie die aantoonde dat zij ruis toevoegen zonder de nauwkeurigheid te verbeteren."),
+        h2("3.1 De modellen \u2014 hoe komt een voorspelling tot stand?"),
+        p("Het systeem combineert twee wiskundige modellen die elk op een andere manier naar wedstrijddata kijken. Door deze twee perspectieven samen te voegen, ontstaat een nauwkeurigere voorspelling dan elk model alleen zou geven."),
 
-        h2("3.2 Anti-Lekkage Waarborgen"),
-        p("Data-integriteit wordt afgedwongen via meerdere beveiligingen om te voorkomen dat toekomstige informatie voorspellingen contamineert:"),
-        bullet("Elo-ratings: opgevraagd met strikt effective_at < kickoff temporeel filter"),
-        bullet("FeatureLeakageError: runtime-exceptie bij elke schending van data-integriteit"),
-        bullet("Teamvorm: gefilterd met before=scheduled_at, uitsluitend pre-wedstrijd data"),
-        bullet("Onderlinge resultaten: beperkt tot uitsluitend historische ontmoetingen"),
-        bullet("Alle 43 kenmerken geverifieerd als point-in-time veilig via code-level handhaving"),
+        p("Model 1: Elo-ratingsysteem", { bold: true }),
+        p("Elk team krijgt een \u201CElo-score\u201D \u2014 een getal dat aangeeft hoe sterk het team is. Hoe meer wedstrijden een team wint (vooral tegen sterke tegenstanders), hoe hoger de score. Het systeem vergelijkt de Elo-scores van beide teams om te bepalen wie de favoriet is. Vergelijk het met een rankingsysteem in tennis of schaken."),
 
-        h2("3.3 Classificatie van Voorspellingsbron"),
-        p("Elke voorspelling wordt onveranderlijk geclassificeerd bij aanmaak:"),
+        p("Model 2: Logistische Regressie", { bold: true }),
+        p("Dit model kijkt naar 43 verschillende factoren tegelijk, bijvoorbeeld: hoe heeft het team de laatste 5 wedstrijden gepresteerd? Hoe vaak wonnen ze thuis? Hoe is het onderlinge resultaat? Wat is het verschil in competitiestand? Het model heeft geleerd van duizenden historische wedstrijden welke combinatie van factoren het best de uitslag voorspelt."),
+
+        p("De twee modellen worden samengevoegd met een gewicht: het Logistische model telt 2x zo zwaar mee als het Elo-model, omdat uit tests bleek dat dit de beste resultaten geeft."),
+
+        explainBox("Stel je voor dat je twee experts vraagt wie een wedstrijd wint. Expert 1 (Elo) kijkt alleen naar de algemene sterkte van teams. Expert 2 (Logistisch) kijkt naar 43 details. Je luistert naar allebei, maar geeft Expert 2 meer gewicht omdat die vaker gelijk heeft. Dat is wat BetsPlug doet."),
+
+        h2("3.2 Beveiliging tegen vals spelen met data"),
+        p("Een groot risico bij voorspellingssystemen is dat ze per ongeluk gebruikmaken van informatie die op het moment van de voorspelling nog niet beschikbaar was. Bijvoorbeeld: als het systeem de uitslag van een wedstrijd zou kennen terwijl het die wedstrijd probeert te voorspellen, zou het vals spelen."),
+        p("BetsPlug heeft meerdere beveiligingen ingebouwd om dit te voorkomen:"),
+        bullet("Teamsterktes (Elo-scores) worden alleen opgehaald tot het moment V\u00D3\u00D3R de aftrap \u2014 nooit erna"),
+        bullet("Teamvorm (de laatste 5 wedstrijden) bevat alleen wedstrijden die al gespeeld waren v\u00F3\u00F3r de te voorspellen wedstrijd"),
+        bullet("Onderlinge resultaten bevatten uitsluitend eerdere ontmoetingen, nooit de wedstrijd zelf"),
+        bullet("Als het systeem detecteert dat er per ongeluk toekomstige data wordt gebruikt, stopt het automatisch met een foutmelding"),
+        explainBox("Dit is vergelijkbaar met een toets op school: als een leerling de antwoorden al kent, is de toets niet eerlijk. BetsPlug zorgt ervoor dat het systeem de \u201Cantwoorden\u201D (de wedstrijduitslag) nooit kan zien voordat het de voorspelling maakt."),
+
+        h2("3.3 Live vs. Backtest \u2014 twee soorten voorspellingen"),
+        p("BetsPlug maakt onderscheid tussen twee soorten voorspellingen:"),
         table2col([
-          ["Veld", "Beschrijving"],
-          ["prediction_source", "'live' (pre-wedstrijd) of 'backtest' (retroactieve simulatie)"],
-          ["locked_at", "Tijdstempelbewijs wanneer live-voorspelling is vastgelegd"],
-          ["match_scheduled_at", "Onveranderlijke snapshot van aftrap op voorspellingsmoment"],
-          ["lead_time_hours", "Uren voor aftrap dat de voorspelling is gegenereerd"],
-          ["closing_odds_snapshot", "Bookmaker-odds en waarde-analyse op voorspellingsmoment"],
+          ["Type", "Uitleg"],
+          ["Live voorspelling", "Gemaakt V\u00D3\u00D3R de wedstrijd begint. Wordt vastgelegd met een tijdstempel als bewijs. Dit is de \u201Cechte\u201D voorspelling."],
+          ["Backtest voorspelling", "Achteraf gemaakt op historische data om het systeem te testen. Wordt duidelijk gelabeld als \u201Csimulatie\u201D."],
         ]),
+        p("Dit onderscheid is cruciaal voor eerlijkheid. Veel voorspellingsplatforms laten dit verschil niet zien, waardoor het lijkt alsof ze beter presteren dan ze werkelijk doen. BetsPlug rapporteert altijd afzonderlijk hoe goed live voorspellingen en backtests presteren."),
+        explainBox("Vergelijk het met een dokter die achteraf zegt \u201CIk wist het al\u201D versus een dokter die van tevoren een diagnose stelt. Alleen de vooraf gestelde diagnose telt echt. BetsPlug laat altijd zien welke voorspellingen echt vooraf zijn gemaakt."),
 
-        h2("3.4 Gevalideerde Prestatiemetrieken"),
-        p("Optimalisatie is uitgevoerd via uitputtende grid search over 1.295 gewichtsconfiguraties op 6.502 gevalueerde voorspellingen:"),
+        h2("3.4 Hoe goed presteert het systeem?"),
+        p("Het systeem is uitvoerig getest om de betrouwbaarheid te meten. Hieronder de resultaten:"),
         table2col([
-          ["Metriek", "Waarde"],
-          ["Configuraties getest", "1.295"],
-          ["Totaal gevalueerde voorspellingen", "6.502"],
-          ["Backtest-nauwkeurigheid (aug 2024 \u2013 dec 2025)", "50,4% (3.743 voorspellingen)"],
-          ["Validatie-nauwkeurigheid (jan 2026 \u2013 apr 2026)", "48,9% (2.759 voorspellingen)"],
-          ["BOTD backtest-nauwkeurigheid", "70,1% (432 picks)"],
-          ["BOTD validatie-nauwkeurigheid", "71,1% (232 picks)"],
-          ["Willekeurige baseline (3-weg)", "33,3%"],
-          ["Backtest-validatie verschil", "1,5 procentpunt (geen overfitting)"],
+          ["Metriek", "Resultaat"],
+          ["Aantal geteste configuraties", "1.295 verschillende instellingen vergeleken"],
+          ["Totaal getoetste wedstrijden", "6.502 wedstrijden"],
+          ["Nauwkeurigheid op trainingsdata (2024\u20132025)", "50,4% correct (bij 3.743 wedstrijden)"],
+          ["Nauwkeurigheid op nieuwe data (2026)", "48,9% correct (bij 2.759 wedstrijden)"],
+          ["Pick van de Dag op trainingsdata", "70,1% correct (432 picks)"],
+          ["Pick van de Dag op nieuwe data", "71,1% correct (232 picks)"],
+          ["Willekeurig gokken (thuis/gelijk/uit)", "33,3% correct"],
         ]),
+        p("Het verschil tussen trainings- en testresultaten is klein (1,5 procentpunt), wat aantoont dat het systeem niet is \u201Coverfitted\u201D \u2014 het werkt ook betrouwbaar op data die het nog nooit heeft gezien."),
+        explainBox("Bij voetbal zijn er drie mogelijke uitslagen: thuiswinst, gelijkspel, of uitwinst. Als je willekeurig gokt heb je 33% kans op goed. BetsPlug scoort gemiddeld 49% \u2014 dat is 48% beter dan willekeurig gokken. De \u201CPick van de Dag\u201D (de beste dagelijkse voorspelling) scoort zelfs 71%."),
 
-        // 4. Data-integriteit
-        h1("4. Data-integriteit & Transparantie"),
+        // 4. Eerlijkheid en transparantie
+        h1("4. Eerlijkheid & Transparantie"),
 
-        h2("4.1 Twee-Sporen Track Record"),
-        bullet("Live track record: uitsluitend authentieke pre-wedstrijd voorspellingen met tijdstempelbewijs"),
-        bullet("Backtest track record: historische simulaties duidelijk als zodanig gelabeld"),
-        bullet("API-filtering: ?source=live of ?source=backtest voor alle metriek-endpoints"),
-        bullet("CSV-export: bevat voorspellingsbron, doorlooptijd en alle evaluatiemetrieken"),
+        h2("4.1 Twee aparte track records"),
+        p("BetsPlug houdt twee aparte scoreborden bij:"),
+        bullet("Live track record: alleen voorspellingen die aantoonbaar V\u00D3\u00D3R de wedstrijd zijn gemaakt, met tijdstempelbewijs"),
+        bullet("Backtest track record: historische simulaties, duidelijk als zodanig gelabeld"),
+        p("Gebruikers kunnen via de API en de website filteren welk type ze willen zien. CSV-exports bevatten altijd de bron (live of backtest), het aantal uren voor aftrap, en alle evaluatiegegevens."),
 
-        h2("4.2 Financiele Berekeningen"),
-        bullet("W/V uitsluitend berekend met echte bookmaker-odds van gelicentieerde databronnen"),
-        bullet("Geen circulaire implied-odds berekeningen (model dat zichzelf beoordeelt)"),
-        bullet("Wanneer geen echte odds beschikbaar: W/V wordt gerapporteerd als null, niet geschat"),
-        bullet("Dekkingspercentage odds transparant vermeld bij elke metriek"),
+        h2("4.2 Eerlijke financiele berekeningen"),
+        p("Winst- en verliesberekeningen worden uitsluitend gemaakt met echte bookmaker-odds van gelicentieerde databronnen (zoals Bet365, Pinnacle). Het systeem berekent GEEN nep-winst op basis van eigen kansschattingen \u2014 dat zou neerkomen op zelfbeoordeling."),
+        bullet("Wanneer echte odds beschikbaar zijn: W/V wordt berekend op basis van die odds"),
+        bullet("Wanneer geen echte odds beschikbaar zijn: W/V wordt als \u201Conbekend\u201D gerapporteerd, niet geschat"),
+        bullet("Bij elke metriek wordt vermeld welk percentage van de picks echte odds had"),
+        explainBox("Stel: het model zegt \u201C60% kans op thuiswinst\u201D. Als we dan zelf odds berekenen (1/0.60 = 1.67) en zeggen \u201Cwe maakten winst!\u201D, dan beoordeelt het model zichzelf. BetsPlug doet dit niet \u2014 we gebruiken alleen echte bookmaker-odds."),
 
-        h2("4.3 Verplichte Disclaimers"),
-        p("Elke API-respons en UI-component met voorspellingsdata bevat:", { italics: true }),
-        p("\"SIMULATIE / UITSLUITEND EDUCATIEF GEBRUIK. Deze kansschattingen zijn gegenereerd door een statistisch model voor onderzoeks- en educatieve doeleinden. Ze vormen GEEN financieel, gok- of beleggingsadvies. Prestaties uit het verleden bieden geen garantie voor toekomstige resultaten. Gok altijd verantwoord en binnen de geldende wetgeving.\"", { italics: true, size: 20 }),
+        h2("4.3 Verplichte waarschuwingen"),
+        p("Elke voorspelling die BetsPlug toont, bevat de volgende disclaimer:"),
+        p("\u201CSIMULATIE / UITSLUITEND EDUCATIEF GEBRUIK. Deze kansschattingen zijn gegenereerd door een statistisch model voor onderzoeks- en educatieve doeleinden. Ze vormen GEEN financieel, gok- of beleggingsadvies. Prestaties uit het verleden bieden geen garantie voor toekomstige resultaten. Gok altijd verantwoord en binnen de geldende wetgeving.\u201D", { italics: true, size: 20 }),
 
-        // 5. Juridisch Kader
+        // 5. Juridisch kader
         h1("5. Juridisch Kader"),
 
-        h2("5.1 Regelgevende Classificatie"),
-        p("BetsPlug biedt statistische analyse en educatieve content. Het platform is uitdrukkelijk NIET:"),
-        bullet("Een gokoperator \u2014 er worden geen inzetten geaccepteerd of gefaciliteerd"),
-        bullet("Een tipgevendienst \u2014 er worden geen rendementen gegarandeerd of gesuggereerd"),
-        bullet("Financieel advies \u2014 er wordt geen beleggings- of gokadvies verstrekt"),
-        p("Het platform opereert als een informatie- en analysedienst onder de toepasselijke EU Digital Services Act-bepalingen en nationale regelgeving voor informatiediensten."),
-
-        h2("5.2 Verantwoord Gokken"),
-        bullet("Verplichte simulatie/educatieve disclaimer op alle voorspellingsuitvoer"),
-        bullet("Geen garantie op nauwkeurigheid of winstgevendheid \u2014 expliciet uitgesloten"),
-        bullet("\"Resultaten uit het verleden bieden geen garantie voor de toekomst\" boodschap"),
-        bullet("Leeftijdsverificatie (18+) vereist voor abonnementsaankopen via Stripe"),
-        bullet("Zelfuitsluiting: gebruikers kunnen hun account en alle bijbehorende gegevens verwijderen"),
-
-        h2("5.3 Gegevensbescherming (AVG/GDPR)"),
-        p("Het platform verwerkt minimale persoonsgegevens in overeenstemming met de AVG:"),
+        h2("5.1 Wat is BetsPlug WEL en wat NIET?"),
+        p("BetsPlug is een informatiedienst die statistische analyses aanbiedt. Het is belangrijk te begrijpen wat het platform WEL en NIET is:"),
         table2col([
-          ["Gegevenscategorie", "Verwerkingsgrondslag"],
-          ["E-mail, gebruikersnaam", "Uitvoering overeenkomst (accountcreatie)"],
-          ["Abonnementsstatus", "Uitvoering overeenkomst"],
-          ["Verlaten checkout e-mail", "Gerechtvaardigd belang (eenmalige herinnering)"],
-          ["Betaalgegevens", "NIET opgeslagen \u2014 verwerkt door Stripe (PCI-DSS Level 1)"],
-          ["Voorspellingsgeschiedenis", "Uitvoering overeenkomst (dienstverlening)"],
+          ["BetsPlug is WEL", "BetsPlug is NIET"],
+          ["Een informatieplatform met AI-analyses", "Een gokbedrijf of casino"],
+          ["Een educatieve dienst over sportstatistiek", "Een tipgevendienst die winst garandeert"],
+          ["Een abonnementsdienst voor data-inzichten", "Financieel of beleggingsadvies"],
         ]),
-        bullet("Recht op vergetelheid: gebruikers kunnen hun account verwijderen via instellingen of AVG-verzoek"),
-        bullet("Gegevensverwerking: EU-gebaseerde infrastructuur (Railway EU, Vercel EU edge)"),
-        bullet("Geen profilering voor geautomatiseerde besluitvorming die gebruikers raakt"),
+        p("BetsPlug accepteert geen inzetten, organiseert geen weddenschappen en faciliteert op geen enkele wijze gokactiviteiten. Het platform valt onder de EU Digital Services Act als informatiedienst."),
 
-        h2("5.4 Intellectueel Eigendom"),
-        bullet("Voorspellingsengine: eigen ensemble-methodologie, intern ontwikkeld"),
-        bullet("Trainingsdata: gelicentieerd van API-Football (Pro-licentie)"),
-        bullet("Aanvullende data: Football-Data.org (attributielicentie)"),
-        bullet("Oddsdata: gelicentieerd van The Odds API (commercieel abonnement)"),
-        bullet("Alle gegevens van derden gebruikt binnen de respectievelijke licentievoorwaarden"),
+        h2("5.2 Verantwoord gokken"),
+        p("Hoewel BetsPlug zelf geen gokdienst is, erkent het platform dat sommige gebruikers de informatie mogelijk gebruiken in combinatie met gokactiviteiten. Daarom neemt BetsPlug de volgende maatregelen:"),
+        bullet("Verplichte disclaimer bij elke voorspelling"),
+        bullet("Duidelijke vermelding dat nauwkeurigheid niet gegarandeerd is"),
+        bullet("De boodschap \u201CResultaten uit het verleden bieden geen garantie voor de toekomst\u201D"),
+        bullet("Leeftijdsverificatie (18+) bij het afsluiten van een abonnement"),
+        bullet("Mogelijkheid tot zelfuitsluiting: gebruikers kunnen hun account volledig verwijderen"),
+
+        h2("5.3 Privacy en gegevensbescherming (AVG/GDPR)"),
+        p("BetsPlug verwerkt zo min mogelijk persoonsgegevens, in volledige overeenstemming met de Algemene Verordening Gegevensbescherming (AVG):"),
+        table2col([
+          ["Wat we bewaren", "Waarom"],
+          ["E-mailadres en gebruikersnaam", "Nodig om in te loggen en het account te beheren"],
+          ["Abonnementsstatus", "Om te bepalen welke content toegankelijk is"],
+          ["Betaalgegevens (creditcard, IBAN)", "Worden NIET door BetsPlug opgeslagen \u2014 Stripe verwerkt alle betalingen"],
+          ["Voorspellingsgeschiedenis", "Om het track record te tonen en de dienst te leveren"],
+        ]),
+        bullet("Recht op vergetelheid: u kunt uw account en alle gegevens laten verwijderen via de instellingen of een AVG-verzoek"),
+        bullet("Gegevensverwerking vindt plaats op Europese servers (Railway EU, Vercel EU)"),
+        bullet("Er vindt geen profilering of geautomatiseerde besluitvorming plaats die gebruikers raakt"),
+        explainBox("In gewoon Nederlands: BetsPlug weet uw e-mailadres en wat voor abonnement u heeft. Uw creditcardgegevens worden door Stripe verwerkt \u2014 BetsPlug ziet of bewaart deze nooit. U kunt op elk moment al uw gegevens laten verwijderen."),
+
+        h2("5.4 Intellectueel eigendom en licenties"),
+        p("Het voorspellingssysteem is volledig in eigen huis ontwikkeld. De data waarop het systeem draait, is gelicentieerd van professionele dataleveranciers:"),
+        bullet("API-Football (Pro-licentie): levert wedstrijddata, uitslagen, teamstatistieken"),
+        bullet("Football-Data.org: aanvullende competitiedata"),
+        bullet("The Odds API: levert bookmaker-odds van 40+ aanbieders"),
+        p("Alle data wordt gebruikt binnen de voorwaarden van de respectievelijke licenties."),
 
         // 6. Risico-informatie
         h1("6. Risico-informatie"),
-        p("Gebruikers en belanghebbenden dienen de volgende inherente beperkingen te begrijpen:"),
-        bullet("Voorspellingen zijn probabilistische schattingen op basis van historische patronen, geen zekerheden"),
-        bullet("Historische nauwkeurigheid (48,9% overall, 71,1% BOTD) biedt geen garantie voor toekomstige prestaties"),
-        bullet("Modellen kunnen onderpresteren tijdens atypische omstandigheden (bijv. pandemie, stakingen, regelwijzigingen)"),
-        bullet("Nauwkeurigheid per competitie varieert: top-6 Europese competities circa 50%, lagere competities circa 40%"),
-        bullet("Gebruikers dienen nooit geld in te zetten dat zij niet kunnen missen"),
-        bullet("BetsPlug aanvaardt geen aansprakelijkheid voor financiele verliezen door gebruik van haar voorspellingen"),
+        p("Het is essentieel dat gebruikers en belanghebbenden de beperkingen van het systeem begrijpen:"),
+        bullet("Voorspellingen zijn schattingen op basis van historische patronen \u2014 geen zekerheden. Voetbal is onvoorspelbaar en verrassingen zijn onvermijdelijk."),
+        bullet("Dat het systeem in het verleden 49% scoorde, betekent niet dat het in de toekomst hetzelfde zal doen. Omstandigheden veranderen."),
+        bullet("Het model kan onderpresteren bij ongewone situaties, zoals pandemie\u00EBn, stakingen, of drastische regelwijzigingen."),
+        bullet("De nauwkeurigheid verschilt per competitie: top-6 Europese competities scoren rond de 50%, terwijl kleinere competities rond de 40% scoren."),
+        bullet("Gebruik informatie van BetsPlug nooit als enige basis voor financiele beslissingen. Zet nooit geld in dat u niet kunt missen."),
+        bullet("BetsPlug aanvaardt geen enkele aansprakelijkheid voor financiele verliezen die ontstaan door het gebruik van haar voorspellingen."),
+        explainBox("Vergelijk het met een weersvoorspelling: 70% kans op regen betekent dat het in 3 van de 10 gevallen NIET regent. Zelfs de beste voorspelling is geen garantie. BetsPlug werkt op dezelfde manier \u2014 het geeft kansen, geen zekerheden."),
 
-        // 7. Auditspoor
-        h1("7. Auditspoor & Reproduceerbaarheid"),
-        p("Het platform onderhoudt een volledig auditspoor voor elke voorspelling:"),
-        bullet("Onveranderlijk voorspellingsrecord: tijdstempel, modelversie, 43-kenmerken snapshot, ruwe modeluitvoer"),
-        bullet("Evaluatierecords: koppelen voorspellingen aan daadwerkelijke wedstrijduitslagen met Brier score en log-loss"),
-        bullet("Volledige reproduceerbaarheid: bij identieke kenmerken produceert het model identieke uitvoer"),
-        bullet("Versiebeheer: alle modelwijzigingen gedocumenteerd in git-geschiedenis met commit-berichten"),
-        bullet("Databasemigraties: schemawijzigingen bijgehouden via Alembic met up/down omkeerbaarheid"),
+        // 7. Controleerbaarheid
+        h1("7. Controleerbaarheid & Naspeurbaarheid"),
+        p("Elke voorspelling die BetsPlug maakt, wordt permanent opgeslagen met alle achterliggende gegevens. Dit maakt het mogelijk om achteraf precies na te gaan hoe een voorspelling tot stand is gekomen:"),
+        bullet("Tijdstempel: wanneer de voorspelling is gemaakt (bewijs dat het v\u00F3\u00F3r de wedstrijd was)"),
+        bullet("Modelversie: welke versie van het systeem de voorspelling heeft gemaakt"),
+        bullet("Kenmerken-snapshot: alle 43 datapunten die op dat moment zijn gebruikt"),
+        bullet("Ruwe modeluitvoer: de exacte berekeningen van elk model"),
+        bullet("Evaluatierecord: de vergelijking met de daadwerkelijke wedstrijduitslag"),
+        p("Al deze gegevens zijn reproduceerbaar: als je dezelfde input geeft, krijg je dezelfde uitvoer. Alle wijzigingen aan het systeem worden bijgehouden in een versiebeheersysteem (git)."),
+        explainBox("Dit betekent dat een auditor of toezichthouder op elk moment kan verifi\u00EBren: (1) wanneer een voorspelling is gemaakt, (2) op basis van welke gegevens, (3) of die gegevens eerlijk waren, en (4) of de voorspelling correct was. Niets kan achteraf worden aangepast."),
 
         // 8. Contact
-        h1("8. Contact & Governance"),
+        h1("8. Contact & Organisatie"),
         table2col([
           ["Onderdeel", "Details"],
           ["Rechtspersoon", "BetsPlug B.V."],
           ["Website", "https://betsplug.com"],
-          ["Technisch contact", "Via contactpagina"],
-          ["Gegevensbescherming", "AVG-verzoeken via contactpagina"],
+          ["Technisch contact", "Via de contactpagina op de website"],
+          ["Privacyverzoeken", "AVG-verzoeken via de contactpagina"],
           ["Documentversie", "7.0 (april 2026)"],
         ]),
 
