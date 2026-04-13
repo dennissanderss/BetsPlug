@@ -1409,20 +1409,9 @@ export default function PredictionsPage() {
           </div>
         </div>
 
-        <div className="flex flex-col items-end gap-2">
-          {/* Model badge */}
-          <div className="flex items-center gap-2 rounded-full border border-blue-500/25 bg-blue-500/10 px-4 py-2">
-            <span className="h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
-            <span className="text-xs font-semibold text-blue-300">{t("pred.modelEnsemble")}</span>
-          </div>
-          {/* Last refresh */}
-          <div className="flex items-center gap-1.5 text-[10px] text-slate-600">
-            <RefreshCw className="h-3 w-3" />
-            <span>
-              {t("pred.autoRefresh")}{" "}
-              {lastRefresh.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}
-            </span>
-          </div>
+        <div className="flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2">
+          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-xs font-semibold text-emerald-300">{t("pred.liveUpdates")}</span>
         </div>
       </div>
 

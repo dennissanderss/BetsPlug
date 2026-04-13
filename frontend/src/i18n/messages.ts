@@ -1447,7 +1447,8 @@ const en = {
 
   /* ── Pred page ───────────────────────────────────── */
   "pred.title": "Predictions",
-  "pred.subtitle": "AI-powered match analysis and probability forecasting - next 7 days",
+  "pred.subtitle": "Our AI analyses upcoming matches and predicts the most likely outcome",
+  "pred.liveUpdates": "Live updates",
   "pred.modelEnsemble": "BetsPlug Pulse",
   "pred.autoRefresh": "Auto-refreshes every 60s · Last:",
   "pred.predicted": "Predicted",
@@ -3169,7 +3170,8 @@ const nl: Dictionary = {
 
   /* ── Pred page ───────────────────────────────────── */
   "pred.title": "Voorspellingen",
-  "pred.subtitle": "AI-gestuurde wedstrijdanalyse en kansberekening - komende 7 dagen",
+  "pred.subtitle": "Onze AI analyseert aankomende wedstrijden en voorspelt de meest waarschijnlijke uitslag",
+  "pred.liveUpdates": "Live updates",
   "pred.modelEnsemble": "BetsPlug Pulse",
   "pred.autoRefresh": "Ververst automatisch elke 60s · Laatst:",
   "pred.predicted": "Voorspeld",

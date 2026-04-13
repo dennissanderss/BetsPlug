@@ -297,36 +297,47 @@ async def get_bet_of_the_day(
             status_filter = None
         window_end = day_end
 
-    where_clauses = [
+    base_clauses = [
         Match.scheduled_at >= window_start,
         Match.scheduled_at <= window_end,
         Prediction.confidence >= BOTD_MIN_CONFIDENCE,
-        # Only serve genuinely pre-match predictions as BOTD
-        Prediction.prediction_source == "live",
     ]
     if status_filter is not None:
-        where_clauses.append(status_filter)
+        base_clauses.append(status_filter)
 
+    load_opts = [
+        joinedload(Prediction.match).joinedload(Match.home_team),
+        joinedload(Prediction.match).joinedload(Match.away_team),
+        joinedload(Prediction.match).joinedload(Match.league),
+        noload(Prediction.evaluation),
+        noload(Prediction.model_version),
+    ]
+
+    # Try live predictions first; fall back to any prediction if no live picks exist yet
     stmt = (
         select(Prediction)
         .join(Match, Match.id == Prediction.match_id)
-        .options(
-            joinedload(Prediction.match)
-            .joinedload(Match.home_team),
-            joinedload(Prediction.match)
-            .joinedload(Match.away_team),
-            joinedload(Prediction.match)
-            .joinedload(Match.league),
-            noload(Prediction.evaluation),
-            noload(Prediction.model_version),
-        )
-        .where(and_(*where_clauses))
+        .options(*load_opts)
+        .where(and_(*base_clauses, Prediction.prediction_source == "live"))
         .order_by(Prediction.confidence.desc())
         .limit(1)
     )
 
     result = await db.execute(stmt)
     prediction = result.unique().scalar_one_or_none()
+
+    # Fallback: if no live predictions exist yet, serve backtest predictions
+    if prediction is None:
+        stmt_fallback = (
+            select(Prediction)
+            .join(Match, Match.id == Prediction.match_id)
+            .options(*load_opts)
+            .where(and_(*base_clauses))
+            .order_by(Prediction.confidence.desc())
+            .limit(1)
+        )
+        result = await db.execute(stmt_fallback)
+        prediction = result.unique().scalar_one_or_none()
 
     if prediction is None:
         return BetOfTheDayResponse(available=False)
