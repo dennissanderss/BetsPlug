@@ -16,64 +16,83 @@ import {
   Trophy,
   Zap,
   Users,
+  type LucideIcon,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
+/** Map Lucide icon string names from Sanity to actual components. */
+const ICON_MAP: Record<string, LucideIcon> = {
+  Brain, Eye, RefreshCw, Scale, Sparkles, Zap, Target, LineChart, Users, Trophy,
+};
+
+/** Resolve an icon name from Sanity to a Lucide component, with a fallback. */
+function resolveIcon(name: string | undefined, fallback: LucideIcon): LucideIcon {
+  if (!name) return fallback;
+  return ICON_MAP[name] ?? fallback;
+}
+
+/** Serializable about data passed from the server component. */
+interface SanityAboutData {
+  founders: { name: string; initial: string; role: string; bio: string }[];
+  stats: { value: string; label: string }[];
+  values: { title: string; description: string; icon: string }[];
+}
+
+interface AboutContentProps {
+  faqSlot?: React.ReactNode;
+  sanityAbout?: SanityAboutData;
+}
+
 /**
  * About Us page — BetsPlug's story, mission, principles and founders.
  * Dark/green design language, motion-driven reveals, SEO-optimized copy.
  */
-export function AboutContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
+export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
 
-  const stats = [
-    { value: t("about.stat1Value"), label: t("about.stat1Label"), icon: Zap },
-    { value: t("about.stat2Value"), label: t("about.stat2Label"), icon: Target },
-    { value: t("about.stat3Value"), label: t("about.stat3Label"), icon: LineChart },
-    { value: t("about.stat4Value"), label: t("about.stat4Label"), icon: Users },
-  ];
+  const defaultStatIcons: LucideIcon[] = [Zap, Target, LineChart, Users];
+  const stats = sanityAbout?.stats?.length
+    ? sanityAbout.stats.map((s, i) => ({
+        value: s.value,
+        label: s.label,
+        icon: defaultStatIcons[i] ?? Zap,
+      }))
+    : [
+        { value: t("about.stat1Value"), label: t("about.stat1Label"), icon: Zap },
+        { value: t("about.stat2Value"), label: t("about.stat2Label"), icon: Target },
+        { value: t("about.stat3Value"), label: t("about.stat3Label"), icon: LineChart },
+        { value: t("about.stat4Value"), label: t("about.stat4Label"), icon: Users },
+      ];
 
-  const values = [
-    {
-      icon: Brain,
-      title: t("about.value1Title"),
-      desc: t("about.value1Desc"),
-    },
-    {
-      icon: Eye,
-      title: t("about.value2Title"),
-      desc: t("about.value2Desc"),
-    },
-    {
-      icon: RefreshCw,
-      title: t("about.value3Title"),
-      desc: t("about.value3Desc"),
-    },
-    {
-      icon: Scale,
-      title: t("about.value4Title"),
-      desc: t("about.value4Desc"),
-    },
-  ];
+  const defaultValueIcons: LucideIcon[] = [Brain, Eye, RefreshCw, Scale];
+  const values = sanityAbout?.values?.length
+    ? sanityAbout.values.map((v, i) => ({
+        icon: resolveIcon(v.icon, defaultValueIcons[i] ?? Brain),
+        title: v.title,
+        desc: v.description,
+      }))
+    : [
+        { icon: Brain, title: t("about.value1Title"), desc: t("about.value1Desc") },
+        { icon: Eye, title: t("about.value2Title"), desc: t("about.value2Desc") },
+        { icon: RefreshCw, title: t("about.value3Title"), desc: t("about.value3Desc") },
+        { icon: Scale, title: t("about.value4Title"), desc: t("about.value4Desc") },
+      ];
 
-  const founders = [
-    {
-      name: t("about.founder1Name"),
-      role: t("about.founder1Role"),
-      bio: t("about.founder1Bio"),
-      initial: "C",
-    },
-    {
-      name: t("about.founder2Name"),
-      role: t("about.founder2Role"),
-      bio: t("about.founder2Bio"),
-      initial: "D",
-    },
-  ];
+  const founders = sanityAbout?.founders?.length
+    ? sanityAbout.founders.map((f) => ({
+        name: f.name,
+        role: f.role,
+        bio: f.bio,
+        initial: f.initial || f.name.charAt(0).toUpperCase(),
+      }))
+    : [
+        { name: t("about.founder1Name"), role: t("about.founder1Role"), bio: t("about.founder1Bio"), initial: "C" },
+        { name: t("about.founder2Name"), role: t("about.founder2Role"), bio: t("about.founder2Bio"), initial: "D" },
+      ];
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#080b14] text-white">

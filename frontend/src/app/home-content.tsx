@@ -33,6 +33,8 @@ import { TopBar } from "@/components/ui/top-bar";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { Article } from "@/data/articles";
 import type { Testimonial } from "@/components/ui/testimonials-columns";
+import type { ComparisonRow } from "@/components/ui/comparison-table";
+import { getLocaleValue } from "@/lib/sanity-data";
 
 const FreePredictions = dynamic(() => import("@/components/ui/free-predictions").then(m => m.FreePredictions), { ssr: false });
 const BetsPlugFooter = dynamic(() => import("@/components/ui/betsplug-footer").then(m => m.BetsPlugFooter), { ssr: true });
@@ -465,11 +467,23 @@ function DashboardPreviewSection() {
 interface HomeContentProps {
   articles: Article[];
   testimonials: Testimonial[];
+  homepage?: any;
 }
 
-export function HomeContent({ articles, testimonials }: HomeContentProps) {
-  const { t } = useTranslations();
+export function HomeContent({ articles, testimonials, homepage }: HomeContentProps) {
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
+
+  // Resolve Sanity comparison rows to current locale
+  const comparisonRows: ComparisonRow[] | undefined = homepage?.comparisonRows?.length
+    ? homepage.comparisonRows.map((r: any) => ({
+        feature: getLocaleValue(r.feature, locale),
+        betsplug: r.betsplug ?? true,
+        freeTools: r.freeTools ?? false,
+        bookmakers: r.bookmakers ?? false,
+        note: getLocaleValue(r.note, locale) || undefined,
+      }))
+    : undefined;
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const featured = useFeaturedMatch();
@@ -1170,7 +1184,7 @@ export function HomeContent({ articles, testimonials }: HomeContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           COMPARISON TABLE — BetsPlug vs competitors (funnel: differentiation)
          ═══════════════════════════════════════════════════════════════════ */}
-      <ComparisonTable />
+      <ComparisonTable rows={comparisonRows} />
 
       {/* ═══════════════════════════════════════════════════════════════════
           DASHBOARD PREVIEW — show off the product inside a browser mock

@@ -10,6 +10,9 @@ import { PAGE_META } from "@/data/page-meta";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { FaqSection } from "@/components/seo/faq-section";
 import { translate } from "@/i18n/messages";
+import { fetchAboutPage, getLocaleValue } from "@/lib/sanity-data";
+
+export const revalidate = 60;
 
 const ABOUT_FAQ_KEYS = [
   { q: "faq.about.q1", a: "faq.about.a1" },
@@ -40,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
   const locale = getServerLocale();
   const faqItems = getLocalizedFaq(ABOUT_FAQ_KEYS);
   const breadcrumbs = getLocalizedBreadcrumbs([
@@ -48,10 +51,34 @@ export default function AboutPage() {
     { labelKey: "bc.aboutUs", canonicalPath: "/about-us" },
   ]);
 
+  const aboutData = await fetchAboutPage();
+
+  // Pre-resolve Sanity data to serializable objects for the client component
+  const sanityAbout = aboutData
+    ? {
+        founders: (aboutData.founders ?? []).map((f: any) => ({
+          name: f.name ?? "",
+          initial: f.initial ?? "",
+          role: getLocaleValue(f.role, locale),
+          bio: getLocaleValue(f.bio, locale),
+        })),
+        stats: (aboutData.stats ?? []).map((s: any) => ({
+          value: s.value ?? "",
+          label: getLocaleValue(s.label, locale),
+        })),
+        values: (aboutData.values ?? []).map((v: any) => ({
+          title: getLocaleValue(v.title, locale),
+          description: getLocaleValue(v.description, locale),
+          icon: v.icon ?? "",
+        })),
+      }
+    : undefined;
+
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
       <AboutContent
+        sanityAbout={sanityAbout}
         faqSlot={
           <FaqSection
             title={translate(locale, "faqTitle.about" as any)}

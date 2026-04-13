@@ -14,7 +14,25 @@ type Row = {
   note?: string;
 };
 
-const rows: Row[] = [
+/** Props accepted from Sanity (locale-resolved by the parent). */
+export interface ComparisonRow {
+  feature: string;
+  betsplug: boolean;
+  freeTools: boolean;
+  bookmakers: boolean;
+  note?: string;
+}
+
+/** Convert a Sanity ComparisonRow to the internal Row format. */
+function toRow(cr: ComparisonRow): Row {
+  const betsplug: Cell = cr.betsplug ? "yes" : "no";
+  // "others" column: both true → yes, one true → partial, none → no
+  const othersTrue = [cr.freeTools, cr.bookmakers].filter(Boolean).length;
+  const others: Cell = othersTrue === 2 ? "yes" : othersTrue === 1 ? "partial" : "no";
+  return { feature: cr.feature, betsplug, others, note: cr.note };
+}
+
+const defaultRows: Row[] = [
   {
     feature: "BetsPlug Pulse AI predictions",
     betsplug: "yes",
@@ -59,16 +77,6 @@ const rows: Row[] = [
     others: "partial",
   },
 ];
-
-/* ── Score calculation (partials count as 0.5) ─────────────────── */
-const betsplugScore = rows.reduce(
-  (sum, r) => sum + (r.betsplug === "yes" ? 1 : r.betsplug === "partial" ? 0.5 : 0),
-  0
-);
-const competitorsScore = rows.reduce(
-  (sum, r) => sum + (r.others === "yes" ? 1 : r.others === "partial" ? 0.5 : 0),
-  0
-);
 
 const fmtScore = (n: number) =>
   Number.isInteger(n) ? `${n}` : n.toString().replace(".", ",");
@@ -118,7 +126,18 @@ function CompetitorCell({ value }: { value: Cell }) {
   );
 }
 
-export function ComparisonTable() {
+export function ComparisonTable({ rows: rowsProp }: { rows?: ComparisonRow[] } = {}) {
+  const rows = rowsProp?.length ? rowsProp.map(toRow) : defaultRows;
+
+  /* ── Score calculation (partials count as 0.5) ─────────────────── */
+  const betsplugScore = rows.reduce(
+    (sum, r) => sum + (r.betsplug === "yes" ? 1 : r.betsplug === "partial" ? 0.5 : 0),
+    0
+  );
+  const competitorsScore = rows.reduce(
+    (sum, r) => sum + (r.others === "yes" ? 1 : r.others === "partial" ? 0.5 : 0),
+    0
+  );
   const { t } = useTranslations();
   return (
     <section

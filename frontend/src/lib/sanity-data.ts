@@ -411,6 +411,38 @@ export async function fetchPageMeta(
   }
 }
 
+// ── Page Singletons ───────────────────────────────────────
+
+/** Generic singleton fetcher — returns the raw document or null. */
+async function fetchSingleton<T = any>(type: string): Promise<T | null> {
+  try {
+    const raw = await client.fetch<T | null>(`*[_type == "${type}"][0]`);
+    return raw ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchHomepage() { return fetchSingleton("homepage"); }
+export async function fetchPricingConfig() { return fetchSingleton("pricingConfig"); }
+export async function fetchAboutPage() { return fetchSingleton("aboutPage"); }
+export async function fetchThankYouPage() { return fetchSingleton("thankYouPage"); }
+export async function fetchHowItWorksPage() { return fetchSingleton("howItWorksPage"); }
+export async function fetchContactPage() { return fetchSingleton("contactPage"); }
+export async function fetchB2bPage() { return fetchSingleton("b2bPage"); }
+export async function fetchWelcomePage() { return fetchSingleton("welcomePage"); }
+export async function fetchCheckoutPage() { return fetchSingleton("checkoutPage"); }
+export async function fetchTrackRecordPage() { return fetchSingleton("trackRecordPage"); }
+
+/** Helper: get a locale value from a Sanity locale field, with i18n key fallback. */
+export function getLocaleValue(
+  field: Record<string, unknown> | undefined,
+  locale: string,
+): string {
+  if (!field) return "";
+  return (field[locale] as string) ?? (field.en as string) ?? "";
+}
+
 // ── Sitemap helpers ───────────────────────────────────────
 
 export async function fetchAllSlugsForSitemap(): Promise<{
