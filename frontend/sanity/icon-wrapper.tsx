@@ -11,9 +11,9 @@ import React from "react";
  * Without this wrapper lucide icons render at a fixed 24×24 which
  * gets squashed to ~9×9 by the sidebar container.
  */
-export function sanityIcon(Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>) {
+export function sanityIcon(Icon: React.ComponentType<any>) {
   const Wrapped = () => (
-    <Icon width="1em" height="1em" data-sanity-icon="custom" />
+    <Icon size="1em" data-sanity-icon="custom" strokeWidth={2} />
   );
   Wrapped.displayName = `SanityIcon(${Icon.displayName || Icon.name || "Icon"})`;
   return Wrapped;
