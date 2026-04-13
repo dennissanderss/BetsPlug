@@ -32,8 +32,8 @@ const en = {
 
   /* Hero */
   "hero.badge": "AI predictions for every match",
-  "hero.titleLine1": "Know which team wins",
-  "hero.titleLine2": "before kickoff.",
+  "hero.titleLine1": "AI Football Predictions —",
+  "hero.titleLine2": "Know Before You Bet",
   "hero.titleLine3": "",
   "hero.subtitle":
     "BetsPlug uses AI to calculate win probabilities for 50+ daily football matches across 30+ leagues. See exactly how likely each outcome is — then decide for yourself.",
@@ -3790,8 +3790,8 @@ const nl: Dictionary = {
   "faq.how.q6": "Is BetsPlug gokadvies?",
   "faq.how.a6": "Nee. BetsPlug biedt datagedreven analyses en kansschattingen. Het is geen gokadvies. Je bent altijd zelf verantwoordelijk voor je beslissingen. Gok nooit met geld dat je niet kunt missen.",
   "hero.badge": "AI-voorspellingen voor elke wedstrijd",
-  "hero.titleLine1": "Weet welk team wint",
-  "hero.titleLine2": "vóór de aftrap.",
+  "hero.titleLine1": "AI-voetbalvoorspellingen —",
+  "hero.titleLine2": "Weet het voordat u gokt",
   "hero.titleLine3": "",
   "hero.subtitle": "BetsPlug gebruikt AI om de winstkansen te berekenen voor meer dan 50 dagelijkse voetbalwedstrijden in meer dan 30 competities. Bekijk precies hoe waarschijnlijk elke uitkomst is en beslis vervolgens zelf.",
   "hero.activeUsers": "actieve gebruikers",

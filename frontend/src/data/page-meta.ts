@@ -156,7 +156,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       ogDescription:
         "Prediksi sepak bola AI dan wawasan taruhan berbasis data dari tim riset BetsPlug.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── ABOUT US ─────────────────────── */
   "/about-us": {
@@ -224,7 +225,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       ogDescription:
         "Dua engineer. Lebih dari 20 tahun pengalaman TI gabungan. Satu obsesi: mengubah data sepak bola menjadi keunggulan terukur.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── PRIVACY ──────────────────────── */
   "/privacy": {
@@ -292,7 +294,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       ogDescription:
         "Bagaimana BetsPlug mengumpulkan, menggunakan, dan melindungi data pribadi Anda. Sesuai GDPR.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── TERMS ────────────────────────── */
   "/terms": {
@@ -360,7 +363,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       ogDescription:
         "Syarat dan ketentuan yang berlaku saat Anda menggunakan BetsPlug. Baca sebelum berlangganan.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── COOKIES ──────────────────────── */
   "/cookies": {
@@ -428,7 +432,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       ogDescription:
         "Cookie apa yang digunakan BetsPlug dan bagaimana Anda dapat mengelola preferensi Anda.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── HOW IT WORKS ─────────────────── */
   "/how-it-works": {
@@ -496,7 +501,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       ogDescription:
         "14 sumber data. 1.200+ fitur. 4 model independen. Setiap prediksi memiliki stempel waktu dan dapat diverifikasi publik.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── TRACK RECORD ─────────────────── */
   "/track-record": {
@@ -564,7 +570,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       ogDescription:
         "58,3% tingkat akurasi. +14,6% ROI. 24.180 prediksi dinilai. Setiap prediksi memiliki stempel waktu di register publik.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── LOGIN ────────────────────────── */
   "/login": {
@@ -608,7 +615,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       description:
         "Masuk ke akun BetsPlug Anda untuk melihat prediksi sepak bola AI hari ini, melacak ROI, dan mengelola langganan analisis sepak bola Anda.",
     },
-  },
+  
+},
 
   /* ─────────────────────── MATCH PREDICTIONS ────────────────── */
   "/match-predictions": {
@@ -676,7 +684,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       ogDescription:
         "Pratinjau 3 prediksi sepak bola AI gratis. Buka sisanya dengan uji coba.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── LEARN ────────────────────────── */
   "/learn": {
@@ -744,7 +753,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       ogDescription:
         "Enam panduan mendalam tentang value betting, xG, Elo, Kelly, Poisson, dan manajemen bankroll.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── BET TYPES ────────────────────── */
   "/bet-types": {
@@ -812,7 +822,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       ogDescription:
         "Pembahasan mendalam tentang BTTS, Over 2.5, Double Chance, Draw No Bet, dan pasar sepak bola populer lainnya.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── WELCOME ──────────────────────── */
   "/welcome": {
@@ -856,7 +867,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       description:
         "Keanggotaan BetsPlug Anda aktif. Masuk untuk melihat prediksi sepak bola AI hari ini, melacak ROI, dan mulai menang lebih cerdas dengan analisis sepak bola kami.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── B2B ────────────────────────────── */
   "/b2b": {
@@ -900,7 +912,8 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       description:
         "Bermitra dengan BetsPlug untuk prediksi sepak bola AI dan analisis sepak bola. Lisensi data, solusi white-label, dan kemitraan afiliasi untuk bisnis.",
     },
-  },
+  
+},
 
   /* ─────────────────────────── CHECKOUT ─────────────────────── */
   "/checkout": {
@@ -944,5 +957,6 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       description:
         "Selesaikan langganan BetsPlug Anda dalam tiga langkah cepat. Dapatkan prediksi sepak bola AI dan analisis sepak bola dengan jaminan uang kembali 14 hari.",
     },
-  },
+  
+},
 };
