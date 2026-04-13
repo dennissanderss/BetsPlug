@@ -21,6 +21,11 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { getLocaleValue } from "@/lib/sanity-data";
+
+interface HowItWorksContentProps {
+  howItWorksPage?: any;
+}
 
 /**
  * How It Works — simplified 3-step explainer for BetsPlug.
@@ -28,19 +33,26 @@ import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
  * Step 2: Get our best pick daily
  * Step 3: Track everything transparently
  */
-export function HowItWorksContent() {
-  const { t } = useTranslations();
+export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
 
-  const heroStats = [
+  const defaultStats = [
     { value: t("hiw.heroStat1Value"), label: t("hiw.heroStat1Label") },
     { value: t("hiw.heroStat2Value"), label: t("hiw.heroStat2Label") },
     { value: t("hiw.heroStat3Value"), label: t("hiw.heroStat3Label") },
     { value: t("hiw.heroStat4Value"), label: t("hiw.heroStat4Label") },
   ];
 
-  const faqs = [
+  const heroStats = howItWorksPage?.stats?.length
+    ? howItWorksPage.stats.map((s: any, i: number) => ({
+        value: s.value ?? defaultStats[i]?.value ?? "",
+        label: getLocaleValue(s.label, locale) || defaultStats[i]?.label || "",
+      }))
+    : defaultStats;
+
+  const defaultFaqs = [
     { q: t("hiw.faq1Q"), a: t("hiw.faq1A") },
     { q: t("hiw.faq2Q"), a: t("hiw.faq2A") },
     { q: t("hiw.faq3Q"), a: t("hiw.faq3A") },
@@ -48,6 +60,13 @@ export function HowItWorksContent() {
     { q: t("hiw.faq5Q"), a: t("hiw.faq5A") },
     { q: t("hiw.faq6Q"), a: t("hiw.faq6A") },
   ];
+
+  const faqs = howItWorksPage?.faqs?.length
+    ? howItWorksPage.faqs.map((f: any) => ({
+        q: getLocaleValue(f.question, locale) || "",
+        a: getLocaleValue(f.answer, locale) || "",
+      }))
+    : defaultFaqs;
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#080b14] text-white">
@@ -108,7 +127,7 @@ export function HowItWorksContent() {
             transition={{ duration: 0.7, delay: 0.15 }}
             className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4"
           >
-            {heroStats.map((s) => (
+            {heroStats.map((s: { value: string; label: string }) => (
               <div
                 key={s.label}
                 className="rounded-2xl border border-white/[0.08] bg-white/[0.03] px-4 py-4 backdrop-blur-sm"
@@ -300,7 +319,7 @@ export function HowItWorksContent() {
           </motion.div>
 
           <div className="space-y-4">
-            {faqs.map((f) => (
+            {faqs.map((f: { q: string; a: string }) => (
               <motion.details
                 key={f.q}
                 initial={{ opacity: 0, y: 15 }}

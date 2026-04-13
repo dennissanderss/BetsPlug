@@ -34,6 +34,7 @@ import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { useAuth } from "@/lib/auth";
+import { getLocaleValue } from "@/lib/sanity-data";
 
 /**
  * WelcomeContent — post-registration / email-verification welcome.
@@ -55,8 +56,12 @@ import { useAuth } from "@/lib/auth";
  * reveals, SiteNav + BetsPlugFooter) so the brand feels
  * consistent from landing → register → welcome.
  */
-export function WelcomeContent() {
-  const { t } = useTranslations();
+interface WelcomeContentProps {
+  welcomePage?: any;
+}
+
+export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const { user } = useAuth();
 
@@ -100,23 +105,20 @@ export function WelcomeContent() {
     },
   ];
 
-  const stats = [
-    {
-      icon: Users,
-      value: "12,400+",
-      label: t("welcome.statMembers"),
-    },
-    {
-      icon: TrendingUp,
-      value: "+14.6%",
-      label: t("welcome.statRoi"),
-    },
-    {
-      icon: Flame,
-      value: "380+",
-      label: t("welcome.statPicks"),
-    },
+  const iconMap: Record<string, typeof Users> = { Users, TrendingUp, Flame };
+  const defaultStats = [
+    { icon: Users, value: "12,400+", label: t("welcome.statMembers") },
+    { icon: TrendingUp, value: "+14.6%", label: t("welcome.statRoi") },
+    { icon: Flame, value: "380+", label: t("welcome.statPicks") },
   ];
+
+  const stats = welcomePage?.stats?.length
+    ? welcomePage.stats.map((s: any, i: number) => ({
+        icon: iconMap[s.icon] ?? defaultStats[i]?.icon ?? Users,
+        value: s.value ?? defaultStats[i]?.value ?? "",
+        label: getLocaleValue(s.label, locale) || defaultStats[i]?.label || "",
+      }))
+    : defaultStats;
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#060912] text-white">
@@ -299,7 +301,7 @@ export function WelcomeContent() {
         {/* ── Stats strip ── */}
         <section className="mx-auto mt-24 max-w-5xl px-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {stats.map((s, i) => (
+            {stats.map((s: { icon: typeof Users; value: string; label: string }, i: number) => (
               <motion.div
                 key={s.label}
                 initial={{ opacity: 0, y: 20 }}

@@ -8,6 +8,9 @@ import {
 } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
+import { fetchHowItWorksPage } from "@/lib/sanity-data";
+
+export const revalidate = 60;
 
 const HOW_FAQ_KEYS = [
   { q: "faq.how.q1", a: "faq.how.a1" },
@@ -38,7 +41,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function HowItWorksPage() {
+export default async function HowItWorksPage() {
+  const [howItWorksPage] = await Promise.all([fetchHowItWorksPage()]);
   const faqItems = getLocalizedFaq(HOW_FAQ_KEYS);
   const breadcrumbs = getLocalizedBreadcrumbs([
     { labelKey: "bc.home", canonicalPath: "/" },
@@ -49,7 +53,7 @@ export default function HowItWorksPage() {
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
       <FaqJsonLd items={faqItems} />
-      <HowItWorksContent />
+      <HowItWorksContent howItWorksPage={howItWorksPage} />
     </>
   );
 }

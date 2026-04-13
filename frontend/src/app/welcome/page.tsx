@@ -3,6 +3,9 @@ import { Suspense } from "react";
 import { WelcomeContent } from "./welcome-content";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
+import { fetchWelcomePage } from "@/lib/sanity-data";
+
+export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
@@ -23,10 +26,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function WelcomePage() {
+export default async function WelcomePage() {
+  const [welcomePage] = await Promise.all([fetchWelcomePage()]);
+
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#060912]" />}>
-      <WelcomeContent />
+      <WelcomeContent welcomePage={welcomePage} />
     </Suspense>
   );
 }

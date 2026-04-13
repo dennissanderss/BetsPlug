@@ -22,13 +22,18 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { getLocaleValue } from "@/lib/sanity-data";
+
+interface B2BContentProps {
+  b2bPage?: any;
+}
 
 /**
  * B2B Partnerships page — premium landing page for business collaborations.
  * Dark/green design language, motion-driven reveals, professional tone.
  */
-export function B2BContent() {
-  const { t } = useTranslations();
+export function B2BContent({ b2bPage }: B2BContentProps) {
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
 
@@ -55,28 +60,21 @@ export function B2BContent() {
     },
   ];
 
-  const usps = [
-    {
-      value: "4",
-      label: t("b2b.usp1"),
-      icon: Brain,
-    },
-    {
-      value: "15+",
-      label: t("b2b.usp2"),
-      icon: Globe,
-    },
-    {
-      value: "1,500+",
-      label: t("b2b.usp3"),
-      icon: Users,
-    },
-    {
-      value: "100%",
-      label: t("b2b.usp4"),
-      icon: ShieldCheck,
-    },
+  const iconMap: Record<string, typeof Brain> = { Brain, Globe, Users, ShieldCheck };
+  const defaultUsps = [
+    { value: "4", label: t("b2b.usp1"), icon: Brain },
+    { value: "15+", label: t("b2b.usp2"), icon: Globe },
+    { value: "1,500+", label: t("b2b.usp3"), icon: Users },
+    { value: "100%", label: t("b2b.usp4"), icon: ShieldCheck },
   ];
+
+  const usps = b2bPage?.usps?.length
+    ? b2bPage.usps.map((u: any, i: number) => ({
+        value: u.value ?? defaultUsps[i]?.value ?? "",
+        label: getLocaleValue(u.label, locale) || defaultUsps[i]?.label || "",
+        icon: iconMap[u.icon] ?? defaultUsps[i]?.icon ?? Brain,
+      }))
+    : defaultUsps;
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#080b14] text-white">
@@ -239,7 +237,7 @@ export function B2BContent() {
           </motion.div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {usps.map((stat, i) => {
+            {usps.map((stat: { value: string; label: string; icon: typeof Brain }, i: number) => {
               const Icon = stat.icon;
               return (
                 <motion.div

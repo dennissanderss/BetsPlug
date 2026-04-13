@@ -1,8 +1,12 @@
 import { ContactContent } from "./contact-content";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { getLocalizedBreadcrumbs } from "@/lib/seo-helpers";
+import { fetchContactPage } from "@/lib/sanity-data";
 
-export default function ContactPage() {
+export const revalidate = 60;
+
+export default async function ContactPage() {
+  const [contactPage] = await Promise.all([fetchContactPage()]);
   const breadcrumbs = getLocalizedBreadcrumbs([
     { labelKey: "bc.home", canonicalPath: "/" },
     { labelKey: "bc.contact", canonicalPath: "/contact" },
@@ -11,7 +15,7 @@ export default function ContactPage() {
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
-      <ContactContent />
+      <ContactContent contactPage={contactPage} />
     </>
   );
 }

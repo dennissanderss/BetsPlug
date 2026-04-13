@@ -10,6 +10,9 @@ import { PAGE_META } from "@/data/page-meta";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { FaqSection } from "@/components/seo/faq-section";
 import { translate } from "@/i18n/messages";
+import { fetchTrackRecordPage } from "@/lib/sanity-data";
+
+export const revalidate = 60;
 
 const TRACK_FAQ_KEYS = [
   { q: "faq.track.q1", a: "faq.track.a1" },
@@ -40,7 +43,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function TrackRecordPage() {
+export default async function TrackRecordPage() {
+  const [trackRecordPage] = await Promise.all([fetchTrackRecordPage()]);
   const locale = getServerLocale();
   const faqItems = getLocalizedFaq(TRACK_FAQ_KEYS);
   const breadcrumbs = getLocalizedBreadcrumbs([
@@ -52,6 +56,7 @@ export default function TrackRecordPage() {
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
       <TrackRecordContent
+        trackRecordPage={trackRecordPage}
         faqSlot={
           <FaqSection
             title={translate(locale, "faqTitle.trackRecord" as any)}

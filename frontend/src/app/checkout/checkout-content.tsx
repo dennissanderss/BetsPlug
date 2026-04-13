@@ -217,7 +217,11 @@ const formatEUR = (n: number) =>
   });
 
 /* ── Main content ───────────────────────────────────────────── */
-export function CheckoutContent() {
+interface CheckoutContentProps {
+  checkoutPage?: any;
+}
+
+export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const params = useSearchParams();

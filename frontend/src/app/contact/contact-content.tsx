@@ -20,12 +20,17 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { SiteNav } from "@/components/ui/site-nav";
 import { AiAssistant } from "@/components/ui/ai-assistant";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { getLocaleValue } from "@/lib/sanity-data";
 
 type FaqItem = { q: string; a: string };
 type FaqGroup = { label: string; icon: typeof BookOpen; items: FaqItem[] };
 
-export function ContactContent() {
-  const { t } = useTranslations();
+interface ContactContentProps {
+  contactPage?: any;
+}
+
+export function ContactContent({ contactPage }: ContactContentProps) {
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const [chatOpen, setChatOpen] = useState(false);
   const [openQ, setOpenQ] = useState<string | null>(null);
@@ -60,7 +65,7 @@ export function ContactContent() {
     },
   ];
 
-  const faqGroups: FaqGroup[] = [
+  const defaultFaqGroups: FaqGroup[] = [
     {
       label: t("contact.faqGroup1"),
       icon: BookOpen,
@@ -80,6 +85,20 @@ export function ContactContent() {
       ],
     },
   ];
+
+  const faqIconMap: Record<string, typeof BookOpen> = { BookOpen, CreditCard };
+  const faqGroups: FaqGroup[] = contactPage?.faqGroups?.length
+    ? contactPage.faqGroups.map((g: any, i: number) => ({
+        label: getLocaleValue(g.label, locale) || defaultFaqGroups[i]?.label || "",
+        icon: faqIconMap[g.icon] ?? defaultFaqGroups[i]?.icon ?? BookOpen,
+        items: g.items?.length
+          ? g.items.map((item: any) => ({
+              q: getLocaleValue(item.question, locale) || "",
+              a: getLocaleValue(item.answer, locale) || "",
+            }))
+          : defaultFaqGroups[i]?.items ?? [],
+      }))
+    : defaultFaqGroups;
 
   // Simple fuzzy filter for the search box
   const normalized = query.trim().toLowerCase();

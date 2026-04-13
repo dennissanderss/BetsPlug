@@ -121,7 +121,7 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
 // Shows off the real product inside a stylized browser mock — copy on the
 // left, mock on the right. Purely presentational: no data fetching.
 
-function DashboardPreviewSection() {
+function DashboardPreviewSection({ sanityAccuracyBars }: { sanityAccuracyBars?: { label: string; value: number }[] }) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
 
@@ -185,7 +185,7 @@ function DashboardPreviewSection() {
     },
   ];
 
-  const accuracyBars = [
+  const accuracyBars = sanityAccuracyBars?.length ? sanityAccuracyBars : [
     { label: "Premier", value: 58 },
     { label: "La Liga", value: 54 },
     { label: "Bundes.", value: 52 },
@@ -468,9 +468,10 @@ interface HomeContentProps {
   articles: Article[];
   testimonials: Testimonial[];
   homepage?: any;
+  pricingConfig?: any;
 }
 
-export function HomeContent({ articles, testimonials, homepage }: HomeContentProps) {
+export function HomeContent({ articles, testimonials, homepage, pricingConfig }: HomeContentProps) {
   const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
 
@@ -1064,11 +1065,17 @@ export function HomeContent({ articles, testimonials, homepage }: HomeContentPro
 
                 {/* Bottom metrics */}
                 <div className="mt-4 grid grid-cols-3 gap-2 border-t border-white/5 pt-4">
-                  {[
-                    { label: t("track.metricPredictions"), value: "1,284" },
-                    { label: t("track.metricModels"), value: "4" },
-                    { label: t("track.metricLeagues"), value: "15+" },
-                  ].map((s) => (
+                  {(homepage?.trackRecordStats?.length
+                    ? homepage.trackRecordStats.map((s: any) => ({
+                        label: getLocaleValue(s.label, locale) || s.label?.en || "",
+                        value: s.value ?? "",
+                      }))
+                    : [
+                        { label: t("track.metricPredictions"), value: "1,284" },
+                        { label: t("track.metricModels"), value: "4" },
+                        { label: t("track.metricLeagues"), value: "15+" },
+                      ]
+                  ).map((s: { label: string; value: string }) => (
                     <div key={s.label} className="text-center">
                       <p className="text-lg font-extrabold text-white">{s.value}</p>
                       <p className="text-[10px] uppercase text-slate-500">{s.label}</p>
@@ -1161,14 +1168,25 @@ export function HomeContent({ articles, testimonials, homepage }: HomeContentPro
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { icon: Zap, title: t("features.f1Title"), desc: t("features.f1Desc") },
-              { icon: Brain, title: t("features.f2Title"), desc: t("features.f2Desc") },
-              { icon: LineChart, title: t("features.f3Title"), desc: t("features.f3Desc") },
-              { icon: Shield, title: t("features.f4Title"), desc: t("features.f4Desc") },
-              { icon: Star, title: t("features.f5Title"), desc: t("features.f5Desc") },
-              { icon: Users, title: t("features.f6Title"), desc: t("features.f6Desc") },
-            ].map(({ icon: Icon, title, desc }) => (
+            {(() => {
+              const iconMap: Record<string, typeof Zap> = { Zap, Brain, LineChart, Shield, Star, Users };
+              const defaultFeatures = [
+                { icon: Zap, title: t("features.f1Title"), desc: t("features.f1Desc") },
+                { icon: Brain, title: t("features.f2Title"), desc: t("features.f2Desc") },
+                { icon: LineChart, title: t("features.f3Title"), desc: t("features.f3Desc") },
+                { icon: Shield, title: t("features.f4Title"), desc: t("features.f4Desc") },
+                { icon: Star, title: t("features.f5Title"), desc: t("features.f5Desc") },
+                { icon: Users, title: t("features.f6Title"), desc: t("features.f6Desc") },
+              ];
+              if (homepage?.featuresGrid?.length) {
+                return homepage.featuresGrid.map((f: any, i: number) => ({
+                  icon: iconMap[f.icon] ?? defaultFeatures[i]?.icon ?? Zap,
+                  title: getLocaleValue(f.title, locale) || defaultFeatures[i]?.title || "",
+                  desc: getLocaleValue(f.description, locale) || defaultFeatures[i]?.desc || "",
+                }));
+              }
+              return defaultFeatures;
+            })().map(({ icon: Icon, title, desc }: { icon: typeof Zap; title: string; desc: string }) => (
               <div key={title} className="glass-card-hover group p-6">
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/10 transition-all group-hover:bg-green-500/20">
                   <Icon className="h-5 w-5 text-green-400" />
@@ -1189,7 +1207,16 @@ export function HomeContent({ articles, testimonials, homepage }: HomeContentPro
       {/* ═══════════════════════════════════════════════════════════════════
           DASHBOARD PREVIEW — show off the product inside a browser mock
          ═══════════════════════════════════════════════════════════════════ */}
-      <DashboardPreviewSection />
+      <DashboardPreviewSection
+        sanityAccuracyBars={
+          homepage?.accuracyBars?.length
+            ? homepage.accuracyBars.map((b: any) => ({
+                label: getLocaleValue(b.label, locale) || b.label?.en || "",
+                value: b.value ?? 50,
+              }))
+            : undefined
+        }
+      />
 
       {/* ═══════════════════════════════════════════════════════════════════
           TESTIMONIALS
@@ -1199,7 +1226,7 @@ export function HomeContent({ articles, testimonials, homepage }: HomeContentPro
       {/* ═══════════════════════════════════════════════════════════════════
           PRICING — plans + lifetime Platinum deal
          ═══════════════════════════════════════════════════════════════════ */}
-      <PricingSection />
+      <PricingSection pricingConfig={pricingConfig} />
 
       {/* ═══════════════════════════════════════════════════════════════════
           SEO CONTENT

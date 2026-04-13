@@ -31,7 +31,12 @@ type Plan = {
   features: string[];
 };
 
-export function PricingSection() {
+interface PricingSectionProps {
+  /** Optional pricing config from Sanity pricingConfig singleton */
+  pricingConfig?: any;
+}
+
+export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const [billing, setBilling] = useState<Billing>("monthly");
@@ -65,8 +70,31 @@ export function PricingSection() {
     }
   };
 
+  // Helper to split a price like 9.99 into { main: "9", cents: "99" }
+  const splitPrice = (price: number): { main: string; cents: string } => {
+    const str = price.toFixed(2);
+    const [main, cents] = str.split(".");
+    return { main, cents };
+  };
+
+  // Resolve Sanity pricing config plans (if available)
+  const sanityPlans = pricingConfig?.plans as any[] | undefined;
+  const getSanityPlan = (id: string) => sanityPlans?.find((p: any) => p.planId === id);
+
   // Charm pricing — Silver €9,99/mo (yearly 20% off €7,99/mo)
   // Gold €14,99/mo (yearly 20% off €11,99/mo)
+  const bronzeSanity = getSanityPlan("bronze");
+  const silverSanity = getSanityPlan("silver");
+  const goldSanity = getSanityPlan("gold");
+  const platSanity = getSanityPlan("platinum");
+
+  const bronzePrice = bronzeSanity?.monthlyPrice != null ? splitPrice(bronzeSanity.monthlyPrice) : { main: "0", cents: "01" };
+  const silverMonthly = silverSanity?.monthlyPrice != null ? splitPrice(silverSanity.monthlyPrice) : { main: "9", cents: "99" };
+  const silverYearly = silverSanity?.yearlyPrice != null ? splitPrice(silverSanity.yearlyPrice) : { main: "7", cents: "99" };
+  const goldMonthly = goldSanity?.monthlyPrice != null ? splitPrice(goldSanity.monthlyPrice) : { main: "14", cents: "99" };
+  const goldYearly = goldSanity?.yearlyPrice != null ? splitPrice(goldSanity.yearlyPrice) : { main: "11", cents: "99" };
+  const platPrice = platSanity?.oneTimePrice != null ? String(Math.floor(platSanity.oneTimePrice)) : "199";
+
   const plans: Plan[] = [
     {
       id: "bronze",
@@ -74,8 +102,8 @@ export function PricingSection() {
       icon: Shield,
       tagline: t("pricing.bronzeTagline"),
       fixed: true,
-      monthly: { main: "0", cents: "01", period: t("pricing.forever") },
-      yearly: { main: "0", cents: "01", period: t("pricing.forever") },
+      monthly: { main: bronzePrice.main, cents: bronzePrice.cents, period: t("pricing.forever") },
+      yearly: { main: bronzePrice.main, cents: bronzePrice.cents, period: t("pricing.forever") },
       cta: t("pricing.bronzeCta"),
       features: [
         t("pricing.bronzeF1"),
@@ -91,14 +119,14 @@ export function PricingSection() {
       icon: Zap,
       tagline: t("pricing.silverTagline"),
       monthly: {
-        main: "9",
-        cents: "99",
+        main: silverMonthly.main,
+        cents: silverMonthly.cents,
         period: t("pricing.perMonth"),
         footnote: t("pricing.billedMonthly"),
       },
       yearly: {
-        main: "7",
-        cents: "99",
+        main: silverYearly.main,
+        cents: silverYearly.cents,
         period: t("pricing.perMonth"),
         footnote: t("pricing.billedYearlySilver"),
       },
@@ -117,14 +145,14 @@ export function PricingSection() {
       icon: Sparkles,
       tagline: t("pricing.goldTagline"),
       monthly: {
-        main: "14",
-        cents: "99",
+        main: goldMonthly.main,
+        cents: goldMonthly.cents,
         period: t("pricing.perMonth"),
         footnote: t("pricing.billedMonthly"),
       },
       yearly: {
-        main: "11",
-        cents: "99",
+        main: goldYearly.main,
+        cents: goldYearly.cents,
         period: t("pricing.perMonth"),
         footnote: t("pricing.billedYearlyGold"),
       },
@@ -145,7 +173,7 @@ export function PricingSection() {
     name: "Platinum",
     icon: Crown,
     tagline: t("pricing.platTagline"),
-    priceMain: "199",
+    priceMain: platPrice,
     period: "one-time",
     cta: t("pricing.platCta"),
     features: [

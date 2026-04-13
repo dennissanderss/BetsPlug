@@ -81,7 +81,7 @@ function useLiveTrackRecordStats(): LiveStats {
  * are produced, audited, and used in practice. Shares the sitewide
  * dark/green design language with motion-driven reveals.
  */
-export function TrackRecordContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
+export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: React.ReactNode; trackRecordPage?: any }) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");

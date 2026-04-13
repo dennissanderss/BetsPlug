@@ -3,6 +3,9 @@ import { Suspense } from "react";
 import { CheckoutContent } from "./checkout-content";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
+import { fetchCheckoutPage } from "@/lib/sanity-data";
+
+export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
@@ -23,10 +26,12 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function CheckoutPage() {
+export default async function CheckoutPage() {
+  const [checkoutPage] = await Promise.all([fetchCheckoutPage()]);
+
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#060912]" />}>
-      <CheckoutContent />
+      <CheckoutContent checkoutPage={checkoutPage} />
     </Suspense>
   );
 }
