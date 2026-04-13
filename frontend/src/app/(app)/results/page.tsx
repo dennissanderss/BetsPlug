@@ -511,8 +511,8 @@ function ResultsPageContent() {
   });
 
   const summaryQuery = useQuery({
-    queryKey: ["weekly-summary"],
-    queryFn: () => api.getWeeklySummary(),
+    queryKey: ["weekly-summary", period],
+    queryFn: () => api.getWeeklySummary(period),
     staleTime: 5 * 60_000,
     retry: 1,
   });
@@ -630,17 +630,17 @@ function ResultsPageContent() {
         return (
           <div className="grid grid-cols-3 gap-3">
             <div className="glass-card p-3 text-center">
-              <p className="text-[9px] uppercase tracking-widest text-slate-500">Current Streak</p>
+              <p className="text-[9px] uppercase tracking-widest text-slate-500">{t("results.currentStreak")}</p>
               <p className={`text-xl font-extrabold tabular-nums ${currentStreak > 0 ? "text-emerald-400" : "text-slate-400"}`}>
                 {currentStreak > 0 ? `🔥 ${currentStreak}` : "0"}
               </p>
             </div>
             <div className="glass-card p-3 text-center">
-              <p className="text-[9px] uppercase tracking-widest text-slate-500">Best Win Streak</p>
+              <p className="text-[9px] uppercase tracking-widest text-slate-500">{t("results.bestStreak")}</p>
               <p className="text-xl font-extrabold tabular-nums text-emerald-400">{maxWinStreak}</p>
             </div>
             <div className="glass-card p-3 text-center">
-              <p className="text-[9px] uppercase tracking-widest text-slate-500">Max Losing Streak</p>
+              <p className="text-[9px] uppercase tracking-widest text-slate-500">{t("results.maxLoseStreak")}</p>
               <p className="text-xl font-extrabold tabular-nums text-red-400">{maxLoseStreak}</p>
             </div>
           </div>
@@ -730,8 +730,8 @@ function ResultsPageContent() {
       {/* Upsell: Platinum lifetime */}
       <UpsellBanner
         targetTier="platinum"
-        headline="Levenslange toegang — betaal één keer, nooit meer"
-        subtext="Alle Gold features + privé Telegram + early access. Beperkt tot 100/jaar."
+        headline={t("results.upsellHeadline")}
+        subtext={t("results.upsellSubtext")}
         variant="inline"
       />
 

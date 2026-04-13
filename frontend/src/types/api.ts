@@ -360,15 +360,18 @@ export interface IngestionRun {
 
 export interface SearchResult {
   id: string;
-  type: "sport" | "league" | "team" | "match";
+  entity_type: "sport" | "league" | "team" | "match";
   name: string;
-  subtitle: string | null;
-  slug: string;
+  description: string | null;
+  slug: string | null;
+  metadata?: Record<string, unknown> | null;
 }
 
 export interface SearchResultGroup {
-  type: string;
+  entity_type: string;
+  label: string;
   items: SearchResult[];
+  total_hits: number;
 }
 
 export interface PaginatedResponse<T> {
@@ -422,6 +425,31 @@ export interface WeeklySummary {
   pl_units: number;
   best_performers: WeeklyPerformer[];
   worst_performers: WeeklyPerformer[];
+}
+
+// ─── Free Picks (Homepage) ───────────────────────────────────────────────────
+
+export interface FreePickItem {
+  id: string;
+  home_team: string;
+  away_team: string;
+  league: string;
+  scheduled_at: string;
+  pick: string;
+  home_win_prob: number;
+  draw_prob: number | null;
+  away_win_prob: number;
+  confidence: number;
+  status: string;
+  home_score: number | null;
+  away_score: number | null;
+  is_correct: boolean | null;
+}
+
+export interface FreePicksResponse {
+  today: FreePickItem[];
+  yesterday: FreePickItem[];
+  stats: { total: number; correct: number; winrate: number };
 }
 
 // ─── Fixture (DB-only, fast) ──────────────────────────────────────────────────

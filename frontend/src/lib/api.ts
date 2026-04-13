@@ -457,9 +457,9 @@ class ApiClient {
       `/fixtures/results?${params}`
     );
   }
-  getWeeklySummary() {
+  getWeeklySummary(days = 7) {
     return this.request<import("@/types/api").WeeklySummary>(
-      "/fixtures/results/weekly-summary"
+      `/fixtures/results/weekly-summary?days=${days}`
     );
   }
   getFixturesToday() {
@@ -496,6 +496,11 @@ class ApiClient {
       count: number;
       matches: import("@/types/api").LiveMatch[];
     }>(`/live/upcoming?days=${days}`);
+  }
+
+  // Homepage
+  getFreePicks() {
+    return this.request<import("@/types/api").FreePicksResponse>("/homepage/free-picks");
   }
 
   // Health

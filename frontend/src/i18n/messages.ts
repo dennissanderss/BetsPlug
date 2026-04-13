@@ -1392,6 +1392,9 @@ const en = {
   "dash.avgConfidence": "Avg Confidence",
   "dash.modelCertainty": "Model certainty",
   "dash.avgConfidenceTooltip": "Average confidence level across all predictions. Higher means the model was more certain about its picks.",
+  "dash.pickOfDay": "Pick of the Day",
+  "dash.pickOfDaySub": "Daily top pick accuracy",
+  "dash.pickOfDayTooltip": "Accuracy of the AI-selected best pick each day",
   "dash.recentPredictions": "Recent Predictions",
   "dash.recentPredictionsDesc": "Latest model outputs with evaluation",
   "dash.lastTen": "Last 10",
@@ -1483,6 +1486,8 @@ const en = {
   "pred.awayWin": "Away Win",
   "pred.modelReasoning": "Model Reasoning",
   "pred.keyFactors": "Key Factors",
+  "pred.upsellHeadline": "Want only the best pick? → Pick of the Day",
+  "pred.upsellSubtext": "Our AI selects the match with the highest certainty every day.",
 
   /* ── Results page ───────────────────────────────────── */
   "results.title": "Results & Outcomes",
@@ -1523,6 +1528,11 @@ const en = {
   "results.noResultsMatchFilters": "No results match your filters",
   "results.noResultsMatchFiltersHint": "Try adjusting the period or result filter above.",
   "results.clearFilters": "Clear filters",
+  "results.currentStreak": "Current Streak",
+  "results.bestStreak": "Best Win Streak",
+  "results.maxLoseStreak": "Max Losing Streak",
+  "results.upsellHeadline": "Lifetime access — pay once, never again",
+  "results.upsellSubtext": "All Gold features + private Telegram + early access. Limited to 100/year.",
 
   /* ── WeeklyReport page ───────────────────────────────────── */
   "weeklyReport.title": "Weekly Report",
@@ -1811,6 +1821,10 @@ const en = {
   "home.freePredSubtitle": "See our models in action. Three free AI-powered match predictions — updated daily, no sign-up required.",
   "home.freePredCta": "View all predictions",
   "home.freePredCtaSub": "Unlock full access to 50+ daily predictions with a free trial.",
+  "home.freePredWinrate": "Win rate",
+  "home.freePredRecord": "Correct picks",
+  "home.freePredToday": "Today's free picks",
+  "home.freePredYesterday": "Yesterday's results",
 
   /* ── Breadcrumb labels ──────────────────────────────────── */
   "bc.home": "Home",
@@ -3096,6 +3110,9 @@ const nl: Dictionary = {
   "dash.avgConfidence": "Gem. betrouwbaarheid",
   "dash.modelCertainty": "Modelzekerheid",
   "dash.avgConfidenceTooltip": "Gemiddelde betrouwbaarheid over alle voorspellingen. Hoger betekent dat het model zekerder was over zijn tips.",
+  "dash.pickOfDay": "Pick van de Dag",
+  "dash.pickOfDaySub": "Dagelijkse toptip nauwkeurigheid",
+  "dash.pickOfDayTooltip": "Nauwkeurigheid van de dagelijks door AI geselecteerde beste tip",
   "dash.recentPredictions": "Recente voorspellingen",
   "dash.recentPredictionsDesc": "Laatste modeluitvoer met evaluatie",
   "dash.lastTen": "Laatste 10",
@@ -3184,6 +3201,8 @@ const nl: Dictionary = {
   "pred.awayWin": "Uitwinst",
   "pred.modelReasoning": "Onderbouwing model",
   "pred.keyFactors": "Belangrijke factoren",
+  "pred.upsellHeadline": "Wil je alleen de beste pick? → Pick van de Dag",
+  "pred.upsellSubtext": "Onze AI kiest dagelijks de wedstrijd met de hoogste zekerheid.",
 
   /* ── Results page ───────────────────────────────────── */
   "results.title": "Resultaten & uitslagen",
@@ -3224,6 +3243,11 @@ const nl: Dictionary = {
   "results.noResultsMatchFilters": "Geen resultaten voldoen aan je filters",
   "results.noResultsMatchFiltersHint": "Pas de periode of het resultaatfilter hierboven aan.",
   "results.clearFilters": "Filters wissen",
+  "results.currentStreak": "Huidige reeks",
+  "results.bestStreak": "Beste reeks",
+  "results.maxLoseStreak": "Langste verliesreeks",
+  "results.upsellHeadline": "Levenslange toegang — betaal één keer, nooit meer",
+  "results.upsellSubtext": "Alle Gold features + privé Telegram + early access. Beperkt tot 100/jaar.",
 
   /* ── WeeklyReport page ───────────────────────────────────── */
   "weeklyReport.title": "Weekrapport",
@@ -3512,6 +3536,10 @@ const nl: Dictionary = {
   "home.freePredSubtitle": "Bekijk onze modellen in actie. Drie gratis AI-voorspellingen — dagelijks bijgewerkt, geen registratie nodig.",
   "home.freePredCta": "Bekijk alle voorspellingen",
   "home.freePredCtaSub": "Ontgrendel volledige toegang tot 50+ dagelijkse voorspellingen met een gratis proefperiode.",
+  "home.freePredWinrate": "Winstpercentage",
+  "home.freePredRecord": "Correcte picks",
+  "home.freePredToday": "Gratis picks van vandaag",
+  "home.freePredYesterday": "Resultaten van gisteren",
 
   /* ── Breadcrumb labels ──────────────────────────────────── */
   "bc.home": "Home",

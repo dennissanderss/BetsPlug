@@ -305,12 +305,12 @@ export default function DashboardPage() {
       tooltip: t("dash.overallAccuracyTooltip"),
     },
     {
-      label: "Pick of the Day",
+      label: t("dash.pickOfDay"),
       value: botdStats?.accuracy_pct != null ? `${botdStats.accuracy_pct}%` : " - ",
       icon: Star,
       trend: "up" as const,
-      sub: "Daily top pick accuracy",
-      tooltip: "Accuracy of the AI-selected best pick each day",
+      sub: t("dash.pickOfDaySub"),
+      tooltip: t("dash.pickOfDayTooltip"),
     },
     {
       label: t("dash.avgConfidence"),

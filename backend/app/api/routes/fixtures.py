@@ -694,13 +694,14 @@ async def get_today_fixtures(
     ),
 )
 async def get_weekly_summary(
+    days: int = Query(default=7, ge=1, le=90, description="Look-back window in days"),
     db: AsyncSession = Depends(get_db),
 ) -> WeeklySummaryResponse:
-    """Weekly prediction performance summary matching frontend WeeklySummary type."""
+    """Prediction performance summary for the given look-back window."""
     from app.models.prediction import Prediction, PredictionEvaluation
 
     now = datetime.now(timezone.utc)
-    week_ago = now - timedelta(days=7)
+    week_ago = now - timedelta(days=days)
 
     # Get all evaluated predictions from last 7 days
     stmt = (

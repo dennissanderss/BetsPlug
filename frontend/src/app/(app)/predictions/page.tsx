@@ -82,7 +82,7 @@ const LEAGUE_POPULARITY: string[] = [
 ];
 
 /** How many leagues to show as quick-filter chips. */
-const QUICK_CHIPS = 6;
+const QUICK_CHIPS = 7;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -574,6 +574,23 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
   const isLive = fixture.status === "live";
   const isFinished = fixture.status === "finished";
 
+  // Correctness check for finished matches
+  let isCorrect: boolean | null = null;
+  if (isFinished && fixture.result && hasPrediction) {
+    const { home_score, away_score } = fixture.result;
+    const actualOutcome =
+      home_score > away_score ? "home" :
+      away_score > home_score ? "away" : "draw";
+    const probs = {
+      home: pred.home_win_prob ?? 0,
+      draw: pred.draw_prob ?? 0,
+      away: pred.away_win_prob ?? 0,
+    };
+    const predicted = (Object.keys(probs) as Array<keyof typeof probs>)
+      .reduce((a, b) => probs[a] >= probs[b] ? a : b);
+    isCorrect = actualOutcome === predicted;
+  }
+
   const confScore = hasPrediction ? Math.round((pred.confidence ?? 0) * 100) : null;
   const confLevel = confScore !== null ? getConfidenceLevel(confScore) : null;
   const confColor = confLevel ? getConfidenceColor(confLevel) : "#475569";
@@ -665,9 +682,17 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
           <OddButton label="2" value={fixture.odds?.away ?? null} highlighted={modelPick === "away"} />
         </div>
 
-        {/* Confidence bar */}
+        {/* Confidence bar + correctness */}
         <div className="col-span-3 sm:col-span-2 flex items-center gap-2">
-          {confScore != null && (
+          {isCorrect !== null ? (
+            <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+              isCorrect
+                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
+                : "bg-red-500/15 text-red-400 border border-red-500/25"
+            }`}>
+              {isCorrect ? "Correct" : "Incorrect"}
+            </span>
+          ) : confScore != null ? (
             <>
               <div className="flex-1 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
                 <div
@@ -679,7 +704,7 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
                 {confScore}%
               </span>
             </>
-          )}
+          ) : null}
         </div>
 
       </div>
@@ -1414,7 +1439,7 @@ export default function PredictionsPage() {
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 text-slate-500" />
             <label htmlFor="predictions-date" className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-              Datum
+              {t("pred.date")}
             </label>
           </div>
           <input
@@ -1433,14 +1458,14 @@ export default function PredictionsPage() {
               disabled={selectedDate <= minDate}
               className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 text-xs font-semibold text-slate-300 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
             >
-              ← Vorige dag
+              ← {t("pred.previousDay")}
             </button>
             <button
               type="button"
               onClick={() => setSelectedDate(today)}
               className="rounded-md border border-blue-500/30 bg-blue-500/10 px-2 py-1 text-xs font-semibold text-blue-300 hover:bg-blue-500/20"
             >
-              Vandaag
+              {t("pred.today")}
             </button>
             <button
               type="button"
@@ -1448,12 +1473,12 @@ export default function PredictionsPage() {
               disabled={selectedDate >= maxDate}
               className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 text-xs font-semibold text-slate-300 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Volgende dag →
+              {t("pred.nextDay")} →
             </button>
           </div>
           {isHistorical && (
             <span className="ml-auto rounded-full border border-slate-500/25 bg-slate-500/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
-              Historisch
+              {t("pred.historical")}
             </span>
           )}
         </div>
@@ -1539,8 +1564,8 @@ export default function PredictionsPage() {
       {!isLoading && upcomingFixtures.length > 0 && (
         <UpsellBanner
           targetTier="gold"
-          headline="Wil je alleen de beste pick? → Pick van de Dag"
-          subtext="66.7% trefzekerheid op 346 picks. Onze AI kiest dagelijks de wedstrijd met de hoogste zekerheid."
+          headline={t("pred.upsellHeadline")}
+          subtext={t("pred.upsellSubtext")}
           variant="card"
         />
       )}

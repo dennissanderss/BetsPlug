@@ -16,7 +16,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.db.session import get_db
-from app.models.match import Match
+from app.models.match import Match, MatchResult
 from app.models.prediction import Prediction
 from app.schemas.prediction import ForecastOutput, PredictionResponse
 
@@ -50,7 +50,10 @@ async def list_predictions(
     # Use the EXACT same query strategy as the original working version:
     # selectinload ALL relationships so model_validate works cleanly.
     q = select(Prediction).options(
-        selectinload(Prediction.match),
+        selectinload(Prediction.match).selectinload(Match.home_team),
+        selectinload(Prediction.match).selectinload(Match.away_team),
+        selectinload(Prediction.match).selectinload(Match.league),
+        selectinload(Prediction.match).selectinload(Match.result),
         selectinload(Prediction.explanation),
         selectinload(Prediction.evaluation),
         selectinload(Prediction.model_version),
@@ -92,8 +95,37 @@ async def list_predictions(
                 resp.reasoning = p.explanation.summary
             items.append(resp.model_dump(mode="json"))
         except Exception:
-            # Fallback: build minimal dict manually
+            # Fallback: build minimal dict manually — include match data
             probs = {"HOME": p.home_win_prob, "DRAW": p.draw_prob or 0, "AWAY": p.away_win_prob}
+            match_data = None
+            m = getattr(p, "match", None)
+            if m is not None:
+                match_data = {
+                    "id": str(m.id),
+                    "home_team_name": m.home_team.name if m.home_team else "Unknown",
+                    "away_team_name": m.away_team.name if m.away_team else "Unknown",
+                    "scheduled_at": m.scheduled_at.isoformat() if m.scheduled_at else None,
+                    "status": m.status.value if hasattr(m.status, "value") else str(m.status),
+                    "league_name": m.league.name if getattr(m, "league", None) else None,
+                    "result": {
+                        "home_score": m.result.home_score,
+                        "away_score": m.result.away_score,
+                        "winner": m.result.winner,
+                    } if getattr(m, "result", None) else None,
+                }
+            eval_data = None
+            ev = getattr(p, "evaluation", None)
+            if ev is not None:
+                eval_data = {
+                    "id": str(ev.id),
+                    "actual_outcome": ev.actual_outcome,
+                    "actual_home_score": ev.actual_home_score,
+                    "actual_away_score": ev.actual_away_score,
+                    "is_correct": ev.is_correct,
+                    "brier_score": ev.brier_score,
+                    "log_loss": ev.log_loss,
+                    "evaluated_at": ev.evaluated_at.isoformat() if ev.evaluated_at else None,
+                }
             items.append({
                 "id": str(p.id),
                 "match_id": str(p.match_id),
@@ -108,8 +140,8 @@ async def list_predictions(
                 "pick": max(probs, key=lambda k: probs[k]),
                 "reasoning": p.explanation.summary if p.explanation else None,
                 "explanation": None,
-                "evaluation": None,
-                "match": None,
+                "evaluation": eval_data,
+                "match": match_data,
                 "created_at": p.created_at.isoformat() if p.created_at else None,
                 "updated_at": p.updated_at.isoformat() if p.updated_at else None,
             })
@@ -135,7 +167,17 @@ async def get_prediction(
 ):
     """Return a prediction record including its explanation and post-match evaluation."""
     result = await db.execute(
-        select(Prediction).where(Prediction.id == prediction_id)
+        select(Prediction)
+        .options(
+            selectinload(Prediction.match).selectinload(Match.home_team),
+            selectinload(Prediction.match).selectinload(Match.away_team),
+            selectinload(Prediction.match).selectinload(Match.league),
+            selectinload(Prediction.match).selectinload(Match.result),
+            selectinload(Prediction.explanation),
+            selectinload(Prediction.evaluation),
+            selectinload(Prediction.model_version),
+        )
+        .where(Prediction.id == prediction_id)
     )
     pred = result.scalar_one_or_none()
     if pred is None:

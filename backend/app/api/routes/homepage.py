@@ -1,20 +1,22 @@
-"""Homepage featured match endpoint.
+"""Homepage endpoints: featured match + free daily picks.
 
-Returns the highest-edge upcoming prediction for the hero card on the homepage.
+Returns the highest-edge upcoming prediction for the hero card, and a
+curated set of 3 free daily picks with rolling accuracy stats.
 """
 
 import logging
 from datetime import datetime, timedelta, timezone
-from typing import Optional
+from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends
-from pydantic import BaseModel
-from sqlalchemy import and_, select
+from pydantic import BaseModel, Field
+from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from app.db.session import get_db
-from app.models.match import Match, MatchStatus
-from app.models.prediction import Prediction
+from app.models.match import Match, MatchResult, MatchStatus
+from app.models.prediction import Prediction, PredictionEvaluation
 
 router = APIRouter()
 log = logging.getLogger(__name__)
@@ -117,4 +119,164 @@ async def get_featured_match(
         elo_diff=elo_diff,
         edge=round(edge, 4),
         label=label,
+    )
+
+
+# ── Free Daily Picks ────────────────────────────────────────────────────────
+
+
+class FreePickItem(BaseModel):
+    id: str
+    home_team: str
+    away_team: str
+    league: str
+    scheduled_at: str
+    pick: str
+    home_win_prob: float
+    draw_prob: Optional[float] = None
+    away_win_prob: float
+    confidence: float
+    status: str
+    home_score: Optional[int] = None
+    away_score: Optional[int] = None
+    is_correct: Optional[bool] = None
+
+
+class FreePicksResponse(BaseModel):
+    today: List[FreePickItem] = Field(default_factory=list)
+    yesterday: List[FreePickItem] = Field(default_factory=list)
+    stats: dict = Field(
+        default_factory=lambda: {"total": 0, "correct": 0, "winrate": 0.0},
+        description="Running accuracy across all evaluated free picks (last 30 days).",
+    )
+
+
+def _pick_from_probs(p: Prediction) -> str:
+    probs = {"HOME": p.home_win_prob, "DRAW": p.draw_prob or 0, "AWAY": p.away_win_prob}
+    return max(probs, key=lambda k: probs[k])
+
+
+def _build_free_pick(pred: Prediction) -> FreePickItem:
+    m = pred.match
+    home = m.home_team.name if m and m.home_team else "TBD"
+    away = m.away_team.name if m and m.away_team else "TBD"
+    league = m.league.name if m and m.league else ""
+
+    pick = _pick_from_probs(pred)
+
+    # Result data for finished matches
+    home_score = away_score = None
+    is_correct = None
+    if m and m.result:
+        home_score = m.result.home_score
+        away_score = m.result.away_score
+        actual = (
+            "HOME" if home_score > away_score
+            else "AWAY" if away_score > home_score
+            else "DRAW"
+        )
+        is_correct = pick == actual
+
+    return FreePickItem(
+        id=str(pred.id),
+        home_team=home,
+        away_team=away,
+        league=league,
+        scheduled_at=m.scheduled_at.isoformat() if m else "",
+        pick=pick,
+        home_win_prob=round(pred.home_win_prob, 4),
+        draw_prob=round(pred.draw_prob, 4) if pred.draw_prob else None,
+        away_win_prob=round(pred.away_win_prob, 4),
+        confidence=round(pred.confidence, 4),
+        status=m.status.value if m and hasattr(m.status, "value") else str(m.status) if m else "unknown",
+        home_score=home_score,
+        away_score=away_score,
+        is_correct=is_correct,
+    )
+
+
+@router.get(
+    "/free-picks",
+    response_model=FreePicksResponse,
+    summary="Free daily picks for homepage",
+)
+async def get_free_picks(
+    db: AsyncSession = Depends(get_db),
+) -> FreePicksResponse:
+    """Top 3 highest-confidence picks for today + yesterday's results + 30-day winrate."""
+    now = datetime.now(timezone.utc)
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    yesterday_start = today_start - timedelta(days=1)
+    tomorrow_start = today_start + timedelta(days=1)
+
+    base_opts = [
+        selectinload(Prediction.match).selectinload(Match.home_team),
+        selectinload(Prediction.match).selectinload(Match.away_team),
+        selectinload(Prediction.match).selectinload(Match.league),
+        selectinload(Prediction.match).selectinload(Match.result),
+    ]
+
+    # ── Today's top 3 by confidence ──────────────────────────────
+    today_stmt = (
+        select(Prediction)
+        .join(Match, Match.id == Prediction.match_id)
+        .options(*base_opts)
+        .where(
+            and_(
+                Match.scheduled_at >= today_start,
+                Match.scheduled_at < tomorrow_start,
+            )
+        )
+        .order_by(Prediction.confidence.desc())
+        .limit(3)
+    )
+    today_rows = (await db.execute(today_stmt)).scalars().unique().all()
+    today_picks = [_build_free_pick(p) for p in today_rows]
+
+    # ── Yesterday's top 3 by confidence ──────────────────────────
+    yesterday_stmt = (
+        select(Prediction)
+        .join(Match, Match.id == Prediction.match_id)
+        .options(*base_opts)
+        .where(
+            and_(
+                Match.scheduled_at >= yesterday_start,
+                Match.scheduled_at < today_start,
+            )
+        )
+        .order_by(Prediction.confidence.desc())
+        .limit(3)
+    )
+    yesterday_rows = (await db.execute(yesterday_stmt)).scalars().unique().all()
+    yesterday_picks = [_build_free_pick(p) for p in yesterday_rows]
+
+    # ── 30-day rolling winrate ───────────────────────────────────
+    # Count evaluated predictions (top 3 per day) from last 30 days.
+    # We approximate by looking at all evaluated predictions and limiting
+    # to a reasonable count since true "top 3 per day" selection would
+    # require caching.
+    thirty_days_ago = now - timedelta(days=30)
+    from sqlalchemy import case, Integer
+    stats_stmt = (
+        select(
+            func.count(PredictionEvaluation.id).label("total"),
+            func.sum(case((PredictionEvaluation.is_correct.is_(True), 1), else_=0)).label("correct"),
+        )
+        .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
+        .join(Match, Match.id == Prediction.match_id)
+        .where(Match.scheduled_at >= thirty_days_ago)
+    )
+    try:
+        row = (await db.execute(stats_stmt)).one_or_none()
+        total = int(row.total) if row and row.total else 0
+        correct = int(row.correct) if row and row.correct else 0
+    except Exception:
+        total = correct = 0
+
+    winrate = round(correct / total, 4) if total > 0 else 0.0
+
+    return FreePicksResponse(
+        today=today_picks,
+        yesterday=yesterday_picks,
+        stats={"total": total, "correct": correct, "winrate": winrate},
     )

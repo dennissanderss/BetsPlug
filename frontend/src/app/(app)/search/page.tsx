@@ -22,7 +22,7 @@ import type { SearchResult, SearchResultGroup } from "@/types/api";
 // ─── Detail link resolver ───────────────────────────────────────────────────
 
 function getHref(result: SearchResult): string {
-  switch (result.type) {
+  switch (result.entity_type) {
     case "sport":
       return `/sports/${result.slug}`;
     case "league":
@@ -129,11 +129,11 @@ const TYPE_LABEL_KEYS: Record<string, string> = {
 
 function ResultCard({ result }: { result: SearchResult }) {
   const { t } = useTranslations();
-  const cfg = getTypeConfig(result.type);
+  const cfg = getTypeConfig(result.entity_type);
   const Icon = cfg.icon;
-  const isMatch = result.type === "match";
-  const translatedLabel = TYPE_LABEL_KEYS[result.type]
-    ? t(TYPE_LABEL_KEYS[result.type] as any)
+  const isMatch = result.entity_type === "match";
+  const translatedLabel = TYPE_LABEL_KEYS[result.entity_type]
+    ? t(TYPE_LABEL_KEYS[result.entity_type] as any)
     : cfg.label;
 
   return (
@@ -160,12 +160,12 @@ function ResultCard({ result }: { result: SearchResult }) {
           <p className="truncate text-sm font-semibold text-slate-100 group-hover:text-white transition-colors">
             {result.name}
           </p>
-          {result.subtitle && (
+          {result.description && (
             <p className="truncate text-xs text-slate-400 mt-0.5">
               {isMatch ? (
-                <MatchSubtitle subtitle={result.subtitle} />
+                <MatchSubtitle subtitle={result.description} />
               ) : (
-                result.subtitle
+                result.description
               )}
             </p>
           )}
@@ -200,7 +200,7 @@ function GroupContent({ items }: { items: SearchResult[] }) {
   return (
     <div className="space-y-2">
       {items.map((item) => (
-        <ResultCard key={`${item.type}-${item.id}`} result={item} />
+        <ResultCard key={`${item.entity_type}-${item.id}`} result={item} />
       ))}
     </div>
   );
@@ -373,7 +373,7 @@ function SearchPageInner() {
   const totalResults = groups.reduce((acc, g) => acc + g.items.length, 0);
 
   const groupMap = new Map<string, SearchResult[]>(
-    groups.map((g) => [g.type, g.items])
+    groups.map((g) => [g.entity_type, g.items])
   );
 
   const tabConfig: { key: string; label: string }[] = [

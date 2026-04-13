@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 _SIMULATION_DISCLAIMER = (
     "SIMULATION / EDUCATIONAL USE ONLY. "
@@ -182,6 +182,23 @@ class PredictionMatchSummary(BaseModel):
     status: str
     league_name: Optional[str] = None
     result: Optional[PredictionMatchResult] = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def extract_from_orm(cls, data: Any) -> Any:
+        """Bridge ORM Match relationships → flat schema fields."""
+        if not hasattr(data, "home_team"):
+            return data
+        out: dict[str, Any] = {}
+        out["id"] = data.id
+        out["scheduled_at"] = data.scheduled_at
+        out["status"] = data.status.value if hasattr(data.status, "value") else str(data.status)
+        out["home_team_name"] = data.home_team.name if data.home_team else "Unknown"
+        out["away_team_name"] = data.away_team.name if data.away_team else "Unknown"
+        out["league_name"] = data.league.name if getattr(data, "league", None) else None
+        if getattr(data, "result", None) is not None:
+            out["result"] = data.result
+        return out
 
 
 class PredictionModelSummary(BaseModel):
