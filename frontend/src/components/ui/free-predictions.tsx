@@ -26,9 +26,10 @@ function PredictionCard({
   index: number;
 }) {
   const { t, locale } = useTranslations();
-  const cScore = Math.round(pick.confidence * 100);
-  const level = confLevel(cScore);
-  const color = confColor(level);
+  const hasPrediction = pick.confidence != null && pick.confidence > 0;
+  const cScore = hasPrediction ? Math.round(pick.confidence! * 100) : 0;
+  const level = hasPrediction ? confLevel(cScore) : "Low";
+  const color = hasPrediction ? confColor(level) : "#64748b";
   const isFinished = pick.status === "finished";
 
   return (
@@ -64,18 +65,29 @@ function PredictionCard({
         )}
       </div>
 
-      {/* Probability bar */}
+      {/* Probability bar OR "analysis pending" */}
       <div className="px-5 pt-3 pb-4">
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-          {t("matchPred.winProbLabel")}
-        </p>
-        <ProbBar
-          home={Math.round(pick.home_win_prob * 100)}
-          draw={pick.draw_prob != null ? Math.round(pick.draw_prob * 100) : null}
-          away={Math.round(pick.away_win_prob * 100)}
-          homeTeam={pick.home_team}
-          awayTeam={pick.away_team}
-        />
+        {hasPrediction ? (
+          <>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+              {t("matchPred.winProbLabel")}
+            </p>
+            <ProbBar
+              home={Math.round(pick.home_win_prob! * 100)}
+              draw={pick.draw_prob != null ? Math.round(pick.draw_prob * 100) : null}
+              away={Math.round(pick.away_win_prob! * 100)}
+              homeTeam={pick.home_team}
+              awayTeam={pick.away_team}
+            />
+          </>
+        ) : (
+          <div className="flex items-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/[0.06] px-3 py-2.5">
+            <Clock className="h-3.5 w-3.5 text-blue-400" />
+            <span className="text-[11px] font-semibold text-blue-300">
+              {t("home.freePredPending")}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Bottom: confidence + correctness badge */}
@@ -96,24 +108,30 @@ function PredictionCard({
           </span>
         ) : (
           <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-            {t("matchPred.confidenceLabel")}
+            {hasPrediction ? t("matchPred.confidenceLabel") : ""}
           </span>
         )}
-        <div className="flex items-center gap-2">
-          <span
-            className="rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-            style={{ background: `${color}1a`, color }}
-          >
-            {level}
+        {hasPrediction ? (
+          <div className="flex items-center gap-2">
+            <span
+              className="rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+              style={{ background: `${color}1a`, color }}
+            >
+              {level}
+            </span>
+            <span
+              className="text-2xl font-extrabold tabular-nums leading-none"
+              style={{ color }}
+            >
+              {cScore}
+              <span className="text-sm font-semibold">%</span>
+            </span>
+          </div>
+        ) : (
+          <span className="inline-flex items-center gap-1 rounded-full border border-slate-500/25 bg-slate-500/10 px-2.5 py-0.5 text-[11px] font-bold text-slate-400">
+            <Clock className="h-3 w-3" /> Pending
           </span>
-          <span
-            className="text-2xl font-extrabold tabular-nums leading-none"
-            style={{ color }}
-          >
-            {cScore}
-            <span className="text-sm font-semibold">%</span>
-          </span>
-        </div>
+        )}
       </div>
     </motion.div>
   );
@@ -231,41 +249,41 @@ export function FreePredictions() {
           )}
         </motion.div>
 
-        {/* Today's picks */}
-        {todayPicks.length > 0 && (
-          <div className="mb-10">
-            <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-400">
-              {t("home.freePredToday")}
-            </h3>
-            <div className="grid gap-5 md:grid-cols-3">
-              {todayPicks.map((pick, i) => (
-                <PredictionCard key={pick.id} pick={pick} index={i} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Yesterday's results */}
-        {yesterdayPicks.length > 0 && (
-          <div className="mb-10">
-            <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-400">
-              {t("home.freePredYesterday")}
-            </h3>
-            <div className="grid gap-5 md:grid-cols-3">
-              {yesterdayPicks.map((pick, i) => (
-                <PredictionCard key={pick.id} pick={pick} index={i} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Loading skeleton — also shown when API returned no picks */}
-        {(loading || !hasPicks) && (
+        {/* Upcoming picks — always 3 cards */}
+        {loading ? (
           <div className="grid gap-5 md:grid-cols-3">
             <PredictionSkeleton />
             <PredictionSkeleton />
             <PredictionSkeleton />
           </div>
+        ) : (
+          <>
+            {todayPicks.length > 0 && (
+              <div className="mb-10">
+                <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-400">
+                  {t("home.freePredToday")}
+                </h3>
+                <div className="grid gap-5 md:grid-cols-3">
+                  {todayPicks.map((pick, i) => (
+                    <PredictionCard key={pick.match_id || pick.id} pick={pick} index={i} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {yesterdayPicks.length > 0 && (
+              <div className="mb-10">
+                <h3 className="mb-4 text-sm font-bold uppercase tracking-widest text-slate-400">
+                  {t("home.freePredYesterday")}
+                </h3>
+                <div className="grid gap-5 md:grid-cols-3">
+                  {yesterdayPicks.map((pick, i) => (
+                    <PredictionCard key={pick.match_id || pick.id} pick={pick} index={i} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
 
         {/* CTA */}

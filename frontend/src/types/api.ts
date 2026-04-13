@@ -436,11 +436,11 @@ export interface FreePickItem {
   away_team: string;
   league: string;
   scheduled_at: string;
-  pick: string;
-  home_win_prob: number;
+  pick: string | null;
+  home_win_prob: number | null;
   draw_prob: number | null;
-  away_win_prob: number;
-  confidence: number;
+  away_win_prob: number | null;
+  confidence: number | null;
   status: string;
   home_score: number | null;
   away_score: number | null;

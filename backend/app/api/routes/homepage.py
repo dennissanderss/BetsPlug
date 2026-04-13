@@ -132,11 +132,11 @@ class FreePickItem(BaseModel):
     away_team: str
     league: str
     scheduled_at: str
-    pick: str
-    home_win_prob: float
+    pick: Optional[str] = None
+    home_win_prob: Optional[float] = None
     draw_prob: Optional[float] = None
-    away_win_prob: float
-    confidence: float
+    away_win_prob: Optional[float] = None
+    confidence: Optional[float] = None
     status: str
     home_score: Optional[int] = None
     away_score: Optional[int] = None
@@ -222,8 +222,8 @@ async def get_free_picks(
         selectinload(Prediction.match).selectinload(Match.result),
     ]
 
-    # ── Upcoming: top 3 scheduled matches by confidence (next 7 days) ──
-    upcoming_cutoff = now + timedelta(days=7)
+    # ── Upcoming: top 3 scheduled matches by confidence (next 14 days) ──
+    upcoming_cutoff = now + timedelta(days=14)
     today_stmt = (
         select(Prediction)
         .join(Match, Match.id == Prediction.match_id)
@@ -240,6 +240,43 @@ async def get_free_picks(
     )
     today_rows = (await db.execute(today_stmt)).scalars().unique().all()
     today_picks = [_build_free_pick(p) for p in today_rows]
+
+    # ── Fallback: fill to 3 with upcoming fixtures that lack predictions ──
+    if len(today_picks) < 3:
+        from app.models.team import Team
+        from app.models.league import League as LeagueModel
+
+        existing_match_ids = [p.match_id for p in today_rows]
+        fill_needed = 3 - len(today_picks)
+        filler_stmt = (
+            select(Match)
+            .options(
+                selectinload(Match.home_team),
+                selectinload(Match.away_team),
+                selectinload(Match.league),
+            )
+            .where(
+                and_(
+                    Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
+                    Match.scheduled_at >= now,
+                    Match.scheduled_at <= upcoming_cutoff,
+                    *([] if not existing_match_ids else [Match.id.notin_(existing_match_ids)]),
+                )
+            )
+            .order_by(Match.scheduled_at.asc())
+            .limit(fill_needed)
+        )
+        filler_rows = (await db.execute(filler_stmt)).scalars().unique().all()
+        for m in filler_rows:
+            today_picks.append(FreePickItem(
+                id="",
+                match_id=str(m.id),
+                home_team=m.home_team.name if m and m.home_team else "TBD",
+                away_team=m.away_team.name if m and m.away_team else "TBD",
+                league=m.league.name if m and m.league else "",
+                scheduled_at=m.scheduled_at.isoformat() if m else "",
+                status=m.status.value if hasattr(m.status, "value") else str(m.status),
+            ))
 
     # ── Recent results: top 3 finished matches by confidence (last 7 days) ──
     results_start = now - timedelta(days=7)

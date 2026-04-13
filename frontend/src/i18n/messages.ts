@@ -1816,8 +1816,9 @@ const en = {
 
   /* ── Free Predictions section (homepage) ────────────────── */
   "home.freePredBadge": "No sign-up required",
-  "home.freePredTitle": "Today's FREE",
+  "home.freePredTitle": "3 FREE",
   "home.freePredTitleHighlight": "AI predictions",
+  "home.freePredPending": "AI analysis in progress — prediction coming soon",
   "home.freePredSubtitle": "See our models in action. Three free AI-powered match predictions — updated daily, no sign-up required.",
   "home.freePredCta": "View all predictions",
   "home.freePredCtaSub": "Unlock full access to 50+ daily predictions with a free trial.",
@@ -3531,8 +3532,9 @@ const nl: Dictionary = {
 
   /* ── Free Predictions section (homepage) ────────────────── */
   "home.freePredBadge": "Geen registratie nodig",
-  "home.freePredTitle": "GRATIS AI",
-  "home.freePredTitleHighlight": "voorspellingen van vandaag",
+  "home.freePredTitle": "3 GRATIS",
+  "home.freePredTitleHighlight": "AI voorspellingen",
+  "home.freePredPending": "AI-analyse bezig — voorspelling volgt binnenkort",
   "home.freePredSubtitle": "Bekijk onze modellen in actie. Drie gratis AI-voorspellingen — dagelijks bijgewerkt, geen registratie nodig.",
   "home.freePredCta": "Bekijk alle voorspellingen",
   "home.freePredCtaSub": "Ontgrendel volledige toegang tot 50+ dagelijkse voorspellingen met een gratis proefperiode.",
