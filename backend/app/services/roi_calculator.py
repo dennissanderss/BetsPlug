@@ -148,15 +148,11 @@ async def realised_pnl_1x2(
             odds_used = None  # invalid data, fall through
 
     if odds_used is None:
-        # v6.3: compute implied odds from the model's probability for
-        # the predicted outcome. This is fairer than the flat 1.90
-        # fallback because it respects each pick's risk profile.
-        pick_prob = probs.get(pick, 0.0)
-        if pick_prob > 0.05:  # sanity: don't divide by near-zero
-            odds_used = round(1.0 / (pick_prob * BOOKMAKER_MARGIN), 3)
-            source = "implied_from_model"
-        else:
-            odds_used = FLAT_FALLBACK_ODDS
+        # v7: no real odds available → P/L cannot be honestly calculated.
+        # The old approach computed implied odds from the model's own
+        # probability, which is circular (the model evaluates itself).
+        # We now return None for P/L to keep the track record honest.
+        return None, None, "no_odds"
 
     if is_correct:
         pnl = round(odds_used - 1.0, 4)

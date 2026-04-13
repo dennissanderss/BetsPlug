@@ -153,7 +153,7 @@ async def job_generate_predictions():
                 batch_ids = ids_to_predict[batch_start:batch_start + BATCH_SIZE]
                 for match_id in batch_ids:
                     try:
-                        await service.generate_forecast(match_id, db)
+                        await service.generate_forecast(match_id, db, source="live")
                         generated += 1
                     except Exception as exc:
                         log.warning("CRON: Prediction failed for %s: %s", match_id, exc)
@@ -518,7 +518,7 @@ async def job_generate_historical_predictions():
             generated = 0
             for match_id in match_ids:
                 try:
-                    await svc.generate_forecast(match_id, db)
+                    await svc.generate_forecast(match_id, db, source="backtest")
                     generated += 1
                 except Exception as exc:
                     log.warning("CRON: Historical prediction failed for %s: %s", match_id, exc)

@@ -27,6 +27,9 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+# Minimum confidence for BOTD selection — single source of truth.
+BOTD_MIN_CONFIDENCE = 0.60
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # v6.3: Historical accuracy endpoint for BOTD picks
@@ -60,7 +63,10 @@ async def get_botd_history(
         select(Prediction, PredictionEvaluation)
         .join(Match, Match.id == Prediction.match_id)
         .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
-        .where(Prediction.confidence >= 0.55)
+        .where(
+            Prediction.confidence >= BOTD_MIN_CONFIDENCE,
+            Prediction.prediction_source == "live",
+        )
         .order_by(Match.scheduled_at.desc())
     )
     rows = (await db.execute(stmt)).all()
@@ -132,19 +138,19 @@ async def get_botd_track_record(
 ) -> BOTDTrackRecord:
     """Return historical accuracy for the highest-confidence daily pick.
 
-    The BOTD is defined as the prediction with confidence >= 0.55 on any
-    given day. This endpoint looks at ALL such picks historically and
-    computes accuracy, streaks, and average confidence.
+    The BOTD is defined as the prediction with confidence >= BOTD_MIN_CONFIDENCE
+    on any given day, restricted to live (pre-match) predictions only.
     """
     from app.models.prediction import PredictionEvaluation
 
-    # Find all predictions that qualified as BOTD (confidence >= 0.55)
-    # grouped by match date, taking the highest confidence per day.
     stmt = (
         select(Prediction, PredictionEvaluation)
         .join(Match, Match.id == Prediction.match_id)
         .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
-        .where(Prediction.confidence >= 0.55)
+        .where(
+            Prediction.confidence >= BOTD_MIN_CONFIDENCE,
+            Prediction.prediction_source == "live",
+        )
         .order_by(Match.scheduled_at)
     )
     rows = (await db.execute(stmt)).all()
@@ -294,7 +300,9 @@ async def get_bet_of_the_day(
     where_clauses = [
         Match.scheduled_at >= window_start,
         Match.scheduled_at <= window_end,
-        Prediction.confidence >= 0.55,
+        Prediction.confidence >= BOTD_MIN_CONFIDENCE,
+        # Only serve genuinely pre-match predictions as BOTD
+        Prediction.prediction_source == "live",
     ]
     if status_filter is not None:
         where_clauses.append(status_filter)

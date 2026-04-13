@@ -65,6 +65,7 @@ class ForecastService:
         db: AsyncSession,
         model_version_id: Optional[uuid.UUID] = None,
         prediction_type: str = "match_result",
+        source: str = "live",
     ) -> Prediction:
         """Generate and persist a forecast for *match_id*.
 
@@ -140,6 +141,7 @@ class ForecastService:
             match_context=match_context,
             prediction_type=prediction_type,
             db=db,
+            source=source,
         )
 
         return prediction
@@ -639,9 +641,26 @@ class ForecastService:
         match_context: dict,
         prediction_type: str,
         db: AsyncSession,
+        source: str = "live",
     ) -> Prediction:
         """Create Prediction + PredictionExplanation rows and flush to db."""
         now = datetime.now(timezone.utc)
+        scheduled = match.scheduled_at
+
+        # ── Pre-match enforcement for live predictions ────────────────────
+        if source == "live" and scheduled and scheduled <= now:
+            # Match already started — downgrade to backtest
+            source = "backtest"
+
+        locked_at = now if source == "live" else None
+        lead_time = None
+        if scheduled:
+            lead_time = (scheduled - now).total_seconds() / 3600.0
+
+        # ── Value analysis: compare model probs vs bookmaker odds ────────
+        odds_snapshot = await self._build_odds_snapshot(
+            match, forecast_result, db
+        )
 
         prediction = Prediction(
             id=uuid.uuid4(),
@@ -668,6 +687,12 @@ class ForecastService:
             features_snapshot=match_context,
             raw_output=forecast_result.raw_output,
             is_simulation=True,
+            # Honesty fields
+            prediction_source=source,
+            locked_at=locked_at,
+            match_scheduled_at=scheduled,
+            lead_time_hours=round(lead_time, 2) if lead_time is not None else None,
+            closing_odds_snapshot=odds_snapshot,
         )
         db.add(prediction)
         await db.flush()  # get prediction.id without committing
@@ -687,6 +712,83 @@ class ForecastService:
         await db.flush()
 
         return prediction
+
+    # ------------------------------------------------------------------ #
+    # Value analysis helper                                                #
+    # ------------------------------------------------------------------ #
+
+    @staticmethod
+    async def _build_odds_snapshot(
+        match: Match,
+        forecast_result: "ForecastResult",
+        db: AsyncSession,
+    ) -> Optional[dict]:
+        """Fetch bookmaker odds and compute value metrics."""
+        try:
+            from app.models.odds import OddsHistory
+            stmt = (
+                select(OddsHistory)
+                .where(
+                    OddsHistory.match_id == match.id,
+                    OddsHistory.market == "1x2",
+                )
+                .order_by(OddsHistory.recorded_at.desc())
+                .limit(1)
+            )
+            row = (await db.execute(stmt)).scalar_one_or_none()
+            if not row or not row.home_odds:
+                return None
+
+            bk_odds = {
+                "home": float(row.home_odds),
+                "draw": float(row.draw_odds) if row.draw_odds else None,
+                "away": float(row.away_odds) if row.away_odds else None,
+            }
+            source = row.source or "unknown"
+
+            # Implied probabilities (raw, with vig)
+            raw_implied = {}
+            for k, o in bk_odds.items():
+                raw_implied[k] = (1.0 / o) if o and o > 1.0 else None
+
+            # Remove vig for fair implied
+            total = sum(v for v in raw_implied.values() if v)
+            fair_implied = {k: (v / total if v and total else None) for k, v in raw_implied.items()}
+
+            # Model probabilities
+            model_probs = {
+                "home": forecast_result.home_win_prob,
+                "draw": forecast_result.draw_prob or 0,
+                "away": forecast_result.away_win_prob,
+            }
+
+            # Edge = model_prob - fair_implied
+            edge = {}
+            for k in ("home", "draw", "away"):
+                fi = fair_implied.get(k)
+                edge[k] = round(model_probs[k] - fi, 4) if fi else None
+
+            # Expected value: (model_prob * odds) - 1
+            ev = {}
+            for k in ("home", "draw", "away"):
+                o = bk_odds.get(k)
+                ev[k] = round(model_probs[k] * o - 1, 4) if o else None
+
+            # Determine if the pick is a value bet
+            pick = max(model_probs, key=lambda k: model_probs[k])
+            is_value = ev.get(pick, -1) is not None and ev.get(pick, -1) > 0
+
+            return {
+                "bookmaker_odds": bk_odds,
+                "source": source,
+                "implied_probs_fair": {k: round(v, 4) if v else None for k, v in fair_implied.items()},
+                "model_edge": edge,
+                "expected_value": ev,
+                "pick": pick.upper(),
+                "is_value_bet": is_value,
+            }
+        except Exception:
+            return None
 
     # ------------------------------------------------------------------ #
     # Database helpers                                                     #

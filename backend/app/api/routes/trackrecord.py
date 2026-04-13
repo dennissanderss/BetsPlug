@@ -38,6 +38,9 @@ async def get_trackrecord_summary(
     model_version_id: Optional[uuid.UUID] = Query(
         default=None, description="Restrict to a specific model version"
     ),
+    source: Optional[str] = Query(
+        default=None, description="Filter by prediction source: 'live', 'backtest', or None for all"
+    ),
     db: AsyncSession = Depends(get_db),
 ) -> TrackrecordSummary:
     """
@@ -66,6 +69,8 @@ async def get_trackrecord_summary(
     )
     if model_version_id is not None:
         q = q.where(Prediction.model_version_id == model_version_id)
+    if source is not None:
+        q = q.where(Prediction.prediction_source == source)
 
     row = (await db.execute(q)).one()
 
@@ -103,6 +108,9 @@ async def get_trackrecord_segments(
         default=None,
         description="Alias for segment_type (frontend uses this name)",
     ),
+    source: Optional[str] = Query(
+        default=None, description="Filter by prediction source: 'live', 'backtest', or None for all"
+    ),
     db: AsyncSession = Depends(get_db),
 ) -> List[SegmentPerformance]:
     """
@@ -115,6 +123,7 @@ async def get_trackrecord_segments(
     and default to ``league``.
     """
     segment_type = segment_type or group_by or "league"
+    _source_filter = Prediction.prediction_source == source if source else None
     if segment_type == "sport":
         q = (
             select(
@@ -134,6 +143,8 @@ async def get_trackrecord_segments(
             .group_by(Sport.name)
             .order_by(Sport.name)
         )
+        if _source_filter is not None:
+            q = q.where(_source_filter)
     elif segment_type == "month":
         # v6 fix: Python-side aggregation. The previous SQL version
         # used func.to_char(..., 'YYYY-MM') for both SELECT and
@@ -218,6 +229,8 @@ async def get_trackrecord_segments(
             .group_by(League.name)
             .order_by(League.name)
         )
+        if _source_filter is not None:
+            q = q.where(_source_filter)
 
     rows = (await db.execute(q)).all()
 

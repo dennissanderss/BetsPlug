@@ -758,7 +758,7 @@ async def regenerate_predictions(
     errors: list[dict] = []
     for match in matches:
         try:
-            pred = await forecast_service.generate_forecast(match.id, db)
+            pred = await forecast_service.generate_forecast(match.id, db, source="backtest")
             generated += 1
         except Exception as exc:
             errors.append(

@@ -46,6 +46,24 @@ class Prediction(UUIDPrimaryKey, TimestampMixin, Base):
 
     is_simulation: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
+    # ── Honesty fields (v7) ───────────────────────────────────────────────
+    # prediction_source: 'live' = made before kickoff, 'backtest' = retroactive
+    prediction_source: Mapped[Optional[str]] = mapped_column(
+        String(20), default="backtest", nullable=True
+    )
+    # locked_at: timestamp proof for live predictions (NULL for backtests)
+    locked_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    # Snapshot of kickoff time at prediction moment (immutable even if match is rescheduled)
+    match_scheduled_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    # Hours before kickoff the prediction was made (negative = after kickoff)
+    lead_time_hours: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    # Bookmaker odds + value analysis frozen at prediction time
+    closing_odds_snapshot: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+
     match: Mapped[Match] = relationship(back_populates="predictions", lazy="selectin")
     model_version: Mapped[ModelVersion] = relationship(lazy="selectin")
     explanation: Mapped[Optional[PredictionExplanation]] = relationship(
@@ -64,6 +82,7 @@ class Prediction(UUIDPrimaryKey, TimestampMixin, Base):
         Index("ix_predictions_match_predicted_at", "match_id", "predicted_at"),
         # Composite index for bet-of-the-day: confidence DESC scan filtered by match date
         Index("ix_predictions_confidence", "confidence"),
+        Index("ix_predictions_source", "prediction_source"),
     )
 
 
