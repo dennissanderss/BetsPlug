@@ -17,14 +17,16 @@ import type { FreePickItem, FreePicksResponse } from "@/types/api";
 import { ProbBar } from "@/components/match-predictions/prob-bar";
 import { confColor, confLevel, formatKickoff } from "@/components/match-predictions/shared";
 
-/* ── Match card — sports-style design ──────────────────────────── */
+/* ── Match card — vertical timeline style ─────────────────────── */
 
 function PredictionCard({
   pick,
   index,
+  isLast,
 }: {
   pick: FreePickItem;
   index: number;
+  isLast: boolean;
 }) {
   const { t, locale } = useTranslations();
   const hasPrediction = pick.confidence != null && pick.confidence > 0;
@@ -35,136 +37,148 @@ function PredictionCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, x: -20 }}
+      whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.45, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#0d1424] to-[#0a0f1a] transition-all hover:border-green-500/30 hover:shadow-[0_8px_40px_rgba(74,222,128,0.08)]"
+      transition={{ duration: 0.45, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
+      className="relative flex gap-4 sm:gap-6"
     >
-      {/* Diagonal accent stripes */}
-      <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rotate-45 bg-gradient-to-b from-green-500/[0.08] to-transparent" />
-      <div className="pointer-events-none absolute -right-4 -top-4 h-24 w-24 rotate-45 bg-gradient-to-b from-emerald-500/[0.06] to-transparent" />
+      {/* Timeline connector */}
+      <div className="relative flex flex-col items-center">
+        {/* Dot */}
+        <div className="relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-green-500 bg-[#0a0f1a] shadow-[0_0_12px_rgba(74,222,128,0.4)]">
+          <div className="h-2 w-2 rounded-full bg-green-400" />
+        </div>
+        {/* Line */}
+        {!isLast && (
+          <div className="w-px flex-1 bg-gradient-to-b from-green-500/40 to-green-500/10" />
+        )}
+      </div>
 
-      {/* League banner */}
-      <div className="relative flex items-center justify-between px-5 py-3">
-        <div className="flex items-center gap-2">
-          <div className="h-4 w-1 rounded-full bg-green-500" />
-          <span className="text-[11px] font-bold uppercase tracking-widest text-green-400">
+      {/* Card */}
+      <div className="group mb-5 flex-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c1322] transition-all hover:border-green-500/30 hover:shadow-[0_8px_40px_rgba(74,222,128,0.08)] sm:mb-6">
+        {/* Diagonal accent stripes */}
+        <div className="pointer-events-none absolute -right-6 top-0 h-full w-24 overflow-hidden">
+          <div className="absolute -right-4 top-0 h-[200%] w-8 rotate-[20deg] bg-gradient-to-b from-green-500/[0.07] to-transparent" />
+          <div className="absolute right-2 top-0 h-[200%] w-4 rotate-[20deg] bg-gradient-to-b from-green-500/[0.05] to-transparent" />
+          <div className="absolute right-8 top-0 h-[200%] w-2 rotate-[20deg] bg-gradient-to-b from-green-500/[0.03] to-transparent" />
+        </div>
+
+        {/* League banner */}
+        <div className="relative flex items-center justify-center gap-3 border-b border-white/[0.06] bg-green-500/[0.06] px-4 py-2.5">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent to-green-500/30" />
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-green-400">
             {pick.league}
           </span>
+          <div className="h-px flex-1 bg-gradient-to-l from-transparent to-green-500/30" />
         </div>
-        <span className="flex items-center gap-1.5 text-[11px] text-slate-500">
-          <Clock className="h-3 w-3" />
-          {formatKickoff(pick.scheduled_at, locale)}
-        </span>
-      </div>
 
-      {/* Divider line with glow */}
-      <div className="mx-5 h-px bg-gradient-to-r from-green-500/30 via-green-500/10 to-transparent" />
+        {/* Teams — VS layout */}
+        <div className="relative px-5 py-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            {/* Home team */}
+            <div className="min-w-0 flex-1 text-center">
+              <p className="truncate text-base font-extrabold uppercase leading-tight tracking-wide text-white sm:text-lg">
+                {pick.home_team}
+              </p>
+            </div>
 
-      {/* Teams — VS layout */}
-      <div className="px-5 py-5">
-        <div className="flex items-center justify-between gap-3">
-          {/* Home team */}
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-lg font-extrabold leading-tight text-white">
-              {pick.home_team}
-            </p>
-          </div>
+            {/* VS badge */}
+            <div className="relative flex-shrink-0">
+              <div className="absolute inset-0 rounded-lg bg-green-500/30 blur-md" />
+              <div className="relative flex h-9 w-9 -skew-x-6 items-center justify-center rounded-lg bg-gradient-to-br from-green-400 to-emerald-500 shadow-[0_0_20px_rgba(74,222,128,0.4)]">
+                <span className="skew-x-6 text-xs font-black tracking-wider text-[#0a1018]">VS</span>
+              </div>
+            </div>
 
-          {/* VS badge */}
-          <div className="relative flex-shrink-0">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 ring-1 ring-green-500/30">
-              <span className="text-xs font-black tracking-wider text-green-400">VS</span>
+            {/* Away team */}
+            <div className="min-w-0 flex-1 text-center">
+              <p className="truncate text-base font-extrabold uppercase leading-tight tracking-wide text-white sm:text-lg">
+                {pick.away_team}
+              </p>
             </div>
           </div>
 
-          {/* Away team */}
-          <div className="min-w-0 flex-1 text-right">
-            <p className="truncate text-lg font-extrabold leading-tight text-white">
-              {pick.away_team}
-            </p>
+          {/* Kickoff time */}
+          <div className="mt-2 flex items-center justify-center gap-1 text-[11px] text-slate-500">
+            <Clock className="h-3 w-3" />
+            {formatKickoff(pick.scheduled_at, locale)}
           </div>
+
+          {/* Score (finished matches) */}
+          {isFinished && pick.home_score != null && pick.away_score != null && (
+            <div className="mt-3 flex items-center justify-center">
+              <div className="rounded-lg bg-white/[0.06] px-5 py-1.5 ring-1 ring-white/[0.1]">
+                <span className="text-xl font-black tabular-nums text-white">
+                  {pick.home_score} — {pick.away_score}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Score (finished matches) */}
-        {isFinished && pick.home_score != null && pick.away_score != null && (
-          <div className="mt-3 flex items-center justify-center">
-            <div className="rounded-lg bg-white/[0.05] px-4 py-1.5 ring-1 ring-white/[0.08]">
-              <span className="text-xl font-black tabular-nums text-white">
-                {pick.home_score} — {pick.away_score}
+        {/* Probability bar + Confidence */}
+        <div className="border-t border-white/[0.06] px-5 py-3 sm:px-6">
+          {hasPrediction ? (
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:gap-5">
+              {/* Prob bar */}
+              <div className="flex-1">
+                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                  {t("matchPred.winProbLabel")}
+                </p>
+                <ProbBar
+                  home={Math.round(pick.home_win_prob! * 100)}
+                  draw={pick.draw_prob != null ? Math.round(pick.draw_prob * 100) : null}
+                  away={Math.round(pick.away_win_prob! * 100)}
+                  homeTeam={pick.home_team}
+                  awayTeam={pick.away_team}
+                />
+              </div>
+
+              {/* Confidence */}
+              <div className="flex items-center gap-2 sm:flex-col sm:items-end sm:gap-0.5">
+                <span
+                  className="rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                  style={{ background: `${color}1a`, color }}
+                >
+                  {level}
+                </span>
+                <span
+                  className="text-2xl font-extrabold tabular-nums leading-none"
+                  style={{ color }}
+                >
+                  {cScore}
+                  <span className="text-sm font-semibold">%</span>
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/[0.06] px-3 py-2.5">
+              <Clock className="h-3.5 w-3.5 text-blue-400" />
+              <span className="text-[11px] font-semibold text-blue-300">
+                {t("home.freePredPending")}
               </span>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
 
-      {/* Probability bar */}
-      <div className="px-5 pb-4">
-        {hasPrediction ? (
-          <>
-            <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-              {t("matchPred.winProbLabel")}
-            </p>
-            <ProbBar
-              home={Math.round(pick.home_win_prob! * 100)}
-              draw={pick.draw_prob != null ? Math.round(pick.draw_prob * 100) : null}
-              away={Math.round(pick.away_win_prob! * 100)}
-              homeTeam={pick.home_team}
-              awayTeam={pick.away_team}
-            />
-          </>
-        ) : (
-          <div className="flex items-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/[0.06] px-3 py-2.5">
-            <Clock className="h-3.5 w-3.5 text-blue-400" />
-            <span className="text-[11px] font-semibold text-blue-300">
-              {t("home.freePredPending")}
+        {/* Result badge (finished only) */}
+        {isFinished && pick.is_correct !== null && (
+          <div className="border-t border-white/[0.06] px-5 py-2.5 sm:px-6">
+            <span
+              className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
+                pick.is_correct
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
+                  : "bg-red-500/15 text-red-400 border border-red-500/25"
+              }`}
+            >
+              {pick.is_correct ? (
+                <><CheckCircle2 className="h-3 w-3" /> Correct</>
+              ) : (
+                <><XCircle className="h-3 w-3" /> Incorrect</>
+              )}
             </span>
           </div>
-        )}
-      </div>
-
-      {/* Bottom bar: confidence + result */}
-      <div className="flex items-center justify-between border-t border-white/[0.06] bg-white/[0.02] px-5 py-3">
-        {isFinished && pick.is_correct !== null ? (
-          <span
-            className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
-              pick.is_correct
-                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
-                : "bg-red-500/15 text-red-400 border border-red-500/25"
-            }`}
-          >
-            {pick.is_correct ? (
-              <><CheckCircle2 className="h-3 w-3" /> Correct</>
-            ) : (
-              <><XCircle className="h-3 w-3" /> Incorrect</>
-            )}
-          </span>
-        ) : (
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-            {hasPrediction ? t("matchPred.confidenceLabel") : ""}
-          </span>
-        )}
-        {hasPrediction ? (
-          <div className="flex items-center gap-2">
-            <span
-              className="rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-              style={{ background: `${color}1a`, color }}
-            >
-              {level}
-            </span>
-            <span
-              className="text-2xl font-extrabold tabular-nums leading-none"
-              style={{ color }}
-            >
-              {cScore}
-              <span className="text-sm font-semibold">%</span>
-            </span>
-          </div>
-        ) : (
-          <span className="inline-flex items-center gap-1 rounded-full border border-slate-500/25 bg-slate-500/10 px-2.5 py-0.5 text-[11px] font-bold text-slate-400">
-            <Clock className="h-3 w-3" /> Pending
-          </span>
         )}
       </div>
     </motion.div>
@@ -175,24 +189,58 @@ function PredictionCard({
 
 function PredictionSkeleton() {
   return (
-    <div className="animate-pulse overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-[#0d1424] to-[#0a0f1a]">
-      <div className="flex items-center justify-between px-5 py-3">
-        <div className="h-3 w-28 rounded bg-white/[0.06]" />
-        <div className="h-3 w-20 rounded bg-white/[0.06]" />
+    <div className="relative flex gap-4 sm:gap-6">
+      <div className="relative flex flex-col items-center">
+        <div className="z-10 h-5 w-5 rounded-full border-2 border-white/10 bg-[#0a0f1a]" />
+        <div className="w-px flex-1 bg-white/[0.06]" />
       </div>
-      <div className="mx-5 h-px bg-white/[0.06]" />
-      <div className="flex items-center justify-between px-5 py-5">
-        <div className="h-5 w-24 rounded bg-white/[0.06]" />
-        <div className="h-10 w-10 rounded-xl bg-white/[0.04]" />
-        <div className="h-5 w-24 rounded bg-white/[0.06]" />
+      <div className="mb-5 flex-1 animate-pulse overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c1322]">
+        <div className="flex justify-center border-b border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
+          <div className="h-3 w-32 rounded bg-white/[0.06]" />
+        </div>
+        <div className="flex items-center justify-between px-6 py-5">
+          <div className="h-5 w-20 rounded bg-white/[0.06]" />
+          <div className="h-9 w-9 rounded-lg bg-white/[0.04]" />
+          <div className="h-5 w-20 rounded bg-white/[0.06]" />
+        </div>
+        <div className="border-t border-white/[0.06] px-6 py-3 space-y-2">
+          <div className="h-2.5 w-20 rounded bg-white/[0.04]" />
+          <div className="h-3 w-full rounded-full bg-white/[0.06]" />
+        </div>
       </div>
-      <div className="px-5 pb-4 space-y-2">
-        <div className="h-2.5 w-20 rounded bg-white/[0.04]" />
-        <div className="h-3 w-full rounded-full bg-white/[0.06]" />
+    </div>
+  );
+}
+
+/* ── Picks list — vertical timeline ───────────────────────────── */
+
+function PicksList({
+  picks,
+  label,
+  icon: Icon,
+}: {
+  picks: FreePickItem[];
+  label: string;
+  icon: typeof Trophy;
+}) {
+  return (
+    <div className="mb-8">
+      <div className="mb-5 flex items-center gap-3">
+        <Icon className="h-4 w-4 text-green-400" />
+        <h3 className="text-sm font-bold uppercase tracking-widest text-slate-300">
+          {label}
+        </h3>
+        <div className="h-px flex-1 bg-gradient-to-r from-green-500/20 to-transparent" />
       </div>
-      <div className="flex items-center justify-between border-t border-white/[0.06] bg-white/[0.02] px-5 py-3">
-        <div className="h-3 w-20 rounded bg-white/[0.04]" />
-        <div className="h-7 w-14 rounded bg-white/[0.06]" />
+      <div>
+        {picks.map((pick, i) => (
+          <PredictionCard
+            key={pick.match_id || pick.id}
+            pick={pick}
+            index={i}
+            isLast={i === picks.length - 1}
+          />
+        ))}
       </div>
     </div>
   );
@@ -212,7 +260,6 @@ export function FreePredictions() {
 
     async function loadPicks() {
       try {
-        // 1. Try the dedicated free-picks endpoint
         const res = await fetch(`${API}/homepage/free-picks`);
         const d: FreePicksResponse = await res.json();
 
@@ -221,11 +268,9 @@ export function FreePredictions() {
           return;
         }
 
-        // 2. Fallback: fetch upcoming fixtures directly and convert
         const fixRes = await fetch(`${API}/fixtures/upcoming?days=14`);
         const fixJson = await fixRes.json();
         const fixtures: Array<Record<string, unknown>> = fixJson.fixtures ?? [];
-
         const now = Date.now();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const upcoming = fixtures
@@ -265,7 +310,6 @@ export function FreePredictions() {
           stats: d.stats ?? { total: 0, correct: 0, winrate: 0 },
         });
       } catch {
-        // Last resort: try fixtures only
         try {
           const fixRes = await fetch(`${API}/fixtures/upcoming?days=14`);
           const fixJson = await fixRes.json();
@@ -301,7 +345,7 @@ export function FreePredictions() {
             });
           }
         } catch {
-          // Both endpoints failed — leave empty
+          // Both endpoints failed
         }
       } finally {
         setLoading(false);
@@ -322,16 +366,15 @@ export function FreePredictions() {
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-green-500/[0.04] blur-[120px]" />
       </div>
-      {/* Diagonal accent lines in background */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(-45deg, rgba(74,222,128,0.8) 0 1px, transparent 1px 40px)",
-        }}
-      />
+      {/* Diagonal accent stripes */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -right-20 top-0 h-full w-40 rotate-[15deg] bg-gradient-to-b from-green-500/[0.04] via-green-500/[0.02] to-transparent" />
+        <div className="absolute -right-10 top-0 h-full w-20 rotate-[15deg] bg-gradient-to-b from-green-500/[0.03] to-transparent" />
+        <div className="absolute -left-20 bottom-0 h-full w-40 rotate-[15deg] bg-gradient-to-t from-green-500/[0.04] via-green-500/[0.02] to-transparent" />
+        <div className="absolute -left-10 bottom-0 h-full w-20 rotate-[15deg] bg-gradient-to-t from-green-500/[0.03] to-transparent" />
+      </div>
 
-      <div className="relative mx-auto max-w-7xl px-6">
+      <div className="relative mx-auto max-w-3xl px-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -340,6 +383,11 @@ export function FreePredictions() {
           transition={{ duration: 0.5 }}
           className="mb-12 text-center"
         >
+          {/* Trophy icon */}
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 shadow-[0_0_40px_rgba(74,222,128,0.4)]">
+            <Trophy className="h-7 w-7 text-[#0a1018]" strokeWidth={2.5} />
+          </div>
+
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-4 py-1.5">
             <Gift className="h-4 w-4 text-green-400" />
             <span className="text-xs font-bold uppercase tracking-widest text-green-400">
@@ -354,7 +402,7 @@ export function FreePredictions() {
             {t("home.freePredSubtitle")}
           </p>
 
-          {/* Running winrate stats */}
+          {/* Winrate stats */}
           {stats.total > 0 && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -384,9 +432,9 @@ export function FreePredictions() {
           )}
         </motion.div>
 
-        {/* Picks */}
+        {/* Picks — vertical timeline layout */}
         {loading ? (
-          <div className="grid gap-5 md:grid-cols-3">
+          <div>
             <PredictionSkeleton />
             <PredictionSkeleton />
             <PredictionSkeleton />
@@ -394,37 +442,10 @@ export function FreePredictions() {
         ) : (
           <>
             {todayPicks.length > 0 && (
-              <div className="mb-10">
-                <div className="mb-5 flex items-center gap-3">
-                  <Trophy className="h-4 w-4 text-green-400" />
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-300">
-                    {t("home.freePredToday")}
-                  </h3>
-                  <div className="h-px flex-1 bg-gradient-to-r from-green-500/20 to-transparent" />
-                </div>
-                <div className="grid gap-5 md:grid-cols-3">
-                  {todayPicks.map((pick, i) => (
-                    <PredictionCard key={pick.match_id || pick.id} pick={pick} index={i} />
-                  ))}
-                </div>
-              </div>
+              <PicksList picks={todayPicks} label={t("home.freePredToday")} icon={Trophy} />
             )}
-
             {yesterdayPicks.length > 0 && (
-              <div className="mb-10">
-                <div className="mb-5 flex items-center gap-3">
-                  <Clock className="h-4 w-4 text-slate-400" />
-                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-300">
-                    {t("home.freePredYesterday")}
-                  </h3>
-                  <div className="h-px flex-1 bg-gradient-to-r from-slate-500/20 to-transparent" />
-                </div>
-                <div className="grid gap-5 md:grid-cols-3">
-                  {yesterdayPicks.map((pick, i) => (
-                    <PredictionCard key={pick.match_id || pick.id} pick={pick} index={i} />
-                  ))}
-                </div>
-              </div>
+              <PicksList picks={yesterdayPicks} label={t("home.freePredYesterday")} icon={Clock} />
             )}
           </>
         )}
