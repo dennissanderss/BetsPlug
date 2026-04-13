@@ -71,6 +71,7 @@ export function BetsPlugFooter() {
     { text: t("footer.termsOfService"), href: loc("/terms") },
     { text: t("footer.privacyPolicy"), href: loc("/privacy") },
     { text: t("footer.cookiePolicy"), href: loc("/cookies") },
+    { text: t("footer.responsibleGambling"), href: loc("/responsible-gambling") },
   ];
 
   return (

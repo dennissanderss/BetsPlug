@@ -601,6 +601,7 @@ const it = {
   "footer.comparison": "Confronto",
   "footer.contact": "Contatto",
   "footer.cookiePolicy": "Politica sui cookie",
+  "footer.responsibleGambling": "18+ Gioca Responsabilmente",
   "footer.copyright": "Tutti i diritti riservati. BetsPlug è una piattaforma di dati e analisi, non un operatore di gioco d'azzardo.",
   "footer.joinCta": "Unisciti al gruppo Premium",
   "footer.learn": "Imparare",
@@ -1257,8 +1258,8 @@ const it = {
   "testimonials.badge": "Testimonianze",
   "testimonials.verified": "Recensioni di acquirenti verificati",
   "testimonials.subtitle": "Migliaia di appassionati di calcio utilizzano già BetsPlug. Ecco cosa pensano.",
-  "testimonials.titleA": "Ciò che il nostro",
-  "testimonials.titleB": "Dire",
+  "testimonials.titleA": "I nostri",
+  "testimonials.titleB": "sono entusiasti",
   "testimonials.titleHighlight": "utenti",
 
   "topbar.cta": "Prova per € 0,01",

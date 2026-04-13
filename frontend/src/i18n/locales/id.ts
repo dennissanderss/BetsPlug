@@ -601,6 +601,7 @@ const id = {
   "footer.comparison": "Perbandingan",
   "footer.contact": "Kontak",
   "footer.cookiePolicy": "Kebijakan Cookie",
+  "footer.responsibleGambling": "18+ Bermain Bertanggung Jawab",
   "footer.copyright": "Semua hak dilindungi. BetsPlug adalah platform data & analitik - bukan operator perjudian.",
   "footer.joinCta": "Gabung Grup Premium",
   "footer.learn": "Pelajari",
@@ -1257,8 +1258,8 @@ const id = {
   "testimonials.badge": "Testimonial",
   "testimonials.verified": "Ulasan dari pembeli terverifikasi",
   "testimonials.subtitle": "Ribuan penggemar sepak bola sudah menggunakan BetsPlug. Inilah yang mereka pikirkan.",
-  "testimonials.titleA": "Apa milik kita",
-  "testimonials.titleB": "mengatakan",
+  "testimonials.titleA": "Para",
+  "testimonials.titleB": "kami sangat antusias",
   "testimonials.titleHighlight": "pengguna",
 
   "topbar.cta": "Coba €0,01",

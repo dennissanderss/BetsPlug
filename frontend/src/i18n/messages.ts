@@ -154,6 +154,7 @@ const en = {
   "footer.termsOfService": "Terms of Service",
   "footer.privacyPolicy": "Privacy Policy",
   "footer.cookiePolicy": "Cookie Policy",
+  "footer.responsibleGambling": "18+ Play Responsibly",
   "footer.comparison": "Comparison",
   "footer.betTypes": "Bet Types",
   "footer.viewAll": "View all",
@@ -229,9 +230,9 @@ const en = {
 
   /* Testimonials */
   "testimonials.badge": "Testimonials",
-  "testimonials.titleA": "What our",
+  "testimonials.titleA": "Our",
   "testimonials.titleHighlight": "users",
-  "testimonials.titleB": "say",
+  "testimonials.titleB": "are raving",
   "testimonials.verified": "Reviews from verified buyers",
   "testimonials.subtitle":
     "Thousands of football fans already use BetsPlug. Here's what they think.",
@@ -1999,6 +2000,7 @@ const nl: Dictionary = {
   "footer.termsOfService": "Algemene Voorwaarden",
   "footer.privacyPolicy": "Privacybeleid",
   "footer.cookiePolicy": "Cookiebeleid",
+  "footer.responsibleGambling": "18+ Speel Verantwoord",
   "footer.comparison": "Vergelijking",
   "footer.betTypes": "Wedmarkten",
   "footer.viewAll": "Bekijk alles",

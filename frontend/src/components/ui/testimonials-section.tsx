@@ -59,7 +59,7 @@ export const TestimonialsSection = ({
 
   useEffect(() => {
     if (testimonials.length <= 1) return;
-    const interval = setInterval(next, 6000);
+    const interval = setInterval(next, 10000);
     return () => clearInterval(interval);
   }, [testimonials.length, next]);
 

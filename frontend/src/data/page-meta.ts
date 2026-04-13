@@ -435,6 +435,50 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
   
 },
 
+  /* ─────────────────────── RESPONSIBLE GAMBLING ─────────────── */
+  "/responsible-gambling": {
+    en: {
+      title: "18+ Play Responsibly · BetsPlug",
+      description:
+        "BetsPlug is not a betting site. Read our responsible gambling policy, learn the signs of problem gambling, and find help resources.",
+    },
+    nl: {
+      title: "18+ Speel Verantwoord · BetsPlug",
+      description:
+        "BetsPlug is geen goksite. Lees ons beleid voor verantwoord gokken, herken de signalen van gokproblemen en vind hulporganisaties.",
+    },
+    de: {
+      title: "18+ Verantwortungsvolles Spielen · BetsPlug",
+      description:
+        "BetsPlug ist keine Wettseite. Lesen Sie unsere Richtlinie zum verantwortungsvollen Spielen, erkennen Sie Anzeichen von Spielsucht und finden Sie Hilfe.",
+    },
+    fr: {
+      title: "18+ Jouez Responsable · BetsPlug",
+      description:
+        "BetsPlug n'est pas un site de paris. Lisez notre politique de jeu responsable, identifiez les signes et trouvez de l'aide.",
+    },
+    es: {
+      title: "18+ Juega Responsablemente · BetsPlug",
+      description:
+        "BetsPlug no es un sitio de apuestas. Lee nuestra política de juego responsable, reconoce las señales y encuentra ayuda.",
+    },
+    it: {
+      title: "18+ Gioca Responsabilmente · BetsPlug",
+      description:
+        "BetsPlug non è un sito di scommesse. Leggi la nostra politica di gioco responsabile, riconosci i segnali e trova aiuto.",
+    },
+    sw: {
+      title: "18+ Cheza kwa Uwajibikaji · BetsPlug",
+      description:
+        "BetsPlug si tovuti ya kamari. Soma sera yetu ya kamari ya uwajibikaji, tambua ishara za tatizo la kamari na pata msaada.",
+    },
+    id: {
+      title: "18+ Bermain Bertanggung Jawab · BetsPlug",
+      description:
+        "BetsPlug bukan situs taruhan. Baca kebijakan perjudian bertanggung jawab kami, kenali tanda-tanda masalah dan temukan bantuan.",
+    },
+  },
+
   /* ─────────────────────────── HOW IT WORKS ─────────────────── */
   "/how-it-works": {
     en: {
