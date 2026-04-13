@@ -1592,5 +1592,8 @@ const de = {
   "pred.confidenceTooltip": "How certain our AI is.",
   "dash.upsellHeadline": "Pick of the Day",
   "dash.upsellSubtext": "For Gold members.",
+  "dash.botdRecent": "Pick of the Day — Recent Picks",
+  "dash.botdRecentDesc": "Our highest-confidence daily picks",
+  "dash.accurate": "accurate",
 } as Record<TranslationKey, string>;
 export default de;

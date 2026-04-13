@@ -1592,5 +1592,8 @@ const fr = {
   "home.freePredToday": "Today's free picks",
   "home.freePredYesterday": "Yesterday's results",
   "home.freePredPending": "AI analysis in progress",
+  "dash.botdRecent": "Pick of the Day — Recent Picks",
+  "dash.botdRecentDesc": "Our highest-confidence daily picks",
+  "dash.accurate": "accurate",
 } as Record<TranslationKey, string>;
 export default fr;
