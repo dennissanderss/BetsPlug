@@ -31,6 +31,7 @@ import { LeaguesTicker } from "@/components/ui/leagues-ticker";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { TopBar } from "@/components/ui/top-bar";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import type { Article } from "@/data/articles";
 
 const FreePredictions = dynamic(() => import("@/components/ui/free-predictions").then(m => m.FreePredictions), { ssr: false });
 const BetsPlugFooter = dynamic(() => import("@/components/ui/betsplug-footer").then(m => m.BetsPlugFooter), { ssr: true });
@@ -460,7 +461,11 @@ function DashboardPreviewSection() {
 
 // ─── Landing Page ───────────────────────────────────────────────────────────
 
-export function HomeContent() {
+interface HomeContentProps {
+  articles: Article[];
+}
+
+export function HomeContent({ articles }: HomeContentProps) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -1188,7 +1193,7 @@ export function HomeContent() {
       {/* ═══════════════════════════════════════════════════════════════════
           LATEST ARTICLES — 3 most recent posts + light "see all" link
          ═══════════════════════════════════════════════════════════════════ */}
-      <LatestArticlesSection />
+      <LatestArticlesSection articles={articles} />
 
       {/* ═══════════════════════════════════════════════════════════════════
           FINAL CTA — last push before footer

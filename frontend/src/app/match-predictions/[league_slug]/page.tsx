@@ -15,13 +15,15 @@ import {
 } from "@/i18n/config";
 import { localizePath } from "@/i18n/routes";
 import {
-  getAllLeagueHubSlugs,
-  getLeagueHub,
-  pickHubLocale,
+  fetchLeagueHubSlugs,
+  fetchLeagueHubBySlug,
   type LeagueHub,
   type LeagueHubLocale,
-} from "@/data/league-hubs";
+} from "@/lib/sanity-data";
+import { pickHubLocale } from "@/data/league-hubs";
 import { LeagueHubFixtures } from "./league-hub-fixtures";
+
+export const revalidate = 3600;
 
 /**
  * League hub — public SEO landing page for one competition.
@@ -40,8 +42,9 @@ type Params = { league_slug: string };
 
 /* ── Static params ────────────────────────────────────────── */
 
-export function generateStaticParams(): Params[] {
-  return getAllLeagueHubSlugs().map((slug) => ({ league_slug: slug }));
+export async function generateStaticParams(): Promise<Params[]> {
+  const slugs = await fetchLeagueHubSlugs();
+  return slugs.map((slug) => ({ league_slug: slug }));
 }
 
 /* ── Helpers ──────────────────────────────────────────────── */
@@ -69,7 +72,7 @@ export async function generateMetadata(props: {
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { league_slug } = await props.params;
-  const hub = getLeagueHub(league_slug);
+  const hub = await fetchLeagueHubBySlug(league_slug);
   if (!hub) {
     return {
       title: "League Not Found · BetsPlug",
@@ -172,7 +175,7 @@ export default async function LeagueHubPage(props: {
   params: Promise<Params>;
 }) {
   const { league_slug } = await props.params;
-  const hub = getLeagueHub(league_slug);
+  const hub = await fetchLeagueHubBySlug(league_slug);
   if (!hub) notFound();
 
   const editorialLocale = readLocaleFromCookie();

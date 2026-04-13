@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowRight, Clock, Newspaper } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
-import { articles as ALL_ARTICLES } from "@/data/articles";
+import type { Article } from "@/data/articles";
 import { CoverArt, SportBadge } from "@/app/articles/article-visuals";
 
 /**
@@ -21,11 +21,15 @@ import { CoverArt, SportBadge } from "@/app/articles/article-visuals";
  * ~400ms after the first. Now only the section heading fades in
  * once; everything else is static.
  */
-export function LatestArticlesSection() {
+interface LatestArticlesSectionProps {
+  articles: Article[];
+}
+
+export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
 
-  const latest = [...ALL_ARTICLES]
+  const latest = [...articles]
     .sort(
       (a, b) =>
         new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()

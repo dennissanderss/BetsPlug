@@ -21,12 +21,11 @@ import {
 } from "@/i18n/config";
 import { localizePath } from "@/i18n/routes";
 import {
-  getAllLearnPillarSlugs,
-  getLearnPillar,
   pickLearnPillarLocale,
   type LearnPillar,
   type LearnPillarLocale,
 } from "@/data/learn-pillars";
+import { fetchLearnPillarSlugs, fetchLearnPillarBySlug } from "@/lib/sanity-data";
 
 /**
  * Learn pillar — long-form evergreen explainer.
@@ -44,12 +43,15 @@ import {
 
 const SITE_URL = "https://betsplug.com";
 
+export const revalidate = 3600;
+
 type Params = { slug: string };
 
 /* ── Static params ────────────────────────────────────────── */
 
-export function generateStaticParams(): Params[] {
-  return getAllLearnPillarSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams(): Promise<Params[]> {
+  const slugs = await fetchLearnPillarSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 /* ── Helpers ──────────────────────────────────────────────── */
@@ -77,7 +79,7 @@ export async function generateMetadata(props: {
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { slug } = await props.params;
-  const pillar = getLearnPillar(slug);
+  const pillar = await fetchLearnPillarBySlug(slug);
   if (!pillar) {
     return {
       title: "Topic Not Found · BetsPlug",
@@ -200,7 +202,7 @@ export default async function LearnPillarPage(props: {
   params: Promise<Params>;
 }) {
   const { slug } = await props.params;
-  const pillar = getLearnPillar(slug);
+  const pillar = await fetchLearnPillarBySlug(slug);
   if (!pillar) notFound();
 
   const editorialLocale = readLocaleFromCookie();
@@ -340,8 +342,7 @@ export default async function LearnPillarPage(props: {
                   {t("Keep reading", "Verder lezen")}
                 </div>
                 <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                  {pillar.related
-                    .map((s) => getLearnPillar(s))
+                  {(await Promise.all(pillar.related.map((s) => fetchLearnPillarBySlug(s))))
                     .filter((p): p is LearnPillar => Boolean(p))
                     .filter((p) => p.slug !== pillar.slug)
                     .map((p) => (

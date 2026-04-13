@@ -7,6 +7,9 @@ import {
 } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { fetchAllArticles } from "@/lib/sanity-data";
+
+export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
@@ -28,16 +31,21 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function ArticlesPage() {
-  const breadcrumbs = getLocalizedBreadcrumbs([
-    { labelKey: "bc.home", canonicalPath: "/" },
-    { labelKey: "bc.articles", canonicalPath: "/articles" },
+export default async function ArticlesPage() {
+  const [allArticles, breadcrumbs] = await Promise.all([
+    fetchAllArticles(),
+    Promise.resolve(
+      getLocalizedBreadcrumbs([
+        { labelKey: "bc.home", canonicalPath: "/" },
+        { labelKey: "bc.articles", canonicalPath: "/articles" },
+      ]),
+    ),
   ]);
 
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
-      <ArticlesContent />
+      <ArticlesContent articles={allArticles} />
     </>
   );
 }

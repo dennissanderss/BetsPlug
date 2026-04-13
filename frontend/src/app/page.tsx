@@ -6,6 +6,9 @@ import {
   FaqJsonLd,
 } from "@/components/seo/json-ld";
 import { getLocalizedFaq } from "@/lib/seo-helpers";
+import { fetchAllArticles } from "@/lib/sanity-data";
+
+export const revalidate = 3600;
 
 /* ── Homepage FAQ keys (resolved per-locale at render time) ── */
 
@@ -20,8 +23,11 @@ const FAQ_KEYS = [
   { q: "faq.home.q8", a: "faq.home.a8" },
 ];
 
-export default function HomePage() {
-  const faqItems = getLocalizedFaq(FAQ_KEYS);
+export default async function HomePage() {
+  const [articles, faqItems] = await Promise.all([
+    fetchAllArticles(),
+    Promise.resolve(getLocalizedFaq(FAQ_KEYS)),
+  ]);
 
   return (
     <>
@@ -32,7 +38,7 @@ export default function HomePage() {
       <FaqJsonLd items={faqItems} />
 
       {/* Client-rendered landing page content */}
-      <HomeContent />
+      <HomeContent articles={articles} />
     </>
   );
 }

@@ -1,9 +1,8 @@
-import { articles } from "@/data/articles";
-import { LEAGUE_HUBS } from "@/data/league-hubs";
-import { BET_TYPE_HUBS } from "@/data/bet-type-hubs";
-import { LEARN_PILLARS } from "@/data/learn-pillars";
+import { fetchAllSlugsForSitemap } from "@/lib/sanity-data";
 import { defaultLocale, locales, localeMeta } from "@/i18n/config";
 import { localizePath } from "@/i18n/routes";
+
+export const revalidate = 3600;
 
 /**
  * Custom sitemap route — served at /sitemap.xml
@@ -107,8 +106,10 @@ function escapeXml(value: string): string {
 
 /* ── Sitemap builder ────────────────────────────────────────── */
 
-function buildEntries(): SitemapEntry[] {
+async function buildEntries(): Promise<SitemapEntry[]> {
   const now = new Date();
+  const { articles, learnPillars, leagueHubs, betTypeHubs } =
+    await fetchAllSlugsForSitemap();
 
   const pageEntries: SitemapEntry[] = PUBLIC_PATHS.map(
     ({ canonical, priority, changeFrequency }) => ({
@@ -120,34 +121,34 @@ function buildEntries(): SitemapEntry[] {
     }),
   );
 
-  const leagueHubEntries: SitemapEntry[] = LEAGUE_HUBS.map((hub) => {
-    const canonical = `/match-predictions/${hub.slug}`;
+  const leagueHubEntries: SitemapEntry[] = leagueHubs.map((slug) => {
+    const canonical = `/match-predictions/${slug}`;
     return {
       url: absoluteUrl(localizePath(canonical, defaultLocale)),
       lastModified: now,
-      changeFrequency: "daily",
+      changeFrequency: "daily" as ChangeFreq,
       priority: 0.85,
       alternates: languageAlternatesFor(canonical),
     };
   });
 
-  const betTypeHubEntries: SitemapEntry[] = BET_TYPE_HUBS.map((hub) => {
-    const canonical = `/bet-types/${hub.slug}`;
+  const betTypeHubEntries: SitemapEntry[] = betTypeHubs.map((slug) => {
+    const canonical = `/bet-types/${slug}`;
     return {
       url: absoluteUrl(localizePath(canonical, defaultLocale)),
       lastModified: now,
-      changeFrequency: "monthly",
+      changeFrequency: "monthly" as ChangeFreq,
       priority: 0.75,
       alternates: languageAlternatesFor(canonical),
     };
   });
 
-  const learnPillarEntries: SitemapEntry[] = LEARN_PILLARS.map((pillar) => {
-    const canonical = `/learn/${pillar.slug}`;
+  const learnPillarEntries: SitemapEntry[] = learnPillars.map((slug) => {
+    const canonical = `/learn/${slug}`;
     return {
       url: absoluteUrl(localizePath(canonical, defaultLocale)),
       lastModified: now,
-      changeFrequency: "monthly",
+      changeFrequency: "monthly" as ChangeFreq,
       priority: 0.75,
       alternates: languageAlternatesFor(canonical),
     };
@@ -157,8 +158,10 @@ function buildEntries(): SitemapEntry[] {
     const canonical = `/articles/${article.slug}`;
     return {
       url: absoluteUrl(canonical),
-      lastModified: new Date(article.publishedAt),
-      changeFrequency: "monthly",
+      lastModified: article.publishedAt
+        ? new Date(article.publishedAt)
+        : now,
+      changeFrequency: "monthly" as ChangeFreq,
       priority: 0.6,
       alternates: languageAlternatesFor(canonical),
     };
@@ -167,7 +170,7 @@ function buildEntries(): SitemapEntry[] {
   const legalEntries: SitemapEntry[] = LEGAL_PATHS.map(({ path, priority }) => ({
     url: absoluteUrl(path),
     lastModified: now,
-    changeFrequency: "yearly",
+    changeFrequency: "yearly" as ChangeFreq,
     priority,
   }));
 
@@ -215,8 +218,8 @@ ${urlBlocks}
 
 /* ── Route handler ──────────────────────────────────────────── */
 
-export function GET(): Response {
-  const xml = serializeXml(buildEntries());
+export async function GET(): Promise<Response> {
+  const xml = serializeXml(await buildEntries());
   return new Response(xml, {
     headers: {
       "Content-Type": "application/xml; charset=utf-8",

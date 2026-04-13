@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { articles, getArticleBySlug, type Article } from "@/data/articles";
+import {
+  fetchArticleSlugs,
+  fetchArticleBySlug,
+  type Article,
+} from "@/lib/sanity-data";
 import { ArticleTemplate } from "../article-template";
+
+export const revalidate = 3600;
 
 /**
  * Single article page — uses the shared ArticleTemplate so every
@@ -12,8 +18,9 @@ const SITE_URL = "https://betsplug.com";
 
 type Params = { slug: string };
 
-export function generateStaticParams(): Params[] {
-  return articles.map((a) => ({ slug: a.slug }));
+export async function generateStaticParams(): Promise<Params[]> {
+  const slugs = await fetchArticleSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 /* ── Helpers ─────────────────────────────────────────────── */
@@ -30,7 +37,7 @@ export async function generateMetadata(props: {
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { slug } = await props.params;
-  const article = getArticleBySlug(slug);
+  const article = await fetchArticleBySlug(slug);
   if (!article) {
     return {
       title: "Article Not Found · BetsPlug",
@@ -106,7 +113,7 @@ export default async function SingleArticlePage(props: {
   params: Promise<Params>;
 }) {
   const { slug } = await props.params;
-  const article = getArticleBySlug(slug);
+  const article = await fetchArticleBySlug(slug);
   if (!article) notFound();
 
   const jsonLd = buildArticleJsonLd(article);

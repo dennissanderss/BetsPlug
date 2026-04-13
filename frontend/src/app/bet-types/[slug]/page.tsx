@@ -15,13 +15,16 @@ import {
 } from "@/i18n/config";
 import { localizePath } from "@/i18n/routes";
 import {
-  getAllBetTypeHubSlugs,
-  getBetTypeHub,
-  pickBetTypeHubLocale,
+  fetchBetTypeHubSlugs,
+  fetchBetTypeHubBySlug,
+  fetchAllBetTypeHubs,
   type BetTypeHub,
   type BetTypeHubLocale,
-} from "@/data/bet-type-hubs";
+} from "@/lib/sanity-data";
+import { pickBetTypeHubLocale } from "@/data/bet-type-hubs";
 import { BetTypeHubFixtures } from "./bet-type-hub-fixtures";
+
+export const revalidate = 3600;
 
 /**
  * Bet-type hub — public SEO landing page for one betting market.
@@ -40,8 +43,9 @@ type Params = { slug: string };
 
 /* ── Static params ────────────────────────────────────────── */
 
-export function generateStaticParams(): Params[] {
-  return getAllBetTypeHubSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams(): Promise<Params[]> {
+  const slugs = await fetchBetTypeHubSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 /* ── Helpers ──────────────────────────────────────────────── */
@@ -69,7 +73,7 @@ export async function generateMetadata(props: {
   params: Promise<Params>;
 }): Promise<Metadata> {
   const { slug } = await props.params;
-  const hub = getBetTypeHub(slug);
+  const hub = await fetchBetTypeHubBySlug(slug);
   if (!hub) {
     return {
       title: "Bet Type Not Found · BetsPlug",
@@ -171,12 +175,13 @@ export default async function BetTypeHubPage(props: {
   params: Promise<Params>;
 }) {
   const { slug } = await props.params;
-  const hub = getBetTypeHub(slug);
+  const hub = await fetchBetTypeHubBySlug(slug);
   if (!hub) notFound();
 
   const editorialLocale = readLocaleFromCookie();
   const jsonLd = buildJsonLd(hub, editorialLocale);
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
+  const allHubs = await fetchAllBetTypeHubs();
 
   return (
     <>
@@ -334,22 +339,18 @@ export default async function BetTypeHubPage(props: {
                 {t("Related markets", "Gerelateerde markten")}
               </div>
               <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                {getAllBetTypeHubSlugs()
-                  .filter((s) => s !== hub.slug)
-                  .map((s) => {
-                    const other = getBetTypeHub(s);
-                    if (!other) return null;
-                    return (
-                      <Link
-                        key={s}
-                        href={`/bet-types/${s}`}
-                        className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.08] bg-white/[0.02] px-4 py-3 text-sm font-bold text-slate-200 transition hover:border-green-500/40 hover:bg-green-500/[0.05] hover:text-green-300"
-                      >
-                        <span>{other.name[editorialLocale]}</span>
-                        <ArrowRight className="h-4 w-4 text-slate-500 transition group-hover:text-green-300" />
-                      </Link>
-                    );
-                  })}
+                {allHubs
+                  .filter((other) => other.slug !== hub.slug)
+                  .map((other) => (
+                    <Link
+                      key={other.slug}
+                      href={`/bet-types/${other.slug}`}
+                      className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.08] bg-white/[0.02] px-4 py-3 text-sm font-bold text-slate-200 transition hover:border-green-500/40 hover:bg-green-500/[0.05] hover:text-green-300"
+                    >
+                      <span>{other.name[editorialLocale]}</span>
+                      <ArrowRight className="h-4 w-4 text-slate-500 transition group-hover:text-green-300" />
+                    </Link>
+                  ))}
               </div>
             </div>
           </div>

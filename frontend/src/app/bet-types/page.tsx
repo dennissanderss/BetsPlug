@@ -9,13 +9,15 @@ import {
   isLocale,
   LOCALE_COOKIE,
 } from "@/i18n/config";
+import { fetchAllBetTypeHubs } from "@/lib/sanity-data";
 import {
-  BET_TYPE_HUBS,
   pickBetTypeHubLocale,
   type BetTypeHubLocale,
 } from "@/data/bet-type-hubs";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
+
+export const revalidate = 3600;
 
 /**
  * /bet-types — index page listing every bet-type hub.
@@ -50,9 +52,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function BetTypesIndexPage() {
+export default async function BetTypesIndexPage() {
   const editorialLocale = readLocaleFromCookie();
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
+  const hubs = await fetchAllBetTypeHubs();
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#0a1220] text-slate-100">
@@ -100,7 +103,7 @@ export default function BetTypesIndexPage() {
       {/* Hub cards */}
       <section className="relative px-4 pb-20">
         <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2">
-          {BET_TYPE_HUBS.map((hub) => (
+          {hubs.map((hub) => (
             <Link
               key={hub.slug}
               href={`/bet-types/${hub.slug}`}

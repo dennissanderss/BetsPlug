@@ -10,10 +10,10 @@ import {
   LOCALE_COOKIE,
 } from "@/i18n/config";
 import {
-  LEARN_PILLARS,
   pickLearnPillarLocale,
   type LearnPillarLocale,
 } from "@/data/learn-pillars";
+import { fetchAllLearnPillars } from "@/lib/sanity-data";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 
@@ -51,8 +51,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function LearnIndexPage() {
+export const revalidate = 3600;
+
+export default async function LearnIndexPage() {
   const editorialLocale = readLocaleFromCookie();
+  const pillars = await fetchAllLearnPillars();
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
 
   return (
@@ -99,7 +102,7 @@ export default function LearnIndexPage() {
       {/* Pillar cards */}
       <section className="relative px-4 pb-20">
         <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2">
-          {LEARN_PILLARS.map((pillar) => (
+          {pillars.map((pillar) => (
             <Link
               key={pillar.slug}
               href={`/learn/${pillar.slug}`}

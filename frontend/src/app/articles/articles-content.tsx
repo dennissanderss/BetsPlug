@@ -14,7 +14,7 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
-import { articles as ALL_ARTICLES, type Article, type Sport } from "@/data/articles";
+import type { Article, Sport } from "@/data/articles";
 import { SportIcon, SportBadge, CoverArt } from "./article-visuals";
 
 /* ──────────────────────────────────────────────────────────────
@@ -23,7 +23,11 @@ import { SportIcon, SportBadge, CoverArt } from "./article-visuals";
 
 type TabId = "all" | Sport;
 
-export function ArticlesContent() {
+interface ArticlesContentProps {
+  articles: Article[];
+}
+
+export function ArticlesContent({ articles }: ArticlesContentProps) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const [activeTab, setActiveTab] = useState<TabId>("all");
@@ -36,11 +40,11 @@ export function ArticlesContent() {
   // Sort newest first
   const sorted = useMemo(
     () =>
-      [...ALL_ARTICLES].sort(
+      [...articles].sort(
         (a, b) =>
           new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
       ),
-    []
+    [articles]
   );
 
   const filtered = useMemo(() => {
