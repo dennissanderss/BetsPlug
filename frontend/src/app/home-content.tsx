@@ -32,7 +32,7 @@ import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { TopBar } from "@/components/ui/top-bar";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { Article } from "@/data/articles";
-import type { Testimonial } from "@/components/ui/testimonials-columns";
+import type { Testimonial } from "@/components/ui/testimonials-section";
 import type { ComparisonRow } from "@/components/ui/comparison-table";
 import { getLocaleValue } from "@/lib/sanity-data";
 

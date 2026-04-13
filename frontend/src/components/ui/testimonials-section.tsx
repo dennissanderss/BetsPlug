@@ -1,62 +1,190 @@
 "use client";
 
-import { motion } from "motion/react";
-import { TestimonialsColumn, type Testimonial } from "@/components/ui/testimonials-columns";
+import { useEffect, useRef, useState } from "react";
+import { motion, useAnimation, useInView } from "motion/react";
+import { Star, Quote } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "@/i18n/locale-provider";
+
+export interface Testimonial {
+  text: string;
+  image: string;
+  name: string;
+  role: string;
+}
 
 interface TestimonialsSectionProps {
   testimonials?: Testimonial[];
 }
 
-export const TestimonialsSection = ({ testimonials = [] }: TestimonialsSectionProps) => {
-  const firstColumn = testimonials.slice(0, 3);
-  const secondColumn = testimonials.slice(3, 6);
-  const thirdColumn = testimonials.slice(6, 9);
+export const TestimonialsSection = ({
+  testimonials = [],
+}: TestimonialsSectionProps) => {
+  const [activeIndex, setActiveIndex] = useState(0);
   const { t } = useTranslations();
+
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+  const controls = useAnimation();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+  };
+
+  useEffect(() => {
+    if (isInView) controls.start("visible");
+  }, [isInView, controls]);
+
+  useEffect(() => {
+    if (testimonials.length <= 1) return;
+    const interval = setInterval(() => {
+      setActiveIndex((c) => (c + 1) % testimonials.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
+
+  if (testimonials.length === 0) return null;
+
   return (
-    <section className="relative overflow-hidden py-20 md:py-28">
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden py-20 md:py-28"
+    >
       {/* Background glow */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-1/2 h-[600px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500/[0.05] blur-[140px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
-        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true }}
-          className="mx-auto flex max-w-2xl flex-col items-center justify-center text-center"
+          initial="hidden"
+          animate={controls}
+          variants={containerVariants}
+          className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:gap-20"
         >
-          <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
-            {t("testimonials.badge")}
-          </span>
+          {/* Left: heading + navigation dots */}
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col justify-center"
+          >
+            <div className="space-y-6">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
+                <Star className="h-3.5 w-3.5 fill-green-400" />
+                {t("testimonials.badge")}
+              </span>
 
-          <h2 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
-            {t("testimonials.titleA")}{" "}
-            <span className="gradient-text">{t("testimonials.titleHighlight")}</span>{" "}
-            {t("testimonials.titleB")}
-          </h2>
-          <p className="mt-5 text-base text-slate-400">
-            {t("testimonials.subtitle")}
-          </p>
+              <h2 className="text-balance text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
+                {t("testimonials.titleA")}{" "}
+                <span className="gradient-text">
+                  {t("testimonials.titleHighlight")}
+                </span>{" "}
+                {t("testimonials.titleB")}
+              </h2>
+
+              <p className="max-w-[540px] text-base text-slate-400 md:text-lg">
+                {t("testimonials.subtitle")}
+              </p>
+
+              {/* Dots */}
+              <div className="flex items-center gap-3 pt-4">
+                {testimonials.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveIndex(i)}
+                    className={`h-2.5 rounded-full transition-all duration-300 ${
+                      activeIndex === i
+                        ? "w-10 bg-green-500"
+                        : "w-2.5 bg-white/20 hover:bg-white/40"
+                    }`}
+                    aria-label={`View testimonial ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right: animated card carousel */}
+          <motion.div
+            variants={itemVariants}
+            className="relative min-h-[340px] md:min-h-[400px]"
+          >
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                className="absolute inset-0"
+                initial={{ opacity: 0, x: 100 }}
+                animate={{
+                  opacity: activeIndex === index ? 1 : 0,
+                  x: activeIndex === index ? 0 : 100,
+                  scale: activeIndex === index ? 1 : 0.9,
+                }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                style={{ zIndex: activeIndex === index ? 10 : 0 }}
+              >
+                <div className="flex h-full flex-col rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-8 shadow-xl shadow-green-500/[0.04] backdrop-blur-sm">
+                  {/* Stars */}
+                  <div className="mb-6 flex gap-1">
+                    {[...Array(5)].map((_, j) => (
+                      <Star
+                        key={j}
+                        className="h-5 w-5 fill-green-400 text-green-400"
+                      />
+                    ))}
+                  </div>
+
+                  {/* Quote */}
+                  <div className="relative mb-6 flex-1">
+                    <Quote className="absolute -left-1 -top-1 h-8 w-8 rotate-180 text-green-500/20" />
+                    <p className="relative z-10 text-lg font-medium leading-relaxed text-slate-200">
+                      &ldquo;{testimonial.text}&rdquo;
+                    </p>
+                  </div>
+
+                  <Separator className="my-4 bg-white/[0.08]" />
+
+                  {/* Author */}
+                  <div className="flex items-center gap-4">
+                    <Avatar className="h-12 w-12 border border-white/10">
+                      <AvatarImage
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                      />
+                      <AvatarFallback className="bg-green-500/20 text-green-400">
+                        {testimonial.name.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h3 className="text-sm font-semibold tracking-tight text-white">
+                        {testimonial.name}
+                      </h3>
+                      <p className="text-xs text-slate-500">
+                        {testimonial.role}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+
+            {/* Decorative corner elements */}
+            <div className="absolute -bottom-4 -left-4 h-20 w-20 rounded-2xl bg-green-500/[0.04]" />
+            <div className="absolute -right-4 -top-4 h-20 w-20 rounded-2xl bg-green-500/[0.04]" />
+          </motion.div>
         </motion.div>
-
-        {/* Columns */}
-        <div className="mt-14 flex max-h-[740px] justify-center gap-6 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]">
-          <TestimonialsColumn testimonials={firstColumn} duration={18} />
-          <TestimonialsColumn
-            testimonials={secondColumn}
-            className="hidden md:block"
-            duration={22}
-          />
-          <TestimonialsColumn
-            testimonials={thirdColumn}
-            className="hidden lg:block"
-            duration={20}
-          />
-        </div>
       </div>
     </section>
   );
