@@ -109,6 +109,7 @@ class FixtureItem(BaseModel):
     league_id: str
     league_name: Optional[str] = None
     league_slug: Optional[str] = None
+    league_country: Optional[str] = None
     home_team_id: str
     home_team_name: Optional[str] = None
     home_team_slug: Optional[str] = None
@@ -384,6 +385,7 @@ def _build_fixture_item(
         league_id=str(match.league_id),
         league_name=match.league.name if match.league else None,
         league_slug=match.league.slug if match.league else None,
+        league_country=match.league.country if match.league else None,
         home_team_id=str(match.home_team_id),
         home_team_name=match.home_team.name if match.home_team else None,
         home_team_slug=match.home_team.slug if match.home_team else None,

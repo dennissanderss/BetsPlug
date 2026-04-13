@@ -142,10 +142,28 @@ class IngestionService:
             self.log.info("ingestion_started", run_id=str(self._run.id))
 
             # --- Pipeline stages ---
+            # fetch_leagues() discovers ALL leagues from the API and
+            # stores them in the DB.  The heavy sync (teams, players,
+            # stats, etc.) only runs for the leagues the adapter has
+            # enabled — controlled by ``_enabled_leagues``.
             sports = await self._ingest_sports(adapter)
+            enabled = set(getattr(adapter, "_enabled_leagues", []))
             for sport_rec in sports:
-                leagues = await self._ingest_leagues(adapter, sport_rec)
-                for league_rec in leagues:
+                all_leagues = await self._ingest_leagues(adapter, sport_rec)
+
+                # Separate: enabled leagues get full sync,
+                # the rest are stored in the DB but not processed.
+                sync_leagues = [
+                    lg for lg in all_leagues
+                    if not enabled or lg.slug in enabled
+                ]
+                self.log.info(
+                    "ingestion_league_filter",
+                    discovered=len(all_leagues),
+                    syncing=len(sync_leagues),
+                )
+
+                for league_rec in sync_leagues:
                     teams = await self._ingest_teams(adapter, league_rec)
                     season_rec = await self._ensure_season(league_rec)
                     for team_rec in teams:

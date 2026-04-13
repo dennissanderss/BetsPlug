@@ -216,6 +216,9 @@ class APIFootballAdapter(DataSourceAdapter):
         )
         self._season: int = int(self.config.get("season", _current_season()))
         self._requests_today: int = 0
+        # Dynamic slug → API-Football ID mapping, populated by
+        # fetch_leagues() when it hits the /leagues endpoint.
+        self._dynamic_league_ids: dict[str, int] = dict(LEAGUE_SLUG_TO_ID)
 
     # ------------------------------------------------------------------
     # Internal HTTP helper
@@ -260,8 +263,14 @@ class APIFootballAdapter(DataSourceAdapter):
         return data.get("response", [])
 
     def _league_id(self, league_slug: str) -> int | None:
-        """Resolve a league slug to an API-Football league ID."""
-        return LEAGUE_SLUG_TO_ID.get(league_slug)
+        """Resolve a league slug to an API-Football league ID.
+
+        Checks the dynamic mapping first (populated by fetch_leagues()),
+        then falls back to the static LEAGUE_SLUG_TO_ID constant.
+        """
+        return self._dynamic_league_ids.get(
+            league_slug, LEAGUE_SLUG_TO_ID.get(league_slug)
+        )
 
     # ------------------------------------------------------------------
     # DataSourceAdapter interface
@@ -279,20 +288,82 @@ class APIFootballAdapter(DataSourceAdapter):
         ]
 
     async def fetch_leagues(self, sport_id: str) -> list[dict]:
-        """Return all supported competitions."""
+        """Discover ALL leagues from the API-Football /leagues endpoint.
+
+        Calls the live API with the current season, builds a dynamic
+        slug → api_id mapping, and returns league dicts for *every*
+        competition found.  The ingestion service stores them all in the
+        DB; the pipeline will only process the ones in
+        ``_enabled_leagues`` (see ``run()`` filtering).
+
+        Falls back to the static LEAGUE_META dict if the API call fails.
+        """
+        try:
+            data = await self._get("leagues", {"season": self._season})
+        except Exception as exc:
+            self.log.warning(
+                "api_football_leagues_fallback",
+                error=str(exc),
+                reason="Falling back to static LEAGUE_META",
+            )
+            # Fallback: return hardcoded leagues
+            leagues = []
+            for league_id, meta in LEAGUE_META.items():
+                slug = ID_TO_LEAGUE_SLUG.get(league_id, _slugify(meta["name"]))
+                leagues.append(
+                    {
+                        "external_id": f"apifb_league_{league_id}",
+                        "sport_slug": "football",
+                        "name": meta["name"],
+                        "slug": slug,
+                        "country": meta.get("country"),
+                        "tier": meta.get("tier"),
+                    }
+                )
+            return leagues
+
         leagues = []
-        for league_id, meta in LEAGUE_META.items():
-            slug = ID_TO_LEAGUE_SLUG.get(league_id, _slugify(meta["name"]))
+        for item in data:
+            league_info = item.get("league", {})
+            country_info = item.get("country", {})
+
+            api_id = league_info.get("id")
+            name = league_info.get("name", "")
+            league_type = league_info.get("type", "League")  # "League" or "Cup"
+            country_name = country_info.get("name", "")
+
+            if not api_id or not name:
+                continue
+
+            slug = _slugify(name)
+            # Prefer the curated slug from our mapping if available
+            if api_id in ID_TO_LEAGUE_SLUG:
+                slug = ID_TO_LEAGUE_SLUG[api_id]
+
+            # Determine tier: 1 for known top leagues, 2 for others
+            tier = LEAGUE_META.get(api_id, {}).get("tier")
+            if tier is None:
+                tier = 2 if league_type == "League" else 3
+
+            # Build dynamic mapping so _league_id() works for any league
+            self._dynamic_league_ids[slug] = api_id
+
             leagues.append(
                 {
-                    "external_id": f"apifb_league_{league_id}",
+                    "external_id": f"apifb_league_{api_id}",
                     "sport_slug": "football",
-                    "name": meta["name"],
+                    "name": name,
                     "slug": slug,
-                    "country": meta["country"],
-                    "tier": meta["tier"],
+                    "country": country_name or None,
+                    "tier": tier,
                 }
             )
+
+        self.log.info(
+            "api_football_leagues_discovered",
+            total=len(leagues),
+            dynamic_mapping_size=len(self._dynamic_league_ids),
+        )
         self._log_fetch("leagues", len(leagues))
         return leagues
 

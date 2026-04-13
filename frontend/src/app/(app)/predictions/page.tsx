@@ -881,6 +881,8 @@ interface FilterBarProps {
   setSortKey: (v: SortKey) => void;
   total: number;
   availableLeagues: string[];
+  /** Map league_name → country (from API fixture data). */
+  leagueCountryMap: Map<string, string>;
 }
 
 function FilterBar({
@@ -892,6 +894,7 @@ function FilterBar({
   setSortKey,
   total,
   availableLeagues,
+  leagueCountryMap,
 }: FilterBarProps) {
   const { t } = useTranslations();
   const [leagueDropdownOpen, setLeagueDropdownOpen] = useState(false);
@@ -900,32 +903,67 @@ function FilterBar({
   // Split leagues: quick chips (top N) vs the rest in dropdown
   const quickChipLeagues = availableLeagues.slice(0, QUICK_CHIPS);
 
-  // Build country-grouped league list, filtered by search query.
-  // Leagues from fixtures not in COUNTRY_LEAGUES go to "Other".
-  const filteredGroups = useMemo(() => {
-    const mapped = new Set(COUNTRY_LEAGUES.flatMap((g) => g.leagues));
-    const unmapped = availableLeagues.filter((l) => !mapped.has(l));
-    const allGroups: typeof COUNTRY_LEAGUES =
-      unmapped.length > 0
-        ? [...COUNTRY_LEAGUES, { country: "Other", flag: "🌍", leagues: unmapped }]
-        : [...COUNTRY_LEAGUES];
+  // Build country-grouped league list dynamically from API data.
+  // Uses leagueCountryMap (from fixture data) + COUNTRY_LEAGUES
+  // as fallback for flag emojis and display names.
+  type CountryGroup = { country: string; flag: string; leagues: string[] };
 
+  const allGroups = useMemo<CountryGroup[]>(() => {
+    // Build a country → flag lookup from COUNTRY_LEAGUES
+    const countryFlags: Record<string, string> = {};
+    for (const cg of COUNTRY_LEAGUES) {
+      countryFlags[cg.country] = cg.flag;
+    }
+
+    // Group available leagues by country from API data
+    const grouped: Record<string, string[]> = {};
+    for (const league of availableLeagues) {
+      // Check API data first, then COUNTRY_LEAGUES fallback
+      let country = leagueCountryMap.get(league);
+      if (!country) {
+        const staticGroup = COUNTRY_LEAGUES.find((g) =>
+          g.leagues.includes(league),
+        );
+        country = staticGroup?.country ?? "Other";
+      }
+      if (!grouped[country]) grouped[country] = [];
+      grouped[country].push(league);
+    }
+
+    // Convert to sorted array, known countries first
+    const knownOrder = COUNTRY_LEAGUES.map((g) => g.country);
+    return Object.entries(grouped)
+      .sort(([a], [b]) => {
+        const ia = knownOrder.indexOf(a);
+        const ib = knownOrder.indexOf(b);
+        const ra = ia === -1 ? 999 : ia;
+        const rb = ib === -1 ? 999 : ib;
+        if (ra !== rb) return ra - rb;
+        return a.localeCompare(b);
+      })
+      .map(([country, leagues]) => ({
+        country,
+        flag: countryFlags[country] ?? "🏳️",
+        leagues,
+      }));
+  }, [availableLeagues, leagueCountryMap]);
+
+  // Apply search filter on groups
+  const filteredGroups = useMemo<CountryGroup[]>(() => {
     const q = leagueSearch.toLowerCase().trim();
     if (!q) return allGroups;
 
     return allGroups
       .map((group) => {
-        // Country name matches → show all leagues in that country
         if (group.country.toLowerCase().includes(q)) return group;
-        // Otherwise filter individual leagues
         const matched = group.leagues.filter((l) =>
           l.toLowerCase().includes(q),
         );
         if (matched.length === 0) return null;
         return { ...group, leagues: matched };
       })
-      .filter(Boolean) as typeof COUNTRY_LEAGUES;
-  }, [leagueSearch, availableLeagues]);
+      .filter(Boolean) as CountryGroup[];
+  }, [leagueSearch, allGroups]);
 
   // Find the flag for the currently active dropdown league
   const activeLeagueFlag = useMemo(() => {
@@ -1283,6 +1321,18 @@ export default function PredictionsPage() {
     });
   }, [upcomingFixtures]);
 
+  // Build league_name → country map from API fixture data.
+  // The backend now includes league_country in the fixture response.
+  const leagueCountryMap = useMemo(() => {
+    const m = new Map<string, string>();
+    upcomingFixtures.forEach((f) => {
+      if (f.league_country && !m.has(f.league_name)) {
+        m.set(f.league_name, f.league_country);
+      }
+    });
+    return m;
+  }, [upcomingFixtures]);
+
   // ── Filter + sort ─────────────────────────────────────────────────────────
   const filtered = useMemo(() => {
     let items = [...upcomingFixtures];
@@ -1517,6 +1567,7 @@ export default function PredictionsPage() {
         setSortKey={setSortKey}
         total={filtered.length}
         availableLeagues={availableLeagues}
+        leagueCountryMap={leagueCountryMap}
       />
 
       {/* ── Content ── */}

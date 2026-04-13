@@ -488,6 +488,7 @@ export interface Fixture {
   league_id?: string;
   league_name: string;
   league_slug: string;
+  league_country?: string | null;
   home_team_id?: string;
   home_team_name: string;
   home_team_slug: string;
