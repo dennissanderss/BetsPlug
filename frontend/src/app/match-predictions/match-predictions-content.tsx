@@ -332,6 +332,8 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
         </div>
       </section>
 
+      {faqSlot}
+
       {/* ── Final CTA ── */}
       <section className="relative px-4 pb-24">
         <motion.div
@@ -368,7 +370,6 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
         </motion.div>
       </section>
 
-      {faqSlot}
       <BetsPlugFooter />
     </div>
   );

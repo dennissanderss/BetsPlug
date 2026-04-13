@@ -586,6 +586,8 @@ export function TrackRecordContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
         </div>
       </section>
 
+      {faqSlot}
+
       {/* ═══════════════════════════════════════════════════════════════════
           TRANSPARENCY CTA BANNER
          ═══════════════════════════════════════════════════════════════════ */}
@@ -635,7 +637,6 @@ export function TrackRecordContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
         </div>
       </section>
 
-      {faqSlot}
       <BetsPlugFooter />
     </div>
   );

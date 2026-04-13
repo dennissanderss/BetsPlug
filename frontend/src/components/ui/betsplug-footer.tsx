@@ -59,7 +59,6 @@ export function BetsPlugFooter() {
     { text: t("nav.trackRecord"), href: "#track-record" },
     { text: t("nav.howItWorks"), href: "#how-it-works" },
     { text: t("nav.pricing"), href: "#pricing" },
-    { text: t("footer.comparison"), href: "#comparison" },
   ];
   const companyLinksT = [
     { text: t("footer.aboutUs"), href: loc("/about") },

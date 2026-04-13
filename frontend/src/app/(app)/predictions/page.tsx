@@ -1174,7 +1174,9 @@ export default function PredictionsPage() {
   // Sort available leagues by popularity rank; unknown leagues go to the end
   // alphabetically so the dropdown always feels intentionally ordered.
   const availableLeagues = useMemo(() => {
-    const s = new Set<string>();
+    // Always include every covered league so the user can filter even
+    // when a league has no fixtures on the selected date.
+    const s = new Set<string>(LEAGUE_POPULARITY);
     upcomingFixtures.forEach((f) => s.add(f.league_name));
     return Array.from(s).sort((a, b) => {
       const ia = LEAGUE_POPULARITY.indexOf(a);

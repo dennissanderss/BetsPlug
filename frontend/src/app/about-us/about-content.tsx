@@ -447,6 +447,8 @@ export function AboutContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
         </div>
       </section>
 
+      {faqSlot}
+
       {/* ═══════════════════════════════════════════════════════════════════
           CTA BANNER
          ═══════════════════════════════════════════════════════════════════ */}
@@ -487,7 +489,6 @@ export function AboutContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
         </div>
       </section>
 
-      {faqSlot}
       <BetsPlugFooter />
     </div>
   );
