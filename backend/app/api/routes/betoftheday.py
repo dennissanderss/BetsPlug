@@ -59,6 +59,7 @@ async def get_botd_history(
     from app.models.prediction import PredictionEvaluation
     from collections import defaultdict
 
+    # Try live predictions first; fall back to all predictions if none exist
     stmt = (
         select(Prediction, PredictionEvaluation)
         .join(Match, Match.id == Prediction.match_id)
@@ -70,6 +71,15 @@ async def get_botd_history(
         .order_by(Match.scheduled_at.desc())
     )
     rows = (await db.execute(stmt)).all()
+    if not rows:
+        stmt_fallback = (
+            select(Prediction, PredictionEvaluation)
+            .join(Match, Match.id == Prediction.match_id)
+            .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+            .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+            .order_by(Match.scheduled_at.desc())
+        )
+        rows = (await db.execute(stmt_fallback)).all()
 
     # Group by date, keep highest confidence per day
     by_date: dict[str, tuple] = {}
@@ -154,6 +164,17 @@ async def get_botd_track_record(
         .order_by(Match.scheduled_at)
     )
     rows = (await db.execute(stmt)).all()
+
+    # Fallback: if no live predictions yet, use all predictions
+    if not rows:
+        stmt_fallback = (
+            select(Prediction, PredictionEvaluation)
+            .join(Match, Match.id == Prediction.match_id)
+            .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+            .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+            .order_by(Match.scheduled_at)
+        )
+        rows = (await db.execute(stmt_fallback)).all()
 
     if not rows:
         return BOTDTrackRecord()

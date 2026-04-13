@@ -1417,36 +1417,6 @@ export default function PredictionsPage() {
         </div>
       </div>
 
-      {/* ── v6 C1: headline counters ── */}
-      {metricsQuery.data && (
-        <div className="grid grid-cols-3 gap-3 sm:gap-4">
-          <div className="glass-card px-4 py-3 sm:px-5 sm:py-4">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-              {t("pred.predicted")}
-            </p>
-            <p className="mt-1 text-xl font-extrabold tabular-nums text-slate-100 sm:text-2xl">
-              {metricsQuery.data.total_forecasts.toLocaleString("nl-NL")}
-            </p>
-          </div>
-          <div className="glass-card px-4 py-3 sm:px-5 sm:py-4">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-              {t("pred.upcoming")}
-            </p>
-            <p className="mt-1 text-xl font-extrabold tabular-nums text-blue-400 sm:text-2xl">
-              {metricsQuery.data.pending_count.toLocaleString("nl-NL")}
-            </p>
-          </div>
-          <div className="glass-card px-4 py-3 sm:px-5 sm:py-4">
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-              {t("pred.correctSoFar")}
-            </p>
-            <p className="mt-1 text-xl font-extrabold tabular-nums text-emerald-400 sm:text-2xl">
-              {metricsQuery.data.correct_predictions.toLocaleString("nl-NL")}
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* ── v6.2: View Mode Tabs ── */}
       <div className="flex items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1">
         {(
@@ -1538,7 +1508,7 @@ export default function PredictionsPage() {
       )}
 
       {/* ── Stats bar ── */}
-      {!isLoading && <StatsBar fixtures={upcomingFixtures} />}
+      {/* StatsBar removed — too many boxes, users don't need these numbers */}
       {isLoading && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 animate-pulse">
           {[1, 2, 3, 4].map((i) => (
