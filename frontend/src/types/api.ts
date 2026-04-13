@@ -431,6 +431,7 @@ export interface WeeklySummary {
 
 export interface FreePickItem {
   id: string;
+  match_id: string;
   home_team: string;
   away_team: string;
   league: string;

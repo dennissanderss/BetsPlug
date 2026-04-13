@@ -22,6 +22,7 @@ import {
   FreeSkeleton,
 } from "@/components/match-predictions/match-cards";
 import { FREE_PICKS, LOCKED_PREVIEW } from "@/components/match-predictions/shared";
+import { useFreeMatchIds } from "@/components/match-predictions/use-free-match-ids";
 
 /**
  * League-scoped fixtures block for the /match-predictions/[league_slug]
@@ -33,6 +34,9 @@ import { FREE_PICKS, LOCKED_PREVIEW } from "@/components/match-predictions/share
 export function LeagueHubFixtures({ leagueSlug }: { leagueSlug: string }) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
+
+  // Global free-pick IDs — single source of truth across all pages
+  const { freeMatchIds, isLoadingFreeIds } = useFreeMatchIds();
 
   const fixturesQuery = useQuery({
     queryKey: ["league-hub-fixtures", leagueSlug, 14],
@@ -59,22 +63,19 @@ export function LeagueHubFixtures({ leagueSlug }: { leagueSlug: string }) {
       );
   }, [fixtures]);
 
-  const withPred = useMemo(
-    () => upcoming.filter((f) => f.prediction !== null),
-    [upcoming],
+  // Free picks: only fixtures whose match ID is in the global free set
+  const free: Fixture[] = useMemo(
+    () => upcoming.filter((f) => freeMatchIds.has(f.id)),
+    [upcoming, freeMatchIds],
   );
-  const withoutPred = useMemo(
-    () => upcoming.filter((f) => f.prediction === null),
-    [upcoming],
-  );
+  // Locked pool: everything else
+  const lockedPool = useMemo(() => {
+    const withPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction !== null);
+    const withoutPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction === null);
+    return [...withPred, ...withoutPred].slice(0, LOCKED_PREVIEW);
+  }, [upcoming, freeMatchIds]);
 
-  const free: Fixture[] = withPred.slice(0, FREE_PICKS);
-  const lockedPool = [
-    ...withPred.slice(FREE_PICKS),
-    ...withoutPred,
-  ].slice(0, LOCKED_PREVIEW);
-
-  const isLoading = fixturesQuery.isLoading;
+  const isLoading = fixturesQuery.isLoading || isLoadingFreeIds;
   const isError = fixturesQuery.isError;
   const hasFree = free.length > 0;
 

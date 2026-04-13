@@ -17,6 +17,7 @@ import {
   FreeSkeleton,
 } from "@/components/match-predictions/match-cards";
 import { FREE_PICKS } from "@/components/match-predictions/shared";
+import { useFreeMatchIds } from "@/components/match-predictions/use-free-match-ids";
 
 /**
  * Bet-type hub fixtures block — shows the top 3 upcoming matches
@@ -33,6 +34,9 @@ export function BetTypeHubFixtures({
   const { t } = useTranslations();
   const loc = useLocalizedHref();
 
+  // Global free-pick IDs — single source of truth across all pages
+  const { freeMatchIds, isLoadingFreeIds } = useFreeMatchIds();
+
   const fixturesQuery = useQuery({
     queryKey: ["bet-type-hub-fixtures", 7],
     queryFn: () => api.getFixturesUpcoming(7),
@@ -43,8 +47,7 @@ export function BetTypeHubFixtures({
 
   const fixtures = fixturesQuery.data?.fixtures ?? [];
 
-  // Only scheduled matches with an actual prediction, sorted by
-  // confidence DESC — that's the "most confident shortlist".
+  // Only show fixtures whose match ID is in the global free set
   const topConfident = useMemo(() => {
     const now = Date.now();
     return fixtures
@@ -52,16 +55,16 @@ export function BetTypeHubFixtures({
         if (f.status !== "scheduled") return false;
         if (f.prediction === null) return false;
         const ts = new Date(f.scheduled_at).getTime();
-        return Number.isFinite(ts) && ts > now;
+        return Number.isFinite(ts) && ts > now && freeMatchIds.has(f.id);
       })
       .sort(
         (a, b) =>
           (b.prediction?.confidence ?? 0) - (a.prediction?.confidence ?? 0),
       )
       .slice(0, FREE_PICKS) as Fixture[];
-  }, [fixtures]);
+  }, [fixtures, freeMatchIds]);
 
-  const isLoading = fixturesQuery.isLoading;
+  const isLoading = fixturesQuery.isLoading || isLoadingFreeIds;
   const isError = fixturesQuery.isError;
   const hasMatches = topConfident.length > 0;
 

@@ -34,6 +34,7 @@ import {
   FREE_PICKS,
   LOCKED_PREVIEW,
 } from "@/components/match-predictions/shared";
+import { useFreeMatchIds } from "@/components/match-predictions/use-free-match-ids";
 
 /* ──────────────────────────────────────────────────────────────
  * Match Predictions — public marketing teaser
@@ -44,6 +45,9 @@ import {
 export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
+
+  // Global free-pick IDs — single source of truth across all pages
+  const { freeMatchIds, isLoadingFreeIds } = useFreeMatchIds();
 
   const fixturesQuery = useQuery({
     queryKey: ["match-predictions-public", 7],
@@ -71,24 +75,19 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       );
   }, [fixtures]);
 
-  // Prefer matches that actually have predictions for the free 3
-  const withPred = useMemo(
-    () => upcoming.filter((f) => f.prediction !== null),
-    [upcoming],
+  // Free picks: only fixtures whose match ID is in the global free set
+  const free: Fixture[] = useMemo(
+    () => upcoming.filter((f) => freeMatchIds.has(f.id)),
+    [upcoming, freeMatchIds],
   );
-  const withoutPred = useMemo(
-    () => upcoming.filter((f) => f.prediction === null),
-    [upcoming],
-  );
+  // Locked pool: everything else (prefer ones with predictions for realism)
+  const lockedPool = useMemo(() => {
+    const withPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction !== null);
+    const withoutPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction === null);
+    return [...withPred, ...withoutPred].slice(0, LOCKED_PREVIEW);
+  }, [upcoming, freeMatchIds]);
 
-  const free: Fixture[] = withPred.slice(0, FREE_PICKS);
-  // Lock the next matches (prefer ones with predictions for realism)
-  const lockedPool = [
-    ...withPred.slice(FREE_PICKS),
-    ...withoutPred,
-  ].slice(0, LOCKED_PREVIEW);
-
-  const isLoading = fixturesQuery.isLoading;
+  const isLoading = fixturesQuery.isLoading || isLoadingFreeIds;
   const isError = fixturesQuery.isError;
   const hasFree = free.length > 0;
 

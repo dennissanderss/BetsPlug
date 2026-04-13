@@ -127,6 +127,7 @@ async def get_featured_match(
 
 class FreePickItem(BaseModel):
     id: str
+    match_id: str  # match UUID — single source of truth for free-pick gating across all pages
     home_team: str
     away_team: str
     league: str
@@ -179,6 +180,7 @@ def _build_free_pick(pred: Prediction) -> FreePickItem:
 
     return FreePickItem(
         id=str(pred.id),
+        match_id=str(m.id) if m else "",
         home_team=home,
         away_team=away,
         league=league,
