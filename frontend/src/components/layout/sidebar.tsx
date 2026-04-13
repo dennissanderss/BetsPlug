@@ -40,37 +40,33 @@ interface NavSection {
 
 const navSections: NavSection[] = [
   {
-    labelKey: "sidebar.gettingStarted",
-    fallbackLabel: "Getting Started",
+    labelKey: "sidebar.overview",
+    fallbackLabel: "Overview",
     items: [
-      { labelKey: "nav.jouwRoute", fallback: "Your Route", href: "/jouw-route", icon: MapPin, badge: "START", badgeColor: "bg-emerald-500" },
       { labelKey: "nav.dashboard", fallback: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     ],
   },
   {
-    labelKey: "sidebar.strategiesAndPicks",
-    fallbackLabel: "Strategies & Picks",
+    labelKey: "sidebar.predictions",
+    fallbackLabel: "Predictions",
     items: [
-      { labelKey: "nav.strategy_lab", fallback: "Strategy Lab", href: "/strategy", icon: FlaskConical, comingSoon: true, badge: "SOON", badgeColor: "bg-slate-500" },
       { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy },
-      { labelKey: "nav.predictions", fallback: "Predictions", href: "/predictions", icon: Sparkles },
+      { labelKey: "nav.predictions", fallback: "All Predictions", href: "/predictions", icon: Sparkles },
     ],
   },
   {
-    labelKey: "sidebar.performance",
-    fallbackLabel: "Performance",
+    labelKey: "sidebar.results",
+    fallbackLabel: "Results",
     items: [
-      { labelKey: "nav.results", fallback: "Results", href: "/results", icon: Trophy },
-      { labelKey: "nav.weekly_report", fallback: "Weekly Report", href: "/weekly-report", icon: FileBarChart2 },
-      { labelKey: "nav.trackrecord", fallback: "Trackrecord", href: "/trackrecord", icon: ClipboardList },
+      { labelKey: "nav.results", fallback: "Results & Analysis", href: "/results", icon: Trophy },
+      { labelKey: "nav.trackrecord", fallback: "Track Record", href: "/trackrecord", icon: ClipboardList },
       { labelKey: "nav.reports", fallback: "Reports", href: "/reports", icon: FileBarChart2 },
     ],
   },
 ];
 
 const bottomNavItems: NavItem[] = [
-  { labelKey: "nav.admin",    fallback: "Admin",    href: "/admin",    icon: ShieldCheck },
-  { labelKey: "nav.settings", fallback: "Settings", href: "/settings", icon: Settings },
+  { labelKey: "nav.admin", fallback: "Admin", href: "/admin", icon: ShieldCheck },
 ];
 
 export function Sidebar() {

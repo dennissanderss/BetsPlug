@@ -377,8 +377,8 @@ export default function DashboardPage() {
       {/* ── Upsell: Gold for BOTD ─────────────────────────────────────────── */}
       <UpsellBanner
         targetTier="gold"
-        headline="Pick van de Dag — 66.7% trefzekerheid"
-        subtext="Onze AI selecteert dagelijks de wedstrijd met de hoogste zekerheid. Alleen voor Gold members."
+        headline={t("dash.upsellHeadline")}
+        subtext={t("dash.upsellSubtext")}
         variant="banner"
       />
 

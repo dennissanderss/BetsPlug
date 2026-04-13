@@ -29,16 +29,16 @@
 
   /* ── Dark theme by default ── */
   :root {
-    /* Base surfaces */
-    --background: 222 47% 5%;        /* #080b14 */
+    /* Base surfaces — v7: lighter navy for readability */
+    --background: 222 35% 10%;       /* #111827 — dark navy, not pitch black */
     --foreground: 210 40% 98%;       /* #f8fafc */
 
     /* Card surfaces */
-    --card: 222 39% 8%;              /* #0d1220 */
+    --card: 222 30% 14%;             /* #1a2236 — visible cards, not invisible */
     --card-foreground: 210 40% 98%;
 
     /* Elevated surface */
-    --elevated: 217 33% 12%;         /* #141b2e */
+    --elevated: 217 28% 18%;         /* #212d45 — clearly elevated */
 
     /* Primary: neon green (from logo) */
     --primary: 142 76% 55%;          /* #4ADE80 neon green */
@@ -69,17 +69,17 @@
     --loss: 0 84% 60%;
     --draw: 38 92% 50%;
 
-    /* Borders */
-    --border: 217 33% 15%;
-    --input: 217 33% 15%;
+    /* Borders — v7: slightly more visible */
+    --border: 217 28% 20%;
+    --input: 217 28% 20%;
     --ring: 142 76% 55%;
 
     --radius: 0.75rem;
 
-    /* Sidebar */
-    --sidebar-background: 222 47% 6%;
+    /* Sidebar — v7: slightly lighter than main bg */
+    --sidebar-background: 222 35% 12%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 14%;
+    --sidebar-border: 217 28% 18%;
   }
 
   /* ── Light mode (opt-in via .light class) ── */
@@ -124,7 +124,7 @@
   }
 
   body {
-    background: radial-gradient(ellipse at top, #0d1220 0%, #080b14 50%, #060912 100%);
+    background: radial-gradient(ellipse at top, #151d30 0%, #111827 50%, #0f1520 100%);
     background-attachment: fixed;
     @apply text-foreground antialiased;
     font-family: var(--font-brand), system-ui, -apple-system, "Segoe UI", Roboto,
@@ -213,28 +213,29 @@
 
 @layer components {
   /* ── Glassmorphism card ── */
+  /* v7: lighter glass cards — visible but not overwhelming */
   .glass-card {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: var(--radius);
   }
 
   .glass-card-hover {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.10);
     border-radius: var(--radius);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
   }
 
   .glass-card-hover:hover {
-    background: rgba(255, 255, 255, 0.07);
-    box-shadow: 0 0 30px rgba(74, 222, 128, 0.15),
-                0 8px 32px rgba(0, 0, 0, 0.4);
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(74, 222, 128, 0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
   }
 
   /* ── Gradient text ── */
