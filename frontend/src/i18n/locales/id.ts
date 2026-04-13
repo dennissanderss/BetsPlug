@@ -46,7 +46,6 @@ const id = {
   "about.valuesBadge": "Yang Kami Percaya",
   "about.valuesSubtitle": "BetsPlug bukan tipster. Ini adalah sistem disiplin. Inilah aturan yang kami tulis untuk diri kami sendiri - dan yang kami tolak untuk dilanggar.",
   "about.valuesTitle": "Empat prinsip di balik setiap pick.",
-
   "articles.allArticles": "Semua artikel",
   "articles.back": "Kembali ke semua artikel",
   "articles.badge": "Analisis sepak bola",
@@ -71,7 +70,6 @@ const id = {
   "articles.subtitle": "Berita sepak bola, analisis AI, dan wawasan berbasis data.",
   "articles.title": "Analisis terbaru",
   "articles.tldr": "Ringkasan",
-
   "b2b.affiliate": "Program Afiliasi",
   "b2b.affiliateDesc": "Dapatkan komisi kompetitif dengan mereferensikan pengguna ke BetsPlug. Kami menyediakan materi pemasaran, tracking, dan pembayaran tepat waktu.",
   "b2b.badge": "Kemitraan bisnis",
@@ -84,9 +82,9 @@ const id = {
   "b2b.media": "Media & Konten",
   "b2b.mediaDesc": "Berkolaborasi dalam konten analisis sepak bola, paper riset, dan jurnalisme data. Cocok untuk media olahraga dan penerbit.",
   "b2b.partnershipsBadge": "Model kemitraan",
-  "b2b.partnershipsSubtitle": "Apakah Anda butuh data mentah, mesin prediksi siap pakai, atau model bagi hasil \\u2014 kami punya jalur kemitraan untuk Anda.",
+  "b2b.partnershipsSubtitle": "Apakah Anda butuh data mentah, mesin prediksi siap pakai, atau model bagi hasil \\\\u2014 kami punya jalur kemitraan untuk Anda.",
   "b2b.partnershipsTitle": "Cara kami bekerja sama",
-  "b2b.subtitle": "Kami berkolaborasi dengan bisnis di seluruh ekosistem analisis sepak bola. Dari lisensi data hingga solusi white-label \\u2014 mari membangun sesuatu bersama.",
+  "b2b.subtitle": "Kami berkolaborasi dengan bisnis di seluruh ekosistem analisis sepak bola. Dari lisensi data hingga solusi white-label \\\\u2014 mari membangun sesuatu bersama.",
   "b2b.titleA": "Bermitra dengan BetsPlug",
   "b2b.titleB": "untuk analisis sepak bola yang lebih cerdas",
   "b2b.usp1": "Model AI digabungkan dalam satu ensemble",
@@ -97,7 +95,6 @@ const id = {
   "b2b.whiteLabelDesc": "Integrasikan mesin prediksi BetsPlug ke platform Anda sendiri. Branding kustom, dukungan khusus, dan harga fleksibel.",
   "b2b.whyPartner": "Mengapa bermitra dengan kami",
   "b2b.whyPartnerTitle": "Dibangun untuk skala, terbukti secara publik",
-
   "bc.aboutUs": "Tentang Kami",
   "bc.articles": "Artikel",
   "bc.b2b": "Kemitraan B2B",
@@ -108,7 +105,6 @@ const id = {
   "bc.learn": "Mempelajari",
   "bc.matchPredictions": "Prediksi Pertandingan",
   "bc.trackRecord": "Rekam Jejak",
-
   "botd.dailySelection": "Seleksi Harian",
   "botd.dailySelectionDesc": "Hanya satu pilihan per hari - kami memilih kualitas daripada kuantitas. Keyakinan minimum 65% diperlukan untuk seleksi.",
   "botd.draw": "Menggambar",
@@ -129,7 +125,6 @@ const id = {
   "botd.title": "Pilihan Hari Ini",
   "botd.valueDetection": "Deteksi Nilai",
   "botd.valueDetectionDesc": "Pilihan ini dipilih karena model ansambel kami mengidentifikasi keunggulan signifikan dalam probabilitas vs peluang pasar.",
-
   "chatbot.clear": "Bersihkan",
   "chatbot.close": "Tutup obrolan",
   "chatbot.footer": "Respons AI disimulasikan - untuk masalah mendesak, email support@betsplug.com",
@@ -147,7 +142,6 @@ const id = {
   "chatbot.suggestion2": "Apa bedanya Silver dan Gold?",
   "chatbot.suggestion3": "Seberapa akurat prediksi Anda?",
   "chatbot.title": "BetsPlug AI Assistant",
-
   "checkout.accountSubtitle": "Anda akan menggunakan detail ini untuk masuk ke BetsPlug.",
   "checkout.accountTitle": "Buat akun Anda",
   "checkout.addons": "Add-on",
@@ -256,7 +250,6 @@ const id = {
   "checkout.yearlySaveBadge": "Hemat 20%",
   "checkout.yearlySaveCallout": "Beralih ke penagihan tahunan dan hemat 20% - itu {amount} off setiap tahun.",
   "checkout.yearlySaving": "Anda menghemat {amount} / tahun",
-
   "common.accuracy": "Akurasi",
   "common.admin": "Admin",
   "common.all_systems": "Semua sistem beroperasi",
@@ -294,7 +287,6 @@ const id = {
   "common.submit": "Kirim",
   "common.trackrecord": "Rekam Jejak",
   "common.win": "Menang",
-
   "comparison.badge": "BetsPlug vs yang lainnya",
   "comparison.caption": "Perbandingan berdasarkan informasi yang tersedia untuk umum dari platform keterangan rahasia terkemuka pada tahun 2026.",
   "comparison.fallsShort": "Gagal",
@@ -307,7 +299,6 @@ const id = {
   "comparison.titleB": "ke BetsPlug.",
   "comparison.typicalTipsters": "Tipster yang khas",
   "comparison.winner": "Pemenang",
-
   "contact.backHome": "Kembali ke beranda",
   "contact.badge": "Kami siap membantu",
   "contact.card1Cta": "Buka chat",
@@ -350,13 +341,11 @@ const id = {
   "contact.trust1": "Rata-rata balasan di bawah 2 menit",
   "contact.trust2": "Compliant GDPR",
   "contact.trust3": "1.500+ user puas",
-
   "cta.badge": "Siap menang lebih cerdas?",
   "cta.primary": "Coba gratis",
   "cta.secondary": "Lihat prediksi",
   "cta.subtitle": "Bergabunglah dengan 1.500+ analis yang sudah menggunakan BetsPlug.",
   "cta.title": "Mulai keunggulan berbasis data Anda hari ini.",
-
   "dash.accuracyByLeague": "Akurasi berdasarkan Liga",
   "dash.accuracyByLeagueDesc": "Akurasi prediksi tersegmentasi berdasarkan liga",
   "dash.allTime": "Sepanjang waktu",
@@ -381,6 +370,9 @@ const id = {
   "dash.overallAccuracy": "Akurasi Keseluruhan",
   "dash.overallAccuracyTooltip": "Persentase prediksi dimana model kami memprediksi dengan tepat hasil pertandingan (kandang/seri/tandang)",
   "dash.pending": "Tertunda",
+  "dash.pickOfDay": "Pilihan Hari Ini",
+  "dash.pickOfDaySub": "Akurasi pilihan teratas harian",
+  "dash.pickOfDayTooltip": "Akurasi pilihan terbaik yang dipilih AI setiap hari",
   "dash.recentPredictions": "Prediksi Terbaru",
   "dash.recentPredictionsDesc": "Keluaran model terbaru dengan evaluasi",
   "dash.subtitle": "Ikhtisar kinerja model dan status sistem waktu nyata",
@@ -395,7 +387,6 @@ const id = {
   "dash.totalForecasts": "Perkiraan Total",
   "dash.totalForecastsTooltip": "Jumlah total prediksi yang dihasilkan model AI kami di semua liga",
   "dash.vsLastPeriod": "vs periode terakhir",
-
   "dashPrev.badge": "Command center Anda",
   "dashPrev.cta": "Jelajahi dashboard",
   "dashPrev.feature1Desc": "Lihat prediksi kepercayaan tertinggi hari ini saat Anda masuk - diurutkan berdasarkan edge, kepercayaan, dan waktu kick-off.",
@@ -430,7 +421,6 @@ const id = {
   "dashPrev.titleA": "Setiap fitur premium,",
   "dashPrev.titleB": ".",
   "dashPrev.titleHighlight": "satu klik saja",
-
   "deals.active": "Aktif",
   "deals.bestValue": "Nilai terbaik",
   "deals.bothGetFreeMonth": "Anda dan teman Anda mendapatkan 1 bulan gratis",
@@ -478,7 +468,6 @@ const id = {
   "deals.totalReferrals": "Total Referensi",
   "deals.yourReferralLink": "Tautan referensi Anda",
   "deals.yourReferralStats": "Statistik rujukan Anda",
-
   "faq.about.a1": "BetsPlug didirikan oleh tim insinyur analisis olahraga dan penggemar sepak bola yang melihat peluang untuk menghadirkan prediksi berbasis AI dan model peringkat Elo kepada petaruh sehari-hari yang mencari keunggulan data.",
   "faq.about.a2": "BetsPlug beroperasi sebagai perusahaan jarak jauh dengan anggota tim di seluruh Eropa. Infrastruktur data dan saluran analisis sepak bola kami berjalan di server cloud yang dioptimalkan untuk pengiriman prediksi pertandingan secara real-time.",
   "faq.about.a3": "Juga tidak. BetsPlug adalah platform analisis sepak bola yang menggunakan prediksi AI, sasaran yang diharapkan, dan peringkat Elo untuk memunculkan peluang nilai taruhan. Kami tidak pernah memasang taruhan atas nama Anda atau menerima taruhan.",
@@ -552,7 +541,6 @@ const id = {
   "faq.track.q4": "Apakah Anda juga menunjukkan kerugian?",
   "faq.track.q5": "Liga apa yang dilacak?",
   "faq.track.q6": "Seberapa sering rekam jejak diperbarui?",
-
   "faqTitle.about": "Tentang FAQ BetsPlug",
   "faqTitle.aboutSub": "Pertanyaan umum tentang siapa kami dan cara kami bekerja.",
   "faqTitle.home": "Pertanyaan yang Sering Diajukan",
@@ -560,7 +548,6 @@ const id = {
   "faqTitle.predictionsSub": "Semua yang perlu Anda ketahui tentang prediksi pertandingan AI kami.",
   "faqTitle.trackRecord": "FAQ Rekam Jejak",
   "faqTitle.trackRecordSub": "Bagaimana kami mengukur dan membagikan kinerja prediksi kami.",
-
   "features.badge": "Apa yang Anda dapatkan",
   "features.f1Desc": "Dapatkan probabilitas kemenangan yang didukung AI untuk 50+ pertandingan setiap hari. Diperbarui secara real time seiring perubahan peluang dan kondisi.",
   "features.f1Title": "Prediksi pertandingan harian",
@@ -576,7 +563,6 @@ const id = {
   "features.f6Title": "Komunitas Telegram",
   "features.titleA": "Semuanya termasuk",
   "features.titleB": "dalam satu platform.",
-
   "finalCta.badge": "Siap mencobanya?",
   "finalCta.cancelAnytime": "Batalkan Kapan Saja",
   "finalCta.instantAccess": "Akses Instan",
@@ -587,7 +573,6 @@ const id = {
   "finalCta.titleA": "Lihat besok",
   "finalCta.titleB": "Hari ini.",
   "finalCta.titleHighlight": "prediksi",
-
   "footer.aboutUs": "Tentang Kami",
   "footer.betTypes": "Jenis Taruhan",
   "footer.bottomCookies": "Cookie",
@@ -622,7 +607,6 @@ const id = {
   "footer.secureTitle": "Pembayaran aman",
   "footer.termsOfService": "Syarat Layanan",
   "footer.viewAll": "Lihat semua",
-
   "header.adminPanel": "Panel Admin",
   "header.favorites": "Favorit",
   "header.live": "Hidup",
@@ -633,7 +617,6 @@ const id = {
   "header.searchPlaceholder": "Cari tim, pertandingan, liga...",
   "header.settings": "Pengaturan",
   "header.subscription": "Berlangganan",
-
   "hero.activeUsers": "pengguna aktif",
   "hero.away": "Jauh",
   "hero.badge": "Prediksi AI untuk setiap pertandingan",
@@ -660,7 +643,6 @@ const id = {
   "hero.usp3Title": "Hasil 100% transparan",
   "hero.winRate": "Tingkat Kemenangan",
   "hero.wins": "Menang",
-
   "hiw.breadcrumbHome": "Rumah",
   "hiw.breadcrumbHow": "Bagaimana cara kerjanya",
   "hiw.ctaBadge": "Siap melihat prediksinya?",
@@ -729,14 +711,16 @@ const id = {
   "hiw.step3Point3Desc": "Pilihan yang kalah akan bertahan selamanya. Rekam jejak yang hanya menunjukkan pemenang adalah pemasaran, bukan transparansi.",
   "hiw.step3Point3Title": "Tidak ada yang dihapus",
   "hiw.step3Title": "Lacak semuanya secara transparan",
-
   "home.freePredBadge": "Tidak perlu mendaftar",
   "home.freePredCta": "Lihat semua prediksi",
   "home.freePredCtaSub": "Buka akses penuh ke 50+ prediksi harian dengan uji coba gratis.",
+  "home.freePredRecord": "Pilihan yang benar",
   "home.freePredSubtitle": "Lihat model kami beraksi. Tiga prediksi pertandingan gratis yang didukung AI — diperbarui setiap hari, tidak perlu mendaftar.",
   "home.freePredTitle": "Hari ini GRATIS",
   "home.freePredTitleHighlight": "prediksi AI",
-
+  "home.freePredToday": "Pilihan gratis hari ini",
+  "home.freePredWinrate": "Tingkat kemenangan",
+  "home.freePredYesterday": "Hasil kemarin",
   "how.badge": "Bagaimana cara kerjanya",
   "how.deepDive": "Pelajari lebih lanjut tentang cara kerjanya",
   "how.step1Desc": "AI kami melihat bentuk, kedudukan, head-to-head, dan 40+ faktor. Satu prediksi per pertandingan, diperbarui setiap hari.",
@@ -747,14 +731,11 @@ const id = {
   "how.step3Title": "3. Lacak semuanya secara transparan",
   "how.subtitle": "Satu mesin AI, satu pilihan harian, satu rekam jejak yang dapat diverifikasi. Tidak ada kotak hitam.",
   "how.title": "Tiga langkah. Transparansi penuh.",
-
   "lang.label": "Bahasa",
   "lang.switch": "Ganti bahasa",
-
   "leagues.badge": "Liga Utama",
   "leagues.titleA": "Liga paling",
   "leagues.titleB": "populer",
-
   "live.analysisPending": "Analisis tertunda",
   "live.cancelled": "Dibatalkan",
   "live.clearFilters": "Hapus filter",
@@ -779,7 +760,6 @@ const id = {
   "live.title": "Pertandingan Langsung",
   "live.viewAnalysis": "Lihat Analisis",
   "live.winProbability": "Kemungkinan menang",
-
   "login.apple": "Lanjutkan dengan Apple",
   "login.badge": "Area anggota",
   "login.createAccount": "Mulai uji coba gratis Anda",
@@ -809,7 +789,6 @@ const id = {
   "login.trust1": "Terenkripsi SSL 256-bit",
   "login.trust2": "Compliant GDPR",
   "login.trust3": "Batalkan kapan saja",
-
   "matchPred.bannerBadge": "Khusus anggota",
   "matchPred.bannerBullet1": "Prediksi AI harian tanpa batas",
   "matchPred.bannerBullet2": "Output BetsPlug Pulse AI lengkap",
@@ -818,7 +797,7 @@ const id = {
   "matchPred.bannerCta": "Buka semua pertandingan",
   "matchPred.bannerCtaSecondary": "Lihat harga",
   "matchPred.bannerDesc": "Gabung BetsPlug untuk melihat semua prediksi liga teratas - dengan skor kepercayaan, update live, dan rekam jejak publik lengkap kami.",
-  "matchPred.bannerNote": "Hanya \\u20ac0,01 mengaktifkan uji coba 7 hari dengan akses penuh.",
+  "matchPred.bannerNote": "Hanya \\\\u20ac0,01 mengaktifkan uji coba 7 hari dengan akses penuh.",
   "matchPred.bannerTitle": "Buka semua pertandingan",
   "matchPred.confidenceLabel": "Kepercayaan",
   "matchPred.ctaFinalButton": "Mulai uji coba gratis",
@@ -834,7 +813,7 @@ const id = {
   "matchPred.freeHeading": "3 prediksi gratis Anda",
   "matchPred.freeSub": "Probabilitas menang lengkap, skor kepercayaan, dan detail model - gratis untuk Anda.",
   "matchPred.kickoffLabel": "Kick-off",
-  "matchPred.loadingTitle": "Memuat pertandingan mendatang\\u2026",
+  "matchPred.loadingTitle": "Memuat pertandingan mendatang\\\\u2026",
   "matchPred.lockedHeading": "Pool pertandingan Premium",
   "matchPred.lockedLabel": "Terkunci",
   "matchPred.lockedSub": "Pertandingan ini hanya untuk anggota. Buka setiap pick, setiap liga, setiap hari.",
@@ -852,7 +831,6 @@ const id = {
   "matchPred.trust3": "Rekam jejak publik",
   "matchPred.unlockThis": "Buka pick ini",
   "matchPred.winProbLabel": "Probabilitas menang",
-
   "nav.about": "Tentang",
   "nav.admin": "Admin",
   "nav.articles": "Artikel",
@@ -875,10 +853,9 @@ const id = {
   "nav.settings": "Pengaturan",
   "nav.startFreeTrial": "Coba gratis",
   "nav.strategy_lab": "Lab Strategi",
-  "nav.trackRecord": "Rekam Jejak",
   "nav.trackrecord": "Rekam Jejak",
+  "nav.trackRecord": "Rekam Jejak",
   "nav.weekly_report": "Laporan Mingguan",
-
   "page.admin": "Panel Admin",
   "page.dashboard": "Dasbor",
   "page.deals": "Penawaran",
@@ -889,7 +866,6 @@ const id = {
   "page.settings": "Pengaturan",
   "page.strategy_lab": "Lab Strategi",
   "page.trackrecord": "Rekam Jejak",
-
   "phrase.educational_only": "Hanya untuk tujuan analitis dan edukatif.",
   "phrase.last_updated": "Terakhir diperbarui",
   "phrase.live_data": "Data langsung",
@@ -898,7 +874,6 @@ const id = {
   "phrase.select_language": "Pilih bahasa",
   "phrase.simulation_disclaimer": "Hasil yang ditampilkan berdasarkan output model simulasi.",
   "phrase.view_all": "Lihat semua",
-
   "pred.analysisPending": "Analisis tertunda",
   "pred.analysisPendingStat": "Analisis Tertunda",
   "pred.autoRefresh": "Penyegaran otomatis setiap tahun 60an · Terakhir:",
@@ -922,13 +897,13 @@ const id = {
   "pred.noLeaguesFound": "Tidak ada liga yang ditemukan",
   "pred.noMatchingPredictions": "Tidak ada prediksi yang cocok dengan filter Anda",
   "pred.noMatchingPredictionsDesc": "Coba sesuaikan filter liga atau kepercayaan diri di atas.",
+  "pred.notProcessed": "Pertandingan ini belum diproses oleh mesin prediksi. Periksa kembali mendekati kick-off.",
   "pred.noUpcomingMatches": "Tidak ada pertandingan mendatang dalam 7 hari ke depan",
   "pred.noUpcomingMatchesDesc": "Tidak ada jadwal pertandingan yang ditemukan di database. Segera periksa kembali.",
-  "pred.notProcessed": "Pertandingan ini belum diproses oleh mesin prediksi. Periksa kembali mendekati kick-off.",
-  "pred.preMatchOdds": "Peluang sebelum pertandingan",
   "pred.predicted": "Diprediksi",
   "pred.predictedOn": "Diprediksi",
   "pred.predictionsReady": "Prediksi Siap",
+  "pred.preMatchOdds": "Peluang sebelum pertandingan",
   "pred.previousDay": "Hari sebelumnya",
   "pred.searchLeague": "Cari liga...",
   "pred.sortConfidence": "Kepercayaan diri",
@@ -940,10 +915,11 @@ const id = {
   "pred.upcoming": "Mendatang",
   "pred.upcomingMatches": "Pertandingan Mendatang",
   "pred.upgradePrompt": "Lihat semua prediksi dengan paket Silver kami atau lebih tinggi.",
+  "pred.upsellHeadline": "Hanya ingin memilih yang terbaik? → Pilihan Hari Ini",
+  "pred.upsellSubtext": "AI kami memilih pertandingan dengan kepastian tertinggi setiap hari.",
   "pred.venue": "Lokasi",
   "pred.viewDetails": "Lihat Detail",
   "pred.winProbability": "Menangkan Probabilitas",
-
   "pricing.badge": "Harga",
   "pricing.billedMonthly": "Ditagih bulanan",
   "pricing.billedYearlyGold": "Ditagih €143,90 per tahun",
@@ -997,15 +973,14 @@ const id = {
   "pricing.trust2": "Batalkan kapan saja",
   "pricing.trust3": "Pembayaran aman via Stripe",
   "pricing.yearly": "Tahunan",
-
   "reports.allAvailableReports": "Semua laporan kinerja yang tersedia",
   "reports.customRange": "Rentang Kustom",
   "reports.download": "Unduh",
   "reports.format": "Format",
+  "reports.generatedReports": "Laporan yang Dihasilkan",
   "reports.generateFailed": "Gagal membuat laporan. Silakan coba lagi.",
   "reports.generateReport": "Hasilkan Laporan",
   "reports.generateReportDescription": "Hasilkan laporan kinerja baru berdasarkan prediksi model.",
-  "reports.generatedReports": "Laporan yang Dihasilkan",
   "reports.generating": "Menghasilkan…",
   "reports.monthlySummary": "Ringkasan Bulanan",
   "reports.noReportsHint": "Gunakan formulir di atas untuk menghasilkan laporan pertama Anda.",
@@ -1018,12 +993,13 @@ const id = {
   "reports.subtitle": "Hasilkan dan unduh laporan kinerja",
   "reports.title": "Laporan & Ekspor",
   "reports.weeklySummary": "Ringkasan Mingguan",
-
   "results.allLeagues": "Semua Liga",
   "results.bestPerformers": "Berkinerja Terbaik",
+  "results.bestStreak": "Kemenangan Beruntun Terbaik",
   "results.clearFilters": "Hapus filter",
   "results.confidence": "kepercayaan diri",
   "results.correct": "BENAR",
+  "results.currentStreak": "Streak saat ini",
   "results.errorLoading": "Tidak dapat memuat data hasil. API mungkin tidak tersedia untuk sementara.",
   "results.expandTo30Days": "Perluas hingga 30 hari",
   "results.filterAll": "Semua",
@@ -1033,6 +1009,7 @@ const id = {
   "results.last14Days": "14 hari terakhir",
   "results.last30Days": "30 hari terakhir",
   "results.last7Days": "7 hari terakhir",
+  "results.maxLoseStreak": "Kekalahan Beruntun Maksimal",
   "results.noPredictionMade": "Tidak ada prediksi yang dibuat",
   "results.noResults": "Tidak ada hasil yang ditemukan",
   "results.noResultsHint": "Tidak ada pertandingan yang selesai dengan hasil pada periode yang dipilih. Coba rentang tanggal yang lebih luas.",
@@ -1056,8 +1033,9 @@ const id = {
   "results.subtitle": "Hasil pertandingan dan akurasi prediksi",
   "results.thisWeekPerformance": "Pertunjukan Minggu Ini",
   "results.title": "Hasil & Hasil",
+  "results.upsellHeadline": "Akses seumur hidup - bayar sekali, tidak pernah lagi",
+  "results.upsellSubtext": "Semua fitur Gold + Telegram pribadi + akses awal. Terbatas untuk 100 orang/tahun.",
   "results.worstPerformers": "Berkinerja Terburuk",
-
   "route.botdAccuracy": "Ketepatan",
   "route.botdBadge": "Rekomendasi #1",
   "route.botdDesc": "Setiap hari, Pulse secara otomatis memilih kecocokan yang paling diyakini oleh modelnya. Satu pilihan, keyakinan maksimal.",
@@ -1067,10 +1045,10 @@ const id = {
   "route.commonForAllPaths": "Umum untuk semua jalur",
   "route.commonResults": "Hasil",
   "route.commonResultsDesc": "Lihat hasil dari semua prediksi",
-  "route.commonTrackResults": "Lacak Hasil",
-  "route.commonTrackResultsDesc": "Lihat hasil dari semua prediksi",
   "route.commonTrackrecord": "Rekam jejak",
   "route.commonTrackrecordDesc": "Data akurasi jangka panjang",
+  "route.commonTrackResults": "Lacak Hasil",
+  "route.commonTrackResultsDesc": "Lihat hasil dari semua prediksi",
   "route.commonWeeklyReport": "Laporan Mingguan",
   "route.commonWeeklyReportDesc": "Ringkasan kinerja",
   "route.path1Step1Desc": "Pilih strategi yang terbukti",
@@ -1109,7 +1087,6 @@ const id = {
   "route.strategyLabTitle": "Lab Strategi",
   "route.subtitle": "Pilih jalur Anda untuk mendapatkan hasil maksimal dari BetsPlug. Setiap rute menghasilkan pilihan yang lebih cerdas - pilih salah satu yang sesuai dengan gaya Anda.",
   "route.title": "Rute Anda",
-
   "search.for": "untuk",
   "search.noResultsFound": "Tidak ada hasil yang ditemukan",
   "search.noResultsInCategory": "Tidak ada hasil dalam kategori ini.",
@@ -1130,7 +1107,6 @@ const id = {
   "search.typeLeague": "Liga",
   "search.typeMatch": "Cocok",
   "search.typeTeam": "Tim",
-
   "seo.badge": "Prediksi sepak bola AI",
   "seo.pillar1Desc": "Mesin prediksi sepak bola AI kami menggabungkan peringkat Elo, model gol Poisson, dan pembelajaran mesin untuk memperkirakan hasil pertandingan di semua liga sepak bola utama. Empat model AI bekerja sama untuk memberikan prediksi yang lebih akurat dibandingkan metode apa pun — memberi Anda tips sepak bola berbasis data yang dapat Anda percayai.",
   "seo.pillar1Title": "Mesin Prediksi Sepak Bola AI",
@@ -1151,7 +1127,6 @@ const id = {
   "seo.subtitle": "BetsPlug adalah platform prediksi sepak bola bertenaga AI yang dipercaya oleh ribuan penggemar sepak bola di seluruh dunia. Model pembelajaran mesin kami menganalisis setiap pertandingan di 30+ liga — mulai dari Premier League dan La Liga hingga Bundesliga, Serie A, dan Ligue 1 — untuk menghitung probabilitas kemenangan yang akurat dan mengidentifikasi peluang nilai taruhan. Baik Anda mencari prediksi sepak bola hari ini, meneliti akumulator berikutnya, atau ingin melihat tim mana yang kemungkinan besar akan menang malam ini — BetsPlug memberi Anda prediksi AI yang jelas dan jujur ​​yang didukung oleh rekam jejak publik sepenuhnya.",
   "seo.titleA": "Prediksi Sepak Bola AI &",
   "seo.titleB": "Tip Taruhan Berdasarkan Data",
-
   "settings.admin": "Admin",
   "settings.alertsFollowedOnly": "Terima peringatan hanya untuk liga yang diikuti",
   "settings.alertsFollowedOnlyDesc": "Sembunyikan notifikasi dari liga yang tidak Anda ikuti",
@@ -1182,8 +1157,8 @@ const id = {
   "settings.predictionUpdatesDesc": "Terima pembaruan ketika prediksi model berubah secara signifikan",
   "settings.profile": "Profil",
   "settings.profileDesc": "Informasi pribadi dan peran akun Anda",
-  "settings.saveSettings": "Simpan pengaturan",
   "settings.savedSuccessfully": "Pengaturan berhasil disimpan",
+  "settings.saveSettings": "Simpan pengaturan",
   "settings.strategyCalls": "Panggilan strategi",
   "settings.strategyCallsDesc": "Memberi peringatan ketika suatu strategi menghasilkan sinyal taruhan baru",
   "settings.subtitle": "Sesuaikan pengalaman Anda",
@@ -1192,18 +1167,15 @@ const id = {
   "settings.title": "Pengaturan",
   "settings.weeklyReportEmails": "Email laporan mingguan",
   "settings.weeklyReportEmailsDesc": "Ringkasan performa model setiap Senin pagi",
-
   "sidebar.gettingStarted": "Memulai",
   "sidebar.performance": "Pertunjukan",
   "sidebar.strategiesAndPicks": "Strategi & Pilihan",
   "sidebar.system": "Sistem",
-
   "socialProof.dismiss": "Tutup pemberitahuan",
   "socialProof.minAgo": "menit yang lalu",
   "socialProof.plan": "rencana",
   "socialProof.subscribed": "baru saja berlangganan",
   "socialProof.verified": "Pembelian terverifikasi",
-
   "strategy.accuracy": "Ketepatan",
   "strategy.archivedNotProfitable": "Diarsipkan - Tidak Menguntungkan",
   "strategy.avgConfidence": "Rata-rata Keyakinan",
@@ -1238,17 +1210,14 @@ const id = {
   "strategy.viewAllPicks": "Lihat Semua Pilihan & Hasil",
   "strategy.winRate": "Tingkat Kemenangan",
   "strategy.winRateTooltip": "Persentase pilihan yang benar",
-
   "testimonials.badge": "Testimonial",
   "testimonials.subtitle": "Ribuan penggemar sepak bola sudah menggunakan BetsPlug. Inilah yang mereka pikirkan.",
   "testimonials.titleA": "Apa milik kita",
   "testimonials.titleB": "mengatakan",
   "testimonials.titleHighlight": "pengguna",
-
   "topbar.cta": "Coba €0,01",
   "topbar.picksAnalyzed": "pilihan dianalisis",
   "topbar.winRate": "tingkat kemenangan",
-
   "tr.breadcrumbHome": "Beranda",
   "tr.breadcrumbTrack": "Rekam Jejak",
   "tr.case1Metric1Label": "Ukuran sampel terfilter",
@@ -1338,7 +1307,6 @@ const id = {
   "tr.transCta2": "Mulai Uji Coba Gratis",
   "tr.transSubtitle": "Setiap prediksi tergradasi yang pernah kami publikasikan dapat dicari berdasarkan pertandingan, tanggal, market, dan model. Tidak ada filter yang menyembunyikan kekalahan.",
   "tr.transTitle": "Jangan percaya kata kami - baca ledgernya.",
-
   "track.accuracy": "Akurasi keseluruhan",
   "track.askQuestion": "Bagaimana cara kerjanya?",
   "track.badge": "Hasil yang terbukti",
@@ -1354,7 +1322,6 @@ const id = {
   "track.titleA": "Lihat kami",
   "track.titleB": "— tidak ada yang disembunyikan.",
   "track.titleHighlight": "hasil nyata",
-
   "trackrecord.accuracy": "Ketepatan",
   "trackrecord.accuracyByLeague": "Akurasi berdasarkan Liga",
   "trackrecord.accuracyByLeagueDesc": "Akurasi prediksi dibagi berdasarkan liga - data nyata",
@@ -1429,7 +1396,6 @@ const id = {
   "trackrecord.value": "Nilai",
   "trackrecord.vs": "vs",
   "trackrecord.whatIsCalibration": "Apa itu Kalibrasi?",
-
   "trusted.card1Desc": "Tidak ada jargon, tidak ada grafik yang rumit. Setiap prediksi menunjukkan persentase yang jelas dan skor kepercayaan diri — bahkan jika Anda belum pernah menganalisis pertandingan sebelumnya.",
   "trusted.card1Title": "Mudah dimengerti.",
   "trusted.card2Desc": "Empat model AI menganalisis bentuk tim, catatan head-to-head, dan peluang langsung untuk menghitung hasil yang paling mungkin terjadi pada setiap pertandingan.",
@@ -1442,7 +1408,6 @@ const id = {
   "trusted.titleB": "penggemar sepak bola",
   "trusted.titleC": "pilih BetsPlug.",
   "trusted.titleHighlight": "1.500+",
-
   "weeklyReport.allCallsThisWeek": "Semua Panggilan Minggu Ini",
   "weeklyReport.callLog": "Log Panggilan",
   "weeklyReport.calls": "panggilan",
@@ -1480,11 +1445,10 @@ const id = {
   "weeklyReport.vsLastWeek": "vs minggu lalu",
   "weeklyReport.weeklyTotal": "Jumlah Mingguan",
   "weeklyReport.win": "MENANG",
-  "weeklyReport.winRate": "Tingkat Kemenangan",
   "weeklyReport.winnersAndLosses": "Pemenang & Kalah",
+  "weeklyReport.winRate": "Tingkat Kemenangan",
   "weeklyReport.wins": "Menang",
   "weeklyReport.yes": "Ya",
-
   "welcome.badge": "Anda masuk.",
   "welcome.ctaPrimary": "Masuk ke dashboard Anda",
   "welcome.ctaSecondary": "Kembali ke beranda",
@@ -1553,5 +1517,5 @@ const id = {
   "welcome.tourTitle": "Di mana menemukan apa, begitu Anda masuk",
   "welcome.trialBody": "Anda tidak akan ditagih hari ini. Batalkan kapan saja dalam 7 hari ke depan dan akun Anda dijeda diam-diam - tanpa pertanyaan, tanpa tekanan.",
   "welcome.trialTitle": "Uji coba gratis 7 hari Anda aktif",
-} as Record<TranslationKey, string>;
+} satisfies Partial<Record<TranslationKey, string>>;
 export default id;

@@ -46,7 +46,6 @@ const es = {
   "about.valuesBadge": "Lo que creemos",
   "about.valuesSubtitle": "BetsPlug no es un pronosticador. Es un sistema disciplinado. Estas son las reglas que escribimos para nosotros mismos y las que nos negamos a romper.",
   "about.valuesTitle": "Cuatro principios detrás de cada elección.",
-
   "articles.allArticles": "Todos los artículos",
   "articles.back": "Volver a todos los artículos",
   "articles.badge": "Análisis de fútbol",
@@ -71,7 +70,6 @@ const es = {
   "articles.subtitle": "Noticias de fútbol, ​​desgloses de partidos mediante IA e información sobre apuestas basada en datos.",
   "articles.title": "Último análisis",
   "articles.tldr": "TL;DR",
-
   "b2b.affiliate": "Programa de afiliados",
   "b2b.affiliateDesc": "Gana comisiones competitivas recomendando usuarios a BetsPlug. Proporcionamos materiales de marketing, seguimiento y pagos oportunos.",
   "b2b.badge": "Asociaciones comerciales",
@@ -97,7 +95,6 @@ const es = {
   "b2b.whiteLabelDesc": "Integre el motor de predicción de BetsPlug en su propia plataforma. Marca personalizada, soporte dedicado y precios flexibles.",
   "b2b.whyPartner": "Por qué asociarse con nosotras",
   "b2b.whyPartnerTitle": "Construido para escalar, probado en público",
-
   "bc.aboutUs": "Sobre nosotras",
   "bc.articles": "Artículos",
   "bc.b2b": "Asociaciones B2B",
@@ -108,7 +105,6 @@ const es = {
   "bc.learn": "Aprender",
   "bc.matchPredictions": "Predicciones de partidos",
   "bc.trackRecord": "Historial",
-
   "botd.dailySelection": "Selección Diaria",
   "botd.dailySelectionDesc": "Sólo una selección por día: preferimos la calidad a la cantidad. Se requiere un mínimo de confianza del 65% para la selección.",
   "botd.draw": "Dibujar",
@@ -129,7 +125,6 @@ const es = {
   "botd.title": "Elección del día",
   "botd.valueDetection": "Detección de valor",
   "botd.valueDetectionDesc": "Se seleccionó esta elección porque nuestro modelo conjunto identificó una ventaja significativa en la probabilidad frente a las probabilidades del mercado.",
-
   "chatbot.clear": "Clara",
   "chatbot.close": "Cerrar chat",
   "chatbot.footer": "Asistente de IA basado en los documentos de BetsPlug; para cualquier otra cosa, envíe un correo electrónico a support@betsplug.com",
@@ -147,7 +142,6 @@ const es = {
   "chatbot.suggestion2": "¿Cuál es la diferencia entre Plata y Oro?",
   "chatbot.suggestion3": "¿Qué tan precisas son tus predicciones?",
   "chatbot.title": "Asistente de IA de BetsPlug",
-
   "checkout.accountSubtitle": "Utilizará estos detalles para iniciar sesión en BetsPlug.",
   "checkout.accountTitle": "Crea tu cuenta",
   "checkout.addons": "Complementos",
@@ -256,7 +250,6 @@ const es = {
   "checkout.yearlySaveBadge": "Ahorra 20%",
   "checkout.yearlySaveCallout": "Cambie a la facturación anual y ahorre un 20 %: es un {amount} de descuento cada año.",
   "checkout.yearlySaving": "Estás ahorrando {cantidad} al año",
-
   "common.accuracy": "Exactitud",
   "common.admin": "Administradora",
   "common.all_systems": "Todos los sistemas operativos.",
@@ -294,7 +287,6 @@ const es = {
   "common.submit": "Entregar",
   "common.trackrecord": "Historial",
   "common.win": "Ganar",
-
   "comparison.badge": "BetsPlug frente al resto",
   "comparison.caption": "Comparación basada en información disponible públicamente de las principales plataformas de tipsters a 2026.",
   "comparison.fallsShort": "se queda corto",
@@ -307,7 +299,6 @@ const es = {
   "comparison.titleB": "a BetsPlug.",
   "comparison.typicalTipsters": "Pronosticadores típicos",
   "comparison.winner": "Ganadora",
-
   "contact.backHome": "De vuelta a casa",
   "contact.badge": "Nosotras estamos aquí para ayudar",
   "contact.card1Cta": "abrir chat",
@@ -350,13 +341,11 @@ const es = {
   "contact.trust1": "Promedio responder en menos de 2 min",
   "contact.trust2": "Cumple con el RGPD",
   "contact.trust3": "Más de 1,500 usuarias felices",
-
   "cta.badge": "¿Listo para ganar de forma más inteligente?",
   "cta.primary": "Iniciar prueba gratuita",
   "cta.secondary": "Ver predicciones",
   "cta.subtitle": "Únase a más de 1500 analistas que ya utilizan BetsPlug para tomar decisiones más precisas, más tranquilas y basadas en datos.",
   "cta.title": "Comience su ventaja basada en datos hoy.",
-
   "dash.accuracyByLeague": "Precisión por liga",
   "dash.accuracyByLeagueDesc": "Precisión de predicción segmentada por liga",
   "dash.allTime": "Todo el tiempo",
@@ -381,6 +370,9 @@ const es = {
   "dash.overallAccuracy": "Precisión general",
   "dash.overallAccuracyTooltip": "Porcentaje de predicciones en las que nuestro modelo predijo correctamente el resultado del partido (local/empate/visitante)",
   "dash.pending": "Pendiente",
+  "dash.pickOfDay": "Elección del día",
+  "dash.pickOfDaySub": "Precisión en la selección diaria",
+  "dash.pickOfDayTooltip": "Precisión de la mejor elección diaria seleccionada por la IA",
   "dash.recentPredictions": "Predicciones recientes",
   "dash.recentPredictionsDesc": "Resultados del último modelo con evaluación.",
   "dash.subtitle": "Descripción general del rendimiento del modelo y estado del sistema en tiempo real",
@@ -395,7 +387,6 @@ const es = {
   "dash.totalForecasts": "Pronósticos totales",
   "dash.totalForecastsTooltip": "Número total de predicciones que nuestro modelo de IA ha generado en todas las ligas",
   "dash.vsLastPeriod": "vs último período",
-
   "dashPrev.badge": "Tu centro de mando",
   "dashPrev.cta": "Explora el panel",
   "dashPrev.feature1Desc": "Vea las predicciones de mayor confianza de hoy en el momento en que inicie sesión, ordenadas por ventaja, confianza y hora de inicio.",
@@ -430,7 +421,6 @@ const es = {
   "dashPrev.titleA": "Cada característica premium,",
   "dashPrev.titleB": ".",
   "dashPrev.titleHighlight": "a un clic de distancia",
-
   "deals.active": "Activa",
   "deals.bestValue": "Mejor valor",
   "deals.bothGetFreeMonth": "Tanto tu como tu amiga obtienen 1 mes gratis",
@@ -478,7 +468,6 @@ const es = {
   "deals.totalReferrals": "Referencias totales",
   "deals.yourReferralLink": "Tu enlace de referencia",
   "deals.yourReferralStats": "Tus estadísticas de referencia",
-
   "faq.about.a1": "BetsPlug fue fundado por un equipo de ingenieros de análisis deportivo y entusiastas del fútbol que vieron la oportunidad de llevar predicciones basadas en inteligencia artificial y modelos de calificación Elo a los apostadores cotidianos que buscaban una ventaja basada en los datos.",
   "faq.about.a2": "BetsPlug opera como una empresa totalmente remota con miembros del equipo en toda Europa. Nuestra infraestructura de datos y canales de análisis de fútbol se ejecutan en servidores en la nube optimizados para la entrega de predicciones de partidos en tiempo real.",
   "faq.about.a3": "Ni. BetsPlug es una plataforma de análisis de fútbol que utiliza predicciones de inteligencia artificial, goles esperados y calificaciones Elo para generar oportunidades de apuestas valiosas. Nunca realizamos apuestas en su nombre ni aceptamos apuestas.",
@@ -552,7 +541,6 @@ const es = {
   "faq.track.q4": "¿Muestras pérdidas también?",
   "faq.track.q5": "¿Qué ligas se rastrean?",
   "faq.track.q6": "¿Con qué frecuencia se actualiza el historial?",
-
   "faqTitle.about": "Acerca de las preguntas frecuentes de BetsPlug",
   "faqTitle.aboutSub": "Preguntas comunes sobre quiénes somos y cómo trabajamos.",
   "faqTitle.home": "Preguntas frecuentes",
@@ -560,7 +548,6 @@ const es = {
   "faqTitle.predictionsSub": "Todo lo que necesitas saber sobre nuestras predicciones de partidos con IA.",
   "faqTitle.trackRecord": "Preguntas frecuentes sobre el historial",
   "faqTitle.trackRecordSub": "Cómo medimos y compartimos nuestro rendimiento de predicción.",
-
   "features.badge": "lo que obtienes",
   "features.f1Desc": "Obtenga probabilidades de victoria impulsadas por IA para más de 50 partidos todos los días. Actualizado en tiempo real a medida que cambian las probabilidades y las condiciones.",
   "features.f1Title": "Predicciones diarias de partidos",
@@ -576,7 +563,6 @@ const es = {
   "features.f6Title": "comunidad de telegramas",
   "features.titleA": "Todo incluido",
   "features.titleB": "en una plataforma.",
-
   "finalCta.badge": "¿Listo para probarlo?",
   "finalCta.cancelAnytime": "Cancelar en cualquier momento",
   "finalCta.instantAccess": "Acceso instantáneo",
@@ -587,7 +573,6 @@ const es = {
   "finalCta.titleA": "ver el de mañana",
   "finalCta.titleB": "hoy.",
   "finalCta.titleHighlight": "predicciones",
-
   "footer.aboutUs": "Sobre nosotras",
   "footer.betTypes": "Tipos de apuesta",
   "footer.bottomCookies": "Galletas",
@@ -622,7 +607,6 @@ const es = {
   "footer.secureTitle": "Pagos seguros",
   "footer.termsOfService": "Términos de servicio",
   "footer.viewAll": "Ver todo",
-
   "header.adminPanel": "Panel de administración",
   "header.favorites": "Favoritas",
   "header.live": "Vivir",
@@ -633,7 +617,6 @@ const es = {
   "header.searchPlaceholder": "Busca equipos, partidos, ligas...",
   "header.settings": "Ajustes",
   "header.subscription": "Suscripción",
-
   "hero.activeUsers": "usuarias activas",
   "hero.away": "Lejos",
   "hero.badge": "Predicciones de IA para cada partido.",
@@ -660,7 +643,6 @@ const es = {
   "hero.usp3Title": "Resultados 100% transparentes",
   "hero.winRate": "Tasa de victorias",
   "hero.wins": "gana",
-
   "hiw.breadcrumbHome": "Hogar",
   "hiw.breadcrumbHow": "como funciona",
   "hiw.ctaBadge": "¿Listo para ver las predicciones?",
@@ -729,14 +711,16 @@ const es = {
   "hiw.step3Point3Desc": "Las selecciones perdedoras se quedan para siempre. Un historial que sólo muestra ganadores es marketing, no transparencia.",
   "hiw.step3Point3Title": "Nada eliminado",
   "hiw.step3Title": "Realice un seguimiento de todo de forma transparente",
-
   "home.freePredBadge": "No es necesario registrarse",
   "home.freePredCta": "Ver todas las predicciones",
   "home.freePredCtaSub": "Desbloquee acceso completo a más de 50 predicciones diarias con una prueba gratuita.",
+  "home.freePredRecord": "Selecciones correctas",
   "home.freePredSubtitle": "Vea nuestros modelos en acción. Tres predicciones de partidos gratuitas basadas en IA: actualizadas diariamente, no es necesario registrarse.",
   "home.freePredTitle": "GRATIS de hoy",
   "home.freePredTitleHighlight": "Predicciones de IA",
-
+  "home.freePredToday": "Selecciones gratuitas de hoy",
+  "home.freePredWinrate": "Porcentaje de victorias",
+  "home.freePredYesterday": "Resultados de ayer",
   "how.badge": "como funciona",
   "how.deepDive": "Obtenga más información sobre cómo funciona",
   "how.step1Desc": "Nuestra IA analiza la forma, la clasificación, los enfrentamientos directos y más de 40 factores. Una predicción por partido, actualizada diariamente.",
@@ -747,14 +731,11 @@ const es = {
   "how.step3Title": "3. Realice un seguimiento de todo de forma transparente",
   "how.subtitle": "Un motor de IA, una selección diaria, un historial verificable. Sin cajas negras.",
   "how.title": "Tres pasos. Transparencia total.",
-
   "lang.label": "Idioma",
   "lang.switch": "Cambiar idioma",
-
   "leagues.badge": "Ligas principales",
   "leagues.titleA": "La mas grande",
   "leagues.titleB": "ligas",
-
   "live.analysisPending": "Análisis pendiente",
   "live.cancelled": "Cancelada",
   "live.clearFilters": "Limpiar filtros",
@@ -779,7 +760,6 @@ const es = {
   "live.title": "Partidos en vivo",
   "live.viewAnalysis": "Ver análisis",
   "live.winProbability": "Probabilidad de ganar",
-
   "login.apple": "Continuar con Apple",
   "login.badge": "Área de miembros",
   "login.createAccount": "Comienza tu prueba gratuita",
@@ -809,7 +789,6 @@ const es = {
   "login.trust1": "SSL de 256 bits cifrada",
   "login.trust2": "Cumple con el RGPD",
   "login.trust3": "Cancelar en cualquier momento",
-
   "matchPred.bannerBadge": "Sólo miembros",
   "matchPred.bannerBullet1": "Predicciones diarias ilimitadas de IA",
   "matchPred.bannerBullet2": "Salida completa de BetsPlug Pulse AI",
@@ -852,7 +831,6 @@ const es = {
   "matchPred.trust3": "Historial público",
   "matchPred.unlockThis": "Desbloquea esta selección",
   "matchPred.winProbLabel": "Probabilidad de ganar",
-
   "nav.about": "Acerca de",
   "nav.admin": "Administradora",
   "nav.articles": "Artículos",
@@ -875,10 +853,9 @@ const es = {
   "nav.settings": "Ajustes",
   "nav.startFreeTrial": "Iniciar prueba gratuita",
   "nav.strategy_lab": "Laboratorio de estrategia",
-  "nav.trackRecord": "Historial",
   "nav.trackrecord": "Historial",
+  "nav.trackRecord": "Historial",
   "nav.weekly_report": "Informe Semanal",
-
   "page.admin": "Panel de administración",
   "page.dashboard": "Panel",
   "page.deals": "Ofertas",
@@ -889,7 +866,6 @@ const es = {
   "page.settings": "Ajustes",
   "page.strategy_lab": "Laboratorio de estrategia",
   "page.trackrecord": "Historial",
-
   "phrase.educational_only": "Sólo para fines analíticos y educativos.",
   "phrase.last_updated": "Última actualización",
   "phrase.live_data": "datos en vivo",
@@ -898,7 +874,6 @@ const es = {
   "phrase.select_language": "Seleccionar idioma",
   "phrase.simulation_disclaimer": "Los resultados mostrados se basan en resultados de modelos simulados.",
   "phrase.view_all": "Ver todo",
-
   "pred.analysisPending": "Análisis pendiente",
   "pred.analysisPendingStat": "Análisis pendiente",
   "pred.autoRefresh": "Se actualiza automáticamente cada 60 segundos · Último:",
@@ -922,13 +897,13 @@ const es = {
   "pred.noLeaguesFound": "No se encontraron ligas",
   "pred.noMatchingPredictions": "Ninguna predicción coincide con tus filtros",
   "pred.noMatchingPredictionsDesc": "Intente ajustar los filtros de liga o de confianza anteriores.",
+  "pred.notProcessed": "Este partido aún no ha sido procesado por el motor de predicción. Vuelva a consultar más cerca del inicio.",
   "pred.noUpcomingMatches": "No hay próximos partidos en los próximos 7 días.",
   "pred.noUpcomingMatchesDesc": "No se encontraron partidos programados en la base de datos. Vuelve a consultar en breve.",
-  "pred.notProcessed": "Este partido aún no ha sido procesado por el motor de predicción. Vuelva a consultar más cerca del inicio.",
-  "pred.preMatchOdds": "Cuotas previas al partido",
   "pred.predicted": "Prevista",
   "pred.predictedOn": "Prevista",
   "pred.predictionsReady": "Predicciones listas",
+  "pred.preMatchOdds": "Cuotas previas al partido",
   "pred.previousDay": "dia anterior",
   "pred.searchLeague": "Buscar liga...",
   "pred.sortConfidence": "Confianza",
@@ -940,10 +915,11 @@ const es = {
   "pred.upcoming": "Próxima",
   "pred.upcomingMatches": "Próximos partidos",
   "pred.upgradePrompt": "Vea todas las predicciones con nuestro plan Silver o superior.",
+  "pred.upsellHeadline": "Quieres sólo la mejor selección? → Selección del día",
+  "pred.upsellSubtext": "Nuestra IA selecciona cada día el partido con mayor certeza.",
   "pred.venue": "Evento",
   "pred.viewDetails": "Ver detalles",
   "pred.winProbability": "Probabilidad de ganar",
-
   "pricing.badge": "Precios",
   "pricing.billedMonthly": "Facturado mensualmente",
   "pricing.billedYearlyGold": "Facturado 143,90€ al año",
@@ -997,15 +973,14 @@ const es = {
   "pricing.trust2": "Cancelar en cualquier momento",
   "pricing.trust3": "Pago seguro por Stripe",
   "pricing.yearly": "Anual",
-
   "reports.allAvailableReports": "Todos los informes de rendimiento disponibles",
   "reports.customRange": "Rango personalizado",
   "reports.download": "Descargar",
   "reports.format": "Formato",
+  "reports.generatedReports": "Informes generados",
   "reports.generateFailed": "No se pudo generar el informe. Por favor inténtalo de nuevo.",
   "reports.generateReport": "Generar informe",
   "reports.generateReportDescription": "Genere un nuevo informe de rendimiento basado en las predicciones del modelo.",
-  "reports.generatedReports": "Informes generados",
   "reports.generating": "Generando…",
   "reports.monthlySummary": "Resumen mensual",
   "reports.noReportsHint": "Utilice el formulario de arriba para generar su primer informe.",
@@ -1018,12 +993,13 @@ const es = {
   "reports.subtitle": "Generar y descargar informes de rendimiento",
   "reports.title": "Informes y Exportaciones",
   "reports.weeklySummary": "Resumen semanal",
-
   "results.allLeagues": "Todas las ligas",
   "results.bestPerformers": "Mejores intérpretes",
+  "results.bestStreak": "Mejor racha de victorias",
   "results.clearFilters": "Limpiar filtros",
   "results.confidence": "confianza",
   "results.correct": "CORRECTA",
+  "results.currentStreak": "Racha actual",
   "results.errorLoading": "No se pudieron cargar los datos de los resultados. Es posible que la API no esté disponible temporalmente.",
   "results.expandTo30Days": "Ampliar a 30 días",
   "results.filterAll": "Toda",
@@ -1033,6 +1009,7 @@ const es = {
   "results.last14Days": "Últimos 14 días",
   "results.last30Days": "últimos 30 días",
   "results.last7Days": "últimos 7 días",
+  "results.maxLoseStreak": "Máxima racha perdedora",
   "results.noPredictionMade": "No se hizo ninguna predicción",
   "results.noResults": "No se encontraron resultados",
   "results.noResultsHint": "No hay partidos finalizados con resultados en el periodo seleccionado. Pruebe con un rango de fechas más amplio.",
@@ -1056,8 +1033,9 @@ const es = {
   "results.subtitle": "Resultados del partido y precisión de la predicción.",
   "results.thisWeekPerformance": "La actuación de esta semana",
   "results.title": "Resultados y resultados",
+  "results.upsellHeadline": "Acceso de por vida: pague una vez y nunca más",
+  "results.upsellSubtext": "Todas las funciones Gold + Telegram privado + acceso anticipado. Limitado a 100 al año.",
   "results.worstPerformers": "Peores artistas",
-
   "route.botdAccuracy": "Exactitud",
   "route.botdBadge": "Recomendación #1",
   "route.botdDesc": "Todos los días, Pulse selecciona automáticamente la coincidencia en la que el modelo tiene más confianza. Una elección, máxima convicción.",
@@ -1067,10 +1045,10 @@ const es = {
   "route.commonForAllPaths": "Común para todos los caminos.",
   "route.commonResults": "Resultados",
   "route.commonResultsDesc": "Ver los resultados de todas las predicciones.",
-  "route.commonTrackResults": "Seguimiento de resultados",
-  "route.commonTrackResultsDesc": "Ver los resultados de todas las predicciones.",
   "route.commonTrackrecord": "Historial",
   "route.commonTrackrecordDesc": "Datos de precisión a largo plazo",
+  "route.commonTrackResults": "Seguimiento de resultados",
+  "route.commonTrackResultsDesc": "Ver los resultados de todas las predicciones.",
   "route.commonWeeklyReport": "Informe Semanal",
   "route.commonWeeklyReportDesc": "Resumen de rendimiento",
   "route.path1Step1Desc": "Elija una estrategia probada",
@@ -1109,7 +1087,6 @@ const es = {
   "route.strategyLabTitle": "Laboratorio de estrategia",
   "route.subtitle": "Elija su camino para aprovechar al máximo BetsPlug. Cada ruta conduce a elecciones más inteligentes: elige la que se adapte a tu estilo.",
   "route.title": "Tu ruta",
-
   "search.for": "para",
   "search.noResultsFound": "No se encontraron resultados",
   "search.noResultsInCategory": "No hay resultados en esta categoría.",
@@ -1130,7 +1107,6 @@ const es = {
   "search.typeLeague": "Liga",
   "search.typeMatch": "Fósforo",
   "search.typeTeam": "Equipo",
-
   "seo.badge": "Predicciones de fútbol con IA",
   "seo.pillar1Desc": "Nuestro motor de predicción de fútbol con IA combina calificaciones Elo, modelos de goles de Poisson y aprendizaje automático para pronosticar los resultados de los partidos en las principales ligas de fútbol. Cuatro modelos de IA trabajan juntos para ofrecer predicciones que son más precisas que cualquier método por sí solo, brindándote consejos de fútbol basados ​​en datos en los que puedes confiar.",
   "seo.pillar1Title": "Motor de predicción de fútbol con IA",
@@ -1151,7 +1127,6 @@ const es = {
   "seo.subtitle": "BetsPlug es la plataforma de predicción de fútbol basada en inteligencia artificial en la que confían miles de fanáticos del fútbol en todo el mundo. Nuestros modelos de aprendizaje automático analizan cada partido en más de 30 ligas (desde la Premier League y La Liga hasta la Bundesliga, la Serie A y la Ligue 1) para calcular probabilidades de victoria precisas e identificar oportunidades de apuestas valiosas. Ya sea que esté buscando predicciones de fútbol de hoy, investigando su próximo acumulador o quiera ver qué equipo tiene más probabilidades de ganar esta noche, BetsPlug le brinda predicciones de IA claras y honestas respaldadas por un historial totalmente público.",
   "seo.titleA": "Predicciones de fútbol con IA y",
   "seo.titleB": "Consejos para apostar basados ​​en datos",
-
   "settings.admin": "Administradora",
   "settings.alertsFollowedOnly": "Reciba alertas solo para las ligas seguidas",
   "settings.alertsFollowedOnlyDesc": "Suprime las notificaciones de ligas que no sigues",
@@ -1182,8 +1157,8 @@ const es = {
   "settings.predictionUpdatesDesc": "Reciba actualizaciones cuando las predicciones del modelo cambien significativamente",
   "settings.profile": "Perfil",
   "settings.profileDesc": "Su información personal y función de cuenta",
-  "settings.saveSettings": "Guardar configuración",
   "settings.savedSuccessfully": "Configuración guardada exitosamente",
+  "settings.saveSettings": "Guardar configuración",
   "settings.strategyCalls": "Llamadas estratégicas",
   "settings.strategyCallsDesc": "Alertas cuando una estrategia genera una nueva señal de apuesta",
   "settings.subtitle": "Personaliza tu experiencia",
@@ -1192,18 +1167,15 @@ const es = {
   "settings.title": "Ajustes",
   "settings.weeklyReportEmails": "Correos electrónicos de informes semanales",
   "settings.weeklyReportEmailsDesc": "Un resumen del rendimiento del modelo todos los lunes por la mañana.",
-
   "sidebar.gettingStarted": "Empezando",
   "sidebar.performance": "Actuación",
   "sidebar.strategiesAndPicks": "Estrategias y selecciones",
   "sidebar.system": "Sistema",
-
   "socialProof.dismiss": "Descartar notificación",
   "socialProof.minAgo": "Hace minutos",
   "socialProof.plan": "plan",
   "socialProof.subscribed": "acabo de suscribirme al",
   "socialProof.verified": "Compra verificada",
-
   "strategy.accuracy": "Exactitud",
   "strategy.archivedNotProfitable": "Archivada - No rentable",
   "strategy.avgConfidence": "Confianza promedio",
@@ -1238,17 +1210,14 @@ const es = {
   "strategy.viewAllPicks": "Ver todas las selecciones y resultados",
   "strategy.winRate": "Tasa de victorias",
   "strategy.winRateTooltip": "Porcentaje de selecciones que fueron correctas",
-
   "testimonials.badge": "Testimonios",
   "testimonials.subtitle": "Miles de aficionados al fútbol ya utilizan BetsPlug. Esto es lo que piensan.",
   "testimonials.titleA": "lo que nuestro",
   "testimonials.titleB": "decir",
   "testimonials.titleHighlight": "usuarias",
-
   "topbar.cta": "Pruébalo por 0,01€",
   "topbar.picksAnalyzed": "selecciones analizadas",
   "topbar.winRate": "tasa de ganancia",
-
   "tr.breadcrumbHome": "Hogar",
   "tr.breadcrumbTrack": "Historial",
   "tr.case1Metric1Label": "Su tamaño de muestra filtrado",
@@ -1338,7 +1307,6 @@ const es = {
   "tr.transCta2": "Iniciar prueba gratuita",
   "tr.transSubtitle": "Cada predicción calificada que hemos publicado se puede buscar por coincidencia, fecha, mercado y modelo. Ningún filtro oculta a los perdedores.",
   "tr.transTitle": "No confíe en nuestra palabra: lea el libro mayor.",
-
   "track.accuracy": "Precisión general",
   "track.askQuestion": "¿Cómo funciona?",
   "track.badge": "Resultados probados",
@@ -1354,7 +1322,6 @@ const es = {
   "track.titleA": "Vea nuestro",
   "track.titleB": "— nada oculto.",
   "track.titleHighlight": "resultados reales",
-
   "trackrecord.accuracy": "Exactitud",
   "trackrecord.accuracyByLeague": "Precisión por liga",
   "trackrecord.accuracyByLeagueDesc": "Precisión de las predicciones desglosada por liga: datos reales",
@@ -1429,7 +1396,6 @@ const es = {
   "trackrecord.value": "Valor",
   "trackrecord.vs": "vs",
   "trackrecord.whatIsCalibration": "¿Qué significa este gráfico?",
-
   "trusted.card1Desc": "Sin jerga ni gráficos complicados. Cada predicción muestra porcentajes claros y una puntuación de confianza, incluso si nunca antes has analizado un partido.",
   "trusted.card1Title": "Fácil de entender.",
   "trusted.card2Desc": "Cuatro modelos de IA analizan la forma del equipo, los registros cara a cara y las probabilidades en vivo para calcular el resultado más probable para cada partido.",
@@ -1442,7 +1408,6 @@ const es = {
   "trusted.titleB": "Aficionadas al futbol",
   "trusted.titleC": "Elige BetsPlug.",
   "trusted.titleHighlight": "1,500+",
-
   "weeklyReport.allCallsThisWeek": "Todas las llamadas de esta semana",
   "weeklyReport.callLog": "Registro de llamadas",
   "weeklyReport.calls": "llamadas",
@@ -1480,11 +1445,10 @@ const es = {
   "weeklyReport.vsLastWeek": "vs la semana pasada",
   "weeklyReport.weeklyTotal": "Total Semanal",
   "weeklyReport.win": "GANAR",
-  "weeklyReport.winRate": "Tasa de victorias",
   "weeklyReport.winnersAndLosses": "Ganadoras y pérdidas",
+  "weeklyReport.winRate": "Tasa de victorias",
   "weeklyReport.wins": "gana",
   "weeklyReport.yes": "Sí",
-
   "welcome.badge": "Estás dentro.",
   "welcome.ctaPrimary": "Inicie sesión en su panel de control",
   "welcome.ctaSecondary": "Volver a la página de inicio",
@@ -1553,5 +1517,5 @@ const es = {
   "welcome.tourTitle": "Dónde encontrar qué, una vez que estés dentro",
   "welcome.trialBody": "No se le cobrará hoy. Cancele en cualquier momento dentro de los próximos 7 días y su cuenta se detendrá silenciosamente, sin preguntas ni presiones.",
   "welcome.trialTitle": "Tu prueba gratuita de 7 días está activa",
-} as Record<TranslationKey, string>;
+} satisfies Partial<Record<TranslationKey, string>>;
 export default es;
