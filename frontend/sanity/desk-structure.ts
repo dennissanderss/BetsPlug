@@ -1,5 +1,14 @@
 import type { StructureBuilder } from "sanity/structure";
 
+/** Helper: show a singleton document (one fixed document, no list). */
+function singleton(S: StructureBuilder, type: string, title: string, id?: string) {
+  const docId = id ?? type;
+  return S.listItem()
+    .title(title)
+    .id(type)
+    .child(S.document().schemaType(type).documentId(docId).title(title));
+}
+
 export const structure = (S: StructureBuilder) =>
   S.list()
     .title("Content")
@@ -23,6 +32,25 @@ export const structure = (S: StructureBuilder) =>
             .items([
               S.documentTypeListItem("leagueHub").title("League Hubs"),
               S.documentTypeListItem("betTypeHub").title("Bet Type Hubs"),
+            ]),
+        ),
+      S.divider(),
+      S.listItem()
+        .title("Pages")
+        .child(
+          S.list()
+            .title("Pages")
+            .items([
+              singleton(S, "homepage", "Homepage"),
+              singleton(S, "aboutPage", "About"),
+              singleton(S, "howItWorksPage", "How It Works"),
+              singleton(S, "contactPage", "Contact"),
+              singleton(S, "b2bPage", "B2B"),
+              singleton(S, "trackRecordPage", "Track Record"),
+              singleton(S, "welcomePage", "Welcome"),
+              singleton(S, "checkoutPage", "Checkout"),
+              singleton(S, "thankYouPage", "Thank You"),
+              singleton(S, "pricingConfig", "Pricing"),
             ]),
         ),
       S.divider(),
