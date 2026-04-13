@@ -36,31 +36,89 @@ BASE_URL = "https://v3.football.api-sports.io"
 
 # Map internal league slugs → API-Football league IDs
 LEAGUE_SLUG_TO_ID: dict[str, int] = {
+    # England
     "premier-league": 39,
-    "la-liga": 140,
-    "bundesliga": 78,
-    "serie-a": 135,
-    "ligue-1": 61,
+    "championship": 40,
+    # Europe (UEFA)
     "champions-league": 2,
+    "europa-league": 3,
+    "conference-league": 848,
+    # Spain
+    "la-liga": 140,
+    # Germany
+    "bundesliga": 78,
+    # Italy
+    "serie-a": 135,
+    # France
+    "ligue-1": 61,
+    # Netherlands
     "eredivisie": 88,
+    # Portugal
     "primeira-liga": 94,
+    # Turkey
     "super-lig": 203,
+    # Belgium
     "jupiler-pro-league": 144,
+    # Scotland
+    "scottish-premiership": 179,
+    # Brazil
+    "brasileirao-serie-a": 71,
+    # USA
+    "mls": 253,
+    # Saudi Arabia
+    "saudi-pro-league": 307,
+    # Australia
+    "a-league": 188,
+    # Japan
+    "j1-league": 98,
+    # South Korea
+    "k-league-1": 292,
+    # China
+    "chinese-super-league": 169,
 }
 
 ID_TO_LEAGUE_SLUG: dict[int, str] = {v: k for k, v in LEAGUE_SLUG_TO_ID.items()}
 
 LEAGUE_META: dict[int, dict] = {
-    39:  {"name": "Premier League",      "country": "England",     "tier": 1},
-    140: {"name": "La Liga",             "country": "Spain",       "tier": 1},
-    78:  {"name": "Bundesliga",          "country": "Germany",     "tier": 1},
-    135: {"name": "Serie A",             "country": "Italy",       "tier": 1},
-    61:  {"name": "Ligue 1",             "country": "France",      "tier": 1},
-    2:   {"name": "Champions League",    "country": "Europe",      "tier": None},
-    88:  {"name": "Eredivisie",          "country": "Netherlands", "tier": 1},
-    94:  {"name": "Primeira Liga",       "country": "Portugal",    "tier": 1},
-    203: {"name": "Super Lig",           "country": "Turkey",      "tier": 1},
-    144: {"name": "Jupiler Pro League",  "country": "Belgium",     "tier": 1},
+    # England
+    39:  {"name": "Premier League",        "country": "England",      "tier": 1},
+    40:  {"name": "Championship",          "country": "England",      "tier": 2},
+    # Europe (UEFA)
+    2:   {"name": "Champions League",      "country": "Europe",       "tier": None},
+    3:   {"name": "Europa League",         "country": "Europe",       "tier": None},
+    848: {"name": "Conference League",     "country": "Europe",       "tier": None},
+    # Spain
+    140: {"name": "La Liga",               "country": "Spain",        "tier": 1},
+    # Germany
+    78:  {"name": "Bundesliga",            "country": "Germany",      "tier": 1},
+    # Italy
+    135: {"name": "Serie A",               "country": "Italy",        "tier": 1},
+    # France
+    61:  {"name": "Ligue 1",               "country": "France",       "tier": 1},
+    # Netherlands
+    88:  {"name": "Eredivisie",            "country": "Netherlands",  "tier": 1},
+    # Portugal
+    94:  {"name": "Primeira Liga",         "country": "Portugal",     "tier": 1},
+    # Turkey
+    203: {"name": "Süper Lig",             "country": "Turkey",       "tier": 1},
+    # Belgium
+    144: {"name": "Jupiler Pro League",    "country": "Belgium",      "tier": 1},
+    # Scotland
+    179: {"name": "Scottish Premiership",  "country": "Scotland",     "tier": 1},
+    # Brazil
+    71:  {"name": "Brasileirão Serie A",   "country": "Brazil",       "tier": 1},
+    # USA
+    253: {"name": "MLS",                   "country": "USA",          "tier": 1},
+    # Saudi Arabia
+    307: {"name": "Saudi Pro League",      "country": "Saudi Arabia", "tier": 1},
+    # Australia
+    188: {"name": "A-League",              "country": "Australia",    "tier": 1},
+    # Japan
+    98:  {"name": "J1 League",             "country": "Japan",        "tier": 1},
+    # South Korea
+    292: {"name": "K League 1",            "country": "South Korea",  "tier": 1},
+    # China
+    169: {"name": "Chinese Super League",  "country": "China",        "tier": 1},
 }
 
 # Pro tier: 7500 requests/day = 5.2 req/min sustained, but bursts are fine.
