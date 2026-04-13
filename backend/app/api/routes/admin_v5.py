@@ -1819,6 +1819,8 @@ async def engine_comparison(
     from app.models.prediction import PredictionEvaluation
 
     cutoff_dt = dt.fromisoformat(cutoff.replace("Z", "+00:00"))
+    if cutoff_dt.tzinfo is None:
+        cutoff_dt = cutoff_dt.replace(tzinfo=timezone.utc)
 
     stmt = (
         select(Prediction, PredictionEvaluation)
