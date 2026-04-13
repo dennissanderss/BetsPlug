@@ -172,13 +172,106 @@ export function FreePredictions() {
 
   useEffect(() => {
     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-    fetch(`${API}/homepage/free-picks`)
-      .then((r) => r.json())
-      .then((d: FreePicksResponse) => {
-        setData(d);
+
+    async function loadPicks() {
+      try {
+        // 1. Try the dedicated free-picks endpoint
+        const res = await fetch(`${API}/homepage/free-picks`);
+        const d: FreePicksResponse = await res.json();
+
+        if (d.today && d.today.length > 0) {
+          setData(d);
+          return;
+        }
+
+        // 2. Fallback: fetch upcoming fixtures directly and convert
+        const fixRes = await fetch(`${API}/fixtures/upcoming?days=14`);
+        const fixJson = await fixRes.json();
+        const fixtures: Array<Record<string, unknown>> = fixJson.fixtures ?? [];
+
+        const now = Date.now();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const upcoming = fixtures
+          .filter((f: any) => {
+            if (f.status !== "scheduled") return false;
+            const ts = new Date(f.scheduled_at as string).getTime();
+            return Number.isFinite(ts) && ts > now;
+          })
+          .sort(
+            (a: any, b: any) =>
+              new Date(a.scheduled_at as string).getTime() -
+              new Date(b.scheduled_at as string).getTime(),
+          )
+          .slice(0, 3);
+
+        const fallbackPicks: FreePickItem[] = upcoming.map((f: any) => ({
+          id: f.id ?? "",
+          match_id: f.id ?? "",
+          home_team: f.home_team_name ?? "TBD",
+          away_team: f.away_team_name ?? "TBD",
+          league: f.league_name ?? "",
+          scheduled_at: f.scheduled_at ?? "",
+          pick: f.prediction?.pick ?? null,
+          home_win_prob: f.prediction?.home_win_prob ?? null,
+          draw_prob: f.prediction?.draw_prob ?? null,
+          away_win_prob: f.prediction?.away_win_prob ?? null,
+          confidence: f.prediction?.confidence ?? null,
+          status: f.status ?? "scheduled",
+          home_score: null,
+          away_score: null,
+          is_correct: null,
+        }));
+
+        setData({
+          today: fallbackPicks,
+          yesterday: d.yesterday ?? [],
+          stats: d.stats ?? { total: 0, correct: 0, winrate: 0 },
+        });
+      } catch {
+        // Last resort: try fixtures only
+        try {
+          const fixRes = await fetch(`${API}/fixtures/upcoming?days=14`);
+          const fixJson = await fixRes.json();
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const fixtures: any[] = fixJson.fixtures ?? [];
+          const now = Date.now();
+          const upcoming = fixtures
+            .filter((f) => f.status === "scheduled" && new Date(f.scheduled_at).getTime() > now)
+            .sort((a, b) => new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime())
+            .slice(0, 3);
+
+          if (upcoming.length > 0) {
+            setData({
+              today: upcoming.map((f: any) => ({
+                id: f.id ?? "",
+                match_id: f.id ?? "",
+                home_team: f.home_team_name ?? "TBD",
+                away_team: f.away_team_name ?? "TBD",
+                league: f.league_name ?? "",
+                scheduled_at: f.scheduled_at ?? "",
+                pick: f.prediction?.pick ?? null,
+                home_win_prob: f.prediction?.home_win_prob ?? null,
+                draw_prob: f.prediction?.draw_prob ?? null,
+                away_win_prob: f.prediction?.away_win_prob ?? null,
+                confidence: f.prediction?.confidence ?? null,
+                status: "scheduled",
+                home_score: null,
+                away_score: null,
+                is_correct: null,
+              })),
+              yesterday: [],
+              stats: { total: 0, correct: 0, winrate: 0 },
+            });
+          }
+        } catch {
+          // Both endpoints failed — leave empty
+        }
+      } finally {
         setLoading(false);
-      })
-      .catch(() => setLoading(false));
+      }
+    }
+
+    loadPicks();
   }, []);
 
   const todayPicks = data?.today ?? [];
