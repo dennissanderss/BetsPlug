@@ -6,7 +6,7 @@ import {
   FaqJsonLd,
 } from "@/components/seo/json-ld";
 import { getLocalizedFaq } from "@/lib/seo-helpers";
-import { fetchAllArticles } from "@/lib/sanity-data";
+import { fetchAllArticles, fetchAllTestimonials } from "@/lib/sanity-data";
 
 export const revalidate = 60;
 
@@ -24,10 +24,19 @@ const FAQ_KEYS = [
 ];
 
 export default async function HomePage() {
-  const [articles, faqItems] = await Promise.all([
+  const [articles, sanityTestimonials, faqItems] = await Promise.all([
     fetchAllArticles(),
+    fetchAllTestimonials(),
     Promise.resolve(getLocalizedFaq(FAQ_KEYS)),
   ]);
+
+  // Map Sanity testimonials to component format
+  const testimonials = sanityTestimonials.map((t) => ({
+    text: t.text,
+    image: t.imageUrl,
+    name: t.name,
+    role: t.role,
+  }));
 
   return (
     <>
@@ -38,7 +47,7 @@ export default async function HomePage() {
       <FaqJsonLd items={faqItems} />
 
       {/* Client-rendered landing page content */}
-      <HomeContent articles={articles} />
+      <HomeContent articles={articles} testimonials={testimonials} />
     </>
   );
 }

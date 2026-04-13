@@ -32,6 +32,7 @@ import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { TopBar } from "@/components/ui/top-bar";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { Article } from "@/data/articles";
+import type { Testimonial } from "@/components/ui/testimonials-columns";
 
 const FreePredictions = dynamic(() => import("@/components/ui/free-predictions").then(m => m.FreePredictions), { ssr: false });
 const BetsPlugFooter = dynamic(() => import("@/components/ui/betsplug-footer").then(m => m.BetsPlugFooter), { ssr: true });
@@ -463,9 +464,10 @@ function DashboardPreviewSection() {
 
 interface HomeContentProps {
   articles: Article[];
+  testimonials: Testimonial[];
 }
 
-export function HomeContent({ articles }: HomeContentProps) {
+export function HomeContent({ articles, testimonials }: HomeContentProps) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -1178,7 +1180,7 @@ export function HomeContent({ articles }: HomeContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           TESTIMONIALS
          ═══════════════════════════════════════════════════════════════════ */}
-      <TestimonialsSection />
+      <TestimonialsSection testimonials={testimonials} />
 
       {/* ═══════════════════════════════════════════════════════════════════
           PRICING — plans + lifetime Platinum deal
