@@ -1255,6 +1255,7 @@ const es = {
   "strategy.winRateTooltip": "Porcentaje de selecciones que fueron correctas",
 
   "testimonials.badge": "Testimonios",
+  "testimonials.verified": "Reseñas de compradores verificados",
   "testimonials.subtitle": "Miles de aficionados al fútbol ya utilizan BetsPlug. Esto es lo que piensan.",
   "testimonials.titleA": "lo que nuestro",
   "testimonials.titleB": "decir",

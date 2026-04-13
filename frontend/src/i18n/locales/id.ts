@@ -1255,6 +1255,7 @@ const id = {
   "strategy.winRateTooltip": "Persentase pilihan yang benar",
 
   "testimonials.badge": "Testimonial",
+  "testimonials.verified": "Ulasan dari pembeli terverifikasi",
   "testimonials.subtitle": "Ribuan penggemar sepak bola sudah menggunakan BetsPlug. Inilah yang mereka pikirkan.",
   "testimonials.titleA": "Apa milik kita",
   "testimonials.titleB": "mengatakan",

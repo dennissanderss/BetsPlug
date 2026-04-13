@@ -232,6 +232,7 @@ const en = {
   "testimonials.titleA": "What our",
   "testimonials.titleHighlight": "users",
   "testimonials.titleB": "say",
+  "testimonials.verified": "Reviews from verified buyers",
   "testimonials.subtitle":
     "Thousands of football fans already use BetsPlug. Here's what they think.",
 
@@ -3730,9 +3731,10 @@ const nl: Dictionary = {
   "features.f6Title": "Telegram-gemeenschap",
   "features.f6Desc": "Sluit je aan bij meer dan 1.500 voetbalfans die voorspellingen delen, wedstrijden bespreken en samen overwinningen vieren.",
   "testimonials.badge": "Getuigenissen",
-  "testimonials.titleA": "Wat onze",
+  "testimonials.titleA": "Onze",
   "testimonials.titleHighlight": "gebruikers",
-  "testimonials.titleB": "inspraak",
+  "testimonials.titleB": "zijn lovend",
+  "testimonials.verified": "Reviews van geverifieerde kopers",
   "testimonials.subtitle": "Duizenden voetbalfans maken al gebruik van BetsPlug. Dit is wat ze denken.",
   "finalCta.badge": "Klaar om het te proberen?",
   "finalCta.titleA": "Zie die van morgen",

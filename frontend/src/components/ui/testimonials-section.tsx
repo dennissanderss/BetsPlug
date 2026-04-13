@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useAnimation, useInView } from "motion/react";
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, ChevronLeft, ChevronRight, BadgeCheck } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "@/i18n/locale-provider";
@@ -28,6 +28,14 @@ export const TestimonialsSection = ({
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const controls = useAnimation();
 
+  const prev = useCallback(() => {
+    setActiveIndex((c) => (c - 1 + testimonials.length) % testimonials.length);
+  }, [testimonials.length]);
+
+  const next = useCallback(() => {
+    setActiveIndex((c) => (c + 1) % testimonials.length);
+  }, [testimonials.length]);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -51,11 +59,9 @@ export const TestimonialsSection = ({
 
   useEffect(() => {
     if (testimonials.length <= 1) return;
-    const interval = setInterval(() => {
-      setActiveIndex((c) => (c + 1) % testimonials.length);
-    }, 6000);
+    const interval = setInterval(next, 6000);
     return () => clearInterval(interval);
-  }, [testimonials.length]);
+  }, [testimonials.length, next]);
 
   if (testimonials.length === 0) return null;
 
@@ -76,7 +82,7 @@ export const TestimonialsSection = ({
           variants={containerVariants}
           className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:gap-20"
         >
-          {/* Left: heading + navigation dots */}
+          {/* Left: heading + navigation */}
           <motion.div
             variants={itemVariants}
             className="flex flex-col justify-center"
@@ -99,20 +105,45 @@ export const TestimonialsSection = ({
                 {t("testimonials.subtitle")}
               </p>
 
-              {/* Dots */}
-              <div className="flex items-center gap-3 pt-4">
-                {testimonials.map((_, i) => (
+              {/* Verified buyers badge */}
+              <div className="flex items-center gap-2 text-sm text-slate-400">
+                <BadgeCheck className="h-4 w-4 text-green-400" />
+                <span>{t("testimonials.verified")}</span>
+              </div>
+
+              {/* Dots + arrows */}
+              <div className="flex items-center gap-4 pt-2">
+                <div className="flex items-center gap-3">
+                  {testimonials.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveIndex(i)}
+                      className={`h-2.5 rounded-full transition-all duration-300 ${
+                        activeIndex === i
+                          ? "w-10 bg-green-500"
+                          : "w-2.5 bg-white/20 hover:bg-white/40"
+                      }`}
+                      aria-label={`View testimonial ${i + 1}`}
+                    />
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-2">
                   <button
-                    key={i}
-                    onClick={() => setActiveIndex(i)}
-                    className={`h-2.5 rounded-full transition-all duration-300 ${
-                      activeIndex === i
-                        ? "w-10 bg-green-500"
-                        : "w-2.5 bg-white/20 hover:bg-white/40"
-                    }`}
-                    aria-label={`View testimonial ${i + 1}`}
-                  />
-                ))}
+                    onClick={prev}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-green-500/40 hover:bg-green-500/10 hover:text-green-400"
+                    aria-label="Previous testimonial"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={next}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:border-green-500/40 hover:bg-green-500/10 hover:text-green-400"
+                    aria-label="Next testimonial"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -168,9 +199,12 @@ export const TestimonialsSection = ({
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <h3 className="text-sm font-semibold tracking-tight text-white">
-                        {testimonial.name}
-                      </h3>
+                      <div className="flex items-center gap-1.5">
+                        <h3 className="text-sm font-semibold tracking-tight text-white">
+                          {testimonial.name}
+                        </h3>
+                        <BadgeCheck className="h-3.5 w-3.5 text-green-400" />
+                      </div>
                       <p className="text-xs text-slate-500">
                         {testimonial.role}
                       </p>

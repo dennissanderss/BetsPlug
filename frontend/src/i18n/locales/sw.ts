@@ -1255,6 +1255,7 @@ const sw = {
   "strategy.winRateTooltip": "Asilimia ya chaguo ambazo zilikuwa sahihi",
 
   "testimonials.badge": "Ushuhuda",
+  "testimonials.verified": "Maoni kutoka kwa wanunuzi waliothibitishwa",
   "testimonials.subtitle": "Maelfu ya mashabiki wa soka tayari wanatumia BetsPlug. Hivi ndivyo wanavyofikiri.",
   "testimonials.titleA": "Nini yetu",
   "testimonials.titleB": "sema",
