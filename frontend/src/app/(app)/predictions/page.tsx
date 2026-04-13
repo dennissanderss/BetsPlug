@@ -945,7 +945,7 @@ function FilterBar({
     leagueFilter !== "All" && !quickChipLeagues.includes(leagueFilter);
 
   return (
-    <div className="glass-card p-4">
+    <div className="rounded-xl border border-white/[0.08] bg-[#0f1729] p-4">
       <div className="flex flex-wrap items-center gap-4">
         {/* League filter: quick chips + dropdown */}
         <div className="flex items-center gap-2 flex-wrap">
@@ -999,7 +999,7 @@ function FilterBar({
             </button>
 
             {leagueDropdownOpen && (
-              <div className="absolute left-0 top-full z-[60] mt-2 w-[340px] rounded-xl border border-slate-600/60 bg-[#111827] shadow-2xl shadow-black/80 ring-1 ring-black/20">
+              <div className="absolute left-0 top-full z-[60] mt-2 w-[340px] isolate rounded-xl border border-slate-600/60 bg-[#111827] shadow-2xl shadow-black/80 ring-1 ring-black/20" style={{ backdropFilter: "none", WebkitBackdropFilter: "none" }}>
                 {/* Search */}
                 <div className="flex items-center gap-2.5 border-b border-slate-700/80 bg-[#1a2236] px-4 py-3 rounded-t-xl">
                   <Search className="h-4 w-4 text-slate-400 shrink-0" />
