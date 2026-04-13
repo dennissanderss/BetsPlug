@@ -31,8 +31,34 @@ export function LeaguesTicker() {
       aria-labelledby="leagues-heading"
       style={{ background: BG }}
     >
+      {/* ── Unique background ── */}
+      {/* Honeycomb / hex dot pattern */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage: `radial-gradient(circle, rgba(74,222,128,0.9) 1px, transparent 1px)`,
+          backgroundSize: "28px 28px",
+          backgroundPosition: "0 0, 14px 14px",
+        }}
+      />
+      {/* Diagonal accent lines */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(135deg, rgba(74,222,128,0.8) 0 1px, transparent 1px 24px)",
+        }}
+      />
+      {/* Radial glow */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-1/2 h-[500px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500/[0.04] blur-[120px]" />
+      </div>
+      {/* Top/bottom accent lines */}
+      <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-green-500/25 to-transparent" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-500/25 to-transparent" />
+
       {/* Title */}
-      <div className="relative z-10 mb-10 text-center">
+      <div className="relative z-10 mb-8 text-center md:mb-10">
         <span className="mb-3 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
           {t("leagues.badge")}
         </span>
@@ -45,22 +71,12 @@ export function LeaguesTicker() {
         </h2>
       </div>
 
-      {/* 3D Perspective marquee */}
+      {/* Marquee — flat on mobile, 3D perspective on md+ */}
       <div
-        className="relative flex items-center justify-center overflow-hidden"
-        style={{
-          perspective: "1200px",
-          height: "180px",
-        }}
+        className="perspective-marquee relative flex items-center justify-center overflow-hidden"
       >
-        {/* Tilted track */}
-        <div
-          className="flex w-full items-center justify-start"
-          style={{
-            transform: "rotateX(6deg) rotateY(-24deg)",
-            transformStyle: "preserve-3d",
-          }}
-        >
+        {/* Track — no tilt on mobile, tilted on desktop */}
+        <div className="marquee-track flex w-full items-center justify-start">
           {/* Scrolling row */}
           <motion.div
             className="flex items-center whitespace-nowrap"
@@ -74,36 +90,58 @@ export function LeaguesTicker() {
             {tripled.map((league, i) => (
               <div
                 key={`${league.slug}-${i}`}
-                className="flex flex-shrink-0 items-center justify-center px-6 sm:px-10 md:px-14"
+                className="flex flex-shrink-0 items-center justify-center px-5 sm:px-8 md:px-12"
                 title={league.name}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`/leagues/${league.slug}.${league.ext ?? "png"}`}
-                  alt={league.name}
-                  className="h-14 w-auto max-w-[140px] object-contain opacity-80 drop-shadow-[0_4px_16px_rgba(74,222,128,0.15)] transition-all duration-300 hover:scale-110 hover:opacity-100 sm:h-16 md:h-20 md:max-w-[180px]"
-                  loading="lazy"
-                />
+                <div className="rounded-xl bg-white/[0.12] p-2.5 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-white/[0.18] sm:rounded-2xl sm:p-3">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`/leagues/${league.slug}.${league.ext ?? "png"}`}
+                    alt={league.name}
+                    className="h-8 w-auto max-w-[80px] object-contain brightness-125 drop-shadow-[0_0_12px_rgba(255,255,255,0.15)] sm:h-10 sm:max-w-[100px] md:h-11 md:max-w-[120px]"
+                    loading="lazy"
+                  />
+                </div>
               </div>
             ))}
           </motion.div>
         </div>
 
-        {/* Horizontal fade */}
+        {/* Side fades */}
         <div
           className="pointer-events-none absolute inset-0"
           style={{
-            background: `linear-gradient(90deg, ${BG} 0%, transparent 20%, transparent 80%, ${BG} 100%)`,
+            background: `linear-gradient(90deg, ${BG} 0%, transparent 10%, transparent 90%, ${BG} 100%)`,
           }}
         />
-        {/* Vertical fade */}
+
+        {/* Vertical fade — only on md+ for the 3D effect */}
         <div
-          className="pointer-events-none absolute inset-0"
+          className="pointer-events-none absolute inset-0 hidden md:block"
           style={{
-            background: `linear-gradient(180deg, ${BG} 0%, transparent 30%, transparent 70%, ${BG} 100%)`,
+            background: `linear-gradient(180deg, ${BG} 0%, transparent 18%, transparent 82%, ${BG} 100%)`,
           }}
         />
       </div>
+
+      <style jsx>{`
+        .perspective-marquee {
+          height: 70px;
+        }
+        .marquee-track {
+          transform: none;
+        }
+        @media (min-width: 768px) {
+          .perspective-marquee {
+            perspective: 1200px;
+            height: 160px;
+          }
+          .marquee-track {
+            transform: rotateX(6deg) rotateY(-24deg);
+            transform-style: preserve-3d;
+          }
+        }
+      `}</style>
     </section>
   );
 }
