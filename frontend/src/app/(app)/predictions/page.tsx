@@ -55,8 +55,31 @@ const COUNTRY_LEAGUES: { country: string; flag: string; leagues: string[] }[] = 
   { country: "China",          flag: "🇨🇳", leagues: ["Chinese Super League"] },
 ];
 
-/** Flat list derived from country groups — used for chip ordering. */
-const LEAGUE_POPULARITY: string[] = COUNTRY_LEAGUES.flatMap((c) => c.leagues);
+/** Flat popularity ranking — determines quick-chip order (top 6 shown). */
+const LEAGUE_POPULARITY: string[] = [
+  "Premier League",
+  "Champions League",
+  "La Liga",
+  "Bundesliga",
+  "Serie A",
+  "Ligue 1",
+  "Eredivisie",
+  "Europa League",
+  "Conference League",
+  "Süper Lig",
+  "Primeira Liga",
+  "Jupiler Pro League",
+  "Scottish Premiership",
+  "Championship",
+  "Liga Portugal",
+  "Brasileirão Serie A",
+  "MLS",
+  "Saudi Pro League",
+  "A-League",
+  "J1 League",
+  "K League 1",
+  "Chinese Super League",
+];
 
 /** How many leagues to show as quick-filter chips. */
 const QUICK_CHIPS = 6;
@@ -976,22 +999,22 @@ function FilterBar({
             </button>
 
             {leagueDropdownOpen && (
-              <div className="absolute left-0 top-full z-50 mt-2 w-80 rounded-xl border border-white/[0.10] bg-[#0c1424] shadow-2xl shadow-black/60 overflow-hidden">
+              <div className="absolute left-0 top-full z-[60] mt-2 w-[340px] rounded-xl border border-slate-600/60 bg-[#111827] shadow-2xl shadow-black/80 ring-1 ring-black/20">
                 {/* Search */}
-                <div className="flex items-center gap-2.5 border-b border-white/[0.08] px-4 py-3">
-                  <Search className="h-4 w-4 text-slate-500 shrink-0" />
+                <div className="flex items-center gap-2.5 border-b border-slate-700/80 bg-[#1a2236] px-4 py-3 rounded-t-xl">
+                  <Search className="h-4 w-4 text-slate-400 shrink-0" />
                   <input
                     type="text"
                     value={leagueSearch}
                     onChange={(e) => setLeagueSearch(e.target.value)}
                     placeholder={t("pred.searchLeague")}
-                    className="w-full bg-transparent text-sm text-white placeholder:text-slate-600 outline-none"
+                    className="w-full bg-transparent text-sm text-white placeholder:text-slate-500 outline-none"
                     autoFocus
                   />
                 </div>
 
                 {/* Grouped league list */}
-                <div className="max-h-80 overflow-y-auto overscroll-contain">
+                <div className="max-h-[420px] overflow-y-auto overscroll-contain py-1 scrollbar-thin">
                   {/* "All" option */}
                   <button
                     onClick={() => {
@@ -1000,8 +1023,8 @@ function FilterBar({
                     }}
                     className={`flex w-full items-center justify-between px-4 py-2.5 text-sm font-semibold transition-colors ${
                       leagueFilter === "All"
-                        ? "bg-blue-600/15 text-blue-300"
-                        : "text-slate-200 hover:bg-white/[0.04]"
+                        ? "bg-blue-500/20 text-blue-300"
+                        : "text-slate-100 hover:bg-slate-700/50"
                     }`}
                   >
                     <span>All Leagues</span>
@@ -1014,11 +1037,11 @@ function FilterBar({
                   {filteredGroups.map((group) => (
                     <div key={group.country}>
                       {/* Country header */}
-                      <div className="mt-1 flex items-center gap-2 border-t border-white/[0.04] px-4 pt-2.5 pb-1">
-                        <span className="text-base leading-none">
+                      <div className="mt-1 flex items-center gap-2.5 border-t border-slate-700/50 bg-slate-800/40 px-4 py-2">
+                        <span className="text-lg leading-none">
                           {group.flag}
                         </span>
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
                           {group.country}
                         </span>
                       </div>
@@ -1031,13 +1054,13 @@ function FilterBar({
                             setLeagueFilter(league);
                             setLeagueDropdownOpen(false);
                           }}
-                          className={`flex w-full items-center justify-between py-2 pl-10 pr-4 text-sm transition-colors ${
+                          className={`flex w-full items-center justify-between py-2.5 pl-11 pr-4 text-[13px] transition-colors ${
                             leagueFilter === league
-                              ? "bg-blue-600/15 text-blue-300"
-                              : "text-slate-300 hover:bg-white/[0.04]"
+                              ? "bg-blue-500/20 text-blue-300 font-semibold"
+                              : "text-slate-200 hover:bg-slate-700/50 font-medium"
                           }`}
                         >
-                          <span className="font-medium">{league}</span>
+                          <span>{league}</span>
                           {leagueFilter === league && (
                             <Check className="h-4 w-4 text-blue-400" />
                           )}
@@ -1047,7 +1070,7 @@ function FilterBar({
                   ))}
 
                   {filteredGroups.length === 0 && (
-                    <p className="px-4 py-6 text-center text-sm text-slate-600">
+                    <p className="px-4 py-6 text-center text-sm text-slate-500">
                       {t("pred.noLeaguesFound")}
                     </p>
                   )}
