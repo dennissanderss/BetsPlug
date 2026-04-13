@@ -771,6 +771,7 @@ function LeagueSection({
   fixtures: Fixture[];
   defaultOpen?: boolean;
 }) {
+  const { t } = useTranslations();
   const [open, setOpen] = useState(defaultOpen);
 
   // Count live matches in this league
@@ -808,12 +809,12 @@ function LeagueSection({
       {open && (
         <div className="divide-y divide-white/[0.03]">
           {/* Column headers */}
-          <div className="hidden sm:grid grid-cols-11 items-center gap-2 px-4 py-2 text-[9px] uppercase tracking-widest text-slate-600">
-            <span className="col-span-1 text-center">Time</span>
-            <span className="col-span-4">Match</span>
-            <span className="col-span-1 text-center">Pick</span>
-            <span className="col-span-3 text-center">Pre-match Odds</span>
-            <span className="col-span-2">Confidence</span>
+          <div className="hidden sm:grid grid-cols-11 items-center gap-2 px-4 py-2 text-[9px] uppercase tracking-widest text-slate-500">
+            <span className="col-span-1 text-center">{t("pred.colTime")}</span>
+            <span className="col-span-4">{t("pred.colMatch")}</span>
+            <span className="col-span-1 text-center">{t("pred.colPick")}</span>
+            <span className="col-span-3 text-center">{t("pred.colOdds")}</span>
+            <span className="col-span-2">{t("pred.colConfidence")}</span>
           </div>
           {fixtures.map((f) => (
             <CompactMatchRow key={f.id} fixture={f} />
