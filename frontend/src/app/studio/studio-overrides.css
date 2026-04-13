@@ -1,0 +1,39 @@
+/* ── BetsPlug Sanity Studio — larger sidebar icons ─────────────
+ *
+ * Sanity's default icon size in the desk-structure sidebar is
+ * ~17px which is hard to see. These overrides bump them to 24px
+ * for the navigation pane lists and document type lists.
+ * ─────────────────────────────────────────────────────────────── */
+
+/* All icons inside the structure-tool pane list items */
+[data-ui="PaneLayout"] [data-ui="Text"] > svg,
+[data-ui="PaneLayout"] [data-ui="Text"] > span > svg {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+}
+
+/* Broader fallback: any SVG rendered inside a list role within panes */
+[data-ui="PaneLayout"] [role="list"] svg,
+[data-ui="PaneLayout"] [role="listbox"] svg {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+}
+
+/* Sanity MenuItem components (used for desk-structure items) */
+[data-ui="MenuItem"] svg,
+[data-ui="MenuButton"] svg {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+}
+
+/* Give icon containers a bit more breathing room */
+[data-ui="PaneLayout"] [data-ui="Text"]:has(> svg),
+[data-ui="PaneLayout"] [data-ui="Text"]:has(> span > svg) {
+  display: inline-flex !important;
+  align-items: center !important;
+  font-size: 24px !important;
+  line-height: 1 !important;
+}
