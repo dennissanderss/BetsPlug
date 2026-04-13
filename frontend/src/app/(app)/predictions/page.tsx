@@ -33,31 +33,30 @@ type LeagueFilter = "All" | string;
 type ConfidenceFilter = "All" | ConfidenceLevel;
 type ViewMode = "upcoming" | "live" | "results";
 
-/** Leagues ranked by popularity — top entries become quick-filter chips. */
-const LEAGUE_POPULARITY: string[] = [
-  "Premier League",
-  "Champions League",
-  "La Liga",
-  "Bundesliga",
-  "Serie A",
-  "Ligue 1",
-  "Eredivisie",
-  "Europa League",
-  "Conference League",
-  "Süper Lig",
-  "Primeira Liga",
-  "Jupiler Pro League",
-  "Scottish Premiership",
-  "Championship",
-  "Liga Portugal",
-  "Brasileirão Serie A",
-  "MLS",
-  "Saudi Pro League",
-  "A-League",
-  "J1 League",
-  "K League 1",
-  "Chinese Super League",
+/** Country → leagues mapping with flags, ordered by popularity. */
+const COUNTRY_LEAGUES: { country: string; flag: string; leagues: string[] }[] = [
+  { country: "England",        flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", leagues: ["Premier League", "Championship"] },
+  { country: "Europe (UEFA)",  flag: "🇪🇺", leagues: ["Champions League", "Europa League", "Conference League"] },
+  { country: "Spain",          flag: "🇪🇸", leagues: ["La Liga"] },
+  { country: "Germany",        flag: "🇩🇪", leagues: ["Bundesliga"] },
+  { country: "Italy",          flag: "🇮🇹", leagues: ["Serie A"] },
+  { country: "France",         flag: "🇫🇷", leagues: ["Ligue 1"] },
+  { country: "Netherlands",    flag: "🇳🇱", leagues: ["Eredivisie"] },
+  { country: "Turkey",         flag: "🇹🇷", leagues: ["Süper Lig"] },
+  { country: "Portugal",       flag: "🇵🇹", leagues: ["Primeira Liga", "Liga Portugal"] },
+  { country: "Belgium",        flag: "🇧🇪", leagues: ["Jupiler Pro League"] },
+  { country: "Scotland",       flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿", leagues: ["Scottish Premiership"] },
+  { country: "Brazil",         flag: "🇧🇷", leagues: ["Brasileirão Serie A"] },
+  { country: "USA",            flag: "🇺🇸", leagues: ["MLS"] },
+  { country: "Saudi Arabia",   flag: "🇸🇦", leagues: ["Saudi Pro League"] },
+  { country: "Australia",      flag: "🇦🇺", leagues: ["A-League"] },
+  { country: "Japan",          flag: "🇯🇵", leagues: ["J1 League"] },
+  { country: "South Korea",    flag: "🇰🇷", leagues: ["K League 1"] },
+  { country: "China",          flag: "🇨🇳", leagues: ["Chinese Super League"] },
 ];
+
+/** Flat list derived from country groups — used for chip ordering. */
+const LEAGUE_POPULARITY: string[] = COUNTRY_LEAGUES.flatMap((c) => c.leagues);
 
 /** How many leagues to show as quick-filter chips. */
 const QUICK_CHIPS = 6;
@@ -852,12 +851,43 @@ function FilterBar({
 
   // Split leagues: quick chips (top N) vs the rest in dropdown
   const quickChipLeagues = availableLeagues.slice(0, QUICK_CHIPS);
-  const allLeagues = availableLeagues;
 
-  // Filtered list for search inside dropdown
-  const dropdownLeagues = allLeagues.filter((l) =>
-    l.toLowerCase().includes(leagueSearch.toLowerCase())
-  );
+  // Build country-grouped league list, filtered by search query.
+  // Leagues from fixtures not in COUNTRY_LEAGUES go to "Other".
+  const filteredGroups = useMemo(() => {
+    const mapped = new Set(COUNTRY_LEAGUES.flatMap((g) => g.leagues));
+    const unmapped = availableLeagues.filter((l) => !mapped.has(l));
+    const allGroups: typeof COUNTRY_LEAGUES =
+      unmapped.length > 0
+        ? [...COUNTRY_LEAGUES, { country: "Other", flag: "🌍", leagues: unmapped }]
+        : [...COUNTRY_LEAGUES];
+
+    const q = leagueSearch.toLowerCase().trim();
+    if (!q) return allGroups;
+
+    return allGroups
+      .map((group) => {
+        // Country name matches → show all leagues in that country
+        if (group.country.toLowerCase().includes(q)) return group;
+        // Otherwise filter individual leagues
+        const matched = group.leagues.filter((l) =>
+          l.toLowerCase().includes(q),
+        );
+        if (matched.length === 0) return null;
+        return { ...group, leagues: matched };
+      })
+      .filter(Boolean) as typeof COUNTRY_LEAGUES;
+  }, [leagueSearch, availableLeagues]);
+
+  // Find the flag for the currently active dropdown league
+  const activeLeagueFlag = useMemo(() => {
+    if (leagueFilter === "All" || quickChipLeagues.includes(leagueFilter))
+      return null;
+    for (const g of COUNTRY_LEAGUES) {
+      if (g.leagues.includes(leagueFilter)) return g.flag;
+    }
+    return "🌍";
+  }, [leagueFilter, quickChipLeagues]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -925,89 +955,106 @@ function FilterBar({
             ))}
           </div>
 
-          {/* "More leagues" dropdown — only rendered when there are leagues beyond quick chips */}
-          {allLeagues.length > QUICK_CHIPS && (
-            <div className="relative" data-league-dropdown>
-              <button
-                onClick={() => {
-                  setLeagueDropdownOpen((v) => !v);
-                  setLeagueSearch("");
-                }}
-                className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all ${
-                  isDropdownLeagueActive
-                    ? "border-blue-500/40 bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                    : "border-white/[0.06] bg-white/[0.03] text-slate-400 hover:text-slate-200 hover:border-white/[0.12]"
-                }`}
-              >
-                {isDropdownLeagueActive ? leagueFilter : t("pred.moreLeagues")}
-                <ChevronsUpDown className="h-3.5 w-3.5" />
-              </button>
-
-              {leagueDropdownOpen && (
-                <div className="absolute left-0 top-full z-50 mt-2 w-64 rounded-lg border border-white/[0.08] bg-[#0d1220] shadow-xl shadow-black/40 overflow-hidden animate-fade-in">
-                  {/* Search */}
-                  <div className="flex items-center gap-2 border-b border-white/[0.06] px-3 py-2">
-                    <Search className="h-3.5 w-3.5 text-slate-500 shrink-0" />
-                    <input
-                      type="text"
-                      value={leagueSearch}
-                      onChange={(e) => setLeagueSearch(e.target.value)}
-                      placeholder={t("pred.searchLeague")}
-                      className="w-full bg-transparent text-xs text-white placeholder:text-slate-600 outline-none"
-                      autoFocus
-                    />
-                  </div>
-
-                  {/* League list */}
-                  <div className="max-h-60 overflow-y-auto overscroll-contain py-1">
-                    {/* "All" option */}
-                    <button
-                      onClick={() => {
-                        setLeagueFilter("All");
-                        setLeagueDropdownOpen(false);
-                      }}
-                      className={`flex w-full items-center justify-between px-3 py-2 text-xs transition-colors ${
-                        leagueFilter === "All"
-                          ? "bg-blue-600/15 text-blue-300"
-                          : "text-slate-300 hover:bg-white/[0.04]"
-                      }`}
-                    >
-                      <span className="font-medium">All</span>
-                      {leagueFilter === "All" && (
-                        <Check className="h-3.5 w-3.5 text-blue-400" />
-                      )}
-                    </button>
-
-                    {dropdownLeagues.map((league) => (
-                      <button
-                        key={league}
-                        onClick={() => {
-                          setLeagueFilter(league);
-                          setLeagueDropdownOpen(false);
-                        }}
-                        className={`flex w-full items-center justify-between px-3 py-2 text-xs transition-colors ${
-                          leagueFilter === league
-                            ? "bg-blue-600/15 text-blue-300"
-                            : "text-slate-300 hover:bg-white/[0.04]"
-                        }`}
-                      >
-                        <span className="font-medium">{league}</span>
-                        {leagueFilter === league && (
-                          <Check className="h-3.5 w-3.5 text-blue-400" />
-                        )}
-                      </button>
-                    ))}
-
-                    {dropdownLeagues.length === 0 && (
-                      <p className="px-3 py-4 text-center text-xs text-slate-600">
-                        {t("pred.noLeaguesFound")}
-                      </p>
-                    )}
-                  </div>
-                </div>
+          {/* "More leagues" dropdown with country grouping */}
+          <div className="relative" data-league-dropdown>
+            <button
+              onClick={() => {
+                setLeagueDropdownOpen((v) => !v);
+                setLeagueSearch("");
+              }}
+              className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all ${
+                isDropdownLeagueActive
+                  ? "border-blue-500/40 bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                  : "border-white/[0.06] bg-white/[0.03] text-slate-400 hover:text-slate-200 hover:border-white/[0.12]"
+              }`}
+            >
+              {isDropdownLeagueActive && activeLeagueFlag && (
+                <span className="text-sm leading-none">{activeLeagueFlag}</span>
               )}
-            </div>
-          )}
+              {isDropdownLeagueActive ? leagueFilter : t("pred.moreLeagues")}
+              <ChevronsUpDown className="h-3.5 w-3.5" />
+            </button>
+
+            {leagueDropdownOpen && (
+              <div className="absolute left-0 top-full z-50 mt-2 w-80 rounded-xl border border-white/[0.10] bg-[#0c1424] shadow-2xl shadow-black/60 overflow-hidden">
+                {/* Search */}
+                <div className="flex items-center gap-2.5 border-b border-white/[0.08] px-4 py-3">
+                  <Search className="h-4 w-4 text-slate-500 shrink-0" />
+                  <input
+                    type="text"
+                    value={leagueSearch}
+                    onChange={(e) => setLeagueSearch(e.target.value)}
+                    placeholder={t("pred.searchLeague")}
+                    className="w-full bg-transparent text-sm text-white placeholder:text-slate-600 outline-none"
+                    autoFocus
+                  />
+                </div>
+
+                {/* Grouped league list */}
+                <div className="max-h-80 overflow-y-auto overscroll-contain">
+                  {/* "All" option */}
+                  <button
+                    onClick={() => {
+                      setLeagueFilter("All");
+                      setLeagueDropdownOpen(false);
+                    }}
+                    className={`flex w-full items-center justify-between px-4 py-2.5 text-sm font-semibold transition-colors ${
+                      leagueFilter === "All"
+                        ? "bg-blue-600/15 text-blue-300"
+                        : "text-slate-200 hover:bg-white/[0.04]"
+                    }`}
+                  >
+                    <span>All Leagues</span>
+                    {leagueFilter === "All" && (
+                      <Check className="h-4 w-4 text-blue-400" />
+                    )}
+                  </button>
+
+                  {/* Country groups */}
+                  {filteredGroups.map((group) => (
+                    <div key={group.country}>
+                      {/* Country header */}
+                      <div className="mt-1 flex items-center gap-2 border-t border-white/[0.04] px-4 pt-2.5 pb-1">
+                        <span className="text-base leading-none">
+                          {group.flag}
+                        </span>
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                          {group.country}
+                        </span>
+                      </div>
+
+                      {/* Leagues under this country */}
+                      {group.leagues.map((league) => (
+                        <button
+                          key={league}
+                          onClick={() => {
+                            setLeagueFilter(league);
+                            setLeagueDropdownOpen(false);
+                          }}
+                          className={`flex w-full items-center justify-between py-2 pl-10 pr-4 text-sm transition-colors ${
+                            leagueFilter === league
+                              ? "bg-blue-600/15 text-blue-300"
+                              : "text-slate-300 hover:bg-white/[0.04]"
+                          }`}
+                        >
+                          <span className="font-medium">{league}</span>
+                          {leagueFilter === league && (
+                            <Check className="h-4 w-4 text-blue-400" />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  ))}
+
+                  {filteredGroups.length === 0 && (
+                    <p className="px-4 py-6 text-center text-sm text-slate-600">
+                      {t("pred.noLeaguesFound")}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Confidence filter */}
