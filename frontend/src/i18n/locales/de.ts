@@ -46,6 +46,7 @@ const de = {
   "about.valuesBadge": "Was wir glauben",
   "about.valuesSubtitle": "BetsPlug ist kein Tippgeber. Es ist ein diszipliniertes System. Dies sind die Regeln, die wir für uns selbst geschrieben haben – und die wir nicht brechen wollen.",
   "about.valuesTitle": "Vier Prinzipien hinter jeder Auswahl.",
+
   "articles.allArticles": "Alle Artikel",
   "articles.back": "Zurück zu allen Artikeln",
   "articles.badge": "Fußballanalyse",
@@ -70,6 +71,7 @@ const de = {
   "articles.subtitle": "Fußballnachrichten, KI-Spielaufschlüsselungen und datengesteuerte Wetteinblicke.",
   "articles.title": "Neueste Analyse",
   "articles.tldr": "TL;DR",
+
   "b2b.affiliate": "Partnerprogramm",
   "b2b.affiliateDesc": "Verdienen Sie wettbewerbsfähige Provisionen, indem Sie Benutzer an BetsPlug verweisen. Wir stellen Marketingmaterialien, Nachverfolgung und pünktliche Auszahlungen bereit.",
   "b2b.badge": "Geschäftspartnerschaften",
@@ -95,6 +97,7 @@ const de = {
   "b2b.whiteLabelDesc": "Integrieren Sie die Vorhersage-Engine von BetsPlug in Ihre eigene Plattform. Individuelles Branding, engagierter Support und flexible Preise.",
   "b2b.whyPartner": "Warum mit uns zusammenarbeiten?",
   "b2b.whyPartnerTitle": "Maßgeschneidert, in der Öffentlichkeit bewährt",
+
   "bc.aboutUs": "Über uns",
   "bc.articles": "Artikel",
   "bc.b2b": "B2B-Partnerschaften",
@@ -105,6 +108,7 @@ const de = {
   "bc.learn": "Lernen",
   "bc.matchPredictions": "Spielvorhersagen",
   "bc.trackRecord": "Erfolgsbilanz",
+
   "botd.dailySelection": "Tägliche Auswahl",
   "botd.dailySelectionDesc": "Nur eine Auswahl pro Tag – wir entscheiden uns für Qualität statt Quantität. Für die Auswahl ist eine Zuverlässigkeit von mindestens 65 % erforderlich.",
   "botd.draw": "Ziehen",
@@ -125,6 +129,7 @@ const de = {
   "botd.title": "Auswahl des Tages",
   "botd.valueDetection": "Werterkennung",
   "botd.valueDetectionDesc": "Diese Auswahl wurde getroffen, weil unser Ensemble-Modell einen signifikanten Vorteil in der Wahrscheinlichkeit gegenüber den Marktquoten identifizierte.",
+
   "chatbot.clear": "Klar",
   "chatbot.close": "Chat schließen",
   "chatbot.footer": "KI-Assistent basierend auf BetsPlug-Dokumenten – für alles andere senden Sie eine E-Mail an support@betsplug.com",
@@ -142,6 +147,7 @@ const de = {
   "chatbot.suggestion2": "Was ist der Unterschied zwischen Silber und Gold?",
   "chatbot.suggestion3": "Wie genau sind Ihre Vorhersagen?",
   "chatbot.title": "BetsPlug KI-Assistent",
+
   "checkout.accountSubtitle": "Mit diesen Daten melden Sie sich bei BetsPlug an.",
   "checkout.accountTitle": "Erstellen Sie Ihr Konto",
   "checkout.addons": "Add-ons",
@@ -250,6 +256,7 @@ const de = {
   "checkout.yearlySaveBadge": "Sparen Sie 20 %",
   "checkout.yearlySaveCallout": "Wechseln Sie zur jährlichen Abrechnung und sparen Sie 20 % – das sind {Betrag} Rabatt pro Jahr.",
   "checkout.yearlySaving": "Sie sparen {Betrag} pro Jahr",
+
   "common.accuracy": "Genauigkeit",
   "common.admin": "Admin",
   "common.all_systems": "Alle Systeme betriebsbereit",
@@ -287,6 +294,7 @@ const de = {
   "common.submit": "Einreichen",
   "common.trackrecord": "Erfolgsbilanz",
   "common.win": "Gewinnen",
+
   "comparison.badge": "BetsPlug im Vergleich zu den anderen",
   "comparison.caption": "Der Vergleich basiert auf öffentlich verfügbaren Informationen führender Tippplattformen mit Stand 2026.",
   "comparison.fallsShort": "Fällt zu kurz",
@@ -299,6 +307,7 @@ const de = {
   "comparison.titleB": "zu BetsPlug.",
   "comparison.typicalTipsters": "Typische Tippgeber",
   "comparison.winner": "Gewinnerin",
+
   "contact.backHome": "Zurück nach Hause",
   "contact.badge": "Wir sind hier, um zu helfen",
   "contact.card1Cta": "Chat öffnen",
@@ -341,11 +350,13 @@ const de = {
   "contact.trust1": "Durchschn. Antwort in weniger als 2 Minuten",
   "contact.trust2": "DSGVO-konform",
   "contact.trust3": "Über 1.500 zufriedene Benutzer",
+
   "cta.badge": "Bereit, intelligenter zu gewinnen?",
   "cta.primary": "Kostenlose Testversion starten",
   "cta.secondary": "Vorhersagen anzeigen",
   "cta.subtitle": "Schließen Sie sich über 1.500 Analysten an, die BetsPlug bereits nutzen, um schärfere, ruhigere und datengestützte Entscheidungen zu treffen.",
   "cta.title": "Starten Sie noch heute Ihren datengesteuerten Vorsprung.",
+
   "dash.accuracyByLeague": "Genauigkeit nach Liga",
   "dash.accuracyByLeagueDesc": "Vorhersagegenauigkeit segmentiert nach Liga",
   "dash.allTime": "Alle Zeiten",
@@ -372,7 +383,7 @@ const de = {
   "dash.pending": "Ausstehend",
   "dash.pickOfDay": "Auswahl des Tages",
   "dash.pickOfDaySub": "Tägliche Top-Pick-Genauigkeit",
-  "dash.pickOfDayTooltip": "Genauigkeit der von der KI ausgewählten besten Auswahl pro Tag",
+  "dash.pickOfDayTooltip": "Genauigkeit der täglich von der KI ausgewählten besten Auswahl",
   "dash.recentPredictions": "Aktuelle Vorhersagen",
   "dash.recentPredictionsDesc": "Neueste Modellausgaben mit Auswertung",
   "dash.subtitle": "Übersicht über die Modellleistung und Echtzeit-Systemstatus",
@@ -387,6 +398,7 @@ const de = {
   "dash.totalForecasts": "Gesamtprognosen",
   "dash.totalForecastsTooltip": "Gesamtzahl der Vorhersagen, die unser KI-Modell für alle Ligen generiert hat",
   "dash.vsLastPeriod": "vs. letzte Periode",
+
   "dashPrev.badge": "Ihre Kommandozentrale",
   "dashPrev.cta": "Entdecken Sie das Dashboard",
   "dashPrev.feature1Desc": "Sehen Sie sich sofort nach der Anmeldung die aktuellen Vorhersagen mit der höchsten Konfidenz an – sortiert nach Vorsprung, Konfidenz und Anstoßzeit.",
@@ -421,6 +433,7 @@ const de = {
   "dashPrev.titleA": "Jede Premium-Funktion,",
   "dashPrev.titleB": ".",
   "dashPrev.titleHighlight": "einen Klick entfernt",
+
   "deals.active": "Aktiv",
   "deals.bestValue": "Bester Wert",
   "deals.bothGetFreeMonth": "Sowohl Sie als auch Ihr Freund erhalten 1 Monat gratis",
@@ -468,6 +481,7 @@ const de = {
   "deals.totalReferrals": "Gesamtzahl der Empfehlungen",
   "deals.yourReferralLink": "Ihr Empfehlungslink",
   "deals.yourReferralStats": "Ihre Empfehlungsstatistiken",
+
   "faq.about.a1": "BetsPlug wurde von einem Team aus Sportanalyseingenieuren und Fußballbegeisterten gegründet, die eine Chance sahen, KI-gesteuerte Vorhersagen und Elo-Bewertungsmodelle für alltägliche Wettende bereitzustellen, die auf der Suche nach einem Vorteil sind, bei dem die Daten an erster Stelle stehen.",
   "faq.about.a2": "BetsPlug ist ein vollständig dezentrales Unternehmen mit Teammitgliedern in ganz Europa. Unsere Dateninfrastruktur und Fußballanalyse-Pipelines laufen auf Cloud-Servern, die für die Bereitstellung von Spielvorhersagen in Echtzeit optimiert sind.",
   "faq.about.a3": "Weder. BetsPlug ist eine Fußballanalyseplattform, die KI-Vorhersagen, erwartete Tore und Elo-Bewertungen nutzt, um Value-Wettmöglichkeiten aufzudecken. Wir platzieren niemals in Ihrem Namen Wetten oder akzeptieren Wetten.",
@@ -541,6 +555,7 @@ const de = {
   "faq.track.q4": "Zeigen Sie auch Verluste?",
   "faq.track.q5": "Welche Ligen werden verfolgt?",
   "faq.track.q6": "Wie oft wird die Erfolgsbilanz aktualisiert?",
+
   "faqTitle.about": "Über BetsPlug FAQ",
   "faqTitle.aboutSub": "Häufige Fragen darüber, wer wir sind und wie wir arbeiten.",
   "faqTitle.home": "Häufig gestellte Fragen",
@@ -548,6 +563,7 @@ const de = {
   "faqTitle.predictionsSub": "Alles, was Sie über unsere KI-Spielvorhersagen wissen müssen.",
   "faqTitle.trackRecord": "Häufig gestellte Fragen zur Erfolgsbilanz",
   "faqTitle.trackRecordSub": "Wie wir unsere Vorhersageleistung messen und teilen.",
+
   "features.badge": "Was Sie bekommen",
   "features.f1Desc": "Erhalten Sie täglich KI-gestützte Gewinnwahrscheinlichkeiten für mehr als 50 Spiele. Wird in Echtzeit aktualisiert, wenn sich Quoten und Bedingungen ändern.",
   "features.f1Title": "Tägliche Spielvorhersagen",
@@ -563,6 +579,7 @@ const de = {
   "features.f6Title": "Telegram-Community",
   "features.titleA": "Alles inklusive",
   "features.titleB": "auf einer Plattform.",
+
   "finalCta.badge": "Bereit, es auszuprobieren?",
   "finalCta.cancelAnytime": "Jederzeit kündbar",
   "finalCta.instantAccess": "Sofortiger Zugriff",
@@ -573,6 +590,7 @@ const de = {
   "finalCta.titleA": "Siehe morgen",
   "finalCta.titleB": "Heute.",
   "finalCta.titleHighlight": "Vorhersagen",
+
   "footer.aboutUs": "Über uns",
   "footer.betTypes": "Wettarten",
   "footer.bottomCookies": "Kekse",
@@ -607,6 +625,7 @@ const de = {
   "footer.secureTitle": "Sichere Zahlungen",
   "footer.termsOfService": "Nutzungsbedingungen",
   "footer.viewAll": "Alle anzeigen",
+
   "header.adminPanel": "Admin-Panel",
   "header.favorites": "Favoritinnen",
   "header.live": "Livin",
@@ -617,6 +636,7 @@ const de = {
   "header.searchPlaceholder": "Suchen Sie nach Teams, Spielen, Ligen ...",
   "header.settings": "Einstellungen",
   "header.subscription": "Abonnement",
+
   "hero.activeUsers": "aktive Benutzer",
   "hero.away": "Weg",
   "hero.badge": "KI-Vorhersagen für jedes Spiel",
@@ -643,6 +663,7 @@ const de = {
   "hero.usp3Title": "100 % transparente Ergebnisse",
   "hero.winRate": "Gewinnrate",
   "hero.wins": "Siege",
+
   "hiw.breadcrumbHome": "Heim",
   "hiw.breadcrumbHow": "Wie es funktioniert",
   "hiw.ctaBadge": "Sind Sie bereit, die Vorhersagen zu sehen?",
@@ -711,16 +732,18 @@ const de = {
   "hiw.step3Point3Desc": "Verlorene Picks bleiben für immer bestehen. Eine Erfolgsbilanz, die nur Gewinner zeigt, ist Marketing, nicht Transparenz.",
   "hiw.step3Point3Title": "Nichts gelöscht",
   "hiw.step3Title": "Verfolgen Sie alles transparent",
+
   "home.freePredBadge": "Keine Anmeldung erforderlich",
   "home.freePredCta": "Alle Vorhersagen anzeigen",
   "home.freePredCtaSub": "Erhalten Sie mit einer kostenlosen Testversion vollen Zugriff auf über 50 tägliche Vorhersagen.",
-  "home.freePredRecord": "Korrekte Auswahlen",
+  "home.freePredRecord": "Richtige Auswahl",
   "home.freePredSubtitle": "Sehen Sie unsere Modelle in Aktion. Drei kostenlose KI-gestützte Spielvorhersagen – täglich aktualisiert, keine Anmeldung erforderlich.",
   "home.freePredTitle": "Heute KOSTENLOS",
   "home.freePredTitleHighlight": "KI-Vorhersagen",
-  "home.freePredToday": "Heutige Gratis-Tipps",
+  "home.freePredToday": "Kommende kostenlose Tipps",
   "home.freePredWinrate": "Gewinnrate",
-  "home.freePredYesterday": "Die Ergebnisse von gestern",
+  "home.freePredYesterday": "Aktuelle Ergebnisse",
+
   "how.badge": "Wie es funktioniert",
   "how.deepDive": "Erfahren Sie mehr darüber, wie es funktioniert",
   "how.step1Desc": "Unsere KI berücksichtigt Form, Tabellenplatz, Kopf-an-Kopf-Rennen und mehr als 40 Faktoren. Eine Vorhersage pro Spiel, täglich aktualisiert.",
@@ -731,11 +754,14 @@ const de = {
   "how.step3Title": "3. Verfolgen Sie alles transparent",
   "how.subtitle": "Eine KI-Engine, eine tägliche Auswahl, eine überprüfbare Erfolgsbilanz. Keine Blackboxen.",
   "how.title": "Drei Schritte. Volle Transparenz.",
+
   "lang.label": "Sprache",
   "lang.switch": "Sprache wechseln",
+
   "leagues.badge": "Top-Ligen",
   "leagues.titleA": "Der Größte",
   "leagues.titleB": "Ligen",
+
   "live.analysisPending": "Analyse steht noch aus",
   "live.cancelled": "Abgesagt",
   "live.clearFilters": "Filter löschen",
@@ -760,6 +786,7 @@ const de = {
   "live.title": "Live-Spiele",
   "live.viewAnalysis": "Analyse anzeigen",
   "live.winProbability": "Gewinnwahrscheinlichkeit",
+
   "login.apple": "Weiter mit Apple",
   "login.badge": "Mitgliederbereich",
   "login.createAccount": "Starten Sie Ihre kostenlose Testversion",
@@ -789,6 +816,7 @@ const de = {
   "login.trust1": "256-Bit-SSL-verschlüsselt",
   "login.trust2": "DSGVO-konform",
   "login.trust3": "Jederzeit kündbar",
+
   "matchPred.bannerBadge": "Nur für Mitglieder",
   "matchPred.bannerBullet1": "Unbegrenzte tägliche KI-Vorhersagen",
   "matchPred.bannerBullet2": "Vollständige BetsPlug Pulse AI-Ausgabe",
@@ -831,6 +859,7 @@ const de = {
   "matchPred.trust3": "Öffentliche Erfolgsbilanz",
   "matchPred.unlockThis": "Schalte diese Auswahl frei",
   "matchPred.winProbLabel": "Gewinnwahrscheinlichkeit",
+
   "nav.about": "Um",
   "nav.admin": "Admin",
   "nav.articles": "Artikel",
@@ -853,9 +882,10 @@ const de = {
   "nav.settings": "Einstellungen",
   "nav.startFreeTrial": "Kostenlose Testversion starten",
   "nav.strategy_lab": "Strategielabor",
-  "nav.trackrecord": "Erfolgsbilanz",
   "nav.trackRecord": "Erfolgsbilanz",
+  "nav.trackrecord": "Erfolgsbilanz",
   "nav.weekly_report": "Wochenbericht",
+
   "page.admin": "Admin-Panel",
   "page.dashboard": "Armaturenbrett",
   "page.deals": "Angebote",
@@ -866,6 +896,7 @@ const de = {
   "page.settings": "Einstellungen",
   "page.strategy_lab": "Strategielabor",
   "page.trackrecord": "Erfolgsbilanz",
+
   "phrase.educational_only": "Nur für Analyse- und Bildungszwecke.",
   "phrase.last_updated": "Zuletzt aktualisiert",
   "phrase.live_data": "Live-Daten",
@@ -874,6 +905,7 @@ const de = {
   "phrase.select_language": "Sprache auswählen",
   "phrase.simulation_disclaimer": "Die angezeigten Ergebnisse basieren auf simulierten Modellergebnissen.",
   "phrase.view_all": "Alle anzeigen",
+
   "pred.analysisPending": "Analyse steht noch aus",
   "pred.analysisPendingStat": "Analyse steht noch aus",
   "pred.autoRefresh": "Automatische Aktualisierung alle 60 Sekunden · Zuletzt:",
@@ -897,13 +929,13 @@ const de = {
   "pred.noLeaguesFound": "Keine Ligen gefunden",
   "pred.noMatchingPredictions": "Keine Vorhersagen entsprechen Ihren Filtern",
   "pred.noMatchingPredictionsDesc": "Versuchen Sie, die Liga- oder Konfidenzfilter oben anzupassen.",
-  "pred.notProcessed": "Diese Übereinstimmung wurde noch nicht von der Vorhersage-Engine verarbeitet. Schauen Sie kurz vor dem Anpfiff noch einmal vorbei.",
   "pred.noUpcomingMatches": "Keine bevorstehenden Spiele in den nächsten 7 Tagen",
   "pred.noUpcomingMatchesDesc": "In der Datenbank wurden keine geplanten Spiele gefunden. Schauen Sie in Kürze noch einmal vorbei.",
+  "pred.notProcessed": "Diese Übereinstimmung wurde noch nicht von der Vorhersage-Engine verarbeitet. Schauen Sie kurz vor dem Anpfiff noch einmal vorbei.",
+  "pred.preMatchOdds": "Quoten vor dem Spiel",
   "pred.predicted": "Vorhergesagt",
   "pred.predictedOn": "Vorhergesagt",
   "pred.predictionsReady": "Vorhersagen bereit",
-  "pred.preMatchOdds": "Quoten vor dem Spiel",
   "pred.previousDay": "Vorheriger Tag",
   "pred.searchLeague": "Liga durchsuchen...",
   "pred.sortConfidence": "Vertrauen",
@@ -915,11 +947,12 @@ const de = {
   "pred.upcoming": "Demnächst",
   "pred.upcomingMatches": "Kommende Spiele",
   "pred.upgradePrompt": "Sehen Sie sich alle Vorhersagen mit unserem Silver-Plan oder höher an.",
-  "pred.upsellHeadline": "Sie wollen nur das Beste? → Pick of the Day",
-  "pred.upsellSubtext": "Unsere KI wählt jeden Tag das Spiel mit der höchsten Sicherheit aus.",
+  "pred.upsellHeadline": "Möchten Sie nur die beste Wahl? → Auswahl des Tages",
+  "pred.upsellSubtext": "Unsere KI wählt jeden Tag das Match mit höchster Sicherheit aus.",
   "pred.venue": "Veranstaltungsort",
   "pred.viewDetails": "Details anzeigen",
   "pred.winProbability": "Gewinnwahrscheinlichkeit",
+
   "pricing.badge": "Preise",
   "pricing.billedMonthly": "Wird monatlich abgerechnet",
   "pricing.billedYearlyGold": "Jährliche Abrechnung: 143,90 €",
@@ -973,14 +1006,15 @@ const de = {
   "pricing.trust2": "Jederzeit kündbar",
   "pricing.trust3": "Sichere Zahlung mit Stripe",
   "pricing.yearly": "Jährlich",
+
   "reports.allAvailableReports": "Alle verfügbaren Leistungsberichte",
   "reports.customRange": "Benutzerdefinierter Bereich",
   "reports.download": "Herunterladen",
   "reports.format": "Format",
-  "reports.generatedReports": "Generierte Berichte",
   "reports.generateFailed": "Bericht konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
   "reports.generateReport": "Bericht erstellen",
   "reports.generateReportDescription": "Erstellen Sie einen neuen Leistungsbericht basierend auf Modellvorhersagen.",
+  "reports.generatedReports": "Generierte Berichte",
   "reports.generating": "Generieren…",
   "reports.monthlySummary": "Monatliche Zusammenfassung",
   "reports.noReportsHint": "Nutzen Sie das Formular oben, um Ihren ersten Bericht zu erstellen.",
@@ -993,13 +1027,14 @@ const de = {
   "reports.subtitle": "Leistungsberichte erstellen und herunterladen",
   "reports.title": "Berichte und Exporte",
   "reports.weeklySummary": "Wöchentliche Zusammenfassung",
+
   "results.allLeagues": "Alle Ligen",
   "results.bestPerformers": "Beste Darsteller",
   "results.bestStreak": "Beste Siegesserie",
   "results.clearFilters": "Filter löschen",
   "results.confidence": "Vertrauen",
   "results.correct": "RICHTIG",
-  "results.currentStreak": "Aktuelle Serie",
+  "results.currentStreak": "Aktueller Streak",
   "results.errorLoading": "Ergebnisdaten konnten nicht geladen werden. Die API ist möglicherweise vorübergehend nicht verfügbar.",
   "results.expandTo30Days": "Auf 30 Tage erweitern",
   "results.filterAll": "Alle",
@@ -1009,7 +1044,7 @@ const de = {
   "results.last14Days": "Letzte 14 Tage",
   "results.last30Days": "Letzte 30 Tage",
   "results.last7Days": "Letzte 7 Tage",
-  "results.maxLoseStreak": "Max-Verlustserie",
+  "results.maxLoseStreak": "Max Niederlagenserie",
   "results.noPredictionMade": "Keine Vorhersage gemacht",
   "results.noResults": "Keine Ergebnisse gefunden",
   "results.noResultsHint": "Keine abgeschlossenen Spiele mit Ergebnissen im ausgewählten Zeitraum. Versuchen Sie es mit einem größeren Datumsbereich.",
@@ -1033,9 +1068,10 @@ const de = {
   "results.subtitle": "Spielergebnisse und Vorhersagegenauigkeit",
   "results.thisWeekPerformance": "Der Auftritt dieser Woche",
   "results.title": "Ergebnisse und Ergebnisse",
-  "results.upsellHeadline": "Lebenslanger Zugang - einmal zahlen, nie wieder",
-  "results.upsellSubtext": "Alle Gold-Funktionen + privates Telegramm + früher Zugang. Begrenzt auf 100/Jahr.",
+  "results.upsellHeadline": "Lebenslanger Zugang – einmal bezahlen, nie wieder",
+  "results.upsellSubtext": "Alle Gold-Funktionen + privates Telegram + früher Zugriff. Begrenzt auf 100/Jahr.",
   "results.worstPerformers": "Schlechteste Darsteller",
+
   "route.botdAccuracy": "Genauigkeit",
   "route.botdBadge": "Nr. 1 Empfehlung",
   "route.botdDesc": "Jeden Tag wählt Pulse automatisch die Übereinstimmung aus, von der das Modell am überzeugtesten ist. Eine Wahl, maximale Überzeugung.",
@@ -1045,10 +1081,10 @@ const de = {
   "route.commonForAllPaths": "Für alle Pfade gleich",
   "route.commonResults": "Ergebnisse",
   "route.commonResultsDesc": "Sehen Sie sich die Ergebnisse aller Vorhersagen an",
-  "route.commonTrackrecord": "Erfolgsbilanz",
-  "route.commonTrackrecordDesc": "Langzeitgenauigkeitsdaten",
   "route.commonTrackResults": "Verfolgen Sie die Ergebnisse",
   "route.commonTrackResultsDesc": "Sehen Sie sich die Ergebnisse aller Vorhersagen an",
+  "route.commonTrackrecord": "Erfolgsbilanz",
+  "route.commonTrackrecordDesc": "Langzeitgenauigkeitsdaten",
   "route.commonWeeklyReport": "Wochenbericht",
   "route.commonWeeklyReportDesc": "Leistungsübersicht",
   "route.path1Step1Desc": "Wählen Sie eine bewährte Strategie",
@@ -1087,6 +1123,7 @@ const de = {
   "route.strategyLabTitle": "Strategielabor",
   "route.subtitle": "Wählen Sie Ihren Weg, um BetsPlug optimal zu nutzen. Jeder Weg führt zu intelligenteren Tipps – wählen Sie diejenige, die zu Ihrem Stil passt.",
   "route.title": "Ihre Route",
+
   "search.for": "für",
   "search.noResultsFound": "Keine Ergebnisse gefunden",
   "search.noResultsInCategory": "Keine Ergebnisse in dieser Kategorie.",
@@ -1107,6 +1144,7 @@ const de = {
   "search.typeLeague": "Liga",
   "search.typeMatch": "Übereinstimmen",
   "search.typeTeam": "Team",
+
   "seo.badge": "KI-Fußballvorhersagen",
   "seo.pillar1Desc": "Unsere KI-Fußballvorhersage-Engine kombiniert Elo-Bewertungen, Poisson-Tormodelle und maschinelles Lernen, um Spielergebnisse in allen großen Fußballligen vorherzusagen. Vier KI-Modelle arbeiten zusammen, um Vorhersagen zu liefern, die genauer sind als jede einzelne Methode allein – und liefern Ihnen datengesteuerte Fußballtipps, denen Sie vertrauen können.",
   "seo.pillar1Title": "KI-Fußballvorhersage-Engine",
@@ -1127,6 +1165,7 @@ const de = {
   "seo.subtitle": "BetsPlug ist die KI-gestützte Fußballvorhersageplattform, der Tausende von Fußballfans weltweit vertrauen. Unsere Modelle für maschinelles Lernen analysieren jedes Spiel in über 30 Ligen – von der Premier League und der La Liga bis zur Bundesliga, Serie A und Ligue 1 –, um genaue Siegwahrscheinlichkeiten zu berechnen und Value-Wettmöglichkeiten zu identifizieren. Egal, ob Sie nach heutigen Fußballvorhersagen suchen, Ihren nächsten Akkumulator recherchieren oder sehen möchten, welches Team heute Abend am wahrscheinlichsten gewinnt – BetsPlug bietet Ihnen klare, ehrliche KI-Vorhersagen, die durch eine vollständig öffentliche Erfolgsbilanz gestützt werden.",
   "seo.titleA": "KI-Fußballvorhersagen und",
   "seo.titleB": "Datengesteuerte Wetttipps",
+
   "settings.admin": "Admin",
   "settings.alertsFollowedOnly": "Erhalten Sie Benachrichtigungen nur für verfolgte Ligen",
   "settings.alertsFollowedOnlyDesc": "Unterdrücken Sie Benachrichtigungen von Ligen, denen Sie nicht folgen",
@@ -1157,8 +1196,8 @@ const de = {
   "settings.predictionUpdatesDesc": "Erhalten Sie Updates, wenn sich Modellvorhersagen erheblich ändern",
   "settings.profile": "Profil",
   "settings.profileDesc": "Ihre persönlichen Daten und Kontorolle",
-  "settings.savedSuccessfully": "Einstellungen erfolgreich gespeichert",
   "settings.saveSettings": "Einstellungen speichern",
+  "settings.savedSuccessfully": "Einstellungen erfolgreich gespeichert",
   "settings.strategyCalls": "Strategieaufrufe",
   "settings.strategyCallsDesc": "Warnt, wenn eine Strategie ein neues Wettsignal generiert",
   "settings.subtitle": "Passen Sie Ihr Erlebnis individuell an",
@@ -1167,15 +1206,18 @@ const de = {
   "settings.title": "Einstellungen",
   "settings.weeklyReportEmails": "Wöchentliche Berichts-E-Mails",
   "settings.weeklyReportEmailsDesc": "Jeden Montagmorgen eine Zusammenfassung der Modellleistung",
+
   "sidebar.gettingStarted": "Erste Schritte",
   "sidebar.performance": "Leistung",
   "sidebar.strategiesAndPicks": "Strategien und Tipps",
   "sidebar.system": "System",
+
   "socialProof.dismiss": "Benachrichtigung verwerfen",
   "socialProof.minAgo": "vor einer Minute",
   "socialProof.plan": "planen",
   "socialProof.subscribed": "habe gerade das abonniert",
   "socialProof.verified": "Verifizierter Kauf",
+
   "strategy.accuracy": "Genauigkeit",
   "strategy.archivedNotProfitable": "Archiviert – Nicht profitabel",
   "strategy.avgConfidence": "Durchschnittliches Vertrauen",
@@ -1210,14 +1252,17 @@ const de = {
   "strategy.viewAllPicks": "Alle Tipps und Ergebnisse anzeigen",
   "strategy.winRate": "Gewinnrate",
   "strategy.winRateTooltip": "Prozentsatz der richtigen Tipps",
+
   "testimonials.badge": "Erfahrungsberichte",
   "testimonials.subtitle": "Tausende Fußballfans nutzen bereits BetsPlug. Hier ist, was sie denken.",
   "testimonials.titleA": "Was unser",
   "testimonials.titleB": "sagen",
   "testimonials.titleHighlight": "Benutzer",
+
   "topbar.cta": "Versuchen Sie es für 0,01 €",
   "topbar.picksAnalyzed": "Picks analysiert",
   "topbar.winRate": "Gewinnrate",
+
   "tr.breadcrumbHome": "Heim",
   "tr.breadcrumbTrack": "Erfolgsbilanz",
   "tr.case1Metric1Label": "Seine gefilterte Stichprobengröße",
@@ -1307,6 +1352,7 @@ const de = {
   "tr.transCta2": "Kostenlose Testversion starten",
   "tr.transSubtitle": "Jede abgestufte Vorhersage, die wir jemals veröffentlicht haben, kann nach Übereinstimmung, Datum, Markt und Modell durchsucht werden. Keine Filter verbergen die Verlierer.",
   "tr.transTitle": "Vertrauen Sie nicht uns beim Wort – lesen Sie das Hauptbuch.",
+
   "track.accuracy": "Gesamtgenauigkeit",
   "track.askQuestion": "Wie funktioniert es?",
   "track.badge": "Bewährte Ergebnisse",
@@ -1322,6 +1368,7 @@ const de = {
   "track.titleA": "Sehen Sie sich unsere an",
   "track.titleB": "– nichts versteckt.",
   "track.titleHighlight": "echte Ergebnisse",
+
   "trackrecord.accuracy": "Genauigkeit",
   "trackrecord.accuracyByLeague": "Genauigkeit nach Liga",
   "trackrecord.accuracyByLeagueDesc": "Vorhersagegenauigkeit aufgeschlüsselt nach Liga – echte Daten",
@@ -1396,6 +1443,7 @@ const de = {
   "trackrecord.value": "Wert",
   "trackrecord.vs": "vs",
   "trackrecord.whatIsCalibration": "Was bedeutet dieses Diagramm?",
+
   "trusted.card1Desc": "Kein Fachjargon, keine komplizierten Diagramme. Jede Vorhersage zeigt klare Prozentzahlen und einen Konfidenzwert – auch wenn Sie noch nie zuvor ein Spiel analysiert haben.",
   "trusted.card1Title": "Leicht zu verstehen.",
   "trusted.card2Desc": "Vier KI-Modelle analysieren die Mannschaftsform, Kopf-an-Kopf-Rekorde und Live-Quoten, um für jedes Spiel den wahrscheinlichsten Ausgang zu berechnen.",
@@ -1408,6 +1456,7 @@ const de = {
   "trusted.titleB": "Fußballfans",
   "trusted.titleC": "Wählen Sie BetsPlug.",
   "trusted.titleHighlight": "1.500+",
+
   "weeklyReport.allCallsThisWeek": "Alle Anrufe dieser Woche",
   "weeklyReport.callLog": "Anrufprotokoll",
   "weeklyReport.calls": "Anrufe",
@@ -1445,10 +1494,11 @@ const de = {
   "weeklyReport.vsLastWeek": "im Vergleich zur letzten Woche",
   "weeklyReport.weeklyTotal": "Wöchentliche Gesamtsumme",
   "weeklyReport.win": "GEWINNEN",
-  "weeklyReport.winnersAndLosses": "Gewinner und Verluste",
   "weeklyReport.winRate": "Gewinnrate",
+  "weeklyReport.winnersAndLosses": "Gewinner und Verluste",
   "weeklyReport.wins": "Siege",
   "weeklyReport.yes": "Ja",
+
   "welcome.badge": "Du bist dabei.",
   "welcome.ctaPrimary": "Melden Sie sich bei Ihrem Dashboard an",
   "welcome.ctaSecondary": "Zurück zur Homepage",
@@ -1517,5 +1567,5 @@ const de = {
   "welcome.tourTitle": "Wo Sie was finden, wenn Sie erst einmal drinnen sind",
   "welcome.trialBody": "Heute wird Ihnen kein Betrag in Rechnung gestellt. Kündigen Sie jederzeit innerhalb der nächsten 7 Tage und Ihr Konto wird stillschweigend pausiert – keine Fragen, kein Druck.",
   "welcome.trialTitle": "Ihre 7-tägige kostenlose Testversion ist aktiv",
-} satisfies Partial<Record<TranslationKey, string>>;
+} as Record<TranslationKey, string>;
 export default de;

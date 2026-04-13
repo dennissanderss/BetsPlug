@@ -46,6 +46,7 @@ const sw = {
   "about.valuesBadge": "Tunachoamini",
   "about.valuesSubtitle": "BetsPlug sio mtaalamu. Ni mfumo wenye nidhamu. Hizi ndizo sheria tulizojiandikia - na zile tunazokataa kuzivunja.",
   "about.valuesTitle": "Kanuni nne nyuma ya kila chaguo.",
+
   "articles.allArticles": "Makala Yote",
   "articles.back": "Rudi kwenye makala yote",
   "articles.badge": "Uchambuzi wa Soka",
@@ -70,6 +71,7 @@ const sw = {
   "articles.subtitle": "Habari za soka, uchanganuzi wa mechi za AI na maarifa ya kamari yanayotokana na data.",
   "articles.title": "Uchambuzi Mpya",
   "articles.tldr": "TL; DR",
+
   "b2b.affiliate": "Mpango Mshirika",
   "b2b.affiliateDesc": "Pata kamisheni za ushindani kwa kuwaelekeza watumiaji kwa BetsPlug. Tunatoa nyenzo za uuzaji, ufuatiliaji na malipo kwa wakati unaofaa.",
   "b2b.badge": "Ushirikiano wa Biashara",
@@ -82,9 +84,9 @@ const sw = {
   "b2b.media": "Vyombo vya Habari na Maudhui",
   "b2b.mediaDesc": "Shirikiana kwenye maudhui ya uchanganuzi wa soka, karatasi za utafiti na uandishi wa data. Ni kamili kwa vyombo vya habari vya michezo na wachapishaji.",
   "b2b.partnershipsBadge": "Mifano ya ushirikiano",
-  "b2b.partnershipsSubtitle": "Iwe unahitaji data ghafi, injini ya ubashiri ya turnkey, au muundo wa ugavi wa mapato \\\\u2014 tuna wimbo wa ushirikiano kwa ajili yako.",
+  "b2b.partnershipsSubtitle": "Iwe unahitaji data ghafi, injini ya ubashiri ya turnkey, au muundo wa ugavi wa mapato \\u2014 tuna wimbo wa ushirikiano kwa ajili yako.",
   "b2b.partnershipsTitle": "Jinsi tunavyofanya kazi pamoja",
-  "b2b.subtitle": "Tunashirikiana na biashara katika mfumo ikolojia wa uchanganuzi wa soka. Kuanzia utoaji leseni ya data hadi suluhisho za lebo nyeupe \\\\u2014 wacha tuunde kitu pamoja.",
+  "b2b.subtitle": "Tunashirikiana na biashara katika mfumo ikolojia wa uchanganuzi wa soka. Kuanzia utoaji leseni ya data hadi suluhisho za lebo nyeupe \\u2014 wacha tuunde kitu pamoja.",
   "b2b.titleA": "Mshiriki na BetsPlug",
   "b2b.titleB": "kwa uchanganuzi bora wa soka",
   "b2b.usp1": "Aina za AI zimejumuishwa katika mkusanyiko mmoja",
@@ -95,6 +97,7 @@ const sw = {
   "b2b.whiteLabelDesc": "Unganisha injini ya utabiri ya BetsPlug kwenye jukwaa lako mwenyewe. Uwekaji chapa maalum, usaidizi uliojitolea, na bei rahisi.",
   "b2b.whyPartner": "Kwanini ushirikiane nasi",
   "b2b.whyPartnerTitle": "Imejengwa kwa kiwango, imethibitishwa hadharani",
+
   "bc.aboutUs": "Kuhusu Sisi",
   "bc.articles": "Makala",
   "bc.b2b": "Ushirikiano wa B2B",
@@ -105,6 +108,7 @@ const sw = {
   "bc.learn": "Jifunze",
   "bc.matchPredictions": "Utabiri wa Mechi",
   "bc.trackRecord": "Rekodi ya Wimbo",
+
   "botd.dailySelection": "Uteuzi wa Kila Siku",
   "botd.dailySelectionDesc": "Chaguo moja tu kwa siku - tunachagua ubora juu ya wingi. Kiwango cha chini cha kujiamini cha 65% kinahitajika kwa uteuzi.",
   "botd.draw": "Chora",
@@ -125,6 +129,7 @@ const sw = {
   "botd.title": "Chagua Siku",
   "botd.valueDetection": "Ugunduzi wa Thamani",
   "botd.valueDetectionDesc": "Chaguo hili lilichaguliwa kwa sababu muundo wetu wa kikundi ulibainisha makali makubwa katika uwezekano dhidi ya uwezekano wa soko.",
+
   "chatbot.clear": "Wazi",
   "chatbot.close": "Funga gumzo",
   "chatbot.footer": "Msaidizi wa AI ameegemea kwenye hati za BetsPlug - kwa kitu kingine chochote, barua pepe support@betsplug.com",
@@ -142,6 +147,7 @@ const sw = {
   "chatbot.suggestion2": "Kuna tofauti gani kati ya Silver na Gold?",
   "chatbot.suggestion3": "Je, utabiri wako ni sahihi kwa kiasi gani?",
   "chatbot.title": "Msaidizi wa AI wa BetsPlug",
+
   "checkout.accountSubtitle": "Utatumia maelezo haya kuingia katika BetsPlug.",
   "checkout.accountTitle": "Fungua akaunti yako",
   "checkout.addons": "Viongezi",
@@ -250,6 +256,7 @@ const sw = {
   "checkout.yearlySaveBadge": "Okoa 20%",
   "checkout.yearlySaveCallout": "Badili utumie malipo ya kila mwaka na uokoe 20% - hiyo ni punguzo la {kiasi} kila mwaka.",
   "checkout.yearlySaving": "Unaokoa {amount} kwa mwaka",
+
   "common.accuracy": "Usahihi",
   "common.admin": "Msimamizi",
   "common.all_systems": "Mifumo yote inafanya kazi",
@@ -287,6 +294,7 @@ const sw = {
   "common.submit": "Wasilisha",
   "common.trackrecord": "Rekodi ya kufuatilia",
   "common.win": "Shinda",
+
   "comparison.badge": "BetsPlug dhidi ya wengine",
   "comparison.caption": "Ulinganisho kulingana na maelezo yanayopatikana kwa umma kutoka kwa majukwaa maarufu ya tipster kufikia 2026.",
   "comparison.fallsShort": "Huanguka mfupi",
@@ -299,6 +307,7 @@ const sw = {
   "comparison.titleB": "kwa BetsPlug.",
   "comparison.typicalTipsters": "Vidokezo vya kawaida",
   "comparison.winner": "Mshindi",
+
   "contact.backHome": "Rudi nyumbani",
   "contact.badge": "Tuko hapa kusaidia",
   "contact.card1Cta": "Fungua gumzo",
@@ -341,11 +350,13 @@ const sw = {
   "contact.trust1": "Wastani. jibu chini ya dakika 2",
   "contact.trust2": "GDPR inatii",
   "contact.trust3": "1,500+ watumiaji wenye furaha",
+
   "cta.badge": "Je, uko tayari kushinda nadhifu zaidi?",
   "cta.primary": "Anza Jaribio Bila Malipo",
   "cta.secondary": "Tazama Utabiri",
   "cta.subtitle": "Jiunge na wachambuzi 1,500+ ambao tayari wanatumia BetsPlug kufanya maamuzi makali, tulivu na yanayoungwa mkono na data.",
   "cta.title": "Anza makali yako yanayoendeshwa na data leo.",
+
   "dash.accuracyByLeague": "Usahihi wa Ligi",
   "dash.accuracyByLeagueDesc": "Usahihi wa utabiri umegawanywa kulingana na ligi",
   "dash.allTime": "Wakati wote",
@@ -370,9 +381,9 @@ const sw = {
   "dash.overallAccuracy": "Usahihi wa Jumla",
   "dash.overallAccuracyTooltip": "Asilimia ya utabiri ambapo mtindo wetu ulitabiri matokeo ya mechi kwa usahihi (nyumbani/ sare/ugenini)",
   "dash.pending": "Inasubiri",
-  "dash.pickOfDay": "Pick of the Day",
-  "dash.pickOfDaySub": "Daily top pick accuracy",
-  "dash.pickOfDayTooltip": "Accuracy of the AI-selected best pick each day",
+  "dash.pickOfDay": "Chagua Siku",
+  "dash.pickOfDaySub": "Usahihi wa chaguo bora za kila siku",
+  "dash.pickOfDayTooltip": "Usahihi wa chaguo bora zaidi kilichochaguliwa na AI kila siku",
   "dash.recentPredictions": "Utabiri wa Hivi Karibuni",
   "dash.recentPredictionsDesc": "Matokeo ya hivi karibuni ya muundo na tathmini",
   "dash.subtitle": "Muhtasari wa utendakazi wa muundo na hali ya mfumo wa wakati halisi",
@@ -387,6 +398,7 @@ const sw = {
   "dash.totalForecasts": "Jumla ya Utabiri",
   "dash.totalForecastsTooltip": "Jumla ya idadi ya utabiri wa muundo wetu wa AI umezalisha katika ligi zote",
   "dash.vsLastPeriod": "dhidi ya kipindi cha mwisho",
+
   "dashPrev.badge": "Kituo chako cha amri",
   "dashPrev.cta": "Chunguza dashibodi",
   "dashPrev.feature1Desc": "Tazama utabiri wa leo wa kutumainiwa zaidi pindi unapoingia - ukipangwa kwa ukingo, kujiamini na wakati wa kuanza.",
@@ -421,6 +433,7 @@ const sw = {
   "dashPrev.titleA": "Kila kipengele cha premium,",
   "dashPrev.titleB": ".",
   "dashPrev.titleHighlight": "bonyeza moja mbali",
+
   "deals.active": "Inayotumika",
   "deals.bestValue": "Thamani bora",
   "deals.bothGetFreeMonth": "Wewe na rafiki yako mnapata mwezi 1 bila malipo",
@@ -468,6 +481,7 @@ const sw = {
   "deals.totalReferrals": "Jumla ya Marejeleo",
   "deals.yourReferralLink": "Kiungo chako cha rufaa",
   "deals.yourReferralStats": "Takwimu zako za rufaa",
+
   "faq.about.a1": "BetsPlug ilianzishwa na timu ya wahandisi wa uchanganuzi wa michezo na wapenda soka ambao waliona fursa ya kuleta ubashiri unaoendeshwa na AI na miundo ya ukadiriaji wa Elo kwa wadau wa kila siku wanaotafuta data-kwanza.",
   "faq.about.a2": "BetsPlug hufanya kazi kama kampuni ya mbali kabisa na wanachama wa timu kote Ulaya. Miundombinu yetu ya data na uchanganuzi wa kandanda huendeshwa kwenye seva za wingu zilizoboreshwa kwa uwasilishaji wa ubashiri wa mechi katika wakati halisi.",
   "faq.about.a3": "Wala. BetsPlug ni jukwaa la uchanganuzi wa soka ambalo linatumia ubashiri wa AI, malengo yanayotarajiwa na ukadiriaji wa Elo ili kuibua fursa za kamari za thamani. Hatuwekei dau kwa niaba yako wala hatukubali dau.",
@@ -541,6 +555,7 @@ const sw = {
   "faq.track.q4": "Unaonyesha hasara pia?",
   "faq.track.q5": "Ligi gani zinafuatiliwa?",
   "faq.track.q6": "Rekodi ya wimbo husasishwa mara ngapi?",
+
   "faqTitle.about": "Kuhusu Maswali Yanayoulizwa Mara kwa Mara ya BetsPlug",
   "faqTitle.aboutSub": "Maswali ya kawaida kuhusu sisi ni nani na jinsi tunavyofanya kazi.",
   "faqTitle.home": "Maswali Yanayoulizwa Mara Kwa Mara",
@@ -548,6 +563,7 @@ const sw = {
   "faqTitle.predictionsSub": "Kila kitu unachohitaji kujua kuhusu utabiri wetu wa mechi ya AI.",
   "faqTitle.trackRecord": "Fuatilia Maswali Yanayoulizwa Mara kwa Mara ya Rekodi",
   "faqTitle.trackRecordSub": "Jinsi tunavyopima na kushiriki utendaji wetu wa utabiri.",
+
   "features.badge": "Unachopata",
   "features.f1Desc": "Pata uwezekano wa kushinda kwa kutumia AI kwa mechi 50+ kila siku. Imesasishwa katika muda halisi kadiri uwezekano na hali zinavyobadilika.",
   "features.f1Title": "Utabiri wa mechi za kila siku",
@@ -563,6 +579,7 @@ const sw = {
   "features.f6Title": "Jumuiya ya Telegraph",
   "features.titleA": "Kila kitu pamoja",
   "features.titleB": "katika jukwaa moja.",
+
   "finalCta.badge": "Je, uko tayari kuijaribu?",
   "finalCta.cancelAnytime": "Ghairi Wakati Wowote",
   "finalCta.instantAccess": "Ufikiaji wa Papo hapo",
@@ -573,6 +590,7 @@ const sw = {
   "finalCta.titleA": "Tazama ya kesho",
   "finalCta.titleB": "leo.",
   "finalCta.titleHighlight": "utabiri",
+
   "footer.aboutUs": "Kuhusu Sisi",
   "footer.betTypes": "Aina za Dau",
   "footer.bottomCookies": "Vidakuzi",
@@ -607,6 +625,7 @@ const sw = {
   "footer.secureTitle": "Malipo salama",
   "footer.termsOfService": "Masharti ya Huduma",
   "footer.viewAll": "Tazama zote",
+
   "header.adminPanel": "Paneli ya Msimamizi",
   "header.favorites": "Vipendwa",
   "header.live": "Ishi",
@@ -617,6 +636,7 @@ const sw = {
   "header.searchPlaceholder": "Tafuta timu, mechi, ligi...",
   "header.settings": "Mipangilio",
   "header.subscription": "Usajili",
+
   "hero.activeUsers": "watumiaji wanaofanya kazi",
   "hero.away": "Mbali",
   "hero.badge": "Utabiri wa AI kwa kila mechi",
@@ -643,6 +663,7 @@ const sw = {
   "hero.usp3Title": "100% matokeo ya uwazi",
   "hero.winRate": "Kiwango cha Ushindi",
   "hero.wins": "Mafanikio",
+
   "hiw.breadcrumbHome": "Nyumbani",
   "hiw.breadcrumbHow": "Jinsi inavyofanya kazi",
   "hiw.ctaBadge": "Je, uko tayari kuona utabiri?",
@@ -711,16 +732,18 @@ const sw = {
   "hiw.step3Point3Desc": "Kupoteza chaguo kubaki milele. Rekodi ya wimbo ambayo inaonyesha washindi pekee ni uuzaji, sio uwazi.",
   "hiw.step3Point3Title": "Hakuna kilichofutwa",
   "hiw.step3Title": "Fuatilia kila kitu kwa uwazi",
+
   "home.freePredBadge": "Hakuna kujisajili kunahitajika",
   "home.freePredCta": "Tazama utabiri wote",
   "home.freePredCtaSub": "Fungua ufikiaji kamili wa ubashiri wa kila siku 50+ na jaribio lisilolipishwa.",
-  "home.freePredRecord": "Correct picks",
+  "home.freePredRecord": "Chaguo sahihi",
   "home.freePredSubtitle": "Tazama mifano yetu inavyofanya kazi. Utabiri wa mechi tatu bila malipo unaoendeshwa na AI - unasasishwa kila siku, hakuna kujisajili kunahitajika.",
   "home.freePredTitle": "Leo BURE",
   "home.freePredTitleHighlight": "Utabiri wa AI",
-  "home.freePredToday": "Today's free picks",
-  "home.freePredWinrate": "Win rate",
-  "home.freePredYesterday": "Yesterday's results",
+  "home.freePredToday": "Chaguo za bure zinazokuja",
+  "home.freePredWinrate": "Kiwango cha kushinda",
+  "home.freePredYesterday": "Matokeo ya hivi majuzi",
+
   "how.badge": "Jinsi inavyofanya kazi",
   "how.deepDive": "Jifunze zaidi kuhusu jinsi inavyofanya kazi",
   "how.step1Desc": "AI yetu inaangalia umbo, msimamo, uso kwa uso na vipengele 40+. Utabiri mmoja kwa kila mechi, unasasishwa kila siku.",
@@ -731,11 +754,14 @@ const sw = {
   "how.step3Title": "3. Fuatilia kila kitu kwa uwazi",
   "how.subtitle": "Injini moja ya AI, chaguo moja la kila siku, rekodi moja ya wimbo inayoweza kuthibitishwa. Hakuna masanduku nyeusi.",
   "how.title": "Hatua tatu. Uwazi kamili.",
+
   "lang.label": "Lugha",
   "lang.switch": "Badilisha lugha",
+
   "leagues.badge": "Ligi Kuu",
   "leagues.titleA": "Kubwa zaidi",
   "leagues.titleB": "ligi",
+
   "live.analysisPending": "Uchambuzi unasubiri",
   "live.cancelled": "Imeghairiwa",
   "live.clearFilters": "Futa vichungi",
@@ -760,6 +786,7 @@ const sw = {
   "live.title": "Live mechi",
   "live.viewAnalysis": "Tazama Uchambuzi",
   "live.winProbability": "Uwezekano wa kushinda",
+
   "login.apple": "Endelea na Apple",
   "login.badge": "Eneo la wanachama",
   "login.createAccount": "Anzisha jaribio lako lisilolipishwa",
@@ -789,6 +816,7 @@ const sw = {
   "login.trust1": "256-bit SSL imesimbwa kwa njia fiche",
   "login.trust2": "GDPR-inavyoendana",
   "login.trust3": "Ghairi wakati wowote",
+
   "matchPred.bannerBadge": "Wanachama pekee",
   "matchPred.bannerBullet1": "Utabiri wa AI usio na kikomo wa kila siku",
   "matchPred.bannerBullet2": "Pato kamili la BetsPlug Pulse AI",
@@ -831,6 +859,7 @@ const sw = {
   "matchPred.trust3": "Rekodi ya umma",
   "matchPred.unlockThis": "Fungua chaguo hili",
   "matchPred.winProbLabel": "Uwezekano wa kushinda",
+
   "nav.about": "Kuhusu",
   "nav.admin": "Msimamizi",
   "nav.articles": "Makala",
@@ -853,9 +882,10 @@ const sw = {
   "nav.settings": "Mipangilio",
   "nav.startFreeTrial": "Anza Jaribio Bila Malipo",
   "nav.strategy_lab": "Maabara ya Mkakati",
-  "nav.trackrecord": "Rekodi ya kufuatilia",
   "nav.trackRecord": "Rekodi ya Wimbo",
+  "nav.trackrecord": "Rekodi ya kufuatilia",
   "nav.weekly_report": "Ripoti ya Wiki",
+
   "page.admin": "Paneli ya Msimamizi",
   "page.dashboard": "Dashibodi",
   "page.deals": "Ofa",
@@ -866,6 +896,7 @@ const sw = {
   "page.settings": "Mipangilio",
   "page.strategy_lab": "Maabara ya Mkakati",
   "page.trackrecord": "Rekodi ya kufuatilia",
+
   "phrase.educational_only": "Kwa madhumuni ya uchambuzi na elimu pekee.",
   "phrase.last_updated": "Ilisasishwa mwisho",
   "phrase.live_data": "Data ya moja kwa moja",
@@ -874,6 +905,7 @@ const sw = {
   "phrase.select_language": "Chagua lugha",
   "phrase.simulation_disclaimer": "Matokeo yanayoonyeshwa yanatokana na mifano ya mifano iliyoigwa.",
   "phrase.view_all": "Tazama zote",
+
   "pred.analysisPending": "Uchambuzi unasubiri",
   "pred.analysisPendingStat": "Uchambuzi Unasubiri",
   "pred.autoRefresh": "Inaonyesha upya kiotomatiki kila baada ya miaka ya 60 · Mwisho:",
@@ -897,13 +929,13 @@ const sw = {
   "pred.noLeaguesFound": "Hakuna ligi zilizopatikana",
   "pred.noMatchingPredictions": "Hakuna ubashiri unaolingana na vichujio vyako",
   "pred.noMatchingPredictionsDesc": "Jaribu kurekebisha ligi au vichujio vya kujiamini hapo juu.",
-  "pred.notProcessed": "Mechi hii bado haijachakatwa na injini ya utabiri. Angalia tena karibu na kuanza.",
   "pred.noUpcomingMatches": "Hakuna mechi zijazo katika siku 7 zijazo",
   "pred.noUpcomingMatchesDesc": "Hakuna urekebishaji ulioratibiwa uliopatikana kwenye hifadhidata. Angalia tena hivi punde.",
+  "pred.notProcessed": "Mechi hii bado haijachakatwa na injini ya utabiri. Angalia tena karibu na kuanza.",
+  "pred.preMatchOdds": "Odd kabla ya mechi",
   "pred.predicted": "Iliyotabiriwa",
   "pred.predictedOn": "Iliyotabiriwa",
   "pred.predictionsReady": "Utabiri Tayari",
-  "pred.preMatchOdds": "Odd kabla ya mechi",
   "pred.previousDay": "Siku iliyotangulia",
   "pred.searchLeague": "Tafuta ligi...",
   "pred.sortConfidence": "Kujiamini",
@@ -915,11 +947,12 @@ const sw = {
   "pred.upcoming": "Ijayo",
   "pred.upcomingMatches": "Mechi Zinazokuja",
   "pred.upgradePrompt": "Tazama utabiri wote ukitumia mpango wetu wa Fedha au toleo jipya zaidi.",
-  "pred.upsellHeadline": "Want only the best pick? → Pick of the Day",
-  "pred.upsellSubtext": "Our AI selects the match with the highest certainty every day.",
+  "pred.upsellHeadline": "Je! Unataka chaguo bora pekee? → Chagua Siku",
+  "pred.upsellSubtext": "AI yetu huchagua mechi kwa uhakika wa hali ya juu kila siku.",
   "pred.venue": "Ukumbi",
   "pred.viewDetails": "Tazama Maelezo",
   "pred.winProbability": "Uwezekano wa Kushinda",
+
   "pricing.badge": "Bei",
   "pricing.billedMonthly": "Inatozwa kila mwezi",
   "pricing.billedYearlyGold": "Inatozwa €143,90 kila mwaka",
@@ -973,14 +1006,15 @@ const sw = {
   "pricing.trust2": "Ghairi Wakati Wowote",
   "pricing.trust3": "Salama malipo kwa Stripe",
   "pricing.yearly": "Kila mwaka",
+
   "reports.allAvailableReports": "Ripoti zote za utendaji zinazopatikana",
   "reports.customRange": "Masafa Maalum",
   "reports.download": "Pakua",
   "reports.format": "Umbizo",
-  "reports.generatedReports": "Ripoti Zinazozalishwa",
   "reports.generateFailed": "Imeshindwa kutoa ripoti. Tafadhali jaribu tena.",
   "reports.generateReport": "Tengeneza Ripoti",
   "reports.generateReportDescription": "Tengeneza ripoti mpya ya utendaji kulingana na utabiri wa mfano.",
+  "reports.generatedReports": "Ripoti Zinazozalishwa",
   "reports.generating": "Inazalisha...",
   "reports.monthlySummary": "Muhtasari wa Kila Mwezi",
   "reports.noReportsHint": "Tumia fomu iliyo hapo juu kutoa ripoti yako ya kwanza.",
@@ -993,13 +1027,14 @@ const sw = {
   "reports.subtitle": "Tengeneza na upakue ripoti za utendaji",
   "reports.title": "Ripoti & Mauzo nje",
   "reports.weeklySummary": "Muhtasari wa Wiki",
+
   "results.allLeagues": "Ligi zote",
   "results.bestPerformers": "Watendaji Bora",
-  "results.bestStreak": "Best Win Streak",
+  "results.bestStreak": "Mfululizo Bora wa Ushindi",
   "results.clearFilters": "Futa vichungi",
   "results.confidence": "kujiamini",
   "results.correct": "SAHIHI",
-  "results.currentStreak": "Current Streak",
+  "results.currentStreak": "Mfululizo wa Sasa",
   "results.errorLoading": "Haikuweza kupakia data ya matokeo. API inaweza kuwa haipatikani kwa muda.",
   "results.expandTo30Days": "Panua hadi siku 30",
   "results.filterAll": "Wote",
@@ -1009,7 +1044,7 @@ const sw = {
   "results.last14Days": "Siku 14 zilizopita",
   "results.last30Days": "Siku 30 zilizopita",
   "results.last7Days": "Siku 7 zilizopita",
-  "results.maxLoseStreak": "Max Losing Streak",
+  "results.maxLoseStreak": "Kiwango cha Juu cha Kupoteza",
   "results.noPredictionMade": "Hakuna utabiri uliofanywa",
   "results.noResults": "Hakuna matokeo yaliyopatikana",
   "results.noResultsHint": "Hakuna mechi zilizokamilika na matokeo katika kipindi kilichochaguliwa. Jaribu safu pana zaidi ya tarehe.",
@@ -1033,9 +1068,10 @@ const sw = {
   "results.subtitle": "Matokeo ya mechi na usahihi wa utabiri",
   "results.thisWeekPerformance": "Utendaji wa Wiki Hii",
   "results.title": "Matokeo na Matokeo",
-  "results.upsellHeadline": "Lifetime access — pay once, never again",
-  "results.upsellSubtext": "All Gold features + private Telegram + early access. Limited to 100/year.",
+  "results.upsellHeadline": "Ufikiaji wa maisha yote - lipa mara moja, usiwahi tena",
+  "results.upsellSubtext": "Vipengele vyote vya Dhahabu + Telegraph ya kibinafsi + ufikiaji wa mapema. Imepunguzwa hadi 100 / mwaka.",
   "results.worstPerformers": "Watendaji Wabaya Zaidi",
+
   "route.botdAccuracy": "Usahihi",
   "route.botdBadge": "#1 Pendekezo",
   "route.botdDesc": "Kila siku, Pulse huchagua kiotomatiki mechi ambayo mtindo anauamini zaidi. Chaguo moja, hatia ya juu.",
@@ -1045,10 +1081,10 @@ const sw = {
   "route.commonForAllPaths": "Kawaida kwa njia zote",
   "route.commonResults": "Matokeo",
   "route.commonResultsDesc": "Tazama matokeo ya utabiri wote",
-  "route.commonTrackrecord": "Rekodi ya kufuatilia",
-  "route.commonTrackrecordDesc": "Data ya usahihi wa muda mrefu",
   "route.commonTrackResults": "Fuatilia Matokeo",
   "route.commonTrackResultsDesc": "Tazama matokeo ya utabiri wote",
+  "route.commonTrackrecord": "Rekodi ya kufuatilia",
+  "route.commonTrackrecordDesc": "Data ya usahihi wa muda mrefu",
   "route.commonWeeklyReport": "Ripoti ya Wiki",
   "route.commonWeeklyReportDesc": "Muhtasari wa utendaji",
   "route.path1Step1Desc": "Chagua mkakati uliothibitishwa",
@@ -1087,6 +1123,7 @@ const sw = {
   "route.strategyLabTitle": "Maabara ya Mkakati",
   "route.subtitle": "Chagua njia yako ili kufaidika zaidi na BetsPlug. Kila njia inaongoza kwa chaguo bora zaidi - chagua inayolingana na mtindo wako.",
   "route.title": "Njia yako",
+
   "search.for": "kwa",
   "search.noResultsFound": "Hakuna matokeo yaliyopatikana",
   "search.noResultsInCategory": "Hakuna matokeo katika kategoria hii.",
@@ -1107,6 +1144,7 @@ const sw = {
   "search.typeLeague": "Ligi",
   "search.typeMatch": "Mechi",
   "search.typeTeam": "Timu",
+
   "seo.badge": "Utabiri wa mpira wa miguu wa AI",
   "seo.pillar1Desc": "Injini yetu ya utabiri wa soka ya AI inachanganya ukadiriaji wa Elo, miundo ya malengo ya Poisson, na kujifunza kwa mashine ili kutabiri matokeo ya mechi kwenye ligi kuu zote za soka. Miundo minne ya AI hufanya kazi pamoja kutoa ubashiri ambao ni sahihi zaidi kuliko mbinu yoyote pekee - kukupa vidokezo vya soka vinavyoendeshwa na data unavyoweza kuamini.",
   "seo.pillar1Title": "Injini ya Utabiri wa Soka ya AI",
@@ -1127,6 +1165,7 @@ const sw = {
   "seo.subtitle": "BetsPlug ni jukwaa la ubashiri wa soka linaloendeshwa na AI linaloaminiwa na maelfu ya mashabiki wa soka duniani kote. Mitindo yetu ya kujifunza mashine huchanganua kila mechi kati ya ligi 30+ - kuanzia Ligi Kuu na La Liga hadi Bundesliga, Serie A na Ligue 1 - ili kukokotoa uwezekano sahihi wa kushinda na kutambua fursa za kamari za thamani. Iwe unatafuta ubashiri wa leo wa kandanda, unatafiti mkusanyiko wako unaofuata, au unataka kuona ni timu gani ambayo ina uwezekano mkubwa wa kushinda usiku wa leo - BetsPlug inakupa utabiri wa AI ulio wazi na wa uaminifu unaoungwa mkono na rekodi kamili ya umma.",
   "seo.titleA": "Utabiri wa Soka wa AI &",
   "seo.titleB": "Vidokezo vya Kuweka Dau Vinavyoendeshwa na Data",
+
   "settings.admin": "Msimamizi",
   "settings.alertsFollowedOnly": "Pokea arifa za ligi zinazofuatwa pekee",
   "settings.alertsFollowedOnlyDesc": "Zuia arifa kutoka kwa ligi ambazo hufuati",
@@ -1157,8 +1196,8 @@ const sw = {
   "settings.predictionUpdatesDesc": "Pokea masasisho wakati utabiri wa muundo unabadilika sana",
   "settings.profile": "Wasifu",
   "settings.profileDesc": "Maelezo yako ya kibinafsi na jukumu la akaunti",
-  "settings.savedSuccessfully": "Mipangilio imehifadhiwa",
   "settings.saveSettings": "Hifadhi mipangilio",
+  "settings.savedSuccessfully": "Mipangilio imehifadhiwa",
   "settings.strategyCalls": "Simu za mkakati",
   "settings.strategyCallsDesc": "Arifa mkakati unapotoa ishara mpya ya kamari",
   "settings.subtitle": "Geuza matumizi yako kukufaa",
@@ -1167,15 +1206,18 @@ const sw = {
   "settings.title": "Mipangilio",
   "settings.weeklyReportEmails": "Barua pepe za ripoti za kila wiki",
   "settings.weeklyReportEmailsDesc": "Muhtasari wa utendaji wa kielelezo kila Jumatatu asubuhi",
+
   "sidebar.gettingStarted": "Kuanza",
   "sidebar.performance": "Utendaji",
   "sidebar.strategiesAndPicks": "Mikakati na Chaguo",
   "sidebar.system": "Mfumo",
+
   "socialProof.dismiss": "Ondoa arifa",
   "socialProof.minAgo": "dakika iliyopita",
   "socialProof.plan": "mpango",
   "socialProof.subscribed": "umejiandikisha tu kwa",
   "socialProof.verified": "Ununuzi uliothibitishwa",
+
   "strategy.accuracy": "Usahihi",
   "strategy.archivedNotProfitable": "Imehifadhiwa - Haifai",
   "strategy.avgConfidence": "Wastani wa Kujiamini",
@@ -1210,14 +1252,17 @@ const sw = {
   "strategy.viewAllPicks": "Tazama Chaguo & Matokeo Yote",
   "strategy.winRate": "Kiwango cha Ushindi",
   "strategy.winRateTooltip": "Asilimia ya chaguo ambazo zilikuwa sahihi",
+
   "testimonials.badge": "Ushuhuda",
   "testimonials.subtitle": "Maelfu ya mashabiki wa soka tayari wanatumia BetsPlug. Hivi ndivyo wanavyofikiri.",
   "testimonials.titleA": "Nini yetu",
   "testimonials.titleB": "sema",
   "testimonials.titleHighlight": "watumiaji",
+
   "topbar.cta": "Jaribu kwa €0.01",
   "topbar.picksAnalyzed": "tar kuchambuliwa",
   "topbar.winRate": "kiwango cha kushinda",
+
   "tr.breadcrumbHome": "Nyumbani",
   "tr.breadcrumbTrack": "Rekodi ya Wimbo",
   "tr.case1Metric1Label": "Saizi yake ya sampuli iliyochujwa",
@@ -1307,6 +1352,7 @@ const sw = {
   "tr.transCta2": "Anza Jaribio Bila Malipo",
   "tr.transSubtitle": "Kila ubashiri uliowekwa alama ambao tumewahi kuchapisha unaweza kutafutwa kulingana na inayolingana, tarehe, soko na muundo. Hakuna vichujio vinavyoficha waliopotea.",
   "tr.transTitle": "Usichukulie neno letu kwa hilo - soma daftari.",
+
   "track.accuracy": "Usahihi wa jumla",
   "track.askQuestion": "Je, inafanyaje kazi?",
   "track.badge": "Matokeo yaliyothibitishwa",
@@ -1322,6 +1368,7 @@ const sw = {
   "track.titleA": "Tazama yetu",
   "track.titleB": "- hakuna kitu kilichofichwa.",
   "track.titleHighlight": "matokeo halisi",
+
   "trackrecord.accuracy": "Usahihi",
   "trackrecord.accuracyByLeague": "Usahihi wa Ligi",
   "trackrecord.accuracyByLeagueDesc": "Usahihi wa utabiri uliovunjwa na ligi - data halisi",
@@ -1396,6 +1443,7 @@ const sw = {
   "trackrecord.value": "Thamani",
   "trackrecord.vs": "dhidi ya",
   "trackrecord.whatIsCalibration": "Je! Chati hii inamaanisha nini?",
+
   "trusted.card1Desc": "Hakuna jargon, hakuna chati ngumu. Kila ubashiri unaonyesha asilimia wazi na alama ya uhakika - hata kama hujawahi kuchanganua mechi hapo awali.",
   "trusted.card1Title": "Rahisi kuelewa.",
   "trusted.card2Desc": "Miundo minne ya AI huchanganua fomu ya timu, rekodi za uso kwa uso, na uwezekano wa moja kwa moja ili kukokotoa matokeo yanayowezekana zaidi kwa kila mechi.",
@@ -1408,6 +1456,7 @@ const sw = {
   "trusted.titleB": "mashabiki wa soka",
   "trusted.titleC": "chagua BetsPlug.",
   "trusted.titleHighlight": "1,500+",
+
   "weeklyReport.allCallsThisWeek": "Simu Zote Wiki Hii",
   "weeklyReport.callLog": "Rekodi ya Simu",
   "weeklyReport.calls": "simu",
@@ -1445,10 +1494,11 @@ const sw = {
   "weeklyReport.vsLastWeek": "dhidi ya wiki iliyopita",
   "weeklyReport.weeklyTotal": "Jumla ya Wiki",
   "weeklyReport.win": "SHINDA",
-  "weeklyReport.winnersAndLosses": "Washindi & Hasara",
   "weeklyReport.winRate": "Kiwango cha Ushindi",
+  "weeklyReport.winnersAndLosses": "Washindi & Hasara",
   "weeklyReport.wins": "Mafanikio",
   "weeklyReport.yes": "Ndiyo",
+
   "welcome.badge": "Umeingia.",
   "welcome.ctaPrimary": "Ingia kwenye dashibodi yako",
   "welcome.ctaSecondary": "Rudi kwenye ukurasa wa nyumbani",
@@ -1517,5 +1567,5 @@ const sw = {
   "welcome.tourTitle": "Wapi kupata nini, mara moja wewe ni ndani",
   "welcome.trialBody": "Hutatozwa leo. Ghairi wakati wowote katika siku 7 zijazo na akaunti yako itasitishwa kimya kimya - hakuna maswali, hakuna shinikizo.",
   "welcome.trialTitle": "Jaribio lako la siku 7 bila malipo linatumika",
-} satisfies Partial<Record<TranslationKey, string>>;
+} as Record<TranslationKey, string>;
 export default sw;

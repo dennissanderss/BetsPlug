@@ -203,11 +203,15 @@ def _build_free_pick(pred: Prediction) -> FreePickItem:
 async def get_free_picks(
     db: AsyncSession = Depends(get_db),
 ) -> FreePicksResponse:
-    """Top 3 highest-confidence picks for today + yesterday's results + 30-day winrate."""
+    """Top 3 highest-confidence upcoming picks + 3 recent results + 30-day winrate.
+
+    Unlike the previous version which was limited to today/yesterday only
+    (often empty on days without matches), this searches a wider window:
+    - "today": next 3 upcoming scheduled matches (up to 7 days ahead)
+    - "yesterday": last 3 finished matches (up to 7 days back)
+    This guarantees the homepage section always has content.
+    """
     now = datetime.now(timezone.utc)
-    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    yesterday_start = today_start - timedelta(days=1)
-    tomorrow_start = today_start + timedelta(days=1)
 
     base_opts = [
         selectinload(Prediction.match).selectinload(Match.home_team),
@@ -216,15 +220,17 @@ async def get_free_picks(
         selectinload(Prediction.match).selectinload(Match.result),
     ]
 
-    # ── Today's top 3 by confidence ──────────────────────────────
+    # ── Upcoming: top 3 scheduled matches by confidence (next 7 days) ──
+    upcoming_cutoff = now + timedelta(days=7)
     today_stmt = (
         select(Prediction)
         .join(Match, Match.id == Prediction.match_id)
         .options(*base_opts)
         .where(
             and_(
-                Match.scheduled_at >= today_start,
-                Match.scheduled_at < tomorrow_start,
+                Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
+                Match.scheduled_at >= now,
+                Match.scheduled_at <= upcoming_cutoff,
             )
         )
         .order_by(Prediction.confidence.desc())
@@ -233,15 +239,17 @@ async def get_free_picks(
     today_rows = (await db.execute(today_stmt)).scalars().unique().all()
     today_picks = [_build_free_pick(p) for p in today_rows]
 
-    # ── Yesterday's top 3 by confidence ──────────────────────────
+    # ── Recent results: top 3 finished matches by confidence (last 7 days) ──
+    results_start = now - timedelta(days=7)
     yesterday_stmt = (
         select(Prediction)
         .join(Match, Match.id == Prediction.match_id)
         .options(*base_opts)
         .where(
             and_(
-                Match.scheduled_at >= yesterday_start,
-                Match.scheduled_at < today_start,
+                Match.status == MatchStatus.FINISHED,
+                Match.scheduled_at >= results_start,
+                Match.scheduled_at <= now,
             )
         )
         .order_by(Prediction.confidence.desc())
@@ -251,12 +259,8 @@ async def get_free_picks(
     yesterday_picks = [_build_free_pick(p) for p in yesterday_rows]
 
     # ── 30-day rolling winrate ───────────────────────────────────
-    # Count evaluated predictions (top 3 per day) from last 30 days.
-    # We approximate by looking at all evaluated predictions and limiting
-    # to a reasonable count since true "top 3 per day" selection would
-    # require caching.
     thirty_days_ago = now - timedelta(days=30)
-    from sqlalchemy import case, Integer
+    from sqlalchemy import case
     stats_stmt = (
         select(
             func.count(PredictionEvaluation.id).label("total"),

@@ -1823,8 +1823,8 @@ const en = {
   "home.freePredCtaSub": "Unlock full access to 50+ daily predictions with a free trial.",
   "home.freePredWinrate": "Win rate",
   "home.freePredRecord": "Correct picks",
-  "home.freePredToday": "Today's free picks",
-  "home.freePredYesterday": "Yesterday's results",
+  "home.freePredToday": "Upcoming free picks",
+  "home.freePredYesterday": "Recent results",
 
   /* ── Breadcrumb labels ──────────────────────────────────── */
   "bc.home": "Home",
@@ -3538,8 +3538,8 @@ const nl: Dictionary = {
   "home.freePredCtaSub": "Ontgrendel volledige toegang tot 50+ dagelijkse voorspellingen met een gratis proefperiode.",
   "home.freePredWinrate": "Winstpercentage",
   "home.freePredRecord": "Correcte picks",
-  "home.freePredToday": "Gratis picks van vandaag",
-  "home.freePredYesterday": "Resultaten van gisteren",
+  "home.freePredToday": "Aankomende gratis picks",
+  "home.freePredYesterday": "Recente resultaten",
 
   /* ── Breadcrumb labels ──────────────────────────────────── */
   "bc.home": "Home",
