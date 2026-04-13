@@ -48,11 +48,12 @@ function setLocaleCookie(res: NextResponse, locale: Locale) {
 export function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
-  // Skip Next internals, API routes and public files
+  // Skip Next internals, API routes, Sanity Studio and public files
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/static") ||
+    pathname.startsWith("/studio") ||
     PUBLIC_FILE.test(pathname)
   ) {
     return NextResponse.next();
