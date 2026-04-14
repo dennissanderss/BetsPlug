@@ -727,7 +727,27 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
       {/* ═══════════════════════════════════════════════════════════════════
           HERO SECTION — PIT LANE
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
+      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
+        {/* Stadium photo — low opacity, monochrome green tint */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('/hero-bg.jpg')",
+            filter: "grayscale(1) contrast(1.15) brightness(0.5)",
+            opacity: 0.18,
+          }}
+        />
+        {/* Lime tint over stadium */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(74, 222, 128, 0.08) 0%, transparent 40%, rgba(74, 222, 128, 0.05) 100%)",
+            mixBlendMode: "screen",
+          }}
+        />
+        {/* Dark gradient overlay for readability */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-[#050505]/75 to-[#050505]" />
         {/* Grid blueprint background */}
         <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
         {/* Ambient lime wash */}

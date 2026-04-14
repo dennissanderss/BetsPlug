@@ -54,8 +54,8 @@ export function LeaguesTicker() {
       <div className="pointer-events-none absolute top-0 left-0 right-0 divider-dashed" />
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 divider-dashed" />
 
-      {/* Title */}
-      <div className="relative z-10 mx-auto max-w-7xl mb-10 px-6 md:mb-14">
+      {/* Title — centered */}
+      <div className="relative z-10 mx-auto mb-10 flex max-w-7xl flex-col items-center px-6 text-center md:mb-14">
         <span className="section-tag mb-4">
           {t("leagues.badge")}
         </span>
