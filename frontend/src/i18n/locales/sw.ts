@@ -1637,5 +1637,17 @@ const sw = {
   "dash.noWeeklyData": "Hakuna data wiki hii bado",
   "dash.quickLinks": "Viungo vya haraka",
   "dash.analyzing": "Inachambua...",
+  "botd.performanceInsights": "Maarifa ya Utendaji",
+  "botd.fullTrackRecord": "Rekodi kamili",
+  "botd.modelQuality": "Ubora wa Modeli",
+  "botd.brierScore": "Alama ya Brier",
+  "botd.brierScoreDesc": "Chini ni bora zaidi (0 = kamili)",
+  "botd.calibrationError": "Hitilafu ya Urekebishaji",
+  "botd.calibrationErrorDesc": "Jinsi uwezekano unavyolingana na ukweli",
+  "botd.totalPredictions": "Jumla ya Utabiri",
+  "botd.overallAccuracy": "Usahihi wa Jumla",
+  "botd.confidenceCalibration": "Urekebishaji wa Kujiamini",
+  "botd.confidenceCalibrationDesc": "Tunapotabiri X%, mechi hutokea kweli X% ya wakati",
+  "botd.accuracyByLeague": "Usahihi kwa Ligi",
 } as Record<TranslationKey, string>;
 export default sw;

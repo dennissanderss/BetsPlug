@@ -25,7 +25,10 @@ function BOTDTrackRecordCard() {
     queryKey: ["botd-track-record"],
     queryFn: async () => {
       const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-      const resp = await fetch(`${API}/bet-of-the-day/track-record`);
+      const token = typeof window !== "undefined" ? localStorage.getItem("betsplug_token") : null;
+      const headers: Record<string, string> = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const resp = await fetch(`${API}/bet-of-the-day/track-record`, { headers });
       if (!resp.ok) return null;
       return resp.json();
     },
@@ -119,7 +122,177 @@ function BOTDTrackRecordCard() {
   );
 }
 
-import { CheckCircle2, XCircle, Clock as ClockIcon } from "lucide-react";
+import { CheckCircle2, XCircle, Clock as ClockIcon, BarChart3, ArrowRight } from "lucide-react";
+import type { SegmentPerformance, CalibrationReport } from "@/types/api";
+
+// ─── BOTD Performance Insights (backtest statistics) ────────────────────────
+
+function BOTDPerformanceInsights() {
+  const { t } = useTranslations();
+
+  const { data: leagueSegments } = useQuery({
+    queryKey: ["trackrecord-segments-league-botd"],
+    queryFn: () => api.getTrackrecordSegments("league"),
+    staleTime: 10 * 60_000,
+  });
+
+  const { data: calibration } = useQuery({
+    queryKey: ["trackrecord-calibration-botd"],
+    queryFn: () => api.getCalibration(),
+    staleTime: 10 * 60_000,
+  });
+
+  const { data: summary } = useQuery({
+    queryKey: ["trackrecord-summary-botd"],
+    queryFn: () => api.getTrackrecordSummary(),
+    staleTime: 10 * 60_000,
+  });
+
+  const topLeagues = (leagueSegments ?? [])
+    .filter((s: SegmentPerformance) => s.total >= 10)
+    .sort((a: SegmentPerformance, b: SegmentPerformance) => b.accuracy - a.accuracy)
+    .slice(0, 8);
+
+  const calBuckets = (calibration as CalibrationReport)?.buckets ?? [];
+
+  if (!summary && topLeagues.length === 0) return null;
+
+  return (
+    <div className="glass-card p-5 sm:p-6">
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center gap-2">
+          <BarChart3 className="h-5 w-5 text-emerald-400" />
+          <h3 className="text-sm font-bold text-slate-100">{t("botd.performanceInsights")}</h3>
+        </div>
+        <Link
+          href="/trackrecord"
+          className="flex items-center gap-1 text-xs text-slate-400 hover:text-emerald-400 transition-colors"
+        >
+          {t("botd.fullTrackRecord")}
+          <ArrowRight className="h-3 w-3" />
+        </Link>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Overall Model Quality */}
+        {summary && (
+          <div>
+            <h4 className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-3">
+              {t("botd.modelQuality")}
+            </h4>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3">
+                <p className="text-[9px] uppercase tracking-wider text-slate-500">{t("botd.brierScore")}</p>
+                <p className="text-lg font-bold tabular-nums text-slate-100">
+                  {summary.brier_score?.toFixed(3) ?? "—"}
+                </p>
+                <p className="text-[9px] text-slate-600">{t("botd.brierScoreDesc")}</p>
+              </div>
+              <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3">
+                <p className="text-[9px] uppercase tracking-wider text-slate-500">{t("botd.calibrationError")}</p>
+                <p className="text-lg font-bold tabular-nums text-slate-100">
+                  {summary.calibration_error?.toFixed(3) ?? "—"}
+                </p>
+                <p className="text-[9px] text-slate-600">{t("botd.calibrationErrorDesc")}</p>
+              </div>
+              <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3">
+                <p className="text-[9px] uppercase tracking-wider text-slate-500">{t("botd.totalPredictions")}</p>
+                <p className="text-lg font-bold tabular-nums text-emerald-400">
+                  {summary.total_predictions?.toLocaleString() ?? "—"}
+                </p>
+              </div>
+              <div className="rounded-lg bg-white/[0.03] border border-white/[0.06] p-3">
+                <p className="text-[9px] uppercase tracking-wider text-slate-500">{t("botd.overallAccuracy")}</p>
+                <p className="text-lg font-bold tabular-nums text-emerald-400">
+                  {summary.accuracy != null ? `${Math.round(summary.accuracy * 100)}%` : "—"}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Confidence Calibration */}
+        {calBuckets.length > 0 && (
+          <div>
+            <h4 className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-3">
+              {t("botd.confidenceCalibration")}
+            </h4>
+            <p className="text-[10px] text-slate-600 mb-2">{t("botd.confidenceCalibrationDesc")}</p>
+            <div className="space-y-1.5">
+              {calBuckets.filter((b) => b.count > 0).map((bucket) => {
+                const predicted = Math.round(bucket.predicted_avg * 100);
+                const observed = Math.round(bucket.observed_freq * 100);
+                const gap = Math.abs(predicted - observed);
+                const isGood = gap <= 5;
+                return (
+                  <div key={bucket.bucket_index} className="flex items-center gap-2 text-xs">
+                    <span className="w-20 text-slate-500 tabular-nums">
+                      {Math.round(bucket.lower_bound * 100)}-{Math.round(bucket.upper_bound * 100)}%
+                    </span>
+                    <div className="flex-1 flex items-center gap-2">
+                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
+                        <div
+                          className="h-full rounded-full"
+                          style={{
+                            width: `${observed}%`,
+                            background: isGood ? "#10b981" : "#f59e0b",
+                          }}
+                        />
+                      </div>
+                      <span className="w-10 text-right tabular-nums text-slate-400">{observed}%</span>
+                    </div>
+                    <span className="w-12 text-right tabular-nums text-slate-600">
+                      n={bucket.count}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            {(calibration as CalibrationReport)?.overall_ece != null && (
+              <p className="mt-2 text-[10px] text-slate-600">
+                ECE: {((calibration as CalibrationReport).overall_ece * 100).toFixed(1)}%
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Accuracy by League */}
+      {topLeagues.length > 0 && (
+        <div className="mt-6">
+          <h4 className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-3">
+            {t("botd.accuracyByLeague")}
+          </h4>
+          <div className="grid gap-1.5 sm:grid-cols-2">
+            {topLeagues.map((seg: SegmentPerformance) => {
+              const accPct = Math.round(seg.accuracy * 100);
+              const accColor = accPct >= 55 ? "#10b981" : accPct >= 45 ? "#f59e0b" : "#ef4444";
+              return (
+                <div
+                  key={seg.segment_value}
+                  className="flex items-center gap-2 rounded-lg bg-white/[0.02] px-3 py-2"
+                >
+                  <div className="flex-1 min-w-0">
+                    <span className="text-xs font-medium text-slate-300 truncate block">
+                      {seg.segment_value}
+                    </span>
+                  </div>
+                  <span className="text-[10px] tabular-nums text-slate-500">{seg.total} picks</span>
+                  <span
+                    className="rounded px-1.5 py-0.5 text-[10px] font-bold tabular-nums"
+                    style={{ background: `${accColor}18`, color: accColor }}
+                  >
+                    {accPct}%
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 // ─── BOTD History List ──────────────────────────────────────────────────────
 
@@ -128,7 +301,10 @@ function BOTDHistoryList() {
     queryKey: ["botd-history"],
     queryFn: async () => {
       const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-      const resp = await fetch(`${API}/bet-of-the-day/history?limit=50`);
+      const token = typeof window !== "undefined" ? localStorage.getItem("betsplug_token") : null;
+      const headers: Record<string, string> = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const resp = await fetch(`${API}/bet-of-the-day/history?limit=50`, { headers });
       if (!resp.ok) return [];
       return resp.json();
     },
@@ -616,6 +792,9 @@ export default function BetOfTheDayPage() {
 
           {/* ── BOTD History List ── */}
           <BOTDHistoryList />
+
+          {/* ── Performance Insights (backtest stats) ── */}
+          <BOTDPerformanceInsights />
 
           {/* ── Info Cards ── */}
           <div className="grid gap-4 sm:grid-cols-3">

@@ -1637,5 +1637,17 @@ const it = {
   "dash.noWeeklyData": "Nessun dato questa settimana",
   "dash.quickLinks": "Link rapidi",
   "dash.analyzing": "Analisi in corso...",
+  "botd.performanceInsights": "Approfondimenti sulle prestazioni",
+  "botd.fullTrackRecord": "Storico completo",
+  "botd.modelQuality": "Qualita del modello",
+  "botd.brierScore": "Punteggio Brier",
+  "botd.brierScoreDesc": "Piu basso e meglio (0 = perfetto)",
+  "botd.calibrationError": "Errore di calibrazione",
+  "botd.calibrationErrorDesc": "Quanto bene le probabilita corrispondono alla realta",
+  "botd.totalPredictions": "Previsioni totali",
+  "botd.overallAccuracy": "Precisione complessiva",
+  "botd.confidenceCalibration": "Calibrazione della fiducia",
+  "botd.confidenceCalibrationDesc": "Quando prevediamo X%, le partite si verificano effettivamente X% delle volte",
+  "botd.accuracyByLeague": "Precisione per campionato",
 } as Record<TranslationKey, string>;
 export default it;

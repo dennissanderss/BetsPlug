@@ -1637,5 +1637,17 @@ const id = {
   "dash.noWeeklyData": "Belum ada data minggu ini",
   "dash.quickLinks": "Tautan cepat",
   "dash.analyzing": "Menganalisis...",
+  "botd.performanceInsights": "Wawasan Performa",
+  "botd.fullTrackRecord": "Rekam jejak lengkap",
+  "botd.modelQuality": "Kualitas Model",
+  "botd.brierScore": "Skor Brier",
+  "botd.brierScoreDesc": "Lebih rendah lebih baik (0 = sempurna)",
+  "botd.calibrationError": "Kesalahan Kalibrasi",
+  "botd.calibrationErrorDesc": "Seberapa baik probabilitas sesuai dengan kenyataan",
+  "botd.totalPredictions": "Total Prediksi",
+  "botd.overallAccuracy": "Akurasi Keseluruhan",
+  "botd.confidenceCalibration": "Kalibrasi Kepercayaan",
+  "botd.confidenceCalibrationDesc": "Ketika kami memprediksi X%, pertandingan benar-benar terjadi X% dari waktu",
+  "botd.accuracyByLeague": "Akurasi per Liga",
 } as Record<TranslationKey, string>;
 export default id;
