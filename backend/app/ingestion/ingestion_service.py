@@ -327,6 +327,8 @@ class IngestionService:
         result = await self.db.execute(select(Team).where(Team.slug == slug))
         existing = result.scalar_one_or_none()
         if existing:
+            if not existing.logo_url and defaults.get("logo_url"):
+                existing.logo_url = defaults["logo_url"]
             return existing, False
         team = Team(slug=slug, league_id=league_id, **defaults)
         self.db.add(team)

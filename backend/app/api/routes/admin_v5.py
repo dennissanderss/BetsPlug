@@ -127,6 +127,67 @@ async def _api_football() -> APIFootballAdapter:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
+# 0. Team logos backfill
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+@router.post(
+    "/backfill-team-logos",
+    summary="Fetch missing team logos from API-Football for all leagues",
+)
+async def backfill_team_logos(
+    db: AsyncSession = Depends(get_db),
+):
+    """For every league mapped in API-Football, fetch team rosters and
+    update logo_url on teams that currently have NULL logos."""
+    from app.models.team import Team
+    from app.models.league import League
+    from app.ingestion.adapters.api_football import LEAGUE_SLUG_TO_ID
+    import re, asyncio
+
+    adapter = await _api_football()
+    updated = 0
+    errors: list[str] = []
+
+    for slug, league_api_id in LEAGUE_SLUG_TO_ID.items():
+        league = (
+            await db.execute(select(League).where(League.slug == slug))
+        ).scalar_one_or_none()
+        if league is None:
+            continue
+
+        try:
+            season = _current_season(datetime.now(timezone.utc))
+            resp = await adapter._get("teams", {"league": league_api_id, "season": season})
+            items = resp.get("response", []) if isinstance(resp, dict) else []
+
+            for item in items:
+                team_data = item.get("team", {})
+                logo = team_data.get("logo")
+                name = team_data.get("name", "")
+                if not logo or not name:
+                    continue
+
+                # Build slug same way as _upsert_team
+                team_slug = re.sub(r"[^\w\s-]", "", name.lower())
+                team_slug = re.sub(r"[\s_]+", "-", team_slug).strip("-")
+
+                team = (
+                    await db.execute(select(Team).where(Team.slug == team_slug))
+                ).scalar_one_or_none()
+                if team and not team.logo_url:
+                    team.logo_url = logo
+                    updated += 1
+
+            await asyncio.sleep(0.3)
+        except Exception as exc:
+            errors.append(f"{slug}: {exc}")
+
+    await db.commit()
+    return {"updated": updated, "errors": errors}
+
+
+# ──────────────────────────────────────────────────────────────────────────────
 # 1. Fixtures backfill
 # ──────────────────────────────────────────────────────────────────────────────
 
@@ -1670,6 +1731,8 @@ async def _upsert_team(db: AsyncSession, league: League, team_raw: dict):
         await db.execute(select(Team).where(Team.slug == slug_raw))
     ).scalar_one_or_none()
     if existing is not None:
+        if not existing.logo_url and team_raw.get("logo"):
+            existing.logo_url = team_raw["logo"]
         return existing
 
     team = Team(
