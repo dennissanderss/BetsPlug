@@ -58,7 +58,7 @@ export default async function BetTypesIndexPage() {
   const hubs = await fetchAllBetTypeHubs();
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
       <SiteNav />
 
       {/* Hero */}

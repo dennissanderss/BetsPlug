@@ -524,11 +524,11 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
   ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
+    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
       {/* ── Top Bar + Navigation ── */}
       <header className="fixed top-0 left-0 right-0 z-50">
         <TopBar />
-        <nav className="border-b border-slate-200/60 bg-white/80 backdrop-blur-xl transition-all duration-300">
+        <nav className="border-b border-white/[0.06] bg-[#070a12]/75 backdrop-blur-xl transition-all duration-300">
           <div
             className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-300 ${
               isScrolled ? "py-1 md:py-0.5" : "py-3 md:py-1"
@@ -555,7 +555,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900"
+                className="text-sm font-semibold text-slate-300 transition-colors hover:text-green-400"
               >
                 {link.label}
               </Link>
@@ -572,7 +572,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
             {/* Desktop buttons (lg+) */}
             <Link
               href={loc("/login")}
-              className={`hidden rounded-md border border-slate-300 font-medium text-slate-600 transition-all hover:border-slate-400 hover:text-slate-900 lg:inline-block ${
+              className={`hidden rounded-md border border-white/15 font-medium text-slate-300 transition-all hover:border-green-500/50 hover:text-white lg:inline-block ${
                 isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
               }`}
             >
@@ -602,7 +602,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
-              className={`flex items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 backdrop-blur-sm transition-all duration-300 hover:border-green-500/40 hover:bg-green-50 lg:hidden ${
+              className={`flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-slate-200 backdrop-blur-sm transition-all duration-300 hover:border-green-500/50 hover:bg-green-500/[0.1] hover:text-white lg:hidden ${
                 isScrolled ? "h-9 w-9" : "h-11 w-11"
               }`}
             >
@@ -734,7 +734,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
           style={{ backgroundImage: "url('/hero-bg.jpg')" }}
         />
         {/* Dark overlay gradient for readability */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14]/90 via-[#080b14]/85 to-[#f8fafb]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14]/90 via-[#080b14]/85 to-background" />
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
@@ -997,7 +997,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
          ═══════════════════════════════════════════════════════════════════ */}
       <section id="track-record" className="relative overflow-hidden py-20 md:py-28">
         {/* Unique background: subtle grid pattern + off-center glow */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#f0f4f8] via-[#f5f8fb] to-[#f0f4f8]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#0f1420] via-[#0b0f1a] to-[#0f1420]" />
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{
@@ -1141,7 +1141,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
           LIVE STATS BAR — compact social-proof strip with animated counters
          ═══════════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden py-16 md:py-20">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#f8fafb] via-[#f0f4f8] to-[#f8fafb]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-[#0f1420] to-background" />
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[600px] rounded-full bg-green-200/20 blur-[120px]" />
         </div>

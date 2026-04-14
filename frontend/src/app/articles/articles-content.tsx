@@ -56,10 +56,10 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
   const rest = filtered.slice(1);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafb] via-white to-[#f8fafb]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-[#0f1420] to-background" />
         <div
           className="absolute inset-0 opacity-[0.03]"
           style={{

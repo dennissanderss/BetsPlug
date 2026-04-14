@@ -30,7 +30,7 @@ export default async function CheckoutPage() {
   const [checkoutPage] = await Promise.all([fetchCheckoutPage()]);
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#f8fafb]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <CheckoutContent checkoutPage={checkoutPage} />
     </Suspense>
   );

@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════════
-   BetsPlug — Sport-Tech Visual System (2026 Refresh)
+   BetsPlug — Dark Neon Stadium (2026 Flip)
    ─────────────────────────────────────────────────────────────────
-   Light, energetic, premium.  Green = primary CTA.  Teal = accent.
+   Charcoal base, neon-green primary, cyan accent. Floodlit sport vibe.
    Exo 2 — geometric sport/tech sans loaded via next/font/google.
    ═══════════════════════════════════════════════════════════════════ */
 
@@ -18,61 +18,61 @@
   }
 
   ::selection {
-    background-color: rgba(16, 185, 129, 0.25);
-    color: #0f172a;
+    background-color: rgba(74, 222, 128, 0.35);
+    color: #f8fafc;
   }
   ::-moz-selection {
-    background-color: rgba(16, 185, 129, 0.25);
-    color: #0f172a;
+    background-color: rgba(74, 222, 128, 0.35);
+    color: #f8fafc;
   }
 
-  /* ── Design tokens ── */
+  /* ── Design tokens — dark neon ── */
   :root {
-    /* Surfaces — light, airy, premium */
-    --background: 210 20% 98%;         /* #f8fafb */
-    --foreground: 222 47% 11%;         /* #1e293b */
+    /* Surfaces — charcoal stadium */
+    --background: 222 42% 5%;          /* #070a12 */
+    --foreground: 210 40% 98%;         /* #f8fafc */
 
-    --card: 0 0% 100%;                 /* white */
-    --card-foreground: 222 47% 11%;
+    --card: 222 34% 9%;                /* #0f1420 */
+    --card-foreground: 210 40% 98%;
 
-    --elevated: 210 20% 96%;           /* #f1f5f9 */
+    --elevated: 222 28% 13%;           /* #161c2a */
 
-    /* Primary: logo green */
-    --primary: 142 71% 45%;            /* #22c55e */
-    --primary-foreground: 0 0% 100%;
+    /* Primary: logo neon green */
+    --primary: 142 76% 56%;            /* #4ade80 */
+    --primary-foreground: 222 47% 5%;  /* #06080d */
 
-    /* Secondary: logo teal/cyan */
-    --secondary: 187 92% 41%;          /* #06b6d4 */
-    --secondary-foreground: 0 0% 100%;
+    /* Secondary: logo cyan glow */
+    --secondary: 187 92% 55%;          /* #22d3ee */
+    --secondary-foreground: 222 47% 5%;
 
     /* Muted */
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%;   /* #64748b */
+    --muted: 222 22% 16%;              /* #1d2536 */
+    --muted-foreground: 215 20% 68%;   /* #8a97ae */
 
     /* Accent */
-    --accent: 210 20% 94%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 222 24% 18%;             /* #222b3e */
+    --accent-foreground: 210 40% 98%;
 
     /* Status */
-    --destructive: 0 84% 60%;
+    --destructive: 0 84% 62%;
     --destructive-foreground: 0 0% 100%;
-    --warning: 38 92% 50%;
+    --warning: 38 95% 58%;
     --warning-foreground: 222 47% 7%;
-    --win: 160 84% 39%;
-    --loss: 0 84% 60%;
-    --draw: 38 92% 50%;
+    --win: 142 76% 56%;
+    --loss: 0 84% 62%;
+    --draw: 38 95% 58%;
 
     /* Borders & Input */
-    --border: 214 32% 91%;             /* #e2e8f0 */
-    --input: 214 32% 91%;
-    --ring: 142 71% 45%;
+    --border: 222 22% 18%;             /* #232c41 */
+    --input: 222 28% 12%;
+    --ring: 142 76% 56%;
 
     --radius: 0.75rem;
 
-    /* Sidebar (dashboard keeps dark) */
-    --sidebar-background: 222 35% 12%;
+    /* Sidebar (dashboard) */
+    --sidebar-background: 222 45% 4%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-border: 217 28% 18%;
+    --sidebar-border: 222 22% 14%;
   }
 }
 
@@ -82,12 +82,19 @@
   }
 
   html {
-    color-scheme: light;
+    color-scheme: dark;
     overflow-x: hidden;
+    background: #070a12;
   }
 
   body {
-    background: #f8fafb;
+    /* Stadium floodlight — twin cool spots on deep charcoal */
+    background:
+      radial-gradient(1200px 600px at 12% -10%, rgba(34, 211, 238, 0.14), transparent 60%),
+      radial-gradient(1000px 700px at 92% 0%, rgba(74, 222, 128, 0.12), transparent 60%),
+      radial-gradient(900px 600px at 50% 110%, rgba(74, 222, 128, 0.08), transparent 60%),
+      #070a12;
+    background-attachment: fixed;
     @apply text-foreground antialiased;
     font-family: var(--font-brand), system-ui, -apple-system, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif;
@@ -98,14 +105,15 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     max-width: 100vw;
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-brand), system-ui, -apple-system, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.15;
+    font-weight: 800;
+    letter-spacing: -0.022em;
+    line-height: 1.08;
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: manual;
@@ -128,7 +136,7 @@
     height: auto;
   }
 
-  /* ── Scrollbar — light theme ── */
+  /* ── Scrollbar — neon accent ── */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -139,65 +147,79 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.08);
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(74, 222, 128, 0.35);
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
+    scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
   }
 }
 
 @layer components {
-  /* ── Sport card — premium white cards with depth ── */
+  /* ── Glass card — dark translucent with subtle neon edge ── */
   .glass-card {
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: rgba(15, 20, 32, 0.72);
+    backdrop-filter: blur(18px) saturate(130%);
+    -webkit-backdrop-filter: blur(18px) saturate(130%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius);
     box-shadow:
-      0 1px 3px rgba(0, 0, 0, 0.04),
-      0 1px 2px rgba(0, 0, 0, 0.02);
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 10px 30px rgba(0, 0, 0, 0.35);
   }
 
   .glass-card-hover {
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    background: rgba(15, 20, 32, 0.72);
+    backdrop-filter: blur(18px) saturate(130%);
+    -webkit-backdrop-filter: blur(18px) saturate(130%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius);
     box-shadow:
-      0 1px 3px rgba(0, 0, 0, 0.04),
-      0 1px 2px rgba(0, 0, 0, 0.02);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 10px 30px rgba(0, 0, 0, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
   }
 
   .glass-card-hover:hover {
-    border-color: rgba(34, 197, 94, 0.3);
+    background: rgba(21, 28, 44, 0.82);
+    border-color: rgba(74, 222, 128, 0.45);
     box-shadow:
-      0 4px 16px rgba(34, 197, 94, 0.08),
-      0 8px 24px rgba(0, 0, 0, 0.06);
+      0 1px 0 rgba(255, 255, 255, 0.05) inset,
+      0 0 0 1px rgba(74, 222, 128, 0.15),
+      0 12px 40px rgba(74, 222, 128, 0.18),
+      0 16px 48px rgba(0, 0, 0, 0.5);
     transform: translateY(-2px);
   }
 
-  /* ── Gradient text — vibrant on light backgrounds ── */
+  /* ── Gradient text — neon-green to cyan ── */
   .gradient-text {
-    background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
+    background: linear-gradient(135deg, #4ade80 0%, #22d3ee 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .gradient-text-green {
-    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    background: linear-gradient(135deg, #4ade80 0%, #86efac 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* ── Dark section variants (hero, footer, dark bands) ── */
+  .gradient-text-cyan {
+    background: linear-gradient(135deg, #22d3ee 0%, #67e8f9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Compat: any remaining `.dark-section` bands keep green/cyan gradient */
   .dark-section .gradient-text {
     background: linear-gradient(135deg, #4ade80 0%, #22d3ee 100%);
     -webkit-background-clip: text;
@@ -205,39 +227,27 @@
     background-clip: text;
   }
 
-  .dark-section .glass-card,
-  .dark-section .glass-card-hover {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-color: rgba(255, 255, 255, 0.10);
-    box-shadow: none;
-  }
-
-  .dark-section .glass-card-hover:hover {
-    background: rgba(255, 255, 255, 0.10);
-    border-color: rgba(74, 222, 128, 0.25);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  }
-
-  /* ── Glow effects ── */
+  /* ── Glow halos ── */
   .glow-green {
-    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2),
-                0 0 60px rgba(34, 197, 94, 0.08);
+    box-shadow:
+      0 0 24px rgba(74, 222, 128, 0.35),
+      0 0 60px rgba(74, 222, 128, 0.18);
   }
 
-  .glow-teal {
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.2),
-                0 0 60px rgba(6, 182, 212, 0.08);
+  .glow-teal,
+  .glow-cyan {
+    box-shadow:
+      0 0 24px rgba(34, 211, 238, 0.35),
+      0 0 60px rgba(34, 211, 238, 0.18);
   }
 
   /* ── Nav items ── */
   .nav-active {
     background: linear-gradient(90deg,
-      rgba(34, 197, 94, 0.12) 0%,
-      rgba(34, 197, 94, 0.03) 100%);
-    border-left: 2px solid #22c55e;
-    color: #16a34a;
+      rgba(74, 222, 128, 0.20) 0%,
+      rgba(74, 222, 128, 0.02) 100%);
+    border-left: 2px solid #4ade80;
+    color: #4ade80;
   }
 
   .nav-item {
@@ -246,45 +256,83 @@
   }
 
   .nav-item:hover {
-    background: rgba(34, 197, 94, 0.06);
-    border-left-color: rgba(34, 197, 94, 0.4);
-    color: #0f172a;
+    background: rgba(74, 222, 128, 0.08);
+    border-left-color: rgba(74, 222, 128, 0.45);
+    color: #e2e8f0;
   }
 
-  /* ── Primary gradient button (neon green CTA) ── */
+  /* ── Primary CTA — neon green with floodlit glow ── */
   .btn-gradient {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    color: white;
-    font-weight: 700;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 60%, #16a34a 100%);
+    color: #06080d;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    box-shadow:
+      0 0 0 1px rgba(74, 222, 128, 0.35) inset,
+      0 8px 28px rgba(74, 222, 128, 0.35),
+      0 0 48px rgba(74, 222, 128, 0.22);
   }
 
   .btn-gradient:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(34, 197, 94, 0.4);
+    filter: brightness(1.05);
+    box-shadow:
+      0 0 0 1px rgba(74, 222, 128, 0.5) inset,
+      0 10px 36px rgba(74, 222, 128, 0.5),
+      0 0 64px rgba(74, 222, 128, 0.3);
   }
 
-  /* ── Highlighted card (green-filled card) ── */
+  /* Secondary cyan CTA */
+  .btn-cyan {
+    background: linear-gradient(135deg, #22d3ee 0%, #06b6d4 100%);
+    color: #06080d;
+    font-weight: 800;
+    box-shadow:
+      0 0 0 1px rgba(34, 211, 238, 0.35) inset,
+      0 8px 28px rgba(34, 211, 238, 0.32);
+  }
+
+  /* ── Highlighted card (green-filled) ── */
   .card-highlight {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    color: white;
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 60%, #16a34a 100%);
+    color: #06080d;
     border-radius: var(--radius);
-    box-shadow: 0 8px 32px rgba(34, 197, 94, 0.25);
+    box-shadow:
+      0 8px 32px rgba(74, 222, 128, 0.35),
+      0 0 0 1px rgba(74, 222, 128, 0.2) inset;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
   .card-highlight:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(34, 197, 94, 0.35);
+    box-shadow:
+      0 12px 44px rgba(74, 222, 128, 0.5),
+      0 0 0 1px rgba(74, 222, 128, 0.35) inset;
   }
 
-  /* ── Grid background pattern ── */
+  /* ── Grid background pattern — stadium lines ── */
   .grid-bg {
     background-image:
-      linear-gradient(rgba(34, 197, 94, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(34, 197, 94, 0.06) 1px, transparent 1px);
+      linear-gradient(rgba(74, 222, 128, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 222, 128, 0.07) 1px, transparent 1px);
     background-size: 60px 60px;
+  }
+
+  .grid-bg-fine {
+    background-image:
+      linear-gradient(rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* Diagonal sport stripes (subtle) */
+  .stripe-bg {
+    background-image: repeating-linear-gradient(
+      135deg,
+      rgba(74, 222, 128, 0.04) 0 2px,
+      transparent 2px 14px
+    );
   }
 
   /* ── Live status dot ── */
@@ -292,8 +340,9 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #22c55e;
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
+    background: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2), 0 0 12px rgba(74, 222, 128, 0.65);
+    animation: live-pulse 1.8s ease-in-out infinite;
   }
 
   .live-dot-red {
@@ -301,7 +350,24 @@
     height: 8px;
     border-radius: 50%;
     background: #ef4444;
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.22), 0 0 12px rgba(239, 68, 68, 0.6);
+    animation: live-pulse 1.8s ease-in-out infinite;
+  }
+
+  /* Neon chip */
+  .chip-neon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #4ade80;
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.3);
   }
 }
 
@@ -317,6 +383,96 @@
   .animate-slide-up {
     animation: slide-up 0.25s ease forwards;
   }
+
+  .animate-glow-pulse {
+    animation: glow-pulse 2.4s ease-in-out infinite;
+  }
+
+  .text-stadium {
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+  }
+
+  .text-stat {
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     SAFETY NET — remap hardcoded light Tailwind classes to dark.
+     The public marketing pages still use bg-white / text-slate-900 /
+     border-slate-200 etc. We override them here so the flip ships
+     without touching ~95 files. Prefer semantic tokens going forward.
+     ═══════════════════════════════════════════════════════════════ */
+
+  /* Backgrounds */
+  .bg-white { background-color: hsl(var(--card)) !important; }
+  .bg-slate-50,
+  .bg-gray-50,
+  .bg-neutral-50,
+  .bg-zinc-50 { background-color: hsl(var(--elevated)) !important; }
+  .bg-slate-100,
+  .bg-gray-100,
+  .bg-neutral-100,
+  .bg-zinc-100 { background-color: hsl(var(--muted)) !important; }
+  .bg-slate-200,
+  .bg-gray-200,
+  .bg-neutral-200,
+  .bg-zinc-200 { background-color: hsl(var(--accent)) !important; }
+
+  /* Text */
+  .text-black,
+  .text-slate-900,
+  .text-slate-950,
+  .text-gray-900,
+  .text-gray-950,
+  .text-neutral-900,
+  .text-zinc-900 { color: hsl(var(--foreground)) !important; }
+  .text-slate-800,
+  .text-gray-800,
+  .text-neutral-800,
+  .text-zinc-800 { color: hsl(var(--foreground)) !important; opacity: 0.95; }
+  .text-slate-700,
+  .text-gray-700,
+  .text-neutral-700,
+  .text-zinc-700 { color: hsl(var(--foreground)) !important; opacity: 0.9; }
+  .text-slate-600,
+  .text-gray-600,
+  .text-neutral-600,
+  .text-zinc-600 { color: hsl(var(--muted-foreground)) !important; }
+  .text-slate-500,
+  .text-gray-500,
+  .text-neutral-500,
+  .text-zinc-500 { color: hsl(var(--muted-foreground)) !important; opacity: 0.9; }
+
+  /* Borders */
+  .border-slate-200,
+  .border-slate-100,
+  .border-gray-200,
+  .border-gray-100,
+  .border-neutral-200,
+  .border-neutral-100,
+  .border-zinc-200,
+  .border-zinc-100 { border-color: hsl(var(--border)) !important; }
+  .border-slate-300,
+  .border-gray-300,
+  .border-neutral-300,
+  .border-zinc-300 { border-color: hsl(var(--border)) !important; }
+
+  /* Dividers (divide-slate-*) */
+  .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
+  .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+    border-color: hsl(var(--border)) !important;
+  }
+
+  /* Hover variants */
+  .hover\:bg-slate-50:hover,
+  .hover\:bg-gray-50:hover { background-color: hsl(var(--elevated)) !important; }
+  .hover\:bg-slate-100:hover,
+  .hover\:bg-gray-100:hover { background-color: hsl(var(--muted)) !important; }
+  .hover\:bg-white:hover { background-color: hsl(var(--card)) !important; }
 }
 
 @keyframes pulse-slow {
@@ -340,6 +496,24 @@
   }
 }
 
+@keyframes live-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.2), 0 0 12px rgba(74, 222, 128, 0.65);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(74, 222, 128, 0.0), 0 0 18px rgba(74, 222, 128, 0.85);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 24px rgba(74, 222, 128, 0.25), 0 0 60px rgba(74, 222, 128, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 36px rgba(74, 222, 128, 0.45), 0 0 80px rgba(74, 222, 128, 0.22);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -353,71 +527,17 @@
 
 /* ── Focus ring ── */
 :focus-visible {
-  outline: 2px solid rgba(34, 197, 94, 0.6);
+  outline: 2px solid rgba(74, 222, 128, 0.7);
   outline-offset: 2px;
 }
 
-/* ── Dashboard dark override ── */
-/* The (app) layout wraps content in a sidebar-based layout.
-   We keep the sidebar and app pages dark via scoped overrides. */
+/* ── Dashboard shell (inherits root dark, keeps sidebar override) ── */
 [data-app-shell] {
   color-scheme: dark;
-  background: radial-gradient(ellipse at top, #151d30 0%, #111827 50%, #0f1520 100%);
+  background:
+    radial-gradient(1200px 700px at 12% -10%, rgba(34, 211, 238, 0.10), transparent 60%),
+    radial-gradient(1000px 800px at 92% 0%, rgba(74, 222, 128, 0.09), transparent 60%),
+    #070a12;
   background-attachment: fixed;
   color: #f8fafc;
-}
-
-[data-app-shell] ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-[data-app-shell] ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-[data-app-shell] .glass-card,
-[data-app-shell] .glass-card-hover {
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-color: rgba(255, 255, 255, 0.10);
-  box-shadow: none;
-}
-
-[data-app-shell] .glass-card-hover:hover {
-  background: rgba(255, 255, 255, 0.10);
-  border-color: rgba(74, 222, 128, 0.25);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-[data-app-shell] .gradient-text {
-  background: linear-gradient(135deg, #4ade80 0%, #a7f3d0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-[data-app-shell] .btn-gradient {
-  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-  color: #0a0e1a;
-  box-shadow: 0 6px 24px rgba(74, 222, 128, 0.28);
-}
-
-[data-app-shell] .nav-active {
-  background: linear-gradient(90deg,
-    rgba(74, 222, 128, 0.2) 0%,
-    rgba(74, 222, 128, 0.05) 100%);
-  border-left: 2px solid #4ade80;
-  color: #4ade80;
-}
-
-[data-app-shell] .nav-item:hover {
-  background: rgba(74, 222, 128, 0.06);
-  border-left-color: rgba(74, 222, 128, 0.4);
-  color: #e2e8f0;
-}
-
-[data-app-shell] ::selection {
-  background-color: rgba(16, 185, 129, 0.4);
-  color: #ffffff;
 }

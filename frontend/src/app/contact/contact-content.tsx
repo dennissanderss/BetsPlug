@@ -116,7 +116,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
     : faqGroups;
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
+    <div className="min-h-screen overflow-x-hidden bg-background text-slate-900">
       {/* Shared site navigation (same as landing) */}
       <SiteNav />
 

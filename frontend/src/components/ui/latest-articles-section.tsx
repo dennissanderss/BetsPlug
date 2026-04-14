@@ -45,7 +45,7 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
       aria-labelledby="latest-articles-heading"
     >
       {/* Ambient backdrop */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[#f0f4f8]/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[#0f1420]/40 to-transparent" />
       <div className="pointer-events-none absolute left-1/2 top-20 h-[320px] w-[620px] -translate-x-1/2 rounded-full bg-green-500/[0.03] blur-[140px]" />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6">

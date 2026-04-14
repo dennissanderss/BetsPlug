@@ -99,7 +99,7 @@ export function BetsPlugFooter() {
         {/* ═══════════════════════════════════════════════════════════
             PREMIUM TELEGRAM CTA — glass card (replaces newsletter)
             ═══════════════════════════════════════════════════════════ */}
-        <div className="relative mb-20 overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] via-white/[0.02] to-white/[0.01] p-8 backdrop-blur-xl md:p-12">
+        <div className="relative mb-20 overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] via-[#0f1420]/[0.02] to-white/[0.01] p-8 backdrop-blur-xl md:p-12">
           {/* Decorative glow */}
           <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-500/[0.18] blur-[100px]" />
           <div className="pointer-events-none absolute -left-10 -bottom-20 h-[240px] w-[240px] rounded-full bg-emerald-500/[0.12] blur-[90px]" />

@@ -198,7 +198,7 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
       </div>
 
       {/* Foreground lock overlay */}
-      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-white/70 via-white/50 to-white/80 backdrop-blur-[2px]">
+      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-white/70 via-[#0f1420]/50 to-white/80 backdrop-blur-[2px]">
         <div className="flex flex-col items-center gap-2 text-center">
           <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-200 bg-green-50 shadow-sm ring-1 ring-green-200">
             <Lock className="h-4 w-4 text-green-600" />
@@ -242,7 +242,7 @@ export function LockedSkeleton() {
           </div>
         </div>
       </div>
-      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-white/70 via-white/50 to-white/80 backdrop-blur-[2px]">
+      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-white/70 via-[#0f1420]/50 to-white/80 backdrop-blur-[2px]">
         <div className="flex flex-col items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-200 bg-green-50 ring-1 ring-green-200">
             <Lock className="h-4 w-4 text-green-600" />

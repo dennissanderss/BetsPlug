@@ -46,10 +46,10 @@ export function ArticleTemplate({ article }: { article: Article }) {
     // overflow-x-clip (not -hidden) so position:sticky still works for the
     // right-column promo banner. -hidden implicitly forces overflow-y:auto on
     // this element which creates a scroll container and breaks sticky.
-    <div className="relative min-h-screen overflow-x-clip bg-[#f8fafb] text-slate-900">
+    <div className="relative min-h-screen overflow-x-clip bg-background text-slate-900">
       {/* Ambient background (matches archive page) */}
       <div className="pointer-events-none fixed inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafb] via-white to-[#f8fafb]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-[#0f1420] to-background" />
         <div
           className="absolute inset-0 opacity-[0.03]"
           style={{

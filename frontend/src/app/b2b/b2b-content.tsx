@@ -77,7 +77,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
     : defaultUsps;
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
+    <div className="min-h-screen overflow-x-hidden bg-background text-slate-900">
       <SiteNav />
 
       {/* ═══════════════════════════════════════════════════════════════════

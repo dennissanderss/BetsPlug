@@ -42,7 +42,7 @@ export function HowItWorks() {
       aria-labelledby="how-it-works-heading"
     >
       {/* Background */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#f8fafb] via-[#f0f4f8] to-[#f8fafb]" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-[#0f1420] to-background" />
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.05]"
         style={{

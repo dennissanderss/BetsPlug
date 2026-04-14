@@ -659,7 +659,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 
   /* ── Render ───────────────────────────────────────────────── */
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.03] blur-[160px]" />
@@ -1362,10 +1362,10 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 /* ── Sub-components ─────────────────────────────────────────── */
 
 const inputCls =
-  "w-full rounded-xl border border-white/[0.1] bg-white/[0.03] px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-green-500/40 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-colors";
+  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-colors";
 
 const inputClsError =
-  "w-full rounded-xl border border-red-500/60 bg-red-500/[0.05] px-4 py-3 text-sm text-white placeholder:text-slate-600 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-colors";
+  "w-full rounded-xl border border-red-500/60 bg-red-50 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-colors";
 
 const inputClsFor = (hasError: boolean) =>
   hasError ? inputClsError : inputCls;
@@ -1394,7 +1394,7 @@ function Field({
       </span>
       {children}
       {hint && !error && (
-        <span className="text-[11px] text-slate-600">{hint}</span>
+        <span className="text-[11px] text-slate-500">{hint}</span>
       )}
       {error && (
         <span className="text-[11px] font-semibold text-red-400">
@@ -1416,14 +1416,14 @@ function StepHeading({
 }) {
   return (
     <div className="flex items-start gap-4">
-      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-green-500/20 bg-green-500/[0.08]">
-        <Icon className="h-5 w-5 text-green-400" />
+      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-green-500/20 bg-green-50">
+        <Icon className="h-5 w-5 text-green-500" />
       </div>
       <div>
-        <h2 className="text-xl font-extrabold text-white sm:text-2xl">
+        <h2 className="text-xl font-extrabold text-slate-900 sm:text-2xl">
           {title}
         </h2>
-        <p className="mt-1 text-sm text-slate-400">{subtitle}</p>
+        <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
       </div>
     </div>
   );
@@ -1449,17 +1449,17 @@ function Stepper({ step }: { step: 1 | 2 | 3 }) {
             <div
               className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border text-xs font-bold transition-colors ${
                 done
-                  ? "border-green-500/60 bg-green-500/20 text-green-300"
+                  ? "border-green-500/60 bg-green-50 text-green-600"
                   : active
-                  ? "border-green-500/60 bg-green-500 text-black shadow-[0_0_20px_rgba(74,222,128,0.35)]"
-                  : "border-white/[0.1] bg-white/[0.03] text-slate-500"
+                  ? "border-green-500/60 bg-green-500 text-white shadow-[0_0_20px_rgba(74,222,128,0.25)]"
+                  : "border-slate-200 bg-slate-50 text-slate-500"
               }`}
             >
               {done ? <Check className="h-4 w-4" strokeWidth={3} /> : it.id}
             </div>
             <span
               className={`text-sm font-semibold transition-colors ${
-                active || done ? "text-white" : "text-slate-500"
+                active || done ? "text-slate-900" : "text-slate-500"
               }`}
             >
               {it.label}
@@ -1467,7 +1467,7 @@ function Stepper({ step }: { step: 1 | 2 | 3 }) {
             {idx < items.length - 1 && (
               <span
                 className={`mx-2 h-px flex-1 ${
-                  done ? "bg-green-500/40" : "bg-white/[0.06]"
+                  done ? "bg-green-500/40" : "bg-slate-200"
                 }`}
               />
             )}
@@ -1514,16 +1514,16 @@ function OrderSummary({
   const isOneTime = plan.oneTime != null;
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] to-white/[0.01] p-6 backdrop-blur-xl">
+    <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
       {/* glow */}
-      <div className="pointer-events-none absolute -right-16 -top-16 h-[240px] w-[240px] rounded-full bg-green-500/[0.12] blur-[90px]" />
+      <div className="pointer-events-none absolute -right-16 -top-16 h-[240px] w-[240px] rounded-full bg-green-500/[0.04] blur-[90px]" />
 
       <div className="relative">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-400">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500">
             {t("checkout.summaryTitle")}
           </h3>
-          <span className="inline-flex items-center gap-1 rounded-full border border-green-500/30 bg-green-500/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
+          <span className="inline-flex items-center gap-1 rounded-full border border-green-200 bg-green-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
             <Lock className="h-3 w-3" />
             SSL
           </span>
@@ -1534,23 +1534,23 @@ function OrderSummary({
           <div
             className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl ${
               plan.highlight
-                ? "bg-green-500/20 shadow-[0_0_20px_rgba(74,222,128,0.3)]"
-                : "bg-green-500/10"
+                ? "bg-green-50 shadow-[0_0_20px_rgba(74,222,128,0.15)]"
+                : "bg-green-50"
             }`}
           >
-            <Icon className="h-5 w-5 text-green-400" />
+            <Icon className="h-5 w-5 text-green-500" />
           </div>
           <div className="flex-1">
             <div className="flex items-baseline justify-between gap-2">
-              <h4 className="text-lg font-extrabold text-white">
+              <h4 className="text-lg font-extrabold text-slate-900">
                 {plan.name}
               </h4>
               {isOneTime ? (
-                <span className="text-xl font-extrabold text-white">
+                <span className="text-xl font-extrabold text-slate-900">
                   {formatEUR(plan.oneTime ?? 0)}
                 </span>
               ) : (
-                <span className="text-xl font-extrabold text-white">
+                <span className="text-xl font-extrabold text-slate-900">
                   {formatEUR(
                     billing === "yearly" ? plan.monthly * 0.8 : plan.monthly
                   )}
@@ -1560,7 +1560,7 @@ function OrderSummary({
                 </span>
               )}
             </div>
-            <p className="mt-0.5 text-xs text-slate-400">{t(plan.tagline)}</p>
+            <p className="mt-0.5 text-xs text-slate-500">{t(plan.tagline)}</p>
           </div>
         </div>
 
@@ -1574,8 +1574,8 @@ function OrderSummary({
                 onClick={() => onChangePlan(p.id)}
                 className={`rounded-xl border px-2 py-2 text-[11px] font-bold uppercase tracking-wider transition-all ${
                   plan.id === p.id
-                    ? "border-green-500/60 bg-green-500/15 text-green-300"
-                    : "border-white/[0.08] bg-white/[0.02] text-slate-400 hover:border-white/[0.16] hover:text-white"
+                    ? "border-green-500/60 bg-green-50 text-green-600"
+                    : "border-slate-200 bg-slate-50 text-slate-500 hover:border-slate-300 hover:text-slate-900"
                 }`}
               >
                 {p.name}
@@ -1587,8 +1587,8 @@ function OrderSummary({
             onClick={() => onChangePlan("platinum")}
             className={`col-span-1 rounded-xl border px-2 py-2 text-[11px] font-bold uppercase tracking-wider transition-all sm:col-span-3 ${
               plan.id === "platinum"
-                ? "border-amber-400/60 bg-amber-400/15 text-amber-300"
-                : "border-white/[0.08] bg-white/[0.02] text-slate-400 hover:border-amber-400/30 hover:text-amber-200"
+                ? "border-amber-400/60 bg-amber-50 text-amber-600"
+                : "border-slate-200 bg-slate-50 text-slate-500 hover:border-amber-400/30 hover:text-amber-600"
             }`}
           >
             <Crown className="mr-1 inline h-3 w-3" />
@@ -1602,8 +1602,8 @@ function OrderSummary({
             <div
               className={`flex items-center justify-between rounded-xl border p-3 transition-colors ${
                 billing === "yearly"
-                  ? "border-green-500/30 bg-green-500/[0.06]"
-                  : "border-white/[0.06] bg-white/[0.02]"
+                  ? "border-green-200 bg-green-50"
+                  : "border-slate-200 bg-slate-50"
               }`}
             >
               <div>
@@ -1613,7 +1613,7 @@ function OrderSummary({
                     {t("checkout.yearlySaveBadge")}
                   </span>
                 </div>
-                <div className="text-sm font-bold text-white">
+                <div className="text-sm font-bold text-slate-900">
                   {billing === "yearly"
                     ? t("checkout.yearly")
                     : t("checkout.monthly")}
@@ -2213,7 +2213,7 @@ function ActiveSubscriptionNotice({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
-        className="relative overflow-hidden rounded-3xl border border-green-500/25 bg-gradient-to-br from-green-500/[0.08] via-white/[0.02] to-white/[0.01] p-8 backdrop-blur-xl sm:p-10"
+        className="relative overflow-hidden rounded-3xl border border-green-500/25 bg-gradient-to-br from-green-500/[0.08] via-[#0f1420]/[0.02] to-white/[0.01] p-8 backdrop-blur-xl sm:p-10"
       >
         <div className="pointer-events-none absolute -right-24 -top-24 h-[260px] w-[260px] rounded-full bg-green-500/[0.14] blur-[110px]" />
         <div className="relative text-center">

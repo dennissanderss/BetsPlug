@@ -144,7 +144,7 @@ function UpgradeCard({
           Upgrade Now
           {/* Shimmer sweep on hover */}
           <div
-            className="pointer-events-none absolute inset-0 translate-x-[-200%] bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-1000 group-hover/btn:translate-x-[200%]"
+            className="pointer-events-none absolute inset-0 translate-x-[-200%] bg-gradient-to-r from-transparent via-[#0f1420]/40 to-transparent transition-transform duration-1000 group-hover/btn:translate-x-[200%]"
           />
         </Link>
       </div>

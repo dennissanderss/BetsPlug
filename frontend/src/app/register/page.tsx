@@ -146,7 +146,7 @@ export default function RegisterPage() {
     }`;
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.05] blur-[160px]" />

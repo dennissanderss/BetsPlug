@@ -109,7 +109,7 @@ export function SeoSection() {
   const pricingHref = `${loc("/")}#pricing`;
   return (
     <section
-      className="relative overflow-hidden bg-[#f0f4f8] py-20 md:py-28"
+      className="relative overflow-hidden bg-[#0b0f1a] py-20 md:py-28"
       aria-labelledby="seo-heading"
     >
       {/* Ambient background */}

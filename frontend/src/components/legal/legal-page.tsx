@@ -24,7 +24,7 @@ export function LegalPage({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative min-h-screen overflow-x-clip bg-[#f8fafb] text-slate-900">
+    <div className="relative min-h-screen overflow-x-clip bg-background text-slate-900">
       <SiteNav />
 
       {/* ── Hero ────────────────────────────────────────────────── */}

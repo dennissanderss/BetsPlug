@@ -121,7 +121,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
     : defaultStats;
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
       {/* ── Ambient background — matches the rest of the site ── */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.04] blur-[160px]" />
@@ -230,7 +230,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mx-auto mt-10 max-w-2xl"
           >
-            <div className="relative overflow-hidden rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 via-white to-transparent p-6">
+            <div className="relative overflow-hidden rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 via-[#0f1420] to-transparent p-6">
               <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-green-500/[0.06] blur-[60px]" />
               <div className="relative flex items-start gap-4 text-left">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-green-500/30 bg-green-50">
@@ -358,7 +358,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
                 className="group relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-green-500/20 hover:shadow-md"
               >
                 {/* Step number */}
-                <div className="absolute -top-3 left-6 flex h-6 items-center justify-center rounded-full border border-green-500/30 bg-[#f8fafb] px-2.5 font-mono text-[10px] font-bold text-green-600">
+                <div className="absolute -top-3 left-6 flex h-6 items-center justify-center rounded-full border border-green-500/30 bg-background px-2.5 font-mono text-[10px] font-bold text-green-600">
                   STEP {i + 1}
                 </div>
 
@@ -801,7 +801,7 @@ function DashboardTourSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="relative mt-6 flex flex-col items-start gap-4 overflow-hidden rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 via-white to-transparent p-5 sm:flex-row sm:items-center sm:p-6"
+        className="relative mt-6 flex flex-col items-start gap-4 overflow-hidden rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 via-[#0f1420] to-transparent p-5 sm:flex-row sm:items-center sm:p-6"
       >
         <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-green-500/[0.06] blur-[80px]" />
         <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-green-500/30 bg-green-50">

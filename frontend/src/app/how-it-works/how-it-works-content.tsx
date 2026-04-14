@@ -69,7 +69,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
     : defaultFaqs;
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
+    <div className="min-h-screen overflow-x-hidden bg-background text-slate-900">
       {/* Shared site navigation */}
       <SiteNav />
 
@@ -331,22 +331,22 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
                   { name: t("hiw.engine3Name"), desc: t("hiw.engine3Desc"), color: "amber" },
                   { name: t("hiw.engine4Name"), desc: t("hiw.engine4Desc"), color: "purple" },
                 ].map((m) => (
-                  <div key={m.name} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-                    <p className={`text-sm font-bold text-${m.color}-400 mb-1`}>{m.name}</p>
-                    <p className="text-xs text-slate-400 leading-relaxed">{m.desc}</p>
+                  <div key={m.name} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <p className={`text-sm font-bold text-${m.color}-600 mb-1`}>{m.name}</p>
+                    <p className="text-xs text-slate-500 leading-relaxed">{m.desc}</p>
                   </div>
                 ))}
               </div>
               <p className="mt-4 text-xs text-slate-500 leading-relaxed">{t("hiw.engineDisclaimer")}</p>
             </motion.div>
 
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
               {t("hiw.faqBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
               {t("hiw.faqTitle")}
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-400 sm:text-lg">
+            <p className="mt-5 text-base leading-relaxed text-slate-500 sm:text-lg">
               {t("hiw.faqSubtitle")}
             </p>
           </motion.div>
@@ -359,15 +359,15 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.4 }}
-                className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] transition-all hover:border-green-500/30 hover:bg-green-500/[0.03] open:border-green-500/30 open:bg-green-500/[0.04]"
+                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:border-green-500/30 hover:bg-green-50 open:border-green-500/30 open:bg-green-50"
               >
                 <summary className="flex cursor-pointer items-center justify-between gap-4 px-6 py-5 text-left list-none">
-                  <span className="text-base font-bold text-white sm:text-lg">
+                  <span className="text-base font-bold text-slate-900 sm:text-lg">
                     {f.q}
                   </span>
-                  <ChevronRight className="h-5 w-5 shrink-0 text-green-400 transition-transform duration-300 group-open:rotate-90" />
+                  <ChevronRight className="h-5 w-5 shrink-0 text-green-500 transition-transform duration-300 group-open:rotate-90" />
                 </summary>
-                <div className="border-t border-white/[0.06] px-6 py-5 text-sm leading-relaxed text-slate-400 sm:text-base">
+                <div className="border-t border-slate-200 px-6 py-5 text-sm leading-relaxed text-slate-500 sm:text-base">
                   {f.a}
                 </div>
               </motion.details>
@@ -386,20 +386,20 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="relative overflow-hidden rounded-3xl border border-green-500/30 bg-gradient-to-br from-[#0d2319] via-[#0a1a13] to-[#050f09] p-10 text-center shadow-2xl shadow-green-500/[0.15] sm:p-14"
+            className="relative overflow-hidden rounded-3xl border border-green-500/30 bg-gradient-to-br from-green-50 via-[#0f1420] to-emerald-50 p-10 text-center shadow-lg sm:p-14"
           >
-            <div className="pointer-events-none absolute -left-20 -top-20 h-[360px] w-[360px] rounded-full bg-green-500/[0.18] blur-[120px]" />
-            <div className="pointer-events-none absolute -bottom-20 -right-20 h-[360px] w-[360px] rounded-full bg-emerald-500/[0.14] blur-[120px]" />
+            <div className="pointer-events-none absolute -left-20 -top-20 h-[360px] w-[360px] rounded-full bg-green-500/[0.06] blur-[120px]" />
+            <div className="pointer-events-none absolute -bottom-20 -right-20 h-[360px] w-[360px] rounded-full bg-emerald-500/[0.05] blur-[120px]" />
 
             <div className="relative">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/15 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-green-300">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-50 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-green-600">
                 <Trophy className="h-3 w-3" />
                 {t("hiw.ctaBadge")}
               </div>
-              <h2 className="mx-auto max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+              <h2 className="mx-auto max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
                 {t("hiw.ctaTitle")}
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-300 sm:text-base">
+              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
                 {t("hiw.ctaSubtitle")}
               </p>
 

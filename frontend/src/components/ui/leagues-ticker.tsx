@@ -34,7 +34,7 @@ const leagues: League[] = [
   { name: "Championship", slug: "championship" },
 ];
 
-const BG = "#f8fafb";
+const BG = "#070a12";
 
 /* Reversed order for the second row */
 const leaguesReversed = [...leagues].reverse();

@@ -30,7 +30,7 @@ export default async function WelcomePage() {
   const [welcomePage] = await Promise.all([fetchWelcomePage()]);
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#f8fafb]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <WelcomeContent welcomePage={welcomePage} />
     </Suspense>
   );
