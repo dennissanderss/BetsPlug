@@ -139,7 +139,7 @@ async def backfill_team_logos(
     db: AsyncSession = Depends(get_db),
 ):
     """For every league mapped in API-Football, fetch team rosters and
-    update logo_url on teams that currently have NULL logos."""
+    update logo_url on ALL teams (overwrite NULL, match by name or slug)."""
     from app.models.team import Team
     from app.models.league import League
     from app.ingestion.adapters.api_football import LEAGUE_SLUG_TO_ID
@@ -147,6 +147,8 @@ async def backfill_team_logos(
 
     adapter = await _api_football()
     updated = 0
+    skipped = 0
+    not_found: list[str] = []
     errors: list[str] = []
 
     for slug, league_api_id in LEAGUE_SLUG_TO_ID.items():
@@ -168,23 +170,54 @@ async def backfill_team_logos(
                 if not logo or not name:
                     continue
 
-                # Build slug same way as _upsert_team
+                # Try matching by slug first
                 team_slug = re.sub(r"[^\w\s-]", "", name.lower())
                 team_slug = re.sub(r"[\s_]+", "-", team_slug).strip("-")
 
                 team = (
                     await db.execute(select(Team).where(Team.slug == team_slug))
                 ).scalar_one_or_none()
-                if team and not team.logo_url:
+
+                # Fallback: match by name (case-insensitive)
+                if team is None:
+                    team = (
+                        await db.execute(
+                            select(Team).where(func.lower(Team.name) == name.lower())
+                        )
+                    ).scalar_one_or_none()
+
+                # Fallback: match by name LIKE (partial)
+                if team is None:
+                    team = (
+                        await db.execute(
+                            select(Team).where(
+                                Team.league_id == league.id,
+                                func.lower(Team.name).contains(name.lower()[:10]),
+                            )
+                        )
+                    ).scalar_one_or_none()
+
+                if team is None:
+                    not_found.append(f"{slug}/{name}")
+                    continue
+
+                if team.logo_url != logo:
                     team.logo_url = logo
                     updated += 1
+                else:
+                    skipped += 1
 
             await asyncio.sleep(0.3)
         except Exception as exc:
             errors.append(f"{slug}: {exc}")
 
     await db.commit()
-    return {"updated": updated, "errors": errors}
+    return {
+        "updated": updated,
+        "skipped_already_set": skipped,
+        "not_found_in_db": not_found[:50],
+        "errors": errors,
+    }
 
 
 # ──────────────────────────────────────────────────────────────────────────────
