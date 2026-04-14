@@ -157,7 +157,7 @@ async def backfill_team_logos(
             continue
 
         try:
-            season = _current_season(datetime.now(timezone.utc))
+            season = _season_for_date(datetime.now(timezone.utc).date())
             resp = await adapter._get("teams", {"league": league_api_id, "season": season})
             items = resp.get("response", []) if isinstance(resp, dict) else []
 
