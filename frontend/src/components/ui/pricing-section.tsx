@@ -191,21 +191,9 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
       className="relative overflow-hidden py-20 md:py-28"
       aria-labelledby="pricing-heading"
     >
-      {/* ── Unique background ────────────────────────────────────── */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-[#0f1420] to-background" />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "radial-gradient(rgba(74,222,128,0.18) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-green-500/[0.04] blur-[150px]" />
-        <div className="absolute left-[8%] bottom-20 h-[320px] w-[320px] rounded-full bg-emerald-500/[0.03] blur-[120px]" />
-        <div className="absolute right-[8%] top-40 h-[320px] w-[320px] rounded-full bg-green-500/[0.03] blur-[120px]" />
-      </div>
+      {/* ── Background ── */}
+      <div className="pointer-events-none absolute inset-0 grid-bg opacity-25" />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-[#4ade80]/[0.04] blur-[150px]" />
 
       <div className="relative z-10 mx-auto max-w-6xl px-6">
         {/* Heading */}
@@ -214,18 +202,16 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="mx-auto mb-16 max-w-3xl text-center"
+          className="mb-14 max-w-3xl"
         >
-          <span className="mb-4 inline-block rounded-full border border-green-300 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600">
-            {t("pricing.badge")}
-          </span>
+          <span className="section-tag mb-6">[ PRICING / PLANS ]</span>
           <h2
             id="pricing-heading"
-            className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl"
+            className="text-display text-4xl text-white sm:text-5xl lg:text-6xl"
           >
-            <span className="gradient-text">{t("pricing.title")}</span>
+            {t("pricing.title")}
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-500 sm:text-lg">
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a3a3] sm:text-lg">
             {t("pricing.subtitle")}
           </p>
         </motion.div>
@@ -239,28 +225,17 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
           <div
             role="tablist"
             aria-label="Billing period"
-            className="relative inline-flex items-center rounded-full border border-slate-200 bg-slate-100 p-1 backdrop-blur-xl"
+            className="relative inline-flex items-center border border-white/[0.1] bg-[#0a0a0a] p-0"
           >
-            {/* Animated slider pill */}
-            <motion.div
-              aria-hidden="true"
-              className="absolute top-1 bottom-1 rounded-full bg-gradient-to-r from-green-500/90 to-emerald-500/90 shadow-[0_0_25px_rgba(74,222,128,0.45)]"
-              initial={false}
-              animate={{
-                left: billing === "monthly" ? "0.25rem" : "50%",
-                right: billing === "monthly" ? "50%" : "0.25rem",
-              }}
-              transition={{ type: "spring", stiffness: 360, damping: 32 }}
-            />
             <button
               type="button"
               role="tab"
               aria-selected={billing === "monthly"}
               onClick={() => setBilling("monthly")}
-              className={`relative z-10 rounded-full px-6 py-2.5 text-sm font-bold transition-colors duration-200 sm:px-8 ${
+              className={`relative z-10 px-6 py-2.5 text-xs font-black uppercase tracking-widest transition-colors duration-200 sm:px-8 ${
                 billing === "monthly"
-                  ? "text-white"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-[#4ade80] text-[#050505]"
+                  : "text-[#a3a3a3] hover:text-white"
               }`}
             >
               {t("pricing.monthly")}
@@ -270,18 +245,18 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
               role="tab"
               aria-selected={billing === "yearly"}
               onClick={() => setBilling("yearly")}
-              className={`relative z-10 flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-bold transition-colors duration-200 sm:px-8 ${
+              className={`relative z-10 flex items-center gap-2 px-6 py-2.5 text-xs font-black uppercase tracking-widest transition-colors duration-200 sm:px-8 ${
                 billing === "yearly"
-                  ? "text-white"
-                  : "text-slate-600 hover:text-slate-900"
+                  ? "bg-[#4ade80] text-[#050505]"
+                  : "text-[#a3a3a3] hover:text-white"
               }`}
             >
               {t("pricing.yearly")}
               <span
-                className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider transition-colors duration-200 ${
+                className={`px-1.5 py-0.5 text-[9px] font-black tracking-widest ${
                   billing === "yearly"
-                    ? "bg-white/20 text-white"
-                    : "bg-green-100 text-green-600"
+                    ? "bg-[#050505] text-[#4ade80]"
+                    : "bg-[#4ade80]/15 text-[#4ade80]"
                 }`}
               >
                 −20%
@@ -307,52 +282,54 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
         {/* 3-plan grid — individual card reveal animations dropped.
             Three cards fading in staggered was a ~300ms decorative
             delay with no UX value; the grid now just renders. */}
-        <div className="grid gap-6 md:grid-cols-3 md:gap-5 lg:gap-6">
+        <div className="grid gap-[1px] bg-white/[0.08] md:grid-cols-3">
           {plans.map((plan) => {
             const Icon = plan.icon;
             const isHighlight = plan.highlight;
             return (
               <div
                 key={plan.id}
-                className={`group relative flex flex-col overflow-hidden rounded-3xl p-8 backdrop-blur-xl transition-all duration-300 ${
+                className={`group relative flex flex-col p-8 transition-all duration-200 ${
                   isHighlight
-                    ? "border-2 border-green-400 bg-white shadow-[0_0_60px_rgba(74,222,128,0.12),0_4px_24px_rgba(0,0,0,0.06)] md:-translate-y-4 md:scale-[1.03]"
-                    : "border border-slate-200 bg-white shadow-sm hover:border-green-300 hover:shadow-md"
+                    ? "bg-[#4ade80] text-[#050505] md:-translate-y-2"
+                    : "bg-[#0a0a0a] scanline hover:bg-[#111]"
                 }`}
               >
-                {/* Highlight glow */}
-                {isHighlight && (
+                {/* Corner brackets */}
+                {!isHighlight && (
                   <>
-                    <div className="pointer-events-none absolute -left-20 -top-20 h-[280px] w-[280px] rounded-full bg-green-500/[0.06] blur-[100px]" />
-                    <div className="pointer-events-none absolute -right-20 -bottom-20 h-[280px] w-[280px] rounded-full bg-emerald-500/[0.04] blur-[100px]" />
-                    <span className="absolute right-6 top-6 rounded-full border border-green-300 bg-green-100 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-green-700 shadow-[0_0_20px_rgba(74,222,128,0.15)]">
-                      {t("pricing.mostPopular")}
-                    </span>
+                    <span className="pointer-events-none absolute left-0 top-0 h-3 w-3 border-l-2 border-t-2 border-[#4ade80]" />
+                    <span className="pointer-events-none absolute right-0 bottom-0 h-3 w-3 border-r-2 border-b-2 border-[#4ade80]" />
                   </>
                 )}
 
-                {/* Icon + Name */}
-                <div className="relative mb-6">
-                  <div
-                    className={`mb-5 flex h-12 w-12 items-center justify-center rounded-2xl ${
-                      isHighlight
-                        ? "bg-green-100 shadow-[0_0_30px_rgba(74,222,128,0.2)]"
-                        : "bg-green-50"
-                    }`}
-                  >
-                    <Icon className="h-6 w-6 text-green-600" />
-                  </div>
-                  <h3 className="text-2xl font-extrabold text-slate-900">
-                    {plan.name}
-                  </h3>
-                  <p className="mt-1 text-sm text-slate-500">{plan.tagline}</p>
+                {isHighlight && (
+                  <span className="absolute right-4 top-4 bg-[#050505] px-2 py-1 font-mono text-[9px] font-black tracking-widest text-[#4ade80]">
+                    ★ POPULAR
+                  </span>
+                )}
+
+                {/* Plan tag */}
+                <div className="mb-6 flex items-center gap-3">
+                  <Icon className={`h-5 w-5 ${isHighlight ? "text-[#050505]" : "text-[#4ade80]"}`} strokeWidth={2} />
+                  <span className={`font-mono text-[10px] font-black uppercase tracking-widest ${isHighlight ? "text-[#050505]" : "text-[#4ade80]"}`}>
+                    PLAN / {plan.name.toUpperCase()}
+                  </span>
                 </div>
+
+                {/* Name */}
+                <h3 className={`text-display text-3xl ${isHighlight ? "text-[#050505]" : "text-white"} sm:text-4xl`}>
+                  {plan.name}
+                </h3>
+                <p className={`mt-2 text-sm ${isHighlight ? "text-[#050505]/75" : "text-[#a3a3a3]"}`}>
+                  {plan.tagline}
+                </p>
 
                 {/* Price */}
                 {(() => {
                   const price = plan.fixed ? plan.monthly : plan[billing];
                   return (
-                    <div className="relative mb-6 min-h-[92px]">
+                    <div className="relative my-6 min-h-[92px]">
                       <AnimatePresence mode="wait" initial={false}>
                         <motion.div
                           key={`${plan.id}-${plan.fixed ? "fixed" : billing}`}
@@ -362,23 +339,23 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                           transition={{ duration: 0.25, ease: "easeOut" }}
                         >
                           <div className="flex items-baseline gap-1">
-                            <span className="text-xl font-bold text-slate-500">
+                            <span className={`text-lg font-bold ${isHighlight ? "text-[#050505]/70" : "text-[#707070]"}`}>
                               €
                             </span>
-                            <span className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
+                            <span className={`text-stat text-5xl sm:text-6xl md:text-7xl ${isHighlight ? "text-[#050505]" : "text-white"}`}>
                               {price.main}
                             </span>
                             {price.cents && (
-                              <span className="mt-2 text-xl font-bold text-slate-500">
+                              <span className={`mt-2 text-lg font-bold ${isHighlight ? "text-[#050505]/70" : "text-[#707070]"}`}>
                                 ,{price.cents}
                               </span>
                             )}
-                            <span className="ml-2 text-sm text-slate-500">
+                            <span className={`ml-2 text-xs uppercase tracking-wider ${isHighlight ? "text-[#050505]/75" : "text-[#707070]"}`}>
                               {price.period}
                             </span>
                           </div>
                           {price.footnote && (
-                            <p className="mt-2 text-xs text-slate-500">
+                            <p className={`mt-2 text-xs ${isHighlight ? "text-[#050505]/70" : "text-[#707070]"}`}>
                               {price.footnote}
                             </p>
                           )}
@@ -392,26 +369,24 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                 <button
                   onClick={() => handleStripeCheckout(plan.id)}
                   disabled={loading === plan.id}
-                  className={`relative mb-6 flex w-full items-center justify-center rounded-2xl px-6 py-3.5 text-sm font-extrabold tracking-tight transition-all duration-300 ${
+                  className={`relative mb-6 flex w-full items-center justify-center px-6 py-3.5 text-xs font-black uppercase tracking-widest transition-all duration-200 ${
                     isHighlight
-                      ? "btn-gradient text-white shadow-lg shadow-green-500/30 hover:shadow-green-500/50"
-                      : "border border-slate-200 bg-slate-50 text-slate-900 hover:border-green-400 hover:bg-green-50"
+                      ? "bg-[#050505] text-[#4ade80] hover:bg-[#1a1a1a]"
+                      : "border border-[#4ade80] bg-transparent text-[#4ade80] hover:bg-[#4ade80] hover:text-[#050505]"
                   } ${loading === plan.id ? "opacity-50 cursor-wait" : ""}`}
                 >
-                  {loading === plan.id ? "Redirecting..." : plan.cta}
+                  {loading === plan.id ? "Redirecting…" : `${plan.cta} →`}
                 </button>
 
                 {/* Features */}
-                <ul className="relative flex flex-col gap-3">
+                <ul className="relative flex flex-col gap-2.5">
                   {plan.features.map((f) => (
                     <li
                       key={f}
-                      className="flex items-start gap-3 text-sm text-slate-600"
+                      className={`flex items-start gap-3 text-sm ${isHighlight ? "text-[#050505]/90" : "text-[#ededed]"}`}
                     >
                       <Check
-                        className={`mt-0.5 h-4 w-4 flex-shrink-0 ${
-                          isHighlight ? "text-green-500" : "text-green-500"
-                        }`}
+                        className={`mt-0.5 h-4 w-4 flex-shrink-0 ${isHighlight ? "text-[#050505]" : "text-[#4ade80]"}`}
                         strokeWidth={3}
                       />
                       <span>{f}</span>
@@ -425,15 +400,20 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
 
         {/* ── Platinum lifetime card (wide, below) ───────────────── */}
         <div
-          className="relative mt-10 overflow-hidden rounded-3xl p-8 md:p-10"
+          className="relative mt-10 overflow-hidden p-8 md:p-10"
           style={{
             background:
-              "radial-gradient(1200px 500px at 0% 0%, rgba(253, 224, 71, 0.08), transparent 55%), radial-gradient(900px 500px at 100% 100%, rgba(234, 179, 8, 0.07), transparent 55%), linear-gradient(135deg, #1a1205 0%, #120d04 35%, #0a0803 65%, #110c04 100%)",
+              "radial-gradient(1200px 500px at 0% 0%, rgba(253, 224, 71, 0.08), transparent 55%), radial-gradient(900px 500px at 100% 100%, rgba(234, 179, 8, 0.07), transparent 55%), linear-gradient(135deg, #120c02 0%, #0a0602 35%, #050301 65%, #0a0602 100%)",
             border: "1px solid rgba(252, 211, 77, 0.4)",
             boxShadow:
-              "0 0 0 1px rgba(252, 211, 77, 0.1) inset, 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(234, 179, 8, 0.1)",
+              "0 0 0 1px rgba(252, 211, 77, 0.08) inset",
           }}
         >
+          {/* Corner brackets — gold */}
+          <span className="pointer-events-none absolute left-[-1px] top-[-1px] h-4 w-4 border-l-2 border-t-2 border-amber-300" />
+          <span className="pointer-events-none absolute right-[-1px] top-[-1px] h-4 w-4 border-r-2 border-t-2 border-amber-300" />
+          <span className="pointer-events-none absolute left-[-1px] bottom-[-1px] h-4 w-4 border-l-2 border-b-2 border-amber-300" />
+          <span className="pointer-events-none absolute right-[-1px] bottom-[-1px] h-4 w-4 border-r-2 border-b-2 border-amber-300" />
           {/* Ambient gold glow */}
           <div className="pointer-events-none absolute -right-32 -top-32 h-[460px] w-[460px] rounded-full bg-amber-300/12 blur-[140px]" />
           <div className="pointer-events-none absolute -left-32 -bottom-32 h-[440px] w-[440px] rounded-full bg-yellow-500/10 blur-[140px]" />
@@ -468,17 +448,17 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
           <div className="relative grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-center">
             {/* Left: branding + features */}
             <div>
-              <div className="mb-4 flex flex-wrap items-center gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-widest text-amber-700 shadow-[0_0_25px_rgba(251,191,36,0.12)]">
+              <div className="mb-6 flex flex-wrap items-center gap-3">
+                <span className="inline-flex items-center gap-2 border border-amber-300/70 px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-amber-300">
                   <Crown className="h-3 w-3" />
                   {t("pricing.platBadgeLifetime")}
                 </span>
-                <span className="rounded-full border border-amber-300/40 bg-amber-950/40 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-amber-200/90">
+                <span className="border border-amber-300/30 bg-amber-300/5 px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-amber-200/80">
                   {t("pricing.platLimited")}
                 </span>
               </div>
 
-              <h3 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+              <h3 className="text-display text-4xl text-white sm:text-5xl lg:text-6xl">
                 <span
                   className="bg-clip-text text-transparent"
                   style={{
@@ -513,13 +493,13 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
             {/* Right: price + CTA */}
             <div className="flex flex-col items-start gap-5 lg:items-end lg:text-right">
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-amber-300">
+                <p className="font-mono text-[10px] font-black uppercase tracking-widest text-amber-300">
                   {t("pricing.platOneTime")}
                 </p>
                 <div className="mt-2 flex items-baseline gap-1 lg:justify-end">
-                  <span className="text-2xl font-bold text-amber-200/80">€</span>
+                  <span className="text-xl font-bold text-amber-200/70">€</span>
                   <span
-                    className="bg-clip-text text-7xl font-extrabold tracking-tight text-transparent"
+                    className="text-stat bg-clip-text text-7xl sm:text-8xl text-transparent"
                     style={{
                       backgroundImage:
                         "linear-gradient(180deg, #fef3c7 0%, #fde68a 30%, #fbbf24 65%, #d97706 100%)",
@@ -529,20 +509,20 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                     199
                   </span>
                 </div>
-                <p className="mt-1 text-xs text-amber-100/60">
+                <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-amber-100/60">
                   {t("pricing.platNoSub")}
                 </p>
               </div>
 
               <Link
                 href={checkoutHref("platinum")}
-                className="group/btn relative inline-flex w-full items-center justify-center overflow-hidden rounded-2xl px-8 py-4 text-sm font-extrabold uppercase tracking-wider text-[#1a1405] transition-all duration-300 sm:w-auto"
+                className="group/btn relative inline-flex w-full items-center justify-center overflow-hidden px-8 py-4 text-xs font-black uppercase tracking-widest text-[#1a1405] transition-all duration-200 sm:w-auto"
                 style={{
                   background:
                     "linear-gradient(135deg, #fef3c7 0%, #fde68a 25%, #fbbf24 55%, #d97706 100%)",
-                  border: "1px solid rgba(253, 224, 71, 0.7)",
+                  border: "1px solid rgba(253, 224, 71, 0.9)",
                   boxShadow:
-                    "0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 8px 28px rgba(251, 191, 36, 0.45), 0 0 64px rgba(251, 191, 36, 0.25)",
+                    "0 0 0 1px rgba(255, 255, 255, 0.12) inset, 0 8px 28px rgba(251, 191, 36, 0.35)",
                 }}
               >
                 <Crown className="mr-2 h-4 w-4" />

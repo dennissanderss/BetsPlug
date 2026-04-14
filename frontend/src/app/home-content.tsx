@@ -725,36 +725,40 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
       </div>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          HERO SECTION
+          HERO SECTION — PIT LANE
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="dark-section relative overflow-hidden pt-40 pb-24 md:pt-48 md:pb-32">
-        {/* Stadium background image */}
-        <div
-          className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('/hero-bg.jpg')" }}
-        />
-        {/* Dark overlay gradient for readability */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14]/90 via-[#080b14]/85 to-background" />
+      <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
+        {/* Grid blueprint background */}
+        <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
+        {/* Ambient lime wash */}
+        <div className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full bg-[#4ade80]/[0.08] blur-[160px]" />
+        <div className="pointer-events-none absolute -right-40 bottom-0 h-[400px] w-[400px] rounded-full bg-[#4ade80]/[0.05] blur-[140px]" />
+        {/* Barcode strip top */}
+        <div className="pointer-events-none absolute top-[88px] left-0 right-0 flex items-center justify-between px-6 opacity-60">
+          <span className="barcode" />
+          <span className="mono-label">[ SYS / BETSPLUG v2.6 ]</span>
+          <span className="barcode" />
+        </div>
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
             {/* Left: Copy */}
             <div>
-              {/* Badge */}
-              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-green-400/30 bg-green-400/10 px-4 py-2 backdrop-blur-sm">
-                <span className="live-dot" />
-                <span className="text-xs font-semibold uppercase tracking-wider text-green-300">
+              {/* Section tag */}
+              <div className="mb-8 flex items-center gap-3">
+                <span className="section-tag">
+                  <span className="live-dot" />
                   {t("hero.badge")}
                 </span>
               </div>
 
-              <h1 className="text-balance break-words text-[2.25rem] font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-[3.75rem] xl:text-6xl">
+              <h1 className="text-display text-balance break-words text-5xl sm:text-6xl lg:text-7xl xl:text-8xl">
                 {t("hero.titleLine1")}{" "}
-                <span className="gradient-text">{t("hero.titleLine2")}</span>
-                {t("hero.titleLine3") ? ` ${t("hero.titleLine3")}` : ""}
+                <span className="text-[#4ade80]">{t("hero.titleLine2")}</span>
+                {t("hero.titleLine3") ? <><br/>{t("hero.titleLine3")}</> : ""}
               </h1>
 
-              <p className="mt-8 max-w-xl text-lg leading-relaxed text-slate-400">
+              <p className="mt-8 max-w-xl text-base leading-relaxed text-[#a3a3a3] sm:text-lg">
                 {t("hero.subtitle")}
               </p>
 
@@ -766,8 +770,10 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                   { icon: CheckCircle2, title: t("hero.usp3Title") },
                 ].map(({ icon: Icon, title }) => (
                   <div key={title} className="flex items-center gap-2.5">
-                    <Icon className="h-5 w-5 shrink-0 text-green-400" />
-                    <span className="text-sm font-semibold text-white">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center border border-[#4ade80]">
+                      <Icon className="h-3 w-3 text-[#4ade80]" strokeWidth={3} />
+                    </span>
+                    <span className="text-sm font-bold uppercase tracking-wide text-white">
                       {title}
                     </span>
                   </div>
@@ -795,10 +801,10 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                   ))}
                 </div>
                 <div>
-                  <p className="text-lg font-extrabold text-white">
+                  <p className="text-stat text-2xl text-white">
                     <AnimatedNumber target={1500} suffix="+" />
                   </p>
-                  <p className="text-xs text-slate-500">{t("hero.activeUsers")}</p>
+                  <p className="mono-label mt-0.5">{t("hero.activeUsers")}</p>
                 </div>
               </div>
 
@@ -809,97 +815,93 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                 </Link>
                 <Link
                   href={loc("/how-it-works")}
-                  className="inline-flex h-11 items-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-6 text-sm font-medium text-slate-300 backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-white/[0.06] hover:text-white"
+                  className="btn-outline"
                 >
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10">
-                    <ArrowRight className="h-3.5 w-3.5 -rotate-45" />
-                  </span>
-                  {t("hero.ctaSecondary")}
+                  {t("hero.ctaSecondary")} →
                 </Link>
               </div>
             </div>
 
-            {/* Right: Floating stats card */}
+            {/* Right: Prediction terminal block */}
             <div className="relative hidden lg:block">
-              <div className="relative mx-auto max-w-md">
-                {/* Glow halo */}
-                <div className="absolute inset-0 -z-10 rounded-[32px] bg-gradient-to-br from-green-400/30 via-emerald-400/10 to-transparent blur-3xl" />
+              <div className="relative mx-auto max-w-md brackets-all">
+                <span className="bracket-tl" /><span className="bracket-tr" />
+                <span className="bracket-bl" /><span className="bracket-br" />
 
-                {/* Main phone-like card */}
-                <div className="relative rounded-[32px] border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.01] p-6 backdrop-blur-xl shadow-2xl">
-                  <div className="mb-5 flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                        {t("hero.freePrediction") || "Free Prediction"}
-                      </p>
-                      <p className="mt-1 text-xl font-extrabold text-white">{featured?.available ? `${featured.home_team} vs ${featured.away_team}` : "Arsenal vs Chelsea"}</p>
+                <div className="relative panel p-6">
+                  {/* Terminal header */}
+                  <div className="mb-5 flex items-center justify-between border-b border-white/[0.08] pb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full bg-[#ef4444]" />
+                      <span className="h-2 w-2 rounded-full bg-[#fbbf24]" />
+                      <span className="h-2 w-2 rounded-full bg-[#4ade80]" />
                     </div>
-                    <span className="flex items-center gap-1.5 rounded-full bg-green-400/15 px-3 py-1 text-[10px] font-bold uppercase text-green-400">
-                      <Sparkles className="h-3 w-3" /> {t("hero.hot")}
+                    <span className="mono-label">
+                      {t("hero.freePrediction") || "PREDICTION // LIVE"}
                     </span>
                   </div>
 
-                  <div className="mb-4 rounded-2xl border border-white/5 bg-black/30 p-4">
-                    <div className="mb-2 flex items-baseline justify-between">
-                      <span className="text-sm text-slate-400">{t("hero.homeWin")}</span>
-                      <span className="text-2xl font-extrabold text-green-400">{featured?.available ? `${Math.round((featured.home_win_prob ?? 0.52) * 100)}%` : "52%"}</span>
+                  <div className="mb-6">
+                    <p className="mono-label-lime mb-2">MATCH</p>
+                    <p className="text-xl font-black uppercase tracking-tight text-white">
+                      {featured?.available ? `${featured.home_team} vs ${featured.away_team}` : "Arsenal vs Chelsea"}
+                    </p>
+                  </div>
+
+                  <div className="mb-5 border border-white/[0.08] p-4">
+                    <div className="mb-3 flex items-baseline justify-between">
+                      <span className="mono-label">{t("hero.homeWin")}</span>
+                      <span className="text-stat text-3xl text-[#4ade80]">
+                        {featured?.available ? `${Math.round((featured.home_win_prob ?? 0.52) * 100)}%` : "52%"}
+                      </span>
                     </div>
-                    <div className="h-2 w-full overflow-hidden rounded-full bg-white/[0.06]">
-                      <div className="h-full rounded-full bg-gradient-to-r from-green-400 to-emerald-400 shadow-[0_0_12px_rgba(74,222,128,0.6)]" style={{ width: `${featured?.available ? Math.round((featured.home_win_prob ?? 0.52) * 100) : 52}%` }} />
+                    <div className="h-1.5 w-full bg-white/[0.06]">
+                      <div className="h-full bg-[#4ade80]" style={{ width: `${featured?.available ? Math.round((featured.home_win_prob ?? 0.52) * 100) : 52}%` }} />
                     </div>
-                    <div className="mt-3 flex gap-2 text-xs text-slate-500">
-                      <span>{t("hero.draw")} {featured?.available ? `${Math.round((featured.draw_prob ?? 0.24) * 100)}%` : "24%"}</span>
-                      <span>·</span>
-                      <span>{t("hero.away")} {featured?.available ? `${Math.round((featured.away_win_prob ?? 0.24) * 100)}%` : "24%"}</span>
+                    <div className="mt-3 flex justify-between text-[10px] font-mono uppercase tracking-wider text-[#707070]">
+                      <span>DRAW {featured?.available ? `${Math.round((featured.draw_prob ?? 0.24) * 100)}%` : "24%"}</span>
+                      <span>AWAY {featured?.available ? `${Math.round((featured.away_win_prob ?? 0.24) * 100)}%` : "24%"}</span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-[1px] bg-white/[0.08]">
                     {[
                       { label: t("hero.confidence"), value: featured?.available ? `${Math.round((featured.confidence ?? 0.78) * 100)}%` : "78%" },
                       { label: "ACCURACY", value: `${botdStats?.accuracy_pct ?? 66.5}%` },
-                      { label: "PICKS TODAY", value: "5+" },
+                      { label: "PICKS", value: "5+" },
                     ].map((s) => (
-                      <div
-                        key={s.label}
-                        className="rounded-xl border border-white/5 bg-black/20 p-3 text-center"
-                      >
-                        <p className="text-[10px] font-medium uppercase text-slate-500">{s.label}</p>
-                        <p className="mt-1 text-sm font-bold text-white">{s.value}</p>
+                      <div key={s.label} className="bg-[#0e0e0e] p-3 text-center">
+                        <p className="mono-label">{s.label}</p>
+                        <p className="text-stat mt-1 text-lg text-white">{s.value}</p>
                       </div>
                     ))}
                   </div>
 
                   <Link
                     href={loc("/predictions")}
-                    className="btn-gradient mt-5 flex w-full items-center justify-center gap-2 rounded-md py-3 text-sm font-bold"
+                    className="btn-lime mt-5 w-full"
                   >
-                    {t("hero.joinNow")} <ChevronRight className="h-4 w-4" />
+                    {t("hero.joinNow")} →
                   </Link>
                 </div>
 
-                {/* Floating mini-card — real BOTD accuracy */}
-                <div className="absolute -left-10 -top-6 rotate-[-6deg] rounded-2xl border border-white/10 bg-[#0d1220]/90 p-3 backdrop-blur-xl shadow-xl">
+                {/* Floating mini tags */}
+                <div className="absolute -left-8 -top-4 rotate-[-4deg] panel px-3 py-2">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-400/15">
-                      <TrendingUp className="h-4 w-4 text-green-400" />
-                    </div>
+                    <TrendingUp className="h-4 w-4 text-[#4ade80]" />
                     <div>
-                      <p className="text-[10px] text-slate-500">Pick of the Day</p>
-                      <p className="text-sm font-extrabold text-white">{botdStats?.accuracy_pct ?? 66.7}%</p>
+                      <p className="mono-label">BOTD ACC</p>
+                      <p className="text-stat text-sm text-white">{botdStats?.accuracy_pct ?? 66.7}%</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Floating bottom card — real correct count */}
-                <div className="absolute -right-6 -bottom-4 rotate-[5deg] rounded-2xl border border-white/10 bg-[#0d1220]/90 p-3 backdrop-blur-xl shadow-xl">
+                <div className="absolute -right-6 -bottom-4 rotate-[4deg] panel px-3 py-2">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-400/15">
-                      <Trophy className="h-4 w-4 text-green-400" />
-                    </div>
+                    <Trophy className="h-4 w-4 text-[#4ade80]" />
                     <div>
-                      <p className="text-[10px] text-slate-500">Correct Picks</p>
-                      <p className="text-sm font-extrabold text-white">{botdStats?.correct ?? 226}</p>
+                      <p className="mono-label">CORRECT</p>
+                      <p className="text-stat text-sm text-white">{botdStats?.correct ?? 226}</p>
                     </div>
                   </div>
                 </div>
@@ -931,60 +933,66 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
          ═══════════════════════════════════════════════════════════════════ */}
       <section id="trusted-partner" className="relative py-20 md:py-28">
         <div className="mx-auto max-w-7xl px-6">
+          <div className="mb-10">
+            <span className="section-tag">[ TRUSTED / WHY ]</span>
+          </div>
           <div className="mb-14 grid gap-8 md:grid-cols-2 md:items-end">
             <div>
-              <h2 className="text-4xl font-extrabold leading-tight text-slate-900 sm:text-5xl">
+              <h2 className="text-display text-4xl text-white sm:text-5xl lg:text-6xl">
                 {t("trusted.titleA")}{" "}
-                <span className="gradient-text">{t("trusted.titleHighlight")}</span>{" "}
+                <span className="text-[#4ade80]">{t("trusted.titleHighlight")}</span>{" "}
                 {t("trusted.titleB")}
                 <br />
                 {t("trusted.titleC")}
               </h2>
             </div>
-            <p className="text-base leading-relaxed text-slate-500">
+            <p className="text-base leading-relaxed text-[#a3a3a3]">
               {t("trusted.subtitle")}
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-[1px] bg-white/[0.08] md:grid-cols-3">
             {/* Card 1 */}
-            <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition hover:shadow-md">
-              <p className="mb-8 text-5xl font-extrabold text-white/[0.08]">01.</p>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50">
-                <Shield className="h-6 w-6 text-green-600" />
+            <div className="relative scanline bg-[#0a0a0a] p-8 transition hover:bg-[#111]">
+              <div className="mb-6 flex items-center justify-between">
+                <span className="mono-label-lime">01 / TRUST</span>
+                <Shield className="h-5 w-5 text-[#4ade80]" strokeWidth={2} />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-slate-900">{t("trusted.card1Title")}</h3>
-              <p className="text-sm leading-relaxed text-slate-500">
+              <p className="font-mono text-6xl font-black text-white/[0.05]">01</p>
+              <h3 className="mt-4 text-display text-2xl text-white">{t("trusted.card1Title")}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[#a3a3a3]">
                 {t("trusted.card1Desc")}
               </p>
             </div>
 
-            {/* Card 2 — HIGHLIGHTED */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-green-500 to-green-600 p-8 shadow-lg">
-              <p className="mb-8 text-5xl font-extrabold text-white/20">02.</p>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
-                <Brain className="h-6 w-6 text-white" />
+            {/* Card 2 — HIGHLIGHTED LIME BLOCK */}
+            <div className="relative stripe-lime p-8">
+              <div className="mb-6 flex items-center justify-between">
+                <span className="font-mono text-[10px] font-black uppercase tracking-widest text-[#050505]">02 / AI CORE</span>
+                <Brain className="h-5 w-5 text-[#050505]" strokeWidth={2.5} />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-white">{t("trusted.card2Title")}</h3>
-              <p className="mb-6 text-sm leading-relaxed text-white/80">
+              <p className="font-mono text-6xl font-black text-[#050505]/15">02</p>
+              <h3 className="mt-4 text-display text-2xl text-[#050505]">{t("trusted.card2Title")}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[#050505]/80">
                 {t("trusted.card2Desc")}
               </p>
               <Link
                 href="#track-record"
-                className="inline-flex items-center gap-1 text-sm font-bold text-white hover:gap-2 transition-all"
+                className="mt-5 inline-flex items-center gap-2 border-b border-[#050505] pb-0.5 text-xs font-black uppercase tracking-widest text-[#050505]"
               >
-                {t("trusted.learnMore")} <ArrowRight className="h-4 w-4" />
+                {t("trusted.learnMore")} →
               </Link>
             </div>
 
             {/* Card 3 */}
-            <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition hover:shadow-md">
-              <p className="mb-8 text-5xl font-extrabold text-white/[0.08]">03.</p>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50">
-                <CheckCircle2 className="h-6 w-6 text-green-600" />
+            <div className="relative scanline bg-[#0a0a0a] p-8 transition hover:bg-[#111]">
+              <div className="mb-6 flex items-center justify-between">
+                <span className="mono-label-lime">03 / PROOF</span>
+                <CheckCircle2 className="h-5 w-5 text-[#4ade80]" strokeWidth={2} />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-slate-900">{t("trusted.card3Title")}</h3>
-              <p className="text-sm leading-relaxed text-slate-500">
+              <p className="font-mono text-6xl font-black text-white/[0.05]">03</p>
+              <h3 className="mt-4 text-display text-2xl text-white">{t("trusted.card3Title")}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[#a3a3a3]">
                 {t("trusted.card3Desc")}
               </p>
             </div>
@@ -996,20 +1004,8 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
           STATS / CHART SECTION
          ═══════════════════════════════════════════════════════════════════ */}
       <section id="track-record" className="relative overflow-hidden py-20 md:py-28">
-        {/* Unique background: subtle grid pattern + off-center glow */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#0f1420] via-[#0b0f1a] to-[#0f1420]" />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(34,197,94,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.12) 1px, transparent 1px)",
-            backgroundSize: "48px 48px",
-          }}
-        />
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-green-200/30 blur-[140px]" />
-          <div className="absolute right-[10%] top-10 h-[320px] w-[320px] rounded-full bg-teal-200/20 blur-[120px]" />
-        </div>
+        <div className="pointer-events-none absolute inset-0 grid-bg opacity-30" />
+        <div className="pointer-events-none absolute left-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-[#4ade80]/[0.06] blur-[140px]" />
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">

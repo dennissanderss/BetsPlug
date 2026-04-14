@@ -91,7 +91,7 @@ export function Sidebar() {
       {/* ── Logo ── */}
       <div className="flex items-center px-4 py-3 border-b border-white/[0.06]">
         <Link href="/" onClick={() => setMobileOpen(false)}>
-          <Image src="/logo.webp" alt="BetsPlug logo" width={200} height={80} className="h-12 md:h-16 lg:h-20 w-auto drop-shadow-[0_0_15px_rgba(16,185,129,0.35)]" />
+          <Image src="/logo.webp" alt="BetsPlug logo" width={200} height={80} className="h-12 md:h-16 lg:h-20 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.35)]" />
         </Link>
       </div>
 
@@ -108,7 +108,7 @@ export function Sidebar() {
 
             {/* Section label */}
             <div className="px-2 pb-2 pt-1">
-              <span className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
+              <span className="mono-label">
                 {getSectionLabel(section)}
               </span>
             </div>
@@ -127,7 +127,7 @@ export function Sidebar() {
             return (
               <div
                 key={item.href}
-                className="nav-item group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 cursor-not-allowed opacity-60"
+                className="nav-item group flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-600 cursor-not-allowed opacity-60"
                 title="Coming Soon — we're collecting data to validate this feature"
               >
                 <Icon className="h-4 w-4 shrink-0 text-slate-600" />
@@ -148,7 +148,7 @@ export function Sidebar() {
               href={localizedHref}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                "nav-item group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium",
+                "nav-item group flex items-center gap-3 px-3 py-2.5 text-sm font-medium",
                 isActive
                   ? "nav-active"
                   : "text-slate-400"
@@ -157,21 +157,18 @@ export function Sidebar() {
               <Icon
                 className={cn(
                   "h-4 w-4 shrink-0 transition-colors",
-                  isActive ? "text-blue-400" : "text-slate-500 group-hover:text-slate-300"
+                  isActive ? "text-[#4ade80]" : "text-slate-500 group-hover:text-slate-300"
                 )}
               />
-              <span className={cn("flex-1", isActive ? "text-blue-300" : "group-hover:text-slate-200")}>
+              <span className={cn("flex-1", isActive ? "text-[#4ade80]" : "group-hover:text-slate-200")}>
                 {getLabel(item)}
               </span>
 
               {/* START badge */}
               {item.badge === "START" && (
                 <span
-                  className="text-[10px] font-bold tracking-wider text-white px-1.5 py-0.5 rounded"
-                  style={{
-                    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-                    boxShadow: "0 0 8px rgba(16,185,129,0.45)",
-                  }}
+                  className="text-[10px] font-black tracking-wider text-[#050505] px-1.5 py-0.5"
+                  style={{ background: "#4ade80" }}
                 >
                   START
                 </span>
@@ -180,11 +177,8 @@ export function Sidebar() {
               {/* HOT badge */}
               {item.badge === "HOT" && (
                 <span
-                  className="text-[10px] font-bold tracking-wider text-white px-1.5 py-0.5 rounded"
-                  style={{
-                    background: "linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)",
-                    boxShadow: "0 0 8px rgba(245,158,11,0.45)",
-                  }}
+                  className="text-[10px] font-black tracking-wider text-[#050505] px-1.5 py-0.5"
+                  style={{ background: "#ef4444" }}
                 >
                   HOT
                 </span>
@@ -192,7 +186,7 @@ export function Sidebar() {
 
               {/* Active chevron */}
               {isActive && !item.badge && (
-                <ChevronRight className="h-3.5 w-3.5 text-blue-400/60" />
+                <ChevronRight className="h-3.5 w-3.5 text-[#4ade80]/60" />
               )}
             </Link>
           );
@@ -204,7 +198,7 @@ export function Sidebar() {
         {/* ── Separator before Admin / Settings ── */}
         <div className="mx-2 my-3 border-t border-white/[0.06]" />
         <div className="px-2 pb-2 pt-1">
-          <span className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
+          <span className="mono-label">
             {(() => { const v = t("sidebar.system" as any); return v === "sidebar.system" ? "System" : v; })()}
           </span>
         </div>
@@ -222,7 +216,7 @@ export function Sidebar() {
               href={localizedHref}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                "nav-item group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium",
+                "nav-item group flex items-center gap-3 px-3 py-2.5 text-sm font-medium",
                 isActive
                   ? "nav-active"
                   : "text-slate-400"
@@ -231,16 +225,16 @@ export function Sidebar() {
               <Icon
                 className={cn(
                   "h-4 w-4 shrink-0 transition-colors",
-                  isActive ? "text-blue-400" : "text-slate-500 group-hover:text-slate-300"
+                  isActive ? "text-[#4ade80]" : "text-slate-500 group-hover:text-slate-300"
                 )}
               />
-              <span className={cn("flex-1", isActive ? "text-blue-300" : "group-hover:text-slate-200")}>
+              <span className={cn("flex-1", isActive ? "text-[#4ade80]" : "group-hover:text-slate-200")}>
                 {getLabel(item)}
               </span>
 
               {/* Active chevron */}
               {isActive && (
-                <ChevronRight className="h-3.5 w-3.5 text-blue-400/60" />
+                <ChevronRight className="h-3.5 w-3.5 text-[#4ade80]/60" />
               )}
             </Link>
           );
@@ -269,10 +263,8 @@ export function Sidebar() {
       <aside
         className="hidden md:flex w-60 shrink-0 flex-col"
         style={{
-          background: "rgba(10, 14, 26, 0.85)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          borderRight: "1px solid rgba(255, 255, 255, 0.06)",
+          background: "#070707",
+          borderRight: "1px solid rgba(255, 255, 255, 0.08)",
         }}
       >
         <NavContent />
@@ -306,10 +298,8 @@ export function Sidebar() {
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
         style={{
-          background: "rgba(10, 14, 26, 0.98)",
-          backdropFilter: "blur(24px)",
-          WebkitBackdropFilter: "blur(24px)",
-          borderRight: "1px solid rgba(255, 255, 255, 0.06)",
+          background: "#070707",
+          borderRight: "1px solid rgba(255, 255, 255, 0.08)",
         }}
       >
         <NavContent />

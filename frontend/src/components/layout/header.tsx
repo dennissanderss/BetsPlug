@@ -114,16 +114,14 @@ export function Header({ className }: HeaderProps) {
         className
       )}
       style={{
-        background: "rgba(10, 14, 26, 0.75)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+        background: "#050505",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
       }}
     >
       {/* Live status indicator */}
       <div className="hidden md:flex items-center gap-2 shrink-0">
         <span className="live-dot" />
-        <span className="text-xs font-semibold text-emerald-400 tracking-wide">{t("header.live" as any)}</span>
+        <span className="mono-label-lime">{t("header.live" as any)}</span>
       </div>
 
       {/* Search bar */}
@@ -135,7 +133,7 @@ export function Header({ className }: HeaderProps) {
           <Search
             className={cn(
               "absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 pointer-events-none transition-colors duration-150",
-              searchFocused ? "text-blue-400" : "text-slate-500"
+              searchFocused ? "text-[#4ade80]" : "text-slate-500"
             )}
           />
           <Input
@@ -146,11 +144,11 @@ export function Header({ className }: HeaderProps) {
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
             className={cn(
-              "pl-9 h-8 text-sm bg-white/[0.04] border-white/10 text-slate-200 placeholder:text-slate-600",
-              "rounded-lg transition-all duration-200",
+              "pl-9 h-8 text-sm bg-white/[0.03] border-white/10 text-slate-200 placeholder:text-slate-600",
+              "rounded-sm transition-all duration-150 font-mono",
               searchFocused
-                ? "border-blue-500/50 bg-white/[0.07] ring-2 ring-blue-500/20"
-                : "hover:bg-white/[0.06] hover:border-white/15"
+                ? "border-[#4ade80]/60 bg-white/[0.05]"
+                : "hover:border-white/20"
             )}
           />
         </div>
@@ -172,7 +170,7 @@ export function Header({ className }: HeaderProps) {
             <Bell className="h-4 w-4" />
             <span
               className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full"
-              style={{ background: "#3b82f6", boxShadow: "0 0 6px rgba(59,130,246,0.8)" }}
+              style={{ background: "#4ade80", boxShadow: "0 0 6px rgba(74,222,128,0.8)" }}
             />
           </Button>
 
@@ -180,22 +178,22 @@ export function Header({ className }: HeaderProps) {
             <div
               className="absolute right-0 top-full mt-2 w-72 rounded-xl p-3 z-50 animate-slide-up"
               style={{
-                background: "rgba(17, 24, 39, 0.95)",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
+                background: "#0a0a0a",
+                backdropFilter: "none",
+                WebkitBackdropFilter: "none",
                 border: "1px solid rgba(255, 255, 255, 0.08)",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(59,130,246,0.1)",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.7)",
               }}
             >
               <div className="flex items-center justify-between mb-3">
-                <p className="text-sm font-semibold text-slate-200">{t("header.notifications" as any)}</p>
-                <span className="text-[10px] font-medium text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full">
-                  2 new
+                <p className="mono-label-lime">{t("header.notifications" as any)}</p>
+                <span className="text-[10px] font-black tracking-widest text-[#050505] bg-[#4ade80] px-1.5 py-0.5">
+                  2 NEW
                 </span>
               </div>
               <div className="space-y-2">
                 <div className="flex items-start gap-2.5 p-2 rounded-lg bg-white/[0.03] border border-white/[0.05]">
-                  <div className="h-1.5 w-1.5 rounded-full bg-blue-400 mt-1.5 shrink-0" />
+                  <div className="h-1.5 w-1.5 rounded-full bg-[#4ade80] mt-1.5 shrink-0" />
                   <p className="text-xs text-slate-300">Model training completed successfully.</p>
                 </div>
                 <div className="flex items-start gap-2.5 p-2 rounded-lg bg-white/[0.03] border border-white/[0.05]">
@@ -220,11 +218,8 @@ export function Header({ className }: HeaderProps) {
           >
             {/* Avatar */}
             <div
-              className="flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold text-white"
-              style={{
-                background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
-                boxShadow: "0 0 10px rgba(59,130,246,0.4)",
-              }}
+              className="flex h-7 w-7 items-center justify-center text-xs font-black text-[#050505]"
+              style={{ background: "#4ade80" }}
             >
               {initial}
             </div>
@@ -241,22 +236,19 @@ export function Header({ className }: HeaderProps) {
             <div
               className="absolute right-0 top-full mt-2 w-60 rounded-xl overflow-hidden z-[60] animate-slide-up"
               style={{
-                background: "rgba(17, 24, 39, 0.95)",
-                backdropFilter: "blur(20px)",
-                WebkitBackdropFilter: "blur(20px)",
+                background: "#0a0a0a",
+                backdropFilter: "none",
+                WebkitBackdropFilter: "none",
                 border: "1px solid rgba(255, 255, 255, 0.08)",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(59,130,246,0.08)",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.7)",
               }}
             >
               {/* User info block */}
               <div className="px-3.5 py-3 border-b border-white/[0.06]">
                 <div className="flex items-center gap-3">
                   <div
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white"
-                    style={{
-                      background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
-                      boxShadow: "0 0 12px rgba(59,130,246,0.45)",
-                    }}
+                    className="flex h-10 w-10 shrink-0 items-center justify-center text-sm font-black text-[#050505]"
+                    style={{ background: "#4ade80" }}
                   >
                     {initial}
                   </div>
@@ -278,7 +270,7 @@ export function Header({ className }: HeaderProps) {
                         "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold",
                         isPlatinum
                           ? "border-amber-400/40 bg-amber-400/10 text-amber-300"
-                          : "border-blue-400/30 bg-blue-500/10 text-blue-300"
+                          : "border-[#4ade80]/40 bg-[#4ade80]/10 text-[#4ade80]"
                       )}
                     >
                       {isPlatinum && <Crown className="h-2.5 w-2.5" />}
