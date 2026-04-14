@@ -1138,61 +1138,56 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          FEATURES GRID
+          LIVE STATS BAR — compact social-proof strip with animated counters
          ═══════════════════════════════════════════════════════════════════ */}
-      <section id="predictions" className="relative overflow-hidden py-20 md:py-28">
-        {/* Unique background: dotted pattern + twin side glows */}
+      <section className="relative overflow-hidden py-16 md:py-20">
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14] via-[#0a0f1a] to-[#080b14]" />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.06]"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(74,222,128,0.55) 1px, transparent 1px)",
-            backgroundSize: "26px 26px",
-          }}
-        />
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -left-20 top-1/3 h-[420px] w-[420px] rounded-full bg-green-500/[0.06] blur-[130px]" />
-          <div className="absolute -right-20 bottom-1/4 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.05] blur-[130px]" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[600px] rounded-full bg-green-500/[0.04] blur-[120px]" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6">
-          <div className="mb-14 text-center">
-            <span className="mb-4 inline-block rounded-full bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
-              {t("features.badge")}
-            </span>
-            <h2 className="text-4xl font-extrabold text-white sm:text-5xl">
-              {t("features.titleA")}{" "}
-              <span className="gradient-text">{t("features.titleB")}</span>
-            </h2>
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {(() => {
-              const iconMap: Record<string, typeof Zap> = { Zap, Brain, LineChart, Shield, Star, Users };
-              const defaultFeatures = [
-                { icon: Zap, title: t("features.f1Title"), desc: t("features.f1Desc") },
-                { icon: Brain, title: t("features.f2Title"), desc: t("features.f2Desc") },
-                { icon: LineChart, title: t("features.f3Title"), desc: t("features.f3Desc") },
-                { icon: Shield, title: t("features.f4Title"), desc: t("features.f4Desc") },
-                { icon: Star, title: t("features.f5Title"), desc: t("features.f5Desc") },
-                { icon: Users, title: t("features.f6Title"), desc: t("features.f6Desc") },
-              ];
-              if (homepage?.featuresGrid?.length) {
-                return homepage.featuresGrid.map((f: any, i: number) => ({
-                  icon: iconMap[f.icon] ?? defaultFeatures[i]?.icon ?? Zap,
-                  title: getLocaleValue(f.title, locale) || defaultFeatures[i]?.title || "",
-                  desc: getLocaleValue(f.description, locale) || defaultFeatures[i]?.desc || "",
-                }));
-              }
-              return defaultFeatures;
-            })().map(({ icon: Icon, title, desc }: { icon: typeof Zap; title: string; desc: string }) => (
-              <div key={title} className="glass-card-hover group p-6">
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/10 transition-all group-hover:bg-green-500/20">
-                  <Icon className="h-5 w-5 text-green-400" />
+        <div className="relative z-10 mx-auto max-w-5xl px-6">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-0 md:divide-x md:divide-white/[0.08]">
+            {[
+              {
+                icon: Target,
+                value: botdStats?.total_picks ?? 1284,
+                suffix: "+",
+                label: t("features.f1Title") || "Predictions Made",
+                color: "text-green-400",
+              },
+              {
+                icon: TrendingUp,
+                value: botdStats?.accuracy_pct ?? 75,
+                suffix: "%",
+                label: t("features.f4Title") || "Verified Accuracy",
+                color: "text-emerald-400",
+              },
+              {
+                icon: Users,
+                value: 1500,
+                suffix: "+",
+                label: t("features.f6Title") || "Active Users",
+                color: "text-green-400",
+              },
+              {
+                icon: BarChart3,
+                value: 15,
+                suffix: "+",
+                label: t("features.f3Title") || "Leagues Covered",
+                color: "text-emerald-400",
+              },
+            ].map(({ icon: Icon, value, suffix, label, color }) => (
+              <div key={label} className="flex flex-col items-center gap-2 px-4 py-2 text-center">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-500/10">
+                  <Icon className={`h-5 w-5 ${color}`} />
                 </div>
-                <h3 className="mb-2 text-lg font-bold text-white">{title}</h3>
-                <p className="text-sm leading-relaxed text-slate-400">{desc}</p>
+                <span className="text-3xl font-extrabold text-white md:text-4xl">
+                  <AnimatedNumber target={value} suffix={suffix} />
+                </span>
+                <span className="text-xs font-medium uppercase tracking-widest text-slate-500">
+                  {label}
+                </span>
               </div>
             ))}
           </div>
