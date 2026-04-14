@@ -1636,5 +1636,6 @@ const sw = {
   "dash.winRateLabel": "Kiwango",
   "dash.noWeeklyData": "Hakuna data wiki hii bado",
   "dash.quickLinks": "Viungo vya haraka",
+  "dash.analyzing": "Inachambua...",
 } as Record<TranslationKey, string>;
 export default sw;

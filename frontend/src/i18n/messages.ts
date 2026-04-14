@@ -1432,6 +1432,7 @@ const en = {
   "dash.winRateLabel": "Rate",
   "dash.noWeeklyData": "No data yet this week",
   "dash.quickLinks": "Quick Links",
+  "dash.analyzing": "Analyzing...",
 
   /* ── Botd page ───────────────────────────────────── */
   "botd.title": "Pick of the Day",
@@ -3172,6 +3173,7 @@ const nl: Dictionary = {
   "dash.winRateLabel": "Rate",
   "dash.noWeeklyData": "Nog geen data deze week",
   "dash.quickLinks": "Snelle links",
+  "dash.analyzing": "Analyseren...",
 
   /* ── Botd page ───────────────────────────────────── */
   "botd.title": "Tip van de Dag",

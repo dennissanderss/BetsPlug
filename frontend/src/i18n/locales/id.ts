@@ -1636,5 +1636,6 @@ const id = {
   "dash.winRateLabel": "Rasio",
   "dash.noWeeklyData": "Belum ada data minggu ini",
   "dash.quickLinks": "Tautan cepat",
+  "dash.analyzing": "Menganalisis...",
 } as Record<TranslationKey, string>;
 export default id;

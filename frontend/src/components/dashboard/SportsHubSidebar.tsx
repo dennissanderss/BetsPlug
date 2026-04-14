@@ -77,7 +77,7 @@ export function SportsHubSidebar({ summary, isLoading }: SportsHubSidebarProps) 
                 <div className="flex items-center justify-center gap-1">
                   <TrendingUp className="h-3 w-3 text-blue-400" />
                   <span className="text-lg font-bold tabular-nums text-blue-400">
-                    {summary.win_rate}%
+                    {Math.round(summary.win_rate * 100)}%
                   </span>
                 </div>
                 <span className="text-[10px] uppercase tracking-wider text-slate-500">

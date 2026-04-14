@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { ArrowRight } from "lucide-react";
+import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import type { Fixture, FixturesResponse } from "@/types/api";
 
 interface LiveMatchesStripProps {
@@ -41,9 +41,7 @@ function LiveMatchCard({ fixture }: { fixture: Fixture }) {
         {/* Home */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
-            {fixture.home_team_logo && (
-              <Image src={fixture.home_team_logo} alt="" width={18} height={18} className="rounded-full shrink-0" />
-            )}
+            <TeamLogo src={fixture.home_team_logo} name={fixture.home_team_name} />
             <span className="text-xs font-medium text-slate-200 truncate">
               {fixture.home_team_name}
             </span>
@@ -56,9 +54,7 @@ function LiveMatchCard({ fixture }: { fixture: Fixture }) {
         {/* Away */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
-            {fixture.away_team_logo && (
-              <Image src={fixture.away_team_logo} alt="" width={18} height={18} className="rounded-full shrink-0" />
-            )}
+            <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} />
             <span className="text-xs font-medium text-slate-200 truncate">
               {fixture.away_team_name}
             </span>

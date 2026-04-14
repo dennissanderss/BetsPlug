@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { useTranslations } from "@/i18n/locale-provider";
 import { Calendar, ChevronDown } from "lucide-react";
 import { confLevel, confColor } from "@/components/match-predictions/shared";
+import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import type { Fixture, FixturesResponse } from "@/types/api";
 
 interface TodayMatchesListProps {
@@ -32,6 +32,7 @@ function formatTime(iso: string): string {
 }
 
 function MatchRow({ fixture }: { fixture: Fixture }) {
+  const { t } = useTranslations();
   const pred = fixture.prediction;
   const conf = pred ? Math.round(pred.confidence * 100) : null;
   const level = conf != null ? confLevel(conf) : null;
@@ -58,9 +59,7 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
 
       {/* Home team */}
       <div className="flex items-center gap-1.5 min-w-0 flex-1">
-        {fixture.home_team_logo && (
-          <Image src={fixture.home_team_logo} alt="" width={18} height={18} className="rounded-full shrink-0" />
-        )}
+        <TeamLogo src={fixture.home_team_logo} name={fixture.home_team_name} />
         <span className="text-xs font-medium text-slate-200 truncate">
           {fixture.home_team_name}
         </span>
@@ -82,9 +81,7 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
         <span className="text-xs font-medium text-slate-200 truncate text-right">
           {fixture.away_team_name}
         </span>
-        {fixture.away_team_logo && (
-          <Image src={fixture.away_team_logo} alt="" width={18} height={18} className="rounded-full shrink-0" />
-        )}
+        <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} />
       </div>
 
       {/* Confidence */}
@@ -97,7 +94,7 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
             {conf}%
           </span>
         ) : (
-          <span className="text-[10px] text-slate-600">—</span>
+          <span className="text-[10px] italic text-slate-600">{t("dash.analyzing")}</span>
         )}
       </div>
     </div>

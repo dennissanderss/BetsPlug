@@ -1636,5 +1636,6 @@ const de = {
   "dash.winRateLabel": "Rate",
   "dash.noWeeklyData": "Noch keine Daten diese Woche",
   "dash.quickLinks": "Schnellzugriff",
+  "dash.analyzing": "Wird analysiert...",
 } as Record<TranslationKey, string>;
 export default de;

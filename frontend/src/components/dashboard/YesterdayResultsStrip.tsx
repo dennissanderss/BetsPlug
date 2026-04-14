@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
+import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { Trophy, ArrowRight, CheckCircle2, XCircle } from "lucide-react";
 import type { Fixture, FixturesResponse } from "@/types/api";
 
@@ -38,9 +38,7 @@ function ResultRow({ fixture }: { fixture: Fixture }) {
     <div className={`flex items-center gap-3 border-l-4 ${borderColor} rounded-r-lg px-3 py-2 transition-colors hover:bg-white/[0.04]`}>
       {/* Home team */}
       <div className="flex items-center gap-1.5 min-w-0 flex-1">
-        {fixture.home_team_logo && (
-          <Image src={fixture.home_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0" />
-        )}
+        <TeamLogo src={fixture.home_team_logo} name={fixture.home_team_name} size={16} />
         <span className="text-xs font-medium text-slate-200 truncate">
           {fixture.home_team_name}
         </span>
@@ -56,9 +54,7 @@ function ResultRow({ fixture }: { fixture: Fixture }) {
         <span className="text-xs font-medium text-slate-200 truncate text-right">
           {fixture.away_team_name}
         </span>
-        {fixture.away_team_logo && (
-          <Image src={fixture.away_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0" />
-        )}
+        <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} size={16} />
       </div>
 
       {/* Our pick */}
