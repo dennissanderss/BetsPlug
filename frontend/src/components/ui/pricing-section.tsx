@@ -428,22 +428,22 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
           className="relative mt-10 overflow-hidden rounded-3xl p-8 md:p-10"
           style={{
             background:
-              "radial-gradient(1200px 500px at 0% 0%, rgba(253, 224, 71, 0.18), transparent 55%), radial-gradient(900px 500px at 100% 100%, rgba(234, 179, 8, 0.16), transparent 55%), linear-gradient(135deg, #3a2a0b 0%, #2a1e08 35%, #1a1405 65%, #241a07 100%)",
-            border: "1px solid rgba(252, 211, 77, 0.45)",
+              "radial-gradient(1200px 500px at 0% 0%, rgba(253, 224, 71, 0.08), transparent 55%), radial-gradient(900px 500px at 100% 100%, rgba(234, 179, 8, 0.07), transparent 55%), linear-gradient(135deg, #1a1205 0%, #120d04 35%, #0a0803 65%, #110c04 100%)",
+            border: "1px solid rgba(252, 211, 77, 0.4)",
             boxShadow:
-              "0 0 0 1px rgba(252, 211, 77, 0.12) inset, 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 60px rgba(234, 179, 8, 0.15)",
+              "0 0 0 1px rgba(252, 211, 77, 0.1) inset, 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(234, 179, 8, 0.1)",
           }}
         >
           {/* Ambient gold glow */}
-          <div className="pointer-events-none absolute -right-32 -top-32 h-[460px] w-[460px] rounded-full bg-amber-300/25 blur-[140px]" />
-          <div className="pointer-events-none absolute -left-32 -bottom-32 h-[440px] w-[440px] rounded-full bg-yellow-500/20 blur-[140px]" />
+          <div className="pointer-events-none absolute -right-32 -top-32 h-[460px] w-[460px] rounded-full bg-amber-300/12 blur-[140px]" />
+          <div className="pointer-events-none absolute -left-32 -bottom-32 h-[440px] w-[440px] rounded-full bg-yellow-500/10 blur-[140px]" />
 
           {/* Metallic brushed sheen — diagonal highlight band */}
           <div
-            className="pointer-events-none absolute inset-0 opacity-70"
+            className="pointer-events-none absolute inset-0 opacity-50"
             style={{
               backgroundImage:
-                "linear-gradient(115deg, transparent 30%, rgba(253, 224, 71, 0.08) 45%, rgba(255, 239, 177, 0.14) 50%, rgba(253, 224, 71, 0.08) 55%, transparent 70%)",
+                "linear-gradient(115deg, transparent 32%, rgba(253, 224, 71, 0.04) 47%, rgba(255, 239, 177, 0.07) 50%, rgba(253, 224, 71, 0.04) 53%, transparent 68%)",
             }}
           />
 
