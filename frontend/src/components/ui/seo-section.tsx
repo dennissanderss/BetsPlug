@@ -346,31 +346,25 @@ function FaqBlock() {
       className="mt-20"
     >
       {/* Header */}
-      <div className="mb-12 text-center">
-        <span className="mb-4 inline-block rounded-full border border-green-200 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-700">
-          {t("faq.badge")}
-        </span>
-        <h3 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
-          {t("faq.titleA")}
+      <div className="mb-12 flex flex-col items-center text-center">
+        <span className="section-label">{t("faq.badge")}</span>
+        <h3 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+          {t("faq.titleA")} <span className="text-[#4ade80]">{t("faq.titleB")}</span>
         </h3>
-        <h3 className="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">
-          <span className="gradient-text">{t("faq.titleB")}</span>
-        </h3>
-        <p className="mx-auto mt-5 max-w-xl text-base text-slate-500">
+        <p className="mx-auto mt-5 max-w-xl text-base text-[#a3a3a3]">
           {t("faq.subtitle")}
         </p>
       </div>
 
       {/* Grid: sidebar + accordion */}
-      <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
-        {/* Ambient glow */}
-        <div className="pointer-events-none absolute -left-20 top-0 h-[300px] w-[300px] rounded-full bg-green-100/40 blur-[100px]" />
-        <div className="pointer-events-none absolute -right-20 bottom-0 h-[300px] w-[300px] rounded-full bg-green-100/40 blur-[100px]" />
+      <div className="relative overflow-hidden border border-white/10 bg-[#0a0a0a] p-5 sm:p-8">
+        <span className="pointer-events-none absolute left-[-1px] top-[-1px] h-3 w-3 border-l-2 border-t-2 border-[#4ade80]" />
+        <span className="pointer-events-none absolute right-[-1px] bottom-[-1px] h-3 w-3 border-r-2 border-b-2 border-[#4ade80]" />
 
         <div className="relative grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr] lg:gap-8">
           {/* Sidebar: categories + contact support */}
-          <aside className="flex flex-col gap-3">
-            <h4 className="mb-1 font-mono text-xs font-semibold uppercase tracking-widest text-slate-400">
+          <aside className="flex flex-col gap-2">
+            <h4 className="mb-2 mono-label">
               {t("faq.browseBy")}
             </h4>
 
@@ -385,40 +379,41 @@ function FaqBlock() {
                     setActiveCategory(cat.id);
                     setOpenQuestion(cat.items[0].q);
                   }}
-                  className={`group relative flex items-center gap-3 rounded-2xl border px-4 py-3.5 text-left transition-all duration-300 ${
+                  className={`group relative flex items-center gap-3 border-l-2 px-4 py-3.5 text-left transition-all duration-200 ${
                     isActive
-                      ? "border-green-300 bg-green-50"
-                      : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
+                      ? "border-l-[#4ade80] bg-[#4ade80]/[0.08]"
+                      : "border-l-transparent bg-[#181818] hover:bg-[#1f1f1f]"
                   }`}
                 >
                   <div
-                    className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl transition-all ${
+                    className={`flex h-9 w-9 flex-shrink-0 items-center justify-center border transition-all ${
                       isActive
-                        ? "bg-green-100"
-                        : "bg-slate-100"
+                        ? "border-[#4ade80]/50 bg-[#4ade80]/[0.1]"
+                        : "border-white/10 bg-[#0a0a0a]"
                     }`}
                   >
                     <Icon
                       className={`h-4 w-4 transition-colors ${
-                        isActive ? "text-green-600" : "text-slate-400"
+                        isActive ? "text-[#4ade80]" : "text-[#a3a3a3]"
                       }`}
+                      strokeWidth={2}
                     />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p
-                      className={`truncate text-sm font-semibold transition-colors ${
-                        isActive ? "text-slate-900" : "text-slate-600"
+                      className={`truncate text-sm font-bold transition-colors ${
+                        isActive ? "text-white" : "text-[#ededed]"
                       }`}
                     >
                       {cat.label}
                     </p>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="font-mono text-[10px] uppercase tracking-widest text-[#707070]">
                       {cat.items.length} {t("faq.articles")}
                     </p>
                   </div>
                   <ChevronDown
                     className={`h-4 w-4 -rotate-90 transition-all ${
-                      isActive ? "text-green-600" : "text-slate-400"
+                      isActive ? "text-[#4ade80]" : "text-[#707070]"
                     }`}
                   />
                 </button>
@@ -426,29 +421,27 @@ function FaqBlock() {
             })}
 
             {/* Contact Support card */}
-            <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 p-5">
-              <div className="mb-3 flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100">
-                  <LifeBuoy className="h-4 w-4 text-green-600" />
+            <div className="relative mt-4 border border-[#4ade80]/30 bg-[#4ade80]/[0.05] p-5">
+              <span className="pointer-events-none absolute left-[-1px] top-[-1px] h-3 w-3 border-l-2 border-t-2 border-[#4ade80]" />
+              <div className="mb-3 flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center border border-[#4ade80]/50 bg-[#4ade80]/[0.1]">
+                  <LifeBuoy className="h-4 w-4 text-[#4ade80]" strokeWidth={2} />
                 </div>
-                <p className="text-sm font-bold text-slate-900">
+                <p className="text-sm font-bold text-white">
                   {t("faq.stillQuestions")}
                 </p>
               </div>
-              <p className="mb-4 text-xs leading-relaxed text-slate-500">
+              <p className="mb-4 text-xs leading-relaxed text-[#a3a3a3]">
                 {t("faq.supportBlurb")}
               </p>
-              <Link
-                href={loc("/contact")}
-                className="btn-gradient flex w-full items-center justify-center rounded-xl px-4 py-2.5 text-xs font-bold shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/30"
-              >
-                {t("faq.contactSupport")}
+              <Link href={loc("/contact")} className="btn-lime w-full">
+                {String(t("faq.contactSupport")).toUpperCase()} →
               </Link>
             </div>
           </aside>
 
           {/* Accordion */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             <AnimatePresence mode="wait">
               <motion.div
                 key={current.id}
@@ -456,17 +449,17 @@ function FaqBlock() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col gap-3"
+                className="flex flex-col gap-2"
               >
                 {current.items.map((item) => {
                   const isOpen = openQuestion === item.q;
                   return (
                     <div
                       key={item.q}
-                      className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
+                      className={`overflow-hidden border-l-2 transition-all duration-200 ${
                         isOpen
-                          ? "border-green-300 bg-green-50/50"
-                          : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
+                          ? "border-l-[#4ade80] bg-[#4ade80]/[0.05]"
+                          : "border-l-transparent bg-[#181818] hover:bg-[#1f1f1f]"
                       }`}
                     >
                       <button
@@ -478,17 +471,17 @@ function FaqBlock() {
                         aria-expanded={isOpen}
                       >
                         <h4
-                          className={`text-sm font-semibold transition-colors sm:text-base ${
-                            isOpen ? "text-slate-900" : "text-slate-700"
+                          className={`text-sm font-bold transition-colors sm:text-base ${
+                            isOpen ? "text-white" : "text-[#ededed]"
                           }`}
                         >
                           {item.q}
                         </h4>
                         <div
-                          className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border transition-all ${
+                          className={`flex h-7 w-7 flex-shrink-0 items-center justify-center border transition-all ${
                             isOpen
-                              ? "rotate-180 border-green-400 bg-green-100 text-green-600"
-                              : "border-slate-200 bg-slate-100 text-slate-400"
+                              ? "rotate-180 border-[#4ade80] bg-[#4ade80]/[0.1] text-[#4ade80]"
+                              : "border-white/10 bg-[#0a0a0a] text-[#707070]"
                           }`}
                         >
                           <ChevronDown className="h-4 w-4" />
@@ -506,8 +499,8 @@ function FaqBlock() {
                             }}
                             className="overflow-hidden"
                           >
-                            <div className="border-t border-slate-200 px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
-                              <p className="text-sm leading-relaxed text-slate-600">
+                            <div className="border-t border-white/[0.08] px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
+                              <p className="text-sm leading-relaxed text-[#cfcfcf]">
                                 {item.a}
                               </p>
                             </div>

@@ -74,7 +74,7 @@ function PredictionCard({
                   <Image src={pick.home_team_logo} alt={pick.home_team} fill className="object-contain" sizes="48px" />
                 </div>
               )}
-              <p className="truncate text-display text-sm text-white sm:text-base">
+              <p className="truncate text-xs font-black uppercase leading-tight tracking-tight text-white sm:text-base">
                 {pick.home_team}
               </p>
             </div>
