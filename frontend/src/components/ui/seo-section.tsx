@@ -4,39 +4,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  Brain,
-  LineChart,
-  Trophy,
-  Target,
-  Zap,
-  ShieldCheck,
   Rocket,
   Sparkles,
   CreditCard,
   Lock,
   ChevronDown,
   LifeBuoy,
-  Globe,
-  Cpu,
 } from "lucide-react";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
-
-import type { TranslationKey } from "@/i18n/messages";
-
-const pillarDefs: Array<{
-  icon: typeof Brain;
-  titleKey: TranslationKey;
-  descKey: TranslationKey;
-}> = [
-  { icon: Brain, titleKey: "seo.pillar1Title", descKey: "seo.pillar1Desc" },
-  { icon: LineChart, titleKey: "seo.pillar2Title", descKey: "seo.pillar2Desc" },
-  { icon: Trophy, titleKey: "seo.pillar3Title", descKey: "seo.pillar3Desc" },
-  { icon: Target, titleKey: "seo.pillar4Title", descKey: "seo.pillar4Desc" },
-  { icon: Zap, titleKey: "seo.pillar5Title", descKey: "seo.pillar5Desc" },
-  { icon: ShieldCheck, titleKey: "seo.pillar6Title", descKey: "seo.pillar6Desc" },
-  { icon: Globe, titleKey: "seo.pillar7Title", descKey: "seo.pillar7Desc" },
-  { icon: Cpu, titleKey: "seo.pillar8Title", descKey: "seo.pillar8Desc" },
-];
 
 type FaqItem = { q: string; a: string };
 type FaqCategory = {
@@ -166,32 +141,6 @@ export function SeoSection() {
             {t("seo.subtitle")}
           </p>
         </motion.div>
-
-        {/* Pillars grid */}
-        <div className="mt-16 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {pillarDefs.map((p) => {
-            const Icon = p.icon;
-            const title = t(p.titleKey);
-            const desc = t(p.descKey);
-            // Pillar cards render statically — the old per-card
-            // whileInView + i*0.08 stagger was decorative and added
-            // ~400ms of cascading reveals on scroll-in.
-            return (
-              <article
-                key={p.titleKey}
-                className="group relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-sm transition-all duration-300 hover:border-green-500/30 hover:shadow-xl hover:shadow-green-500/[0.08]"
-              >
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.15)] transition-transform duration-300 group-hover:scale-110">
-                  <Icon className="h-5 w-5 text-green-400" />
-                </div>
-                <h3 className="mb-2 text-lg font-bold text-white">{title}</h3>
-                <p className="text-sm leading-relaxed text-slate-400">
-                  {desc}
-                </p>
-              </article>
-            );
-          })}
-        </div>
 
         {/* Long-form content */}
         <motion.div
