@@ -748,8 +748,6 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
         />
         {/* Dark gradient overlay for readability */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-[#050505]/75 to-[#050505]" />
-        {/* Grid blueprint background */}
-        <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
         {/* Ambient lime wash */}
         <div className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full bg-[#4ade80]/[0.08] blur-[160px]" />
         <div className="pointer-events-none absolute -right-40 bottom-0 h-[400px] w-[400px] rounded-full bg-[#4ade80]/[0.05] blur-[140px]" />
