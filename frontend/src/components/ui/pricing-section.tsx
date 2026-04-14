@@ -425,18 +425,43 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
 
         {/* ── Platinum lifetime card (wide, below) ───────────────── */}
         <div
-          className="relative mt-10 overflow-hidden rounded-3xl border border-amber-200 bg-white p-8 shadow-sm backdrop-blur-xl md:p-10"
+          className="relative mt-10 overflow-hidden rounded-3xl p-8 md:p-10"
+          style={{
+            background:
+              "radial-gradient(1200px 500px at 0% 0%, rgba(253, 224, 71, 0.18), transparent 55%), radial-gradient(900px 500px at 100% 100%, rgba(234, 179, 8, 0.16), transparent 55%), linear-gradient(135deg, #3a2a0b 0%, #2a1e08 35%, #1a1405 65%, #241a07 100%)",
+            border: "1px solid rgba(252, 211, 77, 0.45)",
+            boxShadow:
+              "0 0 0 1px rgba(252, 211, 77, 0.12) inset, 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 60px rgba(234, 179, 8, 0.15)",
+          }}
         >
           {/* Ambient gold glow */}
-          <div className="pointer-events-none absolute -right-32 -top-32 h-[400px] w-[400px] rounded-full bg-amber-400/[0.06] blur-[130px]" />
-          <div className="pointer-events-none absolute -left-32 -bottom-32 h-[400px] w-[400px] rounded-full bg-yellow-500/[0.04] blur-[130px]" />
+          <div className="pointer-events-none absolute -right-32 -top-32 h-[460px] w-[460px] rounded-full bg-amber-300/25 blur-[140px]" />
+          <div className="pointer-events-none absolute -left-32 -bottom-32 h-[440px] w-[440px] rounded-full bg-yellow-500/20 blur-[140px]" />
+
+          {/* Metallic brushed sheen — diagonal highlight band */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-70"
+            style={{
+              backgroundImage:
+                "linear-gradient(115deg, transparent 30%, rgba(253, 224, 71, 0.08) 45%, rgba(255, 239, 177, 0.14) 50%, rgba(253, 224, 71, 0.08) 55%, transparent 70%)",
+            }}
+          />
 
           {/* Diagonal shimmer lines */}
           <div
-            className="pointer-events-none absolute inset-0 opacity-[0.04]"
+            className="pointer-events-none absolute inset-0 opacity-[0.08]"
             style={{
               backgroundImage:
-                "repeating-linear-gradient(45deg, rgba(251,191,36,0.25) 0 1px, transparent 1px 22px)",
+                "repeating-linear-gradient(45deg, rgba(253, 224, 71, 0.35) 0 1px, transparent 1px 22px)",
+            }}
+          />
+
+          {/* Top inner hairline for bevel */}
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 h-px"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, rgba(253, 224, 71, 0.6) 50%, transparent 100%)",
             }}
           />
 
@@ -448,18 +473,24 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                   <Crown className="h-3 w-3" />
                   {t("pricing.platBadgeLifetime")}
                 </span>
-                <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-600">
+                <span className="rounded-full border border-amber-300/40 bg-amber-950/40 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-amber-200/90">
                   {t("pricing.platLimited")}
                 </span>
               </div>
 
-              <h3 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-                <span className="bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 bg-clip-text text-transparent">
+              <h3 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                <span
+                  className="bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(135deg, #fde68a 0%, #fbbf24 40%, #f59e0b 70%, #fde68a 100%)",
+                  }}
+                >
                   Platinum
                 </span>{" "}
                 Lifetime
               </h3>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-base">
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-amber-100/70 sm:text-base">
                 {platinum.tagline} {t("pricing.platPitch")}
               </p>
 
@@ -467,10 +498,10 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                 {platinum.features.map((f) => (
                   <li
                     key={f}
-                    className="flex items-start gap-2.5 text-sm text-slate-600"
+                    className="flex items-start gap-2.5 text-sm text-amber-50/85"
                   >
                     <Check
-                      className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-400"
+                      className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-300 drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]"
                       strokeWidth={3}
                     />
                     <span>{f}</span>
@@ -482,23 +513,37 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
             {/* Right: price + CTA */}
             <div className="flex flex-col items-start gap-5 lg:items-end lg:text-right">
               <div>
-                <p className="text-xs font-bold uppercase tracking-widest text-amber-600">
+                <p className="text-xs font-bold uppercase tracking-widest text-amber-300">
                   {t("pricing.platOneTime")}
                 </p>
                 <div className="mt-2 flex items-baseline gap-1 lg:justify-end">
-                  <span className="text-2xl font-bold text-slate-500">€</span>
-                  <span className="bg-gradient-to-b from-amber-600 to-amber-400 bg-clip-text text-7xl font-extrabold tracking-tight text-transparent">
+                  <span className="text-2xl font-bold text-amber-200/80">€</span>
+                  <span
+                    className="bg-clip-text text-7xl font-extrabold tracking-tight text-transparent"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(180deg, #fef3c7 0%, #fde68a 30%, #fbbf24 65%, #d97706 100%)",
+                      filter: "drop-shadow(0 2px 12px rgba(251, 191, 36, 0.35))",
+                    }}
+                  >
                     199
                   </span>
                 </div>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-amber-100/60">
                   {t("pricing.platNoSub")}
                 </p>
               </div>
 
               <Link
                 href={checkoutHref("platinum")}
-                className="group/btn relative inline-flex w-full items-center justify-center overflow-hidden rounded-2xl border border-amber-300 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 px-8 py-4 text-sm font-extrabold uppercase tracking-wider text-black shadow-[0_0_40px_rgba(251,191,36,0.2)] transition-all duration-300 hover:shadow-[0_0_60px_rgba(251,191,36,0.35)] sm:w-auto"
+                className="group/btn relative inline-flex w-full items-center justify-center overflow-hidden rounded-2xl px-8 py-4 text-sm font-extrabold uppercase tracking-wider text-[#1a1405] transition-all duration-300 sm:w-auto"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #fef3c7 0%, #fde68a 25%, #fbbf24 55%, #d97706 100%)",
+                  border: "1px solid rgba(253, 224, 71, 0.7)",
+                  boxShadow:
+                    "0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 8px 28px rgba(251, 191, 36, 0.45), 0 0 64px rgba(251, 191, 36, 0.25)",
+                }}
               >
                 <Crown className="mr-2 h-4 w-4" />
                 {platinum.cta}
