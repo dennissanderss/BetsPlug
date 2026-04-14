@@ -178,6 +178,8 @@ class PredictionMatchSummary(BaseModel):
     id: uuid.UUID
     home_team_name: str
     away_team_name: str
+    home_team_logo: Optional[str] = None
+    away_team_logo: Optional[str] = None
     scheduled_at: datetime
     status: str
     league_name: Optional[str] = None
@@ -195,6 +197,8 @@ class PredictionMatchSummary(BaseModel):
         out["status"] = data.status.value if hasattr(data.status, "value") else str(data.status)
         out["home_team_name"] = data.home_team.name if data.home_team else "Unknown"
         out["away_team_name"] = data.away_team.name if data.away_team else "Unknown"
+        out["home_team_logo"] = data.home_team.logo_url if data.home_team else None
+        out["away_team_logo"] = data.away_team.logo_url if data.away_team else None
         out["league_name"] = data.league.name if getattr(data, "league", None) else None
         if getattr(data, "result", None) is not None:
             out["result"] = data.result

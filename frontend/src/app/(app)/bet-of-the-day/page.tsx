@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useTranslations } from "@/i18n/locale-provider";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import {
@@ -211,6 +212,8 @@ interface BetOfTheDay {
   match_id?: string;
   home_team?: string;
   away_team?: string;
+  home_team_logo?: string | null;
+  away_team_logo?: string | null;
   league?: string;
   scheduled_at?: string;
   home_win_prob?: number;
@@ -443,9 +446,15 @@ export default function BetOfTheDayPage() {
               </div>
 
               {/* Match Title */}
-              <h2 className="mb-8 text-center text-3xl font-extrabold text-white sm:text-4xl">
-                {botd.home_team}{" "}
-                <span className="text-slate-500 font-normal">vs</span>{" "}
+              <h2 className="mb-8 flex flex-wrap items-center justify-center gap-3 text-3xl font-extrabold text-white sm:text-4xl">
+                {botd.home_team_logo && (
+                  <Image src={botd.home_team_logo} alt="" width={36} height={36} className="rounded-full" />
+                )}
+                {botd.home_team}
+                <span className="text-slate-500 font-normal">vs</span>
+                {botd.away_team_logo && (
+                  <Image src={botd.away_team_logo} alt="" width={36} height={36} className="rounded-full" />
+                )}
                 {botd.away_team}
               </h2>
 

@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useTranslations } from "@/i18n/locale-provider";
 import {
   Sparkles,
@@ -277,10 +278,16 @@ function MatchCard({ fixture }: { fixture: Fixture }) {
             </span>
           </div>
 
-          <p className="text-base font-semibold text-slate-100 leading-tight">
-            {fixture.home_team_name}{" "}
-            <span className="text-slate-500 font-normal">vs</span>{" "}
-            {fixture.away_team_name}
+          <p className="flex flex-wrap items-center gap-x-1.5 text-base font-semibold text-slate-100 leading-tight">
+            {fixture.home_team_logo && (
+              <Image src={fixture.home_team_logo} alt="" width={20} height={20} className="rounded-full" />
+            )}
+            <span>{fixture.home_team_name}</span>
+            <span className="text-slate-500 font-normal">vs</span>
+            {fixture.away_team_logo && (
+              <Image src={fixture.away_team_logo} alt="" width={20} height={20} className="rounded-full" />
+            )}
+            <span>{fixture.away_team_name}</span>
           </p>
 
           <p className="text-xs text-slate-500 flex items-center gap-1">
@@ -648,6 +655,9 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
         <div className="col-span-5 sm:col-span-4 min-w-0">
           {/* Home team */}
           <div className="flex items-center gap-2">
+            {fixture.home_team_logo && (
+              <Image src={fixture.home_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0" />
+            )}
             <span className={`text-sm font-semibold truncate ${modelPick === "home" ? "text-emerald-300" : "text-slate-100"}`}>
               {fixture.home_team_name}
             </span>
@@ -660,6 +670,9 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
           </div>
           {/* Away team */}
           <div className="flex items-center gap-2 mt-0.5">
+            {fixture.away_team_logo && (
+              <Image src={fixture.away_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0" />
+            )}
             <span className={`text-sm font-semibold truncate ${modelPick === "away" ? "text-emerald-300" : "text-slate-100"}`}>
               {fixture.away_team_name}
             </span>

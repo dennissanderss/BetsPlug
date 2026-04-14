@@ -299,6 +299,8 @@ async def get_strategy_picks(
             Match.status.label("match_status"),
             HomeTeam.name.label("home_team_name"),
             AwayTeam.name.label("away_team_name"),
+            HomeTeam.logo_url.label("home_team_logo"),
+            AwayTeam.logo_url.label("away_team_logo"),
             League.name.label("league_name"),
             PredictionEvaluation.actual_outcome,
             PredictionEvaluation.is_correct,
@@ -325,11 +327,13 @@ async def get_strategy_picks(
         match_status = row[2]
         home_team_name = row[3]
         away_team_name = row[4]
-        league_name = row[5]
-        actual_outcome = row[6]
-        is_correct = row[7]
-        home_score = row[8]
-        away_score = row[9]
+        home_team_logo = row[5]
+        away_team_logo = row[6]
+        league_name = row[7]
+        actual_outcome = row[8]
+        is_correct = row[9]
+        home_score = row[10]
+        away_score = row[11]
 
         odds = None
         if evaluate_strategy(strategy, prediction, odds):
@@ -357,6 +361,8 @@ async def get_strategy_picks(
                     pick=pick,
                     home_team_name=home_team_name,
                     away_team_name=away_team_name,
+                    home_team_logo=home_team_logo,
+                    away_team_logo=away_team_logo,
                     scheduled_at=scheduled_at,
                     league_name=league_name,
                     match_status=status_str,
@@ -416,6 +422,8 @@ async def get_strategy_today_picks(
             Match.scheduled_at,
             HomeTeam.name.label("home"),
             AwayTeam.name.label("away"),
+            HomeTeam.logo_url.label("home_logo"),
+            AwayTeam.logo_url.label("away_logo"),
             League.name.label("league"),
         )
         .join(Match, Match.id == Prediction.match_id)
@@ -432,7 +440,7 @@ async def get_strategy_today_picks(
     rows = (await db.execute(q)).all()
 
     picks = []
-    for pred, scheduled_at, home, away, league in rows:
+    for pred, scheduled_at, home, away, home_logo, away_logo, league in rows:
         if evaluate_strategy(strategy, pred, odds=None):
             probs = {
                 "HOME": pred.home_win_prob,
@@ -445,6 +453,8 @@ async def get_strategy_today_picks(
                     "match_id": str(pred.match_id),
                     "home_team": home,
                     "away_team": away,
+                    "home_team_logo": home_logo,
+                    "away_team_logo": away_logo,
                     "league": league,
                     "kickoff": scheduled_at.isoformat(),
                     "pick": pick,

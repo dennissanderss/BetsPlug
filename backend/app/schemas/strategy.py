@@ -87,6 +87,8 @@ class StrategyPickPrediction(BaseModel):
     # Match context (populated from joined Match)
     home_team_name: Optional[str] = Field(default=None, description="Home team name.")
     away_team_name: Optional[str] = Field(default=None, description="Away team name.")
+    home_team_logo: Optional[str] = Field(default=None, description="Home team logo URL.")
+    away_team_logo: Optional[str] = Field(default=None, description="Away team logo URL.")
     scheduled_at: Optional[datetime] = Field(default=None, description="Match kickoff time.")
     league_name: Optional[str] = Field(default=None, description="League name.")
 

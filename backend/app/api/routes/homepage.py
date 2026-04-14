@@ -26,6 +26,8 @@ class FeaturedMatchResponse(BaseModel):
     available: bool
     home_team: Optional[str] = None
     away_team: Optional[str] = None
+    home_team_logo: Optional[str] = None
+    away_team_logo: Optional[str] = None
     league: Optional[str] = None
     kickoff: Optional[str] = None
     pick: Optional[str] = None
@@ -79,6 +81,8 @@ async def get_featured_match(
     match = prediction.match
     home_name = match.home_team.name if match and match.home_team else None
     away_name = match.away_team.name if match and match.away_team else None
+    home_logo = match.home_team.logo_url if match and match.home_team else None
+    away_logo = match.away_team.logo_url if match and match.away_team else None
     league_name = match.league.name if match and match.league else None
 
     # Determine pick
@@ -109,6 +113,8 @@ async def get_featured_match(
         available=True,
         home_team=home_name,
         away_team=away_name,
+        home_team_logo=home_logo,
+        away_team_logo=away_logo,
         league=league_name,
         kickoff=match.scheduled_at.isoformat() if match else None,
         pick=pick,

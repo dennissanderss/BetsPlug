@@ -11,6 +11,7 @@ import {
   RefreshCw,
   AlertCircle,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
@@ -201,7 +202,10 @@ function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
       <div className="flex-1 px-4 py-4">
         {/* Home team */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-slate-100 leading-tight">
+          <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-100 leading-tight">
+            {fixture.home_team_logo && (
+              <Image src={fixture.home_team_logo} alt="" width={20} height={20} className="rounded-full shrink-0" />
+            )}
             {fixture.home_team_name}
           </span>
           {(isLive || isFinished) && (
@@ -227,7 +231,10 @@ function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
 
         {/* Away team */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-slate-100 leading-tight">
+          <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-100 leading-tight">
+            {fixture.away_team_logo && (
+              <Image src={fixture.away_team_logo} alt="" width={20} height={20} className="rounded-full shrink-0" />
+            )}
             {fixture.away_team_name}
           </span>
           {(isLive || isFinished) && (

@@ -131,6 +131,12 @@ class MatchResponse(MatchBase):
     away_team_name: Optional[str] = Field(
         default=None, description="Denormalised away team name for display convenience."
     )
+    home_team_logo: Optional[str] = Field(
+        default=None, description="Home team logo URL."
+    )
+    away_team_logo: Optional[str] = Field(
+        default=None, description="Away team logo URL."
+    )
     created_at: datetime = Field(description="Timestamp when the record was created (UTC).")
     updated_at: datetime = Field(description="Timestamp of the most recent update (UTC).")
 
@@ -143,6 +149,8 @@ class MatchResponse(MatchBase):
         }
         data["home_team_name"] = match.home_team.name if match.home_team else None
         data["away_team_name"] = match.away_team.name if match.away_team else None
+        data["home_team_logo"] = match.home_team.logo_url if match.home_team else None
+        data["away_team_logo"] = match.away_team.logo_url if match.away_team else None
         return cls.model_validate(data)
 
 

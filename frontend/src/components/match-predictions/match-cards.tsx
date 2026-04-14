@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { Clock, Lock } from "lucide-react";
@@ -37,10 +38,16 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
           <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-green-400/80">
             {fixture.league_name}
           </span>
-          <p className="break-words text-base font-extrabold leading-tight text-white sm:text-lg">
-            {fixture.home_team_name}{" "}
-            <span className="font-normal text-slate-500">vs</span>{" "}
-            {fixture.away_team_name}
+          <p className="flex flex-wrap items-center gap-x-1.5 text-base font-extrabold leading-tight text-white sm:text-lg">
+            {fixture.home_team_logo && (
+              <Image src={fixture.home_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
+            )}
+            <span className="break-words">{fixture.home_team_name}</span>
+            <span className="font-normal text-slate-500">vs</span>
+            {fixture.away_team_logo && (
+              <Image src={fixture.away_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
+            )}
+            <span className="break-words">{fixture.away_team_name}</span>
           </p>
           <p className="flex items-center gap-1 text-xs text-slate-400">
             <Clock className="h-3 w-3 shrink-0" />
@@ -153,10 +160,16 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
             <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-slate-500">
               {fixture.league_name}
             </span>
-            <p className="break-words text-base font-semibold leading-tight text-white">
-              {fixture.home_team_name}{" "}
-              <span className="font-normal text-slate-600">vs</span>{" "}
-              {fixture.away_team_name}
+            <p className="flex flex-wrap items-center gap-x-1.5 text-base font-semibold leading-tight text-white">
+              {fixture.home_team_logo && (
+                <Image src={fixture.home_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
+              )}
+              <span className="break-words">{fixture.home_team_name}</span>
+              <span className="font-normal text-slate-600">vs</span>
+              {fixture.away_team_logo && (
+                <Image src={fixture.away_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
+              )}
+              <span className="break-words">{fixture.away_team_name}</span>
             </p>
             <p className="flex items-center gap-1 text-xs text-slate-500">
               <Clock className="h-3 w-3 shrink-0" />

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -168,7 +169,16 @@ export default function StrategyDetailPage() {
               <div key={pick.match_id} className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] p-4">
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <p className="text-sm font-bold text-slate-100">{pick.home_team} vs {pick.away_team}</p>
+                    <p className="flex items-center gap-1.5 text-sm font-bold text-slate-100">
+                      {pick.home_team_logo && (
+                        <Image src={pick.home_team_logo} alt="" width={18} height={18} className="rounded-full" />
+                      )}
+                      {pick.home_team} vs
+                      {pick.away_team_logo && (
+                        <Image src={pick.away_team_logo} alt="" width={18} height={18} className="rounded-full" />
+                      )}
+                      {pick.away_team}
+                    </p>
                     <p className="text-xs text-slate-500">
                       {pick.league} &middot;{" "}
                       {new Date(pick.kickoff).toLocaleDateString("en-GB", {
@@ -257,8 +267,15 @@ export default function StrategyDetailPage() {
                       >
                         <td className="px-4 py-3 text-slate-400 whitespace-nowrap">{date}</td>
                         <td className="px-4 py-3">
-                          <p className="font-medium text-slate-200 whitespace-nowrap">
-                            {pick.home_team_name ?? "?"} vs {pick.away_team_name ?? "?"}
+                          <p className="flex items-center gap-1.5 font-medium text-slate-200 whitespace-nowrap">
+                            {pick.home_team_logo && (
+                              <Image src={pick.home_team_logo} alt="" width={16} height={16} className="rounded-full" />
+                            )}
+                            {pick.home_team_name ?? "?"} vs
+                            {pick.away_team_logo && (
+                              <Image src={pick.away_team_logo} alt="" width={16} height={16} className="rounded-full" />
+                            )}
+                            {pick.away_team_name ?? "?"}
                           </p>
                         </td>
                         <td className="px-4 py-3">

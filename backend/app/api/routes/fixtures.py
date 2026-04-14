@@ -113,9 +113,11 @@ class FixtureItem(BaseModel):
     home_team_id: str
     home_team_name: Optional[str] = None
     home_team_slug: Optional[str] = None
+    home_team_logo: Optional[str] = None
     away_team_id: str
     away_team_name: Optional[str] = None
     away_team_slug: Optional[str] = None
+    away_team_logo: Optional[str] = None
     external_id: Optional[str] = None
     status: str
     scheduled_at: datetime
@@ -389,9 +391,11 @@ def _build_fixture_item(
         home_team_id=str(match.home_team_id),
         home_team_name=match.home_team.name if match.home_team else None,
         home_team_slug=match.home_team.slug if match.home_team else None,
+        home_team_logo=match.home_team.logo_url if match.home_team else None,
         away_team_id=str(match.away_team_id),
         away_team_name=match.away_team.name if match.away_team else None,
         away_team_slug=match.away_team.slug if match.away_team else None,
+        away_team_logo=match.away_team.logo_url if match.away_team else None,
         external_id=match.external_id,
         status=match.status.value if isinstance(match.status, MatchStatus) else str(match.status),
         scheduled_at=match.scheduled_at,

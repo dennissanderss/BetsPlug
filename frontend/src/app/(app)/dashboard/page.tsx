@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useTranslations } from "@/i18n/locale-provider";
 import { UpsellBanner } from "@/components/ui/upsell-banner";
 import {
@@ -150,10 +151,17 @@ function PredictionsTable({
                 >
                   {/* Match */}
                   <td className="px-4 py-3">
-                    <span className="font-medium text-slate-100">
+                    <span className="flex items-center gap-1.5 font-medium text-slate-100">
+                      {row.match?.home_team_logo && (
+                        <Image src={row.match.home_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0" />
+                      )}
                       {row.match
-                        ? `${row.match.home_team_name} vs ${row.match.away_team_name}`
+                        ? `${row.match.home_team_name} vs`
                         : t("dash.matchLoading")}
+                      {row.match?.away_team_logo && (
+                        <Image src={row.match.away_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0" />
+                      )}
+                      {row.match?.away_team_name}
                     </span>
                     {row.match?.league_name && (
                       <span className="block text-[10px] text-slate-500 mt-0.5">

@@ -257,6 +257,8 @@ class BetOfTheDayResponse(BaseModel):
     match_id: str | None = None
     home_team: str | None = None
     away_team: str | None = None
+    home_team_logo: str | None = None
+    away_team_logo: str | None = None
     league: str | None = None
     scheduled_at: str | None = None
     home_win_prob: float | None = None
@@ -376,6 +378,8 @@ async def get_bet_of_the_day(
 
     home_name = match.home_team.name if match and match.home_team else None
     away_name = match.away_team.name if match and match.away_team else None
+    home_logo = match.home_team.logo_url if match and match.home_team else None
+    away_logo = match.away_team.logo_url if match and match.away_team else None
     league_name = match.league.name if match and match.league else None
 
     # Explanation already eager-loaded via selectin default on model
@@ -409,6 +413,8 @@ async def get_bet_of_the_day(
         match_id=str(prediction.match_id),
         home_team=home_name,
         away_team=away_name,
+        home_team_logo=home_logo,
+        away_team_logo=away_logo,
         league=league_name,
         scheduled_at=match.scheduled_at.isoformat() if match else None,
         home_win_prob=prediction.home_win_prob,

@@ -136,6 +136,8 @@ export interface Match {
   away_team_id: string;
   home_team_name: string;
   away_team_name: string;
+  home_team_logo?: string | null;
+  away_team_logo?: string | null;
   status: "scheduled" | "live" | "finished" | "postponed" | "cancelled";
   scheduled_at: string;
   venue: string | null;
@@ -175,6 +177,8 @@ export interface PredictionMatchSummary {
   id: string;
   home_team_name: string;
   away_team_name: string;
+  home_team_logo?: string | null;
+  away_team_logo?: string | null;
   scheduled_at: string;
   status: string;
   league_name: string | null;
@@ -495,9 +499,11 @@ export interface Fixture {
   home_team_id?: string;
   home_team_name: string;
   home_team_slug: string;
+  home_team_logo?: string | null;
   away_team_id?: string;
   away_team_name: string;
   away_team_slug: string;
+  away_team_logo?: string | null;
   external_id?: string;
   status: "scheduled" | "live" | "finished" | "postponed" | "cancelled";
   scheduled_at: string;
@@ -585,6 +591,8 @@ export interface StrategyPickPrediction {
   pick: string | null;
   home_team_name: string | null;
   away_team_name: string | null;
+  home_team_logo?: string | null;
+  away_team_logo?: string | null;
   scheduled_at: string | null;
   league_name: string | null;
   match_status: string | null;

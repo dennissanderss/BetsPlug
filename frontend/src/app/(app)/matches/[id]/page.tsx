@@ -13,6 +13,7 @@ import {
   Minus,
 } from "lucide-react";
 
+import Image from "next/image";
 import { api } from "@/lib/api";
 import {
   cn,
@@ -155,11 +156,16 @@ function MatchHeader({ match }: { match: Match }) {
       <div className="rounded-xl border border-border bg-card p-6">
         <div className="flex items-center justify-center gap-6 sm:gap-10">
           {/* Home team */}
-          <div className="flex-1 text-right">
-            <p className="text-xl font-bold text-foreground sm:text-2xl">
-              {match.home_team_name}
-            </p>
-            <p className="mt-0.5 text-xs text-muted-foreground">Home</p>
+          <div className="flex-1 flex flex-col items-end gap-1">
+            <div className="flex items-center gap-2">
+              <p className="text-xl font-bold text-foreground sm:text-2xl">
+                {match.home_team_name}
+              </p>
+              {match.home_team_logo && (
+                <Image src={match.home_team_logo} alt="" width={32} height={32} className="rounded-full" />
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground">Home</p>
           </div>
 
           {/* Score / VS */}
@@ -201,11 +207,16 @@ function MatchHeader({ match }: { match: Match }) {
           </div>
 
           {/* Away team */}
-          <div className="flex-1 text-left">
-            <p className="text-xl font-bold text-foreground sm:text-2xl">
-              {match.away_team_name}
-            </p>
-            <p className="mt-0.5 text-xs text-muted-foreground">Away</p>
+          <div className="flex-1 flex flex-col items-start gap-1">
+            <div className="flex items-center gap-2">
+              {match.away_team_logo && (
+                <Image src={match.away_team_logo} alt="" width={32} height={32} className="rounded-full" />
+              )}
+              <p className="text-xl font-bold text-foreground sm:text-2xl">
+                {match.away_team_name}
+              </p>
+            </div>
+            <p className="text-xs text-muted-foreground">Away</p>
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ import {
   TrendingDown,
   ChevronDown,
 } from "lucide-react";
+import Image from "next/image";
 import { api } from "@/lib/api";
 import { useTranslations } from "@/i18n/locale-provider";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
@@ -424,7 +425,10 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
       </span>
 
       {/* Home team */}
-      <span className={`flex-1 text-sm font-medium truncate ${isCorrect === true && pickLabel === "1" ? "text-emerald-300" : "text-slate-200"}`}>
+      <span className={`flex-1 flex items-center gap-1.5 text-sm font-medium truncate ${isCorrect === true && pickLabel === "1" ? "text-emerald-300" : "text-slate-200"}`}>
+        {fixture.home_team_logo && (
+          <Image src={fixture.home_team_logo} alt="" width={18} height={18} className="rounded-full shrink-0" />
+        )}
         {fixture.home_team_name}
       </span>
 
@@ -434,7 +438,10 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
       </span>
 
       {/* Away team */}
-      <span className={`flex-1 text-sm font-medium truncate ${isCorrect === true && pickLabel === "2" ? "text-emerald-300" : "text-slate-200"}`}>
+      <span className={`flex-1 flex items-center gap-1.5 text-sm font-medium truncate ${isCorrect === true && pickLabel === "2" ? "text-emerald-300" : "text-slate-200"}`}>
+        {fixture.away_team_logo && (
+          <Image src={fixture.away_team_logo} alt="" width={18} height={18} className="rounded-full shrink-0" />
+        )}
         {fixture.away_team_name}
       </span>
 
