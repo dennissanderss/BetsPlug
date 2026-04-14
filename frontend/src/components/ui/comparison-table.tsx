@@ -81,25 +81,25 @@ const defaultRows: Row[] = [
 const fmtScore = (n: number) =>
   Number.isInteger(n) ? `${n}` : n.toString().replace(".", ",");
 
-/* ── Cell variants ─────────────────────────────────────────────── */
+/* ── Cell variants — hard edge ──────────────────────────────────── */
 function BetsPlugCell({ value }: { value: Cell }) {
   if (value === "yes") {
     return (
-      <div className="relative mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-emerald-500 shadow-[0_0_24px_rgba(74,222,128,0.25)] ring-1 ring-green-300">
-        <Check className="h-5 w-5 text-[#04130a]" strokeWidth={3.5} />
+      <div className="mx-auto flex h-9 w-9 items-center justify-center bg-[#4ade80]">
+        <Check className="h-5 w-5 text-[#050505]" strokeWidth={3} />
       </div>
     );
   }
   if (value === "partial") {
     return (
-      <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-amber-50 ring-1 ring-amber-300">
-        <Minus className="h-5 w-5 text-amber-500" strokeWidth={3.5} />
+      <div className="mx-auto flex h-9 w-9 items-center justify-center border border-[#4ade80]/60 bg-[#4ade80]/[0.1]">
+        <Minus className="h-5 w-5 text-[#4ade80]" strokeWidth={3} />
       </div>
     );
   }
   return (
-    <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-red-50 ring-1 ring-red-300">
-      <X className="h-5 w-5 text-red-500" strokeWidth={3.5} />
+    <div className="mx-auto flex h-9 w-9 items-center justify-center border border-[#ef4444]/60 bg-[#ef4444]/[0.08]">
+      <X className="h-5 w-5 text-[#ef4444]" strokeWidth={3} />
     </div>
   );
 }
@@ -107,21 +107,21 @@ function BetsPlugCell({ value }: { value: Cell }) {
 function CompetitorCell({ value }: { value: Cell }) {
   if (value === "yes") {
     return (
-      <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-green-200 bg-green-50">
-        <Check className="h-4 w-4 text-green-600" strokeWidth={3} />
+      <div className="mx-auto flex h-8 w-8 items-center justify-center border border-[#4ade80]/40">
+        <Check className="h-4 w-4 text-[#4ade80]" strokeWidth={3} />
       </div>
     );
   }
   if (value === "partial") {
     return (
-      <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-amber-200 bg-amber-50">
-        <Minus className="h-4 w-4 text-amber-500" strokeWidth={3} />
+      <div className="mx-auto flex h-8 w-8 items-center justify-center border border-white/15">
+        <Minus className="h-4 w-4 text-[#a3a3a3]" strokeWidth={3} />
       </div>
     );
   }
   return (
-    <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-slate-50">
-      <X className="h-4 w-4 text-slate-500" strokeWidth={3} />
+    <div className="mx-auto flex h-8 w-8 items-center justify-center border border-white/10">
+      <X className="h-4 w-4 text-[#707070]" strokeWidth={2.5} />
     </div>
   );
 }
@@ -145,19 +145,7 @@ export function ComparisonTable({ rows: rowsProp }: { rows?: ComparisonRow[] } =
       className="relative overflow-hidden py-20 md:py-28"
       aria-labelledby="comparison-heading"
     >
-      {/* ── Background ──────────────────────────────────────────── */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-[#0f1420] to-background" />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.035]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(-45deg, rgba(74,222,128,0.18) 0 1px, transparent 1px 26px)",
-        }}
-      />
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-24 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-green-500/[0.04] blur-[140px]" />
-        <div className="absolute right-[8%] bottom-10 h-[380px] w-[380px] rounded-full bg-emerald-500/[0.03] blur-[120px]" />
-      </div>
+      <div className="pointer-events-none absolute inset-0 grid-bg opacity-20" />
 
       <div className="relative z-10 mx-auto max-w-5xl px-6">
         {/* ── Heading ───────────────────────────────────────────── */}
@@ -166,20 +154,20 @@ export function ComparisonTable({ rows: rowsProp }: { rows?: ComparisonRow[] } =
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="mx-auto mb-16 max-w-3xl text-center"
+          className="mb-12 max-w-3xl"
         >
-          <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-300 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600">
-            <Sparkles className="h-3.5 w-3.5" />
+          <span className="section-tag mb-5">
+            <Sparkles className="h-3 w-3" />
             {t("comparison.badge")}
           </span>
           <h2
             id="comparison-heading"
-            className="text-balance break-words text-3xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl"
+            className="text-display text-3xl text-white sm:text-4xl lg:text-5xl"
           >
             {t("comparison.titleA")}{" "}
-            <span className="gradient-text">{t("comparison.titleB")}</span>
+            <span className="text-[#4ade80]">{t("comparison.titleB")}</span>
           </h2>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-500 sm:text-lg">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#a3a3a3] sm:text-lg">
             {t("comparison.subtitle")}
           </p>
         </motion.div>
@@ -194,32 +182,31 @@ export function ComparisonTable({ rows: rowsProp }: { rows?: ComparisonRow[] } =
             mark the section transition, then everything below is
             static. */}
         <div className="relative">
-          {/* Ambient glow behind the BetsPlug column */}
-          <div
-            className="pointer-events-none absolute inset-y-0 left-[calc(58.33%-10px)] hidden w-[18%] rounded-[3rem] bg-gradient-to-b from-green-500/[0.06] via-green-500/[0.03] to-transparent blur-2xl sm:block"
-            aria-hidden="true"
-          />
+          {/* Hard-edge panel — BetsPlug column gets left/right lime border via cell styling */}
+          <div className="relative border border-white/10 bg-[#0a0a0a]">
+            {/* Corner brackets */}
+            <span className="pointer-events-none absolute left-[-1px] top-[-1px] h-3 w-3 border-l-2 border-t-2 border-[#4ade80]" />
+            <span className="pointer-events-none absolute right-[-1px] top-[-1px] h-3 w-3 border-r-2 border-t-2 border-[#4ade80]" />
+            <span className="pointer-events-none absolute left-[-1px] bottom-[-1px] h-3 w-3 border-l-2 border-b-2 border-[#4ade80]" />
+            <span className="pointer-events-none absolute right-[-1px] bottom-[-1px] h-3 w-3 border-r-2 border-b-2 border-[#4ade80]" />
 
-          <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-2 shadow-sm backdrop-blur-xl sm:p-4">
             {/* Header row */}
-            <div className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] items-stretch gap-1.5 px-1.5 pb-3 pt-4 sm:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] sm:gap-2 sm:px-4 sm:pb-4 sm:pt-5">
-              <div className="flex items-end">
-                <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
-                  {t("comparison.feature")}
-                </span>
+            <div className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] items-stretch sm:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)]">
+              <div className="flex items-end px-4 pb-4 pt-6 sm:px-6">
+                <span className="mono-label">{t("comparison.feature")}</span>
               </div>
 
-              {/* BetsPlug header — floating column top */}
-              <div className="relative flex flex-col items-center gap-2 rounded-t-[1.5rem] border-x-2 border-t-2 border-green-400 bg-gradient-to-b from-green-50 to-white px-3 pb-5 pt-5 shadow-[0_-8px_40px_-12px_rgba(74,222,128,0.15)]">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 shadow-[0_0_24px_rgba(74,222,128,0.5)]">
-                  <Crown className="h-5 w-5 text-[#04130a]" strokeWidth={2.5} />
+              {/* BetsPlug header */}
+              <div className="relative flex flex-col items-center gap-2 border-x border-[#4ade80]/50 bg-[#4ade80]/[0.05] px-3 pb-5 pt-5">
+                <div className="flex h-10 w-10 items-center justify-center bg-[#4ade80]">
+                  <Crown className="h-5 w-5 text-[#050505]" strokeWidth={2.5} />
                 </div>
                 <div className="text-center">
-                  <div className="text-sm font-extrabold tracking-tight text-slate-900 sm:text-base">
-                    BetsPlug
+                  <div className="text-display text-sm text-white sm:text-base">
+                    BETSPLUG
                   </div>
-                  <div className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-green-600">
-                    <span className="h-1 w-1 rounded-full bg-green-600" />
+                  <div className="mt-1 inline-flex items-center gap-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
+                    <span className="live-dot" />
                     {t("comparison.winner")}
                   </div>
                 </div>
@@ -227,14 +214,14 @@ export function ComparisonTable({ rows: rowsProp }: { rows?: ComparisonRow[] } =
 
               {/* Competitors header */}
               <div className="flex flex-col items-center gap-2 px-3 pb-5 pt-5">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50">
-                  <Users className="h-5 w-5 text-slate-500" strokeWidth={2.25} />
+                <div className="flex h-10 w-10 items-center justify-center border border-white/15 bg-white/[0.02]">
+                  <Users className="h-5 w-5 text-[#707070]" strokeWidth={2} />
                 </div>
                 <div className="text-center">
-                  <div className="text-sm font-bold tracking-tight text-slate-500 sm:text-base">
+                  <div className="text-display text-sm text-[#a3a3a3] sm:text-base">
                     {t("comparison.others")}
                   </div>
-                  <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-600">
+                  <div className="mt-1 mono-label">
                     {t("comparison.typicalTipsters")}
                   </div>
                 </div>
@@ -243,38 +230,30 @@ export function ComparisonTable({ rows: rowsProp }: { rows?: ComparisonRow[] } =
 
             {/* Rows */}
             <div>
-              {rows.map((row, i) => (
+              {rows.map((row) => (
                 <div
                   key={row.feature}
-                  className="group grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] items-center gap-1.5 px-1.5 sm:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] sm:gap-2 sm:px-4"
+                  className="group grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] items-stretch border-t border-white/[0.08] sm:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)]"
                 >
                   {/* Feature label */}
-                  <div
-                    className={`py-5 pr-2 sm:py-5 ${
-                      i !== 0 ? "border-t border-slate-100" : ""
-                    }`}
-                  >
-                    <p className="text-sm font-semibold text-slate-900 sm:text-[15px]">
+                  <div className="px-4 py-5 pr-2 sm:px-6">
+                    <p className="text-sm font-bold text-white sm:text-[15px]">
                       {row.feature}
                     </p>
                     {row.note && (
-                      <p className="mt-1 hidden text-xs text-slate-500 sm:block">
+                      <p className="mt-1 hidden text-xs text-[#707070] sm:block">
                         {row.note}
                       </p>
                     )}
                   </div>
 
-                  {/* BetsPlug cell — middle of floating column */}
-                  <div className="flex items-center justify-center border-x-2 border-green-400 bg-green-50/50 py-5 transition-colors group-hover:bg-green-50">
+                  {/* BetsPlug cell */}
+                  <div className="flex items-center justify-center border-x border-[#4ade80]/50 bg-[#4ade80]/[0.05] py-5 transition-colors group-hover:bg-[#4ade80]/[0.08]">
                     <BetsPlugCell value={row.betsplug} />
                   </div>
 
                   {/* Competitors cell */}
-                  <div
-                    className={`flex items-center justify-center py-5 ${
-                      i !== 0 ? "border-t border-slate-100" : ""
-                    }`}
-                  >
+                  <div className="flex items-center justify-center py-5">
                     <CompetitorCell value={row.others} />
                   </div>
                 </div>
@@ -282,42 +261,39 @@ export function ComparisonTable({ rows: rowsProp }: { rows?: ComparisonRow[] } =
             </div>
 
             {/* Score summary row */}
-            <div
-              className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] items-stretch gap-1.5 px-1.5 pb-2 sm:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)] sm:gap-2 sm:px-4"
-            >
-              <div className="flex items-center border-t border-slate-200 py-6 pr-2">
-                <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+            <div className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)] items-stretch border-t border-white/10 sm:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1fr)]">
+              <div className="flex items-center px-4 py-6 sm:px-6">
+                <span className="mono-label-lime">
                   {t("comparison.finalScore")}
                 </span>
               </div>
 
-              {/* BetsPlug final score — bottom of floating column */}
-              <div className="relative flex flex-col items-center justify-center gap-1 rounded-b-[1.5rem] border-x-2 border-b-2 border-green-400 bg-gradient-to-b from-green-50 via-green-100 to-emerald-100 px-3 py-6 shadow-[0_12px_40px_-12px_rgba(74,222,128,0.15)]">
-                <div className="text-3xl font-black leading-none tracking-tight sm:text-4xl">
-                  <span className="gradient-text">{fmtScore(betsplugScore)}</span>
-                  <span className="text-slate-500">/{rows.length}</span>
+              {/* BetsPlug final score */}
+              <div className="flex flex-col items-center justify-center gap-1 border-x border-[#4ade80]/50 bg-[#4ade80]/[0.08] px-3 py-6">
+                <div className="text-stat text-3xl leading-none sm:text-4xl">
+                  <span className="text-[#4ade80]">{fmtScore(betsplugScore)}</span>
+                  <span className="text-[#707070]">/{rows.length}</span>
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-green-600">
+                <div className="font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
                   {t("comparison.fullHouse")}
                 </div>
               </div>
 
               {/* Competitors final score */}
-              <div className="flex flex-col items-center justify-center gap-1 border-t border-slate-200 px-3 py-6">
-                <div className="text-3xl font-black leading-none tracking-tight text-slate-600 sm:text-4xl">
+              <div className="flex flex-col items-center justify-center gap-1 px-3 py-6">
+                <div className="text-stat text-3xl leading-none text-[#a3a3a3] sm:text-4xl">
                   {fmtScore(competitorsScore)}
-                  <span className="text-slate-700">/{rows.length}</span>
+                  <span className="text-[#707070]">/{rows.length}</span>
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
+                <div className="font-mono text-[10px] font-black uppercase tracking-widest text-[#707070]">
                   {t("comparison.fallsShort")}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Caption below */}
-          <p className="mt-6 text-center text-xs text-slate-500">
-            {t("comparison.caption")}
+          <p className="mt-5 font-mono text-[10px] uppercase tracking-widest text-[#707070]">
+            / {t("comparison.caption")}
           </p>
         </div>
       </div>
