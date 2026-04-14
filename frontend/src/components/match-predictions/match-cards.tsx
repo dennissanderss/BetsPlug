@@ -38,7 +38,7 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
           <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-green-600">
             {fixture.league_name}
           </span>
-          <p className="flex flex-wrap items-center gap-x-1.5 text-base font-extrabold leading-tight text-slate-900 sm:text-lg">
+          <p className="flex flex-wrap items-center gap-x-1.5 text-sm font-black uppercase leading-tight tracking-tight text-white sm:text-base">
             {fixture.home_team_logo && (
               <Image src={fixture.home_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
             )}

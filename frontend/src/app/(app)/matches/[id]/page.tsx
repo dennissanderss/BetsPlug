@@ -158,7 +158,7 @@ function MatchHeader({ match }: { match: Match }) {
           {/* Home team */}
           <div className="flex-1 flex flex-col items-end gap-1">
             <div className="flex items-center gap-2">
-              <p className="text-xl font-bold text-foreground sm:text-2xl">
+              <p className="text-sm font-black uppercase leading-tight tracking-tight text-foreground sm:text-lg md:text-xl">
                 {match.home_team_name}
               </p>
               {match.home_team_logo && (
@@ -212,7 +212,7 @@ function MatchHeader({ match }: { match: Match }) {
               {match.away_team_logo && (
                 <Image src={match.away_team_logo} alt="" width={32} height={32} className="rounded-full" />
               )}
-              <p className="text-xl font-bold text-foreground sm:text-2xl">
+              <p className="text-sm font-black uppercase leading-tight tracking-tight text-foreground sm:text-lg md:text-xl">
                 {match.away_team_name}
               </p>
             </div>

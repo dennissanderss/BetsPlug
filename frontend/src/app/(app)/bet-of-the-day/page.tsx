@@ -622,7 +622,7 @@ export default function BetOfTheDayPage() {
               </div>
 
               {/* Match Title */}
-              <h2 className="mb-8 flex flex-wrap items-center justify-center gap-3 text-3xl font-extrabold text-white sm:text-4xl">
+              <h2 className="mb-8 flex flex-wrap items-center justify-center gap-3 text-xl font-black uppercase leading-tight tracking-tight text-white sm:text-2xl md:text-3xl">
                 {botd.home_team_logo && (
                   <Image src={botd.home_team_logo} alt="" width={36} height={36} className="rounded-full" />
                 )}
