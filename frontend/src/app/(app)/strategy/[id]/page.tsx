@@ -48,6 +48,17 @@ export default function StrategyDetailPage() {
     staleTime: 300_000,
   });
 
+  const { data: walkForward } = useQuery({
+    queryKey: ["strategy-walk-forward", strategyId],
+    queryFn: async () => {
+      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+      const resp = await fetch(`${API}/strategies/${strategyId}/walk-forward`);
+      if (!resp.ok) return null;
+      return resp.json();
+    },
+    staleTime: 300_000,
+  });
+
   const strategy = picksData?.strategy;
   const picks = picksData?.picks ?? [];
 
@@ -331,6 +342,60 @@ export default function StrategyDetailPage() {
           )}
         </div>
       </PaywallOverlay>
+
+      {/* Walk-forward validation data */}
+      {walkForward && walkForward.folds && walkForward.folds.length > 0 && (
+        <div className="glass-card p-5 sm:p-6 animate-fade-in">
+          <div className="flex items-center gap-2 mb-4">
+            <Target className="h-5 w-5 text-emerald-400" />
+            <h3 className="text-sm font-bold text-slate-100">Walk-Forward Validation</h3>
+            <span className="ml-auto rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[9px] font-semibold text-emerald-400 uppercase">
+              Statistically validated
+            </span>
+          </div>
+          <p className="text-xs text-slate-500 mb-4">
+            Each fold tests the strategy on unseen data to verify it works on new matches, not just historical ones.
+          </p>
+          <div className="space-y-2">
+            <div className="grid grid-cols-5 gap-2 text-[9px] uppercase tracking-widest text-slate-600 px-3 py-1">
+              <span>Fold</span>
+              <span className="text-center">Sample</span>
+              <span className="text-center">Win Rate</span>
+              <span className="text-center">ROI</span>
+              <span className="text-center">Status</span>
+            </div>
+            {walkForward.folds.map((fold: any, i: number) => (
+              <div key={i} className="grid grid-cols-5 gap-2 items-center rounded-lg bg-white/[0.02] px-3 py-2.5 text-xs">
+                <span className="text-slate-400">Fold {i + 1}</span>
+                <span className="text-center tabular-nums text-slate-300">{fold.sample_size ?? fold.n ?? "—"}</span>
+                <span className={cn("text-center tabular-nums font-medium", (fold.winrate ?? fold.win_rate ?? 0) >= 0.5 ? "text-emerald-400" : "text-red-400")}>
+                  {((fold.winrate ?? fold.win_rate ?? 0) * 100).toFixed(1)}%
+                </span>
+                <span className={cn("text-center tabular-nums font-medium", (fold.roi ?? 0) >= 0 ? "text-emerald-400" : "text-red-400")}>
+                  {fold.roi != null ? `${(fold.roi * 100).toFixed(1)}%` : "—"}
+                </span>
+                <span className="text-center">
+                  {(fold.winrate ?? fold.win_rate ?? 0) >= 0.5 ? (
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 mx-auto" />
+                  ) : (
+                    <XCircle className="h-3.5 w-3.5 text-red-400 mx-auto" />
+                  )}
+                </span>
+              </div>
+            ))}
+          </div>
+          {walkForward.summary && (
+            <div className="mt-4 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
+              <p className="text-xs text-emerald-400">
+                <span className="font-semibold">Overall:</span>{" "}
+                {walkForward.summary.avg_winrate != null && `Win rate ${(walkForward.summary.avg_winrate * 100).toFixed(1)}%`}
+                {walkForward.summary.avg_roi != null && ` · ROI ${(walkForward.summary.avg_roi * 100).toFixed(1)}%`}
+                {walkForward.summary.total_folds != null && ` · ${walkForward.summary.total_folds} folds`}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
     </div>
   );

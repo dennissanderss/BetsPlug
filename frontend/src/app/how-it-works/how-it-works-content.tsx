@@ -307,6 +307,39 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             transition={{ duration: 0.6 }}
             className="mx-auto mb-14 max-w-2xl text-center"
           >
+            {/* ── Under the Hood: engine explanation ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5 }}
+              className="mb-16 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10">
+                  <Database className="h-5 w-5 text-blue-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-extrabold text-white">{t("hiw.engineTitle")}</h3>
+                  <p className="text-sm text-slate-400">{t("hiw.engineSubtitle")}</p>
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {[
+                  { name: t("hiw.engine1Name"), desc: t("hiw.engine1Desc"), color: "blue" },
+                  { name: t("hiw.engine2Name"), desc: t("hiw.engine2Desc"), color: "emerald" },
+                  { name: t("hiw.engine3Name"), desc: t("hiw.engine3Desc"), color: "amber" },
+                  { name: t("hiw.engine4Name"), desc: t("hiw.engine4Desc"), color: "purple" },
+                ].map((m) => (
+                  <div key={m.name} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+                    <p className={`text-sm font-bold text-${m.color}-400 mb-1`}>{m.name}</p>
+                    <p className="text-xs text-slate-400 leading-relaxed">{m.desc}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-4 text-xs text-slate-500 leading-relaxed">{t("hiw.engineDisclaimer")}</p>
+            </motion.div>
+
             <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
               {t("hiw.faqBadge")}
             </span>

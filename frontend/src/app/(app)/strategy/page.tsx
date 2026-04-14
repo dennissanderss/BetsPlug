@@ -18,6 +18,8 @@ import {
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
+import { RelatedLinks } from "@/components/ui/related-links";
+import { Trophy, Sparkles, ClipboardList } from "lucide-react";
 import type { TrackrecordSummary, StrategyResponse } from "@/types/api";
 
 // ─── Minimum predictions required before a backtest is meaningful ────────────
@@ -408,6 +410,15 @@ export default function StrategyPage() {
         </div>
       )}
 
+      {/* Related pages */}
+      <RelatedLinks
+        title={t("related.title")}
+        links={[
+          { label: t("related.trackRecord"), href: "/trackrecord", description: t("related.trackRecordDesc"), icon: ClipboardList },
+          { label: t("related.results"), href: "/results", description: t("related.resultsDesc"), icon: Trophy },
+          { label: t("related.predictions"), href: "/predictions", description: t("related.predictionsDesc"), icon: Sparkles },
+        ]}
+      />
 
     </div>
   );

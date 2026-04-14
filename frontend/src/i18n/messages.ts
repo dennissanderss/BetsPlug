@@ -722,6 +722,19 @@ const en = {
   "hiw.step3Point3Desc":
     "Losing picks stay forever. A track record that only shows winners is marketing, not transparency.",
 
+  /* Engine under the hood */
+  "hiw.engineTitle": "Under the Hood",
+  "hiw.engineSubtitle": "The models behind every prediction",
+  "hiw.engine1Name": "Point-in-Time Elo",
+  "hiw.engine1Desc": "Rates every team based on match results. Uses only data available before each game — no future leakage.",
+  "hiw.engine2Name": "Dixon-Coles Poisson",
+  "hiw.engine2Desc": "Statistical model that predicts exact scores by modeling goals as Poisson-distributed events.",
+  "hiw.engine3Name": "Logistic Regression",
+  "hiw.engine3Desc": "Machine learning model trained on 40+ features including form, head-to-head, and venue effects.",
+  "hiw.engine4Name": "Ensemble + Validation",
+  "hiw.engine4Desc": "All models are combined and validated with walk-forward testing on unseen data. No cherry-picking.",
+  "hiw.engineDisclaimer": "Each model is tested on data it has never seen before (walk-forward validation). Our track record page shows every prediction — wins and losses — with no deletions.",
+
   /* Objection section - FAQ */
   "hiw.faqBadge": "Honest answers",
   "hiw.faqTitle": "Frequently asked questions",
@@ -1229,6 +1242,26 @@ const en = {
   "route.allDesc": "Browse all upcoming matches with AI predictions, pre-match odds, and confidence levels. Filter by league, confidence, or date.",
   "route.allCta": "Browse predictions",
   "route.disclaimer": "For educational and analytical purposes only. Not financial advice. Past performance does not guarantee future results.",
+  "route.strategyTitle": "Strategy Lab",
+  "route.strategyDesc": "Explore proven betting strategies backed by data",
+  "route.resultsTitle": "Results & Analysis",
+  "route.resultsDesc": "See how yesterday's predictions performed",
+
+  /* ── Related links ────────────────────────────────── */
+  "related.title": "Explore More",
+  "related.predictions": "All Predictions",
+  "related.predictionsDesc": "Browse all upcoming match predictions with probabilities",
+  "related.strategyLab": "Strategy Lab",
+  "related.strategyLabDesc": "Data-driven strategies with walk-forward validation",
+  "related.trackRecord": "Track Record",
+  "related.trackRecordDesc": "Full transparency on all our prediction metrics",
+  "related.results": "Results",
+  "related.resultsDesc": "See how our predictions performed recently",
+
+  /* ── Trackrecord export ────────────────────────────── */
+  "trackrecord.exportTitle": "Download All Predictions",
+  "trackrecord.exportDesc": "Full transparency — download every prediction as CSV",
+  "trackrecord.exportCta": "Export CSV",
 
   /* ── Dashboard page titles ────────────────────────────────── */
   "page.dashboard": "Dashboard",
@@ -2485,6 +2518,19 @@ const nl: Dictionary = {
   "hiw.step3Point3Desc":
     "Verloren picks blijven voor altijd. Een track record dat alleen winnaars toont is marketing, geen transparantie.",
 
+  /* Engine under the hood */
+  "hiw.engineTitle": "Onder de motorkap",
+  "hiw.engineSubtitle": "De modellen achter elke voorspelling",
+  "hiw.engine1Name": "Point-in-Time Elo",
+  "hiw.engine1Desc": "Beoordeelt elk team op basis van wedstrijdresultaten. Gebruikt alleen data beschikbaar voor de wedstrijd — geen toekomstige informatie.",
+  "hiw.engine2Name": "Dixon-Coles Poisson",
+  "hiw.engine2Desc": "Statistisch model dat exacte scores voorspelt door doelpunten als Poisson-verdeelde gebeurtenissen te modelleren.",
+  "hiw.engine3Name": "Logistic Regression",
+  "hiw.engine3Desc": "Machine learning model getraind op 40+ kenmerken waaronder vorm, onderlinge historie en thuisvoordeel.",
+  "hiw.engine4Name": "Ensemble + Validatie",
+  "hiw.engine4Desc": "Alle modellen worden gecombineerd en gevalideerd met walk-forward testing op onbekende data. Geen cherry-picking.",
+  "hiw.engineDisclaimer": "Elk model wordt getest op data die het nooit eerder heeft gezien (walk-forward validatie). Ons trackrecord toont elke voorspelling — winst en verlies — zonder verwijderingen.",
+
   /* FAQ */
   "hiw.faqBadge": "Eerlijke antwoorden",
   "hiw.faqTitle": "Veelgestelde vragen",
@@ -2982,6 +3028,26 @@ const nl: Dictionary = {
   "route.allDesc": "Bekijk alle aankomende wedstrijden met AI-voorspellingen, pre-match odds en betrouwbaarheidsniveaus. Filter op competitie, zekerheid of datum.",
   "route.allCta": "Bekijk voorspellingen",
   "route.disclaimer": "Uitsluitend voor educatieve en analytische doeleinden. Geen financieel advies. Resultaten uit het verleden bieden geen garantie voor de toekomst.",
+  "route.strategyTitle": "Strategy Lab",
+  "route.strategyDesc": "Ontdek bewezen strategieen onderbouwd door data",
+  "route.resultsTitle": "Resultaten & Analyse",
+  "route.resultsDesc": "Bekijk hoe de voorspellingen van gisteren het deden",
+
+  /* ── Related links ────────────────────────────────── */
+  "related.title": "Ontdek meer",
+  "related.predictions": "Alle Voorspellingen",
+  "related.predictionsDesc": "Bekijk alle aankomende wedstrijdvoorspellingen met kansen",
+  "related.strategyLab": "Strategy Lab",
+  "related.strategyLabDesc": "Datagedreven strategieen met walk-forward validatie",
+  "related.trackRecord": "Trackrecord",
+  "related.trackRecordDesc": "Volledige transparantie over al onze voorspellingsmetrics",
+  "related.results": "Resultaten",
+  "related.resultsDesc": "Bekijk hoe onze voorspellingen recent presteerden",
+
+  /* ── Trackrecord export ────────────────────────────── */
+  "trackrecord.exportTitle": "Download alle voorspellingen",
+  "trackrecord.exportDesc": "Volledige transparantie — download elke voorspelling als CSV",
+  "trackrecord.exportCta": "Exporteer CSV",
 
   /* ── Dashboard page titles ────────────────────────────────── */
   "page.dashboard": "Dashboard",

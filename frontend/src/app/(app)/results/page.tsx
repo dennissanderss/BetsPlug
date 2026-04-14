@@ -18,6 +18,8 @@ import { api } from "@/lib/api";
 import { useTranslations } from "@/i18n/locale-provider";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import { UpsellBanner } from "@/components/ui/upsell-banner";
+import { RelatedLinks } from "@/components/ui/related-links";
+import { Sparkles, FlaskConical, ClipboardList } from "lucide-react";
 import type { Fixture, WeeklySummary } from "@/types/api";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -740,6 +742,16 @@ function ResultsPageContent() {
         headline={t("results.upsellHeadline")}
         subtext={t("results.upsellSubtext")}
         variant="inline"
+      />
+
+      {/* Related pages */}
+      <RelatedLinks
+        title={t("related.title")}
+        links={[
+          { label: t("related.predictions"), href: "/predictions", description: t("related.predictionsDesc"), icon: Sparkles },
+          { label: t("related.strategyLab"), href: "/strategy", description: t("related.strategyLabDesc"), icon: FlaskConical },
+          { label: t("related.trackRecord"), href: "/trackrecord", description: t("related.trackRecordDesc"), icon: ClipboardList },
+        ]}
       />
 
     </div>

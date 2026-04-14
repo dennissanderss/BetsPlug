@@ -21,8 +21,10 @@ import {
   Star,
   Calendar,
   Trophy,
+  FlaskConical,
 } from "lucide-react";
 import Link from "next/link";
+import { RelatedLinks } from "@/components/ui/related-links";
 import {
   AreaChart,
   Area,
@@ -1542,6 +1544,32 @@ export default function TrackrecordPage() {
               filterParams={filterParams}
             />
           </div>
+
+          {/* CSV Export */}
+          <div className="glass-card p-5 flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-semibold text-slate-100">{t("trackrecord.exportTitle")}</h3>
+              <p className="text-xs text-slate-500 mt-0.5">{t("trackrecord.exportDesc")}</p>
+            </div>
+            <a
+              href={api.getTrackrecordExportUrl()}
+              download
+              className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-400 transition-all hover:bg-emerald-500/20"
+            >
+              <Download className="h-4 w-4" />
+              {t("trackrecord.exportCta")}
+            </a>
+          </div>
+
+          {/* Related pages */}
+          <RelatedLinks
+            title={t("related.title")}
+            links={[
+              { label: t("related.strategyLab"), href: "/strategy", description: t("related.strategyLabDesc"), icon: FlaskConical },
+              { label: t("related.results"), href: "/results", description: t("related.resultsDesc"), icon: Trophy },
+              { label: t("related.predictions"), href: "/predictions", description: t("related.predictionsDesc"), icon: Sparkles },
+            ]}
+          />
         </div>
       )}
     </div>

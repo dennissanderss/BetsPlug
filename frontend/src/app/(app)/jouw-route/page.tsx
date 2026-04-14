@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
-import { Trophy, Sparkles, ArrowRight, Brain, TrendingUp, Shield } from "lucide-react";
+import { Trophy, Sparkles, ArrowRight, Brain, TrendingUp, Shield, FlaskConical, BarChart3 } from "lucide-react";
 
 export default function YourRoutePage() {
   const { t } = useTranslations();
@@ -99,6 +99,36 @@ export default function YourRoutePage() {
           <div className="flex items-center gap-1 text-sm font-semibold text-blue-400 group-hover:gap-2 transition-all">
             {t("route.allCta")} <ArrowRight className="h-4 w-4" />
           </div>
+        </Link>
+      </div>
+
+      {/* Also explore */}
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Link
+          href={loc("/strategy")}
+          className="glass-card-hover group flex items-center gap-3 p-4"
+        >
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10">
+            <FlaskConical className="h-4 w-4 text-emerald-400" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-white">{t("route.strategyTitle")}</p>
+            <p className="text-[10px] text-slate-400">{t("route.strategyDesc")}</p>
+          </div>
+          <ArrowRight className="h-4 w-4 text-slate-600 shrink-0 group-hover:text-emerald-400 transition-colors" />
+        </Link>
+        <Link
+          href={loc("/results")}
+          className="glass-card-hover group flex items-center gap-3 p-4"
+        >
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/10">
+            <BarChart3 className="h-4 w-4 text-amber-400" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-white">{t("route.resultsTitle")}</p>
+            <p className="text-[10px] text-slate-400">{t("route.resultsDesc")}</p>
+          </div>
+          <ArrowRight className="h-4 w-4 text-slate-600 shrink-0 group-hover:text-emerald-400 transition-colors" />
         </Link>
       </div>
 
