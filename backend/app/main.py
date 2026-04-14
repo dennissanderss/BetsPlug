@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
 from app.core.logging import setup_logging
+from app.core.rate_limit import RateLimitMiddleware
 from app.api.routes import router as api_router
 
 
@@ -279,6 +280,9 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    # ── Rate limiting (Redis-backed, fail-open) ────────────────────────────
+    application.add_middleware(RateLimitMiddleware)
 
     # ── Ultra-light liveness probe ──────────────────────────────────────────
     # /api/ping is a zero-dependency endpoint used as a fallback healthcheck
