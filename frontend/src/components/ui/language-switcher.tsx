@@ -7,12 +7,15 @@ import { locales, localeMeta, type Locale } from "@/i18n/config";
 import { useTranslations } from "@/i18n/locale-provider";
 
 type Variant = "compact" | "full";
+type Theme = "light" | "dark";
 
 export function LanguageSwitcher({
   variant = "compact",
+  theme = "light",
   className = "",
 }: {
   variant?: Variant;
+  theme?: Theme;
   className?: string;
 }) {
   const { locale, setLocale, t } = useTranslations();
@@ -47,7 +50,11 @@ export function LanguageSwitcher({
         aria-label={t("lang.switch")}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className={`group flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.03] text-slate-300 backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-white/[0.06] hover:text-white ${
+        className={`group flex items-center gap-2 rounded-full backdrop-blur-sm transition-all ${
+          theme === "dark"
+            ? "border border-white/[0.1] bg-white/[0.03] text-slate-300 hover:border-green-500/40 hover:bg-white/[0.06] hover:text-white"
+            : "border border-slate-300 bg-slate-50 text-slate-600 hover:border-green-500/40 hover:bg-green-50 hover:text-slate-900"
+        } ${
           variant === "compact"
             ? "h-9 px-3 text-xs font-semibold"
             : "w-full justify-between px-4 py-3 text-sm font-medium"
@@ -77,7 +84,11 @@ export function LanguageSwitcher({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className={`absolute z-50 mt-2 min-w-[12rem] overflow-hidden rounded-2xl border border-white/[0.1] bg-[#0d1220]/95 p-1.5 shadow-2xl shadow-black/50 backdrop-blur-xl ${
+            className={`absolute z-50 mt-2 min-w-[12rem] overflow-hidden rounded-2xl p-1.5 shadow-2xl backdrop-blur-xl ${
+              theme === "dark"
+                ? "border border-white/[0.1] bg-[#0d1220]/95 shadow-black/50"
+                : "border border-slate-200 bg-white/95 shadow-slate-200/50"
+            } ${
               variant === "compact" ? "right-0" : "left-0 right-0"
             }`}
           >
@@ -96,8 +107,8 @@ export function LanguageSwitcher({
                     }}
                     className={`flex w-full items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                       active
-                        ? "bg-green-500/10 text-green-300"
-                        : "text-slate-300 hover:bg-white/[0.05] hover:text-white"
+                        ? theme === "dark" ? "bg-green-500/10 text-green-300" : "bg-green-50 text-green-700"
+                        : theme === "dark" ? "text-slate-300 hover:bg-white/[0.05] hover:text-white" : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                     }`}
                   >
                     <span className="flex items-center gap-3">
@@ -106,7 +117,7 @@ export function LanguageSwitcher({
                       </span>
                       <span>{m.native}</span>
                     </span>
-                    {active && <Check className="h-4 w-4 text-green-400" />}
+                    {active && <Check className={`h-4 w-4 ${theme === "dark" ? "text-green-400" : "text-green-600"}`} />}
                   </button>
                 </li>
               );

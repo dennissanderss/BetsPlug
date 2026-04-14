@@ -45,8 +45,8 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
       aria-labelledby="latest-articles-heading"
     >
       {/* Ambient backdrop */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[#0b1220]/40 to-transparent" />
-      <div className="pointer-events-none absolute left-1/2 top-20 h-[320px] w-[620px] -translate-x-1/2 rounded-full bg-green-500/[0.05] blur-[140px]" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[#f0f4f8]/40 to-transparent" />
+      <div className="pointer-events-none absolute left-1/2 top-20 h-[320px] w-[620px] -translate-x-1/2 rounded-full bg-green-500/[0.03] blur-[140px]" />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6">
         {/* Section heading */}
@@ -58,17 +58,17 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="max-w-2xl"
           >
-            <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-300">
+            <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-green-300 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-700">
               <Newspaper className="h-3.5 w-3.5" />
               {t("articles.badge")}
             </span>
             <h2
               id="latest-articles-heading"
-              className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl"
+              className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl md:text-5xl"
             >
               <span className="gradient-text">{t("articles.title")}</span>
             </h2>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-400 sm:text-base">
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-base">
               {t("articles.subtitle")}
             </p>
           </motion.div>
@@ -77,7 +77,7 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
           <div className="hidden sm:block">
             <Link
               href={loc("/articles")}
-              className="group inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.03] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-300 backdrop-blur-xl transition-all duration-300 hover:border-green-500/40 hover:bg-green-500/[0.08] hover:text-white"
+              className="group inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-600 backdrop-blur-xl transition-all duration-300 hover:border-green-400 hover:bg-green-50 hover:text-green-700"
             >
               {t("articles.checkAll")}
               <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
@@ -91,7 +91,7 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
             <Link
               key={article.slug}
               href={loc(`/articles/${article.slug}`)}
-              className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-[0_0_40px_rgba(74,222,128,0.12)]"
+              className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-green-400 hover:shadow-lg"
             >
               <div className="relative aspect-[16/9] overflow-hidden">
                 <CoverArt
@@ -103,13 +103,13 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
               </div>
               <div className="flex flex-1 flex-col gap-4 p-6">
                 <SportBadge sport={article.sport} />
-                <h3 className="text-lg font-extrabold leading-snug tracking-tight text-white group-hover:text-green-50 sm:text-xl">
+                <h3 className="text-lg font-extrabold leading-snug tracking-tight text-slate-900 group-hover:text-green-700 sm:text-xl">
                   {article.title}
                 </h3>
-                <p className="line-clamp-2 flex-1 text-sm leading-relaxed text-slate-400">
+                <p className="line-clamp-2 flex-1 text-sm leading-relaxed text-slate-500">
                   {article.excerpt}
                 </p>
-                <div className="mt-2 flex items-center gap-3 border-t border-white/[0.05] pt-4 text-xs text-slate-500">
+                <div className="mt-2 flex items-center gap-3 border-t border-slate-100 pt-4 text-xs text-slate-400">
                   <span>{formatDate(article.publishedAt)}</span>
                   <span className="text-slate-700">·</span>
                   <span className="inline-flex items-center gap-1.5">
@@ -126,7 +126,7 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
         <div className="mt-10 flex justify-center sm:hidden">
           <Link
             href={loc("/articles")}
-            className="group inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.03] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-300 backdrop-blur-xl transition-all duration-300 hover:border-green-500/40 hover:bg-green-500/[0.08] hover:text-white"
+            className="group inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-600 backdrop-blur-xl transition-all duration-300 hover:border-green-400 hover:bg-green-50 hover:text-green-700"
           >
             {t("articles.checkAll")}
             <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />

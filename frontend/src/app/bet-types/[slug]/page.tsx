@@ -191,13 +191,13 @@ export default async function BetTypeHubPage(props: {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="relative min-h-screen overflow-x-hidden bg-[#0a1220] text-slate-100">
+      <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
         <SiteNav />
 
         {/* Hero */}
         <section className="relative overflow-hidden px-4 pb-10 pt-28 sm:pt-32">
-          <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.12] blur-[140px]" />
-          <div className="pointer-events-none absolute -right-40 -top-20 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.10] blur-[140px]" />
+          <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.06] blur-[140px]" />
+          <div className="pointer-events-none absolute -right-40 -top-20 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.05] blur-[140px]" />
 
           <div className="relative mx-auto max-w-5xl">
             {/* Breadcrumb */}
@@ -205,30 +205,30 @@ export default async function BetTypeHubPage(props: {
               aria-label="Breadcrumb"
               className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-slate-500"
             >
-              <Link href="/" className="transition hover:text-green-300">
+              <Link href="/" className="transition hover:text-green-600">
                 BetsPlug
               </Link>
               <ChevronRight className="h-3 w-3" />
-              <span className="text-slate-400">
+              <span className="text-slate-500">
                 {t("Bet Types", "Wed-types")}
               </span>
               <ChevronRight className="h-3 w-3" />
-              <span className="text-slate-300">
+              <span className="text-slate-600">
                 {hub.name[editorialLocale]}
               </span>
             </nav>
 
             <div className="text-center">
-              <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-300">
+              <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-700">
                 <Target className="h-3.5 w-3.5" />
                 {hub.shortCode}
               </div>
 
-              <h1 className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
+              <h1 className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
                 {hub.name[editorialLocale]}
               </h1>
 
-              <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-300 sm:text-lg">
+              <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-600 sm:text-lg">
                 {hub.tagline[editorialLocale]}
               </p>
             </div>
@@ -244,14 +244,14 @@ export default async function BetTypeHubPage(props: {
         {/* Explainer */}
         <section className="relative px-4 pb-10">
           <div className="mx-auto max-w-3xl">
-            <div className="glass-card p-6 sm:p-10">
-              <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10">
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                 {t(
                   `What is ${hub.name.en}?`,
                   `Wat is ${hub.name.nl}?`,
                 )}
               </h2>
-              <p className="mt-4 text-base leading-relaxed text-slate-300">
+              <p className="mt-4 text-base leading-relaxed text-slate-600">
                 {hub.explainer[editorialLocale]}
               </p>
             </div>
@@ -261,28 +261,28 @@ export default async function BetTypeHubPage(props: {
         {/* Strategy */}
         <section className="relative px-4 pb-12">
           <div className="mx-auto max-w-3xl">
-            <div className="glass-card p-6 sm:p-10">
-              <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10">
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                 {t(
                   `${hub.name.en} strategy`,
                   `${hub.name.nl}-strategie`,
                 )}
               </h2>
-              <p className="mt-4 text-base leading-relaxed text-slate-300">
+              <p className="mt-4 text-base leading-relaxed text-slate-600">
                 {hub.strategy[editorialLocale]}
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
                   href="/track-record"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/[0.08] px-4 py-2 text-xs font-bold text-green-300 transition hover:border-green-500/50 hover:bg-green-500/[0.15]"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-50 px-4 py-2 text-xs font-bold text-green-700 transition hover:border-green-500/50 hover:bg-green-100"
                 >
                   {t("See our track record", "Bekijk ons trackrecord")}
                   <ArrowRight className="h-3 w-3" />
                 </Link>
                 <Link
                   href="/match-predictions"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-xs font-bold text-slate-300 transition hover:border-green-500/40 hover:text-green-300"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-600 transition hover:border-green-500/40 hover:text-green-600"
                 >
                   {t("All predictions", "Alle voorspellingen")}
                   <ArrowRight className="h-3 w-3" />
@@ -302,13 +302,13 @@ export default async function BetTypeHubPage(props: {
         {/* FAQ */}
         <section className="relative px-4 pb-20">
           <div className="mx-auto max-w-3xl">
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
               {t(
                 `${hub.name.en} FAQ`,
                 `Veelgestelde vragen over ${hub.name.nl}`,
               )}
             </h2>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm text-slate-500">
               {t(
                 "Everything the market asks about how this bet type works.",
                 "Alles wat de markt vraagt over hoe dit wed-type werkt.",
@@ -319,13 +319,13 @@ export default async function BetTypeHubPage(props: {
               {hub.faqs[editorialLocale].map((faq) => (
                 <details
                   key={faq.q}
-                  className="group glass-card overflow-hidden p-0"
+                  className="group overflow-hidden rounded-2xl border border-slate-200 bg-white p-0 shadow-sm"
                 >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-5 text-left text-base font-bold text-white transition hover:text-green-300">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-5 text-left text-base font-bold text-slate-900 transition hover:text-green-600">
                     <span>{faq.q}</span>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-slate-500 transition group-open:rotate-90" />
+                    <ChevronRight className="h-4 w-4 shrink-0 text-slate-400 transition group-open:rotate-90" />
                   </summary>
-                  <div className="px-5 pb-5 text-sm leading-relaxed text-slate-300">
+                  <div className="px-5 pb-5 text-sm leading-relaxed text-slate-600">
                     {faq.a}
                   </div>
                 </details>
@@ -333,8 +333,8 @@ export default async function BetTypeHubPage(props: {
             </div>
 
             {/* Cross-links to other bet types */}
-            <div className="mt-10 glass-card p-6">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-green-300">
+            <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-green-700">
                 <Sparkles className="h-3.5 w-3.5" />
                 {t("Related markets", "Gerelateerde markten")}
               </div>
@@ -345,10 +345,10 @@ export default async function BetTypeHubPage(props: {
                     <Link
                       key={other.slug}
                       href={`/bet-types/${other.slug}`}
-                      className="flex items-center justify-between gap-3 rounded-xl border border-white/[0.08] bg-white/[0.02] px-4 py-3 text-sm font-bold text-slate-200 transition hover:border-green-500/40 hover:bg-green-500/[0.05] hover:text-green-300"
+                      className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-green-500/40 hover:bg-green-50 hover:text-green-600"
                     >
                       <span>{other.name[editorialLocale]}</span>
-                      <ArrowRight className="h-4 w-4 text-slate-500 transition group-hover:text-green-300" />
+                      <ArrowRight className="h-4 w-4 text-slate-400 transition group-hover:text-green-600" />
                     </Link>
                   ))}
               </div>

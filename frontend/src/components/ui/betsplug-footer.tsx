@@ -75,7 +75,7 @@ export function BetsPlugFooter() {
   ];
 
   return (
-    <footer className="relative w-full overflow-hidden pt-16 pb-10">
+    <footer className="dark-section relative w-full overflow-hidden pt-16 pb-10">
       {/* ── Background ── */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[#070a13] to-[#050811]" />
       <div
@@ -309,7 +309,7 @@ export function BetsPlugFooter() {
         {/* ═══════════════════════════════════════════════════════════
             PAYMENT / SECURITY STRIP
             ═══════════════════════════════════════════════════════════ */}
-        <div className="relative mt-16 flex flex-col items-center gap-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-6 py-6 backdrop-blur-sm md:flex-row md:justify-between">
+        <div className="relative mt-16 flex flex-col items-center gap-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] px-6 py-6 backdrop-blur-sm md:flex-row md:justify-between">
           {/* Secure payments label */}
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/15 ring-1 ring-green-500/30">
@@ -345,7 +345,7 @@ export function BetsPlugFooter() {
         {/* ═══════════════════════════════════════════════════════════
             BOTTOM BAR
             ═══════════════════════════════════════════════════════════ */}
-        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-6 md:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/[0.08] pt-6 md:flex-row">
           <p className="text-xs text-slate-500">
             © {new Date().getFullYear()} BetsPlug. {t("footer.copyright")}
           </p>

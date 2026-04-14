@@ -159,30 +159,27 @@ export function SocialProofPopup() {
       role="status"
       aria-live="polite"
     >
-      <div className="group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-green-500/20 bg-gradient-to-br from-[#0d1220]/95 to-[#080b14]/95 p-3 pr-9 shadow-2xl shadow-green-500/10 backdrop-blur-xl sm:p-4 sm:pr-10">
-        {/* Glow */}
-        <div className="pointer-events-none absolute -left-10 -top-10 h-28 w-28 rounded-full bg-green-500/20 blur-2xl" />
-
+      <div className="group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-slate-200 bg-white/95 p-3 pr-9 shadow-xl shadow-slate-200/50 backdrop-blur-xl sm:p-4 sm:pr-10">
         {/* Icon */}
-        <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.25)] sm:h-11 sm:w-11">
-          <CheckCircle2 className="h-5 w-5 text-green-400 sm:h-6 sm:w-6" />
+        <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-green-50 shadow-sm sm:h-11 sm:w-11">
+          <CheckCircle2 className="h-5 w-5 text-green-500 sm:h-6 sm:w-6" />
           <span className="absolute -right-0.5 -top-0.5 flex h-2.5 w-2.5">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-400" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500" />
           </span>
         </div>
 
         {/* Text */}
         <div className="relative flex min-w-0 flex-col">
-          <p className="max-w-[240px] truncate text-xs leading-tight text-slate-200 sm:max-w-[280px] sm:text-sm">
-            <span className="font-semibold text-white">{notification.name}</span>{" "}
+          <p className="max-w-[240px] truncate text-xs leading-tight text-slate-600 sm:max-w-[280px] sm:text-sm">
+            <span className="font-semibold text-slate-900">{notification.name}</span>{" "}
             {t("socialProof.subscribed")}{" "}
-            <span className="font-semibold text-green-400">
+            <span className="font-semibold text-green-600">
               {notification.plan}
             </span>{" "}
             {t("socialProof.plan")}
           </p>
-          <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-slate-500 sm:text-[11px]">
+          <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-slate-400 sm:text-[11px]">
             {notification.minutesAgo} {t("socialProof.minAgo")} · {t("socialProof.verified")}
           </p>
         </div>
@@ -192,13 +189,13 @@ export function SocialProofPopup() {
           type="button"
           onClick={handleClose}
           aria-label={t("socialProof.dismiss")}
-          className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-white/10 hover:text-white"
+          className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
         >
           <X size={12} />
         </button>
 
         {/* Progress bar */}
-        <div className="absolute bottom-0 left-0 h-[2px] w-full overflow-hidden rounded-b-2xl bg-white/5">
+        <div className="absolute bottom-0 left-0 h-[2px] w-full overflow-hidden rounded-b-2xl bg-slate-100">
           <div
             className={`h-full bg-gradient-to-r from-green-400 to-emerald-500 ${
               visible ? "animate-[shrink_7s_linear_forwards]" : ""

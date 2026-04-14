@@ -46,19 +46,19 @@ export function ArticleTemplate({ article }: { article: Article }) {
     // overflow-x-clip (not -hidden) so position:sticky still works for the
     // right-column promo banner. -hidden implicitly forces overflow-y:auto on
     // this element which creates a scroll container and breaks sticky.
-    <div className="relative min-h-screen overflow-x-clip bg-[#070a12] text-white">
+    <div className="relative min-h-screen overflow-x-clip bg-[#f8fafb] text-slate-900">
       {/* Ambient background (matches archive page) */}
       <div className="pointer-events-none fixed inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#070a12] via-[#0b1220] to-[#070a12]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafb] via-white to-[#f8fafb]" />
         <div
-          className="absolute inset-0 opacity-[0.05]"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage:
-              "radial-gradient(rgba(74,222,128,0.5) 1px, transparent 1px)",
+              "radial-gradient(rgba(74,222,128,0.3) 1px, transparent 1px)",
             backgroundSize: "28px 28px",
           }}
         />
-        <div className="absolute left-1/2 top-40 h-[520px] w-[720px] -translate-x-1/2 rounded-full bg-green-500/[0.06] blur-[150px]" />
+        <div className="absolute left-1/2 top-40 h-[520px] w-[720px] -translate-x-1/2 rounded-full bg-green-500/[0.04] blur-[150px]" />
       </div>
 
       <SiteNav />
@@ -73,25 +73,25 @@ export function ArticleTemplate({ article }: { article: Article }) {
           >
             <Link
               href={loc("/")}
-              className="transition-colors hover:text-white"
+              className="transition-colors hover:text-slate-900"
             >
               {t("articles.breadcrumbHome")}
             </Link>
             <span>/</span>
             <Link
               href={loc("/articles")}
-              className="transition-colors hover:text-white"
+              className="transition-colors hover:text-slate-900"
             >
               {t("articles.breadcrumbBlog")}
             </Link>
             <span>/</span>
-            <span className="truncate text-slate-600">{article.title}</span>
+            <span className="truncate text-slate-400">{article.title}</span>
           </nav>
 
           {/* Back link */}
           <Link
             href={loc("/articles")}
-            className="mb-6 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 transition-colors hover:text-green-300"
+            className="mb-6 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 transition-colors hover:text-green-600"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             {t("articles.back")}
@@ -111,17 +111,17 @@ export function ArticleTemplate({ article }: { article: Article }) {
                 <div className="mb-5">
                   <SportBadge sport={article.sport} />
                 </div>
-                <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl md:text-5xl">
+                <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
                   {article.title}
                 </h1>
                 <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
                   <span>
                     {t("articles.byline")}{" "}
-                    <span className="text-slate-300">{article.author}</span>
+                    <span className="text-slate-700">{article.author}</span>
                   </span>
-                  <span className="text-slate-700">·</span>
+                  <span className="text-slate-300">·</span>
                   <span>{formatDate(article.publishedAt)}</span>
-                  <span className="text-slate-700">·</span>
+                  <span className="text-slate-300">·</span>
                   <span className="inline-flex items-center gap-1.5">
                     <Clock className="h-3.5 w-3.5" />
                     {article.readingMinutes} {t("articles.readTime")}
@@ -138,7 +138,7 @@ export function ArticleTemplate({ article }: { article: Article }) {
                   delay: 0.1,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="relative mb-10 aspect-[16/9] overflow-hidden rounded-3xl border border-white/[0.08]"
+                className="relative mb-10 aspect-[16/9] overflow-hidden rounded-3xl border border-slate-200"
               >
                 <CoverArt
                   gradient={article.coverGradient}
@@ -156,19 +156,19 @@ export function ArticleTemplate({ article }: { article: Article }) {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.15 }}
-                  className="mb-10 rounded-2xl border border-green-500/20 bg-green-500/[0.04] p-5 backdrop-blur-xl sm:p-6"
+                  className="mb-10 rounded-2xl border border-green-500/20 bg-green-50 p-5 sm:p-6"
                 >
-                  <p className="mb-2 text-[10px] font-extrabold uppercase tracking-widest text-green-300">
+                  <p className="mb-2 text-[10px] font-extrabold uppercase tracking-widest text-green-700">
                     {t("articles.tldr")}
                   </p>
-                  <p className="text-base leading-relaxed text-slate-200">
+                  <p className="text-base leading-relaxed text-slate-700">
                     {article.tldr}
                   </p>
                 </motion.aside>
               )}
 
               {/* Body */}
-              <div className="space-y-6 text-base leading-[1.8] text-slate-300 sm:text-[17px]">
+              <div className="space-y-6 text-base leading-[1.8] text-slate-600 sm:text-[17px]">
                 {article.blocks.map((block, i) => (
                   <BlockRenderer key={i} block={block} />
                 ))}
@@ -180,7 +180,7 @@ export function ArticleTemplate({ article }: { article: Article }) {
               </div>
 
               {/* Share + footer meta */}
-              <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.05] pt-6">
+              <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-slate-200 pt-6">
                 <SportBadge sport={article.sport} />
                 <div className="flex items-center gap-3 text-xs text-slate-500">
                   <Share2 className="h-3.5 w-3.5" />
@@ -209,7 +209,7 @@ export function ArticleTemplate({ article }: { article: Article }) {
           {/* ── Related articles ── */}
           {related.length > 0 && (
             <section className="mt-20">
-              <h2 className="mb-6 text-xl font-extrabold tracking-tight text-white sm:text-2xl">
+              <h2 className="mb-6 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
                 {t("articles.related")}
               </h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -217,7 +217,7 @@ export function ArticleTemplate({ article }: { article: Article }) {
                   <Link
                     key={a.slug}
                     href={loc(`/articles/${a.slug}`)}
-                    className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-[0_0_40px_rgba(74,222,128,0.12)]"
+                    className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-lg hover:shadow-slate-200/50"
                   >
                     <div className="relative aspect-[16/9] overflow-hidden">
                       <CoverArt
@@ -229,12 +229,12 @@ export function ArticleTemplate({ article }: { article: Article }) {
                     </div>
                     <div className="flex flex-1 flex-col gap-3 p-6">
                       <SportBadge sport={a.sport} />
-                      <h3 className="text-base font-extrabold leading-snug tracking-tight text-white sm:text-lg">
+                      <h3 className="text-base font-extrabold leading-snug tracking-tight text-slate-900 sm:text-lg">
                         {a.title}
                       </h3>
-                      <div className="mt-auto flex items-center gap-3 border-t border-white/[0.05] pt-3 text-xs text-slate-500">
+                      <div className="mt-auto flex items-center gap-3 border-t border-slate-200 pt-3 text-xs text-slate-500">
                         <span>{formatDate(a.publishedAt)}</span>
-                        <span className="text-slate-700">·</span>
+                        <span className="text-slate-300">·</span>
                         <span className="inline-flex items-center gap-1.5">
                           <Clock className="h-3.5 w-3.5" />
                           {a.readingMinutes} {t("articles.readTime")}
@@ -260,7 +260,7 @@ function BlockRenderer({ block }: { block: ArticleBlock }) {
   switch (block.type) {
     case "heading":
       return (
-        <h2 className="mt-10 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+        <h2 className="mt-10 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
           {block.text}
         </h2>
       );
@@ -272,12 +272,12 @@ function BlockRenderer({ block }: { block: ArticleBlock }) {
       );
     case "quote":
       return (
-        <blockquote className="relative my-8 rounded-2xl border-l-4 border-green-500/60 bg-white/[0.02] py-5 pl-6 pr-4 text-slate-200">
+        <blockquote className="relative my-8 rounded-2xl border-l-4 border-green-500/60 bg-slate-50 py-5 pl-6 pr-4 text-slate-700">
           <p className="text-lg font-medium italic leading-relaxed">
             &ldquo;<RichText text={block.text} />&rdquo;
           </p>
           {block.cite && (
-            <footer className="mt-3 text-xs font-semibold uppercase tracking-wider text-green-300/80">
+            <footer className="mt-3 text-xs font-semibold uppercase tracking-wider text-green-700/80">
  - {block.cite}
             </footer>
           )}
@@ -289,7 +289,7 @@ function BlockRenderer({ block }: { block: ArticleBlock }) {
           {block.items.map((item, i) => (
             <li key={i} className="flex items-start gap-3">
               <CheckCircle2
-                className="mt-1 h-4 w-4 flex-shrink-0 text-green-400"
+                className="mt-1 h-4 w-4 flex-shrink-0 text-green-500"
                 strokeWidth={2.5}
               />
               <span>
@@ -342,7 +342,7 @@ function RichText({ text }: { text: string }) {
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-semibold text-green-300 underline-offset-4 transition-colors hover:text-green-200 hover:underline"
+          className="font-semibold text-green-600 underline-offset-4 transition-colors hover:text-green-500 hover:underline"
         >
           {label}
         </a>
@@ -352,7 +352,7 @@ function RichText({ text }: { text: string }) {
         <Link
           key={`link-${key++}`}
           href={loc(href)}
-          className="font-semibold text-green-300 underline-offset-4 transition-colors hover:text-green-200 hover:underline"
+          className="font-semibold text-green-600 underline-offset-4 transition-colors hover:text-green-500 hover:underline"
         >
           {label}
         </Link>
@@ -378,7 +378,7 @@ function StickyPromoBanner() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-      className="relative overflow-hidden rounded-3xl border border-green-500/25 bg-gradient-to-br from-green-500/[0.1] via-emerald-500/[0.04] to-transparent p-6 backdrop-blur-xl"
+      className="relative overflow-hidden rounded-3xl border border-green-500/25 bg-gradient-to-br from-green-50 via-emerald-50/40 to-white p-6"
     >
       {/* Subtle glow */}
       <div className="pointer-events-none absolute -right-16 -top-16 h-[220px] w-[220px] rounded-full bg-green-500/[0.18] blur-[100px]" />
@@ -393,14 +393,14 @@ function StickyPromoBanner() {
       />
 
       <div className="relative flex flex-col gap-5">
-        <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-green-300">
+        <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-green-700">
           <Sparkles className="h-3 w-3" />
           {t("articles.ctaBadge")}
         </span>
-        <h3 className="text-xl font-extrabold leading-tight tracking-tight text-white">
+        <h3 className="text-xl font-extrabold leading-tight tracking-tight text-slate-900">
           {t("articles.ctaTitle")}
         </h3>
-        <p className="text-sm leading-relaxed text-slate-300">
+        <p className="text-sm leading-relaxed text-slate-600">
           {t("articles.ctaSubtitle")}
         </p>
         <Link
@@ -429,7 +429,7 @@ function InlinePromoBanner() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className="relative my-12 overflow-hidden rounded-3xl border border-green-500/25 bg-gradient-to-br from-green-500/[0.08] via-emerald-500/[0.03] to-transparent p-6 backdrop-blur-xl sm:p-8"
+      className="relative my-12 overflow-hidden rounded-3xl border border-green-500/25 bg-gradient-to-br from-green-50 via-emerald-50/30 to-white p-6 sm:p-8"
     >
       <div className="pointer-events-none absolute -right-20 -top-20 h-[260px] w-[260px] rounded-full bg-green-500/[0.12] blur-[100px]" />
       <div className="pointer-events-none absolute -left-16 -bottom-16 h-[200px] w-[200px] rounded-full bg-emerald-500/[0.1] blur-[90px]" />
@@ -444,14 +444,14 @@ function InlinePromoBanner() {
 
       <div className="relative grid items-center gap-5 sm:grid-cols-[minmax(0,1fr)_auto]">
         <div>
-          <span className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-green-300">
+          <span className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest text-green-700">
             <Sparkles className="h-3 w-3" />
             {t("articles.ctaBadge")}
           </span>
-          <h3 className="text-xl font-extrabold leading-tight tracking-tight text-white sm:text-2xl">
+          <h3 className="text-xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-2xl">
             {t("articles.ctaTitle")}
           </h3>
-          <p className="mt-2 max-w-lg text-sm leading-relaxed text-slate-300 sm:text-base">
+          <p className="mt-2 max-w-lg text-sm leading-relaxed text-slate-600 sm:text-base">
             {t("articles.ctaSubtitle")}
           </p>
         </div>
@@ -499,13 +499,13 @@ function PrevNextNav({
       >
         <Link
           href={loc("/articles")}
-          className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-8 text-center backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-[0_0_40px_rgba(74,222,128,0.12)]"
+          className="group relative flex flex-col items-center gap-3 overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-lg hover:shadow-slate-200/50"
         >
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-green-300">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-green-700">
             <ArrowLeft className="h-3 w-3" />
             {t("articles.back")}
           </span>
-          <h3 className="text-lg font-extrabold leading-snug tracking-tight text-white transition-colors group-hover:text-green-300 sm:text-xl">
+          <h3 className="text-lg font-extrabold leading-snug tracking-tight text-slate-900 transition-colors group-hover:text-green-600 sm:text-xl">
             {t("articles.related")}
           </h3>
         </Link>
@@ -525,16 +525,16 @@ function PrevNextNav({
       {prev ? (
         <Link
           href={loc(`/articles/${prev.slug}`)}
-          className="group relative flex h-full flex-col gap-3 overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-[0_0_40px_rgba(74,222,128,0.12)]"
+          className="group relative flex h-full flex-col gap-3 overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-lg hover:shadow-slate-200/50"
         >
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-green-300">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-green-700">
             <ArrowLeft className="h-3 w-3" />
             {t("articles.prevPost")}
           </span>
-          <h3 className="text-base font-extrabold leading-snug tracking-tight text-white transition-colors group-hover:text-green-300 sm:text-lg">
+          <h3 className="text-base font-extrabold leading-snug tracking-tight text-slate-900 transition-colors group-hover:text-green-600 sm:text-lg">
             {prev.title}
           </h3>
-          <div className="mt-auto flex items-center gap-3 border-t border-white/[0.05] pt-3 text-xs text-slate-500">
+          <div className="mt-auto flex items-center gap-3 border-t border-slate-200 pt-3 text-xs text-slate-500">
             <SportBadge sport={prev.sport} />
             <span className="inline-flex items-center gap-1.5">
               <Clock className="h-3.5 w-3.5" />
@@ -550,16 +550,16 @@ function PrevNextNav({
       {next ? (
         <Link
           href={loc(`/articles/${next.slug}`)}
-          className="group relative flex h-full flex-col gap-3 overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-[0_0_40px_rgba(74,222,128,0.12)] sm:items-end sm:text-right"
+          className="group relative flex h-full flex-col gap-3 overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-lg hover:shadow-slate-200/50 sm:items-end sm:text-right"
         >
-          <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-green-300">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-green-700">
             {t("articles.nextPost")}
             <ArrowRight className="h-3 w-3" />
           </span>
-          <h3 className="text-base font-extrabold leading-snug tracking-tight text-white transition-colors group-hover:text-green-300 sm:text-lg">
+          <h3 className="text-base font-extrabold leading-snug tracking-tight text-slate-900 transition-colors group-hover:text-green-600 sm:text-lg">
             {next.title}
           </h3>
-          <div className="mt-auto flex items-center gap-3 border-t border-white/[0.05] pt-3 text-xs text-slate-500">
+          <div className="mt-auto flex items-center gap-3 border-t border-slate-200 pt-3 text-xs text-slate-500">
             <SportBadge sport={next.sport} />
             <span className="inline-flex items-center gap-1.5">
               <Clock className="h-3.5 w-3.5" />
@@ -590,7 +590,7 @@ function ShareButtons({ title, slug }: { title: string; slug: string }) {
     <button
       type="button"
       onClick={handleShare}
-      className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-300 transition-all duration-200 hover:border-green-500/40 hover:text-white"
+      className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-600 transition-all duration-200 hover:border-green-500/40 hover:text-slate-900"
       aria-label={`Share ${slug}`}
     >
       <Share2 className="h-3 w-3" />

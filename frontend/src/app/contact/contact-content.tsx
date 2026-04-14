@@ -116,7 +116,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
     : faqGroups;
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#080b14] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       {/* Shared site navigation (same as landing) */}
       <SiteNav />
 
@@ -124,7 +124,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       <section className="relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
         {/* Background */}
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.08] blur-[140px]" />
+          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.06] blur-[140px]" />
           <div
             className="absolute inset-0 opacity-[0.04]"
             style={{
@@ -139,7 +139,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400"
+            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600"
           >
             <Sparkles className="h-3 w-3" />
             {t("contact.badge")}
@@ -149,7 +149,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl"
+            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl md:text-6xl"
           >
             {t("contact.titleA")}{" "}
             <span className="gradient-text">{t("contact.titleB")}</span>
@@ -159,7 +159,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-400 sm:text-lg"
+            className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg"
           >
             {t("contact.subtitle")}
           </motion.p>
@@ -171,10 +171,10 @@ export function ContactContent({ contactPage }: ContactContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.18 }}
-            className="group relative mx-auto mt-10 flex w-full max-w-xl items-center gap-3 overflow-hidden rounded-full border border-green-500/30 bg-white/[0.03] p-2 pl-6 text-left shadow-xl shadow-green-500/[0.08] transition-all hover:border-green-500/50 hover:bg-white/[0.05] hover:shadow-green-500/20"
+            className="group relative mx-auto mt-10 flex w-full max-w-xl items-center gap-3 overflow-hidden rounded-full border border-slate-200 bg-white p-2 pl-6 text-left shadow-xl shadow-slate-200/60 transition-all hover:border-green-500/50 hover:bg-slate-50 hover:shadow-green-500/20"
           >
-            <Sparkles className="h-5 w-5 flex-shrink-0 text-green-400" />
-            <span className="flex-1 truncate text-sm text-slate-400 sm:text-base">
+            <Sparkles className="h-5 w-5 flex-shrink-0 text-green-500" />
+            <span className="flex-1 truncate text-sm text-slate-500 sm:text-base">
               {t("contact.chatPlaceholder")}
             </span>
             <span className="btn-gradient flex items-center gap-2 rounded-full px-5 py-3 text-xs font-extrabold tracking-tight text-black shadow-lg shadow-green-500/30 transition-all group-hover:shadow-green-500/50 sm:text-sm">
@@ -199,25 +199,25 @@ export function ContactContent({ contactPage }: ContactContentProps) {
                 <div
                   className={`mb-5 flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 ${
                     opt.highlight
-                      ? "bg-gradient-to-br from-green-500/25 to-emerald-500/10 shadow-[0_0_30px_rgba(74,222,128,0.25)] ring-1 ring-green-500/30"
-                      : "bg-white/[0.05] ring-1 ring-white/[0.08]"
+                      ? "bg-green-50 shadow-[0_0_30px_rgba(74,222,128,0.15)] ring-1 ring-green-500/30"
+                      : "bg-slate-50 ring-1 ring-slate-200"
                   }`}
                 >
                   <Icon
                     className={`h-5 w-5 ${
-                      opt.highlight ? "text-green-400" : "text-slate-300"
+                      opt.highlight ? "text-green-500" : "text-slate-600"
                     }`}
                   />
                 </div>
-                <h3 className="mb-2 text-lg font-extrabold tracking-tight text-white">
+                <h3 className="mb-2 text-lg font-extrabold tracking-tight text-slate-900">
                   {opt.title}
                 </h3>
-                <p className="mb-5 flex-1 text-sm leading-relaxed text-slate-400">
+                <p className="mb-5 flex-1 text-sm leading-relaxed text-slate-600">
                   {opt.desc}
                 </p>
                 <div
                   className={`inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest ${
-                    opt.highlight ? "text-green-400" : "text-slate-300"
+                    opt.highlight ? "text-green-600" : "text-slate-600"
                   }`}
                 >
                   {opt.cta}
@@ -226,10 +226,10 @@ export function ContactContent({ contactPage }: ContactContentProps) {
               </>
             );
 
-            const cardClass = `group relative flex h-full flex-col overflow-hidden rounded-3xl border p-6 text-left backdrop-blur-sm transition-all duration-300 sm:p-7 ${
+            const cardClass = `group relative flex h-full flex-col overflow-hidden rounded-3xl border p-6 text-left transition-all duration-300 sm:p-7 ${
               opt.highlight
-                ? "border-green-500/30 bg-gradient-to-br from-green-500/[0.08] to-white/[0.02] hover:border-green-500/50 hover:shadow-xl hover:shadow-green-500/[0.12]"
-                : "border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] hover:border-white/20 hover:bg-white/[0.05]"
+                ? "border-green-500/30 bg-green-50 hover:border-green-500/50 hover:shadow-xl hover:shadow-green-500/[0.12]"
+                : "border-slate-200 bg-white shadow-sm hover:border-slate-300 hover:shadow-md"
             }`;
 
             return (
@@ -275,14 +275,14 @@ export function ContactContent({ contactPage }: ContactContentProps) {
             transition={{ duration: 0.6 }}
             className="mb-10 text-center"
           >
-            <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
+            <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600">
               {t("contact.faqBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl md:text-5xl">
+            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
               {t("contact.faqTitleA")}{" "}
               <span className="gradient-text">{t("contact.faqTitleB")}</span>
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-sm text-slate-400 sm:text-base">
+            <p className="mx-auto mt-4 max-w-xl text-sm text-slate-600 sm:text-base">
               {t("contact.faqSubtitle")}
             </p>
           </motion.div>
@@ -301,7 +301,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={t("contact.faqSearch")}
-              className="w-full rounded-2xl border border-white/[0.08] bg-white/[0.03] py-4 pl-12 pr-5 text-sm text-white placeholder:text-slate-500 backdrop-blur-sm transition-all focus:border-green-500/40 focus:bg-white/[0.05] focus:outline-none focus:ring-2 focus:ring-green-500/20"
+              className="w-full rounded-2xl border border-slate-300 bg-white py-4 pl-12 pr-5 text-sm text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
             />
           </motion.div>
 
@@ -317,10 +317,10 @@ export function ContactContent({ contactPage }: ContactContentProps) {
                 return (
                   <div key={group.label}>
                     <div className="mb-4 flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-500/15 ring-1 ring-green-500/30">
-                        <GIcon className="h-4 w-4 text-green-400" />
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-50 ring-1 ring-green-500/30">
+                        <GIcon className="h-4 w-4 text-green-600" />
                       </div>
-                      <h3 className="text-sm font-extrabold uppercase tracking-widest text-white">
+                      <h3 className="text-sm font-extrabold uppercase tracking-widest text-slate-900">
                         {group.label}
                       </h3>
                     </div>
@@ -330,10 +330,10 @@ export function ContactContent({ contactPage }: ContactContentProps) {
                         return (
                           <div
                             key={item.q}
-                            className={`overflow-hidden rounded-2xl border backdrop-blur-sm transition-all duration-300 ${
+                            className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
                               isOpen
-                                ? "border-green-500/30 bg-gradient-to-br from-green-500/[0.06] to-transparent shadow-lg shadow-green-500/[0.06]"
-                                : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.15]"
+                                ? "border-green-500/30 bg-green-50 shadow-lg shadow-green-500/[0.06]"
+                                : "border-slate-200 bg-white hover:border-slate-300"
                             }`}
                           >
                             <button
@@ -344,7 +344,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
                             >
                               <span
                                 className={`text-sm font-semibold transition-colors sm:text-base ${
-                                  isOpen ? "text-white" : "text-slate-200"
+                                  isOpen ? "text-slate-900" : "text-slate-700"
                                 }`}
                               >
                                 {item.q}
@@ -352,8 +352,8 @@ export function ContactContent({ contactPage }: ContactContentProps) {
                               <div
                                 className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border transition-all ${
                                   isOpen
-                                    ? "rotate-180 border-green-500/40 bg-green-500/15 text-green-400"
-                                    : "border-white/10 bg-white/[0.03] text-slate-400"
+                                    ? "rotate-180 border-green-500/40 bg-green-50 text-green-600"
+                                    : "border-slate-200 bg-slate-50 text-slate-500"
                                 }`}
                               >
                                 <ChevronDown className="h-4 w-4" />
@@ -371,7 +371,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
                                   }}
                                   className="overflow-hidden"
                                 >
-                                  <div className="border-t border-white/[0.06] px-5 pb-5 pt-4 text-sm leading-relaxed text-slate-400 sm:px-6 sm:pb-6">
+                                  <div className="border-t border-slate-200 px-5 pb-5 pt-4 text-sm leading-relaxed text-slate-600 sm:px-6 sm:pb-6">
                                     {item.a}
                                   </div>
                                 </motion.div>
@@ -397,19 +397,19 @@ export function ContactContent({ contactPage }: ContactContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="relative overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] via-white/[0.02] to-transparent p-8 text-center backdrop-blur-sm sm:p-12"
+            className="relative overflow-hidden rounded-3xl border border-green-500/20 bg-green-50 p-8 text-center sm:p-12"
           >
-            <div className="pointer-events-none absolute -left-20 -top-20 h-[280px] w-[280px] rounded-full bg-green-500/[0.12] blur-[120px]" />
-            <div className="pointer-events-none absolute -right-20 -bottom-20 h-[280px] w-[280px] rounded-full bg-emerald-500/[0.10] blur-[120px]" />
+            <div className="pointer-events-none absolute -left-20 -top-20 h-[280px] w-[280px] rounded-full bg-green-500/[0.06] blur-[120px]" />
+            <div className="pointer-events-none absolute -right-20 -bottom-20 h-[280px] w-[280px] rounded-full bg-emerald-500/[0.05] blur-[120px]" />
 
             <div className="relative">
-              <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500/30 to-emerald-500/10 shadow-[0_0_40px_rgba(74,222,128,0.3)] ring-1 ring-green-500/40">
-                <Sparkles className="h-6 w-6 text-green-400" />
+              <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100 shadow-[0_0_40px_rgba(74,222,128,0.15)] ring-1 ring-green-500/40">
+                <Sparkles className="h-6 w-6 text-green-600" />
               </div>
-              <h3 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+              <h3 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                 {t("contact.stillNeedTitle")}
               </h3>
-              <p className="mx-auto mt-3 max-w-md text-sm text-slate-400">
+              <p className="mx-auto mt-3 max-w-md text-sm text-slate-600">
                 {t("contact.stillNeedDesc")}
               </p>
               <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -423,7 +423,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
                 </button>
                 <a
                   href="mailto:support@betsplug.com"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/[0.1] bg-white/[0.03] px-6 py-3 text-sm font-semibold text-slate-300 transition-all hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-600 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
                 >
                   <Mail className="h-4 w-4" />
                   support@betsplug.com
@@ -433,15 +433,15 @@ export function ContactContent({ contactPage }: ContactContentProps) {
               {/* Trust row */}
               <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-500">
                 <div className="flex items-center gap-1.5">
-                  <Clock className="h-3 w-3 text-green-400" />
+                  <Clock className="h-3 w-3 text-green-500" />
                   <span>{t("contact.trust1")}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Shield className="h-3 w-3 text-green-400" />
+                  <Shield className="h-3 w-3 text-green-500" />
                   <span>{t("contact.trust2")}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Users className="h-3 w-3 text-green-400" />
+                  <Users className="h-3 w-3 text-green-500" />
                   <span>{t("contact.trust3")}</span>
                 </div>
               </div>

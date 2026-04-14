@@ -199,27 +199,27 @@ function DashboardPreviewSection({ sanityAccuracyBars }: { sanityAccuracyBars?: 
       {/* Ambient glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500/[0.06] blur-[140px]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-200/30 blur-[140px]"
       />
 
       <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.25fr] lg:gap-16">
           {/* ─── Left: copy ─── */}
           <div className="min-w-0">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-2 backdrop-blur-sm">
-              <LayoutDashboard className="h-4 w-4 text-green-400" />
-              <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-300">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-green-300 bg-green-50 px-4 py-2 backdrop-blur-sm">
+              <LayoutDashboard className="h-4 w-4 text-green-600" />
+              <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-600">
                 {t("dashPrev.badge")}
               </span>
             </div>
 
-            <h2 className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+            <h2 className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
               {t("dashPrev.titleA")}{" "}
               <span className="gradient-text">{t("dashPrev.titleHighlight")}</span>
               {t("dashPrev.titleB")}
             </h2>
 
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-400 sm:text-lg">
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-500 sm:text-lg">
               {t("dashPrev.subtitle")}
             </p>
 
@@ -228,14 +228,14 @@ function DashboardPreviewSection({ sanityAccuracyBars }: { sanityAccuracyBars?: 
               {features.map(({ icon: Icon, title, desc }) => (
                 <li
                   key={title}
-                  className="flex gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 backdrop-blur-sm transition hover:border-green-500/30 hover:bg-green-500/[0.04]"
+                  className="flex gap-3 rounded-xl border border-slate-200 bg-white p-4 transition hover:border-green-300 hover:bg-green-50/50"
                 >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-green-500/20 bg-green-500/[0.08]">
-                    <Icon className="h-4 w-4 text-green-400" />
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-green-200 bg-green-50">
+                    <Icon className="h-4 w-4 text-green-600" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm font-bold text-white">{title}</div>
-                    <div className="mt-1 text-xs leading-relaxed text-slate-400">
+                    <div className="text-sm font-bold text-slate-900">{title}</div>
+                    <div className="mt-1 text-xs leading-relaxed text-slate-500">
                       {desc}
                     </div>
                   </div>
@@ -260,7 +260,7 @@ function DashboardPreviewSection({ sanityAccuracyBars }: { sanityAccuracyBars?: 
             {/* Outer glow */}
             <div
               aria-hidden
-              className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-gradient-to-br from-green-500/20 via-emerald-500/10 to-transparent blur-2xl"
+              className="pointer-events-none absolute -inset-6 rounded-[2rem] bg-gradient-to-br from-green-200/40 via-emerald-200/20 to-transparent blur-2xl"
             />
 
             <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a0e1a] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.8)]">
@@ -444,14 +444,14 @@ function DashboardPreviewSection({ sanityAccuracyBars }: { sanityAccuracyBars?: 
             </div>
 
             {/* Floating stat chip */}
-            <div className="absolute -left-4 top-1/3 hidden rounded-xl border border-green-500/30 bg-[#0d1220]/90 p-3 shadow-xl backdrop-blur-xl sm:block">
+            <div className="absolute -left-4 top-1/3 hidden rounded-xl border border-slate-200 bg-white p-3 shadow-lg sm:block">
               <div className="flex items-center gap-2">
-                <Trophy className="h-4 w-4 text-green-400" />
+                <Trophy className="h-4 w-4 text-green-600" />
                 <div>
-                  <div className="text-[9px] uppercase tracking-wider text-slate-500">
+                  <div className="text-[9px] uppercase tracking-wider text-slate-400">
                     Today
                   </div>
-                  <div className="text-sm font-extrabold text-white">12 wins</div>
+                  <div className="text-sm font-extrabold text-slate-900">12 wins</div>
                 </div>
               </div>
             </div>
@@ -524,11 +524,11 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
   ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#080b14] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       {/* ── Top Bar + Navigation ── */}
       <header className="fixed top-0 left-0 right-0 z-50">
         <TopBar />
-        <nav className="border-b border-white/[0.06] bg-[#080b14]/80 backdrop-blur-xl transition-all duration-300">
+        <nav className="border-b border-slate-200/60 bg-white/80 backdrop-blur-xl transition-all duration-300">
           <div
             className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-300 ${
               isScrolled ? "py-1 md:py-0.5" : "py-3 md:py-1"
@@ -555,7 +555,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-semibold text-slate-400 transition-colors hover:text-white"
+                className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900"
               >
                 {link.label}
               </Link>
@@ -566,13 +566,13 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
           <div className="flex items-center gap-3">
             {/* Language switcher (desktop) */}
             <div className="hidden lg:block">
-              <LanguageSwitcher variant="compact" />
+              <LanguageSwitcher variant="compact" theme="dark" />
             </div>
 
             {/* Desktop buttons (lg+) */}
             <Link
               href={loc("/login")}
-              className={`hidden rounded-md border border-white/[0.1] font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white lg:inline-block ${
+              className={`hidden rounded-md border border-slate-300 font-medium text-slate-600 transition-all hover:border-slate-400 hover:text-slate-900 lg:inline-block ${
                 isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
               }`}
             >
@@ -580,7 +580,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
             </Link>
             <Link
               href={`${loc("/checkout")}?plan=gold`}
-              className={`btn-gradient hidden rounded-md font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:inline-block ${
+              className={`btn-gradient hidden rounded-md font-extrabold tracking-tight shadow-lg shadow-green-500/15 transition-all duration-300 lg:inline-block ${
                 isScrolled ? "px-4 py-1.5 text-xs" : "px-5 py-2.5 text-sm"
               }`}
             >
@@ -590,7 +590,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
             {/* Mobile/Tablet CTA button */}
             <Link
               href={`${loc("/checkout")}?plan=gold`}
-              className={`btn-gradient flex items-center justify-center rounded-md font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:hidden ${
+              className={`btn-gradient flex items-center justify-center rounded-md font-extrabold tracking-tight shadow-lg shadow-green-500/15 transition-all duration-300 lg:hidden ${
                 isScrolled ? "px-3 py-1.5 text-[11px]" : "px-4 py-2 text-xs sm:text-sm"
               }`}
             >
@@ -602,7 +602,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
-              className={`flex items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.03] text-white backdrop-blur-sm transition-all duration-300 hover:border-green-500/40 hover:bg-white/[0.06] lg:hidden ${
+              className={`flex items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 backdrop-blur-sm transition-all duration-300 hover:border-green-500/40 hover:bg-green-50 lg:hidden ${
                 isScrolled ? "h-9 w-9" : "h-11 w-11"
               }`}
             >
@@ -686,7 +686,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
               <span className="mb-2 block font-mono text-[10px] font-semibold uppercase tracking-widest text-slate-600">
                 {t("lang.label")}
               </span>
-              <LanguageSwitcher variant="full" />
+              <LanguageSwitcher variant="full" theme="dark" />
             </div>
 
             <Link
@@ -727,21 +727,21 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
       {/* ═══════════════════════════════════════════════════════════════════
           HERO SECTION
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden pt-40 pb-24 md:pt-48 md:pb-32">
+      <section className="dark-section relative overflow-hidden pt-40 pb-24 md:pt-48 md:pb-32">
         {/* Stadium background image */}
         <div
           className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url('/hero-bg.jpg')" }}
         />
         {/* Dark overlay gradient for readability */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14]/90 via-[#080b14]/85 to-[#080b14]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14]/90 via-[#080b14]/85 to-[#f8fafb]" />
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
             {/* Left: Copy */}
             <div>
               {/* Badge */}
-              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-2 backdrop-blur-sm">
+              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-green-400/30 bg-green-400/10 px-4 py-2 backdrop-blur-sm">
                 <span className="live-dot" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-green-300">
                   {t("hero.badge")}
@@ -823,7 +823,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
             <div className="relative hidden lg:block">
               <div className="relative mx-auto max-w-md">
                 {/* Glow halo */}
-                <div className="absolute inset-0 -z-10 rounded-[32px] bg-gradient-to-br from-green-500/30 via-emerald-500/10 to-transparent blur-3xl" />
+                <div className="absolute inset-0 -z-10 rounded-[32px] bg-gradient-to-br from-green-400/30 via-emerald-400/10 to-transparent blur-3xl" />
 
                 {/* Main phone-like card */}
                 <div className="relative rounded-[32px] border border-white/10 bg-gradient-to-br from-white/[0.05] to-white/[0.01] p-6 backdrop-blur-xl shadow-2xl">
@@ -834,7 +834,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                       </p>
                       <p className="mt-1 text-xl font-extrabold text-white">{featured?.available ? `${featured.home_team} vs ${featured.away_team}` : "Arsenal vs Chelsea"}</p>
                     </div>
-                    <span className="flex items-center gap-1.5 rounded-full bg-green-500/15 px-3 py-1 text-[10px] font-bold uppercase text-green-400">
+                    <span className="flex items-center gap-1.5 rounded-full bg-green-400/15 px-3 py-1 text-[10px] font-bold uppercase text-green-400">
                       <Sparkles className="h-3 w-3" /> {t("hero.hot")}
                     </span>
                   </div>
@@ -881,7 +881,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                 {/* Floating mini-card — real BOTD accuracy */}
                 <div className="absolute -left-10 -top-6 rotate-[-6deg] rounded-2xl border border-white/10 bg-[#0d1220]/90 p-3 backdrop-blur-xl shadow-xl">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/15">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-400/15">
                       <TrendingUp className="h-4 w-4 text-green-400" />
                     </div>
                     <div>
@@ -894,7 +894,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                 {/* Floating bottom card — real correct count */}
                 <div className="absolute -right-6 -bottom-4 rotate-[5deg] rounded-2xl border border-white/10 bg-[#0d1220]/90 p-3 backdrop-blur-xl shadow-xl">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/15">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-400/15">
                       <Trophy className="h-4 w-4 text-green-400" />
                     </div>
                     <div>
@@ -933,7 +933,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
         <div className="mx-auto max-w-7xl px-6">
           <div className="mb-14 grid gap-8 md:grid-cols-2 md:items-end">
             <div>
-              <h2 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl">
+              <h2 className="text-4xl font-extrabold leading-tight text-slate-900 sm:text-5xl">
                 {t("trusted.titleA")}{" "}
                 <span className="gradient-text">{t("trusted.titleHighlight")}</span>{" "}
                 {t("trusted.titleB")}
@@ -941,50 +941,50 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                 {t("trusted.titleC")}
               </h2>
             </div>
-            <p className="text-base leading-relaxed text-slate-400">
+            <p className="text-base leading-relaxed text-slate-500">
               {t("trusted.subtitle")}
             </p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
             {/* Card 1 */}
-            <div className="glass-card-hover relative overflow-hidden p-8">
-              <p className="mb-8 text-5xl font-extrabold text-white/10">01.</p>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10">
-                <Shield className="h-6 w-6 text-green-400" />
+            <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition hover:shadow-md">
+              <p className="mb-8 text-5xl font-extrabold text-slate-100">01.</p>
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50">
+                <Shield className="h-6 w-6 text-green-600" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-white">{t("trusted.card1Title")}</h3>
-              <p className="text-sm leading-relaxed text-slate-400">
+              <h3 className="mb-3 text-xl font-bold text-slate-900">{t("trusted.card1Title")}</h3>
+              <p className="text-sm leading-relaxed text-slate-500">
                 {t("trusted.card1Desc")}
               </p>
             </div>
 
             {/* Card 2 — HIGHLIGHTED */}
-            <div className="card-highlight relative overflow-hidden p-8">
-              <p className="mb-8 text-5xl font-extrabold text-black/15">02.</p>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-black/15">
-                <Brain className="h-6 w-6 text-black" />
+            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-green-500 to-green-600 p-8 shadow-lg">
+              <p className="mb-8 text-5xl font-extrabold text-white/20">02.</p>
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
+                <Brain className="h-6 w-6 text-white" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-black">{t("trusted.card2Title")}</h3>
-              <p className="mb-6 text-sm leading-relaxed text-black/80">
+              <h3 className="mb-3 text-xl font-bold text-white">{t("trusted.card2Title")}</h3>
+              <p className="mb-6 text-sm leading-relaxed text-white/80">
                 {t("trusted.card2Desc")}
               </p>
               <Link
                 href="#track-record"
-                className="inline-flex items-center gap-1 text-sm font-bold text-black hover:gap-2 transition-all"
+                className="inline-flex items-center gap-1 text-sm font-bold text-white hover:gap-2 transition-all"
               >
                 {t("trusted.learnMore")} <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
 
             {/* Card 3 */}
-            <div className="glass-card-hover relative overflow-hidden p-8">
-              <p className="mb-8 text-5xl font-extrabold text-white/10">03.</p>
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/10">
-                <CheckCircle2 className="h-6 w-6 text-green-400" />
+            <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition hover:shadow-md">
+              <p className="mb-8 text-5xl font-extrabold text-slate-100">03.</p>
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50">
+                <CheckCircle2 className="h-6 w-6 text-green-600" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-white">{t("trusted.card3Title")}</h3>
-              <p className="text-sm leading-relaxed text-slate-400">
+              <h3 className="mb-3 text-xl font-bold text-slate-900">{t("trusted.card3Title")}</h3>
+              <p className="text-sm leading-relaxed text-slate-500">
                 {t("trusted.card3Desc")}
               </p>
             </div>
@@ -997,35 +997,35 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
          ═══════════════════════════════════════════════════════════════════ */}
       <section id="track-record" className="relative overflow-hidden py-20 md:py-28">
         {/* Unique background: subtle grid pattern + off-center glow */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#070a12] via-[#0a1220] to-[#070a12]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#f0f4f8] via-[#f5f8fb] to-[#f0f4f8]" />
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(74,222,128,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.5) 1px, transparent 1px)",
+              "linear-gradient(rgba(34,197,94,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.12) 1px, transparent 1px)",
             backgroundSize: "48px 48px",
           }}
         />
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-green-500/[0.06] blur-[140px]" />
-          <div className="absolute right-[10%] top-10 h-[320px] w-[320px] rounded-full bg-emerald-500/[0.05] blur-[120px]" />
+          <div className="absolute left-0 top-1/2 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-green-200/30 blur-[140px]" />
+          <div className="absolute right-[10%] top-10 h-[320px] w-[320px] rounded-full bg-teal-200/20 blur-[120px]" />
         </div>
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
             {/* Left: chart visualization */}
             <div className="relative">
-              <div className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-xl">
+              <div className="relative rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
                 {/* Top stat */}
                 <div className="mb-6 flex items-start justify-between">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-green-400">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-green-600">
                       {t("track.label")}
                     </p>
-                    <p className="mt-1 text-3xl font-extrabold text-white">75.4%</p>
-                    <p className="text-xs text-slate-500">{t("track.accuracy")}</p>
+                    <p className="mt-1 text-3xl font-extrabold text-slate-900">75.4%</p>
+                    <p className="text-xs text-slate-400">{t("track.accuracy")}</p>
                   </div>
-                  <span className="rounded-full bg-green-500/15 px-3 py-1 text-[11px] font-bold text-green-400">
+                  <span className="rounded-full bg-green-100 px-3 py-1 text-[11px] font-bold text-green-600">
                     ▲ +5.45%
                   </span>
                 </div>
@@ -1064,7 +1064,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                 </div>
 
                 {/* Bottom metrics */}
-                <div className="mt-4 grid grid-cols-3 gap-2 border-t border-white/5 pt-4">
+                <div className="mt-4 grid grid-cols-3 gap-2 border-t border-slate-200 pt-4">
                   {(homepage?.trackRecordStats?.length
                     ? homepage.trackRecordStats.map((s: any) => ({
                         label: getLocaleValue(s.label, locale) || s.label?.en || "",
@@ -1077,29 +1077,29 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                       ]
                   ).map((s: { label: string; value: string }) => (
                     <div key={s.label} className="text-center">
-                      <p className="text-lg font-extrabold text-white">{s.value}</p>
-                      <p className="text-[10px] uppercase text-slate-500">{s.label}</p>
+                      <p className="text-lg font-extrabold text-slate-900">{s.value}</p>
+                      <p className="text-[10px] uppercase text-slate-400">{s.label}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Floating mini card */}
-              <div className="absolute -right-4 -top-4 rotate-3 rounded-2xl border border-white/10 bg-[#0d1220]/95 p-4 backdrop-blur-xl shadow-xl">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+              <div className="absolute -right-4 -top-4 rotate-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                   {t("track.thisWeek")}
                 </p>
-                <p className="mt-1 text-xl font-extrabold text-green-400">+12.4%</p>
-                <p className="text-[10px] text-slate-500">ROI</p>
+                <p className="mt-1 text-xl font-extrabold text-green-600">+12.4%</p>
+                <p className="text-[10px] text-slate-400">ROI</p>
               </div>
             </div>
 
             {/* Right: copy */}
             <div>
-              <span className="mb-4 inline-block rounded-full bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
+              <span className="mb-4 inline-block rounded-full bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600">
                 {t("track.badge")}
               </span>
-              <h2 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl">
+              <h2 className="text-4xl font-extrabold leading-tight text-slate-900 sm:text-5xl">
                 {t("track.titleA")}{" "}
                 <span className="gradient-text">{t("track.titleHighlight")}</span>
                 <br />
@@ -1108,16 +1108,16 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
 
               <div className="mt-6 flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-green-400 text-green-400" />
+                  <Star key={i} className="h-5 w-5 fill-green-500 text-green-500" />
                 ))}
-                <span className="ml-2 text-sm text-slate-400">{t("track.rating")}</span>
+                <span className="ml-2 text-sm text-slate-500">{t("track.rating")}</span>
               </div>
 
-              <p className="mt-6 text-base leading-relaxed text-slate-400">
+              <p className="mt-6 text-base leading-relaxed text-slate-500">
                 {t("track.desc1")}
               </p>
 
-              <p className="mt-4 text-base leading-relaxed text-slate-400">
+              <p className="mt-4 text-base leading-relaxed text-slate-500">
                 {t("track.desc2")}
               </p>
 
@@ -1127,7 +1127,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                 </Link>
                 <Link
                   href="#faq"
-                  className="text-sm font-semibold text-slate-400 underline underline-offset-4 transition-colors hover:text-white"
+                  className="text-sm font-semibold text-slate-500 underline underline-offset-4 transition-colors hover:text-slate-900"
                 >
                   {t("track.askQuestion")}
                 </Link>
@@ -1141,51 +1141,51 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
           LIVE STATS BAR — compact social-proof strip with animated counters
          ═══════════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden py-16 md:py-20">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#080b14] via-[#0a0f1a] to-[#080b14]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#f8fafb] via-[#f0f4f8] to-[#f8fafb]" />
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[600px] rounded-full bg-green-500/[0.04] blur-[120px]" />
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[600px] rounded-full bg-green-200/20 blur-[120px]" />
         </div>
 
         <div className="relative z-10 mx-auto max-w-5xl px-6">
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-0 md:divide-x md:divide-white/[0.08]">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-0 md:divide-x md:divide-slate-200">
             {[
               {
                 icon: Target,
                 value: botdStats?.total_picks ?? 1284,
                 suffix: "+",
                 label: t("features.f1Title") || "Predictions Made",
-                color: "text-green-400",
+                color: "text-green-600",
               },
               {
                 icon: TrendingUp,
                 value: botdStats?.accuracy_pct ?? 75,
                 suffix: "%",
                 label: t("features.f4Title") || "Verified Accuracy",
-                color: "text-emerald-400",
+                color: "text-emerald-600",
               },
               {
                 icon: Users,
                 value: 1500,
                 suffix: "+",
                 label: t("features.f6Title") || "Active Users",
-                color: "text-green-400",
+                color: "text-green-600",
               },
               {
                 icon: BarChart3,
                 value: 15,
                 suffix: "+",
                 label: t("features.f3Title") || "Leagues Covered",
-                color: "text-emerald-400",
+                color: "text-emerald-600",
               },
             ].map(({ icon: Icon, value, suffix, label, color }) => (
               <div key={label} className="flex flex-col items-center gap-2 px-4 py-2 text-center">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-500/10">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-50">
                   <Icon className={`h-5 w-5 ${color}`} />
                 </div>
-                <span className="text-3xl font-extrabold text-white md:text-4xl">
+                <span className="text-3xl font-extrabold text-slate-900 md:text-4xl">
                   <AnimatedNumber target={value} suffix={suffix} />
                 </span>
-                <span className="text-xs font-medium uppercase tracking-widest text-slate-500">
+                <span className="text-xs font-medium uppercase tracking-widest text-slate-400">
                   {label}
                 </span>
               </div>
@@ -1238,21 +1238,21 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
          ═══════════════════════════════════════════════════════════════════ */}
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-6">
-          <div className="relative overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] via-emerald-500/[0.04] to-transparent p-10 backdrop-blur-xl md:p-16">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-500/20 blur-[100px]" />
-            <div className="pointer-events-none absolute -left-20 -bottom-20 h-[300px] w-[300px] rounded-full bg-emerald-500/10 blur-[100px]" />
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-600 to-emerald-700 p-10 md:p-16">
+            <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-300/30 blur-[100px]" />
+            <div className="pointer-events-none absolute -left-20 -bottom-20 h-[300px] w-[300px] rounded-full bg-emerald-300/20 blur-[100px]" />
 
             <div className="relative text-center">
-              <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
+              <span className="mb-4 inline-block rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white">
                 {t("finalCta.badge")}
               </span>
               <h2 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl">
                 {t("finalCta.titleA")}{" "}
-                <span className="gradient-text">{t("finalCta.titleHighlight")}</span>
+                <span className="text-green-100">{t("finalCta.titleHighlight")}</span>
                 <br />
                 {t("finalCta.titleB")}
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-base text-slate-400">
+              <p className="mx-auto mt-5 max-w-xl text-base text-green-100/80">
                 {t("finalCta.subtitle")}
               </p>
 
@@ -1262,20 +1262,20 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                 </Link>
                 <Link
                   href={loc("/about")}
-                  className="text-sm font-semibold text-slate-400 underline underline-offset-4 transition-colors hover:text-white"
+                  className="text-sm font-semibold text-green-100 underline underline-offset-4 transition-colors hover:text-white"
                 >
                   {t("finalCta.secondary")}
                 </Link>
               </div>
 
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500">
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-green-100/70">
                 {[
                   t("finalCta.moneyBack"),
                   t("finalCta.cancelAnytime"),
                   t("finalCta.instantAccess"),
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-1.5">
-                    <CheckCircle2 className="h-4 w-4 text-green-400" />
+                    <CheckCircle2 className="h-4 w-4 text-green-200" />
                     <span>{item}</span>
                   </div>
                 ))}

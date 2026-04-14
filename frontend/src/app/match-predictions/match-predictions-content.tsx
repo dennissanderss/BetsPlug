@@ -130,20 +130,20 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
   ];
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#0a1220] text-slate-100">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       <SiteNav />
 
       {/* ── Hero ── */}
       <section className="relative overflow-hidden px-4 pb-10 pt-36 sm:pt-40">
-        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.12] blur-[140px]" />
-        <div className="pointer-events-none absolute -right-40 -top-20 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.10] blur-[140px]" />
+        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.06] blur-[140px]" />
+        <div className="pointer-events-none absolute -right-40 -top-20 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.05] blur-[140px]" />
 
         <div className="relative mx-auto max-w-6xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-300"
+            className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-700"
           >
             <Sparkles className="h-3.5 w-3.5" />
             {t("matchPred.eyebrow")}
@@ -153,7 +153,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl"
+            className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl"
           >
             {t("matchPred.title")}
           </motion.h1>
@@ -162,7 +162,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-300 sm:text-lg"
+            className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-600 sm:text-lg"
           >
             {t("matchPred.subtitle")}
           </motion.p>
@@ -172,18 +172,18 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.18 }}
-            className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-2 text-[11px] font-semibold text-slate-400"
+            className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-2 text-[11px] font-semibold text-slate-500"
           >
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5">
-              <Zap className="h-3 w-3 text-green-400" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5">
+              <Zap className="h-3 w-3 text-green-500" />
               {t("matchPred.trust1")}
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5">
-              <Activity className="h-3 w-3 text-blue-400" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5">
+              <Activity className="h-3 w-3 text-blue-500" />
               {t("matchPred.trust2")}
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5">
-              <Shield className="h-3 w-3 text-emerald-400" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5">
+              <Shield className="h-3 w-3 text-emerald-500" />
               {t("matchPred.trust3")}
             </span>
           </motion.div>
@@ -198,10 +198,10 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
             {stats.map(({ label, value, icon: Icon, color }) => (
               <div
                 key={label}
-                className="glass-card flex flex-col items-center justify-center gap-1 px-3 py-4 text-center"
+                className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-slate-200 bg-white px-3 py-4 text-center shadow-sm"
               >
                 <Icon className="h-4 w-4" style={{ color }} />
-                <span className="mt-1 text-2xl font-extrabold leading-none tabular-nums text-white">
+                <span className="mt-1 text-2xl font-extrabold leading-none tabular-nums text-slate-900">
                   {value}
                 </span>
                 <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
@@ -218,10 +218,10 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
         <div className="mx-auto max-w-5xl">
           <div className="mb-5 flex items-end justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                 {t("matchPred.freeHeading")}
               </h2>
-              <p className="mt-1 text-sm text-slate-400">
+              <p className="mt-1 text-sm text-slate-500">
                 {t("matchPred.freeSub")}
               </p>
             </div>
@@ -229,7 +229,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
               <button
                 type="button"
                 onClick={() => fixturesQuery.refetch()}
-                className="hidden items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-[11px] font-semibold text-slate-300 transition hover:border-green-500/40 hover:text-green-300 sm:inline-flex"
+                className="hidden items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-semibold text-slate-600 transition hover:border-green-500/40 hover:text-green-600 sm:inline-flex"
               >
                 <RefreshCw className="h-3 w-3 animate-spin" />
                 {t("matchPred.refresh")}
@@ -246,20 +246,20 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
           )}
 
           {!isLoading && isError && (
-            <div className="glass-card flex flex-col items-start gap-3 border-amber-500/30 bg-amber-500/[0.06] p-6 sm:flex-row sm:items-center">
-              <AlertTriangle className="h-6 w-6 shrink-0 text-amber-400" />
+            <div className="flex flex-col items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-6 shadow-sm sm:flex-row sm:items-center">
+              <AlertTriangle className="h-6 w-6 shrink-0 text-amber-500" />
               <div className="flex-1">
-                <p className="font-bold text-amber-300">
+                <p className="font-bold text-amber-700">
                   {t("matchPred.errorTitle")}
                 </p>
-                <p className="mt-1 text-sm text-slate-300">
+                <p className="mt-1 text-sm text-slate-600">
                   {t("matchPred.errorDesc")}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => fixturesQuery.refetch()}
-                className="inline-flex items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-xs font-bold text-amber-300 transition hover:bg-amber-500/20"
+                className="inline-flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-bold text-amber-700 transition hover:bg-amber-100"
               >
                 <RefreshCw className="h-3.5 w-3.5" />
                 {t("matchPred.refresh")}
@@ -268,21 +268,21 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
           )}
 
           {!isLoading && !isError && !hasFree && (
-            <div className="glass-card flex flex-col items-center gap-4 p-10 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full border border-green-500/25 bg-green-500/10">
-                <Clock className="h-6 w-6 text-green-400" />
+            <div className="flex flex-col items-center gap-4 rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full border border-green-200 bg-green-50">
+                <Clock className="h-6 w-6 text-green-500" />
               </div>
               <div>
-                <h3 className="text-xl font-extrabold text-white">
+                <h3 className="text-xl font-extrabold text-slate-900">
                   {t("matchPred.emptyTitle")}
                 </h3>
-                <p className="mt-1 max-w-md text-sm text-slate-400">
+                <p className="mt-1 max-w-md text-sm text-slate-500">
                   {t("matchPred.emptyDesc")}
                 </p>
               </div>
               <Link
                 href={loc("/track-record")}
-                className="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-5 py-2.5 text-xs font-bold text-green-300 transition hover:border-green-500/50 hover:bg-green-500/[0.15]"
+                className="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-5 py-2.5 text-xs font-bold text-green-700 transition hover:border-green-500/50 hover:bg-green-100"
               >
                 <Eye className="h-3.5 w-3.5" />
                 {t("matchPred.emptyCta")}
@@ -311,10 +311,10 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       <section className="relative px-4 pb-16">
         <div className="mx-auto max-w-5xl">
           <div className="mb-5">
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
               {t("matchPred.lockedHeading")}
             </h2>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm text-slate-500">
               {t("matchPred.lockedSub")}
             </p>
           </div>
@@ -340,14 +340,14 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5 }}
-          className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] to-white/[0.01] p-8 text-center shadow-2xl sm:p-12"
+          className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-lg sm:p-12"
         >
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/[0.08] via-transparent to-emerald-500/[0.06]" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-50 via-transparent to-emerald-50" />
           <div className="relative z-10">
-            <h2 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl">
+            <h2 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
               {t("matchPred.ctaFinalTitle")}
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-300">
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600">
               {t("matchPred.ctaFinalDesc")}
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -360,7 +360,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
               </Link>
               <Link
                 href={loc("/checkout")}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-8 py-4 text-sm font-bold text-white transition-all hover:border-green-500/40 hover:bg-green-500/[0.08]"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-8 py-4 text-sm font-bold text-slate-700 transition-all hover:border-green-500/40 hover:bg-green-50"
               >
                 {t("matchPred.ctaFinalSecondary")}
               </Link>

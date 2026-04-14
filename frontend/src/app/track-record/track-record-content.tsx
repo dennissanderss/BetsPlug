@@ -226,7 +226,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
   ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#080b14] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       {/* Shared site navigation */}
       <SiteNav />
 
@@ -236,12 +236,12 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       <section className="relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
         {/* Ambient background */}
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.08] blur-[140px]" />
+          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.04] blur-[140px]" />
           <div
-            className="absolute inset-0 opacity-[0.04]"
+            className="absolute inset-0 opacity-[0.03]"
             style={{
               backgroundImage:
-                "repeating-linear-gradient(135deg, rgba(74,222,128,0.8) 0 1px, transparent 1px 22px)",
+                "repeating-linear-gradient(135deg, rgba(74,222,128,0.4) 0 1px, transparent 1px 22px)",
             }}
           />
         </div>
@@ -251,7 +251,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400"
+            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600"
           >
             <ShieldCheck className="h-3 w-3" />
             {t("tr.heroBadge")}
@@ -261,7 +261,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl"
+            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl md:text-6xl"
           >
             {t("tr.heroTitleA")}
             <br />
@@ -272,7 +272,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-400 sm:text-lg"
+            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg"
           >
             {t("tr.heroSubtitle")}
           </motion.p>
@@ -293,7 +293,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             </Link>
             <Link
               href={home}
-              className="inline-flex items-center gap-2 rounded-full bg-white/[0.04] px-6 py-3 text-sm font-bold text-white ring-1 ring-white/[0.1] transition-all hover:bg-white/[0.08] hover:ring-green-500/40"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-slate-900 ring-1 ring-slate-200 transition-all hover:bg-slate-50 hover:ring-green-500/40"
             >
               {t("tr.heroCtaSecondary")}
             </Link>
@@ -307,11 +307,11 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             aria-label="Breadcrumb"
             className="mt-10 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-500"
           >
-            <Link href={home} className="transition-colors hover:text-green-400">
+            <Link href={home} className="transition-colors hover:text-green-600">
               {t("tr.breadcrumbHome")}
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-slate-300">{t("tr.breadcrumbTrack")}</span>
+            <span className="text-slate-600">{t("tr.breadcrumbTrack")}</span>
           </motion.nav>
         </div>
       </section>
@@ -319,7 +319,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       {/* ═══════════════════════════════════════════════════════════════════
           HEADLINE KPIs
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-white/[0.06] bg-gradient-to-b from-transparent via-white/[0.02] to-transparent py-20">
+      <section className="relative border-y border-slate-200 bg-gradient-to-b from-white to-slate-50 py-20">
         <div className="relative mx-auto max-w-6xl px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -328,13 +328,13 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             transition={{ duration: 0.6 }}
             className="mx-auto mb-12 max-w-2xl text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
               {t("tr.kpisBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               {t("tr.kpisTitle")}
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-slate-400 sm:text-lg">
+            <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
               {t("tr.kpisSubtitle")}
             </p>
           </motion.div>
@@ -349,17 +349,17 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
                 >
-                  <div className="pointer-events-none absolute -right-10 -top-10 h-[140px] w-[140px] rounded-full bg-green-500/[0.06] blur-[70px] transition-all group-hover:bg-green-500/[0.14]" />
+                  <div className="pointer-events-none absolute -right-10 -top-10 h-[140px] w-[140px] rounded-full bg-green-50 blur-[70px] transition-all group-hover:bg-green-100" />
                   <div className="relative">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/15 ring-1 ring-green-500/30">
-                      <Icon className="h-5 w-5 text-green-400" />
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-50 ring-1 ring-green-500/30">
+                      <Icon className="h-5 w-5 text-green-600" />
                     </div>
-                    <div className="text-4xl font-extrabold tracking-tight text-white">
+                    <div className="text-4xl font-extrabold tracking-tight text-slate-900">
                       {k.value}
                     </div>
-                    <p className="mt-2 text-sm font-semibold text-slate-300">
+                    <p className="mt-2 text-sm font-semibold text-slate-600">
                       {k.label}
                     </p>
                     <p className="mt-1 text-xs leading-relaxed text-slate-500">
@@ -385,13 +385,13 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             transition={{ duration: 0.6 }}
             className="mx-auto mb-14 max-w-2xl text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
               {t("tr.pipeBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
               {t("tr.pipeTitle")}
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-400 sm:text-lg">
+            <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
               {t("tr.pipeSubtitle")}
             </p>
           </motion.div>
@@ -413,23 +413,23 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-50px" }}
                     transition={{ duration: 0.5 }}
-                    className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-7 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
+                    className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
                   >
-                    <div className="pointer-events-none absolute -right-16 -top-16 h-[220px] w-[220px] rounded-full bg-green-500/[0.06] blur-[90px] transition-all group-hover:bg-green-500/[0.14]" />
+                    <div className="pointer-events-none absolute -right-16 -top-16 h-[220px] w-[220px] rounded-full bg-green-50 blur-[90px] transition-all group-hover:bg-green-100" />
                     <div className="relative">
                       <div className="mb-5 flex items-center gap-3">
-                        <span className="font-mono text-xs font-bold uppercase tracking-widest text-green-400">
+                        <span className="font-mono text-xs font-bold uppercase tracking-widest text-green-600">
                           Step {String(i + 1).padStart(2, "0")}
                         </span>
                         <span className="h-px flex-1 bg-gradient-to-r from-green-500/30 to-transparent" />
                       </div>
-                      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.2)] ring-1 ring-green-500/30">
-                        <Icon className="h-5 w-5 text-green-400" />
+                      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 shadow-sm ring-1 ring-green-500/30">
+                        <Icon className="h-5 w-5 text-green-600" />
                       </div>
-                      <h3 className="mb-3 text-xl font-extrabold tracking-tight text-white">
+                      <h3 className="mb-3 text-xl font-extrabold tracking-tight text-slate-900">
                         {step.title}
                       </h3>
-                      <p className="text-sm leading-relaxed text-slate-400">
+                      <p className="text-sm leading-relaxed text-slate-600">
                         {step.desc}
                       </p>
                     </div>
@@ -444,7 +444,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       {/* ═══════════════════════════════════════════════════════════════════
           METHODOLOGY PRINCIPLES
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-white/[0.06] bg-gradient-to-b from-transparent via-white/[0.02] to-transparent py-20 md:py-24">
+      <section className="relative border-y border-slate-200 bg-gradient-to-b from-white to-slate-50 py-20 md:py-24">
         <div className="relative mx-auto max-w-6xl px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -453,13 +453,13 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             transition={{ duration: 0.6 }}
             className="mx-auto mb-14 max-w-2xl text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
               {t("tr.methodBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
               {t("tr.methodTitle")}
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-400 sm:text-lg">
+            <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
               {t("tr.methodSubtitle")}
             </p>
           </motion.div>
@@ -474,18 +474,18 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-7 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
                 >
-                  <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-500/[0.06] blur-[80px] transition-all group-hover:bg-green-500/[0.12]" />
+                  <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-50 blur-[80px] transition-all group-hover:bg-green-100" />
                   <div className="relative flex gap-5">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.2)] ring-1 ring-green-500/30">
-                      <Icon className="h-5 w-5 text-green-400" />
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-green-50 shadow-sm ring-1 ring-green-500/30">
+                      <Icon className="h-5 w-5 text-green-600" />
                     </div>
                     <div>
-                      <h3 className="mb-2 text-lg font-extrabold tracking-tight text-white">
+                      <h3 className="mb-2 text-lg font-extrabold tracking-tight text-slate-900">
                         {m.title}
                       </h3>
-                      <p className="text-sm leading-relaxed text-slate-400">
+                      <p className="text-sm leading-relaxed text-slate-600">
                         {m.desc}
                       </p>
                     </div>
@@ -509,13 +509,13 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             transition={{ duration: 0.6 }}
             className="mx-auto mb-14 max-w-2xl text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
               {t("tr.casesBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
               {t("tr.casesTitle")}
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-400 sm:text-lg">
+            <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
               {t("tr.casesSubtitle")}
             </p>
           </motion.div>
@@ -528,41 +528,41 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6 }}
-                className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent p-8 transition-all hover:border-green-500/30"
+                className="group relative flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
               >
-                <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-500/[0.06] blur-[100px] transition-all group-hover:bg-green-500/[0.14]" />
+                <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-50 blur-[100px] transition-all group-hover:bg-green-100" />
 
                 <div className="relative flex flex-1 flex-col">
                   {/* Persona header */}
                   <div className="mb-6 flex items-center gap-4">
-                    <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500/25 to-emerald-500/10 shadow-[0_0_30px_rgba(74,222,128,0.25)] ring-1 ring-green-500/30">
-                      <span className="text-xl font-extrabold text-green-400">
+                    <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-green-100 to-emerald-50 shadow-sm ring-1 ring-green-500/30">
+                      <span className="text-xl font-extrabold text-green-600">
                         {c.initial}
                       </span>
                     </div>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-widest text-green-400">
+                      <p className="text-xs font-semibold uppercase tracking-widest text-green-600">
                         {c.role}
                       </p>
-                      <h3 className="text-lg font-extrabold tracking-tight text-white">
+                      <h3 className="text-lg font-extrabold tracking-tight text-slate-900">
                         {c.name}
                       </h3>
                     </div>
                   </div>
 
                   {/* Quote */}
-                  <div className="relative mb-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5">
-                    <Quote className="absolute -top-2 left-4 h-4 w-4 rotate-180 text-green-400/60" />
-                    <p className="text-sm leading-relaxed text-slate-300">
+                  <div className="relative mb-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                    <Quote className="absolute -top-2 left-4 h-4 w-4 rotate-180 text-green-500/60" />
+                    <p className="text-sm leading-relaxed text-slate-600">
                       “{c.quote}”
                     </p>
                   </div>
 
                   {/* Metrics grid */}
-                  <div className="mb-6 grid grid-cols-3 gap-2 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
+                  <div className="mb-6 grid grid-cols-3 gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-4">
                     {c.metrics.map((m) => (
                       <div key={m.label} className="text-center">
-                        <div className="text-base font-extrabold tracking-tight text-green-400 sm:text-lg">
+                        <div className="text-base font-extrabold tracking-tight text-green-600 sm:text-lg">
                           {m.value}
                         </div>
                         <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider leading-tight text-slate-500">
@@ -573,9 +573,9 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
                   </div>
 
                   {/* Outcome */}
-                  <div className="mt-auto flex items-start gap-2 border-t border-white/[0.06] pt-5">
-                    <Trophy className="h-4 w-4 shrink-0 translate-y-0.5 text-green-400" />
-                    <p className="text-xs leading-relaxed text-slate-400">
+                  <div className="mt-auto flex items-start gap-2 border-t border-slate-200 pt-5">
+                    <Trophy className="h-4 w-4 shrink-0 translate-y-0.5 text-green-600" />
+                    <p className="text-xs leading-relaxed text-slate-500">
                       {c.outcome}
                     </p>
                   </div>
@@ -598,28 +598,28 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="relative overflow-hidden rounded-3xl border border-green-500/30 bg-gradient-to-br from-[#0d2319] via-[#0a1a13] to-[#050f09] p-10 text-center shadow-2xl shadow-green-500/[0.15] sm:p-14"
+            className="relative overflow-hidden rounded-3xl border border-green-500/30 bg-gradient-to-br from-green-50 via-emerald-50 to-white p-10 text-center shadow-lg shadow-slate-200/60 sm:p-14"
           >
             {/* Ambient glow */}
-            <div className="pointer-events-none absolute -left-20 -top-20 h-[360px] w-[360px] rounded-full bg-green-500/[0.18] blur-[120px]" />
-            <div className="pointer-events-none absolute -bottom-20 -right-20 h-[360px] w-[360px] rounded-full bg-emerald-500/[0.14] blur-[120px]" />
+            <div className="pointer-events-none absolute -left-20 -top-20 h-[360px] w-[360px] rounded-full bg-green-100/60 blur-[120px]" />
+            <div className="pointer-events-none absolute -bottom-20 -right-20 h-[360px] w-[360px] rounded-full bg-emerald-100/40 blur-[120px]" />
 
             <div className="relative">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/15 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-green-300">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-50 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-green-700">
                 <Sparkles className="h-3 w-3" />
                 {t("tr.transBadge")}
               </div>
-              <h2 className="mx-auto max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+              <h2 className="mx-auto max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
                 {t("tr.transTitle")}
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-300 sm:text-base">
+              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
                 {t("tr.transSubtitle")}
               </p>
 
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
                   href={`${home}#track-record`}
-                  className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-7 py-3.5 text-sm font-extrabold tracking-tight text-white ring-1 ring-white/[0.14] transition-all hover:bg-white/[0.1] hover:ring-green-500/40"
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-extrabold tracking-tight text-slate-900 ring-1 ring-slate-200 transition-all hover:bg-slate-50 hover:ring-green-500/40"
                 >
                   {t("tr.transCta1")}
                   <ArrowRight className="h-4 w-4" />

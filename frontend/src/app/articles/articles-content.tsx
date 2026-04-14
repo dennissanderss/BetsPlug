@@ -56,21 +56,21 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
   const rest = filtered.slice(1);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#070a12] text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#070a12] via-[#0b1220] to-[#070a12]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafb] via-white to-[#f8fafb]" />
         <div
-          className="absolute inset-0 opacity-[0.05]"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage:
-              "radial-gradient(rgba(74,222,128,0.5) 1px, transparent 1px)",
+              "radial-gradient(rgba(74,222,128,0.3) 1px, transparent 1px)",
             backgroundSize: "28px 28px",
           }}
         />
-        <div className="absolute left-1/2 top-40 h-[520px] w-[720px] -translate-x-1/2 rounded-full bg-green-500/[0.06] blur-[150px]" />
-        <div className="absolute -left-32 top-[60vh] h-[320px] w-[320px] rounded-full bg-emerald-500/[0.05] blur-[120px]" />
-        <div className="absolute -right-32 top-[30vh] h-[320px] w-[320px] rounded-full bg-green-500/[0.05] blur-[120px]" />
+        <div className="absolute left-1/2 top-40 h-[520px] w-[720px] -translate-x-1/2 rounded-full bg-green-500/[0.04] blur-[150px]" />
+        <div className="absolute -left-32 top-[60vh] h-[320px] w-[320px] rounded-full bg-emerald-500/[0.03] blur-[120px]" />
+        <div className="absolute -right-32 top-[30vh] h-[320px] w-[320px] rounded-full bg-green-500/[0.03] blur-[120px]" />
       </div>
 
       <SiteNav />
@@ -84,14 +84,14 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className="mx-auto mb-10 max-w-3xl text-center sm:mb-14"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-300">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-700">
               <Newspaper className="h-3.5 w-3.5" />
               {t("articles.badge")}
             </span>
-            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
               <span className="gradient-text">{t("articles.title")}</span>
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-slate-400 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
               {t("articles.subtitle")}
             </p>
           </motion.div>
@@ -106,7 +106,7 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
             <div
               role="tablist"
               aria-label="Filter articles by category"
-              className="no-scrollbar flex w-full max-w-full items-center gap-2 overflow-x-auto rounded-full border border-white/[0.08] bg-white/[0.03] p-1.5 backdrop-blur-xl sm:w-auto sm:gap-1"
+              className="no-scrollbar flex w-full max-w-full items-center gap-2 overflow-x-auto rounded-full border border-slate-200 bg-white p-1.5 shadow-sm sm:w-auto sm:gap-1"
             >
               {tabs.map((tab) => {
                 const Icon = tab.id === "all" ? LayoutGrid : undefined;
@@ -119,8 +119,8 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
                     onClick={() => setActiveTab(tab.id)}
                     className={`group relative inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 sm:px-5 sm:text-sm ${
                       isActive
-                        ? "bg-gradient-to-r from-green-500 to-emerald-500 text-black shadow-[0_0_20px_rgba(74,222,128,0.35)]"
-                        : "text-slate-400 hover:bg-white/[0.04] hover:text-white"
+                        ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-[0_0_20px_rgba(74,222,128,0.2)]"
+                        : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
                     }`}
                   >
                     {Icon ? (
@@ -137,9 +137,9 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
 
           {/* Empty state */}
           {filtered.length === 0 && (
-            <div className="mx-auto max-w-lg rounded-3xl border border-white/[0.08] bg-white/[0.02] p-10 text-center backdrop-blur-xl">
-              <Newspaper className="mx-auto mb-4 h-10 w-10 text-slate-600" />
-              <p className="text-sm text-slate-400">{t("articles.empty")}</p>
+            <div className="mx-auto max-w-lg rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+              <Newspaper className="mx-auto mb-4 h-10 w-10 text-slate-400" />
+              <p className="text-sm text-slate-500">{t("articles.empty")}</p>
             </div>
           )}
 
@@ -197,7 +197,7 @@ function FeaturedCard({ article }: { article: Article }) {
   return (
     <Link
       href={loc(`/articles/${article.slug}`)}
-      className="group relative grid overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] backdrop-blur-xl transition-all duration-300 hover:border-green-500/40 hover:shadow-[0_0_60px_rgba(74,222,128,0.12)] lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]"
+      className="group relative grid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:border-green-500/40 hover:shadow-lg hover:shadow-slate-200/50 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]"
     >
       {/* Cover art */}
       <div className="relative aspect-[16/9] overflow-hidden lg:aspect-auto lg:min-h-[360px]">
@@ -212,21 +212,21 @@ function FeaturedCard({ article }: { article: Article }) {
       {/* Text */}
       <div className="relative flex flex-col justify-center gap-5 p-6 sm:p-8 lg:p-10">
         <SportBadge sport={article.sport} />
-        <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-white sm:text-3xl md:text-4xl">
+        <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-3xl md:text-4xl">
           {article.title}
         </h2>
-        <p className="line-clamp-3 text-sm leading-relaxed text-slate-400 sm:text-base">
+        <p className="line-clamp-3 text-sm leading-relaxed text-slate-600 sm:text-base">
           {article.excerpt}
         </p>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
           <span>{formatDate(article.publishedAt)}</span>
-          <span className="text-slate-700">·</span>
+          <span className="text-slate-300">·</span>
           <span className="inline-flex items-center gap-1.5">
             <Clock className="h-3.5 w-3.5" />
             {article.readingMinutes} {t("articles.readTime")}
           </span>
         </div>
-        <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-green-500/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-green-300 transition-all duration-300 group-hover:bg-green-500/15 group-hover:text-green-200">
+        <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-xs font-bold uppercase tracking-wider text-green-700 transition-all duration-300 group-hover:bg-green-100 group-hover:text-green-800">
           Read article
           <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
         </span>
@@ -243,7 +243,7 @@ function ArticleCard({ article }: { article: Article }) {
   return (
     <Link
       href={loc(`/articles/${article.slug}`)}
-      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-[0_0_40px_rgba(74,222,128,0.12)]"
+      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-green-500/40 hover:shadow-lg hover:shadow-slate-200/50"
     >
       <div className="relative aspect-[16/9] overflow-hidden">
         <CoverArt
@@ -255,15 +255,15 @@ function ArticleCard({ article }: { article: Article }) {
       </div>
       <div className="flex flex-1 flex-col gap-4 p-6">
         <SportBadge sport={article.sport} />
-        <h3 className="text-lg font-extrabold leading-snug tracking-tight text-white group-hover:text-green-50 sm:text-xl">
+        <h3 className="text-lg font-extrabold leading-snug tracking-tight text-slate-900 group-hover:text-green-700 sm:text-xl">
           {article.title}
         </h3>
-        <p className="line-clamp-2 flex-1 text-sm leading-relaxed text-slate-400">
+        <p className="line-clamp-2 flex-1 text-sm leading-relaxed text-slate-600">
           {article.excerpt}
         </p>
-        <div className="mt-2 flex items-center gap-3 border-t border-white/[0.05] pt-4 text-xs text-slate-500">
+        <div className="mt-2 flex items-center gap-3 border-t border-slate-200 pt-4 text-xs text-slate-500">
           <span>{formatDate(article.publishedAt)}</span>
-          <span className="text-slate-700">·</span>
+          <span className="text-slate-300">·</span>
           <span className="inline-flex items-center gap-1.5">
             <Clock className="h-3.5 w-3.5" />
             {article.readingMinutes} {t("articles.readTime")}

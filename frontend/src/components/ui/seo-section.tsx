@@ -109,13 +109,13 @@ export function SeoSection() {
   const pricingHref = `${loc("/")}#pricing`;
   return (
     <section
-      className="relative overflow-hidden py-20 md:py-28"
+      className="relative overflow-hidden bg-[#f0f4f8] py-20 md:py-28"
       aria-labelledby="seo-heading"
     >
       {/* Ambient background */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/4 top-1/3 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-green-500/[0.05] blur-[140px]" />
-        <div className="absolute right-1/4 bottom-1/3 h-[400px] w-[600px] translate-x-1/2 rounded-full bg-emerald-500/[0.04] blur-[120px]" />
+        <div className="absolute left-1/4 top-1/3 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-green-200/20 blur-[140px]" />
+        <div className="absolute right-1/4 bottom-1/3 h-[400px] w-[600px] translate-x-1/2 rounded-full bg-green-200/20 blur-[120px]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-6xl px-6">
@@ -127,17 +127,17 @@ export function SeoSection() {
           viewport={{ once: true }}
           className="mx-auto max-w-3xl text-center"
         >
-          <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
+          <span className="mb-4 inline-block rounded-full border border-green-200 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-700">
             {t("seo.badge")}
           </span>
           <h2
             id="seo-heading"
-            className="text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl"
+            className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl"
           >
             {t("seo.titleA")}{" "}
             <span className="gradient-text">{t("seo.titleB")}</span>
           </h2>
-          <p className="mt-5 text-base leading-relaxed text-slate-400 sm:text-lg">
+          <p className="mt-5 text-base leading-relaxed text-slate-500 sm:text-lg">
             {t("seo.subtitle")}
           </p>
         </motion.div>
@@ -148,15 +148,15 @@ export function SeoSection() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="mt-20 rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.03] to-transparent p-8 backdrop-blur-sm sm:p-12"
+          className="mt-20 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm sm:p-12"
         >
-          <div className="prose prose-invert max-w-none">
-            <h3 className="text-2xl font-extrabold text-white sm:text-3xl">
+          <div className="prose max-w-none">
+            <h3 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
               The Best AI Football Prediction Website for Data-Driven Bettors
             </h3>
-            <p className="mt-4 text-base leading-relaxed text-slate-400">
+            <p className="mt-4 text-base leading-relaxed text-slate-600">
               If you&apos;ve been searching for the{" "}
-              <strong className="text-slate-200">
+              <strong className="text-slate-900">
                 best football prediction website
               </strong>
               , you&apos;ve landed in the right place. BetsPlug blends
@@ -168,15 +168,15 @@ export function SeoSection() {
               guessing and start researching like a professional.
             </p>
 
-            <h4 className="mt-8 text-xl font-bold text-white">
+            <h4 className="mt-8 text-xl font-bold text-slate-900">
               AI Betting Predictions Powered by Real Math
             </h4>
-            <p className="mt-3 text-base leading-relaxed text-slate-400">
+            <p className="mt-3 text-base leading-relaxed text-slate-600">
               Behind every BetsPlug pick is a combination of{" "}
-              <strong className="text-slate-200">Elo ratings</strong>,{" "}
-              <strong className="text-slate-200">Poisson goal models</strong>{" "}
+              <strong className="text-slate-900">Elo ratings</strong>,{" "}
+              <strong className="text-slate-900">Poisson goal models</strong>{" "}
               and{" "}
-              <strong className="text-slate-200">
+              <strong className="text-slate-900">
                 machine-learning classifiers
               </strong>{" "}
               trained on hundreds of thousands of historical matches. The
@@ -185,23 +185,23 @@ export function SeoSection() {
  - all in a single dashboard. Dive into our{" "}
               <Link
                 href="/predictions"
-                className="font-semibold text-green-400 underline decoration-green-500/30 underline-offset-4 transition-colors hover:text-green-300"
+                className="font-semibold text-green-600 underline decoration-green-300 underline-offset-4 transition-colors hover:text-green-700"
               >
                 AI predictions hub
               </Link>{" "}
               to see every upcoming match our models have processed.
             </p>
 
-            <h4 className="mt-8 text-xl font-bold text-white">
+            <h4 className="mt-8 text-xl font-bold text-slate-900">
               Free AI Football Picks, Live Probabilities &amp; Pick of the Day
             </h4>
-            <p className="mt-3 text-base leading-relaxed text-slate-400">
+            <p className="mt-3 text-base leading-relaxed text-slate-600">
               Looking for{" "}
-              <strong className="text-slate-200">free AI football picks</strong>?
+              <strong className="text-slate-900">free AI football picks</strong>?
               Every day we publish a highest-confidence{" "}
               <Link
                 href="/bet-of-the-day"
-                className="font-semibold text-green-400 underline decoration-green-500/30 underline-offset-4 transition-colors hover:text-green-300"
+                className="font-semibold text-green-600 underline decoration-green-300 underline-offset-4 transition-colors hover:text-green-700"
               >
                 Pick of the Day
               </Link>{" "}
@@ -209,7 +209,7 @@ export function SeoSection() {
               across all monitored leagues. Want to go deeper? Our{" "}
               <Link
                 href="/live"
-                className="font-semibold text-green-400 underline decoration-green-500/30 underline-offset-4 transition-colors hover:text-green-300"
+                className="font-semibold text-green-600 underline decoration-green-300 underline-offset-4 transition-colors hover:text-green-700"
               >
                 live match tracker
               </Link>{" "}
@@ -218,16 +218,16 @@ export function SeoSection() {
               adjusts.
             </p>
 
-            <h4 className="mt-8 text-xl font-bold text-white">
+            <h4 className="mt-8 text-xl font-bold text-slate-900">
               Transparent Track Record - Verify Every AI Pick
             </h4>
-            <p className="mt-3 text-base leading-relaxed text-slate-400">
+            <p className="mt-3 text-base leading-relaxed text-slate-600">
               Most football prediction websites hide their losses. We don&apos;t.
               Every AI football pick, every Pick of the Day, every confidence
               score is logged publicly in our{" "}
               <Link
                 href="/trackrecord"
-                className="font-semibold text-green-400 underline decoration-green-500/30 underline-offset-4 transition-colors hover:text-green-300"
+                className="font-semibold text-green-600 underline decoration-green-300 underline-offset-4 transition-colors hover:text-green-700"
               >
                 verified track record
               </Link>
@@ -236,17 +236,17 @@ export function SeoSection() {
               no deletions, no cherry-picking.
             </p>
 
-            <h4 className="mt-8 text-xl font-bold text-white">
+            <h4 className="mt-8 text-xl font-bold text-slate-900">
               Data Insights, Not Gambling Advice
             </h4>
-            <p className="mt-3 text-base leading-relaxed text-slate-400">
+            <p className="mt-3 text-base leading-relaxed text-slate-600">
               A crucial note: BetsPlug is{" "}
-              <strong className="text-slate-200">
+              <strong className="text-slate-900">
                 not a bookmaker and not a gambling site
               </strong>
               . We do not accept wagers, handle money, or promote irresponsible
               play. We&apos;re a pure{" "}
-              <strong className="text-slate-200">
+              <strong className="text-slate-900">
                 football analytics and AI prediction platform
               </strong>{" "}
  - think of us as the quant desk you can rent by the month. Our
@@ -255,14 +255,14 @@ export function SeoSection() {
               yours. Learn more{" "}
               <Link
                 href="/about"
-                className="font-semibold text-green-400 underline decoration-green-500/30 underline-offset-4 transition-colors hover:text-green-300"
+                className="font-semibold text-green-600 underline decoration-green-300 underline-offset-4 transition-colors hover:text-green-700"
               >
                 about our mission
               </Link>{" "}
               or browse{" "}
               <Link
                 href={pricingHref}
-                className="font-semibold text-green-400 underline decoration-green-500/30 underline-offset-4 transition-colors hover:text-green-300"
+                className="font-semibold text-green-600 underline decoration-green-300 underline-offset-4 transition-colors hover:text-green-700"
               >
                 pricing plans
               </Link>{" "}
@@ -293,7 +293,7 @@ export function SeoSection() {
             <Link
               key={link.href}
               href={link.href}
-              className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-slate-400 backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-green-500/[0.06] hover:text-green-400"
+              className="rounded-full border border-slate-200 bg-white px-4 py-2 text-slate-600 transition-all hover:border-green-300 hover:bg-green-50 hover:text-green-700"
             >
               {link.label}
             </Link>
@@ -347,30 +347,30 @@ function FaqBlock() {
     >
       {/* Header */}
       <div className="mb-12 text-center">
-        <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400">
+        <span className="mb-4 inline-block rounded-full border border-green-200 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-700">
           {t("faq.badge")}
         </span>
-        <h3 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+        <h3 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
           {t("faq.titleA")}
         </h3>
         <h3 className="mt-2 text-4xl font-extrabold tracking-tight sm:text-5xl">
           <span className="gradient-text">{t("faq.titleB")}</span>
         </h3>
-        <p className="mx-auto mt-5 max-w-xl text-base text-slate-400">
+        <p className="mx-auto mt-5 max-w-xl text-base text-slate-500">
           {t("faq.subtitle")}
         </p>
       </div>
 
       {/* Grid: sidebar + accordion */}
-      <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.03] to-transparent p-5 backdrop-blur-sm sm:p-8">
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
         {/* Ambient glow */}
-        <div className="pointer-events-none absolute -left-20 top-0 h-[300px] w-[300px] rounded-full bg-green-500/[0.08] blur-[100px]" />
-        <div className="pointer-events-none absolute -right-20 bottom-0 h-[300px] w-[300px] rounded-full bg-emerald-500/[0.06] blur-[100px]" />
+        <div className="pointer-events-none absolute -left-20 top-0 h-[300px] w-[300px] rounded-full bg-green-100/40 blur-[100px]" />
+        <div className="pointer-events-none absolute -right-20 bottom-0 h-[300px] w-[300px] rounded-full bg-green-100/40 blur-[100px]" />
 
         <div className="relative grid grid-cols-1 gap-6 lg:grid-cols-[280px_1fr] lg:gap-8">
           {/* Sidebar: categories + contact support */}
           <aside className="flex flex-col gap-3">
-            <h4 className="mb-1 font-mono text-xs font-semibold uppercase tracking-widest text-white/60">
+            <h4 className="mb-1 font-mono text-xs font-semibold uppercase tracking-widest text-slate-400">
               {t("faq.browseBy")}
             </h4>
 
@@ -387,38 +387,38 @@ function FaqBlock() {
                   }}
                   className={`group relative flex items-center gap-3 rounded-2xl border px-4 py-3.5 text-left transition-all duration-300 ${
                     isActive
-                      ? "border-green-500/40 bg-gradient-to-r from-green-500/[0.12] to-green-500/[0.04] shadow-lg shadow-green-500/10"
-                      : "border-white/[0.08] bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
+                      ? "border-green-300 bg-green-50"
+                      : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
                   }`}
                 >
                   <div
                     className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl transition-all ${
                       isActive
-                        ? "bg-green-500/20 shadow-[0_0_20px_rgba(74,222,128,0.25)]"
-                        : "bg-white/[0.05] group-hover:bg-white/[0.08]"
+                        ? "bg-green-100"
+                        : "bg-slate-100"
                     }`}
                   >
                     <Icon
                       className={`h-4 w-4 transition-colors ${
-                        isActive ? "text-green-400" : "text-slate-400"
+                        isActive ? "text-green-600" : "text-slate-400"
                       }`}
                     />
                   </div>
                   <div className="min-w-0 flex-1">
                     <p
                       className={`truncate text-sm font-semibold transition-colors ${
-                        isActive ? "text-white" : "text-slate-300"
+                        isActive ? "text-slate-900" : "text-slate-600"
                       }`}
                     >
                       {cat.label}
                     </p>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-slate-400">
                       {cat.items.length} {t("faq.articles")}
                     </p>
                   </div>
                   <ChevronDown
                     className={`h-4 w-4 -rotate-90 transition-all ${
-                      isActive ? "text-green-400" : "text-slate-600"
+                      isActive ? "text-green-600" : "text-slate-400"
                     }`}
                   />
                 </button>
@@ -426,16 +426,16 @@ function FaqBlock() {
             })}
 
             {/* Contact Support card */}
-            <div className="mt-4 rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] to-emerald-500/[0.03] p-5 backdrop-blur-sm">
+            <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 p-5">
               <div className="mb-3 flex items-center gap-2">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/15">
-                  <LifeBuoy className="h-4 w-4 text-green-400" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100">
+                  <LifeBuoy className="h-4 w-4 text-green-600" />
                 </div>
-                <p className="text-sm font-bold text-white">
+                <p className="text-sm font-bold text-slate-900">
                   {t("faq.stillQuestions")}
                 </p>
               </div>
-              <p className="mb-4 text-xs leading-relaxed text-slate-400">
+              <p className="mb-4 text-xs leading-relaxed text-slate-500">
                 {t("faq.supportBlurb")}
               </p>
               <Link
@@ -463,10 +463,10 @@ function FaqBlock() {
                   return (
                     <div
                       key={item.q}
-                      className={`overflow-hidden rounded-2xl border backdrop-blur-sm transition-all duration-300 ${
+                      className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
                         isOpen
-                          ? "border-green-500/30 bg-gradient-to-br from-green-500/[0.05] to-transparent shadow-lg shadow-green-500/[0.06]"
-                          : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.15] hover:bg-white/[0.03]"
+                          ? "border-green-300 bg-green-50/50"
+                          : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
                       }`}
                     >
                       <button
@@ -479,7 +479,7 @@ function FaqBlock() {
                       >
                         <h4
                           className={`text-sm font-semibold transition-colors sm:text-base ${
-                            isOpen ? "text-white" : "text-slate-200"
+                            isOpen ? "text-slate-900" : "text-slate-700"
                           }`}
                         >
                           {item.q}
@@ -487,8 +487,8 @@ function FaqBlock() {
                         <div
                           className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border transition-all ${
                             isOpen
-                              ? "rotate-180 border-green-500/40 bg-green-500/15 text-green-400"
-                              : "border-white/10 bg-white/[0.03] text-slate-400"
+                              ? "rotate-180 border-green-400 bg-green-100 text-green-600"
+                              : "border-slate-200 bg-slate-100 text-slate-400"
                           }`}
                         >
                           <ChevronDown className="h-4 w-4" />
@@ -506,8 +506,8 @@ function FaqBlock() {
                             }}
                             className="overflow-hidden"
                           >
-                            <div className="border-t border-white/[0.06] px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
-                              <p className="text-sm leading-relaxed text-slate-400">
+                            <div className="border-t border-slate-200 px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
+                              <p className="text-sm leading-relaxed text-slate-600">
                                 {item.a}
                               </p>
                             </div>

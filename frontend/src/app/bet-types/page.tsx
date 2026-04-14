@@ -58,39 +58,39 @@ export default async function BetTypesIndexPage() {
   const hubs = await fetchAllBetTypeHubs();
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#0a1220] text-slate-100">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       <SiteNav />
 
       {/* Hero */}
       <section className="relative overflow-hidden px-4 pb-10 pt-28 sm:pt-32">
-        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.12] blur-[140px]" />
-        <div className="pointer-events-none absolute -right-40 -top-20 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.10] blur-[140px]" />
+        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.06] blur-[140px]" />
+        <div className="pointer-events-none absolute -right-40 -top-20 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.05] blur-[140px]" />
 
         <div className="relative mx-auto max-w-5xl">
           <nav
             aria-label="Breadcrumb"
             className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-slate-500"
           >
-            <Link href="/" className="transition hover:text-green-300">
+            <Link href="/" className="transition hover:text-green-600">
               BetsPlug
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-slate-300">
+            <span className="text-slate-600">
               {t("Bet Types", "Wed-types")}
             </span>
           </nav>
 
           <div className="text-center">
-            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-300">
+            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-700">
               <Target className="h-3.5 w-3.5" />
               {t("Betting markets", "Wedmarkten")}
             </div>
 
-            <h1 className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
               {t("Bet Types Explained", "Wed-types Uitgelegd")}
             </h1>
 
-            <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-300 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-600 sm:text-lg">
               {t(
                 "Deep dives into the most popular football betting markets - how they're priced, when they offer value, and how BetsPlug's ensemble reads them.",
                 "Diepgaande uitleg over de populairste wedmarkten in het voetbal - hoe ze geprijsd worden, wanneer ze value bieden en hoe het BetsPlug-ensemble ze leest.",
@@ -107,21 +107,21 @@ export default async function BetTypesIndexPage() {
             <Link
               key={hub.slug}
               href={`/bet-types/${hub.slug}`}
-              className="group glass-card flex flex-col gap-3 p-6 transition hover:border-green-500/40"
+              className="group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-green-500/40 hover:shadow-md"
             >
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-300">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-700">
                   <Target className="h-3 w-3" />
                   {hub.shortCode}
                 </span>
               </div>
-              <h2 className="text-2xl font-extrabold tracking-tight text-white transition group-hover:text-green-300">
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 transition group-hover:text-green-600">
                 {hub.name[editorialLocale]}
               </h2>
-              <p className="text-sm leading-relaxed text-slate-400">
+              <p className="text-sm leading-relaxed text-slate-500">
                 {hub.tagline[editorialLocale]}
               </p>
-              <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-green-300">
+              <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-green-600">
                 {t("Read the explainer", "Lees de uitleg")}
                 <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
               </div>

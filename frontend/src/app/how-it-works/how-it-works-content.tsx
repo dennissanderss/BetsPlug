@@ -69,7 +69,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
     : defaultFaqs;
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#080b14] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       {/* Shared site navigation */}
       <SiteNav />
 
@@ -94,7 +94,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400"
+            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600"
           >
             <Sparkles className="h-3 w-3" />
             {t("hiw.heroBadge")}
@@ -104,7 +104,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl"
+            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl md:text-6xl"
           >
             {t("hiw.heroTitleA")}
             <br />
@@ -115,7 +115,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-slate-400 sm:text-lg"
+            className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-slate-500 sm:text-lg"
           >
             {t("hiw.heroSubtitle")}
           </motion.p>
@@ -130,9 +130,9 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             {heroStats.map((s: { value: string; label: string }) => (
               <div
                 key={s.label}
-                className="rounded-2xl border border-white/[0.08] bg-white/[0.03] px-4 py-4 backdrop-blur-sm"
+                className="rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm"
               >
-                <div className="text-2xl font-extrabold tracking-tight text-green-400 sm:text-3xl">
+                <div className="text-2xl font-extrabold tracking-tight text-green-500 sm:text-3xl">
                   {s.value}
                 </div>
                 <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider leading-tight text-slate-500">
@@ -158,7 +158,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             </Link>
             <Link
               href={loc("/track-record")}
-              className="inline-flex items-center gap-2 rounded-full bg-white/[0.04] px-6 py-3 text-sm font-bold text-white ring-1 ring-white/[0.1] transition-all hover:bg-white/[0.08] hover:ring-green-500/40"
+              className="inline-flex items-center gap-2 rounded-full bg-slate-50 px-6 py-3 text-sm font-bold text-slate-900 ring-1 ring-slate-200 transition-all hover:bg-white hover:ring-green-500/40"
             >
               {t("hiw.heroCtaPrimary")}
             </Link>
@@ -176,7 +176,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
               {t("hiw.breadcrumbHome")}
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-slate-300">{t("hiw.breadcrumbHow")}</span>
+            <span className="text-slate-600">{t("hiw.breadcrumbHow")}</span>
           </motion.nav>
         </div>
       </section>
@@ -190,7 +190,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
         lead={t("hiw.step1Lead")}
         paragraphs={[t("hiw.step1P1")]}
         side={
-          <div className="relative overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-[#0d1624] via-[#0a1220] to-[#060912] p-8 shadow-2xl shadow-green-500/[0.08]">
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
             <div className="pointer-events-none absolute -left-20 -top-20 h-[250px] w-[250px] rounded-full bg-green-500/[0.12] blur-[100px]" />
             <div
               className="pointer-events-none absolute inset-0 opacity-[0.05]"
@@ -203,7 +203,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             <div className="relative space-y-4">
               <div className="flex items-center gap-2">
                 <span className="live-dot" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-green-500">
                   BetsPlug Pulse
                 </span>
               </div>
@@ -313,15 +313,15 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.5 }}
-              className="mb-16 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 sm:p-8"
+              className="mb-16 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10">
                   <Database className="h-5 w-5 text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-extrabold text-white">{t("hiw.engineTitle")}</h3>
-                  <p className="text-sm text-slate-400">{t("hiw.engineSubtitle")}</p>
+                  <h3 className="text-xl font-extrabold text-slate-900">{t("hiw.engineTitle")}</h3>
+                  <p className="text-sm text-slate-500">{t("hiw.engineSubtitle")}</p>
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

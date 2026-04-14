@@ -217,7 +217,7 @@ export default async function LearnPillarPage(props: {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="relative min-h-screen overflow-x-hidden bg-[#0a1220] text-slate-100">
+      <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
         <SiteNav />
 
         {/* Hero */}
@@ -231,30 +231,30 @@ export default async function LearnPillarPage(props: {
               aria-label="Breadcrumb"
               className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-slate-500"
             >
-              <Link href="/" className="transition hover:text-green-300">
+              <Link href="/" className="transition hover:text-green-600">
                 BetsPlug
               </Link>
               <ChevronRight className="h-3 w-3" />
-              <Link href="/learn" className="transition hover:text-green-300">
+              <Link href="/learn" className="transition hover:text-green-600">
                 {t("Learn", "Leren")}
               </Link>
               <ChevronRight className="h-3 w-3" />
-              <span className="text-slate-300">
+              <span className="text-slate-600">
                 {pillar.title[editorialLocale]}
               </span>
             </nav>
 
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-300">
+              <div className="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-600">
                 <GraduationCap className="h-3.5 w-3.5" />
                 {t("Pillar guide", "Pillar gids")}
               </div>
 
-              <h1 className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl">
+              <h1 className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl">
                 {pillar.title[editorialLocale]}
               </h1>
 
-              <p className="mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-300 sm:text-lg">
+              <p className="mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-600 sm:text-lg">
                 {pillar.tagline[editorialLocale]}
               </p>
             </div>
@@ -265,20 +265,20 @@ export default async function LearnPillarPage(props: {
         <section className="relative px-4 pb-12">
           <div className="mx-auto max-w-3xl">
             <div className="glass-card p-6 sm:p-10">
-              <p className="text-lg leading-relaxed text-slate-200">
+              <p className="text-lg leading-relaxed text-slate-600">
                 {pillar.intro[editorialLocale]}
               </p>
 
               {pillar.sections.map((section) => (
                 <div key={section.heading.en} className="mt-10">
-                  <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                  <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
                     {section.heading[editorialLocale]}
                   </h2>
                   <div className="mt-4 flex flex-col gap-4">
                     {section.body[editorialLocale].map((paragraph, idx) => (
                       <p
                         key={idx}
-                        className="text-base leading-relaxed text-slate-300"
+                        className="text-base leading-relaxed text-slate-600"
                       >
                         {paragraph}
                       </p>
@@ -300,13 +300,13 @@ export default async function LearnPillarPage(props: {
         {/* FAQ */}
         <section className="relative px-4 pb-12">
           <div className="mx-auto max-w-3xl">
-            <h2 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
               {t(
                 `${pillar.title.en} - FAQ`,
                 `${pillar.title.nl} - Veelgestelde vragen`,
               )}
             </h2>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm text-slate-500">
               {t(
                 "Common questions on this topic, answered without the marketing fluff.",
                 "Veelgestelde vragen over dit onderwerp, beantwoord zonder marketingpraatjes.",
@@ -319,11 +319,11 @@ export default async function LearnPillarPage(props: {
                   key={faq.q}
                   className="group glass-card overflow-hidden p-0"
                 >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-5 text-left text-base font-bold text-white transition hover:text-green-300">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-5 text-left text-base font-bold text-slate-900 transition hover:text-green-600">
                     <span>{faq.q}</span>
                     <ChevronRight className="h-4 w-4 shrink-0 text-slate-500 transition group-open:rotate-90" />
                   </summary>
-                  <div className="px-5 pb-5 text-sm leading-relaxed text-slate-300">
+                  <div className="px-5 pb-5 text-sm leading-relaxed text-slate-600">
                     {faq.a}
                   </div>
                 </details>
@@ -337,7 +337,7 @@ export default async function LearnPillarPage(props: {
           <section className="relative px-4 pb-20">
             <div className="mx-auto max-w-3xl">
               <div className="glass-card p-6">
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-green-300">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-green-600">
                   <Sparkles className="h-3.5 w-3.5" />
                   {t("Keep reading", "Verder lezen")}
                 </div>
@@ -349,13 +349,13 @@ export default async function LearnPillarPage(props: {
                       <Link
                         key={p.slug}
                         href={`/learn/${p.slug}`}
-                        className="group flex items-center justify-between gap-3 rounded-xl border border-white/[0.08] bg-white/[0.02] px-4 py-3 text-sm font-bold text-slate-200 transition hover:border-green-500/40 hover:bg-green-500/[0.05] hover:text-green-300"
+                        className="group flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-600 transition hover:border-green-500/40 hover:bg-green-50 hover:text-green-600"
                       >
                         <span className="flex items-center gap-2">
-                          <BookOpen className="h-3.5 w-3.5 text-slate-500 transition group-hover:text-green-300" />
+                          <BookOpen className="h-3.5 w-3.5 text-slate-500 transition group-hover:text-green-600" />
                           {p.title[editorialLocale]}
                         </span>
-                        <ArrowRight className="h-4 w-4 text-slate-500 transition group-hover:text-green-300" />
+                        <ArrowRight className="h-4 w-4 text-slate-500 transition group-hover:text-green-600" />
                       </Link>
                     ))}
                 </div>

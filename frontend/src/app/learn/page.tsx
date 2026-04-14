@@ -59,7 +59,7 @@ export default async function LearnIndexPage() {
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#0a1220] text-slate-100">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       <SiteNav />
 
       {/* Hero */}
@@ -72,24 +72,24 @@ export default async function LearnIndexPage() {
             aria-label="Breadcrumb"
             className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-slate-500"
           >
-            <Link href="/" className="transition hover:text-green-300">
+            <Link href="/" className="transition hover:text-green-600">
               BetsPlug
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-slate-300">{t("Learn", "Leren")}</span>
+            <span className="text-slate-600">{t("Learn", "Leren")}</span>
           </nav>
 
           <div className="text-center">
-            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-300">
+            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-600">
               <GraduationCap className="h-3.5 w-3.5" />
               {t("Pillar guides", "Pillar gidsen")}
             </div>
 
-            <h1 className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
               {t("Learn the Math", "Leer de Wiskunde")}
             </h1>
 
-            <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-300 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-600 sm:text-lg">
               {t(
                 "Six handwritten deep-dives into the concepts that anchor BetsPlug's ensemble - value betting, expected goals, Elo, Kelly, Poisson, and bankroll management.",
                 "Zes handgeschreven deep-dives in de concepten die het ensemble van BetsPlug verankeren - value betting, expected goals, Elo, Kelly, Poisson en bankroll management.",
@@ -109,18 +109,18 @@ export default async function LearnIndexPage() {
               className="group glass-card flex flex-col gap-3 p-6 transition hover:border-green-500/40"
             >
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-300">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
                   <BookOpen className="h-3 w-3" />
                   {t("Pillar", "Pillar")}
                 </span>
               </div>
-              <h2 className="text-2xl font-extrabold tracking-tight text-white transition group-hover:text-green-300">
+              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 transition group-hover:text-green-600">
                 {pillar.title[editorialLocale]}
               </h2>
-              <p className="text-sm leading-relaxed text-slate-400">
+              <p className="text-sm leading-relaxed text-slate-500">
                 {pillar.tagline[editorialLocale]}
               </p>
-              <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-green-300">
+              <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-green-600">
                 {t("Read the guide", "Lees de gids")}
                 <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
               </div>

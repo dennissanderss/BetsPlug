@@ -139,23 +139,23 @@ export default function RegisterPage() {
   };
 
   const inputCls = (hasError: boolean) =>
-    `w-full rounded-xl border bg-white/[0.03] px-4 py-3 pl-11 text-sm text-white placeholder:text-slate-600 outline-none transition-all focus:bg-white/[0.06] ${
+    `w-full rounded-xl border bg-white px-4 py-3 pl-11 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all focus:bg-white ${
       hasError
         ? "border-red-500/40 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
-        : "border-white/[0.1] focus:border-green-500/50 focus:ring-2 focus:ring-green-500/20"
+        : "border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
     }`;
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#060912] text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.08] blur-[160px]" />
-        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.06] blur-[160px]" />
+        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.05] blur-[160px]" />
+        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.04] blur-[160px]" />
         <div
-          className="absolute inset-0 opacity-[0.04]"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage:
-              "radial-gradient(rgba(74,222,128,0.6) 1px, transparent 1px)",
+              "radial-gradient(rgba(74,222,128,0.4) 1px, transparent 1px)",
             backgroundSize: "32px 32px",
           }}
         />
@@ -173,21 +173,21 @@ export default function RegisterPage() {
               transition={{ duration: 0.5 }}
               className="hidden flex-col justify-center lg:flex"
             >
-              <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-4 py-2 backdrop-blur-sm">
-                <Sparkles className="h-4 w-4 text-green-400" />
-                <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-300">
+              <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-2">
+                <Sparkles className="h-4 w-4 text-green-600" />
+                <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-700">
                   Join BetsPlug
                 </span>
               </div>
 
-              <h1 className="max-w-xl text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight xl:text-5xl">
+              <h1 className="max-w-xl text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 xl:text-5xl">
                 Create your{" "}
-                <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 bg-clip-text text-transparent">
                   free account
                 </span>
               </h1>
 
-              <p className="mt-5 max-w-md text-base leading-relaxed text-slate-400">
+              <p className="mt-5 max-w-md text-base leading-relaxed text-slate-600">
                 Start with zero risk. Get access to today&apos;s picks, track
                 ROI and upgrade whenever you&apos;re ready.
               </p>
@@ -200,12 +200,12 @@ export default function RegisterPage() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3 backdrop-blur-sm"
+                    className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3"
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-green-500/20 bg-green-500/[0.08]">
-                      <item.icon className="h-4 w-4 text-green-400" />
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-green-500/20 bg-green-50">
+                      <item.icon className="h-4 w-4 text-green-600" />
                     </div>
-                    <span className="text-sm font-medium text-slate-300">
+                    <span className="text-sm font-medium text-slate-600">
                       {item.label}
                     </span>
                   </div>
@@ -220,25 +220,25 @@ export default function RegisterPage() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="w-full"
             >
-              <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-7 backdrop-blur-xl sm:p-9">
-                <div className="pointer-events-none absolute -right-20 -top-20 h-[260px] w-[260px] rounded-full bg-green-500/[0.12] blur-[100px]" />
+              <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-7 shadow-lg shadow-slate-200/50 sm:p-9">
+                <div className="pointer-events-none absolute -right-20 -top-20 h-[260px] w-[260px] rounded-full bg-green-500/[0.06] blur-[100px]" />
 
                 {/* Form */}
                 {/* Mobile headline */}
                 <div className="relative mb-6 lg:hidden">
-                      <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-3 py-1.5">
-                        <Sparkles className="h-3.5 w-3.5 text-green-400" />
-                        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-300">
+                      <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1.5">
+                        <Sparkles className="h-3.5 w-3.5 text-green-600" />
+                        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-700">
                           Join BetsPlug
                         </span>
                       </div>
-                      <h1 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
+                      <h1 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl">
                         Create your{" "}
-                        <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 bg-clip-text text-transparent">
                           free account
                         </span>
                       </h1>
-                      <p className="mt-3 text-sm text-slate-400">
+                      <p className="mt-3 text-sm text-slate-500">
                         Start with zero risk. No credit card required.
                       </p>
                     </div>
@@ -249,13 +249,13 @@ export default function RegisterPage() {
                       noValidate
                     >
                       {serverError && (
-                        <div className="flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/[0.08] px-4 py-3 backdrop-blur-sm">
-                          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+                        <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+                          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
                           <div>
-                            <p className="text-xs font-bold text-red-300">
+                            <p className="text-xs font-bold text-red-700">
                               We couldn&apos;t create your account
                             </p>
-                            <p className="mt-0.5 text-xs text-red-200/80">
+                            <p className="mt-0.5 text-xs text-red-600">
                               {serverError}
                             </p>
                           </div>
@@ -266,7 +266,7 @@ export default function RegisterPage() {
                       <div>
                         <label
                           htmlFor="register-email"
-                          className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400"
+                          className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500"
                         >
                           Email
                         </label>
@@ -294,7 +294,7 @@ export default function RegisterPage() {
                       <div>
                         <label
                           htmlFor="register-username"
-                          className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400"
+                          className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500"
                         >
                           Username
                         </label>
@@ -322,10 +322,10 @@ export default function RegisterPage() {
                       <div>
                         <label
                           htmlFor="register-name"
-                          className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400"
+                          className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500"
                         >
                           Full name{" "}
-                          <span className="font-normal text-slate-600 normal-case">
+                          <span className="font-normal text-slate-400 normal-case">
                             (optional)
                           </span>
                         </label>
@@ -347,7 +347,7 @@ export default function RegisterPage() {
                       <div>
                         <label
                           htmlFor="register-password"
-                          className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400"
+                          className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500"
                         >
                           Password
                         </label>
@@ -368,7 +368,7 @@ export default function RegisterPage() {
                               showPassword ? "Hide password" : "Show password"
                             }
                             onClick={() => setShowPassword((v) => !v)}
-                            className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white/[0.05] hover:text-white"
+                            className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
                           >
                             {showPassword ? (
                               <EyeOff className="h-4 w-4" />
@@ -388,7 +388,7 @@ export default function RegisterPage() {
                       <div>
                         <label
                           htmlFor="register-confirm"
-                          className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400"
+                          className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500"
                         >
                           Confirm password
                         </label>
@@ -434,14 +434,14 @@ export default function RegisterPage() {
                         By creating an account you agree to our{" "}
                         <Link
                           href={loc("/terms")}
-                          className="font-semibold text-slate-300 hover:text-white"
+                          className="font-semibold text-slate-700 hover:text-green-600"
                         >
                           Terms
                         </Link>{" "}
                         and{" "}
                         <Link
                           href={loc("/privacy")}
-                          className="font-semibold text-slate-300 hover:text-white"
+                          className="font-semibold text-slate-700 hover:text-green-600"
                         >
                           Privacy Policy
                         </Link>
@@ -449,13 +449,13 @@ export default function RegisterPage() {
                       </p>
                     </form>
 
-                <div className="relative mt-7 border-t border-white/[0.06] pt-5 text-center">
+                <div className="relative mt-7 border-t border-slate-200 pt-5 text-center">
                   <span className="text-sm text-slate-500">
                     Already have an account?{" "}
                   </span>
                   <Link
                     href={loc("/login")}
-                    className="text-sm font-bold text-green-400 transition-colors hover:text-green-300"
+                    className="text-sm font-bold text-green-600 transition-colors hover:text-green-500"
                   >
                     Log in
                   </Link>

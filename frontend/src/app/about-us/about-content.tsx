@@ -95,7 +95,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#080b14] text-white">
+    <div className="min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       {/* Shared site navigation */}
       <SiteNav />
 
@@ -105,12 +105,12 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       <section className="relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
         {/* Ambient background */}
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.08] blur-[140px]" />
+          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.04] blur-[140px]" />
           <div
-            className="absolute inset-0 opacity-[0.04]"
+            className="absolute inset-0 opacity-[0.03]"
             style={{
               backgroundImage:
-                "repeating-linear-gradient(135deg, rgba(74,222,128,0.8) 0 1px, transparent 1px 22px)",
+                "repeating-linear-gradient(135deg, rgba(74,222,128,0.4) 0 1px, transparent 1px 22px)",
             }}
           />
         </div>
@@ -120,7 +120,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-400"
+            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600"
           >
             <Sparkles className="h-3 w-3" />
             {t("about.heroBadge")}
@@ -130,7 +130,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl"
+            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl md:text-6xl"
           >
             {t("about.heroTitleA")}
             <br />
@@ -141,7 +141,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-400 sm:text-lg"
+            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg"
           >
             {t("about.heroSubtitle")}
           </motion.p>
@@ -154,11 +154,11 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             aria-label="Breadcrumb"
             className="mt-8 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-500"
           >
-            <Link href={home} className="transition-colors hover:text-green-400">
+            <Link href={home} className="transition-colors hover:text-green-600">
               {t("about.breadcrumbHome")}
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-slate-300">{t("about.breadcrumbAbout")}</span>
+            <span className="text-slate-600">{t("about.breadcrumbAbout")}</span>
           </motion.nav>
         </div>
       </section>
@@ -177,17 +177,17 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
               transition={{ duration: 0.7 }}
               className="relative"
             >
-              <div className="relative overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-[#0d1624] via-[#0a1220] to-[#060912] p-8 shadow-2xl shadow-green-500/[0.08]">
+              <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-lg shadow-slate-200/60">
                 {/* Ambient glow */}
-                <div className="pointer-events-none absolute -left-20 -top-20 h-[250px] w-[250px] rounded-full bg-green-500/[0.12] blur-[100px]" />
-                <div className="pointer-events-none absolute -bottom-20 -right-20 h-[250px] w-[250px] rounded-full bg-emerald-500/[0.10] blur-[100px]" />
+                <div className="pointer-events-none absolute -left-20 -top-20 h-[250px] w-[250px] rounded-full bg-green-50 blur-[100px]" />
+                <div className="pointer-events-none absolute -bottom-20 -right-20 h-[250px] w-[250px] rounded-full bg-emerald-50 blur-[100px]" />
 
                 {/* Grid overlay */}
                 <div
-                  className="pointer-events-none absolute inset-0 opacity-[0.05]"
+                  className="pointer-events-none absolute inset-0 opacity-[0.04]"
                   style={{
                     backgroundImage:
-                      "linear-gradient(rgba(74,222,128,1) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,1) 1px, transparent 1px)",
+                      "linear-gradient(rgba(74,222,128,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.4) 1px, transparent 1px)",
                     backgroundSize: "40px 40px",
                   }}
                 />
@@ -196,18 +196,18 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
                 <div className="relative">
                   <div className="mb-6 flex items-center gap-2">
                     <span className="live-dot" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-green-600">
                       Model Output · Live
                     </span>
                   </div>
 
                   <div className="space-y-4">
-                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
                       <div className="mb-2 flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-300">
+                        <span className="font-semibold text-slate-700">
                           Man City vs Liverpool
                         </span>
-                        <span className="font-mono text-green-400">+EV 12.4%</span>
+                        <span className="font-mono text-green-600">+EV 12.4%</span>
                       </div>
                       <div className="flex items-center gap-2 text-[11px] text-slate-500">
                         <span>Home 54%</span>
@@ -216,51 +216,51 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
                         <span>·</span>
                         <span>Away 24%</span>
                       </div>
-                      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+                      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200">
                         <div className="h-full w-[54%] rounded-full bg-gradient-to-r from-green-500 to-emerald-400" />
                       </div>
                     </div>
 
-                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
                       <div className="mb-2 flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-300">
+                        <span className="font-semibold text-slate-700">
                           Lakers vs Celtics
                         </span>
-                        <span className="font-mono text-green-400">+EV 8.1%</span>
+                        <span className="font-mono text-green-600">+EV 8.1%</span>
                       </div>
                       <div className="flex items-center gap-2 text-[11px] text-slate-500">
                         <span>LAL 47%</span>
                         <span>·</span>
                         <span>BOS 53%</span>
                       </div>
-                      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+                      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200">
                         <div className="h-full w-[53%] rounded-full bg-gradient-to-r from-green-500 to-emerald-400" />
                       </div>
                     </div>
 
-                    <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
                       <div className="mb-2 flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-300">
+                        <span className="font-semibold text-slate-700">
                           Djokovic vs Alcaraz
                         </span>
-                        <span className="font-mono text-green-400">+EV 6.7%</span>
+                        <span className="font-mono text-green-600">+EV 6.7%</span>
                       </div>
                       <div className="flex items-center gap-2 text-[11px] text-slate-500">
                         <span>DJO 51%</span>
                         <span>·</span>
                         <span>ALC 49%</span>
                       </div>
-                      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+                      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200">
                         <div className="h-full w-[51%] rounded-full bg-gradient-to-r from-green-500 to-emerald-400" />
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-6 flex items-center justify-between border-t border-white/[0.06] pt-4">
+                  <div className="mt-6 flex items-center justify-between border-t border-slate-200 pt-4">
                     <span className="text-[10px] uppercase tracking-wider text-slate-500">
                       Updated 12s ago
                     </span>
-                    <Trophy className="h-4 w-4 text-green-400" />
+                    <Trophy className="h-4 w-4 text-green-600" />
                   </div>
                 </div>
               </div>
@@ -273,22 +273,22 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.7 }}
             >
-              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
+              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
                 {t("about.missionBadge")}
               </span>
-              <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+              <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
                 {t("about.missionTitle")}
               </h2>
-              <p className="mt-6 text-base leading-relaxed text-slate-400 sm:text-lg">
+              <p className="mt-6 text-base leading-relaxed text-slate-600 sm:text-lg">
                 {t("about.missionBody1")}
               </p>
-              <p className="mt-4 text-base leading-relaxed text-slate-400 sm:text-lg">
+              <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
                 {t("about.missionBody2")}
               </p>
 
               <Link
                 href={`${home}#how-it-works`}
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-white/[0.04] px-6 py-3 text-sm font-extrabold tracking-tight text-white ring-1 ring-white/[0.1] transition-all hover:bg-white/[0.08] hover:ring-green-500/40"
+                className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-extrabold tracking-tight text-slate-900 ring-1 ring-slate-200 transition-all hover:bg-slate-50 hover:ring-green-500/40"
               >
                 {t("about.missionCta")}
                 <ArrowRight className="h-4 w-4" />
@@ -301,7 +301,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           STATS
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-white/[0.06] bg-gradient-to-b from-transparent via-white/[0.02] to-transparent py-20">
+      <section className="relative border-y border-slate-200 bg-gradient-to-b from-white to-slate-50 py-20">
         <div className="relative mx-auto max-w-6xl px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -310,10 +310,10 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             transition={{ duration: 0.6 }}
             className="mb-12 text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
               {t("about.statsBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
               {t("about.statsTitle")}
             </h2>
           </motion.div>
@@ -328,17 +328,17 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
                 >
-                  <div className="pointer-events-none absolute -right-10 -top-10 h-[120px] w-[120px] rounded-full bg-green-500/[0.06] blur-[60px] transition-all group-hover:bg-green-500/[0.12]" />
+                  <div className="pointer-events-none absolute -right-10 -top-10 h-[120px] w-[120px] rounded-full bg-green-50 blur-[60px] transition-all group-hover:bg-green-100" />
                   <div className="relative">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/15 ring-1 ring-green-500/30">
-                      <Icon className="h-5 w-5 text-green-400" />
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-50 ring-1 ring-green-500/30">
+                      <Icon className="h-5 w-5 text-green-600" />
                     </div>
-                    <div className="text-4xl font-extrabold tracking-tight text-white">
+                    <div className="text-4xl font-extrabold tracking-tight text-slate-900">
                       {stat.value}
                     </div>
-                    <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                    <p className="mt-2 text-xs leading-relaxed text-slate-500">
                       {stat.label}
                     </p>
                   </div>
@@ -361,13 +361,13 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             transition={{ duration: 0.6 }}
             className="mx-auto mb-14 max-w-2xl text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
               {t("about.valuesBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
               {t("about.valuesTitle")}
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-400 sm:text-lg">
+            <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
               {t("about.valuesSubtitle")}
             </p>
           </motion.div>
@@ -382,17 +382,17 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.03] p-7 transition-all hover:border-green-500/30 hover:bg-green-500/[0.04]"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
                 >
-                  <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-500/[0.06] blur-[80px] transition-all group-hover:bg-green-500/[0.12]" />
+                  <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-50 blur-[80px] transition-all group-hover:bg-green-100" />
                   <div className="relative">
-                    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.2)] ring-1 ring-green-500/30">
-                      <Icon className="h-5 w-5 text-green-400" />
+                    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 shadow-sm ring-1 ring-green-500/30">
+                      <Icon className="h-5 w-5 text-green-600" />
                     </div>
-                    <h3 className="mb-3 text-xl font-extrabold tracking-tight text-white">
+                    <h3 className="mb-3 text-xl font-extrabold tracking-tight text-slate-900">
                       {v.title}
                     </h3>
-                    <p className="text-sm leading-relaxed text-slate-400">
+                    <p className="text-sm leading-relaxed text-slate-600">
                       {v.desc}
                     </p>
                   </div>
@@ -406,7 +406,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           FOUNDERS
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-t border-white/[0.06] py-20 md:py-24">
+      <section className="relative border-t border-slate-200 py-20 md:py-24">
         <div className="relative mx-auto max-w-6xl px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -415,13 +415,13 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             transition={{ duration: 0.6 }}
             className="mx-auto mb-14 max-w-2xl text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
               {t("about.teamBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
               {t("about.teamTitle")}
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-400 sm:text-lg">
+            <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
               {t("about.teamSubtitle")}
             </p>
           </motion.div>
@@ -434,29 +434,29 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6 }}
-                className="group relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent p-8 transition-all hover:border-green-500/30"
+                className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
               >
-                <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-500/[0.06] blur-[100px] transition-all group-hover:bg-green-500/[0.14]" />
+                <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-50 blur-[100px] transition-all group-hover:bg-green-100" />
 
                 <div className="relative">
                   {/* Avatar */}
                   <div className="mb-6 flex items-center gap-4">
-                    <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500/25 to-emerald-500/10 shadow-[0_0_30px_rgba(74,222,128,0.25)] ring-1 ring-green-500/30">
-                      <span className="text-2xl font-extrabold text-green-400">
+                    <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-green-100 to-emerald-50 shadow-sm ring-1 ring-green-500/30">
+                      <span className="text-2xl font-extrabold text-green-600">
                         {f.initial}
                       </span>
                     </div>
                     <div>
-                      <h3 className="text-2xl font-extrabold tracking-tight text-white">
+                      <h3 className="text-2xl font-extrabold tracking-tight text-slate-900">
                         {f.name}
                       </h3>
-                      <p className="text-xs font-semibold uppercase tracking-widest text-green-400">
+                      <p className="text-xs font-semibold uppercase tracking-widest text-green-600">
                         {f.role}
                       </p>
                     </div>
                   </div>
 
-                  <p className="text-sm leading-relaxed text-slate-400 sm:text-base">
+                  <p className="text-sm leading-relaxed text-slate-600 sm:text-base">
                     {f.bio}
                   </p>
                 </div>
@@ -478,21 +478,21 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="relative overflow-hidden rounded-3xl border border-green-500/30 bg-gradient-to-br from-[#0d2319] via-[#0a1a13] to-[#050f09] p-10 text-center shadow-2xl shadow-green-500/[0.15] sm:p-14"
+            className="relative overflow-hidden rounded-3xl border border-green-500/30 bg-gradient-to-br from-green-50 via-emerald-50 to-white p-10 text-center shadow-lg shadow-slate-200/60 sm:p-14"
           >
             {/* Ambient glow */}
-            <div className="pointer-events-none absolute -left-20 -top-20 h-[360px] w-[360px] rounded-full bg-green-500/[0.18] blur-[120px]" />
-            <div className="pointer-events-none absolute -bottom-20 -right-20 h-[360px] w-[360px] rounded-full bg-emerald-500/[0.14] blur-[120px]" />
+            <div className="pointer-events-none absolute -left-20 -top-20 h-[360px] w-[360px] rounded-full bg-green-100/60 blur-[120px]" />
+            <div className="pointer-events-none absolute -bottom-20 -right-20 h-[360px] w-[360px] rounded-full bg-emerald-100/40 blur-[120px]" />
 
             <div className="relative">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-500/15 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-green-300">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-50 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-green-700">
                 <Sparkles className="h-3 w-3" />
                 {t("nav.getStarted")}
               </div>
-              <h2 className="mx-auto max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+              <h2 className="mx-auto max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
                 {t("about.ctaTitle")}
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-300 sm:text-base">
+              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
                 {t("about.ctaSubtitle")}
               </p>
 

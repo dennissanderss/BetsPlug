@@ -121,17 +121,17 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
     : defaultStats;
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#060912] text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       {/* ── Ambient background — matches the rest of the site ── */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.08] blur-[160px]" />
-        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.06] blur-[160px]" />
-        <div className="absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-green-500/[0.05] blur-[140px]" />
+        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.04] blur-[160px]" />
+        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.03] blur-[160px]" />
+        <div className="absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-green-500/[0.03] blur-[140px]" />
         <div
-          className="absolute inset-0 opacity-[0.04]"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage:
-              "radial-gradient(rgba(74,222,128,0.6) 1px, transparent 1px)",
+              "radial-gradient(rgba(74,222,128,0.4) 1px, transparent 1px)",
             backgroundSize: "32px 32px",
           }}
         />
@@ -194,8 +194,8 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             transition={{ duration: 0.5 }}
             className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-4 py-2 backdrop-blur-sm"
           >
-            <PartyPopper className="h-4 w-4 text-green-400" />
-            <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-300">
+            <PartyPopper className="h-4 w-4 text-green-500" />
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-600">
               {t("welcome.badge")}
             </span>
           </motion.div>
@@ -208,7 +208,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             className="mx-auto max-w-4xl text-balance break-words text-[2rem] font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl"
           >
             {t("welcome.title")}{" "}
-            <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 bg-clip-text text-transparent">
               {t("welcome.titleHighlight")}
             </span>
           </motion.h1>
@@ -218,7 +218,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mx-auto mt-6 max-w-2xl text-balance text-base leading-relaxed text-slate-400 sm:text-lg"
+            className="mx-auto mt-6 max-w-2xl text-balance text-base leading-relaxed text-slate-500 sm:text-lg"
           >
             {t("welcome.subtitle")}
           </motion.p>
@@ -230,23 +230,23 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mx-auto mt-10 max-w-2xl"
           >
-            <div className="relative overflow-hidden rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.1] via-green-500/[0.04] to-transparent p-6 backdrop-blur-sm">
-              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-green-500/[0.12] blur-[60px]" />
+            <div className="relative overflow-hidden rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 via-white to-transparent p-6">
+              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-green-500/[0.06] blur-[60px]" />
               <div className="relative flex items-start gap-4 text-left">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-green-500/30 bg-green-500/[0.1]">
-                  <CheckCircle2 className="h-5 w-5 text-green-400" />
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-green-500/30 bg-green-50">
+                  <CheckCircle2 className="h-5 w-5 text-green-500" />
                 </div>
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="text-base font-bold text-white sm:text-lg">
+                    <h2 className="text-base font-bold text-slate-900 sm:text-lg">
                       {statusTitle}
                     </h2>
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/[0.1] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-300">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-50 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-green-600">
                       <CheckCircle2 className="h-3 w-3" />
                       Verified
                     </span>
                   </div>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                  <p className="mt-2 text-sm leading-relaxed text-slate-500">
                     {statusBody}
                   </p>
                 </div>
@@ -273,9 +273,9 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             </Link>
             <Link
               href={loc("/checkout")}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-6 py-4 text-sm font-semibold text-slate-300 backdrop-blur-sm transition-all hover:border-white/[0.25] hover:bg-white/[0.06] hover:text-white sm:w-auto"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-sm font-semibold text-slate-600 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 sm:w-auto"
             >
-              <Sparkles className="h-4 w-4 text-green-400" />
+              <Sparkles className="h-4 w-4 text-green-500" />
               Pick your subscription
             </Link>
           </motion.div>
@@ -287,7 +287,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="mt-6 inline-flex items-center gap-2 text-xs text-slate-500"
           >
-            <Mail className="h-3.5 w-3.5 text-green-400/70" />
+            <Mail className="h-3.5 w-3.5 text-green-500/70" />
             {t("welcome.emailHint")}
           </motion.p>
         </section>
@@ -308,15 +308,15 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.5 }}
-                className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 backdrop-blur-sm transition-all hover:border-green-500/20 hover:bg-white/[0.04]"
+                className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-green-500/20 hover:shadow-md"
               >
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/[0.05] to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                 <div className="relative flex items-center gap-4">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-green-500/20 bg-green-500/[0.08]">
-                    <s.icon className="h-5 w-5 text-green-400" />
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-green-500/20 bg-green-50">
+                    <s.icon className="h-5 w-5 text-green-500" />
                   </div>
                   <div>
-                    <div className="text-2xl font-extrabold tracking-tight text-white">
+                    <div className="text-2xl font-extrabold tracking-tight text-slate-900">
                       {s.value}
                     </div>
                     <div className="text-xs text-slate-500">{s.label}</div>
@@ -336,9 +336,9 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             transition={{ duration: 0.6 }}
             className="mb-10 text-center"
           >
-            <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 backdrop-blur-sm">
-              <Sparkles className="h-3.5 w-3.5 text-green-400" />
-              <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+            <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 shadow-sm">
+              <Sparkles className="h-3.5 w-3.5 text-green-500" />
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">
                 {t("welcome.nextTitle")}
               </span>
             </div>
@@ -355,20 +355,20 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.5 }}
-                className="group relative rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 backdrop-blur-sm transition-all hover:border-green-500/20 hover:bg-white/[0.04]"
+                className="group relative rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-green-500/20 hover:shadow-md"
               >
                 {/* Step number */}
-                <div className="absolute -top-3 left-6 flex h-6 items-center justify-center rounded-full border border-green-500/30 bg-[#060912] px-2.5 font-mono text-[10px] font-bold text-green-300">
+                <div className="absolute -top-3 left-6 flex h-6 items-center justify-center rounded-full border border-green-500/30 bg-[#f8fafb] px-2.5 font-mono text-[10px] font-bold text-green-600">
                   STEP {i + 1}
                 </div>
 
-                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-green-500/20 bg-green-500/[0.08]">
-                  <step.icon className="h-5 w-5 text-green-400" />
+                <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-green-500/20 bg-green-50">
+                  <step.icon className="h-5 w-5 text-green-500" />
                 </div>
-                <h3 className="mb-2 text-base font-bold text-white">
+                <h3 className="mb-2 text-base font-bold text-slate-900">
                   {step.title}
                 </h3>
-                <p className="text-sm leading-relaxed text-slate-400">
+                <p className="text-sm leading-relaxed text-slate-500">
                   {step.body}
                 </p>
               </motion.div>
@@ -383,14 +383,14 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6 }}
-            className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] via-white/[0.02] to-transparent p-8 text-center backdrop-blur-sm sm:p-10"
+            className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm sm:p-10"
           >
-            <div className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-green-500/[0.08] blur-[100px]" />
+            <div className="pointer-events-none absolute -left-20 -top-20 h-56 w-56 rounded-full bg-green-500/[0.04] blur-[100px]" />
             <Quote
-              className="mx-auto mb-4 h-8 w-8 text-green-400/70"
+              className="mx-auto mb-4 h-8 w-8 text-green-500/70"
               aria-hidden
             />
-            <blockquote className="relative text-lg font-medium italic leading-relaxed text-slate-200 sm:text-xl">
+            <blockquote className="relative text-lg font-medium italic leading-relaxed text-slate-600 sm:text-xl">
               {t("welcome.quote")}
             </blockquote>
             <figcaption className="relative mt-5 text-sm font-semibold text-slate-500">
@@ -410,7 +410,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
           <p className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-500">
-            <ShieldCheck className="h-3.5 w-3.5 text-green-400/70" />
+            <ShieldCheck className="h-3.5 w-3.5 text-green-500/70" />
             {t("welcome.footerNote")}
           </p>
         </section>
@@ -477,20 +477,20 @@ function QuickstartSection() {
         transition={{ duration: 0.6 }}
         className="mb-14 text-center"
       >
-        <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-3 py-1.5 backdrop-blur-sm">
-          <Rocket className="h-3.5 w-3.5 text-green-400" />
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-green-300">
+        <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-3 py-1.5">
+          <Rocket className="h-3.5 w-3.5 text-green-500" />
+          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-green-600">
             {t("welcome.quickstartEyebrow")}
           </span>
         </div>
         <h2 className="mx-auto max-w-3xl text-balance break-words text-2xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
           {t("welcome.quickstartTitle")}
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-balance text-sm leading-relaxed text-slate-400 sm:text-base">
+        <p className="mx-auto mt-4 max-w-2xl text-balance text-sm leading-relaxed text-slate-500 sm:text-base">
           {t("welcome.quickstartSubtitle")}
         </p>
-        <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.02] px-3 py-1.5 text-[11px] font-semibold text-slate-400">
-          <Clock className="h-3.5 w-3.5 text-green-400" />
+        <div className="mt-5 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-500 shadow-sm">
+          <Clock className="h-3.5 w-3.5 text-green-500" />
           {t("welcome.quickstartDuration")}
         </div>
       </motion.div>
@@ -517,7 +517,7 @@ function QuickstartSection() {
           <path
             d="M 60 70 Q 180 10, 300 70 T 540 70 T 780 70 T 1020 70 T 1140 70"
             fill="none"
-            stroke="rgba(255,255,255,0.08)"
+            stroke="rgba(148,163,184,0.2)"
             strokeWidth="14"
             strokeLinecap="round"
           />
@@ -547,7 +547,7 @@ function QuickstartSection() {
                 <div className="relative flex h-16 w-12 items-end justify-center">
                   {/* Pin body */}
                   <div className="absolute inset-x-0 top-0 mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-emerald-600 shadow-lg shadow-green-500/40 ring-2 ring-green-300/30">
-                    <span className="text-sm font-black text-[#060912]">
+                    <span className="text-sm font-black text-white">
                       {i + 1}
                     </span>
                   </div>
@@ -559,20 +559,20 @@ function QuickstartSection() {
               </div>
 
               {/* Step card */}
-              <div className="group relative w-full flex-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 text-center backdrop-blur-sm transition-all hover:border-green-500/25 hover:bg-white/[0.04]">
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/[0.06] to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="group relative w-full flex-1 overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm transition-all hover:border-green-500/25 hover:shadow-md">
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                 <div className="relative">
-                  <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-green-500/20 bg-green-500/[0.08]">
-                    <step.icon className="h-4 w-4 text-green-400" />
+                  <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl border border-green-500/20 bg-green-50">
+                    <step.icon className="h-4 w-4 text-green-500" />
                   </div>
-                  <h3 className="mb-2 text-sm font-bold leading-tight text-white">
+                  <h3 className="mb-2 text-sm font-bold leading-tight text-slate-900">
                     {step.title}
                   </h3>
-                  <p className="text-xs leading-relaxed text-slate-400">
+                  <p className="text-xs leading-relaxed text-slate-500">
                     {step.body}
                   </p>
-                  <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-2.5 py-1 text-[10px] font-semibold text-slate-500">
-                    <Clock className="h-3 w-3 text-green-400/80" />
+                  <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500">
+                    <Clock className="h-3 w-3 text-green-500/80" />
                     {step.duration}
                   </div>
                 </div>
@@ -604,8 +604,8 @@ function QuickstartSection() {
               <div className="relative z-10 flex shrink-0 flex-col items-center">
                 <div className="flex h-[54px] w-[54px] items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-emerald-600 shadow-lg shadow-green-500/40 ring-2 ring-green-300/30 sm:h-[70px] sm:w-[70px]">
                   <div className="flex flex-col items-center">
-                    <step.icon className="h-4 w-4 text-[#060912] sm:h-5 sm:w-5" />
-                    <span className="text-[9px] font-black tracking-wider text-[#060912] sm:text-[10px]">
+                    <step.icon className="h-4 w-4 text-white sm:h-5 sm:w-5" />
+                    <span className="text-[9px] font-black tracking-wider text-white sm:text-[10px]">
                       STEP {i + 1}
                     </span>
                   </div>
@@ -613,19 +613,19 @@ function QuickstartSection() {
               </div>
 
               {/* Card */}
-              <div className="group relative min-w-0 flex-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 backdrop-blur-sm transition-all hover:border-green-500/25 hover:bg-white/[0.04]">
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/[0.06] to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="group relative min-w-0 flex-1 overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-green-500/25 hover:shadow-md">
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                 <div className="relative">
                   <div className="mb-2 flex flex-wrap items-center gap-2">
-                    <h3 className="text-base font-bold leading-tight text-white">
+                    <h3 className="text-base font-bold leading-tight text-slate-900">
                       {step.title}
                     </h3>
-                    <span className="inline-flex items-center gap-1 rounded-full border border-green-500/20 bg-green-500/[0.08] px-2 py-0.5 text-[10px] font-semibold text-green-300">
+                    <span className="inline-flex items-center gap-1 rounded-full border border-green-500/20 bg-green-50 px-2 py-0.5 text-[10px] font-semibold text-green-600">
                       <Clock className="h-2.5 w-2.5" />
                       {step.duration}
                     </span>
                   </div>
-                  <p className="text-sm leading-relaxed text-slate-400">
+                  <p className="text-sm leading-relaxed text-slate-500">
                     {step.body}
                   </p>
                 </div>
@@ -707,16 +707,16 @@ function DashboardTourSection() {
         transition={{ duration: 0.6 }}
         className="mb-12 text-center"
       >
-        <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-3 py-1.5 backdrop-blur-sm">
-          <LayoutDashboard className="h-3.5 w-3.5 text-green-400" />
-          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-green-300">
+        <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-3 py-1.5">
+          <LayoutDashboard className="h-3.5 w-3.5 text-green-500" />
+          <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-green-600">
             {t("welcome.tourEyebrow")}
           </span>
         </div>
         <h2 className="mx-auto max-w-3xl text-balance break-words text-2xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl">
           {t("welcome.tourTitle")}
         </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-balance text-sm leading-relaxed text-slate-400 sm:text-base">
+        <p className="mx-auto mt-4 max-w-2xl text-balance text-sm leading-relaxed text-slate-500 sm:text-base">
           {t("welcome.tourSubtitle")}
         </p>
       </motion.div>
@@ -727,21 +727,21 @@ function DashboardTourSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.7 }}
-        className="relative overflow-hidden rounded-3xl border border-white/[0.1] bg-gradient-to-br from-white/[0.04] to-white/[0.01] shadow-2xl shadow-green-500/[0.05] backdrop-blur-xl"
+        className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/50"
       >
         {/* Glow */}
-        <div className="pointer-events-none absolute -left-32 -top-32 h-[360px] w-[360px] rounded-full bg-green-500/[0.08] blur-[120px]" />
-        <div className="pointer-events-none absolute -right-32 -bottom-32 h-[360px] w-[360px] rounded-full bg-emerald-500/[0.06] blur-[120px]" />
+        <div className="pointer-events-none absolute -left-32 -top-32 h-[360px] w-[360px] rounded-full bg-green-500/[0.04] blur-[120px]" />
+        <div className="pointer-events-none absolute -right-32 -bottom-32 h-[360px] w-[360px] rounded-full bg-emerald-500/[0.03] blur-[120px]" />
 
         {/* Browser chrome top bar */}
-        <div className="relative flex items-center justify-between gap-4 border-b border-white/[0.06] bg-white/[0.02] px-5 py-3">
+        <div className="relative flex items-center justify-between gap-4 border-b border-slate-200 bg-slate-50 px-5 py-3">
           <div className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
             <span className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
             <span className="h-2.5 w-2.5 rounded-full bg-green-400/70" />
           </div>
           <div className="flex flex-1 items-center justify-center">
-            <div className="inline-flex max-w-full items-center gap-2 truncate rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-[11px] font-medium text-slate-400 sm:max-w-xs">
+            <div className="inline-flex max-w-full items-center gap-2 truncate rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-medium text-slate-500 sm:max-w-xs">
               <span className="h-1.5 w-1.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
               <span className="truncate">app.betsplug.com/dashboard</span>
             </div>
@@ -750,7 +750,7 @@ function DashboardTourSection() {
         </div>
 
         {/* Grid of tour items */}
-        <div className="relative grid grid-cols-1 gap-px bg-white/[0.04] md:grid-cols-2 lg:grid-cols-3">
+        <div className="relative grid grid-cols-1 gap-px bg-slate-100 md:grid-cols-2 lg:grid-cols-3">
           {tourItems.map((item, i) => (
             <motion.div
               key={item.title}
@@ -758,10 +758,10 @@ function DashboardTourSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.4 }}
-              className="group relative overflow-hidden bg-[#060912] p-6 transition-all hover:bg-white/[0.02]"
+              className="group relative overflow-hidden bg-white p-6 transition-all hover:bg-slate-50"
             >
               {/* Hover glow */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/[0.06] to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 
               <div className="relative">
                 {/* Header: icon tile + step number */}
@@ -769,7 +769,7 @@ function DashboardTourSection() {
                   <div
                     className={`flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${item.accent} shadow-lg shadow-green-500/20 ring-1 ring-green-300/20`}
                   >
-                    <item.icon className="h-5 w-5 text-[#060912]" />
+                    <item.icon className="h-5 w-5 text-white" />
                   </div>
                   <span className="font-mono text-[10px] font-bold text-slate-700">
                     0{i + 1}
@@ -777,15 +777,15 @@ function DashboardTourSection() {
                 </div>
 
                 {/* Title + body */}
-                <h3 className="mb-2 text-base font-bold leading-tight text-white">
+                <h3 className="mb-2 text-base font-bold leading-tight text-slate-900">
                   {item.title}
                 </h3>
-                <p className="mb-4 text-sm leading-relaxed text-slate-400">
+                <p className="mb-4 text-sm leading-relaxed text-slate-500">
                   {item.body}
                 </p>
 
                 {/* "Where to find it" breadcrumb */}
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/[0.06] px-3 py-1 font-mono text-[10px] font-semibold text-green-300 transition-all group-hover:border-green-500/40 group-hover:bg-green-500/[0.1]">
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-50 px-3 py-1 font-mono text-[10px] font-semibold text-green-600 transition-all group-hover:border-green-500/40 group-hover:bg-green-100">
                   <ChevronRight className="h-3 w-3" />
                   {item.where}
                 </div>
@@ -801,22 +801,22 @@ function DashboardTourSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="relative mt-6 flex flex-col items-start gap-4 overflow-hidden rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.1] via-green-500/[0.04] to-transparent p-5 backdrop-blur-sm sm:flex-row sm:items-center sm:p-6"
+        className="relative mt-6 flex flex-col items-start gap-4 overflow-hidden rounded-2xl border border-green-200 bg-gradient-to-br from-green-50 via-white to-transparent p-5 sm:flex-row sm:items-center sm:p-6"
       >
-        <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-green-500/[0.12] blur-[80px]" />
-        <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-green-500/30 bg-green-500/[0.1]">
-          <Command className="h-5 w-5 text-green-400" />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-green-500/[0.06] blur-[80px]" />
+        <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-green-500/30 bg-green-50">
+          <Command className="h-5 w-5 text-green-500" />
         </div>
         <div className="relative flex-1">
           <div className="mb-1 flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-300">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-600">
               {t("welcome.tourProTipTitle")}
             </span>
-            <span className="inline-flex items-center gap-0.5 rounded-md border border-white/[0.1] bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] font-bold text-slate-300">
+            <span className="inline-flex items-center gap-0.5 rounded-md border border-slate-200 bg-slate-50 px-1.5 py-0.5 font-mono text-[10px] font-bold text-slate-600">
               ⌘ K
             </span>
           </div>
-          <p className="text-sm leading-relaxed text-slate-300">
+          <p className="text-sm leading-relaxed text-slate-600">
             {t("welcome.tourProTipBody")}
           </p>
         </div>

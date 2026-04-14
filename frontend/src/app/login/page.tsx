@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#060912]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#f8fafb]" />}>
       <LoginContent />
     </Suspense>
   );

@@ -35,10 +35,10 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
 
       <div className="flex flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-center lg:gap-6">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-green-400/80">
+          <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-green-600">
             {fixture.league_name}
           </span>
-          <p className="flex flex-wrap items-center gap-x-1.5 text-base font-extrabold leading-tight text-white sm:text-lg">
+          <p className="flex flex-wrap items-center gap-x-1.5 text-base font-extrabold leading-tight text-slate-900 sm:text-lg">
             {fixture.home_team_logo && (
               <Image src={fixture.home_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
             )}
@@ -74,7 +74,7 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
               awayTeam={fixture.away_team_name}
             />
           ) : (
-            <div className="h-3 w-full animate-pulse rounded-full bg-white/[0.06]" />
+            <div className="h-3 w-full animate-pulse rounded-full bg-slate-100" />
           )}
         </div>
 
@@ -111,22 +111,22 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
         (fixture.odds.home != null ||
           fixture.odds.draw != null ||
           fixture.odds.away != null) && (
-          <div className="flex flex-wrap items-center gap-2 border-t border-white/[0.06] bg-white/[0.02] px-4 py-2 sm:px-5">
+          <div className="flex flex-wrap items-center gap-2 border-t border-slate-200 bg-slate-50 px-4 py-2 sm:px-5">
             <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
               Pre-match odds
             </span>
             {fixture.odds.home != null && (
-              <span className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-200">
+              <span className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-700">
                 1 {fixture.odds.home.toFixed(2)}
               </span>
             )}
             {fixture.odds.draw != null && (
-              <span className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-200">
+              <span className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-700">
                 X {fixture.odds.draw.toFixed(2)}
               </span>
             )}
             {fixture.odds.away != null && (
-              <span className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-200">
+              <span className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-700">
                 2 {fixture.odds.away.toFixed(2)}
               </span>
             )}
@@ -149,7 +149,7 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
   const loc = useLocalizedHref();
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02]">
+    <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white">
       {/* Blurred content underneath */}
       <div
         aria-hidden="true"
@@ -157,10 +157,10 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
       >
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
           <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+            <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-slate-400">
               {fixture.league_name}
             </span>
-            <p className="flex flex-wrap items-center gap-x-1.5 text-base font-semibold leading-tight text-white">
+            <p className="flex flex-wrap items-center gap-x-1.5 text-base font-semibold leading-tight text-slate-900">
               {fixture.home_team_logo && (
                 <Image src={fixture.home_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
               )}
@@ -179,8 +179,8 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
             </p>
           </div>
           <div className="w-full min-w-0 lg:max-w-[260px]">
-            <div className="mb-2 h-2.5 rounded bg-white/[0.06]" />
-            <div className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full bg-white/[0.06]">
+            <div className="mb-2 h-2.5 rounded bg-slate-100" />
+            <div className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full bg-slate-100">
               <div className="h-full w-[45%] rounded-full bg-blue-500/60" />
               <div className="h-full w-[25%] rounded-full bg-amber-500/40" />
               <div className="h-full w-[30%] rounded-full bg-red-500/40" />
@@ -198,17 +198,17 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
       </div>
 
       {/* Foreground lock overlay */}
-      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#0a1220]/60 via-[#0a1220]/40 to-[#0a1220]/70 backdrop-blur-[2px]">
+      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-white/70 via-white/50 to-white/80 backdrop-blur-[2px]">
         <div className="flex flex-col items-center gap-2 text-center">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-500/30 bg-green-500/15 shadow-[0_0_20px_rgba(74,222,128,0.25)] ring-1 ring-green-500/20">
-            <Lock className="h-4 w-4 text-green-400" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-200 bg-green-50 shadow-sm ring-1 ring-green-200">
+            <Lock className="h-4 w-4 text-green-600" />
           </div>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-green-300">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-green-700">
             {t("matchPred.lockedLabel")}
           </p>
           <Link
             href={loc("/checkout")}
-            className="btn-gradient rounded-full px-4 py-1.5 text-[11px] font-extrabold text-black shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50"
+            className="btn-gradient rounded-full px-4 py-1.5 text-[11px] font-extrabold text-white shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50"
           >
             {t("matchPred.unlockThis")}
           </Link>
@@ -224,32 +224,32 @@ export function LockedSkeleton() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02]">
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white">
       <div aria-hidden="true" className="p-5 blur-[6px]">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
           <div className="flex-1 space-y-2">
-            <div className="h-3 w-32 rounded bg-white/[0.06]" />
-            <div className="h-5 w-56 rounded bg-white/[0.06]" />
-            <div className="h-3 w-24 rounded bg-white/[0.06]" />
+            <div className="h-3 w-32 rounded bg-slate-100" />
+            <div className="h-5 w-56 rounded bg-slate-100" />
+            <div className="h-3 w-24 rounded bg-slate-100" />
           </div>
           <div className="w-full max-w-[260px] space-y-2">
-            <div className="h-3 w-full rounded-full bg-white/[0.06]" />
-            <div className="h-2 w-2/3 rounded bg-white/[0.04]" />
+            <div className="h-3 w-full rounded-full bg-slate-100" />
+            <div className="h-2 w-2/3 rounded bg-slate-50" />
           </div>
           <div className="flex flex-col items-end gap-2">
-            <div className="h-10 w-16 rounded bg-white/[0.06]" />
-            <div className="h-6 w-20 rounded-full bg-white/[0.04]" />
+            <div className="h-10 w-16 rounded bg-slate-100" />
+            <div className="h-6 w-20 rounded-full bg-slate-50" />
           </div>
         </div>
       </div>
-      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#0a1220]/60 via-[#0a1220]/40 to-[#0a1220]/70 backdrop-blur-[2px]">
+      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-white/70 via-white/50 to-white/80 backdrop-blur-[2px]">
         <div className="flex flex-col items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-500/30 bg-green-500/15 ring-1 ring-green-500/20">
-            <Lock className="h-4 w-4 text-green-400" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-200 bg-green-50 ring-1 ring-green-200">
+            <Lock className="h-4 w-4 text-green-600" />
           </div>
           <Link
             href={loc("/checkout")}
-            className="btn-gradient rounded-full px-4 py-1.5 text-[11px] font-extrabold text-black shadow-lg shadow-green-500/30"
+            className="btn-gradient rounded-full px-4 py-1.5 text-[11px] font-extrabold text-white shadow-lg shadow-green-500/30"
           >
             {t("matchPred.unlockThis")}
           </Link>
@@ -266,17 +266,17 @@ export function FreeSkeleton() {
     <div className="glass-card animate-pulse overflow-hidden p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-6">
         <div className="flex-1 space-y-2">
-          <div className="h-3 w-32 rounded bg-white/[0.06]" />
-          <div className="h-5 w-56 rounded bg-white/[0.06]" />
-          <div className="h-3 w-24 rounded bg-white/[0.06]" />
+          <div className="h-3 w-32 rounded bg-slate-100" />
+          <div className="h-5 w-56 rounded bg-slate-100" />
+          <div className="h-3 w-24 rounded bg-slate-100" />
         </div>
         <div className="w-full max-w-[260px] space-y-2">
-          <div className="h-3 w-full rounded-full bg-white/[0.06]" />
-          <div className="h-2 w-2/3 rounded bg-white/[0.04]" />
+          <div className="h-3 w-full rounded-full bg-slate-100" />
+          <div className="h-2 w-2/3 rounded bg-slate-50" />
         </div>
         <div className="flex flex-col items-end gap-2">
-          <div className="h-10 w-16 rounded bg-white/[0.06]" />
-          <div className="h-6 w-20 rounded-full bg-white/[0.04]" />
+          <div className="h-10 w-16 rounded bg-slate-100" />
+          <div className="h-6 w-20 rounded-full bg-slate-50" />
         </div>
       </div>
     </div>

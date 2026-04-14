@@ -3,110 +3,76 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════════
-   Brand typeface
+   BetsPlug — Sport-Tech Visual System (2026 Refresh)
    ─────────────────────────────────────────────────────────────────
+   Light, energetic, premium.  Green = primary CTA.  Teal = accent.
    Exo 2 — geometric sport/tech sans loaded via next/font/google.
-   Exposed as the CSS variable --font-brand from src/app/layout.tsx.
    ═══════════════════════════════════════════════════════════════════ */
 
 @layer base {
-  /* ── Tighten Exo 2 letter-spacing to match Lato compactness ── */
   body {
     letter-spacing: -0.011em;
   }
   h1, h2, h3, h4, h5, h6 {
     letter-spacing: -0.02em;
   }
-  /* ── Text selection colors (dark theme friendly) ── */
+
   ::selection {
-    background-color: rgba(16, 185, 129, 0.4);
-    color: #ffffff;
+    background-color: rgba(16, 185, 129, 0.25);
+    color: #0f172a;
   }
   ::-moz-selection {
-    background-color: rgba(16, 185, 129, 0.4);
-    color: #ffffff;
+    background-color: rgba(16, 185, 129, 0.25);
+    color: #0f172a;
   }
 
-  /* ── Dark theme by default ── */
+  /* ── Design tokens ── */
   :root {
-    /* Base surfaces — v7: lighter navy for readability */
-    --background: 222 35% 10%;       /* #111827 — dark navy, not pitch black */
-    --foreground: 210 40% 98%;       /* #f8fafc */
+    /* Surfaces — light, airy, premium */
+    --background: 210 20% 98%;         /* #f8fafb */
+    --foreground: 222 47% 11%;         /* #1e293b */
 
-    /* Card surfaces */
-    --card: 222 30% 14%;             /* #1a2236 — visible cards, not invisible */
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;                 /* white */
+    --card-foreground: 222 47% 11%;
 
-    /* Elevated surface */
-    --elevated: 217 28% 18%;         /* #212d45 — clearly elevated */
+    --elevated: 210 20% 96%;           /* #f1f5f9 */
 
-    /* Primary: neon green (from logo) */
-    --primary: 142 76% 55%;          /* #4ADE80 neon green */
-    --primary-foreground: 222 47% 5%;
+    /* Primary: logo green */
+    --primary: 142 71% 45%;            /* #22c55e */
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary: deeper green */
-    --secondary: 160 84% 39%;        /* #10b981 */
-    --secondary-foreground: 210 40% 98%;
+    /* Secondary: logo teal/cyan */
+    --secondary: 187 92% 41%;          /* #06b6d4 */
+    --secondary-foreground: 0 0% 100%;
 
     /* Muted */
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%; /* #94a3b8 */
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 16% 47%;   /* #64748b */
 
     /* Accent */
-    --accent: 217 33% 20%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 210 20% 94%;
+    --accent-foreground: 222 47% 11%;
 
-    /* Destructive: coral red */
-    --destructive: 0 84% 60%;        /* #ef4444 */
-    --destructive-foreground: 210 40% 98%;
-
-    /* Warning: amber */
-    --warning: 38 92% 50%;           /* #f59e0b */
-    --warning-foreground: 220 47% 7%;
-
-    /* Win / Loss */
+    /* Status */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 7%;
     --win: 160 84% 39%;
     --loss: 0 84% 60%;
     --draw: 38 92% 50%;
 
-    /* Borders — v7: slightly more visible */
-    --border: 217 28% 20%;
-    --input: 217 28% 20%;
-    --ring: 142 76% 55%;
+    /* Borders & Input */
+    --border: 214 32% 91%;             /* #e2e8f0 */
+    --input: 214 32% 91%;
+    --ring: 142 71% 45%;
 
     --radius: 0.75rem;
 
-    /* Sidebar — v7: slightly lighter than main bg */
+    /* Sidebar (dashboard keeps dark) */
     --sidebar-background: 222 35% 12%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-border: 217 28% 18%;
-  }
-
-  /* ── Light mode (opt-in via .light class) ── */
-  .light {
-    --background: 0 0% 98%;
-    --foreground: 222 47% 7%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 7%;
-    --elevated: 210 40% 96%;
-    --primary: 217 91% 52%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 160 84% 35%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-    --accent: 210 40% 94%;
-    --accent-foreground: 222 47% 7%;
-    --destructive: 0 84% 55%;
-    --destructive-foreground: 0 0% 100%;
-    --warning: 38 92% 45%;
-    --warning-foreground: 0 0% 100%;
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 217 91% 52%;
-    --sidebar-background: 222 47% 5%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 14%;
   }
 }
 
@@ -116,16 +82,12 @@
   }
 
   html {
-    color-scheme: dark;
-    /* Prevent any accidental horizontal scroll on mobile (the #1
-       cause of bad mobile layouts is a single element that's a
-       few pixels too wide and pushes the whole page). */
+    color-scheme: light;
     overflow-x: hidden;
   }
 
   body {
-    background: radial-gradient(ellipse at top, #151d30 0%, #111827 50%, #0f1520 100%);
-    background-attachment: fixed;
+    background: #f8fafb;
     @apply text-foreground antialiased;
     font-family: var(--font-brand), system-ui, -apple-system, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif;
@@ -135,43 +97,24 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    /* Force the body to respect the viewport width, even if a
-       child is wider than expected. */
     max-width: 100vw;
   }
 
-  /* ── Headings — Lato Bold ──
-     All headings break long words instead of overflowing the
-     viewport. This is critical for NL/DE where single words
-     can be 15+ characters (e.g. "sportvoorspellingen"). */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-brand), system-ui, -apple-system, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif;
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.15;
-    /* Allow long compound words (NL/DE) to wrap gracefully
-       without the ugly soft-hyphen breaks that `hyphens: auto`
-       produces on huge display type. `break-words` is still
-       the safety net if a word truly exceeds the container. */
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: manual;
   }
 
-  /* ── Generic text overflow safety net ──
-     Any paragraph or inline text also gets safe wrapping so
-     long URLs, emails and compound words never push the layout. */
   p, span, a, li, label, input, textarea, select, button {
     overflow-wrap: break-word;
   }
 
-  /* ── iOS Safari: prevent zoom-on-focus ──
-     iOS Safari automatically zooms in when focusing a form field
-     whose computed font-size is less than 16px. On mobile we force
-     every form control to at least 16px — `!important` is required
-     because Tailwind utilities like `text-sm` (14px) otherwise win.
-     Above 640px we let the original sizing take over. */
   @media (max-width: 639.98px) {
     input,
     textarea,
@@ -180,13 +123,12 @@
     }
   }
 
-  /* Images should never exceed their container on mobile. */
   img, video, svg {
     max-width: 100%;
     height: auto;
   }
 
-  /* ── Scrollbar styling ── */
+  /* ── Scrollbar — light theme ── */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -197,85 +139,105 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.12);
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.2);
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+    scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
   }
 }
 
 @layer components {
-  /* ── Glassmorphism card ── */
-  /* v7: lighter glass cards — visible but not overwhelming */
+  /* ── Sport card — premium white cards with depth ── */
   .glass-card {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: var(--radius);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      0 1px 2px rgba(0, 0, 0, 0.02);
   }
 
   .glass-card-hover {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: var(--radius);
-    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.04),
+      0 1px 2px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
 
   .glass-card-hover:hover {
-    background: rgba(255, 255, 255, 0.10);
-    border-color: rgba(74, 222, 128, 0.25);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    transform: translateY(-1px);
+    border-color: rgba(34, 197, 94, 0.3);
+    box-shadow:
+      0 4px 16px rgba(34, 197, 94, 0.08),
+      0 8px 24px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
   }
 
-  /* ── Gradient text ── */
+  /* ── Gradient text — vibrant on light backgrounds ── */
   .gradient-text {
-    background: linear-gradient(135deg, #4ade80 0%, #a7f3d0 100%);
+    background: linear-gradient(135deg, #059669 0%, #0891b2 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .gradient-text-green {
-    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* ── Blue glow effect ── */
-  .glow-blue {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.35),
-                0 0 60px rgba(59, 130, 246, 0.12);
+  /* ── Dark section variants (hero, footer, dark bands) ── */
+  .dark-section .gradient-text {
+    background: linear-gradient(135deg, #4ade80 0%, #22d3ee 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  .glow-blue-sm {
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3),
-                0 0 20px rgba(59, 130, 246, 0.1);
+  .dark-section .glass-card,
+  .dark-section .glass-card-hover {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-color: rgba(255, 255, 255, 0.10);
+    box-shadow: none;
   }
 
+  .dark-section .glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(74, 222, 128, 0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  /* ── Glow effects ── */
   .glow-green {
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.35),
-                0 0 60px rgba(16, 185, 129, 0.12);
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.2),
+                0 0 60px rgba(34, 197, 94, 0.08);
   }
 
-  /* ── Nav item active gradient ── */
+  .glow-teal {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.2),
+                0 0 60px rgba(6, 182, 212, 0.08);
+  }
+
+  /* ── Nav items ── */
   .nav-active {
     background: linear-gradient(90deg,
-      rgba(74, 222, 128, 0.2) 0%,
-      rgba(74, 222, 128, 0.05) 100%);
-    border-left: 2px solid #4ade80;
-    color: #4ade80;
+      rgba(34, 197, 94, 0.12) 0%,
+      rgba(34, 197, 94, 0.03) 100%);
+    border-left: 2px solid #22c55e;
+    color: #16a34a;
   }
 
   .nav-item {
@@ -284,64 +246,54 @@
   }
 
   .nav-item:hover {
-    background: rgba(74, 222, 128, 0.06);
-    border-left-color: rgba(74, 222, 128, 0.4);
-    color: #e2e8f0;
+    background: rgba(34, 197, 94, 0.06);
+    border-left-color: rgba(34, 197, 94, 0.4);
+    color: #0f172a;
   }
 
-  /* ── Primary gradient button (neon green) ──
-     Previously ran an infinite `btn-pulse` keyframe on every CTA in the
-     viewport — nice flourish, but it repainted every ~2s on a dozen
-     buttons even when the user was just reading. Replaced with a
-     static green glow + an opacity/lift on hover: same visual weight,
-     zero continuous repaint cost. */
+  /* ── Primary gradient button (neon green CTA) ── */
   .btn-gradient {
-    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-    color: #0a0e1a;
-    transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
-    box-shadow: 0 6px 24px rgba(74, 222, 128, 0.28);
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+    font-weight: 700;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
   }
 
   .btn-gradient:hover {
-    opacity: 0.95;
     transform: translateY(-1px);
-    box-shadow: 0 8px 32px rgba(74, 222, 128, 0.4);
+    box-shadow: 0 6px 24px rgba(34, 197, 94, 0.4);
   }
 
-  /* ── Highlighted feature card (like crypto design middle card) ── */
+  /* ── Highlighted card (green-filled card) ── */
   .card-highlight {
-    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-    color: #0a0e1a;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
     border-radius: var(--radius);
-    box-shadow: 0 0 40px rgba(74, 222, 128, 0.25),
-                0 20px 60px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 32px rgba(34, 197, 94, 0.25);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
   .card-highlight:hover {
     transform: translateY(-3px);
-    box-shadow: 0 0 60px rgba(74, 222, 128, 0.4),
-                0 24px 72px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 12px 40px rgba(34, 197, 94, 0.35);
   }
 
   /* ── Grid background pattern ── */
   .grid-bg {
     background-image:
-      linear-gradient(rgba(74, 222, 128, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74, 222, 128, 0.04) 1px, transparent 1px);
+      linear-gradient(rgba(34, 197, 94, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 197, 94, 0.06) 1px, transparent 1px);
     background-size: 60px 60px;
   }
 
-  /* ── Live status dot ──
-     Static soft-glow replacement for the old pulse-live keyframe, which
-     ran infinitely wherever a "LIVE" label was shown. The colour itself
-     already carries the semantic meaning — the pulse was pure flair. */
+  /* ── Live status dot ── */
   .live-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #10b981;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
+    background: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
   }
 
   .live-dot-red {
@@ -354,7 +306,6 @@
 }
 
 @layer utilities {
-  /* ── Slow pulse animation ── */
   .animate-pulse-slow {
     animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
@@ -368,19 +319,9 @@
   }
 }
 
-/* ── Keyframes ──
-   The only keyframes that survive the 2026-04 animation purge are the
-   short one-shot ones used by component entrances (fade-in, slide-up)
-   and the slow opacity pulse that still powers a handful of skeleton
-   highlights. `btn-pulse` and `pulse-live` were removed — their owners
-   now use static shadows. */
 @keyframes pulse-slow {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 @keyframes fade-in {
@@ -399,11 +340,6 @@
   }
 }
 
-/* ── Global reduced-motion kill-switch ──
-   When the OS/browser asks for reduced motion we clamp every CSS
-   animation and transition to effectively zero — one place to enforce
-   accessibility instead of chasing it per-component. Framer Motion
-   listens to the same media query automatically. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -415,8 +351,73 @@
   }
 }
 
-/* ── Focus ring override for dark theme ── */
+/* ── Focus ring ── */
 :focus-visible {
-  outline: 2px solid rgba(74, 222, 128, 0.7);
+  outline: 2px solid rgba(34, 197, 94, 0.6);
   outline-offset: 2px;
+}
+
+/* ── Dashboard dark override ── */
+/* The (app) layout wraps content in a sidebar-based layout.
+   We keep the sidebar and app pages dark via scoped overrides. */
+[data-app-shell] {
+  color-scheme: dark;
+  background: radial-gradient(ellipse at top, #151d30 0%, #111827 50%, #0f1520 100%);
+  background-attachment: fixed;
+  color: #f8fafc;
+}
+
+[data-app-shell] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-app-shell] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+[data-app-shell] .glass-card,
+[data-app-shell] .glass-card-hover {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: rgba(255, 255, 255, 0.10);
+  box-shadow: none;
+}
+
+[data-app-shell] .glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(74, 222, 128, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+[data-app-shell] .gradient-text {
+  background: linear-gradient(135deg, #4ade80 0%, #a7f3d0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-app-shell] .btn-gradient {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  color: #0a0e1a;
+  box-shadow: 0 6px 24px rgba(74, 222, 128, 0.28);
+}
+
+[data-app-shell] .nav-active {
+  background: linear-gradient(90deg,
+    rgba(74, 222, 128, 0.2) 0%,
+    rgba(74, 222, 128, 0.05) 100%);
+  border-left: 2px solid #4ade80;
+  color: #4ade80;
+}
+
+[data-app-shell] .nav-item:hover {
+  background: rgba(74, 222, 128, 0.06);
+  border-left-color: rgba(74, 222, 128, 0.4);
+  color: #e2e8f0;
+}
+
+[data-app-shell] ::selection {
+  background-color: rgba(16, 185, 129, 0.4);
+  color: #ffffff;
 }

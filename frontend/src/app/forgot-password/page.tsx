@@ -61,10 +61,10 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#060912] text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.08] blur-[160px]" />
-        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.06] blur-[160px]" />
+        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.05] blur-[160px]" />
+        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.04] blur-[160px]" />
       </div>
 
       <SiteNav />
@@ -76,25 +76,25 @@ export default function ForgotPasswordPage() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-7 backdrop-blur-xl sm:p-9">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-[260px] w-[260px] rounded-full bg-green-500/[0.12] blur-[100px]" />
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-7 shadow-sm sm:p-9">
+            <div className="pointer-events-none absolute -right-20 -top-20 h-[260px] w-[260px] rounded-full bg-green-500/[0.06] blur-[100px]" />
 
             {!sent && (
               <>
                 <div className="relative mb-6">
                   <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-3 py-1.5">
-                    <Sparkles className="h-3.5 w-3.5 text-green-400" />
-                    <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-300">
+                    <Sparkles className="h-3.5 w-3.5 text-green-500" />
+                    <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-600">
                       Password reset
                     </span>
                   </div>
-                  <h1 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight">
+                  <h1 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight text-slate-900">
                     Forgot your{" "}
-                    <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
+                    <span className="bg-gradient-to-br from-green-500 via-green-500 to-emerald-600 bg-clip-text text-transparent">
                       password?
                     </span>
                   </h1>
-                  <p className="mt-3 text-sm text-slate-400">
+                  <p className="mt-3 text-sm text-slate-500">
                     Enter the email address for your BetsPlug account and
                     we&apos;ll send you a link to reset your password.
                   </p>
@@ -115,7 +115,7 @@ export default function ForgotPasswordPage() {
                   <div>
                     <label
                       htmlFor="forgot-email"
-                      className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400"
+                      className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500"
                     >
                       Email
                     </label>
@@ -129,10 +129,10 @@ export default function ForgotPasswordPage() {
                         placeholder="you@email.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className={`w-full rounded-xl border bg-white/[0.03] px-4 py-3 pl-11 text-sm text-white placeholder:text-slate-600 outline-none transition-all focus:bg-white/[0.06] ${
+                        className={`w-full rounded-xl border bg-white px-4 py-3 pl-11 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all focus:bg-white ${
                           tried && !emailOk
                             ? "border-red-500/40 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
-                            : "border-white/[0.1] focus:border-green-500/50 focus:ring-2 focus:ring-green-500/20"
+                            : "border-slate-300 focus:border-green-500/50 focus:ring-2 focus:ring-green-500/20"
                         }`}
                       />
                     </div>
@@ -146,7 +146,7 @@ export default function ForgotPasswordPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="btn-gradient group flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/25 transition-all hover:shadow-green-500/40 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="btn-gradient group flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/25 transition-all hover:shadow-green-500/40 disabled:cursor-not-allowed disabled:opacity-60 text-white"
                   >
                     {submitting ? (
                       <>
@@ -163,10 +163,10 @@ export default function ForgotPasswordPage() {
                   </button>
                 </form>
 
-                <div className="relative mt-7 border-t border-white/[0.06] pt-5 text-center">
+                <div className="relative mt-7 border-t border-slate-200 pt-5 text-center">
                   <Link
                     href={loc("/login")}
-                    className="text-sm font-bold text-green-400 transition-colors hover:text-green-300"
+                    className="text-sm font-bold text-green-600 transition-colors hover:text-green-500"
                   >
                     ← Back to login
                   </Link>
@@ -176,21 +176,21 @@ export default function ForgotPasswordPage() {
 
             {sent && (
               <div className="relative space-y-5 text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-green-500/30 bg-green-500/[0.12]">
-                  <CheckCircle2 className="h-7 w-7 text-green-300" />
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-green-500/30 bg-green-50">
+                  <CheckCircle2 className="h-7 w-7 text-green-600" />
                 </div>
-                <h1 className="text-2xl font-extrabold tracking-tight">
+                <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">
                   Check your inbox
                 </h1>
-                <p className="text-sm leading-relaxed text-slate-400">
+                <p className="text-sm leading-relaxed text-slate-500">
                   If an account with that email exists, we&apos;ve sent a
                   password reset link to it. It may take a minute to arrive —
                   don&apos;t forget to check your spam folder.
                 </p>
-                <div className="border-t border-white/[0.06] pt-5">
+                <div className="border-t border-slate-200 pt-5">
                   <Link
                     href={loc("/login")}
-                    className="text-sm font-bold text-green-400 transition-colors hover:text-green-300"
+                    className="text-sm font-bold text-green-600 transition-colors hover:text-green-500"
                   >
                     ← Back to login
                   </Link>

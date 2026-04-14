@@ -67,7 +67,7 @@ export function SiteNav() {
       {/* ── Top Bar + Navigation ── */}
       <header className="fixed top-0 left-0 right-0 z-50">
         <TopBar />
-        <nav className="border-b border-white/[0.06] bg-[#080b14]/80 backdrop-blur-xl transition-all duration-300">
+        <nav className="border-b border-slate-200/60 bg-white/80 backdrop-blur-xl transition-all duration-300">
           <div
             className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-300 ${
               isScrolled ? "py-1 md:py-0.5" : "py-3 md:py-1"
@@ -80,7 +80,7 @@ export function SiteNav() {
               width={200}
               height={80}
               priority
-              className={`w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)] transition-all duration-300 ${
+              className={`w-auto transition-all duration-300 ${
                 isScrolled
                   ? "h-8 sm:h-10 md:h-12 lg:h-14"
                   : "h-10 sm:h-14 md:h-16 lg:h-20"
@@ -94,7 +94,7 @@ export function SiteNav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-semibold text-slate-400 transition-colors hover:text-white"
+                className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900"
               >
                 {link.label}
               </Link>
@@ -111,7 +111,7 @@ export function SiteNav() {
             {/* Desktop buttons (lg+) */}
             <Link
               href={loc("/login")}
-              className={`hidden rounded-md border border-white/[0.1] font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white lg:inline-block ${
+              className={`hidden rounded-md border border-slate-300 font-medium text-slate-600 transition-all hover:border-slate-400 hover:text-slate-900 lg:inline-block ${
                 isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
               }`}
             >
@@ -141,7 +141,7 @@ export function SiteNav() {
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
-              className={`flex items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.03] text-white backdrop-blur-sm transition-all duration-300 hover:border-green-500/40 hover:bg-white/[0.06] lg:hidden ${
+              className={`flex items-center justify-center rounded-full border border-slate-300 bg-slate-50 text-slate-600 transition-all duration-300 hover:border-green-500/40 hover:bg-green-50 lg:hidden ${
                 isScrolled ? "h-9 w-9" : "h-11 w-11"
               }`}
             >

@@ -184,7 +184,7 @@ export default function ThankYouPage({
   sanityPlanFeatures?: SanityPlanFeature[];
 }) {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#060912]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#f8fafb]" />}>
       <ThankYouContent sanityPlanFeatures={sanityPlanFeatures} />
     </Suspense>
   );
@@ -306,12 +306,12 @@ function ThankYouContent({
   }, [isTrial, billing, planCopy.label]);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#060912] text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#f8fafb] text-slate-900">
       {/* ── Ambient background ── */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.08] blur-[160px]" />
-        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.06] blur-[160px]" />
-        <div className="absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-green-500/[0.05] blur-[140px]" />
+        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.04] blur-[160px]" />
+        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.03] blur-[160px]" />
+        <div className="absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-green-500/[0.03] blur-[140px]" />
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -378,10 +378,10 @@ function ThankYouContent({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-4 py-2 backdrop-blur-sm"
+            className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-2"
           >
-            <CheckCircle2 className="h-4 w-4 text-green-400" />
-            <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-300">
+            <CheckCircle2 className="h-4 w-4 text-green-500" />
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-700">
               {isTrial ? "Trial started" : "Payment confirmed"}
             </span>
           </motion.div>
@@ -406,7 +406,7 @@ function ThankYouContent({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mx-auto mt-6 max-w-2xl text-balance text-base leading-relaxed text-slate-400 sm:text-lg"
+            className="mx-auto mt-6 max-w-2xl text-balance text-base leading-relaxed text-slate-600 sm:text-lg"
           >
             Your subscription is set up. Here&apos;s everything you just
             unlocked — and where to head next.
@@ -419,29 +419,29 @@ function ThankYouContent({
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mx-auto mt-10 max-w-xl"
           >
-            <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] to-white/[0.01] p-5 backdrop-blur-xl">
-              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-green-500/[0.1] blur-[60px]" />
+            <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-green-500/[0.05] blur-[60px]" />
               <div className="relative flex items-center gap-4">
                 <div
-                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${planCopy.accent} shadow-lg shadow-black/30 ring-1 ring-white/20`}
+                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${planCopy.accent} shadow-lg shadow-slate-200/60 ring-1 ring-slate-200/60`}
                 >
-                  <PlanIcon className="h-5 w-5 text-[#060912]" />
+                  <PlanIcon className="h-5 w-5 text-white" />
                 </div>
                 <div className="min-w-0 flex-1 text-left">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-300">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-600">
                     Active plan
                   </p>
-                  <p className="truncate text-lg font-extrabold text-white">
+                  <p className="truncate text-lg font-extrabold text-slate-900">
                     {planCopy.label}
                   </p>
                 </div>
                 {activated ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/[0.12] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-green-300">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-green-700">
                     <CheckCircle2 className="h-3 w-3" />
                     Active
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/[0.1] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-300">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-600">
                     <Loader2 className="h-3 w-3 animate-spin" />
                     Activating
                   </span>
@@ -467,7 +467,7 @@ function ThankYouContent({
             </Link>
             <Link
               href={loc("/subscription")}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-6 py-4 text-sm font-semibold text-slate-300 backdrop-blur-sm transition-all hover:border-white/[0.25] hover:bg-white/[0.06] hover:text-white sm:w-auto"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-sm font-semibold text-slate-600 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 sm:w-auto"
             >
               View my subscription
             </Link>
@@ -480,7 +480,7 @@ function ThankYouContent({
             transition={{ duration: 0.6, delay: 0.5 }}
             className="mt-6 inline-flex items-center gap-2 text-xs text-slate-500"
           >
-            <Mail className="h-3.5 w-3.5 text-green-400/70" />
+            <Mail className="h-3.5 w-3.5 text-green-500/70" />
             Receipt and account details are on their way to your inbox.
           </motion.p>
         </section>
@@ -494,9 +494,9 @@ function ThankYouContent({
             transition={{ duration: 0.6 }}
             className="mb-10 text-center"
           >
-            <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-3 py-1.5 backdrop-blur-sm">
-              <Sparkles className="h-3.5 w-3.5 text-green-400" />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-green-300">
+            <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-green-500" />
+              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-green-700">
                 What you unlocked
               </span>
             </div>
@@ -515,17 +515,17 @@ function ThankYouContent({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 backdrop-blur-sm transition-all hover:border-green-500/25 hover:bg-white/[0.04]"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-green-500/25 hover:shadow-md"
                 >
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-500/[0.06] to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                   <div className="relative">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-green-500/20 bg-green-500/[0.08]">
-                      <Icon className="h-5 w-5 text-green-400" />
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-green-500/20 bg-green-50">
+                      <Icon className="h-5 w-5 text-green-500" />
                     </div>
-                    <h3 className="mb-2 text-base font-bold text-white">
+                    <h3 className="mb-2 text-base font-bold text-slate-900">
                       {feature.title}
                     </h3>
-                    <p className="text-sm leading-relaxed text-slate-400">
+                    <p className="text-sm leading-relaxed text-slate-600">
                       {feature.body}
                     </p>
                   </div>
@@ -542,18 +542,18 @@ function ThankYouContent({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-5 text-center backdrop-blur-sm"
+            className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm"
           >
             {activated ? (
               <div className="flex items-center justify-center gap-3">
-                <CheckCircle2 className="h-5 w-5 text-green-400" />
-                <p className="text-sm font-semibold text-slate-200">
+                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <p className="text-sm font-semibold text-slate-700">
                   Your subscription is fully activated. Enjoy!
                 </p>
               </div>
             ) : pollTimedOut ? (
               <div className="space-y-2">
-                <p className="text-sm font-semibold text-amber-300">
+                <p className="text-sm font-semibold text-amber-600">
                   Your payment was received — activation may take a few
                   more minutes.
                 </p>
@@ -565,8 +565,8 @@ function ThankYouContent({
               </div>
             ) : (
               <div className="flex items-center justify-center gap-3">
-                <Loader2 className="h-4 w-4 animate-spin text-green-400" />
-                <p className="text-sm font-medium text-slate-400">
+                <Loader2 className="h-4 w-4 animate-spin text-green-500" />
+                <p className="text-sm font-medium text-slate-500">
                   Finalizing your subscription…
                 </p>
               </div>
@@ -582,7 +582,7 @@ function ThankYouContent({
         {/* ── Bottom trust strip ── */}
         <section className="mx-auto mt-16 max-w-3xl px-6 text-center">
           <p className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-500">
-            <ShieldCheck className="h-3.5 w-3.5 text-green-400/70" />
+            <ShieldCheck className="h-3.5 w-3.5 text-green-500/70" />
             SSL-encrypted · 14-day money-back guarantee · Cancel any time
           </p>
         </section>

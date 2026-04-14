@@ -65,9 +65,9 @@ export function TopBar() {
         closing ? "max-h-0 opacity-0" : "max-h-12 opacity-100"
       }`}
     >
-      <div className="relative bg-[#0a0e1a] border-b border-green-500/[0.12] overflow-hidden">
+      <div className="relative bg-gradient-to-r from-green-50 to-teal-50 border-b border-green-200 overflow-hidden">
         {/* Subtle green gradient glow */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-green-500/[0.06] to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-green-200/30 to-transparent pointer-events-none" />
 
         <div className="relative flex items-center justify-center gap-2 px-10 py-2 text-[13px] sm:text-sm">
           <Flame className="h-3.5 w-3.5 text-orange-400 shrink-0" />
@@ -75,33 +75,33 @@ export function TopBar() {
           {stats ? (
             <>
               {/* Desktop: full stats */}
-              <span className="hidden sm:inline text-slate-300">
-                <span className="font-bold text-white">
+              <span className="hidden sm:inline text-slate-500">
+                <span className="font-bold text-slate-700">
                   {Math.round(stats.accuracy_pct)}%
                 </span>{" "}
                 {t("topbar.winRate")}
-                <span className="mx-1.5 text-slate-600">·</span>
-                <span className="font-bold text-white">
+                <span className="mx-1.5 text-slate-400">·</span>
+                <span className="font-bold text-slate-700">
                   {stats.total_picks}+
                 </span>{" "}
                 {t("topbar.picksAnalyzed")}
-                <span className="mx-1.5 text-slate-600">·</span>
+                <span className="mx-1.5 text-slate-400">·</span>
               </span>
 
               {/* Mobile: compact */}
-              <span className="sm:hidden text-slate-300">
-                <span className="font-bold text-white">
+              <span className="sm:hidden text-slate-500">
+                <span className="font-bold text-slate-700">
                   {Math.round(stats.accuracy_pct)}%
                 </span>{" "}
                 {t("topbar.winRate")}
-                <span className="mx-1.5 text-slate-600">·</span>
+                <span className="mx-1.5 text-slate-400">·</span>
               </span>
             </>
           ) : null}
 
           <Link
             href={`${loc("/checkout")}?plan=gold`}
-            className="font-bold text-green-400 hover:text-green-300 transition-colors inline-flex items-center gap-1 whitespace-nowrap"
+            className="font-bold text-green-600 hover:text-green-700 transition-colors inline-flex items-center gap-1 whitespace-nowrap"
           >
             {t("topbar.cta")}
             <ArrowRight className="h-3.5 w-3.5" />
@@ -113,7 +113,7 @@ export function TopBar() {
           type="button"
           onClick={dismiss}
           aria-label="Close"
-          className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-600 hover:text-white transition-colors"
+          className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-700 transition-colors"
         >
           <X className="h-3.5 w-3.5" />
         </button>
