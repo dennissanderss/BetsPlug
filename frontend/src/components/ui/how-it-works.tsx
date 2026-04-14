@@ -101,7 +101,7 @@ export function HowItWorks() {
                     />
 
                     {/* Step number — large watermark */}
-                    <span className="pointer-events-none absolute right-5 top-4 font-mono text-6xl font-black text-slate-200/60 transition-colors duration-500 group-hover:text-green-500/[0.15] sm:text-7xl">
+                    <span className="pointer-events-none absolute right-5 top-4 font-mono text-6xl font-black text-white/[0.06] transition-colors duration-500 group-hover:text-green-400/25 sm:text-7xl">
                       {step.number}
                     </span>
 
@@ -135,7 +135,7 @@ export function HowItWorks() {
                           className={`h-1 rounded-full transition-all duration-500 ${
                             j === i
                               ? `w-6 bg-gradient-to-r ${step.gradient}`
-                              : "w-1 bg-slate-200 group-hover:bg-slate-300"
+                              : "w-1 bg-white/10 group-hover:bg-white/20"
                           }`}
                         />
                       ))}

@@ -949,7 +949,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
           <div className="grid gap-6 md:grid-cols-3">
             {/* Card 1 */}
             <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition hover:shadow-md">
-              <p className="mb-8 text-5xl font-extrabold text-slate-100">01.</p>
+              <p className="mb-8 text-5xl font-extrabold text-white/[0.08]">01.</p>
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50">
                 <Shield className="h-6 w-6 text-green-600" />
               </div>
@@ -979,7 +979,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
 
             {/* Card 3 */}
             <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition hover:shadow-md">
-              <p className="mb-8 text-5xl font-extrabold text-slate-100">03.</p>
+              <p className="mb-8 text-5xl font-extrabold text-white/[0.08]">03.</p>
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50">
                 <CheckCircle2 className="h-6 w-6 text-green-600" />
               </div>

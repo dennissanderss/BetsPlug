@@ -67,7 +67,7 @@ export function SiteNav() {
       {/* ── Top Bar + Navigation ── */}
       <header className="fixed top-0 left-0 right-0 z-50">
         <TopBar />
-        <nav className="border-b border-slate-200/60 bg-white/80 backdrop-blur-xl transition-all duration-300">
+        <nav className="border-b border-white/[0.06] bg-[#070a12]/75 backdrop-blur-xl transition-all duration-300">
           <div
             className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-300 ${
               isScrolled ? "py-1 md:py-0.5" : "py-3 md:py-1"
@@ -94,7 +94,7 @@ export function SiteNav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-semibold text-slate-600 transition-colors hover:text-slate-900"
+                className="text-sm font-semibold text-slate-300 transition-colors hover:text-green-400"
               >
                 {link.label}
               </Link>
@@ -111,7 +111,7 @@ export function SiteNav() {
             {/* Desktop buttons (lg+) */}
             <Link
               href={loc("/login")}
-              className={`hidden rounded-md border border-slate-300 font-medium text-slate-600 transition-all hover:border-slate-400 hover:text-slate-900 lg:inline-block ${
+              className={`hidden rounded-md border border-white/15 font-medium text-slate-300 transition-all hover:border-green-500/50 hover:text-white lg:inline-block ${
                 isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
               }`}
             >
@@ -141,7 +141,7 @@ export function SiteNav() {
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
-              className={`flex items-center justify-center rounded-full border border-slate-300 bg-slate-50 text-slate-600 transition-all duration-300 hover:border-green-500/40 hover:bg-green-50 lg:hidden ${
+              className={`flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-slate-200 transition-all duration-300 hover:border-green-500/50 hover:bg-green-500/[0.1] hover:text-white lg:hidden ${
                 isScrolled ? "h-9 w-9" : "h-11 w-11"
               }`}
             >
