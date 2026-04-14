@@ -1,63 +1,100 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api";
 import { useTranslations } from "@/i18n/locale-provider";
-import { UpsellBanner } from "@/components/ui/upsell-banner";
-import { HeroFeaturedMatch } from "@/components/dashboard/HeroFeaturedMatch";
-import { MetricCardsRow } from "@/components/dashboard/MetricCardsRow";
-import { RecentPredictionsTable } from "@/components/dashboard/RecentPredictionsTable";
-import { PerformanceChart } from "@/components/dashboard/PerformanceChart";
-import { RightSidebar } from "@/components/dashboard/RightSidebar";
+import { QuickNavStrip } from "@/components/dashboard/QuickNavStrip";
+import { HeroBotdCompact } from "@/components/dashboard/HeroBotdCompact";
+import { LiveMatchesStrip } from "@/components/dashboard/LiveMatchesStrip";
+import { TodayMatchesList } from "@/components/dashboard/TodayMatchesList";
+import { YesterdayResultsStrip } from "@/components/dashboard/YesterdayResultsStrip";
+import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 
 export default function DashboardPage() {
   const { t } = useTranslations();
 
+  // ── Hoisted queries (shared across components) ─────────────
+  const { data: botd, isLoading: botdLoading } = useQuery({
+    queryKey: ["botd-hub"],
+    queryFn: () => api.getBetOfTheDay(),
+  });
+
+  const { data: liveFixtures, isLoading: liveLoading } = useQuery({
+    queryKey: ["fixtures-live-hub"],
+    queryFn: () => api.getFixturesLive(),
+    refetchInterval: 60_000,
+  });
+
+  const { data: todayFixtures, isLoading: todayLoading } = useQuery({
+    queryKey: ["fixtures-today-hub"],
+    queryFn: () => api.getFixturesToday(),
+  });
+
+  const { data: yesterdayResults, isLoading: resultsLoading } = useQuery({
+    queryKey: ["fixtures-results-1"],
+    queryFn: () => api.getFixtureResults(1),
+  });
+
+  const { data: weeklySummary, isLoading: weeklyLoading } = useQuery({
+    queryKey: ["weekly-summary-hub"],
+    queryFn: () => api.getWeeklySummary(7),
+  });
+
+  // Live count for nav strip badge
+  const liveCount = (liveFixtures?.fixtures ?? []).filter(
+    (f) => f.status === "live"
+  ).length;
+
+  // Next kickoff time for empty live state
+  const nextKickoff = (() => {
+    const upcoming = (todayFixtures?.fixtures ?? []).find(
+      (f) => f.status === "scheduled"
+    );
+    if (!upcoming) return null;
+    try {
+      return new Date(upcoming.scheduled_at).toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return null;
+    }
+  })();
+
   return (
     <div className="animate-fade-in">
-      {/* ── Page header ─────────────────────────────────────────── */}
-      <div className="mb-8 flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight gradient-text sm:text-4xl">
-            {t("dash.title")}
-          </h1>
-          <p className="mt-1.5 text-sm text-slate-400">{t("dash.subtitle")}</p>
-        </div>
-
-        <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.04] px-4 py-2 text-xs font-medium text-slate-300 backdrop-blur-sm">
-          <span className="live-dot" />
-          <span>{t("dash.liveData")}</span>
-        </div>
-      </div>
-
-      {/* ── Main grid: content + right sidebar ──────────────────── */}
-      <div className="grid gap-8 xl:grid-cols-[1fr_320px]">
-        {/* Main content column */}
-        <div className="space-y-8">
-          <HeroFeaturedMatch />
-          <MetricCardsRow />
-
-          {/* Upsell */}
-          <UpsellBanner
-            targetTier="gold"
-            headline={t("dash.upsellHeadline")}
-            subtext={t("dash.upsellSubtext")}
-            variant="banner"
+      {/* ── Main grid: content + sidebar ────────────────────── */}
+      <div className="grid gap-6 xl:grid-cols-[1fr_300px]">
+        {/* Main column */}
+        <div className="space-y-5">
+          <QuickNavStrip liveCount={liveCount} />
+          <HeroBotdCompact botd={botd} isLoading={botdLoading} />
+          <LiveMatchesStrip
+            data={liveFixtures}
+            isLoading={liveLoading}
+            nextKickoff={nextKickoff}
           />
-
-          <RecentPredictionsTable />
-          <PerformanceChart />
+          <TodayMatchesList data={todayFixtures} isLoading={todayLoading} />
+          <YesterdayResultsStrip
+            data={yesterdayResults}
+            isLoading={resultsLoading}
+          />
         </div>
 
-        {/* Right sidebar - desktop only, below content on mobile */}
+        {/* Right sidebar — desktop */}
         <aside className="hidden xl:block">
           <div className="sticky top-6">
-            <RightSidebar />
+            <SportsHubSidebar
+              summary={weeklySummary}
+              isLoading={weeklyLoading}
+            />
           </div>
         </aside>
       </div>
 
-      {/* Right sidebar on mobile/tablet - shown below main content */}
-      <div className="mt-8 xl:hidden">
-        <RightSidebar />
+      {/* Sidebar on mobile/tablet */}
+      <div className="mt-6 xl:hidden">
+        <SportsHubSidebar summary={weeklySummary} isLoading={weeklyLoading} />
       </div>
     </div>
   );
