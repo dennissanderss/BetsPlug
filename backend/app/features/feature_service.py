@@ -126,9 +126,9 @@ class FeatureService:
         home_standing = await self._get_standing(home_id, league_id, season_id, cutoff, db)
         away_standing = await self._get_standing(away_id, league_id, season_id, cutoff, db)
 
-        # ---- Season stats --------------------------------------------- #
-        home_stats = await self._get_team_stats(home_id, season_id, db)
-        away_stats = await self._get_team_stats(away_id, season_id, db)
+        # ---- Season stats (point-in-time: only matches before cutoff) --- #
+        home_stats = await self._get_team_stats(home_id, season_id, cutoff, db)
+        away_stats = await self._get_team_stats(away_id, season_id, cutoff, db)
 
         # ---- Injuries -------------------------------------------------- #
         home_injuries = await self._count_injuries(home_id, cutoff, db)
@@ -397,9 +397,15 @@ class FeatureService:
     async def _get_team_stats(
         team_id: uuid.UUID,
         season_id: Optional[uuid.UUID],
+        before: datetime,
         db: AsyncSession,
     ) -> dict:
-        """Return season aggregate stats or safe defaults."""
+        """Compute point-in-time season stats from individual match results.
+
+        Only includes matches with ``scheduled_at < before`` to prevent
+        feature leakage. This replaces the old TeamStats aggregate lookup
+        which had no temporal filter.
+        """
         defaults = {
             "matches_played": 0,
             "wins": 0,
@@ -414,28 +420,50 @@ class FeatureService:
         if season_id is None:
             return defaults
 
-        stmt = select(TeamStats).where(
-            and_(
-                TeamStats.team_id == team_id,
-                TeamStats.season_id == season_id,
+        # Fetch finished matches for this team in this season BEFORE cutoff
+        stmt = (
+            select(Match, MatchResult)
+            .join(MatchResult, MatchResult.match_id == Match.id)
+            .where(
+                and_(
+                    Match.season_id == season_id,
+                    Match.status == MatchStatus.FINISHED,
+                    Match.scheduled_at < before,
+                    (Match.home_team_id == team_id) | (Match.away_team_id == team_id),
+                )
             )
+            .order_by(Match.scheduled_at)
         )
-        row = (await db.execute(stmt)).scalar_one_or_none()
-        if row is None:
+        rows = (await db.execute(stmt)).all()
+
+        if not rows:
             return defaults
 
-        mp = row.matches_played or 0
-        win_rate = round(row.wins / mp, 4) if mp > 0 else 0.0
+        wins = draws = losses = goals_scored = goals_conceded = 0
+        for match, result in rows:
+            is_home = match.home_team_id == team_id
+            gs = (result.home_score if is_home else result.away_score) or 0
+            gc = (result.away_score if is_home else result.home_score) or 0
+            goals_scored += gs
+            goals_conceded += gc
+            if gs > gc:
+                wins += 1
+            elif gs == gc:
+                draws += 1
+            else:
+                losses += 1
+
+        mp = len(rows)
         return {
             "matches_played": mp,
-            "wins": row.wins or 0,
-            "draws": row.draws or 0,
-            "losses": row.losses or 0,
-            "goals_scored": row.goals_scored or 0,
-            "goals_conceded": row.goals_conceded or 0,
-            "win_rate": win_rate,
-            "avg_goals_scored": float(row.avg_goals_scored or 0.0),
-            "avg_goals_conceded": float(row.avg_goals_conceded or 0.0),
+            "wins": wins,
+            "draws": draws,
+            "losses": losses,
+            "goals_scored": goals_scored,
+            "goals_conceded": goals_conceded,
+            "win_rate": round(wins / mp, 4) if mp > 0 else 0.0,
+            "avg_goals_scored": round(goals_scored / mp, 2) if mp > 0 else 0.0,
+            "avg_goals_conceded": round(goals_conceded / mp, 2) if mp > 0 else 0.0,
         }
 
     # ------------------------------------------------------------------ #

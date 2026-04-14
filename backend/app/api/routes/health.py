@@ -40,7 +40,7 @@ async def health_check() -> dict:
 
     # --- Sports API config check ---
     checks["api_football"] = "configured" if settings.api_football_key else "missing"
-    checks["football_data"] = "configured" if settings.football_data_api_key else "missing"
+    checks["football_data"] = "disabled"  # free tier disabled 2026-04-14
 
     # --- DB row counts (single query instead of 3 separate round-trips) ---
     fixtures_count = 0

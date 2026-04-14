@@ -122,6 +122,10 @@ class FootballDataOrgAdapter(DataSourceAdapter):
     """
     Adapter for the football-data.org v4 REST API.
 
+    **DISABLED** — This adapter is disabled as of 2026-04-14. The free tier
+    provides incomplete data that caused engine calculation errors. All data
+    ingestion now goes through API-Football Pro exclusively.
+
     Config keys
     -----------
     api_key : str
@@ -131,6 +135,8 @@ class FootballDataOrgAdapter(DataSourceAdapter):
     rate_limit_seconds : float
         Override the per-request delay (default: 6.5s for free tier).
     """
+
+    enabled = False  # DISABLED — do not use; API-Football Pro is the sole source
 
     def __init__(self, config: dict, http_client: httpx.AsyncClient) -> None:
         super().__init__(config, http_client)

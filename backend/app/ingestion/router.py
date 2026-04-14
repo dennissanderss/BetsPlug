@@ -75,11 +75,13 @@ class SportsAPIRouter:
                 http_client=self._client,
             )
 
-        if self._settings.football_data_api_key:
-            self._providers["football_data"] = FootballDataOrgAdapter(
-                config={"api_key": self._settings.football_data_api_key},
-                http_client=self._client,
-            )
+        # football-data.org adapter DISABLED (2026-04-14) — free tier
+        # data was incomplete and caused engine calculation errors.
+        # if self._settings.football_data_api_key:
+        #     self._providers["football_data"] = FootballDataOrgAdapter(
+        #         config={"api_key": self._settings.football_data_api_key},
+        #         http_client=self._client,
+        #     )
 
         log.info("SportsAPIRouter initialized with providers: %s", list(self._providers.keys()))
         return self

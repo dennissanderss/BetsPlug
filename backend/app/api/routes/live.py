@@ -34,10 +34,9 @@ router = APIRouter()
 
 async def _get_service() -> LiveDataService:
     """Create a LiveDataService with a fresh httpx client for this request."""
-    import os
     client = httpx.AsyncClient(timeout=30)
-    api_key = os.environ.get("FOOTBALL_DATA_API_KEY", "")
-    return LiveDataService(http_client=client, fdorg_api_key=api_key)
+    # football-data.org disabled (2026-04-14) — API-Football Pro is sole source
+    return LiveDataService(http_client=client, fdorg_api_key="")
 
 
 # ---------------------------------------------------------------------------

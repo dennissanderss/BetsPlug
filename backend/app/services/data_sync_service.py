@@ -103,8 +103,8 @@ class DataSyncService:
     """
 
     def __init__(self) -> None:
-        self._fdorg_key: str = _settings.football_data_api_key
         self._apifb_key: str = _settings.api_football_key
+        # football-data.org key removed (2026-04-14) — free tier disabled
         self._client: Optional[httpx.AsyncClient] = None
         self._adapter = None  # type: ignore[assignment]
         self._adapter_name: str = ""
@@ -131,7 +131,10 @@ class DataSyncService:
         import os
         force_fd = os.environ.get("FORCE_FOOTBALL_DATA_PRIMARY", "").lower() in ("1", "true", "yes")
 
-        if self._apifb_key and not force_fd:
+        # ── football-data.org adapter DISABLED (2026-04-14) ────────────
+        # Free tier provided incomplete data causing engine errors.
+        # API-Football Pro is now the sole data source. No fallback.
+        if self._apifb_key:
             self._adapter = APIFootballAdapter(
                 config={"api_key": self._apifb_key},
                 http_client=self._client,
@@ -140,23 +143,12 @@ class DataSyncService:
             self.log.info(
                 "data_sync_using_adapter",
                 adapter="api_football",
-                reason="v5_pro_primary",
-            )
-        elif self._fdorg_key:
-            self._adapter = FootballDataOrgAdapter(
-                config={"api_key": self._fdorg_key},
-                http_client=self._client,
-            )
-            self._adapter_name = "football_data_org"
-            self.log.info(
-                "data_sync_using_adapter",
-                adapter="football_data_org",
-                reason="forced_or_no_apifb_key",
+                reason="sole_source_api_football_pro",
             )
         else:
             raise RuntimeError(
-                "No data-source API key configured. Set either "
-                "API_FOOTBALL_KEY or FOOTBALL_DATA_API_KEY."
+                "No data-source API key configured. Set API_FOOTBALL_KEY. "
+                "(football-data.org fallback has been disabled.)"
             )
         return self
 

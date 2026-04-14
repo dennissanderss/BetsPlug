@@ -200,9 +200,9 @@ class ForecastService:
             db=db,
         )
 
-        # --- Season stats ---------------------------------------------- #
-        home_stats = await self._get_team_stats(home_id, season_id, db)
-        away_stats = await self._get_team_stats(away_id, season_id, db)
+        # --- Season stats (point-in-time: only matches before kickoff) -- #
+        home_stats = await self._get_team_stats(home_id, season_id, scheduled_at, db)
+        away_stats = await self._get_team_stats(away_id, season_id, scheduled_at, db)
 
         # --- Standings ------------------------------------------------- #
         home_standing = await self._get_standing(
@@ -1006,32 +1006,67 @@ class ForecastService:
     async def _get_team_stats(
         team_id: uuid.UUID,
         season_id: Optional[uuid.UUID],
+        before: datetime,
         db: AsyncSession,
     ) -> Optional[dict]:
-        """Fetch season-level stats for *team_id*."""
+        """Compute point-in-time season stats from individual match results.
+
+        Only includes matches with ``scheduled_at < before`` to prevent
+        feature leakage. Replaces the old TeamStats aggregate lookup.
+        """
+        from app.models.match import MatchStatus
+
         if season_id is None:
             return None
 
-        stmt = select(TeamStats).where(
-            and_(
-                TeamStats.team_id == team_id,
-                TeamStats.season_id == season_id,
+        stmt = (
+            select(Match, MatchResult)
+            .join(MatchResult, MatchResult.match_id == Match.id)
+            .where(
+                and_(
+                    Match.season_id == season_id,
+                    Match.status == MatchStatus.FINISHED,
+                    Match.scheduled_at < before,
+                    (Match.home_team_id == team_id) | (Match.away_team_id == team_id),
+                )
             )
         )
-        result = (await db.execute(stmt)).scalar_one_or_none()
-        if result is None:
+        rows = (await db.execute(stmt)).all()
+
+        if not rows:
             return None
+
+        wins = draws = losses = goals_scored = goals_conceded = 0
+        home_wins = away_wins = 0
+        for match, result in rows:
+            is_home = match.home_team_id == team_id
+            gs = (result.home_score if is_home else result.away_score) or 0
+            gc = (result.away_score if is_home else result.home_score) or 0
+            goals_scored += gs
+            goals_conceded += gc
+            if gs > gc:
+                wins += 1
+                if is_home:
+                    home_wins += 1
+                else:
+                    away_wins += 1
+            elif gs == gc:
+                draws += 1
+            else:
+                losses += 1
+
+        mp = len(rows)
         return {
-            "matches_played": result.matches_played,
-            "wins": result.wins,
-            "draws": result.draws,
-            "losses": result.losses,
-            "goals_scored": result.goals_scored,
-            "goals_conceded": result.goals_conceded,
-            "home_wins": result.home_wins,
-            "away_wins": result.away_wins,
-            "avg_goals_scored": result.avg_goals_scored,
-            "avg_goals_conceded": result.avg_goals_conceded,
+            "matches_played": mp,
+            "wins": wins,
+            "draws": draws,
+            "losses": losses,
+            "goals_scored": goals_scored,
+            "goals_conceded": goals_conceded,
+            "home_wins": home_wins,
+            "away_wins": away_wins,
+            "avg_goals_scored": round(goals_scored / mp, 2) if mp > 0 else 0.0,
+            "avg_goals_conceded": round(goals_conceded / mp, 2) if mp > 0 else 0.0,
         }
 
     @staticmethod

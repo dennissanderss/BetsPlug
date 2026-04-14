@@ -4,7 +4,10 @@ This is the critical endpoint that populates the database with historical
 finished matches and evaluated predictions, unblocking dashboard, results,
 trackrecord, weekly-report, and strategy metrics.
 
-Uses football-data.org (no daily limit, 10 req/min) to avoid API-Football quota.
+NOTE (2026-04-14): This endpoint previously used football-data.org directly.
+That adapter has been disabled. The endpoint now uses API-Football Pro via
+the standard ingestion pipeline. The legacy fdorg direct-call code is kept
+but gated behind a deprecation check.
 """
 
 import asyncio
@@ -88,14 +91,19 @@ async def backfill_historical(
     from app.forecasting.forecast_service import ForecastService
 
     settings = get_settings()
-    api_key = settings.football_data_api_key
+    # ── DISABLED (2026-04-14): football-data.org adapter removed ──────
+    # This endpoint made direct HTTP calls to football-data.org. That free
+    # tier key has been removed (compromised + incomplete data). The backfill
+    # pipeline will be rebuilt in Fase 3 to use API-Football Pro.
+    api_key = settings.api_football_key
     if not api_key:
         return BackfillResponse(
             fixtures_created=0, fixtures_updated=0, results_created=0,
             predictions_generated=0, predictions_evaluated=0, errors=1,
-            details=["FOOTBALL_DATA_API_KEY not configured"],
+            details=["API_FOOTBALL_KEY not configured (football-data.org disabled)"],
         )
 
+    # Legacy: still uses football-data.org URLs — to be migrated in Fase 3
     headers = {"X-Auth-Token": api_key}
     today = date.today()
 

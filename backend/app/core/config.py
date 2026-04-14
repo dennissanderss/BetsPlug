@@ -85,9 +85,9 @@ class Settings(BaseSettings):
     stripe_webhook_secret: str = ""
 
     # Sports Data APIs
-    football_data_api_key: str = ""   # football-data.org (free, 10 req/min)
-    api_football_key: str = ""        # api-football.com (free, 100 req/day)
-    the_odds_api_key: str = ""        # the-odds-api.com (free, 500 req/month)
+    football_data_api_key: str = ""   # DEPRECATED — disabled 2026-04-14, do not set
+    api_football_key: str = ""        # api-football.com (Pro tier, sole data source)
+    the_odds_api_key: str = ""        # the-odds-api.com (optional, odds only)
 
     # SMTP (Hostinger)
     smtp_host: str = "smtp.hostinger.com"
