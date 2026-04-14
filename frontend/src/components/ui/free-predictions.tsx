@@ -53,7 +53,7 @@ function PredictionCard({
       </div>
 
       {/* Card — hard edge */}
-      <div className="group relative mb-5 flex-1 overflow-hidden border border-white/10 bg-[#0a0a0a] transition-all hover:border-[#4ade80]/40 hover:bg-[#111] sm:mb-6">
+      <div className="group relative mb-5 flex-1 overflow-hidden border border-white/15 bg-[#181818] shadow-[0_4px_20px_rgba(0,0,0,0.4)] transition-all hover:border-[#4ade80]/50 hover:bg-[#1f1f1f] sm:mb-6">
         {/* Corner brackets */}
         <span className="pointer-events-none absolute left-[-1px] top-[-1px] h-3 w-3 border-l-2 border-t-2 border-[#4ade80]" />
         <span className="pointer-events-none absolute right-[-1px] bottom-[-1px] h-3 w-3 border-r-2 border-b-2 border-[#4ade80]" />
