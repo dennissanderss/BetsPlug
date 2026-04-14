@@ -57,13 +57,7 @@ function PredictionCard({
       </div>
 
       {/* Card */}
-      <div className="group mb-5 flex-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0c1322] transition-all hover:border-green-500/30 hover:shadow-[0_8px_40px_rgba(74,222,128,0.08)] sm:mb-6">
-        {/* Diagonal accent stripes */}
-        <div className="pointer-events-none absolute -right-6 top-0 h-full w-24 overflow-hidden">
-          <div className="absolute -right-4 top-0 h-[200%] w-8 rotate-[20deg] bg-gradient-to-b from-green-500/[0.07] to-transparent" />
-          <div className="absolute right-2 top-0 h-[200%] w-4 rotate-[20deg] bg-gradient-to-b from-green-500/[0.05] to-transparent" />
-          <div className="absolute right-8 top-0 h-[200%] w-2 rotate-[20deg] bg-gradient-to-b from-green-500/[0.03] to-transparent" />
-        </div>
+      <div className="group mb-5 flex-1 overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.02] transition-all hover:border-green-500/30 hover:shadow-[0_8px_40px_rgba(74,222,128,0.08)] sm:mb-6">
 
         {/* League banner */}
         <div className="relative flex items-center justify-center gap-3 border-b border-white/[0.06] bg-green-500/[0.06] px-4 py-2.5">
@@ -302,6 +296,8 @@ export function FreePredictions() {
           match_id: f.id ?? "",
           home_team: f.home_team_name ?? "TBD",
           away_team: f.away_team_name ?? "TBD",
+          home_team_logo: f.home_team_logo ?? null,
+          away_team_logo: f.away_team_logo ?? null,
           league: f.league_name ?? "",
           scheduled_at: f.scheduled_at ?? "",
           pick: f.prediction?.pick ?? null,
@@ -339,6 +335,8 @@ export function FreePredictions() {
                 match_id: f.id ?? "",
                 home_team: f.home_team_name ?? "TBD",
                 away_team: f.away_team_name ?? "TBD",
+                home_team_logo: f.home_team_logo ?? null,
+                away_team_logo: f.away_team_logo ?? null,
                 league: f.league_name ?? "",
                 scheduled_at: f.scheduled_at ?? "",
                 pick: f.prediction?.pick ?? null,
