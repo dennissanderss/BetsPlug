@@ -65,55 +65,49 @@ export function TopBar() {
         closing ? "max-h-0 opacity-0" : "max-h-12 opacity-100"
       }`}
     >
-      <div className="relative bg-gradient-to-r from-green-50 to-teal-50 border-b border-green-200 overflow-hidden">
-        {/* Subtle green gradient glow */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-green-200/30 to-transparent pointer-events-none" />
-
-        <div className="relative flex items-center justify-center gap-2 px-10 py-2 text-[13px] sm:text-sm">
-          <Flame className="h-3.5 w-3.5 text-orange-400 shrink-0" />
+      <div className="relative overflow-hidden bg-[#050505] border-b border-[#4ade80]/25">
+        <div className="relative flex items-center justify-center gap-2 px-10 py-2 font-mono text-[11px] uppercase tracking-widest sm:text-[12px]">
+          <Flame className="h-3 w-3 shrink-0 text-[#4ade80]" />
 
           {stats ? (
             <>
-              {/* Desktop: full stats */}
-              <span className="hidden sm:inline text-slate-500">
-                <span className="font-bold text-slate-700">
+              <span className="hidden text-[#a3a3a3] sm:inline">
+                <span className="font-black text-[#4ade80]">
                   {Math.round(stats.accuracy_pct)}%
                 </span>{" "}
                 {t("topbar.winRate")}
-                <span className="mx-1.5 text-slate-400">·</span>
-                <span className="font-bold text-slate-700">
+                <span className="mx-2 text-[#707070]">/</span>
+                <span className="font-black text-[#4ade80]">
                   {stats.total_picks}+
                 </span>{" "}
                 {t("topbar.picksAnalyzed")}
-                <span className="mx-1.5 text-slate-400">·</span>
+                <span className="mx-2 text-[#707070]">/</span>
               </span>
 
-              {/* Mobile: compact */}
-              <span className="sm:hidden text-slate-500">
-                <span className="font-bold text-slate-700">
+              <span className="text-[#a3a3a3] sm:hidden">
+                <span className="font-black text-[#4ade80]">
                   {Math.round(stats.accuracy_pct)}%
                 </span>{" "}
                 {t("topbar.winRate")}
-                <span className="mx-1.5 text-slate-400">·</span>
+                <span className="mx-2 text-[#707070]">/</span>
               </span>
             </>
           ) : null}
 
           <Link
             href={`${loc("/checkout")}?plan=gold`}
-            className="font-bold text-green-600 hover:text-green-700 transition-colors inline-flex items-center gap-1 whitespace-nowrap"
+            className="inline-flex items-center gap-1 whitespace-nowrap font-black text-[#4ade80] transition-colors hover:text-[#86efac]"
           >
             {t("topbar.cta")}
-            <ArrowRight className="h-3.5 w-3.5" />
+            <ArrowRight className="h-3 w-3" strokeWidth={3} />
           </Link>
         </div>
 
-        {/* Dismiss button */}
         <button
           type="button"
           onClick={dismiss}
           aria-label="Close"
-          className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-700 transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#707070] transition-colors hover:text-[#ededed] sm:right-3"
         >
           <X className="h-3.5 w-3.5" />
         </button>

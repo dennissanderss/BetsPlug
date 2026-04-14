@@ -34,7 +34,7 @@ const leagues: League[] = [
   { name: "Championship", slug: "championship" },
 ];
 
-const BG = "#070a12";
+const BG = "#050505";
 
 /* Reversed order for the second row */
 const leaguesReversed = [...leagues].reverse();
@@ -50,35 +50,21 @@ export function LeaguesTicker() {
       aria-labelledby="leagues-heading"
       style={{ background: BG }}
     >
-      {/* ── Background ── */}
-      {/* Subtle grid */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(34,197,94,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(34,197,94,0.15) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
-      {/* Center glow */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/2 h-[600px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-200/30 blur-[150px]" />
-      </div>
-      {/* Edge lines */}
-      <div className="pointer-events-none absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-green-500/20 to-transparent" />
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-500/20 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 grid-bg opacity-20" />
+      <div className="pointer-events-none absolute top-0 left-0 right-0 divider-dashed" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 divider-dashed" />
 
       {/* Title */}
-      <div className="relative z-10 mb-10 text-center md:mb-14">
-        <span className="mb-3 inline-block rounded-full border border-green-300 bg-green-50 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+      <div className="relative z-10 mx-auto max-w-7xl mb-10 px-6 md:mb-14">
+        <span className="section-tag mb-4">
           {t("leagues.badge")}
         </span>
         <h2
           id="leagues-heading"
-          className="text-balance break-words text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl md:text-4xl"
+          className="text-display text-3xl text-white sm:text-4xl lg:text-5xl"
         >
           {t("leagues.titleA")}{" "}
-          <span className="gradient-text">{t("leagues.titleB")}</span>
+          <span className="text-[#4ade80]">{t("leagues.titleB")}</span>
         </h2>
       </div>
 
@@ -133,16 +119,16 @@ export function LeaguesTicker() {
   );
 }
 
-/* ── Logo card ── */
+/* ── Logo card — hard edges ── */
 function LeagueCard({ league }: { league: League }) {
   return (
-    <div className="mx-2 flex-shrink-0 sm:mx-3" title={league.name}>
-      <div className="group flex h-14 w-24 items-center justify-center rounded-xl border border-slate-200 bg-white p-3 shadow-[0_4px_20px_rgba(0,0,0,0.06)] backdrop-blur-sm transition-all duration-300 hover:border-green-500/30 hover:bg-white hover:shadow-[0_4px_30px_rgba(34,197,94,0.12)] sm:h-16 sm:w-28 sm:rounded-2xl md:h-[72px] md:w-32 md:p-4">
+    <div className="mx-1.5 flex-shrink-0 sm:mx-2" title={league.name}>
+      <div className="group flex h-14 w-24 items-center justify-center border border-white/10 bg-[#0a0a0a] p-3 transition-all duration-200 hover:border-[#4ade80]/50 hover:bg-[#111] sm:h-16 sm:w-28 md:h-[72px] md:w-32 md:p-4">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`/leagues/${league.slug}.${league.ext ?? "png"}`}
           alt={league.name}
-          className="h-full w-auto max-w-full object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-transform duration-300 group-hover:scale-110"
+          className="h-full w-auto max-w-full object-contain transition-transform duration-200 group-hover:scale-110"
           loading="lazy"
         />
       </div>

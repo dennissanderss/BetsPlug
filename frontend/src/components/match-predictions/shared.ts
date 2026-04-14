@@ -32,7 +32,7 @@ export function confLevel(score: number): ConfLevel {
 }
 
 export function confColor(level: ConfLevel): string {
-  if (level === "High") return "#10b981";
-  if (level === "Medium") return "#f59e0b";
+  if (level === "High") return "#4ade80";
+  if (level === "Medium") return "#ededed";
   return "#ef4444";
 }

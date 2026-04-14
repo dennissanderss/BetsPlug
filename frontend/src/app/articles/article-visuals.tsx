@@ -63,7 +63,7 @@ export function SportBadge({ sport }: { sport: Sport }) {
   const Icon = meta.icon;
   return (
     <span
-      className={`inline-flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest ${meta.badgeClass}`}
+      className={`inline-flex w-fit items-center gap-1.5 border px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-widest ${meta.badgeClass}`}
     >
       <Icon className="h-3 w-3" />
       {t(meta.labelKey)}

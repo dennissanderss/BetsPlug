@@ -752,7 +752,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                 </span>
               </div>
 
-              <h1 className="text-display text-balance break-words text-5xl sm:text-6xl lg:text-7xl xl:text-8xl">
+              <h1 className="text-display text-balance break-words text-[2.25rem] leading-[0.95] sm:text-5xl lg:text-[3.5rem] xl:text-6xl">
                 {t("hero.titleLine1")}{" "}
                 <span className="text-[#4ade80]">{t("hero.titleLine2")}</span>
                 {t("hero.titleLine3") ? <><br/>{t("hero.titleLine3")}</> : ""}
@@ -1234,44 +1234,51 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
          ═══════════════════════════════════════════════════════════════════ */}
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-6">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-green-600 to-emerald-700 p-10 md:p-16">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-300/30 blur-[100px]" />
-            <div className="pointer-events-none absolute -left-20 -bottom-20 h-[300px] w-[300px] rounded-full bg-emerald-300/20 blur-[100px]" />
+          <div className="relative overflow-hidden stripe-lime p-10 md:p-16">
+            {/* Corner brackets — dark */}
+            <span className="pointer-events-none absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 top-0 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute left-0 bottom-0 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 bottom-0 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
 
-            <div className="relative text-center">
-              <span className="mb-4 inline-block rounded-full border border-white/30 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white">
+            <div className="relative">
+              <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
+                <span className="h-1.5 w-1.5 bg-[#4ade80]" />
                 {t("finalCta.badge")}
               </span>
-              <h2 className="text-4xl font-extrabold leading-tight text-white sm:text-5xl">
+              <h2 className="text-display text-4xl text-[#050505] sm:text-5xl lg:text-6xl">
                 {t("finalCta.titleA")}{" "}
-                <span className="text-green-100">{t("finalCta.titleHighlight")}</span>
+                <span className="text-white">{t("finalCta.titleHighlight")}</span>
                 <br />
                 {t("finalCta.titleB")}
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-base text-green-100/80">
+              <p className="mt-5 max-w-xl text-base text-[#050505]/80">
                 {t("finalCta.subtitle")}
               </p>
 
-              <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link href={`${loc("/checkout")}?plan=gold`}>
-                  <GetStartedButton>{t("finalCta.primary")}</GetStartedButton>
+              <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <Link
+                  href={`${loc("/checkout")}?plan=gold`}
+                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
+                >
+                  {String(t("finalCta.primary")).toUpperCase()} →
                 </Link>
                 <Link
                   href={loc("/about")}
-                  className="text-sm font-semibold text-green-100 underline underline-offset-4 transition-colors hover:text-white"
+                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
                 >
-                  {t("finalCta.secondary")}
+                  {String(t("finalCta.secondary")).replace("→", "").toUpperCase().trim()} →
                 </Link>
               </div>
 
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-green-100/70">
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[10px] font-bold uppercase tracking-widest text-[#050505]/80">
                 {[
                   t("finalCta.moneyBack"),
                   t("finalCta.cancelAnytime"),
                   t("finalCta.instantAccess"),
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-1.5">
-                    <CheckCircle2 className="h-4 w-4 text-green-200" />
+                    <CheckCircle2 className="h-3.5 w-3.5 text-[#050505]" strokeWidth={3} />
                     <span>{item}</span>
                   </div>
                 ))}

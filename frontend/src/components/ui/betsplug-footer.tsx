@@ -75,54 +75,37 @@ export function BetsPlugFooter() {
   ];
 
   return (
-    <footer className="dark-section relative w-full overflow-hidden pt-16 pb-10">
-      {/* ── Background ── */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[#070a13] to-[#050811]" />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(74,222,128,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.6) 1px, transparent 1px)",
-          backgroundSize: "52px 52px",
-          maskImage:
-            "radial-gradient(ellipse at center, black 30%, transparent 80%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse at center, black 30%, transparent 80%)",
-        }}
-      />
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[15%] top-10 h-[420px] w-[420px] rounded-full bg-green-500/[0.07] blur-[140px]" />
-        <div className="absolute right-[15%] bottom-0 h-[360px] w-[360px] rounded-full bg-emerald-500/[0.05] blur-[120px]" />
-      </div>
+    <footer className="relative w-full overflow-hidden bg-[#050505] pt-16 pb-10">
+      <div className="pointer-events-none absolute inset-0 grid-bg opacity-20" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6">
         {/* ═══════════════════════════════════════════════════════════
-            PREMIUM TELEGRAM CTA — glass card (replaces newsletter)
+            PREMIUM TELEGRAM CTA — hard-edge panel
             ═══════════════════════════════════════════════════════════ */}
-        <div className="relative mb-20 overflow-hidden rounded-3xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] via-[#0f1420]/[0.02] to-white/[0.01] p-8 backdrop-blur-xl md:p-12">
-          {/* Decorative glow */}
-          <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-500/[0.18] blur-[100px]" />
-          <div className="pointer-events-none absolute -left-10 -bottom-20 h-[240px] w-[240px] rounded-full bg-emerald-500/[0.12] blur-[90px]" />
+        <div className="relative mb-20 overflow-hidden border border-[#4ade80]/30 bg-[#0a0a0a] p-8 md:p-12">
+          {/* Corner brackets */}
+          <span className="pointer-events-none absolute left-[-1px] top-[-1px] h-4 w-4 border-l-2 border-t-2 border-[#4ade80]" />
+          <span className="pointer-events-none absolute right-[-1px] top-[-1px] h-4 w-4 border-r-2 border-t-2 border-[#4ade80]" />
+          <span className="pointer-events-none absolute left-[-1px] bottom-[-1px] h-4 w-4 border-l-2 border-b-2 border-[#4ade80]" />
+          <span className="pointer-events-none absolute right-[-1px] bottom-[-1px] h-4 w-4 border-r-2 border-b-2 border-[#4ade80]" />
 
           <div className="relative grid items-center gap-10 md:grid-cols-[1.2fr_1fr]">
             <div>
-              {/* Badge */}
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-400">
-                <Sparkles className="h-3.5 w-3.5" />
+              <div className="mb-5 inline-flex items-center gap-2 border border-[#4ade80]/50 px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
+                <Sparkles className="h-3 w-3" />
                 {t("footer.premiumBadge")}
               </div>
 
-              <h3 className="text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
+              <h3 className="text-display text-3xl text-white md:text-4xl lg:text-5xl">
                 {t("footer.premiumTitleA")}{" "}
-                <span className="gradient-text">{t("footer.premiumTitleB")}</span>
+                <span className="text-[#4ade80]">{t("footer.premiumTitleB")}</span>
                 <br className="hidden sm:block" /> {t("footer.premiumTitleC")}
               </h3>
 
-              <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-400">
+              <p className="mt-5 max-w-lg text-base leading-relaxed text-[#a3a3a3]">
                 {t("footer.premiumSubtitle")}
               </p>
 
-              {/* Perk bullets */}
               <ul className="mt-6 grid gap-2 sm:grid-cols-2">
                 {[
                   t("footer.perk1"),
@@ -132,9 +115,9 @@ export function BetsPlugFooter() {
                 ].map((perk) => (
                   <li
                     key={perk}
-                    className="flex items-center gap-2 text-sm text-slate-300"
+                    className="flex items-center gap-2.5 text-sm text-[#ededed]"
                   >
-                    <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-green-400" />
+                    <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-[#4ade80]" strokeWidth={2.5} />
                     {perk}
                   </li>
                 ))}
@@ -145,13 +128,12 @@ export function BetsPlugFooter() {
                   href="https://t.me/betsplug"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-gradient group inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold shadow-lg shadow-green-500/20"
+                  className="btn-lime inline-flex items-center gap-2"
                 >
-                  <Send className="h-4 w-4" />
-                  {t("footer.joinCta")}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <Send className="h-3.5 w-3.5" />
+                  {String(t("footer.joinCta")).toUpperCase()} →
                 </a>
-                <span className="text-xs font-medium text-slate-500">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-[#707070]">
                   {t("footer.limited")}
                 </span>
               </div>
@@ -159,35 +141,40 @@ export function BetsPlugFooter() {
 
             {/* Right visual */}
             <div className="relative hidden md:flex md:justify-end">
-              <div className="relative">
-                <div className="absolute inset-0 rotate-6 rounded-3xl bg-green-500/15 blur-xl" />
-                <div className="relative flex h-72 w-72 flex-col items-center justify-center rounded-3xl border border-white/10 bg-gradient-to-br from-[#0d1220] to-[#080b14] p-6 shadow-2xl">
-                  {/* Phone-like mockup */}
-                  <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-green-400 to-emerald-500 shadow-[0_0_30px_rgba(74,222,128,0.5)]">
-                    <Send className="h-7 w-7 text-[#04130a]" strokeWidth={2.5} />
-                  </div>
-                  <p className="text-xs font-semibold uppercase tracking-widest text-green-400">
-                    BetsPlug VIP
-                  </p>
-                  <p className="mt-1 text-xl font-extrabold text-white">
-                    Premium Group
-                  </p>
+              <div className="relative w-full max-w-[320px] border border-[#4ade80]/25 bg-[#050505] p-6">
+                <span className="pointer-events-none absolute left-[-1px] top-[-1px] h-3 w-3 border-l-2 border-t-2 border-[#4ade80]" />
+                <span className="pointer-events-none absolute right-[-1px] bottom-[-1px] h-3 w-3 border-r-2 border-b-2 border-[#4ade80]" />
 
-                  {/* Mock chat bubbles */}
-                  <div className="mt-5 w-full space-y-2">
-                    <div className="rounded-2xl rounded-bl-sm bg-white/[0.05] px-3 py-2 text-[11px] text-slate-300">
-                      🔥 Value pick: Arsenal ML @ 2.10
-                    </div>
-                    <div className="ml-6 rounded-2xl rounded-br-sm bg-green-500/20 px-3 py-2 text-[11px] text-green-200">
-                      Edge: +6.2% · Confidence 78%
-                    </div>
+                {/* Terminal header */}
+                <div className="mb-4 flex items-center justify-between border-b border-white/[0.08] pb-3">
+                  <div className="flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 bg-[#ef4444]" />
+                    <span className="h-1.5 w-1.5 bg-[#fbbf24]" />
+                    <span className="h-1.5 w-1.5 bg-[#4ade80]" />
                   </div>
+                  <span className="mono-label-lime">VIP / TG</span>
+                </div>
 
-                  {/* Live indicator */}
-                  <div className="mt-5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                    <span className="live-dot" />
-                    {t("footer.onlineNow")}
+                <div className="mb-4 flex h-12 w-12 items-center justify-center bg-[#4ade80]">
+                  <Send className="h-6 w-6 text-[#050505]" strokeWidth={2.5} />
+                </div>
+                <p className="mono-label-lime">BETSPLUG VIP</p>
+                <p className="mt-1 text-display text-xl text-white">
+                  PREMIUM GROUP
+                </p>
+
+                <div className="mt-5 space-y-1.5 text-[11px]">
+                  <div className="border-l-2 border-[#ef4444] bg-white/[0.03] px-3 py-2 text-[#ededed]">
+                    🔥 Value pick: Arsenal ML @ 2.10
                   </div>
+                  <div className="ml-6 border-l-2 border-[#4ade80] bg-[#4ade80]/[0.08] px-3 py-2 text-[#86efac]">
+                    Edge +6.2% · Confidence 78%
+                  </div>
+                </div>
+
+                <div className="mt-5 flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest text-[#707070]">
+                  <span className="live-dot" />
+                  <span>1,200+ {String(t("footer.onlineNow")).toUpperCase()}</span>
                 </div>
               </div>
             </div>
@@ -232,7 +219,7 @@ export function BetsPlugFooter() {
             </ul>
 
             {/* Socials */}
-            <div className="mt-6 flex items-center gap-3">
+            <div className="mt-6 flex items-center gap-2">
               {socials.map(({ icon: Icon, label, href }) => (
                 <a
                   key={label}
@@ -240,7 +227,7 @@ export function BetsPlugFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.03] text-slate-400 backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-green-500/10 hover:text-green-400"
+                  className="flex h-9 w-9 items-center justify-center border border-white/10 bg-[#0a0a0a] text-[#a3a3a3] transition-all hover:border-[#4ade80]/50 hover:text-[#4ade80]"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
@@ -250,7 +237,7 @@ export function BetsPlugFooter() {
 
           {/* Product */}
           <div>
-            <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
+            <h4 className="mb-5 mono-label-lime">
               {t("footer.product")}
             </h4>
             <ul className="space-y-3">
@@ -269,7 +256,7 @@ export function BetsPlugFooter() {
 
           {/* Company */}
           <div>
-            <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
+            <h4 className="mb-5 mono-label-lime">
               {t("footer.company")}
             </h4>
             <ul className="space-y-3">
@@ -288,7 +275,7 @@ export function BetsPlugFooter() {
 
           {/* Legal */}
           <div>
-            <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
+            <h4 className="mb-5 mono-label-lime">
               {t("footer.legal")}
             </h4>
             <ul className="space-y-3">
@@ -309,22 +296,20 @@ export function BetsPlugFooter() {
         {/* ═══════════════════════════════════════════════════════════
             PAYMENT / SECURITY STRIP
             ═══════════════════════════════════════════════════════════ */}
-        <div className="relative mt-16 flex flex-col items-center gap-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] px-6 py-6 backdrop-blur-sm md:flex-row md:justify-between">
-          {/* Secure payments label */}
+        <div className="relative mt-16 flex flex-col items-center gap-6 border border-white/[0.08] bg-[#0a0a0a] px-6 py-5 md:flex-row md:justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500/15 ring-1 ring-green-500/30">
-              <ShieldCheck className="h-5 w-5 text-green-400" />
+            <div className="flex h-9 w-9 items-center justify-center border border-[#4ade80]/40 bg-[#4ade80]/[0.08]">
+              <ShieldCheck className="h-4 w-4 text-[#4ade80]" strokeWidth={2} />
             </div>
             <div>
               <p className="text-sm font-bold text-white">{t("footer.secureTitle")}</p>
-              <p className="flex items-center gap-1 text-xs text-slate-500">
+              <p className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest text-[#707070]">
                 <Lock className="h-3 w-3" />
                 {t("footer.secureDesc")}
               </p>
             </div>
           </div>
 
-          {/* Payment badges — absolutely centered on md+, inline stack on mobile */}
           <div className="flex flex-wrap items-center justify-center gap-2 md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
             <VisaBadge />
             <MastercardBadge />
@@ -333,10 +318,9 @@ export function BetsPlugFooter() {
             <ApplePayBadge />
           </div>
 
-          {/* Trust seal */}
-          <div className="flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/[0.06] px-4 py-2">
+          <div className="flex items-center gap-2 border border-[#4ade80]/30 px-3 py-1.5">
             <span className="live-dot" />
-            <span className="text-xs font-bold uppercase tracking-wider text-green-400">
+            <span className="mono-label-lime">
               {t("footer.pciCompliant")}
             </span>
           </div>
@@ -359,9 +343,9 @@ export function BetsPlugFooter() {
                 {t(key)}
               </Link>
             ))}
-            <div className="hidden items-center gap-1.5 rounded-full bg-white/[0.03] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-500 md:flex">
-              <MessageCircle className="h-3 w-3 text-green-400" />
-              {t("footer.responsible")}
+            <div className="hidden items-center gap-1.5 border border-white/[0.08] px-2.5 py-1 md:flex">
+              <MessageCircle className="h-3 w-3 text-[#4ade80]" />
+              <span className="mono-label">{t("footer.responsible")}</span>
             </div>
           </div>
         </div>

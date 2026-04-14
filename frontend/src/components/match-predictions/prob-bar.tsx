@@ -33,16 +33,16 @@ export function ProbBar({
       key: "home" as const,
       label: homeTeam.split(" ").pop() || homeTeam,
       prob: home,
-      color: "#3b82f6",
+      color: "#4ade80",
       width: `${(home / total) * 100}%`,
     },
     ...(draw !== null
       ? [
           {
             key: "draw" as const,
-            label: "Draw",
+            label: "DRAW",
             prob: draw,
-            color: "#f59e0b",
+            color: "#ededed",
             width: `${(draw / total) * 100}%`,
           },
         ]
@@ -58,17 +58,15 @@ export function ProbBar({
 
   return (
     <div className="w-full">
-      <div className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full bg-white/[0.06]">
+      <div className="flex h-2 w-full gap-[2px] overflow-hidden bg-white/[0.06]">
         {segments.map((seg) => (
           <div
             key={seg.key}
-            className="h-full rounded-full transition-all duration-500"
+            className="h-full transition-all duration-300"
             style={{
               width: seg.width,
               background: seg.color,
-              opacity: predicted === seg.key ? 1 : 0.35,
-              boxShadow:
-                predicted === seg.key ? `0 0 10px ${seg.color}80` : "none",
+              opacity: predicted === seg.key ? 1 : 0.3,
             }}
           />
         ))}
@@ -81,17 +79,17 @@ export function ProbBar({
             style={{ width: seg.width }}
           >
             <span
-              className="text-[11px] font-bold leading-none tabular-nums"
+              className="font-mono text-[11px] font-black leading-none tabular-nums"
               style={{
-                color: predicted === seg.key ? seg.color : "#475569",
+                color: predicted === seg.key ? seg.color : "#707070",
               }}
             >
               {seg.prob}%
             </span>
             <span
-              className="mt-0.5 w-full truncate text-center text-[9px] uppercase tracking-wide"
+              className="mt-0.5 w-full truncate text-center font-mono text-[9px] uppercase tracking-widest"
               style={{
-                color: predicted === seg.key ? seg.color : "#334155",
+                color: predicted === seg.key ? seg.color : "#707070",
               }}
             >
               {seg.label}

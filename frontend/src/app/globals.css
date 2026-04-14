@@ -811,6 +811,86 @@
   /* Ring */
   .ring-slate-200,
   .ring-gray-200 { --tw-ring-color: rgba(255, 255, 255, 0.08) !important; }
+
+  /* ═══════════════════════════════════════════════════════════════
+     HARD EDGES — kill all Tailwind radius utilities
+     Exceptions: live-dot, live-dot-red, avatar circles (rounded-full on
+     elements smaller than 48px are kept via .rounded-full-allow escape).
+     ═══════════════════════════════════════════════════════════════ */
+  .rounded,
+  .rounded-sm,
+  .rounded-md,
+  .rounded-lg,
+  .rounded-xl,
+  .rounded-2xl,
+  .rounded-3xl { border-radius: 0 !important; }
+  .rounded-t,
+  .rounded-t-sm,
+  .rounded-t-md,
+  .rounded-t-lg,
+  .rounded-t-xl,
+  .rounded-t-2xl,
+  .rounded-t-3xl { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+  .rounded-b,
+  .rounded-b-sm,
+  .rounded-b-md,
+  .rounded-b-lg,
+  .rounded-b-xl,
+  .rounded-b-2xl,
+  .rounded-b-3xl { border-bottom-left-radius: 0 !important; border-bottom-right-radius: 0 !important; }
+  .rounded-l, .rounded-l-sm, .rounded-l-md, .rounded-l-lg, .rounded-l-xl, .rounded-l-2xl,
+  .rounded-bl-sm, .rounded-bl-md, .rounded-bl-lg, .rounded-bl-xl, .rounded-bl-2xl, .rounded-bl-3xl,
+  .rounded-tl-sm, .rounded-tl-md, .rounded-tl-lg, .rounded-tl-xl, .rounded-tl-2xl { border-radius: 0 !important; }
+  .rounded-r, .rounded-r-sm, .rounded-r-md, .rounded-r-lg, .rounded-r-xl, .rounded-r-2xl,
+  .rounded-br-sm, .rounded-br-md, .rounded-br-lg, .rounded-br-xl, .rounded-br-2xl,
+  .rounded-tr-sm, .rounded-tr-md, .rounded-tr-lg, .rounded-tr-xl, .rounded-tr-2xl { border-radius: 0 !important; }
+
+  /* Images — no rounded, no drop-shadow */
+  img { border-radius: 0 !important; }
+
+  /* Keep pills/dots explicitly circular only where semantic */
+  .rounded-full { border-radius: 9999px !important; }
+  /* But square them off on images, buttons and large cards where rounded-full was used decoratively */
+  img.rounded-full { border-radius: 0 !important; }
+
+  /* ═══════════════════════════════════════════════════════════════
+     UPPERCASE ALL CTA-LIKE LINKS/BUTTONS
+     Any anchor/button carrying a .btn-* class gets uppercase +
+     tracking applied. Also force it on <button> elements with
+     font-black/font-extrabold classes which are typically CTAs.
+     ═══════════════════════════════════════════════════════════════ */
+  a[class*="btn-"],
+  button[class*="btn-"],
+  .btn-lime,
+  .btn-outline,
+  .btn-gradient,
+  .btn-cyan {
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    border-radius: 0 !important;
+  }
+
+  /* Disable shadow on all btn-* except primary lime glow variants */
+  .btn-outline {
+    box-shadow: none !important;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     MOBILE-FIRST DEFAULTS
+     Tighter container padding on phones, responsive display sizes.
+     ═══════════════════════════════════════════════════════════════ */
+}
+
+/* Responsive hero display — uses container-width fluid scale */
+.text-display {
+  font-size: clamp(1.75rem, 4vw + 1rem, 3.5rem);
+  line-height: 0.95;
+}
+
+/* Mobile-first base sizing — bump h2 sections on phones */
+@media (max-width: 639px) {
+  h1 { font-size: clamp(1.75rem, 8vw, 2.5rem); }
+  h2 { font-size: clamp(1.5rem, 6vw, 2rem); }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
