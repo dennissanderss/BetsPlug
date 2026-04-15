@@ -55,8 +55,9 @@ const PUBLIC_PATHS: Array<{
   { canonical: "/articles", priority: 0.8, changeFrequency: "weekly" },
   { canonical: "/how-it-works", priority: 0.7, changeFrequency: "monthly" },
   { canonical: "/track-record", priority: 0.7, changeFrequency: "weekly" },
-  { canonical: "/about", priority: 0.6, changeFrequency: "monthly" },
-  { canonical: "/about-us", priority: 0.5, changeFrequency: "monthly" },
+  // `/about` is the authenticated in-app "about this product" page and lives
+  // under the (app) group. Only `/about-us` is the public SEO canonical here.
+  { canonical: "/about-us", priority: 0.6, changeFrequency: "monthly" },
   { canonical: "/contact", priority: 0.5, changeFrequency: "yearly" },
 ];
 

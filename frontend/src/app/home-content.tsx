@@ -37,6 +37,8 @@ import type { ComparisonRow } from "@/components/ui/comparison-table";
 import { getLocaleValue } from "@/lib/sanity-data";
 import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { GlassPanel } from "@/components/noct/glass-panel";
 
 const FreePredictions = dynamic(() => import("@/components/ui/free-predictions").then(m => m.FreePredictions), { ssr: false });
 const BetsPlugFooter = dynamic(() => import("@/components/ui/betsplug-footer").then(m => m.BetsPlugFooter), { ssr: true });
@@ -729,49 +731,41 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
          ═══════════════════════════════════════════════════════════════════ */}
       <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
         <HeroMediaBg src={PAGE_IMAGES.home.hero} alt="AI football predictions stadium" />
-        <div className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full bg-[#4ade80]/[0.08] blur-[160px]" />
-        <div className="pointer-events-none absolute -right-40 bottom-0 h-[400px] w-[400px] rounded-full bg-[#4ade80]/[0.05] blur-[140px]" />
-        {/* Barcode strip top */}
-        <div className="pointer-events-none absolute top-[88px] left-0 right-0 flex items-center justify-between px-6 opacity-60">
-          <span className="barcode" />
-          <span className="mono-label">[ SYS / BETSPLUG v2.6 ]</span>
-          <span className="barcode" />
-        </div>
 
-        <div className="relative mx-auto max-w-7xl px-6">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
             {/* Left: Copy */}
             <div>
-              {/* Section tag */}
-              <div className="mb-8 flex items-center gap-3">
-                <span className="section-tag">
+              {/* Soft section label */}
+              <div className="mb-6 flex items-center gap-3">
+                <span className="section-label">
                   <span className="live-dot" />
                   {t("hero.badge")}
                 </span>
               </div>
 
-              <h1 className="text-display text-balance break-words text-[2.25rem] leading-[0.95] sm:text-5xl lg:text-[3.5rem] xl:text-6xl">
+              <h1 className="text-display text-[2.25rem] leading-[1.02] sm:text-5xl lg:text-6xl">
                 {t("hero.titleLine1")}{" "}
-                <span className="text-[#4ade80]">{t("hero.titleLine2")}</span>
+                <span className="gradient-text-green">{t("hero.titleLine2")}</span>
                 {t("hero.titleLine3") ? <><br/>{t("hero.titleLine3")}</> : ""}
               </h1>
 
-              <p className="mt-8 max-w-xl text-base leading-relaxed text-[#a3a3a3] sm:text-lg">
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
                 {t("hero.subtitle")}
               </p>
 
-              {/* USP row — icon + short heading, no box */}
-              <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
+              {/* USP row — hex badges */}
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
                 {[
-                  { icon: Brain, title: t("hero.usp1Title") },
-                  { icon: Target, title: t("hero.usp2Title") },
-                  { icon: CheckCircle2, title: t("hero.usp3Title") },
-                ].map(({ icon: Icon, title }) => (
+                  { icon: Brain, title: t("hero.usp1Title"), variant: "green" as const },
+                  { icon: Target, title: t("hero.usp2Title"), variant: "purple" as const },
+                  { icon: CheckCircle2, title: t("hero.usp3Title"), variant: "blue" as const },
+                ].map(({ icon: Icon, title, variant }) => (
                   <div key={title} className="flex items-center gap-2.5">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center border border-[#4ade80]">
-                      <Icon className="h-3 w-3 text-[#4ade80]" strokeWidth={3} />
-                    </span>
-                    <span className="text-sm font-bold uppercase tracking-wide text-white">
+                    <HexBadge variant={variant} size="sm">
+                      <Icon className="h-3.5 w-3.5" strokeWidth={2.25} />
+                    </HexBadge>
+                    <span className="text-sm font-medium text-[#ededed]">
                       {title}
                     </span>
                   </div>
@@ -949,51 +943,57 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
             </p>
           </div>
 
-          <div className="grid gap-[1px] bg-white/[0.08] md:grid-cols-3">
-            {/* Card 1 */}
-            <div className="relative scanline bg-[#0a0a0a] p-8 transition hover:bg-[#111]">
-              <div className="mb-6 flex items-center justify-between">
-                <span className="mono-label-lime">01 / TRUST</span>
-                <Shield className="h-5 w-5 text-[#4ade80]" strokeWidth={2} />
+          <div className="grid gap-6 md:grid-cols-3 md:gap-6">
+            {/* Card 1 — Trust (green glow) */}
+            <GlassPanel variant="lifted" featureTile="green" className="p-8 text-center">
+              <div className="relative flex flex-col items-center">
+                <HexBadge variant="green" size="lg" className="mb-6">
+                  <Shield className="h-6 w-6" strokeWidth={2} />
+                </HexBadge>
+                <h3 className="text-heading text-xl text-white sm:text-2xl">
+                  {t("trusted.card1Title")}
+                </h3>
+                <p className="mt-3 max-w-xs text-sm leading-relaxed text-[#a3a9b8]">
+                  {t("trusted.card1Desc")}
+                </p>
               </div>
-              <p className="font-mono text-6xl font-black text-white/[0.05]">01</p>
-              <h3 className="mt-4 text-heading text-2xl text-white">{t("trusted.card1Title")}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-[#a3a3a3]">
-                {t("trusted.card1Desc")}
-              </p>
-            </div>
+            </GlassPanel>
 
-            {/* Card 2 — HIGHLIGHTED LIME BLOCK */}
-            <div className="relative stripe-lime p-8">
-              <div className="mb-6 flex items-center justify-between">
-                <span className="font-mono text-[10px] font-black uppercase tracking-widest text-[#050505]">02 / AI CORE</span>
-                <Brain className="h-5 w-5 text-[#050505]" strokeWidth={2.5} />
+            {/* Card 2 — AI Core (purple glow, feature tile) */}
+            <GlassPanel variant="lifted" featureTile="purple" className="p-8 text-center">
+              <div className="relative flex flex-col items-center">
+                <HexBadge variant="purple" size="lg" className="mb-6">
+                  <Brain className="h-6 w-6" strokeWidth={2} />
+                </HexBadge>
+                <h3 className="text-heading text-xl text-white sm:text-2xl">
+                  {t("trusted.card2Title")}
+                </h3>
+                <p className="mt-3 max-w-xs text-sm leading-relaxed text-[#a3a9b8]">
+                  {t("trusted.card2Desc")}
+                </p>
+                <Link
+                  href="#track-record"
+                  className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#d8b4fe] transition-colors hover:text-[#e9d5ff]"
+                >
+                  {t("trusted.learnMore")} →
+                </Link>
               </div>
-              <p className="font-mono text-6xl font-black text-[#050505]/15">02</p>
-              <h3 className="mt-4 text-heading text-2xl text-[#050505]">{t("trusted.card2Title")}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-[#050505]/80">
-                {t("trusted.card2Desc")}
-              </p>
-              <Link
-                href="#track-record"
-                className="mt-5 inline-flex items-center gap-2 border-b border-[#050505] pb-0.5 text-xs font-black uppercase tracking-widest text-[#050505]"
-              >
-                {t("trusted.learnMore")} →
-              </Link>
-            </div>
+            </GlassPanel>
 
-            {/* Card 3 */}
-            <div className="relative scanline bg-[#0a0a0a] p-8 transition hover:bg-[#111]">
-              <div className="mb-6 flex items-center justify-between">
-                <span className="mono-label-lime">03 / PROOF</span>
-                <CheckCircle2 className="h-5 w-5 text-[#4ade80]" strokeWidth={2} />
+            {/* Card 3 — Proof (blue glow) */}
+            <GlassPanel variant="lifted" featureTile="blue" className="p-8 text-center">
+              <div className="relative flex flex-col items-center">
+                <HexBadge variant="blue" size="lg" className="mb-6">
+                  <CheckCircle2 className="h-6 w-6" strokeWidth={2} />
+                </HexBadge>
+                <h3 className="text-heading text-xl text-white sm:text-2xl">
+                  {t("trusted.card3Title")}
+                </h3>
+                <p className="mt-3 max-w-xs text-sm leading-relaxed text-[#a3a9b8]">
+                  {t("trusted.card3Desc")}
+                </p>
               </div>
-              <p className="font-mono text-6xl font-black text-white/[0.05]">03</p>
-              <h3 className="mt-4 text-heading text-2xl text-white">{t("trusted.card3Title")}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-[#a3a3a3]">
-                {t("trusted.card3Desc")}
-              </p>
-            </div>
+            </GlassPanel>
           </div>
         </div>
       </section>
