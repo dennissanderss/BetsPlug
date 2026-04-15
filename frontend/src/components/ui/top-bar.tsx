@@ -2,26 +2,22 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { X, Flame, ArrowRight } from "lucide-react";
+import { X, ArrowRight } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+
+/**
+ * TopBar — thin announcement strip above the site nav.
+ * NOCTURNE: subtle translucent dark with a soft green dot and a
+ * single clickable trial nudge. Dismissable per session.
+ */
 
 const STORAGE_KEY = "bp_topbar_d";
 
 interface TrackRecord {
   accuracy_pct: number;
   total_picks: number;
-  correct: number;
-  current_streak: number;
 }
 
-/**
- * TopBar — slim promotional bar above the main navigation.
- *
- * Shows live track-record stats (win rate + pick count) fetched from
- * the /bet-of-the-day/track-record API, plus a €0.01-trial CTA.
- * Dismissable — persisted in sessionStorage so it stays hidden for
- * the current browser session.
- */
 export function TopBar() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
@@ -29,7 +25,6 @@ export function TopBar() {
   const [closing, setClosing] = useState(false);
   const [stats, setStats] = useState<TrackRecord | null>(null);
 
-  /* ── Restore dismiss state ── */
   useEffect(() => {
     try {
       if (sessionStorage.getItem(STORAGE_KEY) !== "1") setVisible(true);
@@ -38,7 +33,6 @@ export function TopBar() {
     }
   }, []);
 
-  /* ── Fetch track-record stats ── */
   useEffect(() => {
     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
     fetch(`${API}/bet-of-the-day/track-record`)
@@ -54,7 +48,7 @@ export function TopBar() {
     try {
       sessionStorage.setItem(STORAGE_KEY, "1");
     } catch {}
-    setTimeout(() => setVisible(false), 300);
+    setTimeout(() => setVisible(false), 250);
   };
 
   if (!visible) return null;
@@ -65,49 +59,45 @@ export function TopBar() {
         closing ? "max-h-0 opacity-0" : "max-h-12 opacity-100"
       }`}
     >
-      <div className="relative overflow-hidden bg-[#050505] border-b border-[#4ade80]/25">
-        <div className="relative flex items-center justify-center gap-2 px-10 py-2 font-mono text-[11px] uppercase tracking-widest sm:text-[12px]">
-          <Flame className="h-3 w-3 shrink-0 text-[#4ade80]" />
+      <div
+        className="relative flex items-center justify-center border-b px-10 py-2 text-[12px] sm:text-[13px]"
+        style={{
+          background: "hsl(230 20% 7% / 0.85)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderColor: "hsl(0 0% 100% / 0.06)",
+        }}
+      >
+        <span className="live-dot mr-2.5" />
 
-          {stats ? (
-            <>
-              <span className="hidden text-[#a3a3a3] sm:inline">
-                <span className="font-black text-[#4ade80]">
-                  {Math.round(stats.accuracy_pct)}%
-                </span>{" "}
-                {t("topbar.winRate")}
-                <span className="mx-2 text-[#707070]">/</span>
-                <span className="font-black text-[#4ade80]">
-                  {stats.total_picks}+
-                </span>{" "}
-                {t("topbar.picksAnalyzed")}
-                <span className="mx-2 text-[#707070]">/</span>
-              </span>
+        {stats && (
+          <span className="hidden text-[#a3a9b8] sm:inline">
+            <span className="font-semibold text-[#ededed]">
+              {Math.round(stats.accuracy_pct)}%
+            </span>{" "}
+            {t("topbar.winRate")}
+            <span className="mx-2 text-[#4b5264]">·</span>
+            <span className="font-semibold text-[#ededed]">
+              {stats.total_picks}+
+            </span>{" "}
+            {t("topbar.picksAnalyzed")}
+            <span className="mx-2 text-[#4b5264]">·</span>
+          </span>
+        )}
 
-              <span className="text-[#a3a3a3] sm:hidden">
-                <span className="font-black text-[#4ade80]">
-                  {Math.round(stats.accuracy_pct)}%
-                </span>{" "}
-                {t("topbar.winRate")}
-                <span className="mx-2 text-[#707070]">/</span>
-              </span>
-            </>
-          ) : null}
-
-          <Link
-            href={`${loc("/checkout")}?plan=gold`}
-            className="inline-flex items-center gap-1 whitespace-nowrap font-black text-[#4ade80] transition-colors hover:text-[#86efac]"
-          >
-            {t("topbar.cta")}
-            <ArrowRight className="h-3 w-3" strokeWidth={3} />
-          </Link>
-        </div>
+        <Link
+          href={`${loc("/checkout")}?plan=gold`}
+          className="inline-flex items-center gap-1 font-semibold text-[#4ade80] transition-colors hover:text-[#86efac]"
+        >
+          {t("topbar.cta")}
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
 
         <button
           type="button"
           onClick={dismiss}
           aria-label="Close"
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[#707070] transition-colors hover:text-[#ededed] sm:right-3"
+          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#6b7280] transition-colors hover:text-[#ededed]"
         >
           <X className="h-3.5 w-3.5" />
         </button>

@@ -17,13 +17,84 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         disallow: [
+          // API & admin
           "/api/",
           "/admin/",
+          "/*/admin/",
+
+          // Authenticated app shell
           "/dashboard/",
+          "/*/dashboard/",
           "/settings/",
+          "/*/settings/",
+
+          // Account / subscription / favorites (authenticated)
+          "/myaccount",
+          "/*/mijn-account",
+          "/*/mein-konto",
+          "/*/mon-compte",
+          "/*/mi-cuenta",
+          "/*/il-mio-account",
+          "/*/akaunti-yangu",
+          "/*/akun-saya",
+          "/subscription",
+          "/*/abonnement", // nl/de/fr share this slug
+          "/*/suscripcion",
+          "/*/abbonamento",
+          "/*/usajili",
+          "/*/langganan",
+          "/favorites",
+          "/*/favorieten",
+          "/*/favoriten",
+          "/*/favoris",
+          "/*/favoritos",
+          "/*/preferiti",
+          "/*/vipendwa",
+          "/*/favorit",
+
+          // Authenticated in-app routes that duplicate public canonicals.
+          // `$` pins an exact match so siblings like `/about-us` remain
+          // crawlable (disallow `/about` would otherwise swallow them).
+          // "/about"   is the in-app product page; public canonical is "/about-us"
+          "/about$",
+          "/*/over-ons$",
+          "/*/ueber-uns$",
+          "/*/a-propos$",
+          "/*/sobre-nosotros$",
+          "/*/chi-siamo$",
+          "/*/kuhusu$",
+          "/*/tentang$",
+          // "/predictions"  is the auth'd dashboard; public canonical is "/match-predictions"
+          "/predictions/",
+          "/*/voorspellingen/",
+          "/*/prognosen/",
+          "/*/predictions/", // fr reuses en slug
+          "/*/predicciones/",
+          "/*/pronostici/",
+          "/*/utabiri/",
+          "/*/prediksi/",
+          // "/trackrecord"  is the auth'd dashboard; public canonical is "/track-record"
+          "/trackrecord",
+          "/*/prestaties",
+          "/*/bilanz",
+          "/*/historique",
+          "/*/historial",
+          "/*/storico",
+          "/*/rekodi",
+          "/*/riwayat",
+
+          // Funnel / conversion pages (no organic search value)
           "/checkout",
+          "/*/afrekenen",
+          "/*/kasse",
+          "/*/paiement",
+          "/*/pago",
+          "/*/malipo",
+          "/*/pembayaran",
           "/login",
           "/welcome",
+
+          // Private reports, live data & internal feeds
           "/reports/",
           "/weekly-report/",
           "/search",
@@ -35,16 +106,6 @@ export default function robots(): MetadataRoute.Robots {
           "/teams/",
           "/bet-of-the-day/",
           "/jouw-route/",
-          // Localized variants of the same private areas
-          "/*/admin/",
-          "/*/dashboard/",
-          "/*/settings/",
-          "/*/afrekenen",
-          "/*/kasse",
-          "/*/paiement",
-          "/*/pago",
-          "/*/malipo",
-          "/*/pembayaran",
         ],
       },
     ],

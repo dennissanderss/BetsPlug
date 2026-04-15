@@ -3,56 +3,48 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import {
-  Menu,
-  X,
-  ChevronRight,
-  ArrowRight,
-  Sparkles,
-} from "lucide-react";
+import { Menu, X, ArrowRight, ChevronRight } from "lucide-react";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { TopBar } from "@/components/ui/top-bar";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 /**
- * SiteNav — shared public navigation used on every marketing page
- * (landing, contact, …). Fixed position, shrinks on scroll, with a
- * mobile slide-out menu. Anchor links (#predictions etc.) point to the
- * home page so they work from any sub-page.
+ * SiteNav — NOCTURNE public shell navigation.
+ *
+ * Translucent dark glass bar pinned to the top. Logo on the left,
+ * centred nav pills, right-aligned language + login + primary CTA.
+ * Mobile collapses the pills into a glass drawer.
  */
+
 export function SiteNav() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const home = loc("/");
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [mobileMenuOpen]);
+  }, [mobileOpen]);
 
-  // Close mobile menu on escape
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileMenuOpen(false);
+      if (e.key === "Escape") setMobileOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Anchor links are absolute to the localized home page so they work
-  // from sub-pages like /contact as well.
-  const home = loc("/");
   const navLinks = [
     { href: loc("/match-predictions"), label: t("nav.predictions") },
     { href: loc("/how-it-works"), label: t("nav.howItWorks") },
@@ -64,206 +56,214 @@ export function SiteNav() {
 
   return (
     <>
-      {/* ── Top Bar + Navigation ── */}
-      <header className="fixed top-0 left-0 right-0 z-50">
+      <header className="fixed left-0 right-0 top-0 z-50">
         <TopBar />
-        <nav className="border-b border-white/[0.06] bg-[#070a12]/75 backdrop-blur-xl transition-all duration-300">
+
+        <nav
+          className="transition-all duration-300"
+          style={{
+            background: scrolled
+              ? "hsl(230 20% 7% / 0.82)"
+              : "hsl(230 20% 7% / 0.55)",
+            backdropFilter: "blur(28px) saturate(140%)",
+            WebkitBackdropFilter: "blur(28px) saturate(140%)",
+            borderBottom: "1px solid hsl(0 0% 100% / 0.06)",
+          }}
+        >
           <div
-            className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-300 ${
-              isScrolled ? "py-1 md:py-0.5" : "py-3 md:py-1"
+            className={`mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 transition-all sm:px-6 ${
+              scrolled ? "py-2" : "py-3"
             }`}
           >
-          <Link href={home} className="flex items-center">
-            <Image
-              src="/logo.webp"
-              alt="BetsPlug logo"
-              width={200}
-              height={80}
-              priority
-              className={`w-auto transition-all duration-300 ${
-                isScrolled
-                  ? "h-8 sm:h-10 md:h-12 lg:h-14"
-                  : "h-10 sm:h-14 md:h-16 lg:h-20"
-              }`}
-            />
-          </Link>
+            {/* Logo */}
+            <Link href={home} className="flex shrink-0 items-center">
+              <Image
+                src="/logo.webp"
+                alt="BetsPlug"
+                width={200}
+                height={80}
+                priority
+                className={`w-auto transition-all duration-300 ${
+                  scrolled ? "h-9 sm:h-10" : "h-11 sm:h-12"
+                }`}
+              />
+            </Link>
 
-          {/* Desktop nav links */}
-          <div className="hidden items-center gap-8 lg:flex">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-semibold text-slate-300 transition-colors hover:text-green-400"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Right side: desktop buttons + mobile hamburger */}
-          <div className="flex items-center gap-3">
-            {/* Language switcher (desktop) */}
-            <div className="hidden lg:block">
-              <LanguageSwitcher variant="compact" />
+            {/* Centred nav pills (desktop) */}
+            <div
+              className="hidden flex-1 items-center justify-center gap-1 lg:flex"
+            >
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-full px-4 py-2 text-sm font-medium text-[#a3a9b8] transition-colors hover:bg-white/[0.04] hover:text-[#ededed]"
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
 
-            {/* Desktop buttons (lg+) */}
-            <Link
-              href={loc("/login")}
-              className={`hidden rounded-md border border-white/15 font-medium text-slate-300 transition-all hover:border-green-500/50 hover:text-white lg:inline-block ${
-                isScrolled ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
-              }`}
-            >
-              {t("nav.login")}
-            </Link>
-            <Link
-              href={loc("/checkout") + "?plan=gold"}
-              className={`btn-gradient hidden rounded-md font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:inline-block ${
-                isScrolled ? "px-4 py-1.5 text-xs" : "px-5 py-2.5 text-sm"
-              }`}
-            >
-              {t("nav.startFreeTrial")}
-            </Link>
+            {/* Right actions */}
+            <div className="flex items-center gap-2">
+              {/* Language switcher (desktop) */}
+              <div className="hidden lg:block">
+                <LanguageSwitcher variant="compact" theme="dark" />
+              </div>
 
-            {/* Mobile/Tablet CTA button */}
-            <Link
-              href={loc("/checkout") + "?plan=gold"}
-              className={`btn-gradient flex items-center justify-center rounded-md font-extrabold tracking-tight shadow-lg shadow-green-500/20 transition-all duration-300 lg:hidden ${
-                isScrolled ? "px-3 py-1.5 text-[11px]" : "px-4 py-2 text-xs sm:text-sm"
-              }`}
-            >
-              {t("nav.startFreeTrial")}
-            </Link>
+              {/* Login (desktop) */}
+              <Link
+                href={loc("/login")}
+                className="hidden rounded-full px-4 py-2 text-sm font-medium text-[#a3a9b8] transition-colors hover:bg-white/[0.04] hover:text-[#ededed] lg:inline-flex"
+              >
+                {t("nav.login")}
+              </Link>
 
-            {/* Mobile/Tablet hamburger button */}
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(true)}
-              aria-label="Open menu"
-              className={`hamburger-btn lg:hidden ${isScrolled ? "is-compact" : ""}`}
-            >
-              <span className="bar" aria-hidden />
-            </button>
+              {/* Primary CTA */}
+              <Link
+                href={`${loc("/checkout")}?plan=gold`}
+                className="btn-primary hidden items-center gap-1.5 lg:inline-flex"
+              >
+                {t("nav.startFreeTrial")}
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+
+              {/* Mobile CTA (compact) */}
+              <Link
+                href={`${loc("/checkout")}?plan=gold`}
+                className="btn-primary inline-flex items-center gap-1 px-3.5 py-2 text-xs lg:hidden"
+                style={{ fontSize: "0.75rem" }}
+              >
+                {t("nav.startFreeTrial")}
+              </Link>
+
+              {/* Hamburger */}
+              <button
+                type="button"
+                onClick={() => setMobileOpen(true)}
+                aria-label="Open menu"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#ededed] transition-colors hover:border-[#4ade80]/50 hover:bg-[#4ade80]/10 lg:hidden"
+              >
+                <Menu className="h-4 w-4" />
+              </button>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
       </header>
 
-      {/* ── Mobile slide-out menu ── */}
+      {/* Mobile drawer */}
       <div
         className={`fixed inset-0 z-[60] lg:hidden ${
-          mobileMenuOpen ? "pointer-events-auto" : "pointer-events-none"
+          mobileOpen ? "pointer-events-auto" : "pointer-events-none"
         }`}
-        aria-hidden={!mobileMenuOpen}
+        aria-hidden={!mobileOpen}
       >
         {/* Backdrop */}
         <div
-          onClick={() => setMobileMenuOpen(false)}
-          className={`absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-300 ${
-            mobileMenuOpen ? "opacity-100" : "opacity-0"
+          onClick={() => setMobileOpen(false)}
+          className={`absolute inset-0 transition-opacity duration-300 ${
+            mobileOpen ? "opacity-100" : "opacity-0"
           }`}
+          style={{
+            background: "rgba(5, 6, 10, 0.7)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+          }}
         />
 
-        {/* Slide-out panel */}
+        {/* Drawer panel */}
         <aside
-          className={`absolute right-0 top-0 flex h-full w-[92vw] max-w-sm flex-col overflow-hidden border-l border-white/[0.08] bg-gradient-to-b from-[#0d1220] via-[#080b14] to-[#060912] shadow-2xl transition-transform duration-300 ease-out ${
-            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          className={`absolute right-0 top-0 flex h-full w-[92vw] max-w-sm flex-col overflow-hidden transition-transform duration-300 ease-out ${
+            mobileOpen ? "translate-x-0" : "translate-x-full"
           }`}
+          style={{
+            background: "linear-gradient(180deg, hsl(230 22% 8%) 0%, hsl(234 25% 5%) 100%)",
+            borderLeft: "1px solid hsl(0 0% 100% / 0.08)",
+          }}
         >
-          {/* Glow */}
-          <div className="pointer-events-none absolute -right-20 top-0 h-[400px] w-[300px] rounded-full bg-green-500/[0.08] blur-[120px]" />
+          {/* Ambient glow */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-20 top-0 h-[400px] w-[300px] rounded-full"
+            style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(100px)" }}
+          />
 
-          {/* Top: Logo + close */}
-          <div className="relative flex items-center justify-between border-b border-white/[0.06] px-6 py-5">
-            <Link href={home} onClick={() => setMobileMenuOpen(false)} className="flex items-center">
+          {/* Top — logo + close */}
+          <div
+            className="relative flex items-center justify-between border-b px-6 py-5"
+            style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
+          >
+            <Link href={home} onClick={() => setMobileOpen(false)} className="flex items-center">
               <Image
                 src="/logo.webp"
-                alt="BetsPlug logo"
+                alt="BetsPlug"
                 width={120}
                 height={48}
-                className="h-12 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.4)]"
+                className="h-11 w-auto"
               />
             </Link>
             <button
               type="button"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => setMobileOpen(false)}
               aria-label="Close menu"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.03] text-slate-400 transition-all hover:border-green-500/40 hover:bg-white/[0.06] hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#a3a9b8] transition-colors hover:border-[#4ade80]/50 hover:text-[#ededed]"
             >
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
           </div>
 
-          {/* Middle: menu items
-              NOTE: min-h-0 is critical. Without it, the default
-              min-height: auto on flex children prevents this <nav>
-              from shrinking below its intrinsic content height, so
-              on tablet landscape (and any viewport shorter than the
-              menu content) the overflow-y-auto never kicks in and
-              the list can't be scrolled. overscroll-contain stops
-              rubber-band chaining into the locked body. */}
-          <nav className="relative flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto overscroll-contain px-6 py-8">
-            <span className="mb-4 font-mono text-[10px] font-semibold uppercase tracking-widest text-slate-600">
+          {/* Nav items */}
+          <nav className="relative flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-4 py-6">
+            <span className="mb-3 px-2 text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
               {t("nav.menu")}
             </span>
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="group flex items-center justify-between rounded-2xl border border-transparent px-4 py-4 text-lg font-semibold text-white transition-all hover:border-green-500/20 hover:bg-green-500/[0.06]"
+                onClick={() => setMobileOpen(false)}
+                className="group flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-medium text-[#ededed] transition-colors hover:bg-white/[0.04]"
               >
-                <span className="flex items-center gap-3">
-                  <span className="h-1.5 w-1.5 rounded-full bg-slate-700 transition-all group-hover:w-4 group-hover:bg-green-400" />
-                  {link.label}
-                </span>
-                <ChevronRight className="h-5 w-5 text-slate-600 transition-transform group-hover:translate-x-1 group-hover:text-green-400" />
+                <span>{link.label}</span>
+                <ChevronRight className="h-4 w-4 text-[#6b7280] transition-all group-hover:translate-x-1 group-hover:text-[#4ade80]" />
               </Link>
             ))}
 
-            {/* Divider */}
-            <div className="my-6 border-t border-white/[0.06]" />
+            <div
+              className="my-4 h-px"
+              style={{ background: "hsl(0 0% 100% / 0.06)" }}
+            />
 
-            {/* Language switcher (mobile) */}
-            <div className="mb-4">
-              <span className="mb-2 block font-mono text-[10px] font-semibold uppercase tracking-widest text-slate-600">
-                {t("lang.label")}
-              </span>
-              <LanguageSwitcher variant="full" />
+            <div className="mb-3 px-2 text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
+              {t("lang.label")}
+            </div>
+            <div className="px-2">
+              <LanguageSwitcher variant="full" theme="dark" />
             </div>
 
             <Link
               href={loc("/login")}
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-between rounded-2xl border border-white/[0.08] bg-white/[0.02] px-4 py-4 text-base font-medium text-slate-300 transition-all hover:border-white/[0.2] hover:text-white"
+              onClick={() => setMobileOpen(false)}
+              className="mt-4 flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 text-sm font-medium text-[#a3a9b8] transition-colors hover:border-[#4ade80]/40 hover:text-[#ededed]"
             >
               <span>{t("nav.login")}</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </nav>
 
-          {/* Bottom: CTA */}
-          <div className="relative border-t border-white/[0.06] px-6 py-6">
-            <div className="rounded-2xl border border-green-500/20 bg-gradient-to-br from-green-500/[0.08] to-transparent p-5 backdrop-blur-sm">
-              <div className="mb-3 flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-green-400" />
-                <span className="text-xs font-bold uppercase tracking-wider text-green-400">
-                  {t("nav.getStarted")}
-                </span>
-              </div>
-              <p className="mb-4 text-sm leading-relaxed text-slate-400">
-                {t("nav.joinBlurb")}
-              </p>
-              <Link
-                href={loc("/checkout") + "?plan=gold"}
-                onClick={() => setMobileMenuOpen(false)}
-                className="btn-gradient flex w-full items-center justify-center gap-2 rounded-md px-6 py-3.5 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/20"
-              >
-                {t("nav.startFreeTrial")}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
+          {/* Bottom CTA */}
+          <div
+            className="relative border-t px-4 py-5"
+            style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
+          >
+            <Link
+              href={`${loc("/checkout")}?plan=gold`}
+              onClick={() => setMobileOpen(false)}
+              className="btn-primary flex w-full items-center justify-center gap-2"
+            >
+              {t("nav.startFreeTrial")}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </aside>
       </div>
