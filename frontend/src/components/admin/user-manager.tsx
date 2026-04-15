@@ -161,7 +161,7 @@ function StatCard({
     <button
       onClick={onClick}
       className={cn(
-        "glass-card rounded-xl px-4 py-3 text-left transition-all hover:bg-white/[0.04]",
+        "card-neon rounded-xl px-4 py-3 text-left transition-all hover:bg-white/[0.04]",
         active && "ring-1 ring-blue-500/60 bg-blue-500/[0.04]"
       )}
     >
@@ -190,7 +190,7 @@ function DeleteConfirmModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="glass-card w-full max-w-md rounded-xl border border-red-500/30 p-6">
+      <div className="card-neon w-full max-w-md rounded-xl border border-red-500/30 p-6">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-500/15">
             <AlertTriangle className="h-5 w-5 text-red-400" />
@@ -364,7 +364,7 @@ export default function UserManager() {
       </div>
 
       {/* Revenue strip */}
-      <div className="glass-card rounded-xl px-5 py-3 flex items-center justify-between flex-wrap gap-3">
+      <div className="card-neon rounded-xl px-5 py-3 flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-2 text-sm text-slate-300">
           <CreditCard className="h-4 w-4 text-emerald-400" />
           <span className="text-slate-400">Lifetime revenue across all users:</span>
@@ -378,7 +378,7 @@ export default function UserManager() {
       </div>
 
       {/* Toolbar */}
-      <div className="glass-card rounded-xl p-4 flex items-center gap-3 flex-wrap">
+      <div className="card-neon rounded-xl p-4 flex items-center gap-3 flex-wrap">
         {/* Search */}
         <div className="relative flex-1 min-w-[220px]">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
@@ -410,7 +410,7 @@ export default function UserManager() {
       </div>
 
       {/* Table card */}
-      <div className="glass-card rounded-xl overflow-hidden">
+      <div className="card-neon rounded-xl overflow-hidden">
         {/* Header bar */}
         <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
           <div>
@@ -441,7 +441,7 @@ export default function UserManager() {
                   })
                 }
                 disabled={statusMutation.isPending}
-                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold btn-gradient shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold btn-primary shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {statusMutation.isPending && (
                   <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />

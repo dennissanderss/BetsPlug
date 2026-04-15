@@ -60,7 +60,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="glass-card rounded-xl p-5 space-y-4">
+    <div className="card-neon rounded-xl p-5 space-y-4">
       <div className="flex items-start gap-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
           <Icon className="h-4 w-4 text-blue-400" />

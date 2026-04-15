@@ -793,13 +793,20 @@ export default function MatchDetailPage() {
   const displayMatch = analysis?.match ?? match;
 
   return (
-    <div className="space-y-6">
+    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8">
+      <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-emerald-500/15 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full bg-blue-500/10 blur-3xl" />
+      <div className="relative space-y-6">
 
       {/* Match Header */}
       {matchLoading && !displayMatch ? (
         <MatchHeaderSkeleton />
       ) : displayMatch ? (
-        <MatchHeader match={displayMatch} />
+        <div className="card-neon card-neon-green halo-green">
+          <div className="relative">
+            <MatchHeader match={displayMatch} />
+          </div>
+        </div>
       ) : null}
 
       <Separator />
@@ -890,6 +897,7 @@ export default function MatchDetailPage() {
           )}
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 }

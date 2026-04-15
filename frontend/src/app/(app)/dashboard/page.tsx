@@ -13,7 +13,6 @@ import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 export default function DashboardPage() {
   const { t } = useTranslations();
 
-  // ── Hoisted queries (shared across components) ─────────────
   const { data: botd, isLoading: botdLoading } = useQuery({
     queryKey: ["botd-hub"],
     queryFn: () => api.getBetOfTheDay(),
@@ -40,12 +39,10 @@ export default function DashboardPage() {
     queryFn: () => api.getWeeklySummary(7),
   });
 
-  // Live count for nav strip badge
   const liveCount = (liveFixtures?.fixtures ?? []).filter(
     (f) => f.status === "live"
   ).length;
 
-  // Next kickoff time for empty live state
   const nextKickoff = (() => {
     const upcoming = (todayFixtures?.fixtures ?? []).find(
       (f) => f.status === "scheduled"
@@ -62,10 +59,26 @@ export default function DashboardPage() {
   })();
 
   return (
-    <div className="animate-fade-in">
-      {/* ── Main grid: content + sidebar ────────────────────── */}
-      <div className="grid gap-6 xl:grid-cols-[1fr_300px]">
-        {/* Main column */}
+    <div className="relative animate-fade-in mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8">
+      {/* Ambient glow blobs behind content */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-10 -left-10 h-72 w-72 rounded-full opacity-40 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(74,222,128,0.22), transparent 70%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-1/3 right-0 h-80 w-80 rounded-full opacity-30 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(168,85,247,0.20), transparent 70%)",
+        }}
+      />
+
+      <div className="relative grid gap-6 xl:grid-cols-[1fr_300px]">
         <div className="space-y-5">
           <QuickNavStrip liveCount={liveCount} />
           <HeroBotdCompact botd={botd} isLoading={botdLoading} />
@@ -81,7 +94,6 @@ export default function DashboardPage() {
           />
         </div>
 
-        {/* Right sidebar — desktop */}
         <aside className="hidden xl:block">
           <div className="sticky top-6">
             <SportsHubSidebar
@@ -92,8 +104,7 @@ export default function DashboardPage() {
         </aside>
       </div>
 
-      {/* Sidebar on mobile/tablet */}
-      <div className="mt-6 xl:hidden">
+      <div className="relative mt-6 xl:hidden">
         <SportsHubSidebar summary={weeklySummary} isLoading={weeklyLoading} />
       </div>
     </div>

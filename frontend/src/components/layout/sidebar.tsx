@@ -13,14 +13,12 @@ import {
   X,
   Sparkles,
   ChevronRight,
-  FlaskConical,
-  Settings,
   Trophy,
   MapPin,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
-import { Button } from "@/components/ui/button";
+import { Pill } from "@/components/noct/pill";
 
 interface NavItem {
   labelKey: string;
@@ -29,7 +27,7 @@ interface NavItem {
   icon: React.ElementType;
   badge?: string;
   badgeColor?: string;
-  comingSoon?: boolean;  // v3: locks the link and shows "Coming Soon" badge
+  comingSoon?: boolean;
 }
 
 interface NavSection {
@@ -43,7 +41,7 @@ const navSections: NavSection[] = [
     labelKey: "sidebar.overview",
     fallbackLabel: "Overview",
     items: [
-      { labelKey: "nav.jouwRoute", fallback: "How It Works", href: "/jouw-route", icon: MapPin, badge: "START", badgeColor: "bg-emerald-500" },
+      { labelKey: "nav.jouwRoute", fallback: "How It Works", href: "/jouw-route", icon: MapPin, badge: "START" },
       { labelKey: "nav.dashboard", fallback: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     ],
   },
@@ -70,6 +68,13 @@ const bottomNavItems: NavItem[] = [
   { labelKey: "nav.admin", fallback: "Admin", href: "/admin", icon: ShieldCheck },
 ];
 
+/**
+ * Sidebar — NOCTURNE glass-panel surface with ambient green glow.
+ *
+ * The outer aside uses a subtle gradient matching the app shell
+ * (hsl(230 22% 8%) → hsl(234 25% 5%)) layered behind a .glass-panel
+ * so every page on the authed side inherits the same language.
+ */
 export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -87,127 +92,117 @@ export function Sidebar() {
   };
 
   const NavContent = () => (
-    <div className="flex h-full flex-col">
-      {/* ── Logo ── */}
-      <div className="flex items-center px-4 py-3 border-b border-white/[0.06]">
+    <div className="relative flex h-full flex-col">
+      {/* Ambient glow blob */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-20 -left-10 h-64 w-64 rounded-full opacity-50 blur-3xl"
+        style={{ background: "radial-gradient(circle, rgba(74,222,128,0.18), transparent 70%)" }}
+      />
+
+      {/* Logo */}
+      <div className="relative flex items-center px-4 py-3 border-b border-white/[0.06]">
         <Link href="/" onClick={() => setMobileOpen(false)}>
-          <Image src="/logo.webp" alt="BetsPlug logo" width={200} height={80} className="h-12 md:h-16 lg:h-20 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.35)]" />
+          <Image
+            src="/logo.webp"
+            alt="BetsPlug logo"
+            width={200}
+            height={80}
+            className="h-12 md:h-16 lg:h-20 w-auto drop-shadow-[0_0_20px_rgba(74,222,128,0.35)]"
+          />
         </Link>
       </div>
 
-      {/* ── Nav sections ──
-          min-h-0 is required so this flex child can shrink below its
-          intrinsic content height. Without it, overflow-y-auto is a
-          no-op on shorter viewports (tablet landscape, etc.) and the
-          nav list cannot be scrolled. */}
-      <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-4 pt-3">
+      <nav className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-4 pt-3">
         {navSections.map((section, sIdx) => (
           <div key={section.labelKey}>
-            {/* Section divider (not on first section) */}
             {sIdx > 0 && <div className="mx-2 my-3 border-t border-white/[0.06]" />}
 
-            {/* Section label */}
             <div className="px-2 pb-2 pt-1">
-              <span className="mono-label">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
                 {getSectionLabel(section)}
               </span>
             </div>
 
-            {/* Section items */}
             <div className="space-y-0.5">
-        {section.items.map((item) => {
-          const localizedHref = loc(item.href);
-          const isActive =
-            pathname === item.href || pathname.startsWith(item.href + "/") ||
-            pathname === localizedHref || pathname.startsWith(localizedHref + "/");
-          const Icon = item.icon;
+              {section.items.map((item) => {
+                const localizedHref = loc(item.href);
+                const isActive =
+                  pathname === item.href ||
+                  pathname.startsWith(item.href + "/") ||
+                  pathname === localizedHref ||
+                  pathname.startsWith(localizedHref + "/");
+                const Icon = item.icon;
 
-          // v3: Coming Soon items are rendered as locked (not clickable)
-          if (item.comingSoon) {
-            return (
-              <div
-                key={item.href}
-                className="nav-item group flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-slate-600 cursor-not-allowed opacity-60"
-                title="Coming Soon — we're collecting data to validate this feature"
-              >
-                <Icon className="h-4 w-4 shrink-0 text-slate-600" />
-                <span className="flex-1">{getLabel(item)}</span>
-                <span className="text-[8px] font-bold tracking-wider text-amber-400 px-1 py-0.5 rounded border border-amber-500/20 bg-amber-500/10">
-                  GOLD
-                </span>
-                <span className="text-[8px] font-bold tracking-wider text-slate-500 px-1 py-0.5 rounded border border-slate-700 bg-slate-800/50">
-                  SOON
-                </span>
-              </div>
-            );
-          }
+                if (item.comingSoon) {
+                  return (
+                    <div
+                      key={item.href}
+                      className="glass-panel group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#6b7280] cursor-not-allowed opacity-70"
+                      title="Coming Soon"
+                    >
+                      <Icon className="h-4 w-4 shrink-0 text-[#6b7280]" />
+                      <span className="flex-1">{getLabel(item)}</span>
+                      <Pill tone="default" className="text-[9px]">SOON</Pill>
+                    </div>
+                  );
+                }
 
-          return (
-            <Link
-              key={item.href}
-              href={localizedHref}
-              onClick={() => setMobileOpen(false)}
-              className={cn(
-                "nav-item group flex items-center gap-3 px-3 py-2.5 text-sm font-medium",
-                isActive
-                  ? "nav-active"
-                  : "text-slate-400"
-              )}
-            >
-              <Icon
-                className={cn(
-                  "h-4 w-4 shrink-0 transition-colors",
-                  isActive ? "text-[#4ade80]" : "text-slate-500 group-hover:text-slate-300"
-                )}
-              />
-              <span className={cn("flex-1", isActive ? "text-[#4ade80]" : "group-hover:text-slate-200")}>
-                {getLabel(item)}
-              </span>
+                return (
+                  <Link
+                    key={item.href}
+                    href={localizedHref}
+                    onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      "nav-item group flex items-center gap-3 text-sm font-medium",
+                      isActive ? "nav-active" : "text-[#a3a9b8]"
+                    )}
+                  >
+                    <Icon
+                      className={cn(
+                        "h-4 w-4 shrink-0 transition-colors",
+                        isActive ? "text-[#4ade80]" : "text-[#a3a9b8] group-hover:text-[#ededed]"
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "flex-1",
+                        isActive ? "text-[#4ade80]" : "group-hover:text-[#ededed]"
+                      )}
+                    >
+                      {getLabel(item)}
+                    </span>
 
-              {/* START badge */}
-              {item.badge === "START" && (
-                <span
-                  className="text-[10px] font-black tracking-wider text-[#050505] px-1.5 py-0.5"
-                  style={{ background: "#4ade80" }}
-                >
-                  START
-                </span>
-              )}
+                    {item.badge === "START" && <Pill tone="active">START</Pill>}
+                    {item.badge === "HOT" && <Pill tone="loss">HOT</Pill>}
 
-              {/* HOT badge */}
-              {item.badge === "HOT" && (
-                <span
-                  className="text-[10px] font-black tracking-wider text-[#050505] px-1.5 py-0.5"
-                  style={{ background: "#ef4444" }}
-                >
-                  HOT
-                </span>
-              )}
-
-              {/* Active chevron */}
-              {isActive && !item.badge && (
-                <ChevronRight className="h-3.5 w-3.5 text-[#4ade80]/60" />
-              )}
-            </Link>
-          );
-        })}
+                    {isActive && !item.badge && (
+                      <ChevronRight className="h-3.5 w-3.5 text-[#4ade80]/60" />
+                    )}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         ))}
 
-        {/* ── Separator before Admin / Settings ── */}
         <div className="mx-2 my-3 border-t border-white/[0.06]" />
         <div className="px-2 pb-2 pt-1">
-          <span className="mono-label">
-            {(() => { const v = t("sidebar.system" as any); return v === "sidebar.system" ? "System" : v; })()}
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
+            {(() => {
+              const v = t("sidebar.system" as any);
+              return v === "sidebar.system" ? "System" : v;
+            })()}
           </span>
         </div>
 
         {bottomNavItems.map((item) => {
           const localizedHref = loc(item.href);
           const isActive =
-            pathname === item.href || pathname.startsWith(item.href + "/") ||
-            pathname === localizedHref || pathname.startsWith(localizedHref + "/");
+            pathname === item.href ||
+            pathname.startsWith(item.href + "/") ||
+            pathname === localizedHref ||
+            pathname.startsWith(localizedHref + "/");
           const Icon = item.icon;
 
           return (
@@ -216,71 +211,68 @@ export function Sidebar() {
               href={localizedHref}
               onClick={() => setMobileOpen(false)}
               className={cn(
-                "nav-item group flex items-center gap-3 px-3 py-2.5 text-sm font-medium",
-                isActive
-                  ? "nav-active"
-                  : "text-slate-400"
+                "nav-item group flex items-center gap-3 text-sm font-medium",
+                isActive ? "nav-active" : "text-[#a3a9b8]"
               )}
             >
               <Icon
                 className={cn(
                   "h-4 w-4 shrink-0 transition-colors",
-                  isActive ? "text-[#4ade80]" : "text-slate-500 group-hover:text-slate-300"
+                  isActive ? "text-[#4ade80]" : "text-[#a3a9b8] group-hover:text-[#ededed]"
                 )}
               />
-              <span className={cn("flex-1", isActive ? "text-[#4ade80]" : "group-hover:text-slate-200")}>
+              <span
+                className={cn(
+                  "flex-1",
+                  isActive ? "text-[#4ade80]" : "group-hover:text-[#ededed]"
+                )}
+              >
                 {getLabel(item)}
               </span>
 
-              {/* Active chevron */}
-              {isActive && (
-                <ChevronRight className="h-3.5 w-3.5 text-[#4ade80]/60" />
-              )}
+              {isActive && <ChevronRight className="h-3.5 w-3.5 text-[#4ade80]/60" />}
             </Link>
           );
         })}
       </nav>
 
-      {/* ── Footer ── */}
-      <div className="mt-auto border-t border-white/[0.06] px-5 py-4">
-        {/* Status indicator */}
+      {/* Footer */}
+      <div className="relative mt-auto border-t border-white/[0.06] px-5 py-4">
         <div className="flex items-center gap-2 mb-3">
           <span className="live-dot" />
-          <span className="text-xs text-slate-400">{t("common.all_systems" as any)}</span>
+          <span className="text-xs text-[#a3a9b8]">{t("common.all_systems" as any)}</span>
         </div>
-
-        {/* Disclaimer */}
-        <p className="text-[10px] leading-relaxed text-slate-600">
+        <p className="text-[10px] leading-relaxed text-[#6b7280]">
           {t("phrase.educational_only" as any)} {t("phrase.no_financial_advice" as any)}
         </p>
       </div>
     </div>
   );
 
+  const sidebarStyle: React.CSSProperties = {
+    background:
+      "linear-gradient(180deg, hsl(230 22% 8%) 0%, hsl(234 25% 5%) 100%)",
+    borderRight: "1px solid rgba(255, 255, 255, 0.06)",
+    backdropFilter: "blur(14px)",
+    WebkitBackdropFilter: "blur(14px)",
+  };
+
   return (
     <>
       {/* Desktop sidebar */}
-      <aside
-        className="hidden md:flex w-60 shrink-0 flex-col"
-        style={{
-          background: "#070707",
-          borderRight: "1px solid rgba(255, 255, 255, 0.08)",
-        }}
-      >
+      <aside className="hidden md:flex w-60 shrink-0 flex-col" style={sidebarStyle}>
         <NavContent />
       </aside>
 
       {/* Mobile hamburger */}
       <div className="md:hidden fixed top-3 left-3 z-50">
-        <Button
-          variant="ghost"
-          size="icon"
+        <button
           onClick={() => setMobileOpen((prev) => !prev)}
           aria-label="Toggle navigation"
-          className="h-9 w-9 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-white hover:bg-white/10"
+          className="btn-glass h-9 w-9 inline-flex items-center justify-center rounded-lg !px-0 !py-0"
         >
           {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-        </Button>
+        </button>
       </div>
 
       {/* Mobile overlay */}
@@ -297,10 +289,7 @@ export function Sidebar() {
           "md:hidden fixed inset-y-0 left-0 z-40 w-60 transition-transform duration-300 ease-out",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
-        style={{
-          background: "#070707",
-          borderRight: "1px solid rgba(255, 255, 255, 0.08)",
-        }}
+        style={sidebarStyle}
       >
         <NavContent />
       </aside>

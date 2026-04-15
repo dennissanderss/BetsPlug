@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "@/i18n/locale-provider";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -28,9 +30,10 @@ interface PricingPlan {
   isCustom?: boolean;
   features: string[];
   cta: string;
-  ctaVariant: "gradient" | "outline" | "ghost";
+  ctaVariant: "primary" | "glass" | "ghost";
   icon: React.ElementType;
   highlight?: boolean;
+  accent: "green" | "purple" | "blue";
 }
 
 // ─── Referral link box ────────────────────────────────────────────────────────
@@ -43,25 +46,29 @@ function ReferralLinkBox({ link }: { link: string }) {
     try {
       await navigator.clipboard.writeText(link);
     } catch {
-      // fallback: no-op
+      // no-op
     }
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
 
   return (
-    <div className="flex items-stretch gap-0 overflow-hidden rounded-xl border border-white/[0.1]">
-      <div className="flex-1 bg-white/[0.04] px-4 py-2.5 font-mono text-sm text-slate-300 truncate min-w-0 flex items-center">
+    <div
+      className="glass-panel flex items-stretch overflow-hidden rounded-xl"
+      style={{ border: "1px solid hsl(0 0% 100% / 0.1)" }}
+    >
+      <div className="flex min-w-0 flex-1 items-center truncate px-4 py-2.5 font-mono text-sm text-[#ededed]">
         {link}
       </div>
       <button
         onClick={handleCopy}
         className={cn(
-          "flex shrink-0 items-center gap-1.5 border-l border-white/[0.1] px-4 py-2.5 text-xs font-semibold transition-all duration-200",
+          "flex shrink-0 items-center gap-1.5 border-l px-4 py-2.5 text-xs font-semibold transition-all",
           copied
-            ? "bg-emerald-500/20 text-emerald-400"
-            : "bg-white/[0.06] text-slate-300 hover:bg-blue-500/15 hover:text-blue-300"
+            ? "bg-[#4ade80]/20 text-[#4ade80]"
+            : "bg-white/[0.06] text-[#ededed] hover:bg-white/[0.1]"
         )}
+        style={{ borderColor: "hsl(0 0% 100% / 0.1)" }}
       >
         {copied ? (
           <>
@@ -79,14 +86,17 @@ function ReferralLinkBox({ link }: { link: string }) {
   );
 }
 
-// ─── Plan feature list ────────────────────────────────────────────────────────
+// ─── Feature list ────────────────────────────────────────────────────────────
 
 function FeatureList({ features }: { features: string[] }) {
   return (
     <ul className="mt-4 space-y-2">
       {features.map((f) => (
-        <li key={f} className="flex items-center gap-2.5 text-sm text-slate-300">
-          <Check className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
+        <li
+          key={f}
+          className="flex items-center gap-2.5 text-sm text-[#ededed]"
+        >
+          <Check className="h-3.5 w-3.5 shrink-0 text-[#4ade80]" />
           {f}
         </li>
       ))}
@@ -99,78 +109,75 @@ function FeatureList({ features }: { features: string[] }) {
 function PricingCard({ plan }: { plan: PricingPlan }) {
   const { t } = useTranslations();
   const Icon = plan.icon;
+  const cardClass = plan.highlight ? "card-neon-green halo-green" : "card-neon";
 
   return (
-    <div
-      className={cn(
-        "glass-card-hover relative flex flex-col p-6 transition-all duration-200",
-        plan.highlight &&
-          "border-blue-500/30 bg-blue-500/[0.04] glow-blue"
-      )}
-    >
-      {/* Popular badge */}
-      {plan.highlight && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-          <span className="inline-flex items-center gap-1 rounded-full border border-blue-500/40 bg-[#0a0e1a] px-3 py-1 text-[11px] font-bold text-blue-400">
-            <Star className="h-3 w-3" />
-            {t("deals.mostPopular")}
-          </span>
-        </div>
-      )}
-
-      {/* Plan header */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10">
-          <Icon className="h-5 w-5 text-blue-400" />
-        </div>
-        {plan.badge && (
-          <span className="rounded-full bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[11px] font-semibold text-amber-400">
-            {plan.badge}
-          </span>
-        )}
-      </div>
-
-      <h3 className="mt-3 text-base font-bold text-slate-100">{plan.name}</h3>
-
-      {/* Pricing */}
-      <div className="mt-3">
-        {plan.isCustom ? (
-          <p className="text-2xl font-extrabold gradient-text">{t("deals.customPricing")}</p>
-        ) : (
-          <div className="flex items-end gap-2">
-            <p className="text-2xl font-extrabold gradient-text">{plan.memberPrice}</p>
-            <p className="mb-0.5 text-sm text-slate-500 line-through">{plan.regularPrice}</p>
+    <div className={cn(cardClass, "relative rounded-2xl")}>
+      <div className="relative flex h-full flex-col p-6">
+        {/* Popular badge */}
+        {plan.highlight && (
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+            <Pill tone="win">
+              <Star className="h-3 w-3" />
+              {t("deals.mostPopular")}
+            </Pill>
           </div>
         )}
-        {!plan.isCustom && (
-          <p className="text-xs text-slate-500 mt-0.5">{t("deals.perMonth")}</p>
-        )}
-        {plan.saving && (
-          <span className="mt-2 inline-block rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-xs font-semibold text-emerald-400">
-            {plan.saving}
-          </span>
-        )}
-      </div>
 
-      {/* Features */}
-      <FeatureList features={plan.features} />
+        <div className="flex items-start justify-between gap-3">
+          <HexBadge variant={plan.accent} size="md">
+            <Icon className="h-5 w-5" />
+          </HexBadge>
+          {plan.badge && <Pill tone="purple">{plan.badge}</Pill>}
+        </div>
 
-      {/* CTA */}
-      <div className="mt-6 flex-1 flex items-end">
-        <button
-          className={cn(
-            "w-full inline-flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all duration-150",
-            plan.ctaVariant === "gradient" &&
-              "btn-gradient text-white",
-            plan.ctaVariant === "outline" &&
-              "border border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:border-blue-500/50",
-            plan.ctaVariant === "ghost" &&
-              "border border-white/[0.1] text-slate-300 hover:bg-white/[0.06] hover:text-slate-100"
+        <h3 className="mt-3 text-heading text-base text-[#ededed]">
+          {plan.name}
+        </h3>
+
+        {/* Pricing */}
+        <div className="mt-3">
+          {plan.isCustom ? (
+            <p className="text-stat text-2xl gradient-text-green">
+              {t("deals.customPricing")}
+            </p>
+          ) : (
+            <div className="flex items-end gap-2">
+              <p className="text-stat text-2xl gradient-text-green">
+                {plan.memberPrice}
+              </p>
+              <p className="mb-0.5 text-sm text-[#a3a9b8] line-through">
+                {plan.regularPrice}
+              </p>
+            </div>
           )}
-        >
-          {plan.cta}
-          <ArrowRight className="h-4 w-4" />
-        </button>
+          {!plan.isCustom && (
+            <p className="mt-0.5 text-xs text-[#a3a9b8]">
+              {t("deals.perMonth")}
+            </p>
+          )}
+          {plan.saving && (
+            <div className="mt-2">
+              <Pill tone="win">{plan.saving}</Pill>
+            </div>
+          )}
+        </div>
+
+        <FeatureList features={plan.features} />
+
+        <div className="mt-6 flex flex-1 items-end">
+          <button
+            className={cn(
+              "w-full justify-center",
+              plan.ctaVariant === "primary" && "btn-primary",
+              plan.ctaVariant === "glass" && "btn-glass",
+              plan.ctaVariant === "ghost" && "btn-ghost"
+            )}
+          >
+            {plan.cta}
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -188,42 +195,42 @@ function ReferralStep({
   description: string;
 }) {
   return (
-    <div className="flex flex-col items-center text-center gap-3">
-      <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-blue-500/30 bg-blue-500/10 text-lg font-extrabold text-blue-400 glow-blue-sm">
-        {step}
-        {step < 3 && (
-          <ArrowRight className="absolute -right-7 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-600 hidden sm:block" />
-        )}
-      </div>
+    <div className="flex flex-col items-center gap-3 text-center">
+      <HexBadge variant="green" size="lg">
+        <span className="text-stat text-lg">{step}</span>
+      </HexBadge>
       <div>
-        <p className="text-sm font-semibold text-slate-200">{title}</p>
-        <p className="mt-0.5 text-xs text-slate-500">{description}</p>
+        <p className="text-sm font-semibold text-[#ededed]">{title}</p>
+        <p className="mt-0.5 text-xs text-[#a3a9b8]">{description}</p>
       </div>
     </div>
   );
 }
 
-// ─── Stat pill ────────────────────────────────────────────────────────────────
+// ─── Stat tile ────────────────────────────────────────────────────────────────
 
-function StatPill({
+function StatTile({
   label,
   value,
-  color,
+  variant,
 }: {
   label: string;
   value: string;
-  color: "blue" | "green" | "amber";
+  variant: "green" | "purple" | "blue";
 }) {
-  const styles = {
-    blue:  "bg-blue-500/10  border-blue-500/20  text-blue-400",
-    green: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
-    amber: "bg-amber-500/10 border-amber-500/20 text-amber-400",
-  };
-
   return (
-    <div className={cn("rounded-xl border px-5 py-4 text-center", styles[color])}>
-      <p className="text-2xl font-extrabold">{value}</p>
-      <p className="mt-0.5 text-xs font-medium opacity-80">{label}</p>
+    <div className="card-neon rounded-xl">
+      <div className="relative flex items-center gap-3 p-4">
+        <HexBadge variant={variant} size="sm">
+          <Gift className="h-3.5 w-3.5" />
+        </HexBadge>
+        <div>
+          <p className="text-stat text-xl text-[#ededed]">{value}</p>
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-[#a3a9b8]">
+            {label}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -237,8 +244,8 @@ function getPlans(t: (key: any) => string): PricingPlan[] {
       name: "BetsPlug Pro - Annual",
       badge: t("deals.bestValue"),
       regularPrice: "$29.99/mo",
-      memberPrice:  "$23.99/mo",
-      saving:       t("deals.saveAnnual"),
+      memberPrice: "$23.99/mo",
+      saving: t("deals.saveAnnual"),
       features: [
         t("deals.featureUnlimitedPredictions"),
         t("deals.featureAllStrategies"),
@@ -248,16 +255,17 @@ function getPlans(t: (key: any) => string): PricingPlan[] {
         t("deals.featurePrioritySupport"),
       ],
       cta: t("deals.claimDiscount"),
-      ctaVariant: "gradient",
+      ctaVariant: "primary",
       icon: Zap,
       highlight: true,
+      accent: "green",
     },
     {
       id: "monthly",
       name: "BetsPlug Pro - Monthly",
       regularPrice: "$39.99/mo",
-      memberPrice:  "$31.99/mo",
-      saving:       t("deals.saveMonthly"),
+      memberPrice: "$31.99/mo",
+      saving: t("deals.saveMonthly"),
       features: [
         t("deals.featureUnlimitedPredictions"),
         t("deals.featureAllStrategies"),
@@ -266,17 +274,18 @@ function getPlans(t: (key: any) => string): PricingPlan[] {
         t("deals.featurePrioritySupport"),
       ],
       cta: t("deals.claimDiscount"),
-      ctaVariant: "outline",
+      ctaVariant: "glass",
       icon: Star,
       highlight: false,
+      accent: "purple",
     },
     {
       id: "enterprise",
       name: "BetsPlug Enterprise",
       regularPrice: " - ",
-      memberPrice:  null,
-      saving:       null,
-      isCustom:     true,
+      memberPrice: null,
+      saving: null,
+      isCustom: true,
       features: [
         t("deals.featureCustomModels"),
         t("deals.featureDedicatedSupport"),
@@ -289,6 +298,7 @@ function getPlans(t: (key: any) => string): PricingPlan[] {
       ctaVariant: "ghost",
       icon: Building2,
       highlight: false,
+      accent: "blue",
     },
   ];
 }
@@ -300,162 +310,177 @@ const REFERRAL_LINK = "https://betsplug.io/ref/DVB_2024";
 export default function DealsPage() {
   const { t } = useTranslations();
   return (
-    <div className="max-w-5xl space-y-10 animate-fade-in">
-      {/* ── Page header ─────────────────────────────────────────────────────── */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight gradient-text">{t("deals.title")}</h1>
-          <p className="mt-1.5 text-sm text-slate-400">{t("deals.subtitle")}</p>
-        </div>
-        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-400">
-          <Lock className="h-3 w-3" />
-          {t("deals.membersOnly")}
-        </span>
-      </div>
-
-      {/* ── Hero banner ──────────────────────────────────────────────────────── */}
+    <div className="relative">
       <div
-        className="glass-card relative overflow-hidden p-8 animate-slide-up"
+        aria-hidden
+        className="pointer-events-none absolute -left-40 top-10 h-[400px] w-[400px] rounded-full"
         style={{
-          borderColor: "rgba(59,130,246,0.25)",
-          background:
-            "linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(34,211,238,0.04) 100%)",
+          background: "hsl(var(--accent-green) / 0.12)",
+          filter: "blur(140px)",
         }}
-      >
-        {/* Background glow blobs */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full opacity-20"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(59,130,246,0.5) 0%, transparent 70%)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-20 -left-10 h-48 w-48 rounded-full opacity-10"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(34,211,238,0.5) 0%, transparent 70%)",
-          }}
-        />
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-32 top-60 h-[400px] w-[400px] rounded-full"
+        style={{
+          background: "hsl(var(--accent-purple) / 0.1)",
+          filter: "blur(140px)",
+        }}
+      />
 
-        <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 text-xs font-semibold text-emerald-400">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 space-y-10">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <span className="section-label mb-3">
+              <Gift className="h-3 w-3" />
+              Member deals
+            </span>
+            <h1 className="text-heading text-3xl text-[#ededed] sm:text-4xl">
+              {t("deals.title")}{" "}
+              <span className="gradient-text-green">rewards</span>
+            </h1>
+            <p className="mt-2 text-sm text-[#a3a9b8]">{t("deals.subtitle")}</p>
+          </div>
+          <Pill tone="purple">
+            <Lock className="h-3 w-3" />
+            {t("deals.membersOnly")}
+          </Pill>
+        </div>
+
+        {/* Hero referral banner */}
+        <div className="card-neon-green halo-green rounded-2xl">
+          <div className="relative flex flex-col gap-6 p-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-3">
+              <Pill tone="win">
                 <Gift className="h-3 w-3" />
                 {t("deals.memberReward")}
-              </span>
+              </Pill>
+              <h2 className="text-heading text-2xl text-[#ededed]">
+                {t("deals.heroTitle")}
+              </h2>
+              <p className="max-w-md text-sm text-[#a3a9b8]">
+                {t("deals.heroDescription")}
+              </p>
             </div>
-            <h2 className="text-2xl font-extrabold text-slate-100 leading-tight">
-              {t("deals.heroTitle")}
-            </h2>
-            <p className="text-sm text-slate-400 max-w-md">
-              {t("deals.heroDescription")}
-            </p>
-          </div>
 
-          {/* Referral link */}
-          <div className="shrink-0 w-full sm:max-w-sm space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-              {t("deals.yourReferralLink")}
-            </p>
-            <ReferralLinkBox link={REFERRAL_LINK} />
-            <p className="text-[11px] text-slate-600">
-              {t("deals.bothGetFreeMonth")}
-            </p>
+            <div className="w-full shrink-0 space-y-2 sm:max-w-sm">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-[#a3a9b8]">
+                {t("deals.yourReferralLink")}
+              </p>
+              <ReferralLinkBox link={REFERRAL_LINK} />
+              <p className="text-[11px] text-[#a3a9b8]">
+                {t("deals.bothGetFreeMonth")}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* ── Partner Deals ────────────────────────────────────────────────────── */}
-      <div className="animate-slide-up">
-        <div className="mb-5">
-          <h2 className="text-base font-semibold text-slate-100">{t("deals.partnerDeals")}</h2>
-          <p className="mt-0.5 text-xs text-slate-500">
-            {t("deals.partnerDealsDescription")}
+        {/* Partner deals */}
+        <div>
+          <div className="mb-5 flex items-center gap-3">
+            <HexBadge variant="purple" size="sm">
+              <Star className="h-4 w-4" />
+            </HexBadge>
+            <div>
+              <h2 className="text-heading text-base text-[#ededed]">
+                {t("deals.partnerDeals")}
+              </h2>
+              <p className="mt-0.5 text-xs text-[#a3a9b8]">
+                {t("deals.partnerDealsDescription")}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {getPlans(t).map((plan) => (
+              <PricingCard key={plan.id} plan={plan} />
+            ))}
+          </div>
+        </div>
+
+        {/* Referral Program */}
+        <div className="card-neon rounded-2xl">
+          <div className="relative p-6">
+            <div className="mb-6 flex items-start gap-3 border-b border-white/[0.06] pb-5">
+              <HexBadge variant="blue" size="md">
+                <Users className="h-5 w-5" />
+              </HexBadge>
+              <div>
+                <h2 className="text-heading text-base text-[#ededed]">
+                  {t("deals.referralProgram")}
+                </h2>
+                <p className="mt-0.5 text-xs text-[#a3a9b8]">
+                  {t("deals.referralProgramDescription")}
+                </p>
+              </div>
+            </div>
+
+            <div className="mb-8">
+              <p className="mb-5 text-[10px] font-semibold uppercase tracking-wider text-[#a3a9b8]">
+                {t("deals.howItWorks")}
+              </p>
+              <div className="grid gap-8 sm:grid-cols-3">
+                <ReferralStep
+                  step={1}
+                  title={t("deals.step1Title")}
+                  description={t("deals.step1Description")}
+                />
+                <ReferralStep
+                  step={2}
+                  title={t("deals.step2Title")}
+                  description={t("deals.step2Description")}
+                />
+                <ReferralStep
+                  step={3}
+                  title={t("deals.step3Title")}
+                  description={t("deals.step3Description")}
+                />
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <p className="mb-3 text-[10px] font-semibold uppercase tracking-wider text-[#a3a9b8]">
+                {t("deals.yourReferralStats")}
+              </p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <StatTile
+                  label={t("deals.totalReferrals")}
+                  value="3"
+                  variant="blue"
+                />
+                <StatTile
+                  label={t("deals.active")}
+                  value="2"
+                  variant="green"
+                />
+                <StatTile
+                  label={t("deals.creditsEarned")}
+                  value="$47.98"
+                  variant="purple"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-[#a3a9b8]">
+                {t("deals.yourReferralLink")}
+              </p>
+              <ReferralLinkBox link={REFERRAL_LINK} />
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ teaser */}
+        <div className="glass-panel flex items-start gap-3 rounded-xl p-5">
+          <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-[#a3a9b8]" />
+          <p className="text-xs leading-relaxed text-[#a3a9b8]">
+            <span className="font-medium text-[#ededed]">
+              {t("deals.disclaimer")}:{" "}
+            </span>
+            {t("deals.disclaimerText")}
           </p>
         </div>
-
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {getPlans(t).map((plan) => (
-            <PricingCard key={plan.id} plan={plan} />
-          ))}
-        </div>
-      </div>
-
-      {/* ── Referral Program ─────────────────────────────────────────────────── */}
-      <div className="glass-card p-6 animate-slide-up">
-        <div className="flex items-start gap-3 border-b border-white/[0.06] pb-5 mb-6">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
-            <Users className="h-4 w-4 text-blue-400" />
-          </div>
-          <div>
-            <h2 className="text-sm font-semibold text-slate-100">{t("deals.referralProgram")}</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              {t("deals.referralProgramDescription")}
-            </p>
-          </div>
-        </div>
-
-        {/* How it works */}
-        <div className="mb-8">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-5">
-            {t("deals.howItWorks")}
-          </p>
-          <div className="grid gap-8 sm:grid-cols-3 relative">
-            {/* Connector line (decorative) */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute top-6 left-[calc(16.666%+16px)] right-[calc(16.666%+16px)] h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent hidden sm:block"
-            />
-            <ReferralStep
-              step={1}
-              title={t("deals.step1Title")}
-              description={t("deals.step1Description")}
-            />
-            <ReferralStep
-              step={2}
-              title={t("deals.step2Title")}
-              description={t("deals.step2Description")}
-            />
-            <ReferralStep
-              step={3}
-              title={t("deals.step3Title")}
-              description={t("deals.step3Description")}
-            />
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="mb-6">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-3">
-            {t("deals.yourReferralStats")}
-          </p>
-          <div className="grid grid-cols-3 gap-3">
-            <StatPill label={t("deals.totalReferrals")} value="3"      color="blue"  />
-            <StatPill label={t("deals.active")}           value="2"      color="green" />
-            <StatPill label={t("deals.creditsEarned")}   value="$47.98" color="amber" />
-          </div>
-        </div>
-
-        {/* Referral link in section */}
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-            {t("deals.yourReferralLink")}
-          </p>
-          <ReferralLinkBox link={REFERRAL_LINK} />
-        </div>
-      </div>
-
-      {/* ── FAQ teaser ───────────────────────────────────────────────────────── */}
-      <div className="rounded-xl border border-white/[0.05] bg-white/[0.02] p-5 flex items-start gap-3 animate-slide-up">
-        <ExternalLink className="h-4 w-4 shrink-0 mt-0.5 text-slate-500" />
-        <p className="text-xs text-slate-500 leading-relaxed">
-          <span className="text-slate-400 font-medium">{t("deals.disclaimer")}: </span>
-          {t("deals.disclaimerText")}
-        </p>
       </div>
     </div>
   );

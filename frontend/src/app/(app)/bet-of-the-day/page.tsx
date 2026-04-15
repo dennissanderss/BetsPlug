@@ -4,6 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useTranslations } from "@/i18n/locale-provider";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 import {
   Trophy,
   Zap,
@@ -549,27 +551,31 @@ export default function BetOfTheDayPage() {
 
   return (
     <PaywallOverlay feature="pick_of_the_day" requiredTier="gold">
-    <div className="space-y-8 animate-fade-in">
+    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 animate-fade-in">
+      <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-emerald-500/15 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full bg-purple-500/15 blur-3xl" />
+      <div className="relative space-y-8">
       {/* ── Header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10 shadow-lg shadow-amber-500/10">
-            <Trophy className="h-6 w-6 text-amber-400" />
-          </div>
+          <HexBadge variant="green" size="lg">
+            <Trophy className="h-6 w-6" />
+          </HexBadge>
           <div>
-            <h1 className="text-4xl font-extrabold tracking-tight gradient-text">
-              {t("botd.title")}
+            <span className="section-label">Pick of the Day</span>
+            <h1 className="text-heading mt-3">
+              <span className="gradient-text-green">{t("botd.title")}</span>
             </h1>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-2 text-sm text-slate-400">
               {isFutureDate ? t("botd.subtitleFuture") : t("botd.subtitle")}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 rounded-full border border-amber-500/25 bg-amber-500/10 px-4 py-2">
-          <Zap className="h-4 w-4 text-amber-400" />
-          <span className="text-xs font-bold text-amber-300">{t("botd.premiumFeature")}</span>
-        </div>
+        <Pill tone="purple" className="flex items-center gap-2">
+          <Zap className="h-4 w-4" />
+          {t("botd.premiumFeature")}
+        </Pill>
       </div>
 
       {/* ── Main Card ── */}
@@ -603,10 +609,7 @@ export default function BetOfTheDayPage() {
           )}
 
           {/* The Pick */}
-          <div className="glass-card relative overflow-hidden">
-            {/* Background glow */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/[0.04] via-transparent to-blue-500/[0.04]" />
-
+          <div className="card-neon card-neon-green halo-green">
             <div className="relative p-8 sm:p-12">
               {/* League + Time */}
               <div className="mb-6 flex items-center justify-center gap-4">
@@ -830,6 +833,7 @@ export default function BetOfTheDayPage() {
           </div>
         </>
       )}
+      </div>
     </div>
     </PaywallOverlay>
   );

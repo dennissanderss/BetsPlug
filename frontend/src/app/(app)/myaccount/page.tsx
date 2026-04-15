@@ -1,16 +1,7 @@
 "use client";
 
 /**
- * My Account page
- * ───────────────
- * Mirrors nerdytips.com's account hub while staying inside BetsPlug's dark
- * glass theme. Sections: Profile, Account Details, Preferences, Security,
- * Danger Zone, Logout.
- *
- * The heavy lifting (who am I?) comes from `api.getMe()` — a method provided
- * by the Auth Core agent running in parallel on `@/lib/api` and
- * `@/types/api`. Until that method lands, we fall back to the
- * `useAuth()` context so the page still renders something useful in dev.
+ * My Account page — NOCTURNE rebuild
  */
 
 import * as React from "react";
@@ -39,6 +30,8 @@ import { useAuth } from "@/lib/auth";
 import { cn, formatDate } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { User } from "@/types/api";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 
 // ─── Static lists ───────────────────────────────────────────────────────────
 
@@ -53,7 +46,10 @@ const LANGUAGES: { code: string; label: string }[] = [
   { code: "sw", label: "Kiswahili" },
 ];
 
-const ODDS_FORMATS: { value: "decimal" | "fractional" | "american"; label: string }[] = [
+const ODDS_FORMATS: {
+  value: "decimal" | "fractional" | "american";
+  label: string;
+}[] = [
   { value: "decimal", label: "Decimal (2.10)" },
   { value: "fractional", label: "Fractional (11/10)" },
   { value: "american", label: "American (+110)" },
@@ -74,36 +70,34 @@ function detectTimezone(): string {
   }
 }
 
-// ─── Small shared building blocks ───────────────────────────────────────────
+// ─── Input style ────────────────────────────────────────────────────────────
+
+const inputStyle = { border: "1px solid hsl(0 0% 100% / 0.1)" };
+
+const inputClass =
+  "glass-panel w-full rounded-lg px-3 py-2.5 text-sm text-[#ededed] outline-none transition-colors focus:border-[#4ade80]/60";
+
+// ─── Shared building blocks ─────────────────────────────────────────────────
 
 function SectionHeader({
-  icon: Icon,
+  icon,
   title,
   description,
-  tone = "blue",
+  variant = "green",
 }: {
-  icon: React.ElementType;
+  icon: React.ReactNode;
   title: string;
   description: string;
-  tone?: "blue" | "red";
+  variant?: "green" | "purple" | "blue";
 }) {
-  const toneClass =
-    tone === "red"
-      ? "bg-red-500/10 text-red-400"
-      : "bg-blue-500/10 text-blue-400";
   return (
     <div className="mb-5 flex items-start gap-3 border-b border-white/[0.06] pb-4">
-      <div
-        className={cn(
-          "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg",
-          toneClass
-        )}
-      >
-        <Icon className="h-4 w-4" />
-      </div>
+      <HexBadge variant={variant} size="md">
+        {icon}
+      </HexBadge>
       <div>
-        <h2 className="text-sm font-semibold text-slate-100">{title}</h2>
-        <p className="mt-0.5 text-xs text-slate-500">{description}</p>
+        <h2 className="text-heading text-base text-[#ededed]">{title}</h2>
+        <p className="mt-0.5 text-xs text-[#a3a9b8]">{description}</p>
       </div>
     </div>
   );
@@ -112,23 +106,21 @@ function SectionHeader({
 function Field({
   label,
   value,
-  icon: Icon,
+  icon,
 }: {
   label: string;
   value: React.ReactNode;
-  icon?: React.ElementType;
+  icon?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-start justify-between gap-4 rounded-xl border border-white/[0.05] bg-white/[0.02] px-4 py-3">
-      <div className="flex min-w-0 items-start gap-2.5">
-        {Icon && <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-500" />}
-        <div className="min-w-0">
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-            {label}
-          </p>
-          <div className="mt-1 truncate text-sm font-medium text-slate-200">
-            {value}
-          </div>
+    <div className="glass-panel flex items-start gap-3 rounded-xl px-4 py-3">
+      {icon && <div className="mt-0.5 shrink-0 text-[#a3a9b8]">{icon}</div>}
+      <div className="min-w-0">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-[#a3a9b8]">
+          {label}
+        </p>
+        <div className="mt-1 truncate text-sm font-medium text-[#ededed]">
+          {value}
         </div>
       </div>
     </div>
@@ -140,25 +132,26 @@ function LabelledSelect({
   value,
   onChange,
   options,
-  icon: Icon,
+  icon,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   options: { value: string; label: string }[];
-  icon?: React.ElementType;
+  icon?: React.ReactNode;
 }) {
   return (
     <div>
-      <label className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-        {Icon && <Icon className="h-3 w-3" />}
+      <label className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#a3a9b8]">
+        {icon}
         {label}
       </label>
       <div className="relative">
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full appearance-none rounded-lg border border-white/[0.1] bg-white/[0.04] px-3 py-2.5 pr-8 text-sm text-slate-200 outline-none transition-colors focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30"
+          className={cn(inputClass, "appearance-none pr-8")}
+          style={inputStyle}
         >
           {options.map((o) => (
             <option key={o.value} value={o.value}>
@@ -166,7 +159,7 @@ function LabelledSelect({
             </option>
           ))}
         </select>
-        <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500" />
+        <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#a3a9b8]" />
       </div>
     </div>
   );
@@ -178,7 +171,7 @@ function ProfileSkeleton() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-5">
-        <Skeleton className="h-16 w-16 rounded-2xl bg-white/[0.04]" />
+        <Skeleton className="h-20 w-20 rounded-2xl bg-white/[0.04]" />
         <div className="flex-1 space-y-2">
           <Skeleton className="h-4 w-40 bg-white/[0.04]" />
           <Skeleton className="h-3 w-56 bg-white/[0.04]" />
@@ -189,7 +182,7 @@ function ProfileSkeleton() {
   );
 }
 
-// ─── Delete account modal ──────────────────────────────────────────────────
+// ─── Delete modal ──────────────────────────────────────────────────────────
 
 function DeleteAccountModal({
   open,
@@ -210,53 +203,45 @@ function DeleteAccountModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-red-500/30 p-6 shadow-2xl"
-        style={{
-          background: "rgba(17, 24, 39, 0.98)",
-          boxShadow:
-            "0 20px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(239,68,68,0.15)",
-        }}
+        className="glass-panel-raised w-full max-w-md rounded-2xl p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500/10">
-            <AlertTriangle className="h-5 w-5 text-red-400" />
-          </div>
+          <HexBadge variant="purple" size="md">
+            <AlertTriangle className="h-5 w-5" />
+          </HexBadge>
           <div>
-            <h3 className="text-base font-semibold text-slate-100">
+            <h3 className="text-heading text-base text-[#ededed]">
               Delete your account?
             </h3>
-            <p className="mt-1.5 text-sm leading-relaxed text-slate-400">
-              This permanently removes your profile, subscription, favorites
-              and all associated data. This action cannot be undone.
+            <p className="mt-1.5 text-sm leading-relaxed text-[#a3a9b8]">
+              This permanently removes your profile, subscription, favorites and
+              all associated data. This action cannot be undone.
             </p>
           </div>
         </div>
 
         {status === "unavailable" && (
-          <div className="mt-4 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2.5 text-xs text-amber-300">
+          <div className="glass-panel mt-4 rounded-lg px-3 py-2.5 text-xs text-[#a3a9b8]">
             Self-service deletion isn&apos;t available yet. Please contact
             support and we&apos;ll remove your account within 24 hours.
           </div>
         )}
         {status === "error" && (
-          <div className="mt-4 rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2.5 text-xs text-red-300">
+          <div className="glass-panel mt-4 rounded-lg px-3 py-2.5 text-xs text-[#fca5a5]">
             Something went wrong while deleting your account. Please try again
             or contact support.
           </div>
         )}
 
         <div className="mt-6 flex items-center justify-end gap-2">
-          <button
-            onClick={onClose}
-            className="rounded-lg border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-white/[0.08] hover:text-slate-100"
-          >
+          <button onClick={onClose} className="btn-glass">
             Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={status === "loading"}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/40 bg-red-500/15 px-4 py-2 text-sm font-semibold text-red-300 transition-colors hover:bg-red-500/25 disabled:cursor-not-allowed disabled:opacity-60"
+            className="btn-ghost disabled:cursor-not-allowed disabled:opacity-60"
           >
             <Trash2 className="h-3.5 w-3.5" />
             {status === "loading" ? "Deleting..." : "Delete forever"}
@@ -273,9 +258,6 @@ export default function MyAccountPage() {
   const router = useRouter();
   const { user: authUser, logout, token } = useAuth();
 
-  // Fetch the rich user record from the API. If there's no token in
-  // localStorage there's no point firing the call — we fall back to the
-  // auth context below.
   const { data, isLoading, error } = useQuery<User>({
     queryKey: ["me"],
     queryFn: () => api.getMe(),
@@ -283,22 +265,20 @@ export default function MyAccountPage() {
     enabled: Boolean(token),
   });
 
-  // Graceful fallback — merge in whatever we have from auth context if the
-  // full record isn't available.
   const user: Partial<User> = React.useMemo(() => {
     if (data) return data;
     return {
       email: authUser?.email ?? "",
       username: authUser?.name ?? "",
       full_name: authUser?.name ?? null,
-      role: (authUser as (typeof authUser & { role?: string }) | null)?.role ?? "user",
+      role:
+        (authUser as (typeof authUser & { role?: string }) | null)?.role ??
+        "user",
       is_active: true,
       email_verified: false,
       created_at: "",
     };
   }, [data, authUser]);
-
-  // ── Preferences (persisted to localStorage) ──────────────────────────────
 
   const [locale, setLocale] = React.useState<string>("nl");
   const [oddsFormat, setOddsFormat] = React.useState<string>("decimal");
@@ -328,8 +308,6 @@ export default function MyAccountPage() {
     }
   }, [locale, oddsFormat]);
 
-  // ── Profile editing ──────────────────────────────────────────────────────
-
   const [editingName, setEditingName] = React.useState(false);
   const [fullName, setFullName] = React.useState("");
   React.useEffect(() => {
@@ -340,8 +318,6 @@ export default function MyAccountPage() {
     }
   }, [user?.full_name, user?.username]);
 
-  // ── Delete account flow ──────────────────────────────────────────────────
-
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [deleteStatus, setDeleteStatus] = React.useState<
     "idle" | "loading" | "unavailable" | "error"
@@ -350,8 +326,6 @@ export default function MyAccountPage() {
   const handleDelete = async () => {
     setDeleteStatus("loading");
     try {
-      // The backend may not yet expose this endpoint. Try it, and surface a
-      // friendly fallback message if it 404s.
       const base =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
       const res = await fetch(`${base}/auth/me/delete`, {
@@ -375,299 +349,389 @@ export default function MyAccountPage() {
     }
   };
 
-  // ── Initials for the avatar ──────────────────────────────────────────────
-
   const initials = React.useMemo(() => {
-    const source = user?.full_name || user?.username || user?.email || "U";
+    const source =
+      user?.full_name || user?.username || user?.email || "U";
     const parts = source.trim().split(/\s+/).slice(0, 2);
     return parts.map((p) => p[0]?.toUpperCase() ?? "").join("") || "U";
   }, [user?.full_name, user?.username, user?.email]);
 
   const memberSince = user?.created_at ? formatDate(user.created_at) : "—";
-
-  // ── Render ──────────────────────────────────────────────────────────────
+  const tierLabel = prettyRole(user?.role);
 
   return (
-    <div className="mx-auto max-w-5xl space-y-8 animate-fade-in pb-16">
-      {/* Page header */}
-      <div>
-        <h1 className="text-4xl font-bold tracking-tight text-slate-100">
-          My <span className="gradient-text">Account</span>
-        </h1>
-        <p className="mt-1.5 text-sm text-slate-400">
-          Manage your profile, preferences and security settings.
-        </p>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* ── Profile card (spans two columns) ───────────────────────────── */}
-        <div className="glass-card p-6 animate-slide-up lg:col-span-2">
-          <SectionHeader
-            icon={UserIcon}
-            title="Profile"
-            description="Your personal information and account role"
-          />
-
-          {isLoading && !data ? (
-            <ProfileSkeleton />
-          ) : (
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-              <div className="relative flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-blue-500/25 bg-gradient-to-br from-blue-500/30 to-cyan-500/15 text-2xl font-bold text-blue-200 glow-blue-sm">
-                {initials}
-              </div>
-
-              <div className="min-w-0 flex-1 space-y-2">
-                {editingName ? (
-                  <div className="flex items-center gap-2">
-                    <input
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      className="flex-1 rounded-lg border border-white/[0.1] bg-white/[0.05] px-3 py-1.5 text-base font-semibold text-slate-100 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30"
-                    />
-                    <button
-                      onClick={() => setEditingName(false)}
-                      className="rounded-lg border border-white/[0.1] bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-white/[0.08] hover:text-slate-100"
-                    >
-                      Done
-                    </button>
-                  </div>
-                ) : (
-                  <p className="text-lg font-semibold text-slate-100">
-                    {user?.full_name || user?.username || "Unnamed user"}
-                  </p>
-                )}
-
-                <p className="flex items-center gap-1.5 text-xs text-slate-500">
-                  <Mail className="h-3 w-3" />
-                  {user?.email || "—"}
-                </p>
-
-                <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <span className="inline-flex items-center gap-1 rounded-full border border-blue-500/20 bg-blue-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-blue-300">
-                    <Shield className="h-3 w-3" />
-                    {prettyRole(user?.role)}
-                  </span>
-                  {user?.email_verified ? (
-                    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-300">
-                      <BadgeCheck className="h-3 w-3" />
-                      Verified
-                    </span>
-                  ) : (
-                    <button
-                      onClick={() =>
-                        router.push("/login?action=verify-email")
-                      }
-                      className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-amber-300 transition-colors hover:bg-amber-500/15"
-                    >
-                      <AlertTriangle className="h-3 w-3" />
-                      Not verified — Resend
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              <button
-                onClick={() => setEditingName((v) => !v)}
-                className="shrink-0 rounded-lg border border-white/[0.1] bg-white/[0.04] px-4 py-2 text-xs font-medium text-slate-300 transition-colors hover:bg-white/[0.08] hover:text-slate-100"
-              >
-                {editingName ? "Done" : "Edit profile"}
-              </button>
-            </div>
-          )}
-
-          {error && !data && (
-            <p className="mt-4 rounded-lg border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-xs text-amber-300">
-              We couldn&apos;t load your full account record. Showing limited
-              details from your session.
-            </p>
-          )}
-        </div>
-
-        {/* ── Account details ────────────────────────────────────────────── */}
-        <div className="glass-card p-6 animate-slide-up">
-          <SectionHeader
-            icon={BadgeCheck}
-            title="Account Details"
-            description="Read-only information on record"
-          />
-
-          <div className="space-y-2.5">
-            <Field label="Email" value={user?.email || "—"} icon={Mail} />
-            <Field
-              label="Username"
-              value={user?.username || "—"}
-              icon={UserIcon}
-            />
-            <Field
-              label="Role"
-              value={prettyRole(user?.role)}
-              icon={Shield}
-            />
-            <Field
-              label="Member since"
-              value={memberSince}
-              icon={Clock}
-            />
-          </div>
-        </div>
-
-        {/* ── Preferences ────────────────────────────────────────────────── */}
-        <div className="glass-card p-6 animate-slide-up">
-          <SectionHeader
-            icon={Sparkles}
-            title="Preferences"
-            description="Pick the language, odds format and timezone you prefer"
-          />
-
-          <div className="space-y-4">
-            <LabelledSelect
-              label="Language"
-              icon={Globe}
-              value={locale}
-              onChange={setLocale}
-              options={LANGUAGES.map((l) => ({
-                value: l.code,
-                label: `${l.code.toUpperCase()} — ${l.label}`,
-              }))}
-            />
-            <LabelledSelect
-              label="Odds format"
-              icon={Calculator}
-              value={oddsFormat}
-              onChange={setOddsFormat}
-              options={ODDS_FORMATS}
-            />
-
-            <div>
-              <label className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-                <Clock className="h-3 w-3" />
-                Timezone
-              </label>
-              <div className="flex items-center justify-between rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-sm text-slate-300">
-                <span className="truncate">{timezone}</span>
-                <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-                  Auto
-                </span>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between pt-1">
-              <p className="text-[11px] text-slate-500">
-                Preferences are saved on this device.
-              </p>
-              <button
-                onClick={savePreferences}
-                className="btn-gradient inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-semibold text-slate-900 shadow-lg"
-              >
-                {prefsSaved ? (
-                  <>
-                    <Check className="h-3.5 w-3.5" />
-                    Saved
-                  </>
-                ) : (
-                  <>
-                    <Save className="h-3.5 w-3.5" />
-                    Save
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Security ────────────────────────────────────────────────────── */}
-        <div className="glass-card p-6 animate-slide-up lg:col-span-2">
-          <SectionHeader
-            icon={Lock}
-            title="Security"
-            description="Keep your account safe and manage access"
-          />
-
-          <div className="flex flex-col justify-between gap-4 rounded-xl border border-white/[0.05] bg-white/[0.02] px-4 py-4 sm:flex-row sm:items-center">
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-slate-200">
-                Change password
-              </p>
-              <p className="mt-0.5 text-xs text-slate-500">
-                We&apos;ll email you a secure link to set a new password.
-              </p>
-            </div>
-            <button
-              onClick={() => router.push("/forgot-password")}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-2 text-xs font-semibold text-blue-300 transition-colors hover:bg-blue-500/15"
-            >
-              <Mail className="h-3.5 w-3.5" />
-              Send password reset email
-            </button>
-          </div>
-        </div>
-
-        {/* ── Danger zone ─────────────────────────────────────────────────── */}
-        <div className="glass-card p-6 animate-slide-up lg:col-span-2 border-red-500/20">
-          <SectionHeader
-            icon={AlertTriangle}
-            title="Danger zone"
-            description="Actions here are permanent and cannot be undone"
-            tone="red"
-          />
-
-          <div className="flex flex-col justify-between gap-4 rounded-xl border border-red-500/15 bg-red-500/[0.03] px-4 py-4 sm:flex-row sm:items-center">
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-red-200">
-                Delete my account
-              </p>
-              <p className="mt-0.5 text-xs text-red-300/70">
-                Removes your profile, subscription and all associated data.
-              </p>
-            </div>
-            <button
-              onClick={() => {
-                setDeleteStatus("idle");
-                setDeleteOpen(true);
-              }}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/40 bg-red-500/15 px-4 py-2 text-xs font-semibold text-red-300 transition-colors hover:bg-red-500/25"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-              Delete account
-            </button>
-          </div>
-        </div>
-
-        {/* ── Logout ──────────────────────────────────────────────────────── */}
-        <div className="lg:col-span-2">
-          <div className="flex items-center justify-end">
-            <button
-              onClick={logout}
-              className="inline-flex items-center gap-2 rounded-lg border border-white/[0.1] bg-white/[0.04] px-5 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:border-red-500/30 hover:bg-red-500/[0.08] hover:text-red-300"
-            >
-              <LogOut className="h-4 w-4" />
-              Log out of BetsPlug
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Delete account modal */}
-      <DeleteAccountModal
-        open={deleteOpen}
-        onClose={() => setDeleteOpen(false)}
-        onConfirm={handleDelete}
-        status={deleteStatus}
+    <div className="relative">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-40 top-10 h-[400px] w-[400px] rounded-full"
+        style={{
+          background: "hsl(var(--accent-green) / 0.1)",
+          filter: "blur(140px)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-32 top-80 h-[400px] w-[400px] rounded-full"
+        style={{
+          background: "hsl(var(--accent-purple) / 0.08)",
+          filter: "blur(140px)",
+        }}
       />
 
-      {/* Save toast for preferences */}
-      <div
-        className={cn(
-          "fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-400 shadow-xl backdrop-blur-sm transition-all duration-300",
-          prefsSaved
-            ? "translate-y-0 opacity-100"
-            : "translate-y-4 opacity-0 pointer-events-none"
-        )}
-      >
-        <Check className="h-4 w-4" />
-        Preferences saved
-      </div>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 space-y-8">
+        {/* Header */}
+        <div>
+          <span className="section-label mb-3">
+            <UserIcon className="h-3 w-3" />
+            My account
+          </span>
+          <div className="flex flex-wrap items-center gap-4">
+            <HexBadge variant="green" size="xl">
+              <span className="text-stat text-2xl">{initials}</span>
+            </HexBadge>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-heading text-2xl text-[#ededed] sm:text-3xl">
+                {user?.full_name || user?.username || "Unnamed user"}
+              </h1>
+              <p className="mt-1 flex items-center gap-1.5 text-sm text-[#a3a9b8]">
+                <Mail className="h-3.5 w-3.5" />
+                {user?.email || "—"}
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <Pill tone="purple">
+                  <Shield className="h-3 w-3" />
+                  {tierLabel}
+                </Pill>
+                {user?.email_verified ? (
+                  <Pill tone="win">
+                    <BadgeCheck className="h-3 w-3" />
+                    Verified
+                  </Pill>
+                ) : (
+                  <button
+                    onClick={() =>
+                      router.push("/login?action=verify-email")
+                    }
+                    className="cursor-pointer"
+                  >
+                    <Pill tone="loss">
+                      <AlertTriangle className="h-3 w-3" />
+                      Not verified — Resend
+                    </Pill>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
 
+        {/* Quick actions grid */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            {
+              icon: <UserIcon className="h-5 w-5" />,
+              title: "Edit profile",
+              action: () => setEditingName(true),
+              variant: "green" as const,
+            },
+            {
+              icon: <Lock className="h-5 w-5" />,
+              title: "Change password",
+              action: () => router.push("/forgot-password"),
+              variant: "purple" as const,
+            },
+            {
+              icon: <Sparkles className="h-5 w-5" />,
+              title: "Preferences",
+              action: savePreferences,
+              variant: "blue" as const,
+            },
+            {
+              icon: <LogOut className="h-5 w-5" />,
+              title: "Log out",
+              action: logout,
+              variant: "green" as const,
+            },
+          ].map((a) => (
+            <div key={a.title} className="card-neon rounded-2xl">
+              <div className="relative flex flex-col gap-3 p-5">
+                <HexBadge variant={a.variant} size="md">
+                  {a.icon}
+                </HexBadge>
+                <p className="text-sm font-semibold text-[#ededed]">
+                  {a.title}
+                </p>
+                <button onClick={a.action} className="btn-glass self-start">
+                  Open
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* Profile */}
+          <div className="card-neon rounded-2xl lg:col-span-2">
+            <div className="relative p-6">
+              <SectionHeader
+                icon={<UserIcon className="h-5 w-5" />}
+                title="Profile"
+                description="Your personal information and account role"
+                variant="green"
+              />
+
+              {isLoading && !data ? (
+                <ProfileSkeleton />
+              ) : (
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+                  <HexBadge variant="green" size="xl">
+                    <span className="text-stat text-2xl">{initials}</span>
+                  </HexBadge>
+
+                  <div className="min-w-0 flex-1 space-y-2">
+                    {editingName ? (
+                      <div className="flex items-center gap-2">
+                        <input
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          className={cn(
+                            inputClass,
+                            "!py-1.5 text-base font-semibold"
+                          )}
+                          style={inputStyle}
+                        />
+                        <button
+                          onClick={() => setEditingName(false)}
+                          className="btn-glass !px-3 !py-1.5 !text-xs"
+                        >
+                          Done
+                        </button>
+                      </div>
+                    ) : (
+                      <p className="text-lg font-semibold text-[#ededed]">
+                        {user?.full_name || user?.username || "Unnamed user"}
+                      </p>
+                    )}
+
+                    <p className="flex items-center gap-1.5 text-xs text-[#a3a9b8]">
+                      <Mail className="h-3 w-3" />
+                      {user?.email || "—"}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => setEditingName((v) => !v)}
+                    className="btn-glass !px-4 !py-2 !text-xs"
+                  >
+                    {editingName ? "Done" : "Edit profile"}
+                  </button>
+                </div>
+              )}
+
+              {error && !data && (
+                <div className="glass-panel mt-4 rounded-lg px-3 py-2 text-xs text-[#a3a9b8]">
+                  We couldn&apos;t load your full account record. Showing limited
+                  details from your session.
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Account Details */}
+          <div className="card-neon rounded-2xl">
+            <div className="relative p-6">
+              <SectionHeader
+                icon={<BadgeCheck className="h-5 w-5" />}
+                title="Account Details"
+                description="Read-only information on record"
+                variant="purple"
+              />
+
+              <div className="space-y-2.5">
+                <Field
+                  label="Email"
+                  value={user?.email || "—"}
+                  icon={<Mail className="h-3.5 w-3.5" />}
+                />
+                <Field
+                  label="Username"
+                  value={user?.username || "—"}
+                  icon={<UserIcon className="h-3.5 w-3.5" />}
+                />
+                <Field
+                  label="Role"
+                  value={prettyRole(user?.role)}
+                  icon={<Shield className="h-3.5 w-3.5" />}
+                />
+                <Field
+                  label="Member since"
+                  value={memberSince}
+                  icon={<Clock className="h-3.5 w-3.5" />}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Preferences */}
+          <div className="card-neon rounded-2xl">
+            <div className="relative p-6">
+              <SectionHeader
+                icon={<Sparkles className="h-5 w-5" />}
+                title="Preferences"
+                description="Pick the language, odds format and timezone you prefer"
+                variant="blue"
+              />
+
+              <div className="space-y-4">
+                <LabelledSelect
+                  label="Language"
+                  icon={<Globe className="h-3 w-3" />}
+                  value={locale}
+                  onChange={setLocale}
+                  options={LANGUAGES.map((l) => ({
+                    value: l.code,
+                    label: `${l.code.toUpperCase()} — ${l.label}`,
+                  }))}
+                />
+                <LabelledSelect
+                  label="Odds format"
+                  icon={<Calculator className="h-3 w-3" />}
+                  value={oddsFormat}
+                  onChange={setOddsFormat}
+                  options={ODDS_FORMATS}
+                />
+
+                <div>
+                  <label className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-[#a3a9b8]">
+                    <Clock className="h-3 w-3" />
+                    Timezone
+                  </label>
+                  <div
+                    className="glass-panel flex items-center justify-between rounded-lg px-3 py-2.5 text-sm text-[#ededed]"
+                    style={inputStyle}
+                  >
+                    <span className="truncate">{timezone}</span>
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-[#a3a9b8]">
+                      Auto
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-1">
+                  <p className="text-[11px] text-[#a3a9b8]">
+                    Preferences are saved on this device.
+                  </p>
+                  <button onClick={savePreferences} className="btn-primary">
+                    {prefsSaved ? (
+                      <>
+                        <Check className="h-3.5 w-3.5" />
+                        Saved
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-3.5 w-3.5" />
+                        Save
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Security */}
+          <div className="card-neon rounded-2xl lg:col-span-2">
+            <div className="relative p-6">
+              <SectionHeader
+                icon={<Lock className="h-5 w-5" />}
+                title="Security"
+                description="Keep your account safe and manage access"
+                variant="green"
+              />
+
+              <div className="glass-panel flex flex-col justify-between gap-4 rounded-xl px-4 py-4 sm:flex-row sm:items-center">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-[#ededed]">
+                    Change password
+                  </p>
+                  <p className="mt-0.5 text-xs text-[#a3a9b8]">
+                    We&apos;ll email you a secure link to set a new password.
+                  </p>
+                </div>
+                <button
+                  onClick={() => router.push("/forgot-password")}
+                  className="btn-glass"
+                >
+                  <Mail className="h-3.5 w-3.5" />
+                  Send password reset email
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Danger zone */}
+          <div className="card-neon rounded-2xl lg:col-span-2">
+            <div className="relative p-6">
+              <SectionHeader
+                icon={<AlertTriangle className="h-5 w-5" />}
+                title="Danger zone"
+                description="Actions here are permanent and cannot be undone"
+                variant="purple"
+              />
+
+              <div className="glass-panel flex flex-col justify-between gap-4 rounded-xl px-4 py-4 sm:flex-row sm:items-center">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-[#ededed]">
+                    Delete my account
+                  </p>
+                  <p className="mt-0.5 text-xs text-[#a3a9b8]">
+                    Removes your profile, subscription and all associated data.
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setDeleteStatus("idle");
+                    setDeleteOpen(true);
+                  }}
+                  className="btn-ghost"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  Delete account
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Logout */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center justify-end">
+              <button onClick={logout} className="btn-glass">
+                <LogOut className="h-4 w-4" />
+                Log out of BetsPlug
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <DeleteAccountModal
+          open={deleteOpen}
+          onClose={() => setDeleteOpen(false)}
+          onConfirm={handleDelete}
+          status={deleteStatus}
+        />
+
+        <div
+          className={cn(
+            "glass-panel-raised fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl px-4 py-3 text-sm font-medium text-[#4ade80] transition-all duration-300",
+            prefsSaved
+              ? "translate-y-0 opacity-100"
+              : "pointer-events-none translate-y-4 opacity-0"
+          )}
+        >
+          <Check className="h-4 w-4" />
+          Preferences saved
+        </div>
+      </div>
     </div>
   );
 }

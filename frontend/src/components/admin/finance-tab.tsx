@@ -201,7 +201,7 @@ function KpiCard({ label, value, icon: Icon, accent, delta, deltaLabel, subText 
   const deltaIsNegative = delta != null && delta < 0;
 
   return (
-    <div className="glass-card relative overflow-hidden rounded-xl border border-white/[0.06] p-5">
+    <div className="card-neon relative overflow-hidden rounded-xl border border-white/[0.06] p-5">
       <div className="flex items-start justify-between">
         <div className="min-w-0 flex-1">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
@@ -631,7 +631,7 @@ function ExpenseForm({
         <button
           onClick={() => onSubmit(form)}
           disabled={!canSubmit || isPending}
-          className="inline-flex items-center gap-1.5 rounded-lg btn-gradient px-3 py-2 text-xs font-semibold text-white shadow-lg shadow-blue-500/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-1.5 rounded-lg btn-primary px-3 py-2 text-xs font-semibold text-white shadow-lg shadow-blue-500/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {isPending && (
             <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -663,7 +663,7 @@ function DeleteConfirmModal({
 }: DeleteConfirmModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="glass-card w-full max-w-md rounded-xl border border-red-500/30 p-6">
+      <div className="card-neon w-full max-w-md rounded-xl border border-red-500/30 p-6">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-500/15">
             <AlertTriangle className="h-5 w-5 text-red-400" />
@@ -881,7 +881,7 @@ export default function FinanceTab() {
   return (
     <div className="space-y-5">
       {/* ── Period selector ───────────────────────────────────────────────── */}
-      <div className="glass-card flex flex-wrap items-center justify-between gap-3 rounded-xl p-4">
+      <div className="card-neon flex flex-wrap items-center justify-between gap-3 rounded-xl p-4">
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
             <Calendar className="h-4 w-4 text-blue-400" />
@@ -948,7 +948,7 @@ export default function FinanceTab() {
 
       {/* ── Endpoint missing banner ────────────────────────────────────────── */}
       {overviewEndpointMissing && (
-        <div className="glass-card rounded-xl border border-amber-500/30 bg-amber-500/5 p-6">
+        <div className="card-neon rounded-xl border border-amber-500/30 bg-amber-500/5 p-6">
           <div className="flex items-start gap-3">
             <AlertTriangle className="h-5 w-5 shrink-0 text-amber-400" />
             <div className="min-w-0 flex-1">
@@ -965,7 +965,7 @@ export default function FinanceTab() {
 
       {/* ── Generic error banner ───────────────────────────────────────────── */}
       {overviewQuery.isError && !overviewEndpointMissing && (
-        <div className="glass-card flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-500/30 bg-red-500/5 p-4">
+        <div className="card-neon flex flex-wrap items-center justify-between gap-3 rounded-xl border border-red-500/30 bg-red-500/5 p-4">
           <div className="flex items-center gap-2">
             <AlertTriangle className="h-4 w-4 text-red-400" />
             <p className="text-sm text-red-300">
@@ -989,7 +989,7 @@ export default function FinanceTab() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {overviewQuery.isLoading ? (
           Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="glass-card rounded-xl p-5 space-y-3">
+            <div key={i} className="card-neon rounded-xl p-5 space-y-3">
               <Skeleton className="h-3 w-1/3 bg-white/[0.06]" />
               <Skeleton className="h-7 w-2/3 bg-white/[0.06]" />
               <Skeleton className="h-3 w-1/2 bg-white/[0.04]" />
@@ -1035,7 +1035,7 @@ export default function FinanceTab() {
       </div>
 
       {/* ── Row 2: Timeline chart ──────────────────────────────────────────── */}
-      <div className="glass-card rounded-xl overflow-hidden">
+      <div className="card-neon rounded-xl overflow-hidden">
         <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
           <div>
             <h3 className="text-sm font-semibold text-slate-100">Revenue vs Expenses</h3>
@@ -1082,7 +1082,7 @@ export default function FinanceTab() {
       {/* ── Row 3: Two half-width breakdowns ───────────────────────────────── */}
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Revenue by plan */}
-        <div className="glass-card rounded-xl overflow-hidden">
+        <div className="card-neon rounded-xl overflow-hidden">
           <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
             <div>
               <h3 className="text-sm font-semibold text-slate-100">Revenue by plan</h3>
@@ -1121,7 +1121,7 @@ export default function FinanceTab() {
         </div>
 
         {/* Expenses by category */}
-        <div className="glass-card rounded-xl overflow-hidden">
+        <div className="card-neon rounded-xl overflow-hidden">
           <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
             <div>
               <h3 className="text-sm font-semibold text-slate-100">Expenses by category</h3>
@@ -1162,7 +1162,7 @@ export default function FinanceTab() {
       </div>
 
       {/* ── Row 4: Expenses table ──────────────────────────────────────────── */}
-      <div className="glass-card rounded-xl overflow-hidden">
+      <div className="card-neon rounded-xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
           <div>
@@ -1187,7 +1187,7 @@ export default function FinanceTab() {
                 "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold shadow-sm transition-all",
                 showAddForm
                   ? "border border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.08]"
-                  : "btn-gradient text-white shadow-blue-500/20"
+                  : "btn-primary text-white shadow-blue-500/20"
               )}
             >
               {showAddForm ? (

@@ -28,6 +28,8 @@ import { cn, formatDateTime } from "@/lib/utils";
 import type { DataSourceHealth, IngestionRun } from "@/types/api";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 
 import BlogManager from "@/components/admin/blog-manager";
 import UserManager from "@/components/admin/user-manager";
@@ -54,26 +56,14 @@ interface AdminError {
 
 function StatusPill({ status }: { status: string }) {
   const s = status.toLowerCase();
-  const colorMap: Record<string, string> = {
-    completed: "bg-green-500/15 text-green-400",
-    success:   "bg-green-500/15 text-green-400",
-    healthy:   "bg-green-500/15 text-green-400",
-    active:    "bg-green-500/15 text-green-400",
-    running:   "bg-blue-500/15 text-blue-400",
-    pending:   "bg-blue-500/15 text-blue-400",
-    degraded:  "bg-amber-500/15 text-amber-400",
-    warning:   "bg-amber-500/15 text-amber-400",
-    unknown:   "bg-slate-500/15 text-slate-400",
-    failed:    "bg-red-500/15 text-red-400",
-    error:     "bg-red-500/15 text-red-400",
+  const toneMap: Record<string, "win" | "info" | "draw" | "loss" | "default"> = {
+    completed: "win", success: "win", healthy: "win", active: "win",
+    running: "info", pending: "info",
+    degraded: "draw", warning: "draw", unknown: "default",
+    failed: "loss", error: "loss",
   };
-  const cls = colorMap[s] ?? "bg-slate-500/15 text-slate-400";
-
-  return (
-    <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize", cls)}>
-      {status}
-    </span>
-  );
+  const tone = toneMap[s] ?? "default";
+  return <Pill tone={tone} className="capitalize">{status}</Pill>;
 }
 
 // ─── Tab system ───────────────────────────────────────────────────────────────
@@ -94,7 +84,7 @@ interface TabsProps {
 
 function TabPills({ tabs, active, onChange }: TabsProps) {
   return (
-    <div className="flex flex-wrap gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1">
+    <div className="glass-panel flex flex-wrap gap-1 p-1">
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = tab.id === active;
@@ -105,7 +95,7 @@ function TabPills({ tabs, active, onChange }: TabsProps) {
             className={cn(
               "inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-all",
               isActive
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-600/25"
+                ? "bg-[#4ade80]/15 text-[#4ade80] ring-1 ring-[#4ade80]/40"
                 : "text-slate-400 hover:bg-white/[0.04] hover:text-slate-200"
             )}
           >
@@ -159,7 +149,7 @@ function DataSourcesTab() {
     return (
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="glass-card rounded-xl p-5 space-y-3">
+          <div key={i} className="card-neon p-5 space-y-3">
             <Skeleton className="h-5 w-3/4 bg-white/[0.06]" />
             <Skeleton className="h-4 w-1/2 bg-white/[0.04]" />
             <Skeleton className="h-2 w-full rounded-full bg-white/[0.04]" />
@@ -197,7 +187,7 @@ function DataSourcesTab() {
           <div
             key={src.id}
             className={cn(
-              "glass-card-hover rounded-xl p-5 space-y-4 transition-all",
+              "card-neon p-5 space-y-4 transition-all",
               !src.is_active && "opacity-50"
             )}
           >
@@ -258,7 +248,7 @@ function IngestionTab() {
   });
 
   return (
-    <div className="glass-card rounded-xl overflow-hidden">
+    <div className="card-neon overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
         <div>
@@ -384,7 +374,7 @@ function ErrorsTab() {
   const errorCount = errors?.length ?? 0;
 
   return (
-    <div className="glass-card rounded-xl overflow-hidden">
+    <div className="card-neon overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
         <div className="flex items-center gap-2">
@@ -505,7 +495,7 @@ function ActionButton({
         className={cn(
           "inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed",
           variant === "gradient"
-            ? "btn-gradient text-white shadow-lg shadow-blue-500/20"
+            ? "btn-primary"
             : "border border-white/10 bg-white/[0.04] text-slate-200 hover:bg-white/[0.08] hover:border-white/20"
         )}
       >
@@ -545,7 +535,7 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Sync data */}
-      <div className="glass-card rounded-xl p-6 space-y-4">
+      <div className="card-neon p-6 space-y-4">
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
             <RefreshCw className="h-4 w-4 text-blue-400" />
@@ -584,7 +574,7 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
       </div>
 
       {/* Retrain models */}
-      <div className="glass-card rounded-xl p-6 space-y-4">
+      <div className="card-neon p-6 space-y-4">
         <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
             <Zap className="h-4 w-4 text-blue-400" />
@@ -621,7 +611,7 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
       </div>
 
       {/* Scheduler status */}
-      <div className="glass-card rounded-xl overflow-hidden lg:col-span-2">
+      <div className="card-neon overflow-hidden lg:col-span-2">
         <div className="flex items-center gap-2.5 border-b border-white/[0.06] px-6 py-4">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
             <Clock className="h-4 w-4 text-blue-400" />
@@ -738,7 +728,7 @@ function TierSwitcher() {
   };
 
   return (
-    <div className="glass-card rounded-xl p-4">
+    <div className="card-neon p-4">
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2 text-sm font-semibold text-slate-300">
           <Eye className="h-4 w-4 text-blue-400" />
@@ -888,39 +878,53 @@ export default function AdminPage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 space-y-6">
+      {/* ambient glow */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-20 left-1/4 h-72 w-72 rounded-full bg-[#4ade80]/10 blur-3xl" />
+        <div className="absolute top-40 right-1/4 h-72 w-72 rounded-full bg-[#60a5fa]/10 blur-3xl" />
+      </div>
+
       {/* Page header */}
       <div className="flex items-start justify-between animate-fade-in">
         <div>
-          <div className="flex items-center gap-2.5">
-            <Settings className="h-5 w-5 text-slate-400" />
-            <h1 className="gradient-text text-2xl font-bold tracking-tight">Admin</h1>
+          <p className="section-label">Admin</p>
+          <div className="flex items-center gap-3 mt-1">
+            <HexBadge variant="green" size="sm"><Settings className="h-4 w-4" /></HexBadge>
+            <h1 className="text-heading"><span className="gradient-text-green">Admin dashboard</span></h1>
           </div>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-slate-400">
             Data sources, ingestion runs, error log, and system actions
           </p>
         </div>
 
-        {/* System status badge */}
+        {/* System status */}
         <div className="flex items-center gap-2">
           {degradedCount > 0 && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-400">
-              <AlertTriangle className="h-3 w-3" />
-              {degradedCount} degraded
-            </span>
+            <Pill tone="draw"><AlertTriangle className="h-3 w-3" /> {degradedCount} degraded</Pill>
           )}
           {errorCount > 0 && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1.5 text-xs font-semibold tabular-nums text-red-400">
-              {errorCount} error{errorCount !== 1 ? "s" : ""}
-            </span>
+            <Pill tone="loss">{errorCount} error{errorCount !== 1 ? "s" : ""}</Pill>
           )}
           {degradedCount === 0 && errorCount === 0 && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1.5 text-xs font-semibold text-green-400">
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              All systems operational
-            </span>
+            <Pill tone="win"><CheckCircle2 className="h-3.5 w-3.5" /> All systems operational</Pill>
           )}
         </div>
+      </div>
+
+      {/* KPI strip */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: "Data sources", value: sources.length, color: "text-[#60a5fa]" },
+          { label: "Degraded", value: degradedCount, color: "text-amber-400" },
+          { label: "Errors (50)", value: errorCount, color: "text-red-400" },
+          { label: "Healthy", value: sources.filter(s => s.status === "healthy").length, color: "text-[#4ade80]" },
+        ].map((k) => (
+          <div key={k.label} className="glass-panel p-4 space-y-1">
+            <p className="section-label">{k.label}</p>
+            <p className={`text-stat tabular-nums ${k.color}`}>{k.value}</p>
+          </div>
+        ))}
       </div>
 
       {/* Tier switcher for testing paywalls */}

@@ -846,7 +846,7 @@ function SerpPreview({
 
   return (
     <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-4 space-y-1">
-      <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500 mb-2">
+      <p className="section-label mb-2">
         Google SERP Preview
       </p>
       <p className="text-sm font-medium text-blue-400 line-clamp-1 cursor-pointer hover:underline">
@@ -1071,7 +1071,7 @@ export default function SeoMetaEditor() {
   return (
     <div className="space-y-4">
       {/* Header bar */}
-      <div className="glass-card rounded-xl p-5">
+      <div className="card-neon rounded-xl p-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
@@ -1150,8 +1150,8 @@ export default function SeoMetaEditor() {
       <div className="grid gap-4 lg:grid-cols-[240px_1fr]">
         {/* Page sidebar - desktop */}
         <div className="hidden lg:block">
-          <div className="glass-card rounded-xl p-3 sticky top-4">
-            <p className="mb-2 px-2 text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+          <div className="card-neon rounded-xl p-3 sticky top-4">
+            <p className="mb-2 px-2 section-label">
               Pages
             </p>
             <PageSidebar
@@ -1199,7 +1199,7 @@ export default function SeoMetaEditor() {
         </div>
 
         {/* Editor panel */}
-        <div className="glass-card rounded-xl overflow-hidden">
+        <div className="card-neon rounded-xl overflow-hidden">
           {/* Page header */}
           <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
             <div className="flex items-center gap-2.5">
@@ -1338,13 +1338,13 @@ export default function SeoMetaEditor() {
                 </div>
                 <div className="space-y-2">
                   <div>
-                    <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500 mb-0.5">
+                    <p className="section-label mb-0.5">
                       Suggested Title
                     </p>
                     <p className="text-xs text-slate-300">{activeRec.title}</p>
                   </div>
                   <div>
-                    <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500 mb-0.5">
+                    <p className="section-label mb-0.5">
                       Suggested Description
                     </p>
                     <p className="text-xs text-slate-300 leading-relaxed">
@@ -1376,7 +1376,7 @@ export default function SeoMetaEditor() {
 
             {/* Coverage summary for this page */}
             <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-4">
-              <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500 mb-3">
+              <p className="section-label mb-3">
                 Locale Coverage for {activePage.label}
               </p>
               <div className="flex flex-wrap gap-2">

@@ -21,6 +21,8 @@ import { UpsellBanner } from "@/components/ui/upsell-banner";
 import { RelatedLinks } from "@/components/ui/related-links";
 import { Sparkles, FlaskConical, ClipboardList } from "lucide-react";
 import type { Fixture, WeeklySummary } from "@/types/api";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -581,19 +583,23 @@ function ResultsPageContent() {
   const hasError = resultsQuery.isError;
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 animate-fade-in">
+      <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-emerald-500/15 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full bg-blue-500/10 blur-3xl" />
+      <div className="relative space-y-6">
 
       {/* ── Header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10">
-            <Trophy className="h-5 w-5 text-emerald-400" />
-          </div>
+          <HexBadge variant="green" size="lg">
+            <Trophy className="h-6 w-6" />
+          </HexBadge>
           <div>
-            <h1 className="text-4xl font-bold tracking-tight gradient-text leading-tight">
+            <span className="section-label">Results</span>
+            <h1 className="text-heading mt-3">
               {t("results.title")}
             </h1>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-2 text-sm text-slate-400">
               {t("results.subtitle")}
             </p>
           </div>
@@ -696,7 +702,7 @@ function ResultsPageContent() {
           {period < 30 && (
             <button
               onClick={() => setPeriod(30)}
-              className="btn-gradient mt-2 rounded-lg px-4 py-2 text-sm font-semibold text-white"
+              className="btn-primary mt-2"
             >
               {t("results.expandTo30Days")}
             </button>
@@ -711,7 +717,7 @@ function ResultsPageContent() {
           </p>
           <button
             onClick={() => { setResultFilter("All"); setLeagueFilter(""); }}
-            className="btn-gradient mt-2 rounded-lg px-4 py-2 text-sm font-semibold text-white"
+            className="btn-primary mt-2"
           >
             {t("results.clearFilters")}
           </button>
@@ -754,6 +760,7 @@ function ResultsPageContent() {
         ]}
       />
 
+      </div>
     </div>
   );
 }

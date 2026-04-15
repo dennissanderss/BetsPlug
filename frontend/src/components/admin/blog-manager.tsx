@@ -106,7 +106,7 @@ function BlogForm({
         <button
           onClick={() => onSave(form)}
           disabled={isSaving || !form.title.trim() || !form.content.trim()}
-          className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold btn-gradient text-white shadow-lg shadow-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold btn-primary text-white shadow-lg shadow-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {isSaving ? (
             <>
@@ -169,7 +169,7 @@ export default function BlogManager() {
   });
 
   return (
-    <div className="glass-card rounded-xl overflow-hidden">
+    <div className="card-neon rounded-xl overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
         <div>
@@ -185,7 +185,7 @@ export default function BlogManager() {
           {!showForm && !editingPost && (
             <button
               onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold btn-gradient shadow-lg shadow-blue-500/20"
+              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold btn-primary shadow-lg shadow-blue-500/20"
             >
               <Plus className="h-4 w-4" />
               New Post

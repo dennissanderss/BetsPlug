@@ -38,6 +38,8 @@ import {
 import { api } from "@/lib/api";
 import { cn, formatPercent, formatDate } from "@/lib/utils";
 import { useTranslations } from "@/i18n/locale-provider";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 import type {
   TrackrecordSummary,
   SegmentPerformance,
@@ -1247,21 +1249,30 @@ export default function TrackrecordPage() {
   ];
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 animate-fade-in">
+      <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-emerald-500/15 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full bg-blue-500/10 blur-3xl" />
+      <div className="relative space-y-6">
       {/* Page header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
-            <span className="gradient-text">{t("trackrecord.title")}</span>
-          </h1>
-          <p className="mt-1 text-sm text-slate-400">
-            {t("trackrecord.subtitle")}
-          </p>
+        <div className="flex items-start gap-3">
+          <HexBadge variant="green" size="lg">
+            <TrendingUp className="h-6 w-6" />
+          </HexBadge>
+          <div>
+            <span className="section-label">Track record</span>
+            <h1 className="text-heading mt-3 gradient-text-green">
+              {t("trackrecord.title")}
+            </h1>
+            <p className="mt-2 text-sm text-slate-400">
+              {t("trackrecord.subtitle")}
+            </p>
+          </div>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-400">
+        <Pill tone="info" className="flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse-slow inline-block" />
           {t("trackrecord.realApiData")}
-        </span>
+        </Pill>
       </div>
 
       {/* v6.2.1: Data transparency card (replaces the old methodology banner) */}
@@ -1572,6 +1583,7 @@ export default function TrackrecordPage() {
           />
         </div>
       )}
+      </div>
     </div>
   );
 }

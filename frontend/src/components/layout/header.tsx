@@ -15,23 +15,18 @@ import {
   Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { LanguageSwitcher } from "@/components/common/language-switcher";
 import { useAuth } from "@/lib/auth";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 
 interface HeaderProps {
   className?: string;
 }
 
 /**
- * Header — top navigation bar with search, notifications and a user menu.
- *
- * The user menu mirrors the nerdytips.com dropdown: My Account → Favorites →
- * Subscription → Settings → (Admin Panel, for admins) → Logout. Items close
- * the dropdown on click, and outside clicks dismiss it too (preserved from
- * the previous implementation).
+ * Header — NOCTURNE glass bar with search, notifications and user menu.
  */
 export function Header({ className }: HeaderProps) {
   const router = useRouter();
@@ -46,9 +41,6 @@ export function Header({ className }: HeaderProps) {
   const userMenuRef = React.useRef<HTMLDivElement>(null);
   const notifRef = React.useRef<HTMLDivElement>(null);
 
-  // Read the cached subscription tier from localStorage on mount so we can
-  // show a plan pill next to the email. This is a best-effort display hint
-  // and only a fallback — the /subscription page is the source of truth.
   React.useEffect(() => {
     try {
       setTier(window.localStorage.getItem("betsplug_tier"));
@@ -82,10 +74,6 @@ export function Header({ className }: HeaderProps) {
     router.push(loc(path));
   };
 
-  // We type `user` loosely because the auth context currently exposes
-  // { email, name } while the admin/role check comes from a potentially
-  // extended shape written by the Auth Core agent. Reading through a cast
-  // keeps TypeScript happy without reaching into that owner's file.
   const authUser = user as (typeof user & { role?: string }) | null;
   const isAdmin = authUser?.role === "admin";
 
@@ -93,112 +81,96 @@ export function Header({ className }: HeaderProps) {
   const displayEmail = user?.email ?? "";
   const initial = (displayName[0] ?? "G").toUpperCase();
 
-  // Prettify the tier string for the pill ("platinum" → "Platinum").
   const tierLabel = tier
     ? tier.charAt(0).toUpperCase() + tier.slice(1).toLowerCase()
     : null;
   const isPlatinum = tier?.toLowerCase() === "platinum";
 
   return (
-    // ── Stacking-context fix ─────────────────────────────────────────────
-    // The ``backdrop-filter`` on this header creates its own stacking
-    // context. Without an explicit ``z-index`` it ends up painted *behind*
-    // the sibling ``<main>`` element (which comes later in DOM order), so
-    // any ``glass-card`` or ``backdrop-blur`` in the page content would
-    // swallow clicks aimed at the user-menu dropdown.
-    // ``relative z-50`` promotes the whole header (and therefore the
-    // dropdown inside it) above ``<main>`` in the parent stacking context.
     <header
       className={cn(
         "relative z-50 flex h-14 shrink-0 items-center gap-4 px-4 md:px-6",
         className
       )}
       style={{
-        background: "#050505",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+        background: "hsl(230 20% 7% / 0.8)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
       }}
     >
-      {/* Live status indicator */}
-      <div className="hidden md:flex items-center gap-2 shrink-0">
-        <span className="live-dot" />
-        <span className="mono-label-lime">{t("header.live" as any)}</span>
+      {/* Live status pill */}
+      <div className="hidden md:inline-flex shrink-0">
+        <Pill tone="default" className="inline-flex items-center gap-1.5">
+          <span className="live-dot" />
+          {t("header.live" as any)}
+        </Pill>
       </div>
 
       {/* Search bar */}
-      <form
-        onSubmit={handleSearch}
-        className="flex-1 max-w-sm ml-10 md:ml-0"
-      >
-        <div className="relative">
+      <form onSubmit={handleSearch} className="flex-1 max-w-sm ml-10 md:ml-0">
+        <div
+          className={cn(
+            "search-pill flex items-center",
+            searchFocused && "border-[#4ade80]/60"
+          )}
+        >
           <Search
             className={cn(
-              "absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 pointer-events-none transition-colors duration-150",
-              searchFocused ? "text-[#4ade80]" : "text-slate-500"
+              "h-3.5 w-3.5 mr-2 transition-colors duration-150",
+              searchFocused ? "text-[#4ade80]" : "text-[#6b7280]"
             )}
           />
-          <Input
+          <input
             type="search"
             placeholder={t("header.searchPlaceholder" as any)}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
-            className={cn(
-              "pl-9 h-8 text-sm bg-white/[0.03] border-white/10 text-slate-200 placeholder:text-slate-600",
-              "rounded-sm transition-all duration-150 font-mono",
-              searchFocused
-                ? "border-[#4ade80]/60 bg-white/[0.05]"
-                : "hover:border-white/20"
-            )}
+            className="flex-1 bg-transparent text-sm text-[#ededed] placeholder:text-[#6b7280] outline-none"
           />
         </div>
       </form>
 
       <div className="ml-auto flex items-center gap-1">
-        {/* Language switcher */}
         <LanguageSwitcher />
 
         {/* Notifications */}
         <div className="relative" ref={notifRef}>
-          <Button
-            variant="ghost"
-            size="icon"
+          <button
             onClick={() => setNotifOpen((prev) => !prev)}
             aria-label="Notifications"
-            className="relative h-8 w-8 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.06]"
+            className="btn-ghost relative h-9 w-9 inline-flex items-center justify-center !px-0 !py-0 rounded-lg"
           >
             <Bell className="h-4 w-4" />
             <span
               className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full"
-              style={{ background: "#4ade80", boxShadow: "0 0 6px rgba(74,222,128,0.8)" }}
+              style={{
+                background: "#ef4444",
+                boxShadow: "0 0 6px rgba(239,68,68,0.8)",
+              }}
             />
-          </Button>
+          </button>
 
           {notifOpen && (
-            <div
-              className="absolute right-0 top-full mt-2 w-72 rounded-xl p-3 z-50 animate-slide-up"
-              style={{
-                background: "#0a0a0a",
-                backdropFilter: "none",
-                WebkitBackdropFilter: "none",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.7)",
-              }}
-            >
+            <div className="glass-panel-raised absolute right-0 top-full mt-2 w-72 p-3 z-50 animate-slide-up">
               <div className="flex items-center justify-between mb-3">
-                <p className="mono-label-lime">{t("header.notifications" as any)}</p>
-                <span className="text-[10px] font-black tracking-widest text-[#050505] bg-[#4ade80] px-1.5 py-0.5">
-                  2 NEW
-                </span>
+                <span className="section-label">{t("header.notifications" as any)}</span>
+                <Pill tone="active">2 NEW</Pill>
               </div>
               <div className="space-y-2">
-                <div className="flex items-start gap-2.5 p-2 rounded-lg bg-white/[0.03] border border-white/[0.05]">
+                <div className="glass-panel flex items-start gap-2.5 p-2.5">
                   <div className="h-1.5 w-1.5 rounded-full bg-[#4ade80] mt-1.5 shrink-0" />
-                  <p className="text-xs text-slate-300">Model training completed successfully.</p>
+                  <p className="text-xs text-[#ededed]">
+                    Model training completed successfully.
+                  </p>
                 </div>
-                <div className="flex items-start gap-2.5 p-2 rounded-lg bg-white/[0.03] border border-white/[0.05]">
+                <div className="glass-panel flex items-start gap-2.5 p-2.5">
                   <div className="h-1.5 w-1.5 rounded-full bg-emerald-400 mt-1.5 shrink-0" />
-                  <p className="text-xs text-slate-300">New match data available for 3 leagues.</p>
+                  <p className="text-xs text-[#ededed]">
+                    New match data available for 3 leagues.
+                  </p>
                 </div>
               </div>
             </div>
@@ -211,76 +183,50 @@ export function Header({ className }: HeaderProps) {
             onClick={() => setUserMenuOpen((prev) => !prev)}
             aria-label="User menu"
             className={cn(
-              "flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all duration-150",
-              "text-slate-300 hover:text-slate-100 hover:bg-white/[0.06]",
+              "flex items-center gap-2 px-2 py-1 rounded-lg transition-all duration-150",
+              "text-[#a3a9b8] hover:text-[#ededed] hover:bg-white/[0.06]",
               userMenuOpen && "bg-white/[0.06]"
             )}
           >
-            {/* Avatar */}
-            <div
-              className="flex h-7 w-7 items-center justify-center text-xs font-black text-[#050505]"
-              style={{ background: "#4ade80" }}
-            >
-              {initial}
-            </div>
+            <HexBadge variant="green" size="sm" noGlow>
+              <span className="text-[10px] font-black text-[#050505]">{initial}</span>
+            </HexBadge>
             <span className="hidden sm:inline text-sm font-medium">{displayName}</span>
             <ChevronDown
               className={cn(
-                "h-3.5 w-3.5 text-slate-500 transition-transform duration-150",
+                "h-3.5 w-3.5 text-[#6b7280] transition-transform duration-150",
                 userMenuOpen && "rotate-180"
               )}
             />
           </button>
 
           {userMenuOpen && (
-            <div
-              className="absolute right-0 top-full mt-2 w-60 rounded-xl overflow-hidden z-[60] animate-slide-up"
-              style={{
-                background: "#0a0a0a",
-                backdropFilter: "none",
-                WebkitBackdropFilter: "none",
-                border: "1px solid rgba(255, 255, 255, 0.08)",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.7)",
-              }}
-            >
+            <div className="glass-panel-raised absolute right-0 top-full mt-2 w-64 overflow-hidden z-[60] animate-slide-up rounded-xl">
               {/* User info block */}
               <div className="px-3.5 py-3 border-b border-white/[0.06]">
                 <div className="flex items-center gap-3">
-                  <div
-                    className="flex h-10 w-10 shrink-0 items-center justify-center text-sm font-black text-[#050505]"
-                    style={{ background: "#4ade80" }}
-                  >
-                    {initial}
-                  </div>
+                  <HexBadge variant="green" size="md">
+                    <span className="text-sm font-black text-[#050505]">{initial}</span>
+                  </HexBadge>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-slate-100">
+                    <p className="truncate text-sm font-semibold text-[#ededed]">
                       {displayName}
                     </p>
-                    <div className="mt-0.5 flex items-center gap-1.5">
-                      <p className="truncate text-[11px] text-slate-500">
-                        {displayEmail}
-                      </p>
-                    </div>
+                    <p className="mt-0.5 truncate text-[11px] text-[#6b7280]">
+                      {displayEmail}
+                    </p>
                   </div>
                 </div>
                 {tierLabel && (
-                  <div className="mt-2 flex">
-                    <span
-                      className={cn(
-                        "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold",
-                        isPlatinum
-                          ? "border-amber-400/40 bg-amber-400/10 text-amber-300"
-                          : "border-[#4ade80]/40 bg-[#4ade80]/10 text-[#4ade80]"
-                      )}
-                    >
+                  <div className="mt-2.5 flex">
+                    <Pill tone={isPlatinum ? "purple" : "active"} className="inline-flex items-center gap-1">
                       {isPlatinum && <Crown className="h-2.5 w-2.5" />}
                       {tierLabel} plan
-                    </span>
+                    </Pill>
                   </div>
                 )}
               </div>
 
-              {/* Primary actions */}
               <div className="py-1">
                 <MenuItem
                   icon={UserIcon}
@@ -315,7 +261,6 @@ export function Header({ className }: HeaderProps) {
 
               <div className="mx-2 h-px bg-white/[0.06]" />
 
-              {/* Logout */}
               <div className="py-1">
                 <button
                   onClick={() => {
@@ -325,7 +270,9 @@ export function Header({ className }: HeaderProps) {
                   className="flex w-full items-center gap-2.5 px-3.5 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/[0.08] transition-colors"
                 >
                   <LogOut className="h-4 w-4" />
-                  <span className="flex-1 text-left font-medium">{t("header.logout" as any)}</span>
+                  <span className="flex-1 text-left font-medium">
+                    {t("header.logout" as any)}
+                  </span>
                 </button>
               </div>
             </div>
@@ -336,10 +283,6 @@ export function Header({ className }: HeaderProps) {
   );
 }
 
-/**
- * MenuItem — row inside the user-menu dropdown. Shows a left icon, a label
- * and a subtle right chevron. Hover brightens the row background.
- */
 function MenuItem({
   icon: Icon,
   label,
@@ -356,16 +299,16 @@ function MenuItem({
       ? "text-amber-300"
       : accent === "blue"
         ? "text-blue-400"
-        : "text-slate-500 group-hover:text-slate-300";
+        : "text-[#6b7280] group-hover:text-[#ededed]";
 
   return (
     <button
       onClick={onClick}
-      className="group flex w-full items-center gap-2.5 px-3.5 py-2 text-sm text-slate-300 transition-colors hover:bg-white/[0.06] hover:text-slate-100"
+      className="nav-item group flex w-full items-center gap-2.5 text-sm text-[#a3a9b8] hover:text-[#ededed]"
     >
       <Icon className={cn("h-4 w-4 transition-colors", iconClass)} />
       <span className="flex-1 text-left font-medium">{label}</span>
-      <ChevronRight className="h-3.5 w-3.5 text-slate-600 opacity-0 transition-opacity group-hover:opacity-100" />
+      <ChevronRight className="h-3.5 w-3.5 text-[#6b7280] opacity-0 transition-opacity group-hover:opacity-100" />
     </button>
   );
 }

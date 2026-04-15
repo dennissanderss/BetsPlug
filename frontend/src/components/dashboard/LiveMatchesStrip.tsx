@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Activity } from "lucide-react";
 import { TeamLogo } from "@/components/dashboard/TeamLogo";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 import type { Fixture, FixturesResponse } from "@/types/api";
 
 interface LiveMatchesStripProps {
@@ -14,7 +16,7 @@ interface LiveMatchesStripProps {
 
 function LiveCardSkeleton() {
   return (
-    <div className="animate-pulse rounded-xl border border-white/[0.06] bg-white/[0.04] p-3">
+    <div className="glass-panel animate-pulse p-3">
       <div className="h-3 w-20 rounded bg-white/[0.06] mb-3" />
       <div className="space-y-2">
         <div className="h-4 w-full rounded bg-white/[0.06]" />
@@ -26,42 +28,47 @@ function LiveCardSkeleton() {
 
 function LiveMatchCard({ fixture }: { fixture: Fixture }) {
   return (
-    <div className="rounded-xl border border-white/[0.06] border-l-4 border-l-blue-500 bg-white/[0.04] p-3 transition-all hover:bg-white/[0.06]">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="text-[10px] uppercase tracking-wider text-slate-500 truncate">
-          {fixture.league_name}
-        </span>
-        <div className="flex items-center gap-1.5">
-          <span className="live-dot" />
-          <span className="text-[10px] font-semibold uppercase text-emerald-400">LIVE</span>
-        </div>
-      </div>
-
-      <div className="space-y-1.5">
-        {/* Home */}
-        <div className="flex items-center justify-between">
+    <div className="card-neon card-neon-purple p-3">
+      <div className="relative">
+        <div className="mb-2 flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
-            <TeamLogo src={fixture.home_team_logo} name={fixture.home_team_name} />
-            <span className="text-xs font-medium text-slate-200 truncate">
-              {fixture.home_team_name}
+            <HexBadge variant="purple" size="sm" noGlow>
+              <Activity className="h-3.5 w-3.5" />
+            </HexBadge>
+            <span className="text-[10px] uppercase tracking-wider text-[#a3a9b8] truncate">
+              {fixture.league_name}
             </span>
           </div>
-          <span className="text-sm font-bold tabular-nums text-white ml-2">
-            {fixture.result?.home_score ?? 0}
-          </span>
+          <Pill tone="default" className="inline-flex items-center gap-1.5 !px-2">
+            <span className="live-dot-red" />
+            LIVE
+          </Pill>
         </div>
 
-        {/* Away */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 min-w-0">
-            <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} />
-            <span className="text-xs font-medium text-slate-200 truncate">
-              {fixture.away_team_name}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 min-w-0">
+              <TeamLogo src={fixture.home_team_logo} name={fixture.home_team_name} />
+              <span className="text-xs font-semibold text-[#ededed] truncate">
+                {fixture.home_team_name}
+              </span>
+            </div>
+            <span className="text-stat text-lg text-[#ededed] ml-2">
+              {fixture.result?.home_score ?? 0}
             </span>
           </div>
-          <span className="text-sm font-bold tabular-nums text-white ml-2">
-            {fixture.result?.away_score ?? 0}
-          </span>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 min-w-0">
+              <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} />
+              <span className="text-xs font-semibold text-[#ededed] truncate">
+                {fixture.away_team_name}
+              </span>
+            </div>
+            <span className="text-stat text-lg text-[#ededed] ml-2">
+              {fixture.result?.away_score ?? 0}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -76,46 +83,44 @@ export function LiveMatchesStrip({ data, isLoading, nextKickoff }: LiveMatchesSt
   const count = liveMatches.length;
 
   return (
-    <div className="glass-card overflow-hidden">
-      <div className="flex items-center justify-between border-b border-white/[0.05] px-5 py-3">
-        <div className="flex items-center gap-2">
-          <span className="live-dot" />
-          <h2 className="text-sm font-semibold text-slate-100">{t("dash.liveNow")}</h2>
+    <div className="card-neon">
+      <div className="relative">
+        <div className="flex items-center justify-between border-b border-white/[0.05] px-5 py-3">
+          <div className="flex items-center gap-2">
+            <span className="live-dot-red" />
+            <span className="section-label">{t("dash.liveNow")}</span>
+            {count > 0 && <Pill tone="active">{count}</Pill>}
+          </div>
           {count > 0 && (
-            <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold tabular-nums text-emerald-400">
-              {count}
-            </span>
+            <Link
+              href={lHref("/live")}
+              className="flex items-center gap-1 text-xs text-[#a3a9b8] transition-colors hover:text-[#4ade80]"
+            >
+              {t("dash.viewAll")}
+              <ArrowRight className="h-3 w-3" />
+            </Link>
           )}
         </div>
-        {count > 0 && (
-          <Link
-            href={lHref("/live")}
-            className="flex items-center gap-1 text-xs text-slate-400 transition-colors hover:text-emerald-400"
-          >
-            {t("dash.viewAll")}
-            <ArrowRight className="h-3 w-3" />
-          </Link>
-        )}
-      </div>
 
-      <div className="p-4">
-        {isLoading ? (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 3 }).map((_, i) => <LiveCardSkeleton key={i} />)}
-          </div>
-        ) : count === 0 ? (
-          <p className="py-4 text-center text-xs text-slate-500">
-            {nextKickoff
-              ? `${t("dash.noLiveNextMatch")} ${nextKickoff}`
-              : t("dash.noLiveMatches")}
-          </p>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {liveMatches.slice(0, 6).map((fixture) => (
-              <LiveMatchCard key={fixture.id} fixture={fixture} />
-            ))}
-          </div>
-        )}
+        <div className="p-4">
+          {isLoading ? (
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, i) => <LiveCardSkeleton key={i} />)}
+            </div>
+          ) : count === 0 ? (
+            <p className="py-4 text-center text-xs text-[#6b7280]">
+              {nextKickoff
+                ? `${t("dash.noLiveNextMatch")} ${nextKickoff}`
+                : t("dash.noLiveMatches")}
+            </p>
+          ) : (
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {liveMatches.slice(0, 6).map((fixture) => (
+                <LiveMatchCard key={fixture.id} fixture={fixture} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

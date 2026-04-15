@@ -112,7 +112,7 @@ export default function AnalyticsSettings() {
     return (
       <div className="grid gap-6 lg:grid-cols-2">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="glass-card rounded-xl p-6 space-y-4">
+          <div key={i} className="card-neon rounded-xl p-6 space-y-4">
             <Skeleton className="h-5 w-3/4 bg-white/[0.06]" />
             <Skeleton className="h-9 w-full bg-white/[0.04]" />
             <Skeleton className="h-4 w-1/2 bg-white/[0.04]" />
@@ -130,7 +130,7 @@ export default function AnalyticsSettings() {
     <div className="space-y-6">
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Google Analytics 4 */}
-        <div className="glass-card rounded-xl p-6 space-y-4">
+        <div className="card-neon rounded-xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
@@ -161,7 +161,7 @@ export default function AnalyticsSettings() {
         </div>
 
         {/* Google Tag Manager */}
-        <div className="glass-card rounded-xl p-6 space-y-4">
+        <div className="card-neon rounded-xl p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
@@ -192,7 +192,7 @@ export default function AnalyticsSettings() {
         </div>
 
         {/* Google Search Console */}
-        <div className="glass-card rounded-xl p-6 space-y-4 lg:col-span-2">
+        <div className="card-neon rounded-xl p-6 space-y-4 lg:col-span-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
@@ -235,7 +235,7 @@ export default function AnalyticsSettings() {
         <button
           onClick={handleSave}
           disabled={saveMutation.isPending}
-          className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold btn-gradient shadow-lg shadow-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold btn-primary shadow-lg shadow-blue-500/20 disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {saveMutation.isPending ? (
             <>

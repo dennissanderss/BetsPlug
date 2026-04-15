@@ -67,7 +67,7 @@ export default function SeoDashboard() {
       {/* Top row: Overall score + Sitemap/Robots status */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {/* Overall SEO Score */}
-        <div className="glass-card rounded-xl p-6 flex flex-col items-center justify-center text-center">
+        <div className="card-neon rounded-xl p-6 flex flex-col items-center justify-center text-center">
           {isLoading ? (
             <div className="space-y-3">
               <Skeleton className="mx-auto h-16 w-16 rounded-full bg-white/[0.06]" />
@@ -101,7 +101,7 @@ export default function SeoDashboard() {
         </div>
 
         {/* Sitemap status */}
-        <div className="glass-card rounded-xl p-6 space-y-4">
+        <div className="card-neon rounded-xl p-6 space-y-4">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
               <FileCheck className="h-4 w-4 text-blue-400" />
@@ -118,7 +118,7 @@ export default function SeoDashboard() {
         </div>
 
         {/* Robots.txt status */}
-        <div className="glass-card rounded-xl p-6 space-y-4">
+        <div className="card-neon rounded-xl p-6 space-y-4">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
               <Bot className="h-4 w-4 text-blue-400" />
@@ -136,7 +136,7 @@ export default function SeoDashboard() {
       </div>
 
       {/* Per-page SEO table */}
-      <div className="glass-card rounded-xl overflow-hidden">
+      <div className="card-neon rounded-xl overflow-hidden">
         <div className="flex items-center justify-between border-b border-white/[0.06] px-6 py-4">
           <div>
             <h3 className="text-sm font-semibold text-slate-100">Page SEO Scores</h3>

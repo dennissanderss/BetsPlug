@@ -73,7 +73,7 @@ export default function StrategyTiersTab() {
         </div>
         <button
           onClick={save}
-          className="btn-gradient flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold"
+          className="btn-primary flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold"
         >
           <Save className="h-4 w-4" /> Save
         </button>
@@ -91,7 +91,7 @@ export default function StrategyTiersTab() {
         </div>
       ) : (
         Object.entries(sportGroups).map(([sport, sportStrategies]) => (
-          <div key={sport} className="glass-card overflow-hidden">
+          <div key={sport} className="card-neon overflow-hidden">
             {/* Sport header — collapsible */}
             <button
               onClick={() => toggleSport(sport)}
@@ -118,22 +118,22 @@ export default function StrategyTiersTab() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-white/[0.06] bg-white/[0.02]">
-                    <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                    <th className="px-4 py-3 text-left section-label">
                       Strategy
                     </th>
-                    <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                    <th className="px-4 py-3 text-left section-label">
                       Status
                     </th>
-                    <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                    <th className="px-4 py-3 text-left section-label">
                       Win Rate
                     </th>
-                    <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                    <th className="px-4 py-3 text-left section-label">
                       ROI
                     </th>
-                    <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                    <th className="px-4 py-3 text-left section-label">
                       Sample
                     </th>
-                    <th className="px-4 py-3 text-left text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                    <th className="px-4 py-3 text-left section-label">
                       Tier
                     </th>
                   </tr>

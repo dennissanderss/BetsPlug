@@ -207,7 +207,7 @@ function GoalsSection() {
     return (
       <div className="space-y-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="glass-card rounded-xl p-4 space-y-2">
+          <div key={i} className="card-neon rounded-xl p-4 space-y-2">
             <Skeleton className="h-5 w-3/4 bg-white/[0.06]" />
             <Skeleton className="h-4 w-1/2 bg-white/[0.04]" />
             <Skeleton className="h-3 w-1/3 bg-white/[0.04]" />
@@ -243,7 +243,7 @@ function GoalsSection() {
 
       {/* Inline form */}
       {showForm && (
-        <div className="glass-card rounded-xl p-4 space-y-3 border border-blue-500/20">
+        <div className="card-neon rounded-xl p-4 space-y-3 border border-blue-500/20">
           <input
             type="text"
             placeholder="Goal title..."
@@ -335,7 +335,7 @@ function GoalsSection() {
               /* ── Inline edit form ── */
               <div
                 key={goal.id}
-                className="glass-card rounded-xl p-4 space-y-3 border border-blue-500/20"
+                className="card-neon rounded-xl p-4 space-y-3 border border-blue-500/20"
               >
                 <input
                   type="text"
@@ -405,7 +405,7 @@ function GoalsSection() {
               <div
                 key={goal.id}
                 className={cn(
-                  "glass-card rounded-xl p-4 transition-all hover:bg-white/[0.03]",
+                  "card-neon rounded-xl p-4 transition-all hover:bg-white/[0.03]",
                   goal.status === "done" && "opacity-60"
                 )}
               >
@@ -675,12 +675,12 @@ export default function GoalsNotesTab() {
   return (
     <div className="grid gap-6 lg:grid-cols-[3fr_2fr]">
       {/* Left: Goals (60%) */}
-      <div className="glass-card rounded-xl p-6">
+      <div className="card-neon rounded-xl p-6">
         <GoalsSection />
       </div>
 
       {/* Right: Notes (40%) */}
-      <div className="glass-card rounded-xl p-5">
+      <div className="card-neon rounded-xl p-5">
         <NotesSection />
       </div>
     </div>

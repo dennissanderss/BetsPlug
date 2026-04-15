@@ -17,28 +17,15 @@ import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
 import { useTranslations } from "@/i18n/locale-provider";
 import type { Fixture } from "@/types/api";
+import { GlassPanel } from "@/components/noct/glass-panel";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 type StatusFilter = "All" | "Live" | "Upcoming" | "Finished";
 
 const STATUS_FILTERS: StatusFilter[] = ["All", "Live", "Upcoming", "Finished"];
-
-const STATUS_BORDER: Record<string, string> = {
-  live:       "border-l-blue-500",
-  scheduled:  "border-l-slate-600",
-  finished:   "border-l-emerald-500",
-  postponed:  "border-l-amber-500",
-  cancelled:  "border-l-red-800",
-};
-
-const STATUS_GLOW: Record<string, string> = {
-  live:      "shadow-[inset_4px_0_8px_rgba(59,130,246,0.15)]",
-  scheduled: "shadow-none",
-  finished:  "shadow-[inset_4px_0_8px_rgba(16,185,129,0.10)]",
-  postponed: "shadow-none",
-  cancelled: "shadow-none",
-};
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -71,40 +58,32 @@ function StatusBadge({ fixture }: { fixture: Fixture }) {
   const { t } = useTranslations();
   if (fixture.status === "live") {
     return (
-      <span className="flex items-center gap-1.5 rounded-full bg-blue-500/10 px-2.5 py-0.5 text-[11px] font-bold text-blue-400 ring-1 ring-blue-500/30">
+      <Pill tone="purple" className="flex items-center gap-1.5">
         <span className="live-dot-red" style={{ width: 6, height: 6 }} />
-        LIVE
-      </span>
+        Live
+      </Pill>
     );
   }
   if (fixture.status === "scheduled") {
     return (
-      <span className="flex items-center gap-1.5 rounded-full bg-slate-700/50 px-2.5 py-0.5 text-[11px] font-medium text-slate-400">
+      <Pill className="flex items-center gap-1.5">
         <Clock className="h-3 w-3" />
         {formatTime(fixture.scheduled_at)}
-      </span>
+      </Pill>
     );
   }
   if (fixture.status === "finished") {
     return (
-      <span className="flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400">
+      <Pill tone="win" className="flex items-center gap-1.5">
         <CheckCircle2 className="h-3 w-3" />
         FT
-      </span>
+      </Pill>
     );
   }
   if (fixture.status === "postponed") {
-    return (
-      <span className="flex items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-amber-400">
-        {t("live.postponed")}
-      </span>
-    );
+    return <Pill tone="draw">{t("live.postponed")}</Pill>;
   }
-  return (
-    <span className="flex items-center gap-1.5 rounded-full bg-red-900/20 px-2.5 py-0.5 text-[11px] font-semibold text-red-400">
-      {t("live.cancelled")}
-    </span>
-  );
+  return <Pill tone="loss">{t("live.cancelled")}</Pill>;
 }
 
 function ProbabilitySection({ fixture }: { fixture: Fixture }) {
@@ -135,8 +114,8 @@ function ProbabilitySection({ fixture }: { fixture: Fixture }) {
   return (
     <div className="space-y-1.5">
       <div className="flex items-center gap-1.5">
-        <TrendingUp className="h-3 w-3 text-blue-500" />
-        <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
+        <TrendingUp className="h-3 w-3 text-blue-400" />
+        <span className="text-[10px] font-semibold text-slate-400">
           {t("live.winProbability")}
         </span>
       </div>
@@ -156,14 +135,14 @@ function ProbabilitySection({ fixture }: { fixture: Fixture }) {
           style={{ width: `${(awayP / total) * 100}%`, opacity: awayP > homeP ? 1 : 0.4 }}
         />
       </div>
-      <div className="flex justify-between text-[9px] font-semibold uppercase tracking-wider">
-        <span className={homeP >= awayP ? "text-blue-400" : "text-slate-600"}>
+      <div className="flex justify-between text-[10px] font-semibold">
+        <span className={homeP >= awayP ? "text-blue-400" : "text-slate-500"}>
           {homeP}% H
         </span>
         {drawP !== null && (
-          <span className="text-slate-600">{drawP}% D</span>
+          <span className="text-slate-500">{drawP}% D</span>
         )}
-        <span className={awayP > homeP ? "text-red-400" : "text-slate-600"}>
+        <span className={awayP > homeP ? "text-red-400" : "text-slate-500"}>
           {awayP}% A
         </span>
       </div>
@@ -177,108 +156,101 @@ function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
   const isFinished  = fixture.status === "finished";
   const isScheduled = fixture.status === "scheduled";
 
+  const neonVariant =
+    isLive ? "card-neon card-neon-purple halo-purple"
+    : isFinished ? "card-neon card-neon-green"
+    : "card-neon card-neon-blue";
+
   return (
     <div
-      className={cn(
-        "glass-card-hover flex flex-col border-l-4 animate-slide-up",
-        STATUS_BORDER[fixture.status] ?? "border-l-slate-600",
-        STATUS_GLOW[fixture.status]  ?? "shadow-none"
-      )}
+      className={cn(neonVariant, "animate-slide-up")}
       style={{ animationDelay: `${index * 60}ms` }}
     >
-      {/* ── Card top ── */}
-      <div className="flex items-center justify-between gap-2 border-b border-white/[0.06] px-4 py-3">
-        <div className="flex min-w-0 items-center gap-2">
-          <span className="truncate text-xs font-semibold text-slate-300">
-            {fixture.league_name}
-          </span>
-        </div>
-        <div className="shrink-0">
-          <StatusBadge fixture={fixture} />
-        </div>
-      </div>
-
-      {/* ── Scoreboard ── */}
-      <div className="flex-1 px-4 py-4">
-        {/* Home team */}
-        <div className="flex items-center justify-between">
-          <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-100 leading-tight">
-            {fixture.home_team_logo && (
-              <Image src={fixture.home_team_logo} alt="" width={20} height={20} className="rounded-full shrink-0" />
-            )}
-            {fixture.home_team_name}
-          </span>
-          {(isLive || isFinished) && (
-            <span
-              className={cn(
-                "text-2xl font-black tabular-nums leading-none",
-                isLive ? "gradient-text" : "text-slate-200"
-              )}
-            >
-              {fixture.result ? fixture.result.home_score : " - "}
-            </span>
-          )}
-        </div>
-
-        {/* Divider */}
-        <div className="my-2 flex items-center gap-3">
-          <div className="h-px flex-1 bg-white/[0.05]" />
-          <span className="text-[10px] font-medium text-slate-600 uppercase tracking-widest">
-            {isScheduled ? "vs" : isLive ? "LIVE" : "FT"}
-          </span>
-          <div className="h-px flex-1 bg-white/[0.05]" />
-        </div>
-
-        {/* Away team */}
-        <div className="flex items-center justify-between">
-          <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-100 leading-tight">
-            {fixture.away_team_logo && (
-              <Image src={fixture.away_team_logo} alt="" width={20} height={20} className="rounded-full shrink-0" />
-            )}
-            {fixture.away_team_name}
-          </span>
-          {(isLive || isFinished) && (
-            <span
-              className={cn(
-                "text-2xl font-black tabular-nums leading-none",
-                isLive ? "gradient-text" : "text-slate-200"
-              )}
-            >
-              {fixture.result ? fixture.result.away_score : " - "}
-            </span>
-          )}
-        </div>
-
-        {/* Scheduled: kick-off block */}
-        {isScheduled && (
-          <div className="mt-3 flex items-center justify-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.03] py-2">
-            <Clock className="h-3.5 w-3.5 text-slate-500" />
-            <span className="text-xs font-medium text-slate-400">
-              {t("live.kickOff")} {formatTime(fixture.scheduled_at)} · {formatDate(fixture.scheduled_at)}
-            </span>
+      <div className="relative flex flex-col">
+        {/* ── Card top ── */}
+        <div className="flex items-center justify-between gap-2 border-b border-white/[0.06] px-4 py-3">
+          <div className="flex min-w-0 items-center gap-2">
+            <HexBadge variant={isLive ? "purple" : isFinished ? "green" : "blue"} size="sm" noGlow>
+              <Activity className="h-3.5 w-3.5" />
+            </HexBadge>
+            <Pill className="truncate">{fixture.league_name}</Pill>
           </div>
-        )}
+          <div className="shrink-0">
+            <StatusBadge fixture={fixture} />
+          </div>
+        </div>
 
-        {/* Venue */}
-        {fixture.venue && (
-          <p className="mt-2 truncate text-center text-[10px] text-slate-600">
-            {fixture.venue}
-          </p>
-        )}
-      </div>
+        {/* ── Scoreboard ── */}
+        <div className="flex-1 px-4 py-4">
+          {/* Home team */}
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-100 leading-tight">
+              {fixture.home_team_logo && (
+                <Image src={fixture.home_team_logo} alt="" width={20} height={20} className="rounded-full shrink-0" />
+              )}
+              {fixture.home_team_name}
+            </span>
+            {(isLive || isFinished) && (
+              <span className="text-stat text-2xl tabular-nums leading-none">
+                {fixture.result ? fixture.result.home_score : " - "}
+              </span>
+            )}
+          </div>
 
-      {/* ── Analytics bottom ── */}
-      <div className="space-y-3 border-t border-white/[0.06] px-4 py-3">
-        <ProbabilitySection fixture={fixture} />
+          {/* Divider */}
+          <div className="my-2 flex items-center gap-3">
+            <div className="h-px flex-1 bg-white/[0.05]" />
+            <span className="text-[10px] font-medium text-slate-500">
+              {isScheduled ? "vs" : isLive ? "Live" : "FT"}
+            </span>
+            <div className="h-px flex-1 bg-white/[0.05]" />
+          </div>
 
-        {/* View Analysis button */}
-        <Link
-          href={`/matches/${fixture.id}`}
-          className="group flex w-full items-center justify-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-xs font-semibold text-slate-400 transition-all hover:border-blue-500/40 hover:bg-blue-500/10 hover:text-blue-400"
-        >
-          {t("live.viewAnalysis")}
-          <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
-        </Link>
+          {/* Away team */}
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-100 leading-tight">
+              {fixture.away_team_logo && (
+                <Image src={fixture.away_team_logo} alt="" width={20} height={20} className="rounded-full shrink-0" />
+              )}
+              {fixture.away_team_name}
+            </span>
+            {(isLive || isFinished) && (
+              <span className="text-stat text-2xl tabular-nums leading-none">
+                {fixture.result ? fixture.result.away_score : " - "}
+              </span>
+            )}
+          </div>
+
+          {/* Scheduled: kick-off block */}
+          {isScheduled && (
+            <div className="mt-3 flex items-center justify-center gap-2">
+              <Pill className="flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5" />
+                {t("live.kickOff")} {formatTime(fixture.scheduled_at)} · {formatDate(fixture.scheduled_at)}
+              </Pill>
+            </div>
+          )}
+
+          {/* Venue */}
+          {fixture.venue && (
+            <p className="mt-2 truncate text-center text-[10px] text-slate-500">
+              {fixture.venue}
+            </p>
+          )}
+        </div>
+
+        {/* ── Analytics bottom ── */}
+        <div className="space-y-3 border-t border-white/[0.06] px-4 py-3">
+          <ProbabilitySection fixture={fixture} />
+
+          <Link
+            href={`/matches/${fixture.id}`}
+            className="btn-glass group flex w-full items-center justify-center gap-1.5"
+          >
+            {t("live.viewAnalysis")}
+            <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -286,16 +258,8 @@ function MatchCard({ fixture, index }: { fixture: Fixture; index: number }) {
 
 function FilterPill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
   return (
-    <button
-      onClick={onClick}
-      className={cn(
-        "rounded-full px-4 py-1.5 text-xs font-semibold transition-all",
-        active
-          ? "btn-gradient glow-blue-sm text-white"
-          : "border border-white/[0.08] bg-white/[0.03] text-slate-400 hover:border-white/[0.15] hover:bg-white/[0.06] hover:text-slate-200"
-      )}
-    >
-      {label}
+    <button onClick={onClick}>
+      <Pill tone={active ? "active" : "default"}>{label}</Pill>
     </button>
   );
 }
@@ -307,10 +271,10 @@ function StatStrip({ fixtures }: { fixtures: Fixture[] }) {
   const finishedCount = fixtures.filter((f) => f.status === "finished").length;
 
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-2.5">
+    <GlassPanel className="flex items-center gap-3 px-4 py-2.5">
       <div className="flex items-center gap-1.5">
         <span className="live-dot-red" style={{ width: 6, height: 6 }} />
-        <span className="text-xs font-semibold text-blue-400">{liveCount} {t("live.statusLive")}</span>
+        <span className="text-xs font-semibold text-purple-300">{liveCount} {t("live.statusLive")}</span>
       </div>
       <div className="h-3 w-px bg-white/[0.08]" />
       <div className="flex items-center gap-1.5">
@@ -319,10 +283,10 @@ function StatStrip({ fixtures }: { fixtures: Fixture[] }) {
       </div>
       <div className="h-3 w-px bg-white/[0.08]" />
       <div className="flex items-center gap-1.5">
-        <CheckCircle2 className="h-3 w-3 text-emerald-500" />
+        <CheckCircle2 className="h-3 w-3 text-emerald-400" />
         <span className="text-xs text-slate-400">{finishedCount} {t("live.statusFinished")}</span>
       </div>
-    </div>
+    </GlassPanel>
   );
 }
 
@@ -330,10 +294,7 @@ function MatchGridSkeleton() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div
-          key={i}
-          className="glass-card-hover flex flex-col border-l-4 border-l-slate-700 animate-pulse"
-        >
+        <GlassPanel key={i} variant="lifted" className="flex flex-col animate-pulse">
           <div className="border-b border-white/[0.06] px-4 py-3">
             <div className="h-3 w-28 rounded bg-white/[0.06]" />
           </div>
@@ -345,7 +306,7 @@ function MatchGridSkeleton() {
           <div className="border-t border-white/[0.06] px-4 py-3">
             <div className="h-2 w-full rounded-full bg-white/[0.04]" />
           </div>
-        </div>
+        </GlassPanel>
       ))}
     </div>
   );
@@ -353,17 +314,18 @@ function MatchGridSkeleton() {
 
 function EmptyState({ message, onClearFilters, clearLabel }: { message: string; onClearFilters?: () => void; clearLabel?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] py-20">
-      <Activity className="h-10 w-10 text-slate-700" />
-      <p className="text-sm font-medium text-slate-500">{message}</p>
-      {onClearFilters && (
-        <button
-          onClick={onClearFilters}
-          className="mt-1 text-xs font-semibold text-blue-400 hover:text-blue-300 transition-colors"
-        >
-          {clearLabel ?? "Clear filters"}
-        </button>
-      )}
+    <div className="card-neon">
+      <div className="relative flex flex-col items-center justify-center gap-3 py-20">
+        <HexBadge variant="purple" size="lg">
+          <Activity className="h-6 w-6" />
+        </HexBadge>
+        <p className="text-sm font-medium text-slate-400">{message}</p>
+        {onClearFilters && (
+          <button onClick={onClearFilters} className="btn-ghost mt-1 text-xs">
+            {clearLabel ?? "Clear filters"}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -374,7 +336,6 @@ export default function LiveMatchesPage() {
   const { t } = useTranslations();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
 
-  // ── Today's matches (DB-only, instant) ──
   const todayQuery = useQuery({
     queryKey: ["fixtures", "today"],
     queryFn: () => api.getFixturesToday(),
@@ -382,7 +343,6 @@ export default function LiveMatchesPage() {
     staleTime: 30_000,
   });
 
-  // ── Upcoming matches for the next 3 days (DB-only, instant) ──
   const upcomingQuery = useQuery({
     queryKey: ["fixtures", "upcoming", 3],
     queryFn: () => api.getFixturesUpcoming(3),
@@ -393,7 +353,6 @@ export default function LiveMatchesPage() {
   const isLoading = todayQuery.isLoading || upcomingQuery.isLoading;
   const hasError  = todayQuery.isError  || upcomingQuery.isError;
 
-  // Merge + deduplicate by id
   const allFixtures: Fixture[] = useMemo(() => {
     const seen = new Set<string>();
     const combined: Fixture[] = [
@@ -407,7 +366,6 @@ export default function LiveMatchesPage() {
     });
   }, [todayQuery.data, upcomingQuery.data]);
 
-  // Apply status filter
   const filtered: Fixture[] = useMemo(() => {
     return allFixtures.filter((f) => {
       if (statusFilter === "All")      return true;
@@ -418,7 +376,6 @@ export default function LiveMatchesPage() {
     });
   }, [allFixtures, statusFilter]);
 
-  // Sort: live first, then scheduled (by time), then finished
   const sorted: Fixture[] = useMemo(() => {
     const order: Record<string, number> = {
       live: 0, scheduled: 1, finished: 2, postponed: 3, cancelled: 4,
@@ -430,137 +387,118 @@ export default function LiveMatchesPage() {
     });
   }, [filtered]);
 
-  // Last updated timestamp
   const dataUpdatedAt =
     Math.max(todayQuery.dataUpdatedAt ?? 0, upcomingQuery.dataUpdatedAt ?? 0) || null;
 
   const isRefetching = todayQuery.isFetching || upcomingQuery.isFetching;
 
-  // Auto-refresh countdown indicator
   const [tick, setTick] = useState(0);
   useEffect(() => {
     const id = setInterval(() => setTick((t) => t + 1), 1000);
     return () => clearInterval(id);
   }, []);
-  void tick; // used only to force re-render for lastUpdatedLabel
+  void tick;
 
-  // Determine empty-state message
   const todayCount  = todayQuery.data?.fixtures?.length ?? 0;
   const noTodayMsg  = todayCount === 0 && !isLoading && !hasError;
 
+  const liveCount = allFixtures.filter((f) => f.status === "live").length;
+
   return (
-    <div className="space-y-8 animate-fade-in">
-      {/* ── Header ── */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-4xl font-bold tracking-tight gradient-text">
-              {t("live.title")}
-            </h1>
-            <div className="flex items-center gap-1.5 rounded-full bg-red-500/10 px-3 py-1 ring-1 ring-red-500/30">
-              <span className="live-dot-red" />
-              <span className="text-xs font-bold uppercase tracking-widest text-red-400">
-                {t("live.statusLive")}
-              </span>
+    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 animate-fade-in">
+      {/* Ambient glows */}
+      <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-purple-500/15 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full bg-blue-500/10 blur-3xl" />
+
+      <div className="relative space-y-8">
+        {/* ── Header ── */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <span className="section-label inline-flex items-center gap-2">
+              <span className="live-dot-red" /> Live now
+            </span>
+            <h1 className="text-heading mt-3">{t("live.title")}</h1>
+            <p className="mt-2 text-sm text-slate-400">{t("live.subtitle")}</p>
+            <div className="mt-3 flex items-center gap-2">
+              <Pill tone="purple">{liveCount} live</Pill>
+              <div className="flex items-center gap-1.5">
+                <RefreshCw className={cn("h-3 w-3 text-slate-500", isRefetching && "animate-spin")} />
+                <span className="text-[11px] text-slate-500">
+                  {dataUpdatedAt
+                    ? `${t("live.lastUpdated")}: ${lastUpdatedLabel(dataUpdatedAt)}`
+                    : t("live.fetchingData")}
+                </span>
+              </div>
             </div>
           </div>
-          <p className="mt-1.5 text-sm text-slate-400">
-            {t("live.subtitle")}
-          </p>
-          {/* Last updated */}
-          <div className="mt-2 flex items-center gap-1.5">
-            <RefreshCw
-              className={cn(
-                "h-3 w-3 text-slate-600",
-                isRefetching && "animate-spin"
-              )}
-            />
-            <span className="text-[11px] text-slate-600">
-              {dataUpdatedAt
-                ? `${t("live.lastUpdated")}: ${lastUpdatedLabel(dataUpdatedAt)}`
-                : t("live.fetchingData")}
-            </span>
-          </div>
+
+          {!isLoading && !hasError && <StatStrip fixtures={allFixtures} />}
         </div>
 
-        {/* Stat strip */}
-        {!isLoading && !hasError && (
-          <StatStrip fixtures={allFixtures} />
+        {/* ── Error banner ── */}
+        {hasError && (
+          <GlassPanel className="flex items-center gap-3 px-4 py-3 border-red-500/30">
+            <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+            <p className="text-sm text-red-400">{t("live.errorBackend")}</p>
+          </GlassPanel>
+        )}
+
+        {/* ── No games today notice ── */}
+        {noTodayMsg && allFixtures.length > 0 && (
+          <GlassPanel className="flex items-center gap-3 px-4 py-3">
+            <Clock className="h-4 w-4 shrink-0 text-slate-500" />
+            <p className="text-sm text-slate-400">{t("live.noMatchesToday")}</p>
+          </GlassPanel>
+        )}
+
+        {/* ── Filter bar ── */}
+        {!isLoading && (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[11px] font-semibold text-slate-500 mr-1">
+              {t("live.status")}
+            </span>
+            {STATUS_FILTERS.map((s) => {
+              const filterLabels: Record<StatusFilter, string> = {
+                All: t("live.filterAll"),
+                Live: t("live.filterLive"),
+                Upcoming: t("live.filterUpcoming"),
+                Finished: t("live.filterFinished"),
+              };
+              return (
+                <FilterPill
+                  key={s}
+                  label={filterLabels[s]}
+                  active={statusFilter === s}
+                  onClick={() => setStatusFilter(s)}
+                />
+              );
+            })}
+          </div>
+        )}
+
+        {/* ── Match grid ── */}
+        {isLoading ? (
+          <MatchGridSkeleton />
+        ) : sorted.length === 0 ? (
+          <EmptyState
+            message={
+              hasError
+                ? t("live.noDataBackendUnreachable")
+                : allFixtures.length === 0
+                ? t("live.noMatchesFound")
+                : t("live.noMatchesForFilter")
+            }
+            onClearFilters={statusFilter !== "All" ? () => setStatusFilter("All") : undefined}
+            clearLabel={t("live.clearFilters")}
+          />
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {sorted.map((fixture, i) => (
+              <MatchCard key={fixture.id} fixture={fixture} index={i} />
+            ))}
+          </div>
         )}
       </div>
-
-      {/* ── Error banner ── */}
-      {hasError && (
-        <div className="flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3">
-          <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
-          <p className="text-sm text-red-400">
-            {t("live.errorBackend")}
-          </p>
-        </div>
-      )}
-
-      {/* ── No games today notice ── */}
-      {noTodayMsg && allFixtures.length > 0 && (
-        <div className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
-          <Clock className="h-4 w-4 shrink-0 text-slate-500" />
-          <p className="text-sm text-slate-400">
-            {t("live.noMatchesToday")}
-          </p>
-        </div>
-      )}
-
-      {/* ── Filter bar ── */}
-      {!isLoading && (
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-600 mr-1">
-            {t("live.status")}
-          </span>
-          {STATUS_FILTERS.map((s) => {
-            const filterLabels: Record<StatusFilter, string> = {
-              All: t("live.filterAll"),
-              Live: t("live.filterLive"),
-              Upcoming: t("live.filterUpcoming"),
-              Finished: t("live.filterFinished"),
-            };
-            return (
-              <FilterPill
-                key={s}
-                label={filterLabels[s]}
-                active={statusFilter === s}
-                onClick={() => setStatusFilter(s)}
-              />
-            );
-          })}
-        </div>
-      )}
-
-      {/* ── Match grid ── */}
-      {isLoading ? (
-        <MatchGridSkeleton />
-      ) : sorted.length === 0 ? (
-        <EmptyState
-          message={
-            hasError
-              ? t("live.noDataBackendUnreachable")
-              : allFixtures.length === 0
-              ? t("live.noMatchesFound")
-              : t("live.noMatchesForFilter")
-          }
-          onClearFilters={
-            statusFilter !== "All"
-              ? () => setStatusFilter("All")
-              : undefined
-          }
-          clearLabel={t("live.clearFilters")}
-        />
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {sorted.map((fixture, i) => (
-            <MatchCard key={fixture.id} fixture={fixture} index={i} />
-          ))}
-        </div>
-      )}
-
     </div>
   );
 }
