@@ -5,7 +5,7 @@
  * SEO-friendly descriptive filename. The image itself is rendered at
  * low opacity behind a diagonal-stripe pattern + dark gradient overlay.
  *
- * Drop the actual .webp files into /public/hero and /public/cta with
+ * Drop the actual .jpg files into /public/hero and /public/cta with
  * the exact filenames below. Missing files fail open (the gradient +
  * pattern still render, just without the photo).
  */
@@ -35,78 +35,78 @@ interface PageImagePair {
 
 export const PAGE_IMAGES: Record<PageImageKey, PageImagePair> = {
   home: {
-    hero: "/hero/ai-football-predictions-stadium.webp",
-    cta: "/cta/football-player-celebrating-goal.webp",
+    hero: "/hero/ai-football-predictions-stadium.jpg",
+    cta: "/cta/football-player-celebrating-goal.jpg",
     alt: "Footballer celebrating a goal",
   },
   "how-it-works": {
-    hero: "/hero/football-data-analytics-workflow.webp",
-    cta: "/cta/football-team-huddle-tactics.webp",
+    hero: "/hero/football-data-analytics-workflow.jpg",
+    cta: "/cta/football-team-huddle-tactics.jpg",
     alt: "Football team in a tactical huddle",
   },
   "track-record": {
-    hero: "/hero/football-match-statistics-scoreboard.webp",
-    cta: "/cta/football-striker-scoring-winner.webp",
+    hero: "/hero/football-match-statistics-scoreboard.jpg",
+    cta: "/cta/football-striker-scoring-winner.jpg",
     alt: "Football striker scoring a match-winning goal",
   },
   about: {
-    hero: "/hero/football-coach-analysis-sideline.webp",
-    cta: "/cta/football-fans-celebrating-victory.webp",
+    hero: "/hero/football-coach-analysis-sideline.jpg",
+    cta: "/cta/football-fans-celebrating-victory.jpg",
     alt: "Football fans celebrating a victory",
   },
   contact: {
-    hero: "/hero/football-stadium-empty-seats.webp",
-    cta: "/cta/footballer-triumphant-pose-stadium.webp",
+    hero: "/hero/football-stadium-empty-seats.jpg",
+    cta: "/cta/footballer-triumphant-pose-stadium.jpg",
     alt: "Footballer in triumphant pose under stadium lights",
   },
   b2b: {
-    hero: "/hero/football-tactical-board-boardroom.webp",
-    cta: "/cta/professional-football-match-broadcast.webp",
+    hero: "/hero/football-tactical-board-boardroom.jpg",
+    cta: "/cta/professional-football-match-broadcast.jpg",
     alt: "Professional football match broadcast setup",
   },
   welcome: {
-    hero: "/hero/football-training-session-sunrise.webp",
-    cta: "/cta/football-captain-lifting-trophy.webp",
+    hero: "/hero/football-training-session-sunrise.jpg",
+    cta: "/cta/football-captain-lifting-trophy.jpg",
     alt: "Football captain lifting the trophy",
   },
   articles: {
-    hero: "/hero/football-journalist-press-room.webp",
-    cta: "/cta/football-match-action-shot.webp",
+    hero: "/hero/football-journalist-press-room.jpg",
+    cta: "/cta/football-match-action-shot.jpg",
     alt: "Dynamic football match action shot",
   },
   article: {
-    hero: "/hero/football-article-editorial-backdrop.webp",
-    cta: "/cta/football-winning-moment-crowd.webp",
+    hero: "/hero/football-article-editorial-backdrop.jpg",
+    cta: "/cta/football-winning-moment-crowd.jpg",
     alt: "Winning moment at a packed football stadium",
   },
   "match-predictions": {
-    hero: "/hero/football-pitch-markings-aerial.webp",
-    cta: "/cta/football-player-raising-fist-celebration.webp",
+    hero: "/hero/football-pitch-markings-aerial.jpg",
+    cta: "/cta/football-player-raising-fist-celebration.jpg",
     alt: "Football player raising fist in celebration",
   },
   learn: {
-    hero: "/hero/football-playbook-strategy-notes.webp",
-    cta: "/cta/football-midfielder-passing-action.webp",
+    hero: "/hero/football-playbook-strategy-notes.jpg",
+    cta: "/cta/football-midfielder-passing-action.jpg",
     alt: "Football midfielder in action",
   },
   "bet-types": {
-    hero: "/hero/football-statistics-graph-overlay.webp",
-    cta: "/cta/football-goalkeeper-diving-save.webp",
+    hero: "/hero/football-statistics-graph-overlay.jpg",
+    cta: "/cta/football-goalkeeper-diving-save.jpg",
     alt: "Football goalkeeper diving for a save",
   },
   checkout: {
-    hero: "/hero/football-premium-locker-room.webp",
-    cta: "/cta/football-team-celebration-lineup.webp",
+    hero: "/hero/football-premium-locker-room.jpg",
+    cta: "/cta/football-team-celebration-lineup.jpg",
     alt: "Football team celebration lineup",
   },
   "thank-you": {
-    hero: "/hero/football-welcome-stadium-gates.webp",
-    cta: "/cta/footballer-pointing-to-sky-celebration.webp",
+    hero: "/hero/football-welcome-stadium-gates.jpg",
+    cta: "/cta/footballer-pointing-to-sky-celebration.jpg",
     alt: "Footballer pointing to sky in celebration",
   },
   pricing: {
-    hero: "/hero/football-premium-seating-vip.webp",
-    cta: "/cta/champion-footballer-trophy-lift.webp",
+    hero: "/hero/football-premium-seating-vip.jpg",
+    cta: "/cta/champion-footballer-trophy-lift.jpg",
     alt: "Champion footballer lifting trophy",
   },
 };
