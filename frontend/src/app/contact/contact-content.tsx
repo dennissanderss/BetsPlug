@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -15,13 +14,15 @@ import {
   BookOpen,
   CreditCard,
   Users,
+  LifeBuoy,
 } from "lucide-react";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { SiteNav } from "@/components/ui/site-nav";
-import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
-import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
+import { useTranslations } from "@/i18n/locale-provider";
+import { HeroMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 import { getLocaleValue } from "@/lib/sanity-data";
+import { HexBadge } from "@/components/noct/hex-badge";
 
 type FaqItem = { q: string; a: string };
 type FaqGroup = { label: string; icon: typeof BookOpen; items: FaqItem[] };
@@ -32,9 +33,9 @@ interface ContactContentProps {
 
 export function ContactContent({ contactPage }: ContactContentProps) {
   const { t, locale } = useTranslations();
-  const loc = useLocalizedHref();
   const [openQ, setOpenQ] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [activeGroup, setActiveGroup] = useState<string | null>(null);
 
   const helpOptions = [
     {
@@ -45,7 +46,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       cta: t("contact.card2Cta"),
       href: "https://t.me/betsplug",
       external: true,
-      highlight: true,
+      variant: "green" as const,
     },
     {
       id: "email",
@@ -54,6 +55,8 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       desc: t("contact.card3Desc"),
       cta: t("contact.card3Cta"),
       href: "mailto:support@betsplug.com",
+      external: false,
+      variant: "purple" as const,
     },
   ];
 
@@ -92,7 +95,6 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       }))
     : defaultFaqGroups;
 
-  // Simple fuzzy filter for the search box
   const normalized = query.trim().toLowerCase();
   const filteredGroups = normalized
     ? faqGroups
@@ -105,16 +107,22 @@ export function ContactContent({ contactPage }: ContactContentProps) {
           ),
         }))
         .filter((g) => g.items.length > 0)
+    : activeGroup
+    ? faqGroups.filter((g) => g.label === activeGroup)
     : faqGroups;
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background text-slate-900">
-      {/* Shared site navigation (same as landing) */}
+    <div className="min-h-screen">
       <SiteNav />
 
-      {/* ───── HERO ───── */}
-      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+      {/* ─── HERO ─── */}
+      <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
         <HeroMediaBg src={PAGE_IMAGES.contact.hero} alt="" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-20 h-[400px] w-[800px] -translate-x-1/2 rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(140px)" }}
+        />
 
         <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center">
           <motion.span
@@ -131,274 +139,305 @@ export function ContactContent({ contactPage }: ContactContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-display text-3xl text-white sm:text-4xl lg:text-5xl"
+            className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl"
           >
             {t("contact.titleA")}{" "}
-            <span className="gradient-text">{t("contact.titleB")}</span>
+            <span className="gradient-text-green">{t("contact.titleB")}</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg"
+            className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
             {t("contact.subtitle")}
           </motion.p>
-
         </div>
       </section>
 
-      {/* ───── Help options grid ───── */}
+      {/* ─── Help options grid ─── */}
       <section className="relative py-20 md:py-28">
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:gap-8 px-4 sm:px-6 md:grid-cols-2">
-          {helpOptions.map((opt) => {
-            const Icon = opt.icon;
-            const Inner = (
-              <>
-                <div
-                  className={`mb-5 flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 ${
-                    opt.highlight
-                      ? "bg-green-50 shadow-[0_0_30px_rgba(74,222,128,0.15)] ring-1 ring-green-500/30"
-                      : "bg-slate-50 ring-1 ring-slate-200"
-                  }`}
-                >
-                  <Icon
-                    className={`h-5 w-5 ${
-                      opt.highlight ? "text-green-500" : "text-slate-600"
-                    }`}
-                  />
-                </div>
-                <h3 className="mb-2 text-lg font-extrabold tracking-tight text-slate-900">
-                  {opt.title}
-                </h3>
-                <p className="mb-5 flex-1 text-sm leading-relaxed text-slate-600">
-                  {opt.desc}
-                </p>
-                <div
-                  className={`inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest ${
-                    opt.highlight ? "text-green-600" : "text-slate-600"
-                  }`}
-                >
-                  {opt.cta}
-                  <Send className="h-3 w-3" />
-                </div>
-              </>
-            );
-
-            const cardClass = `group relative flex h-full flex-col overflow-hidden rounded-3xl border p-6 sm:p-8 text-left transition-all duration-300 ${
-              opt.highlight
-                ? "border-green-500/30 bg-green-50 hover:border-green-500/50 hover:shadow-xl hover:shadow-green-500/[0.12]"
-                : "border-slate-200 bg-white shadow-sm hover:border-slate-300 hover:shadow-md"
-            }`;
-
-            return (
-              <motion.div
-                key={opt.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-              >
-                <a
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-0 top-1/3 h-[400px] w-[400px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.1)", filter: "blur(140px)" }}
+        />
+        <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2">
+            {helpOptions.map((opt) => {
+              const Icon = opt.icon;
+              return (
+                <motion.a
+                  key={opt.id}
                   href={opt.href}
                   target={opt.external ? "_blank" : undefined}
                   rel={opt.external ? "noopener noreferrer" : undefined}
-                  className={cardClass}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5 }}
+                  className={`card-neon card-neon-${opt.variant} group relative block p-7 sm:p-8 transition-transform duration-300 hover:-translate-y-1`}
                 >
-                  {Inner}
-                </a>
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ───── FAQ Search + Accordions ───── */}
-      <section className="relative py-20 md:py-28">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          {/* Section header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mx-auto mb-12 sm:mb-14 flex flex-col items-center text-center"
-          >
-            <span className="section-label mb-4">
-              {t("contact.faqBadge")}
-            </span>
-            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
-              {t("contact.faqTitleA")}{" "}
-              <span className="gradient-text">{t("contact.faqTitleB")}</span>
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-sm text-slate-600 sm:text-base">
-              {t("contact.faqSubtitle")}
-            </p>
-          </motion.div>
-
-          {/* Search box */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="relative mb-10"
-          >
-            <Search className="absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={t("contact.faqSearch")}
-              className="w-full rounded-2xl border border-slate-300 bg-white py-4 pl-12 pr-5 text-sm text-slate-900 placeholder:text-slate-400 transition-all focus:border-green-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-green-500/20"
-            />
-          </motion.div>
-
-          {/* Accordion groups */}
-          <div className="flex flex-col gap-10">
-            {filteredGroups.length === 0 ? (
-              <p className="text-center text-sm text-slate-500">
-                {t("contact.faqEmpty")}
-              </p>
-            ) : (
-              filteredGroups.map((group) => {
-                const GIcon = group.icon;
-                return (
-                  <div key={group.label}>
-                    <div className="mb-4 flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-green-50 ring-1 ring-green-500/30">
-                        <GIcon className="h-4 w-4 text-green-600" />
-                      </div>
-                      <h3 className="text-sm font-extrabold uppercase tracking-widest text-slate-900">
-                        {group.label}
-                      </h3>
-                    </div>
-                    <div className="flex flex-col gap-3">
-                      {group.items.map((item) => {
-                        const isOpen = openQ === item.q;
-                        return (
-                          <div
-                            key={item.q}
-                            className={`overflow-hidden rounded-2xl border transition-all duration-300 ${
-                              isOpen
-                                ? "border-green-500/30 bg-green-50 shadow-lg shadow-green-500/[0.06]"
-                                : "border-slate-200 bg-white hover:border-slate-300"
-                            }`}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => setOpenQ(isOpen ? null : item.q)}
-                              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-6 sm:py-5"
-                              aria-expanded={isOpen}
-                            >
-                              <span
-                                className={`text-sm font-semibold transition-colors sm:text-base ${
-                                  isOpen ? "text-slate-900" : "text-slate-700"
-                                }`}
-                              >
-                                {item.q}
-                              </span>
-                              <div
-                                className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border transition-all ${
-                                  isOpen
-                                    ? "rotate-180 border-green-500/40 bg-green-50 text-green-600"
-                                    : "border-slate-200 bg-slate-50 text-slate-500"
-                                }`}
-                              >
-                                <ChevronDown className="h-4 w-4" />
-                              </div>
-                            </button>
-                            <AnimatePresence initial={false}>
-                              {isOpen && (
-                                <motion.div
-                                  initial={{ height: 0, opacity: 0 }}
-                                  animate={{ height: "auto", opacity: 1 }}
-                                  exit={{ height: 0, opacity: 0 }}
-                                  transition={{
-                                    duration: 0.3,
-                                    ease: [0.16, 1, 0.3, 1],
-                                  }}
-                                  className="overflow-hidden"
-                                >
-                                  <div className="border-t border-slate-200 px-5 pb-5 pt-4 text-sm leading-relaxed text-slate-600 sm:px-6 sm:pb-6">
-                                    {item.a}
-                                  </div>
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          </div>
-                        );
-                      })}
-                    </div>
+                  <div className="relative flex h-full flex-col">
+                    <HexBadge variant={opt.variant} size="md">
+                      <Icon className="h-5 w-5" strokeWidth={2} />
+                    </HexBadge>
+                    <h3 className="text-heading mt-5 text-xl text-[#ededed]">
+                      {opt.title}
+                    </h3>
+                    <p className="mt-3 flex-1 text-sm leading-relaxed text-[#a3a9b8]">
+                      {opt.desc}
+                    </p>
+                    <span
+                      className={`mt-6 inline-flex items-center gap-2 ${
+                        opt.variant === "green" ? "btn-primary" : "btn-glass"
+                      }`}
+                    >
+                      {opt.cta}
+                      <Send className="h-3.5 w-3.5" />
+                    </span>
                   </div>
-                );
-              })
-            )}
+                </motion.a>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ───── Still need help — finalCta style ───── */}
+      {/* ─── FAQ Search + Accordions ─── */}
       <section className="relative py-20 md:py-28">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-0 h-[400px] w-[500px] rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(140px)" }}
+        />
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16"
+            className="mb-12 flex flex-col items-center text-center"
           >
-            <CtaMediaBg src={PAGE_IMAGES.contact.cta} alt={PAGE_IMAGES.contact.alt} pattern={PAGE_IMAGES.contact.pattern} />
-            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
+            <span className="section-label mb-4">
+              <BookOpen className="h-3 w-3" />
+              {t("contact.faqBadge")}
+            </span>
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              {t("contact.faqTitleA")}{" "}
+              <span className="gradient-text-green">{t("contact.faqTitleB")}</span>
+            </h2>
+            <p className="mt-4 max-w-xl text-base text-[#a3a9b8]">
+              {t("contact.faqSubtitle")}
+            </p>
+          </motion.div>
 
-            <div className="relative">
-              <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
-                <Sparkles className="h-3 w-3" />
-                {t("contact.stillNeedTitle")}
-              </span>
-              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
-                {t("contact.stillNeedTitle")}
-              </h2>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#050505]/80">
-                {t("contact.stillNeedDesc")}
-              </p>
+          <div className="card-neon p-6 sm:p-8">
+            <div className="relative grid gap-8 lg:grid-cols-[240px_1fr]">
+              {/* Sidebar categories */}
+              <aside className="flex flex-col gap-3">
+                <button
+                  type="button"
+                  onClick={() => setActiveGroup(null)}
+                  className={`${
+                    activeGroup === null ? "glass-panel-lifted" : "glass-panel"
+                  } flex items-center gap-3 p-3 text-left text-sm text-[#ededed] transition hover:-translate-y-0.5`}
+                >
+                  <HexBadge variant="green" size="sm" noGlow>
+                    <Sparkles className="h-3.5 w-3.5" />
+                  </HexBadge>
+                  <span>All</span>
+                </button>
+                {faqGroups.map((g) => {
+                  const GIcon = g.icon;
+                  const isActive = activeGroup === g.label;
+                  return (
+                    <button
+                      key={g.label}
+                      type="button"
+                      onClick={() => setActiveGroup(isActive ? null : g.label)}
+                      className={`${
+                        isActive ? "glass-panel-lifted" : "glass-panel"
+                      } flex items-center gap-3 p-3 text-left text-sm text-[#ededed] transition hover:-translate-y-0.5`}
+                    >
+                      <HexBadge variant={isActive ? "green" : "blue"} size="sm" noGlow>
+                        <GIcon className="h-3.5 w-3.5" />
+                      </HexBadge>
+                      <span>{g.label}</span>
+                    </button>
+                  );
+                })}
+              </aside>
 
-              <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <a
-                  href="mailto:support@betsplug.com"
-                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
-                >
-                  <Mail className="h-4 w-4" />
-                  SUPPORT@BETSPLUG.COM →
-                </a>
-                <a
-                  href="https://t.me/betsplug"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
-                >
-                  <MessageCircle className="h-4 w-4" />
-                  TELEGRAM SUPPORT →
-                </a>
+              <div className="flex flex-col gap-6">
+                <div className="relative">
+                  <Search className="absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
+                  <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder={t("contact.faqSearch")}
+                    className="w-full rounded-2xl border border-white/10 bg-[#0a0f1a]/80 py-4 pl-12 pr-5 text-sm text-[#ededed] placeholder:text-[#6b7280] transition-all focus:border-[#4ade80]/50 focus:outline-none focus:ring-2 focus:ring-[#4ade80]/20"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-6">
+                  {filteredGroups.length === 0 ? (
+                    <p className="text-center text-sm text-[#6b7280]">
+                      {t("contact.faqEmpty")}
+                    </p>
+                  ) : (
+                    filteredGroups.map((group) => {
+                      const GIcon = group.icon;
+                      return (
+                        <div key={group.label}>
+                          <div className="mb-3 flex items-center gap-3">
+                            <HexBadge variant="green" size="sm" noGlow>
+                              <GIcon className="h-3.5 w-3.5" />
+                            </HexBadge>
+                            <h3 className="text-heading text-sm text-[#ededed]">
+                              {group.label}
+                            </h3>
+                          </div>
+                          <div className="flex flex-col gap-3">
+                            {group.items.map((item) => {
+                              const isOpen = openQ === item.q;
+                              return (
+                                <div
+                                  key={item.q}
+                                  className={`${
+                                    isOpen ? "card-neon card-neon-green" : "glass-panel-lifted"
+                                  } overflow-hidden transition-all duration-300`}
+                                >
+                                  <div className="relative">
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        setOpenQ(isOpen ? null : item.q)
+                                      }
+                                      className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-6 sm:py-5"
+                                      aria-expanded={isOpen}
+                                    >
+                                      <span
+                                        className={`text-sm font-semibold sm:text-base ${
+                                          isOpen ? "text-[#ededed]" : "text-[#c4cad6]"
+                                        }`}
+                                      >
+                                        {item.q}
+                                      </span>
+                                      <ChevronDown
+                                        className={`h-4 w-4 flex-shrink-0 transition-transform ${
+                                          isOpen
+                                            ? "rotate-180 text-[#4ade80]"
+                                            : "text-[#6b7280]"
+                                        }`}
+                                      />
+                                    </button>
+                                    <AnimatePresence initial={false}>
+                                      {isOpen && (
+                                        <motion.div
+                                          initial={{ height: 0, opacity: 0 }}
+                                          animate={{ height: "auto", opacity: 1 }}
+                                          exit={{ height: 0, opacity: 0 }}
+                                          transition={{
+                                            duration: 0.3,
+                                            ease: [0.16, 1, 0.3, 1],
+                                          }}
+                                          className="overflow-hidden"
+                                        >
+                                          <div className="border-t border-white/10 px-5 pb-5 pt-4 text-sm leading-relaxed text-[#a3a9b8] sm:px-6 sm:pb-6">
+                                            {item.a}
+                                          </div>
+                                        </motion.div>
+                                      )}
+                                    </AnimatePresence>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              {/* Trust row */}
-              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[10px] font-bold uppercase tracking-widest text-[#050505]/80">
-                <div className="flex items-center gap-1.5">
-                  <Clock className="h-3 w-3 text-[#050505]" />
-                  <span>{t("contact.trust1")}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Shield className="h-3 w-3 text-[#050505]" />
-                  <span>{t("contact.trust2")}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Users className="h-3 w-3 text-[#050505]" />
-                  <span>{t("contact.trust3")}</span>
+      {/* ─── Still need help — finalCta ─── */}
+      <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/4 top-0 h-[400px] w-[500px] rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.18)", filter: "blur(140px)" }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-1/4 bottom-0 h-[400px] w-[500px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.15)", filter: "blur(140px)" }}
+        />
+        <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="card-neon card-neon-green halo-green p-10 md:p-16"
+          >
+            <div className="relative">
+              <div className="flex items-start gap-4">
+                <HexBadge variant="green" size="lg">
+                  <LifeBuoy className="h-7 w-7" strokeWidth={2} />
+                </HexBadge>
+                <div className="flex-1">
+                  <span className="section-label mb-4">
+                    <Sparkles className="h-3 w-3" />
+                    {t("contact.stillNeedTitle")}
+                  </span>
+                  <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+                    {t("contact.stillNeedTitle")}
+                  </h2>
+                  <p className="mt-4 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
+                    {t("contact.stillNeedDesc")}
+                  </p>
+
+                  <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+                    <a
+                      href="mailto:support@betsplug.com"
+                      className="btn-primary inline-flex items-center gap-2"
+                    >
+                      <Mail className="h-4 w-4" />
+                      support@betsplug.com
+                    </a>
+                    <a
+                      href="https://t.me/betsplug"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-ghost inline-flex items-center gap-2"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      Telegram support
+                    </a>
+                  </div>
+
+                  <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-[#a3a9b8]">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="h-3.5 w-3.5 text-[#4ade80]" />
+                      <span>{t("contact.trust1")}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Shield className="h-3.5 w-3.5 text-[#4ade80]" />
+                      <span>{t("contact.trust2")}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-3.5 w-3.5 text-[#4ade80]" />
+                      <span>{t("contact.trust3")}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

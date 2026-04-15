@@ -37,18 +37,17 @@ import {
 import { useFreeMatchIds } from "@/components/match-predictions/use-free-match-ids";
 import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 
 /* ──────────────────────────────────────────────────────────────
- * Match Predictions — public marketing teaser
+ * Match Predictions — NOCTURNE rebuild
  * ────────────────────────────────────────────────────────────── */
-
-/* ── Main page content ─────────────────────────────────────── */
 
 export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
 
-  // Global free-pick IDs — single source of truth across all pages
   const { freeMatchIds, isLoadingFreeIds } = useFreeMatchIds();
 
   const fixturesQuery = useQuery({
@@ -61,7 +60,6 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
 
   const fixtures = fixturesQuery.data?.fixtures ?? [];
 
-  // Only upcoming scheduled matches, sorted by kickoff ASC
   const upcoming = useMemo(() => {
     const now = Date.now();
     return fixtures
@@ -72,17 +70,14 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       })
       .sort(
         (a, b) =>
-          new Date(a.scheduled_at).getTime() -
-          new Date(b.scheduled_at).getTime(),
+          new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime(),
       );
   }, [fixtures]);
 
-  // Free picks: only fixtures whose match ID is in the global free set
   const free: Fixture[] = useMemo(
     () => upcoming.filter((f) => freeMatchIds.has(f.id)),
     [upcoming, freeMatchIds],
   );
-  // Locked pool: everything else (prefer ones with predictions for realism)
   const lockedPool = useMemo(() => {
     const withPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction !== null);
     const withoutPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction === null);
@@ -102,68 +97,67 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
     return Math.round((sum / free.length) * 100);
   }, [free]);
 
-  const stats = [
-    {
-      label: t("matchPred.statFree"),
-      value: String(free.length || FREE_PICKS),
-      icon: Sparkles,
-      color: "#4ade80",
-    },
-    {
-      label: t("matchPred.statUpcoming"),
-      value: String(upcoming.length),
-      icon: Clock,
-      color: "#38bdf8",
-    },
+  const stats: {
+    label: string;
+    value: string;
+    icon: typeof Sparkles;
+    variant: "green" | "purple" | "blue";
+  }[] = [
+    { label: t("matchPred.statFree"), value: String(free.length || FREE_PICKS), icon: Sparkles, variant: "green" },
+    { label: t("matchPred.statUpcoming"), value: String(upcoming.length), icon: Clock, variant: "blue" },
     {
       label: t("matchPred.statLocked"),
-      value: String(
-        Math.max(upcoming.length - free.length, LOCKED_PREVIEW),
-      ),
+      value: String(Math.max(upcoming.length - free.length, LOCKED_PREVIEW)),
       icon: Lock,
-      color: "#f59e0b",
+      variant: "purple",
     },
     {
       label: t("matchPred.statAvgConf"),
       value: avgConf !== null ? `${avgConf}%` : " - ",
       icon: TrendingUp,
-      color: "#a855f7",
+      variant: "green",
     },
   ];
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
       <SiteNav />
 
       {/* ── Hero ── */}
-      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
+      <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
         <HeroMediaBg src={PAGE_IMAGES["match-predictions"].hero} alt={PAGE_IMAGES["match-predictions"].alt} />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-10 h-[420px] w-[780px] -translate-x-1/2 rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(140px)" }}
+        />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 text-center">
-          <motion.div
+          <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="section-label mx-auto"
           >
-            <Sparkles className="h-3.5 w-3.5" />
+            <Sparkles className="h-3 w-3" />
             {t("matchPred.eyebrow")}
-          </motion.div>
+          </motion.span>
 
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="text-display mt-5 text-3xl text-white sm:text-4xl lg:text-5xl"
+            className="text-heading mt-5 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl"
           >
-            {t("matchPred.title")}
+            {t("matchPred.title")}{" "}
+            <span className="gradient-text-green">live</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a3a3] sm:text-lg"
+            className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
             {t("matchPred.subtitle")}
           </motion.p>
@@ -173,56 +167,69 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.18 }}
-            className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-2 text-[11px] font-semibold text-slate-500"
+            className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-2"
           >
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5">
-              <Zap className="h-3 w-3 text-green-500" />
+            <Pill tone="default" className="inline-flex items-center gap-1.5">
+              <Zap className="h-3 w-3 text-[#4ade80]" />
               {t("matchPred.trust1")}
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5">
-              <Activity className="h-3 w-3 text-blue-500" />
+            </Pill>
+            <Pill tone="default" className="inline-flex items-center gap-1.5">
+              <Activity className="h-3 w-3 text-[#60a5fa]" />
               {t("matchPred.trust2")}
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5">
-              <Shield className="h-3 w-3 text-emerald-500" />
+            </Pill>
+            <Pill tone="default" className="inline-flex items-center gap-1.5">
+              <Shield className="h-3 w-3 text-[#4ade80]" />
               {t("matchPred.trust3")}
-            </span>
+            </Pill>
           </motion.div>
 
-          {/* Stats bar */}
+          {/* Stats */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.25 }}
             className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4"
           >
-            {stats.map(({ label, value, icon: Icon, color }) => (
+            {stats.map(({ label, value, icon: Icon, variant }) => (
               <div
                 key={label}
-                className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-slate-200 bg-white px-3 py-4 text-center shadow-sm"
+                className={`card-neon card-neon-${variant} relative overflow-hidden px-3 py-5 text-center`}
               >
-                <Icon className="h-4 w-4" style={{ color }} />
-                <span className="mt-1 text-2xl font-extrabold leading-none tabular-nums text-slate-900">
-                  {value}
-                </span>
-                <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-                  {label}
-                </span>
+                <div className="relative flex flex-col items-center gap-2">
+                  <HexBadge variant={variant} size="sm">
+                    <Icon className="h-4 w-4" strokeWidth={2} />
+                  </HexBadge>
+                  <span className="text-stat text-2xl leading-none text-[#ededed]">
+                    {value}
+                  </span>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
+                    {label}
+                  </span>
+                </div>
               </div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* ── Free 3 predictions ── */}
+      {/* ── Free picks ── */}
       <section className="relative py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-0 h-[360px] w-[520px] rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(140px)" }}
+        />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-12 sm:mb-14 flex items-end justify-between gap-4">
             <div>
-              <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+              <span className="section-label">
+                <Sparkles className="h-3 w-3" />
+                {t("matchPred.statFree")}
+              </span>
+              <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("matchPred.freeHeading")}
               </h2>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-3 max-w-xl text-base text-[#a3a9b8]">
                 {t("matchPred.freeSub")}
               </p>
             </div>
@@ -230,7 +237,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
               <button
                 type="button"
                 onClick={() => fixturesQuery.refetch()}
-                className="hidden items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-[11px] font-semibold text-slate-600 transition hover:border-green-500/40 hover:text-green-600 sm:inline-flex"
+                className="btn-glass hidden items-center gap-1.5 sm:inline-flex"
               >
                 <RefreshCw className="h-3 w-3 animate-spin" />
                 {t("matchPred.refresh")}
@@ -247,47 +254,53 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
           )}
 
           {!isLoading && isError && (
-            <div className="flex flex-col items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-6 shadow-sm sm:flex-row sm:items-center">
-              <AlertTriangle className="h-6 w-6 shrink-0 text-amber-500" />
-              <div className="flex-1">
-                <p className="font-bold text-amber-700">
-                  {t("matchPred.errorTitle")}
-                </p>
-                <p className="mt-1 text-sm text-slate-600">
-                  {t("matchPred.errorDesc")}
-                </p>
+            <div className="card-neon card-neon-purple relative overflow-hidden p-6">
+              <div className="relative flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+                <HexBadge variant="purple" size="md">
+                  <AlertTriangle className="h-5 w-5" />
+                </HexBadge>
+                <div className="flex-1">
+                  <p className="text-heading text-lg text-[#ededed]">
+                    {t("matchPred.errorTitle")}
+                  </p>
+                  <p className="mt-1 text-sm text-[#a3a9b8]">
+                    {t("matchPred.errorDesc")}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => fixturesQuery.refetch()}
+                  className="btn-glass inline-flex items-center gap-2"
+                >
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  {t("matchPred.refresh")}
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => fixturesQuery.refetch()}
-                className="inline-flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-bold text-amber-700 transition hover:bg-amber-100"
-              >
-                <RefreshCw className="h-3.5 w-3.5" />
-                {t("matchPred.refresh")}
-              </button>
             </div>
           )}
 
           {!isLoading && !isError && !hasFree && (
-            <div className="flex flex-col items-center gap-4 rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full border border-green-200 bg-green-50">
-                <Clock className="h-6 w-6 text-green-500" />
+            <div className="card-neon card-neon-green relative overflow-hidden p-10 text-center">
+              <div className="relative flex flex-col items-center gap-4">
+                <HexBadge variant="green" size="lg">
+                  <Clock className="h-7 w-7" />
+                </HexBadge>
+                <div>
+                  <h3 className="text-heading text-xl text-[#ededed]">
+                    {t("matchPred.emptyTitle")}
+                  </h3>
+                  <p className="mt-2 max-w-md text-sm text-[#a3a9b8]">
+                    {t("matchPred.emptyDesc")}
+                  </p>
+                </div>
+                <Link
+                  href={loc("/track-record")}
+                  className="btn-primary inline-flex items-center gap-2"
+                >
+                  <Eye className="h-3.5 w-3.5" />
+                  {t("matchPred.emptyCta")}
+                </Link>
               </div>
-              <div>
-                <h3 className="text-xl font-extrabold text-slate-900">
-                  {t("matchPred.emptyTitle")}
-                </h3>
-                <p className="mt-1 max-w-md text-sm text-slate-500">
-                  {t("matchPred.emptyDesc")}
-                </p>
-              </div>
-              <Link
-                href={loc("/track-record")}
-                className="inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-5 py-2.5 text-xs font-bold text-green-700 transition hover:border-green-500/50 hover:bg-green-100"
-              >
-                <Eye className="h-3.5 w-3.5" />
-                {t("matchPred.emptyCta")}
-              </Link>
             </div>
           )}
 
@@ -310,12 +323,21 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
 
       {/* ── Locked pool ── */}
       <section className="relative py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-0 top-10 h-[360px] w-[520px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.1)", filter: "blur(140px)" }}
+        />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-12 sm:mb-14">
-            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+            <span className="section-label">
+              <Lock className="h-3 w-3" />
+              {t("matchPred.statLocked")}
+            </span>
+            <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("matchPred.lockedHeading")}
             </h2>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-3 max-w-xl text-base text-[#a3a9b8]">
               {t("matchPred.lockedSub")}
             </p>
           </div>
@@ -337,36 +359,38 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       {/* ── Final CTA ── */}
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16">
+          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-10 md:p-16">
             <CtaMediaBg
               src={PAGE_IMAGES["match-predictions"].cta}
               alt={PAGE_IMAGES["match-predictions"].alt}
               pattern={PAGE_IMAGES["match-predictions"].pattern}
             />
-            {/* Corner brackets */}
-            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
-
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-16 -top-16 h-[260px] w-[260px] rounded-full"
+              style={{ background: "hsl(var(--accent-green) / 0.28)", filter: "blur(80px)" }}
+            />
             <div className="relative text-center">
-              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
+              <HexBadge variant="green" size="lg" className="mx-auto mb-5">
+                <Sparkles className="h-7 w-7" />
+              </HexBadge>
+              <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("matchPred.ctaFinalTitle")}
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#050505]/80">
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
                 {t("matchPred.ctaFinalDesc")}
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Link
                   href={loc("/checkout")}
-                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
+                  className="btn-primary inline-flex items-center gap-2"
                 >
                   {t("matchPred.ctaFinalButton")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href={loc("/checkout")}
-                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
+                  className="btn-ghost inline-flex items-center gap-2"
                 >
                   {t("matchPred.ctaFinalSecondary")}
                 </Link>

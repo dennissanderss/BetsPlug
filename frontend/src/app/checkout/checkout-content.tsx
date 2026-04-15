@@ -659,19 +659,12 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 
   /* ── Render ───────────────────────────────────────────────── */
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.03] blur-[160px]" />
-        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.02] blur-[160px]" />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(74,222,128,0.4) 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
+        <div className="absolute -left-40 top-40 h-[540px] w-[540px] rounded-full bg-[#4ade80]/[0.08] blur-[160px]" />
+        <div className="absolute -right-40 bottom-40 h-[540px] w-[540px] rounded-full bg-[#a855f7]/[0.07] blur-[160px]" />
+        <div className="absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-[#60a5fa]/[0.05] blur-[140px]" />
       </div>
 
       <CheckoutHeader />
@@ -679,14 +672,16 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
       <main className="relative z-10 mx-auto max-w-7xl px-6 py-10 md:py-14">
         {/* Page heading */}
         <div className="mx-auto max-w-3xl text-center">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-600">
-            <Lock className="h-3 w-3" />
-            {t("checkout.footer.secure")}
-          </span>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+          <div className="mb-4 flex justify-center">
+            <span className="section-label">
+              <Lock className="h-3 w-3" />
+              {t("checkout.footer.secure")}
+            </span>
+          </div>
+          <h1 className="text-display text-3xl text-[#ededed] sm:text-4xl md:text-5xl">
             {t("checkout.pageTitle")}
           </h1>
-          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-slate-500 sm:text-base">
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[#a3a9b8] sm:text-base">
             {t("checkout.pageSubtitle")}
           </p>
         </div>
@@ -757,21 +752,21 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 
               <form
                 onSubmit={handleSubmit}
-                className="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+                className="mt-6 rounded-3xl border border-white/[0.08] bg-white/[0.04] p-6 shadow-sm sm:p-8"
               >
                 {/* Logged-in badge — confirms the session is attached so
                     the user knows this subscription will end up on the
                     right account. */}
                 {user && (
-                  <div className="mb-6 flex items-center gap-3 rounded-2xl border border-green-200 bg-green-50 px-4 py-3">
+                  <div className="mb-6 flex items-center gap-3 rounded-2xl border border-[#4ade80]/30 bg-[#4ade80]/[0.08] px-4 py-3">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-green-500/30 bg-green-100">
-                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                      <CheckCircle2 className="h-4 w-4 text-[#4ade80]" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-600">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#4ade80]">
                         Logged in
                       </p>
-                      <p className="truncate text-sm font-semibold text-slate-900">
+                      <p className="truncate text-sm font-semibold text-[#ededed]">
                         {user.email}
                       </p>
                     </div>
@@ -912,11 +907,11 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                               />
                             </Field>
                           </div>
-                          <p className="mt-5 text-xs text-slate-500">
+                          <p className="mt-5 text-xs text-[#8a93a6]">
                             {t("checkout.alreadyHaveAccount")}{" "}
                             <Link
                               href={loc("/login")}
-                              className="font-semibold text-green-600 hover:text-green-500"
+                              className="font-semibold text-[#4ade80] hover:text-[#4ade80]"
                             >
                               {t("checkout.signIn")}
                             </Link>
@@ -927,8 +922,8 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                       {/* Payment reassurance — white pill badges
                           matching the footer so the trust signals
                           look consistent across the site. */}
-                      <div className="mt-6 flex flex-col items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 sm:flex-row sm:gap-4">
-                        <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-slate-500">
+                      <div className="mt-6 flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.04]/[0.03] px-4 py-4 sm:flex-row sm:gap-4">
+                        <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-[#8a93a6]">
                           <Lock className="h-3.5 w-3.5 text-green-400" />
                           {t("checkout.weAccept")}
                         </div>
@@ -1121,13 +1116,13 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                       {/* Trial reassurance — payment is still
                           required but no charge today */}
                       {trialActive && (
-                        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-green-200 bg-green-50 p-4">
-                          <Gift className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-500" />
+                        <div className="mt-6 flex items-start gap-3 rounded-2xl border border-[#4ade80]/30 bg-[#4ade80]/[0.08] p-4">
+                          <Gift className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#4ade80]" />
                           <div>
-                            <p className="text-xs font-bold uppercase tracking-wider text-green-600">
+                            <p className="text-xs font-bold uppercase tracking-wider text-[#4ade80]">
                               {t("checkout.trialBadge")}
                             </p>
-                            <p className="mt-1 text-xs leading-relaxed text-slate-600">
+                            <p className="mt-1 text-xs leading-relaxed text-[#a3a9b8]">
                               {t("checkout.trialPaymentNote").replace(
                                 "{date}",
                                 trialEndLabel
@@ -1138,21 +1133,21 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                       )}
 
                       {/* Stripe redirect info */}
-                      <div className="mt-6 flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                        <Lock className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-500" />
+                      <div className="mt-6 flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.04]/[0.03] p-5">
+                        <Lock className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#4ade80]" />
                         <div>
-                          <p className="text-sm font-semibold text-slate-900">
+                          <p className="text-sm font-semibold text-[#ededed]">
                             {t("checkout.stripeRedirectTitle")}
                           </p>
-                          <p className="mt-1 text-xs leading-relaxed text-slate-500">
+                          <p className="mt-1 text-xs leading-relaxed text-[#8a93a6]">
                             {t("checkout.stripeRedirectDesc")}
                           </p>
                         </div>
                       </div>
 
                       {/* Payment method badges */}
-                      <div className="mt-4 flex flex-col items-center justify-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 sm:flex-row sm:gap-4">
-                        <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-slate-500">
+                      <div className="mt-4 flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.04]/[0.03] px-4 py-4 sm:flex-row sm:gap-4">
+                        <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-[#8a93a6]">
                           <Lock className="h-3.5 w-3.5 text-green-400" />
                           {t("checkout.weAccept")}
                         </div>
@@ -1167,13 +1162,13 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 
                       {/* Email verification required banner */}
                       {needsVerification && (
-                        <div className="mt-4 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                        <div className="mt-4 flex items-start gap-3 rounded-2xl border border-amber-400/30 bg-amber-500/[0.08] p-4">
                           <Mail className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-500" />
                           <div className="flex-1">
-                            <p className="text-sm font-bold text-amber-700">
+                            <p className="text-sm font-bold text-amber-200">
                               Verify your email to continue
                             </p>
-                            <p className="mt-1 text-xs leading-relaxed text-amber-600">
+                            <p className="mt-1 text-xs leading-relaxed text-amber-300">
                               We sent a verification link to{" "}
                               <span className="font-semibold text-amber-800">
                                 {user?.email}
@@ -1182,12 +1177,12 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                               your account before subscribing.
                             </p>
                             {resendStatus === "sent" ? (
-                              <p className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-600">
+                              <p className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-[#4ade80]/[0.08] px-3 py-1.5 text-xs font-semibold text-[#4ade80]">
                                 <CheckCircle2 className="h-3.5 w-3.5" />
                                 Verification email sent. Check your inbox.
                               </p>
                             ) : resendStatus === "error" ? (
-                              <p className="mt-3 text-xs text-red-600">
+                              <p className="mt-3 text-xs text-red-300">
                                 Could not resend the email. Please try again in
                                 a moment or contact support.
                               </p>
@@ -1200,7 +1195,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                                   resendingVerification ||
                                   resendStatus === "sent"
                                 }
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 transition-colors hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-500/[0.08] px-3 py-1.5 text-xs font-bold text-amber-200 transition-colors hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-60"
                               >
                                 {resendingVerification
                                   ? "Sending…"
@@ -1210,7 +1205,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                               </button>
                               <a
                                 href={`mailto:${user?.email ?? ""}`}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-900"
+                                className="inline-flex items-center gap-1.5 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-xs font-bold text-[#a3a9b8] transition-colors hover:border-white/[0.12] hover:text-[#ededed]"
                               >
                                 Open inbox
                               </a>
@@ -1221,9 +1216,9 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 
                       {/* Checkout error */}
                       {checkoutError && !needsVerification && (
-                        <div className="mt-4 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4">
-                          <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-500" />
-                          <p className="text-xs leading-relaxed text-red-600">
+                        <div className="mt-4 flex items-start gap-3 rounded-2xl border border-red-500/30 bg-red-500/[0.08] p-4">
+                          <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-400" />
+                          <p className="text-xs leading-relaxed text-red-300">
                             {checkoutError}
                           </p>
                         </div>
@@ -1231,24 +1226,24 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 
                       {/* Terms */}
                       <label
-                        className={`mt-6 flex cursor-pointer items-start gap-3 rounded-2xl border bg-white p-4 transition-colors ${
+                        className={`mt-6 flex cursor-pointer items-start gap-3 rounded-2xl border bg-white/[0.04] p-4 transition-colors ${
                           triedAdvance[3] && paymentErrors.terms
-                            ? "border-red-500/60 bg-red-50"
-                            : "border-slate-200"
+                            ? "border-red-500/60 bg-red-500/[0.08]"
+                            : "border-white/[0.08]"
                         }`}
                       >
                         <input
                           type="checkbox"
                           checked={agreed}
                           onChange={(e) => setAgreed(e.target.checked)}
-                          className="mt-0.5 h-4 w-4 rounded border-slate-300 bg-white text-green-500 focus:ring-green-500"
+                          className="mt-0.5 h-4 w-4 rounded border-white/[0.12] bg-white/[0.04] text-[#4ade80] focus:ring-green-500"
                         />
-                        <span className="text-xs leading-relaxed text-slate-500">
+                        <span className="text-xs leading-relaxed text-[#8a93a6]">
                           {t("checkout.agreeTerms")}{" "}
                           <Link
                             href={loc("/terms")}
                             target="_blank"
-                            className="font-semibold text-green-600 hover:text-green-500"
+                            className="font-semibold text-[#4ade80] hover:text-[#4ade80]"
                           >
                             {t("checkout.termsLink")}
                           </Link>{" "}
@@ -1256,7 +1251,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                           <Link
                             href={loc("/privacy")}
                             target="_blank"
-                            className="font-semibold text-green-600 hover:text-green-500"
+                            className="font-semibold text-[#4ade80] hover:text-[#4ade80]"
                           >
                             {t("checkout.privacyLink")}
                           </Link>
@@ -1268,12 +1263,12 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                 </AnimatePresence>
 
                 {/* ── Step actions ─────────────────────────── */}
-                <div className="mt-8 flex items-center justify-between gap-4 border-t border-slate-200 pt-6">
+                <div className="mt-8 flex items-center justify-between gap-4 border-t border-white/[0.08] pt-6">
                   {step > 1 ? (
                     <button
                       type="button"
                       onClick={back}
-                      className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-600 shadow-sm transition-all hover:border-slate-300 hover:text-slate-900"
+                      className="flex items-center gap-1.5 rounded-xl border border-white/[0.08] bg-white/[0.04] px-5 py-3 text-sm font-semibold text-[#a3a9b8] shadow-sm transition-all hover:border-white/[0.12] hover:text-[#ededed]"
                     >
                       <ChevronLeft className="h-4 w-4" />
                       {t("checkout.back")}
@@ -1291,7 +1286,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                           type="button"
                           onClick={next}
                           disabled={!currentValid}
-                          className="btn-gradient flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
+                          className="btn-primary flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
                         >
                           {t("checkout.next")}
                           <ChevronRight className="h-4 w-4" />
@@ -1302,7 +1297,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                     <button
                       type="submit"
                       disabled={!step3Valid || submitting}
-                      className="btn-gradient flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
+                      className="btn-primary flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
                     >
                       {submitting
                         ? t("checkout.processing")
@@ -1338,13 +1333,13 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                 />
 
                 {/* Trust strip */}
-                <div className="rounded-2xl border border-slate-200 bg-white p-4 text-xs text-slate-500 shadow-sm">
+                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.04] p-4 text-xs text-[#8a93a6] shadow-sm">
                   <div className="flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4 text-green-500" />
+                    <ShieldCheck className="h-4 w-4 text-[#4ade80]" />
                     <span>{t("checkout.footer.guarantee")}</span>
                   </div>
                   <div className="mt-2 flex items-center gap-2">
-                    <Lock className="h-4 w-4 text-green-500" />
+                    <Lock className="h-4 w-4 text-[#4ade80]" />
                     <span>{t("checkout.footer.secure")}</span>
                   </div>
                 </div>
@@ -1362,10 +1357,10 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 /* ── Sub-components ─────────────────────────────────────────── */
 
 const inputCls =
-  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-colors";
+  "w-full rounded-xl border border-white/[0.12] bg-white/[0.04] px-4 py-3 text-sm text-[#ededed] placeholder:text-[#6b7280] focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 transition-colors";
 
 const inputClsError =
-  "w-full rounded-xl border border-red-500/60 bg-red-50 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-colors";
+  "w-full rounded-xl border border-red-500/60 bg-red-500/[0.08] px-4 py-3 text-sm text-[#ededed] placeholder:text-[#6b7280] focus:border-red-500/80 focus:outline-none focus:ring-2 focus:ring-red-500/20 transition-colors";
 
 const inputClsFor = (hasError: boolean) =>
   hasError ? inputClsError : inputCls;
@@ -1387,14 +1382,14 @@ function Field({
     <label className={`flex flex-col gap-1.5 ${className}`}>
       <span
         className={`text-xs font-semibold uppercase tracking-wider ${
-          error ? "text-red-400" : "text-slate-500"
+          error ? "text-red-400" : "text-[#8a93a6]"
         }`}
       >
         {label}
       </span>
       {children}
       {hint && !error && (
-        <span className="text-[11px] text-slate-500">{hint}</span>
+        <span className="text-[11px] text-[#8a93a6]">{hint}</span>
       )}
       {error && (
         <span className="text-[11px] font-semibold text-red-400">
@@ -1416,14 +1411,14 @@ function StepHeading({
 }) {
   return (
     <div className="flex items-start gap-4">
-      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-green-500/20 bg-green-50">
-        <Icon className="h-5 w-5 text-green-500" />
+      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-[#4ade80]/20 bg-[#4ade80]/[0.08]">
+        <Icon className="h-5 w-5 text-[#4ade80]" />
       </div>
       <div>
-        <h2 className="text-xl font-extrabold text-slate-900 sm:text-2xl">
+        <h2 className="text-xl font-extrabold text-[#ededed] sm:text-2xl">
           {title}
         </h2>
-        <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
+        <p className="mt-1 text-sm text-[#8a93a6]">{subtitle}</p>
       </div>
     </div>
   );
@@ -1449,17 +1444,17 @@ function Stepper({ step }: { step: 1 | 2 | 3 }) {
             <div
               className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border text-xs font-bold transition-colors ${
                 done
-                  ? "border-green-500/60 bg-green-50 text-green-600"
+                  ? "border-green-500/60 bg-[#4ade80]/[0.08] text-[#4ade80]"
                   : active
-                  ? "border-green-500/60 bg-green-500 text-white shadow-[0_0_20px_rgba(74,222,128,0.25)]"
-                  : "border-slate-200 bg-slate-50 text-slate-500"
+                  ? "border-green-500/60 bg-[#4ade80]/[0.08]0 text-white shadow-[0_0_20px_rgba(74,222,128,0.25)]"
+                  : "border-white/[0.08] bg-white/[0.04]/[0.03] text-[#8a93a6]"
               }`}
             >
               {done ? <Check className="h-4 w-4" strokeWidth={3} /> : it.id}
             </div>
             <span
               className={`text-sm font-semibold transition-colors ${
-                active || done ? "text-slate-900" : "text-slate-500"
+                active || done ? "text-[#ededed]" : "text-[#8a93a6]"
               }`}
             >
               {it.label}
@@ -1467,7 +1462,7 @@ function Stepper({ step }: { step: 1 | 2 | 3 }) {
             {idx < items.length - 1 && (
               <span
                 className={`mx-2 h-px flex-1 ${
-                  done ? "bg-green-500/40" : "bg-slate-200"
+                  done ? "bg-[#4ade80]/[0.08]0/40" : "bg-slate-200"
                 }`}
               />
             )}
@@ -1514,16 +1509,16 @@ function OrderSummary({
   const isOneTime = plan.oneTime != null;
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.04] p-6 shadow-sm">
       {/* glow */}
-      <div className="pointer-events-none absolute -right-16 -top-16 h-[240px] w-[240px] rounded-full bg-green-500/[0.04] blur-[90px]" />
+      <div className="pointer-events-none absolute -right-16 -top-16 h-[240px] w-[240px] rounded-full bg-[#4ade80]/[0.08]0/[0.04] blur-[90px]" />
 
       <div className="relative">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500">
+          <h3 className="text-sm font-bold uppercase tracking-widest text-[#8a93a6]">
             {t("checkout.summaryTitle")}
           </h3>
-          <span className="inline-flex items-center gap-1 rounded-full border border-green-200 bg-green-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+          <span className="inline-flex items-center gap-1 rounded-full border border-[#4ade80]/30 bg-[#4ade80]/[0.08] px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[#4ade80]">
             <Lock className="h-3 w-3" />
             SSL
           </span>
@@ -1534,33 +1529,33 @@ function OrderSummary({
           <div
             className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl ${
               plan.highlight
-                ? "bg-green-50 shadow-[0_0_20px_rgba(74,222,128,0.15)]"
-                : "bg-green-50"
+                ? "bg-[#4ade80]/[0.08] shadow-[0_0_20px_rgba(74,222,128,0.15)]"
+                : "bg-[#4ade80]/[0.08]"
             }`}
           >
-            <Icon className="h-5 w-5 text-green-500" />
+            <Icon className="h-5 w-5 text-[#4ade80]" />
           </div>
           <div className="flex-1">
             <div className="flex items-baseline justify-between gap-2">
-              <h4 className="text-lg font-extrabold text-slate-900">
+              <h4 className="text-lg font-extrabold text-[#ededed]">
                 {plan.name}
               </h4>
               {isOneTime ? (
-                <span className="text-xl font-extrabold text-slate-900">
+                <span className="text-xl font-extrabold text-[#ededed]">
                   {formatEUR(plan.oneTime ?? 0)}
                 </span>
               ) : (
-                <span className="text-xl font-extrabold text-slate-900">
+                <span className="text-xl font-extrabold text-[#ededed]">
                   {formatEUR(
                     billing === "yearly" ? plan.monthly * 0.8 : plan.monthly
                   )}
-                  <span className="text-xs font-semibold text-slate-500">
+                  <span className="text-xs font-semibold text-[#8a93a6]">
                     {t("checkout.perMonth")}
                   </span>
                 </span>
               )}
             </div>
-            <p className="mt-0.5 text-xs text-slate-500">{t(plan.tagline)}</p>
+            <p className="mt-0.5 text-xs text-[#8a93a6]">{t(plan.tagline)}</p>
           </div>
         </div>
 
@@ -1574,8 +1569,8 @@ function OrderSummary({
                 onClick={() => onChangePlan(p.id)}
                 className={`rounded-xl border px-2 py-2 text-[11px] font-bold uppercase tracking-wider transition-all ${
                   plan.id === p.id
-                    ? "border-green-500/60 bg-green-50 text-green-600"
-                    : "border-slate-200 bg-slate-50 text-slate-500 hover:border-slate-300 hover:text-slate-900"
+                    ? "border-green-500/60 bg-[#4ade80]/[0.08] text-[#4ade80]"
+                    : "border-white/[0.08] bg-white/[0.04]/[0.03] text-[#8a93a6] hover:border-white/[0.12] hover:text-[#ededed]"
                 }`}
               >
                 {p.name}
@@ -1587,8 +1582,8 @@ function OrderSummary({
             onClick={() => onChangePlan("platinum")}
             className={`col-span-1 rounded-xl border px-2 py-2 text-[11px] font-bold uppercase tracking-wider transition-all sm:col-span-3 ${
               plan.id === "platinum"
-                ? "border-amber-400/60 bg-amber-50 text-amber-600"
-                : "border-slate-200 bg-slate-50 text-slate-500 hover:border-amber-400/30 hover:text-amber-600"
+                ? "border-amber-400/60 bg-amber-500/[0.08] text-amber-300"
+                : "border-white/[0.08] bg-white/[0.04]/[0.03] text-[#8a93a6] hover:border-amber-400/30 hover:text-amber-300"
             }`}
           >
             <Crown className="mr-1 inline h-3 w-3" />
@@ -1602,18 +1597,18 @@ function OrderSummary({
             <div
               className={`flex items-center justify-between rounded-xl border p-3 transition-colors ${
                 billing === "yearly"
-                  ? "border-green-200 bg-green-50"
-                  : "border-slate-200 bg-slate-50"
+                  ? "border-[#4ade80]/30 bg-[#4ade80]/[0.08]"
+                  : "border-white/[0.08] bg-white/[0.04]/[0.03]"
               }`}
             >
               <div>
-                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400">
+                <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#6b7280]">
                   {t("checkout.billingLabel")}
-                  <span className="inline-flex items-center rounded-full border border-green-500/40 bg-green-500/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-green-300">
+                  <span className="inline-flex items-center rounded-full border border-green-500/40 bg-[#4ade80]/[0.08]0/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-green-300">
                     {t("checkout.yearlySaveBadge")}
                   </span>
                 </div>
-                <div className="text-sm font-bold text-slate-900">
+                <div className="text-sm font-bold text-[#ededed]">
                   {billing === "yearly"
                     ? t("checkout.yearly")
                     : t("checkout.monthly")}
@@ -1624,7 +1619,7 @@ function OrderSummary({
                 onClick={onToggleBilling}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full border transition-colors ${
                   billing === "yearly"
-                    ? "border-green-500/60 bg-green-500/20"
+                    ? "border-green-500/60 bg-[#4ade80]/[0.08]0/20"
                     : "border-white/[0.1] bg-white/[0.04]"
                 }`}
                 aria-label="Toggle billing period"
@@ -1642,7 +1637,7 @@ function OrderSummary({
               <button
                 type="button"
                 onClick={onToggleBilling}
-                className="mt-2 flex w-full items-start gap-2 rounded-xl border border-green-500/25 bg-green-500/[0.06] px-3 py-2.5 text-left transition-all hover:border-green-500/50 hover:bg-green-500/[0.1]"
+                className="mt-2 flex w-full items-start gap-2 rounded-xl border border-green-500/25 bg-[#4ade80]/[0.08]0/[0.06] px-3 py-2.5 text-left transition-all hover:border-green-500/50 hover:bg-[#4ade80]/[0.08]0/[0.1]"
               >
                 <TrendingDown className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
                 <span className="text-[11px] leading-snug text-slate-300">
@@ -1653,7 +1648,7 @@ function OrderSummary({
                 </span>
               </button>
             ) : (
-              <div className="mt-2 flex items-center gap-2 rounded-xl border border-green-500/25 bg-green-500/[0.06] px-3 py-2.5">
+              <div className="mt-2 flex items-center gap-2 rounded-xl border border-green-500/25 bg-[#4ade80]/[0.08]0/[0.06] px-3 py-2.5">
                 <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-green-400" />
                 <span className="text-[11px] font-semibold leading-snug text-green-300">
                   {t("checkout.yearlySaving").replace(
@@ -1668,17 +1663,17 @@ function OrderSummary({
 
         {/* Total breakdown */}
         <div className="mt-5 space-y-2 border-t border-white/[0.06] pt-5 text-sm">
-          <div className="flex items-center justify-between text-slate-400">
+          <div className="flex items-center justify-between text-[#6b7280]">
             <span>{t("checkout.subtotal")}</span>
             <span className="font-semibold text-slate-200">
               {formatEUR(pricing.planTotal)}
             </span>
           </div>
           {pricing.addons > 0 && (
-            <div className="flex items-center justify-between text-slate-400">
+            <div className="flex items-center justify-between text-[#6b7280]">
               <span>
                 {t("checkout.addons")}{" "}
-                <span className="text-[10px] text-slate-600">
+                <span className="text-[10px] text-[#a3a9b8]">
                   ({selectedUpsells.length})
                 </span>
               </span>
@@ -1690,7 +1685,7 @@ function OrderSummary({
 
           {/* Applied coupon */}
           {appliedCoupon && (
-            <div className="flex items-center justify-between rounded-xl border border-amber-400/30 bg-amber-500/[0.06] p-2.5">
+            <div className="flex items-center justify-between rounded-xl border border-amber-400/30 bg-amber-500/[0.08]0/[0.06] p-2.5">
               <div className="flex items-center gap-2">
                 <Tag className="h-3.5 w-3.5 text-amber-400" />
                 <span className="text-xs font-bold text-amber-300">
@@ -1707,7 +1702,7 @@ function OrderSummary({
               the next charge to set expectations clearly. */}
           {trialActive ? (
             <>
-              <div className="flex items-center justify-between border-t border-white/[0.06] pt-3 text-sm text-slate-400">
+              <div className="flex items-center justify-between border-t border-white/[0.06] pt-3 text-sm text-[#6b7280]">
                 <span>After trial ({trialEndLabel})</span>
                 <span className="font-semibold text-slate-200 line-through decoration-slate-600">
                   {formatEUR(pricing.recurring)}
@@ -1721,7 +1716,7 @@ function OrderSummary({
                   {formatEUR(0)}
                 </span>
               </div>
-              <div className="mt-2 flex items-start gap-2 rounded-xl border border-green-500/25 bg-green-500/[0.06] p-3">
+              <div className="mt-2 flex items-start gap-2 rounded-xl border border-green-500/25 bg-[#4ade80]/[0.08]0/[0.06] p-3">
                 <CalendarClock className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400" />
                 <span className="text-[11px] leading-snug text-green-200">
                   {t("checkout.trialBadge")}.{" "}
@@ -1732,9 +1727,9 @@ function OrderSummary({
                   · {formatEUR(pricing.recurring)}.
                 </span>
               </div>
-              <div className="mt-2 flex items-start gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-                <PauseCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400" />
-                <span className="text-[11px] leading-snug text-slate-400">
+              <div className="mt-2 flex items-start gap-2 rounded-xl border border-white/[0.06] bg-white/[0.04]/[0.02] p-3">
+                <PauseCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#6b7280]" />
+                <span className="text-[11px] leading-snug text-[#6b7280]">
                   {t("checkout.trialPausedNote")}
                 </span>
               </div>
@@ -1749,7 +1744,7 @@ function OrderSummary({
               </span>
             </div>
           )}
-          <p className="text-[10px] text-slate-600">
+          <p className="text-[10px] text-[#a3a9b8]">
             {t("checkout.vatIncluded")}
           </p>
         </div>
@@ -1757,23 +1752,23 @@ function OrderSummary({
         {/* Coupon */}
         <div className="mt-5 flex items-stretch gap-2">
           <div className="relative flex-1">
-            <Tag className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+            <Tag className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8a93a6]" />
             <input
               type="text"
               placeholder={t("checkout.couponPlaceholder")}
-              className="h-10 w-full rounded-xl border border-white/[0.1] bg-white/[0.03] pl-9 pr-3 text-sm text-white placeholder:text-slate-600 focus:border-green-500/40 focus:outline-none"
+              className="h-10 w-full rounded-xl border border-white/[0.1] bg-white/[0.04]/[0.03] pl-9 pr-3 text-sm text-white placeholder:text-[#a3a9b8] focus:border-green-500/40 focus:outline-none"
             />
           </div>
           <button
             type="button"
-            className="rounded-xl border border-white/[0.12] bg-white/[0.04] px-4 text-xs font-bold uppercase tracking-wider text-white transition-all hover:border-green-500/40 hover:bg-green-500/[0.08]"
+            className="rounded-xl border border-white/[0.12] bg-white/[0.04] px-4 text-xs font-bold uppercase tracking-wider text-white transition-all hover:border-green-500/40 hover:bg-[#4ade80]/[0.08]0/[0.08]"
           >
             {t("checkout.couponApply")}
           </button>
         </div>
 
         {/* Trial note */}
-        <p className="mt-4 rounded-xl border border-green-500/20 bg-green-500/[0.06] p-3 text-[11px] leading-relaxed text-slate-300">
+        <p className="mt-4 rounded-xl border border-[#4ade80]/20 bg-[#4ade80]/[0.08]0/[0.06] p-3 text-[11px] leading-relaxed text-slate-300">
           <CheckCircle2 className="mr-1 inline h-3 w-3 text-green-400" />
           {t("checkout.trialNote")}
         </p>
@@ -1799,14 +1794,14 @@ function TrialPicker({
   return (
     <div className="mb-6 rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-6 backdrop-blur-xl">
       <div className="flex items-start gap-4">
-        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-green-500/20 bg-green-500/[0.08]">
+        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-[#4ade80]/20 bg-[#4ade80]/[0.08]0/[0.08]">
           <Gift className="h-5 w-5 text-green-400" />
         </div>
         <div className="flex-1">
           <h3 className="text-lg font-extrabold text-white sm:text-xl">
             {t("checkout.trialSectionTitle")}
           </h3>
-          <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+          <p className="mt-1 text-xs text-[#6b7280] sm:text-sm">
             {t("checkout.trialSectionSubtitle")}
           </p>
         </div>
@@ -1819,8 +1814,8 @@ function TrialPicker({
           onClick={() => onChange(true)}
           className={`group relative flex flex-col gap-2 rounded-2xl border p-4 text-left transition-all ${
             startWithTrial
-              ? "border-green-500/60 bg-green-500/[0.08] shadow-[0_0_30px_rgba(74,222,128,0.15)]"
-              : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.2]"
+              ? "border-green-500/60 bg-[#4ade80]/[0.08]0/[0.08] shadow-[0_0_30px_rgba(74,222,128,0.15)]"
+              : "border-white/[0.08] bg-white/[0.04]/[0.02] hover:border-white/[0.2]"
           }`}
         >
           <div className="flex items-start justify-between gap-2">
@@ -1828,7 +1823,7 @@ function TrialPicker({
               <div
                 className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border transition-all ${
                   startWithTrial
-                    ? "border-green-400 bg-green-500"
+                    ? "border-green-400 bg-[#4ade80]/[0.08]0"
                     : "border-white/25"
                 }`}
               >
@@ -1840,11 +1835,11 @@ function TrialPicker({
                 {t("checkout.trialOption1Title")}
               </h4>
             </div>
-            <span className="inline-flex items-center rounded-full border border-green-500/40 bg-green-500/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-green-300">
+            <span className="inline-flex items-center rounded-full border border-green-500/40 bg-[#4ade80]/[0.08]0/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-green-300">
               {t("checkout.trialOption1Badge")}
             </span>
           </div>
-          <p className="text-xs leading-relaxed text-slate-400">
+          <p className="text-xs leading-relaxed text-[#6b7280]">
             {t("checkout.trialOption1Desc").replace("{date}", trialEndLabel)}
           </p>
           <div className="mt-1 text-xs font-bold text-green-400">
@@ -1858,15 +1853,15 @@ function TrialPicker({
           onClick={() => onChange(false)}
           className={`group relative flex flex-col gap-2 rounded-2xl border p-4 text-left transition-all ${
             !startWithTrial
-              ? "border-green-500/60 bg-green-500/[0.08] shadow-[0_0_30px_rgba(74,222,128,0.15)]"
-              : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.2]"
+              ? "border-green-500/60 bg-[#4ade80]/[0.08]0/[0.08] shadow-[0_0_30px_rgba(74,222,128,0.15)]"
+              : "border-white/[0.08] bg-white/[0.04]/[0.02] hover:border-white/[0.2]"
           }`}
         >
           <div className="flex items-center gap-2">
             <div
               className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border transition-all ${
                 !startWithTrial
-                  ? "border-green-400 bg-green-500"
+                  ? "border-green-400 bg-[#4ade80]/[0.08]0"
                   : "border-white/25"
               }`}
             >
@@ -1878,7 +1873,7 @@ function TrialPicker({
               {t("checkout.trialOption2Title")}
             </h4>
           </div>
-          <p className="text-xs leading-relaxed text-slate-400">
+          <p className="text-xs leading-relaxed text-[#6b7280]">
             {t("checkout.trialOption2Desc")}
           </p>
           <div className="mt-1 text-xs font-bold text-white">
@@ -1889,9 +1884,9 @@ function TrialPicker({
 
       {/* Side note — cancelling during trial pauses the account */}
       {startWithTrial && (
-        <div className="mt-4 flex items-start gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-          <PauseCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-400" />
-          <span className="text-[11px] leading-snug text-slate-400">
+        <div className="mt-4 flex items-start gap-2 rounded-xl border border-white/[0.06] bg-white/[0.04]/[0.02] p-3">
+          <PauseCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#6b7280]" />
+          <span className="text-[11px] leading-snug text-[#6b7280]">
             {t("checkout.trialPausedNote")}
           </span>
         </div>
@@ -1916,14 +1911,14 @@ function UpsellsBlock({
   return (
     <div className="mt-8 border-t border-white/[0.06] pt-8">
       <div className="flex items-start gap-4">
-        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-green-500/20 bg-green-500/[0.08]">
+        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-[#4ade80]/20 bg-[#4ade80]/[0.08]0/[0.08]">
           <Sparkles className="h-5 w-5 text-green-400" />
         </div>
         <div>
           <h3 className="text-lg font-extrabold text-white sm:text-xl">
             {t("checkout.upsellsTitle")}
           </h3>
-          <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+          <p className="mt-1 text-xs text-[#6b7280] sm:text-sm">
             {t("checkout.upsellsSubtitle")}
           </p>
         </div>
@@ -1948,8 +1943,8 @@ function UpsellsBlock({
                 disabled
                   ? "cursor-default border-amber-400/30 bg-amber-400/[0.05]"
                   : active
-                  ? "border-green-500/60 bg-green-500/[0.08] shadow-[0_0_30px_rgba(74,222,128,0.12)]"
-                  : "border-white/[0.08] bg-white/[0.02] hover:border-white/[0.2] hover:bg-white/[0.04]"
+                  ? "border-green-500/60 bg-[#4ade80]/[0.08]0/[0.08] shadow-[0_0_30px_rgba(74,222,128,0.12)]"
+                  : "border-white/[0.08] bg-white/[0.04]/[0.02] hover:border-white/[0.2] hover:bg-white/[0.04]"
               }`}
             >
               {/* Checkbox */}
@@ -1958,7 +1953,7 @@ function UpsellsBlock({
                   disabled
                     ? "border-amber-400 bg-amber-400/80"
                     : active
-                    ? "border-green-400 bg-green-500"
+                    ? "border-green-400 bg-[#4ade80]/[0.08]0"
                     : "border-white/25 bg-transparent group-hover:border-white/50"
                 }`}
               >
@@ -1973,8 +1968,8 @@ function UpsellsBlock({
                   disabled
                     ? "bg-amber-400/15"
                     : active
-                    ? "bg-green-500/20"
-                    : "bg-white/[0.04] group-hover:bg-white/[0.08]"
+                    ? "bg-[#4ade80]/[0.08]0/20"
+                    : "bg-white/[0.04] group-hover:bg-white/[0.04]/[0.08]"
                 }`}
               >
                 <Icon
@@ -1983,7 +1978,7 @@ function UpsellsBlock({
                       ? "text-amber-300"
                       : active
                       ? "text-green-400"
-                      : "text-slate-400"
+                      : "text-[#6b7280]"
                   }`}
                 />
               </div>
@@ -2001,13 +1996,13 @@ function UpsellsBlock({
                     </span>
                   ) : (
                     u.badgeKey && (
-                      <span className="inline-flex items-center rounded-full border border-green-500/40 bg-green-500/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-green-300">
+                      <span className="inline-flex items-center rounded-full border border-green-500/40 bg-[#4ade80]/[0.08]0/15 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-green-300">
                         {t(u.badgeKey)}
                       </span>
                     )
                   )}
                 </div>
-                <p className="mt-1 text-xs leading-relaxed text-slate-400">
+                <p className="mt-1 text-xs leading-relaxed text-[#6b7280]">
                   {t(u.descKey)}
                 </p>
               </div>
@@ -2023,7 +2018,7 @@ function UpsellsBlock({
                     <div className="text-sm font-extrabold text-white">
                       +{formatEUR(u.monthly)}
                     </div>
-                    <div className="text-[10px] text-slate-500">
+                    <div className="text-[10px] text-[#8a93a6]">
                       {t("checkout.upsellPerMonth")}
                     </div>
                   </>
@@ -2034,7 +2029,7 @@ function UpsellsBlock({
         })}
       </div>
 
-      <p className="mt-3 text-[10px] text-slate-600">
+      <p className="mt-3 text-[10px] text-[#a3a9b8]">
         {billing === "yearly"
           ? t("checkout.vatIncluded")
           : t("checkout.vatIncluded")}
@@ -2052,12 +2047,12 @@ function UpsellsBlock({
 function CheckoutGateSkeleton() {
   return (
     <div className="mx-auto max-w-2xl animate-pulse rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-8 backdrop-blur-xl">
-      <div className="mx-auto h-12 w-12 rounded-2xl bg-white/[0.06]" />
-      <div className="mx-auto mt-6 h-6 w-3/4 rounded-full bg-white/[0.06]" />
+      <div className="mx-auto h-12 w-12 rounded-2xl bg-white/[0.04]/[0.06]" />
+      <div className="mx-auto mt-6 h-6 w-3/4 rounded-full bg-white/[0.04]/[0.06]" />
       <div className="mx-auto mt-3 h-4 w-2/3 rounded-full bg-white/[0.04]" />
       <div className="mt-8 grid gap-3 sm:grid-cols-2">
-        <div className="h-12 rounded-xl bg-white/[0.05]" />
-        <div className="h-12 rounded-xl bg-white/[0.05]" />
+        <div className="h-12 rounded-xl bg-white/[0.04]/[0.05]" />
+        <div className="h-12 rounded-xl bg-white/[0.04]/[0.05]" />
       </div>
     </div>
   );
@@ -2097,11 +2092,11 @@ function LoginGate({
         className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] to-white/[0.01] p-8 backdrop-blur-xl sm:p-10"
       >
         {/* Glow */}
-        <div className="pointer-events-none absolute -left-24 -top-24 h-[260px] w-[260px] rounded-full bg-green-500/[0.12] blur-[110px]" />
-        <div className="pointer-events-none absolute -right-24 -bottom-24 h-[260px] w-[260px] rounded-full bg-emerald-500/[0.1] blur-[110px]" />
+        <div className="pointer-events-none absolute -left-24 -top-24 h-[260px] w-[260px] rounded-full bg-[#4ade80]/[0.08]0/[0.12] blur-[110px]" />
+        <div className="pointer-events-none absolute -right-24 -bottom-24 h-[260px] w-[260px] rounded-full bg-[#22c55e]/[0.08]0/[0.1] blur-[110px]" />
 
         <div className="relative">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-green-500/30 bg-green-500/[0.1]">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#4ade80]/30 bg-[#4ade80]/[0.08]0/[0.1]">
             <Lock className="h-6 w-6 text-green-400" />
           </div>
 
@@ -2111,7 +2106,7 @@ function LoginGate({
               log in to complete your subscription
             </span>
           </h2>
-          <p className="mx-auto mt-4 max-w-md text-center text-sm leading-relaxed text-slate-400 sm:text-base">
+          <p className="mx-auto mt-4 max-w-md text-center text-sm leading-relaxed text-[#6b7280] sm:text-base">
             For your safety, we require an account before processing
             payment. It takes less than a minute.
           </p>
@@ -2119,7 +2114,7 @@ function LoginGate({
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             <Link
               href={loginHref}
-              className="btn-gradient group inline-flex items-center justify-center gap-2 rounded-xl px-6 py-4 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40"
+              className="btn-primary group inline-flex items-center justify-center gap-2 rounded-xl px-6 py-4 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40"
             >
               <LogIn className="h-4 w-4" />
               Log in
@@ -2127,11 +2122,11 @@ function LoginGate({
             </Link>
             <Link
               href={registerHref}
-              className="group inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-4 text-sm font-bold text-white backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-white/[0.08]"
+              className="group inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-4 text-sm font-bold text-white backdrop-blur-sm transition-all hover:border-green-500/40 hover:bg-white/[0.04]/[0.08]"
             >
               <UserPlus className="h-4 w-4 text-green-400" />
               Create account
-              <ChevronRight className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-0.5" />
+              <ChevronRight className="h-4 w-4 text-[#6b7280] transition-transform group-hover:translate-x-0.5" />
             </Link>
           </div>
 
@@ -2140,7 +2135,7 @@ function LoginGate({
             <button
               type="button"
               onClick={() => setWhyOpen((v) => !v)}
-              className="mx-auto flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 transition-all hover:border-white/[0.18] hover:text-white"
+              className="mx-auto flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-white/[0.04]/[0.03] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#6b7280] transition-all hover:border-white/[0.18] hover:text-white"
               aria-expanded={whyOpen}
             >
               Why do I need an account?
@@ -2160,7 +2155,7 @@ function LoginGate({
                   transition={{ duration: 0.2 }}
                   className="overflow-hidden"
                 >
-                  <p className="mx-auto mt-4 max-w-md text-center text-xs leading-relaxed text-slate-400">
+                  <p className="mx-auto mt-4 max-w-md text-center text-xs leading-relaxed text-[#6b7280]">
                     This lets us tie your subscription to your account,
                     send you receipts, and give you access to your
                     dashboard.
@@ -2171,16 +2166,16 @@ function LoginGate({
           </div>
 
           {/* Trust strip */}
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-4 sm:flex-row sm:gap-6">
-            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-400">
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.04]/[0.02] px-4 py-4 sm:flex-row sm:gap-6">
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-[#6b7280]">
               <ShieldCheck className="h-3.5 w-3.5 text-green-400" />
               14-day money-back guarantee
             </div>
-            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-400">
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-[#6b7280]">
               <Lock className="h-3.5 w-3.5 text-green-400" />
               SSL-encrypted checkout
             </div>
-            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-400">
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-[#6b7280]">
               <Mail className="h-3.5 w-3.5 text-green-400" />
               Receipts by email
             </div>
@@ -2215,9 +2210,9 @@ function ActiveSubscriptionNotice({
         transition={{ duration: 0.35 }}
         className="relative overflow-hidden rounded-3xl border border-green-500/25 bg-gradient-to-br from-green-500/[0.08] via-[#0f1420]/[0.02] to-white/[0.01] p-8 backdrop-blur-xl sm:p-10"
       >
-        <div className="pointer-events-none absolute -right-24 -top-24 h-[260px] w-[260px] rounded-full bg-green-500/[0.14] blur-[110px]" />
+        <div className="pointer-events-none absolute -right-24 -top-24 h-[260px] w-[260px] rounded-full bg-[#4ade80]/[0.08]0/[0.14] blur-[110px]" />
         <div className="relative text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-green-500/30 bg-green-500/[0.12]">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#4ade80]/30 bg-[#4ade80]/[0.08]0/[0.12]">
             <CheckCircle2 className="h-6 w-6 text-green-400" />
           </div>
           <h2 className="mt-6 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
@@ -2229,21 +2224,21 @@ function ActiveSubscriptionNotice({
             )}{" "}
             subscription
           </h2>
-          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-slate-400">
+          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#6b7280]">
             Manage it — change plan, update payment, or cancel — from
             your subscription page.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href={loc("/subscription")}
-              className="btn-gradient inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40"
+              className="btn-primary inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40"
             >
               Go to my subscription
               <ChevronRight className="h-4 w-4" />
             </Link>
             <Link
               href={loc("/dashboard")}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3 text-sm font-bold text-white transition-all hover:border-white/[0.25] hover:bg-white/[0.08]"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3 text-sm font-bold text-white transition-all hover:border-white/[0.25] hover:bg-white/[0.04]/[0.08]"
             >
               Open dashboard
             </Link>

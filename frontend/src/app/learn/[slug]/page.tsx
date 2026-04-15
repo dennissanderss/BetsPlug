@@ -7,12 +7,14 @@ import {
   BookOpen,
   ChevronRight,
   GraduationCap,
+  HelpCircle,
   Sparkles,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { UnlockBanner } from "@/components/match-predictions/unlock-banner";
 import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
+import { HexBadge } from "@/components/noct/hex-badge";
 import { PAGE_IMAGES } from "@/data/page-images";
 import {
   defaultLocale,
@@ -219,43 +221,50 @@ export default async function LearnPillarPage(props: {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="relative min-h-screen overflow-x-hidden bg-background text-white">
+      <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
         <SiteNav />
 
         {/* Hero */}
-        <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+        <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
           <HeroMediaBg src={PAGE_IMAGES.learn.hero} alt="" />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-10 h-[420px] w-[780px] -translate-x-1/2 rounded-full"
+            style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(140px)" }}
+          />
 
           <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
-            {/* Breadcrumb */}
             <nav
               aria-label="Breadcrumb"
-              className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-slate-300"
+              className="mb-6 flex items-center gap-1.5 text-xs text-[#6b7280]"
             >
-              <Link href="/" className="transition hover:text-green-400">
+              <Link href="/" className="transition hover:text-[#4ade80]">
                 BetsPlug
               </Link>
               <ChevronRight className="h-3 w-3" />
-              <Link href="/learn" className="transition hover:text-green-400">
+              <Link href="/learn" className="transition hover:text-[#4ade80]">
                 {t("Learn", "Leren")}
               </Link>
               <ChevronRight className="h-3 w-3" />
-              <span className="text-white">
+              <span className="text-[#a3a9b8]">
                 {pillar.title[editorialLocale]}
               </span>
             </nav>
 
             <div>
-              <span className="section-label inline-flex items-center gap-2">
-                <GraduationCap className="h-3.5 w-3.5" />
+              <HexBadge variant="green" size="lg" className="mb-4">
+                <GraduationCap className="h-7 w-7" />
+              </HexBadge>
+              <span className="section-label">
+                <GraduationCap className="h-3 w-3" />
                 {t("Pillar guide", "Pillar gids")}
               </span>
 
-              <h1 className="text-display mt-5 text-balance break-words text-4xl text-white sm:text-5xl lg:text-6xl">
+              <h1 className="text-heading mt-5 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {pillar.title[editorialLocale]}
               </h1>
 
-              <p className="mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-300 sm:text-lg">
+              <p className="mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
                 {pillar.tagline[editorialLocale]}
               </p>
             </div>
@@ -264,29 +273,38 @@ export default async function LearnPillarPage(props: {
 
         {/* Intro + sections */}
         <section className="relative py-20 md:py-28">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <div className="mx-auto max-w-3xl bg-[#0a0a0a] p-6 sm:p-8">
-              <p className="text-lg leading-relaxed text-slate-300">
-                {pillar.intro[editorialLocale]}
-              </p>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-0 top-10 h-[360px] w-[520px] rounded-full"
+            style={{ background: "hsl(var(--accent-green) / 0.08)", filter: "blur(140px)" }}
+          />
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="mx-auto max-w-3xl">
+              <div className="card-neon card-neon-green relative overflow-hidden p-6 sm:p-8">
+                <div className="relative">
+                  <p className="text-lg leading-relaxed text-[#ededed]">
+                    {pillar.intro[editorialLocale]}
+                  </p>
 
-              {pillar.sections.map((section) => (
-                <div key={section.heading.en} className="mt-10">
-                  <h2 className="text-display text-2xl text-white sm:text-3xl">
-                    {section.heading[editorialLocale]}
-                  </h2>
-                  <div className="mt-4 flex flex-col gap-4">
-                    {section.body[editorialLocale].map((paragraph, idx) => (
-                      <p
-                        key={idx}
-                        className="text-base leading-relaxed text-slate-300"
-                      >
-                        {paragraph}
-                      </p>
-                    ))}
-                  </div>
+                  {pillar.sections.map((section) => (
+                    <div key={section.heading.en} className="mt-10">
+                      <h2 className="text-heading text-2xl text-[#ededed] sm:text-3xl">
+                        {section.heading[editorialLocale]}
+                      </h2>
+                      <div className="mt-4 flex flex-col gap-4">
+                        {section.body[editorialLocale].map((paragraph, idx) => (
+                          <p
+                            key={idx}
+                            className="text-base leading-relaxed text-[#ededed]"
+                          >
+                            {paragraph}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </section>
@@ -303,16 +321,17 @@ export default async function LearnPillarPage(props: {
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <div className="mx-auto max-w-3xl">
               <div className="mb-12 sm:mb-14">
-                <span className="section-label mb-4">
-                  {t("FAQ", "FAQ")}
+                <span className="section-label">
+                  <HelpCircle className="h-3 w-3" />
+                  FAQ
                 </span>
-                <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+                <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                   {t(
                     `${pillar.title.en} - FAQ`,
                     `${pillar.title.nl} - Veelgestelde vragen`,
                   )}
                 </h2>
-                <p className="mt-4 text-sm text-slate-400">
+                <p className="mt-4 text-base text-[#a3a9b8]">
                   {t(
                     "Common questions on this topic, answered without the marketing fluff.",
                     "Veelgestelde vragen over dit onderwerp, beantwoord zonder marketingpraatjes.",
@@ -320,17 +339,17 @@ export default async function LearnPillarPage(props: {
                 </p>
               </div>
 
-              <div className="grid gap-[1px] bg-white/[0.08]">
+              <div className="flex flex-col gap-3">
                 {pillar.faqs[editorialLocale].map((faq) => (
                   <details
                     key={faq.q}
-                    className="group overflow-hidden bg-[#0a0a0a]"
+                    className="glass-panel-lifted group overflow-hidden"
                   >
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-6 text-left text-base font-bold text-white transition hover:text-[#4ade80] sm:p-8">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-6 text-left text-base font-semibold text-[#ededed] transition hover:text-[#4ade80] sm:p-7">
                       <span>{faq.q}</span>
-                      <ChevronRight className="h-4 w-4 shrink-0 text-slate-400 transition group-open:rotate-90" />
+                      <ChevronRight className="h-4 w-4 shrink-0 text-[#6b7280] transition group-open:rotate-90" />
                     </summary>
-                    <div className="px-6 pb-6 text-sm leading-relaxed text-slate-300 sm:px-8 sm:pb-8">
+                    <div className="px-6 pb-6 text-sm leading-relaxed text-[#a3a9b8] sm:px-7 sm:pb-7">
                       {faq.a}
                     </div>
                   </details>
@@ -344,28 +363,38 @@ export default async function LearnPillarPage(props: {
         {pillar.related.length > 0 && (
           <section className="relative py-20 md:py-28">
             <div className="mx-auto max-w-7xl px-4 sm:px-6">
-              <div className="mx-auto max-w-3xl bg-[#0a0a0a] p-6 sm:p-8">
-                <div className="flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-widest text-[#4ade80]">
-                  <Sparkles className="h-3.5 w-3.5" />
+              <div className="mx-auto max-w-5xl">
+                <span className="section-label">
+                  <Sparkles className="h-3 w-3" />
                   {t("Keep reading", "Verder lezen")}
-                </div>
-                <div className="mt-6 grid gap-[1px] bg-white/[0.08] sm:grid-cols-2">
+                </span>
+                <h2 className="text-heading mt-4 text-2xl text-[#ededed] sm:text-3xl">
+                  {t("Related pillars", "Gerelateerde pillars")}
+                </h2>
+                <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                   {(await Promise.all(pillar.related.map((s) => fetchLearnPillarBySlug(s))))
                     .filter((p): p is LearnPillar => Boolean(p))
                     .filter((p) => p.slug !== pillar.slug)
-                    .map((p) => (
-                      <Link
-                        key={p.slug}
-                        href={`/learn/${p.slug}`}
-                        className="group flex items-center justify-between gap-3 bg-[#0a0a0a] p-6 text-sm font-bold text-slate-300 transition hover:bg-[#0f0f0f] hover:text-[#4ade80] sm:p-8"
-                      >
-                        <span className="flex items-center gap-2">
-                          <BookOpen className="h-3.5 w-3.5 text-slate-400 transition group-hover:text-[#4ade80]" />
-                          {p.title[editorialLocale]}
-                        </span>
-                        <ArrowRight className="h-4 w-4 text-slate-400 transition group-hover:text-[#4ade80]" />
-                      </Link>
-                    ))}
+                    .map((p, i) => {
+                      const variant = (["green", "purple", "blue"] as const)[i % 3];
+                      return (
+                        <Link
+                          key={p.slug}
+                          href={`/learn/${p.slug}`}
+                          className={`card-neon card-neon-${variant} group relative block overflow-hidden p-6 transition-transform duration-300 hover:-translate-y-1`}
+                        >
+                          <div className="relative flex flex-col gap-3">
+                            <HexBadge variant={variant} size="sm">
+                              <BookOpen className="h-4 w-4" />
+                            </HexBadge>
+                            <h3 className="text-heading text-lg text-[#ededed] transition group-hover:text-[#4ade80]">
+                              {p.title[editorialLocale]}
+                            </h3>
+                            <ArrowRight className="h-4 w-4 text-[#6b7280] transition group-hover:text-[#4ade80]" />
+                          </div>
+                        </Link>
+                      );
+                    })}
                 </div>
               </div>
             </div>
@@ -375,40 +404,39 @@ export default async function LearnPillarPage(props: {
         {/* Final CTA */}
         <section className="relative py-20 md:py-28">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
-            <div className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16">
+            <div className="card-neon card-neon-green halo-green relative overflow-hidden p-10 md:p-16">
               <CtaMediaBg src={PAGE_IMAGES.learn.cta} alt={PAGE_IMAGES.learn.alt} pattern={PAGE_IMAGES.learn.pattern} />
-              <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
-              <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
-              <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
-              <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
-
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -right-16 -top-16 h-[260px] w-[260px] rounded-full"
+                style={{ background: "hsl(var(--accent-green) / 0.28)", filter: "blur(80px)" }}
+              />
               <div className="relative">
-                <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
-                  <GraduationCap className="h-3 w-3" />
+                <HexBadge variant="green" size="md" className="mb-5">
+                  <GraduationCap className="h-5 w-5" />
+                </HexBadge>
+                <span className="section-label">
+                  <Sparkles className="h-3 w-3" />
                   {t("Start applying", "Aan de slag")}
                 </span>
-                <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
+                <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                   {t("Put theory into practice.", "Breng theorie in de praktijk.")}
                 </h2>
-                <p className="mt-5 max-w-xl text-base leading-relaxed text-[#050505]/80">
+                <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
                   {t(
                     "Once you understand the math, see it run live on every fixture inside BetsPlug.",
                     "Zodra je de wiskunde snapt, zie je het live draaien op elke wedstrijd in BetsPlug.",
                   )}
                 </p>
 
-                <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                  <Link
-                    href="/"
-                    className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
-                  >
-                    {t("VIEW PREDICTIONS", "BEKIJK VOORSPELLINGEN")} →
+                <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                  <Link href="/" className="btn-primary inline-flex items-center gap-2">
+                    {t("View predictions", "Bekijk voorspellingen")}
+                    <ArrowRight className="h-4 w-4" />
                   </Link>
-                  <Link
-                    href="/learn"
-                    className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
-                  >
-                    {t("ALL GUIDES", "ALLE GIDSEN")} →
+                  <Link href="/learn" className="btn-glass inline-flex items-center gap-2">
+                    {t("All guides", "Alle gidsen")}
+                    <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
               </div>

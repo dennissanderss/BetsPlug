@@ -15,7 +15,6 @@ import { motion } from "motion/react";
 import {
   Mail,
   ArrowRight,
-  Sparkles,
   Loader2,
   AlertTriangle,
   KeyRound,
@@ -25,6 +24,7 @@ import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref } from "@/i18n/locale-provider";
 import { api, ApiError } from "@/lib/api";
+import { HexBadge } from "@/components/noct/hex-badge";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -60,11 +60,18 @@ export default function ForgotPasswordPage() {
     }
   };
 
+  const inputCls = (hasError: boolean) =>
+    `w-full rounded-xl border bg-white/[0.04] px-4 py-3 pl-11 text-sm text-[#ededed] placeholder:text-[#6b7280] outline-none transition-all ${
+      hasError
+        ? "border-red-500/40 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
+        : "border-white/[0.08] focus:border-[#4ade80]/60 focus:ring-2 focus:ring-[#4ade80]/20"
+    }`;
+
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.05] blur-[160px]" />
-        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.04] blur-[160px]" />
+        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-[#60a5fa]/[0.08] blur-[160px]" />
+        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-[#4ade80]/[0.06] blur-[160px]" />
       </div>
 
       <SiteNav />
@@ -76,127 +83,123 @@ export default function ForgotPasswordPage() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-7 shadow-sm sm:p-9">
-            <div className="pointer-events-none absolute -right-20 -top-20 h-[260px] w-[260px] rounded-full bg-green-500/[0.06] blur-[100px]" />
-
-            {!sent && (
-              <>
-                <div className="relative mb-6">
-                  <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/[0.08] px-3 py-1.5">
-                    <Sparkles className="h-3.5 w-3.5 text-green-500" />
-                    <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-600">
-                      Password reset
-                    </span>
-                  </div>
-                  <h1 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight text-slate-900">
-                    Forgot your{" "}
-                    <span className="bg-gradient-to-br from-green-500 via-green-500 to-emerald-600 bg-clip-text text-transparent">
-                      password?
-                    </span>
-                  </h1>
-                  <p className="mt-3 text-sm text-slate-500">
-                    Enter the email address for your BetsPlug account and
-                    we&apos;ll send you a link to reset your password.
-                  </p>
-                </div>
-
-                <form
-                  onSubmit={handleSubmit}
-                  className="relative space-y-5"
-                  noValidate
-                >
-                  {serverError && (
-                    <div className="flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/[0.08] px-4 py-3 backdrop-blur-sm">
-                      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
-                      <p className="text-xs text-red-200/80">{serverError}</p>
+          <div className="card-neon-blue p-8 md:p-10">
+            <div className="relative">
+              {!sent && (
+                <>
+                  <div className="mb-6">
+                    <div className="mb-5 flex items-center gap-3">
+                      <HexBadge variant="blue" size="md">
+                        <KeyRound className="h-5 w-5" />
+                      </HexBadge>
+                      <span className="section-label !mb-0">Password reset</span>
                     </div>
-                  )}
+                    <h1 className="text-heading text-3xl text-[#ededed]">
+                      Forgot your{" "}
+                      <span className="gradient-text-cyan">password?</span>
+                    </h1>
+                    <p className="mt-3 text-sm text-[#a3a9b8]">
+                      Enter the email address for your BetsPlug account and
+                      we&apos;ll send you a link to reset your password.
+                    </p>
+                  </div>
 
-                  <div>
-                    <label
-                      htmlFor="forgot-email"
-                      className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500"
+                  <form
+                    onSubmit={handleSubmit}
+                    className="space-y-5"
+                    noValidate
+                  >
+                    {serverError && (
+                      <div className="flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/[0.08] px-4 py-3">
+                        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+                        <p className="text-xs text-red-300">{serverError}</p>
+                      </div>
+                    )}
+
+                    <div>
+                      <label
+                        htmlFor="forgot-email"
+                        className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a93a6]"
+                      >
+                        Email
+                      </label>
+                      <div className="relative">
+                        <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
+                        <input
+                          id="forgot-email"
+                          type="email"
+                          autoComplete="email"
+                          inputMode="email"
+                          placeholder="you@email.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className={inputCls(tried && !emailOk)}
+                        />
+                      </div>
+                      {tried && !emailOk && (
+                        <p className="mt-1.5 text-xs text-red-400">
+                          Please enter a valid email address.
+                        </p>
+                      )}
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="btn-primary group w-full disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      Email
-                    </label>
-                    <div className="relative">
-                      <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                      <input
-                        id="forgot-email"
-                        type="email"
-                        autoComplete="email"
-                        inputMode="email"
-                        placeholder="you@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className={`w-full rounded-xl border bg-white px-4 py-3 pl-11 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all focus:bg-white ${
-                          tried && !emailOk
-                            ? "border-red-500/40 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
-                            : "border-slate-300 focus:border-green-500/50 focus:ring-2 focus:ring-green-500/20"
-                        }`}
-                      />
-                    </div>
-                    {tried && !emailOk && (
-                      <p className="mt-1.5 text-xs text-red-400">
-                        Please enter a valid email address.
-                      </p>
-                    )}
+                      {submitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Sending…
+                        </>
+                      ) : (
+                        <>
+                          <KeyRound className="h-4 w-4" />
+                          Send reset link
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </>
+                      )}
+                    </button>
+                  </form>
+
+                  <div className="mt-7 border-t border-white/[0.08] pt-5 text-center">
+                    <Link
+                      href={loc("/login")}
+                      className="text-sm font-medium text-[#4ade80] transition-colors hover:text-[#86efac]"
+                    >
+                      ← Back to login
+                    </Link>
                   </div>
+                </>
+              )}
 
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="btn-gradient group flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/25 transition-all hover:shadow-green-500/40 disabled:cursor-not-allowed disabled:opacity-60 text-white"
-                  >
-                    {submitting ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Sending…
-                      </>
-                    ) : (
-                      <>
-                        <KeyRound className="h-4 w-4" />
-                        Send reset link
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </>
-                    )}
-                  </button>
-                </form>
-
-                <div className="relative mt-7 border-t border-slate-200 pt-5 text-center">
-                  <Link
-                    href={loc("/login")}
-                    className="text-sm font-bold text-green-600 transition-colors hover:text-green-500"
-                  >
-                    ← Back to login
-                  </Link>
+              {sent && (
+                <div className="space-y-5 text-center">
+                  <div className="mx-auto flex justify-center">
+                    <HexBadge variant="green" size="lg">
+                      <CheckCircle2 className="h-7 w-7" />
+                    </HexBadge>
+                  </div>
+                  <h1 className="text-heading text-2xl text-[#ededed]">
+                    Check your inbox
+                  </h1>
+                  <p className="text-sm leading-relaxed text-[#a3a9b8]">
+                    If an account with that email exists, we&apos;ve sent a
+                    password reset link to it. It may take a minute to arrive —
+                    don&apos;t forget to check your spam folder.
+                  </p>
+                  <div className="border-t border-white/[0.08] pt-5">
+                    <Link
+                      href={loc("/login")}
+                      className="text-sm font-medium text-[#4ade80] transition-colors hover:text-[#86efac]"
+                    >
+                      ← Back to login
+                    </Link>
+                  </div>
                 </div>
-              </>
-            )}
-
-            {sent && (
-              <div className="relative space-y-5 text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-green-500/30 bg-green-50">
-                  <CheckCircle2 className="h-7 w-7 text-green-600" />
-                </div>
-                <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">
-                  Check your inbox
-                </h1>
-                <p className="text-sm leading-relaxed text-slate-500">
-                  If an account with that email exists, we&apos;ve sent a
-                  password reset link to it. It may take a minute to arrive —
-                  don&apos;t forget to check your spam folder.
-                </p>
-                <div className="border-t border-slate-200 pt-5">
-                  <Link
-                    href={loc("/login")}
-                    className="text-sm font-bold text-green-600 transition-colors hover:text-green-500"
-                  >
-                    ← Back to login
-                  </Link>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </motion.div>
       </main>

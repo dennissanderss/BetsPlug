@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, Sparkles, ChevronRight } from "lucide-react";
+import { ArrowRight, Sparkles, ChevronRight, BookOpen, HelpCircle } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { UnlockBanner } from "@/components/match-predictions/unlock-banner";
+import { HexBadge } from "@/components/noct/hex-badge";
 import {
   defaultLocale,
   isLocale,
@@ -192,49 +193,52 @@ export default async function LeagueHubPage(props: {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
+      <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
         <SiteNav />
 
         {/* Hero */}
-        <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
+        <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
           <HeroMediaBg src={PAGE_IMAGES["match-predictions"].hero} alt={PAGE_IMAGES["match-predictions"].alt} />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-10 h-[420px] w-[780px] -translate-x-1/2 rounded-full"
+            style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(140px)" }}
+          />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
             {/* Breadcrumb */}
             <nav
               aria-label="Breadcrumb"
-              className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-slate-500"
+              className="mb-6 flex items-center gap-1.5 text-xs text-[#6b7280]"
             >
-              <Link
-                href="/"
-                className="transition hover:text-green-600"
-              >
+              <Link href="/" className="transition hover:text-[#4ade80]">
                 BetsPlug
               </Link>
               <ChevronRight className="h-3 w-3" />
-              <Link
-                href="/match-predictions"
-                className="transition hover:text-green-600"
-              >
+              <Link href="/match-predictions" className="transition hover:text-[#4ade80]">
                 {t("Match Predictions", "Wedstrijd voorspellingen")}
               </Link>
               <ChevronRight className="h-3 w-3" />
-              <span className="text-slate-600">{hub.name[editorialLocale]}</span>
+              <span className="text-[#a3a9b8]">{hub.name[editorialLocale]}</span>
             </nav>
 
             <div className="text-center">
+              <HexBadge variant="green" size="lg" className="mx-auto mb-4">
+                <Sparkles className="h-7 w-7" />
+              </HexBadge>
               <span className="section-label mx-auto">
-                <Sparkles className="h-3.5 w-3.5" />
                 <span aria-hidden="true">{hub.countryFlag}</span>
                 {hub.country[editorialLocale]}
               </span>
 
-              <h1 className="text-display mt-5 text-3xl text-white sm:text-4xl lg:text-5xl">
+              <h1 className="text-heading mt-5 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {hub.name[editorialLocale]}{" "}
-                {t("AI Predictions", "AI voorspellingen")}
+                <span className="gradient-text-green">
+                  {t("AI Predictions", "AI voorspellingen")}
+                </span>
               </h1>
 
-              <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a3a3] sm:text-lg">
+              <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
                 {hub.tagline[editorialLocale]}
               </p>
             </div>
@@ -246,28 +250,43 @@ export default async function LeagueHubPage(props: {
 
         {/* Editorial intro */}
         <section className="relative py-20 md:py-28">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-0 top-10 h-[360px] w-[520px] rounded-full"
+            style={{ background: "hsl(var(--accent-green) / 0.08)", filter: "blur(140px)" }}
+          />
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
             <div className="mx-auto max-w-3xl">
-              <div className="bg-[#0a0a0a] border border-white/[0.08] p-6 sm:p-8">
-                <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
-                  {t(
-                    `About our ${hub.name.en} model`,
-                    `Over ons ${hub.name.nl}-model`,
-                  )}
-                </h2>
-                <p className="mt-4 text-base leading-relaxed text-[#a3a3a3]">
-                  {hub.intro[editorialLocale]}
-                </p>
+              <div className="card-neon card-neon-green relative overflow-hidden p-6 sm:p-8">
+                <div className="relative">
+                  <div className="mb-4 flex items-center gap-3">
+                    <HexBadge variant="green" size="md">
+                      <BookOpen className="h-5 w-5" />
+                    </HexBadge>
+                    <span className="section-label">
+                      {t("Model brief", "Model briefing")}
+                    </span>
+                  </div>
+                  <h2 className="text-heading text-2xl text-[#ededed] sm:text-3xl lg:text-4xl">
+                    {t(
+                      `About our ${hub.name.en} model`,
+                      `Over ons ${hub.name.nl}-model`,
+                    )}
+                  </h2>
+                  <p className="mt-4 text-base leading-relaxed text-[#ededed]">
+                    {hub.intro[editorialLocale]}
+                  </p>
 
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Link href="/track-record" className="btn-lime">
-                    {t("See our track record", "Bekijk ons trackrecord")}
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                  <Link href="/match-predictions" className="btn-outline">
-                    {t("All leagues", "Alle competities")}
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <Link href="/track-record" className="btn-primary inline-flex items-center gap-2">
+                      {t("See our track record", "Bekijk ons trackrecord")}
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                    <Link href="/match-predictions" className="btn-glass inline-flex items-center gap-2">
+                      {t("All leagues", "Alle competities")}
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -285,35 +304,39 @@ export default async function LeagueHubPage(props: {
         <section className="relative py-20 md:py-28">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <div className="mx-auto max-w-3xl">
-            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
-              {t(
-                `${hub.name.en} predictions FAQ`,
-                `Veelgestelde vragen over ${hub.name.nl}-voorspellingen`,
-              )}
-            </h2>
-            <p className="mt-1 text-sm text-slate-500">
-              {t(
-                "Everything we get asked about how the model works.",
-                "Alles wat we krijgen gevraagd over hoe het model werkt.",
-              )}
-            </p>
+              <span className="section-label">
+                <HelpCircle className="h-3 w-3" />
+                FAQ
+              </span>
+              <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+                {t(
+                  `${hub.name.en} predictions FAQ`,
+                  `Veelgestelde vragen over ${hub.name.nl}-voorspellingen`,
+                )}
+              </h2>
+              <p className="mt-3 text-base text-[#a3a9b8]">
+                {t(
+                  "Everything we get asked about how the model works.",
+                  "Alles wat we krijgen gevraagd over hoe het model werkt.",
+                )}
+              </p>
 
-            <div className="mt-6 flex flex-col gap-3">
-              {hub.faqs[editorialLocale].map((faq) => (
-                <details
-                  key={faq.q}
-                  className="group overflow-hidden rounded-2xl border border-slate-200 bg-white p-0 shadow-sm"
-                >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-5 text-left text-base font-bold text-slate-900 transition hover:text-green-600">
-                    <span>{faq.q}</span>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-slate-400 transition group-open:rotate-90" />
-                  </summary>
-                  <div className="px-5 pb-5 text-sm leading-relaxed text-slate-600">
-                    {faq.a}
-                  </div>
-                </details>
-              ))}
-            </div>
+              <div className="mt-8 flex flex-col gap-3">
+                {hub.faqs[editorialLocale].map((faq) => (
+                  <details
+                    key={faq.q}
+                    className="glass-panel-lifted group overflow-hidden"
+                  >
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-5 text-left text-base font-semibold text-[#ededed] transition hover:text-[#4ade80]">
+                      <span>{faq.q}</span>
+                      <ChevronRight className="h-4 w-4 shrink-0 text-[#6b7280] transition group-open:rotate-90" />
+                    </summary>
+                    <div className="px-5 pb-5 text-sm leading-relaxed text-[#a3a9b8]">
+                      {faq.a}
+                    </div>
+                  </details>
+                ))}
+              </div>
             </div>
           </div>
         </section>

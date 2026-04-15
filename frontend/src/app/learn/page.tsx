@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { ArrowRight, BookOpen, ChevronRight, GraduationCap } from "lucide-react";
+import { ArrowRight, BookOpen, ChevronRight, GraduationCap, Sparkles } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
@@ -18,12 +18,13 @@ import {
 import { fetchAllLearnPillars } from "@/lib/sanity-data";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
+import { HexBadge } from "@/components/noct/hex-badge";
+
+type Variant = "green" | "purple" | "blue";
+const CYCLE: Variant[] = ["green", "purple", "blue"];
 
 /**
- * /learn — index page listing every evergreen learn pillar.
- * Editorial intro + cards → each card links to a long-form
- * deep-dive. Localized EN + NL today; other locales fall back
- * to EN.
+ * /learn — NOCTURNE evergreen pillar hub.
  */
 
 function readLocaleFromCookie(): LearnPillarLocale {
@@ -61,36 +62,47 @@ export default async function LearnIndexPage() {
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
       <SiteNav />
 
       {/* Hero */}
-      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+      <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
         <HeroMediaBg src={PAGE_IMAGES.learn.hero} alt="" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-10 h-[420px] w-[780px] -translate-x-1/2 rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(140px)" }}
+        />
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
           <nav
             aria-label="Breadcrumb"
-            className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-slate-300"
+            className="mb-6 flex items-center gap-1.5 text-xs text-[#6b7280]"
           >
-            <Link href="/" className="transition hover:text-green-400">
+            <Link href="/" className="transition hover:text-[#4ade80]">
               BetsPlug
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-white">{t("Learn", "Leren")}</span>
+            <span className="text-[#a3a9b8]">{t("Learn", "Leren")}</span>
           </nav>
 
           <div className="text-center">
-            <span className="section-label inline-flex items-center gap-2">
-              <GraduationCap className="h-3.5 w-3.5" />
+            <HexBadge variant="green" size="lg" className="mx-auto mb-4">
+              <GraduationCap className="h-7 w-7" />
+            </HexBadge>
+            <span className="section-label mx-auto">
+              <GraduationCap className="h-3 w-3" />
               {t("Pillar guides", "Pillar gidsen")}
             </span>
 
-            <h1 className="text-display mt-5 text-balance break-words text-4xl text-white sm:text-5xl lg:text-6xl">
-              {t("Learn the Math", "Leer de Wiskunde")}
+            <h1 className="text-heading mt-5 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              {t("Learn the", "Leer de")}{" "}
+              <span className="gradient-text-green">
+                {t("Math", "Wiskunde")}
+              </span>
             </h1>
 
-            <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-300 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
               {t(
                 "Six handwritten deep-dives into the concepts that anchor BetsPlug's ensemble - value betting, expected goals, Elo, Kelly, Poisson, and bankroll management.",
                 "Zes handgeschreven deep-dives in de concepten die het ensemble van BetsPlug verankeren - value betting, expected goals, Elo, Kelly, Poisson en bankroll management.",
@@ -102,32 +114,42 @@ export default async function LearnIndexPage() {
 
       {/* Pillar cards */}
       <section className="relative py-20 md:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="grid gap-[1px] bg-white/[0.08] sm:grid-cols-2 lg:grid-cols-3">
-            {pillars.map((pillar) => (
-              <Link
-                key={pillar.slug}
-                href={`/learn/${pillar.slug}`}
-                className="group flex flex-col gap-3 bg-[#0a0a0a] p-6 transition hover:bg-[#0f0f0f] sm:p-8"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="section-label inline-flex items-center gap-1.5">
-                    <BookOpen className="h-3 w-3" />
-                    {t("Pillar", "Pillar")}
-                  </span>
-                </div>
-                <h2 className="text-display text-2xl text-white transition group-hover:text-[#4ade80]">
-                  {pillar.title[editorialLocale]}
-                </h2>
-                <p className="text-sm leading-relaxed text-slate-400">
-                  {pillar.tagline[editorialLocale]}
-                </p>
-                <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#4ade80]">
-                  {t("Read the guide", "Lees de gids")}
-                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-                </div>
-              </Link>
-            ))}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-20 h-[360px] w-[520px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.08)", filter: "blur(140px)" }}
+        />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {pillars.map((pillar, i) => {
+              const variant = CYCLE[i % CYCLE.length];
+              return (
+                <Link
+                  key={pillar.slug}
+                  href={`/learn/${pillar.slug}`}
+                  className={`card-neon card-neon-${variant} group relative block overflow-hidden p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-7`}
+                >
+                  <div className="relative flex flex-col gap-4">
+                    <HexBadge variant={variant} size="md">
+                      <BookOpen className="h-5 w-5" />
+                    </HexBadge>
+                    <span className="section-label">
+                      {t("Pillar", "Pillar")}
+                    </span>
+                    <h2 className="text-heading text-2xl text-[#ededed] transition group-hover:text-[#4ade80]">
+                      {pillar.title[editorialLocale]}
+                    </h2>
+                    <p className="text-sm leading-relaxed text-[#a3a9b8]">
+                      {pillar.tagline[editorialLocale]}
+                    </p>
+                    <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-[#4ade80]">
+                      {t("Read the guide", "Lees de gids")}
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -135,40 +157,39 @@ export default async function LearnIndexPage() {
       {/* Final CTA */}
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16">
+          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-10 md:p-16">
             <CtaMediaBg src={PAGE_IMAGES.learn.cta} alt={PAGE_IMAGES.learn.alt} pattern={PAGE_IMAGES.learn.pattern} />
-            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
-
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-16 -top-16 h-[260px] w-[260px] rounded-full"
+              style={{ background: "hsl(var(--accent-green) / 0.28)", filter: "blur(80px)" }}
+            />
             <div className="relative">
-              <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
-                <GraduationCap className="h-3 w-3" />
+              <HexBadge variant="green" size="md" className="mb-5">
+                <GraduationCap className="h-5 w-5" />
+              </HexBadge>
+              <span className="section-label">
+                <Sparkles className="h-3 w-3" />
                 {t("Start applying", "Aan de slag")}
               </span>
-              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("Put theory into practice.", "Breng theorie in de praktijk.")}
               </h2>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#050505]/80">
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
                 {t(
                   "Once you understand the math, see it run live on every fixture inside BetsPlug.",
                   "Zodra je de wiskunde snapt, zie je het live draaien op elke wedstrijd in BetsPlug.",
                 )}
               </p>
 
-              <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <Link
-                  href="/"
-                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
-                >
-                  {t("VIEW PREDICTIONS", "BEKIJK VOORSPELLINGEN")} →
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <Link href="/" className="btn-primary inline-flex items-center gap-2">
+                  {t("View predictions", "Bekijk voorspellingen")}
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link
-                  href="/how-it-works"
-                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
-                >
-                  {t("HOW IT WORKS", "HOE HET WERKT")} →
+                <Link href="/how-it-works" className="btn-glass inline-flex items-center gap-2">
+                  {t("How it works", "Hoe het werkt")}
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
             </div>

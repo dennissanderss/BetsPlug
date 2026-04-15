@@ -8,32 +8,32 @@
  * so every visual element is defined once and stays consistent.
  */
 
-import {
-  Dribbble,
-  Volleyball,
-  Disc,
-  Zap,
-} from "lucide-react";
+import { Volleyball } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { Sport } from "@/data/articles";
 import { useTranslations } from "@/i18n/locale-provider";
+import { Pill } from "@/components/noct/pill";
 
-/* ── Sport meta (icon + color + label key) ───────────────── */
+/* ── Sport meta (icon + tone + label key) ─────────────────── */
+
+type SportTone = "green" | "purple" | "blue";
 
 type SportMeta = {
   icon: LucideIcon;
-  /** Tailwind text color for the icon */
-  textClass: string;
-  /** Tailwind background + border for the badge pill */
-  badgeClass: string;
+  iconColor: string;
+  tone: SportTone;
+  /** Gradient used on CoverArt fallback. */
+  gradient: string;
   labelKey: "articles.sportFootball";
 };
 
 const SPORT_META: Record<Sport, SportMeta> = {
   football: {
     icon: Volleyball,
-    textClass: "text-green-300",
-    badgeClass: "border-green-500/30 bg-green-500/10 text-green-300",
+    iconColor: "#4ade80",
+    tone: "green",
+    gradient:
+      "radial-gradient(ellipse at top left, rgba(74,222,128,0.28), transparent 55%), radial-gradient(ellipse at bottom right, rgba(168,85,247,0.2), transparent 55%), linear-gradient(135deg, #0a1412 0%, #0a0f1a 100%)",
     labelKey: "articles.sportFootball",
   },
 };
@@ -42,7 +42,7 @@ export function getSportMeta(sport: Sport): SportMeta {
   return SPORT_META[sport];
 }
 
-/* ── Small icon ──────────────────────────────────────────── */
+/* ── Small icon (kept for API compatibility) ──────────────── */
 
 export function SportIcon({
   sport,
@@ -51,27 +51,26 @@ export function SportIcon({
   sport: Sport;
   className?: string;
 }) {
-  const { icon: Icon, textClass } = SPORT_META[sport];
-  return <Icon className={`${className} ${textClass}`} />;
+  const { icon: Icon, iconColor } = SPORT_META[sport];
+  return <Icon className={className} style={{ color: iconColor }} />;
 }
 
-/* ── Badge pill ──────────────────────────────────────────── */
+/* ── Badge pill — NOCTURNE Pill primitive ─────────────────── */
 
 export function SportBadge({ sport }: { sport: Sport }) {
   const { t } = useTranslations();
   const meta = SPORT_META[sport];
   const Icon = meta.icon;
+  const tone = meta.tone === "green" ? "win" : meta.tone === "purple" ? "purple" : "info";
   return (
-    <span
-      className={`inline-flex w-fit items-center gap-1.5 border px-2 py-0.5 font-mono text-[10px] font-black uppercase tracking-widest ${meta.badgeClass}`}
-    >
+    <Pill tone={tone} className="inline-flex items-center gap-1.5">
       <Icon className="h-3 w-3" />
-      {t(meta.labelKey)}
-    </span>
+      <span>{t(meta.labelKey)}</span>
+    </Pill>
   );
 }
 
-/* ── Cover art (layered gradient + oversized icon) ───────── */
+/* ── Cover art — smooth gradient + subtle pattern ─────────── */
 
 export function CoverArt({
   gradient,
@@ -85,12 +84,6 @@ export function CoverArt({
   pattern?: "dots" | "grid" | "diagonal";
   sport: Sport;
   size?: "sm" | "md" | "lg";
-  /**
-   * Optional raster image overlay (WebP / PNG / JPG). When
-   * provided, it replaces the oversized sport icon. The layered
-   * gradient + ambient glow still render underneath so the card
-   * looks cohesive while the image loads or if it 404s.
-   */
   imageUrl?: string;
   imageAlt?: string;
 }) {
@@ -108,45 +101,48 @@ export function CoverArt({
       case "grid":
         return {
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)",
+            "linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)",
           backgroundSize: "40px 40px",
         };
       case "diagonal":
         return {
           backgroundImage:
-            "repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 22px)",
+            "repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0 1px, transparent 1px 22px)",
         };
       default:
         return {
           backgroundImage:
-            "radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px)",
+            "radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)",
           backgroundSize: "24px 24px",
         };
     }
   })();
 
+  // Prefer the caller-supplied gradient; fall back to the sport default.
+  const background = gradient || meta.gradient;
+
   return (
     <div
       className="absolute inset-0"
-      style={{ background: gradient }}
+      style={{ background }}
       aria-hidden={imageUrl ? undefined : "true"}
     >
-      {/* Pattern overlay */}
-      <div
-        className="absolute inset-0 opacity-60"
-        style={patternStyle}
-      />
-      {/* Radial glow */}
+      {/* Pattern overlay — soft */}
+      <div className="absolute inset-0 opacity-50" style={patternStyle} />
+
+      {/* Ambient radial wash */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(74,222,128,0.22) 0%, transparent 55%)",
+            "radial-gradient(ellipse at center, rgba(74,222,128,0.18) 0%, transparent 60%)",
         }}
       />
-      {/* Corner ambient */}
-      <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-green-500/10 blur-[80px]" />
-      <div className="absolute -right-10 -bottom-10 h-48 w-48 rounded-full bg-emerald-500/10 blur-[90px]" />
+
+      {/* Corner glows */}
+      <div className="pointer-events-none absolute -left-16 -top-16 h-48 w-48 rounded-full bg-[#4ade80]/10 blur-[90px]" />
+      <div className="pointer-events-none absolute -right-16 -bottom-16 h-56 w-56 rounded-full bg-[#a855f7]/10 blur-[100px]" />
+
       {imageUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
@@ -157,17 +153,18 @@ export function CoverArt({
           className="absolute inset-0 h-full w-full object-cover mix-blend-luminosity opacity-90"
         />
       ) : (
-        // Oversized sport icon (gradient-only fallback)
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="relative">
             <div className="absolute inset-0 rounded-full bg-white/[0.04] blur-2xl" />
             <Icon
-              className={`${iconSize} ${meta.textClass} drop-shadow-[0_0_30px_rgba(74,222,128,0.35)]`}
+              className={`${iconSize} drop-shadow-[0_0_30px_rgba(74,222,128,0.35)]`}
               strokeWidth={1.3}
+              style={{ color: meta.iconColor }}
             />
           </div>
         </div>
       )}
+
       {/* Bottom fade so text below reads cleanly */}
       <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/40 to-transparent" />
     </div>

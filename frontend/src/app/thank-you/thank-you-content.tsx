@@ -26,6 +26,8 @@ import { useLocalizedHref } from "@/i18n/locale-provider";
 import { api } from "@/lib/api";
 import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 
 /**
  * /thank-you — post-purchase landing page
@@ -308,20 +310,12 @@ function ThankYouContent({
   }, [isTrial, billing, planCopy.label]);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
-      {/* ── Ambient background ── */}
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
+      {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.04] blur-[160px]" />
-        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.03] blur-[160px]" />
-        <div className="absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-green-500/[0.03] blur-[140px]" />
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(74,222,128,0.6) 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
+        <div className="absolute -left-40 top-40 h-[520px] w-[520px] rounded-full bg-[#4ade80]/[0.09] blur-[160px]" />
+        <div className="absolute -right-40 bottom-40 h-[520px] w-[520px] rounded-full bg-[#a855f7]/[0.07] blur-[160px]" />
+        <div className="absolute left-1/2 top-0 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-[#4ade80]/[0.06] blur-[140px]" />
       </div>
 
       <SiteNav />
@@ -373,124 +367,117 @@ function ThankYouContent({
       )}
 
       <main className="relative z-10">
-        {/* ── Hero ── */}
-        <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505] text-center">
+        {/* Hero */}
+        <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-24 text-center">
           <HeroMediaBg src={PAGE_IMAGES["thank-you"].hero} alt={PAGE_IMAGES["thank-you"].alt} />
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-2"
+            className="mx-auto mb-8 flex justify-center"
           >
-            <CheckCircle2 className="h-4 w-4 text-green-500" />
-            <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-700">
-              {isTrial ? "Trial started" : "Payment confirmed"}
+            <HexBadge variant="green" size="xl">
+              <CheckCircle2 className="h-10 w-10" />
+            </HexBadge>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="mb-5 flex items-center justify-center"
+          >
+            <span className="section-label">
+              <CheckCircle2 className="h-3 w-3" />
+              {isTrial ? "Trial started · Welcome aboard" : "Payment confirmed · Welcome aboard"}
             </span>
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mx-auto max-w-4xl text-balance break-words text-[2rem] font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl"
+            className="text-display mx-auto max-w-4xl text-balance break-words text-[2rem] text-[#ededed] sm:text-5xl md:text-6xl"
           >
             Welcome to BetsPlug{" "}
-            <span
-              className={`bg-gradient-to-br ${planCopy.accent} bg-clip-text text-transparent`}
-            >
-              {headlineSuffix}!
-            </span>
+            <span className="gradient-text-green">{headlineSuffix}!</span>
           </motion.h1>
 
-          {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mx-auto mt-6 max-w-2xl text-balance text-base leading-relaxed text-slate-600 sm:text-lg"
+            className="mx-auto mt-6 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
             Your subscription is set up. Here&apos;s everything you just
             unlocked — and where to head next.
           </motion.p>
 
-          {/* Plan badge card */}
+          {/* Plan badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mx-auto mt-10 max-w-xl"
           >
-            <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-green-500/[0.05] blur-[60px]" />
+            <div className="card-neon-green p-5">
               <div className="relative flex items-center gap-4">
-                <div
-                  className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${planCopy.accent} shadow-lg shadow-slate-200/60 ring-1 ring-slate-200/60`}
-                >
-                  <PlanIcon className="h-5 w-5 text-white" />
-                </div>
+                <HexBadge variant="green" size="md">
+                  <PlanIcon className="h-5 w-5" />
+                </HexBadge>
                 <div className="min-w-0 flex-1 text-left">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-600">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8a93a6]">
                     Active plan
                   </p>
-                  <p className="truncate text-lg font-extrabold text-slate-900">
+                  <p className="truncate text-lg font-bold text-[#ededed]">
                     {planCopy.label}
                   </p>
                 </div>
                 {activated ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-green-700">
+                  <Pill tone="win">
                     <CheckCircle2 className="h-3 w-3" />
                     Active
-                  </span>
+                  </Pill>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-600">
+                  <Pill tone="draw">
                     <Loader2 className="h-3 w-3 animate-spin" />
                     Activating
-                  </span>
+                  </Pill>
                 )}
               </div>
             </div>
           </motion.div>
 
-          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
-            <Link
-              href={loc("/dashboard")}
-              className="btn-gradient group inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50 sm:w-auto sm:text-base"
-            >
+            <Link href={loc("/dashboard")} className="btn-primary group w-full sm:w-auto">
               <LayoutDashboard className="h-4 w-4" />
               Go to Dashboard
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
-            <Link
-              href={loc("/subscription")}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-sm font-semibold text-slate-600 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 sm:w-auto"
-            >
+            <Link href={loc("/subscription")} className="btn-glass w-full sm:w-auto">
               View my subscription
             </Link>
           </motion.div>
 
-          {/* Email hint */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-6 inline-flex items-center gap-2 text-xs text-slate-500"
+            className="mt-6 inline-flex items-center gap-2 text-xs text-[#8a93a6]"
           >
-            <Mail className="h-3.5 w-3.5 text-green-500/70" />
+            <Mail className="h-3.5 w-3.5 text-[#4ade80]/80" />
             Receipt and account details are on their way to your inbox.
           </motion.p>
           </div>
         </section>
 
-        {/* ── Plan features ── */}
+        {/* Plan features */}
         <section className="relative py-20 md:py-28">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
@@ -500,18 +487,22 @@ function ThankYouContent({
             transition={{ duration: 0.6 }}
             className="mb-12 sm:mb-14 text-center"
           >
-            <span className="section-label mx-auto">
-              <Sparkles className="h-3.5 w-3.5" />
-              What you unlocked
-            </span>
-            <h2 className="text-display mt-4 text-3xl text-white sm:text-4xl lg:text-5xl">
+            <div className="flex justify-center">
+              <span className="section-label">
+                <Sparkles className="h-3.5 w-3.5" />
+                What you unlocked
+              </span>
+            </div>
+            <h2 className="text-display mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               Your {planCopy.label} benefits are live
             </h2>
           </motion.div>
 
-          <div className="grid gap-[1px] bg-white/[0.08] sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {planCopy.features.map((feature, i) => {
               const Icon = feature.icon;
+              const variants = ["green", "purple", "blue"] as const;
+              const variant = variants[i % variants.length];
               return (
                 <motion.div
                   key={feature.title}
@@ -519,17 +510,16 @@ function ThankYouContent({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="group relative overflow-hidden bg-[#0a0a0a] p-6 sm:p-8 transition-all"
+                  className={`card-neon-${variant} p-6 sm:p-8 transition-all hover:-translate-y-0.5`}
                 >
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#4ade80]/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                   <div className="relative">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center border border-[#4ade80]/30 bg-[#4ade80]/10">
-                      <Icon className="h-5 w-5 text-[#4ade80]" />
-                    </div>
-                    <h3 className="mb-2 text-base font-bold text-white">
+                    <HexBadge variant={variant} size="md" className="mb-4">
+                      <Icon className="h-5 w-5" />
+                    </HexBadge>
+                    <h3 className="text-heading mb-2 text-base text-[#ededed]">
                       {feature.title}
                     </h3>
-                    <p className="text-sm leading-relaxed text-[#a3a3a3]">
+                    <p className="text-sm leading-relaxed text-[#a3a9b8]">
                       {feature.body}
                     </p>
                   </div>
@@ -540,91 +530,91 @@ function ThankYouContent({
           </div>
         </section>
 
-        {/* ── Verification status ── */}
-        <section className="relative py-20 md:py-28">
+        {/* Verification status */}
+        <section className="relative py-12 md:py-16">
           <div className="mx-auto max-w-2xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm"
+            className="card-neon-purple p-5 text-center"
           >
-            {activated ? (
-              <div className="flex items-center justify-center gap-3">
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
-                <p className="text-sm font-semibold text-slate-700">
-                  Your subscription is fully activated. Enjoy!
+            <div className="relative">
+              {activated ? (
+                <div className="flex items-center justify-center gap-3">
+                  <HexBadge variant="green" size="sm" noGlow>
+                    <CheckCircle2 className="h-4 w-4" />
+                  </HexBadge>
+                  <p className="text-sm font-semibold text-[#ededed]">
+                    Your subscription is fully activated. Enjoy!
+                  </p>
+                </div>
+              ) : pollTimedOut ? (
+                <div className="space-y-2">
+                  <p className="text-sm font-semibold text-amber-300">
+                    Your payment was received — activation may take a few
+                    more minutes.
+                  </p>
+                  <p className="text-xs text-[#a3a9b8]">
+                    Check your email for the receipt. If you don&apos;t see
+                    the subscription in your dashboard shortly, please
+                    contact support.
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-center justify-center gap-3">
+                  <HexBadge variant="purple" size="sm" noGlow>
+                    <Mail className="h-4 w-4" />
+                  </HexBadge>
+                  <p className="text-sm font-medium text-[#a3a9b8]">
+                    <Loader2 className="mr-1 inline h-3 w-3 animate-spin text-[#4ade80]" />
+                    Finalizing your subscription…
+                  </p>
+                </div>
+              )}
+              {sessionId && (
+                <p className="mt-3 font-mono text-[10px] text-[#8a93a6]">
+                  ref: {sessionId.slice(0, 24)}…
                 </p>
-              </div>
-            ) : pollTimedOut ? (
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-amber-600">
-                  Your payment was received — activation may take a few
-                  more minutes.
-                </p>
-                <p className="text-xs text-slate-500">
-                  Check your email for the receipt. If you don&apos;t see
-                  the subscription in your dashboard shortly, please
-                  contact support.
-                </p>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center gap-3">
-                <Loader2 className="h-4 w-4 animate-spin text-green-500" />
-                <p className="text-sm font-medium text-slate-500">
-                  Finalizing your subscription…
-                </p>
-              </div>
-            )}
-            {sessionId && (
-              <p className="mt-3 font-mono text-[10px] text-slate-600">
-                ref: {sessionId.slice(0, 24)}…
-              </p>
-            )}
+              )}
+            </div>
           </motion.div>
           </div>
         </section>
 
-        {/* ── Final CTA ── */}
+        {/* Final CTA */}
         <section className="relative py-20 md:py-28">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
-            <div className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16">
-              <CtaMediaBg
-                src={PAGE_IMAGES["thank-you"].cta}
-                alt={PAGE_IMAGES["thank-you"].alt}
-                pattern={PAGE_IMAGES["thank-you"].pattern}
-              />
-              <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
-              <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
-              <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
-              <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
-
-              <div className="relative text-center">
-                <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
-                  Ready to place your first pick?
-                </h2>
-                <p className="mx-auto mt-4 max-w-xl text-base text-[#050505]/80">
-                  Your dashboard is live. Head over and start winning smarter.
-                </p>
-                <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                  <Link
-                    href={loc("/dashboard")}
-                    className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
-                  >
-                    GO TO DASHBOARD →
-                  </Link>
-                  <Link
-                    href={loc("/subscription")}
-                    className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
-                  >
-                    VIEW SUBSCRIPTION →
-                  </Link>
+            <div className="card-neon-green halo-green overflow-hidden p-10 md:p-16">
+              <div className="relative">
+                <CtaMediaBg
+                  src={PAGE_IMAGES["thank-you"].cta}
+                  alt={PAGE_IMAGES["thank-you"].alt}
+                  pattern={PAGE_IMAGES["thank-you"].pattern}
+                />
+                <div className="relative text-center">
+                  <h2 className="text-display text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+                    Ready to place your first pick?
+                  </h2>
+                  <p className="mx-auto mt-4 max-w-xl text-base text-[#a3a9b8]">
+                    Your dashboard is live. Head over and start winning smarter.
+                  </p>
+                  <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                    <Link href={loc("/dashboard")} className="btn-primary group">
+                      <LayoutDashboard className="h-4 w-4" />
+                      Go to dashboard
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                    <Link href={loc("/subscription")} className="btn-glass">
+                      View subscription
+                    </Link>
+                  </div>
+                  <p className="mt-8 inline-flex items-center justify-center gap-2 text-xs text-[#8a93a6]">
+                    <ShieldCheck className="h-3.5 w-3.5 text-[#4ade80]" />
+                    SSL-encrypted · 14-day money-back · Cancel any time
+                  </p>
                 </div>
-                <p className="mt-8 inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-[#050505]/80">
-                  <ShieldCheck className="h-3.5 w-3.5" />
-                  SSL-encrypted · 14-day money-back · Cancel any time
-                </p>
               </div>
             </div>
           </div>

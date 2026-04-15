@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, ChevronRight, Sparkles, Target } from "lucide-react";
+import { ArrowRight, ChevronRight, Sparkles, Target, BookOpen, Lightbulb, HelpCircle } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { UnlockBanner } from "@/components/match-predictions/unlock-banner";
+import { HexBadge } from "@/components/noct/hex-badge";
 import {
   defaultLocale,
   isLocale,
@@ -23,7 +24,7 @@ import {
 } from "@/lib/sanity-data";
 import { pickBetTypeHubLocale } from "@/data/bet-type-hubs";
 import { BetTypeHubFixtures } from "./bet-type-hub-fixtures";
-import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
+import { HeroMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 
 export const revalidate = 60;
@@ -193,43 +194,51 @@ export default async function BetTypeHubPage(props: {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
+      <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
         <SiteNav />
 
         {/* Hero */}
-        <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
+        <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
           <HeroMediaBg src={PAGE_IMAGES["bet-types"].hero} alt={PAGE_IMAGES["bet-types"].alt} />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-10 h-[420px] w-[780px] -translate-x-1/2 rounded-full"
+            style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(140px)" }}
+          />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
             {/* Breadcrumb */}
             <nav
               aria-label="Breadcrumb"
-              className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-slate-500"
+              className="mb-6 flex items-center gap-1.5 text-xs text-[#6b7280]"
             >
-              <Link href="/" className="transition hover:text-green-600">
+              <Link href="/" className="transition hover:text-[#4ade80]">
                 BetsPlug
               </Link>
               <ChevronRight className="h-3 w-3" />
-              <span className="text-slate-500">
+              <span className="text-[#6b7280]">
                 {t("Bet Types", "Wed-types")}
               </span>
               <ChevronRight className="h-3 w-3" />
-              <span className="text-slate-600">
+              <span className="text-[#a3a9b8]">
                 {hub.name[editorialLocale]}
               </span>
             </nav>
 
             <div className="text-center">
+              <HexBadge variant="green" size="lg" className="mx-auto mb-4">
+                <Target className="h-7 w-7" />
+              </HexBadge>
               <span className="section-label mx-auto">
-                <Target className="h-3.5 w-3.5" />
+                <Target className="h-3 w-3" />
                 {hub.shortCode}
               </span>
 
-              <h1 className="text-display mt-5 text-3xl text-white sm:text-4xl lg:text-5xl">
+              <h1 className="text-heading mt-5 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {hub.name[editorialLocale]}
               </h1>
 
-              <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a3a3] sm:text-lg">
+              <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
                 {hub.tagline[editorialLocale]}
               </p>
             </div>
@@ -244,18 +253,33 @@ export default async function BetTypeHubPage(props: {
 
         {/* Explainer */}
         <section className="relative py-20 md:py-28">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-0 top-10 h-[360px] w-[520px] rounded-full"
+            style={{ background: "hsl(var(--accent-green) / 0.08)", filter: "blur(140px)" }}
+          />
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
             <div className="mx-auto max-w-3xl">
-              <div className="bg-[#0a0a0a] border border-white/[0.08] p-6 sm:p-8">
-                <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
-                  {t(
-                    `What is ${hub.name.en}?`,
-                    `Wat is ${hub.name.nl}?`,
-                  )}
-                </h2>
-                <p className="mt-4 text-base leading-relaxed text-[#a3a3a3]">
-                  {hub.explainer[editorialLocale]}
-                </p>
+              <div className="card-neon card-neon-green relative overflow-hidden p-6 sm:p-8">
+                <div className="relative">
+                  <div className="mb-4 flex items-center gap-3">
+                    <HexBadge variant="green" size="md">
+                      <BookOpen className="h-5 w-5" />
+                    </HexBadge>
+                    <span className="section-label">
+                      {t("Explainer", "Uitleg")}
+                    </span>
+                  </div>
+                  <h2 className="text-heading text-2xl text-[#ededed] sm:text-3xl lg:text-4xl">
+                    {t(
+                      `What is ${hub.name.en}?`,
+                      `Wat is ${hub.name.nl}?`,
+                    )}
+                  </h2>
+                  <p className="mt-4 text-base leading-relaxed text-[#ededed]">
+                    {hub.explainer[editorialLocale]}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -263,28 +287,43 @@ export default async function BetTypeHubPage(props: {
 
         {/* Strategy */}
         <section className="relative py-20 md:py-28">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute right-0 top-10 h-[360px] w-[520px] rounded-full"
+            style={{ background: "hsl(var(--accent-purple) / 0.08)", filter: "blur(140px)" }}
+          />
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
             <div className="mx-auto max-w-3xl">
-              <div className="bg-[#0a0a0a] border border-white/[0.08] p-6 sm:p-8">
-                <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
-                  {t(
-                    `${hub.name.en} strategy`,
-                    `${hub.name.nl}-strategie`,
-                  )}
-                </h2>
-                <p className="mt-4 text-base leading-relaxed text-[#a3a3a3]">
-                  {hub.strategy[editorialLocale]}
-                </p>
+              <div className="card-neon card-neon-purple relative overflow-hidden p-6 sm:p-8">
+                <div className="relative">
+                  <div className="mb-4 flex items-center gap-3">
+                    <HexBadge variant="purple" size="md">
+                      <Lightbulb className="h-5 w-5" />
+                    </HexBadge>
+                    <span className="section-label">
+                      {t("Strategy", "Strategie")}
+                    </span>
+                  </div>
+                  <h2 className="text-heading text-2xl text-[#ededed] sm:text-3xl lg:text-4xl">
+                    {t(
+                      `${hub.name.en} strategy`,
+                      `${hub.name.nl}-strategie`,
+                    )}
+                  </h2>
+                  <p className="mt-4 text-base leading-relaxed text-[#ededed]">
+                    {hub.strategy[editorialLocale]}
+                  </p>
 
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Link href="/track-record" className="btn-lime">
-                    {t("See our track record", "Bekijk ons trackrecord")}
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                  <Link href="/match-predictions" className="btn-outline">
-                    {t("All predictions", "Alle voorspellingen")}
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <Link href="/track-record" className="btn-primary inline-flex items-center gap-2">
+                      {t("See our track record", "Bekijk ons trackrecord")}
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                    <Link href="/match-predictions" className="btn-glass inline-flex items-center gap-2">
+                      {t("All predictions", "Alle voorspellingen")}
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -302,57 +341,67 @@ export default async function BetTypeHubPage(props: {
         <section className="relative py-20 md:py-28">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <div className="mx-auto max-w-3xl">
-            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
-              {t(
-                `${hub.name.en} FAQ`,
-                `Veelgestelde vragen over ${hub.name.nl}`,
-              )}
-            </h2>
-            <p className="mt-1 text-sm text-slate-500">
-              {t(
-                "Everything the market asks about how this bet type works.",
-                "Alles wat de markt vraagt over hoe dit wed-type werkt.",
-              )}
-            </p>
+              <span className="section-label">
+                <HelpCircle className="h-3 w-3" />
+                FAQ
+              </span>
+              <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+                {t(
+                  `${hub.name.en} FAQ`,
+                  `Veelgestelde vragen over ${hub.name.nl}`,
+                )}
+              </h2>
+              <p className="mt-3 text-base text-[#a3a9b8]">
+                {t(
+                  "Everything the market asks about how this bet type works.",
+                  "Alles wat de markt vraagt over hoe dit wed-type werkt.",
+                )}
+              </p>
 
-            <div className="mt-6 flex flex-col gap-3">
-              {hub.faqs[editorialLocale].map((faq) => (
-                <details
-                  key={faq.q}
-                  className="group overflow-hidden rounded-2xl border border-slate-200 bg-white p-0 shadow-sm"
-                >
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-5 text-left text-base font-bold text-slate-900 transition hover:text-green-600">
-                    <span>{faq.q}</span>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-slate-400 transition group-open:rotate-90" />
-                  </summary>
-                  <div className="px-5 pb-5 text-sm leading-relaxed text-slate-600">
-                    {faq.a}
+              <div className="mt-8 flex flex-col gap-3">
+                {hub.faqs[editorialLocale].map((faq) => (
+                  <details
+                    key={faq.q}
+                    className="glass-panel-lifted group overflow-hidden"
+                  >
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-5 text-left text-base font-semibold text-[#ededed] transition hover:text-[#4ade80]">
+                      <span>{faq.q}</span>
+                      <ChevronRight className="h-4 w-4 shrink-0 text-[#6b7280] transition group-open:rotate-90" />
+                    </summary>
+                    <div className="px-5 pb-5 text-sm leading-relaxed text-[#a3a9b8]">
+                      {faq.a}
+                    </div>
+                  </details>
+                ))}
+              </div>
+
+              {/* Related markets */}
+              <div className="card-neon card-neon-blue relative mt-10 overflow-hidden p-6">
+                <div className="relative">
+                  <div className="flex items-center gap-2">
+                    <HexBadge variant="blue" size="sm">
+                      <Sparkles className="h-4 w-4" />
+                    </HexBadge>
+                    <span className="section-label">
+                      {t("Related markets", "Gerelateerde markten")}
+                    </span>
                   </div>
-                </details>
-              ))}
-            </div>
-
-            {/* Cross-links to other bet types */}
-            <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-green-700">
-                <Sparkles className="h-3.5 w-3.5" />
-                {t("Related markets", "Gerelateerde markten")}
+                  <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                    {allHubs
+                      .filter((other) => other.slug !== hub.slug)
+                      .map((other) => (
+                        <Link
+                          key={other.slug}
+                          href={`/bet-types/${other.slug}`}
+                          className="glass-panel group flex items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-[#ededed] transition hover:text-[#4ade80]"
+                        >
+                          <span>{other.name[editorialLocale]}</span>
+                          <ArrowRight className="h-4 w-4 text-[#6b7280] transition group-hover:text-[#4ade80]" />
+                        </Link>
+                      ))}
+                  </div>
+                </div>
               </div>
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                {allHubs
-                  .filter((other) => other.slug !== hub.slug)
-                  .map((other) => (
-                    <Link
-                      key={other.slug}
-                      href={`/bet-types/${other.slug}`}
-                      className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-green-500/40 hover:bg-green-50 hover:text-green-600"
-                    >
-                      <span>{other.name[editorialLocale]}</span>
-                      <ArrowRight className="h-4 w-4 text-slate-400 transition group-hover:text-green-600" />
-                    </Link>
-                  ))}
-              </div>
-            </div>
             </div>
           </div>
         </section>

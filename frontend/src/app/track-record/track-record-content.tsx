@@ -28,8 +28,8 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
-import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
-import { PAGE_IMAGES } from "@/data/page-images";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 
 /* ── Live API data hook ─────────────────────────────────── */
 interface LiveStats {
@@ -52,7 +52,6 @@ function useLiveTrackRecordStats(): LiveStats {
   useEffect(() => {
     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
-    // Fetch both endpoints in parallel
     Promise.allSettled([
       fetch(`${API}/trackrecord/summary`).then((r) => r.json()),
       fetch(`${API}/bet-of-the-day/track-record`).then((r) => r.json()),
@@ -71,16 +70,19 @@ function useLiveTrackRecordStats(): LiveStats {
       }
       setStats(next);
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return stats;
 }
 
+const KPI_VARIANTS = ["green", "purple", "blue", "green"] as const;
+const PIPELINE_VARIANTS = ["green", "purple", "blue", "green", "purple", "blue"] as const;
+
+type Accent = "green" | "purple" | "blue";
+
 /**
- * Track Record page — dedicated deep-dive on how BetsPlug's results
- * are produced, audited, and used in practice. Shares the sitewide
- * dark/green design language with motion-driven reveals.
+ * Track Record — NOCTURNE rebuild.
  */
 export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: React.ReactNode; trackRecordPage?: any }) {
   const { t } = useTranslations();
@@ -88,7 +90,6 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
   const home = loc("/");
   const live = useLiveTrackRecordStats();
 
-  // Build KPIs: prefer live API data, fall back to i18n static values
   const kpis = [
     {
       icon: Percent,
@@ -132,59 +133,19 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
   ];
 
   const pipeline = [
-    {
-      icon: Database,
-      title: t("tr.pipe1Title"),
-      desc: t("tr.pipe1Desc"),
-    },
-    {
-      icon: Filter,
-      title: t("tr.pipe2Title"),
-      desc: t("tr.pipe2Desc"),
-    },
-    {
-      icon: Sliders,
-      title: t("tr.pipe3Title"),
-      desc: t("tr.pipe3Desc"),
-    },
-    {
-      icon: Layers,
-      title: t("tr.pipe4Title"),
-      desc: t("tr.pipe4Desc"),
-    },
-    {
-      icon: Target,
-      title: t("tr.pipe5Title"),
-      desc: t("tr.pipe5Desc"),
-    },
-    {
-      icon: CheckCircle2,
-      title: t("tr.pipe6Title"),
-      desc: t("tr.pipe6Desc"),
-    },
+    { icon: Database, title: t("tr.pipe1Title"), desc: t("tr.pipe1Desc") },
+    { icon: Filter, title: t("tr.pipe2Title"), desc: t("tr.pipe2Desc") },
+    { icon: Sliders, title: t("tr.pipe3Title"), desc: t("tr.pipe3Desc") },
+    { icon: Layers, title: t("tr.pipe4Title"), desc: t("tr.pipe4Desc") },
+    { icon: Target, title: t("tr.pipe5Title"), desc: t("tr.pipe5Desc") },
+    { icon: CheckCircle2, title: t("tr.pipe6Title"), desc: t("tr.pipe6Desc") },
   ];
 
   const methodology = [
-    {
-      icon: Activity,
-      title: t("tr.method1Title"),
-      desc: t("tr.method1Desc"),
-    },
-    {
-      icon: LineChart,
-      title: t("tr.method2Title"),
-      desc: t("tr.method2Desc"),
-    },
-    {
-      icon: Lock,
-      title: t("tr.method3Title"),
-      desc: t("tr.method3Desc"),
-    },
-    {
-      icon: Eye,
-      title: t("tr.method4Title"),
-      desc: t("tr.method4Desc"),
-    },
+    { icon: Activity, title: t("tr.method1Title"), desc: t("tr.method1Desc") },
+    { icon: LineChart, title: t("tr.method2Title"), desc: t("tr.method2Desc") },
+    { icon: Lock, title: t("tr.method3Title"), desc: t("tr.method3Desc") },
+    { icon: Eye, title: t("tr.method4Title"), desc: t("tr.method4Desc") },
   ];
 
   const cases = [
@@ -227,22 +188,28 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
   ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background text-slate-900">
-      {/* Shared site navigation */}
+    <div className="min-h-screen overflow-x-hidden">
       <SiteNav />
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          HERO
-         ═══════════════════════════════════════════════════════════════════ */}
-      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
-        <HeroMediaBg src={PAGE_IMAGES["track-record"].hero} alt="Football match statistics scoreboard" />
+      {/* ───────────── HERO ───────────── */}
+      <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 top-20 h-[520px] w-[520px] rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.14)", filter: "blur(160px)" }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-40 top-40 h-[480px] w-[480px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.12)", filter: "blur(160px)" }}
+        />
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 text-center">
           <motion.span
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="section-label mb-5 inline-flex items-center gap-2"
+            className="section-label mb-6 inline-flex items-center gap-2"
           >
             <ShieldCheck className="h-3 w-3" />
             {t("tr.heroBadge")}
@@ -252,103 +219,98 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-display text-balance break-words text-3xl text-white sm:text-5xl md:text-6xl"
+            className="text-display text-balance break-words text-4xl text-[#ededed] sm:text-5xl md:text-6xl"
           >
-            {t("tr.heroTitleA")}
-            <br />
-            <span className="gradient-text">{t("tr.heroTitleB")}</span>
+            {t("tr.heroTitleA")}{" "}
+            <span className="gradient-text-green">{t("tr.heroTitleB")}</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg"
+            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
             {t("tr.heroSubtitle")}
           </motion.p>
 
-          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
-            className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row"
+            className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
-            <Link href={`${home}#track-record`} className="btn-lime">
-              {t("tr.heroCtaPrimary")} →
+            <Link href={`${home}#track-record`} className="btn-primary">
+              {t("tr.heroCtaPrimary")}
             </Link>
-            <Link href={home} className="btn-outline">
+            <Link href={home} className="btn-glass">
               {t("tr.heroCtaSecondary")}
             </Link>
           </motion.div>
 
-          {/* Breadcrumb */}
           <motion.nav
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.25 }}
             aria-label="Breadcrumb"
-            className="mt-10 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-500"
+            className="mt-10 flex items-center justify-center gap-2 text-xs text-[#a3a9b8]"
           >
-            <Link href={home} className="transition-colors hover:text-green-600">
+            <Link href={home} className="transition-colors hover:text-[#4ade80]">
               {t("tr.breadcrumbHome")}
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-slate-600">{t("tr.breadcrumbTrack")}</span>
+            <span className="text-[#ededed]">{t("tr.breadcrumbTrack")}</span>
           </motion.nav>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          HEADLINE KPIs
-         ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-white/[0.08] py-20 md:py-28">
+      {/* ───────────── KPIs ───────────── */}
+      <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(160px)" }}
+        />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-12 max-w-2xl text-center sm:mb-14"
+            className="mx-auto mb-14 max-w-2xl text-center"
           >
-            <span className="section-label mb-4">
+            <span className="section-label mb-4 inline-flex items-center gap-2">
+              <Gauge className="h-3 w-3" />
               {t("tr.kpisBadge")}
             </span>
-            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("tr.kpisTitle")}
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
+            <p className="mt-4 text-base text-[#a3a9b8]">
               {t("tr.kpisSubtitle")}
             </p>
           </motion.div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {kpis.map((k) => {
+            {kpis.map((k, i) => {
               const Icon = k.icon;
+              const variant = KPI_VARIANTS[i % KPI_VARIANTS.length] as Accent;
               return (
                 <motion.div
                   key={k.label}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
+                  transition={{ duration: 0.5, delay: i * 0.05 }}
+                  className={`card-neon card-neon-${variant} rounded-2xl`}
                 >
-                  <div className="pointer-events-none absolute -right-10 -top-10 h-[140px] w-[140px] rounded-full bg-green-50 blur-[70px] transition-all group-hover:bg-green-100" />
-                  <div className="relative">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-50 ring-1 ring-green-500/30">
-                      <Icon className="h-5 w-5 text-green-600" />
-                    </div>
-                    <div className="text-4xl font-extrabold tracking-tight text-slate-900">
-                      {k.value}
-                    </div>
-                    <p className="mt-2 text-sm font-semibold text-slate-600">
-                      {k.label}
-                    </p>
-                    <p className="mt-1 text-xs leading-relaxed text-slate-500">
-                      {k.note}
-                    </p>
+                  <div className="relative p-6">
+                    <HexBadge variant={variant} size="md" className="mb-4">
+                      <Icon className="h-5 w-5" />
+                    </HexBadge>
+                    <div className="text-stat text-4xl text-[#ededed]">{k.value}</div>
+                    <p className="mt-2 text-sm font-semibold text-[#ededed]">{k.label}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-[#a3a9b8]">{k.note}</p>
                   </div>
                 </motion.div>
               );
@@ -357,99 +319,100 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          DATA PIPELINE — how data is processed
-         ═══════════════════════════════════════════════════════════════════ */}
+      {/* ───────────── PIPELINE ───────────── */}
       <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full"
+          style={{ background: "hsl(var(--accent-blue) / 0.12)", filter: "blur(160px)" }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-40 bottom-0 h-[460px] w-[460px] rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(160px)" }}
+        />
+
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-12 max-w-2xl text-center sm:mb-14"
+            className="mx-auto mb-14 max-w-2xl text-center"
           >
-            <span className="section-label mb-4">
+            <span className="section-label mb-4 inline-flex items-center gap-2">
+              <Layers className="h-3 w-3" />
               {t("tr.pipeBadge")}
             </span>
-            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("tr.pipeTitle")}
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
+            <p className="mt-4 text-base text-[#a3a9b8]">
               {t("tr.pipeSubtitle")}
             </p>
           </motion.div>
 
-          <div className="relative">
-            {/* Connecting vertical line on md+ */}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-green-500/20 to-transparent md:block"
-            />
-
-            <div className="grid gap-5 md:grid-cols-2">
-              {pipeline.map((step, i) => {
-                const Icon = step.icon;
-                return (
-                  <motion.div
-                    key={step.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.5 }}
-                    className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
-                  >
-                    <div className="pointer-events-none absolute -right-16 -top-16 h-[220px] w-[220px] rounded-full bg-green-50 blur-[90px] transition-all group-hover:bg-green-100" />
-                    <div className="relative">
-                      <div className="mb-5 flex items-center gap-3">
-                        <span className="font-mono text-xs font-bold uppercase tracking-widest text-green-600">
-                          Step {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="h-px flex-1 bg-gradient-to-r from-green-500/30 to-transparent" />
-                      </div>
-                      <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 shadow-sm ring-1 ring-green-500/30">
-                        <Icon className="h-5 w-5 text-green-600" />
-                      </div>
-                      <h3 className="mb-3 text-xl font-extrabold tracking-tight text-slate-900">
-                        {step.title}
-                      </h3>
-                      <p className="text-sm leading-relaxed text-slate-600">
-                        {step.desc}
-                      </p>
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {pipeline.map((step, i) => {
+              const Icon = step.icon;
+              const variant = PIPELINE_VARIANTS[i % PIPELINE_VARIANTS.length] as Accent;
+              return (
+                <motion.div
+                  key={step.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: i * 0.05 }}
+                  className={`card-neon card-neon-${variant} rounded-2xl`}
+                >
+                  <div className="relative p-7">
+                    <div className="mb-5 flex items-center gap-3">
+                      <HexBadge variant={variant} size="md">
+                        <Icon className="h-5 w-5" />
+                      </HexBadge>
+                      <Pill tone={variant === "green" ? "active" : variant === "purple" ? "purple" : "info"}>
+                        Step {String(i + 1).padStart(2, "0")}
+                      </Pill>
                     </div>
-                  </motion.div>
-                );
-              })}
-            </div>
+                    <h3 className="mb-3 text-xl font-semibold text-[#ededed]">{step.title}</h3>
+                    <p className="text-sm leading-relaxed text-[#a3a9b8]">{step.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          METHODOLOGY PRINCIPLES
-         ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-white/[0.08] py-20 md:py-28">
+      {/* ───────────── METHODOLOGY ───────────── */}
+      <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/4 top-10 h-[460px] w-[460px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.14)", filter: "blur(160px)" }}
+        />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-12 max-w-2xl text-center sm:mb-14"
+            className="mx-auto mb-14 max-w-2xl text-center"
           >
-            <span className="section-label mb-4">
+            <span className="section-label mb-4 inline-flex items-center gap-2">
+              <ShieldCheck className="h-3 w-3" />
               {t("tr.methodBadge")}
             </span>
-            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
-              {t("tr.methodTitle")}
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              {t("tr.methodTitle")} <span className="gradient-text-purple">·</span>
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
+            <p className="mt-4 text-base text-[#a3a9b8]">
               {t("tr.methodSubtitle")}
             </p>
           </motion.div>
 
           <div className="grid gap-5 md:grid-cols-2">
-            {methodology.map((m) => {
+            {methodology.map((m, i) => {
               const Icon = m.icon;
               return (
                 <motion.div
@@ -457,21 +420,16 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
+                  transition={{ duration: 0.5, delay: i * 0.05 }}
+                  className="card-neon card-neon-purple rounded-2xl"
                 >
-                  <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-50 blur-[80px] transition-all group-hover:bg-green-100" />
-                  <div className="relative flex gap-5">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-green-50 shadow-sm ring-1 ring-green-500/30">
-                      <Icon className="h-5 w-5 text-green-600" />
-                    </div>
+                  <div className="relative flex gap-5 p-7">
+                    <HexBadge variant="purple" size="md">
+                      <Icon className="h-5 w-5" />
+                    </HexBadge>
                     <div>
-                      <h3 className="mb-2 text-lg font-extrabold tracking-tight text-slate-900">
-                        {m.title}
-                      </h3>
-                      <p className="text-sm leading-relaxed text-slate-600">
-                        {m.desc}
-                      </p>
+                      <h3 className="mb-2 text-lg font-semibold text-[#ededed]">{m.title}</h3>
+                      <p className="text-sm leading-relaxed text-[#a3a9b8]">{m.desc}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -481,87 +439,81 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          USE CASES
-         ═══════════════════════════════════════════════════════════════════ */}
+      {/* ───────────── CASE STUDIES ───────────── */}
       <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(160px)" }}
+        />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-12 max-w-2xl text-center sm:mb-14"
+            className="mx-auto mb-14 max-w-2xl text-center"
           >
-            <span className="section-label mb-4">
+            <span className="section-label mb-4 inline-flex items-center gap-2">
+              <Trophy className="h-3 w-3" />
               {t("tr.casesBadge")}
             </span>
-            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("tr.casesTitle")}
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
+            <p className="mt-4 text-base text-[#a3a9b8]">
               {t("tr.casesSubtitle")}
             </p>
           </motion.div>
 
           <div className="grid gap-6 lg:grid-cols-3">
-            {cases.map((c) => (
+            {cases.map((c, i) => (
               <motion.article
                 key={c.name}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6 }}
-                className="group relative flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
+                transition={{ duration: 0.6, delay: i * 0.08 }}
+                className="card-neon card-neon-green rounded-3xl"
               >
-                <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-50 blur-[100px] transition-all group-hover:bg-green-100" />
-
-                <div className="relative flex flex-1 flex-col">
-                  {/* Persona header */}
+                <div className="relative flex flex-1 flex-col p-8">
                   <div className="mb-6 flex items-center gap-4">
-                    <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-green-100 to-emerald-50 shadow-sm ring-1 ring-green-500/30">
-                      <span className="text-xl font-extrabold text-green-600">
-                        {c.initial}
-                      </span>
-                    </div>
+                    <HexBadge variant="green" size="lg">
+                      <span className="text-lg font-bold">{c.initial}</span>
+                    </HexBadge>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-widest text-green-600">
+                      <Pill tone="active" className="!text-[10px]">
                         {c.role}
-                      </p>
-                      <h3 className="text-lg font-extrabold tracking-tight text-slate-900">
+                      </Pill>
+                      <h3 className="mt-1 text-lg font-semibold text-[#ededed]">
                         {c.name}
                       </h3>
                     </div>
                   </div>
 
-                  {/* Quote */}
-                  <div className="relative mb-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                    <Quote className="absolute -top-2 left-4 h-4 w-4 rotate-180 text-green-500/60" />
-                    <p className="text-sm leading-relaxed text-slate-600">
-                      “{c.quote}”
+                  <div className="glass-panel relative mb-6 rounded-2xl p-5">
+                    <Quote className="absolute -top-2 left-4 h-4 w-4 rotate-180 text-[#4ade80]" />
+                    <p className="text-sm leading-relaxed text-[#a3a9b8]">
+                      &ldquo;{c.quote}&rdquo;
                     </p>
                   </div>
 
-                  {/* Metrics grid */}
-                  <div className="mb-6 grid grid-cols-3 gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                  <div className="glass-panel mb-6 grid grid-cols-3 gap-2 rounded-2xl p-4">
                     {c.metrics.map((m) => (
                       <div key={m.label} className="text-center">
-                        <div className="text-base font-extrabold tracking-tight text-green-600 sm:text-lg">
+                        <div className="text-stat text-base text-[#4ade80] sm:text-lg">
                           {m.value}
                         </div>
-                        <div className="mt-1 text-[10px] font-semibold uppercase tracking-wider leading-tight text-slate-500">
+                        <div className="mt-1 text-[10px] uppercase tracking-wider leading-tight text-[#a3a9b8]">
                           {m.label}
                         </div>
                       </div>
                     ))}
                   </div>
 
-                  {/* Outcome */}
-                  <div className="mt-auto flex items-start gap-2 border-t border-slate-200 pt-5">
-                    <Trophy className="h-4 w-4 shrink-0 translate-y-0.5 text-green-600" />
-                    <p className="text-xs leading-relaxed text-slate-500">
-                      {c.outcome}
-                    </p>
+                  <div className="mt-auto flex items-start gap-2 border-t border-white/[0.06] pt-5">
+                    <Trophy className="h-4 w-4 shrink-0 translate-y-0.5 text-[#4ade80]" />
+                    <p className="text-xs leading-relaxed text-[#a3a9b8]">{c.outcome}</p>
                   </div>
                 </div>
               </motion.article>
@@ -572,48 +524,45 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
 
       {faqSlot}
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          TRANSPARENCY CTA BANNER
-         ═══════════════════════════════════════════════════════════════════ */}
+      {/* ───────────── TRANSPARENCY CTA ───────────── */}
       <section className="relative py-20 md:py-28">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16"
+            className="card-neon card-neon-green relative overflow-hidden rounded-3xl"
           >
-            <CtaMediaBg src={PAGE_IMAGES["track-record"].cta} alt={PAGE_IMAGES["track-record"].alt} pattern={PAGE_IMAGES["track-record"].pattern} />
-            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -left-20 -top-20 h-[400px] w-[400px] rounded-full"
+              style={{ background: "hsl(var(--accent-green) / 0.25)", filter: "blur(140px)" }}
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-20 -bottom-20 h-[400px] w-[400px] rounded-full"
+              style={{ background: "hsl(var(--accent-purple) / 0.2)", filter: "blur(140px)" }}
+            />
 
-            <div className="relative">
-              <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
+            <div className="relative p-10 md:p-16">
+              <span className="section-label mb-6 inline-flex items-center gap-2">
                 <Sparkles className="h-3 w-3" />
                 {t("tr.transBadge")}
               </span>
-              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
+              <h2 className="text-display text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("tr.transTitle")}
               </h2>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#050505]/80">
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
                 {t("tr.transSubtitle")}
               </p>
 
               <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <Link
-                  href={`${home}#pricing`}
-                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
-                >
-                  {String(t("tr.transCta2")).toUpperCase()} →
+                <Link href={`${home}#pricing`} className="btn-primary">
+                  {t("tr.transCta2")}
                 </Link>
-                <Link
-                  href={`${home}#track-record`}
-                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
-                >
-                  {String(t("tr.transCta1")).toUpperCase()} →
+                <Link href={`${home}#track-record`} className="btn-glass">
+                  {t("tr.transCta1")}
                 </Link>
               </div>
             </div>

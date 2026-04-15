@@ -10,7 +10,6 @@ import {
   Eye,
   RefreshCw,
   Scale,
-  ArrowRight,
   ChevronRight,
   Target,
   Trophy,
@@ -21,21 +20,19 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
-import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
-import { PAGE_IMAGES } from "@/data/page-images";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill, DataChip } from "@/components/noct/pill";
 
 /** Map Lucide icon string names from Sanity to actual components. */
 const ICON_MAP: Record<string, LucideIcon> = {
   Brain, Eye, RefreshCw, Scale, Sparkles, Zap, Target, LineChart, Users, Trophy,
 };
 
-/** Resolve an icon name from Sanity to a Lucide component, with a fallback. */
 function resolveIcon(name: string | undefined, fallback: LucideIcon): LucideIcon {
   if (!name) return fallback;
   return ICON_MAP[name] ?? fallback;
 }
 
-/** Serializable about data passed from the server component. */
 interface SanityAboutData {
   founders: { name: string; initial: string; role: string; bio: string }[];
   stats: { value: string; label: string }[];
@@ -47,9 +44,12 @@ interface AboutContentProps {
   sanityAbout?: SanityAboutData;
 }
 
+type Accent = "green" | "purple" | "blue";
+const VALUE_VARIANTS: Accent[] = ["green", "purple", "blue", "green"];
+const STAT_VARIANTS: Accent[] = ["green", "purple", "blue", "green"];
+
 /**
- * About Us page — BetsPlug's story, mission, principles and founders.
- * Dark/green design language, motion-driven reveals, SEO-optimized copy.
+ * About Us — NOCTURNE rebuild.
  */
 export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
   const { t } = useTranslations();
@@ -97,22 +97,28 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background text-slate-900">
-      {/* Shared site navigation */}
+    <div className="min-h-screen overflow-x-hidden">
       <SiteNav />
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          HERO
-         ═══════════════════════════════════════════════════════════════════ */}
-      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
-        <HeroMediaBg src={PAGE_IMAGES.about.hero} alt="" />
+      {/* ───────────── HERO ───────────── */}
+      <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.14)", filter: "blur(160px)" }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-40 top-40 h-[460px] w-[460px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.12)", filter: "blur(160px)" }}
+        />
 
         <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center">
           <motion.span
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="section-label mb-5"
+            className="section-label mb-6 inline-flex items-center gap-2"
           >
             <Sparkles className="h-3 w-3" />
             {t("about.heroBadge")}
@@ -122,46 +128,48 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-display text-3xl text-white sm:text-4xl lg:text-5xl"
+            className="text-display text-4xl text-[#ededed] sm:text-5xl lg:text-6xl"
           >
-            {t("about.heroTitleA")}
-            <br />
-            <span className="gradient-text">{t("about.heroTitleB")}</span>
+            {t("about.heroTitleA")}{" "}
+            <span className="gradient-text-green">{t("about.heroTitleB")}</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg"
+            className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
             {t("about.heroSubtitle")}
           </motion.p>
 
-          {/* Breadcrumb */}
           <motion.nav
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
             aria-label="Breadcrumb"
-            className="mt-8 flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-500"
+            className="mt-8 flex items-center justify-center gap-2 text-xs text-[#a3a9b8]"
           >
-            <Link href={home} className="transition-colors hover:text-green-600">
+            <Link href={home} className="transition-colors hover:text-[#4ade80]">
               {t("about.breadcrumbHome")}
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-slate-600">{t("about.breadcrumbAbout")}</span>
+            <span className="text-[#ededed]">{t("about.breadcrumbAbout")}</span>
           </motion.nav>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          MISSION — two column
-         ═══════════════════════════════════════════════════════════════════ */}
+      {/* ───────────── MISSION ───────────── */}
       <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(160px)" }}
+        />
+
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            {/* Left: visual card */}
+            {/* Left: Pulse mock card */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -169,167 +177,137 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
               transition={{ duration: 0.7 }}
               className="relative"
             >
-              <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-lg shadow-slate-200/60">
-                {/* Ambient glow */}
-                <div className="pointer-events-none absolute -left-20 -top-20 h-[250px] w-[250px] rounded-full bg-green-50 blur-[100px]" />
-                <div className="pointer-events-none absolute -bottom-20 -right-20 h-[250px] w-[250px] rounded-full bg-emerald-50 blur-[100px]" />
-
-                {/* Grid overlay */}
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-[0.04]"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(rgba(74,222,128,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(74,222,128,0.4) 1px, transparent 1px)",
-                    backgroundSize: "40px 40px",
-                  }}
-                />
-
-                {/* Content inside the card — "model output" mock */}
-                <div className="relative">
-                  <div className="mb-6 flex items-center gap-2">
-                    <span className="live-dot" />
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-green-600">
-                      Model Output · Live
-                    </span>
+              <div className="card-neon card-neon-green halo-green rounded-3xl">
+                <div className="relative p-8">
+                  <div className="mb-6 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="live-dot" />
+                      <span className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                        BetsPlug Pulse · Live
+                      </span>
+                    </div>
+                    <HexBadge variant="green" size="sm">
+                      <Trophy className="h-4 w-4" />
+                    </HexBadge>
                   </div>
 
                   <div className="space-y-4">
-                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                      <div className="mb-2 flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-700">
-                          Man City vs Liverpool
-                        </span>
-                        <span className="font-mono text-green-600">+EV 12.4%</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-[11px] text-slate-500">
-                        <span>Home 54%</span>
-                        <span>·</span>
-                        <span>Draw 22%</span>
-                        <span>·</span>
-                        <span>Away 24%</span>
-                      </div>
-                      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200">
-                        <div className="h-full w-[54%] rounded-full bg-gradient-to-r from-green-500 to-emerald-400" />
-                      </div>
-                    </div>
-
-                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                      <div className="mb-2 flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-700">
-                          Lakers vs Celtics
-                        </span>
-                        <span className="font-mono text-green-600">+EV 8.1%</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-[11px] text-slate-500">
-                        <span>LAL 47%</span>
-                        <span>·</span>
-                        <span>BOS 53%</span>
-                      </div>
-                      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200">
-                        <div className="h-full w-[53%] rounded-full bg-gradient-to-r from-green-500 to-emerald-400" />
-                      </div>
-                    </div>
-
-                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                      <div className="mb-2 flex items-center justify-between text-xs">
-                        <span className="font-semibold text-slate-700">
-                          Djokovic vs Alcaraz
-                        </span>
-                        <span className="font-mono text-green-600">+EV 6.7%</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-[11px] text-slate-500">
-                        <span>DJO 51%</span>
-                        <span>·</span>
-                        <span>ALC 49%</span>
-                      </div>
-                      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-slate-200">
-                        <div className="h-full w-[51%] rounded-full bg-gradient-to-r from-green-500 to-emerald-400" />
-                      </div>
-                    </div>
+                    <MockRow
+                      title="Man City vs Liverpool"
+                      ev="+EV 12.4%"
+                      probs={[
+                        { label: "Home", value: "54%" },
+                        { label: "Draw", value: "22%" },
+                        { label: "Away", value: "24%" },
+                      ]}
+                      barWidth="54%"
+                    />
+                    <MockRow
+                      title="Lakers vs Celtics"
+                      ev="+EV 8.1%"
+                      probs={[
+                        { label: "LAL", value: "47%" },
+                        { label: "BOS", value: "53%" },
+                      ]}
+                      barWidth="53%"
+                    />
+                    <MockRow
+                      title="Djokovic vs Alcaraz"
+                      ev="+EV 6.7%"
+                      probs={[
+                        { label: "DJO", value: "51%" },
+                        { label: "ALC", value: "49%" },
+                      ]}
+                      barWidth="51%"
+                    />
                   </div>
 
-                  <div className="mt-6 flex items-center justify-between border-t border-slate-200 pt-4">
-                    <span className="text-[10px] uppercase tracking-wider text-slate-500">
+                  <div className="mt-6 flex items-center justify-between border-t border-white/[0.06] pt-4">
+                    <span className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
                       Updated 12s ago
                     </span>
-                    <Trophy className="h-4 w-4 text-green-600" />
+                    <Pill tone="active" className="!text-[10px]">
+                      3 signals
+                    </Pill>
                   </div>
                 </div>
               </div>
             </motion.div>
 
-            {/* Right: copy */}
+            {/* Right: Copy */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.7 }}
             >
-              <span className="section-label mb-4">
+              <span className="section-label mb-4 inline-flex items-center gap-2">
+                <Target className="h-3 w-3" />
                 {t("about.missionBadge")}
               </span>
-              <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("about.missionTitle")}
               </h2>
-              <p className="mt-6 text-base leading-relaxed text-slate-600 sm:text-lg">
+              <p className="mt-6 text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
                 {t("about.missionBody1")}
               </p>
-              <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
+              <p className="mt-4 text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
                 {t("about.missionBody2")}
               </p>
 
-              <Link
-                href={`${home}#how-it-works`}
-                className="btn-outline mt-8"
-              >
-                {String(t("about.missionCta")).toUpperCase()} →
+              <Link href={`${home}#how-it-works`} className="btn-glass mt-8 inline-flex">
+                {t("about.missionCta")}
               </Link>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          STATS
-         ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-slate-200 bg-gradient-to-b from-white to-slate-50 py-20 md:py-28">
+      {/* ───────────── STATS ───────────── */}
+      <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full"
+          style={{ background: "hsl(var(--accent-blue) / 0.1)", filter: "blur(160px)" }}
+        />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-12 sm:mb-14 flex flex-col items-center text-center"
+            className="mx-auto mb-14 flex flex-col items-center text-center"
           >
-            <span className="section-label mb-4">
+            <span className="section-label mb-4 inline-flex items-center gap-2">
+              <LineChart className="h-3 w-3" />
               {t("about.statsBadge")}
             </span>
-            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("about.statsTitle")}
             </h2>
           </motion.div>
 
           <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map((stat) => {
+            {stats.map((stat, i) => {
               const Icon = stat.icon;
+              const variant = STAT_VARIANTS[i % STAT_VARIANTS.length];
               return (
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
+                  transition={{ duration: 0.5, delay: i * 0.05 }}
+                  className={`card-neon card-neon-${variant} rounded-2xl`}
                 >
-                  <div className="pointer-events-none absolute -right-10 -top-10 h-[120px] w-[120px] rounded-full bg-green-50 blur-[60px] transition-all group-hover:bg-green-100" />
-                  <div className="relative">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-green-50 ring-1 ring-green-500/30">
-                      <Icon className="h-5 w-5 text-green-600" />
-                    </div>
-                    <div className="text-4xl font-extrabold tracking-tight text-slate-900">
+                  <div className="relative p-6 sm:p-8">
+                    <HexBadge variant={variant} size="md" className="mb-4">
+                      <Icon className="h-5 w-5" />
+                    </HexBadge>
+                    <div className="text-stat text-4xl text-[#ededed]">
                       {stat.value}
                     </div>
-                    <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                    <p className="mt-2 text-xs leading-relaxed text-[#a3a9b8]">
                       {stat.label}
                     </p>
                   </div>
@@ -340,50 +318,54 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          VALUES
-         ═══════════════════════════════════════════════════════════════════ */}
+      {/* ───────────── VALUES ───────────── */}
       <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-40 top-20 h-[480px] w-[480px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.12)", filter: "blur(160px)" }}
+        />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-12 sm:mb-14 flex max-w-2xl flex-col items-center text-center"
+            className="mx-auto mb-14 flex max-w-2xl flex-col items-center text-center"
           >
-            <span className="section-label mb-4">
+            <span className="section-label mb-4 inline-flex items-center gap-2">
+              <Scale className="h-3 w-3" />
               {t("about.valuesBadge")}
             </span>
-            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("about.valuesTitle")}
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
+            <p className="mt-4 text-base text-[#a3a9b8]">
               {t("about.valuesSubtitle")}
             </p>
           </motion.div>
 
           <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
-            {values.map((v) => {
+            {values.map((v, i) => {
               const Icon = v.icon;
+              const variant = VALUE_VARIANTS[i % VALUE_VARIANTS.length];
               return (
                 <motion.div
                   key={v.title}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
+                  transition={{ duration: 0.5, delay: i * 0.05 }}
+                  className={`card-neon card-neon-${variant} rounded-2xl`}
                 >
-                  <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-50 blur-[80px] transition-all group-hover:bg-green-100" />
-                  <div className="relative">
-                    <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-green-50 shadow-sm ring-1 ring-green-500/30">
-                      <Icon className="h-5 w-5 text-green-600" />
-                    </div>
-                    <h3 className="mb-3 text-xl font-extrabold tracking-tight text-slate-900">
+                  <div className="relative p-6 sm:p-8">
+                    <HexBadge variant={variant} size="md" className="mb-5">
+                      <Icon className="h-5 w-5" />
+                    </HexBadge>
+                    <h3 className="mb-3 text-xl font-semibold text-[#ededed]">
                       {v.title}
                     </h3>
-                    <p className="text-sm leading-relaxed text-slate-600">
+                    <p className="text-sm leading-relaxed text-[#a3a9b8]">
                       {v.desc}
                     </p>
                   </div>
@@ -394,60 +376,58 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          FOUNDERS
-         ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-t border-slate-200 py-20 md:py-28">
+      {/* ───────────── FOUNDERS ───────────── */}
+      <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.14)", filter: "blur(160px)" }}
+        />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-12 sm:mb-14 flex max-w-2xl flex-col items-center text-center"
+            className="mx-auto mb-14 flex max-w-2xl flex-col items-center text-center"
           >
-            <span className="section-label mb-4">
+            <span className="section-label mb-4 inline-flex items-center gap-2">
+              <Users className="h-3 w-3" />
               {t("about.teamBadge")}
             </span>
-            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("about.teamTitle")}
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
+            <p className="mt-4 text-base text-[#a3a9b8]">
               {t("about.teamSubtitle")}
             </p>
           </motion.div>
 
           <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
-            {founders.map((f) => (
+            {founders.map((f, i) => (
               <motion.div
                 key={f.name}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6 }}
-                className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
+                transition={{ duration: 0.6, delay: i * 0.08 }}
+                className="card-neon card-neon-purple rounded-3xl"
               >
-                <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-50 blur-[100px] transition-all group-hover:bg-green-100" />
-
-                <div className="relative">
-                  {/* Avatar */}
+                <div className="relative p-6 sm:p-8">
                   <div className="mb-6 flex items-center gap-4">
-                    <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-green-100 to-emerald-50 shadow-sm ring-1 ring-green-500/30">
-                      <span className="text-2xl font-extrabold text-green-600">
-                        {f.initial}
-                      </span>
-                    </div>
+                    <HexBadge variant="purple" size="xl">
+                      <span className="text-2xl font-bold">{f.initial}</span>
+                    </HexBadge>
                     <div>
-                      <h3 className="text-2xl font-extrabold tracking-tight text-slate-900">
+                      <h3 className="text-2xl font-semibold text-[#ededed]">
                         {f.name}
                       </h3>
-                      <p className="text-xs font-semibold uppercase tracking-widest text-green-600">
+                      <Pill tone="purple" className="!text-[10px] mt-1">
                         {f.role}
-                      </p>
+                      </Pill>
                     </div>
                   </div>
-
-                  <p className="text-sm leading-relaxed text-slate-600 sm:text-base">
+                  <p className="text-sm leading-relaxed text-[#a3a9b8] sm:text-base">
                     {f.bio}
                   </p>
                 </div>
@@ -459,9 +439,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
 
       {faqSlot}
 
-      {/* ═══════════════════════════════════════════════════════════════════
-          CTA BANNER
-         ═══════════════════════════════════════════════════════════════════ */}
+      {/* ───────────── CTA ───────────── */}
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <motion.div
@@ -469,31 +447,32 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16"
+            className="card-neon card-neon-green relative overflow-hidden rounded-3xl"
           >
-            <CtaMediaBg src={PAGE_IMAGES.about.cta} alt={PAGE_IMAGES.about.alt} pattern={PAGE_IMAGES.about.pattern} />
-            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -left-20 -top-20 h-[400px] w-[400px] rounded-full"
+              style={{ background: "hsl(var(--accent-green) / 0.25)", filter: "blur(140px)" }}
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-20 -bottom-20 h-[400px] w-[400px] rounded-full"
+              style={{ background: "hsl(var(--accent-purple) / 0.2)", filter: "blur(140px)" }}
+            />
 
-            <div className="relative">
-              <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
+            <div className="relative p-10 md:p-16">
+              <span className="section-label mb-6 inline-flex items-center gap-2">
                 <Sparkles className="h-3 w-3" />
                 {t("nav.getStarted")}
               </span>
-              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
+              <h2 className="text-display text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("about.ctaTitle")}
               </h2>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#050505]/80">
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
                 {t("about.ctaSubtitle")}
               </p>
-
-              <Link
-                href={`${home}#pricing`}
-                className="mt-10 inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
-              >
-                {String(t("about.ctaButton")).toUpperCase()} →
+              <Link href={`${home}#pricing`} className="btn-primary mt-10 inline-flex">
+                {t("about.ctaButton")}
               </Link>
             </div>
           </motion.div>
@@ -501,6 +480,49 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       </section>
 
       <BetsPlugFooter />
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Small mock row for the Pulse card
+   ────────────────────────────────────────────────────────────── */
+function MockRow({
+  title,
+  ev,
+  probs,
+  barWidth,
+}: {
+  title: string;
+  ev: string;
+  probs: { label: string; value: string }[];
+  barWidth: string;
+}) {
+  return (
+    <div className="glass-panel rounded-xl p-4">
+      <div className="mb-2 flex items-center justify-between text-xs">
+        <span className="font-semibold text-[#ededed]">{title}</span>
+        <DataChip tone="win">{ev}</DataChip>
+      </div>
+      <div className="flex items-center gap-2 text-[11px] text-[#a3a9b8]">
+        {probs.map((p, i) => (
+          <React.Fragment key={p.label}>
+            <span>
+              {p.label} {p.value}
+            </span>
+            {i < probs.length - 1 && <span>·</span>}
+          </React.Fragment>
+        ))}
+      </div>
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
+        <div
+          className="h-full rounded-full"
+          style={{
+            width: barWidth,
+            background: "linear-gradient(to right, #4ade80, #22c55e)",
+          }}
+        />
+      </div>
     </div>
   );
 }

@@ -10,7 +10,6 @@ import {
   Eye,
   EyeOff,
   ArrowRight,
-  Sparkles,
   ShieldCheck,
   BadgeCheck,
   RefreshCw,
@@ -24,27 +23,14 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { useAuth } from "@/lib/auth";
 import { api, ApiError } from "@/lib/api";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
- * LoginContent — customer login page for BetsPlug.
- *
- * Design brief:
- *   • Matches the rest of the marketing site (dark ambient bg,
- *     green accent gradient, SiteNav + BetsPlugFooter, motion
- *     reveals, rounded cards with border-white/[0.08] and
- *     backdrop-blur).
- *   • Two-column layout on desktop: promo/trust panel on the
- *     left, form card on the right. Stacks to single column
- *     on tablet/mobile.
- *   • Remember-this-device checkbox persists via localStorage
- *     under `betsplug.rememberDevice`. When checked, the page
- *     auto-fills the saved email on next visit so returning
- *     members can sign in in two clicks.
- *   • Demo only — the submit handler simulates a request and
- *     then redirects to the dashboard. A real auth integration
- *     can plug into `handleSubmit`.
+ * LoginContent — customer login page for BetsPlug, rebuilt in the
+ * NOCTURNE UI language.
  */
 export function LoginContent() {
   const { t } = useTranslations();
@@ -53,9 +39,6 @@ export function LoginContent() {
   const params = useSearchParams();
   const auth = useAuth();
 
-  // Pre-fill the email when the user previously opted into
-  // "remember this device". This is a progressive enhancement —
-  // the page works fine without it.
   const savedEmail = useMemo(() => {
     if (typeof window === "undefined") return "";
     try {
@@ -75,9 +58,6 @@ export function LoginContent() {
   const [submitting, setSubmitting] = useState(false);
   const [tried, setTried] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
-  // When the backend rejects login with 403 email_not_verified
-  // we surface a dedicated banner that lets the user resend
-  // the verification email without leaving the page.
   const [needsVerification, setNeedsVerification] = useState(false);
   const [resending, setResending] = useState(false);
   const [resendStatus, setResendStatus] = useState<
@@ -98,7 +78,6 @@ export function LoginContent() {
 
     setSubmitting(true);
 
-    // Persist the "remember this device" preference.
     try {
       if (remember) {
         window.localStorage.setItem(
@@ -109,20 +88,12 @@ export function LoginContent() {
         window.localStorage.removeItem("betsplug.rememberDevice");
       }
     } catch {
-      // Ignore storage failures (e.g. private browsing on Safari).
+      /* noop */
     }
 
     try {
-      // Real backend call — OAuth2 form body, username may be
-      // either an email or a username on the backend side.
       const res = await api.login(email.trim(), password);
       auth.login(res.access_token, res.user);
-
-      // v6 B4: default landing for logged-in users is the "Your
-      // Route" selector, NOT the Dashboard. Rationale: new users
-      // should pick their path (Strategy Follower / Quick Pick /
-      // Explorer) before drowning in the analytics firehose. Power
-      // users can still override via the ``?next=`` query param.
       const next = params?.get("next");
       router.push(next || loc("/jouw-route"));
     } catch (err) {
@@ -160,26 +131,18 @@ export function LoginContent() {
   };
 
   const inputCls = (hasError: boolean) =>
-    `w-full rounded-xl border bg-white px-4 py-3 pl-11 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all focus:bg-white ${
+    `w-full rounded-xl border bg-white/[0.04] px-4 py-3 pl-11 text-sm text-[#ededed] placeholder:text-[#6b7280] outline-none transition-all ${
       hasError
         ? "border-red-500/40 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
-        : "border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-500/20"
+        : "border-white/[0.08] focus:border-[#4ade80]/60 focus:ring-2 focus:ring-[#4ade80]/20"
     }`;
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
-      {/* ── Ambient background ── */}
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
+      {/* Ambient glow */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -left-40 top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.05] blur-[160px]" />
-        <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.04] blur-[160px]" />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(74,222,128,0.4) 1px, transparent 1px)",
-            backgroundSize: "32px 32px",
-          }}
-        />
+        <div className="absolute -left-40 top-40 h-[540px] w-[540px] rounded-full bg-[#4ade80]/[0.09] blur-[160px]" />
+        <div className="absolute -right-40 bottom-40 h-[540px] w-[540px] rounded-full bg-[#a855f7]/[0.07] blur-[160px]" />
       </div>
 
       <SiteNav />
@@ -187,46 +150,43 @@ export function LoginContent() {
       <main className="relative z-10 pt-40 pb-24 sm:pt-48">
         <section className="mx-auto max-w-6xl px-6">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
-            {/* ─── Left: promo / trust column ────────────── */}
+            {/* Left: promo */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               className="hidden flex-col justify-center lg:flex"
             >
-              <div className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-2">
-                <Sparkles className="h-4 w-4 text-green-600" />
-                <span className="text-xs font-bold uppercase tracking-[0.18em] text-green-700">
-                  {t("login.badge")}
-                </span>
-              </div>
+              <span className="section-label">
+                <LogIn className="h-3 w-3" />
+                {t("login.badge")}
+              </span>
 
-              <h1 className="max-w-xl text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 xl:text-5xl">
+              <h1 className="text-display mt-3 max-w-xl text-balance break-words text-4xl text-[#ededed] xl:text-5xl">
                 {t("login.title")}{" "}
-                <span className="bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 bg-clip-text text-transparent">
+                <span className="gradient-text-green">
                   {t("login.titleHighlight")}
                 </span>
               </h1>
 
-              <p className="mt-5 max-w-md text-base leading-relaxed text-slate-600">
+              <p className="mt-5 max-w-md text-base leading-relaxed text-[#a3a9b8]">
                 {t("login.subtitle")}
               </p>
 
-              {/* Trust row */}
               <div className="mt-10 grid max-w-md grid-cols-1 gap-3">
                 {[
-                  { icon: ShieldCheck, label: t("login.trust1") },
-                  { icon: BadgeCheck, label: t("login.trust2") },
-                  { icon: RefreshCw, label: t("login.trust3") },
+                  { icon: ShieldCheck, label: t("login.trust1"), variant: "green" as const },
+                  { icon: BadgeCheck, label: t("login.trust2"), variant: "purple" as const },
+                  { icon: RefreshCw, label: t("login.trust3"), variant: "blue" as const },
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3"
+                    className="glass-panel flex items-center gap-3 px-4 py-3"
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-green-500/20 bg-green-50">
-                      <item.icon className="h-4 w-4 text-green-600" />
-                    </div>
-                    <span className="text-sm font-medium text-slate-600">
+                    <HexBadge variant={item.variant} size="sm" noGlow>
+                      <item.icon className="h-4 w-4" />
+                    </HexBadge>
+                    <span className="text-sm font-medium text-[#cbd3e0]">
                       {item.label}
                     </span>
                   </div>
@@ -234,280 +194,278 @@ export function LoginContent() {
               </div>
             </motion.div>
 
-            {/* ─── Right: login form card ────────────────── */}
+            {/* Right: login card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
               className="w-full"
             >
-              <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-7 shadow-lg shadow-slate-200/50 sm:p-9">
-                {/* Card glow */}
-                <div className="pointer-events-none absolute -right-20 -top-20 h-[260px] w-[260px] rounded-full bg-green-500/[0.06] blur-[100px]" />
-
-                {/* Mobile headline (desktop has its own in the left column) */}
-                <div className="relative mb-6 lg:hidden">
-                  <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1.5">
-                    <Sparkles className="h-3.5 w-3.5 text-green-600" />
-                    <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-green-700">
+              <div className="card-neon-green p-8 md:p-10">
+                <div className="relative">
+                  {/* Mobile headline */}
+                  <div className="mb-6 lg:hidden">
+                    <span className="section-label">
+                      <LogIn className="h-3 w-3" />
                       {t("login.badge")}
                     </span>
+                    <h1 className="text-heading mt-2 text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
+                      {t("login.title")}{" "}
+                      <span className="gradient-text-green">
+                        {t("login.titleHighlight")}
+                      </span>
+                    </h1>
+                    <p className="mt-3 text-sm text-[#a3a9b8]">
+                      {t("login.subtitle")}
+                    </p>
                   </div>
-                  <h1 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl">
-                    {t("login.title")}{" "}
-                    <span className="bg-gradient-to-br from-green-500 via-green-600 to-emerald-600 bg-clip-text text-transparent">
-                      {t("login.titleHighlight")}
-                    </span>
-                  </h1>
-                  <p className="mt-3 text-sm text-slate-500">
-                    {t("login.subtitle")}
-                  </p>
-                </div>
 
-                <form
-                  onSubmit={handleSubmit}
-                  className="relative space-y-5"
-                  noValidate
-                >
-                  {/* Server error banner */}
-                  {serverError && !needsVerification && (
-                    <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
-                      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-                      <div>
-                        <p className="text-xs font-bold text-red-700">
-                          {t("login.errorTitle")}
-                        </p>
-                        <p className="mt-0.5 text-xs text-red-600">
-                          {serverError}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Email-not-verified banner with resend CTA */}
-                  {needsVerification && (
-                    <div className="flex flex-col gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
-                      <div className="flex items-start gap-3">
-                        <Mail className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
-                        <div className="flex-1">
-                          <p className="text-xs font-bold text-amber-700">
-                            Verify your email
+                  <form
+                    onSubmit={handleSubmit}
+                    className="space-y-5"
+                    noValidate
+                  >
+                    {serverError && !needsVerification && (
+                      <div className="flex items-start gap-3 rounded-xl border border-red-500/30 bg-red-500/[0.08] px-4 py-3">
+                        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+                        <div>
+                          <p className="text-xs font-semibold text-red-300">
+                            {t("login.errorTitle")}
                           </p>
-                          <p className="mt-0.5 text-xs text-amber-600">
-                            We sent a verification link to {email.trim()}.
-                            Click it to finish activating your account.
+                          <p className="mt-0.5 text-xs text-red-300/80">
+                            {serverError}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between gap-3">
+                    )}
+
+                    {needsVerification && (
+                      <div className="flex flex-col gap-3 rounded-xl border border-amber-400/30 bg-amber-500/[0.08] px-4 py-3">
+                        <div className="flex items-start gap-3">
+                          <Mail className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
+                          <div className="flex-1">
+                            <p className="text-xs font-semibold text-amber-200">
+                              Verify your email
+                            </p>
+                            <p className="mt-0.5 text-xs text-amber-200/80">
+                              We sent a verification link to {email.trim()}.
+                              Click it to finish activating your account.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between gap-3">
+                          <button
+                            type="button"
+                            onClick={handleResendVerification}
+                            disabled={resending || !emailOk}
+                            className="btn-glass !py-1.5 !px-3 !text-xs disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            {resending ? (
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                            ) : (
+                              <RefreshCw className="h-3 w-3" />
+                            )}
+                            Resend verification email
+                          </button>
+                          {resendStatus === "success" && (
+                            <span className="inline-flex items-center gap-1 text-xs text-[#4ade80]">
+                              <CheckCircle2 className="h-3 w-3" />
+                              Sent
+                            </span>
+                          )}
+                          {resendStatus === "error" && (
+                            <span className="text-xs text-red-400">
+                              Try again
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Email */}
+                    <div>
+                      <label
+                        htmlFor="login-email"
+                        className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a93a6]"
+                      >
+                        {t("login.email")}
+                      </label>
+                      <div className="relative">
+                        <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
+                        <input
+                          id="login-email"
+                          type="email"
+                          autoComplete="email"
+                          inputMode="email"
+                          placeholder={t("login.emailPh")}
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className={inputCls(tried && !emailOk)}
+                        />
+                      </div>
+                      {tried && !emailOk && (
+                        <p className="mt-1.5 text-xs text-red-400">
+                          {t("login.emailError")}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Password */}
+                    <div>
+                      <div className="mb-2 flex items-center justify-between">
+                        <label
+                          htmlFor="login-password"
+                          className="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a93a6]"
+                        >
+                          {t("login.password")}
+                        </label>
+                        <Link
+                          href={loc("/forgot-password")}
+                          className="text-xs font-medium text-[#4ade80] transition-colors hover:text-[#86efac]"
+                        >
+                          {t("login.forgot")}
+                        </Link>
+                      </div>
+                      <div className="relative">
+                        <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
+                        <input
+                          id="login-password"
+                          type={showPassword ? "text" : "password"}
+                          autoComplete="current-password"
+                          placeholder={t("login.passwordPh")}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className={`${inputCls(
+                            tried && !passwordOk
+                          )} pr-12`}
+                        />
                         <button
                           type="button"
-                          onClick={handleResendVerification}
-                          disabled={resending || !emailOk}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-100 px-3 py-1.5 text-xs font-semibold text-amber-700 transition-all hover:bg-amber-200 disabled:cursor-not-allowed disabled:opacity-50"
+                          aria-label={
+                            showPassword
+                              ? t("login.hidePassword")
+                              : t("login.showPassword")
+                          }
+                          onClick={() => setShowPassword((v) => !v)}
+                          className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-[#6b7280] transition-colors hover:bg-white/[0.04] hover:text-[#ededed]"
                         >
-                          {resending ? (
-                            <Loader2 className="h-3 w-3 animate-spin" />
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4" />
                           ) : (
-                            <RefreshCw className="h-3 w-3" />
+                            <Eye className="h-4 w-4" />
                           )}
-                          Resend verification email
                         </button>
-                        {resendStatus === "success" && (
-                          <span className="inline-flex items-center gap-1 text-xs text-green-600">
-                            <CheckCircle2 className="h-3 w-3" />
-                            Sent
-                          </span>
-                        )}
-                        {resendStatus === "error" && (
-                          <span className="text-xs text-red-600">
-                            Try again
-                          </span>
-                        )}
                       </div>
+                      {tried && !passwordOk && (
+                        <p className="mt-1.5 text-xs text-red-400">
+                          {t("login.passwordError")}
+                        </p>
+                      )}
                     </div>
-                  )}
 
-                  {/* Email */}
-                  <div>
+                    {/* Remember device */}
                     <label
-                      htmlFor="login-email"
-                      className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500"
+                      htmlFor="login-remember"
+                      className="group flex cursor-pointer items-start gap-3 rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4 transition-all hover:border-[#4ade80]/30 hover:bg-white/[0.05]"
                     >
-                      {t("login.email")}
+                      <span className="relative mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center">
+                        <input
+                          id="login-remember"
+                          type="checkbox"
+                          checked={remember}
+                          onChange={(e) => setRemember(e.target.checked)}
+                          className="peer sr-only"
+                        />
+                        <span className="flex h-5 w-5 items-center justify-center rounded-md border border-white/[0.12] bg-white/[0.04] transition-all peer-checked:border-[#4ade80] peer-checked:bg-[#4ade80]">
+                          {remember && (
+                            <svg
+                              viewBox="0 0 24 24"
+                              className="h-3 w-3 text-[#05130b]"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={4}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                          )}
+                        </span>
+                      </span>
+                      <div className="flex-1">
+                        <div className="text-sm font-semibold text-[#ededed]">
+                          {t("login.rememberDevice")}
+                        </div>
+                        <p className="mt-0.5 text-xs leading-relaxed text-[#a3a9b8]">
+                          {t("login.rememberHint")}
+                        </p>
+                      </div>
                     </label>
-                    <div className="relative">
-                      <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                      <input
-                        id="login-email"
-                        type="email"
-                        autoComplete="email"
-                        inputMode="email"
-                        placeholder={t("login.emailPh")}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className={inputCls(tried && !emailOk)}
-                      />
-                    </div>
-                    {tried && !emailOk && (
-                      <p className="mt-1.5 text-xs text-red-400">
-                        {t("login.emailError")}
-                      </p>
-                    )}
-                  </div>
 
-                  {/* Password */}
-                  <div>
-                    <div className="mb-2 flex items-center justify-between">
-                      <label
-                        htmlFor="login-password"
-                        className="text-xs font-semibold uppercase tracking-wider text-slate-500"
-                      >
-                        {t("login.password")}
-                      </label>
-                      <Link
-                        href={loc("/forgot-password")}
-                        className="text-xs font-semibold text-green-600 transition-colors hover:text-green-500"
-                      >
-                        {t("login.forgot")}
-                      </Link>
+                    {/* Submit */}
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="btn-primary group w-full disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {submitting ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          {t("login.submitting")}
+                        </>
+                      ) : (
+                        <>
+                          <LogIn className="h-4 w-4" />
+                          {t("login.submit")}
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </>
+                      )}
+                    </button>
+
+                    {/* Divider */}
+                    <div className="flex items-center gap-3">
+                      <div className="h-px flex-1 bg-white/[0.08]" />
+                      <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8a93a6]">
+                        {t("login.orDivider")}
+                      </span>
+                      <div className="h-px flex-1 bg-white/[0.08]" />
                     </div>
-                    <div className="relative">
-                      <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                      <input
-                        id="login-password"
-                        type={showPassword ? "text" : "password"}
-                        autoComplete="current-password"
-                        placeholder={t("login.passwordPh")}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className={`${inputCls(
-                          tried && !passwordOk
-                        )} pr-12`}
-                      />
-                      <button
-                        type="button"
-                        aria-label={
-                          showPassword
-                            ? t("login.hidePassword")
-                            : t("login.showPassword")
-                        }
-                        onClick={() => setShowPassword((v) => !v)}
-                        className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
+
+                    {/* Social buttons */}
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      <button type="button" className="btn-glass">
+                        <GoogleMark />
+                        {t("login.google")}
+                      </button>
+                      <button type="button" className="btn-glass">
+                        <AppleMark />
+                        {t("login.apple")}
                       </button>
                     </div>
-                    {tried && !passwordOk && (
-                      <p className="mt-1.5 text-xs text-red-400">
-                        {t("login.passwordError")}
-                      </p>
-                    )}
-                  </div>
+                  </form>
 
-                  {/* Remember device */}
-                  <label
-                    htmlFor="login-remember"
-                    className="group flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-green-500/20 hover:bg-green-50"
-                  >
-                    <span className="relative mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center">
-                      <input
-                        id="login-remember"
-                        type="checkbox"
-                        checked={remember}
-                        onChange={(e) => setRemember(e.target.checked)}
-                        className="peer sr-only"
-                      />
-                      <span className="flex h-5 w-5 items-center justify-center rounded-md border border-slate-300 bg-white transition-all peer-checked:border-green-400 peer-checked:bg-green-500">
-                        {remember && (
-                          <svg
-                            viewBox="0 0 24 24"
-                            className="h-3 w-3 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={4}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
-                        )}
-                      </span>
+                  {/* Footer */}
+                  <div className="mt-7 border-t border-white/[0.08] pt-5 text-center">
+                    <span className="text-sm text-[#a3a9b8]">
+                      {t("login.noAccount")}{" "}
                     </span>
-                    <div className="flex-1">
-                      <div className="text-sm font-semibold text-slate-900">
-                        {t("login.rememberDevice")}
-                      </div>
-                      <p className="mt-0.5 text-xs leading-relaxed text-slate-500">
-                        {t("login.rememberHint")}
-                      </p>
-                    </div>
-                  </label>
-
-                  {/* Submit */}
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="btn-gradient group flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/25 transition-all hover:shadow-green-500/40 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {submitting ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        {t("login.submitting")}
-                      </>
-                    ) : (
-                      <>
-                        <LogIn className="h-4 w-4" />
-                        {t("login.submit")}
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                      </>
-                    )}
-                  </button>
-
-                  {/* Divider */}
-                  <div className="flex items-center gap-3">
-                    <div className="h-px flex-1 bg-slate-200" />
-                    <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400">
-                      {t("login.orDivider")}
-                    </span>
-                    <div className="h-px flex-1 bg-slate-200" />
-                  </div>
-
-                  {/* Social buttons (demo) */}
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <button
-                      type="button"
-                      className="flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900"
+                    <Link
+                      href={loc("/register")}
+                      className="text-sm font-semibold text-[#4ade80] transition-colors hover:text-[#86efac]"
                     >
-                      <GoogleMark />
-                      {t("login.google")}
-                    </button>
-                    <button
-                      type="button"
-                      className="flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-600 transition-all hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900"
-                    >
-                      <AppleMark />
-                      {t("login.apple")}
-                    </button>
+                      {t("login.createAccount")}
+                    </Link>
                   </div>
-                </form>
-
-                {/* Footer of the card: signup link */}
-                <div className="relative mt-7 border-t border-slate-200 pt-5 text-center">
-                  <span className="text-sm text-slate-500">
-                    {t("login.noAccount")}{" "}
-                  </span>
-                  <Link
-                    href={loc("/register")}
-                    className="text-sm font-bold text-green-600 transition-colors hover:text-green-500"
-                  >
-                    {t("login.createAccount")}
-                  </Link>
                 </div>
+              </div>
+
+              {/* Trust pills below card */}
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
+                <Pill>
+                  <Lock className="h-3 w-3" />
+                  Secure login
+                </Pill>
+                <Pill tone="purple">Encrypted</Pill>
               </div>
             </motion.div>
           </div>
@@ -518,8 +476,6 @@ export function LoginContent() {
     </div>
   );
 }
-
-/* ── Tiny inline brand marks (no external assets) ────────────── */
 
 function GoogleMark() {
   return (
@@ -546,7 +502,7 @@ function GoogleMark() {
 
 function AppleMark() {
   return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 text-slate-900" fill="currentColor" aria-hidden>
+    <svg viewBox="0 0 24 24" className="h-4 w-4 text-[#ededed]" fill="currentColor" aria-hidden>
       <path d="M16.365 1.43c0 1.14-.42 2.23-1.26 3.05-.91.9-2.01 1.47-3.16 1.36-.12-1.09.43-2.22 1.21-3.04.85-.92 2.21-1.52 3.21-1.37zM20.4 17.14c-.57 1.28-.85 1.86-1.59 3-1.03 1.6-2.49 3.59-4.3 3.61-1.61.02-2.03-1.05-4.22-1.04-2.19.01-2.65 1.06-4.27 1.04-1.82-.02-3.19-1.82-4.23-3.41C.57 16.3.1 10.6 2.32 7.72c1.49-1.92 3.84-3.04 6.04-3.04 2.25 0 3.66 1.23 5.52 1.23 1.81 0 2.91-1.24 5.51-1.24 1.96 0 4.04 1.07 5.52 2.92-4.85 2.66-4.05 9.6-.51 9.55z" />
     </svg>
   );
