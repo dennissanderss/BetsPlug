@@ -30,6 +30,7 @@ import type { Article } from "@/data/articles";
 import type { Testimonial } from "@/components/ui/testimonials-section";
 import type { ComparisonRow } from "@/components/ui/comparison-table";
 import { getLocaleValue } from "@/lib/sanity-data";
+import { useBotdTrackRecord } from "@/hooks/use-botd-track-record";
 
 /* Heavy shared sections loaded dynamically */
 const LeaguesTicker = dynamic(() => import("@/components/ui/leagues-ticker").then(m => m.LeaguesTicker), { ssr: true });
@@ -59,15 +60,6 @@ function useFeaturedMatch(): FeaturedMatch | null {
   useEffect(() => {
     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
     fetch(`${API}/homepage/featured-match`).then(r => r.json()).then(setData).catch(() => {});
-  }, []);
-  return data;
-}
-
-function useBotdStats() {
-  const [data, setData] = useState<{ accuracy_pct: number; total_picks: number; correct: number } | null>(null);
-  useEffect(() => {
-    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-    fetch(`${API}/bet-of-the-day/track-record`).then(r => r.json()).then(setData).catch(() => {});
   }, []);
   return data;
 }
@@ -205,7 +197,7 @@ export function HomeContent({
   const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const featured = useFeaturedMatch();
-  const botd = useBotdStats();
+  const botd = useBotdTrackRecord();
   const stats = useHomepageStats();
   const picks = useUpcomingPicks();
 

@@ -25,6 +25,7 @@ import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { getLocaleValue } from "@/lib/sanity-data";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { useBotdTrackRecord } from "@/hooks/use-botd-track-record";
 
 interface HowItWorksContentProps {
   howItWorksPage?: any;
@@ -41,10 +42,26 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
   const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
+  const botd = useBotdTrackRecord();
 
+  // Stats 1 (BOTD accuracy) and 2 (picks tracked) come from the live
+  // Pick-of-the-Day track record when loaded; fall back to the i18n
+  // defaults on first paint / network error. Stats 3 and 4 are static.
   const defaultStats = [
-    { value: t("hiw.heroStat1Value"), label: t("hiw.heroStat1Label") },
-    { value: t("hiw.heroStat2Value"), label: t("hiw.heroStat2Label") },
+    {
+      value:
+        botd?.accuracy_pct != null
+          ? `${botd.accuracy_pct}%`
+          : t("hiw.heroStat1Value"),
+      label: t("hiw.heroStat1Label"),
+    },
+    {
+      value:
+        botd?.total_picks != null
+          ? botd.total_picks.toLocaleString(locale)
+          : t("hiw.heroStat2Value"),
+      label: t("hiw.heroStat2Label"),
+    },
     { value: t("hiw.heroStat3Value"), label: t("hiw.heroStat3Label") },
     { value: t("hiw.heroStat4Value"), label: t("hiw.heroStat4Label") },
   ];

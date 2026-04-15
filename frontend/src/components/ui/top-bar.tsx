@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { X, ArrowRight } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { useBotdTrackRecord } from "@/hooks/use-botd-track-record";
 
 /**
  * TopBar — thin announcement strip above the site nav.
@@ -13,17 +14,12 @@ import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 const STORAGE_KEY = "bp_topbar_d";
 
-interface TrackRecord {
-  accuracy_pct: number;
-  total_picks: number;
-}
-
 export function TopBar() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
-  const [stats, setStats] = useState<TrackRecord | null>(null);
+  const stats = useBotdTrackRecord();
 
   useEffect(() => {
     try {
@@ -31,16 +27,6 @@ export function TopBar() {
     } catch {
       setVisible(true);
     }
-  }, []);
-
-  useEffect(() => {
-    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-    fetch(`${API}/bet-of-the-day/track-record`)
-      .then((r) => r.json())
-      .then((d: TrackRecord) => {
-        if (d && typeof d.accuracy_pct === "number") setStats(d);
-      })
-      .catch(() => {});
   }, []);
 
   const dismiss = () => {
