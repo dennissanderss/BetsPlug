@@ -936,7 +936,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
           </div>
           <div className="mb-14 grid gap-8 md:grid-cols-2 md:items-end">
             <div>
-              <h2 className="text-display text-4xl text-white sm:text-5xl lg:text-6xl">
+              <h2 className="text-heading text-4xl text-white sm:text-5xl">
                 {t("trusted.titleA")}{" "}
                 <span className="text-[#4ade80]">{t("trusted.titleHighlight")}</span>{" "}
                 {t("trusted.titleB")}
@@ -957,7 +957,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                 <Shield className="h-5 w-5 text-[#4ade80]" strokeWidth={2} />
               </div>
               <p className="font-mono text-6xl font-black text-white/[0.05]">01</p>
-              <h3 className="mt-4 text-display text-2xl text-white">{t("trusted.card1Title")}</h3>
+              <h3 className="mt-4 text-heading text-2xl text-white">{t("trusted.card1Title")}</h3>
               <p className="mt-3 text-sm leading-relaxed text-[#a3a3a3]">
                 {t("trusted.card1Desc")}
               </p>
@@ -970,7 +970,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                 <Brain className="h-5 w-5 text-[#050505]" strokeWidth={2.5} />
               </div>
               <p className="font-mono text-6xl font-black text-[#050505]/15">02</p>
-              <h3 className="mt-4 text-display text-2xl text-[#050505]">{t("trusted.card2Title")}</h3>
+              <h3 className="mt-4 text-heading text-2xl text-[#050505]">{t("trusted.card2Title")}</h3>
               <p className="mt-3 text-sm leading-relaxed text-[#050505]/80">
                 {t("trusted.card2Desc")}
               </p>
@@ -989,7 +989,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
                 <CheckCircle2 className="h-5 w-5 text-[#4ade80]" strokeWidth={2} />
               </div>
               <p className="font-mono text-6xl font-black text-white/[0.05]">03</p>
-              <h3 className="mt-4 text-display text-2xl text-white">{t("trusted.card3Title")}</h3>
+              <h3 className="mt-4 text-heading text-2xl text-white">{t("trusted.card3Title")}</h3>
               <p className="mt-3 text-sm leading-relaxed text-[#a3a3a3]">
                 {t("trusted.card3Desc")}
               </p>
