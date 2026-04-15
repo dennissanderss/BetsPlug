@@ -30,41 +30,41 @@ interface MediaBgProps {
 export function HeroMediaBg({
   src,
   alt = "",
-  opacity = 0.18,
+  opacity = 0.4,
   className = "",
 }: MediaBgProps) {
   return (
     <>
-      {/* 1 · Photo */}
+      {/* 1 · Photo — visible enough to read as imagery, grayscale */}
       <div
         role={alt ? "img" : undefined}
         aria-label={alt || undefined}
         className={`pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat ${className}`}
         style={{
           backgroundImage: `url('${src}')`,
-          filter: "grayscale(1) contrast(1.15) brightness(0.55)",
+          filter: "grayscale(1) contrast(1.1) brightness(0.75)",
           opacity,
         }}
       />
-      {/* 2 · Lime screen tint */}
+      {/* 2 · Subtle lime tint */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(135deg, rgba(74, 222, 128, 0.08) 0%, transparent 40%, rgba(74, 222, 128, 0.05) 100%)",
+            "linear-gradient(135deg, rgba(74, 222, 128, 0.1) 0%, transparent 50%, rgba(74, 222, 128, 0.06) 100%)",
           mixBlendMode: "screen",
         }}
       />
       {/* 3 · Diagonal stripe pattern */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.08]"
+        className="pointer-events-none absolute inset-0 opacity-[0.06]"
         style={{
           backgroundImage:
             "repeating-linear-gradient(135deg, rgba(74,222,128,0.4) 0 1px, transparent 1px 22px)",
         }}
       />
-      {/* 4 · Dark gradient for readability */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-[#050505]/75 to-[#050505]" />
+      {/* 4 · Dark gradient — readable but photo still visible */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050505]/35 via-[#050505]/55 to-[#050505]/85" />
     </>
   );
 }
