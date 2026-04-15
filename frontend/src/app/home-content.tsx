@@ -26,7 +26,7 @@ import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
-import { Pill, DataChip, TrustScore } from "@/components/noct/pill";
+import { Pill, DataChip } from "@/components/noct/pill";
 import type { Article } from "@/data/articles";
 import type { Testimonial } from "@/components/ui/testimonials-section";
 import type { ComparisonRow } from "@/components/ui/comparison-table";
@@ -34,7 +34,6 @@ import { getLocaleValue } from "@/lib/sanity-data";
 
 /* Heavy shared sections loaded dynamically */
 const LeaguesTicker = dynamic(() => import("@/components/ui/leagues-ticker").then(m => m.LeaguesTicker), { ssr: true });
-const FreePredictions = dynamic(() => import("@/components/ui/free-predictions").then(m => m.FreePredictions), { ssr: false });
 const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section").then(m => m.TestimonialsSection), { ssr: false });
 const ComparisonTable = dynamic(() => import("@/components/ui/comparison-table").then(m => m.ComparisonTable), { ssr: true });
 const PricingSection = dynamic(() => import("@/components/ui/pricing-section").then(m => m.PricingSection), { ssr: true });
@@ -74,6 +73,39 @@ function useBotdStats() {
   return data;
 }
 
+interface HomepageStats {
+  total: number;
+  correct: number;
+  winrate: number; // 0–1
+}
+
+/**
+ * 30-day rolling winrate across all evaluated free picks.
+ * Source of truth for the track-record block on the homepage.
+ * Returns null until the fetch resolves → render "—" in that window.
+ */
+function useHomepageStats(): HomepageStats | null {
+  const [stats, setStats] = useState<HomepageStats | null>(null);
+  useEffect(() => {
+    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+    fetch(`${API}/homepage/free-picks`)
+      .then(r => r.json())
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((d: any) => {
+        const s = d?.stats;
+        if (s && typeof s.total === "number") {
+          setStats({
+            total: s.total,
+            correct: s.correct ?? 0,
+            winrate: typeof s.winrate === "number" ? s.winrate : 0,
+          });
+        }
+      })
+      .catch(() => {});
+  }, []);
+  return stats;
+}
+
 interface UpcomingPick {
   home_team: string;
   away_team: string;
@@ -87,32 +119,49 @@ interface UpcomingPick {
   confidence: number;
 }
 
+/** Today's 3 free picks for the hero widget. */
 function useUpcomingPicks(): UpcomingPick[] {
   const [picks, setPicks] = useState<UpcomingPick[]>([]);
   useEffect(() => {
     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
     fetch(`${API}/homepage/free-picks`)
-      .then(r => r.json())
+      .then((r) => r.json())
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((d: any) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const arr: any[] = d?.today ?? [];
-        setPicks(arr.slice(0, 4).map((p) => ({
-          home_team: p.home_team,
-          away_team: p.away_team,
-          home_logo: p.home_team_logo ?? null,
-          away_logo: p.away_team_logo ?? null,
-          league: p.league,
-          kickoff: p.scheduled_at,
-          home_prob: Math.round((p.home_win_prob ?? 0) * 100),
-          draw_prob: Math.round((p.draw_prob ?? 0) * 100),
-          away_prob: Math.round((p.away_win_prob ?? 0) * 100),
-          confidence: Math.round((p.confidence ?? 0) * 100),
-        })));
+        setPicks(
+          arr.slice(0, 3).map((p) => ({
+            home_team: p.home_team,
+            away_team: p.away_team,
+            home_logo: p.home_team_logo ?? null,
+            away_logo: p.away_team_logo ?? null,
+            league: p.league,
+            kickoff: p.scheduled_at,
+            home_prob: Math.round((p.home_win_prob ?? 0) * 100),
+            draw_prob: Math.round((p.draw_prob ?? 0) * 100),
+            away_prob: Math.round((p.away_win_prob ?? 0) * 100),
+            confidence: Math.round((p.confidence ?? 0) * 100),
+          }))
+        );
       })
       .catch(() => {});
   }, []);
   return picks;
+}
+
+function formatKickoff(iso: string, locale: string): string {
+  try {
+    return new Date(iso).toLocaleString(locale, {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return iso;
+  }
 }
 
 function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: string }) {
@@ -133,20 +182,6 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
     return () => clearInterval(timer);
   }, [target]);
   return <span>{count.toLocaleString()}{suffix}</span>;
-}
-
-function formatKickoff(iso: string, locale: string): string {
-  try {
-    return new Date(iso).toLocaleString(locale, {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return iso;
-  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -172,6 +207,7 @@ export function HomeContent({
   const loc = useLocalizedHref();
   const featured = useFeaturedMatch();
   const botd = useBotdStats();
+  const stats = useHomepageStats();
   const picks = useUpcomingPicks();
 
   // Comparison rows resolved from Sanity (locale-aware)
@@ -335,63 +371,60 @@ export function HomeContent({
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative"
             >
-              <div className="card-neon card-neon-green halo-green relative p-5 sm:p-6">
-                <div className="flex items-center justify-between">
-                  <Pill className="pill-active">
-                    <Activity className="h-3 w-3" />
-                    {t("hero.freePrediction") || "Live prediction"}
-                  </Pill>
-                  <Pill tone="purple">
-                    <Flame className="h-3 w-3" /> {t("hero.hot") || "Hot"}
-                  </Pill>
-                </div>
-
-                <p className="mt-5 text-xs font-semibold uppercase tracking-wider text-[#6b7280]">
-                  Match
-                </p>
-                <p className="mt-1 text-xl font-semibold text-[#ededed]">
-                  {featured?.available ? `${featured.home_team} vs ${featured.away_team}` : "Arsenal vs Chelsea"}
-                </p>
-
+              <div className="card-neon card-neon-green halo-green relative overflow-hidden">
+                {/* Widget header */}
                 <div
-                  className="mt-5 rounded-xl p-4"
-                  style={{
-                    background: "hsl(230 22% 6% / 0.6)",
-                    border: "1px solid hsl(0 0% 100% / 0.06)",
-                  }}
+                  className="relative flex items-center justify-between gap-3 border-b px-5 pt-5 pb-4"
+                  style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
                 >
-                  <div className="mb-2 flex items-baseline justify-between">
-                    <span className="text-sm text-[#a3a9b8]">{t("hero.homeWin") || "Home win"}</span>
-                    <span className="text-stat text-3xl text-[#4ade80]">{homeProb}%</span>
+                  <div className="flex items-center gap-2.5">
+                    <HexBadge variant="green" size="sm" noGlow>
+                      <Activity className="h-3.5 w-3.5" />
+                    </HexBadge>
+                    <div>
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
+                        {t("hero.freePrediction")}
+                      </p>
+                      <p className="text-sm font-semibold text-[#ededed]">
+                        {t("home.freePredTitle")}
+                      </p>
+                    </div>
                   </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full" style={{ background: "hsl(0 0% 100% / 0.06)" }}>
-                    <div
-                      className="h-full rounded-full transition-all"
-                      style={{
-                        width: `${homeProb}%`,
-                        background: "linear-gradient(90deg, #22c55e, #4ade80)",
-                        boxShadow: "0 0 14px hsl(var(--accent-green)/0.75)",
-                      }}
-                    />
-                  </div>
-                  <div className="mt-3 flex justify-between text-xs text-[#6b7280]">
-                    <span>{t("hero.draw") || "Draw"} {drawProb}%</span>
-                    <span>{t("hero.away") || "Away"} {awayProb}%</span>
-                  </div>
+                  <Pill className="pill-active">
+                    <span className="live-dot" />
+                    Live
+                  </Pill>
                 </div>
 
-                <div className="mt-4 grid grid-cols-3 gap-2">
-                  <MiniStat label={t("hero.confidence") || "Confidence"} value={`${confidence}%`} tone="green" />
-                  <MiniStat label="Accuracy" value={`${botd?.accuracy_pct ?? 66.5}%`} tone="purple" />
-                  <MiniStat label="Picks" value="5+" tone="blue" />
+                {/* 3 pick rows */}
+                <div className="relative divide-y" style={{ borderColor: "hsl(0 0% 100% / 0.05)" }}>
+                  {picks.slice(0, 3).map((p, i) => (
+                    <HeroPickRow key={i} pick={p} locale={locale} />
+                  ))}
+                  {picks.length === 0 &&
+                    [0, 1, 2].map((i) => (
+                      <div key={i} className="p-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="h-3 w-24 animate-pulse rounded bg-white/[0.05]" />
+                          <div className="h-3 w-16 animate-pulse rounded bg-white/[0.05]" />
+                        </div>
+                        <div className="mt-3 h-4 w-3/4 animate-pulse rounded bg-white/[0.05]" />
+                      </div>
+                    ))}
                 </div>
 
-                <Link
-                  href={loc("/predictions")}
-                  className="btn-primary mt-5 flex w-full items-center justify-center gap-2"
+                {/* Footer CTA */}
+                <div
+                  className="relative border-t p-4"
+                  style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
                 >
-                  {t("hero.joinNow") || "Open predictions"} <ArrowRight className="h-4 w-4" />
-                </Link>
+                  <Link
+                    href={loc("/match-predictions")}
+                    className="btn-primary flex w-full items-center justify-center gap-2"
+                  >
+                    {t("home.freePredCta") || t("hero.joinNow")} <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
               </div>
 
               {/* Floating mini-cards for depth */}
@@ -408,7 +441,7 @@ export function HomeContent({
                       Pick of the day
                     </p>
                     <p className="text-stat text-sm text-[#c4b5fd]">
-                      {botd?.accuracy_pct ?? 66.7}%
+                      {botd?.accuracy_pct != null ? `${botd.accuracy_pct}%` : "—"}
                     </p>
                   </div>
                 </div>
@@ -426,7 +459,7 @@ export function HomeContent({
                       Correct picks
                     </p>
                     <p className="text-stat text-sm text-[#93c5fd]">
-                      {botd?.correct ?? 226}
+                      {botd?.correct ?? "—"}
                     </p>
                   </div>
                 </div>
@@ -454,7 +487,7 @@ export function HomeContent({
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-12 max-w-3xl">
             <span className="section-label">
-              <Sparkles className="h-3 w-3" /> {t("trusted.titleHighlight") || "Why BetsPlug"}
+              <Sparkles className="h-3 w-3" /> {t("trusted.titleHighlight")}
             </span>
             <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("trusted.titleA")}{" "}
@@ -493,11 +526,6 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          4 · FREE PREDICTIONS — full shared widget with tabs + stats
-         ══════════════════════════════════════════════════════════════ */}
-      <FreePredictions />
-
-      {/* ══════════════════════════════════════════════════════════════
           4 · HOW IT WORKS — 3 premium step cards
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative py-20 md:py-28">
@@ -508,7 +536,7 @@ export function HomeContent({
         />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-12 text-center">
-            <span className="section-label">{t("how.badge") || "Process"}</span>
+            <span className="section-label">{t("how.badge")}</span>
             <h2 className="text-heading mx-auto max-w-2xl text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("how.title")}
             </h2>
@@ -553,7 +581,7 @@ export function HomeContent({
 
           <div className="mt-10 flex justify-center">
             <Link href={loc("/how-it-works")} className="btn-glass inline-flex items-center gap-1.5">
-              {t("how.deepDive") || "See how it works"} <ChevronRight className="h-4 w-4" />
+              {t("how.deepDive")} <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
@@ -574,7 +602,7 @@ export function HomeContent({
             <div>
               <span className="section-label">
                 <TrendingUp className="h-3 w-3" />
-                {t("track.label") || "Track record"}
+                {t("track.label")}
               </span>
               <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("trusted.titleC")}{" "}
@@ -586,7 +614,7 @@ export function HomeContent({
                   {t("nav.trackRecord")} <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link href={loc("/predictions")} className="btn-glass">
-                  {t("home.freePredCta") || "Browse predictions"}
+                  {t("home.freePredCta")}
                 </Link>
               </div>
             </div>
@@ -603,13 +631,21 @@ export function HomeContent({
                     Accuracy
                   </p>
                   <p className="text-stat mt-1 text-4xl text-[#ededed] sm:text-5xl">
-                    {botd?.accuracy_pct ?? 75.4}%
+                    {stats
+                      ? `${Math.round(stats.winrate * 1000) / 10}%`
+                      : "—"}
                   </p>
                   <p className="mt-1 text-xs text-[#6b7280]">
-                    Across {botd?.total_picks ?? 1284} picks
+                    {stats
+                      ? `Across ${stats.total.toLocaleString(locale)} picks (30d)`
+                      : "Loading 30-day stats…"}
                   </p>
                 </div>
-                <Pill tone="win">▲ +5.45%</Pill>
+                {stats && stats.total > 0 && (
+                  <Pill tone="win">
+                    {stats.correct}/{stats.total}
+                  </Pill>
+                )}
               </div>
 
               <div className="relative mt-6 h-36 sm:h-44">
@@ -640,7 +676,10 @@ export function HomeContent({
               </div>
 
               <div className="relative mt-4 grid grid-cols-3 gap-2 border-t pt-4" style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}>
-                <ChartStat label="Predictions" value={botd?.total_picks?.toLocaleString() ?? "1,284"} />
+                <ChartStat
+                  label="Predictions"
+                  value={stats?.total != null ? stats.total.toLocaleString(locale) : "—"}
+                />
                 <ChartStat label="Models" value="4" />
                 <ChartStat label="Leagues" value="30+" />
               </div>
@@ -679,14 +718,14 @@ export function HomeContent({
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <div className="mb-10 flex flex-wrap items-end justify-between gap-3">
               <div>
-                <span className="section-label">{t("articles.badge") || "Research"}</span>
+                <span className="section-label">{t("articles.badge")}</span>
                 <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl">
-                  {t("articles.title") || "Latest analysis."}
+                  {t("articles.title")}
                 </h2>
                 <p className="mt-3 max-w-xl text-sm text-[#a3a9b8]">{t("articles.subtitle")}</p>
               </div>
               <Link href={loc("/articles")} className="btn-glass inline-flex items-center gap-1.5">
-                {t("articles.checkAll") || "All articles"} <ChevronRight className="h-4 w-4" />
+                {t("articles.checkAll")} <ChevronRight className="h-4 w-4" />
               </Link>
             </div>
 
@@ -765,7 +804,7 @@ export function HomeContent({
             <div className="relative">
               <span className="section-label mx-auto">
                 <Sparkles className="h-3 w-3" />
-                {t("finalCta.badge") || "Ready to try?"}
+                {t("finalCta.badge")}
               </span>
               <h2 className="text-display mx-auto max-w-2xl text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("finalCta.titleA")}{" "}
@@ -812,6 +851,73 @@ export function HomeContent({
 /* ═══════════════════════════════════════════════════════════════
    Local sub-components
    ═══════════════════════════════════════════════════════════════ */
+
+/** HeroPickRow — compact match row rendered in the hero widget. */
+function HeroPickRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
+  const maxProb = Math.max(pick.home_prob, pick.draw_prob, pick.away_prob);
+  const predicted =
+    pick.home_prob === maxProb ? "home" : pick.draw_prob === maxProb ? "draw" : "away";
+  const predictedLabel =
+    predicted === "home" ? pick.home_team : predicted === "away" ? pick.away_team : "Draw";
+  const pickPct = Math.max(pick.home_prob, pick.draw_prob, pick.away_prob);
+
+  return (
+    <div className="relative p-4 transition-colors hover:bg-white/[0.02]">
+      <div className="flex items-center justify-between gap-2">
+        <div className="min-w-0 flex-1">
+          {/* League + kickoff */}
+          <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider">
+            <span className="truncate text-[#4ade80]">{pick.league}</span>
+            <span className="text-[#3a3f4a]">·</span>
+            <span className="flex items-center gap-1 text-[#6b7280]">
+              <Clock className="h-2.5 w-2.5" />
+              {formatKickoff(pick.kickoff, locale)}
+            </span>
+          </div>
+
+          {/* Teams */}
+          <div className="mt-1.5 flex items-center gap-2">
+            {pick.home_logo && (
+              <Image
+                src={pick.home_logo}
+                alt=""
+                width={20}
+                height={20}
+                className="h-5 w-5 flex-shrink-0 object-contain"
+              />
+            )}
+            <span className="truncate text-sm font-semibold text-[#ededed]">
+              {pick.home_team}
+            </span>
+            <span className="text-[10px] text-[#6b7280]">vs</span>
+            <span className="truncate text-sm font-semibold text-[#ededed]">
+              {pick.away_team}
+            </span>
+            {pick.away_logo && (
+              <Image
+                src={pick.away_logo}
+                alt=""
+                width={20}
+                height={20}
+                className="h-5 w-5 flex-shrink-0 object-contain"
+              />
+            )}
+          </div>
+
+          {/* Predicted pick label */}
+          <p className="mt-1.5 text-[11px] text-[#a3a9b8]">
+            Pick: <span className="font-semibold text-[#ededed]">{predictedLabel}</span>
+          </p>
+        </div>
+
+        {/* Probability chip */}
+        <DataChip tone="win" className="flex-shrink-0">
+          {pickPct}%
+        </DataChip>
+      </div>
+    </div>
+  );
+}
 
 function MiniStat({
   label,
@@ -898,43 +1004,6 @@ function BigFeatureCard({
           </Link>
         )}
       </div>
-    </div>
-  );
-}
-
-function MatchRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
-  const maxProb = Math.max(pick.home_prob, pick.draw_prob, pick.away_prob);
-  const predicted = pick.home_prob === maxProb ? "home" : pick.draw_prob === maxProb ? "draw" : "away";
-  return (
-    <div className="grid items-center gap-3 p-4 transition-colors hover:bg-white/[0.02] sm:grid-cols-[minmax(0,0.75fr)_minmax(0,2fr)_minmax(0,1.5fr)_auto]">
-      <div>
-        <p className="text-xs font-semibold text-[#4ade80]">{pick.league}</p>
-        <p className="mt-0.5 flex items-center gap-1 text-[11px] text-[#6b7280]">
-          <Clock className="h-3 w-3" />
-          {formatKickoff(pick.kickoff, locale)}
-        </p>
-      </div>
-      <div className="flex items-center gap-3">
-        <div className="flex min-w-0 flex-1 items-center gap-2">
-          {pick.home_logo && (
-            <Image src={pick.home_logo} alt="" width={26} height={26} className="h-6 w-6 object-contain" />
-          )}
-          <p className="truncate text-sm font-semibold text-[#ededed]">{pick.home_team}</p>
-        </div>
-        <span className="text-[11px] font-medium text-[#6b7280]">vs</span>
-        <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
-          <p className="truncate text-right text-sm font-semibold text-[#ededed]">{pick.away_team}</p>
-          {pick.away_logo && (
-            <Image src={pick.away_logo} alt="" width={26} height={26} className="h-6 w-6 object-contain" />
-          )}
-        </div>
-      </div>
-      <div className="flex items-center gap-2">
-        <DataChip tone={predicted === "home" ? "win" : "default"}>{pick.home_prob}%</DataChip>
-        <DataChip>{pick.draw_prob}%</DataChip>
-        <DataChip tone={predicted === "away" ? "win" : "default"}>{pick.away_prob}%</DataChip>
-      </div>
-      <TrustScore value={Math.round(pick.confidence / 10)} max={10} />
     </div>
   );
 }

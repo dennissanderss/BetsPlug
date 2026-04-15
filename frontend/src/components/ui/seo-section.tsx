@@ -15,96 +15,18 @@ import {
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import {
+  homeFaqCategories,
+  type HomeFaqCategoryId,
+} from "@/data/home-faq";
 
-type FaqItem = { q: string; a: string };
-type FaqCategory = {
-  id: string;
-  label: string;
-  icon: typeof Rocket;
-  items: FaqItem[];
+// Category-icon mapping lives in the view layer (data module stays pure).
+const CATEGORY_ICONS: Record<HomeFaqCategoryId, typeof Rocket> = {
+  "getting-started": Rocket,
+  predictions: Sparkles,
+  pricing: CreditCard,
+  "data-security": Lock,
 };
-
-const faqCategories: FaqCategory[] = [
-  {
-    id: "getting-started",
-    label: "Getting Started",
-    icon: Rocket,
-    items: [
-      {
-        q: "What is an AI football prediction platform?",
-        a: "An AI football prediction platform uses machine learning models, historical data, and statistical engines (like Elo and Poisson) to forecast the most likely outcome of football matches. BetsPlug is built as a pure analytics tool - we show you the numbers, probabilities and expected value, so you can decide which bets to place with a bookmaker of your choice.",
-      },
-      {
-        q: "How do I get started with BetsPlug?",
-        a: "Start with our Bronze plan - a symbolic €0.01 trial that unlocks 7 days of full Gold-level access: daily AI football picks, upcoming match predictions, our verified track record and every model output. We charge one cent through Stripe so we can verify the card is real (this is how we keep the platform fraud-free). Upgrade to Silver, Gold or Platinum when you're ready.",
-      },
-      {
-        q: "Which football leagues does the AI predictor cover?",
-        a: "Our AI predictor is focused exclusively on football, covering the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Champions League and more. New football leagues are added regularly as our models are trained and validated.",
-      },
-    ],
-  },
-  {
-    id: "predictions",
-    label: "Predictions & Models",
-    icon: Sparkles,
-    items: [
-      {
-        q: "How accurate are AI football betting predictions?",
-        a: "Accuracy depends on the league, the market and the model. Our AI betting predictions are continuously benchmarked against closing lines and logged in our public track record. You can see the exact hit-rate, ROI and confidence distribution of every model we run - no cherry-picking, no hidden losses.",
-      },
-      {
-        q: "Which models power BetsPlug predictions?",
-        a: "We combine Elo ratings, Poisson goal models, and machine-learning classifiers trained on hundreds of thousands of historical matches. Each prediction includes win probability, expected goals, confidence score, and edge over the current bookmaker line.",
-      },
-      {
-        q: "Can I use AI for football betting research?",
-        a: "Absolutely. Thousands of data-driven bettors use BetsPlug as their research layer: compare our AI predictions against bookmaker odds, filter by confidence, backtest strategies, and identify value bets before the market corrects.",
-      },
-    ],
-  },
-  {
-    id: "pricing",
-    label: "Pricing & Billing",
-    icon: CreditCard,
-    items: [
-      {
-        q: "Do I need a subscription to see AI picks?",
-        a: "We offer a free tier with daily AI football picks so you can try the platform. For full access to live probabilities, strategy backtesting and the complete track record, check our subscription plans.",
-      },
-      {
-        q: "Can I cancel my subscription anytime?",
-        a: "Yes. All plans are month-to-month with no long-term commitment. You can cancel anytime from your account dashboard and keep access until the end of your current billing period.",
-      },
-      {
-        q: "Do you offer refunds?",
-        a: "We offer a 14-day money-back guarantee on all paid plans under EU consumer law. If BetsPlug isn't right for you, contact support within the first 14 days and we'll issue a full refund - no questions asked. Platinum Lifetime is final-sale after the 14-day window.",
-      },
-    ],
-  },
-  {
-    id: "data-security",
-    label: "Data & Security",
-    icon: Lock,
-    items: [
-      {
-        q: "Is BetsPlug a betting or gambling website?",
-        a: "No. BetsPlug is a data analytics platform for football fans, traders and researchers. We provide AI football predictions, statistics and insights. You cannot gamble, deposit or place bets on BetsPlug - we exist to inform your decisions, not to take them.",
-      },
-      {
-        q: "How is my data protected?",
-        a: "Your data is encrypted in transit (TLS 1.3) and at rest (AES-256). We never sell or share personal information, and we process payments through PCI-compliant providers so we never store your card details on our servers.",
-      },
-      {
-        q: "Where does your football data come from?",
-        a: "We aggregate data from licensed football data providers, official league feeds, and public statistical sources. Every data point feeding our models is verified and timestamped for full reproducibility in our track record.",
-      },
-    ],
-  },
-];
-
-// Flat list for Schema.org JSON-LD
-const faqs: FaqItem[] = faqCategories.flatMap((c) => c.items);
 
 export function SeoSection() {
   const { t } = useTranslations();
@@ -247,7 +169,7 @@ export function SeoSection() {
               job is to give you the data, probabilities and machine-learning
               outputs; the decision to place a bet (and with whom) is entirely
               yours. Learn more{" "}
-              <Link href="/about" className={linkCls}>
+              <Link href="/about-us" className={linkCls}>
                 about our mission
               </Link>{" "}
               or browse{" "}
@@ -259,7 +181,7 @@ export function SeoSection() {
           </div>
         </motion.div>
 
-        {/* FAQ Section */}
+        {/* FAQ Section — accordion; Schema.org JSON-LD emitted once by page.tsx */}
         <FaqBlock />
 
         {/* Final internal-link CTA row */}
@@ -284,25 +206,6 @@ export function SeoSection() {
           ))}
         </motion.div>
       </div>
-
-      {/* FAQ Schema.org structured data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: faqs.map((f) => ({
-              "@type": "Question",
-              name: f.q,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: f.a,
-              },
-            })),
-          }),
-        }}
-      />
     </section>
   );
 }
@@ -312,14 +215,14 @@ export function SeoSection() {
 function FaqBlock() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
-  const [activeCategory, setActiveCategory] = useState<string>(
-    faqCategories[0].id,
+  const [activeCategory, setActiveCategory] = useState<HomeFaqCategoryId>(
+    homeFaqCategories[0].id,
   );
   const [openQuestion, setOpenQuestion] = useState<string | null>(
-    faqCategories[0].items[0].q,
+    homeFaqCategories[0].items[0].question,
   );
 
-  const current = faqCategories.find((c) => c.id === activeCategory)!;
+  const current = homeFaqCategories.find((c) => c.id === activeCategory)!;
 
   return (
     <motion.div
@@ -353,8 +256,8 @@ function FaqBlock() {
                 {t("faq.browseBy")}
               </h4>
 
-              {faqCategories.map((cat) => {
-                const Icon = cat.icon;
+              {homeFaqCategories.map((cat) => {
+                const Icon = CATEGORY_ICONS[cat.id];
                 const isActive = cat.id === activeCategory;
                 return (
                   <button
@@ -362,7 +265,7 @@ function FaqBlock() {
                     type="button"
                     onClick={() => {
                       setActiveCategory(cat.id);
-                      setOpenQuestion(cat.items[0].q);
+                      setOpenQuestion(cat.items[0].question);
                     }}
                     className={`group relative flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200 ${
                       isActive
@@ -444,10 +347,10 @@ function FaqBlock() {
                   className="flex flex-col gap-3"
                 >
                   {current.items.map((item) => {
-                    const isOpen = openQuestion === item.q;
+                    const isOpen = openQuestion === item.question;
                     return (
                       <div
-                        key={item.q}
+                        key={item.question}
                         className={`${
                           isOpen
                             ? "card-neon card-neon-green"
@@ -458,7 +361,7 @@ function FaqBlock() {
                           <button
                             type="button"
                             onClick={() =>
-                              setOpenQuestion(isOpen ? null : item.q)
+                              setOpenQuestion(isOpen ? null : item.question)
                             }
                             className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-6 sm:py-5"
                             aria-expanded={isOpen}
@@ -470,7 +373,7 @@ function FaqBlock() {
                                   : "text-[#ededed] hover:text-[#4ade80]"
                               }`}
                             >
-                              {item.q}
+                              {item.question}
                             </h4>
                             <div
                               className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-all ${
@@ -496,7 +399,7 @@ function FaqBlock() {
                               >
                                 <div className="border-t border-white/[0.06] px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
                                   <p className="text-sm leading-relaxed text-[#a3a9b8]">
-                                    {item.a}
+                                    {item.answer}
                                   </p>
                                 </div>
                               </motion.div>
