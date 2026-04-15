@@ -35,6 +35,8 @@ import type { Article } from "@/data/articles";
 import type { Testimonial } from "@/components/ui/testimonials-section";
 import type { ComparisonRow } from "@/components/ui/comparison-table";
 import { getLocaleValue } from "@/lib/sanity-data";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 
 const FreePredictions = dynamic(() => import("@/components/ui/free-predictions").then(m => m.FreePredictions), { ssr: false });
 const BetsPlugFooter = dynamic(() => import("@/components/ui/betsplug-footer").then(m => m.BetsPlugFooter), { ssr: true });
@@ -726,27 +728,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
           HERO SECTION — PIT LANE
          ═══════════════════════════════════════════════════════════════════ */}
       <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
-        {/* Stadium photo — low opacity, monochrome green tint */}
-        <div
-          className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: "url('/hero-bg.jpg')",
-            filter: "grayscale(1) contrast(1.15) brightness(0.5)",
-            opacity: 0.18,
-          }}
-        />
-        {/* Lime tint over stadium */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(135deg, rgba(74, 222, 128, 0.08) 0%, transparent 40%, rgba(74, 222, 128, 0.05) 100%)",
-            mixBlendMode: "screen",
-          }}
-        />
-        {/* Dark gradient overlay for readability */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-[#050505]/75 to-[#050505]" />
-        {/* Ambient lime wash */}
+        <HeroMediaBg src={PAGE_IMAGES.home.hero} alt="AI football predictions stadium" />
         <div className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full bg-[#4ade80]/[0.08] blur-[160px]" />
         <div className="pointer-events-none absolute -right-40 bottom-0 h-[400px] w-[400px] rounded-full bg-[#4ade80]/[0.05] blur-[140px]" />
         {/* Barcode strip top */}
@@ -1250,12 +1232,13 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
          ═══════════════════════════════════════════════════════════════════ */}
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-6">
-          <div className="relative overflow-hidden stripe-lime p-10 md:p-16">
+          <div className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16">
+            <CtaMediaBg src={PAGE_IMAGES.home.cta} alt={PAGE_IMAGES.home.alt} />
             {/* Corner brackets — dark */}
-            <span className="pointer-events-none absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 top-0 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute left-0 bottom-0 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 bottom-0 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
+            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
 
             <div className="relative">
               <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">

@@ -21,6 +21,8 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { HeroMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 
 /** Map Lucide icon string names from Sanity to actual components. */
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -102,18 +104,8 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           HERO
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
-        {/* Ambient background */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.04] blur-[140px]" />
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage:
-                "repeating-linear-gradient(135deg, rgba(74,222,128,0.4) 0 1px, transparent 1px 22px)",
-            }}
-          />
-        </div>
+      <section className="no-rhythm relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
+        <HeroMediaBg src={PAGE_IMAGES.about.hero} alt="" />
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
           <motion.span

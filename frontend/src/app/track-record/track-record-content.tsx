@@ -29,6 +29,8 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 
 /* ── Live API data hook ─────────────────────────────────── */
 interface LiveStats {
@@ -233,18 +235,8 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       {/* ═══════════════════════════════════════════════════════════════════
           HERO
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
-        {/* Ambient background */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.04] blur-[140px]" />
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage:
-                "repeating-linear-gradient(135deg, rgba(74,222,128,0.4) 0 1px, transparent 1px 22px)",
-            }}
-          />
-        </div>
+      <section className="no-rhythm relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
+        <HeroMediaBg src={PAGE_IMAGES["track-record"].hero} alt="Football match statistics scoreboard" />
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
           <motion.span
@@ -598,12 +590,13 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="relative overflow-hidden stripe-lime p-10 md:p-16"
+            className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16"
           >
-            <span className="pointer-events-none absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 top-0 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
-            <span className="pointer-events-none absolute left-0 bottom-0 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
-            <span className="pointer-events-none absolute right-0 bottom-0 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
+            <CtaMediaBg src={PAGE_IMAGES["track-record"].cta} alt={PAGE_IMAGES["track-record"].alt} />
+            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
 
             <div className="relative">
               <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">

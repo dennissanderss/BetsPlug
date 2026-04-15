@@ -20,6 +20,8 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { SiteNav } from "@/components/ui/site-nav";
 import { AiAssistant } from "@/components/ui/ai-assistant";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { HeroMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 import { getLocaleValue } from "@/lib/sanity-data";
 
 type FaqItem = { q: string; a: string };
@@ -121,18 +123,8 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       <SiteNav />
 
       {/* ───── HERO ───── */}
-      <section className="relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
-        {/* Background */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-green-500/[0.06] blur-[140px]" />
-          <div
-            className="absolute inset-0 opacity-[0.04]"
-            style={{
-              backgroundImage:
-                "repeating-linear-gradient(135deg, rgba(74,222,128,0.8) 0 1px, transparent 1px 22px)",
-            }}
-          />
-        </div>
+      <section className="no-rhythm relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
+        <HeroMediaBg src={PAGE_IMAGES.contact.hero} alt="" />
 
         <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
           <motion.span
