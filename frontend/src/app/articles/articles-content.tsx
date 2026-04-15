@@ -16,6 +16,8 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { Article, Sport } from "@/data/articles";
 import { SportIcon, SportBadge, CoverArt } from "./article-visuals";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 
 /* ──────────────────────────────────────────────────────────────
  * Articles archive — public marketing page
@@ -57,51 +59,34 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
-      {/* Ambient background */}
-      <div className="pointer-events-none fixed inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-[#0f1420] to-background" />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "radial-gradient(rgba(74,222,128,0.3) 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
-          }}
-        />
-        <div className="absolute left-1/2 top-40 h-[520px] w-[720px] -translate-x-1/2 rounded-full bg-green-500/[0.04] blur-[150px]" />
-        <div className="absolute -left-32 top-[60vh] h-[320px] w-[320px] rounded-full bg-emerald-500/[0.03] blur-[120px]" />
-        <div className="absolute -right-32 top-[30vh] h-[320px] w-[320px] rounded-full bg-green-500/[0.03] blur-[120px]" />
-      </div>
-
       <SiteNav />
 
-      <main className="relative z-10 pt-36 pb-24 sm:pt-40">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-          {/* Hero heading */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="mx-auto mb-10 max-w-3xl text-center sm:mb-14"
-          >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-700">
+      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
+        <HeroMediaBg src={PAGE_IMAGES.articles.hero} alt={PAGE_IMAGES.articles.alt} />
+        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6">
+          <div className="mx-auto max-w-3xl text-center">
+            <span className="section-label mb-4">
               <Newspaper className="h-3.5 w-3.5" />
               {t("articles.badge")}
             </span>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
-              <span className="gradient-text">{t("articles.title")}</span>
+            <h1 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl mt-4">
+              {t("articles.title")}
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#a3a3a3] sm:text-lg">
               {t("articles.subtitle")}
             </p>
-          </motion.div>
+          </div>
+        </div>
+      </section>
 
+      <main className="relative z-10 py-20 md:py-28">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
           {/* Sport tab filters */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-10 flex justify-center sm:mb-14"
+            className="mb-12 flex justify-center sm:mb-14"
           >
             <div
               role="tablist"
@@ -253,7 +238,7 @@ function ArticleCard({ article }: { article: Article }) {
           size="md"
         />
       </div>
-      <div className="flex flex-1 flex-col gap-4 p-6">
+      <div className="flex flex-1 flex-col gap-4 p-6 sm:p-8">
         <SportBadge sport={article.sport} />
         <h3 className="text-lg font-extrabold leading-snug tracking-tight text-slate-900 group-hover:text-green-700 sm:text-xl">
           {article.title}

@@ -35,6 +35,8 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { useAuth } from "@/lib/auth";
 import { getLocaleValue } from "@/lib/sanity-data";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 
 /**
  * WelcomeContent — post-registration / email-verification welcome.
@@ -185,8 +187,10 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
       )}
 
       {/* ── Hero ── */}
-      <main className="relative z-10 pt-44 pb-24 sm:pt-52">
-        <section className="mx-auto max-w-5xl px-6 text-center">
+      <main className="relative z-10">
+        <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505] text-center">
+          <HeroMediaBg src={PAGE_IMAGES.welcome.hero} alt={PAGE_IMAGES.welcome.alt} />
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -290,6 +294,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             <Mail className="h-3.5 w-3.5 text-green-500/70" />
             {t("welcome.emailHint")}
           </motion.p>
+          </div>
         </section>
 
         {/* ── Quickstart timeline ── */}
@@ -399,20 +404,46 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
           </motion.figure>
         </section>
 
-        {/* ── Bottom CTA + support note ── */}
-        <section className="mx-auto mt-24 max-w-3xl px-6 text-center">
-          <Link
-            href={loc("/predictions")}
-            className="btn-gradient group inline-flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-extrabold tracking-tight shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50"
-          >
-            <Rocket className="h-4 w-4" />
-            Start exploring predictions
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
-          <p className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-500">
-            <ShieldCheck className="h-3.5 w-3.5 text-green-500/70" />
-            {t("welcome.footerNote")}
-          </p>
+        {/* ── Final CTA ── */}
+        <section className="relative py-20 md:py-28">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6">
+            <div className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16">
+              <CtaMediaBg
+                src={PAGE_IMAGES.welcome.cta}
+                alt={PAGE_IMAGES.welcome.alt}
+                pattern={PAGE_IMAGES.welcome.pattern}
+              />
+              <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+              <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+              <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+              <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
+
+              <div className="relative text-center">
+                <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
+                  Start exploring predictions
+                </h2>
+                <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                  <Link
+                    href={loc("/predictions")}
+                    className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
+                  >
+                    <Rocket className="h-4 w-4" />
+                    BROWSE PREDICTIONS →
+                  </Link>
+                  <Link
+                    href={loc("/checkout")}
+                    className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
+                  >
+                    PICK A PLAN →
+                  </Link>
+                </div>
+                <p className="mt-8 inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-[#050505]/80">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  {t("welcome.footerNote")}
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
 

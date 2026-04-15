@@ -16,6 +16,8 @@ import {
 } from "@/data/bet-type-hubs";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
+import { HeroMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 
 export const revalidate = 60;
 
@@ -62,11 +64,10 @@ export default async function BetTypesIndexPage() {
       <SiteNav />
 
       {/* Hero */}
-      <section className="relative overflow-hidden px-4 pb-10 pt-28 sm:pt-32">
-        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.06] blur-[140px]" />
-        <div className="pointer-events-none absolute -right-40 -top-20 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.05] blur-[140px]" />
+      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
+        <HeroMediaBg src={PAGE_IMAGES["bet-types"].hero} alt={PAGE_IMAGES["bet-types"].alt} />
 
-        <div className="relative mx-auto max-w-5xl">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <nav
             aria-label="Breadcrumb"
             className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-slate-500"
@@ -81,16 +82,16 @@ export default async function BetTypesIndexPage() {
           </nav>
 
           <div className="text-center">
-            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-700">
+            <span className="section-label mx-auto">
               <Target className="h-3.5 w-3.5" />
               {t("Betting markets", "Wedmarkten")}
-            </div>
+            </span>
 
-            <h1 className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+            <h1 className="text-display mt-5 text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("Bet Types Explained", "Wed-types Uitgelegd")}
             </h1>
 
-            <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-600 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a3a3] sm:text-lg">
               {t(
                 "Deep dives into the most popular football betting markets - how they're priced, when they offer value, and how BetsPlug's ensemble reads them.",
                 "Diepgaande uitleg over de populairste wedmarkten in het voetbal - hoe ze geprijsd worden, wanneer ze value bieden en hoe het BetsPlug-ensemble ze leest.",
@@ -101,13 +102,14 @@ export default async function BetTypesIndexPage() {
       </section>
 
       {/* Hub cards */}
-      <section className="relative px-4 pb-20">
-        <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2">
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="grid gap-[1px] bg-white/[0.08] sm:grid-cols-2">
           {hubs.map((hub) => (
             <Link
               key={hub.slug}
               href={`/bet-types/${hub.slug}`}
-              className="group flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-green-500/40 hover:shadow-md"
+              className="group flex flex-col gap-3 bg-[#0a0a0a] p-6 sm:p-8 transition hover:bg-[#111]"
             >
               <div className="flex items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-700">
@@ -115,18 +117,19 @@ export default async function BetTypesIndexPage() {
                   {hub.shortCode}
                 </span>
               </div>
-              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 transition group-hover:text-green-600">
+              <h2 className="text-display text-2xl text-white transition group-hover:text-[#4ade80]">
                 {hub.name[editorialLocale]}
               </h2>
-              <p className="text-sm leading-relaxed text-slate-500">
+              <p className="text-sm leading-relaxed text-[#a3a3a3]">
                 {hub.tagline[editorialLocale]}
               </p>
-              <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-green-600">
+              <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-[#4ade80]">
                 {t("Read the explainer", "Lees de uitleg")}
                 <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
               </div>
             </Link>
           ))}
+        </div>
         </div>
       </section>
 

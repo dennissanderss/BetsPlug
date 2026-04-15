@@ -24,6 +24,8 @@ import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref } from "@/i18n/locale-provider";
 import { api } from "@/lib/api";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 
 /**
  * /thank-you — post-purchase landing page
@@ -370,9 +372,11 @@ function ThankYouContent({
         </div>
       )}
 
-      <main className="relative z-10 pt-36 pb-20 sm:pt-44">
+      <main className="relative z-10">
         {/* ── Hero ── */}
-        <section className="mx-auto max-w-5xl px-6 text-center">
+        <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505] text-center">
+          <HeroMediaBg src={PAGE_IMAGES["thank-you"].hero} alt={PAGE_IMAGES["thank-you"].alt} />
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -483,29 +487,29 @@ function ThankYouContent({
             <Mail className="h-3.5 w-3.5 text-green-500/70" />
             Receipt and account details are on their way to your inbox.
           </motion.p>
+          </div>
         </section>
 
         {/* ── Plan features ── */}
-        <section className="mx-auto mt-24 max-w-6xl px-6">
+        <section className="relative py-20 md:py-28">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6 }}
-            className="mb-10 text-center"
+            className="mb-12 sm:mb-14 text-center"
           >
-            <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-green-500" />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-green-700">
-                What you unlocked
-              </span>
-            </div>
-            <h2 className="mx-auto max-w-3xl text-balance text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl md:text-4xl">
+            <span className="section-label mx-auto">
+              <Sparkles className="h-3.5 w-3.5" />
+              What you unlocked
+            </span>
+            <h2 className="text-display mt-4 text-3xl text-white sm:text-4xl lg:text-5xl">
               Your {planCopy.label} benefits are live
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          <div className="grid gap-[1px] bg-white/[0.08] sm:grid-cols-2 lg:grid-cols-3">
             {planCopy.features.map((feature, i) => {
               const Icon = feature.icon;
               return (
@@ -515,17 +519,17 @@ function ThankYouContent({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-green-500/25 hover:shadow-md"
+                  className="group relative overflow-hidden bg-[#0a0a0a] p-6 sm:p-8 transition-all"
                 >
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#4ade80]/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                   <div className="relative">
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-green-500/20 bg-green-50">
-                      <Icon className="h-5 w-5 text-green-500" />
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center border border-[#4ade80]/30 bg-[#4ade80]/10">
+                      <Icon className="h-5 w-5 text-[#4ade80]" />
                     </div>
-                    <h3 className="mb-2 text-base font-bold text-slate-900">
+                    <h3 className="mb-2 text-base font-bold text-white">
                       {feature.title}
                     </h3>
-                    <p className="text-sm leading-relaxed text-slate-600">
+                    <p className="text-sm leading-relaxed text-[#a3a3a3]">
                       {feature.body}
                     </p>
                   </div>
@@ -533,10 +537,12 @@ function ThankYouContent({
               );
             })}
           </div>
+          </div>
         </section>
 
         {/* ── Verification status ── */}
-        <section className="mx-auto mt-20 max-w-2xl px-6">
+        <section className="relative py-20 md:py-28">
+          <div className="mx-auto max-w-2xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -577,14 +583,51 @@ function ThankYouContent({
               </p>
             )}
           </motion.div>
+          </div>
         </section>
 
-        {/* ── Bottom trust strip ── */}
-        <section className="mx-auto mt-16 max-w-3xl px-6 text-center">
-          <p className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-500">
-            <ShieldCheck className="h-3.5 w-3.5 text-green-500/70" />
-            SSL-encrypted · 14-day money-back guarantee · Cancel any time
-          </p>
+        {/* ── Final CTA ── */}
+        <section className="relative py-20 md:py-28">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6">
+            <div className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16">
+              <CtaMediaBg
+                src={PAGE_IMAGES["thank-you"].cta}
+                alt={PAGE_IMAGES["thank-you"].alt}
+                pattern={PAGE_IMAGES["thank-you"].pattern}
+              />
+              <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+              <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+              <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+              <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
+
+              <div className="relative text-center">
+                <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
+                  Ready to place your first pick?
+                </h2>
+                <p className="mx-auto mt-4 max-w-xl text-base text-[#050505]/80">
+                  Your dashboard is live. Head over and start winning smarter.
+                </p>
+                <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                  <Link
+                    href={loc("/dashboard")}
+                    className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
+                  >
+                    GO TO DASHBOARD →
+                  </Link>
+                  <Link
+                    href={loc("/subscription")}
+                    className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
+                  >
+                    VIEW SUBSCRIPTION →
+                  </Link>
+                </div>
+                <p className="mt-8 inline-flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest text-[#050505]/80">
+                  <ShieldCheck className="h-3.5 w-3.5" />
+                  SSL-encrypted · 14-day money-back · Cancel any time
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
 

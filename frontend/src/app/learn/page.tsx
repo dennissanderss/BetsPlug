@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowRight, BookOpen, ChevronRight, GraduationCap } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 import {
   defaultLocale,
   isLocale,
@@ -59,37 +61,36 @@ export default async function LearnIndexPage() {
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-slate-900">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-white">
       <SiteNav />
 
       {/* Hero */}
-      <section className="relative overflow-hidden px-4 pb-10 pt-28 sm:pt-32">
-        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.12] blur-[140px]" />
-        <div className="pointer-events-none absolute -right-40 -top-20 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.10] blur-[140px]" />
+      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+        <HeroMediaBg src={PAGE_IMAGES.learn.hero} alt="" />
 
-        <div className="relative mx-auto max-w-5xl">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
           <nav
             aria-label="Breadcrumb"
-            className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-slate-500"
+            className="mb-6 flex items-center gap-1.5 text-xs font-semibold text-slate-300"
           >
-            <Link href="/" className="transition hover:text-green-600">
+            <Link href="/" className="transition hover:text-green-400">
               BetsPlug
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-slate-600">{t("Learn", "Leren")}</span>
+            <span className="text-white">{t("Learn", "Leren")}</span>
           </nav>
 
           <div className="text-center">
-            <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label inline-flex items-center gap-2">
               <GraduationCap className="h-3.5 w-3.5" />
               {t("Pillar guides", "Pillar gidsen")}
-            </div>
+            </span>
 
-            <h1 className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+            <h1 className="text-display mt-5 text-balance break-words text-4xl text-white sm:text-5xl lg:text-6xl">
               {t("Learn the Math", "Leer de Wiskunde")}
             </h1>
 
-            <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-600 sm:text-lg">
+            <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-300 sm:text-lg">
               {t(
                 "Six handwritten deep-dives into the concepts that anchor BetsPlug's ensemble - value betting, expected goals, Elo, Kelly, Poisson, and bankroll management.",
                 "Zes handgeschreven deep-dives in de concepten die het ensemble van BetsPlug verankeren - value betting, expected goals, Elo, Kelly, Poisson en bankroll management.",
@@ -100,32 +101,78 @@ export default async function LearnIndexPage() {
       </section>
 
       {/* Pillar cards */}
-      <section className="relative px-4 pb-20">
-        <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2">
-          {pillars.map((pillar) => (
-            <Link
-              key={pillar.slug}
-              href={`/learn/${pillar.slug}`}
-              className="group glass-card flex flex-col gap-3 p-6 transition hover:border-green-500/40"
-            >
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
-                  <BookOpen className="h-3 w-3" />
-                  {t("Pillar", "Pillar")}
-                </span>
-              </div>
-              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 transition group-hover:text-green-600">
-                {pillar.title[editorialLocale]}
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="grid gap-[1px] bg-white/[0.08] sm:grid-cols-2 lg:grid-cols-3">
+            {pillars.map((pillar) => (
+              <Link
+                key={pillar.slug}
+                href={`/learn/${pillar.slug}`}
+                className="group flex flex-col gap-3 bg-[#0a0a0a] p-6 transition hover:bg-[#0f0f0f] sm:p-8"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="section-label inline-flex items-center gap-1.5">
+                    <BookOpen className="h-3 w-3" />
+                    {t("Pillar", "Pillar")}
+                  </span>
+                </div>
+                <h2 className="text-display text-2xl text-white transition group-hover:text-[#4ade80]">
+                  {pillar.title[editorialLocale]}
+                </h2>
+                <p className="text-sm leading-relaxed text-slate-400">
+                  {pillar.tagline[editorialLocale]}
+                </p>
+                <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[#4ade80]">
+                  {t("Read the guide", "Lees de gids")}
+                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16">
+            <CtaMediaBg src={PAGE_IMAGES.learn.cta} alt={PAGE_IMAGES.learn.alt} pattern={PAGE_IMAGES.learn.pattern} />
+            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
+
+            <div className="relative">
+              <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
+                <GraduationCap className="h-3 w-3" />
+                {t("Start applying", "Aan de slag")}
+              </span>
+              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
+                {t("Put theory into practice.", "Breng theorie in de praktijk.")}
               </h2>
-              <p className="text-sm leading-relaxed text-slate-500">
-                {pillar.tagline[editorialLocale]}
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#050505]/80">
+                {t(
+                  "Once you understand the math, see it run live on every fixture inside BetsPlug.",
+                  "Zodra je de wiskunde snapt, zie je het live draaien op elke wedstrijd in BetsPlug.",
+                )}
               </p>
-              <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-green-600">
-                {t("Read the guide", "Lees de gids")}
-                <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+
+              <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
+                >
+                  {t("VIEW PREDICTIONS", "BEKIJK VOORSPELLINGEN")} →
+                </Link>
+                <Link
+                  href="/how-it-works"
+                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
+                >
+                  {t("HOW IT WORKS", "HOE HET WERKT")} →
+                </Link>
               </div>
-            </Link>
-          ))}
+            </div>
+          </div>
         </div>
       </section>
 

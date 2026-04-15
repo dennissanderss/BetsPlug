@@ -104,15 +104,15 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           HERO
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="no-rhythm relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
+      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
         <HeroMediaBg src={PAGE_IMAGES.about.hero} alt="" />
 
-        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+        <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center">
           <motion.span
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600"
+            className="section-label mb-5"
           >
             <Sparkles className="h-3 w-3" />
             {t("about.heroBadge")}
@@ -122,7 +122,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl md:text-6xl"
+            className="text-display text-3xl text-white sm:text-4xl lg:text-5xl"
           >
             {t("about.heroTitleA")}
             <br />
@@ -158,8 +158,8 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           MISSION — two column
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-24">
-        <div className="relative mx-auto max-w-6xl px-6">
+      <section className="relative py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             {/* Left: visual card */}
             <motion.div
@@ -265,10 +265,10 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.7 }}
             >
-              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+              <span className="section-label mb-4">
                 {t("about.missionBadge")}
               </span>
-              <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+              <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
                 {t("about.missionTitle")}
               </h2>
               <p className="mt-6 text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -280,10 +280,9 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
 
               <Link
                 href={`${home}#how-it-works`}
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-extrabold tracking-tight text-slate-900 ring-1 ring-slate-200 transition-all hover:bg-slate-50 hover:ring-green-500/40"
+                className="btn-outline mt-8"
               >
-                {t("about.missionCta")}
-                <ArrowRight className="h-4 w-4" />
+                {String(t("about.missionCta")).toUpperCase()} →
               </Link>
             </motion.div>
           </div>
@@ -293,24 +292,24 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           STATS
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-slate-200 bg-gradient-to-b from-white to-slate-50 py-20">
-        <div className="relative mx-auto max-w-6xl px-6">
+      <section className="relative border-y border-slate-200 bg-gradient-to-b from-white to-slate-50 py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mb-12 text-center"
+            className="mx-auto mb-12 sm:mb-14 flex flex-col items-center text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label mb-4">
               {t("about.statsBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("about.statsTitle")}
             </h2>
           </motion.div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {stats.map((stat) => {
               const Icon = stat.icon;
               return (
@@ -320,7 +319,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
                 >
                   <div className="pointer-events-none absolute -right-10 -top-10 h-[120px] w-[120px] rounded-full bg-green-50 blur-[60px] transition-all group-hover:bg-green-100" />
                   <div className="relative">
@@ -344,19 +343,19 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           VALUES
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-24">
-        <div className="relative mx-auto max-w-6xl px-6">
+      <section className="relative py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-14 max-w-2xl text-center"
+            className="mx-auto mb-12 sm:mb-14 flex max-w-2xl flex-col items-center text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label mb-4">
               {t("about.valuesBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("about.valuesTitle")}
             </h2>
             <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -364,7 +363,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             </p>
           </motion.div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
             {values.map((v) => {
               const Icon = v.icon;
               return (
@@ -374,7 +373,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
                 >
                   <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-50 blur-[80px] transition-all group-hover:bg-green-100" />
                   <div className="relative">
@@ -398,19 +397,19 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           FOUNDERS
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-t border-slate-200 py-20 md:py-24">
-        <div className="relative mx-auto max-w-6xl px-6">
+      <section className="relative border-t border-slate-200 py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-14 max-w-2xl text-center"
+            className="mx-auto mb-12 sm:mb-14 flex max-w-2xl flex-col items-center text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label mb-4">
               {t("about.teamBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("about.teamTitle")}
             </h2>
             <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -418,7 +417,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             </p>
           </motion.div>
 
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
             {founders.map((f) => (
               <motion.div
                 key={f.name}
@@ -426,7 +425,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.6 }}
-                className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
+                className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
               >
                 <div className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full bg-green-50 blur-[100px] transition-all group-hover:bg-green-100" />
 
@@ -463,8 +462,8 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           CTA BANNER
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative pb-24 pt-4">
-        <div className="mx-auto max-w-5xl px-6">
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import {
   Sparkles,
-  ArrowRight,
   ChevronRight,
   Activity,
   Database,
@@ -235,15 +234,15 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       {/* ═══════════════════════════════════════════════════════════════════
           HERO
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="no-rhythm relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
+      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
         <HeroMediaBg src={PAGE_IMAGES["track-record"].hero} alt="Football match statistics scoreboard" />
 
-        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 text-center">
           <motion.span
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600"
+            className="section-label mb-5 inline-flex items-center gap-2"
           >
             <ShieldCheck className="h-3 w-3" />
             {t("tr.heroBadge")}
@@ -253,7 +252,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl md:text-6xl"
+            className="text-display text-balance break-words text-3xl text-white sm:text-5xl md:text-6xl"
           >
             {t("tr.heroTitleA")}
             <br />
@@ -276,17 +275,10 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             transition={{ duration: 0.7, delay: 0.15 }}
             className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
-            <Link
-              href={`${home}#track-record`}
-              className="btn-gradient inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/20"
-            >
-              {t("tr.heroCtaPrimary")}
-              <ArrowRight className="h-4 w-4" />
+            <Link href={`${home}#track-record`} className="btn-lime">
+              {t("tr.heroCtaPrimary")} →
             </Link>
-            <Link
-              href={home}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-slate-900 ring-1 ring-slate-200 transition-all hover:bg-slate-50 hover:ring-green-500/40"
-            >
+            <Link href={home} className="btn-outline">
               {t("tr.heroCtaSecondary")}
             </Link>
           </motion.div>
@@ -311,19 +303,19 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       {/* ═══════════════════════════════════════════════════════════════════
           HEADLINE KPIs
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-slate-200 bg-gradient-to-b from-white to-slate-50 py-20">
-        <div className="relative mx-auto max-w-6xl px-6">
+      <section className="relative border-y border-white/[0.08] py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-12 max-w-2xl text-center"
+            className="mx-auto mb-12 max-w-2xl text-center sm:mb-14"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label mb-4">
               {t("tr.kpisBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("tr.kpisTitle")}
             </h2>
             <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -368,19 +360,19 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       {/* ═══════════════════════════════════════════════════════════════════
           DATA PIPELINE — how data is processed
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-24">
-        <div className="relative mx-auto max-w-6xl px-6">
+      <section className="relative py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-14 max-w-2xl text-center"
+            className="mx-auto mb-12 max-w-2xl text-center sm:mb-14"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label mb-4">
               {t("tr.pipeBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("tr.pipeTitle")}
             </h2>
             <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -436,19 +428,19 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       {/* ═══════════════════════════════════════════════════════════════════
           METHODOLOGY PRINCIPLES
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-slate-200 bg-gradient-to-b from-white to-slate-50 py-20 md:py-24">
-        <div className="relative mx-auto max-w-6xl px-6">
+      <section className="relative border-y border-white/[0.08] py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-14 max-w-2xl text-center"
+            className="mx-auto mb-12 max-w-2xl text-center sm:mb-14"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label mb-4">
               {t("tr.methodBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("tr.methodTitle")}
             </h2>
             <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -492,19 +484,19 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       {/* ═══════════════════════════════════════════════════════════════════
           USE CASES
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-24">
-        <div className="relative mx-auto max-w-6xl px-6">
+      <section className="relative py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-14 max-w-2xl text-center"
+            className="mx-auto mb-12 max-w-2xl text-center sm:mb-14"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label mb-4">
               {t("tr.casesBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("tr.casesTitle")}
             </h2>
             <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -583,8 +575,8 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       {/* ═══════════════════════════════════════════════════════════════════
           TRANSPARENCY CTA BANNER
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative pb-24 pt-4">
-        <div className="mx-auto max-w-5xl px-6">
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -20,7 +20,7 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { SiteNav } from "@/components/ui/site-nav";
 import { AiAssistant } from "@/components/ui/ai-assistant";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
-import { HeroMediaBg } from "@/components/ui/media-bg";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 import { getLocaleValue } from "@/lib/sanity-data";
 
@@ -123,15 +123,15 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       <SiteNav />
 
       {/* ───── HERO ───── */}
-      <section className="no-rhythm relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
+      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
         <HeroMediaBg src={PAGE_IMAGES.contact.hero} alt="" />
 
-        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+        <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center">
           <motion.span
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600"
+            className="section-label mb-5"
           >
             <Sparkles className="h-3 w-3" />
             {t("contact.badge")}
@@ -141,7 +141,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl md:text-6xl"
+            className="text-display text-3xl text-white sm:text-4xl lg:text-5xl"
           >
             {t("contact.titleA")}{" "}
             <span className="gradient-text">{t("contact.titleB")}</span>
@@ -182,8 +182,8 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       </section>
 
       {/* ───── Help options grid ───── */}
-      <section className="relative px-6 pb-16">
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-5 md:grid-cols-3">
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 sm:gap-8 px-4 sm:px-6 md:grid-cols-3">
           {helpOptions.map((opt) => {
             const Icon = opt.icon;
             const Inner = (
@@ -218,7 +218,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
               </>
             );
 
-            const cardClass = `group relative flex h-full flex-col overflow-hidden rounded-3xl border p-6 text-left transition-all duration-300 sm:p-7 ${
+            const cardClass = `group relative flex h-full flex-col overflow-hidden rounded-3xl border p-6 sm:p-8 text-left transition-all duration-300 ${
               opt.highlight
                 ? "border-green-500/30 bg-green-50 hover:border-green-500/50 hover:shadow-xl hover:shadow-green-500/[0.12]"
                 : "border-slate-200 bg-white shadow-sm hover:border-slate-300 hover:shadow-md"
@@ -257,20 +257,20 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       </section>
 
       {/* ───── FAQ Search + Accordions ───── */}
-      <section className="relative px-6 pb-20">
-        <div className="mx-auto max-w-4xl">
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
           {/* Section header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mb-10 text-center"
+            className="mx-auto mb-12 sm:mb-14 flex flex-col items-center text-center"
           >
-            <span className="mb-4 inline-block rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label mb-4">
               {t("contact.faqBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("contact.faqTitleA")}{" "}
               <span className="gradient-text">{t("contact.faqTitleB")}</span>
             </h2>
@@ -381,59 +381,64 @@ export function ContactContent({ contactPage }: ContactContentProps) {
         </div>
       </section>
 
-      {/* ───── Still need help strip ───── */}
-      <section className="relative px-6 pb-24">
-        <div className="mx-auto max-w-4xl">
+      {/* ───── Still need help — finalCta style ───── */}
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="relative overflow-hidden rounded-3xl border border-green-500/20 bg-green-50 p-8 text-center sm:p-12"
+            className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16"
           >
-            <div className="pointer-events-none absolute -left-20 -top-20 h-[280px] w-[280px] rounded-full bg-green-500/[0.06] blur-[120px]" />
-            <div className="pointer-events-none absolute -right-20 -bottom-20 h-[280px] w-[280px] rounded-full bg-emerald-500/[0.05] blur-[120px]" />
+            <CtaMediaBg src={PAGE_IMAGES.contact.cta} alt={PAGE_IMAGES.contact.alt} pattern={PAGE_IMAGES.contact.pattern} />
+            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
 
             <div className="relative">
-              <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100 shadow-[0_0_40px_rgba(74,222,128,0.15)] ring-1 ring-green-500/40">
-                <Sparkles className="h-6 w-6 text-green-600" />
-              </div>
-              <h3 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+              <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
+                <Sparkles className="h-3 w-3" />
                 {t("contact.stillNeedTitle")}
-              </h3>
-              <p className="mx-auto mt-3 max-w-md text-sm text-slate-600">
+              </span>
+              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
+                {t("contact.stillNeedTitle")}
+              </h2>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#050505]/80">
                 {t("contact.stillNeedDesc")}
               </p>
-              <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+
+              <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <button
                   type="button"
                   onClick={() => setChatOpen(true)}
-                  className="btn-gradient inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50"
+                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
                 >
                   <Sparkles className="h-4 w-4" />
-                  {t("contact.chatStart")}
+                  {String(t("contact.chatStart")).toUpperCase()} →
                 </button>
                 <a
                   href="mailto:support@betsplug.com"
-                  className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-600 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
                 >
                   <Mail className="h-4 w-4" />
-                  support@betsplug.com
+                  SUPPORT@BETSPLUG.COM →
                 </a>
               </div>
 
               {/* Trust row */}
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-500">
+              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-[10px] font-bold uppercase tracking-widest text-[#050505]/80">
                 <div className="flex items-center gap-1.5">
-                  <Clock className="h-3 w-3 text-green-500" />
+                  <Clock className="h-3 w-3 text-[#050505]" />
                   <span>{t("contact.trust1")}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Shield className="h-3 w-3 text-green-500" />
+                  <Shield className="h-3 w-3 text-[#050505]" />
                   <span>{t("contact.trust2")}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Users className="h-3 w-3 text-green-500" />
+                  <Users className="h-3 w-3 text-[#050505]" />
                   <span>{t("contact.trust3")}</span>
                 </div>
               </div>

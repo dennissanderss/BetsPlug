@@ -22,7 +22,7 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
-import { HeroMediaBg } from "@/components/ui/media-bg";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 import { getLocaleValue } from "@/lib/sanity-data";
 
@@ -85,15 +85,15 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           HERO
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="no-rhythm relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
+      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
         <HeroMediaBg src={PAGE_IMAGES["b2b"].hero} alt="" />
 
-        <div className="relative z-10 mx-auto max-w-4xl px-6 text-center">
+        <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 text-center">
           <motion.span
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600"
+            className="section-label mb-5"
           >
             <Handshake className="h-3 w-3" />
             {t("b2b.badge")}
@@ -103,7 +103,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl md:text-6xl"
+            className="text-display text-3xl text-white sm:text-4xl lg:text-5xl"
           >
             {t("b2b.titleA")}
             <br />
@@ -127,11 +127,10 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
           >
             <a
               href="mailto:business@betsplug.com"
-              className="btn-gradient inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50 sm:text-base"
+              className="btn-lime"
             >
               <Mail className="h-4 w-4" />
-              {t("b2b.contactCta")}
-              <ArrowRight className="h-4 w-4" />
+              {String(t("b2b.contactCta")).toUpperCase()} →
             </a>
           </motion.div>
 
@@ -155,20 +154,20 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           PARTNERSHIP TYPES
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-24">
-        <div className="relative mx-auto max-w-6xl px-6">
+      <section className="relative py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-14 max-w-2xl text-center"
+            className="mx-auto mb-12 sm:mb-14 flex max-w-2xl flex-col items-center text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label mb-4">
               <Building2 className="h-3 w-3" />
               {t("b2b.partnershipsBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("b2b.partnershipsTitle")}
             </h2>
             <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -176,7 +175,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
             </p>
           </motion.div>
 
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-2">
             {partnershipTypes.map((p, i) => {
               const Icon = p.icon;
               return (
@@ -186,7 +185,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
                 >
                   <div className="pointer-events-none absolute -right-16 -top-16 h-[200px] w-[200px] rounded-full bg-green-50 blur-[80px] transition-all group-hover:bg-green-100" />
                   <div className="relative">
@@ -210,25 +209,25 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           WHY PARTNER WITH US — stats
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative border-y border-slate-200 bg-gradient-to-b from-white to-slate-50 py-20">
-        <div className="relative mx-auto max-w-6xl px-6">
+      <section className="relative border-y border-slate-200 bg-gradient-to-b from-white to-slate-50 py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mb-12 text-center"
+            className="mx-auto mb-12 sm:mb-14 flex flex-col items-center text-center"
           >
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label mb-4">
               <BarChart3 className="h-3 w-3" />
               {t("b2b.whyPartner")}
             </span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("b2b.whyPartnerTitle")}
             </h2>
           </motion.div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {usps.map((stat: { value: string; label: string; icon: typeof Brain }, i: number) => {
               const Icon = stat.icon;
               return (
@@ -238,7 +237,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
+                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm transition-all hover:border-green-500/30 hover:shadow-md"
                 >
                   <div className="pointer-events-none absolute -right-10 -top-10 h-[120px] w-[120px] rounded-full bg-green-50 blur-[60px] transition-all group-hover:bg-green-100" />
                   <div className="relative">
@@ -260,48 +259,48 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          CONTACT CTA
+          CONTACT CTA — finalCta style
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative pb-24 pt-20">
-        <div className="mx-auto max-w-5xl px-6">
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="relative overflow-hidden rounded-3xl border border-green-500/30 bg-gradient-to-br from-green-50 via-emerald-50 to-white p-10 text-center shadow-lg shadow-slate-200/60 sm:p-14"
+            className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16"
           >
-            {/* Ambient glow */}
-            <div className="pointer-events-none absolute -left-20 -top-20 h-[360px] w-[360px] rounded-full bg-green-100/60 blur-[120px]" />
-            <div className="pointer-events-none absolute -bottom-20 -right-20 h-[360px] w-[360px] rounded-full bg-emerald-100/40 blur-[120px]" />
+            <CtaMediaBg src={PAGE_IMAGES["b2b"].cta} alt={PAGE_IMAGES["b2b"].alt} pattern={PAGE_IMAGES["b2b"].pattern} />
+            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
 
             <div className="relative">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-50 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-green-700">
+              <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
                 <Sparkles className="h-3 w-3" />
                 {t("b2b.contactTitle")}
-              </div>
-              <h2 className="mx-auto max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+              </span>
+              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
                 {t("b2b.contactTitle")}
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#050505]/80">
                 {t("b2b.contactSubtitle")}
               </p>
 
-              {/* Email display */}
-              <div className="mx-auto mt-8 inline-flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-6 py-4 shadow-sm">
-                <Mail className="h-5 w-5 text-green-600" />
-                <span className="text-base font-semibold text-slate-900 sm:text-lg">
+              <div className="mt-8 inline-flex items-center gap-3 bg-[#050505] px-6 py-4">
+                <Mail className="h-5 w-5 text-[#4ade80]" />
+                <span className="font-mono text-sm font-bold uppercase tracking-widest text-[#4ade80] sm:text-base">
                   {t("b2b.email")}
                 </span>
               </div>
 
-              <div className="mt-8">
+              <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <a
                   href="mailto:business@betsplug.com"
-                  className="btn-gradient inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50 sm:text-base"
+                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
                 >
-                  {t("b2b.contactCta")}
-                  <ArrowRight className="h-4 w-4" />
+                  {String(t("b2b.contactCta")).toUpperCase()} →
                 </a>
               </div>
             </div>

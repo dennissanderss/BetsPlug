@@ -22,6 +22,8 @@ import {
 } from "@/lib/sanity-data";
 import { pickHubLocale } from "@/data/league-hubs";
 import { LeagueHubFixtures } from "./league-hub-fixtures";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 
 export const revalidate = 60;
 
@@ -194,11 +196,10 @@ export default async function LeagueHubPage(props: {
         <SiteNav />
 
         {/* Hero */}
-        <section className="relative overflow-hidden px-4 pb-10 pt-28 sm:pt-32">
-          <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.06] blur-[140px]" />
-          <div className="pointer-events-none absolute -right-40 -top-20 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.05] blur-[140px]" />
+        <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
+          <HeroMediaBg src={PAGE_IMAGES["match-predictions"].hero} alt={PAGE_IMAGES["match-predictions"].alt} />
 
-          <div className="relative mx-auto max-w-5xl">
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
             {/* Breadcrumb */}
             <nav
               aria-label="Breadcrumb"
@@ -222,18 +223,18 @@ export default async function LeagueHubPage(props: {
             </nav>
 
             <div className="text-center">
-              <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-700">
+              <span className="section-label mx-auto">
                 <Sparkles className="h-3.5 w-3.5" />
                 <span aria-hidden="true">{hub.countryFlag}</span>
                 {hub.country[editorialLocale]}
-              </div>
+              </span>
 
-              <h1 className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+              <h1 className="text-display mt-5 text-3xl text-white sm:text-4xl lg:text-5xl">
                 {hub.name[editorialLocale]}{" "}
                 {t("AI Predictions", "AI voorspellingen")}
               </h1>
 
-              <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-600 sm:text-lg">
+              <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a3a3] sm:text-lg">
                 {hub.tagline[editorialLocale]}
               </p>
             </div>
@@ -244,50 +245,47 @@ export default async function LeagueHubPage(props: {
         </section>
 
         {/* Editorial intro */}
-        <section className="relative px-4 pb-12">
-          <div className="mx-auto max-w-3xl">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10">
-              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
-                {t(
-                  `About our ${hub.name.en} model`,
-                  `Over ons ${hub.name.nl}-model`,
-                )}
-              </h2>
-              <p className="mt-4 text-base leading-relaxed text-slate-600">
-                {hub.intro[editorialLocale]}
-              </p>
+        <section className="relative py-20 md:py-28">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="mx-auto max-w-3xl">
+              <div className="bg-[#0a0a0a] border border-white/[0.08] p-6 sm:p-8">
+                <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
+                  {t(
+                    `About our ${hub.name.en} model`,
+                    `Over ons ${hub.name.nl}-model`,
+                  )}
+                </h2>
+                <p className="mt-4 text-base leading-relaxed text-[#a3a3a3]">
+                  {hub.intro[editorialLocale]}
+                </p>
 
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  href="/track-record"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-50 px-4 py-2 text-xs font-bold text-green-700 transition hover:border-green-500/50 hover:bg-green-100"
-                >
-                  {t("See our track record", "Bekijk ons trackrecord")}
-                  <ArrowRight className="h-3 w-3" />
-                </Link>
-                <Link
-                  href="/match-predictions"
-                  className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-xs font-bold text-slate-600 transition hover:border-green-500/40 hover:text-green-600"
-                >
-                  {t("All leagues", "Alle competities")}
-                  <ArrowRight className="h-3 w-3" />
-                </Link>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Link href="/track-record" className="btn-lime">
+                    {t("See our track record", "Bekijk ons trackrecord")}
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                  <Link href="/match-predictions" className="btn-outline">
+                    {t("All leagues", "Alle competities")}
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
         {/* Unlock CTA */}
-        <section className="relative px-4 pb-12">
-          <div className="mx-auto max-w-5xl">
+        <section className="relative py-20 md:py-28">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <UnlockBanner />
           </div>
         </section>
 
         {/* FAQ */}
-        <section className="relative px-4 pb-20">
-          <div className="mx-auto max-w-3xl">
-            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+        <section className="relative py-20 md:py-28">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="mx-auto max-w-3xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t(
                 `${hub.name.en} predictions FAQ`,
                 `Veelgestelde vragen over ${hub.name.nl}-voorspellingen`,
@@ -315,6 +313,7 @@ export default async function LeagueHubPage(props: {
                   </div>
                 </details>
               ))}
+            </div>
             </div>
           </div>
         </section>

@@ -35,6 +35,8 @@ import {
   LOCKED_PREVIEW,
 } from "@/components/match-predictions/shared";
 import { useFreeMatchIds } from "@/components/match-predictions/use-free-match-ids";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 
 /* ──────────────────────────────────────────────────────────────
  * Match Predictions — public marketing teaser
@@ -134,16 +136,15 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       <SiteNav />
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden px-4 pb-10 pt-36 sm:pt-40">
-        <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-green-500/[0.06] blur-[140px]" />
-        <div className="pointer-events-none absolute -right-40 -top-20 h-[420px] w-[420px] rounded-full bg-emerald-500/[0.05] blur-[140px]" />
+      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28 bg-[#050505]">
+        <HeroMediaBg src={PAGE_IMAGES["match-predictions"].hero} alt={PAGE_IMAGES["match-predictions"].alt} />
 
-        <div className="relative mx-auto max-w-6xl text-center">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="mx-auto inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-green-700"
+            className="section-label mx-auto"
           >
             <Sparkles className="h-3.5 w-3.5" />
             {t("matchPred.eyebrow")}
@@ -153,7 +154,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="mt-5 text-balance break-words text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-6xl"
+            className="text-display mt-5 text-3xl text-white sm:text-4xl lg:text-5xl"
           >
             {t("matchPred.title")}
           </motion.h1>
@@ -162,7 +163,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-slate-600 sm:text-lg"
+            className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a3a3] sm:text-lg"
           >
             {t("matchPred.subtitle")}
           </motion.p>
@@ -214,11 +215,11 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       </section>
 
       {/* ── Free 3 predictions ── */}
-      <section className="relative px-4 pb-10">
-        <div className="mx-auto max-w-5xl">
-          <div className="mb-5 flex items-end justify-between gap-4">
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mb-12 sm:mb-14 flex items-end justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+              <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
                 {t("matchPred.freeHeading")}
               </h2>
               <p className="mt-1 text-sm text-slate-500">
@@ -301,17 +302,17 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       </section>
 
       {/* ── Unlock banner ── */}
-      <section className="relative px-4 pb-12">
-        <div className="mx-auto max-w-5xl">
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <UnlockBanner />
         </div>
       </section>
 
       {/* ── Locked pool ── */}
-      <section className="relative px-4 pb-16">
-        <div className="mx-auto max-w-5xl">
-          <div className="mb-5">
-            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mb-12 sm:mb-14">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("matchPred.lockedHeading")}
             </h2>
             <p className="mt-1 text-sm text-slate-500">
@@ -334,39 +335,45 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       {faqSlot}
 
       {/* ── Final CTA ── */}
-      <section className="relative px-4 pb-24">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5 }}
-          className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-lg sm:p-12"
-        >
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-green-50 via-transparent to-emerald-50" />
-          <div className="relative z-10">
-            <h2 className="text-balance break-words text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
-              {t("matchPred.ctaFinalTitle")}
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600">
-              {t("matchPred.ctaFinalDesc")}
-            </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link
-                href={loc("/checkout")}
-                className="btn-gradient group inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold text-black shadow-xl shadow-green-500/30 transition-all hover:shadow-green-500/50"
-              >
-                {t("matchPred.ctaFinalButton")}
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                href={loc("/checkout")}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-8 py-4 text-sm font-bold text-slate-700 transition-all hover:border-green-500/40 hover:bg-green-50"
-              >
-                {t("matchPred.ctaFinalSecondary")}
-              </Link>
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16">
+            <CtaMediaBg
+              src={PAGE_IMAGES["match-predictions"].cta}
+              alt={PAGE_IMAGES["match-predictions"].alt}
+              pattern={PAGE_IMAGES["match-predictions"].pattern}
+            />
+            {/* Corner brackets */}
+            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
+
+            <div className="relative text-center">
+              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
+                {t("matchPred.ctaFinalTitle")}
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#050505]/80">
+                {t("matchPred.ctaFinalDesc")}
+              </p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <Link
+                  href={loc("/checkout")}
+                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
+                >
+                  {t("matchPred.ctaFinalButton")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href={loc("/checkout")}
+                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
+                >
+                  {t("matchPred.ctaFinalSecondary")}
+                </Link>
+              </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       <BetsPlugFooter />

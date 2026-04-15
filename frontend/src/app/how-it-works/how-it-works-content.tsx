@@ -4,7 +4,6 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import {
   Sparkles,
-  ArrowRight,
   ChevronRight,
   Database,
   Trophy,
@@ -78,15 +77,15 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           HERO
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="no-rhythm relative overflow-hidden pt-40 pb-16 md:pt-48 md:pb-20">
+      <section className="no-rhythm relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
         <HeroMediaBg src={PAGE_IMAGES["how-it-works"].hero} alt="" />
 
-        <div className="relative z-10 mx-auto max-w-5xl px-6 text-center">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 text-center">
           <motion.span
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-green-600"
+            className="section-label mb-5 inline-flex items-center gap-2"
           >
             <Sparkles className="h-3 w-3" />
             {t("hiw.heroBadge")}
@@ -96,7 +95,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-balance break-words text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-5xl md:text-6xl"
+            className="text-display text-balance break-words text-3xl text-white sm:text-5xl md:text-6xl"
           >
             {t("hiw.heroTitleA")}
             <br />
@@ -141,17 +140,10 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
-            <Link
-              href={`${home}#pricing`}
-              className="btn-gradient inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/20"
-            >
-              {t("hiw.heroCtaSecondary")}
-              <ArrowRight className="h-4 w-4" />
+            <Link href={`${home}#pricing`} className="btn-lime">
+              {t("hiw.heroCtaSecondary")} →
             </Link>
-            <Link
-              href={loc("/track-record")}
-              className="inline-flex items-center gap-2 rounded-full bg-slate-50 px-6 py-3 text-sm font-bold text-slate-900 ring-1 ring-slate-200 transition-all hover:bg-white hover:ring-green-500/40"
-            >
+            <Link href={loc("/track-record")} className="btn-outline">
               {t("hiw.heroCtaPrimary")}
             </Link>
           </motion.div>
@@ -290,14 +282,14 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           FAQ
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-24">
-        <div className="relative mx-auto max-w-4xl px-6">
+      <section className="relative py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-14 max-w-2xl text-center"
+            className="mx-auto mb-12 max-w-2xl text-center sm:mb-14"
           >
             {/* ── Under the Hood: engine explanation ── */}
             <motion.div
@@ -305,7 +297,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.5 }}
-              className="mb-16 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+              className="mb-16 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 text-left"
             >
               <div className="flex items-center gap-3 mb-6">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10">
@@ -332,10 +324,10 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
               <p className="mt-4 text-xs text-slate-500 leading-relaxed">{t("hiw.engineDisclaimer")}</p>
             </motion.div>
 
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-50 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-600">
+            <span className="section-label mb-4">
               {t("hiw.faqBadge")}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {t("hiw.faqTitle")}
             </h2>
             <p className="mt-5 text-base leading-relaxed text-slate-500 sm:text-lg">
@@ -371,8 +363,8 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
       {/* ═══════════════════════════════════════════════════════════════════
           FINAL CTA
          ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative pb-24 pt-4">
-        <div className="mx-auto max-w-5xl px-6">
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -444,8 +436,8 @@ function StageSection({
   stageNumber: number;
 }) {
   return (
-    <section className="relative py-20 md:py-24">
-      <div className="relative mx-auto max-w-6xl px-6">
+    <section className="relative py-20 md:py-28">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <div
           className={`grid items-center gap-12 lg:grid-cols-2 lg:gap-16 ${
             reverse ? "lg:[&>*:first-child]:order-2" : ""
@@ -464,10 +456,10 @@ function StageSection({
               </span>
               <span className="h-px flex-1 bg-gradient-to-r from-green-500/40 to-transparent" />
             </div>
-            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-400">
+            <span className="section-label mb-4">
               {badge}
             </span>
-            <h2 className="text-3xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-4xl md:text-5xl">
+            <h2 className="text-display text-3xl text-white sm:text-4xl lg:text-5xl">
               {title}
             </h2>
             <p className="mt-5 text-base font-semibold leading-relaxed text-slate-300 sm:text-lg">
