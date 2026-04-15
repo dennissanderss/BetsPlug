@@ -141,11 +141,9 @@ export function SiteNav() {
               type="button"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open menu"
-              className={`flex items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-slate-200 transition-all duration-300 hover:border-green-500/50 hover:bg-green-500/[0.1] hover:text-white lg:hidden ${
-                isScrolled ? "h-9 w-9" : "h-11 w-11"
-              }`}
+              className={`hamburger-btn lg:hidden ${isScrolled ? "is-compact" : ""}`}
             >
-              <Menu className={isScrolled ? "h-4 w-4" : "h-5 w-5"} />
+              <span className="bar" aria-hidden />
             </button>
           </div>
         </div>

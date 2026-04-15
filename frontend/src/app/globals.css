@@ -600,6 +600,57 @@
     animation: live-pulse 1.6s ease-in-out infinite;
   }
 
+  /* ═══════════════════════════════════════════════════════════════
+     HAMBURGER — hard-edge square with 3 lime bars
+     ═══════════════════════════════════════════════════════════════ */
+  .hamburger-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid rgba(74, 222, 128, 0.45);
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .hamburger-btn:hover {
+    background: rgba(74, 222, 128, 0.08);
+    border-color: #4ade80;
+  }
+  .hamburger-btn::before,
+  .hamburger-btn::after,
+  .hamburger-btn > span.bar {
+    content: "";
+    position: absolute;
+    left: 10px;
+    width: 20px;
+    height: 2px;
+    background: #4ade80;
+    transition: transform 0.2s ease, opacity 0.2s ease, width 0.2s ease;
+  }
+  .hamburger-btn::before { top: 12px; }
+  .hamburger-btn > span.bar { top: 19px; width: 14px; }
+  .hamburger-btn::after { top: 26px; }
+  .hamburger-btn:hover > span.bar { width: 20px; }
+  /* Open state: transform into X */
+  .hamburger-btn.is-open::before {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .hamburger-btn.is-open::after {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+  .hamburger-btn.is-open > span.bar { opacity: 0; }
+
+  /* Compact size for scrolled state */
+  .hamburger-btn.is-compact {
+    width: 36px;
+    height: 36px;
+  }
+  .hamburger-btn.is-compact::before { top: 11px; }
+  .hamburger-btn.is-compact > span.bar { top: 17px; }
+  .hamburger-btn.is-compact::after { top: 23px; }
+
   /* Chip — neon outlined */
   .chip-neon {
     display: inline-flex;
@@ -904,6 +955,39 @@
   /* Ring */
   .ring-slate-200,
   .ring-gray-200 { --tw-ring-color: rgba(255, 255, 255, 0.08) !important; }
+
+  /* ═══════════════════════════════════════════════════════════════
+     CTA GRADIENT OVERRIDE — pale green container gradients get
+     flattened to a solid lime block so stray legacy CTAs match the
+     PIT LANE style without per-page rewrites. Scoped to -50/-100
+     (always containers, never buttons).
+     ═══════════════════════════════════════════════════════════════ */
+  div.bg-gradient-to-br.from-green-50,
+  div.bg-gradient-to-br.from-green-100,
+  div.bg-gradient-to-b.from-green-50,
+  div.bg-gradient-to-b.from-green-100,
+  div.bg-gradient-to-r.from-green-50,
+  div.bg-gradient-to-r.from-green-100,
+  div.bg-gradient-to-br.from-emerald-50,
+  div.bg-gradient-to-b.from-emerald-50,
+  div.bg-gradient-to-r.from-emerald-50 {
+    background: #4ade80 !important;
+    background-image: repeating-linear-gradient(
+      135deg,
+      rgba(5, 5, 5, 0.12) 0 6px,
+      transparent 6px 14px
+    ) !important;
+    color: #050505 !important;
+  }
+
+  /* Big-container from-green-500/600 gradients (panels, not buttons)
+     → dark hard-edge panel with lime border */
+  div.bg-gradient-to-br.from-green-600,
+  div.bg-gradient-to-br.from-green-500 {
+    background: #0a0a0a !important;
+    border: 1px solid rgba(74, 222, 128, 0.4) !important;
+    color: #ededed !important;
+  }
 
   /* ═══════════════════════════════════════════════════════════════
      HARD EDGES — kill all Tailwind radius utilities

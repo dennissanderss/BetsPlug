@@ -598,38 +598,37 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="relative overflow-hidden rounded-3xl border border-green-500/30 bg-gradient-to-br from-green-50 via-emerald-50 to-white p-10 text-center shadow-lg shadow-slate-200/60 sm:p-14"
+            className="relative overflow-hidden stripe-lime p-10 md:p-16"
           >
-            {/* Ambient glow */}
-            <div className="pointer-events-none absolute -left-20 -top-20 h-[360px] w-[360px] rounded-full bg-green-100/60 blur-[120px]" />
-            <div className="pointer-events-none absolute -bottom-20 -right-20 h-[360px] w-[360px] rounded-full bg-emerald-100/40 blur-[120px]" />
+            <span className="pointer-events-none absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 top-0 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute left-0 bottom-0 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 bottom-0 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
 
             <div className="relative">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-50 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-green-700">
+              <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
                 <Sparkles className="h-3 w-3" />
                 {t("tr.transBadge")}
-              </div>
-              <h2 className="mx-auto max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+              </span>
+              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
                 {t("tr.transTitle")}
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#050505]/80">
                 {t("tr.transSubtitle")}
               </p>
 
-              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <Link
-                  href={`${home}#track-record`}
-                  className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-extrabold tracking-tight text-slate-900 ring-1 ring-slate-200 transition-all hover:bg-slate-50 hover:ring-green-500/40"
-                >
-                  {t("tr.transCta1")}
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
+              <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <Link
                   href={`${home}#pricing`}
-                  className="btn-gradient inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50 sm:text-base"
+                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
                 >
-                  {t("tr.transCta2")}
-                  <ArrowRight className="h-4 w-4" />
+                  {String(t("tr.transCta2")).toUpperCase()} →
+                </Link>
+                <Link
+                  href={`${home}#track-record`}
+                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
+                >
+                  {String(t("tr.transCta1")).toUpperCase()} →
                 </Link>
               </div>
             </div>
