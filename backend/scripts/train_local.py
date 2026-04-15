@@ -26,10 +26,10 @@ import xgboost as xgb
 
 # ── Railway DB Connection ─────────────────────────────────────────────────
 DB_CONFIG = {
-    "host": "junction.proxy.rlwy.net",
-    "port": 31958,
+    "host": "nozomi.proxy.rlwy.net",
+    "port": 29246,
     "user": "postgres",
-    "password": "iYHwNkbfwwXxqDgmpuKUHhjqQNMTfbSL",
+    "password": "tUPuzKaIwtNtGgFROFpzpoEXLBMdKArq",
     "dbname": "railway",
 }
 

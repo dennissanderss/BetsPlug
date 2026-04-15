@@ -22,10 +22,10 @@ API_KEY = "41ac3dd6fe43bb2e79e3026bd3e9f9ea"
 API_BASE = "https://v3.football.api-sports.io"
 
 DB_CONFIG = {
-    "host": "junction.proxy.rlwy.net",
-    "port": 31958,
+    "host": "nozomi.proxy.rlwy.net",
+    "port": 29246,
     "user": "postgres",
-    "password": "iYHwNkbfwwXxqDgmpuKUHhjqQNMTfbSL",
+    "password": "tUPuzKaIwtNtGgFROFpzpoEXLBMdKArq",
     "dbname": "railway",
 }
 
