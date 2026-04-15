@@ -19,7 +19,6 @@ import {
   Eye,
   Star,
   Activity,
-  Flame,
   ChevronRight,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
@@ -422,7 +421,7 @@ export function HomeContent({
                     href={loc("/match-predictions")}
                     className="btn-primary flex w-full items-center justify-center gap-2"
                   >
-                    {t("home.freePredCta") || t("hero.joinNow")} <ArrowRight className="h-4 w-4" />
+                    {t("home.freePredCta")} <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
               </div>
@@ -915,32 +914,6 @@ function HeroPickRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
           {pickPct}%
         </DataChip>
       </div>
-    </div>
-  );
-}
-
-function MiniStat({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: string;
-  tone: "green" | "purple" | "blue";
-}) {
-  const color = tone === "green" ? "#4ade80" : tone === "purple" ? "#c4b5fd" : "#60a5fa";
-  return (
-    <div
-      className="rounded-lg p-2.5"
-      style={{
-        background: "hsl(230 22% 6% / 0.55)",
-        border: "1px solid hsl(0 0% 100% / 0.06)",
-      }}
-    >
-      <p className="text-[9px] font-semibold uppercase tracking-wider text-[#6b7280]">{label}</p>
-      <p className="text-stat mt-0.5 text-sm" style={{ color }}>
-        {value}
-      </p>
     </div>
   );
 }
