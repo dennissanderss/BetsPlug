@@ -55,7 +55,7 @@
     "away"
   ],
   "logistic_train_accuracy": 0.489458109857592,
-  "xgboost_train_accuracy": 0.5414740151655262,
+  "xgboost_train_accuracy": 0.5424218605511374,
   "walk_forward_accuracy_at_70_conf": 0.744,
   "walk_forward_accuracy_at_75_conf": 0.782,
   "elo_home_advantage": 65,

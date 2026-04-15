@@ -226,6 +226,31 @@ async def lifespan(app: FastAPI):
     except Exception as exc:
         logger.exception("[BOOTSTRAP ADMIN] Bootstrap step failed: %s", exc)
 
+    # ── Load production v8 models from disk (non-blocking) ─────────────────
+    # Models are trained offline via `backend/scripts/train_and_save.py` and
+    # shipped in `backend/models/`. Loading takes <1s and is cached at class
+    # level, so every forecast request reuses the same in-memory instance.
+    # Failure is logged but does NOT block boot — the ensemble falls back
+    # to the legacy in-memory Logistic cache if the disk models are missing.
+    try:
+        from app.forecasting.models.production_v8_model import ProductionV8Model
+        if ProductionV8Model.load_models():
+            meta = ProductionV8Model._metadata or {}
+            logger.info(
+                "[MODEL LOAD] ProductionV8Model loaded — %d features, "
+                "trained on %d samples, version %s",
+                len(ProductionV8Model._feature_names or []),
+                meta.get("trained_on_samples", 0),
+                meta.get("version", "?"),
+            )
+        else:
+            logger.warning(
+                "[MODEL LOAD] ProductionV8Model NOT loaded — files missing in "
+                "backend/models/. Falling back to legacy in-memory models."
+            )
+    except Exception as exc:
+        logger.exception("[MODEL LOAD] Failed to load production models: %s", exc)
+
     # ── Start background scheduler (never blocks boot) ──────────────────────
     try:
         from app.services.scheduler import start_scheduler

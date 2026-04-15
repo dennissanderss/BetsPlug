@@ -96,8 +96,10 @@ def main():
     lr_size = logistic_path.stat().st_size / 1024
     print(f"      {logistic_path} ({lr_size:.1f} KB)")
 
+    # Save the underlying booster directly — version-stable across
+    # xgboost/sklearn minor version mismatches.
     xgb_path = OUTPUT_DIR / "xgboost_model.ubj"
-    xgb_model.save_model(str(xgb_path))
+    xgb_model.get_booster().save_model(str(xgb_path))
     xgb_size = xgb_path.stat().st_size / 1024
     print(f"      {xgb_path} ({xgb_size:.1f} KB)")
 

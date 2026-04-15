@@ -591,16 +591,20 @@ class ForecastService:
     def _build_default_ensemble(
         cls, model_version_id: uuid.UUID, config: dict
     ) -> EnsembleModel:
-        """Build an ensemble with one instance of each base model type.
+        """Build an ensemble with the available base models.
 
-        If a trained LogisticModel has been cached via
-        ``set_cached_logistic``, reuse it so it produces real
-        (non-uniform) probabilities. Otherwise a fresh uniform-prior
-        LogisticModel is instantiated.
+        v8.1 strategy:
+        - ProductionV8Model (pre-trained Logistic + XGBoost on 43k matches
+          via backend/scripts/train_and_save.py) replaces the in-memory
+          Logistic + XGBoost cache slots when available on disk.
+        - Elo + Poisson remain as deterministic sub-models.
+        - Falls back to the legacy in-memory cache path when disk models
+          are missing (e.g. dev environments without serialized models).
         """
         from app.forecasting.models.elo_model import EloModel
         from app.forecasting.models.poisson_model import PoissonModel
         from app.forecasting.models.logistic_model import LogisticModel
+        from app.forecasting.models.production_v8_model import ProductionV8Model
 
         sub_config = config.get("sub_model_config", {})
         # v8: post-rebuild weights. Logistic + XGBoost trained on clean
@@ -613,22 +617,31 @@ class ForecastService:
             "xgboost": 1.0,
         })
 
-        logistic_model = cls._cached_logistic
-        if logistic_model is None:
-            logistic_model = LogisticModel(
-                model_version_id, sub_config.get("logistic", {})
-            )
-
         sub_models = [
             (EloModel(model_version_id, sub_config.get("elo", {})), weights.get("elo", 0.8)),
             (PoissonModel(model_version_id, sub_config.get("poisson", {})), weights.get("poisson", 1.2)),
-            (logistic_model, weights.get("logistic", 0.8)),
         ]
 
-        # v3: add XGBoost as 4th model if trained and cached
-        xgb_model = cls._cached_xgboost if hasattr(cls, "_cached_xgboost") else None
-        if xgb_model is not None:
-            sub_models.append((xgb_model, weights.get("xgboost", 1.5)))
+        # v8.1: prefer the pre-trained production model from disk
+        if ProductionV8Model.is_available():
+            prod_model = ProductionV8Model(model_version_id, sub_config.get("production_v8", {}))
+            # The production model internally ensembles LR+XGB (0.4/0.6).
+            # Sum of original logistic + xgboost weights to preserve scale.
+            combined_weight = weights.get("logistic", 2.0) + weights.get("xgboost", 1.0)
+            sub_models.append((prod_model, combined_weight))
+        else:
+            # Fallback to legacy in-memory Logistic + XGBoost cache
+            logistic_model = cls._cached_logistic
+            if logistic_model is None:
+                logistic_model = LogisticModel(
+                    model_version_id, sub_config.get("logistic", {})
+                )
+            sub_models.append((logistic_model, weights.get("logistic", 0.8)))
+
+            xgb_model = cls._cached_xgboost if hasattr(cls, "_cached_xgboost") else None
+            if xgb_model is not None:
+                sub_models.append((xgb_model, weights.get("xgboost", 1.5)))
+
         return EnsembleModel(
             model_version_id=model_version_id,
             config=config,
