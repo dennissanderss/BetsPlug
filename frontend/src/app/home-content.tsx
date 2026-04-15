@@ -521,7 +521,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
     { href: loc("/how-it-works"), label: t("nav.howItWorks") },
     { href: loc("/track-record"), label: t("nav.trackRecord") },
     { href: loc("/about-us"), label: t("nav.about") },
-    { href: "#pricing", label: t("nav.pricing") },
+    { href: loc("/pricing"), label: t("nav.pricing") },
     { href: loc("/contact"), label: t("nav.contact") },
   ];
 

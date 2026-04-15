@@ -58,7 +58,7 @@ export function SiteNav() {
     { href: loc("/how-it-works"), label: t("nav.howItWorks") },
     { href: loc("/track-record"), label: t("nav.trackRecord") },
     { href: loc("/about-us"), label: t("nav.about") },
-    { href: `${home}#pricing`, label: t("nav.pricing") },
+    { href: loc("/pricing"), label: t("nav.pricing") },
     { href: loc("/contact"), label: t("nav.contact") },
   ];
 
