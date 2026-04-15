@@ -437,7 +437,7 @@ export function HomeContent({
                   </HexBadge>
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                      Pick of the day
+                      {t("dash.pickOfDay")}
                     </p>
                     <p className="text-stat text-sm text-[#c4b5fd]">
                       {botd?.accuracy_pct != null ? `${botd.accuracy_pct}%` : "—"}
@@ -455,7 +455,7 @@ export function HomeContent({
                   </HexBadge>
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                      Correct picks
+                      {t("home.freePredRecord")}
                     </p>
                     <p className="text-stat text-sm text-[#93c5fd]">
                       {botd?.correct ?? "—"}
@@ -604,8 +604,9 @@ export function HomeContent({
                 {t("track.label")}
               </span>
               <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-                {t("trusted.titleC")}{" "}
-                <span className="gradient-text-green">nothing hidden.</span>
+                {t("track.titleA")}{" "}
+                <span className="gradient-text-green">{t("track.titleHighlight")}</span>{" "}
+                {t("track.titleB")}
               </h2>
               <p className="mt-4 max-w-xl text-base text-[#a3a9b8]">{t("track.accuracy")}</p>
               <div className="mt-6 flex flex-wrap gap-3">
@@ -627,7 +628,7 @@ export function HomeContent({
               <div className="relative flex items-start justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wider text-[#6b7280]">
-                    Accuracy
+                    {t("home.freePredWinrate")}
                   </p>
                   <p className="text-stat mt-1 text-4xl text-[#ededed] sm:text-5xl">
                     {stats
@@ -676,11 +677,11 @@ export function HomeContent({
 
               <div className="relative mt-4 grid grid-cols-3 gap-2 border-t pt-4" style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}>
                 <ChartStat
-                  label="Predictions"
+                  label={t("track.metricPredictions")}
                   value={stats?.total != null ? stats.total.toLocaleString(locale) : "—"}
                 />
-                <ChartStat label="Models" value="4" />
-                <ChartStat label="Leagues" value="30+" />
+                <ChartStat label={t("track.metricModels")} value="4" />
+                <ChartStat label={t("track.metricLeagues")} value="30+" />
               </div>
             </div>
           </div>
