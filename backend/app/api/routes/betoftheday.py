@@ -27,8 +27,14 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Minimum confidence for BOTD selection — single source of truth.
-BOTD_MIN_CONFIDENCE = 0.60
+# v8: Confidence tiering from walk-forward validation (28,838 test picks)
+# Source: docs/V8_ENGINE_REPORT.md
+# BOTD uses ≥60% (67.4% accuracy, ~6,060 qualifying picks historically).
+# Premium tier uses ≥75% for the elite 78.2% accuracy tier.
+BOTD_MIN_CONFIDENCE = 0.60       # BOTD threshold
+CONFIDENCE_SILVER = 0.55         # Silver tier: 63.0% accuracy
+CONFIDENCE_GOLD = 0.65           # Gold tier:   70.6% accuracy
+CONFIDENCE_PLATINUM = 0.75       # Premium:     78.2% accuracy
 
 
 # ─────────────────────────────────────────────────────────────────────────────
