@@ -72,41 +72,39 @@ export function HeroMediaBg({
 export function CtaMediaBg({
   src,
   alt = "",
-  opacity = 0.25,
+  opacity = 0.14,
   className = "",
 }: MediaBgProps) {
   return (
     <>
-      {/* 1 · Photo */}
+      {/* 1 · Photo — low opacity grayscale */}
       <div
         role={alt ? "img" : undefined}
         aria-label={alt || undefined}
         className={`pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat ${className}`}
         style={{
           backgroundImage: `url('${src}')`,
-          filter: "grayscale(1) contrast(1.2) brightness(0.6)",
+          filter: "grayscale(1) contrast(1.2) brightness(0.55)",
           opacity,
         }}
       />
-      {/* 2 · Strong lime tint */}
+      {/* 2 · Lime gradient — matches site-wide accent language */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(135deg, rgba(74, 222, 128, 0.55) 0%, rgba(34, 197, 94, 0.45) 100%)",
+            "linear-gradient(135deg, #4ade80 0%, #22c55e 55%, #16a34a 100%)",
           mixBlendMode: "multiply",
         }}
       />
-      {/* 3 · Diagonal cautionary-tape stripes */}
+      {/* 3 · Deep-dark corner wash for contrast */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage:
-            "repeating-linear-gradient(135deg, rgba(5, 5, 5, 0.14) 0 6px, transparent 6px 14px)",
+          background:
+            "radial-gradient(ellipse at top left, rgba(5, 5, 5, 0.25) 0%, transparent 55%), radial-gradient(ellipse at bottom right, rgba(5, 5, 5, 0.3) 0%, transparent 60%)",
         }}
       />
-      {/* 4 · Subtle vignette */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#4ade80]/30" />
     </>
   );
 }
