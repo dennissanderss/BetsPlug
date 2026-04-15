@@ -22,6 +22,7 @@ import { HeroMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { POTD_STATS } from "@/data/potd-stats";
 
 const PricingSection = dynamic(
   () => import("@/components/ui/pricing-section").then((m) => m.PricingSection),
@@ -70,7 +71,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       includes: [
         "Full Gold access for 7 days",
         "Every prediction + live probability",
-        "Daily Pick of the Day (66.7% accuracy)",
+        `Daily Pick of the Day (${POTD_STATS.accuracy}% accuracy)`,
         "Complete track record + results feed",
         "Cancel any time, no auto-upgrade",
       ],
@@ -119,7 +120,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       price: "€14,99",
       period: "month",
       includes: [
-        "Daily Pick of the Day (66.7% accuracy)",
+        `Daily Pick of the Day (${POTD_STATS.accuracy}% accuracy)`,
         "All 30+ leagues worldwide (CL, UEL, MLS, Süper Lig…)",
         "PDF/CSV/JSON report exports",
         "Exclusive Gold Telegram community",
@@ -160,7 +161,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
 
   const goldVsOthers = [
     { label: "All 30+ leagues worldwide", bronze: "trial", silver: false, gold: true, platinum: true },
-    { label: "Pick of the Day (66.7% accuracy)", bronze: "trial", silver: false, gold: true, platinum: true },
+    { label: `Pick of the Day (${POTD_STATS.accuracy}% accuracy)`, bronze: "trial", silver: false, gold: true, platinum: true },
     { label: "CSV / JSON / PDF exports", bronze: "trial", silver: false, gold: true, platinum: true },
     { label: "Gold Telegram community", bronze: "trial", silver: false, gold: true, platinum: true },
     { label: "Priority 12h support", bronze: false, silver: false, gold: true, platinum: true },
@@ -175,7 +176,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       icon: TrendingUp,
       title: "Best ROI for active bettors",
       desc:
-        "€14,99/month for 30+ leagues, 66.7% Pick of the Day accuracy, and full exports. Silver users routinely upgrade within 30 days.",
+        `€14,99/month for 30+ leagues, ${POTD_STATS.accuracy}% Pick of the Day accuracy, and full exports. Silver users routinely upgrade within 30 days.`,
     },
     {
       icon: Sparkles,
