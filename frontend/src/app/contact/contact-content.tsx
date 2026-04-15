@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { SiteNav } from "@/components/ui/site-nav";
-import { AiAssistant } from "@/components/ui/ai-assistant";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
@@ -34,20 +33,10 @@ interface ContactContentProps {
 export function ContactContent({ contactPage }: ContactContentProps) {
   const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
-  const [chatOpen, setChatOpen] = useState(false);
   const [openQ, setOpenQ] = useState<string | null>(null);
   const [query, setQuery] = useState("");
 
   const helpOptions = [
-    {
-      id: "chat",
-      icon: Sparkles,
-      title: t("contact.card1Title"),
-      desc: t("contact.card1Desc"),
-      cta: t("contact.card1Cta"),
-      onClick: () => setChatOpen(true),
-      highlight: true,
-    },
     {
       id: "telegram",
       icon: MessageCircle,
@@ -56,6 +45,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       cta: t("contact.card2Cta"),
       href: "https://t.me/betsplug",
       external: true,
+      highlight: true,
     },
     {
       id: "email",
@@ -156,34 +146,12 @@ export function ContactContent({ contactPage }: ContactContentProps) {
             {t("contact.subtitle")}
           </motion.p>
 
-          {/* Chatbot CTA "search-style" bar */}
-          <motion.button
-            type="button"
-            onClick={() => setChatOpen(true)}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.18 }}
-            className="group relative mx-auto mt-10 flex w-full max-w-xl items-center gap-3 overflow-hidden rounded-full border border-slate-200 bg-white p-2 pl-6 text-left shadow-xl shadow-slate-200/60 transition-all hover:border-green-500/50 hover:bg-slate-50 hover:shadow-green-500/20"
-          >
-            <Sparkles className="h-5 w-5 flex-shrink-0 text-green-500" />
-            <span className="flex-1 truncate text-sm text-slate-500 sm:text-base">
-              {t("contact.chatPlaceholder")}
-            </span>
-            <span className="btn-gradient flex items-center gap-2 rounded-full px-5 py-3 text-xs font-extrabold tracking-tight text-black shadow-lg shadow-green-500/30 transition-all group-hover:shadow-green-500/50 sm:text-sm">
-              {t("contact.chatStart")}
-              <Send className="h-3.5 w-3.5" />
-            </span>
-          </motion.button>
-
-          <p className="mt-4 text-xs text-slate-500">
-            {t("contact.chatHint")}
-          </p>
         </div>
       </section>
 
       {/* ───── Help options grid ───── */}
       <section className="relative py-20 md:py-28">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 sm:gap-8 px-4 sm:px-6 md:grid-cols-3">
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:gap-8 px-4 sm:px-6 md:grid-cols-2">
           {helpOptions.map((opt) => {
             const Icon = opt.icon;
             const Inner = (
@@ -232,24 +200,14 @@ export function ContactContent({ contactPage }: ContactContentProps) {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                {opt.onClick ? (
-                  <button
-                    type="button"
-                    onClick={opt.onClick}
-                    className={`${cardClass} w-full`}
-                  >
-                    {Inner}
-                  </button>
-                ) : (
-                  <a
-                    href={opt.href}
-                    target={opt.external ? "_blank" : undefined}
-                    rel={opt.external ? "noopener noreferrer" : undefined}
-                    className={cardClass}
-                  >
-                    {Inner}
-                  </a>
-                )}
+                <a
+                  href={opt.href}
+                  target={opt.external ? "_blank" : undefined}
+                  rel={opt.external ? "noopener noreferrer" : undefined}
+                  className={cardClass}
+                >
+                  {Inner}
+                </a>
               </motion.div>
             );
           })}
@@ -410,20 +368,21 @@ export function ContactContent({ contactPage }: ContactContentProps) {
               </p>
 
               <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <button
-                  type="button"
-                  onClick={() => setChatOpen(true)}
-                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  {String(t("contact.chatStart")).toUpperCase()} →
-                </button>
                 <a
                   href="mailto:support@betsplug.com"
-                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
+                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
                 >
                   <Mail className="h-4 w-4" />
                   SUPPORT@BETSPLUG.COM →
+                </a>
+                <a
+                  href="https://t.me/betsplug"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  TELEGRAM SUPPORT →
                 </a>
               </div>
 
@@ -448,9 +407,6 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       </section>
 
       <BetsPlugFooter />
-
-      {/* Chatbot modal */}
-      <AiAssistant isOpen={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
 }
