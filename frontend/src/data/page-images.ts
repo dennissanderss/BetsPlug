@@ -1,13 +1,14 @@
 /**
  * Centralised mapping of per-page hero and final-CTA background images.
  *
- * Every file is a WebP under /public/hero/ or /public/cta/ with an
- * SEO-friendly descriptive filename. The image itself is rendered at
- * low opacity behind a diagonal-stripe pattern + dark gradient overlay.
+ * Files live under /public/hero/ or /public/cta/ with SEO-friendly
+ * descriptive filenames. The mapping below uses `.jpg`, but `.webp`
+ * is also supported — just change the extension in the matching entry
+ * (or rename the dropped file to match). Both formats render directly
+ * as CSS background-image without any code change.
  *
- * Drop the actual .jpg files into /public/hero and /public/cta with
- * the exact filenames below. Missing files fail open (the gradient +
- * pattern still render, just without the photo).
+ * Missing files fail open — the overlays (gradient + pattern + tint)
+ * still render, just without the photo.
  */
 
 export type PageImageKey =
