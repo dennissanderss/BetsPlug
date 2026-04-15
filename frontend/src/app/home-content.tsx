@@ -70,33 +70,6 @@ interface HomepageStats {
   winrate: number; // 0–1
 }
 
-/**
- * 30-day rolling winrate across all evaluated free picks.
- * Source of truth for the track-record block on the homepage.
- * Returns null until the fetch resolves → render "—" in that window.
- */
-function useHomepageStats(): HomepageStats | null {
-  const [stats, setStats] = useState<HomepageStats | null>(null);
-  useEffect(() => {
-    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-    fetch(`${API}/homepage/free-picks`)
-      .then(r => r.json())
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((d: any) => {
-        const s = d?.stats;
-        if (s && typeof s.total === "number") {
-          setStats({
-            total: s.total,
-            correct: s.correct ?? 0,
-            winrate: typeof s.winrate === "number" ? s.winrate : 0,
-          });
-        }
-      })
-      .catch(() => {});
-  }, []);
-  return stats;
-}
-
 interface UpcomingPick {
   home_team: string;
   away_team: string;
@@ -110,35 +83,59 @@ interface UpcomingPick {
   confidence: number;
 }
 
-/** Today's 3 free picks for the hero widget. */
-function useUpcomingPicks(): UpcomingPick[] {
-  const [picks, setPicks] = useState<UpcomingPick[]>([]);
+interface FreePicksPayload {
+  stats: HomepageStats | null;
+  picks: UpcomingPick[];
+}
+
+/**
+ * Single fetch of `/homepage/free-picks` — the payload contains both
+ * the 30-day rolling winrate block (feeds the track-record card) and
+ * today's 3 free picks (feeds the hero widget). Previously both were
+ * fetched in two independent useEffects → one extra round trip per
+ * homepage load. Consumers call the shallow selectors below.
+ *
+ * Returns `{ stats: null, picks: [] }` until the fetch resolves.
+ */
+function useHomepageFreePicks(): FreePicksPayload {
+  const [payload, setPayload] = useState<FreePicksPayload>({
+    stats: null,
+    picks: [],
+  });
   useEffect(() => {
     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
     fetch(`${API}/homepage/free-picks`)
       .then((r) => r.json())
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((d: any) => {
+        const s = d?.stats;
+        const nextStats: HomepageStats | null =
+          s && typeof s.total === "number"
+            ? {
+                total: s.total,
+                correct: s.correct ?? 0,
+                winrate: typeof s.winrate === "number" ? s.winrate : 0,
+              }
+            : null;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const arr: any[] = d?.today ?? [];
-        setPicks(
-          arr.slice(0, 3).map((p) => ({
-            home_team: p.home_team,
-            away_team: p.away_team,
-            home_logo: p.home_team_logo ?? null,
-            away_logo: p.away_team_logo ?? null,
-            league: p.league,
-            kickoff: p.scheduled_at,
-            home_prob: Math.round((p.home_win_prob ?? 0) * 100),
-            draw_prob: Math.round((p.draw_prob ?? 0) * 100),
-            away_prob: Math.round((p.away_win_prob ?? 0) * 100),
-            confidence: Math.round((p.confidence ?? 0) * 100),
-          }))
-        );
+        const nextPicks: UpcomingPick[] = arr.slice(0, 3).map((p) => ({
+          home_team: p.home_team,
+          away_team: p.away_team,
+          home_logo: p.home_team_logo ?? null,
+          away_logo: p.away_team_logo ?? null,
+          league: p.league,
+          kickoff: p.scheduled_at,
+          home_prob: Math.round((p.home_win_prob ?? 0) * 100),
+          draw_prob: Math.round((p.draw_prob ?? 0) * 100),
+          away_prob: Math.round((p.away_win_prob ?? 0) * 100),
+          confidence: Math.round((p.confidence ?? 0) * 100),
+        }));
+        setPayload({ stats: nextStats, picks: nextPicks });
       })
       .catch(() => {});
   }, []);
-  return picks;
+  return payload;
 }
 
 function formatKickoff(iso: string, locale: string): string {
@@ -198,8 +195,7 @@ export function HomeContent({
   const loc = useLocalizedHref();
   const featured = useFeaturedMatch();
   const botd = useBotdTrackRecord();
-  const stats = useHomepageStats();
-  const picks = useUpcomingPicks();
+  const { stats, picks } = useHomepageFreePicks();
 
   // Comparison rows resolved from Sanity (locale-aware)
   const comparisonRows: ComparisonRow[] | undefined = homepage?.comparisonRows?.length
