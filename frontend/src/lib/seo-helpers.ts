@@ -21,6 +21,8 @@ import {
 } from "@/i18n/config";
 import { localizePath } from "@/i18n/routes";
 import { translate } from "@/i18n/messages";
+import { formatMsg } from "@/i18n/format";
+import { POTD_STATS } from "@/data/potd-stats";
 
 const SITE_URL = "https://betsplug.com";
 
@@ -79,14 +81,36 @@ export function getLocalizedAlternates(canonicalPath: string): {
 type FaqKeySet = { q: string; a: string }[];
 
 /**
+ * Per-locale narrative numbers for SSR placeholder substitution.
+ * Uses the comma decimal for NL/DE/FR/ES/IT and point for everything
+ * else. These feed `formatMsg()` where FAQ strings contain
+ * `{potdAccuracy}` / `{potdPicks}` tokens — keeps JSON-LD markup
+ * crawler-friendly with real numbers instead of raw templates.
+ */
+const POTD_VARS_BY_LOCALE: Record<Locale, { potdAccuracy: string; potdPicks: string }> = {
+  en: { potdAccuracy: POTD_STATS.accuracy, potdPicks: POTD_STATS.totalPicks },
+  nl: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
+  de: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
+  fr: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
+  es: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
+  it: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
+  sw: { potdAccuracy: POTD_STATS.accuracy, potdPicks: POTD_STATS.totalPicks },
+  id: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
+};
+
+/**
  * Build a locale-aware FAQ items array from translation keys.
  * Each entry in `keys` is { q: "faq.home.q1", a: "faq.home.a1" }.
+ * Applies `{potdAccuracy}` / `{potdPicks}` placeholder substitution
+ * using the static `POTD_STATS` snapshot so JSON-LD ships real
+ * numbers to crawlers without a client fetch.
  */
 export function getLocalizedFaq(keys: FaqKeySet) {
   const locale = getServerLocale();
+  const vars = POTD_VARS_BY_LOCALE[locale];
   return keys.map(({ q, a }) => ({
-    question: translate(locale, q as any),
-    answer: translate(locale, a as any),
+    question: formatMsg(translate(locale, q as any), vars),
+    answer: formatMsg(translate(locale, a as any), vars),
   }));
 }
 

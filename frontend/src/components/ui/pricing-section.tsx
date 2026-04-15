@@ -8,6 +8,7 @@ import type { LucideIcon } from "lucide-react";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 
 type Billing = "monthly" | "yearly";
 
@@ -42,6 +43,7 @@ interface PricingSectionProps {
 export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
+  const potd = usePotdNumbers();
   const [billing, setBilling] = useState<Billing>("monthly");
   const [loading, setLoading] = useState<string | null>(null);
 
@@ -110,7 +112,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
       features: [
         t("pricing.bronzeF1"),
         t("pricing.bronzeF2"),
-        t("pricing.bronzeF3"),
+        t("pricing.bronzeF3", potd),
         t("pricing.bronzeF4"),
         t("pricing.bronzeF5"),
       ],
@@ -163,7 +165,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
       cta: t("pricing.goldCta"),
       accent: "green",
       features: [
-        t("pricing.goldF1"),
+        t("pricing.goldF1", potd),
         t("pricing.goldF2"),
         t("pricing.goldF3"),
         t("pricing.goldF4"),

@@ -25,7 +25,7 @@ import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { getLocaleValue } from "@/lib/sanity-data";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
-import { useBotdTrackRecord } from "@/hooks/use-botd-track-record";
+import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 
 interface HowItWorksContentProps {
   howItWorksPage?: any;
@@ -42,24 +42,18 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
   const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
-  const botd = useBotdTrackRecord();
+  const potd = usePotdNumbers();
 
   // Stats 1 (BOTD accuracy) and 2 (picks tracked) come from the live
   // Pick-of-the-Day track record when loaded; fall back to the i18n
   // defaults on first paint / network error. Stats 3 and 4 are static.
   const defaultStats = [
     {
-      value:
-        botd?.accuracy_pct != null
-          ? `${botd.accuracy_pct}%`
-          : t("hiw.heroStat1Value"),
+      value: t("hiw.heroStat1Value", potd),
       label: t("hiw.heroStat1Label"),
     },
     {
-      value:
-        botd?.total_picks != null
-          ? botd.total_picks.toLocaleString(locale)
-          : t("hiw.heroStat2Value"),
+      value: t("hiw.heroStat2Value", potd),
       label: t("hiw.heroStat2Label"),
     },
     { value: t("hiw.heroStat3Value"), label: t("hiw.heroStat3Label") },
@@ -74,8 +68,8 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
     : defaultStats;
 
   const defaultFaqs = [
-    { q: t("hiw.faq1Q"), a: t("hiw.faq1A") },
-    { q: t("hiw.faq2Q"), a: t("hiw.faq2A") },
+    { q: t("hiw.faq1Q"), a: t("hiw.faq1A", potd) },
+    { q: t("hiw.faq2Q"), a: t("hiw.faq2A", potd) },
     { q: t("hiw.faq3Q"), a: t("hiw.faq3A") },
     { q: t("hiw.faq4Q"), a: t("hiw.faq4A") },
     { q: t("hiw.faq5Q"), a: t("hiw.faq5A") },
@@ -243,7 +237,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
         reverse
         badge={t("hiw.step2Badge")}
         title={t("hiw.step2Title")}
-        lead={t("hiw.step2Lead")}
+        lead={t("hiw.step2Lead", potd)}
         paragraphs={[t("hiw.step2P1")]}
         stageNumber={2}
         accent="purple"
@@ -252,7 +246,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             <StagePoint
               icon={Star}
               title={t("hiw.step2Point1Title")}
-              desc={t("hiw.step2Point1Desc")}
+              desc={t("hiw.step2Point1Desc", potd)}
               variant="purple"
               card
             />

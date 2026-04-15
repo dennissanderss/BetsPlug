@@ -30,6 +30,7 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 
 /* ── Live API data hook ─────────────────────────────────── */
 interface LiveStats {
@@ -89,6 +90,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
   const loc = useLocalizedHref();
   const home = loc("/");
   const live = useLiveTrackRecordStats();
+  const potd = usePotdNumbers();
 
   const kpis = [
     {
@@ -105,11 +107,8 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       value:
         live.botdAccuracy != null
           ? `${(live.botdAccuracy * 100).toFixed(1)}%`
-          : t("tr.kpi2Value"),
-      label:
-        live.botdAccuracy != null
-          ? `Pick of the Day accuracy (${live.botdTotal ?? "..."} picks)`
-          : t("tr.kpi2Label"),
+          : t("tr.kpi2Value", potd),
+      label: t("tr.kpi2Label", potd),
       note: t("tr.kpi2Note"),
     },
     {

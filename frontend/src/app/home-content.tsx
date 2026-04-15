@@ -31,6 +31,7 @@ import type { Testimonial } from "@/components/ui/testimonials-section";
 import type { ComparisonRow } from "@/components/ui/comparison-table";
 import { getLocaleValue } from "@/lib/sanity-data";
 import { useBotdTrackRecord } from "@/hooks/use-botd-track-record";
+import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 
 /* Heavy shared sections loaded dynamically */
 const LeaguesTicker = dynamic(() => import("@/components/ui/leagues-ticker").then(m => m.LeaguesTicker), { ssr: true });
@@ -195,6 +196,7 @@ export function HomeContent({
   const loc = useLocalizedHref();
   const featured = useFeaturedMatch();
   const botd = useBotdTrackRecord();
+  const potd = usePotdNumbers();
   const { stats, picks } = useHomepageFreePicks();
 
   // Comparison rows resolved from Sanity (locale-aware)
@@ -533,7 +535,7 @@ export function HomeContent({
           <div className="grid gap-5 md:grid-cols-3">
             {[
               { num: "01", icon: Zap, title: t("how.step1Title"), desc: t("how.step1Desc"), variant: "green" as const },
-              { num: "02", icon: Star, title: t("how.step2Title"), desc: t("how.step2Desc"), variant: "purple" as const },
+              { num: "02", icon: Star, title: t("how.step2Title"), desc: t("how.step2Desc", potd), variant: "purple" as const },
               { num: "03", icon: Eye, title: t("how.step3Title"), desc: t("how.step3Desc"), variant: "blue" as const },
             ].map(({ num, icon: Icon, title, desc, variant }) => (
               <div key={num} className={`card-neon card-neon-${variant} relative overflow-hidden p-6 sm:p-7`}>

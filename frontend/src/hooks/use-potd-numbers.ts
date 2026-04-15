@@ -4,7 +4,17 @@ import { useTranslations } from "@/i18n/locale-provider";
 import { POTD_STATS } from "@/data/potd-stats";
 import { useBotdTrackRecord } from "./use-botd-track-record";
 
-export interface PotdNumbers {
+/**
+ * Shape of the `vars` object accepted by `t(key, vars)` for any
+ * message that uses `{potdAccuracy}` / `{potdPicks}` placeholders.
+ *
+ * Declared as an index-signature type (rather than a strict
+ * interface) so it directly satisfies `MessageVars` without a cast
+ * — callers can write `t(key, usePotdNumbers())` and TypeScript is
+ * happy.
+ */
+export type PotdNumbers = {
+  [key: string]: string;
   /**
    * Pick-of-the-Day accuracy as a locale-formatted string, ready
    * to drop into `{potdAccuracy}%` placeholders. No `%` suffix.
@@ -16,7 +26,7 @@ export interface PotdNumbers {
    * "1,284". No suffix.
    */
   potdPicks: string;
-}
+};
 
 /**
  * Returns `{potdAccuracy, potdPicks}` strings ready to feed to

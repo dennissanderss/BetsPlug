@@ -95,7 +95,7 @@ const en = {
   "how.step1Desc": "Our AI looks at form, standings, head-to-head and 40+ factors. One prediction per match, updated daily.",
   "how.step2Title": "2. Get our best pick daily",
   "how.step2Desc":
-    "Pick of the Day: 66.7% accuracy on 346 picks. Or browse all predictions yourself.",
+    "Pick of the Day: {potdAccuracy}% accuracy on {potdPicks} picks. Or browse all predictions yourself.",
   "how.step3Title": "3. Track everything transparently",
   "how.step3Desc":
     "Every prediction is stored and evaluated. Download the full dataset as CSV. Nothing hidden, nothing deleted.",
@@ -254,7 +254,7 @@ const en = {
   "pricing.bronzeCta": "Start €0.01 Trial",
   "pricing.bronzeF1": "Full Gold access for 7 days",
   "pricing.bronzeF2": "All predictions + live scores",
-  "pricing.bronzeF3": "Daily Pick of the Day (66.7% accuracy)",
+  "pricing.bronzeF3": "Daily Pick of the Day ({potdAccuracy}% accuracy)",
   "pricing.bronzeF4": "Track record + results + exports",
   "pricing.bronzeF5": "Just €0.01 · Cancel anytime",
   "pricing.silverTagline": "Perfect for getting started",
@@ -266,7 +266,7 @@ const en = {
   "pricing.silverF5": "Email support (48h response)",
   "pricing.goldTagline": "Full access to every prediction",
   "pricing.goldCta": "Start Gold",
-  "pricing.goldF1": "Daily Pick of the Day (66.7% accuracy)",
+  "pricing.goldF1": "Daily Pick of the Day ({potdAccuracy}% accuracy)",
   "pricing.goldF2": "All 30+ leagues worldwide (CL, UEL, MLS…)",
   "pricing.goldF3": "PDF/CSV/JSON report exports",
   "pricing.goldF4": "Exclusive Gold Telegram community",
@@ -542,8 +542,8 @@ const en = {
   "tr.kpi1Value": "~50%",
   "tr.kpi1Label": "3-way match accuracy",
   "tr.kpi1Note": "Home/draw/away predictions, all leagues combined",
-  "tr.kpi2Value": "66.7%",
-  "tr.kpi2Label": "Pick of the Day accuracy (346 picks)",
+  "tr.kpi2Value": "{potdAccuracy}%",
+  "tr.kpi2Label": "Pick of the Day accuracy ({potdPicks} picks)",
   "tr.kpi2Note": "Our single highest-confidence daily selection",
   "tr.kpi3Value": "5,000+",
   "tr.kpi3Label": "Graded predictions",
@@ -651,7 +651,7 @@ const en = {
   "hiw.metaTitle":
     "How It Works · BetsPlug Pulse AI Predictions",
   "hiw.metaDesc":
-    "See how BetsPlug Pulse analyses every match, delivers a daily Pick of the Day with 66.7% accuracy, and lets you track every prediction transparently.",
+    "See how BetsPlug Pulse analyses every match, delivers a daily Pick of the Day with {potdAccuracy}% accuracy, and lets you track every prediction transparently.",
   "hiw.breadcrumbHome": "Home",
   "hiw.breadcrumbHow": "How it works",
 
@@ -662,9 +662,9 @@ const en = {
     "BetsPlug Pulse analyses form, standings, head-to-head and 40+ factors for every match. You get the predictions, we keep the track record public. Three steps, nothing hidden.",
   "hiw.heroCtaPrimary": "See the track record",
   "hiw.heroCtaSecondary": "Start Free Trial",
-  "hiw.heroStat1Value": "66.7%",
+  "hiw.heroStat1Value": "{potdAccuracy}%",
   "hiw.heroStat1Label": "BOTD accuracy",
-  "hiw.heroStat2Value": "346",
+  "hiw.heroStat2Value": "{potdPicks}",
   "hiw.heroStat2Label": "Picks tracked",
   "hiw.heroStat3Value": "70+",
   "hiw.heroStat3Label": "Leagues covered",
@@ -692,12 +692,12 @@ const en = {
   "hiw.step2Badge": "Step 02",
   "hiw.step2Title": "Get our best pick daily",
   "hiw.step2Lead":
-    "Every day we highlight one pick: the Pick of the Day. Currently at 66.7% accuracy over 346 picks. Or browse all predictions yourself - grouped by league, with live scores and odds.",
+    "Every day we highlight one pick: the Pick of the Day. Currently at {potdAccuracy}% accuracy over {potdPicks} picks. Or browse all predictions yourself - grouped by league, with live scores and odds.",
   "hiw.step2P1":
     "The Pick of the Day is selected based on the strongest confidence signal from BetsPlug Pulse. You can also explore all predictions, filter by league, and see live scores as matches are being played.",
   "hiw.step2Point1Title": "Pick of the Day",
   "hiw.step2Point1Desc":
-    "66.7% accuracy on 346 picks. Our strongest daily recommendation.",
+    "{potdAccuracy}% accuracy on {potdPicks} picks. Our strongest daily recommendation.",
   "hiw.step2Point2Title": "All Predictions",
   "hiw.step2Point2Desc":
     "Browse every match prediction grouped by league, with live scores and odds.",
@@ -742,10 +742,10 @@ const en = {
     "If you've tried a tipster site before, you've probably been burned. Here's why BetsPlug is different.",
   "hiw.faq1Q": "How accurate are your predictions?",
   "hiw.faq1A":
-    "Our Pick of the Day has 66.7% accuracy over 346 picks. Overall 3-way match predictions (home/draw/away) hit around 50%. Every prediction is timestamped before kick-off and graded automatically, so you can verify the track record yourself.",
+    "Our Pick of the Day has {potdAccuracy}% accuracy over {potdPicks} picks. Overall 3-way match predictions (home/draw/away) hit around 50%. Every prediction is timestamped before kick-off and graded automatically, so you can verify the track record yourself.",
   "hiw.faq2Q": "What is Pick of the Day?",
   "hiw.faq2A":
-    "Each day BetsPlug Pulse selects the match with the strongest confidence signal. This is our Pick of the Day - currently at 66.7% accuracy. You can also browse all other predictions on the platform.",
+    "Each day BetsPlug Pulse selects the match with the strongest confidence signal. This is our Pick of the Day - currently at {potdAccuracy}% accuracy. You can also browse all other predictions on the platform.",
   "hiw.faq3Q": "Can I download the data?",
   "hiw.faq3A":
     "Yes. The track record page lets you download the full prediction history as a CSV file. Every prediction, every result - nothing hidden.",
@@ -1977,9 +1977,9 @@ const en = {
 
   /* ── How It Works FAQ ───────────────────────────────────── */
   "faq.how.q1": "How accurate are your predictions?",
-  "faq.how.a1": "Our Pick of the Day has 66.7% accuracy over 346 picks. Overall 3-way match predictions (home/draw/away) hit around 50%. Every prediction is timestamped before kick-off and graded automatically, so you can verify the track record yourself.",
+  "faq.how.a1": "Our Pick of the Day has {potdAccuracy}% accuracy over {potdPicks} picks. Overall 3-way match predictions (home/draw/away) hit around 50%. Every prediction is timestamped before kick-off and graded automatically, so you can verify the track record yourself.",
   "faq.how.q2": "What is Pick of the Day?",
-  "faq.how.a2": "Each day BetsPlug Pulse selects the match with the strongest confidence signal. This is our Pick of the Day - currently at 66.7% accuracy. You can also browse all other predictions on the platform.",
+  "faq.how.a2": "Each day BetsPlug Pulse selects the match with the strongest confidence signal. This is our Pick of the Day - currently at {potdAccuracy}% accuracy. You can also browse all other predictions on the platform.",
   "faq.how.q3": "Can I download the data?",
   "faq.how.a3": "Yes. The track record page lets you download the full prediction history as a CSV file. Every prediction, every result - nothing hidden.",
   "faq.how.q4": "Which football leagues do you cover?",
@@ -2085,7 +2085,7 @@ const nl: Dictionary = {
   "pricing.bronzeCta": "Start €0,01 proef",
   "pricing.bronzeF1": "Volledige Gold-toegang voor 7 dagen",
   "pricing.bronzeF2": "Alle voorspellingen + live scores",
-  "pricing.bronzeF3": "Dagelijkse Pick van de Dag (66,7% trefzekerheid)",
+  "pricing.bronzeF3": "Dagelijkse Pick van de Dag ({potdAccuracy}% trefzekerheid)",
   "pricing.bronzeF4": "Trackrecord + resultaten + exports",
   "pricing.bronzeF5": "Slechts €0,01 · Altijd opzegbaar",
   "pricing.silverTagline": "Perfect om te beginnen",
@@ -2097,7 +2097,7 @@ const nl: Dictionary = {
   "pricing.silverF5": "E-mailsupport (48u reactietijd)",
   "pricing.goldTagline": "Volledige toegang tot elke voorspelling",
   "pricing.goldCta": "Start Gold",
-  "pricing.goldF1": "Dagelijkse Pick van de Dag (66,7% trefzekerheid)",
+  "pricing.goldF1": "Dagelijkse Pick van de Dag ({potdAccuracy}% trefzekerheid)",
   "pricing.goldF2": "Alle 30+ competities wereldwijd (CL, UEL, MLS…)",
   "pricing.goldF3": "PDF/CSV/JSON rapport-exports",
   "pricing.goldF4": "Exclusief Gold Telegram community",
@@ -2342,8 +2342,8 @@ const nl: Dictionary = {
   "tr.kpi1Value": "~50%",
   "tr.kpi1Label": "3-way wedstrijdnauwkeurigheid",
   "tr.kpi1Note": "Thuis/gelijk/uit voorspellingen, alle competities samen",
-  "tr.kpi2Value": "66,7%",
-  "tr.kpi2Label": "Keuze van de Dag nauwkeurigheid (346 picks)",
+  "tr.kpi2Value": "{potdAccuracy}%",
+  "tr.kpi2Label": "Keuze van de Dag nauwkeurigheid ({potdPicks} picks)",
   "tr.kpi2Note": "Onze dagelijkse selectie met het hoogste vertrouwen",
   "tr.kpi3Value": "5.000+",
   "tr.kpi3Label": "Beoordeelde voorspellingen",
@@ -2447,7 +2447,7 @@ const nl: Dictionary = {
   "hiw.metaTitle":
     "Hoe Het Werkt · BetsPlug Pulse AI-Voorspellingen",
   "hiw.metaDesc":
-    "Ontdek hoe BetsPlug Pulse elke wedstrijd analyseert, dagelijks een Pick of the Day levert met 66,7% nauwkeurigheid, en je elke voorspelling transparant laat volgen.",
+    "Ontdek hoe BetsPlug Pulse elke wedstrijd analyseert, dagelijks een Pick of the Day levert met {potdAccuracy}% nauwkeurigheid, en je elke voorspelling transparant laat volgen.",
   "hiw.breadcrumbHome": "Home",
   "hiw.breadcrumbHow": "Hoe het werkt",
 
@@ -2458,9 +2458,9 @@ const nl: Dictionary = {
     "BetsPlug Pulse analyseert vorm, standen, onderlinge historie en 40+ factoren voor elke wedstrijd. Jij krijgt de voorspellingen, wij houden het track record openbaar. Drie stappen, niets verborgen.",
   "hiw.heroCtaPrimary": "Bekijk het track record",
   "hiw.heroCtaSecondary": "Gratis proberen",
-  "hiw.heroStat1Value": "66,7%",
+  "hiw.heroStat1Value": "{potdAccuracy}%",
   "hiw.heroStat1Label": "BOTD nauwkeurigheid",
-  "hiw.heroStat2Value": "346",
+  "hiw.heroStat2Value": "{potdPicks}",
   "hiw.heroStat2Label": "Picks gevolgd",
   "hiw.heroStat3Value": "70+",
   "hiw.heroStat3Label": "Competities",
@@ -2488,12 +2488,12 @@ const nl: Dictionary = {
   "hiw.step2Badge": "Stap 02",
   "hiw.step2Title": "Ontvang onze beste pick dagelijks",
   "hiw.step2Lead":
-    "Elke dag selecteren we één pick: de Pick of the Day. Momenteel op 66,7% nauwkeurigheid over 346 picks. Of bekijk zelf alle voorspellingen - gegroepeerd per competitie, met live scores en odds.",
+    "Elke dag selecteren we één pick: de Pick of the Day. Momenteel op {potdAccuracy}% nauwkeurigheid over {potdPicks} picks. Of bekijk zelf alle voorspellingen - gegroepeerd per competitie, met live scores en odds.",
   "hiw.step2P1":
     "De Pick of the Day wordt geselecteerd op basis van het sterkste confidence-signaal van BetsPlug Pulse. Je kunt ook alle voorspellingen verkennen, filteren per competitie en live scores bekijken terwijl wedstrijden gespeeld worden.",
   "hiw.step2Point1Title": "Pick of the Day",
   "hiw.step2Point1Desc":
-    "66,7% nauwkeurigheid op 346 picks. Onze sterkste dagelijkse aanbeveling.",
+    "{potdAccuracy}% nauwkeurigheid op {potdPicks} picks. Onze sterkste dagelijkse aanbeveling.",
   "hiw.step2Point2Title": "Alle Voorspellingen",
   "hiw.step2Point2Desc":
     "Bekijk elke wedstrijdvoorspelling gegroepeerd per competitie, met live scores en odds.",
@@ -2538,10 +2538,10 @@ const nl: Dictionary = {
     "Als je eerder een tipstersite hebt geprobeerd, ben je waarschijnlijk teleurgesteld. Hier is waarom BetsPlug anders is.",
   "hiw.faq1Q": "Hoe nauwkeurig zijn jullie voorspellingen?",
   "hiw.faq1A":
-    "Onze Pick of the Day heeft 66,7% nauwkeurigheid over 346 picks. De totale 3-way wedstrijdvoorspellingen (thuis/gelijk/uit) scoren rond de 50%. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld, dus je kunt het track record zelf verifiëren.",
+    "Onze Pick of the Day heeft {potdAccuracy}% nauwkeurigheid over {potdPicks} picks. De totale 3-way wedstrijdvoorspellingen (thuis/gelijk/uit) scoren rond de 50%. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld, dus je kunt het track record zelf verifiëren.",
   "hiw.faq2Q": "Wat is Pick of the Day?",
   "hiw.faq2A":
-    "Elke dag selecteert BetsPlug Pulse de wedstrijd met het sterkste confidence-signaal. Dit is onze Pick of the Day - momenteel op 66,7% nauwkeurigheid. Je kunt ook alle andere voorspellingen op het platform bekijken.",
+    "Elke dag selecteert BetsPlug Pulse de wedstrijd met het sterkste confidence-signaal. Dit is onze Pick of the Day - momenteel op {potdAccuracy}% nauwkeurigheid. Je kunt ook alle andere voorspellingen op het platform bekijken.",
   "hiw.faq3Q": "Kan ik de data downloaden?",
   "hiw.faq3A":
     "Ja. Op de track record-pagina kun je de volledige voorspellingshistorie downloaden als CSV-bestand. Elke voorspelling, elk resultaat - niets verborgen.",
@@ -3760,9 +3760,9 @@ const nl: Dictionary = {
 
   /* ── How It Works FAQ ───────────────────────────────────── */
   "faq.how.q1": "Hoe nauwkeurig zijn jullie voorspellingen?",
-  "faq.how.a1": "Onze Pick of the Day heeft 66,7% nauwkeurigheid over 346 picks. De totale 3-way wedstrijdvoorspellingen (thuis/gelijk/uit) scoren rond de 50%. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld, dus je kunt het track record zelf verifiëren.",
+  "faq.how.a1": "Onze Pick of the Day heeft {potdAccuracy}% nauwkeurigheid over {potdPicks} picks. De totale 3-way wedstrijdvoorspellingen (thuis/gelijk/uit) scoren rond de 50%. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld, dus je kunt het track record zelf verifiëren.",
   "faq.how.q2": "Wat is Pick of the Day?",
-  "faq.how.a2": "Elke dag selecteert BetsPlug Pulse de wedstrijd met het sterkste confidence-signaal. Dit is onze Pick of the Day - momenteel op 66,7% nauwkeurigheid. Je kunt ook alle andere voorspellingen op het platform bekijken.",
+  "faq.how.a2": "Elke dag selecteert BetsPlug Pulse de wedstrijd met het sterkste confidence-signaal. Dit is onze Pick of the Day - momenteel op {potdAccuracy}% nauwkeurigheid. Je kunt ook alle andere voorspellingen op het platform bekijken.",
   "faq.how.q3": "Kan ik de data downloaden?",
   "faq.how.a3": "Ja. Op de track record-pagina kun je de volledige voorspellingshistorie downloaden als CSV-bestand. Elke voorspelling, elk resultaat - niets verborgen.",
   "faq.how.q4": "Welke voetbalcompetities dekken jullie?",
@@ -3815,7 +3815,7 @@ const nl: Dictionary = {
   "how.step1Title": "1. Pulse analyseert elke wedstrijd",
   "how.step1Desc": "Onze AI bekijkt vorm, standen, onderlinge historie en 40+ factoren. Eén voorspelling per wedstrijd, dagelijks bijgewerkt.",
   "how.step2Title": "2. Ontvang onze beste pick dagelijks",
-  "how.step2Desc": "Pick of the Day: 66,7% nauwkeurigheid op 346 picks. Of bekijk zelf alle voorspellingen.",
+  "how.step2Desc": "Pick of the Day: {potdAccuracy}% nauwkeurigheid op {potdPicks} picks. Of bekijk zelf alle voorspellingen.",
   "how.step3Title": "3. Volg alles transparant",
   "how.step3Desc": "Elke voorspelling wordt opgeslagen en geëvalueerd. Download de volledige dataset als CSV. Niets verborgen, niets verwijderd.",
   "how.deepDive": "Lees meer over hoe het werkt",

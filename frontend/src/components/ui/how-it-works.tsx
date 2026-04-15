@@ -4,10 +4,12 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { Zap, Star, Eye, ArrowRight } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 
 export function HowItWorks() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
+  const potd = usePotdNumbers();
   const steps = [
     {
       number: "01",
@@ -21,7 +23,7 @@ export function HowItWorks() {
       number: "02",
       icon: Star,
       title: t("how.step2Title"),
-      description: t("how.step2Desc"),
+      description: t("how.step2Desc", potd),
       gradient: "from-emerald-400 to-teal-500",
       glow: "bg-emerald-500/20",
     },
