@@ -3,83 +3,119 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════════
-   BetsPlug — PIT LANE
+   BetsPlug — NOCTURNE
    ─────────────────────────────────────────────────────────────────
-   Pure black base, single logo-green accent, brutalist sport-tech.
-   Hard edges, hairline borders, dashed dividers, mono labels.
-   Exo 2 — loaded via next/font/google.
+   Atmospheric glass dashboard. Deep black base with gradient colour
+   bleeds, translucent surfaces with backdrop-blur, soft-rounded
+   corners, hex-badge iconography, mixed-case premium typography.
+   Green primary (logo), purple/magenta for special moments, cool
+   blue for info states.
    ═══════════════════════════════════════════════════════════════════ */
 
 @layer base {
   :root {
-    /* Core surfaces — true black */
-    --background: 0 0% 2%;             /* #050505 */
-    --foreground: 0 0% 93%;            /* #ededed */
+    /* ── SURFACES ─────────────────────────────────────────────── */
+    --bg-base: 234 17% 6%;              /* #0a0b11 */
+    --bg-deeper: 234 22% 4%;            /* #07080c */
+    --surface-1: 230 16% 10%;           /* #141722 — base card solid */
+    --surface-2: 230 16% 13%;           /* #1a1d2b — raised panel */
+    --surface-3: 230 15% 16%;           /* #212536 — active/hover */
 
-    --card: 0 0% 5%;                   /* #0e0e0e */
-    --card-foreground: 0 0% 93%;
+    --glass-1: 230 16% 10% / 0.55;      /* translucent for blur */
+    --glass-2: 230 16% 13% / 0.65;
+    --glass-3: 230 15% 16% / 0.75;
 
-    --elevated: 0 0% 7%;               /* #121212 */
+    /* ── BORDERS ──────────────────────────────────────────────── */
+    --border-subtle: 0 0% 100% / 0.06;
+    --border-default: 0 0% 100% / 0.1;
+    --border-strong: 0 0% 100% / 0.16;
 
-    /* Accent — logo green */
-    --primary: 142 76% 56%;            /* #4ade80 */
-    --primary-foreground: 0 0% 4%;     /* near-black for contrast on lime */
+    /* ── TEXT ─────────────────────────────────────────────────── */
+    --text-primary: 210 40% 94%;        /* #ededed */
+    --text-secondary: 218 13% 68%;      /* #a3a9b8 */
+    --text-muted: 218 11% 45%;          /* #6b7280 */
 
-    /* Secondary kept green-family (no cyan) */
-    --secondary: 142 70% 45%;          /* #22c55e */
-    --secondary-foreground: 0 0% 4%;
+    /* ── ACCENTS ─────────────────────────────────────────────── */
+    --accent-green: 142 71% 45%;        /* #22c55e — primary brand */
+    --accent-green-bright: 142 76% 60%; /* #4ade80 */
+    --accent-green-soft: 142 71% 70%;   /* #86efac */
 
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 44%;      /* #707070 */
+    --accent-purple: 271 91% 65%;       /* #a855f7 — secondary flair */
+    --accent-purple-bright: 294 72% 59%;/* #d946ef */
+    --accent-purple-soft: 271 91% 78%;  /* #c4b5fd */
 
-    --accent: 0 0% 10%;
-    --accent-foreground: 0 0% 93%;
+    --accent-blue: 217 91% 60%;         /* #3b82f6 — tertiary info */
+    --accent-blue-soft: 213 94% 74%;    /* #60a5fa */
 
-    /* Status — classic red loss */
-    --destructive: 0 84% 60%;          /* #ef4444 */
+    /* ── STATUS ──────────────────────────────────────────────── */
+    --status-win: 142 76% 56%;          /* #4ade80 */
+    --status-loss: 0 84% 62%;           /* #ef4444 */
+    --status-draw: 38 95% 58%;          /* #fbbf24 */
+
+    /* ── RADII ───────────────────────────────────────────────── */
+    --r-sm: 6px;
+    --r-md: 10px;       /* buttons */
+    --r-lg: 14px;       /* cards */
+    --r-xl: 20px;       /* large panels */
+    --r-pill: 999px;
+
+    /* ── SHADOWS ─────────────────────────────────────────────── */
+    --shadow-card:
+      0 1px 0 hsl(0 0% 100% / 0.04) inset,
+      0 8px 24px rgba(0, 0, 0, 0.35);
+    --shadow-lifted:
+      0 1px 0 hsl(0 0% 100% / 0.06) inset,
+      0 12px 36px rgba(0, 0, 0, 0.5),
+      0 0 0 1px hsl(0 0% 100% / 0.04);
+    --shadow-glow-green:
+      0 0 0 1px hsl(var(--accent-green) / 0.4) inset,
+      0 10px 30px hsl(var(--accent-green) / 0.25);
+    --shadow-glow-purple:
+      0 0 0 1px hsl(var(--accent-purple) / 0.4) inset,
+      0 10px 30px hsl(var(--accent-purple) / 0.25);
+
+    /* ── Tailwind-compat (kept for legacy classes) ──────────── */
+    --background: 234 17% 6%;
+    --foreground: 210 40% 94%;
+    --card: 230 16% 10%;
+    --card-foreground: 210 40% 94%;
+    --elevated: 230 16% 13%;
+    --primary: 142 71% 45%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 271 91% 65%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 230 16% 13%;
+    --muted-foreground: 218 13% 68%;
+    --accent: 230 15% 16%;
+    --accent-foreground: 210 40% 94%;
+    --destructive: 0 84% 62%;
     --destructive-foreground: 0 0% 100%;
-    --warning: 38 95% 58%;
-    --warning-foreground: 0 0% 4%;
-    --win: 142 76% 56%;
-    --loss: 0 84% 60%;
-    --draw: 0 0% 93%;
-
-    /* Borders & Input — hairline */
-    --border: 0 0% 12%;                /* #1f1f1f */
-    --input: 0 0% 7%;
-    --ring: 142 76% 56%;
-
-    --radius: 0.375rem;                /* softened — 6px */
-
-    /* Sidebar */
-    --sidebar-background: 0 0% 3%;
-    --sidebar-foreground: 0 0% 93%;
-    --sidebar-border: 0 0% 10%;
-
-    /* Palette shortcuts */
-    --lime: #4ade80;
-    --lime-soft: rgba(74, 222, 128, 0.12);
-    --lime-line: rgba(74, 222, 128, 0.35);
-    --bone: #ededed;
-    --dim: #707070;
-    --blk: #050505;
+    --border: 0 0% 100% / 0.1;
+    --input: 230 16% 13%;
+    --ring: 142 71% 45%;
+    --radius: 0.625rem;
+    --sidebar-background: 230 20% 7%;
+    --sidebar-foreground: 210 40% 94%;
+    --sidebar-border: 0 0% 100% / 0.08;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   html {
     color-scheme: dark;
     overflow-x: hidden;
-    background: #050505;
+    background: hsl(var(--bg-base));
   }
 
+  /* Atmospheric body: deep black with colour bleeds at corners.
+     Fixed so it persists through scroll; behind all section content. */
   body {
-    background: #050505;
-    @apply text-foreground antialiased;
+    min-height: 100vh;
+    color: hsl(var(--text-primary));
     font-family: var(--font-brand), system-ui, -apple-system, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif;
     font-weight: 400;
@@ -89,985 +125,753 @@
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     max-width: 100vw;
-    min-height: 100vh;
+    background: hsl(var(--bg-base));
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 90% 50% at 0% 0%, hsl(var(--accent-green) / 0.18), transparent 60%),
+      radial-gradient(ellipse 60% 70% at 100% 30%, hsl(var(--accent-purple) / 0.16), transparent 65%),
+      radial-gradient(ellipse 80% 40% at 50% 100%, hsl(var(--accent-blue) / 0.08), transparent 65%);
+  }
+
+  body > * {
+    position: relative;
+    z-index: 1;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-brand), system-ui, -apple-system, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, sans-serif;
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    line-height: 0.98;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    text-transform: none;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: hsl(var(--text-primary));
+    overflow-wrap: anywhere;
+    word-break: normal;
+    hyphens: auto;
+    min-width: 0;
   }
 
   p, span, a, li, label, input, textarea, select, button {
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
+    min-width: 0;
   }
 
-  ::selection {
-    background-color: #4ade80;
-    color: #050505;
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
   }
-  ::-moz-selection {
-    background-color: #4ade80;
-    color: #050505;
+
+  section, section > div, main, main > div { max-width: 100%; }
+
+  ::selection {
+    background-color: hsl(var(--accent-green) / 0.35);
+    color: hsl(var(--text-primary));
   }
 
   @media (max-width: 639.98px) {
-    input,
-    textarea,
-    select {
-      font-size: 16px !important;
-    }
+    input, textarea, select { font-size: 16px !important; }
+    h1 { font-size: clamp(1.75rem, 7vw, 2.5rem); }
+    h2 { font-size: clamp(1.375rem, 5.5vw, 2rem); }
+    h3 { font-size: clamp(1.125rem, 4.5vw, 1.5rem); }
   }
 
-  img, video, svg {
-    max-width: 100%;
-    height: auto;
-  }
+  img, video, svg { max-width: 100%; height: auto; }
 
-  /* ── Scrollbar ── */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 0;
+    background: hsl(0 0% 100% / 0.08);
+    border-radius: var(--r-pill);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(74, 222, 128, 0.45);
+    background: hsl(var(--accent-green) / 0.35);
   }
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+    scrollbar-color: hsl(0 0% 100% / 0.08) transparent;
   }
 }
 
 @layer components {
   /* ═══════════════════════════════════════════════════════════════
-     PANELS — hard black, hairline border, no blur
+     GLASS PANELS — the foundation surface.
+     Translucent dark with backdrop blur, soft inner gloss, gentle
+     outer shadow. Use .glass-panel-lifted for hover or KPI cards,
+     .glass-panel-raised for the topmost layer (modals, popovers).
      ═══════════════════════════════════════════════════════════════ */
-  .panel,
-  .glass-card {
-    background: #0e0e0e;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius);
-    box-shadow: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-
-  .panel-lime,
-  .glass-card-hover {
-    background: #0e0e0e;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: var(--radius);
-    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  .glass-panel {
+    background: hsl(var(--glass-1));
+    backdrop-filter: blur(24px) saturate(130%);
+    -webkit-backdrop-filter: blur(24px) saturate(130%);
+    border: 1px solid hsl(var(--border-default));
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-card);
     position: relative;
   }
-
-  .panel-lime:hover,
-  .glass-card-hover:hover {
-    border-color: rgba(74, 222, 128, 0.5);
-    background: #111;
-    transform: translateY(-1px);
+  .glass-panel-lifted {
+    background: hsl(var(--glass-2));
+    backdrop-filter: blur(28px) saturate(140%);
+    -webkit-backdrop-filter: blur(28px) saturate(140%);
+    border: 1px solid hsl(var(--border-default));
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-lifted);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .glass-panel-lifted:hover {
+    border-color: hsl(var(--accent-green) / 0.3);
+    transform: translateY(-2px);
+  }
+  .glass-panel-raised {
+    background: hsl(var(--glass-3));
+    backdrop-filter: blur(32px) saturate(150%);
+    -webkit-backdrop-filter: blur(32px) saturate(150%);
+    border: 1px solid hsl(var(--border-strong));
+    border-radius: var(--r-xl);
+    box-shadow:
+      0 2px 0 hsl(0 0% 100% / 0.06) inset,
+      0 20px 60px rgba(0, 0, 0, 0.6);
   }
 
-  /* Panel with dashed border */
-  .panel-dashed {
-    background: #0e0e0e;
-    border: 1px dashed rgba(74, 222, 128, 0.35);
-    border-radius: var(--radius);
-  }
-
-  /* Corner brackets — decorative L-shaped marks at card corners */
-  .brackets {
-    position: relative;
-  }
-  .brackets::before,
-  .brackets::after {
+  /* Atmospheric glow backdrop on any panel — subtle gradient bleed */
+  .glow-backdrop-green::before {
     content: "";
     position: absolute;
-    width: 14px;
-    height: 14px;
-    border-color: #4ade80;
-    border-style: solid;
+    inset: -1px;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at center top, hsl(var(--accent-green) / 0.15), transparent 70%);
     pointer-events: none;
+    z-index: -1;
   }
-  .brackets::before {
-    top: -1px;
-    left: -1px;
-    border-width: 2px 0 0 2px;
-  }
-  .brackets::after {
-    bottom: -1px;
-    right: -1px;
-    border-width: 0 2px 2px 0;
-  }
-
-  .brackets-all {
-    position: relative;
-  }
-  .brackets-all > .bracket-tl,
-  .brackets-all > .bracket-tr,
-  .brackets-all > .bracket-bl,
-  .brackets-all > .bracket-br {
+  .glow-backdrop-purple::before {
+    content: "";
     position: absolute;
-    width: 14px;
-    height: 14px;
-    border-color: #4ade80;
-    border-style: solid;
+    inset: -1px;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at center, hsl(var(--accent-purple) / 0.18), transparent 70%);
     pointer-events: none;
+    z-index: -1;
   }
-  .brackets-all > .bracket-tl { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
-  .brackets-all > .bracket-tr { top: -1px; right: -1px; border-width: 2px 2px 0 0; }
-  .brackets-all > .bracket-bl { bottom: -1px; left: -1px; border-width: 0 0 2px 2px; }
-  .brackets-all > .bracket-br { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
-
-  /* ═══════════════════════════════════════════════════════════════
-     MONO LABELS — small caps terminal labels
-     ═══════════════════════════════════════════════════════════════ */
-  .mono-label {
-    font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #707070;
+  .glow-backdrop-blue::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at center, hsl(var(--accent-blue) / 0.15), transparent 70%);
+    pointer-events: none;
+    z-index: -1;
   }
 
-  .mono-label-lime {
-    font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #4ade80;
+  /* Inner vertical glow column (for feature tiles) */
+  .feature-tile {
+    position: relative;
+    overflow: hidden;
   }
-
-  /* ═══════════════════════════════════════════════════════════════
-     CANONICAL SECTION LABEL — use site-wide above every H2
-     ═══════════════════════════════════════════════════════════════ */
-  .section-label,
-  .section-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #4ade80;
-    background: rgba(74, 222, 128, 0.06);
-    padding: 0.375rem 0.875rem;
-    border: 1px solid rgba(74, 222, 128, 0.35);
-    border-radius: 4px;
-    margin-bottom: 1.25rem;
-    white-space: nowrap;
+  .feature-tile::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 70%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    opacity: 0.6;
   }
-
-  /* Force any pill-label pattern to match the canonical look — hard-edge */
-  span.rounded-full.uppercase.tracking-widest,
-  div.rounded-full.uppercase.tracking-widest {
-    background: rgba(74, 222, 128, 0.06) !important;
-    border: 1px solid rgba(74, 222, 128, 0.4) !important;
-    color: #4ade80 !important;
-    font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace !important;
-    letter-spacing: 0.22em !important;
-    font-weight: 800 !important;
-    border-radius: 0 !important;
+  .feature-tile-green::before {
+    background: linear-gradient(180deg,
+      hsl(var(--accent-green) / 0.28) 0%,
+      hsl(var(--accent-green) / 0.08) 50%,
+      transparent 100%);
   }
-  span.rounded-full.uppercase.tracking-wider,
-  div.rounded-full.uppercase.tracking-wider {
-    background: rgba(74, 222, 128, 0.06) !important;
-    border: 1px solid rgba(74, 222, 128, 0.4) !important;
-    color: #4ade80 !important;
-    font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace !important;
-    letter-spacing: 0.18em !important;
-    font-weight: 800 !important;
-    border-radius: 0 !important;
+  .feature-tile-purple::before {
+    background: linear-gradient(180deg,
+      hsl(var(--accent-purple) / 0.3) 0%,
+      hsl(var(--accent-purple-bright) / 0.1) 50%,
+      transparent 100%);
   }
-
-  /* ═══════════════════════════════════════════════════════════════
-     DIVIDERS
-     ═══════════════════════════════════════════════════════════════ */
-  .divider-dashed {
-    height: 1px;
-    width: 100%;
-    background-image: linear-gradient(90deg, rgba(74, 222, 128, 0.35) 50%, transparent 50%);
-    background-size: 10px 1px;
-    background-repeat: repeat-x;
-  }
-
-  .divider-hairline {
-    height: 1px;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.08);
-  }
-
-  /* ═══════════════════════════════════════════════════════════════
-     BARCODE STRIP — visual rhythm header accent
-     ═══════════════════════════════════════════════════════════════ */
-  .barcode {
-    display: inline-block;
-    height: 18px;
-    width: 80px;
-    background-image: repeating-linear-gradient(
-      90deg,
-      #4ade80 0 1px,
-      transparent 1px 3px,
-      #4ade80 3px 5px,
-      transparent 5px 6px,
-      #4ade80 6px 7px,
-      transparent 7px 11px
-    );
+  .feature-tile-blue::before {
+    background: linear-gradient(180deg,
+      hsl(var(--accent-blue) / 0.28) 0%,
+      hsl(var(--accent-blue) / 0.08) 50%,
+      transparent 100%);
   }
 
   /* ═══════════════════════════════════════════════════════════════
      BUTTONS
      ═══════════════════════════════════════════════════════════════ */
+  .btn-primary,
   .btn-lime,
   .btn-gradient {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    background: #4ade80;
-    color: #050505;
-    font-weight: 900;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    border-radius: 6px;
-    border: 1px solid #4ade80;
-    padding: 0.875rem 1.5rem;
-    font-size: 0.8125rem;
-    transition: background 0.15s ease, box-shadow 0.2s ease, transform 0.12s ease;
-    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: #05130b;
+    background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
+    border: 1px solid hsl(var(--accent-green) / 0.8);
+    border-radius: var(--r-md);
+    box-shadow:
+      0 1px 0 hsl(0 0% 100% / 0.25) inset,
+      0 4px 16px hsl(var(--accent-green) / 0.3);
+    transition: transform 0.18s ease, box-shadow 0.25s ease, filter 0.18s ease;
+    text-transform: none;
   }
-
+  .btn-primary:hover,
   .btn-lime:hover,
   .btn-gradient:hover {
-    background: #86efac;
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(74, 222, 128, 0.3);
+    filter: brightness(1.05);
+    box-shadow:
+      0 1px 0 hsl(0 0% 100% / 0.3) inset,
+      0 6px 24px hsl(var(--accent-green) / 0.45);
   }
 
-  .btn-outline {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    background: transparent;
-    color: #4ade80;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    border-radius: 6px;
-    border: 1px solid #4ade80;
-    padding: 0.875rem 1.5rem;
-    font-size: 0.8125rem;
-    transition: background 0.15s ease, color 0.15s ease;
-  }
-  .btn-outline:hover {
-    background: #4ade80;
-    color: #050505;
-  }
-
-  /* Legacy .btn-cyan kept as green outline so no visual breakage */
+  .btn-glass,
+  .btn-outline,
   .btn-cyan {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: hsl(var(--text-primary));
+    background: hsl(var(--glass-2));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid hsl(var(--border-default));
+    border-radius: var(--r-md);
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    text-transform: none;
+  }
+  .btn-glass:hover,
+  .btn-outline:hover,
+  .btn-cyan:hover {
+    background: hsl(var(--glass-3));
+    border-color: hsl(var(--accent-green) / 0.4);
+    color: hsl(var(--accent-green-bright));
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--text-secondary));
     background: transparent;
-    color: #4ade80;
-    font-weight: 800;
-    text-transform: uppercase;
-    border-radius: 4px;
-    border: 1px solid #4ade80;
-    padding: 0.875rem 1.5rem;
-    font-size: 0.8125rem;
+    border: 1px solid transparent;
+    border-radius: var(--r-md);
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .btn-ghost:hover {
+    background: hsl(0 0% 100% / 0.04);
+    color: hsl(var(--text-primary));
   }
 
-  /* ═══════════════════════════════════════════════════════════════
-     GRADIENT TEXT — kept as single-color for consistency
-     ═══════════════════════════════════════════════════════════════ */
-  .gradient-text,
-  .gradient-text-green,
-  .gradient-text-cyan {
-    color: #4ade80;
-    background: none;
-    -webkit-text-fill-color: #4ade80;
-  }
-
-  .dark-section .gradient-text {
-    color: #4ade80;
-  }
-
-  /* ═══════════════════════════════════════════════════════════════
-     GLOWS — kept subtle
-     ═══════════════════════════════════════════════════════════════ */
-  .glow-green,
-  .glow-teal,
-  .glow-cyan {
-    box-shadow: 0 0 24px rgba(74, 222, 128, 0.3);
-  }
-
-  /* Warm celebration glow — used at emotional moments (CTA highlights,
-     win states). Soft amber halo that hints at matchday/crowd energy
-     without breaking the single-accent system. */
-  .glow-warm {
+  /* Purple feature-button variant */
+  .btn-purple {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(180deg, hsl(var(--accent-purple)) 0%, hsl(var(--accent-purple-bright)) 100%);
+    border: 1px solid hsl(var(--accent-purple) / 0.8);
+    border-radius: var(--r-md);
     box-shadow:
-      0 0 0 1px rgba(251, 191, 36, 0.2) inset,
-      0 8px 30px rgba(251, 191, 36, 0.18),
-      0 0 60px rgba(251, 191, 36, 0.08);
+      0 1px 0 hsl(0 0% 100% / 0.22) inset,
+      0 4px 16px hsl(var(--accent-purple) / 0.3);
+    transition: transform 0.18s ease, filter 0.18s ease;
+  }
+  .btn-purple:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     CARD-HIGHLIGHT — solid lime block (e.g. 2nd-of-3 card)
+     PILLS — data chips, date tabs, status pills
      ═══════════════════════════════════════════════════════════════ */
-  .card-highlight {
-    background: #4ade80;
-    color: #050505;
-    border-radius: var(--radius);
-    border: 1px solid #4ade80;
-    transition: transform 0.2s ease;
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: hsl(var(--text-secondary));
+    background: hsl(var(--glass-2));
+    border: 1px solid hsl(var(--border-default));
+    border-radius: var(--r-pill);
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
   }
-  .card-highlight:hover {
-    transform: translateY(-2px);
+  .pill:hover {
+    background: hsl(var(--glass-3));
+    color: hsl(var(--text-primary));
+  }
+  .pill-active {
+    background: linear-gradient(180deg, hsl(var(--accent-green) / 0.95) 0%, hsl(var(--accent-green)) 100%);
+    color: #05130b;
+    border-color: hsl(var(--accent-green));
+    font-weight: 600;
+    box-shadow: 0 3px 10px hsl(var(--accent-green) / 0.35);
   }
 
-  /* Diagonal stripe pattern inside lime blocks (cautionary tape) */
-  .stripe-lime {
-    background-color: #4ade80;
-    background-image: repeating-linear-gradient(
-      135deg,
-      rgba(5, 5, 5, 0.12) 0 6px,
-      transparent 6px 14px
-    );
+  /* Data chip — tabular number display (odds, scores) */
+  .pill-data {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    padding: 0.25rem 0.625rem;
+    font-family: var(--font-brand), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: hsl(var(--text-primary));
+    background: hsl(var(--glass-2));
+    border: 1px solid hsl(var(--border-default));
+    border-radius: var(--r-md);
+  }
+  .pill-data-win {
+    color: hsl(var(--status-win));
+    background: hsl(var(--status-win) / 0.12);
+    border-color: hsl(var(--status-win) / 0.35);
+  }
+  .pill-data-loss {
+    color: hsl(var(--status-loss));
+    background: hsl(var(--status-loss) / 0.12);
+    border-color: hsl(var(--status-loss) / 0.35);
+  }
+
+  /* Status pills */
+  .pill-win {
+    background: hsl(var(--status-win) / 0.15);
+    color: hsl(var(--status-win));
+    border-color: hsl(var(--status-win) / 0.35);
+  }
+  .pill-loss {
+    background: hsl(var(--status-loss) / 0.15);
+    color: hsl(var(--status-loss));
+    border-color: hsl(var(--status-loss) / 0.35);
+  }
+  .pill-draw {
+    background: hsl(var(--status-draw) / 0.15);
+    color: hsl(var(--status-draw));
+    border-color: hsl(var(--status-draw) / 0.35);
+  }
+
+  /* Trust score pill (the "10/10" in reference) */
+  .pill-trust {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.625rem;
+    font-family: var(--font-brand), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: #05130b;
+    background: linear-gradient(180deg, hsl(var(--accent-green) / 0.95) 0%, hsl(var(--accent-green)) 100%);
+    border-radius: var(--r-pill);
+    box-shadow: 0 2px 8px hsl(var(--accent-green) / 0.3);
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     NAV ITEMS
+     SECTION LABEL — soft pill eyebrow above H1/H2.
+     Replaces the brutalist mono corner-tag.
+     ═══════════════════════════════════════════════════════════════ */
+  .section-label,
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: hsl(var(--accent-green-bright));
+    background: hsl(var(--accent-green) / 0.1);
+    border: 1px solid hsl(var(--accent-green) / 0.3);
+    border-radius: var(--r-pill);
+    margin-bottom: 1rem;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+  .section-label-purple {
+    color: hsl(var(--accent-purple-soft));
+    background: hsl(var(--accent-purple) / 0.1);
+    border-color: hsl(var(--accent-purple) / 0.35);
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     NAV
      ═══════════════════════════════════════════════════════════════ */
   .nav-item {
     position: relative;
     display: flex;
     align-items: center;
-    padding: 0.625rem 1rem;
-    color: #a3a3a3;
+    gap: 0.75rem;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
     font-weight: 500;
-    letter-spacing: 0.01em;
-    border-left: 2px solid transparent;
-    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+    color: hsl(var(--text-secondary));
+    border-radius: var(--r-md);
+    transition: background 0.18s ease, color 0.18s ease;
   }
   .nav-item:hover {
-    color: #ededed;
-    background: rgba(255, 255, 255, 0.03);
+    background: hsl(0 0% 100% / 0.04);
+    color: hsl(var(--text-primary));
   }
   .nav-active {
-    color: #4ade80;
-    background: rgba(74, 222, 128, 0.06);
-    border-left-color: #4ade80;
+    color: hsl(var(--accent-green-bright));
+    background: linear-gradient(90deg,
+      hsl(var(--accent-green) / 0.15),
+      hsl(var(--accent-green) / 0.05));
+    font-weight: 600;
   }
-
-  /* ═══════════════════════════════════════════════════════════════
-     SECTION BACKGROUNDS — alternate site-wide for rhythm
-     Base:    #050505 with fine grid
-     Alt:     #080808 with diagonal stripe
-     Accent:  deeper black with side lime glows (hero-style)
-     ═══════════════════════════════════════════════════════════════ */
-  .section-base {
-    position: relative;
-    background: #050505;
-  }
-  .section-base::before {
+  .nav-active::before {
     content: "";
     position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image:
-      linear-gradient(rgba(74, 222, 128, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74, 222, 128, 0.04) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
-  }
-
-  .section-alt {
-    position: relative;
-    background: #080808;
-  }
-  .section-alt::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: repeating-linear-gradient(
-      135deg,
-      rgba(74, 222, 128, 0.03) 0 1px,
-      transparent 1px 22px
-    );
-  }
-
-  .section-accent {
-    position: relative;
-    background: #050505;
-    overflow: hidden;
-  }
-  .section-accent::before {
-    content: "";
-    position: absolute;
-    left: -10%;
-    top: 0;
-    bottom: 0;
-    width: 40%;
-    pointer-events: none;
-    background: radial-gradient(ellipse at center, rgba(74, 222, 128, 0.08) 0%, transparent 60%);
-  }
-  .section-accent::after {
-    content: "";
-    position: absolute;
-    right: -10%;
-    top: 0;
-    bottom: 0;
-    width: 40%;
-    pointer-events: none;
-    background: radial-gradient(ellipse at center, rgba(74, 222, 128, 0.06) 0%, transparent 60%);
-  }
-
-  /* ═══════════════════════════════════════════════════════════════
-     GRID / BG PATTERNS
-     ═══════════════════════════════════════════════════════════════ */
-  .grid-bg {
-    background-image:
-      linear-gradient(rgba(74, 222, 128, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74, 222, 128, 0.06) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
-  .grid-bg-fine {
-    background-image:
-      linear-gradient(rgba(74, 222, 128, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74, 222, 128, 0.04) 1px, transparent 1px);
-    background-size: 20px 20px;
-  }
-  .stripe-bg {
-    background-image: repeating-linear-gradient(
-      135deg,
-      rgba(74, 222, 128, 0.05) 0 1px,
-      transparent 1px 14px
-    );
-  }
-
-  /* ═══════════════════════════════════════════════════════════════
-     CTA PATTERN LIBRARY — subtle dark overlays, one per page.
-     Each sits on top of the lime gradient so each page gets a
-     unique texture without breaking the system look.
-     ═══════════════════════════════════════════════════════════════ */
-  .cta-pattern-dots {
-    background-image: radial-gradient(rgba(5, 5, 5, 0.25) 1.5px, transparent 1.5px);
-    background-size: 22px 22px;
-  }
-  .cta-pattern-grid {
-    background-image:
-      linear-gradient(rgba(5, 5, 5, 0.18) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(5, 5, 5, 0.18) 1px, transparent 1px);
-    background-size: 36px 36px;
-  }
-  .cta-pattern-diagonal {
-    background-image: repeating-linear-gradient(45deg, rgba(5, 5, 5, 0.16) 0 1px, transparent 1px 18px);
-  }
-  .cta-pattern-vertical {
-    background-image: repeating-linear-gradient(90deg, rgba(5, 5, 5, 0.16) 0 1px, transparent 1px 16px);
-  }
-  .cta-pattern-horizontal {
-    background-image: repeating-linear-gradient(0deg, rgba(5, 5, 5, 0.16) 0 1px, transparent 1px 16px);
-  }
-  .cta-pattern-chevron {
-    background-image:
-      linear-gradient(135deg, rgba(5, 5, 5, 0.15) 25%, transparent 25%),
-      linear-gradient(225deg, rgba(5, 5, 5, 0.15) 25%, transparent 25%);
-    background-size: 24px 24px;
-    background-position: 0 0, 12px 0;
-  }
-  .cta-pattern-crosshatch {
-    background-image:
-      repeating-linear-gradient(45deg, rgba(5, 5, 5, 0.14) 0 1px, transparent 1px 16px),
-      repeating-linear-gradient(-45deg, rgba(5, 5, 5, 0.14) 0 1px, transparent 1px 16px);
-  }
-  .cta-pattern-ticks {
-    background-image: repeating-linear-gradient(
-      90deg,
-      rgba(5, 5, 5, 0.22) 0 1px,
-      transparent 1px 10px,
-      rgba(5, 5, 5, 0.22) 10px 11px,
-      transparent 11px 30px
-    );
-  }
-  .cta-pattern-checker {
-    background-image:
-      linear-gradient(45deg, rgba(5, 5, 5, 0.15) 25%, transparent 25%, transparent 75%, rgba(5, 5, 5, 0.15) 75%),
-      linear-gradient(45deg, rgba(5, 5, 5, 0.15) 25%, transparent 25%, transparent 75%, rgba(5, 5, 5, 0.15) 75%);
-    background-size: 28px 28px;
-    background-position: 0 0, 14px 14px;
-  }
-  .cta-pattern-plus {
-    background-image:
-      linear-gradient(rgba(5, 5, 5, 0.2) 2px, transparent 2px),
-      linear-gradient(90deg, rgba(5, 5, 5, 0.2) 2px, transparent 2px);
-    background-size: 24px 24px;
-    background-position: 11px 11px, 11px 11px;
-  }
-  .cta-pattern-dashes {
-    background-image: repeating-linear-gradient(135deg, rgba(5, 5, 5, 0.22) 0 6px, transparent 6px 18px);
-  }
-  .cta-pattern-waves {
-    background-image:
-      radial-gradient(circle at 50% 100%, rgba(5, 5, 5, 0.18) 6px, transparent 7px),
-      radial-gradient(circle at 50% 0%, rgba(5, 5, 5, 0.18) 6px, transparent 7px);
-    background-size: 40px 20px;
-  }
-  .cta-pattern-zigzag {
-    background-image:
-      linear-gradient(135deg, rgba(5, 5, 5, 0.18) 25%, transparent 25%, transparent 50%, rgba(5, 5, 5, 0.18) 50%, rgba(5, 5, 5, 0.18) 75%, transparent 75%);
-    background-size: 18px 18px;
-  }
-  .cta-pattern-dotgrid {
-    background-image:
-      radial-gradient(rgba(5, 5, 5, 0.2) 1px, transparent 1px),
-      linear-gradient(rgba(5, 5, 5, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(5, 5, 5, 0.1) 1px, transparent 1px);
-    background-size: 30px 30px, 30px 30px, 30px 30px;
-  }
-  .cta-pattern-triangles {
-    background-image:
-      linear-gradient(60deg, rgba(5, 5, 5, 0.18) 25%, transparent 25.5%),
-      linear-gradient(-60deg, rgba(5, 5, 5, 0.18) 25%, transparent 25.5%);
-    background-size: 26px 45px;
-  }
-
-  /* Scanline sweep on hover */
-  .scanline {
-    position: relative;
-    overflow: hidden;
-  }
-  .scanline::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      180deg,
-      transparent 0%,
-      rgba(74, 222, 128, 0.12) 50%,
-      transparent 100%
-    );
-    transform: translateY(-100%);
-    transition: transform 0.45s ease;
-    pointer-events: none;
-  }
-  .scanline:hover::after {
-    transform: translateY(100%);
+    left: 0;
+    top: 10%;
+    bottom: 10%;
+    width: 2px;
+    background: hsl(var(--accent-green));
+    border-radius: var(--r-pill);
   }
 
   /* ═══════════════════════════════════════════════════════════════
      LIVE STATUS DOT
      ═══════════════════════════════════════════════════════════════ */
   .live-dot {
-    width: 6px;
-    height: 6px;
+    display: inline-block;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: #4ade80;
-    box-shadow: 0 0 8px rgba(74, 222, 128, 0.8);
-    animation: live-pulse 1.6s ease-in-out infinite;
+    background: hsl(var(--accent-green));
+    box-shadow: 0 0 0 3px hsl(var(--accent-green) / 0.2), 0 0 10px hsl(var(--accent-green) / 0.6);
+    animation: noct-pulse 1.8s ease-in-out infinite;
   }
   .live-dot-red {
-    width: 6px;
-    height: 6px;
+    display: inline-block;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
-    background: #ef4444;
-    box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
-    animation: live-pulse 1.6s ease-in-out infinite;
+    background: hsl(var(--status-loss));
+    box-shadow: 0 0 0 3px hsl(var(--status-loss) / 0.2), 0 0 10px hsl(var(--status-loss) / 0.6);
+    animation: noct-pulse 1.8s ease-in-out infinite;
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     HAMBURGER — hard-edge square with 3 lime bars
+     GRADIENT TEXT
      ═══════════════════════════════════════════════════════════════ */
-  .hamburger-btn {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: transparent;
-    border: 1px solid rgba(74, 222, 128, 0.45);
-    transition: background 0.15s ease, border-color 0.15s ease;
+  .gradient-text,
+  .gradient-text-green {
+    background: linear-gradient(135deg, hsl(var(--accent-green-bright)) 0%, hsl(var(--accent-green)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-  .hamburger-btn:hover {
-    background: rgba(74, 222, 128, 0.08);
-    border-color: #4ade80;
+  .gradient-text-purple {
+    background: linear-gradient(135deg, hsl(var(--accent-purple-bright)) 0%, hsl(var(--accent-purple)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-  .hamburger-btn::before,
-  .hamburger-btn::after,
-  .hamburger-btn > span.bar {
-    content: "";
-    position: absolute;
-    left: 10px;
-    width: 20px;
-    height: 2px;
-    background: #4ade80;
-    transition: transform 0.2s ease, opacity 0.2s ease, width 0.2s ease;
+  .gradient-text-cyan {
+    background: linear-gradient(135deg, hsl(var(--accent-blue-soft)) 0%, hsl(var(--accent-blue)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-  .hamburger-btn::before { top: 12px; }
-  .hamburger-btn > span.bar { top: 19px; width: 14px; }
-  .hamburger-btn::after { top: 26px; }
-  .hamburger-btn:hover > span.bar { width: 20px; }
-  /* Open state: transform into X */
-  .hamburger-btn.is-open::before {
-    transform: translateY(7px) rotate(45deg);
-  }
-  .hamburger-btn.is-open::after {
-    transform: translateY(-7px) rotate(-45deg);
-  }
-  .hamburger-btn.is-open > span.bar { opacity: 0; }
 
-  /* Compact size for scrolled state */
-  .hamburger-btn.is-compact {
-    width: 36px;
-    height: 36px;
+  /* ═══════════════════════════════════════════════════════════════
+     GLOW UTILITIES
+     ═══════════════════════════════════════════════════════════════ */
+  .glow-green {
+    box-shadow: 0 0 24px hsl(var(--accent-green) / 0.3);
   }
-  .hamburger-btn.is-compact::before { top: 11px; }
-  .hamburger-btn.is-compact > span.bar { top: 17px; }
-  .hamburger-btn.is-compact::after { top: 23px; }
+  .glow-purple {
+    box-shadow: 0 0 24px hsl(var(--accent-purple) / 0.32);
+  }
+  .glow-blue {
+    box-shadow: 0 0 24px hsl(var(--accent-blue) / 0.3);
+  }
 
-  /* Chip — neon outlined */
-  .chip-neon {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.25rem 0.625rem;
-    border-radius: 2px;
-    font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
-    font-size: 10px;
+  /* ═══════════════════════════════════════════════════════════════
+     TYPOGRAPHY — softened display + heading + stat
+     ═══════════════════════════════════════════════════════════════ */
+  .text-display {
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.04;
+    text-transform: none;
+  }
+  .text-heading {
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-transform: none;
+  }
+  .text-stat {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1;
+  }
+
+  /* Soft mono label */
+  .mono-label {
+    font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #4ade80;
-    background: transparent;
-    border: 1px solid #4ade80;
+    color: hsl(var(--text-muted));
+  }
+  .mono-label-lime {
+    font-family: "JetBrains Mono", "SF Mono", "Menlo", "Consolas", monospace;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: hsl(var(--accent-green-bright));
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     DUOTONE IMAGE — black/lime
+     SEARCH BAR — rounded pill with icon slot
      ═══════════════════════════════════════════════════════════════ */
-  .duotone-lime {
-    filter: grayscale(1) contrast(1.1) brightness(0.78);
-    position: relative;
+  .search-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 1rem;
+    background: hsl(var(--glass-1));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--border-default));
+    border-radius: var(--r-pill);
+    color: hsl(var(--text-secondary));
+    transition: border-color 0.18s ease, background 0.18s ease;
   }
-  .duotone-lime-wrap {
-    position: relative;
-    overflow: hidden;
+  .search-pill:focus-within {
+    border-color: hsl(var(--accent-green) / 0.5);
+    background: hsl(var(--glass-2));
   }
-  .duotone-lime-wrap::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(74, 222, 128, 0.55) 0%, rgba(5, 5, 5, 0.5) 100%);
-    mix-blend-mode: screen;
-    pointer-events: none;
-    z-index: 1;
+
+  /* ═══════════════════════════════════════════════════════════════
+     DATA ROW — table row as rounded panel
+     ═══════════════════════════════════════════════════════════════ */
+  .data-row {
+    display: flex;
+    align-items: center;
+    padding: 0.875rem 1rem;
+    background: hsl(var(--glass-1));
+    border: 1px solid hsl(var(--border-subtle));
+    border-radius: var(--r-md);
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
   }
-  .duotone-lime-wrap::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 50%, rgba(5, 5, 5, 0.8) 100%);
-    pointer-events: none;
-    z-index: 2;
+  .data-row:hover {
+    background: hsl(var(--glass-2));
+    border-color: hsl(var(--border-default));
+    transform: translateY(-1px);
   }
-  .duotone-lime-wrap > img,
-  .duotone-lime-wrap > * {
-    position: relative;
-    z-index: 0;
-    filter: grayscale(1) contrast(1.15) brightness(0.8);
+
+  /* ═══════════════════════════════════════════════════════════════
+     LEGACY SAFETY NET — keep pre-NOCTURNE pages readable while we
+     rebuild them. Maps old Tailwind colour classes to NOCTURNE
+     tokens. Will be slimmed as pages get rebuilt.
+     ═══════════════════════════════════════════════════════════════ */
+  .glass-card,
+  .glass-card-hover,
+  .panel,
+  .panel-lime {
+    background: hsl(var(--glass-1));
+    backdrop-filter: blur(24px) saturate(130%);
+    -webkit-backdrop-filter: blur(24px) saturate(130%);
+    border: 1px solid hsl(var(--border-default));
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-card);
+  }
+  .glass-card-hover,
+  .panel-lime {
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+  .glass-card-hover:hover,
+  .panel-lime:hover {
+    border-color: hsl(var(--accent-green) / 0.35);
+    transform: translateY(-2px);
   }
 }
 
 @layer utilities {
-  /* ═══════════════════════════════════════════════════════════════
-     DISPLAY TYPE — softened caps (B-pass: slightly less aggressive)
-     Reserve .text-display for marquee H1s. Use .text-heading for
-     ordinary H2/H3 — bold caps without the brutalist tightness.
-     ═══════════════════════════════════════════════════════════════ */
-  .text-display {
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    text-transform: uppercase;
-    line-height: 1;
-  }
-
-  .text-heading {
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 1.05;
-    text-transform: none;
-  }
-
-  .text-stadium {
-    font-weight: 900;
-    letter-spacing: -0.035em;
-    text-transform: uppercase;
-  }
-
-  .text-stat {
-    font-variant-numeric: tabular-nums;
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    line-height: 0.95;
-  }
-
-  /* Terminal ascii dots ●●● */
-  .ascii-dots::before {
-    content: "● ● ●";
-    color: #707070;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-  }
-
   .animate-pulse-slow {
-    animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: noct-pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
   .animate-fade-in {
-    animation: fade-in 0.3s ease forwards;
+    animation: noct-fade-in 0.35s ease forwards;
   }
   .animate-slide-up {
-    animation: slide-up 0.25s ease forwards;
-  }
-  .animate-glow-pulse {
-    animation: glow-pulse 2.4s ease-in-out infinite;
+    animation: noct-slide-up 0.3s ease forwards;
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     SAFETY NET — remap legacy Tailwind colors to PIT LANE tokens
+     COLOUR / SURFACE SAFETY NET — legacy Tailwind overrides.
+     Keeps untouched pages on-brand during rebuild. Will be pruned
+     per-page as components get migrated to NOCTURNE primitives.
      ═══════════════════════════════════════════════════════════════ */
 
-  /* Backgrounds — all white/light greys → black panel */
-  .bg-white { background-color: #0e0e0e !important; }
-  .bg-slate-50,
-  .bg-gray-50,
-  .bg-neutral-50,
-  .bg-zinc-50,
-  .bg-slate-100,
-  .bg-gray-100,
-  .bg-neutral-100,
-  .bg-zinc-100 { background-color: #0e0e0e !important; }
-  .bg-slate-200,
-  .bg-gray-200,
-  .bg-neutral-200,
-  .bg-zinc-200 { background-color: #121212 !important; }
+  /* Backgrounds → glass/dark tokens */
+  .bg-white { background-color: hsl(var(--surface-1)) !important; }
+  .bg-slate-50, .bg-gray-50, .bg-neutral-50, .bg-zinc-50,
+  .bg-slate-100, .bg-gray-100, .bg-neutral-100, .bg-zinc-100 {
+    background-color: hsl(var(--surface-1)) !important;
+  }
+  .bg-slate-200, .bg-gray-200, .bg-neutral-200, .bg-zinc-200 {
+    background-color: hsl(var(--surface-2)) !important;
+  }
 
-  /* Translucent white nav veils → translucent black */
-  .bg-white\/70,
-  .bg-white\/75,
-  .bg-white\/80,
-  .bg-white\/85,
-  .bg-white\/90,
-  .bg-white\/95 { background-color: rgba(5, 5, 5, 0.8) !important; }
+  .bg-white\/70, .bg-white\/75, .bg-white\/80, .bg-white\/85, .bg-white\/90, .bg-white\/95 {
+    background-color: hsl(var(--glass-2)) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
 
-  /* Text — all dark slate → bone off-white */
+  /* Text legacy → token foreground */
   .text-black,
-  .text-slate-900,
-  .text-slate-950,
-  .text-gray-900,
-  .text-gray-950,
-  .text-neutral-900,
-  .text-zinc-900,
-  .text-slate-800,
-  .text-gray-800,
-  .text-neutral-800,
-  .text-zinc-800 { color: #ededed !important; }
-  .text-slate-700,
-  .text-gray-700,
-  .text-neutral-700,
-  .text-zinc-700 { color: #d4d4d4 !important; }
-  .text-slate-600,
-  .text-gray-600,
-  .text-neutral-600,
-  .text-zinc-600,
-  .text-slate-500,
-  .text-gray-500,
-  .text-neutral-500,
-  .text-zinc-500 { color: #a3a3a3 !important; }
-  .text-slate-400,
-  .text-gray-400,
-  .text-neutral-400,
-  .text-zinc-400 { color: #8a8a8a !important; }
+  .text-slate-900, .text-slate-950, .text-gray-900, .text-gray-950,
+  .text-neutral-900, .text-zinc-900,
+  .text-slate-800, .text-gray-800, .text-neutral-800, .text-zinc-800 {
+    color: hsl(var(--text-primary)) !important;
+  }
+  .text-slate-700, .text-gray-700, .text-neutral-700, .text-zinc-700 {
+    color: hsl(var(--text-primary)) !important;
+    opacity: 0.92;
+  }
+  .text-slate-600, .text-gray-600, .text-neutral-600, .text-zinc-600,
+  .text-slate-500, .text-gray-500, .text-neutral-500, .text-zinc-500 {
+    color: hsl(var(--text-secondary)) !important;
+  }
+  .text-slate-400, .text-gray-400, .text-neutral-400, .text-zinc-400 {
+    color: hsl(var(--text-muted)) !important;
+  }
 
-  /* Borders — all neutral → hairline */
-  .border-slate-100,
-  .border-slate-200,
-  .border-slate-300,
-  .border-gray-100,
-  .border-gray-200,
-  .border-gray-300,
-  .border-neutral-100,
-  .border-neutral-200,
-  .border-neutral-300,
-  .border-zinc-100,
-  .border-zinc-200,
-  .border-zinc-300 { border-color: rgba(255, 255, 255, 0.08) !important; }
+  /* Borders */
+  .border-slate-100, .border-slate-200, .border-slate-300,
+  .border-gray-100, .border-gray-200, .border-gray-300,
+  .border-neutral-100, .border-neutral-200, .border-neutral-300,
+  .border-zinc-100, .border-zinc-200, .border-zinc-300 {
+    border-color: hsl(var(--border-default)) !important;
+  }
 
   /* Dividers */
   .divide-slate-200 > :not([hidden]) ~ :not([hidden]),
   .divide-gray-200 > :not([hidden]) ~ :not([hidden]),
   .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
   .divide-gray-100 > :not([hidden]) ~ :not([hidden]) {
-    border-color: rgba(255, 255, 255, 0.08) !important;
+    border-color: hsl(var(--border-default)) !important;
   }
 
-  /* Hover variants */
-  .hover\:bg-slate-50:hover,
-  .hover\:bg-gray-50:hover,
-  .hover\:bg-slate-100:hover,
-  .hover\:bg-gray-100:hover { background-color: #121212 !important; }
-  .hover\:bg-white:hover { background-color: #0e0e0e !important; }
+  /* Green family → primary */
+  .bg-green-50, .bg-emerald-50, .bg-teal-50, .bg-lime-50 {
+    background-color: hsl(var(--accent-green) / 0.08) !important;
+  }
+  .bg-green-100, .bg-emerald-100, .bg-teal-100 {
+    background-color: hsl(var(--accent-green) / 0.14) !important;
+  }
+  .bg-green-500, .bg-green-600, .bg-emerald-500, .bg-emerald-600 {
+    background-color: hsl(var(--accent-green)) !important;
+  }
+  .bg-green-400, .bg-emerald-400 {
+    background-color: hsl(var(--accent-green-bright)) !important;
+  }
+  .text-green-300, .text-green-400, .text-emerald-300, .text-emerald-400 {
+    color: hsl(var(--accent-green-bright)) !important;
+  }
+  .text-green-500, .text-green-600, .text-green-700, .text-green-800,
+  .text-emerald-500, .text-emerald-600, .text-emerald-700, .text-emerald-800 {
+    color: hsl(var(--accent-green)) !important;
+  }
+  .border-green-100, .border-green-200, .border-green-300,
+  .border-green-400, .border-green-500,
+  .border-emerald-100, .border-emerald-200, .border-emerald-300,
+  .border-emerald-400, .border-emerald-500 {
+    border-color: hsl(var(--accent-green) / 0.35) !important;
+  }
 
-  /* ═══════════════════════════════════════════════════════════════
-     Legacy green/emerald/teal/cyan/blue/indigo/sky → LIME
-     Single accent rule. Purple, amber, red, yellow kept for platinum
-     and destructive states.
-     ═══════════════════════════════════════════════════════════════ */
+  /* Blue / cyan / indigo families → blue accent (softly mapped) */
+  .text-blue-400, .text-blue-500, .text-blue-600, .text-indigo-500, .text-indigo-600,
+  .text-cyan-400, .text-cyan-500, .text-sky-400, .text-sky-500 {
+    color: hsl(var(--accent-blue-soft)) !important;
+  }
+  .bg-blue-50, .bg-indigo-50, .bg-cyan-50, .bg-sky-50 {
+    background-color: hsl(var(--accent-blue) / 0.1) !important;
+  }
 
-  /* Pale colored-chip backgrounds → lime-tinted */
-  .bg-green-50,
-  .bg-emerald-50,
-  .bg-teal-50,
-  .bg-cyan-50,
-  .bg-sky-50,
-  .bg-blue-50,
-  .bg-indigo-50 { background-color: rgba(74, 222, 128, 0.1) !important; }
-  .bg-green-100,
-  .bg-emerald-100,
-  .bg-teal-100,
-  .bg-cyan-100,
-  .bg-sky-100,
-  .bg-blue-100,
-  .bg-indigo-100 { background-color: rgba(74, 222, 128, 0.16) !important; }
+  /* Amber kept for platinum/warning states */
+  .bg-amber-50, .bg-yellow-50, .bg-orange-50 { background-color: hsl(38 95% 58% / 0.1) !important; }
+  .bg-amber-100, .bg-yellow-100, .bg-orange-100 { background-color: hsl(38 95% 58% / 0.16) !important; }
+  .text-amber-500, .text-amber-600, .text-amber-700, .text-amber-800,
+  .text-yellow-500, .text-yellow-600, .text-orange-500, .text-orange-600 {
+    color: hsl(38 95% 58%) !important;
+  }
 
-  /* Red keeps classic */
-  .bg-red-50,
-  .bg-rose-50,
-  .bg-pink-50 { background-color: rgba(239, 68, 68, 0.12) !important; }
-  .bg-red-100,
-  .bg-rose-100,
-  .bg-pink-100 { background-color: rgba(239, 68, 68, 0.18) !important; }
+  /* Red → loss */
+  .text-red-400, .text-red-500, .text-red-600, .text-rose-500, .text-rose-600, .text-pink-500, .text-pink-600 {
+    color: hsl(var(--status-loss)) !important;
+  }
+  .bg-red-50, .bg-rose-50, .bg-pink-50 { background-color: hsl(var(--status-loss) / 0.1) !important; }
 
-  /* Amber kept for platinum + warning states */
-  .bg-amber-50,
-  .bg-yellow-50,
-  .bg-orange-50 { background-color: rgba(251, 191, 36, 0.12) !important; }
-  .bg-amber-100,
-  .bg-yellow-100,
-  .bg-orange-100 { background-color: rgba(251, 191, 36, 0.18) !important; }
+  /* RADIUS SCALE — clamp to NOCTURNE scale */
+  .rounded-sm { border-radius: var(--r-sm) !important; }
+  .rounded, .rounded-md { border-radius: var(--r-md) !important; }
+  .rounded-lg, .rounded-xl { border-radius: var(--r-lg) !important; }
+  .rounded-2xl { border-radius: var(--r-xl) !important; }
+  .rounded-3xl { border-radius: var(--r-xl) !important; }
 
-  /* Colored borders */
-  .border-green-100,
-  .border-green-200,
-  .border-green-300,
-  .border-emerald-100,
-  .border-emerald-200,
-  .border-emerald-300,
-  .border-teal-100,
-  .border-teal-200,
-  .border-cyan-100,
-  .border-cyan-200,
-  .border-blue-100,
-  .border-blue-200,
-  .border-indigo-100 { border-color: rgba(74, 222, 128, 0.35) !important; }
-  .border-red-100,
-  .border-red-200,
-  .border-rose-200 { border-color: rgba(239, 68, 68, 0.35) !important; }
-  .border-amber-100,
-  .border-amber-200,
-  .border-yellow-100,
-  .border-yellow-200 { border-color: rgba(251, 191, 36, 0.4) !important; }
+  /* Uppercase/tracking-widest pills → soft pill label */
+  span.rounded-full.uppercase.tracking-widest,
+  div.rounded-full.uppercase.tracking-widest,
+  span.rounded-full.uppercase.tracking-wider,
+  div.rounded-full.uppercase.tracking-wider {
+    background: hsl(var(--accent-green) / 0.1) !important;
+    border: 1px solid hsl(var(--accent-green) / 0.3) !important;
+    color: hsl(var(--accent-green-bright)) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.08em !important;
+    font-family: var(--font-brand), ui-sans-serif, system-ui, sans-serif !important;
+    border-radius: var(--r-pill) !important;
+  }
 
-  /* Dark saturated text → lime variants */
-  .text-green-500,
-  .text-green-600,
-  .text-green-700,
-  .text-green-800,
-  .text-green-900,
-  .text-emerald-500,
-  .text-emerald-600,
-  .text-emerald-700,
-  .text-emerald-800,
-  .text-emerald-900,
-  .text-teal-500,
-  .text-teal-600,
-  .text-teal-700,
-  .text-cyan-500,
-  .text-cyan-600,
-  .text-cyan-700,
-  .text-sky-500,
-  .text-sky-600,
-  .text-blue-500,
-  .text-blue-600,
-  .text-blue-700,
-  .text-blue-800,
-  .text-indigo-500,
-  .text-indigo-600,
-  .text-indigo-700 { color: #4ade80 !important; }
+  /* Buttons sharing .btn-* get NOCTURNE primary */
+  a[class*="btn-"], button[class*="btn-"] {
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    border-radius: var(--r-md) !important;
+  }
 
-  .text-green-300,
-  .text-green-400,
-  .text-emerald-300,
-  .text-emerald-400,
-  .text-teal-300,
-  .text-teal-400,
-  .text-cyan-300,
-  .text-cyan-400 { color: #86efac !important; }
-
-  /* Red kept for loss/destructive */
-  .text-red-400,
-  .text-red-500,
-  .text-red-600,
-  .text-red-700,
-  .text-rose-500,
-  .text-rose-600,
-  .text-pink-500,
-  .text-pink-600 { color: #ef4444 !important; }
-
-  /* Amber kept for platinum */
-  .text-amber-500,
-  .text-amber-600,
-  .text-amber-700,
-  .text-amber-800,
-  .text-yellow-500,
-  .text-yellow-600,
-  .text-yellow-700,
-  .text-orange-500,
-  .text-orange-600,
-  .text-orange-700 { color: #fbbf24 !important; }
-
-  /* Ring */
-  .ring-slate-200,
-  .ring-gray-200 { --tw-ring-color: rgba(255, 255, 255, 0.08) !important; }
-
-  /* ═══════════════════════════════════════════════════════════════
-     CTA GRADIENT OVERRIDE — pale green container gradients get
-     flattened to a solid lime block so stray legacy CTAs match the
-     PIT LANE style without per-page rewrites. Scoped to -50/-100
-     (always containers, never buttons).
-     ═══════════════════════════════════════════════════════════════ */
+  /* Legacy CTA gradient containers get the lime gradient block */
   div.bg-gradient-to-br.from-green-50,
   div.bg-gradient-to-br.from-green-100,
   div.bg-gradient-to-b.from-green-50,
@@ -1077,215 +881,64 @@
   div.bg-gradient-to-br.from-emerald-50,
   div.bg-gradient-to-b.from-emerald-50,
   div.bg-gradient-to-r.from-emerald-50 {
-    background: #4ade80 !important;
-    background-image: repeating-linear-gradient(
-      135deg,
-      rgba(5, 5, 5, 0.12) 0 6px,
-      transparent 6px 14px
-    ) !important;
-    color: #050505 !important;
+    background: linear-gradient(135deg, hsl(var(--accent-green) / 0.9), hsl(var(--accent-green))) !important;
+    color: #05130b !important;
   }
 
-  /* Big-container from-green-500/600 gradients (panels, not buttons)
-     → dark hard-edge panel with lime border */
-  div.bg-gradient-to-br.from-green-600,
-  div.bg-gradient-to-br.from-green-500 {
-    background: #0a0a0a !important;
-    border: 1px solid rgba(74, 222, 128, 0.4) !important;
-    color: #ededed !important;
-  }
+  /* Kill leftover PIT LANE accents that don't fit */
+  .stripe-lime,
+  .stripe-bg,
+  .grid-bg,
+  .grid-bg-fine,
+  .cta-pattern-dots,
+  .cta-pattern-grid,
+  .cta-pattern-diagonal,
+  .cta-pattern-vertical,
+  .cta-pattern-horizontal,
+  .cta-pattern-chevron,
+  .cta-pattern-crosshatch,
+  .cta-pattern-ticks,
+  .cta-pattern-checker,
+  .cta-pattern-plus,
+  .cta-pattern-dashes,
+  .cta-pattern-waves,
+  .cta-pattern-zigzag,
+  .cta-pattern-dotgrid,
+  .cta-pattern-triangles { background-image: none !important; }
 
-  /* ═══════════════════════════════════════════════════════════════
-     SOFTENED RADIUS SCALE (B-pass) — clamps all Tailwind radius
-     utilities to a tight 2–10px scale. Not flat, not pill-happy.
-     ═══════════════════════════════════════════════════════════════ */
-  .rounded-sm { border-radius: 2px !important; }
-  .rounded,
-  .rounded-md { border-radius: 4px !important; }
-  .rounded-lg { border-radius: 6px !important; }
-  .rounded-xl { border-radius: 6px !important; }
-  .rounded-2xl { border-radius: 8px !important; }
-  .rounded-3xl { border-radius: 10px !important; }
-  /* Edge variants honour the same cap */
-  .rounded-t, .rounded-t-md { border-top-left-radius: 4px !important; border-top-right-radius: 4px !important; }
-  .rounded-t-lg, .rounded-t-xl { border-top-left-radius: 6px !important; border-top-right-radius: 6px !important; }
-  .rounded-t-2xl { border-top-left-radius: 8px !important; border-top-right-radius: 8px !important; }
-  .rounded-t-3xl { border-top-left-radius: 10px !important; border-top-right-radius: 10px !important; }
-  .rounded-b, .rounded-b-md { border-bottom-left-radius: 4px !important; border-bottom-right-radius: 4px !important; }
-  .rounded-b-lg, .rounded-b-xl { border-bottom-left-radius: 6px !important; border-bottom-right-radius: 6px !important; }
-  .rounded-b-2xl { border-bottom-left-radius: 8px !important; border-bottom-right-radius: 8px !important; }
-  .rounded-b-3xl { border-bottom-left-radius: 10px !important; border-bottom-right-radius: 10px !important; }
+  /* Brackets classes become no-ops (styling removed) */
+  .brackets::before, .brackets::after,
+  .brackets-all > .bracket-tl,
+  .brackets-all > .bracket-tr,
+  .brackets-all > .bracket-bl,
+  .brackets-all > .bracket-br { display: none !important; }
 
-  /* Avatars, dots, team/league logos keep full circular */
-  .rounded-full { border-radius: 9999px !important; }
-  img.rounded-full { border-radius: 9999px !important; }
-  /* Generic images get the same 6px cap */
-  img:not(.rounded-full) { border-radius: 4px; }
-
-  /* ═══════════════════════════════════════════════════════════════
-     UPPERCASE ALL CTA-LIKE LINKS/BUTTONS
-     Any anchor/button carrying a .btn-* class gets uppercase +
-     tracking applied. Also force it on <button> elements with
-     font-black/font-extrabold classes which are typically CTAs.
-     ═══════════════════════════════════════════════════════════════ */
-  a[class*="btn-"],
-  button[class*="btn-"],
-  .btn-lime,
-  .btn-outline,
-  .btn-gradient,
-  .btn-cyan {
-    text-transform: uppercase !important;
-    letter-spacing: 0.06em !important;
-    border-radius: 6px !important;
-  }
-
-  /* Disable shadow on all btn-* except primary lime glow variants */
-  .btn-outline {
-    box-shadow: none !important;
-  }
-
-  /* ═══════════════════════════════════════════════════════════════
-     MOBILE-FIRST DEFAULTS
-     Tighter container padding on phones, responsive display sizes.
-     ═══════════════════════════════════════════════════════════════ */
-}
-
-/* Responsive hero display — uses container-width fluid scale */
-.text-display {
-  font-size: clamp(1.5rem, 4vw + 0.5rem, 3.5rem);
-  line-height: 1;
-}
-.text-heading {
-  font-size: clamp(1.5rem, 3vw + 0.5rem, 2.75rem);
-  line-height: 1.1;
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   GLOBAL OVERFLOW SAFEGUARDS — prevent headlines/long words from
-   pushing content off-screen on mobile, especially for translated
-   strings that can be 30%+ longer than English.
-   ═══════════════════════════════════════════════════════════════════ */
-html, body {
-  overflow-x: hidden;
-  max-width: 100vw;
-}
-
-h1, h2, h3, h4, h5, h6, p, span, a, li, .text-display, .text-stat {
-  overflow-wrap: anywhere;
-  word-break: normal;
-  hyphens: auto;
-  -webkit-hyphens: auto;
-  min-width: 0;
-}
-
-/* Section-level safety: every section gets contained */
-section,
-section > div,
-main,
-main > div {
-  max-width: 100%;
-}
-
-/* Match-card team names + price stats keep their tabular look but
-   still wrap if they have to */
-.text-stat {
-  word-break: keep-all;
-  overflow-wrap: anywhere;
-}
-
-/* Mobile-first base sizing — softer caps so long translations fit */
-@media (max-width: 639px) {
-  h1, .text-display {
-    font-size: clamp(1.4rem, 7vw, 2.25rem) !important;
-    line-height: 1.05;
-    letter-spacing: -0.025em;
-  }
-  h2 {
-    font-size: clamp(1.25rem, 5.5vw, 1.875rem) !important;
-    line-height: 1.1;
-  }
-  h3 {
-    font-size: clamp(1.05rem, 4.5vw, 1.5rem) !important;
-    line-height: 1.15;
-  }
-  /* Mono labels can also overflow — let them break */
-  .mono-label,
-  .mono-label-lime,
-  .section-tag,
-  .section-label {
-    white-space: normal !important;
-    line-height: 1.4;
-    letter-spacing: 0.14em;
-  }
-}
-
-/* Tablet — same protection */
-@media (min-width: 640px) and (max-width: 1023px) {
-  h1, .text-display { font-size: clamp(1.75rem, 5vw, 3rem); }
-  h2 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
-}
-
-/* ═══════════════════════════════════════════════════════════════════
-   AUTO SECTION RHYTHM — alternate even sections with subtle stripe
-   Applies site-wide to top-level <section> elements. Skips sections
-   that already declare an explicit section-* class, and skips those
-   inside dashboard (data-app-shell).
-   ═══════════════════════════════════════════════════════════════════ */
-section:nth-of-type(even):not(.section-base):not(.section-alt):not(.section-accent):not(.no-rhythm) {
-  position: relative;
-  background-image:
-    repeating-linear-gradient(135deg, rgba(74, 222, 128, 0.022) 0 1px, transparent 1px 22px),
-    linear-gradient(180deg, #070707 0%, #0a0a0a 100%);
-}
-
-section:nth-of-type(odd):not(.section-base):not(.section-alt):not(.section-accent):not(.no-rhythm) {
-  background: #050505;
-}
-
-/* Dashboard shell opts out of the striped rhythm — dashboard sections
-   should stay plain dark. */
-[data-app-shell] section:nth-of-type(even),
-[data-app-shell] section:nth-of-type(odd) {
-  background: transparent !important;
+  /* Scanline no longer sweeps */
+  .scanline::after { display: none !important; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
    KEYFRAMES
    ═══════════════════════════════════════════════════════════════════ */
-@keyframes pulse-slow {
+@keyframes noct-pulse-slow {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50% { opacity: 0.6; }
 }
-
-@keyframes fade-in {
+@keyframes noct-fade-in {
   from { opacity: 0; }
-  to   { opacity: 1; }
+  to { opacity: 1; }
 }
-
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes noct-slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-@keyframes live-pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(74, 222, 128, 0.8); }
-  50%      { box-shadow: 0 0 14px rgba(74, 222, 128, 1); }
-}
-
-@keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(74, 222, 128, 0.25); }
-  50%      { box-shadow: 0 0 36px rgba(74, 222, 128, 0.45); }
-}
-
-@keyframes scan-sweep {
-  0%   { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
+@keyframes noct-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px hsl(var(--accent-green) / 0.2), 0 0 10px hsl(var(--accent-green) / 0.6); }
+  50%      { box-shadow: 0 0 0 6px hsl(var(--accent-green) / 0), 0 0 14px hsl(var(--accent-green) / 0.85); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
@@ -1293,16 +946,16 @@ section:nth-of-type(odd):not(.section-base):not(.section-alt):not(.section-accen
   }
 }
 
+/* Focus */
 :focus-visible {
-  outline: 2px solid #4ade80;
+  outline: 2px solid hsl(var(--accent-green) / 0.6);
   outline-offset: 2px;
+  border-radius: var(--r-sm);
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   DASHBOARD SHELL — shares the same pure-black root
-   ═══════════════════════════════════════════════════════════════════ */
+/* Dashboard shell (app layout) — already dark, same canvas */
 [data-app-shell] {
   color-scheme: dark;
-  background: #050505;
-  color: #ededed;
+  background: hsl(var(--bg-base));
+  color: hsl(var(--text-primary));
 }
