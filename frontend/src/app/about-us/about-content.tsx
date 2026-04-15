@@ -21,7 +21,7 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
-import { HeroMediaBg } from "@/components/ui/media-bg";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 
 /** Map Lucide icon string names from Sanity to actual components. */
@@ -470,30 +470,31 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="relative overflow-hidden rounded-3xl border border-green-500/30 bg-gradient-to-br from-green-50 via-emerald-50 to-white p-10 text-center shadow-lg shadow-slate-200/60 sm:p-14"
+            className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16"
           >
-            {/* Ambient glow */}
-            <div className="pointer-events-none absolute -left-20 -top-20 h-[360px] w-[360px] rounded-full bg-green-100/60 blur-[120px]" />
-            <div className="pointer-events-none absolute -bottom-20 -right-20 h-[360px] w-[360px] rounded-full bg-emerald-100/40 blur-[120px]" />
+            <CtaMediaBg src={PAGE_IMAGES.about.cta} alt={PAGE_IMAGES.about.alt} pattern={PAGE_IMAGES.about.pattern} />
+            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
 
             <div className="relative">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-50 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-green-700">
+              <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
                 <Sparkles className="h-3 w-3" />
                 {t("nav.getStarted")}
-              </div>
-              <h2 className="mx-auto max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+              </span>
+              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
                 {t("about.ctaTitle")}
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#050505]/80">
                 {t("about.ctaSubtitle")}
               </p>
 
               <Link
                 href={`${home}#pricing`}
-                className="btn-gradient mt-8 inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50 sm:text-base"
+                className="mt-10 inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
               >
-                {t("about.ctaButton")}
-                <ArrowRight className="h-4 w-4" />
+                {String(t("about.ctaButton")).toUpperCase()} →
               </Link>
             </div>
           </motion.div>

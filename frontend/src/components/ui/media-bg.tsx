@@ -16,6 +16,8 @@
  * the section stays on-brand even before photos are uploaded.
  */
 
+import type { CtaPattern } from "@/data/page-images";
+
 interface MediaBgProps {
   src: string;
   alt?: string;
@@ -25,6 +27,11 @@ interface MediaBgProps {
   dark?: number;
   /** Extra tailwind on the outer wrapper. */
   className?: string;
+}
+
+interface CtaMediaBgProps extends MediaBgProps {
+  /** Pattern variant — one subtle overlay per page for variety. */
+  pattern?: CtaPattern;
 }
 
 export function HeroMediaBg({
@@ -74,7 +81,8 @@ export function CtaMediaBg({
   alt = "",
   opacity = 0.14,
   className = "",
-}: MediaBgProps) {
+  pattern,
+}: CtaMediaBgProps) {
   return (
     <>
       {/* 1 · Photo — low opacity grayscale */}
@@ -97,7 +105,14 @@ export function CtaMediaBg({
           mixBlendMode: "multiply",
         }}
       />
-      {/* 3 · Deep-dark corner wash for contrast */}
+      {/* 3 · Per-page subtle pattern */}
+      {pattern && (
+        <div
+          aria-hidden
+          className={`pointer-events-none absolute inset-0 cta-pattern-${pattern}`}
+        />
+      )}
+      {/* 4 · Deep-dark corner wash for contrast */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{

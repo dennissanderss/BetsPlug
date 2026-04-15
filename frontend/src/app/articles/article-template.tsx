@@ -20,6 +20,8 @@ import {
   getRelatedArticles,
 } from "@/data/articles";
 import { CoverArt, SportBadge } from "./article-visuals";
+import { CtaMediaBg } from "@/components/ui/media-bg";
+import { PAGE_IMAGES } from "@/data/page-images";
 
 /* ──────────────────────────────────────────────────────────────
  * ArticleTemplate — rendered for every single article page.
@@ -372,29 +374,30 @@ function StickyPromoBanner() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-      className="relative overflow-hidden border border-[#4ade80]/30 bg-[#0a0a0a] p-6"
+      className="relative overflow-hidden bg-[#4ade80] p-6"
     >
-      <span className="pointer-events-none absolute left-[-1px] top-[-1px] h-3 w-3 border-l-2 border-t-2 border-[#4ade80]" />
-      <span className="pointer-events-none absolute right-[-1px] bottom-[-1px] h-3 w-3 border-r-2 border-b-2 border-[#4ade80]" />
+      <CtaMediaBg src={PAGE_IMAGES.article.cta} alt={PAGE_IMAGES.article.alt} pattern={PAGE_IMAGES.article.pattern} />
+      <span className="pointer-events-none absolute left-0 top-0 z-10 h-3 w-3 border-l-2 border-t-2 border-[#050505]" />
+      <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-3 w-3 border-r-2 border-b-2 border-[#050505]" />
 
-      <div className="relative flex flex-col gap-5">
-        <span className="section-label w-fit">
+      <div className="relative flex flex-col gap-4">
+        <span className="inline-flex w-fit items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
           <Sparkles className="h-3 w-3" />
           {t("articles.ctaBadge")}
         </span>
-        <h3 className="text-display text-xl text-white">
+        <h3 className="text-display text-xl text-[#050505]">
           {t("articles.ctaTitle")}
         </h3>
-        <p className="text-sm leading-relaxed text-[#a3a3a3]">
+        <p className="text-sm leading-relaxed text-[#050505]/80">
           {t("articles.ctaSubtitle")}
         </p>
         <Link
           href={`${loc("/checkout")}?plan=bronze`}
-          className="btn-lime w-full"
+          className="inline-flex items-center justify-center gap-2 bg-[#050505] px-6 py-3 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
         >
           {String(t("articles.ctaButton")).toUpperCase()} →
         </Link>
-        <span className="text-center font-mono text-[10px] uppercase tracking-widest text-[#707070]">
+        <span className="text-center font-mono text-[10px] uppercase tracking-widest text-[#050505]/70">
           {t("articles.ctaNoCard")}
         </span>
       </div>
@@ -413,32 +416,35 @@ function InlinePromoBanner() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className="relative my-12 overflow-hidden border border-[#4ade80]/30 bg-[#0a0a0a] p-6 sm:p-8"
+      className="relative my-12 overflow-hidden bg-[#4ade80] p-6 sm:p-8"
     >
-      <span className="pointer-events-none absolute left-[-1px] top-[-1px] h-3 w-3 border-l-2 border-t-2 border-[#4ade80]" />
-      <span className="pointer-events-none absolute right-[-1px] bottom-[-1px] h-3 w-3 border-r-2 border-b-2 border-[#4ade80]" />
+      <CtaMediaBg src={PAGE_IMAGES.article.cta} alt={PAGE_IMAGES.article.alt} pattern={PAGE_IMAGES.article.pattern} />
+      <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+      <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+      <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+      <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
 
       <div className="relative grid items-center gap-5 sm:grid-cols-[minmax(0,1fr)_auto]">
         <div>
-          <span className="section-label mb-3">
+          <span className="mb-4 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
             <Sparkles className="h-3 w-3" />
             {t("articles.ctaBadge")}
           </span>
-          <h3 className="text-display text-xl text-white sm:text-2xl">
+          <h3 className="text-display text-xl text-[#050505] sm:text-2xl">
             {t("articles.ctaTitle")}
           </h3>
-          <p className="mt-2 max-w-lg text-sm leading-relaxed text-[#a3a3a3] sm:text-base">
+          <p className="mt-2 max-w-lg text-sm leading-relaxed text-[#050505]/80 sm:text-base">
             {t("articles.ctaSubtitle")}
           </p>
         </div>
         <div className="flex flex-col items-start gap-2 sm:items-end">
           <Link
             href={`${loc("/checkout")}?plan=bronze`}
-            className="btn-lime"
+            className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
           >
             {String(t("articles.ctaButton")).toUpperCase()} →
           </Link>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-[#707070]">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-[#050505]/70">
             {t("articles.ctaNoCard")}
           </span>
         </div>

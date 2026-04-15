@@ -592,7 +592,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             transition={{ duration: 0.7 }}
             className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16"
           >
-            <CtaMediaBg src={PAGE_IMAGES["track-record"].cta} alt={PAGE_IMAGES["track-record"].alt} />
+            <CtaMediaBg src={PAGE_IMAGES["track-record"].cta} alt={PAGE_IMAGES["track-record"].alt} pattern={PAGE_IMAGES["track-record"].pattern} />
             <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
             <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
             <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />

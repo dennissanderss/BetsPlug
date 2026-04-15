@@ -21,7 +21,7 @@ import {
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
-import { HeroMediaBg } from "@/components/ui/media-bg";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 import { getLocaleValue } from "@/lib/sanity-data";
 
@@ -378,37 +378,38 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="relative overflow-hidden rounded-3xl border border-green-500/30 bg-gradient-to-br from-green-50 via-[#0f1420] to-emerald-50 p-10 text-center shadow-lg sm:p-14"
+            className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16"
           >
-            <div className="pointer-events-none absolute -left-20 -top-20 h-[360px] w-[360px] rounded-full bg-green-500/[0.06] blur-[120px]" />
-            <div className="pointer-events-none absolute -bottom-20 -right-20 h-[360px] w-[360px] rounded-full bg-emerald-500/[0.05] blur-[120px]" />
+            <CtaMediaBg src={PAGE_IMAGES["how-it-works"].cta} alt={PAGE_IMAGES["how-it-works"].alt} pattern={PAGE_IMAGES["how-it-works"].pattern} />
+            <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
+            <span className="pointer-events-none absolute left-0 bottom-0 z-10 h-4 w-4 border-l-2 border-b-2 border-[#050505]" />
+            <span className="pointer-events-none absolute right-0 bottom-0 z-10 h-4 w-4 border-r-2 border-b-2 border-[#050505]" />
 
             <div className="relative">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-green-500/40 bg-green-50 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-green-600">
+              <span className="mb-6 inline-flex items-center gap-2 bg-[#050505] px-3 py-1.5 font-mono text-[10px] font-black uppercase tracking-widest text-[#4ade80]">
                 <Trophy className="h-3 w-3" />
                 {t("hiw.ctaBadge")}
-              </div>
-              <h2 className="mx-auto max-w-2xl text-3xl font-extrabold leading-[1.1] tracking-tight text-slate-900 sm:text-4xl md:text-5xl">
+              </span>
+              <h2 className="text-display text-3xl text-[#050505] sm:text-4xl lg:text-5xl">
                 {t("hiw.ctaTitle")}
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-slate-600 sm:text-base">
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#050505]/80">
                 {t("hiw.ctaSubtitle")}
               </p>
 
-              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <Link
                   href={`${home}#pricing`}
-                  className="btn-gradient inline-flex items-center gap-2 rounded-full px-8 py-4 text-sm font-extrabold tracking-tight shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50 sm:text-base"
+                  className="inline-flex items-center gap-2 bg-[#050505] px-8 py-4 text-xs font-black uppercase tracking-widest text-[#4ade80] transition-colors hover:bg-[#1a1a1a]"
                 >
-                  {t("hiw.ctaPrimary")}
-                  <ArrowRight className="h-4 w-4" />
+                  {String(t("hiw.ctaPrimary")).toUpperCase()} →
                 </Link>
                 <Link
                   href={loc("/track-record")}
-                  className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] px-7 py-3.5 text-sm font-extrabold tracking-tight text-white ring-1 ring-white/[0.14] transition-all hover:bg-white/[0.1] hover:ring-green-500/40"
+                  className="inline-flex items-center gap-2 border-b-2 border-[#050505] pb-1 text-xs font-black uppercase tracking-widest text-[#050505] transition-colors hover:border-white hover:text-white"
                 >
-                  {t("hiw.ctaSecondary")}
-                  <ArrowRight className="h-4 w-4" />
+                  {String(t("hiw.ctaSecondary")).toUpperCase()} →
                 </Link>
               </div>
             </div>

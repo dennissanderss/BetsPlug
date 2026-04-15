@@ -1233,7 +1233,7 @@ export function HomeContent({ articles, testimonials, homepage, pricingConfig }:
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-6">
           <div className="relative overflow-hidden bg-[#4ade80] p-10 md:p-16">
-            <CtaMediaBg src={PAGE_IMAGES.home.cta} alt={PAGE_IMAGES.home.alt} />
+            <CtaMediaBg src={PAGE_IMAGES.home.cta} alt={PAGE_IMAGES.home.alt} pattern={PAGE_IMAGES.home.pattern} />
             {/* Corner brackets — dark */}
             <span className="pointer-events-none absolute left-0 top-0 z-10 h-4 w-4 border-l-2 border-t-2 border-[#050505]" />
             <span className="pointer-events-none absolute right-0 top-0 z-10 h-4 w-4 border-r-2 border-t-2 border-[#050505]" />
