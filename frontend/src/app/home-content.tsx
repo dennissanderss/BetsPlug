@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
@@ -28,6 +29,17 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill, DataChip, TrustScore } from "@/components/noct/pill";
 import type { Article } from "@/data/articles";
 import type { Testimonial } from "@/components/ui/testimonials-section";
+import type { ComparisonRow } from "@/components/ui/comparison-table";
+import { getLocaleValue } from "@/lib/sanity-data";
+
+/* Heavy shared sections loaded dynamically */
+const LeaguesTicker = dynamic(() => import("@/components/ui/leagues-ticker").then(m => m.LeaguesTicker), { ssr: true });
+const FreePredictions = dynamic(() => import("@/components/ui/free-predictions").then(m => m.FreePredictions), { ssr: false });
+const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section").then(m => m.TestimonialsSection), { ssr: false });
+const ComparisonTable = dynamic(() => import("@/components/ui/comparison-table").then(m => m.ComparisonTable), { ssr: true });
+const PricingSection = dynamic(() => import("@/components/ui/pricing-section").then(m => m.PricingSection), { ssr: true });
+const SeoSection = dynamic(() => import("@/components/ui/seo-section").then(m => m.SeoSection), { ssr: true });
+const SocialProofPopup = dynamic(() => import("@/components/ui/social-proof-popup").then(m => m.SocialProofPopup), { ssr: false });
 
 /* ═══════════════════════════════════════════════════════════════
    Data hooks
@@ -144,16 +156,35 @@ function formatKickoff(iso: string, locale: string): string {
 interface HomeContentProps {
   articles: Article[];
   testimonials?: Testimonial[];
-  homepage?: unknown;
-  pricingConfig?: unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  homepage?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  pricingConfig?: any;
 }
 
-export function HomeContent({ articles }: HomeContentProps) {
+export function HomeContent({
+  articles,
+  testimonials = [],
+  homepage,
+  pricingConfig,
+}: HomeContentProps) {
   const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const featured = useFeaturedMatch();
   const botd = useBotdStats();
   const picks = useUpcomingPicks();
+
+  // Comparison rows resolved from Sanity (locale-aware)
+  const comparisonRows: ComparisonRow[] | undefined = homepage?.comparisonRows?.length
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ? homepage.comparisonRows.map((r: any) => ({
+        feature: getLocaleValue(r.feature, locale),
+        betsplug: r.betsplug ?? true,
+        freeTools: r.freeTools ?? false,
+        bookmakers: r.bookmakers ?? false,
+        note: getLocaleValue(r.note, locale) || undefined,
+      }))
+    : undefined;
 
   const latestArticles = [...(articles ?? [])]
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
@@ -406,7 +437,12 @@ export function HomeContent({ articles }: HomeContentProps) {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          2 · FEATURES — 3 premium feature cards
+          2 · LEAGUES TICKER
+         ══════════════════════════════════════════════════════════════ */}
+      <LeaguesTicker />
+
+      {/* ══════════════════════════════════════════════════════════════
+          3 · FEATURES — 3 premium feature cards
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative py-20 md:py-28">
         <div
@@ -457,73 +493,9 @@ export function HomeContent({ articles }: HomeContentProps) {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          3 · LIVE PICKS
+          4 · FREE PREDICTIONS — full shared widget with tabs + stats
          ══════════════════════════════════════════════════════════════ */}
-      {picks.length > 0 && (
-        <section className="relative py-20 md:py-24">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute right-0 top-20 h-[400px] w-[400px] rounded-full"
-            style={{ background: "hsl(var(--accent-purple) / 0.1)", filter: "blur(140px)" }}
-          />
-
-          <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
-            <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <span className="section-label">
-                  <Zap className="h-3 w-3" />
-                  {t("home.freePredBadge") || "Free picks"}
-                </span>
-                <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl">
-                  {t("home.freePredTitle")}{" "}
-                  <span className="gradient-text-green">{t("home.freePredTitleHighlight")}</span>
-                </h2>
-                <p className="mt-3 max-w-xl text-sm text-[#a3a9b8] sm:text-base">
-                  {t("home.freePredSubtitle")}
-                </p>
-              </div>
-              <Link href={loc("/match-predictions")} className="btn-glass inline-flex items-center gap-1.5">
-                {t("home.freePredCta") || "See all"} <ChevronRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <div className="card-neon relative overflow-hidden">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -top-16 left-1/2 h-[240px] w-[70%] -translate-x-1/2 rounded-full opacity-60"
-                style={{ background: "hsl(var(--accent-green) / 0.25)", filter: "blur(80px)" }}
-              />
-              <div
-                className="relative flex items-center justify-between gap-3 border-b p-5"
-                style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
-              >
-                <div className="flex items-center gap-3">
-                  <HexBadge variant="green" size="sm" noGlow>
-                    <Activity className="h-3.5 w-3.5" />
-                  </HexBadge>
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-[#6b7280]">
-                      Today's feed
-                    </p>
-                    <p className="text-sm font-semibold text-[#ededed] sm:text-base">
-                      {picks.length} open picks
-                    </p>
-                  </div>
-                </div>
-                <Pill className="pill-active">
-                  <span className="live-dot" /> Live
-                </Pill>
-              </div>
-
-              <div className="relative divide-y" style={{ borderColor: "hsl(0 0% 100% / 0.05)" }}>
-                {picks.map((p, i) => (
-                  <MatchRow key={i} pick={p} locale={locale} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+      <FreePredictions />
 
       {/* ══════════════════════════════════════════════════════════════
           4 · HOW IT WORKS — 3 premium step cards
@@ -678,78 +650,26 @@ export function HomeContent({ articles }: HomeContentProps) {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          6 · PRICING PREVIEW
+          6 · TESTIMONIALS
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-28">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full"
-          style={{ background: "hsl(var(--accent-purple) / 0.1)", filter: "blur(140px)" }}
-        />
+      {testimonials.length > 0 && (
+        <TestimonialsSection testimonials={testimonials} />
+      )}
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="mb-12 text-center">
-            <span className="section-label">{t("pricing.badge") || "Pricing"}</span>
-            <h2 className="text-heading mx-auto max-w-2xl text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-              {t("pricing.title") || "Pick the plan that fits"}
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-base text-[#a3a9b8]">{t("pricing.subtitle")}</p>
-          </div>
+      {/* ══════════════════════════════════════════════════════════════
+          7 · COMPARISON TABLE — BetsPlug vs Others
+         ══════════════════════════════════════════════════════════════ */}
+      <ComparisonTable rows={comparisonRows} />
 
-          <div className="grid gap-5 md:grid-cols-3">
-            <PlanCard
-              name="Bronze"
-              tagline="7-day full access trial"
-              price="€0,01"
-              period="7 days"
-              icon={Shield}
-              variant="blue"
-              features={["Full Gold access", "Pick of the Day", "All predictions", "Cancel anytime"]}
-              ctaHref={`${loc("/checkout")}?plan=bronze`}
-              ctaLabel="Start trial"
-            />
-            <PlanCard
-              name="Gold"
-              tagline="Most popular"
-              price="€14,99"
-              period="month"
-              icon={Star}
-              variant="green"
-              popular
-              features={[
-                "30+ leagues worldwide",
-                "Daily Pick of the Day",
-                "CSV / JSON / PDF exports",
-                "Gold Telegram community",
-              ]}
-              ctaHref={`${loc("/checkout")}?plan=gold`}
-              ctaLabel="Start Gold"
-            />
-            <PlanCard
-              name="Platinum Lifetime"
-              tagline="Founder-tier · Pay once"
-              price="€199"
-              period="one-time"
-              icon={Trophy}
-              variant="purple"
-              features={[
-                "Lifetime Gold access",
-                "Private Platinum Telegram",
-                "Lifetime price lock",
-                "Early access everywhere",
-              ]}
-              ctaHref={`${loc("/checkout")}?plan=platinum`}
-              ctaLabel="Claim lifetime"
-            />
-          </div>
+      {/* ══════════════════════════════════════════════════════════════
+          8 · PRICING — 3 plans + Platinum Lifetime (shared component)
+         ══════════════════════════════════════════════════════════════ */}
+      <PricingSection pricingConfig={pricingConfig} />
 
-          <div className="mt-10 flex justify-center">
-            <Link href={loc("/pricing")} className="btn-glass inline-flex items-center gap-1.5">
-              Compare all plans <ChevronRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* ══════════════════════════════════════════════════════════════
+          9 · SEO CONTENT + FAQ
+         ══════════════════════════════════════════════════════════════ */}
+      <SeoSection />
 
       {/* ══════════════════════════════════════════════════════════════
           7 · ARTICLES
@@ -882,6 +802,9 @@ export function HomeContent({ articles }: HomeContentProps) {
       </section>
 
       <BetsPlugFooter />
+
+      {/* Floating social proof */}
+      <SocialProofPopup />
     </div>
   );
 }
