@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **Frontend design (NOCTURNE):** before touching any visual code, read
+> `frontend/NOCTURNE.md`. Every page, card, button and data chip on the
+> public site and in the authed dashboard must follow those conventions —
+> `card-neon` gradient-border surfaces, `<HexBadge>` icon frames, `<Pill>` /
+> `<DataChip>` / `<TrustScore>` data primitives, ambient glow blobs behind
+> every section, mixed-case typography, and logo-green as the sole primary
+> accent. Plain `<div>` + hard-coded hex colours will render off-brand.
+
 ## Project
 
 Sports Intelligence Platform / BetsPlug — subscription B2C sports-forecasting SaaS. Ingests football/basketball matches, engineers point-in-time features (Elo, form, H2H, standings), runs probabilistic models (Elo / Poisson / Logistic / XGBoost / Ensemble), tracks accuracy, and serves a Next.js marketing + dashboard site behind a Stripe paywall.
