@@ -16,10 +16,16 @@ import { createContext, useCallback, useContext, useMemo } from "react";
 import { defaultLocale, LOCALE_COOKIE, type Locale } from "./config";
 import { translate, type TranslationKey } from "./messages";
 import { translatePath } from "./routes";
+import { formatMsg, type MessageVars } from "./format";
 
 type LocaleContextValue = {
   locale: Locale;
-  t: (key: TranslationKey) => string;
+  /**
+   * Look up a translation key. When the template contains
+   * `{name}` placeholders, pass a `vars` object to substitute them;
+   * unknown placeholders are left verbatim.
+   */
+  t: (key: TranslationKey, vars?: MessageVars) => string;
   setLocale: (next: Locale) => void;
 };
 
@@ -33,7 +39,8 @@ export function LocaleProvider({
   children: React.ReactNode;
 }) {
   const t = useCallback(
-    (key: TranslationKey) => translate(locale, key),
+    (key: TranslationKey, vars?: MessageVars) =>
+      formatMsg(translate(locale, key), vars),
     [locale]
   );
 
@@ -65,7 +72,8 @@ export function useTranslations() {
     // Safe fallback so non-wrapped components still render English.
     return {
       locale: defaultLocale,
-      t: (key: TranslationKey) => translate(defaultLocale, key),
+      t: (key: TranslationKey, vars?: MessageVars) =>
+        formatMsg(translate(defaultLocale, key), vars),
       setLocale: () => {},
     };
   }
