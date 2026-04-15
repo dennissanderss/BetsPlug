@@ -1,16 +1,9 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useLocalizedHref } from "@/i18n/locale-provider";
-
+// Deprecated route — kept as a server-side redirect so old bookmarks
+// and localized URLs (e.g. /nl/weekrapport) keep working until they
+// fall out of search engine caches. Schedule for removal once
+// /results has fully replaced it in marketing copy.
 export default function WeeklyReportPage() {
-  const router = useRouter();
-  const loc = useLocalizedHref();
-
-  useEffect(() => {
-    router.replace(loc("/results"));
-  }, [router, loc]);
-
-  return null;
+  redirect("/results");
 }

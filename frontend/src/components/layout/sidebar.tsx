@@ -15,10 +15,17 @@ import {
   ChevronRight,
   Trophy,
   MapPin,
+  Telescope,
+  LineChart,
+  Activity,
+  Layers,
+  Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { Pill } from "@/components/noct/pill";
+import { useTier, type Tier, TIER_RANK } from "@/hooks/use-tier";
+import { UpgradeLockModal } from "@/components/noct/upgrade-lock-modal";
 
 interface NavItem {
   labelKey: string;
@@ -28,6 +35,12 @@ interface NavItem {
   badge?: string;
   badgeColor?: string;
   comingSoon?: boolean;
+  /** Minimum tier needed to access. Lower tiers see a locked item. */
+  requiredTier?: Tier;
+  /** Short one-liner shown in the upgrade modal. */
+  lockBlurb?: string;
+  /** Benefits shown in the upgrade modal. */
+  lockBenefits?: string[];
 }
 
 interface NavSection {
@@ -62,24 +75,91 @@ const navSections: NavSection[] = [
       { labelKey: "nav.reports", fallback: "Reports", href: "/reports", icon: FileBarChart2 },
     ],
   },
+  {
+    labelKey: "sidebar.analyst",
+    fallbackLabel: "Data Analyst",
+    items: [
+      {
+        labelKey: "nav.analyst_hub",
+        fallback: "Analyst Hub",
+        href: "/analyst",
+        icon: Layers,
+        requiredTier: "gold",
+        lockBlurb: "Deep analytics dashboards for serious handicappers.",
+        lockBenefits: [
+          "Predictions Explorer with filters + CSV export",
+          "Match Deep Dive with per-model breakdown",
+          "Engine performance + calibration charts",
+        ],
+      },
+      {
+        labelKey: "nav.predictions_explorer",
+        fallback: "Predictions Explorer",
+        href: "/analyst/predictions",
+        icon: Telescope,
+        requiredTier: "gold",
+        lockBlurb: "Filter every pick by tier, market, league and export to CSV.",
+        lockBenefits: [
+          "Confidence tier filter (Silver / Gold / Platinum)",
+          "Market filter (1X2 / Over-Under / BTTS)",
+          "League and date range filters",
+          "One-click CSV export",
+        ],
+      },
+      {
+        labelKey: "nav.match_deep_dive",
+        fallback: "Match Deep Dive",
+        href: "/analyst/matches",
+        icon: Activity,
+        requiredTier: "silver", // Silver sees teaser preview, Gold+ full
+        lockBlurb: "See exactly why the engine ranks a match the way it does.",
+        lockBenefits: [
+          "Elo progression chart for both teams",
+          "Submodel breakdown (Elo / Logistic / XGBoost / Poisson)",
+          "Top-10 feature importance bar chart",
+          "H2H last 10 and recent form detail",
+        ],
+      },
+      {
+        labelKey: "nav.engine_performance",
+        fallback: "Engine Performance",
+        href: "/analyst/engine-performance",
+        icon: LineChart,
+        requiredTier: "gold",
+        lockBlurb: "Calibration, Brier score and per-league accuracy.",
+        lockBenefits: [
+          "10-bucket reliability diagram",
+          "Per-league and per-tier accuracy tables",
+          "Lead-time decay curve",
+          "Brier score and log-loss",
+        ],
+      },
+    ],
+  },
 ];
 
 const bottomNavItems: NavItem[] = [
   { labelKey: "nav.admin", fallback: "Admin", href: "/admin", icon: ShieldCheck },
 ];
 
+type LockedFeature = {
+  label: string;
+  requiredTier: Exclude<Tier, "free">;
+  blurb?: string;
+  benefits?: string[];
+};
+
 /**
  * Sidebar — NOCTURNE glass-panel surface with ambient green glow.
- *
- * The outer aside uses a subtle gradient matching the app shell
- * (hsl(230 22% 8%) → hsl(234 25% 5%)) layered behind a .glass-panel
- * so every page on the authed side inherits the same language.
  */
 export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [lockedFeature, setLockedFeature] =
+    React.useState<LockedFeature | null>(null);
   const { t } = useTranslations();
   const loc = useLocalizedHref();
+  const { hasAccess, ready: tierReady } = useTier();
 
   const getLabel = (item: NavItem) => {
     const translated = t(item.labelKey as any);
@@ -89,6 +169,100 @@ export function Sidebar() {
   const getSectionLabel = (section: NavSection) => {
     const translated = t(section.labelKey as any);
     return translated === section.labelKey ? section.fallbackLabel : translated;
+  };
+
+  const openLockFor = (item: NavItem) => {
+    if (!item.requiredTier || item.requiredTier === "free") return;
+    setLockedFeature({
+      label: getLabel(item),
+      requiredTier: item.requiredTier as Exclude<Tier, "free">,
+      blurb: item.lockBlurb,
+      benefits: item.lockBenefits,
+    });
+  };
+
+  const renderItem = (item: NavItem) => {
+    const localizedHref = loc(item.href);
+    const isActive =
+      pathname === item.href ||
+      pathname.startsWith(item.href + "/") ||
+      pathname === localizedHref ||
+      pathname.startsWith(localizedHref + "/");
+    const Icon = item.icon;
+
+    if (item.comingSoon) {
+      return (
+        <div
+          key={item.href}
+          className="glass-panel group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#6b7280] cursor-not-allowed opacity-70"
+          title="Coming Soon"
+        >
+          <Icon className="h-4 w-4 shrink-0 text-[#6b7280]" />
+          <span className="flex-1">{getLabel(item)}</span>
+          <Pill tone="default" className="text-[9px]">SOON</Pill>
+        </div>
+      );
+    }
+
+    // Tier-locked item — only treat as locked once tier state has hydrated
+    // so admins / paid users don't see a flash of lock icons on first paint.
+    const locked =
+      item.requiredTier &&
+      item.requiredTier !== "free" &&
+      tierReady &&
+      !hasAccess(item.requiredTier);
+
+    if (locked) {
+      return (
+        <button
+          key={item.href}
+          type="button"
+          onClick={() => {
+            setMobileOpen(false);
+            openLockFor(item);
+          }}
+          className="nav-item group flex w-full items-center gap-3 text-sm font-medium text-[#6b7280] hover:text-[#a3a9b8]"
+        >
+          <Icon className="h-4 w-4 shrink-0 text-[#6b7280] group-hover:text-[#a3a9b8] transition-colors" />
+          <span className="flex-1 text-left">{getLabel(item)}</span>
+          <Lock className="h-3.5 w-3.5 text-[#6b7280] group-hover:text-[#a3a9b8]" />
+        </button>
+      );
+    }
+
+    return (
+      <Link
+        key={item.href}
+        href={localizedHref}
+        onClick={() => setMobileOpen(false)}
+        className={cn(
+          "nav-item group flex items-center gap-3 text-sm font-medium",
+          isActive ? "nav-active" : "text-[#a3a9b8]"
+        )}
+      >
+        <Icon
+          className={cn(
+            "h-4 w-4 shrink-0 transition-colors",
+            isActive ? "text-[#4ade80]" : "text-[#a3a9b8] group-hover:text-[#ededed]"
+          )}
+        />
+        <span
+          className={cn(
+            "flex-1",
+            isActive ? "text-[#4ade80]" : "group-hover:text-[#ededed]"
+          )}
+        >
+          {getLabel(item)}
+        </span>
+
+        {item.badge === "START" && <Pill tone="active">START</Pill>}
+        {item.badge === "HOT" && <Pill tone="loss">HOT</Pill>}
+
+        {isActive && !item.badge && (
+          <ChevronRight className="h-3.5 w-3.5 text-[#4ade80]/60" />
+        )}
+      </Link>
+    );
   };
 
   const NavContent = () => (
@@ -124,65 +298,7 @@ export function Sidebar() {
               </span>
             </div>
 
-            <div className="space-y-0.5">
-              {section.items.map((item) => {
-                const localizedHref = loc(item.href);
-                const isActive =
-                  pathname === item.href ||
-                  pathname.startsWith(item.href + "/") ||
-                  pathname === localizedHref ||
-                  pathname.startsWith(localizedHref + "/");
-                const Icon = item.icon;
-
-                if (item.comingSoon) {
-                  return (
-                    <div
-                      key={item.href}
-                      className="glass-panel group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#6b7280] cursor-not-allowed opacity-70"
-                      title="Coming Soon"
-                    >
-                      <Icon className="h-4 w-4 shrink-0 text-[#6b7280]" />
-                      <span className="flex-1">{getLabel(item)}</span>
-                      <Pill tone="default" className="text-[9px]">SOON</Pill>
-                    </div>
-                  );
-                }
-
-                return (
-                  <Link
-                    key={item.href}
-                    href={localizedHref}
-                    onClick={() => setMobileOpen(false)}
-                    className={cn(
-                      "nav-item group flex items-center gap-3 text-sm font-medium",
-                      isActive ? "nav-active" : "text-[#a3a9b8]"
-                    )}
-                  >
-                    <Icon
-                      className={cn(
-                        "h-4 w-4 shrink-0 transition-colors",
-                        isActive ? "text-[#4ade80]" : "text-[#a3a9b8] group-hover:text-[#ededed]"
-                      )}
-                    />
-                    <span
-                      className={cn(
-                        "flex-1",
-                        isActive ? "text-[#4ade80]" : "group-hover:text-[#ededed]"
-                      )}
-                    >
-                      {getLabel(item)}
-                    </span>
-
-                    {item.badge === "START" && <Pill tone="active">START</Pill>}
-                    {item.badge === "HOT" && <Pill tone="loss">HOT</Pill>}
-
-                    {isActive && !item.badge && (
-                      <ChevronRight className="h-3.5 w-3.5 text-[#4ade80]/60" />
-                    )}
-                  </Link>
-                );
-              })}
-            </div>
+            <div className="space-y-0.5">{section.items.map(renderItem)}</div>
           </div>
         ))}
 
@@ -196,44 +312,7 @@ export function Sidebar() {
           </span>
         </div>
 
-        {bottomNavItems.map((item) => {
-          const localizedHref = loc(item.href);
-          const isActive =
-            pathname === item.href ||
-            pathname.startsWith(item.href + "/") ||
-            pathname === localizedHref ||
-            pathname.startsWith(localizedHref + "/");
-          const Icon = item.icon;
-
-          return (
-            <Link
-              key={item.href}
-              href={localizedHref}
-              onClick={() => setMobileOpen(false)}
-              className={cn(
-                "nav-item group flex items-center gap-3 text-sm font-medium",
-                isActive ? "nav-active" : "text-[#a3a9b8]"
-              )}
-            >
-              <Icon
-                className={cn(
-                  "h-4 w-4 shrink-0 transition-colors",
-                  isActive ? "text-[#4ade80]" : "text-[#a3a9b8] group-hover:text-[#ededed]"
-                )}
-              />
-              <span
-                className={cn(
-                  "flex-1",
-                  isActive ? "text-[#4ade80]" : "group-hover:text-[#ededed]"
-                )}
-              >
-                {getLabel(item)}
-              </span>
-
-              {isActive && <ChevronRight className="h-3.5 w-3.5 text-[#4ade80]/60" />}
-            </Link>
-          );
-        })}
+        {bottomNavItems.map(renderItem)}
       </nav>
 
       {/* Footer */}
@@ -293,6 +372,18 @@ export function Sidebar() {
       >
         <NavContent />
       </aside>
+
+      {/* Upgrade modal — shared between desktop + mobile drawer */}
+      <UpgradeLockModal
+        open={lockedFeature !== null}
+        onOpenChange={(open) => {
+          if (!open) setLockedFeature(null);
+        }}
+        feature={lockedFeature?.label ?? ""}
+        requiredTier={lockedFeature?.requiredTier ?? "gold"}
+        blurb={lockedFeature?.blurb}
+        benefits={lockedFeature?.benefits}
+      />
     </>
   );
 }
