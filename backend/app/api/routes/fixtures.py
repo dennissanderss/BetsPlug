@@ -1059,3 +1059,344 @@ async def get_fixture_analysis(
         away_team_form=away_form,
         head_to_head=h2h,
     )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Live lineups + events (via API-Football pass-through)
+#
+# API-Football already has /fixtures/lineups and /fixtures/events. Our Match
+# rows carry the provider's fixture ID in external_id (format:
+# "apifb_match_{id}"). We extract that and proxy the call, shaping the
+# response to what the NOCTURNE detail page wants to render.
+#
+# Simple in-process TTL cache so rapid re-renders don't burn the API quota.
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+import time as _time
+import httpx as _httpx
+
+from app.core.config import get_settings as _get_settings
+from app.ingestion.adapters.api_football import APIFootballAdapter as _ApiFb
+
+
+class LineupPlayer(BaseModel):
+    id: Optional[int] = None
+    name: str
+    number: Optional[int] = None
+    position: Optional[str] = None  # "G" / "D" / "M" / "F" (API-Football codes)
+    grid: Optional[str] = None  # "1:1" / "2:3" — row:col on the pitch grid
+
+
+class LineupCoach(BaseModel):
+    id: Optional[int] = None
+    name: Optional[str] = None
+    photo: Optional[str] = None
+
+
+class TeamLineup(BaseModel):
+    team_id: Optional[int] = None
+    team_name: Optional[str] = None
+    team_logo: Optional[str] = None
+    formation: Optional[str] = None
+    coach: Optional[LineupCoach] = None
+    starting_xi: List[LineupPlayer] = []
+    substitutes: List[LineupPlayer] = []
+
+
+class FixtureLineupsResponse(BaseModel):
+    fixture_id: str
+    home: Optional[TeamLineup] = None
+    away: Optional[TeamLineup] = None
+    available: bool = False
+    note: Optional[str] = None
+
+
+class FixtureEvent(BaseModel):
+    minute: Optional[int] = None
+    extra_minute: Optional[int] = None
+    team_id: Optional[int] = None
+    team_name: Optional[str] = None
+    team_side: Optional[str] = None  # "home" | "away"
+    player_name: Optional[str] = None
+    assist_name: Optional[str] = None
+    type: Optional[str] = None  # "Goal" | "Card" | "subst" | "Var"
+    detail: Optional[str] = None  # "Normal Goal" | "Yellow Card" | "Red Card" | …
+    comments: Optional[str] = None
+
+
+class FixtureEventsResponse(BaseModel):
+    fixture_id: str
+    events: List[FixtureEvent] = []
+    available: bool = False
+    note: Optional[str] = None
+
+
+# ── Tiny TTL cache ───────────────────────────────────────────────────────────
+# Keeps responses warm for a short window so repeated page-loads and React
+# Query refetches don't hammer API-Football when a match is live.
+
+_LINEUP_TTL = 120.0  # seconds
+_EVENT_TTL_LIVE = 45.0  # live match → refresh often
+_EVENT_TTL_FINAL = 86400.0  # finished match → cache a day
+_pass_cache: dict[str, tuple[float, Any]] = {}
+
+
+def _cache_get(key: str) -> Optional[Any]:
+    entry = _pass_cache.get(key)
+    if entry is None:
+        return None
+    expiry, value = entry
+    if expiry < _time.time():
+        _pass_cache.pop(key, None)
+        return None
+    return value
+
+
+def _cache_set(key: str, value: Any, ttl: float) -> None:
+    _pass_cache[key] = (_time.time() + ttl, value)
+
+
+def _apifb_id_for(match: Match) -> Optional[int]:
+    """Extract the API-Football fixture ID from our external_id (apifb_match_123)."""
+    if not match.external_id:
+        return None
+    parts = match.external_id.split("_")
+    if len(parts) < 3 or parts[0] != "apifb" or parts[1] != "match":
+        return None
+    try:
+        return int(parts[2])
+    except ValueError:
+        return None
+
+
+async def _call_api_football(endpoint: str, params: dict) -> list:
+    """Thin pass-through to API-Football's /{endpoint}. Returns the `response` list."""
+    settings = _get_settings()
+    if not settings.api_football_key:
+        raise HTTPException(
+            status_code=503, detail="API_FOOTBALL_KEY not configured"
+        )
+    async with _httpx.AsyncClient(timeout=20) as client:
+        adapter = _ApiFb(
+            config={
+                "api_key": settings.api_football_key,
+                "rate_limit_seconds": 0.2,
+            },
+            http_client=client,
+        )
+        data = await adapter._get(endpoint, params)
+    if isinstance(data, list):
+        return data
+    if isinstance(data, dict):
+        return data.get("response", []) or []
+    return []
+
+
+@router.get(
+    "/{fixture_id}/lineup",
+    response_model=FixtureLineupsResponse,
+    summary="Lineups, formation and bench for both teams (via API-Football)",
+)
+async def get_fixture_lineup(
+    fixture_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> FixtureLineupsResponse:
+    match = (
+        await db.execute(select(Match).where(Match.id == fixture_id))
+    ).scalar_one_or_none()
+    if match is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Fixture {fixture_id} not found.",
+        )
+
+    apifb_id = _apifb_id_for(match)
+    if apifb_id is None:
+        return FixtureLineupsResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note="This fixture was not ingested from API-Football, so lineups are unavailable.",
+        )
+
+    cache_key = f"lineup:{apifb_id}"
+    cached = _cache_get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        items = await _call_api_football("fixtures/lineups", {"fixture": apifb_id})
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa: BLE001 — best-effort pass-through
+        return FixtureLineupsResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note=f"Lineup provider error: {exc}",
+        )
+
+    if not items:
+        out = FixtureLineupsResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note="Lineups not published yet — usually available ~1h before kick-off.",
+        )
+        _cache_set(cache_key, out, 90.0)
+        return out
+
+    # API-Football returns items ordered as [home, away] but we match on
+    # team_id against the Match home_team.external_id if possible.
+    home_team_apifb_id: Optional[int] = None
+    away_team_apifb_id: Optional[int] = None
+    # Try to extract team ID from API-Football via external_id if stored.
+    # Otherwise fall back to [0]=home, [1]=away per their convention.
+
+    def _shape_player(raw: dict) -> LineupPlayer:
+        p = raw.get("player", raw)
+        return LineupPlayer(
+            id=p.get("id"),
+            name=p.get("name") or "",
+            number=p.get("number"),
+            position=p.get("pos"),
+            grid=p.get("grid"),
+        )
+
+    def _shape_side(raw: dict) -> TeamLineup:
+        team = raw.get("team", {})
+        coach_raw = raw.get("coach") or {}
+        return TeamLineup(
+            team_id=team.get("id"),
+            team_name=team.get("name"),
+            team_logo=team.get("logo"),
+            formation=raw.get("formation"),
+            coach=(
+                LineupCoach(
+                    id=coach_raw.get("id"),
+                    name=coach_raw.get("name"),
+                    photo=coach_raw.get("photo"),
+                )
+                if coach_raw
+                else None
+            ),
+            starting_xi=[_shape_player(p) for p in (raw.get("startXI") or [])],
+            substitutes=[_shape_player(p) for p in (raw.get("substitutes") or [])],
+        )
+
+    home_side: Optional[TeamLineup] = None
+    away_side: Optional[TeamLineup] = None
+
+    if len(items) >= 1:
+        home_side = _shape_side(items[0])
+    if len(items) >= 2:
+        away_side = _shape_side(items[1])
+
+    # If the Match's home team is actually the 2nd item, swap. We compare on
+    # team name since that's what we reliably have stored locally.
+    if home_side and away_side and match.home_team and match.away_team:
+        local_home = (match.home_team.name or "").strip().lower()
+        if (
+            home_side.team_name
+            and home_side.team_name.strip().lower() != local_home
+            and away_side.team_name
+            and away_side.team_name.strip().lower() == local_home
+        ):
+            home_side, away_side = away_side, home_side
+
+    out = FixtureLineupsResponse(
+        fixture_id=str(fixture_id),
+        home=home_side,
+        away=away_side,
+        available=bool(home_side or away_side),
+    )
+    _cache_set(cache_key, out, _LINEUP_TTL)
+    return out
+
+
+@router.get(
+    "/{fixture_id}/events",
+    response_model=FixtureEventsResponse,
+    summary="Match events timeline — goals, cards, subs, VAR (via API-Football)",
+)
+async def get_fixture_events(
+    fixture_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> FixtureEventsResponse:
+    match = (
+        await db.execute(select(Match).where(Match.id == fixture_id))
+    ).scalar_one_or_none()
+    if match is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Fixture {fixture_id} not found.",
+        )
+
+    apifb_id = _apifb_id_for(match)
+    if apifb_id is None:
+        return FixtureEventsResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note="This fixture was not ingested from API-Football, so events are unavailable.",
+        )
+
+    cache_key = f"events:{apifb_id}"
+    cached = _cache_get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        items = await _call_api_football("fixtures/events", {"fixture": apifb_id})
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        return FixtureEventsResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note=f"Events provider error: {exc}",
+        )
+
+    # Build local team name → side map so the UI can colour-code events.
+    home_name = (match.home_team.name or "").strip().lower() if match.home_team else ""
+    away_name = (match.away_team.name or "").strip().lower() if match.away_team else ""
+
+    events: list[FixtureEvent] = []
+    for raw in items:
+        tm = raw.get("time") or {}
+        team = raw.get("team") or {}
+        player = raw.get("player") or {}
+        assist = raw.get("assist") or {}
+        team_name = team.get("name")
+        team_side: Optional[str] = None
+        if team_name:
+            low = team_name.strip().lower()
+            if low == home_name:
+                team_side = "home"
+            elif low == away_name:
+                team_side = "away"
+        events.append(
+            FixtureEvent(
+                minute=tm.get("elapsed"),
+                extra_minute=tm.get("extra"),
+                team_id=team.get("id"),
+                team_name=team_name,
+                team_side=team_side,
+                player_name=player.get("name"),
+                assist_name=assist.get("name"),
+                type=raw.get("type"),
+                detail=raw.get("detail"),
+                comments=raw.get("comments"),
+            )
+        )
+
+    # Chronological order
+    events.sort(
+        key=lambda e: ((e.minute or 0), (e.extra_minute or 0))
+    )
+
+    out = FixtureEventsResponse(
+        fixture_id=str(fixture_id),
+        events=events,
+        available=True,
+    )
+    ttl = _EVENT_TTL_LIVE if match.status == MatchStatus.LIVE else _EVENT_TTL_FINAL
+    _cache_set(cache_key, out, ttl)
+    return out

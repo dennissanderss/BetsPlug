@@ -526,6 +526,60 @@ export interface Fixture {
   odds?: FixtureOdds | null;
 }
 
+/** ── Lineup / events (API-Football pass-through) ────────────────────── */
+
+export interface LineupPlayer {
+  id: number | null;
+  name: string;
+  number: number | null;
+  position: string | null; // "G" / "D" / "M" / "F"
+  grid: string | null; // "row:col" on the pitch grid
+}
+
+export interface LineupCoach {
+  id: number | null;
+  name: string | null;
+  photo: string | null;
+}
+
+export interface TeamLineup {
+  team_id: number | null;
+  team_name: string | null;
+  team_logo: string | null;
+  formation: string | null;
+  coach: LineupCoach | null;
+  starting_xi: LineupPlayer[];
+  substitutes: LineupPlayer[];
+}
+
+export interface FixtureLineups {
+  fixture_id: string;
+  home: TeamLineup | null;
+  away: TeamLineup | null;
+  available: boolean;
+  note: string | null;
+}
+
+export interface FixtureEvent {
+  minute: number | null;
+  extra_minute: number | null;
+  team_id: number | null;
+  team_name: string | null;
+  team_side: "home" | "away" | null;
+  player_name: string | null;
+  assist_name: string | null;
+  type: string | null; // "Goal" | "Card" | "subst" | "Var"
+  detail: string | null;
+  comments: string | null;
+}
+
+export interface FixtureEvents {
+  fixture_id: string;
+  events: FixtureEvent[];
+  available: boolean;
+  note: string | null;
+}
+
 /** Response shape of /api/fixtures/{id}/analysis — team form + H2H. */
 export interface FixtureAnalysis {
   match: Fixture;

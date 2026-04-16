@@ -30,6 +30,12 @@ import {
   CheckCircle2,
   XCircle,
   Sparkles,
+  Users,
+  ListOrdered,
+  Goal,
+  Square,
+  RefreshCw,
+  UserRound,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -38,6 +44,11 @@ import type {
   Fixture,
   FixtureAnalysis,
   FixturePrediction,
+  FixtureLineups,
+  FixtureEvents,
+  FixtureEvent,
+  LineupPlayer,
+  TeamLineup,
   TeamForm,
 } from "@/types/api";
 
@@ -776,10 +787,302 @@ function FactorsBlock({ pred }: { pred: FixturePrediction }) {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Lineup — per-team starting XI + subs + coach + formation
+   ───────────────────────────────────────────────────────────── */
+
+function PlayerRow({
+  p,
+  sideVariant,
+}: {
+  p: LineupPlayer;
+  sideVariant: "green" | "purple";
+}) {
+  const numberColor =
+    sideVariant === "green"
+      ? "bg-[#4ade80]/15 text-[#86efac] ring-[#4ade80]/30"
+      : "bg-[#a855f7]/15 text-[#d8b4fe] ring-[#a855f7]/30";
+  return (
+    <li className="flex items-center gap-3 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2">
+      <span
+        className={
+          "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold tabular-nums ring-1 " +
+          numberColor
+        }
+      >
+        {p.number ?? "—"}
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-xs font-semibold text-[#ededed]">{p.name}</p>
+        {p.position && (
+          <p className="text-[10px] uppercase tracking-wider text-[#6b7280]">
+            {positionLabel(p.position)}
+          </p>
+        )}
+      </div>
+    </li>
+  );
+}
+
+function positionLabel(code: string): string {
+  if (code === "G") return "Goalkeeper";
+  if (code === "D") return "Defender";
+  if (code === "M") return "Midfielder";
+  if (code === "F") return "Forward";
+  return code;
+}
+
+function TeamLineupCard({
+  side,
+  variant,
+}: {
+  side: TeamLineup;
+  variant: "green" | "purple";
+}) {
+  return (
+    <div className={`card-neon card-neon-${variant} p-5`}>
+      <div className="relative">
+        <div className="flex items-center gap-2.5">
+          <HexBadge variant={variant} size="sm" noGlow>
+            <Users className="h-4 w-4" />
+          </HexBadge>
+          <div className="min-w-0">
+            <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+              {variant === "green" ? "Home" : "Away"}
+            </p>
+            <p className="text-sm font-bold text-[#ededed] truncate">
+              {side.team_name ?? "—"}
+            </p>
+          </div>
+          {side.formation && (
+            <Pill tone="default" className="ml-auto !text-[10px] tabular-nums">
+              {side.formation}
+            </Pill>
+          )}
+        </div>
+
+        {/* Starting XI */}
+        <div className="mt-4">
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#a3a9b8]">
+            Starting XI
+          </p>
+          {side.starting_xi.length === 0 ? (
+            <p className="text-xs italic text-[#6b7280]">No starting XI yet.</p>
+          ) : (
+            <ul className="space-y-1.5">
+              {side.starting_xi.map((p, i) => (
+                <PlayerRow key={(p.id ?? i) + p.name} p={p} sideVariant={variant} />
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* Substitutes */}
+        {side.substitutes.length > 0 && (
+          <div className="mt-4">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#a3a9b8]">
+              Substitutes
+            </p>
+            <ul className="space-y-1.5">
+              {side.substitutes.map((p, i) => (
+                <PlayerRow
+                  key={(p.id ?? i) + p.name + "-sub"}
+                  p={p}
+                  sideVariant={variant}
+                />
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Coach */}
+        {side.coach?.name && (
+          <div className="mt-4 flex items-center gap-3 rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2">
+            <HexBadge variant="blue" size="sm" noGlow>
+              <UserRound className="h-3.5 w-3.5" />
+            </HexBadge>
+            <div>
+              <p className="text-[10px] uppercase tracking-wider text-[#6b7280]">
+                Coach
+              </p>
+              <p className="text-xs font-semibold text-[#ededed]">
+                {side.coach.name}
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Events timeline — goals, cards, subs, VAR
+   ───────────────────────────────────────────────────────────── */
+
+function eventVisual(
+  ev: FixtureEvent,
+): {
+  icon: typeof Goal;
+  color: string;
+  label: string;
+  tone: "win" | "loss" | "draw" | "default";
+} {
+  const detail = (ev.detail ?? "").toLowerCase();
+  const type = (ev.type ?? "").toLowerCase();
+
+  if (type === "goal") {
+    if (detail.includes("own goal")) {
+      return { icon: Goal, color: "#f87171", label: "Own goal", tone: "loss" };
+    }
+    if (detail.includes("missed")) {
+      return {
+        icon: XCircle,
+        color: "#a3a9b8",
+        label: "Missed penalty",
+        tone: "default",
+      };
+    }
+    if (detail.includes("penalty")) {
+      return { icon: Goal, color: "#4ade80", label: "Penalty goal", tone: "win" };
+    }
+    return { icon: Goal, color: "#4ade80", label: "Goal", tone: "win" };
+  }
+  if (type === "card") {
+    if (detail.includes("red")) {
+      return { icon: Square, color: "#ef4444", label: "Red card", tone: "loss" };
+    }
+    return { icon: Square, color: "#fbbf24", label: "Yellow card", tone: "draw" };
+  }
+  if (type === "subst") {
+    return { icon: RefreshCw, color: "#a855f7", label: "Substitution", tone: "default" };
+  }
+  if (type === "var") {
+    return { icon: Activity, color: "#60a5fa", label: "VAR", tone: "default" };
+  }
+  return { icon: Activity, color: "#a3a9b8", label: ev.type ?? "Event", tone: "default" };
+}
+
+function EventRow({ ev }: { ev: FixtureEvent }) {
+  const v = eventVisual(ev);
+  const Icon = v.icon;
+  const minuteLabel = ev.minute != null
+    ? ev.extra_minute
+      ? `${ev.minute}+${ev.extra_minute}'`
+      : `${ev.minute}'`
+    : "—";
+
+  const isAway = ev.team_side === "away";
+  const isSub = (ev.type ?? "").toLowerCase() === "subst";
+
+  return (
+    <li
+      className={
+        "flex items-stretch gap-3 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2.5 " +
+        (isAway ? "flex-row-reverse text-right" : "")
+      }
+    >
+      {/* Minute badge */}
+      <div className="flex w-10 shrink-0 items-center justify-center">
+        <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/[0.05] text-[10px] font-bold tabular-nums text-[#ededed] ring-1 ring-white/[0.08]">
+          {minuteLabel}
+        </span>
+      </div>
+
+      {/* Icon */}
+      <div className="flex shrink-0 items-center">
+        <span
+          className="inline-flex h-7 w-7 items-center justify-center rounded-full ring-1"
+          style={{
+            background: `${v.color}1a`,
+            color: v.color,
+            boxShadow: `0 0 12px ${v.color}33`,
+            borderColor: `${v.color}55`,
+          }}
+        >
+          <Icon className="h-3.5 w-3.5" />
+        </span>
+      </div>
+
+      {/* Body */}
+      <div className="min-w-0 flex-1">
+        <div className={"flex flex-wrap items-center gap-1.5 " + (isAway ? "justify-end" : "")}>
+          <span className="text-xs font-semibold text-[#ededed]">
+            {ev.player_name ?? v.label}
+          </span>
+          {ev.team_name && (
+            <Pill
+              tone={v.tone}
+              className="!text-[9px] inline-flex items-center"
+            >
+              {ev.team_name}
+            </Pill>
+          )}
+        </div>
+        <p className="mt-0.5 text-[11px] text-[#a3a9b8]">
+          {isSub && ev.assist_name ? (
+            <>
+              In: <span className="font-semibold text-[#86efac]">{ev.player_name}</span>
+              {" · "}
+              Out: <span className="font-semibold text-[#f87171]">{ev.assist_name}</span>
+            </>
+          ) : ev.assist_name ? (
+            <>assist by <span className="text-[#ededed]">{ev.assist_name}</span></>
+          ) : (
+            <>{v.label}{ev.detail ? ` — ${ev.detail}` : ""}</>
+          )}
+        </p>
+      </div>
+    </li>
+  );
+}
+
+function EventsList({ events }: { events: FixtureEvent[] }) {
+  if (events.length === 0) {
+    return (
+      <p className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-6 text-center text-xs text-[#a3a9b8]">
+        No events yet.
+      </p>
+    );
+  }
+  // Group by half for readability
+  const firstHalf = events.filter((e) => (e.minute ?? 0) <= 45);
+  const secondHalf = events.filter((e) => (e.minute ?? 0) > 45);
+
+  return (
+    <div className="space-y-4">
+      {firstHalf.length > 0 && (
+        <div>
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#a3a9b8]">
+            First half
+          </p>
+          <ul className="space-y-2">
+            {firstHalf.map((ev, i) => (
+              <EventRow key={i} ev={ev} />
+            ))}
+          </ul>
+        </div>
+      )}
+      {secondHalf.length > 0 && (
+        <div>
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#a3a9b8]">
+            Second half
+          </p>
+          <ul className="space-y-2">
+            {secondHalf.map((ev, i) => (
+              <EventRow key={i + 100} ev={ev} />
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
    Pill-style tabs (NOCTURNE)
    ───────────────────────────────────────────────────────────── */
 
-type TabKey = "overview" | "form" | "h2h";
+type TabKey = "overview" | "form" | "h2h" | "lineup" | "events";
 
 function TabStrip({
   value,
@@ -792,6 +1095,8 @@ function TabStrip({
 }) {
   const tabs: Array<{ key: TabKey; label: string; icon: typeof TrendingUp }> = [
     { key: "overview", label: "Overview", icon: TrendingUp },
+    { key: "events", label: "Events", icon: ListOrdered },
+    { key: "lineup", label: "Lineup", icon: Users },
     { key: "form", label: "Form", icon: Activity },
     { key: "h2h", label: "Head-to-Head", icon: Shield },
   ];
@@ -898,6 +1203,25 @@ export default function MatchDetailPage() {
   const displayMatch = analysis?.match ?? fixture;
   const prediction = displayMatch?.prediction ?? null;
   const hasPrediction = Boolean(prediction);
+  const isLive = displayMatch?.status === "live";
+
+  // Lineup + events — only fetched when their tab is active so we don't
+  // burn API quota on every page load. Lineup is static once published;
+  // events auto-refresh every 45s while the match is live.
+  const { data: lineup, isLoading: lineupLoading } = useQuery({
+    queryKey: ["fixture-lineup", matchId],
+    queryFn: () => api.getFixtureLineup(matchId),
+    enabled: Boolean(matchId) && tab === "lineup",
+    retry: false,
+  });
+
+  const { data: events, isLoading: eventsLoading } = useQuery({
+    queryKey: ["fixture-events", matchId],
+    queryFn: () => api.getFixtureEvents(matchId),
+    enabled: Boolean(matchId) && tab === "events",
+    refetchInterval: isLive ? 45_000 : false,
+    retry: false,
+  });
 
   if (fixtureError) {
     return (
@@ -1076,6 +1400,88 @@ export default function MatchDetailPage() {
               <div className="card-neon p-8">
                 <div className="relative text-center text-xs text-[#a3a9b8]">
                   No head-to-head data available.
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── Events tab ── */}
+        {tab === "events" && (
+          <div className="space-y-5">
+            {eventsLoading ? (
+              <BlockSkeleton />
+            ) : events?.available ? (
+              <div className="card-neon p-5">
+                <div className="relative">
+                  <div className="mb-4 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <HexBadge variant="purple" size="sm" noGlow>
+                        <ListOrdered className="h-4 w-4" />
+                      </HexBadge>
+                      <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+                        Match Events
+                      </p>
+                    </div>
+                    {isLive && (
+                      <Pill tone="default" className="inline-flex items-center gap-1.5 !text-[10px]">
+                        <span className="live-dot-red" />
+                        Auto-updating
+                      </Pill>
+                    )}
+                  </div>
+                  <EventsList events={events.events} />
+                </div>
+              </div>
+            ) : (
+              <div className="card-neon p-8">
+                <div className="relative text-center">
+                  <HexBadge variant="blue" size="md" noGlow>
+                    <ListOrdered className="h-5 w-5" />
+                  </HexBadge>
+                  <p className="mt-4 text-sm font-semibold text-[#ededed]">
+                    No events available
+                  </p>
+                  <p className="mt-1 text-xs text-[#a3a9b8]">
+                    {events?.note ??
+                      "Events appear live once the match kicks off."}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── Lineup tab ── */}
+        {tab === "lineup" && (
+          <div className="space-y-5">
+            {lineupLoading ? (
+              <>
+                <BlockSkeleton />
+                <BlockSkeleton />
+              </>
+            ) : lineup?.available && (lineup.home || lineup.away) ? (
+              <div className="grid gap-5 md:grid-cols-2">
+                {lineup.home && (
+                  <TeamLineupCard side={lineup.home} variant="green" />
+                )}
+                {lineup.away && (
+                  <TeamLineupCard side={lineup.away} variant="purple" />
+                )}
+              </div>
+            ) : (
+              <div className="card-neon p-8">
+                <div className="relative text-center">
+                  <HexBadge variant="blue" size="md" noGlow>
+                    <Users className="h-5 w-5" />
+                  </HexBadge>
+                  <p className="mt-4 text-sm font-semibold text-[#ededed]">
+                    Lineup not published yet
+                  </p>
+                  <p className="mt-1 text-xs text-[#a3a9b8]">
+                    {lineup?.note ??
+                      "Starting XIs are usually confirmed around an hour before kick-off."}
+                  </p>
                 </div>
               </div>
             )}
