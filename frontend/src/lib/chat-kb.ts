@@ -43,7 +43,7 @@ BetsPlug has four tiers. Silver and Gold bill monthly or yearly (yearly saves ~2
 - **Gold - €14.99/month or €11.99/month billed yearly (€143.88/year) - most popular**: The full product. All 30+ leagues worldwide (Champions League, Europa League, MLS, Eredivisie, etc.), full BetsPlug Pulse AI output with model breakdown, instant picks with zero delay, daily Pick of the Day, live probability tracking and real-time alerts, exclusive Gold-tier Telegram channel, Strategy Lab (coming soon) with backtesting, priority support (12h response), one personal strategy review per month. This is the plan we recommend for anyone who takes their edge seriously.
 - **Platinum Lifetime - €199 one-time** (limited to 100 members per year): Everything in Gold for life (current and all future features), plus founder-tier perks: private Platinum-only Telegram channel capped at 20 seats, 1-on-1 onboarding call with the founders, monthly personal strategy review, early access to new features, read-only API access, and a lifetime price lock. Final-sale after the 14-day refund window.
 
-Bronze IS the free trial - Silver and Gold do not have a separate trial path. Add-ons on Silver/Gold are opt-in during checkout (Telegram VIP, Tip of the Day, etc).
+Bronze IS the free trial - Silver and Gold do not have a separate trial path. Add-ons on Silver/Gold are opt-in during checkout (Telegram VIP, Pick of the Day, etc).
 
 ## Payments
 BetsPlug accepts major credit cards (Visa, Mastercard, American Express), iDEAL, Bancontact, SEPA, PayPal and Apple Pay / Google Pay. All payments are processed through a PCI-compliant payment provider. The company is based in the EU; prices include 21% VAT where applicable.

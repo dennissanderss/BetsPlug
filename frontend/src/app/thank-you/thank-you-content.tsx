@@ -162,7 +162,7 @@ const PLAN_FEATURES: Record<PlanKey, PlanFeatures> = {
         icon: Rocket,
         title: "Every add-on included",
         body:
-          "Telegram alerts, Tip of the Day, premium reports — nothing to upgrade, ever.",
+          "Telegram alerts, Pick of the Day, premium reports — nothing to upgrade, ever.",
       },
       {
         icon: Trophy,

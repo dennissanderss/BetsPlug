@@ -88,21 +88,21 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
   return (
     <Link
       href={lHref(`/matches/${fixture.id}`)}
-      className="group flex items-center gap-3 px-3 py-2.5 border-b border-white/[0.05] transition-colors hover:bg-white/[0.04] last:border-b-0 cursor-pointer focus-visible:outline-none focus-visible:bg-white/[0.05]"
+      className="group flex items-center gap-2 sm:gap-3 px-2 py-2 sm:px-3 sm:py-2.5 border-b border-white/[0.05] transition-colors hover:bg-white/[0.04] last:border-b-0 cursor-pointer focus-visible:outline-none focus-visible:bg-white/[0.05]"
     >
       {/* Time / Live minute */}
-      <span className="w-16 shrink-0 text-xs tabular-nums">
+      <span className="w-11 sm:w-16 shrink-0 text-xs tabular-nums">
         {isLive ? (
           <span className="inline-flex items-center gap-1">
             <span className="live-dot-red" />
-            <span className="text-red-400 font-semibold uppercase text-[10px] tracking-wider">
+            <span className="text-red-400 font-semibold uppercase text-[9px] sm:text-[10px] tracking-wider">
               {formatLiveMinute(fixture.live_score) ?? "LIVE"}
             </span>
           </span>
         ) : isFinished ? (
-          <Pill tone="default" className="!text-[10px]">FT</Pill>
+          <Pill tone="default" className="!text-[9px] sm:!text-[10px]">FT</Pill>
         ) : (
-          <Pill tone="default" className="!text-[10px]">{formatTime(fixture.scheduled_at)}</Pill>
+          <Pill tone="default" className="!text-[9px] sm:!text-[10px]">{formatTime(fixture.scheduled_at)}</Pill>
         )}
       </span>
 
@@ -115,10 +115,10 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
       </div>
 
       {/* Score or VS */}
-      <div className="w-16 shrink-0 text-center">
+      <div className="w-10 sm:w-16 shrink-0 text-center">
         {isFinished || isLive ? (
-          <span className="text-stat text-sm text-[#ededed]">
-            {fixture.result?.home_score ?? 0} - {fixture.result?.away_score ?? 0}
+          <span className="text-stat text-xs sm:text-sm text-[#ededed] tabular-nums">
+            {fixture.result?.home_score ?? 0}-{fixture.result?.away_score ?? 0}
           </span>
         ) : (
           <span className="text-[10px] uppercase tracking-wider text-[#6b7280]">vs</span>
@@ -134,25 +134,29 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
       </div>
 
       {/* Pick + Confidence */}
-      <div className="flex shrink-0 items-center gap-1.5">
+      <div className="flex shrink-0 items-center gap-1 sm:gap-1.5">
         {pick ? (
-          <Pill tone={pick.tone} className="!text-[10px] hidden sm:inline-flex max-w-[110px] truncate">
+          <Pill
+            tone={pick.tone}
+            className="!text-[9px] sm:!text-[10px] hidden md:inline-flex max-w-[110px] truncate"
+          >
             <span className="truncate">{shortTeamName(pick.label)}</span>
           </Pill>
         ) : null}
-        <div className="w-14 text-right">
+        <div className="w-11 sm:w-14 text-right">
           {conf != null ? (
             <DataChip
               tone="win"
               style={color ? { color, borderColor: `${color}66` } : undefined}
+              className="!text-[10px] sm:!text-xs"
             >
               {conf}%
             </DataChip>
           ) : (
-            <span className="text-[10px] italic text-[#6b7280]">{t("dash.analyzing")}</span>
+            <span className="text-[9px] italic text-[#6b7280]">{t("dash.analyzing")}</span>
           )}
         </div>
-        <ArrowRight className="h-3 w-3 shrink-0 text-[#6b7280] transition-all group-hover:translate-x-0.5 group-hover:text-[#4ade80]" />
+        <ArrowRight className="hidden sm:block h-3 w-3 shrink-0 text-[#6b7280] transition-all group-hover:translate-x-0.5 group-hover:text-[#4ade80]" />
       </div>
     </Link>
   );

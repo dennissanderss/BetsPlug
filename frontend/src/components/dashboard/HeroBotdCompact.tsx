@@ -13,6 +13,7 @@ interface BotdData {
   confidence?: number | null;
   predicted_outcome?: string | null;
   prediction_id?: string | null;
+  match_id?: string | null;
 }
 
 interface HeroBotdCompactProps {
@@ -50,33 +51,33 @@ export function HeroBotdCompact({ botd, isLoading }: HeroBotdCompactProps) {
 
   return (
     <Link
-      href={lHref(botd.prediction_id ? `/predictions/${botd.prediction_id}` : "/bet-of-the-day")}
-      className="group flex items-center gap-4 rounded-xl border-l-4 border-emerald-500 bg-white/[0.04] px-4 py-3 transition-all hover:bg-white/[0.08]"
+      href={lHref(botd.match_id ? `/matches/${botd.match_id}` : "/bet-of-the-day")}
+      className="group flex items-center gap-2 sm:gap-4 rounded-xl border-l-4 border-emerald-500 bg-white/[0.04] px-3 py-3 sm:px-4 transition-all hover:bg-white/[0.08]"
     >
-      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10">
-        <Star className="h-4 w-4 text-emerald-400" />
+      <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10">
+        <Star className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-400" />
       </div>
 
-      <span className="text-[11px] font-bold uppercase tracking-widest text-emerald-400 shrink-0">
-        {t("dash.tipOfTheDay")}
+      <span className="hidden sm:inline text-[11px] font-bold uppercase tracking-widest text-emerald-400 shrink-0">
+        {t("botd.title")}
       </span>
 
-      <div className="h-4 w-px bg-white/[0.1]" />
+      <div className="hidden sm:block h-4 w-px bg-white/[0.1]" />
 
-      <span className="text-sm font-medium text-slate-200 truncate">
+      <span className="text-xs sm:text-sm font-medium text-slate-200 truncate min-w-0 flex-1">
         {botd.home_team} vs {botd.away_team}
       </span>
 
       {botd.league && (
-        <span className="hidden sm:inline text-xs text-slate-500 truncate shrink-0">
+        <span className="hidden md:inline text-xs text-slate-500 truncate shrink-0">
           {botd.league}
         </span>
       )}
 
-      <div className="ml-auto flex items-center gap-3 shrink-0">
+      <div className="ml-auto flex items-center gap-2 sm:gap-3 shrink-0">
         {conf != null && (
           <span
-            className="rounded-full px-2.5 py-0.5 text-xs font-bold tabular-nums"
+            className="rounded-full px-2 sm:px-2.5 py-0.5 text-[11px] sm:text-xs font-bold tabular-nums"
             style={{ background: `${color}18`, color }}
           >
             {conf}%

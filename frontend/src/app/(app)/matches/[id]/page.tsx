@@ -230,19 +230,19 @@ function MatchHeader({ match, locale }: { match: Fixture; locale: string }) {
         </div>
 
         {/* Teams row */}
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-6">
           {/* Home */}
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-end sm:text-right">
+          <div className="flex flex-col items-center gap-2 text-center sm:gap-3 sm:flex-row sm:justify-end sm:text-right">
             <TeamLogoBlock
               src={match.home_team_logo}
               name={match.home_team_name}
-              size={64}
+              size={48}
             />
             <div className="min-w-0">
-              <p className="text-base font-bold leading-tight text-[#ededed] sm:text-xl">
+              <p className="text-xs font-bold leading-tight text-[#ededed] sm:text-xl break-words">
                 {match.home_team_name}
               </p>
-              <p className="mt-0.5 text-[10px] uppercase tracking-wider text-[#6b7280]">
+              <p className="mt-0.5 text-[9px] uppercase tracking-wider text-[#6b7280] sm:text-[10px]">
                 Home
               </p>
               {winner === "home" && (
@@ -255,15 +255,15 @@ function MatchHeader({ match, locale }: { match: Fixture; locale: string }) {
           </div>
 
           {/* Center — score or kickoff */}
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center px-1">
             {scheduled && match.result ? (
               <>
-                <div className="flex items-center gap-3 sm:gap-5">
-                  <span className="text-stat text-5xl text-[#ededed] sm:text-6xl tabular-nums">
+                <div className="flex items-center gap-2 sm:gap-5">
+                  <span className="text-stat text-3xl text-[#ededed] sm:text-6xl tabular-nums">
                     {match.result.home_score}
                   </span>
-                  <span className="text-lg font-semibold text-[#6b7280]">-</span>
-                  <span className="text-stat text-5xl text-[#ededed] sm:text-6xl tabular-nums">
+                  <span className="text-base font-semibold text-[#6b7280] sm:text-lg">-</span>
+                  <span className="text-stat text-3xl text-[#ededed] sm:text-6xl tabular-nums">
                     {match.result.away_score}
                   </span>
                 </div>
@@ -281,10 +281,10 @@ function MatchHeader({ match, locale }: { match: Fixture; locale: string }) {
               </>
             ) : (
               <>
-                <span className="text-sm font-semibold uppercase tracking-widest text-[#6b7280]">
+                <span className="text-[10px] sm:text-sm font-semibold uppercase tracking-widest text-[#6b7280]">
                   VS
                 </span>
-                <span className="mt-1 text-stat text-2xl text-[#ededed]">
+                <span className="mt-1 text-stat text-base sm:text-2xl text-[#ededed] tabular-nums">
                   {formatTime(match.scheduled_at, locale)}
                 </span>
               </>
@@ -292,17 +292,17 @@ function MatchHeader({ match, locale }: { match: Fixture; locale: string }) {
           </div>
 
           {/* Away */}
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:text-left">
+          <div className="flex flex-col items-center gap-2 text-center sm:gap-3 sm:flex-row sm:text-left">
             <TeamLogoBlock
               src={match.away_team_logo}
               name={match.away_team_name}
-              size={64}
+              size={48}
             />
             <div className="min-w-0">
-              <p className="text-base font-bold leading-tight text-[#ededed] sm:text-xl">
+              <p className="text-xs font-bold leading-tight text-[#ededed] sm:text-xl break-words">
                 {match.away_team_name}
               </p>
-              <p className="mt-0.5 text-[10px] uppercase tracking-wider text-[#6b7280]">
+              <p className="mt-0.5 text-[9px] uppercase tracking-wider text-[#6b7280] sm:text-[10px]">
                 Away
               </p>
               {winner === "away" && (
@@ -405,7 +405,7 @@ function ProbBar({
       </div>
 
       {/* Legend */}
-      <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+      <div className="mt-3 grid grid-cols-3 gap-1 sm:gap-2 text-center">
         <div>
           <DataChip tone={pickSide === "home" ? "win" : "default"}>
             {Math.round(home * 100)}%
@@ -489,7 +489,7 @@ function TeamFormCard({
         </div>
 
         {/* W/D/L + goals — 3-up */}
-        <div className="mt-4 grid grid-cols-3 gap-2">
+        <div className="mt-4 grid grid-cols-3 gap-1.5 sm:gap-2">
           <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2 py-2 text-center">
             <p className="text-stat text-lg text-[#ededed] tabular-nums">
               {form.wins}-{form.draws}-{form.losses}
@@ -557,9 +557,9 @@ function H2HCard({
 
         {total > 0 ? (
           <>
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-                <p className="text-stat text-2xl text-[#4ade80] tabular-nums">
+            <div className="mt-4 grid grid-cols-3 gap-1.5 sm:gap-2">
+              <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-2 sm:p-3 text-center">
+                <p className="text-stat text-xl sm:text-2xl text-[#4ade80] tabular-nums">
                   {h2h.home_wins}
                 </p>
                 <p className="mt-1 text-[9px] uppercase tracking-wider text-[#6b7280] truncate">
@@ -771,13 +771,13 @@ function FactorsBlock({ pred }: { pred: FixturePrediction }) {
                       </Pill>
                     </div>
                     <div className="mt-1.5 grid grid-cols-3 gap-1 text-center">
-                      <DataChip tone={pickSide === "home" ? "win" : "default"}>
+                      <DataChip tone={pickSide === "home" ? "win" : "default"} className="!text-[10px] sm:!text-xs">
                         {Math.round(sm.home * 100)}%
                       </DataChip>
-                      <DataChip tone={pickSide === "draw" ? "win" : "default"}>
+                      <DataChip tone={pickSide === "draw" ? "win" : "default"} className="!text-[10px] sm:!text-xs">
                         {Math.round(sm.draw * 100)}%
                       </DataChip>
-                      <DataChip tone={pickSide === "away" ? "win" : "default"}>
+                      <DataChip tone={pickSide === "away" ? "win" : "default"} className="!text-[10px] sm:!text-xs">
                         {Math.round(sm.away * 100)}%
                       </DataChip>
                     </div>

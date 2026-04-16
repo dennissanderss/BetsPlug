@@ -72,7 +72,7 @@ export default function AnalystLayout({ children }: { children: React.ReactNode 
                 ]
               : [
                   "Read-only Match Deep Dive preview",
-                  "Daily Bet of the Day pick",
+                  "Daily Pick of the Day",
                   "Full results history with detail",
                 ]
           }

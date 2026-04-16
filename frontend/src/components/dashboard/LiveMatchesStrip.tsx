@@ -47,7 +47,7 @@ function LiveMatchCard({ fixture }: { fixture: Fixture }) {
   return (
     <Link
       href={lHref(`/matches/${fixture.id}`)}
-      className="card-neon card-neon-purple p-3 block transition-all hover:-translate-y-0.5 hover:halo-purple focus-visible:outline-none focus-visible:halo-purple"
+      className="card-neon card-neon-purple p-2.5 sm:p-3 block transition-all hover:-translate-y-0.5 hover:halo-purple focus-visible:outline-none focus-visible:halo-purple"
     >
       <div className="relative">
         <div className="mb-2 flex items-center justify-between gap-2">
@@ -73,7 +73,7 @@ function LiveMatchCard({ fixture }: { fixture: Fixture }) {
                 {fixture.home_team_name}
               </span>
             </div>
-            <span className="text-stat text-lg text-[#ededed] ml-2 shrink-0">
+            <span className="text-stat text-base sm:text-lg text-[#ededed] ml-2 shrink-0 tabular-nums">
               {fixture.result?.home_score ?? 0}
             </span>
           </div>
@@ -85,7 +85,7 @@ function LiveMatchCard({ fixture }: { fixture: Fixture }) {
                 {fixture.away_team_name}
               </span>
             </div>
-            <span className="text-stat text-lg text-[#ededed] ml-2 shrink-0">
+            <span className="text-stat text-base sm:text-lg text-[#ededed] ml-2 shrink-0 tabular-nums">
               {fixture.result?.away_score ?? 0}
             </span>
           </div>

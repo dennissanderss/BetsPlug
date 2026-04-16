@@ -257,7 +257,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
   const [billing, setBilling] = useState<Billing>(initialBilling);
   // Add-ons are opt-in on Silver/Gold — users start with nothing
   // pre-selected and can tick whichever extras they want.
-  // (Tip of the Day is still shown as "Included" on Platinum.)
+  // (Pick of the Day is still shown as "Included" on Platinum.)
   const [selectedUpsells, setSelectedUpsells] = useState<UpsellId[]>([]);
   // Trial is the default path (maximises free-trial conversions),
   // but users who already trust us can pick "Subscribe now".
@@ -418,7 +418,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 
   // Which upsells are actually chargeable for this plan.
   // Platinum is the lifetime "everything included" tier — both
-  // Telegram Alerts and Tip of the Day are bundled in for free,
+  // Telegram Alerts and Pick of the Day are bundled in for free,
   // so they're shown as "Included" and removed from the billable list.
   // Stripe also can't mix one-time (Platinum) with recurring (addons)
   // in a single checkout, which makes "all included" the cleanest path.

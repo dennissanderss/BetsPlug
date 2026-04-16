@@ -108,7 +108,7 @@ export function Header({ className }: HeaderProps) {
       </div>
 
       {/* Search bar */}
-      <form onSubmit={handleSearch} className="flex-1 max-w-sm ml-10 md:ml-0">
+      <form onSubmit={handleSearch} className="flex-1 min-w-0 max-w-sm ml-2 sm:ml-10 md:ml-0">
         <div
           className={cn(
             "search-pill flex items-center",
