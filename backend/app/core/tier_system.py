@@ -98,17 +98,17 @@ TIER_METADATA: dict[PickTier, dict[str, Any]] = {
     PickTier.GOLD: {
         "slug": "gold",
         "label": "🔵 Gold",
-        "accuracy_claim": "77%",
+        "accuracy_claim": "70%+",
     },
     PickTier.SILVER: {
         "slug": "silver",
         "label": "⚪ Silver",
-        "accuracy_claim": "69%",
+        "accuracy_claim": "60%+",
     },
     PickTier.FREE: {
         "slug": "free",
         "label": "⬜ Free",
-        "accuracy_claim": "55%+",
+        "accuracy_claim": "45%+",
     },
 }
 
