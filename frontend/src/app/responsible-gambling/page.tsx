@@ -36,9 +36,8 @@ export default function ResponsibleGamblingPage() {
       <h2>1. What BetsPlug is — and what it is not</h2>
       <p>
         BetsPlug is an <strong>AI-driven sports analytics platform</strong>. We
-        use statistical models — including Elo ratings, Poisson distributions,
-        and logistic regression — to generate match predictions and probability
-        estimates. We do <strong>not</strong> accept bets, process wagers, hold
+        use multiple AI models to analyse team data and generate match
+        predictions and probability estimates. We do <strong>not</strong> accept bets, process wagers, hold
         customer funds, or operate as a bookmaker or gambling operator in any
         jurisdiction.
       </p>

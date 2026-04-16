@@ -140,7 +140,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
               {t("b2b.contactCta")}
             </a>
             <Link href={home} className="btn-glass inline-flex items-center gap-2">
-              Back to home
+              Back to homepage
             </Link>
           </motion.div>
 
@@ -349,7 +349,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
                   {t("b2b.contactCta")}
                 </a>
                 <Link href={home} className="btn-ghost inline-flex items-center gap-2">
-                  Back to home
+                  Back to homepage
                 </Link>
               </div>
             </div>

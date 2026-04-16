@@ -81,7 +81,7 @@ const PLAN_FEATURES: Record<PlanKey, PlanFeatures> = {
         icon: Target,
         title: "Daily free picks",
         body:
-          "Get our top 3 value picks each morning, hand-picked and graded by our models.",
+          "Get our top 3 value picks each morning, hand-picked by our AI.",
       },
       {
         icon: Sparkles,
@@ -93,7 +93,7 @@ const PLAN_FEATURES: Record<PlanKey, PlanFeatures> = {
         icon: Mail,
         title: "Weekly digest",
         body:
-          "A clean summary of last week's ROI, hit rate and best segments — straight to your inbox.",
+          "A clear summary of last week's results and best picks — straight to your inbox.",
       },
     ],
   },
@@ -112,13 +112,13 @@ const PLAN_FEATURES: Record<PlanKey, PlanFeatures> = {
         icon: LayoutDashboard,
         title: "ROI dashboard",
         body:
-          "Track your profit curve, bankroll and per-league performance with pro-grade analytics.",
+          "Track your profits, bankroll and results per league in one simple dashboard.",
       },
       {
         icon: ShieldCheck,
         title: "Value alerts",
         body:
-          "Get notified the moment a pick with +EV drops so you can lock in the best odds.",
+          "Get notified the moment a high-value pick drops so you can grab the best odds.",
       },
     ],
   },
@@ -131,19 +131,19 @@ const PLAN_FEATURES: Record<PlanKey, PlanFeatures> = {
         icon: Trophy,
         title: "Premium picks",
         body:
-          "Our highest-confidence plays — smaller list, bigger edge. Every pick is model-backed.",
+          "Our highest-confidence plays — smaller list, bigger edge. Every pick is backed by AI.",
       },
       {
         icon: LayoutDashboard,
         title: "Full analytics suite",
         body:
-          "Deep calibration, segment ROI, bankroll planning and backtests. No feature locked.",
+          "Full stats breakdown, profit tracking, bankroll planning and historical results. Nothing locked.",
       },
       {
         icon: Zap,
         title: "Priority support",
         body:
-          "Direct line to the team, plus early access to new models and betting tools.",
+          "Direct line to the team, plus early access to new features and betting tools.",
       },
     ],
   },
@@ -411,7 +411,7 @@ function ThankYouContent({
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mx-auto mt-6 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
-            Your 4-model ensemble subscription is live across 30+ leagues. Here&apos;s exactly what just unlocked — and where to head first.
+            Your AI football predictions subscription is live across 30+ leagues. Here&apos;s exactly what you just unlocked — and where to go first.
           </motion.p>
 
           {/* Plan badge */}
@@ -598,7 +598,7 @@ function ThankYouContent({
                     Ready to place your first pick?
                   </h2>
                   <p className="mx-auto mt-4 max-w-xl text-base text-[#a3a9b8]">
-                    Your dashboard is live. Head over and start winning smarter.
+                    Your dashboard is live. Check your first predictions now.
                   </p>
                   <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
                     <Link href={loc("/dashboard")} className="btn-primary group w-full sm:w-auto">

@@ -111,8 +111,8 @@ export default async function BetTypesIndexPage() {
 
             <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
               {t(
-                "1X2, Over/Under, Both Teams To Score, Asian Handicap, Double Chance — each market has its own math. Our guides show exactly how BetsPlug's 4-model ensemble prices them, when they hide genuine value, and the tipster traps to skip.",
-                "1X2, Over/Under, Both Teams To Score, Asian Handicap, Double Chance — elke markt heeft zijn eigen wiskunde. Onze gidsen laten zien hoe het 4-model-ensemble van BetsPlug ze prijst, wanneer ze echte value bieden en welke tipster-valkuilen je moet vermijden.",
+                "1X2, Over/Under, Both Teams To Score, Asian Handicap, Double Chance — each market works differently. Our guides show exactly how BetsPlug's AI analyses them, when they hide real value, and the tipster traps to avoid.",
+                "1X2, Over/Under, Both Teams To Score, Asian Handicap, Double Chance — elke markt werkt anders. Onze gidsen laten zien hoe de AI van BetsPlug ze analyseert, wanneer ze echte value bieden en welke tipster-valkuilen je moet vermijden.",
               )}
             </p>
           </div>
@@ -189,8 +189,8 @@ export default async function BetTypesIndexPage() {
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
                 {t(
-                  "Open any fixture in BetsPlug and compare the bookmaker line against our calibrated probability. If there's an edge, you'll see it flagged — across 30+ leagues, recalculated every hour.",
-                  "Open een wedstrijd in BetsPlug en vergelijk de bookmaker-lijn met onze gekalibreerde kans. Als er een edge is, zie je het direct — over 30+ competities, elk uur herberekend.",
+                  "Open any match in BetsPlug and compare the bookmaker odds against our AI prediction. If there's value, you'll see it flagged — across 30+ leagues, updated every hour.",
+                  "Open een wedstrijd in BetsPlug en vergelijk de bookmaker-odds met onze AI-voorspelling. Als er value is, zie je het direct — over 30+ competities, elk uur bijgewerkt.",
                 )}
               </p>
 

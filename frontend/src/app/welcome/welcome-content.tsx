@@ -64,7 +64,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
     user ? `, ${displayName}` : ""
   }!`;
   const statusBody =
-    "Here's what to do next: browse today's predictions, pick the subscription that fits you, and start winning smarter with the rest of the crew.";
+    "Here's what to do next: check today's AI football predictions, pick a plan that fits your betting style, and start winning smarter.";
 
   const nextStepVariants: HexVariant[] = ["green", "purple", "blue"];
   const nextSteps = [
@@ -241,7 +241,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
                 href={loc("/predictions")}
                 className="btn-primary inline-flex items-center gap-2"
               >
-                Browse today&apos;s predictions
+                See today&apos;s predictions
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
@@ -340,7 +340,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
               </span>
               <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 Your first{" "}
-                <span className="gradient-text-green">three moves.</span>
+                <span className="gradient-text-green">three steps.</span>
               </h2>
             </motion.div>
 
@@ -431,7 +431,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
                     className="btn-primary inline-flex items-center gap-2"
                   >
                     <Rocket className="h-4 w-4" />
-                    Browse predictions
+                    See predictions
                   </Link>
                   <Link
                     href={loc("/checkout")}

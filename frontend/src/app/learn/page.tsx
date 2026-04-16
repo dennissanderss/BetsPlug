@@ -104,8 +104,8 @@ export default async function LearnIndexPage() {
 
             <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
               {t(
-                "Six handwritten deep-dives into the concepts that anchor the BetsPlug ensemble — value betting, expected goals, Elo ratings, the Kelly criterion, Dixon-Coles Poisson and bankroll management. Read one a day, skip the tipster noise forever.",
-                "Zes handgeschreven deep-dives in de concepten die het BetsPlug-ensemble verankeren — value betting, expected goals, Elo-ratings, het Kelly-criterion, Dixon-Coles Poisson en bankroll-management. Lees er één per dag en sla de tipster-ruis voorgoed over.",
+                "Six in-depth guides covering the ideas behind every BetsPlug prediction — value betting, expected goals, team ratings, smart staking, goal models and bankroll management. Read one a day and stop relying on tipster guesswork.",
+                "Zes diepgaande gidsen over de ideeën achter elke BetsPlug-voorspelling — value betting, expected goals, teamratings, slim inzetten, doelpuntenmodellen en bankroll-management. Lees er één per dag en stop met vertrouwen op tipster-gokwerk.",
               )}
             </p>
           </div>
@@ -183,8 +183,8 @@ export default async function LearnIndexPage() {
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
                 {t(
-                  "Reading about Poisson and Kelly is one thing — watching them assign probabilities to tonight's fixtures is where it clicks. Start your €0,01 trial and score the next pillar against real AI football predictions.",
-                  "Lezen over Poisson en Kelly is één ding — ze probabilities zien toewijzen aan vanavonds wedstrijden is waar het klikt. Start je €0,01 proefperiode en toets de volgende pillar aan echte AI-voetbalvoorspellingen.",
+                  "Reading about betting theory is one thing — watching the AI apply it to tonight's matches is where it clicks. Start your €0,01 trial and test what you've learned against real AI football predictions.",
+                  "Lezen over wedtheorie is één ding — de AI het zien toepassen op vanavonds wedstrijden is waar het klikt. Start je €0,01 proefperiode en test wat je hebt geleerd tegen echte AI-voetbalvoorspellingen.",
                 )}
               </p>
 
@@ -194,7 +194,7 @@ export default async function LearnIndexPage() {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link href="/how-it-works" className="btn-glass inline-flex items-center gap-2">
-                  {t("See how the ensemble works", "Zie hoe het ensemble werkt")}
+                  {t("See how the AI works", "Zie hoe de AI werkt")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>

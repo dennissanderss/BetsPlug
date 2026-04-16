@@ -65,7 +65,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       name: "Bronze",
       tagline: "The €0,01 test drive",
       bestFor:
-        "If you've been burned by a tipster before: run our AI football predictions against your own bets for 7 days before you spend a cent more.",
+        "Been burned by a tipster before? Try our AI football predictions against your own bets for 7 days before you spend a cent more.",
       price: "€0,01",
       period: "7 days",
       includes: [
@@ -90,7 +90,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       name: "Silver",
       tagline: "The weekend-bettor plan",
       bestFor:
-        "You bet the big matches in Premier League, La Liga, Bundesliga, Serie A or Ligue 1 — and nothing else. Silver covers those five without paying for leagues you ignore.",
+        "You bet on the big leagues — Premier League, La Liga, Bundesliga, Serie A or Ligue 1. Silver covers those five without paying for leagues you don't follow.",
       price: "€9,99",
       period: "month",
       includes: [
@@ -116,7 +116,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       name: "Gold",
       tagline: "The full-access plan most users pick",
       bestFor:
-        "Serious bettors who want every edge: all 30+ leagues, downloadable data, the Gold Telegram, and priority support when a prediction question can't wait 48 hours.",
+        "For serious bettors who want every edge: all 30+ leagues, downloadable picks, the Gold Telegram, and fast support when you need answers.",
       price: "€14,99",
       period: "month",
       includes: [
@@ -140,7 +140,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       name: "Platinum lifetime",
       tagline: "Pay once. Keep it forever.",
       bestFor:
-        "You're already planning to stick with BetsPlug long-term. Platinum locks in today's price for life, plus founder-tier perks you can't get on any monthly plan.",
+        "You're in this for the long run. Platinum locks in today's price forever, plus exclusive perks you can't get on any monthly plan.",
       price: "€199",
       period: "one-time",
       includes: [
@@ -174,21 +174,21 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
   const goldReasons = [
     {
       icon: TrendingUp,
-      title: "The break-even math is brutal",
+      title: "Cheaper than one lost bet",
       desc:
-        `€14,99/month is less than a single placed-and-lost bet on a gut feeling. For that, you get 30+ leagues, ${POTD_STATS.accuracy}% Pick-of-the-Day hit rate, and every prediction exportable as CSV.`,
+        `€14,99/month is less than one bet you lose on a gut feeling. For that, you get 30+ leagues, our ${POTD_STATS.accuracy}% Pick of the Day, and every prediction downloadable.`,
     },
     {
       icon: Sparkles,
-      title: "Strategy Lab ships to Gold first",
+      title: "Strategy Lab comes to Gold first",
       desc:
-        "Backtest your own angles against our entire historical AI prediction database the moment Strategy Lab launches. Gold and Platinum users get it before anyone else.",
+        "Test your own betting strategies against our full prediction history when Strategy Lab launches. Gold and Platinum users get early access.",
     },
     {
       icon: Shield,
-      title: "Community and priority access",
+      title: "Community + fast support",
       desc:
-        "Gold unlocks our closed Telegram channel for pick discussion and a 12-hour support SLA. Silver is email-only (48h). Bronze is trial-scoped.",
+        "Gold unlocks our private Telegram channel for pick discussion and 12-hour support. Silver is email-only (48h). Bronze is trial-only.",
     },
   ];
 
@@ -209,7 +209,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       icon: Star,
       title: "Private Platinum Telegram (20 seats)",
       desc:
-        "A separate founder channel with direct access to our model team — deep-dive Q&A, pre-release insights, and strategy review before launch.",
+        "A separate founder channel with direct access to our team — in-depth Q&A, early insights, and strategy discussion before features go live.",
     },
   ];
 
@@ -260,10 +260,10 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
-            Every plan unlocks the same AI football predictions and the same public
-            track record. The only difference is league coverage and the tooling
-            around it. Start with a €0,01 trial, upgrade when the numbers convince
-            you, or lock in lifetime pricing before it rises.
+            Every plan gives you the same AI football predictions and the same public
+            track record. The only difference is how many leagues you get and the
+            extras around it. Start with a €0,01 trial, upgrade when the results
+            convince you, or lock in lifetime pricing before it goes up.
           </motion.p>
 
           {/* Risk-reversal trust bar */}
@@ -326,9 +326,9 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               <span className="gradient-text-green">predictions & track record.</span>
             </h2>
             <p className="mt-4 max-w-2xl text-base text-[#a3a9b8]">
-              The difference is which leagues you get, how deeply you can export the
-              data, and how fast our team responds when something breaks. Pick the
-              one that matches how you actually bet.
+              The difference is which leagues you get, how you can download your
+              picks, and how fast we respond when you need help. Pick the one
+              that matches how you actually bet.
             </p>
           </div>
 
@@ -521,9 +521,8 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               <span className="gradient-text-green">in one matrix.</span>
             </h2>
             <p className="mt-4 max-w-2xl text-base text-[#a3a9b8]">
-              Green check = unlocked. Grey cross = out of scope for that tier. The
-              7-day trial rows show you exactly what Bronze unlocks during the
-              probation window.
+              Green check = included. Grey cross = not in that plan. The 7-day trial
+              rows show you exactly what Bronze unlocks during the trial period.
             </p>
           </div>
 
@@ -654,9 +653,9 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               <span className="gradient-text-green">the serious tool.</span>
             </h2>
             <p className="mt-4 max-w-2xl text-base text-[#a3a9b8]">
-              If you bet more than once a week, or on matches outside the top-5
-              European leagues, Gold pays for itself inside a single correctly-timed
-              pick. Here's what the extra €5/month actually buys.
+              If you bet more than once a week, or follow leagues outside the top-5,
+              Gold pays for itself with a single well-timed pick. Here's what the
+              extra €5/month actually gets you.
             </p>
           </div>
 
@@ -874,8 +873,8 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
                 Seven days of full Gold access. No auto-upgrade. Cancel in two
-                clicks. Run our AI football predictions next to your own betting
-                log for a week, then decide — we'd rather you verify than trust.
+                clicks. Compare our AI football predictions with your own bets
+                for a week, then decide — we'd rather you see results than trust words.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link

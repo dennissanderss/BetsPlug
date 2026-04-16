@@ -139,13 +139,13 @@ export default function RegisterPage() {
               </h1>
 
               <p className="mt-5 max-w-md text-base leading-relaxed text-[#a3a9b8]">
-                One card-verify charge of €0,01, then a full trial of the 4-model ensemble, Pick of the Day and live ROI tracking across 30+ leagues. Cancel in two clicks — no awkward phone call.
+                Just €0,01 to start. Get full access to every AI prediction, the Pick of the Day and live results across 30+ leagues. Cancel in two clicks — no awkward phone call.
               </p>
 
               <div className="mt-10 grid max-w-md grid-cols-1 gap-3">
                 {[
-                  { icon: ShieldCheck, label: "Stripe-secured · bank-grade encryption", variant: "green" as const },
-                  { icon: BadgeCheck, label: "€0,01 today · price anchors at trial end", variant: "purple" as const },
+                  { icon: ShieldCheck, label: "Stripe-secured · safe checkout", variant: "green" as const },
+                  { icon: BadgeCheck, label: "€0,01 today · no hidden charges", variant: "purple" as const },
                   { icon: RefreshCw, label: "Cancel or upgrade in two clicks", variant: "blue" as const },
                 ].map((item) => (
                   <div
@@ -183,7 +183,7 @@ export default function RegisterPage() {
                       <span className="gradient-text-green">AI football predictions.</span>
                     </h1>
                     <p className="mt-3 text-sm text-[#a3a9b8]">
-                      €0,01 card-verify, full trial access, cancel in two clicks.
+                      €0,01 to start, full access to every prediction, cancel in two clicks.
                     </p>
                   </div>
 
