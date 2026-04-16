@@ -19,12 +19,18 @@ from app.auth.dependencies import (
     require_analyst,
     require_role,
 )
+from app.auth.tier import (
+    get_current_tier,
+    get_current_user_optional,
+)
 
 __all__ = [
     "get_db",
     "get_current_user",
+    "get_current_user_optional",
     "get_active_user",
     "require_admin",
     "require_analyst",
     "require_role",
+    "get_current_tier",
 ]

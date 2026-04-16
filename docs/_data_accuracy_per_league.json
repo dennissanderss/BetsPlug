@@ -1,0 +1,760 @@
+{
+  "reliable": [
+    {
+      "league_id": "e0efa138-7f03-4c60-bcbc-c463f3842438",
+      "league": "Champions League",
+      "sport": "Football",
+      "country": "Europe",
+      "n_eval": 624,
+      "accuracy_overall": 57.5,
+      "silver": {
+        "n": 255,
+        "acc": 67.8
+      },
+      "botd": {
+        "n": 193,
+        "acc": 69.4
+      },
+      "gold": {
+        "n": 133,
+        "acc": 75.9
+      },
+      "platinum": {
+        "n": 40,
+        "acc": 92.5
+      },
+      "first_match": "2024-02-13",
+      "last_match": "2026-04-15"
+    },
+    {
+      "league_id": "137edd72-3ef0-4e4a-9708-63c30df6ce1e",
+      "league": "S\u00fcper Lig",
+      "sport": "Football",
+      "country": "Turkey",
+      "n_eval": 991,
+      "accuracy_overall": 56.5,
+      "silver": {
+        "n": 535,
+        "acc": 67.3
+      },
+      "botd": {
+        "n": 433,
+        "acc": 70.0
+      },
+      "gold": {
+        "n": 298,
+        "acc": 79.5
+      },
+      "platinum": {
+        "n": 106,
+        "acc": 89.6
+      },
+      "first_match": "2024-01-24",
+      "last_match": "2026-04-13"
+    },
+    {
+      "league_id": "f2b51cb0-733d-4f79-863f-cd510fd17311",
+      "league": "Eredivisie",
+      "sport": "Football",
+      "country": "Netherlands",
+      "n_eval": 987,
+      "accuracy_overall": 56.3,
+      "silver": {
+        "n": 617,
+        "acc": 65.0
+      },
+      "botd": {
+        "n": 533,
+        "acc": 67.9
+      },
+      "gold": {
+        "n": 404,
+        "acc": 73.3
+      },
+      "platinum": {
+        "n": 176,
+        "acc": 86.9
+      },
+      "first_match": "2024-01-24",
+      "last_match": "2026-04-12"
+    },
+    {
+      "league_id": "dc5763a2-0da9-4a13-8d6c-1c0ce6b2cc4c",
+      "league": "Premier League",
+      "sport": "Football",
+      "country": "England",
+      "n_eval": 1134,
+      "accuracy_overall": 54.1,
+      "silver": {
+        "n": 686,
+        "acc": 62.0
+      },
+      "botd": {
+        "n": 562,
+        "acc": 64.1
+      },
+      "gold": {
+        "n": 386,
+        "acc": 67.6
+      },
+      "platinum": {
+        "n": 157,
+        "acc": 85.4
+      },
+      "first_match": "2024-01-30",
+      "last_match": "2026-04-13"
+    },
+    {
+      "league_id": "449aa2d2-74e9-4cfb-a32a-efea876d54b9",
+      "league": "Saudi Pro League",
+      "sport": "Football",
+      "country": "Saudi Arabia",
+      "n_eval": 892,
+      "accuracy_overall": 53.4,
+      "silver": {
+        "n": 545,
+        "acc": 60.4
+      },
+      "botd": {
+        "n": 464,
+        "acc": 61.2
+      },
+      "gold": {
+        "n": 352,
+        "acc": 68.2
+      },
+      "platinum": {
+        "n": 156,
+        "acc": 85.3
+      },
+      "first_match": "2024-02-07",
+      "last_match": "2026-04-15"
+    },
+    {
+      "league_id": "f71b7c32-9f4a-41d6-b5ad-8a28b670f2bc",
+      "league": "Scottish Premiership",
+      "sport": "Football",
+      "country": "Scotland",
+      "n_eval": 740,
+      "accuracy_overall": 54.6,
+      "silver": {
+        "n": 431,
+        "acc": 62.9
+      },
+      "botd": {
+        "n": 390,
+        "acc": 63.6
+      },
+      "gold": {
+        "n": 271,
+        "acc": 74.2
+      },
+      "platinum": {
+        "n": 115,
+        "acc": 85.2
+      },
+      "first_match": "2024-01-24",
+      "last_match": "2026-04-12"
+    },
+    {
+      "league_id": "81998369-31b7-4d92-9b63-4d071190c9c5",
+      "league": "Liga MX",
+      "sport": "Football",
+      "country": "Mexico",
+      "n_eval": 1075,
+      "accuracy_overall": 53.6,
+      "silver": {
+        "n": 585,
+        "acc": 57.8
+      },
+      "botd": {
+        "n": 475,
+        "acc": 60.2
+      },
+      "gold": {
+        "n": 294,
+        "acc": 65.3
+      },
+      "platinum": {
+        "n": 71,
+        "acc": 84.5
+      },
+      "first_match": "2024-01-25",
+      "last_match": "2026-04-13"
+    },
+    {
+      "league_id": "38fa627e-169e-4631-a646-ff6649ed5864",
+      "league": "Chinese Super League",
+      "sport": "Football",
+      "country": "China",
+      "n_eval": 579,
+      "accuracy_overall": 58.0,
+      "silver": {
+        "n": 344,
+        "acc": 67.4
+      },
+      "botd": {
+        "n": 267,
+        "acc": 70.0
+      },
+      "gold": {
+        "n": 199,
+        "acc": 70.4
+      },
+      "platinum": {
+        "n": 89,
+        "acc": 80.9
+      },
+      "first_match": "2024-03-01",
+      "last_match": "2025-11-22"
+    },
+    {
+      "league_id": "c14d2d79-979f-4ddb-b8b5-8195725fe121",
+      "league": "Primeira Liga",
+      "sport": "Football",
+      "country": "Portugal",
+      "n_eval": 940,
+      "accuracy_overall": 55.9,
+      "silver": {
+        "n": 566,
+        "acc": 65.7
+      },
+      "botd": {
+        "n": 502,
+        "acc": 68.5
+      },
+      "gold": {
+        "n": 381,
+        "acc": 73.0
+      },
+      "platinum": {
+        "n": 203,
+        "acc": 78.8
+      },
+      "first_match": "2024-01-28",
+      "last_match": "2026-04-13"
+    },
+    {
+      "league_id": "c12726e4-bc51-45b8-9cc7-685d958c30f5",
+      "league": "Bundesliga",
+      "sport": "Football",
+      "country": "Germany",
+      "n_eval": 955,
+      "accuracy_overall": 51.3,
+      "silver": {
+        "n": 556,
+        "acc": 57.2
+      },
+      "botd": {
+        "n": 454,
+        "acc": 58.1
+      },
+      "gold": {
+        "n": 320,
+        "acc": 62.8
+      },
+      "platinum": {
+        "n": 108,
+        "acc": 75.9
+      },
+      "first_match": "2024-01-24",
+      "last_match": "2026-04-12"
+    },
+    {
+      "league_id": "43106ec3-111e-4a37-a415-9e0b20bd3590",
+      "league": "Jupiler Pro League",
+      "sport": "Football",
+      "country": "Belgium",
+      "n_eval": 940,
+      "accuracy_overall": 49.9,
+      "silver": {
+        "n": 517,
+        "acc": 57.1
+      },
+      "botd": {
+        "n": 436,
+        "acc": 57.8
+      },
+      "gold": {
+        "n": 284,
+        "acc": 66.5
+      },
+      "platinum": {
+        "n": 108,
+        "acc": 74.1
+      },
+      "first_match": "2024-01-24",
+      "last_match": "2026-04-12"
+    },
+    {
+      "league_id": "4acd5222-802e-454e-b415-e9c1af26961d",
+      "league": "Championship",
+      "sport": "Football",
+      "country": "England",
+      "n_eval": 1678,
+      "accuracy_overall": 46.1,
+      "silver": {
+        "n": 677,
+        "acc": 52.0
+      },
+      "botd": {
+        "n": 586,
+        "acc": 53.9
+      },
+      "gold": {
+        "n": 270,
+        "acc": 67.8
+      },
+      "platinum": {
+        "n": 72,
+        "acc": 73.6
+      },
+      "first_match": "2024-01-24",
+      "last_match": "2026-04-14"
+    },
+    {
+      "league_id": "00cdab5a-7846-4a6c-96d2-62d5ed12e305",
+      "league": "La Liga",
+      "sport": "Football",
+      "country": "Spain",
+      "n_eval": 1110,
+      "accuracy_overall": 53.2,
+      "silver": {
+        "n": 615,
+        "acc": 58.4
+      },
+      "botd": {
+        "n": 518,
+        "acc": 59.1
+      },
+      "gold": {
+        "n": 372,
+        "acc": 63.2
+      },
+      "platinum": {
+        "n": 125,
+        "acc": 72.0
+      },
+      "first_match": "2024-01-26",
+      "last_match": "2026-04-13"
+    },
+    {
+      "league_id": "26d8d924-e0dd-4251-81da-82c7a0a6dce9",
+      "league": "Serie A",
+      "sport": "Football",
+      "country": "Italy",
+      "n_eval": 1141,
+      "accuracy_overall": 52.9,
+      "silver": {
+        "n": 662,
+        "acc": 58.8
+      },
+      "botd": {
+        "n": 550,
+        "acc": 62.2
+      },
+      "gold": {
+        "n": 368,
+        "acc": 67.1
+      },
+      "platinum": {
+        "n": 103,
+        "acc": 71.8
+      },
+      "first_match": "2024-01-26",
+      "last_match": "2026-04-13"
+    },
+    {
+      "league_id": "23ddbe08-bcea-4958-a99b-70c95d9b0642",
+      "league": "Europa League",
+      "sport": "Football",
+      "country": "Europe",
+      "n_eval": 656,
+      "accuracy_overall": 53.0,
+      "silver": {
+        "n": 273,
+        "acc": 57.9
+      },
+      "botd": {
+        "n": 191,
+        "acc": 57.1
+      },
+      "gold": {
+        "n": 106,
+        "acc": 65.1
+      },
+      "platinum": {
+        "n": 32,
+        "acc": 59.4
+      },
+      "first_match": "2024-02-15",
+      "last_match": "2026-04-09"
+    },
+    {
+      "league_id": "f5d468a2-d229-4ea6-9076-11cc6a6f1677",
+      "league": "Ligue 1",
+      "sport": "Football",
+      "country": "France",
+      "n_eval": 949,
+      "accuracy_overall": 51.2,
+      "silver": {
+        "n": 544,
+        "acc": 57.7
+      },
+      "botd": {
+        "n": 459,
+        "acc": 57.5
+      },
+      "gold": {
+        "n": 300,
+        "acc": 57.3
+      },
+      "platinum": {
+        "n": 59,
+        "acc": 54.2
+      },
+      "first_match": "2024-01-26",
+      "last_match": "2026-04-12"
+    },
+    {
+      "league_id": "c2e69536-2997-45aa-a98b-441a09fee556",
+      "league": "J1 League",
+      "sport": "Football",
+      "country": "Japan",
+      "n_eval": 938,
+      "accuracy_overall": 44.3,
+      "silver": {
+        "n": 393,
+        "acc": 41.0
+      },
+      "botd": {
+        "n": 304,
+        "acc": 42.4
+      },
+      "gold": {
+        "n": 169,
+        "acc": 43.8
+      },
+      "platinum": {
+        "n": 33,
+        "acc": 33.3
+      },
+      "first_match": "2024-02-23",
+      "last_match": "2025-12-06"
+    }
+  ],
+  "sparse": [
+    {
+      "league_id": "0aca9d5e-eed9-4c9b-a852-a08548f73d8f",
+      "league": "Segunda Divisi\u00f3n",
+      "sport": "Football",
+      "country": "Spain",
+      "n_eval": 1379,
+      "accuracy_overall": 44.5,
+      "silver": {
+        "n": 491,
+        "acc": 44.4
+      },
+      "botd": {
+        "n": 401,
+        "acc": 44.6
+      },
+      "gold": {
+        "n": 135,
+        "acc": 53.3
+      },
+      "platinum": {
+        "n": 5,
+        "acc": 100.0
+      },
+      "first_match": "2024-01-26",
+      "last_match": "2026-04-13"
+    },
+    {
+      "league_id": "6186d345-9ae1-4625-8e9f-e7d415270afb",
+      "league": "MLS",
+      "sport": "Football",
+      "country": "USA",
+      "n_eval": 1320,
+      "accuracy_overall": 45.5,
+      "silver": {
+        "n": 531,
+        "acc": 43.5
+      },
+      "botd": {
+        "n": 399,
+        "acc": 40.9
+      },
+      "gold": {
+        "n": 221,
+        "acc": 43.9
+      },
+      "platinum": {
+        "n": 23,
+        "acc": 47.8
+      },
+      "first_match": "2024-02-22",
+      "last_match": "2025-12-06"
+    },
+    {
+      "league_id": "e62535c4-f2d0-4e39-bed5-cfb5758af686",
+      "league": "Serie B",
+      "sport": "Football",
+      "country": "Italy",
+      "n_eval": 1205,
+      "accuracy_overall": 41.9,
+      "silver": {
+        "n": 464,
+        "acc": 43.5
+      },
+      "botd": {
+        "n": 396,
+        "acc": 43.4
+      },
+      "gold": {
+        "n": 156,
+        "acc": 58.3
+      },
+      "platinum": {
+        "n": 0,
+        "acc": null
+      },
+      "first_match": "2024-01-26",
+      "last_match": "2026-04-14"
+    },
+    {
+      "league_id": "38aea91f-2206-44c3-ab4a-1877a466a1a8",
+      "league": "Ligue 2",
+      "sport": "Football",
+      "country": "France",
+      "n_eval": 1012,
+      "accuracy_overall": 40.8,
+      "silver": {
+        "n": 384,
+        "acc": 32.6
+      },
+      "botd": {
+        "n": 320,
+        "acc": 31.6
+      },
+      "gold": {
+        "n": 136,
+        "acc": 39.0
+      },
+      "platinum": {
+        "n": 13,
+        "acc": 46.2
+      },
+      "first_match": "2024-01-27",
+      "last_match": "2026-04-13"
+    },
+    {
+      "league_id": "4cefc76f-8c11-4454-b767-fdf8323b13af",
+      "league": "2. Bundesliga",
+      "sport": "Football",
+      "country": "Germany",
+      "n_eval": 956,
+      "accuracy_overall": 46.2,
+      "silver": {
+        "n": 406,
+        "acc": 51.2
+      },
+      "botd": {
+        "n": 323,
+        "acc": 53.9
+      },
+      "gold": {
+        "n": 178,
+        "acc": 57.3
+      },
+      "platinum": {
+        "n": 28,
+        "acc": 67.9
+      },
+      "first_match": "2024-01-26",
+      "last_match": "2026-04-12"
+    },
+    {
+      "league_id": "a6352481-1b2f-4c98-a76e-2b334e2d5236",
+      "league": "Conference League",
+      "sport": "Football",
+      "country": "Europe",
+      "n_eval": 944,
+      "accuracy_overall": 50.5,
+      "silver": {
+        "n": 281,
+        "acc": 49.5
+      },
+      "botd": {
+        "n": 207,
+        "acc": 49.8
+      },
+      "gold": {
+        "n": 86,
+        "acc": 61.6
+      },
+      "platinum": {
+        "n": 17,
+        "acc": 41.2
+      },
+      "first_match": "2024-02-15",
+      "last_match": "2026-04-09"
+    },
+    {
+      "league_id": "b1d4b1e1-418d-46c9-bc85-882f0255e928",
+      "league": "Liga Profesional Argentina",
+      "sport": "Football",
+      "country": "Argentina",
+      "n_eval": 888,
+      "accuracy_overall": 41.9,
+      "silver": {
+        "n": 98,
+        "acc": 53.1
+      },
+      "botd": {
+        "n": 60,
+        "acc": 58.3
+      },
+      "gold": {
+        "n": 27,
+        "acc": 55.6
+      },
+      "platinum": {
+        "n": 1,
+        "acc": 100.0
+      },
+      "first_match": "2024-05-10",
+      "last_match": "2025-12-14"
+    },
+    {
+      "league_id": "7558986e-5f6c-4141-b2f5-847a3a1f4818",
+      "league": "Brasileir\u00e3o Serie A",
+      "sport": "Football",
+      "country": "Brazil",
+      "n_eval": 760,
+      "accuracy_overall": 50.4,
+      "silver": {
+        "n": 197,
+        "acc": 67.0
+      },
+      "botd": {
+        "n": 109,
+        "acc": 66.1
+      },
+      "gold": {
+        "n": 68,
+        "acc": 66.2
+      },
+      "platinum": {
+        "n": 15,
+        "acc": 80.0
+      },
+      "first_match": "2024-04-13",
+      "last_match": "2025-12-07"
+    },
+    {
+      "league_id": "9ec361f2-e822-40eb-b173-caa16c119168",
+      "league": "Swiss Super League",
+      "sport": "Football",
+      "country": "Switzerland",
+      "n_eval": 704,
+      "accuracy_overall": 42.5,
+      "silver": {
+        "n": 323,
+        "acc": 46.1
+      },
+      "botd": {
+        "n": 263,
+        "acc": 44.9
+      },
+      "gold": {
+        "n": 130,
+        "acc": 58.5
+      },
+      "platinum": {
+        "n": 26,
+        "acc": 92.3
+      },
+      "first_match": "2024-01-27",
+      "last_match": "2026-04-12"
+    },
+    {
+      "league_id": "1dc24bbc-420c-4937-a77b-af0b63857e54",
+      "league": "A-League",
+      "sport": "Football",
+      "country": "Australia",
+      "n_eval": 573,
+      "accuracy_overall": 42.2,
+      "silver": {
+        "n": 316,
+        "acc": 41.5
+      },
+      "botd": {
+        "n": 244,
+        "acc": 42.6
+      },
+      "gold": {
+        "n": 123,
+        "acc": 55.3
+      },
+      "platinum": {
+        "n": 15,
+        "acc": 40.0
+      },
+      "first_match": "2024-01-25",
+      "last_match": "2026-04-12"
+    },
+    {
+      "league_id": "acf5d7d1-49cf-4201-995b-2dcb13137877",
+      "league": "K League 1",
+      "sport": "Football",
+      "country": "South Korea",
+      "n_eval": 541,
+      "accuracy_overall": 41.8,
+      "silver": {
+        "n": 175,
+        "acc": 41.1
+      },
+      "botd": {
+        "n": 122,
+        "acc": 40.2
+      },
+      "gold": {
+        "n": 76,
+        "acc": 39.5
+      },
+      "platinum": {
+        "n": 6,
+        "acc": 83.3
+      },
+      "first_match": "2024-03-01",
+      "last_match": "2025-12-08"
+    },
+    {
+      "league_id": "74e46c44-7ec7-43e5-ac40-dce85bef94e2",
+      "league": "Copa Libertadores",
+      "sport": "Football",
+      "country": "South America",
+      "n_eval": 426,
+      "accuracy_overall": 47.9,
+      "silver": {
+        "n": 248,
+        "acc": 49.2
+      },
+      "botd": {
+        "n": 195,
+        "acc": 47.7
+      },
+      "gold": {
+        "n": 87,
+        "acc": 63.2
+      },
+      "platinum": {
+        "n": 10,
+        "acc": 80.0
+      },
+      "first_match": "2024-02-07",
+      "last_match": "2025-11-29"
+    }
+  ]
+}

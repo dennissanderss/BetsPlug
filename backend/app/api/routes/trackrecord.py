@@ -12,7 +12,15 @@ from sqlalchemy import Integer, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.api.deps import get_current_tier
 from app.core.prediction_filters import v81_predictions_filter
+from app.core.tier_system import (
+    PickTier,
+    TIER_METADATA,
+    TIER_SYSTEM_ENABLED,
+    access_filter,
+    pick_tier_expression,
+)
 from app.db.session import get_db
 from app.models.league import League
 from app.models.match import Match
@@ -43,6 +51,7 @@ async def get_trackrecord_summary(
         default=None, description="Filter by prediction source: 'live', 'backtest', or None for all"
     ),
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> TrackrecordSummary:
     """
     Compute aggregate performance metrics over all evaluated predictions.
@@ -74,6 +83,9 @@ async def get_trackrecord_summary(
         q = q.where(Prediction.prediction_source == source)
     # v8.1 filter: exclude pre-deploy predictions (broken feature pipeline)
     q = q.where(v81_predictions_filter())
+    # v8.1 tier access filter
+    if TIER_SYSTEM_ENABLED:
+        q = q.where(access_filter(user_tier))
 
     row = (await db.execute(q)).one()
 
@@ -83,6 +95,40 @@ async def get_trackrecord_summary(
     avg_brier = float(row.avg_brier or 0.0)
     avg_log_loss = float(row.avg_log_loss) if row.avg_log_loss is not None else None
     avg_confidence = float(row.avg_confidence or 0.0)
+
+    # v8.1 per-tier breakdown
+    per_tier: Optional[dict] = None
+    if TIER_SYSTEM_ENABLED:
+        per_tier_q = (
+            select(
+                pick_tier_expression(),
+                func.count(PredictionEvaluation.id).label("total"),
+                func.sum(func.cast(PredictionEvaluation.is_correct, Integer)).label("correct"),
+            )
+            .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
+            .join(Match, Match.id == Prediction.match_id)
+            .where(v81_predictions_filter())
+            .where(access_filter(user_tier))
+            .group_by(pick_tier_expression())
+        )
+        if model_version_id is not None:
+            per_tier_q = per_tier_q.where(Prediction.model_version_id == model_version_id)
+        if source is not None:
+            per_tier_q = per_tier_q.where(Prediction.prediction_source == source)
+
+        tier_rows = (await db.execute(per_tier_q)).all()
+        per_tier = {}
+        for tier_int, t_total, t_correct in tier_rows:
+            if not t_total:
+                continue
+            t_int = int(tier_int)
+            t_correct_int = int(t_correct or 0)
+            slug = TIER_METADATA[PickTier(t_int)]["slug"]
+            per_tier[slug] = {
+                "total": t_total,
+                "correct": t_correct_int,
+                "accuracy": t_correct_int / t_total if t_total else 0.0,
+            }
 
     return TrackrecordSummary(
         model_version_id=model_version_id,
@@ -94,6 +140,7 @@ async def get_trackrecord_summary(
         avg_confidence=avg_confidence,
         period_start=row.period_start,
         period_end=row.period_end,
+        per_tier=per_tier,
     )
 
 
@@ -115,6 +162,7 @@ async def get_trackrecord_segments(
         default=None, description="Filter by prediction source: 'live', 'backtest', or None for all"
     ),
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> List[SegmentPerformance]:
     """
     Return per-segment accuracy and Brier scores.
@@ -150,6 +198,9 @@ async def get_trackrecord_segments(
             q = q.where(_source_filter)
         # v8.1 filter
         q = q.where(v81_predictions_filter())
+        # v8.1 tier access filter
+        if TIER_SYSTEM_ENABLED:
+            q = q.where(access_filter(user_tier))
     elif segment_type == "month":
         # v6 fix: Python-side aggregation. The previous SQL version
         # used func.to_char(..., 'YYYY-MM') for both SELECT and
@@ -164,7 +215,7 @@ async def get_trackrecord_segments(
         # calendar time, which maps to when the MATCH was played — not
         # when the prediction was generated. Bucketing on
         # Match.scheduled_at gives us one point per real match month.
-        rows = (await db.execute(
+        month_q = (
             select(
                 Match.scheduled_at,
                 PredictionEvaluation.is_correct,
@@ -176,7 +227,10 @@ async def get_trackrecord_segments(
             .join(Match, Match.id == Prediction.match_id)
             # v8.1 filter
             .where(v81_predictions_filter())
-        )).all()
+        )
+        if TIER_SYSTEM_ENABLED:
+            month_q = month_q.where(access_filter(user_tier))
+        rows = (await db.execute(month_q)).all()
 
         buckets: dict[str, dict] = {}
         for match_at, is_correct, brier, log_loss, conf in rows:
@@ -240,6 +294,9 @@ async def get_trackrecord_segments(
             q = q.where(_source_filter)
         # v8.1 filter
         q = q.where(v81_predictions_filter())
+        # v8.1 tier access filter
+        if TIER_SYSTEM_ENABLED:
+            q = q.where(access_filter(user_tier))
 
     rows = (await db.execute(q)).all()
 
@@ -271,6 +328,7 @@ async def get_calibration(
         default=_NUM_CALIBRATION_BUCKETS, ge=2, le=20, description="Number of probability bins"
     ),
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> CalibrationReport:
     """
     Compute a reliability diagram for a model version.
@@ -310,6 +368,11 @@ async def get_calibration(
         base_q = base_q.where(Prediction.model_version_id == model_version_id)
     # v8.1 filter
     base_q = base_q.where(v81_predictions_filter())
+    # v8.1 tier access filter — requires JOIN on matches
+    if TIER_SYSTEM_ENABLED:
+        base_q = base_q.join(Match, Match.id == Prediction.match_id).where(
+            access_filter(user_tier)
+        )
     result = await db.execute(base_q)
     rows = result.all()
 
@@ -400,6 +463,7 @@ async def get_calibration(
 async def _stream_trackrecord_csv(
     db: AsyncSession,
     model_version_id: Optional[uuid.UUID] = None,
+    user_tier: PickTier = PickTier.PLATINUM,
 ) -> AsyncIterator[bytes]:
     """Yield CSV rows for every prediction, one at a time."""
     # UTF-8 BOM + Excel sep hint so European Excel opens correctly
@@ -421,6 +485,9 @@ async def _stream_trackrecord_csv(
         summary_q = summary_q.where(Prediction.model_version_id == model_version_id)
     # v8.1 filter
     summary_q = summary_q.where(v81_predictions_filter())
+    # v8.1 tier access filter
+    if TIER_SYSTEM_ENABLED:
+        summary_q = summary_q.where(access_filter(user_tier))
     sr = (await db.execute(summary_q)).one()
     s_total = sr.total or 0
     s_correct = int(sr.correct or 0)
@@ -493,6 +560,9 @@ async def _stream_trackrecord_csv(
         q = q.where(Prediction.model_version_id == model_version_id)
     # v8.1 filter
     q = q.where(v81_predictions_filter())
+    # v8.1 tier access filter
+    if TIER_SYSTEM_ENABLED:
+        q = q.where(access_filter(user_tier))
 
     result = await db.stream(q)
     flush_every = 200
@@ -599,8 +669,9 @@ async def export_trackrecord_csv(
         description="Restrict to a single model version. Omit to export all models.",
     ),
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> StreamingResponse:
-    """Stream all evaluated predictions as CSV.
+    """Stream all evaluated predictions as CSV — scoped to the user's tier.
 
     One row per prediction/evaluation pair; columns cover enough data
     for a user to recompute accuracy, Brier, log-loss and calibration
@@ -613,7 +684,11 @@ async def export_trackrecord_csv(
         "Cache-Control": "no-store",
     }
     return StreamingResponse(
-        _stream_trackrecord_csv(db, model_version_id=model_version_id),
+        _stream_trackrecord_csv(
+            db,
+            model_version_id=model_version_id,
+            user_tier=user_tier,
+        ),
         media_type="text/csv; charset=utf-8",
         headers=headers,
     )

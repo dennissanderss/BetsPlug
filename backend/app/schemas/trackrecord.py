@@ -4,9 +4,17 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
+
+
+class TierBreakdown(BaseModel):
+    """Per-pick-tier slice of an aggregate metric."""
+    model_config = ConfigDict(from_attributes=True)
+    total: int = Field(ge=0)
+    correct: int = Field(ge=0)
+    accuracy: float = Field(ge=0.0, le=1.0)
 
 
 class TrackrecordSummary(BaseModel):
@@ -91,6 +99,16 @@ class TrackrecordSummary(BaseModel):
     period_end: Optional[datetime] = Field(
         default=None,
         description="Latest prediction timestamp included in this summary (UTC).",
+    )
+
+    # v8.1 tier system — breakdown by pick_tier (only populated when enabled)
+    per_tier: Optional[Dict[str, TierBreakdown]] = Field(
+        default=None,
+        description=(
+            "Breakdown of totals/accuracy per pick_tier (platinum/gold/silver/free). "
+            "Tiers with zero samples in user's access scope are omitted. "
+            "Present only when TIER_SYSTEM_ENABLED."
+        ),
     )
 
 

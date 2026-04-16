@@ -15,6 +15,14 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.api.deps import get_current_tier
+from app.core.tier_system import (
+    PickTier,
+    TIER_SYSTEM_ENABLED,
+    access_filter,
+    pick_tier_expression,
+    tier_info,
+)
 from app.db.session import get_db
 from app.models.match import Match, MatchResult
 from app.models.prediction import Prediction
@@ -42,6 +50,7 @@ async def list_predictions(
     limit: int = Query(default=50, ge=1, le=200),
     offset: int = Query(default=0, ge=0),
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ):
     """Return predictions ordered by predicted_at descending."""
     from app.models.league import League
@@ -58,30 +67,66 @@ async def list_predictions(
         selectinload(Prediction.evaluation),
         selectinload(Prediction.model_version),
     )
+    count_q = select(func.count(Prediction.id))
 
-    if sport is not None or league_id is not None or date_from is not None or date_to is not None:
+    # v8.1 tier system — ensure Match JOIN so access_filter can reference
+    # Match.league_id, and apply access filter + filter the count query too
+    # so pagination reflects tier scope.
+    needs_match_join = (
+        sport is not None or league_id is not None
+        or date_from is not None or date_to is not None
+        or TIER_SYSTEM_ENABLED
+    )
+    if needs_match_join:
         q = q.join(Match, Match.id == Prediction.match_id)
+        count_q = count_q.join(Match, Match.id == Prediction.match_id)
         if sport is not None:
             q = q.join(League, League.id == Match.league_id).join(Sport, Sport.id == League.sport_id)
             q = q.where(Sport.slug == sport)
+            count_q = (
+                count_q.join(League, League.id == Match.league_id)
+                .join(Sport, Sport.id == League.sport_id)
+                .where(Sport.slug == sport)
+            )
         if league_id is not None:
             q = q.where(Match.league_id == league_id)
+            count_q = count_q.where(Match.league_id == league_id)
         if date_from is not None:
             q = q.where(Match.scheduled_at >= date_from)
+            count_q = count_q.where(Match.scheduled_at >= date_from)
         if date_to is not None:
             q = q.where(Match.scheduled_at <= date_to)
+            count_q = count_q.where(Match.scheduled_at <= date_to)
 
     if model_version_id is not None:
         q = q.where(Prediction.model_version_id == model_version_id)
+        count_q = count_q.where(Prediction.model_version_id == model_version_id)
+
+    # Tier access filter — excludes picks above user's tier access
+    if TIER_SYSTEM_ENABLED:
+        tier_where = access_filter(user_tier)
+        q = q.where(tier_where)
+        count_q = count_q.where(tier_where)
 
     q = q.order_by(Prediction.predicted_at.desc()).offset(offset).limit(limit)
 
     result = await db.execute(q)
     predictions = result.scalars().unique().all()
 
-    # Count total for pagination info
-    count_q = select(func.count(Prediction.id))
     total = int((await db.execute(count_q)).scalar() or 0)
+
+    # Build a lookup of pick_tier by prediction_id via a side query — avoids
+    # tangling the CASE expression into the main selectinload query.
+    pick_tier_by_id: dict[str, int] = {}
+    if TIER_SYSTEM_ENABLED and predictions:
+        pred_ids = [p.id for p in predictions]
+        tier_q = (
+            select(Prediction.id, pick_tier_expression())
+            .join(Match, Match.id == Prediction.match_id)
+            .where(Prediction.id.in_(pred_ids))
+        )
+        for pid, pt in (await db.execute(tier_q)).all():
+            pick_tier_by_id[str(pid)] = int(pt)
 
     # Build response items — always use the safe manual builder so match
     # data is never silently dropped by a pydantic validation error.
@@ -142,7 +187,7 @@ async def list_predictions(
         except Exception:
             pass
 
-        items.append({
+        item = {
             "id": str(p.id),
             "match_id": str(p.match_id),
             "model_version_id": str(p.model_version_id),
@@ -160,7 +205,13 @@ async def list_predictions(
             "match": match_data,
             "created_at": p.created_at.isoformat() if getattr(p, "created_at", None) else None,
             "updated_at": p.updated_at.isoformat() if getattr(p, "updated_at", None) else None,
-        })
+        }
+        # v8.1 tier labelling — only when flag is on, for backward compat.
+        if TIER_SYSTEM_ENABLED:
+            pt_int = pick_tier_by_id.get(str(p.id))
+            if pt_int is not None:
+                item.update(tier_info(pt_int))
+        items.append(item)
 
     # Return as JSONResponse to completely bypass FastAPI's response_model
     # serialization. The shape matches PaginatedResponse for the frontend.
@@ -180,6 +231,7 @@ async def list_predictions(
 async def get_prediction(
     prediction_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ):
     """Return a prediction record including its explanation and post-match evaluation."""
     result = await db.execute(
@@ -202,12 +254,37 @@ async def get_prediction(
             detail=f"Prediction {prediction_id} not found.",
         )
 
+    # v8.1 tier access check — compute pick_tier and ensure it's within user's tier.
+    pick_tier_int: Optional[int] = None
+    if TIER_SYSTEM_ENABLED:
+        tier_row = await db.execute(
+            select(pick_tier_expression())
+            .select_from(Prediction)
+            .join(Match, Match.id == Prediction.match_id)
+            .where(Prediction.id == prediction_id)
+        )
+        pt = tier_row.scalar_one_or_none()
+        pick_tier_int = int(pt) if pt is not None else PickTier.FREE.value
+        if pick_tier_int > user_tier.value:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail={
+                    "error": "tier_upgrade_required",
+                    "required_tier": PickTier(pick_tier_int).name.lower(),
+                    "current_tier": user_tier.name.lower(),
+                    "message": (
+                        f"This pick is {PickTier(pick_tier_int).name.title()} tier. "
+                        f"Upgrade to view."
+                    ),
+                },
+            )
+
     try:
         resp = PredictionResponse.model_validate(pred)
-        return JSONResponse(content=resp.model_dump(mode="json"))
+        payload = resp.model_dump(mode="json")
     except Exception:
         # Minimal fallback
-        return JSONResponse(content={
+        payload = {
             "id": str(pred.id),
             "match_id": str(pred.match_id),
             "predicted_at": pred.predicted_at.isoformat() if pred.predicted_at else None,
@@ -215,7 +292,13 @@ async def get_prediction(
             "draw_prob": pred.draw_prob,
             "away_win_prob": pred.away_win_prob,
             "confidence": pred.confidence,
-        })
+        }
+
+    # Attach tier labelling (flag-gated)
+    if TIER_SYSTEM_ENABLED and pick_tier_int is not None:
+        payload.update(tier_info(pick_tier_int))
+
+    return JSONResponse(content=payload)
 
 
 @router.post(

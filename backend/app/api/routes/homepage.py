@@ -15,6 +15,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.prediction_filters import v81_predictions_filter
+from app.core.tier_system import (
+    PickTier,
+    TIER_SYSTEM_ENABLED,
+    access_filter,
+)
 from app.db.session import get_db
 from app.models.match import Match, MatchResult, MatchStatus
 from app.models.prediction import Prediction, PredictionEvaluation
@@ -72,6 +77,10 @@ async def get_featured_match(
         .order_by(Prediction.confidence.desc())
         .limit(1)
     )
+    # v8.1 homepage is public — always force FREE tier scope so upgrade
+    # nudges on the hero card represent what a logged-out visitor would see.
+    if TIER_SYSTEM_ENABLED:
+        stmt = stmt.where(access_filter(PickTier.FREE))
 
     result = await db.execute(stmt)
     prediction = result.scalar_one_or_none()
@@ -251,6 +260,9 @@ async def get_free_picks(
         .order_by(Prediction.confidence.desc())
         .limit(3)
     )
+    # v8.1: force FREE tier — homepage is public, show the Free experience.
+    if TIER_SYSTEM_ENABLED:
+        today_stmt = today_stmt.where(access_filter(PickTier.FREE))
     today_rows = (await db.execute(today_stmt)).scalars().unique().all()
     today_picks = [_build_free_pick(p) for p in today_rows]
 
@@ -309,6 +321,9 @@ async def get_free_picks(
         .order_by(Prediction.confidence.desc())
         .limit(3)
     )
+    # v8.1: force FREE tier on public homepage
+    if TIER_SYSTEM_ENABLED:
+        yesterday_stmt = yesterday_stmt.where(access_filter(PickTier.FREE))
     yesterday_rows = (await db.execute(yesterday_stmt)).scalars().unique().all()
     yesterday_picks = [_build_free_pick(p) for p in yesterday_rows]
 
@@ -326,6 +341,9 @@ async def get_free_picks(
         # v8.1 filter: exclude pre-deploy predictions (broken feature pipeline)
         .where(v81_predictions_filter())
     )
+    # v8.1: FREE-scope stats on homepage
+    if TIER_SYSTEM_ENABLED:
+        stats_stmt = stats_stmt.where(access_filter(PickTier.FREE))
     try:
         row = (await db.execute(stats_stmt)).one_or_none()
         total = int(row.total) if row and row.total else 0

@@ -66,8 +66,14 @@ def v81_predictions_filter() -> ColumnElement:
 # When the filter is first enabled (or redefined), these cache entries hold
 # stale aggregates computed against the un-filtered prediction set. Flush
 # them so the next request recomputes against filtered data.
+#
+# v8.1 tier system: cache keys now include tier suffix (e.g.
+# ``dashboard:metrics:platinum``, ``strategy:metrics:<uuid>:gold``).
+# The glob patterns below cover both the old flat keys and the new
+# tier-suffixed variants so a single flush wipes everything stale.
 V81_FILTER_CACHE_PATTERNS: tuple[str, ...] = (
-    "dashboard:*",
-    "strategy:metrics:*",
-    "strategy:today:*",
+    "dashboard:*",          # dashboard:metrics, dashboard:metrics:{tier}
+    "strategy:metrics:*",   # strategy:metrics:{uuid}, strategy:metrics:{uuid}:{tier}
+    "strategy:today:*",     # strategy:today:{uuid}, strategy:today:{uuid}:{tier}
+    "pricing:*",            # pricing:comparison — new in v8.1
 )

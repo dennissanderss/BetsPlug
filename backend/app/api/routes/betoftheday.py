@@ -19,7 +19,15 @@ from sqlalchemy.orm import joinedload, noload
 
 from datetime import timedelta
 
+from app.api.deps import get_current_tier
 from app.core.prediction_filters import v81_predictions_filter
+from app.core.tier_system import (
+    PickTier,
+    TIER_SYSTEM_ENABLED,
+    access_filter,
+    pick_tier_expression,
+    tier_info,
+)
 from app.db.session import get_db
 from app.models.match import Match, MatchStatus
 from app.models.prediction import Prediction
@@ -61,8 +69,9 @@ class BOTDHistoryItem(BaseModel):
 async def get_botd_history(
     limit: int = Query(default=50, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> list[BOTDHistoryItem]:
-    """Return the last N BOTD picks with their results."""
+    """Return the last N BOTD picks with their results (filtered by user tier)."""
     from app.models.prediction import PredictionEvaluation
     from collections import defaultdict
 
@@ -80,6 +89,8 @@ async def get_botd_history(
         .where(v81_predictions_filter())
         .order_by(Match.scheduled_at.desc())
     )
+    if TIER_SYSTEM_ENABLED:
+        stmt = stmt.where(access_filter(user_tier))
     rows = (await db.execute(stmt)).all()
     if not rows:
         stmt_fallback = (
@@ -91,6 +102,8 @@ async def get_botd_history(
             .where(v81_predictions_filter())
             .order_by(Match.scheduled_at.desc())
         )
+        if TIER_SYSTEM_ENABLED:
+            stmt_fallback = stmt_fallback.where(access_filter(user_tier))
         rows = (await db.execute(stmt_fallback)).all()
 
     # Group by date, keep highest confidence per day
@@ -157,11 +170,14 @@ class BOTDTrackRecord(BaseModel):
 @router.get("/track-record", response_model=BOTDTrackRecord)
 async def get_botd_track_record(
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> BOTDTrackRecord:
     """Return historical accuracy for the highest-confidence daily pick.
 
     The BOTD is defined as the prediction with confidence >= BOTD_MIN_CONFIDENCE
     on any given day, restricted to live (pre-match) predictions only.
+    Tier-aware: Free users see the Free-qualifying BOTD stream,
+    Platinum users see the elite stream, etc.
     """
     from app.models.prediction import PredictionEvaluation
 
@@ -177,6 +193,8 @@ async def get_botd_track_record(
         .where(v81_predictions_filter())
         .order_by(Match.scheduled_at)
     )
+    if TIER_SYSTEM_ENABLED:
+        stmt = stmt.where(access_filter(user_tier))
     rows = (await db.execute(stmt)).all()
 
     # Fallback: if no live predictions yet, use all v8.1 predictions
@@ -190,6 +208,8 @@ async def get_botd_track_record(
             .where(v81_predictions_filter())
             .order_by(Match.scheduled_at)
         )
+        if TIER_SYSTEM_ENABLED:
+            stmt_fallback = stmt_fallback.where(access_filter(user_tier))
         rows = (await db.execute(stmt_fallback)).all()
 
     if not rows:
@@ -286,6 +306,10 @@ class BetOfTheDayResponse(BaseModel):
     prediction_id: str | None = None
     # v6.2 transparency: expose the latest pre-match odds if available.
     odds: BOTDOdds | None = None
+    # v8.1 tier labelling (populated only when TIER_SYSTEM_ENABLED)
+    pick_tier: str | None = None
+    pick_tier_label: str | None = None
+    pick_tier_accuracy: str | None = None
 
     class Config:
         from_attributes = True
@@ -298,6 +322,7 @@ async def get_bet_of_the_day(
         description="Date to get BOTD for (defaults to today UTC)",
     ),
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> BetOfTheDayResponse:
     """
     Returns the single highest-confidence prediction for the given date.
@@ -361,6 +386,8 @@ async def get_bet_of_the_day(
         .order_by(Prediction.confidence.desc())
         .limit(1)
     )
+    if TIER_SYSTEM_ENABLED:
+        stmt = stmt.where(access_filter(user_tier))
 
     result = await db.execute(stmt)
     prediction = result.unique().scalar_one_or_none()
@@ -375,6 +402,8 @@ async def get_bet_of_the_day(
             .order_by(Prediction.confidence.desc())
             .limit(1)
         )
+        if TIER_SYSTEM_ENABLED:
+            stmt_fallback = stmt_fallback.where(access_filter(user_tier))
         result = await db.execute(stmt_fallback)
         prediction = result.unique().scalar_one_or_none()
 
@@ -424,6 +453,24 @@ async def get_bet_of_the_day(
     except Exception as exc:  # pragma: no cover — odds are nice-to-have
         logger.debug("BOTD odds fetch failed (non-fatal): %s", exc)
 
+    # v8.1 tier labelling for the chosen pick
+    pick_tier_slug = None
+    pick_tier_label_str = None
+    pick_tier_accuracy_str = None
+    if TIER_SYSTEM_ENABLED:
+        tier_row = await db.execute(
+            select(pick_tier_expression())
+            .select_from(Prediction)
+            .join(Match, Match.id == Prediction.match_id)
+            .where(Prediction.id == prediction.id)
+        )
+        pt = tier_row.scalar_one_or_none()
+        if pt is not None:
+            info = tier_info(int(pt))
+            pick_tier_slug = info["pick_tier"]
+            pick_tier_label_str = info["pick_tier_label"]
+            pick_tier_accuracy_str = info["pick_tier_accuracy"]
+
     return BetOfTheDayResponse(
         available=True,
         match_id=str(prediction.match_id),
@@ -441,4 +488,7 @@ async def get_bet_of_the_day(
         explanation_summary=explanation,
         prediction_id=str(prediction.id),
         odds=botd_odds,
+        pick_tier=pick_tier_slug,
+        pick_tier_label=pick_tier_label_str,
+        pick_tier_accuracy=pick_tier_accuracy_str,
     )

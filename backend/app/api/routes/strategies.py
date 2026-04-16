@@ -9,7 +9,13 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 
+from app.api.deps import get_current_tier
 from app.core.prediction_filters import v81_predictions_filter
+from app.core.tier_system import (
+    PickTier,
+    TIER_SYSTEM_ENABLED,
+    access_filter,
+)
 from app.db.session import get_db
 from app.models.league import League
 from app.models.match import Match
@@ -392,14 +398,15 @@ async def get_strategy_picks(
 async def get_strategy_today_picks(
     strategy_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ):
-    """Return upcoming scheduled matches that pass this strategy's filters."""
+    """Return upcoming scheduled matches that pass this strategy's filters (tier-scoped)."""
     from app.core.cache import cache_get, cache_set
     from datetime import datetime, timedelta, timezone
     from app.models.match import MatchStatus
 
-    # Check cache
-    cache_key = f"strategy:today:{strategy_id}"
+    # Check cache — tier-aware key
+    cache_key = f"strategy:today:{strategy_id}:{user_tier.name.lower()}"
     cached = await cache_get(cache_key)
     if cached is not None:
         return cached
@@ -438,6 +445,9 @@ async def get_strategy_today_picks(
         )
         .order_by(Match.scheduled_at)
     )
+    # v8.1 tier access filter
+    if TIER_SYSTEM_ENABLED:
+        q = q.where(access_filter(user_tier))
     rows = (await db.execute(q)).all()
 
     picks = []
@@ -482,17 +492,18 @@ async def get_strategy_today_picks(
 async def get_strategy_metrics(
     strategy_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ):
     """
     Calculate performance metrics for a strategy based on evaluated predictions.
-    Results are cached in Redis for 15 minutes.
+    Results are cached in Redis for 15 minutes (per-tier).
     Returns: sample_size, winrate, roi, max_drawdown, profit_factor.
     """
     from app.core.cache import cache_get, cache_set
     from app.models.prediction import PredictionEvaluation
 
-    # Check cache first
-    cache_key = f"strategy:metrics:{strategy_id}"
+    # Check cache first — tier-aware key
+    cache_key = f"strategy:metrics:{strategy_id}:{user_tier.name.lower()}"
     cached = await cache_get(cache_key)
     if cached is not None:
         return cached
@@ -518,6 +529,9 @@ async def get_strategy_metrics(
         .where(v81_predictions_filter())
         .order_by(Match.scheduled_at)
     )
+    # v8.1 tier access filter
+    if TIER_SYSTEM_ENABLED:
+        q = q.where(access_filter(user_tier))
     rows = (await db.execute(q)).all()
 
     # Filter for strategy matches
