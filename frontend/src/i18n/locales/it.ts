@@ -1462,6 +1462,7 @@ const it = {
   "testimonials.titleA": "I nostri",
   "testimonials.titleB": "sono entusiasti",
   "testimonials.titleHighlight": "utenti",
+  "testimonials.trusted": "Scelto da oltre 1.500 scommettitori appassionati",
   "testimonials.verified": "Recensioni di acquirenti verificati",
 
   "topbar.cta": "Prova per € 0,01",

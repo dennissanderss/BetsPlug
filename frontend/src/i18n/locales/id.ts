@@ -1462,6 +1462,7 @@ const id = {
   "testimonials.titleA": "Para",
   "testimonials.titleB": "kami sangat antusias",
   "testimonials.titleHighlight": "pengguna",
+  "testimonials.trusted": "Dipercaya oleh 1.500+ petaruh yang bersemangat",
   "testimonials.verified": "Ulasan dari pembeli terverifikasi",
 
   "topbar.cta": "Coba €0,01",

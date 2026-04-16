@@ -2,11 +2,20 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useAnimation, useInView } from "motion/react";
-import { Star, Quote, ChevronLeft, ChevronRight, BadgeCheck } from "lucide-react";
+import Image from "next/image";
+import { Star, Quote, ChevronLeft, ChevronRight, BadgeCheck, Users } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { useTranslations } from "@/i18n/locale-provider";
+
+const TRUST_AVATARS = [
+  "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop&crop=faces",
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=faces",
+  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=faces",
+  "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=faces",
+  "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=faces",
+];
 
 export interface Testimonial {
   text: string;
@@ -113,6 +122,25 @@ export const TestimonialsSection = ({
               <p className="mt-4 max-w-xl text-base text-[#a3a9b8]">
                 {t("testimonials.subtitle")}
               </p>
+
+              {/* Trust line — avatar stack + count */}
+              <div className="flex items-center gap-4">
+                <div className="flex -space-x-2.5">
+                  {TRUST_AVATARS.map((src, i) => (
+                    <Image
+                      key={i}
+                      src={src}
+                      alt=""
+                      width={34}
+                      height={34}
+                      className="h-[34px] w-[34px] rounded-full border-2 border-[#0a0b11] object-cover"
+                    />
+                  ))}
+                </div>
+                <p className="text-sm font-medium text-[#a3a9b8]">
+                  {t("testimonials.trusted")}
+                </p>
+              </div>
 
               {/* Verified pill */}
               <div>

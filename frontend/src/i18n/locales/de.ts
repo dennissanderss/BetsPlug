@@ -1462,6 +1462,7 @@ const de = {
   "testimonials.titleA": "Unsere",
   "testimonials.titleB": "sind begeistert",
   "testimonials.titleHighlight": "Benutzer",
+  "testimonials.trusted": "Mehr als 1.500 leidenschaftliche Wettende vertrauen darauf",
   "testimonials.verified": "Bewertungen von verifizierten Käufern",
 
   "topbar.cta": "Versuchen Sie es für 0,01 €",

@@ -1462,6 +1462,7 @@ const fr = {
   "testimonials.titleA": "Nos",
   "testimonials.titleB": "sont enthousiastes",
   "testimonials.titleHighlight": "utilisateurs",
+  "testimonials.trusted": "Reconnu par plus de 1 500 parieurs passionnés",
   "testimonials.verified": "Avis d'acheteurs vérifiés",
 
   "topbar.cta": "Essayez pour 0,01€",

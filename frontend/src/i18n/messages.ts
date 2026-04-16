@@ -298,6 +298,7 @@ const en = {
   "testimonials.titleHighlight": "users",
   "testimonials.titleB": "are raving",
   "testimonials.verified": "Reviews from verified buyers",
+  "testimonials.trusted": "Trusted by 1,500+ passionate bettors",
   "testimonials.subtitle":
     "Thousands of football fans already use BetsPlug. Here's what they think.",
 
@@ -3349,6 +3350,7 @@ const nl: Dictionary = {
   "testimonials.titleA": "Onze",
   "testimonials.titleB": "zijn lovend",
   "testimonials.titleHighlight": "gebruikers",
+  "testimonials.trusted": "Vertrouwd door meer dan 1.500+ fanatieke betters",
   "testimonials.verified": "Reviews van geverifieerde kopers",
   "topbar.cta": "Probeer het voor € 0,01",
   "topbar.picksAnalyzed": "keuzes geanalyseerd",

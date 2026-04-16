@@ -1462,6 +1462,7 @@ const sw = {
   "testimonials.titleA": "Watumiaji",
   "testimonials.titleB": "wanafurahia",
   "testimonials.titleHighlight": "wetu",
+  "testimonials.trusted": "Inaaminiwa na dau 1,500+ wenye shauku",
   "testimonials.verified": "Maoni kutoka kwa wanunuzi waliothibitishwa",
 
   "topbar.cta": "Jaribu kwa €0.01",
