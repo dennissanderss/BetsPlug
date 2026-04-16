@@ -315,18 +315,14 @@ class ApiClient {
     );
   }
 
-  // Matches
-  getMatch(id: string) {
-    return this.request<import("@/types/api").Match>(`/matches/${id}`);
+  // Matches — backed by /fixtures/{id} (same shape as the list endpoints,
+  // avoids the legacy /matches/{id} path which has schema drift issues).
+  getFixtureDetail(id: string) {
+    return this.request<import("@/types/api").Fixture>(`/fixtures/${id}`);
   }
-  getMatchAnalysis(id: string) {
-    return this.request<import("@/types/api").MatchAnalysis>(
-      `/matches/${id}/analysis`
-    );
-  }
-  getMatchForecast(id: string) {
-    return this.request<import("@/types/api").ForecastOutput>(
-      `/matches/${id}/forecast`
+  getFixtureAnalysis(id: string) {
+    return this.request<import("@/types/api").FixtureAnalysis>(
+      `/fixtures/${id}/analysis`
     );
   }
 

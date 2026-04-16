@@ -20,12 +20,13 @@ They do NOT constitute financial, betting, or investment advice of any kind.
 """
 from __future__ import annotations
 
+import uuid
 from datetime import date, datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy import and_, select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
@@ -815,3 +816,246 @@ async def get_results(
     ]
 
     return ResultsResponse(days=days, count=len(fixtures), fixtures=fixtures)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Single-fixture detail + analysis
+#
+# These power the /matches/[id] detail page in the authed dashboard. They
+# return the SAME FixtureItem shape the list endpoints use, plus a simple
+# pre-match analysis summary (last-5 form per team, H2H aggregate). No
+# coupling to the broken /matches/{id} legacy schema.
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+class TeamFormSummary(BaseModel):
+    """Per-team recent-form stats. Mirrors the frontend TeamForm type."""
+
+    last_5: List[str] = Field(
+        default_factory=list,
+        description="Most-recent-first list of 'W'/'D'/'L' codes for the last 5 finished matches.",
+    )
+    last_10: List[str] = Field(default_factory=list)
+    wins: int = 0
+    draws: int = 0
+    losses: int = 0
+    goals_scored: int = 0
+    goals_conceded: int = 0
+
+
+class HeadToHeadSummary(BaseModel):
+    """Aggregated head-to-head history between two teams."""
+
+    total: int = 0
+    home_wins: int = 0
+    draws: int = 0
+    away_wins: int = 0
+    summary: Optional[str] = None
+
+
+class FixtureAnalysisResponse(BaseModel):
+    """Pre-match analysis: core fixture + form per team + H2H aggregate."""
+
+    match: FixtureItem
+    home_team_form: TeamFormSummary
+    away_team_form: TeamFormSummary
+    head_to_head: HeadToHeadSummary
+
+
+async def _team_form_summary(
+    team_id: uuid.UUID, db: AsyncSession, window: int = 10
+) -> TeamFormSummary:
+    """Compute W/D/L codes + goal totals for a team's most recent finished games."""
+    stmt = (
+        select(Match)
+        .where(
+            or_(Match.home_team_id == team_id, Match.away_team_id == team_id),
+            Match.status == MatchStatus.FINISHED,
+        )
+        .order_by(Match.scheduled_at.desc())
+        .limit(window)
+    )
+    rows = (await db.execute(stmt)).scalars().all()
+
+    codes_newest_first: list[str] = []
+    wins = draws = losses = gf = ga = 0
+
+    for m in rows:
+        if m.result is None:
+            continue
+        if m.home_team_id == team_id:
+            gf += m.result.home_score
+            ga += m.result.away_score
+            if m.result.winner == "home":
+                codes_newest_first.append("W")
+                wins += 1
+            elif m.result.winner == "draw":
+                codes_newest_first.append("D")
+                draws += 1
+            else:
+                codes_newest_first.append("L")
+                losses += 1
+        else:
+            gf += m.result.away_score
+            ga += m.result.home_score
+            if m.result.winner == "away":
+                codes_newest_first.append("W")
+                wins += 1
+            elif m.result.winner == "draw":
+                codes_newest_first.append("D")
+                draws += 1
+            else:
+                codes_newest_first.append("L")
+                losses += 1
+
+    return TeamFormSummary(
+        last_5=codes_newest_first[:5],
+        last_10=codes_newest_first[:10],
+        wins=wins,
+        draws=draws,
+        losses=losses,
+        goals_scored=gf,
+        goals_conceded=ga,
+    )
+
+
+async def _head_to_head_summary(
+    home_team_id: uuid.UUID,
+    away_team_id: uuid.UUID,
+    exclude_match_id: uuid.UUID,
+    db: AsyncSession,
+    home_name: str,
+    away_name: str,
+) -> HeadToHeadSummary:
+    """Aggregate past meetings between the two teams, excluding the current fixture."""
+    stmt = (
+        select(Match)
+        .where(
+            or_(
+                and_(
+                    Match.home_team_id == home_team_id,
+                    Match.away_team_id == away_team_id,
+                ),
+                and_(
+                    Match.home_team_id == away_team_id,
+                    Match.away_team_id == home_team_id,
+                ),
+            ),
+            Match.status == MatchStatus.FINISHED,
+            Match.id != exclude_match_id,
+        )
+        .order_by(Match.scheduled_at.desc())
+        .limit(10)
+    )
+    rows = (await db.execute(stmt)).scalars().all()
+
+    total = 0
+    home_wins = draws = away_wins = 0
+
+    for m in rows:
+        if m.result is None:
+            continue
+        total += 1
+        if m.result.winner == "draw":
+            draws += 1
+            continue
+        # Winning team perspective: the "home" of the current fixture.
+        this_match_home_won = (
+            m.home_team_id == home_team_id and m.result.winner == "home"
+        ) or (m.away_team_id == home_team_id and m.result.winner == "away")
+        if this_match_home_won:
+            home_wins += 1
+        else:
+            away_wins += 1
+
+    summary: Optional[str] = None
+    if total > 0:
+        summary = (
+            f"Last {total} meetings: "
+            f"{home_name} {home_wins}W – {draws}D – {away_wins}W {away_name}."
+        )
+
+    return HeadToHeadSummary(
+        total=total,
+        home_wins=home_wins,
+        draws=draws,
+        away_wins=away_wins,
+        summary=summary,
+    )
+
+
+@router.get(
+    "/{fixture_id}",
+    response_model=FixtureItem,
+    summary="Single fixture with predictions and odds",
+    description=(
+        "Return the same FixtureItem shape the list endpoints use, for a "
+        "single match by ID. Powers the /matches/[id] detail page."
+    ),
+)
+async def get_fixture_detail(
+    fixture_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> FixtureItem:
+    match = (
+        await db.execute(select(Match).where(Match.id == fixture_id))
+    ).scalar_one_or_none()
+    if match is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Fixture {fixture_id} not found.",
+        )
+
+    pred_map = await _load_latest_predictions([match.id], db)
+    odds_map = await _load_latest_odds([match.id], db)
+    return _build_fixture_item(
+        match,
+        pred_map.get(match.id),
+        odds_map.get(match.id),
+    )
+
+
+@router.get(
+    "/{fixture_id}/analysis",
+    response_model=FixtureAnalysisResponse,
+    summary="Fixture analysis (team form + head-to-head)",
+)
+async def get_fixture_analysis(
+    fixture_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> FixtureAnalysisResponse:
+    match = (
+        await db.execute(select(Match).where(Match.id == fixture_id))
+    ).scalar_one_or_none()
+    if match is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Fixture {fixture_id} not found.",
+        )
+
+    pred_map = await _load_latest_predictions([match.id], db)
+    odds_map = await _load_latest_odds([match.id], db)
+    fixture_item = _build_fixture_item(
+        match, pred_map.get(match.id), odds_map.get(match.id)
+    )
+
+    home_form = await _team_form_summary(match.home_team_id, db)
+    away_form = await _team_form_summary(match.away_team_id, db)
+
+    home_name = match.home_team.name if match.home_team else "Home"
+    away_name = match.away_team.name if match.away_team else "Away"
+    h2h = await _head_to_head_summary(
+        match.home_team_id,
+        match.away_team_id,
+        match.id,
+        db,
+        home_name,
+        away_name,
+    )
+
+    return FixtureAnalysisResponse(
+        match=fixture_item,
+        home_team_form=home_form,
+        away_team_form=away_form,
+        head_to_head=h2h,
+    )

@@ -465,6 +465,8 @@ export interface FixturePrediction {
   home_win_prob: number;
   draw_prob: number | null;
   away_win_prob: number;
+  predicted_home_score?: number | null;
+  predicted_away_score?: number | null;
   confidence: number;
   model_name: string | null;
   predicted_at?: string;
@@ -472,7 +474,10 @@ export interface FixturePrediction {
   reasoning?: string | null;
   edge?: Record<string, number> | null;
   implied_probabilities?: Record<string, number> | null;
-  top_features?: Array<{ feature: string; importance: number }> | null;
+  top_features?: Array<
+    | { feature: string; importance: number }
+    | { name: string; home: number; draw: number; away: number; weight: number }
+  > | null;
 }
 
 /** Shape returned by /api/fixtures/today, /upcoming, /results */
@@ -519,6 +524,20 @@ export interface Fixture {
   } | null;
   prediction: FixturePrediction | null;
   odds?: FixtureOdds | null;
+}
+
+/** Response shape of /api/fixtures/{id}/analysis — team form + H2H. */
+export interface FixtureAnalysis {
+  match: Fixture;
+  home_team_form: TeamForm;
+  away_team_form: TeamForm;
+  head_to_head: {
+    total: number;
+    home_wins: number;
+    draws: number;
+    away_wins: number;
+    summary: string | null;
+  };
 }
 
 export interface FixturesResponse {

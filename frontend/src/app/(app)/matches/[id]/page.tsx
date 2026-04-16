@@ -3,10 +3,9 @@
 /**
  * /matches/[id] — rich match detail page (NOCTURNE styled).
  *
- * Three API calls:
- *   GET /api/matches/{id}              → Match (header data)
- *   GET /api/matches/{id}/analysis     → MatchAnalysis (form, H2H, stats)
- *   GET /api/matches/{id}/forecast     → ForecastOutput (AI forecast)
+ * Two API calls:
+ *   GET /api/fixtures/{id}              → Fixture (header + embedded prediction)
+ *   GET /api/fixtures/{id}/analysis     → FixtureAnalysis (form + H2H)
  *
  * Everything is rendered in the NOCTURNE design language: card-neon
  * gradient-border panels, HexBadge icon frames, Pills/DataChips for
@@ -36,9 +35,9 @@ import {
 import { api } from "@/lib/api";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type {
-  Match,
-  MatchAnalysis,
-  ForecastOutput,
+  Fixture,
+  FixtureAnalysis,
+  FixturePrediction,
   TeamForm,
 } from "@/types/api";
 
@@ -167,7 +166,7 @@ function FormLetter({ r }: { r: string }) {
    Header card — teams + score/VS + kickoff + venue + league
    ───────────────────────────────────────────────────────────── */
 
-function MatchHeader({ match, locale }: { match: Match; locale: string }) {
+function MatchHeader({ match, locale }: { match: Fixture; locale: string }) {
   const isFinished = match.status === "finished";
   const isLive = match.status === "live";
   const scheduled = isLive || isFinished;
@@ -193,7 +192,7 @@ function MatchHeader({ match, locale }: { match: Match; locale: string }) {
         <div className="mb-5 flex flex-wrap items-center gap-2">
           <span className="section-label">
             <Sparkles className="h-3 w-3" />
-            Match Preview
+            {match.league_name ?? "Match Preview"}
           </span>
           {match.round_name && (
             <Pill tone="default" className="!text-[10px]">
@@ -513,7 +512,7 @@ function H2HCard({
   homeName,
   awayName,
 }: {
-  h2h: MatchAnalysis["head_to_head"];
+  h2h: FixtureAnalysis["head_to_head"];
   homeName: string;
   awayName: string;
 }) {
@@ -636,16 +635,16 @@ function ConfidenceBlock({ confidence }: { confidence: number }) {
    ───────────────────────────────────────────────────────────── */
 
 function PredictedScoreBlock({
-  forecast,
+  pred,
   homeName,
   awayName,
 }: {
-  forecast: ForecastOutput;
+  pred: FixturePrediction;
   homeName: string;
   awayName: string;
 }) {
-  const h = forecast.predicted_home_score;
-  const a = forecast.predicted_away_score;
+  const h = pred.predicted_home_score;
+  const a = pred.predicted_away_score;
   if (h == null || a == null) return null;
 
   return (
@@ -684,17 +683,31 @@ function PredictedScoreBlock({
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Key factors — from forecast explanation
+   AI reasoning + sub-model breakdown (from prediction payload)
    ───────────────────────────────────────────────────────────── */
 
-function FactorsBlock({ forecast }: { forecast: ForecastOutput }) {
-  const ex = forecast.explanation;
-  if (!ex) return null;
+type SubModelFeature = {
+  name: string;
+  home: number;
+  draw: number;
+  away: number;
+  weight: number;
+};
 
-  const positives = Object.entries(ex.top_factors_for ?? {}).slice(0, 5);
-  const negatives = Object.entries(ex.top_factors_against ?? {}).slice(0, 5);
+function isSubModel(f: unknown): f is SubModelFeature {
+  return (
+    typeof f === "object" &&
+    f !== null &&
+    "name" in f &&
+    "home" in f &&
+    "away" in f
+  );
+}
 
-  if (positives.length === 0 && negatives.length === 0) return null;
+function FactorsBlock({ pred }: { pred: FixturePrediction }) {
+  const reasoning = pred.reasoning?.trim();
+  const subModels = (pred.top_features ?? []).filter(isSubModel);
+  if (!reasoning && subModels.length === 0) return null;
 
   return (
     <div className="card-neon p-5">
@@ -708,55 +721,55 @@ function FactorsBlock({ forecast }: { forecast: ForecastOutput }) {
           </p>
         </div>
 
-        {ex.summary && (
+        {reasoning && (
           <p className="mt-3 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-xs leading-relaxed text-[#cbd3e0]">
-            {ex.summary}
+            {reasoning}
           </p>
         )}
 
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
-          {positives.length > 0 && (
-            <div>
-              <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#86efac]">
-                Supporting factors
-              </p>
-              <ul className="space-y-1.5">
-                {positives.map(([k, v]) => (
+        {subModels.length > 0 && (
+          <div className="mt-4">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#a3a9b8]">
+              Sub-model breakdown
+            </p>
+            <ul className="space-y-1.5">
+              {subModels.map((sm) => {
+                const pickSide: "home" | "draw" | "away" =
+                  sm.home >= sm.draw && sm.home >= sm.away
+                    ? "home"
+                    : sm.away >= sm.draw
+                    ? "away"
+                    : "draw";
+                return (
                   <li
-                    key={k}
-                    className="flex items-center justify-between rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-1.5"
+                    key={sm.name}
+                    className="rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2"
                   >
-                    <span className="text-xs text-[#cbd3e0] truncate">{k}</span>
-                    <Pill tone="win" className="!text-[10px] tabular-nums">
-                      +{formatPct(Math.abs(v))}
-                    </Pill>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold text-[#ededed] truncate">
+                        {sm.name}
+                      </span>
+                      <Pill tone="default" className="!text-[9px] tabular-nums">
+                        weight ×{sm.weight}
+                      </Pill>
+                    </div>
+                    <div className="mt-1.5 grid grid-cols-3 gap-1 text-center">
+                      <DataChip tone={pickSide === "home" ? "win" : "default"}>
+                        {Math.round(sm.home * 100)}%
+                      </DataChip>
+                      <DataChip tone={pickSide === "draw" ? "win" : "default"}>
+                        {Math.round(sm.draw * 100)}%
+                      </DataChip>
+                      <DataChip tone={pickSide === "away" ? "win" : "default"}>
+                        {Math.round(sm.away * 100)}%
+                      </DataChip>
+                    </div>
                   </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {negatives.length > 0 && (
-            <div>
-              <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#fca5a5]">
-                Opposing factors
-              </p>
-              <ul className="space-y-1.5">
-                {negatives.map(([k, v]) => (
-                  <li
-                    key={k}
-                    className="flex items-center justify-between rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-1.5"
-                  >
-                    <span className="text-xs text-[#cbd3e0] truncate">{k}</span>
-                    <Pill tone="loss" className="!text-[10px] tabular-nums">
-                      −{formatPct(Math.abs(v))}
-                    </Pill>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -771,11 +784,11 @@ type TabKey = "overview" | "form" | "h2h";
 function TabStrip({
   value,
   onChange,
-  hasForecast,
+  hasPrediction,
 }: {
   value: TabKey;
   onChange: (k: TabKey) => void;
-  hasForecast: boolean;
+  hasPrediction: boolean;
 }) {
   const tabs: Array<{ key: TabKey; label: string; icon: typeof TrendingUp }> = [
     { key: "overview", label: "Overview", icon: TrendingUp },
@@ -801,7 +814,7 @@ function TabStrip({
           >
             <tab.icon className="h-3.5 w-3.5" />
             {tab.label}
-            {tab.key === "overview" && hasForecast && (
+            {tab.key === "overview" && hasPrediction && (
               <span className="ml-0.5 rounded-full bg-[#4ade80]/20 px-1.5 text-[9px] font-bold text-[#86efac]">
                 AI
               </span>
@@ -866,29 +879,27 @@ export default function MatchDetailPage() {
 
   const [tab, setTab] = useState<TabKey>("overview");
 
-  const { data: match, isLoading: matchLoading, error: matchError } = useQuery({
-    queryKey: ["match", matchId],
-    queryFn: () => api.getMatch(matchId),
+  const {
+    data: fixture,
+    isLoading: fixtureLoading,
+    error: fixtureError,
+  } = useQuery({
+    queryKey: ["fixture-detail", matchId],
+    queryFn: () => api.getFixtureDetail(matchId),
     enabled: Boolean(matchId),
   });
 
   const { data: analysis, isLoading: analysisLoading } = useQuery({
-    queryKey: ["match-analysis", matchId],
-    queryFn: () => api.getMatchAnalysis(matchId),
+    queryKey: ["fixture-analysis", matchId],
+    queryFn: () => api.getFixtureAnalysis(matchId),
     enabled: Boolean(matchId),
   });
 
-  const { data: forecast, isLoading: forecastLoading } = useQuery({
-    queryKey: ["match-forecast", matchId],
-    queryFn: () => api.getMatchForecast(matchId),
-    enabled: Boolean(matchId),
-    retry: false,
-  });
+  const displayMatch = analysis?.match ?? fixture;
+  const prediction = displayMatch?.prediction ?? null;
+  const hasPrediction = Boolean(prediction);
 
-  const hasForecast = !forecastLoading && forecast !== undefined;
-  const displayMatch = analysis?.match ?? match;
-
-  if (matchError) {
+  if (fixtureError) {
     return (
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8">
         <div className="card-neon p-8">
@@ -900,7 +911,7 @@ export default function MatchDetailPage() {
               Failed to load match data
             </p>
             <p className="mt-1 text-xs text-[#a3a9b8]">
-              {matchError instanceof Error ? matchError.message : "Unknown error"}
+              {fixtureError instanceof Error ? fixtureError.message : "Unknown error"}
             </p>
             <Link
               href={lHref("/dashboard")}
@@ -940,19 +951,19 @@ export default function MatchDetailPage() {
         </Link>
 
         {/* Header */}
-        {matchLoading && !displayMatch ? (
+        {fixtureLoading && !displayMatch ? (
           <HeaderSkeleton />
         ) : displayMatch ? (
           <MatchHeader match={displayMatch} locale={locale} />
         ) : null}
 
         {/* Tabs */}
-        <TabStrip value={tab} onChange={setTab} hasForecast={hasForecast} />
+        <TabStrip value={tab} onChange={setTab} hasPrediction={hasPrediction} />
 
         {/* ── Overview tab ── */}
         {tab === "overview" && (
           <div className="space-y-5">
-            {forecast ? (
+            {prediction ? (
               <div className="card-neon p-5">
                 <div className="relative">
                   <div className="flex items-center gap-2">
@@ -965,37 +976,37 @@ export default function MatchDetailPage() {
                   </div>
                   <div className="mt-4">
                     <ProbBar
-                      home={forecast.home_win_prob}
-                      draw={forecast.draw_prob}
-                      away={forecast.away_win_prob}
+                      home={prediction.home_win_prob}
+                      draw={prediction.draw_prob}
+                      away={prediction.away_win_prob}
                       homeName={displayMatch?.home_team_name ?? "Home"}
                       awayName={displayMatch?.away_team_name ?? "Away"}
                     />
                   </div>
                 </div>
               </div>
-            ) : forecastLoading ? (
+            ) : fixtureLoading ? (
               <BlockSkeleton />
             ) : null}
 
             <div className="grid gap-5 md:grid-cols-2">
-              {forecast ? (
-                <ConfidenceBlock confidence={forecast.confidence} />
-              ) : forecastLoading ? (
+              {prediction ? (
+                <ConfidenceBlock confidence={prediction.confidence} />
+              ) : fixtureLoading ? (
                 <BlockSkeleton />
               ) : null}
-              {forecast && displayMatch ? (
+              {prediction && displayMatch ? (
                 <PredictedScoreBlock
-                  forecast={forecast}
+                  pred={prediction}
                   homeName={displayMatch.home_team_name}
                   awayName={displayMatch.away_team_name}
                 />
               ) : null}
             </div>
 
-            {forecast && <FactorsBlock forecast={forecast} />}
+            {prediction && <FactorsBlock pred={prediction} />}
 
-            {!forecast && !forecastLoading && (
+            {!prediction && !fixtureLoading && (
               <div className="card-neon p-8">
                 <div className="relative text-center">
                   <HexBadge variant="blue" size="md" noGlow>
@@ -1011,11 +1022,11 @@ export default function MatchDetailPage() {
               </div>
             )}
 
-            {forecast?.disclaimer && (
-              <p className="px-2 text-[10px] italic leading-relaxed text-[#6b7280]">
-                {forecast.disclaimer}
-              </p>
-            )}
+            <p className="px-2 text-[10px] italic leading-relaxed text-[#6b7280]">
+              Simulation / educational use only. AI probability estimates are not
+              financial or betting advice. Past performance does not guarantee
+              future results.
+            </p>
           </div>
         )}
 
