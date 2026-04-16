@@ -166,12 +166,15 @@ export function SiteNav() {
                 {/* Mega-menu panel */}
                 {predictionsOpen && (
                   <div
-                    className="absolute left-1/2 top-full z-50 mt-2 w-[min(720px,92vw)] -translate-x-1/2 rounded-2xl p-4 shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
+                    className="absolute left-1/2 top-full z-50 mt-2 w-[min(720px,92vw)] -translate-x-1/2 rounded-2xl p-4 shadow-[0_32px_80px_rgba(0,0,0,0.65)]"
                     style={{
-                      background: "hsl(230 16% 10% / 0.94)",
-                      backdropFilter: "blur(28px) saturate(150%)",
-                      WebkitBackdropFilter: "blur(28px) saturate(150%)",
-                      border: "1px solid hsl(0 0% 100% / 0.1)",
+                      // Fully opaque base so hero copy never bleeds through,
+                      // with a soft gradient for depth.
+                      background:
+                        "linear-gradient(180deg, hsl(230 18% 11%) 0%, hsl(230 18% 9%) 100%)",
+                      backdropFilter: "blur(32px) saturate(160%)",
+                      WebkitBackdropFilter: "blur(32px) saturate(160%)",
+                      border: "1px solid hsl(0 0% 100% / 0.12)",
                     }}
                     onMouseEnter={openPredictions}
                     onMouseLeave={scheduleClose}
