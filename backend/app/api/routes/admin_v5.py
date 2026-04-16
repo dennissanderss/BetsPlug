@@ -132,6 +132,47 @@ async def _api_football() -> APIFootballAdapter:
 # ──────────────────────────────────────────────────────────────────────────────
 
 
+@router.get(
+    "/diagnose-team-logos",
+    summary="Inspect DB state: leagues, teams, and how many have logos",
+)
+async def diagnose_team_logos(
+    db: AsyncSession = Depends(get_db),
+):
+    """Read-only diagnostic. Shows which league slugs exist in the DB and
+    how many teams currently have a logo_url set. Use this before/after
+    the backfill to verify what's happening."""
+    from app.models.team import Team
+    from app.models.league import League
+    from app.ingestion.adapters.api_football import LEAGUE_SLUG_TO_ID
+
+    league_rows = (
+        await db.execute(select(League.slug, League.name))
+    ).all()
+    db_slugs = sorted({row[0] for row in league_rows})
+    mapped_slugs = set(LEAGUE_SLUG_TO_ID.keys())
+
+    total_teams = (await db.execute(select(func.count(Team.id)))).scalar() or 0
+    teams_with_logo = (
+        await db.execute(
+            select(func.count(Team.id)).where(Team.logo_url.isnot(None))
+        )
+    ).scalar() or 0
+
+    return {
+        "api_football_key_configured": bool(_settings.api_football_key),
+        "total_leagues_in_db": len(db_slugs),
+        "db_league_slugs": db_slugs,
+        "expected_slugs_in_LEAGUE_SLUG_TO_ID": sorted(mapped_slugs),
+        "matching_slugs": sorted(set(db_slugs) & mapped_slugs),
+        "slugs_in_db_but_not_in_mapping": sorted(set(db_slugs) - mapped_slugs),
+        "slugs_in_mapping_but_not_in_db": sorted(mapped_slugs - set(db_slugs)),
+        "total_teams_in_db": total_teams,
+        "teams_with_logo_url": teams_with_logo,
+        "teams_without_logo_url": total_teams - teams_with_logo,
+    }
+
+
 @router.post(
     "/backfill-team-logos",
     summary="Fetch missing team logos from API-Football for all leagues",
@@ -140,29 +181,39 @@ async def backfill_team_logos(
     db: AsyncSession = Depends(get_db),
 ):
     """For every league mapped in API-Football, fetch team rosters and
-    update logo_url on ALL teams (overwrite NULL, match by name or slug)."""
+    update logo_url on teams. Matches teams by slug, then by exact
+    (case-insensitive) name, then by partial name — searching globally
+    (not scoped to a League row). This way the backfill still works even
+    when the local League.slug doesn't match the mapping keys."""
     from app.models.team import Team
     from app.models.league import League
     from app.ingestion.adapters.api_football import LEAGUE_SLUG_TO_ID
-    import re, asyncio
+    import re as _re, asyncio as _asyncio
 
     adapter = await _api_football()
     updated = 0
     skipped = 0
     not_found: list[str] = []
     errors: list[str] = []
+    leagues_queried = 0
+    api_teams_returned = 0
 
     for slug, league_api_id in LEAGUE_SLUG_TO_ID.items():
+        # We try to find a matching League row for optional scoping, but
+        # we DO NOT skip the API call when it's missing — teams may still
+        # exist under a different slug scheme.
         league = (
             await db.execute(select(League).where(League.slug == slug))
         ).scalar_one_or_none()
-        if league is None:
-            continue
 
         try:
             season = _season_for_date(datetime.now(timezone.utc).date())
-            resp = await adapter._get("teams", {"league": league_api_id, "season": season})
+            resp = await adapter._get(
+                "teams", {"league": league_api_id, "season": season}
+            )
             items = resp.get("response", []) if isinstance(resp, dict) else []
+            leagues_queried += 1
+            api_teams_returned += len(items)
 
             for item in items:
                 team_data = item.get("team", {})
@@ -171,32 +222,35 @@ async def backfill_team_logos(
                 if not logo or not name:
                     continue
 
-                # Try matching by slug first
-                team_slug = re.sub(r"[^\w\s-]", "", name.lower())
-                team_slug = re.sub(r"[\s_]+", "-", team_slug).strip("-")
+                # Try matching by slug first (globally).
+                team_slug = _re.sub(r"[^\w\s-]", "", name.lower())
+                team_slug = _re.sub(r"[\s_]+", "-", team_slug).strip("-")
 
                 team = (
                     await db.execute(select(Team).where(Team.slug == team_slug))
                 ).scalar_one_or_none()
 
-                # Fallback: match by name (case-insensitive)
-                if team is None:
-                    team = (
-                        await db.execute(
-                            select(Team).where(func.lower(Team.name) == name.lower())
-                        )
-                    ).scalar_one_or_none()
-
-                # Fallback: match by name LIKE (partial)
+                # Fallback: exact case-insensitive name match (global).
                 if team is None:
                     team = (
                         await db.execute(
                             select(Team).where(
-                                Team.league_id == league.id,
-                                func.lower(Team.name).contains(name.lower()[:10]),
+                                func.lower(Team.name) == name.lower()
                             )
                         )
                     ).scalar_one_or_none()
+
+                # Fallback: partial name match. Scope to league when
+                # available to avoid cross-league false positives, else
+                # fall back to global partial match.
+                if team is None:
+                    partial = name.lower()[:10]
+                    stmt = select(Team).where(
+                        func.lower(Team.name).contains(partial)
+                    )
+                    if league is not None:
+                        stmt = stmt.where(Team.league_id == league.id)
+                    team = (await db.execute(stmt)).scalar_one_or_none()
 
                 if team is None:
                     not_found.append(f"{slug}/{name}")
@@ -208,7 +262,7 @@ async def backfill_team_logos(
                 else:
                     skipped += 1
 
-            await asyncio.sleep(0.3)
+            await _asyncio.sleep(0.3)
         except Exception as exc:
             errors.append(f"{slug}: {exc}")
 
@@ -216,7 +270,10 @@ async def backfill_team_logos(
     return {
         "updated": updated,
         "skipped_already_set": skipped,
-        "not_found_in_db": not_found[:50],
+        "leagues_queried_against_api": leagues_queried,
+        "total_teams_returned_by_api": api_teams_returned,
+        "not_found_in_db_count": len(not_found),
+        "not_found_in_db_sample": not_found[:50],
         "errors": errors,
     }
 
