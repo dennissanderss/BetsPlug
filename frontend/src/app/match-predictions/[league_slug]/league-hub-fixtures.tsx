@@ -117,32 +117,36 @@ export function LeagueHubFixtures({ leagueSlug }: { leagueSlug: string }) {
 
   return (
     <>
-      {/* Stats bar */}
-      <div className="mx-auto mt-8 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4">
+      {/* Stats bar — NOCTURNE glass tiles */}
+      <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4">
         {stats.map(({ label, value, icon: Icon, color }) => (
           <div
             key={label}
-            className="flex flex-col items-center justify-center gap-1 rounded-2xl border border-slate-200 bg-white px-3 py-4 text-center shadow-sm"
+            className="glass-panel flex flex-col items-center justify-center gap-1 px-3 py-4 text-center"
           >
             <Icon className="h-4 w-4" style={{ color }} />
-            <span className="mt-1 text-2xl font-extrabold leading-none tabular-nums text-slate-900">
+            <span className="mt-1 text-stat text-2xl leading-none tabular-nums text-[#ededed]">
               {value}
             </span>
-            <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
               {label}
             </span>
           </div>
         ))}
       </div>
 
-      {/* Free 3 predictions */}
+      {/* Free picks */}
       <div className="mt-12">
         <div className="mb-5 flex items-end justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+            <span className="section-label">
+              <Sparkles className="h-3 w-3" />
+              {t("matchPred.statFree")}
+            </span>
+            <h2 className="text-heading mt-2 text-2xl text-[#ededed] sm:text-3xl">
               {t("matchPred.freeHeading")}
             </h2>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-[#a3a9b8]">
               {t("matchPred.freeSub")}
             </p>
           </div>
@@ -150,7 +154,7 @@ export function LeagueHubFixtures({ leagueSlug }: { leagueSlug: string }) {
             <button
               type="button"
               onClick={() => fixturesQuery.refetch()}
-              className="hidden items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-600 transition hover:border-green-400 hover:text-green-600 sm:inline-flex"
+              className="btn-glass hidden items-center gap-1.5 !text-[11px] sm:inline-flex"
             >
               <RefreshCw className="h-3 w-3 animate-spin" />
               {t("matchPred.refresh")}
@@ -167,20 +171,20 @@ export function LeagueHubFixtures({ leagueSlug }: { leagueSlug: string }) {
         )}
 
         {!isLoading && isError && (
-          <div className="flex flex-col items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-6 shadow-sm sm:flex-row sm:items-center">
-            <AlertTriangle className="h-6 w-6 shrink-0 text-amber-500" />
+          <div className="glass-panel flex flex-col items-start gap-3 p-6 sm:flex-row sm:items-center">
+            <AlertTriangle className="h-6 w-6 shrink-0 text-amber-400" />
             <div className="flex-1">
-              <p className="font-bold text-amber-700">
+              <p className="font-bold text-amber-300">
                 {t("matchPred.errorTitle")}
               </p>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-[#a3a9b8]">
                 {t("matchPred.errorDesc")}
               </p>
             </div>
             <button
               type="button"
               onClick={() => fixturesQuery.refetch()}
-              className="inline-flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-4 py-2 text-xs font-bold text-amber-700 transition hover:bg-amber-100"
+              className="btn-glass inline-flex items-center gap-2 !text-xs"
             >
               <RefreshCw className="h-3.5 w-3.5" />
               {t("matchPred.refresh")}
@@ -189,21 +193,21 @@ export function LeagueHubFixtures({ leagueSlug }: { leagueSlug: string }) {
         )}
 
         {!isLoading && !isError && !hasFree && (
-          <div className="flex flex-col items-center gap-4 rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-green-200 bg-green-50">
-              <Clock className="h-6 w-6 text-green-500" />
+          <div className="glass-panel flex flex-col items-center gap-4 p-10 text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[#4ade80]/30 bg-[#4ade80]/[0.08]">
+              <Clock className="h-6 w-6 text-[#4ade80]" />
             </div>
             <div>
-              <h3 className="text-xl font-extrabold text-slate-900">
+              <h3 className="text-heading text-xl text-[#ededed]">
                 {t("matchPred.emptyTitle")}
               </h3>
-              <p className="mt-1 max-w-md text-sm text-slate-500">
+              <p className="mt-1 max-w-md text-sm text-[#a3a9b8]">
                 {t("matchPred.emptyDesc")}
               </p>
             </div>
             <Link
               href={loc("/track-record")}
-              className="inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-50 px-5 py-2.5 text-xs font-bold text-green-700 transition hover:border-green-400 hover:bg-green-100"
+              className="btn-glass inline-flex items-center gap-2"
             >
               <Eye className="h-3.5 w-3.5" />
               {t("matchPred.emptyCta")}
@@ -223,10 +227,14 @@ export function LeagueHubFixtures({ leagueSlug }: { leagueSlug: string }) {
       {/* Locked pool */}
       <div className="mt-12">
         <div className="mb-5">
-          <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+          <span className="section-label">
+            <Lock className="h-3 w-3" />
+            {t("matchPred.statLocked")}
+          </span>
+          <h2 className="text-heading mt-2 text-2xl text-[#ededed] sm:text-3xl">
             {t("matchPred.lockedHeading")}
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-[#a3a9b8]">
             {t("matchPred.lockedSub")}
           </p>
         </div>
