@@ -260,8 +260,16 @@ class DataSyncService:
         league_id: uuid.UUID,
         team_slug: str,
         team_name: str,
+        logo_url: Optional[str] = None,
     ) -> Team:
-        """Ensure a Team row exists for *team_slug* and return it."""
+        """Ensure a Team row exists for *team_slug* and return it.
+
+        If ``logo_url`` is provided:
+         - on creation, it's stored on the new row
+         - on an existing row that has no logo yet, it's filled in
+           (opportunistic backfill — every time an upstream sync brings
+            us a logo for a team that was created without one, we save it)
+        """
         result = await db.execute(select(Team).where(Team.slug == team_slug))
         team = result.scalar_one_or_none()
         if team is None:
@@ -270,13 +278,20 @@ class DataSyncService:
                 league_id=league_id,
                 name=team_name,
                 slug=team_slug,
+                logo_url=logo_url,
                 is_active=True,
             )
             db.add(team)
             await db.flush()
             self.log.info(
-                "created_team", slug=team_slug, league_id=str(league_id)
+                "created_team",
+                slug=team_slug,
+                league_id=str(league_id),
+                has_logo=bool(logo_url),
             )
+        elif logo_url and not team.logo_url:
+            team.logo_url = logo_url
+            self.log.info("team_logo_filled_in", slug=team_slug)
         return team
 
     # ── Competition rotation ──────────────────────────────────────────────────
@@ -348,14 +363,23 @@ class DataSyncService:
 
                 home_slug = raw.get("home_team_slug", "unknown-home")
                 away_slug = raw.get("away_team_slug", "unknown-away")
-                home_name = home_slug.replace("-", " ").title()
-                away_name = away_slug.replace("-", " ").title()
+                # Prefer the real team name when the adapter provides it.
+                home_name = raw.get("home_team_name") or home_slug.replace("-", " ").title()
+                away_name = raw.get("away_team_name") or away_slug.replace("-", " ").title()
 
                 home_team = await self._get_or_create_team(
-                    db, league.id, home_slug, home_name
+                    db,
+                    league.id,
+                    home_slug,
+                    home_name,
+                    logo_url=raw.get("home_team_logo"),
                 )
                 away_team = await self._get_or_create_team(
-                    db, league.id, away_slug, away_name
+                    db,
+                    league.id,
+                    away_slug,
+                    away_name,
+                    logo_url=raw.get("away_team_logo"),
                 )
 
                 external_id = raw.get("external_id")
@@ -577,9 +601,13 @@ class DataSyncService:
                 if not team_slug:
                     continue
 
-                team_name = team_slug.replace("-", " ").title()
+                team_name = row.get("team_name") or team_slug.replace("-", " ").title()
                 team = await self._get_or_create_team(
-                    db, league.id, team_slug, team_name
+                    db,
+                    league.id,
+                    team_slug,
+                    team_name,
+                    logo_url=row.get("team_logo"),
                 )
 
                 # Upsert: one snapshot per (league, season, team, date)

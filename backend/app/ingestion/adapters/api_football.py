@@ -503,7 +503,11 @@ class APIFootballAdapter(DataSourceAdapter):
                     "external_id": f"apifb_match_{fixture['id']}",
                     "league_slug": league_id,
                     "home_team_slug": home_slug,
+                    "home_team_name": home.get("name"),
+                    "home_team_logo": home.get("logo"),
                     "away_team_slug": away_slug,
+                    "away_team_name": away.get("name"),
+                    "away_team_logo": away.get("logo"),
                     "scheduled_at": _parse_iso(fixture.get("date")),
                     "status": _map_status(fixture.get("status", {}).get("short")),
                     "venue": (fixture.get("venue") or {}).get("name"),
@@ -586,6 +590,8 @@ class APIFootballAdapter(DataSourceAdapter):
                     rows.append(
                         {
                             "team_slug": team_slug,
+                            "team_name": team.get("name"),
+                            "team_logo": team.get("logo"),
                             "league_slug": league_slug,
                             "season_name": season_id,
                             "position": entry.get("rank"),
