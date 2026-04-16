@@ -19,7 +19,7 @@ DB_CONFIG = {
     "dbname": "railway",
 }
 
-DEPLOY_AFTER_UTC = "2026-04-16 11:15:00+00"
+DEPLOY_AFTER_UTC = "2026-04-16 11:28:00+00"  # after win_rate fix
 
 
 def main():

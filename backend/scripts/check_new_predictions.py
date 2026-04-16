@@ -15,7 +15,7 @@ DB_CONFIG = {
 
 # Deploy timestamp: when commit b7270b9 went live on Railway
 # Using a conservative window — anything from today UTC
-DEPLOY_AFTER_UTC = "2026-04-16 11:15:00+00"  # buffer after 11:07 UTC commit
+DEPLOY_AFTER_UTC = "2026-04-16 11:40:00+00"  # after local fill batch
 
 
 def main():
