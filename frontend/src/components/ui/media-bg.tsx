@@ -46,7 +46,7 @@ export function HeroMediaBg({
 
       {/* 2 · Perspective mesh grid — connected nodes net */}
       <div
-        className="pointer-events-none absolute inset-0 overflow-hidden"
+        className="pointer-events-none absolute inset-0 overflow-hidden opacity-50"
         style={{ perspective: "800px" }}
       >
         <div
@@ -84,7 +84,7 @@ export function HeroMediaBg({
 
       {/* 3 · Second smaller mesh (purple tint, offset) for depth */}
       <div
-        className="pointer-events-none absolute inset-0 overflow-hidden opacity-40"
+        className="pointer-events-none absolute inset-0 overflow-hidden opacity-20"
         style={{ perspective: "600px" }}
       >
         <div
@@ -159,7 +159,7 @@ export function CtaMediaBg({
 
       {/* 2 · Perspective mesh grid (same language as hero) */}
       <div
-        className="pointer-events-none absolute inset-0 overflow-hidden"
+        className="pointer-events-none absolute inset-0 overflow-hidden opacity-50"
         style={{ perspective: "700px" }}
       >
         <div
