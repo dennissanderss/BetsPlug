@@ -524,6 +524,17 @@ export interface Fixture {
   } | null;
   prediction: FixturePrediction | null;
   odds?: FixtureOdds | null;
+  /** Live-score cache (only populated when status === "live"). */
+  live_score?: {
+    home_goals: number | null;
+    away_goals: number | null;
+    /** Elapsed minutes. For HT this is null; for extra time 90+. */
+    elapsed: number | null;
+    /** Raw API-Football status short code: "1H" / "2H" / "HT" / "ET" / "P". */
+    status: string | null;
+    halftime_home: number | null;
+    halftime_away: number | null;
+  } | null;
 }
 
 /** ── Lineup / events (API-Football pass-through) ────────────────────── */

@@ -54,6 +54,7 @@ import type {
 
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill, DataChip, TrustScore } from "@/components/noct/pill";
+import { formatLiveMinute } from "@/components/match-predictions/shared";
 
 /* ─────────────────────────────────────────────────────────────
    Helpers
@@ -216,9 +217,9 @@ function MatchHeader({ match, locale }: { match: Fixture; locale: string }) {
             </Pill>
           )}
           {isLive && (
-            <Pill tone="default" className="inline-flex items-center gap-1.5 !text-[10px]">
+            <Pill tone="default" className="inline-flex items-center gap-1.5 !text-[10px] tabular-nums">
               <span className="live-dot-red" />
-              LIVE
+              {formatLiveMinute(match.live_score) ?? "LIVE"}
             </Pill>
           )}
           {isFinished && (
@@ -266,12 +267,17 @@ function MatchHeader({ match, locale }: { match: Fixture; locale: string }) {
                     {match.result.away_score}
                   </span>
                 </div>
-                {match.result.home_score_ht != null &&
-                  match.result.away_score_ht != null && (
-                    <p className="mt-1 text-[10px] uppercase tracking-wider text-[#6b7280]">
-                      HT {match.result.home_score_ht}-{match.result.away_score_ht}
-                    </p>
-                  )}
+                {isLive ? (
+                  <p className="mt-1.5 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-red-400 tabular-nums">
+                    <span className="live-dot-red" />
+                    {formatLiveMinute(match.live_score) ?? "Live"}
+                  </p>
+                ) : match.result.home_score_ht != null &&
+                  match.result.away_score_ht != null ? (
+                  <p className="mt-1 text-[10px] uppercase tracking-wider text-[#6b7280]">
+                    HT {match.result.home_score_ht}-{match.result.away_score_ht}
+                  </p>
+                ) : null}
               </>
             ) : (
               <>
@@ -1192,6 +1198,13 @@ export default function MatchDetailPage() {
     queryKey: ["fixture-detail", matchId],
     queryFn: () => api.getFixtureDetail(matchId),
     enabled: Boolean(matchId),
+    // Auto-refresh live fixtures so the elapsed minute + score stay
+    // current without a manual reload. The function form polls only
+    // while the last response had status="live".
+    refetchInterval: (query) =>
+      (query.state.data as Fixture | undefined)?.status === "live"
+        ? 30_000
+        : false,
   });
 
   const { data: analysis, isLoading: analysisLoading } = useQuery({
@@ -1200,7 +1213,7 @@ export default function MatchDetailPage() {
     enabled: Boolean(matchId),
   });
 
-  const displayMatch = analysis?.match ?? fixture;
+  const displayMatch = fixture ?? analysis?.match;
   const prediction = displayMatch?.prediction ?? null;
   const hasPrediction = Boolean(prediction);
   const isLive = displayMatch?.status === "live";

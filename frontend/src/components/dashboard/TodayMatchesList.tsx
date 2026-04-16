@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { Calendar, ChevronDown, ArrowRight } from "lucide-react";
-import { confLevel, confColor } from "@/components/match-predictions/shared";
+import { confLevel, confColor, formatLiveMinute } from "@/components/match-predictions/shared";
 import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill, DataChip } from "@/components/noct/pill";
@@ -90,13 +90,13 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
       href={lHref(`/matches/${fixture.id}`)}
       className="group flex items-center gap-3 px-3 py-2.5 border-b border-white/[0.05] transition-colors hover:bg-white/[0.04] last:border-b-0 cursor-pointer focus-visible:outline-none focus-visible:bg-white/[0.05]"
     >
-      {/* Time */}
-      <span className="w-14 shrink-0 text-xs tabular-nums">
+      {/* Time / Live minute */}
+      <span className="w-16 shrink-0 text-xs tabular-nums">
         {isLive ? (
           <span className="inline-flex items-center gap-1">
             <span className="live-dot-red" />
             <span className="text-red-400 font-semibold uppercase text-[10px] tracking-wider">
-              LIVE
+              {formatLiveMinute(fixture.live_score) ?? "LIVE"}
             </span>
           </span>
         ) : isFinished ? (

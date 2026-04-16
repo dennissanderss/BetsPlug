@@ -6,6 +6,7 @@ import { ArrowRight, Activity, Target } from "lucide-react";
 import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { formatLiveMinute } from "@/components/match-predictions/shared";
 import type { Fixture, FixturesResponse } from "@/types/api";
 
 interface LiveMatchesStripProps {
@@ -58,9 +59,9 @@ function LiveMatchCard({ fixture }: { fixture: Fixture }) {
               {fixture.league_name}
             </span>
           </div>
-          <Pill tone="default" className="inline-flex items-center gap-1.5 !px-2 shrink-0">
+          <Pill tone="default" className="inline-flex items-center gap-1.5 !px-2 shrink-0 tabular-nums">
             <span className="live-dot-red" />
-            LIVE
+            {formatLiveMinute(fixture.live_score) ?? "LIVE"}
           </Pill>
         </div>
 

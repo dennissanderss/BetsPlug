@@ -409,6 +409,60 @@ def _build_fixture_item(
     )
 
 
+async def _enrich_with_live_scores(items: List[FixtureItem], matches: list) -> None:
+    """Attach cached live-score data (including elapsed minute) to any
+    LIVE fixture in ``items``.
+
+    The Redis cache ``live:fixtures`` is populated every ~60s by
+    ``job_sync_live_fixtures`` in the background scheduler — all callers
+    share the same cache, so this adds no API-Football load.
+
+    Mutates ``items`` in-place. Safe to call on empty lists.
+    """
+    if not items:
+        return
+    # Only bother if at least one fixture is live.
+    live_items = [it for it in items if (it.status or "").lower() == "live"]
+    if not live_items:
+        return
+
+    try:
+        from app.core.cache import cache_get  # local import to avoid circular deps
+        cached = await cache_get("live:fixtures") or []
+    except Exception:  # noqa: BLE001 — cache read must never break the response
+        return
+
+    if not cached:
+        return
+
+    score_by_afid: dict[str, dict] = {}
+    for entry in cached:
+        afid = str(entry.get("api_football_id", ""))
+        if afid:
+            score_by_afid[afid] = entry
+
+    by_match_id = {str(m.id): m for m in matches}
+
+    for item in live_items:
+        match = by_match_id.get(str(item.id))
+        if not match or not match.external_id:
+            continue
+        if not match.external_id.startswith("apifb_match_"):
+            continue
+        afid = match.external_id.replace("apifb_match_", "")
+        hit = score_by_afid.get(afid)
+        if not hit:
+            continue
+        item.live_score = {
+            "home_goals": hit.get("home_goals"),
+            "away_goals": hit.get("away_goals"),
+            "elapsed": hit.get("elapsed"),
+            "status": hit.get("status"),
+            "halftime_home": hit.get("halftime_home"),
+            "halftime_away": hit.get("halftime_away"),
+        }
+
+
 async def _load_latest_predictions(
     match_ids: list,
     db: AsyncSession,
@@ -561,6 +615,7 @@ async def get_upcoming_fixtures(
         _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
         for m in matches
     ]
+    await _enrich_with_live_scores(fixtures, matches)
 
     return UpcomingFixturesResponse(count=len(fixtures), fixtures=fixtures)
 
@@ -683,6 +738,7 @@ async def get_today_fixtures(
         _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
         for m in matches
     ]
+    await _enrich_with_live_scores(fixtures, matches)
 
     return TodayFixturesResponse(
         date=today.isoformat(),
@@ -1008,11 +1064,13 @@ async def get_fixture_detail(
 
     pred_map = await _load_latest_predictions([match.id], db)
     odds_map = await _load_latest_odds([match.id], db)
-    return _build_fixture_item(
+    item = _build_fixture_item(
         match,
         pred_map.get(match.id),
         odds_map.get(match.id),
     )
+    await _enrich_with_live_scores([item], [match])
+    return item
 
 
 @router.get(
@@ -1038,6 +1096,7 @@ async def get_fixture_analysis(
     fixture_item = _build_fixture_item(
         match, pred_map.get(match.id), odds_map.get(match.id)
     )
+    await _enrich_with_live_scores([fixture_item], [match])
 
     home_form = await _team_form_summary(match.home_team_id, db)
     away_form = await _team_form_summary(match.away_team_id, db)
