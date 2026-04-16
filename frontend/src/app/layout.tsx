@@ -33,16 +33,18 @@ export const viewport: Viewport = {
 };
 
 /* ── Site-wide OpenGraph image ─────────────────────────────────
-   Square BetsPlug logo on dark navy background. Per-page metadata
-   (articles, league hubs, learn pillars, ...) can still override
-   this with a more specific image; pages that don't override fall
-   back to this brand card. Lives in /public/og-image.png so it's
-   served as a static asset under the canonical SITE_URL. */
+   BetsPlug social card at the Open Graph standard 1200×630 (1.91:1).
+   Renders correctly on Facebook, LinkedIn, WhatsApp, iMessage,
+   Discord, Slack, Twitter `summary_large_image`, and Google rich
+   snippets without any platform cropping. Per-page metadata
+   (articles, league hubs, learn pillars, …) can override this with
+   a more specific image; pages that don't override fall back to
+   this brand card. Lives in /public/og-image.png. */
 const OG_IMAGE = {
   url: "/og-image.png",
-  width: 2000,
-  height: 2000,
-  alt: "BetsPlug · AI Football Predictions & Analytics",
+  width: 1200,
+  height: 630,
+  alt: "BetsPlug · AI-Driven football predictions",
 } as const;
 
 /* ── Locale-aware metadata ────────────────────────────────────
