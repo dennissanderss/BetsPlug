@@ -167,14 +167,25 @@
     letter-spacing: -0.02em;
     line-height: 1.15;
     color: hsl(var(--text-primary));
-    overflow-wrap: anywhere;
+    /* Only break at whitespace; long compounds like "AI-voetbalvoorspellingen"
+       must stay intact. Allow `break-word` as a last-resort fallback so
+       extreme overflow still shrinks gracefully instead of pushing the
+       viewport — combined with fluid font-size on .text-display /
+       .text-heading, content reflows without inserting hyphens mid-word. */
+    overflow-wrap: break-word;
     word-break: normal;
-    hyphens: auto;
+    hyphens: manual;
+    -webkit-hyphens: manual;
     min-width: 0;
   }
 
   p, span, a, li, label, input, textarea, select, button {
-    overflow-wrap: anywhere;
+    /* Body copy may still break long URLs/tokens but must not insert
+       pseudo-hyphens inside ordinary words. */
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: manual;
+    -webkit-hyphens: manual;
     min-width: 0;
   }
 
@@ -734,18 +745,29 @@
 
   /* ═══════════════════════════════════════════════════════════════
      TYPOGRAPHY — softened display + heading + stat
+     Fluid font sizes: `clamp(min, preferred, max)` auto-scales with
+     viewport so long words never get hyphenated mid-word. Consumers
+     can still override via Tailwind text-* utilities (the last-written
+     font-size wins because these are plain declarations without !important).
      ═══════════════════════════════════════════════════════════════ */
   .text-display {
     font-weight: 800;
     letter-spacing: -0.025em;
     line-height: 1.04;
     text-transform: none;
+    /* 24px on 320px phones → 56px on 1440px+ desktops. Min set low
+       enough so long compound words in locales like NL/DE (e.g.
+       "AI-voetbalvoorspellingen") still fit within the viewport
+       without the browser resorting to mid-word breaks. */
+    font-size: clamp(1.5rem, 0.85rem + 3vw, 3.5rem);
   }
   .text-heading {
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 1.1;
     text-transform: none;
+    /* 20px → 40px fluid */
+    font-size: clamp(1.25rem, 0.8rem + 2.1vw, 2.5rem);
   }
   .text-stat {
     font-variant-numeric: tabular-nums;

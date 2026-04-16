@@ -278,7 +278,7 @@ export function HomeContent({
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.05 }}
-                className="text-display max-w-2xl text-balance break-words text-3xl text-[#ededed] sm:text-4xl md:text-5xl lg:text-6xl"
+                className="text-display max-w-2xl text-balance text-[#ededed]"
               >
                 {t("hero.titleLine1") ? <>{t("hero.titleLine1")}{" "}</> : null}
                 <span className="gradient-text-green">{t("hero.titleLine2")}</span>
