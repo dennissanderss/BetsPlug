@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "motion/react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import {
   Sparkles,
+  ChevronDown,
   ChevronRight,
   Database,
   Trophy,
@@ -488,30 +490,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             <p className="mt-4 text-base text-[#a3a9b8]">{t("hiw.faqSubtitle")}</p>
           </motion.div>
 
-          <div className="space-y-4">
-            {faqs.map((f: { q: string; a: string }) => (
-              <motion.details
-                key={f.q}
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.4 }}
-                className="card-neon group rounded-2xl"
-              >
-                <div className="relative">
-                  <summary className="flex cursor-pointer items-center justify-between gap-4 px-6 py-5 text-left list-none">
-                    <span className="text-base font-semibold text-[#ededed] sm:text-lg">
-                      {f.q}
-                    </span>
-                    <ChevronRight className="h-5 w-5 shrink-0 text-[#4ade80] transition-transform duration-300 group-open:rotate-90" />
-                  </summary>
-                  <div className="border-t border-white/[0.06] px-6 py-5 text-sm leading-relaxed text-[#a3a9b8] sm:text-base">
-                    {f.a}
-                  </div>
-                </div>
-              </motion.details>
-            ))}
-          </div>
+          <FaqAccordion faqs={faqs} />
         </div>
       </section>
 
@@ -700,4 +679,68 @@ function StagePoint({
   }
 
   return <div className="glass-panel rounded-2xl p-4">{body}</div>;
+}
+
+/** Reusable FAQ accordion matching the homepage SeoSection style. */
+function FaqAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
+  const [openIdx, setOpenIdx] = useState<number | null>(0);
+  return (
+    <div className="space-y-3">
+      {faqs.map((f, i) => {
+        const isOpen = openIdx === i;
+        return (
+          <div
+            key={f.q}
+            className={`overflow-hidden transition-all duration-200 ${
+              isOpen ? "card-neon card-neon-green" : "glass-panel-lifted"
+            }`}
+          >
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setOpenIdx(isOpen ? null : i)}
+                className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+                aria-expanded={isOpen}
+              >
+                <span
+                  className={`text-base font-semibold transition-colors sm:text-lg ${
+                    isOpen ? "text-[#ededed]" : "text-[#a3a9b8]"
+                  }`}
+                >
+                  {f.q}
+                </span>
+                <div
+                  className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-all ${
+                    isOpen
+                      ? "rotate-180 bg-[#4ade80]/15 text-[#4ade80]"
+                      : "bg-white/[0.05] text-[#6b7280]"
+                  }`}
+                >
+                  <ChevronDown className="h-4 w-4" />
+                </div>
+              </button>
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <div
+                      className="border-t px-6 pb-6 pt-4 text-sm leading-relaxed text-[#a3a9b8] sm:text-base"
+                      style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
+                    >
+                      {f.a}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
