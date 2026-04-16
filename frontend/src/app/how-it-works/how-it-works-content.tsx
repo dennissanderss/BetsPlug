@@ -30,6 +30,7 @@ import { getLocaleValue } from "@/lib/sanity-data";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { usePotdNumbers } from "@/hooks/use-potd-numbers";
+import { HeroMediaBg } from "@/components/ui/media-bg";
 
 interface HowItWorksContentProps {
   howItWorksPage?: any;
@@ -93,6 +94,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
 
       {/* ───────────── HERO ───────────── */}
       <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+        <HeroMediaBg />
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full"

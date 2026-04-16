@@ -94,52 +94,58 @@ export function HeroMediaBg({
 }
 
 /**
- * CtaMediaBg — lime gradient + optional pattern for CTA blocks.
+ * CtaMediaBg — sporty geometric pattern for CTA blocks.
+ * No photos — concentric arc rings in lime/green on a green
+ * gradient base. Props kept backwards-compatible (src ignored).
  */
 export function CtaMediaBg({
-  src,
-  alt = "",
-  opacity = 0.14,
   className = "",
-  pattern,
 }: CtaMediaBgProps) {
   return (
     <>
-      {/* 1 · Photo if provided (low opacity grayscale) */}
-      {src && (
-        <div
-          role={alt ? "img" : undefined}
-          aria-label={alt || undefined}
-          className={`pointer-events-none absolute inset-0 overflow-hidden bg-cover bg-center bg-no-repeat ${className}`}
-          style={{
-            backgroundImage: `url('${src}')`,
-            filter: "grayscale(1) contrast(1.2) brightness(0.55)",
-            opacity,
-          }}
-        />
-      )}
-      {/* 2 · Lime gradient */}
+      {/* 1 · Green gradient base */}
       <div
-        className="pointer-events-none absolute inset-0"
+        className={`pointer-events-none absolute inset-0 ${className}`}
         style={{
           background:
-            "linear-gradient(135deg, #4ade80 0%, #22c55e 55%, #16a34a 100%)",
-          mixBlendMode: "multiply",
+            "linear-gradient(135deg, hsl(var(--accent-green) / 0.3) 0%, hsl(230 22% 9% / 0.85) 45%, hsl(var(--accent-green) / 0.2) 100%)",
         }}
       />
-      {/* 3 · Per-page pattern */}
-      {pattern && (
-        <div
-          aria-hidden
-          className={`pointer-events-none absolute inset-0 cta-pattern-${pattern}`}
-        />
-      )}
-      {/* 4 · Dark corner wash */}
+
+      {/* 2 · Concentric arc rings — top-right (lime) */}
+      <div
+        className="pointer-events-none absolute -right-[10%] -top-[20%] h-[450px] w-[450px] opacity-[0.15]"
+        style={{
+          background:
+            "repeating-radial-gradient(circle at 50% 50%, transparent 0px, transparent 30px, hsl(var(--accent-green) / 0.7) 32px, transparent 34px)",
+        }}
+      />
+
+      {/* 3 · Concentric arc rings — bottom-left (green-blue) */}
+      <div
+        className="pointer-events-none absolute -bottom-[15%] -left-[8%] h-[380px] w-[380px] opacity-[0.12]"
+        style={{
+          background:
+            "repeating-radial-gradient(circle at 50% 50%, transparent 0px, transparent 26px, hsl(var(--accent-blue) / 0.5) 28px, transparent 30px)",
+        }}
+      />
+
+      {/* 4 · Dot grid texture */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.05]"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at center, hsl(0 0% 100% / 0.9) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+
+      {/* 5 · Dark gradient for text readability */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at top left, rgba(5,5,5,0.25) 0%, transparent 55%), radial-gradient(ellipse at bottom right, rgba(5,5,5,0.3) 0%, transparent 60%)",
+            "radial-gradient(ellipse at top left, hsl(var(--bg-base) / 0.2) 0%, transparent 55%), radial-gradient(ellipse at bottom right, hsl(var(--bg-base) / 0.3) 0%, transparent 60%)",
         }}
       />
     </>

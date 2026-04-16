@@ -31,6 +31,7 @@ import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { usePotdNumbers } from "@/hooks/use-potd-numbers";
+import { HeroMediaBg } from "@/components/ui/media-bg";
 
 /* ── Live API data hook ─────────────────────────────────── */
 interface LiveStats {
@@ -192,6 +193,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
 
       {/* ───────────── HERO ───────────── */}
       <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+        <HeroMediaBg />
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 top-20 h-[520px] w-[520px] rounded-full"

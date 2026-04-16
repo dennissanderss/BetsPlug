@@ -50,6 +50,7 @@ import {
   getOrderedCountries,
   POPULAR_COUNTRY_CODES,
 } from "@/lib/countries";
+import { HeroMediaBg } from "@/components/ui/media-bg";
 
 /* ── Abandoned checkout tracking ─────────────────────────────
    Fire-and-forget API calls that never block the checkout UX.
@@ -660,6 +661,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
   /* ── Render ───────────────────────────────────────────────── */
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
+      <HeroMediaBg />
       {/* Ambient background */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-40 top-40 h-[540px] w-[540px] rounded-full bg-[#4ade80]/[0.08] blur-[160px]" />

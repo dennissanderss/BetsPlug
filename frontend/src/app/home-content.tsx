@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
+import { HeroMediaBg } from "@/components/ui/media-bg";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill, DataChip } from "@/components/noct/pill";
@@ -241,7 +242,8 @@ export function HomeContent({
           1 · HERO — text left, premium prediction card right
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24">
-        {/* Ambient hero glows */}
+        <HeroMediaBg />
+        {/* Ambient hero glows (on top of pattern) */}
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 top-10 h-[460px] w-[460px] rounded-full"

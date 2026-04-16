@@ -22,6 +22,7 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill, DataChip } from "@/components/noct/pill";
+import { HeroMediaBg } from "@/components/ui/media-bg";
 
 /** Map Lucide icon string names from Sanity to actual components. */
 const ICON_MAP: Record<string, LucideIcon> = {
@@ -102,6 +103,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
 
       {/* ───────────── HERO ───────────── */}
       <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-28">
+        <HeroMediaBg />
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full"

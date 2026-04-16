@@ -25,6 +25,7 @@ import { useAuth } from "@/lib/auth";
 import { api, ApiError } from "@/lib/api";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { HeroMediaBg } from "@/components/ui/media-bg";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -139,6 +140,7 @@ export function LoginContent() {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
+      <HeroMediaBg />
       {/* Ambient glow */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute -left-40 top-40 h-[540px] w-[540px] rounded-full bg-[#4ade80]/[0.09] blur-[160px]" />
