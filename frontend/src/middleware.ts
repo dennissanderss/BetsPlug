@@ -45,6 +45,19 @@ function setLocaleCookie(res: NextResponse, locale: Locale) {
   res.headers.set("Content-Language", locale);
 }
 
+/**
+ * Build a Headers object for an internal rewrite that carries the
+ * resolved locale as `x-locale`. Server-side code (generateMetadata,
+ * getServerLocale) reads this header so the correct locale is used
+ * on the very first request — cookies only land on the browser AFTER
+ * render, which is why Googlebot was seeing English metadata on /de.
+ */
+function withLocaleHeader(req: NextRequest, locale: Locale): Headers {
+  const h = new Headers(req.headers);
+  h.set("x-locale", locale);
+  return h;
+}
+
 export function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
@@ -76,7 +89,9 @@ export function middleware(req: NextRequest) {
     // Rewrite /nl/voorspellingen → /predictions (internal)
     const url = req.nextUrl.clone();
     url.pathname = parsed.canonical;
-    const res = NextResponse.rewrite(url);
+    const res = NextResponse.rewrite(url, {
+      request: { headers: withLocaleHeader(req, parsed.locale) },
+    });
     setLocaleCookie(res, parsed.locale);
     return res;
   }
@@ -116,13 +131,19 @@ export function middleware(req: NextRequest) {
   if (parsed.canonical !== pathname) {
     const url = req.nextUrl.clone();
     url.pathname = parsed.canonical;
-    const res = NextResponse.rewrite(url);
+    const res = NextResponse.rewrite(url, {
+      request: { headers: withLocaleHeader(req, defaultLocale) },
+    });
     setLocaleCookie(res, defaultLocale);
     return res;
   }
 
   // Path already matches filesystem — serve as-is, just refresh cookie.
-  const res = NextResponse.next();
+  // Also attach x-locale header so SSR sees the right language even
+  // before the cookie has propagated.
+  const res = NextResponse.next({
+    request: { headers: withLocaleHeader(req, preferred) },
+  });
   if (!cookieLocale || cookieLocale !== preferred) {
     setLocaleCookie(res, preferred);
   } else {

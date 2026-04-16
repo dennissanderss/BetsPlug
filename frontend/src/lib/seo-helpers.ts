@@ -10,7 +10,7 @@
  * determine the active locale during SSR / generateMetadata().
  */
 
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import {
   LOCALE_COOKIE,
   isLocale,
@@ -28,8 +28,25 @@ const SITE_URL = "https://betsplug.com";
 
 /* ── Locale detection ───────────────────────────────────────── */
 
-/** Read the active locale from the NEXT_LOCALE cookie. */
+/**
+ * Resolve the active locale for the current server request.
+ *
+ * Checks sources in order of trust:
+ *   1. `x-locale` request header — set by middleware on every rewrite
+ *      so generateMetadata() sees the correct locale on the very
+ *      first request (fixes Googlebot seeing /de with EN metadata).
+ *   2. NEXT_LOCALE cookie — for requests that didn't go through the
+ *      rewrite path (e.g. already-canonical paths with repeat visits).
+ *   3. defaultLocale fallback.
+ */
 export function getServerLocale(): Locale {
+  try {
+    const h = headers();
+    const hdrLocale = h.get("x-locale");
+    if (isLocale(hdrLocale)) return hdrLocale;
+  } catch {
+    // headers() throws outside a request scope — fall through.
+  }
   const cookieStore = cookies();
   const raw = cookieStore.get(LOCALE_COOKIE)?.value;
   return isLocale(raw) ? raw : defaultLocale;

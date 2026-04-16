@@ -1,16 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { Exo_2 } from "next/font/google";
-import { cookies } from "next/headers";
 import Script from "next/script";
 import "./globals.css";
 import { AppProviders } from "@/components/layout/providers";
 import { LocaleProvider } from "@/i18n/locale-provider";
-import {
-  defaultLocale,
-  isLocale,
-  LOCALE_COOKIE,
-} from "@/i18n/config";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 
@@ -97,10 +91,10 @@ export default function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  // Middleware has already set the cookie to a valid locale.
-  const cookieStore = cookies();
-  const raw = cookieStore.get(LOCALE_COOKIE)?.value;
-  const locale = isLocale(raw) ? raw : defaultLocale;
+  // Resolve via the shared helper so <html lang> matches the locale
+  // that generateMetadata() used. Reads x-locale header first (set by
+  // middleware on every rewrite) then falls back to the cookie.
+  const locale = getServerLocale();
 
   return (
     <html

@@ -39,9 +39,9 @@ const en = {
 
   /* Hero */
   "hero.badge": "Live · AI football predictions for 30+ leagues",
-  "hero.titleLine1": "Stop guessing.",
+  "hero.titleLine1": "",
   "hero.titleLine2": "AI football predictions",
-  "hero.titleLine3": "that actually deliver.",
+  "hero.titleLine3": "that actually deliver",
   "hero.subtitle":
     "Our AI crunches 40+ stats per match across the Premier League, La Liga, Bundesliga, Champions League and 26+ other leagues. Every prediction is locked before kickoff and tracked publicly. No cherry-picking. No deleted losses. Just honest AI football predictions you can verify yourself.",
   "hero.activeUsers": "bettors trust BetsPlug every month",
@@ -2759,9 +2759,6 @@ const nl: Dictionary = {
   "hero.joinNow": "Sluit je nu aan",
   "hero.livePick": "Gratis voorspelling",
   "hero.subtitle": "Onze AI analyseert 40+ statistieken per wedstrijd in de Premier League, La Liga, Bundesliga, Champions League en 26+ andere competities. Elke voorspelling wordt voor de aftrap vergrendeld en openbaar bijgehouden. Geen cherry-picking. Geen verwijderde verliezen. Eerlijke AI-voetbalvoorspellingen die je zelf kunt controleren.",
-  "hero.titleLine1": "",
-  "hero.titleLine2": "AI-voetbalvoorspellingen",
-  "hero.titleLine3": "die je kunt verifiëren.",
   "hero.today": "Vandaag",
   "hero.usp1Desc": "Gemeten over meer dan 80.000 historische wedstrijden en bij elke keuze openbaar gevolgd.",
   "hero.usp1Title": "58% gemiddeld hitpercentage",
@@ -3808,6 +3805,9 @@ const nl: Dictionary = {
   "b2b.affiliateDesc": "Verdien competitieve terugkerende commissies voor elke BetsPlug-abonnee die je doorverwijst. Realtime dashboards, co-branded creatieve kits, maandelijkse uitbetalingen, nul uitbetalingsdrempels.",
   "b2b.mediaDesc": "Partner op het gebied van datajournalistiek, onderzoekspapers en on-air voetbalanalyses. Volledige toegang tot onze historische voorspellingendatabase plus technische ondersteuning voor aangepaste visualisaties.",
   "b2b.contactSubtitle": "Stel uzelf en je product voor. Ons partnerteam reageert binnen 24 kantooruren met een uitgebreid voorstel en prijsstelling.",
+  "hero.titleLine1": "",
+  "hero.titleLine2": "AI-voetbalvoorspellingen",
+  "hero.titleLine3": "die daadwerkelijk opleveren",
 };
 
 
