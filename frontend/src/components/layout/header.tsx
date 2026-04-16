@@ -13,6 +13,8 @@ import {
   Star,
   Crown,
   Shield,
+  Menu,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "@/components/common/language-switcher";
@@ -20,6 +22,7 @@ import { useAuth } from "@/lib/auth";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { useNavState } from "@/components/layout/nav-state-context";
 
 interface HeaderProps {
   className?: string;
@@ -33,13 +36,16 @@ export function Header({ className }: HeaderProps) {
   const { user, logout } = useAuth();
   const { t } = useTranslations();
   const loc = useLocalizedHref();
+  const { toggleMobile, mobileOpen } = useNavState();
   const [query, setQuery] = React.useState("");
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
   const [notifOpen, setNotifOpen] = React.useState(false);
   const [searchFocused, setSearchFocused] = React.useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = React.useState(false);
   const [tier, setTier] = React.useState<string | null>(null);
   const userMenuRef = React.useRef<HTMLDivElement>(null);
   const notifRef = React.useRef<HTMLDivElement>(null);
+  const mobileSearchRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     try {
@@ -66,8 +72,16 @@ export function Header({ className }: HeaderProps) {
     e.preventDefault();
     if (query.trim()) {
       router.push(`${loc("/search")}?q=${encodeURIComponent(query.trim())}`);
+      setMobileSearchOpen(false);
     }
   }
+
+  // Focus the mobile search input the moment it expands.
+  React.useEffect(() => {
+    if (mobileSearchOpen) {
+      requestAnimationFrame(() => mobileSearchRef.current?.focus());
+    }
+  }, [mobileSearchOpen]);
 
   const navigate = (path: string) => {
     setUserMenuOpen(false);
@@ -89,7 +103,7 @@ export function Header({ className }: HeaderProps) {
   return (
     <header
       className={cn(
-        "relative z-50 flex h-14 shrink-0 items-center gap-4 px-4 md:px-6",
+        "relative z-50 flex h-14 shrink-0 items-center gap-2 sm:gap-4 px-3 sm:px-4 md:px-6",
         className
       )}
       style={{
@@ -99,7 +113,19 @@ export function Header({ className }: HeaderProps) {
         borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
       }}
     >
-      {/* Live status pill */}
+      {/* Mobile hamburger — toggles the sidebar drawer. Always visible
+          on phones, hidden from md+ where the sidebar is persistent. */}
+      <button
+        type="button"
+        onClick={toggleMobile}
+        aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+        aria-expanded={mobileOpen}
+        className="md:hidden inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.04] text-[#ededed] transition-colors hover:bg-white/[0.08]"
+      >
+        {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+      </button>
+
+      {/* Live status pill — desktop only */}
       <div className="hidden md:inline-flex shrink-0">
         <Pill tone="default" className="inline-flex items-center gap-1.5">
           <span className="live-dot" />
@@ -107,8 +133,11 @@ export function Header({ className }: HeaderProps) {
         </Pill>
       </div>
 
-      {/* Search bar */}
-      <form onSubmit={handleSearch} className="flex-1 min-w-0 max-w-sm ml-2 sm:ml-10 md:ml-0">
+      {/* Desktop search bar (sm+) — expanded pill */}
+      <form
+        onSubmit={handleSearch}
+        className="hidden sm:block flex-1 min-w-0 max-w-sm md:ml-0"
+      >
         <div
           className={cn(
             "search-pill flex items-center",
@@ -133,7 +162,17 @@ export function Header({ className }: HeaderProps) {
         </div>
       </form>
 
-      <div className="ml-auto flex items-center gap-1">
+      {/* Mobile search icon (below sm) — expands into an overlay input */}
+      <button
+        type="button"
+        onClick={() => setMobileSearchOpen(true)}
+        aria-label={t("header.searchPlaceholder" as any)}
+        className="sm:hidden ml-auto inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.04] text-[#a3a9b8] transition-colors hover:bg-white/[0.08] hover:text-[#ededed]"
+      >
+        <Search className="h-4 w-4" />
+      </button>
+
+      <div className="ml-auto sm:ml-auto flex items-center gap-1">
         <LanguageSwitcher />
 
         {/* Notifications */}
@@ -279,6 +318,53 @@ export function Header({ className }: HeaderProps) {
           )}
         </div>
       </div>
+
+      {/* Mobile search overlay — fills the header row when the mobile
+          search icon is tapped. Submitting or tapping the X closes it. */}
+      {mobileSearchOpen && (
+        <div
+          className="sm:hidden absolute inset-0 z-10 flex items-center gap-2 px-3"
+          style={{
+            background: "hsl(230 20% 7% / 0.92)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => setMobileSearchOpen(false)}
+            aria-label="Close search"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.04] text-[#ededed]"
+          >
+            <X className="h-4 w-4" />
+          </button>
+          <form onSubmit={handleSearch} className="flex-1 min-w-0">
+            <div
+              className={cn(
+                "search-pill flex items-center",
+                searchFocused && "border-[#4ade80]/60"
+              )}
+            >
+              <Search
+                className={cn(
+                  "h-3.5 w-3.5 mr-2 transition-colors duration-150 shrink-0",
+                  searchFocused ? "text-[#4ade80]" : "text-[#6b7280]"
+                )}
+              />
+              <input
+                ref={mobileSearchRef}
+                type="search"
+                placeholder={t("header.searchPlaceholder" as any)}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                className="flex-1 bg-transparent text-sm text-[#ededed] placeholder:text-[#6b7280] outline-none"
+              />
+            </div>
+          </form>
+        </div>
+      )}
     </header>
   );
 }

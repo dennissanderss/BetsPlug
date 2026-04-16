@@ -9,8 +9,6 @@ import {
   ClipboardList,
   FileBarChart2,
   ShieldCheck,
-  Menu,
-  X,
   Sparkles,
   ChevronRight,
   Trophy,
@@ -26,6 +24,7 @@ import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { Pill } from "@/components/noct/pill";
 import { useTier, type Tier } from "@/hooks/use-tier";
 import { UpgradeLockModal } from "@/components/noct/upgrade-lock-modal";
+import { useNavState } from "@/components/layout/nav-state-context";
 
 interface NavItem {
   labelKey: string;
@@ -154,7 +153,10 @@ type LockedFeature = {
  */
 export function Sidebar() {
   const pathname = usePathname();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  // Drawer state lives in a shared context so the Header's hamburger
+  // can open/close us. Falls back to a no-op provider when the tree
+  // doesn't have one (e.g. storybook, tests).
+  const { mobileOpen, setMobileOpen } = useNavState();
   const [lockedFeature, setLockedFeature] =
     React.useState<LockedFeature | null>(null);
   const { t } = useTranslations();
@@ -342,17 +344,6 @@ export function Sidebar() {
       <aside className="hidden md:flex w-60 shrink-0 flex-col" style={sidebarStyle}>
         <NavContent />
       </aside>
-
-      {/* Mobile hamburger */}
-      <div className="md:hidden fixed top-3 left-3 z-50">
-        <button
-          onClick={() => setMobileOpen((prev) => !prev)}
-          aria-label="Toggle navigation"
-          className="btn-glass h-9 w-9 inline-flex items-center justify-center rounded-lg !px-0 !py-0"
-        >
-          {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-        </button>
-      </div>
 
       {/* Mobile overlay */}
       {mobileOpen && (
