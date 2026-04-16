@@ -998,6 +998,75 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
       description:
         "Selesaikan langganan BetsPlug Anda dalam tiga langkah cepat. Dapatkan prediksi sepak bola AI dan analisis sepak bola dengan jaminan uang kembali 14 hari.",
     },
+
+},
+
+  /* ─────────────────────────── PRICING ─────────────────────── */
+  "/pricing": {
+    en: {
+      title: "Pricing Plans · AI Football Predictions · BetsPlug",
+      description:
+        "Choose the BetsPlug plan that fits you — Bronze trial for €0.01, Silver for casual bettors, Gold for full access, or Platinum Lifetime founder-tier for €199 once.",
+      ogTitle: "BetsPlug Pricing · AI Football Predictions",
+      ogDescription:
+        "Bronze, Silver, Gold or Platinum Lifetime — pick the plan built for your betting style.",
+    },
   
+    nl: {
+      title: "Prijsplannen · AI-voetbalvoorspellingen · BetsPlug",
+      description:
+        "Kies het BetsPlug-abonnement dat bij je past: proefversie Brons voor € 0,01, Zilver voor informele gokkers, Goud voor volledige toegang, of Platinum Lifetime Founder-niveau voor eenmalig € 199.",
+      ogTitle: "BetsPlug-prijzen · AI-voetbalvoorspellingen",
+      ogDescription:
+        "Levenslang Brons, Zilver, Goud of Platina — kies het plan dat bij je gokstijl past.",
+    },
+    de: {
+      title: "Preispläne · KI-Fußballvorhersagen · BetsPlug",
+      description:
+        "Wählen Sie den BetsPlug-Plan, der zu Ihnen passt – Bronze-Testversion für 0,01 €, Silber für Gelegenheitswettende, Gold für vollen Zugriff oder Platinum Lifetime-Gründerstufe für einmalig 199 €.",
+      ogTitle: "BetsPlug-Preise · KI-Fußballvorhersagen",
+      ogDescription:
+        "Bronze, Silber, Gold oder Platin auf Lebenszeit – wählen Sie den Plan, der zu Ihrem Wettstil passt.",
+    },
+    fr: {
+      title: "Plans tarifaires · Prédictions de football IA · BetsPlug",
+      description:
+        "Choisissez le plan BetsPlug qui vous convient : essai Bronze pour 0,01 €, Argent pour les parieurs occasionnels, Or pour un accès complet ou niveau fondateur Platinum Lifetime pour 199 € une fois.",
+      ogTitle: "Tarifs BetsPlug · Prédictions de football IA",
+      ogDescription:
+        "Bronze, Argent, Or ou Platine à vie : choisissez le plan adapté à votre style de pari.",
+    },
+    es: {
+      title: "Planes de precios · Predicciones de fútbol con IA · BetsPlug",
+      description:
+        "Elija el plan BetsPlug que más le convenga: prueba Bronce por 0,01 €, Plata para apostadores ocasionales, Oro para acceso completo o nivel fundador Platino vitalicio por 199 € una vez.",
+      ogTitle: "Precios de BetsPlug · Predicciones de fútbol con IA",
+      ogDescription:
+        "Bronce, Plata, Oro o Platino de por vida: elija el plan diseñado para su estilo de apuestas.",
+    },
+    it: {
+      title: "Piani tariffari · Pronostici di calcio AI · BetsPlug",
+      description:
+        "Scegli il piano BetsPlug adatto a te: prova Bronzo per 0,01 €, Argento per scommettitori occasionali, Oro per accesso completo o Livello fondatore Platinum Lifetime per 199 € una volta.",
+      ogTitle: "Prezzi BetsPlug · Pronostici calcistici AI",
+      ogDescription:
+        "Bronzo, Argento, Oro o Platino a vita: scegli il piano creato per il tuo stile di scommessa.",
+    },
+    sw: {
+      title: "Mipango ya Bei · Utabiri wa Soka wa AI · BetsPlug",
+      description:
+        "Chagua mpango wa BetsPlug unaokufaa — Jaribio la Shaba kwa €0.01, Fedha kwa waweka dau wa kawaida, Dhahabu kwa ufikiaji kamili au mwanzilishi wa kiwango cha Platinum Lifetime kwa €199 mara moja.",
+      ogTitle: "Bei ya BetsPlug · Utabiri wa Soka wa AI",
+      ogDescription:
+        "Shaba, Fedha, Dhahabu au Platinamu Maishani - chagua mpango ulioundwa kwa mtindo wako wa kamari.",
+    },
+    id: {
+      title: "Paket Harga · Prediksi Sepak Bola AI · BetsPlug",
+      description:
+        "Pilih paket BetsPlug yang cocok untuk Anda — Uji coba perunggu seharga €0,01, Perak untuk petaruh biasa, Emas untuk akses penuh, atau tingkat pendiri Platinum Lifetime seharga €199 satu kali.",
+      ogTitle: "Harga BetsPlug · Prediksi Sepak Bola AI",
+      ogDescription:
+        "Perunggu, Perak, Emas, atau Platinum Seumur Hidup — pilih paket yang dibuat untuk gaya taruhan Anda.",
+    },
 },
 };

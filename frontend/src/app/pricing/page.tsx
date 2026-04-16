@@ -7,23 +7,25 @@ import {
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { PricingContent } from "./pricing-content";
 import { fetchPricingConfig } from "@/lib/sanity-data";
+import { PAGE_META } from "@/data/page-meta";
 
 export const revalidate = 60;
 
 export async function generateMetadata(): Promise<Metadata> {
+  const locale = getServerLocale();
+  const meta =
+    PAGE_META["/pricing"]?.[locale] ?? PAGE_META["/pricing"].en;
   const alternates = getLocalizedAlternates("/pricing");
   return {
-    title: "Pricing Plans · AI Football Predictions · BetsPlug",
-    description:
-      "Choose the BetsPlug plan that fits you — Bronze trial for €0.01, Silver for casual bettors, Gold for full access, or Platinum Lifetime founder-tier for €199 once.",
+    title: meta.title,
+    description: meta.description,
     alternates: {
       canonical: alternates.canonical,
       languages: alternates.languages,
     },
     openGraph: {
-      title: "BetsPlug Pricing · AI Football Predictions",
-      description:
-        "Bronze, Silver, Gold or Platinum Lifetime — pick the plan built for your betting style.",
+      title: meta.ogTitle ?? meta.title,
+      description: meta.ogDescription ?? meta.description,
       type: "website",
     },
   };
