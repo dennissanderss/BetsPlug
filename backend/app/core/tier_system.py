@@ -117,11 +117,17 @@ TIER_METADATA: dict[PickTier, dict[str, Any]] = {
 # SQL expression: classify each prediction row as a PickTier integer
 # ---------------------------------------------------------------------------
 def pick_tier_expression() -> ColumnElement:
-    """Return a SQLAlchemy CASE returning pick_tier as integer (0..3).
+    """Return a SQLAlchemy CASE returning pick_tier as integer (0..3) or NULL.
 
-    Evaluation order matters — we check Platinum first, then Gold, etc.
-    A Champions-League pick with confidence 0.80 would technically qualify
-    for Silver and Gold too; we want the highest applicable tier assigned.
+    Classification order matters — Platinum is checked first, then Gold,
+    Silver, Free. A Champions-League pick with confidence 0.80 qualifies
+    for all four tiers; we want the *highest* applicable tier assigned.
+
+    Predictions with ``confidence < 0.55`` (the Free baseline threshold)
+    are deliberately returned as **NULL** — they don't belong in any tier
+    and should not be counted in tier aggregates. Queries grouping by
+    ``pick_tier`` should filter ``WHERE pick_tier IS NOT NULL`` (or filter
+    on ``confidence >= 0.55`` upstream, which has the same effect).
 
     Usage::
 
@@ -152,7 +158,14 @@ def pick_tier_expression() -> ColumnElement:
             ),
             PickTier.SILVER.value,
         ),
-        else_=PickTier.FREE.value,
+        (
+            # Explicit Free branch: requires conf >= 0.55. Below that we
+            # deliberately fall through to else_=NULL so conf<0.55 rows
+            # are excluded from every tier query automatically.
+            Prediction.confidence >= CONF_THRESHOLD[PickTier.FREE],
+            PickTier.FREE.value,
+        ),
+        else_=None,
     ).label("pick_tier")
 
 

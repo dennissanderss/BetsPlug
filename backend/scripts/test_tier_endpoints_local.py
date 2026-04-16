@@ -251,6 +251,7 @@ async def run_pricing(db):
         if tier == PickTier.SILVER: return len(LEAGUES_SILVER)
         return None
 
+    from app.core.tier_system import CONF_THRESHOLD, access_filter as _access_filter
     tier_expr_agg = pick_tier_expression()
     agg_q = (
         select(
@@ -261,25 +262,33 @@ async def run_pricing(db):
         .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
         .join(Match, Match.id == Prediction.match_id)
         .where(v81_predictions_filter())
+        .where(Prediction.confidence >= CONF_THRESHOLD[PickTier.FREE])
         .group_by(tier_expr_agg)
     )
     rows = {int(t): (int(total or 0), int(correct or 0))
-            for t, total, correct in (await db.execute(agg_q)).all()}
+            for t, total, correct in (await db.execute(agg_q)).all() if t is not None}
 
     sixty_days_ago = datetime.now(timezone.utc) - timedelta(days=60)
-    tier_expr_ppd = pick_tier_expression()
-    ppd_q = (
+    # Inclusive picks-per-day
+    ppd_base = (
         select(
-            tier_expr_ppd,
-            func.count(Prediction.id).label("total"),
+            func.count(Prediction.id).filter(_access_filter(PickTier.FREE)).label("free"),
+            func.count(Prediction.id).filter(_access_filter(PickTier.SILVER)).label("silver"),
+            func.count(Prediction.id).filter(_access_filter(PickTier.GOLD)).label("gold"),
+            func.count(Prediction.id).filter(_access_filter(PickTier.PLATINUM)).label("platinum"),
         )
         .join(Match, Match.id == Prediction.match_id)
         .where(v81_predictions_filter())
         .where(Match.scheduled_at >= sixty_days_ago)
         .where(Match.status == MatchStatus.FINISHED)
-        .group_by(tier_expr_ppd)
     )
-    ppd_rows = {int(t): int(total or 0) for t, total in (await db.execute(ppd_q)).all()}
+    ppd_row = (await db.execute(ppd_base)).one()
+    ppd_rows = {
+        int(PickTier.FREE): int(ppd_row.free or 0),
+        int(PickTier.SILVER): int(ppd_row.silver or 0),
+        int(PickTier.GOLD): int(ppd_row.gold or 0),
+        int(PickTier.PLATINUM): int(ppd_row.platinum or 0),
+    }
     _wilson_lower_bound_pct = _wilson
     _leagues_count_for_tier = _leagues_count
 

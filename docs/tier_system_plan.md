@@ -1,8 +1,19 @@
 # Tier System Plan v3 — Inclusief Kwaliteitsmodel met Pick Labels
 
 **Datum:** 16 april 2026 (v3 na user-feedback: inclusief tiers + visuele pick labels)
-**Status:** PLAN v3 — goedgekeurd met 3 aanpassingen, wacht op OK voor implementatie.
-**Brondata:** 27,037 geëvalueerde v8.1 predictions (`scripts/recalc_tier_samples.py`).
+**Laatst bijgewerkt:** 17 april 2026 (live-cijfers gemeten; plan-schattingen vervangen)
+**Status:** LIVE — `TIER_SYSTEM_ENABLED=true` op Railway. Plan-schattingen uit §1, §2 en §4 waren te optimistisch; hieronder staan de ECHTE gemeten cijfers.
+**Brondata:** 27,037 geëvalueerde v8.1 predictions.
+
+## ⚠️ Update notitie 17 april 2026 — werkelijke cijfers
+
+De oorspronkelijke plan-schattingen maakten twee fouten:
+
+1. **Accuracy per tier:** plan gebruikte "all predictions in tier-scope" (bv. alle top-10 picks met conf≥0.70 = 76.6% voor Gold). In productie wordt `pick_tier_expression()` gebruikt die elke pick aan **precies één** tier toewijst (hogere tier wint). Gold-exclusive preds halen 71.7% — de Platinum-rijen die plan meetelde zijn in productie weggehaald.
+
+2. **Picks/dag:** plan deelde `total_samples / 400` als willekeurig getal. De ECHTE meting is "voltooide wedstrijden laatste 60 kalenderdagen / 60". Veel lager dan het plan suggereerde.
+
+**Zie §1b (herziene tabel) en §2b (herziene pricing-tabel) voor de actuele cijfers.**
 
 ---
 
@@ -33,14 +44,17 @@ ELSE  →  pick_tier = ⬜ FREE
 ```
 
 ### User Tier = abonnementsniveau
-Bepaalt welke pick_tiers de user mag zien:
+Bepaalt welke pick_tiers de user mag zien. **Werkelijke (gemeten) picks/dag** zijn lager dan de originele plan-schatting — zie tabel hieronder.
 
-| User tier | Ziet pick_tier | Picks/dag (schatting) |
+| User tier | Ziet pick_tier | Picks/dag (LIVE, 60 FINISHED days) |
 |-----------|----------------|:-:|
-| **Free** | ⬜ Free | ~5 (1 prominent, rest lijst) |
-| **Silver** | ⚪ Silver + ⬜ Free | ~16 (11 Silver + 5 Free) |
-| **Gold** | 🔵 Gold + ⚪ Silver + ⬜ Free | ~21 (5 Gold + 11 Silver + 5 Free) |
-| **Platinum** | 🟢 Platinum + 🔵 Gold + ⚪ Silver + ⬜ Free | ~22 (1.6 Plat + 5 Gold + 11 Silver + 5 Free) |
+| **Free** | ⬜ Free | **4.47** |
+| **Silver** | ⚪ Silver + ⬜ Free | **6.00** |
+| **Gold** | 🔵 Gold + ⚪ Silver + ⬜ Free | **6.77** |
+| **Platinum** | 🟢 Platinum + 🔵 Gold + ⚪ Silver + ⬜ Free | **7.13** |
+
+> Historisch plan (verworpen): Free ~5, Silver ~16, Gold ~21, Platinum ~22.
+> Die waren gebaseerd op `totale v8.1 sample / 400`, niet op de kalenderdag-rate in recent seizoen.
 
 Elk pick-item in de UI toont een badge ( 🟢 / 🔵 / ⚪ / ⬜ ) zodat user direct ziet welke kwaliteit het is. User kan filteren per tier.
 
@@ -50,25 +64,37 @@ Elk pick-item in de UI toont een badge ( 🟢 / 🔵 / ⚪ / ⬜ ) zodat user di
 
 ### Pick-tier definities (op welke picks kwalificeert een pick als dit tier?)
 
-| Pick tier | Leagues | Confidence | Label | Historische accuracy |
-|-----------|---------|:--:|:--:|:--:|
-| 🟢 **Platinum** | Top 5 (CL, Süper Lig, Eredivisie, PL, Saudi PL) | >=0.75 | 🟢 | **87%** (635 picks) |
-| 🔵 **Gold** | Top 10 (excl. Platinum-set) | >=0.70 | 🔵 | **77%** (1,341 picks*) |
-| ⚪ **Silver** | Top 14 (excl. Gold-set) | >=0.65 | ⚪ | **69%** (2,356 picks*) |
-| ⬜ **Free** | Alle andere combinaties | >=0.55 | ⬜ | **55%** (rest) |
+**§1b — LIVE GEMETEN (17 april 2026, post-deploy):**
 
-*_Silver/Gold counts na uitsluiting van hogere tier-picks. Exact te herberekenen bij implementatie._
+| Pick tier | Leagues | Confidence | Label | ACCURACY (live) | Sample |
+|-----------|---------|:--:|:--:|:--:|:--:|
+| 🟢 **Platinum** | Top 5 (CL, Süper Lig, Eredivisie, PL, Saudi PL) | >=0.75 | 🟢 | **86.9%** | 635 picks |
+| 🔵 **Gold** | Top 10 \ Platinum-set | >=0.70 | 🔵 | **71.7%** | 1,341 picks |
+| ⚪ **Silver** | Top 14 \ Gold-set | >=0.65 | ⚪ | **63.2%** | 2,356 picks |
+| ⬜ **Free** | Overig, conf >= 0.55 | >=0.55 | ⬜ | **48.0%** | 8,383 picks |
+
+**Claim per tier** (Wilson 95% lower bound):
+- Platinum: **"85%+"** (LB 84.0%)
+- Gold: **"70%+"** (LB ~70.2%)
+- Silver: **"62%+"** (LB ~61.3%)
+- Free: **"45%+"** (LB ~47.0%)
+
+Oorspronkelijke plan-claims (verworpen): Platinum 85%+, Gold 77%, Silver 69%, Free 55%. Die waren berekend op "all-qualifying" i.p.v. exclusive tier-rijen.
 
 ### User-tier pricing (placeholder)
 
-| User tier | Picks/dag | Prijs (placeholder) |
-|-----------|:-:|:-:|
-| Free | ~5 | gratis |
-| Silver | ~16 | EUR 9/mo |
-| Gold | ~21 | EUR 19/mo |
-| Platinum | ~22 | EUR 39/mo |
+**§2b — LIVE GEMETEN picks/dag (inclusief alle lagere tiers):**
 
-**Belangrijk:** Platinum user betaalt voor de 1.6 Platinum picks (85%+), niet voor "meer picks". De 22 totaal zijn een aangenaam bijproduct — de 🟢 badge is wat betaald wordt.
+| User tier | Picks/dag (inclusive, live) | Prijs (placeholder) |
+|-----------|:-:|:-:|
+| Free | **4.47** | gratis |
+| Silver | **6.00** | EUR 9/mo |
+| Gold | **6.77** | EUR 19/mo |
+| Platinum | **7.13** | EUR 39/mo |
+
+**Belangrijk:** Platinum user betaalt voor de ~0.4 🟢 Platinum picks per dag (86.9%), niet voor "meer picks". De 7.13 totaal is inclusief Gold+Silver+Free. Het onderscheid zit in **kwaliteit** (tier-badge), niet in volume.
+
+**Marketing-copy moet** altijd naar het EXCLUSIVE accuracy-cijfer verwijzen (bv. "🟢 Platinum picks halen 87%") — niet naar het inclusive-user-gemiddelde (Platinum user's totaal = 55% omdat Free-picks het gemiddelde omlaag trekken).
 
 ---
 

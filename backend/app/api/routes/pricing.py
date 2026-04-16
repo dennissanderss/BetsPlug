@@ -59,7 +59,12 @@ class PricingTier(BaseModel):
     )
     picks_per_day_estimate: float = Field(
         ge=0.0,
-        description="Average daily qualifying picks over the last 60 days",
+        description=(
+            "INCLUSIVE average daily picks a user of this tier sees — "
+            "Platinum users see Platinum + Gold + Silver + Free picks, "
+            "Silver users see Silver + Free, etc. Measured over the last "
+            "60 FINISHED match-days."
+        ),
     )
 
 
@@ -120,11 +125,14 @@ async def get_pricing_comparison(
     if cached is not None:
         return [PricingTier(**row) for row in cached]
 
-    # 1) Accuracy + sample size per pick_tier — one GROUP BY query
+    # 1) Accuracy + sample size per pick_tier — one GROUP BY query.
     # IMPORTANT: evaluate pick_tier_expression() once and reuse in SELECT + GROUP BY.
     # Two calls produce CASE-nodes with different bind parameter IDs which
     # PostgreSQL then treats as non-equivalent, triggering
     # "column ... must appear in the GROUP BY clause".
+    # v8.2: pick_tier_expression() now returns NULL for conf<0.55, so we
+    # must filter those rows OUT of the aggregate — otherwise SQL groups
+    # them as a NULL bucket that shows up neither as a tier nor as "other".
     tier_expr_agg = pick_tier_expression()
     agg_q = (
         select(
@@ -137,27 +145,41 @@ async def get_pricing_comparison(
         .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
         .join(Match, Match.id == Prediction.match_id)
         .where(v81_predictions_filter())
+        .where(Prediction.confidence >= CONF_THRESHOLD[PickTier.FREE])
         .group_by(tier_expr_agg)
     )
-    rows = {int(t): (int(total or 0), int(correct or 0)) for t, total, correct in (await db.execute(agg_q)).all()}
+    rows = {int(t): (int(total or 0), int(correct or 0)) for t, total, correct in (await db.execute(agg_q)).all() if t is not None}
 
-    # 2) Picks-per-day estimate per tier — last 60 finished days, qualifying picks
+    # 2) Picks-per-day estimate — INCLUSIVE (what a user of each tier
+    # actually sees daily). Free user sees only Free picks; Silver sees
+    # Free + Silver; Gold sees Free + Silver + Gold; Platinum sees all.
+    # Previously this was exclusive (tier-only counts) which was
+    # misleading on the pricing card.
     from datetime import datetime, timedelta, timezone
     sixty_days_ago = datetime.now(timezone.utc) - timedelta(days=60)
 
-    tier_expr_ppd = pick_tier_expression()
-    ppd_q = (
+    # One query, four FILTER clauses — one per tier access scope.
+    # access_filter(tier) already enforces conf >= 0.55.
+    from app.core.tier_system import access_filter
+    ppd_base = (
         select(
-            tier_expr_ppd,
-            func.count(Prediction.id).label("total"),
+            func.count(Prediction.id).filter(access_filter(PickTier.FREE)).label("free"),
+            func.count(Prediction.id).filter(access_filter(PickTier.SILVER)).label("silver"),
+            func.count(Prediction.id).filter(access_filter(PickTier.GOLD)).label("gold"),
+            func.count(Prediction.id).filter(access_filter(PickTier.PLATINUM)).label("platinum"),
         )
         .join(Match, Match.id == Prediction.match_id)
         .where(v81_predictions_filter())
         .where(Match.scheduled_at >= sixty_days_ago)
         .where(Match.status == MatchStatus.FINISHED)
-        .group_by(tier_expr_ppd)
     )
-    ppd_rows = {int(t): int(total or 0) for t, total in (await db.execute(ppd_q)).all()}
+    ppd_row = (await db.execute(ppd_base)).one()
+    ppd_inclusive: dict[int, int] = {
+        int(PickTier.FREE): int(ppd_row.free or 0),
+        int(PickTier.SILVER): int(ppd_row.silver or 0),
+        int(PickTier.GOLD): int(ppd_row.gold or 0),
+        int(PickTier.PLATINUM): int(ppd_row.platinum or 0),
+    }
 
     # 3) Compose PricingTier for each level. Cast every numeric value
     # explicitly — SUM() returns Decimal on PG which Pydantic v2 can reject
@@ -170,7 +192,8 @@ async def get_pricing_comparison(
         meta = TIER_METADATA[tier]
         acc_pct = float(round(100.0 * correct / total, 1)) if total > 0 else 0.0
         lb = float(_wilson_lower_bound_pct(correct, total))
-        ppd_count = int(ppd_rows.get(int(tier), 0))
+        # Inclusive picks-per-day: what this tier's user sees daily.
+        ppd_count = ppd_inclusive.get(int(tier), 0)
         ppd = float(round(ppd_count / 60.0, 2))
 
         result.append(PricingTier(
