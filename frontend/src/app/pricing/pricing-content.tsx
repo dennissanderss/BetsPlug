@@ -248,7 +248,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl"
+            className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl"
           >
             The BetsPlug plan built for{" "}
             <span className="gradient-text-green">your betting style.</span>
@@ -310,7 +310,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       <PricingSection pricingConfig={pricingConfig} />
 
       {/* ═══ PLAN DEEP-DIVES ═══ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-0 top-1/4 h-[400px] w-[500px] rounded-full"
@@ -321,7 +321,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             <span className="section-label">
               <Sparkles className="h-3 w-3" /> What you get, plan by plan
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               Every plan unlocks the same AI football{" "}
               <span className="gradient-text-green">predictions & track record.</span>
             </h2>
@@ -396,7 +396,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                     </div>
 
                     <h3
-                      className="text-display mt-5 text-3xl sm:text-4xl"
+                      className="text-display mt-5 break-words text-3xl sm:text-4xl"
                       style={{ color: isAmber ? "#fde68a" : "#ededed" }}
                     >
                       {plan.name}
@@ -475,7 +475,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
 
                     <Link
                       href={plan.ctaHref(loc)}
-                      className={`mt-8 inline-flex items-center justify-center gap-2 ${
+                      className={`mt-8 inline-flex w-full items-center justify-center gap-2 sm:w-auto ${
                         isAmber ? "" : "btn-primary"
                       }`}
                       style={
@@ -505,7 +505,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       </section>
 
       {/* ═══ COMPARISON MATRIX ═══ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute right-0 top-1/4 h-[400px] w-[500px] rounded-full"
@@ -516,7 +516,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             <span className="section-label">
               <Sparkles className="h-3 w-3" /> Side by side
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               Every plan, every feature,{" "}
               <span className="gradient-text-green">in one matrix.</span>
             </h2>
@@ -528,7 +528,8 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
           </div>
 
           <div className="card-neon overflow-hidden">
-            <div className="relative">
+            <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+            <div className="relative min-w-[640px]">
               {/* Header */}
               <div className="grid grid-cols-[minmax(0,1.5fr)_repeat(4,minmax(0,1fr))] items-stretch border-b border-white/10">
                 <div className="px-4 py-5 sm:px-6">
@@ -631,12 +632,13 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                 </div>
               ))}
             </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ═══ WHY GOLD ═══ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-0 bottom-0 h-[400px] w-[500px] rounded-full"
@@ -647,7 +649,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             <span className="section-label">
               <Star className="h-3 w-3" /> Why most users pick Gold
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               Silver is a starter. Gold is{" "}
               <span className="gradient-text-green">the serious tool.</span>
             </h2>
@@ -697,7 +699,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       </section>
 
       {/* ═══ WHY PLATINUM ═══ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute right-0 top-0 h-[500px] w-[600px] rounded-full"
@@ -716,7 +718,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               <Crown className="h-3 w-3" />
               Why Platinum lifetime
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               The math that makes{" "}
               <span style={{ color: "#fbbf24" }}>Platinum unbeatable.</span>
             </h2>
@@ -779,7 +781,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
 
           {/* Value breakdown */}
           <div
-            className="card-neon mt-8 p-8 sm:p-10"
+            className="card-neon mt-8 p-5 sm:p-8 md:p-10"
             style={{
               background: "#0f0a02",
               borderColor: "rgba(251, 191, 36, 0.4)",
@@ -849,7 +851,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       </section>
 
       {/* ═══ FINAL CTA ═══ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/4 top-0 h-[400px] w-[500px] rounded-full"
@@ -861,12 +863,12 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
           style={{ background: "hsl(var(--accent-purple) / 0.15)", filter: "blur(140px)" }}
         />
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="card-neon card-neon-green halo-green p-10 md:p-16">
+          <div className="card-neon card-neon-green halo-green p-6 sm:p-10 md:p-16">
             <div className="relative text-center">
               <span className="section-label mb-4">
                 <Sparkles className="h-3 w-3" /> Test the AI against your own bets
               </span>
-              <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 Start for €0,01.{" "}
                 <span className="gradient-text-green">Decide once the numbers land.</span>
               </h2>

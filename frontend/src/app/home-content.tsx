@@ -273,16 +273,11 @@ export function HomeContent({
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.05 }}
-                className="text-display text-4xl text-[#ededed] sm:text-5xl lg:text-6xl"
+                className="text-display max-w-2xl text-balance break-words text-3xl text-[#ededed] sm:text-4xl md:text-5xl lg:text-6xl"
               >
-                {t("hero.titleLine1")}{" "}
+                {t("hero.titleLine1") ? <>{t("hero.titleLine1")}{" "}</> : null}
                 <span className="gradient-text-green">{t("hero.titleLine2")}</span>
-                {t("hero.titleLine3") ? (
-                  <>
-                    <br />
-                    {t("hero.titleLine3")}
-                  </>
-                ) : null}
+                {t("hero.titleLine3") ? <>{" "}{t("hero.titleLine3")}</> : null}
               </motion.h1>
 
               <motion.p
@@ -368,7 +363,7 @@ export function HomeContent({
               initial={{ opacity: 0, y: 24, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative"
+              className="relative overflow-hidden sm:overflow-visible"
             >
               <div className="card-neon card-neon-green halo-green relative overflow-hidden">
                 {/* Widget header */}
@@ -554,7 +549,7 @@ export function HomeContent({
           BetsPlug as the answer. Numbers are industry-standard and
           intentionally non-BetsPlug so the claim is credible.
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-24">
+      <section className="relative overflow-hidden py-20 md:py-24">
         <div
           aria-hidden
           className="pointer-events-none absolute right-0 top-1/2 h-[360px] w-[360px] -translate-y-1/2 rounded-full"
@@ -567,7 +562,7 @@ export function HomeContent({
               <AlertTriangle className="h-3 w-3" />
               {t("pas.badge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("pas.titleA")}{" "}
               <span className="gradient-text-green">{t("pas.titleB")}</span>
             </h2>
@@ -613,7 +608,7 @@ export function HomeContent({
       {/* ══════════════════════════════════════════════════════════════
           3 · FEATURES — 3 premium feature cards
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-0 top-1/2 h-[400px] w-[400px] -translate-y-1/2 rounded-full"
@@ -625,7 +620,7 @@ export function HomeContent({
             <span className="section-label">
               <Sparkles className="h-3 w-3" /> {t("trusted.titleHighlight")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("trusted.titleA")}{" "}
               <span className="gradient-text-green">{t("trusted.titleHighlight")}</span>{" "}
               {t("trusted.titleB")}
@@ -664,7 +659,7 @@ export function HomeContent({
       {/* ══════════════════════════════════════════════════════════════
           4 · HOW IT WORKS — 3 premium step cards
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[800px] -translate-x-1/2 rounded-full"
@@ -673,7 +668,7 @@ export function HomeContent({
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-12 text-center">
             <span className="section-label">{t("how.badge")}</span>
-            <h2 className="text-heading mx-auto max-w-2xl text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading mx-auto max-w-2xl text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("how.title")}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-base text-[#a3a9b8]">{t("how.subtitle")}</p>
@@ -726,7 +721,7 @@ export function HomeContent({
       {/* ══════════════════════════════════════════════════════════════
           5 · TRACK RECORD — split section
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-0 bottom-0 h-[400px] w-[500px] rounded-full"
@@ -740,7 +735,7 @@ export function HomeContent({
                 <TrendingUp className="h-3 w-3" />
                 {t("track.label")}
               </span>
-              <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("track.titleA")}{" "}
                 <span className="gradient-text-green">{t("track.titleHighlight")}</span>{" "}
                 {t("track.titleB")}
@@ -832,7 +827,7 @@ export function HomeContent({
           entry point for that persona — reducing friction vs a single
           one-size-fits-all CTA.
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute right-1/2 top-10 h-[420px] w-[420px] translate-x-1/2 rounded-full"
@@ -845,7 +840,7 @@ export function HomeContent({
               <Sparkles className="h-3 w-3" />
               {t("persona.badge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("persona.titleA")}{" "}
               <span className="gradient-text-green">{t("persona.titleB")}</span>
             </h2>
@@ -919,7 +914,7 @@ export function HomeContent({
           the 'what if this doesn't work?' objection that kills
           conversion at the pricing step.
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-24">
+      <section className="relative overflow-hidden py-20 md:py-24">
         <div
           aria-hidden
           className="pointer-events-none absolute left-0 top-0 h-[360px] w-[480px] rounded-full"
@@ -932,7 +927,7 @@ export function HomeContent({
               <Shield className="h-3 w-3" />
               {t("riskReversal.badge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("riskReversal.titleA")}{" "}
               <span className="gradient-text-green">{t("riskReversal.titleB")}</span>
             </h2>
@@ -980,12 +975,12 @@ export function HomeContent({
           7 · ARTICLES
          ══════════════════════════════════════════════════════════════ */}
       {latestArticles.length > 0 && (
-        <section className="relative py-20 md:py-24">
+        <section className="relative overflow-hidden py-20 md:py-24">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <div className="mb-10 flex flex-wrap items-end justify-between gap-3">
               <div>
                 <span className="section-label">{t("articles.badge")}</span>
-                <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl">
+                <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
                   {t("articles.title")}
                 </h2>
                 <p className="mt-3 max-w-xl text-sm text-[#a3a9b8]">{t("articles.subtitle")}</p>
@@ -1053,9 +1048,9 @@ export function HomeContent({
       {/* ══════════════════════════════════════════════════════════════
           8 · FINAL CTA
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="card-neon halo-green relative overflow-hidden p-10 text-center md:p-16">
+          <div className="card-neon halo-green relative overflow-hidden p-6 text-center sm:p-10 md:p-16">
             <div
               aria-hidden
               className="pointer-events-none absolute -right-20 -top-20 h-[320px] w-[320px] rounded-full"
@@ -1072,7 +1067,7 @@ export function HomeContent({
                 <Sparkles className="h-3 w-3" />
                 {t("finalCta.badge")}
               </span>
-              <h2 className="text-display mx-auto max-w-2xl text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-display mx-auto max-w-2xl text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("finalCta.titleA")}{" "}
                 <span className="gradient-text-green">{t("finalCta.titleHighlight")}</span>{" "}
                 {t("finalCta.titleB")}
@@ -1142,7 +1137,7 @@ function HeroPickRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
           </div>
 
           {/* Teams */}
-          <div className="mt-1.5 flex items-center gap-2">
+          <div className="mt-1.5 flex min-w-0 items-center gap-2">
             {pick.home_logo && (
               <Image
                 src={pick.home_logo}
@@ -1152,11 +1147,11 @@ function HeroPickRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
                 className="h-5 w-5 flex-shrink-0 object-contain"
               />
             )}
-            <span className="truncate text-sm font-semibold text-[#ededed]">
+            <span className="min-w-0 truncate text-sm font-semibold text-[#ededed]">
               {pick.home_team}
             </span>
-            <span className="text-[10px] text-[#6b7280]">vs</span>
-            <span className="truncate text-sm font-semibold text-[#ededed]">
+            <span className="flex-shrink-0 text-[10px] text-[#6b7280]">vs</span>
+            <span className="min-w-0 truncate text-sm font-semibold text-[#ededed]">
               {pick.away_team}
             </span>
             {pick.away_logo && (

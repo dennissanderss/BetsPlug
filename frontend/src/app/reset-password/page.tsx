@@ -109,7 +109,7 @@ function ResetPasswordInner() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <div className="card-neon-blue p-8 md:p-10">
+          <div className="card-neon-blue p-5 sm:p-8 md:p-10">
             <div className="relative">
               {!success && (
                 <>
@@ -120,7 +120,7 @@ function ResetPasswordInner() {
                       </HexBadge>
                       <span className="section-label !mb-0">Reset password</span>
                     </div>
-                    <h1 className="text-heading text-3xl text-[#ededed]">
+                    <h1 className="text-heading text-balance break-words text-2xl text-[#ededed] sm:text-3xl">
                       Choose a new{" "}
                       <span className="gradient-text-cyan">password</span>
                     </h1>
@@ -246,7 +246,7 @@ function ResetPasswordInner() {
                       <CheckCircle2 className="h-7 w-7" />
                     </HexBadge>
                   </div>
-                  <h1 className="text-heading text-2xl text-[#ededed]">
+                  <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
                     Password reset
                   </h1>
                   <p className="text-sm leading-relaxed text-[#a3a9b8]">

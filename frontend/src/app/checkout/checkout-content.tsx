@@ -669,7 +669,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 
       <CheckoutHeader />
 
-      <main className="relative z-10 mx-auto max-w-7xl px-6 py-10 md:py-14">
+      <main className="relative z-10 mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-14">
         {/* Page heading */}
         <div className="mx-auto max-w-3xl text-center">
           <div className="mb-4 flex justify-center">
@@ -678,7 +678,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
               {t("checkout.footer.secure")}
             </span>
           </div>
-          <h1 className="text-display text-3xl text-[#ededed] sm:text-4xl md:text-5xl">
+          <h1 className="text-display text-balance break-words text-3xl text-[#ededed] sm:text-4xl md:text-5xl">
             {t("checkout.pageTitle")}
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-[#a3a9b8] sm:text-base">
@@ -1263,12 +1263,12 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                 </AnimatePresence>
 
                 {/* ── Step actions ─────────────────────────── */}
-                <div className="mt-8 flex items-center justify-between gap-4 border-t border-white/[0.08] pt-6">
+                <div className="mt-8 flex flex-col-reverse gap-3 border-t border-white/[0.08] pt-6 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                   {step > 1 ? (
                     <button
                       type="button"
                       onClick={back}
-                      className="flex items-center gap-1.5 rounded-xl border border-white/[0.08] bg-white/[0.04] px-5 py-3 text-sm font-semibold text-[#a3a9b8] shadow-sm transition-all hover:border-white/[0.12] hover:text-[#ededed]"
+                      className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/[0.08] bg-white/[0.04] px-5 py-3 text-sm font-semibold text-[#a3a9b8] shadow-sm transition-all hover:border-white/[0.12] hover:text-[#ededed] sm:w-auto"
                     >
                       <ChevronLeft className="h-4 w-4" />
                       {t("checkout.back")}
@@ -1286,7 +1286,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                           type="button"
                           onClick={next}
                           disabled={!currentValid}
-                          className="btn-primary flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
+                          className="btn-primary flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none sm:w-auto"
                         >
                           {t("checkout.next")}
                           <ChevronRight className="h-4 w-4" />
@@ -1297,7 +1297,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                     <button
                       type="submit"
                       disabled={!step3Valid || submitting}
-                      className="btn-primary flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
+                      className="btn-primary flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none sm:w-auto"
                     >
                       {submitting
                         ? t("checkout.processing")
@@ -1432,17 +1432,17 @@ function Stepper({ step }: { step: 1 | 2 | 3 }) {
     { id: 3, label: t("checkout.step3") },
   ];
   return (
-    <ol className="flex items-center gap-3">
+    <ol className="flex items-center gap-2 sm:gap-3">
       {items.map((it, idx) => {
         const done = step > it.id;
         const active = step === it.id;
         return (
           <li
             key={it.id}
-            className="flex flex-1 items-center gap-3 first:flex-none"
+            className="flex flex-1 items-center gap-2 first:flex-none sm:gap-3"
           >
             <div
-              className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border text-xs font-bold transition-colors ${
+              className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border text-xs font-bold transition-colors sm:h-9 sm:w-9 ${
                 done
                   ? "border-green-500/60 bg-[#4ade80]/[0.08] text-[#4ade80]"
                   : active
@@ -1453,7 +1453,7 @@ function Stepper({ step }: { step: 1 | 2 | 3 }) {
               {done ? <Check className="h-4 w-4" strokeWidth={3} /> : it.id}
             </div>
             <span
-              className={`text-sm font-semibold transition-colors ${
+              className={`hidden text-sm font-semibold transition-colors sm:inline ${
                 active || done ? "text-[#ededed]" : "text-[#8a93a6]"
               }`}
             >
@@ -1461,7 +1461,7 @@ function Stepper({ step }: { step: 1 | 2 | 3 }) {
             </span>
             {idx < items.length - 1 && (
               <span
-                className={`mx-2 h-px flex-1 ${
+                className={`mx-1 h-px flex-1 sm:mx-2 ${
                   done ? "bg-[#4ade80]/[0.08]0/40" : "bg-slate-200"
                 }`}
               />
@@ -1509,7 +1509,7 @@ function OrderSummary({
   const isOneTime = plan.oneTime != null;
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.04] p-6 shadow-sm">
+    <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.04] p-4 shadow-sm sm:p-6">
       {/* glow */}
       <div className="pointer-events-none absolute -right-16 -top-16 h-[240px] w-[240px] rounded-full bg-[#4ade80]/[0.08]0/[0.04] blur-[90px]" />
 
@@ -2089,7 +2089,7 @@ function LoginGate({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
-        className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] to-white/[0.01] p-8 backdrop-blur-xl sm:p-10"
+        className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-white/[0.05] to-white/[0.01] p-6 backdrop-blur-xl sm:p-10"
       >
         {/* Glow */}
         <div className="pointer-events-none absolute -left-24 -top-24 h-[260px] w-[260px] rounded-full bg-[#4ade80]/[0.08]0/[0.12] blur-[110px]" />
@@ -2100,7 +2100,7 @@ function LoginGate({
             <Lock className="h-6 w-6 text-green-400" />
           </div>
 
-          <h2 className="mt-6 text-center text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+          <h2 className="mt-6 text-balance break-words text-center text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
             Almost there —{" "}
             <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
               log in to complete your subscription
@@ -2166,17 +2166,17 @@ function LoginGate({
           </div>
 
           {/* Trust strip */}
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.04]/[0.02] px-4 py-4 sm:flex-row sm:gap-6">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.04]/[0.02] px-4 py-4 sm:gap-6">
             <div className="flex items-center gap-2 text-[11px] font-semibold text-[#6b7280]">
-              <ShieldCheck className="h-3.5 w-3.5 text-green-400" />
+              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-green-400" />
               14-day money-back guarantee
             </div>
             <div className="flex items-center gap-2 text-[11px] font-semibold text-[#6b7280]">
-              <Lock className="h-3.5 w-3.5 text-green-400" />
+              <Lock className="h-3.5 w-3.5 shrink-0 text-green-400" />
               SSL-encrypted checkout
             </div>
             <div className="flex items-center gap-2 text-[11px] font-semibold text-[#6b7280]">
-              <Mail className="h-3.5 w-3.5 text-green-400" />
+              <Mail className="h-3.5 w-3.5 shrink-0 text-green-400" />
               Receipts by email
             </div>
           </div>
@@ -2215,7 +2215,7 @@ function ActiveSubscriptionNotice({
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#4ade80]/30 bg-[#4ade80]/[0.08]0/[0.12]">
             <CheckCircle2 className="h-6 w-6 text-green-400" />
           </div>
-          <h2 className="mt-6 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+          <h2 className="mt-6 text-balance break-words text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
             You already have an active{" "}
             {prettyPlan && (
               <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
@@ -2231,14 +2231,14 @@ function ActiveSubscriptionNotice({
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href={loc("/subscription")}
-              className="btn-primary inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40"
+              className="btn-primary inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40 sm:w-auto"
             >
               Go to my subscription
               <ChevronRight className="h-4 w-4" />
             </Link>
             <Link
               href={loc("/dashboard")}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3 text-sm font-bold text-white transition-all hover:border-white/[0.25] hover:bg-white/[0.04]/[0.08]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3 text-sm font-bold text-white transition-all hover:border-white/[0.25] hover:bg-white/[0.04]/[0.08] sm:w-auto"
             >
               Open dashboard
             </Link>

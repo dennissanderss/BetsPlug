@@ -87,7 +87,7 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
         </div>
       </section>
 
-      <main className="relative z-10 py-20 md:py-28">
+      <main className="relative z-10 overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-0 top-40 h-[360px] w-[480px] rounded-full"
@@ -174,7 +174,7 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
       {/* ── Final CTA ── */}
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-10 md:p-16">
+          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-6 sm:p-8 md:p-16">
             <CtaMediaBg
               src={PAGE_IMAGES.articles.cta}
               alt={PAGE_IMAGES.articles.alt}
@@ -193,7 +193,7 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
                 <Sparkles className="h-3 w-3" />
                 {t("articles.listCtaBadge")}
               </span>
-              <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("articles.listCtaTitle")}{" "}
                 <span className="gradient-text-green">
                   {t("articles.listCtaAccent")}

@@ -39,9 +39,9 @@ const en = {
 
   /* Hero */
   "hero.badge": "Live · AI football predictions for 30+ leagues",
-  "hero.titleLine1": "Stop guessing. Start using",
+  "hero.titleLine1": "",
   "hero.titleLine2": "AI football predictions",
-  "hero.titleLine3": "you can actually verify.",
+  "hero.titleLine3": "you can verify.",
   "hero.subtitle":
     "Four models — XGBoost, Poisson, Elo and logistic regression — combined into one AI engine forecasting Premier League, La Liga, Bundesliga, Champions League and 26+ other football leagues. Every prediction is pre-match locked and publicly tracked. No cherry-picking. No hindsight bias.",
   "hero.activeUsers": "bettors trust BetsPlug every month",
@@ -2750,9 +2750,9 @@ const nl: Dictionary = {
   "hero.joinNow": "Sluit je nu aan",
   "hero.livePick": "Gratis voorspelling",
   "hero.subtitle": "Vier modellen – XGBoost, Poisson, Elo en logistieke regressie – gecombineerd in één AI-engine die de Premier League, La Liga, Bundesliga, Champions League en meer dan 26 andere voetbalcompetities voorspelt. Elke voorspelling wordt vóór de wedstrijd vergrendeld en openbaar bijgehouden. Geen kersenpluk. Geen vooringenomenheid achteraf.",
-  "hero.titleLine1": "Houd op met raden. Begin met gebruiken",
+  "hero.titleLine1": "",
   "hero.titleLine2": "AI-voetbalvoorspellingen",
-  "hero.titleLine3": "je kunt het daadwerkelijk verifiëren.",
+  "hero.titleLine3": "die je kunt verifiëren.",
   "hero.today": "Vandaag",
   "hero.usp1Desc": "Gemeten over meer dan 80.000 historische wedstrijden en bij elke keuze openbaar gevolgd.",
   "hero.usp1Title": "58% gemiddeld hitpercentage",

@@ -622,8 +622,14 @@
     border: 1px solid hsl(var(--accent-green) / 0.3);
     border-radius: var(--r-pill);
     margin-bottom: 1rem;
-    white-space: nowrap;
+    max-width: 100%;
     text-transform: uppercase;
+  }
+  @media (min-width: 640px) {
+    .section-label,
+    .section-tag {
+      white-space: nowrap;
+    }
   }
   .section-label-purple {
     color: hsl(var(--accent-purple-soft));

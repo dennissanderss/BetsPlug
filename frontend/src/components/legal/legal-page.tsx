@@ -31,17 +31,17 @@ export function LegalPage({
       {/* Hero */}
       <section className="relative pt-32 pb-12 md:pt-40 md:pb-16">
         <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-[#4ade80]/[0.08] blur-[160px]" />
-          <div className="absolute right-1/4 top-40 h-[320px] w-[480px] rounded-full bg-[#a855f7]/[0.06] blur-[140px]" />
+          <div className="absolute left-1/2 top-0 h-[520px] w-[min(820px,100vw)] -translate-x-1/2 rounded-full bg-[#4ade80]/[0.08] blur-[160px]" />
+          <div className="absolute right-1/4 top-40 h-[320px] w-[min(480px,80vw)] rounded-full bg-[#a855f7]/[0.06] blur-[140px]" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-3xl px-6 text-center">
+        <div className="relative z-10 mx-auto max-w-3xl px-4 text-center sm:px-6">
           <span className="section-label">
             <FileText className="h-3 w-3" />
             Legal
           </span>
 
-          <h1 className="text-display mt-2 text-balance text-4xl text-[#ededed] sm:text-5xl">
+          <h1 className="text-display mt-2 text-balance text-2xl text-[#ededed] sm:text-4xl md:text-5xl">
             {title}
           </h1>
 
@@ -68,17 +68,18 @@ export function LegalPage({
 
       {/* Body */}
       <section className="relative pb-24">
-        <div className="relative mx-auto max-w-3xl px-6">
-          <div className="card-neon p-8 md:p-12">
+        <div className="relative mx-auto max-w-3xl px-4 sm:px-6">
+          <div className="card-neon p-5 sm:p-8 md:p-12">
             <div className="relative">
               <article
                 className="
-                  [&_h2]:text-heading [&_h2]:mb-3 [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:text-[#ededed] first:[&_h2]:mt-0
-                  [&_h3]:text-heading [&_h3]:mb-2 [&_h3]:mt-7 [&_h3]:text-xl [&_h3]:text-[#ededed]
+                  break-words
+                  [&_h2]:text-heading [&_h2]:mb-3 [&_h2]:mt-10 [&_h2]:text-xl [&_h2]:text-[#ededed] first:[&_h2]:mt-0 sm:[&_h2]:text-2xl
+                  [&_h3]:text-heading [&_h3]:mb-2 [&_h3]:mt-7 [&_h3]:text-lg [&_h3]:text-[#ededed] sm:[&_h3]:text-xl
                   [&_p]:mb-4 [&_p]:text-sm [&_p]:leading-relaxed [&_p]:text-[#a3a9b8]
-                  [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-6 [&_ul]:text-sm [&_ul]:text-[#a3a9b8]
-                  [&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-6 [&_ol]:text-sm [&_ol]:text-[#a3a9b8]
-                  [&_a]:font-medium [&_a]:text-[#4ade80] [&_a]:underline [&_a]:decoration-[#4ade80]/40 [&_a]:underline-offset-4 hover:[&_a]:text-[#86efac]
+                  [&_ul]:mb-4 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5 [&_ul]:text-sm [&_ul]:text-[#a3a9b8] sm:[&_ul]:pl-6
+                  [&_ol]:mb-4 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-5 [&_ol]:text-sm [&_ol]:text-[#a3a9b8] sm:[&_ol]:pl-6
+                  [&_a]:font-medium [&_a]:text-[#4ade80] [&_a]:underline [&_a]:decoration-[#4ade80]/40 [&_a]:underline-offset-4 [&_a]:break-all hover:[&_a]:text-[#86efac]
                   [&_strong]:font-semibold [&_strong]:text-[#ededed]
                 "
               >

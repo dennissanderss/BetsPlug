@@ -264,7 +264,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       </section>
 
       {/* ───────────── KPIs ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full"
@@ -282,7 +282,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
               <Gauge className="h-3 w-3" />
               {t("tr.kpisBadge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("tr.kpisTitle")}
             </h2>
             <p className="mt-4 text-base text-[#a3a9b8]">
@@ -307,7 +307,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
                     <HexBadge variant={variant} size="md" className="mb-4">
                       <Icon className="h-5 w-5" />
                     </HexBadge>
-                    <div className="text-stat text-4xl text-[#ededed]">{k.value}</div>
+                    <div className="text-stat text-3xl text-[#ededed] sm:text-4xl">{k.value}</div>
                     <p className="mt-2 text-sm font-semibold text-[#ededed]">{k.label}</p>
                     <p className="mt-1 text-xs leading-relaxed text-[#a3a9b8]">{k.note}</p>
                   </div>
@@ -319,7 +319,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       </section>
 
       {/* ───────────── PIPELINE ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full"
@@ -343,7 +343,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
               <Layers className="h-3 w-3" />
               {t("tr.pipeBadge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("tr.pipeTitle")}
             </h2>
             <p className="mt-4 text-base text-[#a3a9b8]">
@@ -384,7 +384,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       </section>
 
       {/* ───────────── METHODOLOGY ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/4 top-10 h-[460px] w-[460px] rounded-full"
@@ -402,7 +402,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
               <ShieldCheck className="h-3 w-3" />
               {t("tr.methodBadge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("tr.methodTitle")} <span className="gradient-text-purple">·</span>
             </h2>
             <p className="mt-4 text-base text-[#a3a9b8]">
@@ -439,7 +439,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       </section>
 
       {/* ───────────── CASE STUDIES ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full"
@@ -457,7 +457,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
               <Trophy className="h-3 w-3" />
               {t("tr.casesBadge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("tr.casesTitle")}
             </h2>
             <p className="mt-4 text-base text-[#a3a9b8]">
@@ -497,13 +497,13 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
                     </p>
                   </div>
 
-                  <div className="glass-panel mb-6 grid grid-cols-3 gap-2 rounded-2xl p-4">
+                  <div className="glass-panel mb-6 grid grid-cols-3 gap-2 rounded-2xl p-3 sm:p-4">
                     {c.metrics.map((m) => (
-                      <div key={m.label} className="text-center">
-                        <div className="text-stat text-base text-[#4ade80] sm:text-lg">
+                      <div key={m.label} className="min-w-0 text-center">
+                        <div className="text-stat truncate text-base text-[#4ade80] sm:text-lg">
                           {m.value}
                         </div>
-                        <div className="mt-1 text-[10px] uppercase tracking-wider leading-tight text-[#a3a9b8]">
+                        <div className="mt-1 break-words text-[10px] uppercase tracking-wider leading-tight text-[#a3a9b8]">
                           {m.label}
                         </div>
                       </div>
@@ -524,7 +524,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       {faqSlot}
 
       {/* ───────────── TRANSPARENCY CTA ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -544,12 +544,12 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
               style={{ background: "hsl(var(--accent-purple) / 0.2)", filter: "blur(140px)" }}
             />
 
-            <div className="relative p-10 md:p-16">
+            <div className="relative p-6 sm:p-10 md:p-16">
               <span className="section-label mb-6 inline-flex items-center gap-2">
                 <Sparkles className="h-3 w-3" />
                 {t("tr.transBadge")}
               </span>
-              <h2 className="text-display text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-display text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("tr.transTitle")}
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">

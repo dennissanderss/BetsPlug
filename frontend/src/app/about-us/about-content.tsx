@@ -128,7 +128,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-display text-4xl text-[#ededed] sm:text-5xl lg:text-6xl"
+            className="text-display text-2xl text-[#ededed] text-balance break-words sm:text-4xl lg:text-5xl"
           >
             {t("about.heroTitleA")}{" "}
             <span className="gradient-text-green">{t("about.heroTitleB")}</span>
@@ -160,7 +160,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       </section>
 
       {/* ───────────── MISSION ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full"
@@ -245,7 +245,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
                 <Target className="h-3 w-3" />
                 {t("about.missionBadge")}
               </span>
-              <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading text-2xl text-[#ededed] text-balance break-words sm:text-3xl lg:text-4xl">
                 {t("about.missionTitle")}
               </h2>
               <p className="mt-6 text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
@@ -264,7 +264,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       </section>
 
       {/* ───────────── STATS ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full"
@@ -282,7 +282,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
               <LineChart className="h-3 w-3" />
               {t("about.statsBadge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-2xl text-[#ededed] text-balance break-words sm:text-3xl lg:text-4xl">
               {t("about.statsTitle")}
             </h2>
           </motion.div>
@@ -304,7 +304,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
                     <HexBadge variant={variant} size="md" className="mb-4">
                       <Icon className="h-5 w-5" />
                     </HexBadge>
-                    <div className="text-stat text-4xl text-[#ededed]">
+                    <div className="text-stat text-3xl text-[#ededed] sm:text-4xl">
                       {stat.value}
                     </div>
                     <p className="mt-2 text-xs leading-relaxed text-[#a3a9b8]">
@@ -319,7 +319,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       </section>
 
       {/* ───────────── VALUES ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute -right-40 top-20 h-[480px] w-[480px] rounded-full"
@@ -337,7 +337,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
               <Scale className="h-3 w-3" />
               {t("about.valuesBadge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-2xl text-[#ededed] text-balance break-words sm:text-3xl lg:text-4xl">
               {t("about.valuesTitle")}
             </h2>
             <p className="mt-4 text-base text-[#a3a9b8]">
@@ -377,7 +377,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
       </section>
 
       {/* ───────────── FOUNDERS ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 top-20 h-[500px] w-[500px] rounded-full"
@@ -395,7 +395,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
               <Users className="h-3 w-3" />
               {t("about.teamBadge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-2xl text-[#ededed] text-balance break-words sm:text-3xl lg:text-4xl">
               {t("about.teamTitle")}
             </h2>
             <p className="mt-4 text-base text-[#a3a9b8]">
@@ -460,12 +460,12 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
               style={{ background: "hsl(var(--accent-purple) / 0.2)", filter: "blur(140px)" }}
             />
 
-            <div className="relative p-10 md:p-16">
+            <div className="relative p-6 sm:p-8 md:p-16">
               <span className="section-label mb-6 inline-flex items-center gap-2">
                 <Sparkles className="h-3 w-3" />
                 {t("nav.getStarted")}
               </span>
-              <h2 className="text-display text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-display text-2xl text-[#ededed] text-balance break-words sm:text-3xl lg:text-4xl">
                 {t("about.ctaTitle")}
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">

@@ -128,7 +128,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
         <HeroMediaBg src={PAGE_IMAGES["match-predictions"].hero} alt={PAGE_IMAGES["match-predictions"].alt} />
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-10 h-[420px] w-[780px] -translate-x-1/2 rounded-full"
+          className="pointer-events-none absolute left-1/2 top-10 h-[420px] w-[min(780px,100vw)] -translate-x-1/2 rounded-full"
           style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(140px)" }}
         />
 
@@ -147,7 +147,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="text-heading mt-5 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl"
+            className="text-heading mt-5 text-2xl text-[#ededed] sm:text-3xl lg:text-5xl"
           >
             {t("matchPred.title")}{" "}
             <span className="gradient-text-green">live</span>
@@ -216,17 +216,17 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       <section className="relative py-20 md:py-28">
         <div
           aria-hidden
-          className="pointer-events-none absolute left-0 top-0 h-[360px] w-[520px] rounded-full"
+          className="pointer-events-none absolute left-0 top-0 h-[360px] w-[min(520px,90vw)] rounded-full"
           style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(140px)" }}
         />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="mb-12 sm:mb-14 flex items-end justify-between gap-4">
+          <div className="mb-12 sm:mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <span className="section-label">
                 <Sparkles className="h-3 w-3" />
                 {t("matchPred.statFree")}
               </span>
-              <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading mt-4 text-2xl text-[#ededed] sm:text-3xl lg:text-5xl">
                 {t("matchPred.freeHeading")}
               </h2>
               <p className="mt-3 max-w-xl text-base text-[#a3a9b8]">
@@ -325,7 +325,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       <section className="relative py-20 md:py-28">
         <div
           aria-hidden
-          className="pointer-events-none absolute right-0 top-10 h-[360px] w-[520px] rounded-full"
+          className="pointer-events-none absolute right-0 top-10 h-[360px] w-[min(520px,90vw)] rounded-full"
           style={{ background: "hsl(var(--accent-purple) / 0.1)", filter: "blur(140px)" }}
         />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
@@ -334,7 +334,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
               <Lock className="h-3 w-3" />
               {t("matchPred.statLocked")}
             </span>
-            <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading mt-4 text-2xl text-[#ededed] sm:text-3xl lg:text-5xl">
               {t("matchPred.lockedHeading")}
             </h2>
             <p className="mt-3 max-w-xl text-base text-[#a3a9b8]">
@@ -359,7 +359,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       {/* ── Final CTA ── */}
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-10 md:p-16">
+          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-6 sm:p-10 md:p-16">
             <CtaMediaBg
               src={PAGE_IMAGES["match-predictions"].cta}
               alt={PAGE_IMAGES["match-predictions"].alt}
@@ -374,7 +374,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
               <HexBadge variant="green" size="lg" className="mx-auto mb-5">
                 <Sparkles className="h-7 w-7" />
               </HexBadge>
-              <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading text-2xl text-[#ededed] sm:text-3xl lg:text-5xl">
                 {t("matchPred.ctaFinalTitle")}
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">

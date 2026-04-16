@@ -306,7 +306,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
       />
 
       {/* ───────────── INTEGRITY LAYER (NEW) ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute -left-40 top-20 h-[460px] w-[460px] rounded-full"
@@ -330,7 +330,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
               <ShieldCheck className="h-3 w-3" />
               {t("hiw.integrityBadge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("hiw.integrityTitleA")}{" "}
               <span className="gradient-text-green">{t("hiw.integrityTitleB")}</span>
             </h2>
@@ -419,7 +419,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
       </section>
 
       {/* ───────────── ENGINE + FAQ ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-40 h-[500px] w-[600px] -translate-x-1/2 rounded-full"
@@ -482,7 +482,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
               <HelpCircle className="h-3 w-3" />
               {t("hiw.faqBadge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("hiw.faqTitle")}
             </h2>
             <p className="mt-4 text-base text-[#a3a9b8]">{t("hiw.faqSubtitle")}</p>
@@ -516,7 +516,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
       </section>
 
       {/* ───────────── FINAL CTA ───────────── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -536,12 +536,12 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
               style={{ background: "hsl(var(--accent-purple) / 0.2)", filter: "blur(140px)" }}
             />
 
-            <div className="relative p-10 md:p-16">
+            <div className="relative p-6 sm:p-10 md:p-16">
               <span className="section-label mb-6 inline-flex items-center gap-2">
                 <Trophy className="h-3 w-3" />
                 {t("hiw.ctaBadge")}
               </span>
-              <h2 className="text-display text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-display text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("hiw.ctaTitle")}
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
@@ -593,7 +593,7 @@ function StageSection({
     accent === "purple" ? "gradient-text-purple" : accent === "blue" ? "gradient-text-cyan" : "gradient-text-green";
 
   return (
-    <section className="relative py-20 md:py-28">
+    <section className="relative overflow-hidden py-20 md:py-28">
       <div
         aria-hidden
         className={`pointer-events-none absolute ${reverse ? "-right-40" : "-left-40"} top-20 h-[460px] w-[460px] rounded-full`}
@@ -631,7 +631,7 @@ function StageSection({
               <Sparkles className="h-3 w-3" />
               {badge}
             </span>
-            <h2 className={`text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl`}>
+            <h2 className={`text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl`}>
               <span className={gradientClass}>{title}</span>
             </h2>
             <p className="mt-5 text-base font-medium leading-relaxed text-[#ededed] sm:text-lg">

@@ -201,7 +201,7 @@ export function LoginContent() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="w-full"
             >
-              <div className="card-neon-green p-8 md:p-10">
+              <div className="card-neon-green p-5 sm:p-8 md:p-10">
                 <div className="relative">
                   {/* Mobile headline */}
                   <div className="mb-6 lg:hidden">

@@ -120,7 +120,7 @@ export default async function BetTypesIndexPage() {
       </section>
 
       {/* Hub cards */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute right-0 top-20 h-[360px] w-[520px] rounded-full"
@@ -145,7 +145,7 @@ export default async function BetTypesIndexPage() {
                         {hub.shortCode}
                       </span>
                     </div>
-                    <h2 className="text-heading text-2xl text-[#ededed] transition group-hover:text-[#4ade80]">
+                    <h2 className="text-heading break-words text-2xl text-[#ededed] transition group-hover:text-[#4ade80]">
                       {hub.name[editorialLocale]}
                     </h2>
                     <p className="text-sm leading-relaxed text-[#a3a9b8]">
@@ -166,7 +166,7 @@ export default async function BetTypesIndexPage() {
       {/* Final CTA */}
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-10 md:p-16">
+          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-6 sm:p-8 md:p-16">
             <CtaMediaBg src={PAGE_IMAGES["bet-types"].cta} alt={PAGE_IMAGES["bet-types"].alt} pattern={PAGE_IMAGES["bet-types"].pattern} />
             <div
               aria-hidden
@@ -181,7 +181,7 @@ export default async function BetTypesIndexPage() {
                 <Sparkles className="h-3 w-3" />
                 {t("Pick a market · see the model", "Kies een markt · zie het model")}
               </span>
-              <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t("Every market, priced by our", "Elke markt, geprijsd door onze")}{" "}
                 <span className="gradient-text-green">
                   {t("AI football predictions.", "AI-voetbalvoorspellingen.")}

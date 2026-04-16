@@ -104,7 +104,7 @@ export function BetsPlugFooter() {
 
   return (
     <footer
-      className="relative mx-auto flex w-full max-w-6xl flex-col items-center justify-center overflow-hidden rounded-t-[2rem] border-t px-6 py-12 md:rounded-t-[3rem] lg:py-16"
+      className="relative mx-auto flex w-full max-w-6xl flex-col items-center justify-center overflow-hidden rounded-t-[2rem] border-t px-4 py-10 sm:px-6 sm:py-12 md:rounded-t-[3rem] lg:py-16"
       style={{
         borderColor: "hsl(0 0% 100% / 0.08)",
         background:
@@ -130,7 +130,7 @@ export function BetsPlugFooter() {
       />
 
       {/* Main grid */}
-      <div className="grid w-full gap-8 xl:grid-cols-3 xl:gap-8">
+      <div className="grid w-full gap-8 md:grid-cols-2 xl:grid-cols-3 xl:gap-8">
         {/* Brand column */}
         <AnimatedContainer className="space-y-4">
           <Link href={loc("/")} className="inline-flex items-center">
@@ -168,7 +168,7 @@ export function BetsPlugFooter() {
         </AnimatedContainer>
 
         {/* Link columns */}
-        <div className="mt-2 grid grid-cols-2 gap-8 md:grid-cols-4 xl:col-span-2 xl:mt-0">
+        <div className="mt-2 grid grid-cols-2 gap-x-6 gap-y-2 sm:gap-8 md:mt-0 md:grid-cols-2 xl:col-span-2 xl:grid-cols-4">
           {footerSections.map((section, index) => (
             <AnimatedContainer key={section.label} delay={0.1 + index * 0.08}>
               <div className="mb-8 md:mb-0">
@@ -214,7 +214,7 @@ export function BetsPlugFooter() {
       {/* Payment + security strip */}
       <AnimatedContainer
         delay={0.5}
-        className="relative mt-10 flex w-full flex-col items-center gap-5 rounded-2xl border px-5 py-5 md:flex-row md:justify-between"
+        className="relative mt-10 flex w-full flex-col items-center gap-5 rounded-2xl border px-4 py-5 sm:px-5 lg:flex-row lg:justify-between"
       >
         <div
           aria-hidden
@@ -253,7 +253,7 @@ export function BetsPlugFooter() {
           </div>
         </div>
 
-        <div className="relative flex flex-wrap items-center justify-center gap-2 md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2">
+        <div className="relative flex flex-wrap items-center justify-center gap-2 lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2">
           <VisaBadge />
           <MastercardBadge />
           <AmexBadge />
@@ -275,7 +275,7 @@ export function BetsPlugFooter() {
         className="relative mt-8 flex w-full flex-col items-center justify-between gap-4 border-t pt-6 md:flex-row"
         style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
       >
-        <div className="flex items-center gap-5">
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           {bottomLinks.map(({ key, href }) => (
             <Link
               key={key}
@@ -286,7 +286,7 @@ export function BetsPlugFooter() {
             </Link>
           ))}
         </div>
-        <p className="text-[11px] text-[#6b7280]">
+        <p className="text-center text-[11px] text-[#6b7280]">
           {t("footer.responsible")}
         </p>
       </div>

@@ -46,7 +46,7 @@ export function HeroMediaBg({
       <div
         role={alt ? "img" : undefined}
         aria-label={alt || undefined}
-        className={`pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat ${className}`}
+        className={`pointer-events-none absolute inset-0 overflow-hidden bg-cover bg-center bg-no-repeat ${className}`}
         style={{
           backgroundImage: `url('${src}')`,
           filter: "grayscale(1) contrast(1.1) brightness(0.75)",
@@ -89,7 +89,7 @@ export function CtaMediaBg({
       <div
         role={alt ? "img" : undefined}
         aria-label={alt || undefined}
-        className={`pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat ${className}`}
+        className={`pointer-events-none absolute inset-0 overflow-hidden bg-cover bg-center bg-no-repeat ${className}`}
         style={{
           backgroundImage: `url('${src}')`,
           filter: "grayscale(1) contrast(1.2) brightness(0.55)",

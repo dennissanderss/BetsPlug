@@ -131,7 +131,7 @@ function VerifyEmailInner() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <div className="card-neon-blue p-8 md:p-10 text-center">
+          <div className="card-neon-blue p-5 text-center sm:p-8 md:p-10">
             <div className="relative">
               {state === "loading" && (
                 <div className="space-y-5">
@@ -140,7 +140,7 @@ function VerifyEmailInner() {
                       <Loader2 className="h-6 w-6 animate-spin" />
                     </HexBadge>
                   </div>
-                  <h1 className="text-heading text-2xl text-[#ededed]">
+                  <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
                     Verifying your email…
                   </h1>
                   <p className="text-sm text-[#a3a9b8]">
@@ -156,7 +156,7 @@ function VerifyEmailInner() {
                       <CheckCircle2 className="h-7 w-7" />
                     </HexBadge>
                   </div>
-                  <h1 className="text-heading text-2xl text-[#ededed]">
+                  <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
                     Email verified!
                   </h1>
                   <p className="text-sm text-[#a3a9b8]">
@@ -176,7 +176,7 @@ function VerifyEmailInner() {
                       <AlertTriangle className="h-6 w-6" />
                     </HexBadge>
                   </div>
-                  <h1 className="text-heading text-2xl text-[#ededed]">
+                  <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
                     Verification link missing
                   </h1>
                   <p className="text-sm text-[#a3a9b8]">
@@ -200,7 +200,7 @@ function VerifyEmailInner() {
                       <AlertTriangle className="h-6 w-6" />
                     </HexBadge>
                   </div>
-                  <h1 className="text-heading text-2xl text-[#ededed]">
+                  <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
                     Link expired or invalid
                   </h1>
                   <p className="text-sm text-[#a3a9b8]">

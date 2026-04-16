@@ -83,7 +83,7 @@ export default function ForgotPasswordPage() {
           transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <div className="card-neon-blue p-8 md:p-10">
+          <div className="card-neon-blue p-5 sm:p-8 md:p-10">
             <div className="relative">
               {!sent && (
                 <>
@@ -94,7 +94,7 @@ export default function ForgotPasswordPage() {
                       </HexBadge>
                       <span className="section-label !mb-0">Password reset</span>
                     </div>
-                    <h1 className="text-heading text-3xl text-[#ededed]">
+                    <h1 className="text-heading text-balance break-words text-2xl text-[#ededed] sm:text-3xl">
                       Forgot your{" "}
                       <span className="gradient-text-cyan">password?</span>
                     </h1>
@@ -181,7 +181,7 @@ export default function ForgotPasswordPage() {
                       <CheckCircle2 className="h-7 w-7" />
                     </HexBadge>
                   </div>
-                  <h1 className="text-heading text-2xl text-[#ededed]">
+                  <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
                     Check your inbox
                   </h1>
                   <p className="text-sm leading-relaxed text-[#a3a9b8]">

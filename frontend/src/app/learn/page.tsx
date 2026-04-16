@@ -113,7 +113,7 @@ export default async function LearnIndexPage() {
       </section>
 
       {/* Pillar cards */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-0 top-20 h-[360px] w-[520px] rounded-full"
@@ -136,7 +136,7 @@ export default async function LearnIndexPage() {
                     <span className="section-label">
                       {t(`Pillar ${String(i + 1).padStart(2, "0")}`, `Pillar ${String(i + 1).padStart(2, "0")}`)}
                     </span>
-                    <h2 className="text-heading text-2xl text-[#ededed] transition group-hover:text-[#4ade80]">
+                    <h2 className="text-heading break-words text-2xl text-[#ededed] transition group-hover:text-[#4ade80]">
                       {pillar.title[editorialLocale]}
                     </h2>
                     <p className="text-sm leading-relaxed text-[#a3a9b8]">
@@ -157,7 +157,7 @@ export default async function LearnIndexPage() {
       {/* Final CTA */}
       <section className="relative py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-10 md:p-16">
+          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-6 sm:p-8 md:p-16">
             <CtaMediaBg src={PAGE_IMAGES.learn.cta} alt={PAGE_IMAGES.learn.alt} pattern={PAGE_IMAGES.learn.pattern} />
             <div
               aria-hidden
@@ -172,7 +172,7 @@ export default async function LearnIndexPage() {
                 <Sparkles className="h-3 w-3" />
                 {t("From theory to tonight's slate", "Van theorie naar vanavonds wedstrijden")}
               </span>
-              <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 {t(
                   "See the math run live on every",
                   "Zie de wiskunde live draaien op elke",

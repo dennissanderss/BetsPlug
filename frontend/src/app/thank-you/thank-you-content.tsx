@@ -493,7 +493,7 @@ function ThankYouContent({
                 What you unlocked
               </span>
             </div>
-            <h2 className="text-display mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-display mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               Your {planCopy.label} benefits are live
             </h2>
           </motion.div>
@@ -586,7 +586,7 @@ function ThankYouContent({
         {/* Final CTA */}
         <section className="relative py-20 md:py-28">
           <div className="mx-auto max-w-5xl px-4 sm:px-6">
-            <div className="card-neon-green halo-green overflow-hidden p-10 md:p-16">
+            <div className="card-neon-green halo-green overflow-hidden p-6 sm:p-10 md:p-16">
               <div className="relative">
                 <CtaMediaBg
                   src={PAGE_IMAGES["thank-you"].cta}
@@ -594,24 +594,24 @@ function ThankYouContent({
                   pattern={PAGE_IMAGES["thank-you"].pattern}
                 />
                 <div className="relative text-center">
-                  <h2 className="text-display text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+                  <h2 className="text-display text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                     Ready to place your first pick?
                   </h2>
                   <p className="mx-auto mt-4 max-w-xl text-base text-[#a3a9b8]">
                     Your dashboard is live. Head over and start winning smarter.
                   </p>
                   <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                    <Link href={loc("/dashboard")} className="btn-primary group">
+                    <Link href={loc("/dashboard")} className="btn-primary group w-full sm:w-auto">
                       <LayoutDashboard className="h-4 w-4" />
                       Go to dashboard
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
-                    <Link href={loc("/subscription")} className="btn-glass">
+                    <Link href={loc("/subscription")} className="btn-glass w-full sm:w-auto">
                       View subscription
                     </Link>
                   </div>
-                  <p className="mt-8 inline-flex items-center justify-center gap-2 text-xs text-[#8a93a6]">
-                    <ShieldCheck className="h-3.5 w-3.5 text-[#4ade80]" />
+                  <p className="mt-8 inline-flex flex-wrap items-center justify-center gap-2 text-center text-xs text-[#8a93a6]">
+                    <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-[#4ade80]" />
                     SSL-encrypted · 14-day money-back · Cancel any time
                   </p>
                 </div>

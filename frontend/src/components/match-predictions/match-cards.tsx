@@ -29,7 +29,7 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
       className="glass-card-hover relative overflow-hidden border-green-500/20"
     >
       {/* Free ribbon */}
-      <div className="pointer-events-none absolute -right-9 top-4 rotate-45 bg-gradient-to-r from-green-500 to-emerald-500 px-10 py-1 text-[10px] font-extrabold uppercase tracking-widest text-black shadow-lg shadow-green-500/30">
+      <div className="pointer-events-none absolute -right-8 top-3 rotate-45 bg-gradient-to-r from-green-500 to-emerald-500 px-8 py-0.5 text-[9px] font-extrabold uppercase tracking-widest text-black shadow-lg shadow-green-500/30 sm:-right-9 sm:top-4 sm:px-10 sm:py-1 sm:text-[10px]">
         Free
       </div>
 
@@ -111,8 +111,8 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
         (fixture.odds.home != null ||
           fixture.odds.draw != null ||
           fixture.odds.away != null) && (
-          <div className="flex flex-wrap items-center gap-2 border-t border-slate-200 bg-slate-50 px-4 py-2 sm:px-5">
-            <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+          <div className="flex flex-wrap items-center gap-1.5 border-t border-slate-200 bg-slate-50 px-3 py-2 sm:gap-2 sm:px-5">
+            <span className="w-full text-[10px] font-semibold uppercase tracking-widest text-slate-500 sm:w-auto">
               Pre-match odds
             </span>
             {fixture.odds.home != null && (
@@ -131,7 +131,7 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
               </span>
             )}
             {fixture.odds.over_2_5 != null && fixture.odds.under_2_5 != null && (
-              <span className="ml-auto text-[10px] text-slate-500">
+              <span className="w-full text-[10px] text-slate-500 sm:ml-auto sm:w-auto">
                 O/U 2.5: {fixture.odds.over_2_5.toFixed(2)} /{" "}
                 {fixture.odds.under_2_5.toFixed(2)}
               </span>
@@ -186,9 +186,9 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
               <div className="h-full w-[30%] rounded-full bg-red-500/40" />
             </div>
           </div>
-          <div className="flex flex-col items-end gap-1">
-            <span className="text-4xl font-extrabold leading-none text-emerald-400/70">
-              82<span className="text-xl">%</span>
+          <div className="flex shrink-0 flex-row items-center gap-3 lg:flex-col lg:items-end lg:gap-1">
+            <span className="text-3xl font-extrabold leading-none text-emerald-400/70 sm:text-4xl">
+              82<span className="text-lg sm:text-xl">%</span>
             </span>
             <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold uppercase text-emerald-400/70">
               Confidence
@@ -225,18 +225,18 @@ export function LockedSkeleton() {
   const loc = useLocalizedHref();
   return (
     <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white">
-      <div aria-hidden="true" className="p-5 blur-[6px]">
+      <div aria-hidden="true" className="p-4 blur-[6px] sm:p-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
-          <div className="flex-1 space-y-2">
-            <div className="h-3 w-32 rounded bg-slate-100" />
-            <div className="h-5 w-56 rounded bg-slate-100" />
+          <div className="min-w-0 flex-1 space-y-2">
+            <div className="h-3 w-32 max-w-full rounded bg-slate-100" />
+            <div className="h-5 w-56 max-w-full rounded bg-slate-100" />
             <div className="h-3 w-24 rounded bg-slate-100" />
           </div>
-          <div className="w-full max-w-[260px] space-y-2">
+          <div className="w-full min-w-0 space-y-2 lg:max-w-[260px]">
             <div className="h-3 w-full rounded-full bg-slate-100" />
             <div className="h-2 w-2/3 rounded bg-slate-50" />
           </div>
-          <div className="flex flex-col items-end gap-2">
+          <div className="flex shrink-0 flex-row items-center gap-3 lg:flex-col lg:items-end lg:gap-2">
             <div className="h-10 w-16 rounded bg-slate-100" />
             <div className="h-6 w-20 rounded-full bg-slate-50" />
           </div>
@@ -263,18 +263,18 @@ export function LockedSkeleton() {
 
 export function FreeSkeleton() {
   return (
-    <div className="glass-card animate-pulse overflow-hidden p-5">
+    <div className="glass-card animate-pulse overflow-hidden p-4 sm:p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-6">
-        <div className="flex-1 space-y-2">
-          <div className="h-3 w-32 rounded bg-slate-100" />
-          <div className="h-5 w-56 rounded bg-slate-100" />
+        <div className="min-w-0 flex-1 space-y-2">
+          <div className="h-3 w-32 max-w-full rounded bg-slate-100" />
+          <div className="h-5 w-56 max-w-full rounded bg-slate-100" />
           <div className="h-3 w-24 rounded bg-slate-100" />
         </div>
-        <div className="w-full max-w-[260px] space-y-2">
+        <div className="w-full min-w-0 space-y-2 lg:max-w-[260px]">
           <div className="h-3 w-full rounded-full bg-slate-100" />
           <div className="h-2 w-2/3 rounded bg-slate-50" />
         </div>
-        <div className="flex flex-col items-end gap-2">
+        <div className="flex shrink-0 flex-row items-center gap-3 lg:flex-col lg:items-end lg:gap-2">
           <div className="h-10 w-16 rounded bg-slate-100" />
           <div className="h-6 w-20 rounded-full bg-slate-50" />
         </div>

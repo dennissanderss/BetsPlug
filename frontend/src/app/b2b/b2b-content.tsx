@@ -83,7 +83,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
   const logoRow = ["Acme Bets", "Oddsline", "PitchPro", "ScoreWire", "MetaKick"];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <SiteNav />
 
       {/* ═══ HERO ═══ */}
@@ -110,7 +110,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-display text-3xl text-[#ededed] sm:text-5xl lg:text-6xl"
+            className="text-display text-2xl text-[#ededed] text-balance break-words sm:text-4xl lg:text-5xl"
           >
             {t("b2b.titleA")}
             <br />
@@ -161,7 +161,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
       </section>
 
       {/* ═══ PARTNERSHIP TYPES ═══ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute right-0 top-1/4 h-[400px] w-[500px] rounded-full"
@@ -179,7 +179,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
               <Building2 className="h-3 w-3" />
               {t("b2b.partnershipsBadge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-2xl text-[#ededed] text-balance break-words sm:text-3xl lg:text-4xl">
               {t("b2b.partnershipsTitle")}
             </h2>
             <p className="mt-4 text-base text-[#a3a9b8]">
@@ -220,7 +220,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
       </section>
 
       {/* ═══ STATS ═══ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-0 top-1/3 h-[400px] w-[500px] rounded-full"
@@ -238,7 +238,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
               <BarChart3 className="h-3 w-3" />
               {t("b2b.whyPartner")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-2xl text-[#ededed] text-balance break-words sm:text-3xl lg:text-4xl">
               {t("b2b.whyPartnerTitle")}
             </h2>
           </motion.div>
@@ -268,7 +268,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
                       <HexBadge variant={stat.variant} size="md">
                         <Icon className="h-5 w-5" strokeWidth={2} />
                       </HexBadge>
-                      <div className="text-stat mt-5 text-4xl text-[#ededed]">
+                      <div className="text-stat mt-5 text-3xl text-[#ededed] sm:text-4xl">
                         {stat.value}
                       </div>
                       <p className="mt-2 text-sm text-[#a3a9b8]">{stat.label}</p>
@@ -302,7 +302,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
       </section>
 
       {/* ═══ CONTACT CTA ═══ */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/4 top-0 h-[400px] w-[500px] rounded-full"
@@ -319,14 +319,14 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="card-neon card-neon-green halo-green p-10 md:p-16"
+            className="card-neon card-neon-green halo-green p-6 sm:p-8 md:p-16"
           >
             <div className="relative">
               <span className="section-label mb-4">
                 <Sparkles className="h-3 w-3" />
                 {t("b2b.contactTitle")}
               </span>
-              <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading text-2xl text-[#ededed] text-balance break-words sm:text-3xl lg:text-4xl">
                 {t("b2b.contactTitle")}
               </h2>
               <p className="mt-4 max-w-xl text-base leading-relaxed text-[#a3a9b8]">

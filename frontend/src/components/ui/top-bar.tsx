@@ -46,7 +46,7 @@ export function TopBar() {
       }`}
     >
       <div
-        className="relative flex items-center justify-center border-b px-10 py-2 text-[12px] sm:text-[13px]"
+        className="relative flex items-center justify-center border-b px-4 py-2 text-[12px] sm:px-10 sm:text-[13px]"
         style={{
           background: "hsl(230 20% 7% / 0.85)",
           backdropFilter: "blur(20px)",

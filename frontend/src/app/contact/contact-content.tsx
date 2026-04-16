@@ -112,7 +112,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
     : faqGroups;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <SiteNav />
 
       {/* ─── HERO ─── */}
@@ -139,7 +139,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
-            className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl"
+            className="text-heading text-2xl text-[#ededed] text-balance break-words sm:text-3xl lg:text-4xl"
           >
             {t("contact.titleA")}{" "}
             <span className="gradient-text-green">{t("contact.titleB")}</span>
@@ -157,7 +157,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       </section>
 
       {/* ─── Help options grid ─── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute right-0 top-1/3 h-[400px] w-[400px] rounded-full"
@@ -206,7 +206,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       </section>
 
       {/* ─── FAQ Search + Accordions ─── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-0 top-0 h-[400px] w-[500px] rounded-full"
@@ -224,7 +224,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
               <BookOpen className="h-3 w-3" />
               {t("contact.faqBadge")}
             </span>
-            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h2 className="text-heading text-2xl text-[#ededed] text-balance break-words sm:text-3xl lg:text-4xl">
               {t("contact.faqTitleA")}{" "}
               <span className="gradient-text-green">{t("contact.faqTitleB")}</span>
             </h2>
@@ -234,9 +234,9 @@ export function ContactContent({ contactPage }: ContactContentProps) {
           </motion.div>
 
           <div className="card-neon p-6 sm:p-8">
-            <div className="relative grid gap-8 lg:grid-cols-[240px_1fr]">
+            <div className="relative grid gap-6 sm:gap-8 lg:grid-cols-[240px_1fr]">
               {/* Sidebar categories */}
-              <aside className="flex flex-col gap-3">
+              <aside className="flex flex-row flex-wrap gap-2 lg:flex-col lg:gap-3">
                 <button
                   type="button"
                   onClick={() => setActiveGroup(null)}
@@ -369,7 +369,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       </section>
 
       {/* ─── Still need help — finalCta ─── */}
-      <section className="relative py-20 md:py-28">
+      <section className="relative overflow-hidden py-20 md:py-28">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/4 top-0 h-[400px] w-[500px] rounded-full"
@@ -386,19 +386,19 @@ export function ContactContent({ contactPage }: ContactContentProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="card-neon card-neon-green halo-green p-10 md:p-16"
+            className="card-neon card-neon-green halo-green p-6 sm:p-8 md:p-16"
           >
             <div className="relative">
-              <div className="flex items-start gap-4">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                 <HexBadge variant="green" size="lg">
                   <LifeBuoy className="h-7 w-7" strokeWidth={2} />
                 </HexBadge>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <span className="section-label mb-4">
                     <Sparkles className="h-3 w-3" />
                     {t("contact.stillNeedTitle")}
                   </span>
-                  <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+                  <h2 className="text-heading text-2xl text-[#ededed] text-balance break-words sm:text-3xl lg:text-4xl">
                     {t("contact.stillNeedTitle")}
                   </h2>
                   <p className="mt-4 max-w-xl text-base leading-relaxed text-[#a3a9b8]">

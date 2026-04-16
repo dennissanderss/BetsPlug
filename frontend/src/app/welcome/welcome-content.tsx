@@ -102,7 +102,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
     : defaultStats;
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
       <SiteNav />
 
       {/* Confetti burst */}
@@ -183,7 +183,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-heading text-3xl text-[#ededed] sm:text-5xl lg:text-6xl"
+              className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-5xl lg:text-6xl"
             >
               {t("welcome.title")}{" "}
               <span className="gradient-text-green">
@@ -338,7 +338,7 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
                 <Sparkles className="h-3 w-3" />
                 {t("welcome.nextTitle")}
               </span>
-              <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 Your first{" "}
                 <span className="gradient-text-green">three moves.</span>
               </h2>
@@ -416,12 +416,12 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
             style={{ background: "hsl(var(--accent-purple) / 0.15)", filter: "blur(140px)" }}
           />
           <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
-            <div className="card-neon card-neon-green halo-green p-10 md:p-16">
+            <div className="card-neon card-neon-green halo-green p-6 sm:p-10 md:p-16">
               <div className="relative text-center">
                 <span className="section-label mb-4">
                   <Rocket className="h-3 w-3" /> Ready
                 </span>
-                <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+                <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                   Start exploring{" "}
                   <span className="gradient-text-green">predictions.</span>
                 </h2>
@@ -514,7 +514,7 @@ function QuickstartSection() {
             <Rocket className="h-3 w-3" />
             {t("welcome.quickstartEyebrow")}
           </span>
-          <h2 className="text-heading mx-auto mt-4 max-w-3xl text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+          <h2 className="text-heading mx-auto mt-4 max-w-3xl text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
             {t("welcome.quickstartTitle")}
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-[#a3a9b8]">
@@ -528,7 +528,7 @@ function QuickstartSection() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {steps.map((step, i) => {
             const Icon = step.icon;
             const variant = stepVariants[i % stepVariants.length];
@@ -605,7 +605,7 @@ function DashboardTourSection() {
             <LayoutDashboard className="h-3 w-3" />
             {t("welcome.tourEyebrow")}
           </span>
-          <h2 className="text-heading mx-auto mt-4 max-w-3xl text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+          <h2 className="text-heading mx-auto mt-4 max-w-3xl text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
             {t("welcome.tourTitle")}
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-[#a3a9b8]">
