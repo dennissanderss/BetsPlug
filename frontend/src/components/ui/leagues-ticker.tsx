@@ -35,10 +35,7 @@ const leagues: League[] = [
   { name: "Championship", slug: "championship" },
 ];
 
-/* Reversed order for the second row */
 const leaguesReversed = [...leagues].reverse();
-
-const TILE_VARIANTS = ["card-neon-green", "card-neon-purple", "card-neon-blue"] as const;
 
 export function LeaguesTicker() {
   const { t } = useTranslations();
@@ -47,23 +44,18 @@ export function LeaguesTicker() {
 
   return (
     <section
-      className="relative overflow-hidden py-14 md:py-20"
+      className="relative overflow-hidden py-16 md:py-24"
       aria-labelledby="leagues-heading"
     >
-      {/* Ambient glow blobs */}
+      {/* Ambient glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-40 top-10 h-[420px] w-[420px] rounded-full"
-        style={{ background: "hsl(var(--accent-green) / 0.14)", filter: "blur(150px)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-40 bottom-0 h-[420px] w-[420px] rounded-full"
-        style={{ background: "hsl(var(--accent-purple) / 0.12)", filter: "blur(150px)" }}
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{ background: "hsl(var(--accent-green) / 0.06)", filter: "blur(160px)" }}
       />
 
       {/* Title — centered */}
-      <div className="relative z-10 mx-auto mb-10 flex max-w-7xl flex-col items-center px-4 text-center sm:px-6 md:mb-14">
+      <div className="relative z-10 mx-auto mb-12 flex max-w-7xl flex-col items-center px-4 text-center sm:px-6 md:mb-16">
         <span className="section-label mb-4">
           <Sparkles className="h-3 w-3" />
           {t("leagues.badge")}
@@ -77,83 +69,77 @@ export function LeaguesTicker() {
         </h2>
       </div>
 
-      {/* 3D Marquee container */}
-      <div className="leagues-stage relative z-10">
-        <div className="leagues-rotator space-y-4 md:space-y-5">
-          {/* ── Row 1: scrolls left ── */}
-          <div className="relative overflow-hidden">
-            <motion.div
-              className="flex w-max items-center"
-              animate={{ x: ["0%", "-33.3333%"] }}
-              transition={{ duration: 35, ease: "linear", repeat: Infinity }}
-            >
-              {row1.map((league, i) => (
-                <LeagueCard key={`r1-${league.slug}-${i}`} league={league} index={i} />
-              ))}
-            </motion.div>
-            <SideFades />
-          </div>
+      {/* Scrolling rows */}
+      <div className="relative z-10 space-y-4">
+        {/* Row 1 — scrolls left */}
+        <div className="relative overflow-hidden">
+          <motion.div
+            className="flex w-max items-center"
+            animate={{ x: ["0%", "-33.3333%"] }}
+            transition={{ duration: 40, ease: "linear", repeat: Infinity }}
+          >
+            {row1.map((league, i) => (
+              <LeagueLogo key={`r1-${league.slug}-${i}`} league={league} />
+            ))}
+          </motion.div>
+          <EdgeFades />
+        </div>
 
-          {/* ── Row 2: scrolls right ── */}
-          <div className="relative overflow-hidden">
-            <motion.div
-              className="flex w-max items-center"
-              animate={{ x: ["-33.3333%", "0%"] }}
-              transition={{ duration: 40, ease: "linear", repeat: Infinity }}
-            >
-              {row2.map((league, i) => (
-                <LeagueCard key={`r2-${league.slug}-${i}`} league={league} index={i + 1} />
-              ))}
-            </motion.div>
-            <SideFades />
-          </div>
+        {/* Row 2 — scrolls right */}
+        <div className="relative overflow-hidden">
+          <motion.div
+            className="flex w-max items-center"
+            animate={{ x: ["-33.3333%", "0%"] }}
+            transition={{ duration: 45, ease: "linear", repeat: Infinity }}
+          >
+            {row2.map((league, i) => (
+              <LeagueLogo key={`r2-${league.slug}-${i}`} league={league} />
+            ))}
+          </motion.div>
+          <EdgeFades />
         </div>
       </div>
-
-      <style jsx>{`
-        .leagues-stage {
-          perspective: 900px;
-          perspective-origin: 50% 50%;
-        }
-        .leagues-rotator {
-          transform: rotateX(16deg) rotateZ(-1deg);
-          transform-style: preserve-3d;
-        }
-      `}</style>
     </section>
   );
 }
 
-/* ── Logo card — NOCTURNE neon ── */
-function LeagueCard({ league, index }: { league: League; index: number }) {
-  const variant = TILE_VARIANTS[index % TILE_VARIANTS.length];
+function LeagueLogo({ league }: { league: League }) {
   return (
-    <div className="mx-1.5 flex-shrink-0 sm:mx-2" title={league.name}>
+    <div className="mx-3 flex-shrink-0 sm:mx-4" title={league.name}>
       <div
-        className={`${variant} group flex h-14 w-24 items-center justify-center rounded-[14px] p-3 transition-transform duration-300 hover:-translate-y-0.5 sm:h-16 sm:w-28 md:h-[72px] md:w-32 md:p-4`}
+        className="group relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl p-3 transition-all duration-300 hover:scale-110 sm:h-20 sm:w-20 sm:p-4"
+        style={{
+          background: "hsl(var(--glass-1))",
+          border: "1px solid hsl(0 0% 100% / 0.06)",
+        }}
       >
-        <div className="relative flex h-full w-full items-center justify-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={`/leagues/${league.slug}.${league.ext ?? "png"}`}
-            alt={league.name}
-            className="h-full w-auto max-w-full object-contain transition-transform duration-300 group-hover:scale-110"
-            loading="lazy"
-          />
-        </div>
+        {/* Hover glow */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          style={{
+            background: "radial-gradient(circle at center, hsl(var(--accent-green) / 0.15), transparent 70%)",
+          }}
+        />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`/leagues/${league.slug}.${league.ext ?? "png"}`}
+          alt={league.name}
+          className="relative h-full w-auto max-w-full object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+        />
       </div>
     </div>
   );
 }
 
-/* ── Side gradient fades — NOCTURNE body ── */
-function SideFades() {
+function EdgeFades() {
   return (
     <div
       className="pointer-events-none absolute inset-0"
       style={{
         background:
-          "linear-gradient(90deg, hsl(230 20% 6%) 0%, transparent 8%, transparent 92%, hsl(230 20% 6%) 100%)",
+          "linear-gradient(90deg, hsl(var(--bg-base)) 0%, transparent 10%, transparent 90%, hsl(var(--bg-base)) 100%)",
       }}
     />
   );
