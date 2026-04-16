@@ -38,7 +38,9 @@ from app.models.stats import TeamStats
 # Constants / defaults
 # ─────────────────────────────────────────────────────────────────────────────
 
-_FORM_MATCHES = 5          # number of recent matches for form calculation
+_FORM_MATCHES = 30         # number of recent matches for form calculation (10+ for form, 5 for venue-only subset)
+                           # (was 5; bumped to 10 to match train_local.py feature pipeline —
+                           # see docs/feature_pipeline_verification.md)
 _H2H_MATCHES = 10          # number of h2h matches to fetch
 _DEFAULT_LEAGUE_AVG = 2.7  # fallback league average goals per game
 
@@ -941,11 +943,16 @@ class ForecastService:
     async def _get_team_form(
         team_id: uuid.UUID,
         before: datetime,
-        league_id: uuid.UUID,
+        league_id: uuid.UUID,  # retained for backward compat but unused
         n: int,
         db: AsyncSession,
     ) -> list[dict]:
-        """Fetch the last *n* completed matches for *team_id* before *before*."""
+        """Fetch the last *n* completed matches for *team_id* across ALL leagues.
+
+        v8.1 feature-parity fix: removed league_id filter to match
+        train_local.py which uses full team history regardless of competition.
+        See docs/feature_pipeline_verification.md for root cause.
+        """
         from app.models.match import MatchStatus
 
         stmt = (
@@ -953,7 +960,6 @@ class ForecastService:
             .join(MatchResult, MatchResult.match_id == Match.id)
             .where(
                 and_(
-                    Match.league_id == league_id,
                     Match.status == MatchStatus.FINISHED,
                     Match.scheduled_at < before,
                     (Match.home_team_id == team_id) | (Match.away_team_id == team_id),
@@ -1003,6 +1009,8 @@ class ForecastService:
             .limit(n)
         )
         rows = (await db.execute(stmt)).all()
+        # v8.1 fix: reverse so list is oldest-first, matching train_local.py semantics
+        # where h2h[-5:] returns the 5 MOST RECENT matches, not the 5 oldest.
         return [
             {
                 "match_id": str(m.id),
@@ -1012,7 +1020,7 @@ class ForecastService:
                 "away_score": r.away_score,
                 "scheduled_at": m.scheduled_at.isoformat() if m.scheduled_at else None,
             }
-            for m, r in rows
+            for m, r in reversed(rows)
         ]
 
     @staticmethod
@@ -1022,22 +1030,26 @@ class ForecastService:
         before: datetime,
         db: AsyncSession,
     ) -> Optional[dict]:
-        """Compute point-in-time season stats from individual match results.
+        """Compute point-in-time team stats from ALL historical matches.
 
-        Only includes matches with ``scheduled_at < before`` to prevent
-        feature leakage. Replaces the old TeamStats aggregate lookup.
+        v8.1 feature-parity fix (16 April 2026):
+        - Previously filtered by season_id, causing feature mismatch with
+          train_local.py which uses full team history.
+        - Now uses ALL finished matches with scheduled_at < before to match
+          the local pipeline exactly.
+        - season_id parameter retained for backward compat but unused.
+        See docs/feature_pipeline_verification.md for root cause.
         """
         from app.models.match import MatchStatus
 
-        if season_id is None:
-            return None
-
+        # Use FULL team history, not just current season.
+        # This matches train_local.py compute_features season_stats() which
+        # iterates over team_results[team_id] (all matches for that team).
         stmt = (
             select(Match, MatchResult)
             .join(MatchResult, MatchResult.match_id == Match.id)
             .where(
                 and_(
-                    Match.season_id == season_id,
                     Match.status == MatchStatus.FINISHED,
                     Match.scheduled_at < before,
                     (Match.home_team_id == team_id) | (Match.away_team_id == team_id),

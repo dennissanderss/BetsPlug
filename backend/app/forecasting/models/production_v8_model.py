@@ -218,34 +218,35 @@ class ProductionV8Model(ForecastModel):
         away_elo = float(ctx.get("away_elo_at_kickoff") or 1500.0)
         elo_diff = home_elo - away_elo
 
-        # Build per-team history from form lists
+        # Build per-team history from form lists.
+        # v8.1 feature-parity fix: backend now loads 10 matches (_FORM_MATCHES=10)
+        # to match train_local.py full-history pipeline. See
+        # docs/feature_pipeline_verification.md for root cause.
         home_form = ctx.get("home_form") or []
         away_form = ctx.get("away_form") or []
         h2h = ctx.get("h2h_matches") or []
 
-        h_hist5 = _form_to_history(home_form, home_id)
-        a_hist5 = _form_to_history(away_form, away_id)
+        h_hist = _form_to_history(home_form, home_id)
+        a_hist = _form_to_history(away_form, away_id)
 
         # ── Form last 5 (8 features) ──
-        h_ppg5, h_gf5, h_ga5, h_wr5, _ = _form_stats(h_hist5, n=5)
-        a_ppg5, a_gf5, a_ga5, a_wr5, _ = _form_stats(a_hist5, n=5)
+        h_ppg5, h_gf5, h_ga5, h_wr5, _ = _form_stats(h_hist, n=5)
+        a_ppg5, a_gf5, a_ga5, a_wr5, _ = _form_stats(a_hist, n=5)
 
-        # ── Form last 10 — the backend only loads 5, so we approximate ──
-        # When only 5 matches available, use them as the "10"-window too.
-        # This is a minor fidelity loss vs train_local.py but avoids needing
-        # extra DB round-trips per prediction.
-        h_ppg10, h_gf10, h_ga10, _, _ = _form_stats(h_hist5, n=10)
-        a_ppg10, a_gf10, a_ga10, _, _ = _form_stats(a_hist5, n=10)
+        # ── Form last 10 (4 features) — real 10-match window ──
+        h_ppg10, h_gf10, h_ga10, _, _ = _form_stats(h_hist, n=10)
+        a_ppg10, a_gf10, a_ga10, _, _ = _form_stats(a_hist, n=10)
         h_gd10 = h_gf10 - h_ga10
         a_gd10 = a_gf10 - a_ga10
 
         # ── Momentum last 3 (2 features) ──
-        h_ppg3, _, _, _, _ = _form_stats(h_hist5, n=3)
-        a_ppg3, _, _, _, _ = _form_stats(a_hist5, n=3)
+        h_ppg3, _, _, _, _ = _form_stats(h_hist, n=3)
+        a_ppg3, _, _, _, _ = _form_stats(a_hist, n=3)
 
         # ── Home-only / Away-only form (4 features) ──
-        h_home_hist = [h for h in h_hist5 if h["is_home"] is True]
-        a_away_hist = [h for h in a_hist5 if h["is_home"] is False]
+        # Matches train_local.py: filter full history, then take last 5 of that subset.
+        h_home_hist = [h for h in h_hist if h["is_home"] is True]
+        a_away_hist = [h for h in a_hist if h["is_home"] is False]
         h_home_ppg, _, _, h_home_wr, _ = _form_stats(h_home_hist, n=5)
         a_away_ppg, _, _, a_away_wr, _ = _form_stats(a_away_hist, n=5)
 
@@ -293,17 +294,17 @@ class ProductionV8Model(ForecastModel):
         h_swr = float(home_stats.get("win_rate") or 0)
         a_swr = float(away_stats.get("win_rate") or 0)
 
-        # ── Consistency (2 features) — std of goals last N ──
-        h_consistency = _goal_consistency(h_hist5)
-        a_consistency = _goal_consistency(a_hist5)
+        # ── Consistency (2 features) — std of goals last 10 ──
+        h_consistency = _goal_consistency(h_hist)
+        a_consistency = _goal_consistency(a_hist)
 
-        # ── Clean sheet % (2 features) ──
-        h_cs_pct = _clean_sheet_pct(h_hist5)
-        a_cs_pct = _clean_sheet_pct(a_hist5)
+        # ── Clean sheet % (2 features) — percent of last 10 ──
+        h_cs_pct = _clean_sheet_pct(h_hist)
+        a_cs_pct = _clean_sheet_pct(a_hist)
 
         # ── Rest days (2 features) ──
-        h_rest = _days_rest(h_hist5, ctx.get("scheduled_at"))
-        a_rest = _days_rest(a_hist5, ctx.get("scheduled_at"))
+        h_rest = _days_rest(h_hist, ctx.get("scheduled_at"))
+        a_rest = _days_rest(a_hist, ctx.get("scheduled_at"))
 
         # ── Derived (3 features) ──
         form_diff = h_ppg5 - a_ppg5
