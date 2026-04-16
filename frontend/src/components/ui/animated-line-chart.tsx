@@ -71,11 +71,13 @@ export function AnimatedLineChart({
   // Fill area path — same line + close along bottom
   const fillD = `${d} L${points[points.length - 1].x.toFixed(2)},${(padding.top + innerHeight).toFixed(2)} L${points[0].x.toFixed(2)},${(padding.top + innerHeight).toFixed(2)} Z`;
 
-  // Spring-driven progress
+  // Spring-driven progress — draw phase uses first 70% of frames,
+  // remaining 30% holds the final state before the loop restarts.
+  const drawFrames = Math.round(durationInFrames * 0.7);
   const progress = spring({
-    frame,
+    frame: Math.min(frame, drawFrames),
     fps,
-    durationInFrames: Math.round(durationInFrames * 0.85),
+    durationInFrames: drawFrames,
     config: { damping: 200 },
   });
 

@@ -778,21 +778,63 @@ export function HomeContent({
               </div>
             </div>
 
-            {/* Right — animated line chart */}
+            {/* Right — animated line chart + floating badges */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.6 }}
-              className="card-neon card-neon-green halo-green relative overflow-hidden"
+              transition={{ duration: 0.8 }}
+              className="relative overflow-hidden sm:overflow-visible"
             >
+              <div className="card-neon card-neon-green halo-green relative overflow-hidden">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -right-12 -top-12 h-[200px] w-[200px] rounded-full"
+                  style={{ background: "hsl(var(--accent-green) / 0.2)", filter: "blur(80px)" }}
+                />
+                <div className="relative aspect-[16/10] sm:aspect-[16/9]">
+                  <TrackRecordChart data={historySeries} stats={stats} />
+                </div>
+              </div>
+
+              {/* Floating badge — top-left: accuracy */}
               <div
-                aria-hidden
-                className="pointer-events-none absolute -right-12 -top-12 h-[200px] w-[200px] rounded-full"
-                style={{ background: "hsl(var(--accent-green) / 0.2)", filter: "blur(80px)" }}
-              />
-              <div className="relative aspect-[16/10] sm:aspect-[16/9]">
-                <TrackRecordChart data={historySeries} stats={stats} />
+                className="card-neon card-neon-green absolute -left-6 -top-5 hidden -rotate-[4deg] p-3 sm:block"
+                style={{ width: 190 }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <HexBadge variant="green" size="sm" noGlow>
+                    <Target className="h-3.5 w-3.5" />
+                  </HexBadge>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
+                      {t("track.accuracy")}
+                    </p>
+                    <p className="text-stat text-sm text-[#4ade80]">
+                      {stats ? `${Math.round(stats.winrate * 1000) / 10}%` : "—"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating badge — bottom-right: total predictions */}
+              <div
+                className="card-neon card-neon-purple absolute -bottom-4 -right-4 hidden rotate-[4deg] p-3 sm:block"
+                style={{ width: 190 }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <HexBadge variant="purple" size="sm" noGlow>
+                    <BarChart3 className="h-3.5 w-3.5" />
+                  </HexBadge>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
+                      {t("track.metricPredictions")}
+                    </p>
+                    <p className="text-stat text-sm text-[#c4b5fd]">
+                      {stats ? stats.total.toLocaleString(locale) : "—"}
+                    </p>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>

@@ -23,9 +23,8 @@ export interface TrackRecordChartProps {
  * Falls back to realistic demo data when the API hasn't returned
  * data yet so the chart area is never blank.
  */
-export function TrackRecordChart({ data, stats }: TrackRecordChartProps) {
+export function TrackRecordChart({ data }: TrackRecordChartProps) {
   const series = data && data.length >= 2 ? data : FALLBACK_DATA;
-  const isLive = data !== null && data !== undefined && data.length >= 2;
 
   return (
     <div className="relative h-full w-full">
@@ -40,33 +39,19 @@ export function TrackRecordChart({ data, stats }: TrackRecordChartProps) {
           speed: 1,
           showFill: true,
         }}
-        durationInFrames={120}
+        durationInFrames={150}
         fps={30}
         compositionWidth={1000}
         compositionHeight={560}
         autoPlay
-        loop={false}
+        loop
         style={{
           width: "100%",
           height: "100%",
         }}
         controls={false}
-        showPosterWhenUnplayed
         clickToPlay={false}
       />
-
-      {/* Live-data indicator badge */}
-      {isLive && (
-        <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full border border-[#4ade80]/20 bg-[#0a0a0a]/70 px-2.5 py-1 backdrop-blur-sm">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#4ade80] opacity-50" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#4ade80]" />
-          </span>
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-[#4ade80]">
-            Live
-          </span>
-        </div>
-      )}
     </div>
   );
 }
