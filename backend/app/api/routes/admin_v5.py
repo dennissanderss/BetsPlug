@@ -198,6 +198,23 @@ async def backfill_team_logos(
     leagues_queried = 0
     api_teams_returned = 0
 
+    # Logos are season-independent — try the current football season
+    # first, then fall back through recent seasons until the API returns
+    # data. Kalenderjaar-leagues (MLS, J1, A-League, Liga MX, Copa Lib)
+    # use a different season offset than Aug-Jul European leagues, and
+    # some endpoints only carry data for specific years.
+    this_year = datetime.now(timezone.utc).year
+    season_candidates = [
+        _season_for_date(datetime.now(timezone.utc).date()),  # e.g. 2025
+        this_year,                                            # 2026
+        this_year - 1,                                        # 2025
+        this_year - 2,                                        # 2024
+        this_year - 3,                                        # 2023
+    ]
+    # Preserve order, drop dupes
+    _seen: set[int] = set()
+    season_candidates = [s for s in season_candidates if not (s in _seen or _seen.add(s))]
+
     for slug, league_api_id in LEAGUE_SLUG_TO_ID.items():
         # We try to find a matching League row for optional scoping, but
         # we DO NOT skip the API call when it's missing — teams may still
@@ -207,11 +224,15 @@ async def backfill_team_logos(
         ).scalar_one_or_none()
 
         try:
-            season = _season_for_date(datetime.now(timezone.utc).date())
-            resp = await adapter._get(
-                "teams", {"league": league_api_id, "season": season}
-            )
-            items = resp.get("response", []) if isinstance(resp, dict) else []
+            items: list = []
+            for season in season_candidates:
+                resp = await adapter._get(
+                    "teams", {"league": league_api_id, "season": season}
+                )
+                items = resp.get("response", []) if isinstance(resp, dict) else []
+                if items:
+                    break
+                await _asyncio.sleep(0.2)
             leagues_queried += 1
             api_teams_returned += len(items)
 
