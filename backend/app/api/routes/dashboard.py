@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.prediction_filters import v81_predictions_filter
 from app.db.session import get_db
 from app.models.prediction import Prediction, PredictionEvaluation
 
@@ -62,31 +63,43 @@ async def get_dashboard_metrics(
     if cached is not None:
         return DashboardMetrics(**cached)
 
+    # v8.1 filter: restrict all aggregations to post-deploy predictions.
+    # Pre-v8.1 preds used a broken feature pipeline — see
+    # docs/production_validation_v2.md
+    _v81 = v81_predictions_filter()
+
     # Total predictions
-    total_result = await db.execute(select(func.count(Prediction.id)))
+    total_result = await db.execute(
+        select(func.count(Prediction.id)).where(_v81)
+    )
     total_forecasts: int = total_result.scalar_one()
 
-    # Evaluation counts
+    # Evaluation counts — JOIN to Prediction so v8.1 filter can apply
     eval_count_result = await db.execute(
         select(func.count(PredictionEvaluation.id))
+        .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
+        .where(_v81)
     )
     evaluated_count: int = eval_count_result.scalar_one()
 
     correct_result = await db.execute(
-        select(func.count(PredictionEvaluation.id)).where(
-            PredictionEvaluation.is_correct.is_(True)
-        )
+        select(func.count(PredictionEvaluation.id))
+        .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
+        .where(PredictionEvaluation.is_correct.is_(True))
+        .where(_v81)
     )
     correct_predictions: int = correct_result.scalar_one()
 
     # Averages
     avg_brier_result = await db.execute(
         select(func.avg(PredictionEvaluation.brier_score))
+        .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
+        .where(_v81)
     )
     avg_brier_raw = avg_brier_result.scalar_one()
 
     avg_confidence_result = await db.execute(
-        select(func.avg(Prediction.confidence))
+        select(func.avg(Prediction.confidence)).where(_v81)
     )
     avg_confidence_raw = avg_confidence_result.scalar_one()
 

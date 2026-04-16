@@ -12,6 +12,7 @@ from sqlalchemy import Integer, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.core.prediction_filters import v81_predictions_filter
 from app.db.session import get_db
 from app.models.league import League
 from app.models.match import Match
@@ -71,6 +72,8 @@ async def get_trackrecord_summary(
         q = q.where(Prediction.model_version_id == model_version_id)
     if source is not None:
         q = q.where(Prediction.prediction_source == source)
+    # v8.1 filter: exclude pre-deploy predictions (broken feature pipeline)
+    q = q.where(v81_predictions_filter())
 
     row = (await db.execute(q)).one()
 
@@ -145,6 +148,8 @@ async def get_trackrecord_segments(
         )
         if _source_filter is not None:
             q = q.where(_source_filter)
+        # v8.1 filter
+        q = q.where(v81_predictions_filter())
     elif segment_type == "month":
         # v6 fix: Python-side aggregation. The previous SQL version
         # used func.to_char(..., 'YYYY-MM') for both SELECT and
@@ -169,6 +174,8 @@ async def get_trackrecord_segments(
             )
             .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
             .join(Match, Match.id == Prediction.match_id)
+            # v8.1 filter
+            .where(v81_predictions_filter())
         )).all()
 
         buckets: dict[str, dict] = {}
@@ -231,6 +238,8 @@ async def get_trackrecord_segments(
         )
         if _source_filter is not None:
             q = q.where(_source_filter)
+        # v8.1 filter
+        q = q.where(v81_predictions_filter())
 
     rows = (await db.execute(q)).all()
 
@@ -299,6 +308,8 @@ async def get_calibration(
     )
     if model_version_id is not None:
         base_q = base_q.where(Prediction.model_version_id == model_version_id)
+    # v8.1 filter
+    base_q = base_q.where(v81_predictions_filter())
     result = await db.execute(base_q)
     rows = result.all()
 
@@ -408,6 +419,8 @@ async def _stream_trackrecord_csv(
     )
     if model_version_id is not None:
         summary_q = summary_q.where(Prediction.model_version_id == model_version_id)
+    # v8.1 filter
+    summary_q = summary_q.where(v81_predictions_filter())
     sr = (await db.execute(summary_q)).one()
     s_total = sr.total or 0
     s_correct = int(sr.correct or 0)
@@ -478,6 +491,8 @@ async def _stream_trackrecord_csv(
     )
     if model_version_id is not None:
         q = q.where(Prediction.model_version_id == model_version_id)
+    # v8.1 filter
+    q = q.where(v81_predictions_filter())
 
     result = await db.stream(q)
     flush_every = 200

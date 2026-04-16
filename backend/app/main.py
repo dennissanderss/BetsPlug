@@ -251,6 +251,25 @@ async def lifespan(app: FastAPI):
     except Exception as exc:
         logger.exception("[MODEL LOAD] Failed to load production models: %s", exc)
 
+    # ── Flush stale aggregate caches from pre-v8.1-filter deploys ───────────
+    # dashboard:metrics, strategy:metrics:*, strategy:today:* were computed
+    # against the un-filtered prediction set and now hold wrong totals.
+    # Flush once on boot so the next request recomputes against v8.1 data.
+    try:
+        from app.core.cache import cache_delete
+        from app.core.prediction_filters import V81_FILTER_CACHE_PATTERNS
+        total_flushed = 0
+        for pattern in V81_FILTER_CACHE_PATTERNS:
+            n = await cache_delete(pattern)
+            total_flushed += n
+        if total_flushed:
+            logger.info(
+                "[CACHE FLUSH] v8.1 filter — invalidated %d stale key(s) matching %s",
+                total_flushed, V81_FILTER_CACHE_PATTERNS,
+            )
+    except Exception as exc:
+        logger.warning("Failed to flush v8.1 aggregate caches: %s", exc)
+
     # ── Start background scheduler (never blocks boot) ──────────────────────
     try:
         from app.services.scheduler import start_scheduler

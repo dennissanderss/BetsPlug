@@ -19,6 +19,7 @@ from sqlalchemy.orm import joinedload, noload
 
 from datetime import timedelta
 
+from app.core.prediction_filters import v81_predictions_filter
 from app.db.session import get_db
 from app.models.match import Match, MatchStatus
 from app.models.prediction import Prediction
@@ -65,7 +66,7 @@ async def get_botd_history(
     from app.models.prediction import PredictionEvaluation
     from collections import defaultdict
 
-    # Try live predictions first; fall back to all predictions if none exist
+    # Try live predictions first; fall back to all v8.1 predictions if none exist
     stmt = (
         select(Prediction, PredictionEvaluation)
         .join(Match, Match.id == Prediction.match_id)
@@ -74,6 +75,9 @@ async def get_botd_history(
             Prediction.confidence >= BOTD_MIN_CONFIDENCE,
             Prediction.prediction_source == "live",
         )
+        # v8.1 filter — applied inside 'live' branch too (old pipeline also had
+        # prediction_source='live' from pre-fix v8.0 Celery runs)
+        .where(v81_predictions_filter())
         .order_by(Match.scheduled_at.desc())
     )
     rows = (await db.execute(stmt)).all()
@@ -83,6 +87,8 @@ async def get_botd_history(
             .join(Match, Match.id == Prediction.match_id)
             .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
             .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+            # v8.1 filter
+            .where(v81_predictions_filter())
             .order_by(Match.scheduled_at.desc())
         )
         rows = (await db.execute(stmt_fallback)).all()
@@ -167,17 +173,21 @@ async def get_botd_track_record(
             Prediction.confidence >= BOTD_MIN_CONFIDENCE,
             Prediction.prediction_source == "live",
         )
+        # v8.1 filter
+        .where(v81_predictions_filter())
         .order_by(Match.scheduled_at)
     )
     rows = (await db.execute(stmt)).all()
 
-    # Fallback: if no live predictions yet, use all predictions
+    # Fallback: if no live predictions yet, use all v8.1 predictions
     if not rows:
         stmt_fallback = (
             select(Prediction, PredictionEvaluation)
             .join(Match, Match.id == Prediction.match_id)
             .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
             .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+            # v8.1 filter
+            .where(v81_predictions_filter())
             .order_by(Match.scheduled_at)
         )
         rows = (await db.execute(stmt_fallback)).all()

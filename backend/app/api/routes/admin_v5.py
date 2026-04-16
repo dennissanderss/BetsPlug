@@ -45,6 +45,7 @@ from sqlalchemy import and_, delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
+from app.core.prediction_filters import v81_predictions_filter
 from app.db.session import get_db
 from app.forecasting.elo_history import EloHistoryService
 from app.ingestion.adapters.api_football import (
@@ -1906,12 +1907,27 @@ async def engine_comparison(
         default="2026-04-12T22:00:00",
         description="ISO datetime marking the v3 deploy. Predictions before = v2, after = v3.",
     ),
+    scope: str = Query(
+        default="all",
+        description=(
+            "Which prediction set to compare: "
+            "'all' (default, includes pre-v8.1), "
+            "'v81_only' (only post-2026-04-16 11:00 UTC predictions with the "
+            "fixed feature pipeline), or "
+            "'pre_v81' (only pre-deploy predictions, useful for auditing the bug)."
+        ),
+    ),
     db: AsyncSession = Depends(get_db),
 ):
     """Compare accuracy of predictions made BEFORE the v3 engine deploy
     vs predictions made AFTER. Both must be evaluated (have results).
+
+    Use ``scope`` to control whether pre-v8.1 (broken-pipeline) predictions
+    are included — this endpoint is explicitly designed for version-comparison
+    so the v8.1 filter is OFF by default.
     """
     from datetime import datetime as dt
+    from app.core.prediction_filters import V81_DEPLOYMENT_CUTOFF, V81_VALID_SOURCES
     from app.models.prediction import PredictionEvaluation
 
     cutoff_dt = dt.fromisoformat(cutoff.replace("Z", "+00:00"))
@@ -1922,6 +1938,16 @@ async def engine_comparison(
         select(Prediction, PredictionEvaluation)
         .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
     )
+    # Optional v8.1 scope filter
+    if scope == "v81_only":
+        stmt = stmt.where(v81_predictions_filter())
+    elif scope == "pre_v81":
+        stmt = stmt.where(Prediction.created_at < V81_DEPLOYMENT_CUTOFF)
+    elif scope != "all":
+        raise HTTPException(
+            status_code=400,
+            detail=f"scope must be one of 'all', 'v81_only', 'pre_v81' — got '{scope}'",
+        )
     rows = (await db.execute(stmt)).all()
 
     v2_correct = v2_total = v3_correct = v3_total = 0
@@ -1949,6 +1975,36 @@ async def engine_comparison(
             else "too close to call" if v3_total >= 30
             else f"need more data ({v3_total} evaluated, need 30+)"
         ),
+    }
+
+
+# ── Cache management ─────────────────────────────────────────────────────────
+
+
+@router.post(
+    "/cache/invalidate-metrics",
+    summary="Flush stale aggregate caches (dashboard, strategy metrics)",
+)
+async def invalidate_metrics_cache():
+    """Flush Redis cache entries that hold aggregated accuracy numbers.
+
+    Call after any schema / query change that affects how user-facing
+    accuracy / ROI / winrate figures are computed (e.g. the v8.1 filter
+    added on 2026-04-16). The app also flushes these automatically on
+    every boot, so this endpoint is mostly for manual re-flush mid-session.
+    """
+    from app.core.cache import cache_delete
+    from app.core.prediction_filters import V81_FILTER_CACHE_PATTERNS
+    total = 0
+    by_pattern: dict[str, int] = {}
+    for pattern in V81_FILTER_CACHE_PATTERNS:
+        n = await cache_delete(pattern)
+        by_pattern[pattern] = n
+        total += n
+    return {
+        "flushed_total": total,
+        "by_pattern": by_pattern,
+        "patterns": list(V81_FILTER_CACHE_PATTERNS),
     }
 
 
@@ -1983,11 +2039,14 @@ async def optimize_ensemble(
     cutoff_dt = datetime.fromisoformat(backtest_cutoff).replace(tzinfo=timezone.utc)
 
     # Load all evaluated predictions with raw_output
+    # v8.1 filter: only use v8.1 predictions for ensemble re-weighting
+    # (pre-v8.1 raw_output was computed against broken features)
     stmt = (
         select(Prediction, PredictionEvaluation, Match.scheduled_at)
         .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
         .join(Match, Match.id == Prediction.match_id)
         .where(Prediction.raw_output.isnot(None))
+        .where(v81_predictions_filter())
     )
     rows = (await db.execute(stmt)).all()
 

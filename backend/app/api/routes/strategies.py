@@ -9,6 +9,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 
+from app.core.prediction_filters import v81_predictions_filter
 from app.db.session import get_db
 from app.models.league import League
 from app.models.match import Match
@@ -513,6 +514,8 @@ async def get_strategy_metrics(
         .join(HomeTeam, HomeTeam.id == Match.home_team_id)
         .join(AwayTeam, AwayTeam.id == Match.away_team_id)
         .join(League, League.id == Match.league_id)
+        # v8.1 filter: exclude pre-deploy predictions (broken feature pipeline)
+        .where(v81_predictions_filter())
         .order_by(Match.scheduled_at)
     )
     rows = (await db.execute(q)).all()
@@ -630,6 +633,8 @@ async def _walk_forward_for_strategy(
             select(Prediction, PredictionEvaluation, Match.scheduled_at)
             .join(Match, Match.id == Prediction.match_id)
             .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+            # v8.1 filter
+            .where(v81_predictions_filter())
             .order_by(Match.scheduled_at.asc())
         )
         rows = (await db.execute(q)).all()
@@ -774,6 +779,8 @@ async def walk_forward_all(
         select(Prediction, PredictionEvaluation, Match.scheduled_at)
         .join(Match, Match.id == Prediction.match_id)
         .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        # v8.1 filter: restrict walk-forward to v8.1 predictions
+        .where(v81_predictions_filter())
         .order_by(Match.scheduled_at.asc())
     )
     pre_fetched = (await db.execute(pre_fetch_stmt)).all()
@@ -875,6 +882,8 @@ async def refresh_strategy_validation_v2(
         select(Prediction, PredictionEvaluation, Match.scheduled_at)
         .join(Match, Match.id == Prediction.match_id)
         .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        # v8.1 filter: restrict walk-forward to v8.1 predictions
+        .where(v81_predictions_filter())
         .order_by(Match.scheduled_at.asc())
     )
     pre_fetched = (await db.execute(pre_fetch_stmt)).all()

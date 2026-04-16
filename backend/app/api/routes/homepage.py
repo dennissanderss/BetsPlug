@@ -14,6 +14,7 @@ from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.core.prediction_filters import v81_predictions_filter
 from app.db.session import get_db
 from app.models.match import Match, MatchResult, MatchStatus
 from app.models.prediction import Prediction, PredictionEvaluation
@@ -322,6 +323,8 @@ async def get_free_picks(
         .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
         .join(Match, Match.id == Prediction.match_id)
         .where(Match.scheduled_at >= thirty_days_ago)
+        # v8.1 filter: exclude pre-deploy predictions (broken feature pipeline)
+        .where(v81_predictions_filter())
     )
     try:
         row = (await db.execute(stats_stmt)).one_or_none()
