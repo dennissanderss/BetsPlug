@@ -29,6 +29,71 @@ const I18N_DIR = path.join(__dirname, "../src/i18n");
 const MESSAGES_FILE = path.join(I18N_DIR, "messages.ts");
 const LOCALES_DIR = path.join(I18N_DIR, "locales");
 const PAGE_META_FILE = path.join(__dirname, "../src/data/page-meta.ts");
+const GLOSSARY_FILE = path.join(__dirname, "i18n-glossary.json");
+
+/* ── Glossary: protect brand / domain terms from translation ──────
+   Load the shared glossary file. Every term in doNotTranslate is
+   swapped for an opaque placeholder before we call Google Translate,
+   then swapped back verbatim afterwards. This is cheaper + more
+   reliable than hardcoding per-locale translations, and is the same
+   glossary the review script uses for validation.
+*/
+const GLOSSARY = JSON.parse(fs.readFileSync(GLOSSARY_FILE, "utf-8"));
+const PROTECTED_TERMS = (GLOSSARY.doNotTranslate ?? []).sort(
+  (a, b) => b.length - a.length, // longest-first so "Pick of the Day" wins over "Pick"
+);
+// `⟦BP#⟧` uses angle-quote characters (U+27E6/27E7) that Google Translate
+// leaves untouched — unlike `{{X#}}` which it sometimes mangles, or bare
+// tokens which it sometimes capitalises.
+const TOKEN_OPEN = "\u27E6BP";
+const TOKEN_CLOSE = "\u27E7";
+
+function protectGlossary(text) {
+  if (text == null || typeof text !== "string") {
+    return { protectedText: "", tokens: [] };
+  }
+  const tokens = [];
+  let out = text;
+
+  // (a) Fixed brand / product / league terms from the glossary.
+  for (const term of PROTECTED_TERMS) {
+    const pattern = new RegExp(
+      term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+      "g",
+    );
+    out = out.replace(pattern, () => {
+      const idx = tokens.length;
+      tokens.push(term);
+      return `${TOKEN_OPEN}${idx}${TOKEN_CLOSE}`;
+    });
+  }
+
+  // (b) ICU-style runtime placeholders like {amount}, {year}, {potdAccuracy}.
+  //     Google Translate happily "translates" these to the target language
+  //     (e.g. {amount} → {bedrag}) which breaks formatMsg() at runtime.
+  //     Wrap each one as an opaque token so it survives verbatim.
+  out = out.replace(/\{([a-zA-Z][a-zA-Z0-9_]*)\}/g, (match) => {
+    const idx = tokens.length;
+    tokens.push(match);
+    return `${TOKEN_OPEN}${idx}${TOKEN_CLOSE}`;
+  });
+
+  return { protectedText: out, tokens };
+}
+
+function restoreGlossary(text, tokens) {
+  let out = text;
+  // Google Translate occasionally drops the brackets or adds a trailing
+  // space — tolerate that when restoring.
+  for (let i = 0; i < tokens.length; i++) {
+    const pattern = new RegExp(
+      `\\u27E6?\\s*BP\\s*${i}\\s*\\u27E7?`,
+      "g",
+    );
+    out = out.replace(pattern, tokens[i]);
+  }
+  return out;
+}
 
 /* ── Config ────────────────────────────────────────────────── */
 
@@ -162,31 +227,54 @@ function extractNlDict() {
 }
 
 /**
- * Insert new NL key-value pairs into the nl block in messages.ts.
- * Appends them just before the closing "}" of the nl object.
+ * Insert or REPLACE NL key-value pairs inside the nl block.
+ *
+ * For keys that already exist in the block, the value is overwritten
+ * in place — this is what --force expects. For genuinely new keys
+ * the entry is appended just before the closing "}". Prevents the
+ * "every run of --force doubles the NL block size" bug.
  */
 function insertNlKeys(newEntries) {
   let content = fs.readFileSync(MESSAGES_FILE, "utf-8");
   const block = findObjectBlock(content, "const nl");
+  const nlBlock = content.slice(block.bodyStart, block.bodyEnd);
+  const existing = parseTranslationFile(nlBlock);
 
-  // Build the new lines to insert
-  const lines = [];
+  // Merge newEntries over existing, preserving the order of original
+  // keys first, then appending truly-new keys at the end.
+  const merged = new Map(existing);
+  const appended = [];
   for (const [key, value] of newEntries) {
-    const escaped = escapeForTS(value);
+    if (merged.has(key)) {
+      merged.set(key, value); // replace
+    } else {
+      merged.set(key, value); // append
+      appended.push(key);
+    }
+  }
+
+  // Rebuild the block body, grouped by key prefix for readability,
+  // sorted alphabetically — same convention as locale files.
+  const lines = [];
+  let lastPrefix = "";
+  for (const key of [...merged.keys()].sort()) {
+    const prefix = key.split(".")[0];
+    if (prefix !== lastPrefix && lastPrefix !== "") {
+      lines.push("");
+    }
+    lastPrefix = prefix;
+    const escaped = escapeForTS(merged.get(key));
     lines.push(`  "${key}": "${escaped}",`);
   }
 
-  // Insert before the closing brace of the nl block
-  const insertPoint = block.bodyEnd;
-  const before = content.slice(0, insertPoint);
-  const after = content.slice(insertPoint);
-
-  // Add a newline before the new entries if the last char isn't one
-  const needsNewline = before.length > 0 && before[before.length - 1] !== "\n";
-  const insertion = (needsNewline ? "\n" : "") + lines.join("\n") + "\n";
-
-  content = before + insertion + after;
+  const newBlockBody = "\n" + lines.join("\n") + "\n";
+  content =
+    content.slice(0, block.bodyStart) + newBlockBody + content.slice(block.bodyEnd);
   fs.writeFileSync(MESSAGES_FILE, content, "utf-8");
+
+  if (appended.length > 0) {
+    // Just metadata for logging; the caller already prints totals.
+  }
 }
 
 /**
@@ -269,12 +357,19 @@ function enforceInformalDutch(text) {
 }
 
 /**
- * Translate a batch of strings using google-translate-api-x
+ * Translate a batch of strings using google-translate-api-x.
+ *
+ * Wraps each input with glossary-protection: brand / domain terms are
+ * swapped for opaque tokens before the call and restored afterwards,
+ * so Google Translate never has a chance to "translate" BetsPlug into
+ * "wedstop" or "Pick of the Day" into "Keuze van de dag".
  */
 async function translateBatch(texts, targetLang) {
+  const protectedPairs = texts.map((t) => protectGlossary(t));
+  const protectedTexts = protectedPairs.map((p) => p.protectedText);
+
   try {
-    // google-translate-api-x supports array input
-    const results = await translate(texts, {
+    const results = await translate(protectedTexts, {
       from: "en",
       to: targetLang,
       autoCorrect: false,
@@ -284,11 +379,15 @@ async function translateBatch(texts, targetLang) {
     if (Array.isArray(results)) {
       translated = results.map((r) => r.text);
     } else {
-      // Single string result
       translated = [results.text];
     }
 
-    // Enforce informal register for Dutch
+    // Restore glossary placeholders to their original brand terms.
+    translated = translated.map((text, i) =>
+      restoreGlossary(text, protectedPairs[i].tokens),
+    );
+
+    // Enforce informal register for Dutch.
     if (targetLang === "nl") {
       translated = translated.map(enforceInformalDutch);
     }
@@ -296,7 +395,7 @@ async function translateBatch(texts, targetLang) {
     return translated;
   } catch (err) {
     console.error(`  Error translating to ${targetLang}: ${err.message}`);
-    // Return originals on error
+    // Return originals on error.
     return texts;
   }
 }

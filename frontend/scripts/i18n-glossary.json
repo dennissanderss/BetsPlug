@@ -1,0 +1,80 @@
+{
+  "_comment": "BetsPlug i18n glossary — single source of truth for terms that must survive auto-translation unchanged, plus per-locale overrides for phrases that Google Translate gets wrong. Consumed by translate.mjs (protect during translation) and review-translations.mjs (post-translate validation + optional auto-fix).",
+
+  "_doNotTranslateComment": "Only TRUE brand names + product names + proper nouns that should stay identical in every locale. Common abbreviations (AI, API) are deliberately excluded — German prefers 'KI', French 'IA' etc., and forcing 'AI' everywhere hurts SEO. League names stay because they are proper nouns that readers recognise in English.",
+
+  "doNotTranslate": [
+    "BetsPlug",
+    "BetsPlug Pulse",
+    "Pick of the Day",
+    "Strategy Lab",
+    "Match Deep Dive",
+    "Predictions Explorer",
+    "Engine Performance",
+    "Analyst Hub",
+    "Telegram",
+    "Stripe",
+    "CookieYes",
+    "XGBoost",
+    "Elo",
+    "Poisson",
+    "Premier League",
+    "La Liga",
+    "Bundesliga",
+    "Serie A",
+    "Serie B",
+    "Ligue 1",
+    "Ligue 2",
+    "Eredivisie",
+    "Champions League",
+    "Europa League",
+    "Conference League",
+    "Championship",
+    "Primeira Liga",
+    "Süper Lig",
+    "Jupiler Pro League",
+    "Saudi Pro League",
+    "J1 League",
+    "K League 1",
+    "MLS"
+  ],
+
+  "_preferredComment": "Per-locale overrides for phrases where Google Translate's output is awkward. These are matched case-insensitively against the translated output; when detected, the review script flags the key and (with --fix) replaces it with the preferred wording. Keep this list SHORT — the goal is to nudge, not to hand-translate.",
+
+  "preferredTranslations": {
+    "nl": {
+      "gokken": "wedden",
+      "wedding": "weddenschap",
+      "retailsportgokkers": "recreatieve wedders",
+      "retailgokker": "recreatieve wedder",
+      "industry average": "gemiddelde in de industrie",
+      "coinflip-gebied": "bijna kop of munt",
+      "zwarte doos": "black box"
+    },
+    "de": {
+      "Wette": "Wette",
+      "Wett-Tipp": "Wett-Tipp"
+    },
+    "fr": {},
+    "es": {},
+    "it": {},
+    "sw": {},
+    "id": {}
+  },
+
+  "_validationComment": "Heuristics used by review-translations.mjs. lengthRatio: flag keys where translated.length / en.length is outside [min, max]. duplicateOfEn: flag keys whose translation equals the EN source (except when EN is a brand name or numeric).",
+
+  "validation": {
+    "lengthRatio": { "min": 0.35, "max": 2.6 },
+    "minKeyLengthToCheck": 20,
+    "allowDuplicateIfShorterThan": 4,
+    "allowDuplicateFor": [
+      "nav.",
+      "common.",
+      "bc.",
+      "header.",
+      "route.stepN",
+      "stat"
+    ]
+  }
+}
