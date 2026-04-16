@@ -719,7 +719,7 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          5 · TRACK RECORD — split section
+          5 · TRACK RECORD — proof section
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden py-20 md:py-28">
         <div
@@ -727,94 +727,97 @@ export function HomeContent({
           className="pointer-events-none absolute left-0 bottom-0 h-[400px] w-[500px] rounded-full"
           style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(140px)" }}
         />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-0 top-10 h-[300px] w-[300px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.08)", filter: "blur(140px)" }}
+        />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr]">
-            <div>
-              <span className="section-label">
-                <TrendingUp className="h-3 w-3" />
-                {t("track.label")}
-              </span>
-              <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-                {t("track.titleA")}{" "}
-                <span className="gradient-text-green">{t("track.titleHighlight")}</span>{" "}
-                {t("track.titleB")}
-              </h2>
-              <p className="mt-4 max-w-xl text-base text-[#a3a9b8]">{t("track.accuracy")}</p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link href={loc("/track-record")} className="btn-primary inline-flex items-center gap-1.5">
-                  {t("nav.trackRecord")} <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link href={loc("/predictions")} className="btn-glass">
-                  {t("home.freePredCta")}
-                </Link>
-              </div>
-            </div>
+          {/* Header */}
+          <div className="mb-12 max-w-3xl sm:mb-14">
+            <span className="section-label">
+              <Shield className="h-3 w-3" />
+              {t("track.badge")}
+            </span>
+            <h2 className="text-heading text-balance break-words text-2xl text-[#ededed] sm:text-3xl lg:text-5xl">
+              {t("track.titleA")}{" "}
+              <span className="gradient-text-green">{t("track.titleHighlight")}</span>{" "}
+              {t("track.titleB")}
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
+              {t("track.desc1")}
+            </p>
+          </div>
 
-            <div className="card-neon card-neon-green halo-green relative overflow-hidden p-6">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -right-12 -top-12 h-[200px] w-[200px] rounded-full"
-                style={{ background: "hsl(var(--accent-green) / 0.3)", filter: "blur(80px)" }}
-              />
-              <div className="relative flex items-start justify-between">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-[#6b7280]">
-                    {t("home.freePredWinrate")}
-                  </p>
-                  <p className="text-stat mt-1 text-4xl text-[#ededed] sm:text-5xl">
-                    {stats
-                      ? `${Math.round(stats.winrate * 1000) / 10}%`
-                      : "—"}
-                  </p>
-                  <p className="mt-1 text-xs text-[#6b7280]">
-                    {stats
-                      ? `Across ${stats.total.toLocaleString(locale)} picks (30d)`
-                      : "Loading 30-day stats…"}
-                  </p>
-                </div>
-                {stats && stats.total > 0 && (
-                  <Pill tone="win">
-                    {stats.correct}/{stats.total}
-                  </Pill>
-                )}
-              </div>
+          {/* Proof cards — 4-column grid */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                icon: Clock,
+                variant: "green" as const,
+                value: t("track.accuracy"),
+                label: t("track.metricPredictions"),
+                desc: stats && stats.total > 0
+                  ? `${Math.round(stats.winrate * 1000) / 10}% ${t("home.freePredWinrate").toLowerCase()} — ${stats.correct}/${stats.total}`
+                  : t("track.accuracy"),
+              },
+              {
+                icon: Database,
+                variant: "purple" as const,
+                value: "80,000+",
+                label: t("track.metricModels"),
+                desc: t("track.desc2").split("—")[0].trim() || "Historical matches analyzed by the ensemble",
+              },
+              {
+                icon: Globe,
+                variant: "blue" as const,
+                value: "30+",
+                label: t("track.metricLeagues"),
+                desc: "Premier League, La Liga, Bundesliga, Champions League, Eredivisie + 25 more",
+              },
+              {
+                icon: Eye,
+                variant: "green" as const,
+                value: "100%",
+                label: t("track.badge"),
+                desc: "Every pick timestamped pre-match, auto-graded post-match, published win or lose — no hidden results",
+              },
+            ].map((card, i) => {
+              const variants = ["green", "purple", "blue", "green"] as const;
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.5, delay: i * 0.08 }}
+                  className={`card-neon card-neon-${variants[i]} relative p-5 sm:p-6`}
+                >
+                  <div className="relative">
+                    <HexBadge variant={variants[i]} size="md" className="mb-3">
+                      <card.icon className="h-5 w-5" />
+                    </HexBadge>
+                    <p className="text-stat text-2xl text-[#ededed] sm:text-3xl">{card.value}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-[#a3a9b8]">{card.desc}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
 
-              <div className="relative mt-6 h-36 sm:h-44">
-                <svg viewBox="0 0 400 180" className="h-full w-full" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="homeChart" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#4ade80" stopOpacity="0.45" />
-                      <stop offset="100%" stopColor="#4ade80" stopOpacity="0" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M 0 140 L 40 120 L 80 130 L 120 90 L 160 100 L 200 70 L 240 80 L 280 50 L 320 60 L 360 30 L 400 40 L 400 180 L 0 180 Z"
-                    fill="url(#homeChart)"
-                  />
-                  <path
-                    d="M 0 140 L 40 120 L 80 130 L 120 90 L 160 100 L 200 70 L 240 80 L 280 50 L 320 60 L 360 30 L 400 40"
-                    fill="none"
-                    stroke="#4ade80"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{ filter: "drop-shadow(0 0 8px rgba(74,222,128,0.7))" }}
-                  />
-                  {[[160, 100], [280, 50], [360, 30]].map(([x, y], i) => (
-                    <circle key={i} cx={x} cy={y} r="4" fill="#4ade80" />
-                  ))}
-                </svg>
-              </div>
-
-              <div className="relative mt-4 grid grid-cols-3 gap-2 border-t pt-4" style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}>
-                <ChartStat
-                  label={t("track.metricPredictions")}
-                  value={stats?.total != null ? stats.total.toLocaleString(locale) : "—"}
-                />
-                <ChartStat label={t("track.metricModels")} value="4" />
-                <ChartStat label={t("track.metricLeagues")} value="30+" />
-              </div>
+          {/* Second paragraph + CTAs */}
+          <div className="mt-10 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-xl text-sm leading-relaxed text-[#6b7280]">
+              {t("track.desc2")}
+            </p>
+            <div className="flex shrink-0 flex-wrap gap-3">
+              <Link href={loc("/track-record")} className="btn-primary inline-flex items-center gap-1.5">
+                {t("track.cta")} <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link href={loc("/predictions")} className="btn-glass">
+                {t("home.freePredCta")}
+              </Link>
             </div>
           </div>
         </div>
