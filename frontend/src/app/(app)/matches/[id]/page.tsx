@@ -188,17 +188,6 @@ function MatchHeader({ match, locale }: { match: Fixture; locale: string }) {
   return (
     <div className="card-neon card-neon-green halo-green">
       {/* Ambient glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-24 -top-24 h-[320px] w-[320px] rounded-full"
-        style={{ background: "hsl(var(--accent-green) / 0.18)", filter: "blur(130px)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-24 -bottom-24 h-[280px] w-[280px] rounded-full"
-        style={{ background: "hsl(var(--accent-purple) / 0.14)", filter: "blur(120px)" }}
-      />
-
       <div className="relative p-5 sm:p-7">
         {/* Top row: league / status / matchday */}
         <div className="mb-5 flex flex-wrap items-center gap-2">
@@ -1266,17 +1255,6 @@ export default function MatchDetailPage() {
   return (
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8">
       {/* Ambient glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full"
-        style={{ background: "hsl(var(--accent-green) / 0.15)", filter: "blur(140px)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full"
-        style={{ background: "hsl(var(--accent-purple) / 0.12)", filter: "blur(140px)" }}
-      />
-
       <div className="relative space-y-6">
         {/* Back link */}
         <Link

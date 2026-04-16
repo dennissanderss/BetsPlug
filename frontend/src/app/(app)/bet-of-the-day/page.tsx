@@ -552,8 +552,6 @@ export default function BetOfTheDayPage() {
   return (
     <PaywallOverlay feature="pick_of_the_day" requiredTier="gold">
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 animate-fade-in">
-      <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-emerald-500/15 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full bg-purple-500/15 blur-3xl" />
       <div className="relative space-y-8">
       {/* ── Header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">

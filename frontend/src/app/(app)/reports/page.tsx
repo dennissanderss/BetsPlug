@@ -323,17 +323,6 @@ function ReportsPageContent() {
   return (
     <div className="relative">
       {/* Ambient glow blobs */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-40 top-10 h-[400px] w-[400px] rounded-full"
-        style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(140px)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-32 top-40 h-[400px] w-[400px] rounded-full"
-        style={{ background: "hsl(var(--accent-purple) / 0.08)", filter: "blur(140px)" }}
-      />
-
       <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 space-y-5 sm:space-y-8 overflow-hidden">
         {/* Page header */}
         <div>

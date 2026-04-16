@@ -61,23 +61,6 @@ export default function DashboardPage() {
   return (
     <div className="relative animate-fade-in mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 overflow-hidden">
       {/* Ambient glow blobs behind content */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -top-10 -left-10 h-72 w-72 rounded-full opacity-40 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(74,222,128,0.22), transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute top-1/3 right-0 h-80 w-80 rounded-full opacity-30 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(168,85,247,0.20), transparent 70%)",
-        }}
-      />
-
       <div className="relative grid gap-4 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
         <div className="min-w-0 space-y-4 sm:space-y-5">
           <QuickNavStrip liveCount={liveCount} />

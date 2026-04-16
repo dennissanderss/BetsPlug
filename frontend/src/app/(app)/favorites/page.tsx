@@ -107,23 +107,6 @@ export default function FavoritesPage() {
 
   return (
     <div className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-40 top-10 h-[400px] w-[400px] rounded-full"
-        style={{
-          background: "hsl(var(--accent-green) / 0.1)",
-          filter: "blur(140px)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-32 top-60 h-[400px] w-[400px] rounded-full"
-        style={{
-          background: "hsl(var(--accent-purple) / 0.08)",
-          filter: "blur(140px)",
-        }}
-      />
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 space-y-8">
         {/* Header */}
         <div>

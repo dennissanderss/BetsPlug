@@ -34,12 +34,6 @@ const cards = [
 export default function AnalystHubPage() {
   return (
     <section className="relative">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-32 top-0 h-[360px] w-[360px] rounded-full"
-        style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(120px)" }}
-      />
-
       <div className="relative mx-auto max-w-7xl">
         <div className="mb-10 max-w-2xl">
           <span className="section-label">
