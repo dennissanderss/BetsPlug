@@ -35,58 +35,103 @@ export function HeroMediaBg({
 }: MediaBgProps) {
   return (
     <>
-      {/* 1 · Colour gradient base — green→purple diagonal wash */}
+      {/* 1 · Colour gradient wash */}
       <div
         className={`pointer-events-none absolute inset-0 ${className}`}
         style={{
           background:
-            "linear-gradient(135deg, hsl(var(--accent-green) / 0.18) 0%, transparent 35%, hsl(var(--accent-purple) / 0.14) 65%, hsl(var(--accent-blue) / 0.1) 100%)",
+            "linear-gradient(135deg, hsl(var(--accent-green) / 0.14) 0%, transparent 40%, hsl(var(--accent-purple) / 0.1) 70%, hsl(var(--accent-blue) / 0.08) 100%)",
         }}
       />
 
-      {/* 2 · Concentric arc rings — top-right */}
+      {/* 2 · Perspective mesh grid — connected nodes net */}
       <div
-        className="pointer-events-none absolute -right-[15%] -top-[30%] h-[600px] w-[600px] opacity-[0.12]"
-        style={{
-          background:
-            "repeating-radial-gradient(circle at 50% 50%, transparent 0px, transparent 38px, hsl(var(--accent-green) / 0.6) 40px, transparent 42px)",
-        }}
-      />
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        style={{ perspective: "800px" }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: "-50%",
+            transformOrigin: "60% 40%",
+            transform: "rotateX(55deg) rotateZ(-30deg)",
+          }}
+        >
+          {/* Grid lines */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage:
+                `linear-gradient(0deg, hsl(var(--accent-green) / 0.18) 1px, transparent 1px),
+                 linear-gradient(90deg, hsl(var(--accent-green) / 0.18) 1px, transparent 1px)`,
+              backgroundSize: "56px 56px",
+            }}
+          />
+          {/* Diamond dots at intersections */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage:
+                "radial-gradient(circle, hsl(var(--accent-green) / 0.45) 2.5px, transparent 2.5px)",
+              backgroundSize: "56px 56px",
+              backgroundPosition: "0 0",
+            }}
+          />
+        </div>
+      </div>
 
-      {/* 3 · Concentric arc rings — bottom-left */}
+      {/* 3 · Second smaller mesh (purple tint, offset) for depth */}
       <div
-        className="pointer-events-none absolute -bottom-[25%] -left-[10%] h-[500px] w-[500px] opacity-[0.1]"
-        style={{
-          background:
-            "repeating-radial-gradient(circle at 50% 50%, transparent 0px, transparent 32px, hsl(var(--accent-purple) / 0.5) 34px, transparent 36px)",
-        }}
-      />
+        className="pointer-events-none absolute inset-0 overflow-hidden opacity-40"
+        style={{ perspective: "600px" }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: "-40%",
+            transformOrigin: "30% 70%",
+            transform: "rotateX(60deg) rotateZ(-25deg)",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage:
+                `linear-gradient(0deg, hsl(var(--accent-purple) / 0.12) 1px, transparent 1px),
+                 linear-gradient(90deg, hsl(var(--accent-purple) / 0.12) 1px, transparent 1px)`,
+              backgroundSize: "44px 44px",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage:
+                "radial-gradient(circle, hsl(var(--accent-purple) / 0.3) 2px, transparent 2px)",
+              backgroundSize: "44px 44px",
+            }}
+          />
+        </div>
+      </div>
 
-      {/* 4 · Smaller arc cluster — center-left */}
-      <div
-        className="pointer-events-none absolute left-[5%] top-[20%] h-[300px] w-[300px] opacity-[0.08]"
-        style={{
-          background:
-            "repeating-radial-gradient(circle at 50% 50%, transparent 0px, transparent 24px, hsl(var(--accent-blue) / 0.5) 26px, transparent 28px)",
-        }}
-      />
-
-      {/* 5 · Subtle grid dots for texture */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at center, hsl(0 0% 100% / 0.8) 1px, transparent 1px)",
-          backgroundSize: "32px 32px",
-        }}
-      />
-
-      {/* 6 · Dark gradient overlay for text readability */}
+      {/* 4 · Fade mask: transparent center, visible edges */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, hsl(var(--bg-base) / 0.3) 0%, hsl(var(--bg-base) / 0.5) 50%, hsl(var(--bg-base) / 0.8) 100%)",
+            "radial-gradient(ellipse 70% 60% at 50% 45%, hsl(var(--bg-base) / 0.7) 0%, hsl(var(--bg-base) / 0.3) 60%, transparent 100%)",
+        }}
+      />
+
+      {/* 5 · Bottom readability gradient */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(180deg, transparent 0%, hsl(var(--bg-base) / 0.4) 50%, hsl(var(--bg-base) / 0.85) 100%)",
         }}
       />
     </>
@@ -103,49 +148,56 @@ export function CtaMediaBg({
 }: CtaMediaBgProps) {
   return (
     <>
-      {/* 1 · Green gradient base */}
+      {/* 1 · Gradient base */}
       <div
         className={`pointer-events-none absolute inset-0 ${className}`}
         style={{
           background:
-            "linear-gradient(135deg, hsl(var(--accent-green) / 0.3) 0%, hsl(230 22% 9% / 0.85) 45%, hsl(var(--accent-green) / 0.2) 100%)",
+            "linear-gradient(135deg, hsl(var(--accent-green) / 0.25) 0%, hsl(230 22% 9% / 0.8) 50%, hsl(var(--accent-green) / 0.18) 100%)",
         }}
       />
 
-      {/* 2 · Concentric arc rings — top-right (lime) */}
+      {/* 2 · Perspective mesh grid (same language as hero) */}
       <div
-        className="pointer-events-none absolute -right-[10%] -top-[20%] h-[450px] w-[450px] opacity-[0.15]"
-        style={{
-          background:
-            "repeating-radial-gradient(circle at 50% 50%, transparent 0px, transparent 30px, hsl(var(--accent-green) / 0.7) 32px, transparent 34px)",
-        }}
-      />
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        style={{ perspective: "700px" }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            inset: "-40%",
+            transformOrigin: "70% 30%",
+            transform: "rotateX(50deg) rotateZ(-35deg)",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage:
+                `linear-gradient(0deg, hsl(var(--accent-green) / 0.2) 1px, transparent 1px),
+                 linear-gradient(90deg, hsl(var(--accent-green) / 0.2) 1px, transparent 1px)`,
+              backgroundSize: "48px 48px",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage:
+                "radial-gradient(circle, hsl(var(--accent-green) / 0.5) 2px, transparent 2px)",
+              backgroundSize: "48px 48px",
+            }}
+          />
+        </div>
+      </div>
 
-      {/* 3 · Concentric arc rings — bottom-left (green-blue) */}
-      <div
-        className="pointer-events-none absolute -bottom-[15%] -left-[8%] h-[380px] w-[380px] opacity-[0.12]"
-        style={{
-          background:
-            "repeating-radial-gradient(circle at 50% 50%, transparent 0px, transparent 26px, hsl(var(--accent-blue) / 0.5) 28px, transparent 30px)",
-        }}
-      />
-
-      {/* 4 · Dot grid texture */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at center, hsl(0 0% 100% / 0.9) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
-
-      {/* 5 · Dark gradient for text readability */}
+      {/* 3 · Center fade for text readability */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at top left, hsl(var(--bg-base) / 0.2) 0%, transparent 55%), radial-gradient(ellipse at bottom right, hsl(var(--bg-base) / 0.3) 0%, transparent 60%)",
+            "radial-gradient(ellipse 80% 70% at 50% 50%, hsl(var(--bg-base) / 0.6) 0%, transparent 70%)",
         }}
       />
     </>
