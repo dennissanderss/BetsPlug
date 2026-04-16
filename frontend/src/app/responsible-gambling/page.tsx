@@ -29,8 +29,8 @@ export default function ResponsibleGamblingPage() {
   return (
     <LegalPage
       title="18+ Play Responsibly"
-      intro="BetsPlug is not a betting or gambling platform. We provide AI-powered predictions and statistical analysis for educational and entertainment purposes only."
-      lastUpdated="April 13, 2026"
+      intro="BetsPlug is an analytics platform, not a bookmaker. Our AI football predictions are educational — and we take problem gambling seriously. Read this before you place a single bet."
+      lastUpdated="April 16, 2026"
       breadcrumb="Responsible Gambling"
     >
       <h2>1. What BetsPlug is — and what it is not</h2>

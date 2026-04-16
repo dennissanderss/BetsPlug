@@ -8,6 +8,7 @@ import {
   ArrowRight,
   Newspaper,
   LayoutGrid,
+  Sparkles,
   Trophy,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
@@ -15,7 +16,7 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { Article, Sport } from "@/data/articles";
 import { SportIcon, SportBadge, CoverArt } from "./article-visuals";
-import { HeroMediaBg } from "@/components/ui/media-bg";
+import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 import { Pill } from "@/components/noct/pill";
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -74,9 +75,10 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
               <Newspaper className="h-3 w-3" />
               {t("articles.badge")}
             </span>
-            <h1 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            <h1 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("articles.title")}{" "}
-              <span className="gradient-text-green">insights</span>
+              <span className="gradient-text-green">{t("articles.titleAccent")}</span>{" "}
+              {t("articles.titleTail")}
             </h1>
             <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
               {t("articles.subtitle")}
@@ -168,6 +170,60 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
           )}
         </div>
       </main>
+
+      {/* ── Final CTA ── */}
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-10 md:p-16">
+            <CtaMediaBg
+              src={PAGE_IMAGES.articles.cta}
+              alt={PAGE_IMAGES.articles.alt}
+              pattern={PAGE_IMAGES.articles.pattern}
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-16 -top-16 h-[260px] w-[260px] rounded-full"
+              style={{ background: "hsl(var(--accent-green) / 0.28)", filter: "blur(80px)" }}
+            />
+            <div className="relative">
+              <HexBadge variant="green" size="md" className="mb-5">
+                <Newspaper className="h-5 w-5" />
+              </HexBadge>
+              <span className="section-label">
+                <Sparkles className="h-3 w-3" />
+                {t("articles.listCtaBadge")}
+              </span>
+              <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+                {t("articles.listCtaTitle")}{" "}
+                <span className="gradient-text-green">
+                  {t("articles.listCtaAccent")}
+                </span>
+              </h2>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
+                {t("articles.listCtaSubtitle")}
+              </p>
+
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <Link href="/register" className="btn-primary inline-flex items-center gap-2">
+                  {t("articles.listCtaPrimary")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/match-predictions"
+                  className="btn-glass inline-flex items-center gap-2"
+                >
+                  {t("articles.listCtaSecondary")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+
+              <p className="mt-5 text-xs text-[#6b7280]">
+                {t("articles.listCtaReassurance")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <BetsPlugFooter />
     </div>

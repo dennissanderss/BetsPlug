@@ -130,24 +130,23 @@ export default function RegisterPage() {
             >
               <span className="section-label">
                 <UserPlus className="h-3 w-3" />
-                Join BetsPlug
+                Start your €0,01 trial
               </span>
 
               <h1 className="text-display mt-3 max-w-xl text-balance break-words text-4xl text-[#ededed] xl:text-5xl">
-                Create your{" "}
-                <span className="gradient-text-green">free account</span>
+                Unlock today&apos;s{" "}
+                <span className="gradient-text-green">AI football predictions.</span>
               </h1>
 
               <p className="mt-5 max-w-md text-base leading-relaxed text-[#a3a9b8]">
-                Start with zero risk. Get access to today&apos;s picks, track
-                ROI and upgrade whenever you&apos;re ready.
+                One card-verify charge of €0,01, then a full trial of the 4-model ensemble, Pick of the Day and live ROI tracking across 30+ leagues. Cancel in two clicks — no awkward phone call.
               </p>
 
               <div className="mt-10 grid max-w-md grid-cols-1 gap-3">
                 {[
-                  { icon: ShieldCheck, label: "Bank-grade encryption", variant: "green" as const },
-                  { icon: BadgeCheck, label: "No credit card required", variant: "purple" as const },
-                  { icon: RefreshCw, label: "Cancel or upgrade anytime", variant: "blue" as const },
+                  { icon: ShieldCheck, label: "Stripe-secured · bank-grade encryption", variant: "green" as const },
+                  { icon: BadgeCheck, label: "€0,01 today · price anchors at trial end", variant: "purple" as const },
+                  { icon: RefreshCw, label: "Cancel or upgrade in two clicks", variant: "blue" as const },
                 ].map((item) => (
                   <div
                     key={item.label}
@@ -177,14 +176,14 @@ export default function RegisterPage() {
                   <div className="mb-6 lg:hidden">
                     <span className="section-label">
                       <UserPlus className="h-3 w-3" />
-                      Join BetsPlug
+                      Start your €0,01 trial
                     </span>
                     <h1 className="text-heading mt-2 text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
-                      Create your{" "}
-                      <span className="gradient-text-green">free account</span>
+                      Unlock today&apos;s{" "}
+                      <span className="gradient-text-green">AI football predictions.</span>
                     </h1>
                     <p className="mt-3 text-sm text-[#a3a9b8]">
-                      Start with zero risk. No credit card required.
+                      €0,01 card-verify, full trial access, cancel in two clicks.
                     </p>
                   </div>
 

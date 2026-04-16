@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { ArrowRight, ChevronRight, Target } from "lucide-react";
+import { ArrowRight, ChevronRight, Sparkles, Target } from "lucide-react";
+import { CtaMediaBg } from "@/components/ui/media-bg";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import {
@@ -17,6 +18,7 @@ import {
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 import { HeroMediaBg } from "@/components/ui/media-bg";
+
 import { PAGE_IMAGES } from "@/data/page-images";
 import { HexBadge } from "@/components/noct/hex-badge";
 
@@ -94,20 +96,23 @@ export default async function BetTypesIndexPage() {
             </HexBadge>
             <span className="section-label mx-auto">
               <Target className="h-3 w-3" />
-              {t("Betting markets", "Wedmarkten")}
+              {t(
+                "Every market, scored by the same AI football prediction engine",
+                "Elke markt, gescoord door dezelfde AI-voetbalvoorspellingsengine",
+              )}
             </span>
 
-            <h1 className="text-heading mt-5 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-              {t("Bet Types", "Wed-types")}{" "}
+            <h1 className="text-heading mt-5 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              {t("Bet types decoded by", "Wed-types ontcijferd door")}{" "}
               <span className="gradient-text-green">
-                {t("Explained", "Uitgelegd")}
+                {t("AI football predictions.", "AI-voetbalvoorspellingen.")}
               </span>
             </h1>
 
             <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
               {t(
-                "Deep dives into the most popular football betting markets - how they're priced, when they offer value, and how BetsPlug's ensemble reads them.",
-                "Diepgaande uitleg over de populairste wedmarkten in het voetbal - hoe ze geprijsd worden, wanneer ze value bieden en hoe het BetsPlug-ensemble ze leest.",
+                "1X2, Over/Under, Both Teams To Score, Asian Handicap, Double Chance — each market has its own math. Our guides show exactly how BetsPlug's 4-model ensemble prices them, when they hide genuine value, and the tipster traps to skip.",
+                "1X2, Over/Under, Both Teams To Score, Asian Handicap, Double Chance — elke markt heeft zijn eigen wiskunde. Onze gidsen laten zien hoe het 4-model-ensemble van BetsPlug ze prijst, wanneer ze echte value bieden en welke tipster-valkuilen je moet vermijden.",
               )}
             </p>
           </div>
@@ -154,6 +159,59 @@ export default async function BetTypesIndexPage() {
                 </Link>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="relative py-20 md:py-28">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="card-neon card-neon-green halo-green relative overflow-hidden p-10 md:p-16">
+            <CtaMediaBg src={PAGE_IMAGES["bet-types"].cta} alt={PAGE_IMAGES["bet-types"].alt} pattern={PAGE_IMAGES["bet-types"].pattern} />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-16 -top-16 h-[260px] w-[260px] rounded-full"
+              style={{ background: "hsl(var(--accent-green) / 0.28)", filter: "blur(80px)" }}
+            />
+            <div className="relative">
+              <HexBadge variant="green" size="md" className="mb-5">
+                <Target className="h-5 w-5" />
+              </HexBadge>
+              <span className="section-label">
+                <Sparkles className="h-3 w-3" />
+                {t("Pick a market · see the model", "Kies een markt · zie het model")}
+              </span>
+              <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+                {t("Every market, priced by our", "Elke markt, geprijsd door onze")}{" "}
+                <span className="gradient-text-green">
+                  {t("AI football predictions.", "AI-voetbalvoorspellingen.")}
+                </span>
+              </h2>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
+                {t(
+                  "Open any fixture in BetsPlug and compare the bookmaker line against our calibrated probability. If there's an edge, you'll see it flagged — across 30+ leagues, recalculated every hour.",
+                  "Open een wedstrijd in BetsPlug en vergelijk de bookmaker-lijn met onze gekalibreerde kans. Als er een edge is, zie je het direct — over 30+ competities, elk uur herberekend.",
+                )}
+              </p>
+
+              <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+                <Link href="/register" className="btn-primary inline-flex items-center gap-2">
+                  {t("Claim €0,01 trial", "Claim €0,01 proefperiode")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link href="/match-predictions" className="btn-glass inline-flex items-center gap-2">
+                  {t("Browse today's predictions", "Bekijk vandaag's voorspellingen")}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+
+              <p className="mt-5 text-xs text-[#6b7280]">
+                {t(
+                  "No lock-in · Cancel in two clicks · Stripe-secured",
+                  "Geen lock-in · Annuleer in twee kliks · Beveiligd door Stripe",
+                )}
+              </p>
+            </div>
           </div>
         </div>
       </section>

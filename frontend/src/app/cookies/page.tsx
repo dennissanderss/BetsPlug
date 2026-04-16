@@ -27,8 +27,8 @@ export default function CookiePolicyPage() {
   return (
     <LegalPage
       title="Cookie Policy"
-      intro="A short, honest overview of the cookies BetsPlug uses, what they do, and how you can control them."
-      lastUpdated="April 9, 2026"
+      intro="The short list: what cookies BetsPlug sets, why each one exists, and how to switch the optional ones off. No marketing trackers. No third-party ad pixels."
+      lastUpdated="April 16, 2026"
       breadcrumb="Cookies"
     >
       <h2>1. What are cookies?</h2>

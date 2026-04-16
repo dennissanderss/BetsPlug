@@ -390,7 +390,7 @@ function ThankYouContent({
           >
             <span className="section-label">
               <CheckCircle2 className="h-3 w-3" />
-              {isTrial ? "Trial started · Welcome aboard" : "Payment confirmed · Welcome aboard"}
+              {isTrial ? "€0,01 trial charged · Welcome aboard" : "Payment confirmed · Welcome aboard"}
             </span>
           </motion.div>
 
@@ -400,8 +400,9 @@ function ThankYouContent({
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-display mx-auto max-w-4xl text-balance break-words text-[2rem] text-[#ededed] sm:text-5xl md:text-6xl"
           >
-            Welcome to BetsPlug{" "}
-            <span className="gradient-text-green">{headlineSuffix}!</span>
+            The{" "}
+            <span className="gradient-text-green">AI football predictions</span>
+            {" "}are yours now — {headlineSuffix}.
           </motion.h1>
 
           <motion.p
@@ -410,8 +411,7 @@ function ThankYouContent({
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mx-auto mt-6 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
-            Your subscription is set up. Here&apos;s everything you just
-            unlocked — and where to head next.
+            Your 4-model ensemble subscription is live across 30+ leagues. Here&apos;s exactly what just unlocked — and where to head first.
           </motion.p>
 
           {/* Plan badge */}

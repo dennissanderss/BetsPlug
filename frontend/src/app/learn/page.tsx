@@ -92,20 +92,20 @@ export default async function LearnIndexPage() {
             </HexBadge>
             <span className="section-label mx-auto">
               <GraduationCap className="h-3 w-3" />
-              {t("Pillar guides", "Pillar gidsen")}
+              {t("Six pillar guides · written for bettors, not mathematicians", "Zes pillar-gidsen · geschreven voor bettors, niet wiskundigen")}
             </span>
 
             <h1 className="text-heading mt-5 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-              {t("Learn the", "Leer de")}{" "}
+              {t("Learn the math behind every", "Leer de wiskunde achter elke")}{" "}
               <span className="gradient-text-green">
-                {t("Math", "Wiskunde")}
+                {t("AI football prediction.", "AI-voetbalvoorspelling.")}
               </span>
             </h1>
 
             <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
               {t(
-                "Six handwritten deep-dives into the concepts that anchor BetsPlug's ensemble - value betting, expected goals, Elo, Kelly, Poisson, and bankroll management.",
-                "Zes handgeschreven deep-dives in de concepten die het ensemble van BetsPlug verankeren - value betting, expected goals, Elo, Kelly, Poisson en bankroll management.",
+                "Six handwritten deep-dives into the concepts that anchor the BetsPlug ensemble — value betting, expected goals, Elo ratings, the Kelly criterion, Dixon-Coles Poisson and bankroll management. Read one a day, skip the tipster noise forever.",
+                "Zes handgeschreven deep-dives in de concepten die het BetsPlug-ensemble verankeren — value betting, expected goals, Elo-ratings, het Kelly-criterion, Dixon-Coles Poisson en bankroll-management. Lees er één per dag en sla de tipster-ruis voorgoed over.",
               )}
             </p>
           </div>
@@ -134,7 +134,7 @@ export default async function LearnIndexPage() {
                       <BookOpen className="h-5 w-5" />
                     </HexBadge>
                     <span className="section-label">
-                      {t("Pillar", "Pillar")}
+                      {t(`Pillar ${String(i + 1).padStart(2, "0")}`, `Pillar ${String(i + 1).padStart(2, "0")}`)}
                     </span>
                     <h2 className="text-heading text-2xl text-[#ededed] transition group-hover:text-[#4ade80]">
                       {pillar.title[editorialLocale]}
@@ -170,28 +170,41 @@ export default async function LearnIndexPage() {
               </HexBadge>
               <span className="section-label">
                 <Sparkles className="h-3 w-3" />
-                {t("Start applying", "Aan de slag")}
+                {t("From theory to tonight's slate", "Van theorie naar vanavonds wedstrijden")}
               </span>
               <h2 className="text-heading mt-4 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-                {t("Put theory into practice.", "Breng theorie in de praktijk.")}
+                {t(
+                  "See the math run live on every",
+                  "Zie de wiskunde live draaien op elke",
+                )}{" "}
+                <span className="gradient-text-green">
+                  {t("AI football prediction.", "AI-voetbalvoorspelling.")}
+                </span>
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
                 {t(
-                  "Once you understand the math, see it run live on every fixture inside BetsPlug.",
-                  "Zodra je de wiskunde snapt, zie je het live draaien op elke wedstrijd in BetsPlug.",
+                  "Reading about Poisson and Kelly is one thing — watching them assign probabilities to tonight's fixtures is where it clicks. Start your €0,01 trial and score the next pillar against real AI football predictions.",
+                  "Lezen over Poisson en Kelly is één ding — ze probabilities zien toewijzen aan vanavonds wedstrijden is waar het klikt. Start je €0,01 proefperiode en toets de volgende pillar aan echte AI-voetbalvoorspellingen.",
                 )}
               </p>
 
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <Link href="/" className="btn-primary inline-flex items-center gap-2">
-                  {t("View predictions", "Bekijk voorspellingen")}
+                <Link href="/register" className="btn-primary inline-flex items-center gap-2">
+                  {t("Claim €0,01 trial", "Claim €0,01 proefperiode")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link href="/how-it-works" className="btn-glass inline-flex items-center gap-2">
-                  {t("How it works", "Hoe het werkt")}
+                  {t("See how the ensemble works", "Zie hoe het ensemble werkt")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
+
+              <p className="mt-5 text-xs text-[#6b7280]">
+                {t(
+                  "No lock-in · Cancel in two clicks · Stripe-secured",
+                  "Geen lock-in · Annuleer in twee kliks · Beveiligd door Stripe",
+                )}
+              </p>
             </div>
           </div>
         </div>

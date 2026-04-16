@@ -13,6 +13,7 @@ import {
   Shield,
   Sparkles,
   TrendingUp,
+  TrendingDown,
   Trophy,
   Clock,
   Zap,
@@ -20,6 +21,15 @@ import {
   Star,
   Activity,
   ChevronRight,
+  Globe,
+  AlertTriangle,
+  BarChart3,
+  Smartphone,
+  Calculator,
+  Database,
+  RotateCcw,
+  XCircle,
+  CreditCard,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -459,9 +469,146 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
+          1b · LIVE PROOF STRIP — freshness ribbon wired to real API data
+          Every number here is pulled live from the same /homepage/free-picks
+          endpoint that powers the widget above. If the numbers lie, the
+          widget lies — there is no "results page" we can tweak separately.
+         ══════════════════════════════════════════════════════════════ */}
+      <section className="relative pt-4 pb-10 md:pt-6 md:pb-14">
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="card-neon halo-green relative overflow-hidden p-5 sm:p-6">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-16 -top-16 h-[240px] w-[240px] rounded-full"
+              style={{ background: "hsl(var(--accent-green) / 0.22)", filter: "blur(100px)" }}
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -left-20 -bottom-20 h-[220px] w-[220px] rounded-full"
+              style={{ background: "hsl(var(--accent-purple) / 0.18)", filter: "blur(100px)" }}
+            />
+
+            <div className="relative flex flex-col gap-5">
+              <div className="flex items-center justify-between gap-3">
+                <span className="section-label">
+                  <span className="live-dot" />
+                  {t("liveProof.label")}
+                </span>
+                <Pill className="hidden sm:inline-flex">
+                  <Activity className="h-3 w-3" />
+                  Live
+                </Pill>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <LiveStatChip
+                  icon={Activity}
+                  variant="green"
+                  label={t("liveProof.picks")}
+                  value={picks.length > 0 ? String(picks.length) : "—"}
+                />
+                <LiveStatChip
+                  icon={Target}
+                  variant="purple"
+                  label={t("liveProof.winrate")}
+                  value={
+                    stats && stats.total > 0
+                      ? `${(stats.winrate * 100).toFixed(1)}%`
+                      : "—"
+                  }
+                />
+                <LiveStatChip
+                  icon={TrendingUp}
+                  variant="blue"
+                  label={t("liveProof.predictions")}
+                  value={
+                    stats && stats.total > 0
+                      ? stats.total.toLocaleString(locale)
+                      : "—"
+                  }
+                />
+                <LiveStatChip
+                  icon={Globe}
+                  variant="green"
+                  label={t("liveProof.leagues")}
+                  value={t("liveProof.leaguesValue")}
+                />
+              </div>
+
+              <p className="text-xs leading-relaxed text-[#6b7280]">
+                {t("liveProof.disclaimer")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
           2 · LEAGUES TICKER
          ══════════════════════════════════════════════════════════════ */}
       <LeaguesTicker />
+
+      {/* ══════════════════════════════════════════════════════════════
+          2b · PAS — problem/agitate/solve block
+          Frame the real pain (retail bettors lose) BEFORE we present
+          BetsPlug as the answer. Numbers are industry-standard and
+          intentionally non-BetsPlug so the claim is credible.
+         ══════════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 md:py-24">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-0 top-1/2 h-[360px] w-[360px] -translate-y-1/2 rounded-full"
+          style={{ background: "hsl(var(--accent-red, 0 72% 60%) / 0.12)", filter: "blur(140px)" }}
+        />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mb-10 max-w-3xl">
+            <span className="section-label">
+              <AlertTriangle className="h-3 w-3" />
+              {t("pas.badge")}
+            </span>
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              {t("pas.titleA")}{" "}
+              <span className="gradient-text-green">{t("pas.titleB")}</span>
+            </h2>
+            <p className="mt-4 text-base text-[#a3a9b8]">{t("pas.subtitle")}</p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            <PasStatCard
+              icon={TrendingDown}
+              value={t("pas.stat1Value")}
+              label={t("pas.stat1Label")}
+              desc={t("pas.stat1Desc")}
+            />
+            <PasStatCard
+              icon={BarChart3}
+              value={t("pas.stat2Value")}
+              label={t("pas.stat2Label")}
+              desc={t("pas.stat2Desc")}
+            />
+            <PasStatCard
+              icon={AlertTriangle}
+              value={t("pas.stat3Value")}
+              label={t("pas.stat3Label")}
+              desc={t("pas.stat3Desc")}
+            />
+          </div>
+
+          <div className="mt-10 grid items-center gap-5 rounded-2xl border p-6 md:grid-cols-[1fr_auto] md:p-8"
+            style={{ borderColor: "hsl(0 0% 100% / 0.06)", background: "hsl(0 0% 100% / 0.02)" }}>
+            <p className="text-base leading-relaxed text-[#ededed]">
+              {t("pas.solve")}
+            </p>
+            <Link
+              href={loc("/how-it-works")}
+              className="btn-primary inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
+            >
+              {t("pas.cta")} <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* ══════════════════════════════════════════════════════════════
           3 · FEATURES — 3 premium feature cards
@@ -679,6 +826,78 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
+          5b · PERSONA SEGMENTATION — 'who BetsPlug is for'
+          Three persona cards. Same platform, different habits.
+          Each card has its own CTA that routes to the most relevant
+          entry point for that persona — reducing friction vs a single
+          one-size-fits-all CTA.
+         ══════════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-1/2 top-10 h-[420px] w-[420px] translate-x-1/2 rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.14)", filter: "blur(150px)" }}
+        />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mb-12 max-w-3xl">
+            <span className="section-label">
+              <Sparkles className="h-3 w-3" />
+              {t("persona.badge")}
+            </span>
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              {t("persona.titleA")}{" "}
+              <span className="gradient-text-green">{t("persona.titleB")}</span>
+            </h2>
+            <p className="mt-4 text-base text-[#a3a9b8]">{t("persona.subtitle")}</p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            <PersonaCard
+              variant="green"
+              icon={Smartphone}
+              title={t("persona.casualTitle")}
+              pitch={t("persona.casualPitch")}
+              features={[
+                t("persona.casualFeature1"),
+                t("persona.casualFeature2"),
+                t("persona.casualFeature3"),
+              ]}
+              ctaLabel={t("persona.casualCta")}
+              ctaHref={loc("/match-predictions")}
+            />
+            <PersonaCard
+              variant="purple"
+              icon={Calculator}
+              title={t("persona.seriousTitle")}
+              pitch={t("persona.seriousPitch")}
+              features={[
+                t("persona.seriousFeature1"),
+                t("persona.seriousFeature2"),
+                t("persona.seriousFeature3"),
+              ]}
+              ctaLabel={t("persona.seriousCta")}
+              ctaHref={`${loc("/checkout")}?plan=gold`}
+              highlight
+            />
+            <PersonaCard
+              variant="blue"
+              icon={Database}
+              title={t("persona.quantTitle")}
+              pitch={t("persona.quantPitch")}
+              features={[
+                t("persona.quantFeature1"),
+                t("persona.quantFeature2"),
+                t("persona.quantFeature3"),
+              ]}
+              ctaLabel={t("persona.quantCta")}
+              ctaHref={loc("/track-record")}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
           6 · TESTIMONIALS
          ══════════════════════════════════════════════════════════════ */}
       {testimonials.length > 0 && (
@@ -694,6 +913,63 @@ export function HomeContent({
           8 · PRICING — 3 plans + Platinum Lifetime (shared component)
          ══════════════════════════════════════════════════════════════ */}
       <PricingSection pricingConfig={pricingConfig} />
+
+      {/* ══════════════════════════════════════════════════════════════
+          8b · RISK REVERSAL — sits right after Pricing to absorb
+          the 'what if this doesn't work?' objection that kills
+          conversion at the pricing step.
+         ══════════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 md:py-24">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-0 h-[360px] w-[480px] rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(140px)" }}
+        />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mb-12 max-w-3xl">
+            <span className="section-label">
+              <Shield className="h-3 w-3" />
+              {t("riskReversal.badge")}
+            </span>
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              {t("riskReversal.titleA")}{" "}
+              <span className="gradient-text-green">{t("riskReversal.titleB")}</span>
+            </h2>
+            <p className="mt-4 text-base text-[#a3a9b8]">{t("riskReversal.subtitle")}</p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            <RiskCard
+              variant="green"
+              icon={RotateCcw}
+              title={t("riskReversal.guaranteeTitle")}
+              desc={t("riskReversal.guaranteeDesc")}
+            />
+            <RiskCard
+              variant="purple"
+              icon={XCircle}
+              title={t("riskReversal.cancelTitle")}
+              desc={t("riskReversal.cancelDesc")}
+            />
+            <RiskCard
+              variant="blue"
+              icon={CreditCard}
+              title={t("riskReversal.noCardTitle")}
+              desc={t("riskReversal.noCardDesc")}
+            />
+          </div>
+
+          <div className="mt-10 flex justify-center">
+            <Link
+              href={`${loc("/checkout")}?plan=bronze`}
+              className="btn-primary inline-flex items-center gap-1.5"
+            >
+              {t("riskReversal.cta")} <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* ══════════════════════════════════════════════════════════════
           9 · SEO CONTENT + FAQ
@@ -914,6 +1190,203 @@ function ChartStat({ label, value }: { label: string; value: string }) {
     <div>
       <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">{label}</p>
       <p className="text-stat mt-0.5 text-base text-[#ededed] sm:text-lg">{value}</p>
+    </div>
+  );
+}
+
+/** LiveStatChip — one tile in the live proof strip under the hero. */
+function LiveStatChip({
+  icon: Icon,
+  variant,
+  label,
+  value,
+}: {
+  icon: typeof Shield;
+  variant: "green" | "purple" | "blue";
+  label: string;
+  value: string;
+}) {
+  return (
+    <div
+      className="relative flex items-center gap-3 rounded-xl border p-4"
+      style={{
+        borderColor: "hsl(0 0% 100% / 0.06)",
+        background: "hsl(0 0% 100% / 0.02)",
+      }}
+    >
+      <HexBadge variant={variant} size="md">
+        <Icon className="h-5 w-5" strokeWidth={2} />
+      </HexBadge>
+      <div className="min-w-0 flex-1">
+        <p className="text-stat text-xl text-[#ededed] sm:text-2xl">{value}</p>
+        <p className="text-[11px] font-medium uppercase tracking-wider text-[#6b7280]">
+          {label}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/** PasStatCard — one of the three pain-stat cards in the PAS block. */
+function PasStatCard({
+  icon: Icon,
+  value,
+  label,
+  desc,
+}: {
+  icon: typeof Shield;
+  value: string;
+  label: string;
+  desc: string;
+}) {
+  return (
+    <div
+      className="relative flex flex-col overflow-hidden rounded-2xl border p-6 sm:p-7"
+      style={{
+        borderColor: "hsl(0 0% 100% / 0.06)",
+        background: "hsl(0 0% 100% / 0.025)",
+      }}
+    >
+      <div className="flex items-center gap-3">
+        <div
+          className="flex h-10 w-10 items-center justify-center rounded-lg"
+          style={{
+            background: "hsl(0 72% 60% / 0.12)",
+            color: "hsl(0 72% 66%)",
+          }}
+        >
+          <Icon className="h-5 w-5" strokeWidth={2} />
+        </div>
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
+          Industry average
+        </span>
+      </div>
+      <p className="text-stat mt-5 text-4xl text-[#ededed] sm:text-5xl">{value}</p>
+      <p className="mt-1 text-sm font-semibold text-[#ededed]">{label}</p>
+      <p className="mt-3 text-sm leading-relaxed text-[#a3a9b8]">{desc}</p>
+    </div>
+  );
+}
+
+/** PersonaCard — one of the three persona cards in the segmentation block. */
+function PersonaCard({
+  variant,
+  icon: Icon,
+  title,
+  pitch,
+  features,
+  ctaLabel,
+  ctaHref,
+  highlight,
+}: {
+  variant: "green" | "purple" | "blue";
+  icon: typeof Shield;
+  title: string;
+  pitch: string;
+  features: string[];
+  ctaLabel: string;
+  ctaHref: string;
+  highlight?: boolean;
+}) {
+  return (
+    <div
+      className={`card-neon card-neon-${variant} relative flex flex-col overflow-hidden p-6 sm:p-7`}
+    >
+      {highlight && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-20 left-1/2 h-[240px] w-[80%] -translate-x-1/2 rounded-full"
+          style={{
+            background:
+              "radial-gradient(ellipse, hsl(var(--accent-purple) / 0.38), transparent 65%)",
+            filter: "blur(40px)",
+          }}
+        />
+      )}
+
+      <div className="relative flex flex-col">
+        <div className="flex items-center justify-between">
+          <HexBadge variant={variant} size="lg">
+            <Icon className="h-6 w-6" strokeWidth={2} />
+          </HexBadge>
+          {highlight && (
+            <span className="rounded-full bg-[hsl(var(--accent-purple))] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white">
+              Most users
+            </span>
+          )}
+        </div>
+
+        <h3 className="text-heading mt-5 text-xl text-[#ededed] sm:text-2xl">
+          {title}
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed text-[#a3a9b8]">{pitch}</p>
+
+        <ul className="mt-5 space-y-2">
+          {features.map((f) => (
+            <li
+              key={f}
+              className="flex items-start gap-2.5 text-sm text-[#a3a9b8]"
+            >
+              <CheckCircle2
+                className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#4ade80]"
+                strokeWidth={2.25}
+              />
+              <span>{f}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <Link
+        href={ctaHref}
+        className={`relative mt-6 inline-flex w-full items-center justify-center gap-1.5 ${
+          highlight ? "btn-primary" : "btn-glass"
+        }`}
+      >
+        {ctaLabel} <ArrowRight className="h-4 w-4" />
+      </Link>
+    </div>
+  );
+}
+
+/** RiskCard — one of the three risk-reversal cards. */
+function RiskCard({
+  variant,
+  icon: Icon,
+  title,
+  desc,
+}: {
+  variant: "green" | "purple" | "blue";
+  icon: typeof Shield;
+  title: string;
+  desc: string;
+}) {
+  return (
+    <div
+      className={`card-neon card-neon-${variant} relative flex flex-col overflow-hidden p-6 sm:p-7`}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-14 left-1/2 h-[160px] w-[70%] -translate-x-1/2 rounded-full opacity-70"
+        style={{
+          background:
+            variant === "green"
+              ? "radial-gradient(ellipse, hsl(var(--accent-green) / 0.28), transparent 60%)"
+              : variant === "purple"
+              ? "radial-gradient(ellipse, hsl(var(--accent-purple) / 0.30), transparent 60%)"
+              : "radial-gradient(ellipse, hsl(var(--accent-blue) / 0.26), transparent 60%)",
+          filter: "blur(40px)",
+        }}
+      />
+      <div className="relative flex items-start gap-4">
+        <HexBadge variant={variant} size="md">
+          <Icon className="h-5 w-5" strokeWidth={2} />
+        </HexBadge>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-heading text-lg text-[#ededed]">{title}</h3>
+        </div>
+      </div>
+      <p className="relative mt-4 text-sm leading-relaxed text-[#a3a9b8]">{desc}</p>
     </div>
   );
 }

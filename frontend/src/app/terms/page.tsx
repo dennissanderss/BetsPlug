@@ -27,8 +27,8 @@ export default function TermsOfServicePage() {
   return (
     <LegalPage
       title="Terms of Service"
-      intro="The agreement between you and BetsPlug. By creating an account or using the service, you agree to these terms."
-      lastUpdated="April 9, 2026"
+      intro="The agreement between you and BetsPlug. Plain language where possible, legal clarity where it matters — read before you create an account."
+      lastUpdated="April 16, 2026"
       breadcrumb="Terms"
     >
       <h2>1. Who we are</h2>

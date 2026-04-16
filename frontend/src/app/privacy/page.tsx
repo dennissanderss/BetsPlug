@@ -27,8 +27,8 @@ export default function PrivacyPolicyPage() {
   return (
     <LegalPage
       title="Privacy Policy"
-      intro="We take your privacy seriously. This policy explains what data we collect, why we collect it, and what rights you have under the GDPR."
-      lastUpdated="April 9, 2026"
+      intro="Plain-English explanation of what BetsPlug collects, why, and the GDPR rights you have over it. No dark patterns, no ad trackers, no selling your data."
+      lastUpdated="April 16, 2026"
       breadcrumb="Privacy Policy"
     >
       <h2>1. Who we are</h2>

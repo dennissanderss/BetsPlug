@@ -18,6 +18,8 @@ import {
   Globe,
   HelpCircle,
   Activity,
+  ShieldCheck,
+  XCircle,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -302,6 +304,119 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
           </div>
         }
       />
+
+      {/* ───────────── INTEGRITY LAYER (NEW) ───────────── */}
+      <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 top-20 h-[460px] w-[460px] rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(160px)" }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-40 bottom-20 h-[460px] w-[460px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.08)", filter: "blur(160px)" }}
+        />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+            className="mx-auto mb-14 max-w-3xl text-center"
+          >
+            <span className="section-label mb-4 inline-flex items-center gap-2">
+              <ShieldCheck className="h-3 w-3" />
+              {t("hiw.integrityBadge")}
+            </span>
+            <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              {t("hiw.integrityTitleA")}{" "}
+              <span className="gradient-text-green">{t("hiw.integrityTitleB")}</span>
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-[#a3a9b8]">
+              {t("hiw.integritySubtitle")}
+            </p>
+          </motion.div>
+
+          <div className="space-y-5">
+            {[
+              {
+                badTitle: t("hiw.integrityBad1Title"),
+                badDesc: t("hiw.integrityBad1Desc"),
+                goodTitle: t("hiw.integrityGood1Title"),
+                goodDesc: t("hiw.integrityGood1Desc"),
+              },
+              {
+                badTitle: t("hiw.integrityBad2Title"),
+                badDesc: t("hiw.integrityBad2Desc"),
+                goodTitle: t("hiw.integrityGood2Title"),
+                goodDesc: t("hiw.integrityGood2Desc"),
+              },
+              {
+                badTitle: t("hiw.integrityBad3Title"),
+                badDesc: t("hiw.integrityBad3Desc"),
+                goodTitle: t("hiw.integrityGood3Title"),
+                goodDesc: t("hiw.integrityGood3Desc"),
+              },
+            ].map((row, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.5, delay: i * 0.05 }}
+                className="grid gap-4 md:grid-cols-[1fr_auto_1fr] md:items-stretch"
+              >
+                {/* Bad side */}
+                <div
+                  className="relative overflow-hidden rounded-2xl border border-red-500/20 bg-red-500/[0.04] p-6"
+                >
+                  <div className="mb-3 flex items-center gap-2">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-500/15 text-red-400">
+                      <XCircle className="h-4 w-4" />
+                    </div>
+                    <span className="text-[10px] font-semibold uppercase tracking-widest text-red-400/80">
+                      {t("hiw.integrityBadBadge")}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-semibold text-[#ededed] sm:text-lg">
+                    {row.badTitle}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[#a3a9b8]">
+                    {row.badDesc}
+                  </p>
+                </div>
+
+                {/* Arrow / divider */}
+                <div className="hidden items-center justify-center md:flex">
+                  <ChevronRight className="h-6 w-6 text-[#4ade80]/60" />
+                </div>
+
+                {/* Good side */}
+                <div className="card-neon card-neon-green rounded-2xl">
+                  <div className="relative p-6">
+                    <div className="mb-3 flex items-center gap-2">
+                      <HexBadge variant="green" size="sm">
+                        <ShieldCheck className="h-4 w-4" />
+                      </HexBadge>
+                      <span className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                        {t("hiw.integrityGoodBadge")}
+                      </span>
+                    </div>
+                    <h3 className="text-base font-semibold text-[#ededed] sm:text-lg">
+                      {row.goodTitle}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-[#a3a9b8]">
+                      {row.goodDesc}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ───────────── ENGINE + FAQ ───────────── */}
       <section className="relative py-20 md:py-28">

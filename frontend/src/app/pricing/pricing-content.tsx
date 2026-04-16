@@ -63,22 +63,22 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       id: "bronze",
       icon: Shield,
       name: "Bronze",
-      tagline: "Full-access 7-day trial",
+      tagline: "The €0,01 test drive",
       bestFor:
-        "First-timers who want to validate BetsPlug against their own betting data before committing.",
+        "If you've been burned by a tipster before: run our AI football predictions against your own bets for 7 days before you spend a cent more.",
       price: "€0,01",
       period: "7 days",
       includes: [
-        "Full Gold access for 7 days",
-        "Every prediction + live probability",
-        `Daily Pick of the Day (${POTD_STATS.accuracy}% accuracy)`,
-        "Complete track record + results feed",
-        "Cancel any time, no auto-upgrade",
+        "Full Gold access for 7 days — every feature",
+        "Every match prediction + live probabilities",
+        `Daily Pick of the Day (${POTD_STATS.accuracy}% hit rate)`,
+        "Complete public track record",
+        "Cancel in two clicks — no auto-upgrade",
       ],
       notIncluded: [
         "Gold Telegram community",
         "Strategy Lab access",
-        "Priority support",
+        "Priority support queue",
       ],
       variant: "blue",
       cta: "Start €0,01 trial",
@@ -88,21 +88,21 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       id: "silver",
       icon: Zap,
       name: "Silver",
-      tagline: "For casual weekend bettors",
+      tagline: "The weekend-bettor plan",
       bestFor:
-        "Bettors focused on top-5 European leagues who want solid predictions without the bells and whistles.",
+        "You bet the big matches in Premier League, La Liga, Bundesliga, Serie A or Ligue 1 — and nothing else. Silver covers those five without paying for leagues you ignore.",
       price: "€9,99",
       period: "month",
       includes: [
-        "All predictions — top 5 European leagues",
+        "AI predictions for top-5 European leagues",
         "Live scores + live probability updates",
-        "Weekly performance reports",
-        "Full track record transparency",
-        "Email support (48h response)",
+        "Weekly performance report in your inbox",
+        "Full public track record — every loss included",
+        "Email support (48-hour SLA)",
       ],
       notIncluded: [
-        "Coverage beyond top-5 leagues (no CL, MLS, Süper Lig…)",
-        "PDF/CSV/JSON report exports",
+        "Leagues beyond top-5 (no Champions League, MLS, Süper Lig…)",
+        "PDF / CSV / JSON report exports",
         "Gold Telegram community",
         "Strategy Lab access",
       ],
@@ -114,19 +114,19 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       id: "gold",
       icon: Star,
       name: "Gold",
-      tagline: "Most popular — full access",
+      tagline: "The full-access plan most users pick",
       bestFor:
-        "Serious bettors who want every edge: all leagues, all exports, and direct access to our AI analysts.",
+        "Serious bettors who want every edge: all 30+ leagues, downloadable data, the Gold Telegram, and priority support when a prediction question can't wait 48 hours.",
       price: "€14,99",
       period: "month",
       includes: [
-        `Daily Pick of the Day (${POTD_STATS.accuracy}% accuracy)`,
-        "All 30+ leagues worldwide (CL, UEL, MLS, Süper Lig…)",
-        "PDF/CSV/JSON report exports",
+        `Daily Pick of the Day (${POTD_STATS.accuracy}% hit rate)`,
+        "All 30+ football leagues worldwide (CL, UEL, MLS, Süper Lig…)",
+        "PDF / CSV / JSON exports of every prediction",
         "Exclusive Gold Telegram community",
-        "Priority support (12h response)",
-        "Strategy Lab access (coming soon)",
-        "Full transparency — every pick logged",
+        "Priority support (12-hour SLA)",
+        "Strategy Lab access (launching soon)",
+        "Full transparency — every pick publicly logged",
       ],
       notIncluded: ["Lifetime pricing lock", "Founder-tier perks"],
       variant: "green",
@@ -138,17 +138,17 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       id: "platinum",
       icon: Crown,
       name: "Platinum lifetime",
-      tagline: "Founder-tier — pay once, keep forever",
+      tagline: "Pay once. Keep it forever.",
       bestFor:
-        "Power users who want the best long-term ROI — everything Gold offers, plus exclusive Platinum-only perks, forever.",
+        "You're already planning to stick with BetsPlug long-term. Platinum locks in today's price for life, plus founder-tier perks you can't get on any monthly plan.",
       price: "€199",
       period: "one-time",
       includes: [
         "Lifetime Gold access — every current & future feature",
         "Private Platinum Telegram (max 20 seats)",
-        "Lifetime price lock — immune to future increases",
-        "Early access to all new features",
-        "Never pay again — no renewals, ever",
+        "Lifetime price lock — immune to every future increase",
+        "Early access to every new feature",
+        "Never pay again — zero renewals, zero upsells",
         "Exclusive Strategy Lab access at launch",
       ],
       notIncluded: [],
@@ -174,42 +174,42 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
   const goldReasons = [
     {
       icon: TrendingUp,
-      title: "Best ROI for active bettors",
+      title: "The break-even math is brutal",
       desc:
-        `€14,99/month for 30+ leagues, ${POTD_STATS.accuracy}% Pick of the Day accuracy, and full exports. Silver users routinely upgrade within 30 days.`,
+        `€14,99/month is less than a single placed-and-lost bet on a gut feeling. For that, you get 30+ leagues, ${POTD_STATS.accuracy}% Pick-of-the-Day hit rate, and every prediction exportable as CSV.`,
     },
     {
       icon: Sparkles,
-      title: "The only plan with Strategy Lab",
+      title: "Strategy Lab ships to Gold first",
       desc:
-        "Backtest your own angles against our entire historical prediction database. Ships Gold + Platinum first.",
+        "Backtest your own angles against our entire historical AI prediction database the moment Strategy Lab launches. Gold and Platinum users get it before anyone else.",
     },
     {
       icon: Shield,
-      title: "Community + priority support",
+      title: "Community and priority access",
       desc:
-        "Real-time Gold Telegram + 12h response SLA. Silver is email-only. Bronze is trial-scoped.",
+        "Gold unlocks our closed Telegram channel for pick discussion and a 12-hour support SLA. Silver is email-only (48h). Bronze is trial-scoped.",
     },
   ];
 
   const platinumReasons = [
     {
       icon: Crown,
-      title: "Break-even in 14 months, free forever after",
+      title: "Breaks even at month 14, free forever after",
       desc:
-        "€199 once = the cost of 13.2 Gold months. Lifetime lock means you never pay again — while Gold and Silver prices will rise as the product matures.",
+        "€199 once is 13.2 months of Gold. Every month after that is pure savings — and our Gold price is already scheduled to rise as coverage expands.",
     },
     {
       icon: Lock,
-      title: "Max 100 Platinum seats per year",
+      title: "100 Platinum seats per year. Hard cap.",
       desc:
-        "Founder-tier access with a hard cap. Once the 100 yearly seats are gone, Platinum re-opens at a higher price point the next cycle.",
+        "Once this year's 100 founder seats are claimed, the tier closes until next cycle — at a higher price. If you see Platinum available, the window is still open.",
     },
     {
       icon: Star,
-      title: "Private Platinum Telegram",
+      title: "Private Platinum Telegram (20 seats)",
       desc:
-        "Separate 20-seat channel with direct access to our AI analysts — deep-dive Q&A, pre-release insights, strategy review.",
+        "A separate founder channel with direct access to our model team — deep-dive Q&A, pre-release insights, and strategy review before launch.",
     },
   ];
 
@@ -241,7 +241,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             className="section-label mb-5 inline-flex items-center gap-2"
           >
             <Sparkles className="h-3 w-3" />
-            Pricing / Plans
+            Less than one bad bet per month
           </motion.span>
 
           <motion.h1
@@ -250,7 +250,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             transition={{ duration: 0.7, delay: 0.05 }}
             className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl"
           >
-            Choose the plan built for{" "}
+            The BetsPlug plan built for{" "}
             <span className="gradient-text-green">your betting style.</span>
           </motion.h1>
 
@@ -260,10 +260,36 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
-            Four plans, one transparent track record behind them all. Start with a
-            €0,01 Bronze trial, scale to Gold when you&apos;re ready, or lock in
-            lifetime access with Platinum.
+            Every plan unlocks the same AI football predictions and the same public
+            track record. The only difference is league coverage and the tooling
+            around it. Start with a €0,01 trial, upgrade when the numbers convince
+            you, or lock in lifetime pricing before it rises.
           </motion.p>
+
+          {/* Risk-reversal trust bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="mx-auto mt-8 flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-[#a3a9b8]"
+          >
+            <span className="inline-flex items-center gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80]" />
+              7-day Gold trial for €0,01
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80]" />
+              No auto-upgrade after trial
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80]" />
+              Cancel in two clicks
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80]" />
+              Stripe-secured checkout
+            </span>
+          </motion.div>
 
           <motion.nav
             initial={{ opacity: 0 }}
@@ -293,15 +319,16 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-12">
             <span className="section-label">
-              <Sparkles className="h-3 w-3" /> Plan deep dive
+              <Sparkles className="h-3 w-3" /> What you get, plan by plan
             </span>
             <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-              What&apos;s actually{" "}
-              <span className="gradient-text-green">inside each plan.</span>
+              Every plan unlocks the same AI football{" "}
+              <span className="gradient-text-green">predictions & track record.</span>
             </h2>
             <p className="mt-4 max-w-2xl text-base text-[#a3a9b8]">
-              Every plan includes our full transparent track record. The difference
-              is the coverage, the tools, and how much you unlock.
+              The difference is which leagues you get, how deeply you can export the
+              data, and how fast our team responds when something breaks. Pick the
+              one that matches how you actually bet.
             </p>
           </div>
 
@@ -490,8 +517,14 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               <Sparkles className="h-3 w-3" /> Side by side
             </span>
             <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-              Compare every plan at a glance.
+              Every plan, every feature,{" "}
+              <span className="gradient-text-green">in one matrix.</span>
             </h2>
+            <p className="mt-4 max-w-2xl text-base text-[#a3a9b8]">
+              Green check = unlocked. Grey cross = out of scope for that tier. The
+              7-day trial rows show you exactly what Bronze unlocks during the
+              probation window.
+            </p>
           </div>
 
           <div className="card-neon overflow-hidden">
@@ -612,15 +645,16 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-12">
             <span className="section-label">
-              <Star className="h-3 w-3" /> Why Gold
+              <Star className="h-3 w-3" /> Why most users pick Gold
             </span>
             <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-              Most people pick{" "}
-              <span className="gradient-text-green">Gold — here&apos;s why.</span>
+              Silver is a starter. Gold is{" "}
+              <span className="gradient-text-green">the serious tool.</span>
             </h2>
             <p className="mt-4 max-w-2xl text-base text-[#a3a9b8]">
-              Silver is a great starter, but if you bet more than once a week on
-              matches outside the top 5 European leagues, Gold pays for itself.
+              If you bet more than once a week, or on matches outside the top-5
+              European leagues, Gold pays for itself inside a single correctly-timed
+              pick. Here's what the extra €5/month actually buys.
             </p>
           </div>
 
@@ -683,13 +717,14 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               Why Platinum lifetime
             </span>
             <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-              The best long-term deal{" "}
-              <span style={{ color: "#fbbf24" }}>is Platinum.</span>
+              The math that makes{" "}
+              <span style={{ color: "#fbbf24" }}>Platinum unbeatable.</span>
             </h2>
             <p className="mt-4 max-w-2xl text-base text-[#a3a9b8]">
-              €199 once. Gold costs €14,99/month — so Platinum breaks even at 13.2
-              months and you never pay again. Plus founder-tier perks you
-              can&apos;t get on any monthly plan.
+              €199 once. Gold is €14,99/month — Platinum breaks even at month 14 and
+              every month after is pure savings. While Silver and Gold prices keep
+              rising with coverage, your Platinum price is frozen the second you
+              claim a seat.
             </p>
           </div>
 
@@ -829,30 +864,34 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
           <div className="card-neon card-neon-green halo-green p-10 md:p-16">
             <div className="relative text-center">
               <span className="section-label mb-4">
-                <Sparkles className="h-3 w-3" /> Ready to try it?
+                <Sparkles className="h-3 w-3" /> Test the AI against your own bets
               </span>
               <h2 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-                Start with €0,01 —{" "}
-                <span className="gradient-text-green">decide later.</span>
+                Start for €0,01.{" "}
+                <span className="gradient-text-green">Decide once the numbers land.</span>
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
-                Full Gold access for 7 days. Cancel any time. No surprises, no
-                auto-upgrade. Just our real predictions against your real bets.
+                Seven days of full Gold access. No auto-upgrade. Cancel in two
+                clicks. Run our AI football predictions next to your own betting
+                log for a week, then decide — we'd rather you verify than trust.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
                   href={`${loc("/checkout")}?plan=bronze`}
                   className="btn-primary inline-flex items-center gap-2"
                 >
-                  Start €0,01 trial
+                  Claim €0,01 trial
                 </Link>
                 <Link
                   href={loc("/track-record")}
                   className="btn-ghost inline-flex items-center gap-2"
                 >
-                  See the track record
+                  See the full track record
                 </Link>
               </div>
+              <p className="mt-5 text-xs text-[#6b7280]">
+                Secured by Stripe · No hidden fees · Winners &amp; losers published on the track record
+              </p>
             </div>
           </div>
         </div>

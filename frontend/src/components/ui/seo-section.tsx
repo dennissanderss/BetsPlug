@@ -218,8 +218,10 @@ function FaqBlock() {
   const [activeCategory, setActiveCategory] = useState<HomeFaqCategoryId>(
     homeFaqCategories[0].id,
   );
-  const [openQuestion, setOpenQuestion] = useState<string | null>(
-    homeFaqCategories[0].items[0].question,
+  // Track the OPEN item by its stable translation key, not the
+  // rendered (locale-dependent) question text.
+  const [openKey, setOpenKey] = useState<string | null>(
+    homeFaqCategories[0].items[0].questionKey,
   );
 
   const current = homeFaqCategories.find((c) => c.id === activeCategory)!;
@@ -265,7 +267,7 @@ function FaqBlock() {
                     type="button"
                     onClick={() => {
                       setActiveCategory(cat.id);
-                      setOpenQuestion(cat.items[0].question);
+                      setOpenKey(cat.items[0].questionKey);
                     }}
                     className={`group relative flex items-center gap-3 rounded-xl px-4 py-3 text-left transition-all duration-200 ${
                       isActive
@@ -296,7 +298,7 @@ function FaqBlock() {
                             : "text-[#cfd3dc]"
                         }`}
                       >
-                        {cat.label}
+                        {t(cat.labelKey)}
                       </p>
                       <p className="text-[11px] text-[#6b7280]">
                         {cat.items.length} {t("faq.articles")}
@@ -347,10 +349,10 @@ function FaqBlock() {
                   className="flex flex-col gap-3"
                 >
                   {current.items.map((item) => {
-                    const isOpen = openQuestion === item.question;
+                    const isOpen = openKey === item.questionKey;
                     return (
                       <div
-                        key={item.question}
+                        key={item.questionKey}
                         className={`${
                           isOpen
                             ? "card-neon card-neon-green"
@@ -361,7 +363,7 @@ function FaqBlock() {
                           <button
                             type="button"
                             onClick={() =>
-                              setOpenQuestion(isOpen ? null : item.question)
+                              setOpenKey(isOpen ? null : item.questionKey)
                             }
                             className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left sm:px-6 sm:py-5"
                             aria-expanded={isOpen}
@@ -373,7 +375,7 @@ function FaqBlock() {
                                   : "text-[#ededed] hover:text-[#4ade80]"
                               }`}
                             >
-                              {item.question}
+                              {t(item.questionKey)}
                             </h4>
                             <div
                               className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-all ${
@@ -399,7 +401,7 @@ function FaqBlock() {
                               >
                                 <div className="border-t border-white/[0.06] px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
                                   <p className="text-sm leading-relaxed text-[#a3a9b8]">
-                                    {item.answer}
+                                    {t(item.answerKey)}
                                   </p>
                                 </div>
                               </motion.div>
