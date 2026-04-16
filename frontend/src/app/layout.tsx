@@ -63,9 +63,11 @@ export async function generateMetadata(): Promise<Metadata> {
       languages: alternates.languages,
     },
     icons: {
-      icon: [{ url: "/logo.webp", type: "image/webp" }],
-      shortcut: "/logo.webp",
-      apple: "/logo.webp",
+      // Browser tab + pinned-tab favicon: the standalone plug mark
+      // (separate from the full logo, which stays the Apple touch icon).
+      icon: [{ url: "/favicon.png", type: "image/png" }],
+      shortcut: "/favicon.png",
+      apple: "/favicon.png",
     },
     openGraph: {
       type: "website",
