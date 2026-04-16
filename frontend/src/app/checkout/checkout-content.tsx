@@ -754,7 +754,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 
               <form
                 onSubmit={handleSubmit}
-                className="mt-6 rounded-3xl border border-white/[0.08] bg-white/[0.04] p-6 shadow-sm sm:p-8"
+                className="mt-6 rounded-3xl border border-white/[0.1] bg-[hsl(230_16%_10%/0.88)] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-8"
               >
                 {/* Logged-in badge — confirms the session is attached so
                     the user knows this subscription will end up on the
@@ -1335,7 +1335,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                 />
 
                 {/* Trust strip */}
-                <div className="rounded-2xl border border-white/[0.08] bg-white/[0.04] p-4 text-xs text-[#8a93a6] shadow-sm">
+                <div className="rounded-2xl border border-white/[0.1] bg-[hsl(230_16%_10%/0.88)] p-4 text-xs text-[#8a93a6] shadow-[0_16px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="h-4 w-4 text-[#4ade80]" />
                     <span>{t("checkout.footer.guarantee")}</span>
@@ -1511,7 +1511,7 @@ function OrderSummary({
   const isOneTime = plan.oneTime != null;
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-white/[0.04] p-4 shadow-sm sm:p-6">
+    <div className="relative overflow-hidden rounded-3xl border border-white/[0.1] bg-[hsl(230_16%_10%/0.88)] p-4 shadow-[0_24px_60px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-6">
       {/* glow */}
       <div className="pointer-events-none absolute -right-16 -top-16 h-[240px] w-[240px] rounded-full bg-[#4ade80]/[0.08]0/[0.04] blur-[90px]" />
 
