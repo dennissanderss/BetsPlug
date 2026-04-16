@@ -41,7 +41,7 @@ from typing import Optional
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import and_, delete, func, select
+from sqlalchemy import and_, case, delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import get_settings
@@ -159,6 +159,35 @@ async def diagnose_team_logos(
         )
     ).scalar() or 0
 
+    # Per-league breakdown: how many teams have/lack logos, grouped by
+    # league name. Helps answer "which leagues are still gappy?"
+    per_league_rows = (
+        await db.execute(
+            select(
+                League.slug,
+                League.name,
+                func.count(Team.id).label("total"),
+                func.sum(
+                    case((Team.logo_url.isnot(None), 1), else_=0)
+                ).label("with_logo"),
+            )
+            .select_from(Team)
+            .join(League, Team.league_id == League.id)
+            .group_by(League.slug, League.name)
+            .order_by(League.name)
+        )
+    ).all()
+    per_league = [
+        {
+            "slug": row[0],
+            "name": row[1],
+            "total_teams": int(row[2] or 0),
+            "teams_with_logo": int(row[3] or 0),
+            "teams_without_logo": int((row[2] or 0) - (row[3] or 0)),
+        }
+        for row in per_league_rows
+    ]
+
     return {
         "api_football_key_configured": bool(_settings.api_football_key),
         "total_leagues_in_db": len(db_slugs),
@@ -170,6 +199,102 @@ async def diagnose_team_logos(
         "total_teams_in_db": total_teams,
         "teams_with_logo_url": teams_with_logo,
         "teams_without_logo_url": total_teams - teams_with_logo,
+        "per_league": per_league,
+    }
+
+
+@router.post(
+    "/backfill-team-logos-by-search",
+    summary="Second pass: fetch logos for remaining teams via /teams?search",
+)
+async def backfill_team_logos_by_search(
+    db: AsyncSession = Depends(get_db),
+    limit: int = Query(500, ge=1, le=2000),
+):
+    """Second-pass backfill for teams that the league-based backfill
+    missed. For each team without a logo_url we call API-Football's
+    /teams?search={name} endpoint and take the best name match.
+
+    Scoped by ``limit`` (default 500) so we can split large backlogs
+    across multiple invocations and stay well under the daily quota."""
+    from app.models.team import Team
+    import re as _re, asyncio as _asyncio
+
+    adapter = await _api_football()
+    missing = (
+        await db.execute(
+            select(Team).where(Team.logo_url.is_(None)).limit(limit)
+        )
+    ).scalars().all()
+
+    updated = 0
+    no_match: list[str] = []
+    errors: list[str] = []
+
+    for team in missing:
+        try:
+            # API-Football requires at least 3 chars for the search.
+            term = (team.name or "").strip()
+            if len(term) < 3:
+                no_match.append(f"{team.name} (name too short)")
+                continue
+            resp = await adapter._get("teams", {"search": term})
+            items = resp if isinstance(resp, list) else (
+                resp.get("response", []) if isinstance(resp, dict) else []
+            )
+
+            picked_logo: str | None = None
+            picked_name: str | None = None
+
+            # Try exact case-insensitive match first.
+            target_lower = term.lower()
+            for it in items:
+                td = it.get("team", {})
+                nm = (td.get("name") or "").strip()
+                if nm.lower() == target_lower and td.get("logo"):
+                    picked_logo = td["logo"]
+                    picked_name = nm
+                    break
+
+            # Fallback: slugified comparison.
+            if picked_logo is None:
+                def _sl(s: str) -> str:
+                    s = _re.sub(r"[^\w\s-]", "", s.lower())
+                    return _re.sub(r"[\s_]+", "-", s).strip("-")
+                target_slug = _sl(term)
+                for it in items:
+                    td = it.get("team", {})
+                    nm = (td.get("name") or "").strip()
+                    if _sl(nm) == target_slug and td.get("logo"):
+                        picked_logo = td["logo"]
+                        picked_name = nm
+                        break
+
+            # Last resort: take the first result's logo if the search had
+            # exactly one team — otherwise skip (too ambiguous).
+            if picked_logo is None and len(items) == 1:
+                td = items[0].get("team", {})
+                if td.get("logo"):
+                    picked_logo = td["logo"]
+                    picked_name = td.get("name")
+
+            if picked_logo:
+                team.logo_url = picked_logo
+                updated += 1
+            else:
+                no_match.append(f"{team.name} (searched, {len(items)} hits)")
+
+            await _asyncio.sleep(0.25)
+        except Exception as exc:
+            errors.append(f"{team.name}: {exc}")
+
+    await db.commit()
+    return {
+        "examined": len(missing),
+        "updated": updated,
+        "not_matched": len(no_match),
+        "not_matched_sample": no_match[:25],
+        "errors": errors[:25],
     }
 
 
