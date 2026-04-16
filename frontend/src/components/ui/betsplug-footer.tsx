@@ -1,10 +1,7 @@
 "use client";
 
-import React from "react";
-import type { ComponentProps, ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "motion/react";
 import {
   Send,
   Twitter,
@@ -14,9 +11,13 @@ import {
   MapPin,
   ShieldCheck,
   Lock,
+  ArrowRight,
+  Sparkles,
+  MessageCircle,
 } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { Pill } from "@/components/noct/pill";
+import { HexBadge } from "@/components/noct/hex-badge";
 import {
   VisaBadge,
   MastercardBadge,
@@ -25,115 +26,128 @@ import {
   ApplePayBadge,
 } from "./payment-badges";
 
-/**
- * BetsPlugFooter — NOCTURNE footer (centered, glow-highlighted top).
- *
- * Layout mirrors the reference footer pattern: centered max-w-6xl shell
- * with a top hairline highlight, 4-column grid (brand + 3 link columns),
- * animated-on-view containers. Keeps the full BetsPlug data set: product
- * / company / legal / socials, payment-method icons, security strip and
- * PCI compliance pill.
- */
-
-interface FooterLink {
-  text: string;
-  href: string;
-  icon?: React.ComponentType<{ className?: string }>;
-  external?: boolean;
-}
-
-interface FooterSection {
-  label: string;
-  links: FooterLink[];
-}
+const socialLinks = [
+  { icon: Twitter, label: "Twitter", href: "https://twitter.com/betsplug" },
+  { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/betsplug_com" },
+  { icon: Youtube, label: "YouTube", href: "https://youtube.com/@betsplug" },
+  { icon: Send, label: "Telegram", href: "https://t.me/betsplug" },
+];
 
 export function BetsPlugFooter() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
 
-  const footerSections: FooterSection[] = [
-    {
-      label: t("footer.product"),
-      links: [
-        { text: t("nav.predictions"), href: loc("/match-predictions") },
-        { text: t("nav.trackRecord"), href: loc("/track-record") },
-        { text: t("nav.howItWorks"), href: loc("/how-it-works") },
-        { text: t("nav.pricing"), href: loc("/pricing") },
-      ],
-    },
-    {
-      label: t("footer.company"),
-      links: [
-        { text: t("footer.aboutUs"), href: loc("/about-us") },
-        { text: t("footer.ourModels"), href: loc("/about-us") + "#models" },
-        { text: t("nav.articles"), href: loc("/articles") },
-        { text: t("footer.contact"), href: loc("/contact") },
-        { text: t("b2b.badge"), href: loc("/b2b") },
-      ],
-    },
-    {
-      label: t("footer.legal"),
-      links: [
-        { text: t("footer.termsOfService"), href: loc("/terms") },
-        { text: t("footer.privacyPolicy"), href: loc("/privacy") },
-        { text: t("footer.cookiePolicy"), href: loc("/cookies") },
-        { text: t("footer.responsibleGambling"), href: loc("/responsible-gambling") },
-      ],
-    },
-    {
-      label: "Follow",
-      links: [
-        { text: "Twitter", href: "https://twitter.com/betsplug", icon: Twitter, external: true },
-        {
-          text: "Instagram",
-          href: "https://www.instagram.com/betsplug_com",
-          icon: Instagram,
-          external: true,
-        },
-        { text: "YouTube", href: "https://youtube.com/@betsplug", icon: Youtube, external: true },
-        { text: "Telegram", href: "https://t.me/betsplug", icon: Send, external: true },
-      ],
-    },
+  const productLinks = [
+    { text: t("nav.predictions"), href: loc("/match-predictions") },
+    { text: t("nav.trackRecord"), href: loc("/track-record") },
+    { text: t("nav.howItWorks"), href: loc("/how-it-works") },
+    { text: t("nav.pricing"), href: loc("/pricing") },
+  ];
+  const companyLinks = [
+    { text: t("footer.aboutUs"), href: loc("/about-us") },
+    { text: t("nav.articles"), href: loc("/articles") },
+    { text: t("footer.contact"), href: loc("/contact") },
+    { text: t("b2b.badge"), href: loc("/b2b") },
+  ];
+  const legalLinks = [
+    { text: t("footer.termsOfService"), href: loc("/terms") },
+    { text: t("footer.privacyPolicy"), href: loc("/privacy") },
+    { text: t("footer.cookiePolicy"), href: loc("/cookies") },
+    { text: t("footer.responsibleGambling"), href: loc("/responsible-gambling") },
+  ];
+  const contactInfo = [
+    { icon: Mail, text: "support@betsplug.com", href: "mailto:support@betsplug.com" },
+    { icon: MapPin, text: "Netherlands", isAddress: true },
   ];
 
-  const bottomLinks = [
-    { key: "footer.bottomPrivacy", href: "/privacy" },
-    { key: "footer.bottomTerms", href: "/terms" },
-    { key: "footer.bottomCookies", href: "/cookies" },
-  ] as const;
-
   return (
-    <footer
-      className="relative mx-auto flex w-full max-w-6xl flex-col items-center justify-center overflow-hidden rounded-t-[2rem] border-t px-4 py-10 sm:px-6 sm:py-12 md:rounded-t-[3rem] lg:py-16"
-      style={{
-        borderColor: "hsl(0 0% 100% / 0.08)",
-        background:
-          "radial-gradient(55% 180px at 50% 0%, hsl(var(--accent-green) / 0.08), transparent 70%), linear-gradient(180deg, hsl(230 22% 7% / 0.5) 0%, hsl(234 25% 4%) 100%)",
-      }}
-    >
-      {/* Top glow hairline highlight */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-px w-1/3 -translate-x-1/2 -translate-y-1/2 rounded-full blur"
-        style={{ background: "hsl(var(--accent-green) / 0.55)" }}
-      />
-      {/* Ambient corner glows */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-20 bottom-0 h-[260px] w-[260px] rounded-full"
-        style={{ background: "hsl(var(--accent-green) / 0.08)", filter: "blur(120px)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-20 top-10 h-[220px] w-[220px] rounded-full"
-        style={{ background: "hsl(var(--accent-purple) / 0.08)", filter: "blur(120px)" }}
-      />
+    <footer className="relative z-10 mt-8 w-full overflow-hidden pt-16 pb-8">
+      {/* Ambient glow blobs */}
+      <div className="pointer-events-none absolute top-0 left-1/2 z-0 h-full w-full -translate-x-1/2 select-none">
+        <div
+          className="absolute -top-32 left-1/4 h-72 w-72 rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.15)", filter: "blur(100px)" }}
+        />
+        <div
+          className="absolute right-1/4 -bottom-24 h-80 w-80 rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.12)", filter: "blur(100px)" }}
+        />
+      </div>
 
-      {/* Main grid */}
-      <div className="grid w-full gap-8 md:grid-cols-2 xl:grid-cols-3 xl:gap-8">
+      {/* ═══ Telegram CTA banner ═══ */}
+      <div className="relative z-10 mx-auto mb-12 max-w-6xl px-4 sm:px-6">
+        <div
+          className="card-neon card-neon-green halo-green relative overflow-hidden rounded-2xl p-6 sm:p-8"
+        >
+          {/* Inner glow accent */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-16 -top-16 h-[260px] w-[260px] rounded-full"
+            style={{ background: "hsl(var(--accent-green) / 0.25)", filter: "blur(80px)" }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -left-16 -bottom-16 h-[220px] w-[220px] rounded-full"
+            style={{ background: "hsl(var(--accent-purple) / 0.2)", filter: "blur(80px)" }}
+          />
+
+          <div className="relative flex flex-col items-center gap-6 md:flex-row md:justify-between">
+            <div className="flex items-start gap-4">
+              <HexBadge variant="green" size="lg" className="hidden shrink-0 sm:flex">
+                <Send className="h-6 w-6" />
+              </HexBadge>
+              <div>
+                <Pill tone="active" className="mb-3">
+                  <Sparkles className="h-3 w-3" />
+                  Exclusive tips
+                </Pill>
+                <h3 className="text-heading text-xl text-[#ededed] sm:text-2xl">
+                  Join our Telegram for{" "}
+                  <span className="gradient-text-green">free daily picks</span>
+                </h3>
+                <p className="mt-2 max-w-md text-sm text-[#a3a9b8]">
+                  Get real-time value alerts, edge picks and live chat with our AI analysts.
+                  Be the first to know when a high-value match hits the board.
+                </p>
+                <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#6b7280]">
+                  <span className="flex items-center gap-1">
+                    <span className="live-dot" />
+                    1,200+ members online
+                  </span>
+                  <span>·</span>
+                  <span>Free to join</span>
+                  <span>·</span>
+                  <span>Daily picks</span>
+                </div>
+              </div>
+            </div>
+            <a
+              href="https://t.me/betsplug"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary shrink-0 gap-2"
+            >
+              <Send className="h-4 w-4" />
+              Join Telegram
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══ Main footer glass card ═══ */}
+      <div
+        className="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-8 rounded-2xl px-6 py-10 md:flex-row md:items-start md:justify-between md:gap-12"
+        style={{
+          background: "hsl(var(--glass-2))",
+          backdropFilter: "blur(24px) saturate(140%)",
+          WebkitBackdropFilter: "blur(24px) saturate(140%)",
+          border: "1px solid hsl(0 0% 100% / 0.08)",
+        }}
+      >
         {/* Brand column */}
-        <AnimatedContainer className="space-y-4">
-          <Link href={loc("/")} className="inline-flex items-center">
+        <div className="flex flex-col items-center md:items-start">
+          <Link href={loc("/")} className="mb-4 flex items-center gap-2.5">
             <Image
               src="/logo.webp"
               alt="BetsPlug"
@@ -142,179 +156,172 @@ export function BetsPlugFooter() {
               className="h-10 w-auto"
             />
           </Link>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#a3a9b8]">
+          <p className="mb-6 max-w-xs text-center text-sm leading-relaxed text-[#a3a9b8] md:text-left">
             {t("footer.brandTagline")}
           </p>
 
-          <ul className="mt-5 space-y-2 text-sm">
-            <li className="flex min-w-0 items-center gap-2 text-[#a3a9b8]">
-              <Mail className="h-4 w-4 shrink-0 text-[#4ade80]" />
-              <a
-                href="mailto:support@betsplug.com"
-                className="min-w-0 truncate transition-colors hover:text-[#ededed]"
-              >
-                support@betsplug.com
-              </a>
-            </li>
-            <li className="flex items-center gap-2 text-[#a3a9b8]">
-              <MapPin className="h-4 w-4 text-[#4ade80]" />
-              <span>Netherlands</span>
-            </li>
+          {/* Contact info */}
+          <ul className="mb-6 space-y-2.5 text-sm">
+            {contactInfo.map(({ icon: Icon, text, href, isAddress }) => (
+              <li key={text}>
+                {href ? (
+                  <a
+                    href={href}
+                    className="flex items-center justify-center gap-2 transition-colors hover:text-[#ededed] md:justify-start"
+                  >
+                    <Icon className="h-4 w-4 shrink-0 text-[#4ade80]" />
+                    <span className="text-[#a3a9b8]">{text}</span>
+                  </a>
+                ) : (
+                  <div className="flex items-center justify-center gap-2 md:justify-start">
+                    <Icon className="h-4 w-4 shrink-0 text-[#4ade80]" />
+                    {isAddress ? (
+                      <address className="not-italic text-[#a3a9b8]">{text}</address>
+                    ) : (
+                      <span className="text-[#a3a9b8]">{text}</span>
+                    )}
+                  </div>
+                )}
+              </li>
+            ))}
           </ul>
 
-          <p className="text-muted-foreground mt-6 text-xs text-[#6b7280] md:mt-8">
-            © {new Date().getFullYear()} BetsPlug. {t("footer.copyright")}
-          </p>
-        </AnimatedContainer>
+          {/* Socials */}
+          <div className="flex gap-3">
+            {socialLinks.map(({ icon: Icon, label, href }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="flex h-9 w-9 items-center justify-center rounded-full text-[#4ade80] transition-all hover:bg-[#4ade80]/10 hover:text-[#86efac]"
+                style={{ border: "1px solid hsl(0 0% 100% / 0.08)" }}
+              >
+                <Icon className="h-4 w-4" />
+              </a>
+            ))}
+          </div>
+        </div>
 
         {/* Link columns */}
-        <div className="mt-2 grid grid-cols-2 gap-x-6 gap-y-2 sm:gap-8 md:mt-0 md:grid-cols-2 xl:col-span-2 xl:grid-cols-4">
-          {footerSections.map((section, index) => (
-            <AnimatedContainer key={section.label} delay={0.1 + index * 0.08}>
-              <div className="mb-8 md:mb-0">
-                <h3 className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                  {section.label}
-                </h3>
-                <ul className="mt-4 space-y-2.5 text-sm">
-                  {section.links.map((link) => {
-                    const className =
-                      "inline-flex items-center gap-1.5 text-[#a3a9b8] transition-colors hover:text-[#4ade80]";
-                    const inner = (
-                      <>
-                        {link.icon && <link.icon className="h-4 w-4" />}
-                        <span>{link.text}</span>
-                      </>
-                    );
-                    return (
-                      <li key={link.text}>
-                        {link.external ? (
-                          <a
-                            href={link.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={className}
-                          >
-                            {inner}
-                          </a>
-                        ) : (
-                          <Link href={link.href} className={className}>
-                            {inner}
-                          </Link>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </AnimatedContainer>
-          ))}
-        </div>
+        <nav className="flex w-full flex-col gap-8 text-center sm:flex-row sm:justify-end sm:text-left md:w-auto md:gap-12">
+          <FooterCol title={t("footer.product")} links={productLinks} />
+          <FooterCol title={t("footer.company")} links={companyLinks} />
+          <FooterCol title={t("footer.legal")} links={legalLinks} />
+
+          {/* Help / Support column */}
+          <div>
+            <div className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#4ade80]">
+              Support
+            </div>
+            <ul className="space-y-2.5 text-sm">
+              <li>
+                <Link
+                  href={loc("/contact")}
+                  className="text-[#a3a9b8] transition-colors hover:text-[#ededed]"
+                >
+                  {t("footer.contact")}
+                </Link>
+              </li>
+              <li>
+                <a
+                  href="https://t.me/betsplug"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-1.5 text-[#a3a9b8] transition-colors hover:text-[#ededed]"
+                >
+                  <span>Live chat</span>
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#4ade80] opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#4ade80]" />
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="mailto:support@betsplug.com"
+                  className="text-[#a3a9b8] transition-colors hover:text-[#ededed]"
+                >
+                  Email support
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
       </div>
 
-      {/* Payment + security strip */}
-      <AnimatedContainer
-        delay={0.5}
-        className="relative mt-10 flex w-full flex-col items-center gap-5 rounded-2xl border px-4 py-5 sm:px-5 lg:flex-row lg:justify-between"
-      >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-[inherit]"
-          style={{
-            background: "hsl(230 16% 10% / 0.55)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            borderColor: "hsl(0 0% 100% / 0.08)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-[inherit] border"
-          style={{ borderColor: "hsl(0 0% 100% / 0.08)" }}
-        />
-
-        <div className="relative flex items-center gap-3">
-          <div
-            className="flex h-9 w-9 items-center justify-center rounded-full"
-            style={{
-              background: "hsl(var(--accent-green) / 0.12)",
-              border: "1px solid hsl(var(--accent-green) / 0.3)",
-            }}
-          >
-            <ShieldCheck className="h-4 w-4 text-[#4ade80]" strokeWidth={2} />
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-[#ededed]">
-              {t("footer.secureTitle")}
-            </p>
-            <p className="mt-0.5 flex items-center gap-1 text-xs text-[#6b7280]">
-              <Lock className="h-3 w-3" />
-              {t("footer.secureDesc")}
-            </p>
-          </div>
+      {/* ═══ Payment + security strip ═══ */}
+      <div className="relative z-10 mx-auto mt-6 flex max-w-6xl flex-col items-center gap-4 px-4 sm:flex-row sm:justify-between sm:px-6">
+        <div className="flex items-center gap-2.5">
+          <ShieldCheck className="h-4 w-4 text-[#4ade80]" />
+          <span className="text-xs text-[#6b7280]">
+            {t("footer.secureTitle")}
+          </span>
+          <Lock className="h-3 w-3 text-[#6b7280]" />
         </div>
-
-        <div className="relative flex flex-wrap items-center justify-center gap-2 lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2">
+        <div className="flex flex-wrap items-center justify-center gap-2">
           <VisaBadge />
           <MastercardBadge />
           <AmexBadge />
           <PayPalBadge />
           <ApplePayBadge />
         </div>
-
-        <Pill
-          className="relative"
-          style={{ color: "#4ade80", borderColor: "hsl(var(--accent-green) / 0.3)" }}
-        >
+        <Pill style={{ color: "#4ade80", borderColor: "hsl(var(--accent-green) / 0.3)" }}>
           <span className="live-dot" />
           {t("footer.pciCompliant")}
         </Pill>
-      </AnimatedContainer>
+      </div>
 
-      {/* Bottom bar */}
-      <div
-        className="relative mt-8 flex w-full flex-col items-center justify-between gap-4 border-t pt-6 md:flex-row"
-        style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
-      >
-        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-          {bottomLinks.map(({ key, href }) => (
-            <Link
-              key={key}
-              href={loc(href)}
-              className="text-xs text-[#6b7280] transition-colors hover:text-[#4ade80]"
-            >
-              {t(key)}
+      {/* ═══ Bottom copyright ═══ */}
+      <div className="relative z-10 mx-auto mt-8 max-w-6xl px-4 sm:px-6">
+        <div
+          className="flex flex-col items-center justify-between gap-3 border-t pt-6 text-xs text-[#6b7280] sm:flex-row"
+          style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
+        >
+          <span>© {new Date().getFullYear()} BetsPlug. {t("footer.copyright")}</span>
+          <div className="flex items-center gap-4">
+            <Link href={loc("/privacy")} className="transition-colors hover:text-[#4ade80]">
+              {t("footer.bottomPrivacy")}
             </Link>
-          ))}
+            <Link href={loc("/terms")} className="transition-colors hover:text-[#4ade80]">
+              {t("footer.bottomTerms")}
+            </Link>
+            <Link href={loc("/cookies")} className="transition-colors hover:text-[#4ade80]">
+              {t("footer.bottomCookies")}
+            </Link>
+          </div>
         </div>
-        <p className="text-center text-[11px] text-[#6b7280]">
-          {t("footer.responsible")}
-        </p>
       </div>
     </footer>
   );
 }
 
-type ViewAnimationProps = {
-  delay?: number;
-  className?: ComponentProps<typeof motion.div>["className"];
-  children: ReactNode;
-};
-
-function AnimatedContainer({ className, delay = 0.1, children }: ViewAnimationProps) {
-  const shouldReduceMotion = useReducedMotion();
-  if (shouldReduceMotion) {
-    return <div className={className}>{children}</div>;
-  }
+function FooterCol({
+  title,
+  links,
+}: {
+  title: string;
+  links: { text: string; href: string }[];
+}) {
   return (
-    <motion.div
-      initial={{ filter: "blur(4px)", translateY: -8, opacity: 0 }}
-      whileInView={{ filter: "blur(0px)", translateY: 0, opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay, duration: 0.8 }}
-      className={className}
-    >
-      {children}
-    </motion.div>
+    <div>
+      <div className="mb-3 text-xs font-semibold uppercase tracking-widest text-[#4ade80]">
+        {title}
+      </div>
+      <ul className="space-y-2.5 text-sm">
+        {links.map(({ text, href }) => (
+          <li key={text}>
+            <Link
+              href={href}
+              className="text-[#a3a9b8] transition-colors hover:text-[#ededed]"
+            >
+              {text}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
