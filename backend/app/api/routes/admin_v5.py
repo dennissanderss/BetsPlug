@@ -229,7 +229,16 @@ async def backfill_team_logos(
                 resp = await adapter._get(
                     "teams", {"league": league_api_id, "season": season}
                 )
-                items = resp.get("response", []) if isinstance(resp, dict) else []
+                # Note: adapter._get already unwraps data["response"] and
+                # returns the list (see api_football.py:288). We may also
+                # get a dict if some code path returns the full envelope —
+                # handle both defensively.
+                if isinstance(resp, list):
+                    items = resp
+                elif isinstance(resp, dict):
+                    items = resp.get("response", [])
+                else:
+                    items = []
                 if items:
                     break
                 await _asyncio.sleep(0.2)
