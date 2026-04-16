@@ -20,10 +20,10 @@ const en = {
   "nav.about": "About",
   "nav.articles": "Articles",
   "nav.login": "Login",
-  "nav.startFreeTrial": "Start Free Trial",
+  "nav.startFreeTrial": "Start Winning",
   "nav.menu": "Menu",
   "nav.getStarted": "Get Started",
-  "nav.joinBlurb": "Join 1,500+ analysts and get data-driven predictions today.",
+  "nav.joinBlurb": "Join 1,500+ bettors getting smarter picks every day.",
 
   /* Top Bar */
   "topbar.winRate": "win rate",
@@ -39,13 +39,13 @@ const en = {
 
   /* Hero */
   "hero.badge": "Live · AI football predictions for 30+ leagues",
-  "hero.titleLine1": "",
+  "hero.titleLine1": "Stop guessing.",
   "hero.titleLine2": "AI football predictions",
-  "hero.titleLine3": "you can verify.",
+  "hero.titleLine3": "that actually deliver.",
   "hero.subtitle":
-    "Four models — XGBoost, Poisson, Elo and logistic regression — combined into one AI engine forecasting Premier League, La Liga, Bundesliga, Champions League and 26+ other football leagues. Every prediction is pre-match locked and publicly tracked. No cherry-picking. No hindsight bias.",
+    "Our AI crunches 40+ stats per match across the Premier League, La Liga, Bundesliga, Champions League and 26+ other leagues. Every prediction is locked before kickoff and tracked publicly. No cherry-picking. No deleted losses. Just honest AI football predictions you can verify yourself.",
   "hero.activeUsers": "bettors trust BetsPlug every month",
-  "hero.ctaPrimary": "See today's free predictions",
+  "hero.ctaPrimary": "See today's free picks",
   "hero.ctaSecondary": "How our AI works",
   "hero.livePick": "Free Prediction",
   "hero.freePrediction": "Free Prediction",
@@ -59,60 +59,60 @@ const en = {
   "hero.winRate": "Win Rate",
   "hero.today": "Today",
   "hero.wins": "Wins",
-  "hero.usp1Title": "58% average hit-rate",
-  "hero.usp1Desc": "Measured across 80,000+ historical matches and tracked publicly on every pick.",
-  "hero.usp2Title": "Pre-match locked",
-  "hero.usp2Desc": "Predictions published before kickoff. No ex-post cherry-picking. Ever.",
+  "hero.usp1Title": "58% avg hit rate",
+  "hero.usp1Desc": "Tested on 80,000+ real matches. Every pick tracked publicly.",
+  "hero.usp2Title": "Locked before kickoff",
+  "hero.usp2Desc": "All predictions go live before the match starts. No sneaky edits. Ever.",
   "hero.usp3Title": "30+ leagues covered",
-  "hero.usp3Desc": "Premier League, La Liga, Bundesliga, Serie A, Champions League and more — all in one subscription.",
+  "hero.usp3Desc": "Premier League, La Liga, Bundesliga, Serie A, Champions League and more. One subscription.",
 
   /* Live proof strip — the ribbon of live stats under the hero */
   "liveProof.label": "Live · Updated continuously",
   "liveProof.picks": "AI predictions today",
-  "liveProof.winrate": "30-day winrate",
+  "liveProof.winrate": "30-day win rate",
   "liveProof.predictions": "Predictions last 30 days",
   "liveProof.leagues": "Football leagues live",
   "liveProof.leaguesValue": "30+",
-  "liveProof.disclaimer": "Numbers pulled live from the same database that powers every prediction. No 'results page' you have to trust separately.",
+  "liveProof.disclaimer": "These numbers come straight from the same database behind every prediction. No separate 'results page' we control. What you see is what happened.",
 
   /* PAS pain block — 'how the average bettor loses' */
-  "pas.badge": "The hard math of casual betting",
-  "pas.titleA": "Most bettors don't have a strategy.",
-  "pas.titleB": "They have a feeling.",
-  "pas.subtitle": "Industry research on retail sports bettors keeps finding the same three numbers. They're not pretty.",
+  "pas.badge": "Why most bettors lose money",
+  "pas.titleA": "You don't have a strategy.",
+  "pas.titleB": "You have a gut feeling.",
+  "pas.subtitle": "The numbers on casual betting are brutal. Here's what the industry data actually says.",
   "pas.stat1Value": "\u22126%",
-  "pas.stat1Label": "Average annual ROI",
-  "pas.stat1Desc": "The typical retail punter loses roughly 6% of every euro staked over a full year. Not in a bad year. In an average one.",
+  "pas.stat1Label": "Average yearly ROI",
+  "pas.stat1Desc": "The average punter loses 6p of every pound staked. Not in a bad year. Every year.",
   "pas.stat2Value": "48%",
-  "pas.stat2Label": "Average hit-rate on 3-way markets",
-  "pas.stat2Desc": "Coin-flip territory. Enough wins to feel like you're close. Not enough to beat the vig.",
+  "pas.stat2Label": "Average hit rate on match bets",
+  "pas.stat2Desc": "Basically a coin flip. Enough wins to keep you hooked. Not enough to beat the bookmaker's margin.",
   "pas.stat3Value": "72%",
-  "pas.stat3Label": "Accounts that end the year net-negative",
-  "pas.stat3Desc": "Only about one in four bettors finishes the calendar year up. The rest fund the ones who do.",
-  "pas.solve": "BetsPlug exists so you don't land in that 72%. Not a black box, not a 'lock of the week' — a transparent AI football predictions engine with a public win/loss record and the same data bookmakers use.",
-  "pas.cta": "See how our AI does better",
+  "pas.stat3Label": "Bettors who end the year down",
+  "pas.stat3Desc": "Three out of four bettors finish the year in the red. The other one had an edge.",
+  "pas.solve": "BetsPlug is built so you're not in that 72%. Not a tipster. Not a 'lock of the week'. A transparent AI football predictions engine with a public win/loss record. The same data the bookmakers use — now working for you.",
+  "pas.cta": "See how our AI finds the edge",
 
   /* Persona segmentation — for whom is this right */
-  "persona.badge": "Who BetsPlug is built for",
-  "persona.titleA": "Three ways",
-  "persona.titleB": "bettors use BetsPlug.",
-  "persona.subtitle": "Same platform, same AI football predictions — different habits. Pick the flow that sounds like yours.",
+  "persona.badge": "Who is BetsPlug for?",
+  "persona.titleA": "Three types of bettors",
+  "persona.titleB": "use BetsPlug.",
+  "persona.subtitle": "Same AI football predictions. Different betting styles. Find the one that fits you.",
   "persona.casualTitle": "The weekend bettor",
-  "persona.casualPitch": "You place 2–5 bets a week — mostly on matches you already planned to watch. You want a second opinion that's better than your group chat.",
-  "persona.casualFeature1": "Today's picks in 30 seconds",
-  "persona.casualFeature2": "One-line rationale per match",
+  "persona.casualPitch": "You bet on a few matches each weekend. Mostly games you're already watching. You want smarter picks than your mate's gut feeling.",
+  "persona.casualFeature1": "Today's picks in under 30 seconds",
+  "persona.casualFeature2": "Quick reason behind every pick",
   "persona.casualFeature3": "Free Pick of the Day on the homepage",
   "persona.casualCta": "Start with the free Pick of the Day",
   "persona.seriousTitle": "The serious punter",
-  "persona.seriousPitch": "You track units, shop lines across bookmakers and treat your bankroll like a portfolio. You want an AI edge without outsourcing your judgement.",
-  "persona.seriousFeature1": "Every prediction with confidence score + edge vs market odds",
-  "persona.seriousFeature2": "Full 30+ league coverage (CL, UEL, MLS included)",
-  "persona.seriousFeature3": "Pre-match locked \u2014 no hindsight adjustments",
+  "persona.seriousPitch": "You manage your bankroll properly. You shop for the best odds. You want an AI edge without losing control of your bets.",
+  "persona.seriousFeature1": "Every prediction with a confidence score + edge vs market odds",
+  "persona.seriousFeature2": "Full coverage across 30+ leagues (CL, UEL, MLS included)",
+  "persona.seriousFeature3": "Locked before kickoff \u2014 no sneaky changes after the match",
   "persona.seriousCta": "See tonight's value plays",
-  "persona.quantTitle": "The data-first bettor",
-  "persona.quantPitch": "You want the raw model outputs, not the marketing. xG, Elo deltas, Poisson goal distributions, calibration curves \u2014 all of it.",
+  "persona.quantTitle": "The numbers bettor",
+  "persona.quantPitch": "You want the raw data, not the sales pitch. Full stats, predictions, expected goals \u2014 everything our AI uses to make its picks.",
   "persona.quantFeature1": "CSV / JSON exports of every prediction",
-  "persona.quantFeature2": "Per-model breakdown (XGBoost, Poisson, Elo, logistic)",
+  "persona.quantFeature2": "Detailed breakdown from multiple AI models",
   "persona.quantFeature3": "Strategy Lab backtesting (rolling out soon)",
   "persona.quantCta": "Inspect a sample export",
 
@@ -120,13 +120,13 @@ const en = {
   "riskReversal.badge": "Zero risk to find out",
   "riskReversal.titleA": "Try every AI football prediction we publish.",
   "riskReversal.titleB": "If it's not for you, we refund you.",
-  "riskReversal.subtitle": "Start with a 7-day full-access trial for one cent. If you're not happy within 14 days of a paid subscription, email support and we refund the full amount \u2014 no survey, no win-back script, no friction.",
+  "riskReversal.subtitle": "Start with 7 days of full access for one cent. Not happy within 14 days of going paid? Email us. Full refund. No survey. No hassle.",
   "riskReversal.guaranteeTitle": "14-day money-back guarantee",
-  "riskReversal.guaranteeDesc": "Full refund on any paid plan if you're not happy within 14 days. One email. Processed within 48 hours.",
+  "riskReversal.guaranteeDesc": "Full refund on any paid plan within 14 days. One email. Processed within 48 hours. Done.",
   "riskReversal.cancelTitle": "Cancel in two clicks",
-  "riskReversal.cancelDesc": "No phone calls, no retention offers, no 'please give feedback'. Settings \u2192 Subscription \u2192 Cancel. Access continues until the end of the period you already paid for.",
-  "riskReversal.noCardTitle": "No card for the free pick",
-  "riskReversal.noCardDesc": "Want to see the model before you pay anything? The Pick of the Day and today's homepage picks are free to view. No signup. No credit card.",
+  "riskReversal.cancelDesc": "No phone calls. No 'please stay' offers. Settings, Subscription, Cancel. You keep access until the end of your paid period.",
+  "riskReversal.noCardTitle": "No card for the free picks",
+  "riskReversal.noCardDesc": "Want to see the AI in action before paying anything? The Pick of the Day and today's homepage picks are free. No signup. No card.",
   "riskReversal.cta": "Claim your 7-day \u20ac0.01 trial",
 
   /* Language switcher */
@@ -138,7 +138,7 @@ const en = {
   "comparison.titleA": "What tipsters hide.",
   "comparison.titleB": "What we publish.",
   "comparison.subtitle":
-    "Most tipster sites quietly delete losing weeks and screenshot the wins. We do the opposite. Every AI football prediction — hit or miss — stays in the public record. Here's how that looks side by side.",
+    "Most tipsters quietly delete their losing weeks and screenshot the wins. We do the opposite. Every AI football prediction — win or loss — stays public forever. See how that stacks up.",
   "comparison.feature": "Feature",
   "comparison.winner": "Winner",
   "comparison.others": "Others",
@@ -151,25 +151,25 @@ const en = {
 
   /* How it works */
   "how.badge": "How it works",
-  "how.title": "From raw data to AI football predictions in three steps.",
+  "how.title": "From match data to AI football predictions in three steps.",
   "how.subtitle":
-    "One AI engine. One daily Pick of the Day. One publicly verifiable track record. No black boxes.",
-  "how.step1Title": "1. Pulse scans every match",
+    "One AI engine. One daily Pick of the Day. One public track record you can verify. No black boxes.",
+  "how.step1Title": "1. Our AI scans every match",
   "how.step1Desc":
-    "BetsPlug Pulse ingests 40+ signals per fixture — form, league position, head-to-head history, xG, lineup strength, injuries, rest days — and produces one AI football prediction per match. Refreshed before every kickoff across all 30+ supported leagues.",
-  "how.step2Title": "2. We surface the single best pick",
+    "Our AI analyzes form, head-to-head records, and league standings — plus 40 other factors per match. Updated before every kickoff across 30+ leagues. That's how our AI football predictions start.",
+  "how.step2Title": "2. We pick the single best bet",
   "how.step2Desc":
-    "Pick of the Day is our highest-confidence AI football prediction out of 50+ matches that day — currently tracking at {potdAccuracy}% accuracy over {potdPicks} picks. One clear call. Delivered daily. Free to see on the homepage before you pay a cent.",
+    "Pick of the Day is our highest-confidence AI football prediction out of 50+ matches that day — currently at {potdAccuracy}% accuracy across {potdPicks} picks. One clear call. Delivered daily. Free on the homepage.",
   "how.step3Title": "3. Every pick tracked, nothing edited",
   "how.step3Desc":
-    "Predictions are saved before kickoff and auto-graded after the final whistle. Wins, losses, model-by-model — the full CSV is yours to download. Nothing edited. Nothing deleted. Nothing we couldn't prove in court.",
+    "Predictions are saved before kickoff and graded automatically after the final whistle. Wins and losses — the full CSV is yours to download. Nothing edited. Nothing deleted.",
   "how.deepDive": "See the full methodology",
 
   /* Pricing */
   "pricing.badge": "Pricing",
-  "pricing.title": "Less than one bad bet per month.",
+  "pricing.title": "You already lose more than this on one bad bet.",
   "pricing.subtitle":
-    "A single stake you lose on a gut feeling costs more than a month of BetsPlug. See every AI football prediction, the Pick of the Day and the full public track record. Start with a 7-day trial for €0.01 — cancel in two clicks if it's not for you. No lock-in. No hidden fees.",
+    "Most bettors burn through €15 in a single weekend on gut-feeling stakes. BetsPlug gives you AI football predictions, a daily Pick of the Day, and a fully public track record — for less than that one lost accumulator. Try it for €0.01 over 7 days. Cancel in two clicks. No lock-in. No hidden fees.",
   "pricing.monthly": "Monthly",
   "pricing.yearly": "Yearly",
   "pricing.save": "Save 20%",
@@ -180,10 +180,10 @@ const en = {
   "pricing.ctaLifetime": "Get lifetime access",
 
   /* Final CTA */
-  "cta.badge": "Ready to win smarter?",
+  "cta.badge": "Ready to bet smarter?",
   "cta.title": "Start your data-driven edge today.",
   "cta.subtitle":
-    "Join 1,500+ analysts already using BetsPlug to make sharper, calmer, data-backed decisions.",
+    "Join 1,500+ bettors already using BetsPlug to make smarter, data-backed picks.",
   "cta.primary": "Start Free Trial",
   "cta.secondary": "View Predictions",
 
@@ -193,7 +193,7 @@ const en = {
   "footer.premiumTitleB": "Premium Telegram",
   "footer.premiumTitleC": "group",
   "footer.premiumSubtitle":
-    "Get real-time picks, edge alerts and live chat with our AI analysts. Be the first to know when a high-value match hits the board - straight in your pocket.",
+    "Get real-time picks, edge alerts and live chat with fellow bettors. Be the first to know when a high-value match hits the board — straight in your pocket.",
   "footer.perk1": "Instant value alerts",
   "footer.perk2": "Private analyst Q&A",
   "footer.perk3": "Daily free picks",
@@ -238,17 +238,17 @@ const en = {
   "trusted.titleB": "bettors across Europe",
   "trusted.titleC": "trust BetsPlug.",
   "trusted.subtitle":
-    "No hype. No hidden losses. Just AI football predictions with a track record you can check any time — and models that don't care whether you agree with them.",
-  "trusted.card1Title": "Probabilities you can read at a glance",
+    "No hype. No hidden losses. Just AI football predictions with a track record you can check any time.",
+  "trusted.card1Title": "Picks you can read in 3 seconds",
   "trusted.card1Desc":
-    "No jargon, no charts to decode. Each AI football prediction shows a clean win %, a confidence score, and a one-line rationale. Takes 3 seconds to scan — whether you bet once a week or every day.",
-  "trusted.card2Title": "Accuracy we publish — win or lose",
+    "No confusing charts. Every AI football prediction shows a clear win %, a confidence score, and a short explanation. Scan it, decide, move on.",
+  "trusted.card2Title": "We publish every result — wins and losses",
   "trusted.card2Desc":
-    "58% average hit-rate across 80,000+ historical matches. Every pick timestamped before kickoff and graded automatically after the final whistle. The track record is public. Check it yourself before you pay a cent.",
+    "58% average hit rate across 80,000+ matches. Every pick timestamped before kickoff. Auto-graded after full time. The track record is public. Check it before you spend a penny.",
   "trusted.learnMore": "See the full track record",
-  "trusted.card3Title": "Built with institutional-grade models",
+  "trusted.card3Title": "Built with serious AI models",
   "trusted.card3Desc":
-    "XGBoost, Poisson distribution, Elo ratings, logistic regression — the same model families used by quant shops and sportsbooks. Ensembled into one AI engine for better accuracy than any single method alone.",
+    "Multiple AI models work together to produce one prediction per match. Each model brings a different angle. Together they're more accurate than any single approach.",
 
   /* Track record section */
   "track.label": "Track Record",
@@ -263,9 +263,9 @@ const en = {
   "track.titleB": "in numbers.",
   "track.rating": "4.9 / 5 from 1,500+ verified users",
   "track.desc1":
-    "Every AI football prediction is timestamped before kickoff, auto-graded after the final whistle, and written to the same public database that powers the homepage. Wins and losses. No editing. No hidden results tab.",
+    "Every AI football prediction is timestamped before kickoff, auto-graded after the final whistle, and written to the same public database that powers the homepage. Wins and losses. No editing. No hidden results.",
   "track.desc2":
-    "Premier League predictions, La Liga tips, Champions League forecasts, Eredivisie analysis — the same methodology and the same transparency across 30+ football leagues worldwide. No 'we only track our best league' tricks.",
+    "Premier League predictions, La Liga tips, Champions League picks, Eredivisie analysis — same approach, same honesty across 30+ football leagues worldwide. We don't cherry-pick our best league.",
   "track.cta": "View the full track record",
   "track.askQuestion": "How is accuracy calculated?",
 
@@ -303,11 +303,11 @@ const en = {
     "Thousands of football fans already use BetsPlug. Here's what they think.",
 
   /* Final landing CTA */
-  "finalCta.badge": "Ready to see the models at work?",
+  "finalCta.badge": "Ready to get your edge?",
   "finalCta.titleA": "See tomorrow's",
   "finalCta.titleHighlight": "AI football predictions",
   "finalCta.titleB": "today.",
-  "finalCta.subtitle": "1,500+ bettors across Europe already use BetsPlug to find value before the market does. 7 full days of Gold access — every prediction, the Pick of the Day, the complete track record — for one symbolic cent. Cancel in two clicks if it's not for you.",
+  "finalCta.subtitle": "1,500+ bettors across Europe already use BetsPlug to find value before the bookmakers catch up. Get 7 full days of Gold access — every prediction, the Pick of the Day, the full track record — for just one cent. Cancel in two clicks if it's not for you.",
   "finalCta.primary": "Claim your 7-day €0.01 trial",
   "finalCta.secondary": "Browse today's free picks →",
   "finalCta.moneyBack": "14-day money-back guarantee",
@@ -359,39 +359,39 @@ const en = {
   "pricing.trust3": "Secure payment by Stripe",
 
   /* Articles */
-  "articles.badge": "Match analysis · model deep-dives · betting science",
-  "articles.title": "Fresh",
+  "articles.badge": "Match breakdowns · betting strategy · AI football predictions",
+  "articles.title": "Weekly",
   "articles.titleAccent": "AI football predictions",
-  "articles.titleTail": "analysis, every week.",
-  "articles.subtitle": "Match previews, ensemble deep-dives and data-driven betting insights written by the team behind the BetsPlug AI football predictions engine — no tipster takes, just the math.",
+  "articles.titleTail": "insights you can actually use.",
+  "articles.subtitle": "Match previews, betting strategy breakdowns and football betting tips from the BetsPlug team. No hype. No gut feelings. Just clear thinking backed by data.",
   "articles.allArticles": "All Articles",
   "articles.sportFootball": "Football",
   "articles.readTime": "min read",
-  "articles.empty": "No articles in this category yet - check back soon.",
+  "articles.empty": "No articles here yet — new guides drop every week.",
   "articles.back": "Back to all articles",
   "articles.breadcrumbHome": "Home",
   "articles.breadcrumbBlog": "Articles",
   "articles.share": "Share",
   "articles.related": "Related Articles",
-  "articles.ctaBadge": "Members-only edge",
-  "articles.ctaTitle": "Turn this analysis into real AI football predictions.",
-  "articles.ctaSubtitle": "Claim your €0,01 trial and unlock calibrated probabilities, Pick of the Day and the full BetsPlug Pulse for every fixture across 30+ leagues.",
-  "articles.ctaButton": "Claim €0,01 trial",
+  "articles.ctaBadge": "Your betting edge starts here",
+  "articles.ctaTitle": "Put this knowledge to work with real AI football predictions.",
+  "articles.ctaSubtitle": "Start your €0,01 trial and get match-by-match win probabilities, a daily Pick of the Day and full BetsPlug Pulse breakdowns for 30+ leagues.",
+  "articles.ctaButton": "Start €0,01 trial",
   "articles.ctaNoCard": "No lock-in · Cancel in two clicks · Stripe-secured",
-  "articles.listCtaBadge": "From essay to upcoming fixtures",
-  "articles.listCtaTitle": "Ready to apply this analysis to tonight's",
+  "articles.listCtaBadge": "From reading to real picks",
+  "articles.listCtaTitle": "Ready to use these football betting tips on tonight's",
   "articles.listCtaAccent": "AI football predictions?",
-  "articles.listCtaSubtitle": "BetsPlug runs the same 4-model ensemble our writers reference — XGBoost, Dixon-Coles Poisson, Point-in-Time Elo and calibrated logistic regression — across 30+ leagues. Probabilities refreshed every hour.",
-  "articles.listCtaPrimary": "Claim €0,01 trial",
+  "articles.listCtaSubtitle": "BetsPlug analyses every match with four proven prediction methods running side by side — covering 30+ leagues. Win probabilities update every hour so you always have the latest numbers.",
+  "articles.listCtaPrimary": "Start €0,01 trial",
   "articles.listCtaSecondary": "See today's predictions",
   "articles.listCtaReassurance": "No lock-in · Cancel in two clicks · Stripe-secured",
   "articles.tldr": "TL;DR",
   "articles.publishedOn": "Published",
   "articles.byline": "By",
-  "articles.checkAll": "Check all articles",
+  "articles.checkAll": "Browse all articles",
   "articles.prevPost": "Previous article",
   "articles.nextPost": "Next article",
-  "articles.navLabel": "Continue reading",
+  "articles.navLabel": "Keep reading",
 
   /* SEO section */
   "seo.badge": "AI football predictions",
@@ -401,7 +401,7 @@ const en = {
     "BetsPlug is the AI-powered football prediction platform trusted by thousands of football fans worldwide. Our machine learning models analyse every match across 30+ leagues — from the Premier League and La Liga to the Bundesliga, Serie A and Ligue 1 — to calculate accurate win probabilities and identify value betting opportunities. Whether you're looking for today's football predictions, researching your next accumulator, or want to see which team is most likely to win tonight — BetsPlug gives you clear, honest AI predictions backed by a fully public track record.",
   "seo.pillar1Title": "AI Football Prediction Engine",
   "seo.pillar1Desc":
-    "BetsPlug Pulse, our AI football prediction engine, combines Elo ratings, Poisson goal models, and logistic regression to forecast match outcomes across all major football leagues. Multiple models work together to deliver predictions that are more accurate than any single method alone — giving you data-driven football tips you can trust.",
+    "BetsPlug Pulse, our AI football prediction engine, combines team strength ratings, a scoreline predictor and a pattern-recognition AI model to forecast match outcomes across all major football leagues. Multiple models work together to deliver predictions that are more accurate than any single method alone — giving you data-driven football tips you can trust.",
   "seo.pillar2Title": "Today's Football Betting Tips",
   "seo.pillar2Desc":
     "Every day, BetsPlug generates AI-powered betting tips for 50+ matches. Each football prediction includes win probabilities, confidence scores, and pre-match odds comparison — so you can see exactly where the value lies before placing any bet.",
@@ -422,7 +422,7 @@ const en = {
     "From Premier League predictions to Champions League tips, from Eredivisie forecasts to Süper Lig match analysis — BetsPlug covers 30+ football leagues worldwide. Our AI models are trained on years of historical match data, form tables, head-to-head records and expected goals (xG) to deliver reliable football betting predictions for every competition we cover.",
   "seo.pillar8Title": "How BetsPlug's AI Predictions Work",
   "seo.pillar8Desc":
-    "BetsPlug Pulse, our AI engine, combines Elo ratings for team strength, Poisson distribution for goal prediction, and logistic regression for pattern recognition — blending all signals via weighted averaging into final match probabilities. The result: accurate, data-backed football predictions updated before every matchday across all supported leagues.",
+    "BetsPlug Pulse, our AI engine, combines team strength ratings, a scoreline predictor and a pattern-recognition AI model — blending all signals via weighted averaging into final match probabilities. The result: accurate, data-backed football predictions updated before every matchday across all supported leagues.",
 
   /* FAQ */
   "faq.badge": "Frequently Asked Questions",
@@ -454,7 +454,7 @@ const en = {
   "contact.card1Cta": "Open AI chat",
   "contact.card2Title": "Telegram community",
   "contact.card2Desc":
-    "1,200+ bettors online, daily AI picks, live Q&A with the model team, and instant edge alerts when the ensemble flags a high-confidence fixture.",
+    "1,200+ bettors online, daily AI picks, live Q&A with the model team, and instant edge alerts when our AI flags a high-confidence fixture.",
   "contact.card2Cta": "Join Telegram",
   "contact.card3Title": "Email a real human",
   "contact.card3Desc":
@@ -473,7 +473,7 @@ const en = {
   "contact.faqGroup1": "Getting started",
   "contact.faq1Q": "What exactly is BetsPlug?",
   "contact.faq1A":
-    "BetsPlug is an AI football analytics platform. We publish probability-driven predictions from a four-model ensemble, point-in-time Elo ratings, Dixon-Coles Poisson output and a transparent public track record — so you can make data-backed decisions. We are not a bookmaker; you cannot place bets with us.",
+    "BetsPlug is an AI football analytics platform. We publish probability-driven predictions from four combined AI models, team strength ratings, scoreline predictions and a transparent public track record — so you can make data-backed decisions. We are not a bookmaker; you cannot place bets with us.",
   "contact.faq2Q": "Do I need to pay to try BetsPlug?",
   "contact.faq2A":
     "No. Three AI picks are free every day and the public track record has no paywall. When you're ready for more, the €0,01 Bronze trial unlocks full Gold access for 7 days — cancel in two clicks, no auto-upgrade.",
@@ -541,7 +541,7 @@ const en = {
   "about.missionBody1":
     "For too long the football prediction market has run on hype. YouTube gurus chasing clout. Telegram channels selling 'locks of the week.' Paid tipsters with no verifiable history and a habit of deleting bad months. As lifelong football fans, it drove us up the wall — because we knew the underlying data was already saying something more interesting than any of them were.",
   "about.missionBody2":
-    "So we built the tool we always wished existed: a platform that ingests thousands of matches per week, runs them through XGBoost, Dixon-Coles Poisson, point-in-time Elo and a calibrated logistic regression, and only publishes the picks where the models and the market disagree enough to matter. No vibes. No survivorship bias. Every prediction timestamped pre-kickoff and graded in public.",
+    "So we built the tool we always wished existed: a platform that ingests thousands of matches per week, runs them through four specialised AI models — a pattern finder, a scoreline predictor, a team strength tracker and an odds calibrator — and only publishes the picks where the models and the market disagree enough to matter. No vibes. Every prediction timestamped pre-kickoff and graded in public.",
   "about.missionCta": "See the engine in detail",
 
   "about.statsBadge": "By the numbers",
@@ -561,13 +561,13 @@ const en = {
     "BetsPlug isn't a tipster service. It's a disciplined system with a public ledger. These are the rules we refuse to bend — no matter how bad a week gets.",
   "about.value1Title": "Data over opinion — always",
   "about.value1Desc":
-    "Every prediction comes from a model, not a mood. We publish the explicit probability, the ensemble confidence, and the disagreement with the market so you can verify the reasoning instead of trusting a face on a screen.",
+    "Every prediction comes from a model, not a mood. We publish the explicit probability, the combined AI confidence, and the disagreement with the market so you can verify the reasoning instead of trusting a face on a screen.",
   "about.value2Title": "Track record lives in public",
   "about.value2Desc":
     "Every AI football prediction lives forever on our public track record — wins, losses and pushes, never deleted. If we don't perform over the long run, we don't deserve a cent of your money. Transparency is the whole point.",
   "about.value3Title": "Continuous retraining",
   "about.value3Desc":
-    "Football evolves. Managers get sacked, rosters reshuffle, new leagues enter the coverage. Our models retrain on fresh results and the ensemble is re-weighted quarterly based on out-of-sample performance — never stagnant.",
+    "Football evolves. Managers get sacked, rosters reshuffle, new leagues enter the coverage. Our models retrain on fresh results and the AI is re-weighted quarterly based on real-world performance — never stagnant.",
   "about.value4Title": "Your edge, not ours",
   "about.value4Desc":
     "We're analysts, not bookmakers. When the model beats the market, you benefit — not a platform skimming a vig off your losses. That alignment shapes every product decision, every price, every feature priority.",
@@ -585,7 +585,7 @@ const en = {
   "about.founder2Name": "Dennis",
   "about.founder2Role": "Co-founder · Data science & modelling",
   "about.founder2Bio":
-    "Football enthusiast turned data scientist with years in the ICT trenches. Owns the four-model ensemble, walk-forward validation, calibration and the integrity rules that keep the published win-rate honest.",
+    "Football enthusiast turned data scientist with years in the ICT trenches. Owns the four AI models, walk-forward validation, calibration and the integrity rules that keep the published win-rate honest.",
 
   "about.ctaTitle": "Ready to swap tipster hype for AI football predictions?",
   "about.ctaSubtitle":
@@ -640,9 +640,9 @@ const en = {
   "tr.pipe3Title": "Feature engineering",
   "tr.pipe3Desc":
     "For every fixture we compute 40+ features — Elo, xG trends, rest days, travel, head-to-head, referee bias, market movement — stored in a point-in-time feature store so training never leaks future information.",
-  "tr.pipe4Title": "Four-model ensemble",
+  "tr.pipe4Title": "Four AI models combined",
   "tr.pipe4Desc":
-    "XGBoost, Dixon-Coles Poisson, point-in-time Elo and a calibrated logistic regression each vote on the outcome. Their probabilities are ensembled into the final BetsPlug prediction.",
+    "Four separate AI models — a pattern finder, a scoreline predictor, a team strength tracker and an odds calibrator — each produce their own probabilities. Their outputs are combined into the final BetsPlug prediction.",
   "tr.pipe5Title": "Value detection",
   "tr.pipe5Desc":
     "Each prediction is compared to the best available market odds. Only picks with a statistically significant edge — after commission and expected closing-line slippage — get flagged as value.",
@@ -725,7 +725,7 @@ const en = {
   "hiw.metaTitle":
     "How Our AI Football Predictions Work · BetsPlug",
   "hiw.metaDesc":
-    "Four models — XGBoost, Poisson, Elo and logistic regression — turn 80,000+ matches of history into AI football predictions for 30+ leagues. Pre-match locked. Publicly tracked.",
+    "Four AI models analyse 80,000+ matches of history and deliver AI football predictions for 30+ leagues. Pre-match locked. Publicly tracked.",
   "hiw.breadcrumbHome": "Home",
   "hiw.breadcrumbHow": "How it works",
 
@@ -766,12 +766,12 @@ const en = {
   "hiw.step2Badge": "Step 02 · Forecast",
   "hiw.step2Title": "Four models, one AI football prediction per match",
   "hiw.step2Lead":
-    "We don't pick one model and pray. BetsPlug runs four — XGBoost, Poisson, Elo ratings and a calibrated logistic regression — and ensembles their outputs into a single probability for each match outcome.",
+    "We don't pick one model and pray. BetsPlug runs four AI models — a pattern finder, a scoreline predictor, team strength ratings and an odds calibrator — and combines their outputs into a single probability for each match outcome.",
   "hiw.step2P1":
-    "Each model has a blind spot. XGBoost captures non-linear interactions; Poisson nails low-scoring draws; Elo tracks momentum; logistic regression keeps the probabilities honest. Ensembled, they cover each other's weaknesses. That's why Pick-of-the-Day currently sits at {potdAccuracy}% over {potdPicks} tracked forecasts.",
+    "Each model has a blind spot. One captures hidden patterns in form and fatigue; another nails low-scoring draws; the third tracks team momentum; the fourth keeps the probabilities honest. Combined, they cover each other's weaknesses. That's why Pick-of-the-Day currently sits at {potdAccuracy}% over {potdPicks} tracked forecasts.",
   "hiw.step2Point1Title": "Pick of the Day",
   "hiw.step2Point1Desc":
-    "{potdAccuracy}% hit rate across {potdPicks} picks — the single highest-confidence forecast each day, selected by the ensemble.",
+    "{potdAccuracy}% hit rate across {potdPicks} picks — the single highest-confidence forecast each day, selected by our combined AI.",
   "hiw.step2Point2Title": "All match predictions",
   "hiw.step2Point2Desc":
     "Browse every upcoming fixture with AI probabilities, live scores and opening odds — grouped by league.",
@@ -826,15 +826,15 @@ const en = {
   /* Engine under the hood */
   "hiw.engineTitle": "Under the hood — the four models",
   "hiw.engineSubtitle": "Each model is trained on 80,000+ historical matches and walk-forward validated",
-  "hiw.engine1Name": "XGBoost",
-  "hiw.engine1Desc": "Gradient-boosted decision trees. Captures non-linear interactions between form, fatigue, H2H and venue effects that linear models miss.",
-  "hiw.engine2Name": "Dixon-Coles Poisson",
-  "hiw.engine2Desc": "Models goals as Poisson-distributed events and yields precise scoreline probabilities — especially strong for low-scoring leagues.",
-  "hiw.engine3Name": "Point-in-Time Elo",
+  "hiw.engine1Name": "Pattern Finder",
+  "hiw.engine1Desc": "An advanced AI model that spots hidden patterns between form, fatigue, H2H and venue effects that simpler methods miss.",
+  "hiw.engine2Name": "Scoreline Predictor",
+  "hiw.engine2Desc": "An AI model that predicts the most likely scoreline for every match — especially strong for low-scoring leagues.",
+  "hiw.engine3Name": "Team Strength Tracker",
   "hiw.engine3Desc": "Team-strength ratings updated match-by-match using only pre-kickoff data. Venue-adjusted. Zero lookahead.",
-  "hiw.engine4Name": "Calibrated Logistic Regression",
-  "hiw.engine4Desc": "Keeps the ensemble honest. Outputs probabilities that match long-run frequencies — not inflated confidence.",
-  "hiw.engineDisclaimer": "Each model is tested on matches it has never seen (walk-forward validation, season by season). The ensemble is re-weighted quarterly based on out-of-sample performance. Our track record page shows every prediction — wins and losses — with nothing deleted.",
+  "hiw.engine4Name": "Odds Calibrator",
+  "hiw.engine4Desc": "Keeps the other models honest. Outputs win probabilities that match long-run frequencies — not inflated confidence.",
+  "hiw.engineDisclaimer": "Each model is tested on matches it has never seen (walk-forward validation, season by season). The models are re-weighted quarterly based on real-world performance. Our track record page shows every prediction — wins and losses — with nothing deleted.",
 
   /* Objection section - FAQ */
   "hiw.faqBadge": "Objections, answered",
@@ -846,7 +846,7 @@ const en = {
     "Pick of the Day: {potdAccuracy}% hit rate across {potdPicks} tracked predictions. Overall 3-way match predictions (home/draw/away) hit around 50% — meaningfully above the ~37% a random guess would yield. Every prediction is timestamped before kickoff and graded automatically. You can verify every number on the public track record.",
   "hiw.faq2Q": "What is Pick of the Day?",
   "hiw.faq2A":
-    "Each day the ensemble flags one fixture with unusually high model confidence. That's Pick of the Day — currently at {potdAccuracy}% hit rate. You also get every other prediction on the platform, not just this one.",
+    "Each day our AI flags one fixture with unusually high confidence. That's Pick of the Day — currently at {potdAccuracy}% hit rate. You also get every other prediction on the platform, not just this one.",
   "hiw.faq3Q": "Can I download the raw prediction data?",
   "hiw.faq3A":
     "Yes. The track record page has a CSV export button. Every prediction, every timestamp, every grade. Run your own analysis and sanity-check our claims — we'd rather you verify than take our word.",
@@ -881,7 +881,7 @@ const en = {
   /* Page heading */
   "checkout.pageTitle": "Unlock your AI football predictions",
   "checkout.pageSubtitle":
-    "One €0,01 card-verify, then full access to the 4-model ensemble across 30+ leagues. Stripe-secured checkout, cancel in two clicks.",
+    "One €0,01 card-verify, then full access to all four AI models across 30+ leagues. Stripe-secured checkout, cancel in two clicks.",
 
   /* Stepper labels */
   "checkout.step1": "Account",
@@ -1030,7 +1030,7 @@ const en = {
   "welcome.title": "You're in the model,",
   "welcome.titleHighlight": "not the narrative.",
   "welcome.subtitle":
-    "No more tipster Telegram chaos. The BetsPlug 4-model ensemble is now running on every fixture for you — XGBoost, Dixon-Coles Poisson, Point-in-Time Elo and calibrated logistic regression. Calibrated AI football predictions, not hot takes.",
+    "No more tipster Telegram chaos. The BetsPlug AI is now running on every fixture for you — four proven models working together. Data-driven AI football predictions, not hot takes.",
 
   "welcome.trialTitle": "Your €0,01 trial is active",
   "welcome.trialBody":
@@ -1050,7 +1050,7 @@ const en = {
     "Use the email and password you just created to unlock the member dashboard and tonight's AI football predictions.",
   "welcome.next2Title": "See today's locked picks",
   "welcome.next2Body":
-    "Calibrated probabilities land every morning, scored across 30+ leagues. Pure model output — no pundit noise.",
+    "Win probabilities land every morning, scored across 30+ leagues. Pure AI analysis — no pundit noise.",
   "welcome.next3Title": "Track your ROI",
   "welcome.next3Body":
     "Watch the numbers go up with our live bankroll tracker and weekly performance reports.",
@@ -1143,11 +1143,11 @@ const en = {
   "login.meta.description":
     "Log in to your BetsPlug account to see today's picks, track your ROI and manage your subscription.",
 
-  "login.badge": "Members area",
-  "login.title": "Welcome back.",
-  "login.titleHighlight": "Tonight's AI football predictions are waiting.",
+  "login.badge": "Welcome back",
+  "login.title": "Good to see you.",
+  "login.titleHighlight": "Today's predictions are ready.",
   "login.subtitle":
-    "Sign in to see today's calibrated probabilities, your live ROI tracker and the latest locked picks across 30+ leagues.",
+    "Sign in to see today's picks, check your live results and unlock the latest predictions across 30+ leagues.",
 
   "login.email": "Email address",
   "login.emailPh": "you@example.com",
@@ -1227,43 +1227,43 @@ const en = {
   "matchPred.metaTitle": "AI Football Predictions · Free Daily Picks · BetsPlug",
   "matchPred.metaDesc":
     "See today's AI football predictions across Premier League, La Liga, Bundesliga and 27+ more leagues — three full picks free every day, unlocked with a €0,01 trial.",
-  "matchPred.eyebrow": "Today's free AI picks",
-  "matchPred.title": "AI football predictions for every upcoming match",
+  "matchPred.eyebrow": "Today's football predictions",
+  "matchPred.title": "AI football predictions for every match —",
   "matchPred.subtitle":
-    "A live window into what the BetsPlug ensemble is forecasting right now. Three full picks are free every day — win probabilities, confidence scores and model output included. Unlock the rest with a €0,01 trial.",
-  "matchPred.trust1": "4-model AI ensemble",
+    "See what BetsPlug's AI is predicting right now. Three full picks are free every day — win probabilities, confidence scores and recommended bet types included. Unlock the rest with a €0,01 trial.",
+  "matchPred.trust1": "AI-powered predictions",
   "matchPred.trust2": "Live probabilities",
   "matchPred.trust3": "Publicly tracked",
   "matchPred.statFree": "Free picks today",
-  "matchPred.statUpcoming": "Upcoming fixtures",
+  "matchPred.statUpcoming": "Upcoming matches",
   "matchPred.statLocked": "Locked predictions",
   "matchPred.statAvgConf": "Avg confidence",
-  "matchPred.freeHeading": "Your 3 free AI predictions — today",
+  "matchPred.freeHeading": "Your 3 free football predictions — today",
   "matchPred.freeSub":
-    "Full win probabilities, confidence scores and model reasoning. No email required, no paywall.",
-  "matchPred.lockedHeading": "The rest of today's slate — members only",
+    "Full win probabilities, confidence scores and the AI's recommended bet type. No email needed, no paywall.",
+  "matchPred.lockedHeading": "More match predictions — members only",
   "matchPred.lockedSub":
-    "Every other AI football prediction we've generated for the next 7 days. Gold unlocks all 30+ leagues; the €0,01 trial unlocks everything for a week.",
+    "Every other AI football prediction for the next 7 days. Gold unlocks all 30+ leagues. The €0,01 trial gives you full access for a week.",
   "matchPred.bannerBadge": "Members only",
-  "matchPred.bannerTitle": "Unlock every match in the slate",
+  "matchPred.bannerTitle": "Unlock every match prediction",
   "matchPred.bannerDesc":
-    "Every locked pick above is a full prediction — probabilities, confidence, ensemble reasoning. A €0,01 Bronze trial unlocks it all for 7 days.",
-  "matchPred.bannerBullet1": "Every AI football prediction, every league",
-  "matchPred.bannerBullet2": "Full 4-model ensemble output per match",
-  "matchPred.bannerBullet3": "Live probabilities during the match",
+    "Every locked pick above is a full AI football prediction — probabilities, confidence and the best bet type for that match. A €0,01 trial unlocks it all for 7 days.",
+  "matchPred.bannerBullet1": "AI football predictions for every match, every league",
+  "matchPred.bannerBullet2": "Full AI analysis per match",
+  "matchPred.bannerBullet3": "Live probabilities updated every hour",
   "matchPred.bannerBullet4": "Cancel in two clicks — no auto-upgrade",
-  "matchPred.bannerCta": "Unlock every match",
+  "matchPred.bannerCta": "Unlock all predictions",
   "matchPred.bannerCtaSecondary": "See pricing",
-  "matchPred.bannerNote": "€0,01 activates your 7-day full-access Gold trial. No hidden upgrade.",
-  "matchPred.ctaFinalTitle": "Stop guessing. Start with the model.",
+  "matchPred.bannerNote": "€0,01 activates your 7-day full-access trial. No hidden fees.",
+  "matchPred.ctaFinalTitle": "Stop guessing. Start with AI football predictions.",
   "matchPred.ctaFinalDesc":
-    "Every upcoming match. Every probability. Every confidence score. Unlocked in seconds. Join the bettors who run their slate through AI before staking a cent.",
+    "Every upcoming match. Every probability. Every confidence score. Unlocked in seconds. Join the bettors who check the AI before placing a bet.",
   "matchPred.ctaFinalButton": "Claim €0,01 trial",
   "matchPred.ctaFinalSecondary": "Browse plans",
   "matchPred.loadingTitle": "Loading upcoming matches…",
-  "matchPred.emptyTitle": "No upcoming matches in the window",
+  "matchPred.emptyTitle": "No upcoming matches right now",
   "matchPred.emptyDesc":
-    "New fixtures are scheduled every morning. Check back shortly or explore our track record.",
+    "New matches are added every morning. Check back soon or explore our track record.",
   "matchPred.emptyCta": "View track record",
   "matchPred.errorTitle": "Couldn't load live fixtures",
   "matchPred.errorDesc":
@@ -1280,14 +1280,14 @@ const en = {
   "b2b.titleA": "Bring AI football predictions",
   "b2b.titleB": "into your product.",
   "b2b.subtitle":
-    "Sportsbooks, analytics platforms, media companies and SaaS operators use the BetsPlug engine — raw probabilities, graded ledger, ensemble output — to power pre-match odds, editorial insights and user-facing forecasts. Four partnership tracks, one underlying model.",
+    "Sportsbooks, analytics platforms, media companies and SaaS operators use the BetsPlug engine — raw probabilities, graded ledger, combined AI output — to power pre-match odds, editorial insights and user-facing forecasts. Four partnership tracks, one underlying model.",
   "b2b.partnershipsBadge": "Four partnership tracks",
   "b2b.partnershipsTitle": "Pick the model that fits your product.",
   "b2b.partnershipsSubtitle":
     "Whether you need raw data through a REST API, a turnkey AI prediction engine behind your brand, an affiliate funnel or editorial collaboration — we have a commercial structure for it.",
   "b2b.dataLicensing": "Data & API licensing",
   "b2b.dataLicensingDesc":
-    "Direct API access to AI football predictions, ensemble probabilities, point-in-time Elo ratings and match features. Perfect for sportsbooks, fantasy platforms and quant-oriented analytics products.",
+    "Direct API access to AI football predictions, combined probabilities, team strength ratings and match features. Perfect for sportsbooks, fantasy platforms and analytics products.",
   "b2b.whiteLabel": "White-label prediction engine",
   "b2b.whiteLabelDesc":
     "Embed the BetsPlug prediction engine behind your own brand — custom domain, tailored UI, dedicated support SLA, flexible volume pricing. Ship in weeks, not quarters.",
@@ -1299,7 +1299,7 @@ const en = {
     "Partner on data journalism, research papers and on-air football analytics. Full access to our historical prediction database plus engineering support for custom visualisations.",
   "b2b.whyPartner": "Why partners choose BetsPlug",
   "b2b.whyPartnerTitle": "Built for scale. Proven in public.",
-  "b2b.usp1": "AI models ensembled per prediction",
+  "b2b.usp1": "AI models combined per prediction",
   "b2b.usp2": "Football leagues in live coverage",
   "b2b.usp3": "Monthly bettors on the platform",
   "b2b.usp4": "Transparency — every pick public",
@@ -1416,7 +1416,7 @@ const en = {
   "common.all_systems": "All systems operational",
 
   /* ── Dashboard phrases ────────────────────────────────────── */
-  "phrase.simulation_disclaimer": "Results shown are based on simulated model outputs.",
+  "phrase.simulation_disclaimer": "Results shown are based on simulated predictions.",
   "phrase.educational_only": "For analytical & educational purposes only.",
   "phrase.no_financial_advice": "Not financial advice.",
   "phrase.live_data": "Live data",
@@ -1462,9 +1462,9 @@ const en = {
   "strategy.awaitingData": "Awaiting data",
   "strategy.howItWorks": "How Our System Works",
   "strategy.step1Title": "Our AI Model Analyzes",
-  "strategy.step1Desc": "Our ensemble combines 3 proven models - Elo ratings (team strength), Poisson distribution (goal prediction), and Logistic regression (pattern recognition) - to calculate win/draw/loss probabilities for every upcoming match.",
+  "strategy.step1Desc": "Our AI combines 3 proven models — team strength ratings, a scoreline predictor and a pattern-recognition model — to calculate win/draw/loss probabilities for every upcoming match.",
   "strategy.step2Title": "A Strategy Filters",
-  "strategy.step2Desc": "A strategy is a set of rules that selects only the best opportunities from the model's output. For example: \"only follow picks where the home team has > 60% predicted win probability\" or \"only back matches with low draw probability\". Each strategy has a different risk/reward profile.",
+  "strategy.step2Desc": "A strategy is a set of rules that selects only the best opportunities from the AI's predictions. For example: \"only follow picks where the home team has > 60% predicted win probability\" or \"only back matches with low draw probability\". Each strategy has a different risk/reward profile.",
   "strategy.step3Title": "You Follow the Picks",
   "strategy.step3Desc": "Pick a strategy below, then click \"View All Picks & Results\" to see which upcoming matches it recommends. Each strategy shows its historical win rate and ROI so you can choose based on real backtested data.",
   "strategy.profitableStrategies": "Profitable Strategies",
@@ -1476,7 +1476,7 @@ const en = {
   "strategy.accuracy": "Accuracy",
   "strategy.brierScore": "Prediction Quality",
   "strategy.avgConfidence": "Avg Confidence",
-  "strategy.realPredictionDisclaimer": "These figures are real model outputs from the database. They reflect prediction accuracy metrics only - not betting P/L, which requires backtest analysis.",
+  "strategy.realPredictionDisclaimer": "These figures are real predictions from the database. They reflect prediction accuracy metrics only - not betting P/L, which requires backtest analysis.",
 
   /* ── Dash page ───────────────────────────────────── */
   "dash.title": "Dashboard",
@@ -1503,7 +1503,7 @@ const en = {
   "dash.botdRecent": "Pick of the Day — Recent Picks",
   "dash.botdRecentDesc": "Our highest-confidence daily picks and their outcomes",
   "dash.accurate": "accurate",
-  "dash.recentPredictionsDesc": "Latest model outputs with evaluation",
+  "dash.recentPredictionsDesc": "Latest predictions with evaluation",
   "dash.lastTen": "Last 10",
   "dash.thMatch": "Match",
   "dash.thDate": "Date",
@@ -1586,7 +1586,7 @@ const en = {
   "botd.valueDetection": "Value Detection",
   "botd.valueDetectionDesc": "This pick was selected because BetsPlug Pulse identified a significant edge in the probability vs market odds.",
   "botd.modelsAgree": "All Models Agree",
-  "botd.modelsAgreeDesc": "Elo, Poisson, Logistic Regression - all models within BetsPlug Pulse contribute to this prediction for maximum reliability.",
+  "botd.modelsAgreeDesc": "All four AI models within BetsPlug Pulse contribute to this prediction for maximum reliability.",
   "botd.dailySelection": "Daily Selection",
   "botd.dailySelectionDesc": "Only one pick per day - we choose quality over quantity. Minimum 65% confidence required for selection.",
   "botd.performanceInsights": "Performance Insights",
@@ -1872,7 +1872,7 @@ const en = {
   "trackrecord.noPredictionsYet": "No predictions recorded yet",
   "trackrecord.noPredictionsYetDesc": "Data collection is in progress. Prediction statistics will appear here once the first model evaluations are complete.",
   "trackrecord.noPredictionsEmptyDesc": "Predictions will appear here once the model has generated forecasts for upcoming matches. Data collection is in progress.",
-  "trackrecord.disclaimer": "These figures are real model outputs based on historical match data. This is not financial or betting advice.",
+  "trackrecord.disclaimer": "These figures are real predictions based on historical match data. This is not financial or betting advice.",
   "trackrecord.pending": "Pending",
   "trackrecord.correct": "Correct",
   "trackrecord.incorrect": "Incorrect",
@@ -2030,15 +2030,15 @@ const en = {
   "faq.home.cat3Label": "Pricing & Billing",
   "faq.home.cat4Label": "Data & Security",
   "faq.home.q1": "What is an AI football prediction platform?",
-  "faq.home.a1": "An AI football prediction platform uses machine learning models, historical data, and statistical engines (like Elo and Poisson) to forecast the most likely outcome of football matches. BetsPlug is built as a pure analytics tool - we show you the numbers, probabilities and expected value, so you can decide which bets to place with a bookmaker of your choice.",
+  "faq.home.a1": "An AI football prediction platform uses AI models, historical data and proven statistical methods to forecast the most likely outcome of football matches. BetsPlug is built as a pure analytics tool - we show you the numbers, probabilities and expected value, so you can decide which bets to place with a bookmaker of your choice.",
   "faq.home.q2": "How do I get started with BetsPlug?",
-  "faq.home.a2": "Start with our Bronze plan - a symbolic €0.01 trial that unlocks 7 days of full Gold-level access: daily AI football picks, upcoming match predictions, our verified track record and every model output. We charge one cent through Stripe so we can verify the card is real (this is how we keep the platform fraud-free). Upgrade to Silver, Gold or Platinum when you're ready.",
+  "faq.home.a2": "Start with our Bronze plan - a symbolic €0.01 trial that unlocks 7 days of full Gold-level access: daily AI football picks, upcoming match predictions, our verified track record and every prediction. We charge one cent through Stripe so we can verify the card is real (this is how we keep the platform fraud-free). Upgrade to Silver, Gold or Platinum when you're ready.",
   "faq.home.q3": "Which football leagues does the AI predictor cover?",
   "faq.home.a3": "Our AI predictor is focused exclusively on football, covering the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Champions League and more. New football leagues are added regularly as our models are trained and validated.",
   "faq.home.q4": "How accurate are AI football betting predictions?",
   "faq.home.a4": "Accuracy depends on the league, the market and the model. Our AI betting predictions are continuously benchmarked against closing lines and logged in our public track record. You can see the exact hit-rate, ROI and confidence distribution of every model we run - no cherry-picking, no hidden losses.",
   "faq.home.q5": "Which models power BetsPlug predictions?",
-  "faq.home.a5": "We combine Elo ratings, Poisson goal models, and machine-learning classifiers trained on hundreds of thousands of historical matches. Each prediction includes win probability, expected goals, confidence score, and edge over the current bookmaker line.",
+  "faq.home.a5": "We combine team strength ratings, a scoreline predictor and AI models trained on hundreds of thousands of historical matches. Each prediction includes win probability, expected goals, confidence score, and edge over the current bookmaker line.",
   "faq.home.q6": "Can I use AI for football betting research?",
   "faq.home.a6": "Absolutely. Thousands of data-driven bettors use BetsPlug as their research layer: compare our AI predictions against bookmaker odds, filter by confidence, backtest strategies, and identify value bets before the market corrects.",
   "faq.home.q7": "Do I need a subscription to see AI picks?",
@@ -2750,7 +2750,7 @@ const nl: Dictionary = {
   "hero.hot": "Heet",
   "hero.joinNow": "Sluit je nu aan",
   "hero.livePick": "Gratis voorspelling",
-  "hero.subtitle": "Vier modellen – XGBoost, Poisson, Elo en logistieke regressie – gecombineerd in één AI-engine die de Premier League, La Liga, Bundesliga, Champions League en meer dan 26 andere voetbalcompetities voorspelt. Elke voorspelling wordt vóór de wedstrijd vergrendeld en openbaar bijgehouden. Geen kersenpluk. Geen vooringenomenheid achteraf.",
+  "hero.subtitle": "Onze AI analyseert 40+ statistieken per wedstrijd in de Premier League, La Liga, Bundesliga, Champions League en 26+ andere competities. Elke voorspelling wordt voor de aftrap vergrendeld en openbaar bijgehouden. Geen cherry-picking. Geen verwijderde verliezen. Eerlijke AI-voetbalvoorspellingen die je zelf kunt controleren.",
   "hero.titleLine1": "",
   "hero.titleLine2": "AI-voetbalvoorspellingen",
   "hero.titleLine3": "die je kunt verifiëren.",
@@ -2990,7 +2990,7 @@ const nl: Dictionary = {
   "persona.casualTitle": "De weekendgokker",
   "persona.quantCta": "Inspecteer een voorbeeldexport",
   "persona.quantFeature1": "CSV/JSON-export van elke voorspelling",
-  "persona.quantFeature2": "Uitsplitsing per model (XGBoost, Poisson, Elo, logistiek)",
+  "persona.quantFeature2": "Gedetailleerde uitsplitsing van meerdere AI-modellen",
   "persona.quantFeature3": "Backtesting van Strategy Lab (binnenkort uitgerold)",
   "persona.quantPitch": "Je wilt de ruwe modelresultaten, niet de marketing. xG, Elo-delta's, Poisson-doelverdelingen, kalibratiecurven en alles.",
   "persona.quantTitle": "De data-first gokker",
@@ -3516,8 +3516,8 @@ const nl: Dictionary = {
   "trusted.card1Title": "Kansen die je in één oogopslag kunt aflezen",
   "trusted.card2Desc": "58% gemiddeld hitpercentage over meer dan 80.000 historische wedstrijden. Elke keuze krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld na het laatste fluitsignaal. Het trackrecord is openbaar. Controleer het zelf voordat je een cent betaalt.",
   "trusted.card2Title": "Nauwkeurigheid die we publiceren – winnen of verliezen",
-  "trusted.card3Desc": "XGBoost, Poisson-distributie, Elo-beoordelingen, logistische regressie – dezelfde modelfamilies die worden gebruikt door kwantitatieve winkels en sportsbooks. Samengebracht in één AI-engine voor een betere nauwkeurigheid dan welke enkele methode dan ook.",
-  "trusted.card3Title": "Gebouwd met modellen van institutionele kwaliteit",
+  "trusted.card3Desc": "Meerdere AI-modellen werken samen om één voorspelling per wedstrijd te maken. Elk model brengt een andere invalshoek. Samen zijn ze nauwkeuriger dan welke enkele aanpak dan ook.",
+  "trusted.card3Title": "Gebouwd met serieuze AI-modellen",
   "trusted.learnMore": "Bekijk het volledige trackrecord",
   "trusted.subtitle": "Geen hype. Geen verborgen verliezen. Gewoon AI-voetbalvoorspellingen met een track record die je op elk moment kunt controleren – en modellen die er niet om geven of je het er mee eens bent.",
   "trusted.titleA": "Waarom",
@@ -3619,7 +3619,7 @@ const nl: Dictionary = {
   "articles.listCtaBadge": "Van essay tot komende wedstrijden",
   "articles.listCtaTitle": "Klaar om deze analyse toe te passen op die van vanavond",
   "articles.listCtaAccent": "AI-voetbalvoorspellingen?",
-  "articles.listCtaSubtitle": "BetsPlug voert hetzelfde 4-modellenensemble uit waar onze schrijvers naar verwijzen – XGBoost, Dixon-Coles Poisson, Point-in-Time Elo en gekalibreerde logistieke regressie – in meer dan 30 competities. Kansen worden elk uur vernieuwd.",
+  "articles.listCtaSubtitle": "BetsPlug analyseert elke wedstrijd met vier bewezen voorspellingsmethodes — in 30+ competities. Winstkansen worden elk uur bijgewerkt.",
   "articles.listCtaPrimary": "Claim een ​​proefperiode van € 0,01",
   "articles.listCtaSecondary": "Bekijk de voorspellingen van vandaag",
   "articles.listCtaReassurance": "Geen lock-in · Annuleer in twee klikken · Stripe-beveiligd",
@@ -3665,7 +3665,7 @@ const nl: Dictionary = {
   "tr.pipe1Desc": "Wedstrijd-, opstellings-, blessure- en noteringsgegevens worden elke 30 seconden opgehaald bij gecontroleerde aanbieders. Van elke plaat is een versie gemaakt, zodat we elk moment in de geschiedenis opnieuw kunnen afspelen.",
   "tr.pipe2Desc": "Teamnamen, competities en markttypen worden toegewezen aan een canoniek schema. Uitschieters, laattijdig geannuleerde wedstrijden en opgeschorte markten worden vóór de modellering gemarkeerd.",
   "tr.pipe3Desc": "Voor elke wedstrijd berekenen we meer dan 40 kenmerken – Elo, xG-trends, rustdagen, reizen, onderlinge confrontaties, vooringenomenheid van de scheidsrechter, marktbewegingen – opgeslagen in een punt-in-tijd functieopslag, zodat training nooit toekomstige informatie lekt.",
-  "tr.pipe4Desc": "XGBoost, Dixon-Coles Poisson, point-in-time Elo en een gekalibreerde logistische regressie stemmen elk over de uitkomst. Hun kansen worden samengevoegd in de uiteindelijke BetsPlug-voorspelling.",
+  "tr.pipe4Desc": "Vier afzonderlijke AI-modellen produceren elk hun eigen kansen. Hun uitkomsten worden gecombineerd tot één uiteindelijke BetsPlug-voorspelling.",
   "tr.pipe5Desc": "Elke voorspelling wordt vergeleken met de best beschikbare marktkansen. Alleen keuzes met een statistisch significant voordeel – na commissie en verwachte ontsporing van de slotlijn – worden als waarde gemarkeerd.",
   "tr.pipe6Desc": "Keuzes krijgen een tijdstempel zodra ze live gaan. Wanneer de wedstrijd eindigt, beoordeelt de officiële feed ze automatisch en wordt het resultaat in het grootboek geschreven: winst, verlies of push.",
   "tr.methodSubtitle": "Elk nummer op deze pagina overleeft deze vangrails. Als een resultaat dit niet oplevert, wordt het niet meegeteld voor de hoofdstatistieken.",
@@ -3682,15 +3682,15 @@ const nl: Dictionary = {
   "tr.case3Outcome": "Gebruikt het historische grootboek als onafhankelijke backtest. Als de slotlijnwaarde daar standhoudt, vertrouwt hij erop voor live staking.",
   "tr.transSubtitle": "Elke beoordeelde AI-voetbalvoorspelling die we ooit hebben gepubliceerd, is doorzoekbaar op wedstrijd, datum, markt en model. Er zijn geen filters die de verliezers verbergen. Geen dashboardweergaven vegen slechte weken onder het tapijt.",
   "hiw.metaTitle": "Hoe onze AI-voetbalvoorspellingen werken · BetsPlug",
-  "hiw.metaDesc": "Vier modellen – XGBoost, Poisson, Elo en logistieke regressie – zetten meer dan 80.000 historische wedstrijden om in AI-voetbalvoorspellingen voor meer dan 30 competities. Pre-match vergrendeld. Openbaar gevolgd.",
+  "hiw.metaDesc": "Vier AI-modellen analyseren 80.000+ wedstrijden en leveren AI-voetbalvoorspellingen voor 30+ competities. Voor de aftrap vergrendeld. Openbaar gevolgd.",
   "hiw.heroSubtitle": "De meeste tipstersites laten je een winnende schermafbeelding zien en vragen je deze te vertrouwen. We laten je de modellen, de gegevens en elke voorspelling zien die we ooit hebben gedaan: winnaars en verliezers. Hier ziet je precies hoe BetsPlug meer dan 80.000 wedstrijden uit de voetbalgeschiedenis omzet in een voorspelling voor de volgende aftrap.",
   "hiw.step1Lead": "Voordat onze AI een enkele voetbalvoorspelling doet, verwerkt hij vorm, klassement, doelpuntgegevens, onderlinge geschiedenis, opstellingen, rustdagen, reisafstand en meer dan 40 andere factoren voor elke komende wedstrijd. Alle kenmerkwaarden worden op het moment van opname vastgelegd; het model kan nooit de toekomst 'zien'.",
   "hiw.step1P1": "Deze discipline op het juiste moment is de manier waarop we vooruitkijkende bias voorkomen – de stille moordenaar van de claim van elke tipgever op het gebied van winstpercentages. Als een model ooit is getraind op gegevens die het vóór de start niet zou hebben gehad, liegt de backtest. Die van ons niet.",
   "hiw.step1Point1Desc": "Elo-rating, recente vorm, xG, H2H, klassement, openingskansen, rustdagen, thuisvoordeel - allemaal momentopnamen vóór de aftrap.",
   "hiw.step1Point2Desc": "Geplande pijplijnen halen elke nacht nieuwe gegevens op voor elke wedstrijd in de komende zeven dagen. Geen verouderde input.",
   "hiw.step1Point3Desc": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League — plus nog 23+ meer. Elke competitie heeft meer dan 5 seizoenen aan zuivere geschiedenis.",
-  "hiw.step2Lead": "We kiezen niet één model en bidden. BetsPlug voert er vier uit: XGBoost, Poisson, Elo-beoordelingen en een gekalibreerde logistische regressie, en voegt hun uitkomsten samen in één enkele waarschijnlijkheid voor elke wedstrijduitslag.",
-  "hiw.step2P1": "Elk model heeft een blinde vlek. XGBoost legt niet-lineaire interacties vast; Poisson scoort laag scorende remises; Elo volgt het momentum; logistische regressie houdt de kansen eerlijk. Samen bedekken ze elkaars zwakheden. Daarom ligt Pick-of-the-Day momenteel op {potdAccuracy}% ten opzichte van de door {potdPicks} bijgehouden voorspellingen.",
+  "hiw.step2Lead": "We kiezen niet één model en bidden. BetsPlug draait vier AI-modellen die samenwerken — elk met een eigen specialiteit — en combineert hun uitkomsten tot één enkele waarschijnlijkheid voor elke wedstrijduitslag.",
+  "hiw.step2P1": "Elk model heeft een blinde vlek. Het ene vangt verborgen patronen in vorm en vermoeidheid; het andere voorspelt exacte scorelijnen; het derde volgt teamsterkte; het vierde houdt de kansen eerlijk. Samen dekken 4 AI-modellen elkaars zwakheden. Daarom ligt Pick-of-the-Day momenteel op {potdAccuracy}% over {potdPicks} bijgehouden voorspellingen.",
   "hiw.step2Point1Desc": "{potdAccuracy}% hitpercentage voor {potdPicks} keuzes: de enige voorspelling met het hoogste vertrouwen elke dag, geselecteerd door het ensemble.",
   "hiw.step2Point2Desc": "Blader door elke komende wedstrijd met AI-kansen, live scores en openingskansen - gegroepeerd per competitie.",
   "hiw.step2Point3Desc": "Binnenkort beschikbaar: filter voorspellingen op backtested-strategie (thuisfavorieten, low-xG underdogs, Europese vermoeidheid verdwijnt).",
@@ -3745,7 +3745,7 @@ const nl: Dictionary = {
   "checkout.stripeRedirectDesc": "Nadat je op de onderstaande knop heeft geklikt, wordt je doorgestuurd naar de beveiligde betaalpagina van Stripe om je betaling af te ronden. Wij accepteren alle gangbare creditcards, debetkaarten en PayPal.",
   "checkout.successBody": "Je abonnement is nu actief! Je wordt doorgestuurd naar je dashboard.",
   "welcome.meta.description": "Je BetsPlug-lidmaatschap is actief. Log in om de keuzes van vandaag te zien, houd je ROI bij en begin slimmer te winnen - wij staan ​​voor je klaar.",
-  "welcome.subtitle": "Geen tipgever Telegram-chaos meer. Het BetsPlug-ensemble met 4 modellen draait nu voor je op elk armatuur: XGBoost, Dixon-Coles Poisson, Point-in-Time Elo en gekalibreerde logistische regressie. Gekalibreerde AI-voetbalvoorspellingen, geen hot-takes.",
+  "welcome.subtitle": "Geen tipgever-chaos meer. De BetsPlug AI draait nu voor jou op elke wedstrijd. Data-gedreven AI-voetbalvoorspellingen, geen onderbuikgevoel.",
   "welcome.trialBody": "We hebben vandaag € 0,01 in rekening gebracht om je kaart te verifiëren. Verder niets. Annuleer op elk gewenst moment met twee klikken voordat de proefperiode afloopt en je betaalt geen cent meer.",
   "welcome.paidBody": "Volledige ontgrendeling. Elke AI-voetbalvoorspelling, elke modeldiagnostiek, elke kalibratiegrafiek: het wacht allemaal in het dashboard.",
   "welcome.emailHint": "Er is een bevestigingsmail onderweg. Controleer je inbox (en spam, voor het geval dat).",
