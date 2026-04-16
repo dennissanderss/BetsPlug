@@ -77,18 +77,35 @@ export function BetsPlugFooter() {
       {/* ═══ Telegram CTA banner ═══ */}
       <div className="relative z-10 mx-auto mb-12 max-w-6xl px-4 sm:px-6">
         <div
-          className="card-neon card-neon-green halo-green relative overflow-hidden rounded-2xl p-6 sm:p-8"
+          className="relative overflow-hidden rounded-2xl p-[1px]"
+          style={{
+            background:
+              "linear-gradient(135deg, hsl(var(--accent-green) / 0.7) 0%, hsl(var(--accent-green) / 0.15) 30%, hsl(var(--accent-purple) / 0.15) 70%, hsl(var(--accent-purple) / 0.6) 100%)",
+          }}
         >
-          {/* Inner glow accent */}
+          <div
+            className="relative overflow-hidden rounded-[calc(1rem-1px)] p-6 sm:p-8"
+            style={{
+              background:
+                "linear-gradient(135deg, hsl(var(--accent-green) / 0.12) 0%, hsl(230 22% 8% / 0.97) 35%, hsl(230 22% 8% / 0.97) 65%, hsl(var(--accent-purple) / 0.1) 100%)",
+            }}
+          >
+
+          {/* Big ambient glow blobs inside */}
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-16 -top-16 h-[260px] w-[260px] rounded-full"
-            style={{ background: "hsl(var(--accent-green) / 0.25)", filter: "blur(80px)" }}
+            className="pointer-events-none absolute -right-20 -top-20 h-[320px] w-[320px] rounded-full"
+            style={{ background: "hsl(var(--accent-green) / 0.3)", filter: "blur(100px)" }}
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute -left-16 -bottom-16 h-[220px] w-[220px] rounded-full"
-            style={{ background: "hsl(var(--accent-purple) / 0.2)", filter: "blur(80px)" }}
+            className="pointer-events-none absolute -left-20 -bottom-20 h-[280px] w-[280px] rounded-full"
+            style={{ background: "hsl(var(--accent-purple) / 0.25)", filter: "blur(100px)" }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-0 h-[180px] w-[400px] -translate-x-1/2 rounded-full"
+            style={{ background: "hsl(var(--accent-green) / 0.15)", filter: "blur(80px)" }}
           />
 
           <div className="relative flex flex-col items-center gap-6 md:flex-row md:justify-between">
@@ -131,6 +148,7 @@ export function BetsPlugFooter() {
               Join Telegram
               <ArrowRight className="h-4 w-4" />
             </a>
+          </div>
           </div>
         </div>
       </div>
