@@ -19,7 +19,7 @@ import math
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import Integer, and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -45,6 +45,7 @@ router = APIRouter()
 # Response shape
 # ---------------------------------------------------------------------------
 class PricingTier(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     pick_tier: str = Field(description="Tier slug: free/silver/gold/platinum")
     pick_tier_label: str = Field(description="UI label with emoji")
     pick_tier_accuracy: str = Field(description="Display accuracy claim, e.g. '85%+'")
@@ -120,9 +121,14 @@ async def get_pricing_comparison(
         return [PricingTier(**row) for row in cached]
 
     # 1) Accuracy + sample size per pick_tier — one GROUP BY query
+    # IMPORTANT: evaluate pick_tier_expression() once and reuse in SELECT + GROUP BY.
+    # Two calls produce CASE-nodes with different bind parameter IDs which
+    # PostgreSQL then treats as non-equivalent, triggering
+    # "column ... must appear in the GROUP BY clause".
+    tier_expr_agg = pick_tier_expression()
     agg_q = (
         select(
-            pick_tier_expression(),
+            tier_expr_agg,
             func.count(PredictionEvaluation.id).label("total"),
             func.sum(
                 func.cast(PredictionEvaluation.is_correct, Integer)
@@ -131,7 +137,7 @@ async def get_pricing_comparison(
         .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
         .join(Match, Match.id == Prediction.match_id)
         .where(v81_predictions_filter())
-        .group_by(pick_tier_expression())
+        .group_by(tier_expr_agg)
     )
     rows = {int(t): (int(total or 0), int(correct or 0)) for t, total, correct in (await db.execute(agg_q)).all()}
 
@@ -139,37 +145,42 @@ async def get_pricing_comparison(
     from datetime import datetime, timedelta, timezone
     sixty_days_ago = datetime.now(timezone.utc) - timedelta(days=60)
 
+    tier_expr_ppd = pick_tier_expression()
     ppd_q = (
         select(
-            pick_tier_expression(),
+            tier_expr_ppd,
             func.count(Prediction.id).label("total"),
         )
         .join(Match, Match.id == Prediction.match_id)
         .where(v81_predictions_filter())
         .where(Match.scheduled_at >= sixty_days_ago)
         .where(Match.status == MatchStatus.FINISHED)
-        .group_by(pick_tier_expression())
+        .group_by(tier_expr_ppd)
     )
     ppd_rows = {int(t): int(total or 0) for t, total in (await db.execute(ppd_q)).all()}
 
-    # 3) Compose PricingTier for each level
+    # 3) Compose PricingTier for each level. Cast every numeric value
+    # explicitly — SUM() returns Decimal on PG which Pydantic v2 can reject
+    # when the model declares `int` or `float`. Same for COUNT → bigint.
     result: List[PricingTier] = []
     for tier in (PickTier.FREE, PickTier.SILVER, PickTier.GOLD, PickTier.PLATINUM):
         total, correct = rows.get(int(tier), (0, 0))
+        total = int(total or 0)
+        correct = int(correct or 0)
         meta = TIER_METADATA[tier]
-        acc_pct = round(100.0 * correct / total, 1) if total > 0 else 0.0
-        lb = _wilson_lower_bound_pct(correct, total)
-        ppd_count = ppd_rows.get(int(tier), 0)
-        ppd = round(ppd_count / 60.0, 2)
+        acc_pct = float(round(100.0 * correct / total, 1)) if total > 0 else 0.0
+        lb = float(_wilson_lower_bound_pct(correct, total))
+        ppd_count = int(ppd_rows.get(int(tier), 0))
+        ppd = float(round(ppd_count / 60.0, 2))
 
         result.append(PricingTier(
-            pick_tier=meta["slug"],
-            pick_tier_label=meta["label"],
-            pick_tier_accuracy=meta["accuracy_claim"],
+            pick_tier=str(meta["slug"]),
+            pick_tier_label=str(meta["label"]),
+            pick_tier_accuracy=str(meta["accuracy_claim"]),
             accuracy_pct=acc_pct,
             wilson_ci_lower_pct=lb,
             sample_size=total,
-            confidence_threshold=CONF_THRESHOLD[tier],
+            confidence_threshold=float(CONF_THRESHOLD[tier]),
             leagues_count=_leagues_count_for_tier(tier),
             picks_per_day_estimate=ppd,
         ))

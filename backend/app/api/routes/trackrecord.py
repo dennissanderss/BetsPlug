@@ -99,9 +99,12 @@ async def get_trackrecord_summary(
     # v8.1 per-tier breakdown
     per_tier: Optional[dict] = None
     if TIER_SYSTEM_ENABLED:
+        # Evaluate pick_tier_expression() once — see dashboard.py for rationale.
+        # Two separate calls create non-equivalent CASE-nodes on PostgreSQL.
+        tier_expr = pick_tier_expression()
         per_tier_q = (
             select(
-                pick_tier_expression(),
+                tier_expr,
                 func.count(PredictionEvaluation.id).label("total"),
                 func.sum(func.cast(PredictionEvaluation.is_correct, Integer)).label("correct"),
             )
@@ -109,7 +112,7 @@ async def get_trackrecord_summary(
             .join(Match, Match.id == Prediction.match_id)
             .where(v81_predictions_filter())
             .where(access_filter(user_tier))
-            .group_by(pick_tier_expression())
+            .group_by(tier_expr)
         )
         if model_version_id is not None:
             per_tier_q = per_tier_q.where(Prediction.model_version_id == model_version_id)
@@ -119,15 +122,18 @@ async def get_trackrecord_summary(
         tier_rows = (await db.execute(per_tier_q)).all()
         per_tier = {}
         for tier_int, t_total, t_correct in tier_rows:
-            if not t_total:
+            # Cast everything explicitly — COUNT/SUM on PG return bigint/Decimal
+            # which Pydantic v2 rejects for int/float fields in TierBreakdown.
+            total_int = int(t_total or 0)
+            if not total_int:
                 continue
             t_int = int(tier_int)
             t_correct_int = int(t_correct or 0)
             slug = TIER_METADATA[PickTier(t_int)]["slug"]
             per_tier[slug] = {
-                "total": t_total,
+                "total": total_int,
                 "correct": t_correct_int,
-                "accuracy": t_correct_int / t_total if t_total else 0.0,
+                "accuracy": float(t_correct_int / total_int) if total_int else 0.0,
             }
 
     return TrackrecordSummary(

@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from typing import Dict, Optional
 
 from fastapi import APIRouter, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -30,12 +30,14 @@ router = APIRouter()
 
 
 class DashboardTierBreakdown(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     total: int
     correct: int
     accuracy: float
 
 
 class DashboardMetrics(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     total_forecasts: int
     evaluated_count: int
     pending_count: int
@@ -150,23 +152,15 @@ async def get_dashboard_metrics(
     # v8.1 per-tier breakdown
     per_tier: Optional[Dict[str, DashboardTierBreakdown]] = None
     if TIER_SYSTEM_ENABLED:
-        per_tier_q = (
-            select(
-                pick_tier_expression(),
-                func.count(PredictionEvaluation.id).label("total"),
-                func.sum(func.cast(PredictionEvaluation.is_correct, func.count().type)).label("correct"),
-            )
-            .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
-            .join(Match, Match.id == Prediction.match_id)
-            .where(_v81)
-            .where(_tier)
-            .group_by(pick_tier_expression())
-        )
-        # Fallback cast for is_correct summing — use Integer not count type
         from sqlalchemy import Integer
+        # Evaluate pick_tier_expression() ONCE and reuse the same element in
+        # SELECT and GROUP BY. Two separate calls produce two CASE expressions
+        # with different bind parameter IDs, which PostgreSQL treats as
+        # non-equivalent and rejects with "must appear in GROUP BY clause".
+        tier_expr = pick_tier_expression()
         per_tier_q = (
             select(
-                pick_tier_expression(),
+                tier_expr,
                 func.count(PredictionEvaluation.id).label("total"),
                 func.sum(func.cast(PredictionEvaluation.is_correct, Integer)).label("correct"),
             )
@@ -174,7 +168,7 @@ async def get_dashboard_metrics(
             .join(Match, Match.id == Prediction.match_id)
             .where(_v81)
             .where(_tier)
-            .group_by(pick_tier_expression())
+            .group_by(tier_expr)
         )
         rows = (await db.execute(per_tier_q)).all()
         per_tier = {}
@@ -183,11 +177,12 @@ async def get_dashboard_metrics(
                 continue
             t_int = int(tier_int)
             c = int(t_correct or 0)
+            total_int = int(t_total)
             slug = TIER_METADATA[PickTier(t_int)]["slug"]
             per_tier[slug] = DashboardTierBreakdown(
-                total=t_total,
+                total=total_int,
                 correct=c,
-                accuracy=round(c / t_total, 4) if t_total else 0.0,
+                accuracy=round(c / total_int, 4) if total_int else 0.0,
             )
 
     result = DashboardMetrics(
