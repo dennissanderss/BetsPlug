@@ -26,16 +26,16 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="glass-card-hover relative overflow-hidden border-green-500/20"
+      className="card-neon-green relative overflow-hidden"
     >
       {/* Free ribbon */}
-      <div className="pointer-events-none absolute -right-8 top-3 rotate-45 bg-gradient-to-r from-green-500 to-emerald-500 px-8 py-0.5 text-[9px] font-extrabold uppercase tracking-widest text-black shadow-lg shadow-green-500/30 sm:-right-9 sm:top-4 sm:px-10 sm:py-1 sm:text-[10px]">
+      <div className="pointer-events-none absolute -right-8 top-3 rotate-45 bg-gradient-to-r from-green-500 to-emerald-500 px-8 py-0.5 text-[9px] font-extrabold uppercase tracking-widest text-black sm:-right-9 sm:top-4 sm:px-10 sm:py-1 sm:text-[10px]">
         Free
       </div>
 
       <div className="flex flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-center lg:gap-6">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-          <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-green-600">
+          <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-green-400">
             {fixture.league_name}
           </span>
           <p className="flex flex-wrap items-center gap-x-1.5 text-sm font-black uppercase leading-tight tracking-tight text-white sm:text-base">
@@ -43,13 +43,13 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
               <Image src={fixture.home_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
             )}
             <span className="break-words">{fixture.home_team_name}</span>
-            <span className="font-normal text-slate-500">vs</span>
+            <span className="font-normal text-[#6b7280]">vs</span>
             {fixture.away_team_logo && (
               <Image src={fixture.away_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
             )}
             <span className="break-words">{fixture.away_team_name}</span>
           </p>
-          <p className="flex items-center gap-1 text-xs text-slate-400">
+          <p className="flex items-center gap-1 text-xs text-[#6b7280]">
             <Clock className="h-3 w-3 shrink-0" />
             <span className="truncate">
               {formatKickoff(fixture.scheduled_at, locale)}
@@ -58,7 +58,7 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
         </div>
 
         <div className="w-full min-w-0 lg:max-w-[280px] lg:mx-4">
-          <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
             {t("matchPred.winProbLabel")}
           </p>
           {hasPred ? (
@@ -74,7 +74,7 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
               awayTeam={fixture.away_team_name}
             />
           ) : (
-            <div className="h-3 w-full animate-pulse rounded-full bg-slate-100" />
+            <div className="h-3 w-full animate-pulse rounded-full bg-white/[0.06]" />
           )}
         </div>
 
@@ -99,7 +99,7 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
               </span>
             </>
           ) : (
-            <span className="text-xs italic text-slate-500"> - </span>
+            <span className="text-xs italic text-[#6b7280]"> - </span>
           )}
         </div>
       </div>
@@ -111,27 +111,30 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
         (fixture.odds.home != null ||
           fixture.odds.draw != null ||
           fixture.odds.away != null) && (
-          <div className="flex flex-wrap items-center gap-1.5 border-t border-slate-200 bg-slate-50 px-3 py-2 sm:gap-2 sm:px-5">
-            <span className="w-full text-[10px] font-semibold uppercase tracking-widest text-slate-500 sm:w-auto">
+          <div
+            className="flex flex-wrap items-center gap-1.5 px-3 py-2 sm:gap-2 sm:px-5"
+            style={{ borderTop: "1px solid hsl(0 0% 100% / 0.08)", background: "hsl(0 0% 100% / 0.02)" }}
+          >
+            <span className="w-full text-[10px] font-semibold uppercase tracking-widest text-[#6b7280] sm:w-auto">
               Pre-match odds
             </span>
             {fixture.odds.home != null && (
-              <span className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-700">
+              <span className="rounded-md border border-white/[0.1] bg-white/[0.04] px-2 py-0.5 text-[11px] font-semibold tabular-nums text-[#a3a9b8]">
                 1 {fixture.odds.home.toFixed(2)}
               </span>
             )}
             {fixture.odds.draw != null && (
-              <span className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-700">
+              <span className="rounded-md border border-white/[0.1] bg-white/[0.04] px-2 py-0.5 text-[11px] font-semibold tabular-nums text-[#a3a9b8]">
                 X {fixture.odds.draw.toFixed(2)}
               </span>
             )}
             {fixture.odds.away != null && (
-              <span className="rounded-md border border-slate-200 bg-white px-2 py-0.5 text-[11px] font-semibold tabular-nums text-slate-700">
+              <span className="rounded-md border border-white/[0.1] bg-white/[0.04] px-2 py-0.5 text-[11px] font-semibold tabular-nums text-[#a3a9b8]">
                 2 {fixture.odds.away.toFixed(2)}
               </span>
             )}
             {fixture.odds.over_2_5 != null && fixture.odds.under_2_5 != null && (
-              <span className="w-full text-[10px] text-slate-500 sm:ml-auto sm:w-auto">
+              <span className="w-full text-[10px] text-[#6b7280] sm:ml-auto sm:w-auto">
                 O/U 2.5: {fixture.odds.over_2_5.toFixed(2)} /{" "}
                 {fixture.odds.under_2_5.toFixed(2)}
               </span>
@@ -149,7 +152,7 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
   const loc = useLocalizedHref();
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white">
+    <div className="card-neon group relative overflow-hidden">
       {/* Blurred content underneath */}
       <div
         aria-hidden="true"
@@ -157,21 +160,21 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
       >
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
           <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-            <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+            <span className="truncate text-[11px] font-semibold uppercase tracking-widest text-[#6b7280]">
               {fixture.league_name}
             </span>
-            <p className="flex flex-wrap items-center gap-x-1.5 text-base font-semibold leading-tight text-slate-900">
+            <p className="flex flex-wrap items-center gap-x-1.5 text-base font-semibold leading-tight text-[#ededed]">
               {fixture.home_team_logo && (
                 <Image src={fixture.home_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
               )}
               <span className="break-words">{fixture.home_team_name}</span>
-              <span className="font-normal text-slate-600">vs</span>
+              <span className="font-normal text-[#6b7280]">vs</span>
               {fixture.away_team_logo && (
                 <Image src={fixture.away_team_logo} alt="" width={22} height={22} className="inline-block rounded-full" />
               )}
               <span className="break-words">{fixture.away_team_name}</span>
             </p>
-            <p className="flex items-center gap-1 text-xs text-slate-500">
+            <p className="flex items-center gap-1 text-xs text-[#6b7280]">
               <Clock className="h-3 w-3 shrink-0" />
               <span className="truncate">
                 {formatKickoff(fixture.scheduled_at, locale)}
@@ -179,8 +182,8 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
             </p>
           </div>
           <div className="w-full min-w-0 lg:max-w-[260px]">
-            <div className="mb-2 h-2.5 rounded bg-slate-100" />
-            <div className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full bg-slate-100">
+            <div className="mb-2 h-2.5 rounded bg-white/[0.06]" />
+            <div className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full bg-white/[0.06]">
               <div className="h-full w-[45%] rounded-full bg-blue-500/60" />
               <div className="h-full w-[25%] rounded-full bg-amber-500/40" />
               <div className="h-full w-[30%] rounded-full bg-red-500/40" />
@@ -198,17 +201,17 @@ export function LockedMatchCard({ fixture }: { fixture: Fixture }) {
       </div>
 
       {/* Foreground lock overlay */}
-      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-white/70 via-[#0f1420]/50 to-white/80 backdrop-blur-[2px]">
+      <div className="absolute inset-0 flex items-center justify-center bg-[#0f1420]/70 backdrop-blur-[2px]">
         <div className="flex flex-col items-center gap-2 text-center">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-200 bg-green-50 shadow-sm ring-1 ring-green-200">
-            <Lock className="h-4 w-4 text-green-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-500/30 bg-green-500/[0.08] shadow-[0_0_20px_rgba(74,222,128,0.15)] ring-1 ring-green-500/20">
+            <Lock className="h-4 w-4 text-green-400" />
           </div>
-          <p className="text-[11px] font-bold uppercase tracking-widest text-green-700">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-green-400">
             {t("matchPred.lockedLabel")}
           </p>
           <Link
             href={loc("/checkout")}
-            className="btn-gradient rounded-full px-4 py-1.5 text-[11px] font-extrabold text-white shadow-lg shadow-green-500/30 transition-all hover:shadow-green-500/50"
+            className="btn-primary rounded-full px-4 py-1.5 text-[11px] font-extrabold"
           >
             {t("matchPred.unlockThis")}
           </Link>
@@ -224,32 +227,32 @@ export function LockedSkeleton() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white">
+    <div className="card-neon relative overflow-hidden">
       <div aria-hidden="true" className="p-4 blur-[6px] sm:p-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
           <div className="min-w-0 flex-1 space-y-2">
-            <div className="h-3 w-32 max-w-full rounded bg-slate-100" />
-            <div className="h-5 w-56 max-w-full rounded bg-slate-100" />
-            <div className="h-3 w-24 rounded bg-slate-100" />
+            <div className="h-3 w-32 max-w-full rounded bg-white/[0.06]" />
+            <div className="h-5 w-56 max-w-full rounded bg-white/[0.06]" />
+            <div className="h-3 w-24 rounded bg-white/[0.06]" />
           </div>
           <div className="w-full min-w-0 space-y-2 lg:max-w-[260px]">
-            <div className="h-3 w-full rounded-full bg-slate-100" />
-            <div className="h-2 w-2/3 rounded bg-slate-50" />
+            <div className="h-3 w-full rounded-full bg-white/[0.06]" />
+            <div className="h-2 w-2/3 rounded bg-white/[0.04]" />
           </div>
           <div className="flex shrink-0 flex-row items-center gap-3 lg:flex-col lg:items-end lg:gap-2">
-            <div className="h-10 w-16 rounded bg-slate-100" />
-            <div className="h-6 w-20 rounded-full bg-slate-50" />
+            <div className="h-10 w-16 rounded bg-white/[0.06]" />
+            <div className="h-6 w-20 rounded-full bg-white/[0.04]" />
           </div>
         </div>
       </div>
-      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-white/70 via-[#0f1420]/50 to-white/80 backdrop-blur-[2px]">
+      <div className="absolute inset-0 flex items-center justify-center bg-[#0f1420]/70 backdrop-blur-[2px]">
         <div className="flex flex-col items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-200 bg-green-50 ring-1 ring-green-200">
-            <Lock className="h-4 w-4 text-green-600" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-green-500/30 bg-green-500/[0.08] ring-1 ring-green-500/20">
+            <Lock className="h-4 w-4 text-green-400" />
           </div>
           <Link
             href={loc("/checkout")}
-            className="btn-gradient rounded-full px-4 py-1.5 text-[11px] font-extrabold text-white shadow-lg shadow-green-500/30"
+            className="btn-primary rounded-full px-4 py-1.5 text-[11px] font-extrabold"
           >
             {t("matchPred.unlockThis")}
           </Link>
@@ -263,20 +266,20 @@ export function LockedSkeleton() {
 
 export function FreeSkeleton() {
   return (
-    <div className="glass-card animate-pulse overflow-hidden p-4 sm:p-5">
+    <div className="card-neon animate-pulse overflow-hidden p-4 sm:p-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-6">
         <div className="min-w-0 flex-1 space-y-2">
-          <div className="h-3 w-32 max-w-full rounded bg-slate-100" />
-          <div className="h-5 w-56 max-w-full rounded bg-slate-100" />
-          <div className="h-3 w-24 rounded bg-slate-100" />
+          <div className="h-3 w-32 max-w-full rounded bg-white/[0.06]" />
+          <div className="h-5 w-56 max-w-full rounded bg-white/[0.06]" />
+          <div className="h-3 w-24 rounded bg-white/[0.06]" />
         </div>
         <div className="w-full min-w-0 space-y-2 lg:max-w-[260px]">
-          <div className="h-3 w-full rounded-full bg-slate-100" />
-          <div className="h-2 w-2/3 rounded bg-slate-50" />
+          <div className="h-3 w-full rounded-full bg-white/[0.06]" />
+          <div className="h-2 w-2/3 rounded bg-white/[0.04]" />
         </div>
         <div className="flex shrink-0 flex-row items-center gap-3 lg:flex-col lg:items-end lg:gap-2">
-          <div className="h-10 w-16 rounded bg-slate-100" />
-          <div className="h-6 w-20 rounded-full bg-slate-50" />
+          <div className="h-10 w-16 rounded bg-white/[0.06]" />
+          <div className="h-6 w-20 rounded-full bg-white/[0.04]" />
         </div>
       </div>
     </div>

@@ -316,7 +316,7 @@ export function AiAssistant({
                     className={`absolute right-1.5 flex h-9 w-9 items-center justify-center rounded-full transition-all ${
                       input.trim() === "" || isTyping
                         ? "cursor-not-allowed bg-white/[0.05] text-slate-500"
-                        : "btn-gradient text-black shadow-lg shadow-green-500/30 hover:shadow-green-500/50"
+                        : "btn-primary text-black shadow-lg shadow-green-500/30 hover:shadow-green-500/50"
                     }`}
                   >
                     {isTyping ? (

@@ -17,7 +17,7 @@ function Pill({
     <div
       aria-label={label}
       title={label}
-      className="flex h-8 w-12 items-center justify-center rounded-md border border-white/[0.1] bg-white shadow-sm"
+      className="flex h-8 w-12 items-center justify-center rounded-md border border-white/[0.1] bg-white/90 shadow-sm"
     >
       {children}
     </div>

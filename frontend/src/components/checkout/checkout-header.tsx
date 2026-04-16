@@ -35,7 +35,7 @@ export function CheckoutHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200/60 bg-white/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-white/[0.08] bg-[#0a1220]/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4">
         {/* Logo + back-to-site */}
         <div className="flex items-center gap-6">
@@ -50,7 +50,7 @@ export function CheckoutHeader() {
           </Link>
           <Link
             href={home}
-            className="hidden items-center gap-1.5 text-xs font-medium text-slate-500 transition-colors hover:text-slate-900 sm:flex"
+            className="hidden items-center gap-1.5 text-xs font-medium text-[#6b7280] transition-colors hover:text-[#ededed] sm:flex"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             {t("checkout.backToSite")}
@@ -61,12 +61,12 @@ export function CheckoutHeader() {
         <div className="hidden items-center gap-6 lg:flex">
           {usps.map(({ icon: Icon, title, desc }) => (
             <div key={title} className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-green-200 bg-green-50">
-                <Icon className="h-4 w-4 text-green-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-green-500/30 bg-green-500/[0.08]">
+                <Icon className="h-4 w-4 text-green-400" />
               </div>
               <div className="leading-tight">
-                <div className="text-sm font-semibold text-slate-900">{title}</div>
-                <div className="text-[11px] text-slate-500">{desc}</div>
+                <div className="text-sm font-semibold text-[#ededed]">{title}</div>
+                <div className="text-[11px] text-[#6b7280]">{desc}</div>
               </div>
             </div>
           ))}
@@ -77,17 +77,17 @@ export function CheckoutHeader() {
           {usps.map(({ icon: Icon, title }) => (
             <div
               key={title}
-              className="flex items-center gap-2 text-xs font-medium text-slate-600"
+              className="flex items-center gap-2 text-xs font-medium text-[#a3a9b8]"
             >
-              <Icon className="h-4 w-4 text-green-500" />
+              <Icon className="h-4 w-4 text-green-400" />
               {title}
             </div>
           ))}
         </div>
 
         {/* Mobile: just the lock icon + "secure" label */}
-        <div className="flex items-center gap-2 text-xs font-semibold text-slate-600 md:hidden">
-          <Lock className="h-4 w-4 text-green-500" />
+        <div className="flex items-center gap-2 text-xs font-semibold text-[#a3a9b8] md:hidden">
+          <Lock className="h-4 w-4 text-green-400" />
           {t("checkout.header.usp1Title")}
         </div>
       </div>
