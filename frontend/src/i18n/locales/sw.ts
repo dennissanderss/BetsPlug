@@ -855,6 +855,12 @@ const sw = {
   "home.freePredWinrate": "Win rate",
   "home.freePredYesterday": "Yesterday's results",
 
+  "homeLeagues.cardHint": "Tazama utabiri",
+  "homeLeagues.ctaAll": "Vinjari ligi zote",
+  "homeLeagues.eyebrow": "Ligi maarufu",
+  "homeLeagues.subtitle": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Champions League na zaidi - usajili mmoja unashughulikia zote, kwa rekodi ya umma ambayo unaweza kuthibitisha.",
+  "homeLeagues.title": "Utabiri wa AI kwa kila ligi ambayo ni muhimu",
+
   "how.badge": "Jinsi inavyofanya kazi",
   "how.deepDive": "Tazama mbinu kamili",
   "how.step1Desc": "BetsPlug Pulse humeza mawimbi 40+ kwa kila mechi - fomu, msimamo wa ligi, historia ya ana kwa ana, xG, nguvu ya kikosi, majeraha, siku za kupumzika - na hutoa ubashiri mmoja wa soka wa AI kwa kila mechi. Huonyeshwa upya kabla ya kila mchezo kuanza katika ligi zote 30+ zinazotumika.",

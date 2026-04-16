@@ -855,6 +855,12 @@ const es = {
   "home.freePredWinrate": "Win rate",
   "home.freePredYesterday": "Yesterday's results",
 
+  "homeLeagues.cardHint": "Ver predicciones",
+  "homeLeagues.ctaAll": "Explorar todas las ligas",
+  "homeLeagues.eyebrow": "Ligas populares",
+  "homeLeagues.subtitle": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Champions League y más: una suscripción los cubre todos, con un historial público que puede verificar.",
+  "homeLeagues.title": "Predicciones de IA para cada liga importante",
+
   "how.badge": "como funciona",
   "how.deepDive": "Ver la metodología completa",
   "how.step1Desc": "BetsPlug Pulse procesa más de 40 señales por partido (forma, posición en la liga, historial de enfrentamientos directos, xG, fuerza de la alineación, lesiones, días de descanso) y produce una predicción de fútbol de IA por partido. Actualizado antes de cada inicio en las más de 30 ligas admitidas.",

@@ -39,14 +39,18 @@ import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import Image from "next/image";
+import { ALL_LEAGUES, getLeagueName } from "@/data/league-catalog";
+import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
 
 /* ──────────────────────────────────────────────────────────────
  * Match Predictions — NOCTURNE rebuild
  * ────────────────────────────────────────────────────────────── */
 
 export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
+  const isNl = locale === "nl";
 
   const { freeMatchIds, isLoadingFreeIds } = useFreeMatchIds();
 
@@ -350,6 +354,72 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
               : Array.from({ length: LOCKED_PREVIEW }).map((_, i) => (
                   <LockedSkeleton key={i} />
                 ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Browse by league — SEO hub ── */}
+      <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/4 top-10 h-[340px] w-[520px] rounded-full"
+          style={{ background: "hsl(var(--accent-blue) / 0.08)", filter: "blur(140px)" }}
+        />
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="text-center">
+            <span className="section-label mx-auto">
+              <Shield className="h-3 w-3" />
+              {isNl ? "Alle competities" : "All leagues"}
+            </span>
+            <h2 className="text-heading mt-3 text-2xl text-[#ededed] sm:text-3xl lg:text-4xl">
+              {isNl
+                ? "AI-voorspellingen per competitie"
+                : "AI predictions by league"}
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-[#a3a9b8] sm:text-base">
+              {isNl
+                ? "30+ competities wereldwijd. Zelfde AI-motor, zelfde openbare trackrecord — klik een competitie voor de gratis picks van deze week."
+                : "30+ competitions worldwide. Same AI engine, same public track record — click any league for this week's free picks."}
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {ALL_LEAGUES.map((league) => {
+              const logo = LEAGUE_LOGO_PATH[league.slug] ?? null;
+              const name = getLeagueName(league, isNl ? "nl" : "en");
+              return (
+                <Link
+                  key={league.slug}
+                  href={loc(`/match-predictions/${league.slug}`)}
+                  className="glass-panel-lifted group flex items-center gap-3 px-4 py-3 transition-all"
+                >
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.04]">
+                    {logo ? (
+                      <Image
+                        src={logo}
+                        alt=""
+                        width={30}
+                        height={30}
+                        className="object-contain"
+                      />
+                    ) : (
+                      <span className="text-lg" aria-hidden="true">
+                        {league.flag}
+                      </span>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-[#ededed] transition-colors group-hover:text-[#4ade80]">
+                      {name}
+                    </p>
+                    <p className="text-[11px] uppercase tracking-wider text-[#6b7280]">
+                      {isNl ? "Bekijk voorspellingen" : "View predictions"}
+                    </p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-[#6b7280] transition-all group-hover:translate-x-0.5 group-hover:text-[#4ade80]" />
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

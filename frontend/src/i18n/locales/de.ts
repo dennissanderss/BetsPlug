@@ -855,6 +855,12 @@ const de = {
   "home.freePredWinrate": "Gewinnrate",
   "home.freePredYesterday": "Aktuelle Ergebnisse",
 
+  "homeLeagues.cardHint": "Vorhersagen anzeigen",
+  "homeLeagues.ctaAll": "Durchsuchen Sie alle Ligen",
+  "homeLeagues.eyebrow": "Beliebte Ligen",
+  "homeLeagues.subtitle": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Champions League und mehr – ein Abonnement deckt sie alle ab, mit einer öffentlichen Erfolgsbilanz, die Sie überprüfen können.",
+  "homeLeagues.title": "KI-Vorhersagen für jede wichtige Liga",
+
   "how.badge": "Wie es funktioniert",
   "how.deepDive": "Sehen Sie sich die vollständige Methodik an",
   "how.step1Desc": "BetsPlug Pulse erfasst mehr als 40 Signale pro Spiel – Form, Ligaposition, Head-to-Head-Verlauf, xG, Aufstellungsstärke, Verletzungen, Ruhetage – und erstellt eine KI-Fußballvorhersage pro Spiel. Wird vor jedem Anpfiff in allen über 30 unterstützten Ligen aktualisiert.",

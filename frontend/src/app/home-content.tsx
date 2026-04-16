@@ -44,6 +44,8 @@ import { getLocaleValue } from "@/lib/sanity-data";
 import { useBotdTrackRecord } from "@/hooks/use-botd-track-record";
 import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { useBotdHistory } from "@/hooks/use-botd-history";
+import { PRIMARY_LEAGUES, getLeagueName } from "@/data/league-catalog";
+import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
 
 /* Heavy shared sections loaded dynamically */
 const TrackRecordChart = dynamic(() => import("@/components/ui/track-record-chart").then(m => m.TrackRecordChart), { ssr: false });
@@ -914,6 +916,86 @@ export function HomeContent({
               ctaLabel={t("persona.quantCta")}
               ctaHref={loc("/track-record")}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          5b · POPULAR LEAGUES — SEO hub + conversion gateway
+         ══════════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-10 h-[360px] w-[560px] rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(140px)" }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-0 bottom-10 h-[340px] w-[520px] rounded-full"
+          style={{ background: "hsl(var(--accent-purple) / 0.08)", filter: "blur(140px)" }}
+        />
+
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="text-center">
+            <span className="section-label mx-auto">
+              <Sparkles className="h-3 w-3" />
+              {t("homeLeagues.eyebrow" as any)}
+            </span>
+            <h2 className="text-heading mt-3 text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              {t("homeLeagues.title" as any)}
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
+              {t("homeLeagues.subtitle" as any)}
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {PRIMARY_LEAGUES.map((league) => {
+              const logo = LEAGUE_LOGO_PATH[league.slug] ?? null;
+              const name = getLeagueName(league, locale === "nl" ? "nl" : "en");
+              return (
+                <Link
+                  key={league.slug}
+                  href={loc(`/match-predictions/${league.slug}`)}
+                  className="glass-panel-lifted group flex items-center gap-3 px-4 py-3 transition-all"
+                >
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.04]">
+                    {logo ? (
+                      <Image
+                        src={logo}
+                        alt=""
+                        width={30}
+                        height={30}
+                        className="object-contain"
+                      />
+                    ) : (
+                      <span className="text-lg" aria-hidden="true">
+                        {league.flag}
+                      </span>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-[#ededed] transition-colors group-hover:text-[#4ade80]">
+                      {name}
+                    </p>
+                    <p className="text-[10px] uppercase tracking-wider text-[#6b7280]">
+                      {t("homeLeagues.cardHint" as any)}
+                    </p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-[#6b7280] transition-all group-hover:translate-x-0.5 group-hover:text-[#4ade80]" />
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="mt-8 text-center">
+            <Link
+              href={loc("/match-predictions")}
+              className="btn-glass inline-flex items-center gap-2"
+            >
+              {t("homeLeagues.ctaAll" as any)}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>

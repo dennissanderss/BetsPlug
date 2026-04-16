@@ -2,11 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { Menu, X, ArrowRight, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Menu, X, ArrowRight, ChevronRight, ChevronDown } from "lucide-react";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { TopBar } from "@/components/ui/top-bar";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import {
+  PRIMARY_LEAGUES,
+  ALL_LEAGUES,
+  getLeagueName,
+} from "@/data/league-catalog";
+import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
 
 /**
  * SiteNav — NOCTURNE public shell navigation.
@@ -17,11 +23,48 @@ import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
  */
 
 export function SiteNav() {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [predictionsOpen, setPredictionsOpen] = useState(false);
+  const predictionsRef = useRef<HTMLDivElement>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isNl = locale === "nl";
+
+  // Close mega-menu when clicking outside or pressing Escape.
+  useEffect(() => {
+    if (!predictionsOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (
+        predictionsRef.current &&
+        !predictionsRef.current.contains(e.target as Node)
+      ) {
+        setPredictionsOpen(false);
+      }
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPredictionsOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [predictionsOpen]);
+
+  // Small hover-intent delay so the menu doesn't flicker when the
+  // cursor crosses the gap between trigger and panel.
+  const openPredictions = () => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    setPredictionsOpen(true);
+  };
+  const scheduleClose = () => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = setTimeout(() => setPredictionsOpen(false), 120);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -45,8 +88,9 @@ export function SiteNav() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const navLinks = [
-    { href: loc("/match-predictions"), label: t("nav.predictions") },
+  // Match Predictions is rendered as a mega-menu (see below) — the
+  // rest are plain links.
+  const secondaryLinks = [
     { href: loc("/how-it-works"), label: t("nav.howItWorks") },
     { href: loc("/track-record"), label: t("nav.trackRecord") },
     { href: loc("/about-us"), label: t("nav.about") },
@@ -93,7 +137,128 @@ export function SiteNav() {
             <div
               className="hidden flex-1 items-center justify-center gap-1 lg:flex"
             >
-              {navLinks.map((link) => (
+              {/* Match Predictions — mega-menu trigger */}
+              <div
+                ref={predictionsRef}
+                className="relative"
+                onMouseEnter={openPredictions}
+                onMouseLeave={scheduleClose}
+              >
+                <Link
+                  href={loc("/match-predictions")}
+                  onClick={() => setPredictionsOpen(false)}
+                  aria-haspopup="true"
+                  aria-expanded={predictionsOpen}
+                  className={`inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    predictionsOpen
+                      ? "bg-white/[0.06] text-[#ededed]"
+                      : "text-[#a3a9b8] hover:bg-white/[0.04] hover:text-[#ededed]"
+                  }`}
+                >
+                  {t("nav.predictions")}
+                  <ChevronDown
+                    className={`h-3 w-3 transition-transform duration-150 ${
+                      predictionsOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </Link>
+
+                {/* Mega-menu panel */}
+                {predictionsOpen && (
+                  <div
+                    className="absolute left-1/2 top-full z-50 mt-2 w-[min(720px,92vw)] -translate-x-1/2 rounded-2xl p-4 shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
+                    style={{
+                      background: "hsl(230 16% 10% / 0.94)",
+                      backdropFilter: "blur(28px) saturate(150%)",
+                      WebkitBackdropFilter: "blur(28px) saturate(150%)",
+                      border: "1px solid hsl(0 0% 100% / 0.1)",
+                    }}
+                    onMouseEnter={openPredictions}
+                    onMouseLeave={scheduleClose}
+                  >
+                    <div className="mb-3 flex items-center justify-between px-2">
+                      <div>
+                        <div className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                          {isNl ? "Top competities" : "Top leagues"}
+                        </div>
+                        <div className="mt-0.5 text-[11px] text-[#6b7280]">
+                          {isNl
+                            ? "AI-voorspellingen met openbaar trackrecord"
+                            : "AI predictions with a public track record"}
+                        </div>
+                      </div>
+                      <Link
+                        href={loc("/match-predictions")}
+                        onClick={() => setPredictionsOpen(false)}
+                        className="inline-flex items-center gap-1 rounded-full border border-[#4ade80]/30 bg-[#4ade80]/[0.08] px-3 py-1.5 text-[11px] font-bold text-[#86efac] transition hover:bg-[#4ade80]/[0.14]"
+                      >
+                        {isNl ? "Alle competities" : "All leagues"}
+                        <ArrowRight className="h-3 w-3" />
+                      </Link>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
+                      {PRIMARY_LEAGUES.map((league) => {
+                        const logo = LEAGUE_LOGO_PATH[league.slug] ?? null;
+                        const name = getLeagueName(league, isNl ? "nl" : "en");
+                        return (
+                          <Link
+                            key={league.slug}
+                            href={loc(`/match-predictions/${league.slug}`)}
+                            onClick={() => setPredictionsOpen(false)}
+                            className="group flex items-center gap-2.5 rounded-xl px-3 py-2 transition-colors hover:bg-white/[0.05]"
+                          >
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-white/[0.06] bg-white/[0.03]">
+                              {logo ? (
+                                <Image
+                                  src={logo}
+                                  alt=""
+                                  width={22}
+                                  height={22}
+                                  className="object-contain"
+                                />
+                              ) : (
+                                <span className="text-sm" aria-hidden="true">
+                                  {league.flag}
+                                </span>
+                              )}
+                            </div>
+                            <span className="min-w-0 flex-1 truncate text-sm font-semibold text-[#ededed] transition-colors group-hover:text-[#4ade80]">
+                              {name}
+                            </span>
+                            <ChevronRight className="h-3.5 w-3.5 shrink-0 text-[#6b7280] transition group-hover:translate-x-0.5 group-hover:text-[#4ade80]" />
+                          </Link>
+                        );
+                      })}
+                    </div>
+
+                    <div
+                      className="mt-3 border-t pt-3"
+                      style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
+                    >
+                      <div className="px-2 text-[10px] font-semibold uppercase tracking-widest text-[#a3a9b8]">
+                        {isNl ? "Overige" : "More leagues"}
+                      </div>
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {ALL_LEAGUES.filter((l) => l.tier === "secondary").map(
+                          (league) => (
+                            <Link
+                              key={league.slug}
+                              href={loc(`/match-predictions/${league.slug}`)}
+                              onClick={() => setPredictionsOpen(false)}
+                              className="rounded-full border border-white/[0.06] bg-white/[0.02] px-3 py-1 text-[11px] text-[#a3a9b8] transition-colors hover:border-[#4ade80]/30 hover:bg-[#4ade80]/[0.08] hover:text-[#86efac]"
+                            >
+                              {getLeagueName(league, isNl ? "nl" : "en")}
+                            </Link>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {secondaryLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -217,7 +382,32 @@ export function SiteNav() {
             <span className="mb-3 px-2 text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
               {t("nav.menu")}
             </span>
-            {navLinks.map((link) => (
+            {/* Match Predictions — parent link + top leagues sub-list */}
+            <Link
+              href={loc("/match-predictions")}
+              onClick={() => setMobileOpen(false)}
+              className="group flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-medium text-[#ededed] transition-colors hover:bg-white/[0.04]"
+            >
+              <span>{t("nav.predictions")}</span>
+              <ChevronRight className="h-4 w-4 text-[#6b7280] transition-all group-hover:translate-x-1 group-hover:text-[#4ade80]" />
+            </Link>
+            <div className="mx-2 mt-1 mb-2 grid grid-cols-2 gap-1">
+              {PRIMARY_LEAGUES.slice(0, 6).map((league) => (
+                <Link
+                  key={league.slug}
+                  href={loc(`/match-predictions/${league.slug}`)}
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.02] px-2.5 py-2 text-xs text-[#a3a9b8] transition-colors hover:text-[#ededed]"
+                >
+                  <span aria-hidden="true">{league.flag}</span>
+                  <span className="truncate">
+                    {getLeagueName(league, isNl ? "nl" : "en")}
+                  </span>
+                </Link>
+              ))}
+            </div>
+
+            {secondaryLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

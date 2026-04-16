@@ -855,6 +855,12 @@ const it = {
   "home.freePredWinrate": "Win rate",
   "home.freePredYesterday": "Yesterday's results",
 
+  "homeLeagues.cardHint": "Visualizza le previsioni",
+  "homeLeagues.ctaAll": "Sfoglia tutti i campionati",
+  "homeLeagues.eyebrow": "Leghe popolari",
+  "homeLeagues.subtitle": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Champions League e altro ancora: un abbonamento li copre tutti, con un track record pubblico che puoi verificare.",
+  "homeLeagues.title": "Pronostici AI per ogni campionato che conta",
+
   "how.badge": "Come funziona",
   "how.deepDive": "Vedi la metodologia completa",
   "how.step1Desc": "BetsPlug Pulse acquisisce oltre 40 segnali per partita (forma, posizione in campionato, cronologia degli scontri diretti, xG, forza della formazione, infortuni, giorni di riposo) e produce un pronostico calcistico basato sull'intelligenza artificiale per partita. Aggiornato prima di ogni calcio d'inizio in tutti gli oltre 30 campionati supportati.",

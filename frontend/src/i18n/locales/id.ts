@@ -855,6 +855,12 @@ const id = {
   "home.freePredWinrate": "Win rate",
   "home.freePredYesterday": "Yesterday's results",
 
+  "homeLeagues.cardHint": "Lihat prediksi",
+  "homeLeagues.ctaAll": "Jelajahi semua liga",
+  "homeLeagues.eyebrow": "Liga populer",
+  "homeLeagues.subtitle": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Champions League dan banyak lagi — satu langganan mencakup semuanya, dengan rekam jejak publik yang dapat Anda verifikasi.",
+  "homeLeagues.title": "Prediksi AI untuk setiap liga yang penting",
+
   "how.badge": "Bagaimana cara kerjanya",
   "how.deepDive": "Lihat metodologi selengkapnya",
   "how.step1Desc": "BetsPlug Pulse menyerap 40+ sinyal per pertandingan — bentuk, posisi liga, riwayat head-to-head, xG, kekuatan susunan pemain, cedera, hari istirahat — dan menghasilkan satu prediksi sepak bola AI per pertandingan. Disegarkan sebelum setiap kickoff di 30+ liga yang didukung.",

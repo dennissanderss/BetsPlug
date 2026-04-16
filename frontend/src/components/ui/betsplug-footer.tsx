@@ -25,6 +25,8 @@ import {
   PayPalBadge,
   ApplePayBadge,
 } from "./payment-badges";
+import { ALL_LEAGUES, getLeagueName } from "@/data/league-catalog";
+import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
 
 const socialLinks = [
   { icon: Twitter, label: "Twitter", href: "https://twitter.com/betsplug" },
@@ -34,8 +36,9 @@ const socialLinks = [
 ];
 
 export function BetsPlugFooter() {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
+  const isNl = locale === "nl";
 
   const productLinks = [
     { text: t("nav.predictions"), href: loc("/match-predictions") },
@@ -267,6 +270,70 @@ export function BetsPlugFooter() {
             </ul>
           </div>
         </nav>
+      </div>
+
+      {/* ═══ Predictions by league — SEO cluster ═══
+         Compact grid of every league we cover, each linking to its
+         /match-predictions/{slug} hub. Strong internal-link signal
+         for Google's topical authority scoring. */}
+      <div className="relative z-10 mx-auto mt-12 max-w-6xl px-4 sm:px-6">
+        <div
+          className="rounded-2xl border p-5 sm:p-6"
+          style={{
+            borderColor: "hsl(0 0% 100% / 0.06)",
+            background: "hsl(230 16% 10% / 0.4)",
+          }}
+        >
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-widest text-[#4ade80]">
+                {t("nav.predictions")}
+              </div>
+              <div className="mt-1 text-[11px] text-[#6b7280]">
+                {isNl
+                  ? "AI-voetbalvoorspellingen per competitie"
+                  : "AI football predictions by league"}
+              </div>
+            </div>
+            <Link
+              href={loc("/match-predictions")}
+              className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#a3a9b8] transition-colors hover:text-[#4ade80]"
+            >
+              {isNl ? "Alle competities" : "All leagues"}
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5 sm:grid-cols-3 lg:grid-cols-4">
+            {ALL_LEAGUES.map((league) => {
+              const logo = LEAGUE_LOGO_PATH[league.slug] ?? null;
+              const name = getLeagueName(league, isNl ? "nl" : "en");
+              return (
+                <li key={league.slug}>
+                  <Link
+                    href={loc(`/match-predictions/${league.slug}`)}
+                    className="group inline-flex w-full items-center gap-2 py-1 text-xs text-[#a3a9b8] transition-colors hover:text-[#ededed]"
+                  >
+                    {logo ? (
+                      <Image
+                        src={logo}
+                        alt=""
+                        width={16}
+                        height={16}
+                        className="h-4 w-4 shrink-0 object-contain opacity-70 transition-opacity group-hover:opacity-100"
+                      />
+                    ) : (
+                      <span className="w-4 shrink-0 text-center text-xs" aria-hidden="true">
+                        {league.flag}
+                      </span>
+                    )}
+                    <span className="truncate">{name}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
 
       {/* ═══ Payment + security strip ═══ */}

@@ -270,6 +270,13 @@ const en = {
   "track.askQuestion": "How is accuracy calculated?",
 
   /* Features */
+  /* ── Home: Popular leagues strip ───────────────────────────── */
+  "homeLeagues.eyebrow": "Popular leagues",
+  "homeLeagues.title": "AI predictions for every league that matters",
+  "homeLeagues.subtitle": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Champions League and more — one subscription covers them all, with a public track record you can verify.",
+  "homeLeagues.cardHint": "View predictions",
+  "homeLeagues.ctaAll": "Browse all leagues",
+
   "features.badge": "What you get",
   "features.titleA": "Everything included",
   "features.titleB": "in one platform.",
@@ -2768,6 +2775,12 @@ const nl: Dictionary = {
   "faqTitle.predictionsSub": "Alles wat je moet weten over onze AI-wedstrijdvoorspellingen.",
   "faqTitle.trackRecord": "Track Record FAQ",
   "faqTitle.trackRecordSub": "Hoe we onze voorspellingsprestaties meten en delen.",
+
+  "homeLeagues.eyebrow": "Populaire competities",
+  "homeLeagues.title": "AI-voorspellingen voor elke competitie die telt",
+  "homeLeagues.subtitle": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Champions League en meer — één abonnement dekt ze allemaal, met een openbaar trackrecord dat je zelf kunt verifiëren.",
+  "homeLeagues.cardHint": "Bekijk voorspellingen",
+  "homeLeagues.ctaAll": "Alle competities bekijken",
 
   "features.badge": "Wat je krijgt",
   "features.f1Desc": "Ontvang elke dag door AI aangedreven winstkansen voor meer dan 50 wedstrijden. In realtime bijgewerkt als kansen en omstandigheden veranderen.",
