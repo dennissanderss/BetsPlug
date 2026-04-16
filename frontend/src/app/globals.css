@@ -1066,9 +1066,31 @@
   border-radius: var(--r-sm);
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   SECTION TRANSITIONS — seamless blend between sections.
+   Every section is transparent so the body atmospheric glow shows
+   through. Even sections get a whisper of surface lift (feathered
+   in/out) to create visual separation without hard boundaries.
+   ═══════════════════════════════════════════════════════════════════ */
+section {
+  background: transparent;
+}
+section:nth-child(even) {
+  background:
+    linear-gradient(180deg,
+      transparent 0%,
+      hsl(230 16% 8% / 0.3) 12%,
+      hsl(230 16% 8% / 0.3) 88%,
+      transparent 100%);
+}
+
 /* Dashboard shell (app layout) — already dark, same canvas */
 [data-app-shell] {
   color-scheme: dark;
   background: hsl(var(--bg-base));
   color: hsl(var(--text-primary));
+}
+[data-app-shell] section,
+[data-app-shell] section:nth-child(even) {
+  background: transparent !important;
 }
