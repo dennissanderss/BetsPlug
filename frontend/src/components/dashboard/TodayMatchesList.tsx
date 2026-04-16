@@ -1,13 +1,47 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { useTranslations } from "@/i18n/locale-provider";
-import { Calendar, ChevronDown } from "lucide-react";
+import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
+import { Calendar, ChevronDown, ArrowRight } from "lucide-react";
 import { confLevel, confColor } from "@/components/match-predictions/shared";
 import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill, DataChip } from "@/components/noct/pill";
 import type { Fixture, FixturesResponse } from "@/types/api";
+
+/**
+ * Convert backend `pick` (HOME/DRAW/AWAY) → display label + tone.
+ * Uses team short-name when we predict a winner, localised "Draw"
+ * for the draw case.
+ */
+function pickLabel(
+  pick: string | null | undefined,
+  homeName: string,
+  awayName: string,
+  drawText: string,
+): { label: string; tone: "win" | "draw" } | null {
+  if (!pick) return null;
+  if (pick === "HOME") return { label: homeName, tone: "win" };
+  if (pick === "AWAY") return { label: awayName, tone: "win" };
+  if (pick === "DRAW") return { label: drawText, tone: "draw" };
+  return null;
+}
+
+/** Best-effort short team name for tight row layouts. */
+function shortTeamName(name: string): string {
+  if (name.length <= 14) return name;
+  // Drop common suffixes that inflate length.
+  const trimmed = name
+    .replace(/\sFC$/i, "")
+    .replace(/\sCF$/i, "")
+    .replace(/\sAFC$/i, "")
+    .replace(/^FC\s/i, "")
+    .replace(/\sSC$/i, "")
+    .replace(/^1\.?\s*FC\s+/i, "")
+    .trim();
+  return trimmed.length <= 14 ? trimmed : trimmed.slice(0, 13) + "…";
+}
 
 interface TodayMatchesListProps {
   data: FixturesResponse | undefined;
@@ -35,6 +69,7 @@ function formatTime(iso: string): string {
 
 function MatchRow({ fixture }: { fixture: Fixture }) {
   const { t } = useTranslations();
+  const lHref = useLocalizedHref();
   const pred = fixture.prediction;
   const conf = pred ? Math.round(pred.confidence * 100) : null;
   const level = conf != null ? confLevel(conf) : null;
@@ -43,8 +78,18 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
   const isFinished = fixture.status === "finished";
   const isLive = fixture.status === "live";
 
+  const pick = pickLabel(
+    pred?.pick,
+    fixture.home_team_name,
+    fixture.away_team_name,
+    t("common.draw"),
+  );
+
   return (
-    <div className="flex items-center gap-3 px-3 py-2.5 border-b border-white/[0.05] transition-colors hover:bg-white/[0.03] last:border-b-0">
+    <Link
+      href={lHref(`/matches/${fixture.id}`)}
+      className="group flex items-center gap-3 px-3 py-2.5 border-b border-white/[0.05] transition-colors hover:bg-white/[0.04] last:border-b-0 cursor-pointer focus-visible:outline-none focus-visible:bg-white/[0.05]"
+    >
       {/* Time */}
       <span className="w-14 shrink-0 text-xs tabular-nums">
         {isLive ? (
@@ -88,20 +133,28 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
         <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} />
       </div>
 
-      {/* Confidence */}
-      <div className="w-16 shrink-0 text-right">
-        {conf != null ? (
-          <DataChip
-            tone="win"
-            style={color ? { color, borderColor: `${color}66` } : undefined}
-          >
-            {conf}%
-          </DataChip>
-        ) : (
-          <span className="text-[10px] italic text-[#6b7280]">{t("dash.analyzing")}</span>
-        )}
+      {/* Pick + Confidence */}
+      <div className="flex shrink-0 items-center gap-1.5">
+        {pick ? (
+          <Pill tone={pick.tone} className="!text-[10px] hidden sm:inline-flex max-w-[110px] truncate">
+            <span className="truncate">{shortTeamName(pick.label)}</span>
+          </Pill>
+        ) : null}
+        <div className="w-14 text-right">
+          {conf != null ? (
+            <DataChip
+              tone="win"
+              style={color ? { color, borderColor: `${color}66` } : undefined}
+            >
+              {conf}%
+            </DataChip>
+          ) : (
+            <span className="text-[10px] italic text-[#6b7280]">{t("dash.analyzing")}</span>
+          )}
+        </div>
+        <ArrowRight className="h-3 w-3 shrink-0 text-[#6b7280] transition-all group-hover:translate-x-0.5 group-hover:text-[#4ade80]" />
       </div>
-    </div>
+    </Link>
   );
 }
 

@@ -1,27 +1,40 @@
 "use client";
 
+/**
+ * /matches/[id] — rich match detail page (NOCTURNE styled).
+ *
+ * Three API calls:
+ *   GET /api/matches/{id}              → Match (header data)
+ *   GET /api/matches/{id}/analysis     → MatchAnalysis (form, H2H, stats)
+ *   GET /api/matches/{id}/forecast     → ForecastOutput (AI forecast)
+ *
+ * Everything is rendered in the NOCTURNE design language: card-neon
+ * gradient-border panels, HexBadge icon frames, Pills/DataChips for
+ * data, ambient glow blobs, logo-green as the primary accent.
+ */
+
+import Image from "next/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import {
-  MapPin,
+  ArrowLeft,
   Calendar,
   Clock,
+  MapPin,
+  Target,
   TrendingUp,
+  Shield,
+  Activity,
   BarChart2,
   CheckCircle2,
   XCircle,
-  Minus,
+  Sparkles,
 } from "lucide-react";
 
-import Image from "next/image";
 import { api } from "@/lib/api";
-import {
-  cn,
-  formatPercent,
-  formatDateTime,
-  formatDate,
-  getStatusBadgeColor,
-} from "@/lib/utils";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type {
   Match,
   MatchAnalysis,
@@ -29,874 +42,1034 @@ import type {
   TeamForm,
 } from "@/types/api";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProbabilityBar } from "@/components/charts/probability-bar";
+import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill, DataChip, TrustScore } from "@/components/noct/pill";
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────────────
+   Helpers
+   ───────────────────────────────────────────────────────────── */
 
-function FormBadge({ result }: { result: string }) {
-  const colorMap: Record<string, string> = {
-    W: "bg-green-500 text-white border-green-500",
-    D: "bg-amber-400 text-white border-amber-400",
-    L: "bg-red-500 text-white border-red-500",
-  };
-  return (
-    <span
-      className={cn(
-        "inline-flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold",
-        colorMap[result] ?? "bg-muted text-muted-foreground"
-      )}
-    >
-      {result}
-    </span>
-  );
+function formatKickoff(iso: string, locale: string): string {
+  try {
+    return new Date(iso).toLocaleString(locale || "en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return iso;
+  }
 }
 
-function StatusBadge({ status }: { status: Match["status"] }) {
-  return (
-    <span
-      className={cn(
-        "rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize",
-        getStatusBadgeColor(status)
-      )}
-    >
-      {status}
-    </span>
-  );
+function formatTime(iso: string, locale: string): string {
+  try {
+    return new Date(iso).toLocaleTimeString(locale || "en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  } catch {
+    return "";
+  }
 }
 
-// ─── Skeleton Screens ────────────────────────────────────────────────────────
+function formatDate(iso: string, locale: string): string {
+  try {
+    return new Date(iso).toLocaleDateString(locale || "en-GB", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  } catch {
+    return "";
+  }
+}
 
-function MatchHeaderSkeleton() {
+function formatPct(n: number): string {
+  return `${Math.round(n * 100)}%`;
+}
+
+function confColor(conf: number): string {
+  // 0-0.55 red, 0.55-0.65 amber, 0.65+ green
+  if (conf >= 0.65) return "#4ade80";
+  if (conf >= 0.55) return "#fbbf24";
+  return "#f87171";
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Team-logo fallback (initials badge)
+   ───────────────────────────────────────────────────────────── */
+
+function TeamLogoBlock({
+  src,
+  name,
+  size = 56,
+}: {
+  src: string | null | undefined;
+  name: string;
+  size?: number;
+}) {
+  if (src) {
+    return (
+      <Image
+        src={src}
+        alt={name}
+        width={size}
+        height={size}
+        className="rounded-full bg-white/[0.05] object-contain"
+      />
+    );
+  }
+  const initials = name
+    .split(/\s+/)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Skeleton className="h-5 w-32" />
-        <Skeleton className="h-5 w-20" />
-      </div>
-      <div className="flex items-center justify-center gap-8">
-        <Skeleton className="h-10 w-40" />
-        <Skeleton className="h-14 w-24" />
-        <Skeleton className="h-10 w-40" />
-      </div>
-      <div className="flex justify-center gap-4">
-        <Skeleton className="h-4 w-28" />
-        <Skeleton className="h-4 w-24" />
-      </div>
+    <div
+      className="flex items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.04] text-sm font-bold text-[#a3a9b8]"
+      style={{ width: size, height: size }}
+    >
+      {initials}
     </div>
   );
 }
 
-function AnalysisSkeleton() {
+/* ─────────────────────────────────────────────────────────────
+   Form letter badge (W/D/L) — NOCTURNE Pills
+   ───────────────────────────────────────────────────────────── */
+
+function FormLetter({ r }: { r: string }) {
+  const tone: "win" | "draw" | "loss" | "default" =
+    r === "W" ? "win" : r === "D" ? "draw" : r === "L" ? "loss" : "default";
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      {[0, 1].map((i) => (
-        <Card key={i}>
-          <CardHeader>
-            <Skeleton className="h-5 w-32" />
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex gap-2">
-              {Array.from({ length: 5 }).map((_, j) => (
-                <Skeleton key={j} className="h-7 w-7 rounded-full" />
-              ))}
-            </div>
-            {Array.from({ length: 4 }).map((_, j) => (
-              <Skeleton key={j} className="h-5 w-full" />
-            ))}
-          </CardContent>
-        </Card>
-      ))}
-    </div>
+    <span
+      className={
+        "inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold " +
+        (tone === "win"
+          ? "bg-[#4ade80]/15 text-[#86efac] ring-1 ring-[#4ade80]/30"
+          : tone === "draw"
+          ? "bg-[#fbbf24]/15 text-[#fbbf24] ring-1 ring-[#fbbf24]/30"
+          : tone === "loss"
+          ? "bg-[#f87171]/15 text-[#f87171] ring-1 ring-[#f87171]/30"
+          : "bg-white/[0.05] text-[#6b7280]")
+      }
+    >
+      {r}
+    </span>
   );
 }
 
-// ─── Match Header ────────────────────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────────────
+   Header card — teams + score/VS + kickoff + venue + league
+   ───────────────────────────────────────────────────────────── */
 
-function MatchHeader({ match }: { match: Match }) {
+function MatchHeader({ match, locale }: { match: Match; locale: string }) {
   const isFinished = match.status === "finished";
-  const hasScore = isFinished && match.result !== null;
+  const isLive = match.status === "live";
+  const scheduled = isLive || isFinished;
+
+  const winner = match.result?.winner ?? null;
 
   return (
-    <div className="space-y-4">
-      {/* Meta row */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <Calendar className="h-4 w-4" />
-            {formatDateTime(match.scheduled_at)}
+    <div className="card-neon card-neon-green halo-green">
+      {/* Ambient glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-24 -top-24 h-[320px] w-[320px] rounded-full"
+        style={{ background: "hsl(var(--accent-green) / 0.18)", filter: "blur(130px)" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-24 -bottom-24 h-[280px] w-[280px] rounded-full"
+        style={{ background: "hsl(var(--accent-purple) / 0.14)", filter: "blur(120px)" }}
+      />
+
+      <div className="relative p-5 sm:p-7">
+        {/* Top row: league / status / matchday */}
+        <div className="mb-5 flex flex-wrap items-center gap-2">
+          <span className="section-label">
+            <Sparkles className="h-3 w-3" />
+            Match Preview
           </span>
-          {match.venue && (
-            <span className="flex items-center gap-1.5">
-              <MapPin className="h-4 w-4" />
-              {match.venue}
-            </span>
-          )}
           {match.round_name && (
-            <span className="flex items-center gap-1.5">
-              <Clock className="h-4 w-4" />
+            <Pill tone="default" className="!text-[10px]">
               {match.round_name}
-            </span>
+            </Pill>
+          )}
+          {match.matchday && (
+            <Pill tone="default" className="!text-[10px]">
+              MD {match.matchday}
+            </Pill>
+          )}
+          {isLive && (
+            <Pill tone="default" className="inline-flex items-center gap-1.5 !text-[10px]">
+              <span className="live-dot-red" />
+              LIVE
+            </Pill>
+          )}
+          {isFinished && (
+            <Pill tone="default" className="!text-[10px]">
+              Full Time
+            </Pill>
           )}
         </div>
-        <StatusBadge status={match.status} />
-      </div>
 
-      {/* Score / Fixture display */}
-      <div className="rounded-xl border border-border bg-card p-6">
-        <div className="flex items-center justify-center gap-6 sm:gap-10">
-          {/* Home team */}
-          <div className="flex-1 flex flex-col items-end gap-1">
-            <div className="flex items-center gap-2">
-              <p className="text-sm font-black uppercase leading-tight tracking-tight text-foreground sm:text-lg md:text-xl">
+        {/* Teams row */}
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">
+          {/* Home */}
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-end sm:text-right">
+            <TeamLogoBlock
+              src={match.home_team_logo}
+              name={match.home_team_name}
+              size={64}
+            />
+            <div className="min-w-0">
+              <p className="text-base font-bold leading-tight text-[#ededed] sm:text-xl">
                 {match.home_team_name}
               </p>
-              {match.home_team_logo && (
-                <Image src={match.home_team_logo} alt="" width={32} height={32} className="rounded-full" />
+              <p className="mt-0.5 text-[10px] uppercase tracking-wider text-[#6b7280]">
+                Home
+              </p>
+              {winner === "home" && (
+                <Pill tone="win" className="mt-1.5 !text-[10px] inline-flex items-center gap-1">
+                  <CheckCircle2 className="h-3 w-3" />
+                  Winner
+                </Pill>
               )}
             </div>
-            <p className="text-xs text-muted-foreground">Home</p>
           </div>
 
-          {/* Score / VS */}
-          <div className="shrink-0 text-center">
-            {hasScore ? (
-              <div>
-                <p className="text-4xl font-black tabular-nums tracking-tight text-foreground sm:text-5xl">
-                  {match.result!.home_score}
-                  <span className="mx-1 text-muted-foreground">–</span>
-                  {match.result!.away_score}
-                </p>
-                {match.result!.home_score_ht !== null && (
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    HT: {match.result!.home_score_ht} – {match.result!.away_score_ht}
-                  </p>
-                )}
-                {match.result!.winner && (
-                  <div className="mt-2 flex justify-center">
-                    <Badge
-                      variant={
-                        match.result!.winner === "home"
-                          ? "success"
-                          : match.result!.winner === "away"
-                          ? "destructive"
-                          : "secondary"
-                      }
-                      className="capitalize"
-                    >
-                      {match.result!.winner === "draw"
-                        ? "Draw"
-                        : `${match.result!.winner} win`}
-                    </Badge>
-                  </div>
-                )}
-              </div>
+          {/* Center — score or kickoff */}
+          <div className="flex flex-col items-center">
+            {scheduled && match.result ? (
+              <>
+                <div className="flex items-center gap-3 sm:gap-5">
+                  <span className="text-stat text-5xl text-[#ededed] sm:text-6xl tabular-nums">
+                    {match.result.home_score}
+                  </span>
+                  <span className="text-lg font-semibold text-[#6b7280]">-</span>
+                  <span className="text-stat text-5xl text-[#ededed] sm:text-6xl tabular-nums">
+                    {match.result.away_score}
+                  </span>
+                </div>
+                {match.result.home_score_ht != null &&
+                  match.result.away_score_ht != null && (
+                    <p className="mt-1 text-[10px] uppercase tracking-wider text-[#6b7280]">
+                      HT {match.result.home_score_ht}-{match.result.away_score_ht}
+                    </p>
+                  )}
+              </>
             ) : (
-              <p className="text-3xl font-bold text-muted-foreground">vs</p>
+              <>
+                <span className="text-sm font-semibold uppercase tracking-widest text-[#6b7280]">
+                  VS
+                </span>
+                <span className="mt-1 text-stat text-2xl text-[#ededed]">
+                  {formatTime(match.scheduled_at, locale)}
+                </span>
+              </>
             )}
           </div>
 
-          {/* Away team */}
-          <div className="flex-1 flex flex-col items-start gap-1">
-            <div className="flex items-center gap-2">
-              {match.away_team_logo && (
-                <Image src={match.away_team_logo} alt="" width={32} height={32} className="rounded-full" />
-              )}
-              <p className="text-sm font-black uppercase leading-tight tracking-tight text-foreground sm:text-lg md:text-xl">
+          {/* Away */}
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:text-left">
+            <TeamLogoBlock
+              src={match.away_team_logo}
+              name={match.away_team_name}
+              size={64}
+            />
+            <div className="min-w-0">
+              <p className="text-base font-bold leading-tight text-[#ededed] sm:text-xl">
                 {match.away_team_name}
               </p>
+              <p className="mt-0.5 text-[10px] uppercase tracking-wider text-[#6b7280]">
+                Away
+              </p>
+              {winner === "away" && (
+                <Pill tone="win" className="mt-1.5 !text-[10px] inline-flex items-center gap-1">
+                  <CheckCircle2 className="h-3 w-3" />
+                  Winner
+                </Pill>
+              )}
             </div>
-            <p className="text-xs text-muted-foreground">Away</p>
           </div>
+        </div>
+
+        {/* Meta row: date + venue */}
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 border-t border-white/[0.06] pt-4">
+          <Pill tone="default" className="inline-flex items-center gap-1.5 !text-[11px]">
+            <Calendar className="h-3 w-3" />
+            {formatDate(match.scheduled_at, locale)}
+          </Pill>
+          <Pill tone="default" className="inline-flex items-center gap-1.5 !text-[11px]">
+            <Clock className="h-3 w-3" />
+            {formatTime(match.scheduled_at, locale)}
+          </Pill>
+          {match.venue && (
+            <Pill tone="default" className="inline-flex items-center gap-1.5 !text-[11px]">
+              <MapPin className="h-3 w-3" />
+              {match.venue}
+            </Pill>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Analysis Tab ────────────────────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────────────
+   Probability bar — NOCTURNE variant, highlighted pick
+   ───────────────────────────────────────────────────────────── */
+
+function ProbBar({
+  home,
+  draw,
+  away,
+  homeName,
+  awayName,
+}: {
+  home: number;
+  draw: number | null;
+  away: number;
+  homeName: string;
+  awayName: string;
+}) {
+  const total = home + (draw ?? 0) + away || 1;
+  const hp = (home / total) * 100;
+  const dp = ((draw ?? 0) / total) * 100;
+  const ap = (away / total) * 100;
+
+  const highest = Math.max(home, draw ?? 0, away);
+  const pickSide: "home" | "draw" | "away" =
+    highest === home ? "home" : highest === away ? "away" : "draw";
+
+  return (
+    <div>
+      {/* Segmented bar */}
+      <div className="flex h-3 w-full gap-0.5 overflow-hidden rounded-full bg-white/[0.05]">
+        <div
+          className="h-full rounded-l-full transition-all"
+          style={{
+            width: `${hp}%`,
+            background:
+              pickSide === "home"
+                ? "linear-gradient(90deg, #22c55e, #4ade80)"
+                : "rgba(74,222,128,0.40)",
+            boxShadow: pickSide === "home" ? "0 0 14px rgba(74,222,128,0.4)" : undefined,
+          }}
+        />
+        {draw != null && dp > 0 && (
+          <div
+            className="h-full transition-all"
+            style={{
+              width: `${dp}%`,
+              background:
+                pickSide === "draw"
+                  ? "linear-gradient(90deg, #f59e0b, #fbbf24)"
+                  : "rgba(251,191,36,0.35)",
+              boxShadow: pickSide === "draw" ? "0 0 14px rgba(251,191,36,0.35)" : undefined,
+            }}
+          />
+        )}
+        <div
+          className="h-full rounded-r-full transition-all"
+          style={{
+            width: `${ap}%`,
+            background:
+              pickSide === "away"
+                ? "linear-gradient(90deg, #a855f7, #d946ef)"
+                : "rgba(168,85,247,0.35)",
+            boxShadow: pickSide === "away" ? "0 0 14px rgba(168,85,247,0.35)" : undefined,
+          }}
+        />
+      </div>
+
+      {/* Legend */}
+      <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+        <div>
+          <DataChip tone={pickSide === "home" ? "win" : "default"}>
+            {Math.round(home * 100)}%
+          </DataChip>
+          <p className="mt-1 truncate text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+            {homeName}
+          </p>
+        </div>
+        <div>
+          {draw != null ? (
+            <>
+              <DataChip tone={pickSide === "draw" ? "win" : "default"}>
+                {Math.round(draw * 100)}%
+              </DataChip>
+              <p className="mt-1 text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+                Draw
+              </p>
+            </>
+          ) : (
+            <>
+              <DataChip tone="default">—</DataChip>
+              <p className="mt-1 text-[10px] uppercase tracking-wider text-[#6b7280]">
+                No draw
+              </p>
+            </>
+          )}
+        </div>
+        <div>
+          <DataChip tone={pickSide === "away" ? "win" : "default"}>
+            {Math.round(away * 100)}%
+          </DataChip>
+          <p className="mt-1 truncate text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+            {awayName}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Team form card — last 5 + simple stats
+   ───────────────────────────────────────────────────────────── */
 
 function TeamFormCard({
   teamName,
   form,
-  side,
+  variant,
 }: {
   teamName: string;
   form: TeamForm;
-  side: "home" | "away";
+  variant: "green" | "purple";
 }) {
-  const accentColor = side === "home" ? "text-blue-600 dark:text-blue-400" : "text-orange-600 dark:text-orange-400";
-  const bgColor = side === "home" ? "bg-blue-50 dark:bg-blue-950/20" : "bg-orange-50 dark:bg-orange-950/20";
-
-  const total = form.wins + form.draws + form.losses;
-  const winRate = total > 0 ? form.wins / total : 0;
-  const avgScored = total > 0 ? (form.goals_scored / total).toFixed(2) : " - ";
-  const avgConceded = total > 0 ? (form.goals_conceded / total).toFixed(2) : " - ";
-
   return (
-    <Card className={cn("border-t-4", side === "home" ? "border-t-blue-500" : "border-t-orange-500")}>
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-semibold">{teamName}</CardTitle>
-          <span
-            className={cn(
-              "rounded-full px-2.5 py-0.5 text-xs font-semibold capitalize",
-              bgColor,
-              accentColor
-            )}
-          >
-            {side}
-          </span>
+    <div className={`card-neon card-neon-${variant} p-5`}>
+      <div className="relative">
+        <div className="flex items-center gap-2.5">
+          <HexBadge variant={variant} size="sm" noGlow>
+            <Activity className="h-4 w-4" />
+          </HexBadge>
+          <div className="min-w-0">
+            <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+              Recent Form
+            </p>
+            <p className="text-sm font-bold text-[#ededed] truncate">{teamName}</p>
+          </div>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Last 5 form */}
-        <div>
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+
+        {/* Last-5 strip */}
+        <div className="mt-4">
+          <p className="mb-2 text-[10px] uppercase tracking-wider text-[#6b7280]">
             Last 5
           </p>
-          <div className="flex flex-wrap gap-1.5">
-            {form.last_5.length > 0 ? (
-              form.last_5.map((r, i) => <FormBadge key={i} result={r} />)
+          <div className="flex items-center gap-1.5">
+            {form.last_5.length === 0 ? (
+              <span className="text-xs italic text-[#6b7280]">No data</span>
             ) : (
-              <span className="text-sm text-muted-foreground">No data</span>
+              form.last_5.slice(0, 5).map((r, i) => <FormLetter key={i} r={r} />)
             )}
           </div>
         </div>
 
-        <Separator />
+        {/* W/D/L + goals — 3-up */}
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2 py-2 text-center">
+            <p className="text-stat text-lg text-[#ededed] tabular-nums">
+              {form.wins}-{form.draws}-{form.losses}
+            </p>
+            <p className="mt-0.5 text-[9px] uppercase tracking-wider text-[#6b7280]">
+              W-D-L
+            </p>
+          </div>
+          <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2 py-2 text-center">
+            <p className="text-stat text-lg text-[#4ade80] tabular-nums">
+              {form.goals_scored}
+            </p>
+            <p className="mt-0.5 text-[9px] uppercase tracking-wider text-[#6b7280]">
+              Scored
+            </p>
+          </div>
+          <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2 py-2 text-center">
+            <p className="text-stat text-lg text-[#f87171] tabular-nums">
+              {form.goals_conceded}
+            </p>
+            <p className="mt-0.5 text-[9px] uppercase tracking-wider text-[#6b7280]">
+              Conceded
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-        {/* W/D/L mini cards */}
-        <div className="grid grid-cols-3 gap-2">
-          <div className="rounded-md bg-green-50 p-2 text-center dark:bg-green-950/30">
-            <p className="text-lg font-bold text-green-600 dark:text-green-400">{form.wins}</p>
-            <p className="text-xs text-green-700 dark:text-green-500">W</p>
-          </div>
-          <div className="rounded-md bg-amber-50 p-2 text-center dark:bg-amber-950/30">
-            <p className="text-lg font-bold text-amber-600 dark:text-amber-400">{form.draws}</p>
-            <p className="text-xs text-amber-700 dark:text-amber-500">D</p>
-          </div>
-          <div className="rounded-md bg-red-50 p-2 text-center dark:bg-red-950/30">
-            <p className="text-lg font-bold text-red-600 dark:text-red-400">{form.losses}</p>
-            <p className="text-xs text-red-700 dark:text-red-500">L</p>
+/* ─────────────────────────────────────────────────────────────
+   H2H card — aggregate wins/draws/losses + summary
+   ───────────────────────────────────────────────────────────── */
+
+function H2HCard({
+  h2h,
+  homeName,
+  awayName,
+}: {
+  h2h: MatchAnalysis["head_to_head"];
+  homeName: string;
+  awayName: string;
+}) {
+  const total = h2h.total || 0;
+  const homeWinPct = total ? Math.round((h2h.home_wins / total) * 100) : 0;
+  const drawPct = total ? Math.round((h2h.draws / total) * 100) : 0;
+  const awayWinPct = total ? Math.round((h2h.away_wins / total) * 100) : 0;
+
+  return (
+    <div className="card-neon card-neon-blue p-5">
+      <div className="relative">
+        <div className="flex items-center gap-2.5">
+          <HexBadge variant="blue" size="sm" noGlow>
+            <Shield className="h-4 w-4" />
+          </HexBadge>
+          <div>
+            <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+              Head-to-Head
+            </p>
+            <p className="text-sm font-bold text-[#ededed]">
+              {total > 0 ? `Last ${total} meetings` : "No history"}
+            </p>
           </div>
         </div>
 
-        <Separator />
+        {total > 0 ? (
+          <>
+            <div className="mt-4 grid grid-cols-3 gap-2">
+              <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+                <p className="text-stat text-2xl text-[#4ade80] tabular-nums">
+                  {h2h.home_wins}
+                </p>
+                <p className="mt-1 text-[9px] uppercase tracking-wider text-[#6b7280] truncate">
+                  {homeName} wins
+                </p>
+                <p className="mt-0.5 text-[10px] text-[#a3a9b8] tabular-nums">
+                  {homeWinPct}%
+                </p>
+              </div>
+              <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+                <p className="text-stat text-2xl text-[#fbbf24] tabular-nums">
+                  {h2h.draws}
+                </p>
+                <p className="mt-1 text-[9px] uppercase tracking-wider text-[#6b7280]">
+                  Draws
+                </p>
+                <p className="mt-0.5 text-[10px] text-[#a3a9b8] tabular-nums">
+                  {drawPct}%
+                </p>
+              </div>
+              <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+                <p className="text-stat text-2xl text-[#d946ef] tabular-nums">
+                  {h2h.away_wins}
+                </p>
+                <p className="mt-1 text-[9px] uppercase tracking-wider text-[#6b7280] truncate">
+                  {awayName} wins
+                </p>
+                <p className="mt-0.5 text-[10px] text-[#a3a9b8] tabular-nums">
+                  {awayWinPct}%
+                </p>
+              </div>
+            </div>
 
-        {/* Key stats */}
-        <div className="space-y-2.5 text-sm">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Win rate</span>
-            <span className="font-semibold">{formatPercent(winRate)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Avg scored / game</span>
-            <span className="font-semibold">{avgScored}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Avg conceded / game</span>
-            <span className="font-semibold">{avgConceded}</span>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function ComparisonRow({
-  label,
-  homeValue,
-  awayValue,
-  homeRaw,
-  awayRaw,
-  higherIsBetter = true,
-}: {
-  label: string;
-  homeValue: string;
-  awayValue: string;
-  homeRaw: number;
-  awayRaw: number;
-  higherIsBetter?: boolean;
-}) {
-  const homeWins = higherIsBetter ? homeRaw > awayRaw : homeRaw < awayRaw;
-  const awayWins = higherIsBetter ? awayRaw > homeRaw : awayRaw < homeRaw;
-
-  return (
-    <div className="grid grid-cols-3 items-center gap-3 py-2.5 text-sm">
-      <span
-        className={cn(
-          "text-right font-semibold",
-          homeWins
-            ? "text-blue-600 dark:text-blue-400"
-            : "text-foreground"
-        )}
-      >
-        {homeValue}
-      </span>
-      <span className="text-center text-xs text-muted-foreground">{label}</span>
-      <span
-        className={cn(
-          "text-left font-semibold",
-          awayWins
-            ? "text-orange-600 dark:text-orange-400"
-            : "text-foreground"
-        )}
-      >
-        {awayValue}
-      </span>
-    </div>
-  );
-}
-
-function AnalysisTab({ analysis }: { analysis: MatchAnalysis }) {
-  const hf = analysis.home_team_form;
-  const af = analysis.away_team_form;
-  const hTotal = hf.wins + hf.draws + hf.losses || 1;
-  const aTotal = af.wins + af.draws + af.losses || 1;
-
-  return (
-    <div className="space-y-6">
-      {/* Form comparison */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        <TeamFormCard
-          teamName={analysis.match.home_team_name}
-          form={analysis.home_team_form}
-          side="home"
-        />
-        <TeamFormCard
-          teamName={analysis.match.away_team_name}
-          form={analysis.away_team_form}
-          side="away"
-        />
-      </div>
-
-      {/* Key stats comparison table */}
-      <Card>
-        <CardHeader className="pb-3">
-          <div className="grid grid-cols-3 gap-3 text-center text-sm font-semibold">
-            <span className="text-blue-600 dark:text-blue-400 truncate">
-              {analysis.match.home_team_name}
-            </span>
-            <span className="text-muted-foreground">Comparison</span>
-            <span className="text-orange-600 dark:text-orange-400 truncate">
-              {analysis.match.away_team_name}
-            </span>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className="divide-y divide-border">
-            <ComparisonRow
-              label="Win Rate"
-              homeValue={formatPercent(hf.wins / hTotal)}
-              awayValue={formatPercent(af.wins / aTotal)}
-              homeRaw={hf.wins / hTotal}
-              awayRaw={af.wins / aTotal}
-            />
-            <ComparisonRow
-              label="Avg Goals Scored"
-              homeValue={(hf.goals_scored / hTotal).toFixed(2)}
-              awayValue={(af.goals_scored / aTotal).toFixed(2)}
-              homeRaw={hf.goals_scored / hTotal}
-              awayRaw={af.goals_scored / aTotal}
-            />
-            <ComparisonRow
-              label="Avg Goals Conceded"
-              homeValue={(hf.goals_conceded / hTotal).toFixed(2)}
-              awayValue={(af.goals_conceded / aTotal).toFixed(2)}
-              homeRaw={hf.goals_conceded / hTotal}
-              awayRaw={af.goals_conceded / aTotal}
-              higherIsBetter={false}
-            />
-            <ComparisonRow
-              label="Wins"
-              homeValue={String(hf.wins)}
-              awayValue={String(af.wins)}
-              homeRaw={hf.wins}
-              awayRaw={af.wins}
-            />
-            <ComparisonRow
-              label="Draws"
-              homeValue={String(hf.draws)}
-              awayValue={String(af.draws)}
-              homeRaw={hf.draws}
-              awayRaw={af.draws}
-            />
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-// ─── Forecast Tab ────────────────────────────────────────────────────────────
-
-function ConfidenceMeter({ confidence }: { confidence: number }) {
-  const pct = confidence * 100;
-  const color =
-    pct >= 70
-      ? "bg-green-500"
-      : pct >= 50
-      ? "bg-amber-400"
-      : "bg-red-500";
-
-  const label =
-    pct >= 70 ? "High confidence" : pct >= 50 ? "Medium confidence" : "Low confidence";
-
-  return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-muted-foreground">Model Confidence</span>
-        <span className="font-bold">{formatPercent(confidence)}</span>
-      </div>
-      <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
-        <div
-          className={cn("h-full rounded-full transition-all duration-700", color)}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-      <p className="text-xs text-muted-foreground">{label}</p>
-    </div>
-  );
-}
-
-function FactorList({
-  title,
-  factors,
-  positive,
-}: {
-  title: string;
-  factors: Record<string, number>;
-  positive: boolean;
-}) {
-  const entries = Object.entries(factors).sort(([, a], [, b]) => Math.abs(b) - Math.abs(a));
-
-  if (entries.length === 0) return null;
-
-  return (
-    <div>
-      <div className="mb-2 flex items-center gap-2">
-        {positive ? (
-          <CheckCircle2 className="h-4 w-4 text-green-500" />
+            {h2h.summary && (
+              <p className="mt-4 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-xs leading-relaxed text-[#a3a9b8]">
+                {h2h.summary}
+              </p>
+            )}
+          </>
         ) : (
-          <XCircle className="h-4 w-4 text-red-500" />
+          <p className="mt-4 text-xs italic text-[#6b7280]">
+            The teams haven&apos;t met in our recorded history.
+          </p>
         )}
-        <p className="text-sm font-semibold text-foreground">{title}</p>
       </div>
-      <ul className="space-y-1.5">
-        {entries.map(([factor, value]) => (
-          <li key={factor} className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground capitalize">
-              {factor.replace(/_/g, " ")}
-            </span>
-            <span
-              className={cn(
-                "font-semibold tabular-nums",
-                positive
-                  ? "text-green-600 dark:text-green-400"
-                  : "text-red-600 dark:text-red-400"
-              )}
-            >
-              {value > 0 ? "+" : ""}
-              {(value * 100).toFixed(1)}%
-            </span>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
 
-function ForecastTab({
+/* ─────────────────────────────────────────────────────────────
+   Confidence meter — large NOCTURNE stat
+   ───────────────────────────────────────────────────────────── */
+
+function ConfidenceBlock({ confidence }: { confidence: number }) {
+  const pct = Math.round(confidence * 100);
+  const color = confColor(confidence);
+  const trust = Math.max(1, Math.min(10, Math.round(confidence * 10)));
+
+  return (
+    <div className="card-neon card-neon-green p-5">
+      <div className="relative flex items-center justify-between gap-3">
+        <div>
+          <div className="flex items-center gap-2">
+            <HexBadge variant="green" size="sm" noGlow>
+              <Target className="h-4 w-4" />
+            </HexBadge>
+            <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+              Confidence
+            </p>
+          </div>
+          <p
+            className="mt-2 text-stat text-4xl tabular-nums leading-none"
+            style={{ color }}
+          >
+            {pct}
+            <span className="text-lg font-semibold">%</span>
+          </p>
+          <p className="mt-1 text-[11px] text-[#6b7280]">
+            How sure our AI is about this pick
+          </p>
+        </div>
+        <TrustScore value={trust} max={10} />
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Predicted score — from ForecastOutput
+   ───────────────────────────────────────────────────────────── */
+
+function PredictedScoreBlock({
   forecast,
-  homeTeamName,
-  awayTeamName,
+  homeName,
+  awayName,
 }: {
   forecast: ForecastOutput;
-  homeTeamName: string;
-  awayTeamName: string;
+  homeName: string;
+  awayName: string;
 }) {
-  const explanation = forecast.explanation;
+  const h = forecast.predicted_home_score;
+  const a = forecast.predicted_away_score;
+  if (h == null || a == null) return null;
 
   return (
-    <div className="space-y-5">
-      {/* Probability bar */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold">Win Probabilities</CardTitle>
-          <CardDescription>Model output</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-5">
-          <ProbabilityBar
-            home={forecast.home_win_prob}
-            draw={forecast.draw_prob ?? 0}
-            away={forecast.away_win_prob}
-            homeLabel={homeTeamName}
-            awayLabel={awayTeamName}
-          />
-          <Separator />
-          <ConfidenceMeter confidence={forecast.confidence} />
-        </CardContent>
-      </Card>
-
-      {/* Predicted score */}
-      {forecast.predicted_home_score !== null && forecast.predicted_away_score !== null && (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold">Predicted Score</CardTitle>
-            <CardDescription>Expected scoreline range</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center gap-6">
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground">{homeTeamName}</p>
-                <p className="text-4xl font-black tabular-nums text-foreground">
-                  {forecast.predicted_home_score.toFixed(0)}
-                </p>
-              </div>
-              <Minus className="h-6 w-6 text-muted-foreground" />
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground">{awayTeamName}</p>
-                <p className="text-4xl font-black tabular-nums text-foreground">
-                  {forecast.predicted_away_score.toFixed(0)}
-                </p>
-              </div>
-            </div>
-            {forecast.confidence_interval_low !== null &&
-              forecast.confidence_interval_high !== null && (
-                <p className="mt-3 text-center text-xs text-muted-foreground">
-                  Confidence interval:{" "}
-                  {formatPercent(forecast.confidence_interval_low)} –{" "}
-                  {formatPercent(forecast.confidence_interval_high)}
-                </p>
-              )}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Explanation */}
-      {explanation && (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold">Model Explanation</CardTitle>
-            <CardDescription>Key factors driving the forecast</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            {/* Summary text */}
-            {explanation.summary && (
-              <div className="rounded-md bg-muted/50 px-4 py-3">
-                <p className="text-sm leading-relaxed text-foreground">
-                  {explanation.summary}
-                </p>
-              </div>
-            )}
-
-            <div className="grid gap-5 sm:grid-cols-2">
-              {Object.keys(explanation.top_factors_for).length > 0 && (
-                <FactorList
-                  title="Factors in favour"
-                  factors={explanation.top_factors_for}
-                  positive
-                />
-              )}
-              {Object.keys(explanation.top_factors_against).length > 0 && (
-                <FactorList
-                  title="Factors against"
-                  factors={explanation.top_factors_against}
-                  positive={false}
-                />
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Model metadata */}
-      <p className="text-center text-xs text-muted-foreground">
-        Model: {forecast.model_name} v{forecast.model_version} · Predicted{" "}
-        {formatDateTime(forecast.predicted_at)}
-      </p>
+    <div className="card-neon card-neon-purple p-5">
+      <div className="relative">
+        <div className="flex items-center gap-2">
+          <HexBadge variant="purple" size="sm" noGlow>
+            <BarChart2 className="h-4 w-4" />
+          </HexBadge>
+          <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+            Predicted Scoreline
+          </p>
+        </div>
+        <div className="mt-3 flex items-center justify-center gap-4">
+          <div className="min-w-0 text-right">
+            <p className="text-[10px] uppercase tracking-wider text-[#6b7280] truncate">
+              {homeName}
+            </p>
+            <p className="text-stat text-4xl text-[#ededed] tabular-nums">
+              {h.toFixed(1)}
+            </p>
+          </div>
+          <span className="text-sm text-[#6b7280]">-</span>
+          <div className="min-w-0">
+            <p className="text-[10px] uppercase tracking-wider text-[#6b7280] truncate">
+              {awayName}
+            </p>
+            <p className="text-stat text-4xl text-[#ededed] tabular-nums">
+              {a.toFixed(1)}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
-// ─── Head-to-Head Tab ─────────────────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────────────
+   Key factors — from forecast explanation
+   ───────────────────────────────────────────────────────────── */
 
-interface H2HData {
-  total: number;
-  home_wins: number;
-  draws: number;
-  away_wins: number;
-  summary: string;
-}
+function FactorsBlock({ forecast }: { forecast: ForecastOutput }) {
+  const ex = forecast.explanation;
+  if (!ex) return null;
 
-function HeadToHeadTab({
-  h2h,
-  homeTeamName,
-  awayTeamName,
-}: {
-  h2h: H2HData;
-  homeTeamName: string;
-  awayTeamName: string;
-}) {
-  const total = h2h.total || 1;
-  const homeWinPct = h2h.home_wins / total;
-  const drawPct = h2h.draws / total;
-  const awayWinPct = h2h.away_wins / total;
+  const positives = Object.entries(ex.top_factors_for ?? {}).slice(0, 5);
+  const negatives = Object.entries(ex.top_factors_against ?? {}).slice(0, 5);
+
+  if (positives.length === 0 && negatives.length === 0) return null;
 
   return (
-    <div className="space-y-5">
-      {/* H2H record */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base font-semibold">All-Time Record</CardTitle>
-          <CardDescription>{h2h.total} meetings total</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-5">
-          {/* Three-way stat */}
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/30">
-              <p className="text-3xl font-black text-blue-600 dark:text-blue-400">
-                {h2h.home_wins}
-              </p>
-              <p className="mt-1 text-xs font-medium text-blue-700 dark:text-blue-500 truncate">
-                {homeTeamName}
-              </p>
-              <p className="text-xs text-blue-600 dark:text-blue-500">
-                {formatPercent(homeWinPct)}
-              </p>
-            </div>
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/40">
-              <p className="text-3xl font-black text-slate-600 dark:text-slate-400">
-                {h2h.draws}
-              </p>
-              <p className="mt-1 text-xs font-medium text-slate-600 dark:text-slate-400">
-                Draws
-              </p>
-              <p className="text-xs text-slate-500 dark:text-slate-500">
-                {formatPercent(drawPct)}
-              </p>
-            </div>
-            <div className="rounded-lg border border-orange-200 bg-orange-50 p-4 dark:border-orange-800 dark:bg-orange-950/30">
-              <p className="text-3xl font-black text-orange-600 dark:text-orange-400">
-                {h2h.away_wins}
-              </p>
-              <p className="mt-1 text-xs font-medium text-orange-700 dark:text-orange-500 truncate">
-                {awayTeamName}
-              </p>
-              <p className="text-xs text-orange-600 dark:text-orange-500">
-                {formatPercent(awayWinPct)}
-              </p>
-            </div>
-          </div>
+    <div className="card-neon p-5">
+      <div className="relative">
+        <div className="flex items-center gap-2">
+          <HexBadge variant="blue" size="sm" noGlow>
+            <TrendingUp className="h-4 w-4" />
+          </HexBadge>
+          <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+            Why the AI picks this
+          </p>
+        </div>
 
-          {/* H2H bar */}
-          <div className="flex h-4 w-full overflow-hidden rounded-full">
-            <div
-              className="bg-blue-500 transition-all duration-500"
-              style={{ width: `${homeWinPct * 100}%` }}
-              title={`${homeTeamName}: ${formatPercent(homeWinPct)}`}
-            />
-            <div
-              className="bg-slate-400 transition-all duration-500"
-              style={{ width: `${drawPct * 100}%` }}
-              title={`Draws: ${formatPercent(drawPct)}`}
-            />
-            <div
-              className="flex-1 bg-orange-500 transition-all duration-500"
-              title={`${awayTeamName}: ${formatPercent(awayWinPct)}`}
-            />
-          </div>
+        {ex.summary && (
+          <p className="mt-3 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-xs leading-relaxed text-[#cbd3e0]">
+            {ex.summary}
+          </p>
+        )}
 
-          {/* Summary */}
-          {h2h.summary && (
-            <div className="rounded-md bg-muted/50 px-4 py-3">
-              <p className="text-sm text-foreground">{h2h.summary}</p>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          {positives.length > 0 && (
+            <div>
+              <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#86efac]">
+                Supporting factors
+              </p>
+              <ul className="space-y-1.5">
+                {positives.map(([k, v]) => (
+                  <li
+                    key={k}
+                    className="flex items-center justify-between rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-1.5"
+                  >
+                    <span className="text-xs text-[#cbd3e0] truncate">{k}</span>
+                    <Pill tone="win" className="!text-[10px] tabular-nums">
+                      +{formatPct(Math.abs(v))}
+                    </Pill>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
-        </CardContent>
-      </Card>
 
-      {h2h.total === 0 && (
-        <Card>
-          <CardContent className="py-10 text-center">
-            <BarChart2 className="mx-auto mb-3 h-8 w-8 text-muted-foreground/50" />
-            <p className="text-sm text-muted-foreground">
-              No head-to-head history found between these teams.
-            </p>
-          </CardContent>
-        </Card>
-      )}
+          {negatives.length > 0 && (
+            <div>
+              <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#fca5a5]">
+                Opposing factors
+              </p>
+              <ul className="space-y-1.5">
+                {negatives.map(([k, v]) => (
+                  <li
+                    key={k}
+                    className="flex items-center justify-between rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-1.5"
+                  >
+                    <span className="text-xs text-[#cbd3e0] truncate">{k}</span>
+                    <Pill tone="loss" className="!text-[10px] tabular-nums">
+                      −{formatPct(Math.abs(v))}
+                    </Pill>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
-// ─── Page ────────────────────────────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────────────
+   Pill-style tabs (NOCTURNE)
+   ───────────────────────────────────────────────────────────── */
+
+type TabKey = "overview" | "form" | "h2h";
+
+function TabStrip({
+  value,
+  onChange,
+  hasForecast,
+}: {
+  value: TabKey;
+  onChange: (k: TabKey) => void;
+  hasForecast: boolean;
+}) {
+  const tabs: Array<{ key: TabKey; label: string; icon: typeof TrendingUp }> = [
+    { key: "overview", label: "Overview", icon: TrendingUp },
+    { key: "form", label: "Form", icon: Activity },
+    { key: "h2h", label: "Head-to-Head", icon: Shield },
+  ];
+
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      {tabs.map((tab) => {
+        const active = tab.key === value;
+        return (
+          <button
+            key={tab.key}
+            type="button"
+            onClick={() => onChange(tab.key)}
+            className={
+              "inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-semibold transition-all " +
+              (active
+                ? "border-[#4ade80]/40 bg-[#4ade80]/10 text-[#86efac] shadow-[0_0_18px_rgba(74,222,128,0.18)]"
+                : "border-white/[0.08] bg-white/[0.03] text-[#a3a9b8] hover:border-white/[0.16] hover:text-[#ededed]")
+            }
+          >
+            <tab.icon className="h-3.5 w-3.5" />
+            {tab.label}
+            {tab.key === "overview" && hasForecast && (
+              <span className="ml-0.5 rounded-full bg-[#4ade80]/20 px-1.5 text-[9px] font-bold text-[#86efac]">
+                AI
+              </span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Skeletons
+   ───────────────────────────────────────────────────────────── */
+
+function HeaderSkeleton() {
+  return (
+    <div className="card-neon animate-pulse p-5 sm:p-7">
+      <div className="relative space-y-4">
+        <div className="h-4 w-32 rounded bg-white/[0.05]" />
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+          <div className="flex items-center justify-end gap-3">
+            <div className="h-16 w-16 rounded-full bg-white/[0.05]" />
+            <div className="h-5 w-24 rounded bg-white/[0.05]" />
+          </div>
+          <div className="h-10 w-16 rounded bg-white/[0.05]" />
+          <div className="flex items-center gap-3">
+            <div className="h-5 w-24 rounded bg-white/[0.05]" />
+            <div className="h-16 w-16 rounded-full bg-white/[0.05]" />
+          </div>
+        </div>
+        <div className="flex justify-center gap-2">
+          <div className="h-5 w-24 rounded-full bg-white/[0.05]" />
+          <div className="h-5 w-24 rounded-full bg-white/[0.05]" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BlockSkeleton() {
+  return (
+    <div className="card-neon animate-pulse p-5">
+      <div className="relative space-y-3">
+        <div className="h-4 w-32 rounded bg-white/[0.05]" />
+        <div className="h-8 w-full rounded bg-white/[0.05]" />
+        <div className="h-16 w-full rounded bg-white/[0.05]" />
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Page
+   ───────────────────────────────────────────────────────────── */
 
 export default function MatchDetailPage() {
   const params = useParams();
-  const matchId = String(params.id);
+  const matchId = (params?.id as string) || "";
+  const { locale } = useTranslations();
+  const lHref = useLocalizedHref();
 
-  const {
-    data: match,
-    isLoading: matchLoading,
-    error: matchError,
-  } = useQuery({
+  const [tab, setTab] = useState<TabKey>("overview");
+
+  const { data: match, isLoading: matchLoading, error: matchError } = useQuery({
     queryKey: ["match", matchId],
     queryFn: () => api.getMatch(matchId),
     enabled: Boolean(matchId),
   });
 
-  const {
-    data: analysis,
-    isLoading: analysisLoading,
-  } = useQuery({
+  const { data: analysis, isLoading: analysisLoading } = useQuery({
     queryKey: ["match-analysis", matchId],
     queryFn: () => api.getMatchAnalysis(matchId),
     enabled: Boolean(matchId),
   });
 
-  const {
-    data: forecast,
-    isLoading: forecastLoading,
-  } = useQuery({
+  const { data: forecast, isLoading: forecastLoading } = useQuery({
     queryKey: ["match-forecast", matchId],
     queryFn: () => api.getMatchForecast(matchId),
     enabled: Boolean(matchId),
-    retry: false, // forecast may not exist — don't spam
+    retry: false,
   });
 
   const hasForecast = !forecastLoading && forecast !== undefined;
+  const displayMatch = analysis?.match ?? match;
 
   if (matchError) {
     return (
-      <div className="flex h-64 flex-col items-center justify-center gap-3 rounded-lg border border-destructive/30 bg-destructive/5">
-        <p className="text-sm font-medium text-destructive">Failed to load match data.</p>
-        <p className="text-xs text-muted-foreground">
-          {matchError instanceof Error ? matchError.message : "Unknown error"}
-        </p>
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8">
+        <div className="card-neon p-8">
+          <div className="relative text-center">
+            <HexBadge variant="purple" size="md" noGlow>
+              <XCircle className="h-5 w-5" />
+            </HexBadge>
+            <p className="mt-4 text-sm font-semibold text-[#ededed]">
+              Failed to load match data
+            </p>
+            <p className="mt-1 text-xs text-[#a3a9b8]">
+              {matchError instanceof Error ? matchError.message : "Unknown error"}
+            </p>
+            <Link
+              href={lHref("/dashboard")}
+              className="btn-glass mt-4 inline-flex items-center gap-1.5 text-xs"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Back to dashboard
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }
 
-  // Use analysis.match if available (richer), fall back to match
-  const displayMatch = analysis?.match ?? match;
-
   return (
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8">
-      <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-emerald-500/15 blur-3xl" />
-      <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full bg-blue-500/10 blur-3xl" />
+      {/* Ambient glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full"
+        style={{ background: "hsl(var(--accent-green) / 0.15)", filter: "blur(140px)" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full"
+        style={{ background: "hsl(var(--accent-purple) / 0.12)", filter: "blur(140px)" }}
+      />
+
       <div className="relative space-y-6">
+        {/* Back link */}
+        <Link
+          href={lHref("/dashboard")}
+          className="btn-ghost inline-flex items-center gap-1.5 text-xs"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" />
+          Back to dashboard
+        </Link>
 
-      {/* Match Header */}
-      {matchLoading && !displayMatch ? (
-        <MatchHeaderSkeleton />
-      ) : displayMatch ? (
-        <div className="card-neon card-neon-green halo-green">
-          <div className="relative">
-            <MatchHeader match={displayMatch} />
-          </div>
-        </div>
-      ) : null}
+        {/* Header */}
+        {matchLoading && !displayMatch ? (
+          <HeaderSkeleton />
+        ) : displayMatch ? (
+          <MatchHeader match={displayMatch} locale={locale} />
+        ) : null}
 
-      <Separator />
+        {/* Tabs */}
+        <TabStrip value={tab} onChange={setTab} hasForecast={hasForecast} />
 
-      {/* Tabs */}
-      <Tabs defaultValue="analysis">
-        <TabsList className="mb-2">
-          <TabsTrigger value="analysis">
-            <TrendingUp className="mr-1.5 h-3.5 w-3.5" />
-            Analysis
-          </TabsTrigger>
-          <TabsTrigger value="forecast" disabled={!hasForecast && !forecastLoading}>
-            <BarChart2 className="mr-1.5 h-3.5 w-3.5" />
-            Forecast
-            {hasForecast && (
-              <span className="ml-1.5 rounded-full bg-primary/20 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
-                AI
-              </span>
+        {/* ── Overview tab ── */}
+        {tab === "overview" && (
+          <div className="space-y-5">
+            {forecast ? (
+              <div className="card-neon p-5">
+                <div className="relative">
+                  <div className="flex items-center gap-2">
+                    <HexBadge variant="green" size="sm" noGlow>
+                      <Target className="h-4 w-4" />
+                    </HexBadge>
+                    <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+                      Win Probabilities
+                    </p>
+                  </div>
+                  <div className="mt-4">
+                    <ProbBar
+                      home={forecast.home_win_prob}
+                      draw={forecast.draw_prob}
+                      away={forecast.away_win_prob}
+                      homeName={displayMatch?.home_team_name ?? "Home"}
+                      awayName={displayMatch?.away_team_name ?? "Away"}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : forecastLoading ? (
+              <BlockSkeleton />
+            ) : null}
+
+            <div className="grid gap-5 md:grid-cols-2">
+              {forecast ? (
+                <ConfidenceBlock confidence={forecast.confidence} />
+              ) : forecastLoading ? (
+                <BlockSkeleton />
+              ) : null}
+              {forecast && displayMatch ? (
+                <PredictedScoreBlock
+                  forecast={forecast}
+                  homeName={displayMatch.home_team_name}
+                  awayName={displayMatch.away_team_name}
+                />
+              ) : null}
+            </div>
+
+            {forecast && <FactorsBlock forecast={forecast} />}
+
+            {!forecast && !forecastLoading && (
+              <div className="card-neon p-8">
+                <div className="relative text-center">
+                  <HexBadge variant="blue" size="md" noGlow>
+                    <BarChart2 className="h-5 w-5" />
+                  </HexBadge>
+                  <p className="mt-4 text-sm font-semibold text-[#ededed]">
+                    No forecast yet
+                  </p>
+                  <p className="mt-1 text-xs text-[#a3a9b8]">
+                    Our AI hasn&apos;t published a forecast for this fixture. Check back closer to kick-off.
+                  </p>
+                </div>
+              </div>
             )}
-          </TabsTrigger>
-          <TabsTrigger value="h2h">Head-to-Head</TabsTrigger>
-        </TabsList>
 
-        {/* Analysis Tab */}
-        <TabsContent value="analysis">
-          {analysisLoading ? (
-            <AnalysisSkeleton />
-          ) : analysis ? (
-            <AnalysisTab analysis={analysis} />
-          ) : (
-            <Card>
-              <CardContent className="py-10 text-center">
-                <p className="text-sm text-muted-foreground">
-                  No analysis data available for this match.
-                </p>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
+            {forecast?.disclaimer && (
+              <p className="px-2 text-[10px] italic leading-relaxed text-[#6b7280]">
+                {forecast.disclaimer}
+              </p>
+            )}
+          </div>
+        )}
 
-        {/* Forecast Tab */}
-        <TabsContent value="forecast">
-          {forecastLoading ? (
-            <div className="space-y-4">
-              <Skeleton className="h-12 w-full" />
-              <Skeleton className="h-32 w-full" />
-              <Skeleton className="h-48 w-full" />
-            </div>
-          ) : forecast && displayMatch ? (
-            <ForecastTab
-              forecast={forecast}
-              homeTeamName={displayMatch.home_team_name}
-              awayTeamName={displayMatch.away_team_name}
-            />
-          ) : (
-            <Card>
-              <CardContent className="py-10 text-center">
-                <BarChart2 className="mx-auto mb-3 h-8 w-8 text-muted-foreground/50" />
-                <p className="text-sm text-muted-foreground">
-                  No forecast available for this match yet.
-                </p>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
+        {/* ── Form tab ── */}
+        {tab === "form" && (
+          <div className="space-y-5">
+            {analysisLoading ? (
+              <>
+                <BlockSkeleton />
+                <BlockSkeleton />
+              </>
+            ) : analysis ? (
+              <div className="grid gap-5 md:grid-cols-2">
+                <TeamFormCard
+                  teamName={analysis.match.home_team_name}
+                  form={analysis.home_team_form}
+                  variant="green"
+                />
+                <TeamFormCard
+                  teamName={analysis.match.away_team_name}
+                  form={analysis.away_team_form}
+                  variant="purple"
+                />
+              </div>
+            ) : (
+              <div className="card-neon p-8">
+                <div className="relative text-center text-xs text-[#a3a9b8]">
+                  No form data available for this match.
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
-        {/* Head-to-Head Tab */}
-        <TabsContent value="h2h">
-          {analysisLoading ? (
-            <div className="space-y-4">
-              <Skeleton className="h-48 w-full" />
-              <Skeleton className="h-32 w-full" />
-            </div>
-          ) : analysis ? (
-            <HeadToHeadTab
-              h2h={analysis.head_to_head}
-              homeTeamName={analysis.match.home_team_name}
-              awayTeamName={analysis.match.away_team_name}
-            />
-          ) : (
-            <Card>
-              <CardContent className="py-10 text-center">
-                <p className="text-sm text-muted-foreground">
+        {/* ── H2H tab ── */}
+        {tab === "h2h" && (
+          <div className="space-y-5">
+            {analysisLoading ? (
+              <BlockSkeleton />
+            ) : analysis ? (
+              <H2HCard
+                h2h={analysis.head_to_head}
+                homeName={analysis.match.home_team_name}
+                awayName={analysis.match.away_team_name}
+              />
+            ) : (
+              <div className="card-neon p-8">
+                <div className="relative text-center text-xs text-[#a3a9b8]">
                   No head-to-head data available.
-                </p>
-              </CardContent>
-            </Card>
-          )}
-        </TabsContent>
-      </Tabs>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

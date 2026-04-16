@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
-import { ArrowRight, Activity } from "lucide-react";
+import { ArrowRight, Activity, Target } from "lucide-react";
 import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
@@ -27,10 +27,29 @@ function LiveCardSkeleton() {
 }
 
 function LiveMatchCard({ fixture }: { fixture: Fixture }) {
+  const { t } = useTranslations();
+  const lHref = useLocalizedHref();
+  const pred = fixture.prediction;
+  const pick = pred?.pick;
+  const conf = pred ? Math.round(pred.confidence * 100) : null;
+
+  // Short name map for the pick pill
+  let pickTeam: string | null = null;
+  let pickTone: "win" | "draw" = "win";
+  if (pick === "HOME") pickTeam = fixture.home_team_name;
+  else if (pick === "AWAY") pickTeam = fixture.away_team_name;
+  else if (pick === "DRAW") {
+    pickTeam = t("common.draw");
+    pickTone = "draw";
+  }
+
   return (
-    <div className="card-neon card-neon-purple p-3">
+    <Link
+      href={lHref(`/matches/${fixture.id}`)}
+      className="card-neon card-neon-purple p-3 block transition-all hover:-translate-y-0.5 hover:halo-purple focus-visible:outline-none focus-visible:halo-purple"
+    >
       <div className="relative">
-        <div className="mb-2 flex items-center justify-between">
+        <div className="mb-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <HexBadge variant="purple" size="sm" noGlow>
               <Activity className="h-3.5 w-3.5" />
@@ -39,39 +58,53 @@ function LiveMatchCard({ fixture }: { fixture: Fixture }) {
               {fixture.league_name}
             </span>
           </div>
-          <Pill tone="default" className="inline-flex items-center gap-1.5 !px-2">
+          <Pill tone="default" className="inline-flex items-center gap-1.5 !px-2 shrink-0">
             <span className="live-dot-red" />
             LIVE
           </Pill>
         </div>
 
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 min-w-0">
               <TeamLogo src={fixture.home_team_logo} name={fixture.home_team_name} />
               <span className="text-xs font-semibold text-[#ededed] truncate">
                 {fixture.home_team_name}
               </span>
             </div>
-            <span className="text-stat text-lg text-[#ededed] ml-2">
+            <span className="text-stat text-lg text-[#ededed] ml-2 shrink-0">
               {fixture.result?.home_score ?? 0}
             </span>
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 min-w-0">
               <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} />
               <span className="text-xs font-semibold text-[#ededed] truncate">
                 {fixture.away_team_name}
               </span>
             </div>
-            <span className="text-stat text-lg text-[#ededed] ml-2">
+            <span className="text-stat text-lg text-[#ededed] ml-2 shrink-0">
               {fixture.result?.away_score ?? 0}
             </span>
           </div>
         </div>
+
+        {pickTeam && (
+          <div className="mt-2.5 flex items-center justify-between gap-2 border-t border-white/[0.06] pt-2">
+            <Pill tone={pickTone} className="!text-[10px] inline-flex items-center gap-1 max-w-[70%] truncate">
+              <Target className="h-3 w-3 shrink-0" />
+              <span className="truncate">{pickTeam}</span>
+            </Pill>
+            {conf != null && (
+              <span className="text-[10px] font-semibold tabular-nums text-[#a3a9b8]">
+                {conf}%
+              </span>
+            )}
+          </div>
+        )}
       </div>
-    </div>
+    </Link>
   );
 }
 
