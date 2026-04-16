@@ -1776,5 +1776,13 @@ const id = {
   "welcome.tourTitle": "Di mana menemukan apa, begitu Anda masuk",
   "welcome.trialBody": "Anda tidak akan ditagih hari ini. Batalkan kapan saja dalam 7 hari ke depan dan akun Anda dijeda diam-diam - tanpa pertanyaan, tanpa tekanan.",
   "welcome.trialTitle": "Uji coba gratis 7 hari Anda aktif",
+  "nav.analyst_hub": "Analyst Hub",
+  "nav.predictions_explorer": "Penjelajah Prediksi",
+  "nav.match_deep_dive": "Match Deep Dive",
+  "nav.engine_performance": "Engine Performance",
+  "sidebar.overview": "Ikhtisar",
+  "sidebar.predictions": "Prediksi",
+  "sidebar.results": "Hasil",
+  "sidebar.analyst": "Analis Data",
 } as Record<TranslationKey, string>;
 export default id;

@@ -420,49 +420,49 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
 
   return (
     <div
-      className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.02] transition-colors"
+      className="flex items-center gap-2 sm:gap-3 px-2 sm:px-4 py-2.5 sm:py-3 hover:bg-white/[0.02] transition-colors"
       style={{ borderLeft: `3px solid ${borderColor}` }}
     >
       {/* Date */}
-      <span className="w-16 shrink-0 text-xs text-slate-500 tabular-nums">
+      <span className="w-12 sm:w-16 shrink-0 text-[10px] sm:text-xs text-slate-500 tabular-nums">
         {new Date(fixture.scheduled_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
       </span>
 
       {/* Home team */}
-      <span className={`flex-1 flex items-center gap-1.5 text-sm font-medium truncate ${isCorrect === true && pickLabel === "1" ? "text-emerald-300" : "text-slate-200"}`}>
+      <span className={`flex-1 min-w-0 flex items-center gap-1.5 text-xs sm:text-sm font-medium truncate ${isCorrect === true && pickLabel === "1" ? "text-emerald-300" : "text-slate-200"}`}>
         {fixture.home_team_logo && (
-          <Image src={fixture.home_team_logo} alt="" width={18} height={18} className="rounded-full shrink-0" />
+          <Image src={fixture.home_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0 sm:w-[18px] sm:h-[18px]" />
         )}
-        {fixture.home_team_name}
+        <span className="truncate">{fixture.home_team_name}</span>
       </span>
 
       {/* Score */}
-      <span className="w-14 text-center text-sm font-bold tabular-nums text-slate-100">
-        {homeScore ?? "–"} - {awayScore ?? "–"}
+      <span className="w-10 sm:w-14 text-center text-xs sm:text-sm font-bold tabular-nums text-slate-100 shrink-0">
+        {homeScore ?? "–"}-{awayScore ?? "–"}
       </span>
 
       {/* Away team */}
-      <span className={`flex-1 flex items-center gap-1.5 text-sm font-medium truncate ${isCorrect === true && pickLabel === "2" ? "text-emerald-300" : "text-slate-200"}`}>
+      <span className={`flex-1 min-w-0 flex items-center gap-1.5 text-xs sm:text-sm font-medium truncate ${isCorrect === true && pickLabel === "2" ? "text-emerald-300" : "text-slate-200"}`}>
         {fixture.away_team_logo && (
-          <Image src={fixture.away_team_logo} alt="" width={18} height={18} className="rounded-full shrink-0" />
+          <Image src={fixture.away_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0 sm:w-[18px] sm:h-[18px]" />
         )}
-        {fixture.away_team_name}
+        <span className="truncate">{fixture.away_team_name}</span>
       </span>
 
-      {/* Pick */}
+      {/* Pick (hidden on narrow phone) */}
       <span
-        className="w-8 text-center text-xs font-bold rounded"
+        className="hidden sm:inline w-8 text-center text-xs font-bold rounded shrink-0"
         style={{ color: isCorrect === true ? "#10b981" : isCorrect === false ? "#ef4444" : "#64748b" }}
       >
         {pickLabel}
       </span>
 
       {/* Result icon */}
-      <span className="w-8 text-center">
+      <span className="w-6 sm:w-8 text-center shrink-0">
         {isCorrect === true ? (
-          <CheckCircle2 className="h-4 w-4 text-emerald-400 inline" />
+          <CheckCircle2 className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-emerald-400 inline" />
         ) : isCorrect === false ? (
-          <XCircle className="h-4 w-4 text-red-400 inline" />
+          <XCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-red-400 inline" />
         ) : (
           <span className="text-xs text-slate-600">—</span>
         )}
@@ -583,7 +583,7 @@ function ResultsPageContent() {
   const hasError = resultsQuery.isError;
 
   return (
-    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 animate-fade-in">
+    <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-emerald-500/15 blur-3xl" />
       <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full bg-blue-500/10 blur-3xl" />
       <div className="relative space-y-6">

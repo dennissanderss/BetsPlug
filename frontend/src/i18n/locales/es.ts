@@ -1776,5 +1776,13 @@ const es = {
   "welcome.tourTitle": "Dónde encontrar qué, una vez que estés dentro",
   "welcome.trialBody": "No se le cobrará hoy. Cancele en cualquier momento dentro de los próximos 7 días y su cuenta se detendrá silenciosamente, sin preguntas ni presiones.",
   "welcome.trialTitle": "Tu prueba gratuita de 7 días está activa",
+  "nav.analyst_hub": "Analyst Hub",
+  "nav.predictions_explorer": "Explorador de predicciones",
+  "nav.match_deep_dive": "Match Deep Dive",
+  "nav.engine_performance": "Engine Performance",
+  "sidebar.overview": "Resumen",
+  "sidebar.predictions": "Predicciones",
+  "sidebar.results": "Resultados",
+  "sidebar.analyst": "Analista de datos",
 } as Record<TranslationKey, string>;
 export default es;

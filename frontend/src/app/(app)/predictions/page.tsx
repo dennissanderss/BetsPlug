@@ -343,10 +343,10 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
 
   return (
     <div className="border-b border-white/[0.04] last:border-b-0">
-      <div className="grid grid-cols-11 items-center gap-2 px-4 py-3.5 hover:bg-white/[0.02] transition-colors">
+      <div className="grid grid-cols-11 items-center gap-1 sm:gap-2 px-2 sm:px-4 py-3 sm:py-3.5 hover:bg-white/[0.02] transition-colors">
         {/* Time + Status */}
-        <div className="col-span-2 sm:col-span-1 flex flex-col items-center">
-          <span className="text-sm font-bold text-slate-100 tabular-nums">
+        <div className="col-span-2 sm:col-span-1 flex flex-col items-center min-w-0">
+          <span className="text-xs sm:text-sm font-bold text-slate-100 tabular-nums">
             {formatTimeOnly(fixture.scheduled_at)}
           </span>
           {isLive ? (
@@ -364,7 +364,7 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
         </div>
 
         {/* Teams — col 2 */}
-        <div className="col-span-5 sm:col-span-4 min-w-0">
+        <div className="col-span-5 sm:col-span-4 min-w-0 overflow-hidden">
           {/* Home team */}
           <div className="flex items-center gap-2">
             {fixture.home_team_logo && (
@@ -398,10 +398,10 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
         </div>
 
         {/* Prediction pick badge — col 3 */}
-        <div className="col-span-1 flex justify-center">
+        <div className="col-span-1 flex justify-center min-w-0">
           {pickLabel && (
             <span
-              className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-xs font-bold"
+              className="inline-flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold"
               style={{
                 background: `${confColor}18`,
                 color: confColor,
@@ -508,15 +508,15 @@ function LeagueSection({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-5 py-3.5 bg-gradient-to-r from-white/[0.03] to-transparent border-b border-white/[0.05] hover:from-white/[0.05] transition-colors"
+        className="w-full flex items-center justify-between gap-2 px-3 sm:px-5 py-3 sm:py-3.5 bg-gradient-to-r from-white/[0.03] to-transparent border-b border-white/[0.05] hover:from-white/[0.05] transition-colors"
         aria-expanded={open}
       >
-        <div className="flex items-center gap-3">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-500/10">
-            <Trophy className="h-3.5 w-3.5 text-blue-400" />
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-md bg-blue-500/10 shrink-0">
+            <Trophy className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-blue-400" />
           </div>
-          <span className="text-sm font-bold text-slate-100">{leagueName}</span>
-          <span className="rounded-full bg-white/[0.06] px-2.5 py-0.5 text-[10px] font-semibold tabular-nums text-slate-400">
+          <span className="text-xs sm:text-sm font-bold text-slate-100 truncate">{leagueName}</span>
+          <span className="rounded-full bg-white/[0.06] px-2 sm:px-2.5 py-0.5 text-[10px] font-semibold tabular-nums text-slate-400 shrink-0">
             {fixtures.length}
           </span>
           {liveCount > 0 && (
@@ -1118,7 +1118,7 @@ export default function PredictionsPage() {
 
   return (
     <PaywallOverlay feature="all_predictions" requiredTier="silver">
-    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 animate-fade-in">
+    <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-emerald-500/15 blur-3xl" />
       <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full bg-blue-500/10 blur-3xl" />
       <div className="relative space-y-6">

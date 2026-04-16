@@ -59,7 +59,7 @@ export default function DashboardPage() {
   })();
 
   return (
-    <div className="relative animate-fade-in mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8">
+    <div className="relative animate-fade-in mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 overflow-hidden">
       {/* Ambient glow blobs behind content */}
       <div
         aria-hidden
@@ -78,8 +78,8 @@ export default function DashboardPage() {
         }}
       />
 
-      <div className="relative grid gap-6 xl:grid-cols-[1fr_300px]">
-        <div className="space-y-5">
+      <div className="relative grid gap-4 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="min-w-0 space-y-4 sm:space-y-5">
           <QuickNavStrip liveCount={liveCount} />
           <HeroBotdCompact botd={botd} isLoading={botdLoading} />
           <LiveMatchesStrip

@@ -1776,5 +1776,13 @@ const sw = {
   "welcome.tourTitle": "Wapi kupata nini, mara moja wewe ni ndani",
   "welcome.trialBody": "Hutatozwa leo. Ghairi wakati wowote katika siku 7 zijazo na akaunti yako itasitishwa kimya kimya - hakuna maswali, hakuna shinikizo.",
   "welcome.trialTitle": "Jaribio lako la siku 7 bila malipo linatumika",
+  "nav.analyst_hub": "Analyst Hub",
+  "nav.predictions_explorer": "Kichunguzi cha utabiri",
+  "nav.match_deep_dive": "Match Deep Dive",
+  "nav.engine_performance": "Engine Performance",
+  "sidebar.overview": "Muhtasari",
+  "sidebar.predictions": "Utabiri",
+  "sidebar.results": "Matokeo",
+  "sidebar.analyst": "Mchambuzi wa Data",
 } as Record<TranslationKey, string>;
 export default sw;

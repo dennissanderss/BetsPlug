@@ -1776,5 +1776,13 @@ const de = {
   "welcome.tourTitle": "Wo Sie was finden, wenn Sie erst einmal drinnen sind",
   "welcome.trialBody": "Heute wird Ihnen kein Betrag in Rechnung gestellt. Kündigen Sie jederzeit innerhalb der nächsten 7 Tage und Ihr Konto wird stillschweigend pausiert – keine Fragen, kein Druck.",
   "welcome.trialTitle": "Ihre 7-tägige kostenlose Testversion ist aktiv",
+  "nav.analyst_hub": "Analyst Hub",
+  "nav.predictions_explorer": "Vorhersage-Explorer",
+  "nav.match_deep_dive": "Match Deep Dive",
+  "nav.engine_performance": "Engine Performance",
+  "sidebar.overview": "Übersicht",
+  "sidebar.predictions": "Vorhersagen",
+  "sidebar.results": "Ergebnisse",
+  "sidebar.analyst": "Daten-Analyst",
 } as Record<TranslationKey, string>;
 export default de;

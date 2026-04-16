@@ -334,7 +334,7 @@ function ReportsPageContent() {
         style={{ background: "hsl(var(--accent-purple) / 0.08)", filter: "blur(140px)" }}
       />
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 space-y-8">
+      <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 space-y-5 sm:space-y-8 overflow-hidden">
         {/* Page header */}
         <div>
           <span className="section-label mb-3">

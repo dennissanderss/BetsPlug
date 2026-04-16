@@ -836,19 +836,19 @@ function RecentPredictionsFeed() {
               <button
                 type="button"
                 onClick={() => setExpandedId(isExpanded ? null : pred.id)}
-                className="w-full px-4 py-3 flex flex-wrap items-center gap-3 text-left"
+                className="w-full px-3 sm:px-4 py-3 grid grid-cols-1 sm:grid-cols-[auto_1fr_auto_auto] md:grid-cols-[auto_1fr_auto_auto_auto_auto] gap-2 sm:gap-3 items-center text-left"
                 aria-expanded={isExpanded}
                 aria-label={`${matchLabel} — klik voor details`}
               >
                 {/* Time */}
-                <span className="text-xs text-slate-500 w-28 shrink-0">{scheduledAt}</span>
+                <span className="text-xs text-slate-500 w-full sm:w-24 md:w-28 shrink-0 truncate">{scheduledAt}</span>
 
                 {/* Match */}
-                <div className="flex-1 min-w-[180px]">
-                  <p className="text-sm font-medium text-slate-100 leading-tight">{matchLabel}</p>
+                <div className="min-w-0 overflow-hidden">
+                  <p className="text-sm font-medium text-slate-100 leading-tight truncate">{matchLabel}</p>
                   <div className="flex items-center gap-2 mt-0.5">
                     {pred.match && (
-                      <p className="text-[10px] text-slate-500">{pred.match.status}</p>
+                      <p className="text-[10px] text-slate-500 truncate">{pred.match.status}</p>
                     )}
                     {modelLabel && (
                       <span className="inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/10 px-1.5 py-0.5 text-[9px] font-semibold text-blue-300 uppercase tracking-wide">
@@ -858,24 +858,24 @@ function RecentPredictionsFeed() {
                   </div>
                 </div>
 
-                {/* Probabilities */}
-                <span className="text-slate-300 font-medium min-w-[150px] font-mono text-xs">
+                {/* Probabilities (hidden on phone — visible from md) */}
+                <span className="hidden md:inline text-slate-300 font-medium font-mono text-xs whitespace-nowrap">
                   {callSummary}
                 </span>
 
                 {/* Confidence */}
-                <div className="flex items-center gap-1.5 min-w-[90px]">
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wide">{t("trackrecord.conf")}</span>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span className="hidden sm:inline text-[10px] text-slate-500 uppercase tracking-wide">{t("trackrecord.conf")}</span>
                   <ConfidenceBadge value={pred.confidence} />
                 </div>
 
                 {/* Status */}
-                <div className="min-w-[90px]">
+                <div className="shrink-0">
                   <PredictionStatusBadge correct={correct} evaluated={evaluated} />
                 </div>
 
-                {/* Prediction quality score */}
-                <span className="text-xs font-mono tabular-nums w-20 text-right text-slate-500">
+                {/* Prediction quality score (hidden on phone) */}
+                <span className="hidden md:inline text-xs font-mono tabular-nums w-16 text-right text-slate-500 shrink-0">
                   {pred.evaluation?.brier_score != null
                     ? `PQ: ${fmt(pred.evaluation.brier_score, 3)}`
                     : " - "}
@@ -1249,7 +1249,7 @@ export default function TrackrecordPage() {
   ];
 
   return (
-    <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 animate-fade-in">
+    <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
       <div aria-hidden className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full bg-emerald-500/15 blur-3xl" />
       <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[360px] w-[360px] rounded-full bg-blue-500/10 blur-3xl" />
       <div className="relative space-y-6">
@@ -1389,7 +1389,7 @@ export default function TrackrecordPage() {
                 value={dateFrom}
                 onChange={(e) => setDateFrom(e.target.value)}
                 className={cn(
-                  "h-8 w-36 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-slate-200",
+                  "h-8 w-32 sm:w-36 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 sm:px-3 text-xs sm:text-sm text-slate-200",
                   "placeholder:text-slate-500",
                   "focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.06]",
                   "transition-colors [color-scheme:dark]"
@@ -1405,7 +1405,7 @@ export default function TrackrecordPage() {
                 value={dateTo}
                 onChange={(e) => setDateTo(e.target.value)}
                 className={cn(
-                  "h-8 w-36 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 text-sm text-slate-200",
+                  "h-8 w-32 sm:w-36 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 sm:px-3 text-xs sm:text-sm text-slate-200",
                   "placeholder:text-slate-500",
                   "focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.06]",
                   "transition-colors [color-scheme:dark]"
@@ -1415,7 +1415,7 @@ export default function TrackrecordPage() {
 
             {/* Sport select */}
             <Select value={sportId} onValueChange={(v) => { setSportId(v); setLeagueId("all"); }}>
-              <SelectTrigger className="h-8 w-40 text-sm border-white/[0.08] bg-white/[0.04] text-slate-200 focus:border-blue-500/50">
+              <SelectTrigger className="h-8 w-32 sm:w-40 text-xs sm:text-sm border-white/[0.08] bg-white/[0.04] text-slate-200 focus:border-blue-500/50">
                 <SelectValue placeholder={t("trackrecord.allLeagues")} />
               </SelectTrigger>
               <SelectContent>
@@ -1430,7 +1430,7 @@ export default function TrackrecordPage() {
 
             {/* League select */}
             <Select value={leagueId} onValueChange={setLeagueId}>
-              <SelectTrigger className="h-8 w-48 text-sm border-white/[0.08] bg-white/[0.04] text-slate-200 focus:border-blue-500/50">
+              <SelectTrigger className="h-8 w-40 sm:w-48 text-xs sm:text-sm border-white/[0.08] bg-white/[0.04] text-slate-200 focus:border-blue-500/50">
                 <SelectValue placeholder={t("trackrecord.allLeagues")} />
               </SelectTrigger>
               <SelectContent>
