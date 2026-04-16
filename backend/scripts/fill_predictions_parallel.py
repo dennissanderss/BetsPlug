@@ -62,9 +62,18 @@ async def main():
                 f"| rate={rate:.1f}/s | ETA={eta_min:.0f}min"
             )
 
-            if cycle_gen == 0 or remaining == 0:
+            # Exit only when remaining is genuinely 0 (not -1 from errors)
+            # remaining = -1 means all parallel requests failed, retry after pause
+            if remaining == 0:
                 print("  All done!")
                 break
+            if cycle_gen == 0 and remaining == -1:
+                print(f"  Transient errors, pausing 30s and retrying...")
+                await asyncio.sleep(30)
+                continue
+            if cycle_gen == 0:
+                # remaining >= 0 but nothing generated — likely all skipped
+                print(f"  0 generated this cycle, continuing...")
 
             await asyncio.sleep(PAUSE_BETWEEN_CYCLES)
 

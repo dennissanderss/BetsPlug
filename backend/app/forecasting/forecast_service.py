@@ -1092,6 +1092,9 @@ class ForecastService:
             "away_wins": away_wins,
             "avg_goals_scored": round(goals_scored / mp, 2) if mp > 0 else 0.0,
             "avg_goals_conceded": round(goals_conceded / mp, 2) if mp > 0 else 0.0,
+            # v8.1 fix: expose win_rate so ProductionV8Model's h_swr / a_swr
+            # features match train_local.py (wins/mp). Previously returned 0.
+            "win_rate": wins / mp if mp > 0 else 0.0,
         }
 
     @staticmethod
