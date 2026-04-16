@@ -22,13 +22,10 @@ import { UpgradeLockModal } from "@/components/noct/upgrade-lock-modal";
 export default function AnalystLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { tier, hasAccess, ready } = useTier();
+  const { hasAccess, ready } = useTier();
   const [showLock, setShowLock] = React.useState(false);
 
-  const isMatchDeepDive =
-    pathname.startsWith("/analyst/matches/") ||
-    pathname.startsWith("/analyst/matches");
-
+  const isMatchDeepDive = pathname.startsWith("/analyst/matches");
   const requiredTier: "silver" | "gold" = isMatchDeepDive ? "silver" : "gold";
   const allowed = ready && hasAccess(requiredTier);
 
@@ -86,6 +83,5 @@ export default function AnalystLayout({ children }: { children: React.ReactNode 
 
   // Pass through — the page handles its own tier-aware content
   // (e.g. Silver sees teaser sections, Gold sees full content).
-  void tier;
   return <>{children}</>;
 }

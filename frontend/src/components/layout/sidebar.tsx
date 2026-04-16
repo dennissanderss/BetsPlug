@@ -24,7 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { Pill } from "@/components/noct/pill";
-import { useTier, type Tier, TIER_RANK } from "@/hooks/use-tier";
+import { useTier, type Tier } from "@/hooks/use-tier";
 import { UpgradeLockModal } from "@/components/noct/upgrade-lock-modal";
 
 interface NavItem {

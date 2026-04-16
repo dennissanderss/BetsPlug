@@ -36,6 +36,12 @@ reports_data/
 Thumbs.db
 desktop.ini
 
+# Office lock files (created while a doc is open in Word/Excel)
+~$*.docx
+~$*.xlsx
+~$*.doc
+~$*.xls
+
 # Testing
 .coverage
 htmlcov/
