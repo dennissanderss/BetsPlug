@@ -29,6 +29,13 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth.tier import get_current_tier
+from app.core.prediction_filters import v81_predictions_filter
+from app.core.tier_system import (
+    PickTier,
+    TIER_SYSTEM_ENABLED,
+    access_filter,
+)
 from app.db.session import get_db
 from app.models.league import League
 from app.models.match import Match, MatchResult, MatchStatus
@@ -477,8 +484,16 @@ async def _enrich_with_live_scores(items: List[FixtureItem], matches: list) -> N
 async def _load_latest_predictions(
     match_ids: list,
     db: AsyncSession,
+    user_tier: Optional[PickTier] = None,
 ) -> dict:
-    """Return a {match_id: Prediction} mapping for the latest prediction per match."""
+    """Return a {match_id: Prediction} mapping for the latest prediction per match.
+
+    When ``TIER_SYSTEM_ENABLED`` and ``user_tier`` is provided, the latest
+    prediction must also pass :func:`access_filter` and
+    :func:`v81_predictions_filter` — matches whose only prediction is
+    gated above the user's tier are excluded from the returned dict so
+    the caller can drop them from the response.
+    """
     if not match_ids:
         return {}
 
@@ -510,6 +525,17 @@ async def _load_latest_predictions(
             ),
         )
     )
+    # v8.3 — tier scope the prediction itself so Dashboard fixture
+    # strips (Live / Today / Results) stop leaking Gold+ picks to
+    # Free users. access_filter requires a JOIN on matches for
+    # Match.league_id.
+    if TIER_SYSTEM_ENABLED and user_tier is not None:
+        stmt = (
+            stmt
+            .join(Match, Match.id == Prediction.match_id)
+            .where(access_filter(user_tier))
+            .where(v81_predictions_filter())
+        )
     rows = (await db.execute(stmt)).scalars().all()
     return {p.match_id: p for p in rows}
 
@@ -595,6 +621,7 @@ async def get_upcoming_fixtures(
         default=None, description="Filter by league slug (e.g. 'premier-league')."
     ),
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> UpcomingFixturesResponse:
     now = datetime.now(timezone.utc)
     cutoff = now + timedelta(days=days)
@@ -619,7 +646,13 @@ async def get_upcoming_fixtures(
     raw_matches = (await db.execute(stmt)).scalars().all()
     matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
-    pred_map = await _load_latest_predictions(match_ids, db)
+    pred_map = await _load_latest_predictions(match_ids, db, user_tier)
+    # v8.3 — hide matches whose latest prediction is tier-gated away so
+    # Free users see Free-tier matches only. Matches with no prediction
+    # at all also fall off (otherwise lists fill with noise).
+    if TIER_SYSTEM_ENABLED:
+        matches = [m for m in matches if m.id in pred_map]
+        match_ids = [m.id for m in matches]
     odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
@@ -649,6 +682,7 @@ async def get_live_fixtures(
         default=None, description="Filter by league slug."
     ),
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ):
     """Live matches with real-time scores from Redis cache."""
     from app.core.cache import cache_get
@@ -670,7 +704,12 @@ async def get_live_fixtures(
     raw_matches = (await db.execute(stmt)).scalars().all()
     matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
-    pred_map = await _load_latest_predictions(match_ids, db)
+    pred_map = await _load_latest_predictions(match_ids, db, user_tier)
+    # v8.3 — same tier gate as /upcoming: hide live matches whose
+    # latest prediction isn't accessible to the caller.
+    if TIER_SYSTEM_ENABLED:
+        matches = [m for m in matches if m.id in pred_map]
+        match_ids = [m.id for m in matches]
     odds_map = await _load_latest_odds(match_ids, db)
 
     # ── 3. Build a lookup from api_football_id → live score data ───────
@@ -724,6 +763,7 @@ async def get_live_fixtures(
 )
 async def get_today_fixtures(
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> TodayFixturesResponse:
     today = date.today()
     day_start = datetime(today.year, today.month, today.day, tzinfo=timezone.utc)
@@ -742,7 +782,10 @@ async def get_today_fixtures(
     raw_matches = (await db.execute(stmt)).scalars().all()
     matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
-    pred_map = await _load_latest_predictions(match_ids, db)
+    pred_map = await _load_latest_predictions(match_ids, db, user_tier)
+    if TIER_SYSTEM_ENABLED:
+        matches = [m for m in matches if m.id in pred_map]
+        match_ids = [m.id for m in matches]
     odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
@@ -850,6 +893,7 @@ async def get_results(
         default=None, description="Filter by league slug."
     ),
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> ResultsResponse:
     now = datetime.now(timezone.utc)
     cutoff = now - timedelta(days=days)
@@ -874,7 +918,10 @@ async def get_results(
     raw_matches = (await db.execute(stmt)).scalars().all()
     matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
-    pred_map = await _load_latest_predictions(match_ids, db)
+    pred_map = await _load_latest_predictions(match_ids, db, user_tier)
+    if TIER_SYSTEM_ENABLED:
+        matches = [m for m in matches if m.id in pred_map]
+        match_ids = [m.id for m in matches]
     odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
