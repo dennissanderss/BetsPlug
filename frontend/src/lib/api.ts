@@ -575,6 +575,13 @@ class ApiClient {
     return this.request<import("@/types/api").DashboardMetrics>("/dashboard/metrics");
   }
 
+  // v8.1 — public pricing/tier comparison (used by /pricing and /engine)
+  getPricingComparison() {
+    return this.request<import("@/types/api").PricingTierData[]>(
+      "/pricing/comparison",
+    );
+  }
+
   // Strategies
   getStrategies(activeOnly = false) {
     const qs = activeOnly ? "?active_only=true" : "";

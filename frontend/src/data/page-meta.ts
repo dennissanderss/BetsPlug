@@ -22,7 +22,18 @@ export interface PageMeta {
   ogDescription?: string;
 }
 
-export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
+/**
+ * A per-locale metadata bag. English (`en`) is mandatory because every
+ * caller uses it as the fallback (`PAGE_META["/x"]?.[locale] ?? PAGE_META["/x"].en`).
+ * All other locales are optional — when they're missing we fall back to
+ * English, which matches our SEO posture for pages that aren't translated
+ * into every locale yet (e.g. /engine is only EN + NL for now).
+ */
+export type PageMetaByLocale = Partial<Record<Locale, PageMeta>> & {
+  en: PageMeta;
+};
+
+export const PAGE_META: Record<string, PageMetaByLocale> = {
   /* ─────────────────────────── HOME ─────────────────────────── */
   "/": {
     en: {
@@ -1000,6 +1011,22 @@ export const PAGE_META: Record<string, Record<Locale, PageMeta>> = {
     },
 
 },
+
+  /* ─────────────────────────── ENGINE TRANSPARENCY ───────────── */
+  "/engine": {
+    en: {
+      title: "Engine Transparency · BetsPlug Methodology",
+      description: "How BetsPlug classifies every pick into a quality tier, how we measure accuracy, and the live per-tier results from our v8.1 engine.",
+      ogTitle: "How BetsPlug measures accuracy · Engine transparency",
+      ogDescription: "Four pick tiers (Platinum / Gold / Silver / Free), each with its own historical accuracy. Methodology, sample sizes, Wilson confidence intervals — all public.",
+    },
+    nl: {
+      title: "Engine Transparantie · BetsPlug Methodologie",
+      description: "Hoe BetsPlug elke pick in een kwaliteitstier indeelt, hoe we nauwkeurigheid meten, en de live per-tier resultaten van onze v8.1 engine.",
+      ogTitle: "Hoe BetsPlug nauwkeurigheid meet · Engine transparantie",
+      ogDescription: "Vier pick tiers (Platinum / Gold / Silver / Free), elk met eigen historische nauwkeurigheid. Methodologie, sample sizes, Wilson betrouwbaarheidsintervallen — publiek.",
+    },
+  },
 
   /* ─────────────────────────── PRICING ─────────────────────── */
   "/pricing": {
