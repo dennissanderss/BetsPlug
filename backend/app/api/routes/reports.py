@@ -10,10 +10,12 @@ from fastapi.responses import FileResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth.dependencies import get_current_user
 from app.auth.tier import get_current_tier
 from app.core.tier_system import PickTier
 from app.db.session import get_db
 from app.models.report import GeneratedReport, ReportJob
+from app.models.user import User
 from app.schemas.report import GeneratedReportResponse, ReportJobCreate, ReportJobResponse
 
 logger = logging.getLogger(__name__)
@@ -77,6 +79,12 @@ async def _cleanup_old_reports(db: AsyncSession) -> int:
 async def generate_report(
     payload: ReportJobCreate,
     db: AsyncSession = Depends(get_db),
+    # get_current_user raises 401 when no valid token is present. This
+    # runs BEFORE the tier check below, so an unauthenticated caller
+    # gets a semantically correct 401 Unauthorized instead of a
+    # misleading 402 "Reports require Gold tier". 402 should only fire
+    # for authenticated Free/Silver users.
+    _user: User = Depends(get_current_user),
     user_tier: PickTier = Depends(get_current_tier),
 ) -> ReportJobResponse:
     """Generate a report synchronously in the requested format and return the

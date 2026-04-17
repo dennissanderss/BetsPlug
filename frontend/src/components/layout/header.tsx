@@ -32,7 +32,7 @@ interface HeaderProps {
  */
 export function Header({ className }: HeaderProps) {
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user, logout, ready } = useAuth();
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const { toggleMobile, mobileOpen } = useNavState();
@@ -90,9 +90,16 @@ export function Header({ className }: HeaderProps) {
   const authUser = user as (typeof user & { role?: string }) | null;
   const isAdmin = authUser?.role === "admin";
 
-  const displayName = user?.name ?? "Guest";
-  const displayEmail = user?.email ?? "";
-  const initial = (displayName[0] ?? "G").toUpperCase();
+  // Only fall back to "Guest" once auth has finished resolving.
+  // Before `ready` is true the user object is null regardless of
+  // whether a valid JWT is in localStorage, so rendering "Guest"
+  // unconditionally flashed the wrong label on every first paint
+  // for authed users. Show "…" during the transient window.
+  const displayName = ready ? (user?.name ?? "Guest") : "…";
+  const displayEmail = ready ? (user?.email ?? "") : "";
+  const initial = ready
+    ? (user?.name?.[0] ?? "G").toUpperCase()
+    : "";
 
   const tierLabel = tier
     ? tier.charAt(0).toUpperCase() + tier.slice(1).toLowerCase()
