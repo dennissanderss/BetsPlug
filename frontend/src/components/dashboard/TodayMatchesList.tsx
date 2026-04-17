@@ -8,6 +8,7 @@ import { confLevel, confColor, formatLiveMinute } from "@/components/match-predi
 import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill, DataChip } from "@/components/noct/pill";
+import { TierScopePill } from "@/components/noct/tier-scope-pill";
 import type { Fixture, FixturesResponse } from "@/types/api";
 
 /**
@@ -184,7 +185,7 @@ export function TodayMatchesList({ data, isLoading }: TodayMatchesListProps) {
   return (
     <div className="card-neon card-neon-green">
       <div className="relative">
-        <div className="flex items-center justify-between border-b border-white/[0.05] px-5 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.05] px-5 py-3">
           <div className="flex items-center gap-3">
             <HexBadge variant="green" size="sm" noGlow>
               <Calendar className="h-4 w-4" />
@@ -192,6 +193,7 @@ export function TodayMatchesList({ data, isLoading }: TodayMatchesListProps) {
             <span className="section-label">{t("dash.todayMatches")}</span>
             {count > 0 && <Pill tone="active">{count}</Pill>}
           </div>
+          <TierScopePill compact />
         </div>
 
         <div>

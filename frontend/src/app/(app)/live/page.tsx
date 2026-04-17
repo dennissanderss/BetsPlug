@@ -20,6 +20,7 @@ import type { Fixture } from "@/types/api";
 import { GlassPanel } from "@/components/noct/glass-panel";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { TierScopePill } from "@/components/noct/tier-scope-pill";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -416,8 +417,9 @@ export default function LiveMatchesPage() {
             </span>
             <h1 className="text-heading mt-3">{t("live.title")}</h1>
             <p className="mt-2 text-sm text-slate-400">{t("live.subtitle")}</p>
-            <div className="mt-3 flex items-center gap-2">
+            <div className="mt-3 flex flex-wrap items-center gap-2">
               <Pill tone="purple">{liveCount} live</Pill>
+              <TierScopePill />
               <div className="flex items-center gap-1.5">
                 <RefreshCw className={cn("h-3 w-3 text-slate-500", isRefetching && "animate-spin")} />
                 <span className="text-[11px] text-slate-500">

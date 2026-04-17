@@ -6,6 +6,7 @@ import { ArrowRight, Activity, Target } from "lucide-react";
 import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { TierScopePill } from "@/components/noct/tier-scope-pill";
 import { formatLiveMinute } from "@/components/match-predictions/shared";
 import type { Fixture, FixturesResponse } from "@/types/api";
 
@@ -119,21 +120,24 @@ export function LiveMatchesStrip({ data, isLoading, nextKickoff }: LiveMatchesSt
   return (
     <div className="card-neon">
       <div className="relative">
-        <div className="flex items-center justify-between border-b border-white/[0.05] px-5 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.05] px-5 py-3">
           <div className="flex items-center gap-2">
             <span className="live-dot-red" />
             <span className="section-label">{t("dash.liveNow")}</span>
             {count > 0 && <Pill tone="active">{count}</Pill>}
           </div>
-          {count > 0 && (
-            <Link
-              href={lHref("/live")}
-              className="flex items-center gap-1 text-xs text-[#a3a9b8] transition-colors hover:text-[#4ade80]"
-            >
-              {t("dash.viewAll")}
-              <ArrowRight className="h-3 w-3" />
-            </Link>
-          )}
+          <div className="flex items-center gap-2">
+            <TierScopePill compact />
+            {count > 0 && (
+              <Link
+                href={lHref("/live")}
+                className="flex items-center gap-1 text-xs text-[#a3a9b8] transition-colors hover:text-[#4ade80]"
+              >
+                {t("dash.viewAll")}
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            )}
+          </div>
         </div>
 
         <div className="p-4">

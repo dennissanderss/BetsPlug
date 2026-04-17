@@ -11,6 +11,8 @@ import { YesterdayResultsStrip } from "@/components/dashboard/YesterdayResultsSt
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 import { TierPerformanceCard } from "@/components/dashboard/TierPerformanceCard";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
+import { UpgradeNudgeCard } from "@/components/dashboard/UpgradeNudgeCard";
+import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 
 export default function DashboardPage() {
   const { t } = useTranslations();
@@ -67,7 +69,20 @@ export default function DashboardPage() {
         <div className="min-w-0 space-y-4 sm:space-y-5">
           <WelcomeBanner />
           <QuickNavStrip liveCount={liveCount} />
-          <HeroBotdCompact botd={botd} isLoading={botdLoading} />
+          {/* BOTD is a Gold+ feature. On the dashboard we used to leak the
+              actual pick to Free/Silver users, who then saw the full page
+              gated on click — confusing. Gate it here too. The inline
+              variant of PaywallOverlay replaces the row with a compact
+              upgrade CTA, matching the row's narrow visual footprint. */}
+          <PaywallOverlay
+            feature="pick_of_the_day"
+            requiredTier="gold"
+            variant="inline"
+          >
+            <HeroBotdCompact botd={botd} isLoading={botdLoading} />
+          </PaywallOverlay>
+          {/* Tier-specific "next step" trigger (null for Platinum). */}
+          <UpgradeNudgeCard />
           {/* v8.1 — per-tier historical accuracy with upgrade nudges.
               Auto-hides when TIER_SYSTEM_ENABLED=false on backend. */}
           <TierPerformanceCard />

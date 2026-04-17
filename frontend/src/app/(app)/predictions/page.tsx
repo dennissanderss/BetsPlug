@@ -28,6 +28,7 @@ import { UpsellBanner } from "@/components/ui/upsell-banner";
 import { GlassPanel } from "@/components/noct/glass-panel";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { TierScopePill } from "@/components/noct/tier-scope-pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import { classifyPickTier } from "@/lib/pick-tier";
 import type { PickTierSlug } from "@/types/api";
@@ -1217,6 +1218,9 @@ export default function PredictionsPage() {
             <p className="mt-2 text-sm text-slate-400">
               {t("pred.subtitle")}
             </p>
+            <div className="mt-3">
+              <TierScopePill />
+            </div>
           </div>
         </div>
 

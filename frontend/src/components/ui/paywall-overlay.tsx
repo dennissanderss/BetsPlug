@@ -230,8 +230,31 @@ export function PaywallOverlay({
     checkSubscription();
   }, [requiredTier]);
 
-  // Avoid a flash of paywall during first paint
-  if (!checked) return <>{children}</>;
+  // Render a neutral placeholder while we figure out access. Earlier
+  // versions returned the unlocked children here, which caused gated
+  // content to flash for 0.5-1s before the paywall took over (clearly
+  // visible on slow networks and on /bet-of-the-day for Free users).
+  // A frosted skeleton is the safer default — no paid content leaks.
+  if (!checked) {
+    if (variant === "inline") {
+      return (
+        <div
+          aria-busy
+          className="h-28 w-full animate-pulse rounded-2xl border border-white/[0.06] bg-white/[0.02]"
+        />
+      );
+    }
+    return (
+      <div
+        aria-busy
+        className="relative min-h-[220px] overflow-hidden rounded-2xl border border-white/[0.06] bg-gradient-to-b from-[#0d1321]/60 via-[#080b14]/70 to-[#060912]/80 backdrop-blur-md"
+      >
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="h-8 w-32 animate-pulse rounded-full bg-white/[0.05]" />
+        </div>
+      </div>
+    );
+  }
   if (hasAccess) return <>{children}</>;
 
   const tierLabel = TIER_LABELS[requiredTier];
