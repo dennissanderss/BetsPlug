@@ -40,6 +40,8 @@ import { cn, formatPercent, formatDate } from "@/lib/utils";
 import { useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { PickTierBadge } from "@/components/noct/pick-tier-badge";
+import type { PickTierSlug } from "@/types/api";
 import type {
   TrackrecordSummary,
   SegmentPerformance,
@@ -190,6 +192,80 @@ function SummaryStatsTable({ summary }: { summary: TrackrecordSummary }) {
               </td>
             </tr>
           ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// ─── Per-tier breakdown (v8.1) ───────────────────────────────────────────────
+
+/** Shield-row breakdown of accuracy per pick_tier — renders below the
+ * SummaryStatsTable when the backend returned per_tier data. */
+function PerTierBreakdownTable({ summary }: { summary: TrackrecordSummary }) {
+  const perTier = summary.per_tier;
+  if (!perTier || Object.keys(perTier).length === 0) {
+    return null;
+  }
+
+  // Fixed display order (highest tier first)
+  const ORDER: PickTierSlug[] = ["platinum", "gold", "silver", "free"];
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-white/[0.06]">
+      <div className="border-b border-white/[0.06] bg-white/[0.03] px-4 py-3">
+        <h3 className="text-sm font-semibold text-slate-100">
+          Accuracy per pick-tier
+        </h3>
+        <p className="text-xs text-slate-500">
+          How each quality tier performed historically. Higher tier = more selective,
+          higher accuracy.
+        </p>
+      </div>
+      <table className="w-full text-sm">
+        <thead>
+          <tr className="border-b border-white/[0.06] bg-white/[0.02]">
+            <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Tier
+            </th>
+            <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Total
+            </th>
+            <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Correct
+            </th>
+            <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
+              Accuracy
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {ORDER.map((slug, idx) => {
+            const row = perTier[slug];
+            if (!row) return null;
+            return (
+              <tr
+                key={slug}
+                className={cn(
+                  "border-b border-white/[0.04] last:border-0 transition-colors hover:bg-white/[0.03]",
+                  idx % 2 === 0 ? "bg-transparent" : "bg-white/[0.01]",
+                )}
+              >
+                <td className="px-4 py-3">
+                  <PickTierBadge tier={slug} size="sm" showAccuracy={false} />
+                </td>
+                <td className="px-4 py-3 text-right tabular-nums text-slate-400">
+                  {Number(row.total).toLocaleString()}
+                </td>
+                <td className="px-4 py-3 text-right tabular-nums text-slate-400">
+                  {Number(row.correct).toLocaleString()}
+                </td>
+                <td className="px-4 py-3 text-right tabular-nums">
+                  {accuracyCell(Number(row.accuracy))}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -1514,7 +1590,11 @@ export default function TrackrecordPage() {
                 {t("trackrecord.noSummaryData")}
               </p>
             ) : (
-              <SummaryStatsTable summary={summary} />
+              <div className="space-y-4">
+                <SummaryStatsTable summary={summary} />
+                {/* v8.1 per-tier breakdown — auto-hides when backend flag off. */}
+                <PerTierBreakdownTable summary={summary} />
+              </div>
             )}
           </div>
         </div>
