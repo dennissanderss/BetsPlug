@@ -10,6 +10,7 @@ import { TodayMatchesList } from "@/components/dashboard/TodayMatchesList";
 import { YesterdayResultsStrip } from "@/components/dashboard/YesterdayResultsStrip";
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 import { TierPerformanceCard } from "@/components/dashboard/TierPerformanceCard";
+import { TierEmptyStateCard } from "@/components/dashboard/TierEmptyStateCard";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { UpgradeNudgeCard } from "@/components/dashboard/UpgradeNudgeCard";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
@@ -83,6 +84,12 @@ export default function DashboardPage() {
           </PaywallOverlay>
           {/* Tier-specific "next step" trigger (null for Platinum). */}
           <UpgradeNudgeCard />
+          {/* Contextual empty-state: renders only when the signed-in
+              user's own tier has zero picks in the current v8.1
+              window. Sits above TierPerformanceCard so the comparison
+              table below reads as the answer to "what would upgrading
+              get me?". */}
+          <TierEmptyStateCard />
           {/* v8.1 — per-tier historical accuracy with upgrade nudges.
               Auto-hides when TIER_SYSTEM_ENABLED=false on backend. */}
           <TierPerformanceCard />
