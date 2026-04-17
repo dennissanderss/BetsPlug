@@ -42,6 +42,7 @@ from sqlalchemy import and_, case, or_
 from sqlalchemy.sql import ColumnElement
 
 from app.core.tier_leagues import (
+    LEAGUES_FREE,
     LEAGUES_GOLD,
     LEAGUES_PLATINUM,
     LEAGUES_SILVER,
@@ -57,7 +58,12 @@ from app.models.prediction import Prediction
 # When ``False``, endpoints that check this flag should fall back to their
 # pre-tier-system behavior (no tier filter, no ``pick_tier`` fields in
 # responses). This allows instant rollback without git revert.
-TIER_SYSTEM_ENABLED: bool = getenv("TIER_SYSTEM_ENABLED", "false").lower() == "true"
+#
+# Default flipped to ON in v8.3 — the user-facing flow now depends on
+# tier scoping (Free = top-14 leagues at conf≥0.55, Silver = same leagues
+# at ≥0.65, etc.). Set ``TIER_SYSTEM_ENABLED=false`` on Railway only to
+# roll back to the legacy "everyone sees everything" mode.
+TIER_SYSTEM_ENABLED: bool = getenv("TIER_SYSTEM_ENABLED", "true").lower() == "true"
 
 
 # ---------------------------------------------------------------------------
@@ -159,10 +165,14 @@ def pick_tier_expression() -> ColumnElement:
             PickTier.SILVER.value,
         ),
         (
-            # Explicit Free branch: requires conf >= 0.55. Below that we
-            # deliberately fall through to else_=NULL so conf<0.55 rows
-            # are excluded from every tier query automatically.
-            Prediction.confidence >= CONF_THRESHOLD[PickTier.FREE],
+            # Explicit Free branch: picks in LEAGUES_FREE with conf >= 0.55.
+            # Below that (or outside the whitelist) we fall through to
+            # else_=NULL so conf<0.55 rows and off-scope leagues are
+            # excluded from every tier query automatically.
+            and_(
+                Match.league_id.in_(LEAGUES_FREE),
+                Prediction.confidence >= CONF_THRESHOLD[PickTier.FREE],
+            ),
             PickTier.FREE.value,
         ),
         else_=None,
@@ -199,11 +209,18 @@ def access_filter(user_tier: PickTier) -> ColumnElement:
             .where(access_filter(PickTier.SILVER))
         )
     """
+    # v8.3 — enforce the Free-tier league whitelist as a baseline for every
+    # user. This makes the tier set a strict funnel: every pick visible to
+    # anyone must live in LEAGUES_FREE (which by default equals
+    # LEAGUES_SILVER, the top-14 set). Narrow LEAGUES_FREE in
+    # tier_leagues.py to tighten the funnel further.
+    free_whitelist = Match.league_id.in_(LEAGUES_FREE)
     min_conf = Prediction.confidence >= CONF_THRESHOLD[PickTier.FREE]
+    baseline = and_(free_whitelist, min_conf)
 
     if user_tier == PickTier.PLATINUM:
-        # Platinum sees everything that passes Free baseline
-        return min_conf
+        # Platinum sees everything that passes the Free baseline.
+        return baseline
 
     # Build "qualifies as a higher tier than user's" exclusions
     exclusions: list[ColumnElement] = []
@@ -224,7 +241,7 @@ def access_filter(user_tier: PickTier) -> ColumnElement:
         ))
 
     # NOT (qualifies as higher tier)
-    return and_(min_conf, ~or_(*exclusions))
+    return and_(baseline, ~or_(*exclusions))
 
 
 # ---------------------------------------------------------------------------

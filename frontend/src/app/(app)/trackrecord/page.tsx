@@ -707,9 +707,11 @@ function ModelsOverviewPanel() {
 function DataTransparencyCard({
   summary,
   loading,
+  pickTier,
 }: {
   summary: TrackrecordSummary | undefined;
   loading: boolean;
+  pickTier?: string;
 }) {
   const total = summary?.total_predictions ?? null;
   const periodStart = summary?.period_start ? new Date(summary.period_start) : null;
@@ -719,7 +721,10 @@ function DataTransparencyCard({
       ? d.toLocaleDateString("nl-NL", { day: "numeric", month: "short", year: "numeric" })
       : "—";
 
-  const exportUrl = api.getTrackrecordExportUrl();
+  const exportUrl = api.getTrackrecordExportUrl(
+    undefined,
+    pickTier && pickTier !== "all" ? pickTier : undefined,
+  );
 
   return (
     <div className="glass-card p-5 sm:p-6 animate-slide-up">
@@ -1252,6 +1257,62 @@ function SportAccuracySection({
   );
 }
 
+// ─── Tier tabs (v8.3 public filter) ────────────────────────────────────────
+
+type TierTabKey = "all" | "free" | "silver" | "gold" | "platinum";
+
+const TIER_TABS: {
+  key: TierTabKey;
+  label: string;
+  emoji: string;
+  activeClass: string;
+}[] = [
+  { key: "all", label: "All tiers", emoji: "◯", activeClass: "border-white/30 bg-white/[0.08] text-slate-100" },
+  { key: "free", label: "Free · 45%+", emoji: "⬜", activeClass: "border-slate-300/30 bg-slate-300/[0.10] text-slate-200" },
+  { key: "silver", label: "Silver · 60%+", emoji: "⚪", activeClass: "border-slate-100/40 bg-slate-100/[0.10] text-slate-100" },
+  { key: "gold", label: "Gold · 70%+", emoji: "🔵", activeClass: "border-blue-400/40 bg-blue-500/[0.12] text-blue-100" },
+  { key: "platinum", label: "Platinum · 85%+", emoji: "🟢", activeClass: "border-emerald-400/40 bg-emerald-500/[0.12] text-emerald-100" },
+];
+
+function TierTabsStrip({
+  value,
+  onChange,
+}: {
+  value: TierTabKey;
+  onChange: (v: TierTabKey) => void;
+}) {
+  return (
+    <div className="glass-card overflow-hidden">
+      <div className="border-b border-white/[0.05] px-4 py-2">
+        <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+          Tier scope — click any tier to audit its track record
+        </span>
+      </div>
+      <div className="flex flex-wrap gap-1.5 p-3">
+        {TIER_TABS.map((tab) => {
+          const active = tab.key === value;
+          return (
+            <button
+              key={tab.key}
+              type="button"
+              onClick={() => onChange(tab.key)}
+              className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                active
+                  ? tab.activeClass
+                  : "border-white/[0.08] bg-transparent text-slate-400 hover:border-white/[0.15] hover:text-slate-200"
+              }`}
+              aria-pressed={active}
+            >
+              <span aria-hidden>{tab.emoji}</span>
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function TrackrecordPage() {
@@ -1261,6 +1322,11 @@ export default function TrackrecordPage() {
   const [sportId, setSportId] = React.useState("all");
   const [leagueId, setLeagueId] = React.useState("all");
   const [activeTab, setActiveTab] = React.useState("performance");
+  // v8.3 — public tier selector. "all" means "whatever the caller has
+  // access to"; the other values override access_filter on the backend.
+  const [pickTier, setPickTier] = React.useState<
+    "all" | "free" | "silver" | "gold" | "platinum"
+  >("all");
 
   // Build filter params for API calls
   const filterParams = React.useMemo(() => {
@@ -1269,8 +1335,9 @@ export default function TrackrecordPage() {
     if (dateTo) p.date_to = dateTo;
     if (sportId !== "all") p.sport_id = sportId;
     if (leagueId !== "all") p.league_id = leagueId;
+    if (pickTier !== "all") p.pick_tier = pickTier;
     return p;
-  }, [dateFrom, dateTo, sportId, leagueId]);
+  }, [dateFrom, dateTo, sportId, leagueId, pickTier]);
 
   const { data: summary, isLoading: summaryLoading } = useQuery({
     queryKey: ["trackrecord-summary", filterParams],
@@ -1350,8 +1417,13 @@ export default function TrackrecordPage() {
         </Pill>
       </div>
 
+      {/* v8.3 — public tier selector. Lets any visitor audit the track
+          record of any tier (Free can see Platinum's numbers and vice
+          versa). Updates every KPI, chart, segment and CSV export. */}
+      <TierTabsStrip value={pickTier} onChange={setPickTier} />
+
       {/* v6.2.1: Data transparency card (replaces the old methodology banner) */}
-      <DataTransparencyCard summary={summary} loading={summaryLoading} />
+      <DataTransparencyCard summary={summary} loading={summaryLoading} pickTier={pickTier} />
 
       {/* 1. Live Performance Banner — real data only */}
       <LivePerformanceBanner summary={summary} loading={summaryLoading} />
@@ -1668,7 +1740,10 @@ export default function TrackrecordPage() {
               <p className="text-xs text-slate-500 mt-0.5">{t("trackrecord.exportDesc")}</p>
             </div>
             <a
-              href={api.getTrackrecordExportUrl()}
+              href={api.getTrackrecordExportUrl(
+                undefined,
+                pickTier !== "all" ? pickTier : undefined,
+              )}
               download
               className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-400 transition-all hover:bg-emerald-500/20"
             >

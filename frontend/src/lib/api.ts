@@ -388,8 +388,16 @@ class ApiClient {
    * download link can use it. We return the URL rather than a fetched
    * Blob so browsers handle the filename + progress indicator natively.
    */
-  getTrackrecordExportUrl(modelVersionId?: string): string {
-    const qs = modelVersionId ? `?model_version_id=${modelVersionId}` : "";
+  getTrackrecordExportUrl(
+    modelVersionId?: string,
+    pickTier?: string,
+  ): string {
+    const params: Record<string, string> = {};
+    if (modelVersionId) params.model_version_id = modelVersionId;
+    if (pickTier) params.pick_tier = pickTier;
+    const qs = Object.keys(params).length
+      ? `?${new URLSearchParams(params)}`
+      : "";
     return `${this.baseUrl}/trackrecord/export.csv${qs}`;
   }
 

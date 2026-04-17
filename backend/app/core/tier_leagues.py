@@ -10,7 +10,21 @@ Tier structure:
     LEAGUES_PLATINUM  = top 5  elite competitions
     LEAGUES_GOLD      = top 10 (Platinum + 5 next)
     LEAGUES_SILVER    = top 14 (Gold + 4 next)
-    FREE tier uses no league whitelist (everything not in Silver qualifies).
+    LEAGUES_FREE      = top 14 (= LEAGUES_SILVER)
+
+v8.3 change — FREE used to have NO league whitelist (any league with
+``confidence >= 0.55`` would fall through to the Free branch). That made
+Free users see picks in lower-profile leagues we don't actively curate,
+and it also meant picks outside any paid tier's scope leaked into
+public-homepage surfaces. Anchoring FREE to the same league set as
+SILVER keeps the tier funnel clean: every tier uses the same top-14
+leagues; upgrade = higher confidence floor = fewer, sharper picks.
+
+Narrow LEAGUES_FREE further (e.g. to 2nd-division leagues) if you want
+to funnel harder — the rest of the tier logic is agnostic to the
+specific set as long as FREE ⊇ SILVER ⊇ GOLD ⊇ PLATINUM semantically
+(a higher-tier pick always qualifies for every lower tier's league
+scope by pick_tier_expression's ordering).
 """
 
 LEAGUES_PLATINUM: frozenset[str] = frozenset({
@@ -35,3 +49,8 @@ LEAGUES_SILVER: frozenset[str] = LEAGUES_GOLD | frozenset({
     "00cdab5a-7846-4a6c-96d2-62d5ed12e305",  # La Liga
     "26d8d924-e0dd-4251-81da-82c7a0a6dce9",  # Serie A
 })
+
+# v8.3 — explicit whitelist for the Free tier. See module docstring.
+# Default = same set as Silver; edit here if you want a more aggressive
+# funnel.
+LEAGUES_FREE: frozenset[str] = LEAGUES_SILVER

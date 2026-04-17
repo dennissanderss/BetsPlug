@@ -38,6 +38,28 @@ router = APIRouter()
 _NUM_CALIBRATION_BUCKETS = 10
 
 
+def _parse_public_pick_tier(slug: Optional[str]) -> Optional[PickTier]:
+    """Parse the PUBLIC ``?pick_tier=`` query param used by the trackrecord
+    page's tier-selector tabs.
+
+    This is distinct from the admin-only ``?tier=`` dependency injected by
+    ``get_current_tier``: it does NOT change the caller's access scope,
+    it just narrows the aggregate to predictions *classified* as that
+    tier. Safe to expose publicly — the trackrecord page is the product's
+    transparency surface and every user (Free or Platinum) needs to see
+    accuracy broken down per tier.
+
+    Returns None when the slug is missing or unrecognised; callers treat
+    None as "no tier filter".
+    """
+    if not slug:
+        return None
+    try:
+        return PickTier[slug.strip().upper()]
+    except KeyError:
+        return None
+
+
 @router.get(
     "/summary",
     response_model=TrackrecordSummary,
@@ -49,6 +71,15 @@ async def get_trackrecord_summary(
     ),
     source: Optional[str] = Query(
         default=None, description="Filter by prediction source: 'live', 'backtest', or None for all"
+    ),
+    pick_tier: Optional[str] = Query(
+        default=None,
+        description=(
+            "PUBLIC tier filter: 'free' | 'silver' | 'gold' | 'platinum'. "
+            "Narrows the summary to predictions classified as that tier, "
+            "bypassing the caller's access_filter so Free users can still "
+            "audit Platinum's track-record. See /trackrecord tier tabs."
+        ),
     ),
     db: AsyncSession = Depends(get_db),
     user_tier: PickTier = Depends(get_current_tier),
@@ -83,9 +114,19 @@ async def get_trackrecord_summary(
         q = q.where(Prediction.prediction_source == source)
     # v8.1 filter: exclude pre-deploy predictions (broken feature pipeline)
     q = q.where(v81_predictions_filter())
-    # v8.1 tier access filter
+    # v8.1/v8.3 tier filter:
+    # - When the public ?pick_tier= is supplied, we scope ONLY to that
+    #   tier classification and bypass the caller's access_filter — the
+    #   trackrecord page is a public transparency surface and every
+    #   visitor should be able to inspect any tier's historical numbers.
+    # - Otherwise, fall back to the normal access_filter so list queries
+    #   respect the caller's subscription.
+    public_tier = _parse_public_pick_tier(pick_tier)
     if TIER_SYSTEM_ENABLED:
-        q = q.where(access_filter(user_tier))
+        if public_tier is not None:
+            q = q.where(pick_tier_expression() == public_tier.value)
+        else:
+            q = q.where(access_filter(user_tier))
 
     row = (await db.execute(q)).one()
 
@@ -176,6 +217,10 @@ async def get_trackrecord_segments(
     source: Optional[str] = Query(
         default=None, description="Filter by prediction source: 'live', 'backtest', or None for all"
     ),
+    pick_tier: Optional[str] = Query(
+        default=None,
+        description="PUBLIC tier filter — see /trackrecord/summary.",
+    ),
     db: AsyncSession = Depends(get_db),
     user_tier: PickTier = Depends(get_current_tier),
 ) -> List[SegmentPerformance]:
@@ -190,6 +235,7 @@ async def get_trackrecord_segments(
     """
     segment_type = segment_type or group_by or "league"
     _source_filter = Prediction.prediction_source == source if source else None
+    public_tier = _parse_public_pick_tier(pick_tier)
     if segment_type == "sport":
         q = (
             select(
@@ -213,9 +259,12 @@ async def get_trackrecord_segments(
             q = q.where(_source_filter)
         # v8.1 filter
         q = q.where(v81_predictions_filter())
-        # v8.1 tier access filter
+        # v8.1/v8.3 tier filter — public ?pick_tier= overrides access_filter
         if TIER_SYSTEM_ENABLED:
-            q = q.where(access_filter(user_tier))
+            if public_tier is not None:
+                q = q.where(pick_tier_expression() == public_tier.value)
+            else:
+                q = q.where(access_filter(user_tier))
     elif segment_type == "month":
         # v6 fix: Python-side aggregation. The previous SQL version
         # used func.to_char(..., 'YYYY-MM') for both SELECT and
@@ -244,7 +293,10 @@ async def get_trackrecord_segments(
             .where(v81_predictions_filter())
         )
         if TIER_SYSTEM_ENABLED:
-            month_q = month_q.where(access_filter(user_tier))
+            if public_tier is not None:
+                month_q = month_q.where(pick_tier_expression() == public_tier.value)
+            else:
+                month_q = month_q.where(access_filter(user_tier))
         rows = (await db.execute(month_q)).all()
 
         buckets: dict[str, dict] = {}
@@ -309,9 +361,12 @@ async def get_trackrecord_segments(
             q = q.where(_source_filter)
         # v8.1 filter
         q = q.where(v81_predictions_filter())
-        # v8.1 tier access filter
+        # v8.1/v8.3 tier filter — public ?pick_tier= overrides access_filter
         if TIER_SYSTEM_ENABLED:
-            q = q.where(access_filter(user_tier))
+            if public_tier is not None:
+                q = q.where(pick_tier_expression() == public_tier.value)
+            else:
+                q = q.where(access_filter(user_tier))
 
     rows = (await db.execute(q)).all()
 
@@ -341,6 +396,10 @@ async def get_calibration(
     ),
     num_buckets: int = Query(
         default=_NUM_CALIBRATION_BUCKETS, ge=2, le=20, description="Number of probability bins"
+    ),
+    pick_tier: Optional[str] = Query(
+        default=None,
+        description="PUBLIC tier filter — see /trackrecord/summary.",
     ),
     db: AsyncSession = Depends(get_db),
     user_tier: PickTier = Depends(get_current_tier),
@@ -383,10 +442,13 @@ async def get_calibration(
         base_q = base_q.where(Prediction.model_version_id == model_version_id)
     # v8.1 filter
     base_q = base_q.where(v81_predictions_filter())
-    # v8.1 tier access filter — requires JOIN on matches
+    # v8.1/v8.3 tier filter — public ?pick_tier= overrides access_filter
+    public_tier = _parse_public_pick_tier(pick_tier)
     if TIER_SYSTEM_ENABLED:
         base_q = base_q.join(Match, Match.id == Prediction.match_id).where(
-            access_filter(user_tier)
+            pick_tier_expression() == public_tier.value
+            if public_tier is not None
+            else access_filter(user_tier)
         )
     result = await db.execute(base_q)
     rows = result.all()
@@ -479,6 +541,7 @@ async def _stream_trackrecord_csv(
     db: AsyncSession,
     model_version_id: Optional[uuid.UUID] = None,
     user_tier: PickTier = PickTier.PLATINUM,
+    public_tier: Optional[PickTier] = None,
 ) -> AsyncIterator[bytes]:
     """Yield CSV rows for every prediction, one at a time."""
     # UTF-8 BOM + Excel sep hint so European Excel opens correctly
@@ -500,9 +563,12 @@ async def _stream_trackrecord_csv(
         summary_q = summary_q.where(Prediction.model_version_id == model_version_id)
     # v8.1 filter
     summary_q = summary_q.where(v81_predictions_filter())
-    # v8.1 tier access filter
+    # v8.1/v8.3 tier filter — public ?pick_tier= overrides access_filter
     if TIER_SYSTEM_ENABLED:
-        summary_q = summary_q.where(access_filter(user_tier))
+        if public_tier is not None:
+            summary_q = summary_q.where(pick_tier_expression() == public_tier.value)
+        else:
+            summary_q = summary_q.where(access_filter(user_tier))
     sr = (await db.execute(summary_q)).one()
     s_total = sr.total or 0
     s_correct = int(sr.correct or 0)
@@ -575,9 +641,12 @@ async def _stream_trackrecord_csv(
         q = q.where(Prediction.model_version_id == model_version_id)
     # v8.1 filter
     q = q.where(v81_predictions_filter())
-    # v8.1 tier access filter
+    # v8.1/v8.3 tier filter — public ?pick_tier= overrides access_filter
     if TIER_SYSTEM_ENABLED:
-        q = q.where(access_filter(user_tier))
+        if public_tier is not None:
+            q = q.where(pick_tier_expression() == public_tier.value)
+        else:
+            q = q.where(access_filter(user_tier))
 
     result = await db.stream(q)
     flush_every = 200
@@ -683,17 +752,31 @@ async def export_trackrecord_csv(
         default=None,
         description="Restrict to a single model version. Omit to export all models.",
     ),
+    pick_tier: Optional[str] = Query(
+        default=None,
+        description=(
+            "PUBLIC tier filter: 'free' | 'silver' | 'gold' | 'platinum'. "
+            "When supplied the CSV is scoped to predictions classified as "
+            "that tier, overriding the caller's normal access scope."
+        ),
+    ),
     db: AsyncSession = Depends(get_db),
     user_tier: PickTier = Depends(get_current_tier),
 ) -> StreamingResponse:
-    """Stream all evaluated predictions as CSV — scoped to the user's tier.
+    """Stream all evaluated predictions as CSV — scoped to the user's tier
+    OR to an explicit ``?pick_tier=`` when set (transparency surface).
 
     One row per prediction/evaluation pair; columns cover enough data
     for a user to recompute accuracy, Brier, log-loss and calibration
     ECE themselves. This is the primary transparency artefact for the
     Track Record page.
     """
-    filename = f"betsplug-trackrecord-{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.csv"
+    public_tier = _parse_public_pick_tier(pick_tier)
+    tier_suffix = f"-{public_tier.name.lower()}" if public_tier is not None else ""
+    filename = (
+        f"betsplug-trackrecord{tier_suffix}-"
+        f"{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.csv"
+    )
     headers = {
         "Content-Disposition": f'attachment; filename="{filename}"',
         "Cache-Control": "no-store",
@@ -703,6 +786,7 @@ async def export_trackrecord_csv(
             db,
             model_version_id=model_version_id,
             user_tier=user_tier,
+            public_tier=public_tier,
         ),
         media_type="text/csv; charset=utf-8",
         headers=headers,
