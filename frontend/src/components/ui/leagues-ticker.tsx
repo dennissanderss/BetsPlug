@@ -1,8 +1,26 @@
 "use client";
 
-import { motion } from "motion/react";
 import { Sparkles } from "lucide-react";
 import { useTranslations } from "@/i18n/locale-provider";
+
+/**
+ * LeaguesTicker — dual-row horizontal ticker of league crests.
+ *
+ * Perf notes (this component was a mobile hotspot):
+ *   • Animation is CSS-only (`@keyframes bp-ticker-l/r`). Running on
+ *     the compositor thread means zero JS main-thread cost per frame
+ *     on low-end Android. Previously used framer-motion which runs
+ *     rAF on JS thread → janked on mobile.
+ *   • Uses 2 copies of the list (minimum for seamless loop at -50%)
+ *     instead of 3 — ~33% fewer DOM nodes + image decodes.
+ *   • `content-visibility: auto` skips render when off-screen.
+ *   • `prefers-reduced-motion` disables animation entirely.
+ *   • Ambient glow is a static, small-blur radial gradient instead
+ *     of a 160px blur filter (which forces an offscreen buffer and
+ *     repaints whenever anything composites above it).
+ *   • Hover effects are gated behind `@media (hover: hover)` so
+ *     touch devices skip the transitions altogether.
+ */
 
 type League = {
   name: string;
@@ -39,22 +57,26 @@ const leaguesReversed = [...leagues].reverse();
 
 export function LeaguesTicker() {
   const { t } = useTranslations();
-  const row1 = [...leagues, ...leagues, ...leagues];
-  const row2 = [...leaguesReversed, ...leaguesReversed, ...leaguesReversed];
+  // Two copies is the minimum for a seamless -50% loop.
+  const row1 = [...leagues, ...leagues];
+  const row2 = [...leaguesReversed, ...leaguesReversed];
 
   return (
     <section
-      className="relative overflow-hidden py-16 md:py-24"
+      className="bp-ticker-section relative overflow-hidden py-16 md:py-24"
       aria-labelledby="leagues-heading"
     >
-      {/* Ambient glow */}
+      {/* Static, cheap ambient background — no blur filter. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{ background: "hsl(var(--accent-green) / 0.06)", filter: "blur(160px)" }}
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[380px] w-[620px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            "radial-gradient(closest-side, hsl(var(--accent-green) / 0.08), transparent 70%)",
+        }}
       />
 
-      {/* Title — centered */}
+      {/* Title */}
       <div className="relative z-10 mx-auto mb-12 flex max-w-7xl flex-col items-center px-4 text-center sm:px-6 md:mb-16">
         <span className="section-label mb-4">
           <Sparkles className="h-3 w-3" />
@@ -71,64 +93,133 @@ export function LeaguesTicker() {
 
       {/* Scrolling rows */}
       <div className="relative z-10 space-y-4">
-        {/* Row 1 — scrolls left */}
         <div className="relative overflow-hidden">
-          <motion.div
-            className="flex w-max items-center"
-            animate={{ x: ["0%", "-33.3333%"] }}
-            transition={{ duration: 40, ease: "linear", repeat: Infinity }}
-          >
+          <div className="bp-ticker-track bp-ticker-track--l flex w-max items-center">
             {row1.map((league, i) => (
-              <LeagueLogo key={`r1-${league.slug}-${i}`} league={league} />
+              <LeagueLogo
+                key={`r1-${league.slug}-${i}`}
+                league={league}
+                // The second copy is a visual duplicate used purely
+                // to make the loop seamless. Hide it from a11y tree.
+                ariaHidden={i >= leagues.length}
+              />
             ))}
-          </motion.div>
+          </div>
           <EdgeFades />
         </div>
 
-        {/* Row 2 — scrolls right */}
         <div className="relative overflow-hidden">
-          <motion.div
-            className="flex w-max items-center"
-            animate={{ x: ["-33.3333%", "0%"] }}
-            transition={{ duration: 45, ease: "linear", repeat: Infinity }}
-          >
+          <div className="bp-ticker-track bp-ticker-track--r flex w-max items-center">
             {row2.map((league, i) => (
-              <LeagueLogo key={`r2-${league.slug}-${i}`} league={league} />
+              <LeagueLogo
+                key={`r2-${league.slug}-${i}`}
+                league={league}
+                ariaHidden={i >= leaguesReversed.length}
+              />
             ))}
-          </motion.div>
+          </div>
           <EdgeFades />
         </div>
       </div>
+
+      {/* Scoped styles — CSS-only animation runs on the compositor. */}
+      <style jsx>{`
+        .bp-ticker-section {
+          /* Skip painting when off-screen; reserve height to avoid jumps. */
+          content-visibility: auto;
+          contain-intrinsic-size: 0 560px;
+        }
+
+        .bp-ticker-track {
+          will-change: transform;
+          transform: translate3d(0, 0, 0);
+          backface-visibility: hidden;
+        }
+
+        .bp-ticker-track--l {
+          animation: bp-ticker-l 60s linear infinite;
+        }
+
+        .bp-ticker-track--r {
+          animation: bp-ticker-r 70s linear infinite;
+        }
+
+        @keyframes bp-ticker-l {
+          from {
+            transform: translate3d(0, 0, 0);
+          }
+          to {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+
+        @keyframes bp-ticker-r {
+          from {
+            transform: translate3d(-50%, 0, 0);
+          }
+          to {
+            transform: translate3d(0, 0, 0);
+          }
+        }
+
+        /* Respect reduced motion — freeze the ticker. */
+        @media (prefers-reduced-motion: reduce) {
+          .bp-ticker-track--l,
+          .bp-ticker-track--r {
+            animation: none;
+          }
+        }
+      `}</style>
     </section>
   );
 }
 
-function LeagueLogo({ league }: { league: League }) {
+function LeagueLogo({
+  league,
+  ariaHidden = false,
+}: {
+  league: League;
+  ariaHidden?: boolean;
+}) {
   return (
-    <div className="mx-3 flex-shrink-0 sm:mx-4" title={league.name}>
+    <div
+      className="bp-ticker-item mx-3 flex-shrink-0 sm:mx-4"
+      title={league.name}
+      aria-hidden={ariaHidden || undefined}
+    >
       <div
-        className="group relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl p-3 transition-all duration-300 hover:scale-110 sm:h-20 sm:w-20 sm:p-4"
+        className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl p-3 sm:h-20 sm:w-20 sm:p-4"
         style={{
           background: "hsl(var(--glass-1))",
           border: "1px solid hsl(0 0% 100% / 0.06)",
         }}
       >
-        {/* Hover glow */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          style={{
-            background: "radial-gradient(circle at center, hsl(var(--accent-green) / 0.15), transparent 70%)",
-          }}
-        />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={`/leagues/${league.slug}.${league.ext ?? "png"}`}
-          alt={league.name}
-          className="relative h-full w-auto max-w-full object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] transition-transform duration-300 group-hover:scale-105"
+          alt={ariaHidden ? "" : league.name}
+          width={80}
+          height={80}
+          className="relative h-full w-auto max-w-full object-contain"
           loading="lazy"
+          decoding="async"
+          // @ts-expect-error -- fetchpriority is valid HTML but missing from React types in older versions
+          fetchpriority="low"
+          draggable={false}
         />
       </div>
+
+      <style jsx>{`
+        /* Hover effects only on actual pointer devices — skips touch. */
+        @media (hover: hover) and (pointer: fine) {
+          .bp-ticker-item > div {
+            transition: transform 0.3s ease;
+          }
+          .bp-ticker-item:hover > div {
+            transform: scale(1.08);
+          }
+        }
+      `}</style>
     </div>
   );
 }
@@ -136,6 +227,7 @@ function LeagueLogo({ league }: { league: League }) {
 function EdgeFades() {
   return (
     <div
+      aria-hidden
       className="pointer-events-none absolute inset-0"
       style={{
         background:
