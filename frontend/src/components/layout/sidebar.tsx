@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { Pill } from "@/components/noct/pill";
 import { useTier, type Tier } from "@/hooks/use-tier";
+import { useAuth } from "@/lib/auth";
 import { UpgradeLockModal } from "@/components/noct/upgrade-lock-modal";
 import { useNavState } from "@/components/layout/nav-state-context";
 
@@ -103,6 +104,12 @@ export function Sidebar() {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const { hasAccess, ready: tierReady } = useTier();
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
+  // Only admins see the Admin entry in the System section.
+  const visibleBottomNavItems = isAdmin
+    ? bottomNavItems
+    : bottomNavItems.filter((item) => item.href !== "/admin");
 
   const getLabel = (item: NavItem) => {
     const translated = t(item.labelKey as any);
@@ -249,17 +256,21 @@ export function Sidebar() {
           </div>
         ))}
 
-        <div className="mx-2 my-3 border-t border-white/[0.06]" />
-        <div className="px-2 pb-2 pt-1">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
-            {(() => {
-              const v = t("sidebar.system" as any);
-              return v === "sidebar.system" ? "System" : v;
-            })()}
-          </span>
-        </div>
+        {visibleBottomNavItems.length > 0 && (
+          <>
+            <div className="mx-2 my-3 border-t border-white/[0.06]" />
+            <div className="px-2 pb-2 pt-1">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
+                {(() => {
+                  const v = t("sidebar.system" as any);
+                  return v === "sidebar.system" ? "System" : v;
+                })()}
+              </span>
+            </div>
 
-        {bottomNavItems.map(renderItem)}
+            {visibleBottomNavItems.map(renderItem)}
+          </>
+        )}
       </nav>
 
       {/* Footer */}

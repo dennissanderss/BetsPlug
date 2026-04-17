@@ -23,7 +23,10 @@ import {
   RotateCcw,
 } from "lucide-react";
 
+import { useRouter } from "next/navigation";
+
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
 import { cn, formatDateTime } from "@/lib/utils";
 import type { DataSourceHealth, IngestionRun } from "@/types/api";
 
@@ -781,14 +784,35 @@ function TierSwitcher() {
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = React.useState("datasources");
+  const router = useRouter();
+  const { user, ready } = useAuth();
+
+  // Client-side role gate. Non-admins get bounced to the dashboard
+  // before any admin data query fires, so this isn't just cosmetic.
+  // Backend-enforced checks on the individual /admin/* endpoints
+  // remain the source of truth; this is a UX guard-rail.
+  const isAdmin = user?.role === "admin";
+  React.useEffect(() => {
+    if (!ready) return;
+    if (!user || !isAdmin) {
+      router.replace("/dashboard");
+    }
+  }, [ready, user, isAdmin, router]);
 
   // Set tier to platinum only if admin is NOT actively testing a specific tier
   React.useEffect(() => {
+    if (!isAdmin) return;
     const testing = localStorage.getItem("betsplug_admin_testing_tier");
     if (!testing) {
       localStorage.setItem("betsplug_tier", "platinum");
     }
-  }, []);
+  }, [isAdmin]);
+
+  // Render nothing while we verify role — prevents a flash of admin UI
+  // for regular users before the redirect effect runs.
+  if (!ready || !isAdmin) {
+    return null;
+  }
 
   const { data: sources = [] } = useQuery<DataSourceHealth[]>({
     queryKey: ["data-sources"],

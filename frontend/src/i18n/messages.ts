@@ -1428,6 +1428,17 @@ const en = {
   "route.resultsTitle": "Results & Analysis",
   "route.resultsDesc": "See how yesterday's predictions performed",
 
+  /* ── Settings (minimal) ───────────────────────────── */
+  "settings.kicker": "Settings",
+  "settings.passwordTitle": "Change password",
+  "settings.passwordBody": "We'll email you a secure link to set a new password. The link expires after 30 minutes.",
+  "settings.passwordCta": "Send password reset email",
+  "settings.passwordSending": "Sending…",
+  "settings.passwordSent": "Email sent",
+  "settings.passwordSentHelp": "Check your inbox (and spam folder) for the reset link.",
+  "settings.accountPointerPrefix": "Looking for profile, language or subscription settings? See your",
+  "settings.accountPointerLink": "account page",
+
   /* ── Pick reasoning (inline explainability) ──────── */
   "reasoning.kicker": "Reasoning",
   "reasoning.title": "Why this pick?",
@@ -2015,9 +2026,9 @@ const en = {
   "trackrecord.noPredictionDataYet": "No prediction data yet",
   "trackrecord.noPredictionDataYetDesc": "The system has not yet generated or evaluated any predictions. KPI cards, charts, and tables below will populate automatically as the model runs and match outcomes are recorded. Check back after the first batch of predictions has been processed.",
 
-  /* ── Settings page ───────────────────────────────────── */
+  /* ── Settings page (minimal — only password reset lives here) ─── */
   "settings.title": "Settings",
-  "settings.subtitle": "Customize your experience",
+  "settings.subtitle": "Security only. Profile, language and subscription management live on your account page.",
   "settings.profile": "Profile",
   "settings.profileDesc": "Your personal information and account role",
   "settings.editProfile": "Edit profile",
@@ -3533,6 +3544,15 @@ const nl: Dictionary = {
   "route.strategyTitle": "Strategy Lab",
   "route.trackRecordDesc": "Historische modelprestaties, kalibratie en segmentanalyse",
   "route.trackRecordTitle": "Trackrecord",
+  "settings.kicker": "Instellingen",
+  "settings.passwordTitle": "Wachtwoord wijzigen",
+  "settings.passwordBody": "We sturen een beveiligde link per e-mail waarmee je een nieuw wachtwoord kunt instellen. De link verloopt na 30 minuten.",
+  "settings.passwordCta": "Stuur wachtwoord-reset e-mail",
+  "settings.passwordSending": "Verzenden…",
+  "settings.passwordSent": "E-mail verzonden",
+  "settings.passwordSentHelp": "Kijk in je inbox (en spam) voor de reset-link.",
+  "settings.accountPointerPrefix": "Zoek je profiel-, taal- of abonnementinstellingen? Bekijk je",
+  "settings.accountPointerLink": "accountpagina",
   "reasoning.kicker": "Onderbouwing",
   "reasoning.title": "Waarom deze pick?",
   "reasoning.footnote": "Top-3 signalen die voor deze wedstrijd het meest afweken van de baseline.",
@@ -3625,7 +3645,7 @@ const nl: Dictionary = {
   "settings.savedSuccessfully": "Instellingen succesvol opgeslagen",
   "settings.strategyCalls": "Strategietips",
   "settings.strategyCallsDesc": "Meldingen wanneer een strategie een nieuw wedsignaal genereert",
-  "settings.subtitle": "Pas je ervaring aan",
+  "settings.subtitle": "Alleen beveiliging. Profiel, taal en abonnement beheer je op je accountpagina.",
   "settings.switchToDark": "Terug naar de premium donkere interface",
   "settings.timezone": "Tijdzone",
   "settings.title": "Instellingen",
