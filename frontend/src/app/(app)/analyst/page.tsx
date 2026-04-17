@@ -1,29 +1,36 @@
-import Link from "next/link";
-import { Telescope, Activity, LineChart, ArrowRight } from "lucide-react";
+import { Telescope, Activity, LineChart, Clock } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 
 export const metadata = {
   title: "Data Analyst — BetsPlug",
   robots: { index: false, follow: false },
 };
 
+/**
+ * Analyst sub-routes (`/analyst/predictions`, `/analyst/engine-performance`)
+ * are part of Fase 2 of the v10 build and are not yet shipped. The dynamic
+ * `/analyst/matches/[id]` route exists for Match Deep Dive but needs a list
+ * entry point before it can be linked here.
+ *
+ * Rendering these as inert "Coming soon" cards (no href) instead of <Link>
+ * prevents the 404 path that Gold+ users were hitting when they clicked
+ * through from the hub.
+ */
 const cards = [
   {
-    href: "/analyst/predictions",
     icon: Telescope,
     variant: "green" as const,
     title: "Predictions Explorer",
     desc: "Filter every pick by tier, market, league and export to CSV.",
   },
   {
-    href: "/analyst/matches",
     icon: Activity,
     variant: "purple" as const,
     title: "Match Deep Dive",
     desc: "Submodel breakdown, Elo progression and feature importance per match.",
   },
   {
-    href: "/analyst/engine-performance",
     icon: LineChart,
     variant: "blue" as const,
     title: "Engine Performance",
@@ -51,11 +58,18 @@ export default function AnalystHubPage() {
           {cards.map((card) => {
             const Icon = card.icon;
             return (
-              <Link
-                key={card.href}
-                href={card.href}
-                className={`card-neon card-neon-${card.variant} group block p-6 sm:p-7`}
+              <div
+                key={card.title}
+                aria-disabled="true"
+                className={`card-neon card-neon-${card.variant} relative block p-6 opacity-70 cursor-not-allowed sm:p-7`}
+                title="Coming soon — Fase 2 of the v10 build"
               >
+                <div className="absolute right-4 top-4">
+                  <Pill tone="default" className="inline-flex items-center gap-1 text-[10px]">
+                    <Clock className="h-3 w-3" />
+                    Coming soon
+                  </Pill>
+                </div>
                 <div className="relative">
                   <HexBadge variant={card.variant} size="md">
                     <Icon className="h-5 w-5" />
@@ -64,11 +78,8 @@ export default function AnalystHubPage() {
                     {card.title}
                   </h3>
                   <p className="mt-3 text-sm text-[#a3a9b8]">{card.desc}</p>
-                  <span className="mt-5 inline-flex items-center gap-1 text-xs text-[#4ade80] opacity-0 transition-opacity group-hover:opacity-100">
-                    Open <ArrowRight className="h-3 w-3" />
-                  </span>
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>

@@ -91,11 +91,18 @@ const navSections: NavSection[] = [
           "lock.analystHub.benefit3",
         ],
       },
+      // NOTE: /analyst/predictions, /analyst/matches (list) and
+      // /analyst/engine-performance are Fase 2 of the v10 build — the
+      // pages don't exist yet. Marked `comingSoon: true` so EVERY tier
+      // (including Gold+) sees a non-clickable "SOON" chip instead of
+      // getting a 404 on click. When the pages ship, flip the flag and
+      // the existing requiredTier + lock metadata takes over.
       {
         labelKey: "nav.predictions_explorer",
         fallback: "Predictions Explorer",
         href: "/analyst/predictions",
         icon: Telescope,
+        comingSoon: true,
         requiredTier: "gold",
         lockBlurbKey: "lock.predictionsExplorer.blurb",
         lockBenefitKeys: [
@@ -110,6 +117,7 @@ const navSections: NavSection[] = [
         fallback: "Match Deep Dive",
         href: "/analyst/matches",
         icon: Activity,
+        comingSoon: true,
         requiredTier: "silver", // Silver sees teaser preview, Gold+ full
         lockBlurbKey: "lock.matchDeepDive.blurb",
         lockBenefitKeys: [
@@ -124,6 +132,7 @@ const navSections: NavSection[] = [
         fallback: "Engine Performance",
         href: "/analyst/engine-performance",
         icon: LineChart,
+        comingSoon: true,
         requiredTier: "gold",
         lockBlurbKey: "lock.enginePerformance.blurb",
         lockBenefitKeys: [
