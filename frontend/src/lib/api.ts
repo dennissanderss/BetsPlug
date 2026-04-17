@@ -4,6 +4,56 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 const TOKEN_KEY = "betsplug_token";
 const USER_KEY = "betsplug_user";
 const TIER_KEY = "betsplug_tier";
+const ADMIN_TESTING_TIER_KEY = "betsplug_admin_testing_tier";
+
+const ADMIN_TIER_SLUGS = new Set(["free", "silver", "gold", "platinum"]);
+
+/**
+ * Read the admin "test as tier" override from localStorage.
+ *
+ * The admin panel has a `TierSwitcher` widget (see
+ * `app/(app)/admin/page.tsx`) that writes the chosen tier slug to
+ * `betsplug_admin_testing_tier`. We mirror that value here so every
+ * outgoing API request can append `?tier=<slug>` — the backend
+ * dependency `get_current_tier` (backend/app/auth/tier.py) accepts
+ * the override ONLY when the caller is an authenticated admin, so
+ * sending the param for non-admins is a harmless no-op.
+ *
+ * Returns null unless both conditions hold:
+ *   - The stored user in localStorage has role === "admin"
+ *   - `betsplug_admin_testing_tier` contains a known tier slug
+ */
+function readAdminTestingTier(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const rawUser = window.localStorage.getItem(USER_KEY);
+    if (!rawUser) return null;
+    const user = JSON.parse(rawUser);
+    if (user?.role !== "admin") return null;
+    const slug = window.localStorage.getItem(ADMIN_TESTING_TIER_KEY);
+    if (!slug) return null;
+    const lower = slug.toLowerCase();
+    if (!ADMIN_TIER_SLUGS.has(lower)) return null;
+    return lower;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Append `?tier=<slug>` (or `&tier=<slug>` when a querystring is
+ * already present) to a path. No-op when `slug` is null.
+ *
+ * Kept in one place so the behavior stays consistent for `request()`
+ * (JSON endpoints) AND the URL-builder helpers like
+ * `getTrackrecordExportUrl()` / `getReportDownloadUrl()` which return
+ * raw URLs for `<a href>` downloads.
+ */
+function withAdminTier(path: string, slug: string | null): string {
+  if (!slug) return path;
+  const sep = path.includes("?") ? "&" : "?";
+  return `${path}${sep}tier=${encodeURIComponent(slug)}`;
+}
 
 /**
  * Custom error that exposes the HTTP status code alongside the
@@ -69,7 +119,14 @@ class ApiClient {
   }
 
   private async request<T>(path: string, options?: RequestInit): Promise<T> {
-    const url = `${this.baseUrl}${path}`;
+    // Admin "test as tier" override — see readAdminTestingTier() docs.
+    // We inject the query param here so every authenticated fetch
+    // reaches the backend with the correct tier context; without it
+    // the backend falls back to the admin's own subscription, which
+    // causes the frontend (reading `betsplug_tier` from localStorage)
+    // to receive data that doesn't match its expected scope and
+    // surfaces as a React error boundary crash.
+    const url = `${this.baseUrl}${withAdminTier(path, readAdminTestingTier())}`;
 
     // Build headers with auto-attached bearer token. We do NOT
     // force JSON content-type when the caller supplied their own
@@ -398,7 +455,8 @@ class ApiClient {
     const qs = Object.keys(params).length
       ? `?${new URLSearchParams(params)}`
       : "";
-    return `${this.baseUrl}/trackrecord/export.csv${qs}`;
+    const path = withAdminTier(`/trackrecord/export.csv${qs}`, readAdminTestingTier());
+    return `${this.baseUrl}${path}`;
   }
 
   // Backtests
@@ -431,7 +489,8 @@ class ApiClient {
     });
   }
   getReportDownloadUrl(id: string) {
-    return `${this.baseUrl}/reports/${id}/download`;
+    const path = withAdminTier(`/reports/${id}/download`, readAdminTestingTier());
+    return `${this.baseUrl}${path}`;
   }
 
   // Admin
