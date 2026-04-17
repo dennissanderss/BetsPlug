@@ -156,6 +156,74 @@ async def tier_smoke(db: AsyncSession = Depends(get_db)) -> dict[str, Any]:
             "traceback": traceback.format_exc()[-1500:],
         })
 
+    # Step 4b: picks-per-day with explicit select_from(Prediction) — tentative fix
+    async def ppd_inclusive_fixed():
+        sixty_days_ago = datetime.now(timezone.utc) - timedelta(days=60)
+        q = (
+            select(
+                func.count(Prediction.id).filter(access_filter(PickTier.FREE)).label("free"),
+                func.count(Prediction.id).filter(access_filter(PickTier.SILVER)).label("silver"),
+                func.count(Prediction.id).filter(access_filter(PickTier.GOLD)).label("gold"),
+                func.count(Prediction.id).filter(access_filter(PickTier.PLATINUM)).label("platinum"),
+            )
+            .select_from(Prediction)
+            .join(Match, Match.id == Prediction.match_id)
+            .where(v81_predictions_filter())
+            .where(Match.scheduled_at >= sixty_days_ago)
+            .where(Match.status == MatchStatus.FINISHED)
+        )
+        row = (await db.execute(q)).one()
+        return {"free": int(row.free or 0), "silver": int(row.silver or 0), "gold": int(row.gold or 0), "platinum": int(row.platinum or 0)}
+
+    try:
+        steps.append({"step": "ppd_inclusive_fixed", "ok": True, "result": await ppd_inclusive_fixed()})
+    except Exception as e:
+        steps.append({
+            "step": "ppd_inclusive_fixed",
+            "ok": False,
+            "error_type": type(e).__name__,
+            "error_msg": str(e)[:500],
+        })
+
+    # Step 4c: dashboard total_q pattern — count from Prediction, .where + .join
+    async def dashboard_total_pattern():
+        total_q = select(func.count(Prediction.id))
+        total_q = total_q.where(v81_predictions_filter())
+        total_q = total_q.join(Match, Match.id == Prediction.match_id).where(access_filter(PickTier.FREE))
+        return int((await db.execute(total_q)).scalar_one())
+
+    try:
+        steps.append({"step": "dashboard_total_pattern", "ok": True, "result": await dashboard_total_pattern()})
+    except Exception as e:
+        steps.append({
+            "step": "dashboard_total_pattern",
+            "ok": False,
+            "error_type": type(e).__name__,
+            "error_msg": str(e)[:500],
+            "traceback": traceback.format_exc()[-1500:],
+        })
+
+    # Step 4d: dashboard total_q with explicit select_from
+    async def dashboard_total_fixed():
+        total_q = (
+            select(func.count(Prediction.id))
+            .select_from(Prediction)
+            .join(Match, Match.id == Prediction.match_id)
+            .where(v81_predictions_filter())
+            .where(access_filter(PickTier.FREE))
+        )
+        return int((await db.execute(total_q)).scalar_one())
+
+    try:
+        steps.append({"step": "dashboard_total_fixed", "ok": True, "result": await dashboard_total_fixed()})
+    except Exception as e:
+        steps.append({
+            "step": "dashboard_total_fixed",
+            "ok": False,
+            "error_type": type(e).__name__,
+            "error_msg": str(e)[:500],
+        })
+
     # Step 5: trackrecord /summary core query
     async def trackrecord_core():
         q = (
