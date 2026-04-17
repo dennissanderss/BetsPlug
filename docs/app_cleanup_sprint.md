@@ -6,9 +6,9 @@ sessie op branch `main`, losse commit per actie.
 
 ## TL;DR
 
-5 van de 6 acties afgerond en gepusht. Actie 6 (inline explainability)
-bewust overgeslagen — backend-scope + tijdsinschatting buiten het
-budget voor deze sprint. Zie § "Niet gedaan" voor waarom.
+Alle 6 acties + eindrapport afgerond in één sessie. Commits staan
+lokaal op `main` — nog niet gepusht naar `origin/main`. Dennis beslist
+wanneer.
 
 ## Commits
 
@@ -19,9 +19,8 @@ budget voor deze sprint. Zie § "Niet gedaan" voor waarom.
 | 3 | `dd0ddd7` | feat(dashboard): make Dashboard the post-login landing + welcome banner | 6 | +160/−4 |
 | 4 | `0ccb473` | feat(reports): tier-scope generated reports + per-tier comparison block | 2 | +214/−5 |
 | 5 | `a3c14a5` | chore(analyst): remove unfinished Analyst Hub from app shell | 3 | −254 |
-
-Alle commits zijn nog **lokaal** — niet gepusht naar `origin/main` op
-het moment van schrijven. Dennis beslist zelf wanneer hij pusht.
+| 6 | `cadd920` | docs(sprint): initial sprint report (acties 1-5) | 1 | +220 |
+| 7 | `190fc1a` | feat(explain): inline "Why this pick?" block on prediction cards (v8.2) | 12 | +505/−4 |
 
 ## Wat is gedaan per actie
 
@@ -137,33 +136,62 @@ is de schoonste actie.
 - Publieke `/engine` (methodology) blijft ongemoeid — die ligt
   buiten `(app)/`.
 
-## Niet gedaan
+### Actie 6 — Inline explainability ✅
 
-### Actie 6 — Inline explainability (USP feature)
+**Rationale:** users hebben nu geen idee waarom de AI een bepaalde
+pick maakt. Transparantie/explainability is een echte USP die
+concurrenten niet bieden.
 
-Bewust **overgeslagen**. Redenen:
+**Aanpak zonder ML-werk:** de 39 features worden al opgeslagen in
+`Prediction.features_snapshot` (JSONB column, elke v8.1 rij). In
+plaats van SHAP/permutation importance bij elke request te draaien,
+gebruikt de nieuwe `pick_drivers` service een hand-gekozen set van
+8 candidaat-features met hard-coded priors (mean/std) en ranked top-3
+op abs z-score. Deterministisch, geen model-call, geen scaler-unpickle.
 
-1. **Backend-scope.** De 39 features zitten tijdens predictie in het
-   model maar worden niet teruggegeven aan de API. Om top-3 drivers
-   te tonen moet het prediction endpoint uitgebreid met een
-   `top_drivers` veld (backend + schema + serialization). Dat raakt
-   model-adjacent code.
-2. **Feature attribution is niet triviaal.** "Top-3 feature drivers"
-   uit een XGBoost + calibrated logistic ensemble halen vraagt SHAP
-   of permutation-importance aan de prediction-kant — werk voor een
-   losse engine-sprint.
-3. **Tier-gated UI + i18n + uitklap-component** is nog eens 1-2
-   dagen werk bovenop de ML-kant.
+**Backend:**
 
-De prompt zelf gaf hier expliciet ruimte voor: *"ALS GEEN TIJD: sla
-deze actie over. Dit is een nice-to-have USP die ook later kan."*
+- `backend/app/services/pick_drivers.py` (new) — 8 kandidaat-features
+  (elo_diff, form_diff, venue_form_diff, h2h_home_wr, gd_diff,
+  h_cs_pct, a_cs_pct, h_home_wr) met label/mean/std/formatter/direction
+  metadata. `compute_top_drivers(features_snapshot)` geeft max N
+  entries terug, of `None` als snapshot mist.
+- `backend/app/schemas/prediction.py` — nieuwe `PredictionDriver`
+  sub-model + optional `top_drivers` list op `PredictionResponse`.
+- 4 endpoints geven `top_drivers` terug:
+  - `routes/predictions.py` list + single-prediction
+  - `routes/matches.py` (via lokale helper)
+  - `routes/fixtures.py` via `PredictionSummary` — zodat elke
+    fixture-call het meestuurt en /predictions list view het ziet.
+  - `routes/betoftheday.py` via nieuw inline `BOTDDriver` sub-model.
 
-**Advies voor een aparte sprint:**
+**Frontend:**
 
-- Eerst: backend endpoint `/predictions/{id}/drivers` dat top-3
-  features + importance scores teruggeeft.
-- Daarna: `<PickReasoningBlock prediction={pred} userTier={tier}/>`
-  op prediction cards met tier-lock voor Free/Silver.
+- `frontend/src/components/predictions/PickReasoningBlock.tsx` (new)
+  NOCTURNE-gestijlde collapsible card. `useTier()` gated:
+  Gold+ zien "Why this pick?" met drie gekleurde driver rows
+  (groen/rood/slate dot per direction), Free/Silver zien een
+  Lock-icon teaser met "Upgrade" CTA naar `/pricing`. Returns `null`
+  als er geen drivers zijn OF zolang tier hydrateert (geen flicker).
+- `frontend/src/types/api.ts` — `PredictionDriver` type + `top_drivers`
+  op `Prediction`, `BetOfTheDayResponse` en `FixturePrediction`.
+- Gerenderd op 3 plekken:
+  - `/bet-of-the-day` — wide variant, open by default.
+  - `/predictions` list (via `FreeMatchCard` in `match-cards.tsx`) —
+    compact variant onder de confidence score.
+  - `/matches/[id]` detail page — wide variant boven de
+    sub-model `FactorsBlock`.
+- i18n (EN + NL): `reasoning.kicker`, `.title`, `.footnote`,
+  `.lockedKicker`, `.lockedTitle`, `.lockedBody`, `.lockedCta`.
+
+**Belangrijk:** geen DB migratie, geen wijziging aan forecasting
+pipeline, geen model/scaler aanraking. Alles draait op de reeds
+opgeslagen `features_snapshot` JSONB en presentation-layer code.
+
+**Beperking:** de 8 kandidaat-features zijn met de hand gekozen op
+interpreteerbaarheid (wat leest de user makkelijk?), niet op model
+importance. Voor "wat trok de XGBoost het zwaarst" zou een echte
+SHAP-aftakking nodig zijn — losse sprint.
 
 ## Openstaande follow-ups
 
