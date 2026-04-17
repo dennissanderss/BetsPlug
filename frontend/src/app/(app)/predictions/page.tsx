@@ -28,6 +28,9 @@ import { UpsellBanner } from "@/components/ui/upsell-banner";
 import { GlassPanel } from "@/components/noct/glass-panel";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { PickTierBadge } from "@/components/noct/pick-tier-badge";
+import { classifyPickTier } from "@/lib/pick-tier";
+import type { PickTierSlug } from "@/types/api";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -35,6 +38,8 @@ type ConfidenceLevel = "High" | "Medium" | "Low";
 type SortKey = "confidence" | "time" | "league";
 type LeagueFilter = "All" | string;
 type ConfidenceFilter = "All" | ConfidenceLevel;
+/** v8.1: "All" = no filter, or a specific PickTierSlug to show ONLY that tier. */
+type TierFilter = "All" | PickTierSlug;
 type ViewMode = "upcoming" | "live" | "results";
 
 /** Country → leagues mapping with flags, ordered by popularity. */
@@ -341,6 +346,15 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
 
   const pickLabel = modelPick === "home" ? "1" : modelPick === "draw" ? "X" : modelPick === "away" ? "2" : null;
 
+  // v8.1: classify this pick's tier for the badge rendered alongside.
+  // Uses league_id when the fixture has one (future-proof), falls back
+  // to league_name match (what /fixtures currently returns).
+  const pickTier = classifyPickTier({
+    leagueId: (fixture as any).league_id ?? null,
+    leagueName: fixture.league_name ?? null,
+    confidence: pred?.confidence ?? null,
+  });
+
   return (
     <div className="border-b border-white/[0.04] last:border-b-0">
       <div className="grid grid-cols-11 items-center gap-1 sm:gap-2 px-2 sm:px-4 py-3 sm:py-3.5 hover:bg-white/[0.02] transition-colors">
@@ -398,7 +412,7 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
         </div>
 
         {/* Prediction pick badge — col 3 */}
-        <div className="col-span-1 flex justify-center min-w-0">
+        <div className="col-span-1 flex flex-col items-center gap-1 min-w-0">
           {pickLabel && (
             <span
               className="inline-flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold"
@@ -410,6 +424,16 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
             >
               {pickLabel}
             </span>
+          )}
+          {/* v8.1 tier shield — shows at a glance which tier this pick belongs
+              to. Shield-only (no label) to fit the dense row layout. */}
+          {pickTier && (
+            <PickTierBadge
+              tier={pickTier}
+              size="sm"
+              showLabel={false}
+              showAccuracy={false}
+            />
           )}
         </div>
 
@@ -616,6 +640,9 @@ interface FilterBarProps {
   setLeagueFilter: (v: LeagueFilter) => void;
   confidenceFilter: ConfidenceFilter;
   setConfidenceFilter: (v: ConfidenceFilter) => void;
+  // v8.1 tier filter
+  tierFilter: TierFilter;
+  setTierFilter: (v: TierFilter) => void;
   sortKey: SortKey;
   setSortKey: (v: SortKey) => void;
   total: number;
@@ -629,6 +656,8 @@ function FilterBar({
   setLeagueFilter,
   confidenceFilter,
   setConfidenceFilter,
+  tierFilter,
+  setTierFilter,
   sortKey,
   setSortKey,
   total,
@@ -882,6 +911,47 @@ function FilterBar({
           </div>
         </div>
 
+        {/* v8.1 Pick-tier filter */}
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+            Tier
+          </span>
+          <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
+            {([
+              { value: "All" as const, label: "All", icon: null },
+              { value: "platinum" as const, label: "Platinum", icon: "🟢" },
+              { value: "gold" as const, label: "Gold", icon: "🔵" },
+              { value: "silver" as const, label: "Silver", icon: "⚪" },
+              { value: "free" as const, label: "Free", icon: "⬜" },
+            ]).map((opt) => {
+              const active = tierFilter === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  onClick={() => setTierFilter(opt.value)}
+                  className={`flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-semibold transition-all ${
+                    active
+                      ? opt.value === "platinum"
+                        ? "bg-amber-500/20 text-amber-300 border border-amber-400/40"
+                        : opt.value === "gold"
+                        ? "bg-blue-500/20 text-blue-300 border border-blue-400/40"
+                        : opt.value === "silver"
+                        ? "bg-white/10 text-slate-100 border border-white/30"
+                        : opt.value === "free"
+                        ? "bg-slate-600/30 text-slate-200 border border-slate-500/40"
+                        : "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                  title={opt.value === "All" ? "Show all tiers" : `Show only ${opt.label} picks`}
+                >
+                  {opt.icon && <span>{opt.icon}</span>}
+                  <span>{opt.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Confidence filter */}
         <div className="flex items-center gap-2">
           <Filter className="h-3.5 w-3.5 text-slate-500" />
@@ -974,6 +1044,7 @@ export default function PredictionsPage() {
   const { t } = useTranslations();
   const [leagueFilter,     setLeagueFilter]     = useState<LeagueFilter>("All");
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("All");
+  const [tierFilter,       setTierFilter]       = useState<TierFilter>("All");
   const [sortKey,          setSortKey]          = useState<SortKey>("confidence");
 
   // v6.2: view mode tabs (Upcoming / Live Now / Results)
@@ -1088,6 +1159,19 @@ export default function PredictionsPage() {
       });
     }
 
+    // v8.1: tier filter — keeps only picks classified as the selected tier.
+    if (tierFilter !== "All") {
+      items = items.filter((f) => {
+        if (!f.prediction) return false;
+        const classified = classifyPickTier({
+          leagueId: (f as any).league_id ?? null,
+          leagueName: f.league_name ?? null,
+          confidence: f.prediction.confidence,
+        });
+        return classified === tierFilter;
+      });
+    }
+
     if (sortKey === "confidence") {
       items.sort((a, b) => {
         const ca = a.prediction ? a.prediction.confidence : -1;
@@ -1101,7 +1185,7 @@ export default function PredictionsPage() {
     }
 
     return items;
-  }, [upcomingFixtures, leagueFilter, confidenceFilter, sortKey]);
+  }, [upcomingFixtures, leagueFilter, confidenceFilter, tierFilter, sortKey]);
 
   // v6.2: group filtered fixtures by league for accordion rendering
   const groupedByLeague = useMemo(
@@ -1261,6 +1345,8 @@ export default function PredictionsPage() {
         setLeagueFilter={setLeagueFilter}
         confidenceFilter={confidenceFilter}
         setConfidenceFilter={setConfidenceFilter}
+        tierFilter={tierFilter}
+        setTierFilter={setTierFilter}
         sortKey={sortKey}
         setSortKey={setSortKey}
         total={filtered.length}
