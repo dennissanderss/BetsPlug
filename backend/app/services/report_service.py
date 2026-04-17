@@ -39,16 +39,37 @@ from reportlab.platypus import (
     Table,
     TableStyle,
 )
-from sqlalchemy import and_, func, select
+from sqlalchemy import and_, case, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.config import get_settings
+from app.core.prediction_filters import v81_predictions_filter
+from app.core.tier_system import (
+    PickTier,
+    TIER_METADATA,
+    TIER_SYSTEM_ENABLED,
+    access_filter,
+    pick_tier_expression,
+)
 from app.models.match import Match, MatchResult, MatchStatus
 from app.models.prediction import Prediction, PredictionEvaluation
 from app.models.report import GeneratedReport, ReportJob
 
 logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# Tier → competition-scope label (shown in the report header banner).
+# Kept in this module so the PDF/CSV/JSON renderers can reference it without
+# pulling the full marketing copy from tier_system.
+# ---------------------------------------------------------------------------
+_TIER_SCOPE_LABEL: dict[str, str] = {
+    "platinum": "Top-5 elite leagues · 85%+ historical",
+    "gold": "Top-10 leagues · 70%+ historical",
+    "silver": "Top-14 leagues · 60%+ historical",
+    "free": "All leagues · 45%+ historical baseline",
+}
 
 
 class ReportService:
@@ -59,6 +80,7 @@ class ReportService:
         job: ReportJob,
         db: AsyncSession,
         fmt: str = "pdf",
+        user_tier: PickTier = PickTier.PLATINUM,
     ) -> GeneratedReport:
         """Generate a report for the given job in the requested format.
 
@@ -66,6 +88,11 @@ class ReportService:
         unknown format. The caller is expected to catch + translate to a
         404/500 response — we let the exception bubble so the route handler
         can mark the job as failed.
+
+        ``user_tier`` scopes the rendered data to the caller's subscription
+        tier when TIER_SYSTEM_ENABLED — Silver users get Silver-qualifying
+        picks, Gold gets Silver + Gold, etc. Defaults to PLATINUM so legacy
+        callers that haven't been updated still get the complete dataset.
         """
         fmt = (fmt or "pdf").lower()
         if fmt not in {"pdf", "csv", "json"}:
@@ -85,7 +112,9 @@ class ReportService:
         start_date = end_date - timedelta(days=days)
 
         # Gather data — include raw rows for CSV/JSON output
-        data = await self._gather_performance_data(start_date, end_date, db)
+        data = await self._gather_performance_data(
+            start_date, end_date, db, user_tier=user_tier
+        )
 
         # Resolve a writable output dir. On Railway the default
         # /app/reports is writable within a container instance; if for
@@ -148,9 +177,23 @@ class ReportService:
         return report
 
     async def _gather_performance_data(
-        self, start: datetime, end: datetime, db: AsyncSession
+        self,
+        start: datetime,
+        end: datetime,
+        db: AsyncSession,
+        user_tier: PickTier = PickTier.PLATINUM,
     ) -> dict:
-        """Gather prediction performance metrics for the date range."""
+        """Gather prediction performance metrics for the date range.
+
+        When TIER_SYSTEM_ENABLED, the main dataset is scoped to the picks
+        the user can actually see (``access_filter(user_tier)`` + the
+        v8.1 pipeline filter so pre-v8.1 junk rows don't poison totals).
+
+        A secondary ``per_tier`` aggregate covers all 4 tiers regardless
+        of the user's access — it powers the cross-tier comparison block
+        in the report footer, same approach as the dashboard metrics
+        endpoint (transparency + upgrade trigger).
+        """
         # v6.2.2: eager-load match + teams + league so CSV / JSON rows can
         # render human-readable team names without firing N extra queries.
         stmt = (
@@ -175,6 +218,9 @@ class ReportService:
             )
             .order_by(Match.scheduled_at)
         )
+        if TIER_SYSTEM_ENABLED:
+            stmt = stmt.where(v81_predictions_filter())
+            stmt = stmt.where(access_filter(user_tier))
         rows = (await db.execute(stmt)).all()
 
         total = len(rows)
@@ -203,6 +249,20 @@ class ReportService:
             else:
                 confidence_buckets["low (<0.4)"] += 1
 
+        # ── Per-tier comparison (all 4 tiers, unaffected by user's access) ──
+        per_tier: dict[str, dict] = {}
+        if TIER_SYSTEM_ENABLED:
+            per_tier = await self._gather_per_tier_breakdown(start, end, db)
+
+        # Tier metadata for the header banner + filename suffix
+        tier_meta_src = TIER_METADATA[user_tier]
+        tier_meta = {
+            "slug": tier_meta_src["slug"],
+            "label": tier_meta_src["label"],
+            "accuracy_claim": tier_meta_src["accuracy_claim"],
+            "scope_label": _TIER_SCOPE_LABEL.get(tier_meta_src["slug"], ""),
+        }
+
         return {
             "total_predictions": total,
             "total_evaluated": len(evaluated),
@@ -211,9 +271,63 @@ class ReportService:
             "avg_brier": sum(brier_scores) / len(brier_scores) if brier_scores else 0.0,
             "confidence_buckets": confidence_buckets,
             "top_correct": top_correct,
+            "tier": tier_meta,
+            "per_tier": per_tier,
             # Full rows so CSV / JSON renderers have the complete dataset.
             "rows": rows,
         }
+
+    async def _gather_per_tier_breakdown(
+        self, start: datetime, end: datetime, db: AsyncSession
+    ) -> dict[str, dict]:
+        """Return {tier_slug: {total, correct, accuracy}} for the date range.
+
+        Unlike the main data query, this aggregate is NOT access-filtered —
+        every tier row is computed so the report can display a comparison
+        table between what the user's tier delivered vs what other tiers
+        did over the same period. Same pattern as
+        ``/api/dashboard/metrics.per_tier``.
+        """
+        stmt = (
+            select(
+                pick_tier_expression(),
+                func.count(PredictionEvaluation.id).label("total"),
+                func.sum(
+                    case((PredictionEvaluation.is_correct.is_(True), 1), else_=0)
+                ).label("correct"),
+            )
+            .join(Match, Match.id == Prediction.match_id)
+            .join(
+                PredictionEvaluation,
+                PredictionEvaluation.prediction_id == Prediction.id,
+            )
+            .where(
+                and_(
+                    Match.scheduled_at >= start,
+                    Match.scheduled_at <= end,
+                )
+            )
+            .where(v81_predictions_filter())
+            .group_by(pick_tier_expression())
+        )
+        rows = (await db.execute(stmt)).all()
+
+        slug_by_int = {0: "free", 1: "silver", 2: "gold", 3: "platinum"}
+        out: dict[str, dict] = {}
+        for tier_int, total, correct_count in rows:
+            if tier_int is None:
+                continue
+            slug = slug_by_int.get(int(tier_int))
+            if slug is None:
+                continue
+            total_i = int(total or 0)
+            correct_i = int(correct_count or 0)
+            out[slug] = {
+                "total": total_i,
+                "correct": correct_i,
+                "accuracy": (correct_i / total_i) if total_i else 0.0,
+            }
+        return out
 
     # ───────────────────────── PDF renderer (v6.2.3 polished) ──────────────
     #
@@ -437,6 +551,38 @@ class ReportService:
             f"({(end - start).days} days)"
         )
         elements.append(Paragraph(period_label, muted_style))
+
+        # ── Tier scope banner ────────────────────────────────────────
+        # Makes it unambiguous which tier the report was generated for.
+        # Without this a Silver user could mistake Gold-driven numbers
+        # for "their" track record.
+        tier_meta = data.get("tier") or {}
+        tier_slug = str(tier_meta.get("slug") or "platinum")
+        tier_label = str(tier_meta.get("label") or "").strip()
+        tier_scope = str(tier_meta.get("scope_label") or "").strip()
+        if tier_label:
+            tier_banner_style = ParagraphStyle(
+                "TierBanner",
+                parent=body_style,
+                fontName="Helvetica-Bold",
+                fontSize=10,
+                textColor=self._COLOR_DARK,
+                leading=13,
+                spaceBefore=8,
+                spaceAfter=2,
+            )
+            tier_scope_style = ParagraphStyle(
+                "TierScope",
+                parent=muted_style,
+                fontSize=8,
+                leading=10,
+            )
+            elements.append(Spacer(1, 6))
+            elements.append(
+                Paragraph(f"Scope: {tier_label} tier", tier_banner_style)
+            )
+            if tier_scope:
+                elements.append(Paragraph(tier_scope, tier_scope_style))
         elements.append(Spacer(1, 18))
 
         # ── Hero stat grid ───────────────────────────────────────────
@@ -586,6 +732,53 @@ class ReportService:
 
         elements.append(Spacer(1, 18))
 
+        # ── Per-tier comparison (bonus section) ──────────────────────
+        # Lets the user compare their own tier's numbers to neighbouring
+        # tiers without having to log in. Only rendered when we have at
+        # least one tier bucket populated.
+        per_tier = data.get("per_tier") or {}
+        tier_rows = [("platinum", "Platinum"), ("gold", "Gold"), ("silver", "Silver"), ("free", "Free")]
+        populated = [(s, lbl) for s, lbl in tier_rows if s in per_tier and per_tier[s].get("total", 0) > 0]
+        if populated:
+            elements.extend(self._section_header("Tier Comparison", styles))
+            table_rows = [["Tier", "Picks", "Correct", "Accuracy", ""]]
+            for slug, lbl in populated:
+                bkt = per_tier[slug]
+                tot = int(bkt.get("total", 0))
+                cor = int(bkt.get("correct", 0))
+                acc = float(bkt.get("accuracy", 0.0))
+                marker = "← your tier" if slug == tier_slug else ""
+                table_rows.append([
+                    lbl,
+                    f"{tot:,}",
+                    f"{cor:,}",
+                    f"{acc:.1%}" if tot else "—",
+                    marker,
+                ])
+            tier_table = Table(
+                table_rows,
+                colWidths=[28 * mm, 22 * mm, 22 * mm, 26 * mm, 40 * mm],
+            )
+            style_cmds = [
+                ("BACKGROUND", (0, 0), (-1, 0), self._COLOR_DARK),
+                ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("FONTSIZE", (0, 0), (-1, -1), 8),
+                ("LEFTPADDING", (0, 0), (-1, -1), 5),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+                ("TOPPADDING", (0, 0), (-1, -1), 5),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, self._COLOR_LIGHT_BG]),
+                ("LINEBELOW", (0, 0), (-1, -1), 0.3, self._COLOR_BORDER),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("ALIGN", (1, 1), (3, -1), "RIGHT"),
+                ("TEXTCOLOR", (4, 1), (4, -1), self._COLOR_PRIMARY),
+                ("FONTNAME", (4, 1), (4, -1), "Helvetica-Bold"),
+            ]
+            tier_table.setStyle(TableStyle(style_cmds))
+            elements.append(tier_table)
+            elements.append(Spacer(1, 14))
+
         # ── Disclaimer ────────────────────────────────────────────────
         elements.extend(self._section_header("Disclaimer", styles))
         elements.append(
@@ -655,6 +848,10 @@ class ReportService:
                     f"{start.date().isoformat()} to {end.date().isoformat()}",
                 ]
             )
+            tier_meta = data.get("tier") or {}
+            writer.writerow(["# tier_slug", str(tier_meta.get("slug") or "")])
+            writer.writerow(["# tier_label", str(tier_meta.get("label") or "")])
+            writer.writerow(["# tier_scope", str(tier_meta.get("scope_label") or "")])
             writer.writerow(
                 [
                     "# total_predictions",
@@ -805,6 +1002,8 @@ class ReportService:
                 "start": start.isoformat(),
                 "end": end.isoformat(),
             },
+            "tier": data.get("tier"),
+            "per_tier": data.get("per_tier") or {},
             "summary": {
                 "total_predictions": data["total_predictions"],
                 "total_evaluated": data["total_evaluated"],

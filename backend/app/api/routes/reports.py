@@ -10,6 +10,8 @@ from fastapi.responses import FileResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.auth.tier import get_current_tier
+from app.core.tier_system import PickTier
 from app.db.session import get_db
 from app.models.report import GeneratedReport, ReportJob
 from app.schemas.report import GeneratedReportResponse, ReportJobCreate, ReportJobResponse
@@ -75,10 +77,15 @@ async def _cleanup_old_reports(db: AsyncSession) -> int:
 async def generate_report(
     payload: ReportJobCreate,
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> ReportJobResponse:
     """Generate a report synchronously in the requested format and return the
     job record. v6.2.2 fixes the long-standing bug where the `format` field
     from the frontend was silently dropped and every report was a PDF.
+
+    Tier-scoped (v8.2): the report only contains picks the caller has
+    access to, and embeds a tier banner so users can tell which slice
+    of the data the document covers.
     """
     from datetime import datetime, timezone
     from app.services.report_service import ReportService
@@ -105,6 +112,9 @@ async def generate_report(
     # ReportJob to keep the migration footprint zero.
     merged_config = dict(payload.config or {})
     merged_config["format"] = fmt
+    # Persist the tier slug on the job so the generated artefact stays
+    # auditable (which tier did this document describe?).
+    merged_config["tier"] = user_tier.name.lower()
 
     # Auto-cleanup: delete reports older than 12h to keep DB + disk clean
     await _cleanup_old_reports(db)
@@ -120,7 +130,7 @@ async def generate_report(
 
     try:
         service = ReportService()
-        report = await service.generate(new_job, db, fmt=fmt)
+        report = await service.generate(new_job, db, fmt=fmt, user_tier=user_tier)
         new_job.status = "completed"
         new_job.completed_at = datetime.now(timezone.utc)
         # Explicit commit so the GeneratedReport row is visible to the
