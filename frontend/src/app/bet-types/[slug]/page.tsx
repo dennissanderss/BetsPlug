@@ -11,10 +11,7 @@ import {
   defaultLocale,
   isLocale,
   LOCALE_COOKIE,
-  locales,
-  localeMeta,
 } from "@/i18n/config";
-import { localizePath } from "@/i18n/routes";
 import {
   fetchBetTypeHubSlugs,
   fetchBetTypeHubBySlug,
@@ -23,6 +20,7 @@ import {
   type BetTypeHubLocale,
 } from "@/lib/sanity-data";
 import { pickBetTypeHubLocale } from "@/data/bet-type-hubs";
+import { getLocalizedAlternates } from "@/lib/seo-helpers";
 import { BetTypeHubFixtures } from "./bet-type-hub-fixtures";
 import { HeroMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
@@ -59,17 +57,6 @@ function readLocaleFromCookie(): BetTypeHubLocale {
   return pickBetTypeHubLocale(uiLocale);
 }
 
-function languageAlternates(slug: string): Record<string, string> {
-  const map: Record<string, string> = {};
-  const canonical = `/bet-types/${slug}`;
-  for (const l of locales) {
-    const tag = localeMeta[l].hreflang;
-    map[tag] = `${SITE_URL}${localizePath(canonical, l)}`;
-  }
-  map["x-default"] = `${SITE_URL}${localizePath(canonical, defaultLocale)}`;
-  return map;
-}
-
 /* ── Metadata ─────────────────────────────────────────────── */
 
 export async function generateMetadata(props: {
@@ -88,19 +75,20 @@ export async function generateMetadata(props: {
   const editorialLocale = readLocaleFromCookie();
   const title = hub.metaTitle[editorialLocale];
   const description = hub.metaDescription[editorialLocale];
+  const alternates = getLocalizedAlternates(`/bet-types/${hub.slug}`);
 
   return {
     title,
     description,
     alternates: {
-      canonical: `/bet-types/${hub.slug}`,
-      languages: languageAlternates(hub.slug),
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
     openGraph: {
       title,
       description,
       type: "article",
-      url: `${SITE_URL}/bet-types/${hub.slug}`,
+      url: alternates.canonical,
     },
     twitter: {
       card: "summary_large_image",

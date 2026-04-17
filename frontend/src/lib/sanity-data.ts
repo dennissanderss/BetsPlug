@@ -270,25 +270,48 @@ export async function fetchAllLeagueHubs(): Promise<LeagueHub[]> {
 export async function fetchLeagueHubBySlug(
   slug: string,
 ): Promise<LeagueHub | undefined> {
+  // 1. Sanity first — richest editorial content.
   try {
     const raw = await client.fetch(leagueHubBySlugQuery, { slug });
-    if (!raw) return LEAGUE_HUBS.find((h) => h.slug === slug);
-    return transformLeagueHub(raw);
+    if (raw) return transformLeagueHub(raw);
   } catch {
-    return LEAGUE_HUBS.find((h) => h.slug === slug);
+    /* fall through to fallbacks */
   }
+  // 2. Handcrafted LEAGUE_HUBS (src/data/league-hubs.ts) — the
+  //    pre-Sanity originals for leagues we invested editorial time in.
+  const handcrafted = LEAGUE_HUBS.find((h) => h.slug === slug);
+  if (handcrafted) return handcrafted;
+
+  // 3. Auto-generated skeleton from the shared catalog. Guarantees
+  //    every league we advertise in the nav / footer / mega-menu
+  //    renders a valid page — no more 404s when we add a new league
+  //    to the catalog before it has Sanity content.
+  const { ALL_LEAGUES } = await import("@/data/league-catalog");
+  const { buildSkeletonHub } = await import("@/data/league-hub-skeleton");
+  const entry = ALL_LEAGUES.find((l) => l.slug === slug);
+  if (entry) return buildSkeletonHub(entry);
+
+  return undefined;
 }
 
 export async function fetchLeagueHubSlugs(): Promise<string[]> {
+  // Start with the static catalog so every league we advertise is
+  // always returned — Sanity / LEAGUE_HUBS only ADD to the set.
+  const { ALL_LEAGUES } = await import("@/data/league-catalog");
+  const out = new Set<string>();
+  ALL_LEAGUES.forEach((l) => out.add(l.slug));
+  LEAGUE_HUBS.forEach((h) => out.add(h.slug));
+
   try {
     const raw: { slug: { current: string } }[] = await client.fetch(
       `*[_type == "leagueHub"]{ slug }`,
     );
-    if (!raw?.length) return LEAGUE_HUBS.map((h) => h.slug);
-    return raw.map((r) => r.slug.current);
+    (raw ?? []).forEach((r) => out.add(r.slug.current));
   } catch {
-    return LEAGUE_HUBS.map((h) => h.slug);
+    /* ignore — fallbacks cover us */
   }
+
+  return Array.from(out);
 }
 
 // ── Bet Type Hubs ─────────────────────────────────────────

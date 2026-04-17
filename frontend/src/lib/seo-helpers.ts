@@ -71,8 +71,34 @@ export function getCanonicalUrl(canonicalPath: string): string {
 
 /**
  * Build the alternates.languages map for a given canonical path.
+ *
  * Emits one entry per locale (keyed by its BCP-47 hreflang tag)
- * plus x-default pointing to the English URL.
+ * plus x-default pointing to the English URL. `canonical` is an
+ * ABSOLUTE URL, LOCALE-AWARE (prefixed with /nl, /de, … when the
+ * active request locale isn't English).
+ *
+ * ────────────────────────────────────────────────────────────
+ * ⚠️  ALWAYS USE THIS FOR `alternates.canonical`. Never do:
+ *
+ *       alternates: { canonical: `/some/${slug}` }    ❌
+ *
+ *     That renders as `https://betsplug.com/some/${slug}` on every
+ *     locale, making /nl /de /fr all point to the English URL →
+ *     Google demotes the localised pages as duplicates.
+ *
+ *     Instead:
+ *
+ *       const alt = getLocalizedAlternates(`/some/${slug}`);
+ *       alternates: {
+ *         canonical: alt.canonical,
+ *         languages: alt.languages,
+ *       }                                              ✓
+ *
+ * ────────────────────────────────────────────────────────────
+ *
+ * @param canonicalPath the ENGLISH canonical path, e.g. "/articles"
+ *                      or "/match-predictions/premier-league". Not
+ *                      the localised slug.
  */
 export function getLocalizedAlternates(canonicalPath: string): {
   canonical: string;
@@ -88,7 +114,8 @@ export function getLocalizedAlternates(canonicalPath: string): {
     const path = localizePath(canonicalPath, l);
     languages[tag] = `${SITE_URL}${path === "/" ? "" : path}`;
   }
-  languages["x-default"] = `${SITE_URL}${localizePath(canonicalPath, defaultLocale) === "/" ? "" : localizePath(canonicalPath, defaultLocale)}`;
+  const defaultPath = localizePath(canonicalPath, defaultLocale);
+  languages["x-default"] = `${SITE_URL}${defaultPath === "/" ? "" : defaultPath}`;
 
   return { canonical, languages };
 }

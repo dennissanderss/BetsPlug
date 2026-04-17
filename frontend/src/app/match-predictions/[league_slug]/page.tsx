@@ -23,10 +23,7 @@ import {
   defaultLocale,
   isLocale,
   LOCALE_COOKIE,
-  locales,
-  localeMeta,
 } from "@/i18n/config";
-import { localizePath } from "@/i18n/routes";
 import {
   fetchLeagueHubSlugs,
   fetchLeagueHubBySlug,
@@ -36,6 +33,7 @@ import {
 } from "@/lib/sanity-data";
 import { pickHubLocale } from "@/data/league-hubs";
 import { getLeagueLogoPath } from "@/data/league-logos";
+import { getLocalizedAlternates } from "@/lib/seo-helpers";
 
 import { LeagueHubFixtures } from "./league-hub-fixtures";
 import { LeagueHubTopPick } from "./league-hub-top-pick";
@@ -84,17 +82,6 @@ function readLocaleFromCookie(): LeagueHubLocale {
   return pickHubLocale(uiLocale);
 }
 
-function languageAlternates(slug: string): Record<string, string> {
-  const map: Record<string, string> = {};
-  const canonical = `/match-predictions/${slug}`;
-  for (const l of locales) {
-    const tag = localeMeta[l].hreflang;
-    map[tag] = `${SITE_URL}${localizePath(canonical, l)}`;
-  }
-  map["x-default"] = `${SITE_URL}${localizePath(canonical, defaultLocale)}`;
-  return map;
-}
-
 function currentGameweekLabel(locale: LeagueHubLocale): string {
   // Quick-n-dirty freshness signal. Not the real gameweek but a
   // human-readable window Google can see on every crawl.
@@ -123,13 +110,14 @@ export async function generateMetadata(props: {
   const editorialLocale = readLocaleFromCookie();
   const title = hub.metaTitle[editorialLocale];
   const description = hub.metaDescription[editorialLocale];
+  const alternates = getLocalizedAlternates(`/match-predictions/${hub.slug}`);
 
   return {
     title,
     description,
     alternates: {
-      canonical: `/match-predictions/${hub.slug}`,
-      languages: languageAlternates(hub.slug),
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
     openGraph: {
       title,

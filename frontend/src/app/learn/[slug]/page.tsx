@@ -20,16 +20,14 @@ import {
   defaultLocale,
   isLocale,
   LOCALE_COOKIE,
-  locales,
-  localeMeta,
 } from "@/i18n/config";
-import { localizePath } from "@/i18n/routes";
 import {
   pickLearnPillarLocale,
   type LearnPillar,
   type LearnPillarLocale,
 } from "@/data/learn-pillars";
 import { fetchLearnPillarSlugs, fetchLearnPillarBySlug } from "@/lib/sanity-data";
+import { getLocalizedAlternates } from "@/lib/seo-helpers";
 
 /**
  * Learn pillar — long-form evergreen explainer.
@@ -66,17 +64,6 @@ function readLocaleFromCookie(): LearnPillarLocale {
   return pickLearnPillarLocale(uiLocale);
 }
 
-function languageAlternates(slug: string): Record<string, string> {
-  const map: Record<string, string> = {};
-  const canonical = `/learn/${slug}`;
-  for (const l of locales) {
-    const tag = localeMeta[l].hreflang;
-    map[tag] = `${SITE_URL}${localizePath(canonical, l)}`;
-  }
-  map["x-default"] = `${SITE_URL}${localizePath(canonical, defaultLocale)}`;
-  return map;
-}
-
 /* ── Metadata ─────────────────────────────────────────────── */
 
 export async function generateMetadata(props: {
@@ -94,19 +81,20 @@ export async function generateMetadata(props: {
   const editorialLocale = readLocaleFromCookie();
   const title = pillar.metaTitle[editorialLocale];
   const description = pillar.metaDescription[editorialLocale];
+  const alternates = getLocalizedAlternates(`/learn/${pillar.slug}`);
 
   return {
     title,
     description,
     alternates: {
-      canonical: `/learn/${pillar.slug}`,
-      languages: languageAlternates(pillar.slug),
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
     openGraph: {
       title,
       description,
       type: "article",
-      url: `${SITE_URL}/learn/${pillar.slug}`,
+      url: alternates.canonical,
     },
     twitter: {
       card: "summary_large_image",
