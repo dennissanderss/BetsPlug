@@ -8,6 +8,7 @@ import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { Fixture } from "@/types/api";
 import { ProbBar } from "./prob-bar";
 import { confColor, confLevel, formatKickoff } from "./shared";
+import { PickReasoningBlock } from "@/components/predictions/PickReasoningBlock";
 
 /* ── Free (unlocked) match card ────────────────────────────── */
 
@@ -103,6 +104,15 @@ export function FreeMatchCard({ fixture }: { fixture: Fixture }) {
           )}
         </div>
       </div>
+
+      {/* v8.2 — inline "Why this pick?" block, tier-gated inside the
+          component itself (Gold+ sees full, Free/Silver see upgrade CTA).
+          Auto-hides when the backend didn't return any drivers. */}
+      {hasPred && pred!.top_drivers && pred!.top_drivers.length > 0 && (
+        <div className="px-4 pb-3 sm:px-5">
+          <PickReasoningBlock drivers={pred!.top_drivers} />
+        </div>
+      )}
 
       {/* v6: pre-match odds row. Rendered only when backend returned
           an `odds` object. No placeholder when null — we'd rather

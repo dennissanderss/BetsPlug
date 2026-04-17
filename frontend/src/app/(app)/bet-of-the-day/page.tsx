@@ -7,7 +7,8 @@ import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
-import type { PickTierSlug } from "@/types/api";
+import { PickReasoningBlock } from "@/components/predictions/PickReasoningBlock";
+import type { PickTierSlug, PredictionDriver } from "@/types/api";
 import {
   Trophy,
   Zap,
@@ -416,6 +417,8 @@ interface BetOfTheDay {
   pick_tier?: PickTierSlug | null;
   pick_tier_label?: string | null;
   pick_tier_accuracy?: string | null;
+  // v8.2 — top-3 drivers for the "Why this pick?" block
+  top_drivers?: PredictionDriver[] | null;
 }
 
 // ─── Large Probability Display ──────────────────────────────────────────────
@@ -742,6 +745,17 @@ export default function BetOfTheDayPage() {
                   <p className="text-sm text-slate-300 leading-relaxed">
                     {botd.explanation_summary}
                   </p>
+                </div>
+              )}
+
+              {/* v8.2 — inline "Why this pick?" (Gold+ unlock) */}
+              {botd.top_drivers && botd.top_drivers.length > 0 && (
+                <div className="mt-4 mx-auto max-w-lg">
+                  <PickReasoningBlock
+                    drivers={botd.top_drivers}
+                    variant="wide"
+                    defaultOpen
+                  />
                 </div>
               )}
 

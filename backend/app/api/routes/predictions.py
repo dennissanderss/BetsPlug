@@ -27,6 +27,7 @@ from app.db.session import get_db
 from app.models.match import Match, MatchResult
 from app.models.prediction import Prediction
 from app.schemas.prediction import ForecastOutput, PredictionResponse
+from app.services.pick_drivers import compute_top_drivers
 
 router = APIRouter()
 
@@ -187,6 +188,11 @@ async def list_predictions(
         except Exception:
             pass
 
+        # v8.2: surface top-3 feature drivers for the "Why this pick?" UI.
+        # Cheap — pure Python dict ranking against hand-picked priors; no
+        # scaler/model loading. Omitted (None) when no snapshot is stored.
+        top_drivers = compute_top_drivers(getattr(p, "features_snapshot", None))
+
         item = {
             "id": str(p.id),
             "match_id": str(p.match_id),
@@ -203,6 +209,7 @@ async def list_predictions(
             "explanation": None,
             "evaluation": eval_data,
             "match": match_data,
+            "top_drivers": top_drivers,
             "created_at": p.created_at.isoformat() if getattr(p, "created_at", None) else None,
             "updated_at": p.updated_at.isoformat() if getattr(p, "updated_at", None) else None,
         }
@@ -293,6 +300,11 @@ async def get_prediction(
             "away_win_prob": pred.away_win_prob,
             "confidence": pred.confidence,
         }
+
+    # v8.2: top-3 drivers for the inline "Why this pick?" block.
+    top_drivers = compute_top_drivers(getattr(pred, "features_snapshot", None))
+    if top_drivers is not None:
+        payload["top_drivers"] = top_drivers
 
     # Attach tier labelling (flag-gated)
     if TIER_SYSTEM_ENABLED and pick_tier_int is not None:

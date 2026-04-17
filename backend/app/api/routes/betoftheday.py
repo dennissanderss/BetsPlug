@@ -288,6 +288,16 @@ class BOTDOdds(BaseModel):
     fetched_at: str | None = None
 
 
+class BOTDDriver(BaseModel):
+    """Inline shape for a top-driver entry — mirrors PredictionDriver."""
+
+    feature: str
+    label: str
+    value: str
+    impact: float
+    direction: str | None = None
+
+
 class BetOfTheDayResponse(BaseModel):
     available: bool
     match_id: str | None = None
@@ -310,6 +320,9 @@ class BetOfTheDayResponse(BaseModel):
     pick_tier: str | None = None
     pick_tier_label: str | None = None
     pick_tier_accuracy: str | None = None
+    # v8.2 inline explainability — top-3 feature drivers (omitted when no
+    # features_snapshot is on the prediction row).
+    top_drivers: list[BOTDDriver] | None = None
 
     class Config:
         from_attributes = True
@@ -471,6 +484,13 @@ async def get_bet_of_the_day(
             pick_tier_label_str = info["pick_tier_label"]
             pick_tier_accuracy_str = info["pick_tier_accuracy"]
 
+    # v8.2 top-3 feature drivers — cheap dict scoring vs hand-picked priors.
+    from app.services.pick_drivers import compute_top_drivers
+    drivers_raw = compute_top_drivers(getattr(prediction, "features_snapshot", None))
+    botd_drivers = (
+        [BOTDDriver(**d) for d in drivers_raw] if drivers_raw else None
+    )
+
     return BetOfTheDayResponse(
         available=True,
         match_id=str(prediction.match_id),
@@ -491,4 +511,5 @@ async def get_bet_of_the_day(
         pick_tier=pick_tier_slug,
         pick_tier_label=pick_tier_label_str,
         pick_tier_accuracy=pick_tier_accuracy_str,
+        top_drivers=botd_drivers,
     )

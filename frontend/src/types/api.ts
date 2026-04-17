@@ -230,6 +230,23 @@ export interface PickTierFields {
   pick_tier_accuracy?: string | null;
 }
 
+/**
+ * v8.2 — one entry in the "Why this pick?" top-drivers block.
+ * Derived server-side from the prediction's features_snapshot.
+ */
+export interface PredictionDriver {
+  /** Internal feature key, e.g. "elo_diff", "h2h_home_wr". */
+  feature: string;
+  /** Human-readable label ready to render. */
+  label: string;
+  /** Pre-formatted value string ("+120", "70%", "+0.42 ppg"). */
+  value: string;
+  /** Abs z-score vs typical prior. Used only for ordering. */
+  impact: number;
+  /** Who benefits: 'home', 'away', or 'neutral'. */
+  direction?: "home" | "away" | "neutral" | null;
+}
+
 export interface Prediction extends PickTierFields {
   id: string;
   match_id: string;
@@ -246,6 +263,8 @@ export interface Prediction extends PickTierFields {
   evaluation: PredictionEvaluation | null;
   match: PredictionMatchSummary | null;
   model_info: PredictionModelSummary | null;
+  /** Optional — populated when features_snapshot is available. */
+  top_drivers?: PredictionDriver[] | null;
 }
 
 /** v6.2: BOTD response now includes optional pre-match odds. */
@@ -274,6 +293,8 @@ export interface BetOfTheDayResponse extends PickTierFields {
   explanation_summary: string | null;
   prediction_id: string | null;
   odds: BetOfTheDayOdds | null;
+  /** v8.2 — top-3 drivers surfaced on the Pick of the Day page. */
+  top_drivers?: PredictionDriver[] | null;
 }
 
 export interface PredictionEvaluation {
@@ -503,6 +524,8 @@ export interface FixturePrediction {
     | { feature: string; importance: number }
     | { name: string; home: number; draw: number; away: number; weight: number }
   > | null;
+  /** v8.2 — top-3 feature drivers for the "Why this pick?" UI block. */
+  top_drivers?: PredictionDriver[] | null;
 }
 
 /** Shape returned by /api/fixtures/today, /upcoming, /results */

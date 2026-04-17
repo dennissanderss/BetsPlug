@@ -12,7 +12,22 @@ from app.models.match import Match, MatchResult, MatchStatus
 from app.models.prediction import Prediction
 from app.models.team import Team
 from app.schemas.match import MatchAnalysis, MatchDetail, MatchKeyStats, MatchResponse
-from app.schemas.prediction import ForecastOutput, PredictionResponse
+from app.schemas.prediction import ForecastOutput, PredictionDriver, PredictionResponse
+from app.services.pick_drivers import compute_top_drivers
+
+
+def _prediction_response_with_drivers(pred: Prediction) -> PredictionResponse:
+    """Build a PredictionResponse + attach top-3 drivers from the snapshot.
+
+    Kept local to avoid importing the pick_drivers helper all over the
+    route files; the list-endpoint in predictions.py uses its own manual
+    dict builder so this wrapper is just for matches.py (single + list).
+    """
+    resp = PredictionResponse.model_validate(pred)
+    raw = compute_top_drivers(getattr(pred, "features_snapshot", None))
+    if raw:
+        resp.top_drivers = [PredictionDriver.model_validate(d) for d in raw]
+    return resp
 
 router = APIRouter()
 
@@ -48,7 +63,7 @@ async def get_match(
     return MatchDetail(
         **match_resp.model_dump(),
         result=match.result,
-        predictions=[PredictionResponse.model_validate(p) for p in predictions],
+        predictions=[_prediction_response_with_drivers(p) for p in predictions],
     )
 
 
@@ -161,7 +176,7 @@ async def get_match_analysis(
     )
     latest_pred_orm = latest_pred_result.scalar_one_or_none()
     latest_prediction = (
-        PredictionResponse.model_validate(latest_pred_orm) if latest_pred_orm else None
+        _prediction_response_with_drivers(latest_pred_orm) if latest_pred_orm else None
     )
 
     return MatchAnalysis(

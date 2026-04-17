@@ -1428,6 +1428,15 @@ const en = {
   "route.resultsTitle": "Results & Analysis",
   "route.resultsDesc": "See how yesterday's predictions performed",
 
+  /* ── Pick reasoning (inline explainability) ──────── */
+  "reasoning.kicker": "Reasoning",
+  "reasoning.title": "Why this pick?",
+  "reasoning.footnote": "Top-3 signals that deviated most from baseline for this fixture.",
+  "reasoning.lockedKicker": "Gold feature",
+  "reasoning.lockedTitle": "See why our AI picked this",
+  "reasoning.lockedBody": "Upgrade to Gold to unlock the top-3 feature drivers behind every pick — Elo gap, form, H2H and more.",
+  "reasoning.lockedCta": "Upgrade",
+
   /* ── Dashboard welcome banner ─────────────────────── */
   "welcomeBanner.label": "Welcome",
   "welcomeBanner.title": "Here's how BetsPlug works",
@@ -3524,6 +3533,13 @@ const nl: Dictionary = {
   "route.strategyTitle": "Strategy Lab",
   "route.trackRecordDesc": "Historische modelprestaties, kalibratie en segmentanalyse",
   "route.trackRecordTitle": "Trackrecord",
+  "reasoning.kicker": "Onderbouwing",
+  "reasoning.title": "Waarom deze pick?",
+  "reasoning.footnote": "Top-3 signalen die voor deze wedstrijd het meest afweken van de baseline.",
+  "reasoning.lockedKicker": "Gold-functie",
+  "reasoning.lockedTitle": "Ontdek waarom onze AI deze pick koos",
+  "reasoning.lockedBody": "Upgrade naar Gold om de top-3 feature-drivers achter elke pick te zien — Elo-verschil, vorm, H2H en meer.",
+  "reasoning.lockedCta": "Upgrade",
   "welcomeBanner.label": "Welkom",
   "welcomeBanner.title": "Zo werkt BetsPlug",
   "welcomeBanner.subtitle": "Onze AI analyseert voetbaldata — vorm, onderlinge resultaten, competitiestanden en teamsterktes — om de meest waarschijnlijke uitslag van aankomende wedstrijden te voorspellen.",

@@ -55,6 +55,7 @@ import type {
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill, DataChip, TrustScore } from "@/components/noct/pill";
 import { formatLiveMinute } from "@/components/match-predictions/shared";
+import { PickReasoningBlock } from "@/components/predictions/PickReasoningBlock";
 
 /* ─────────────────────────────────────────────────────────────
    Helpers
@@ -1318,6 +1319,14 @@ export default function MatchDetailPage() {
                 />
               ) : null}
             </div>
+
+            {prediction && prediction.top_drivers && prediction.top_drivers.length > 0 && (
+              <PickReasoningBlock
+                drivers={prediction.top_drivers}
+                variant="wide"
+                defaultOpen
+              />
+            )}
 
             {prediction && <FactorsBlock pred={prediction} />}
 

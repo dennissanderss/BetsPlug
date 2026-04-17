@@ -218,6 +218,27 @@ class PredictionModelSummary(BaseModel):
     model_type: str      # "elo" | "poisson" | "logistic" | "ensemble"
 
 
+class PredictionDriver(BaseModel):
+    """One top-driver entry for the inline "Why this pick?" reasoning block.
+
+    Derived at response time from ``Prediction.features_snapshot`` by
+    :mod:`app.services.pick_drivers`. The frontend renders these as
+    short chips on Gold+ prediction cards; Free/Silver see a locked
+    teaser. See v8.2 release notes.
+    """
+
+    model_config = ConfigDict(from_attributes=True)
+
+    feature: str = Field(description="Internal feature key (e.g. 'elo_diff', 'h2h_home_wr').")
+    label: str = Field(description="Human-readable label for the feature.")
+    value: str = Field(description="Pre-formatted value string (e.g. '+120', '70%').")
+    impact: float = Field(description="Abs z-score of this feature vs its typical prior.")
+    direction: Optional[str] = Field(
+        default=None,
+        description="Which side benefits: 'home', 'away', or 'neutral'.",
+    )
+
+
 class PredictionResponse(PredictionBase):
     """Full prediction representation returned by the API."""
 
@@ -237,6 +258,14 @@ class PredictionResponse(PredictionBase):
     match: Optional[PredictionMatchSummary] = Field(
         default=None,
         description="Lightweight match summary so feed/list UIs can show teams without a second fetch (v6.1).",
+    )
+    top_drivers: Optional[List[PredictionDriver]] = Field(
+        default=None,
+        description=(
+            "Top-3 features that deviate most from their typical prior for "
+            "this match. Populated by the API layer from features_snapshot; "
+            "omitted when no snapshot is available (pre-v8.1 rows)."
+        ),
     )
     created_at: datetime = Field(description="Timestamp when the record was created (UTC).")
     updated_at: datetime = Field(description="Timestamp of the most recent update (UTC).")

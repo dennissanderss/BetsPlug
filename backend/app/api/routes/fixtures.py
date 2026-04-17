@@ -70,6 +70,10 @@ class PredictionSummary(BaseModel):
     edge: Optional[Dict[str, float]] = None  # {home: 0.04, draw: -0.02, away: -0.02}
     implied_probabilities: Optional[Dict[str, float]] = None
     top_features: Optional[List[Dict[str, Any]]] = None
+    # v8.2 — ranked top-3 human-readable drivers derived from
+    # features_snapshot. Populated on fixture list + detail so the
+    # /predictions list view can render "Why this pick?" inline.
+    top_drivers: Optional[List[Dict[str, Any]]] = None
     strategies_matched: Optional[List[str]] = None
     disclaimer: str = _SIMULATION_DISCLAIMER
     is_simulation: bool = True
@@ -367,6 +371,12 @@ def _build_fixture_item(
             if features_list:
                 top_features = features_list
 
+        # v8.2: top-3 feature drivers for the inline reasoning block.
+        from app.services.pick_drivers import compute_top_drivers
+        top_drivers = compute_top_drivers(
+            getattr(latest_prediction, "features_snapshot", None)
+        )
+
         pred_summary = PredictionSummary(
             id=str(latest_prediction.id),
             home_win_prob=latest_prediction.home_win_prob,
@@ -381,6 +391,7 @@ def _build_fixture_item(
             reasoning=reasoning,
             edge=edge,
             top_features=top_features,
+            top_drivers=top_drivers,
         )
 
     return FixtureItem(
