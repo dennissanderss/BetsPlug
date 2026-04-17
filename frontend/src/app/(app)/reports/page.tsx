@@ -278,14 +278,16 @@ function KpiTile({
   value,
   variant,
   icon,
+  title,
 }: {
   label: string;
   value: React.ReactNode;
   variant: "green" | "purple" | "blue";
   icon: React.ReactNode;
+  title?: string;
 }) {
   return (
-    <div className="card-neon rounded-2xl">
+    <div className="card-neon rounded-2xl" title={title}>
       <div className="relative flex items-center gap-4 p-5">
         <HexBadge variant={variant} size="md">
           {icon}
@@ -318,7 +320,22 @@ function ReportsPageContent() {
     queryFn: () => api.getReports(),
   });
 
+  // B2.1 — Win rate KPI sourced from the dashboard metrics endpoint
+  // (tier-scoped via access_filter on the backend; admin tier override
+  // is auto-propagated by api.ts). ROI + Streak aren't computed on this
+  // endpoint yet — they stay "—" until a dedicated metrics source ships,
+  // with a tooltip so the dash isn't mistaken for zero.
+  const { data: metrics } = useQuery({
+    queryKey: ["dashboard-metrics-tier"],
+    queryFn: () => api.getDashboardMetrics(),
+    staleTime: 5 * 60_000,
+  });
+
   const total = reports?.length ?? 0;
+  const winRateValue =
+    metrics && metrics.evaluated_count > 0
+      ? `${(metrics.accuracy * 100).toFixed(1)}%`
+      : "—";
 
   return (
     <div className="relative">
@@ -346,21 +363,24 @@ function ReportsPageContent() {
           />
           <KpiTile
             label="Win rate"
-            value="—"
+            value={winRateValue}
             variant="purple"
             icon={<Sparkles className="h-5 w-5" />}
+            title="Historical accuracy across your tier's evaluated picks (live, tier-scoped)."
           />
           <KpiTile
             label="ROI"
             value="—"
             variant="blue"
             icon={<Sparkles className="h-5 w-5" />}
+            title="ROI isn't tier-scoped yet — arrives once the honest-ROI pipeline splits by tier."
           />
           <KpiTile
             label="Streak"
             value="—"
             variant="green"
             icon={<Sparkles className="h-5 w-5" />}
+            title="Longest consecutive correct-pick streak — pending a tier-aware aggregation."
           />
         </div>
 

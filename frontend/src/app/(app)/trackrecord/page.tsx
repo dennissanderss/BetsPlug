@@ -1309,6 +1309,21 @@ function TierTabsStrip({
           );
         })}
       </div>
+      {/* B2.4 — inline explainer so users understand how each tier is
+          defined. Tiers combine a league-scope filter with a confidence
+          threshold, then the per-tier accuracy is the historical result
+          of the v8.1 engine on that slice. Keeping this as copy (not a
+          popover) so screen-reader users and first-time visitors see it
+          without discovery. */}
+      <div className="border-t border-white/[0.05] px-4 py-2 text-[11px] text-slate-500 leading-relaxed">
+        Each tier filters picks by league scope + model confidence:
+        {" "}
+        <span className="text-slate-400">Platinum</span> = top-5 elite leagues + conf ≥75%,{" "}
+        <span className="text-slate-400">Gold</span> = top-10 + ≥70%,{" "}
+        <span className="text-slate-400">Silver</span> = top-14 + ≥65%,{" "}
+        <span className="text-slate-400">Free</span> = top-14 + ≥55%.
+        Accuracy is recomputed live from evaluated matches — no cache, no cherry-picking.
+      </div>
     </div>
   );
 }

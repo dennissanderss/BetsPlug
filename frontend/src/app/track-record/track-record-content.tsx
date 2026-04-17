@@ -213,6 +213,12 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
   const live = useLiveTrackRecordStats(pickTier);
   const potd = usePotdNumbers();
 
+  // B2.3 — the BOTD KPI sits in the same row as the tier-scoped KPIs but
+  // is pulled from a separate endpoint (/bet-of-the-day/track-record)
+  // that doesn't understand pick_tier. When a specific tier is selected,
+  // hiding the BOTD card prevents the confusing "tier changed but this
+  // number didn't" impression users reported.
+  const showBotdKpi = pickTier === "all";
   const kpis = [
     {
       icon: Percent,
@@ -223,15 +229,19 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       label: t("tr.kpi1Label"),
       note: t("tr.kpi1Note"),
     },
-    {
-      icon: TrendingUp,
-      value:
-        live.botdAccuracy != null
-          ? `${(live.botdAccuracy * 100).toFixed(1)}%`
-          : t("tr.kpi2Value", potd),
-      label: t("tr.kpi2Label", potd),
-      note: t("tr.kpi2Note"),
-    },
+    ...(showBotdKpi
+      ? [
+          {
+            icon: TrendingUp,
+            value:
+              live.botdAccuracy != null
+                ? `${(live.botdAccuracy * 100).toFixed(1)}%`
+                : t("tr.kpi2Value", potd),
+            label: t("tr.kpi2Label", potd),
+            note: t("tr.kpi2Note"),
+          },
+        ]
+      : []),
     {
       icon: Hash,
       value:
