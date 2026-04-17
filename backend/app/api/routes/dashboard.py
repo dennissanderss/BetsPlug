@@ -190,7 +190,11 @@ async def get_dashboard_metrics(
         rows = (await db.execute(per_tier_q)).all()
         per_tier = {}
         for tier_int, t_total, t_correct in rows:
-            if not t_total:
+            # Skip the NULL bucket that pick_tier_expression() returns
+            # for rows that don't qualify for ANY tier (conf<0.55, or
+            # match outside every LEAGUES_* whitelist). Without this
+            # guard int(tier_int) crashes with TypeError.
+            if tier_int is None or not t_total:
                 continue
             t_int = int(tier_int)
             c = int(t_correct or 0)

@@ -176,8 +176,12 @@ async def get_trackrecord_summary(
         for tier_int, t_total, t_correct in tier_rows:
             # Cast everything explicitly — COUNT/SUM on PG return bigint/Decimal
             # which Pydantic v2 rejects for int/float fields in TierBreakdown.
+            # Skip the NULL bucket that pick_tier_expression() returns for
+            # rows that don't qualify for any tier (conf<0.55 or match
+            # outside every LEAGUES_* whitelist). Without this guard
+            # int(tier_int) crashes with TypeError.
             total_int = int(t_total or 0)
-            if not total_int:
+            if tier_int is None or not total_int:
                 continue
             t_int = int(tier_int)
             t_correct_int = int(t_correct or 0)

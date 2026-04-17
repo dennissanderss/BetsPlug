@@ -160,6 +160,12 @@ async def get_pricing_comparison(
 
     # One query, four FILTER clauses — one per tier access scope.
     # access_filter(tier) already enforces conf >= 0.55.
+    #
+    # IMPORTANT: .select_from(Prediction) is required because the four
+    # FILTER clauses (each access_filter(tier)) reference Match.league_id
+    # via access_filter's internal expressions, which confuses SQLAlchemy's
+    # implicit-FROM inference. Without an explicit LEFT side the compiler
+    # raises "Don't know how to join to Match". (Fix 2026-04-17.)
     from app.core.tier_system import access_filter
     ppd_base = (
         select(
@@ -168,6 +174,7 @@ async def get_pricing_comparison(
             func.count(Prediction.id).filter(access_filter(PickTier.GOLD)).label("gold"),
             func.count(Prediction.id).filter(access_filter(PickTier.PLATINUM)).label("platinum"),
         )
+        .select_from(Prediction)
         .join(Match, Match.id == Prediction.match_id)
         .where(v81_predictions_filter())
         .where(Match.scheduled_at >= sixty_days_ago)
