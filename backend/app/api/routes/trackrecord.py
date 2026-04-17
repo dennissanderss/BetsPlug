@@ -97,6 +97,15 @@ async def get_trackrecord_summary(
     avg_confidence = float(row.avg_confidence or 0.0)
 
     # v8.1 per-tier breakdown
+    #
+    # IMPORTANT: per_tier stats are computed WITHOUT access_filter so every
+    # user — regardless of their own tier — sees the accuracy of every tier.
+    # This is both a transparency feature and an upgrade trigger (Free user
+    # sees "Platinum: 87%" alongside "Free: 46%" and understands the gap).
+    #
+    # The list endpoint below (/segments etc.) still applies access_filter
+    # so lower-tier users can't SEE individual higher-tier picks; only the
+    # aggregate breakdown is fully visible.
     per_tier: Optional[dict] = None
     if TIER_SYSTEM_ENABLED:
         # Evaluate pick_tier_expression() once — see dashboard.py for rationale.
@@ -111,7 +120,7 @@ async def get_trackrecord_summary(
             .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
             .join(Match, Match.id == Prediction.match_id)
             .where(v81_predictions_filter())
-            .where(access_filter(user_tier))
+            # NOTE: intentionally no access_filter here — see comment above.
             .group_by(tier_expr)
         )
         if model_version_id is not None:

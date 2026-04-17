@@ -81,8 +81,10 @@ async def get_dashboard_metrics(
     """
     from app.core.cache import cache_get, cache_set
 
-    # Cache key is tier-aware so each tier sees its own numbers
-    cache_key = f"dashboard:metrics:{user_tier.name.lower()}"
+    # Cache key is tier-aware so each tier sees its own numbers.
+    # Version bump (v2) invalidates stale caches that were computed before
+    # per_tier stopped being access-filtered (Bug 1 fix, 2026-04).
+    cache_key = f"dashboard:metrics:v2:{user_tier.name.lower()}"
     cached = await cache_get(cache_key)
     if cached is not None:
         return DashboardMetrics(**cached)
@@ -150,6 +152,21 @@ async def get_dashboard_metrics(
     avg_confidence = round(float(avg_confidence_raw), 2) if avg_confidence_raw is not None else 0.0
 
     # v8.1 per-tier breakdown
+    #
+    # IMPORTANT: per_tier stats are computed WITHOUT access_filter so every
+    # user — regardless of their own tier — sees the accuracy of every tier.
+    # This is both a transparency feature (user can see what higher tiers
+    # deliver) and an upgrade trigger (a Free user sees "Platinum: 87%"
+    # alongside "Free: 46%" and understands the gap they'd unlock).
+    #
+    # The per-tier row aggregation itself uses pick_tier_expression() which
+    # classifies every eligible pick into exactly one of {Platinum, Gold,
+    # Silver, Free} — so excluding access_filter doesn't leak individual
+    # picks, only aggregate counts and accuracy percentages.
+    #
+    # The list endpoints (/api/predictions, /api/trackrecord/picks) still
+    # apply access_filter so Free users can only SEE their own-tier picks;
+    # only the aggregate breakdown is fully visible.
     per_tier: Optional[Dict[str, DashboardTierBreakdown]] = None
     if TIER_SYSTEM_ENABLED:
         from sqlalchemy import Integer
@@ -167,7 +184,7 @@ async def get_dashboard_metrics(
             .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
             .join(Match, Match.id == Prediction.match_id)
             .where(_v81)
-            .where(_tier)
+            # NOTE: intentionally no access_filter here — see comment above.
             .group_by(tier_expr)
         )
         rows = (await db.execute(per_tier_q)).all()
