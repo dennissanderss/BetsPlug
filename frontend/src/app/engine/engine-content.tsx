@@ -20,27 +20,28 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import { api } from "@/lib/api";
 import type { PickTierSlug, PricingTierData } from "@/types/api";
-import { useLocalizedHref } from "@/i18n/locale-provider";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 /**
  * Long-form transparency page. Single scroll with anchor links in the
  * sticky sub-nav at the top so users (and press) can deep-link to any
- * section.
+ * section. All copy is i18n'd (EN + NL) via `engine.*` keys.
  */
 
-const SECTIONS = [
-  { id: "how-it-works", label: "How it works", icon: Activity },
-  { id: "per-tier", label: "Accuracy per tier", icon: Target },
-  { id: "validation", label: "Walk-forward validation", icon: BarChart3 },
-  { id: "data", label: "Data sources", icon: Database },
-  { id: "disclaimers", label: "Disclaimers", icon: AlertTriangle },
-];
+const SECTION_KEYS = [
+  { id: "how-it-works", key: "engine.nav.howItWorks", icon: Activity },
+  { id: "per-tier", key: "engine.nav.perTier", icon: Target },
+  { id: "validation", key: "engine.nav.validation", icon: BarChart3 },
+  { id: "data", key: "engine.nav.data", icon: Database },
+  { id: "disclaimers", key: "engine.nav.disclaimers", icon: AlertTriangle },
+] as const;
 
 // Order tiers high → low in the table
 const TIER_ORDER: PickTierSlug[] = ["platinum", "gold", "silver", "free"];
 
 export function EngineContent() {
   const loc = useLocalizedHref();
+  const { t } = useTranslations();
 
   const { data: tiers, isLoading } = useQuery({
     queryKey: ["pricing-comparison-engine"],
@@ -71,7 +72,7 @@ export function EngineContent() {
             className="section-label mb-5 inline-flex items-center gap-2"
           >
             <Sparkles className="h-3 w-3" />
-            Engine transparency
+            {t("engine.hero.label" as any)}
           </motion.span>
 
           <motion.h1
@@ -80,8 +81,10 @@ export function EngineContent() {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl"
           >
-            How we classify picks and{" "}
-            <span className="gradient-text-green">measure accuracy.</span>
+            {t("engine.hero.titleA" as any)}{" "}
+            <span className="gradient-text-green">
+              {t("engine.hero.titleB" as any)}
+            </span>
           </motion.h1>
 
           <motion.p
@@ -90,10 +93,7 @@ export function EngineContent() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
-            Every BetsPlug prediction is classified into one of four quality tiers
-            based on the league and the model&rsquo;s confidence. Each tier has its
-            own historical accuracy — measured on the same public evaluation set
-            used in our track record.
+            {t("engine.hero.subtitle" as any)}
           </motion.p>
 
           {/* Sub-nav anchors */}
@@ -101,14 +101,14 @@ export function EngineContent() {
             aria-label="Engine sections"
             className="mt-10 flex flex-wrap items-center justify-center gap-2"
           >
-            {SECTIONS.map(({ id, label, icon: Icon }) => (
+            {SECTION_KEYS.map(({ id, key, icon: Icon }) => (
               <a
                 key={id}
                 href={`#${id}`}
                 className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-slate-300 transition-colors hover:border-emerald-400/40 hover:bg-emerald-400/5 hover:text-emerald-300"
               >
                 <Icon className="h-3.5 w-3.5" />
-                {label}
+                {t(key as any)}
               </a>
             ))}
           </nav>
@@ -120,31 +120,31 @@ export function EngineContent() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <SectionHeader
             icon={Activity}
-            label="How it works"
-            title="Ensemble of four independent models"
-            subtitle="We combine Elo ratings, Logistic Regression, XGBoost and a Poisson goal-model. Weighted average, calibrated probabilities."
+            label={t("engine.how.label" as any)}
+            title={t("engine.how.title" as any)}
+            subtitle={t("engine.how.subtitle" as any)}
           />
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <ExplainCard
               icon={Activity}
-              title="39 point-in-time features"
-              body="Every prediction uses recent form (5/10 matches), venue-specific stats, head-to-head, season averages, Elo differential, rest days, and clean-sheet rate — all computed as of the match kickoff so there is zero future information."
+              title={t("engine.how.features.title" as any)}
+              body={t("engine.how.features.body" as any)}
             />
             <ExplainCard
               icon={BarChart3}
-              title="Weighted ensemble"
-              body="Logistic Regression (40%) and XGBoost (60%) form the main ensemble, with Elo as a sanity anchor. Probabilities are normalised so home + draw + away = 1.00."
+              title={t("engine.how.ensemble.title" as any)}
+              body={t("engine.how.ensemble.body" as any)}
             />
             <ExplainCard
               icon={Target}
-              title="Tier classification at prediction time"
-              body="A pick is Platinum if the match is in our top-5 leagues AND confidence ≥ 75%. Gold = top-10 + ≥ 70%. Silver = top-14 + ≥ 65%. Free = anything else with confidence ≥ 55%. Picks below 55% are not shown."
+              title={t("engine.how.classification.title" as any)}
+              body={t("engine.how.classification.body" as any)}
             />
             <ExplainCard
               icon={Shield}
-              title="No post-hoc tuning"
-              body="The model version that produced each historical pick is the same one live today. We don't backfill old picks with new models to make our trackrecord look better — every pick in our track record is the original one."
+              title={t("engine.how.noTuning.title" as any)}
+              body={t("engine.how.noTuning.body" as any)}
             />
           </div>
         </div>
@@ -155,9 +155,9 @@ export function EngineContent() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <SectionHeader
             icon={Target}
-            label="Accuracy per tier"
-            title="Live numbers, updated as each match finishes"
-            subtitle="Sourced from /api/pricing/comparison. Sample sizes and Wilson 95% lower bounds included — because a point estimate without a confidence interval is advertising, not science."
+            label={t("engine.perTier.label" as any)}
+            title={t("engine.perTier.title" as any)}
+            subtitle={t("engine.perTier.subtitle" as any)}
           />
 
           <div className="mt-8 overflow-hidden rounded-xl border border-white/[0.08]">
@@ -165,28 +165,28 @@ export function EngineContent() {
               <thead>
                 <tr className="border-b border-white/[0.08] bg-white/[0.03]">
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Tier
+                    {t("engine.perTier.col.tier" as any)}
                   </th>
                   <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Accuracy
+                    {t("engine.perTier.col.accuracy" as any)}
                   </th>
                   <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 hidden sm:table-cell">
-                    95% LB
+                    {t("engine.perTier.col.wilson" as any)}
                   </th>
                   <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Sample
+                    {t("engine.perTier.col.sample" as any)}
                   </th>
                   <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 hidden md:table-cell">
-                    Conf ≥
+                    {t("engine.perTier.col.conf" as any)}
                   </th>
                   <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500 hidden md:table-cell">
-                    Leagues
+                    {t("engine.perTier.col.leagues" as any)}
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {TIER_ORDER.map((slug) => {
-                  const t = tierMap.get(slug);
+                  const tier = tierMap.get(slug);
                   return (
                     <tr
                       key={slug}
@@ -200,31 +200,31 @@ export function EngineContent() {
                         />
                       </td>
                       <td className="px-4 py-3 text-right tabular-nums font-semibold text-slate-100">
-                        {isLoading || !t
+                        {isLoading || !tier
                           ? "…"
-                          : `${t.accuracy_pct.toFixed(1)}%`}
+                          : `${tier.accuracy_pct.toFixed(1)}%`}
                       </td>
                       <td className="px-4 py-3 text-right tabular-nums text-slate-400 hidden sm:table-cell">
-                        {isLoading || !t
+                        {isLoading || !tier
                           ? "…"
-                          : `${t.wilson_ci_lower_pct.toFixed(1)}%`}
+                          : `${tier.wilson_ci_lower_pct.toFixed(1)}%`}
                       </td>
                       <td className="px-4 py-3 text-right tabular-nums text-slate-400">
-                        {isLoading || !t
+                        {isLoading || !tier
                           ? "…"
-                          : t.sample_size.toLocaleString()}
+                          : tier.sample_size.toLocaleString()}
                       </td>
                       <td className="px-4 py-3 text-right tabular-nums text-slate-400 hidden md:table-cell">
-                        {isLoading || !t
+                        {isLoading || !tier
                           ? "…"
-                          : `${(t.confidence_threshold * 100).toFixed(0)}%`}
+                          : `${(tier.confidence_threshold * 100).toFixed(0)}%`}
                       </td>
                       <td className="px-4 py-3 text-right tabular-nums text-slate-400 hidden md:table-cell">
-                        {isLoading || !t
+                        {isLoading || !tier
                           ? "…"
-                          : t.leagues_count == null
-                          ? "all"
-                          : t.leagues_count.toString()}
+                          : tier.leagues_count == null
+                          ? t("engine.perTier.leaguesAll" as any)
+                          : tier.leagues_count.toString()}
                       </td>
                     </tr>
                   );
@@ -234,9 +234,7 @@ export function EngineContent() {
           </div>
 
           <p className="mt-4 text-xs text-slate-500">
-            The accuracy column is the point estimate. The 95% lower bound (Wilson
-            interval) tells you the worst-case accuracy consistent with the
-            observed sample — an honest floor, not the headline.
+            {t("engine.perTier.footer" as any)}
           </p>
         </div>
       </section>
@@ -246,35 +244,21 @@ export function EngineContent() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <SectionHeader
             icon={BarChart3}
-            label="Walk-forward validation"
-            title="Trained on yesterday, tested on tomorrow"
-            subtitle="The most honest backtest we can run: the model never sees data from after the match it&rsquo;s predicting."
+            label={t("engine.val.label" as any)}
+            title={t("engine.val.title" as any)}
+            subtitle={t("engine.val.subtitle" as any)}
           />
 
           <div className="mt-8 space-y-4 text-sm leading-relaxed text-slate-300">
+            <p>{t("engine.val.p1" as any)}</p>
+            <p>{t("engine.val.p2" as any)}</p>
             <p>
-              A common mistake in football modelling is training on the full
-              2020–2026 dataset, then testing accuracy on the same years. That
-              leaks information — the model has already &ldquo;seen&rdquo;
-              future features like final league standings, season averages, and
-              late-season form. The numbers look great. They&rsquo;re
-              meaningless.
-            </p>
-            <p>
-              We validate differently. The engine rolls through every match in
-              chronological order. For a match on March 12 2024, the model is
-              only trained on data available up to and including March 11. Form
-              tables are truncated. Elo ratings are reconstructed to their
-              March 11 state. Features are computed point-in-time.
-            </p>
-            <p>
-              The current v8.1 walk-forward run covered{" "}
+              {t("engine.val.p3A" as any)}{" "}
               <span className="font-semibold text-emerald-400">
-                28,838 out-of-sample predictions
+                {t("engine.val.p3B" as any)}
               </span>
-              {" "}across four time-folds. Results directly match what the
-              Per-tier table above shows — we use the same methodology in
-              production.
+              {" "}
+              {t("engine.val.p3C" as any)}
             </p>
           </div>
         </div>
@@ -285,26 +269,26 @@ export function EngineContent() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <SectionHeader
             icon={Database}
-            label="Data sources"
-            title="One licensed feed, no scraping"
-            subtitle="API-Football Pro tier. 29 competitions, daily ingestion, auditable lineage."
+            label={t("engine.data.label" as any)}
+            title={t("engine.data.title" as any)}
+            subtitle={t("engine.data.subtitle" as any)}
           />
 
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             <ExplainCard
               icon={Database}
-              title="Matches & results"
-              body="Kickoff times, final scores, in-game events. Ingested hourly during match windows, nightly otherwise."
+              title={t("engine.data.matches.title" as any)}
+              body={t("engine.data.matches.body" as any)}
             />
             <ExplainCard
               icon={BarChart3}
-              title="Team statistics"
-              body="Match-level shots, possession, corners, cards. Season-level standings, goal differentials. All point-in-time snapshotted."
+              title={t("engine.data.teams.title" as any)}
+              body={t("engine.data.teams.body" as any)}
             />
             <ExplainCard
               icon={Target}
-              title="Odds (read-only)"
-              body="Pre-match 1X2 odds captured for retrospective analysis. We never place bets and never write to bookmakers — odds are context, not signal."
+              title={t("engine.data.odds.title" as any)}
+              body={t("engine.data.odds.body" as any)}
             />
           </div>
         </div>
@@ -315,40 +299,40 @@ export function EngineContent() {
         <div className="mx-auto max-w-4xl px-4 sm:px-6">
           <SectionHeader
             icon={AlertTriangle}
-            label="Disclaimers"
-            title="What this is, and what it isn't"
+            label={t("engine.disclaimers.label" as any)}
+            title={t("engine.disclaimers.title" as any)}
             subtitle=""
           />
 
           <div className="mt-8 space-y-4 rounded-xl border border-amber-500/15 bg-amber-500/[0.03] p-6 text-sm text-slate-300">
             <p>
-              <strong className="text-amber-300">Educational / simulation only.</strong>{" "}
-              BetsPlug provides statistical analysis of historical sports data.
-              All predictions are presented as simulations for educational
-              purposes. Nothing on this site constitutes betting advice, financial
-              advice, or a guarantee of future results.
+              <strong className="text-amber-300">
+                {t("engine.disclaimers.edu.strong" as any)}
+              </strong>{" "}
+              {t("engine.disclaimers.edu.body" as any)}
             </p>
             <p>
-              <strong className="text-amber-300">Past performance is not indicative of future results.</strong>{" "}
-              Tier accuracy figures (85%+, 70%+, etc.) are historical backtest
-              measurements. Sample sizes and confidence intervals are published
-              above so you can verify the scope of each claim.
+              <strong className="text-amber-300">
+                {t("engine.disclaimers.past.strong" as any)}
+              </strong>{" "}
+              {t("engine.disclaimers.past.body" as any)}
             </p>
             <p>
-              <strong className="text-amber-300">No gambling licence. No affiliation with bookmakers.</strong>{" "}
-              BetsPlug operates under an educational / analytical framework (no
-              KSA licence required in the Netherlands). We are not affiliated
-              with any bookmaker and do not facilitate bet placement.
+              <strong className="text-amber-300">
+                {t("engine.disclaimers.noLicence.strong" as any)}
+              </strong>{" "}
+              {t("engine.disclaimers.noLicence.body" as any)}
             </p>
             <p>
-              <strong className="text-amber-300">Responsible use.</strong>{" "}
-              Sports betting involves financial risk. If you or someone you know
-              struggles with gambling, please visit{" "}
+              <strong className="text-amber-300">
+                {t("engine.disclaimers.responsible.strong" as any)}
+              </strong>{" "}
+              {t("engine.disclaimers.responsible.body" as any)}{" "}
               <Link
                 href={loc("/responsible-gambling")}
                 className="text-emerald-400 underline hover:text-emerald-300"
               >
-                our responsible-gambling page
+                {t("engine.disclaimers.responsible.link" as any)}
               </Link>
               .
             </p>
@@ -359,7 +343,7 @@ export function EngineContent() {
               href={loc("/pricing")}
               className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-5 py-2.5 text-sm font-semibold text-emerald-300 transition-colors hover:border-emerald-400/60 hover:bg-emerald-400/20"
             >
-              See our plans
+              {t("engine.seePlans" as any)}
               <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
