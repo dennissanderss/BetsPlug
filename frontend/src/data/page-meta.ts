@@ -1026,7 +1026,56 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
       ogTitle: "Hoe BetsPlug nauwkeurigheid meet · Engine transparantie",
       ogDescription: "Vier pick tiers (Platinum / Gold / Silver / Free), elk met eigen historische nauwkeurigheid. Methodologie, sample sizes, Wilson betrouwbaarheidsintervallen — publiek.",
     },
-  },
+  
+    de: {
+      title: "Engine-Transparenz · BetsPlug Methodik",
+      description:
+        "Wie BetsPlug jede Auswahl in eine Qualitätsstufe einordnet, wie wir die Genauigkeit messen und die Live-Ergebnisse pro Stufe unserer v8.1-Engine.",
+      ogTitle: "Wie BetsPlug die Genauigkeit misst · Engine-Transparenz",
+      ogDescription:
+        "Vier Auswahlstufen (Platin / Gold / Silber / Kostenlos), jede mit ihrer eigenen historischen Genauigkeit. Methodik, Stichprobengrößen, Wilson-Konfidenzintervalle – alles öffentlich.",
+    },
+    fr: {
+      title: "Transparence du moteur · Méthodologie BetsPlug",
+      description:
+        "Comment BetsPlug classe chaque choix dans un niveau de qualité, comment nous mesurons la précision et les résultats en direct par niveau de notre moteur v8.1.",
+      ogTitle: "Comment BetsPlug mesure la précision · Transparence du moteur",
+      ogDescription:
+        "Quatre niveaux de sélection (Platine/Or/Argent/Gratuit), chacun avec sa propre précision historique. Méthodologie, tailles d’échantillon, intervalles de confiance de Wilson – tous publics.",
+    },
+    es: {
+      title: "Transparencia del Motor · BetsPlug Metodología",
+      description:
+        "Cómo BetsPlug clasifica cada selección en un nivel de calidad, cómo medimos la precisión y los resultados en vivo por nivel de nuestro motor v8.1.",
+      ogTitle: "Cómo BetsPlug mide la precisión · Transparencia del motor",
+      ogDescription:
+        "Cuatro niveles de selección (Platino / Oro / Plata / Gratis), cada uno con su propia precisión histórica. Metodología, tamaños de muestra, intervalos de confianza de Wilson: todo público.",
+    },
+    it: {
+      title: "Trasparenza del motore · Metodologia BetsPlug",
+      description:
+        "Come BetsPlug classifica ogni scelta in un livello di qualità, come misuriamo la precisione e i risultati in tempo reale per livello dal nostro motore v8.1.",
+      ogTitle: "Come BetsPlug misura la precisione · Trasparenza del motore",
+      ogDescription:
+        "Quattro livelli di scelta (Platino/Oro/Argento/Gratuito), ciascuno con la propria accuratezza storica. Metodologia, dimensioni del campione, intervalli di confidenza di Wilson: tutto pubblico.",
+    },
+    sw: {
+      title: "Uwazi wa Injini · BetsPlug Mbinu",
+      description:
+        "Jinsi BetsPlug inavyoainisha kila chaguo katika kiwango cha ubora, jinsi tunavyopima usahihi, na matokeo ya moja kwa moja kwa kila ngazi kutoka kwa injini yetu ya v8.1.",
+      ogTitle: "Jinsi BetsPlug inavyopima usahihi · Uwazi wa injini",
+      ogDescription:
+        "Viwango vinne vya kuchagua (Platinum / Dhahabu / Fedha / Bure), kila moja ikiwa na usahihi wake wa kihistoria. Mbinu, ukubwa wa sampuli, vipindi vya kujiamini vya Wilson - yote ya umma.",
+    },
+    id: {
+      title: "Transparansi Mesin · BetsPlug Metodologi",
+      description:
+        "Bagaimana BetsPlug mengklasifikasikan setiap pilihan ke dalam tingkat kualitas, cara kami mengukur akurasi, dan hasil langsung per tingkat dari mesin v8.1 kami.",
+      ogTitle: "Bagaimana BetsPlug mengukur akurasi · Transparansi mesin",
+      ogDescription:
+        "Empat tingkatan pilihan (Platinum / Emas / Perak / Gratis), masing-masing memiliki keakuratan historisnya sendiri. Metodologi, ukuran sampel, interval kepercayaan Wilson — semuanya bersifat publik.",
+    },
+},
 
   /* ─────────────────────────── PRICING ─────────────────────── */
   "/pricing": {
@@ -1094,6 +1143,75 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
       ogTitle: "Harga BetsPlug · Prediksi Sepak Bola AI",
       ogDescription:
         "Perunggu, Perak, Emas, atau Platinum Seumur Hidup — pilih paket yang dibuat untuk gaya taruhan Anda.",
+    },
+  },
+
+  /* ─────────────────────────── CONTACT ─────────────────────────── */
+  "/contact": {
+    en: {
+      title: "Contact BetsPlug · Support, partnerships & press",
+      description:
+        "Get in touch with the BetsPlug team. Email support, partnership requests, or press enquiries — we reply within one business day.",
+      ogTitle: "Contact BetsPlug",
+      ogDescription:
+        "Email support, partnerships, or press — we reply within one business day.",
+    },
+  
+    nl: {
+      title: "Contact BetsPlug · Ondersteuning, partnerschappen en pers",
+      description:
+        "Neem contact op met het BetsPlug-team. E-mailondersteuning, partnerschapsverzoeken of persvragen: wij antwoorden binnen één werkdag.",
+      ogTitle: "Contact BetsPlug",
+      ogDescription:
+        "E-mailondersteuning, partnerschappen of pers: we antwoorden binnen één werkdag.",
+    },
+    de: {
+      title: "Kontakt BetsPlug · Support, Partnerschaften & Presse",
+      description:
+        "Nehmen Sie Kontakt mit dem BetsPlug-Team auf. E-Mail-Support, Partnerschaftsanfragen oder Presseanfragen – wir antworten innerhalb eines Werktages.",
+      ogTitle: "Kontakt BetsPlug",
+      ogDescription:
+        "E-Mail-Support, Partnerschaften oder Presse – wir antworten innerhalb eines Werktages.",
+    },
+    fr: {
+      title: "Contact BetsPlug · Accompagnement, partenariats & presse",
+      description:
+        "Prenez contact avec l'équipe BetsPlug. Assistance par e-mail, demandes de partenariat ou demandes de presse : nous répondons dans un délai d'un jour ouvrable.",
+      ogTitle: "Contacter BetsPlug",
+      ogDescription:
+        "Assistance par e-mail, partenariats ou presse : nous répondons dans un délai d'un jour ouvrable.",
+    },
+    es: {
+      title: "Contacto BetsPlug · Soporte, asociaciones y prensa",
+      description:
+        "Ponte en contacto con el equipo de BetsPlug. Soporte por correo electrónico, solicitudes de asociación o consultas de prensa: respondemos dentro de un día hábil.",
+      ogTitle: "Contacto BetsPlug",
+      ogDescription:
+        "Soporte por correo electrónico, asociaciones o prensa: respondemos dentro de un día hábil.",
+    },
+    it: {
+      title: "Contatto BetsPlug · Supporto, partnership e stampa",
+      description:
+        "Entra in contatto con il team BetsPlug. Supporto via email, richieste di partnership o richieste della stampa: rispondiamo entro un giorno lavorativo.",
+      ogTitle: "Contatto BetsPlug",
+      ogDescription:
+        "Supporto via e-mail, partnership o stampa: rispondiamo entro un giorno lavorativo.",
+    },
+    sw: {
+      title: "Wasiliana na BetsPlug · Usaidizi, ushirikiano na vyombo vya habari",
+      description:
+        "Wasiliana na timu ya BetsPlug. Usaidizi wa barua pepe, maombi ya ushirikiano, au maswali ya waandishi wa habari - tunajibu ndani ya siku moja ya kazi.",
+      ogTitle: "Wasiliana BetsPlug",
+      ogDescription:
+        "Usaidizi wa barua pepe, ushirikiano, au bonyeza - tunajibu ndani ya siku moja ya kazi.",
+    },
+    id: {
+      title: "Hubungi BetsPlug · Dukungan, kemitraan & pers",
+      description:
+        "Hubungi tim BetsPlug. Dukungan email, permintaan kemitraan, atau pertanyaan pers — kami membalasnya dalam satu hari kerja.",
+      ogTitle: "Hubungi BetsPlug",
+      ogDescription:
+        "Dukungan email, kemitraan, atau pers — kami membalas dalam satu hari kerja.",
     },
 },
 };

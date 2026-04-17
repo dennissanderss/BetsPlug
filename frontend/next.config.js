@@ -2,6 +2,10 @@
 const nextConfig = {
   output: "standalone",
   images: {
+    // Serve AVIF when the browser accepts it (smallest), falling back
+    // to WebP (universal modern support), then the original format.
+    // next/image auto-negotiates per request via the Accept header.
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "cdn.sanity.io" },

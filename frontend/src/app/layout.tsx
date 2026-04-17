@@ -39,12 +39,14 @@ export const viewport: Viewport = {
    snippets without any platform cropping. Per-page metadata
    (articles, league hubs, learn pillars, …) can override this with
    a more specific image; pages that don't override fall back to
-   this brand card. Lives in /public/og-image.png. */
+   this brand card. Served as JPG (175KB) instead of PNG (935KB) —
+   every social scraper supports JPG and the file is ~5× smaller. */
 const OG_IMAGE = {
-  url: "/og-image.png",
+  url: "/og-image.jpg",
   width: 1200,
   height: 630,
   alt: "BetsPlug · AI-Driven football predictions",
+  type: "image/jpeg",
 } as const;
 
 /* ── Locale-aware metadata ────────────────────────────────────
@@ -65,12 +67,18 @@ export async function generateMetadata(): Promise<Metadata> {
       languages: alternates.languages,
     },
     icons: {
-      // Browser tab + pinned-tab favicon: the standalone plug mark
-      // (separate from the full logo, which stays the Apple touch icon).
-      icon: [{ url: "/favicon.png", type: "image/png" }],
-      shortcut: "/favicon.png",
-      apple: "/favicon.png",
+      // Browser tab favicon — served at the right size per viewport
+      // density. Replaces the old single 1254×1254 / 333KB file that
+      // browsers were downscaling on every page load.
+      icon: [
+        { url: "/favicon-16.png", type: "image/png", sizes: "16x16" },
+        { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+      ],
+      shortcut: "/favicon-32.png",
+      // iOS home-screen icon (180×180 is the current Apple spec).
+      apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
     },
+    manifest: "/manifest.webmanifest",
     openGraph: {
       type: "website",
       siteName: "BetsPlug",
