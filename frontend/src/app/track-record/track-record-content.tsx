@@ -24,6 +24,7 @@ import {
   Hash,
   Gauge,
   Quote,
+  Download,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -42,7 +43,9 @@ interface LiveStats {
   botdAccuracy: number | null;
 }
 
-function useLiveTrackRecordStats(): LiveStats {
+type PublicTier = "all" | "free" | "silver" | "gold" | "platinum";
+
+function useLiveTrackRecordStats(pickTier: PublicTier = "all"): LiveStats {
   const [stats, setStats] = useState<LiveStats>({
     totalPredictions: null,
     accuracy: null,
@@ -53,12 +56,22 @@ function useLiveTrackRecordStats(): LiveStats {
 
   useEffect(() => {
     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+    const tierQs = pickTier !== "all" ? `?pick_tier=${pickTier}` : "";
 
+    // BOTD trackrecord is always the raw BOTD stream — not tier-scoped
+    // (BOTD itself is a Gold+ feature). The summary call, in contrast,
+    // respects the ?pick_tier= public filter so each tab reshapes KPIs.
     Promise.allSettled([
-      fetch(`${API}/trackrecord/summary`).then((r) => r.json()),
+      fetch(`${API}/trackrecord/summary${tierQs}`).then((r) => r.json()),
       fetch(`${API}/bet-of-the-day/track-record`).then((r) => r.json()),
     ]).then(([summaryResult, botdResult]) => {
-      const next: LiveStats = { ...stats };
+      const next: LiveStats = {
+        totalPredictions: null,
+        accuracy: null,
+        brierScore: null,
+        botdTotal: null,
+        botdAccuracy: null,
+      };
       if (summaryResult.status === "fulfilled" && summaryResult.value) {
         const s = summaryResult.value;
         next.totalPredictions = s.total_predictions ?? null;
@@ -72,10 +85,78 @@ function useLiveTrackRecordStats(): LiveStats {
       }
       setStats(next);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pickTier]);
 
   return stats;
+}
+
+// Tier metadata for the public tabs — label, emoji and an accent
+// colour class applied when the tab is active. Mirrors the authed
+// /trackrecord page's TierTabsStrip visual language.
+const PUBLIC_TIER_TABS: {
+  key: PublicTier;
+  label: string;
+  emoji: string;
+  activeClass: string;
+}[] = [
+  { key: "all", label: "All tiers", emoji: "◯", activeClass: "border-white/30 bg-white/[0.08] text-slate-100" },
+  { key: "free", label: "Free · 45%+", emoji: "⬜", activeClass: "border-slate-300/30 bg-slate-300/[0.10] text-slate-200" },
+  { key: "silver", label: "Silver · 60%+", emoji: "⚪", activeClass: "border-slate-100/40 bg-slate-100/[0.10] text-slate-100" },
+  { key: "gold", label: "Gold · 70%+", emoji: "🔵", activeClass: "border-blue-400/40 bg-blue-500/[0.12] text-blue-100" },
+  { key: "platinum", label: "Platinum · 85%+", emoji: "🟢", activeClass: "border-emerald-400/40 bg-emerald-500/[0.12] text-emerald-100" },
+];
+
+function PublicTierTabs({
+  value,
+  onChange,
+}: {
+  value: PublicTier;
+  onChange: (v: PublicTier) => void;
+}) {
+  const api = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+  const csvSuffix = value !== "all" ? `?pick_tier=${value}` : "";
+  return (
+    <div className="card-neon card-neon-green rounded-2xl overflow-hidden">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.05] px-5 py-3">
+        <span className="section-label inline-flex items-center gap-2">
+          <ShieldCheck className="h-3 w-3" />
+          Audit any tier
+        </span>
+        <a
+          href={`${api}/trackrecord/export.csv${csvSuffix}`}
+          download
+          className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+        >
+          <Download className="h-3.5 w-3.5" />
+          Download CSV
+        </a>
+      </div>
+      <div className="flex flex-wrap gap-1.5 p-3">
+        {PUBLIC_TIER_TABS.map((tab) => {
+          const active = tab.key === value;
+          return (
+            <button
+              key={tab.key}
+              type="button"
+              onClick={() => onChange(tab.key)}
+              className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                active
+                  ? tab.activeClass
+                  : "border-white/[0.08] bg-transparent text-slate-400 hover:border-white/[0.15] hover:text-slate-200"
+              }`}
+              aria-pressed={active}
+            >
+              <span aria-hidden>{tab.emoji}</span>
+              {tab.label}
+            </button>
+          );
+        })}
+      </div>
+      <p className="border-t border-white/[0.05] px-5 py-2 text-[10px] text-slate-500 leading-relaxed">
+        Every number updates live. Download the raw rows to recompute accuracy, Brier and calibration yourself.
+      </p>
+    </div>
+  );
 }
 
 const KPI_VARIANTS = ["green", "purple", "blue", "green"] as const;
@@ -90,7 +171,10 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
-  const live = useLiveTrackRecordStats();
+  // v8.3 — public tier selector lives on the marketing page so anyone
+  // (logged in or not) can audit every tier's historical numbers.
+  const [pickTier, setPickTier] = useState<PublicTier>("all");
+  const live = useLiveTrackRecordStats(pickTier);
   const potd = usePotdNumbers();
 
   const kpis = [
@@ -291,6 +375,13 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
               {t("tr.kpisSubtitle")}
             </p>
           </motion.div>
+
+          {/* v8.3 — public tier selector. Numbers above the KPI grid
+              update as you click a tab; the CSV download in the tab
+              header stays in sync with the selected tier. */}
+          <div className="mb-8">
+            <PublicTierTabs value={pickTier} onChange={setPickTier} />
+          </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {kpis.map((k, i) => {
