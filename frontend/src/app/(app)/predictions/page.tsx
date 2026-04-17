@@ -30,6 +30,7 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { TierScopePill } from "@/components/noct/tier-scope-pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
+import { PickReasoningBlock } from "@/components/predictions/PickReasoningBlock";
 import { classifyPickTier } from "@/lib/pick-tier";
 import type { PickTierSlug } from "@/types/api";
 
@@ -471,6 +472,18 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
         </div>
 
       </div>
+
+      {/* v8.2 "Why this pick?" — collapsible explainability block.
+          PickReasoningBlock renders nothing when drivers are null/empty
+          (older rows without features_snapshot) and gates itself behind
+          Gold+ internally: Free/Silver see a locked teaser. Kept
+          outside the grid so the expanded drivers can span full-width
+          without disturbing the row layout. */}
+      {pred?.top_drivers && pred.top_drivers.length > 0 && (
+        <div className="px-2 sm:px-4 pb-3">
+          <PickReasoningBlock drivers={pred.top_drivers} variant="compact" />
+        </div>
+      )}
 
     </div>
   );
