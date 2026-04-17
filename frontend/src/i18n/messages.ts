@@ -1422,6 +1422,8 @@ const en = {
   "route.disclaimer": "For educational and analytical purposes only. Not financial advice. Past performance does not guarantee future results.",
   "route.strategyTitle": "Strategy Lab",
   "route.strategyDesc": "Explore proven betting strategies backed by data",
+  "route.trackRecordTitle": "Track Record",
+  "route.trackRecordDesc": "Historical model accuracy, calibration and per-tier breakdown",
   "route.resultsTitle": "Results & Analysis",
   "route.resultsDesc": "See how yesterday's predictions performed",
 
@@ -3511,6 +3513,8 @@ const nl: Dictionary = {
   "route.step3Title": "Eerlijk gevalideerd",
   "route.strategyDesc": "Ontdek bewezen strategieen onderbouwd door data",
   "route.strategyTitle": "Strategy Lab",
+  "route.trackRecordDesc": "Historische modelprestaties, kalibratie en segmentanalyse",
+  "route.trackRecordTitle": "Trackrecord",
   "route.subtitle": "Onze AI analyseert voetbaldata — teamvorm, onderlinge resultaten, competitiestanden en teamsterktes — om de meest waarschijnlijke uitslag van aankomende wedstrijden te voorspellen.",
   "route.title": "Hoe BetsPlug werkt",
 

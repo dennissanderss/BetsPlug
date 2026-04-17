@@ -9,7 +9,7 @@ import {
   Brain,
   TrendingUp,
   Shield,
-  FlaskConical,
+  ClipboardList,
   BarChart3,
 } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -111,14 +111,14 @@ export default function YourRoutePage() {
 
       {/* Also explore */}
       <section className="grid gap-3 sm:grid-cols-2 mb-10">
-        <Link href={loc("/strategy")} className="card-neon card-neon-purple group">
+        <Link href={loc("/trackrecord")} className="card-neon card-neon-purple group">
           <div className="relative flex items-center gap-3 p-4">
             <HexBadge variant="purple" size="sm">
-              <FlaskConical className="h-4 w-4" />
+              <ClipboardList className="h-4 w-4" />
             </HexBadge>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-white">{t("route.strategyTitle")}</p>
-              <p className="text-xs text-slate-400">{t("route.strategyDesc")}</p>
+              <p className="text-sm font-semibold text-white">{t("route.trackRecordTitle")}</p>
+              <p className="text-xs text-slate-400">{t("route.trackRecordDesc")}</p>
             </div>
             <ArrowRight className="h-4 w-4 text-slate-500 shrink-0 group-hover:text-[#d8b4fe] transition-colors" />
           </div>

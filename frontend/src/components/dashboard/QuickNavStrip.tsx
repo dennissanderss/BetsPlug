@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
-import { Star, Target, Zap, Trophy, FlaskConical, ArrowRight } from "lucide-react";
+import { Star, Target, Zap, Trophy, ArrowRight } from "lucide-react";
 import { HexBadge, type HexVariant } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 
@@ -21,7 +21,6 @@ export function QuickNavStrip({ liveCount }: QuickNavStripProps) {
     { label: t("dash.nav.predictions"), description: t("dash.nav.predictions"), href: "/predictions", icon: Target, badge: null },
     { label: t("dash.nav.live"), description: t("dash.nav.live"), href: "/live", icon: Zap, badge: liveCount > 0 ? liveCount : null },
     { label: t("dash.nav.results"), description: t("dash.nav.results"), href: "/results", icon: Trophy, badge: null },
-    { label: t("dash.nav.strategy"), description: t("dash.nav.strategy"), href: "/strategy", icon: FlaskConical, badge: null },
   ];
 
   return (

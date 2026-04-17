@@ -6,7 +6,6 @@ import { UpsellBanner } from "@/components/ui/upsell-banner";
 import {
   TrendingUp,
   Target,
-  FlaskConical,
   ClipboardList,
   FileBarChart2,
   ArrowRight,
@@ -27,7 +26,6 @@ export function SportsHubSidebar({ summary, isLoading }: SportsHubSidebarProps) 
 
   const quickLinks = [
     { label: t("dash.nav.predictions"), href: "/predictions", icon: Target },
-    { label: t("dash.nav.strategy"), href: "/strategy", icon: FlaskConical },
     { label: t("dash.nav.trackRecord"), href: "/trackrecord", icon: ClipboardList },
     { label: t("dash.nav.reports"), href: "/reports", icon: FileBarChart2 },
   ];
