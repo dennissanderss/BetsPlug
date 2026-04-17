@@ -59,10 +59,8 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
   const loc = useLocalizedHref();
   const { t } = useTranslations();
 
-  // NOTE (P2.3): tagline + bestFor + cta come from i18n (EN + NL).
-  // The `includes` / `notIncluded` arrays and the comparison/reasons
-  // sections further down are still hard-coded English and scheduled
-  // for Fase C extraction — see docs/fase_b_qa_report.md § "DEEL 3".
+  // All strings are i18n'd via pricingDeep.* keys (EN + NL). See
+  // src/i18n/messages.ts for the full set.
   const plans: PlanDetail[] = [
     {
       id: "bronze",
@@ -71,19 +69,19 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       tagline: t("pricingDeep.bronzeTagline" as any),
       bestFor: t("pricingDeep.bronzeBestFor" as any),
       price: "€0,01",
-      period: "7 days",
+      period: t("pricingDeep.period.7days" as any),
       includes: [
-        "Full Gold access for 7 days — every feature",
-        "🔵 Gold picks (70%+ historical accuracy)",
-        "⚪ Silver + ⬜ Free picks included — every pick labelled by tier",
-        "Match Deep Dive + Predictions Explorer + CSV export",
-        "Complete public track record",
-        "Cancel in two clicks — no auto-upgrade",
+        t("pricingDeep.bronzeInc1" as any),
+        t("pricingDeep.bronzeInc2" as any),
+        t("pricingDeep.bronzeInc3" as any),
+        t("pricingDeep.bronzeInc4" as any),
+        t("pricingDeep.bronzeInc5" as any),
+        t("pricingDeep.bronzeInc6" as any),
       ],
       notIncluded: [
-        "🟢 Platinum elite picks (top-5 leagues, 85%+ accuracy)",
-        "Gold Telegram community",
-        "Priority support queue",
+        t("pricingDeep.bronzeOut1" as any),
+        t("pricingDeep.bronzeOut2" as any),
+        t("pricingDeep.bronzeOut3" as any),
       ],
       variant: "blue",
       cta: t("pricingDeep.bronzeCta" as any),
@@ -96,22 +94,22 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       tagline: t("pricingDeep.silverTagline" as any),
       bestFor: t("pricingDeep.silverBestFor" as any),
       price: "€9,99",
-      period: "month",
+      period: t("pricingDeep.period.month" as any),
       includes: [
-        "⚪ Silver picks — top 14 competitions, confidence ≥65%, 60%+ historical accuracy",
-        "⬜ Free picks included — all leagues with confidence ≥55%",
-        "~6 picks per day on average (incl. Free)",
-        "Live scores + live probability updates",
-        "Weekly performance report in your inbox",
-        "Full public track record — every loss included",
-        "Email support (48-hour SLA)",
+        t("pricingDeep.silverInc1" as any),
+        t("pricingDeep.silverInc2" as any),
+        t("pricingDeep.silverInc3" as any),
+        t("pricingDeep.silverInc4" as any),
+        t("pricingDeep.silverInc5" as any),
+        t("pricingDeep.silverInc6" as any),
+        t("pricingDeep.silverInc7" as any),
       ],
       notIncluded: [
-        "🔵 Gold picks (top-10 leagues, 70%+ accuracy)",
-        "🟢 Platinum elite picks (top-5 leagues, 85%+ accuracy)",
-        "Data Analyst tools (Deep Dive, Explorer, Calibration)",
-        "PDF / CSV / JSON report exports",
-        "Gold Telegram community",
+        t("pricingDeep.silverOut1" as any),
+        t("pricingDeep.silverOut2" as any),
+        t("pricingDeep.silverOut3" as any),
+        t("pricingDeep.silverOut4" as any),
+        t("pricingDeep.silverOut5" as any),
       ],
       variant: "purple",
       cta: t("pricingDeep.silverCta" as any),
@@ -124,21 +122,21 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       tagline: t("pricingDeep.goldTagline" as any),
       bestFor: t("pricingDeep.goldBestFor" as any),
       price: "€14,99",
-      period: "month",
+      period: t("pricingDeep.period.month" as any),
       includes: [
-        "🔵 Gold picks — top 10 competitions, confidence ≥70%, 70%+ historical accuracy",
-        "⚪ Silver + ⬜ Free picks included — every pick labelled by tier",
-        "~7 picks per day on average (incl. all lower tiers)",
-        "Data Analyst tools — Match Deep Dive, Predictions Explorer, Engine Performance",
-        "PDF / CSV / JSON exports of every prediction",
-        "Exclusive Gold Telegram community",
-        "Priority support (12-hour SLA)",
-        "Full transparency — every pick publicly logged",
+        t("pricingDeep.goldInc1" as any),
+        t("pricingDeep.goldInc2" as any),
+        t("pricingDeep.goldInc3" as any),
+        t("pricingDeep.goldInc4" as any),
+        t("pricingDeep.goldInc5" as any),
+        t("pricingDeep.goldInc6" as any),
+        t("pricingDeep.goldInc7" as any),
+        t("pricingDeep.goldInc8" as any),
       ],
       notIncluded: [
-        "🟢 Platinum elite picks (top-5 leagues, 85%+ accuracy)",
-        "Lifetime pricing lock",
-        "Founder-tier perks",
+        t("pricingDeep.goldOut1" as any),
+        t("pricingDeep.goldOut2" as any),
+        t("pricingDeep.goldOut3" as any),
       ],
       variant: "green",
       popular: true,
@@ -152,16 +150,16 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       tagline: t("pricingDeep.platinumTagline" as any),
       bestFor: t("pricingDeep.platinumBestFor" as any),
       price: "€199",
-      period: "one-time",
+      period: t("pricingDeep.period.oneTime" as any),
       includes: [
-        "🟢 Platinum elite picks — top-5 leagues, confidence ≥75%, 85%+ historical accuracy",
-        "🔵 Gold + ⚪ Silver + ⬜ Free picks included — every tier, every pick",
-        "~7 picks per day on average (all tiers combined)",
-        "All Data Analyst tools — Deep Dive, Explorer, Calibration, Engine Performance",
-        "Private Platinum Telegram (max 20 seats)",
-        "Lifetime price lock — immune to every future increase",
-        "Early access to every new feature",
-        "Never pay again — zero renewals, zero upsells",
+        t("pricingDeep.platinumInc1" as any),
+        t("pricingDeep.platinumInc2" as any),
+        t("pricingDeep.platinumInc3" as any),
+        t("pricingDeep.platinumInc4" as any),
+        t("pricingDeep.platinumInc5" as any),
+        t("pricingDeep.platinumInc6" as any),
+        t("pricingDeep.platinumInc7" as any),
+        t("pricingDeep.platinumInc8" as any),
       ],
       notIncluded: [],
       variant: "amber",
@@ -171,59 +169,54 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
     },
   ];
 
+  const trialStr = t("pricingDeep.compare.trial" as any);
   const goldVsOthers = [
-    { label: "⬜ Free picks (45%+ accuracy, all leagues)", bronze: "trial", silver: true, gold: true, platinum: true },
-    { label: "⚪ Silver picks (60%+ accuracy, top 14 leagues)", bronze: "trial", silver: true, gold: true, platinum: true },
-    { label: "🔵 Gold picks (70%+ accuracy, top 10 leagues)", bronze: "trial", silver: false, gold: true, platinum: true },
-    { label: "🟢 Platinum picks (85%+ accuracy, top 5 elite)", bronze: false, silver: false, gold: false, platinum: true },
-    { label: "Data Analyst tools (Deep Dive, Explorer, Calibration)", bronze: "trial", silver: false, gold: true, platinum: true },
-    { label: "CSV / JSON / PDF exports", bronze: "trial", silver: false, gold: true, platinum: true },
-    { label: "Gold Telegram community", bronze: "trial", silver: false, gold: true, platinum: true },
-    { label: "Priority 12h support", bronze: false, silver: false, gold: true, platinum: true },
-    { label: "Private Platinum Telegram (20 seats)", bronze: false, silver: false, gold: false, platinum: true },
-    { label: "Lifetime price lock", bronze: false, silver: false, gold: false, platinum: true },
-    { label: "Pay once — no renewals", bronze: false, silver: false, gold: false, platinum: true },
+    { label: t("pricingDeep.compare.row1" as any), bronze: trialStr, silver: true, gold: true, platinum: true },
+    { label: t("pricingDeep.compare.row2" as any), bronze: trialStr, silver: true, gold: true, platinum: true },
+    { label: t("pricingDeep.compare.row3" as any), bronze: trialStr, silver: false, gold: true, platinum: true },
+    { label: t("pricingDeep.compare.row4" as any), bronze: false, silver: false, gold: false, platinum: true },
+    { label: t("pricingDeep.compare.row5" as any), bronze: trialStr, silver: false, gold: true, platinum: true },
+    { label: t("pricingDeep.compare.row6" as any), bronze: trialStr, silver: false, gold: true, platinum: true },
+    { label: t("pricingDeep.compare.row7" as any), bronze: trialStr, silver: false, gold: true, platinum: true },
+    { label: t("pricingDeep.compare.row8" as any), bronze: false, silver: false, gold: true, platinum: true },
+    { label: t("pricingDeep.compare.row9" as any), bronze: false, silver: false, gold: false, platinum: true },
+    { label: t("pricingDeep.compare.row10" as any), bronze: false, silver: false, gold: false, platinum: true },
+    { label: t("pricingDeep.compare.row11" as any), bronze: false, silver: false, gold: false, platinum: true },
   ];
 
   const goldReasons = [
     {
       icon: TrendingUp,
-      title: "70%+ accuracy on top-10 leagues",
-      desc:
-        `Gold unlocks 🔵 Gold-labelled picks with 70%+ historical accuracy across 10 top competitions (Premier League, Eredivisie, Bundesliga, Primeira Liga, Liga MX and more). €14,99/month is less than one bet you lose on a gut feeling.`,
+      title: t("pricingDeep.goldReason1.title" as any),
+      desc: t("pricingDeep.goldReason1.desc" as any),
     },
     {
       icon: Sparkles,
-      title: "Data Analyst tools unlocked",
-      desc:
-        "Match Deep Dive (Elo progression, sub-model breakdown, feature importance), Predictions Explorer (tier + market filter, CSV export) and Engine Performance / Calibration charts. Silver does not include these.",
+      title: t("pricingDeep.goldReason2.title" as any),
+      desc: t("pricingDeep.goldReason2.desc" as any),
     },
     {
       icon: Shield,
-      title: "Community + fast support",
-      desc:
-        "Gold unlocks our private Telegram channel for pick discussion and 12-hour support. Silver is email-only (48h). Bronze is trial-only.",
+      title: t("pricingDeep.goldReason3.title" as any),
+      desc: t("pricingDeep.goldReason3.desc" as any),
     },
   ];
 
   const platinumReasons = [
     {
       icon: Crown,
-      title: "Breaks even at month 14, free forever after",
-      desc:
-        "€199 once is 13.2 months of Gold. Every month after that is pure savings — and our Gold price is already scheduled to rise as coverage expands.",
+      title: t("pricingDeep.platinumReason1.title" as any),
+      desc: t("pricingDeep.platinumReason1.desc" as any),
     },
     {
       icon: Lock,
-      title: "100 Platinum seats per year. Hard cap.",
-      desc:
-        "Once this year's 100 founder seats are claimed, the tier closes until next cycle — at a higher price. If you see Platinum available, the window is still open.",
+      title: t("pricingDeep.platinumReason2.title" as any),
+      desc: t("pricingDeep.platinumReason2.desc" as any),
     },
     {
       icon: Star,
-      title: "Private Platinum Telegram (20 seats)",
-      desc:
-        "A separate founder channel with direct access to our team — in-depth Q&A, early insights, and strategy discussion before features go live.",
+      title: t("pricingDeep.platinumReason3.title" as any),
+      desc: t("pricingDeep.platinumReason3.desc" as any),
     },
   ];
 
@@ -255,7 +248,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             className="section-label mb-5 inline-flex items-center gap-2"
           >
             <Sparkles className="h-3 w-3" />
-            Less than one bad bet per month
+            {t("pricingDeep.hero.label" as any)}
           </motion.span>
 
           <motion.h1
@@ -264,8 +257,10 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             transition={{ duration: 0.7, delay: 0.05 }}
             className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl"
           >
-            The BetsPlug plan built for{" "}
-            <span className="gradient-text-green">your betting style.</span>
+            {t("pricingDeep.hero.titleA" as any)}{" "}
+            <span className="gradient-text-green">
+              {t("pricingDeep.hero.titleB" as any)}
+            </span>
           </motion.h1>
 
           <motion.p
@@ -274,12 +269,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
-            Every plan runs on the same AI engine and the same public track record.
-            The difference is which <em>quality tier</em> of picks you unlock:
-            ⬜ Free (45%+ accuracy, all leagues), ⚪ Silver (60%+, top-14 leagues),
-            🔵 Gold (70%+, top-10 leagues) or 🟢 Platinum elite (85%+, top-5 leagues).
-            Start with a €0,01 trial, upgrade when the tier above pays for itself,
-            or lock in lifetime pricing before it goes up.
+            {t("pricingDeep.hero.subtitle" as any)}
           </motion.p>
 
           {/* Risk-reversal trust bar */}
@@ -386,13 +376,13 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                           className="text-[10px] font-semibold uppercase tracking-wider"
                           style={{ color: isAmber ? "#fbbf24" : undefined }}
                         >
-                          Plan · {plan.name}
+                          {t("pricingDeep.planPrefix" as any)} {plan.name}
                         </span>
                       </div>
                       {plan.popular && (
                         <Pill tone="active" className="gap-1 text-[10px]">
                           <Star className="h-3 w-3" />
-                          Popular
+                          {t("pricingDeep.pillPopular" as any)}
                         </Pill>
                       )}
                       {plan.lifetime && (
@@ -406,7 +396,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                           }}
                         >
                           <Crown className="h-3 w-3" />
-                          Lifetime
+                          {t("pricingDeep.pillLifetime" as any)}
                         </Pill>
                       )}
                     </div>
@@ -458,7 +448,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                         className="text-[10px] font-semibold uppercase tracking-wider"
                         style={{ color: isAmber ? "#fbbf24" : "#4ade80" }}
                       >
-                        Included
+                        {t("pricingDeep.included" as any)}
                       </p>
                       {plan.includes.map((item) => (
                         <div key={item} className="flex items-start gap-3 text-sm">
@@ -475,7 +465,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                     {plan.notIncluded.length > 0 && (
                       <div className="mt-5 space-y-2.5">
                         <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                          Not included
+                          {t("pricingDeep.notIncluded" as any)}
                         </p>
                         {plan.notIncluded.map((item) => (
                           <div
