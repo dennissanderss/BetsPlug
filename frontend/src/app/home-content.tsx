@@ -460,7 +460,12 @@ export function HomeContent({
                       {t("home.freePredRecord")}
                     </p>
                     <p className="text-stat text-sm text-[#93c5fd]">
-                      {botd && botd.correct > 0 ? botd.correct : 847}
+                      {/* Only show a live number once the BOTD ledger
+                          actually has evaluated picks — otherwise fall
+                          back to the last-reviewed static figure so we
+                          never claim "0 correct" or "2 correct" while
+                          the live counter is warming up. */}
+                      {botd && botd.correct > 0 ? botd.correct : "—"}
                     </p>
                   </div>
                 </div>
@@ -513,10 +518,13 @@ export function HomeContent({
                   icon={Target}
                   variant="purple"
                   label={t("liveProof.winrate")}
+                  /* Require at least 30 graded picks before quoting a
+                     winrate — otherwise small-sample noise (e.g. "0%"
+                     on day 1) is more misleading than no number. */
                   value={
-                    stats && stats.total > 0 && stats.winrate > 0
+                    stats && stats.total >= 30 && stats.winrate > 0
                       ? `${(stats.winrate * 100).toFixed(1)}%`
-                      : "64.8%"
+                      : "—"
                   }
                 />
                 <LiveStatChip
@@ -526,7 +534,7 @@ export function HomeContent({
                   value={
                     stats && stats.total > 0
                       ? stats.total.toLocaleString(locale)
-                      : "1,247"
+                      : "—"
                   }
                 />
                 <LiveStatChip

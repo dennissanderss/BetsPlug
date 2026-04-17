@@ -2283,7 +2283,7 @@ const en = {
   "home.freePredCta": "View all predictions",
   "home.freePredCtaSub": "Unlock full access to 50+ daily predictions with a free trial.",
   "home.freePredWinrate": "Win rate",
-  "home.freePredRecord": "Correct picks",
+  "home.freePredRecord": "Correct picks all-time",
   "home.freePredToday": "Upcoming free picks",
   "home.freePredYesterday": "Recent results",
 
@@ -3256,7 +3256,7 @@ const nl: Dictionary = {
   "home.freePredCta": "Bekijk alle voorspellingen",
   "home.freePredCtaSub": "Ontgrendel volledige toegang tot 50+ dagelijkse voorspellingen met een gratis proefperiode.",
   "home.freePredPending": "AI-analyse bezig — voorspelling volgt binnenkort",
-  "home.freePredRecord": "Correcte picks",
+  "home.freePredRecord": "Correcte picks totaal",
   "home.freePredSubtitle": "Bekijk onze modellen in actie. Drie gratis AI-voorspellingen — dagelijks bijgewerkt, geen registratie nodig.",
   "home.freePredTitle": "3 GRATIS",
   "home.freePredTitleHighlight": "AI voorspellingen",
