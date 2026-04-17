@@ -365,6 +365,40 @@ const en = {
   "pricing.trust2": "Cancel Anytime",
   "pricing.trust3": "Secure payment by Stripe",
 
+  /* ── Pricing page deep-dive (plan cards under the hero) ──────
+   * Only the most visible strings are i18n'd here — taglines,
+   * bestFor headlines, CTAs + hero trust-bar. The long
+   * includes/notIncluded arrays, comparison table labels and
+   * the gold/platinum "reasons" sections remain hard-coded in
+   * pricing-content.tsx and are queued for extraction as part
+   * of Fase C framework work.
+   */
+  "pricingDeep.trust1": "7-day Gold trial for €0,01",
+  "pricingDeep.trust2": "No auto-upgrade after trial",
+  "pricingDeep.trust3": "Cancel in two clicks",
+  "pricingDeep.trust4": "Stripe-secured checkout",
+
+  "pricingDeep.sectionLabel": "What you get, plan by plan",
+  "pricingDeep.sectionHeadingA": "Every plan unlocks the same AI football",
+  "pricingDeep.sectionHeadingB": "predictions & track record.",
+  "pricingDeep.sectionIntro": "The difference is which leagues you get, how you can download your picks, and how fast we respond when you need help. Pick the one that matches how you actually bet.",
+
+  "pricingDeep.bronzeTagline": "The €0,01 test drive",
+  "pricingDeep.bronzeBestFor": "Been burned by a tipster before? Try full Gold access for 7 days — see our 🔵 Gold picks (70%+ historical accuracy) against your own bets before you spend a cent more.",
+  "pricingDeep.bronzeCta": "Start €0,01 trial",
+
+  "pricingDeep.silverTagline": "The weekend-bettor plan",
+  "pricingDeep.silverBestFor": "You bet a few times per week on mid-to-top European football. Silver gives you ⚪ Silver picks (60%+ historical accuracy) across 14 top competitions — plus every Free pick — without paying for the Data Analyst tools.",
+  "pricingDeep.silverCta": "Start Silver",
+
+  "pricingDeep.goldTagline": "The full-access plan most users pick",
+  "pricingDeep.goldBestFor": "For serious bettors who want the Data Analyst tools. 🔵 Gold picks (70%+ accuracy) across 10 top leagues, plus downloadable picks, Match Deep Dive, and fast support.",
+  "pricingDeep.goldCta": "Start Gold",
+
+  "pricingDeep.platinumTagline": "Elite picks. Pay once. Keep it forever.",
+  "pricingDeep.platinumBestFor": "You want our best picks only. 🟢 Platinum unlocks elite picks from the top-5 competitions (Champions League, Premier League, Eredivisie, Süper Lig, Saudi Pro League) with 85%+ historical accuracy — plus every Gold, Silver and Free pick below it. Lifetime.",
+  "pricingDeep.platinumCta": "Claim lifetime",
+
   /* Articles */
   "articles.badge": "Match breakdowns · betting strategy · AI football predictions",
   "articles.title": "Weekly",
@@ -3341,6 +3375,34 @@ const nl: Dictionary = {
   "pricing.trust2": "Annuleer op elk gewenst moment",
   "pricing.trust3": "Veilige betaling via Stripe",
   "pricing.yearly": "Jaarlijks",
+
+  /* ── Pricing page deep-dive (zie EN-sectie voor scope) ─────── */
+  "pricingDeep.trust1": "7-daagse Gold-proef voor € 0,01",
+  "pricingDeep.trust2": "Geen automatische upgrade na de proef",
+  "pricingDeep.trust3": "Annuleer in twee kliks",
+  "pricingDeep.trust4": "Stripe-beveiligde checkout",
+
+  "pricingDeep.sectionLabel": "Wat je krijgt, plan voor plan",
+  "pricingDeep.sectionHeadingA": "Elk plan gebruikt dezelfde AI-voetbal-",
+  "pricingDeep.sectionHeadingB": "voorspellingen & trackrecord.",
+  "pricingDeep.sectionIntro": "Het verschil zit in welke competities je krijgt, hoe je je picks kunt downloaden, en hoe snel we reageren als je hulp nodig hebt. Kies het plan dat bij jouw gokstijl past.",
+
+  "pricingDeep.bronzeTagline": "De proefrit voor € 0,01",
+  "pricingDeep.bronzeBestFor": "Al eens verbrand door een tipster? Probeer 7 dagen volledige Gold-toegang — zie onze 🔵 Gold picks (70%+ historische nauwkeurigheid) naast je eigen inzetten voordat je nog een cent uitgeeft.",
+  "pricingDeep.bronzeCta": "Start € 0,01 proefperiode",
+
+  "pricingDeep.silverTagline": "Het plan voor de weekend-gokker",
+  "pricingDeep.silverBestFor": "Je gokt een paar keer per week op midden- en topvoetbal in Europa. Silver geeft je ⚪ Silver picks (60%+ historische nauwkeurigheid) in 14 topcompetities — plus elke Free pick — zonder dat je voor de Data Analyst tools betaalt.",
+  "pricingDeep.silverCta": "Start Silver",
+
+  "pricingDeep.goldTagline": "Het volledige plan dat de meesten kiezen",
+  "pricingDeep.goldBestFor": "Voor serieuze gokkers die de Data Analyst tools willen. 🔵 Gold picks (70%+ nauwkeurigheid) in 10 topcompetities, plus downloadbare picks, Match Deep Dive en snelle support.",
+  "pricingDeep.goldCta": "Start Gold",
+
+  "pricingDeep.platinumTagline": "Elite picks. Eenmalig betalen. Voor altijd.",
+  "pricingDeep.platinumBestFor": "Je wilt alleen onze beste picks. 🟢 Platinum ontgrendelt elite picks uit de top-5 competities (Champions League, Premier League, Eredivisie, Süper Lig, Saudi Pro League) met 85%+ historische nauwkeurigheid — plus elke Gold, Silver en Free pick eronder. Levenslang.",
+  "pricingDeep.platinumCta": "Claim levenslang",
+
 
   "related.predictions": "Alle Voorspellingen",
   "related.predictionsDesc": "Bekijk alle aankomende wedstrijdvoorspellingen met kansen",

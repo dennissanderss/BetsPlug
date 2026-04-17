@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
-import { useLocalizedHref } from "@/i18n/locale-provider";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { HeroMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -57,15 +57,19 @@ const AMBER_GLOW_BG =
 
 export function PricingContent({ pricingConfig }: PricingContentProps) {
   const loc = useLocalizedHref();
+  const { t } = useTranslations();
 
+  // NOTE (P2.3): tagline + bestFor + cta come from i18n (EN + NL).
+  // The `includes` / `notIncluded` arrays and the comparison/reasons
+  // sections further down are still hard-coded English and scheduled
+  // for Fase C extraction — see docs/fase_b_qa_report.md § "DEEL 3".
   const plans: PlanDetail[] = [
     {
       id: "bronze",
       icon: Shield,
       name: "Bronze",
-      tagline: "The €0,01 test drive",
-      bestFor:
-        "Been burned by a tipster before? Try full Gold access for 7 days — see our 🔵 Gold picks (70%+ historical accuracy) against your own bets before you spend a cent more.",
+      tagline: t("pricingDeep.bronzeTagline" as any),
+      bestFor: t("pricingDeep.bronzeBestFor" as any),
       price: "€0,01",
       period: "7 days",
       includes: [
@@ -82,16 +86,15 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
         "Priority support queue",
       ],
       variant: "blue",
-      cta: "Start €0,01 trial",
+      cta: t("pricingDeep.bronzeCta" as any),
       ctaHref: (l) => `${l("/checkout")}?plan=bronze`,
     },
     {
       id: "silver",
       icon: Zap,
       name: "Silver",
-      tagline: "The weekend-bettor plan",
-      bestFor:
-        "You bet a few times per week on mid-to-top European football. Silver gives you ⚪ Silver picks (60%+ historical accuracy) across 14 top competitions — plus every Free pick — without paying for the Data Analyst tools.",
+      tagline: t("pricingDeep.silverTagline" as any),
+      bestFor: t("pricingDeep.silverBestFor" as any),
       price: "€9,99",
       period: "month",
       includes: [
@@ -111,16 +114,15 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
         "Gold Telegram community",
       ],
       variant: "purple",
-      cta: "Start Silver",
+      cta: t("pricingDeep.silverCta" as any),
       ctaHref: (l) => `${l("/checkout")}?plan=silver`,
     },
     {
       id: "gold",
       icon: Star,
       name: "Gold",
-      tagline: "The full-access plan most users pick",
-      bestFor:
-        "For serious bettors who want the Data Analyst tools. 🔵 Gold picks (70%+ accuracy) across 10 top leagues, plus downloadable picks, Match Deep Dive, and fast support.",
+      tagline: t("pricingDeep.goldTagline" as any),
+      bestFor: t("pricingDeep.goldBestFor" as any),
       price: "€14,99",
       period: "month",
       includes: [
@@ -140,16 +142,15 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       ],
       variant: "green",
       popular: true,
-      cta: "Start Gold",
+      cta: t("pricingDeep.goldCta" as any),
       ctaHref: (l) => `${l("/checkout")}?plan=gold`,
     },
     {
       id: "platinum",
       icon: Crown,
       name: "Platinum lifetime",
-      tagline: "Elite picks. Pay once. Keep it forever.",
-      bestFor:
-        "You want our best picks only. 🟢 Platinum unlocks elite picks from the top-5 competitions (Champions League, Premier League, Eredivisie, Süper Lig, Saudi Pro League) with 85%+ historical accuracy — plus every Gold, Silver and Free pick below it. Lifetime.",
+      tagline: t("pricingDeep.platinumTagline" as any),
+      bestFor: t("pricingDeep.platinumBestFor" as any),
       price: "€199",
       period: "one-time",
       includes: [
@@ -165,7 +166,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       notIncluded: [],
       variant: "amber",
       lifetime: true,
-      cta: "Claim lifetime",
+      cta: t("pricingDeep.platinumCta" as any),
       ctaHref: (l) => `${l("/checkout")}?plan=platinum`,
     },
   ];
@@ -290,19 +291,19 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
           >
             <span className="inline-flex items-center gap-1.5">
               <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80]" />
-              7-day Gold trial for €0,01
+              {t("pricingDeep.trust1" as any)}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80]" />
-              No auto-upgrade after trial
+              {t("pricingDeep.trust2" as any)}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80]" />
-              Cancel in two clicks
+              {t("pricingDeep.trust3" as any)}
             </span>
             <span className="inline-flex items-center gap-1.5">
               <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80]" />
-              Stripe-secured checkout
+              {t("pricingDeep.trust4" as any)}
             </span>
           </motion.div>
 
@@ -334,16 +335,16 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="mb-12">
             <span className="section-label">
-              <Sparkles className="h-3 w-3" /> What you get, plan by plan
+              <Sparkles className="h-3 w-3" /> {t("pricingDeep.sectionLabel" as any)}
             </span>
             <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-              Every plan unlocks the same AI football{" "}
-              <span className="gradient-text-green">predictions & track record.</span>
+              {t("pricingDeep.sectionHeadingA" as any)}{" "}
+              <span className="gradient-text-green">
+                {t("pricingDeep.sectionHeadingB" as any)}
+              </span>
             </h2>
             <p className="mt-4 max-w-2xl text-base text-[#a3a9b8]">
-              The difference is which leagues you get, how you can download your
-              picks, and how fast we respond when you need help. Pick the one
-              that matches how you actually bet.
+              {t("pricingDeep.sectionIntro" as any)}
             </p>
           </div>
 
