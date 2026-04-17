@@ -13,10 +13,6 @@ import {
   ChevronRight,
   Trophy,
   MapPin,
-  Telescope,
-  LineChart,
-  Activity,
-  Layers,
   Lock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -71,76 +67,6 @@ const navSections: NavSection[] = [
       { labelKey: "nav.results", fallback: "Results & Analysis", href: "/results", icon: Trophy },
       { labelKey: "nav.trackrecord", fallback: "Track Record", href: "/trackrecord", icon: ClipboardList },
       { labelKey: "nav.reports", fallback: "Reports", href: "/reports", icon: FileBarChart2 },
-    ],
-  },
-  {
-    labelKey: "sidebar.analyst",
-    fallbackLabel: "Data Analyst",
-    items: [
-      {
-        labelKey: "nav.analyst_hub",
-        fallback: "Analyst Hub",
-        href: "/analyst",
-        icon: Layers,
-        requiredTier: "gold",
-        lockBlurbKey: "lock.analystHub.blurb",
-        lockBenefitKeys: [
-          "lock.analystHub.benefit1",
-          "lock.analystHub.benefit2",
-          "lock.analystHub.benefit3",
-        ],
-      },
-      // NOTE: /analyst/predictions, /analyst/matches (list) and
-      // /analyst/engine-performance are Fase 2 of the v10 build — the
-      // pages don't exist yet. Marked `comingSoon: true` so EVERY tier
-      // (including Gold+) sees a non-clickable "SOON" chip instead of
-      // getting a 404 on click. When the pages ship, flip the flag and
-      // the existing requiredTier + lock metadata takes over.
-      {
-        labelKey: "nav.predictions_explorer",
-        fallback: "Predictions Explorer",
-        href: "/analyst/predictions",
-        icon: Telescope,
-        comingSoon: true,
-        requiredTier: "gold",
-        lockBlurbKey: "lock.predictionsExplorer.blurb",
-        lockBenefitKeys: [
-          "lock.predictionsExplorer.benefit1",
-          "lock.predictionsExplorer.benefit2",
-          "lock.predictionsExplorer.benefit3",
-          "lock.predictionsExplorer.benefit4",
-        ],
-      },
-      {
-        labelKey: "nav.match_deep_dive",
-        fallback: "Match Deep Dive",
-        href: "/analyst/matches",
-        icon: Activity,
-        comingSoon: true,
-        requiredTier: "silver", // Silver sees teaser preview, Gold+ full
-        lockBlurbKey: "lock.matchDeepDive.blurb",
-        lockBenefitKeys: [
-          "lock.matchDeepDive.benefit1",
-          "lock.matchDeepDive.benefit2",
-          "lock.matchDeepDive.benefit3",
-          "lock.matchDeepDive.benefit4",
-        ],
-      },
-      {
-        labelKey: "nav.engine_performance",
-        fallback: "Engine Performance",
-        href: "/analyst/engine-performance",
-        icon: LineChart,
-        comingSoon: true,
-        requiredTier: "gold",
-        lockBlurbKey: "lock.enginePerformance.blurb",
-        lockBenefitKeys: [
-          "lock.enginePerformance.benefit1",
-          "lock.enginePerformance.benefit2",
-          "lock.enginePerformance.benefit3",
-          "lock.enginePerformance.benefit4",
-        ],
-      },
     ],
   },
   {
