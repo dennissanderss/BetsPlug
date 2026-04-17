@@ -71,20 +71,27 @@ function trackEvent(event: string, params: Record<string, unknown>) {
   }
 }
 
+/** Safe variants that don't need a live-numbers quote. Used when
+ *  the BOTD track-record is too sparse to honestly render
+ *  "{X}% win rate · {N}+ picks" — skips "authority" + "fomo"
+ *  which both embed {hitRate}. */
+const SAFE_VARIANTS: VariantKey[] = ["scarcity", "reciprocity", "social"];
+
 /** Pick a variant for this session. Deterministic per sessionStorage
  *  key so the copy doesn't flicker across page navigations. Rotates
  *  across sessions so returning visitors see fresh copy. */
-function pickVariantForSession(): VariantKey {
+function pickVariantForSession(safeOnly: boolean): VariantKey {
+  const pool = safeOnly ? SAFE_VARIANTS : VARIANTS;
   try {
     const stored = sessionStorage.getItem(STORAGE_VARIANT);
-    if (stored && (VARIANTS as string[]).includes(stored)) {
+    if (stored && (pool as string[]).includes(stored)) {
       return stored as VariantKey;
     }
   } catch {
     /* sessionStorage disabled — fall through to random pick */
   }
-  const idx = Math.floor(Math.random() * VARIANTS.length);
-  const pick = VARIANTS[idx];
+  const idx = Math.floor(Math.random() * pool.length);
+  const pick = pool[idx];
   try {
     sessionStorage.setItem(STORAGE_VARIANT, pick);
   } catch {
@@ -159,17 +166,51 @@ export function TopBar() {
   const [variant, setVariant] = useState<VariantKey | null>(null);
   const stats = useBotdTrackRecord();
 
+  // Gate on stats: if we don't yet know the numbers OR the numbers
+  // are too sparse to quote (evaluated<20 or accuracy_pct==0), pick
+  // from SAFE_VARIANTS only. Prevents "0% win rate · 2+ picks"
+  // appearing on every public page when the BOTD ledger is new.
+  const canQuoteStats = !!(
+    stats &&
+    stats.evaluated >= 20 &&
+    stats.accuracy_pct > 0
+  );
+
   useEffect(() => {
     try {
       if (sessionStorage.getItem(STORAGE_DISMISS) === "1") return;
     } catch {
       /* ignore */
     }
-    const v = pickVariantForSession();
-    setVariant(v);
-    setVisible(true);
-    trackEvent("topbar_impression", { topbar_variant: v });
+    // Defer variant pick until we know whether stats are quotable —
+    // stats is null on first render. Waiting one tick keeps the
+    // sessionStorage-scoped variant stable once chosen.
   }, []);
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem(STORAGE_DISMISS) === "1") return;
+    } catch {
+      /* ignore */
+    }
+    if (variant !== null) return; // already picked for this session
+    // Wait for the stats hook to resolve before picking — once we
+    // know, pick a variant appropriate to the data we can actually
+    // quote. If stats are still null after 2s assume they're sparse
+    // and use safe variants.
+    const pick = () => {
+      const v = pickVariantForSession(!canQuoteStats);
+      setVariant(v);
+      setVisible(true);
+      trackEvent("topbar_impression", { topbar_variant: v });
+    };
+    if (stats === null) {
+      const timer = setTimeout(pick, 2000);
+      return () => clearTimeout(timer);
+    }
+    pick();
+    return;
+  }, [stats, canQuoteStats, variant]);
 
   const hitRate = useMemo(() => {
     if (stats?.accuracy_pct) return String(Math.round(stats.accuracy_pct));
