@@ -243,7 +243,7 @@ export function HomeContent({
       {/* ══════════════════════════════════════════════════════════════
           1 · HERO — text left, premium prediction card right
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24">
+      <section className="relative overflow-hidden pt-40 pb-16 md:pt-52 md:pb-24">
         <HeroMediaBg />
         {/* Ambient hero glows (on top of pattern) */}
         <div
@@ -280,7 +280,7 @@ export function HomeContent({
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.05 }}
-                className="text-display max-w-2xl text-balance text-[#ededed]"
+                className="mt-5 text-display max-w-2xl text-balance text-[#ededed]"
               >
                 {t("hero.titleLine1") ? <>{t("hero.titleLine1")}{" "}</> : null}
                 <span className="gradient-text-green">{t("hero.titleLine2")}</span>
