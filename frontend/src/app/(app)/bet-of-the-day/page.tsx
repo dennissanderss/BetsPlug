@@ -41,8 +41,13 @@ function BOTDTrackRecordCard() {
 
   if (isLoading || !data || data.total_picks === 0) return null;
 
-  const accColor =
-    data.accuracy_pct >= 55
+  // When picks exist but none are evaluated yet, accuracy is undefined.
+  // Show a pending state instead of a misleading 0%.
+  const evaluated = data.evaluated ?? 0;
+  const hasEvaluations = evaluated > 0;
+  const accColor = !hasEvaluations
+    ? "text-slate-500"
+    : data.accuracy_pct >= 55
       ? "text-emerald-400"
       : data.accuracy_pct >= 45
       ? "text-amber-400"
@@ -64,10 +69,12 @@ function BOTDTrackRecordCard() {
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
           <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Accuracy</p>
           <p className={`text-2xl font-extrabold tabular-nums ${accColor}`}>
-            {data.accuracy_pct}%
+            {hasEvaluations ? `${data.accuracy_pct}%` : "—"}
           </p>
           <p className="text-[10px] text-slate-500 mt-0.5">
-            {data.correct} / {data.evaluated} correct
+            {hasEvaluations
+              ? `${data.correct} / ${evaluated} correct`
+              : "awaiting first result"}
           </p>
         </div>
 
@@ -78,7 +85,7 @@ function BOTDTrackRecordCard() {
             {data.total_picks}
           </p>
           <p className="text-[10px] text-slate-500 mt-0.5">
-            {data.evaluated} evaluated
+            {evaluated} evaluated
           </p>
         </div>
 

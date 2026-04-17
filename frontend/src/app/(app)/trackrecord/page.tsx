@@ -1302,6 +1302,7 @@ export default function TrackrecordPage() {
       return resp.json() as Promise<{
         accuracy_pct: number;
         total_picks: number;
+        evaluated: number;
         correct: number;
         current_streak: number;
         avg_confidence: number;
@@ -1362,22 +1363,46 @@ export default function TrackrecordPage() {
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 animate-slide-up">
           <KpiCard
             title="Total Predictions"
-            value={summary?.total_predictions.toLocaleString() ?? " - "}
+            value={
+              summary && summary.total_predictions > 0
+                ? summary.total_predictions.toLocaleString()
+                : "—"
+            }
             subtitle="Verified match predictions"
             icon={Target}
             accent="blue"
           />
           <KpiCard
             title="Accuracy"
-            value={summary ? formatPercent(summary.accuracy) : " - "}
-            subtitle="On all 3-way predictions"
+            value={
+              summary && summary.total_predictions > 0
+                ? formatPercent(summary.accuracy)
+                : "—"
+            }
+            subtitle={
+              summary && summary.total_predictions > 0
+                ? "On all 3-way predictions"
+                : "Awaiting first evaluation"
+            }
             icon={TrendingUp}
             accent="green"
           />
           <KpiCard
             title="Pick of the Day"
-            value={botdStats ? `${botdStats.accuracy_pct}%` : " - "}
-            subtitle={botdStats ? `${botdStats.total_picks} picks, ${botdStats.correct} correct` : "Loading..."}
+            value={
+              !botdStats
+                ? " - "
+                : (botdStats.evaluated ?? 0) > 0
+                  ? `${botdStats.accuracy_pct}%`
+                  : "—"
+            }
+            subtitle={
+              !botdStats
+                ? "Loading..."
+                : (botdStats.evaluated ?? 0) > 0
+                  ? `${botdStats.evaluated} evaluated, ${botdStats.correct} correct`
+                  : `${botdStats.total_picks} picks — awaiting first result`
+            }
             icon={Star}
             accent="gold"
             highlight
@@ -1392,8 +1417,10 @@ export default function TrackrecordPage() {
         </div>
       )}
 
-      {/* BOTD Highlight Section — hero USP */}
-      {botdStats && botdStats.total_picks > 0 && (
+      {/* BOTD Highlight Section — hero USP. Only render when there is at
+          least one evaluated pick; otherwise the banner would shout "0%
+          accuracy" while merely waiting for matches to finish. */}
+      {botdStats && botdStats.total_picks > 0 && (botdStats.evaluated ?? 0) > 0 && (
         <div className="relative overflow-hidden rounded-2xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/[0.08] via-amber-500/[0.05] to-transparent p-6 sm:p-8 animate-slide-up">
           <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/[0.03] rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
@@ -1414,7 +1441,7 @@ export default function TrackrecordPage() {
                 )}
               </div>
               <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl">
-                {botdStats.correct} correct out of {botdStats.total_picks} picks.
+                {botdStats.correct} correct out of {botdStats.evaluated} evaluated picks.
                 Every day, our AI selects the single match it is most confident about.
                 High-confidence picks only — that is our edge.
               </p>
