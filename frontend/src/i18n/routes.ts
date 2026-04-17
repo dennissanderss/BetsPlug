@@ -240,16 +240,6 @@ export const routeTable = {
     sw: "/chaguo-la-siku",
     id: "/pilihan-hari-ini",
   },
-  "/settings": {
-    en: "/settings",
-    nl: "/instellingen",
-    de: "/einstellungen",
-    fr: "/parametres",
-    es: "/ajustes",
-    it: "/impostazioni",
-    sw: "/mipangilio",
-    id: "/pengaturan",
-  },
   "/search": {
     en: "/search",
     nl: "/zoeken",

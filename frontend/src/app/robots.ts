@@ -25,8 +25,6 @@ export default function robots(): MetadataRoute.Robots {
           // Authenticated app shell
           "/dashboard/",
           "/*/dashboard/",
-          "/settings/",
-          "/*/settings/",
 
           // Account / subscription / favorites (authenticated)
           "/myaccount",

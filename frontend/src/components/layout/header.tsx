@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import {
   Bell,
   Search,
-  Settings,
   LogOut,
   ChevronDown,
   ChevronRight,
@@ -282,11 +281,6 @@ export function Header({ className }: HeaderProps) {
                   label={t("header.subscription" as any)}
                   onClick={() => navigate("/subscription")}
                   accent={isPlatinum ? "amber" : undefined}
-                />
-                <MenuItem
-                  icon={Settings}
-                  label={t("header.settings" as any)}
-                  onClick={() => navigate("/settings")}
                 />
                 {isAdmin && (
                   <MenuItem
