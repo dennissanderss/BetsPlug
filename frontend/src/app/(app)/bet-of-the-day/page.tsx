@@ -6,6 +6,8 @@ import { useTranslations } from "@/i18n/locale-provider";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { PickTierBadge } from "@/components/noct/pick-tier-badge";
+import type { PickTierSlug } from "@/types/api";
 import {
   Trophy,
   Zap,
@@ -403,6 +405,10 @@ interface BetOfTheDay {
   prediction_id?: string;
   // v6.2 — optional pre-match odds (null when no odds row on file)
   odds?: BetOfTheDayOddsShape | null;
+  // v8.1 — pick-tier classification (null when flag is off)
+  pick_tier?: PickTierSlug | null;
+  pick_tier_label?: string | null;
+  pick_tier_accuracy?: string | null;
 }
 
 // ─── Large Probability Display ──────────────────────────────────────────────
@@ -570,10 +576,23 @@ export default function BetOfTheDayPage() {
           </div>
         </div>
 
-        <Pill tone="purple" className="flex items-center gap-2">
-          <Zap className="h-4 w-4" />
-          {t("botd.premiumFeature")}
-        </Pill>
+        {/* v8.1: show pick-tier badge when available, falling back to the
+            generic "Premium Feature" pill when the flag is off. The badge
+            communicates the actual quality tier of today's pick, which is
+            stronger marketing than a static "Premium" label. */}
+        {botd?.pick_tier ? (
+          <PickTierBadge
+            tier={botd.pick_tier}
+            label={botd.pick_tier_label?.replace(/^[^\w]+\s*/, "") ?? undefined}
+            accuracy={botd.pick_tier_accuracy ?? undefined}
+            size="lg"
+          />
+        ) : (
+          <Pill tone="purple" className="flex items-center gap-2">
+            <Zap className="h-4 w-4" />
+            {t("botd.premiumFeature")}
+          </Pill>
+        )}
       </div>
 
       {/* ── Main Card ── */}

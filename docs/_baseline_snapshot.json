@@ -1,0 +1,73 @@
+{
+  "timestamp": "2026-04-16T23:00:45.517954+00:00",
+  "endpoints": {
+    "/health": {
+      "status": 200,
+      "bytes": 252
+    },
+    "/dashboard/metrics": {
+      "status": 200,
+      "bytes": 286,
+      "accuracy": 0.4804,
+      "total_forecasts": 8384,
+      "evaluated_count": 8383,
+      "correct_predictions": 4027,
+      "per_tier": {
+        "free": 0.4804
+      }
+    },
+    "/trackrecord/summary": {
+      "status": 200,
+      "bytes": 412,
+      "accuracy": 0.4803769533579864,
+      "total_predictions": 8383,
+      "correct_predictions": 4027,
+      "per_tier": {
+        "free": 0.4803769533579864
+      }
+    },
+    "/pricing/comparison": {
+      "status": 200,
+      "bytes": 887,
+      "list_len": 4,
+      "items_summary": [
+        {
+          "pick_tier": "free",
+          "accuracy_pct": 48.0,
+          "sample_size": 8383,
+          "picks_per_day_estimate": 4.47
+        },
+        {
+          "pick_tier": "silver",
+          "accuracy_pct": 63.2,
+          "sample_size": 2356,
+          "picks_per_day_estimate": 6.0
+        },
+        {
+          "pick_tier": "gold",
+          "accuracy_pct": 71.7,
+          "sample_size": 1341,
+          "picks_per_day_estimate": 6.77
+        },
+        {
+          "pick_tier": "platinum",
+          "accuracy_pct": 86.9,
+          "sample_size": 635,
+          "picks_per_day_estimate": 7.13
+        }
+      ]
+    },
+    "/bet-of-the-day/": {
+      "status": 200,
+      "bytes": 864
+    },
+    "/homepage/free-picks": {
+      "status": 200,
+      "bytes": 3182
+    },
+    "/predictions/?limit=1": {
+      "status": 200,
+      "bytes": 1025
+    }
+  }
+}

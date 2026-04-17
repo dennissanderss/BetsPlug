@@ -214,7 +214,23 @@ export interface ModelOverview {
   hyperparameter_keys: string[];
 }
 
-export interface Prediction {
+/**
+ * v8.1 pick-tier slug — lowercase, stable API key.
+ * The UI looks up emoji and copy via TIER_DISPLAY (see pick-tier-badge.tsx).
+ */
+export type PickTierSlug = "free" | "silver" | "gold" | "platinum";
+
+/** v8.1 — three fields added to every pick response when TIER_SYSTEM_ENABLED. */
+export interface PickTierFields {
+  /** Stable slug — use for logic / cache keys. */
+  pick_tier?: PickTierSlug | null;
+  /** UI-ready label with emoji, e.g. "🟢 Platinum". */
+  pick_tier_label?: string | null;
+  /** Display accuracy claim, e.g. "85%+". */
+  pick_tier_accuracy?: string | null;
+}
+
+export interface Prediction extends PickTierFields {
   id: string;
   match_id: string;
   model_version_id: string;
@@ -243,7 +259,7 @@ export interface BetOfTheDayOdds {
   fetched_at: string | null;
 }
 
-export interface BetOfTheDayResponse {
+export interface BetOfTheDayResponse extends PickTierFields {
   available: boolean;
   match_id: string | null;
   home_team: string | null;
@@ -268,6 +284,13 @@ export interface PredictionEvaluation {
   evaluated_at: string;
 }
 
+/** v8.1 — per-tier slice for aggregate endpoints (trackrecord, dashboard). */
+export interface TierBreakdown {
+  total: number;
+  correct: number;
+  accuracy: number;
+}
+
 export interface TrackrecordSummary {
   total_predictions: number;
   accuracy: number;
@@ -277,6 +300,8 @@ export interface TrackrecordSummary {
   calibration_error: number;
   period_start: string | null;
   period_end: string | null;
+  /** v8.1: breakdown by pick_tier; omitted or null when flag is off. */
+  per_tier?: Partial<Record<PickTierSlug, TierBreakdown>> | null;
 }
 
 export interface SegmentPerformance {
@@ -638,6 +663,23 @@ export interface DashboardMetrics {
   avg_confidence: number;
   has_data: boolean;
   generated_at: string;
+  /** v8.1: breakdown by pick_tier; omitted or null when flag is off. */
+  per_tier?: Partial<Record<PickTierSlug, TierBreakdown>> | null;
+}
+
+// ─── Pricing comparison (public) ─────────────────────────────
+/** v8.1: GET /api/pricing/comparison — returned for each of 4 tiers. */
+export interface PricingTierData {
+  pick_tier: PickTierSlug;
+  pick_tier_label: string;
+  pick_tier_accuracy: string;
+  accuracy_pct: number;
+  wilson_ci_lower_pct: number;
+  sample_size: number;
+  confidence_threshold: number;
+  leagues_count: number | null;
+  /** INCLUSIVE daily pick count a user of this tier sees. */
+  picks_per_day_estimate: number;
 }
 
 // Strategies

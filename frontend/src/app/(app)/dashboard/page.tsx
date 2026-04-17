@@ -9,6 +9,7 @@ import { LiveMatchesStrip } from "@/components/dashboard/LiveMatchesStrip";
 import { TodayMatchesList } from "@/components/dashboard/TodayMatchesList";
 import { YesterdayResultsStrip } from "@/components/dashboard/YesterdayResultsStrip";
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
+import { TierPerformanceCard } from "@/components/dashboard/TierPerformanceCard";
 
 export default function DashboardPage() {
   const { t } = useTranslations();
@@ -65,6 +66,9 @@ export default function DashboardPage() {
         <div className="min-w-0 space-y-4 sm:space-y-5">
           <QuickNavStrip liveCount={liveCount} />
           <HeroBotdCompact botd={botd} isLoading={botdLoading} />
+          {/* v8.1 — per-tier historical accuracy with upgrade nudges.
+              Auto-hides when TIER_SYSTEM_ENABLED=false on backend. */}
+          <TierPerformanceCard />
           <LiveMatchesStrip
             data={liveFixtures}
             isLoading={liveLoading}

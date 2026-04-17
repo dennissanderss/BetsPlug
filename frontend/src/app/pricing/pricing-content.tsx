@@ -65,19 +65,20 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       name: "Bronze",
       tagline: "The €0,01 test drive",
       bestFor:
-        "Been burned by a tipster before? Try our AI football predictions against your own bets for 7 days before you spend a cent more.",
+        "Been burned by a tipster before? Try full Gold access for 7 days — see our 🔵 Gold picks (70%+ historical accuracy) against your own bets before you spend a cent more.",
       price: "€0,01",
       period: "7 days",
       includes: [
         "Full Gold access for 7 days — every feature",
-        "Every match prediction + live probabilities",
-        `Daily Pick of the Day (${POTD_STATS.accuracy}% hit rate)`,
+        "🔵 Gold picks (70%+ historical accuracy)",
+        "⚪ Silver + ⬜ Free picks included — every pick labelled by tier",
+        "Match Deep Dive + Predictions Explorer + CSV export",
         "Complete public track record",
         "Cancel in two clicks — no auto-upgrade",
       ],
       notIncluded: [
+        "🟢 Platinum elite picks (top-5 leagues, 85%+ accuracy)",
         "Gold Telegram community",
-        "Strategy Lab access",
         "Priority support queue",
       ],
       variant: "blue",
@@ -90,21 +91,24 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       name: "Silver",
       tagline: "The weekend-bettor plan",
       bestFor:
-        "You bet on the big leagues — Premier League, La Liga, Bundesliga, Serie A or Ligue 1. Silver covers those five without paying for leagues you don't follow.",
+        "You bet a few times per week on mid-to-top European football. Silver gives you ⚪ Silver picks (60%+ historical accuracy) across 14 top competitions — plus every Free pick — without paying for the Data Analyst tools.",
       price: "€9,99",
       period: "month",
       includes: [
-        "AI predictions for top-5 European leagues",
+        "⚪ Silver picks — top 14 competitions, confidence ≥65%, 60%+ historical accuracy",
+        "⬜ Free picks included — all leagues with confidence ≥55%",
+        "~6 picks per day on average (incl. Free)",
         "Live scores + live probability updates",
         "Weekly performance report in your inbox",
         "Full public track record — every loss included",
         "Email support (48-hour SLA)",
       ],
       notIncluded: [
-        "Leagues beyond top-5 (no Champions League, MLS, Süper Lig…)",
+        "🔵 Gold picks (top-10 leagues, 70%+ accuracy)",
+        "🟢 Platinum elite picks (top-5 leagues, 85%+ accuracy)",
+        "Data Analyst tools (Deep Dive, Explorer, Calibration)",
         "PDF / CSV / JSON report exports",
         "Gold Telegram community",
-        "Strategy Lab access",
       ],
       variant: "purple",
       cta: "Start Silver",
@@ -116,19 +120,24 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       name: "Gold",
       tagline: "The full-access plan most users pick",
       bestFor:
-        "For serious bettors who want every edge: all 30+ leagues, downloadable picks, the Gold Telegram, and fast support when you need answers.",
+        "For serious bettors who want the Data Analyst tools. 🔵 Gold picks (70%+ accuracy) across 10 top leagues, plus downloadable picks, Match Deep Dive, and fast support.",
       price: "€14,99",
       period: "month",
       includes: [
-        `Daily Pick of the Day (${POTD_STATS.accuracy}% hit rate)`,
-        "All 30+ football leagues worldwide (CL, UEL, MLS, Süper Lig…)",
+        "🔵 Gold picks — top 10 competitions, confidence ≥70%, 70%+ historical accuracy",
+        "⚪ Silver + ⬜ Free picks included — every pick labelled by tier",
+        "~7 picks per day on average (incl. all lower tiers)",
+        "Data Analyst tools — Match Deep Dive, Predictions Explorer, Engine Performance",
         "PDF / CSV / JSON exports of every prediction",
         "Exclusive Gold Telegram community",
         "Priority support (12-hour SLA)",
-        "Strategy Lab access (launching soon)",
         "Full transparency — every pick publicly logged",
       ],
-      notIncluded: ["Lifetime pricing lock", "Founder-tier perks"],
+      notIncluded: [
+        "🟢 Platinum elite picks (top-5 leagues, 85%+ accuracy)",
+        "Lifetime pricing lock",
+        "Founder-tier perks",
+      ],
       variant: "green",
       popular: true,
       cta: "Start Gold",
@@ -138,18 +147,20 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       id: "platinum",
       icon: Crown,
       name: "Platinum lifetime",
-      tagline: "Pay once. Keep it forever.",
+      tagline: "Elite picks. Pay once. Keep it forever.",
       bestFor:
-        "You're in this for the long run. Platinum locks in today's price forever, plus exclusive perks you can't get on any monthly plan.",
+        "You want our best picks only. 🟢 Platinum unlocks elite picks from the top-5 competitions (Champions League, Premier League, Eredivisie, Süper Lig, Saudi Pro League) with 85%+ historical accuracy — plus every Gold, Silver and Free pick below it. Lifetime.",
       price: "€199",
       period: "one-time",
       includes: [
-        "Lifetime Gold access — every current & future feature",
+        "🟢 Platinum elite picks — top-5 leagues, confidence ≥75%, 85%+ historical accuracy",
+        "🔵 Gold + ⚪ Silver + ⬜ Free picks included — every tier, every pick",
+        "~7 picks per day on average (all tiers combined)",
+        "All Data Analyst tools — Deep Dive, Explorer, Calibration, Engine Performance",
         "Private Platinum Telegram (max 20 seats)",
         "Lifetime price lock — immune to every future increase",
         "Early access to every new feature",
         "Never pay again — zero renewals, zero upsells",
-        "Exclusive Strategy Lab access at launch",
       ],
       notIncluded: [],
       variant: "amber",
@@ -160,12 +171,14 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
   ];
 
   const goldVsOthers = [
-    { label: "All 30+ leagues worldwide", bronze: "trial", silver: false, gold: true, platinum: true },
-    { label: `Pick of the Day (${POTD_STATS.accuracy}% accuracy)`, bronze: "trial", silver: false, gold: true, platinum: true },
+    { label: "⬜ Free picks (45%+ accuracy, all leagues)", bronze: "trial", silver: true, gold: true, platinum: true },
+    { label: "⚪ Silver picks (60%+ accuracy, top 14 leagues)", bronze: "trial", silver: true, gold: true, platinum: true },
+    { label: "🔵 Gold picks (70%+ accuracy, top 10 leagues)", bronze: "trial", silver: false, gold: true, platinum: true },
+    { label: "🟢 Platinum picks (85%+ accuracy, top 5 elite)", bronze: false, silver: false, gold: false, platinum: true },
+    { label: "Data Analyst tools (Deep Dive, Explorer, Calibration)", bronze: "trial", silver: false, gold: true, platinum: true },
     { label: "CSV / JSON / PDF exports", bronze: "trial", silver: false, gold: true, platinum: true },
     { label: "Gold Telegram community", bronze: "trial", silver: false, gold: true, platinum: true },
     { label: "Priority 12h support", bronze: false, silver: false, gold: true, platinum: true },
-    { label: "Strategy Lab (launching soon)", bronze: false, silver: false, gold: true, platinum: true },
     { label: "Private Platinum Telegram (20 seats)", bronze: false, silver: false, gold: false, platinum: true },
     { label: "Lifetime price lock", bronze: false, silver: false, gold: false, platinum: true },
     { label: "Pay once — no renewals", bronze: false, silver: false, gold: false, platinum: true },
@@ -174,15 +187,15 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
   const goldReasons = [
     {
       icon: TrendingUp,
-      title: "Cheaper than one lost bet",
+      title: "70%+ accuracy on top-10 leagues",
       desc:
-        `€14,99/month is less than one bet you lose on a gut feeling. For that, you get 30+ leagues, our ${POTD_STATS.accuracy}% Pick of the Day, and every prediction downloadable.`,
+        `Gold unlocks 🔵 Gold-labelled picks with 70%+ historical accuracy across 10 top competitions (Premier League, Eredivisie, Bundesliga, Primeira Liga, Liga MX and more). €14,99/month is less than one bet you lose on a gut feeling.`,
     },
     {
       icon: Sparkles,
-      title: "Strategy Lab comes to Gold first",
+      title: "Data Analyst tools unlocked",
       desc:
-        "Test your own betting strategies against our full prediction history when Strategy Lab launches. Gold and Platinum users get early access.",
+        "Match Deep Dive (Elo progression, sub-model breakdown, feature importance), Predictions Explorer (tier + market filter, CSV export) and Engine Performance / Calibration charts. Silver does not include these.",
     },
     {
       icon: Shield,
@@ -260,10 +273,11 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
-            Every plan gives you the same AI football predictions and the same public
-            track record. The only difference is how many leagues you get and the
-            extras around it. Start with a €0,01 trial, upgrade when the results
-            convince you, or lock in lifetime pricing before it goes up.
+            Every plan runs on the same AI engine and the same public track record.
+            The difference is which <em>quality tier</em> of picks you unlock:
+            Silver (60%+ accuracy), Gold (70%+), or Platinum elite (85%+ on our
+            top-5 leagues). Start with a €0,01 trial, upgrade when the tier above
+            pays for itself, or lock in lifetime pricing before it goes up.
           </motion.p>
 
           {/* Risk-reversal trust bar */}
