@@ -1542,8 +1542,32 @@ export default function TrackrecordPage() {
         </div>
       )}
 
-      {/* 2. Recent Predictions Feed — real API data */}
-      <RecentPredictionsFeed />
+      {/* 2. Recent Predictions Feed — real API data.
+          The tier-tabs only filter AGGREGATE stats (summary, segments,
+          calibration, CSV). The picks feed is always scoped to the
+          caller's subscription via access_filter() on the backend, so
+          clicking "Platinum" while on Free would show Platinum stats
+          but still render the viewer's own Free picks here — that
+          mismatch was confusing users. Hide the feed (with an
+          explanatory card) when a single tier is selected; show it
+          again on "All tiers". */}
+      {pickTier === "all" ? (
+        <RecentPredictionsFeed />
+      ) : (
+        <div className="glass-card p-6 animate-slide-up">
+          <div className="flex items-start gap-3">
+            <Database className="h-5 w-5 text-slate-500 flex-shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-slate-200">
+                {t("trackrecord.recentPicksHiddenTitle")}
+              </p>
+              <p className="text-xs leading-relaxed text-slate-400">
+                {t("trackrecord.recentPicksHiddenDesc")}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Filter bar */}
       <div className="glass-card p-4">
