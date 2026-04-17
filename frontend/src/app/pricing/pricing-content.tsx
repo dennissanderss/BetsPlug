@@ -275,9 +275,10 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
           >
             Every plan runs on the same AI engine and the same public track record.
             The difference is which <em>quality tier</em> of picks you unlock:
-            Silver (60%+ accuracy), Gold (70%+), or Platinum elite (85%+ on our
-            top-5 leagues). Start with a €0,01 trial, upgrade when the tier above
-            pays for itself, or lock in lifetime pricing before it goes up.
+            ⬜ Free (45%+ accuracy, all leagues), ⚪ Silver (60%+, top-14 leagues),
+            🔵 Gold (70%+, top-10 leagues) or 🟢 Platinum elite (85%+, top-5 leagues).
+            Start with a €0,01 trial, upgrade when the tier above pays for itself,
+            or lock in lifetime pricing before it goes up.
           </motion.p>
 
           {/* Risk-reversal trust bar */}
