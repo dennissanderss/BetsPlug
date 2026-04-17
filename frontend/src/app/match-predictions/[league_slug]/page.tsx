@@ -182,6 +182,32 @@ function buildJsonLd(hub: LeagueHub, editorialLocale: LeagueHubLocale) {
         },
       },
       {
+        // Standalone BreadcrumbList node — some SEO crawlers only
+        // detect breadcrumbs declared as a top-level @graph entity.
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "BetsPlug",
+            item: SITE_URL,
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Match Predictions",
+            item: `${SITE_URL}/match-predictions`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: hub.name[editorialLocale],
+            item: url,
+          },
+        ],
+      },
+      {
         "@type": "SportsOrganization",
         "@id": `${url}#league`,
         name: hub.name.en,

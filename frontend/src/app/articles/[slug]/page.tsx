@@ -6,6 +6,7 @@ import {
   type Article,
 } from "@/lib/sanity-data";
 import { getLocalizedAlternates } from "@/lib/seo-helpers";
+import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { ArticleTemplate } from "../article-template";
 
 export const revalidate = 60;
@@ -121,6 +122,15 @@ export default async function SingleArticlePage(props: {
 
   const jsonLd = buildArticleJsonLd(article);
 
+  // Breadcrumb schema so Google can render breadcrumb rich snippets
+  // in SERPs (the visual breadcrumb lives inside ArticleTemplate but
+  // was missing its JSON-LD counterpart before).
+  const breadcrumbItems = [
+    { name: "BetsPlug", href: "/" },
+    { name: "Articles", href: "/articles" },
+    { name: article.title, href: `/articles/${article.slug}` },
+  ];
+
   return (
     <>
       <script
@@ -128,6 +138,7 @@ export default async function SingleArticlePage(props: {
         // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <BreadcrumbJsonLd items={breadcrumbItems} />
       <ArticleTemplate article={article} />
     </>
   );

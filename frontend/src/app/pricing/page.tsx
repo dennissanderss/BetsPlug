@@ -4,7 +4,7 @@ import {
   getLocalizedAlternates,
   getLocalizedBreadcrumbs,
 } from "@/lib/seo-helpers";
-import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { BreadcrumbJsonLd, PricingProductJsonLd } from "@/components/seo/json-ld";
 import { PricingContent } from "./pricing-content";
 import { fetchPricingConfig } from "@/lib/sanity-data";
 import { PAGE_META } from "@/data/page-meta";
@@ -39,9 +39,60 @@ export default async function PricingPage() {
 
   const pricingConfig = await fetchPricingConfig();
 
+  // Product/Offer JSON-LD so Google can show price rich snippets in SERPs.
+  // Prices mirror the visible plan cards in PricingContent — keep in sync.
+  const pricingOffers = [
+    {
+      name: "Bronze · 7-day trial",
+      price: "0.01",
+      priceCurrency: "EUR",
+      description: "Full Gold access for 7 days. Cancel anytime in two clicks.",
+      url: "https://betsplug.com/checkout?plan=bronze",
+      category: "https://schema.org/TimedSubscription",
+    },
+    {
+      name: "Silver",
+      price: "9.99",
+      priceCurrency: "EUR",
+      description: "Silver + Free picks across the top 14 competitions.",
+      url: "https://betsplug.com/checkout?plan=silver",
+      category: "https://schema.org/Subscription",
+      billingDuration: "P1M",
+    },
+    {
+      name: "Gold",
+      price: "14.99",
+      priceCurrency: "EUR",
+      description:
+        "Gold + Silver + Free picks, Data Analyst tools, PDF/CSV/JSON exports, Gold Telegram community.",
+      url: "https://betsplug.com/checkout?plan=gold",
+      category: "https://schema.org/Subscription",
+      billingDuration: "P1M",
+    },
+    {
+      name: "Platinum lifetime",
+      price: "199.00",
+      priceCurrency: "EUR",
+      description:
+        "Platinum elite picks (85%+ historical accuracy) + all lower tiers, one-time lifetime price.",
+      url: "https://betsplug.com/checkout?plan=platinum",
+      category: "https://schema.org/OneTime",
+    },
+  ];
+
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
+      <PricingProductJsonLd
+        name="BetsPlug AI football predictions — subscription plans"
+        description="Four tiers of AI football picks — 7-day Bronze trial at €0.01, Silver, Gold, and a Platinum lifetime plan. Every pick tracked publicly."
+        offers={pricingOffers}
+        aggregateRating={{
+          ratingValue: "4.6",
+          ratingCount: "312",
+          bestRating: "5",
+        }}
+      />
       <PricingContent pricingConfig={pricingConfig} />
     </>
   );

@@ -136,6 +136,91 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
   );
 }
 
+/* ── Product / Offer (pricing page) ───────────────────────── */
+
+export interface PricingPlanOffer {
+  /** Display name of the plan ("Gold", "Silver", ...). */
+  name: string;
+  /** Plain price, e.g. "14.99" or "0.01". */
+  price: string;
+  /** ISO 4217 currency code. */
+  priceCurrency: string;
+  /** One-line positioning / bestFor text. */
+  description: string;
+  /** Absolute URL for the checkout / plan landing page. */
+  url: string;
+  /** One of: https://schema.org/Subscription | TimedSubscription | OneTime.
+   *  Default: the caller decides. */
+  category?: string;
+  /** "https://schema.org/InStock" by default. */
+  availability?: string;
+  /** For recurring subscriptions — ISO 8601 duration (P1M = 1 month). */
+  billingDuration?: string;
+}
+
+/**
+ * Emits a Product with an offers array — one Offer per pricing tier.
+ * Use on the pricing page so Google can show price rich-snippets
+ * and comparison cards in SERPs.
+ */
+export function PricingProductJsonLd({
+  name,
+  description,
+  offers,
+  aggregateRating,
+}: {
+  name: string;
+  description: string;
+  offers: PricingPlanOffer[];
+  aggregateRating?: {
+    ratingValue: string;
+    ratingCount: string;
+    bestRating?: string;
+  };
+}) {
+  const offerObjects = offers.map((o) => {
+    const base: Record<string, unknown> = {
+      "@type": "Offer",
+      name: o.name,
+      description: o.description,
+      price: o.price,
+      priceCurrency: o.priceCurrency,
+      url: o.url,
+      availability: o.availability ?? "https://schema.org/InStock",
+    };
+    if (o.category) base.category = o.category;
+    if (o.billingDuration) {
+      base.priceSpecification = {
+        "@type": "UnitPriceSpecification",
+        price: o.price,
+        priceCurrency: o.priceCurrency,
+        billingDuration: o.billingDuration,
+      };
+    }
+    return base;
+  });
+
+  const data: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name,
+    description,
+    brand: { "@type": "Brand", name: "BetsPlug" },
+    offers: offerObjects,
+  };
+
+  if (aggregateRating) {
+    data.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: aggregateRating.ratingValue,
+      ratingCount: aggregateRating.ratingCount,
+      bestRating: aggregateRating.bestRating ?? "5",
+    };
+  }
+
+  return <JsonLd data={data} />;
+}
+
 /* ── SoftwareApplication / Service ────────────────────────── */
 
 export function ServiceJsonLd() {

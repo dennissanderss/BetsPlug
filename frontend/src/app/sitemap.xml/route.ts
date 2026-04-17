@@ -50,14 +50,18 @@ const PUBLIC_PATHS: Array<{
 }> = [
   { canonical: "/", priority: 1.0, changeFrequency: "daily" },
   { canonical: "/match-predictions", priority: 0.9, changeFrequency: "daily" },
+  { canonical: "/pricing", priority: 0.9, changeFrequency: "monthly" },
   { canonical: "/bet-types", priority: 0.8, changeFrequency: "monthly" },
   { canonical: "/learn", priority: 0.8, changeFrequency: "monthly" },
   { canonical: "/articles", priority: 0.8, changeFrequency: "weekly" },
   { canonical: "/how-it-works", priority: 0.7, changeFrequency: "monthly" },
   { canonical: "/track-record", priority: 0.7, changeFrequency: "weekly" },
+  { canonical: "/engine", priority: 0.7, changeFrequency: "monthly" },
+  { canonical: "/b2b", priority: 0.6, changeFrequency: "monthly" },
   // `/about` is the authenticated in-app "about this product" page and lives
   // under the (app) group. Only `/about-us` is the public SEO canonical here.
   { canonical: "/about-us", priority: 0.6, changeFrequency: "monthly" },
+  { canonical: "/responsible-gambling", priority: 0.5, changeFrequency: "yearly" },
   { canonical: "/contact", priority: 0.5, changeFrequency: "yearly" },
 ];
 

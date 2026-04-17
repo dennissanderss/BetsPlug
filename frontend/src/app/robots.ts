@@ -22,6 +22,12 @@ export default function robots(): MetadataRoute.Robots {
           "/admin/",
           "/*/admin/",
 
+          // Sanity Studio — CMS editing interface, no SEO value
+          "/studio",
+          "/studio/",
+          "/*/studio",
+          "/*/studio/",
+
           // Authenticated app shell
           "/dashboard/",
           "/*/dashboard/",
