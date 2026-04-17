@@ -259,4 +259,48 @@ async def tier_smoke(db: AsyncSession = Depends(get_db)) -> dict[str, Any]:
             "traceback": traceback.format_exc()[-1500:],
         })
 
+    # Step 6: call the REAL pricing endpoint function directly and capture error
+    try:
+        from app.api.routes.pricing import get_pricing_comparison
+        result = await get_pricing_comparison(db=db)
+        steps.append({"step": "real_pricing_fn", "ok": True, "result": f"returned {len(result)} rows"})
+    except Exception as e:
+        steps.append({
+            "step": "real_pricing_fn",
+            "ok": False,
+            "error_type": type(e).__name__,
+            "error_msg": str(e)[:500],
+            "traceback": traceback.format_exc()[-2000:],
+        })
+
+    # Step 7: call the REAL dashboard/metrics endpoint function directly
+    try:
+        from app.api.routes.dashboard import get_dashboard_metrics
+        result = await get_dashboard_metrics(db=db, user_tier=PickTier.FREE)
+        steps.append({"step": "real_dashboard_fn", "ok": True, "result": f"accuracy={result.accuracy}, total={result.total_forecasts}"})
+    except Exception as e:
+        steps.append({
+            "step": "real_dashboard_fn",
+            "ok": False,
+            "error_type": type(e).__name__,
+            "error_msg": str(e)[:500],
+            "traceback": traceback.format_exc()[-2000:],
+        })
+
+    # Step 8: call the REAL trackrecord/summary endpoint function directly
+    try:
+        from app.api.routes.trackrecord import get_trackrecord_summary
+        result = await get_trackrecord_summary(
+            model_version_id=None, source=None, pick_tier=None, db=db, user_tier=PickTier.FREE
+        )
+        steps.append({"step": "real_trackrecord_fn", "ok": True, "result": f"accuracy={result.accuracy}, total={result.total_predictions}"})
+    except Exception as e:
+        steps.append({
+            "step": "real_trackrecord_fn",
+            "ok": False,
+            "error_type": type(e).__name__,
+            "error_msg": str(e)[:500],
+            "traceback": traceback.format_exc()[-2000:],
+        })
+
     return {"ok": all(s.get("ok", True) for s in steps if "ok" in s), "steps": steps}
