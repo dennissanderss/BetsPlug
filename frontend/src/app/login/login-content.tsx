@@ -96,7 +96,7 @@ export function LoginContent() {
       const res = await api.login(email.trim(), password);
       auth.login(res.access_token, res.user);
       const next = params?.get("next");
-      router.push(next || loc("/jouw-route"));
+      router.push(next || loc("/dashboard"));
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.status === 403 && err.detail === "email_not_verified") {

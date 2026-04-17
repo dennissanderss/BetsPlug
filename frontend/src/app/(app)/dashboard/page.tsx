@@ -10,6 +10,7 @@ import { TodayMatchesList } from "@/components/dashboard/TodayMatchesList";
 import { YesterdayResultsStrip } from "@/components/dashboard/YesterdayResultsStrip";
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 import { TierPerformanceCard } from "@/components/dashboard/TierPerformanceCard";
+import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 
 export default function DashboardPage() {
   const { t } = useTranslations();
@@ -64,6 +65,7 @@ export default function DashboardPage() {
       {/* Ambient glow blobs behind content */}
       <div className="relative grid gap-4 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
         <div className="min-w-0 space-y-4 sm:space-y-5">
+          <WelcomeBanner />
           <QuickNavStrip liveCount={liveCount} />
           <HeroBotdCompact botd={botd} isLoading={botdLoading} />
           {/* v8.1 — per-tier historical accuracy with upgrade nudges.

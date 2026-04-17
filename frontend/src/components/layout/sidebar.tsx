@@ -53,8 +53,7 @@ const navSections: NavSection[] = [
     labelKey: "sidebar.overview",
     fallbackLabel: "Overview",
     items: [
-      { labelKey: "nav.jouwRoute", fallback: "How It Works", href: "/jouw-route", icon: MapPin, badge: "START" },
-      { labelKey: "nav.dashboard", fallback: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+      { labelKey: "nav.dashboard", fallback: "Dashboard", href: "/dashboard", icon: LayoutDashboard, badge: "START" },
     ],
   },
   {
@@ -142,6 +141,13 @@ const navSections: NavSection[] = [
           "lock.enginePerformance.benefit4",
         ],
       },
+    ],
+  },
+  {
+    labelKey: "sidebar.help",
+    fallbackLabel: "Help",
+    items: [
+      { labelKey: "nav.jouwRoute", fallback: "How It Works", href: "/jouw-route", icon: MapPin },
     ],
   },
 ];

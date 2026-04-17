@@ -1372,6 +1372,7 @@ const en = {
   "sidebar.predictions": "Predictions",
   "sidebar.results": "Results",
   "sidebar.analyst": "Data Analyst",
+  "sidebar.help": "Help",
 
   /* ── Tier-lock copy (Data Analyst sidebar items) ──────────── */
   "lock.analystHub.blurb": "Deep analytics dashboards for serious handicappers.",
@@ -1426,6 +1427,14 @@ const en = {
   "route.trackRecordDesc": "Historical model accuracy, calibration and per-tier breakdown",
   "route.resultsTitle": "Results & Analysis",
   "route.resultsDesc": "See how yesterday's predictions performed",
+
+  /* ── Dashboard welcome banner ─────────────────────── */
+  "welcomeBanner.label": "Welcome",
+  "welcomeBanner.title": "Here's how BetsPlug works",
+  "welcomeBanner.subtitle": "Our AI analyses football data — form, head-to-head, standings and team strength — to forecast the most likely outcome of upcoming matches.",
+  "welcomeBanner.stepPrefix": "Step",
+  "welcomeBanner.exploreCta": "See the full walkthrough",
+  "welcomeBanner.dismiss": "Don't show again",
 
   /* ── Related links ────────────────────────────────── */
   "related.title": "Explore More",
@@ -3515,6 +3524,12 @@ const nl: Dictionary = {
   "route.strategyTitle": "Strategy Lab",
   "route.trackRecordDesc": "Historische modelprestaties, kalibratie en segmentanalyse",
   "route.trackRecordTitle": "Trackrecord",
+  "welcomeBanner.label": "Welkom",
+  "welcomeBanner.title": "Zo werkt BetsPlug",
+  "welcomeBanner.subtitle": "Onze AI analyseert voetbaldata — vorm, onderlinge resultaten, competitiestanden en teamsterktes — om de meest waarschijnlijke uitslag van aankomende wedstrijden te voorspellen.",
+  "welcomeBanner.stepPrefix": "Stap",
+  "welcomeBanner.exploreCta": "Bekijk de volledige onboarding",
+  "welcomeBanner.dismiss": "Niet meer tonen",
   "route.subtitle": "Onze AI analyseert voetbaldata — teamvorm, onderlinge resultaten, competitiestanden en teamsterktes — om de meest waarschijnlijke uitslag van aankomende wedstrijden te voorspellen.",
   "route.title": "Hoe BetsPlug werkt",
 
@@ -3603,6 +3618,7 @@ const nl: Dictionary = {
 
   "sidebar.analyst": "Data Analist",
   "sidebar.gettingStarted": "Aan de slag",
+  "sidebar.help": "Help",
   "sidebar.overview": "Overzicht",
   "sidebar.performance": "Prestaties",
   "sidebar.predictions": "Voorspellingen",

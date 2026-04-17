@@ -72,7 +72,7 @@ export default function RegisterPage() {
       });
       auth.login(res.access_token, res.user);
       const next = params?.get("next");
-      router.replace(next || loc("/jouw-route"));
+      router.replace(next || loc("/dashboard"));
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.detail === "email_taken") {
