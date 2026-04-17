@@ -6,13 +6,14 @@ import uuid
 from datetime import datetime, timezone
 from typing import AsyncIterator, List, Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import StreamingResponse
 from sqlalchemy import Integer, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.api.deps import get_current_tier
+from app.auth.dependencies import get_current_user
 from app.core.prediction_filters import v81_predictions_filter
 from app.core.tier_system import (
     PickTier,
@@ -26,6 +27,7 @@ from app.models.league import League
 from app.models.match import Match
 from app.models.prediction import Prediction, PredictionEvaluation
 from app.models.sport import Sport
+from app.models.user import User
 from app.schemas.trackrecord import (
     CalibrationBucket,
     CalibrationReport,
@@ -755,24 +757,53 @@ async def export_trackrecord_csv(
     pick_tier: Optional[str] = Query(
         default=None,
         description=(
-            "PUBLIC tier filter: 'free' | 'silver' | 'gold' | 'platinum'. "
-            "When supplied the CSV is scoped to predictions classified as "
-            "that tier, overriding the caller's normal access scope."
+            "Tier filter: 'free' | 'silver' | 'gold' | 'platinum'. "
+            "When supplied the CSV is scoped to predictions classified "
+            "as that tier. Callers may only request tiers up to and "
+            "including their own subscription tier — higher-tier "
+            "downloads return 402."
         ),
     ),
     db: AsyncSession = Depends(get_db),
+    _user: User = Depends(get_current_user),
     user_tier: PickTier = Depends(get_current_tier),
 ) -> StreamingResponse:
-    """Stream all evaluated predictions as CSV — scoped to the user's tier
-    OR to an explicit ``?pick_tier=`` when set (transparency surface).
+    """Stream all evaluated predictions as CSV — scoped to the caller's tier
+    OR to an explicit ``?pick_tier=`` when set (≤ caller's tier).
+
+    Authentication is required (B1.1): the CSV contains every match
+    name, pick, odds and outcome, which is the product's paid
+    deliverable. Un-authenticated requests now return 401; the aggregate
+    numbers needed to render the public Track Record page are still
+    available via ``GET /trackrecord/summary``.
 
     One row per prediction/evaluation pair; columns cover enough data
     for a user to recompute accuracy, Brier, log-loss and calibration
-    ECE themselves. This is the primary transparency artefact for the
-    Track Record page.
+    ECE themselves.
     """
     public_tier = _parse_public_pick_tier(pick_tier)
-    tier_suffix = f"-{public_tier.name.lower()}" if public_tier is not None else ""
+
+    # B1.1 tier-gate: requesting a CSV for a tier above the caller's
+    # subscription would leak the paid product. Block with 402 so
+    # clients can distinguish "pay to unlock" from 403 "forbidden".
+    # When TIER_SYSTEM_ENABLED is false the check is a no-op because
+    # user_tier is forced to PLATINUM in that mode.
+    if (
+        TIER_SYSTEM_ENABLED
+        and public_tier is not None
+        and public_tier > user_tier
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_402_PAYMENT_REQUIRED,
+            detail=(
+                f"The {public_tier.name.title()} track-record CSV is "
+                "restricted to subscribers on that tier or higher."
+            ),
+        )
+
+    tier_suffix = (
+        f"-{public_tier.name.lower()}" if public_tier is not None else ""
+    )
     filename = (
         f"betsplug-trackrecord{tier_suffix}-"
         f"{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.csv"

@@ -106,6 +106,23 @@ const PUBLIC_TIER_TABS: {
   { key: "platinum", label: "Platinum · 85%+", emoji: "🟢", activeClass: "border-emerald-400/40 bg-emerald-500/[0.12] text-emerald-100" },
 ];
 
+// Client-side auth probe — reads the localStorage token written by
+// the login flow. Used only to decide whether to surface the "Download
+// CSV" anchor vs a "Sign in to download" CTA on the public page. The
+// real authorisation still happens server-side; this just avoids the
+// crude 401 screen anonymous users would otherwise see.
+function useHasAuthToken(): boolean {
+  const [hasToken, setHasToken] = useState(false);
+  useEffect(() => {
+    try {
+      setHasToken(Boolean(window.localStorage.getItem("betsplug_token")));
+    } catch {
+      setHasToken(false);
+    }
+  }, []);
+  return hasToken;
+}
+
 function PublicTierTabs({
   value,
   onChange,
@@ -115,6 +132,10 @@ function PublicTierTabs({
 }) {
   const api = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
   const csvSuffix = value !== "all" ? `?pick_tier=${value}` : "";
+  const hasToken = useHasAuthToken();
+  const localize = useLocalizedHref();
+  const localizedLogin = localize("/login");
+
   return (
     <div className="card-neon card-neon-green rounded-2xl overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.05] px-5 py-3">
@@ -122,14 +143,29 @@ function PublicTierTabs({
           <ShieldCheck className="h-3 w-3" />
           Audit any tier
         </span>
-        <a
-          href={`${api}/trackrecord/export.csv${csvSuffix}`}
-          download
-          className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors"
-        >
-          <Download className="h-3.5 w-3.5" />
-          Download CSV
-        </a>
+        {hasToken ? (
+          <a
+            href={`${api}/trackrecord/export.csv${csvSuffix}`}
+            download
+            className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Download CSV
+          </a>
+        ) : (
+          // B1.1: the CSV endpoint now requires authentication and only
+          // serves tiers up to the caller's own. Public visitors can
+          // still browse every tier's aggregate numbers above, but the
+          // row-level export (match names, picks, odds, outcomes) is a
+          // paid deliverable — swap the anchor for a sign-in CTA.
+          <Link
+            href={localizedLogin}
+            className="inline-flex items-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.04] px-3 py-1.5 text-[11px] font-semibold text-slate-300 hover:border-emerald-400/40 hover:text-emerald-300 transition-colors"
+          >
+            <Lock className="h-3.5 w-3.5" />
+            Sign in to download CSV
+          </Link>
+        )}
       </div>
       <div className="flex flex-wrap gap-1.5 p-3">
         {PUBLIC_TIER_TABS.map((tab) => {
