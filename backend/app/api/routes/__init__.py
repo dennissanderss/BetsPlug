@@ -37,6 +37,7 @@ from app.api.routes.checkout_sessions import router as checkout_sessions_router
 from app.api.routes.route import router as route_router
 from app.api.routes.admin_api_usage import router as admin_api_usage_router
 from app.api.routes.admin_v5 import router as admin_v5_router
+from app.api.routes.debug_tier import router as debug_tier_router  # TEMP: remove after diagnosis
 
 router = APIRouter()
 
@@ -77,3 +78,4 @@ router.include_router(checkout_sessions_router, tags=["checkout"])
 router.include_router(route_router, prefix="/route", tags=["route"])
 router.include_router(admin_api_usage_router, prefix="/admin", tags=["admin-api-usage"])
 router.include_router(admin_v5_router, prefix="/admin/v5", tags=["admin-v5"])
+router.include_router(debug_tier_router, prefix="/_debug", tags=["_debug"])  # TEMP: remove after diagnosis
