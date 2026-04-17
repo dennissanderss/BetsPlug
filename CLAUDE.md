@@ -2,6 +2,13 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **Session handoff:** at the start of any new session, first read
+> `docs/SESSION_HANDOFF.md` for the current state of Fase A/B/C,
+> recent commits, open follow-ups, canonical tier facts and
+> do's/don'ts. Pair it with `docs/fase_b_qa_report.md` for the detailed
+> QA audit findings. Those two files together replace having to
+> reconstruct prior-session history.
+
 > **Frontend design (NOCTURNE):** before touching any visual code, read
 > `frontend/NOCTURNE.md`. Every page, card, button and data chip on the
 > public site and in the authed dashboard must follow those conventions —
