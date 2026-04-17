@@ -25,10 +25,36 @@ const en = {
   "nav.getStarted": "Get Started",
   "nav.joinBlurb": "Join 1,500+ bettors getting smarter picks every day.",
 
-  /* Top Bar */
+  /* Top Bar — legacy keys (still used as fallback accuracy copy) */
   "topbar.winRate": "win rate",
   "topbar.picksAnalyzed": "picks analyzed",
   "topbar.cta": "Try for €0.01",
+
+  /* Top Bar rotating Cialdini variants ─────────────────────────
+     Each variant targets one principle of persuasion. Desktop
+     copy is the full phrase; mobile copy is the compact version
+     used below the sm: breakpoint. {hitRate} / {totalPicks} are
+     filled at render time from the live track record API (with
+     POTD_STATS as fallback). */
+  "topbar.v.scarcity.text": "Today's top picks lock at kick-off — act before the whistle",
+  "topbar.v.scarcity.textMobile": "Picks lock at kick-off",
+  "topbar.v.scarcity.cta": "Unlock now",
+
+  "topbar.v.authority.text": "{hitRate}% hit rate · {totalPicks}+ predictions verified · Public track record",
+  "topbar.v.authority.textMobile": "{hitRate}% hit rate · verified",
+  "topbar.v.authority.cta": "See proof",
+
+  "topbar.v.reciprocity.text": "Free Pick of the Day — AI's highest-conviction call, no email, no card",
+  "topbar.v.reciprocity.textMobile": "Free Pick of the Day — no card",
+  "topbar.v.reciprocity.cta": "View free pick",
+
+  "topbar.v.social.text": "1,500+ bettors across Europe trust BetsPlug every day",
+  "topbar.v.social.textMobile": "1,500+ bettors trust BetsPlug",
+  "topbar.v.social.cta": "Try €0.01 trial",
+
+  "topbar.v.fomo.text": "Last month: {hitRate}% hit on Pick of the Day — today's pick is already live",
+  "topbar.v.fomo.textMobile": "{hitRate}% hit last month",
+  "topbar.v.fomo.cta": "Don't miss today's pick",
 
   /* Social proof popup */
   "socialProof.subscribed": "just subscribed to the",
@@ -2871,12 +2897,6 @@ const nl: Dictionary = {
   "faqTitle.trackRecord": "Track Record FAQ",
   "faqTitle.trackRecordSub": "Hoe we onze voorspellingsprestaties meten en delen.",
 
-  "homeLeagues.eyebrow": "Populaire competities",
-  "homeLeagues.title": "AI-voorspellingen voor elke competitie die telt",
-  "homeLeagues.subtitle": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Champions League en meer — één abonnement dekt ze allemaal, met een openbaar trackrecord dat je zelf kunt verifiëren.",
-  "homeLeagues.cardHint": "Bekijk voorspellingen",
-  "homeLeagues.ctaAll": "Alle competities bekijken",
-
   "features.badge": "Wat je krijgt",
   "features.f1Desc": "Ontvang elke dag door AI aangedreven winstkansen voor meer dan 50 wedstrijden. In realtime bijgewerkt als kansen en omstandigheden veranderen.",
   "features.f1Title": "Dagelijkse wedstrijdvoorspellingen",
@@ -3087,6 +3107,12 @@ const nl: Dictionary = {
   "home.freePredToday": "Aankomende gratis picks",
   "home.freePredWinrate": "Winstpercentage",
   "home.freePredYesterday": "Recente resultaten",
+
+  "homeLeagues.cardHint": "Bekijk voorspellingen",
+  "homeLeagues.ctaAll": "Alle competities bekijken",
+  "homeLeagues.eyebrow": "Populaire competities",
+  "homeLeagues.subtitle": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Champions League en meer — één abonnement dekt ze allemaal, met een openbaar trackrecord dat je zelf kunt verifiëren.",
+  "homeLeagues.title": "AI-voorspellingen voor elke competitie die telt",
 
   "how.badge": "Hoe het werkt",
   "how.deepDive": "Bekijk de volledige methodologie",
@@ -3743,6 +3769,21 @@ const nl: Dictionary = {
 
   "topbar.cta": "Probeer het voor € 0,01",
   "topbar.picksAnalyzed": "keuzes geanalyseerd",
+  "topbar.v.authority.cta": "Zie bewijs",
+  "topbar.v.authority.text": "{hitRate}% trefferpercentage · {totalPicks}+ voorspellingen geverifieerd · Openbaar trackrecord",
+  "topbar.v.authority.textMobile": "{hitRate}% trefferpercentage · geverifieerd",
+  "topbar.v.fomo.cta": "Mis de keuze van vandaag niet",
+  "topbar.v.fomo.text": "Vorige maand: {hitRate}% hit op Pick of the Day — de keuze van vandaag is al live",
+  "topbar.v.fomo.textMobile": "{hitRate}% hit vorige maand",
+  "topbar.v.reciprocity.cta": "Bekijk gratis keuze",
+  "topbar.v.reciprocity.text": "Gratis Pick of the Day — AI's oproep met de hoogste overtuiging, geen e-mail, geen kaart",
+  "topbar.v.reciprocity.textMobile": "Gratis Pick of the Day — geen kaart",
+  "topbar.v.scarcity.cta": "Ontgrendel nu",
+  "topbar.v.scarcity.text": "De beste keuzes van vandaag worden bij de aftrap vastgelegd – handel vóór het fluitsignaal",
+  "topbar.v.scarcity.textMobile": "Picks vergrendelen bij de aftrap",
+  "topbar.v.social.cta": "Probeer een proefversie van € 0,01",
+  "topbar.v.social.text": "Meer dan 1.500 gokkers in heel Europa vertrouwen elke dag op BetsPlug",
+  "topbar.v.social.textMobile": "1.500+ gokkers vertrouwen op BetsPlug",
   "topbar.winRate": "winstpercentage",
 
   "tr.breadcrumbHome": "Home",
