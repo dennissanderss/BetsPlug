@@ -1790,5 +1790,5 @@ const it = {
   "welcome.tourTitle": "Dove trovare cosa, una volta dentro",
   "welcome.trialBody": "Non ti verrà addebitato alcun importo oggi. Annulla in qualsiasi momento nei prossimi 7 giorni e il tuo account verrà messo in pausa silenziosamente: nessuna domanda, nessuna pressione.",
   "welcome.trialTitle": "La tua prova gratuita di 7 giorni è attiva",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default it;

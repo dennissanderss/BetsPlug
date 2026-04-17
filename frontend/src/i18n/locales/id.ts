@@ -1790,5 +1790,5 @@ const id = {
   "welcome.tourTitle": "Di mana menemukan apa, begitu Anda masuk",
   "welcome.trialBody": "Anda tidak akan ditagih hari ini. Batalkan kapan saja dalam 7 hari ke depan dan akun Anda dijeda diam-diam - tanpa pertanyaan, tanpa tekanan.",
   "welcome.trialTitle": "Uji coba gratis 7 hari Anda aktif",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default id;

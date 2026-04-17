@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Lock, Sparkles, X, Crown, ArrowRight } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import type { Tier } from "@/hooks/use-tier";
+import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
+import { formatMsg } from "@/i18n/format";
 
 interface UpgradeLockModalProps {
   open: boolean;
@@ -18,26 +20,26 @@ interface UpgradeLockModalProps {
   benefits?: string[];
 }
 
-const TIER_COPY: Record<
+const TIER_VISUAL: Record<
   Exclude<Tier, "free">,
-  { label: string; hexVariant: "green" | "purple" | "blue"; cta: string; plan: string }
+  { label: string; hexVariant: "green" | "purple" | "blue"; ctaKey: string; plan: string }
 > = {
   silver: {
     label: "Silver",
     hexVariant: "blue",
-    cta: "Upgrade to Silver",
+    ctaKey: "upgradeLock.ctaSilver",
     plan: "silver",
   },
   gold: {
     label: "Gold",
     hexVariant: "green",
-    cta: "Upgrade to Gold",
+    ctaKey: "upgradeLock.ctaGold",
     plan: "gold",
   },
   platinum: {
     label: "Platinum",
     hexVariant: "purple",
-    cta: "Upgrade to Platinum",
+    ctaKey: "upgradeLock.ctaPlatinum",
     plan: "platinum",
   },
 };
@@ -50,7 +52,15 @@ export function UpgradeLockModal({
   blurb,
   benefits,
 }: UpgradeLockModalProps) {
-  const copy = TIER_COPY[requiredTier];
+  const visual = TIER_VISUAL[requiredTier];
+  const { t } = useTranslations();
+  const loc = useLocalizedHref();
+  const cta = t(visual.ctaKey as any);
+  const defaultBlurb = formatMsg(t("upgradeLock.defaultBlurb" as any), {
+    tier: visual.label,
+  });
+  const compareLabel = t("upgradeLock.compareAll" as any);
+  const copy = visual; // back-compat for template references below
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -95,8 +105,7 @@ export function UpgradeLockModal({
               </Dialog.Title>
 
               <p className="mt-2 text-sm text-[#a3a9b8]">
-                {blurb ??
-                  `This feature is part of ${copy.label} and higher plans.`}
+                {blurb ?? defaultBlurb}
               </p>
 
               {benefits && benefits.length > 0 && (
@@ -120,21 +129,21 @@ export function UpgradeLockModal({
 
               <div className="mt-7 flex w-full flex-col gap-2">
                 <Link
-                  href={`/checkout?plan=${copy.plan}`}
+                  href={loc(`/checkout?plan=${copy.plan}`)}
                   onClick={() => onOpenChange(false)}
                   className="btn-primary inline-flex items-center justify-center gap-1.5"
                 >
                   <Crown className="h-4 w-4" />
-                  {copy.cta}
+                  {cta}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
 
                 <Link
-                  href="/subscription"
+                  href={loc("/subscription")}
                   onClick={() => onOpenChange(false)}
                   className="btn-ghost text-xs"
                 >
-                  Compare all plans
+                  {compareLabel}
                 </Link>
               </div>
             </div>

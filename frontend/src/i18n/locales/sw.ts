@@ -1790,5 +1790,5 @@ const sw = {
   "welcome.tourTitle": "Wapi kupata nini, mara moja wewe ni ndani",
   "welcome.trialBody": "Hutatozwa leo. Ghairi wakati wowote katika siku 7 zijazo na akaunti yako itasitishwa kimya kimya - hakuna maswali, hakuna shinikizo.",
   "welcome.trialTitle": "Jaribio lako la siku 7 bila malipo linatumika",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default sw;

@@ -1790,5 +1790,5 @@ const es = {
   "welcome.tourTitle": "Dónde encontrar qué, una vez que estés dentro",
   "welcome.trialBody": "No se le cobrará hoy. Cancele en cualquier momento dentro de los próximos 7 días y su cuenta se detendrá silenciosamente, sin preguntas ni presiones.",
   "welcome.trialTitle": "Tu prueba gratuita de 7 días está activa",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default es;

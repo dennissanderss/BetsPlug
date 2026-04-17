@@ -36,10 +36,10 @@ interface NavItem {
   comingSoon?: boolean;
   /** Minimum tier needed to access. Lower tiers see a locked item. */
   requiredTier?: Tier;
-  /** Short one-liner shown in the upgrade modal. */
-  lockBlurb?: string;
-  /** Benefits shown in the upgrade modal. */
-  lockBenefits?: string[];
+  /** i18n key for the short one-liner shown in the upgrade modal. */
+  lockBlurbKey?: string;
+  /** i18n keys for the benefit checklist shown in the upgrade modal. */
+  lockBenefitKeys?: string[];
 }
 
 interface NavSection {
@@ -84,11 +84,11 @@ const navSections: NavSection[] = [
         href: "/analyst",
         icon: Layers,
         requiredTier: "gold",
-        lockBlurb: "Deep analytics dashboards for serious handicappers.",
-        lockBenefits: [
-          "Predictions Explorer with filters + CSV export",
-          "Match Deep Dive with per-model breakdown",
-          "Engine performance + calibration charts",
+        lockBlurbKey: "lock.analystHub.blurb",
+        lockBenefitKeys: [
+          "lock.analystHub.benefit1",
+          "lock.analystHub.benefit2",
+          "lock.analystHub.benefit3",
         ],
       },
       {
@@ -97,12 +97,12 @@ const navSections: NavSection[] = [
         href: "/analyst/predictions",
         icon: Telescope,
         requiredTier: "gold",
-        lockBlurb: "Filter every pick by tier, market, league and export to CSV.",
-        lockBenefits: [
-          "Confidence tier filter (Silver / Gold / Platinum)",
-          "Market filter (1X2 / Over-Under / BTTS)",
-          "League and date range filters",
-          "One-click CSV export",
+        lockBlurbKey: "lock.predictionsExplorer.blurb",
+        lockBenefitKeys: [
+          "lock.predictionsExplorer.benefit1",
+          "lock.predictionsExplorer.benefit2",
+          "lock.predictionsExplorer.benefit3",
+          "lock.predictionsExplorer.benefit4",
         ],
       },
       {
@@ -111,12 +111,12 @@ const navSections: NavSection[] = [
         href: "/analyst/matches",
         icon: Activity,
         requiredTier: "silver", // Silver sees teaser preview, Gold+ full
-        lockBlurb: "See exactly why the engine ranks a match the way it does.",
-        lockBenefits: [
-          "Elo progression chart for both teams",
-          "Submodel breakdown (Elo / Logistic / XGBoost / Poisson)",
-          "Top-10 feature importance bar chart",
-          "H2H last 10 and recent form detail",
+        lockBlurbKey: "lock.matchDeepDive.blurb",
+        lockBenefitKeys: [
+          "lock.matchDeepDive.benefit1",
+          "lock.matchDeepDive.benefit2",
+          "lock.matchDeepDive.benefit3",
+          "lock.matchDeepDive.benefit4",
         ],
       },
       {
@@ -125,12 +125,12 @@ const navSections: NavSection[] = [
         href: "/analyst/engine-performance",
         icon: LineChart,
         requiredTier: "gold",
-        lockBlurb: "Calibration, Brier score and per-league accuracy.",
-        lockBenefits: [
-          "10-bucket reliability diagram",
-          "Per-league and per-tier accuracy tables",
-          "Lead-time decay curve",
-          "Brier score and log-loss",
+        lockBlurbKey: "lock.enginePerformance.blurb",
+        lockBenefitKeys: [
+          "lock.enginePerformance.benefit1",
+          "lock.enginePerformance.benefit2",
+          "lock.enginePerformance.benefit3",
+          "lock.enginePerformance.benefit4",
         ],
       },
     ],
@@ -175,11 +175,15 @@ export function Sidebar() {
 
   const openLockFor = (item: NavItem) => {
     if (!item.requiredTier || item.requiredTier === "free") return;
+    // Translate blurb/benefit keys at open time so locale changes are
+    // reflected without rebuilding the navSections array.
+    const blurb = item.lockBlurbKey ? t(item.lockBlurbKey as any) : undefined;
+    const benefits = item.lockBenefitKeys?.map((k) => t(k as any));
     setLockedFeature({
       label: getLabel(item),
       requiredTier: item.requiredTier as Exclude<Tier, "free">,
-      blurb: item.lockBlurb,
-      benefits: item.lockBenefits,
+      blurb: blurb && blurb !== item.lockBlurbKey ? blurb : undefined,
+      benefits,
     });
   };
 
