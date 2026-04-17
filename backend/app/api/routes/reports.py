@@ -86,9 +86,27 @@ async def generate_report(
     Tier-scoped (v8.2): the report only contains picks the caller has
     access to, and embeds a tier banner so users can tell which slice
     of the data the document covers.
+
+    Backend authorisation (B1.2): PDF/CSV/JSON reports are a paid
+    feature — the Gold+ PaywallOverlay on `/reports` is the UI gate,
+    but without this server-side check a Free user could hit the
+    endpoint directly (cURL, scripts, Postman) and exfiltrate a
+    fully-formatted report. We mirror the frontend gate here so the
+    two stay in lockstep.
     """
     from datetime import datetime, timezone
     from app.services.report_service import ReportService
+
+    # Paywall parity with PaywallOverlay(requiredTier="gold") on the
+    # Reports page. 402 is the semantically correct status for
+    # payment-gated resources — clients can distinguish it from a 403
+    # "forbidden" (e.g. non-admin hitting an admin route) if they want
+    # to render an upgrade CTA vs a hard error.
+    if user_tier < PickTier.GOLD:
+        raise HTTPException(
+            status_code=status.HTTP_402_PAYMENT_REQUIRED,
+            detail="Reports require Gold tier or higher.",
+        )
 
     fmt = (payload.format or "pdf").lower()
     if fmt not in _ALLOWED_FORMATS:
