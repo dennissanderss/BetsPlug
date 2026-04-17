@@ -11,12 +11,11 @@ import {
   Shield,
   ClipboardList,
   BarChart3,
+  Globe,
 } from "lucide-react";
-import { HexBadge } from "@/components/noct/hex-badge";
+import { HexBadge, type HexVariant } from "@/components/noct/hex-badge";
 
-const STEP_VARIANTS = ["green", "purple", "blue"] as const;
-const STEP_CARDS = ["card-neon-green", "card-neon-purple", "card-neon-blue"] as const;
-const STEP_HALOS = ["halo-green", "halo-purple", "halo-blue"] as const;
+const STEP_VARIANTS: HexVariant[] = ["green", "purple", "blue"];
 
 export default function YourRoutePage() {
   const { t } = useTranslations();
@@ -47,27 +46,150 @@ export default function YourRoutePage() {
         </p>
       </section>
 
-      {/* Steps */}
-      <section className="mb-12 space-y-4">
-        {steps.map((s, i) => {
-          const Icon = s.icon;
-          return (
-            <div key={i} className={`card-neon ${STEP_CARDS[i]} ${STEP_HALOS[i]}`}>
-              <div className="relative flex items-start gap-5 p-6">
-                <HexBadge variant={STEP_VARIANTS[i]} size="lg">
-                  <Icon className="h-6 w-6" />
-                </HexBadge>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="section-label">Step {String(i + 1).padStart(2, "0")}</span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-1">{s.title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed">{s.desc}</p>
-                </div>
-              </div>
+      {/* Steps — hero visual (left) + 3 frosted cards (right) */}
+      <section className="relative mb-12">
+        {/* ── SVG network backdrop — subtle connection grid ───────── */}
+        <svg
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.08]"
+          viewBox="0 0 600 500"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <radialGradient id="netfade" cx="30%" cy="50%" r="60%">
+              <stop offset="0%" stopColor="#4ade80" stopOpacity="1" />
+              <stop offset="100%" stopColor="#4ade80" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+          <g stroke="url(#netfade)" strokeWidth="0.5" fill="none">
+            <path d="M50 80 L180 150 L120 260 L240 320 L90 400" />
+            <path d="M180 150 L310 120 L400 220 L330 350 L240 320" />
+            <path d="M310 120 L430 90 L520 200 L400 220" />
+            <path d="M120 260 L240 320 L330 350 L290 440" />
+            <path d="M520 200 L470 330 L380 420" />
+          </g>
+          <g fill="#4ade80" fillOpacity="0.7">
+            <circle cx="50" cy="80" r="2" />
+            <circle cx="180" cy="150" r="2.5" />
+            <circle cx="310" cy="120" r="2" />
+            <circle cx="430" cy="90" r="1.8" />
+            <circle cx="520" cy="200" r="2" />
+            <circle cx="120" cy="260" r="2" />
+            <circle cx="240" cy="320" r="2.5" />
+            <circle cx="400" cy="220" r="2" />
+            <circle cx="330" cy="350" r="2" />
+            <circle cx="470" cy="330" r="1.8" />
+            <circle cx="90" cy="400" r="2" />
+            <circle cx="290" cy="440" r="2" />
+            <circle cx="380" cy="420" r="2" />
+          </g>
+        </svg>
+
+        <div className="relative grid items-center gap-8 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+          {/* ── Hero visual — hologram globe emblem (mirrors image #11) ── */}
+          <div className="relative flex h-[380px] items-center justify-center md:h-[500px]">
+            {/* Radial ambient glow */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(circle at center, rgba(74,222,128,0.30) 0%, rgba(74,222,128,0.08) 35%, transparent 70%)",
+                filter: "blur(20px)",
+              }}
+            />
+            {/* Concentric rings */}
+            <div
+              aria-hidden
+              className="absolute h-[360px] w-[360px] rounded-full border border-[#4ade80]/15 animate-pulse-slow"
+            />
+            <div
+              aria-hidden
+              className="absolute h-[260px] w-[260px] rounded-full border border-[#4ade80]/25"
+            />
+            <div
+              aria-hidden
+              className="absolute h-[180px] w-[180px] rounded-full border border-[#4ade80]/35"
+            />
+
+            {/* Central emblem — Globe inside glowing disk */}
+            <div
+              className="relative z-10 flex h-36 w-36 items-center justify-center rounded-full border border-[#4ade80]/50 bg-[#0a0f14]"
+              style={{
+                boxShadow:
+                  "0 0 60px rgba(74,222,128,0.45), inset 0 0 30px rgba(74,222,128,0.15)",
+              }}
+            >
+              <Globe className="h-16 w-16 text-[#4ade80] drop-shadow-[0_0_12px_rgba(74,222,128,0.6)]" />
             </div>
-          );
-        })}
+
+            {/* Orbiting hex-badge chips — hint at the 3 steps */}
+            <div className="absolute top-4 left-2 md:top-10 md:left-8 animate-pulse-slow">
+              <HexBadge variant="green" size="sm">
+                <Brain className="h-3.5 w-3.5" />
+              </HexBadge>
+            </div>
+            <div className="absolute bottom-8 left-10 md:bottom-16 md:left-14">
+              <HexBadge variant="purple" size="sm">
+                <TrendingUp className="h-3.5 w-3.5" />
+              </HexBadge>
+            </div>
+            <div className="absolute top-14 right-4 md:top-20 md:right-6 animate-pulse-slow">
+              <HexBadge variant="blue" size="sm">
+                <Shield className="h-3.5 w-3.5" />
+              </HexBadge>
+            </div>
+          </div>
+
+          {/* ── 3 frosted glass cards — mirrors the RHS of image #11 ── */}
+          <div className="relative space-y-4">
+            {steps.map((s, i) => {
+              const Icon = s.icon;
+              const variant = STEP_VARIANTS[i];
+              const kickerTone =
+                variant === "green"
+                  ? "text-[#4ade80] border-[#4ade80]/30 bg-[#4ade80]/[0.08]"
+                  : variant === "purple"
+                    ? "text-[#c084fc] border-[#c084fc]/30 bg-[#c084fc]/[0.08]"
+                    : "text-[#60a5fa] border-[#60a5fa]/30 bg-[#60a5fa]/[0.08]";
+              return (
+                <div
+                  key={i}
+                  className="group relative overflow-hidden rounded-2xl border border-white/[0.12] bg-white/[0.04] backdrop-blur-xl transition-all hover:border-white/[0.18] hover:bg-white/[0.06]"
+                  style={{
+                    boxShadow:
+                      "inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 32px rgba(0,0,0,0.25)",
+                  }}
+                >
+                  {/* Top-left highlight sheen */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                  />
+
+                  <div className="relative flex items-start gap-4 p-5 sm:p-6">
+                    <div className="min-w-0 flex-1 space-y-2">
+                      <span
+                        className={`inline-block rounded-md border px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest ${kickerTone}`}
+                      >
+                        {t("welcomeBanner.stepPrefix")} {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <h3 className="text-lg font-bold text-white sm:text-xl">
+                        {s.title}
+                      </h3>
+                      <p className="text-sm leading-relaxed text-slate-300/90">
+                        {s.desc}
+                      </p>
+                    </div>
+                    <HexBadge variant={variant} size="md">
+                      <Icon className="h-5 w-5" />
+                    </HexBadge>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </section>
 
       {/* Two paths */}
