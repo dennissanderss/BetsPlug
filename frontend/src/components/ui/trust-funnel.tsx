@@ -360,6 +360,22 @@ function TierBreakdownCard({
   const pctStr = `${(accuracy * 100).toFixed(1).replace(".", isNl ? "," : ".")}%`;
   const totalStr = total.toLocaleString(locale);
 
+  // Wilson 95% CI — one-line honesty signal. For the quant-minded
+  // users the band is small on these populations (n=840+ everywhere),
+  // but surfacing it pre-empts the "point estimate ≠ truth" critique.
+  const ci = (() => {
+    if (total <= 0) return null;
+    const z = 1.96;
+    const p = accuracy;
+    const denom = 1 + (z * z) / total;
+    const centre = p + (z * z) / (2 * total);
+    const margin = z * Math.sqrt((p * (1 - p) + (z * z) / (4 * total)) / total);
+    return {
+      lower: Math.max(0, (centre - margin) / denom),
+      upper: Math.min(1, (centre + margin) / denom),
+    };
+  })();
+
   return (
     <div
       className="relative overflow-hidden rounded-2xl border p-5"
@@ -393,6 +409,11 @@ function TierBreakdownCard({
         <span className="font-semibold text-[#ededed]">{totalStr}</span>{" "}
         {isNl ? "picks" : "picks"}
       </p>
+      {ci && (
+        <p className="relative mt-1 text-[10px] text-[#6b7280] tabular-nums">
+          95% CI {(ci.lower * 100).toFixed(0)}–{(ci.upper * 100).toFixed(0)}%
+        </p>
+      )}
     </div>
   );
 }
