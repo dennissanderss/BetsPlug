@@ -266,6 +266,14 @@ export function TrustFunnel() {
               ? "Niet onze woorden. Elke voorspelling staat met tijdstempel online voordat de wedstrijd begint en wordt na afloop automatisch beoordeeld."
               : "Not our words. Every prediction is timestamped online before kickoff and auto-graded after full time."}
           </p>
+          <p className="mx-auto mt-4 max-w-xl text-[11px] leading-relaxed text-[#6b7280]">
+            <span className="font-semibold text-[#a3a9b8]">
+              {isNl ? "Belangrijk:" : "Important:"}
+            </span>{" "}
+            {isNl
+              ? "dit blijven data en kansmodel-berekeningen. Wij geven geen garantie op de uitslag van een individuele wedstrijd, en geen enkel AI-model ter wereld kan dat. Gebruik onze cijfers als informatie, niet als zekerheid."
+              : "these remain data and probability-model calculations. We offer no guarantee on the outcome of any individual match, and no AI model on earth can. Use our numbers as information, not as certainty."}
+          </p>
           <Link
             href={loc("/track-record")}
             className="btn-primary mt-6 inline-flex items-center gap-2"
