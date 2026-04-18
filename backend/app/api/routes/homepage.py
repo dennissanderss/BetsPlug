@@ -327,8 +327,12 @@ async def get_free_picks(
     yesterday_rows = (await db.execute(yesterday_stmt)).scalars().unique().all()
     yesterday_picks = [_build_free_pick(p) for p in yesterday_rows]
 
-    # ── 30-day rolling winrate ───────────────────────────────────
-    thirty_days_ago = now - timedelta(days=30)
+    # ── Cumulative Free-tier winrate ─────────────────────────────
+    # v8.4 — switched from a 30-day rolling window to the full v8.1
+    # evaluated set so the number on the homepage matches the Free
+    # row in /api/pricing/comparison and /api/trackrecord/summary.
+    # Having three different "our accuracy" numbers on three pages
+    # was a trust-eroder; they all pull the same point estimate now.
     from sqlalchemy import case
     stats_stmt = (
         select(
@@ -337,7 +341,6 @@ async def get_free_picks(
         )
         .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
         .join(Match, Match.id == Prediction.match_id)
-        .where(Match.scheduled_at >= thirty_days_ago)
         # v8.1 filter: exclude pre-deploy predictions (broken feature pipeline)
         .where(v81_predictions_filter())
     )
