@@ -24,7 +24,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { Database, Brain, ClipboardCheck, Crown, ShieldCheck, ArrowRight } from "lucide-react";
+import { Database, Brain, ClipboardCheck, ShieldCheck, ArrowRight } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { TierEmblem } from "@/components/noct/tier-emblem";
 import { TIER_THEME, type TierKey } from "@/components/noct/tier-theme";
@@ -48,7 +48,7 @@ const FALLBACK = {
   matchesIngested: 55680,
   forecastsTotal: 3801,
   evaluatedTotal: 3763,
-  silver: { total: 1138, accuracy: 0.607 },
+  silver: { total: 3004, accuracy: 0.607 },
   gold: { total: 1650, accuracy: 0.705 },
   platinum: { total: 840, accuracy: 0.823 },
   lastReviewed: "2026-04-18",
@@ -116,7 +116,11 @@ export function TrustFunnel() {
     total: live.platinum.total ?? FALLBACK.platinum.total,
     accuracy: live.platinum.accuracy ?? FALLBACK.platinum.accuracy,
   };
-  const premiumTotal = silver.total + gold.total + platinum.total;
+  // Don't sum silver+gold+platinum totals. The pick_tier thresholds
+  // are cumulative (confidence >= 0.65 / 0.70 / 0.75), so a Platinum
+  // pick is also counted under Gold and Silver in the backend — adding
+  // them double- and triple-counts. Silver already represents "every
+  // pick that cleared the lowest premium threshold".
 
   const fmt = (n: number) => n.toLocaleString(locale);
   const pct = (n: number) =>
@@ -154,20 +158,9 @@ export function TrustFunnel() {
       value: fmt(evaluatedTotal),
       label: isNl ? "Wedstrijden beoordeeld (uitslag bekend)" : "Matches graded (result in)",
       desc: isNl
-        ? "Elke voorspelling wordt automatisch beoordeeld zodra de wedstrijd afgelopen is. Geen kersenpluk, geen stilletjes verwijderde verliezers."
-        : "Every forecast is automatically graded the moment the match ends. No cherry-picking, no quietly removed losers.",
+        ? "Elke voorspelling wordt automatisch beoordeeld zodra de wedstrijd afgelopen is. Geen kersenpluk, geen stilletjes verwijderde verliezers. Hieronder zie je hoe die voorspellingen presteren per betrouwbaarheidsdrempel."
+        : "Every forecast is automatically graded the moment the match ends. No cherry-picking, no quietly removed losers. Below you can see how those forecasts perform per confidence threshold.",
       variant: "green",
-    },
-    {
-      icon: Crown,
-      value: fmt(premiumTotal),
-      label: isNl
-        ? "Verdeeld over drie premium tiers"
-        : "Split across three premium tiers",
-      desc: isNl
-        ? "Elke voorspelling krijgt een tier op basis van hoe zeker het model is. Hoe hoger de drempel, hoe scherper de cijfers."
-        : "Every forecast is tagged with a tier based on model confidence. The higher the threshold, the sharper the numbers.",
-      variant: "purple",
     },
   ];
 
@@ -202,12 +195,12 @@ export function TrustFunnel() {
             {isNl ? (
               <>
                 Van <span className="gradient-text-green">55.000+ wedstrijden</span> naar{" "}
-                <span className="gradient-text-green">{fmt(premiumTotal)} eerlijke picks</span>
+                <span className="gradient-text-green">{fmt(evaluatedTotal)} beoordeelde picks</span>
               </>
             ) : (
               <>
                 From <span className="gradient-text-green">55 000+ matches</span> to{" "}
-                <span className="gradient-text-green">{fmt(premiumTotal)} honest picks</span>
+                <span className="gradient-text-green">{fmt(evaluatedTotal)} graded picks</span>
               </>
             )}
           </h2>
