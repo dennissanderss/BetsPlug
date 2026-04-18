@@ -28,11 +28,17 @@ import { Database, Brain, ClipboardCheck, Crown, ShieldCheck, ArrowRight } from 
 import { HexBadge } from "@/components/noct/hex-badge";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
+interface TierStat {
+  accuracy: number | null;
+  total: number | null;
+}
+
 interface TrustData {
-  goldAccuracy: number | null; // 0-1
-  goldTotal: number | null;
-  forecastsTotal: number | null; // /dashboard/metrics total_forecasts
-  evaluatedTotal: number | null; // /dashboard/metrics evaluated_count
+  silver: TierStat;
+  gold: TierStat;
+  platinum: TierStat;
+  forecastsTotal: number | null;
+  evaluatedTotal: number | null;
 }
 
 /** Manually reviewed fallback, update alongside potd-stats.ts refreshes. */
@@ -40,32 +46,43 @@ const FALLBACK = {
   matchesIngested: 55680,
   forecastsTotal: 3801,
   evaluatedTotal: 3763,
-  goldTotal: 1650,
-  goldAccuracy: 0.705,
+  silver: { total: 1138, accuracy: 0.607 },
+  gold: { total: 1650, accuracy: 0.705 },
+  platinum: { total: 840, accuracy: 0.823 },
   lastReviewed: "2026-04-18",
 };
 
 function useTrustData(): TrustData {
   const [data, setData] = useState<TrustData>({
-    goldAccuracy: null,
-    goldTotal: null,
+    silver: { accuracy: null, total: null },
+    gold: { accuracy: null, total: null },
+    platinum: { accuracy: null, total: null },
     forecastsTotal: null,
     evaluatedTotal: null,
   });
 
   useEffect(() => {
     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-    Promise.all([
-      fetch(`${API}/trackrecord/summary?pick_tier=gold`).then((r) => r.json()).catch(() => null),
-      fetch(`${API}/dashboard/metrics`).then((r) => r.json()).catch(() => null),
-    ]).then(([gold, dashboard]) => {
+    const pick = (d: unknown): TierStat => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const g = gold as any;
+      const r = d as any;
+      return {
+        accuracy: typeof r?.accuracy === "number" && r.accuracy > 0 ? r.accuracy : null,
+        total: typeof r?.total_predictions === "number" && r.total_predictions > 0 ? r.total_predictions : null,
+      };
+    };
+    Promise.all([
+      fetch(`${API}/trackrecord/summary?pick_tier=silver`).then((r) => r.json()).catch(() => null),
+      fetch(`${API}/trackrecord/summary?pick_tier=gold`).then((r) => r.json()).catch(() => null),
+      fetch(`${API}/trackrecord/summary?pick_tier=platinum`).then((r) => r.json()).catch(() => null),
+      fetch(`${API}/dashboard/metrics`).then((r) => r.json()).catch(() => null),
+    ]).then(([silver, gold, platinum, dashboard]) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const d = dashboard as any;
       setData({
-        goldAccuracy: typeof g?.accuracy === "number" && g.accuracy > 0 ? g.accuracy : null,
-        goldTotal: typeof g?.total_predictions === "number" && g.total_predictions > 0 ? g.total_predictions : null,
+        silver: pick(silver),
+        gold: pick(gold),
+        platinum: pick(platinum),
         forecastsTotal: typeof d?.total_forecasts === "number" && d.total_forecasts > 0 ? d.total_forecasts : null,
         evaluatedTotal: typeof d?.evaluated_count === "number" && d.evaluated_count > 0 ? d.evaluated_count : null,
       });
@@ -85,8 +102,19 @@ export function TrustFunnel() {
   const matchesIngested = FALLBACK.matchesIngested; // static (we don't expose a matches-count endpoint)
   const forecastsTotal = live.forecastsTotal ?? FALLBACK.forecastsTotal;
   const evaluatedTotal = live.evaluatedTotal ?? FALLBACK.evaluatedTotal;
-  const goldTotal = live.goldTotal ?? FALLBACK.goldTotal;
-  const goldAccuracy = live.goldAccuracy ?? FALLBACK.goldAccuracy;
+  const silver = {
+    total: live.silver.total ?? FALLBACK.silver.total,
+    accuracy: live.silver.accuracy ?? FALLBACK.silver.accuracy,
+  };
+  const gold = {
+    total: live.gold.total ?? FALLBACK.gold.total,
+    accuracy: live.gold.accuracy ?? FALLBACK.gold.accuracy,
+  };
+  const platinum = {
+    total: live.platinum.total ?? FALLBACK.platinum.total,
+    accuracy: live.platinum.accuracy ?? FALLBACK.platinum.accuracy,
+  };
+  const premiumTotal = silver.total + gold.total + platinum.total;
 
   const fmt = (n: number) => n.toLocaleString(locale);
   const pct = (n: number) =>
@@ -130,21 +158,14 @@ export function TrustFunnel() {
     },
     {
       icon: Crown,
-      value: fmt(goldTotal),
-      label: isNl ? "Daarvan in Gold-tier (betrouwbaarheid ≥ 70%)" : "Of those in Gold tier (confidence ≥ 70%)",
+      value: fmt(premiumTotal),
+      label: isNl
+        ? "Verdeeld over drie premium tiers"
+        : "Split across three premium tiers",
       desc: isNl
-        ? "Het meest betrouwbare deel: alleen voorspellingen waar ons model minstens 70% zeker van was."
-        : "The sharpest slice: only forecasts where the model was at least 70% sure.",
+        ? "Elke voorspelling krijgt een tier op basis van hoe zeker het model is. Hoe hoger de drempel, hoe scherper de cijfers."
+        : "Every forecast is tagged with a tier based on model confidence. The higher the threshold, the sharper the numbers.",
       variant: "purple",
-    },
-    {
-      icon: ShieldCheck,
-      value: pct(goldAccuracy),
-      label: isNl ? "Nauwkeurigheid, openbaar verifieerbaar" : "Accuracy, publicly verifiable",
-      desc: isNl
-        ? "Geen marketingbrochure. Download de data en tel het zelf. Ter vergelijking: een willekeurige keuze op thuis, gelijkspel of uit haalt ongeveer 37%."
-        : "Not a marketing brochure. Download the data and count it yourself. For reference: a random guess on home, draw or away lands around 37%.",
-      variant: "green",
     },
   ];
 
@@ -179,12 +200,12 @@ export function TrustFunnel() {
             {isNl ? (
               <>
                 Van <span className="gradient-text-green">55.000+ wedstrijden</span> naar{" "}
-                <span className="gradient-text-green">{fmt(goldTotal)} eerlijke picks</span>
+                <span className="gradient-text-green">{fmt(premiumTotal)} eerlijke picks</span>
               </>
             ) : (
               <>
                 From <span className="gradient-text-green">55 000+ matches</span> to{" "}
-                <span className="gradient-text-green">{fmt(goldTotal)} honest picks</span>
+                <span className="gradient-text-green">{fmt(premiumTotal)} honest picks</span>
               </>
             )}
           </h2>
@@ -253,6 +274,50 @@ export function TrustFunnel() {
           })}
         </div>
 
+        {/* Tier-breakdown card, shows all 3 paid tiers side by side so
+            visitors don't think we only measure 'Gold'. */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5 }}
+          className="mt-10"
+        >
+          <p className="mb-4 text-center text-xs font-bold uppercase tracking-widest text-[#6b7280]">
+            {isNl ? "Nauwkeurigheid per tier" : "Accuracy per tier"}
+          </p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <TierBreakdownCard
+              accent="slate"
+              label={isNl ? "Silver" : "Silver"}
+              confFloor="≥ 0,65"
+              accuracy={silver.accuracy}
+              total={silver.total}
+              locale={locale}
+              isNl={isNl}
+            />
+            <TierBreakdownCard
+              accent="purple"
+              label={isNl ? "Gold" : "Gold"}
+              confFloor="≥ 0,70"
+              accuracy={gold.accuracy}
+              total={gold.total}
+              locale={locale}
+              isNl={isNl}
+            />
+            <TierBreakdownCard
+              accent="amber"
+              label={isNl ? "Platinum" : "Platinum"}
+              confFloor="≥ 0,75"
+              accuracy={platinum.accuracy}
+              total={platinum.total}
+              locale={locale}
+              isNl={isNl}
+              highlight
+            />
+          </div>
+        </motion.div>
+
         {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
@@ -284,5 +349,74 @@ export function TrustFunnel() {
         </motion.div>
       </div>
     </section>
+  );
+}
+
+function TierBreakdownCard({
+  accent,
+  label,
+  confFloor,
+  accuracy,
+  total,
+  locale,
+  isNl,
+  highlight = false,
+}: {
+  accent: "slate" | "purple" | "amber";
+  label: string;
+  confFloor: string;
+  accuracy: number;
+  total: number;
+  locale: string;
+  isNl: boolean;
+  highlight?: boolean;
+}) {
+  const pctStr = `${(accuracy * 100).toFixed(1).replace(".", isNl ? "," : ".")}%`;
+  const totalStr = total.toLocaleString(locale);
+
+  const accentClasses = {
+    slate: {
+      border: "border-slate-400/30",
+      bg: "bg-slate-400/[0.04]",
+      text: "text-slate-200",
+      value: "text-slate-100",
+    },
+    purple: {
+      border: "border-purple-400/30",
+      bg: "bg-purple-400/[0.05]",
+      text: "text-purple-200",
+      value: "text-purple-100",
+    },
+    amber: {
+      border: "border-amber-400/40",
+      bg: "bg-amber-400/[0.06]",
+      text: "text-amber-200",
+      value: "text-amber-100",
+    },
+  }[accent];
+
+  return (
+    <div
+      className={`relative overflow-hidden rounded-2xl border ${accentClasses.border} ${accentClasses.bg} p-5 ${
+        highlight ? "ring-1 ring-amber-400/30" : ""
+      }`}
+    >
+      <div className="flex items-center justify-between">
+        <span className={`text-[10px] font-bold uppercase tracking-widest ${accentClasses.text}`}>
+          {label}
+        </span>
+        <span className="text-[9px] font-semibold uppercase tracking-wider text-[#6b7280] tabular-nums">
+          conf {confFloor}
+        </span>
+      </div>
+      <p className={`text-stat mt-3 text-3xl leading-none ${accentClasses.value}`}>
+        {pctStr}
+      </p>
+      <p className="mt-1 text-xs text-[#a3a9b8]">
+        {isNl ? "over" : "across"}{" "}
+        <span className="font-semibold text-[#ededed]">{totalStr}</span>{" "}
+        {isNl ? "picks" : "picks"}
+      </p>
+    </div>
   );
 }

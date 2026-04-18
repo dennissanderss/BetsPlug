@@ -52,7 +52,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
   const loc = useLocalizedHref();
   const isNl = locale === "nl";
 
-  const { freeMatchIds, freePickConf, freePickMap, isLoadingFreeIds } = useFreeMatchIds();
+  const { freeMatchIds, freePickMap, isLoadingFreeIds } = useFreeMatchIds();
 
   const fixturesQuery = useQuery({
     queryKey: ["match-predictions-public", 7],
@@ -119,40 +119,6 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
   const isError = fixturesQuery.isError;
   const hasFree = free.length > 0;
 
-  // Source avgConf from the free-picks API response (freePickConf) rather
-  // than the fixture endpoint's prediction field. The fixture endpoint may
-  // return prediction:null for matches whose confidence lands in a tier gap,
-  // which would drag the average to ~22%. freePickConf comes directly from
-  // /homepage/free-picks which always includes confidence for each pick.
-  const avgConf = useMemo(() => {
-    if (freePickConf.size === 0) return null;
-    const vals = Array.from(freePickConf.values());
-    const sum = vals.reduce((a, b) => a + b, 0);
-    return Math.round((sum / vals.length) * 100);
-  }, [freePickConf]);
-
-  const stats: {
-    label: string;
-    value: string;
-    icon: typeof Sparkles;
-    variant: "green" | "purple" | "blue";
-  }[] = [
-    { label: t("matchPred.statFree"), value: String(free.length || FREE_PICKS), icon: Sparkles, variant: "green" },
-    { label: t("matchPred.statUpcoming"), value: String(upcoming.length), icon: Clock, variant: "blue" },
-    {
-      label: t("matchPred.statLocked"),
-      value: String(Math.max(upcoming.length - free.length, LOCKED_PREVIEW)),
-      icon: Lock,
-      variant: "purple",
-    },
-    {
-      label: t("matchPred.statAvgConf"),
-      value: avgConf !== null ? `${avgConf}%` : " - ",
-      icon: TrendingUp,
-      variant: "green",
-    },
-  ];
-
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
       <SiteNav />
@@ -217,32 +183,9 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
             </Pill>
           </motion.div>
 
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.25 }}
-            className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-4"
-          >
-            {stats.map(({ label, value, icon: Icon, variant }) => (
-              <div
-                key={label}
-                className={`card-neon card-neon-${variant} relative overflow-hidden px-3 py-5 text-center`}
-              >
-                <div className="relative flex flex-col items-center gap-2">
-                  <HexBadge variant={variant} size="sm">
-                    <Icon className="h-4 w-4" strokeWidth={2} />
-                  </HexBadge>
-                  <span className="text-stat text-2xl leading-none text-[#ededed]">
-                    {value}
-                  </span>
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
-                    {label}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </motion.div>
+          {/* Stats block removed — user feedback said the 4-container
+              summary felt repetitive across pages. Tier ladder on the
+              homepage already carries that story. */}
         </div>
       </section>
 
@@ -254,6 +197,33 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
           style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(140px)" }}
         />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          {/* Tier context banner, makes it unmistakeable that these 3
+              picks are the FREE slice and that higher tiers unlock more. */}
+          <div className="mb-10 flex flex-col gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-4 sm:items-center">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-lg ring-1 ring-emerald-400/30">
+                🆓
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">
+                  {isNl ? "Free tier · 3 picks per dag" : "Free tier · 3 picks per day"}
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-[#ededed] sm:text-base">
+                  {isNl
+                    ? "Je kijkt nu naar de 3 gratis voorspellingen van vandaag. Silver (≥ 65% betrouwbaarheid), Gold (≥ 70%) en Platinum (≥ 75%) ontgrendelen alle overige wedstrijden plus hogere nauwkeurigheid per tier."
+                    : "You're viewing today's 3 free predictions. Silver (≥ 65% confidence), Gold (≥ 70%) and Platinum (≥ 75%) unlock every other fixture plus higher accuracy per tier."}
+                </p>
+              </div>
+            </div>
+            <Link
+              href={loc("/checkout")}
+              className="btn-primary inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap"
+            >
+              {isNl ? "Upgrade naar Premium" : "Upgrade to Premium"}
+              <Lock className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+
           <div className="mb-12 sm:mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <span className="section-label">
