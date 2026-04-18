@@ -259,15 +259,24 @@ class APIFootballAdapter(DataSourceAdapter):
         self.log.debug("api_football_request", url=url, params=params)
         await self.rate_limit()
 
+        # Wall-clock timer for latency + scaling-monitor quota log. We record
+        # every outbound call (including 429 retries) so the /admin/api-usage
+        # + /admin/capacity-plan dashboards see real traffic, not an estimate.
+        import time as _t
+        t0 = _t.perf_counter()
+
         response = await self.http_client.get(url, headers=headers, params=params or {})
         self._requests_today += 1
+        await self._record_quota_log(endpoint, response.status_code, t0)
 
         if response.status_code == 429:
             self.log.warning("api_football_rate_limited", url=url,
                              requests_today=self._requests_today)
             await asyncio.sleep(60)
+            t0 = _t.perf_counter()
             response = await self.http_client.get(url, headers=headers, params=params or {})
             self._requests_today += 1
+            await self._record_quota_log(endpoint, response.status_code, t0)
 
         if response.status_code in (401, 403):
             self.log.error("api_football_auth_error", url=url,
@@ -286,6 +295,25 @@ class APIFootballAdapter(DataSourceAdapter):
                        results=data.get("results", 0),
                        requests_today=self._requests_today)
         return data.get("response", [])
+
+    async def _record_quota_log(
+        self, endpoint: str, status_code: int, t0: float
+    ) -> None:
+        """Write one ApiUsageLog row per HTTP response.
+
+        Fire-and-forget — uses a fresh DB session so a logging failure
+        never poisons the caller's transaction. Imported lazily to avoid
+        a cold-start import of SQLAlchemy inside the adapter module.
+        """
+        try:
+            import time as _t
+            from app.services.api_usage_tracker import record_api_call
+            latency_ms = int((_t.perf_counter() - t0) * 1000)
+            await record_api_call(
+                "api_football", endpoint, status_code, latency_ms
+            )
+        except Exception:  # pragma: no cover — advisory, never crash
+            pass
 
     def _league_id(self, league_slug: str) -> int | None:
         """Resolve a league slug to an API-Football league ID.

@@ -541,6 +541,11 @@ class ApiClient {
       "/admin/pipeline-health"
     );
   }
+  getCapacityPlan() {
+    return this.request<import("@/types/api").CapacityPlan>(
+      "/admin/capacity-plan"
+    );
+  }
   runGeneratePredictions(days = 7) {
     return this.request<import("@/types/api").GeneratePredictionsResult>(
       "/admin/generate-predictions",

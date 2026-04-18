@@ -21,6 +21,8 @@ import {
   Globe,
   Eye,
   RotateCcw,
+  Gauge,
+  ArrowUpRight,
 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
@@ -700,12 +702,330 @@ function PipelineHealthCard() {
   );
 }
 
+function CapacityPlanCard() {
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["admin-capacity-plan"],
+    queryFn: () => api.getCapacityPlan(),
+    refetchInterval: 120_000,
+  });
+
+  const verdictColor = (s: string) =>
+    s === "safe"
+      ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+      : s === "watch"
+      ? "bg-amber-500/15 text-amber-300 border-amber-500/30"
+      : s === "tight"
+      ? "bg-orange-500/15 text-orange-300 border-orange-500/30"
+      : "bg-red-500/15 text-red-300 border-red-500/30";
+
+  const verdictLabel = (s: string) =>
+    ({ safe: "Safe", watch: "Watch", tight: "Tight", over: "Over limit" }[s] ??
+      s);
+
+  return (
+    <div className="card-neon p-6 space-y-4 lg:col-span-2">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10">
+            <Gauge className="h-4 w-4 text-purple-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-100">
+              API Capacity (API-Football)
+            </h3>
+            <p className="text-xs text-slate-400">
+              Measured usage vs plan limit, per-endpoint breakdown, and
+              projections against user-count scenarios.
+            </p>
+          </div>
+        </div>
+        {data && (
+          <span
+            className={cn(
+              "inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] font-semibold uppercase tracking-wide",
+              verdictColor(data.verdict),
+            )}
+          >
+            {verdictLabel(data.verdict)}
+          </span>
+        )}
+      </div>
+
+      {isLoading && <Skeleton className="h-24 w-full rounded-lg" />}
+      {isError && (
+        <p className="text-xs text-red-400">
+          Kon capacity-plan niet ophalen.
+        </p>
+      )}
+
+      {data && (
+        <>
+          {/* Today headline + 7d sparkline */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+            <div className="glass-panel p-3 space-y-0.5 sm:col-span-2">
+              <p className="section-label">Today so far</p>
+              <p className="text-stat tabular-nums text-[#a855f7]">
+                {data.usage.today_calls.toLocaleString()}
+                <span className="text-sm text-slate-500">
+                  {" "}
+                  / {data.plan.daily_limit.toLocaleString()}
+                </span>
+              </p>
+              <p className="text-[11px] text-slate-500">
+                {data.usage.pct_of_limit_today}% of {data.plan.name} plan used
+              </p>
+              {/* Progress bar */}
+              <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/[0.05]">
+                <div
+                  className={cn(
+                    "h-full rounded-full transition-all",
+                    data.verdict === "safe"
+                      ? "bg-emerald-400"
+                      : data.verdict === "watch"
+                      ? "bg-amber-400"
+                      : data.verdict === "tight"
+                      ? "bg-orange-400"
+                      : "bg-red-500",
+                  )}
+                  style={{
+                    width: `${Math.min(100, data.usage.pct_of_limit_today)}%`,
+                  }}
+                />
+              </div>
+            </div>
+            <div className="glass-panel p-3 space-y-0.5">
+              <p className="section-label">Avg per day (7d)</p>
+              <p className="text-stat tabular-nums text-slate-100">
+                {Math.round(data.usage.avg_daily_last_7d).toLocaleString()}
+              </p>
+              <p className="text-[10px] text-slate-500">
+                {data.usage.last_7d_calls.toLocaleString()} total last 7d
+              </p>
+            </div>
+            <div className="glass-panel p-3 space-y-0.5">
+              <p className="section-label">Calls / user / day</p>
+              <p className="text-stat tabular-nums text-slate-100">
+                {data.user_base.calls_per_user_per_day.toFixed(2)}
+              </p>
+              <p className="text-[10px] text-slate-500">
+                {data.user_base.effective} active users (7d)
+              </p>
+            </div>
+          </div>
+
+          {/* 7-day sparkline bars */}
+          <div className="glass-panel p-3 space-y-1.5">
+            <div className="flex items-center justify-between">
+              <p className="section-label">Last 7 days</p>
+              <p className="text-[10px] text-slate-500">
+                daily limit ≈ {data.plan.daily_limit.toLocaleString()}
+              </p>
+            </div>
+            <div className="flex items-end gap-1 h-12">
+              {data.usage.series_7d.map((d) => {
+                const pct = Math.min(
+                  100,
+                  (d.calls / Math.max(1, data.plan.daily_limit)) * 100,
+                );
+                return (
+                  <div
+                    key={d.day}
+                    className="flex-1 flex flex-col items-center justify-end gap-0.5 group relative"
+                    title={`${d.day}: ${d.calls.toLocaleString()} calls`}
+                  >
+                    <div
+                      className={cn(
+                        "w-full rounded-sm transition-all",
+                        pct >= 80
+                          ? "bg-red-500/60"
+                          : pct >= 50
+                          ? "bg-amber-400/60"
+                          : "bg-emerald-400/50",
+                      )}
+                      style={{ height: `${Math.max(4, pct)}%` }}
+                    />
+                    <span className="text-[9px] tabular-nums text-slate-500">
+                      {d.day.slice(5)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* User-count scenarios */}
+          <div className="space-y-2">
+            <p className="section-label">Scaling scenarios</p>
+            <div className="overflow-x-auto rounded-lg border border-white/[0.06]">
+              <table className="w-full min-w-[480px] text-xs">
+                <thead>
+                  <tr className="border-b border-white/[0.06] bg-white/[0.02] text-[10px] uppercase tracking-wider text-slate-500">
+                    <th className="px-3 py-2 text-left font-semibold">
+                      Active users
+                    </th>
+                    <th className="px-3 py-2 text-right font-semibold">
+                      Projected / day
+                    </th>
+                    <th className="px-3 py-2 text-right font-semibold">
+                      % of {data.plan.name}
+                    </th>
+                    <th className="px-3 py-2 text-right font-semibold">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.scenarios.map((s) => (
+                    <tr
+                      key={s.users}
+                      className="border-b border-white/[0.04] last:border-b-0 hover:bg-white/[0.02]"
+                    >
+                      <td className="px-3 py-2 font-semibold tabular-nums text-slate-100">
+                        {s.users.toLocaleString()}
+                      </td>
+                      <td className="px-3 py-2 text-right tabular-nums text-slate-300">
+                        {s.projected_daily_calls.toLocaleString()}
+                      </td>
+                      <td className="px-3 py-2 text-right tabular-nums text-slate-300">
+                        {s.pct_of_limit}%
+                      </td>
+                      <td className="px-3 py-2 text-right">
+                        <span
+                          className={cn(
+                            "inline-flex rounded-md border px-2 py-0.5 text-[10px] font-semibold uppercase",
+                            verdictColor(s.status),
+                          )}
+                        >
+                          {verdictLabel(s.status)}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {data.projection.break_even_users !== null && (
+              <p className="text-[11px] text-slate-500">
+                Break-even (100% of daily limit) reached around{" "}
+                <span className="font-semibold text-slate-300 tabular-nums">
+                  ~{data.projection.break_even_users.toLocaleString()}
+                </span>{" "}
+                active users
+                {data.projection.headroom_users !== null && (
+                  <>
+                    {" · "}
+                    room to grow{" "}
+                    <span className="font-semibold text-slate-300 tabular-nums">
+                      +{data.projection.headroom_users.toLocaleString()}
+                    </span>{" "}
+                    before hitting 80%
+                  </>
+                )}
+                {data.plan.upgrade_target && (
+                  <>
+                    {" · next tier "}
+                    <span className="font-semibold text-slate-300">
+                      {data.plan.upgrade_target.name}
+                    </span>{" "}
+                    (${data.plan.upgrade_target.price_usd_month}/mo,{" "}
+                    {data.plan.upgrade_target.daily_limit.toLocaleString()}
+                    /day)
+                  </>
+                )}
+              </p>
+            )}
+          </div>
+
+          {/* Top endpoints */}
+          <div className="grid gap-3 md:grid-cols-2">
+            <div className="glass-panel p-3 space-y-1.5">
+              <p className="section-label">Top endpoints (24h)</p>
+              {data.top_endpoints_24h.length === 0 ? (
+                <p className="text-[11px] italic text-slate-500">
+                  No calls logged in the last 24h.
+                </p>
+              ) : (
+                <ul className="space-y-1 text-xs font-mono">
+                  {data.top_endpoints_24h.map((row) => (
+                    <li
+                      key={row.endpoint}
+                      className="flex items-center justify-between gap-2"
+                    >
+                      <span className="truncate text-slate-300">
+                        /{row.endpoint}
+                      </span>
+                      <span className="tabular-nums text-slate-500">
+                        {row.calls}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="glass-panel p-3 space-y-1.5">
+              <p className="section-label">Top endpoints (7d)</p>
+              {data.top_endpoints_7d.length === 0 ? (
+                <p className="text-[11px] italic text-slate-500">
+                  No calls logged in the last 7 days.
+                </p>
+              ) : (
+                <ul className="space-y-1 text-xs font-mono">
+                  {data.top_endpoints_7d.map((row) => (
+                    <li
+                      key={row.endpoint}
+                      className="flex items-center justify-between gap-2"
+                    >
+                      <span className="truncate text-slate-300">
+                        /{row.endpoint}
+                      </span>
+                      <span className="tabular-nums text-slate-500">
+                        {row.calls}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <button
+              onClick={() => refetch()}
+              className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-slate-300 hover:bg-white/[0.08]"
+            >
+              <RefreshCw className="h-3 w-3" />
+              Refresh
+            </button>
+            <p className="text-[10px] italic text-slate-500">
+              Projection is linear (pessimistic — cache-efficiency not
+              modelled). For capacity-planning, not realtime alerting.
+            </p>
+            {data.plan.upgrade_target && (
+              <a
+                href="https://dashboard.api-football.com/profile?access=subscriptions"
+                target="_blank"
+                rel="noreferrer"
+                className="ml-auto inline-flex items-center gap-1.5 text-[11px] font-semibold text-purple-300 hover:text-purple-200"
+              >
+                Upgrade to {data.plan.upgrade_target.name}
+                <ArrowUpRight className="h-3 w-3" />
+              </a>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
   const [syncSourceId, setSyncSourceId] = React.useState("all");
   const [modelType, setModelType] = React.useState("all");
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
+      <CapacityPlanCard />
       <PipelineHealthCard />
       {/* Sync data */}
       <div className="card-neon p-6 space-y-4">

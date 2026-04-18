@@ -875,6 +875,61 @@ export interface GeneratePredictionsResult {
   details: string[];
 }
 
+// Capacity plan (GET /api/admin/capacity-plan)
+export type CapacityStatus = "safe" | "watch" | "tight" | "over";
+
+export interface CapacityScenario {
+  users: number;
+  projected_daily_calls: number;
+  pct_of_limit: number;
+  status: CapacityStatus;
+}
+
+export interface CapacityEndpointRow {
+  endpoint: string;
+  calls: number;
+}
+
+export interface CapacityDaily {
+  day: string;
+  calls: number;
+}
+
+export interface CapacityPlan {
+  as_of: string;
+  provider: string;
+  plan: {
+    name: string;
+    daily_limit: number;
+    upgrade_target: {
+      name: string;
+      daily_limit: number;
+      price_usd_month: number;
+    } | null;
+  };
+  usage: {
+    today_calls: number;
+    pct_of_limit_today: number;
+    last_7d_calls: number;
+    avg_daily_last_7d: number;
+    series_7d: CapacityDaily[];
+  };
+  user_base: {
+    active_last_7d: number;
+    total_active: number;
+    effective: number;
+    calls_per_user_per_day: number;
+  };
+  top_endpoints_24h: CapacityEndpointRow[];
+  top_endpoints_7d: CapacityEndpointRow[];
+  scenarios: CapacityScenario[];
+  projection: {
+    break_even_users: number | null;
+    headroom_users: number | null;
+  };
+  verdict: CapacityStatus;
+}
+
 // Blog
 export interface BlogPost {
   id: string;
