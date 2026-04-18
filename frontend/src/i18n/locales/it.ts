@@ -1224,6 +1224,7 @@ const it = {
   "pricing.ctaLifetime": "Ottieni accesso illimitato",
   "pricing.ctaUpgrade": "Aggiornamento",
   "pricing.forever": "/ Prova di 7 giorni",
+  "pricing.dataProvenanceFooter": "Based on model validation on 2 years of historical data. Live measurement started 16 April 2026.",
   "pricing.goldCta": "Inizia Oro",
   "pricing.goldF1": "Giornaliero Pick of the Day (accuratezza {potdAccuracy}%)",
   "pricing.goldF2": "Tutti gli oltre 30 campionati del mondo (CL, UEL, MLS...)",

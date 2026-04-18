@@ -1224,6 +1224,7 @@ const sw = {
   "pricing.ctaLifetime": "Pata ufikiaji wa maisha yote",
   "pricing.ctaUpgrade": "Boresha",
   "pricing.forever": "/ Jaribio la siku 7",
+  "pricing.dataProvenanceFooter": "Based on model validation on 2 years of historical data. Live measurement started 16 April 2026.",
   "pricing.goldCta": "Anza Dhahabu",
   "pricing.goldF1": "Kila siku Pick of the Day ({potdAccuracy}% usahihi)",
   "pricing.goldF2": "Ligi zote 30+ duniani kote (CL, UEL, MLS…)",

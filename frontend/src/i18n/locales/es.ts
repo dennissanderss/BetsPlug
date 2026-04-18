@@ -1224,6 +1224,7 @@ const es = {
   "pricing.ctaLifetime": "Obtenga acceso de por vida",
   "pricing.ctaUpgrade": "Mejora",
   "pricing.forever": "/ Prueba de 7 días",
+  "pricing.dataProvenanceFooter": "Based on model validation on 2 years of historical data. Live measurement started 16 April 2026.",
   "pricing.goldCta": "Empezar Oro",
   "pricing.goldF1": "Diariamente Pick of the Day ({potdAccuracy}% de precisión)",
   "pricing.goldF2": "Las más de 30 ligas del mundo (CL, UEL, MLS…)",

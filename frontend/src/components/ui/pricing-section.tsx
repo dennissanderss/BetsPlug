@@ -408,6 +408,11 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                       </li>
                     ))}
                   </ul>
+
+                  {/* Model-validation provenance footer */}
+                  <p className="mt-5 text-[10px] leading-relaxed text-[#6b7280]">
+                    {t("pricing.dataProvenanceFooter")}
+                  </p>
                 </div>
               </div>
             );
@@ -482,6 +487,10 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                     </li>
                   ))}
                 </ul>
+
+                <p className="mt-4 text-[10px] leading-relaxed text-amber-100/60">
+                  {t("pricing.dataProvenanceFooter")}
+                </p>
               </div>
 
               {/* Right */}

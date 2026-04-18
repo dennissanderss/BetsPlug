@@ -1224,6 +1224,7 @@ const id = {
   "pricing.ctaLifetime": "Dapatkan akses seumur hidup",
   "pricing.ctaUpgrade": "Meningkatkan",
   "pricing.forever": "/ Uji coba 7 hari",
+  "pricing.dataProvenanceFooter": "Based on model validation on 2 years of historical data. Live measurement started 16 April 2026.",
   "pricing.goldCta": "Mulai Emas",
   "pricing.goldF1": "Harian Pick of the Day (akurasi {potdAccuracy}%)",
   "pricing.goldF2": "Semua 30+ liga di seluruh dunia (CL, UEL, MLS…)",
