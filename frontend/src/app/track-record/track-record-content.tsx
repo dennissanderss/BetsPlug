@@ -167,11 +167,26 @@ function PublicTierTabs({
                   }
                 );
                 if (!resp.ok) {
-                  window.alert(
+                  // Surface the backend's own `detail` message when
+                  // present — covers 402 (tier too low), 429 (rate-
+                  // limit) and any 5xx. Falls back to a friendly
+                  // default when the body isn't JSON.
+                  let detail: string | null = null;
+                  try {
+                    const body = await resp.json();
+                    detail = typeof body?.detail === "string" ? body.detail : null;
+                  } catch {
+                    /* non-JSON body */
+                  }
+                  const msg =
                     resp.status === 401 || resp.status === 403
                       ? "Log opnieuw in om de CSV te downloaden."
-                      : "Download mislukt, probeer het zo opnieuw."
-                  );
+                      : resp.status === 402
+                        ? detail ||
+                          "Deze tier zit niet in je abonnement. Upgrade om de CSV te downloaden."
+                        : detail ||
+                          `Download mislukt (${resp.status}), probeer het zo opnieuw.`;
+                  window.alert(msg);
                   return;
                 }
                 const blob = await resp.blob();
