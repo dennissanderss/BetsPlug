@@ -608,6 +608,14 @@ const it = {
   "engine.val.p3A": "L'attuale corsa walk-forward v8.1 coperta",
   "engine.val.p3B": "28.838 previsioni fuori campione",
   "engine.val.p3C": "attraverso quattro pieghe temporali. I risultati corrispondono direttamente a ciò che mostra la tabella per livello sopra: utilizziamo la stessa metodologia nella produzione.",
+
+  "engine.val.modelHeader": "Model validation",
+  "engine.val.modelTitle": "What the headline numbers are",
+  "engine.val.modelBody": "We apply the current model to historical matches using only information that was available at the moment of each kickoff (team form, Elo, H2H, standings). This tests whether the model learned general patterns rather than memorised specific results. Every tier accuracy on this site comes from this dataset.",
+  "engine.val.liveHeader": "Live measurement",
+  "engine.val.liveTitle": "Separately logged since 16 April 2026",
+  "engine.val.liveBody": "From 16 April 2026 onward every new prediction is generated before its match starts and the outcome is recorded after full time. This is a separate stream tracked on the Live tab of /track-record. It starts small and grows daily; statistically meaningful tier numbers require ~200 graded picks per tier.",
+  "engine.val.integrityDisclaimer": "Important: the two datasets are never mixed. Headline numbers are model validation on historical matches, not live-tracked wins. If the live stream diverges from validation over time, we will publish the gap.",
   "engine.val.subtitle": "Il backtest più onesto che possiamo eseguire: il modello non vede mai i dati successivi alla partita che sta pronosticando.",
   "engine.val.title": "Allenato ieri, testato domani",
 

@@ -473,6 +473,14 @@ const en = {
   "engine.val.p3B": "28,838 out-of-sample predictions",
   "engine.val.p3C": "across four time-folds. Results directly match what the Per-tier table above shows, we use the same methodology in production.",
 
+  "engine.val.modelHeader": "Model validation",
+  "engine.val.modelTitle": "What the headline numbers are",
+  "engine.val.modelBody": "We apply the current model to historical matches using only information that was available at the moment of each kickoff (team form, Elo, H2H, standings). This tests whether the model learned general patterns rather than memorised specific results. Every tier accuracy on this site comes from this dataset.",
+  "engine.val.liveHeader": "Live measurement",
+  "engine.val.liveTitle": "Separately logged since 16 April 2026",
+  "engine.val.liveBody": "From 16 April 2026 onward every new prediction is generated before its match starts and the outcome is recorded after full time. This is a separate stream tracked on the Live tab of /track-record. It starts small and grows daily; statistically meaningful tier numbers require ~200 graded picks per tier.",
+  "engine.val.integrityDisclaimer": "Important: the two datasets are never mixed. The headline 48%/60.7%/70.5%/82.3% numbers are model validation on historical matches, not live live-tracked wins. If the live stream diverges from validation over time, we will publish the gap — we would rather show a hard truth than a polished number.",
+
   "engine.data.label": "Data sources",
   "engine.data.title": "One licensed feed, no scraping",
   "engine.data.subtitle": "API-Football Pro tier. 29 competitions, daily ingestion, auditable lineage.",
@@ -3674,6 +3682,14 @@ const nl: Dictionary = {
   "engine.val.p3A": "De huidige v8.1 walk-forward run dekte",
   "engine.val.p3B": "28.838 out-of-sample voorspellingen",
   "engine.val.p3C": "verdeeld over vier tijdsfolds. Resultaten matchen direct met wat de Per-tier tabel hierboven toont, we gebruiken dezelfde methodologie in productie.",
+
+  "engine.val.modelHeader": "Modelvalidatie",
+  "engine.val.modelTitle": "Waar de cijfers op de site vandaan komen",
+  "engine.val.modelBody": "We passen het huidige model toe op historische wedstrijden met alléén informatie die op het moment van aftrap bekend was (teamvorm, Elo, H2H, klassement). Zo testen we of het model algemene patronen heeft geleerd en niet specifieke uitslagen onthouden. Elke tier-nauwkeurigheid op deze site komt uit deze dataset.",
+  "engine.val.liveHeader": "Live meting",
+  "engine.val.liveTitle": "Apart gelogd sinds 16 april 2026",
+  "engine.val.liveBody": "Sinds 16 april 2026 wordt elke nieuwe voorspelling gemaakt voordat de wedstrijd begint en wordt de uitkomst na afloop vastgelegd. Dit is een aparte stroom, zichtbaar op de Live-tab van /track-record. Hij begint klein en groeit dagelijks; statistisch betekenisvolle tier-cijfers vereisen circa 200 beoordeelde picks per tier.",
+  "engine.val.integrityDisclaimer": "Belangrijk: de twee datasets worden nooit gemengd. De 48%/60,7%/70,5%/82,3% hoofdcijfers zijn modelvalidatie op historische wedstrijden, geen live getrackte winsten. Als de live-stroom na verloop van tijd afwijkt van de validatie, publiceren we het verschil — we tonen liever een harde waarheid dan een gepolijst cijfer.",
 
   "engine.data.label": "Databronnen",
   "engine.data.title": "Eén gelicentieerde feed, geen scraping",

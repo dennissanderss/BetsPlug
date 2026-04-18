@@ -270,6 +270,36 @@ export function EngineContent() {
               {t("engine.val.p3C" as any)}
             </p>
           </div>
+
+          {/* Integrity block — distinguishes model validation from live measurement */}
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.04] p-5">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">
+                {t("engine.val.modelHeader" as any)}
+              </p>
+              <p className="mt-2 text-sm font-semibold text-[#ededed]">
+                {t("engine.val.modelTitle" as any)}
+              </p>
+              <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                {t("engine.val.modelBody" as any)}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-blue-400/20 bg-blue-400/[0.04] p-5">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-blue-300">
+                {t("engine.val.liveHeader" as any)}
+              </p>
+              <p className="mt-2 text-sm font-semibold text-[#ededed]">
+                {t("engine.val.liveTitle" as any)}
+              </p>
+              <p className="mt-2 text-xs leading-relaxed text-slate-400">
+                {t("engine.val.liveBody" as any)}
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-6 text-[11px] leading-relaxed text-slate-500">
+            {t("engine.val.integrityDisclaimer" as any)}
+          </p>
         </div>
       </section>
 
