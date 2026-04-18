@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * TierLadder — public tier-accuracy showcase for the homepage.
+ * TierLadder, public tier-accuracy showcase for the homepage.
  *
  * Fetches live numbers from /api/trackrecord/summary?pick_tier={tier}
  * for all four tiers in parallel. Shows accuracy + graded-pick count +
@@ -11,7 +11,7 @@
  * Design: four `card-neon` panels, one per tier, with an ambient glow
  * blob behind the section that matches NOCTURNE. Numbers fall back to
  * a static approximation from the last manual snapshot if the API is
- * unreachable — we never render "0%" or a bare dash, which would look
+ * unreachable, we never render "0%" or a bare dash, which would look
  * like the service is broken.
  */
 
@@ -26,7 +26,7 @@ import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 type TierKey = "free" | "silver" | "gold" | "platinum";
 
 interface TierRow {
-  accuracy: number | null; // 0–1
+  accuracy: number | null; // 0-1
   total: number | null;
 }
 
@@ -141,8 +141,8 @@ export function TierLadder() {
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
             {isNl
-              ? "Elke voorspelling krijgt een tier op basis van modelbetrouwbaarheid. Hoe hoger de tier, hoe strenger de drempel — en hoe scherper de cijfers. Alle getallen komen rechtstreeks uit ons openbare trackrecord."
-              : "Every prediction is labelled with a tier based on model confidence. The higher the tier, the stricter the threshold — and the sharper the numbers. All stats pulled live from our public track record."}
+              ? "Elke voorspelling krijgt een tier op basis van modelbetrouwbaarheid. Hoe hoger de tier, hoe strenger de drempel en hoe scherper de cijfers. Alle getallen komen rechtstreeks uit ons openbare trackrecord."
+              : "Every prediction is labelled with a tier based on model confidence. The higher the tier, the stricter the threshold and the sharper the numbers. All stats pulled live from our public track record."}
           </p>
         </motion.div>
 
@@ -207,8 +207,8 @@ export function TierLadder() {
         <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
           <p className="text-xs text-[#6b7280]">
             {isNl
-              ? "Live cijfers — elke beoordeelde pick sinds de v8.1 deploy (2026-04-16)."
-              : "Live numbers — every graded pick since the v8.1 deploy (2026-04-16)."}
+              ? "Live cijfers, rechtstreeks uit onze database."
+              : "Live numbers, straight from our database."}
           </p>
           <Link
             href={loc("/track-record")}

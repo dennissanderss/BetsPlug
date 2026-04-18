@@ -44,7 +44,7 @@ import { ALL_LEAGUES, getLeagueName } from "@/data/league-catalog";
 import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
 
 /* ──────────────────────────────────────────────────────────────
- * Match Predictions — NOCTURNE rebuild
+ * Match Predictions, NOCTURNE rebuild
  * ────────────────────────────────────────────────────────────── */
 
 export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode }) {
@@ -388,7 +388,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
         </div>
       </section>
 
-      {/* ── Browse by league — SEO hub ── */}
+      {/* ── Browse by league, SEO hub ── */}
       <section className="relative py-20 md:py-28">
         <div
           aria-hidden
@@ -408,8 +408,8 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm text-[#a3a9b8] sm:text-base">
               {isNl
-                ? "30+ competities wereldwijd. Zelfde AI-motor, zelfde openbare trackrecord — klik een competitie voor de gratis picks van deze week."
-                : "30+ competitions worldwide. Same AI engine, same public track record — click any league for this week's free picks."}
+                ? "30+ competities wereldwijd. Zelfde AI-motor, zelfde openbare trackrecord, klik een competitie voor de gratis picks van deze week."
+                : "30+ competitions worldwide. Same AI engine, same public track record, click any league for this week's free picks."}
             </p>
           </div>
 

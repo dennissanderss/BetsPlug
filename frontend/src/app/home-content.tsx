@@ -86,7 +86,7 @@ function useFeaturedMatch(): FeaturedMatch | null {
 interface HomepageStats {
   total: number;
   correct: number;
-  winrate: number; // 0–1
+  winrate: number; // 0-1
 }
 
 interface UpcomingPick {
@@ -108,7 +108,7 @@ interface FreePicksPayload {
 }
 
 /**
- * Single fetch of `/homepage/free-picks` — the payload contains both
+ * Single fetch of `/homepage/free-picks`, the payload contains both
  * the 30-day rolling winrate block (feeds the track-record card) and
  * today's 3 free picks (feeds the hero widget). Previously both were
  * fetched in two independent useEffects → one extra round trip per
@@ -192,7 +192,7 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   HomeContent — landing page flow with NOCTURNE app-UI styling
+   HomeContent, landing page flow with NOCTURNE app-UI styling
    ═══════════════════════════════════════════════════════════════ */
 
 interface HomeContentProps {
@@ -244,7 +244,7 @@ export function HomeContent({
       <SiteNav />
 
       {/* ══════════════════════════════════════════════════════════════
-          1 · HERO — text left, premium prediction card right
+          1 · HERO, text left, premium prediction card right
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden pt-40 pb-16 md:pt-52 md:pb-24">
         <HeroMediaBg />
@@ -368,7 +368,7 @@ export function HomeContent({
               </motion.div>
             </div>
 
-            {/* Prediction preview — app widget */}
+            {/* Prediction preview, app widget */}
             <motion.div
               initial={{ opacity: 0, y: 24, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -447,7 +447,7 @@ export function HomeContent({
                     <p className="text-stat text-sm text-[#c4b5fd]">
                       {/* Use Gold-tier accuracy from potd (falls back to 70.6%
                           static snapshot while BOTD picks are still pending). */}
-                      {potd.potdAccuracy ? `${potd.potdAccuracy}%` : "—"}
+                      {potd.potdAccuracy ? `${potd.potdAccuracy}%` : ","}
                     </p>
                   </div>
                 </div>
@@ -479,7 +479,7 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          1a2 · RECOGNIZE-THIS — empathy-first pain section. Shows the
+          1a2 · RECOGNIZE-THIS, empathy-first pain section. Shows the
           Telegram-tipster frustrations the visitor has already lived
           through, so they feel understood before we pitch the solution.
           Placed right after the hero so the flow is:
@@ -488,10 +488,10 @@ export function HomeContent({
       <RecognizeThis />
 
       {/* ══════════════════════════════════════════════════════════════
-          1b · LIVE PROOF STRIP — freshness ribbon wired to real API data
+          1b · LIVE PROOF STRIP, freshness ribbon wired to real API data
           Every number here is pulled live from the same /homepage/free-picks
           endpoint that powers the widget above. If the numbers lie, the
-          widget lies — there is no "results page" we can tweak separately.
+          widget lies, there is no "results page" we can tweak separately.
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative pt-4 pb-10 md:pt-6 md:pb-14">
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
@@ -531,12 +531,12 @@ export function HomeContent({
                   variant="purple"
                   label={t("liveProof.winrate")}
                   /* Require at least 30 graded picks before quoting a
-                     winrate — otherwise small-sample noise (e.g. "0%"
+                     winrate, otherwise small-sample noise (e.g. "0%"
                      on day 1) is more misleading than no number. */
                   value={
                     stats && stats.total >= 30 && stats.winrate > 0
                       ? `${(stats.winrate * 100).toFixed(1)}%`
-                      : "—"
+                      : ","
                   }
                 />
                 <LiveStatChip
@@ -546,7 +546,7 @@ export function HomeContent({
                   value={
                     stats && stats.total > 0
                       ? stats.total.toLocaleString(locale)
-                      : "—"
+                      : ","
                   }
                 />
                 <LiveStatChip
@@ -566,14 +566,14 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          1c · TIER LADDER — tier accuracy + graded-pick count per tier,
+          1c · TIER LADDER, tier accuracy + graded-pick count per tier,
           live from /api/trackrecord/summary. Replaces the vague "58%
           gemiddeld hitpercentage" line with a concrete value ladder.
          ══════════════════════════════════════════════════════════════ */}
       <TierLadder />
 
       {/* ══════════════════════════════════════════════════════════════
-          1d · TRUST FUNNEL — "from 55k matches to 1.65k honest picks",
+          1d · TRUST FUNNEL, "from 55k matches to 1.65k honest picks",
           plain-language explanation of why the advertised volume looks
           smaller than the raw database count. Turns the "why only 8k?"
           visitor question into a conversion-oriented honesty story.
@@ -586,7 +586,7 @@ export function HomeContent({
       <LeaguesTicker />
 
       {/* ══════════════════════════════════════════════════════════════
-          2b · PAS — problem/agitate/solve block
+          2b · PAS, problem/agitate/solve block
           Frame the real pain (retail bettors lose) BEFORE we present
           BetsPlug as the answer. Numbers are industry-standard and
           intentionally non-BetsPlug so the claim is credible.
@@ -648,7 +648,7 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          3 · FEATURES — 3 premium feature cards
+          3 · FEATURES, 3 premium feature cards
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden py-20 md:py-28">
         <div
@@ -699,7 +699,7 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          4 · HOW IT WORKS — 3 premium step cards
+          4 · HOW IT WORKS, 3 premium step cards
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden py-20 md:py-28">
         <div
@@ -761,7 +761,7 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          5 · TRACK RECORD — animated chart + stats
+          5 · TRACK RECORD, animated chart + stats
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden py-20 md:py-28">
         <div
@@ -772,7 +772,7 @@ export function HomeContent({
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.15fr]">
-            {/* Left — copy + stats strip + CTAs */}
+            {/* Left, copy + stats strip + CTAs */}
             <div>
               <span className="section-label">
                 <Shield className="h-3 w-3" />
@@ -790,8 +790,8 @@ export function HomeContent({
               {/* Mini stat strip */}
               {(() => {
                 const hasLive = stats && stats.total > 0 && stats.winrate > 0;
-                const displayAcc = hasLive ? `${Math.round(stats.winrate * 1000) / 10}%` : "—";
-                const displayTotal = hasLive ? stats.total.toLocaleString(locale) : "—";
+                const displayAcc = hasLive ? `${Math.round(stats.winrate * 1000) / 10}%` : ",";
+                const displayTotal = hasLive ? stats.total.toLocaleString(locale) : ",";
                 return (
                   <div className="mt-8 grid grid-cols-3 gap-4">
                     <div>
@@ -820,7 +820,7 @@ export function HomeContent({
               </div>
             </div>
 
-            {/* Right — animated line chart + floating badges */}
+            {/* Right, animated line chart + floating badges */}
             <motion.div
               initial={{ opacity: 0, y: 24, scale: 0.98 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -839,7 +839,7 @@ export function HomeContent({
                 </div>
               </div>
 
-              {/* Floating badge — top-left: accuracy */}
+              {/* Floating badge, top-left: accuracy */}
               <div
                 className="card-neon card-neon-green absolute -left-6 -top-5 hidden -rotate-[4deg] p-3 sm:block"
                 style={{ width: 190 }}
@@ -853,13 +853,13 @@ export function HomeContent({
                       {t("track.accuracy")}
                     </p>
                     <p className="text-stat text-sm text-[#4ade80]">
-                      {stats && stats.winrate > 0 ? `${Math.round(stats.winrate * 1000) / 10}%` : "—"}
+                      {stats && stats.winrate > 0 ? `${Math.round(stats.winrate * 1000) / 10}%` : ","}
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Floating badge — bottom-right: total predictions */}
+              {/* Floating badge, bottom-right: total predictions */}
               <div
                 className="card-neon card-neon-purple absolute -bottom-4 -right-4 hidden rotate-[4deg] p-3 sm:block"
                 style={{ width: 190 }}
@@ -873,7 +873,7 @@ export function HomeContent({
                       {t("track.metricPredictions")}
                     </p>
                     <p className="text-stat text-sm text-[#c4b5fd]">
-                      {stats && stats.total > 0 ? stats.total.toLocaleString(locale) : "—"}
+                      {stats && stats.total > 0 ? stats.total.toLocaleString(locale) : ","}
                     </p>
                   </div>
                 </div>
@@ -884,10 +884,10 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          5b · PERSONA SEGMENTATION — 'who BetsPlug is for'
+          5b · PERSONA SEGMENTATION, 'who BetsPlug is for'
           Three persona cards. Same platform, different habits.
           Each card has its own CTA that routes to the most relevant
-          entry point for that persona — reducing friction vs a single
+          entry point for that persona, reducing friction vs a single
           one-size-fits-all CTA.
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden py-20 md:py-28">
@@ -956,7 +956,7 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          5b · POPULAR LEAGUES — SEO hub + conversion gateway
+          5b · POPULAR LEAGUES, SEO hub + conversion gateway
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative py-20 md:py-28">
         <div
@@ -1043,17 +1043,17 @@ export function HomeContent({
       )}
 
       {/* ══════════════════════════════════════════════════════════════
-          7 · COMPARISON TABLE — BetsPlug vs Others
+          7 · COMPARISON TABLE, BetsPlug vs Others
          ══════════════════════════════════════════════════════════════ */}
       <ComparisonTable rows={comparisonRows} />
 
       {/* ══════════════════════════════════════════════════════════════
-          8 · PRICING — 3 plans + Platinum Lifetime (shared component)
+          8 · PRICING, 3 plans + Platinum Lifetime (shared component)
          ══════════════════════════════════════════════════════════════ */}
       <PricingSection pricingConfig={pricingConfig} />
 
       {/* ══════════════════════════════════════════════════════════════
-          8b · RISK REVERSAL — sits right after Pricing to absorb
+          8b · RISK REVERSAL, sits right after Pricing to absorb
           the 'what if this doesn't work?' objection that kills
           conversion at the pricing step.
          ══════════════════════════════════════════════════════════════ */}
@@ -1256,7 +1256,7 @@ export function HomeContent({
    Local sub-components
    ═══════════════════════════════════════════════════════════════ */
 
-/** HeroPickRow — compact match row rendered in the hero widget. */
+/** HeroPickRow, compact match row rendered in the hero widget. */
 function HeroPickRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
   const maxProb = Math.max(pick.home_prob, pick.draw_prob, pick.away_prob);
   const predicted =
@@ -1332,7 +1332,7 @@ function ChartStat({ label, value }: { label: string; value: string }) {
   );
 }
 
-/** LiveStatChip — one tile in the live proof strip under the hero. */
+/** LiveStatChip, one tile in the live proof strip under the hero. */
 function LiveStatChip({
   icon: Icon,
   variant,
@@ -1365,7 +1365,7 @@ function LiveStatChip({
   );
 }
 
-/** PasStatCard — one of the three pain-stat cards in the PAS block. */
+/** PasStatCard, one of the three pain-stat cards in the PAS block. */
 function PasStatCard({
   icon: Icon,
   value,
@@ -1406,7 +1406,7 @@ function PasStatCard({
   );
 }
 
-/** PersonaCard — one of the three persona cards in the segmentation block. */
+/** PersonaCard, one of the three persona cards in the segmentation block. */
 function PersonaCard({
   variant,
   icon: Icon,
@@ -1487,7 +1487,7 @@ function PersonaCard({
   );
 }
 
-/** RiskCard — one of the three risk-reversal cards. */
+/** RiskCard, one of the three risk-reversal cards. */
 function RiskCard({
   variant,
   icon: Icon,

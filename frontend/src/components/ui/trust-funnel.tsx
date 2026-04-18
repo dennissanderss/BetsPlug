@@ -1,11 +1,11 @@
 "use client";
 
 /**
- * TrustFunnel — "honest funnel" transparency section for the homepage.
+ * TrustFunnel, "honest funnel" transparency section for the homepage.
  *
  * Explains in plain language how we go from 55 000+ ingested matches
  * down to the ~1 650 Gold-tier graded predictions we actually advertise.
- * Designed to answer the visitor question: "you say 1 650 — but didn't
+ * Designed to answer the visitor question: "you say 1 650, but didn't
  * you have tens of thousands of matches? Why so few?"
  *
  * The answer is honest: we only count predictions made with the CURRENT
@@ -29,13 +29,13 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 interface TrustData {
-  goldAccuracy: number | null; // 0–1
+  goldAccuracy: number | null; // 0-1
   goldTotal: number | null;
   forecastsTotal: number | null; // /dashboard/metrics total_forecasts
   evaluatedTotal: number | null; // /dashboard/metrics evaluated_count
 }
 
-/** Manually reviewed fallback — update alongside potd-stats.ts refreshes. */
+/** Manually reviewed fallback, update alongside potd-stats.ts refreshes. */
 const FALLBACK = {
   matchesIngested: 55680,
   forecastsTotal: 3801,
@@ -81,7 +81,7 @@ export function TrustFunnel() {
   const isNl = locale === "nl";
   const live = useTrustData();
 
-  // Merge live with fallback — never render zero / dash in a marketing section
+  // Merge live with fallback, never render zero / dash in a marketing section
   const matchesIngested = FALLBACK.matchesIngested; // static (we don't expose a matches-count endpoint)
   const forecastsTotal = live.forecastsTotal ?? FALLBACK.forecastsTotal;
   const evaluatedTotal = live.evaluatedTotal ?? FALLBACK.evaluatedTotal;
@@ -115,8 +115,8 @@ export function TrustFunnel() {
         ? "Voorspeld met ons huidige AI-model"
         : "Forecast with our current AI model",
       desc: isNl
-        ? "Alleen voorspellingen van het model dat nu live staat. Oudere modelversies zijn gearchiveerd — niet verstopt, maar ook niet meegeteld in onze cijfers."
-        : "Only predictions from the model that's currently live. Older model versions are archived — not hidden, but not counted in our stats either.",
+        ? "Alleen voorspellingen van het model dat nu live staat. Oudere modelversies zijn gearchiveerd, niet verstopt, maar ook niet meegeteld in onze cijfers."
+        : "Only predictions from the model that's currently live. Older model versions are archived, not hidden, but not counted in our stats either.",
       variant: "purple",
     },
     {
@@ -140,10 +140,10 @@ export function TrustFunnel() {
     {
       icon: ShieldCheck,
       value: pct(goldAccuracy),
-      label: isNl ? "Nauwkeurigheid — openbaar verifieerbaar" : "Accuracy — publicly verifiable",
+      label: isNl ? "Nauwkeurigheid, openbaar verifieerbaar" : "Accuracy, publicly verifiable",
       desc: isNl
-        ? "Geen marketingbrochure — download de data en tel het zelf. Ter vergelijking: een willekeurige gok op thuis/gelijkspel/uit haalt ongeveer 37%."
-        : "Not a marketing brochure — download the data and count it yourself. For reference: a random guess on home/draw/away lands around 37%.",
+        ? "Geen marketingbrochure. Download de data en tel het zelf. Ter vergelijking: een willekeurige gok op thuis, gelijkspel of uit haalt ongeveer 37%."
+        : "Not a marketing brochure. Download the data and count it yourself. For reference: a random guess on home, draw or away lands around 37%.",
       variant: "green",
     },
   ];

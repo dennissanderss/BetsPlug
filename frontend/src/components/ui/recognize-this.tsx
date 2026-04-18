@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * RecognizeThis — empathy-first pain-recognition section.
+ * RecognizeThis, empathy-first pain-recognition section.
  *
  * Sits between the hero and the proof-oriented sections (live proof,
  * tier ladder, trust funnel). Purpose: hit the visitor with the exact
@@ -9,7 +9,7 @@
  * think "yes, that's me" BEFORE we start pitching the solution.
  *
  * Tone rules (per product feedback):
- *   - Never accuse competitors of scamming / bedrog — describe patterns
+ *   - Never accuse competitors of scamming / bedrog, describe patterns
  *     the visitor has experienced, not labels for bad actors.
  *   - Empathy first, pitch second. Lead with "we get it" not "they're bad".
  *   - Each card is a recognisable pattern, not a general industry stat.
@@ -75,7 +75,7 @@ export function RecognizeThis() {
 
   return (
     <section className="relative overflow-hidden py-20 md:py-28">
-      {/* Ambient glows — warmer tones to signal "this is the pain section" */}
+      {/* Ambient glows, warmer tones to signal "this is the pain section" */}
       <div
         aria-hidden
         className="pointer-events-none absolute -left-40 top-10 h-[460px] w-[460px] rounded-full"
@@ -104,20 +104,20 @@ export function RecognizeThis() {
             {isNl ? (
               <>
                 Je hebt het{" "}
-                <span className="gradient-text-purple">al eerder geprobeerd</span>{" "}
-                — en het werd niet beter.
+                <span className="gradient-text-purple">al eerder geprobeerd</span>
+                . En het werd niet beter.
               </>
             ) : (
               <>
                 You've{" "}
-                <span className="gradient-text-purple">been here before</span>{" "}
-                — and it didn't get better.
+                <span className="gradient-text-purple">been here before</span>
+                . And it didn't get better.
               </>
             )}
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
             {isNl
-              ? "Telegramgroepen met een ‘gegarandeerde' winrate. Tips die pas binnenkomen als je al niks meer kunt doen. Verliezen die een dag later stilletjes uit de groep verdwijnen. We kennen het verhaal — en we hoorden dezelfde klacht zo vaak dat we besloten het anders op te lossen."
+              ? "Telegramgroepen met een ‘gegarandeerde' winrate. Tips die pas binnenkomen als je al niks meer kunt doen. Verliezen die een dag later stilletjes uit de groep verdwijnen. We kennen het verhaal. We hoorden dezelfde klacht zo vaak dat we besloten het anders op te lossen."
               : "Telegram groups with a ‘guaranteed' win rate. Tips that drop when there's nothing left to do. Losses that quietly disappear from the chat the next day. We've heard the same story often enough to build the opposite."}
           </p>
         </motion.div>
@@ -170,8 +170,8 @@ export function RecognizeThis() {
               </p>
               <p className="mt-3 text-base leading-relaxed text-[#ededed] sm:text-lg">
                 {isNl
-                  ? "Eén transparant AI-model. Elke voorspelling wordt vóór de aftrap vergrendeld met tijdstempel — winst of verlies, alles blijft staan. Per tier kun je de nauwkeurigheid zelf controleren. Geen groepen, geen excel-sheets, geen 'vertrouw me maar'."
-                  : "One transparent AI model. Every prediction is locked with a timestamp before kickoff — win or loss, nothing gets deleted. You can check the accuracy of every tier yourself. No groups, no spreadsheets, no 'just trust me'."}
+                  ? "Eén transparant AI-model. Elke voorspelling wordt vóór de aftrap vergrendeld met tijdstempel. Winst of verlies, alles blijft staan. Per tier kun je de nauwkeurigheid zelf controleren. Geen groepen, geen excel-sheets, geen 'vertrouw me maar'."
+                  : "One transparent AI model. Every prediction is locked with a timestamp before kickoff. Win or loss, nothing gets deleted. You can check the accuracy of every tier yourself. No groups, no spreadsheets, no 'just trust me'."}
               </p>
             </div>
             <Link

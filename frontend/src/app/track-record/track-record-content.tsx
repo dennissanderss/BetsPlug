@@ -58,7 +58,7 @@ function useLiveTrackRecordStats(pickTier: PublicTier = "all"): LiveStats {
     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
     const tierQs = pickTier !== "all" ? `?pick_tier=${pickTier}` : "";
 
-    // BOTD trackrecord is always the raw BOTD stream — not tier-scoped
+    // BOTD trackrecord is always the raw BOTD stream, not tier-scoped
     // (BOTD itself is a Gold+ feature). The summary call, in contrast,
     // respects the ?pick_tier= public filter so each tab reshapes KPIs.
     Promise.allSettled([
@@ -90,7 +90,7 @@ function useLiveTrackRecordStats(pickTier: PublicTier = "all"): LiveStats {
   return stats;
 }
 
-// Tier metadata for the public tabs — label, emoji and an accent
+// Tier metadata for the public tabs, label, emoji and an accent
 // colour class applied when the tab is active. Mirrors the authed
 // /trackrecord page's TierTabsStrip visual language.
 const PUBLIC_TIER_TABS: {
@@ -106,7 +106,7 @@ const PUBLIC_TIER_TABS: {
   { key: "platinum", label: "Platinum · 80%+", emoji: "🟢", activeClass: "border-emerald-400/40 bg-emerald-500/[0.12] text-emerald-100" },
 ];
 
-// Client-side auth probe — reads the localStorage token written by
+// Client-side auth probe, reads the localStorage token written by
 // the login flow. Used only to decide whether to surface the "Download
 // CSV" anchor vs a "Sign in to download" CTA on the public page. The
 // real authorisation still happens server-side; this just avoids the
@@ -157,7 +157,7 @@ function PublicTierTabs({
           // serves tiers up to the caller's own. Public visitors can
           // still browse every tier's aggregate numbers above, but the
           // row-level export (match names, picks, odds, outcomes) is a
-          // paid deliverable — swap the anchor for a sign-in CTA.
+          // paid deliverable, swap the anchor for a sign-in CTA.
           <Link
             href={localizedLogin}
             className="inline-flex items-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.04] px-3 py-1.5 text-[11px] font-semibold text-slate-300 hover:border-emerald-400/40 hover:text-emerald-300 transition-colors"
@@ -201,20 +201,20 @@ const PIPELINE_VARIANTS = ["green", "purple", "blue", "green", "purple", "blue"]
 type Accent = "green" | "purple" | "blue";
 
 /**
- * Track Record — NOCTURNE rebuild.
+ * Track Record, NOCTURNE rebuild.
  */
 export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: React.ReactNode; trackRecordPage?: any }) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
-  // v8.5 — default to Gold tier (70%+) on the public page so first-time
+  // v8.5, default to Gold tier (70%+) on the public page so first-time
   // visitors immediately see the most compelling honest number.
   // Users can still explore every tier via the tab strip below.
   const [pickTier, setPickTier] = useState<PublicTier>("gold");
   const live = useLiveTrackRecordStats(pickTier);
   const potd = usePotdNumbers();
 
-  // B2.3 — the BOTD KPI sits in the same row as the tier-scoped KPIs but
+  // B2.3, the BOTD KPI sits in the same row as the tier-scoped KPIs but
   // is pulled from a separate endpoint (/bet-of-the-day/track-record)
   // that doesn't understand pick_tier. When a specific tier is selected,
   // hiding the BOTD card prevents the confusing "tier changed but this
@@ -423,7 +423,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             </p>
           </motion.div>
 
-          {/* v8.3 — public tier selector. Numbers above the KPI grid
+          {/* v8.3, public tier selector. Numbers above the KPI grid
               update as you click a tab; the CSV download in the tab
               header stays in sync with the selected tier. */}
           <div className="mb-8">

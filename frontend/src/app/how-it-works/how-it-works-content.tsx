@@ -40,7 +40,7 @@ type Accent = "green" | "purple" | "blue";
 const HERO_STAT_VARIANTS: Accent[] = ["green", "purple", "blue", "green"];
 
 /**
- * How It Works — NOCTURNE rebuild.
+ * How It Works, NOCTURNE rebuild.
  */
 export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
   const { t, locale } = useTranslations();
@@ -262,7 +262,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
               variant="purple"
               card
             />
-            {/* 3rd point ("Strategy Lab") removed — the backtested-strategy
+            {/* 3rd point ("Strategy Lab") removed, the backtested-strategy
                 filter never shipped and the copy promised a feature that
                 isn't on the roadmap. Two concrete features is cleaner
                 than padding with vapourware. */}
@@ -544,7 +544,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Stage section — alternating 2-col layout
+   Stage section, alternating 2-col layout
    ───────────────────────────────────────────────────────────── */
 
 function StageSection({
@@ -640,7 +640,7 @@ function StageSection({
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Stage point — icon + title + desc row (optionally carded)
+   Stage point, icon + title + desc row (optionally carded)
    ───────────────────────────────────────────────────────────── */
 
 function StagePoint({
