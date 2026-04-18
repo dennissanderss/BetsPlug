@@ -646,13 +646,11 @@ async def get_upcoming_fixtures(
     raw_matches = (await db.execute(stmt)).scalars().all()
     matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
+    # Load predictions but do NOT filter out matches that have no prediction.
+    # Hiding the match itself (not just the prediction) leaves the page blank
+    # when Celery hasn't caught up yet. Tier-gating applies to the prediction
+    # field inside each fixture — the match row itself is always visible.
     pred_map = await _load_latest_predictions(match_ids, db, user_tier)
-    # v8.3 — hide matches whose latest prediction is tier-gated away so
-    # Free users see Free-tier matches only. Matches with no prediction
-    # at all also fall off (otherwise lists fill with noise).
-    if TIER_SYSTEM_ENABLED:
-        matches = [m for m in matches if m.id in pred_map]
-        match_ids = [m.id for m in matches]
     odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
@@ -704,12 +702,9 @@ async def get_live_fixtures(
     raw_matches = (await db.execute(stmt)).scalars().all()
     matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
+    # Do NOT filter out live matches without predictions — show the match
+    # regardless. Tier-gating applies only to the prediction field.
     pred_map = await _load_latest_predictions(match_ids, db, user_tier)
-    # v8.3 — same tier gate as /upcoming: hide live matches whose
-    # latest prediction isn't accessible to the caller.
-    if TIER_SYSTEM_ENABLED:
-        matches = [m for m in matches if m.id in pred_map]
-        match_ids = [m.id for m in matches]
     odds_map = await _load_latest_odds(match_ids, db)
 
     # ── 3. Build a lookup from api_football_id → live score data ───────
@@ -782,10 +777,9 @@ async def get_today_fixtures(
     raw_matches = (await db.execute(stmt)).scalars().all()
     matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
+    # Do NOT filter out matches that have no prediction — show the match
+    # regardless; tier-gating applies only to the prediction field.
     pred_map = await _load_latest_predictions(match_ids, db, user_tier)
-    if TIER_SYSTEM_ENABLED:
-        matches = [m for m in matches if m.id in pred_map]
-        match_ids = [m.id for m in matches]
     odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
@@ -918,10 +912,9 @@ async def get_results(
     raw_matches = (await db.execute(stmt)).scalars().all()
     matches = _dedup_fixtures(raw_matches)
     match_ids = [m.id for m in matches]
+    # Do NOT filter out matches without predictions — results should show all
+    # finished matches. Tier-gating applies only to the prediction column.
     pred_map = await _load_latest_predictions(match_ids, db, user_tier)
-    if TIER_SYSTEM_ENABLED:
-        matches = [m for m in matches if m.id in pred_map]
-        match_ids = [m.id for m in matches]
     odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
