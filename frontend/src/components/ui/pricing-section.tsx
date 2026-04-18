@@ -171,6 +171,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
         t("pricing.goldF4"),
         t("pricing.goldF5"),
         t("pricing.goldF6"),
+        t("pricing.goldF7"),
       ],
     },
   ];
@@ -188,6 +189,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
       t("pricing.platF3"),
       t("pricing.platF4"),
       t("pricing.platF5"),
+      t("pricing.platF6"),
     ],
   };
 

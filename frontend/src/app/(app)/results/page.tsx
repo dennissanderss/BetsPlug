@@ -28,6 +28,15 @@ import { Pill } from "@/components/noct/pill";
 
 type PeriodFilter = 7 | 14 | 30;
 type ResultFilter = "All" | "Correct" | "Incorrect";
+type TierFilter = "all" | "free" | "silver" | "gold" | "platinum";
+
+const TIER_TABS: { key: TierFilter; label: string }[] = [
+  { key: "all", label: "All tiers" },
+  { key: "free", label: "Bronze · 45%+" },
+  { key: "silver", label: "Silver · 60%+" },
+  { key: "gold", label: "Gold · 70%+" },
+  { key: "platinum", label: "Platinum · 80%+" },
+];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -512,6 +521,7 @@ function ResultsPageContent() {
   const [period, setPeriod] = useState<PeriodFilter>(7);
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
+  const [tierFilter, setTierFilter] = useState<TierFilter>("all");
 
   // ── Queries ────────────────────────────────────────────────────────────────
   const resultsQuery = useQuery({
@@ -522,8 +532,9 @@ function ResultsPageContent() {
   });
 
   const summaryQuery = useQuery({
-    queryKey: ["weekly-summary", period],
-    queryFn: () => api.getWeeklySummary(period),
+    queryKey: ["weekly-summary", period, tierFilter],
+    queryFn: () =>
+      api.getWeeklySummary(period, tierFilter === "all" ? undefined : tierFilter),
     staleTime: 5 * 60_000,
     retry: 1,
   });
@@ -546,8 +557,17 @@ function ResultsPageContent() {
   const filtered = useMemo(() => {
     let items = [...allResults];
 
-    // Only show finished fixtures that have actual result data
-    items = items.filter((f) => f.status === "finished" && f.result);
+    // Require a finished match with a score AND a prediction AND a
+    // tier classification — otherwise "Pick" and "Result" columns
+    // render as "—" on every row and users can't tell whether the
+    // empty cells mean "we got it wrong" or "we never forecast this".
+    items = items.filter(
+      (f) => f.status === "finished" && f.result && f.prediction,
+    );
+
+    if (tierFilter !== "all") {
+      items = items.filter((f) => f.prediction?.pick_tier === tierFilter);
+    }
 
     if (leagueFilter) {
       items = items.filter((f) => f.league_name === leagueFilter);
@@ -577,7 +597,7 @@ function ResultsPageContent() {
     items.sort((a, b) => b.scheduled_at.localeCompare(a.scheduled_at));
 
     return items;
-  }, [allResults, resultFilter, leagueFilter]);
+  }, [allResults, resultFilter, leagueFilter, tierFilter]);
 
   const isLoading = resultsQuery.isLoading;
   const hasError = resultsQuery.isError;
@@ -601,6 +621,37 @@ function ResultsPageContent() {
               {t("results.subtitle")}
             </p>
           </div>
+        </div>
+      </div>
+
+      {/* ── Tier scope strip ── */}
+      {/* Split the resultaten view by pick-tier so Gold members can see the
+          exact match list their 70%+ headline number is built from, and
+          Platinum members likewise for 80%+. Without the strip the KPI card
+          mixed every tier and always read ~50%, contradicting the tier
+          claims on the homepage. */}
+      <div className="glass-card px-4 py-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[10px] uppercase tracking-widest text-slate-500 mr-2">
+            Scope
+          </span>
+          {TIER_TABS.map((tab) => {
+            const active = tab.key === tierFilter;
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setTierFilter(tab.key)}
+                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  active
+                    ? "bg-emerald-600/80 text-white"
+                    : "bg-white/[0.03] text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
