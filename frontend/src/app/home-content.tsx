@@ -21,7 +21,6 @@ import {
   Star,
   Activity,
   ChevronRight,
-  Globe,
   AlertTriangle,
   BarChart3,
   Smartphone,
@@ -487,83 +486,9 @@ export function HomeContent({
          ══════════════════════════════════════════════════════════════ */}
       <RecognizeThis />
 
-      {/* ══════════════════════════════════════════════════════════════
-          1b · LIVE PROOF STRIP, freshness ribbon wired to real API data
-          Every number here is pulled live from the same /homepage/free-picks
-          endpoint that powers the widget above. If the numbers lie, the
-          widget lies, there is no "results page" we can tweak separately.
-         ══════════════════════════════════════════════════════════════ */}
-      <section className="relative pt-4 pb-10 md:pt-6 md:pb-14">
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="card-neon halo-green relative overflow-hidden p-5 sm:p-6">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -right-16 -top-16 h-[240px] w-[240px] rounded-full"
-              style={{ background: "hsl(var(--accent-green) / 0.22)", filter: "blur(100px)" }}
-            />
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -left-20 -bottom-20 h-[220px] w-[220px] rounded-full"
-              style={{ background: "hsl(var(--accent-purple) / 0.18)", filter: "blur(100px)" }}
-            />
-
-            <div className="relative flex flex-col gap-5">
-              <div className="flex items-center justify-between gap-3">
-                <span className="section-label">
-                  <span className="live-dot" />
-                  {t("liveProof.label")}
-                </span>
-                <Pill className="hidden sm:inline-flex">
-                  <Activity className="h-3 w-3" />
-                  Live
-                </Pill>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <LiveStatChip
-                  icon={Activity}
-                  variant="green"
-                  label={t("liveProof.picks")}
-                  value={picks.length > 0 ? String(picks.length) : "3"}
-                />
-                <LiveStatChip
-                  icon={Target}
-                  variant="purple"
-                  label={t("liveProof.winrate")}
-                  /* Require at least 30 graded picks before quoting a
-                     winrate, otherwise small-sample noise (e.g. "0%"
-                     on day 1) is more misleading than no number. */
-                  value={
-                    stats && stats.total >= 30 && stats.winrate > 0
-                      ? `${(stats.winrate * 100).toFixed(1)}%`
-                      : ","
-                  }
-                />
-                <LiveStatChip
-                  icon={TrendingUp}
-                  variant="blue"
-                  label={t("liveProof.predictions")}
-                  value={
-                    stats && stats.total > 0
-                      ? stats.total.toLocaleString(locale)
-                      : ","
-                  }
-                />
-                <LiveStatChip
-                  icon={Globe}
-                  variant="green"
-                  label={t("liveProof.leagues")}
-                  value={t("liveProof.leaguesValue")}
-                />
-              </div>
-
-              <p className="text-xs leading-relaxed text-[#6b7280]">
-                {t("liveProof.disclaimer")}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 1b · LIVE PROOF STRIP removed — TierLadder below covers the
+          same '70%+ tier accuracy, here's the volume' story with
+          proper per-tier breakdown instead of a blended aggregate. */}
 
       {/* ══════════════════════════════════════════════════════════════
           1c · TIER LADDER, tier accuracy + graded-pick count per tier,
@@ -1328,39 +1253,6 @@ function ChartStat({ label, value }: { label: string; value: string }) {
     <div>
       <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">{label}</p>
       <p className="text-stat mt-0.5 text-base text-[#ededed] sm:text-lg">{value}</p>
-    </div>
-  );
-}
-
-/** LiveStatChip, one tile in the live proof strip under the hero. */
-function LiveStatChip({
-  icon: Icon,
-  variant,
-  label,
-  value,
-}: {
-  icon: typeof Shield;
-  variant: "green" | "purple" | "blue";
-  label: string;
-  value: string;
-}) {
-  return (
-    <div
-      className="relative flex items-center gap-3 rounded-xl border p-4"
-      style={{
-        borderColor: "hsl(0 0% 100% / 0.06)",
-        background: "hsl(0 0% 100% / 0.02)",
-      }}
-    >
-      <HexBadge variant={variant} size="md">
-        <Icon className="h-5 w-5" strokeWidth={2} />
-      </HexBadge>
-      <div className="min-w-0 flex-1">
-        <p className="text-stat text-xl text-[#ededed] sm:text-2xl">{value}</p>
-        <p className="text-[11px] font-medium uppercase tracking-wider text-[#6b7280]">
-          {label}
-        </p>
-      </div>
     </div>
   );
 }
