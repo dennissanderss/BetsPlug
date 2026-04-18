@@ -959,7 +959,7 @@ const en = {
   "hiw.metaTitle":
     "How Our AI Football Predictions Work · BetsPlug",
   "hiw.metaDesc":
-    "Four AI models analyse 80,000+ matches of history and deliver AI football predictions for 30+ leagues. Pre-match locked. Publicly tracked.",
+    "Four AI models analyse 70,000+ matches of history and deliver AI football predictions for 30+ leagues. Pre-match locked. Publicly tracked.",
   "hiw.breadcrumbHome": "Home",
   "hiw.breadcrumbHow": "How it works",
 
@@ -967,7 +967,7 @@ const en = {
   "hiw.heroTitleA": "From raw match data to",
   "hiw.heroTitleB": "AI football predictions you can verify.",
   "hiw.heroSubtitle":
-    "Most tipster sites show you a winning screenshot and ask you to trust them. We show you the models, the data, and every prediction we've ever made, winners and losers. Here's exactly how BetsPlug turns 80,000+ matches of football history into a forecast for the next kickoff.",
+    "Most tipster sites show you a winning screenshot and ask you to trust them. We show you the models, the data, and every prediction we've ever made, winners and losers. Here's exactly how BetsPlug turns 70,000+ matches of football history into a forecast for the next kickoff.",
   "hiw.heroCtaPrimary": "See the public track record",
   "hiw.heroCtaSecondary": "Get today's free AI prediction",
   "hiw.heroStat1Value": "{potdAccuracy}%",
@@ -983,10 +983,10 @@ const en = {
   "hiw.step1Badge": "Step 01 · Ingest",
   "hiw.step1Title": "Every match, every stat, every night",
   "hiw.step1Lead":
-    "Before our AI makes a single football prediction, it ingests form, standings, goal data, head-to-head history, lineups, rest days, travel distance and 40+ other factors for every upcoming fixture. All feature values are snapshotted at the moment of ingestion, the model can never 'see' the future.",
+    "Before our AI makes a single football prediction, it ingests form, standings, goal data, head-to-head history, lineups, rest days, travel distance and dozens of other factors for every upcoming fixture. All feature values are snapshotted at the moment of ingestion, the model can never 'see' the future.",
   "hiw.step1P1":
     "This point-in-time discipline is how we prevent lookahead bias, the silent killer of every tipster's win-rate claim. If a model is ever trained on data it wouldn't have had before kickoff, its backtest lies. Ours doesn't.",
-  "hiw.step1Point1Title": "40+ features per match",
+  "hiw.step1Point1Title": "39 features per match",
   "hiw.step1Point1Desc":
     "Elo rating, recent form, xG, H2H, standings, opening odds, rest days, home advantage, all snapshotted pre-kickoff.",
   "hiw.step1Point2Title": "Refreshed every night",
@@ -994,7 +994,7 @@ const en = {
     "Scheduled pipelines pull fresh data for every fixture in the upcoming 7 days, every night. No stale inputs.",
   "hiw.step1Point3Title": "30+ top leagues live",
   "hiw.step1Point3Desc":
-    "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, plus 23+ more. Every league has 5+ seasons of clean history.",
+    "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, plus 20+ more. The training corpus spans 5+ seasons of clean history.",
 
   /* Step 2 */
   "hiw.step2Badge": "Step 02 · Forecast",
@@ -1059,7 +1059,7 @@ const en = {
 
   /* Engine under the hood */
   "hiw.engineTitle": "Under the hood, the four models",
-  "hiw.engineSubtitle": "Each model is trained on 80,000+ historical matches and walk-forward validated",
+  "hiw.engineSubtitle": "Each model is trained on 70,000+ historical matches and walk-forward validated",
   "hiw.engine1Name": "Pattern Finder",
   "hiw.engine1Desc": "An advanced AI model that spots hidden patterns between form, fatigue, H2H and venue effects that simpler methods miss.",
   "hiw.engine2Name": "Scoreline Predictor",
@@ -1068,7 +1068,7 @@ const en = {
   "hiw.engine3Desc": "Team-strength ratings updated match-by-match using only pre-kickoff data. Venue-adjusted. Zero lookahead.",
   "hiw.engine4Name": "Odds Calibrator",
   "hiw.engine4Desc": "Keeps the other models honest. Outputs win probabilities that match long-run frequencies, not inflated confidence.",
-  "hiw.engineDisclaimer": "Each model is tested on matches it has never seen (walk-forward validation, season by season). The models are re-weighted quarterly based on real-world performance. Our track record page shows every prediction, wins and losses, with nothing deleted.",
+  "hiw.engineDisclaimer": "Each model is tested on matches it has never seen (walk-forward validation across multiple folds). Our track record page shows every prediction, wins and losses, with nothing deleted.",
 
   /* Objection section - FAQ */
   "hiw.faqBadge": "Objections, answered",
@@ -1089,7 +1089,7 @@ const en = {
     "30+ top competitions including Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, Europa League and Europa Conference. Each league has at least 5 seasons of clean training data behind it.",
   "hiw.faq5Q": "What is Strategy Lab?",
   "hiw.faq5A":
-    "Strategy Lab lets you filter predictions by backtested strategies (for example: home favourites in rain, underdogs after European away trips). Currently marked Coming Soon while we finalize the plausibility gate that prevents overfit strategies from being presented as profitable.",
+    "Strategy Lab lets you build and rank predictions by backtested strategies (for example: home favourites after rest, underdogs after European away trips). Every strategy runs through a plausibility gate that clamps implausible winrates and ROIs to zero, so overfit filters can't be presented as profitable.",
   "hiw.faq6Q": "Is this gambling advice?",
   "hiw.faq6A":
     "No. BetsPlug is an analytics platform. We publish probabilities and a verifiable track record, what you choose to do with that information is entirely your decision. All forecasting output is labelled educational and simulated.",
@@ -3184,14 +3184,14 @@ const nl: Dictionary = {
   "hiw.ctaSecondary": "Bekijk het track record",
   "hiw.ctaSubtitle": "Bekijk de gratis AI-voetbalvoorspelling van vandaag, blader door het openbare trackrecord en beslis zelf - voordat je iets betaalt.",
   "hiw.ctaTitle": "Stop met raden. Begin met data.",
-  "hiw.engine1Desc": "Beoordeelt elk team op basis van wedstrijdresultaten. Gebruikt alleen data beschikbaar voor de wedstrijd, geen toekomstige informatie.",
-  "hiw.engine1Name": "Point-in-Time Elo",
-  "hiw.engine2Desc": "Statistisch model dat exacte scores voorspelt op basis van de doelpuntenkracht van elk team.",
-  "hiw.engine2Name": "Scoreline Predictor",
-  "hiw.engine3Desc": "Machine learning model getraind op 40+ kenmerken waaronder vorm, onderlinge historie en thuisvoordeel.",
-  "hiw.engine3Name": "Pattern Finder",
-  "hiw.engine4Desc": "Alle modellen worden gecombineerd en getest op wedstrijden die ze nog nooit hebben gezien. Geen cherry-picking.",
-  "hiw.engine4Name": "AI Combiner + Check",
+  "hiw.engine1Desc": "Een geavanceerd AI-model dat verborgen patronen herkent tussen vorm, vermoeidheid, H2H en thuisvoordeel die eenvoudigere methodes missen.",
+  "hiw.engine1Name": "Patroonzoeker",
+  "hiw.engine2Desc": "Statistisch model dat de meest waarschijnlijke eindstand voorspelt, sterk in laag-scorende competities.",
+  "hiw.engine2Name": "Scorelijnvoorspeller",
+  "hiw.engine3Desc": "Teamsterkte-ratings, wedstrijd voor wedstrijd bijgewerkt met uitsluitend pre-match data. Gecorrigeerd voor thuisvoordeel. Geen lookahead.",
+  "hiw.engine3Name": "Point-in-Time Elo",
+  "hiw.engine4Desc": "Houdt de andere modellen eerlijk. Levert winkansen die aansluiten op lange-termijn-frequenties, geen opgeblazen zelfvertrouwen.",
+  "hiw.engine4Name": "Oddskalibrator",
   "hiw.engineDisclaimer": "Elk model wordt getest op data die het nooit eerder heeft gezien (walk-forward validatie). Ons trackrecord toont elke voorspelling, winst en verlies, zonder verwijderingen.",
   "hiw.engineSubtitle": "De modellen achter elke voorspelling",
   "hiw.engineTitle": "Onder de motorkap",
@@ -3203,7 +3203,7 @@ const nl: Dictionary = {
   "hiw.faq3Q": "Kan ik de data downloaden?",
   "hiw.faq4A": "30+ topcompetities waaronder Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, Europa League en Europa Conference. Elke competitie heeft minimaal vijf seizoenen aan schone trainingsgegevens.",
   "hiw.faq4Q": "Welke voetbalcompetities dekken jullie?",
-  "hiw.faq5A": "Met Strategy Lab kunt je voorspellingen filteren op basis van backtested-strategieën (bijvoorbeeld: thuisfavorieten bij regen, underdogs na Europese uitreizen). Momenteel gemarkeerd als 'Coming Soon', terwijl we de plausibiliteitspoort afronden die voorkomt dat overfit-strategieën als winstgevend worden gepresenteerd.",
+  "hiw.faq5A": "Met Strategy Lab bouw en rangschik je voorspellingen op basis van backtested-strategieën (bijvoorbeeld: thuisfavorieten na rust, underdogs na Europese uitreizen). Elke strategie loopt door een plausibiliteitspoort die onwaarschijnlijke winrates en ROIs op nul klemt, zodat overfitte filters niet als winstgevend gepresenteerd kunnen worden.",
   "hiw.faq5Q": "Wat is Strategy Lab?",
   "hiw.faq6A": "Nee. BetsPlug is een analyseplatform. We publiceren waarschijnlijkheden en een verifieerbaar trackrecord; wat je met die informatie doet, is volledig je beslissing. Alle prognoseresultaten worden als educatief en gesimuleerd bestempeld.",
   "hiw.faq6Q": "Is dit gokadvies?",
@@ -3221,7 +3221,7 @@ const nl: Dictionary = {
   "hiw.heroStat3Value": "70+",
   "hiw.heroStat4Label": "Downloadbare data",
   "hiw.heroStat4Value": "CSV",
-  "hiw.heroSubtitle": "De meeste tipstersites laten je een winnende schermafbeelding zien en vragen je deze te vertrouwen. We laten je de modellen, de gegevens en elke voorspelling zien die we ooit hebben gedaan: winnaars en verliezers. Hier ziet je precies hoe BetsPlug meer dan 80.000 wedstrijden uit de voetbalgeschiedenis omzet in een voorspelling voor de volgende aftrap.",
+  "hiw.heroSubtitle": "De meeste tipstersites laten je een winnende schermafbeelding zien en vragen je deze te vertrouwen. We laten je de modellen, de gegevens en elke voorspelling zien die we ooit hebben gedaan: winnaars en verliezers. Hier zie je precies hoe BetsPlug ruim 70.000 wedstrijden uit de voetbalgeschiedenis omzet in een voorspelling voor de volgende aftrap.",
   "hiw.heroTitleA": "Eén AI. Elke wedstrijd.",
   "hiw.heroTitleB": "Volledig transparante voorspellingen.",
   "hiw.integrityBad1Desc": "De keuze verandert stilletjes na 10 minuten, wanneer de score omslaat. Schermafbeeldingen zien er schoon uit. De werkelijkheid niet.",
@@ -3242,17 +3242,17 @@ const nl: Dictionary = {
   "hiw.integritySubtitle": "Drie architecturale keuzes maken het voor ons onmogelijk om stilletjes het trackrecord te koken. Hetzelfde zou je moeten eisen van elke dienst die AI-voetbalvoorspellingen verkoopt.",
   "hiw.integrityTitleA": "Waarom BetsPlug",
   "hiw.integrityTitleB": "kan zijn cijfers niet vervalsen.",
-  "hiw.metaDesc": "Vier AI-modellen analyseren 80.000+ wedstrijden en leveren AI-voetbalvoorspellingen voor 30+ competities. Voor de aftrap vergrendeld. Openbaar gevolgd.",
+  "hiw.metaDesc": "Vier AI-modellen analyseren 70.000+ wedstrijden en leveren AI-voetbalvoorspellingen voor 30+ competities. Voor de aftrap vergrendeld. Openbaar gevolgd.",
   "hiw.metaTitle": "Hoe onze AI-voetbalvoorspellingen werken · BetsPlug",
   "hiw.step1Badge": "Stap 01",
-  "hiw.step1Lead": "Voordat onze AI een enkele voetbalvoorspelling doet, verwerkt hij vorm, klassement, doelpuntgegevens, onderlinge geschiedenis, opstellingen, rustdagen, reisafstand en meer dan 40 andere factoren voor elke komende wedstrijd. Alle kenmerkwaarden worden op het moment van opname vastgelegd; het model kan nooit de toekomst 'zien'.",
+  "hiw.step1Lead": "Voordat onze AI een enkele voetbalvoorspelling doet, verwerkt hij vorm, klassement, doelpuntgegevens, onderlinge geschiedenis, opstellingen, rustdagen, reisafstand en tientallen andere factoren voor elke komende wedstrijd. Alle kenmerkwaarden worden op het moment van opname vastgelegd; het model kan nooit de toekomst 'zien'.",
   "hiw.step1P1": "Deze discipline op het juiste moment is de manier waarop we vooruitkijkende bias voorkomen, de stille moordenaar van de claim van elke tipgever op het gebied van winstpercentages. Als een model ooit is getraind op gegevens die het vóór de start niet zou hebben gehad, liegt de backtest. Die van ons niet.",
   "hiw.step1Point1Desc": "Elo-rating, recente vorm, xG, H2H, klassement, openingskansen, rustdagen, thuisvoordeel - allemaal momentopnamen vóór de aftrap.",
-  "hiw.step1Point1Title": "40+ factoren per wedstrijd",
+  "hiw.step1Point1Title": "39 factoren per wedstrijd",
   "hiw.step1Point2Desc": "Geplande pijplijnen halen elke nacht nieuwe gegevens op voor elke wedstrijd in de komende zeven dagen. Geen verouderde input.",
   "hiw.step1Point2Title": "Dagelijks bijgewerkt",
-  "hiw.step1Point3Desc": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, plus nog 23+ meer. Elke competitie heeft meer dan 5 seizoenen aan zuivere geschiedenis.",
-  "hiw.step1Point3Title": "70+ competities",
+  "hiw.step1Point3Desc": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, plus nog 20+ meer. Het trainings-corpus beslaat 5+ seizoenen aan zuivere geschiedenis.",
+  "hiw.step1Point3Title": "30+ topcompetities",
   "hiw.step1Title": "Pulse analyseert elke wedstrijd",
   "hiw.step2Badge": "Stap 02",
   "hiw.step2Lead": "We kiezen niet één model en bidden. BetsPlug voert vier AI-modellen uit, een patroonzoeker, een scorelijnvoorspeller, teamsterktebeoordelingen en een oddskalibrator, en combineert hun resultaten tot één enkele waarschijnlijkheid voor elke wedstrijduitslag.",

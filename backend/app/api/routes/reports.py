@@ -138,9 +138,38 @@ async def generate_report(
     # ReportJob to keep the migration footprint zero.
     merged_config = dict(payload.config or {})
     merged_config["format"] = fmt
-    # Persist the tier slug on the job so the generated artefact stays
-    # auditable (which tier did this document describe?).
-    merged_config["tier"] = user_tier.name.lower()
+
+    # v8.6 — honour the form-selected tier. The frontend lets users pick
+    # any tier at or below their own rank, sent as config.pick_tier. We
+    # translate that to the scoping PickTier the service filters on.
+    # Enforce the rank guard here too so a crafted API call can't
+    # request a tier above the caller's subscription.
+    requested_tier_slug = (merged_config.get("pick_tier") or "").strip().lower()
+    scoped_tier = user_tier
+    if requested_tier_slug:
+        try:
+            candidate = PickTier[requested_tier_slug.upper()]
+        except KeyError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=(
+                    f"Unknown pick_tier: {requested_tier_slug!r}. "
+                    "Must be one of 'free' | 'silver' | 'gold' | 'platinum'."
+                ),
+            )
+        if int(candidate) > int(user_tier):
+            raise HTTPException(
+                status_code=status.HTTP_402_PAYMENT_REQUIRED,
+                detail=(
+                    f"{candidate.name.title()} reports are restricted to "
+                    "subscribers on that tier or higher."
+                ),
+            )
+        scoped_tier = candidate
+
+    # Persist the (effective) tier slug on the job so the generated
+    # artefact stays auditable (which tier did this document describe?).
+    merged_config["tier"] = scoped_tier.name.lower()
 
     # Auto-cleanup: delete reports older than 12h to keep DB + disk clean
     await _cleanup_old_reports(db)
@@ -156,7 +185,7 @@ async def generate_report(
 
     try:
         service = ReportService()
-        report = await service.generate(new_job, db, fmt=fmt, user_tier=user_tier)
+        report = await service.generate(new_job, db, fmt=fmt, user_tier=scoped_tier)
         new_job.status = "completed"
         new_job.completed_at = datetime.now(timezone.utc)
         # Explicit commit so the GeneratedReport row is visible to the
