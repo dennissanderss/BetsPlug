@@ -219,27 +219,41 @@ async def capacity_plan(
     top_7d = await _top_endpoints(seven_days_ago)
 
     # ── User base (active last 7d) ────────────────────────────────────────
-    active_users_7d = int(
-        (
-            await db.execute(
-                select(func.count(User.id)).where(
-                    User.is_active.is_(True),
-                    User.last_login_at.is_not(None),
-                    User.last_login_at >= seven_days_ago,
+    # Defensive: the users table has been reshaped a few times and on very
+    # old deploys last_login_at or is_active may not exist. We don't want
+    # the whole capacity endpoint to 500 just because a user-count query
+    # failed. Fall back to 1 so the projection still runs (numbers will be
+    # pessimistic until the column materialises).
+    active_users_7d = 0
+    total_active_users = 0
+    try:
+        active_users_7d = int(
+            (
+                await db.execute(
+                    select(func.count(User.id)).where(
+                        User.is_active.is_(True),
+                        User.last_login_at.is_not(None),
+                        User.last_login_at >= seven_days_ago,
+                    )
                 )
-            )
-        ).scalar_one()
-    )
-    # Fall back to total active users if last_login_at isn't populated for
-    # most accounts — prevents a divide-by-zero when the site is very new
-    # or the field hasn't been backfilled.
-    total_active_users = int(
-        (
-            await db.execute(
-                select(func.count(User.id)).where(User.is_active.is_(True))
-            )
-        ).scalar_one()
-    )
+            ).scalar_one()
+        )
+    except Exception:  # pragma: no cover — column may be missing on old DBs
+        await db.rollback()
+        active_users_7d = 0
+
+    try:
+        total_active_users = int(
+            (
+                await db.execute(
+                    select(func.count(User.id)).where(User.is_active.is_(True))
+                )
+            ).scalar_one()
+        )
+    except Exception:  # pragma: no cover
+        await db.rollback()
+        total_active_users = 0
+
     effective_user_base = active_users_7d or total_active_users or 1
 
     # ── Projection ────────────────────────────────────────────────────────
