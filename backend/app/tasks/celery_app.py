@@ -120,9 +120,14 @@ def create_celery_app() -> Celery:
                 "options": {"queue": "ingestion"},
             },
             # Run ensemble model on upcoming matches without predictions.
-            "generate-predictions-every-10m": {
+            # Cadence bumped from 10 → 3 min so newly-ingested fixtures
+            # get a pre-match prediction before kickoff. The task itself
+            # is idempotent (only picks up matches without an existing
+            # Prediction row via ~exists(...)), so raising frequency is
+            # safe — no duplicate rows.
+            "generate-predictions-every-3m": {
                 "task": "app.tasks.sync_tasks.task_generate_predictions",
-                "schedule": crontab(minute="*/10"),
+                "schedule": crontab(minute="*/3"),
                 "options": {"queue": "forecasting"},
             },
             # Weekly winners/losers summary every Monday at 08:00 UTC.
