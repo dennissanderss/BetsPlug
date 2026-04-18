@@ -40,6 +40,7 @@ import { cn, formatPercent, formatDate } from "@/lib/utils";
 import { useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { TrackRecordHubTabs } from "@/components/dashboard/TrackRecordHubTabs";
+import { TrustFunnel } from "@/components/ui/trust-funnel";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import type { PickTierSlug } from "@/types/api";
@@ -1804,6 +1805,12 @@ export default function TrackrecordPage() {
               { label: t("related.predictions"), href: "/predictions", description: t("related.predictionsDesc"), icon: Sparkles },
             ]}
           />
+
+          {/* Dataset herkomst — same TrustFunnel visualisation used on
+              the marketing homepage, so authed users can see the exact
+              pipeline (55k → 3.8k → 3.763 → per tier) without leaving
+              the track-record context. */}
+          <TrustFunnel />
         </div>
       )}
       </div>
