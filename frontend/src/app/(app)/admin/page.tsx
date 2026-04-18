@@ -703,10 +703,11 @@ function PipelineHealthCard() {
 }
 
 function CapacityPlanCard() {
-  const { data, isLoading, isError, refetch } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["admin-capacity-plan"],
     queryFn: () => api.getCapacityPlan(),
     refetchInterval: 120_000,
+    retry: false,
   });
 
   const verdictColor = (s: string) =>
@@ -753,9 +754,23 @@ function CapacityPlanCard() {
 
       {isLoading && <Skeleton className="h-24 w-full rounded-lg" />}
       {isError && (
-        <p className="text-xs text-red-400">
-          Kon capacity-plan niet ophalen.
-        </p>
+        <div className="rounded-lg border border-red-500/30 bg-red-500/5 p-3 space-y-2">
+          <p className="text-xs font-semibold text-red-300">
+            Kon capacity-plan niet ophalen
+          </p>
+          <pre className="overflow-x-auto whitespace-pre-wrap break-all text-[10px] font-mono text-red-300/80">
+            {error instanceof Error
+              ? `${error.name}: ${error.message}`
+              : String(error ?? "Unknown error")}
+          </pre>
+          <button
+            onClick={() => refetch()}
+            className="inline-flex items-center gap-1.5 rounded border border-red-500/30 bg-red-500/10 px-2 py-1 text-[11px] text-red-200 hover:bg-red-500/20"
+          >
+            <RefreshCw className="h-3 w-3" />
+            Retry
+          </button>
+        </div>
       )}
 
       {data && (
