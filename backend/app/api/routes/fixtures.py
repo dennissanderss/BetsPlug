@@ -1319,7 +1319,11 @@ import time as _time
 import httpx as _httpx
 
 from app.core.config import get_settings as _get_settings
-from app.ingestion.adapters.api_football import APIFootballAdapter as _ApiFb
+from app.ingestion.adapters.api_football import (
+    APIFootballAdapter as _ApiFb,
+    LEAGUE_SLUG_TO_ID as _LEAGUE_SLUG_TO_ID,
+    _current_season as _apifb_current_season,
+)
 
 
 class LineupPlayer(BaseModel):
@@ -1374,6 +1378,77 @@ class FixtureEventsResponse(BaseModel):
     note: Optional[str] = None
 
 
+class FixtureTeamStats(BaseModel):
+    """Per-team match stats from API-Football /fixtures/statistics.
+
+    Keys mirror the adapter's TYPE_MAP_INT + Ball Possession. Any field
+    may be None if the provider didn't return it for this match.
+    """
+
+    shots_on_target: Optional[int] = None
+    shots_total: Optional[int] = None
+    corners: Optional[int] = None
+    yellow_cards: Optional[int] = None
+    red_cards: Optional[int] = None
+    fouls: Optional[int] = None
+    offsides: Optional[int] = None
+    passes_accurate: Optional[int] = None
+    possession_pct: Optional[float] = None
+
+
+class FixtureStatisticsResponse(BaseModel):
+    fixture_id: str
+    home: Optional[FixtureTeamStats] = None
+    away: Optional[FixtureTeamStats] = None
+    available: bool = False
+    note: Optional[str] = None
+
+
+class FixtureInjury(BaseModel):
+    player_name: Optional[str] = None
+    player_photo: Optional[str] = None
+    team_id: Optional[int] = None
+    team_name: Optional[str] = None
+    team_side: Optional[str] = None  # "home" | "away"
+    type: Optional[str] = None  # "Missing Fixture" | "Questionable" | …
+    reason: Optional[str] = None  # specific injury ("Knee Injury", "Suspended")
+
+
+class FixtureInjuriesResponse(BaseModel):
+    fixture_id: str
+    items: List[FixtureInjury] = []
+    available: bool = False
+    note: Optional[str] = None
+
+
+class StandingRow(BaseModel):
+    position: Optional[int] = None
+    team_id: Optional[int] = None
+    team_name: Optional[str] = None
+    team_logo: Optional[str] = None
+    played: int = 0
+    wins: int = 0
+    draws: int = 0
+    losses: int = 0
+    goals_for: int = 0
+    goals_against: int = 0
+    goal_difference: int = 0
+    points: int = 0
+    form: Optional[str] = None
+    description: Optional[str] = None
+    is_home_team: bool = False
+    is_away_team: bool = False
+
+
+class FixtureStandingsResponse(BaseModel):
+    fixture_id: str
+    league_name: Optional[str] = None
+    season: Optional[int] = None
+    rows: List[StandingRow] = []
+    available: bool = False
+    note: Optional[str] = None
+
+
 # ── Tiny TTL cache ───────────────────────────────────────────────────────────
 # Keeps responses warm for a short window so repeated page-loads and React
 # Query refetches don't hammer API-Football when a match is live.
@@ -1381,6 +1456,10 @@ class FixtureEventsResponse(BaseModel):
 _LINEUP_TTL = 120.0  # seconds
 _EVENT_TTL_LIVE = 45.0  # live match → refresh often
 _EVENT_TTL_FINAL = 86400.0  # finished match → cache a day
+_STATS_TTL_LIVE = 60.0  # possession/shots move fast while live
+_STATS_TTL_FINAL = 86400.0
+_INJURIES_TTL = 3600.0  # injuries don't change during a match
+_STANDINGS_TTL = 900.0  # refresh league table every 15 min
 _pass_cache: dict[str, tuple[float, Any]] = {}
 
 
@@ -1641,4 +1720,377 @@ async def get_fixture_events(
     )
     ttl = _EVENT_TTL_LIVE if match.status == MatchStatus.LIVE else _EVENT_TTL_FINAL
     _cache_set(cache_key, out, ttl)
+    return out
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Live match statistics — possession, shots, corners, cards (via API-Football)
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+_STAT_TYPE_MAP_INT = {
+    "Shots on Goal": "shots_on_target",
+    "Total Shots": "shots_total",
+    "Corner Kicks": "corners",
+    "Yellow Cards": "yellow_cards",
+    "Red Cards": "red_cards",
+    "Fouls": "fouls",
+    "Offsides": "offsides",
+    "Passes accurate": "passes_accurate",
+}
+
+
+def _stat_as_int(v: Any) -> Optional[int]:
+    if v is None:
+        return None
+    if isinstance(v, str):
+        v = v.strip().rstrip("%")
+        if not v:
+            return None
+    try:
+        return int(float(v))
+    except (TypeError, ValueError):
+        return None
+
+
+def _stat_as_float(v: Any) -> Optional[float]:
+    if v is None:
+        return None
+    if isinstance(v, str):
+        v = v.strip().rstrip("%")
+        if not v:
+            return None
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+@router.get(
+    "/{fixture_id}/statistics",
+    response_model=FixtureStatisticsResponse,
+    summary="Live match statistics — shots, possession, corners (via API-Football)",
+)
+async def get_fixture_statistics(
+    fixture_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> FixtureStatisticsResponse:
+    match = (
+        await db.execute(select(Match).where(Match.id == fixture_id))
+    ).scalar_one_or_none()
+    if match is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Fixture {fixture_id} not found.",
+        )
+
+    apifb_id = _apifb_id_for(match)
+    if apifb_id is None:
+        return FixtureStatisticsResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note="This fixture was not ingested from API-Football, so stats are unavailable.",
+        )
+
+    cache_key = f"stats:{apifb_id}"
+    cached = _cache_get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        items = await _call_api_football(
+            "fixtures/statistics", {"fixture": apifb_id}
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        return FixtureStatisticsResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note=f"Stats provider error: {exc}",
+        )
+
+    if not items:
+        out = FixtureStatisticsResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note="Match statistics not published yet — usually appear shortly after kick-off.",
+        )
+        _cache_set(cache_key, out, 60.0)
+        return out
+
+    # Local home name for side mapping; API-Football returns items as [home, away]
+    # but we double-check by team name to survive any ordering quirks.
+    local_home = (match.home_team.name or "").strip().lower() if match.home_team else ""
+
+    sides: dict[str, FixtureTeamStats] = {}
+    order: list[Optional[str]] = []
+    for i, entry in enumerate(items[:2]):
+        team = entry.get("team", {}) or {}
+        name = (team.get("name") or "").strip().lower()
+        if name == local_home:
+            side = "home"
+        elif name and len(sides) == 0 and i == 0 and local_home and name != local_home:
+            side = "away"
+        else:
+            side = "home" if i == 0 else "away"
+        order.append(side)
+        stats = FixtureTeamStats()
+        for stat in entry.get("statistics", []) or []:
+            label = stat.get("type", "")
+            value = stat.get("value")
+            if label == "Ball Possession":
+                stats.possession_pct = _stat_as_float(value)
+            elif label in _STAT_TYPE_MAP_INT:
+                setattr(stats, _STAT_TYPE_MAP_INT[label], _stat_as_int(value))
+        sides[side] = stats
+
+    # Fix accidental collisions (both sides mapped to the same key) by
+    # reverting to positional order.
+    if len(sides) < 2:
+        sides = {}
+        for i, entry in enumerate(items[:2]):
+            side = "home" if i == 0 else "away"
+            stats = FixtureTeamStats()
+            for stat in entry.get("statistics", []) or []:
+                label = stat.get("type", "")
+                value = stat.get("value")
+                if label == "Ball Possession":
+                    stats.possession_pct = _stat_as_float(value)
+                elif label in _STAT_TYPE_MAP_INT:
+                    setattr(stats, _STAT_TYPE_MAP_INT[label], _stat_as_int(value))
+            sides[side] = stats
+
+    out = FixtureStatisticsResponse(
+        fixture_id=str(fixture_id),
+        home=sides.get("home"),
+        away=sides.get("away"),
+        available=True,
+    )
+    ttl = _STATS_TTL_LIVE if match.status == MatchStatus.LIVE else _STATS_TTL_FINAL
+    _cache_set(cache_key, out, ttl)
+    return out
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Injury list for a fixture (via API-Football /injuries?fixture=)
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@router.get(
+    "/{fixture_id}/injuries",
+    response_model=FixtureInjuriesResponse,
+    summary="Injury list for both teams (via API-Football)",
+)
+async def get_fixture_injuries(
+    fixture_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> FixtureInjuriesResponse:
+    match = (
+        await db.execute(select(Match).where(Match.id == fixture_id))
+    ).scalar_one_or_none()
+    if match is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Fixture {fixture_id} not found.",
+        )
+
+    apifb_id = _apifb_id_for(match)
+    if apifb_id is None:
+        return FixtureInjuriesResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note="This fixture was not ingested from API-Football, so injuries are unavailable.",
+        )
+
+    cache_key = f"injuries:{apifb_id}"
+    cached = _cache_get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        items = await _call_api_football("injuries", {"fixture": apifb_id})
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        return FixtureInjuriesResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note=f"Injury provider error: {exc}",
+        )
+
+    local_home = (match.home_team.name or "").strip().lower() if match.home_team else ""
+    local_away = (match.away_team.name or "").strip().lower() if match.away_team else ""
+
+    injuries: list[FixtureInjury] = []
+    for raw in items:
+        player = raw.get("player") or {}
+        team = raw.get("team") or {}
+        team_name = team.get("name")
+        side: Optional[str] = None
+        if team_name:
+            low = team_name.strip().lower()
+            if low == local_home:
+                side = "home"
+            elif low == local_away:
+                side = "away"
+        injuries.append(
+            FixtureInjury(
+                player_name=player.get("name"),
+                player_photo=player.get("photo"),
+                team_id=team.get("id"),
+                team_name=team_name,
+                team_side=side,
+                type=player.get("type"),
+                reason=player.get("reason"),
+            )
+        )
+
+    out = FixtureInjuriesResponse(
+        fixture_id=str(fixture_id),
+        items=injuries,
+        available=True,
+        note=(
+            "API-Football does not list any injuries for this fixture."
+            if not injuries
+            else None
+        ),
+    )
+    _cache_set(cache_key, out, _INJURIES_TTL)
+    return out
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# League standings for the fixture's league (via API-Football /standings)
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@router.get(
+    "/{fixture_id}/standings",
+    response_model=FixtureStandingsResponse,
+    summary="League table for the fixture's league (via API-Football)",
+)
+async def get_fixture_standings(
+    fixture_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> FixtureStandingsResponse:
+    match = (
+        await db.execute(select(Match).where(Match.id == fixture_id))
+    ).scalar_one_or_none()
+    if match is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Fixture {fixture_id} not found.",
+        )
+
+    # Resolve API-Football league id from the Match's league slug.
+    league = match.league
+    league_slug = (league.slug or "").strip() if league else ""
+    apifb_league_id = _LEAGUE_SLUG_TO_ID.get(league_slug)
+    if apifb_league_id is None:
+        return FixtureStandingsResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note=(
+                "League table is unavailable — this league is not mapped to "
+                "API-Football standings."
+            ),
+        )
+
+    season = _apifb_current_season()
+    cache_key = f"standings:{apifb_league_id}:{season}"
+    cached = _cache_get(cache_key)
+    if cached is not None:
+        # Re-decorate the cached rows with is_home/is_away for this specific
+        # fixture (teams differ per fixture, league standings don't).
+        rows = _mark_fixture_teams_in_standings(cached.rows, match)
+        return FixtureStandingsResponse(
+            fixture_id=str(fixture_id),
+            league_name=cached.league_name,
+            season=cached.season,
+            rows=rows,
+            available=cached.available,
+            note=cached.note,
+        )
+
+    try:
+        data = await _call_api_football(
+            "standings", {"league": apifb_league_id, "season": season}
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:  # noqa: BLE001
+        return FixtureStandingsResponse(
+            fixture_id=str(fixture_id),
+            available=False,
+            note=f"Standings provider error: {exc}",
+        )
+
+    if not data:
+        out = FixtureStandingsResponse(
+            fixture_id=str(fixture_id),
+            season=season,
+            available=False,
+            note="API-Football did not return a standings table for this league/season.",
+        )
+        _cache_set(cache_key, out, 120.0)
+        return out
+
+    league_block = data[0].get("league", {}) or {}
+    league_name = league_block.get("name")
+    rows: list[StandingRow] = []
+    for group in league_block.get("standings", []) or []:
+        for entry in group:
+            team = entry.get("team", {}) or {}
+            all_stats = entry.get("all", {}) or {}
+            goals = all_stats.get("goals", {}) or {}
+            rows.append(
+                StandingRow(
+                    position=entry.get("rank"),
+                    team_id=team.get("id"),
+                    team_name=team.get("name"),
+                    team_logo=team.get("logo"),
+                    played=all_stats.get("played", 0) or 0,
+                    wins=all_stats.get("win", 0) or 0,
+                    draws=all_stats.get("draw", 0) or 0,
+                    losses=all_stats.get("lose", 0) or 0,
+                    goals_for=goals.get("for", 0) or 0,
+                    goals_against=goals.get("against", 0) or 0,
+                    goal_difference=entry.get("goalsDiff", 0) or 0,
+                    points=entry.get("points", 0) or 0,
+                    form=entry.get("form"),
+                    description=entry.get("description"),
+                )
+            )
+
+    marked = _mark_fixture_teams_in_standings(rows, match)
+    out = FixtureStandingsResponse(
+        fixture_id=str(fixture_id),
+        league_name=league_name,
+        season=season,
+        rows=marked,
+        available=bool(rows),
+        note=None if rows else "No standings returned by provider.",
+    )
+    _cache_set(cache_key, out, _STANDINGS_TTL)
+    return out
+
+
+def _mark_fixture_teams_in_standings(
+    rows: List[StandingRow], match: Match
+) -> List[StandingRow]:
+    """Stamp is_home_team / is_away_team flags on standings rows by team name."""
+    home_name = (match.home_team.name or "").strip().lower() if match.home_team else ""
+    away_name = (match.away_team.name or "").strip().lower() if match.away_team else ""
+    out: list[StandingRow] = []
+    for r in rows:
+        name = (r.team_name or "").strip().lower()
+        out.append(
+            r.model_copy(
+                update={
+                    "is_home_team": bool(name) and name == home_name,
+                    "is_away_team": bool(name) and name == away_name,
+                }
+            )
+        )
     return out

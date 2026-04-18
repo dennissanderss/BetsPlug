@@ -392,6 +392,21 @@ class ApiClient {
       `/fixtures/${id}/events`
     );
   }
+  getFixtureStatistics(id: string) {
+    return this.request<import("@/types/api").FixtureStatistics>(
+      `/fixtures/${id}/statistics`
+    );
+  }
+  getFixtureInjuries(id: string) {
+    return this.request<import("@/types/api").FixtureInjuries>(
+      `/fixtures/${id}/injuries`
+    );
+  }
+  getFixtureStandings(id: string) {
+    return this.request<import("@/types/api").FixtureStandings>(
+      `/fixtures/${id}/standings`
+    );
+  }
 
   // Predictions — trailing slash required: FastAPI redirects /predictions → /predictions/
   // (307), but Railway's CDN downgrades the redirect to HTTP which browsers

@@ -651,6 +651,77 @@ export interface FixtureEvents {
   note: string | null;
 }
 
+/** ── Match statistics (API-Football /fixtures/statistics) ──────────── */
+
+export interface FixtureTeamStats {
+  shots_on_target: number | null;
+  shots_total: number | null;
+  corners: number | null;
+  yellow_cards: number | null;
+  red_cards: number | null;
+  fouls: number | null;
+  offsides: number | null;
+  passes_accurate: number | null;
+  possession_pct: number | null;
+}
+
+export interface FixtureStatistics {
+  fixture_id: string;
+  home: FixtureTeamStats | null;
+  away: FixtureTeamStats | null;
+  available: boolean;
+  note: string | null;
+}
+
+/** ── Injuries (API-Football /injuries?fixture=) ────────────────────── */
+
+export interface FixtureInjury {
+  player_name: string | null;
+  player_photo: string | null;
+  team_id: number | null;
+  team_name: string | null;
+  team_side: "home" | "away" | null;
+  type: string | null;
+  reason: string | null;
+}
+
+export interface FixtureInjuries {
+  fixture_id: string;
+  items: FixtureInjury[];
+  available: boolean;
+  note: string | null;
+}
+
+/** ── Standings (API-Football /standings) ───────────────────────────── */
+
+export interface StandingRow {
+  position: number | null;
+  team_id: number | null;
+  team_name: string | null;
+  team_logo: string | null;
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goals_for: number;
+  goals_against: number;
+  goal_difference: number;
+  points: number;
+  form: string | null;
+  description: string | null;
+  is_home_team: boolean;
+  is_away_team: boolean;
+}
+
+export interface FixtureStandings {
+  fixture_id: string;
+  league_name: string | null;
+  season: number | null;
+  rows: StandingRow[];
+  available: boolean;
+  note: string | null;
+}
+
 /** Response shape of /api/fixtures/{id}/analysis — team form + H2H. */
 export interface FixtureAnalysis {
   match: Fixture;

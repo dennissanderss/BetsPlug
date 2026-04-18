@@ -34,6 +34,9 @@ import {
   Square,
   RefreshCw,
   UserRound,
+  BarChart2,
+  Ambulance,
+  Trophy,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -45,6 +48,9 @@ import type {
   LineupPlayer,
   TeamLineup,
   TeamForm,
+  FixtureTeamStats,
+  FixtureInjury,
+  StandingRow,
 } from "@/types/api";
 
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -748,9 +754,16 @@ function EventRow({ ev }: { ev: FixtureEvent }) {
 function EventsList({ events }: { events: FixtureEvent[] }) {
   if (events.length === 0) {
     return (
-      <p className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-6 text-center text-xs text-[#a3a9b8]">
-        No events yet.
-      </p>
+      <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-6 text-center">
+        <p className="text-xs font-semibold text-[#ededed]">
+          No events reported yet
+        </p>
+        <p className="mt-1 text-[11px] leading-relaxed text-[#a3a9b8]">
+          API-Football hasn&apos;t published goals, cards or subs for this
+          fixture. The first events normally appear within a minute or two
+          of kick-off — this page auto-refreshes.
+        </p>
+      </div>
     );
   }
   const firstHalf = events.filter((e) => (e.minute ?? 0) <= 45);
@@ -786,9 +799,483 @@ function EventsList({ events }: { events: FixtureEvent[] }) {
   );
 }
 
+/* ─── Stats block (possession, shots, corners, cards) ──────── */
+
+function StatBarRow({
+  label,
+  home,
+  away,
+  highlightLarger = true,
+}: {
+  label: string;
+  home: number | null;
+  away: number | null;
+  /** If false, never tint the winning side (used for cards/fouls). */
+  highlightLarger?: boolean;
+}) {
+  const h = home ?? 0;
+  const a = away ?? 0;
+  const total = h + a || 1;
+  const hp = (h / total) * 100;
+  const ap = (a / total) * 100;
+  const homeWins = highlightLarger && h > a;
+  const awayWins = highlightLarger && a > h;
+
+  return (
+    <div className="py-2">
+      <div className="mb-1 flex items-center justify-between gap-2 text-xs">
+        <span
+          className={
+            "font-bold tabular-nums " +
+            (homeWins ? "text-[#86efac]" : "text-[#ededed]")
+          }
+        >
+          {home ?? "—"}
+        </span>
+        <span className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+          {label}
+        </span>
+        <span
+          className={
+            "font-bold tabular-nums " +
+            (awayWins ? "text-[#d8b4fe]" : "text-[#ededed]")
+          }
+        >
+          {away ?? "—"}
+        </span>
+      </div>
+      <div className="flex h-1.5 w-full gap-0.5 overflow-hidden rounded-full bg-white/[0.05]">
+        <div
+          className="h-full rounded-l-full transition-all"
+          style={{
+            width: `${hp}%`,
+            background: homeWins
+              ? "linear-gradient(90deg, #22c55e, #4ade80)"
+              : "rgba(74,222,128,0.30)",
+          }}
+        />
+        <div
+          className="h-full rounded-r-full transition-all"
+          style={{
+            width: `${ap}%`,
+            background: awayWins
+              ? "linear-gradient(90deg, #a855f7, #d946ef)"
+              : "rgba(168,85,247,0.30)",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function PossessionDonut({
+  home,
+  away,
+}: {
+  home: number | null;
+  away: number | null;
+}) {
+  const h = home ?? 0;
+  const a = away ?? (home != null ? 100 - h : 0);
+  return (
+    <div className="flex items-center justify-around gap-4 rounded-lg border border-white/[0.06] bg-white/[0.02] px-4 py-3">
+      <div className="text-center">
+        <p className="text-stat text-2xl text-[#86efac] tabular-nums">
+          {home != null ? `${Math.round(h)}%` : "—"}
+        </p>
+        <p className="mt-0.5 text-[9px] uppercase tracking-wider text-[#6b7280]">
+          Home
+        </p>
+      </div>
+      <div className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+        Possession
+      </div>
+      <div className="text-center">
+        <p className="text-stat text-2xl text-[#d8b4fe] tabular-nums">
+          {away != null ? `${Math.round(a)}%` : "—"}
+        </p>
+        <p className="mt-0.5 text-[9px] uppercase tracking-wider text-[#6b7280]">
+          Away
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function MatchStatsBlock({
+  home,
+  away,
+  homeName,
+  awayName,
+}: {
+  home: FixtureTeamStats | null;
+  away: FixtureTeamStats | null;
+  homeName: string;
+  awayName: string;
+}) {
+  const h = home ?? ({} as FixtureTeamStats);
+  const a = away ?? ({} as FixtureTeamStats);
+
+  return (
+    <div className="card-neon card-neon-green p-5">
+      <div className="relative">
+        <div className="mb-4 flex items-center gap-2">
+          <HexBadge variant="green" size="sm" noGlow>
+            <BarChart2 className="h-4 w-4" />
+          </HexBadge>
+          <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+            Match Statistics
+          </p>
+        </div>
+
+        {/* Team labels */}
+        <div className="mb-3 grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-center">
+          <p className="truncate text-xs font-bold text-[#86efac]">
+            {homeName}
+          </p>
+          <span className="text-[9px] uppercase tracking-wider text-[#6b7280]">
+            vs
+          </span>
+          <p className="truncate text-xs font-bold text-[#d8b4fe]">
+            {awayName}
+          </p>
+        </div>
+
+        <PossessionDonut
+          home={h.possession_pct ?? null}
+          away={a.possession_pct ?? null}
+        />
+
+        <div className="mt-2 divide-y divide-white/[0.04]">
+          <StatBarRow
+            label="Total Shots"
+            home={h.shots_total ?? null}
+            away={a.shots_total ?? null}
+          />
+          <StatBarRow
+            label="Shots on Target"
+            home={h.shots_on_target ?? null}
+            away={a.shots_on_target ?? null}
+          />
+          <StatBarRow
+            label="Corners"
+            home={h.corners ?? null}
+            away={a.corners ?? null}
+          />
+          <StatBarRow
+            label="Fouls"
+            home={h.fouls ?? null}
+            away={a.fouls ?? null}
+            highlightLarger={false}
+          />
+          <StatBarRow
+            label="Offsides"
+            home={h.offsides ?? null}
+            away={a.offsides ?? null}
+            highlightLarger={false}
+          />
+          <StatBarRow
+            label="Yellow Cards"
+            home={h.yellow_cards ?? null}
+            away={a.yellow_cards ?? null}
+            highlightLarger={false}
+          />
+          <StatBarRow
+            label="Red Cards"
+            home={h.red_cards ?? null}
+            away={a.red_cards ?? null}
+            highlightLarger={false}
+          />
+          <StatBarRow
+            label="Accurate Passes"
+            home={h.passes_accurate ?? null}
+            away={a.passes_accurate ?? null}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Injuries ──────────────────────────────────────────────── */
+
+function InjuryRow({ inj }: { inj: FixtureInjury }) {
+  const sideTone =
+    inj.team_side === "home"
+      ? "bg-[#4ade80]/12 ring-[#4ade80]/30 text-[#86efac]"
+      : inj.team_side === "away"
+      ? "bg-[#a855f7]/12 ring-[#a855f7]/30 text-[#d8b4fe]"
+      : "bg-white/[0.05] ring-white/[0.08] text-[#a3a9b8]";
+
+  // "type" is usually "Missing Fixture" / "Questionable"; "reason" is
+  // the specific injury description ("Knee Injury", "Muscle Injury",
+  // "Suspended"). Show both when available.
+  const status = inj.type ?? "Unknown";
+  const reason = inj.reason ?? null;
+
+  return (
+    <li className="flex items-center gap-3 rounded-lg border border-white/[0.05] bg-white/[0.02] px-3 py-2">
+      {inj.player_photo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={inj.player_photo}
+          alt={inj.player_name ?? ""}
+          className="h-8 w-8 shrink-0 rounded-full bg-white/[0.05] object-cover"
+        />
+      ) : (
+        <span
+          className={
+            "inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ring-1 " +
+            sideTone
+          }
+        >
+          <Ambulance className="h-3.5 w-3.5" />
+        </span>
+      )}
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-xs font-semibold text-[#ededed]">
+          {inj.player_name ?? "Unknown player"}
+        </p>
+        <p className="truncate text-[10px] text-[#a3a9b8]">
+          {inj.team_name ?? "—"}
+        </p>
+      </div>
+      <div className="flex shrink-0 flex-col items-end gap-1">
+        <Pill
+          tone={inj.type === "Missing Fixture" ? "loss" : "draw"}
+          className="!text-[9px]"
+        >
+          {status}
+        </Pill>
+        {reason && (
+          <span className="text-[9px] italic text-[#6b7280]">{reason}</span>
+        )}
+      </div>
+    </li>
+  );
+}
+
+function InjuriesBlock({
+  items,
+  homeName,
+  awayName,
+}: {
+  items: FixtureInjury[];
+  homeName: string;
+  awayName: string;
+}) {
+  const home = items.filter((i) => i.team_side === "home");
+  const away = items.filter((i) => i.team_side === "away");
+  const other = items.filter((i) => !i.team_side);
+
+  return (
+    <div className="grid gap-5 md:grid-cols-2">
+      <div className="card-neon card-neon-green p-5">
+        <div className="relative">
+          <div className="mb-3 flex items-center gap-2.5">
+            <HexBadge variant="green" size="sm" noGlow>
+              <Ambulance className="h-4 w-4" />
+            </HexBadge>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+                Home · {home.length}
+              </p>
+              <p className="text-sm font-bold text-[#ededed] truncate">
+                {homeName}
+              </p>
+            </div>
+          </div>
+          {home.length === 0 ? (
+            <p className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-4 text-center text-xs italic text-[#6b7280]">
+              No reported injuries or suspensions.
+            </p>
+          ) : (
+            <ul className="space-y-1.5">
+              {home.map((i, idx) => (
+                <InjuryRow key={idx} inj={i} />
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      <div className="card-neon card-neon-purple p-5">
+        <div className="relative">
+          <div className="mb-3 flex items-center gap-2.5">
+            <HexBadge variant="purple" size="sm" noGlow>
+              <Ambulance className="h-4 w-4" />
+            </HexBadge>
+            <div className="min-w-0">
+              <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+                Away · {away.length}
+              </p>
+              <p className="text-sm font-bold text-[#ededed] truncate">
+                {awayName}
+              </p>
+            </div>
+          </div>
+          {away.length === 0 ? (
+            <p className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-4 text-center text-xs italic text-[#6b7280]">
+              No reported injuries or suspensions.
+            </p>
+          ) : (
+            <ul className="space-y-1.5">
+              {away.map((i, idx) => (
+                <InjuryRow key={idx} inj={i} />
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      {other.length > 0 && (
+        <div className="card-neon p-5 md:col-span-2">
+          <div className="relative">
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#a3a9b8]">
+              Unmatched entries
+            </p>
+            <ul className="space-y-1.5">
+              {other.map((i, idx) => (
+                <InjuryRow key={idx} inj={i} />
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─── Standings ─────────────────────────────────────────────── */
+
+function StandingsTable({
+  rows,
+  leagueName,
+}: {
+  rows: StandingRow[];
+  leagueName: string | null;
+}) {
+  return (
+    <div className="card-neon card-neon-blue p-5">
+      <div className="relative">
+        <div className="mb-4 flex items-center gap-2.5">
+          <HexBadge variant="blue" size="sm" noGlow>
+            <Trophy className="h-4 w-4" />
+          </HexBadge>
+          <div>
+            <p className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+              League Table
+            </p>
+            <p className="text-sm font-bold text-[#ededed]">
+              {leagueName ?? "Current Season"}
+            </p>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto rounded-lg border border-white/[0.06]">
+          <table className="w-full min-w-[560px] text-xs">
+            <thead>
+              <tr className="border-b border-white/[0.06] bg-white/[0.02] text-[10px] uppercase tracking-wider text-[#6b7280]">
+                <th className="px-2 py-2 text-left font-semibold">#</th>
+                <th className="px-2 py-2 text-left font-semibold">Team</th>
+                <th className="px-2 py-2 text-right font-semibold tabular-nums">P</th>
+                <th className="px-2 py-2 text-right font-semibold tabular-nums hidden sm:table-cell">W</th>
+                <th className="px-2 py-2 text-right font-semibold tabular-nums hidden sm:table-cell">D</th>
+                <th className="px-2 py-2 text-right font-semibold tabular-nums hidden sm:table-cell">L</th>
+                <th className="px-2 py-2 text-right font-semibold tabular-nums">GD</th>
+                <th className="px-2 py-2 text-right font-semibold tabular-nums">Pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => {
+                const marked = r.is_home_team || r.is_away_team;
+                return (
+                  <tr
+                    key={`${r.position}-${r.team_id ?? r.team_name ?? "?"}`}
+                    className={
+                      "border-b border-white/[0.04] last:border-b-0 " +
+                      (r.is_home_team
+                        ? "bg-[#4ade80]/[0.06]"
+                        : r.is_away_team
+                        ? "bg-[#a855f7]/[0.06]"
+                        : "hover:bg-white/[0.02]")
+                    }
+                  >
+                    <td className="px-2 py-2 font-semibold tabular-nums text-[#ededed]">
+                      {r.position ?? "—"}
+                    </td>
+                    <td className="px-2 py-2">
+                      <div className="flex items-center gap-2">
+                        {r.team_logo ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={r.team_logo}
+                            alt=""
+                            className="h-4 w-4 shrink-0 rounded-full bg-white/[0.05] object-contain"
+                          />
+                        ) : null}
+                        <span
+                          className={
+                            "truncate " +
+                            (marked
+                              ? "font-bold text-[#ededed]"
+                              : "font-semibold text-[#cbd3e0]")
+                          }
+                        >
+                          {r.team_name ?? "—"}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="px-2 py-2 text-right tabular-nums text-[#a3a9b8]">
+                      {r.played}
+                    </td>
+                    <td className="px-2 py-2 text-right tabular-nums text-[#a3a9b8] hidden sm:table-cell">
+                      {r.wins}
+                    </td>
+                    <td className="px-2 py-2 text-right tabular-nums text-[#a3a9b8] hidden sm:table-cell">
+                      {r.draws}
+                    </td>
+                    <td className="px-2 py-2 text-right tabular-nums text-[#a3a9b8] hidden sm:table-cell">
+                      {r.losses}
+                    </td>
+                    <td
+                      className={
+                        "px-2 py-2 text-right tabular-nums " +
+                        ((r.goal_difference ?? 0) > 0
+                          ? "text-[#86efac]"
+                          : (r.goal_difference ?? 0) < 0
+                          ? "text-[#f87171]"
+                          : "text-[#a3a9b8]")
+                      }
+                    >
+                      {r.goal_difference > 0
+                        ? `+${r.goal_difference}`
+                        : r.goal_difference}
+                    </td>
+                    <td className="px-2 py-2 text-right font-bold tabular-nums text-[#ededed]">
+                      {r.points}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Tabs (no "Overview" — that was the prediction tab) ───── */
 
-type TabKey = "events" | "lineup" | "form" | "h2h";
+type TabKey =
+  | "events"
+  | "stats"
+  | "lineup"
+  | "form"
+  | "h2h"
+  | "injuries"
+  | "standings";
 
 function TabStrip({
   value,
@@ -803,9 +1290,12 @@ function TabStrip({
     icon: typeof ListOrdered;
   }> = [
     { key: "events", label: "Events", icon: ListOrdered },
+    { key: "stats", label: "Stats", icon: BarChart2 },
     { key: "lineup", label: "Lineup", icon: Users },
     { key: "form", label: "Form", icon: Activity },
     { key: "h2h", label: "Head-to-Head", icon: Shield },
+    { key: "injuries", label: "Injuries", icon: Ambulance },
+    { key: "standings", label: "Standings", icon: Trophy },
   ];
 
   return (
@@ -914,6 +1404,28 @@ export default function LiveScoreDetailPage() {
     queryFn: () => api.getFixtureEvents(matchId),
     enabled: Boolean(matchId) && tab === "events",
     refetchInterval: isLive ? 45_000 : false,
+    retry: false,
+  });
+
+  const { data: stats, isLoading: statsLoading } = useQuery({
+    queryKey: ["live-score-stats", matchId],
+    queryFn: () => api.getFixtureStatistics(matchId),
+    enabled: Boolean(matchId) && tab === "stats",
+    refetchInterval: isLive ? 60_000 : false,
+    retry: false,
+  });
+
+  const { data: injuries, isLoading: injuriesLoading } = useQuery({
+    queryKey: ["live-score-injuries", matchId],
+    queryFn: () => api.getFixtureInjuries(matchId),
+    enabled: Boolean(matchId) && tab === "injuries",
+    retry: false,
+  });
+
+  const { data: standings, isLoading: standingsLoading } = useQuery({
+    queryKey: ["live-score-standings", matchId],
+    queryFn: () => api.getFixtureStandings(matchId),
+    enabled: Boolean(matchId) && tab === "standings",
     retry: false,
   });
 
@@ -1096,6 +1608,116 @@ export default function LiveScoreDetailPage() {
               <div className="card-neon p-8">
                 <div className="relative text-center text-xs text-[#a3a9b8]">
                   No head-to-head data available.
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Stats */}
+        {tab === "stats" && (
+          <div className="space-y-5">
+            {statsLoading ? (
+              <BlockSkeleton />
+            ) : stats?.available && (stats.home || stats.away) ? (
+              <MatchStatsBlock
+                home={stats.home}
+                away={stats.away}
+                homeName={displayMatch?.home_team_name ?? "Home"}
+                awayName={displayMatch?.away_team_name ?? "Away"}
+              />
+            ) : (
+              <div className="card-neon p-8">
+                <div className="relative text-center">
+                  <HexBadge variant="blue" size="md" noGlow>
+                    <BarChart2 className="h-5 w-5" />
+                  </HexBadge>
+                  <p className="mt-4 text-sm font-semibold text-[#ededed]">
+                    Match statistics unavailable
+                  </p>
+                  <p className="mt-1 text-xs text-[#a3a9b8]">
+                    {stats?.note ??
+                      "API-Football publishes possession, shots and cards shortly after kick-off."}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Injuries */}
+        {tab === "injuries" && (
+          <div className="space-y-5">
+            {injuriesLoading ? (
+              <>
+                <BlockSkeleton />
+                <BlockSkeleton />
+              </>
+            ) : injuries?.available ? (
+              injuries.items.length > 0 ? (
+                <InjuriesBlock
+                  items={injuries.items}
+                  homeName={displayMatch?.home_team_name ?? "Home"}
+                  awayName={displayMatch?.away_team_name ?? "Away"}
+                />
+              ) : (
+                <div className="card-neon p-8">
+                  <div className="relative text-center">
+                    <HexBadge variant="green" size="md" noGlow>
+                      <Ambulance className="h-5 w-5" />
+                    </HexBadge>
+                    <p className="mt-4 text-sm font-semibold text-[#ededed]">
+                      No reported injuries
+                    </p>
+                    <p className="mt-1 text-xs text-[#a3a9b8]">
+                      {injuries.note ??
+                        "API-Football has no active injuries for either team."}
+                    </p>
+                  </div>
+                </div>
+              )
+            ) : (
+              <div className="card-neon p-8">
+                <div className="relative text-center">
+                  <HexBadge variant="blue" size="md" noGlow>
+                    <Ambulance className="h-5 w-5" />
+                  </HexBadge>
+                  <p className="mt-4 text-sm font-semibold text-[#ededed]">
+                    Injury list unavailable
+                  </p>
+                  <p className="mt-1 text-xs text-[#a3a9b8]">
+                    {injuries?.note ??
+                      "Couldn't load injury data for this fixture."}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Standings */}
+        {tab === "standings" && (
+          <div className="space-y-5">
+            {standingsLoading ? (
+              <BlockSkeleton />
+            ) : standings?.available && standings.rows.length > 0 ? (
+              <StandingsTable
+                rows={standings.rows}
+                leagueName={standings.league_name}
+              />
+            ) : (
+              <div className="card-neon p-8">
+                <div className="relative text-center">
+                  <HexBadge variant="blue" size="md" noGlow>
+                    <Trophy className="h-5 w-5" />
+                  </HexBadge>
+                  <p className="mt-4 text-sm font-semibold text-[#ededed]">
+                    Standings unavailable
+                  </p>
+                  <p className="mt-1 text-xs text-[#a3a9b8]">
+                    {standings?.note ??
+                      "Couldn't load the league table for this competition."}
+                  </p>
                 </div>
               </div>
             )}
