@@ -20,7 +20,7 @@ from sqlalchemy.orm import joinedload, noload
 from datetime import timedelta
 
 from app.api.deps import get_current_tier
-from app.core.prediction_filters import v81_predictions_filter
+from app.core.prediction_filters import trackrecord_filter
 from app.core.tier_system import (
     PickTier,
     TIER_SYSTEM_ENABLED,
@@ -86,7 +86,7 @@ async def get_botd_history(
         )
         # v8.1 filter — applied inside 'live' branch too (old pipeline also had
         # prediction_source='live' from pre-fix v8.0 Celery runs)
-        .where(v81_predictions_filter())
+        .where(trackrecord_filter())
         .order_by(Match.scheduled_at.desc())
     )
     if TIER_SYSTEM_ENABLED:
@@ -99,7 +99,7 @@ async def get_botd_history(
             .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
             .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
             # v8.1 filter
-            .where(v81_predictions_filter())
+            .where(trackrecord_filter())
             .order_by(Match.scheduled_at.desc())
         )
         if TIER_SYSTEM_ENABLED:
@@ -190,7 +190,7 @@ async def get_botd_track_record(
             Prediction.prediction_source == "live",
         )
         # v8.1 filter
-        .where(v81_predictions_filter())
+        .where(trackrecord_filter())
         .order_by(Match.scheduled_at)
     )
     if TIER_SYSTEM_ENABLED:
@@ -205,7 +205,7 @@ async def get_botd_track_record(
             .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
             .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
             # v8.1 filter
-            .where(v81_predictions_filter())
+            .where(trackrecord_filter())
             .order_by(Match.scheduled_at)
         )
         if TIER_SYSTEM_ENABLED:

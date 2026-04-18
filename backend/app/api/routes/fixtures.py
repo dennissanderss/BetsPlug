@@ -30,7 +30,7 @@ from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.tier import get_current_tier
-from app.core.prediction_filters import v81_predictions_filter
+from app.core.prediction_filters import trackrecord_filter
 from app.core.tier_leagues import (
     LEAGUES_FREE,
     LEAGUES_GOLD,
@@ -598,18 +598,22 @@ async def _load_latest_predictions(
     # detail page showed "No forecast yet") because BOTD filters v8.1
     # BEFORE sorting and we didn't.
     from sqlalchemy import func
-    latest_at_filter = Prediction.match_id.in_(match_ids)
-    if TIER_SYSTEM_ENABLED:
-        latest_at_filter = and_(latest_at_filter, v81_predictions_filter())
-    subq = (
-        select(
-            Prediction.match_id,
-            func.max(Prediction.predicted_at).label("latest_at"),
-        )
-        .where(latest_at_filter)
-        .group_by(Prediction.match_id)
-        .subquery()
+    subq_base = select(
+        Prediction.match_id,
+        func.max(Prediction.predicted_at).label("latest_at"),
     )
+    if TIER_SYSTEM_ENABLED:
+        # Join Match inside the subquery so trackrecord_filter() (which
+        # references Match.scheduled_at to exclude post-kickoff rows)
+        # has its operand in scope. Without the join the filter raises
+        # at query-planning time.
+        subq_base = subq_base.join(Match, Match.id == Prediction.match_id).where(
+            trackrecord_filter(),
+            Prediction.match_id.in_(match_ids),
+        )
+    else:
+        subq_base = subq_base.where(Prediction.match_id.in_(match_ids))
+    subq = subq_base.group_by(Prediction.match_id).subquery()
 
     from sqlalchemy.orm import noload
 
@@ -646,7 +650,7 @@ async def _load_latest_predictions(
             stmt
             .join(Match, Match.id == Prediction.match_id)
             .where(Match.league_id.in_(LEAGUES_FREE))
-            .where(v81_predictions_filter())
+            .where(trackrecord_filter())
         )
     rows = (await db.execute(stmt)).scalars().all()
     return {p.match_id: p for p in rows}
@@ -948,7 +952,7 @@ async def get_weekly_summary(
                 Match.status == MatchStatus.FINISHED,
             )
         )
-        .where(v81_predictions_filter())
+        .where(trackrecord_filter())
     )
     if TIER_SYSTEM_ENABLED and public_tier is not None:
         stmt = stmt.where(pick_tier_expression() == public_tier.value)

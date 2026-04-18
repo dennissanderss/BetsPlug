@@ -14,7 +14,7 @@ from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.core.prediction_filters import v81_predictions_filter
+from app.core.prediction_filters import trackrecord_filter
 from app.core.tier_system import (
     PickTier,
     TIER_SYSTEM_ENABLED,
@@ -343,7 +343,7 @@ async def get_free_picks(
         .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
         .join(Match, Match.id == Prediction.match_id)
         # v8.1 filter: exclude pre-deploy predictions (broken feature pipeline)
-        .where(v81_predictions_filter())
+        .where(trackrecord_filter())
     )
     # v8.5: Show Gold-tier accuracy on the public homepage — honest (real
     # evaluated data) but represents our highest-volume premium tier.

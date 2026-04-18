@@ -205,7 +205,7 @@ def access_filter(user_tier: PickTier) -> ColumnElement:
         q = (
             select(Prediction)
             .join(Match, Match.id == Prediction.match_id)
-            .where(v81_predictions_filter())
+            .where(trackrecord_filter())
             .where(access_filter(PickTier.SILVER))
         )
     """

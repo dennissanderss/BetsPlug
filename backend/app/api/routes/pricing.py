@@ -23,7 +23,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import Integer, and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.prediction_filters import v81_predictions_filter
+from app.core.prediction_filters import trackrecord_filter
 from app.core.tier_system import (
     CONF_THRESHOLD,
     LEAGUES_GOLD,
@@ -144,7 +144,7 @@ async def get_pricing_comparison(
         )
         .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
         .join(Match, Match.id == Prediction.match_id)
-        .where(v81_predictions_filter())
+        .where(trackrecord_filter())
         .where(Prediction.confidence >= CONF_THRESHOLD[PickTier.FREE])
         .group_by(tier_expr_agg)
     )
@@ -176,7 +176,7 @@ async def get_pricing_comparison(
         )
         .select_from(Prediction)
         .join(Match, Match.id == Prediction.match_id)
-        .where(v81_predictions_filter())
+        .where(trackrecord_filter())
         .where(Match.scheduled_at >= sixty_days_ago)
         .where(Match.status == MatchStatus.FINISHED)
     )

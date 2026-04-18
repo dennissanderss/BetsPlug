@@ -14,7 +14,7 @@ from sqlalchemy.orm import selectinload
 
 from app.api.deps import get_current_tier
 from app.auth.dependencies import get_current_user
-from app.core.prediction_filters import v81_predictions_filter
+from app.core.prediction_filters import trackrecord_filter
 from app.core.tier_system import (
     PickTier,
     TIER_METADATA,
@@ -124,7 +124,7 @@ async def get_trackrecord_summary(
     if source is not None:
         q = q.where(Prediction.prediction_source == source)
     # v8.1 filter: exclude pre-deploy predictions (broken feature pipeline)
-    q = q.where(v81_predictions_filter())
+    q = q.where(trackrecord_filter())
     # Diagnostic toggle — exclude backfill rows stamped after kickoff.
     if pre_match_only:
         q = q.where(Prediction.predicted_at < Match.scheduled_at)
@@ -174,7 +174,7 @@ async def get_trackrecord_summary(
             )
             .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
             .join(Match, Match.id == Prediction.match_id)
-            .where(v81_predictions_filter())
+            .where(trackrecord_filter())
             # NOTE: intentionally no access_filter here — see comment above.
             .group_by(tier_expr)
         )
@@ -276,7 +276,7 @@ async def get_trackrecord_segments(
         if _source_filter is not None:
             q = q.where(_source_filter)
         # v8.1 filter
-        q = q.where(v81_predictions_filter())
+        q = q.where(trackrecord_filter())
         # v8.1/v8.3 tier filter — public ?pick_tier= overrides access_filter
         if TIER_SYSTEM_ENABLED:
             if public_tier is not None:
@@ -308,7 +308,7 @@ async def get_trackrecord_segments(
             .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
             .join(Match, Match.id == Prediction.match_id)
             # v8.1 filter
-            .where(v81_predictions_filter())
+            .where(trackrecord_filter())
         )
         if TIER_SYSTEM_ENABLED:
             if public_tier is not None:
@@ -378,7 +378,7 @@ async def get_trackrecord_segments(
         if _source_filter is not None:
             q = q.where(_source_filter)
         # v8.1 filter
-        q = q.where(v81_predictions_filter())
+        q = q.where(trackrecord_filter())
         # v8.1/v8.3 tier filter — public ?pick_tier= overrides access_filter
         if TIER_SYSTEM_ENABLED:
             if public_tier is not None:
@@ -459,7 +459,7 @@ async def get_calibration(
     if model_version_id is not None:
         base_q = base_q.where(Prediction.model_version_id == model_version_id)
     # v8.1 filter
-    base_q = base_q.where(v81_predictions_filter())
+    base_q = base_q.where(trackrecord_filter())
     # v8.1/v8.3 tier filter — public ?pick_tier= overrides access_filter
     public_tier = _parse_public_pick_tier(pick_tier)
     if TIER_SYSTEM_ENABLED:
@@ -580,7 +580,7 @@ async def _stream_trackrecord_csv(
     if model_version_id is not None:
         summary_q = summary_q.where(Prediction.model_version_id == model_version_id)
     # v8.1 filter
-    summary_q = summary_q.where(v81_predictions_filter())
+    summary_q = summary_q.where(trackrecord_filter())
     # v8.1/v8.3 tier filter — public ?pick_tier= overrides access_filter
     if TIER_SYSTEM_ENABLED:
         if public_tier is not None:
@@ -658,7 +658,7 @@ async def _stream_trackrecord_csv(
     if model_version_id is not None:
         q = q.where(Prediction.model_version_id == model_version_id)
     # v8.1 filter
-    q = q.where(v81_predictions_filter())
+    q = q.where(trackrecord_filter())
     # v8.1/v8.3 tier filter — public ?pick_tier= overrides access_filter
     if TIER_SYSTEM_ENABLED:
         if public_tier is not None:

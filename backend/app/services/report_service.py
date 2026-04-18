@@ -44,7 +44,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.config import get_settings
-from app.core.prediction_filters import v81_predictions_filter
+from app.core.prediction_filters import trackrecord_filter
 from app.core.tier_system import (
     PickTier,
     TIER_METADATA,
@@ -219,7 +219,7 @@ class ReportService:
             .order_by(Match.scheduled_at)
         )
         if TIER_SYSTEM_ENABLED:
-            stmt = stmt.where(v81_predictions_filter())
+            stmt = stmt.where(trackrecord_filter())
             stmt = stmt.where(access_filter(user_tier))
         rows = (await db.execute(stmt)).all()
 
@@ -307,7 +307,7 @@ class ReportService:
                     Match.scheduled_at <= end,
                 )
             )
-            .where(v81_predictions_filter())
+            .where(trackrecord_filter())
             .group_by(pick_tier_expression())
         )
         rows = (await db.execute(stmt)).all()

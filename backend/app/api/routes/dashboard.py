@@ -9,7 +9,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_tier
-from app.core.prediction_filters import v81_predictions_filter
+from app.core.prediction_filters import trackrecord_filter
 from app.core.tier_system import (
     PickTier,
     TIER_METADATA,
@@ -89,19 +89,20 @@ async def get_dashboard_metrics(
     if cached is not None:
         return DashboardMetrics(**cached)
 
-    # v8.1 filter: restrict all aggregations to post-deploy predictions.
-    # Pre-v8.1 preds used a broken feature pipeline — see
-    # docs/production_validation_v2.md
-    _v81 = v81_predictions_filter()
+    # v8.1 + honest-timestamp filter: restrict all aggregations to
+    # post-deploy predictions AND drop rows stamped after kickoff
+    # (see trackrecord_filter docstring). Requires a Match JOIN, so we
+    # always add one even when TIER_SYSTEM_ENABLED is off.
+    _track = trackrecord_filter()
 
-    # Tier access filter — requires Match JOIN when enabled
+    # Tier access filter — same Match JOIN is reused.
     _tier = access_filter(user_tier) if TIER_SYSTEM_ENABLED else None
 
     def _add_tier_filter(q):
-        """Apply v8.1 + tier filters; add Match JOIN when tier system is active."""
-        q = q.where(_v81)
+        """Apply v8.1 + tier filters. trackrecord_filter always needs Match."""
+        q = q.join(Match, Match.id == Prediction.match_id).where(_track)
         if _tier is not None:
-            q = q.join(Match, Match.id == Prediction.match_id).where(_tier)
+            q = q.where(_tier)
         return q
 
     # Total predictions
