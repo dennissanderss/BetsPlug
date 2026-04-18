@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import type { FreePickItem } from "@/types/api";
 
 /**
  * Single source of truth for which match IDs are designated as "free picks".
@@ -31,14 +32,21 @@ export function useFreeMatchIds() {
 
   const ids = new Set<string>();
   const freePickConf = new Map<string, number>();
+  // Full pick record keyed by match_id, so downstream pages can synthesize
+  // a prediction object when `/fixtures/upcoming` returns prediction:null
+  // (happens when the pick's confidence lands outside the endpoint's tier
+  // scope — e.g. a 0.65 Free pick that Silver-scopes out of the fixtures
+  // response but Free-picks correctly surfaces).
+  const freePickMap = new Map<string, FreePickItem>();
   if (data) {
     for (const pick of data.today) {
       if (pick.match_id) {
         ids.add(pick.match_id);
         if (pick.confidence != null) freePickConf.set(pick.match_id, pick.confidence);
+        freePickMap.set(pick.match_id, pick);
       }
     }
   }
 
-  return { freeMatchIds: ids, freePickConf, isLoadingFreeIds: isLoading };
+  return { freeMatchIds: ids, freePickConf, freePickMap, isLoadingFreeIds: isLoading };
 }

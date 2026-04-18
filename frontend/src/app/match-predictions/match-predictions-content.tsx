@@ -52,7 +52,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
   const loc = useLocalizedHref();
   const isNl = locale === "nl";
 
-  const { freeMatchIds, freePickConf, isLoadingFreeIds } = useFreeMatchIds();
+  const { freeMatchIds, freePickConf, freePickMap, isLoadingFreeIds } = useFreeMatchIds();
 
   const fixturesQuery = useQuery({
     queryKey: ["match-predictions-public", 7],
@@ -78,10 +78,37 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
       );
   }, [fixtures]);
 
-  const free: Fixture[] = useMemo(
-    () => upcoming.filter((f) => freeMatchIds.has(f.id)),
-    [upcoming, freeMatchIds],
-  );
+  // Build free fixtures; if the fixtures endpoint returned prediction:null
+  // (tier-scope mismatch with /homepage/free-picks) synthesize a minimal
+  // prediction object from the free-picks response so the FreeMatchCard
+  // always renders win-probs + confidence instead of an empty bar.
+  const free: Fixture[] = useMemo(() => {
+    return upcoming
+      .filter((f) => freeMatchIds.has(f.id))
+      .map((f) => {
+        if (f.prediction) return f;
+        const pick = freePickMap.get(f.id);
+        if (
+          !pick ||
+          pick.home_win_prob == null ||
+          pick.away_win_prob == null ||
+          pick.confidence == null
+        ) {
+          return f;
+        }
+        return {
+          ...f,
+          prediction: {
+            home_win_prob: pick.home_win_prob,
+            draw_prob: pick.draw_prob,
+            away_win_prob: pick.away_win_prob,
+            confidence: pick.confidence,
+            model_name: null,
+            pick: pick.pick,
+          },
+        } as Fixture;
+      });
+  }, [upcoming, freeMatchIds, freePickMap]);
   const lockedPool = useMemo(() => {
     const withPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction !== null);
     const withoutPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction === null);
