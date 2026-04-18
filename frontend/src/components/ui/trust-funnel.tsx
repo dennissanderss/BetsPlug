@@ -104,8 +104,8 @@ export function TrustFunnel() {
       value: `${fmt(matchesIngested)}+`,
       label: isNl ? "Gespeelde wedstrijden in onze database" : "Played matches in our database",
       desc: isNl
-        ? "Live ingeladen uit Football-Data en API-Football. Alle grote competities, meerdere seizoenen terug."
-        : "Live ingested from Football-Data and API-Football. Every major league, multiple seasons back.",
+        ? "Verzameld via betaalde data-licenties. Alle grote competities, meerdere seizoenen terug."
+        : "Collected through paid data licences. Every major league, multiple seasons back.",
       variant: "blue",
     },
     {
@@ -115,8 +115,8 @@ export function TrustFunnel() {
         ? "Voorspeld met ons huidige AI-model"
         : "Forecast with our current AI model",
       desc: isNl
-        ? "Alleen voorspellingen gemaakt ná de v8.1 deploy (16 april 2026) — met de gecorrigeerde feature-pipeline. Oudere voorspellingen gebruikten een kapot model en zijn gearchiveerd, niet verstopt."
-        : "Only predictions made after the v8.1 deploy (16 April 2026) — with the fixed feature pipeline. Older predictions used a broken model and are archived, not hidden.",
+        ? "Alleen voorspellingen van het model dat nu live staat. Oudere modelversies zijn gearchiveerd — niet verstopt, maar ook niet meegeteld in onze cijfers."
+        : "Only predictions from the model that's currently live. Older model versions are archived — not hidden, but not counted in our stats either.",
       variant: "purple",
     },
     {
@@ -124,8 +124,8 @@ export function TrustFunnel() {
       value: fmt(evaluatedTotal),
       label: isNl ? "Wedstrijden beoordeeld (uitslag bekend)" : "Matches graded (result in)",
       desc: isNl
-        ? "Elke voorspelling wordt automatisch beoordeeld na het laatste fluitsignaal. Geen kersenpluk, geen stilletjes verwijderde verliezers."
-        : "Every forecast is auto-graded after full time. No cherry-picking, no quietly removed losers.",
+        ? "Elke voorspelling wordt automatisch beoordeeld zodra de wedstrijd afgelopen is. Geen kersenpluk, geen stilletjes verwijderde verliezers."
+        : "Every forecast is automatically graded the moment the match ends. No cherry-picking, no quietly removed losers.",
       variant: "green",
     },
     {
@@ -133,8 +133,8 @@ export function TrustFunnel() {
       value: fmt(goldTotal),
       label: isNl ? "Daarvan in Gold-tier (betrouwbaarheid ≥ 70%)" : "Of those in Gold tier (confidence ≥ 70%)",
       desc: isNl
-        ? "De meest betrouwbare slice: alleen voorspellingen waar ons model ten minste 70% vertrouwen had."
-        : "The sharpest slice: only forecasts where the model had at least 70% confidence.",
+        ? "Het meest betrouwbare deel: alleen voorspellingen waar ons model minstens 70% zeker van was."
+        : "The sharpest slice: only forecasts where the model was at least 70% sure.",
       variant: "purple",
     },
     {
@@ -142,8 +142,8 @@ export function TrustFunnel() {
       value: pct(goldAccuracy),
       label: isNl ? "Nauwkeurigheid — openbaar verifieerbaar" : "Accuracy — publicly verifiable",
       desc: isNl
-        ? "Geen marketingbrochure. Download de CSV, tel ze zelf. De 3-weg voetbalvoorspelling (thuis/gelijkspel/uit) zit op ~50% als basisniveau — een willekeurige gok haalt ~37%."
-        : "Not a marketing brochure. Download the CSV, count them yourself. Baseline 3-way match-outcome prediction sits at ~50% — a random guess hits ~37%.",
+        ? "Geen marketingbrochure — download de data en tel het zelf. Ter vergelijking: een willekeurige gok op thuis/gelijkspel/uit haalt ongeveer 37%."
+        : "Not a marketing brochure — download the data and count it yourself. For reference: a random guess on home/draw/away lands around 37%.",
       variant: "green",
     },
   ];
@@ -190,8 +190,8 @@ export function TrustFunnel() {
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
             {isNl
-              ? "We tellen alleen wat ons huidige model echt heeft voorspeld. Geen opgepoetste all-time nummers, geen verborgen oude fouten. Dit is precies hoe de trechter werkt:"
-              : "We only count what our current model actually predicted. No polished all-time numbers, no hidden old mistakes. Here's exactly how the funnel works:"}
+              ? "We tellen alleen voorspellingen van ons huidige AI-model. Geen opgepoetste all-time cijfers, geen verborgen fouten. Zo komen we stap voor stap bij onze nauwkeurigheid:"
+              : "We only count predictions from the AI model that's currently live. No polished all-time numbers, no hidden mistakes. Here's how we get to our accuracy, step by step:"}
           </p>
         </motion.div>
 
