@@ -58,14 +58,35 @@ export function BotdTrackRecordSection() {
   useEffect(() => {
     const API =
       process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-    fetch(`${API}/bet-of-the-day/track-record`)
+    // Integriteit-sprint: this section shows collected data (model
+    // validation) — the live-measurement variant lives in
+    // LiveMeasurementSection. The model-validation endpoint returns
+    // the summary + row list in a single call.
+    fetch(`${API}/bet-of-the-day/model-validation?limit=15`)
       .then((r) => (r.ok ? r.json() : null))
-      .then(setAgg)
-      .catch(() => setAgg(null));
-    fetch(`${API}/bet-of-the-day/history?limit=15`)
-      .then((r) => (r.ok ? r.json() : []))
-      .then(setHistory)
-      .catch(() => setHistory([]));
+      .then((body) => {
+        if (!body) {
+          setAgg(null);
+          setHistory([]);
+          return;
+        }
+        const s = body.summary ?? {};
+        setAgg({
+          total_picks: s.total_picks ?? 0,
+          evaluated: s.evaluated ?? 0,
+          correct: s.correct ?? 0,
+          accuracy_pct: s.accuracy_pct ?? 0,
+          current_streak: s.current_streak ?? 0,
+          best_streak: s.best_streak ?? 0,
+          avg_confidence: s.avg_confidence ?? 0,
+          last_updated: "",
+        });
+        setHistory(body.picks ?? []);
+      })
+      .catch(() => {
+        setAgg(null);
+        setHistory([]);
+      });
   }, []);
 
   const fmtDate = (iso: string) => {

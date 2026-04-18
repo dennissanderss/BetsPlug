@@ -19,124 +19,239 @@ import {
   AlertTriangle,
   Target,
   Flame,
+  CheckCircle2,
+  XCircle,
+  Clock as ClockIcon,
+  BarChart3,
+  ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { TrackRecordHubTabs } from "@/components/dashboard/TrackRecordHubTabs";
+import type { SegmentPerformance, CalibrationReport } from "@/types/api";
 
-// ─── BOTD Track Record Card (v6.3) ──────────────────────────────────────────
+// ─── BOTD Picks Section (Modelvalidatie + Live meting) ──────────────────────
 
-function BOTDTrackRecordCard() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["botd-track-record"],
+interface BotdSectionPick {
+  date: string;
+  home_team: string;
+  away_team: string;
+  league: string;
+  prediction: string;
+  confidence: number;
+  correct: boolean | null;
+  home_score: number | null;
+  away_score: number | null;
+  odds_used: number | null;
+}
+
+interface BotdSectionResponse {
+  summary: {
+    total_picks: number;
+    evaluated: number;
+    correct: number;
+    accuracy_pct: number;
+    avg_confidence: number;
+    current_streak: number;
+    best_streak: number;
+  };
+  picks: BotdSectionPick[];
+}
+
+function BotdPicksSection({
+  endpoint,
+  title,
+  description,
+  accentColor,
+  emptyCopy,
+  lowSampleThreshold,
+  lowSampleCopy,
+}: {
+  endpoint: "model-validation" | "live-tracking";
+  title: string;
+  description: string;
+  accentColor: string;
+  emptyCopy: string;
+  lowSampleThreshold?: number;
+  lowSampleCopy?: string;
+}) {
+  const { data, isLoading } = useQuery<BotdSectionResponse>({
+    queryKey: [`botd-${endpoint}`],
     queryFn: async () => {
-      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-      const token = typeof window !== "undefined" ? localStorage.getItem("betsplug_token") : null;
+      const API =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("betsplug_token")
+          : null;
       const headers: Record<string, string> = {};
       if (token) headers["Authorization"] = `Bearer ${token}`;
-      const resp = await fetch(`${API}/bet-of-the-day/track-record`, { headers });
-      if (!resp.ok) return null;
+      const resp = await fetch(`${API}/bet-of-the-day/${endpoint}?limit=30`, {
+        headers,
+      });
+      if (!resp.ok)
+        return { summary: { total_picks: 0, evaluated: 0, correct: 0, accuracy_pct: 0, avg_confidence: 0, current_streak: 0, best_streak: 0 }, picks: [] };
       return resp.json();
     },
     staleTime: 5 * 60_000,
   });
 
-  if (isLoading || !data || data.total_picks === 0) return null;
+  if (isLoading) {
+    return (
+      <div className="glass-card p-5 sm:p-6">
+        <div className="h-5 w-48 animate-pulse rounded bg-white/[0.06]" />
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div
+              key={i}
+              className="h-16 animate-pulse rounded-lg bg-white/[0.04]"
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
-  // When picks exist but none are evaluated yet, accuracy is undefined.
-  // Show a pending state instead of a misleading 0%.
-  const evaluated = data.evaluated ?? 0;
-  const hasEvaluations = evaluated > 0;
+  const s = data?.summary ?? null;
+  const picks = data?.picks ?? [];
+  const hasEvaluations = s && s.evaluated > 0;
+  const lowSample =
+    lowSampleThreshold != null && s != null && s.total_picks < lowSampleThreshold;
+
   const accColor = !hasEvaluations
     ? "text-slate-500"
-    : data.accuracy_pct >= 55
+    : s!.accuracy_pct >= 55
       ? "text-emerald-400"
-      : data.accuracy_pct >= 45
-      ? "text-amber-400"
-      : "text-red-400";
+      : s!.accuracy_pct >= 45
+        ? "text-amber-400"
+        : "text-red-400";
 
   return (
-    <div className="glass-card p-5 sm:p-6">
-      <div className="flex items-center gap-2 mb-4">
-        <Target className="h-5 w-5 text-blue-400" />
-        <h3 className="text-sm font-bold text-slate-100">Pick of the Day — Track Record</h3>
-        <span className="ml-auto inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          Live
-        </span>
+    <div className="glass-card p-5 sm:p-6 space-y-4">
+      <div className="flex items-center gap-2">
+        <Target className={`h-5 w-5 ${accentColor}`} />
+        <h3 className="text-sm font-bold text-slate-100">{title}</h3>
       </div>
+      <p className="text-xs leading-relaxed text-slate-400">{description}</p>
 
+      {/* KPIs */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {/* Accuracy */}
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Accuracy</p>
+          <p className="mb-1 text-[9px] uppercase tracking-widest text-slate-500">
+            Accuracy
+          </p>
           <p className={`text-2xl font-extrabold tabular-nums ${accColor}`}>
-            {hasEvaluations ? `${data.accuracy_pct}%` : "—"}
+            {hasEvaluations ? `${s!.accuracy_pct}%` : "—"}
           </p>
-          <p className="text-[10px] text-slate-500 mt-0.5">
+          <p className="mt-0.5 text-[10px] text-slate-500">
             {hasEvaluations
-              ? `${data.correct} / ${evaluated} correct`
-              : "awaiting first result"}
+              ? `${s!.correct} / ${s!.evaluated} correct`
+              : "wachten op uitslagen"}
           </p>
         </div>
-
-        {/* Total Picks */}
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Total Picks</p>
+          <p className="mb-1 text-[9px] uppercase tracking-widest text-slate-500">
+            Picks
+          </p>
           <p className="text-2xl font-extrabold tabular-nums text-blue-400">
-            {data.total_picks}
+            {s?.total_picks ?? 0}
           </p>
-          <p className="text-[10px] text-slate-500 mt-0.5">
-            {evaluated} evaluated
+          <p className="mt-0.5 text-[10px] text-slate-500">
+            {s?.evaluated ?? 0} beoordeeld
           </p>
         </div>
-
-        {/* Current Streak — visually prominent */}
-        {data.current_streak > 0 ? (
-          <div className="rounded-lg border border-emerald-500/30 p-3 text-center relative overflow-hidden"
-            style={{
-              background: "radial-gradient(ellipse at center, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.03) 70%, transparent 100%)",
-              boxShadow: "0 0 24px rgba(16,185,129,0.15), inset 0 0 24px rgba(16,185,129,0.05)",
-            }}
-          >
-            <p className="text-[9px] uppercase tracking-widest text-emerald-400/80 mb-1">Streak</p>
-            <p className="text-3xl font-extrabold tabular-nums text-emerald-300">
-              <Flame className="inline h-7 w-7 mr-1 -mt-1 text-orange-400 drop-shadow-[0_0_6px_rgba(251,146,60,0.5)]" />
-              {data.current_streak}
-            </p>
-            <p className="text-[10px] text-emerald-400/70 mt-0.5 font-semibold">
-              consecutive wins
-            </p>
-          </div>
-        ) : (
-          <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-            <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Streak</p>
-            <p className="text-2xl font-extrabold tabular-nums text-slate-600">
-              —
-            </p>
-            <p className="text-[10px] text-slate-600 mt-0.5">
-              building...
-            </p>
-          </div>
-        )}
-
-        {/* Avg Confidence */}
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
-          <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-1">Avg Confidence</p>
-          <p className="text-2xl font-extrabold tabular-nums text-slate-100">
-            {data.avg_confidence}%
+          <p className="mb-1 text-[9px] uppercase tracking-widest text-slate-500">
+            Reeks
           </p>
-          <p className="text-[10px] text-slate-500 mt-0.5">
-            best streak: {data.best_streak}
+          <p className="text-2xl font-extrabold tabular-nums text-slate-100">
+            {s?.current_streak ?? 0}
+          </p>
+          <p className="mt-0.5 text-[10px] text-slate-500">
+            best: {s?.best_streak ?? 0}
+          </p>
+        </div>
+        <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
+          <p className="mb-1 text-[9px] uppercase tracking-widest text-slate-500">
+            Avg conf.
+          </p>
+          <p className="text-2xl font-extrabold tabular-nums text-slate-100">
+            {s?.avg_confidence ?? 0}%
+          </p>
+          <p className="mt-0.5 text-[10px] text-slate-500">
+            model-score
           </p>
         </div>
       </div>
+
+      {lowSample && lowSampleCopy && (
+        <p className="rounded-md border border-amber-500/25 bg-amber-500/[0.05] px-3 py-2 text-[11px] text-amber-300">
+          {lowSampleCopy}
+        </p>
+      )}
+
+      {/* Table */}
+      {picks.length === 0 ? (
+        <p className="rounded-md border border-white/[0.06] bg-white/[0.02] px-3 py-6 text-center text-xs text-slate-500">
+          {emptyCopy}
+        </p>
+      ) : (
+        <div className="space-y-1">
+          <div className="grid grid-cols-12 gap-2 border-b border-white/[0.05] px-3 py-2 text-[10px] uppercase tracking-widest text-slate-600">
+            <span className="col-span-2">Datum</span>
+            <span className="col-span-4">Wedstrijd</span>
+            <span className="col-span-2 text-center">Pick</span>
+            <span className="col-span-2 text-center">Uitslag</span>
+            <span className="col-span-2 text-center">Resultaat</span>
+          </div>
+          {picks.map((p, i) => (
+            <div
+              key={i}
+              className="grid grid-cols-12 items-center gap-2 rounded-md px-3 py-2.5 text-xs transition-colors hover:bg-white/[0.02]"
+              style={{
+                borderLeft: `3px solid ${p.correct === true ? "#10b981" : p.correct === false ? "#ef4444" : "#64748b"}`,
+              }}
+            >
+              <span className="col-span-2 tabular-nums text-slate-500">
+                {new Date(p.date).toLocaleDateString("nl-NL", {
+                  day: "2-digit",
+                  month: "short",
+                })}
+              </span>
+              <span className="col-span-4 truncate font-medium text-slate-200">
+                {p.home_team} vs {p.away_team}
+              </span>
+              <span className="col-span-2 text-center">
+                <span className="inline-flex items-center rounded-md border border-blue-500/20 bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-blue-300">
+                  {p.prediction} {p.confidence}%
+                </span>
+              </span>
+              <span className="col-span-2 text-center font-medium tabular-nums text-slate-300">
+                {p.home_score != null
+                  ? `${p.home_score} - ${p.away_score}`
+                  : "—"}
+              </span>
+              <span className="col-span-2 text-center">
+                {p.correct === true ? (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> Correct
+                  </span>
+                ) : p.correct === false ? (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-red-400">
+                    <XCircle className="h-3.5 w-3.5" /> Fout
+                  </span>
+                ) : (
+                  <span className="text-[10px] text-slate-500">wacht</span>
+                )}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-import { CheckCircle2, XCircle, Clock as ClockIcon, BarChart3, ArrowRight } from "lucide-react";
-import type { SegmentPerformance, CalibrationReport } from "@/types/api";
 
 // ─── BOTD Performance Insights (backtest statistics) ────────────────────────
 
@@ -309,83 +424,6 @@ function BOTDPerformanceInsights() {
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-// ─── BOTD History List ──────────────────────────────────────────────────────
-
-function BOTDHistoryList() {
-  const { data: history, isLoading } = useQuery({
-    queryKey: ["botd-history"],
-    queryFn: async () => {
-      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-      const token = typeof window !== "undefined" ? localStorage.getItem("betsplug_token") : null;
-      const headers: Record<string, string> = {};
-      if (token) headers["Authorization"] = `Bearer ${token}`;
-      const resp = await fetch(`${API}/bet-of-the-day/history?limit=50`, { headers });
-      if (!resp.ok) return [];
-      return resp.json();
-    },
-    staleTime: 5 * 60_000,
-  });
-
-  if (isLoading || !history || history.length === 0) return null;
-
-  return (
-    <div className="glass-card p-5 sm:p-6">
-      <h3 className="text-sm font-bold text-slate-100 mb-4 flex items-center gap-2">
-        <ClockIcon className="h-4 w-4 text-blue-400" />
-        Recent Picks
-      </h3>
-      <div className="space-y-1">
-        {/* Header */}
-        <div className="grid grid-cols-12 gap-2 px-3 py-2 text-[10px] uppercase tracking-widest text-slate-600 border-b border-white/[0.05]">
-          <span className="col-span-2">Date</span>
-          <span className="col-span-4">Match</span>
-          <span className="col-span-2 text-center">Pick</span>
-          <span className="col-span-2 text-center">Score</span>
-          <span className="col-span-2 text-center">Result</span>
-        </div>
-        {/* Rows */}
-        {history.map((item: any, idx: number) => (
-          <div
-            key={idx}
-            className="grid grid-cols-12 gap-2 px-3 py-2.5 text-xs items-center hover:bg-white/[0.02] rounded-md transition-colors"
-            style={{
-              borderLeft: `3px solid ${item.correct === true ? "#10b981" : item.correct === false ? "#ef4444" : "#64748b"}`,
-            }}
-          >
-            <span className="col-span-2 text-slate-500 tabular-nums">
-              {new Date(item.date).toLocaleDateString("en-GB", { day: "2-digit", month: "short" })}
-            </span>
-            <span className="col-span-4 text-slate-200 font-medium truncate">
-              {item.home_team} vs {item.away_team}
-            </span>
-            <span className="col-span-2 text-center">
-              <span className="inline-flex items-center rounded-md bg-blue-500/10 border border-blue-500/20 px-1.5 py-0.5 text-[10px] font-semibold text-blue-300">
-                {item.prediction} {item.confidence}%
-              </span>
-            </span>
-            <span className="col-span-2 text-center tabular-nums text-slate-300 font-medium">
-              {item.home_score != null ? `${item.home_score} - ${item.away_score}` : "—"}
-            </span>
-            <span className="col-span-2 text-center">
-              {item.correct === true ? (
-                <span className="inline-flex items-center gap-1 text-emerald-400 text-[10px] font-semibold">
-                  <CheckCircle2 className="h-3.5 w-3.5" /> Correct
-                </span>
-              ) : item.correct === false ? (
-                <span className="inline-flex items-center gap-1 text-red-400 text-[10px] font-semibold">
-                  <XCircle className="h-3.5 w-3.5" /> Wrong
-                </span>
-              ) : (
-                <span className="text-slate-500 text-[10px]">Pending</span>
-              )}
-            </span>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
@@ -838,11 +876,25 @@ export default function BetOfTheDayPage() {
             </div>
           </div>
 
-          {/* ── BOTD Track Record (v6.3) ── */}
-          <BOTDTrackRecordCard />
+          {/* ── Modelvalidatie — historische picks op afgelopen wedstrijden ── */}
+          <BotdPicksSection
+            endpoint="model-validation"
+            title="Modelvalidatie — verzamelde data"
+            description="Onze BOTD-methode toegepast op recent afgelopen wedstrijden. Per dag de hoogst-scorende pick. Dit toont hoe het model presteert op data die we hebben verzameld — niet een live pre-match meting."
+            accentColor="text-blue-400"
+            emptyCopy="Nog geen verzamelde data voor deze tier."
+          />
 
-          {/* ── BOTD History List ── */}
-          <BOTDHistoryList />
+          {/* ── Live meting — strict pre-match picks vanaf 18 april 2026 ── */}
+          <BotdPicksSection
+            endpoint="live-tracking"
+            title="Live meting sinds 18 april 2026"
+            description="Alleen picks die strikt vóór de aftrap zijn vastgelegd. Deze meting groeit dagelijks. Dit is de eerlijke pre-match track record van onze BOTD."
+            accentColor="text-emerald-400"
+            emptyCopy="Eerste live BOTD verschijnt zodra er een afgelopen wedstrijd is binnen de live-meting."
+            lowSampleThreshold={10}
+            lowSampleCopy="Klein sample — de meting loopt nog. Eerlijke accuracy verschijnt zodra we minstens 10 beoordeelde picks hebben."
+          />
 
           {/* ── Performance Insights (backtest stats) ── */}
           <BOTDPerformanceInsights />
