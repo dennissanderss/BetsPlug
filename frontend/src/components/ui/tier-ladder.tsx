@@ -9,7 +9,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Lock, ShieldCheck } from "lucide-react";
+import { Lock, ShieldCheck, Unlock } from "lucide-react";
 import Link from "next/link";
 import { Pill } from "@/components/noct/pill";
 import { TierEmblem } from "@/components/noct/tier-emblem";
@@ -185,7 +185,12 @@ export function TierLadder() {
                     {isNl ? "beoordeelde picks" : "graded picks"}
                   </p>
 
-                  {tierKey !== "bronze" && (
+                  {tierKey === "bronze" ? (
+                    <div className="mt-4 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-[#22c55e]">
+                      <Unlock className="h-3 w-3" />
+                      {isNl ? "Gratis tier" : "Free tier"}
+                    </div>
+                  ) : (
                     <div className="mt-4 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
                       <Lock className="h-3 w-3" />
                       {isNl ? "Premium tier" : "Premium tier"}
