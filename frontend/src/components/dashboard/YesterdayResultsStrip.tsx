@@ -5,7 +5,35 @@ import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { ArrowRight, CheckCircle2, XCircle } from "lucide-react";
 import { Pill, DataChip } from "@/components/noct/pill";
-import type { Fixture, FixturesResponse } from "@/types/api";
+import type { Fixture, FixturesResponse, PickTierSlug } from "@/types/api";
+
+// Tier initial + colour used as a compact per-row badge so users can see
+// at a glance which tier each yesterday-pick belonged to.
+const TIER_CHIP: Record<
+  PickTierSlug,
+  { letter: string; className: string; title: string }
+> = {
+  free: {
+    letter: "F",
+    className: "bg-[#b87333]/15 text-[#e8a864] border-[#b87333]/30",
+    title: "Free / Bronze tier",
+  },
+  silver: {
+    letter: "S",
+    className: "bg-[#c0c0c0]/15 text-[#e5e4e2] border-[#c0c0c0]/30",
+    title: "Silver tier",
+  },
+  gold: {
+    letter: "G",
+    className: "bg-[#d4af37]/15 text-[#f5d67a] border-[#d4af37]/30",
+    title: "Gold tier",
+  },
+  platinum: {
+    letter: "P",
+    className: "bg-[#a8d8ea]/15 text-[#d9f0ff] border-[#a8d8ea]/35",
+    title: "Platinum tier",
+  },
+};
 
 interface YesterdayResultsStripProps {
   data: FixturesResponse | undefined;
@@ -33,6 +61,8 @@ function isCorrect(fixture: Fixture): boolean | null {
 function ResultRow({ fixture }: { fixture: Fixture }) {
   const correct = isCorrect(fixture);
   const pick = pickLabel(fixture.prediction);
+  const tierSlug = fixture.prediction?.pick_tier ?? null;
+  const tierChip = tierSlug ? TIER_CHIP[tierSlug] : null;
 
   const wrapperClass =
     correct === true
@@ -65,6 +95,15 @@ function ResultRow({ fixture }: { fixture: Fixture }) {
           <TeamLogo src={fixture.away_team_logo} name={fixture.away_team_name} size={16} />
         </div>
 
+        {tierChip && (
+          <span
+            title={tierChip.title}
+            className={`shrink-0 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded border px-1 text-[10px] font-bold ${tierChip.className}`}
+          >
+            {tierChip.letter}
+          </span>
+        )}
+
         <DataChip
           tone={correct === true ? "win" : correct === false ? "loss" : "default"}
           className="shrink-0"
@@ -86,10 +125,14 @@ export function YesterdayResultsStrip({ data, isLoading }: YesterdayResultsStrip
   const { t } = useTranslations();
   const lHref = useLocalizedHref();
 
-  const fixtures = (data?.fixtures ?? []).filter((f) => f.status === "finished");
-  const withPredictions = fixtures.filter((f) => f.prediction != null);
-  const correctCount = withPredictions.filter((f) => isCorrect(f) === true).length;
-  const total = withPredictions.length;
+  // Only surface finished matches we actually had a prediction for —
+  // otherwise the strip filled up with "—/—" rows which users read as
+  // "we got it wrong" when they really meant "no pick was ever made".
+  const fixtures = (data?.fixtures ?? []).filter(
+    (f) => f.status === "finished" && f.prediction != null,
+  );
+  const correctCount = fixtures.filter((f) => isCorrect(f) === true).length;
+  const total = fixtures.length;
   const winRate = total > 0 ? Math.round((correctCount / total) * 100) : 0;
 
   return (
