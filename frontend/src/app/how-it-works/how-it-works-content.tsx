@@ -18,7 +18,6 @@ import {
   Zap,
   Globe,
   HelpCircle,
-  Activity,
   ShieldCheck,
   XCircle,
 } from "lucide-react";
@@ -30,14 +29,13 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { HeroMediaBg } from "@/components/ui/media-bg";
+import { TierLadder } from "@/components/ui/tier-ladder";
 
 interface HowItWorksContentProps {
   howItWorksPage?: any;
 }
 
 type Accent = "green" | "purple" | "blue";
-
-const HERO_STAT_VARIANTS: Accent[] = ["green", "purple", "blue", "green"];
 
 /**
  * How It Works, NOCTURNE rebuild.
@@ -47,29 +45,6 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
   const loc = useLocalizedHref();
   const home = loc("/");
   const potd = usePotdNumbers();
-
-  // Stats 1 (BOTD accuracy) and 2 (picks tracked) come from the live
-  // Pick-of-the-Day track record when loaded; fall back to the i18n
-  // defaults on first paint / network error. Stats 3 and 4 are static.
-  const defaultStats = [
-    {
-      value: t("hiw.heroStat1Value", potd),
-      label: t("hiw.heroStat1Label"),
-    },
-    {
-      value: t("hiw.heroStat2Value", potd),
-      label: t("hiw.heroStat2Label"),
-    },
-    { value: t("hiw.heroStat3Value"), label: t("hiw.heroStat3Label") },
-    { value: t("hiw.heroStat4Value"), label: t("hiw.heroStat4Label") },
-  ];
-
-  const heroStats = howItWorksPage?.stats?.length
-    ? howItWorksPage.stats.map((s: any, i: number) => ({
-        value: s.value ?? defaultStats[i]?.value ?? "",
-        label: getLocaleValue(s.label, locale) || defaultStats[i]?.label || "",
-      }))
-    : defaultStats;
 
   const defaultFaqs = [
     { q: t("hiw.faq1Q"), a: t("hiw.faq1A", potd) },
@@ -135,41 +110,11 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
             {t("hiw.heroSubtitle")}
           </motion.p>
 
-          {/* Hero KPI strip */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="mx-auto mt-12 grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-4"
-          >
-            {heroStats.map((s: { value: string; label: string }, i: number) => {
-              const variant = HERO_STAT_VARIANTS[i % HERO_STAT_VARIANTS.length];
-              return (
-                <div
-                  key={s.label}
-                  className={`card-neon card-neon-${variant} rounded-2xl`}
-                >
-                  <div className="relative flex flex-col items-center p-5 text-center">
-                    <HexBadge variant={variant} size="sm" className="mb-3">
-                      <Activity className="h-4 w-4" />
-                    </HexBadge>
-                    <div className="text-stat text-2xl text-[#ededed] sm:text-3xl">
-                      {s.value}
-                    </div>
-                    <div className="mt-1 text-[10px] uppercase tracking-wider leading-tight text-[#a3a9b8]">
-                      {s.label}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </motion.div>
-
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
+            className="mt-12 flex flex-col items-center justify-center gap-3 sm:flex-row"
           >
             <Link href={`${home}#pricing`} className="btn-primary">
               {t("hiw.heroCtaSecondary")}
@@ -194,6 +139,9 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
           </motion.nav>
         </div>
       </section>
+
+      {/* ───────────── TIER LADDER ───────────── */}
+      <TierLadder />
 
       {/* ───────────── STEP 1 ───────────── */}
       <StageSection
