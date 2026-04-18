@@ -95,8 +95,8 @@ const en = {
   /* Live proof strip — the ribbon of live stats under the hero */
   "liveProof.label": "Live · Updated continuously",
   "liveProof.picks": "AI predictions today",
-  "liveProof.winrate": "30-day win rate",
-  "liveProof.predictions": "Predictions last 30 days",
+  "liveProof.winrate": "Gold-tier win rate",
+  "liveProof.predictions": "Gold picks graded",
   "liveProof.leagues": "Football leagues live",
   "liveProof.leaguesValue": "30+",
   "liveProof.disclaimer": "These numbers come straight from the same database behind every prediction. No separate 'results page' we control. What you see is what happened.",
@@ -3318,8 +3318,8 @@ const nl: Dictionary = {
   "liveProof.leagues": "Voetbalcompetities live",
   "liveProof.leaguesValue": "30+",
   "liveProof.picks": "AI-voorspellingen vandaag",
-  "liveProof.predictions": "Voorspellingen duren 30 dagen",
-  "liveProof.winrate": "Winrate van 30 dagen",
+  "liveProof.predictions": "Gold-picks beoordeeld",
+  "liveProof.winrate": "Gold-tier winrate",
 
   "lock.analystHub.benefit1": "Predictions Explorer met filters + CSV-export",
   "lock.analystHub.benefit2": "Match Deep Dive met per-model uitsplitsing",

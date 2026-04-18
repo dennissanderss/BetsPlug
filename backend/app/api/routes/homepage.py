@@ -19,6 +19,7 @@ from app.core.tier_system import (
     PickTier,
     TIER_SYSTEM_ENABLED,
     access_filter,
+    pick_tier_expression,
 )
 from app.db.session import get_db
 from app.models.match import Match, MatchResult, MatchStatus
@@ -346,12 +347,15 @@ async def get_free_picks(
     )
     # v8.5: Show Gold-tier accuracy on the public homepage — honest (real
     # evaluated data) but represents our highest-volume premium tier.
-    # Gold picks have conf >= 0.70, giving the attractive 70 %+ number
-    # visitors see. Free-tier's 48 % was technically correct but actively
-    # undermined conversion; Gold's 70 %+ is equally honest and shows
-    # what paid subscribers actually receive.
+    # IMPORTANT: use pick_tier_expression() == GOLD rather than
+    # access_filter(GOLD). access_filter is an ACCESS scope ("picks a Gold
+    # user can see") which includes Free+Silver+Gold (~8.4k picks,
+    # ~57% avg). We want the picks CLASSIFIED as Gold only
+    # (~1.65k picks, ~70.5%). Mirrors trackrecord.py's ?pick_tier=gold
+    # behaviour so the homepage number matches the Gold row in
+    # /api/trackrecord/summary and the TierLadder component.
     if TIER_SYSTEM_ENABLED:
-        stats_stmt = stats_stmt.where(access_filter(PickTier.GOLD))
+        stats_stmt = stats_stmt.where(pick_tier_expression() == PickTier.GOLD.value)
     try:
         row = (await db.execute(stats_stmt)).one_or_none()
         total = int(row.total) if row and row.total else 0
