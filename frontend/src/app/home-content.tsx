@@ -50,6 +50,7 @@ import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
 const TrackRecordChart = dynamic(() => import("@/components/ui/track-record-chart").then(m => m.TrackRecordChart), { ssr: false });
 const LeaguesTicker = dynamic(() => import("@/components/ui/leagues-ticker").then(m => m.LeaguesTicker), { ssr: true });
 const TrustFunnel = dynamic(() => import("@/components/ui/trust-funnel").then(m => m.TrustFunnel), { ssr: false });
+const RecognizeThis = dynamic(() => import("@/components/ui/recognize-this").then(m => m.RecognizeThis), { ssr: true });
 const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section").then(m => m.TestimonialsSection), { ssr: false });
 const ComparisonTable = dynamic(() => import("@/components/ui/comparison-table").then(m => m.ComparisonTable), { ssr: true });
 const PricingSection = dynamic(() => import("@/components/ui/pricing-section").then(m => m.PricingSection), { ssr: true });
@@ -476,53 +477,24 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          2 · HOW WE FILTER — unified filter story
-          Previously three separate sections (RecognizeThis, TierLadder,
-          TrustFunnel) each told a fragment of the same narrative
-          ("we're honest about what we actually ship"). Merged here
-          into one section with a shared intro header; the TrustFunnel
-          below now carries the full visual (volume funnel + per-tier
-          accuracy breakdown).
+          1a2 · RECOGNIZE-THIS, empathy-first pain section. Shows the
+          Telegram-tipster frustrations the visitor has already lived
+          through, so they feel understood before we pitch the solution.
+          Placed right after the hero so the flow is:
+             Hero (promise) → Pain ("yes that's me") → Proof → Ladder → ...
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden pt-20 md:pt-28">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 h-[360px] w-[720px] -translate-x-1/2 rounded-full"
-          style={{
-            background: "hsl(var(--accent-green) / 0.08)",
-            filter: "blur(140px)",
-          }}
-        />
-        <div className="relative mx-auto mb-8 max-w-3xl px-4 text-center sm:px-6 md:mb-10">
-          <span className="section-label mx-auto">
-            <Sparkles className="h-3 w-3" />
-            {locale === "nl" ? "Hoe we filteren" : "How we filter"}
-          </span>
-          <h2 className="text-heading mt-3 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-            {locale === "nl" ? (
-              <>
-                Van ruwe wedstrijden naar{" "}
-                <span className="gradient-text-green">eerlijke picks</span>
-              </>
-            ) : (
-              <>
-                From raw fixtures to{" "}
-                <span className="gradient-text-green">honest picks</span>
-              </>
-            )}
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-[#a3a9b8]">
-            {locale === "nl"
-              ? "We publiceren alleen picks waarin ons ensemble echt vertrouwen heeft. Hieronder zie je wat dat betekent — per tier en door de volledige filter-trechter."
-              : "We only publish picks our ensemble actually has conviction in. Here's what that means — per tier, and through the full filter funnel."}
-          </p>
-        </div>
-      </section>
+      <RecognizeThis />
 
-      {/* Standalone TierLadder removed — the TrustFunnel below now
-          carries the per-tier accuracy breakdown (incl. Bronze), so
-          showing both would be duplicate content. */}
+      {/* 1b · LIVE PROOF STRIP + standalone TierLadder removed — the
+          TrustFunnel below now carries the per-tier accuracy breakdown
+          (incl. Bronze), so the ladder would be duplicate content. */}
 
+      {/* ══════════════════════════════════════════════════════════════
+          1c · TRUST FUNNEL, "from 55k matches to 1.65k honest picks",
+          plain-language explanation of why the advertised volume looks
+          smaller than the raw database count. Turns the "why only 8k?"
+          visitor question into a conversion-oriented honesty story.
+         ══════════════════════════════════════════════════════════════ */}
       <TrustFunnel />
 
       {/* ══════════════════════════════════════════════════════════════
@@ -592,63 +564,116 @@ export function HomeContent({
         </div>
       </section>
 
-      {/* Section 3 "FEATURES · Trust/AI/Proof" removed — its three
-          cards duplicated messaging already present in the PAS block
-          (honesty), the Track Record chart (proof) and the Personas
-          grid (features). Removing this section tightens the
-          narrative without losing any unique persuasion token. */}
+      {/* ══════════════════════════════════════════════════════════════
+          3 · FEATURES, 3 premium feature cards
+         ══════════════════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-1/2 h-[400px] w-[400px] -translate-y-1/2 rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(140px)" }}
+        />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mb-12 max-w-3xl">
+            <span className="section-label">
+              <Sparkles className="h-3 w-3" /> {t("trusted.titleHighlight")}
+            </span>
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              {t("trusted.titleA")}{" "}
+              <span className="gradient-text-green">{t("trusted.titleHighlight")}</span>{" "}
+              {t("trusted.titleB")}
+            </h2>
+            <p className="mt-4 text-base text-[#a3a9b8]">{t("trusted.subtitle")}</p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            <BigFeatureCard
+              variant="green"
+              icon={Shield}
+              tag={t("trusted.card1Title") ? "Trust" : "Trust"}
+              title={t("trusted.card1Title")}
+              desc={t("trusted.card1Desc")}
+            />
+            <BigFeatureCard
+              variant="purple"
+              icon={Brain}
+              tag="AI Core"
+              title={t("trusted.card2Title")}
+              desc={t("trusted.card2Desc")}
+              href={loc("/track-record")}
+              cta={t("trusted.learnMore")}
+            />
+            <BigFeatureCard
+              variant="blue"
+              icon={CheckCircle2}
+              tag="Proof"
+              title={t("trusted.card3Title")}
+              desc={t("trusted.card3Desc")}
+            />
+          </div>
+        </div>
+      </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          4 · HOW IT WORKS — compact 3-step strip
-          Previously a full section with 3 large card blocks that
-          duplicated the /how-it-works deep-dive page line-for-line.
-          Compacted to a single horizontal strip — enough to reassure
-          the reader ("3 steps, we've done this before") while routing
-          serious readers to the dedicated page.
+          4 · HOW IT WORKS, 3 premium step cards
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-14 md:py-20">
-        <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="mb-8 flex flex-wrap items-baseline justify-between gap-4">
-            <div>
-              <span className="section-label">{t("how.badge")}</span>
-              <h2 className="text-heading mt-2 text-balance text-2xl text-[#ededed] sm:text-3xl">
-                {t("how.title")}
-              </h2>
-            </div>
-            <Link
-              href={loc("/how-it-works")}
-              className="btn-glass inline-flex shrink-0 items-center gap-1.5"
-            >
+      <section className="relative overflow-hidden py-20 md:py-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[800px] -translate-x-1/2 rounded-full"
+          style={{ background: "hsl(var(--accent-blue) / 0.1)", filter: "blur(140px)" }}
+        />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="mb-12 text-center">
+            <span className="section-label">{t("how.badge")}</span>
+            <h2 className="text-heading mx-auto max-w-2xl text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+              {t("how.title")}
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-base text-[#a3a9b8]">{t("how.subtitle")}</p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {[
+              { num: "01", icon: Zap, title: t("how.step1Title"), desc: t("how.step1Desc"), variant: "green" as const },
+              { num: "02", icon: Star, title: t("how.step2Title"), desc: t("how.step2Desc", potd), variant: "purple" as const },
+              { num: "03", icon: Eye, title: t("how.step3Title"), desc: t("how.step3Desc"), variant: "blue" as const },
+            ].map(({ num, icon: Icon, title, desc, variant }) => (
+              <div key={num} className={`card-neon card-neon-${variant} relative overflow-hidden p-6 sm:p-7`}>
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -top-14 left-1/2 h-[160px] w-[70%] -translate-x-1/2 rounded-full opacity-70"
+                  style={{
+                    background:
+                      variant === "green"
+                        ? "radial-gradient(ellipse, hsl(var(--accent-green)/0.28), transparent 60%)"
+                        : variant === "purple"
+                        ? "radial-gradient(ellipse, hsl(var(--accent-purple)/0.32), transparent 60%)"
+                        : "radial-gradient(ellipse, hsl(var(--accent-blue)/0.28), transparent 60%)",
+                    filter: "blur(40px)",
+                  }}
+                />
+                <div className="relative flex items-start gap-4">
+                  <HexBadge variant={variant} size="md">
+                    <Icon className="h-5 w-5" strokeWidth={2} />
+                  </HexBadge>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
+                      Step {num}
+                    </span>
+                    <h3 className="text-heading mt-1 text-lg text-[#ededed]">{title}</h3>
+                  </div>
+                </div>
+                <p className="relative mt-4 text-sm leading-relaxed text-[#a3a9b8]">{desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex justify-center">
+            <Link href={loc("/how-it-works")} className="btn-glass inline-flex items-center gap-1.5">
               {t("how.deepDive")} <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
-
-          <ol className="grid gap-3 md:grid-cols-3">
-            {[
-              { num: "01", icon: Zap, title: t("how.step1Title"), variant: "green" as const },
-              { num: "02", icon: Star, title: t("how.step2Title"), variant: "purple" as const },
-              { num: "03", icon: Eye, title: t("how.step3Title"), variant: "blue" as const },
-            ].map(({ num, icon: Icon, title, variant }) => (
-              <li
-                key={num}
-                className="flex items-center gap-3 rounded-xl border p-4"
-                style={{
-                  borderColor: "hsl(0 0% 100% / 0.06)",
-                  background: "hsl(230 16% 10% / 0.4)",
-                }}
-              >
-                <HexBadge variant={variant} size="sm" noGlow>
-                  <Icon className="h-4 w-4" strokeWidth={2} />
-                </HexBadge>
-                <div className="min-w-0 flex-1">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                    Step {num}
-                  </span>
-                  <h3 className="text-heading text-sm text-[#ededed]">{title}</h3>
-                </div>
-              </li>
-            ))}
-          </ol>
         </div>
       </section>
 
@@ -776,16 +801,6 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          5a · TESTIMONIALS — moved here from later in the page.
-          Social proof lands hardest right after the Track Record
-          chart (the hardest proof point). Conditional render keeps
-          the section invisible when Sanity returns zero items.
-         ══════════════════════════════════════════════════════════════ */}
-      {testimonials.length > 0 && (
-        <TestimonialsSection testimonials={testimonials} />
-      )}
-
-      {/* ══════════════════════════════════════════════════════════════
           5b · PERSONA SEGMENTATION, 'who BetsPlug is for'
           Three persona cards. Same platform, different habits.
           Each card has its own CTA that routes to the most relevant
@@ -818,11 +833,6 @@ export function HomeContent({
               icon={Smartphone}
               title={t("persona.casualTitle")}
               pitch={t("persona.casualPitch")}
-              proof={
-                locale === "nl"
-                  ? "3 gratis picks per dag · geen registratie"
-                  : "3 free picks/day · no signup"
-              }
               features={[
                 t("persona.casualFeature1"),
                 t("persona.casualFeature2"),
@@ -836,11 +846,6 @@ export function HomeContent({
               icon={Calculator}
               title={t("persona.seriousTitle")}
               pitch={t("persona.seriousPitch")}
-              proof={
-                locale === "nl"
-                  ? `Gold tier · ${potd.potdAccuracy.split(/[.,]/)[0]}%+ historische accuraatheid`
-                  : `Gold tier · ${potd.potdAccuracy.split(/[.,]/)[0]}%+ historical accuracy`
-              }
               features={[
                 t("persona.seriousFeature1"),
                 t("persona.seriousFeature2"),
@@ -855,11 +860,6 @@ export function HomeContent({
               icon={Database}
               title={t("persona.quantTitle")}
               pitch={t("persona.quantPitch")}
-              proof={
-                locale === "nl"
-                  ? "CSV / JSON exports · volledige geschiedenis"
-                  : "CSV / JSON exports · full history"
-              }
               features={[
                 t("persona.quantFeature1"),
                 t("persona.quantFeature2"),
@@ -952,10 +952,12 @@ export function HomeContent({
         </div>
       </section>
 
-      {/* Section 6 "TESTIMONIALS" moved earlier — now rendered
-          immediately after the Track Record section so social proof
-          lands in its strongest position (right after the hardest
-          proof point). Keeps a conditional render guard. */}
+      {/* ══════════════════════════════════════════════════════════════
+          6 · TESTIMONIALS
+         ══════════════════════════════════════════════════════════════ */}
+      {testimonials.length > 0 && (
+        <TestimonialsSection testimonials={testimonials} />
+      )}
 
       {/* ══════════════════════════════════════════════════════════════
           7 · COMPARISON TABLE, BetsPlug vs Others
@@ -1298,7 +1300,6 @@ function PersonaCard({
   ctaLabel,
   ctaHref,
   highlight,
-  proof,
 }: {
   variant: "green" | "purple" | "blue";
   icon: typeof Shield;
@@ -1308,8 +1309,6 @@ function PersonaCard({
   ctaLabel: string;
   ctaHref: string;
   highlight?: boolean;
-  /** Optional concrete proof chip ("3 picks/day · 65% accuracy"). */
-  proof?: string;
 }) {
   return (
     <div
@@ -1343,25 +1342,6 @@ function PersonaCard({
           {title}
         </h3>
         <p className="mt-3 text-sm leading-relaxed text-[#a3a9b8]">{pitch}</p>
-
-        {proof && (
-          <div
-            className="mt-4 inline-flex items-center gap-2 self-start rounded-full border px-3 py-1 text-[11px] font-semibold"
-            style={{
-              borderColor: "hsl(0 0% 100% / 0.08)",
-              background: "hsl(230 18% 10% / 0.6)",
-              color:
-                variant === "green"
-                  ? "#4ade80"
-                  : variant === "purple"
-                  ? "#c4b5fd"
-                  : "#93c5fd",
-            }}
-          >
-            <Sparkles className="h-3 w-3" />
-            <span>{proof}</span>
-          </div>
-        )}
 
         <ul className="mt-5 space-y-2">
           {features.map((f) => (
@@ -1433,9 +1413,59 @@ function RiskCard({
   );
 }
 
-/* BigFeatureCard removed — was only used by the deleted
-   "3 Premium Features" section (Trust/AI/Proof) whose content
-   duplicated messaging in PAS + Track Record + Personas. */
+function BigFeatureCard({
+  variant,
+  icon: Icon,
+  tag,
+  title,
+  desc,
+  href,
+  cta,
+}: {
+  variant: "green" | "purple" | "blue";
+  icon: typeof Shield;
+  tag: string;
+  title: string;
+  desc: string;
+  href?: string;
+  cta?: string;
+}) {
+  return (
+    <div className={`card-neon card-neon-${variant} relative flex flex-col overflow-hidden p-6 sm:p-7`}>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-16 left-1/2 h-[200px] w-[75%] -translate-x-1/2 rounded-full opacity-70"
+        style={{
+          background:
+            variant === "green"
+              ? "radial-gradient(ellipse, hsl(var(--accent-green) / 0.38), transparent 60%)"
+              : variant === "purple"
+              ? "radial-gradient(ellipse, hsl(var(--accent-purple) / 0.42), transparent 60%)"
+              : "radial-gradient(ellipse, hsl(var(--accent-blue) / 0.35), transparent 60%)",
+          filter: "blur(40px)",
+        }}
+      />
+      <div className="relative flex flex-col">
+        <div className="mb-5 flex items-center justify-between">
+          <HexBadge variant={variant} size="lg">
+            <Icon className="h-6 w-6" strokeWidth={2} />
+          </HexBadge>
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">{tag}</span>
+        </div>
+        <h3 className="text-heading text-xl text-[#ededed] sm:text-2xl">{title}</h3>
+        <p className="mt-3 text-sm leading-relaxed text-[#a3a9b8]">{desc}</p>
+        {href && cta && (
+          <Link
+            href={href}
+            className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#4ade80] transition-colors hover:text-[#86efac]"
+          >
+            {cta} <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function PlanCard({
   name,
