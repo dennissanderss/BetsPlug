@@ -142,21 +142,27 @@ import type { SegmentPerformance, CalibrationReport } from "@/types/api";
 function BOTDPerformanceInsights() {
   const { t } = useTranslations();
 
+  // PotD is always a Gold-tier pick, so every KPI in this block must be
+  // scoped to Gold. Without the filter we returned the unscoped aggregate
+  // (Free+Silver+Gold+Platinum mixed), producing a misleading ~48% total
+  // accuracy directly beneath a "Gold · 70%+" claim.
+  const tierParams = { pick_tier: "gold" };
+
   const { data: leagueSegments } = useQuery({
-    queryKey: ["trackrecord-segments-league-botd"],
-    queryFn: () => api.getTrackrecordSegments("league"),
+    queryKey: ["trackrecord-segments-league-botd", "gold"],
+    queryFn: () => api.getTrackrecordSegments("league", tierParams),
     staleTime: 10 * 60_000,
   });
 
   const { data: calibration } = useQuery({
-    queryKey: ["trackrecord-calibration-botd"],
-    queryFn: () => api.getCalibration(),
+    queryKey: ["trackrecord-calibration-botd", "gold"],
+    queryFn: () => api.getCalibration(tierParams),
     staleTime: 10 * 60_000,
   });
 
   const { data: summary } = useQuery({
-    queryKey: ["trackrecord-summary-botd"],
-    queryFn: () => api.getTrackrecordSummary(),
+    queryKey: ["trackrecord-summary-botd", "gold"],
+    queryFn: () => api.getTrackrecordSummary(tierParams),
     staleTime: 10 * 60_000,
   });
 

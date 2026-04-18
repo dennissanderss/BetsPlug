@@ -144,14 +144,52 @@ function PublicTierTabs({
           Audit any tier
         </span>
         {hasToken ? (
-          <a
-            href={`${api}/trackrecord/export.csv${csvSuffix}`}
-            download
+          <button
+            type="button"
+            onClick={async () => {
+              // A plain <a href> can't attach the Authorization header
+              // the backend requires, so the CSV endpoint always
+              // 401'd. Fetch the bytes with the bearer token, wrap in
+              // a blob, and trigger a synthetic download.
+              try {
+                const token =
+                  typeof window !== "undefined"
+                    ? window.localStorage.getItem("betsplug_token")
+                    : null;
+                const resp = await fetch(
+                  `${api}/trackrecord/export.csv${csvSuffix}`,
+                  {
+                    headers: token
+                      ? { Authorization: `Bearer ${token}` }
+                      : undefined,
+                  }
+                );
+                if (!resp.ok) {
+                  window.alert(
+                    resp.status === 401 || resp.status === 403
+                      ? "Log opnieuw in om de CSV te downloaden."
+                      : "Download mislukt, probeer het zo opnieuw."
+                  );
+                  return;
+                }
+                const blob = await resp.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = `trackrecord${value !== "all" ? `-${value}` : ""}.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+              } catch {
+                window.alert("Download mislukt, probeer het zo opnieuw.");
+              }
+            }}
             className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors"
           >
             <Download className="h-3.5 w-3.5" />
             Download CSV
-          </a>
+          </button>
         ) : (
           // B1.1: the CSV endpoint now requires authentication and only
           // serves tiers up to the caller's own. Public visitors can
