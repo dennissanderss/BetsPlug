@@ -24,6 +24,7 @@ import type { Fixture, WeeklySummary } from "@/types/api";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { TrackRecordHubTabs } from "@/components/dashboard/TrackRecordHubTabs";
+import { derivePickSide } from "@/lib/prediction-pick";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -380,16 +381,7 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
     const actualOutcome =
       home_score > away_score ? "home_win" :
       away_score > home_score ? "away_win" : "draw";
-    if (
-      pred!.home_win_prob >= pred!.away_win_prob &&
-      pred!.home_win_prob >= (pred!.draw_prob ?? 0)
-    ) {
-      predictedSide = "home";
-    } else if ((pred!.draw_prob ?? 0) >= pred!.away_win_prob) {
-      predictedSide = "draw";
-    } else {
-      predictedSide = "away";
-    }
+    predictedSide = derivePickSide(pred);
     const predicted =
       predictedSide === "home"
         ? "home_win"
@@ -428,12 +420,10 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
   const awayScore = fixture.result?.away_score ?? null;
 
   // Compact pick label
-  let pickLabel = "—";
-  if (hasPrediction) {
-    if (pred!.home_win_prob >= pred!.away_win_prob && pred!.home_win_prob >= (pred!.draw_prob ?? 0)) pickLabel = "1";
-    else if ((pred!.draw_prob ?? 0) >= pred!.away_win_prob) pickLabel = "X";
-    else pickLabel = "2";
-  }
+  const pickLabel =
+    predictedSide === "home" ? "1" :
+    predictedSide === "draw" ? "X" :
+    predictedSide === "away" ? "2" : "—";
 
   const borderColor = isCorrect === true ? "#10b981" : isCorrect === false ? "#ef4444" : "#334155";
 
@@ -586,16 +576,10 @@ function ResultsPageContent() {
         if (!pred || !f.result) return false;
         const { home_score, away_score } = f.result;
         const actualOutcome =
-          home_score > away_score ? "home_win" :
-          away_score > home_score ? "away_win" : "draw";
-        const predicted =
-          pred.home_win_prob >= pred.away_win_prob &&
-          pred.home_win_prob >= (pred.draw_prob ?? 0)
-            ? "home_win"
-            : (pred.draw_prob ?? 0) >= pred.away_win_prob
-            ? "draw"
-            : "away_win";
-        const correct = actualOutcome === predicted;
+          home_score > away_score ? "home" :
+          away_score > home_score ? "away" : "draw";
+        const predictedSide = derivePickSide(pred);
+        const correct = actualOutcome === predictedSide;
         return resultFilter === "Correct" ? correct : !correct;
       });
     }
@@ -683,9 +667,7 @@ function ResultsPageContent() {
         let tempWin = 0;
         let tempLose = 0;
         for (const f of evaluated) {
-          const pred = f.prediction!;
-          const probs = { home: pred.home_win_prob, draw: pred.draw_prob ?? 0, away: pred.away_win_prob };
-          const pick = Object.entries(probs).sort((a, b) => b[1] - a[1])[0][0];
+          const pick = derivePickSide(f.prediction);
           const winner = f.result!.home_score > f.result!.away_score ? "home" : f.result!.home_score < f.result!.away_score ? "away" : "draw";
           const correct = pick === winner;
           if (correct) { tempWin++; tempLose = 0; maxWinStreak = Math.max(maxWinStreak, tempWin); }
@@ -695,9 +677,7 @@ function ResultsPageContent() {
         currentStreak = 0;
         for (let i = 0; i < evaluated.length; i++) {
           const f = evaluated[i];
-          const pred = f.prediction!;
-          const probs = { home: pred.home_win_prob, draw: pred.draw_prob ?? 0, away: pred.away_win_prob };
-          const pick = Object.entries(probs).sort((a, b) => b[1] - a[1])[0][0];
+          const pick = derivePickSide(f.prediction);
           const winner = f.result!.home_score > f.result!.away_score ? "home" : f.result!.home_score < f.result!.away_score ? "away" : "draw";
           if (pick === winner) currentStreak++;
           else break;

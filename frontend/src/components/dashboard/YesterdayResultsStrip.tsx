@@ -6,6 +6,7 @@ import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { ArrowRight, CheckCircle2, XCircle } from "lucide-react";
 import { Pill, DataChip } from "@/components/noct/pill";
 import type { Fixture, FixturesResponse, PickTierSlug } from "@/types/api";
+import { derivePickSide, pickLabel as computePickLabel } from "@/lib/prediction-pick";
 
 // Tier initial + colour used as a compact per-row badge so users can see
 // at a glance which tier each yesterday-pick belonged to.
@@ -41,21 +42,14 @@ interface YesterdayResultsStripProps {
 }
 
 function pickLabel(prediction: Fixture["prediction"]): string {
-  if (!prediction) return "—";
-  const { home_win_prob, draw_prob, away_win_prob } = prediction;
-  if (home_win_prob >= away_win_prob && home_win_prob >= (draw_prob ?? 0)) return "1";
-  if ((draw_prob ?? 0) >= away_win_prob) return "X";
-  return "2";
+  return computePickLabel(prediction);
 }
 
 function isCorrect(fixture: Fixture): boolean | null {
   if (!fixture.result || !fixture.prediction) return null;
-  const pick = pickLabel(fixture.prediction);
-  const winner = fixture.result.winner;
-  if (pick === "1" && winner === "home") return true;
-  if (pick === "X" && winner === "draw") return true;
-  if (pick === "2" && winner === "away") return true;
-  return false;
+  const side = derivePickSide(fixture.prediction);
+  if (!side) return null;
+  return side === fixture.result.winner;
 }
 
 function ResultRow({ fixture }: { fixture: Fixture }) {

@@ -16,6 +16,7 @@ import { CheckCircle2, XCircle, Minus, TrendingUp } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { api } from "@/lib/api";
+import { derivePickSide } from "@/lib/prediction-pick";
 import type { Fixture } from "@/types/api";
 
 function fmtDate(iso: string, locale: string): string {
@@ -30,16 +31,10 @@ function fmtDate(iso: string, locale: string): string {
 }
 
 function computeOutcome(f: Fixture): "correct" | "wrong" | "na" {
-  const p = f.prediction;
   const r = f.result;
-  if (!p || !r || !r.winner) return "na";
-  // Pick is what the model bet on; winner is what actually happened.
-  let modelPick: "home" | "draw" | "away" = "home";
-  if (p.draw_prob != null && p.draw_prob >= p.home_win_prob && p.draw_prob >= p.away_win_prob) {
-    modelPick = "draw";
-  } else if (p.away_win_prob >= p.home_win_prob) {
-    modelPick = "away";
-  }
+  if (!f.prediction || !r || !r.winner) return "na";
+  const modelPick = derivePickSide(f.prediction);
+  if (!modelPick) return "na";
   return modelPick === r.winner ? "correct" : "wrong";
 }
 
