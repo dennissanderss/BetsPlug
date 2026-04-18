@@ -31,7 +31,7 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { TierEmblem } from "@/components/noct/tier-emblem";
-import { type TierKey } from "@/components/noct/tier-theme";
+import { TIER_THEME, type TierKey } from "@/components/noct/tier-theme";
 import { Pill } from "@/components/noct/pill";
 import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { HeroMediaBg } from "@/components/ui/media-bg";
@@ -93,20 +93,60 @@ function useLiveTrackRecordStats(pickTier: PublicTier = "all"): LiveStats {
   return stats;
 }
 
-// Tier metadata for the public tabs, label, emoji and an accent
-// colour class applied when the tab is active. Mirrors the authed
-// /trackrecord page's TierTabsStrip visual language.
+// Tier metadata for the public tabs. The dot colour and active
+// border/background are derived from TIER_THEME so Free=bronze,
+// Silver=silver, Gold=gold, Platinum=diamond-blue — no more
+// gold-but-blue / platinum-but-green mismatches.
 const PUBLIC_TIER_TABS: {
   key: PublicTier;
   label: string;
-  emoji: string;
-  activeClass: string;
+  /** Hex colour for the leading dot; null = neutral white for "all". */
+  dotHex: string | null;
+  /** Active-state ring + tint; both derived from the tier hex. */
+  ringHex: string;
+  tintHex: string;
+  textHex: string;
 }[] = [
-  { key: "all", label: "All tiers", emoji: "◯", activeClass: "border-white/30 bg-white/[0.08] text-slate-100" },
-  { key: "free", label: "Free · 45%+", emoji: "⬜", activeClass: "border-slate-300/30 bg-slate-300/[0.10] text-slate-200" },
-  { key: "silver", label: "Silver · 60%+", emoji: "⚪", activeClass: "border-slate-100/40 bg-slate-100/[0.10] text-slate-100" },
-  { key: "gold", label: "Gold · 70%+", emoji: "🔵", activeClass: "border-blue-400/40 bg-blue-500/[0.12] text-blue-100" },
-  { key: "platinum", label: "Platinum · 80%+", emoji: "🟢", activeClass: "border-emerald-400/40 bg-emerald-500/[0.12] text-emerald-100" },
+  {
+    key: "all",
+    label: "All tiers",
+    dotHex: null,
+    ringHex: "rgba(255,255,255,0.30)",
+    tintHex: "rgba(255,255,255,0.08)",
+    textHex: "#ededed",
+  },
+  {
+    key: "free",
+    label: "Free · 45%+",
+    dotHex: TIER_THEME.bronze.colorHex,
+    ringHex: TIER_THEME.bronze.ringHex,
+    tintHex: TIER_THEME.bronze.bgTintHex,
+    textHex: TIER_THEME.bronze.highlightHex,
+  },
+  {
+    key: "silver",
+    label: "Silver · 60%+",
+    dotHex: TIER_THEME.silver.colorHex,
+    ringHex: TIER_THEME.silver.ringHex,
+    tintHex: TIER_THEME.silver.bgTintHex,
+    textHex: TIER_THEME.silver.highlightHex,
+  },
+  {
+    key: "gold",
+    label: "Gold · 70%+",
+    dotHex: TIER_THEME.gold.colorHex,
+    ringHex: TIER_THEME.gold.ringHex,
+    tintHex: TIER_THEME.gold.bgTintHex,
+    textHex: TIER_THEME.gold.highlightHex,
+  },
+  {
+    key: "platinum",
+    label: "Platinum · 80%+",
+    dotHex: TIER_THEME.platinum.colorHex,
+    ringHex: TIER_THEME.platinum.ringHex,
+    tintHex: TIER_THEME.platinum.bgTintHex,
+    textHex: TIER_THEME.platinum.highlightHex,
+  },
 ];
 
 // Client-side auth probe, reads the localStorage token written by
@@ -226,19 +266,40 @@ function PublicTierTabs({
       <div className="flex flex-wrap gap-1.5 p-3">
         {PUBLIC_TIER_TABS.map((tab) => {
           const active = tab.key === value;
+          // Active-state colours come straight from TIER_THEME, so the
+          // Gold tab is metallic gold, Platinum is diamond-blue, etc.
+          // Inactive tabs stay neutral so the active one pops.
+          const activeStyle = active
+            ? {
+                borderColor: tab.ringHex,
+                background: tab.tintHex,
+                color: tab.textHex,
+              }
+            : undefined;
           return (
             <button
               key={tab.key}
               type="button"
               onClick={() => onChange(tab.key)}
+              style={activeStyle}
               className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
                 active
-                  ? tab.activeClass
+                  ? ""
                   : "border-white/[0.08] bg-transparent text-slate-400 hover:border-white/[0.15] hover:text-slate-200"
               }`}
               aria-pressed={active}
             >
-              <span aria-hidden>{tab.emoji}</span>
+              <span
+                aria-hidden
+                className="inline-block h-2.5 w-2.5 rounded-full"
+                style={{
+                  background: tab.dotHex ?? "transparent",
+                  border: tab.dotHex
+                    ? `1px solid ${tab.dotHex}`
+                    : "1px solid rgba(255,255,255,0.35)",
+                  boxShadow: active && tab.dotHex ? `0 0 8px ${tab.dotHex}` : undefined,
+                }}
+              />
               {tab.label}
             </button>
           );
