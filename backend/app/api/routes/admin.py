@@ -239,12 +239,37 @@ async def trigger_sync(
         return SyncResponse(accepted=False, message=f"Sync failed: {str(exc)}", task_id=None)
 
 
-@router.post("/batch-predictions", summary="Generate predictions for 100 historical matches")
+@router.post("/batch-predictions", summary="Generate predictions for matches without one")
 async def batch_predictions(
     batch_size: int = Body(default=100, embed=True),
+    include_upcoming: bool = Body(
+        default=False,
+        embed=True,
+        description=(
+            "Also scan SCHEDULED matches in the next `upcoming_days` days. "
+            "When False (default) only finished matches are backfilled — the "
+            "original behaviour, used by the historical backfill script."
+        ),
+    ),
+    upcoming_days: int = Body(
+        default=14,
+        embed=True,
+        description="Days-ahead window for upcoming matches when include_upcoming=True.",
+    ),
     db: AsyncSession = Depends(get_db),
 ):
-    """Generate predictions + evaluations for finished matches without predictions. Call repeatedly."""
+    """Generate predictions for matches missing one. Evaluates finished ones on the way.
+
+    Default behaviour (``include_upcoming=False``) scans FINISHED matches
+    without predictions and emits both prediction + evaluation for each —
+    the legacy historical-backfill pipeline used by
+    ``backend/scripts/fill_predictions_safe.py``.
+
+    Setting ``include_upcoming=True`` additionally scans SCHEDULED matches
+    within the next ``upcoming_days`` days that lack a prediction. Useful
+    when the Celery live-generator has fallen behind — e.g. post-deploy
+    gap 2026-04-16..22 observed during round-2 audit.
+    """
     import math
     from app.forecasting.forecast_service import ForecastService
     from app.models.match import Match, MatchResult, MatchStatus
@@ -263,29 +288,35 @@ async def batch_predictions(
         db.add(mv)
         await db.flush()
 
-    # Find finished matches without predictions
-    from sqlalchemy import and_
+    # Find matches without predictions — finished first (fills trackrecord),
+    # then upcoming if the caller opted in (fills today/soon fixture pages).
+    from datetime import timedelta as _td
+    from sqlalchemy import and_, or_
+
+    status_branch: list = [Match.status == MatchStatus.FINISHED]
+    if include_upcoming:
+        status_branch.append(
+            and_(
+                Match.status == MatchStatus.SCHEDULED,
+                Match.scheduled_at >= datetime.now(timezone.utc),
+                Match.scheduled_at <= datetime.now(timezone.utc) + _td(days=upcoming_days),
+            )
+        )
+
     stmt = (
         select(Match).where(
             and_(
-                Match.status == MatchStatus.FINISHED,
+                or_(*status_branch),
                 ~Match.id.in_(select(Prediction.match_id).distinct()),
             )
         ).order_by(Match.scheduled_at).limit(batch_size)
     )
     matches = (await db.execute(stmt)).scalars().all()
-    remaining = 0
 
-    # Count total remaining
-    count_stmt = select(Match).where(
-        and_(
-            Match.status == MatchStatus.FINISHED,
-            ~Match.id.in_(select(Prediction.match_id).distinct()),
-        )
-    )
+    # Count total remaining using the same status scope as the selection
     remaining_result = await db.execute(select(Match.id).where(
         and_(
-            Match.status == MatchStatus.FINISHED,
+            or_(*status_branch),
             ~Match.id.in_(select(Prediction.match_id).distinct()),
         )
     ))

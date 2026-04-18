@@ -1,5 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from app.auth.dependencies import require_admin
 from app.api.routes.health import router as health_router
 from app.api.routes.auth import router as auth_router
 from app.api.routes.search import router as search_router
@@ -52,28 +53,34 @@ router.include_router(models_router, prefix="/models", tags=["models"])
 router.include_router(trackrecord_router, prefix="/trackrecord", tags=["trackrecord"])
 router.include_router(backtests_router, prefix="/backtests", tags=["backtests"])
 router.include_router(reports_router, prefix="/reports", tags=["reports"])
-router.include_router(admin_router, prefix="/admin", tags=["admin"])
+# ── Admin routers — all gated behind require_admin at the router level.
+# Individual route functions do not need to repeat the dependency. This
+# closes the gap where /api/admin/users etc. were reachable unauth (see
+# docs/final_launch_readiness_v2.md §10 for the original discovery).
+_ADMIN_AUTH = [Depends(require_admin)]
+
+router.include_router(admin_router, prefix="/admin", tags=["admin"], dependencies=_ADMIN_AUTH)
 router.include_router(live_router, prefix="/live", tags=["live"])
 router.include_router(subscriptions_router, prefix="/subscriptions", tags=["subscriptions"])
 router.include_router(betoftheday_router, prefix="/bet-of-the-day", tags=["bet-of-the-day"])
 router.include_router(fixtures_router, prefix="/fixtures", tags=["fixtures"])
 router.include_router(dashboard_router, prefix="/dashboard", tags=["dashboard"])
 router.include_router(strategies_router, prefix="/strategies", tags=["strategies"])
-router.include_router(admin_blog_router, prefix="/admin/blog", tags=["admin-blog"])
-router.include_router(admin_users_router, prefix="/admin/users", tags=["admin-users"])
-router.include_router(admin_settings_router, prefix="/admin/settings", tags=["admin-settings"])
-router.include_router(admin_seo_router, prefix="/admin/seo", tags=["admin-seo"])
-router.include_router(admin_backfill_router, prefix="/admin", tags=["admin-backfill"])
+router.include_router(admin_blog_router, prefix="/admin/blog", tags=["admin-blog"], dependencies=_ADMIN_AUTH)
+router.include_router(admin_users_router, prefix="/admin/users", tags=["admin-users"], dependencies=_ADMIN_AUTH)
+router.include_router(admin_settings_router, prefix="/admin/settings", tags=["admin-settings"], dependencies=_ADMIN_AUTH)
+router.include_router(admin_seo_router, prefix="/admin/seo", tags=["admin-seo"], dependencies=_ADMIN_AUTH)
+router.include_router(admin_backfill_router, prefix="/admin", tags=["admin-backfill"], dependencies=_ADMIN_AUTH)
 router.include_router(homepage_router, prefix="/homepage", tags=["homepage"])
 router.include_router(pricing_router, prefix="/pricing", tags=["pricing"])
 router.include_router(odds_router, prefix="/odds", tags=["odds"])
-router.include_router(admin_research_router, prefix="/admin/research", tags=["admin-research"])
-router.include_router(admin_cleanup_router, prefix="/admin", tags=["admin-cleanup"])
-router.include_router(admin_notes_router, prefix="/admin", tags=["admin-notes"])
-router.include_router(admin_finance_router, prefix="/admin/finance", tags=["admin-finance"])
+router.include_router(admin_research_router, prefix="/admin/research", tags=["admin-research"], dependencies=_ADMIN_AUTH)
+router.include_router(admin_cleanup_router, prefix="/admin", tags=["admin-cleanup"], dependencies=_ADMIN_AUTH)
+router.include_router(admin_notes_router, prefix="/admin", tags=["admin-notes"], dependencies=_ADMIN_AUTH)
+router.include_router(admin_finance_router, prefix="/admin/finance", tags=["admin-finance"], dependencies=_ADMIN_AUTH)
 router.include_router(subscription_gate_router, prefix="/subscription", tags=["subscription"])
 router.include_router(checkout_sessions_router, tags=["checkout"])
 # v5
 router.include_router(route_router, prefix="/route", tags=["route"])
-router.include_router(admin_api_usage_router, prefix="/admin", tags=["admin-api-usage"])
-router.include_router(admin_v5_router, prefix="/admin/v5", tags=["admin-v5"])
+router.include_router(admin_api_usage_router, prefix="/admin", tags=["admin-api-usage"], dependencies=_ADMIN_AUTH)
+router.include_router(admin_v5_router, prefix="/admin/v5", tags=["admin-v5"], dependencies=_ADMIN_AUTH)

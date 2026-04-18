@@ -625,8 +625,18 @@ async def _load_latest_predictions(
     # (with a locked teaser badge for above-tier picks) instead of
     # silently dropping them — which to the user reads as "no
     # prediction" and breaks trust.
+    # v8.4 follow-up (P2-C): keep the tier funnel intact by requiring
+    # the match league to be in LEAGUES_FREE. Without this we'd leak
+    # predictions from non-top-14 leagues (A-League, Serie B, etc.)
+    # to anonymous callers with no tier classification — picks that
+    # were never part of any paid tier's scope per tier_system_plan.md.
     if TIER_SYSTEM_ENABLED:
-        stmt = stmt.where(v81_predictions_filter())
+        stmt = (
+            stmt
+            .join(Match, Match.id == Prediction.match_id)
+            .where(Match.league_id.in_(LEAGUES_FREE))
+            .where(v81_predictions_filter())
+        )
     rows = (await db.execute(stmt)).scalars().all()
     return {p.match_id: p for p in rows}
 
