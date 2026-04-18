@@ -55,7 +55,7 @@ const COPY: Record<Exclude<Tier, "platinum">, TierCopy> = {
     currentAccuracy: "70%+",
     currentScope: "top-10 leagues, confidence ≥70%",
     nextLabel: "Platinum",
-    nextAccuracy: "85%+",
+    nextAccuracy: "80%+",
   },
 };
 

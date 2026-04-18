@@ -2,10 +2,10 @@
 
 Returns a public, per-pick-tier breakdown of historical accuracy so the
 pricing page can show users:
-    Free     55%+     all leagues         conf >= 0.55
-    Silver   69%      top 14              conf >= 0.65
-    Gold     77%      top 10              conf >= 0.70
-    Platinum 85%+     top 5  elite        conf >= 0.75
+    Free     45%+     top 14 leagues      conf >= 0.55
+    Silver   60%+     top 14              conf >= 0.65
+    Gold     70%+     top 10              conf >= 0.70
+    Platinum 80%+     top 5  elite        conf >= 0.75
 
 All numbers are computed from the v8.1 evaluated prediction set. No
 authentication — this is marketing data.
@@ -48,7 +48,7 @@ class PricingTier(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     pick_tier: str = Field(description="Tier slug: free/silver/gold/platinum")
     pick_tier_label: str = Field(description="UI label with emoji")
-    pick_tier_accuracy: str = Field(description="Display accuracy claim, e.g. '85%+'")
+    pick_tier_accuracy: str = Field(description="Display accuracy claim, e.g. '80%+'")
     accuracy_pct: float = Field(ge=0.0, le=100.0, description="Point estimate (%)")
     wilson_ci_lower_pct: float = Field(ge=0.0, le=100.0)
     sample_size: int = Field(ge=0, description="Evaluated predictions used")

@@ -65,10 +65,10 @@ logger = logging.getLogger(__name__)
 # pulling the full marketing copy from tier_system.
 # ---------------------------------------------------------------------------
 _TIER_SCOPE_LABEL: dict[str, str] = {
-    "platinum": "Top-5 elite leagues · 85%+ historical",
+    "platinum": "Top-5 elite leagues · 80%+ historical",
     "gold": "Top-10 leagues · 70%+ historical",
     "silver": "Top-14 leagues · 60%+ historical",
-    "free": "All leagues · 45%+ historical baseline",
+    "free": "Top-14 leagues · 45%+ historical baseline",
 }
 
 

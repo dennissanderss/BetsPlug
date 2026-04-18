@@ -83,12 +83,12 @@ const STEPS: Record<UpgradableTier, TierStep> = {
     current: "gold",
     next: "platinum",
     currentAccuracy: "70%+",
-    nextAccuracy: "85%+",
+    nextAccuracy: "80%+",
     nextLabel: "Platinum",
     benefits: [
       "Top-5 elite leagues — only the sharpest markets",
       "Confidence ≥75% — highest-signal picks only",
-      "85%+ historical — our top-of-the-funnel tier",
+      "80%+ historical — our top-of-the-funnel tier",
     ],
     accent: {
       gradient: "from-emerald-500/25 via-cyan-400/10 to-transparent",

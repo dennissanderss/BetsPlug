@@ -3,10 +3,10 @@
 The v8.1 engine classifies every prediction into one of four quality tiers
 based on the league and the model's confidence:
 
-    🟢 Platinum : top  5 leagues + confidence >= 0.75  ~87% historical accuracy
-    🔵 Gold     : top 10 leagues + confidence >= 0.70  ~77%
-    ⚪ Silver   : top 14 leagues + confidence >= 0.65  ~69%
-    ⬜ Free     : anything else  + confidence >= 0.55  ~55%
+    🟢 Platinum : top  5 leagues + confidence >= 0.75  ~82% historical accuracy
+    🔵 Gold     : top 10 leagues + confidence >= 0.70  ~70%
+    ⚪ Silver   : top 14 leagues + confidence >= 0.65  ~61%
+    ⬜ Free     : anything else  + confidence >= 0.55  ~48%
 
 Users see picks from their subscription tier AND all lower tiers, each
 rendered with a visual label (emoji) so they understand the quality hint
@@ -99,7 +99,7 @@ TIER_METADATA: dict[PickTier, dict[str, Any]] = {
     PickTier.PLATINUM: {
         "slug": "platinum",
         "label": "🟢 Platinum",
-        "accuracy_claim": "85%+",
+        "accuracy_claim": "80%+",
     },
     PickTier.GOLD: {
         "slug": "gold",
@@ -258,7 +258,7 @@ def tier_info(tier: PickTier | int) -> dict[str, Any]:
         {
             "pick_tier": "platinum",        # slug (stable API key)
             "pick_tier_label": "🟢 Platinum", # UI-ready string
-            "pick_tier_accuracy": "85%+"    # historical accuracy claim
+            "pick_tier_accuracy": "80%+"    # historical accuracy claim
         }
     """
     if isinstance(tier, int) and not isinstance(tier, PickTier):

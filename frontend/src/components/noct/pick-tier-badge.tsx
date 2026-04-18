@@ -18,7 +18,7 @@ import type { PickTierSlug } from "@/types/api";
  *   - Free:     dashed outline, minimal treatment
  *
  * Usage:
- *   <PickTierBadge tier="platinum" accuracy="85%+" size="md" />
+ *   <PickTierBadge tier="platinum" accuracy="80%+" size="md" />
  *   <PickTierBadge tier="gold" accuracy="70%+" locked />
  *   <PickTierBadge tier="silver" label="Silver Pick" showLabel />
  */
@@ -28,7 +28,7 @@ const TIER_DISPLAY: Record<
   PickTierSlug,
   { label: string; accuracy: string; order: number }
 > = {
-  platinum: { label: "Platinum", accuracy: "85%+", order: 3 },
+  platinum: { label: "Platinum", accuracy: "80%+", order: 3 },
   gold: { label: "Gold", accuracy: "70%+", order: 2 },
   silver: { label: "Silver", accuracy: "60%+", order: 1 },
   free: { label: "Free", accuracy: "45%+", order: 0 },

@@ -39,7 +39,7 @@ const INFO: Record<
   },
   platinum: {
     label: "Platinum",
-    accuracy: "85%+",
+    accuracy: "80%+",
     emoji: "🟢",
     accent: "text-emerald-200 border-emerald-400/30 bg-emerald-500/[0.08]",
   },

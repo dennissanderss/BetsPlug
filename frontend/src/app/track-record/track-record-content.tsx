@@ -103,7 +103,7 @@ const PUBLIC_TIER_TABS: {
   { key: "free", label: "Free · 45%+", emoji: "⬜", activeClass: "border-slate-300/30 bg-slate-300/[0.10] text-slate-200" },
   { key: "silver", label: "Silver · 60%+", emoji: "⚪", activeClass: "border-slate-100/40 bg-slate-100/[0.10] text-slate-100" },
   { key: "gold", label: "Gold · 70%+", emoji: "🔵", activeClass: "border-blue-400/40 bg-blue-500/[0.12] text-blue-100" },
-  { key: "platinum", label: "Platinum · 85%+", emoji: "🟢", activeClass: "border-emerald-400/40 bg-emerald-500/[0.12] text-emerald-100" },
+  { key: "platinum", label: "Platinum · 80%+", emoji: "🟢", activeClass: "border-emerald-400/40 bg-emerald-500/[0.12] text-emerald-100" },
 ];
 
 // Client-side auth probe — reads the localStorage token written by

@@ -226,7 +226,7 @@ export interface PickTierFields {
   pick_tier?: PickTierSlug | null;
   /** UI-ready label with emoji, e.g. "🟢 Platinum". */
   pick_tier_label?: string | null;
-  /** Display accuracy claim, e.g. "85%+". */
+  /** Display accuracy claim, e.g. "80%+". */
   pick_tier_accuracy?: string | null;
 }
 

@@ -74,7 +74,7 @@ export default async function PricingPage() {
       price: "199.00",
       priceCurrency: "EUR",
       description:
-        "Platinum elite picks (85%+ historical accuracy) + all lower tiers, one-time lifetime price.",
+        "Platinum elite picks (80%+ historical accuracy) + all lower tiers, one-time lifetime price.",
       url: "https://betsplug.com/checkout?plan=platinum",
       category: "https://schema.org/OneTime",
     },
