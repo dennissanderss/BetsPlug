@@ -40,6 +40,9 @@ router = APIRouter()
 _NUM_CALIBRATION_BUCKETS = 10
 
 
+LIVE_MEASUREMENT_START = datetime(2026, 4, 16, 11, 0, 0, tzinfo=timezone.utc)
+
+
 def _parse_public_pick_tier(slug: Optional[str]) -> Optional[PickTier]:
     """Parse the PUBLIC ``?pick_tier=`` query param used by the trackrecord
     page's tier-selector tabs.
@@ -216,6 +219,82 @@ async def get_trackrecord_summary(
         period_end=row.period_end,
         per_tier=per_tier,
     )
+
+
+@router.get(
+    "/live-measurement",
+    summary="Strictly pre-match, live-sourced predictions logged since 2026-04-16",
+)
+async def get_live_measurement(
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Separate, honest "live" stream for public display.
+
+    Strict filter:
+      - prediction_source = 'live'
+      - predicted_at < Match.scheduled_at (truly pre-match)
+      - created_at >= LIVE_MEASUREMENT_START (v8.1 deploy cut-off)
+      - PredictionEvaluation attached (match graded)
+
+    Returns per-tier aggregates. Starts at 0/0 right after deploy and
+    grows as evaluated matches accumulate. No mixing with the model-
+    validation dataset on /summary — this endpoint is the single source
+    of truth for the "Live meting" surface.
+    """
+    from sqlalchemy import Integer as _Int
+
+    # Total + per-tier in a single pass using pick_tier_expression()
+    tier_expr = pick_tier_expression() if TIER_SYSTEM_ENABLED else None
+
+    stmt = (
+        select(
+            tier_expr.label("tier") if tier_expr is not None else Prediction.match_id,
+            func.count(PredictionEvaluation.id).label("total"),
+            func.sum(func.cast(PredictionEvaluation.is_correct, _Int)).label("correct"),
+        )
+        .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
+        .join(Match, Match.id == Prediction.match_id)
+        .where(Prediction.prediction_source == "live")
+        .where(Prediction.predicted_at < Match.scheduled_at)
+        .where(Prediction.created_at >= LIVE_MEASUREMENT_START)
+    )
+    if tier_expr is not None:
+        stmt = stmt.group_by(tier_expr)
+
+    rows = (await db.execute(stmt)).all()
+
+    per_tier: dict = {}
+    total_all = 0
+    correct_all = 0
+    for r in rows:
+        t = int(r.total or 0)
+        c = int(r.correct or 0)
+        total_all += t
+        correct_all += c
+        if tier_expr is not None and r.tier is not None:
+            try:
+                slug = TIER_METADATA[PickTier(int(r.tier))]["slug"]
+            except Exception:
+                continue
+            per_tier[slug] = {
+                "total": t,
+                "correct": c,
+                "accuracy": (c / t) if t else 0.0,
+            }
+
+    # Ensure every tier slug appears even if 0 — so frontend can render
+    # "0 / 0 — awaiting data" placeholders per card.
+    if TIER_SYSTEM_ENABLED:
+        for slug in ("free", "silver", "gold", "platinum"):
+            per_tier.setdefault(slug, {"total": 0, "correct": 0, "accuracy": 0.0})
+
+    return {
+        "start_date": LIVE_MEASUREMENT_START.date().isoformat(),
+        "total": total_all,
+        "correct": correct_all,
+        "accuracy": (correct_all / total_all) if total_all else 0.0,
+        "per_tier": per_tier,
+    }
 
 
 @router.get(
