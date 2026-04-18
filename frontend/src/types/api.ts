@@ -526,6 +526,10 @@ export interface FixturePrediction {
   > | null;
   /** v8.2 — top-3 feature drivers for the "Why this pick?" UI block. */
   top_drivers?: PredictionDriver[] | null;
+  /** v8.3 — tier metadata shown as a badge on the visible pick. */
+  pick_tier?: "free" | "silver" | "gold" | "platinum" | null;
+  pick_tier_label?: string | null;
+  pick_tier_accuracy?: string | null;
 }
 
 /** Shape returned by /api/fixtures/today, /upcoming, /results */
@@ -571,6 +575,14 @@ export interface Fixture {
     away_score_ht?: number | null;
   } | null;
   prediction: FixturePrediction | null;
+  /** v8.4 — set when a v8.1 prediction EXISTS for this match but the
+   * caller's subscription tier is below the pick's tier. The UI uses
+   * this slug to render an "Upgrade to 🔵 Gold" teaser where the
+   * probs would normally be. Null when the pick is visible or no
+   * prediction exists. */
+  locked_pick_tier?: "silver" | "gold" | "platinum" | null;
+  locked_pick_tier_label?: string | null;
+  locked_pick_tier_accuracy?: string | null;
   odds?: FixtureOdds | null;
   /** Live-score cache (only populated when status === "live"). */
   live_score?: {

@@ -31,10 +31,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.tier import get_current_tier
 from app.core.prediction_filters import v81_predictions_filter
+from app.core.tier_leagues import (
+    LEAGUES_FREE,
+    LEAGUES_GOLD,
+    LEAGUES_PLATINUM,
+    LEAGUES_SILVER,
+)
 from app.core.tier_system import (
+    CONF_THRESHOLD,
     PickTier,
+    TIER_METADATA,
     TIER_SYSTEM_ENABLED,
-    access_filter,
+    tier_info,
 )
 from app.db.session import get_db
 from app.models.league import League
@@ -43,6 +51,26 @@ from app.models.prediction import Prediction
 from app.models.team import Team
 
 router = APIRouter()
+
+
+def _classify_pick_tier(league_id: Any, confidence: float) -> Optional[PickTier]:
+    """Python mirror of ``pick_tier_expression`` SQL CASE.
+
+    Returns the highest tier the prediction qualifies for, or ``None``
+    if it falls below every tier's threshold (conf < 0.55 or league
+    outside LEAGUES_FREE). Same ordering rule as the SQL side —
+    Platinum is checked first, then Gold, Silver, Free.
+    """
+    league_str = str(league_id)
+    if league_str in LEAGUES_PLATINUM and confidence >= CONF_THRESHOLD[PickTier.PLATINUM]:
+        return PickTier.PLATINUM
+    if league_str in LEAGUES_GOLD and confidence >= CONF_THRESHOLD[PickTier.GOLD]:
+        return PickTier.GOLD
+    if league_str in LEAGUES_SILVER and confidence >= CONF_THRESHOLD[PickTier.SILVER]:
+        return PickTier.SILVER
+    if league_str in LEAGUES_FREE and confidence >= CONF_THRESHOLD[PickTier.FREE]:
+        return PickTier.FREE
+    return None
 
 _SIMULATION_DISCLAIMER = (
     "SIMULATION / EDUCATIONAL USE ONLY. "
@@ -59,7 +87,13 @@ _SIMULATION_DISCLAIMER = (
 
 
 class PredictionSummary(BaseModel):
-    """Rich prediction summary embedded in a fixture response."""
+    """Rich prediction summary embedded in a fixture response.
+
+    Only returned when the pick is visible to the caller. When the
+    pick's tier is above the caller's subscription tier, the parent
+    FixtureItem drops this field and instead sets ``locked_pick_tier``
+    so the UI can render an upgrade teaser in its place.
+    """
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -82,6 +116,10 @@ class PredictionSummary(BaseModel):
     # /predictions list view can render "Why this pick?" inline.
     top_drivers: Optional[List[Dict[str, Any]]] = None
     strategies_matched: Optional[List[str]] = None
+    # v8.3 — pick-tier metadata shown as the badge on the visible pick.
+    pick_tier: Optional[str] = None
+    pick_tier_label: Optional[str] = None
+    pick_tier_accuracy: Optional[str] = None
     disclaimer: str = _SIMULATION_DISCLAIMER
     is_simulation: bool = True
 
@@ -139,6 +177,12 @@ class FixtureItem(BaseModel):
     result: Optional[ResultSummary] = None
     prediction: Optional[PredictionSummary] = None
     odds: Optional[OddsSummary] = None
+    # v8.4 — set when a v8.1 prediction EXISTS for this match but the
+    # caller's tier is below the pick's tier. The prediction field is
+    # then null and the UI renders an upgrade teaser using these slugs.
+    locked_pick_tier: Optional[str] = None
+    locked_pick_tier_label: Optional[str] = None
+    locked_pick_tier_accuracy: Optional[str] = None
     # v6.3: real-time live score — only set for matches with status=LIVE
     # Populated from Redis cache, refreshed every 60s via API-Football.
     live_score: Optional[dict] = None
@@ -313,8 +357,15 @@ def _build_fixture_item(
     match: Match,
     latest_prediction: Optional[Prediction] = None,
     odds: Optional[OddsSummary] = None,
+    user_tier: Optional[PickTier] = None,
 ) -> FixtureItem:
-    """Convert a Match ORM object to a FixtureItem response schema."""
+    """Convert a Match ORM object to a FixtureItem response schema.
+
+    When ``user_tier`` is provided and the latest prediction's pick-tier
+    exceeds that, the returned PredictionSummary has ``locked=True`` and
+    all sensitive fields (probs, confidence, pick, reasoning) are nulled.
+    The tier badge metadata stays so the UI can render an upgrade teaser.
+    """
     result_summary: Optional[ResultSummary] = None
     if match.result:
         result_summary = ResultSummary(
@@ -326,6 +377,7 @@ def _build_fixture_item(
         )
 
     pred_summary: Optional[PredictionSummary] = None
+    locked_meta: tuple = (None, None, None)
     if latest_prediction:
         model_name = None
         if latest_prediction.model_version:
@@ -384,22 +436,58 @@ def _build_fixture_item(
             getattr(latest_prediction, "features_snapshot", None)
         )
 
-        pred_summary = PredictionSummary(
-            id=str(latest_prediction.id),
-            home_win_prob=latest_prediction.home_win_prob,
-            draw_prob=latest_prediction.draw_prob,
-            away_win_prob=latest_prediction.away_win_prob,
-            predicted_home_score=latest_prediction.predicted_home_score,
-            predicted_away_score=latest_prediction.predicted_away_score,
-            confidence=latest_prediction.confidence,
-            model_name=model_name,
-            predicted_at=latest_prediction.predicted_at.isoformat() if latest_prediction.predicted_at else None,
-            pick=pick,
-            reasoning=reasoning,
-            edge=edge,
-            top_features=top_features,
-            top_drivers=top_drivers,
+        # v8.4 — classify the pick's tier and compare to the caller's
+        # tier. If the pick is above the user's tier we emit a lock
+        # marker on the FixtureItem itself (see locked_meta below) and
+        # skip the full PredictionSummary so sensitive probs/pick are
+        # never serialised.
+        pick_tier_enum = _classify_pick_tier(
+            match.league_id, latest_prediction.confidence or 0.0
         )
+        meta: Dict[str, Optional[str]] = {
+            "pick_tier": None,
+            "pick_tier_label": None,
+            "pick_tier_accuracy": None,
+        }
+        if pick_tier_enum is not None:
+            meta = tier_info(pick_tier_enum)
+
+        is_locked = (
+            TIER_SYSTEM_ENABLED
+            and user_tier is not None
+            and pick_tier_enum is not None
+            and int(pick_tier_enum) > int(user_tier)
+        )
+
+        if is_locked:
+            pred_summary = None
+            locked_meta = (
+                meta["pick_tier"],
+                meta["pick_tier_label"],
+                meta["pick_tier_accuracy"],
+            )
+        else:
+            pred_summary = PredictionSummary(
+                id=str(latest_prediction.id),
+                home_win_prob=latest_prediction.home_win_prob,
+                draw_prob=latest_prediction.draw_prob,
+                away_win_prob=latest_prediction.away_win_prob,
+                predicted_home_score=latest_prediction.predicted_home_score,
+                predicted_away_score=latest_prediction.predicted_away_score,
+                confidence=latest_prediction.confidence,
+                model_name=model_name,
+                predicted_at=latest_prediction.predicted_at.isoformat()
+                if latest_prediction.predicted_at else None,
+                pick=pick,
+                reasoning=reasoning,
+                edge=edge,
+                top_features=top_features,
+                top_drivers=top_drivers,
+                pick_tier=meta["pick_tier"],
+                pick_tier_label=meta["pick_tier_label"],
+                pick_tier_accuracy=meta["pick_tier_accuracy"],
+            )
+            locked_meta = (None, None, None)
 
     return FixtureItem(
         id=str(match.id),
@@ -423,6 +511,9 @@ def _build_fixture_item(
         matchday=match.matchday,
         result=result_summary,
         prediction=pred_summary,
+        locked_pick_tier=locked_meta[0],
+        locked_pick_tier_label=locked_meta[1],
+        locked_pick_tier_accuracy=locked_meta[2],
         odds=odds,
     )
 
@@ -525,17 +616,17 @@ async def _load_latest_predictions(
             ),
         )
     )
-    # v8.3 — tier scope the prediction itself so Dashboard fixture
-    # strips (Live / Today / Results) stop leaking Gold+ picks to
-    # Free users. access_filter requires a JOIN on matches for
-    # Match.league_id.
-    if TIER_SYSTEM_ENABLED and user_tier is not None:
-        stmt = (
-            stmt
-            .join(Match, Match.id == Prediction.match_id)
-            .where(access_filter(user_tier))
-            .where(v81_predictions_filter())
-        )
+    # v8.4 — return ALL latest v8.1 predictions regardless of the
+    # caller's tier. The ``user_tier`` is still accepted (for call
+    # sites that haven't been updated) but the access gate is now
+    # enforced in ``_build_fixture_item`` by masking sensitive
+    # fields on picks that exceed the user's tier. That way the
+    # fixture list keeps showing every match + prediction pair
+    # (with a locked teaser badge for above-tier picks) instead of
+    # silently dropping them — which to the user reads as "no
+    # prediction" and breaks trust.
+    if TIER_SYSTEM_ENABLED:
+        stmt = stmt.where(v81_predictions_filter())
     rows = (await db.execute(stmt)).scalars().all()
     return {p.match_id: p for p in rows}
 
@@ -654,7 +745,7 @@ async def get_upcoming_fixtures(
     odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
-        _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
+        _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id), user_tier=user_tier)
         for m in matches
     ]
     await _enrich_with_live_scores(fixtures, matches)
@@ -717,7 +808,7 @@ async def get_live_fixtures(
     # ── 4. Build response, enriching each fixture with live_score ──────
     fixtures = []
     for m in matches:
-        item = _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
+        item = _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id), user_tier=user_tier)
 
         # Try to attach live score from cache
         eid = m.external_id or ""
@@ -783,7 +874,7 @@ async def get_today_fixtures(
     odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
-        _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
+        _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id), user_tier=user_tier)
         for m in matches
     ]
     await _enrich_with_live_scores(fixtures, matches)
@@ -918,7 +1009,7 @@ async def get_results(
     odds_map = await _load_latest_odds(match_ids, db)
 
     fixtures = [
-        _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id))
+        _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id), user_tier=user_tier)
         for m in matches
     ]
 
@@ -1103,6 +1194,7 @@ async def _head_to_head_summary(
 async def get_fixture_detail(
     fixture_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> FixtureItem:
     match = (
         await db.execute(select(Match).where(Match.id == fixture_id))
@@ -1113,12 +1205,13 @@ async def get_fixture_detail(
             detail=f"Fixture {fixture_id} not found.",
         )
 
-    pred_map = await _load_latest_predictions([match.id], db)
+    pred_map = await _load_latest_predictions([match.id], db, user_tier)
     odds_map = await _load_latest_odds([match.id], db)
     item = _build_fixture_item(
         match,
         pred_map.get(match.id),
         odds_map.get(match.id),
+        user_tier=user_tier,
     )
     await _enrich_with_live_scores([item], [match])
     return item
@@ -1132,6 +1225,7 @@ async def get_fixture_detail(
 async def get_fixture_analysis(
     fixture_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> FixtureAnalysisResponse:
     match = (
         await db.execute(select(Match).where(Match.id == fixture_id))
@@ -1142,10 +1236,10 @@ async def get_fixture_analysis(
             detail=f"Fixture {fixture_id} not found.",
         )
 
-    pred_map = await _load_latest_predictions([match.id], db)
+    pred_map = await _load_latest_predictions([match.id], db, user_tier)
     odds_map = await _load_latest_odds([match.id], db)
     fixture_item = _build_fixture_item(
-        match, pred_map.get(match.id), odds_map.get(match.id)
+        match, pred_map.get(match.id), odds_map.get(match.id), user_tier=user_tier
     )
     await _enrich_with_live_scores([fixture_item], [match])
 
