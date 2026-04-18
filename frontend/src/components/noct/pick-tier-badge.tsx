@@ -55,48 +55,51 @@ interface TierVisuals {
   pillBg: string;
 }
 
+// v8.6 — palette derived from the central tier-theme tokens used by the
+// homepage (Bronze=copper, Silver=metallic, Gold=metallic-gold,
+// Platinum=icy diamond). Keeps the dashboard badges visually aligned
+// with pricing + TierLadder so users don't see a different tier colour
+// per page.
 const VISUALS: Record<PickTierSlug, TierVisuals> = {
   platinum: {
-    // Warm gold gradient — premium / trophy look.
-    from: "#fde047", // gold-300 (bright top)
-    to: "#b45309",   // amber-700 (deep burnished bottom)
-    glow: "rgba(250, 204, 21, 0.55)",
-    fillTop: "rgba(250, 204, 21, 0.32)",
-    fillBottom: "rgba(16, 8, 4, 0.78)",
-    indicator: "#fef3c7", // amber-100 (bright on dark)
-    textColor: "#fbbf24", // amber-400
-    pillBg: "rgba(250, 204, 21, 0.12)",
+    from: "#d9f0ff",
+    to: "#5eb3d9",
+    glow: "rgba(168, 216, 234, 0.55)",
+    fillTop: "rgba(168, 216, 234, 0.32)",
+    fillBottom: "rgba(8, 18, 30, 0.78)",
+    indicator: "#e0f4ff",
+    textColor: "#d9f0ff",
+    pillBg: "rgba(168, 216, 234, 0.12)",
   },
   gold: {
-    from: "#60a5fa",
-    to: "#2563eb",
-    glow: "rgba(59, 130, 246, 0.5)",
-    fillTop: "rgba(59, 130, 246, 0.28)",
-    fillBottom: "rgba(4, 8, 16, 0.7)",
-    indicator: "#bfdbfe",
-    textColor: "#60a5fa",
-    pillBg: "rgba(59, 130, 246, 0.12)",
+    from: "#fbbf24",
+    to: "#b8860b",
+    glow: "rgba(212, 175, 55, 0.55)",
+    fillTop: "rgba(212, 175, 55, 0.32)",
+    fillBottom: "rgba(18, 12, 4, 0.78)",
+    indicator: "#fef3c7",
+    textColor: "#f5d67a",
+    pillBg: "rgba(212, 175, 55, 0.12)",
   },
   silver: {
-    from: "#e2e8f0",
-    to: "#94a3b8",
-    glow: "rgba(226, 232, 240, 0.18)",
-    fillTop: "rgba(226, 232, 240, 0.16)",
-    fillBottom: "rgba(10, 15, 22, 0.75)",
-    indicator: "#e2e8f0",
-    textColor: "#cbd5e1",
-    pillBg: "rgba(226, 232, 240, 0.08)",
+    from: "#e5e4e2",
+    to: "#8a8d91",
+    glow: "rgba(192, 192, 192, 0.22)",
+    fillTop: "rgba(192, 192, 192, 0.18)",
+    fillBottom: "rgba(12, 16, 22, 0.75)",
+    indicator: "#e5e4e2",
+    textColor: "#e5e4e2",
+    pillBg: "rgba(192, 192, 192, 0.08)",
   },
   free: {
-    from: "#475569",
-    to: "#334155",
-    glow: "rgba(0, 0, 0, 0)",
-    fillTop: "rgba(71, 85, 105, 0.10)",
-    fillBottom: "rgba(6, 10, 16, 0.6)",
-    indicator: "#94a3b8",
-    textColor: "#94a3b8",
-    pillBg: "rgba(148, 163, 184, 0.08)",
-    dashArray: "3 2",
+    from: "#d68a4a",
+    to: "#8b5a2b",
+    glow: "rgba(184, 115, 51, 0.35)",
+    fillTop: "rgba(184, 115, 51, 0.18)",
+    fillBottom: "rgba(14, 10, 6, 0.72)",
+    indicator: "#e8a864",
+    textColor: "#e8a864",
+    pillBg: "rgba(184, 115, 51, 0.10)",
   },
 };
 

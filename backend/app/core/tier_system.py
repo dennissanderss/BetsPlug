@@ -98,22 +98,22 @@ CONF_THRESHOLD: dict[PickTier, float] = {
 TIER_METADATA: dict[PickTier, dict[str, Any]] = {
     PickTier.PLATINUM: {
         "slug": "platinum",
-        "label": "🟢 Platinum",
+        "label": "IV Platinum",
         "accuracy_claim": "80%+",
     },
     PickTier.GOLD: {
         "slug": "gold",
-        "label": "🔵 Gold",
+        "label": "III Gold",
         "accuracy_claim": "70%+",
     },
     PickTier.SILVER: {
         "slug": "silver",
-        "label": "⚪ Silver",
+        "label": "II Silver",
         "accuracy_claim": "60%+",
     },
     PickTier.FREE: {
         "slug": "free",
-        "label": "⬜ Free",
+        "label": "I Bronze",
         "accuracy_claim": "45%+",
     },
 }

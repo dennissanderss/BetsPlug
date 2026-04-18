@@ -14,7 +14,6 @@ import {
   ArrowUpDown,
   Clock,
   RefreshCw,
-  Radio,
   CalendarDays,
   Trophy,
   ChevronsUpDown,
@@ -42,7 +41,12 @@ type LeagueFilter = "All" | string;
 type ConfidenceFilter = "All" | ConfidenceLevel;
 /** v8.1: "All" = no filter, or a specific PickTierSlug to show ONLY that tier. */
 type TierFilter = "All" | PickTierSlug;
-type ViewMode = "upcoming" | "live" | "results";
+// v8.6 — "live" tab removed: the engine publishes pre-match predictions,
+// so a live-scores-only view was off-strategy and produced nearly-empty
+// pages. Live scores still surface inside match detail and the dashboard
+// LiveMatchesStrip; the Predictions page now only switches between
+// Upcoming and Results.
+type ViewMode = "upcoming" | "results";
 
 /** Country → leagues mapping with flags, ordered by popularity. */
 const COUNTRY_LEAGUES: { country: string; flag: string; leagues: string[] }[] = [
@@ -1087,9 +1091,6 @@ export default function PredictionsPage() {
   const fixturesQuery = useQuery({
     queryKey: ["predictions-view", viewMode, selectedDate],
     queryFn: () => {
-      if (viewMode === "live") {
-        return api.getFixturesLive();
-      }
       if (viewMode === "results" || selectedDate < today) {
         return api.getFixtureResults(daysBack);
       }
@@ -1097,8 +1098,8 @@ export default function PredictionsPage() {
       // experience (user lands on today) still shows a busy list.
       return api.getFixturesUpcoming(Math.max(7, daysAhead));
     },
-    staleTime: viewMode === "live" ? 30_000 : 60_000,
-    refetchInterval: viewMode === "live" ? 30_000 : 60_000,
+    staleTime: 60_000,
+    refetchInterval: 60_000,
     retry: 2,
   });
 
@@ -1109,7 +1110,6 @@ export default function PredictionsPage() {
   // Live view skips the date filter entirely — all LIVE matches are shown.
   const upcomingFixtures = useMemo<Fixture[]>(() => {
     const all = fixturesQuery.data?.fixtures ?? [];
-    if (viewMode === "live") return all;
     // For "today" and future dates we also keep the default "next 7
     // days" behaviour when the user hasn't touched the picker, so the
     // page isn't empty.
@@ -1160,6 +1160,14 @@ export default function PredictionsPage() {
   // ── Filter + sort ─────────────────────────────────────────────────────────
   const filtered = useMemo(() => {
     let items = [...upcomingFixtures];
+
+    // Always drop fixtures without a prediction. On the authenticated
+    // predictions page a row without a tier classification is useless
+    // noise — the user can't see confidence, can't filter by tier, and
+    // reads the blank card as "we got it wrong". These are fixtures
+    // outside our league scope or that haven't been through the v8.1
+    // pipeline yet. v8.6.
+    items = items.filter((f) => f.prediction != null);
 
     if (leagueFilter !== "All") {
       items = items.filter((f) => f.league_name === leagueFilter);
@@ -1243,17 +1251,15 @@ export default function PredictionsPage() {
         </Pill>
       </div>
 
-      {/* ── v6.2: View Mode Tabs ── */}
+      {/* ── v8.6: View Mode Tabs — Upcoming / Results only ── */}
       <div className="flex items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1">
         {(
           [
             { key: "upcoming" as const, label: t("pred.upcoming"), icon: CalendarDays },
-            { key: "live" as const, label: t("live.statusLive"), icon: Radio },
             { key: "results" as const, label: t("results.title"), icon: Trophy },
           ]
         ).map(({ key, label, icon: Icon }) => {
           const active = viewMode === key;
-          const isLiveTab = key === "live";
           return (
             <button
               key={key}
@@ -1261,29 +1267,20 @@ export default function PredictionsPage() {
               onClick={() => setViewMode(key)}
               className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
                 active
-                  ? isLiveTab
-                    ? "bg-red-600 text-white shadow-md shadow-red-500/20"
-                    : "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                   : "text-slate-400 hover:text-slate-200"
               }`}
               aria-pressed={active}
             >
-              <Icon className={`h-4 w-4 ${isLiveTab && active ? "animate-pulse" : ""}`} />
+              <Icon className="h-4 w-4" />
               <span>{label}</span>
-              {isLiveTab &&
-                viewMode === "live" &&
-                upcomingFixtures.length > 0 && (
-                  <span className="rounded-full bg-white/20 px-1.5 py-0.5 text-[10px] tabular-nums">
-                    {upcomingFixtures.length}
-                  </span>
-                )}
             </button>
           );
         })}
       </div>
 
-      {/* ── v6 B3: date picker (hidden in Live Now) ── */}
-      {viewMode !== "live" && (
+      {/* ── v6 B3: date picker ── */}
+      {true && (
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4">
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 text-slate-500" />
