@@ -33,6 +33,7 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { HeroMediaBg } from "@/components/ui/media-bg";
+import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
 
 /* ── Live API data hook ─────────────────────────────────── */
 interface LiveStats {
@@ -495,6 +496,9 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           </div>
         </div>
       </section>
+
+      {/* ───────────── PICK OF THE DAY TRACK RECORD ───────────── */}
+      <BotdTrackRecordSection />
 
       {/* ───────────── PIPELINE ───────────── */}
       <section className="relative overflow-hidden py-20 md:py-28">
