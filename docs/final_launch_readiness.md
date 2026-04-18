@@ -1,15 +1,34 @@
 # BetsPlug — Productie Stabiliteitsaudit
 
-**Datum:** 2026-04-18
-**Auditor:** Claude Opus 4.7 (1M)
+**Datum:** 2026-04-18 (audit) · **Fix-sprint:** 2026-04-18
+**Auditor / fix-engineer:** Claude Opus 4.7 (1M)
 **Scope:** Volledig product — backend API, Celery pipeline, frontend (app + publiek), tier-systeem
 **Evidence:** `docs/_audit_evidence/2026-04-18/` (API responses saved as `.json`)
 
-> **Beperking:** directe productie Postgres-connectie (Railway DB) is geweigerd als "Production Reads zonder expliciete autorisatie". Alle cijfers in dit rapport komen uit **live API responses** (Railway production) en **statische code-analyse**. Waar DB-bevestiging kritiek is, staat dit expliciet als "⚠ DB-verificatie nodig".
+> **Beperking tijdens audit:** directe productie Postgres-connectie (Railway DB) is geweigerd als "Production Reads zonder expliciete autorisatie". Alle cijfers in dit rapport komen uit **live API responses** (Railway production) en **statische code-analyse**. Tijdens de fix-sprint kon één read-only DB-script (`check_new_predictions.py`) draaien en bevestigde de ware pipeline-status.
 
 ---
 
-## 1. EXECUTIVE SUMMARY
+## STATUS-UPDATE — Fix-sprint 2026-04-18 (na audit)
+
+| Prio | Item | Status | Commit |
+|------|------|--------|--------|
+| **P0.1** | Platinum claim 85%+ → 80%+ overal | ✅ **FIXED** | `6a03e86` |
+| **P0.2** | Bronze/Basic plan → Gold tier; trial 7d expiry | ✅ **FIXED** | `9ee4e70` |
+| **P1.1** | Evaluator 4 dagen achter | ✅ **FALSE ALARM** — `check_new_predictions.py` bevestigt 0 uncovered, 21,807/22,006 evaluated (99.1%). `period_end` field in /trackrecord-response was het misleidend signaal. | n/a |
+| **P1.2** | 0/60 predictions vandaag | ✅ **FIXED** — predictions bestaan, fixtures endpoint filterde ze weg. Nu locked-teaser i.p.v. drop | `7230c97` |
+| **P1.3** | Homepage fake fallbacks 64.8% / 1,247 | ✅ **FIXED** — vervangen door "—" | `df8e7d6` |
+| **P1.4** | TIER_SYSTEM_ENABLED graceful fallback | ✅ **FIXED** — /engine toont nu error-banner, overige endpoints degrade al correct | `41460a1` |
+| **P1.5** | `?tier=` silent-fail non-admin | ✅ **FIXED** — WARNING log op elke poging, invalid slugs ook gelogd | `b127d82` |
+| **P1.6** | Home stats 50% ≠ trackrecord 48.4% | ✅ **FIXED** — 30-day window verwijderd, zelfde cumulatieve Free-tier set als pricing/trackrecord | `96fc352` |
+
+**Alle P0 en P1 zijn doorgevoerd.** Launch-blokkers zijn weg.
+
+Resterende scope (P2/P3): zie §7 onderaan — backlog-werk, niet launch-kritiek.
+
+---
+
+## 1. EXECUTIVE SUMMARY (original audit, vóór fixes)
 
 ### Verdict: 🟡 **CONDITIONAL GO — Launch mogelijk na fix van 2 P0 en 4 P1 issues**
 
