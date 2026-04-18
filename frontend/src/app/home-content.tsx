@@ -442,7 +442,7 @@ export function HomeContent({
                       {t("dash.pickOfDay")}
                     </p>
                     <p className="text-stat text-sm text-[#c4b5fd]">
-                      {botd && botd.accuracy_pct > 0 ? `${botd.accuracy_pct}%` : "64.8%"}
+                      {botd && botd.accuracy_pct > 0 ? `${botd.accuracy_pct}%` : "—"}
                     </p>
                   </div>
                 </div>
@@ -763,8 +763,8 @@ export function HomeContent({
               {/* Mini stat strip */}
               {(() => {
                 const hasLive = stats && stats.total > 0 && stats.winrate > 0;
-                const displayAcc = hasLive ? `${Math.round(stats.winrate * 1000) / 10}%` : "64.8%";
-                const displayTotal = hasLive ? stats.total.toLocaleString(locale) : "1,247";
+                const displayAcc = hasLive ? `${Math.round(stats.winrate * 1000) / 10}%` : "—";
+                const displayTotal = hasLive ? stats.total.toLocaleString(locale) : "—";
                 return (
                   <div className="mt-8 grid grid-cols-3 gap-4">
                     <div>
@@ -826,7 +826,7 @@ export function HomeContent({
                       {t("track.accuracy")}
                     </p>
                     <p className="text-stat text-sm text-[#4ade80]">
-                      {stats && stats.winrate > 0 ? `${Math.round(stats.winrate * 1000) / 10}%` : "64.8%"}
+                      {stats && stats.winrate > 0 ? `${Math.round(stats.winrate * 1000) / 10}%` : "—"}
                     </p>
                   </div>
                 </div>
@@ -846,7 +846,7 @@ export function HomeContent({
                       {t("track.metricPredictions")}
                     </p>
                     <p className="text-stat text-sm text-[#c4b5fd]">
-                      {stats && stats.total > 0 ? stats.total.toLocaleString(locale) : "1,247"}
+                      {stats && stats.total > 0 ? stats.total.toLocaleString(locale) : "—"}
                     </p>
                   </div>
                 </div>
