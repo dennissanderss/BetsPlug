@@ -53,7 +53,11 @@ npm run dev                     # http://localhost:3000
 npm run build && npm run start
 npm run lint
 npm run translate               # google-translate-api-x → NL only (see below)
+npm run migrate:homepage        # push local homepage content into Sanity
+npm run migrate:homepage:dry    # same, dry-run (no writes)
 ```
+
+`npm install` silently runs `scripts/setup-hooks.sh` via `postinstall` to wire git hooks — expected, not an error.
 
 Docker (from repo root):
 ```bash
