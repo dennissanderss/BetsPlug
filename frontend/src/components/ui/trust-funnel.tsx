@@ -24,7 +24,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { Database, Brain, ClipboardCheck, ShieldCheck, ArrowRight } from "lucide-react";
+import { Database, Brain, ClipboardCheck, ShieldCheck, ArrowRight, Lock, Unlock } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { TierEmblem } from "@/components/noct/tier-emblem";
 import { TIER_THEME, type TierKey } from "@/components/noct/tier-theme";
@@ -36,6 +36,7 @@ interface TierStat {
 }
 
 interface TrustData {
+  bronze: TierStat;
   silver: TierStat;
   gold: TierStat;
   platinum: TierStat;
@@ -48,6 +49,7 @@ const FALLBACK = {
   matchesIngested: 55680,
   forecastsTotal: 3801,
   evaluatedTotal: 3763,
+  bronze: { total: 3763, accuracy: 0.484 },
   silver: { total: 3004, accuracy: 0.607 },
   gold: { total: 1650, accuracy: 0.705 },
   platinum: { total: 840, accuracy: 0.823 },
@@ -56,6 +58,7 @@ const FALLBACK = {
 
 function useTrustData(): TrustData {
   const [data, setData] = useState<TrustData>({
+    bronze: { accuracy: null, total: null },
     silver: { accuracy: null, total: null },
     gold: { accuracy: null, total: null },
     platinum: { accuracy: null, total: null },
@@ -74,14 +77,17 @@ function useTrustData(): TrustData {
       };
     };
     Promise.all([
+      // Bronze maps to backend pick_tier=free (see tier-ladder.tsx)
+      fetch(`${API}/trackrecord/summary?pick_tier=free`).then((r) => r.json()).catch(() => null),
       fetch(`${API}/trackrecord/summary?pick_tier=silver`).then((r) => r.json()).catch(() => null),
       fetch(`${API}/trackrecord/summary?pick_tier=gold`).then((r) => r.json()).catch(() => null),
       fetch(`${API}/trackrecord/summary?pick_tier=platinum`).then((r) => r.json()).catch(() => null),
       fetch(`${API}/dashboard/metrics`).then((r) => r.json()).catch(() => null),
-    ]).then(([silver, gold, platinum, dashboard]) => {
+    ]).then(([bronze, silver, gold, platinum, dashboard]) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const d = dashboard as any;
       setData({
+        bronze: pick(bronze),
         silver: pick(silver),
         gold: pick(gold),
         platinum: pick(platinum),
@@ -104,6 +110,10 @@ export function TrustFunnel() {
   const matchesIngested = FALLBACK.matchesIngested; // static (we don't expose a matches-count endpoint)
   const forecastsTotal = live.forecastsTotal ?? FALLBACK.forecastsTotal;
   const evaluatedTotal = live.evaluatedTotal ?? FALLBACK.evaluatedTotal;
+  const bronze = {
+    total: live.bronze.total ?? FALLBACK.bronze.total,
+    accuracy: live.bronze.accuracy ?? FALLBACK.bronze.accuracy,
+  };
   const silver = {
     total: live.silver.total ?? FALLBACK.silver.total,
     accuracy: live.silver.accuracy ?? FALLBACK.silver.accuracy,
@@ -269,8 +279,8 @@ export function TrustFunnel() {
           })}
         </div>
 
-        {/* Tier-breakdown card, shows all 3 paid tiers side by side so
-            visitors don't think we only measure 'Gold'. */}
+        {/* Tier-breakdown card, shows all 4 tiers (Bronze free + 3 paid)
+            side by side so visitors don't think we only measure 'Gold'. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -281,7 +291,14 @@ export function TrustFunnel() {
           <p className="mb-4 text-center text-xs font-bold uppercase tracking-widest text-[#6b7280]">
             {isNl ? "Nauwkeurigheid per tier" : "Accuracy per tier"}
           </p>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <TierBreakdownCard
+              tier="bronze"
+              accuracy={bronze.accuracy}
+              total={bronze.total}
+              locale={locale}
+              isNl={isNl}
+            />
             <TierBreakdownCard
               tier="silver"
               accuracy={silver.accuracy}
@@ -304,6 +321,15 @@ export function TrustFunnel() {
               isNl={isNl}
               highlight
             />
+          </div>
+          <div className="mt-4 flex justify-center">
+            <Link
+              href={loc("/track-record")}
+              className="inline-flex items-center gap-1.5 text-[11px] font-medium text-[#a3a9b8] underline-offset-4 transition-colors hover:text-[#ededed] hover:underline"
+            >
+              {isNl ? "Bekijk volledig trackrecord" : "See full track record"}
+              <ArrowRight className="h-3 w-3" />
+            </Link>
           </div>
         </motion.div>
 
@@ -413,6 +439,17 @@ function TierBreakdownCard({
         <p className="relative mt-1 text-[10px] text-[#6b7280] tabular-nums">
           95% CI {(ci.lower * 100).toFixed(0)}–{(ci.upper * 100).toFixed(0)}%
         </p>
+      )}
+      {tier === "bronze" ? (
+        <div className="relative mt-3 flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-widest text-[#22c55e]">
+          <Unlock className="h-3 w-3" />
+          {isNl ? "Gratis tier" : "Free tier"}
+        </div>
+      ) : (
+        <div className="relative mt-3 flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-widest text-[#6b7280]">
+          <Lock className="h-3 w-3" />
+          {isNl ? "Premium tier" : "Premium tier"}
+        </div>
       )}
     </div>
   );

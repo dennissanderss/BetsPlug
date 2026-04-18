@@ -49,7 +49,6 @@ import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
 /* Heavy shared sections loaded dynamically */
 const TrackRecordChart = dynamic(() => import("@/components/ui/track-record-chart").then(m => m.TrackRecordChart), { ssr: false });
 const LeaguesTicker = dynamic(() => import("@/components/ui/leagues-ticker").then(m => m.LeaguesTicker), { ssr: true });
-const TierLadder = dynamic(() => import("@/components/ui/tier-ladder").then(m => m.TierLadder), { ssr: false });
 const TrustFunnel = dynamic(() => import("@/components/ui/trust-funnel").then(m => m.TrustFunnel), { ssr: false });
 const RecognizeThis = dynamic(() => import("@/components/ui/recognize-this").then(m => m.RecognizeThis), { ssr: true });
 const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section").then(m => m.TestimonialsSection), { ssr: false });
@@ -486,19 +485,12 @@ export function HomeContent({
          ══════════════════════════════════════════════════════════════ */}
       <RecognizeThis />
 
-      {/* 1b · LIVE PROOF STRIP removed — TierLadder below covers the
-          same '70%+ tier accuracy, here's the volume' story with
-          proper per-tier breakdown instead of a blended aggregate. */}
+      {/* 1b · LIVE PROOF STRIP + standalone TierLadder removed — the
+          TrustFunnel below now carries the per-tier accuracy breakdown
+          (incl. Bronze), so the ladder would be duplicate content. */}
 
       {/* ══════════════════════════════════════════════════════════════
-          1c · TIER LADDER, tier accuracy + graded-pick count per tier,
-          live from /api/trackrecord/summary. Replaces the vague "58%
-          gemiddeld hitpercentage" line with a concrete value ladder.
-         ══════════════════════════════════════════════════════════════ */}
-      <TierLadder />
-
-      {/* ══════════════════════════════════════════════════════════════
-          1d · TRUST FUNNEL, "from 55k matches to 1.65k honest picks",
+          1c · TRUST FUNNEL, "from 55k matches to 1.65k honest picks",
           plain-language explanation of why the advertised volume looks
           smaller than the raw database count. Turns the "why only 8k?"
           visitor question into a conversion-oriented honesty story.
