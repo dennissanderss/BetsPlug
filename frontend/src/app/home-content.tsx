@@ -50,6 +50,7 @@ import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
 /* Heavy shared sections loaded dynamically */
 const TrackRecordChart = dynamic(() => import("@/components/ui/track-record-chart").then(m => m.TrackRecordChart), { ssr: false });
 const LeaguesTicker = dynamic(() => import("@/components/ui/leagues-ticker").then(m => m.LeaguesTicker), { ssr: true });
+const TierLadder = dynamic(() => import("@/components/ui/tier-ladder").then(m => m.TierLadder), { ssr: false });
 const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section").then(m => m.TestimonialsSection), { ssr: false });
 const ComparisonTable = dynamic(() => import("@/components/ui/comparison-table").then(m => m.ComparisonTable), { ssr: true });
 const PricingSection = dynamic(() => import("@/components/ui/pricing-section").then(m => m.PricingSection), { ssr: true });
@@ -552,6 +553,13 @@ export function HomeContent({
           </div>
         </div>
       </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          1c · TIER LADDER — tier accuracy + graded-pick count per tier,
+          live from /api/trackrecord/summary. Replaces the vague "58%
+          gemiddeld hitpercentage" line with a concrete value ladder.
+         ══════════════════════════════════════════════════════════════ */}
+      <TierLadder />
 
       {/* ══════════════════════════════════════════════════════════════
           2 · LEAGUES TICKER
