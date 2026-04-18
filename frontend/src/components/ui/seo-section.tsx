@@ -128,13 +128,12 @@ export function SeoSection() {
                 Pick of the Day
               </Link>{" "}
               - a single curated AI pick our algorithm rates as the best value
-              across all monitored leagues. Want to go deeper? Our{" "}
-              <Link href="/live" className={linkCls}>
-                live match tracker
+              across all monitored leagues. Want to go deeper? Browse the full{" "}
+              <Link href="/predictions" className={linkCls}>
+                predictions list
               </Link>{" "}
-              shows real-time AI probabilities as they shift during a game,
-              perfect for spotting in-play value seconds before the market
-              adjusts.
+              to see every upcoming match with probabilities, confidence score
+              and tier classification.
             </p>
 
             <h4 className="text-heading mt-8 text-xl text-[#ededed]">
@@ -195,7 +194,6 @@ export function SeoSection() {
           {[
             { href: "/predictions", label: "AI Predictions" },
             { href: "/bet-of-the-day", label: "Pick of the Day" },
-            { href: "/live", label: "Live Probabilities" },
             { href: "/trackrecord", label: "Track Record" },
             { href: pricingHref, label: "Pricing" },
             { href: "/deals", label: "Exclusive Deals" },

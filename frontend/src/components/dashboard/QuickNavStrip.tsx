@@ -2,24 +2,19 @@
 
 import Link from "next/link";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
-import { Star, Target, Zap, Trophy, ArrowRight } from "lucide-react";
+import { Star, Target, Trophy, ArrowRight } from "lucide-react";
 import { HexBadge, type HexVariant } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 
-interface QuickNavStripProps {
-  liveCount: number;
-}
-
 const HEX_CYCLE: HexVariant[] = ["green", "purple", "blue", "green", "purple"];
 
-export function QuickNavStrip({ liveCount }: QuickNavStripProps) {
+export function QuickNavStrip() {
   const { t } = useTranslations();
   const lHref = useLocalizedHref();
 
   const items = [
     { label: t("dash.nav.botd"), description: t("dash.nav.botd"), href: "/bet-of-the-day", icon: Star, badge: null as number | null },
     { label: t("dash.nav.predictions"), description: t("dash.nav.predictions"), href: "/predictions", icon: Target, badge: null },
-    { label: t("dash.nav.live"), description: t("dash.nav.live"), href: "/live", icon: Zap, badge: liveCount > 0 ? liveCount : null },
     { label: t("dash.nav.results"), description: t("dash.nav.results"), href: "/results", icon: Trophy, badge: null },
   ];
 

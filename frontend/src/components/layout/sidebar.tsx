@@ -14,7 +14,6 @@ import {
   Trophy,
   MapPin,
   Lock,
-  Radio,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
@@ -60,13 +59,6 @@ const navSections: NavSection[] = [
     items: [
       { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy },
       { labelKey: "nav.predictions", fallback: "All Predictions", href: "/predictions", icon: Sparkles },
-      // v8.6 — live tab was removed from /predictions on the explicit
-      // user note that live scores belong in a standalone overview,
-      // not bundled with the prediction tool. Surface the existing
-      // /live page as its own sidebar entry so users can still find
-      // today's scoreboard without confusing it with the pre-match
-      // prediction list.
-      { labelKey: "nav.liveScores", fallback: "Live scores", href: "/live", icon: Radio },
     ],
   },
   {

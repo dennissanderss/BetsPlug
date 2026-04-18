@@ -102,7 +102,6 @@ export default function robots(): MetadataRoute.Robots {
           "/reports/",
           "/weekly-report/",
           "/search",
-          "/live/",
           "/results/",
           "/deals/",
           "/strategy/",

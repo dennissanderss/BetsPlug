@@ -70,16 +70,6 @@ export const routeTable = {
     sw: "/jifunze",
     id: "/belajar",
   },
-  "/live": {
-    en: "/live",
-    nl: "/live",
-    de: "/live",
-    fr: "/en-direct",
-    es: "/en-vivo",
-    it: "/live",
-    sw: "/moja-kwa-moja",
-    id: "/langsung",
-  },
   "/dashboard": {
     en: "/dashboard",
     nl: "/dashboard",

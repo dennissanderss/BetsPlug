@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
-import { ArrowRight, Activity, Target } from "lucide-react";
+import { Activity, Target } from "lucide-react";
 import { TeamLogo } from "@/components/dashboard/TeamLogo";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
@@ -112,7 +112,6 @@ function LiveMatchCard({ fixture }: { fixture: Fixture }) {
 
 export function LiveMatchesStrip({ data, isLoading, nextKickoff }: LiveMatchesStripProps) {
   const { t } = useTranslations();
-  const lHref = useLocalizedHref();
 
   const liveMatches = (data?.fixtures ?? []).filter((f) => f.status === "live");
   const count = liveMatches.length;
@@ -128,15 +127,6 @@ export function LiveMatchesStrip({ data, isLoading, nextKickoff }: LiveMatchesSt
           </div>
           <div className="flex items-center gap-2">
             <TierScopePill compact />
-            {count > 0 && (
-              <Link
-                href={lHref("/live")}
-                className="flex items-center gap-1 text-xs text-[#a3a9b8] transition-colors hover:text-[#4ade80]"
-              >
-                {t("dash.viewAll")}
-                <ArrowRight className="h-3 w-3" />
-              </Link>
-            )}
           </div>
         </div>
 

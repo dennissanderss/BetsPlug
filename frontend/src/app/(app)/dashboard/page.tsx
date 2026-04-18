@@ -61,10 +61,6 @@ export default function DashboardPage() {
     staleTime: 5 * 60_000,
   });
 
-  const liveCount = (liveFixtures?.fixtures ?? []).filter(
-    (f) => f.status === "live"
-  ).length;
-
   const nextKickoff = (() => {
     const upcoming = (todayFixtures?.fixtures ?? []).find(
       (f) => f.status === "scheduled"
@@ -86,7 +82,7 @@ export default function DashboardPage() {
       <div className="relative grid gap-4 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
         <div className="min-w-0 space-y-4 sm:space-y-5">
           <WelcomeBanner />
-          <QuickNavStrip liveCount={liveCount} />
+          <QuickNavStrip />
           {/* BOTD is a Gold+ feature. On the dashboard we used to leak the
               actual pick to Free/Silver users, who then saw the full page
               gated on click — confusing. Gate it here too. The inline
