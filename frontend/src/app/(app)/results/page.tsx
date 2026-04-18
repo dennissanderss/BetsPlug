@@ -28,15 +28,24 @@ import { Pill } from "@/components/noct/pill";
 
 type PeriodFilter = 7 | 14 | 30;
 type ResultFilter = "All" | "Correct" | "Incorrect";
-type TierFilter = "all" | "free" | "silver" | "gold" | "platinum";
+// v8.6 — "all" tab removed: each tier is a different product (scope +
+// confidence floor), so adding their totals together produced a
+// number users couldn't interpret. Force the view to pick a specific
+// tier; default to Gold (the flagship).
+type TierFilter = "free" | "silver" | "gold" | "platinum";
 
 const TIER_TABS: { key: TierFilter; label: string }[] = [
-  { key: "all", label: "All tiers" },
   { key: "free", label: "Bronze · 45%+" },
   { key: "silver", label: "Silver · 60%+" },
   { key: "gold", label: "Gold · 70%+" },
   { key: "platinum", label: "Platinum · 80%+" },
 ];
+
+// Live v8.1 tracking started at the deploy cutoff — see
+// backend/app/core/prediction_filters.py V81_DEPLOYMENT_CUTOFF.
+// Kept as a literal so the page doesn't need an extra API round-trip
+// and the number lines up with the homepage copy.
+const LIVE_TRACKING_START = "2026-04-16";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -521,7 +530,7 @@ function ResultsPageContent() {
   const [period, setPeriod] = useState<PeriodFilter>(7);
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
-  const [tierFilter, setTierFilter] = useState<TierFilter>("all");
+  const [tierFilter, setTierFilter] = useState<TierFilter>("gold");
 
   // ── Queries ────────────────────────────────────────────────────────────────
   const resultsQuery = useQuery({
@@ -533,8 +542,7 @@ function ResultsPageContent() {
 
   const summaryQuery = useQuery({
     queryKey: ["weekly-summary", period, tierFilter],
-    queryFn: () =>
-      api.getWeeklySummary(period, tierFilter === "all" ? undefined : tierFilter),
+    queryFn: () => api.getWeeklySummary(period, tierFilter),
     staleTime: 5 * 60_000,
     retry: 1,
   });
@@ -565,9 +573,7 @@ function ResultsPageContent() {
       (f) => f.status === "finished" && f.result && f.prediction,
     );
 
-    if (tierFilter !== "all") {
-      items = items.filter((f) => f.prediction?.pick_tier === tierFilter);
-    }
+    items = items.filter((f) => f.prediction?.pick_tier === tierFilter);
 
     if (leagueFilter) {
       items = items.filter((f) => f.league_name === leagueFilter);
@@ -624,12 +630,7 @@ function ResultsPageContent() {
         </div>
       </div>
 
-      {/* ── Tier scope strip ── */}
-      {/* Split the resultaten view by pick-tier so Gold members can see the
-          exact match list their 70%+ headline number is built from, and
-          Platinum members likewise for 80%+. Without the strip the KPI card
-          mixed every tier and always read ~50%, contradicting the tier
-          claims on the homepage. */}
+      {/* ── Tier scope strip + live-tracking-since label ── */}
       <div className="glass-card px-4 py-3">
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-[10px] uppercase tracking-widest text-slate-500 mr-2">
@@ -652,6 +653,12 @@ function ResultsPageContent() {
               </button>
             );
           })}
+          <span className="ml-auto text-[10px] uppercase tracking-widest text-slate-500">
+            Live tracking since{" "}
+            <span className="text-slate-300 font-semibold tabular-nums">
+              {LIVE_TRACKING_START}
+            </span>
+          </span>
         </div>
       </div>
 
