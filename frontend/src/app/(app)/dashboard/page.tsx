@@ -14,9 +14,11 @@ import { TierEmptyStateCard } from "@/components/dashboard/TierEmptyStateCard";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { UpgradeNudgeCard } from "@/components/dashboard/UpgradeNudgeCard";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
+import { useTier } from "@/hooks/use-tier";
 
 export default function DashboardPage() {
   const { t } = useTranslations();
+  const { tier: userTierSlug } = useTier();
 
   const { data: botd, isLoading: botdLoading } = useQuery({
     queryKey: ["botd-hub"],
@@ -39,9 +41,15 @@ export default function DashboardPage() {
     queryFn: () => api.getFixtureResults(1),
   });
 
+  // Scope the "This week" widget to the signed-in user's own pick-tier
+  // so the numbers line up with what that user actually has access to.
+  // Without a tier filter the widget mixed all tiers together and
+  // always printed ~56%, directly contradicting the "Gold · 70%+"
+  // claim next to it. Falls back to an unscoped call for anonymous
+  // sessions.
   const { data: weeklySummary, isLoading: weeklyLoading } = useQuery({
-    queryKey: ["weekly-summary-hub"],
-    queryFn: () => api.getWeeklySummary(7),
+    queryKey: ["weekly-summary-hub", userTierSlug ?? "all"],
+    queryFn: () => api.getWeeklySummary(7, userTierSlug ?? undefined),
   });
 
   const liveCount = (liveFixtures?.fixtures ?? []).filter(
@@ -110,13 +118,14 @@ export default function DashboardPage() {
             <SportsHubSidebar
               summary={weeklySummary}
               isLoading={weeklyLoading}
+              userTierSlug={userTierSlug}
             />
           </div>
         </aside>
       </div>
 
       <div className="relative mt-6 xl:hidden">
-        <SportsHubSidebar summary={weeklySummary} isLoading={weeklyLoading} />
+        <SportsHubSidebar summary={weeklySummary} isLoading={weeklyLoading} userTierSlug={userTierSlug} />
       </div>
     </div>
   );

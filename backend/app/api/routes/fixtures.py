@@ -42,6 +42,7 @@ from app.core.tier_system import (
     PickTier,
     TIER_METADATA,
     TIER_SYSTEM_ENABLED,
+    pick_tier_expression,
     tier_info,
 )
 from app.db.session import get_db
@@ -588,14 +589,24 @@ async def _load_latest_predictions(
     if not match_ids:
         return {}
 
-    # Subquery: max predicted_at per match_id
+    # Subquery: max predicted_at per match_id, but scoped to v8.1
+    # predictions only. Without v81_predictions_filter() here we'd pick
+    # the absolute latest row — which may be a pre-v8.1 backtest — and
+    # then drop the whole match when the outer v81 filter rejects it,
+    # even when an older but valid v8.1 prediction still exists. That
+    # caused the PotD/match-detail divergence (PotD found a prediction,
+    # detail page showed "No forecast yet") because BOTD filters v8.1
+    # BEFORE sorting and we didn't.
     from sqlalchemy import func
+    latest_at_filter = Prediction.match_id.in_(match_ids)
+    if TIER_SYSTEM_ENABLED:
+        latest_at_filter = and_(latest_at_filter, v81_predictions_filter())
     subq = (
         select(
             Prediction.match_id,
             func.max(Prediction.predicted_at).label("latest_at"),
         )
-        .where(Prediction.match_id.in_(match_ids))
+        .where(latest_at_filter)
         .group_by(Prediction.match_id)
         .subquery()
     )
@@ -907,13 +918,23 @@ async def get_today_fixtures(
 )
 async def get_weekly_summary(
     days: int = Query(default=7, ge=1, le=90, description="Look-back window in days"),
+    pick_tier: Optional[str] = Query(
+        default=None,
+        description=(
+            "Optional public tier filter: 'free' | 'silver' | 'gold' | 'platinum'. "
+            "Scopes the counted predictions to that exact pick-tier so dashboard "
+            "widgets can show numbers consistent with a user's actual access."
+        ),
+    ),
     db: AsyncSession = Depends(get_db),
 ) -> WeeklySummaryResponse:
     """Prediction performance summary for the given look-back window."""
     from app.models.prediction import Prediction, PredictionEvaluation
+    from app.api.routes.trackrecord import _parse_public_pick_tier
 
     now = datetime.now(timezone.utc)
     week_ago = now - timedelta(days=days)
+    public_tier = _parse_public_pick_tier(pick_tier)
 
     # Get all evaluated predictions from last 7 days
     stmt = (
@@ -927,7 +948,10 @@ async def get_weekly_summary(
                 Match.status == MatchStatus.FINISHED,
             )
         )
+        .where(v81_predictions_filter())
     )
+    if TIER_SYSTEM_ENABLED and public_tier is not None:
+        stmt = stmt.where(pick_tier_expression() == public_tier.value)
     rows = (await db.execute(stmt)).all()
 
     total_calls = len(rows)

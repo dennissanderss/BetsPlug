@@ -530,9 +530,11 @@ class ApiClient {
       `/fixtures/results?${params}`
     );
   }
-  getWeeklySummary(days = 7) {
+  getWeeklySummary(days = 7, pickTier?: string) {
+    const qs = new URLSearchParams({ days: String(days) });
+    if (pickTier) qs.set("pick_tier", pickTier);
     return this.request<import("@/types/api").WeeklySummary>(
-      `/fixtures/results/weekly-summary?days=${days}`
+      `/fixtures/results/weekly-summary?${qs}`
     );
   }
   getFixturesToday() {

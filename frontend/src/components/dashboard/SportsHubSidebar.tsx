@@ -14,15 +14,21 @@ import {
   BarChart3,
 } from "lucide-react";
 import type { WeeklySummary } from "@/types/api";
+import type { PickTierSlug } from "@/types/api";
 
 interface SportsHubSidebarProps {
   summary: WeeklySummary | undefined;
   isLoading: boolean;
+  userTierSlug?: PickTierSlug | null;
 }
 
-export function SportsHubSidebar({ summary, isLoading }: SportsHubSidebarProps) {
-  const { t } = useTranslations();
+export function SportsHubSidebar({ summary, isLoading, userTierSlug }: SportsHubSidebarProps) {
+  const { t, locale } = useTranslations();
   const lHref = useLocalizedHref();
+  const isNl = locale === "nl";
+  const tierLabel = userTierSlug
+    ? userTierSlug.charAt(0).toUpperCase() + userTierSlug.slice(1)
+    : null;
 
   const quickLinks = [
     { label: t("dash.nav.predictions"), href: "/predictions", icon: Target },
@@ -37,6 +43,13 @@ export function SportsHubSidebar({ summary, isLoading }: SportsHubSidebarProps) 
         <div className="flex items-center gap-2 border-b border-white/[0.05] px-4 py-3">
           <BarChart3 className="h-4 w-4 text-emerald-400" />
           <h3 className="text-sm font-semibold text-slate-200">{t("dash.thisWeek")}</h3>
+          <span className="ml-auto text-[10px] uppercase tracking-wider text-slate-500">
+            {tierLabel
+              ? `${tierLabel} · ${isNl ? "7 dagen" : "7 days"}`
+              : isNl
+              ? "Alle tiers · 7 dagen"
+              : "All tiers · 7 days"}
+          </span>
         </div>
         <div className="p-4">
           {isLoading ? (
