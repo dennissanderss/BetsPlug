@@ -1157,17 +1157,15 @@ export default function PredictionsPage() {
     return m;
   }, [upcomingFixtures]);
 
+  // ── Split into with/without prediction so the empty state can be honest ─
+  const fixturesWithPrediction = useMemo(
+    () => upcomingFixtures.filter((f) => f.prediction != null),
+    [upcomingFixtures],
+  );
+
   // ── Filter + sort ─────────────────────────────────────────────────────────
   const filtered = useMemo(() => {
-    let items = [...upcomingFixtures];
-
-    // Always drop fixtures without a prediction. On the authenticated
-    // predictions page a row without a tier classification is useless
-    // noise — the user can't see confidence, can't filter by tier, and
-    // reads the blank card as "we got it wrong". These are fixtures
-    // outside our league scope or that haven't been through the v8.1
-    // pipeline yet. v8.6.
-    items = items.filter((f) => f.prediction != null);
+    let items = [...fixturesWithPrediction];
 
     if (leagueFilter !== "All") {
       items = items.filter((f) => f.league_name === leagueFilter);
@@ -1207,7 +1205,7 @@ export default function PredictionsPage() {
     }
 
     return items;
-  }, [upcomingFixtures, leagueFilter, confidenceFilter, tierFilter, sortKey]);
+  }, [fixturesWithPrediction, leagueFilter, confidenceFilter, tierFilter, sortKey]);
 
   // v6.2: group filtered fixtures by league for accordion rendering
   const groupedByLeague = useMemo(
@@ -1377,8 +1375,19 @@ export default function PredictionsPage() {
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
           <Sparkles className="h-8 w-8 text-slate-600" />
           <p className="text-base font-medium text-slate-400">{t("pred.noUpcomingMatches")}</p>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-slate-600 max-w-md">
             {t("pred.noUpcomingMatchesDesc")}
+          </p>
+        </div>
+      ) : fixturesWithPrediction.length === 0 ? (
+        <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
+          <Sparkles className="h-8 w-8 text-slate-600" />
+          <p className="text-base font-medium text-slate-400">{t("pred.noForecastsYet")}</p>
+          <p className="text-sm text-slate-600 max-w-xl">
+            {t("pred.noForecastsYetDesc")}
+          </p>
+          <p className="text-xs text-slate-500">
+            {upcomingFixtures.length} {upcomingFixtures.length === 1 ? "match" : "matches"} on this date
           </p>
         </div>
       ) : filtered.length === 0 ? (
@@ -1388,8 +1397,11 @@ export default function PredictionsPage() {
           <p className="text-sm text-slate-600">
             {t("pred.noMatchingPredictionsDesc")}
           </p>
+          <p className="text-xs text-slate-500">
+            {fixturesWithPrediction.length} predictions available without filters
+          </p>
           <button
-            onClick={() => { setLeagueFilter("All"); setConfidenceFilter("All"); }}
+            onClick={() => { setLeagueFilter("All"); setConfidenceFilter("All"); setTierFilter("All"); }}
             className="btn-primary mt-2"
           >
             {t("pred.clearFilters")}

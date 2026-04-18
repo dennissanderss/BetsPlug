@@ -521,6 +521,17 @@ class ApiClient {
       body: JSON.stringify(modelType ? { model_type: modelType } : {}),
     });
   }
+  getPipelineHealth() {
+    return this.request<import("@/types/api").PipelineHealth>(
+      "/admin/pipeline-health"
+    );
+  }
+  runGeneratePredictions(days = 7) {
+    return this.request<import("@/types/api").GeneratePredictionsResult>(
+      "/admin/generate-predictions",
+      { method: "POST", body: JSON.stringify({ days }) },
+    );
+  }
 
   // Fixture Results
   getFixtureResults(days = 7, league?: string) {

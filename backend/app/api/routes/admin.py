@@ -656,6 +656,193 @@ async def generate_predictions(
     )
 
 
+class PipelineHealthResponse(BaseModel):
+    """Diagnostic snapshot of the prediction pipeline.
+
+    Renders a single verdict (``diagnosis``) plus the raw counters that led
+    to it, so an admin can tell in one glance whether the
+    ``generate-predictions-every-10m`` Celery-beat task is actually
+    producing pre-match forecasts or has silently fallen behind.
+    """
+
+    diagnosis: str  # "healthy" | "no_model" | "stale" | "partial" | "unknown"
+    message: str
+    active_model_versions: int
+    predictions_last_1h: int
+    predictions_last_24h: int
+    latest_predicted_at: Optional[datetime]
+    upcoming_matches_7d: int
+    upcoming_with_prediction: int
+    recent_finished_2d: int
+    recent_finished_with_prediction: int
+
+
+@router.get(
+    "/pipeline-health",
+    response_model=PipelineHealthResponse,
+    summary="Snapshot of the prediction pipeline (models, recent output, coverage)",
+)
+async def pipeline_health(
+    db: AsyncSession = Depends(get_db),
+) -> PipelineHealthResponse:
+    """Return a one-glance diagnosis of whether predictions are flowing.
+
+    Checks, in order:
+
+    1. Is there an active ``ModelVersion`` row? If not → ``no_model`` (the
+       ``generate_forecast`` path raises ``ValueError`` and every
+       Celery-beat fire counts as a silent failure).
+    2. How many predictions have been inserted in the last hour / 24h?
+       A live pipeline should produce at least a handful per day during
+       European football hours.
+    3. What fraction of the next 7 days of scheduled matches already has
+       a prediction? Below ~50% is suspicious.
+    4. What fraction of the last 2 days of finished matches had one?
+       Near-zero means the Celery job missed its pre-match window.
+
+    Verdict:
+
+    - ``healthy``  — active model + coverage ≥50% both sides
+    - ``no_model`` — no active ModelVersion row
+    - ``stale``    — active model but 0 predictions in the last 24 h
+    - ``partial``  — active model, some recent output, but coverage <50%
+    - ``unknown``  — none of the above (e.g. no matches in range)
+    """
+    from datetime import timedelta
+    from sqlalchemy import func
+
+    from app.models.match import Match, MatchStatus
+    from app.models.model_version import ModelVersion
+    from app.models.prediction import Prediction
+
+    now = datetime.now(timezone.utc)
+    one_hour_ago = now - timedelta(hours=1)
+    one_day_ago = now - timedelta(hours=24)
+    seven_days_ahead = now + timedelta(days=7)
+    two_days_ago = now - timedelta(days=2)
+
+    active_mv_count = (
+        await db.execute(
+            select(func.count(ModelVersion.id)).where(ModelVersion.is_active.is_(True))
+        )
+    ).scalar_one()
+
+    pred_1h = (
+        await db.execute(
+            select(func.count(Prediction.id)).where(Prediction.created_at >= one_hour_ago)
+        )
+    ).scalar_one()
+
+    pred_24h = (
+        await db.execute(
+            select(func.count(Prediction.id)).where(Prediction.created_at >= one_day_ago)
+        )
+    ).scalar_one()
+
+    latest_pa = (
+        await db.execute(select(func.max(Prediction.predicted_at)))
+    ).scalar_one()
+
+    upcoming_total = (
+        await db.execute(
+            select(func.count(Match.id)).where(
+                Match.status == MatchStatus.SCHEDULED,
+                Match.scheduled_at >= now,
+                Match.scheduled_at <= seven_days_ahead,
+            )
+        )
+    ).scalar_one()
+
+    upcoming_with_pred = (
+        await db.execute(
+            select(func.count(func.distinct(Match.id)))
+            .select_from(Match)
+            .join(Prediction, Prediction.match_id == Match.id)
+            .where(
+                Match.status == MatchStatus.SCHEDULED,
+                Match.scheduled_at >= now,
+                Match.scheduled_at <= seven_days_ahead,
+            )
+        )
+    ).scalar_one()
+
+    recent_finished = (
+        await db.execute(
+            select(func.count(Match.id)).where(
+                Match.status == MatchStatus.FINISHED,
+                Match.scheduled_at >= two_days_ago,
+                Match.scheduled_at <= now,
+            )
+        )
+    ).scalar_one()
+
+    recent_finished_with_pred = (
+        await db.execute(
+            select(func.count(func.distinct(Match.id)))
+            .select_from(Match)
+            .join(Prediction, Prediction.match_id == Match.id)
+            .where(
+                Match.status == MatchStatus.FINISHED,
+                Match.scheduled_at >= two_days_ago,
+                Match.scheduled_at <= now,
+                Prediction.predicted_at <= Match.scheduled_at,
+            )
+        )
+    ).scalar_one()
+
+    if active_mv_count == 0:
+        diagnosis = "no_model"
+        message = (
+            "No active ModelVersion row. generate_forecast() raises "
+            "ValueError on every call, so the Celery-beat task silently "
+            "fails. Seed a model via POST /admin/generate-predictions or "
+            "re-activate the v8.1 row."
+        )
+    elif pred_24h == 0:
+        diagnosis = "stale"
+        message = (
+            "Active model present, but 0 predictions in the last 24h. "
+            "Likely causes: Celery-beat is not running on Railway, the "
+            "'forecasting' queue has no worker, or the task is erroring "
+            "silently. Check Railway logs for 'task_generate_predictions'."
+        )
+    else:
+        upcoming_pct = (upcoming_with_pred / upcoming_total) if upcoming_total else None
+        recent_pct = (recent_finished_with_pred / recent_finished) if recent_finished else None
+        if (upcoming_pct is None or upcoming_pct >= 0.5) and (
+            recent_pct is None or recent_pct >= 0.5
+        ):
+            diagnosis = "healthy"
+            message = "Pipeline is producing forecasts on schedule."
+        elif upcoming_total == 0 and recent_finished == 0:
+            diagnosis = "unknown"
+            message = (
+                "No matches in either window — nothing to score. "
+                "Re-check in a few hours once the ingestion cron has run."
+            )
+        else:
+            diagnosis = "partial"
+            message = (
+                f"Coverage: {upcoming_with_pred}/{upcoming_total} upcoming, "
+                f"{recent_finished_with_pred}/{recent_finished} recent finished. "
+                "Pipeline is running but missing its pre-match window for "
+                "most matches — check the cron cadence vs. ingestion timing."
+            )
+
+    return PipelineHealthResponse(
+        diagnosis=diagnosis,
+        message=message,
+        active_model_versions=active_mv_count,
+        predictions_last_1h=pred_1h,
+        predictions_last_24h=pred_24h,
+        latest_predicted_at=latest_pa,
+        upcoming_matches_7d=upcoming_total,
+        upcoming_with_prediction=upcoming_with_pred,
+        recent_finished_2d=recent_finished,
+        recent_finished_with_prediction=recent_finished_with_pred,
+    )
+
+
 class SeedStrategiesResponse(BaseModel):
     strategies: List[Dict[str, Any]]
     message: str

@@ -531,12 +531,150 @@ function ActionButton({
 const darkSelectCls =
   "h-9 w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors";
 
+function PipelineHealthCard() {
+  const healthQuery = useQuery({
+    queryKey: ["admin-pipeline-health"],
+    queryFn: () => api.getPipelineHealth(),
+    refetchInterval: 60_000,
+  });
+
+  const runMutation = useMutation({
+    mutationFn: () => api.runGeneratePredictions(7),
+    onSuccess: () => healthQuery.refetch(),
+  });
+
+  const health = healthQuery.data;
+  const tone = health
+    ? health.diagnosis === "healthy"
+      ? "win"
+      : health.diagnosis === "no_model" || health.diagnosis === "stale"
+        ? "loss"
+        : health.diagnosis === "partial"
+          ? "draw"
+          : "default"
+    : "default";
+
+  return (
+    <div className="card-neon p-6 space-y-4 lg:col-span-2">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
+            <CheckCircle2 className="h-4 w-4 text-blue-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-100">Pipeline Health</h3>
+            <p className="text-xs text-slate-400">
+              Live snapshot of the forecasting pipeline — models, recent output, coverage.
+            </p>
+          </div>
+        </div>
+        {health && <StatusPill status={health.diagnosis} />}
+      </div>
+
+      {healthQuery.isLoading && (
+        <Skeleton className="h-24 w-full rounded-lg" />
+      )}
+
+      {healthQuery.isError && (
+        <p className="text-xs text-red-400">
+          Kon pipeline-health niet ophalen.
+        </p>
+      )}
+
+      {health && (
+        <>
+          <p className="text-sm text-slate-300">{health.message}</p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="glass-panel p-3 space-y-0.5">
+              <p className="section-label">Active models</p>
+              <p className="text-stat tabular-nums text-[#60a5fa]">
+                {health.active_model_versions}
+              </p>
+            </div>
+            <div className="glass-panel p-3 space-y-0.5">
+              <p className="section-label">Preds last 24h</p>
+              <p className="text-stat tabular-nums text-[#4ade80]">
+                {health.predictions_last_24h}
+              </p>
+              <p className="text-[10px] text-slate-500">
+                {health.predictions_last_1h} in last hour
+              </p>
+            </div>
+            <div className="glass-panel p-3 space-y-0.5">
+              <p className="section-label">Upcoming (7d)</p>
+              <p className="text-stat tabular-nums text-slate-100">
+                {health.upcoming_with_prediction}
+                <span className="text-sm text-slate-500"> / {health.upcoming_matches_7d}</span>
+              </p>
+            </div>
+            <div className="glass-panel p-3 space-y-0.5">
+              <p className="section-label">Finished (2d)</p>
+              <p className="text-stat tabular-nums text-slate-100">
+                {health.recent_finished_with_prediction}
+                <span className="text-sm text-slate-500"> / {health.recent_finished_2d}</span>
+              </p>
+            </div>
+          </div>
+
+          {health.latest_predicted_at && (
+            <p className="text-xs text-slate-500">
+              Latest predicted_at:{" "}
+              <span className="text-slate-300 font-mono">
+                {formatDateTime(health.latest_predicted_at)}
+              </span>
+            </p>
+          )}
+
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <button
+              onClick={() => runMutation.mutate()}
+              disabled={runMutation.isPending}
+              className="inline-flex items-center gap-2 rounded-lg btn-primary px-4 py-2 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {runMutation.isPending ? (
+                <>
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  Genereren...
+                </>
+              ) : (
+                <>
+                  <Zap className="h-4 w-4" />
+                  Run pipeline now (7d)
+                </>
+              )}
+            </button>
+            <button
+              onClick={() => healthQuery.refetch()}
+              className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-xs text-slate-300 hover:bg-white/[0.08]"
+            >
+              <RefreshCw className="h-3 w-3" />
+              Refresh
+            </button>
+            {runMutation.isSuccess && runMutation.data && (
+              <p className="text-xs text-green-400">
+                {runMutation.data.predictions_generated} nieuwe voorspellingen, {runMutation.data.errors} errors (scope: {runMutation.data.total_matches} wedstrijden).
+              </p>
+            )}
+            {runMutation.isError && (
+              <p className="text-xs text-red-400">
+                {runMutation.error instanceof Error ? runMutation.error.message : "Run failed."}
+              </p>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
   const [syncSourceId, setSyncSourceId] = React.useState("all");
   const [modelType, setModelType] = React.useState("all");
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
+      <PipelineHealthCard />
       {/* Sync data */}
       <div className="card-neon p-6 space-y-4">
         <div className="flex items-center gap-2.5">

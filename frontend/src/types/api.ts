@@ -770,6 +770,34 @@ export interface StrategyPicksResponse {
   picks: StrategyPickPrediction[];
 }
 
+// Admin — pipeline health diagnostic
+export type PipelineDiagnosis =
+  | "healthy"
+  | "no_model"
+  | "stale"
+  | "partial"
+  | "unknown";
+
+export interface PipelineHealth {
+  diagnosis: PipelineDiagnosis;
+  message: string;
+  active_model_versions: number;
+  predictions_last_1h: number;
+  predictions_last_24h: number;
+  latest_predicted_at: string | null;
+  upcoming_matches_7d: number;
+  upcoming_with_prediction: number;
+  recent_finished_2d: number;
+  recent_finished_with_prediction: number;
+}
+
+export interface GeneratePredictionsResult {
+  total_matches: number;
+  predictions_generated: number;
+  errors: number;
+  details: string[];
+}
+
 // Blog
 export interface BlogPost {
   id: string;
