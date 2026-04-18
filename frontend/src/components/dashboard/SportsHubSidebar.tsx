@@ -97,6 +97,13 @@ export function SportsHubSidebar({ summary, isLoading, userTierSlug }: SportsHub
               </div>
             </div>
           )}
+          {summary && (
+            <p className="mt-3 text-[10px] leading-relaxed text-slate-600">
+              {isNl
+                ? "Klein venster · elk weekcijfer varieert. All-time nauwkeurigheid per tier staat op de trackrecord-pagina."
+                : "Small window · weekly numbers vary. All-time accuracy per tier lives on the track-record page."}
+            </p>
+          )}
         </div>
       </div>
 
@@ -120,13 +127,20 @@ export function SportsHubSidebar({ summary, isLoading, userTierSlug }: SportsHub
         </div>
       </div>
 
-      {/* Upsell */}
-      <UpsellBanner
-        targetTier="gold"
-        headline={t("dash.upsellHeadline")}
-        subtext={t("dash.upsellSubtext")}
-        variant="card"
-      />
+      {/* Upsell — only render when the signed-in user isn't already on
+          Gold or higher. A Platinum user would otherwise see a
+          "Upgrade naar Gold" CTA (a downgrade), and a Gold user would
+          see "upgrade naar gold" prompting their own tier. The main
+          content already carries an "Upgrade to Platinum" nudge for
+          Gold users, and Platinum needs no further CTA. */}
+      {userTierSlug !== "gold" && userTierSlug !== "platinum" && (
+        <UpsellBanner
+          targetTier="gold"
+          headline={t("dash.upsellHeadline")}
+          subtext={t("dash.upsellSubtext")}
+          variant="card"
+        />
+      )}
     </div>
   );
 }
