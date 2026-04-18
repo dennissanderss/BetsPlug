@@ -27,7 +27,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { api } from "@/lib/api";
-import { TrackRecordHubTabs } from "@/components/dashboard/TrackRecordHubTabs";
 import type { SegmentPerformance, CalibrationReport } from "@/types/api";
 
 // ─── BOTD Picks Section (Modelvalidatie + Live meting) ──────────────────────
@@ -614,9 +613,6 @@ export default function BetOfTheDayPage() {
     <PaywallOverlay feature="pick_of_the_day" requiredTier="gold">
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 animate-fade-in">
       <div className="relative space-y-8">
-      {/* ── Track Record hub tabs ── */}
-      <TrackRecordHubTabs active="potd" />
-
       {/* ── Header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -876,16 +872,10 @@ export default function BetOfTheDayPage() {
             </div>
           </div>
 
-          {/* ── Modelvalidatie — historische picks op afgelopen wedstrijden ── */}
-          <BotdPicksSection
-            endpoint="model-validation"
-            title="Modelvalidatie — verzamelde data"
-            description="Onze BOTD-methode toegepast op recent afgelopen wedstrijden. Per dag de hoogst-scorende pick. Dit toont hoe het model presteert op data die we hebben verzameld — niet een live pre-match meting."
-            accentColor="text-blue-400"
-            emptyCopy="Nog geen verzamelde data voor deze tier."
-          />
-
-          {/* ── Live meting — strict pre-match picks vanaf 18 april 2026 ── */}
+          {/* ── Live meting — strict pre-match picks vanaf 18 april 2026 ──
+              The model-validation (verzamelde data) surface now lives on
+              /trackrecord so all historical track records are in one place.
+              This page is the canonical home of the live BOTD stream. */}
           <BotdPicksSection
             endpoint="live-tracking"
             title="Live meting sinds 18 april 2026"
@@ -895,6 +885,15 @@ export default function BetOfTheDayPage() {
             lowSampleThreshold={10}
             lowSampleCopy="Klein sample — de meting loopt nog. Eerlijke accuracy verschijnt zodra we minstens 10 beoordeelde picks hebben."
           />
+
+          <div className="glass-card p-4 text-sm text-slate-400">
+            <p>
+              Op zoek naar de historische modelvalidatie van de Pick of the Day?{" "}
+              <Link href="/trackrecord" className="text-emerald-400 hover:underline">
+                Bekijk &apos;Modelvalidatie — Pick of the Day&apos; op Track Record →
+              </Link>
+            </p>
+          </div>
 
           {/* ── Performance Insights (backtest stats) ── */}
           <BOTDPerformanceInsights />

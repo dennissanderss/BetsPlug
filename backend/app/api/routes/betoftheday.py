@@ -11,7 +11,11 @@ import logging
 from datetime import date, datetime, time, timezone
 from typing import Optional
 
+import csv
+import io
+
 from fastapi import APIRouter, Depends, Query
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from sqlalchemy import select, and_, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -351,6 +355,71 @@ async def get_botd_model_validation(
         require_live_source=False,
         created_from=V81_DEPLOYMENT_CUTOFF,
         limit=limit,
+    )
+
+
+@router.get(
+    "/export.csv",
+    summary="Download Pick-of-the-Day model-validation picks as CSV",
+)
+async def export_botd_csv(
+    limit: int = Query(default=365, ge=1, le=1000),
+    db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
+) -> StreamingResponse:
+    """Stream the model-validation BOTD picks as a CSV.
+
+    Mirrors the shape of /bet-of-the-day/model-validation but serialised
+    so a Gold/Platinum subscriber can reconcile every daily pick offline.
+    """
+    section = await _build_botd_section(
+        db,
+        user_tier,
+        require_pre_match=False,
+        require_live_source=False,
+        created_from=V81_DEPLOYMENT_CUTOFF,
+        limit=limit,
+    )
+
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(
+        [
+            "date",
+            "league",
+            "home_team",
+            "away_team",
+            "prediction",
+            "confidence_pct",
+            "implied_odds",
+            "home_score",
+            "away_score",
+            "correct",
+        ]
+    )
+    for p in section.picks:
+        writer.writerow(
+            [
+                p.date,
+                p.league,
+                p.home_team,
+                p.away_team,
+                p.prediction,
+                f"{p.confidence:.1f}",
+                f"{p.odds_used:.2f}" if p.odds_used is not None else "",
+                p.home_score if p.home_score is not None else "",
+                p.away_score if p.away_score is not None else "",
+                "" if p.correct is None else ("yes" if p.correct else "no"),
+            ]
+        )
+
+    buffer.seek(0)
+    return StreamingResponse(
+        iter([buffer.getvalue()]),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": 'attachment; filename="betsplug-potd-validation.csv"',
+        },
     )
 
 

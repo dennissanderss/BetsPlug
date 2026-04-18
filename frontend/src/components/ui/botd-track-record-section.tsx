@@ -21,6 +21,7 @@ import {
   Flame,
   Target,
   ShieldCheck,
+  Download,
 } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { useTranslations } from "@/i18n/locale-provider";
@@ -134,21 +135,28 @@ export function BotdTrackRecordSection() {
           <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
             {isNl ? (
               <>
-                Onze <span className="gradient-text-green">dagelijkse topvoorspelling</span> — openbaar
-                bijgehouden
+                Modelvalidatie — <span className="gradient-text-green">Pick of the Day</span>
               </>
             ) : (
               <>
-                Our <span className="gradient-text-green">single daily top pick</span> — publicly
-                tracked
+                Model validation — <span className="gradient-text-green">Pick of the Day</span>
               </>
             )}
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-[#a3a9b8]">
             {isNl
-              ? "Pick of the Day is één voorspelling per dag, de match waar ons model het meest overtuigd is. Inclusief voor Gold en Platinum."
-              : "Pick of the Day is a single daily pick, the match our model is most confident about. Included on Gold and Platinum."}
+              ? "Verzamelde data: onze BOTD-methode toegepast op recent afgelopen wedstrijden, per dag de hoogst-scorende pick. Inclusief voor Gold en Platinum. Voor de strikt pre-match live meting, zie de Pick of the Day pagina."
+              : "Collected data: our BOTD method applied to recently finished matches, the highest-confidence pick per day. Included on Gold and Platinum. For the strict pre-match live measurement, see the Pick of the Day page."}
           </p>
+          <div className="mt-4">
+            <a
+              href={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/bet-of-the-day/export.csv`}
+              className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/15"
+            >
+              <Download className="h-3.5 w-3.5" />
+              {isNl ? "Download CSV (Pick of the Day)" : "Download CSV (Pick of the Day)"}
+            </a>
+          </div>
         </motion.div>
 
         {/* KPI strip */}
