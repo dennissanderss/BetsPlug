@@ -143,7 +143,7 @@ function PublicTierTabs({
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.05] px-5 py-3">
         <span className="section-label inline-flex items-center gap-2">
           <ShieldCheck className="h-3 w-3" />
-          Audit any tier
+          Model validation per tier
         </span>
         {hasToken ? (
           <button
@@ -244,7 +244,7 @@ function PublicTierTabs({
         })}
       </div>
       <p className="border-t border-white/[0.05] px-5 py-2 text-[10px] text-slate-500 leading-relaxed">
-        Every number updates live. Download the raw rows to recompute accuracy, Brier and calibration yourself.
+        Historically validated on pre-kickoff snapshots (batch + live). Live-only numbers sit on the Pick-of-the-Day track record. Download the raw rows to recompute accuracy, Brier and calibration yourself.
       </p>
     </div>
   );
