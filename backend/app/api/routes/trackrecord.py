@@ -676,11 +676,24 @@ async def _stream_trackrecord_csv(
     buffer = io.StringIO()
     writer = csv.writer(buffer)
 
-    # ── Dashboard header — hardcoded values (no Excel formulas) ──────
-    # Formulas like =COUNTA / =COUNTIF break on non-English Excel
-    # because function names are locale-specific (COUNTA = AANTALARG
-    # in Dutch). Hardcoded values are always readable everywhere.
-    # Users can still verify by filtering the Correct? column.
+    # ── Dashboard header ─────────────────────────────────────────────
+    # We publish both the hardcoded value and the arithmetic formula.
+    # Pure-arithmetic Excel formulas (=B6/B5) work in every locale —
+    # it's only the function names (COUNTA, COUNTIF, …) that localise,
+    # so a cell-reference divide is portable. This lets auditors
+    # recompute the accuracy in-place by editing column B.
+    #
+    # Row layout (1-indexed, as Excel shows it):
+    #   1  (blank)
+    #   2  BETSPLUG TRACK RECORD
+    #   3  (blank)
+    #   4  Period             | <period string>
+    #   5  Total Predictions  | <int>
+    #   6  Correct Predictions| <int>
+    #   7  Accuracy           | <xx.x%>
+    #   8  Accuracy formula   | =B6/B5          ← live, locale-safe
+    #   9  Definition         | 3-way match accuracy …
+    #  10  Generated          | <timestamp>
     writer.writerow([])
     writer.writerow(["BETSPLUG TRACK RECORD"])
     writer.writerow([])
@@ -688,6 +701,15 @@ async def _stream_trackrecord_csv(
     writer.writerow(["Total Predictions", s_total])
     writer.writerow(["Correct Predictions", s_correct])
     writer.writerow(["Accuracy", f"{s_accuracy:.1f}%"])
+    # Excel interprets a leading '=' as a formula. When opened in a
+    # plain text viewer the cell shows literally "=B6/B5", which still
+    # reads as a valid mathematical expression referring to the two
+    # rows above.
+    writer.writerow(["Accuracy formula", "=B6/B5"])
+    writer.writerow([
+        "Definition",
+        "3-way match accuracy (home / draw / away). A prediction counts as correct when the pick matched the actual outcome.",
+    ])
     writer.writerow(["Generated", datetime.now(timezone.utc).strftime("%d %b %Y %H:%M UTC")])
     writer.writerow([])
     writer.writerow(["All data is for educational and simulation purposes only. Not financial or betting advice."])

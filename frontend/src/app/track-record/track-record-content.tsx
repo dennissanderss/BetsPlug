@@ -30,10 +30,11 @@ import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
+import { TierEmblem } from "@/components/noct/tier-emblem";
+import { type TierKey } from "@/components/noct/tier-theme";
 import { Pill } from "@/components/noct/pill";
 import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { HeroMediaBg } from "@/components/ui/media-bg";
-import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
 import { LiveMeasurementSection } from "@/components/ui/live-measurement-section";
 
 /* ── Live API data hook ─────────────────────────────────── */
@@ -254,6 +255,15 @@ const KPI_VARIANTS = ["green", "purple", "blue", "green"] as const;
 const PIPELINE_VARIANTS = ["green", "purple", "blue", "green", "purple", "blue"] as const;
 
 type Accent = "green" | "purple" | "blue";
+
+/** Map the public tier selector value to a TierKey for emblem rendering. */
+function publicTierToTierKey(t: PublicTier): TierKey | null {
+  if (t === "free") return "bronze";
+  if (t === "silver") return "silver";
+  if (t === "gold") return "gold";
+  if (t === "platinum") return "platinum";
+  return null; // 'all'
+}
 
 /**
  * Track Record, NOCTURNE rebuild.
@@ -489,6 +499,12 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             {kpis.map((k, i) => {
               const Icon = k.icon;
               const variant = KPI_VARIANTS[i % KPI_VARIANTS.length] as Accent;
+              // Accuracy card (i===0) gets a tier-coloured emblem when a
+              // specific tier tab is active so the hex colour matches the
+              // tier the number belongs to — Free=bronze, Silver=silver,
+              // Gold=gold, Platinum=diamond-blue. 'All tiers' keeps the
+              // generic green hex.
+              const tierKey = i === 0 ? publicTierToTierKey(pickTier) : null;
               return (
                 <motion.div
                   key={k.label}
@@ -499,9 +515,15 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
                   className={`card-neon card-neon-${variant} rounded-2xl`}
                 >
                   <div className="relative p-6">
-                    <HexBadge variant={variant} size="md" className="mb-4">
-                      <Icon className="h-5 w-5" />
-                    </HexBadge>
+                    {tierKey ? (
+                      <div className="mb-4">
+                        <TierEmblem tier={tierKey} size="md" />
+                      </div>
+                    ) : (
+                      <HexBadge variant={variant} size="md" className="mb-4">
+                        <Icon className="h-5 w-5" />
+                      </HexBadge>
+                    )}
                     <div className="text-stat text-3xl text-[#ededed] sm:text-4xl">{k.value}</div>
                     <p className="mt-2 text-sm font-semibold text-[#ededed]">{k.label}</p>
                     <p className="mt-1 text-xs leading-relaxed text-[#a3a9b8]">{k.note}</p>
@@ -513,10 +535,10 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
-      {/* ───────────── PICK OF THE DAY TRACK RECORD ───────────── */}
-      <BotdTrackRecordSection />
-
       {/* ───────────── LIVE MEASUREMENT ───────────── */}
+      {/* Pick-of-the-Day track record section hidden from the public page
+          until the backend live-measurement pipeline is stabilised. For
+          now the model-validation (backtest) KPIs above are sufficient. */}
       <LiveMeasurementSection />
 
       {/* ───────────── PIPELINE ───────────── */}
