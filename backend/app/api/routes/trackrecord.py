@@ -694,26 +694,29 @@ async def _stream_trackrecord_csv(
     writer.writerow([])
     writer.writerow([])
 
-    # Column headers — English, clear, simple, with odds for transparency
+    # Column headers — English, clear, simple, with odds for transparency.
+    # v8.6: "Predicted At" added so auditors can verify the pre-match lock
+    # per-row (backfill rows would show a timestamp after Match Date).
     writer.writerow(
         [
             "Match Date",       # A
-            "League",           # B
-            "Home Team",        # C
-            "Away Team",        # D
-            "Home %",           # E
-            "Draw %",           # F
-            "Away %",           # G
-            "Confidence %",     # H
-            "Prediction",       # I
-            "Odds Used",        # J  ← NEW: implied or real odds
-            "Odds Source",      # K  ← NEW: "real" / "implied" / "estimated"
-            "Actual Outcome",   # L
-            "Correct?",         # M
-            "Home Score",       # N
-            "Away Score",       # O
-            "P/L (units)",      # P  ← NEW: profit/loss per pick
-            "Model",            # Q
+            "Predicted At",     # B  ← NEW: ISO timestamp, for pre-match lock audit
+            "League",           # C
+            "Home Team",        # D
+            "Away Team",        # E
+            "Home %",           # F
+            "Draw %",           # G
+            "Away %",           # H
+            "Confidence %",     # I
+            "Prediction",       # J
+            "Odds Used",        # K
+            "Odds Source",      # L
+            "Actual Outcome",   # M
+            "Correct?",         # N
+            "Home Score",       # O
+            "Away Score",       # P
+            "P/L (units)",      # Q
+            "Model",            # R
         ]
     )  # row 13
     yield buffer.getvalue().encode("utf-8")
@@ -806,9 +809,15 @@ async def _stream_trackrecord_csv(
 
             pnl = round(odds_val - 1.0, 2) if evaluation.is_correct else -1.0
 
+            predicted_at = (
+                pred.predicted_at.strftime("%Y-%m-%d %H:%M UTC")
+                if pred.predicted_at else ""
+            )
+
             writer.writerow(
                 [
                     match_date,
+                    predicted_at,
                     (m.league.name if m and m.league else ""),
                     (m.home_team.name if m and m.home_team else ""),
                     (m.away_team.name if m and m.away_team else ""),

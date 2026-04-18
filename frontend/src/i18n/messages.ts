@@ -3218,7 +3218,7 @@ const nl: Dictionary = {
   "hiw.heroStat2Label": "Picks gevolgd",
   "hiw.heroStat2Value": "{potdPicks}",
   "hiw.heroStat3Label": "Competities",
-  "hiw.heroStat3Value": "70+",
+  "hiw.heroStat3Value": "30+",
   "hiw.heroStat4Label": "Downloadbare data",
   "hiw.heroStat4Value": "CSV",
   "hiw.heroSubtitle": "De meeste tipstersites laten je een winnende schermafbeelding zien en vragen je deze te vertrouwen. We laten je de modellen, de gegevens en elke voorspelling zien die we ooit hebben gedaan: winnaars en verliezers. Hier zie je precies hoe BetsPlug ruim 70.000 wedstrijden uit de voetbalgeschiedenis omzet in een voorspelling voor de volgende aftrap.",
