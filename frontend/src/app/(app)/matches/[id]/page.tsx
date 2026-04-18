@@ -19,6 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import {
   ArrowLeft,
+  ArrowRight,
   Calendar,
   Clock,
   MapPin,
@@ -36,6 +37,7 @@ import {
   Square,
   RefreshCw,
   UserRound,
+  Lock,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -1168,6 +1170,89 @@ function BlockSkeleton() {
   );
 }
 
+/**
+ * LockedPickUpsellCard — shown on /matches/[id] when the fixture has a
+ * prediction in the DB but the signed-in user's tier can't see it.
+ * Previously this rendered as "No forecast yet", which made the app
+ * feel broken. The backend already populates `locked_pick_tier` +
+ * accompanying label/accuracy fields for exactly this scenario.
+ */
+function LockedPickUpsellCard({
+  tier,
+  label,
+  accuracy,
+}: {
+  tier: "silver" | "gold" | "platinum";
+  label?: string;
+  accuracy?: string;
+}) {
+  const TIER_COPY = {
+    silver: {
+      title: "Silver-tier pick available",
+      palette: "border-[#c0c0c0]/35 bg-[#c0c0c0]/[0.05]",
+      text: "text-[#e5e4e2]",
+      accent: "from-[#8a8d91] via-[#c0c0c0] to-[#e5e4e2]",
+    },
+    gold: {
+      title: "Gold-tier pick available",
+      palette: "border-[#d4af37]/40 bg-[#d4af37]/[0.06]",
+      text: "text-[#f5d67a]",
+      accent: "from-[#b8860b] via-[#d4af37] to-[#fbbf24]",
+    },
+    platinum: {
+      title: "Platinum-tier pick available",
+      palette: "border-[#a8d8ea]/40 bg-[#a8d8ea]/[0.06]",
+      text: "text-[#d9f0ff]",
+      accent: "from-[#5eb3d9] via-[#a8d8ea] to-[#e0f4ff]",
+    },
+  } as const;
+  const copy = TIER_COPY[tier];
+  const resolvedLabel = label ?? `${tier.charAt(0).toUpperCase()}${tier.slice(1)}`;
+  const resolvedAccuracy = accuracy ?? (tier === "silver" ? "60%+" : tier === "gold" ? "70%+" : "80%+");
+
+  return (
+    <div
+      className={`card-neon relative overflow-hidden rounded-2xl border p-6 ${copy.palette}`}
+    >
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute inset-0 bg-gradient-to-br opacity-[0.08] ${copy.accent}`}
+      />
+      <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-4">
+          <HexBadge
+            variant={tier === "gold" ? "purple" : tier === "platinum" ? "blue" : "green"}
+            size="md"
+            noGlow
+          >
+            <Lock className="h-5 w-5" />
+          </HexBadge>
+          <div className="min-w-0">
+            <p className={`text-[10px] font-bold uppercase tracking-widest ${copy.text}`}>
+              Locked · {resolvedLabel} tier · {resolvedAccuracy}
+            </p>
+            <p className="mt-1 text-base font-bold text-[#ededed]">
+              We hebben een voorspelling voor deze wedstrijd
+            </p>
+            <p className="mt-1 max-w-md text-xs leading-relaxed text-[#a3a9b8]">
+              Deze pick zit in {resolvedLabel} ({resolvedAccuracy} historische
+              nauwkeurigheid). Upgrade om de confidence, waarschijnlijkheden,
+              odds en top-drivers te zien.
+            </p>
+          </div>
+        </div>
+        <Link
+          href="/pricing"
+          className="btn-primary inline-flex shrink-0 items-center gap-2"
+        >
+          Upgrade naar {resolvedLabel}
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────────────────────────────────────────────────────
    Page
    ───────────────────────────────────────────────────────────── */
@@ -1331,19 +1416,27 @@ export default function MatchDetailPage() {
             {prediction && <FactorsBlock pred={prediction} />}
 
             {!prediction && !fixtureLoading && (
-              <div className="card-neon p-8">
-                <div className="relative text-center">
-                  <HexBadge variant="blue" size="md" noGlow>
-                    <BarChart2 className="h-5 w-5" />
-                  </HexBadge>
-                  <p className="mt-4 text-sm font-semibold text-[#ededed]">
-                    No forecast yet
-                  </p>
-                  <p className="mt-1 text-xs text-[#a3a9b8]">
-                    Our AI hasn&apos;t published a forecast for this fixture. Check back closer to kick-off.
-                  </p>
+              displayMatch?.locked_pick_tier ? (
+                <LockedPickUpsellCard
+                  tier={displayMatch.locked_pick_tier}
+                  label={displayMatch.locked_pick_tier_label ?? undefined}
+                  accuracy={displayMatch.locked_pick_tier_accuracy ?? undefined}
+                />
+              ) : (
+                <div className="card-neon p-8">
+                  <div className="relative text-center">
+                    <HexBadge variant="blue" size="md" noGlow>
+                      <BarChart2 className="h-5 w-5" />
+                    </HexBadge>
+                    <p className="mt-4 text-sm font-semibold text-[#ededed]">
+                      No forecast yet
+                    </p>
+                    <p className="mt-1 text-xs text-[#a3a9b8]">
+                      Our AI hasn&apos;t published a forecast for this fixture. Check back closer to kick-off.
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )
             )}
 
             <p className="px-2 text-[10px] italic leading-relaxed text-[#6b7280]">
