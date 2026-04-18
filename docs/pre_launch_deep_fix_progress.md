@@ -69,16 +69,22 @@ for details on each fix.
 5. `31554de` — feat(results/4.2+4.3): drop All-tiers tab + start-date label
 6. `9b69a56` — feat(reports/6.1): tier selector on report form
 
-## Open items (not addressed in this sprint)
+## Sprint part 2 — follow-up commits
 
-- **1.4b**: Upgrade-teaser for Free/Silver users viewing a Gold/Platinum match detail (new component).
+| # | Status | Commit |
+|---|--------|--------|
+| 1.4b (match-detail upgrade teaser) | ✅ Done | `643c060` — new `LockedPickUpsellCard` consumes `locked_pick_tier` fields already on the fixture response |
+| 5.4 (merge /results + /trackrecord) | ✅ Pragmatic ship | `6a6d032` — shared `TrackRecordHubTabs` strip rendered at the top of /trackrecord, /results and /bet-of-the-day. Users now see Cumulative / Recent / Pick of the Day as one click apart. Full single-page merge deferred. |
+| 5.2b (TrustFunnel on /track-record) | ✅ Done | `a22f77b` — authed `/trackrecord` page now embeds the same `TrustFunnel` visualisation used on the homepage, under Related Links |
+| 3.3-extra (standalone live scores entry) | ✅ Done | `785cdd1` — `/live` page resurfaced as its own sidebar entry under Predictions (Radio icon). Separate from the prediction list. |
+
+## Open items (truly deferred)
+
 - **4.1**: 10-row manual audit of results → prediction_id integrity (needs live DB access).
-- **4.4b**: Wilson CIs on tier numbers — out of scope, logged for when the product value warrants the extra stats complexity.
+- **4.4b**: Wilson CIs on tier numbers — only worth the stats complexity if users keep misreading short-window variance.
 - **5.1b**: Manual CSV export content check per tier (needs auth token).
-- **5.2b**: Port the TrustFunnel visualisation onto the dedicated `/track-record` page.
-- **5.4**: Merge `/results` + `/track-record` into one tabbed surface.
 - **6.1b**: Confirm backend `report_service` honours `config.pick_tier` when generating PDFs — if not, Gold/Platinum users still get the default-tier report.
-- Autonomous live-scores "overzicht" page (per sprint doc 3.3 note): logged as future feature.
+- Pricing-promised features never implemented (Telegram communities, priority support, JSON export) — build or remove.
 
 ## Product decisions taken without blocking user
 
