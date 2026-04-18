@@ -26,6 +26,8 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import { Database, Brain, ClipboardCheck, Crown, ShieldCheck, ArrowRight } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
+import { TierEmblem } from "@/components/noct/tier-emblem";
+import { TIER_THEME, type TierKey } from "@/components/noct/tier-theme";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 interface TierStat {
@@ -288,27 +290,21 @@ export function TrustFunnel() {
           </p>
           <div className="grid gap-3 sm:grid-cols-3">
             <TierBreakdownCard
-              accent="slate"
-              label={isNl ? "Silver" : "Silver"}
-              confFloor="≥ 0,65"
+              tier="silver"
               accuracy={silver.accuracy}
               total={silver.total}
               locale={locale}
               isNl={isNl}
             />
             <TierBreakdownCard
-              accent="purple"
-              label={isNl ? "Gold" : "Gold"}
-              confFloor="≥ 0,70"
+              tier="gold"
               accuracy={gold.accuracy}
               total={gold.total}
               locale={locale}
               isNl={isNl}
             />
             <TierBreakdownCard
-              accent="amber"
-              label={isNl ? "Platinum" : "Platinum"}
-              confFloor="≥ 0,75"
+              tier="platinum"
               accuracy={platinum.accuracy}
               total={platinum.total}
               locale={locale}
@@ -353,66 +349,53 @@ export function TrustFunnel() {
 }
 
 function TierBreakdownCard({
-  accent,
-  label,
-  confFloor,
+  tier,
   accuracy,
   total,
   locale,
   isNl,
   highlight = false,
 }: {
-  accent: "slate" | "purple" | "amber";
-  label: string;
-  confFloor: string;
+  tier: TierKey;
   accuracy: number;
   total: number;
   locale: string;
   isNl: boolean;
   highlight?: boolean;
 }) {
+  const theme = TIER_THEME[tier];
   const pctStr = `${(accuracy * 100).toFixed(1).replace(".", isNl ? "," : ".")}%`;
   const totalStr = total.toLocaleString(locale);
 
-  const accentClasses = {
-    slate: {
-      border: "border-slate-400/30",
-      bg: "bg-slate-400/[0.04]",
-      text: "text-slate-200",
-      value: "text-slate-100",
-    },
-    purple: {
-      border: "border-purple-400/30",
-      bg: "bg-purple-400/[0.05]",
-      text: "text-purple-200",
-      value: "text-purple-100",
-    },
-    amber: {
-      border: "border-amber-400/40",
-      bg: "bg-amber-400/[0.06]",
-      text: "text-amber-200",
-      value: "text-amber-100",
-    },
-  }[accent];
-
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl border ${accentClasses.border} ${accentClasses.bg} p-5 ${
-        highlight ? "ring-1 ring-amber-400/30" : ""
-      }`}
+      className="relative overflow-hidden rounded-2xl border p-5"
+      style={{
+        borderColor: theme.ringHex,
+        background: `linear-gradient(180deg, ${theme.bgTintHex}, rgba(15,20,32,0.6))`,
+        boxShadow: highlight ? `0 0 30px ${theme.ringHex}` : undefined,
+      }}
     >
-      <div className="flex items-center justify-between">
-        <span className={`text-[10px] font-bold uppercase tracking-widest ${accentClasses.text}`}>
-          {label}
-        </span>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-8 -top-8 h-[120px] w-[120px] rounded-full"
+        style={{ background: `${theme.colorHex}22`, filter: "blur(40px)" }}
+      />
+      <div className="relative flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <TierEmblem tier={tier} size="sm" />
+          <span className={`text-[10px] font-bold uppercase tracking-widest ${theme.textClass}`}>
+            {theme.name}
+          </span>
+        </div>
         <span className="text-[9px] font-semibold uppercase tracking-wider text-[#6b7280] tabular-nums">
-          conf {confFloor}
+          conf ≥ {theme.confFloor}
         </span>
       </div>
-      <p className={`text-stat mt-3 text-3xl leading-none ${accentClasses.value}`}>
+      <p className="text-stat relative mt-3 text-3xl leading-none text-[#ededed]">
         {pctStr}
       </p>
-      <p className="mt-1 text-xs text-[#a3a9b8]">
+      <p className="relative mt-1 text-xs text-[#a3a9b8]">
         {isNl ? "over" : "across"}{" "}
         <span className="font-semibold text-[#ededed]">{totalStr}</span>{" "}
         {isNl ? "picks" : "picks"}
