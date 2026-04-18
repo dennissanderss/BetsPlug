@@ -24,6 +24,10 @@ import { getLocalizedAlternates } from "@/lib/seo-helpers";
 import { BetTypeHubFixtures } from "./bet-type-hub-fixtures";
 import { HeroMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
+import Image from "next/image";
+import { COMBO_LEAGUE_SLUGS } from "@/data/bet-type-league-combos";
+import { LEAGUE_CATALOG, getLeagueName as getCatalogLeagueName } from "@/data/league-catalog";
+import { getLeagueLogoPath } from "@/data/league-logos";
 
 export const revalidate = 60;
 
@@ -391,6 +395,66 @@ export default async function BetTypeHubPage(props: {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* ═══ This market by league — longtail SEO cluster ═══
+           Funnels into the /bet-types/[slug]/[league_slug] combo
+           pages. Each card targets a keyword-rich query like
+           "BTTS Premier League tips" or "Over 2.5 La Liga
+           predictions". */}
+        <section className="relative mx-auto max-w-6xl px-4 pb-20 sm:px-6">
+          <div className="mb-6 flex items-center gap-3">
+            <HexBadge variant="green" size="sm" noGlow>
+              <Sparkles className="h-4 w-4" />
+            </HexBadge>
+            <h2 className="text-heading text-2xl text-[#ededed] sm:text-3xl">
+              {hub.name[editorialLocale]}{" "}
+              <span className="gradient-text-green">
+                {editorialLocale === "nl" ? "per competitie" : "by league"}
+              </span>
+            </h2>
+          </div>
+          <p className="mb-6 max-w-2xl text-sm text-[#a3a9b8]">
+            {editorialLocale === "nl"
+              ? `Hoe ${hub.name.nl} zich gedraagt in elk van onze gedekte topcompetities — met historische cijfers en marktanalyse per competitie.`
+              : `How ${hub.name.en} behaves in each of our covered top competitions — with historical numbers and market analysis per league.`}
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {COMBO_LEAGUE_SLUGS.map((leagueSlug) => {
+              const entry = LEAGUE_CATALOG.find((l) => l.slug === leagueSlug);
+              if (!entry) return null;
+              const lname = getCatalogLeagueName(entry, editorialLocale);
+              const logo = getLeagueLogoPath(leagueSlug);
+              return (
+                <Link
+                  key={leagueSlug}
+                  href={`/bet-types/${hub.slug}/${leagueSlug}`}
+                  className="group flex items-center gap-3 rounded-xl border p-4 transition-colors hover:border-[#4ade80]/40"
+                  style={{
+                    borderColor: "hsl(0 0% 100% / 0.06)",
+                    background: "hsl(230 16% 10% / 0.4)",
+                  }}
+                >
+                  {logo ? (
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white/[0.03] p-1">
+                      <Image src={logo} alt="" width={32} height={32} className="h-full w-full object-contain" />
+                    </div>
+                  ) : (
+                    <div className="h-10 w-10 shrink-0 rounded-lg bg-white/[0.03]" />
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-sm font-semibold text-[#ededed] transition-colors group-hover:text-[#4ade80]">
+                      {hub.name[editorialLocale]} · {lname}
+                    </div>
+                    <div className="mt-0.5 text-[11px] text-[#6b7280]">
+                      {editorialLocale === "nl" ? "Marktanalyse + picks" : "Market analysis + picks"}
+                    </div>
+                  </div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-[#6b7280] transition-all group-hover:translate-x-0.5 group-hover:text-[#4ade80]" />
+                </Link>
+              );
+            })}
           </div>
         </section>
 

@@ -1,6 +1,7 @@
 import { fetchAllSlugsForSitemap } from "@/lib/sanity-data";
 import { defaultLocale, locales, localeMeta } from "@/i18n/config";
 import { localizePath } from "@/i18n/routes";
+import { getAllComboSlugs } from "@/data/bet-type-league-combos";
 
 export const revalidate = 60;
 
@@ -148,6 +149,22 @@ async function buildEntries(): Promise<SitemapEntry[]> {
     };
   });
 
+  // Bet-type × league combo pages — longtail SEO cluster.
+  // 4 markets × 9 leagues = 36 pages on this commit; expanded
+  // automatically whenever BET_TYPE_HUBS or COMBO_LEAGUE_SLUGS grows.
+  const comboEntries: SitemapEntry[] = getAllComboSlugs().map(
+    ({ betTypeSlug, leagueSlug }) => {
+      const canonical = `/bet-types/${betTypeSlug}/${leagueSlug}`;
+      return {
+        url: absoluteUrl(localizePath(canonical, defaultLocale)),
+        lastModified: now,
+        changeFrequency: "weekly" as ChangeFreq,
+        priority: 0.7,
+        alternates: languageAlternatesFor(canonical),
+      };
+    },
+  );
+
   const learnPillarEntries: SitemapEntry[] = learnPillars.map((slug) => {
     const canonical = `/learn/${slug}`;
     return {
@@ -183,6 +200,7 @@ async function buildEntries(): Promise<SitemapEntry[]> {
     ...pageEntries,
     ...leagueHubEntries,
     ...betTypeHubEntries,
+    ...comboEntries,
     ...learnPillarEntries,
     ...articleEntries,
     ...legalEntries,

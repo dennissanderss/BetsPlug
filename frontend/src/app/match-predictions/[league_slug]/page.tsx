@@ -40,6 +40,8 @@ import { LeagueHubTopPick } from "./league-hub-top-pick";
 import { LeagueHubMethodology } from "./league-hub-methodology";
 import { LeagueHubRecent } from "./league-hub-recent";
 import { LeagueHubSiblings } from "./league-hub-siblings";
+import { BET_TYPE_HUBS } from "@/data/bet-type-hubs";
+import { COMBO_LEAGUE_SLUGS } from "@/data/bet-type-league-combos";
 
 export const revalidate = 60;
 
@@ -505,6 +507,58 @@ export default async function LeagueHubPage(props: {
           leagues={siblingList}
           locale={editorialLocale}
         />
+
+        {/* ═══ By market — longtail combo cluster ═══
+           Links to /bet-types/[slug]/[this-league] combo pages so
+           visitors (and crawlers) can drill into market-specific
+           analysis for this league. Only renders when the league
+           is one of our covered combo leagues. */}
+        {COMBO_LEAGUE_SLUGS.includes(hub.slug) && (
+          <section className="relative mx-auto max-w-6xl px-4 pb-20 sm:px-6">
+            <div className="mb-6 flex items-center gap-3">
+              <HexBadge variant="green" size="sm" noGlow>
+                <Sparkles className="h-4 w-4" />
+              </HexBadge>
+              <h2 className="text-heading text-2xl text-[#ededed] sm:text-3xl">
+                {hub.name[editorialLocale]}{" "}
+                <span className="gradient-text-green">
+                  {editorialLocale === "nl" ? "marktanalyses" : "market breakdowns"}
+                </span>
+              </h2>
+            </div>
+            <p className="mb-6 max-w-2xl text-sm text-[#a3a9b8]">
+              {editorialLocale === "nl"
+                ? `Hoe onze AI elk van de populairste markten leest voor ${hub.name.nl}-wedstrijden.`
+                : `How our AI reads each of the most popular markets for ${hub.name.en} fixtures.`}
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {BET_TYPE_HUBS.map((bt) => (
+                <Link
+                  key={bt.slug}
+                  href={`/bet-types/${bt.slug}/${hub.slug}`}
+                  className="group flex items-center gap-3 rounded-xl border p-4 transition-colors hover:border-[#4ade80]/40"
+                  style={{
+                    borderColor: "hsl(0 0% 100% / 0.06)",
+                    background: "hsl(230 16% 10% / 0.4)",
+                  }}
+                >
+                  <span className="inline-flex h-10 min-w-[48px] items-center justify-center rounded-lg border border-[#4ade80]/20 bg-[#4ade80]/5 px-2 text-[11px] font-semibold tracking-wider text-[#4ade80]">
+                    {bt.shortCode}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-sm font-semibold text-[#ededed] transition-colors group-hover:text-[#4ade80]">
+                      {bt.name[editorialLocale]} · {hub.name[editorialLocale]}
+                    </div>
+                    <div className="mt-0.5 text-[11px] text-[#6b7280]">
+                      {editorialLocale === "nl" ? "Marktanalyse + picks" : "Market analysis + picks"}
+                    </div>
+                  </div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-[#6b7280] transition-all group-hover:translate-x-0.5 group-hover:text-[#4ade80]" />
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         <BetsPlugFooter />
       </div>
