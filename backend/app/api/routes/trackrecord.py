@@ -83,6 +83,15 @@ async def get_trackrecord_summary(
             "audit Platinum's track-record. See /trackrecord tier tabs."
         ),
     ),
+    pre_match_only: bool = Query(
+        default=False,
+        description=(
+            "When true, restrict to predictions whose predicted_at < "
+            "scheduled_at (true pre-match locks). Excludes retroactive "
+            "backfill rows. Diagnostic parameter — use to compare how "
+            "much backfill contamination is in the headline numbers."
+        ),
+    ),
     db: AsyncSession = Depends(get_db),
     user_tier: PickTier = Depends(get_current_tier),
 ) -> TrackrecordSummary:
@@ -116,6 +125,9 @@ async def get_trackrecord_summary(
         q = q.where(Prediction.prediction_source == source)
     # v8.1 filter: exclude pre-deploy predictions (broken feature pipeline)
     q = q.where(v81_predictions_filter())
+    # Diagnostic toggle — exclude backfill rows stamped after kickoff.
+    if pre_match_only:
+        q = q.where(Prediction.predicted_at < Match.scheduled_at)
     # v8.1/v8.3 tier filter:
     # - When the public ?pick_tier= is supplied, we scope ONLY to that
     #   tier classification and bypass the caller's access_filter — the
