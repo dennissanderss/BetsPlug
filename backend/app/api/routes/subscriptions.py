@@ -21,7 +21,7 @@ from __future__ import annotations
 import logging
 import time
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from pydantic import BaseModel
@@ -601,6 +601,19 @@ async def stripe_webhook(
             plan_type = plan_map.get(str(plan).lower(), PlanType.BASIC)
             is_lifetime = plan_type == PlanType.LIFETIME
 
+            # Bronze is a one-time €0,01 payment that unlocks Gold-tier
+            # access for exactly 7 days. Stripe does not manage the
+            # expiry (it's a `mode=payment`, not a subscription), so we
+            # set the end-date ourselves and flag the sub as TRIALING.
+            now_utc = datetime.now(timezone.utc)
+            is_bronze_trial = plan_type == PlanType.BASIC
+            if is_bronze_trial:
+                period_end = now_utc + timedelta(days=7)
+                initial_status = SubscriptionStatus.TRIALING
+            else:
+                period_end = None  # recurring plans: Stripe sets this via invoice webhooks
+                initial_status = SubscriptionStatus.ACTIVE
+
             # Upsert subscription for the resolved user
             result = await db.execute(
                 select(Subscription).where(Subscription.user_id == user.id)
@@ -609,20 +622,23 @@ async def stripe_webhook(
 
             if existing_sub:
                 existing_sub.plan_type = plan_type
-                existing_sub.status = SubscriptionStatus.ACTIVE
+                existing_sub.status = initial_status
                 existing_sub.stripe_customer_id = customer_id
                 existing_sub.stripe_subscription_id = subscription_id
                 existing_sub.is_lifetime = is_lifetime
-                existing_sub.current_period_start = datetime.now(timezone.utc)
+                existing_sub.current_period_start = now_utc
+                if period_end is not None:
+                    existing_sub.current_period_end = period_end
             else:
                 new_sub = Subscription(
                     user_id=user.id,
                     plan_type=plan_type,
-                    status=SubscriptionStatus.ACTIVE,
+                    status=initial_status,
                     stripe_customer_id=customer_id,
                     stripe_subscription_id=subscription_id,
                     is_lifetime=is_lifetime,
-                    current_period_start=datetime.now(timezone.utc),
+                    current_period_start=now_utc,
+                    current_period_end=period_end,
                 )
                 db.add(new_sub)
 

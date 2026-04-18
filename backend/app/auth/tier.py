@@ -11,10 +11,16 @@ Behaviour of ``get_current_tier``:
         (disables all filtering; endpoints behave as before the system)
 
     Authenticated user with active paid subscription:
-        plan_type ``basic``     -> ``PickTier.SILVER``
-        plan_type ``standard``  -> ``PickTier.GOLD``
-        plan_type ``premium``   -> ``PickTier.PLATINUM``
-        plan_type ``lifetime``  -> ``PickTier.PLATINUM``
+        plan_type ``basic``     -> ``PickTier.GOLD``      (Bronze trial = 7-day Gold)
+        plan_type ``standard``  -> ``PickTier.SILVER``    (Silver plan)
+        plan_type ``premium``   -> ``PickTier.GOLD``      (Gold plan)
+        plan_type ``lifetime``  -> ``PickTier.PLATINUM``  (Platinum lifetime)
+
+    The PlanType enum values are legacy names. Current checkout slugs
+    (bronze/silver/gold/platinum) are aliased to these enum values via
+    ``subscriptions.py`` PLAN_ALIASES + plan_map. The mapping table
+    above reflects the **current product promise** per the pricing
+    page — Bronze grants 7-day Gold trial access, not Silver.
 
     Authenticated admin with ``?tier=<slug>`` query param:
         returns that tier (for debugging / impersonation)
@@ -23,12 +29,16 @@ Behaviour of ``get_current_tier``:
 """
 from __future__ import annotations
 
+import logging
 import uuid
+from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import Depends, HTTPException, Query, Request
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+logger = logging.getLogger(__name__)
 
 from app.auth.dependencies import get_current_user, oauth2_scheme
 from app.core.security import decode_access_token
@@ -45,11 +55,20 @@ from app.models.user import Role, User
 # ---------------------------------------------------------------------------
 # Plan-to-tier mapping
 # ---------------------------------------------------------------------------
-# Subscription plan types (from models/subscription.py) mapped to PickTier:
+# Subscription plan types (from models/subscription.py) mapped to PickTier.
+#
+# The enum values are legacy internal names; the keys below document what
+# the user actually checked out for given today's pricing page:
+#   BASIC    <- bronze checkout slug (7-day Gold trial, €0,01)
+#   STANDARD <- silver checkout slug (monthly/yearly Silver)
+#   PREMIUM  <- gold   checkout slug (monthly/yearly Gold)
+#   LIFETIME <- platinum checkout slug (one-time Platinum)
+#
+# Access semantics follow the pricing-page promise, not the enum name.
 PLAN_TO_TIER: dict[PlanType, PickTier] = {
-    PlanType.BASIC: PickTier.SILVER,
-    PlanType.STANDARD: PickTier.GOLD,
-    PlanType.PREMIUM: PickTier.PLATINUM,
+    PlanType.BASIC: PickTier.GOLD,
+    PlanType.STANDARD: PickTier.SILVER,
+    PlanType.PREMIUM: PickTier.GOLD,
     PlanType.LIFETIME: PickTier.PLATINUM,
 }
 
@@ -143,6 +162,20 @@ async def _resolve_user_tier(user: User, db: AsyncSession) -> PickTier:
 
     if sub is None:
         return PickTier.FREE
+
+    # Honour trial / period expiry. Lifetime plans never expire (Stripe
+    # doesn't send expiry events for them), so they skip this check.
+    # Recurring plans have ``current_period_end`` rolled forward by
+    # Stripe's invoice.* webhooks; Bronze one-time trials set it at
+    # checkout (see subscriptions.py). If the timestamp is past, we
+    # treat the user as Free regardless of the stored status value —
+    # the tier resolver is the final enforcement gate.
+    if not sub.is_lifetime and sub.current_period_end is not None:
+        end = sub.current_period_end
+        if end.tzinfo is None:
+            end = end.replace(tzinfo=timezone.utc)
+        if end < datetime.now(timezone.utc):
+            return PickTier.FREE
 
     return PLAN_TO_TIER.get(sub.plan_type, PickTier.FREE)
 

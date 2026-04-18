@@ -15,11 +15,23 @@ const TIER_KEY = "betsplug_tier";
 const USER_KEY = "betsplug_user";
 const TESTING_KEY = "betsplug_admin_testing_tier";
 
+// Maps the `plan` string returned by /subscriptions/status to the tier slug
+// used in the UI. The API returns legacy enum values (basic/standard/premium/
+// lifetime) but the pricing promise for each tier is:
+//   basic   <- bronze checkout   -> Gold access (7-day trial)
+//   standard<- silver checkout   -> Silver access
+//   premium <- gold   checkout   -> Gold access
+//   lifetime<- platinum checkout -> Platinum access
+// Also accept the new-naming slugs in case /status ever returns them directly.
 const API_TIER_MAP: Record<string, Tier> = {
-  basic: "silver",
+  basic: "gold",
+  bronze: "gold",
   standard: "silver",
+  silver: "silver",
   premium: "gold",
+  gold: "gold",
   lifetime: "platinum",
+  platinum: "platinum",
 };
 
 function readTierFromStorage(): { tier: Tier; isAdmin: boolean } {
