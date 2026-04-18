@@ -99,9 +99,9 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
   // /homepage/free-picks which always includes confidence for each pick.
   const avgConf = useMemo(() => {
     if (freePickConf.size === 0) return null;
-    let sum = 0;
-    for (const conf of freePickConf.values()) sum += conf;
-    return Math.round((sum / freePickConf.size) * 100);
+    const vals = Array.from(freePickConf.values());
+    const sum = vals.reduce((a, b) => a + b, 0);
+    return Math.round((sum / vals.length) * 100);
   }, [freePickConf]);
 
   const stats: {
