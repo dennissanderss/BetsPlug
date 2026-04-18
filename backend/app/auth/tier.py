@@ -208,13 +208,26 @@ async def get_current_tier(
         return PickTier.FREE
 
     # Admin override via ?tier=... — debug / support / QA tool.
-    if tier_override and user.role == Role.ADMIN:
-        slug = tier_override.strip().upper()
-        try:
-            return PickTier[slug]
-        except KeyError:
-            # Invalid slug -> fall through to normal resolution
-            pass
+    if tier_override:
+        if user.role == Role.ADMIN:
+            slug = tier_override.strip().upper()
+            try:
+                return PickTier[slug]
+            except KeyError:
+                logger.warning(
+                    "tier_override_invalid_slug user=%s slug=%s",
+                    user.email, tier_override,
+                )
+        else:
+            # Non-admin passing ?tier= is ignored, but we log it so
+            # abuse / confused-UI attempts can be traced. The fall-
+            # through to normal resolution keeps the security posture
+            # identical to before — no user ever escalates via the
+            # query string.
+            logger.warning(
+                "tier_override_denied user=%s role=%s slug=%s",
+                user.email, user.role, tier_override,
+            )
 
     return await _resolve_user_tier(user, db)
 
