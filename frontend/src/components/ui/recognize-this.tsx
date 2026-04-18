@@ -1,31 +1,34 @@
 "use client";
 
 /**
- * RecognizeThis, empathy-first pain-recognition section.
+ * RecognizeThis, visual empathy section with a fake-tipster chat mockup
+ * next to the real BetsPlug prediction card. The contrast is the point.
  *
- * Sits between the hero and the proof-oriented sections (live proof,
- * tier ladder, trust funnel). Purpose: hit the visitor with the exact
- * frustrations they've had in Telegram groups / tipster sites so they
- * think "yes, that's me" BEFORE we start pitching the solution.
+ * Why this design: visitors recognise the patterns ("yes, I've been in
+ * that group") before we ever say the word 'BetsPlug'. A flat grid of
+ * NOCTURNE cards felt corporate; a phone-chat mockup is visceral.
  *
  * Tone rules (per product feedback):
- *   - Never accuse competitors of scamming / bedrog, describe patterns
- *     the visitor has experienced, not labels for bad actors.
- *   - Empathy first, pitch second. Lead with "we get it" not "they're bad".
- *   - Each card is a recognisable pattern, not a general industry stat.
+ *   - Never accuse competitors of scamming, describe the patterns.
+ *   - Mock copy in the chat is deliberately exaggerated but not libellous.
+ *   - Right side keeps it professional: real data structure, real numbers.
  */
 
 import Link from "next/link";
 import { motion } from "motion/react";
 import {
-  HelpCircle,
-  EyeOff,
-  Clock3,
-  Lock,
   ArrowRight,
+  Flame,
+  AlertTriangle,
   Sparkles,
+  CheckCircle2,
+  Clock3,
+  Target,
+  ShieldCheck,
+  Trash2,
 } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
+import { Pill } from "@/components/noct/pill";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 export function RecognizeThis() {
@@ -33,58 +36,23 @@ export function RecognizeThis() {
   const loc = useLocalizedHref();
   const isNl = locale === "nl";
 
-  const pains: {
-    icon: typeof HelpCircle;
-    title: string;
-    desc: string;
-    variant: "purple" | "blue" | "green";
-  }[] = [
-    {
-      icon: HelpCircle,
-      variant: "purple",
-      title: isNl ? "Tips zonder onderbouwing" : "Tips without any basis",
-      desc: isNl
-        ? "Een bericht met 'Leg in op Madrid, vertrouw me'. Geen winkans, geen uitleg, geen trackrecord om op te zoeken. Je moet maar hopen dat het werkt."
-        : "A message saying 'Back Madrid, trust me.' No win probability, no reasoning, no track record to look up. You just hope it works.",
-    },
-    {
-      icon: EyeOff,
-      variant: "blue",
-      title: isNl ? "Verliezen die 'nooit gebeurd' zijn" : "Losses that 'never happened'",
-      desc: isNl
-        ? "Gisteren had de groep nog 50+ berichten. Vandaag zie je alleen de winnaars. Screenshots van 95% winrate maar nergens een verloren pick te bekennen."
-        : "Yesterday the group had 50+ messages. Today you only see the winners. Screenshots boasting 95% hit rates but not a single losing pick in sight.",
-    },
-    {
-      icon: Clock3,
-      variant: "green",
-      title: isNl ? "Altijd te laat binnen" : "Always in too late",
-      desc: isNl
-        ? "De tip komt 5 minuten voor aftrap. Geen tijd om na te denken, de odds zijn al gekelderd, en de 'zekere winst' was er alleen voor wie sneller was dan jij."
-        : "The tip lands 5 minutes before kickoff. No time to think, the odds have already crashed, and the 'sure thing' only paid for whoever moved faster than you.",
-    },
-    {
-      icon: Lock,
-      variant: "purple",
-      title: isNl ? "Betalen voor een spreadsheet" : "Paying for a spreadsheet",
-      desc: isNl
-        ? "€100 per maand voor toegang tot een gedeelde sheet met picks. Geen model, geen cijfers per tier, geen manier om zelf te controleren of het klopt."
-        : "€100 a month to access a shared sheet of picks. No model, no per-tier stats, no way to verify any of it yourself.",
-    },
-  ];
-
   return (
     <section className="relative overflow-hidden py-20 md:py-28">
-      {/* Ambient glows, warmer tones to signal "this is the pain section" */}
+      {/* Ambient glows: red+purple (pain), then green fading in (relief) */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-40 top-10 h-[460px] w-[460px] rounded-full"
-        style={{ background: "hsl(var(--accent-purple) / 0.16)", filter: "blur(140px)" }}
+        className="pointer-events-none absolute -left-32 top-20 h-[500px] w-[500px] rounded-full"
+        style={{ background: "hsl(0 72% 55% / 0.12)", filter: "blur(160px)" }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-40 bottom-10 h-[420px] w-[420px] rounded-full"
-        style={{ background: "hsl(var(--accent-blue) / 0.1)", filter: "blur(140px)" }}
+        className="pointer-events-none absolute -right-40 top-40 h-[480px] w-[480px] rounded-full"
+        style={{ background: "hsl(var(--accent-purple) / 0.14)", filter: "blur(150px)" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 -bottom-20 h-[340px] w-[600px] -translate-x-1/2 rounded-full"
+        style={{ background: "hsl(var(--accent-green) / 0.14)", filter: "blur(150px)" }}
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
@@ -94,9 +62,9 @@ export function RecognizeThis() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5 }}
-          className="mb-14 max-w-3xl"
+          className="mx-auto mb-14 max-w-3xl text-center"
         >
-          <span className="section-label">
+          <span className="section-label mx-auto">
             <Sparkles className="h-3 w-3" />
             {isNl ? "Herken je dit?" : "Sound familiar?"}
           </span>
@@ -115,75 +83,394 @@ export function RecognizeThis() {
               </>
             )}
           </h2>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
             {isNl
-              ? "Telegramgroepen met een ‘gegarandeerde' winrate. Tips die pas binnenkomen als je al niks meer kunt doen. Verliezen die een dag later stilletjes uit de groep verdwijnen. We kennen het verhaal. We hoorden dezelfde klacht zo vaak dat we besloten het anders op te lossen."
-              : "Telegram groups with a ‘guaranteed' win rate. Tips that drop when there's nothing left to do. Losses that quietly disappear from the chat the next day. We've heard the same story often enough to build the opposite."}
+              ? "Zie je dit wel eens voorbij komen? Groepen met 'gegarandeerde' winrates, tips die pas binnenkomen als je er niks meer mee kan, en screenshots waar alle verliezen op mysterieuze wijze ontbreken."
+              : "Seen any of this? Groups with 'guaranteed' hit rates, tips that drop when there's nothing left to do, and screenshots where every loss has mysteriously vanished."}
           </p>
         </motion.div>
 
-        {/* Pain cards */}
-        <div className="grid gap-4 sm:grid-cols-2">
-          {pains.map((pain, i) => {
-            const Icon = pain.icon;
-            return (
-              <motion.div
-                key={pain.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.45, delay: i * 0.08 }}
-                className={`card-neon card-neon-${pain.variant} rounded-2xl`}
-              >
-                <div className="relative p-6 sm:p-7">
-                  <div className="flex items-start gap-4">
-                    <HexBadge variant={pain.variant} size="md">
-                      <Icon className="h-5 w-5" />
-                    </HexBadge>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-base font-bold text-[#ededed] sm:text-lg">
-                        {pain.title}
-                      </h3>
-                      <p className="mt-2 text-sm leading-relaxed text-[#a3a9b8]">
-                        {pain.desc}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+        {/* Side-by-side comparison: chat mockup vs BetsPlug card */}
+        <div className="grid items-stretch gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
+          {/* LEFT, fake tipster chat mockup */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6 }}
+            className="relative"
+          >
+            <TipsterChatMockup isNl={isNl} />
+            {/* Corner label */}
+            <div className="absolute -top-3 left-4 z-10 flex items-center gap-1.5 rounded-full bg-red-500/20 px-3 py-1 ring-1 ring-red-400/40 backdrop-blur">
+              <AlertTriangle className="h-3 w-3 text-red-300" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-red-200">
+                {isNl ? "Wat je nu ziet" : "What you see now"}
+              </span>
+            </div>
+          </motion.div>
+
+          {/* RIGHT, BetsPlug alternative card */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="relative"
+          >
+            <BetsPlugCard isNl={isNl} />
+            <div className="absolute -top-3 left-4 z-10 flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 ring-1 ring-emerald-400/40 backdrop-blur">
+              <CheckCircle2 className="h-3 w-3 text-emerald-300" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-200">
+                {isNl ? "Wat BetsPlug toont" : "What BetsPlug shows"}
+              </span>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Compact comparison rows below */}
+        <div className="mt-14 grid gap-3 sm:grid-cols-2">
+          <ComparisonRow
+            icon={AlertTriangle}
+            pain={isNl ? "'Bet on Madrid, trust me'" : "'Bet on Madrid, trust me'"}
+            answer={isNl ? "Win% + betrouwbaarheid + 4 AI-modellen" : "Win% + confidence + 4 AI models"}
+          />
+          <ComparisonRow
+            icon={Trash2}
+            pain={isNl ? "Verliezen stil verdwenen" : "Losses quietly removed"}
+            answer={isNl ? "Elke winst én verlies blijft openbaar staan" : "Every win and loss stays public forever"}
+          />
+          <ComparisonRow
+            icon={Clock3}
+            pain={isNl ? "Tip 5 min voor aftrap" : "Tip 5 min before kickoff"}
+            answer={isNl ? "Uren van tevoren gepubliceerd" : "Published hours in advance"}
+          />
+          <ComparisonRow
+            icon={Target}
+            pain={isNl ? "€100/maand voor een Excel" : "€100/month for a spreadsheet"}
+            answer={isNl ? "3 picks per dag gratis. €0,01 trial." : "3 picks per day free. €0.01 trial."}
+          />
         </div>
 
         {/* Bridge to solution */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5 }}
-          className="card-neon card-neon-green mt-10 overflow-hidden rounded-2xl halo-green"
+          className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
-          <div className="relative grid items-center gap-4 p-6 sm:grid-cols-[1fr_auto] sm:gap-8 sm:p-8">
-            <div>
-              <p className="text-sm font-bold uppercase tracking-widest text-[#4ade80]">
-                {isNl ? "Daarom bouwden we BetsPlug" : "That's why we built BetsPlug"}
-              </p>
-              <p className="mt-3 text-base leading-relaxed text-[#ededed] sm:text-lg">
-                {isNl
-                  ? "Eén transparant AI-model. Elke voorspelling wordt vóór de aftrap vergrendeld met tijdstempel. Winst of verlies, alles blijft staan. Per tier kun je de nauwkeurigheid zelf controleren. Geen groepen, geen excel-sheets, geen 'vertrouw me maar'."
-                  : "One transparent AI model. Every prediction is locked with a timestamp before kickoff. Win or loss, nothing gets deleted. You can check the accuracy of every tier yourself. No groups, no spreadsheets, no 'just trust me'."}
-              </p>
-            </div>
-            <Link
-              href={loc("/how-it-works")}
-              className="btn-primary inline-flex items-center justify-center gap-2 whitespace-nowrap"
-            >
-              {isNl ? "Hoe we het anders doen" : "How we do it differently"}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+          <p className="text-center text-sm text-[#a3a9b8] sm:text-left">
+            {isNl
+              ? "Daarom bouwden we BetsPlug precies het omgekeerde."
+              : "That's why we built BetsPlug as the opposite."}
+          </p>
+          <Link
+            href={loc("/how-it-works")}
+            className="btn-primary inline-flex items-center gap-2"
+          >
+            {isNl ? "Hoe we het anders doen" : "How we do it differently"}
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TipsterChatMockup, fake Telegram-style group chat
+   ───────────────────────────────────────────────────────────── */
+
+function TipsterChatMockup({ isNl }: { isNl: boolean }) {
+  const messages: {
+    body: React.ReactNode;
+    time: string;
+    flag?: "urgent" | "deleted" | "cherry";
+  }[] = [
+    {
+      body: (
+        <>
+          <div className="flex items-center gap-1 text-sm font-bold text-red-200">
+            <Flame className="h-3.5 w-3.5 text-red-300" />
+            {isNl ? "🔥🔥 SUREBET ALERT 🔥🔥" : "🔥🔥 SUREBET ALERT 🔥🔥"}
+          </div>
+          <p className="mt-1 text-base font-black text-white">
+            {isNl ? "BET MADRID WIN NOW" : "BET MADRID WIN NOW"}
+          </p>
+          <p className="mt-0.5 text-xs text-white/70">
+            {isNl ? "trust me 💯" : "trust me 💯"}
+          </p>
+        </>
+      ),
+      time: isNl ? "5 min voor aftrap" : "5 min before kickoff",
+      flag: "urgent",
+    },
+    {
+      body: (
+        <>
+          <p className="text-sm font-bold text-white">
+            {isNl ? "💰 GUARANTEED PROFIT TONIGHT 💰" : "💰 GUARANTEED PROFIT TONIGHT 💰"}
+          </p>
+          <p className="mt-0.5 text-xs text-white/70">
+            {isNl ? "Screenshot: 95% winrate deze maand 📊" : "Screenshot: 95% winrate this month 📊"}
+          </p>
+        </>
+      ),
+      time: isNl ? "gisteren" : "yesterday",
+      flag: "cherry",
+    },
+    {
+      body: (
+        <>
+          <p className="text-sm italic text-white/40 line-through">
+            {isNl ? "[bericht verwijderd]" : "[message deleted]"}
+          </p>
+          <p className="mt-0.5 text-[10px] text-white/50">
+            {isNl ? "(gisteravond, verloren)" : "(last night, lost)"}
+          </p>
+        </>
+      ),
+      time: isNl ? "eergisteren" : "2 days ago",
+      flag: "deleted",
+    },
+    {
+      body: (
+        <>
+          <p className="text-sm font-bold text-white">
+            {isNl ? "VIP Premium €100/maand" : "VIP Premium €100/month"}
+          </p>
+          <p className="mt-0.5 text-xs text-white/70">
+            {isNl ? "→ toegang tot gedeelde sheet" : "→ access to shared sheet"}
+          </p>
+        </>
+      ),
+      time: isNl ? "ma" : "Mon",
+    },
+  ];
+
+  return (
+    <div className="relative h-full overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-b from-[#14161c] to-[#0b0d13] shadow-2xl">
+      {/* Chat header */}
+      <div className="flex items-center gap-3 border-b border-white/[0.06] bg-white/[0.02] px-5 py-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-red-500/30 to-orange-500/30 text-lg ring-1 ring-red-400/30">
+          🔥
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-bold text-white">
+            VIP Football Tips 🔥🔥🔥
+          </p>
+          <p className="truncate text-[11px] text-white/50">
+            {isNl ? "3.247 leden · 92% winrate" : "3,247 members · 92% hit rate"}
+          </p>
+        </div>
+        <div className="flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          {isNl ? "Online" : "Online"}
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div className="space-y-4 p-5">
+        {messages.map((m, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.35, delay: 0.3 + i * 0.15 }}
+            className="flex gap-3"
+          >
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-purple-500/30 to-pink-500/30 text-xs font-bold text-white/80">
+              A
+            </div>
+            <div
+              className={`flex-1 rounded-2xl rounded-tl-md px-4 py-3 ring-1 ${
+                m.flag === "urgent"
+                  ? "bg-red-500/15 ring-red-400/30"
+                  : m.flag === "cherry"
+                  ? "bg-amber-500/10 ring-amber-400/25"
+                  : m.flag === "deleted"
+                  ? "bg-white/[0.02] ring-white/10"
+                  : "bg-white/[0.04] ring-white/10"
+              }`}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-white/60">
+                  Admin
+                </span>
+                <span className="text-[10px] text-white/40">{m.time}</span>
+              </div>
+              <div className="mt-1.5">{m.body}</div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Chat footer: warning strip */}
+      <div className="border-t border-red-500/20 bg-red-500/5 px-5 py-3">
+        <div className="flex items-center gap-2 text-[11px] font-semibold text-red-200">
+          <AlertTriangle className="h-3.5 w-3.5" />
+          <span>
+            {isNl
+              ? "Geen cijfers. Geen uitleg. Geen trackrecord."
+              : "No stats. No reasoning. No track record."}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BetsPlugCard, professional alternative mirror
+   ───────────────────────────────────────────────────────────── */
+
+function BetsPlugCard({ isNl }: { isNl: boolean }) {
+  const rows: { label: string; value: string; strong?: boolean }[] = [
+    { label: isNl ? "Thuis" : "Home", value: "56%" },
+    { label: isNl ? "Gelijk" : "Draw", value: "23%" },
+    { label: isNl ? "Uit" : "Away", value: "21%" },
+  ];
+
+  return (
+    <div className="card-neon card-neon-green relative h-full overflow-hidden rounded-3xl">
+      <div className="relative flex h-full flex-col p-6 sm:p-7">
+        {/* Header */}
+        <div className="flex items-center gap-3 border-b border-white/[0.06] pb-4">
+          <HexBadge variant="green" size="md">
+            <ShieldCheck className="h-5 w-5" />
+          </HexBadge>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#4ade80]">
+              {isNl ? "Gratis voorspelling" : "Free prediction"}
+            </p>
+            <p className="truncate text-base font-bold text-[#ededed]">
+              Leeds vs Wolves
+            </p>
+            <p className="text-[11px] text-[#6b7280]">
+              Premier League · {isNl ? "za 16:00" : "Sat 16:00"}
+            </p>
+          </div>
+          <Pill tone="active" className="!text-[9px]">
+            {isNl ? "4u vóór aftrap" : "4h before KO"}
+          </Pill>
+        </div>
+
+        {/* Probability breakdown */}
+        <div className="mt-5">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
+            {isNl ? "Winkansen per uitkomst" : "Win probability breakdown"}
+          </p>
+          <div className="mt-3 space-y-2.5">
+            {rows.map((r, i) => (
+              <div key={r.label} className="flex items-center gap-3">
+                <span className="w-16 text-xs font-semibold text-[#a3a9b8]">
+                  {r.label}
+                </span>
+                <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
+                  <div
+                    className={`h-full rounded-full ${
+                      i === 0
+                        ? "bg-gradient-to-r from-emerald-500 to-green-400"
+                        : i === 1
+                        ? "bg-gradient-to-r from-slate-500 to-slate-400"
+                        : "bg-gradient-to-r from-purple-500 to-purple-400"
+                    }`}
+                    style={{ width: r.value }}
+                  />
+                </div>
+                <span className="w-10 text-right text-sm font-extrabold tabular-nums text-[#ededed]">
+                  {r.value}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Confidence badge */}
+        <div className="mt-5 flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-500/[0.06] p-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/15 text-xl font-extrabold text-emerald-300">
+            65%
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">
+              {isNl ? "Modelbetrouwbaarheid" : "Model confidence"}
+            </p>
+            <p className="mt-0.5 text-xs leading-relaxed text-[#a3a9b8]">
+              {isNl
+                ? "4 AI-modellen stemmen overeen. Gold-tier, 70%+ historische accuracy."
+                : "4 AI models agree. Gold tier, 70%+ historical accuracy."}
+            </p>
+          </div>
+        </div>
+
+        {/* Meta */}
+        <div className="mt-5 grid grid-cols-3 gap-2 border-t border-white/[0.06] pt-4 text-center">
+          <div>
+            <p className="text-[9px] uppercase tracking-widest text-[#6b7280]">
+              {isNl ? "Gepubliceerd" : "Published"}
+            </p>
+            <p className="mt-0.5 text-[11px] font-semibold text-[#ededed]">
+              {isNl ? "4u van tevoren" : "4h ahead"}
+            </p>
+          </div>
+          <div>
+            <p className="text-[9px] uppercase tracking-widest text-[#6b7280]">
+              {isNl ? "Prijs" : "Price"}
+            </p>
+            <p className="mt-0.5 text-[11px] font-semibold text-[#ededed]">
+              {isNl ? "Gratis" : "Free"}
+            </p>
+          </div>
+          <div>
+            <p className="text-[9px] uppercase tracking-widest text-[#6b7280]">
+              {isNl ? "Resultaat" : "Result"}
+            </p>
+            <p className="mt-0.5 text-[11px] font-semibold text-[#ededed]">
+              {isNl ? "Automatisch" : "Auto-graded"}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ComparisonRow, compact pain → answer row
+   ───────────────────────────────────────────────────────────── */
+
+function ComparisonRow({
+  icon: Icon,
+  pain,
+  answer,
+}: {
+  icon: typeof AlertTriangle;
+  pain: string;
+  answer: string;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-30px" }}
+      transition={{ duration: 0.4 }}
+      className="flex items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 backdrop-blur"
+    >
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-300 ring-1 ring-red-400/20">
+        <Icon className="h-4 w-4" />
+      </div>
+      <div className="min-w-0 flex-1 truncate text-sm italic text-[#a3a9b8]">
+        {pain}
+      </div>
+      <ArrowRight className="h-4 w-4 shrink-0 text-[#6b7280]" />
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-300 ring-1 ring-emerald-400/25">
+        <CheckCircle2 className="h-4 w-4" />
+      </div>
+      <div className="min-w-0 flex-1 text-sm font-semibold text-[#ededed]">
+        {answer}
+      </div>
+    </motion.div>
   );
 }
