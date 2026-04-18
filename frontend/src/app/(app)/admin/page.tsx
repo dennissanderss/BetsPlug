@@ -598,24 +598,56 @@ function PipelineHealthCard() {
                 {health.predictions_last_24h}
               </p>
               <p className="text-[10px] text-slate-500">
-                {health.predictions_last_1h} in last hour
+                {health.pre_kickoff_24h} pre-kickoff / {health.post_kickoff_24h} post-kickoff
               </p>
             </div>
             <div className="glass-panel p-3 space-y-0.5">
               <p className="section-label">Upcoming (7d)</p>
               <p className="text-stat tabular-nums text-slate-100">
-                {health.upcoming_with_prediction}
+                {health.upcoming_visible}
                 <span className="text-sm text-slate-500"> / {health.upcoming_matches_7d}</span>
+              </p>
+              <p className="text-[10px] text-slate-500">
+                user-visible / total ({health.upcoming_with_prediction} in DB)
               </p>
             </div>
             <div className="glass-panel p-3 space-y-0.5">
               <p className="section-label">Finished (2d)</p>
               <p className="text-stat tabular-nums text-slate-100">
-                {health.recent_finished_with_prediction}
+                {health.recent_finished_visible}
                 <span className="text-sm text-slate-500"> / {health.recent_finished_2d}</span>
+              </p>
+              <p className="text-[10px] text-slate-500">
+                user-visible / total ({health.recent_finished_with_prediction} in DB)
               </p>
             </div>
           </div>
+
+          {Object.keys(health.source_breakdown_24h).length > 0 && (
+            <div className="glass-panel p-3 space-y-1.5">
+              <p className="section-label">Prediction sources (last 24h)</p>
+              <div className="flex flex-wrap gap-1.5">
+                {Object.entries(health.source_breakdown_24h).map(([src, n]) => {
+                  const allowed = ["live", "backtest", "batch_local_fill"].includes(src);
+                  return (
+                    <span
+                      key={src}
+                      className={cn(
+                        "inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[11px] font-mono",
+                        allowed
+                          ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-300"
+                          : "bg-red-500/10 border border-red-500/30 text-red-300",
+                      )}
+                      title={allowed ? "Allowed by trackrecord_filter" : "REJECTED by trackrecord_filter"}
+                    >
+                      {src === "__null__" ? "(null)" : src}
+                      <span className="tabular-nums">{n}</span>
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {health.latest_predicted_at && (
             <p className="text-xs text-slate-500">
@@ -921,7 +953,7 @@ function TierSwitcher() {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AdminPage() {
-  const [activeTab, setActiveTab] = React.useState("datasources");
+  const [activeTab, setActiveTab] = React.useState("actions");
   const router = useRouter();
   const { user, ready } = useAuth();
 
@@ -969,33 +1001,9 @@ export default function AdminPage() {
 
   const tabs: TabDef[] = [
     {
-      id: "datasources",
-      label: "Data Sources",
-      icon: Database,
-      badge: degradedCount,
-      badgeColor: "bg-amber-500",
-    },
-    {
-      id: "ingestion",
-      label: "Ingestion",
-      icon: RefreshCw,
-    },
-    {
-      id: "errors",
-      label: "Errors",
-      icon: AlertTriangle,
-      badge: errorCount,
-      badgeColor: "bg-red-500",
-    },
-    {
       id: "actions",
       label: "Actions",
       icon: Zap,
-    },
-    {
-      id: "blog",
-      label: "Blog",
-      icon: FileText,
     },
     {
       id: "users",
@@ -1006,21 +1014,6 @@ export default function AdminPage() {
       id: "finance",
       label: "Finance",
       icon: DollarSign,
-    },
-    {
-      id: "seo",
-      label: "SEO",
-      icon: Search,
-    },
-    {
-      id: "seo-meta",
-      label: "SEO Meta",
-      icon: Globe,
-    },
-    {
-      id: "analytics",
-      label: "Analytics",
-      icon: BarChart3,
     },
     {
       id: "goals",
@@ -1101,16 +1094,9 @@ export default function AdminPage() {
 
       {/* Tab content */}
       <div className="animate-fade-in">
-        {activeTab === "datasources" && <DataSourcesTab />}
-        {activeTab === "ingestion" && <IngestionTab />}
-        {activeTab === "errors" && <ErrorsTab />}
         {activeTab === "actions" && <ActionsTab sources={sources} />}
-        {activeTab === "blog" && <BlogManager />}
         {activeTab === "users" && <UserManager />}
         {activeTab === "finance" && <FinanceTab />}
-        {activeTab === "seo" && <SeoDashboard />}
-        {activeTab === "seo-meta" && <SeoMetaEditor />}
-        {activeTab === "analytics" && <AnalyticsSettings />}
         {activeTab === "goals" && <GoalsNotesTab />}
         {activeTab === "strategy-tiers" && <StrategyTiersTab />}
         {activeTab === "email-diagnostics" && <EmailDiagnosticsTab />}

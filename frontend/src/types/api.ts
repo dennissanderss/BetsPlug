@@ -847,6 +847,7 @@ export type PipelineDiagnosis =
   | "no_model"
   | "stale"
   | "partial"
+  | "filtered_out"
   | "unknown";
 
 export interface PipelineHealth {
@@ -860,6 +861,11 @@ export interface PipelineHealth {
   upcoming_with_prediction: number;
   recent_finished_2d: number;
   recent_finished_with_prediction: number;
+  upcoming_visible: number;
+  recent_finished_visible: number;
+  source_breakdown_24h: Record<string, number>;
+  post_kickoff_24h: number;
+  pre_kickoff_24h: number;
 }
 
 export interface GeneratePredictionsResult {

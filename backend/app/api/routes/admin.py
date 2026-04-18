@@ -665,16 +665,26 @@ class PipelineHealthResponse(BaseModel):
     producing pre-match forecasts or has silently fallen behind.
     """
 
-    diagnosis: str  # "healthy" | "no_model" | "stale" | "partial" | "unknown"
+    diagnosis: str  # "healthy" | "no_model" | "stale" | "partial" | "filtered_out" | "unknown"
     message: str
     active_model_versions: int
     predictions_last_1h: int
     predictions_last_24h: int
     latest_predicted_at: Optional[datetime]
+    # Raw coverage (any prediction row, no filter)
     upcoming_matches_7d: int
     upcoming_with_prediction: int
     recent_finished_2d: int
     recent_finished_with_prediction: int
+    # User-visible coverage (after trackrecord_filter — same as the public
+    # endpoints /fixtures/results, /bet-of-the-day, /trackrecord/summary)
+    upcoming_visible: int
+    recent_finished_visible: int
+    # Prediction-source breakdown over last 24h (live, backtest, batch_local_fill, ...)
+    source_breakdown_24h: Dict[str, int]
+    # Post-kickoff predictions in last 24h: filtered out by trackrecord_filter
+    post_kickoff_24h: int
+    pre_kickoff_24h: int
 
 
 @router.get(
@@ -711,6 +721,7 @@ async def pipeline_health(
     from datetime import timedelta
     from sqlalchemy import func
 
+    from app.core.prediction_filters import trackrecord_filter
     from app.models.match import Match, MatchStatus
     from app.models.model_version import ModelVersion
     from app.models.prediction import Prediction
@@ -766,6 +777,22 @@ async def pipeline_health(
         )
     ).scalar_one()
 
+    # Same query but with the public trackrecord_filter applied — this is what
+    # the user-facing endpoints actually see.
+    upcoming_visible = (
+        await db.execute(
+            select(func.count(func.distinct(Match.id)))
+            .select_from(Match)
+            .join(Prediction, Prediction.match_id == Match.id)
+            .where(
+                Match.status == MatchStatus.SCHEDULED,
+                Match.scheduled_at >= now,
+                Match.scheduled_at <= seven_days_ahead,
+                trackrecord_filter(),
+            )
+        )
+    ).scalar_one()
+
     recent_finished = (
         await db.execute(
             select(func.count(Match.id)).where(
@@ -785,10 +812,66 @@ async def pipeline_health(
                 Match.status == MatchStatus.FINISHED,
                 Match.scheduled_at >= two_days_ago,
                 Match.scheduled_at <= now,
+            )
+        )
+    ).scalar_one()
+
+    recent_finished_visible = (
+        await db.execute(
+            select(func.count(func.distinct(Match.id)))
+            .select_from(Match)
+            .join(Prediction, Prediction.match_id == Match.id)
+            .where(
+                Match.status == MatchStatus.FINISHED,
+                Match.scheduled_at >= two_days_ago,
+                Match.scheduled_at <= now,
+                trackrecord_filter(),
+            )
+        )
+    ).scalar_one()
+
+    # Source breakdown over last 24h
+    source_rows = (
+        await db.execute(
+            select(
+                func.coalesce(Prediction.prediction_source, "__null__"),
+                func.count(Prediction.id),
+            )
+            .where(Prediction.created_at >= one_day_ago)
+            .group_by(Prediction.prediction_source)
+        )
+    ).all()
+    source_breakdown: Dict[str, int] = {str(label): int(n) for label, n in source_rows}
+
+    # Pre- vs post-kickoff split over last 24h
+    pre_kickoff_24h = (
+        await db.execute(
+            select(func.count(Prediction.id))
+            .select_from(Prediction)
+            .join(Match, Match.id == Prediction.match_id)
+            .where(
+                Prediction.created_at >= one_day_ago,
                 Prediction.predicted_at <= Match.scheduled_at,
             )
         )
     ).scalar_one()
+
+    post_kickoff_24h = (
+        await db.execute(
+            select(func.count(Prediction.id))
+            .select_from(Prediction)
+            .join(Match, Match.id == Prediction.match_id)
+            .where(
+                Prediction.created_at >= one_day_ago,
+                Prediction.predicted_at > Match.scheduled_at,
+            )
+        )
+    ).scalar_one()
+
+    raw_upcoming_pct = (upcoming_with_pred / upcoming_total) if upcoming_total else None
+    raw_recent_pct = (recent_finished_with_pred / recent_finished) if recent_finished else None
+    vis_upcoming_pct = (upcoming_visible / upcoming_total) if upcoming_total else None
+    vis_recent_pct = (recent_finished_visible / recent_finished) if recent_finished else None
 
     if active_mv_count == 0:
         diagnosis = "no_model"
@@ -806,11 +889,38 @@ async def pipeline_health(
             "'forecasting' queue has no worker, or the task is erroring "
             "silently. Check Railway logs for 'task_generate_predictions'."
         )
+    elif (
+        (raw_upcoming_pct is not None and raw_upcoming_pct >= 0.5)
+        or (raw_recent_pct is not None and raw_recent_pct >= 0.5)
+    ) and (
+        (vis_upcoming_pct is not None and vis_upcoming_pct < 0.1)
+        and (vis_recent_pct is not None and vis_recent_pct < 0.1)
+    ):
+        # Raw rows exist but the public filter is throwing almost all of them
+        # away. Build an explanation pointing at the exact reason.
+        reasons = []
+        if post_kickoff_24h > 0 and post_kickoff_24h >= pre_kickoff_24h:
+            reasons.append(
+                f"{post_kickoff_24h} of {pre_kickoff_24h + post_kickoff_24h} predictions "
+                "in the last 24h were made AFTER kickoff (predicted_at > "
+                "scheduled_at) and are excluded from user-facing aggregates"
+            )
+        bad_sources = [
+            k for k in source_breakdown
+            if k not in ("live", "backtest", "batch_local_fill")
+        ]
+        if bad_sources:
+            reasons.append(
+                f"prediction_source values outside the allowlist: {bad_sources}"
+            )
+        diagnosis = "filtered_out"
+        message = (
+            "Predictions ARE being generated but the public track record "
+            "filter rejects them. " + (" ; ".join(reasons) if reasons else "")
+        )
     else:
-        upcoming_pct = (upcoming_with_pred / upcoming_total) if upcoming_total else None
-        recent_pct = (recent_finished_with_pred / recent_finished) if recent_finished else None
-        if (upcoming_pct is None or upcoming_pct >= 0.5) and (
-            recent_pct is None or recent_pct >= 0.5
+        if (raw_upcoming_pct is None or raw_upcoming_pct >= 0.5) and (
+            raw_recent_pct is None or raw_recent_pct >= 0.5
         ):
             diagnosis = "healthy"
             message = "Pipeline is producing forecasts on schedule."
@@ -840,6 +950,11 @@ async def pipeline_health(
         upcoming_with_prediction=upcoming_with_pred,
         recent_finished_2d=recent_finished,
         recent_finished_with_prediction=recent_finished_with_pred,
+        upcoming_visible=upcoming_visible,
+        recent_finished_visible=recent_finished_visible,
+        source_breakdown_24h=source_breakdown,
+        post_kickoff_24h=post_kickoff_24h,
+        pre_kickoff_24h=pre_kickoff_24h,
     )
 
 
