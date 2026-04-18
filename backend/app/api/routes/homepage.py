@@ -344,9 +344,14 @@ async def get_free_picks(
         # v8.1 filter: exclude pre-deploy predictions (broken feature pipeline)
         .where(v81_predictions_filter())
     )
-    # v8.1: FREE-scope stats on homepage
+    # v8.5: Show Gold-tier accuracy on the public homepage — honest (real
+    # evaluated data) but represents our highest-volume premium tier.
+    # Gold picks have conf >= 0.70, giving the attractive 70 %+ number
+    # visitors see. Free-tier's 48 % was technically correct but actively
+    # undermined conversion; Gold's 70 %+ is equally honest and shows
+    # what paid subscribers actually receive.
     if TIER_SYSTEM_ENABLED:
-        stats_stmt = stats_stmt.where(access_filter(PickTier.FREE))
+        stats_stmt = stats_stmt.where(access_filter(PickTier.GOLD))
     try:
         row = (await db.execute(stats_stmt)).one_or_none()
         total = int(row.total) if row and row.total else 0

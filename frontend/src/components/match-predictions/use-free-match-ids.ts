@@ -13,6 +13,12 @@ import { api } from "@/lib/api";
  *
  * The underlying data comes from `/homepage/free-picks` which returns
  * the top 3 upcoming matches by model confidence.
+ *
+ * `freePickConf` is a map of match_id → confidence (0–1) sourced
+ * directly from the free-picks response. Use this for the avg-confidence
+ * stat instead of reading `f.prediction?.confidence` from the fixtures
+ * endpoint, which may return null for matches where the prediction tier
+ * differs from the fixture-endpoint access scope.
  */
 export function useFreeMatchIds() {
   const { data, isLoading } = useQuery({
@@ -24,11 +30,15 @@ export function useFreeMatchIds() {
   });
 
   const ids = new Set<string>();
+  const freePickConf = new Map<string, number>();
   if (data) {
     for (const pick of data.today) {
-      if (pick.match_id) ids.add(pick.match_id);
+      if (pick.match_id) {
+        ids.add(pick.match_id);
+        if (pick.confidence != null) freePickConf.set(pick.match_id, pick.confidence);
+      }
     }
   }
 
-  return { freeMatchIds: ids, isLoadingFreeIds: isLoading };
+  return { freeMatchIds: ids, freePickConf, isLoadingFreeIds: isLoading };
 }

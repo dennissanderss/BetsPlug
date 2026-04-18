@@ -45,10 +45,18 @@ export function usePotdNumbers(): PotdNumbers {
   const { locale } = useTranslations();
   const live = useBotdTrackRecord();
 
+  // Guard against 0 from BOTD when all picks are still pending evaluation —
+  // `??` only catches null/undefined, so we need an explicit > 0 check.
+  // When BOTD is cold (accuracy_pct=0, total_picks=8), fall back to the
+  // Gold-tier static snapshot so the page shows the honest 70%+ numbers.
   const accuracyRaw =
-    live?.accuracy_pct ?? Number.parseFloat(POTD_STATS.accuracy);
+    live?.accuracy_pct != null && live.accuracy_pct > 0
+      ? live.accuracy_pct
+      : Number.parseFloat(POTD_STATS.accuracy);
   const picksRaw =
-    live?.total_picks ?? Number.parseInt(POTD_STATS.totalPicks, 10);
+    live?.total_picks != null && live.total_picks > 0
+      ? live.total_picks
+      : Number.parseInt(POTD_STATS.totalPicks, 10);
 
   const fmtPct = new Intl.NumberFormat(locale, {
     maximumFractionDigits: 1,

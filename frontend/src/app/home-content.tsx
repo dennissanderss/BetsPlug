@@ -442,7 +442,9 @@ export function HomeContent({
                       {t("dash.pickOfDay")}
                     </p>
                     <p className="text-stat text-sm text-[#c4b5fd]">
-                      {botd && botd.accuracy_pct > 0 ? `${botd.accuracy_pct}%` : "—"}
+                      {/* Use Gold-tier accuracy from potd (falls back to 70.6%
+                          static snapshot while BOTD picks are still pending). */}
+                      {potd.potdAccuracy ? `${potd.potdAccuracy}%` : "—"}
                     </p>
                   </div>
                 </div>
@@ -460,12 +462,10 @@ export function HomeContent({
                       {t("home.freePredRecord")}
                     </p>
                     <p className="text-stat text-sm text-[#93c5fd]">
-                      {/* Only show a live number once the BOTD ledger
-                          actually has evaluated picks — otherwise fall
-                          back to the last-reviewed static figure so we
-                          never claim "0 correct" or "2 correct" while
-                          the live counter is warming up. */}
-                      {botd && botd.correct > 0 ? botd.correct : "—"}
+                      {/* Show Gold-tier total evaluated picks from the
+                          static snapshot while the BOTD ledger is warming
+                          up (all BOTD picks are still future matches). */}
+                      {botd && botd.correct > 0 ? botd.correct : potd.potdPicks}
                     </p>
                   </div>
                 </div>

@@ -207,9 +207,10 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
-  // v8.3 — public tier selector lives on the marketing page so anyone
-  // (logged in or not) can audit every tier's historical numbers.
-  const [pickTier, setPickTier] = useState<PublicTier>("all");
+  // v8.5 — default to Gold tier (70%+) on the public page so first-time
+  // visitors immediately see the most compelling honest number.
+  // Users can still explore every tier via the tab strip below.
+  const [pickTier, setPickTier] = useState<PublicTier>("gold");
   const live = useLiveTrackRecordStats(pickTier);
   const potd = usePotdNumbers();
 

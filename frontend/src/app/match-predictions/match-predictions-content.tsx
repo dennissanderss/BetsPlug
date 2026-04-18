@@ -52,7 +52,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
   const loc = useLocalizedHref();
   const isNl = locale === "nl";
 
-  const { freeMatchIds, isLoadingFreeIds } = useFreeMatchIds();
+  const { freeMatchIds, freePickConf, isLoadingFreeIds } = useFreeMatchIds();
 
   const fixturesQuery = useQuery({
     queryKey: ["match-predictions-public", 7],
@@ -92,14 +92,17 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
   const isError = fixturesQuery.isError;
   const hasFree = free.length > 0;
 
+  // Source avgConf from the free-picks API response (freePickConf) rather
+  // than the fixture endpoint's prediction field. The fixture endpoint may
+  // return prediction:null for matches whose confidence lands in a tier gap,
+  // which would drag the average to ~22%. freePickConf comes directly from
+  // /homepage/free-picks which always includes confidence for each pick.
   const avgConf = useMemo(() => {
-    if (free.length === 0) return null;
-    const sum = free.reduce(
-      (acc, f) => acc + (f.prediction?.confidence ?? 0),
-      0,
-    );
-    return Math.round((sum / free.length) * 100);
-  }, [free]);
+    if (freePickConf.size === 0) return null;
+    let sum = 0;
+    for (const conf of freePickConf.values()) sum += conf;
+    return Math.round((sum / freePickConf.size) * 100);
+  }, [freePickConf]);
 
   const stats: {
     label: string;
