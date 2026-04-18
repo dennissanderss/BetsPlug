@@ -146,20 +146,20 @@ export function TrustFunnel() {
       icon: Brain,
       value: fmt(forecastsTotal),
       label: isNl
-        ? "Voorspeld met ons huidige AI-model"
-        : "Forecast with our current AI model",
+        ? "Geanalyseerd door ons huidige AI-model"
+        : "Analysed by our current AI model",
       desc: isNl
-        ? "Alleen voorspellingen van het model dat nu live staat. Oudere modelversies zijn gearchiveerd, niet verstopt, maar ook niet meegeteld in onze cijfers."
-        : "Only predictions from the model that's currently live. Older model versions are archived, not hidden, but not counted in our stats either.",
+        ? "Onze huidige modelversie is losgelaten op deze wedstrijden. Oudere modelversies zijn gearchiveerd, niet verstopt, maar ook niet meegeteld in onze cijfers."
+        : "Our current model version was run against these matches. Older model versions are archived, not hidden, but not counted in our numbers either.",
       variant: "purple",
     },
     {
       icon: ClipboardCheck,
       value: fmt(evaluatedTotal),
-      label: isNl ? "Wedstrijden beoordeeld (uitslag bekend)" : "Matches graded (result in)",
+      label: isNl ? "Wedstrijden in onze dataset" : "Matches in our dataset",
       desc: isNl
-        ? "Elke voorspelling wordt automatisch beoordeeld zodra de wedstrijd afgelopen is. Geen kersenpluk, geen stilletjes verwijderde verliezers. Hieronder zie je hoe die voorspellingen presteren per betrouwbaarheidsdrempel."
-        : "Every forecast is automatically graded the moment the match ends. No cherry-picking, no quietly removed losers. Below you can see how those forecasts perform per confidence threshold.",
+        ? "Elke wedstrijd wordt vergeleken met de modelvoorspelling en het resultaat vastgelegd. Geen kersenpluk, geen verborgen verliezers. Hieronder zie je hoe het model presteert per betrouwbaarheidsdrempel."
+        : "Every match is compared to the model forecast and the result is recorded. No cherry-picking, no hidden losers. Below you can see how the model performs per confidence threshold.",
       variant: "green",
     },
   ];
@@ -189,25 +189,25 @@ export function TrustFunnel() {
         >
           <span className="section-label mx-auto">
             <ShieldCheck className="h-3 w-3" />
-            {isNl ? "Hoe we aan onze cijfers komen" : "How we got to our numbers"}
+            {isNl ? "Hoe onze modelprestaties tot stand komen" : "How our model numbers are built"}
           </span>
           <h2 className="text-heading mt-5 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
             {isNl ? (
               <>
                 Van <span className="gradient-text-green">55.000+ wedstrijden</span> naar{" "}
-                <span className="gradient-text-green">{fmt(evaluatedTotal)} beoordeelde picks</span>
+                <span className="gradient-text-green">verzamelde data van {fmt(evaluatedTotal)} wedstrijden</span>
               </>
             ) : (
               <>
                 From <span className="gradient-text-green">55 000+ matches</span> to{" "}
-                <span className="gradient-text-green">{fmt(evaluatedTotal)} graded picks</span>
+                <span className="gradient-text-green">collected data from {fmt(evaluatedTotal)} matches</span>
               </>
             )}
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
             {isNl
-              ? "We tellen alleen voorspellingen van ons huidige AI-model. Geen opgepoetste all-time cijfers, geen verborgen fouten. Zo komen we stap voor stap bij onze nauwkeurigheid:"
-              : "We only count predictions from the AI model that's currently live. No polished all-time numbers, no hidden mistakes. Here's how we get to our accuracy, step by step:"}
+              ? "Onze cijfers komen uit modelanalyse op historische wedstrijden. Het model ziet bij elke wedstrijd alleen informatie die op dat moment bekend was, nooit wat er daarna gebeurde. Zo komen we stap voor stap bij onze modelprestaties:"
+              : "Our numbers come from model analysis on historical matches. At every match the model only sees information that was available at that moment, never what happened after. Here's how we build the model-performance number step by step:"}
           </p>
         </motion.div>
 
@@ -317,8 +317,8 @@ export function TrustFunnel() {
         >
           <p className="mx-auto max-w-xl text-sm leading-relaxed text-[#a3a9b8]">
             {isNl
-              ? "Niet onze woorden. Elke voorspelling staat met tijdstempel online voordat de wedstrijd begint en wordt na afloop automatisch beoordeeld."
-              : "Not our words. Every prediction is timestamped online before kickoff and auto-graded after full time."}
+              ? "De cijfers hierboven komen uit modelvalidatie op 2 jaar historische data. Sinds 16 april 2026 loggen we daarnaast ook een live meting — die groeit dagelijks."
+              : "The numbers above come from model validation on 2 years of historical data. Since 16 April 2026 we also log a separate live measurement — that grows daily."}
           </p>
           <p className="mx-auto mt-4 max-w-xl text-[11px] leading-relaxed text-[#6b7280]">
             <span className="font-semibold text-[#a3a9b8]">
@@ -332,7 +332,7 @@ export function TrustFunnel() {
             href={loc("/track-record")}
             className="btn-primary mt-6 inline-flex items-center gap-2"
           >
-            {isNl ? "Bekijk elke voorspelling zelf" : "Inspect every prediction yourself"}
+            {isNl ? "Bekijk de volledige data" : "Inspect the full data"}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </motion.div>

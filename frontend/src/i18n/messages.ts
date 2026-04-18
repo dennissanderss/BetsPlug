@@ -69,7 +69,7 @@ const en = {
   "hero.titleLine2": "AI football predictions",
   "hero.titleLine3": "that actually deliver",
   "hero.subtitle":
-    "Our AI crunches 40+ stats per match across the Premier League, La Liga, Bundesliga, Champions League and 26+ other leagues. Every prediction is locked before kickoff and tracked publicly. No cherry-picking. No deleted losses. Just honest AI football predictions you can verify yourself.",
+    "Our AI crunches 40+ stats per match across the Premier League, La Liga, Bundesliga, Champions League and 26+ other leagues. Our model performance comes from point-in-time analysis on historical matches, publicly documented. No cherry-picking. No deleted losses. Just honest AI football predictions you can verify yourself.",
   "hero.activeUsers": "subscribers trust BetsPlug every month",
   "hero.ctaPrimary": "See today's free picks",
   "hero.ctaSecondary": "How our AI works",
@@ -87,7 +87,7 @@ const en = {
   "hero.wins": "Wins",
   "hero.usp1Title": "Up to 80% accurate",
   "hero.usp1Desc": "Our top tiers predict 70% to 80% of football matches correctly. Every result timestamped and public.",
-  "hero.usp2Title": "Locked before kickoff",
+  "hero.usp2Title": "Point-in-time only",
   "hero.usp2Desc": "All predictions go live before the match starts. No sneaky edits. Ever.",
   "hero.usp3Title": "30+ leagues covered",
   "hero.usp3Desc": "Premier League, La Liga, Bundesliga, Serie A, Champions League and more. One subscription.",
@@ -133,7 +133,7 @@ const en = {
   "persona.seriousPitch": "You manage your bankroll properly. You shop for the best odds. You want an AI edge without losing control of your bets.",
   "persona.seriousFeature1": "Every prediction with a confidence score + edge vs market odds",
   "persona.seriousFeature2": "Full coverage across 30+ leagues (CL, UEL, MLS included)",
-  "persona.seriousFeature3": "Locked before kickoff \u2014 no sneaky changes after the match",
+  "persona.seriousFeature3": "Point-in-time features only — no post-match data leaks in",
   "persona.seriousCta": "See tonight's value plays",
   "persona.quantTitle": "The numbers user",
   "persona.quantPitch": "You want the raw data, not the sales pitch. Full stats, predictions, expected goals \u2014 everything our AI uses to make its picks.",
@@ -188,7 +188,7 @@ const en = {
     "Pick of the Day is our highest-confidence AI football prediction out of 50+ matches that day, currently at {potdAccuracy}% accuracy across {potdPicks} picks. One clear call. Delivered daily. Free on the homepage.",
   "how.step3Title": "3. Every pick tracked, nothing edited",
   "how.step3Desc":
-    "Predictions are saved before kickoff and graded automatically after the final whistle. Wins and losses, the full CSV is yours to download. Nothing edited. Nothing deleted.",
+    "Predictions are scored against the official result feed. Wins and losses, the full CSV is yours to download. Nothing edited. Nothing deleted.",
   "how.deepDive": "See the full methodology",
 
   /* Pricing */
@@ -270,7 +270,7 @@ const en = {
     "No confusing charts. Every AI football prediction shows a clear win %, a confidence score, and a short explanation. Scan it, decide, move on.",
   "trusted.card2Title": "We publish every result: wins and losses",
   "trusted.card2Desc":
-    "Gold tier hits 70%+ across 1,650+ graded picks. Platinum 80%+. Every prediction timestamped before kickoff. Auto-graded after full time. The track record is public. Check it before you spend a penny.",
+    "Gold tier scores 70%+ across 1,650+ graded picks. Platinum 80%+. Model analysis uses point-in-time features only. Results are recorded automatically. All data is public. Check it before you spend a penny.",
   "trusted.learnMore": "See the full track record",
   "trusted.card3Title": "Built with serious AI models",
   "trusted.card3Desc":
@@ -289,7 +289,7 @@ const en = {
   "track.titleB": "in numbers.",
   "track.rating": "4.9 / 5 from 1,500+ verified users",
   "track.desc1":
-    "Every AI football prediction is timestamped before kickoff, auto-graded after the final whistle, and written to the same public database that powers the homepage. Wins and losses. No editing. No hidden results.",
+    "Every AI football prediction is computed from point-in-time features, scored automatically, and persisted in the same public database that powers the homepage. Wins and losses. No editing. No hidden results.",
   "track.desc2":
     "Premier League predictions, La Liga tips, Champions League picks, Eredivisie analysis, same approach, same honesty across 30+ football leagues worldwide. We don't cherry-pick our best league.",
   "track.cta": "View the full track record",
@@ -632,7 +632,7 @@ const en = {
     "Every day, BetsPlug generates AI-powered betting tips for 50+ matches. Each football prediction includes win probabilities, confidence scores, and pre-match odds comparison, so you can see exactly where the value lies before placing any bet.",
   "seo.pillar3Title": "Verified Public Track Record",
   "seo.pillar3Desc":
-    "Unlike typical tipster sites, BetsPlug publishes every prediction, wins and losses, in a fully transparent, publicly verifiable track record. Every AI football pick is timestamped before kickoff and automatically graded after the match. No cherry-picking, no hidden results.",
+    "Unlike typical tipster sites, BetsPlug publishes every prediction, wins and losses, in a fully transparent, publicly verifiable dataset. The model analyses each match using only data that was available beforehand, then results are recorded. No cherry-picking, no hidden results.",
   "seo.pillar4Title": "Daily Pick of the Day",
   "seo.pillar4Desc":
     "Short on time? Our AI-powered Pick of the Day selects the single highest-confidence football prediction across all leagues, one clear tip, delivered daily. No scrolling through dozens of matches. Just our algorithm's best pick, backed by data.",
@@ -829,7 +829,7 @@ const en = {
   "tr.heroTitleA": "Every AI football prediction we've ever made,",
   "tr.heroTitleB": "wins and losses, side by side.",
   "tr.heroSubtitle":
-    "Most tipster sites show you a winning screenshot. We show you the ledger. Every BetsPlug pick is timestamped before kickoff, probability-weighted, graded against the official result feed, and published here, winner or loser. This page is the only proof of performance you should accept from anyone selling football predictions.",
+    "Most tipster sites show you a winning screenshot. We show you the ledger. Every BetsPlug pick is scored against the official result feed, and published here, winner or loser. This page is the only proof of performance you should accept from anyone selling football predictions.",
   "tr.heroCtaPrimary": "Explore the live results",
   "tr.heroCtaSecondary": "Start €0,01 trial",
 
@@ -1034,7 +1034,7 @@ const en = {
     "The pick quietly changes 10 minutes in, when the scoreline turns. Screenshots look clean. Reality doesn't.",
   "hiw.integrityGood1Title": "Timestamped before the whistle",
   "hiw.integrityGood1Desc":
-    "Every prediction is written to the database before kickoff. Change the pick after? New row, new timestamp, both visible forever.",
+    "Every prediction is persisted with its point-in-time features. Any update creates a new row; both versions stay visible.",
   "hiw.integrityBad2Title": "Deleted losing days",
   "hiw.integrityBad2Desc":
     "Bad weeks don't make it to the 'track record'. The feed gets curated. 80% winrate. Sure.",
@@ -1068,7 +1068,7 @@ const en = {
     "If you've been burned by a tipster before, you're probably skeptical. Good. Here's exactly what makes BetsPlug different.",
   "hiw.faq1Q": "How accurate are your AI football predictions?",
   "hiw.faq1A":
-    "Pick of the Day: {potdAccuracy}% hit rate across {potdPicks} tracked predictions. Overall 3-way match predictions (home/draw/away) hit around 50%, meaningfully above the ~37% a random guess would yield. Every prediction is timestamped before kickoff and graded automatically. You can verify every number on the public track record.",
+    "Pick of the Day: {potdAccuracy}% hit rate across {potdPicks} tracked predictions. Overall 3-way match predictions (home/draw/away) hit around 50%, meaningfully above the ~37% a random guess would yield. Each match is compared against the model forecast and the result recorded. You can verify every number on the public track record.",
   "hiw.faq2Q": "What is Pick of the Day?",
   "hiw.faq2A":
     "Each day our AI flags one fixture with unusually high confidence. That's Pick of the Day, currently at {potdAccuracy}% hit rate. You also get every other prediction on the platform, not just this one.",
@@ -2364,7 +2364,7 @@ const en = {
 
   /* ── Track Record FAQ ───────────────────────────────────── */
   "faq.track.q1": "How is the track record verified?",
-  "faq.track.a1": "Every prediction is timestamped and logged before kick-off. Results are matched automatically from official data feeds, so our AI prediction track record cannot be edited or cherry-picked after the fact.",
+  "faq.track.a1": "Every prediction is persisted with its source + timestamp. Results are matched automatically from official data feeds, so our AI prediction track record cannot be edited or cherry-picked after the fact.",
   "faq.track.q2": "What does the Brier score mean?",
   "faq.track.a2": "The Brier score measures how close our probability forecasts are to actual outcomes. Lower is better, a score of 0 is perfect. We use it to benchmark our football analytics models against the market.",
   "faq.track.q3": "How far back does the track record go?",
@@ -2392,7 +2392,7 @@ const en = {
 
   /* ── How It Works FAQ ───────────────────────────────────── */
   "faq.how.q1": "How accurate are your predictions?",
-  "faq.how.a1": "Our Pick of the Day has {potdAccuracy}% accuracy over {potdPicks} picks. Overall 3-way match predictions (home/draw/away) hit around 50%. Every prediction is timestamped before kick-off and graded automatically, so you can verify the track record yourself.",
+  "faq.how.a1": "Our Pick of the Day has {potdAccuracy}% accuracy over {potdPicks} picks. Overall 3-way match predictions (home/draw/away) hit around 50%. Every prediction uses point-in-time features only and is scored automatically — you can inspect every row yourself.",
   "faq.how.q2": "What is Pick of the Day?",
   "faq.how.a2": "Each day BetsPlug Pulse selects the match with the strongest confidence signal. This is our Pick of the Day - currently at {potdAccuracy}% accuracy. You can also browse all other predictions on the platform.",
   "faq.how.q3": "Can I download the data?",
@@ -2430,7 +2430,7 @@ const nl: Dictionary = {
   "about.metaTitle": "Over BetsPlug · De teambuilding AI Voetbalvoorspellingen",
   "about.missionBadge": "Waarom BetsPlug bestaat",
   "about.missionBody1": "De markt voor voetbalvoorspellingen heeft te lang op hypes gefunctioneerd. YouTube-goeroes jagen op macht. Telegram kanalen die 'sloten van de week' verkopen. Betaalde tipgevers zonder verifieerbare geschiedenis en de gewoonte om slechte maanden te verwijderen. Als levenslange voetbalfans dreef het ons tegen de muur, omdat we wisten dat de onderliggende gegevens al iets interessanters zeiden dan al die gegevens.",
-  "about.missionBody2": "Dus hebben we de tool gebouwd die we altijd al wilden: een platform dat duizenden wedstrijden per week verwerkt door meerdere AI-modellen, en alleen de picks publiceert waar onze AI en de markt het oneens is. Geen onderbuikgevoel. Geen verborgen verliezen. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt publiekelijk beoordeeld.",
+  "about.missionBody2": "Dus hebben we de tool gebouwd die we altijd al wilden: een platform dat duizenden wedstrijden per week verwerkt door meerdere AI-modellen, en alleen de picks publiceert waar onze AI en de markt het oneens is. Geen onderbuikgevoel. Geen verborgen verliezen. Elke wedstrijd wordt geanalyseerd met alleen informatie die op dat moment bekend was.",
   "about.missionCta": "Zie hoe het werkt",
   "about.missionTitle": "Wij maken van ruwe wedstrijddata een meetbare voorsprong.",
   "about.stat1Label": "Jaar gecombineerde ICT- & data-ervaring",
@@ -3005,7 +3005,7 @@ const nl: Dictionary = {
   "faq.home.q7": "Heb ik een abonnement nodig om AI-picks te zien?",
   "faq.home.q8": "Kan ik mijn abonnement op elk moment opzeggen?",
   "faq.home.q9": "Bieden jullie restituties aan?",
-  "faq.how.a1": "Onze Pick of the Day heeft een nauwkeurigheid van {potdAccuracy}% ten opzichte van {potdPicks} keuzes. De algemene drievoudige wedstrijdvoorspellingen (thuis/gelijkspel/uit) bereikten ongeveer 50%. Elke voorspelling krijgt vóór de aftrap een tijdstempel en wordt automatisch beoordeeld, zodat je het trackrecord zelf kunt verifiëren.",
+  "faq.how.a1": "Onze Pick of the Day heeft een nauwkeurigheid van {potdAccuracy}% ten opzichte van {potdPicks} keuzes. De algemene drievoudige wedstrijdvoorspellingen (thuis/gelijkspel/uit) bereikten ongeveer 50%. Elke wedstrijd wordt vergeleken met de modelvoorspelling en het resultaat vastgelegd, zodat je het trackrecord zelf kunt verifiëren.",
   "faq.how.a2": "Elke dag selecteert BetsPlug Pulse de wedstrijd met het sterkste vertrouwenssignaal. Dit is onze Pick of the Day - momenteel met een nauwkeurigheid van {potdAccuracy}%. Je kunt ook door alle andere voorspellingen op het platform bladeren.",
   "faq.how.a3": "Ja. Op de track record-pagina kun je de volledige voorspellingshistorie downloaden als CSV-bestand. Elke voorspelling, elk resultaat - niets verborgen.",
   "faq.how.a4": "We omvatten meer dan 70 voetbalcompetities wereldwijd, waaronder de Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie en alle grote UEFA-competities.",
@@ -3142,14 +3142,14 @@ const nl: Dictionary = {
   "hero.hot": "Heet",
   "hero.joinNow": "Sluit je nu aan",
   "hero.livePick": "Gratis voorspelling",
-  "hero.subtitle": "Onze AI analyseert meer dan 40 statistieken per wedstrijd in de Premier League, La Liga, Bundesliga, Champions League en 26+ andere competities. Elke voorspelling wordt vóór de aftrap vergrendeld en openbaar bijgehouden. Geen kersenpluk. Geen verwijderde verliezen. Gewoon eerlijke AI-voetbalvoorspellingen die je zelf kunt verifiëren.",
+  "hero.subtitle": "Onze AI analyseert meer dan 40 statistieken per wedstrijd in de Premier League, La Liga, Bundesliga, Champions League en 26+ andere competities. Onze modelprestaties komen uit point-in-time analyse op historische wedstrijden, publiek vastgelegd. Geen kersenpluk. Geen verwijderde verliezen. Gewoon eerlijke AI-voetbalvoorspellingen die je zelf kunt verifiëren.",
   "hero.titleLine1": "",
   "hero.titleLine2": "AI-voetbalvoorspellingen",
   "hero.titleLine3": "die daadwerkelijk opleveren",
   "hero.today": "Vandaag",
   "hero.usp1Desc": "Onze topmodellen voorspellen 70% tot 80% van de wedstrijden correct. Elke uitslag krijgt een tijdstempel en is openbaar.",
   "hero.usp1Title": "Tot 80% nauwkeurig",
-  "hero.usp2Desc": "Voorspellingen gepubliceerd vóór de aftrap. Geen kersenpluk achteraf. Ooit.",
+  "hero.usp2Desc": "Point-in-time model-analyse. Geen kersenpluk achteraf, nooit.",
   "hero.usp2Title": "Pre-match vergrendeld",
   "hero.usp3Desc": "Premier League, La Liga, Bundesliga, Serie A, Champions League en meer. Eén abonnement.",
   "hero.usp3Title": "Meer dan 30 competities gedekt",
@@ -3174,7 +3174,7 @@ const nl: Dictionary = {
   "hiw.engineDisclaimer": "Elk model wordt getest op data die het nooit eerder heeft gezien (walk-forward validatie). Ons trackrecord toont elke voorspelling, winst en verlies, zonder verwijderingen.",
   "hiw.engineSubtitle": "De modellen achter elke voorspelling",
   "hiw.engineTitle": "Onder de motorkap",
-  "hiw.faq1A": "Pick of the Day: {potdAccuracy}% trefferpercentage voor {potdPicks} bijgehouden voorspellingen. De algemene drievoudige wedstrijdvoorspellingen (thuis/gelijkspel/uit) bedroegen ongeveer 50%, betekenisvol boven de ~37% die een willekeurige keuze zou opleveren. Elke voorspelling krijgt vóór de aftrap een tijdstempel en wordt automatisch beoordeeld. Je kunt elk nummer op het openbare trackrecord verifiëren.",
+  "hiw.faq1A": "Pick of the Day: {potdAccuracy}% trefferpercentage voor {potdPicks} bijgehouden voorspellingen. De algemene drievoudige wedstrijdvoorspellingen (thuis/gelijkspel/uit) bedroegen ongeveer 50%, betekenisvol boven de ~37% die een willekeurige keuze zou opleveren. Elke wedstrijd wordt vergeleken met de modelvoorspelling en het resultaat vastgelegd. Je kunt elk nummer op het openbare trackrecord verifiëren.",
   "hiw.faq1Q": "Hoe nauwkeurig zijn jullie voorspellingen?",
   "hiw.faq2A": "Elke dag markeert onze AI één wedstrijd met een ongewoon hoog vertrouwen. Dat is Pick of the Day, momenteel met een trefferpercentage van {potdAccuracy}%. Je krijgt ook elke andere voorspelling op het platform, niet alleen deze.",
   "hiw.faq2Q": "Wat is Pick of the Day?",
@@ -3211,7 +3211,7 @@ const nl: Dictionary = {
   "hiw.integrityBad3Title": "Screenshots in plaats van gegevens",
   "hiw.integrityBadBadge": "Typische tipstersnelkoppeling",
   "hiw.integrityBadge": "De integriteitslaag",
-  "hiw.integrityGood1Desc": "Elke voorspelling wordt vóór de aftrap naar de database geschreven. De keuze daarna wijzigen? Nieuwe rij, nieuwe tijdstempel, beide voor altijd zichtbaar.",
+  "hiw.integrityGood1Desc": "Elke voorspelling wordt opgeslagen met zijn point-in-time features. Een update maakt een nieuwe rij; beide versies blijven zichtbaar.",
   "hiw.integrityGood1Title": "Tijdstempel vóór het fluitsignaal",
   "hiw.integrityGood2Desc": "Op de trackrecordpagina worden verliezers naast winnaars weergegeven. Onze slechtste week is één klik verwijderd, niet geschrobd.",
   "hiw.integrityGood2Title": "Elk verlies blijft openbaar",
@@ -3278,7 +3278,7 @@ const nl: Dictionary = {
   "how.step1Title": "1. Pulse scant elke wedstrijd",
   "how.step2Desc": "Pick of the Day is onze meest betrouwbare AI-voetbalvoorspelling van meer dan 50 wedstrijden die dag, momenteel met een nauwkeurigheid van {potdAccuracy}% voor {potdPicks} keuzes. Eén duidelijke oproep. Dagelijks geleverd. Gratis op de startpagina.",
   "how.step2Title": "2. We brengen de beste keuze naar voren",
-  "how.step3Desc": "Voorspellingen worden vóór de aftrap opgeslagen en na het laatste fluitsignaal automatisch beoordeeld. Winsten, verliezen, model voor model: u kunt de volledige CSV downloaden. Niets bewerkt. Niets verwijderd. Niets dat we niet konden bewijzen in de rechtbank.",
+  "how.step3Desc": "Voorspellingen worden gekoppeld aan point-in-time features en na afloop automatisch gescoord. Winsten, verliezen, model voor model: u kunt de volledige CSV downloaden. Niets bewerkt. Niets verwijderd. Niets dat we niet konden bewijzen in de rechtbank.",
   "how.step3Title": "3. Elke keuze wordt bijgehouden, niets bewerkt",
   "how.subtitle": "Eén AI-motor. Eén dagelijkse Pick of the Day. Eén openbaar trackrecord dat je kunt verifiëren. Geen zwarte dozen.",
   "how.title": "Van ruwe data naar AI-voetbalvoorspellingen in drie stappen.",
@@ -3489,7 +3489,7 @@ const nl: Dictionary = {
   "persona.seriousCta": "Bekijk de waardespelen van vanavond",
   "persona.seriousFeature1": "Elke voorspelling met vertrouwensscore + voorsprong versus marktkansen",
   "persona.seriousFeature2": "Volledige dekking van meer dan 30 competities (inclusief CL, UEL, MLS)",
-  "persona.seriousFeature3": "Pre-match vergrendeld, geen aanpassingen achteraf",
+  "persona.seriousFeature3": "Point-in-time features, geen aanpassingen achteraf",
   "persona.seriousPitch": "Je volgt eenheden, markt-odds en behandelt je bankroll als een portefeuille. Je wilt een AI-voorsprong zonder je oordeel uit te besteden.",
   "persona.seriousTitle": "De serieuze gebruiker",
   "persona.subtitle": "Hetzelfde platform, dezelfde AI-voetbalvoorspellingen, verschillende gewoonten. Kies de flow die klinkt als die van jou.",
@@ -3905,7 +3905,7 @@ const nl: Dictionary = {
   "route.step1Title": "AI analyseert data",
   "route.step2Desc": "Per wedstrijd berekenen we de kans op thuiswinst, gelijkspel of uitwinst.",
   "route.step2Title": "Kans berekend",
-  "route.step3Desc": "Elke voorspelling krijgt een tijdstempel en wordt bijgehouden. Onze nauwkeurigheid is openbaar controleerbaar.",
+  "route.step3Desc": "Elke voorspelling wordt gekoppeld aan point-in-time data en vastgelegd. Onze nauwkeurigheid is openbaar controleerbaar.",
   "route.step3Title": "Eerlijk gevalideerd",
   "route.strategyDesc": "Ontdek bewezen strategieen onderbouwd door data",
   "route.strategyTitle": "Strategy Lab",
@@ -3940,7 +3940,7 @@ const nl: Dictionary = {
   "seo.pillar1Title": "AI-voetbalvoorspellingsengine",
   "seo.pillar2Desc": "Elke dag genereert BetsPlug AI-aangedreven goktips voor meer dan 50 wedstrijden. Elke voetbalvoorspelling omvat winstkansen, betrouwbaarheidsscores en vergelijking van odds vóór de wedstrijd, zodat je precies kunt zien waar de waarde ligt voordat je een voorspelling plaatst.",
   "seo.pillar2Title": "Tips voor voetbalvoorspellingen van vandaag",
-  "seo.pillar3Desc": "In tegenstelling tot typische tipstersites publiceert BetsPlug elke voorspelling, winsten en verliezen, in een volledig transparant, publiekelijk verifieerbaar trackrecord. Elke AI-voetbalkeuze krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld na de wedstrijd. Geen cherry-picking, geen verborgen resultaten.",
+  "seo.pillar3Desc": "In tegenstelling tot typische tipstersites publiceert BetsPlug onze modelprestaties in een volledig transparante, publiekelijk verifieerbare dataset. Elke match gebruikt alleen informatie beschikbaar op dat moment; het resultaat wordt na afloop geregistreerd. Geen cherry-picking, geen verborgen resultaten.",
   "seo.pillar3Title": "Geverifieerd openbaar trackrecord",
   "seo.pillar4Desc": "Weinig tijd? Onze AI-aangedreven Pick of the Day selecteert de meest betrouwbare voetbalvoorspelling voor alle competities: één duidelijke tip, dagelijks geleverd. Geen scrollen door tientallen wedstrijden. Gewoon de beste keuze van ons algoritme, ondersteund door gegevens.",
   "seo.pillar4Title": "Dagelijks Pick of the Day",
@@ -4122,7 +4122,7 @@ const nl: Dictionary = {
   "tr.heroBadge": "Volledig transparant",
   "tr.heroCtaPrimary": "Bekijk de nieuwste resultaten",
   "tr.heroCtaSecondary": "Terug naar home",
-  "tr.heroSubtitle": "De meeste tipstersites laten je een winnende schermafbeelding zien. Wij laten je het grootboek zien. Elke keuze van BetsPlug wordt vóór de aftrap voorzien van een tijdstempel, wordt gewogen op basis van de waarschijnlijkheid, wordt beoordeeld op basis van de officiële resultatenfeed en wordt hier gepubliceerd: winnaar of verliezer. Deze pagina is het enige prestatiebewijs dat je moet accepteren van iedereen die voetbalvoorspellingen verkoopt.",
+  "tr.heroSubtitle": "De meeste tipstersites laten je een winnende schermafbeelding zien. Wij laten je het grootboek zien. Elke BetsPlug-pick wordt gewogen op waarschijnlijkheid, gescoord tegen de officiële resultatenfeed en hier gepubliceerd: winnaar of verliezer. Deze pagina is het enige prestatiebewijs dat je moet accepteren van iedereen die voetbalvoorspellingen verkoopt.",
   "tr.heroTitleA": "Een track record dat je",
   "tr.heroTitleB": "écht kunt verifiëren.",
   "tr.kpi1Label": "3-way wedstrijdnauwkeurigheid",
@@ -4140,7 +4140,7 @@ const nl: Dictionary = {
   "tr.kpisBadge": "Afgelopen 12 maanden",
   "tr.kpisSubtitle": "Een eerlijke voortschrijdende momentopname van elke AI-voetbalvoorspelling die in de afgelopen twaalf maanden is beoordeeld. Slechte weken inbegrepen. Goede weken, niet kersengeplukt.",
   "tr.kpisTitle": "De cijfers, ongefilterd.",
-  "tr.metaDesc": "Openbaar grootboek van elke BetsPlug AI-voetbalvoorspelling: tijdstempel vóór de aftrap, beoordeeld door de officiële feed, zowel winnaars als verliezers. Geen verwijderingen. Geen curatie.",
+  "tr.metaDesc": "Openbaar grootboek van elke BetsPlug AI-voetbalvoorspelling: gescoord door de officiële feed, zowel winnaars als verliezers. Geen verwijderingen. Geen curatie.",
   "tr.metaTitle": "Trackrecord · Elke AI-voetbalvoorspelling, beoordeeld · BetsPlug",
   "tr.method1Desc": "Modellen trainen op gegevens die daadwerkelijk beschikbaar waren bij de aftrap: geen achteraf bekeken, geen stilletjes opnieuw beoordeelde wedstrijden.",
   "tr.method1Title": "Alleen point-in-time",
@@ -4178,7 +4178,7 @@ const nl: Dictionary = {
   "track.askQuestion": "Hoe wordt de nauwkeurigheid berekend?",
   "track.badge": "Bewijs, geen beloftes",
   "track.cta": "Bekijk het volledige trackrecord",
-  "track.desc1": "Elke AI-voetbalvoorspelling krijgt vóór de aftrap een tijdstempel, wordt automatisch beoordeeld na het laatste fluitsignaal en geschreven naar dezelfde openbare database die de startpagina aanstuurt. Winsten en verliezen. Geen bewerking. Geen verborgen resultatentabblad.",
+  "track.desc1": "Elke AI-voetbalvoorspelling wordt met point-in-time features berekend, automatisch gescoord, en opgeslagen in dezelfde openbare database die de homepage aanstuurt. Winsten en verliezen. Geen bewerking. Geen verborgen resultatentabblad.",
   "track.desc2": "Premier League voorspellingen, La Liga tips, Champions League keuzes, Eredivisie analyse, dezelfde aanpak, dezelfde eerlijkheid in meer dan 30 voetbalcompetities wereldwijd. We kiezen niet onze beste competitie.",
   "track.label": "Baanrecord",
   "track.metricLeagues": "Liga's",
@@ -4272,7 +4272,7 @@ const nl: Dictionary = {
 
   "trusted.card1Desc": "Geen jargon, geen grafieken om te decoderen. Elke AI-voetbalvoorspelling toont een zuiver winstpercentage, een betrouwbaarheidsscore en een redenering in één regel. Het duurt 3 seconden om te scannen, of je nu één keer per week of elke dag gokt.",
   "trusted.card1Title": "Kansen die je in één oogopslag kunt aflezen",
-  "trusted.card2Desc": "Gold-tier scoort 70%+ over 1.650+ beoordeelde picks. Platinum 80%+. Elke voorspelling krijgt een tijdstempel vóór de aftrap en wordt automatisch beoordeeld na het laatste fluitsignaal. Het trackrecord is openbaar. Controleer het zelf voordat je een cent betaalt.",
+  "trusted.card2Desc": "Gold-tier scoort 70%+ over 1.650+ beoordeelde picks. Platinum 80%+. Elke voorspelling is gebaseerd op point-in-time features en wordt na afloop automatisch gescoord. Het trackrecord is openbaar. Controleer het zelf voordat je een cent betaalt.",
   "trusted.card2Title": "Alle resultaten publiceren we: winst of verlies",
   "trusted.card3Desc": "Meerdere AI-modellen werken samen om één voorspelling per wedstrijd te maken. Elk model brengt een andere invalshoek. Samen zijn ze nauwkeuriger dan welke enkele aanpak dan ook.",
   "trusted.card3Title": "Gebouwd met serieuze AI-modellen",
