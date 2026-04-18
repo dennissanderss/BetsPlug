@@ -51,6 +51,7 @@ import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
 const TrackRecordChart = dynamic(() => import("@/components/ui/track-record-chart").then(m => m.TrackRecordChart), { ssr: false });
 const LeaguesTicker = dynamic(() => import("@/components/ui/leagues-ticker").then(m => m.LeaguesTicker), { ssr: true });
 const TierLadder = dynamic(() => import("@/components/ui/tier-ladder").then(m => m.TierLadder), { ssr: false });
+const TrustFunnel = dynamic(() => import("@/components/ui/trust-funnel").then(m => m.TrustFunnel), { ssr: false });
 const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section").then(m => m.TestimonialsSection), { ssr: false });
 const ComparisonTable = dynamic(() => import("@/components/ui/comparison-table").then(m => m.ComparisonTable), { ssr: true });
 const PricingSection = dynamic(() => import("@/components/ui/pricing-section").then(m => m.PricingSection), { ssr: true });
@@ -560,6 +561,14 @@ export function HomeContent({
           gemiddeld hitpercentage" line with a concrete value ladder.
          ══════════════════════════════════════════════════════════════ */}
       <TierLadder />
+
+      {/* ══════════════════════════════════════════════════════════════
+          1d · TRUST FUNNEL — "from 55k matches to 1.65k honest picks",
+          plain-language explanation of why the advertised volume looks
+          smaller than the raw database count. Turns the "why only 8k?"
+          visitor question into a conversion-oriented honesty story.
+         ══════════════════════════════════════════════════════════════ */}
+      <TrustFunnel />
 
       {/* ══════════════════════════════════════════════════════════════
           2 · LEAGUES TICKER
