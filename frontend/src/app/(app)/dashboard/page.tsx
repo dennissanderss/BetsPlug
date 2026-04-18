@@ -41,15 +41,24 @@ export default function DashboardPage() {
     queryFn: () => api.getFixtureResults(1),
   });
 
-  // Scope the "This week" widget to the signed-in user's own pick-tier
-  // so the numbers line up with what that user actually has access to.
-  // Without a tier filter the widget mixed all tiers together and
-  // always printed ~56%, directly contradicting the "Gold · 70%+"
-  // claim next to it. Falls back to an unscoped call for anonymous
-  // sessions.
+  // Sidebar shows two numbers: an all-time cumulative accuracy (the
+  // number on the homepage the user actually paid for) and a small
+  // "this week" line underneath for recent activity. The week-only
+  // display we had before swung 30+ points week-to-week on Platinum
+  // because the tier only produces ~11 picks in 7 days. Cumulative is
+  // the stable headline, week is the secondary.
   const { data: weeklySummary, isLoading: weeklyLoading } = useQuery({
     queryKey: ["weekly-summary-hub", userTierSlug ?? "all"],
     queryFn: () => api.getWeeklySummary(7, userTierSlug ?? undefined),
+  });
+
+  const { data: tierSummary, isLoading: tierSummaryLoading } = useQuery({
+    queryKey: ["trackrecord-summary-hub", userTierSlug ?? "all"],
+    queryFn: () =>
+      api.getTrackrecordSummary(
+        userTierSlug ? { pick_tier: userTierSlug } : undefined,
+      ),
+    staleTime: 5 * 60_000,
   });
 
   const liveCount = (liveFixtures?.fixtures ?? []).filter(
@@ -119,13 +128,21 @@ export default function DashboardPage() {
               summary={weeklySummary}
               isLoading={weeklyLoading}
               userTierSlug={userTierSlug}
+              tierSummary={tierSummary}
+              tierSummaryLoading={tierSummaryLoading}
             />
           </div>
         </aside>
       </div>
 
       <div className="relative mt-6 xl:hidden">
-        <SportsHubSidebar summary={weeklySummary} isLoading={weeklyLoading} userTierSlug={userTierSlug} />
+        <SportsHubSidebar
+          summary={weeklySummary}
+          isLoading={weeklyLoading}
+          userTierSlug={userTierSlug}
+          tierSummary={tierSummary}
+          tierSummaryLoading={tierSummaryLoading}
+        />
       </div>
     </div>
   );
