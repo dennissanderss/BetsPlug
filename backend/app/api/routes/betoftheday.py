@@ -20,7 +20,11 @@ from sqlalchemy.orm import joinedload, noload
 from datetime import timedelta
 
 from app.api.deps import get_current_tier
-from app.core.prediction_filters import trackrecord_filter
+from app.core.prediction_filters import (
+    V81_DEPLOYMENT_CUTOFF,
+    trackrecord_filter,
+    v81_predictions_filter,
+)
 from app.core.tier_system import (
     PickTier,
     TIER_SYSTEM_ENABLED,
@@ -31,6 +35,11 @@ from app.core.tier_system import (
 from app.db.session import get_db
 from app.models.match import Match, MatchStatus
 from app.models.prediction import Prediction
+
+# Live BOTD tracking starts from this date. Predictions earlier than this
+# are legitimate model validation output but not part of the "live
+# measurement" narrative — see docs/integrity_relabel_sprint.md.
+LIVE_BOTD_START = datetime(2026, 4, 18, tzinfo=timezone.utc)
 
 logger = logging.getLogger(__name__)
 
@@ -153,6 +162,224 @@ async def get_botd_history(
         ))
 
     return result
+
+
+class BOTDSectionSummary(BaseModel):
+    """Aggregate summary for one Pick-of-the-Day display section.
+
+    Returned alongside the per-day pick list so the UI can show headline
+    KPIs (n picks / accuracy / streak) without a second round-trip.
+    """
+
+    total_picks: int = 0
+    evaluated: int = 0
+    correct: int = 0
+    accuracy_pct: float = 0.0
+    avg_confidence: float = 0.0
+    current_streak: int = 0
+    best_streak: int = 0
+
+
+class BOTDSectionResponse(BaseModel):
+    """Pick-of-the-Day surface split by integrity source.
+
+    The ``model-validation`` endpoint returns the model's one best pick
+    per day applied to finished matches (post-kickoff timestamps are
+    kept — this is model validation, not live measurement). The
+    ``live-tracking`` endpoint returns ONLY picks that were timestamped
+    strictly before kickoff and flagged ``prediction_source = 'live'``.
+    Both reuse this envelope so the frontend renders them identically.
+    """
+
+    summary: BOTDSectionSummary
+    picks: list[BOTDHistoryItem]
+
+
+async def _build_botd_section(
+    db: AsyncSession,
+    user_tier: PickTier,
+    *,
+    require_pre_match: bool,
+    require_live_source: bool,
+    created_from: datetime,
+    limit: int,
+) -> BOTDSectionResponse:
+    """Shared builder for /model-validation and /live-tracking.
+
+    Parameters
+    ----------
+    require_pre_match:
+        If True, only keep predictions with ``predicted_at < scheduled_at``.
+        The display variant of ``trackrecord_filter``'s ``<=`` guard.
+    require_live_source:
+        If True, restrict to ``prediction_source = 'live'`` rows. Used by
+        the live-tracking section to strip out backtest and batch fills.
+    created_from:
+        Lower bound on ``Prediction.created_at``. Always at least
+        ``V81_DEPLOYMENT_CUTOFF``; model-validation uses the cutoff
+        directly, live-tracking uses ``LIVE_BOTD_START``.
+    limit:
+        Maximum number of per-day picks to return (ordered newest first).
+    """
+    from app.models.prediction import PredictionEvaluation
+
+    # Base filter: v8.1 pipeline + above BOTD confidence floor.
+    stmt = (
+        select(Prediction, PredictionEvaluation)
+        .join(Match, Match.id == Prediction.match_id)
+        .outerjoin(
+            PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id
+        )
+        .where(
+            Prediction.confidence >= BOTD_MIN_CONFIDENCE,
+            v81_predictions_filter(),
+            Prediction.created_at >= created_from,
+        )
+        .order_by(Match.scheduled_at.desc())
+    )
+    if require_live_source:
+        stmt = stmt.where(Prediction.prediction_source == "live")
+    if require_pre_match:
+        stmt = stmt.where(Prediction.predicted_at < Match.scheduled_at)
+    if TIER_SYSTEM_ENABLED:
+        stmt = stmt.where(access_filter(user_tier))
+
+    rows = (await db.execute(stmt)).all()
+
+    # Group by kickoff date, keep the highest-confidence row per day.
+    by_date: dict[str, tuple] = {}
+    for pred, evaluation in rows:
+        if pred.match is None or pred.match.scheduled_at is None:
+            continue
+        date_key = pred.match.scheduled_at.strftime("%Y-%m-%d")
+        existing = by_date.get(date_key)
+        if existing is None or pred.confidence > existing[0].confidence:
+            by_date[date_key] = (pred, evaluation)
+
+    # Oldest → newest for correct streak computation; slice to limit afterward.
+    sorted_asc = sorted(by_date.items(), key=lambda x: x[0])
+
+    pick_labels = {"home": "Home", "draw": "Draw", "away": "Away"}
+    picks: list[BOTDHistoryItem] = []
+    for _, (pred, evaluation) in sorted_asc:
+        probs = {
+            "home": pred.home_win_prob,
+            "draw": pred.draw_prob or 0,
+            "away": pred.away_win_prob,
+        }
+        pick = max(probs, key=lambda k: probs[k])
+        m = pred.match
+        home = m.home_team.name if m and m.home_team else "?"
+        away = m.away_team.name if m and m.away_team else "?"
+        league = m.league.name if m and m.league else ""
+        home_score = m.result.home_score if m and m.result else None
+        away_score = m.result.away_score if m and m.result else None
+        pick_prob = probs.get(pick, 0.5)
+        implied_odds = round(1.0 / (pick_prob * 0.95), 2) if pick_prob > 0.05 else None
+
+        picks.append(
+            BOTDHistoryItem(
+                date=m.scheduled_at.strftime("%Y-%m-%d") if m.scheduled_at else "",
+                home_team=home,
+                away_team=away,
+                league=league,
+                prediction=pick_labels.get(pick, pick),
+                confidence=round(pred.confidence * 100, 1),
+                correct=bool(evaluation.is_correct) if evaluation else None,
+                home_score=home_score,
+                away_score=away_score,
+                odds_used=implied_odds,
+            )
+        )
+
+    # Summary (computed on the full sorted list before trimming).
+    total = len(picks)
+    evaluated_picks = [p for p in picks if p.correct is not None]
+    evaluated = len(evaluated_picks)
+    correct = sum(1 for p in evaluated_picks if p.correct)
+    accuracy_pct = round((correct / evaluated * 100), 1) if evaluated else 0.0
+    avg_conf = round(sum(p.confidence for p in picks) / total, 1) if total else 0.0
+
+    best = temp = 0
+    for p in evaluated_picks:
+        if p.correct:
+            temp += 1
+            best = max(best, temp)
+        else:
+            temp = 0
+    current = 0
+    for p in reversed(evaluated_picks):
+        if p.correct:
+            current += 1
+        else:
+            break
+
+    summary = BOTDSectionSummary(
+        total_picks=total,
+        evaluated=evaluated,
+        correct=correct,
+        accuracy_pct=accuracy_pct,
+        avg_confidence=avg_conf,
+        current_streak=current,
+        best_streak=best,
+    )
+
+    # Return newest first, capped to limit.
+    picks_display = list(reversed(picks))[:limit]
+    return BOTDSectionResponse(summary=summary, picks=picks_display)
+
+
+@router.get("/model-validation", response_model=BOTDSectionResponse)
+async def get_botd_model_validation(
+    limit: int = Query(default=30, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
+) -> BOTDSectionResponse:
+    """Return the model's one best pick per day on already-finished matches.
+
+    This is model validation data: the pipeline's highest-confidence pick
+    per day, restricted to v8.1 predictions (``created_at`` since the
+    2026-04-16 v8.1 cutoff), regardless of whether the prediction was
+    timestamped before kickoff. Used to fill the "Modelvalidatie" card on
+    /bet-of-the-day while we build up enough strictly-pre-match data for
+    the /live-tracking surface.
+    """
+    return await _build_botd_section(
+        db,
+        user_tier,
+        require_pre_match=False,
+        require_live_source=False,
+        created_from=V81_DEPLOYMENT_CUTOFF,
+        limit=limit,
+    )
+
+
+@router.get("/live-tracking", response_model=BOTDSectionResponse)
+async def get_botd_live_tracking(
+    limit: int = Query(default=30, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
+) -> BOTDSectionResponse:
+    """Return the strict live-measurement BOTD stream.
+
+    Only includes predictions that are:
+
+    - ``prediction_source = 'live'`` (produced by the real-time cron, not
+      a backtest or batch fill),
+    - ``predicted_at < scheduled_at`` (timestamped strictly before
+      kickoff — no retroactive rows), AND
+    - ``created_at >= 2026-04-18`` (the live-measurement start date).
+
+    Will be empty or near-empty initially and grow day by day.
+    """
+    return await _build_botd_section(
+        db,
+        user_tier,
+        require_pre_match=True,
+        require_live_source=True,
+        created_from=LIVE_BOTD_START,
+        limit=limit,
+    )
 
 
 class BOTDTrackRecord(BaseModel):
