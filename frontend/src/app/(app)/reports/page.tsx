@@ -8,7 +8,8 @@ import { api } from "@/lib/api";
 import { formatDateTime } from "@/lib/utils";
 import { useTranslations } from "@/i18n/locale-provider";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
-import type { GeneratedReport } from "@/types/api";
+import type { GeneratedReport, PickTierSlug } from "@/types/api";
+import { useTier } from "@/hooks/use-tier";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -51,21 +52,48 @@ function EmptyReports() {
 interface GenerateFormState {
   report_type: string;
   format: string;
+  pick_tier: PickTierSlug;
 }
+
+// Tier options available to each subscription level. A user can always
+// inspect their own tier and everything below it (the same access
+// semantics as /predictions and /trackrecord).
+const TIER_RANK: Record<PickTierSlug, number> = {
+  free: 0,
+  silver: 1,
+  gold: 2,
+  platinum: 3,
+};
 
 function GenerateReportCard() {
   const { t } = useTranslations();
   const queryClient = useQueryClient();
+  const { tier: userTierSlug, rank: userRank } = useTier();
   const [form, setForm] = React.useState<GenerateFormState>({
     report_type: "weekly",
     format: "pdf",
+    pick_tier: userTierSlug,
   });
+
+  // Keep the default tier in sync if useTier() hydrates after mount.
+  React.useEffect(() => {
+    setForm((f) =>
+      f.pick_tier === "free" && userTierSlug !== "free"
+        ? { ...f, pick_tier: userTierSlug }
+        : f,
+    );
+  }, [userTierSlug]);
+
+  const tierOptions: PickTierSlug[] = (
+    ["free", "silver", "gold", "platinum"] as const
+  ).filter((t) => TIER_RANK[t] <= userRank);
 
   const mutation = useMutation({
     mutationFn: () =>
       api.generateReport({
         report_type: form.report_type,
         format: form.format,
+        config: { pick_tier: form.pick_tier },
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reports"] });
@@ -129,6 +157,36 @@ function GenerateReportCard() {
               <option value="pdf">PDF</option>
               <option value="csv">CSV</option>
               <option value="json">JSON</option>
+            </select>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-[#a3a9b8]">
+              Tier
+            </label>
+            <select
+              value={form.pick_tier}
+              onChange={(e) =>
+                setForm((f) => ({
+                  ...f,
+                  pick_tier: e.target.value as PickTierSlug,
+                }))
+              }
+              className={`${selectClass} w-40`}
+              style={{ border: "1px solid hsl(0 0% 100% / 0.1)" }}
+            >
+              {tierOptions.includes("free") && (
+                <option value="free">Bronze · 45%+</option>
+              )}
+              {tierOptions.includes("silver") && (
+                <option value="silver">Silver · 60%+</option>
+              )}
+              {tierOptions.includes("gold") && (
+                <option value="gold">Gold · 70%+</option>
+              )}
+              {tierOptions.includes("platinum") && (
+                <option value="platinum">Platinum · 80%+</option>
+              )}
             </select>
           </div>
 
