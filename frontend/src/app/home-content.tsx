@@ -52,6 +52,7 @@ const TrackRecordChart = dynamic(() => import("@/components/ui/track-record-char
 const LeaguesTicker = dynamic(() => import("@/components/ui/leagues-ticker").then(m => m.LeaguesTicker), { ssr: true });
 const TierLadder = dynamic(() => import("@/components/ui/tier-ladder").then(m => m.TierLadder), { ssr: false });
 const TrustFunnel = dynamic(() => import("@/components/ui/trust-funnel").then(m => m.TrustFunnel), { ssr: false });
+const RecognizeThis = dynamic(() => import("@/components/ui/recognize-this").then(m => m.RecognizeThis), { ssr: true });
 const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section").then(m => m.TestimonialsSection), { ssr: false });
 const ComparisonTable = dynamic(() => import("@/components/ui/comparison-table").then(m => m.ComparisonTable), { ssr: true });
 const PricingSection = dynamic(() => import("@/components/ui/pricing-section").then(m => m.PricingSection), { ssr: true });
@@ -476,6 +477,15 @@ export function HomeContent({
           </div>
         </div>
       </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          1a2 · RECOGNIZE-THIS — empathy-first pain section. Shows the
+          Telegram-tipster frustrations the visitor has already lived
+          through, so they feel understood before we pitch the solution.
+          Placed right after the hero so the flow is:
+             Hero (promise) → Pain ("yes that's me") → Proof → Ladder → ...
+         ══════════════════════════════════════════════════════════════ */}
+      <RecognizeThis />
 
       {/* ══════════════════════════════════════════════════════════════
           1b · LIVE PROOF STRIP — freshness ribbon wired to real API data
