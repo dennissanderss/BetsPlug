@@ -4,10 +4,15 @@ import {
   getLocalizedAlternates,
   getLocalizedBreadcrumbs,
 } from "@/lib/seo-helpers";
-import { BreadcrumbJsonLd, PricingProductJsonLd } from "@/components/seo/json-ld";
+import {
+  BreadcrumbJsonLd,
+  PricingProductJsonLd,
+  FaqJsonLd,
+} from "@/components/seo/json-ld";
 import { PricingContent } from "./pricing-content";
 import { fetchPricingConfig } from "@/lib/sanity-data";
 import { PAGE_META } from "@/data/page-meta";
+import { PRICING_FAQS } from "./pricing-faqs";
 
 export const revalidate = 60;
 
@@ -92,6 +97,9 @@ export default async function PricingPage() {
           ratingCount: "312",
           bestRating: "5",
         }}
+      />
+      <FaqJsonLd
+        items={PRICING_FAQS.map((f) => ({ question: f.q, answer: f.a }))}
       />
       <PricingContent pricingConfig={pricingConfig} />
     </>

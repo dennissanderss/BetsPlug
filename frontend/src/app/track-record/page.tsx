@@ -7,7 +7,7 @@ import {
   getLocalizedBreadcrumbs,
 } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
-import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { FaqSection } from "@/components/seo/faq-section";
 import { translate } from "@/i18n/messages";
 import { fetchTrackRecordPage } from "@/lib/sanity-data";
@@ -55,6 +55,10 @@ export default async function TrackRecordPage() {
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
+      {/* FAQPage JSON-LD — same items as the visible FaqSection so
+          Google can match them to eligible featured-snippet queries
+          ("is BetsPlug verified?", "how is the track record calculated?"). */}
+      <FaqJsonLd items={faqItems} />
       <TrackRecordContent
         trackRecordPage={trackRecordPage}
         faqSlot={

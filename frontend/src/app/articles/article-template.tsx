@@ -228,6 +228,100 @@ export function ArticleTemplate({ article }: { article: Article }) {
               </div>
             </section>
           )}
+
+          {/* ═══ Keep exploring — blog → money page funnel ═══
+             SEO reasoning: blog posts drive organic traffic but
+             without internal links out, they don't pass equity to
+             the pages that convert (predictions / pricing / track
+             record). This cluster gives every article a deliberate
+             exit ramp to each of our four money-page clusters, with
+             keyword-rich anchor text. */}
+          <section className="mt-20">
+            <span className="section-label mb-4">
+              <Sparkles className="h-3 w-3" />
+              Keep exploring
+            </span>
+            <h2 className="text-heading mb-8 text-2xl text-[#ededed] sm:text-3xl">
+              Put the theory to work
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <Link
+                href={loc("/match-predictions")}
+                className="group block rounded-xl border p-5 transition-colors hover:border-[#4ade80]/40"
+                style={{
+                  borderColor: "hsl(0 0% 100% / 0.06)",
+                  background: "hsl(230 16% 10% / 0.4)",
+                }}
+              >
+                <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                  Predictions
+                </div>
+                <h3 className="text-heading text-base text-[#ededed] transition-colors group-hover:text-[#4ade80]">
+                  Today&rsquo;s AI football predictions
+                </h3>
+                <p className="mt-2 text-xs text-[#a3a9b8]">
+                  Pre-match locked picks across 15+ leagues with live confidence scores.
+                </p>
+              </Link>
+
+              <Link
+                href={loc("/learn")}
+                className="group block rounded-xl border p-5 transition-colors hover:border-[#4ade80]/40"
+                style={{
+                  borderColor: "hsl(0 0% 100% / 0.06)",
+                  background: "hsl(230 16% 10% / 0.4)",
+                }}
+              >
+                <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                  Learn
+                </div>
+                <h3 className="text-heading text-base text-[#ededed] transition-colors group-hover:text-[#4ade80]">
+                  The math behind every pick
+                </h3>
+                <p className="mt-2 text-xs text-[#a3a9b8]">
+                  Elo, Poisson, Kelly, value betting — read the deep-dive pillars.
+                </p>
+              </Link>
+
+              <Link
+                href={loc("/bet-types")}
+                className="group block rounded-xl border p-5 transition-colors hover:border-[#4ade80]/40"
+                style={{
+                  borderColor: "hsl(0 0% 100% / 0.06)",
+                  background: "hsl(230 16% 10% / 0.4)",
+                }}
+              >
+                <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                  Bet markets
+                </div>
+                <h3 className="text-heading text-base text-[#ededed] transition-colors group-hover:text-[#4ade80]">
+                  BTTS, Over/Under, DNB decoded
+                </h3>
+                <p className="mt-2 text-xs text-[#a3a9b8]">
+                  How each market is priced and where our model finds value.
+                </p>
+              </Link>
+
+              <Link
+                href={loc("/track-record")}
+                className="group block rounded-xl border p-5 transition-colors hover:border-[#4ade80]/40"
+                style={{
+                  borderColor: "hsl(0 0% 100% / 0.06)",
+                  background: "hsl(230 16% 10% / 0.4)",
+                }}
+              >
+                <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                  Proof
+                </div>
+                <h3 className="text-heading text-base text-[#ededed] transition-colors group-hover:text-[#4ade80]">
+                  Our public track record
+                </h3>
+                <p className="mt-2 text-xs text-[#a3a9b8]">
+                  Every pick — wins and losses — logged before kickoff.
+                </p>
+              </Link>
+            </div>
+          </section>
         </div>
       </main>
 

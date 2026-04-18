@@ -23,6 +23,7 @@ import { PAGE_IMAGES } from "@/data/page-images";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { POTD_STATS } from "@/data/potd-stats";
+import { PRICING_FAQS } from "./pricing-faqs";
 
 const PricingSection = dynamic(
   () => import("@/components/ui/pricing-section").then((m) => m.PricingSection),
@@ -901,6 +902,55 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ═══ FAQ — objection handling + featured-snippet bait ═══
+         Content lives in ./pricing-faqs.ts and is also emitted as
+         FAQPage JSON-LD from page.tsx so Google can surface these
+         as rich results. */}
+      <section className="relative overflow-hidden py-16 md:py-24">
+        <div className="relative mx-auto max-w-3xl px-4 sm:px-6">
+          <div className="text-center">
+            <span className="section-label mb-4">
+              <Sparkles className="h-3 w-3" /> FAQ
+            </span>
+            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
+              Pricing questions,{" "}
+              <span className="gradient-text-green">answered.</span>
+            </h2>
+          </div>
+
+          <div className="mt-10 space-y-3">
+            {PRICING_FAQS.map((faq, i) => (
+              <details
+                key={i}
+                className="group rounded-xl border p-5 transition-colors hover:border-white/[0.12]"
+                style={{
+                  borderColor: "hsl(0 0% 100% / 0.06)",
+                  background: "hsl(230 16% 10% / 0.4)",
+                }}
+              >
+                <summary className="flex cursor-pointer items-center justify-between gap-4 text-left text-sm font-semibold text-[#ededed] [&::-webkit-details-marker]:hidden">
+                  <span>{faq.q}</span>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-[#6b7280] transition-transform group-open:rotate-90" />
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-[#a3a9b8]">
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+          </div>
+
+          <p className="mt-10 text-center text-xs text-[#6b7280]">
+            Still stuck?{" "}
+            <Link
+              href={loc("/contact")}
+              className="text-[#4ade80] transition-colors hover:text-[#86efac]"
+            >
+              Email support →
+            </Link>
+          </p>
         </div>
       </section>
 

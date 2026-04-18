@@ -27,6 +27,8 @@ import {
 } from "./payment-badges";
 import { ALL_LEAGUES, getLeagueName } from "@/data/league-catalog";
 import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
+import { LEARN_PILLARS } from "@/data/learn-pillars";
+import { BET_TYPE_HUBS } from "@/data/bet-type-hubs";
 
 const socialLinks = [
   { icon: Twitter, label: "Twitter", href: "https://twitter.com/betsplug" },
@@ -333,6 +335,116 @@ export function BetsPlugFooter() {
               );
             })}
           </ul>
+        </div>
+      </div>
+
+      {/* ═══ Learn + Bet markets — SEO clusters ═══
+         Second internal-linking cluster so both content surfaces
+         (educational pillars + bet-market explainers) are reachable
+         within 2 clicks from every page. Without this, /learn/* and
+         /bet-types/* were effectively orphaned from the footer. */}
+      <div className="relative z-10 mx-auto mt-4 max-w-6xl px-4 sm:px-6">
+        <div className="grid gap-4 md:grid-cols-2">
+          {/* Learn cluster */}
+          <div
+            className="rounded-2xl border p-5 sm:p-6"
+            style={{
+              borderColor: "hsl(0 0% 100% / 0.06)",
+              background: "hsl(230 16% 10% / 0.4)",
+            }}
+          >
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div>
+                <div className="text-xs font-semibold uppercase tracking-widest text-[#4ade80]">
+                  {(() => {
+                    const v = t("nav.learn" as any);
+                    return v === "nav.learn" ? "Learn" : v;
+                  })()}
+                </div>
+                <div className="mt-1 text-[11px] text-[#6b7280]">
+                  {isNl
+                    ? "De wiskunde achter onze voorspellingen"
+                    : "The maths behind every prediction"}
+                </div>
+              </div>
+              <Link
+                href={loc("/learn")}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#a3a9b8] transition-colors hover:text-[#4ade80]"
+              >
+                {isNl ? "Alle gidsen" : "All guides"}
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+
+            <ul className="grid grid-cols-1 gap-x-4 gap-y-1.5 sm:grid-cols-2">
+              {LEARN_PILLARS.map((pillar) => {
+                const title =
+                  pillar.title[isNl ? "nl" : "en"] ?? pillar.title.en;
+                return (
+                  <li key={pillar.slug}>
+                    <Link
+                      href={loc(`/learn/${pillar.slug}`)}
+                      className="group inline-flex w-full items-center gap-2 py-1 text-xs text-[#a3a9b8] transition-colors hover:text-[#ededed]"
+                    >
+                      <Sparkles className="h-3 w-3 shrink-0 text-[#4ade80]/70 transition-colors group-hover:text-[#4ade80]" />
+                      <span className="truncate">{title}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {/* Bet markets cluster */}
+          <div
+            className="rounded-2xl border p-5 sm:p-6"
+            style={{
+              borderColor: "hsl(0 0% 100% / 0.06)",
+              background: "hsl(230 16% 10% / 0.4)",
+            }}
+          >
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div>
+                <div className="text-xs font-semibold uppercase tracking-widest text-[#4ade80]">
+                  {(() => {
+                    const v = t("nav.betTypes" as any);
+                    return v === "nav.betTypes" ? "Bet markets" : v;
+                  })()}
+                </div>
+                <div className="mt-1 text-[11px] text-[#6b7280]">
+                  {isNl
+                    ? "BTTS, Over/Under, Draw No Bet en meer"
+                    : "BTTS, Over/Under, Draw No Bet and more"}
+                </div>
+              </div>
+              <Link
+                href={loc("/bet-types")}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#a3a9b8] transition-colors hover:text-[#4ade80]"
+              >
+                {isNl ? "Alle markten" : "All markets"}
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+
+            <ul className="grid grid-cols-1 gap-x-4 gap-y-1.5 sm:grid-cols-2">
+              {BET_TYPE_HUBS.map((hub) => {
+                const name = hub.name[isNl ? "nl" : "en"] ?? hub.name.en;
+                return (
+                  <li key={hub.slug}>
+                    <Link
+                      href={loc(`/bet-types/${hub.slug}`)}
+                      className="group inline-flex w-full items-center gap-2 py-1 text-xs text-[#a3a9b8] transition-colors hover:text-[#ededed]"
+                    >
+                      <span className="inline-flex h-4 min-w-[28px] items-center justify-center rounded border border-[#4ade80]/20 bg-[#4ade80]/5 px-1 text-[9px] font-semibold tracking-wider text-[#4ade80]/80 transition-colors group-hover:border-[#4ade80]/40 group-hover:text-[#4ade80]">
+                        {hub.shortCode}
+                      </span>
+                      <span className="truncate">{name}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </div>
 
