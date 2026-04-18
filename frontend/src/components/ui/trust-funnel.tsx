@@ -142,7 +142,7 @@ export function TrustFunnel() {
       value: pct(goldAccuracy),
       label: isNl ? "Nauwkeurigheid, openbaar verifieerbaar" : "Accuracy, publicly verifiable",
       desc: isNl
-        ? "Geen marketingbrochure. Download de data en tel het zelf. Ter vergelijking: een willekeurige gok op thuis, gelijkspel of uit haalt ongeveer 37%."
+        ? "Geen marketingbrochure. Download de data en tel het zelf. Ter vergelijking: een willekeurige keuze op thuis, gelijkspel of uit haalt ongeveer 37%."
         : "Not a marketing brochure. Download the data and count it yourself. For reference: a random guess on home, draw or away lands around 37%.",
       variant: "green",
     },

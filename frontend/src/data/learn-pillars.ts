@@ -73,8 +73,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "Value betting is geen winnaars kiezen - het is prijzen spotten die hoger zijn dan hun echte kans. Volledige gids over EV, Kelly-sizing en echte voorbeelden.",
     },
     intro: {
-      en: "Value betting is the only mathematically honest way to beat a bookmaker. The idea sounds counterintuitive at first: a professional bettor does not care about picking winners. They care about whether the price on offer is higher than the true probability of the outcome. A bet at 2.50 on a coin flip is profitable in the long run, even though it loses half the time, because the fair price for a 50% coin flip is only 2.00. This is the entire game, and every other topic on this site - xG models, Elo ratings, Kelly staking, Poisson distributions - is ultimately in service of it.",
-      nl: "Value betting is de enige wiskundig eerlijke manier om een bookmaker te verslaan. Het idee klinkt eerst contra-intuïtief: een professionele wedder geeft niet om het kiezen van winnaars. Hij geeft om de vraag of de aangeboden prijs hoger is dan de echte kans op de uitkomst. Een weddenschap op 2.50 op een munt is op de lange termijn winstgevend, ook al verliest hij de helft van de tijd, omdat de eerlijke prijs voor een 50% munt slechts 2.00 is. Dit is het hele spel, en elk ander onderwerp op deze site - xG-modellen, Elo-ratings, Kelly-sizing, Poisson-verdelingen - staat uiteindelijk in dienst hiervan.",
+      en: "Value betting is the only mathematically honest way to beat a bookmaker. The idea sounds counterintuitive at first: a professional user does not care about picking winners. They care about whether the price on offer is higher than the true probability of the outcome. A bet at 2.50 on a coin flip is profitable in the long run, even though it loses half the time, because the fair price for a 50% coin flip is only 2.00. This is the entire game, and every other topic on this site - xG models, Elo ratings, Kelly staking, Poisson distributions - is ultimately in service of it.",
+      nl: "Value betting is de enige wiskundig eerlijke manier om een bookmaker te verslaan. Het idee klinkt eerst contra-intuïtief: een professionele wedder geeft niet om het kiezen van winnaars. Hij geeft om de vraag of de aangeboden prijs hoger is dan de echte kans op de uitkomst. Een voorspelling op 2.50 op een munt is op de lange termijn winstgevend, ook al verliest hij de helft van de tijd, omdat de eerlijke prijs voor een 50% munt slechts 2.00 is. Dit is het hele spel, en elk ander onderwerp op deze site - xG-modellen, Elo-ratings, Kelly-sizing, Poisson-verdelingen - staat uiteindelijk in dienst hiervan.",
     },
     sections: [
       {
@@ -89,8 +89,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
             "The catch is that you never know the true probability - only an estimate. Everything that follows in value betting is about closing the gap between your estimate and reality while keeping your model honest.",
           ],
           nl: [
-            "Expected value (EV) is het gemiddelde bedrag dat je wint of verliest per eenheid inzet, aangenomen dat je de weddenschap vele malen herhaalt. De formule is simpel: EV = (winstkans × winst bij winst) − (verlieskans × stake). Voor een 10-eenheids weddenschap op 2.50 met een echte 50% uitkomst: EV = (0.50 × 15) − (0.50 × 10) = 7.50 − 5.00 = +2.50 per 10 ingezet, ofwel +25% rendement.",
-            "Elke weddenschap met positieve EV is op de lange termijn de moeite waard, ongeacht of hij op de dag zelf wint of verliest. Elke weddenschap met negatieve EV moet je vermijden, zelfs als hij bijna zeker is. Een 1.01-weddenschap tussen een Premier League-club en een pub-ploeg heeft negatieve EV als de echte kans op winst voor de grote club onder 99% ligt, wat in vriendschappelijke wedstrijden en cupshocks vaak het geval is.",
+            "Expected value (EV) is het gemiddelde bedrag dat je wint of verliest per eenheid inzet, aangenomen dat je de voorspelling vele malen herhaalt. De formule is simpel: EV = (winstkans × winst bij winst) − (verlieskans × stake). Voor een 10-eenheids voorspelling op 2.50 met een echte 50% uitkomst: EV = (0.50 × 15) − (0.50 × 10) = 7.50 − 5.00 = +2.50 per 10 ingezet, ofwel +25% rendement.",
+            "Elke voorspelling met positieve EV is op de lange termijn de moeite waard, ongeacht of hij op de dag zelf wint of verliest. Elke voorspelling met negatieve EV moet je vermijden, zelfs als hij bijna zeker is. Een 1.01-voorspelling tussen een Premier League-club en een pub-ploeg heeft negatieve EV als de echte kans op winst voor de grote club onder 99% ligt, wat in vriendschappelijke wedstrijden en cupshocks vaak het geval is.",
             "De vangst is dat je de echte kans nooit kent - alleen een schatting. Alles wat volgt in value betting draait om het dichten van de kloof tussen je schatting en de werkelijkheid zonder je model oneerlijk te maken.",
           ],
         },
@@ -109,7 +109,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
           nl: [
             "Elke decimale odds kun je omzetten naar een impliciete kans door 1 te delen door de prijs. Een prijs van 2.00 impliceert 50%, 1.50 impliceert 66.67%, 5.00 impliceert 20%. Een bookmaker zet zijn prijzen zo dat de impliciete kansen over alle uitkomsten in een markt samen meer dan 100% opleveren - het overschot is zijn marge, bekend als de overround.",
             "Voor een driewegmarkt met eerlijke odds van 2.00 / 3.50 / 4.00 is de som van de eerlijke impliciete kansen 50% + 28.57% + 25% = 103.57%. Die 3.57% is de edge van de bookmaker - de prijs die je betaalt om überhaupt te mogen wedden. Scherpe boeken draaien op ~2% marges; recreatieve boeken vaak 6–8%. Hoe hoger de overround, hoe moeilijker value te vinden is, omdat de basis-impliciete kansen verder van de echte getallen af zitten.",
-            "De eerste les van value betting is simpelweg winkelen voor betere prijzen. Twee bookmakers die dezelfde wedstrijd quoten op 2.00 en 2.15 voor dezelfde pick is het verschil tussen -2% en +6% yield op een weddenschap waar je overtuigd was dat de 50%-kans klopte. Daarom is closing-line value (CLV) tracking zo belangrijk - meer daarover in een latere pijler.",
+            "De eerste les van value betting is simpelweg winkelen voor betere prijzen. Twee bookmakers die dezelfde wedstrijd quoten op 2.00 en 2.15 voor dezelfde pick is het verschil tussen -2% en +6% yield op een voorspelling waar je overtuigd was dat de 50%-kans klopte. Daarom is closing-line value (CLV) tracking zo belangrijk - meer daarover in een latere pijler.",
           ],
         },
       },
@@ -120,7 +120,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
         },
         body: {
           en: [
-            "Your edge - the gap between the true probability and the bookmaker's implied probability - comes from one of three places: a better model, a faster information loop, or a softer market. Most recreational bettors try the first and fail because their models aren't rigorous enough to beat the combined research of a professional trading desk. The second requires either inside information (illegal and unethical) or an extremely fast data pipeline that most people don't have.",
+            "Your edge - the gap between the true probability and the bookmaker's implied probability - comes from one of three places: a better model, a faster information loop, or a softer market. Most recreational subscribers try the first and fail because their models aren't rigorous enough to beat the combined research of a professional trading desk. The second requires either inside information (illegal and unethical) or an extremely fast data pipeline that most people don't have.",
             "The third is the most realistic path for an individual. Soft markets are ones where the bookmaker's price is based less on a sharp model and more on what the crowd bets. Low-profile leagues, second-tier competitions, early-season fixtures and niche markets (corners, cards, specific player props) are all softer than the Premier League 1X2. A decent model applied to a soft market can generate meaningful yield even with consumer-grade tools.",
             "BetsPlug sits in the first category - we invest in model quality so casual users can borrow that edge without building it themselves. Our ensemble combines four independent models plus a calibration layer, trained on every match from five top leagues. The goal isn't to give you a guaranteed winner; it's to give you a probability estimate that is, on average, more accurate than the implied probability baked into the consumer-book price.",
           ],
@@ -138,14 +138,14 @@ export const LEARN_PILLARS: LearnPillar[] = [
         },
         body: {
           en: [
-            "The biggest psychological barrier to value betting isn't the math - it's variance. Even a bettor with a consistent 5% edge will have losing weeks, losing months, and occasionally losing quarters. The distribution of returns is wide enough that you need roughly 300 bets to be 95% confident your edge is real, and 1000 bets before variance stops dominating the picture.",
+            "The biggest psychological barrier to value betting isn't the math - it's variance. Even a user with a consistent 5% edge will have losing weeks, losing months, and occasionally losing quarters. The distribution of returns is wide enough that you need roughly 300 bets to be 95% confident your edge is real, and 1000 bets before variance stops dominating the picture.",
             "Most people don't last that long. They scale up stakes after a hot run, scale down (or stop) after a cold run, and never give their edge the sample size it needs to express itself. The professional answer is flat staking (or disciplined Kelly - see the Kelly pillar) combined with a bankroll sized to survive drawdowns without emotional cascades.",
             "BetsPlug's published track record deliberately covers multiple seasons, not a hot streak. You'll see cold periods in our history - that's the nature of the game. What matters is whether the long-run yield stays positive after you account for the margin you paid on every bet.",
           ],
           nl: [
-            "De grootste psychologische drempel bij value betting is niet de wiskunde - het is variance. Zelfs een speler met een consistente 5% edge heeft verliesweken, verliesmaanden en af en toe een verlieskwartaal. De verdeling van rendementen is breed genoeg dat je ongeveer 300 weddenschappen nodig hebt om met 95% zekerheid te kunnen zeggen dat je edge echt is, en 1000 weddenschappen voordat variance niet meer het beeld domineert.",
+            "De grootste psychologische drempel bij value betting is niet de wiskunde - het is variance. Zelfs een speler met een consistente 5% edge heeft verliesweken, verliesmaanden en af en toe een verlieskwartaal. De verdeling van rendementen is breed genoeg dat je ongeveer 300 voorspellingen nodig hebt om met 95% zekerheid te kunnen zeggen dat je edge echt is, en 1000 voorspellingen voordat variance niet meer het beeld domineert.",
             "De meeste mensen houden dat niet vol. Ze verhogen hun inzetten na een hete run, verlagen (of stoppen) na een koude run, en geven hun edge nooit de sample size die hij nodig heeft om zichzelf te tonen. Het professionele antwoord is flat staking (of gedisciplineerde Kelly - zie de Kelly-pijler) in combinatie met een bankroll die groot genoeg is om drawdowns te overleven zonder emotionele cascades.",
-            "De gepubliceerde track record van BetsPlug dekt opzettelijk meerdere seizoenen, niet een hete streak. Je ziet koude periodes in onze geschiedenis - dat is de aard van het spel. Wat telt is of de lange-termijn yield positief blijft nadat je de marge hebt afgetrokken die je op elke weddenschap hebt betaald.",
+            "De gepubliceerde track record van BetsPlug dekt opzettelijk meerdere seizoenen, niet een hete streak. Je ziet koude periodes in onze geschiedenis - dat is de aard van het spel. Wat telt is of de lange-termijn yield positief blijft nadat je de marge hebt afgetrokken die je op elke voorspelling hebt betaald.",
           ],
         },
       },
@@ -162,8 +162,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
           ],
           nl: [
             "Neem een wedstrijd waar ons ensemble de thuisploeg schat op 54% om te winnen, het gelijkspel op 24% en de uitploeg op 22%. De eerlijke odds zijn 1.85 / 4.17 / 4.55. Een consumer-boek noteert de wedstrijd op 1.95 / 3.80 / 4.20. De thuiswedstrijd op 1.95 impliceert 51.3%, dus ons model zegt dat die prijs een edge heeft van 54% − 51.3% = +2.7% - een kleine maar positieve EV.",
-            "Het gelijkspel op 3.80 impliceert 26.3%, maar ons model geeft het slechts 24% - een negatieve edge van −2.3%. De uitploeg op 4.20 impliceert 23.8%, ons model geeft 22% - ook negatief. Dus op deze wedstrijd is de enige value-weddenschap de thuiswinst, op een bescheiden +5.3% yield (na verrekening van de 2.7% kans-edge tegen de 1.95-prijs).",
-            "Deze ene weddenschap maakt niet uit. Wat uitmaakt is dat we hetzelfde filter op elke wedstrijd toepassen, alleen wedden als de positieve-EV drempel gehaald wordt, en de lange-termijn sample size het werk laten doen. BetsPlug's gratis voorspellingen markeren deze edges zonder dat je zelf de rekensom hoeft te maken - de confidence-score is onze afkorting voor 'hoe comfortabel is het model met deze kansschatting'.",
+            "Het gelijkspel op 3.80 impliceert 26.3%, maar ons model geeft het slechts 24% - een negatieve edge van −2.3%. De uitploeg op 4.20 impliceert 23.8%, ons model geeft 22% - ook negatief. Dus op deze wedstrijd is de enige value-voorspelling de thuiswinst, op een bescheiden +5.3% yield (na verrekening van de 2.7% kans-edge tegen de 1.95-prijs).",
+            "Deze ene voorspelling maakt niet uit. Wat uitmaakt is dat we hetzelfde filter op elke wedstrijd toepassen, alleen wedden als de positieve-EV drempel gehaald wordt, en de lange-termijn sample size het werk laten doen. BetsPlug's gratis voorspellingen markeren deze edges zonder dat je zelf de rekensom hoeft te maken - de confidence-score is onze afkorting voor 'hoe comfortabel is het model met deze kansschatting'.",
           ],
         },
       },
@@ -172,7 +172,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
       en: [
         {
           q: "Is value betting the same as predicting winners?",
-          a: "No. A value bet is one where the price is higher than the true probability - it can easily be on an underdog or a draw. Predicting winners without checking the price is how most recreational bettors lose money even when they're right about results.",
+          a: "No. A value bet is one where the price is higher than the true probability - it can easily be on an underdog or a draw. Predicting winners without checking the price is how most recreational subscribers lose money even when they're right about results.",
         },
         {
           q: "How do I calculate my edge?",
@@ -194,7 +194,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: [
         {
           q: "Is value betting hetzelfde als winnaars voorspellen?",
-          a: "Nee. Een value-weddenschap is er één waar de prijs hoger is dan de echte kans - dat kan makkelijk een underdog of gelijkspel zijn. Winnaars voorspellen zonder de prijs te checken is hoe de meeste recreatieve spelers geld verliezen, zelfs als ze gelijk hebben over de uitslag.",
+          a: "Nee. Een value-voorspelling is er één waar de prijs hoger is dan de echte kans - dat kan makkelijk een underdog of gelijkspel zijn. Winnaars voorspellen zonder de prijs te checken is hoe de meeste recreatieve spelers geld verliezen, zelfs als ze gelijk hebben over de uitslag.",
         },
         {
           q: "Hoe bereken ik mijn edge?",
@@ -523,8 +523,8 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "Hoe het Kelly Criterion optimale stakes berekent, waarom full Kelly te agressief is en de fractional-Kelly sizing die BetsPlug in member-tools gebruikt.",
     },
     intro: {
-      en: "The Kelly Criterion is a stake-sizing formula derived by information theorist John Kelly in 1956, originally to maximise the long-run growth rate of wealth in repeated independent gambles with known edge. It's the only mathematically optimal answer to the question 'how much should I bet?' - but it's also famously aggressive, and the gap between the theory and the practical reality of football betting is where most people get burned. This guide explains the formula, the intuition behind it, and why professional bettors almost always size at some fraction of full Kelly.",
-      nl: "Het Kelly Criterion is een stake-sizing formule die werd afgeleid door informatietheoreticus John Kelly in 1956, oorspronkelijk om de lange-termijn groeisnelheid van vermogen te maximaliseren in herhaalde onafhankelijke gokken met bekende edge. Het is het enige wiskundig optimale antwoord op de vraag 'hoeveel moet ik inzetten?' - maar het is ook berucht agressief, en het gat tussen de theorie en de praktische realiteit van voetbalweddenschappen is waar de meeste mensen zich branden. Deze gids legt de formule uit, de intuïtie erachter, en waarom professionele spelers bijna altijd op een fractie van volle Kelly inzetten.",
+      en: "The Kelly Criterion is a stake-sizing formula derived by information theorist John Kelly in 1956, originally to maximise the long-run growth rate of wealth in repeated independent gambles with known edge. It's the only mathematically optimal answer to the question 'how much should I bet?' - but it's also famously aggressive, and the gap between the theory and the practical reality of football betting is where most people get burned. This guide explains the formula, the intuition behind it, and why professional subscribers almost always size at some fraction of full Kelly.",
+      nl: "Het Kelly Criterion is een stake-sizing formule die werd afgeleid door informatietheoreticus John Kelly in 1956, oorspronkelijk om de lange-termijn groeisnelheid van vermogen te maximaliseren in herhaalde onafhankelijke voorspellen met bekende edge. Het is het enige wiskundig optimale antwoord op de vraag 'hoeveel moet ik inzetten?' - maar het is ook berucht agressief, en het gat tussen de theorie en de praktische realiteit van voetbalvoorspellingen is waar de meeste mensen zich branden. Deze gids legt de formule uit, de intuïtie erachter, en waarom professionele spelers bijna altijd op een fractie van volle Kelly inzetten.",
     },
     sections: [
       {
@@ -534,13 +534,13 @@ export const LEARN_PILLARS: LearnPillar[] = [
         },
         body: {
           en: [
-            "For a bet with decimal odds O and true probability p of winning, the Kelly fraction is f = (p × (O − 1) − (1 − p)) / (O − 1). In words: 'edge divided by odds-minus-one'. For a bet at 2.00 with a true probability of 55%, Kelly says stake f = (0.55 × 1 − 0.45) / 1 = 0.10, or 10% of your bankroll. That's an aggressive number - most recreational bettors are horrified by it.",
+            "For a bet with decimal odds O and true probability p of winning, the Kelly fraction is f = (p × (O − 1) − (1 − p)) / (O − 1). In words: 'edge divided by odds-minus-one'. For a bet at 2.00 with a true probability of 55%, Kelly says stake f = (0.55 × 1 − 0.45) / 1 = 0.10, or 10% of your bankroll. That's an aggressive number - most recreational subscribers are horrified by it.",
             "The formula scales naturally: a smaller edge produces a smaller stake. A 52% probability at 2.00 gives f = 0.04 (4% of bankroll). A 65% probability at 2.00 gives f = 0.30 (30% of bankroll - terrifying). A 51% probability at 2.00 gives f = 0.02. And any negative-edge bet gives a negative f, which Kelly correctly interprets as 'don't bet'.",
             "The mathematical guarantee is that no other sizing strategy beats Kelly in the long run for maximising compound growth. Flat staking underperforms Kelly asymptotically; doubling up after losses (Martingale) dramatically underperforms and eventually bankrupts you. Kelly is provably optimal - under the assumption that you know your true edge, which is where the practical problems start.",
           ],
           nl: [
-            "Voor een weddenschap met decimale odds O en echte winstkans p is de Kelly-fractie f = (p × (O − 1) − (1 − p)) / (O − 1). In woorden: 'edge gedeeld door odds-min-één'. Voor een weddenschap op 2.00 met een echte kans van 55% zegt Kelly stake f = (0.55 × 1 − 0.45) / 1 = 0.10, ofwel 10% van je bankroll. Dat is een agressief getal - de meeste recreatieve spelers zijn er ontsteld over.",
-            "De formule schaalt natuurlijk: een kleinere edge geeft een kleinere inzet. Een 52%-kans op 2.00 geeft f = 0.04 (4% van de bankroll). Een 65%-kans op 2.00 geeft f = 0.30 (30% van de bankroll - angstaanjagend). Een 51%-kans op 2.00 geeft f = 0.02. En elke negatieve-edge weddenschap geeft een negatieve f, die Kelly correct interpreteert als 'niet wedden'.",
+            "Voor een voorspelling met decimale odds O en echte winstkans p is de Kelly-fractie f = (p × (O − 1) − (1 − p)) / (O − 1). In woorden: 'edge gedeeld door odds-min-één'. Voor een voorspelling op 2.00 met een echte kans van 55% zegt Kelly stake f = (0.55 × 1 − 0.45) / 1 = 0.10, ofwel 10% van je bankroll. Dat is een agressief getal - de meeste recreatieve spelers zijn er ontsteld over.",
+            "De formule schaalt natuurlijk: een kleinere edge geeft een kleinere inzet. Een 52%-kans op 2.00 geeft f = 0.04 (4% van de bankroll). Een 65%-kans op 2.00 geeft f = 0.30 (30% van de bankroll - angstaanjagend). Een 51%-kans op 2.00 geeft f = 0.02. En elke negatieve-edge voorspelling geeft een negatieve f, die Kelly correct interpreteert als 'niet wedden'.",
             "De wiskundige garantie is dat geen enkele andere sizing-strategie Kelly op de lange termijn verslaat voor het maximaliseren van compounded groei. Flat staking presteert asymptotisch slechter dan Kelly; verdubbelen na verliezen (Martingale) presteert dramatisch slechter en leidt uiteindelijk tot bankroet. Kelly is aantoonbaar optimaal - onder de aanname dat je je echte edge kent, en daar beginnen de praktische problemen.",
           ],
         },
@@ -566,17 +566,17 @@ export const LEARN_PILLARS: LearnPillar[] = [
       {
         heading: {
           en: "Kelly with multiple simultaneous bets",
-          nl: "Kelly met meerdere gelijktijdige weddenschappen",
+          nl: "Kelly met meerdere gelijktijdige voorspellingen",
         },
         body: {
           en: [
-            "Pure Kelly assumes one bet at a time, but football bettors often place multiple bets on the same day or weekend. If the bets are uncorrelated (different leagues, different markets), you can scale them independently using their individual Kelly fractions - with one important caveat: the sum of all fractions should never exceed 1, or you risk running out of bankroll before all the bets settle.",
+            "Pure Kelly assumes one bet at a time, but football subscribers often place multiple bets on the same day or weekend. If the bets are uncorrelated (different leagues, different markets), you can scale them independently using their individual Kelly fractions - with one important caveat: the sum of all fractions should never exceed 1, or you risk running out of bankroll before all the bets settle.",
             "If the bets are correlated (three Premier League matches on the same Saturday - all influenced by general Premier League variance that weekend), pure Kelly over-allocates because it double-counts the risk. The correct move is to size down proportionally, or to use a constrained-Kelly optimisation that respects the correlation matrix.",
             "BetsPlug member tools ship a built-in multi-bet Kelly calculator that accounts for correlation between simultaneous fixtures. For the free preview, the confidence score is the raw signal - if you want to sizing-size yourself, divide by 4 (quarter-Kelly) and you'll be close to a safe baseline without needing the correlation math.",
           ],
           nl: [
-            "Pure Kelly veronderstelt één weddenschap tegelijk, maar sportspelers plaatsen vaak meerdere weddenschappen op dezelfde dag of hetzelfde weekend. Als de weddenschappen ongecorreleerd zijn (verschillende competities, verschillende markten), kun je ze onafhankelijk schalen met hun individuele Kelly-fracties - met één belangrijke kanttekening: de som van alle fracties mag nooit groter zijn dan 1, anders loop je het risico dat je bankroll op is voordat alle weddenschappen afgewikkeld zijn.",
-            "Als de weddenschappen gecorreleerd zijn (drie Premier League-wedstrijden op dezelfde zaterdag - allemaal beïnvloed door algemene Premier League-variance dat weekend), over-alloceert pure Kelly omdat het het risico dubbel telt. De juiste move is proportioneel verkleinen of een beperkte-Kelly-optimalisatie gebruiken die de correlatiematrix respecteert.",
+            "Pure Kelly veronderstelt één voorspelling tegelijk, maar sportspelers plaatsen vaak meerdere voorspellingen op dezelfde dag of hetzelfde weekend. Als de voorspellingen ongecorreleerd zijn (verschillende competities, verschillende markten), kun je ze onafhankelijk schalen met hun individuele Kelly-fracties - met één belangrijke kanttekening: de som van alle fracties mag nooit groter zijn dan 1, anders loop je het risico dat je bankroll op is voordat alle voorspellingen afgewikkeld zijn.",
+            "Als de voorspellingen gecorreleerd zijn (drie Premier League-wedstrijden op dezelfde zaterdag - allemaal beïnvloed door algemene Premier League-variance dat weekend), over-alloceert pure Kelly omdat het het risico dubbel telt. De juiste move is proportioneel verkleinen of een beperkte-Kelly-optimalisatie gebruiken die de correlatiematrix respecteert.",
             "BetsPlug member-tools leveren een ingebouwde multi-bet Kelly-calculator die rekening houdt met correlatie tussen gelijktijdige wedstrijden. Voor de gratis preview is de confidence-score het rauwe signaal - als je jezelf wilt sizen, deel door 4 (quarter-Kelly) en je zit dicht bij een veilige baseline zonder de correlatie-wiskunde nodig te hebben.",
           ],
         },
@@ -593,7 +593,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
             "Notice how sensitive this is to the probability estimate. If the true probability was 54% instead of 58% (a 4-point overestimate), the real edge drops to 6.4%, real full Kelly becomes 11.6%, and quarter-Kelly falls to 2.9% - a third of the stake you would have placed based on the 58% estimate. This is exactly the kind of mis-sizing that sinks overconfident models. Always quarter-Kelly until you've validated the model on at least 500 out-of-sample picks.",
           ],
           nl: [
-            "Stel je hebt een bankroll van €2.000 en het BetsPlug-ensemble geeft je een 58%-kans op een wedstrijd waar de bookmakerprijs 2.10 is. Je edge is 0.58 − (1 / 2.10) = 0.58 − 0.476 = 0.104 (10.4%). Volle Kelly f = (0.58 × 1.10 − 0.42) / 1.10 = 0.1945, ofwel 19.45% van de bankroll. Dat is €389 op één weddenschap - een angstaanjagend getal.",
+            "Stel je hebt een bankroll van €2.000 en het BetsPlug-ensemble geeft je een 58%-kans op een wedstrijd waar de bookmakerprijs 2.10 is. Je edge is 0.58 − (1 / 2.10) = 0.58 − 0.476 = 0.104 (10.4%). Volle Kelly f = (0.58 × 1.10 − 0.42) / 1.10 = 0.1945, ofwel 19.45% van de bankroll. Dat is €389 op één voorspelling - een angstaanjagend getal.",
             "Half-Kelly zou €194 inzetten, quarter-Kelly €97. Het verschil in lange-termijn groei tussen deze drie opties is veel kleiner dan het verschil in variance, dus de meeste professionals nemen quarter-Kelly op verse picks en schalen pas op nadat het model zich op een grote sample heeft bewezen.",
             "Merk op hoe gevoelig dit is voor de kansschatting. Als de echte kans 54% was in plaats van 58% (een 4-punts overschatting), zakt de echte edge naar 6.4%, wordt echte volle Kelly 11.6%, en zakt quarter-Kelly naar 2.9% - een derde van de stake die je op basis van de 58%-schatting zou hebben geplaatst. Dit is precies het soort mis-sizing dat overmoedige modellen doet zinken. Gebruik altijd quarter-Kelly totdat je het model op minstens 500 out-of-sample picks hebt gevalideerd.",
           ],
@@ -642,7 +642,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
         },
         {
           q: "Berekent BetsPlug Kelly automatisch?",
-          a: "Members krijgen een Kelly-sizing tool in het dashboard die rekening houdt met correlatie tussen gelijktijdige weddenschappen. De gratis preview toont alleen confidence; je kunt handmatig quarter-Kelly toepassen als je een ruwe startpositie wilt.",
+          a: "Members krijgen een Kelly-sizing tool in het dashboard die rekening houdt met correlatie tussen gelijktijdige voorspellingen. De gratis preview toont alleen confidence; je kunt handmatig quarter-Kelly toepassen als je een ruwe startpositie wilt.",
         },
       ],
     },
@@ -807,11 +807,11 @@ export const LEARN_PILLARS: LearnPillar[] = [
       nl: "Bankroll Management voor Sportwedders (2026) · BetsPlug",
     },
     metaDescription: {
-      en: "How to size your bankroll, survive variance, and avoid the psychological traps that wipe out +EV bettors. Practical rules and worked examples.",
+      en: "How to size your bankroll, survive variance, and avoid the psychological traps that wipe out +EV subscribers. Practical rules and worked examples.",
       nl: "Hoe je je bankroll dimensioneert, variance overleeft en de psychologische valkuilen vermijdt die +EV-spelers uitvegen. Praktische regels en uitgewerkte voorbeelden.",
     },
     intro: {
-      en: "Most people who lose money betting don't lose because their picks are bad. They lose because their bankroll management is bad. A bettor with a genuine edge who sizes wrong will still go broke; a bettor with a small edge who sizes right will compound slowly but surely. This pillar is the most practical one on the site - it covers the rules that separate 'has a model' from 'has a business', and it draws directly from what professional betting syndicates actually do.",
+      en: "Most people who lose money betting don't lose because their picks are bad. They lose because their bankroll management is bad. A user with a genuine edge who sizes wrong will still go broke; a user with a small edge who sizes right will compound slowly but surely. This pillar is the most practical one on the site - it covers the rules that separate 'has a model' from 'has a business', and it draws directly from what professional betting syndicates actually do.",
       nl: "De meeste mensen die geld verliezen met wedden verliezen niet omdat hun picks slecht zijn. Ze verliezen omdat hun bankroll management slecht is. Een speler met een echte edge die verkeerd inzet gaat alsnog failliet; een speler met een kleine edge die goed inzet compoundt langzaam maar zeker. Deze pijler is de meest praktische op de site - hij dekt de regels die 'heeft een model' onderscheiden van 'heeft een business', en hij is direct ontleend aan wat professionele wedsyndicaten daadwerkelijk doen.",
     },
     sections: [
@@ -823,12 +823,12 @@ export const LEARN_PILLARS: LearnPillar[] = [
         body: {
           en: [
             "Your bankroll is the pool of money you have set aside exclusively for betting. It's not your savings, it's not your rent money, and it's definitely not money you need to pay bills with. The cleanest definition: a bankroll is an amount you could lose in full and your life would not meaningfully change. If losing it would cause you stress, the bankroll is too big for your financial situation.",
-            "Professional syndicates separate bankroll from operating capital the way a business separates working capital from reserves. The bankroll pays out winnings and absorbs losses; it does not pay rent, salaries, or expenses. This separation is psychological as much as it is financial: it keeps decisions rational because the bettor isn't thinking 'if I lose this bet I can't pay my car payment'.",
-            "For a recreational bettor, the right bankroll number is between 1% and 5% of your discretionary savings - not your total net worth, not your emergency fund. If you have €20,000 in savings and €5,000 of that is genuinely discretionary (you'd spend it on holidays or gadgets if you weren't betting), then a bankroll of €500 – €1,000 is reasonable.",
+            "Professional syndicates separate bankroll from operating capital the way a business separates working capital from reserves. The bankroll pays out winnings and absorbs losses; it does not pay rent, salaries, or expenses. This separation is psychological as much as it is financial: it keeps decisions rational because the user isn't thinking 'if I lose this bet I can't pay my car payment'.",
+            "For a recreational user, the right bankroll number is between 1% and 5% of your discretionary savings - not your total net worth, not your emergency fund. If you have €20,000 in savings and €5,000 of that is genuinely discretionary (you'd spend it on holidays or gadgets if you weren't betting), then a bankroll of €500 – €1,000 is reasonable.",
           ],
           nl: [
             "Je bankroll is de pot geld die je exclusief voor wedden opzij hebt gezet. Het is niet je spaargeld, niet je huurgeld, en zeker niet geld dat je nodig hebt om rekeningen mee te betalen. De schoonste definitie: een bankroll is een bedrag dat je volledig zou kunnen verliezen zonder dat je leven betekenisvol verandert. Als het verlies ervan stress zou veroorzaken, is de bankroll te groot voor je financiële situatie.",
-            "Professionele syndicaten scheiden bankroll van operationeel kapitaal zoals een bedrijf werkkapitaal scheidt van reserves. De bankroll betaalt winsten uit en absorbeert verliezen; hij betaalt geen huur, salarissen of kosten. Deze scheiding is psychologisch net zo belangrijk als financieel: hij houdt beslissingen rationeel omdat de speler niet denkt 'als ik deze weddenschap verlies kan ik mijn autolease niet betalen'.",
+            "Professionele syndicaten scheiden bankroll van operationeel kapitaal zoals een bedrijf werkkapitaal scheidt van reserves. De bankroll betaalt winsten uit en absorbeert verliezen; hij betaalt geen huur, salarissen of kosten. Deze scheiding is psychologisch net zo belangrijk als financieel: hij houdt beslissingen rationeel omdat de speler niet denkt 'als ik deze voorspelling verlies kan ik mijn autolease niet betalen'.",
             "Voor een recreatieve speler is het juiste bankroll-getal tussen 1% en 5% van je beschikbare spaargeld - niet je totale vermogen, niet je noodfonds. Als je €20.000 aan spaargeld hebt en €5.000 daarvan is echt beschikbaar (je zou het uitgeven aan vakanties of gadgets als je niet zou wedden), dan is een bankroll van €500 – €1.000 redelijk.",
           ],
         },
@@ -841,13 +841,13 @@ export const LEARN_PILLARS: LearnPillar[] = [
         body: {
           en: [
             "Once the bankroll is set, the most common professional rule is: never stake more than 1–2% of your current bankroll on a single bet, regardless of confidence. A €1,000 bankroll implies unit sizes of €10–€20. Anything bigger and a normal losing streak (which happens routinely) will dig a hole that's emotionally hard to climb out of.",
-            "The reason to cap at 2% isn't that Kelly says so - Kelly often recommends more - but that 2% survives the worst drawdowns seen in historical simulation. A bettor staking 2% flat on +EV picks with a 55% hit rate can expect drawdowns of around 20% of bankroll over a typical 500-bet sample. That's scary but survivable. A bettor staking 5% flat on the same edge can expect drawdowns of 45%+, which is the point at which most people blink and quit.",
+            "The reason to cap at 2% isn't that Kelly says so - Kelly often recommends more - but that 2% survives the worst drawdowns seen in historical simulation. A user staking 2% flat on +EV picks with a 55% hit rate can expect drawdowns of around 20% of bankroll over a typical 500-bet sample. That's scary but survivable. A user staking 5% flat on the same edge can expect drawdowns of 45%+, which is the point at which most people blink and quit.",
             "If you're using Kelly, the right move is to cap Kelly at 2% for any individual bet even when the formula recommends more. The upside trade-off is small; the downside protection is huge. Professional syndicates call this a 'Kelly-Lite' approach and it's the standard in nearly every desk I've personally interviewed.",
           ],
           nl: [
-            "Zodra de bankroll is vastgesteld, is de meest voorkomende professionele regel: zet nooit meer dan 1–2% van je huidige bankroll in op één weddenschap, ongeacht je confidence. Een bankroll van €1.000 impliceert unit-groottes van €10–€20. Alles groter en een normale verliesreeks (die routinematig gebeurt) graaft een gat dat emotioneel moeilijk te verlaten is.",
-            "De reden om op 2% te plafonneren is niet dat Kelly dat zegt - Kelly raadt vaak meer aan - maar dat 2% de ergste drawdowns overleeft die in historische simulatie zijn gezien. Een speler die flat 2% inzet op +EV-picks met een 55% hit rate kan drawdowns van ongeveer 20% van de bankroll verwachten over een typische sample van 500 weddenschappen. Dat is eng maar te overleven. Een speler die 5% flat inzet op dezelfde edge kan drawdowns van 45%+ verwachten, het punt waarop de meeste mensen knipperen en stoppen.",
-            "Als je Kelly gebruikt, is de juiste move om Kelly op 2% te plafonneren voor elke individuele weddenschap, zelfs als de formule meer aanbeveelt. De upside-tradeoff is klein; de downside-bescherming is enorm. Professionele syndicaten noemen dit een 'Kelly-Lite' aanpak en het is de standaard bij bijna elke desk die ik persoonlijk heb geïnterviewd.",
+            "Zodra de bankroll is vastgesteld, is de meest voorkomende professionele regel: zet nooit meer dan 1–2% van je huidige bankroll in op één voorspelling, ongeacht je confidence. Een bankroll van €1.000 impliceert unit-groottes van €10–€20. Alles groter en een normale verliesreeks (die routinematig gebeurt) graaft een gat dat emotioneel moeilijk te verlaten is.",
+            "De reden om op 2% te plafonneren is niet dat Kelly dat zegt - Kelly raadt vaak meer aan - maar dat 2% de ergste drawdowns overleeft die in historische simulatie zijn gezien. Een speler die flat 2% inzet op +EV-picks met een 55% hit rate kan drawdowns van ongeveer 20% van de bankroll verwachten over een typische sample van 500 voorspellingen. Dat is eng maar te overleven. Een speler die 5% flat inzet op dezelfde edge kan drawdowns van 45%+ verwachten, het punt waarop de meeste mensen knipperen en stoppen.",
+            "Als je Kelly gebruikt, is de juiste move om Kelly op 2% te plafonneren voor elke individuele voorspelling, zelfs als de formule meer aanbeveelt. De upside-tradeoff is klein; de downside-bescherming is enorm. Professionele syndicaten noemen dit een 'Kelly-Lite' aanpak en het is de standaard bij bijna elke desk die ik persoonlijk heb geïnterviewd.",
           ],
         },
       },
@@ -858,12 +858,12 @@ export const LEARN_PILLARS: LearnPillar[] = [
         },
         body: {
           en: [
-            "Drawdown is the peak-to-trough decline in your bankroll over time. Even the best-managed betting operation experiences meaningful drawdowns - variance doesn't care how good your model is. For a 55% hit rate at average odds 1.90 (a realistic profile for a disciplined value bettor), the expected worst drawdown over 500 bets is around 18%; over 1,000 bets it climbs to 25%.",
-            "These numbers sound small until you experience them emotionally. A €1,000 bankroll dropping to €820 over the course of two months feels much worse than the math suggests, especially if you're comparing it to the €1,150 peak you hit last week. Most bettors react by increasing stakes to 'win it back faster', which is the single most reliable way to turn a survivable drawdown into a terminal one.",
+            "Drawdown is the peak-to-trough decline in your bankroll over time. Even the best-managed betting operation experiences meaningful drawdowns - variance doesn't care how good your model is. For a 55% hit rate at average odds 1.90 (a realistic profile for a disciplined value user), the expected worst drawdown over 500 bets is around 18%; over 1,000 bets it climbs to 25%.",
+            "These numbers sound small until you experience them emotionally. A €1,000 bankroll dropping to €820 over the course of two months feels much worse than the math suggests, especially if you're comparing it to the €1,150 peak you hit last week. Most subscribers react by increasing stakes to 'win it back faster', which is the single most reliable way to turn a survivable drawdown into a terminal one.",
             "The professional answer is a rigid staking plan that you commit to in advance and do not deviate from under any emotional circumstances. Write it down: 'I will stake 1.5% of my current bankroll on every +EV pick my model flags, I will not increase stakes after losses, I will not decrease stakes after losses, I will rebalance the unit size weekly based on bankroll changes'. Follow the plan mechanically. That's the hard part.",
           ],
           nl: [
-            "Drawdown is de daling van piek naar dal in je bankroll over tijd. Zelfs de best gemanagede wedoperatie ervaart betekenisvolle drawdowns - variance geeft niet om hoe goed je model is. Voor een 55% hit rate op gemiddelde odds 1.90 (een realistisch profiel voor een gedisciplineerde value-speler) is de verwachte ergste drawdown over 500 weddenschappen ongeveer 18%; over 1.000 weddenschappen klimt het naar 25%.",
+            "Drawdown is de daling van piek naar dal in je bankroll over tijd. Zelfs de best gemanagede wedoperatie ervaart betekenisvolle drawdowns - variance geeft niet om hoe goed je model is. Voor een 55% hit rate op gemiddelde odds 1.90 (een realistisch profiel voor een gedisciplineerde value-speler) is de verwachte ergste drawdown over 500 voorspellingen ongeveer 18%; over 1.000 voorspellingen klimt het naar 25%.",
             "Deze getallen klinken klein totdat je ze emotioneel ervaart. Een bankroll van €1.000 die over twee maanden zakt naar €820 voelt veel slechter dan de wiskunde suggereert, vooral als je het vergelijkt met de €1.150 piek die je vorige week haalde. De meeste spelers reageren door stakes te verhogen om 'het sneller terug te winnen', wat de meest betrouwbare manier is om een overlevbare drawdown in een terminale te veranderen.",
             "Het professionele antwoord is een rigide staking plan dat je van tevoren vastlegt en waarvan je onder geen enkele emotionele omstandigheid afwijkt. Schrijf het op: 'Ik zet 1.5% van mijn huidige bankroll in op elke +EV-pick die mijn model signaleert, ik verhoog stakes niet na verliezen, ik verlaag stakes niet na verliezen, ik herbalanceer de unit-grootte wekelijks op basis van bankroll-veranderingen'. Volg het plan mechanisch. Dat is het harde deel.",
           ],
@@ -876,13 +876,13 @@ export const LEARN_PILLARS: LearnPillar[] = [
         },
         body: {
           en: [
-            "You cannot improve what you don't measure. Every bet you place should be logged with: date, league, fixture, market, price taken, stake, model's probability estimate, model's confidence score, bet result, and running bankroll. This is the minimum - and it's what separates a serious bettor from a casual one.",
-            "Two metrics matter most: ROI (profit divided by total staked) and closing-line value (CLV - how often your taken price is better than the closing price on the same bet). ROI is how much you make per unit staked in the long run. CLV is a leading indicator - bettors with consistently positive CLV make money on average, even when recent results are bad, because they're systematically getting better prices than the market consensus.",
+            "You cannot improve what you don't measure. Every bet you place should be logged with: date, league, fixture, market, price taken, stake, model's probability estimate, model's confidence score, bet result, and running bankroll. This is the minimum - and it's what separates a serious user from a casual one.",
+            "Two metrics matter most: ROI (profit divided by total staked) and closing-line value (CLV - how often your taken price is better than the closing price on the same bet). ROI is how much you make per unit staked in the long run. CLV is a leading indicator - subscribers with consistently positive CLV make money on average, even when recent results are bad, because they're systematically getting better prices than the market consensus.",
             "BetsPlug publishes both metrics in the public track record section. Members can filter the record by league, market and model confidence band to see how the edge behaves in different subsets - that's useful for identifying which kinds of picks are genuinely +EV vs which are noise. If you're running your own model, the minimum you need is a spreadsheet. If you're serious, use Pinnacle closing lines as your baseline for CLV tracking.",
           ],
           nl: [
-            "Je kunt niet verbeteren wat je niet meet. Elke weddenschap die je plaatst moet worden gelogd met: datum, competitie, wedstrijd, markt, genomen prijs, stake, kansschatting van het model, confidence-score van het model, uitslag, en lopende bankroll. Dit is het minimum - en het scheidt een serieuze speler van een casual.",
-            "Twee metrics zijn het belangrijkst: ROI (winst gedeeld door totale stake) en closing-line value (CLV - hoe vaak je genomen prijs beter is dan de closing-prijs op dezelfde weddenschap). ROI is hoeveel je gemiddeld verdient per eenheid inzet op de lange termijn. CLV is een leading indicator - spelers met consistent positieve CLV verdienen gemiddeld geld, zelfs wanneer recente resultaten slecht zijn, omdat ze systematisch betere prijzen krijgen dan de marktconsensus.",
+            "Je kunt niet verbeteren wat je niet meet. Elke voorspelling die je plaatst moet worden gelogd met: datum, competitie, wedstrijd, markt, genomen prijs, stake, kansschatting van het model, confidence-score van het model, uitslag, en lopende bankroll. Dit is het minimum - en het scheidt een serieuze speler van een casual.",
+            "Twee metrics zijn het belangrijkst: ROI (winst gedeeld door totale stake) en closing-line value (CLV - hoe vaak je genomen prijs beter is dan de closing-prijs op dezelfde voorspelling). ROI is hoeveel je gemiddeld verdient per eenheid inzet op de lange termijn. CLV is een leading indicator - spelers met consistent positieve CLV verdienen gemiddeld geld, zelfs wanneer recente resultaten slecht zijn, omdat ze systematisch betere prijzen krijgen dan de marktconsensus.",
             "BetsPlug publiceert beide metrics in het publieke track record-gedeelte. Members kunnen de record filteren op competitie, markt en model-confidence band om te zien hoe de edge zich gedraagt in verschillende subsets - dat is nuttig voor het identificeren welke soorten picks echt +EV zijn versus welke ruis zijn. Als je je eigen model runt, is een spreadsheet het minimum wat je nodig hebt. Als je serieus bent, gebruik Pinnacle closing lines als je baseline voor CLV-tracking.",
           ],
         },
@@ -894,12 +894,12 @@ export const LEARN_PILLARS: LearnPillar[] = [
         },
         body: {
           en: [
-            "There are exactly two situations where a disciplined bettor should walk away from the session (not the hobby - just the current sitting). First, when you've hit your daily stop-loss. A professional desk sets a limit of, say, 5% of weekly bankroll in daily drawdown, after which the day is closed regardless of how many +EV picks remain. The reason is behavioural: after a bad day, judgment degrades, and taking more bets is statistically worse than waiting until tomorrow.",
+            "There are exactly two situations where a disciplined user should walk away from the session (not the hobby - just the current sitting). First, when you've hit your daily stop-loss. A professional desk sets a limit of, say, 5% of weekly bankroll in daily drawdown, after which the day is closed regardless of how many +EV picks remain. The reason is behavioural: after a bad day, judgment degrades, and taking more bets is statistically worse than waiting until tomorrow.",
             "Second, when you catch yourself 'chasing' - increasing stakes beyond the plan because you're trying to win money back, or taking picks the model didn't flag because 'this one feels right'. Chasing is how models get abandoned and how bankrolls die. The fix is mechanical: close the app, log off, come back the next day.",
             "The one situation where you should walk away from the hobby entirely is if it stops being fun or starts to interfere with the rest of your life. Gambling-related anxiety, sleep loss, relationship strain - any of these is a sign that it's time to take a break or quit. No positive ROI is worth that trade-off. BetsPlug is an analytics platform for people who treat betting as a side interest, not a coping mechanism; if you need help with gambling problems, please reach out to the resources linked on our responsible-play page.",
           ],
           nl: [
-            "Er zijn precies twee situaties waarin een gedisciplineerde speler de sessie moet verlaten (niet de hobby - alleen het huidige moment). Ten eerste wanneer je je dagelijkse stop-loss hebt geraakt. Een professionele desk stelt een limiet van bijvoorbeeld 5% van de weekse bankroll in dagelijkse drawdown, waarna de dag wordt gesloten ongeacht hoeveel +EV-picks er overblijven. De reden is gedragsmatig: na een slechte dag verslechtert het oordeel, en meer weddenschappen nemen is statistisch slechter dan wachten tot morgen.",
+            "Er zijn precies twee situaties waarin een gedisciplineerde speler de sessie moet verlaten (niet de hobby - alleen het huidige moment). Ten eerste wanneer je je dagelijkse stop-loss hebt geraakt. Een professionele desk stelt een limiet van bijvoorbeeld 5% van de weekse bankroll in dagelijkse drawdown, waarna de dag wordt gesloten ongeacht hoeveel +EV-picks er overblijven. De reden is gedragsmatig: na een slechte dag verslechtert het oordeel, en meer voorspellingen nemen is statistisch slechter dan wachten tot morgen.",
             "Ten tweede wanneer je merkt dat je aan het 'chasen' bent - stakes verhogen boven het plan omdat je geld probeert terug te winnen, of picks nemen die het model niet heeft gesignaleerd omdat 'deze voelt goed'. Chasen is hoe modellen worden opgegeven en hoe bankrolls sterven. De oplossing is mechanisch: sluit de app, log uit, kom de volgende dag terug.",
             "De ene situatie waarin je de hobby volledig moet verlaten is als het stopt leuk te zijn of als het andere delen van je leven begint te verstoren. Gok-gerelateerde angst, slaapverlies, spanning in relaties - elk hiervan is een teken dat het tijd is voor een pauze of om te stoppen. Geen positieve ROI is die afweging waard. BetsPlug is een analyseplatform voor mensen die wedden als een bijinteresse behandelen, niet als coping-mechanisme; als je hulp nodig hebt bij gokproblemen, neem contact op met de bronnen op onze verantwoord-spelen pagina.",
           ],
@@ -910,7 +910,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
       en: [
         {
           q: "How big should my starting bankroll be?",
-          a: "Between 1% and 5% of your discretionary savings. For most recreational bettors that's €200–€2,000. The bankroll should be money you could lose completely without life consequences. If losing it would hurt, it's too big.",
+          a: "Between 1% and 5% of your discretionary savings. For most recreational subscribers that's €200–€2,000. The bankroll should be money you could lose completely without life consequences. If losing it would hurt, it's too big.",
         },
         {
           q: "Should I use flat stakes or Kelly?",
@@ -940,7 +940,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
         },
         {
           q: "Hoe vaak moet ik de unit-grootte herbalanceren?",
-          a: "Wekelijks of na elke 10 weddenschappen, wat eerst komt. Herbalanceer niet na een enkele grote winst of verlies - dat is hoe je jezelf praat in grotere stakes op de verkeerde dagen.",
+          a: "Wekelijks of na elke 10 voorspellingen, wat eerst komt. Herbalanceer niet na een enkele grote winst of verlies - dat is hoe je jezelf praat in grotere stakes op de verkeerde dagen.",
         },
         {
           q: "Wat doe ik als ik een 20% drawdown raak?",
@@ -948,7 +948,7 @@ export const LEARN_PILLARS: LearnPillar[] = [
         },
         {
           q: "Hoe track ik closing-line value?",
-          a: "Log de prijs die je nam en de closing-prijs (Pinnacle is de gebruikelijke referentie) voor elke weddenschap. CLV = (jouw_prijs / closing_prijs) − 1. Gemiddelde CLV boven 0 over 100+ weddenschappen is een sterke leading indicator voor lange-termijn winstgevendheid.",
+          a: "Log de prijs die je nam en de closing-prijs (Pinnacle is de gebruikelijke referentie) voor elke voorspelling. CLV = (jouw_prijs / closing_prijs) − 1. Gemiddelde CLV boven 0 over 100+ voorspellingen is een sterke leading indicator voor lange-termijn winstgevendheid.",
         },
       ],
     },

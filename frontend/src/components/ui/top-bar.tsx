@@ -15,7 +15,7 @@ import { POTD_STATS } from "@/data/potd-stats";
  *   - scarcity:    "Picks lock at kick-off"
  *   - authority:   "{hitRate}% hit rate · {N}+ picks verified"
  *   - reciprocity: "Free Pick of the Day — no card, no email"
- *   - social:      "1,500+ bettors trust BetsPlug"
+ *   - social:      "1,500+ subscribers trust BetsPlug"
  *   - fomo:        "Last month: {X}% hit on Pick of the Day"
  *
  * Variant selection is session-scoped (deterministic per

@@ -167,7 +167,7 @@ export function SeoSection() {
               </strong>{" "}
               - think of us as the quant desk you can rent by the month. Our
               job is to give you the data, probabilities and machine-learning
-              outputs; the decision to place a bet (and with whom) is entirely
+              outputs; the decision to make a pick (and with whom) is entirely
               yours. Learn more{" "}
               <Link href="/about-us" className={linkCls}>
                 about our mission

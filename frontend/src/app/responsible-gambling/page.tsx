@@ -43,7 +43,7 @@ export default function ResponsibleGamblingPage() {
       </p>
       <p>
         Our predictions are provided for <strong>informational, educational,
-        and entertainment purposes only</strong>. Any decision to place a bet
+        and entertainment purposes only</strong>. Any decision to make a pick
         with a licensed bookmaker is entirely your own responsibility.
       </p>
 
@@ -67,7 +67,7 @@ export default function ResponsibleGamblingPage() {
       <ul>
         <li>Never bet more than you can afford to lose.</li>
         <li>Never chase losses by increasing your stake.</li>
-        <li>Never borrow money to place bets.</li>
+        <li>Never borrow money to place predictions.</li>
         <li>Treat betting as entertainment, not as a source of income.</li>
       </ul>
 

@@ -92,7 +92,7 @@ export default async function LearnIndexPage() {
             </HexBadge>
             <span className="section-label mx-auto">
               <GraduationCap className="h-3 w-3" />
-              {t("Six pillar guides · written for bettors, not mathematicians", "Zes pillar-gidsen · geschreven voor bettors, niet wiskundigen")}
+              {t("Six pillar guides · written for subscribers, not mathematicians", "Zes pillar-gidsen · geschreven voor subscribers, niet wiskundigen")}
             </span>
 
             <h1 className="text-heading mt-5 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">

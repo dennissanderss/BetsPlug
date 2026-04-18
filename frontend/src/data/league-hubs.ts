@@ -127,7 +127,7 @@ export const LEAGUE_HUBS: LeagueHub[] = [
         },
         {
           q: "Mag ik BetsPlug gebruiken vanuit Nederland?",
-          a: "BetsPlug is een analyseplatform, geen bookmaker - we nemen geen weddenschappen aan. Je mag onze voorspellingen overal gebruiken waar sportwedden legaal is. In Nederland mag je alleen wedden bij vergunninghouders van de Kansspelautoriteit. Speel bewust.",
+          a: "BetsPlug is een analyseplatform, geen bookmaker - we nemen geen voorspellingen aan. Je mag onze voorspellingen overal gebruiken waar sportwedden legaal is. In Nederland mag je alleen wedden bij vergunninghouders van de Kansspelautoriteit. Speel bewust.",
         },
       ],
     },
@@ -547,7 +547,7 @@ export const LEAGUE_HUBS: LeagueHub[] = [
         },
         {
           q: "Mag ik BetsPlug gebruiken vanuit Nederland?",
-          a: "Ja - BetsPlug is een analyseplatform, geen bookmaker, dus we nemen geen weddenschappen aan. In Nederland mag je alleen wedden bij vergunninghouders van de Kansspelautoriteit. Onze voorspellingen helpen je beslissen hoe je je bankroll verdeelt zodra je op een legale site zit. Speel bewust.",
+          a: "Ja - BetsPlug is een analyseplatform, geen bookmaker, dus we nemen geen voorspellingen aan. In Nederland mag je alleen wedden bij vergunninghouders van de Kansspelautoriteit. Onze voorspellingen helpen je beslissen hoe je je bankroll verdeelt zodra je op een legale site zit. Speel bewust.",
         },
       ],
     },

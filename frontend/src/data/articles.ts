@@ -75,7 +75,7 @@ export const articles: Article[] = [
     title:
       "How to Find a Real Edge on Matchday: An AI Research Framework for Modern Bettors",
     excerpt:
-      "Most bettors burn their bankroll on gut calls and recency bias. Here's the exact 5-step research framework our AI models use to isolate a repeatable edge on every football matchday.",
+      "Most subscribers burn their bankroll on gut calls and recency bias. Here's the exact 5-step research framework our AI models use to isolate a repeatable edge on every football matchday.",
     metaTitle:
       "How to Find a Real Edge on Matchday · AI Research Framework · BetsPlug",
     metaDescription:
@@ -88,11 +88,11 @@ export const articles: Article[] = [
       "linear-gradient(135deg, #0b1220 0%, #0f2a1a 40%, #064e3b 100%)",
     coverPattern: "dots",
     tldr:
-      "Winning bettors are just disciplined researchers. Follow this five-step framework every matchday and the edge finds you - not the other way around.",
+      "Winning subscribers are just disciplined researchers. Follow this five-step framework every matchday and the edge finds you - not the other way around.",
     blocks: [
       {
         type: "paragraph",
-        text: "Ask ten bettors how they picked their last bet and you'll get ten different answers - a hot team, a gut feeling, something they saw on Twitter, a friend's tip. The one thing almost none of them will say is \"I followed a written process.\" And that's exactly the gap a data-driven bettor can exploit. The bookmakers don't outsmart us because they have better models; they outsmart us because they are disciplined and we are not.",
+        text: "Ask ten subscribers how they picked their last bet and you'll get ten different answers - a hot team, a gut feeling, something they saw on Twitter, a friend's tip. The one thing almost none of them will say is \"I followed a written process.\" And that's exactly the gap a data-driven user can exploit. The bookmakers don't outsmart us because they have better models; they outsmart us because they are disciplined and we are not.",
       },
       {
         type: "paragraph",
@@ -104,7 +104,7 @@ export const articles: Article[] = [
       },
       {
         type: "paragraph",
-        text: "The opening line is the collective wisdom of thousands of sharp bettors. Before you form a single opinion, write down what the market thinks: the decimal odds, the implied probabilities, and the overround. If Manchester City is trading at 1.50, the market is telling you they win roughly 67% of the time. Your job is not to prove the market wrong - your job is to find the matches where you have a specific, defensible reason to disagree.",
+        text: "The opening line is the collective wisdom of thousands of sharp subscribers. Before you form a single opinion, write down what the market thinks: the decimal odds, the implied probabilities, and the overround. If Manchester City is trading at 1.50, the market is telling you they win roughly 67% of the time. Your job is not to prove the market wrong - your job is to find the matches where you have a specific, defensible reason to disagree.",
       },
       {
         type: "paragraph",

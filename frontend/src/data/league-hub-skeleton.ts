@@ -164,7 +164,7 @@ export function buildSkeletonHub(entry: LeagueCatalogEntry): LeagueHub {
         },
         {
           q: `Is BetsPlug een bookmaker?`,
-          a: `Nee. BetsPlug is een analytics-platform — we accepteren geen weddenschappen en beheren geen klantgelden. Voorspellingen zijn voor informatieve en educatieve doeleinden. Check altijd je lokale toezichthouder en gok verantwoord.`,
+          a: `Nee. BetsPlug is een analytics-platform — we accepteren geen voorspellingen en beheren geen klantgelden. Voorspellingen zijn voor informatieve en educatieve doeleinden. Check altijd je lokale toezichthouder en gok verantwoord.`,
         },
       ],
     },

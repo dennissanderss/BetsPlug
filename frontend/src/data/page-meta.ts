@@ -457,7 +457,7 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
     nl: {
       title: "18+ Speel Verantwoord · BetsPlug",
       description:
-        "BetsPlug is geen goksite. Lees ons beleid voor verantwoord gokken, herken de signalen van gokproblemen en vind hulporganisaties.",
+        "BetsPlug is geen goksite. Lees ons beleid voor verantwoord voorspellen, herken de signalen van gokproblemen en vind hulporganisaties.",
     },
     de: {
       title: "18+ Verantwortungsvolles Spielen · BetsPlug",
@@ -1082,7 +1082,7 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
     en: {
       title: "Pricing Plans · AI Football Predictions · BetsPlug",
       description:
-        "Choose the BetsPlug plan that fits you — Bronze trial for €0.01, Silver for casual bettors, Gold for full access, or Platinum Lifetime founder-tier for €199 once.",
+        "Choose the BetsPlug plan that fits you — Bronze trial for €0.01, Silver for casual users, Gold for full access, or Platinum Lifetime founder-tier for €199 once.",
       ogTitle: "BetsPlug Pricing · AI Football Predictions",
       ogDescription:
         "Bronze, Silver, Gold or Platinum Lifetime — pick the plan built for your betting style.",
@@ -1091,7 +1091,7 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
     nl: {
       title: "Prijsplannen · AI-voetbalvoorspellingen · BetsPlug",
       description:
-        "Kies het BetsPlug-abonnement dat bij je past: proefversie Brons voor € 0,01, Zilver voor informele gokkers, Goud voor volledige toegang, of Platinum Lifetime Founder-niveau voor eenmalig € 199.",
+        "Kies het BetsPlug-abonnement dat bij je past: proefversie Brons voor € 0,01, Zilver voor informele abonnees, Goud voor volledige toegang, of Platinum Lifetime Founder-niveau voor eenmalig € 199.",
       ogTitle: "BetsPlug-prijzen · AI-voetbalvoorspellingen",
       ogDescription:
         "Levenslang Brons, Zilver, Goud of Platina — kies het plan dat bij je gokstijl past.",

@@ -512,7 +512,7 @@ export function HomeContent({
 
       {/* ══════════════════════════════════════════════════════════════
           2b · PAS, problem/agitate/solve block
-          Frame the real pain (retail bettors lose) BEFORE we present
+          Frame the real pain (sports fans lose) BEFORE we present
           BetsPlug as the answer. Numbers are industry-standard and
           intentionally non-BetsPlug so the claim is credible.
          ══════════════════════════════════════════════════════════════ */}
