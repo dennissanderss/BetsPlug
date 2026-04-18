@@ -41,6 +41,8 @@ import { useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { TrackRecordHubTabs } from "@/components/dashboard/TrackRecordHubTabs";
 import { TrustFunnel } from "@/components/ui/trust-funnel";
+import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
+import { LiveMeasurementSection } from "@/components/ui/live-measurement-section";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import type { PickTierSlug } from "@/types/api";
@@ -1805,6 +1807,12 @@ export default function TrackrecordPage() {
               { label: t("related.predictions"), href: "/predictions", description: t("related.predictionsDesc"), icon: Sparkles },
             ]}
           />
+
+          {/* Pick of the Day measurement */}
+          <BotdTrackRecordSection />
+
+          {/* Live measurement — strict pre-match, source=live, since 2026-04-16 */}
+          <LiveMeasurementSection />
 
           {/* Dataset herkomst — same TrustFunnel visualisation used on
               the marketing homepage, so authed users can see the exact
