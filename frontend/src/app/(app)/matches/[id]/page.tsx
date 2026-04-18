@@ -606,12 +606,13 @@ function H2HCard({
    ───────────────────────────────────────────────────────────── */
 
 function ConfidenceBlock({ confidence }: { confidence: number }) {
+  const { t } = useTranslations();
   const pct = Math.round(confidence * 100);
   const color = confColor(confidence);
   const trust = Math.max(1, Math.min(10, Math.round(confidence * 10)));
 
   return (
-    <div className="card-neon card-neon-green p-5">
+    <div className="card-neon card-neon-green p-5" title={t("pred.confidenceTooltip")}>
       <div className="relative flex items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
