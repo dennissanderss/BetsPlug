@@ -4,12 +4,12 @@
  * Design decisions (per product feedback, 2026-04-18):
  *   - Bronze (Free)  → metallic copper           → Roman I
  *   - Silver         → metallic silver           → Roman II
- *   - Gold           → deep violet (NOT gold)    → Roman III
- *   - Platinum       → metallic gold (top tier)  → Roman IV
+ *   - Gold           → metallic gold             → Roman III
+ *   - Platinum       → icy diamond blue          → Roman IV
  *
- * The twist: Gold does NOT use gold accents because Platinum is our
- * highest tier and should carry the most prestigious visual weight.
- * Gold gets a premium violet instead; Platinum wins the gold crown.
+ * Platinum sits above Gold, so it uses an icy diamond-blue palette
+ * (lighter and cooler than Silver) to read as "the tier above gold"
+ * without colliding with the metallic silver below.
  *
  * Every tier-aware component (pricing, ladder, trust funnel, pick
  * badges, dashboard KPIs) must import from here. Do not inline new
@@ -82,36 +82,36 @@ export const TIER_THEME: Record<TierKey, TierTheme> = {
     accuracyClaim: "60%+",
   },
 
-  // ───────── GOLD — premium violet (NOT gold) ─────────
+  // ───────── GOLD — metallic gold ─────────
   gold: {
     name: "Gold",
     numeral: "III",
-    colorHex: "#8b5cf6", // violet 500
-    highlightHex: "#c4b5fd", // violet 300
-    gradientFromHex: "#6d28d9",
-    gradientToHex: "#a78bfa",
-    bgTintHex: "rgba(139, 92, 246, 0.08)",
-    ringHex: "rgba(196, 181, 253, 0.4)",
-    textClass: "text-[#c4b5fd]",
-    borderClass: "border-[#8b5cf6]/30",
-    bgClass: "bg-[#8b5cf6]/[0.05]",
-    confFloor: "0,70",
-    accuracyClaim: "70%+",
-  },
-
-  // ───────── PLATINUM — metallic gold (top tier crown) ─────────
-  platinum: {
-    name: "Platinum",
-    numeral: "IV",
     colorHex: "#d4af37", // metallic gold
     highlightHex: "#f5d67a",
     gradientFromHex: "#b8860b",
     gradientToHex: "#fbbf24",
     bgTintHex: "rgba(212, 175, 55, 0.08)",
-    ringHex: "rgba(245, 214, 122, 0.45)",
+    ringHex: "rgba(245, 214, 122, 0.4)",
     textClass: "text-[#f5d67a]",
-    borderClass: "border-[#d4af37]/35",
-    bgClass: "bg-[#d4af37]/[0.06]",
+    borderClass: "border-[#d4af37]/30",
+    bgClass: "bg-[#d4af37]/[0.05]",
+    confFloor: "0,70",
+    accuracyClaim: "70%+",
+  },
+
+  // ───────── PLATINUM — icy diamond blue (top tier crown) ─────────
+  platinum: {
+    name: "Platinum",
+    numeral: "IV",
+    colorHex: "#a8d8ea", // diamond blue
+    highlightHex: "#d9f0ff",
+    gradientFromHex: "#5eb3d9",
+    gradientToHex: "#e0f4ff",
+    bgTintHex: "rgba(168, 216, 234, 0.08)",
+    ringHex: "rgba(217, 240, 255, 0.5)",
+    textClass: "text-[#d9f0ff]",
+    borderClass: "border-[#a8d8ea]/35",
+    bgClass: "bg-[#a8d8ea]/[0.06]",
     confFloor: "0,75",
     accuracyClaim: "80%+",
   },
