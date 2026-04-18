@@ -43,10 +43,11 @@ export function EngineContent() {
   const loc = useLocalizedHref();
   const { t } = useTranslations();
 
-  const { data: tiers, isLoading } = useQuery({
+  const { data: tiers, isLoading, isError } = useQuery({
     queryKey: ["pricing-comparison-engine"],
     queryFn: () => api.getPricingComparison(),
     staleTime: 5 * 60_000,
+    retry: 1,
   });
 
   // Index tier data by slug for easy lookup
@@ -159,6 +160,14 @@ export function EngineContent() {
             title={t("engine.perTier.title" as any)}
             subtitle={t("engine.perTier.subtitle" as any)}
           />
+
+          {isError && (
+            <div className="mt-6 rounded-xl border border-amber-400/30 bg-amber-500/[0.06] p-4 text-sm text-amber-200">
+              Tier-accuracy cijfers zijn tijdelijk niet beschikbaar. Onze
+              live-cijfer-pijplijn wordt bijgewerkt — kom straks terug of
+              bekijk de publieke <a href="/track-record" className="underline">track record</a> voor de historische resultaten.
+            </div>
+          )}
 
           <div className="mt-8 overflow-hidden rounded-xl border border-white/[0.08]">
             <table className="w-full text-sm">
