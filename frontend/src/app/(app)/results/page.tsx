@@ -23,6 +23,7 @@ import { Sparkles, ClipboardList } from "lucide-react";
 import type { Fixture, WeeklySummary } from "@/types/api";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { TrackRecordHubTabs } from "@/components/dashboard/TrackRecordHubTabs";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -611,6 +612,9 @@ function ResultsPageContent() {
   return (
     <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
       <div className="relative space-y-6">
+
+      {/* ── Track Record hub tabs ── */}
+      <TrackRecordHubTabs active="recent" />
 
       {/* ── Header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">

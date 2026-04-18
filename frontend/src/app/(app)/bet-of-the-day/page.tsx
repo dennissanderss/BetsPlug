@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { api } from "@/lib/api";
+import { TrackRecordHubTabs } from "@/components/dashboard/TrackRecordHubTabs";
 
 // ─── BOTD Track Record Card (v6.3) ──────────────────────────────────────────
 
@@ -575,6 +576,9 @@ export default function BetOfTheDayPage() {
     <PaywallOverlay feature="pick_of_the_day" requiredTier="gold">
     <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-6 md:py-8 animate-fade-in">
       <div className="relative space-y-8">
+      {/* ── Track Record hub tabs ── */}
+      <TrackRecordHubTabs active="potd" />
+
       {/* ── Header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-center gap-3">

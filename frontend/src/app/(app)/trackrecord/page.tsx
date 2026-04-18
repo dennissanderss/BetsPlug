@@ -39,6 +39,7 @@ import { api } from "@/lib/api";
 import { cn, formatPercent, formatDate } from "@/lib/utils";
 import { useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
+import { TrackRecordHubTabs } from "@/components/dashboard/TrackRecordHubTabs";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import type { PickTierSlug } from "@/types/api";
@@ -1410,6 +1411,9 @@ export default function TrackrecordPage() {
   return (
     <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
       <div className="relative space-y-6">
+      {/* Track Record hub tabs */}
+      <TrackRecordHubTabs active="cumulative" />
+
       {/* Page header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex items-start gap-3">
