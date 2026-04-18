@@ -704,6 +704,12 @@ const sw = {
   "faq.track.q4": "Unaonyesha hasara pia?",
   "faq.track.q5": "Ligi gani zinafuatiliwa?",
   "faq.track.q6": "Rekodi ya wimbo husasishwa mara ngapi?",
+  "faq.track.q7": "Are your numbers based on live predictions or model validation?",
+  "faq.track.a7": "Our current numbers (48% to 82%+ accuracy) come from model validation on 3,749 historical matches. Since 16 April 2026 we also log a separate live measurement. Both datasets are visible separately on the track-record page.",
+  "faq.track.q8": "Why is the live measurement still small?",
+  "faq.track.a8": "We started the live measurement on 16 April 2026. New predictions accumulate daily but only become statistically meaningful once ~200 graded matches per tier are in the sample.",
+  "faq.track.q9": "How do I know your model validation is honest?",
+  "faq.track.a9": "We use point-in-time features: for every historical match the model only sees data that was available at that moment. Everything is downloadable as CSV from the track-record page.",
 
   "faqTitle.about": "Kuhusu Maswali Yanayoulizwa Mara kwa Mara ya BetsPlug",
   "faqTitle.aboutSub": "Maswali ya kawaida kuhusu sisi ni nani na jinsi tunavyofanya kazi.",
