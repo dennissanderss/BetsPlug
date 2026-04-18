@@ -102,10 +102,10 @@ export function RecognizeThis() {
           >
             <TipsterChatMockup isNl={isNl} />
             {/* Corner label */}
-            <div className="absolute -top-3 left-4 z-10 flex items-center gap-1.5 rounded-full bg-red-500/20 px-3 py-1 ring-1 ring-red-400/40 backdrop-blur">
+            <div className="absolute -top-3 left-4 z-10 flex items-center gap-1.5 rounded-full bg-red-500/25 px-3 py-1 ring-1 ring-red-400/50 backdrop-blur">
               <AlertTriangle className="h-3 w-3 text-red-300" />
               <span className="text-[10px] font-bold uppercase tracking-widest text-red-200">
-                {isNl ? "Wat je nu ziet" : "What you see now"}
+                {isNl ? "Red flag patronen" : "Red flag patterns"}
               </span>
             </div>
           </motion.div>
@@ -183,6 +183,18 @@ export function RecognizeThis() {
    ───────────────────────────────────────────────────────────── */
 
 function TipsterChatMockup({ isNl }: { isNl: boolean }) {
+  const flagCopy: Record<"urgent" | "deleted" | "cherry", string> = isNl
+    ? {
+        urgent: "Red flag: te laat om te acteren",
+        cherry: "Red flag: geen verliezen zichtbaar",
+        deleted: "Red flag: verlies stilletjes gewist",
+      }
+    : {
+        urgent: "Red flag: too late to act",
+        cherry: "Red flag: no losses shown",
+        deleted: "Red flag: loss quietly removed",
+      };
+
   const messages: {
     body: React.ReactNode;
     time: string;
@@ -302,6 +314,14 @@ function TipsterChatMockup({ isNl }: { isNl: boolean }) {
                 <span className="text-[10px] text-white/40">{m.time}</span>
               </div>
               <div className="mt-1.5">{m.body}</div>
+              {m.flag && (
+                <div className="mt-3 flex items-center gap-1.5 rounded-md bg-red-500/25 px-2 py-1 ring-1 ring-red-400/40">
+                  <AlertTriangle className="h-3 w-3 shrink-0 text-red-200" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-red-100">
+                    {flagCopy[m.flag]}
+                  </span>
+                </div>
+              )}
             </div>
           </motion.div>
         ))}
@@ -353,7 +373,7 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
             </p>
           </div>
           <Pill tone="active" className="!text-[9px]">
-            {isNl ? "4u vóór aftrap" : "4h before KO"}
+            {isNl ? "Pre-match locked" : "Pre-match locked"}
           </Pill>
         </div>
 
@@ -405,14 +425,34 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
           </div>
         </div>
 
+        {/* Evidence chips, waarom het model deze kant op leunt */}
+        <div className="mt-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
+            {isNl ? "Waarom deze voorspelling" : "Why this prediction"}
+          </p>
+          <div className="mt-2.5 flex flex-wrap gap-1.5">
+            {(isNl
+              ? ["Elo +14 thuis", "Vorm 3W-1L", "H2H 2-1-0", "xG 1,8 vs 1,2"]
+              : ["Elo +14 home", "Form 3W-1L", "H2H 2-1-0", "xG 1.8 vs 1.2"]
+            ).map((chip) => (
+              <span
+                key={chip}
+                className="rounded-full border border-white/[0.06] bg-white/[0.03] px-2.5 py-1 text-[10px] font-medium text-[#a3a9b8]"
+              >
+                {chip}
+              </span>
+            ))}
+          </div>
+        </div>
+
         {/* Meta */}
-        <div className="mt-5 grid grid-cols-3 gap-2 border-t border-white/[0.06] pt-4 text-center">
+        <div className="mt-auto grid grid-cols-3 gap-2 border-t border-white/[0.06] pt-4 text-center">
           <div>
             <p className="text-[9px] uppercase tracking-widest text-[#6b7280]">
-              {isNl ? "Gepubliceerd" : "Published"}
+              {isNl ? "Timing" : "Timing"}
             </p>
             <p className="mt-0.5 text-[11px] font-semibold text-[#ededed]">
-              {isNl ? "4u van tevoren" : "4h ahead"}
+              {isNl ? "Pre-match" : "Pre-match"}
             </p>
           </div>
           <div>
