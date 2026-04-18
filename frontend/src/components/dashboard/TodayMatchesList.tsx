@@ -88,7 +88,7 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
 
   return (
     <Link
-      href={lHref(`/matches/${fixture.id}`)}
+      href={lHref(`/live-score/${fixture.id}`)}
       className="group flex items-center gap-2 sm:gap-3 px-2 py-2 sm:px-3 sm:py-2.5 border-b border-white/[0.05] transition-colors hover:bg-white/[0.04] last:border-b-0 cursor-pointer focus-visible:outline-none focus-visible:bg-white/[0.05]"
     >
       {/* Time / Live minute */}

@@ -320,6 +320,16 @@ export const routeTable = {
     sw: "/mechi",
     id: "/pertandingan",
   },
+  "/live-score": {
+    en: "/live-score",
+    nl: "/live-score",
+    de: "/live-score",
+    fr: "/live-score",
+    es: "/live-score",
+    it: "/live-score",
+    sw: "/live-score",
+    id: "/live-score",
+  },
   "/teams": {
     en: "/teams",
     nl: "/teams",

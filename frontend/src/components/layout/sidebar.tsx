@@ -14,6 +14,7 @@ import {
   Trophy,
   MapPin,
   Lock,
+  Radio,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
@@ -51,6 +52,7 @@ const navSections: NavSection[] = [
     fallbackLabel: "Overview",
     items: [
       { labelKey: "nav.dashboard", fallback: "Dashboard", href: "/dashboard", icon: LayoutDashboard, badge: "START" },
+      { labelKey: "nav.live_score", fallback: "Live Score", href: "/live-score", icon: Radio },
     ],
   },
   {

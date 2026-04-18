@@ -47,7 +47,7 @@ function LiveMatchCard({ fixture }: { fixture: Fixture }) {
 
   return (
     <Link
-      href={lHref(`/matches/${fixture.id}`)}
+      href={lHref(`/live-score/${fixture.id}`)}
       className="card-neon card-neon-purple p-2.5 sm:p-3 block transition-all hover:-translate-y-0.5 hover:halo-purple focus-visible:outline-none focus-visible:halo-purple"
     >
       <div className="relative">
