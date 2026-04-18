@@ -12,7 +12,6 @@ import {
   Star,
   BarChart3,
   Download,
-  Lock,
   Eye,
   CheckCircle2,
   RefreshCw,
@@ -244,7 +243,7 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
         badge={t("hiw.step2Badge")}
         title={t("hiw.step2Title")}
         lead={t("hiw.step2Lead", potd)}
-        paragraphs={[t("hiw.step2P1")]}
+        paragraphs={[t("hiw.step2P1", potd)]}
         stageNumber={2}
         accent="purple"
         side={
@@ -263,13 +262,10 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
               variant="purple"
               card
             />
-            <StagePoint
-              icon={Lock}
-              title={t("hiw.step2Point3Title")}
-              desc={t("hiw.step2Point3Desc")}
-              variant="purple"
-              card
-            />
+            {/* 3rd point ("Strategy Lab") removed — the backtested-strategy
+                filter never shipped and the copy promised a feature that
+                isn't on the roadmap. Two concrete features is cleaner
+                than padding with vapourware. */}
           </div>
         }
       />
