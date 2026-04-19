@@ -69,6 +69,54 @@ class RetrainResponse(BaseModel):
 # ---------------------------------------------------------------------------
 
 
+class SchedulerJobStatus(BaseModel):
+    id: str
+    name: str
+    trigger: str
+    next_run_time: Optional[datetime]
+    pending: bool
+
+
+class SchedulerStatus(BaseModel):
+    running: bool
+    jobs: List[SchedulerJobStatus]
+
+
+@router.get(
+    "/scheduler-status",
+    response_model=SchedulerStatus,
+    summary="Return APScheduler job state for diagnostic use",
+)
+async def get_scheduler_status() -> SchedulerStatus:
+    """Diagnose scheduler health.
+
+    Reports whether APScheduler is running and lists every registered job
+    with its next scheduled run. Silent-failing scheduler startups would
+    otherwise be invisible until user-facing aggregates (live-measurement,
+    dashboard) went stale.
+    """
+    try:
+        from app.services.scheduler import scheduler
+    except Exception as exc:  # apscheduler not importable — disabled deploy
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=f"scheduler unavailable: {exc!s}",
+        )
+
+    jobs: List[SchedulerJobStatus] = []
+    for job in scheduler.get_jobs():
+        jobs.append(
+            SchedulerJobStatus(
+                id=str(job.id),
+                name=job.name or str(job.id),
+                trigger=str(job.trigger),
+                next_run_time=job.next_run_time,
+                pending=job.pending,
+            )
+        )
+    return SchedulerStatus(running=scheduler.running, jobs=jobs)
+
+
 @router.get(
     "/data-sources",
     response_model=List[DataSourceHealth],

@@ -1,5 +1,18 @@
 """Celery application configuration and task definitions.
 
+.. warning::
+
+    **Not deployed in production.** Railway Procfile runs only
+    ``web: python start.py`` (uvicorn + APScheduler lifespan hook). There
+    is no ``celery beat`` or ``celery worker`` process scheduled. All
+    periodic work in production is driven by APScheduler in
+    ``app/services/scheduler.py``.
+
+    This module is retained for local ``docker-compose`` runs where a
+    separate beat/worker container IS started (see ``docker-compose.yml``).
+    Any Beat-schedule change here MUST be mirrored in
+    ``app/services/scheduler.py`` to actually take effect on Railway.
+
 Beat schedule
 -------------
 * run_weekly_report     – every Monday at 08:00 UTC

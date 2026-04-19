@@ -692,7 +692,10 @@ async def get_bet_of_the_day(
         .join(Match, Match.id == Prediction.match_id)
         .options(*load_opts)
         .where(and_(*base_clauses, Prediction.prediction_source == "live"))
-        .order_by(Prediction.confidence.desc())
+        # Deterministic tie-break: if two picks share the top confidence,
+        # always prefer the one with the smallest id so BOTD doesn't
+        # flip between requests within the same day.
+        .order_by(Prediction.confidence.desc(), Prediction.id)
         .limit(1)
     )
     if TIER_SYSTEM_ENABLED:
@@ -708,7 +711,7 @@ async def get_bet_of_the_day(
             .join(Match, Match.id == Prediction.match_id)
             .options(*load_opts)
             .where(and_(*base_clauses))
-            .order_by(Prediction.confidence.desc())
+            .order_by(Prediction.confidence.desc(), Prediction.id)
             .limit(1)
         )
         if TIER_SYSTEM_ENABLED:
