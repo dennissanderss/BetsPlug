@@ -16,8 +16,6 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
   Trophy,
-  CheckCircle2,
-  XCircle,
   Flame,
   Target,
   ShieldCheck,
@@ -37,45 +35,23 @@ interface BotdAggregate {
   last_updated: string;
 }
 
-interface BotdHistoryItem {
-  date: string;
-  home_team: string;
-  away_team: string;
-  league: string;
-  prediction: string;
-  confidence: number;
-  correct: boolean | null;
-  home_score: number | null;
-  away_score: number | null;
-  odds_used: number | null;
-}
-
 export function BotdTrackRecordSection() {
   const { locale } = useTranslations();
   const isNl = locale === "nl";
   const [agg, setAgg] = useState<BotdAggregate | null>(null);
-  const [history, setHistory] = useState<BotdHistoryItem[] | null>(null);
 
   useEffect(() => {
     const API =
       process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-    // Integriteit-sprint: this section shows collected data (model
-    // validation) — the live-measurement variant lives in
-    // LiveMeasurementSection. The model-validation endpoint returns
-    // the summary + row list in a single call.
-    // Pull extra rows so the post-filter list (graded only) still
-    // has enough history to look populated. The backend's `picks`
-    // array is ordered newest-first and can include unfinished
-    // fixtures (correct === null) because _build_botd_section does
-    // not require_pre_match. We strip those here so a section
-    // titled "historical backtest" never shows "Pending" rows for
-    // matches that have not been played yet.
-    fetch(`${API}/bet-of-the-day/model-validation?limit=50`)
+    // Only the aggregate is consumed here — the row list was removed
+    // because showing 15 of 414 picks made users ask "where is the
+    // rest?". The CSV download below exposes the full dataset so the
+    // four KPI numbers can be recomputed independently.
+    fetch(`${API}/bet-of-the-day/model-validation?limit=1`)
       .then((r) => (r.ok ? r.json() : null))
       .then((body) => {
         if (!body) {
           setAgg(null);
-          setHistory([]);
           return;
         }
         const s = body.summary ?? {};
@@ -89,27 +65,9 @@ export function BotdTrackRecordSection() {
           avg_confidence: s.avg_confidence ?? 0,
           last_updated: "",
         });
-        const gradedOnly: BotdHistoryItem[] = (body.picks ?? []).filter(
-          (p: BotdHistoryItem) => p.correct === true || p.correct === false
-        );
-        setHistory(gradedOnly.slice(0, 15));
       })
-      .catch(() => {
-        setAgg(null);
-        setHistory([]);
-      });
+      .catch(() => setAgg(null));
   }, []);
-
-  const fmtDate = (iso: string) => {
-    try {
-      return new Date(iso).toLocaleDateString(isNl ? "nl-NL" : "en-GB", {
-        day: "2-digit",
-        month: "short",
-      });
-    } catch {
-      return iso;
-    }
-  };
 
   return (
     <section
@@ -165,15 +123,6 @@ export function BotdTrackRecordSection() {
               ? "Onze BOTD-methode (de hoogst-scorende pick per dag) toegepast op matches die inmiddels gespeeld zijn. Dit is backtest-data — een eerlijke proxy voor hoe de feature het in het verleden zou hebben gedaan. De strikt pre-match live versie staat in sectie 4 hieronder."
               : "Our BOTD method (the highest-confidence pick per day) applied to matches that have since finished. This is backtest data — an honest proxy for how the feature would have performed historically. The strict pre-match live version lives in section 4 below."}
           </p>
-          <div className="mt-4">
-            <a
-              href={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/bet-of-the-day/export.csv`}
-              className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/15"
-            >
-              <Download className="h-3.5 w-3.5" />
-              {isNl ? "Download CSV (Pick of the Day)" : "Download CSV (Pick of the Day)"}
-            </a>
-          </div>
         </motion.div>
 
         {/* KPI strip */}
@@ -232,78 +181,45 @@ export function BotdTrackRecordSection() {
           />
         </div>
 
-        {/* History table */}
-        <div className="mt-10 overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0b0d13]">
-          <div className="grid grid-cols-12 gap-2 border-b border-white/[0.06] bg-white/[0.02] px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
-            <span className="col-span-2">{isNl ? "Datum" : "Date"}</span>
-            <span className="col-span-4">{isNl ? "Wedstrijd" : "Match"}</span>
-            <span className="col-span-2">{isNl ? "Competitie" : "League"}</span>
-            <span className="col-span-2 text-center">{isNl ? "Pick · conf." : "Pick · conf."}</span>
-            <span className="col-span-1 text-center">{isNl ? "Uitslag" : "Score"}</span>
-            <span className="col-span-1 text-center">{isNl ? "Resultaat" : "Result"}</span>
+        {/* Verify-yourself panel — replaces the inline row list.
+            Showing 15 graded rows out of 414 was misleading (users
+            asked "waar is de rest?"), so we surface the full dataset
+            as a single CSV download with a plain-language invitation
+            to recompute the aggregate numbers. All four KPIs above
+            are derived from the same file. */}
+        <div className="mt-10 card-neon card-neon-green rounded-2xl">
+          <div className="relative flex flex-col gap-5 p-6 md:flex-row md:items-center md:gap-8">
+            <div className="shrink-0">
+              <HexBadge variant="green" size="md">
+                <Download className="h-5 w-5" />
+              </HexBadge>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-[#ededed]">
+                {isNl
+                  ? "Wil je de volledige dataset zelf controleren?"
+                  : "Want to verify the full dataset yourself?"}
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-[#a3a9b8]">
+                {isNl
+                  ? "De CSV bevat alle picks die in de vier KPI's hierboven worden meegeteld — met datum, wedstrijd, competitie, pick, betrouwbaarheid, uitslag en resultaat. Herbereken de nauwkeurigheid gerust zelf in Excel of Sheets."
+                  : "The CSV contains every pick counted in the four KPIs above — with date, match, league, pick, confidence, score and outcome. Feel free to recompute the accuracy yourself in Excel or Sheets."}
+              </p>
+            </div>
+            <a
+              href={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/bet-of-the-day/export.csv`}
+              className="btn-primary inline-flex items-center gap-2 whitespace-nowrap self-start md:self-auto"
+            >
+              <Download className="h-4 w-4" />
+              {isNl ? "Download CSV" : "Download CSV"}
+            </a>
           </div>
-          {history == null ? (
-            <div className="px-4 py-8 text-center text-xs text-[#6b7280]">
-              {isNl ? "Laden..." : "Loading..."}
-            </div>
-          ) : history.length === 0 ? (
-            <div className="px-4 py-8 text-center text-xs text-[#6b7280]">
-              {isNl ? "Nog geen picks beschikbaar." : "No picks available yet."}
-            </div>
-          ) : (
-            history.map((row, i) => (
-              <div
-                key={i}
-                className="grid grid-cols-12 items-center gap-2 border-b border-white/[0.04] px-4 py-3 text-xs last:border-b-0"
-                style={{
-                  borderLeft: `3px solid ${
-                    row.correct === true
-                      ? "#10b981"
-                      : row.correct === false
-                        ? "#ef4444"
-                        : "#334155"
-                  }`,
-                }}
-              >
-                <span className="col-span-2 tabular-nums text-[#a3a9b8]">
-                  {fmtDate(row.date)}
-                </span>
-                <span className="col-span-4 font-semibold text-[#ededed] truncate">
-                  {row.home_team} vs {row.away_team}
-                </span>
-                <span className="col-span-2 truncate text-[#a3a9b8]">
-                  {row.league}
-                </span>
-                <span className="col-span-2 text-center">
-                  <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-400/20 bg-emerald-500/[0.06] px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
-                    {row.prediction} · {row.confidence.toFixed(0)}%
-                  </span>
-                </span>
-                <span className="col-span-1 text-center tabular-nums text-[#ededed]">
-                  {row.home_score != null && row.away_score != null
-                    ? `${row.home_score}-${row.away_score}`
-                    : "—"}
-                </span>
-                <span className="col-span-1 flex justify-center">
-                  {row.correct === true ? (
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                  ) : row.correct === false ? (
-                    <XCircle className="h-4 w-4 text-red-400" />
-                  ) : (
-                    <span className="text-[10px] text-[#6b7280]">
-                      {isNl ? "Pending" : "Pending"}
-                    </span>
-                  )}
-                </span>
-              </div>
-            ))
-          )}
         </div>
 
-        <p className="mt-6 text-center text-[11px] text-[#6b7280]">
+        <p className="mt-6 text-center text-[11px] leading-relaxed text-[#6b7280]">
           {isNl
-            ? "Inclusief voor Gold en Platinum. Elke pick staat met tijdstempel online voor aftrap."
-            : "Included on Gold and Platinum. Every pick is timestamped online before kick-off."}
+            ? "Pick van de Dag is een feature voor Gold- en Platinum-abonnees — deze cijfers laten zien hoe die feature historisch zou hebben gepresteerd. Elke pick wordt in productie met tijdstempel vastgezet vóór de aftrap."
+            : "Pick of the Day is a feature for Gold and Platinum subscribers — these numbers show how the feature would have performed historically. In production each pick is timestamped and locked before kick-off."}
         </p>
       </div>
     </section>
