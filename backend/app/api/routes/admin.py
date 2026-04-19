@@ -82,6 +82,31 @@ class SchedulerStatus(BaseModel):
     jobs: List[SchedulerJobStatus]
 
 
+class CacheFlushResponse(BaseModel):
+    flushed: Dict[str, int]
+    total: int
+
+
+@router.post(
+    "/cache-flush",
+    response_model=CacheFlushResponse,
+    summary="Flush v8.1-affected Redis cache patterns",
+)
+async def flush_v81_cache() -> CacheFlushResponse:
+    """Flush every cache key whose contents depend on v8.1 filter semantics.
+
+    Call once after each backend deploy that changes filter logic, so
+    users don't see stale aggregates for up to 1h (pricing TTL).
+    """
+    from app.core.cache import cache_delete
+    from app.core.prediction_filters import V81_FILTER_CACHE_PATTERNS
+
+    flushed: Dict[str, int] = {}
+    for pattern in V81_FILTER_CACHE_PATTERNS:
+        flushed[pattern] = await cache_delete(pattern)
+    return CacheFlushResponse(flushed=flushed, total=sum(flushed.values()))
+
+
 @router.get(
     "/scheduler-status",
     response_model=SchedulerStatus,
