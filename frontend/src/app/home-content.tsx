@@ -14,7 +14,6 @@ import {
   Sparkles,
   TrendingUp,
   TrendingDown,
-  Trophy,
   Clock,
   Zap,
   Eye,
@@ -400,8 +399,8 @@ export function HomeContent({
                       </p>
                       <p className="text-sm font-semibold text-[#ededed]">
                         {locale === "nl"
-                          ? "3 sterkste voorspellingen vandaag"
-                          : "3 strongest predictions today"}
+                          ? "Top-3 voor de komende weken"
+                          : "Top-3 for the coming weeks"}
                       </p>
                     </div>
                   </div>
@@ -470,20 +469,31 @@ export function HomeContent({
                   on /bet-of-the-day. The bottom-right floating "record"
                   badge is kept because it tracks the Gold-tier sample
                   size, which is what the chart behind it visualises. */}
+              {/* Bottom-right floating badge — replaces the old
+                  "CORRECTE PICKS TOTAAL 238" tile. The raw count was
+                  a BOTD-backtest number (238/406 ≈ 58.6%) that looked
+                  smaller than it should next to the 80%+ win-kans
+                  chips inside the widget. A Gold-tier accuracy stat
+                  is more honest AND more magnetic — it's literally
+                  the number the picks below are drawn from. */}
               <div
                 className="card-neon card-neon-blue absolute -right-4 -bottom-4 hidden rotate-[4deg] p-3 sm:block"
-                style={{ width: 180 }}
+                style={{ width: 190 }}
               >
                 <div className="flex items-center gap-2.5">
                   <HexBadge variant="blue" size="sm" noGlow>
-                    <Trophy className="h-3.5 w-3.5" />
+                    <Target className="h-3.5 w-3.5" />
                   </HexBadge>
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                      {t("home.freePredRecord")}
+                      {locale === "nl"
+                        ? "Gold-tier trefzekerheid"
+                        : "Gold-tier accuracy"}
                     </p>
                     <p className="text-stat text-sm text-[#93c5fd]">
-                      {botd && botd.correct > 0 ? botd.correct : potd.potdPicks}
+                      {potd.potdAccuracy
+                        ? `${potd.potdAccuracy}%`
+                        : "77,7%"}
                     </p>
                   </div>
                 </div>
@@ -1224,9 +1234,18 @@ function HeroPickRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
     <div className="relative p-4 transition-colors hover:bg-white/[0.02]">
       <div className="flex items-center justify-between gap-2">
         <div className="min-w-0 flex-1">
-          {/* League + kickoff (kickoff blurred) */}
+          {/* League + kickoff — both blurred so visitors can't cross-
+              reference a specific league + date to identify the match
+              on another fixture site. Only the pick direction and the
+              win-probability chip stay legible. */}
           <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider">
-            <span className="truncate text-[#4ade80]">{pick.league}</span>
+            <span
+              className="truncate text-[#4ade80]"
+              style={blurStyle}
+              aria-hidden
+            >
+              {pick.league}
+            </span>
             <span className="text-[#3a3f4a]">·</span>
             <span
               className="flex items-center gap-1 text-[#6b7280]"
