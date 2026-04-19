@@ -381,6 +381,13 @@ async def export_botd_csv(
         limit=limit,
     )
 
+    # Only include graded rows — the inline table on /prestaties was
+    # reworked to a stats-only layout precisely because mixing future
+    # "Pending" picks into a "historical backtest" file is confusing.
+    # Keeping the CSV consistent with the KPIs above it (which are
+    # already derived from evaluated_picks only).
+    graded_picks = [p for p in section.picks if p.correct is not None]
+
     buffer = io.StringIO()
     writer = csv.writer(buffer)
     writer.writerow(
@@ -397,7 +404,7 @@ async def export_botd_csv(
             "correct",
         ]
     )
-    for p in section.picks:
+    for p in graded_picks:
         writer.writerow(
             [
                 p.date,
@@ -409,14 +416,22 @@ async def export_botd_csv(
                 f"{p.odds_used:.2f}" if p.odds_used is not None else "",
                 p.home_score if p.home_score is not None else "",
                 p.away_score if p.away_score is not None else "",
-                "" if p.correct is None else ("yes" if p.correct else "no"),
+                "yes" if p.correct else "no",
             ]
         )
 
-    buffer.seek(0)
+    # Prepend UTF-8 BOM + sep=, hint so European Excel (NL/DE/FR, where
+    # the default list separator is ';') opens the file with columns
+    # split correctly AND decodes accented team names ("Bayern München",
+    # "Al Qādisiyah", "Süper Lig") as UTF-8 rather than CP-1252. Without
+    # these two bytes the whole file renders in column A and "München"
+    # shows up as "MÃ¼nchen".
+    payload_body = buffer.getvalue().encode("utf-8")
+    payload = b"\xef\xbb\xbf" + b"sep=,\r\n" + payload_body
+
     return StreamingResponse(
-        iter([buffer.getvalue()]),
-        media_type="text/csv",
+        iter([payload]),
+        media_type="text/csv; charset=utf-8",
         headers={
             "Content-Disposition": 'attachment; filename="betsplug-potd-validation.csv"',
         },
