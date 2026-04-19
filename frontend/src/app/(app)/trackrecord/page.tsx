@@ -1408,6 +1408,8 @@ export default function TrackrecordPage() {
   const tabs = [
     { key: "performance", label: t("trackrecord.performance"), icon: TrendingUp },
     { key: "segments", label: t("trackrecord.segments"), icon: Layers },
+    { key: "botd", label: t("trackrecord.tabBotd"), icon: Trophy },
+    { key: "live", label: t("trackrecord.tabLive"), icon: Activity },
   ];
 
   return (
@@ -1804,17 +1806,25 @@ export default function TrackrecordPage() {
             ]}
           />
 
-          {/* Pick of the Day measurement */}
-          <BotdTrackRecordSection />
-
-          {/* Live measurement — strict pre-match, source=live, since 2026-04-16 */}
-          <LiveMeasurementSection />
-
           {/* Dataset herkomst — same TrustFunnel visualisation used on
               the marketing homepage, so authed users can see the exact
               pipeline (55k → 3.8k → 3.763 → per tier) without leaving
               the track-record context. */}
           <TrustFunnel />
+        </div>
+      )}
+
+      {/* ── Pick of the Day Tab ── */}
+      {activeTab === "botd" && (
+        <div className="space-y-6 animate-slide-up">
+          <BotdTrackRecordSection />
+        </div>
+      )}
+
+      {/* ── Live Meting Tab ── */}
+      {activeTab === "live" && (
+        <div className="space-y-6 animate-slide-up">
+          <LiveMeasurementSection />
         </div>
       )}
       </div>
