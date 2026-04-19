@@ -1021,13 +1021,16 @@ export function HomeContent({
             <p className="mt-4 text-base text-[#a3a9b8]">{t("riskReversal.subtitle")}</p>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-3">
-            <RiskCard
-              variant="green"
-              icon={RotateCcw}
-              title={t("riskReversal.guaranteeTitle")}
-              desc={t("riskReversal.guaranteeDesc")}
-            />
+          {/* "14 dagen geld-terug-garantie" card dropped here too —
+              probability-model deliverables do not match the
+              "satisfaction guarantee" framing (users unhappy with a
+              losing match will claim the refund even though no
+              outcome was ever promised). The statutory withdrawal
+              right is handled via FAQ + contact, not a marketing
+              badge. The two remaining cards (cancel any time + no
+              card required for the Bronze trial) are factual
+              operational promises, not outcome guarantees. */}
+          <div className="grid gap-5 md:grid-cols-2">
             <RiskCard
               variant="purple"
               icon={XCircle}
@@ -1174,7 +1177,10 @@ export function HomeContent({
                 </Link>
               </div>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-[#6b7280]">
-                {[t("finalCta.moneyBack"), t("finalCta.cancelAnytime"), t("finalCta.instantAccess")].map(
+                {/* "14-day money-back guarantee" chip dropped — see the
+                    risk-reversal section above for the rationale. The two
+                    remaining chips are factual operational commitments. */}
+                {[t("finalCta.cancelAnytime"), t("finalCta.instantAccess")].map(
                   (item) => (
                     <div key={item} className="flex items-center gap-1.5">
                       <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80]" />

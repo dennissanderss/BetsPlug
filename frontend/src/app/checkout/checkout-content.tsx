@@ -1334,13 +1334,10 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                   appliedCoupon={appliedCoupon}
                 />
 
-                {/* Trust strip */}
+                {/* Trust strip — "guarantee" row dropped (see
+                    checkout-footer.tsx for rationale). */}
                 <div className="rounded-2xl border border-white/[0.1] bg-[hsl(230_16%_10%/0.88)] p-4 text-xs text-[#8a93a6] shadow-[0_16px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl">
                   <div className="flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4 text-[#4ade80]" />
-                    <span>{t("checkout.footer.guarantee")}</span>
-                  </div>
-                  <div className="mt-2 flex items-center gap-2">
                     <Lock className="h-4 w-4 text-[#4ade80]" />
                     <span>{t("checkout.footer.secure")}</span>
                   </div>

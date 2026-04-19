@@ -8,6 +8,8 @@ import type { LucideIcon } from "lucide-react";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { TierEmblem } from "@/components/noct/tier-emblem";
+import type { TierKey } from "@/components/noct/tier-theme";
 import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 
 type Billing = "monthly" | "yearly";
@@ -24,6 +26,12 @@ type Plan = {
   id: string;
   name: string;
   icon: LucideIcon;
+  /** Tier key for the authentic metallic emblem rendered on the card.
+   *  Replaces the previous accent-hued HexBadge+icon combo, so Bronze
+   *  shows copper, Silver metallic-silver, Gold metallic-gold and
+   *  Platinum diamond-blue — matching every other tier surface on the
+   *  site (tier-ladder, dashboard, trackrecord). */
+  tier: TierKey;
   tagline: string;
   /** When true this plan ignores the billing toggle (e.g. Bronze free tier) */
   fixed?: boolean;
@@ -103,6 +111,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
       id: "bronze",
       name: "Bronze",
       icon: Shield,
+      tier: "bronze",
       tagline: t("pricing.bronzeTagline"),
       fixed: true,
       monthly: { main: bronzePrice.main, cents: bronzePrice.cents, period: t("pricing.forever") },
@@ -121,6 +130,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
       id: "silver",
       name: "Silver",
       icon: Zap,
+      tier: "silver",
       tagline: t("pricing.silverTagline"),
       monthly: {
         main: silverMonthly.main,
@@ -148,6 +158,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
       id: "gold",
       name: "Gold",
       icon: Sparkles,
+      tier: "gold",
       tagline: t("pricing.goldTagline"),
       monthly: {
         main: goldMonthly.main,
@@ -333,10 +344,20 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                     </Pill>
                   )}
 
-                  {/* Plan icon badge */}
-                  <HexBadge variant={accent} size="md" className="mb-5">
-                    <Icon className="h-5 w-5" strokeWidth={2} />
-                  </HexBadge>
+                  {/* Plan icon — TierEmblem renders the Roman numeral
+                      in the authentic metallic tier colour (bronze =
+                      copper, silver = metallic, gold = metallic gold,
+                      platinum = diamond blue). Previously a generic
+                      HexBadge in the card's accent variant (blue /
+                      purple / green) was shown, which made Bronze
+                      render blue, Silver purple and Gold green —
+                      inconsistent with every other tier surface on
+                      the site (tier-ladder, dashboard, trackrecord)
+                      and confusing to visitors trying to learn which
+                      colour means which tier. */}
+                  <div className="mb-5">
+                    <TierEmblem tier={plan.tier} size="md" />
+                  </div>
 
                   {/* Name */}
                   <h3 className="text-heading text-2xl text-[#ededed]">
@@ -442,9 +463,13 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
               {/* Left */}
               <div>
                 <div className="mb-6 flex flex-wrap items-center gap-3">
-                  <HexBadge variant="green" size="md">
-                    <Crown className="h-5 w-5" strokeWidth={2} />
-                  </HexBadge>
+                  {/* Platinum Lifetime emblem — diamond-blue Roman IV.
+                      The old render combined a green HexBadge with a
+                      Crown icon on an amber background, giving the
+                      card three conflicting tier colours at once and
+                      visually clashing with Platinum's diamond-blue
+                      identity used everywhere else on the site. */}
+                  <TierEmblem tier="platinum" size="md" />
                   <span
                     className="section-label"
                     style={{
@@ -536,12 +561,16 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
           </div>
         </div>
 
-        {/* Trust row */}
+        {/* Trust row — the "14-day money-back guarantee" pill was
+            dropped. The service is a probability model, not a
+            deterministic product, so a "money-back if not satisfied"
+            framing invites refund requests from users unhappy with
+            individual match outcomes (which the product never
+            promised). The statutory right of withdrawal under EU/NL
+            consumer law is still honoured via the FAQ + contact
+            flow, which is the correct place for a statutory right
+            — not a marketing badge. */}
         <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-          <Pill>
-            <Check className="h-3 w-3 text-[#4ade80]" strokeWidth={3} />
-            {t("pricing.trust1")}
-          </Pill>
           <Pill>
             <Check className="h-3 w-3 text-[#4ade80]" strokeWidth={3} />
             {t("pricing.trust2")}
