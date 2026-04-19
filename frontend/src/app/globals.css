@@ -1060,11 +1060,15 @@
   50% { opacity: 0.6; }
 }
 @keyframes noct-fade-in {
-  from { opacity: 0; }
+  /* Starts at opacity 0.85 (not 0) so the dark body background never
+     shows through during the animation — that was the "zwart flikker"
+     symptom on the dashboard when multiple cards fade in on mount. */
+  from { opacity: 0.85; }
   to { opacity: 1; }
 }
 @keyframes noct-slide-up {
-  from { opacity: 0; transform: translateY(8px); }
+  /* Same black-flash guard as noct-fade-in — start visible, slide only. */
+  from { opacity: 0.85; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes noct-pulse {

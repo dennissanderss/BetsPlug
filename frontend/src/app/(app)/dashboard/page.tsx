@@ -52,16 +52,18 @@ export default function DashboardPage() {
     queryFn: () => api.getWeeklySummary(7, userTierSlug ?? undefined),
   });
 
-  // Backtest = model-validation dataset (historical, dominated by pre-v8.1
-  // records). We fetch source="backtest" explicitly so the card headline is
-  // honest about what the user is looking at; live picks have their own row.
+  // Model-validation dataset (all v8.1 evaluated picks for the selected tier).
+  // We deliberately do NOT set source="backtest" here — that would exclude the
+  // 19 k batch_local_fill rows (the bulk of historical evaluated data), which
+  // caused the "0.0% (0/0)" bug on the dashboard sidebar. The Live-meting row
+  // below uses its own endpoint (/trackrecord/live-measurement) so the two
+  // surfaces stay cleanly separated.
   const { data: tierSummary, isLoading: tierSummaryLoading } = useQuery({
     queryKey: ["trackrecord-summary-hub", userTierSlug ?? "all"],
     queryFn: () =>
-      api.getTrackrecordSummary({
-        source: "backtest",
-        ...(userTierSlug ? { pick_tier: userTierSlug } : {}),
-      }),
+      api.getTrackrecordSummary(
+        userTierSlug ? { pick_tier: userTierSlug } : {},
+      ),
     staleTime: 5 * 60_000,
   });
 

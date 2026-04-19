@@ -133,10 +133,10 @@ export function SportsHubSidebar({
             <div className="mb-2 flex items-center gap-1.5">
               <FlaskConical className="h-3.5 w-3.5 text-emerald-400" />
               <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                {isNl ? "Backtest" : "Backtest"}
+                {isNl ? "Modelvalidatie" : "Model validation"}
               </span>
               <span className="text-[10px] text-slate-500">
-                {isNl ? "· modelvalidatie" : "· model validation"}
+                {isNl ? "· alle v8.1 picks" : "· all v8.1 picks"}
               </span>
               <ArrowRight className="ml-auto h-3 w-3 text-slate-600 transition-all group-hover:translate-x-0.5 group-hover:text-emerald-300" />
             </div>
