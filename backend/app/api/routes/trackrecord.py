@@ -166,25 +166,10 @@ async def get_trackrecord_summary(
     # aggregate breakdown is fully visible.
     per_tier: Optional[dict] = None
     if TIER_SYSTEM_ENABLED:
-        # Evaluate pick_tier_expression() once — see dashboard.py for rationale.
-        # Two separate calls create non-equivalent CASE-nodes on PostgreSQL.
-        tier_expr = pick_tier_expression()
-        per_tier_q = (
-            select(
-                tier_expr,
-                func.count(PredictionEvaluation.id).label("total"),
-                func.sum(func.cast(PredictionEvaluation.is_correct, Integer)).label("correct"),
-            )
-            .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
-            .join(Match, Match.id == Prediction.match_id)
-            .where(trackrecord_filter())
-            # NOTE: intentionally no access_filter here — see comment above.
-            .group_by(tier_expr)
-        )
+        from app.core.aggregate_queries import per_tier_evaluated_stmt
+        per_tier_q = per_tier_evaluated_stmt(source=source)
         if model_version_id is not None:
             per_tier_q = per_tier_q.where(Prediction.model_version_id == model_version_id)
-        if source is not None:
-            per_tier_q = per_tier_q.where(Prediction.prediction_source == source)
 
         tier_rows = (await db.execute(per_tier_q)).all()
         per_tier = {}
