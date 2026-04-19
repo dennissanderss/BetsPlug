@@ -351,14 +351,17 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
 
   const pickLabel = modelPick === "home" ? "1" : modelPick === "draw" ? "X" : modelPick === "away" ? "2" : null;
 
-  // v8.1: classify this pick's tier for the badge rendered alongside.
-  // Uses league_id when the fixture has one (future-proof), falls back
-  // to league_name match (what /fixtures currently returns).
-  const pickTier = classifyPickTier({
-    leagueId: (fixture as any).league_id ?? null,
-    leagueName: fixture.league_name ?? null,
-    confidence: pred?.confidence ?? null,
-  });
+  // v8.1: prefer the backend-classified tier from the API response
+  // (/fixtures already runs the same CASE expression server-side).
+  // Fall back to the frontend mirror only if the field is absent —
+  // e.g. when TIER_SYSTEM_ENABLED was off at the time of the call.
+  const pickTier =
+    (pred as any)?.pick_tier ??
+    classifyPickTier({
+      leagueId: (fixture as any).league_id ?? null,
+      leagueName: fixture.league_name ?? null,
+      confidence: pred?.confidence ?? null,
+    });
 
   return (
     <div className="border-b border-white/[0.04] last:border-b-0">
@@ -1178,15 +1181,18 @@ export default function PredictionsPage() {
       });
     }
 
-    // v8.1: tier filter — keeps only picks classified as the selected tier.
+    // v8.1: tier filter — prefers the backend-classified tier from the API
+    // response, falls back to frontend mirror only when absent.
     if (tierFilter !== "All") {
       items = items.filter((f) => {
         if (!f.prediction) return false;
-        const classified = classifyPickTier({
-          leagueId: (f as any).league_id ?? null,
-          leagueName: f.league_name ?? null,
-          confidence: f.prediction.confidence,
-        });
+        const classified =
+          (f.prediction as any).pick_tier ??
+          classifyPickTier({
+            leagueId: (f as any).league_id ?? null,
+            leagueName: f.league_name ?? null,
+            confidence: f.prediction.confidence,
+          });
         return classified === tierFilter;
       });
     }

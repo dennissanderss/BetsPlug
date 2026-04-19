@@ -1,6 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import type { PickTierSlug } from "@/types/api";
+import { TIER_METADATA as SHARED_TIER_META } from "@/data/tier-metadata";
 
 /**
  * PickTierBadge — v8.1 quality-tier indicator for a single prediction.
@@ -24,14 +25,17 @@ import type { PickTierSlug } from "@/types/api";
  */
 
 // ─── Display metadata (default if API doesn't provide label/accuracy) ───────
+// Sourced from @/data/tier-metadata so backend TIER_METADATA drift is
+// caught in one place. Pass the `accuracy` prop to override — e.g. when
+// a route already fetched /api/pricing/comparison.
 const TIER_DISPLAY: Record<
   PickTierSlug,
   { label: string; accuracy: string; order: number }
 > = {
-  platinum: { label: "Platinum", accuracy: "80%+", order: 3 },
-  gold: { label: "Gold", accuracy: "70%+", order: 2 },
-  silver: { label: "Silver", accuracy: "60%+", order: 1 },
-  free: { label: "Free", accuracy: "45%+", order: 0 },
+  platinum: { label: SHARED_TIER_META.platinum.label, accuracy: SHARED_TIER_META.platinum.accuracyClaim, order: SHARED_TIER_META.platinum.rank },
+  gold: { label: SHARED_TIER_META.gold.label, accuracy: SHARED_TIER_META.gold.accuracyClaim, order: SHARED_TIER_META.gold.rank },
+  silver: { label: SHARED_TIER_META.silver.label, accuracy: SHARED_TIER_META.silver.accuracyClaim, order: SHARED_TIER_META.silver.rank },
+  free: { label: SHARED_TIER_META.free.label, accuracy: SHARED_TIER_META.free.accuracyClaim, order: SHARED_TIER_META.free.rank },
 };
 
 // ─── Tier-specific visual tokens ─────────────────────────────────────────────
