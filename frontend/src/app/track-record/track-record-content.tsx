@@ -107,35 +107,28 @@ function useLiveTrackRecordStats(pickTier: PublicTier = "all"): LiveStats {
 }
 
 // Tier metadata for the public tabs. The dot colour and active
-// border/background are derived from TIER_THEME so Free=bronze,
-// Silver=silver, Gold=gold, Platinum=diamond-blue — no more
-// gold-but-blue / platinum-but-green mismatches.
+// border/background are derived from TIER_THEME so Silver=silver,
+// Gold=gold, Platinum=diamond-blue — no gold-but-blue / platinum-
+// but-green mismatches.
+//
+// The "All tiers" and "Free · 45%+" tabs were deliberately removed:
+// on the public marketing surface they return the full-sample
+// accuracy (60.1%), which reads as "Free subscribers get a weak
+// product" even though the number simply reflects the lowest
+// confidence floor. The three remaining tiers (60% / 70% / 80%+)
+// are the ones the paid product actually promises, so they are
+// the only numbers worth advertising here. The full dataset
+// remains downloadable via the per-tier CSV export.
 const PUBLIC_TIER_TABS: {
   key: PublicTier;
   label: string;
-  /** Hex colour for the leading dot; null = neutral white for "all". */
-  dotHex: string | null;
+  /** Hex colour for the leading dot. */
+  dotHex: string;
   /** Active-state ring + tint; both derived from the tier hex. */
   ringHex: string;
   tintHex: string;
   textHex: string;
 }[] = [
-  {
-    key: "all",
-    label: "All tiers",
-    dotHex: null,
-    ringHex: "rgba(255,255,255,0.30)",
-    tintHex: "rgba(255,255,255,0.08)",
-    textHex: "#ededed",
-  },
-  {
-    key: "free",
-    label: "Free · 45%+",
-    dotHex: TIER_THEME.bronze.colorHex,
-    ringHex: TIER_THEME.bronze.ringHex,
-    tintHex: TIER_THEME.bronze.bgTintHex,
-    textHex: TIER_THEME.bronze.highlightHex,
-  },
   {
     key: "silver",
     label: "Silver · 60%+",
@@ -354,12 +347,12 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
   const live = useLiveTrackRecordStats(pickTier);
   const potd = usePotdNumbers();
 
-  // B2.3, the BOTD KPI sits in the same row as the tier-scoped KPIs but
-  // is pulled from a separate endpoint (/bet-of-the-day/track-record)
-  // that doesn't understand pick_tier. When a specific tier is selected,
-  // hiding the BOTD card prevents the confusing "tier changed but this
-  // number didn't" impression users reported.
-  const showBotdKpi = pickTier === "all";
+  // BOTD KPI no longer lives in the hero row — the "All tiers" tab
+  // was removed, and showing BOTD alongside Silver/Gold/Platinum
+  // caused the "tier changed but this number didn't" impression
+  // because BOTD is tier-agnostic. The full BOTD stats have their
+  // own dedicated section further down the page.
+  const showBotdKpi = false;
   const kpis = [
     {
       icon: Percent,
@@ -684,7 +677,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             <PublicTierTabs value={pickTier} onChange={setPickTier} />
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {kpis.map((k, i) => {
               const Icon = k.icon;
               const variant = KPI_VARIANTS[i % KPI_VARIANTS.length] as Accent;
