@@ -290,11 +290,17 @@ async def get_free_picks(
         .order_by(max_prob_expr.desc())
         .limit(3)
     )
-    # Keep the Free access scope — any user (or anonymous visitor) can
-    # see these picks; the max-prob floor above is what makes the
-    # selection premium, not the tier membership.
+    # IMPORTANT — use the PLATINUM access scope, not FREE.
+    # access_filter(FREE) means "show only Free-tier picks" (i.e. the
+    # narrow band of confidence 0.55-0.60 that Free users can see), so
+    # it was actively EXCLUDING the Benfica-at-87%-type premium picks
+    # we actually want to tease the visitor with. access_filter(PLATINUM)
+    # returns everything the system has classified as a pick (tier
+    # whitelist + confidence >= 0.55 baseline), which is the superset
+    # the homepage should draw its "strongest of the week" from.
+    # The teams + kickoff are blurred anyway, so no paid-tier data leaks.
     if TIER_SYSTEM_ENABLED:
-        today_stmt = today_stmt.where(access_filter(PickTier.FREE))
+        today_stmt = today_stmt.where(access_filter(PickTier.PLATINUM))
     today_rows = (await db.execute(today_stmt)).scalars().unique().all()
     today_picks = [_build_free_pick(p) for p in today_rows]
 
