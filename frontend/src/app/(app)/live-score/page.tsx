@@ -9,7 +9,7 @@
  * /live-score/[id] for the per-match deep dive.
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, type ReactNode } from "react";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -48,12 +48,17 @@ function formatTime(iso: string): string {
   }
 }
 
-function formatMatchDate(iso: string): string {
+function formatMatchDate(
+  iso: string,
+  locale: string,
+  todayLabel: string,
+): string {
   try {
     const d = new Date(iso);
     const now = new Date();
-    if (d.toDateString() === now.toDateString()) return "";
-    return d.toLocaleDateString(undefined, { day: "numeric", month: "short" });
+    if (d.toDateString() === now.toDateString()) return todayLabel;
+    const bcp = locale === "nl" ? "nl-NL" : "en-GB";
+    return d.toLocaleDateString(bcp, { day: "numeric", month: "short" });
   } catch {
     return "";
   }
@@ -85,8 +90,13 @@ function ScoreCell({ fixture }: { fixture: Fixture }) {
 }
 
 function StatusCell({ fixture }: { fixture: Fixture }) {
+  const { locale } = useTranslations();
+  const todayLabel = locale === "nl" ? "Vandaag" : "Today";
+  const dateLabel = formatMatchDate(fixture.scheduled_at, locale, todayLabel);
+
+  let inner: ReactNode;
   if (fixture.status === "live") {
-    return (
+    inner = (
       <span className="inline-flex items-center gap-1">
         <span className="live-dot-red" />
         <span className="font-semibold uppercase text-[9px] sm:text-[10px] tracking-wider tabular-nums text-red-400">
@@ -94,29 +104,30 @@ function StatusCell({ fixture }: { fixture: Fixture }) {
         </span>
       </span>
     );
+  } else if (fixture.status === "finished") {
+    inner = <Pill tone="default" className="!text-[9px] sm:!text-[10px]">FT</Pill>;
+  } else if (fixture.status === "postponed") {
+    inner = <Pill tone="draw" className="!text-[9px] sm:!text-[10px]">POSTP.</Pill>;
+  } else if (fixture.status === "cancelled") {
+    inner = <Pill tone="loss" className="!text-[9px] sm:!text-[10px]">CANC.</Pill>;
+  } else {
+    const timeLabel = formatTime(fixture.scheduled_at);
+    inner = (
+      <Pill tone="default" className="!text-[9px] sm:!text-[10px]">
+        {timeLabel}
+      </Pill>
+    );
   }
-  if (fixture.status === "finished") {
-    return <Pill tone="default" className="!text-[9px] sm:!text-[10px]">FT</Pill>;
-  }
-  if (fixture.status === "postponed") {
-    return <Pill tone="draw" className="!text-[9px] sm:!text-[10px]">POSTP.</Pill>;
-  }
-  if (fixture.status === "cancelled") {
-    return <Pill tone="loss" className="!text-[9px] sm:!text-[10px]">CANC.</Pill>;
-  }
-  const dateLabel = formatMatchDate(fixture.scheduled_at);
-  const timeLabel = formatTime(fixture.scheduled_at);
+
   return (
-    <Pill tone="default" className="!text-[9px] sm:!text-[10px]">
-      <span className="flex flex-col items-center leading-tight">
-        {dateLabel && (
-          <span className="text-[8px] sm:text-[9px] opacity-80">
-            {dateLabel}
-          </span>
-        )}
-        <span>{timeLabel}</span>
-      </span>
-    </Pill>
+    <span className="flex flex-col items-start gap-0.5 leading-tight">
+      {dateLabel && (
+        <span className="text-[8px] sm:text-[9px] uppercase tracking-wider text-[#6b7280]">
+          {dateLabel}
+        </span>
+      )}
+      {inner}
+    </span>
   );
 }
 
@@ -128,7 +139,7 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
       href={lHref(`/live-score/${fixture.id}`)}
       className="group flex items-center gap-2 sm:gap-3 px-2 py-2 sm:px-3 sm:py-2.5 border-b border-white/[0.05] transition-colors hover:bg-white/[0.04] last:border-b-0 cursor-pointer focus-visible:outline-none focus-visible:bg-white/[0.05]"
     >
-      <span className="w-14 sm:w-20 shrink-0 text-xs tabular-nums">
+      <span className="w-16 sm:w-20 shrink-0 text-xs tabular-nums">
         <StatusCell fixture={fixture} />
       </span>
 
