@@ -26,6 +26,8 @@ import {
   Target,
   ShieldCheck,
   Trash2,
+  TrendingUp,
+  Crown,
 } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
@@ -347,10 +349,17 @@ function TipsterChatMockup({ isNl }: { isNl: boolean }) {
    ───────────────────────────────────────────────────────────── */
 
 function BetsPlugCard({ isNl }: { isNl: boolean }) {
-  const rows: { label: string; value: string; strong?: boolean }[] = [
-    { label: isNl ? "Thuis" : "Home", value: "56%" },
-    { label: isNl ? "Gelijk" : "Draw", value: "23%" },
-    { label: isNl ? "Uit" : "Away", value: "21%" },
+  const rows: { label: string; value: string; tone: "home" | "draw" | "away" }[] = [
+    { label: isNl ? "Thuis" : "Home", value: "56%", tone: "home" },
+    { label: isNl ? "Gelijk" : "Draw", value: "23%", tone: "draw" },
+    { label: isNl ? "Uit" : "Away", value: "21%", tone: "away" },
+  ];
+
+  const models: { name: string; pick: string; confPct: number }[] = [
+    { name: "Elo", pick: isNl ? "Thuis" : "Home", confPct: 58 },
+    { name: "Poisson", pick: isNl ? "Thuis" : "Home", confPct: 54 },
+    { name: "XGBoost", pick: isNl ? "Thuis" : "Home", confPct: 61 },
+    { name: "Ensemble", pick: isNl ? "Thuis" : "Home", confPct: 65 },
   ];
 
   return (
@@ -363,7 +372,7 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
           </HexBadge>
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold uppercase tracking-widest text-[#4ade80]">
-              {isNl ? "Gratis voorspelling" : "Free prediction"}
+              {isNl ? "Gold-tier pick" : "Gold-tier pick"}
             </p>
             <p className="truncate text-base font-bold text-[#ededed]">
               Leeds vs Wolves
@@ -377,30 +386,54 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
           </Pill>
         </div>
 
+        {/* Hero pick */}
+        <div className="mt-5 flex items-end justify-between gap-3">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
+              {isNl ? "Onze pick" : "Our pick"}
+            </p>
+            <p className="text-stat mt-1 text-3xl leading-none text-[#ededed]">
+              {isNl ? "Thuis" : "Home"}
+            </p>
+            <p className="mt-1 text-[11px] text-[#a3a9b8]">Leeds</p>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#4ade80]">
+              {isNl ? "Vertrouwen" : "Confidence"}
+            </p>
+            <p className="text-stat mt-1 text-3xl leading-none text-[#4ade80]">
+              65%
+            </p>
+            <p className="mt-1 text-[11px] text-[#a3a9b8]">
+              {isNl ? "≥ 70% drempel · Gold" : "≥ 70% threshold · Gold"}
+            </p>
+          </div>
+        </div>
+
         {/* Probability breakdown */}
         <div className="mt-5">
           <p className="text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
             {isNl ? "Winkansen per uitkomst" : "Win probability breakdown"}
           </p>
-          <div className="mt-3 space-y-2.5">
-            {rows.map((r, i) => (
+          <div className="mt-3 space-y-2">
+            {rows.map((r) => (
               <div key={r.label} className="flex items-center gap-3">
-                <span className="w-16 text-xs font-semibold text-[#a3a9b8]">
+                <span className="w-14 text-[11px] font-semibold text-[#a3a9b8]">
                   {r.label}
                 </span>
-                <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
+                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
                   <div
                     className={`h-full rounded-full ${
-                      i === 0
+                      r.tone === "home"
                         ? "bg-gradient-to-r from-emerald-500 to-green-400"
-                        : i === 1
+                        : r.tone === "draw"
                         ? "bg-gradient-to-r from-slate-500 to-slate-400"
                         : "bg-gradient-to-r from-purple-500 to-purple-400"
                     }`}
                     style={{ width: r.value }}
                   />
                 </div>
-                <span className="w-10 text-right text-sm font-extrabold tabular-nums text-[#ededed]">
+                <span className="w-10 text-right text-xs font-bold tabular-nums text-[#ededed]">
                   {r.value}
                 </span>
               </div>
@@ -408,27 +441,47 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
           </div>
         </div>
 
-        {/* Confidence badge */}
-        <div className="mt-5 flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-500/[0.06] p-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/15 text-xl font-extrabold text-emerald-300">
-            65%
-          </div>
-          <div className="min-w-0 flex-1">
+        {/* Model consensus */}
+        <div className="mt-5 rounded-2xl border border-emerald-400/20 bg-emerald-500/[0.04] p-4">
+          <div className="flex items-center justify-between">
             <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-              {isNl ? "Modelbetrouwbaarheid" : "Model confidence"}
+              {isNl ? "Model-consensus" : "Model consensus"}
             </p>
-            <p className="mt-0.5 text-xs leading-relaxed text-[#a3a9b8]">
-              {isNl
-                ? "4 AI-modellen stemmen overeen. Gold-tier, 70%+ historische accuracy."
-                : "4 AI models agree. Gold tier, 70%+ historical accuracy."}
-            </p>
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold text-emerald-300 ring-1 ring-emerald-400/30">
+              <CheckCircle2 className="h-3 w-3" />
+              4 / 4 {isNl ? "eens" : "agree"}
+            </span>
+          </div>
+          <div className="mt-3 space-y-1.5">
+            {models.map((m) => (
+              <div key={m.name} className="flex items-center gap-2.5">
+                <span className="w-20 text-[11px] font-semibold text-[#a3a9b8]">
+                  {m.name}
+                </span>
+                <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-300">
+                  <CheckCircle2 className="h-2.5 w-2.5" />
+                </span>
+                <span className="w-12 text-[11px] font-semibold text-[#ededed]">
+                  {m.pick}
+                </span>
+                <div className="h-1 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-emerald-500/80 to-green-400"
+                    style={{ width: `${m.confPct}%` }}
+                  />
+                </div>
+                <span className="w-8 text-right text-[10px] tabular-nums text-[#a3a9b8]">
+                  {m.confPct}%
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Evidence chips, waarom het model deze kant op leunt */}
-        <div className="mt-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
+        {/* Signals */}
+        <div className="mt-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
           <p className="text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
-            {isNl ? "Waarom deze voorspelling" : "Why this prediction"}
+            {isNl ? "Belangrijkste signalen" : "Key signals"}
           </p>
           <div className="mt-2.5 flex flex-wrap gap-1.5">
             {(isNl
@@ -445,6 +498,23 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
           </div>
         </div>
 
+        {/* Track-record tag */}
+        <div className="mt-4 flex items-center gap-3 rounded-2xl border border-emerald-400/15 bg-gradient-to-r from-emerald-500/[0.08] to-transparent p-3.5">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-400/30">
+            <TrendingUp className="h-4 w-4" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">
+              {isNl ? "Historisch · Gold-tier" : "Historical · Gold tier"}
+            </p>
+            <p className="mt-0.5 text-[11px] leading-relaxed text-[#a3a9b8]">
+              {isNl
+                ? "70,6% raak over 1.650 beoordeelde Gold-picks. Openbaar, niets verwijderd."
+                : "70.6% hit rate across 1,650 graded Gold picks. Public, nothing deleted."}
+            </p>
+          </div>
+        </div>
+
         {/* Meta */}
         <div className="mt-auto grid grid-cols-3 gap-2 border-t border-white/[0.06] pt-4 text-center">
           <div>
@@ -457,10 +527,11 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
           </div>
           <div>
             <p className="text-[9px] uppercase tracking-widest text-[#6b7280]">
-              {isNl ? "Prijs" : "Price"}
+              {isNl ? "Tier" : "Tier"}
             </p>
-            <p className="mt-0.5 text-[11px] font-semibold text-[#ededed]">
-              {isNl ? "Gratis" : "Free"}
+            <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-semibold text-[#4ade80]">
+              <Crown className="h-3 w-3" />
+              Gold
             </p>
           </div>
           <div>
