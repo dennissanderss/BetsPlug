@@ -9,7 +9,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Lock, ShieldCheck, Unlock } from "lucide-react";
+import { Lock, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { Pill } from "@/components/noct/pill";
 import { TierEmblem } from "@/components/noct/tier-emblem";
@@ -108,7 +108,9 @@ export function TierLadder() {
         >
           <span className="section-label">
             <ShieldCheck className="h-3 w-3" />
-            {isNl ? "Vier tiers, één eerlijk trackrecord" : "Four tiers, one honest track record"}
+            {isNl
+              ? "Drie tiers, één eerlijk trackrecord"
+              : "Three tiers, one honest track record"}
           </span>
           <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
             {isNl ? (
@@ -130,8 +132,15 @@ export function TierLadder() {
           </p>
         </motion.div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {TIER_ORDER.map((tierKey, i) => {
+        {/* Bronze (Free · 45%+) is deliberately hidden from the public
+            tier ladder. It returns the full-sample accuracy (60.1%)
+            which reads as "the Free subscription performs weakly" to
+            prospective visitors, even though the number just reflects
+            the lowest confidence floor. The three paid tiers are the
+            ones the product actually promises; the raw Bronze numbers
+            remain available via the per-tier CSV export on /prestaties. */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {TIER_ORDER.filter((t) => t !== "bronze").map((tierKey, i) => {
             const theme = TIER_THEME[tierKey];
             const row = stats[tierKey];
             const accuracyNum =
@@ -185,17 +194,10 @@ export function TierLadder() {
                     {isNl ? "beoordeelde picks" : "graded picks"}
                   </p>
 
-                  {tierKey === "bronze" ? (
-                    <div className="mt-4 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-[#22c55e]">
-                      <Unlock className="h-3 w-3" />
-                      {isNl ? "Gratis tier" : "Free tier"}
-                    </div>
-                  ) : (
-                    <div className="mt-4 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
-                      <Lock className="h-3 w-3" />
-                      {isNl ? "Premium tier" : "Premium tier"}
-                    </div>
-                  )}
+                  <div className="mt-4 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
+                    <Lock className="h-3 w-3" />
+                    {isNl ? "Premium tier" : "Premium tier"}
+                  </div>
                 </div>
               </motion.div>
             );
