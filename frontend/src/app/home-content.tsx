@@ -136,18 +136,27 @@ function useHomepageFreePicks(): FreePicksPayload {
             : null;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const arr: any[] = d?.today ?? [];
-        const nextPicks: UpcomingPick[] = arr.slice(0, 3).map((p) => ({
-          home_team: p.home_team,
-          away_team: p.away_team,
-          home_logo: p.home_team_logo ?? null,
-          away_logo: p.away_team_logo ?? null,
-          league: p.league,
-          kickoff: p.scheduled_at,
-          home_prob: Math.round((p.home_win_prob ?? 0) * 100),
-          draw_prob: Math.round((p.draw_prob ?? 0) * 100),
-          away_prob: Math.round((p.away_win_prob ?? 0) * 100),
-          confidence: Math.round((p.confidence ?? 0) * 100),
-        }));
+        // Sort today's matches by model confidence DESC before slicing
+        // to 3 so the homepage hero shows the strongest picks of the
+        // day instead of whatever the backend happened to order first.
+        // Visitors came here because the headline promises "top AI
+        // predictions" — leading with lowest-confidence coin-flips
+        // (42%/44%/50%) would undermine that promise immediately.
+        const nextPicks: UpcomingPick[] = [...arr]
+          .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))
+          .slice(0, 3)
+          .map((p) => ({
+            home_team: p.home_team,
+            away_team: p.away_team,
+            home_logo: p.home_team_logo ?? null,
+            away_logo: p.away_team_logo ?? null,
+            league: p.league,
+            kickoff: p.scheduled_at,
+            home_prob: Math.round((p.home_win_prob ?? 0) * 100),
+            draw_prob: Math.round((p.draw_prob ?? 0) * 100),
+            away_prob: Math.round((p.away_win_prob ?? 0) * 100),
+            confidence: Math.round((p.confidence ?? 0) * 100),
+          }));
         setPayload({ stats: nextStats, picks: nextPicks });
       })
       .catch(() => {});
@@ -429,27 +438,14 @@ export function HomeContent({
                 </div>
               </div>
 
-              {/* Floating mini-cards for depth */}
-              <div
-                className="card-neon card-neon-purple absolute -left-8 -top-6 hidden -rotate-[5deg] p-3 sm:block"
-                style={{ width: 200 }}
-              >
-                <div className="flex items-center gap-2.5">
-                  <HexBadge variant="purple" size="sm" noGlow>
-                    <TrendingUp className="h-3.5 w-3.5" />
-                  </HexBadge>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                      {t("dash.pickOfDay")}
-                    </p>
-                    <p className="text-stat text-sm text-[#c4b5fd]">
-                      {/* Use Gold-tier accuracy from potd (falls back to 70.6%
-                          static snapshot while BOTD picks are still pending). */}
-                      {potd.potdAccuracy ? `${potd.potdAccuracy}%` : ","}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              {/* Floating label removed — the previous "PICK OF THE DAY"
+                  tag above a container of three free sample matches was
+                  misleading (those picks are just today's premium hero
+                  preview, not the dedicated BOTD pick). The BOTD feature
+                  has its own explicit surface further down the page and
+                  on /bet-of-the-day. The bottom-right floating "record"
+                  badge is kept because it tracks the Gold-tier sample
+                  size, which is what the chart behind it visualises. */}
               <div
                 className="card-neon card-neon-blue absolute -right-4 -bottom-4 hidden rotate-[4deg] p-3 sm:block"
                 style={{ width: 180 }}
@@ -463,9 +459,6 @@ export function HomeContent({
                       {t("home.freePredRecord")}
                     </p>
                     <p className="text-stat text-sm text-[#93c5fd]">
-                      {/* Show Gold-tier total evaluated picks from the
-                          static snapshot while the BOTD ledger is warming
-                          up (all BOTD picks are still future matches). */}
                       {botd && botd.correct > 0 ? botd.correct : potd.potdPicks}
                     </p>
                   </div>
@@ -1173,31 +1166,60 @@ export function HomeContent({
    Local sub-components
    ═══════════════════════════════════════════════════════════════ */
 
-/** HeroPickRow, compact match row rendered in the hero widget. */
+/** HeroPickRow — compact match row rendered in the hero widget.
+ *
+ * The team names and kickoff time are intentionally blurred on the
+ * public homepage: the value proposition is "the AI has strong picks
+ * for today" — not "here are three free picks you can bet on right
+ * now". Blurring forces the qualified visitor to sign in / upgrade
+ * to see the actual match, while the league, pick direction and
+ * confidence remain legible so the preview still feels substantive.
+ * Only the public marketing surface uses this row; logged-in users
+ * see full match details on /predictions and /bet-of-the-day. */
 function HeroPickRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
   const maxProb = Math.max(pick.home_prob, pick.draw_prob, pick.away_prob);
   const predicted =
     pick.home_prob === maxProb ? "home" : pick.draw_prob === maxProb ? "draw" : "away";
-  const predictedLabel =
-    predicted === "home" ? pick.home_team : predicted === "away" ? pick.away_team : "Draw";
+  const predictedSideLabel =
+    predicted === "home"
+      ? locale === "nl" ? "Thuis" : "Home"
+      : predicted === "away"
+        ? locale === "nl" ? "Uit" : "Away"
+        : locale === "nl" ? "Gelijkspel" : "Draw";
   const pickPct = Math.max(pick.home_prob, pick.draw_prob, pick.away_prob);
+
+  // Blurred style applied to the match-identifying content. CSS blur
+  // keeps the layout intact (same width / height) so the widget
+  // doesn't jump after login.
+  const blurStyle: React.CSSProperties = {
+    filter: "blur(6px)",
+    userSelect: "none",
+  };
 
   return (
     <div className="relative p-4 transition-colors hover:bg-white/[0.02]">
       <div className="flex items-center justify-between gap-2">
         <div className="min-w-0 flex-1">
-          {/* League + kickoff */}
+          {/* League + kickoff (kickoff blurred) */}
           <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider">
             <span className="truncate text-[#4ade80]">{pick.league}</span>
             <span className="text-[#3a3f4a]">·</span>
-            <span className="flex items-center gap-1 text-[#6b7280]">
+            <span
+              className="flex items-center gap-1 text-[#6b7280]"
+              style={blurStyle}
+              aria-hidden
+            >
               <Clock className="h-2.5 w-2.5" />
               {formatKickoff(pick.kickoff, locale)}
             </span>
           </div>
 
-          {/* Teams */}
-          <div className="mt-1.5 flex min-w-0 items-center gap-2">
+          {/* Teams — blurred to hide the match until sign-in */}
+          <div
+            className="mt-1.5 flex min-w-0 items-center gap-2"
+            style={blurStyle}
+            aria-hidden
+          >
             {pick.home_logo && (
               <Image
                 src={pick.home_logo}
@@ -1225,13 +1247,16 @@ function HeroPickRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
             )}
           </div>
 
-          {/* Predicted pick label */}
+          {/* Predicted pick label — side only (Home/Draw/Away), not team name */}
           <p className="mt-1.5 text-[11px] text-[#a3a9b8]">
-            Pick: <span className="font-semibold text-[#ededed]">{predictedLabel}</span>
+            {locale === "nl" ? "Keuze" : "Pick"}:{" "}
+            <span className="font-semibold text-[#ededed]">
+              {predictedSideLabel}
+            </span>
           </p>
         </div>
 
-        {/* Probability chip */}
+        {/* Probability chip — stays visible, this is the value we sell */}
         <DataChip tone="win" className="flex-shrink-0">
           {pickPct}%
         </DataChip>

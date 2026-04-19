@@ -110,10 +110,9 @@ export function TrustFunnel() {
   const matchesIngested = FALLBACK.matchesIngested; // static (we don't expose a matches-count endpoint)
   const forecastsTotal = live.forecastsTotal ?? FALLBACK.forecastsTotal;
   const evaluatedTotal = live.evaluatedTotal ?? FALLBACK.evaluatedTotal;
-  const bronze = {
-    total: live.bronze.total ?? FALLBACK.bronze.total,
-    accuracy: live.bronze.accuracy ?? FALLBACK.bronze.accuracy,
-  };
+  // Bronze is no longer rendered in the tier-breakdown strip, but
+  // the live-data hook still returns it so the downstream shape
+  // remains stable for any future re-introduction.
   const silver = {
     total: live.silver.total ?? FALLBACK.silver.total,
     accuracy: live.silver.accuracy ?? FALLBACK.silver.accuracy,
@@ -279,8 +278,12 @@ export function TrustFunnel() {
           })}
         </div>
 
-        {/* Tier-breakdown card, shows all 4 tiers (Bronze free + 3 paid)
-            side by side so visitors don't think we only measure 'Gold'. */}
+        {/* Tier-breakdown card. Bronze was removed because its number
+            is the full-sample accuracy (60.1%) which read to visitors
+            as "the Free subscription performs weakly" instead of
+            "lowest confidence floor". The three paid tiers still
+            tell the full honesty story: higher confidence, tighter
+            threshold, higher accuracy. */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -291,14 +294,7 @@ export function TrustFunnel() {
           <p className="mb-4 text-center text-xs font-bold uppercase tracking-widest text-[#6b7280]">
             {isNl ? "Nauwkeurigheid per tier" : "Accuracy per tier"}
           </p>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <TierBreakdownCard
-              tier="bronze"
-              accuracy={bronze.accuracy}
-              total={bronze.total}
-              locale={locale}
-              isNl={isNl}
-            />
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <TierBreakdownCard
               tier="silver"
               accuracy={silver.accuracy}

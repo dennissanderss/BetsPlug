@@ -278,7 +278,7 @@ const en = {
 
   /* Track record section */
   "track.label": "Track Record",
-  "track.accuracy": "Rolling 30-day accuracy",
+  "track.accuracy": "Gold tier accuracy (historical)",
   "track.thisWeek": "This week",
   "track.metricPredictions": "Predictions",
   "track.metricModels": "Models",
@@ -4391,7 +4391,7 @@ const nl: Dictionary = {
   "tr.transSubtitle": "Elke beoordeelde AI-voetbalvoorspelling die we ooit hebben gepubliceerd, is doorzoekbaar op wedstrijd, datum, markt en model. Er zijn geen filters die de verliezers verbergen. Geen dashboardweergaven vegen slechte weken onder het tapijt.",
   "tr.transTitle": "Vertrouw ons niet op ons woord - lees het grootboek.",
 
-  "track.accuracy": "Rollende nauwkeurigheid van 30 dagen",
+  "track.accuracy": "Nauwkeurigheid Gold-tier (historisch)",
   "track.askQuestion": "Hoe wordt de nauwkeurigheid berekend?",
   "track.badge": "Bewijs, geen beloftes",
   "track.cta": "Bekijk het volledige trackrecord",
