@@ -20,7 +20,15 @@ import {
   HelpCircle,
   ShieldCheck,
   XCircle,
+  Brain,
+  Gauge,
+  Filter as FilterIcon,
+  Crown,
+  ArrowDown,
+  Target,
 } from "lucide-react";
+import { TierEmblem } from "@/components/noct/tier-emblem";
+import { TIER_ORDER, TIER_THEME, type TierKey } from "@/components/noct/tier-theme";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
@@ -143,6 +151,9 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
       {/* ───────────── TIER LADDER ───────────── */}
       <TierLadder />
 
+      {/* ───────────── TIER FLOW ───────────── */}
+      <TierFlowSection />
+
       {/* ───────────── STEP 1 ───────────── */}
       <StageSection
         badge={t("hiw.step1Badge")}
@@ -217,6 +228,9 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
           </div>
         }
       />
+
+      {/* ───────────── BET OF THE DAY ───────────── */}
+      <BotdSection />
 
       {/* ───────────── STEP 3 ───────────── */}
       <StageSection
@@ -687,6 +701,444 @@ function FaqAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
           </div>
         );
       })}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Tier flow, explains how a prediction lands in a tier
+   ───────────────────────────────────────────────────────────── */
+
+function TierFlowSection() {
+  const { t } = useTranslations();
+  return (
+    <section className="relative overflow-hidden py-20 md:py-28">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-40 top-20 h-[460px] w-[460px] rounded-full"
+        style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(160px)" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-40 bottom-20 h-[420px] w-[420px] rounded-full"
+        style={{ background: "hsl(var(--accent-purple) / 0.1)", filter: "blur(160px)" }}
+      />
+
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto mb-14 max-w-3xl text-center"
+        >
+          <span className="section-label mb-4 inline-flex items-center gap-2">
+            <Gauge className="h-3 w-3" />
+            {t("hiw.flowBadge")}
+          </span>
+          <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            {t("hiw.flowTitleA")}{" "}
+            <span className="gradient-text-green">{t("hiw.flowTitleB")}</span>
+          </h2>
+          <p className="mt-5 text-base leading-relaxed text-[#a3a9b8]">
+            {t("hiw.flowSubtitle")}
+          </p>
+        </motion.div>
+
+        <div className="grid items-start gap-6 lg:grid-cols-[1fr_auto_1.2fr]">
+          {/* Left: vertical step flow */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6 }}
+            className="space-y-3"
+          >
+            <FlowStep
+              icon={Globe}
+              label={t("hiw.flowStep1Label")}
+              title={t("hiw.flowStep1Title")}
+              desc={t("hiw.flowStep1Desc")}
+            />
+            <FlowArrow />
+            <FlowStep
+              icon={Brain}
+              label={t("hiw.flowStep2Label")}
+              title={t("hiw.flowStep2Title")}
+              desc={t("hiw.flowStep2Desc")}
+            />
+            <FlowArrow />
+            <FlowStep
+              icon={Gauge}
+              label={t("hiw.flowStep3Label")}
+              title={t("hiw.flowStep3Title")}
+              desc={t("hiw.flowStep3Desc")}
+            />
+            <FlowArrow />
+            <FlowStep
+              icon={FilterIcon}
+              label={t("hiw.flowStep4Label")}
+              title={t("hiw.flowStep4Title")}
+              desc={t("hiw.flowStep4Desc")}
+              highlight
+            />
+          </motion.div>
+
+          {/* Middle: big arrow (desktop only) */}
+          <div className="hidden lg:flex items-center justify-center self-stretch">
+            <ChevronRight className="h-10 w-10 text-[#4ade80]/50" />
+          </div>
+
+          {/* Right: tier threshold bars */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6 }}
+            className="card-neon card-neon-green halo-green rounded-3xl"
+          >
+            <div className="relative p-6 sm:p-8">
+              <div className="mb-5 flex items-center gap-2">
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                  {t("hiw.flowBarsLabel")}
+                </span>
+              </div>
+              <div className="space-y-3">
+                {[...TIER_ORDER].reverse().map((tierKey) => (
+                  <TierBar key={tierKey} tierKey={tierKey} />
+                ))}
+                <div className="glass-panel flex items-center gap-3 rounded-xl p-3 opacity-60">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-[#6b7280]">
+                    <XCircle className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold text-[#a3a9b8]">
+                        {t("hiw.flowBarNoneTitle")}
+                      </span>
+                      <span className="text-[10px] tabular-nums text-[#6b7280]">
+                        &lt; 55%
+                      </span>
+                    </div>
+                    <p className="mt-0.5 text-[11px] text-[#6b7280]">
+                      {t("hiw.flowBarNoneDesc")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <p className="mt-4 text-[11px] leading-relaxed text-[#a3a9b8]">
+                {t("hiw.flowBarsFooter")}
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FlowStep({
+  icon: Icon,
+  label,
+  title,
+  desc,
+  highlight = false,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  title: string;
+  desc: string;
+  highlight?: boolean;
+}) {
+  return (
+    <div
+      className={
+        "glass-panel rounded-2xl p-4 transition-colors " +
+        (highlight ? "ring-1 ring-[#4ade80]/30 bg-[#4ade80]/[0.04]" : "")
+      }
+    >
+      <div className="flex items-start gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/[0.04] text-[#4ade80]">
+          <Icon className="h-5 w-5" />
+        </div>
+        <div className="min-w-0">
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
+            {label}
+          </span>
+          <h4 className="mt-0.5 text-sm font-semibold text-[#ededed]">{title}</h4>
+          <p className="mt-1 text-[12px] leading-relaxed text-[#a3a9b8]">{desc}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FlowArrow() {
+  return (
+    <div className="flex justify-center py-0.5" aria-hidden>
+      <ArrowDown className="h-4 w-4 text-[#4ade80]/50" />
+    </div>
+  );
+}
+
+function TierBar({ tierKey }: { tierKey: TierKey }) {
+  const { t } = useTranslations();
+  const theme = TIER_THEME[tierKey];
+  const confPct = Math.round(parseFloat(theme.confFloor.replace(",", ".")) * 100);
+  // Width of the bar: platinum widest (premium feel), bronze narrowest
+  const widthMap: Record<TierKey, string> = {
+    platinum: "95%",
+    gold: "82%",
+    silver: "70%",
+    bronze: "55%",
+  };
+
+  return (
+    <div
+      className="relative overflow-hidden rounded-xl border p-3"
+      style={{
+        borderColor: theme.ringHex,
+        background: `linear-gradient(90deg, ${theme.bgTintHex}, rgba(15,20,32,0.4))`,
+      }}
+    >
+      <div className="relative flex items-center gap-3">
+        <TierEmblem tier={tierKey} size="sm" />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2">
+            <span
+              className={`text-[11px] font-bold uppercase tracking-widest ${theme.textClass}`}
+            >
+              {theme.name}
+            </span>
+            <span className="text-[10px] tabular-nums text-[#a3a9b8]">
+              ≥ {confPct}%
+            </span>
+          </div>
+          <p className="mt-0.5 text-[11px] text-[#a3a9b8]">
+            {(t as (k: string) => string)(
+              `hiw.flowBar${tierKey.charAt(0).toUpperCase() + tierKey.slice(1)}Desc`,
+            )}
+          </p>
+          <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-white/[0.06]">
+            <div
+              className="h-full rounded-full"
+              style={{
+                width: widthMap[tierKey],
+                background: `linear-gradient(90deg, ${theme.colorHex}, ${theme.colorHex}aa)`,
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Bet of the Day, dedicated story + selection funnel
+   ───────────────────────────────────────────────────────────── */
+
+function BotdSection() {
+  const { t } = useTranslations();
+  const loc = useLocalizedHref();
+  const potd = usePotdNumbers();
+  return (
+    <section className="relative overflow-hidden py-20 md:py-28">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-20 h-[520px] w-[620px] -translate-x-1/2 rounded-full"
+        style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(160px)" }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-40 bottom-0 h-[400px] w-[400px] rounded-full"
+        style={{ background: "hsl(var(--accent-purple) / 0.1)", filter: "blur(160px)" }}
+      />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto mb-14 max-w-3xl text-center"
+        >
+          <span className="section-label mb-4 inline-flex items-center gap-2">
+            <Crown className="h-3 w-3" />
+            {t("hiw.botdBadge")}
+          </span>
+          <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            {t("hiw.botdTitleA")}{" "}
+            <span className="gradient-text-green">{t("hiw.botdTitleB")}</span>
+          </h2>
+          <p className="mt-5 text-base leading-relaxed text-[#a3a9b8]">
+            {t("hiw.botdSubtitle")}
+          </p>
+        </motion.div>
+
+        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12">
+          {/* Left: story + stats */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6 }}
+          >
+            <h3 className="text-lg font-semibold text-[#ededed] sm:text-xl">
+              {t("hiw.botdStoryTitle")}
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-[#a3a9b8] sm:text-base">
+              {t("hiw.botdStoryP1")}
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-[#a3a9b8] sm:text-base">
+              {t("hiw.botdStoryP2")}
+            </p>
+
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <div className="glass-panel rounded-2xl p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                  {t("hiw.botdStatAccuracyLabel")}
+                </p>
+                <p className="text-stat mt-1 text-3xl leading-none text-[#ededed]">
+                  {potd.potdAccuracy}%
+                </p>
+                <p className="mt-2 text-[11px] text-[#a3a9b8]">
+                  {t("hiw.botdStatAccuracyDesc", potd)}
+                </p>
+              </div>
+              <div className="glass-panel rounded-2xl p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-[#a855f7]">
+                  {t("hiw.botdStatPicksLabel")}
+                </p>
+                <p className="text-stat mt-1 text-3xl leading-none text-[#ededed]">
+                  {potd.potdPicks}
+                </p>
+                <p className="mt-2 text-[11px] text-[#a3a9b8]">
+                  {t("hiw.botdStatPicksDesc")}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <Link href={loc("/bet-of-the-day")} className="btn-primary inline-flex">
+                {t("hiw.botdCtaPrimary")}
+              </Link>
+              <Link href={loc("/track-record")} className="btn-glass inline-flex">
+                {t("hiw.botdCtaSecondary")}
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Right: selection funnel card */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6 }}
+            className="card-neon card-neon-green halo-green rounded-3xl"
+          >
+            <div className="relative p-6 sm:p-8">
+              <div className="mb-5 flex items-center justify-between">
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                  {t("hiw.botdFunnelLabel")}
+                </span>
+                <HexBadge variant="green" size="sm">
+                  <Crown className="h-4 w-4" />
+                </HexBadge>
+              </div>
+
+              <div className="space-y-3">
+                <FunnelStep
+                  rank="01"
+                  icon={Database}
+                  title={t("hiw.botdFunnel1Title")}
+                  desc={t("hiw.botdFunnel1Desc")}
+                  tag={t("hiw.botdFunnel1Tag")}
+                />
+                <FlowArrow />
+                <FunnelStep
+                  rank="02"
+                  icon={FilterIcon}
+                  title={t("hiw.botdFunnel2Title")}
+                  desc={t("hiw.botdFunnel2Desc")}
+                  tag={t("hiw.botdFunnel2Tag")}
+                />
+                <FlowArrow />
+                <FunnelStep
+                  rank="03"
+                  icon={Target}
+                  title={t("hiw.botdFunnel3Title")}
+                  desc={t("hiw.botdFunnel3Desc")}
+                  tag={t("hiw.botdFunnel3Tag")}
+                />
+                <FlowArrow />
+                <FunnelStep
+                  rank="04"
+                  icon={Crown}
+                  title={t("hiw.botdFunnel4Title")}
+                  desc={t("hiw.botdFunnel4Desc")}
+                  tag={t("hiw.botdFunnel4Tag")}
+                  highlight
+                />
+              </div>
+
+              <p className="mt-5 border-t border-white/[0.06] pt-4 text-[11px] leading-relaxed text-[#a3a9b8]">
+                {t("hiw.botdFunnelFooter")}
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FunnelStep({
+  rank,
+  icon: Icon,
+  title,
+  desc,
+  tag,
+  highlight = false,
+}: {
+  rank: string;
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  desc: string;
+  tag: string;
+  highlight?: boolean;
+}) {
+  return (
+    <div
+      className={
+        "glass-panel rounded-xl p-3.5 transition-colors " +
+        (highlight ? "ring-1 ring-[#4ade80]/40 bg-[#4ade80]/[0.06]" : "")
+      }
+    >
+      <div className="flex items-start gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-[#4ade80]">
+          <Icon className="h-4 w-4" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-[10px] font-mono tabular-nums text-[#6b7280]">
+                {rank}
+              </span>
+              <span className="text-xs font-semibold text-[#ededed] truncate">
+                {title}
+              </span>
+            </div>
+            <Pill
+              tone={highlight ? "active" : "default"}
+              className="!text-[9px] whitespace-nowrap"
+            >
+              {tag}
+            </Pill>
+          </div>
+          <p className="mt-1 text-[11px] leading-relaxed text-[#a3a9b8]">{desc}</p>
+        </div>
+      </div>
     </div>
   );
 }

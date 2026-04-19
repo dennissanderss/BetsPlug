@@ -1073,6 +1073,71 @@ const en = {
   "hiw.integrityGood3Desc":
     "Download the full prediction log. Run your own winrate calc. Call us out publicly if the numbers disagree.",
 
+  /* Tier flow section (how a pick lands in a tier) */
+  "hiw.flowBadge": "From match to tier",
+  "hiw.flowTitleA": "Every pick earns its tier.",
+  "hiw.flowTitleB": "No labels handed out for free.",
+  "hiw.flowSubtitle":
+    "Tiers aren't marketing — they reflect how sure the AI actually is. Here's the exact path from a Saturday fixture to a Gold or Platinum badge.",
+  "hiw.flowStep1Label": "Step 01",
+  "hiw.flowStep1Title": "Every match of the day",
+  "hiw.flowStep1Desc":
+    "Hundreds of fixtures across 30+ leagues enter the pipeline with fresh data: form, injuries, H2H, xG, odds.",
+  "hiw.flowStep2Label": "Step 02",
+  "hiw.flowStep2Title": "Five AI models vote",
+  "hiw.flowStep2Desc":
+    "Elo, Poisson, Logistic, XGBoost and the Ensemble each score the match. Their consensus becomes one probability.",
+  "hiw.flowStep3Label": "Step 03",
+  "hiw.flowStep3Title": "Confidence score (0–100%)",
+  "hiw.flowStep3Desc":
+    "The stronger and more unanimous the models, the higher the score. Shaky or split predictions score low.",
+  "hiw.flowStep4Label": "Step 04",
+  "hiw.flowStep4Title": "Threshold decides the tier",
+  "hiw.flowStep4Desc":
+    "Only picks above a strict threshold earn a tier badge. The higher the threshold, the fewer picks — and the sharper they are.",
+  "hiw.flowBarsLabel": "Confidence thresholds",
+  "hiw.flowBarPlatinumDesc": "Rare, highest-conviction calls. Fewest picks, sharpest hit rate.",
+  "hiw.flowBarGoldDesc": "Strong consensus, tight error margin.",
+  "hiw.flowBarSilverDesc": "Solid edge, more volume, a little more variance.",
+  "hiw.flowBarBronzeDesc": "Free-tier entry level. Real predictions, wider net.",
+  "hiw.flowBarNoneTitle": "No tier assigned",
+  "hiw.flowBarNoneDesc": "Models disagree or confidence is too low. We don't publish guesses.",
+  "hiw.flowBarsFooter":
+    "Higher tier = stricter filter = fewer picks but higher accuracy. That's the whole trade-off.",
+
+  /* Bet of the Day dedicated section */
+  "hiw.botdBadge": "Bet of the Day",
+  "hiw.botdTitleA": "One pick a day.",
+  "hiw.botdTitleB": "Chosen, not guessed.",
+  "hiw.botdSubtitle":
+    "Every morning our engine scans hundreds of matches and picks exactly one to spotlight. Not five. Not a bundle. One.",
+  "hiw.botdStoryTitle": "Why a single pick?",
+  "hiw.botdStoryP1":
+    "We were tired of tipster feeds dumping 10 picks a day, then quietly deleting the losers. If a system truly has an edge, it should be willing to stake its reputation on its single best call.",
+  "hiw.botdStoryP2":
+    "So that's the rule. Every day, one pick. The highest-confidence match of the day, published pre-kickoff, graded in public. Win or lose, it stays on the record.",
+  "hiw.botdStatAccuracyLabel": "Hit rate",
+  "hiw.botdStatAccuracyDesc": "across {potdPicks} tracked picks",
+  "hiw.botdStatPicksLabel": "Tracked picks",
+  "hiw.botdStatPicksDesc": "Every one published pre-kickoff and graded in public.",
+  "hiw.botdCtaPrimary": "See today's pick",
+  "hiw.botdCtaSecondary": "Full track record",
+  "hiw.botdFunnelLabel": "Daily selection funnel",
+  "hiw.botdFunnel1Title": "All matches of the day",
+  "hiw.botdFunnel1Desc": "Every fixture across 30+ leagues enters the candidate pool.",
+  "hiw.botdFunnel1Tag": "300+ matches",
+  "hiw.botdFunnel2Title": "Filter on confidence",
+  "hiw.botdFunnel2Desc": "Only matches where the AI consensus is strong enough survive this step.",
+  "hiw.botdFunnel2Tag": "High conviction",
+  "hiw.botdFunnel3Title": "Filter on value",
+  "hiw.botdFunnel3Desc": "Our probability must beat the market's implied odds by a meaningful margin.",
+  "hiw.botdFunnel3Tag": "vs. market",
+  "hiw.botdFunnel4Title": "One winner",
+  "hiw.botdFunnel4Desc": "The single best combined score becomes that day's Bet of the Day.",
+  "hiw.botdFunnel4Tag": "Published",
+  "hiw.botdFunnelFooter":
+    "If no match passes both filters, we publish nothing. No pick is better than a bad pick.",
+
   /* Engine under the hood */
   "hiw.engineTitle": "Under the hood, the four models",
   "hiw.engineSubtitle": "Each model is trained on 70,000+ historical matches and walk-forward validated",
@@ -3242,6 +3307,69 @@ const nl: Dictionary = {
   "hiw.engineDisclaimer": "Elk model wordt getest op data die het nooit eerder heeft gezien (walk-forward validatie). Ons trackrecord toont elke voorspelling, winst en verlies, zonder verwijderingen.",
   "hiw.engineSubtitle": "De modellen achter elke voorspelling",
   "hiw.engineTitle": "Onder de motorkap",
+
+  "hiw.flowBadge": "Van wedstrijd naar tier",
+  "hiw.flowTitleA": "Elke pick verdient zijn tier.",
+  "hiw.flowTitleB": "Labels worden niet cadeau gedaan.",
+  "hiw.flowSubtitle":
+    "Tiers zijn geen marketing — ze vertellen hoe zeker onze AI écht is. Dit is het pad van een zaterdagwedstrijd naar een Gold- of Platinum-badge.",
+  "hiw.flowStep1Label": "Stap 01",
+  "hiw.flowStep1Title": "Elke wedstrijd van de dag",
+  "hiw.flowStep1Desc":
+    "Honderden wedstrijden in 30+ competities gaan de pijplijn in met verse data: vorm, blessures, onderling, xG, odds.",
+  "hiw.flowStep2Label": "Stap 02",
+  "hiw.flowStep2Title": "Vijf AI-modellen stemmen",
+  "hiw.flowStep2Desc":
+    "Elo, Poisson, Logistic, XGBoost en de Ensemble scoren elk de wedstrijd. Hun consensus wordt één kans.",
+  "hiw.flowStep3Label": "Stap 03",
+  "hiw.flowStep3Title": "Vertrouwensscore (0–100%)",
+  "hiw.flowStep3Desc":
+    "Hoe sterker en eensgezinder de modellen, hoe hoger de score. Wankele of verdeelde voorspellingen scoren laag.",
+  "hiw.flowStep4Label": "Stap 04",
+  "hiw.flowStep4Title": "Drempel bepaalt de tier",
+  "hiw.flowStep4Desc":
+    "Alleen picks boven een strenge drempel krijgen een tier-badge. Hoe hoger de drempel, hoe minder picks — en hoe scherper.",
+  "hiw.flowBarsLabel": "Vertrouwensdrempels",
+  "hiw.flowBarPlatinumDesc": "Zeldzame picks met de hoogste overtuiging. Weinig, maar scherpste hitpercentage.",
+  "hiw.flowBarGoldDesc": "Sterke consensus, smalle foutmarge.",
+  "hiw.flowBarSilverDesc": "Solide voorsprong, meer volume, iets meer variantie.",
+  "hiw.flowBarBronzeDesc": "Instap op het gratis niveau. Echte voorspellingen, breder net.",
+  "hiw.flowBarNoneTitle": "Geen tier toegekend",
+  "hiw.flowBarNoneDesc": "Modellen oneens of vertrouwen te laag. Wij publiceren geen gokjes.",
+  "hiw.flowBarsFooter":
+    "Hogere tier = strengere filter = minder picks maar hogere nauwkeurigheid. Dat is de volledige afweging.",
+
+  "hiw.botdBadge": "Bet of the Day",
+  "hiw.botdTitleA": "Eén pick per dag.",
+  "hiw.botdTitleB": "Gekozen, niet gegokt.",
+  "hiw.botdSubtitle":
+    "Elke ochtend scant onze engine honderden wedstrijden en kiest er precies één om uit te lichten. Geen vijf. Geen bundel. Eén.",
+  "hiw.botdStoryTitle": "Waarom één enkele pick?",
+  "hiw.botdStoryP1":
+    "We waren klaar met tipster-feeds die 10 picks per dag dumpen en de verliezers stilletjes verwijderen. Als een systeem echt een edge heeft, moet het bereid zijn zijn reputatie op zijn beste pick te zetten.",
+  "hiw.botdStoryP2":
+    "Dus dat is de regel. Elke dag, één pick. De wedstrijd met het hoogste vertrouwen, pre-kickoff gepubliceerd en in het openbaar beoordeeld. Winst of verlies, hij blijft op het record staan.",
+  "hiw.botdStatAccuracyLabel": "Trefferpercentage",
+  "hiw.botdStatAccuracyDesc": "over {potdPicks} bijgehouden picks",
+  "hiw.botdStatPicksLabel": "Bijgehouden picks",
+  "hiw.botdStatPicksDesc": "Elke pick pre-kickoff gepubliceerd en openbaar beoordeeld.",
+  "hiw.botdCtaPrimary": "Bekijk de pick van vandaag",
+  "hiw.botdCtaSecondary": "Volledig trackrecord",
+  "hiw.botdFunnelLabel": "Dagelijkse selectie-funnel",
+  "hiw.botdFunnel1Title": "Alle wedstrijden van de dag",
+  "hiw.botdFunnel1Desc": "Elke wedstrijd in 30+ competities komt in de kandidatenpool.",
+  "hiw.botdFunnel1Tag": "300+ wedstrijden",
+  "hiw.botdFunnel2Title": "Filter op vertrouwen",
+  "hiw.botdFunnel2Desc": "Alleen wedstrijden waar de AI-consensus sterk genoeg is overleven deze stap.",
+  "hiw.botdFunnel2Tag": "Hoge overtuiging",
+  "hiw.botdFunnel3Title": "Filter op value",
+  "hiw.botdFunnel3Desc": "Onze kans moet de impliciete odds van de markt met een betekenisvolle marge verslaan.",
+  "hiw.botdFunnel3Tag": "vs. markt",
+  "hiw.botdFunnel4Title": "Eén winnaar",
+  "hiw.botdFunnel4Desc": "De beste gecombineerde score wordt de Bet of the Day van die dag.",
+  "hiw.botdFunnel4Tag": "Gepubliceerd",
+  "hiw.botdFunnelFooter":
+    "Als geen wedstrijd door beide filters komt, publiceren we niets. Geen pick is beter dan een slechte pick.",
   "hiw.faq1A": "Pick of the Day: {potdAccuracy}% trefferpercentage voor {potdPicks} bijgehouden voorspellingen. De algemene drievoudige wedstrijdvoorspellingen (thuis/gelijkspel/uit) bedroegen ongeveer 50%, betekenisvol boven de ~37% die een willekeurige keuze zou opleveren. Elke wedstrijd wordt vergeleken met de modelvoorspelling en het resultaat vastgelegd. Je kunt elk nummer op het openbare trackrecord verifiëren.",
   "hiw.faq1Q": "Hoe nauwkeurig zijn jullie voorspellingen?",
   "hiw.faq2A": "Elke dag markeert onze AI één wedstrijd met een ongewoon hoog vertrouwen. Dat is Pick of the Day, momenteel met een trefferpercentage van {potdAccuracy}%. Je krijgt ook elke andere voorspelling op het platform, niet alleen deze.",
