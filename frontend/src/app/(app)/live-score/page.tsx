@@ -192,21 +192,34 @@ export default function LiveScorePage() {
     queryFn: () => api.getFixtureResults(1),
   });
 
-  // Merge live + today + yesterday-results, dedupe by id. Live's entries
-  // are newest, so take those first.
+  const { data: upcomingData, isLoading: upcomingLoading } = useQuery({
+    queryKey: ["live-score-upcoming-14"],
+    queryFn: () => api.getFixturesUpcoming(14),
+    refetchInterval: 5 * 60_000,
+  });
+
+  // Merge live + today + yesterday-results + next-14d upcoming. Dedupe by id,
+  // keeping the first occurrence so live overrides today which overrides
+  // upcoming (live data is freshest).
   const allFixtures = useMemo(() => {
     const seen = new Map<string, Fixture>();
     for (const source of [
       liveData?.fixtures ?? [],
       todayData?.fixtures ?? [],
+      upcomingData?.fixtures ?? [],
       resultsData?.fixtures ?? [],
     ]) {
       for (const f of source) {
         if (!seen.has(f.id)) seen.set(f.id, f);
       }
     }
-    return Array.from(seen.values());
-  }, [liveData, todayData, resultsData]);
+    return Array.from(seen.values()).sort((a, b) => {
+      // Live first, then chronological
+      if (a.status === "live" && b.status !== "live") return -1;
+      if (b.status === "live" && a.status !== "live") return 1;
+      return new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime();
+    });
+  }, [liveData, todayData, upcomingData, resultsData]);
 
   const liveCount = allFixtures.filter((f) => f.status === "live").length;
 
@@ -230,7 +243,7 @@ export default function LiveScorePage() {
     : leagueNames.slice(0, INITIAL_LEAGUES);
   const hasMore = leagueNames.length > INITIAL_LEAGUES;
 
-  const isLoading = liveLoading || todayLoading || resultsLoading;
+  const isLoading = liveLoading || todayLoading || resultsLoading || upcomingLoading;
 
   const headerLabel = t("liveScore.title" as any);
   const headerSubtitle = t("liveScore.subtitle" as any);
