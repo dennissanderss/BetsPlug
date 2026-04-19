@@ -440,24 +440,29 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
           })}
         </div>
 
-        {/* Platinum lifetime card */}
+        {/* Platinum lifetime card — recoloured from amber/gold to
+            diamond-blue so the background palette matches the TierEmblem
+            (Roman IV, icy blue) rendered in its top-left and every other
+            Platinum surface across the site. The previous amber gradient
+            was a hold-over from an earlier design that used Crown/gold
+            as the Platinum visual language; now both signals agree. */}
         <div
           className="card-neon relative mt-10 overflow-hidden"
           style={{
             boxShadow:
-              "0 20px 50px -15px rgba(251, 191, 36, 0.35), 0 0 0 1px rgba(252, 211, 77, 0.15) inset",
+              "0 20px 50px -15px rgba(94, 179, 217, 0.38), 0 0 0 1px rgba(217, 240, 255, 0.2) inset",
           }}
         >
           <div
             className="relative p-8 md:p-10"
             style={{
               background:
-                "linear-gradient(135deg, hsl(45 80% 15%) 0%, hsl(40 70% 10%) 50%, hsl(30 80% 12%) 100%)",
+                "linear-gradient(135deg, hsl(200 55% 14%) 0%, hsl(205 45% 9%) 50%, hsl(210 55% 12%) 100%)",
             }}
           >
-            {/* Ambient amber blobs */}
-            <div className="pointer-events-none absolute -right-32 -top-32 h-[460px] w-[460px] rounded-full bg-amber-300/[0.12] blur-[140px]" />
-            <div className="pointer-events-none absolute -left-32 -bottom-32 h-[440px] w-[440px] rounded-full bg-yellow-500/[0.1] blur-[140px]" />
+            {/* Ambient diamond-blue blobs */}
+            <div className="pointer-events-none absolute -right-32 -top-32 h-[460px] w-[460px] rounded-full bg-sky-300/[0.16] blur-[140px]" />
+            <div className="pointer-events-none absolute -left-32 -bottom-32 h-[440px] w-[440px] rounded-full bg-cyan-400/[0.12] blur-[140px]" />
 
             <div className="relative grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-center">
               {/* Left */}
@@ -473,9 +478,9 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                   <span
                     className="section-label"
                     style={{
-                      color: "#fcd34d",
-                      borderColor: "rgba(252, 211, 77, 0.3)",
-                      background: "rgba(252, 211, 77, 0.06)",
+                      color: "#d9f0ff",
+                      borderColor: "rgba(168, 216, 234, 0.35)",
+                      background: "rgba(168, 216, 234, 0.08)",
                     }}
                   >
                     <Crown className="h-3 w-3" /> {t("pricing.platBadgeLifetime")}
@@ -487,14 +492,14 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                     className="bg-clip-text text-transparent"
                     style={{
                       backgroundImage:
-                        "linear-gradient(135deg, #fde68a 0%, #fbbf24 40%, #f59e0b 70%, #fde68a 100%)",
+                        "linear-gradient(135deg, #e0f4ff 0%, #a8d8ea 40%, #5eb3d9 70%, #d9f0ff 100%)",
                     }}
                   >
                     Platinum
                   </span>{" "}
                   Lifetime
                 </h3>
-                <p className="mt-3 max-w-xl text-sm leading-relaxed text-amber-100/80 sm:text-base">
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-sky-100/80 sm:text-base">
                   {platinum.tagline} {t("pricing.platPitch")}
                 </p>
 
@@ -502,10 +507,10 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                   {platinum.features.map((f) => (
                     <li
                       key={f}
-                      className="flex items-start gap-2.5 text-sm text-amber-50/90"
+                      className="flex items-start gap-2.5 text-sm text-sky-50/90"
                     >
                       <Check
-                        className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-300 drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]"
+                        className="mt-0.5 h-4 w-4 flex-shrink-0 text-sky-200 drop-shadow-[0_0_6px_rgba(168,216,234,0.55)]"
                         strokeWidth={3}
                       />
                       <span>{f}</span>
@@ -513,7 +518,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                   ))}
                 </ul>
 
-                <p className="mt-4 text-[10px] leading-relaxed text-amber-100/60">
+                <p className="mt-4 text-[10px] leading-relaxed text-sky-100/60">
                   {t("pricing.dataProvenanceFooter")}
                 </p>
               </div>
@@ -521,23 +526,23 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
               {/* Right */}
               <div className="flex flex-col items-start gap-5 lg:items-end lg:text-right">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-widest text-amber-300">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-sky-200">
                     {t("pricing.platOneTime")}
                   </p>
                   <div className="mt-2 flex items-baseline gap-1 lg:justify-end">
-                    <span className="text-xl font-bold text-amber-200/70">€</span>
+                    <span className="text-xl font-bold text-sky-200/70">€</span>
                     <span
                       className="text-stat bg-clip-text text-6xl text-transparent sm:text-7xl"
                       style={{
                         backgroundImage:
-                          "linear-gradient(180deg, #fef3c7 0%, #fde68a 30%, #fbbf24 65%, #d97706 100%)",
-                        filter: "drop-shadow(0 2px 12px rgba(251, 191, 36, 0.35))",
+                          "linear-gradient(180deg, #e0f4ff 0%, #a8d8ea 30%, #5eb3d9 65%, #38b2d9 100%)",
+                        filter: "drop-shadow(0 2px 12px rgba(168, 216, 234, 0.4))",
                       }}
                     >
                       {platinum.priceMain}
                     </span>
                   </div>
-                  <p className="mt-1 text-xs text-amber-100/60">
+                  <p className="mt-1 text-xs text-sky-100/60">
                     {t("pricing.platNoSub")}
                   </p>
                 </div>
@@ -547,10 +552,10 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                   className="btn-primary inline-flex w-full justify-center sm:w-auto"
                   style={{
                     background:
-                      "linear-gradient(180deg, #fcd34d, #d97706)",
+                      "linear-gradient(180deg, #a8d8ea, #5eb3d9)",
                     color: "#05130b",
                     boxShadow:
-                      "0 0 0 1px rgba(255, 255, 255, 0.12) inset, 0 8px 28px rgba(251, 191, 36, 0.4)",
+                      "0 0 0 1px rgba(255, 255, 255, 0.15) inset, 0 8px 28px rgba(168, 216, 234, 0.45)",
                   }}
                 >
                   <Crown className="mr-2 h-4 w-4" />
