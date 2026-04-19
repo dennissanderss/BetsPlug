@@ -41,6 +41,7 @@ import { useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { TrustFunnel } from "@/components/ui/trust-funnel";
 import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
+import { BotdLiveTrackingSection } from "@/components/ui/botd-live-tracking-section";
 import { LiveMeasurementSection } from "@/components/ui/live-measurement-section";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
@@ -1405,11 +1406,16 @@ export default function TrackrecordPage() {
     [monthSegments]
   );
 
+  // Mirrors the public /prestaties four-surface layout. The public
+  // page numbers sections 1–4 as: tier-backtest / tier-live / botd-
+  // backtest / botd-live. Authed users get the same mental model,
+  // plus the existing "Segmenten" drill-down as an extra 5th tab.
   const tabs = [
-    { key: "performance", label: t("trackrecord.performance"), icon: TrendingUp },
+    { key: "performance", label: `1 · ${t("trackrecord.performance")}`, icon: TrendingUp },
+    { key: "live", label: `2 · ${t("trackrecord.tabLive")}`, icon: Activity },
+    { key: "botd", label: `3 · ${t("trackrecord.tabBotd")}`, icon: Trophy },
+    { key: "botd-live", label: `4 · ${t("trackrecord.tabBotd")} · ${t("trackrecord.tabLive")}`, icon: Activity },
     { key: "segments", label: t("trackrecord.segments"), icon: Layers },
-    { key: "botd", label: t("trackrecord.tabBotd"), icon: Trophy },
-    { key: "live", label: t("trackrecord.tabLive"), icon: Activity },
   ];
 
   return (
@@ -1825,6 +1831,14 @@ export default function TrackrecordPage() {
       {activeTab === "live" && (
         <div className="space-y-6 animate-slide-up">
           <LiveMeasurementSection />
+        </div>
+      )}
+
+      {/* ── BOTD Live Tab ── Strict pre-match Pick-of-the-Day stream,
+           gated behind the login on the public page, fully visible here. */}
+      {activeTab === "botd-live" && (
+        <div className="space-y-6 animate-slide-up">
+          <BotdLiveTrackingSection />
         </div>
       )}
       </div>

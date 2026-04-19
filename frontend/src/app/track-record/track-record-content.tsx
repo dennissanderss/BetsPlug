@@ -35,9 +35,8 @@ import { TIER_THEME, type TierKey } from "@/components/noct/tier-theme";
 import { Pill } from "@/components/noct/pill";
 import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { HeroMediaBg } from "@/components/ui/media-bg";
-import { LiveMeasurementSection } from "@/components/ui/live-measurement-section";
 import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
-import { BotdLiveTrackingSection } from "@/components/ui/botd-live-tracking-section";
+import { LockedLivePlaceholder } from "@/components/ui/locked-live-placeholder";
 
 /* ── Live API data hook ─────────────────────────────────── */
 interface LiveStats {
@@ -572,10 +571,10 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
               {
                 n: "2",
                 kind: isNl ? "Live meting" : "Live measurement",
-                title: isNl ? "Per tier · live" : "Per tier · live",
+                title: isNl ? "Per tier · live 🔒" : "Per tier · live 🔒",
                 desc: isNl
-                  ? "Alleen picks die écht vóór de aftrap werden vastgezet. Sinds 16 april 2026."
-                  : "Only picks locked strictly before kickoff. Since 16 April 2026.",
+                  ? "Alleen picks die écht vóór de aftrap werden vastgezet. Zichtbaar na inloggen."
+                  : "Only picks locked strictly before kickoff. Visible after sign-in.",
                 href: "#live-measurement",
                 tone: "blue",
               },
@@ -592,10 +591,10 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
               {
                 n: "4",
                 kind: isNl ? "Live meting" : "Live measurement",
-                title: isNl ? "Pick van de Dag · live" : "Pick of the Day · live",
+                title: isNl ? "Pick van de Dag · live 🔒" : "Pick of the Day · live 🔒",
                 desc: isNl
-                  ? "Strikt pre-match BOTD-picks. Begint klein, groeit met elke gespeelde BOTD."
-                  : "Strictly pre-match BOTD picks. Starts small, grows with every played BOTD.",
+                  ? "Strikt pre-match BOTD-picks. Zichtbaar na inloggen."
+                  : "Strictly pre-match BOTD picks. Visible after sign-in.",
                 href: "#botd-live",
                 tone: "green",
               },
@@ -713,18 +712,19 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
-      {/* ───────────── LIVE MEASUREMENT (tier) ───────────── */}
-      <LiveMeasurementSection />
+      {/* ───────────── 2 · LIVE MEASUREMENT (tier) — LOCKED ─────────────
+          Live tier data is intentionally hidden from anonymous visitors
+          while it grows from zero (cut-off 2026-04-16). Showing 0/0 on
+          the marketing surface would read as "product doesn't work"
+          instead of "warm-up phase". Signed-in users see the real
+          numbers on the authed /trackrecord dashboard. */}
+      <LockedLivePlaceholder number="2" variant="tier" id="live-measurement" />
 
-      {/* ───────────── BOTD BACKTEST ───────────── */}
-      {/* Pick-of-the-Day historical backtest. Was hidden while the live
-          pipeline stabilised; now rendered alongside the live section
-          below so the full transparency story — tier backtest → tier
-          live → BOTD backtest → BOTD live — is visible on one page. */}
+      {/* ───────────── 3 · BOTD BACKTEST ───────────── */}
       <BotdTrackRecordSection />
 
-      {/* ───────────── BOTD LIVE ───────────── */}
-      <BotdLiveTrackingSection />
+      {/* ───────────── 4 · BOTD LIVE — LOCKED ───────────── */}
+      <LockedLivePlaceholder number="4" variant="botd" id="botd-live" />
 
       {/* ───────────── PIPELINE ───────────── */}
       <section className="relative overflow-hidden py-20 md:py-28">
