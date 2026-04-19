@@ -52,12 +52,16 @@ export default function DashboardPage() {
     queryFn: () => api.getWeeklySummary(7, userTierSlug ?? undefined),
   });
 
+  // Backtest = model-validation dataset (historical, dominated by pre-v8.1
+  // records). We fetch source="backtest" explicitly so the card headline is
+  // honest about what the user is looking at; live picks have their own row.
   const { data: tierSummary, isLoading: tierSummaryLoading } = useQuery({
     queryKey: ["trackrecord-summary-hub", userTierSlug ?? "all"],
     queryFn: () =>
-      api.getTrackrecordSummary(
-        userTierSlug ? { pick_tier: userTierSlug } : undefined,
-      ),
+      api.getTrackrecordSummary({
+        source: "backtest",
+        ...(userTierSlug ? { pick_tier: userTierSlug } : {}),
+      }),
     staleTime: 5 * 60_000,
   });
 

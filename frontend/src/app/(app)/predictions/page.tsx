@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import { api } from "@/lib/api";
 import type { Fixture, FixturePrediction } from "@/types/api";
-import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import { UpsellBanner } from "@/components/ui/upsell-banner";
 import { GlassPanel } from "@/components/noct/glass-panel";
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -1221,7 +1220,6 @@ export default function PredictionsPage() {
   }, []);
 
   return (
-    <PaywallOverlay feature="all_predictions" requiredTier="silver">
     <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
       <div className="relative space-y-6">
 
@@ -1433,6 +1431,5 @@ export default function PredictionsPage() {
 
       </div>
     </div>
-    </PaywallOverlay>
   );
 }

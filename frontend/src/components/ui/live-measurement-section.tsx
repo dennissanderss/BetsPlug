@@ -73,7 +73,10 @@ export function LiveMeasurementSection() {
     : "16 april 2026";
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-28">
+    <section
+      id="live-measurement"
+      className="relative overflow-hidden py-20 md:py-28 scroll-mt-24"
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute -right-40 top-10 h-[440px] w-[440px] rounded-full"

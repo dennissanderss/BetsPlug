@@ -1313,21 +1313,26 @@ export default function AdminPage() {
     }
   }, [isAdmin]);
 
-  // Render nothing while we verify role — prevents a flash of admin UI
-  // for regular users before the redirect effect runs.
-  if (!ready || !isAdmin) {
-    return null;
-  }
-
+  // Hooks must run in the same order every render, so call useQuery
+  // BEFORE the role-gate early return. Queries are disabled until we
+  // know the user is an admin to avoid unauthenticated calls.
   const { data: sources = [] } = useQuery<DataSourceHealth[]>({
     queryKey: ["data-sources"],
     queryFn: () => api.getDataSources(),
+    enabled: ready && isAdmin,
   });
 
   const { data: errors = [] } = useQuery<AdminError[]>({
     queryKey: ["admin-errors"],
     queryFn: () => api.getAdminErrors(50).then((rows) => rows as AdminError[]),
+    enabled: ready && isAdmin,
   });
+
+  // Render nothing while we verify role — prevents a flash of admin UI
+  // for regular users before the redirect effect runs.
+  if (!ready || !isAdmin) {
+    return null;
+  }
 
   const errorCount = errors.length;
   const degradedCount = sources.filter(

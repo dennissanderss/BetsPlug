@@ -48,6 +48,17 @@ function formatTime(iso: string): string {
   }
 }
 
+function formatMatchDate(iso: string): string {
+  try {
+    const d = new Date(iso);
+    const now = new Date();
+    if (d.toDateString() === now.toDateString()) return "";
+    return d.toLocaleDateString(undefined, { day: "numeric", month: "short" });
+  } catch {
+    return "";
+  }
+}
+
 function matchesFilter(f: Fixture, filter: StatusFilter): boolean {
   if (filter === "all") return true;
   if (filter === "live") return f.status === "live";
@@ -93,9 +104,18 @@ function StatusCell({ fixture }: { fixture: Fixture }) {
   if (fixture.status === "cancelled") {
     return <Pill tone="loss" className="!text-[9px] sm:!text-[10px]">CANC.</Pill>;
   }
+  const dateLabel = formatMatchDate(fixture.scheduled_at);
+  const timeLabel = formatTime(fixture.scheduled_at);
   return (
     <Pill tone="default" className="!text-[9px] sm:!text-[10px]">
-      {formatTime(fixture.scheduled_at)}
+      <span className="flex flex-col items-center leading-tight">
+        {dateLabel && (
+          <span className="text-[8px] sm:text-[9px] opacity-80">
+            {dateLabel}
+          </span>
+        )}
+        <span>{timeLabel}</span>
+      </span>
     </Pill>
   );
 }
@@ -108,7 +128,7 @@ function MatchRow({ fixture }: { fixture: Fixture }) {
       href={lHref(`/live-score/${fixture.id}`)}
       className="group flex items-center gap-2 sm:gap-3 px-2 py-2 sm:px-3 sm:py-2.5 border-b border-white/[0.05] transition-colors hover:bg-white/[0.04] last:border-b-0 cursor-pointer focus-visible:outline-none focus-visible:bg-white/[0.05]"
     >
-      <span className="w-11 sm:w-16 shrink-0 text-xs tabular-nums">
+      <span className="w-14 sm:w-20 shrink-0 text-xs tabular-nums">
         <StatusCell fixture={fixture} />
       </span>
 

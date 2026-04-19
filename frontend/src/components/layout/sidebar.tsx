@@ -76,7 +76,7 @@ const navSections: NavSection[] = [
     labelKey: "sidebar.help",
     fallbackLabel: "Help",
     items: [
-      { labelKey: "nav.jouwRoute", fallback: "How It Works", href: "/jouw-route", icon: MapPin },
+      { labelKey: "nav.jouwRoute", fallback: "How It Works", href: "/how-it-works", icon: MapPin },
     ],
   },
 ];

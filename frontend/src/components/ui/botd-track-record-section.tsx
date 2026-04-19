@@ -102,7 +102,10 @@ export function BotdTrackRecordSection() {
   };
 
   return (
-    <section className="relative overflow-hidden py-20 md:py-28">
+    <section
+      id="model-validation"
+      className="relative overflow-hidden py-20 md:py-28 scroll-mt-24"
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute -left-40 top-10 h-[420px] w-[420px] rounded-full"
