@@ -1,7 +1,7 @@
 # BetsPlug Engine v8 — Validatierapport
 
-**Datum:** 15 april 2026
-**Versie:** 8.0
+**Datum:** 15 april 2026 (v8.0 walk-forward) — bijgewerkt 19 april 2026 met live v8.1 cijfers
+**Versie:** 8.0 / 8.1 live
 **Status:** ✅ Gevalideerd, geen data leakage
 
 ---
@@ -10,7 +10,18 @@
 
 De BetsPlug prediction engine is volledig herbouwd op een dataset van **43.257 wedstrijden** uit **30 competities** over **5.5 jaar**, verzameld via één gelicentieerde bron (API-Football Pro).
 
-Het model behaalt **74.4% accuracy** op premium picks (confidence ≥ 70%) over een walk-forward validatie van 28.838 test-picks, zonder data leakage.
+**v8.0 walk-forward validatie** (28.838 out-of-sample picks): **74.4% accuracy** op premium picks (confidence ≥ 0.70).
+
+**v8.1 live per-tier accuracy** (post-deploy set per 2026-04-16, continu bijgewerkt via `/api/pricing/comparison`):
+
+| Tier | Competities | Confidence floor | Steekproef | Accuracy |
+|---|---|---|---|---|
+| Platinum | Top 5 elite | ≥ 0.75 | 840 | **82.5%** |
+| Gold | Top 10 | ≥ 0.70 | 1.650 | **71.7%** |
+| Silver | Top 14 | ≥ 0.65 | 3.004 | 60%+ |
+| Free | Top 14 | ≥ 0.55 | 3.763 | 48.4% |
+
+De live v8.1 cijfers liggen boven de walk-forward baseline doordat de live-pipeline stricter filtert (pre-match lock, `predicted_at ≤ scheduled_at`, alleen top-14 competities). Beide zijn niet-leaking, beide rapporteren we.
 
 ---
 

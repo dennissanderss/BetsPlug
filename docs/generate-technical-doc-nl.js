@@ -197,7 +197,7 @@ const doc = new Document({
         ]),
 
         h2("4.3 Prestatiemetrieken"),
-        p("Walk-forward resultaten op 28.838 out-of-sample test picks:"),
+        p("Walk-forward resultaten op 28.838 out-of-sample test picks (eerlijke temporele validatie):"),
         table2col([
           ["Confidence drempel", "Picks", "Nauwkeurigheid"],
           ["Alle (geen filter)", "28.838", "49,2%"],
@@ -208,7 +208,15 @@ const doc = new Document({
           ["\u2265 70%", "2.473", "74,4%"],
           ["\u2265 75% (Premium)", "1.497", "78,2%"],
         ]),
-        p("Interpretatie: ruwe nauwkeurigheid is bescheiden omdat voetbal 1X2 moeilijk is (33% willekeurig, ~50% best case). Echte waarde ligt in confidence filtering \u2014 het model onthoudt zich bij onzekere wedstrijden. Bij \u2265 75% confidence levert 78,2% nauwkeurigheid een echte edge op."),
+        p("Live v8.1 nauwkeurigheid per tier op de post-deploy ge\u00ebvalueerde set (continu bijgewerkt via /api/pricing/comparison):"),
+        table2col([
+          ["Tier", "Competities", "Confidence floor", "Steekproef", "Nauwkeurigheid"],
+          ["Platinum", "Top 5 elite", "\u2265 0,75", "840", "82,5%"],
+          ["Gold", "Top 10",       "\u2265 0,70", "1.650", "71,7%"],
+          ["Silver", "Top 14",     "\u2265 0,65", "3.004", "60%+"],
+          ["Free", "Top 14",       "\u2265 0,55", "3.763", "48,4%"],
+        ]),
+        p("Interpretatie: ruwe nauwkeurigheid is bescheiden omdat voetbal 1X2 moeilijk is (33% willekeurig, ~50% best case). Echte waarde ligt in confidence filtering \u2014 het model onthoudt zich bij onzekere wedstrijden. Bij \u2265 75% confidence levert 78,2% walk-forward / 82,5% live-v8.1 nauwkeurigheid een echte edge op."),
 
         h1("5. Deployment & Operations"),
 
@@ -220,12 +228,13 @@ const doc = new Document({
         bullet("Modellen overleven container restarts (geen in-memory cache opnieuw opbouwen)"),
 
         h2("5.2 Automatische voorspellingsgeneratie"),
-        p("Celery beat scheduler genereert continu voorspellingen:"),
-        bullet("Elke 5 min: sync_upcoming_matches (nieuwe fixtures)"),
-        bullet("Elke 5 min: sync_recent_results (einduitslagen)"),
-        bullet("Elke 5 min: generate_predictions_for_upcoming (voor matches zonder voorspelling)"),
-        bullet("Elke 30 min: sync_standings (league tabellen)"),
-        p("Geen handmatige interventie nodig. Nieuwe matches krijgen automatisch v8 voorspellingen binnen 5-10 minuten."),
+        p("APScheduler (draait in-process met FastAPI op Railway) genereert continu voorspellingen:"),
+        bullet("Elke 6 uur: job_sync_data (upcoming + uitslagen + standings, 7 competities per cycle)"),
+        bullet("Elke 10 min: job_generate_predictions (v8.1 voorspelling voor upcoming matches zonder)"),
+        bullet("Elke 20 min: job_evaluate_predictions (score finished matches)"),
+        bullet("Elke 5 min: job_generate_historical_predictions (backtest backfill, 100 per batch)"),
+        bullet("Direct na sync: geketend generate_predictions zodat nieuwe fixtures geen hele cycle wachten"),
+        p("Geen handmatige interventie nodig. Nieuwe matches krijgen v8.1 voorspellingen binnen 10 minuten na ingestion."),
 
         h2("5.3 Monitoring"),
         bullet("Health endpoint: GET /api/health retourneert DB, Redis, API-Football status + row counts"),

@@ -261,7 +261,7 @@ const doc = new Document({
         p("If leakage were present, shuffled labels or random features would score above the majority class baseline. They do not."),
 
         h2("4.3 Performance Metrics"),
-        p("Walk-forward results on 28,838 out-of-sample test picks:"),
+        p("Walk-forward results on 28,838 out-of-sample test picks (honest temporal validation):"),
         table2col([
           ["Confidence threshold", "Picks", "Accuracy"],
           ["All (no filter)", "28,838", "49.2%"],
@@ -272,7 +272,15 @@ const doc = new Document({
           ["\u2265 70%", "2,473", "74.4%"],
           ["\u2265 75% (Premium)", "1,497", "78.2%"],
         ]),
-        p("Interpretation: raw accuracy is modest because football 1X2 is hard (33% random baseline, ~50% best-case for all picks). Real value lies in confidence filtering \u2014 the model correctly abstains on uncertain matches. At \u2265 75% confidence, 78.2% accuracy represents a genuine edge."),
+        p("Live v8.1 per-tier accuracy on the post-deploy evaluated set (updated continuously via /api/pricing/comparison):"),
+        table2col([
+          ["Tier", "League scope", "Confidence floor", "Sample", "Accuracy"],
+          ["Platinum", "Top 5 elite", "\u2265 0.75", "840", "82.5%"],
+          ["Gold", "Top 10",      "\u2265 0.70", "1,650", "71.7%"],
+          ["Silver", "Top 14",    "\u2265 0.65", "3,004", "60%+"],
+          ["Free", "Top 14",      "\u2265 0.55", "3,763", "48.4%"],
+        ]),
+        p("Interpretation: raw accuracy is modest because football 1X2 is hard (33% random baseline, ~50% best-case for all picks). Real value lies in confidence filtering \u2014 the model correctly abstains on uncertain matches. At \u2265 75% confidence, 78.2% walk-forward / 82.5% live-v8.1 accuracy represents a genuine edge."),
 
         // 5. Deployment & Operations
         h1("5. Deployment & Operations"),
@@ -286,12 +294,13 @@ const doc = new Document({
         bullet("Version-stable format: XGBoost Booster save_model + joblib for sklearn components"),
 
         h2("5.2 Automated Prediction Generation"),
-        p("Celery beat scheduler generates predictions continuously:"),
-        bullet("Every 5 minutes: sync_upcoming_matches (new fixtures)"),
-        bullet("Every 5 minutes: sync_recent_results (final scores)"),
-        bullet("Every 5 minutes: generate_predictions_for_upcoming (predictions for matches without one)"),
-        bullet("Every 30 minutes: sync_standings (league tables)"),
-        p("No manual intervention required. New matches automatically receive v8 predictions within 5-10 minutes of becoming available in API-Football."),
+        p("APScheduler (running in-process with FastAPI on Railway) generates predictions continuously:"),
+        bullet("Every 6 hours: job_sync_data (upcoming + results + standings, 7 leagues per cycle)"),
+        bullet("Every 10 minutes: job_generate_predictions (v8.1 forecast for upcoming matches without one)"),
+        bullet("Every 20 minutes: job_evaluate_predictions (score finished matches)"),
+        bullet("Every 5 minutes: job_generate_historical_predictions (backtest backfill, 100 per batch)"),
+        bullet("Immediately after sync: chained generate_predictions so new fixtures never wait a full cycle"),
+        p("No manual intervention required. New matches receive v8.1 predictions within 10 minutes of ingestion."),
 
         h2("5.3 Monitoring"),
         bullet("Health endpoint: GET /api/health returns DB, Redis, API-Football status + row counts"),
