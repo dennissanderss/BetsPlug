@@ -140,9 +140,16 @@ async def job_generate_predictions():
             all_match_ids = [row[0] for row in matches_result.all()]
 
             if all_match_ids:
+                # Only skip matches that already have a LIVE-source prediction.
+                # Upcoming matches with only a 'batch_local_fill' / 'backtest'
+                # row need a fresh live pick alongside — otherwise the public
+                # live-measurement surface never grows past 0/0 because every
+                # finished match was prefilled by the batch job before the
+                # scheduler could lock its pre-match window.
                 existing = await db.execute(
                     select(Prediction.match_id)
                     .where(Prediction.match_id.in_(all_match_ids))
+                    .where(Prediction.prediction_source == "live")
                     .distinct()
                 )
                 existing_ids = set(existing.scalars().all())
