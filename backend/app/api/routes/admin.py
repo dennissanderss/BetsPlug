@@ -87,6 +87,55 @@ class CacheFlushResponse(BaseModel):
     total: int
 
 
+class JobTriggerResponse(BaseModel):
+    triggered: str
+    ok: bool
+    detail: Optional[str] = None
+
+
+@router.post(
+    "/trigger-job",
+    response_model=JobTriggerResponse,
+    summary="Run an APScheduler job immediately (diagnostic / manual backfill)",
+)
+async def trigger_scheduler_job(
+    job_id: str = Query(
+        ...,
+        description=(
+            "One of: generate_predictions, evaluate_predictions, "
+            "historical_predictions, sync_data."
+        ),
+    ),
+) -> JobTriggerResponse:
+    """Kick off a scheduler job outside its normal cadence.
+
+    Useful for: manual backfill after a deploy, catching up on missed
+    evaluations, or verifying a job actually runs without waiting up
+    to 20 min for the next scheduled firing.
+    """
+    from app.services import scheduler as scheduler_module
+
+    job_map = {
+        "generate_predictions": scheduler_module.job_generate_predictions,
+        "evaluate_predictions": scheduler_module.job_evaluate_predictions,
+        "historical_predictions": scheduler_module.job_generate_historical_predictions,
+        "sync_data": scheduler_module.job_sync_data,
+    }
+    fn = job_map.get(job_id)
+    if fn is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"unknown job_id '{job_id}', expected one of {list(job_map)}",
+        )
+    try:
+        await fn()
+        return JobTriggerResponse(triggered=job_id, ok=True)
+    except Exception as exc:
+        return JobTriggerResponse(
+            triggered=job_id, ok=False, detail=f"{type(exc).__name__}: {exc}"
+        )
+
+
 @router.post(
     "/cache-flush",
     response_model=CacheFlushResponse,

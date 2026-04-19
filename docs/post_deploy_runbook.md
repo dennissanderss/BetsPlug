@@ -59,6 +59,17 @@ curl -s -X POST -H "Authorization: Bearer $TOKEN" \
 
 Doe dit één keer na elke deploy die filter-semantiek aanraakt. Voorkomt dat users tot 1u stale aggregates zien.
 
+### 4b. Scheduler-job handmatig triggeren (optioneel)
+
+Als je een job direct wilt laten draaien (backfill na deploy, of verifiëren dat eval echt werkt zonder 20 min wachten):
+
+```bash
+curl -s -X POST -H "Authorization: Bearer $TOKEN" \
+  "https://betsplug-production.up.railway.app/api/admin/trigger-job?job_id=evaluate_predictions" | jq
+```
+
+`job_id` kan: `generate_predictions`, `evaluate_predictions`, `historical_predictions`, `sync_data`.
+
 ## 5. Data-parity matrix vullen (DB-toegang)
 
 Railway PSQL shell:
