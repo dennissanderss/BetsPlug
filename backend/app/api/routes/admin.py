@@ -82,6 +82,31 @@ class SchedulerStatus(BaseModel):
     jobs: List[SchedulerJobStatus]
 
 
+class LiveMeasurementFunnel(BaseModel):
+    """Counts at each filter of the ``/trackrecord/live-measurement`` query.
+
+    Makes it obvious which filter is responsible when the public live
+    measurement shows 0/0 — typically ``pre_match_predictions`` collapses
+    because the ingestion run imports a fixture after kickoff, so the
+    prediction is created with ``predicted_at >= scheduled_at`` and gets
+    silently dropped from the surface.
+    """
+
+    start_date: str
+    now: datetime
+    finished_matches_since_start: int
+    finished_matches_with_any_prediction: int
+    live_predictions_since_start: int
+    pre_match_live_predictions: int
+    pre_match_live_predictions_evaluated: int
+    upcoming_matches_7d: int
+    upcoming_matches_7d_with_live_pred: int
+    latest_prediction_created_at: Optional[datetime]
+    latest_prediction_predicted_at: Optional[datetime]
+    latest_evaluation_created_at: Optional[datetime]
+    sample_late_predictions: List[Dict[str, Any]]
+
+
 class CacheFlushResponse(BaseModel):
     flushed: Dict[str, int]
     total: int
@@ -189,6 +214,177 @@ async def get_scheduler_status() -> SchedulerStatus:
             )
         )
     return SchedulerStatus(running=scheduler.running, jobs=jobs)
+
+
+@router.get(
+    "/live-measurement-funnel",
+    response_model=LiveMeasurementFunnel,
+    summary="Diagnose why /trackrecord/live-measurement shows 0/0",
+)
+async def live_measurement_funnel(
+    db: AsyncSession = Depends(get_db),
+) -> LiveMeasurementFunnel:
+    """Return the drop-off at every filter of the live-measurement query.
+
+    The public surface applies four cumulative filters and stays at 0/0 if
+    any one collapses. This endpoint reports the row count at each step so
+    we can tell at a glance whether the issue is: no finished matches yet
+    (paasperiode / end-of-season), the scheduler not running on Railway,
+    fixtures imported after kickoff (``predicted_at >= scheduled_at``), or
+    the evaluation job lagging behind final whistle.
+    """
+    from datetime import timedelta
+    from sqlalchemy import and_, func
+
+    from app.api.routes.trackrecord import LIVE_MEASUREMENT_START
+    from app.models.match import Match, MatchStatus
+    from app.models.prediction import Prediction, PredictionEvaluation
+
+    now = datetime.now(timezone.utc)
+    seven_days_ahead = now + timedelta(days=7)
+
+    finished_since_start = (
+        await db.execute(
+            select(func.count(Match.id)).where(
+                Match.status == MatchStatus.FINISHED,
+                Match.scheduled_at >= LIVE_MEASUREMENT_START,
+            )
+        )
+    ).scalar_one()
+
+    finished_with_any_pred = (
+        await db.execute(
+            select(func.count(func.distinct(Match.id)))
+            .select_from(Match)
+            .join(Prediction, Prediction.match_id == Match.id)
+            .where(
+                Match.status == MatchStatus.FINISHED,
+                Match.scheduled_at >= LIVE_MEASUREMENT_START,
+            )
+        )
+    ).scalar_one()
+
+    live_preds_since_start = (
+        await db.execute(
+            select(func.count(Prediction.id)).where(
+                Prediction.prediction_source == "live",
+                Prediction.created_at >= LIVE_MEASUREMENT_START,
+            )
+        )
+    ).scalar_one()
+
+    pre_match_live = (
+        await db.execute(
+            select(func.count(Prediction.id))
+            .join(Match, Match.id == Prediction.match_id)
+            .where(
+                Prediction.prediction_source == "live",
+                Prediction.created_at >= LIVE_MEASUREMENT_START,
+                Prediction.predicted_at < Match.scheduled_at,
+            )
+        )
+    ).scalar_one()
+
+    pre_match_live_evaluated = (
+        await db.execute(
+            select(func.count(PredictionEvaluation.id))
+            .select_from(PredictionEvaluation)
+            .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
+            .join(Match, Match.id == Prediction.match_id)
+            .where(
+                Prediction.prediction_source == "live",
+                Prediction.created_at >= LIVE_MEASUREMENT_START,
+                Prediction.predicted_at < Match.scheduled_at,
+            )
+        )
+    ).scalar_one()
+
+    upcoming_total = (
+        await db.execute(
+            select(func.count(Match.id)).where(
+                Match.status == MatchStatus.SCHEDULED,
+                Match.scheduled_at >= now,
+                Match.scheduled_at <= seven_days_ahead,
+            )
+        )
+    ).scalar_one()
+
+    upcoming_with_live = (
+        await db.execute(
+            select(func.count(func.distinct(Match.id)))
+            .select_from(Match)
+            .join(Prediction, Prediction.match_id == Match.id)
+            .where(
+                Match.status == MatchStatus.SCHEDULED,
+                Match.scheduled_at >= now,
+                Match.scheduled_at <= seven_days_ahead,
+                Prediction.prediction_source == "live",
+            )
+        )
+    ).scalar_one()
+
+    latest_pred_created = (
+        await db.execute(select(func.max(Prediction.created_at)))
+    ).scalar_one()
+    latest_pred_predicted = (
+        await db.execute(select(func.max(Prediction.predicted_at)))
+    ).scalar_one()
+    latest_eval_created = (
+        await db.execute(select(func.max(PredictionEvaluation.created_at)))
+    ).scalar_one()
+
+    # Up to 5 recent 'live' predictions that were created AFTER kickoff —
+    # if this list is non-empty it confirms the ingestion window is the
+    # cause of the empty live measurement.
+    late_stmt = (
+        select(
+            Prediction.id,
+            Prediction.match_id,
+            Prediction.predicted_at,
+            Match.scheduled_at,
+            Match.status,
+        )
+        .join(Match, Match.id == Prediction.match_id)
+        .where(
+            Prediction.prediction_source == "live",
+            Prediction.created_at >= LIVE_MEASUREMENT_START,
+            Prediction.predicted_at >= Match.scheduled_at,
+        )
+        .order_by(Prediction.created_at.desc())
+        .limit(5)
+    )
+    late_rows = (await db.execute(late_stmt)).all()
+    sample_late = [
+        {
+            "prediction_id": str(r.id),
+            "match_id": str(r.match_id),
+            "predicted_at": r.predicted_at.isoformat() if r.predicted_at else None,
+            "scheduled_at": r.scheduled_at.isoformat() if r.scheduled_at else None,
+            "minutes_late": (
+                int((r.predicted_at - r.scheduled_at).total_seconds() // 60)
+                if (r.predicted_at and r.scheduled_at)
+                else None
+            ),
+            "match_status": r.status.value if r.status else None,
+        }
+        for r in late_rows
+    ]
+
+    return LiveMeasurementFunnel(
+        start_date=LIVE_MEASUREMENT_START.date().isoformat(),
+        now=now,
+        finished_matches_since_start=int(finished_since_start or 0),
+        finished_matches_with_any_prediction=int(finished_with_any_pred or 0),
+        live_predictions_since_start=int(live_preds_since_start or 0),
+        pre_match_live_predictions=int(pre_match_live or 0),
+        pre_match_live_predictions_evaluated=int(pre_match_live_evaluated or 0),
+        upcoming_matches_7d=int(upcoming_total or 0),
+        upcoming_matches_7d_with_live_pred=int(upcoming_with_live or 0),
+        latest_prediction_created_at=latest_pred_created,
+        latest_prediction_predicted_at=latest_pred_predicted,
+        latest_evaluation_created_at=latest_eval_created,
+        sample_late_predictions=sample_late,
+    )
 
 
 @router.get(
