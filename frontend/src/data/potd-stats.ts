@@ -28,19 +28,22 @@
 export const POTD_STATS = {
   /**
    * Gold-tier accuracy (confidence >= 0.70) as a one-decimal percentage.
-   * Source: /api/trackrecord/summary?pick_tier=gold — refreshed 2026-04-18.
-   * Gold tier is the flagship tier shown on all public marketing pages because
-   * it represents the largest volume of premium evaluated predictions (1 650+)
-   * at an honest, compelling win-rate of 70 %+.
+   * Source: /api/trackrecord/summary?pick_tier=gold — refreshed 2026-04-19.
+   * Gold tier is the flagship tier shown on all public marketing pages.
+   *
+   * Note 2026-04-19: sample size dropped from 1 650 → 573 after the
+   * v8.1 deploy filter was tightened (pre-v8.1 predictions are no
+   * longer counted). Accuracy climbed from 70.6% → 77.7% because the
+   * remaining sample is the higher-quality v8.1 stream only.
    */
-  accuracy: "70.6",
+  accuracy: "77.7",
   /** Total Gold-tier picks evaluated — human-formatted string. */
-  totalPicks: "1650",
+  totalPicks: "573",
   /**
    * NL-formatted accuracy using the Dutch decimal comma.
    * Keep in sync with `accuracy` above.
    */
-  accuracyNL: "70,6",
+  accuracyNL: "77,7",
   /** ISO date of the last manual refresh — bump when numbers change. */
-  lastReviewed: "2026-04-18",
+  lastReviewed: "2026-04-19",
 } as const;

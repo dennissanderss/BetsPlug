@@ -32,6 +32,7 @@ import {
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { POTD_STATS } from "@/data/potd-stats";
 
 export function RecognizeThis() {
   const { locale } = useTranslations();
@@ -509,8 +510,8 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
             </p>
             <p className="mt-0.5 text-[11px] leading-relaxed text-[#a3a9b8]">
               {isNl
-                ? "70,6% raak over 1.650 beoordeelde Gold-picks. Openbaar, niets verwijderd."
-                : "70.6% hit rate across 1,650 graded Gold picks. Public, nothing deleted."}
+                ? `${POTD_STATS.accuracyNL}% raak over ${POTD_STATS.totalPicks} beoordeelde Gold-picks. Openbaar, niets verwijderd.`
+                : `${POTD_STATS.accuracy}% hit rate across ${POTD_STATS.totalPicks} graded Gold picks. Public, nothing deleted.`}
             </p>
           </div>
         </div>

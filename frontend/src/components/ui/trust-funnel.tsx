@@ -145,30 +145,34 @@ export function TrustFunnel() {
     {
       icon: Database,
       value: `${fmt(matchesIngested)}+`,
-      label: isNl ? "Gespeelde wedstrijden in onze database" : "Played matches in our database",
+      label: isNl
+        ? "Ruwe wedstrijden in onze database"
+        : "Raw matches in our database",
       desc: isNl
-        ? "Verzameld via betaalde data-licenties. Alle grote competities, meerdere seizoenen terug."
-        : "Collected through paid data licences. Every major league, multiple seasons back.",
+        ? "Verzameld via betaalde data-licenties, alle competities en seizoenen terug. De meeste komen uit lagere divisies of niche-landen — daar doen wij bewust geen uitspraken over."
+        : "Collected through paid data licences across every league and season we have access to. Most of them are lower divisions or niche countries — we deliberately do not publish predictions for those.",
       variant: "blue",
     },
     {
       icon: Brain,
       value: fmt(forecastsTotal),
       label: isNl
-        ? "Geanalyseerd door ons huidige AI-model"
-        : "Analysed by our current AI model",
+        ? "Voorspellingen met onze huidige AI (v8.1)"
+        : "Predictions from our current AI (v8.1)",
       desc: isNl
-        ? "Onze huidige modelversie is losgelaten op deze wedstrijden. Oudere modelversies zijn gearchiveerd, niet verstopt, maar ook niet meegeteld in onze cijfers."
-        : "Our current model version was run against these matches. Older model versions are archived, not hidden, but not counted in our numbers either.",
+        ? "We voorspellen alléén op onze 14 kern-competities (Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Champions League, Eredivisie, Championship, etc.) — daar hebben we genoeg historische diepte om eerlijke cijfers te staven. Oudere modelversies zijn gearchiveerd, niet meegeteld."
+        : "We only publish predictions for our 14 core competitions (Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Champions League, Eredivisie, Championship, etc.) — that's where we have the historical depth to back our numbers. Older model versions are archived, not counted.",
       variant: "purple",
     },
     {
       icon: ClipboardCheck,
       value: fmt(evaluatedTotal),
-      label: isNl ? "Wedstrijden in onze dataset" : "Matches in our dataset",
+      label: isNl
+        ? "Daarvan al gespeeld en beoordeeld"
+        : "Of those, already played and graded",
       desc: isNl
-        ? "Elke wedstrijd wordt vergeleken met de modelvoorspelling en het resultaat vastgelegd. Geen kersenpluk, geen verborgen verliezers. Hieronder zie je hoe het model presteert per betrouwbaarheidsdrempel."
-        : "Every match is compared to the model forecast and the result is recorded. No cherry-picking, no hidden losers. Below you can see how the model performs per confidence threshold.",
+        ? "Elke wedstrijd in dit getal is uitgespeeld, de uitslag staat vast, en onze voorspelling is publiek vergeleken met wat er écht gebeurde. Geen kersenpluk, geen verborgen verliezers. Hieronder zie je hoe het model het doet per betrouwbaarheidsdrempel."
+        : "Every match in this number has been played, the result is final, and our prediction is publicly compared against what actually happened. No cherry-picking, no hidden losers. Below is the model's performance per confidence threshold.",
       variant: "green",
     },
   ];
