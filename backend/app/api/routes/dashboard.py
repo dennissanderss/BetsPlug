@@ -84,7 +84,7 @@ async def get_dashboard_metrics(
     # Cache key is tier-aware so each tier sees its own numbers.
     # Version bump (v2) invalidates stale caches that were computed before
     # per_tier stopped being access-filtered (Bug 1 fix, 2026-04).
-    cache_key = f"dashboard:metrics:v2:{user_tier.name.lower()}"
+    cache_key = f"dashboard:metrics:v3:{user_tier.name.lower()}"
     cached = await cache_get(cache_key)
     if cached is not None:
         return DashboardMetrics(**cached)
@@ -170,31 +170,11 @@ async def get_dashboard_metrics(
     # only the aggregate breakdown is fully visible.
     per_tier: Optional[Dict[str, DashboardTierBreakdown]] = None
     if TIER_SYSTEM_ENABLED:
-        from sqlalchemy import Integer
-        # Evaluate pick_tier_expression() ONCE and reuse the same element in
-        # SELECT and GROUP BY. Two separate calls produce two CASE expressions
-        # with different bind parameter IDs, which PostgreSQL treats as
-        # non-equivalent and rejects with "must appear in GROUP BY clause".
-        tier_expr = pick_tier_expression()
-        per_tier_q = (
-            select(
-                tier_expr,
-                func.count(PredictionEvaluation.id).label("total"),
-                func.sum(func.cast(PredictionEvaluation.is_correct, Integer)).label("correct"),
-            )
-            .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
-            .join(Match, Match.id == Prediction.match_id)
-            .where(_v81)
-            # NOTE: intentionally no access_filter here — see comment above.
-            .group_by(tier_expr)
-        )
-        rows = (await db.execute(per_tier_q)).all()
+        from app.core.aggregate_queries import per_tier_evaluated_stmt
+        rows = (await db.execute(per_tier_evaluated_stmt())).all()
         per_tier = {}
         for tier_int, t_total, t_correct in rows:
-            # Skip the NULL bucket that pick_tier_expression() returns
-            # for rows that don't qualify for ANY tier (conf<0.55, or
-            # match outside every LEAGUES_* whitelist). Without this
-            # guard int(tier_int) crashes with TypeError.
+            # Skip NULL-tier rows (conf<0.55 or outside whitelist).
             if tier_int is None or not t_total:
                 continue
             t_int = int(tier_int)
