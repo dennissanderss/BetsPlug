@@ -508,7 +508,7 @@ const en = {
   "pricingDeep.hero.label": "Less than one bad bet per month",
   "pricingDeep.hero.titleA": "The BetsPlug plan built for",
   "pricingDeep.hero.titleB": "your betting style.",
-  "pricingDeep.hero.subtitle": "Every plan runs on the same AI engine and the same public track record. The difference is which quality tier of picks you unlock: ⬜ Free (45%+ accuracy, top-14 leagues), ⚪ Silver (60%+, top-14 leagues), 🔵 Gold (70%+, top-10 leagues) or 🟢 Platinum elite (80%+, top-5 leagues). Start with a €0,01 trial, upgrade when the tier above pays for itself, or lock in lifetime pricing before it goes up.",
+  "pricingDeep.hero.subtitle": "Every plan runs on the same AI engine and the same public track record. The higher your tier, the sharper the picks — start with a €0,01 trial and keep going only if it pays for itself.",
   "pricingDeep.hero.subtitleQuality": "quality tier",
 
   "pricingDeep.planPrefix": "Plan ·",
@@ -3908,7 +3908,7 @@ const nl: Dictionary = {
   "pricingDeep.hero.label": "Minder dan één slechte voorspelling per maand",
   "pricingDeep.hero.titleA": "Het BetsPlug-plan gemaakt voor",
   "pricingDeep.hero.titleB": "jouw gokstijl.",
-  "pricingDeep.hero.subtitle": "Elk plan draait op dezelfde AI-engine en hetzelfde publieke trackrecord. Het verschil is welke kwaliteits-tier picks je ontgrendelt: ⬜ Free (45%+ nauwkeurigheid, top-14 competities), ⚪ Silver (60%+, top-14 competities), 🔵 Gold (70%+, top-10 competities) of 🟢 Platinum elite (80%+, top-5 competities). Start met een proefperiode van € 0,01, upgrade zodra de tier erboven zichzelf terugbetaalt, of leg levenslange prijs vast voordat die omhoog gaat.",
+  "pricingDeep.hero.subtitle": "Elk plan draait op dezelfde AI-engine en hetzelfde publieke trackrecord. Hoe hoger je tier, hoe scherper de picks — start met een € 0,01 proef en ga alleen verder als het zichzelf terugbetaalt.",
   "pricingDeep.hero.subtitleQuality": "kwaliteits-tier",
 
   "pricingDeep.planPrefix": "Plan ·",
