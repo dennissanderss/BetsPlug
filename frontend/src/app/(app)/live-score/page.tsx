@@ -48,15 +48,9 @@ function formatTime(iso: string): string {
   }
 }
 
-function formatMatchDate(
-  iso: string,
-  locale: string,
-  todayLabel: string,
-): string {
+function formatMatchDate(iso: string, locale: string): string {
   try {
     const d = new Date(iso);
-    const now = new Date();
-    if (d.toDateString() === now.toDateString()) return todayLabel;
     const bcp = locale === "nl" ? "nl-NL" : "en-GB";
     return d.toLocaleDateString(bcp, { day: "numeric", month: "short" });
   } catch {
@@ -91,8 +85,7 @@ function ScoreCell({ fixture }: { fixture: Fixture }) {
 
 function StatusCell({ fixture }: { fixture: Fixture }) {
   const { locale } = useTranslations();
-  const todayLabel = locale === "nl" ? "Vandaag" : "Today";
-  const dateLabel = formatMatchDate(fixture.scheduled_at, locale, todayLabel);
+  const dateLabel = formatMatchDate(fixture.scheduled_at, locale);
 
   let inner: ReactNode;
   if (fixture.status === "live") {
