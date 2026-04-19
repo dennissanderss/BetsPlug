@@ -71,6 +71,18 @@ async def job_sync_data():
 
         log.info("CRON: Full sync done — created=%d updated=%d errors=%d",
                  total_created, total_updated, total_errors)
+
+        # Chain: if any new matches were ingested, trigger prediction
+        # generation immediately so freshly imported fixtures get their
+        # pre-match 'live' lock without waiting for the next 10-min cycle.
+        # Failures are non-fatal — the interval job will catch up on its
+        # next run anyway.
+        if total_created > 0:
+            try:
+                log.info("CRON: Chaining generate_predictions after sync (created=%d).", total_created)
+                await job_generate_predictions()
+            except Exception as chain_exc:
+                log.warning("CRON: Chained generate_predictions failed: %s", chain_exc)
     except Exception as exc:
         log.error("CRON: Data sync failed: %s", exc, exc_info=True)
 
@@ -839,20 +851,25 @@ def start_scheduler():
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=2),
     )
 
-    # Generate predictions every 6 hours (30 min after sync)
+    # Generate predictions every 10 minutes so newly ingested fixtures get
+    # a pre-match 'live' lock quickly. Previous cadence (6h) meant matches
+    # imported between cycles missed their pre-match window entirely,
+    # leaving /trackrecord/live-measurement permanently near-empty.
     scheduler.add_job(
         job_generate_predictions,
-        trigger=IntervalTrigger(hours=6),
+        trigger=IntervalTrigger(minutes=10),
         id="generate_predictions",
         name="Generate predictions",
         replace_existing=True,
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=5),
     )
 
-    # Evaluate predictions every 6 hours (1 hour after sync)
+    # Evaluate predictions every 20 minutes so finished matches surface in
+    # dashboards within ~20 min of final whistle. Previous cadence (6h)
+    # caused visible lag on /dashboard and /trackrecord.
     scheduler.add_job(
         job_evaluate_predictions,
-        trigger=IntervalTrigger(hours=6),
+        trigger=IntervalTrigger(minutes=20),
         id="evaluate_predictions",
         name="Evaluate predictions",
         replace_existing=True,
