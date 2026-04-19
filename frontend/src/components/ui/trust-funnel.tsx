@@ -189,25 +189,11 @@ export function TrustFunnel() {
             {isNl ? "Nauwkeurigheid per tier" : "Accuracy per tier"}
           </p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <TierBreakdownCard
-              tier="silver"
-              accuracy={silver.accuracy}
-              total={silver.total}
-              locale={locale}
-              isNl={isNl}
-            />
-            <TierBreakdownCard
-              tier="gold"
-              accuracy={gold.accuracy}
-              total={gold.total}
-              locale={locale}
-              isNl={isNl}
-            />
+            <TierBreakdownCard tier="silver" accuracy={silver.accuracy} isNl={isNl} />
+            <TierBreakdownCard tier="gold" accuracy={gold.accuracy} isNl={isNl} />
             <TierBreakdownCard
               tier="platinum"
               accuracy={platinum.accuracy}
-              total={platinum.total}
-              locale={locale}
               isNl={isNl}
               highlight
             />
@@ -260,37 +246,16 @@ export function TrustFunnel() {
 function TierBreakdownCard({
   tier,
   accuracy,
-  total,
-  locale,
   isNl,
   highlight = false,
 }: {
   tier: TierKey;
   accuracy: number;
-  total: number;
-  locale: string;
   isNl: boolean;
   highlight?: boolean;
 }) {
   const theme = TIER_THEME[tier];
   const pctStr = `${(accuracy * 100).toFixed(1).replace(".", isNl ? "," : ".")}%`;
-  const totalStr = total.toLocaleString(locale);
-
-  // Wilson 95% CI — one-line honesty signal. For the quant-minded
-  // users the band is small on these populations (n=840+ everywhere),
-  // but surfacing it pre-empts the "point estimate ≠ truth" critique.
-  const ci = (() => {
-    if (total <= 0) return null;
-    const z = 1.96;
-    const p = accuracy;
-    const denom = 1 + (z * z) / total;
-    const centre = p + (z * z) / (2 * total);
-    const margin = z * Math.sqrt((p * (1 - p) + (z * z) / (4 * total)) / total);
-    return {
-      lower: Math.max(0, (centre - margin) / denom),
-      upper: Math.min(1, (centre + margin) / denom),
-    };
-  })();
 
   return (
     <div
@@ -320,16 +285,6 @@ function TierBreakdownCard({
       <p className="text-stat relative mt-3 text-3xl leading-none text-[#ededed]">
         {pctStr}
       </p>
-      <p className="relative mt-1 text-xs text-[#a3a9b8]">
-        {isNl ? "over" : "across"}{" "}
-        <span className="font-semibold text-[#ededed]">{totalStr}</span>{" "}
-        {isNl ? "picks" : "picks"}
-      </p>
-      {ci && (
-        <p className="relative mt-1 text-[10px] text-[#6b7280] tabular-nums">
-          95% CI {(ci.lower * 100).toFixed(0)}–{(ci.upper * 100).toFixed(0)}%
-        </p>
-      )}
       {tier === "bronze" ? (
         <div className="relative mt-3 flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-widest text-[#22c55e]">
           <Unlock className="h-3 w-3" />
