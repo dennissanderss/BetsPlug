@@ -245,16 +245,30 @@ async def get_free_picks(
         selectinload(Prediction.match).selectinload(Match.result),
     ]
 
-    # ── Upcoming: top 3 premium-confidence picks (next 14 days) ──
-    # Floor lifted from the Free 45% to the Silver 60% threshold so
-    # the homepage hero only shows the model's strong picks. The
-    # teams + kickoff are blurred on the public page, and advertising
-    # a "premium sneak peek" while leaking 42%/44%/50% coin-flips made
-    # the proposition look weak on first glance. On unusually quiet
-    # match days the fallback block below backfills with scheduled
-    # fixtures that lack predictions, so the card is never empty.
-    SILVER_CONFIDENCE_FLOOR = 0.60
-    upcoming_cutoff = now + timedelta(days=14)
+    # ── Upcoming: top 3 strongest upcoming picks (next 21 days) ──
+    # Earlier iterations ordered by `Prediction.confidence` and were
+    # showing 42%/44%/50% on the homepage. Root cause: the stored
+    # `confidence` is a calibrated score (for legacy models it is the
+    # normalisation `(max_prob - 1/3) / (2/3)`), not the raw winning-
+    # side probability we render to the visitor. A pick with
+    # confidence = 0.65 can still have a max probability of ~0.42,
+    # so filtering / sorting on `confidence` gave us false-positive
+    # "strong" picks.
+    #
+    # The fix: sort on the SQL GREATEST of the three outcome probs,
+    # which is exactly the number displayed as the green win-kans
+    # chip in the hero widget. Filter anything below 0.55 to keep the
+    # premium framing ("our best picks, blurred") honest. Window is
+    # widened to 21 days so end-of-season quiet weeks don't starve
+    # the card.
+    from sqlalchemy import func as _func
+    max_prob_expr = _func.greatest(
+        Prediction.home_win_prob,
+        _func.coalesce(Prediction.draw_prob, 0.0),
+        Prediction.away_win_prob,
+    )
+    VISIBLE_WIN_PROB_FLOOR = 0.55
+    upcoming_cutoff = now + timedelta(days=21)
     today_stmt = (
         select(Prediction)
         .join(Match, Match.id == Prediction.match_id)
@@ -264,14 +278,14 @@ async def get_free_picks(
                 Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
                 Match.scheduled_at >= now,
                 Match.scheduled_at <= upcoming_cutoff,
-                Prediction.confidence >= SILVER_CONFIDENCE_FLOOR,
+                max_prob_expr >= VISIBLE_WIN_PROB_FLOOR,
             )
         )
-        .order_by(Prediction.confidence.desc())
+        .order_by(max_prob_expr.desc())
         .limit(3)
     )
     # Keep the Free access scope — any user (or anonymous visitor) can
-    # see these picks; the confidence floor above is what makes the
+    # see these picks; the max-prob floor above is what makes the
     # selection premium, not the tier membership.
     if TIER_SYSTEM_ENABLED:
         today_stmt = today_stmt.where(access_filter(PickTier.FREE))
