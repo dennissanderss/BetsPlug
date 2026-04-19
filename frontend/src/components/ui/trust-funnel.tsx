@@ -24,8 +24,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { Database, Brain, ClipboardCheck, ShieldCheck, ArrowRight, Lock, Unlock } from "lucide-react";
-import { HexBadge } from "@/components/noct/hex-badge";
+import { ShieldCheck, ArrowRight, Lock, Unlock } from "lucide-react";
 import { TierEmblem } from "@/components/noct/tier-emblem";
 import { TIER_THEME, type TierKey } from "@/components/noct/tier-theme";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
@@ -107,12 +106,7 @@ export function TrustFunnel() {
   const live = useTrustData();
 
   // Merge live with fallback, never render zero / dash in a marketing section
-  const matchesIngested = FALLBACK.matchesIngested; // static (we don't expose a matches-count endpoint)
-  const forecastsTotal = live.forecastsTotal ?? FALLBACK.forecastsTotal;
   const evaluatedTotal = live.evaluatedTotal ?? FALLBACK.evaluatedTotal;
-  // Bronze is no longer rendered in the tier-breakdown strip, but
-  // the live-data hook still returns it so the downstream shape
-  // remains stable for any future re-introduction.
   const silver = {
     total: live.silver.total ?? FALLBACK.silver.total,
     accuracy: live.silver.accuracy ?? FALLBACK.silver.accuracy,
@@ -127,55 +121,9 @@ export function TrustFunnel() {
   };
   // Don't sum silver+gold+platinum totals. The pick_tier thresholds
   // are cumulative (confidence >= 0.65 / 0.70 / 0.75), so a Platinum
-  // pick is also counted under Gold and Silver in the backend — adding
-  // them double- and triple-counts. Silver already represents "every
-  // pick that cleared the lowest premium threshold".
+  // pick is also counted under Gold and Silver in the backend.
 
   const fmt = (n: number) => n.toLocaleString(locale);
-  const pct = (n: number) =>
-    `${(n * 100).toFixed(1).replace(".", isNl ? "," : ".")}%`;
-
-  const steps: {
-    icon: typeof Database;
-    value: string;
-    label: string;
-    desc: string;
-    variant: "green" | "blue" | "purple";
-  }[] = [
-    {
-      icon: Database,
-      value: `${fmt(matchesIngested)}+`,
-      label: isNl
-        ? "Ruwe wedstrijden in onze database"
-        : "Raw matches in our database",
-      desc: isNl
-        ? "Verzameld via betaalde data-licenties, alle competities en seizoenen terug. De meeste komen uit lagere divisies of niche-landen — daar doen wij bewust geen uitspraken over."
-        : "Collected through paid data licences across every league and season we have access to. Most of them are lower divisions or niche countries — we deliberately do not publish predictions for those.",
-      variant: "blue",
-    },
-    {
-      icon: Brain,
-      value: fmt(forecastsTotal),
-      label: isNl
-        ? "Voorspellingen met onze huidige AI (v8.1)"
-        : "Predictions from our current AI (v8.1)",
-      desc: isNl
-        ? "We voorspellen alléén op onze 14 kern-competities (Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Champions League, Eredivisie, Championship, etc.) — daar hebben we genoeg historische diepte om eerlijke cijfers te staven. Oudere modelversies zijn gearchiveerd, niet meegeteld."
-        : "We only publish predictions for our 14 core competitions (Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Champions League, Eredivisie, Championship, etc.) — that's where we have the historical depth to back our numbers. Older model versions are archived, not counted.",
-      variant: "purple",
-    },
-    {
-      icon: ClipboardCheck,
-      value: fmt(evaluatedTotal),
-      label: isNl
-        ? "Daarvan al gespeeld en beoordeeld"
-        : "Of those, already played and graded",
-      desc: isNl
-        ? "Elke wedstrijd in dit getal is uitgespeeld, de uitslag staat vast, en onze voorspelling is publiek vergeleken met wat er écht gebeurde. Geen kersenpluk, geen verborgen verliezers. Hieronder zie je hoe het model het doet per betrouwbaarheidsdrempel."
-        : "Every match in this number has been played, the result is final, and our prediction is publicly compared against what actually happened. No cherry-picking, no hidden losers. Below is the model's performance per confidence threshold.",
-      variant: "green",
-    },
-  ];
 
   return (
     <section className="relative overflow-hidden py-20 md:py-28">
@@ -198,89 +146,31 @@ export function TrustFunnel() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5 }}
-          className="mb-14 text-center"
+          className="mb-10 text-center"
         >
           <span className="section-label mx-auto">
             <ShieldCheck className="h-3 w-3" />
-            {isNl ? "Hoe onze modelprestaties tot stand komen" : "How our model numbers are built"}
+            {isNl ? "Openbaar trackrecord" : "Public track record"}
           </span>
           <h2 className="text-heading mt-5 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
             {isNl ? (
               <>
-                Van <span className="gradient-text-green">55.000+ wedstrijden</span> naar{" "}
-                <span className="gradient-text-green">verzamelde data van {fmt(evaluatedTotal)} wedstrijden</span>
+                Elke voorspelling{" "}
+                <span className="gradient-text-green">openbaar beoordeeld</span>.
               </>
             ) : (
               <>
-                From <span className="gradient-text-green">55 000+ matches</span> to{" "}
-                <span className="gradient-text-green">collected data from {fmt(evaluatedTotal)} matches</span>
+                Every prediction{" "}
+                <span className="gradient-text-green">publicly graded</span>.
               </>
             )}
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
             {isNl
-              ? "Onze cijfers komen uit modelanalyse op historische wedstrijden. Het model ziet bij elke wedstrijd alleen informatie die op dat moment bekend was, nooit wat er daarna gebeurde. Zo komen we stap voor stap bij onze modelprestaties:"
-              : "Our numbers come from model analysis on historical matches. At every match the model only sees information that was available at that moment, never what happened after. Here's how we build the model-performance number step by step:"}
+              ? `We publiceren alleen op onze 14 kern-competities. Elke voorspelling wordt pre-match gelockt en na afloop vergeleken met de echte uitslag — geen kersenpluk, geen verborgen verliezers. Hieronder zie je hoe het model presteert per vertrouwensdrempel, over ${fmt(evaluatedTotal)} beoordeelde picks.`
+              : `We only publish on our 14 core competitions. Every prediction is locked pre-match and compared against the real result — no cherry-picking, no hidden losers. Below is how the model performs per confidence threshold, across ${fmt(evaluatedTotal)} graded picks.`}
           </p>
         </motion.div>
-
-        {/* Funnel steps */}
-        <div className="relative space-y-4">
-          {steps.map((step, i) => {
-            const Icon = step.icon;
-            const isLast = i === steps.length - 1;
-            return (
-              <motion.div
-                key={step.label}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.45, delay: i * 0.07 }}
-                className="relative"
-              >
-                <div
-                  className={`card-neon card-neon-${step.variant} relative overflow-hidden rounded-2xl`}
-                >
-                  <div className="relative grid items-center gap-4 p-6 sm:grid-cols-[auto_auto_1fr] sm:gap-6">
-                    {/* Icon */}
-                    <HexBadge variant={step.variant} size="md">
-                      <Icon className="h-5 w-5" />
-                    </HexBadge>
-
-                    {/* Big number */}
-                    <div className="min-w-[160px]">
-                      <p className="text-stat text-4xl leading-none text-[#ededed] sm:text-5xl">
-                        {step.value}
-                      </p>
-                    </div>
-
-                    {/* Label + description */}
-                    <div className="min-w-0">
-                      <p className="text-sm font-bold uppercase tracking-wider text-[#ededed] sm:text-base">
-                        {step.label}
-                      </p>
-                      <p className="mt-2 text-sm leading-relaxed text-[#a3a9b8]">
-                        {step.desc}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Connector arrow between steps */}
-                {!isLast && (
-                  <div
-                    aria-hidden
-                    className="pointer-events-none relative -mb-2 -mt-1 flex justify-center"
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.1] bg-[#0f1420]">
-                      <ArrowRight className="h-3.5 w-3.5 rotate-90 text-[#4ade80]" />
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
 
         {/* Tier-breakdown card. Bronze was removed because its number
             is the full-sample accuracy (60.1%) which read to visitors
