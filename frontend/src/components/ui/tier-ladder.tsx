@@ -147,10 +147,7 @@ export function TierLadder() {
               row.accuracy != null && row.accuracy > 0
                 ? row.accuracy
                 : FALLBACK[tierKey].accuracy;
-            const totalNum =
-              row.total != null && row.total > 0 ? row.total : FALLBACK[tierKey].total;
             const accStr = `${(accuracyNum * 100).toFixed(1).replace(".", isNl ? "," : ".")}%`;
-            const totalStr = totalNum.toLocaleString(locale);
 
             return (
               <motion.div
@@ -187,11 +184,6 @@ export function TierLadder() {
                   </h3>
                   <p className="text-stat mt-1 text-4xl leading-none text-[#ededed]">
                     {accStr}
-                  </p>
-                  <p className="mt-2 text-xs text-[#a3a9b8]">
-                    {isNl ? "over" : "across"}{" "}
-                    <span className="font-semibold text-[#ededed]">{totalStr}</span>{" "}
-                    {isNl ? "beoordeelde picks" : "graded picks"}
                   </p>
 
                   <div className="mt-4 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
