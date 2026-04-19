@@ -34,16 +34,20 @@ export function useBotdTrackRecord(): BotdTrackRecord | null {
 
   useEffect(() => {
     const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-    fetch(`${API}/bet-of-the-day/track-record`)
+    // Use /model-validation (not /track-record) because /track-record
+    // returns zero rows when only future live picks exist, producing a
+    // misleading "0% accuracy on 8 picks" tile on marketing surfaces.
+    // /model-validation returns the same source the track-record page uses.
+    fetch(`${API}/bet-of-the-day/model-validation?limit=1`)
       .then((r) => r.json())
       .then((d: unknown) => {
-        const record = d as Partial<BotdTrackRecord> | null;
-        if (record && typeof record.accuracy_pct === "number") {
+        const summary = (d as { summary?: Partial<BotdTrackRecord> } | null)?.summary;
+        if (summary && typeof summary.accuracy_pct === "number") {
           setData({
-            accuracy_pct: record.accuracy_pct,
-            total_picks: record.total_picks ?? 0,
-            correct: record.correct ?? 0,
-            evaluated: record.evaluated ?? 0,
+            accuracy_pct: summary.accuracy_pct,
+            total_picks: summary.total_picks ?? 0,
+            correct: summary.correct ?? 0,
+            evaluated: summary.evaluated ?? 0,
           });
         }
       })

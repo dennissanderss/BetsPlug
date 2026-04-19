@@ -154,6 +154,9 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
       {/* ───────────── TIER FLOW ───────────── */}
       <TierFlowSection />
 
+      {/* ───────────── ACCURACY vs CONFIDENCE ───────────── */}
+      <AccuracyVsConfidenceSection />
+
       {/* ───────────── STEP 1 ───────────── */}
       <StageSection
         badge={t("hiw.step1Badge")}
@@ -1143,5 +1146,206 @@ function FunnelStep({
         </div>
       </div>
     </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Accuracy vs Confidence, plain-language side-by-side explainer
+   ───────────────────────────────────────────────────────────── */
+
+function AccuracyVsConfidenceSection() {
+  const { t } = useTranslations();
+
+  // Deterministic 10-dot strip: 7 correct (green), 3 wrong (red) = 70%.
+  const accuracyDots = Array.from({ length: 10 }, (_, i) => i < 7);
+
+  return (
+    <section className="relative overflow-hidden py-20 md:py-28">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-20 h-[440px] w-[600px] -translate-x-1/2 rounded-full"
+        style={{ background: "hsl(var(--accent-blue) / 0.1)", filter: "blur(160px)" }}
+      />
+
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6 }}
+          className="mx-auto mb-12 max-w-3xl text-center"
+        >
+          <span className="section-label mb-4 inline-flex items-center gap-2">
+            <BarChart3 className="h-3 w-3" />
+            {t("hiw.calibBadge")}
+          </span>
+          <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+            {t("hiw.calibTitleA")}{" "}
+            <span className="gradient-text-green">{t("hiw.calibTitleB")}</span>
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-[#a3a9b8]">
+            {t("hiw.calibSubtitle")}
+          </p>
+        </motion.div>
+
+        <div className="grid gap-5 md:grid-cols-2">
+          {/* Accuracy card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6 }}
+            className="card-neon card-neon-green rounded-3xl"
+          >
+            <div className="relative p-6 sm:p-8">
+              <div className="mb-5 flex items-center gap-3">
+                <HexBadge variant="green" size="md">
+                  <Target className="h-5 w-5" />
+                </HexBadge>
+                <div>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                    {t("hiw.calibAccLabel")}
+                  </span>
+                  <h3 className="text-lg font-semibold text-[#ededed] sm:text-xl">
+                    {t("hiw.calibAccTitle")}
+                  </h3>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed text-[#a3a9b8]">
+                {t("hiw.calibAccDef")}
+              </p>
+
+              {/* 10-dot strip */}
+              <div className="mt-6 rounded-2xl bg-black/30 p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-[#a3a9b8]">
+                    {t("hiw.calibAccExampleLabel")}
+                  </span>
+                  <span className="text-stat text-2xl leading-none text-[#4ade80]">
+                    70%
+                  </span>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {accuracyDots.map((ok, i) => (
+                    <span
+                      key={i}
+                      className={
+                        "flex h-7 w-7 items-center justify-center rounded-md text-[10px] font-bold " +
+                        (ok
+                          ? "bg-[#4ade80]/15 text-[#4ade80] ring-1 ring-[#4ade80]/30"
+                          : "bg-red-500/10 text-red-400 ring-1 ring-red-500/20")
+                      }
+                    >
+                      {ok ? "✓" : "✗"}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-3 text-[11px] text-[#a3a9b8]">
+                  {t("hiw.calibAccExampleDesc")}
+                </p>
+              </div>
+
+              <div className="mt-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+                <p className="text-[11px] leading-relaxed text-[#a3a9b8]">
+                  <span className="font-semibold text-[#ededed]">
+                    {t("hiw.calibAccRealityLabel")}
+                  </span>{" "}
+                  {t("hiw.calibAccRealityDesc")}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Confidence card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="card-neon card-neon-blue rounded-3xl"
+          >
+            <div className="relative p-6 sm:p-8">
+              <div className="mb-5 flex items-center gap-3">
+                <HexBadge variant="blue" size="md">
+                  <Gauge className="h-5 w-5" />
+                </HexBadge>
+                <div>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-[#60a5fa]">
+                    {t("hiw.calibConfLabel")}
+                  </span>
+                  <h3 className="text-lg font-semibold text-[#ededed] sm:text-xl">
+                    {t("hiw.calibConfTitle")}
+                  </h3>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed text-[#a3a9b8]">
+                {t("hiw.calibConfDef")}
+              </p>
+
+              {/* Gauge-like bar */}
+              <div className="mt-6 rounded-2xl bg-black/30 p-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-[#a3a9b8]">
+                    {t("hiw.calibConfExampleLabel")}
+                  </span>
+                  <span className="text-stat text-2xl leading-none text-[#60a5fa]">
+                    75%
+                  </span>
+                </div>
+                <div className="relative mt-3 h-3 overflow-hidden rounded-full bg-white/[0.06]">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: "75%",
+                      background: "linear-gradient(90deg, #60a5fa, #3b82f6)",
+                    }}
+                  />
+                </div>
+                <div className="mt-1.5 flex justify-between text-[9px] tabular-nums text-[#6b7280]">
+                  <span>0%</span>
+                  <span>50%</span>
+                  <span>100%</span>
+                </div>
+                <p className="mt-3 text-[11px] text-[#a3a9b8]">
+                  {t("hiw.calibConfExampleDesc")}
+                </p>
+              </div>
+
+              <div className="mt-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+                <p className="text-[11px] leading-relaxed text-[#a3a9b8]">
+                  <span className="font-semibold text-[#ededed]">
+                    {t("hiw.calibConfRealityLabel")}
+                  </span>{" "}
+                  {t("hiw.calibConfRealityDesc")}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Bottom calibration note */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-8 rounded-2xl border border-[#4ade80]/20 bg-[#4ade80]/[0.04] p-5 sm:p-6"
+        >
+          <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#4ade80]/15 text-[#4ade80]">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <div className="flex-1">
+              <h4 className="text-sm font-semibold text-[#ededed] sm:text-base">
+                {t("hiw.calibBottomTitle")}
+              </h4>
+              <p className="mt-1 text-[12px] leading-relaxed text-[#a3a9b8] sm:text-sm">
+                {t("hiw.calibBottomDesc")}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
   );
 }

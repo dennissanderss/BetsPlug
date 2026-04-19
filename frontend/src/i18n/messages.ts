@@ -1105,6 +1105,35 @@ const en = {
   "hiw.flowBarsFooter":
     "Higher tier = stricter filter = fewer picks but higher accuracy. That's the whole trade-off.",
 
+  /* Accuracy vs Confidence explainer */
+  "hiw.calibBadge": "Two numbers, two meanings",
+  "hiw.calibTitleA": "Accuracy and confidence",
+  "hiw.calibTitleB": "are not the same thing.",
+  "hiw.calibSubtitle":
+    "Tipsters love to blur the line. We don't. One is a claim we make before kickoff, the other is the score we prove afterwards. Here's the plain-English version.",
+  "hiw.calibAccLabel": "After the fact",
+  "hiw.calibAccTitle": "Accuracy",
+  "hiw.calibAccDef":
+    "How many picks actually turned out to be right. Measured after the final whistle, not guessed before.",
+  "hiw.calibAccExampleLabel": "Example · 10 picks",
+  "hiw.calibAccExampleDesc": "7 wins, 3 losses → accuracy = 70%.",
+  "hiw.calibAccRealityLabel": "Reality check:",
+  "hiw.calibAccRealityDesc":
+    "A coin flip on home / draw / away is ~33%. Anything above 33% is a real edge. Our Silver tier sits at 60%+, Gold at 70%+, Platinum at 80%+.",
+  "hiw.calibConfLabel": "Before the kickoff",
+  "hiw.calibConfTitle": "Confidence",
+  "hiw.calibConfDef":
+    "How sure the model is before the match — a self-rating from 0% to 100%. The tier threshold filters on this number.",
+  "hiw.calibConfExampleLabel": "Example · model says",
+  "hiw.calibConfExampleDesc":
+    "A 75% confidence pick means: across many similar picks, this outcome should win about 75% of the time.",
+  "hiw.calibConfRealityLabel": "Reality check:",
+  "hiw.calibConfRealityDesc":
+    "Confidence is a promise. If we say 75% and only 55% actually win, the model is overconfident. That's why we track both openly.",
+  "hiw.calibBottomTitle": "Calibrated = the two lines match",
+  "hiw.calibBottomDesc":
+    "A well-built model has accuracy that mirrors its confidence. If we publish a 70% pick, it should hit ~70% over time. You can check it live on the track record page — every pick, win or loss.",
+
   /* Bet of the Day dedicated section */
   "hiw.botdBadge": "Bet of the Day",
   "hiw.botdTitleA": "One pick a day.",
@@ -3338,6 +3367,34 @@ const nl: Dictionary = {
   "hiw.flowBarNoneDesc": "Modellen oneens of de voorsprong op de markt is te klein. Deze blijven op de bank in plaats van ze op te kloppen tot een pick.",
   "hiw.flowBarsFooter":
     "Hogere tier = strengere filter = minder picks maar hogere nauwkeurigheid. Dat is de volledige afweging.",
+
+  "hiw.calibBadge": "Twee cijfers, twee betekenissen",
+  "hiw.calibTitleA": "Nauwkeurigheid en betrouwbaarheid",
+  "hiw.calibTitleB": "zijn niet hetzelfde.",
+  "hiw.calibSubtitle":
+    "Tipsters vervagen de lijn graag. Wij niet. De één is een belofte die we vóór de aftrap doen, de ander is het cijfer dat we ná afloop bewijzen. Hier is het zonder jargon.",
+  "hiw.calibAccLabel": "Achteraf",
+  "hiw.calibAccTitle": "Nauwkeurigheid",
+  "hiw.calibAccDef":
+    "Hoeveel picks achteraf echt bleken te kloppen. Gemeten na het laatste fluitsignaal, niet vooraf geschat.",
+  "hiw.calibAccExampleLabel": "Voorbeeld · 10 picks",
+  "hiw.calibAccExampleDesc": "7 goed, 3 fout → nauwkeurigheid = 70%.",
+  "hiw.calibAccRealityLabel": "Reality check:",
+  "hiw.calibAccRealityDesc":
+    "Een munt opgooien voor thuis / gelijk / uit is ~33%. Alles boven 33% is een echte voorsprong. Onze Silver-tier zit op 60%+, Gold op 70%+, Platinum op 80%+.",
+  "hiw.calibConfLabel": "Vóór de aftrap",
+  "hiw.calibConfTitle": "Betrouwbaarheid",
+  "hiw.calibConfDef":
+    "Hoe zeker het model is vóór de wedstrijd — een zelfbeoordeling van 0% tot 100%. De tier-drempel filtert op dit getal.",
+  "hiw.calibConfExampleLabel": "Voorbeeld · model zegt",
+  "hiw.calibConfExampleDesc":
+    "Een pick met 75% betrouwbaarheid betekent: over veel vergelijkbare picks, zou deze uitkomst ongeveer 75% van de tijd winnen.",
+  "hiw.calibConfRealityLabel": "Reality check:",
+  "hiw.calibConfRealityDesc":
+    "Betrouwbaarheid is een belofte. Als wij 75% zeggen maar slechts 55% wint, is het model te zelfverzekerd. Daarom tracken we beide openbaar.",
+  "hiw.calibBottomTitle": "Gekalibreerd = de twee lijnen lopen gelijk",
+  "hiw.calibBottomDesc":
+    "Een goed gebouwd model heeft nauwkeurigheid die aansluit bij zijn betrouwbaarheid. Als we een pick van 70% publiceren, moet die over de tijd ~70% kloppen. Je kunt het live controleren op de trackrecord-pagina — elke pick, winst of verlies.",
 
   "hiw.botdBadge": "Bet of the Day",
   "hiw.botdTitleA": "Eén pick per dag.",
