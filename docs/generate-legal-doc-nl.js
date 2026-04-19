@@ -245,7 +245,7 @@ const doc = new Document({
         h1("7. Gebruiksvoorwaarden"),
 
         h2("7.1 Abonnementsmodel"),
-        bullet("Gelaagde abonnementen (Free, Silver, Gold, Platinum) met verschillende feature toegang"),
+        bullet("Gelaagde abonnementen (Bronze, Silver, Gold, Platinum) met verschillende feature toegang"),
         bullet("Maandelijkse of jaarlijkse facturering via Stripe"),
         bullet("Automatische verlenging tenzij opgezegd"),
         bullet("Opzegging: effectief aan het einde van de huidige factureringsperiode; geen terugbetaling voor ongebruikt deel"),

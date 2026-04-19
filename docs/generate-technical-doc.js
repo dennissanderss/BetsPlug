@@ -171,10 +171,10 @@ const doc = new Document({
         h2("2.1 Technology Stack"),
         table2col([
           ["Layer", "Technology"],
-          ["Backend", "FastAPI (Python 3.11+), SQLAlchemy 2.0 async"],
-          ["Database", "PostgreSQL 18.3, 5 GB persistent volume"],
-          ["Cache / Queue", "Redis 7 (Celery broker + result backend)"],
-          ["Frontend", "Next.js 15, React 19, TypeScript, Tailwind"],
+          ["Backend", "FastAPI 0.115 (Python 3.12), SQLAlchemy 2 async (asyncpg)"],
+          ["Database", "PostgreSQL 16, 5 GB persistent volume"],
+          ["Cache / Queue", "Redis 7 (Celery 5 broker + result backend)"],
+          ["Frontend", "Next.js 14, React 18, TypeScript, Tailwind"],
           ["Deployment", "Railway (backend + database + Redis) + Vercel (frontend)"],
           ["Data source", "API-Football Pro (licensed, 7,500 req/day)"],
           ["Payments", "Stripe (SaaS subscription)"],
@@ -278,7 +278,7 @@ const doc = new Document({
           ["Platinum", "Top 5 elite", "\u2265 0.75", "840", "82.5%"],
           ["Gold", "Top 10",      "\u2265 0.70", "1,650", "71.7%"],
           ["Silver", "Top 14",    "\u2265 0.65", "3,004", "60%+"],
-          ["Free", "Top 14",      "\u2265 0.55", "3,763", "48.4%"],
+          ["Bronze (Free)", "Top 14", "\u2265 0.55", "3,763", "48.4%"],
         ]),
         p("Interpretation: raw accuracy is modest because football 1X2 is hard (33% random baseline, ~50% best-case for all picks). Real value lies in confidence filtering \u2014 the model correctly abstains on uncertain matches. At \u2265 75% confidence, 78.2% walk-forward / 82.5% live-v8.1 accuracy represents a genuine edge."),
 

@@ -245,7 +245,7 @@ const doc = new Document({
         h1("7. Terms of Use"),
 
         h2("7.1 Subscription Model"),
-        bullet("Tiered subscriptions (Free, Silver, Gold, Platinum) with different feature access"),
+        bullet("Tiered subscriptions (Bronze, Silver, Gold, Platinum) with different feature access"),
         bullet("Monthly or annual billing via Stripe"),
         bullet("Automatic renewal unless cancelled"),
         bullet("Cancellation: effective at end of current billing period; no refund for unused portion"),
