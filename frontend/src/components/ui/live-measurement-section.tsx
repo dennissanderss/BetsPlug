@@ -96,7 +96,7 @@ export function LiveMeasurementSection() {
         >
           <span className="section-label">
             <Activity className="h-3 w-3" />
-            {isNl ? "Live meting" : "Live measurement"}
+            {isNl ? "2 · Live meting per tier" : "2 · Live measurement per tier"}
           </span>
           <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
             {isNl ? (

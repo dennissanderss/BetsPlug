@@ -1,32 +1,32 @@
 "use client";
 
 /**
- * BotdTrackRecordSection — Pick-of-the-Day specific track record surface
- * on the public /track-record page. Answers the question "what's the
- * accuracy of *that one* daily pick you advertise on the Gold + Platinum
- * tier cards?" — previously only visible to authenticated /bet-of-the-day
- * visitors.
+ * BotdLiveTrackingSection — strict "live meting" surface for the
+ * Pick-of-the-Day feature, fetched from /bet-of-the-day/live-tracking.
  *
- * Backend sources (both anonymous-accessible):
- *   - GET /api/bet-of-the-day/track-record  → aggregate KPIs
- *   - GET /api/bet-of-the-day/history       → row list for the table
+ * Only counts predictions produced by the real-time scheduler that
+ * were locked strictly before kickoff and created on/after the
+ * LIVE_BOTD_START cut-off. Starts empty and grows as matches are
+ * graded by the evaluator cron — the counterpart to
+ * LiveMeasurementSection but scoped to the daily BOTD pick.
  */
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
-  Trophy,
+  Activity,
   CheckCircle2,
   XCircle,
-  Flame,
   Target,
+  Trophy,
+  Flame,
   ShieldCheck,
-  Download,
+  Clock,
 } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { useTranslations } from "@/i18n/locale-provider";
 
-interface BotdAggregate {
+interface BotdSummary {
   total_picks: number;
   evaluated: number;
   correct: number;
@@ -34,7 +34,6 @@ interface BotdAggregate {
   current_streak: number;
   best_streak: number;
   avg_confidence: number;
-  last_updated: string;
 }
 
 interface BotdHistoryItem {
@@ -47,48 +46,34 @@ interface BotdHistoryItem {
   correct: boolean | null;
   home_score: number | null;
   away_score: number | null;
-  odds_used: number | null;
 }
 
-export function BotdTrackRecordSection() {
+interface BotdLiveResponse {
+  summary: BotdSummary;
+  picks: BotdHistoryItem[];
+}
+
+export function BotdLiveTrackingSection() {
   const { locale } = useTranslations();
   const isNl = locale === "nl";
-  const [agg, setAgg] = useState<BotdAggregate | null>(null);
-  const [history, setHistory] = useState<BotdHistoryItem[] | null>(null);
+  const [data, setData] = useState<BotdLiveResponse | null>(null);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const API =
       process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-    // Integriteit-sprint: this section shows collected data (model
-    // validation) — the live-measurement variant lives in
-    // LiveMeasurementSection. The model-validation endpoint returns
-    // the summary + row list in a single call.
-    fetch(`${API}/bet-of-the-day/model-validation?limit=15`)
+    fetch(`${API}/bet-of-the-day/live-tracking?limit=15`)
       .then((r) => (r.ok ? r.json() : null))
       .then((body) => {
-        if (!body) {
-          setAgg(null);
-          setHistory([]);
-          return;
-        }
-        const s = body.summary ?? {};
-        setAgg({
-          total_picks: s.total_picks ?? 0,
-          evaluated: s.evaluated ?? 0,
-          correct: s.correct ?? 0,
-          accuracy_pct: s.accuracy_pct ?? 0,
-          current_streak: s.current_streak ?? 0,
-          best_streak: s.best_streak ?? 0,
-          avg_confidence: s.avg_confidence ?? 0,
-          last_updated: "",
-        });
-        setHistory(body.picks ?? []);
+        setData(body ?? null);
+        setLoaded(true);
       })
-      .catch(() => {
-        setAgg(null);
-        setHistory([]);
-      });
+      .catch(() => setLoaded(true));
   }, []);
+
+  const agg = data?.summary;
+  const history = data?.picks ?? null;
+  const awaiting = !agg || (agg.evaluated ?? 0) === 0;
 
   const fmtDate = (iso: string) => {
     try {
@@ -103,22 +88,14 @@ export function BotdTrackRecordSection() {
 
   return (
     <section
-      id="model-validation"
+      id="botd-live"
       className="relative overflow-hidden py-20 md:py-28 scroll-mt-24"
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-40 top-10 h-[420px] w-[420px] rounded-full"
+        className="pointer-events-none absolute -right-40 top-10 h-[420px] w-[420px] rounded-full"
         style={{
-          background: "hsl(var(--accent-green) / 0.1)",
-          filter: "blur(140px)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-40 bottom-0 h-[380px] w-[380px] rounded-full"
-        style={{
-          background: "hsl(var(--accent-blue) / 0.08)",
+          background: "hsl(var(--accent-blue) / 0.10)",
           filter: "blur(140px)",
         }}
       />
@@ -132,38 +109,29 @@ export function BotdTrackRecordSection() {
           className="mb-10 max-w-2xl"
         >
           <span className="section-label">
-            <ShieldCheck className="h-3 w-3" />
+            <Activity className="h-3 w-3" />
             {isNl
-              ? "3 · Pick van de Dag — historische backtest"
-              : "3 · Pick of the Day — historical backtest"}
+              ? "4 · Pick van de Dag — live meting"
+              : "4 · Pick of the Day — live measurement"}
           </span>
           <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
             {isNl ? (
               <>
-                De dagelijkse topper, teruggerekend op{" "}
-                <span className="gradient-text-green">recent afgelopen wedstrijden</span>
+                Alleen echte pre-match picks{" "}
+                <span className="gradient-text-green">sinds 18 april 2026</span>
               </>
             ) : (
               <>
-                The daily best pick, replayed on{" "}
-                <span className="gradient-text-green">recently finished matches</span>
+                Only real pre-match picks{" "}
+                <span className="gradient-text-green">since 18 April 2026</span>
               </>
             )}
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-[#a3a9b8]">
             {isNl
-              ? "Onze BOTD-methode (de hoogst-scorende pick per dag) toegepast op matches die inmiddels gespeeld zijn. Dit is backtest-data — een eerlijke proxy voor hoe de feature het in het verleden zou hebben gedaan. De strikt pre-match live versie staat in sectie 4 hieronder."
-              : "Our BOTD method (the highest-confidence pick per day) applied to matches that have since finished. This is backtest data — an honest proxy for how the feature would have performed historically. The strict pre-match live version lives in section 4 below."}
+              ? "De Pick van de Dag, maar alleen wanneer hij door de scheduler voor de aftrap werd vastgezet en daarna werd beoordeeld. Geen backtest, geen retroactieve rijen. Deze meting begint klein en groeit elke dag waarop een BOTD-wedstrijd wordt gespeeld."
+              : "The Pick of the Day, but only when it was locked before kickoff by the live scheduler and graded afterwards. No backtest, no retroactive rows. This measurement starts small and grows every day a BOTD fixture is played."}
           </p>
-          <div className="mt-4">
-            <a
-              href={`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api"}/bet-of-the-day/export.csv`}
-              className="inline-flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/15"
-            >
-              <Download className="h-3.5 w-3.5" />
-              {isNl ? "Download CSV (Pick of the Day)" : "Download CSV (Pick of the Day)"}
-            </a>
-          </div>
         </motion.div>
 
         {/* KPI strip */}
@@ -172,18 +140,20 @@ export function BotdTrackRecordSection() {
             icon={Target}
             variant="green"
             value={
-              agg?.accuracy_pct != null && agg.evaluated > 0
+              !awaiting && agg
                 ? `${agg.accuracy_pct.toFixed(1).replace(".", isNl ? "," : ".")}%`
                 : "—"
             }
             label={isNl ? "Nauwkeurigheid" : "Accuracy"}
             note={
-              agg && agg.evaluated > 0
+              !awaiting && agg
                 ? `${agg.correct} / ${agg.evaluated} ${isNl ? "correct" : "correct"}`
                 : isNl
-                ? "Wacht op eerste uitslagen"
-                : "Awaiting first results"
+                  ? "Wacht op eerste beoordeelde BOTD"
+                  : "Awaiting first graded BOTD"
             }
+            awaiting={awaiting}
+            isNl={isNl}
           />
           <KpiCard
             icon={Trophy}
@@ -195,50 +165,70 @@ export function BotdTrackRecordSection() {
                 ? `${agg.evaluated} ${isNl ? "beoordeeld" : "evaluated"}`
                 : "—"
             }
+            awaiting={awaiting}
+            isNl={isNl}
           />
           <KpiCard
             icon={Flame}
             variant="green"
-            value={agg?.current_streak != null ? String(agg.current_streak) : "—"}
-            label={isNl ? "Huidige reeks" : "Current streak"}
-            note={
-              agg
-                ? `${isNl ? "Beste" : "Best"}: ${agg.best_streak}`
+            value={
+              !awaiting && agg?.current_streak != null
+                ? String(agg.current_streak)
                 : "—"
             }
+            label={isNl ? "Huidige reeks" : "Current streak"}
+            note={
+              !awaiting && agg
+                ? `${isNl ? "Beste" : "Best"}: ${agg.best_streak}`
+                : isNl
+                  ? "Volgt zodra data binnen is"
+                  : "Starts once data arrives"
+            }
+            awaiting={awaiting}
+            isNl={isNl}
           />
           <KpiCard
             icon={ShieldCheck}
             variant="blue"
             value={
-              agg?.avg_confidence != null
+              agg?.avg_confidence != null && agg.total_picks > 0
                 ? `${agg.avg_confidence.toFixed(1).replace(".", isNl ? "," : ".")}%`
                 : "—"
             }
             label={isNl ? "Gem. betrouwbaarheid" : "Avg confidence"}
             note={
-              isNl ? "Gemiddelde model-score" : "Average model score"
+              isNl ? "Gemiddelde modelscore" : "Average model score"
             }
+            awaiting={awaiting}
+            isNl={isNl}
           />
         </div>
 
-        {/* History table */}
+        {/* History table (only when at least one pick has been locked) */}
         <div className="mt-10 overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0b0d13]">
           <div className="grid grid-cols-12 gap-2 border-b border-white/[0.06] bg-white/[0.02] px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
             <span className="col-span-2">{isNl ? "Datum" : "Date"}</span>
             <span className="col-span-4">{isNl ? "Wedstrijd" : "Match"}</span>
             <span className="col-span-2">{isNl ? "Competitie" : "League"}</span>
-            <span className="col-span-2 text-center">{isNl ? "Pick · conf." : "Pick · conf."}</span>
-            <span className="col-span-1 text-center">{isNl ? "Uitslag" : "Score"}</span>
-            <span className="col-span-1 text-center">{isNl ? "Resultaat" : "Result"}</span>
+            <span className="col-span-2 text-center">
+              {isNl ? "Pick · conf." : "Pick · conf."}
+            </span>
+            <span className="col-span-1 text-center">
+              {isNl ? "Uitslag" : "Score"}
+            </span>
+            <span className="col-span-1 text-center">
+              {isNl ? "Resultaat" : "Result"}
+            </span>
           </div>
-          {history == null ? (
+          {!loaded ? (
             <div className="px-4 py-8 text-center text-xs text-[#6b7280]">
-              {isNl ? "Laden..." : "Loading..."}
+              {isNl ? "Laden…" : "Loading…"}
             </div>
-          ) : history.length === 0 ? (
-            <div className="px-4 py-8 text-center text-xs text-[#6b7280]">
-              {isNl ? "Nog geen picks beschikbaar." : "No picks available yet."}
+          ) : !history || history.length === 0 ? (
+            <div className="px-4 py-10 text-center text-xs text-[#6b7280]">
+              {isNl
+                ? "Nog geen live-gelogde BOTD-picks. Eerste rij verschijnt zodra een BOTD-wedstrijd is gespeeld."
+                : "No live-logged BOTD picks yet. The first row appears as soon as a BOTD fixture has been played."}
             </div>
           ) : (
             history.map((row, i) => (
@@ -258,7 +248,7 @@ export function BotdTrackRecordSection() {
                 <span className="col-span-2 tabular-nums text-[#a3a9b8]">
                   {fmtDate(row.date)}
                 </span>
-                <span className="col-span-4 font-semibold text-[#ededed] truncate">
+                <span className="col-span-4 truncate font-semibold text-[#ededed]">
                   {row.home_team} vs {row.away_team}
                 </span>
                 <span className="col-span-2 truncate text-[#a3a9b8]">
@@ -280,9 +270,7 @@ export function BotdTrackRecordSection() {
                   ) : row.correct === false ? (
                     <XCircle className="h-4 w-4 text-red-400" />
                   ) : (
-                    <span className="text-[10px] text-[#6b7280]">
-                      {isNl ? "Pending" : "Pending"}
-                    </span>
+                    <Clock className="h-4 w-4 text-slate-500" />
                   )}
                 </span>
               </div>
@@ -290,10 +278,10 @@ export function BotdTrackRecordSection() {
           )}
         </div>
 
-        <p className="mt-6 text-center text-[11px] text-[#6b7280]">
+        <p className="mt-8 text-center text-[11px] leading-relaxed text-[#6b7280]">
           {isNl
-            ? "Inclusief voor Gold en Platinum. Elke pick staat met tijdstempel online voor aftrap."
-            : "Included on Gold and Platinum. Every pick is timestamped online before kick-off."}
+            ? "Gebruik deze sectie om te checken hoe de BOTD het doet op wedstrijden waarvoor de pick écht vóór de aftrap werd vastgezet. Voor de bredere backtest, zie sectie 3 hierboven."
+            : "Use this section to judge how BOTD performs on matches where the pick was truly locked before kickoff. For the broader backtest, see section 3 above."}
         </p>
       </div>
     </section>
@@ -306,29 +294,39 @@ function KpiCard({
   value,
   label,
   note,
+  awaiting,
+  isNl,
 }: {
-  icon: typeof Trophy;
+  icon: typeof Target;
   variant: "green" | "purple" | "blue";
   value: string;
   label: string;
   note: string;
+  awaiting?: boolean;
+  isNl: boolean;
 }) {
   return (
     <div className={`card-neon card-neon-${variant} rounded-2xl`}>
-      <div className="relative p-5">
-        <HexBadge variant={variant} size="md" className="mb-3">
-          <Icon className="h-5 w-5" />
-        </HexBadge>
-        <div className="text-stat text-3xl leading-none text-[#ededed]">
+      <div className="relative p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <HexBadge variant={variant} size="md">
+            <Icon className="h-5 w-5" />
+          </HexBadge>
+          {awaiting ? (
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/[0.12] bg-white/[0.03] px-2 py-0.5 text-[9px] font-semibold text-slate-400">
+              <Clock className="h-2.5 w-2.5" />
+              {isNl ? "Wacht op data" : "Awaiting data"}
+            </span>
+          ) : null}
+        </div>
+        <div className="text-stat text-3xl text-[#ededed] sm:text-4xl">
           {value}
         </div>
         <p className="mt-2 text-sm font-semibold text-[#ededed]">{label}</p>
-        <p className="mt-1 text-[11px] leading-relaxed text-[#a3a9b8]">
-          {note}
-        </p>
+        <p className="mt-1 text-xs leading-relaxed text-[#a3a9b8]">{note}</p>
       </div>
     </div>
   );
 }
 
-export default BotdTrackRecordSection;
+export default BotdLiveTrackingSection;

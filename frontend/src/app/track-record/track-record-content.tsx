@@ -36,6 +36,8 @@ import { Pill } from "@/components/noct/pill";
 import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { HeroMediaBg } from "@/components/ui/media-bg";
 import { LiveMeasurementSection } from "@/components/ui/live-measurement-section";
+import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
+import { BotdLiveTrackingSection } from "@/components/ui/botd-live-tracking-section";
 
 /* ── Live API data hook ─────────────────────────────────── */
 interface LiveStats {
@@ -330,7 +332,8 @@ function publicTierToTierKey(t: PublicTier): TierKey | null {
  * Track Record, NOCTURNE rebuild.
  */
 export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: React.ReactNode; trackRecordPage?: any }) {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
+  const isNl = locale === "nl";
   const loc = useLocalizedHref();
   const home = loc("/");
   // v8.5, default to Gold tier (70%+) on the public page so first-time
@@ -522,8 +525,120 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
+      {/* ───────────── TABLE OF CONTENTS ─────────────
+          Public-facing roadmap of what lives on this page. Four
+          distinct data surfaces, all honest, each with a clear
+          "backtest vs live" label so visitors never conflate the
+          historical validation numbers with the small-but-growing
+          live-measurement numbers that only started after the v8.1
+          deploy cut-off. */}
+      <section className="relative py-12 md:py-16">
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5 }}
+            className="mb-8 max-w-3xl"
+          >
+            <span className="section-label mb-3 inline-flex items-center gap-2">
+              <Eye className="h-3 w-3" />
+              {isNl ? "Wat vind je op deze pagina?" : "What's on this page?"}
+            </span>
+            <h2 className="text-heading text-balance text-2xl text-[#ededed] sm:text-3xl">
+              {isNl
+                ? "Vier verschillende meetpunten, allemaal eerlijk gelabeld."
+                : "Four distinct measurements, each honestly labelled."}
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-[#a3a9b8]">
+              {isNl
+                ? "Klik op een blok om direct naar die sectie te springen. Elk blok is óf een historische backtest (groter sample, retroactief) óf een live meting (klein en groeiend, strikt vóór aftrap vastgezet)."
+                : "Click a card to jump to that section. Each one is either a historical backtest (larger sample, retroactive) or a live measurement (small and growing, locked strictly before kickoff)."}
+            </p>
+          </motion.div>
+
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                n: "1",
+                kind: isNl ? "Backtest" : "Backtest",
+                title: isNl ? "Tier-accuraatheid" : "Tier accuracy",
+                desc: isNl
+                  ? "Free / Silver / Gold / Platinum — historische trefzekerheid per tier."
+                  : "Free / Silver / Gold / Platinum — historical hit rate per tier.",
+                href: "#tier-kpis",
+                tone: "green",
+              },
+              {
+                n: "2",
+                kind: isNl ? "Live meting" : "Live measurement",
+                title: isNl ? "Per tier · live" : "Per tier · live",
+                desc: isNl
+                  ? "Alleen picks die écht vóór de aftrap werden vastgezet. Sinds 16 april 2026."
+                  : "Only picks locked strictly before kickoff. Since 16 April 2026.",
+                href: "#live-measurement",
+                tone: "blue",
+              },
+              {
+                n: "3",
+                kind: isNl ? "Backtest" : "Backtest",
+                title: isNl ? "Pick van de Dag" : "Pick of the Day",
+                desc: isNl
+                  ? "De dagelijkse topper toegepast op recent afgelopen wedstrijden."
+                  : "The daily top pick applied to recently finished matches.",
+                href: "#model-validation",
+                tone: "purple",
+              },
+              {
+                n: "4",
+                kind: isNl ? "Live meting" : "Live measurement",
+                title: isNl ? "Pick van de Dag · live" : "Pick of the Day · live",
+                desc: isNl
+                  ? "Strikt pre-match BOTD-picks. Begint klein, groeit met elke gespeelde BOTD."
+                  : "Strictly pre-match BOTD picks. Starts small, grows with every played BOTD.",
+                href: "#botd-live",
+                tone: "green",
+              },
+            ].map((item) => (
+              <a
+                key={item.n}
+                href={item.href}
+                className={`card-neon card-neon-${item.tone} group block rounded-2xl transition-transform hover:-translate-y-0.5`}
+              >
+                <div className="relative p-5">
+                  <div className="mb-3 flex items-center justify-between">
+                    <span className="text-stat text-2xl text-[#ededed]">
+                      {item.n}
+                    </span>
+                    <span
+                      className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest ${
+                        item.kind === (isNl ? "Live meting" : "Live measurement")
+                          ? "border-blue-400/30 bg-blue-500/10 text-blue-300"
+                          : "border-emerald-400/30 bg-emerald-500/10 text-emerald-300"
+                      }`}
+                    >
+                      {item.kind}
+                    </span>
+                  </div>
+                  <p className="text-sm font-semibold text-[#ededed]">
+                    {item.title}
+                  </p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-[#a3a9b8]">
+                    {item.desc}
+                  </p>
+                  <p className="mt-3 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-widest text-[#4ade80] group-hover:gap-2 transition-all">
+                    {isNl ? "Spring erheen" : "Jump to section"}
+                    <ChevronRight className="h-3 w-3" />
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ───────────── KPIs ───────────── */}
-      <section className="relative overflow-hidden py-20 md:py-28">
+      <section id="tier-kpis" className="relative overflow-hidden py-20 md:py-28 scroll-mt-24">
         <div
           aria-hidden
           className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full"
@@ -539,7 +654,9 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           >
             <span className="section-label mb-4 inline-flex items-center gap-2">
               <Gauge className="h-3 w-3" />
-              {t("tr.kpisBadge")}
+              {isNl
+                ? "1 · Tier-accuraatheid (historische backtest)"
+                : "1 · Tier accuracy (historical backtest)"}
             </span>
             <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("tr.kpisTitle")}
@@ -596,11 +713,18 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
-      {/* ───────────── LIVE MEASUREMENT ───────────── */}
-      {/* Pick-of-the-Day track record section hidden from the public page
-          until the backend live-measurement pipeline is stabilised. For
-          now the model-validation (backtest) KPIs above are sufficient. */}
+      {/* ───────────── LIVE MEASUREMENT (tier) ───────────── */}
       <LiveMeasurementSection />
+
+      {/* ───────────── BOTD BACKTEST ───────────── */}
+      {/* Pick-of-the-Day historical backtest. Was hidden while the live
+          pipeline stabilised; now rendered alongside the live section
+          below so the full transparency story — tier backtest → tier
+          live → BOTD backtest → BOTD live — is visible on one page. */}
+      <BotdTrackRecordSection />
+
+      {/* ───────────── BOTD LIVE ───────────── */}
+      <BotdLiveTrackingSection />
 
       {/* ───────────── PIPELINE ───────────── */}
       <section className="relative overflow-hidden py-20 md:py-28">
