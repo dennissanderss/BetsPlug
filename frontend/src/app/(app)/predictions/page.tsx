@@ -15,6 +15,7 @@ import {
   Clock,
   RefreshCw,
   CalendarDays,
+  Calendar,
   Trophy,
   ChevronsUpDown,
   Check,
@@ -30,6 +31,7 @@ import { TierScopePill } from "@/components/noct/tier-scope-pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import { PickReasoningBlock } from "@/components/predictions/PickReasoningBlock";
 import { classifyPickTier } from "@/lib/pick-tier";
+import { derivePickSide } from "@/lib/prediction-pick";
 import type { PickTierSlug } from "@/types/api";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -595,6 +597,113 @@ function LeagueSection({
   );
 }
 
+/** Results-mode accordion: one panel per day, newest first. Same row
+ *  renderer as the upcoming view, just grouped differently.
+ */
+function DateSection({
+  dateIso,
+  fixtures,
+  defaultOpen = true,
+}: {
+  dateIso: string;
+  fixtures: Fixture[];
+  defaultOpen?: boolean;
+}) {
+  const { t, locale } = useTranslations();
+  const [open, setOpen] = useState(defaultOpen);
+
+  const hits = fixtures.filter((f) => {
+    if (!f.prediction || !f.result?.winner) return false;
+    return derivePickSide(f.prediction) === f.result.winner;
+  }).length;
+  const misses = fixtures.filter((f) => {
+    if (!f.prediction || !f.result?.winner) return false;
+    return derivePickSide(f.prediction) !== f.result.winner;
+  }).length;
+  const pending = fixtures.length - hits - misses;
+
+  // Friendly day label: "Today", "Yesterday", or day-month.
+  const dateLabel = (() => {
+    const [y, m, d] = dateIso.split("-").map(Number);
+    const dt = new Date(y, m - 1, d);
+    const now = new Date();
+    const isToday = dt.toDateString() === now.toDateString();
+    const yest = new Date(now);
+    yest.setDate(now.getDate() - 1);
+    const isYest = dt.toDateString() === yest.toDateString();
+    const bcp = locale === "nl" ? "nl-NL" : "en-GB";
+    if (isToday) return locale === "nl" ? "Vandaag" : "Today";
+    if (isYest) return locale === "nl" ? "Gisteren" : "Yesterday";
+    return dt.toLocaleDateString(bcp, {
+      weekday: "long",
+      day: "numeric",
+      month: "short",
+    });
+  })();
+
+  return (
+    <div className="glass-card overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between gap-2 px-3 sm:px-5 py-3 sm:py-3.5 bg-gradient-to-r from-white/[0.03] to-transparent border-b border-white/[0.05] hover:from-white/[0.05] transition-colors"
+        aria-expanded={open}
+      >
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-md bg-blue-500/10 shrink-0">
+            <Calendar className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-blue-400" />
+          </div>
+          <span className="text-xs sm:text-sm font-bold text-slate-100 truncate">
+            {dateLabel}
+          </span>
+          <span className="rounded-full bg-white/[0.06] px-2 sm:px-2.5 py-0.5 text-[10px] font-semibold tabular-nums text-slate-400 shrink-0">
+            {fixtures.length}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          {hits > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold text-emerald-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              {hits}
+            </span>
+          )}
+          {misses > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-red-500/10 px-2 py-0.5 text-[9px] font-bold text-red-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-red-400" />
+              {misses}
+            </span>
+          )}
+          {pending > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-slate-500/10 px-2 py-0.5 text-[9px] font-bold text-slate-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />
+              {pending}
+            </span>
+          )}
+          {open ? (
+            <ChevronUp className="h-4 w-4 text-slate-500" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-slate-500" />
+          )}
+        </div>
+      </button>
+      {open && (
+        <div className="divide-y divide-white/[0.03]">
+          <div className="hidden sm:grid grid-cols-11 items-center gap-2 px-4 py-2 text-[9px] uppercase tracking-widest text-slate-500">
+            <span className="col-span-1 text-center">{t("pred.colTime")}</span>
+            <span className="col-span-4">{t("pred.colMatch")}</span>
+            <span className="col-span-1 text-center">{t("pred.colPick")}</span>
+            <span className="col-span-3 text-center">{t("pred.colOdds")}</span>
+            <span className="col-span-2">{t("pred.colConfidence")}</span>
+          </div>
+          {fixtures.map((f) => (
+            <CompactMatchRow key={f.id} fixture={f} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function groupFixturesByLeague(
   fixtures: Fixture[]
 ): Array<{ name: string; fixtures: Fixture[] }> {
@@ -1070,6 +1179,9 @@ export default function PredictionsPage() {
   // v6.2: view mode tabs (Upcoming / Live Now / Results)
   const [viewMode, setViewMode] = useState<ViewMode>("upcoming");
 
+  // Results-mode range selector: defaults to this week.
+  const [resultsRange, setResultsRange] = useState<7 | 14 | 30>(7);
+
   // v6 B3: date picker state. Default = today. min = 30 days back,
   // max = 7 days ahead — same bounds Dennis specified.
   const today = useMemo(() => todayIsoDate(), []);
@@ -1077,7 +1189,8 @@ export default function PredictionsPage() {
   const maxDate = useMemo(() => addDaysIso(today, 7), [today]);
   const [selectedDate, setSelectedDate] = useState<string>(today);
 
-  const isHistorical = viewMode === "results" || selectedDate < today;
+  const isResults = viewMode === "results";
+  const isHistorical = isResults || selectedDate < today;
   const daysAhead = Math.max(1, daysBetweenIso(today, selectedDate) + 1);
   const daysBack = Math.max(1, daysBetweenIso(selectedDate, today) + 1);
 
@@ -1091,9 +1204,14 @@ export default function PredictionsPage() {
 
   // ── Fetch upcoming / live / results depending on view mode + date ─────────
   const fixturesQuery = useQuery({
-    queryKey: ["predictions-view", viewMode, selectedDate],
+    queryKey: ["predictions-view", viewMode, selectedDate, resultsRange],
     queryFn: () => {
-      if (viewMode === "results" || selectedDate < today) {
+      if (isResults) {
+        // Results tab: fetch the full range (7/14/30 days). Date picker
+        // is hidden in this view; the range selector drives the window.
+        return api.getFixtureResults(resultsRange);
+      }
+      if (selectedDate < today) {
         return api.getFixtureResults(daysBack);
       }
       // Default "upcoming" query wants at least 7 days so the default
@@ -1110,8 +1228,13 @@ export default function PredictionsPage() {
 
   // ── Filter the returned fixtures to the exact selected date ───────────────
   // Live view skips the date filter entirely — all LIVE matches are shown.
+  // Results view also skips the date filter — the range selector controls
+  // the window and we show every graded match inside it.
   const upcomingFixtures = useMemo<Fixture[]>(() => {
     const all = fixturesQuery.data?.fixtures ?? [];
+    if (isResults) {
+      return all;
+    }
     // For "today" and future dates we also keep the default "next 7
     // days" behaviour when the user hasn't touched the picker, so the
     // page isn't empty.
@@ -1127,7 +1250,7 @@ export default function PredictionsPage() {
       const dd = String(d.getDate()).padStart(2, "0");
       return `${y}-${m}-${dd}` === selectedDate;
     });
-  }, [fixturesQuery.data, selectedDate, today, viewMode]);
+  }, [fixturesQuery.data, selectedDate, today, isResults]);
 
   // ── Derived leagues list for filter tabs ─────────────────────────────────
   // Sort available leagues by popularity rank; unknown leagues go to the end
@@ -1218,6 +1341,50 @@ export default function PredictionsPage() {
     [filtered]
   );
 
+  // Results view: group by match-date (newest first) for a track-record style
+  // scan across the selected range. Each day shows every graded match in one
+  // panel with hit/miss indicators per row.
+  const groupedByDate = useMemo(() => {
+    if (!isResults) return [] as Array<{ date: string; fixtures: Fixture[] }>;
+    const map = new Map<string, Fixture[]>();
+    for (const f of filtered) {
+      if (!f.scheduled_at) continue;
+      const d = new Date(f.scheduled_at);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      const key = `${y}-${m}-${dd}`;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(f);
+    }
+    const keys = Array.from(map.keys()).sort((a, b) => b.localeCompare(a));
+    return keys.map((date) => ({
+      date,
+      fixtures: map.get(date)!.sort((a, b) =>
+        a.scheduled_at.localeCompare(b.scheduled_at),
+      ),
+    }));
+  }, [filtered, isResults]);
+
+  // Results view: hit / miss / pending counts for the summary strip on top.
+  const resultsSummary = useMemo(() => {
+    if (!isResults) return { hits: 0, misses: 0, pending: 0, total: 0 };
+    let hits = 0;
+    let misses = 0;
+    let pending = 0;
+    for (const f of filtered) {
+      if (!f.prediction || !f.result?.winner) {
+        pending += 1;
+        continue;
+      }
+      const predicted = derivePickSide(f.prediction);
+      const actual = f.result.winner;
+      if (predicted && predicted === actual) hits += 1;
+      else misses += 1;
+    }
+    return { hits, misses, pending, total: filtered.length };
+  }, [filtered, isResults]);
+
   // ── Auto-refresh indicator ────────────────────────────────────────────────
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
   useEffect(() => {
@@ -1281,8 +1448,81 @@ export default function PredictionsPage() {
         })}
       </div>
 
-      {/* ── v6 B3: date picker ── */}
-      {true && (
+      {/* ── Results-mode range selector (replaces the single-date picker) ── */}
+      {isResults && (
+        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4">
+          <div className="flex items-center gap-2">
+            <Clock className="h-4 w-4 text-slate-500" />
+            <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
+              {t("pred.rangeLabel" as any) === "pred.rangeLabel"
+                ? "Periode"
+                : t("pred.rangeLabel" as any)}
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            {([7, 14, 30] as const).map((days) => {
+              const active = resultsRange === days;
+              return (
+                <button
+                  key={days}
+                  type="button"
+                  onClick={() => setResultsRange(days)}
+                  className={`rounded-md border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    active
+                      ? "border-blue-500/40 bg-blue-500/15 text-blue-200"
+                      : "border-white/[0.08] bg-white/[0.03] text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  {days} {t("pred.rangeDays" as any) === "pred.rangeDays"
+                    ? "dagen"
+                    : t("pred.rangeDays" as any)}
+                </button>
+              );
+            })}
+          </div>
+          {/* Hit / miss summary */}
+          {resultsSummary.total > 0 && (
+            <div className="ml-auto flex items-center gap-3 text-[11px]">
+              <span className="inline-flex items-center gap-1.5 text-emerald-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                {resultsSummary.hits}{" "}
+                {t("pred.resultHits" as any) === "pred.resultHits"
+                  ? "raak"
+                  : t("pred.resultHits" as any)}
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-red-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-red-400" />
+                {resultsSummary.misses}{" "}
+                {t("pred.resultMisses" as any) === "pred.resultMisses"
+                  ? "mis"
+                  : t("pred.resultMisses" as any)}
+              </span>
+              {resultsSummary.pending > 0 && (
+                <span className="inline-flex items-center gap-1.5 text-slate-400">
+                  <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />
+                  {resultsSummary.pending}{" "}
+                  {t("pred.resultPending" as any) === "pred.resultPending"
+                    ? "open"
+                    : t("pred.resultPending" as any)}
+                </span>
+              )}
+              {resultsSummary.hits + resultsSummary.misses > 0 && (
+                <span className="rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-0.5 font-bold tabular-nums text-emerald-200">
+                  {Math.round(
+                    (resultsSummary.hits /
+                      (resultsSummary.hits + resultsSummary.misses)) *
+                      100,
+                  )}
+                  %
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── v6 B3: date picker (upcoming/single-day browsing only) ── */}
+      {!isResults && (
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4">
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 text-slate-500" />
@@ -1411,8 +1651,21 @@ export default function PredictionsPage() {
             {t("pred.clearFilters")}
           </button>
         </div>
+      ) : isResults ? (
+        // Results view: group by date (newest first) so users can scan
+        // the weeks' picks like a track record.
+        <div className="space-y-3">
+          {groupedByDate.map((group, i) => (
+            <DateSection
+              key={group.date}
+              dateIso={group.date}
+              fixtures={group.fixtures}
+              defaultOpen={i < 3}
+            />
+          ))}
+        </div>
       ) : (
-        // v6.2: grouped-by-league accordion view
+        // v6.2: grouped-by-league accordion view (upcoming mode)
         <div className="space-y-3">
           {groupedByLeague.map((group) => (
             <LeagueSection
