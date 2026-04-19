@@ -1100,8 +1100,8 @@ const en = {
   "hiw.flowBarGoldDesc": "Strong consensus, tight error margin.",
   "hiw.flowBarSilverDesc": "Solid edge, more volume, a little more variance.",
   "hiw.flowBarBronzeDesc": "Free-tier entry level. Real predictions, wider net.",
-  "hiw.flowBarNoneTitle": "No tier assigned",
-  "hiw.flowBarNoneDesc": "Models disagree or confidence is too low. We don't publish guesses.",
+  "hiw.flowBarNoneTitle": "Too shaky — no tier",
+  "hiw.flowBarNoneDesc": "Models disagree or the edge over the market is too thin. These stay on the bench instead of being dressed up as picks.",
   "hiw.flowBarsFooter":
     "Higher tier = stricter filter = fewer picks but higher accuracy. That's the whole trade-off.",
 
@@ -3334,8 +3334,8 @@ const nl: Dictionary = {
   "hiw.flowBarGoldDesc": "Sterke consensus, smalle foutmarge.",
   "hiw.flowBarSilverDesc": "Solide voorsprong, meer volume, iets meer variantie.",
   "hiw.flowBarBronzeDesc": "Instap op het gratis niveau. Echte voorspellingen, breder net.",
-  "hiw.flowBarNoneTitle": "Geen tier toegekend",
-  "hiw.flowBarNoneDesc": "Modellen oneens of vertrouwen te laag. Wij publiceren geen gokjes.",
+  "hiw.flowBarNoneTitle": "Te wankel — geen tier",
+  "hiw.flowBarNoneDesc": "Modellen oneens of de voorsprong op de markt is te klein. Deze blijven op de bank in plaats van ze op te kloppen tot een pick.",
   "hiw.flowBarsFooter":
     "Hogere tier = strengere filter = minder picks maar hogere nauwkeurigheid. Dat is de volledige afweging.",
 

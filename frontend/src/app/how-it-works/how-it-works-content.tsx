@@ -804,23 +804,26 @@ function TierFlowSection() {
                 </span>
               </div>
               <div className="space-y-3">
-                {[...TIER_ORDER].reverse().map((tierKey) => (
-                  <TierBar key={tierKey} tierKey={tierKey} />
-                ))}
-                <div className="glass-panel flex items-center gap-3 rounded-xl p-3 opacity-60">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-[#6b7280]">
+                {[...TIER_ORDER]
+                  .reverse()
+                  .filter((k) => k !== "bronze")
+                  .map((tierKey) => (
+                    <TierBar key={tierKey} tierKey={tierKey} />
+                  ))}
+                <div className="flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/[0.04] p-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-400">
                     <XCircle className="h-4 w-4" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-semibold text-[#a3a9b8]">
+                      <span className="text-xs font-semibold text-[#ededed]">
                         {t("hiw.flowBarNoneTitle")}
                       </span>
-                      <span className="text-[10px] tabular-nums text-[#6b7280]">
-                        &lt; 55%
+                      <span className="text-[10px] tabular-nums text-red-400/80">
+                        &lt; 65%
                       </span>
                     </div>
-                    <p className="mt-0.5 text-[11px] text-[#6b7280]">
+                    <p className="mt-0.5 text-[11px] leading-relaxed text-[#a3a9b8]">
                       {t("hiw.flowBarNoneDesc")}
                     </p>
                   </div>
