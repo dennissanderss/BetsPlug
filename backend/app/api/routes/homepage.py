@@ -245,7 +245,15 @@ async def get_free_picks(
         selectinload(Prediction.match).selectinload(Match.result),
     ]
 
-    # ── Upcoming: top 3 scheduled matches by confidence (next 14 days) ──
+    # ── Upcoming: top 3 premium-confidence picks (next 14 days) ──
+    # Floor lifted from the Free 45% to the Silver 60% threshold so
+    # the homepage hero only shows the model's strong picks. The
+    # teams + kickoff are blurred on the public page, and advertising
+    # a "premium sneak peek" while leaking 42%/44%/50% coin-flips made
+    # the proposition look weak on first glance. On unusually quiet
+    # match days the fallback block below backfills with scheduled
+    # fixtures that lack predictions, so the card is never empty.
+    SILVER_CONFIDENCE_FLOOR = 0.60
     upcoming_cutoff = now + timedelta(days=14)
     today_stmt = (
         select(Prediction)
@@ -256,12 +264,15 @@ async def get_free_picks(
                 Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
                 Match.scheduled_at >= now,
                 Match.scheduled_at <= upcoming_cutoff,
+                Prediction.confidence >= SILVER_CONFIDENCE_FLOOR,
             )
         )
         .order_by(Prediction.confidence.desc())
         .limit(3)
     )
-    # v8.1: force FREE tier — homepage is public, show the Free experience.
+    # Keep the Free access scope — any user (or anonymous visitor) can
+    # see these picks; the confidence floor above is what makes the
+    # selection premium, not the tier membership.
     if TIER_SYSTEM_ENABLED:
         today_stmt = today_stmt.where(access_filter(PickTier.FREE))
     today_rows = (await db.execute(today_stmt)).scalars().unique().all()

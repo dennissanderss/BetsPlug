@@ -394,10 +394,14 @@ export function HomeContent({
                     </HexBadge>
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                        {t("hero.freePrediction")}
+                        {locale === "nl"
+                          ? "Top premium picks"
+                          : "Top premium picks"}
                       </p>
                       <p className="text-sm font-semibold text-[#ededed]">
-                        {t("home.freePredTitle")}
+                        {locale === "nl"
+                          ? "3 sterkste voorspellingen vandaag"
+                          : "3 strongest predictions today"}
                       </p>
                     </div>
                   </div>
@@ -405,6 +409,26 @@ export function HomeContent({
                     <span className="live-dot" />
                     Live
                   </Pill>
+                </div>
+
+                {/* Column header strip — tells the visitor what the green
+                    percentage chip to the right of each row actually
+                    represents. Without this label the number reads as
+                    "accuracy" (which it isn't — it's the model's estimated
+                    win-probability for its pick). */}
+                <div
+                  className="flex items-center justify-between gap-2 border-b px-5 py-2"
+                  style={{
+                    borderColor: "hsl(0 0% 100% / 0.05)",
+                    background: "rgba(255,255,255,0.015)",
+                  }}
+                >
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
+                    {locale === "nl" ? "Competitie · wedstrijd" : "League · match"}
+                  </span>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                    {locale === "nl" ? "Win-kans model" : "Model win probability"}
+                  </span>
                 </div>
 
                 {/* 3 pick rows */}
