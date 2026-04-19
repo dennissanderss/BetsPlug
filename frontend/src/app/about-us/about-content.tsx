@@ -15,6 +15,9 @@ import {
   Trophy,
   Zap,
   Users,
+  Database,
+  Filter,
+  ArrowDown,
   type LucideIcon,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
@@ -171,7 +174,7 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            {/* Left: Pulse mock card */}
+            {/* Left: Analysis pipeline visual */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -182,54 +185,55 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
               <div className="card-neon card-neon-green halo-green rounded-3xl">
                 <div className="relative p-8">
                   <div className="mb-6 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="live-dot" />
-                      <span className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
-                        BetsPlug Pulse · Live
-                      </span>
-                    </div>
+                    <span className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                      {t("about.pipelineLabel")}
+                    </span>
                     <HexBadge variant="green" size="sm">
-                      <Trophy className="h-4 w-4" />
+                      <LineChart className="h-4 w-4" />
                     </HexBadge>
                   </div>
 
-                  <div className="space-y-4">
-                    <MockRow
-                      title="Man City vs Liverpool"
-                      ev="+EV 12.4%"
-                      probs={[
-                        { label: "Home", value: "54%" },
-                        { label: "Draw", value: "22%" },
-                        { label: "Away", value: "24%" },
-                      ]}
-                      barWidth="54%"
+                  <div className="space-y-3">
+                    <PipelineStep
+                      index="01"
+                      icon={Database}
+                      title={t("about.pipelineStep1Title")}
+                      detail={t("about.pipelineStep1Detail")}
+                      tag={t("about.pipelineStep1Tag")}
                     />
-                    <MockRow
-                      title="Lakers vs Celtics"
-                      ev="+EV 8.1%"
-                      probs={[
-                        { label: "LAL", value: "47%" },
-                        { label: "BOS", value: "53%" },
-                      ]}
-                      barWidth="53%"
+                    <PipelineArrow />
+                    <PipelineStep
+                      index="02"
+                      icon={Brain}
+                      title={t("about.pipelineStep2Title")}
+                      detail={t("about.pipelineStep2Detail")}
+                      tag={t("about.pipelineStep2Tag")}
                     />
-                    <MockRow
-                      title="Djokovic vs Alcaraz"
-                      ev="+EV 6.7%"
-                      probs={[
-                        { label: "DJO", value: "51%" },
-                        { label: "ALC", value: "49%" },
-                      ]}
-                      barWidth="51%"
+                    <PipelineArrow />
+                    <PipelineStep
+                      index="03"
+                      icon={Scale}
+                      title={t("about.pipelineStep3Title")}
+                      detail={t("about.pipelineStep3Detail")}
+                      tag={t("about.pipelineStep3Tag")}
+                    />
+                    <PipelineArrow />
+                    <PipelineStep
+                      index="04"
+                      icon={Filter}
+                      title={t("about.pipelineStep4Title")}
+                      detail={t("about.pipelineStep4Detail")}
+                      tag={t("about.pipelineStep4Tag")}
+                      highlight
                     />
                   </div>
 
                   <div className="mt-6 flex items-center justify-between border-t border-white/[0.06] pt-4">
                     <span className="text-[10px] uppercase tracking-wider text-[#a3a9b8]">
-                      Updated 12s ago
+                      {t("about.pipelineFooter")}
                     </span>
                     <Pill tone="active" className="!text-[10px]">
-                      3 signals
+                      {t("about.pipelineBadge")}
                     </Pill>
                   </div>
                 </div>
@@ -487,44 +491,61 @@ export function AboutContent({ faqSlot, sanityAbout }: AboutContentProps) {
 }
 
 /* ──────────────────────────────────────────────────────────────
-   Small mock row for the Pulse card
+   Pipeline step primitives for the analysis-pipeline visual
    ────────────────────────────────────────────────────────────── */
-function MockRow({
+function PipelineStep({
+  index,
+  icon: Icon,
   title,
-  ev,
-  probs,
-  barWidth,
+  detail,
+  tag,
+  highlight = false,
 }: {
+  index: string;
+  icon: LucideIcon;
   title: string;
-  ev: string;
-  probs: { label: string; value: string }[];
-  barWidth: string;
+  detail: string;
+  tag: string;
+  highlight?: boolean;
 }) {
   return (
-    <div className="glass-panel rounded-xl p-4">
-      <div className="mb-2 flex items-center justify-between text-xs">
-        <span className="font-semibold text-[#ededed]">{title}</span>
-        <DataChip tone="win">{ev}</DataChip>
+    <div
+      className={
+        "glass-panel rounded-xl p-3.5 transition-colors " +
+        (highlight
+          ? "ring-1 ring-[#4ade80]/30 bg-[#4ade80]/[0.04]"
+          : "")
+      }
+    >
+      <div className="flex items-start gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-[#4ade80]">
+          <Icon className="h-4 w-4" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-[10px] font-mono tabular-nums text-[#6b7280]">
+                {index}
+              </span>
+              <span className="text-xs font-semibold text-[#ededed] truncate">
+                {title}
+              </span>
+            </div>
+            <DataChip tone={highlight ? "win" : "default"}>{tag}</DataChip>
+          </div>
+          <p className="mt-1 text-[11px] leading-relaxed text-[#a3a9b8]">
+            {detail}
+          </p>
+        </div>
       </div>
-      <div className="flex items-center gap-2 text-[11px] text-[#a3a9b8]">
-        {probs.map((p, i) => (
-          <React.Fragment key={p.label}>
-            <span>
-              {p.label} {p.value}
-            </span>
-            {i < probs.length - 1 && <span>·</span>}
-          </React.Fragment>
-        ))}
-      </div>
-      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/[0.08]">
-        <div
-          className="h-full rounded-full"
-          style={{
-            width: barWidth,
-            background: "linear-gradient(to right, #4ade80, #22c55e)",
-          }}
-        />
-      </div>
+    </div>
+  );
+}
+
+function PipelineArrow() {
+  return (
+    <div className="flex justify-center py-0.5" aria-hidden>
+      <ArrowDown className="h-3 w-3 text-[#4ade80]/50" />
     </div>
   );
 }
