@@ -268,7 +268,13 @@ async def get_free_picks(
         Prediction.away_win_prob,
     )
     VISIBLE_WIN_PROB_FLOOR = 0.55
-    upcoming_cutoff = now + timedelta(days=21)
+    # 45-day window so we always have 3 legitimate premium picks to
+    # show — even during quiet end-of-season weeks where European
+    # football only produces a handful of clear favourites. Earlier
+    # 14/21-day windows were dropping to 2 real picks which then
+    # triggered the blank-fixture fallback (rendered as a "0%" row
+    # on the homepage — the exact bug the user reported).
+    upcoming_cutoff = now + timedelta(days=45)
     today_stmt = (
         select(Prediction)
         .join(Match, Match.id == Prediction.match_id)
@@ -292,44 +298,14 @@ async def get_free_picks(
     today_rows = (await db.execute(today_stmt)).scalars().unique().all()
     today_picks = [_build_free_pick(p) for p in today_rows]
 
-    # ── Fallback: fill to 3 with upcoming fixtures that lack predictions ──
-    if len(today_picks) < 3:
-        from app.models.team import Team
-        from app.models.league import League as LeagueModel
-
-        existing_match_ids = [p.match_id for p in today_rows]
-        fill_needed = 3 - len(today_picks)
-        filler_stmt = (
-            select(Match)
-            .options(
-                selectinload(Match.home_team),
-                selectinload(Match.away_team),
-                selectinload(Match.league),
-            )
-            .where(
-                and_(
-                    Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
-                    Match.scheduled_at >= now,
-                    Match.scheduled_at <= upcoming_cutoff,
-                    *([] if not existing_match_ids else [Match.id.notin_(existing_match_ids)]),
-                )
-            )
-            .order_by(Match.scheduled_at.asc())
-            .limit(fill_needed)
-        )
-        filler_rows = (await db.execute(filler_stmt)).scalars().unique().all()
-        for m in filler_rows:
-            today_picks.append(FreePickItem(
-                id="",
-                match_id=str(m.id),
-                home_team=m.home_team.name if m and m.home_team else "TBD",
-                away_team=m.away_team.name if m and m.away_team else "TBD",
-                home_team_logo=m.home_team.logo_url if m and m.home_team else None,
-                away_team_logo=m.away_team.logo_url if m and m.away_team else None,
-                league=m.league.name if m and m.league else "",
-                scheduled_at=m.scheduled_at.isoformat() if m else "",
-                status=m.status.value if hasattr(m.status, "value") else str(m.status),
-            ))
+    # Blank-fixture fallback REMOVED. Previously, if fewer than 3
+    # predictions cleared the max-prob floor we padded the list with
+    # upcoming fixtures that had no Prediction row — but those items
+    # had null probabilities, which the frontend mapped to 0% and
+    # rendered as a visible broken row on the hero widget. The 45-day
+    # window above now gives the primary query room to find three
+    # genuine premium picks; if it still can't, showing 2 honest
+    # picks beats 2 + a 0% placeholder.
 
     # ── Recent results: top 3 finished matches by confidence (last 7 days) ──
     results_start = now - timedelta(days=7)
