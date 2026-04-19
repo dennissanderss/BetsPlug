@@ -63,7 +63,14 @@ export function BotdTrackRecordSection() {
     // validation) — the live-measurement variant lives in
     // LiveMeasurementSection. The model-validation endpoint returns
     // the summary + row list in a single call.
-    fetch(`${API}/bet-of-the-day/model-validation?limit=15`)
+    // Pull extra rows so the post-filter list (graded only) still
+    // has enough history to look populated. The backend's `picks`
+    // array is ordered newest-first and can include unfinished
+    // fixtures (correct === null) because _build_botd_section does
+    // not require_pre_match. We strip those here so a section
+    // titled "historical backtest" never shows "Pending" rows for
+    // matches that have not been played yet.
+    fetch(`${API}/bet-of-the-day/model-validation?limit=50`)
       .then((r) => (r.ok ? r.json() : null))
       .then((body) => {
         if (!body) {
@@ -82,7 +89,10 @@ export function BotdTrackRecordSection() {
           avg_confidence: s.avg_confidence ?? 0,
           last_updated: "",
         });
-        setHistory(body.picks ?? []);
+        const gradedOnly: BotdHistoryItem[] = (body.picks ?? []).filter(
+          (p: BotdHistoryItem) => p.correct === true || p.correct === false
+        );
+        setHistory(gradedOnly.slice(0, 15));
       })
       .catch(() => {
         setAgg(null);

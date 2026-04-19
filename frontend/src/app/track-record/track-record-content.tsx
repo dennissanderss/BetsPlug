@@ -65,9 +65,16 @@ function useLiveTrackRecordStats(pickTier: PublicTier = "all"): LiveStats {
     // BOTD trackrecord is always the raw BOTD stream, not tier-scoped
     // (BOTD itself is a Gold+ feature). The summary call, in contrast,
     // respects the ?pick_tier= public filter so each tab reshapes KPIs.
+    //
+    // The BOTD KPI now pulls /bet-of-the-day/model-validation (same
+    // source as the section 3 card below) so the hero accuracy figure
+    // never disagrees with the detailed section. Previously the top
+    // card used /bet-of-the-day/track-record which returns zero rows
+    // when only future live picks exist, producing a confusing "0%
+    // accuracy" tile right above a section claiming 58.6%.
     Promise.allSettled([
       fetch(`${API}/trackrecord/summary${tierQs}`).then((r) => r.json()),
-      fetch(`${API}/bet-of-the-day/track-record`).then((r) => r.json()),
+      fetch(`${API}/bet-of-the-day/model-validation?limit=1`).then((r) => r.json()),
     ]).then(([summaryResult, botdResult]) => {
       const next: LiveStats = {
         totalPredictions: null,
@@ -83,9 +90,14 @@ function useLiveTrackRecordStats(pickTier: PublicTier = "all"): LiveStats {
         next.brierScore = s.brier_score ?? s.avg_brier_score ?? null;
       }
       if (botdResult.status === "fulfilled" && botdResult.value) {
-        const b = botdResult.value;
-        next.botdTotal = b.total ?? b.total_picks ?? null;
-        next.botdAccuracy = b.accuracy ?? b.win_rate ?? null;
+        const summary = botdResult.value?.summary ?? {};
+        next.botdTotal = summary.total_picks ?? null;
+        // accuracy_pct is a percentage (0-100); the tile expects a
+        // fraction (0-1) so it can multiply by 100 itself.
+        next.botdAccuracy =
+          typeof summary.accuracy_pct === "number"
+            ? summary.accuracy_pct / 100
+            : null;
       }
       setStats(next);
     });
