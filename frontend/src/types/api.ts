@@ -875,6 +875,25 @@ export interface GeneratePredictionsResult {
   details: string[];
 }
 
+export interface SchedulerJob {
+  id: string;
+  name: string;
+  trigger: string;
+  next_run_time: string | null;
+  pending: boolean;
+}
+
+export interface SchedulerStatus {
+  running: boolean;
+  jobs: SchedulerJob[];
+}
+
+export interface JobTriggerResponse {
+  triggered: string;
+  ok: boolean;
+  detail?: string | null;
+}
+
 // Capacity plan (GET /api/admin/capacity-plan)
 export type CapacityStatus = "safe" | "watch" | "tight" | "over";
 

@@ -1260,22 +1260,153 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
         />
       </div>
 
-      {/* Scheduler status */}
-      <div className="card-neon overflow-hidden lg:col-span-2">
-        <div className="flex items-center gap-2.5 border-b border-white/[0.06] px-6 py-4">
+      {/* Scheduler status — LIVE data from APScheduler */}
+      <SchedulerStatusCard />
+    </div>
+  );
+}
+
+// ─── Scheduler Status (live) ──────────────────────────────────────────────────
+
+const JOB_DESCRIPTIONS: Record<string, string> = {
+  sync_data:
+    "Haalt fixtures + results op van API-Football. Zonder deze taak komen er geen nieuwe wedstrijden binnen.",
+  generate_predictions:
+    "Genereert AI-voorspellingen voor upcoming matches zonder prediction.",
+  evaluate_predictions:
+    "Scoort afgelopen voorspellingen nadat een wedstrijd klaar is.",
+  historical_predictions:
+    "Backfill voorspellingen voor historische wedstrijden (backtest).",
+  sync_live_fixtures:
+    "Checkt elke minuut tijdens speeluren of een match afgelopen is.",
+};
+
+const TRIGGERABLE_JOBS = new Set([
+  "sync_data",
+  "generate_predictions",
+  "evaluate_predictions",
+  "historical_predictions",
+]);
+
+function SchedulerStatusCard() {
+  const statusQuery = useQuery({
+    queryKey: ["admin-scheduler-status"],
+    queryFn: () => api.getSchedulerStatus(),
+    refetchInterval: 30_000,
+    retry: false,
+  });
+
+  const [lastTrigger, setLastTrigger] = React.useState<{
+    job: string;
+    ok: boolean;
+    detail?: string | null;
+  } | null>(null);
+
+  const triggerMutation = useMutation({
+    mutationFn: (jobId: string) => api.triggerSchedulerJob(jobId),
+    onSuccess: (data) => {
+      setLastTrigger({ job: data.triggered, ok: data.ok, detail: data.detail });
+      statusQuery.refetch();
+    },
+    onError: (err, jobId) => {
+      setLastTrigger({
+        job: jobId,
+        ok: false,
+        detail: err instanceof Error ? err.message : String(err),
+      });
+    },
+  });
+
+  const status = statusQuery.data;
+
+  return (
+    <div className="card-neon overflow-hidden lg:col-span-2">
+      <div className="flex items-center justify-between gap-3 border-b border-white/[0.06] px-6 py-4">
+        <div className="flex items-center gap-2.5">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
             <Clock className="h-4 w-4 text-blue-400" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-slate-100">Scheduler Status</h3>
-            <p className="text-xs text-slate-400">Celery beat schedule - background task cadence</p>
+            <h3 className="text-sm font-semibold text-slate-100">
+              Scheduler Status
+              <span className="ml-2 inline-flex items-center rounded-md border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-300">
+                🟢 Live
+              </span>
+            </h3>
+            <p className="text-xs text-slate-400">
+              Echte APScheduler-status. Als "Running" uit staat draaien er ZERO
+              automatische taken (geen nieuwe wedstrijden, geen voorspellingen).
+            </p>
           </div>
         </div>
+        <div className="flex items-center gap-2">
+          {status && (
+            <StatusPill status={status.running ? "running" : "failed"} />
+          )}
+          <button
+            onClick={() => statusQuery.refetch()}
+            className="inline-flex items-center gap-1.5 rounded border border-white/10 bg-white/[0.04] px-2 py-1 text-[11px] text-slate-300 hover:bg-white/[0.08]"
+          >
+            <RefreshCw className="h-3 w-3" />
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      {statusQuery.isLoading && (
+        <div className="p-6">
+          <Skeleton className="h-24 w-full rounded-lg" />
+        </div>
+      )}
+
+      {statusQuery.isError && (
+        <div className="p-6 space-y-2">
+          <p className="text-xs font-semibold text-red-300">
+            Kon scheduler-status niet ophalen
+          </p>
+          <pre className="overflow-x-auto whitespace-pre-wrap break-all rounded border border-red-500/30 bg-red-500/5 p-2 text-[10px] font-mono text-red-300/80">
+            {statusQuery.error instanceof Error
+              ? `${statusQuery.error.name}: ${statusQuery.error.message}`
+              : String(statusQuery.error ?? "Unknown error")}
+          </pre>
+          <p className="text-[11px] text-red-200/80">
+            <strong>Waarschijnlijke oorzaak:</strong> backend onbereikbaar of
+            scheduler-module niet geladen. Check Railway logs.
+          </p>
+        </div>
+      )}
+
+      {status && !status.running && (
+        <div className="mx-6 mt-4 rounded-lg border border-red-500/40 bg-red-500/10 p-3">
+          <p className="text-xs font-semibold text-red-200">
+            ⚠️ APScheduler draait NIET op Railway.
+          </p>
+          <p className="mt-1 text-[11px] text-red-200/80">
+            Dit is de meest waarschijnlijke oorzaak van een data-gat. Redeploy
+            de backend op Railway of check de crashlog — start_scheduler() in
+            backend/app/main.py:276 werd niet succesvol aangeroepen.
+          </p>
+        </div>
+      )}
+
+      {status && status.running && status.jobs.length === 0 && (
+        <div className="mx-6 mt-4 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3">
+          <p className="text-xs font-semibold text-amber-200">
+            ⚠️ Scheduler draait, maar geen jobs geregistreerd.
+          </p>
+          <p className="mt-1 text-[11px] text-amber-200/80">
+            start_scheduler() registreert geen add_job() calls. Check
+            backend/app/services/scheduler.py:930.
+          </p>
+        </div>
+      )}
+
+      {status && status.jobs.length > 0 && (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/[0.06]">
-                {["Task", "Schedule", "Description", "Status"].map((h, i) => (
+                {["Job", "Trigger", "Volgende run", "Actie"].map((h, i) => (
                   <th
                     key={h}
                     className={cn(
@@ -1289,57 +1420,88 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
               </tr>
             </thead>
             <tbody>
-              {[
-                {
-                  task: "ingest_all_sources",
-                  schedule: "Every 6 hours",
-                  description: "Fetch latest fixture and result data",
-                  status: "active",
-                },
-                {
-                  task: "run_predictions",
-                  schedule: "Every 4 hours",
-                  description: "Generate forecasts for upcoming matches",
-                  status: "active",
-                },
-                {
-                  task: "evaluate_predictions",
-                  schedule: "Every 2 hours",
-                  description: "Score completed match predictions",
-                  status: "active",
-                },
-                {
-                  task: "retrain_models",
-                  schedule: "Weekly (Sun 02:00)",
-                  description: "Full model retraining on latest data",
-                  status: "active",
-                },
-                {
-                  task: "generate_weekly_report",
-                  schedule: "Weekly (Mon 07:00)",
-                  description: "Create weekly simulation performance report",
-                  status: "active",
-                },
-              ].map((row, idx, arr) => (
-                <tr
-                  key={row.task}
-                  className={cn(
-                    "transition-colors hover:bg-white/[0.02]",
-                    idx < arr.length - 1 && "border-b border-white/[0.04]"
-                  )}
-                >
-                  <td className="px-5 py-3 font-mono text-xs text-slate-300">{row.task}</td>
-                  <td className="px-5 py-3 whitespace-nowrap text-xs text-slate-400">{row.schedule}</td>
-                  <td className="px-5 py-3 text-xs text-slate-400">{row.description}</td>
-                  <td className="px-5 py-3 text-right">
-                    <StatusPill status={row.status} />
-                  </td>
-                </tr>
-              ))}
+              {status.jobs.map((job, idx, arr) => {
+                const canTrigger = TRIGGERABLE_JOBS.has(job.id);
+                const isTriggering =
+                  triggerMutation.isPending &&
+                  triggerMutation.variables === job.id;
+                const nextRun = job.next_run_time
+                  ? formatDateTime(job.next_run_time)
+                  : "— (paused)";
+                return (
+                  <tr
+                    key={job.id}
+                    className={cn(
+                      "transition-colors hover:bg-white/[0.02]",
+                      idx < arr.length - 1 && "border-b border-white/[0.04]"
+                    )}
+                  >
+                    <td className="px-5 py-3 space-y-0.5">
+                      <p className="font-mono text-xs text-slate-200">
+                        {job.name || job.id}
+                      </p>
+                      {JOB_DESCRIPTIONS[job.id] && (
+                        <p className="text-[11px] text-slate-500">
+                          {JOB_DESCRIPTIONS[job.id]}
+                        </p>
+                      )}
+                    </td>
+                    <td className="px-5 py-3 font-mono text-[11px] text-slate-400">
+                      {job.trigger}
+                    </td>
+                    <td className="px-5 py-3 whitespace-nowrap text-xs text-slate-400">
+                      {nextRun}
+                    </td>
+                    <td className="px-5 py-3 text-right">
+                      {canTrigger ? (
+                        <button
+                          onClick={() => triggerMutation.mutate(job.id)}
+                          disabled={triggerMutation.isPending}
+                          className="inline-flex items-center gap-1.5 rounded-md border border-blue-500/30 bg-blue-500/10 px-2.5 py-1 text-[11px] font-semibold text-blue-200 hover:bg-blue-500/20 disabled:opacity-50"
+                        >
+                          {isTriggering ? (
+                            <>
+                              <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                              Bezig…
+                            </>
+                          ) : (
+                            <>
+                              <Zap className="h-3 w-3" />
+                              Run nu
+                            </>
+                          )}
+                        </button>
+                      ) : (
+                        <span className="text-[11px] text-slate-600">—</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
-      </div>
+      )}
+
+      {lastTrigger && (
+        <div
+          className={cn(
+            "mx-6 my-4 rounded-lg border p-3 text-xs",
+            lastTrigger.ok
+              ? "border-emerald-500/30 bg-emerald-500/5 text-emerald-200"
+              : "border-red-500/30 bg-red-500/5 text-red-200"
+          )}
+        >
+          <p className="font-semibold">
+            {lastTrigger.ok ? "✓" : "✗"} {lastTrigger.job}
+          </p>
+          {lastTrigger.detail && (
+            <p className="mt-1 font-mono text-[11px] opacity-80">
+              {lastTrigger.detail}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

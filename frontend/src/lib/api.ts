@@ -552,6 +552,17 @@ class ApiClient {
       { method: "POST", body: JSON.stringify({ days }) },
     );
   }
+  getSchedulerStatus() {
+    return this.request<import("@/types/api").SchedulerStatus>(
+      "/admin/scheduler-status"
+    );
+  }
+  triggerSchedulerJob(jobId: string) {
+    return this.request<import("@/types/api").JobTriggerResponse>(
+      `/admin/trigger-job?job_id=${encodeURIComponent(jobId)}`,
+      { method: "POST" },
+    );
+  }
 
   // Fixture Results
   getFixtureResults(days = 7, league?: string) {
