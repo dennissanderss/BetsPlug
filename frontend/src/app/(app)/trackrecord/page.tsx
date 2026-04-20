@@ -1557,7 +1557,13 @@ export default function TrackrecordPage() {
   const [dateTo, setDateTo] = React.useState("");
   const [sportId, setSportId] = React.useState("all");
   const [leagueId, setLeagueId] = React.useState("all");
+  // Tabs zijn verwijderd — layout is nu lineair. State + array behouden
+  // tot de refactor helemaal is opgeschoond zodat TypeScript niet klaagt
+  // over ongebruikte symbolen; geen render-pad gebruikt ze nog.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [activeTab, setActiveTab] = React.useState("performance");
+  void setActiveTab;
+  void activeTab;
   // v8.3 — public tier selector. "all" means "whatever the caller has
   // access to"; the other values override access_filter on the backend.
   const [pickTier, setPickTier] = React.useState<
@@ -1627,6 +1633,8 @@ export default function TrackrecordPage() {
   // page numbers sections 1–4 as: tier-backtest / tier-live / botd-
   // backtest / botd-live. Authed users get the same mental model,
   // plus the existing "Segmenten" drill-down as an extra 5th tab.
+  // Dead tabs array — laat even staan zodat latere cleanup makkelijk is.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const tabs = [
     { key: "performance", label: `1 · ${t("trackrecord.performance")}`, icon: TrendingUp },
     { key: "live", label: `2 · ${t("trackrecord.tabLive")}`, icon: Activity },
@@ -1634,6 +1642,7 @@ export default function TrackrecordPage() {
     { key: "botd-live", label: `4 · ${t("trackrecord.tabBotd")} · ${t("trackrecord.tabLive")}`, icon: Activity },
     { key: "segments", label: t("trackrecord.segments"), icon: Layers },
   ];
+  void tabs;
 
   return (
     <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
@@ -2149,169 +2158,6 @@ export default function TrackrecordPage() {
         </div>
       </div>
 
-      {/* ── Legacy tab renderblocks — dead code, tabs zijn verwijderd.
-           Hieronder worden ze niet meer gerenderd (activeTab mag ook
-           niet meer bestaan) maar we houden de no-op guards zodat
-           TypeScript niet klaagt tot de refactor helemaal is opgeschoond. */}
-      {false && activeTab === "performance" && (
-        <div className="space-y-6 animate-slide-up">
-          {/* Accuracy over time — real data from monthSegments */}
-          <ProfitabilityChart monthSegments={monthSegments} loading={monthLoading} />
-
-          {/* Accuracy by league — real data */}
-          <div className="glass-card p-6">
-            <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.accuracyByLeague")}</h2>
-              <p className="text-sm text-slate-500 mt-0.5">
-                {t("trackrecord.accuracyByLeagueDesc")}
-              </p>
-            </div>
-            <SportAccuracySection filterParams={filterParams} />
-          </div>
-
-          {/* Rolling accuracy chart */}
-          <div className="glass-card p-6">
-            <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.accuracyTrend")}</h2>
-              <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.accuracyTrendDesc")}</p>
-            </div>
-            {monthLoading ? (
-              <div className="h-72 w-full rounded-xl bg-white/[0.03] animate-pulse" />
-            ) : rollingData.length === 0 ? (
-              <div className="flex h-72 items-center justify-center text-sm text-slate-500">
-                {t("trackrecord.noMonthlyData")}
-              </div>
-            ) : (
-              <RollingAccuracyChart
-                data={rollingData}
-                title=""
-                windowLabel={t("trackrecord.monthlyAccuracy")}
-                showBaseline={false}
-                targetAccuracy={0.6}
-              />
-            )}
-          </div>
-
-          {/* Summary stats */}
-          <div className="glass-card p-6">
-            <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.summaryStatistics")}</h2>
-              <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.summaryStatisticsDesc")}</p>
-            </div>
-            {summaryLoading ? (
-              <div className="space-y-1.5">
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i} className="h-9 w-full rounded-lg bg-white/[0.04] animate-pulse" />
-                ))}
-              </div>
-            ) : !summary ? (
-              <p className="py-8 text-center text-sm text-slate-500">
-                {t("trackrecord.noSummaryData")}
-              </p>
-            ) : (
-              <div className="space-y-4">
-                <SummaryStatsTable summary={summary} />
-                {/* v8.1 per-tier breakdown — auto-hides when backend flag off. */}
-                <PerTierBreakdownTable summary={summary} />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ── Segments Tab ── */}
-      {false && activeTab === "segments" && (
-        <div className="space-y-6 animate-slide-up">
-          {/* By League */}
-          <div className="glass-card p-6">
-            <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.performanceByLeague")}</h2>
-              <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.performanceByLeagueDesc")}</p>
-            </div>
-            <SegmentSection title={t("trackrecord.league")} groupBy="sport" filterParams={filterParams} />
-          </div>
-
-          {/* By League */}
-          <div className="glass-card p-6">
-            <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.performanceByLeague")}</h2>
-              <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.performanceByLeagueDesc")}</p>
-            </div>
-            <SegmentSection title={t("trackrecord.league")} groupBy="league" filterParams={filterParams} />
-          </div>
-
-          {/* By Confidence Bucket */}
-          <div className="glass-card p-6">
-            <div className="mb-4">
-              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.performanceByConfidence")}</h2>
-              <p className="text-sm text-slate-500 mt-0.5">{t("trackrecord.performanceByConfidenceDesc")}</p>
-            </div>
-            <SegmentSection
-              title={t("trackrecord.confidenceBucket")}
-              groupBy="confidence_bucket"
-              filterParams={filterParams}
-            />
-          </div>
-
-          {/* CSV Export */}
-          <div className="glass-card p-5 flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-semibold text-slate-100">{t("trackrecord.exportTitle")}</h3>
-              <p className="text-xs text-slate-500 mt-0.5">{t("trackrecord.exportDesc")}</p>
-            </div>
-            <a
-              href={api.getTrackrecordExportUrl(
-                undefined,
-                pickTier !== "all" ? pickTier : undefined,
-              )}
-              download
-              className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-400 transition-all hover:bg-emerald-500/20"
-            >
-              <Download className="h-4 w-4" />
-              {t("trackrecord.exportCta")}
-            </a>
-          </div>
-
-          {/* Related pages */}
-          <RelatedLinks
-            title={t("related.title")}
-            links={[
-              { label: t("related.strategyLab"), href: "/strategy", description: t("related.strategyLabDesc"), icon: FlaskConical },
-              { label: t("related.results"), href: "/results", description: t("related.resultsDesc"), icon: Trophy },
-              { label: t("related.predictions"), href: "/predictions", description: t("related.predictionsDesc"), icon: Sparkles },
-            ]}
-          />
-
-          {/* Dataset herkomst — same TrustFunnel visualisation used on
-              the marketing homepage, so authed users can see the exact
-              pipeline (55k → 3.8k → 3.763 → per tier) without leaving
-              the track-record context. */}
-          <TrustFunnel />
-        </div>
-      )}
-
-      {/* Legacy dead code — tab-gated blocks nu uitgezet. Vervangen door
-           de lineaire layout hierboven. Mag opgeruimd worden in een
-           volgende commit zodra de refactor stabiel staat in prod. */}
-      {false && activeTab === "botd" && (
-        <div className="space-y-6 animate-slide-up">
-          <BotdTierGate>
-            <BotdTrackRecordSection />
-          </BotdTierGate>
-        </div>
-      )}
-      {false && activeTab === "live" && (
-        <div className="space-y-6 animate-slide-up">
-          <LiveMeasurementSection />
-        </div>
-      )}
-      {false && activeTab === "botd-live" && (
-        <div className="space-y-6 animate-slide-up">
-          <BotdTierGate>
-            <BotdLiveTrackingSection />
-          </BotdTierGate>
-        </div>
-      )}
       </div>
     </div>
   );
