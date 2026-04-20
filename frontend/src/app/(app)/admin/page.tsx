@@ -1071,20 +1071,6 @@ function ActionsHelpPanel() {
       {open && (
         <div className="space-y-4 border-t border-white/[0.06] px-5 py-4 text-sm text-[#cbd3e0]">
           <div>
-            <p className="mb-1 text-[13px] font-semibold text-purple-300">
-              🟣 API Capacity (API-Football)
-            </p>
-            <p className="text-xs leading-relaxed text-slate-400">
-              Alleen informatief. Toont hoeveel API-Football calls we vandaag
-              en in de afgelopen 7 dagen hebben gedaan, afgezet tegen de
-              limiet van het huidige abonnement. Onder aan zie je een
-              projectie: "bij X gebruikers kom je op Y calls per dag". Handig
-              om te beslissen of je naar een hoger API-Football plan moet.
-              <strong className="text-emerald-300"> Geen knoppen — niets aan klikken.</strong>
-            </p>
-          </div>
-
-          <div>
             <p className="mb-1 text-[13px] font-semibold text-blue-300">
               🔵 Pipeline Health
             </p>
@@ -1168,7 +1154,6 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <ActionsHelpPanel />
-      <CapacityPlanCard />
       <PipelineHealthCard />
       {/* Sync data */}
       <div className="card-neon p-6 space-y-4">
