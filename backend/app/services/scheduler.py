@@ -168,23 +168,45 @@ async def job_generate_predictions():
             # Process in batches of BATCH_SIZE
             service = ForecastService()
             generated = 0
+            failed = 0
             for batch_start in range(0, len(ids_to_predict), BATCH_SIZE):
                 batch_ids = ids_to_predict[batch_start:batch_start + BATCH_SIZE]
                 for match_id in batch_ids:
                     try:
                         await service.generate_forecast(match_id, db, source="live")
+                        # Commit per-match so a later failure doesn't roll
+                        # back earlier successes in the same batch, and a
+                        # flush-error on this match doesn't poison the
+                        # shared session for the next 49. Before this fix
+                        # one bad match caused PendingRollbackError on
+                        # every subsequent iteration — invisible because
+                        # the except-branch logged them all as identical
+                        # "Prediction failed" warnings.
+                        await db.commit()
                         generated += 1
                     except Exception as exc:
-                        log.warning("CRON: Prediction failed for %s: %s", match_id, exc)
+                        # Rollback so the session is usable for the next
+                        # match instead of raising PendingRollbackError
+                        # on the first query. And log with exc_info=True
+                        # so the Railway log has the full traceback —
+                        # the previous warning-only output hid which
+                        # line in generate_forecast was actually raising.
+                        await db.rollback()
+                        failed += 1
+                        log.error(
+                            "CRON: Prediction failed for %s: %s",
+                            match_id, exc, exc_info=True,
+                        )
 
-                await db.commit()
                 db.expire_all()
                 gc.collect()
-                log.debug("CRON: Prediction batch committed (%d-%d).",
+                log.debug("CRON: Prediction batch done (%d-%d).",
                           batch_start, batch_start + len(batch_ids))
 
-            log.info("CRON: Generated %d predictions for %d new matches.",
-                     generated, len(ids_to_predict))
+            log.info(
+                "CRON: Generated %d predictions for %d new matches (%d failed).",
+                generated, len(ids_to_predict), failed,
+            )
 
     except Exception as exc:
         log.error("CRON: Prediction generation failed: %s", exc, exc_info=True)
