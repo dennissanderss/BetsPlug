@@ -542,6 +542,11 @@ function PipelineHealthCard() {
     queryKey: ["admin-pipeline-health"],
     queryFn: () => api.getPipelineHealth(),
     refetchInterval: 60_000,
+    // Retry for 2 min so Railway redeploy windows don't flash a red
+    // error on the admin tab — "Failed to fetch" during deploy is
+    // not a real error, it's a 5-second gap while the new image boots.
+    retry: 3,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10_000),
   });
 
   const runMutation = useMutation({
