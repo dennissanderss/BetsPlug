@@ -17,6 +17,7 @@ import {
   Crown,
   Target,
   Activity,
+  RefreshCw,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
