@@ -378,8 +378,8 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm text-[#a3a9b8] sm:text-base">
               {isNl
-                ? "30+ competities wereldwijd. Zelfde AI-motor, zelfde openbare trackrecord, klik een competitie voor de gratis picks van deze week."
-                : "30+ competitions worldwide. Same AI engine, same public track record, click any league for this week's free picks."}
+                ? "30 competities wereldwijd. Zelfde AI-motor, zelfde openbare trackrecord, klik een competitie voor de gratis picks van deze week."
+                : "30 competitions worldwide. Same AI engine, same public track record, click any league for this week's free picks."}
             </p>
           </div>
 

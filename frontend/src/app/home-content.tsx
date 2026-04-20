@@ -710,7 +710,7 @@ export function HomeContent({
                       <p className="mt-1 text-xs text-[#6b7280]">{t("track.metricPredictions")}</p>
                     </div>
                     <div>
-                      <p className="text-stat text-2xl text-[#ededed] sm:text-3xl">30+</p>
+                      <p className="text-stat text-2xl text-[#ededed] sm:text-3xl">30</p>
                       <p className="mt-1 text-xs text-[#6b7280]">{t("track.metricLeagues")}</p>
                     </div>
                   </div>

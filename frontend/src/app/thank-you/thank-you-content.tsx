@@ -411,7 +411,7 @@ function ThankYouContent({
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mx-auto mt-6 max-w-2xl text-balance text-base leading-relaxed text-[#a3a9b8] sm:text-lg"
           >
-            Your AI football predictions subscription is live across 30+ leagues. Here&apos;s exactly what you just unlocked — and where to go first.
+            Your AI football predictions subscription is live across 30 leagues. Here&apos;s exactly what you just unlocked — and where to go first.
           </motion.p>
 
           {/* Plan badge */}

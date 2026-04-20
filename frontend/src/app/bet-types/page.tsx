@@ -189,8 +189,8 @@ export default async function BetTypesIndexPage() {
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
                 {t(
-                  "Open any match in BetsPlug and compare the bookmaker odds against our AI prediction. If there's value, you'll see it flagged — across 30+ leagues, updated every hour.",
-                  "Open een wedstrijd in BetsPlug en vergelijk de bookmaker-odds met onze AI-voorspelling. Als er value is, zie je het direct — over 30+ competities, elk uur bijgewerkt.",
+                  "Open any match in BetsPlug and compare the bookmaker odds against our AI prediction. If there's value, you'll see it flagged — across 30 leagues, updated every hour.",
+                  "Open een wedstrijd in BetsPlug en vergelijk de bookmaker-odds met onze AI-voorspelling. Als er value is, zie je het direct — over 30 competities, elk uur bijgewerkt.",
                 )}
               </p>
 

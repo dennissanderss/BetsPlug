@@ -98,7 +98,7 @@ const en = {
   "liveProof.winrate": "Gold-tier win rate",
   "liveProof.predictions": "Gold picks graded",
   "liveProof.leagues": "Football leagues live",
-  "liveProof.leaguesValue": "30+",
+  "liveProof.leaguesValue": "30",
   "liveProof.disclaimer": "These numbers come straight from the same database behind every prediction. No separate 'results page' we control. What you see is what happened.",
 
   /* PAS pain block, 'how the average user loses' */
@@ -132,7 +132,7 @@ const en = {
   "persona.seriousTitle": "The serious user",
   "persona.seriousPitch": "You manage your bankroll properly. You shop for the best odds. You want an AI edge without losing control of your bets.",
   "persona.seriousFeature1": "Every prediction with a confidence score + edge vs market odds",
-  "persona.seriousFeature2": "Full coverage across 30+ leagues (CL, UEL, MLS included)",
+  "persona.seriousFeature2": "Full coverage across 30 leagues (CL, UEL, MLS included)",
   "persona.seriousFeature3": "Only data from before kickoff — no post-match data leaks in",
   "persona.seriousCta": "See tonight's value plays",
   "persona.quantTitle": "The numbers user",
@@ -182,7 +182,7 @@ const en = {
     "One AI engine. One daily Pick of the Day. One public track record you can verify. No black boxes.",
   "how.step1Title": "1. Our AI scans every match",
   "how.step1Desc":
-    "Our AI analyzes form, head-to-head records, and league standings, plus 40 other factors per match. Updated before every kickoff across 30+ leagues. That's how our AI football predictions start.",
+    "Our AI analyzes form, head-to-head records, and league standings, plus 40 other factors per match. Updated before every kickoff across 30 leagues. That's how our AI football predictions start.",
   "how.step2Title": "2. We pick the single best bet",
   "how.step2Desc":
     "Pick of the Day is our highest-confidence AI football prediction out of 50+ matches that day, currently at {potdAccuracy}% accuracy across {potdPicks} picks. One clear call. Delivered daily. Free on the homepage.",
@@ -291,7 +291,7 @@ const en = {
   "track.desc1":
     "Every AI football prediction is computed from only the data available before kickoff, scored automatically, and persisted in the same public database that powers the homepage. Wins and losses. No editing. No hidden results.",
   "track.desc2":
-    "Premier League predictions, La Liga tips, Champions League picks, Eredivisie analysis, same approach, same honesty across 30+ football leagues worldwide. We don't cherry-pick our best league.",
+    "Premier League predictions, La Liga tips, Champions League picks, Eredivisie analysis, same approach, same honesty across 30 football leagues worldwide. We don't cherry-pick our best league.",
   "track.cta": "View the full track record",
   "track.askQuestion": "How is accuracy calculated?",
 
@@ -609,13 +609,13 @@ const en = {
   "articles.related": "Related Articles",
   "articles.ctaBadge": "Your betting edge starts here",
   "articles.ctaTitle": "Put this knowledge to work with real AI football predictions.",
-  "articles.ctaSubtitle": "Start your €0,01 trial and get match-by-match win probabilities, a daily Pick of the Day and full BetsPlug Pulse breakdowns for 30+ leagues.",
+  "articles.ctaSubtitle": "Start your €0,01 trial and get match-by-match win probabilities, a daily Pick of the Day and full BetsPlug Pulse breakdowns for 30 leagues.",
   "articles.ctaButton": "Start €0,01 trial",
   "articles.ctaNoCard": "No lock-in · Cancel in two clicks · Stripe-secured",
   "articles.listCtaBadge": "From reading to real picks",
   "articles.listCtaTitle": "Ready to use these football betting tips on tonight's",
   "articles.listCtaAccent": "AI football predictions?",
-  "articles.listCtaSubtitle": "BetsPlug analyses every match with four proven prediction methods running side by side, covering 30+ leagues. Win probabilities update every hour so you always have the latest numbers.",
+  "articles.listCtaSubtitle": "BetsPlug analyses every match with four proven prediction methods running side by side, covering 30 leagues. Win probabilities update every hour so you always have the latest numbers.",
   "articles.listCtaPrimary": "Start €0,01 trial",
   "articles.listCtaSecondary": "See today's predictions",
   "articles.listCtaReassurance": "No lock-in · Cancel in two clicks · Stripe-secured",
@@ -632,7 +632,7 @@ const en = {
   "seo.titleA": "AI Football Predictions &",
   "seo.titleB": "Data-Driven Betting Tips",
   "seo.subtitle":
-    "BetsPlug is the AI-powered football prediction platform trusted by thousands of football fans worldwide. Our machine learning models analyse every match across 30+ leagues, from the Premier League and La Liga to the Bundesliga, Serie A and Ligue 1, to calculate accurate win probabilities and identify value betting opportunities. Whether you're looking for today's football predictions, researching your next accumulator, or want to see which team is most likely to win tonight, BetsPlug gives you clear, honest AI predictions backed by a fully public track record.",
+    "BetsPlug is the AI-powered football prediction platform trusted by thousands of football fans worldwide. Our machine learning models analyse every match across 30 leagues, from the Premier League and La Liga to the Bundesliga, Serie A and Ligue 1, to calculate accurate win probabilities and identify value betting opportunities. Whether you're looking for today's football predictions, researching your next accumulator, or want to see which team is most likely to win tonight, BetsPlug gives you clear, honest AI predictions backed by a fully public track record.",
   "seo.pillar1Title": "AI Football Prediction Engine",
   "seo.pillar1Desc":
     "BetsPlug Pulse, our AI football prediction engine, combines team strength ratings, a scoreline predictor and a pattern-recognition AI model to forecast match outcomes across all major football leagues. Multiple models work together to deliver predictions that are more accurate than any single method alone, giving you data-driven football tips you can trust.",
@@ -653,7 +653,7 @@ const en = {
     "BetsPlug is a football analytics and prediction platform, not a bookmaker. We don't accept bets or handle money. We provide AI-driven football predictions, match analysis and data insights so you can make your own informed decisions. What you do with the information is entirely up to you.",
   "seo.pillar7Title": "Football Predictions for Every League",
   "seo.pillar7Desc":
-    "From Premier League predictions to Champions League tips, from Eredivisie forecasts to Süper Lig match analysis, BetsPlug covers 30+ football leagues worldwide. Our AI models are trained on years of historical match data, form tables, head-to-head records and expected goals (xG) to deliver reliable football betting predictions for every competition we cover.",
+    "From Premier League predictions to Champions League tips, from Eredivisie forecasts to Süper Lig match analysis, BetsPlug covers 30 football leagues worldwide. Our AI models are trained on years of historical match data, form tables, head-to-head records and expected goals (xG) to deliver reliable football betting predictions for every competition we cover.",
   "seo.pillar8Title": "How BetsPlug's AI Predictions Work",
   "seo.pillar8Desc":
     "BetsPlug Pulse, our AI engine, combines team strength ratings, a scoreline predictor and a pattern-recognition AI model, blending all signals via weighted averaging into final match probabilities. The result: accurate, data-backed football predictions updated before every matchday across all supported leagues.",
@@ -713,7 +713,7 @@ const en = {
     "No. Three AI picks are free every day and the public track record has no paywall. When you're ready for more, the €0,01 Bronze trial unlocks full Gold access for 7 days, cancel in two clicks, no auto-upgrade.",
   "contact.faq3Q": "Which football leagues do you cover?",
   "contact.faq3A":
-    "30+ top football competitions worldwide, Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, UEFA Champions League, Europa League and 22+ more. Every league has 5+ seasons of clean training data before it goes live.",
+    "30 top football competitions worldwide, Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, UEFA Champions League, Europa League and 22+ more. Every league has 5+ seasons of clean training data before it goes live.",
 
   "contact.faqGroup2": "Account & billing",
   "contact.faq4Q": "Can I cancel my subscription anytime?",
@@ -749,7 +749,7 @@ const en = {
     "Thanks for reaching out! A BetsPlug analyst will get back to you shortly. In the meantime, check our FAQ or drop us a line at support@betsplug.com.",
   "chatbot.replyHello":
     "Hey there! 👋 I'm the BetsPlug AI. Ask me anything about our models, pricing or predictions - I'll do my best to help.",
-  "chatbot.replyPricing": "We have four tiers. Bronze is a symbolic €0.01 trial - full access for 7 days, real card required (this keeps the platform fraud-free). Silver (€9.99/mo) is an entry-level plan limited to the top 5 European leagues and BetsPlug Pulse picks with a 2h delay. Gold (€14.99/mo) is our most popular - all 30+ leagues worldwide, full BetsPlug Pulse AI output, instant picks, daily Pick of the Day, Gold Telegram and Strategy Lab (coming soon). Platinum (€199 one-time lifetime) adds private Telegram, 1-on-1 onboarding and a lifetime price lock. All paid plans are backed by a 14-day EU money-back guarantee.",
+  "chatbot.replyPricing": "We have four tiers. Bronze is a symbolic €0.01 trial - full access for 7 days, real card required (this keeps the platform fraud-free). Silver (€9.99/mo) is an entry-level plan limited to the top 5 European leagues and BetsPlug Pulse picks with a 2h delay. Gold (€14.99/mo) is our most popular - all 30 leagues worldwide, full BetsPlug Pulse AI output, instant picks, daily Pick of the Day, Gold Telegram and Strategy Lab (coming soon). Platinum (€199 one-time lifetime) adds private Telegram, 1-on-1 onboarding and a lifetime price lock. All paid plans are backed by a 14-day EU money-back guarantee.",
   "chatbot.replyRefund": "All Silver and Gold plans can be cancelled anytime from your dashboard - you keep access until the end of your billing period. We also offer a 14-day money-back guarantee on all paid plans under EU consumer law. Platinum Lifetime is final-sale after the 14-day refund window.",
   "chatbot.replyAccuracy":
     "Every prediction is logged in our public track record with hit-rate, ROI and confidence scores. You can filter by league, market and date range. No cherry-picking, no hidden losses - transparency is the whole point.",
@@ -760,7 +760,7 @@ const en = {
   "about.metaTitle":
     "About BetsPlug · The Team Building AI Football Predictions",
   "about.metaDesc":
-    "Meet the two engineers behind BetsPlug. We got tired of tipster noise, so we built AI football predictions with a public track record, 30+ leagues, four models, zero cherry-picking.",
+    "Meet the two engineers behind BetsPlug. We got tired of tipster noise, so we built AI football predictions with a public track record, 30 leagues, four models, zero cherry-picking.",
   "about.breadcrumbHome": "Home",
   "about.breadcrumbAbout": "About",
 
@@ -871,7 +871,7 @@ const en = {
   "tr.kpi2Note": "The single highest-confidence forecast each day",
   "tr.kpi3Value": "5,000+",
   "tr.kpi3Label": "Predictions publicly graded",
-  "tr.kpi3Note": "Across 30+ top football competitions",
+  "tr.kpi3Note": "Across 30 top football competitions",
   "tr.kpi4Value": "<0.22",
   "tr.kpi4Label": "Brier score (lower = better calibration)",
   "tr.kpi4Note": "Calibrated across win / draw / loss probabilities",
@@ -975,7 +975,7 @@ const en = {
   "hiw.metaTitle":
     "How Our AI Football Predictions Work · BetsPlug",
   "hiw.metaDesc":
-    "Four AI models analyse 70,000+ matches of history and deliver AI football predictions for 30+ leagues. Pre-match locked. Publicly tracked.",
+    "Four AI models analyse 70,000+ matches of history and deliver AI football predictions for 30 leagues. Pre-match locked. Publicly tracked.",
   "hiw.breadcrumbHome": "Home",
   "hiw.breadcrumbHow": "How it works",
 
@@ -990,7 +990,7 @@ const en = {
   "hiw.heroStat1Label": "Pick-of-the-day hit rate",
   "hiw.heroStat2Value": "{potdPicks}",
   "hiw.heroStat2Label": "Predictions published",
-  "hiw.heroStat3Value": "30+",
+  "hiw.heroStat3Value": "30",
   "hiw.heroStat3Label": "Football leagues live",
   "hiw.heroStat4Value": "CSV",
   "hiw.heroStat4Label": "Exportable prediction log",
@@ -1008,7 +1008,7 @@ const en = {
   "hiw.step1Point2Title": "Refreshed every 6 hours",
   "hiw.step1Point2Desc":
     "Scheduled pipelines pull fresh data for every fixture in the upcoming 7 days, every 6 hours. No stale inputs.",
-  "hiw.step1Point3Title": "30+ top leagues live",
+  "hiw.step1Point3Title": "30 top leagues live",
   "hiw.step1Point3Desc":
     "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, plus 20+ more. The training corpus spans 5+ seasons of clean history.",
 
@@ -1082,7 +1082,7 @@ const en = {
   "hiw.flowStep1Label": "Step 01",
   "hiw.flowStep1Title": "Every match of the day",
   "hiw.flowStep1Desc":
-    "Hundreds of fixtures across 30+ leagues enter the pipeline with fresh data: form, injuries, H2H, xG, odds.",
+    "Hundreds of fixtures across 30 leagues enter the pipeline with fresh data: form, injuries, H2H, xG, odds.",
   "hiw.flowStep2Label": "Step 02",
   "hiw.flowStep2Title": "Four AI models vote",
   "hiw.flowStep2Desc":
@@ -1153,7 +1153,7 @@ const en = {
   "hiw.botdCtaSecondary": "Full track record",
   "hiw.botdFunnelLabel": "Daily selection funnel",
   "hiw.botdFunnel1Title": "All matches of the day",
-  "hiw.botdFunnel1Desc": "Every fixture across 30+ leagues enters the candidate pool.",
+  "hiw.botdFunnel1Desc": "Every fixture across 30 leagues enters the candidate pool.",
   "hiw.botdFunnel1Tag": "300+ matches",
   "hiw.botdFunnel2Title": "Filter on confidence",
   "hiw.botdFunnel2Desc": "Only matches where the AI consensus is strong enough survive this step.",
@@ -1196,7 +1196,7 @@ const en = {
     "Yes. The track record page has a CSV export button. Every prediction, every timestamp, every grade. Run your own analysis and sanity-check our claims, we'd rather you verify than take our word.",
   "hiw.faq4Q": "Which football leagues do your AI predictions cover?",
   "hiw.faq4A":
-    "30+ top competitions including Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, Europa League and Europa Conference. Each league has at least 5 seasons of clean training data behind it.",
+    "30 top competitions including Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, Europa League and Europa Conference. Each league has at least 5 seasons of clean training data behind it.",
   "hiw.faq5Q": "What is Strategy Lab?",
   "hiw.faq5A":
     "Strategy Lab lets you build and rank predictions by backtested strategies (for example: home favourites after rest, underdogs after European away trips). Every strategy runs through a plausibility gate that clamps implausible winrates and ROIs to zero, so overfit filters can't be presented as profitable.",
@@ -1225,7 +1225,7 @@ const en = {
   /* Page heading */
   "checkout.pageTitle": "Unlock your AI football predictions",
   "checkout.pageSubtitle":
-    "One €0,01 card-verify, then full access to all four AI models across 30+ leagues. Stripe-secured checkout, cancel in two clicks.",
+    "One €0,01 card-verify, then full access to all four AI models across 30 leagues. Stripe-secured checkout, cancel in two clicks.",
 
   /* Stepper labels */
   "checkout.step1": "Account",
@@ -1394,7 +1394,7 @@ const en = {
     "Use the email and password you just created to unlock the member dashboard and tonight's AI football predictions.",
   "welcome.next2Title": "See today's locked picks",
   "welcome.next2Body":
-    "Win probabilities land every morning, scored across 30+ leagues. Pure AI analysis, no pundit noise.",
+    "Win probabilities land every morning, scored across 30 leagues. Pure AI analysis, no pundit noise.",
   "welcome.next3Title": "Track your ROI",
   "welcome.next3Body":
     "Watch the numbers go up with our live bankroll tracker and weekly performance reports.",
@@ -1491,7 +1491,7 @@ const en = {
   "login.title": "Good to see you.",
   "login.titleHighlight": "Today's predictions are ready.",
   "login.subtitle":
-    "Sign in to see today's picks, check your live results and unlock the latest predictions across 30+ leagues.",
+    "Sign in to see today's picks, check your live results and unlock the latest predictions across 30 leagues.",
 
   "login.email": "Email address",
   "login.emailPh": "you@example.com",
@@ -1587,7 +1587,7 @@ const en = {
     "Full win probabilities, confidence scores and the AI's recommended bet type. No email needed, no paywall.",
   "matchPred.lockedHeading": "More match predictions, members only",
   "matchPred.lockedSub":
-    "Every other AI football prediction for the next 7 days. Gold unlocks all 30+ leagues. The €0,01 trial gives you full access for a week.",
+    "Every other AI football prediction for the next 7 days. Gold unlocks all 30 leagues. The €0,01 trial gives you full access for a week.",
   "matchPred.bannerBadge": "Members only",
   "matchPred.bannerTitle": "Unlock every match prediction",
   "matchPred.bannerDesc":
@@ -2635,7 +2635,7 @@ const nl: Dictionary = {
   "articles.listCtaPrimary": "Claim een ​​proefperiode van € 0,01",
   "articles.listCtaReassurance": "Geen lock-in · Annuleer in twee klikken · Stripe-beveiligd",
   "articles.listCtaSecondary": "Bekijk de voorspellingen van vandaag",
-  "articles.listCtaSubtitle": "BetsPlug analyseert elke wedstrijd met vier bewezen voorspellingsmethodes, in 30+ competities. Winstkansen worden elk uur bijgewerkt.",
+  "articles.listCtaSubtitle": "BetsPlug analyseert elke wedstrijd met vier bewezen voorspellingsmethodes, in 30 competities. Winstkansen worden elk uur bijgewerkt.",
   "articles.listCtaTitle": "Klaar om deze analyse toe te passen op die van vanavond",
   "articles.navLabel": "Lees verder",
   "articles.nextPost": "Volgend artikel",
@@ -2731,7 +2731,7 @@ const nl: Dictionary = {
   "chatbot.replyAccuracy": "Elke voorspelling wordt vastgelegd in ons openbare trackrecord met hitrate, ROI en betrouwbaarheidsscores. Je kunt filteren op competitie, markt en datumbereik. Geen 'cherry picking', geen verborgen verliezen; transparantie is het hele punt.",
   "chatbot.replyDefault": "Bedankt dat je contact met ons opneemt! Een BetsPlug-analist zal binnenkort contact met je opnemen. Bekijk in de tussentijd onze FAQ of stuur ons een bericht op support@betsplug.com.",
   "chatbot.replyHello": "Hé daar! 👋 Ik ben de BetsPlug AI. Vraag mij alles over onze modellen, prijzen of voorspellingen - ik zal mijn best doen om je te helpen.",
-  "chatbot.replyPricing": "We hebben vier niveaus. Bronze is een symbolische proefversie van € 0,01 - volledige toegang gedurende 7 dagen, echte kaart vereist (dit houdt het platform fraudevrij). Zilver (€ 9,99/maand) is een instapabonnement dat beperkt is tot de top 5 van Europese competities en BetsPlug Pulse keuzes met een vertraging van 2 uur. Goud (€ 14,99/maand) is ons populairste - alle 30+ competities wereldwijd, volledige BetsPlug Pulse AI-output, directe keuzes, dagelijks Pick of the Day, Goud Telegram en Strategy Lab (binnenkort beschikbaar). Platinum (€ 199,- eenmalig levenslang) voegt privé Telegram, 1-op-1 onboarding en een levenslang prijsslot toe. Alle betaalde abonnementen worden ondersteund door een EU-geld-terug-garantie van 14 dagen.",
+  "chatbot.replyPricing": "We hebben vier niveaus. Bronze is een symbolische proefversie van € 0,01 - volledige toegang gedurende 7 dagen, echte kaart vereist (dit houdt het platform fraudevrij). Zilver (€ 9,99/maand) is een instapabonnement dat beperkt is tot de top 5 van Europese competities en BetsPlug Pulse keuzes met een vertraging van 2 uur. Goud (€ 14,99/maand) is ons populairste - alle 30 competities wereldwijd, volledige BetsPlug Pulse AI-output, directe keuzes, dagelijks Pick of the Day, Goud Telegram en Strategy Lab (binnenkort beschikbaar). Platinum (€ 199,- eenmalig levenslang) voegt privé Telegram, 1-op-1 onboarding en een levenslang prijsslot toe. Alle betaalde abonnementen worden ondersteund door een EU-geld-terug-garantie van 14 dagen.",
   "chatbot.replyRefund": "Silver- en Gold-plannen kun je op elk moment opzeggen in je dashboard - je behoudt toegang tot het einde van je factureringsperiode. We bieden ook een 14 dagen niet-goed-geld-terug-garantie op alle betaalde plannen conform EU-recht. Platinum Lifetime is final-sale na de 14-dagen.",
   "chatbot.replyTelegram": "Onze Telegram-community heeft meer dan 1.200 actieve leden met dagelijkse keuzes, edge-alerts en live vraag- en antwoordsessies met onze analisten. Meld je aan via t.me/betsplug - gratis voor Bronze-gebruikers, VIP-kanalen voor Silver/Gold.",
   "chatbot.suggestion1": "Hoe werkt de Pick of the Day?",
@@ -2917,7 +2917,7 @@ const nl: Dictionary = {
   "contact.faq1Q": "Wat is BetsPlug precies?",
   "contact.faq2A": "Nee. Drie AI-keuzes zijn elke dag gratis en het publieke trackrecord heeft geen betaalmuur. Als je klaar bent voor meer, ontgrendelt de Bronze-proefversie van € 0,01 gedurende 7 dagen volledige Gold-toegang. Annuleer met twee klikken, geen automatische upgrade.",
   "contact.faq2Q": "Moet ik betalen om BetsPlug te proberen?",
-  "contact.faq3A": "30+ topvoetbalcompetities wereldwijd, Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, UEFA Champions League, Europa League en nog 22+ meer. Elke competitie heeft meer dan 5 seizoenen aan schone trainingsgegevens voordat deze live gaat.",
+  "contact.faq3A": "30 topvoetbalcompetities wereldwijd, Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, UEFA Champions League, Europa League en nog 22+ meer. Elke competitie heeft meer dan 5 seizoenen aan schone trainingsgegevens voordat deze live gaat.",
   "contact.faq3Q": "Welke competities dekken jullie?",
   "contact.faq4A": "Ja. Zilver en Goud zijn maandelijks opzegbaar en hebben geen lock-in. Annuleer met twee klikken vanaf je dashboard en behoud toegang tot het einde van je huidige factureringsperiode. Geen bewaarscripts. Geen vragen gesteld.",
   "contact.faq4Q": "Kan ik mijn abonnement op elk moment opzeggen?",
@@ -3348,7 +3348,7 @@ const nl: Dictionary = {
   "hiw.flowStep1Label": "Stap 01",
   "hiw.flowStep1Title": "Elke wedstrijd van de dag",
   "hiw.flowStep1Desc":
-    "Honderden wedstrijden in 30+ competities gaan de pijplijn in met verse data: vorm, blessures, onderling, xG, odds.",
+    "Honderden wedstrijden in 30 competities gaan de pijplijn in met verse data: vorm, blessures, onderling, xG, odds.",
   "hiw.flowStep2Label": "Stap 02",
   "hiw.flowStep2Title": "Vier AI-modellen stemmen",
   "hiw.flowStep2Desc":
@@ -3417,7 +3417,7 @@ const nl: Dictionary = {
   "hiw.botdCtaSecondary": "Volledig trackrecord",
   "hiw.botdFunnelLabel": "Dagelijkse selectie-funnel",
   "hiw.botdFunnel1Title": "Alle wedstrijden van de dag",
-  "hiw.botdFunnel1Desc": "Elke wedstrijd in 30+ competities komt in de kandidatenpool.",
+  "hiw.botdFunnel1Desc": "Elke wedstrijd in 30 competities komt in de kandidatenpool.",
   "hiw.botdFunnel1Tag": "300+ wedstrijden",
   "hiw.botdFunnel2Title": "Filter op vertrouwen",
   "hiw.botdFunnel2Desc": "Alleen wedstrijden waar de AI-consensus sterk genoeg is overleven deze stap.",
@@ -3436,7 +3436,7 @@ const nl: Dictionary = {
   "hiw.faq2Q": "Wat is Pick of the Day?",
   "hiw.faq3A": "Ja. De trackrecordpagina heeft een CSV-exportknop. Elke voorspelling, elke tijdstempel, elk cijfer. Voer je eigen analyse uit en controleer onze beweringen. Wij hebben liever dat je dit verifieert dan dat je ons op ons woord gelooft.",
   "hiw.faq3Q": "Kan ik de data downloaden?",
-  "hiw.faq4A": "30+ topcompetities waaronder Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, Europa League en Europa Conference. Elke competitie heeft minimaal vijf seizoenen aan schone trainingsgegevens.",
+  "hiw.faq4A": "30 topcompetities waaronder Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, Europa League en Europa Conference. Elke competitie heeft minimaal vijf seizoenen aan schone trainingsgegevens.",
   "hiw.faq4Q": "Welke voetbalcompetities dekken jullie?",
   "hiw.faq5A": "Met Strategy Lab bouw en rangschik je voorspellingen op basis van backtested-strategieën (bijvoorbeeld: thuisfavorieten na rust, underdogs na Europese uitreizen). Elke strategie loopt door een plausibiliteitspoort die onwaarschijnlijke winrates en ROIs op nul klemt, zodat overfitte filters niet als winstgevend gepresenteerd kunnen worden.",
   "hiw.faq5Q": "Wat is Strategy Lab?",
@@ -3453,7 +3453,7 @@ const nl: Dictionary = {
   "hiw.heroStat2Label": "Picks gevolgd",
   "hiw.heroStat2Value": "{potdPicks}",
   "hiw.heroStat3Label": "Competities",
-  "hiw.heroStat3Value": "30+",
+  "hiw.heroStat3Value": "30",
   "hiw.heroStat4Label": "Downloadbare data",
   "hiw.heroStat4Value": "CSV",
   "hiw.heroSubtitle": "De meeste tipstersites laten je een winnende schermafbeelding zien en vragen je deze te vertrouwen. We laten je de modellen, de gegevens en elke voorspelling zien die we ooit hebben gedaan: winnaars en verliezers. Hier zie je precies hoe BetsPlug ruim 70.000 wedstrijden uit de voetbalgeschiedenis omzet in een voorspelling voor de volgende aftrap.",
@@ -3477,7 +3477,7 @@ const nl: Dictionary = {
   "hiw.integritySubtitle": "Drie architecturale keuzes maken het voor ons onmogelijk om stilletjes het trackrecord te koken. Hetzelfde zou je moeten eisen van elke dienst die AI-voetbalvoorspellingen verkoopt.",
   "hiw.integrityTitleA": "Waarom BetsPlug",
   "hiw.integrityTitleB": "kan zijn cijfers niet vervalsen.",
-  "hiw.metaDesc": "Vier AI-modellen analyseren 70.000+ wedstrijden en leveren AI-voetbalvoorspellingen voor 30+ competities. Voor de aftrap vergrendeld. Openbaar gevolgd.",
+  "hiw.metaDesc": "Vier AI-modellen analyseren 70.000+ wedstrijden en leveren AI-voetbalvoorspellingen voor 30 competities. Voor de aftrap vergrendeld. Openbaar gevolgd.",
   "hiw.metaTitle": "Hoe onze AI-voetbalvoorspellingen werken · BetsPlug",
   "hiw.step1Badge": "Stap 01",
   "hiw.step1Lead": "Voordat onze AI een enkele voetbalvoorspelling doet, verwerkt hij vorm, klassement, doelpuntgegevens, onderlinge geschiedenis, opstellingen, rustdagen, reisafstand en tientallen andere factoren voor elke komende wedstrijd. Alle kenmerkwaarden worden op het moment van opname vastgelegd; het model kan nooit de toekomst 'zien'.",
@@ -3487,7 +3487,7 @@ const nl: Dictionary = {
   "hiw.step1Point2Desc": "Geplande pijplijnen halen elke 6 uur nieuwe gegevens op voor elke wedstrijd in de komende zeven dagen. Geen verouderde input.",
   "hiw.step1Point2Title": "Dagelijks bijgewerkt",
   "hiw.step1Point3Desc": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, plus nog 20+ meer. Het trainings-corpus beslaat 5+ seizoenen aan zuivere geschiedenis.",
-  "hiw.step1Point3Title": "30+ topcompetities",
+  "hiw.step1Point3Title": "30 topcompetities",
   "hiw.step1Title": "Pulse analyseert elke wedstrijd",
   "hiw.step2Badge": "Stap 02",
   "hiw.step2Lead": "We kiezen niet één model en bidden. BetsPlug voert vier AI-modellen uit, een patroonzoeker, een scorelijnvoorspeller, teamsterktebeoordelingen en een oddskalibrator, en combineert hun resultaten tot één enkele waarschijnlijkheid voor elke wedstrijduitslag.",
@@ -3530,7 +3530,7 @@ const nl: Dictionary = {
 
   "how.badge": "Hoe het werkt",
   "how.deepDive": "Bekijk de volledige methodologie",
-  "how.step1Desc": "BetsPlug Pulse verwerkt meer dan 40 signalen per wedstrijd, vorm, positie in de competitie, onderlinge geschiedenis, xG, opstellingssterkte, blessures, rustdagen, en produceert één AI-voetbalvoorspelling per wedstrijd. Vernieuwd vóór elke aftrap in alle 30+ ondersteunde competities.",
+  "how.step1Desc": "BetsPlug Pulse verwerkt meer dan 40 signalen per wedstrijd, vorm, positie in de competitie, onderlinge geschiedenis, xG, opstellingssterkte, blessures, rustdagen, en produceert één AI-voetbalvoorspelling per wedstrijd. Vernieuwd vóór elke aftrap in alle 30 ondersteunde competities.",
   "how.step1Title": "1. Pulse scant elke wedstrijd",
   "how.step2Desc": "Pick of the Day is onze meest betrouwbare AI-voetbalvoorspelling van meer dan 50 wedstrijden die dag, momenteel met een nauwkeurigheid van {potdAccuracy}% voor {potdPicks} keuzes. Eén duidelijke oproep. Dagelijks geleverd. Gratis op de startpagina.",
   "how.step2Title": "2. We brengen de beste keuze naar voren",
@@ -3574,7 +3574,7 @@ const nl: Dictionary = {
   "liveProof.disclaimer": "Cijfers worden live opgehaald uit dezelfde database die elke voorspelling ondersteunt. Geen 'resultatenpagina' die je afzonderlijk moet vertrouwen.",
   "liveProof.label": "Live · Continu bijgewerkt",
   "liveProof.leagues": "Voetbalcompetities live",
-  "liveProof.leaguesValue": "30+",
+  "liveProof.leaguesValue": "30",
   "liveProof.picks": "AI-voorspellingen vandaag",
   "liveProof.predictions": "Gold-picks beoordeeld",
   "liveProof.winrate": "Gold-tier winrate",
@@ -3656,7 +3656,7 @@ const nl: Dictionary = {
   "matchPred.loadingTitle": "Aankomende wedstrijden laden…",
   "matchPred.lockedHeading": "Premium wedstrijdpool",
   "matchPred.lockedLabel": "Vergrendeld",
-  "matchPred.lockedSub": "Elke andere AI-voetbalvoorspelling die we voor de komende zeven dagen hebben gegenereerd. Goud ontgrendelt alle 30+ competities; de proefperiode van € 0,01 ontgrendelt alles voor een week.",
+  "matchPred.lockedSub": "Elke andere AI-voetbalvoorspelling die we voor de komende zeven dagen hebben gegenereerd. Goud ontgrendelt alle 30 competities; de proefperiode van € 0,01 ontgrendelt alles voor een week.",
   "matchPred.metaDesc": "Bekijk de AI-voetbalvoorspellingen van vandaag voor Premier League, La Liga, Bundesliga en nog 27+ competities, elke dag drie volledige keuzes gratis, ontgrendeld met een proefperiode van € 0,01.",
   "matchPred.metaTitle": "AI Wedstrijdvoorspellingen · Gratis Picks · BetsPlug",
   "matchPred.refresh": "Vernieuwen",
@@ -4412,7 +4412,7 @@ const nl: Dictionary = {
   "tr.kpi2Note": "Onze dagelijkse selectie met het hoogste vertrouwen",
   "tr.kpi2Value": "{potdAccuracy}%",
   "tr.kpi3Label": "Beoordeelde voorspellingen",
-  "tr.kpi3Note": "Over 30+ voetbalcompetities",
+  "tr.kpi3Note": "Over 30 voetbalcompetities",
   "tr.kpi3Value": "5.000+",
   "tr.kpi4Label": "Brier-score (lager = beter)",
   "tr.kpi4Note": "Gekalibreerd over winst/gelijk/verlies",

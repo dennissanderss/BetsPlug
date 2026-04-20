@@ -139,7 +139,7 @@ export default function RegisterPage() {
               </h1>
 
               <p className="mt-5 max-w-md text-base leading-relaxed text-[#a3a9b8]">
-                Just €0,01 to start. Get full access to every AI prediction, the Pick of the Day and live results across 30+ leagues. Cancel in two clicks — no awkward phone call.
+                Just €0,01 to start. Get full access to every AI prediction, the Pick of the Day and live results across 30 leagues. Cancel in two clicks — no awkward phone call.
               </p>
 
               <div className="mt-10 grid max-w-md grid-cols-1 gap-3">
