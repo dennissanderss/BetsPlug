@@ -782,20 +782,161 @@ function DataTransparencyCard({
           </div>
         </div>
 
-        {/* Right: download button */}
-        <div className="flex shrink-0 sm:ml-4">
+        {/* Right: download buttons — two CSVs zodat iemand die alleen
+             de BOTD historie wil kopiëren niet door 3.000+ predictions
+             hoeft te filteren. De groene knop = alle predictions van
+             de huidige tier-scope; de paarse = 1 rij per BOTD-dag. */}
+        <div className="flex flex-wrap shrink-0 gap-2 sm:ml-4">
           <a
             href={exportUrl}
             download
             className="inline-flex items-center gap-2 rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-2.5 text-sm font-semibold text-blue-200 hover:bg-blue-500/20 hover:border-blue-500/50 transition-colors"
             aria-label="Download alle voorspellingen als CSV"
+            title="Alle evaluated predictions van de actieve tier-scope"
           >
             <Download className="h-4 w-4" />
             Download CSV
           </a>
+          <BotdCsvDownloadButton />
         </div>
       </div>
     </div>
+  );
+}
+
+// ─── BOTD tier gate — voor BOTD en BOTD-Live tabs. Gold en Platinum
+//      zien de onderliggende sectie; Free en Silver krijgen een
+//      upgrade-teaser. We lezen tier uit localStorage zodat de admin
+//      tier-switcher in /admin ("Test as Tier") ook hier doorwerkt en
+//      je kunt valideren hoe de paywall eruit ziet zonder echt account.
+
+function BotdTierGate({ children }: { children: React.ReactNode }) {
+  const [userTier, setUserTier] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    try {
+      setUserTier(window.localStorage.getItem("betsplug_tier"));
+    } catch {
+      setUserTier(null);
+    }
+  }, []);
+
+  const hasAccess = userTier === "gold" || userTier === "platinum";
+  if (hasAccess) return <>{children}</>;
+
+  return (
+    <div
+      className="relative overflow-hidden rounded-2xl border p-6 sm:p-10"
+      style={{
+        background:
+          "linear-gradient(135deg, hsl(var(--accent-green) / 0.14) 0%, hsl(230 22% 9% / 0.9) 55%, hsl(var(--accent-purple) / 0.18) 100%)",
+        borderColor: "hsl(var(--accent-purple) / 0.3)",
+        boxShadow:
+          "0 0 0 1px hsl(var(--accent-purple) / 0.08) inset, 0 10px 40px rgba(0,0,0,0.4)",
+      }}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-20 -top-20 h-[280px] w-[280px] rounded-full"
+        style={{
+          background: "hsl(var(--accent-purple) / 0.25)",
+          filter: "blur(100px)",
+        }}
+      />
+      <div className="relative flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-purple-500/15 ring-1 ring-purple-400/30">
+          <Trophy className="h-6 w-6 text-purple-300" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <h3 className="text-xl font-bold text-[#ededed] sm:text-2xl">
+            Alleen voor Gold & Platinum abonnees
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-[#c8cdd6]">
+            De Pick of the Day zit op <strong className="text-[#fde68a]">Gold</strong>{" "}
+            en <strong className="text-[#93c5fd]">Platinum</strong> — onze enige
+            dagelijkse pick met de hoogste modelconfidence. Free en Silver hebben geen
+            BOTD-toegang omdat we het volume laag en de signaal-kwaliteit hoog willen
+            houden. Upgrade naar Gold (of Platinum voor top-5 competities) om deze
+            track record en de dagelijkse pick vrij te spelen. Gold en Platinum zien
+            beide dezelfde BOTD stream — dezelfde picks.
+          </p>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <Link
+              href="/pricing"
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              Upgrade naar Gold
+            </Link>
+            <Link
+              href="/bet-of-the-day"
+              className="btn-glass inline-flex items-center gap-2"
+            >
+              Bekijk BOTD-voorbeeld
+            </Link>
+          </div>
+          <p className="mt-3 text-[11px] text-[#6b7280]">
+            Admin aan het testen? Open <code className="rounded bg-white/[0.06] px-1">/admin</code>{" "}
+            → "Test as Tier" → Gold / Platinum om deze sectie vrij te spelen.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── BOTD CSV download — aparte knop want users vroegen om een CSV
+//      met alleen de Pick-of-the-Day historie, niet het hele prediction
+//      corpus. Bearer-token pattern zodat de admin-gated backend
+//      endpoint accepts dezelfde auth als de rest van deze pagina.
+
+function BotdCsvDownloadButton() {
+  const [busy, setBusy] = React.useState(false);
+  const api = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+
+  async function downloadBotd() {
+    setBusy(true);
+    try {
+      const token =
+        typeof window !== "undefined"
+          ? window.localStorage.getItem("betsplug_token")
+          : null;
+      const resp = await fetch(`${api}/bet-of-the-day/export.csv`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
+      if (!resp.ok) {
+        window.alert(
+          resp.status === 401 || resp.status === 403
+            ? "Log opnieuw in om de BOTD CSV te downloaden."
+            : `BOTD CSV download mislukt (${resp.status}).`,
+        );
+        return;
+      }
+      const blob = await resp.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "betsplug-pick-of-the-day.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch {
+      window.alert("BOTD CSV download mislukt.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      disabled={busy}
+      onClick={downloadBotd}
+      title="Alleen Pick-of-the-Day historie als CSV"
+      className="inline-flex items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-4 py-2.5 text-sm font-semibold text-purple-200 hover:bg-purple-500/20 hover:border-purple-500/50 transition-colors disabled:opacity-50"
+    >
+      <Trophy className="h-4 w-4" />
+      {busy ? "Bezig…" : "BOTD CSV"}
+    </button>
   );
 }
 
@@ -1669,17 +1810,70 @@ export default function TrackrecordPage() {
         </div>
       </div>
 
-      {/* Tab pills */}
-      <div className="flex gap-2">
-        {tabs.map(({ key, label, icon }) => (
-          <TabPill
-            key={key}
-            label={label}
-            icon={icon}
-            active={activeTab === key}
-            onClick={() => setActiveTab(key)}
-          />
-        ))}
+      {/* Tab pills — gegroepeerd als Backtest | Live | Anders zodat
+           duidelijk is welke tabs historische simulatie tonen en welke
+           pre-match meting vanaf 18 april 2026. User feedback: "dikke
+           onderscheid tussen backtest bovenin en live onderin". */}
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400/80">
+            Backtest
+          </span>
+          <div className="h-px flex-1 bg-gradient-to-r from-emerald-500/40 to-transparent" />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {tabs
+            .filter((t) => t.key === "performance" || t.key === "botd")
+            .map(({ key, label, icon }) => (
+              <TabPill
+                key={key}
+                label={label}
+                icon={icon}
+                active={activeTab === key}
+                onClick={() => setActiveTab(key)}
+              />
+            ))}
+        </div>
+
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-400/80">
+            Live meting · vanaf 18 apr 2026
+          </span>
+          <div className="h-px flex-1 bg-gradient-to-r from-blue-500/40 to-transparent" />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {tabs
+            .filter((t) => t.key === "live" || t.key === "botd-live")
+            .map(({ key, label, icon }) => (
+              <TabPill
+                key={key}
+                label={label}
+                icon={icon}
+                active={activeTab === key}
+                onClick={() => setActiveTab(key)}
+              />
+            ))}
+        </div>
+
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+            Drilldown
+          </span>
+          <div className="h-px flex-1 bg-gradient-to-r from-slate-500/40 to-transparent" />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {tabs
+            .filter((t) => t.key === "segments")
+            .map(({ key, label, icon }) => (
+              <TabPill
+                key={key}
+                label={label}
+                icon={icon}
+                active={activeTab === key}
+                onClick={() => setActiveTab(key)}
+              />
+            ))}
+        </div>
       </div>
 
       {/* ── Performance Tab ── */}
@@ -1820,14 +2014,19 @@ export default function TrackrecordPage() {
         </div>
       )}
 
-      {/* ── Pick of the Day Tab ── */}
+      {/* ── Pick of the Day Tab ── Gold+ paywall. Free/Silver krijgen
+           een upgrade-teaser; Gold/Platinum de echte sectie. */}
       {activeTab === "botd" && (
         <div className="space-y-6 animate-slide-up">
-          <BotdTrackRecordSection />
+          <BotdTierGate>
+            <BotdTrackRecordSection />
+          </BotdTierGate>
         </div>
       )}
 
-      {/* ── Live Meting Tab ── */}
+      {/* ── Live Meting Tab ── per-tier live meting is voor alle
+           ingelogde users zichtbaar (ook Free/Silver — het ZIJN hun
+           eigen tier-cijfers). */}
       {activeTab === "live" && (
         <div className="space-y-6 animate-slide-up">
           <LiveMeasurementSection />
@@ -1835,10 +2034,12 @@ export default function TrackrecordPage() {
       )}
 
       {/* ── BOTD Live Tab ── Strict pre-match Pick-of-the-Day stream,
-           gated behind the login on the public page, fully visible here. */}
+           óók Gold+ only. Free/Silver zien de upgrade-teaser. */}
       {activeTab === "botd-live" && (
         <div className="space-y-6 animate-slide-up">
-          <BotdLiveTrackingSection />
+          <BotdTierGate>
+            <BotdLiveTrackingSection />
+          </BotdTierGate>
         </div>
       )}
       </div>
