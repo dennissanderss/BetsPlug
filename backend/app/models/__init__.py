@@ -23,6 +23,7 @@ from app.models.elo_history import TeamEloHistory
 from app.models.match_statistics import MatchStatistics
 from app.models.top_scorer import TopScorer
 from app.models.api_usage import ApiUsageLog
+from app.models.telegram_post import TelegramPost
 
 __all__ = [
     "Sport", "League", "Season", "Team", "Player",
@@ -39,4 +40,6 @@ __all__ = [
     "AbandonedCheckout", "Coupon",
     # v5
     "TeamEloHistory", "MatchStatistics", "TopScorer", "ApiUsageLog",
+    # telegram
+    "TelegramPost",
 ]

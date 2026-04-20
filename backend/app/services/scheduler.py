@@ -846,6 +846,70 @@ async def job_snapshot_upcoming_odds():
             pass
 
 
+# ──────────────────────────────────────────────────────────────────
+# @BetsPlug Telegram auto-poster — scheduler adapters
+# ──────────────────────────────────────────────────────────────────
+
+
+async def job_telegram_post_scheduled_pick():
+    """Post the best available Free-tier pick to @BetsPlug.
+
+    Wraps ``publish_scheduled_slot`` with DB session management + a
+    broad try/except so one bad post never blows up the scheduler
+    (which would block every other cron on the process).
+    """
+    log.info("CRON: Telegram — posting scheduled Free pick")
+    try:
+        from app.db.session import async_session_factory
+        from app.services.telegram_posting import publish_scheduled_slot
+
+        async with async_session_factory() as db:
+            post = await publish_scheduled_slot(db)
+            if post is None:
+                log.info("CRON: Telegram — no eligible pick, skipping slot")
+            else:
+                log.info(
+                    "CRON: Telegram — posted pick id=%s msg_id=%s",
+                    post.id, post.telegram_message_id,
+                )
+    except Exception as exc:
+        log.error("CRON: Telegram scheduled pick failed: %s", exc, exc_info=True)
+
+
+async def job_telegram_post_daily_summary():
+    """Post the bilingual daily summary for today (CET)."""
+    log.info("CRON: Telegram — posting daily summary")
+    try:
+        from app.db.session import async_session_factory
+        from app.services.telegram_posting import publish_daily_summary
+
+        async with async_session_factory() as db:
+            post = await publish_daily_summary(db)
+            if post is None:
+                log.info("CRON: Telegram — no picks today, summary skipped")
+            else:
+                log.info(
+                    "CRON: Telegram — daily summary posted msg_id=%s",
+                    post.telegram_message_id,
+                )
+    except Exception as exc:
+        log.error("CRON: Telegram daily summary failed: %s", exc, exc_info=True)
+
+
+async def job_telegram_update_results():
+    """Sweep pick posts whose fixtures have resolved and edit in the score."""
+    try:
+        from app.db.session import async_session_factory
+        from app.services.telegram_posting import update_all_pending_results
+
+        async with async_session_factory() as db:
+            updated = await update_all_pending_results(db)
+            if updated:
+                log.info("CRON: Telegram — %d pick posts updated with result", updated)
+    except Exception as exc:
+        log.error("CRON: Telegram result sweep failed: %s", exc, exc_info=True)
+
+
 def start_scheduler():
     """Register jobs and start the scheduler."""
     # Sync data every 6 hours
@@ -953,6 +1017,52 @@ def start_scheduler():
         name="Backfill stale results",
         replace_existing=True,
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=3),
+    )
+
+    # ── @BetsPlug Telegram auto-poster ─────────────────────────────
+    # Three Free-tier picks per day at 11 / 15 / 19 CET, one daily
+    # summary at 23 CET, plus a result-update sweep every 15 minutes
+    # so posted picks flip to ✅/❌ within ~15 min of final whistle.
+    # CronTrigger timezone is Europe/Amsterdam so CEST/CET transitions
+    # are handled automatically.
+    from zoneinfo import ZoneInfo as _ZI
+    _CET = _ZI("Europe/Amsterdam")
+
+    scheduler.add_job(
+        job_telegram_post_scheduled_pick,
+        trigger=CronTrigger(hour=11, minute=0, timezone=_CET),
+        id="telegram_pick_11_cet",
+        name="Telegram @BetsPlug — 11:00 CET pick",
+        replace_existing=True,
+    )
+    scheduler.add_job(
+        job_telegram_post_scheduled_pick,
+        trigger=CronTrigger(hour=15, minute=0, timezone=_CET),
+        id="telegram_pick_15_cet",
+        name="Telegram @BetsPlug — 15:00 CET pick",
+        replace_existing=True,
+    )
+    scheduler.add_job(
+        job_telegram_post_scheduled_pick,
+        trigger=CronTrigger(hour=19, minute=0, timezone=_CET),
+        id="telegram_pick_19_cet",
+        name="Telegram @BetsPlug — 19:00 CET pick",
+        replace_existing=True,
+    )
+    scheduler.add_job(
+        job_telegram_post_daily_summary,
+        trigger=CronTrigger(hour=23, minute=0, timezone=_CET),
+        id="telegram_daily_summary",
+        name="Telegram @BetsPlug — daily summary 23:00 CET",
+        replace_existing=True,
+    )
+    scheduler.add_job(
+        job_telegram_update_results,
+        trigger=IntervalTrigger(minutes=15),
+        id="telegram_update_results",
+        name="Telegram @BetsPlug — result-update sweep",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=4),
     )
 
     scheduler.start()
