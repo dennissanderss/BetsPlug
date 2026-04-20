@@ -767,6 +767,12 @@ function CapacityPlanCard() {
               ? `${error.name}: ${error.message}`
               : String(error ?? "Unknown error")}
           </pre>
+          <p className="text-[11px] text-red-200/80">
+            <strong>Waarschijnlijke oorzaak:</strong> Railway backend is even
+            niet bereikbaar (deploy-window) of je admin-sessie is verlopen.
+            Wacht 1-2 min en klik Retry. Als het blijft falen: Railway →
+            Deployments → check deploy status.
+          </p>
           <button
             onClick={() => refetch()}
             className="inline-flex items-center gap-1.5 rounded border border-red-500/30 bg-red-500/10 px-2 py-1 text-[11px] text-red-200 hover:bg-red-500/20"
@@ -1038,12 +1044,130 @@ function CapacityPlanCard() {
   );
 }
 
+function ActionsHelpPanel() {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <div className="card-neon lg:col-span-2 overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center justify-between gap-3 px-5 py-3 text-left hover:bg-white/[0.02]"
+      >
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10">
+            <BookOpen className="h-4 w-4 text-amber-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-100">
+              Wat doen deze blokken? Welke knoppen zijn veilig?
+            </h3>
+            <p className="text-xs text-slate-400">
+              Klik om uit te klappen — plain-Dutch uitleg per card.
+            </p>
+          </div>
+        </div>
+        <span className="text-xs text-slate-400">{open ? "−" : "+"}</span>
+      </button>
+      {open && (
+        <div className="space-y-4 border-t border-white/[0.06] px-5 py-4 text-sm text-[#cbd3e0]">
+          <div>
+            <p className="mb-1 text-[13px] font-semibold text-purple-300">
+              🟣 API Capacity (API-Football)
+            </p>
+            <p className="text-xs leading-relaxed text-slate-400">
+              Alleen informatief. Toont hoeveel API-Football calls we vandaag
+              en in de afgelopen 7 dagen hebben gedaan, afgezet tegen de
+              limiet van het huidige abonnement. Onder aan zie je een
+              projectie: "bij X gebruikers kom je op Y calls per dag". Handig
+              om te beslissen of je naar een hoger API-Football plan moet.
+              <strong className="text-emerald-300"> Geen knoppen — niets aan klikken.</strong>
+            </p>
+          </div>
+
+          <div>
+            <p className="mb-1 text-[13px] font-semibold text-blue-300">
+              🔵 Pipeline Health
+            </p>
+            <p className="text-xs leading-relaxed text-slate-400">
+              Live status van de <em>voorspellings-motor</em>: draait het AI
+              model, is er output in de laatste 24 uur, hebben upcoming
+              wedstrijden een voorspelling. "Active models" = hoeveel model-
+              versies staan aan. "Preds last 24h" = hoeveel nieuwe
+              voorspellingen de pipeline in 24u produceerde. "Upcoming (7d)"
+              = aankomende wedstrijden met/zonder voorspelling. "Finished
+              (2d)" = afgelopen wedstrijden waar uitslagen op binnenkwamen.
+              <br />
+              <strong className="text-amber-300">
+                ⚠️ "Run pipeline now (7d)" knop = veilig maar duurt ~1 min
+                en stookt rekenkracht op Railway. Alleen gebruiken als
+                "Preds last 24h" op 0 staat of veel lager dan normaal.
+              </strong>
+            </p>
+          </div>
+
+          <div>
+            <p className="mb-1 text-[13px] font-semibold text-[#4ade80]">
+              🟢 Sync Data
+            </p>
+            <p className="text-xs leading-relaxed text-slate-400">
+              Haalt handmatig nieuwe wedstrijd-data op van de ingestion
+              sources (API-Football, football-data.org, etc.). Loopt
+              normaal elke 6 uur automatisch. Knop gebruiken als je ziet
+              dat een wedstrijd van vandaag nog niet in de DB staat.
+              <strong className="text-emerald-300"> Safe — kost een paar API-Football calls.</strong>
+            </p>
+          </div>
+
+          <div>
+            <p className="mb-1 text-[13px] font-semibold text-red-300">
+              🔴 Retrain Models
+            </p>
+            <p className="text-xs leading-relaxed text-slate-400">
+              Traint de AI modellen opnieuw op de meest recente historische
+              wedstrijden. Dit is een <strong>duur en zwaar</strong> proces —
+              neemt 30-60 min op Railway en kan tijdelijk voorspellingen
+              traag maken.
+              <strong className="text-red-300">
+                {" "}⚠️ Alleen klikken na grote data-updates of als je met
+                opzet nieuwe model-performance wilt testen. Niet zomaar elke
+                dag.
+              </strong>
+            </p>
+          </div>
+
+          <div>
+            <p className="mb-1 text-[13px] font-semibold text-slate-300">
+              ⚪ Scheduler Status
+            </p>
+            <p className="text-xs leading-relaxed text-slate-400">
+              Alleen info-tabel. Toont welke achtergrond-taken automatisch
+              draaien en op welke frequentie. "Active" = taak is ingepland
+              en draait op de aangegeven cadans.
+              <strong className="text-emerald-300"> Geen knoppen — niks aan te klikken.</strong>
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-amber-500/20 bg-amber-500/[0.04] p-3">
+            <p className="text-xs text-amber-200">
+              <strong>"Kon capacity-plan niet ophalen" error?</strong> Dit is
+              bijna altijd een tijdelijke Railway-deploy window. Wacht 1-2
+              min en klik Retry. Als het blijft falen: Railway dashboard →
+              Deployments → check of er een crash is.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
   const [syncSourceId, setSyncSourceId] = React.useState("all");
   const [modelType, setModelType] = React.useState("all");
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
+      <ActionsHelpPanel />
       <CapacityPlanCard />
       <PipelineHealthCard />
       {/* Sync data */}
@@ -1052,10 +1176,17 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
             <RefreshCw className="h-4 w-4 text-blue-400" />
           </div>
-          <div>
-            <h3 className="text-sm font-semibold text-slate-100">Sync Data</h3>
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-slate-100">Sync Data</h3>
+              <span className="inline-flex items-center rounded-md border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-300">
+                🟢 Veilig
+              </span>
+            </div>
             <p className="text-xs text-slate-400">
-              Trigger a manual ingestion run for one or all sources.
+              Haalt nieuwe wedstrijd-data op (fixtures, results). Kost enkele
+              API-Football calls, geen DB-wijzigingen die je eerdere data
+              overschrijven. Loopt normaal elke 6 uur automatisch.
             </p>
           </div>
         </div>
@@ -1086,15 +1217,22 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
       </div>
 
       {/* Retrain models */}
-      <div className="card-neon p-6 space-y-4">
+      <div className="card-neon p-6 space-y-4 border border-red-500/15">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
-            <Zap className="h-4 w-4 text-blue-400" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/10">
+            <Zap className="h-4 w-4 text-red-400" />
           </div>
-          <div>
-            <h3 className="text-sm font-semibold text-slate-100">Retrain Models</h3>
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-slate-100">Retrain Models</h3>
+              <span className="inline-flex items-center rounded-md border border-red-500/30 bg-red-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-red-300">
+                🔴 Duur
+              </span>
+            </div>
             <p className="text-xs text-slate-400">
-              Trigger a model retraining pipeline run.
+              Hertrain de AI-modellen op historische data. 30-60 minuten
+              op Railway, kan voorspellingen tijdelijk traag maken.
+              Alleen na grote data-updates of bewust model-testen.
             </p>
           </div>
         </div>
