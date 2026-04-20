@@ -33,6 +33,7 @@ from app.models.telegram_post import TelegramPost
 from app.services.telegram_posting import (
     publish_daily_summary,
     publish_pick,
+    publish_promo,
     publish_scheduled_slot,
     select_next_free_pick,
     update_all_pending_results,
@@ -187,6 +188,19 @@ async def force_post_summary(
         db, target_date=target_date, channel=channel
     )
     return _post_to_summary(post) if post is not None else None
+
+
+@router.post(
+    "/post-promo",
+    response_model=PostSummary,
+    summary="Force-post the bilingual tier-comparison promo",
+)
+async def force_post_promo(
+    channel: Optional[str] = Query(default=None),
+    db: AsyncSession = Depends(get_db),
+) -> PostSummary:
+    post = await publish_promo(db, channel=channel)
+    return _post_to_summary(post)
 
 
 @router.post(

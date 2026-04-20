@@ -25,6 +25,7 @@ import {
   Zap,
   ArrowUpRight,
   ClipboardList,
+  Megaphone,
 } from "lucide-react";
 
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -136,6 +137,7 @@ function PostTypePill({ type }: { type: string }) {
     pick: { tone: "win", label: "Pick" },
     result_update: { tone: "info", label: "Result" },
     daily_summary: { tone: "draw", label: "Summary" },
+    promo: { tone: "default", label: "Promo" },
   };
   const cfg = map[type] ?? { tone: "default" as const, label: type };
   return (
@@ -462,6 +464,24 @@ export default function TelegramManager() {
             >
               <ClipboardList className="h-3.5 w-3.5" />
               {busyAction === "summary" ? "Posting…" : "Post daily summary"}
+            </button>
+            <button
+              type="button"
+              disabled={busyAction !== null}
+              onClick={() =>
+                runAction(
+                  "promo",
+                  () => adminCall<PostSummary>("/admin/telegram/post-promo", "POST"),
+                  (r) => {
+                    const p = r as PostSummary;
+                    return `Tier-promo gepost · msg_id ${p.telegram_message_id}`;
+                  },
+                )
+              }
+              className="btn-glass inline-flex items-center justify-center gap-2 disabled:opacity-50"
+            >
+              <Megaphone className="h-3.5 w-3.5" />
+              {busyAction === "promo" ? "Posting…" : "Post tier promo"}
             </button>
             <button
               type="button"

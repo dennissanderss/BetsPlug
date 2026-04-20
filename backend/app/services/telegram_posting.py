@@ -53,6 +53,7 @@ from app.services.telegram_templates import (
     render_daily_summary,
     render_pick_message,
     render_pick_with_graded_banner,
+    render_promo_message,
     render_result_update,
 )
 
@@ -515,6 +516,34 @@ async def publish_daily_summary(
     return summary_post
 
 
+async def publish_promo(
+    db: AsyncSession, channel: Optional[str] = None
+) -> TelegramPost:
+    """Post the bilingual tier-explanation promo to the channel.
+
+    Fires weekly from the scheduler (Sunday 18:00 CET) and can be
+    triggered on-demand from the admin UI. Includes the last-7-day
+    Free-tier accuracy as a credibility anchor so the reader sees a
+    real number next to the upgrade pitch.
+    """
+    target = _resolve_channel(channel)
+    weekly = await _weekly_accuracy_pct(db)
+    body = render_promo_message(weekly_accuracy_pct=weekly)
+    message_id = await post_to_channel(target, body)
+
+    promo = TelegramPost(
+        prediction_id=None,
+        channel=target,
+        telegram_message_id=message_id,
+        post_type="promo",
+        posted_at=datetime.now(timezone.utc),
+    )
+    db.add(promo)
+    await db.commit()
+    await db.refresh(promo)
+    return promo
+
+
 async def update_all_pending_results(
     db: AsyncSession, channel: Optional[str] = None
 ) -> int:
@@ -555,6 +584,7 @@ __all__ = [
     "publish_scheduled_slot",
     "publish_result_update",
     "publish_daily_summary",
+    "publish_promo",
     "update_all_pending_results",
     "select_next_free_pick",
 ]

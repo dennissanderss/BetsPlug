@@ -910,6 +910,23 @@ async def job_telegram_update_results():
         log.error("CRON: Telegram result sweep failed: %s", exc, exc_info=True)
 
 
+async def job_telegram_post_weekly_promo():
+    """Post the bilingual tier-comparison promo to the public channel."""
+    log.info("CRON: Telegram — posting weekly promo")
+    try:
+        from app.db.session import async_session_factory
+        from app.services.telegram_posting import publish_promo
+
+        async with async_session_factory() as db:
+            post = await publish_promo(db)
+            log.info(
+                "CRON: Telegram — weekly promo posted msg_id=%s",
+                post.telegram_message_id,
+            )
+    except Exception as exc:
+        log.error("CRON: Telegram weekly promo failed: %s", exc, exc_info=True)
+
+
 def start_scheduler():
     """Register jobs and start the scheduler."""
     # Sync data every 6 hours
@@ -1063,6 +1080,16 @@ def start_scheduler():
         name="Telegram @BetsPlug — result-update sweep",
         replace_existing=True,
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=4),
+    )
+    # Weekly tier-comparison promo — Sunday 18:00 CET. Placed before
+    # prime-time fixtures so it lands when people are actively opening
+    # the app, not in the middle of the night.
+    scheduler.add_job(
+        job_telegram_post_weekly_promo,
+        trigger=CronTrigger(day_of_week="sun", hour=18, minute=0, timezone=_CET),
+        id="telegram_weekly_promo",
+        name="Telegram @BetsPlug — weekly tier promo",
+        replace_existing=True,
     )
 
     scheduler.start()

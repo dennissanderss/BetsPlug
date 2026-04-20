@@ -177,7 +177,8 @@ def render_pick_message(
         f"Pre-match odds:\n{odds_line}\n"
         "\n"
         "📝 Result auto-posted here as a reply after full-time.\n"
-        "⚠️ Statistical analysis · 18+ · betsplug.com"
+        "🎁 Free tier pick · Silver/Gold/Platinum = higher confidence → betsplug.com\n"
+        "⚠️ Statistical analysis · 18+"
     )
 
     nl_block = (
@@ -192,7 +193,8 @@ def render_pick_message(
         f"Pre-match odds:\n{odds_line}\n"
         "\n"
         "📝 Uitslag komt automatisch hieronder als reply na de wedstrijd.\n"
-        "⚠️ Statistische analyse · 18+ · betsplug.com"
+        "🎁 Gratis tier pick · Silver/Gold/Platinum = hogere zekerheid → betsplug.com\n"
+        "⚠️ Statistische analyse · 18+"
     )
 
     return f"{en_block}\n\n---\n\n{nl_block}"
@@ -359,9 +361,70 @@ def render_daily_summary(
     return f"{en_block}\n\n---\n\n{nl_block}"
 
 
+def render_promo_message(weekly_accuracy_pct: Optional[float] = None) -> str:
+    """Return the bilingual weekly promo post.
+
+    Explains what a reader on @BetsPluggs is actually looking at (Free
+    tier only, 55-65% confidence band) and what the paid tiers unlock.
+    Intentionally educational rather than hypey — the audience is
+    sceptics burned by tipster channels, not lottery players.
+    """
+    weekly_en = (
+        f"\n📊 Last 7 days — Free tier accuracy: {round(weekly_accuracy_pct)}%"
+        if weekly_accuracy_pct is not None
+        else ""
+    )
+    weekly_nl = (
+        f"\n📊 Afgelopen 7 dagen — Free-tier accuracy: {round(weekly_accuracy_pct)}%"
+        if weekly_accuracy_pct is not None
+        else ""
+    )
+
+    en_block = (
+        "🔓 What you're seeing here\n"
+        "\n"
+        "Every pick in this channel is a BRONZE (Free) tier prediction —\n"
+        "the 55–65% confidence band of our model. Honest, modest, free."
+        f"{weekly_en}\n"
+        "\n"
+        "Paid tiers unlock higher-conviction calls:\n"
+        "🥈 Silver    · ≥ 65% confidence\n"
+        "🥇 Gold      · ≥ 70% confidence\n"
+        "💎 Platinum · ≥ 75% confidence · top-5 leagues only\n"
+        "\n"
+        "Every pick — Free or paid — is tested on 80,000+ historical\n"
+        "matches with a public, tamper-proof track record.\n"
+        "\n"
+        "→ Upgrade: betsplug.com/pricing\n"
+        "→ Track record: betsplug.com/track-record"
+    )
+
+    nl_block = (
+        "🔓 Wat je hier ziet\n"
+        "\n"
+        "Elke pick in dit kanaal is een BRONZE (gratis) tier voorspelling —\n"
+        "de 55–65% zekerheidsband van ons model. Eerlijk, bescheiden, gratis."
+        f"{weekly_nl}\n"
+        "\n"
+        "Betaalde tiers ontgrendelen sterkere calls:\n"
+        "🥈 Silver    · ≥ 65% zekerheid\n"
+        "🥇 Gold      · ≥ 70% zekerheid\n"
+        "💎 Platinum · ≥ 75% zekerheid · alleen top-5 competities\n"
+        "\n"
+        "Elke pick — gratis of betaald — wordt getest op 80.000+ historische\n"
+        "wedstrijden met een publiek, niet-bewerkbaar trackrecord.\n"
+        "\n"
+        "→ Upgraden: betsplug.com/pricing\n"
+        "→ Trackrecord: betsplug.com/track-record"
+    )
+
+    return f"{en_block}\n\n---\n\n{nl_block}"
+
+
 __all__ = [
     "render_pick_message",
     "render_pick_with_graded_banner",
     "render_result_update",
     "render_daily_summary",
+    "render_promo_message",
 ]
