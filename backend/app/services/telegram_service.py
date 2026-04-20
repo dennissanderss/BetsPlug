@@ -81,7 +81,11 @@ async def _post_api(method: str, payload: dict) -> dict:
     return body.get("result") or {}
 
 
-async def post_to_channel(channel: str, message: str) -> int:
+async def post_to_channel(
+    channel: str,
+    message: str,
+    reply_to_message_id: Optional[int] = None,
+) -> int:
     """Post a plain-text message to the given channel.
 
     Returns the Telegram `message_id` (int). If the bot token is not
@@ -91,18 +95,25 @@ async def post_to_channel(channel: str, message: str) -> int:
     `channel` may be an `@handle` or a numeric chat id. The caller
     typically passes ``settings.telegram_channel_free`` (= @BetsPlug
     by default) or the optional test channel.
+
+    Passing ``reply_to_message_id`` posts as a Telegram reply to that
+    message — the UI shows a quote-preview that tapping jumps to the
+    parent. Used by the result-update flow so the score appears as a
+    fresh notification in the channel scroll instead of only an edit
+    on a 5-day-old pick post.
     """
     token = _token()
     if not token:
         logger.info(
-            "telegram: dry-run (no token) channel=%s len=%d preview=%r",
+            "telegram: dry-run (no token) channel=%s len=%d reply_to=%s preview=%r",
             channel,
             len(message),
+            reply_to_message_id,
             message[:80],
         )
         return -1
 
-    payload = {
+    payload: dict = {
         "chat_id": channel,
         "text": message,
         # `disable_web_page_preview` keeps the betsplug.com mention at
@@ -110,6 +121,14 @@ async def post_to_channel(channel: str, message: str) -> int:
         # the pick itself.
         "disable_web_page_preview": True,
     }
+    if reply_to_message_id is not None:
+        payload["reply_to_message_id"] = reply_to_message_id
+        # Don't fail the result post if the original pick was deleted
+        # from the channel (e.g. operator clean-up) — Telegram would
+        # normally reject the reply entirely. Allow sending without the
+        # reply context in that case.
+        payload["allow_sending_without_reply"] = True
+
     try:
         result = await _post_api("sendMessage", payload)
     except TelegramError as e:

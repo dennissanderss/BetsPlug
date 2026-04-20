@@ -52,6 +52,7 @@ from app.services.telegram_service import (
 from app.services.telegram_templates import (
     render_daily_summary,
     render_pick_message,
+    render_pick_with_graded_banner,
     render_result_update,
 )
 
@@ -301,10 +302,24 @@ async def publish_scheduled_slot(
 async def publish_result_update(
     post: TelegramPost, db: AsyncSession
 ) -> bool:
-    """Edit a previously-posted pick to append the final score.
+    """Publish the result of a resolved pick in TWO places:
 
-    Returns True when the edit was issued, False when the fixture isn't
-    finished yet or the post has already been updated.
+    1. A NEW reply message under the original pick — fires a fresh
+       Telegram push notification and surfaces the verdict in the live
+       channel scroll, so users who joined after the pick was published
+       (or who missed the pick post) still see "we called X vs Y, it
+       was ✅ / ❌". Telegram auto-renders a quote-preview of the
+       parent pick above the reply, which is exactly the context the
+       reader needs.
+    2. An in-place EDIT of the original pick post that prepends a
+       GRADED banner — so anyone scrolling back days later still sees
+       the verdict on the pick itself, not just in a reply thread
+       buried below the fold.
+
+    Returns True when both steps succeeded (or were no-ops because the
+    message had already been edited earlier), False when the fixture
+    isn't finished yet or the evaluator hasn't scored the prediction.
+    Idempotent: `result_posted_at` guards against double-publishing.
     """
     if post.result_posted_at is not None:
         return False
@@ -329,21 +344,77 @@ async def publish_result_update(
     if evaluation is None:
         return False
 
+    home_score = match.result.home_score
+    away_score = match.result.away_score
+    was_correct = bool(evaluation.is_correct)
     weekly = await _weekly_accuracy_pct(db)
-    body = render_result_update(
+
+    # ─── Step 1: reply-post with the full verdict. This is the one
+    #     users actually see as a notification, so it takes priority —
+    #     we short-circuit with a False return if it fails, leaving
+    #     result_posted_at=null so the sweep retries on the next run.
+    reply_body = render_result_update(
         prediction,
-        home_score=match.result.home_score,
-        away_score=match.result.away_score,
-        was_correct=bool(evaluation.is_correct),
+        home_score=home_score,
+        away_score=away_score,
+        was_correct=was_correct,
         weekly_accuracy_pct=weekly,
     )
     try:
-        await update_message(
-            post.channel, post.telegram_message_id, body
+        reply_message_id = await post_to_channel(
+            post.channel,
+            reply_body,
+            reply_to_message_id=post.telegram_message_id,
         )
     except TelegramError as e:
-        logger.error("telegram: result-update edit failed: %s", e)
+        logger.error("telegram: result-reply send failed: %s", e)
         return False
+
+    # Audit the reply as a separate row — lets the admin dashboard
+    # count "posts with result" vs "picks pending" correctly and makes
+    # the history table show both the pick and its verdict reply.
+    reply_row = TelegramPost(
+        prediction_id=prediction.id,
+        channel=post.channel,
+        telegram_message_id=reply_message_id,
+        post_type="result_update",
+        posted_at=datetime.now(timezone.utc),
+    )
+    db.add(reply_row)
+
+    # ─── Step 2: best-effort edit of the original pick post. The
+    #     current Bot API doesn't return the original post body, so
+    #     we re-render it from the prediction + odds and prepend the
+    #     GRADED banner. A failure here is NOT fatal — the reply has
+    #     already delivered the verdict, and we still mark the row
+    #     resolved so the sweep doesn't keep retrying forever.
+    try:
+        odds_home, odds_draw, odds_away = await _latest_odds_for_match(
+            prediction.match_id, db
+        )
+        original_body = render_pick_message(
+            prediction,
+            odds_home=odds_home,
+            odds_draw=odds_draw,
+            odds_away=odds_away,
+        )
+        edit_body = render_pick_with_graded_banner(
+            original_body,
+            home_score=home_score,
+            away_score=away_score,
+            was_correct=was_correct,
+        )
+        await update_message(
+            post.channel, post.telegram_message_id, edit_body
+        )
+    except TelegramError as e:
+        logger.warning(
+            "telegram: graded-banner edit failed (reply was posted): %s", e
+        )
+    except Exception as e:  # pragma: no cover — defensive
+        logger.warning(
+            "telegram: graded-banner render failed (reply was posted): %s", e
+        )
 
     post.result_posted_at = datetime.now(timezone.utc)
     await db.commit()

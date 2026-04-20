@@ -176,7 +176,7 @@ def render_pick_message(
         "\n"
         f"Pre-match odds:\n{odds_line}\n"
         "\n"
-        "📝 Result follows after the match.\n"
+        "📝 Result auto-posted here as a reply after full-time.\n"
         "⚠️ Statistical analysis · 18+ · betsplug.com"
     )
 
@@ -191,7 +191,7 @@ def render_pick_message(
         "\n"
         f"Pre-match odds:\n{odds_line}\n"
         "\n"
-        "📝 Uitslag volgt na de wedstrijd.\n"
+        "📝 Uitslag komt automatisch hieronder als reply na de wedstrijd.\n"
         "⚠️ Statistische analyse · 18+ · betsplug.com"
     )
 
@@ -205,49 +205,75 @@ def render_result_update(
     was_correct: bool,
     weekly_accuracy_pct: Optional[float] = None,
 ) -> str:
-    """Return the bilingual result update for a completed fixture."""
+    """Short bilingual result body — posted as a REPLY under the original pick.
+
+    Kept terse on purpose: users see this in the channel scroll days
+    after the pick was published, so the message must convey
+    "verdict + score + accuracy trend" without repeating what's already
+    in the reply-preview that Telegram auto-generates above it.
+    """
     match = prediction.match
     home_name = match.home_team.name if match.home_team else "Home"
     away_name = match.away_team.name if match.away_team else "Away"
     pick = _infer_pick(prediction)
     conf_pct = _fmt_confidence_pct(prediction.confidence)
     ok_emoji = "✅" if was_correct else "❌"
-    en_verdict = "Correct" if was_correct else "Incorrect"
-    nl_verdict = "Correct" if was_correct else "Mis"
+    en_verdict = "CORRECT" if was_correct else "MISS"
+    nl_verdict = "CORRECT" if was_correct else "MIS"
+
     weekly_line_en = (
-        f"\n\n📊 Week accuracy: {round(weekly_accuracy_pct)}%"
+        f"\n📊 Week accuracy: {round(weekly_accuracy_pct)}%"
         if weekly_accuracy_pct is not None
         else ""
     )
     weekly_line_nl = (
-        f"\n📊 Nauwkeurigheid deze week: {round(weekly_accuracy_pct)}%"
+        f"\n📊 Deze week: {round(weekly_accuracy_pct)}%"
         if weekly_accuracy_pct is not None
         else ""
     )
 
     en_block = (
-        "✅ Result\n"
+        f"{ok_emoji} RESULT · {en_verdict}\n"
         "\n"
         f"⚽ {home_name} {home_score} – {away_score} {away_name}\n"
-        "\n"
         f"🤖 Our pick: {_pick_label_en(pick, home_name, away_name)} "
-        f"({conf_pct}%)\n"
-        f"Result: {ok_emoji} {en_verdict}"
+        f"({conf_pct}%)"
         f"{weekly_line_en}"
     )
 
     nl_block = (
-        "✅ Uitslag\n"
+        f"{ok_emoji} UITSLAG · {nl_verdict}\n"
         "\n"
         f"⚽ {home_name} {home_score} – {away_score} {away_name}\n"
-        "\n"
         f"🤖 Onze pick: {_pick_label_nl(pick, home_name, away_name)} "
-        f"({conf_pct}%)\n"
-        f"Resultaat: {ok_emoji} {nl_verdict}"
+        f"({conf_pct}%)"
         f"{weekly_line_nl}"
     )
 
     return f"{en_block}\n\n---\n\n{nl_block}"
+
+
+def render_pick_with_graded_banner(
+    original_body: str,
+    home_score: int,
+    away_score: int,
+    was_correct: bool,
+) -> str:
+    """Prepend a GRADED banner to the original pick body for in-place edit.
+
+    The pick post is ALSO edited when its fixture resolves so anyone
+    scrolling back through history sees the verdict without needing
+    to tap the reply thread. Shorter than `render_result_update`
+    because the full result body is carried by the reply message.
+    """
+    ok_emoji = "✅" if was_correct else "❌"
+    en = "CORRECT" if was_correct else "MISS"
+    nl = "CORRECT" if was_correct else "MIS"
+    banner = (
+        f"{ok_emoji} GRADED · {home_score}–{away_score} · {en} / {nl}\n"
+        "━━━━━━━━━━━━━━━━━━━━\n\n"
+    )
+    return banner + original_body
 
 
 def render_daily_summary(
@@ -335,6 +361,7 @@ def render_daily_summary(
 
 __all__ = [
     "render_pick_message",
+    "render_pick_with_graded_banner",
     "render_result_update",
     "render_daily_summary",
 ]
