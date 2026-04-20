@@ -6,12 +6,13 @@ from datetime import datetime
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import delete, select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.security import hash_password
 from app.db.session import get_db
-from app.models.user import User
+from app.models.user import Role, User
 from app.models.subscription import Payment, Subscription
 
 logger = logging.getLogger(__name__)
@@ -76,9 +77,166 @@ class UserDeleteResponse(BaseModel):
     message: str
 
 
+class UserCreateRequest(BaseModel):
+    """Admin-only user creation payload.
+
+    Bypasses the /register → verify-email → trial checkout path. Used
+    for seeding test accounts and creating staff users without making
+    them click a verify-email link.
+    """
+    email: EmailStr
+    password: str = Field(min_length=8, max_length=200)
+    username: Optional[str] = None
+    full_name: Optional[str] = None
+    role: str = Field(default="viewer")
+    email_verified: bool = True
+    # If False (default), a second POST with the same email errors
+    # with 409. If True, we update the password + flags of the
+    # existing row and return it — useful for "reset this test user".
+    upsert: bool = False
+
+
+class UserCreateResponse(BaseModel):
+    id: uuid.UUID
+    email: str
+    username: str
+    role: str
+    is_active: bool
+    email_verified: bool
+    created: bool  # True if we inserted; False if upsert updated
+    message: str
+
+
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
+
+
+@router.post(
+    "/",
+    response_model=UserCreateResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def create_user(
+    body: UserCreateRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Admin-only: create (or optionally upsert) a user.
+
+    Bypasses the /register → verify-email → trial-checkout flow so an
+    admin can seed staff accounts or test rows without forcing a
+    real signup. The caller must already be authenticated as an
+    admin (router is mounted with ``_ADMIN_AUTH`` in routes/__init__).
+
+    Behaviour
+    ---------
+    - Fresh email: create user, return 201 with ``created=True``.
+    - Existing email + ``upsert=False``: 409 Conflict.
+    - Existing email + ``upsert=True``: update hashed_password,
+      email_verified and is_active on the existing row; 201 with
+      ``created=False``. Role / username are left untouched so this
+      doesn't accidentally demote a user.
+    - Username collision on create: auto-suffix (``foo``, ``foo1``,
+      ``foo2``, …) so the request never 409s on username alone.
+
+    Does NOT send a verification email by default (``email_verified``
+    defaults to True). Set ``email_verified=False`` to leave the
+    user in the "needs verification" state — useful if you want to
+    test the verify-email flow end-to-end.
+    """
+    # Validate role
+    try:
+        role_enum = Role(body.role.lower())
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid role {body.role!r}. "
+                   f"Must be one of: {', '.join(r.value for r in Role)}.",
+        )
+
+    email_lower = body.email.lower()
+
+    # Existing-email branch
+    existing = (
+        await db.execute(select(User).where(User.email == email_lower))
+    ).scalar_one_or_none()
+
+    if existing is not None:
+        if not body.upsert:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"A user with email {email_lower!r} already exists. "
+                       f"Set upsert=true to update the existing row.",
+            )
+        existing.hashed_password = hash_password(body.password)
+        existing.email_verified = body.email_verified
+        existing.is_active = True
+        await db.flush()
+        await db.refresh(existing)
+        logger.info(
+            "[ADMIN_CREATE_USER] Upserted existing user id=%s email=%s",
+            existing.id, existing.email,
+        )
+        return UserCreateResponse(
+            id=existing.id,
+            email=existing.email,
+            username=existing.username,
+            role=existing.role.value if hasattr(existing.role, "value") else str(existing.role),
+            is_active=existing.is_active,
+            email_verified=existing.email_verified,
+            created=False,
+            message="Existing user updated (password reset).",
+        )
+
+    # Fresh create branch — resolve username, auto-suffix on collision.
+    base_username = (body.username or email_lower.split("@")[0]).strip()
+    if not base_username:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="username must be a non-empty string when supplied.",
+        )
+    username = base_username
+    suffix = 1
+    while (
+        await db.execute(select(User).where(User.username == username))
+    ).scalar_one_or_none() is not None:
+        username = f"{base_username}{suffix}"
+        suffix += 1
+        if suffix > 999:
+            # Defensive ceiling — in practice never reached.
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Could not resolve a free username suffix.",
+            )
+
+    new_user = User(
+        email=email_lower,
+        username=username,
+        full_name=body.full_name,
+        hashed_password=hash_password(body.password),
+        role=role_enum,
+        is_active=True,
+        email_verified=body.email_verified,
+    )
+    db.add(new_user)
+    await db.flush()
+    await db.refresh(new_user)
+
+    logger.info(
+        "[ADMIN_CREATE_USER] Created user id=%s email=%s role=%s verified=%s",
+        new_user.id, new_user.email, new_user.role.value, new_user.email_verified,
+    )
+
+    return UserCreateResponse(
+        id=new_user.id,
+        email=new_user.email,
+        username=new_user.username,
+        role=new_user.role.value,
+        is_active=new_user.is_active,
+        email_verified=new_user.email_verified,
+        created=True,
+        message="User created successfully.",
+    )
 
 
 @router.get("/", response_model=List[AdminUserItem])
