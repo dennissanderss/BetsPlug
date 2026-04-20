@@ -526,25 +526,40 @@ class DataSyncService:
                 )
                 match_result_row = existing_result.scalar_one_or_none()
 
+                # NB: use "is not None" not "or" when reading scores — a
+                # legitimate 0-0 final would otherwise be coerced to None
+                # (truthy short-circuit) and overwrite with 0 on create or
+                # silently skip the update on the else branch.
+                new_home = score.get("home_score")
+                new_away = score.get("away_score")
+                new_ht_home = score.get("home_score_ht")
+                new_ht_away = score.get("away_score_ht")
+                new_winner = score.get("winner")
+
                 if match_result_row is None:
                     match_result_row = MatchResult(
                         id=uuid.uuid4(),
                         match_id=match.id,
-                        home_score=score.get("home_score") or 0,
-                        away_score=score.get("away_score") or 0,
-                        home_score_ht=score.get("home_score_ht"),
-                        away_score_ht=score.get("away_score_ht"),
-                        winner=score.get("winner"),
+                        home_score=new_home if new_home is not None else 0,
+                        away_score=new_away if new_away is not None else 0,
+                        home_score_ht=new_ht_home,
+                        away_score_ht=new_ht_away,
+                        winner=new_winner,
                         extra_data=score.get("extra_data"),
                     )
                     db.add(match_result_row)
                     created_results += 1
                 else:
-                    match_result_row.home_score = score.get("home_score") or match_result_row.home_score
-                    match_result_row.away_score = score.get("away_score") or match_result_row.away_score
-                    match_result_row.home_score_ht = score.get("home_score_ht", match_result_row.home_score_ht)
-                    match_result_row.away_score_ht = score.get("away_score_ht", match_result_row.away_score_ht)
-                    match_result_row.winner = score.get("winner", match_result_row.winner)
+                    if new_home is not None:
+                        match_result_row.home_score = new_home
+                    if new_away is not None:
+                        match_result_row.away_score = new_away
+                    if new_ht_home is not None:
+                        match_result_row.home_score_ht = new_ht_home
+                    if new_ht_away is not None:
+                        match_result_row.away_score_ht = new_ht_away
+                    if new_winner is not None:
+                        match_result_row.winner = new_winner
 
             except Exception as exc:
                 self.log.warning(

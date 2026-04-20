@@ -92,6 +92,23 @@ LEAGUE_SLUG_TO_ID: dict[str, int] = {
 
 ID_TO_LEAGUE_SLUG: dict[int, str] = {v: k for k, v in LEAGUE_SLUG_TO_ID.items()}
 
+# Leagues that run on calendar year (Feb/Mar → Oct/Nov/Dec) instead of the
+# European Aug-May convention. For these, API-Football's ``season`` param
+# uses the YEAR of play (2026), not the year the Aug-May cycle started
+# (2025). Querying ``season=2025`` for an MLS fixture in April 2026
+# returns an empty array because the 2025 MLS season ended in December.
+# This is the secondary silent-failure class on top of the April 14
+# outage: even when the primary API-Football bug is fixed, these six
+# leagues would keep returning zero new fixtures through the summer.
+CALENDAR_YEAR_LEAGUE_IDS: set[int] = {
+    253,  # MLS (Feb-Dec)
+    71,   # Brasileirão Serie A (Mar-Dec)
+    98,   # J1 League (Feb-Dec)
+    292,  # K League 1 (Feb-Dec)
+    169,  # Chinese Super League (Mar-Nov)
+    128,  # Liga Profesional Argentina (Feb-Dec after 2024 reform)
+}
+
 LEAGUE_META: dict[int, dict] = {
     # England
     39:  {"name": "Premier League",              "country": "England",       "tier": 1},
@@ -288,13 +305,41 @@ class APIFootballAdapter(DataSourceAdapter):
 
         # API-Football wraps all responses in {"get": ..., "response": [...]}
         errors = data.get("errors", {})
+        response_list = data.get("response", [])
+
+        # Application-level errors are returned with HTTP 200 and a
+        # non-empty ``errors`` dict (plan rejections, quota exhausted,
+        # token invalid, "season not subscribed", etc.). Logging a
+        # warning and returning [] made every sync appear to succeed
+        # with zero results — indistinguishable from a real "no fixtures
+        # in range" response. That hid a 5-day ingestion outage in
+        # production. Raise loudly when the API rejected our call so
+        # sync_upcoming_matches bumps errors=1 and the admin panel
+        # surfaces the failure.
+        if errors and not response_list:
+            self.log.error(
+                "api_football_api_error_fatal",
+                url=url,
+                endpoint=endpoint,
+                errors=errors,
+                requests_today=self._requests_today,
+            )
+            raise RuntimeError(
+                f"API-Football rejected request to {endpoint}: {errors}"
+            )
         if errors:
-            self.log.warning("api_football_api_error", url=url, errors=errors)
+            # Errors alongside data — warning only (e.g. deprecation
+            # notices, partial-result warnings). The response is still
+            # usable so we don't abort.
+            self.log.warning(
+                "api_football_api_warning",
+                url=url, endpoint=endpoint, errors=errors,
+            )
 
         self.log.debug("api_football_response", url=url,
                        results=data.get("results", 0),
                        requests_today=self._requests_today)
-        return data.get("response", [])
+        return response_list
 
     async def _record_quota_log(
         self, endpoint: str, status_code: int, t0: float
@@ -428,7 +473,9 @@ class APIFootballAdapter(DataSourceAdapter):
             return []
 
         data = await self._fetch_with_retry(
-            self._get, "teams", {"league": api_id, "season": self._season}
+            self._get,
+            "teams",
+            {"league": api_id, "season": self._season_for_league(api_id)},
         )
         if not data:
             return []
@@ -490,6 +537,19 @@ class APIFootballAdapter(DataSourceAdapter):
         self._log_fetch("players", len(players), team_id=raw_id)
         return players
 
+    def _season_for_league(self, api_id: int) -> int:
+        """Return the correct API-Football season year for a league.
+
+        Most European leagues use the start-year convention (2025-26
+        season → ``season=2025``). Calendar-year leagues (MLS, Serie A
+        Brasil, J1, K-League 1, CSL, Argentine Liga) use the year of
+        play. ``self._season`` is the default (Aug-May); override for
+        calendar-year IDs.
+        """
+        if api_id in CALENDAR_YEAR_LEAGUE_IDS:
+            return datetime.now(timezone.utc).year
+        return self._season
+
     async def fetch_matches(
         self,
         league_id: str,
@@ -504,7 +564,7 @@ class APIFootballAdapter(DataSourceAdapter):
 
         params = {
             "league": api_id,
-            "season": self._season,
+            "season": self._season_for_league(api_id),
             "from": date_from.isoformat(),
             "to": date_to.isoformat(),
         }
@@ -602,7 +662,9 @@ class APIFootballAdapter(DataSourceAdapter):
             return []
 
         data = await self._fetch_with_retry(
-            self._get, "standings", {"league": api_id, "season": self._season}
+            self._get,
+            "standings",
+            {"league": api_id, "season": self._season_for_league(api_id)},
         )
         if not data:
             return []
@@ -648,8 +710,13 @@ class APIFootballAdapter(DataSourceAdapter):
         # Find the league for this team
         for slug, api_id in LEAGUE_SLUG_TO_ID.items():
             data = await self._fetch_with_retry(
-                self._get, "teams/statistics",
-                {"team": raw_id, "league": api_id, "season": self._season}
+                self._get,
+                "teams/statistics",
+                {
+                    "team": raw_id,
+                    "league": api_id,
+                    "season": self._season_for_league(api_id),
+                },
             )
             if not data:
                 continue
