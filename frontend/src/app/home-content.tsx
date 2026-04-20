@@ -28,7 +28,6 @@ import {
   RotateCcw,
   XCircle,
   CreditCard,
-  Lock,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -313,8 +312,8 @@ export function HomeContent({
                 className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4"
               >
                 {[
-                  { icon: XCircle, title: t("hero.usp1Title"), variant: "green" as const },
-                  { icon: Lock, title: t("hero.usp2Title"), variant: "purple" as const },
+                  { icon: Activity, title: t("hero.usp1Title"), variant: "green" as const },
+                  { icon: Clock, title: t("hero.usp2Title"), variant: "purple" as const },
                   { icon: Eye, title: t("hero.usp3Title"), variant: "blue" as const },
                 ].map(({ icon: Icon, title, variant }) => (
                   <div key={title} className="flex items-center gap-2.5">
