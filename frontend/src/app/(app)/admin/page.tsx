@@ -24,6 +24,7 @@ import {
   Gauge,
   ArrowUpRight,
   Send,
+  BookOpen,
 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
@@ -47,6 +48,7 @@ import StrategyTiersTab from "@/components/admin/strategy-tiers-tab";
 import EmailDiagnosticsTab from "@/components/admin/email-diagnostics-tab";
 import SeoMetaEditor from "@/components/admin/seo-meta-editor";
 import TelegramManager from "@/components/admin/telegram-manager";
+import SystemInfoTab from "@/components/admin/system-info";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -1377,6 +1379,11 @@ export default function AdminPage() {
       label: "Telegram",
       icon: Send,
     },
+    {
+      id: "system-info",
+      label: "Stack & Specs",
+      icon: BookOpen,
+    },
   ];
 
   return (
@@ -1448,6 +1455,7 @@ export default function AdminPage() {
         {activeTab === "strategy-tiers" && <StrategyTiersTab />}
         {activeTab === "email-diagnostics" && <EmailDiagnosticsTab />}
         {activeTab === "telegram" && <TelegramManager />}
+        {activeTab === "system-info" && <SystemInfoTab />}
       </div>
     </div>
   );
