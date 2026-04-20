@@ -1,30 +1,57 @@
-"""Async email service for BetsPlug.
+"""Transactional email service for BetsPlug — Resend HTTP API.
 
-Uses aiosmtplib to send transactional emails (email verification, password
-reset, welcome, payment receipts).
+Why Resend (not SMTP)
+---------------------
+Previous implementation used Hostinger SMTP via ``aiosmtplib``. It
+suffered from three classes of failure that cost us ~2 weeks of
+missing password-reset + verification emails:
+  1. Env var name mismatches (SMTP_PASS vs SMTP_PASSWORD, MAIL_FROM_*
+     vs SMTP_FROM) silently dropped credentials.
+  2. Duplicated Pydantic Settings fields made ``smtp_host`` empty in
+     production, which tripped an implicit dev-mode fallback that
+     returned True without sending anything.
+  3. Even when correctly configured, Hostinger SMTP had poor
+     deliverability for transactional email — many legitimate
+     password-reset mails landed in spam.
 
-Dev-mode (``EMAIL_DEV_MODE=1``): messages are logged to stdout instead
-of being delivered, so local development can copy verification/reset
-links straight from the logs without a real SMTP provider. This mode is
-now explicit opt-in — previously any missing SMTP env silently tripped
-the fallback, which masked a production outage caused by duplicated
-config fields. See ``core/config.py`` git history for the incident.
+Resend's HTTP API removes the entire TLS / port / handshake surface
+area. One POST → one email. Deliverability is tuned for transactional
+flows (DKIM + SPF + DMARC + ARC signed on every send, shared IPs with
+good reputation).
 
-All templates are inline, simple responsive HTML with the BetsPlug brand
-colours and a Dutch + English body so users on either language get a
-readable email without a i18n round-trip.
+Public API
+----------
+Public functions are UNCHANGED from the SMTP era so existing callers
+(auth routes, subscription webhooks, abandoned checkout) keep working
+without edits:
+
+    await send_email(to, subject, html, text, action_url=..., raise_on_failure=...)
+    await send_verification_email(to, token, username)
+    await send_password_reset_email(to, token, username)
+    await send_welcome_email(to, username, plan)
+    await send_payment_receipt_email(to, username, plan, amount, currency)
+    await send_subscription_cancelled_email(to, username, plan, access_until=...)
+
+Dev mode
+--------
+Set ``EMAIL_DEV_MODE=1`` to skip the Resend API and log messages to
+stdout (useful for local dev when you don't want to burn your Resend
+free-tier budget). Missing ``RESEND_API_KEY`` on production triggers
+a LOUD ``[EMAIL MISCONFIG]`` error, not a silent success.
 """
 
 from __future__ import annotations
 
 import logging
-from email.message import EmailMessage
 
-import aiosmtplib
+import httpx
 
 from app.core.config import get_settings
 
 logger = logging.getLogger(__name__)
+
+
+RESEND_API_URL = "https://api.resend.com/emails"
 
 
 # ---------------------------------------------------------------------------
@@ -41,37 +68,35 @@ async def send_email(
     *,
     raise_on_failure: bool = False,
 ) -> bool:
-    """Send an email via async SMTP.
+    """Send an email via the Resend HTTP API.
 
     Behaviour matrix
     ----------------
     - ``EMAIL_DEV_MODE=1``: log message + action URL to stdout, return
-      True. Use during local dev so you don't need a real SMTP provider.
-    - Missing/empty ``smtp_host`` OR ``smtp_password``: log a LOUD
-      misconfig error and return False. (Used to silently return True
-      via an implicit dev-mode fallback, which hid a production outage.)
-    - Configured correctly: attempt SMTP, return True on success. On
-      SMTP failure, log the exception and return False (never raises
-      unless ``raise_on_failure`` is set).
+      True. Explicit opt-in only; production must NEVER trip this.
+    - Missing ``RESEND_API_KEY``: log a loud ``[EMAIL MISCONFIG]`` with
+      the action URL (so an admin can share the link manually) and
+      return False. Never silent.
+    - API returns a non-2xx: log the response body and return False.
+    - API returns 2xx: log the Resend message ID and return True.
 
     Parameters
     ----------
     action_url:
-        Optional canonical action URL (e.g. verification or reset link).
-        When supplied and SMTP is in dev-mode OR misconfigured, the URL
-        is logged on its own highly-visible line so admins can
-        ``grep '[ACTION URL]'`` Railway logs and share the link with
-        the affected user while the SMTP issue is being fixed.
+        Optional canonical action URL (verification / reset link).
+        Logged on its own highly-visible line in dev-mode OR when a
+        send fails, so an admin can ``grep '[ACTION URL]'`` Railway
+        logs and share the link with the affected user.
     raise_on_failure:
-        When True, the underlying ``aiosmtplib`` exception is re-raised
-        instead of being swallowed. Used by the admin diagnostics
-        endpoint (``POST /auth/admin/test-email``) so the real SMTP error
-        reaches the browser rather than disappearing into Railway logs.
+        When True, transport errors are re-raised instead of being
+        swallowed. Used by the admin diagnostics endpoint
+        (``POST /auth/admin/test-email``) so the real error reaches
+        the browser rather than disappearing into logs.
     """
     settings = get_settings()
 
-    # Explicit dev-mode opt-in — set EMAIL_DEV_MODE=1 in your local .env
-    # to skip real SMTP and just log the message body.
+    # Explicit dev-mode opt-in — local dev only. Production leaving
+    # EMAIL_DEV_MODE unset means real sends.
     if settings.email_dev_mode:
         banner = "=" * 72
         logger.warning(
@@ -87,110 +112,89 @@ async def send_email(
             logger.info("Text body:\n%s", text)
         return True
 
-    # Production misconfig — loud error, no silent success. Was
-    # previously a silent True via implicit dev-mode, which cost us ~2
-    # weeks of missing verification + password-reset emails.
-    missing = []
-    if not settings.smtp_host:
-        missing.append("SMTP_HOST")
-    if not settings.smtp_password:
-        missing.append("SMTP_PASS (or SMTP_PASSWORD)")
-    if not settings.smtp_user:
-        missing.append("SMTP_USER")
-    if missing:
+    # Production misconfig — loud error + no silent success.
+    if not settings.resend_api_key:
         logger.error(
-            "[EMAIL MISCONFIG] Required SMTP env vars missing: %s. "
-            "Email to=%s subject=%r NOT sent. Set EMAIL_DEV_MODE=1 to "
-            "intentionally skip SMTP during local dev.",
-            ", ".join(missing), to, subject,
+            "[EMAIL MISCONFIG] RESEND_API_KEY is not set. Email to=%s "
+            "subject=%r NOT sent. Set RESEND_API_KEY in Railway env, or "
+            "set EMAIL_DEV_MODE=1 to intentionally skip sends.",
+            to, subject,
         )
         if action_url:
             logger.error(
-                "[ACTION URL — SMTP misconfigured, please share manually] %s",
+                "[ACTION URL — email misconfigured, please share manually] %s",
                 action_url,
             )
         if raise_on_failure:
-            raise RuntimeError(
-                f"SMTP misconfigured: missing {', '.join(missing)}"
-            )
+            raise RuntimeError("RESEND_API_KEY not configured")
         return False
 
-    message = EmailMessage()
-    message["From"] = settings.smtp_from
-    message["To"] = to
-    message["Subject"] = subject
+    payload: dict[str, object] = {
+        "from": settings.email_from,
+        "to": [to],
+        "subject": subject,
+        "html": html,
+    }
     if text:
-        message.set_content(text)
-        message.add_alternative(html, subtype="html")
-    else:
-        message.set_content(
-            "This email requires an HTML-capable client to view."
-        )
-        message.add_alternative(html, subtype="html")
+        payload["text"] = text
 
-    # Port 465 uses *implicit* TLS (connection is SSL from byte 0), while
-    # port 587 uses STARTTLS (upgrades a plaintext connection to TLS).
-    # aiosmtplib exposes these as two different flags (``use_tls`` vs
-    # ``start_tls``) that must not both be true at the same time, so we
-    # pick based on the port. ``smtp_use_tls`` still gates whether we
-    # negotiate TLS at all, so setting it to False disables encryption
-    # entirely (dev/loopback only).
-    use_ssl = settings.smtp_port == 465 and settings.smtp_use_tls
-    use_starttls = settings.smtp_port != 465 and settings.smtp_use_tls
-    # Verbose handshake log so Railway logs clearly show every SMTP attempt
-    # and operators can tell whether the problem is at connect, auth, or
-    # data-transfer time.
-    logger.warning(
-        "[EMAIL SMTP] Attempting send host=%s port=%d user=%s from=%r "
-        "tls=%s starttls=%s to=%s subject=%r",
-        settings.smtp_host,
-        settings.smtp_port,
-        settings.smtp_user or "(none)",
-        settings.smtp_from,
-        use_ssl,
-        use_starttls,
-        to,
-        subject,
+    headers = {
+        "Authorization": f"Bearer {settings.resend_api_key}",
+        "Content-Type": "application/json",
+    }
+
+    logger.info(
+        "[EMAIL RESEND] Sending from=%r to=%s subject=%r",
+        settings.email_from, to, subject,
     )
-    # Hard ceiling on the SMTP round-trip. A slow upstream SMTP server
-    # can hang the TLS handshake for 30+ seconds; past that the send is
-    # almost certainly lost and we'd rather fail fast and log the
-    # [ACTION URL] fallback than pile up stalled background workers.
+
     try:
-        await aiosmtplib.send(
-            message,
-            hostname=settings.smtp_host,
-            port=settings.smtp_port,
-            username=settings.smtp_user or None,
-            password=settings.smtp_password or None,
-            start_tls=use_starttls,
-            use_tls=use_ssl,
-            timeout=20,
-        )
-        logger.warning(
-            "[EMAIL SMTP] ✓ Sent OK to=%s subject=%r", to, subject
-        )
-        return True
-    except Exception as exc:  # noqa: BLE001 — never break callers
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            resp = await client.post(RESEND_API_URL, json=payload, headers=headers)
+    except httpx.HTTPError as exc:
         logger.error(
-            "[EMAIL SMTP] ✗ Send FAILED to=%s subject=%r "
-            "err_type=%s err=%s",
+            "[EMAIL RESEND] ✗ Transport error to=%s subject=%r err_type=%s err=%s",
             to, subject, type(exc).__name__, exc,
         )
         if action_url:
-            # Even when send fails, still log the URL so admin can
-            # share it manually while the SMTP issue is being fixed.
-            logger.warning(
-                "[ACTION URL — SMTP failed, please share manually] %s",
+            logger.error(
+                "[ACTION URL — transport failed, please share manually] %s",
                 action_url,
             )
         if raise_on_failure:
             raise
         return False
 
+    if resp.status_code >= 400:
+        logger.error(
+            "[EMAIL RESEND] ✗ API error to=%s subject=%r status=%d body=%s",
+            to, subject, resp.status_code, resp.text[:500],
+        )
+        if action_url:
+            logger.error(
+                "[ACTION URL — Resend rejected send, please share manually] %s",
+                action_url,
+            )
+        if raise_on_failure:
+            raise RuntimeError(
+                f"Resend API returned {resp.status_code}: {resp.text[:200]}"
+            )
+        return False
+
+    # Success path — Resend returns {"id": "<uuid>"} on 200.
+    try:
+        message_id = resp.json().get("id", "(no id)")
+    except Exception:  # noqa: BLE001
+        message_id = "(unparseable response)"
+    logger.info(
+        "[EMAIL RESEND] ✓ Sent OK to=%s subject=%r resend_id=%s",
+        to, subject, message_id,
+    )
+    return True
+
 
 # ---------------------------------------------------------------------------
-# Shared layout helper
+# Shared layout helpers
 # ---------------------------------------------------------------------------
 
 
@@ -210,9 +214,9 @@ def _layout(title: str, body_html: str) -> str:
       <td align="center">
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#111827;border-radius:12px;overflow:hidden;border:1px solid #1f2937;">
           <tr>
-            <td style="padding:28px 32px 16px 32px;text-align:center;background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);">
+            <td style="padding:28px 32px 16px 32px;text-align:center;background:linear-gradient(135deg,#4ade80 0%,#22c55e 100%);">
               <h1 style="margin:0;font-size:24px;line-height:1.2;color:#ffffff;">BetsPlug</h1>
-              <p style="margin:4px 0 0 0;font-size:13px;color:#fff7ed;">Sports analytics, smarter picks</p>
+              <p style="margin:4px 0 0 0;font-size:13px;color:#ecfdf5;">AI football predictions that actually deliver</p>
             </td>
           </tr>
           <tr>
@@ -222,7 +226,7 @@ def _layout(title: str, body_html: str) -> str:
           </tr>
           <tr>
             <td style="padding:20px 32px;text-align:center;background:#0f172a;border-top:1px solid #1f2937;font-size:12px;color:#9ca3af;">
-              &copy; BetsPlug &middot; <a href="https://betsplug.com" style="color:#fb923c;text-decoration:none;">betsplug.com</a>
+              &copy; BetsPlug &middot; <a href="https://betsplug.com" style="color:#4ade80;text-decoration:none;">betsplug.com</a>
               <br>You are receiving this email because of activity on your BetsPlug account.
             </td>
           </tr>
@@ -238,7 +242,7 @@ def _layout(title: str, body_html: str) -> str:
 def _button(label: str, url: str) -> str:
     return (
         f'<a href="{url}" '
-        f'style="display:inline-block;padding:14px 28px;background:#f97316;color:#ffffff;'
+        f'style="display:inline-block;padding:14px 28px;background:#4ade80;color:#0b1220;'
         f'text-decoration:none;font-weight:600;border-radius:8px;margin:12px 0;">{label}</a>'
     )
 
@@ -274,7 +278,7 @@ async def send_verification_email(to: str, token: str, username: str) -> bool:
       <p>Thanks for signing up for BetsPlug. Please confirm your email address to activate your account.</p>
       <p style="text-align:center;">{_button("Verify email", verify_url)}</p>
       <p style="font-size:13px;color:#9ca3af;">Or copy this link into your browser:<br>
-      <a href="{verify_url}" style="color:#fb923c;word-break:break-all;">{verify_url}</a></p>
+      <a href="{verify_url}" style="color:#4ade80;word-break:break-all;">{verify_url}</a></p>
       <p style="font-size:13px;color:#9ca3af;">This link is valid for 24 hours.</p>
       <hr style="border:none;border-top:1px solid #1f2937;margin:24px 0;">
       <h3 style="margin:0 0 8px 0;color:#ffffff;font-size:16px;">Nederlands</h3>
@@ -320,7 +324,7 @@ async def send_password_reset_email(to: str, token: str, username: str) -> bool:
       Click the button below to choose a new one.</p>
       <p style="text-align:center;">{_button("Reset password", reset_url)}</p>
       <p style="font-size:13px;color:#9ca3af;">Or copy this link into your browser:<br>
-      <a href="{reset_url}" style="color:#fb923c;word-break:break-all;">{reset_url}</a></p>
+      <a href="{reset_url}" style="color:#4ade80;word-break:break-all;">{reset_url}</a></p>
       <p style="font-size:13px;color:#9ca3af;">This link is valid for 1 hour. If you didn't request a reset, you can ignore this email.</p>
       <hr style="border:none;border-top:1px solid #1f2937;margin:24px 0;">
       <h3 style="margin:0 0 8px 0;color:#ffffff;font-size:16px;">Nederlands</h3>
@@ -420,12 +424,7 @@ async def send_subscription_cancelled_email(
     plan: str,
     access_until: str | None = None,
 ) -> bool:
-    """Send a cancel-confirmation email when the user schedules a cancel.
-
-    Stripe keeps the subscription active until ``current_period_end`` (no
-    further auto-charge). This email confirms that and gives the user
-    clarity on the end date + a way to reactivate.
-    """
+    """Send a cancel-confirmation email when the user schedules a cancel."""
     settings = get_settings()
     base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
     subscription_url = f"{base}/subscription"

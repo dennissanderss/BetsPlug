@@ -2,22 +2,17 @@
 
 History
 -------
-``email_service.py`` was a second SMTP implementation (synchronous,
-via stdlib ``smtplib``) that read from a different set of settings
-fields (``settings.smtp_pass``) than the async implementation in
-``email.py`` (``settings.smtp_password``). The duplication caused a
-silent production outage: the config file had two ``smtp_*`` blocks,
-the second one winning and leaving ``smtp_host`` empty, which tripped
-the dev-mode fallback and ate every transactional email.
+This module used to be a second, synchronous SMTP implementation
+(stdlib ``smtplib``) that disagreed with the async implementation in
+``email.py`` on settings field names. Under the dual implementation
+we had a silent production outage where every transactional email
+was dropped. Resolved 2026-04-21 by moving to a single Resend HTTP
+API sender (``email.py``) and reducing this module to a thin
+forwarder.
 
-Resolution: there is now a single SMTP stack (``app.services.email``,
-async, ``aiosmtplib``). This module is kept only to avoid breaking
-``abandoned_checkout_service.py`` which still imports ``send_email``
-and ``send_email_sync`` from here. Both names below forward to the
-canonical implementation.
-
-Do not add new senders here. Use ``app.services.email.send_email``
-directly.
+This module exists only so ``abandoned_checkout_service.py`` and any
+Celery task keep working without a sweeping rename. For new code,
+import ``app.services.email.send_email`` directly.
 """
 
 from __future__ import annotations

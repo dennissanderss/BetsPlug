@@ -89,60 +89,51 @@ class Settings(BaseSettings):
     api_football_key: str = ""        # api-football.com (Pro tier, sole data source)
     the_odds_api_key: str = ""        # the-odds-api.com (optional, odds only)
 
-    # ── SMTP (transactional email via Hostinger) ─────────────────────
-    # History: this block was duplicated earlier (two `smtp_host` lines,
-    # second one winning as empty, which disabled real sends on
-    # production). Consolidated to ONE block below.
+    # ── Transactional email (Resend HTTP API) ────────────────────────
+    # Replaced Hostinger SMTP on 2026-04-21 after an ~2-week silent
+    # outage caused by duplicated Settings fields + env var name
+    # mismatches + an implicit dev-mode fallback that returned True
+    # without sending anything. Resend is HTTP-only so none of those
+    # failure modes are possible anymore.
     #
-    # Railway env naming convention is `SMTP_PASS` / `MAIL_FROM_ADDRESS`
-    # / `MAIL_FROM_NAME`, which differs from the Python field names we
-    # want (`smtp_password`, `smtp_from`). `validation_alias` on each
-    # Field tells Pydantic which env var to read, so Railway keeps its
-    # intuitive naming and the code keeps clean field names.
-    smtp_host: str = Field(
-        default="smtp.hostinger.com",
-        validation_alias="SMTP_HOST",
-    )
-    smtp_port: int = Field(default=465, validation_alias="SMTP_PORT")
-    smtp_user: str = Field(default="", validation_alias="SMTP_USER")
-    # Accepts both SMTP_PASS (Railway's current name) and SMTP_PASSWORD
-    # by reading SMTP_PASS as the canonical alias. Users migrating from
-    # either name can continue without touching env config.
-    smtp_password: str = Field(
+    # Required Railway env:
+    #   RESEND_API_KEY       — from resend.com → API Keys
+    #   MAIL_FROM_ADDRESS    — e.g. support@betsplug.com (must be a
+    #                          verified Resend domain)
+    #   MAIL_FROM_NAME       — e.g. BetsPlug
+    # Optional:
+    #   EMAIL_DEV_MODE=1     — skip real sends, log to stdout (local
+    #                          dev only)
+    resend_api_key: str = Field(
         default="",
-        validation_alias="SMTP_PASS",
+        validation_alias="RESEND_API_KEY",
     )
-    smtp_from_address: str = Field(
+    email_from_address: str = Field(
         default="",
         validation_alias="MAIL_FROM_ADDRESS",
     )
-    smtp_from_name: str = Field(
+    email_from_name: str = Field(
         default="BetsPlug",
         validation_alias="MAIL_FROM_NAME",
     )
-    smtp_use_tls: bool = True
-    # Explicit opt-in: when true, ``send_email`` logs the message to
-    # stdout and returns True without attempting SMTP. The old code
-    # tripped into this branch automatically whenever SMTP_HOST was
-    # empty, which hid production misconfig (empty password → silent
-    # failure was indistinguishable from "dev mode intentional").
-    # Now you must *explicitly* set EMAIL_DEV_MODE=1 for local dev;
-    # production with a broken SMTP config will log a loud error and
-    # return False instead of pretending success.
+    # Explicit opt-in: when true, ``send_email`` logs the message body
+    # to stdout and returns True without calling Resend. Production
+    # must NEVER set this — missing RESEND_API_KEY on production
+    # triggers a LOUD misconfig error instead of a silent pass.
     email_dev_mode: bool = Field(
         default=False,
         validation_alias="EMAIL_DEV_MODE",
     )
 
     @property
-    def smtp_from(self) -> str:
+    def email_from(self) -> str:
         """RFC-5322 "Name <address>" formatted From header.
 
         Falls back to a sane default when MAIL_FROM_ADDRESS is unset so
-        the header never ends up empty (which some SMTP servers reject).
+        Resend never sees an empty From (it would reject the send).
         """
-        address = self.smtp_from_address or "noreply@betsplug.com"
-        name = self.smtp_from_name or "BetsPlug"
+        address = self.email_from_address or "noreply@betsplug.com"
+        name = self.email_from_name or "BetsPlug"
         return f"{name} <{address}>"
 
     # Abandoned Checkout
