@@ -1631,7 +1631,9 @@ export default function PredictionsPage() {
             {t("pred.noForecastsYetDesc")}
           </p>
           <p className="text-xs text-slate-500">
-            {upcomingFixtures.length} {upcomingFixtures.length === 1 ? "match" : "matches"} on this date
+            {upcomingFixtures.length === 1
+              ? t("pred.matchOnThisDate")
+              : t("pred.matchesOnThisDate", { count: upcomingFixtures.length })}
           </p>
         </div>
       ) : filtered.length === 0 ? (
@@ -1642,7 +1644,7 @@ export default function PredictionsPage() {
             {t("pred.noMatchingPredictionsDesc")}
           </p>
           <p className="text-xs text-slate-500">
-            {fixturesWithPrediction.length} predictions available without filters
+            {t("pred.predictionsAvailable", { count: fixturesWithPrediction.length })}
           </p>
           <button
             onClick={() => { setLeagueFilter("All"); setConfidenceFilter("All"); setTierFilter("All"); }}
