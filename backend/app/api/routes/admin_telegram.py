@@ -81,6 +81,40 @@ class HealthResponse(BaseModel):
     )
 
 
+class ChannelOverview(BaseModel):
+    """Aggregate stats for one Telegram channel we post to.
+
+    Single source of truth for the admin dashboard's per-channel card —
+    the UI shouldn't have to compute these from the /posts history.
+    """
+    channel: str
+    tier: str = Field(
+        ...,
+        description=(
+            "Logical tier this channel covers (currently always 'free'; "
+            "Silver/Gold/Platinum channels will surface here when added)."
+        ),
+    )
+    is_primary: bool = Field(
+        ..., description="True for the channel configured as FREE primary."
+    )
+    is_test: bool = Field(
+        ..., description="True when this is the optional TELEGRAM_CHANNEL_TEST."
+    )
+    total_posts: int
+    picks_posted: int
+    picks_with_result: int
+    picks_pending_result: int
+    summaries_posted: int
+    last_post_at: Optional[datetime] = None
+    last_post_type: Optional[str] = None
+    scheduled_slots_cet: list[str] = Field(
+        default_factory=lambda: ["11:00", "15:00", "19:00"],
+        description="APScheduler cron times for pick posting (CET).",
+    )
+    summary_slot_cet: str = "23:00"
+
+
 # ---------------------------------------------------------------------------
 # Operational endpoints
 # ---------------------------------------------------------------------------
@@ -245,6 +279,84 @@ async def get_health() -> HealthResponse:
         channel=settings.telegram_channel_free,
         bot=bot,
     )
+
+
+@router.get(
+    "/channels",
+    response_model=list[ChannelOverview],
+    summary="Per-channel activity overview",
+)
+async def get_channels_overview(
+    db: AsyncSession = Depends(get_db),
+) -> list[ChannelOverview]:
+    """Aggregate stats for every channel this instance is configured to
+    post to, plus any *other* channel we have historical posts for.
+
+    The union means rotating the production channel handle (or adding a
+    Silver/Gold/Platinum channel later) never hides old post history —
+    any channel that ever received a post stays visible here.
+    """
+    settings = get_settings()
+
+    configured = []
+    if settings.telegram_channel_free:
+        configured.append((settings.telegram_channel_free, "free", True, False))
+    if settings.telegram_channel_test:
+        configured.append((settings.telegram_channel_test, "free", False, True))
+
+    # Pull every channel we've ever posted to from the audit table so
+    # stale handles don't disappear from the dashboard.
+    historical_stmt = select(TelegramPost.channel).distinct()
+    historical = {
+        c for (c,) in (await db.execute(historical_stmt)).all() if c
+    }
+
+    configured_channels = {c[0] for c in configured}
+    for extra in historical - configured_channels:
+        # Historical-only channel — mark neither primary nor test so
+        # the UI can render it as "archived" / not currently active.
+        configured.append((extra, "unknown", False, False))
+
+    overviews: list[ChannelOverview] = []
+    for handle, tier, is_primary, is_test in configured:
+        stmt = select(TelegramPost).where(TelegramPost.channel == handle)
+        rows = (await db.execute(stmt)).scalars().all()
+
+        total = len(rows)
+        picks = [r for r in rows if r.post_type == "pick"]
+        picks_done = [r for r in picks if r.result_posted_at is not None]
+        picks_pending = [r for r in picks if r.result_posted_at is None]
+        summaries = [r for r in rows if r.post_type == "daily_summary"]
+
+        last = max(rows, key=lambda r: r.posted_at) if rows else None
+
+        overviews.append(
+            ChannelOverview(
+                channel=handle,
+                tier=tier,
+                is_primary=is_primary,
+                is_test=is_test,
+                total_posts=total,
+                picks_posted=len(picks),
+                picks_with_result=len(picks_done),
+                picks_pending_result=len(picks_pending),
+                summaries_posted=len(summaries),
+                last_post_at=last.posted_at if last else None,
+                last_post_type=last.post_type if last else None,
+            )
+        )
+
+    # Sort: primary first, then test, then archived, alphabetical
+    # within each group.
+    def _sort_key(o: ChannelOverview) -> tuple[int, str]:
+        if o.is_primary:
+            return (0, o.channel)
+        if o.is_test:
+            return (1, o.channel)
+        return (2, o.channel)
+
+    overviews.sort(key=_sort_key)
+    return overviews
 
 
 # ---------------------------------------------------------------------------

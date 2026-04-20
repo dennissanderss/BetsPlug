@@ -23,6 +23,7 @@ import {
   RotateCcw,
   Gauge,
   ArrowUpRight,
+  Send,
 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
@@ -45,6 +46,7 @@ import GoalsNotesTab from "@/components/admin/goals-notes-tab";
 import StrategyTiersTab from "@/components/admin/strategy-tiers-tab";
 import EmailDiagnosticsTab from "@/components/admin/email-diagnostics-tab";
 import SeoMetaEditor from "@/components/admin/seo-meta-editor";
+import TelegramManager from "@/components/admin/telegram-manager";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -1370,6 +1372,11 @@ export default function AdminPage() {
       label: "Email Diagnostics",
       icon: Mail,
     },
+    {
+      id: "telegram",
+      label: "Telegram",
+      icon: Send,
+    },
   ];
 
   return (
@@ -1440,6 +1447,7 @@ export default function AdminPage() {
         {activeTab === "goals" && <GoalsNotesTab />}
         {activeTab === "strategy-tiers" && <StrategyTiersTab />}
         {activeTab === "email-diagnostics" && <EmailDiagnosticsTab />}
+        {activeTab === "telegram" && <TelegramManager />}
       </div>
     </div>
   );
