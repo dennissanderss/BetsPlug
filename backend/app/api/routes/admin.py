@@ -118,6 +118,30 @@ class JobTriggerResponse(BaseModel):
     detail: Optional[str] = None
 
 
+class MatchStatusByDate(BaseModel):
+    """One row per (date, status) — shows whether matches from a given
+    day are stuck on SCHEDULED instead of transitioning to FINISHED."""
+
+    day: str  # YYYY-MM-DD
+    status: str
+    count: int
+
+
+class MatchStatusBreakdownResponse(BaseModel):
+    """Per-day match-status counts for the last N days.
+
+    Use this to diagnose "results page stops on day X" — if day X+1 has
+    matches stuck on SCHEDULED after kickoff passed, sync_recent_results
+    is failing for that league range.
+    """
+
+    days_back: int
+    rows: List[MatchStatusByDate]
+    totals_by_status: Dict[str, int]
+    stuck_scheduled_past_kickoff: int
+    last_finished_match_day: Optional[str]
+
+
 class IngestionDiagnosisResponse(BaseModel):
     """Per-league diagnostic for ``sync_upcoming_matches``.
 
@@ -179,6 +203,85 @@ async def trigger_scheduler_job(
         return JobTriggerResponse(
             triggered=job_id, ok=False, detail=f"{type(exc).__name__}: {exc}"
         )
+
+
+@router.get(
+    "/match-status-breakdown",
+    response_model=MatchStatusBreakdownResponse,
+    summary="Count matches by (date, status) over the last N days",
+)
+async def match_status_breakdown(
+    days_back: int = Query(default=14, ge=1, le=60),
+    db: AsyncSession = Depends(get_db),
+) -> MatchStatusBreakdownResponse:
+    """Return per-day, per-status match counts to diagnose data gaps.
+
+    Symptom we're diagnosing: results page shows finished matches up to
+    day X, then nothing. Hypothesis: day X+1 onwards has matches in DB
+    but stuck on status=SCHEDULED because sync_recent_results never
+    updated them. This endpoint makes that visible instantly — one glance
+    shows per-day where the SCHEDULED→FINISHED transition is failing.
+    """
+    from datetime import timedelta
+    from sqlalchemy import func, cast, Date, and_
+    from app.models.match import Match, MatchStatus
+
+    now = datetime.now(timezone.utc)
+    cutoff = now - timedelta(days=days_back)
+
+    # Per-day, per-status count
+    stmt = (
+        select(
+            cast(Match.scheduled_at, Date).label("day"),
+            Match.status,
+            func.count(Match.id).label("n"),
+        )
+        .where(Match.scheduled_at >= cutoff)
+        .where(Match.scheduled_at <= now + timedelta(days=1))
+        .group_by(cast(Match.scheduled_at, Date), Match.status)
+        .order_by(cast(Match.scheduled_at, Date).desc(), Match.status)
+    )
+    rows = (await db.execute(stmt)).all()
+
+    per_day: List[MatchStatusByDate] = []
+    totals: Dict[str, int] = {}
+    for day, status_enum, n in rows:
+        status_str = (
+            status_enum.value if hasattr(status_enum, "value") else str(status_enum)
+        )
+        per_day.append(
+            MatchStatusByDate(day=day.isoformat(), status=status_str, count=int(n))
+        )
+        totals[status_str] = totals.get(status_str, 0) + int(n)
+
+    # Matches stuck on SCHEDULED past kickoff (> 3h ago = definitely started
+    # by now)
+    stuck_cutoff = now - timedelta(hours=3)
+    stuck_stmt = select(func.count(Match.id)).where(
+        and_(
+            Match.status == MatchStatus.SCHEDULED,
+            Match.scheduled_at <= stuck_cutoff,
+            Match.scheduled_at >= cutoff,
+        )
+    )
+    stuck = int((await db.execute(stuck_stmt)).scalar() or 0)
+
+    # Most recent day with at least one FINISHED match
+    last_fin_stmt = (
+        select(func.max(cast(Match.scheduled_at, Date)))
+        .where(Match.status == MatchStatus.FINISHED)
+        .where(Match.scheduled_at >= cutoff)
+    )
+    last_fin = (await db.execute(last_fin_stmt)).scalar()
+    last_fin_iso = last_fin.isoformat() if last_fin else None
+
+    return MatchStatusBreakdownResponse(
+        days_back=days_back,
+        rows=per_day,
+        totals_by_status=totals,
+        stuck_scheduled_past_kickoff=stuck,
+        last_finished_match_day=last_fin_iso,
+    )
 
 
 @router.post(

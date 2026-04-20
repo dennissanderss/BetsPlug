@@ -1165,6 +1165,9 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
       {/* Diagnose one league (surface raw API-Football error) */}
       <DiagnoseIngestionCard />
 
+      {/* Per-day match status breakdown (which day stopped FINISHED-ing?) */}
+      <MatchStatusBreakdownCard />
+
       {/* Retrain models */}
       <div className="card-neon p-6 space-y-4 border border-red-500/15">
         <div className="flex items-center gap-2.5">
@@ -1443,6 +1446,205 @@ function DiagnoseIngestionCard() {
             ? mutation.error.message
             : "Diagnose failed."}
         </p>
+      )}
+    </div>
+  );
+}
+
+// ─── Match Status Breakdown (per-day, per-status) ─────────────────────────────
+
+const STATUS_COLORS: Record<string, string> = {
+  scheduled: "bg-slate-500/15 text-slate-200 border-slate-500/30",
+  live: "bg-amber-500/15 text-amber-200 border-amber-500/30",
+  finished: "bg-emerald-500/15 text-emerald-200 border-emerald-500/30",
+  postponed: "bg-blue-500/15 text-blue-200 border-blue-500/30",
+  cancelled: "bg-red-500/15 text-red-200 border-red-500/30",
+};
+
+function MatchStatusBreakdownCard() {
+  const [days, setDays] = React.useState(14);
+  const query = useQuery({
+    queryKey: ["admin-match-status-breakdown", days],
+    queryFn: () => api.getMatchStatusBreakdown(days),
+    retry: 3,
+    retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 10_000),
+  });
+
+  const data = query.data;
+
+  const perDayGroups = React.useMemo(() => {
+    if (!data) return [] as { day: string; buckets: Record<string, number>; total: number }[];
+    const byDay = new Map<string, Record<string, number>>();
+    for (const row of data.rows) {
+      if (!byDay.has(row.day)) byDay.set(row.day, {});
+      byDay.get(row.day)![row.status] = row.count;
+    }
+    return Array.from(byDay.entries())
+      .map(([day, buckets]) => ({
+        day,
+        buckets,
+        total: Object.values(buckets).reduce((a, b) => a + b, 0),
+      }))
+      .sort((a, b) => (a.day < b.day ? 1 : -1));
+  }, [data]);
+
+  return (
+    <div className="card-neon p-6 space-y-4 lg:col-span-2">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10">
+            <BarChart3 className="h-4 w-4 text-purple-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-100">
+              Match Status Breakdown (per dag)
+            </h3>
+            <p className="text-xs text-slate-400">
+              Toont per dag hoeveel wedstrijden elke status hebben. Als
+              je een dag ziet met 20 SCHEDULED en 0 FINISHED terwijl de
+              aftrap al gepasseerd is: sync_recent_results doet voor die
+              dag zijn werk niet. Directe wijzer naar welke league vast
+              staat.
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={days}
+            onChange={(e) => setDays(Number(e.target.value))}
+            className="h-8 rounded-md border border-white/10 bg-white/[0.04] px-2 text-xs text-slate-200"
+          >
+            {[7, 14, 30, 60].map((d) => (
+              <option key={d} value={d} className="bg-[#111827]">
+                {d}d
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={() => query.refetch()}
+            className="inline-flex items-center gap-1.5 rounded border border-white/10 bg-white/[0.04] px-2 py-1 text-[11px] text-slate-300 hover:bg-white/[0.08]"
+          >
+            <RefreshCw className="h-3 w-3" />
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      {query.isLoading && <Skeleton className="h-32 w-full rounded-lg" />}
+
+      {query.isError && (
+        <p className="text-xs text-red-400">
+          Kon match-status-breakdown niet ophalen.
+        </p>
+      )}
+
+      {data && (
+        <>
+          {/* Red flag banner */}
+          {data.stuck_scheduled_past_kickoff > 0 && (
+            <div className="rounded-lg border border-red-500/40 bg-red-500/10 p-3">
+              <p className="text-xs font-semibold text-red-200">
+                ⚠️ {data.stuck_scheduled_past_kickoff} wedstrijden staan op
+                SCHEDULED maar aftrap is meer dan 3u geleden.
+              </p>
+              <p className="mt-1 text-[11px] text-red-200/80">
+                Dit is waarschijnlijk je data-gat: sync_recent_results of
+                sync_live_fixtures heeft deze niet naar FINISHED getild.
+                Klik hieronder per dag om te zien welke leagues vastzitten.
+              </p>
+            </div>
+          )}
+
+          {/* Totals */}
+          <div className="flex flex-wrap gap-2">
+            {Object.entries(data.totals_by_status).map(([status, n]) => (
+              <span
+                key={status}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] font-semibold capitalize",
+                  STATUS_COLORS[status] ?? "bg-white/[0.04] text-slate-300 border-white/10",
+                )}
+              >
+                {status}
+                <span className="tabular-nums opacity-70">{n}</span>
+              </span>
+            ))}
+            {data.last_finished_match_day && (
+              <span className="ml-auto inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-[11px] text-slate-400">
+                Laatste FINISHED:{" "}
+                <span className="font-mono text-slate-200">
+                  {data.last_finished_match_day}
+                </span>
+              </span>
+            )}
+          </div>
+
+          {/* Per-day rows */}
+          <div className="overflow-x-auto rounded-lg border border-white/[0.06]">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-white/[0.06] bg-white/[0.02] text-[10px] uppercase tracking-wider text-slate-500">
+                  <th className="px-3 py-2 text-left font-semibold">Datum</th>
+                  <th className="px-3 py-2 text-right font-semibold">Scheduled</th>
+                  <th className="px-3 py-2 text-right font-semibold">Live</th>
+                  <th className="px-3 py-2 text-right font-semibold">Finished</th>
+                  <th className="px-3 py-2 text-right font-semibold">Postponed</th>
+                  <th className="px-3 py-2 text-right font-semibold">Cancelled</th>
+                  <th className="px-3 py-2 text-right font-semibold">Totaal</th>
+                </tr>
+              </thead>
+              <tbody>
+                {perDayGroups.map((row) => {
+                  const scheduled = row.buckets.scheduled ?? 0;
+                  const live = row.buckets.live ?? 0;
+                  const finished = row.buckets.finished ?? 0;
+                  const postponed = row.buckets.postponed ?? 0;
+                  const cancelled = row.buckets.cancelled ?? 0;
+                  const dayDate = new Date(row.day + "T12:00:00Z");
+                  const now = new Date();
+                  const isPast = dayDate.getTime() < now.getTime() - 3 * 3600 * 1000;
+                  const stuckFlag = isPast && scheduled > 0 && finished === 0;
+                  return (
+                    <tr
+                      key={row.day}
+                      className={cn(
+                        "border-b border-white/[0.04] last:border-b-0",
+                        stuckFlag && "bg-red-500/[0.04]",
+                      )}
+                    >
+                      <td className="px-3 py-2 font-mono text-xs text-slate-200">
+                        {row.day}
+                        {stuckFlag && (
+                          <span className="ml-2 text-[10px] font-semibold text-red-300">
+                            ⚠️ stuck
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-3 py-2 text-right tabular-nums text-slate-300">
+                        {scheduled || "·"}
+                      </td>
+                      <td className="px-3 py-2 text-right tabular-nums text-amber-300">
+                        {live || "·"}
+                      </td>
+                      <td className="px-3 py-2 text-right tabular-nums text-emerald-300">
+                        {finished || "·"}
+                      </td>
+                      <td className="px-3 py-2 text-right tabular-nums text-blue-300">
+                        {postponed || "·"}
+                      </td>
+                      <td className="px-3 py-2 text-right tabular-nums text-red-300">
+                        {cancelled || "·"}
+                      </td>
+                      <td className="px-3 py-2 text-right tabular-nums font-semibold text-slate-100">
+                        {row.total}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );

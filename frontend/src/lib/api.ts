@@ -569,6 +569,11 @@ class ApiClient {
       { method: "POST" },
     );
   }
+  getMatchStatusBreakdown(daysBack = 14) {
+    return this.request<import("@/types/api").MatchStatusBreakdown>(
+      `/admin/match-status-breakdown?days_back=${daysBack}`,
+    );
+  }
 
   // Fixture Results
   getFixtureResults(days = 7, league?: string) {

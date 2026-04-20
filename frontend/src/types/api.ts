@@ -905,6 +905,20 @@ export interface IngestionDiagnosis {
   error_message?: string | null;
 }
 
+export interface MatchStatusByDate {
+  day: string;
+  status: string;
+  count: number;
+}
+
+export interface MatchStatusBreakdown {
+  days_back: number;
+  rows: MatchStatusByDate[];
+  totals_by_status: Record<string, number>;
+  stuck_scheduled_past_kickoff: number;
+  last_finished_match_day: string | null;
+}
+
 // Capacity plan (GET /api/admin/capacity-plan)
 export type CapacityStatus = "safe" | "watch" | "tight" | "over";
 
