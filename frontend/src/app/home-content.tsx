@@ -40,7 +40,6 @@ import type { Testimonial } from "@/components/ui/testimonials-section";
 import type { ComparisonRow } from "@/components/ui/comparison-table";
 import { getLocaleValue } from "@/lib/sanity-data";
 import { useBotdTrackRecord } from "@/hooks/use-botd-track-record";
-import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { useBotdHistory } from "@/hooks/use-botd-history";
 import { PRIMARY_LEAGUES, getLeagueName } from "@/data/league-catalog";
 import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
@@ -220,7 +219,6 @@ export function HomeContent({
   const loc = useLocalizedHref();
   const featured = useFeaturedMatch();
   const botd = useBotdTrackRecord();
-  const potd = usePotdNumbers();
   const historySeries = useBotdHistory();
   const { stats, picks } = useHomepageFreePicks();
 
@@ -461,43 +459,6 @@ export function HomeContent({
                 </div>
               </div>
 
-              {/* Floating label removed — the previous "PICK OF THE DAY"
-                  tag above a container of three free sample matches was
-                  misleading (those picks are just today's premium hero
-                  preview, not the dedicated BOTD pick). The BOTD feature
-                  has its own explicit surface further down the page and
-                  on /bet-of-the-day. The bottom-right floating "record"
-                  badge is kept because it tracks the Gold-tier sample
-                  size, which is what the chart behind it visualises. */}
-              {/* Bottom-right floating badge — replaces the old
-                  "CORRECTE PICKS TOTAAL 238" tile. The raw count was
-                  a BOTD-backtest number (238/406 ≈ 58.6%) that looked
-                  smaller than it should next to the 80%+ win-kans
-                  chips inside the widget. A Gold-tier accuracy stat
-                  is more honest AND more magnetic — it's literally
-                  the number the picks below are drawn from. */}
-              <div
-                className="card-neon card-neon-blue absolute -right-4 -bottom-4 hidden rotate-[4deg] p-3 sm:block"
-                style={{ width: 190 }}
-              >
-                <div className="flex items-center gap-2.5">
-                  <HexBadge variant="blue" size="sm" noGlow>
-                    <Target className="h-3.5 w-3.5" />
-                  </HexBadge>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                      {locale === "nl"
-                        ? "Gold-tier trefzekerheid"
-                        : "Gold-tier accuracy"}
-                    </p>
-                    <p className="text-stat text-sm text-[#93c5fd]">
-                      {potd.potdAccuracy
-                        ? `${potd.potdAccuracy}%`
-                        : "77,7%"}
-                    </p>
-                  </div>
-                </div>
-              </div>
             </motion.div>
           </div>
         </div>
