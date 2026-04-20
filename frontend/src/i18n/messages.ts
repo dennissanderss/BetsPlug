@@ -85,10 +85,10 @@ const en = {
   "hero.winRate": "Win Rate",
   "hero.today": "Today",
   "hero.wins": "Wins",
-  "hero.usp1Title": "No cherry-picking",
-  "hero.usp1Desc": "Every prediction logged — winners and losers. No hidden losses, no screenshot theatre.",
-  "hero.usp2Title": "Locked pre-match",
-  "hero.usp2Desc": "Each pick is timestamped before kickoff and cannot be edited after. Ever.",
+  "hero.usp1Title": "Losses shown too",
+  "hero.usp1Desc": "Every pick stays on the record — winners and misses. Nothing quietly deleted.",
+  "hero.usp2Title": "Published before kickoff",
+  "hero.usp2Desc": "Every prediction goes live with a timestamp before the match starts, and cannot be edited after.",
   "hero.usp3Title": "Public track record",
   "hero.usp3Desc": "Every call, every result — visible in your dashboard and on the public track record page.",
 
@@ -997,7 +997,7 @@ const en = {
 
   /* Step 1 */
   "hiw.step1Badge": "Step 01 · Ingest",
-  "hiw.step1Title": "Every match, every stat, every night",
+  "hiw.step1Title": "Every match, every stat, every few hours",
   "hiw.step1Lead":
     "Before our AI makes a single football prediction, it ingests form, standings, goal data, head-to-head history, lineups, rest days, travel distance and dozens of other factors for every upcoming fixture. All feature values are snapshotted at the moment of ingestion, the model can never 'see' the future.",
   "hiw.step1P1":
@@ -1005,9 +1005,9 @@ const en = {
   "hiw.step1Point1Title": "39 features per match",
   "hiw.step1Point1Desc":
     "Elo rating, recent form, xG, H2H, standings, opening odds, rest days, home advantage, all snapshotted pre-kickoff.",
-  "hiw.step1Point2Title": "Refreshed every night",
+  "hiw.step1Point2Title": "Refreshed every 6 hours",
   "hiw.step1Point2Desc":
-    "Scheduled pipelines pull fresh data for every fixture in the upcoming 7 days, every night. No stale inputs.",
+    "Scheduled pipelines pull fresh data for every fixture in the upcoming 7 days, every 6 hours. No stale inputs.",
   "hiw.step1Point3Title": "30+ top leagues live",
   "hiw.step1Point3Desc":
     "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, plus 20+ more. The training corpus spans 5+ seasons of clean history.",
@@ -1084,7 +1084,7 @@ const en = {
   "hiw.flowStep1Desc":
     "Hundreds of fixtures across 30+ leagues enter the pipeline with fresh data: form, injuries, H2H, xG, odds.",
   "hiw.flowStep2Label": "Step 02",
-  "hiw.flowStep2Title": "Five AI models vote",
+  "hiw.flowStep2Title": "Four AI models vote",
   "hiw.flowStep2Desc":
     "Elo, Poisson, Logistic, XGBoost and the Ensemble each score the match. Their consensus becomes one probability.",
   "hiw.flowStep3Label": "Step 03",
@@ -3312,10 +3312,10 @@ const nl: Dictionary = {
   "hero.titleLine2": "AI-voetbalvoorspellingen",
   "hero.titleLine3": "die daadwerkelijk opleveren",
   "hero.today": "Vandaag",
-  "hero.usp1Desc": "Elke voorspelling gelogd — winners én verliezers. Geen verborgen verliezen, geen screenshot-theater.",
-  "hero.usp1Title": "Geen kersenpluk",
-  "hero.usp2Desc": "Elke pick krijgt een tijdstempel vóór de aftrap en kan daarna niet meer worden bewerkt. Nooit.",
-  "hero.usp2Title": "Vooraf vastgezet",
+  "hero.usp1Desc": "Elke pick blijft staan — winst én misser. Niks stilletjes weggepoetst.",
+  "hero.usp1Title": "Ook de missers zichtbaar",
+  "hero.usp2Desc": "Elke voorspelling gaat met tijdstempel live vóór de aftrap en kan daarna niet meer worden bewerkt.",
+  "hero.usp2Title": "Gepubliceerd vóór aftrap",
   "hero.usp3Desc": "Elke call, elke uitslag — zichtbaar in je dashboard én op de publieke track record pagina.",
   "hero.usp3Title": "Publiek track record",
   "hero.winRate": "Winstpercentage",
@@ -3333,7 +3333,7 @@ const nl: Dictionary = {
   "hiw.engine2Desc": "Statistisch model dat de meest waarschijnlijke eindstand voorspelt, sterk in laag-scorende competities.",
   "hiw.engine2Name": "Scorelijnvoorspeller",
   "hiw.engine3Desc": "Teamsterkte-ratings, wedstrijd voor wedstrijd bijgewerkt met uitsluitend pre-match data. Gecorrigeerd voor thuisvoordeel. Geen lookahead.",
-  "hiw.engine3Name": "Elo-score op moment van voorspelling",
+  "hiw.engine3Name": "Teamsterkte-tracker",
   "hiw.engine4Desc": "Houdt de andere modellen eerlijk. Levert winkansen die aansluiten op lange-termijn-frequenties, geen opgeblazen zelfvertrouwen.",
   "hiw.engine4Name": "Oddskalibrator",
   "hiw.engineDisclaimer": "Elk model wordt getest op data die het nooit eerder heeft gezien (walk-forward validatie). Ons trackrecord toont elke voorspelling, winst en verlies, zonder verwijderingen.",
@@ -3350,7 +3350,7 @@ const nl: Dictionary = {
   "hiw.flowStep1Desc":
     "Honderden wedstrijden in 30+ competities gaan de pijplijn in met verse data: vorm, blessures, onderling, xG, odds.",
   "hiw.flowStep2Label": "Stap 02",
-  "hiw.flowStep2Title": "Vijf AI-modellen stemmen",
+  "hiw.flowStep2Title": "Vier AI-modellen stemmen",
   "hiw.flowStep2Desc":
     "Elo, Poisson, Logistic, XGBoost en de Ensemble scoren elk de wedstrijd. Hun consensus wordt één kans.",
   "hiw.flowStep3Label": "Stap 03",
@@ -3484,7 +3484,7 @@ const nl: Dictionary = {
   "hiw.step1P1": "Deze discipline op het juiste moment is de manier waarop we vooruitkijkende bias voorkomen, de stille moordenaar van de claim van elke tipgever op het gebied van winstpercentages. Als een model ooit is getraind op gegevens die het vóór de start niet zou hebben gehad, liegt de backtest. Die van ons niet.",
   "hiw.step1Point1Desc": "Elo-rating, recente vorm, xG, H2H, klassement, openingskansen, rustdagen, thuisvoordeel - allemaal momentopnamen vóór de aftrap.",
   "hiw.step1Point1Title": "39 factoren per wedstrijd",
-  "hiw.step1Point2Desc": "Geplande pijplijnen halen elke nacht nieuwe gegevens op voor elke wedstrijd in de komende zeven dagen. Geen verouderde input.",
+  "hiw.step1Point2Desc": "Geplande pijplijnen halen elke 6 uur nieuwe gegevens op voor elke wedstrijd in de komende zeven dagen. Geen verouderde input.",
   "hiw.step1Point2Title": "Dagelijks bijgewerkt",
   "hiw.step1Point3Desc": "Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie, Champions League, plus nog 20+ meer. Het trainings-corpus beslaat 5+ seizoenen aan zuivere geschiedenis.",
   "hiw.step1Point3Title": "30+ topcompetities",
@@ -3498,7 +3498,7 @@ const nl: Dictionary = {
   "hiw.step2Point2Title": "Alle Voorspellingen",
   "hiw.step2Point3Desc": "Binnenkort beschikbaar: filter voorspellingen op backtested-strategie (thuisfavorieten, low-xG underdogs, Europese vermoeidheid verdwijnt).",
   "hiw.step2Point3Title": "Strategy Lab",
-  "hiw.step2Title": "Ontvang onze beste pick dagelijks",
+  "hiw.step2Title": "Vier modellen, één AI-voetbalvoorspelling per wedstrijd",
   "hiw.step3Badge": "Stap 03",
   "hiw.step3Lead": "Wanneer het aftrapfluit klinkt, is elke BetsPlug-voorspelling al voorzien van een tijdstempel en opgeslagen. Na de wedstrijd komen de resultaten binnen via de officiële feed en wordt elke keuze automatisch beoordeeld. Overwinningen, verliezen en pushes, allemaal gepubliceerd op één pagina.",
   "hiw.step3P1": "Dit is wat we bedoelen met 'no cherry-picking': verliezende keuzes verdwijnen niet stilletjes en slechte maanden worden niet van het dashboard geschrapt. Als je ooit een tipgever hebt gezien wiens trackrecord alleen maar winnaars laat zien, dan keek je naar marketing en niet naar transparantie.",
