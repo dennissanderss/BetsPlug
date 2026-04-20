@@ -41,25 +41,38 @@ export function LockedLivePlaceholder({
   const isNl = locale === "nl";
   const loc = useLocalizedHref();
 
-  // Auth-aware: signed-in readers get the real live section inline
-  // instead of the lock-screen — they've paid/registered, they're
-  // entitled to see the numbers on the same page without a detour
-  // through /trackrecord in the (app) group.
+  // Auth + tier-aware: signed-in readers get the real live section
+  // inline, but we respect the paywall. For the BOTD variant Silver
+  // and Free tiers are BLOCKED (product rule: BOTD is Gold+ only, and
+  // Gold/Platinum see the same stream), so they still see an upgrade
+  // teaser here. Tier variant has no BOTD lock and just needs a
+  // signed-in session.
   const [hasToken, setHasToken] = useState(false);
+  const [userTier, setUserTier] = useState<string | null>(null);
   useEffect(() => {
     try {
       setHasToken(Boolean(window.localStorage.getItem("betsplug_token")));
+      setUserTier(window.localStorage.getItem("betsplug_tier"));
     } catch {
       setHasToken(false);
+      setUserTier(null);
     }
   }, []);
 
+  const tierHasBotdAccess =
+    userTier === "gold" || userTier === "platinum";
+
   if (hasToken) {
-    return variant === "tier" ? (
-      <LiveMeasurementSection />
-    ) : (
-      <BotdLiveTrackingSection />
-    );
+    if (variant === "tier") {
+      return <LiveMeasurementSection />;
+    }
+    // BOTD variant: Gold+ only.
+    if (tierHasBotdAccess) {
+      return <BotdLiveTrackingSection />;
+    }
+    // Free/Silver signed-in → keep the lock screen but swap the copy
+    // to an upgrade pitch (handled below via `variant === 'botd'` +
+    // headline/body override).
   }
 
   const title =
@@ -71,8 +84,18 @@ export function LockedLivePlaceholder({
         ? `${number} · Pick van de Dag — live meting`
         : `${number} · Pick of the Day — live measurement`;
 
-  const headline =
-    variant === "tier"
+  // For signed-in Free/Silver users hitting the BOTD variant we swap
+  // the copy to an upgrade pitch (product rule: BOTD is Gold+ only).
+  // For signed-out users we keep the original "sign in to view"
+  // framing. Both flow into the same lock-card template below.
+  const isBotdPaywallForSignedIn =
+    hasToken && variant === "botd" && !tierHasBotdAccess;
+
+  const headline = isBotdPaywallForSignedIn
+    ? isNl
+      ? "Alleen voor Gold & Platinum abonnees"
+      : "Gold & Platinum subscribers only"
+    : variant === "tier"
       ? isNl
         ? "Alleen zichtbaar voor ingelogde gebruikers"
         : "Visible to signed-in users only"
@@ -80,8 +103,11 @@ export function LockedLivePlaceholder({
         ? "Alleen zichtbaar voor ingelogde gebruikers"
         : "Visible to signed-in users only";
 
-  const body =
-    variant === "tier"
+  const body = isBotdPaywallForSignedIn
+    ? isNl
+      ? "De Pick of the Day zit op Gold en Platinum — onze enige dagelijkse pick met de hoogste modelconfidence. Free en Silver hebben geen BOTD-toegang omdat we het volume laag en de signaal-kwaliteit hoog willen houden. Upgrade naar Gold (of Platinum voor top-5 competities) om deze live meting en de dagelijkse pick vrij te spelen."
+      : "Pick of the Day lives on Gold and Platinum — our single daily pick with the highest model confidence. Free and Silver don't include BOTD access because we keep the volume low and the signal quality high. Upgrade to Gold (or Platinum for top-5 leagues) to unlock this live measurement and the daily pick."
+    : variant === "tier"
       ? isNl
         ? "De live meting per tier is de strikt pre-match dataset die dagelijks groeit vanaf 16 april 2026. We bouwen deze zichtbaar op in het dashboard zodat je per dag kunt volgen hoe elke tier presteert. Omdat dit in de opbouwfase zit, is hij afgeschermd: zo zie je niet per ongeluk een half-gevulde grafiek. Log in om de actuele stand te bekijken op je dashboard."
         : "The live measurement per tier is the strict pre-match dataset growing daily from April 16 2026. We build this up visibly inside the dashboard so you can track each tier's progress day by day. Because it is in its warm-up phase, it is gated: you won't accidentally read a half-filled chart. Sign in to see today's live numbers on your dashboard."
@@ -162,25 +188,49 @@ export function LockedLivePlaceholder({
                 </p>
 
                 <div className="mt-8 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-                  <Link
-                    href={loginHref}
-                    className="btn-primary inline-flex items-center gap-2"
-                  >
-                    {isNl ? "Log in om te bekijken" : "Sign in to view"}
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    href={dashboardHref}
-                    className="btn-glass inline-flex items-center gap-2"
-                  >
-                    {isNl ? "Ga naar dashboard" : "Go to dashboard"}
-                  </Link>
+                  {isBotdPaywallForSignedIn ? (
+                    <>
+                      <Link
+                        href={loc("/pricing")}
+                        className="btn-primary inline-flex items-center gap-2"
+                      >
+                        {isNl ? "Upgrade naar Gold" : "Upgrade to Gold"}
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                      <Link
+                        href={loc("/bet-of-the-day")}
+                        className="btn-glass inline-flex items-center gap-2"
+                      >
+                        {isNl ? "Bekijk BOTD-voorbeeld" : "Preview BOTD"}
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href={loginHref}
+                        className="btn-primary inline-flex items-center gap-2"
+                      >
+                        {isNl ? "Log in om te bekijken" : "Sign in to view"}
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                      <Link
+                        href={dashboardHref}
+                        className="btn-glass inline-flex items-center gap-2"
+                      >
+                        {isNl ? "Ga naar dashboard" : "Go to dashboard"}
+                      </Link>
+                    </>
+                  )}
                 </div>
 
                 <p className="mt-6 text-[11px] leading-relaxed text-[#6b7280]">
-                  {isNl
-                    ? "Geen account? De backtest-cijfers hierboven (sectie 1 en 3) zijn volledig openbaar — daarvoor hoef je niet in te loggen."
-                    : "No account? The backtest numbers above (sections 1 and 3) are fully public — no sign-in needed for those."}
+                  {isBotdPaywallForSignedIn
+                    ? isNl
+                      ? "Gold en Platinum hebben beiden volledige toegang tot de BOTD — dezelfde stream, dezelfde picks."
+                      : "Gold and Platinum both include full BOTD access — same stream, same picks."
+                    : isNl
+                      ? "Geen account? De backtest-cijfers hierboven (sectie 1 en 3) zijn volledig openbaar — daarvoor hoef je niet in te loggen."
+                      : "No account? The backtest numbers above (sections 1 and 3) are fully public — no sign-in needed for those."}
                 </p>
               </div>
             </div>
