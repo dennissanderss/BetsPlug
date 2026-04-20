@@ -380,7 +380,7 @@ const en = {
   "pricing.platTagline": "Elite top-5 picks. Pay once, keep forever.",
   "pricing.platPitch": "Unlock Platinum elite picks from our 5 strictest competitions (Champions League, Premier League, Eredivisie, Süper Lig, Saudi Pro League) — model confidence ≥ 80% — plus every Gold, Silver and Free pick below. Lifetime price lock.",
   "pricing.platBadgeLifetime": "Lifetime Deal",
-  "pricing.platLimited": "Limited to 100/year",
+  "pricing.platLimited": "Around 100 seats per year",
   "pricing.platOneTime": "One-time payment",
   "pricing.platNoSub": "No subscription. No renewals. Ever.",
   "pricing.platCta": "Claim Lifetime Access",
@@ -587,8 +587,8 @@ const en = {
 
   "pricingDeep.platinumReason1.title": "Breaks even at month 14, free forever after",
   "pricingDeep.platinumReason1.desc": "€199 once is 13.2 months of Gold. Every month after that is pure savings, and our Gold price is already scheduled to rise as coverage expands.",
-  "pricingDeep.platinumReason2.title": "100 Platinum seats per year. Hard cap.",
-  "pricingDeep.platinumReason2.desc": "Once this year's 100 founder seats are claimed, the tier closes until next cycle, at a higher price. If you see Platinum available, the window is still open.",
+  "pricingDeep.platinumReason2.title": "Around 100 Platinum seats per yearly cycle",
+  "pricingDeep.platinumReason2.desc": "We cap each yearly cycle at roughly 100 founder seats. When we approach that number the tier pauses and reopens next cycle at a higher price. If you see Platinum available, the window is still open.",
   "pricingDeep.platinumReason3.title": "Private Platinum Telegram (20 seats, soon)",
   "pricingDeep.platinumReason3.desc": "Direct founder email today, plus a private Platinum Telegram channel launching soon: 20 seats, in-depth Q&A, early insights, and strategy discussion before features go live.",
 
@@ -2128,7 +2128,7 @@ const en = {
   "results.bestStreak": "Best Win Streak",
   "results.maxLoseStreak": "Max Losing Streak",
   "results.upsellHeadline": "Lifetime access, pay once, never again",
-  "results.upsellSubtext": "All Gold features + direct founder access + Platinum Telegram (soon) + early access. Limited to 100/year.",
+  "results.upsellSubtext": "All Gold features + direct founder access + Platinum Telegram (soon) + early access. Around 100 seats per yearly cycle.",
 
   /* ── WeeklyReport page ───────────────────────────────────── */
   "weeklyReport.title": "Weekly Report",
@@ -3857,7 +3857,7 @@ const nl: Dictionary = {
   "pricing.platF4": "Elke Data Analyst tool + directe founder-e-mail + Private Platinum Telegram (20 plekken, binnenkort)",
   "pricing.platF5": "Levenslange prijsvergrendeling + vroege toegang tot elke nieuwe feature",
   "pricing.platF6": "Eén betaling. Geen verlengingen. Geen verrassingen. Ooit.",
-  "pricing.platLimited": "Beperkt tot 100/jaar",
+  "pricing.platLimited": "Ongeveer 100 plekken per jaar",
   "pricing.platNoSub": "Geen abonnement. Geen verlengingen. Ooit.",
   "pricing.platOneTime": "Eenmalige betaling",
   "pricing.platPitch": "Ontgrendel Platinum elite picks uit onze 5 strengste competities (Champions League, Premier League, Eredivisie, Süper Lig, Saudi Pro League) — modelbetrouwbaarheid ≥ 80% — plus elke Gold, Silver en Free pick eronder. Levenslange prijsvergrendeling.",
@@ -4050,8 +4050,8 @@ const nl: Dictionary = {
 
   "pricingDeep.platinumReason1.title": "Verdient zich terug in maand 14, daarna gratis",
   "pricingDeep.platinumReason1.desc": "€ 199 eenmalig is 13,2 maanden Gold. Elke maand daarna is pure besparing, en onze Gold-prijs staat al gepland om te stijgen naarmate we meer competities dekken.",
-  "pricingDeep.platinumReason2.title": "100 Platinum-plekken per jaar. Harde limiet.",
-  "pricingDeep.platinumReason2.desc": "Zodra dit jaar de 100 founder-plekken zijn geclaimed sluit de tier tot de volgende cyclus, tegen een hogere prijs. Zie je Platinum beschikbaar, dan is het venster nog open.",
+  "pricingDeep.platinumReason2.title": "Ongeveer 100 Platinum-plekken per jaarcyclus",
+  "pricingDeep.platinumReason2.desc": "Elke jaarcyclus houden we de tier rond de 100 founder-plekken. Zodra we dat aantal naderen pauzeren we Platinum en heropent de tier volgend cyclus tegen een hogere prijs. Zie je Platinum beschikbaar, dan is het venster nog open.",
   "pricingDeep.platinumReason3.title": "Private Platinum Telegram (20 plekken, binnenkort)",
   "pricingDeep.platinumReason3.desc": "Directe founder-e-mail vandaag, plus een privé Platinum Telegram-kanaal dat binnenkort live gaat: 20 plekken, diepgaande Q&A, vroege inzichten en strategie-discussies voordat functies live gaan.",
 
@@ -4145,7 +4145,7 @@ const nl: Dictionary = {
   "results.thisWeekPerformance": "Prestaties deze week",
   "results.title": "Resultaten & uitslagen",
   "results.upsellHeadline": "Levenslange toegang, betaal één keer, nooit meer",
-  "results.upsellSubtext": "Alle Gold-functies + directe founder-toegang + Platinum Telegram (binnenkort) + vroege toegang. Beperkt tot 100/jaar.",
+  "results.upsellSubtext": "Alle Gold-functies + directe founder-toegang + Platinum Telegram (binnenkort) + vroege toegang. Ongeveer 100 plekken per jaarcyclus.",
   "results.worstPerformers": "Slechtste prestaties",
 
   "riskReversal.badge": "Geen risico om erachter te komen",
