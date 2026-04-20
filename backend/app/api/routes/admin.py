@@ -118,6 +118,26 @@ class JobTriggerResponse(BaseModel):
     detail: Optional[str] = None
 
 
+class IngestionDiagnosisResponse(BaseModel):
+    """Per-league diagnostic for ``sync_upcoming_matches``.
+
+    Surfaces the exact API-Football error when the sync returns zero
+    matches. The scheduler's own ``job_sync_data`` swallows every
+    exception (so one bad league doesn't kill the whole run), which
+    is correct for production but useless for debugging. This endpoint
+    runs one league synchronously and returns the full stack-trace +
+    upstream errors dict on failure.
+    """
+    league: str
+    ok: bool
+    created: int
+    updated: int
+    errors: int
+    matches_returned_by_api: int
+    error_type: Optional[str] = None
+    error_message: Optional[str] = None
+
+
 @router.post(
     "/trigger-job",
     response_model=JobTriggerResponse,
@@ -158,6 +178,59 @@ async def trigger_scheduler_job(
     except Exception as exc:
         return JobTriggerResponse(
             triggered=job_id, ok=False, detail=f"{type(exc).__name__}: {exc}"
+        )
+
+
+@router.post(
+    "/diagnose-ingestion",
+    response_model=IngestionDiagnosisResponse,
+    summary="Run a single-league sync_upcoming_matches and surface the exact error",
+)
+async def diagnose_ingestion(
+    league_slug: str = Query(
+        default="premier-league",
+        description=(
+            "Internal league slug to test (default: premier-league). "
+            "Available: premier-league, la-liga, bundesliga, serie-a, "
+            "ligue-1, eredivisie, etc."
+        ),
+    ),
+    db: AsyncSession = Depends(get_db),
+) -> IngestionDiagnosisResponse:
+    """Execute ``sync_upcoming_matches`` for ONE league and return the raw
+    outcome — including the upstream API-Football errors payload if any.
+
+    This bypasses ``job_sync_data``'s blanket exception handler, so an
+    invalid plan / quota / token failure shows up with its exact message
+    instead of being logged-and-forgotten. Use this when the scheduler
+    says it ran successfully but no new matches land in the database.
+    """
+    from app.services.data_sync_service import DataSyncService
+
+    try:
+        async with DataSyncService() as svc:
+            result = await svc.sync_upcoming_matches_for_slug(db, league_slug)
+            await db.commit()
+        return IngestionDiagnosisResponse(
+            league=league_slug,
+            ok=result.get("errors", 0) == 0,
+            created=result.get("created", 0),
+            updated=result.get("updated", 0),
+            errors=result.get("errors", 0),
+            matches_returned_by_api=result.get("api_returned", 0),
+            error_type=result.get("error_type"),
+            error_message=result.get("error_message"),
+        )
+    except Exception as exc:
+        return IngestionDiagnosisResponse(
+            league=league_slug,
+            ok=False,
+            created=0,
+            updated=0,
+            errors=1,
+            matches_returned_by_api=0,
+            error_type=type(exc).__name__,
+            error_message=str(exc),
         )
 
 
@@ -544,9 +617,25 @@ async def trigger_sync(
 
         await db.commit()
 
+        # Surface the per-league errors message when the adapter
+        # rejected the upstream call — otherwise admins only see
+        # "0 new, 0 updated" and assume everything is healthy.
+        upcoming_err = matches_result.get("error_message")
+        league = matches_result.get("competition", "?")
+
+        if upcoming_err:
+            msg = (
+                f"League {league}: {upcoming_err}. "
+                f"Results: {results_result.get('created_results', 0)} new. "
+                f"Standings: {standings_result.get('rows_upserted', 0)} rows."
+            )
+            return SyncResponse(accepted=False, message=msg, task_id=None)
+
         msg = (
-            f"Sync complete. "
-            f"Matches: {matches_result.get('created', 0)} new, {matches_result.get('updated', 0)} updated. "
+            f"League {league}: "
+            f"{matches_result.get('created', 0)} new, "
+            f"{matches_result.get('updated', 0)} updated "
+            f"(API returned {matches_result.get('api_returned', 0)} fixtures). "
             f"Results: {results_result.get('created_results', 0)} new. "
             f"Standings: {standings_result.get('rows_upserted', 0)} rows."
         )

@@ -1148,7 +1148,6 @@ function ActionsHelpPanel() {
 }
 
 function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
-  const [syncSourceId, setSyncSourceId] = React.useState("all");
   const [modelType, setModelType] = React.useState("all");
 
   return (
@@ -1156,50 +1155,10 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
       <ActionsHelpPanel />
       <PipelineHealthCard />
       {/* Sync data */}
-      <div className="card-neon p-6 space-y-4">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
-            <RefreshCw className="h-4 w-4 text-blue-400" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-slate-100">Sync Data</h3>
-              <span className="inline-flex items-center rounded-md border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-300">
-                🟢 Veilig
-              </span>
-            </div>
-            <p className="text-xs text-slate-400">
-              Haalt nieuwe wedstrijd-data op (fixtures, results). Kost enkele
-              API-Football calls, geen DB-wijzigingen die je eerdere data
-              overschrijven. Loopt normaal elke 6 uur automatisch.
-            </p>
-          </div>
-        </div>
-        <div className="space-y-1.5">
-          <label className="text-xs font-medium text-slate-400">Data Source (optional)</label>
-          <select
-            value={syncSourceId}
-            onChange={(e) => setSyncSourceId(e.target.value)}
-            className={darkSelectCls}
-          >
-            <option value="all" className="bg-[#111827]">All Sources</option>
-            {sources.map((s) => (
-              <option key={s.id} value={s.id} className="bg-[#111827]">
-                {s.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <ActionButton
-          label="Sync Data"
-          loadingLabel="Syncing…"
-          successMessage="Sync job queued successfully."
-          icon={RefreshCw}
-          onExecute={() =>
-            api.triggerSync(syncSourceId !== "all" ? syncSourceId : undefined)
-          }
-        />
-      </div>
+      <SyncDataCard sources={sources} />
+
+      {/* Diagnose one league (surface raw API-Football error) */}
+      <DiagnoseIngestionCard />
 
       {/* Retrain models */}
       <div className="card-neon p-6 space-y-4 border border-red-500/15">
@@ -1247,6 +1206,239 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
 
       {/* Scheduler status — LIVE data from APScheduler */}
       <SchedulerStatusCard />
+    </div>
+  );
+}
+
+// ─── Sync Data (with real backend message) ───────────────────────────────────
+
+function SyncDataCard({ sources }: { sources: DataSourceHealth[] }) {
+  const [syncSourceId, setSyncSourceId] = React.useState("all");
+  const mutation = useMutation({
+    mutationFn: () =>
+      api.triggerSync(syncSourceId !== "all" ? syncSourceId : undefined),
+  });
+
+  const resp = mutation.data as { accepted?: boolean; message?: string } | undefined;
+  const accepted = resp?.accepted ?? true;
+  const message = resp?.message;
+
+  return (
+    <div className="card-neon p-6 space-y-4">
+      <div className="flex items-center gap-2.5">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
+          <RefreshCw className="h-4 w-4 text-blue-400" />
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-slate-100">Sync Data</h3>
+            <span className="inline-flex items-center rounded-md border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-300">
+              🟢 Veilig
+            </span>
+          </div>
+          <p className="text-xs text-slate-400">
+            Haalt nieuwe wedstrijd-data op (fixtures, results, standings)
+            voor één league uit de rotatie. Toont nu het echte resultaat
+            inclusief errors van API-Football — dus als er iets mis is met
+            je key/plan/quota zie je precies wat.
+          </p>
+        </div>
+      </div>
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-slate-400">Data Source (optional)</label>
+        <select
+          value={syncSourceId}
+          onChange={(e) => setSyncSourceId(e.target.value)}
+          className="h-9 w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-slate-200 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors"
+        >
+          <option value="all" className="bg-[#111827]">All Sources</option>
+          {sources.map((s) => (
+            <option key={s.id} value={s.id} className="bg-[#111827]">
+              {s.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <button
+        onClick={() => mutation.mutate()}
+        disabled={mutation.isPending}
+        className="inline-flex items-center gap-2 rounded-lg btn-primary px-4 py-2.5 text-sm font-semibold disabled:opacity-60"
+      >
+        {mutation.isPending ? (
+          <>
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            Syncing…
+          </>
+        ) : (
+          <>
+            <RefreshCw className="h-4 w-4" />
+            Sync Data
+          </>
+        )}
+      </button>
+      {mutation.isSuccess && message && (
+        <div
+          className={cn(
+            "rounded-lg border p-3 text-xs",
+            accepted
+              ? "border-emerald-500/30 bg-emerald-500/5 text-emerald-200"
+              : "border-red-500/30 bg-red-500/5 text-red-200",
+          )}
+        >
+          <p className="font-semibold mb-1">
+            {accepted ? "✓ Sync ok" : "✗ Sync failed"}
+          </p>
+          <p className="font-mono text-[11px] leading-relaxed">{message}</p>
+        </div>
+      )}
+      {mutation.isError && (
+        <p className="text-xs text-red-400">
+          {mutation.error instanceof Error
+            ? mutation.error.message
+            : "Sync call failed."}
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ─── Diagnose single-league ingestion (surface raw API-Football errors) ──────
+
+const DIAGNOSE_LEAGUES = [
+  "premier-league", "la-liga", "bundesliga", "serie-a", "ligue-1",
+  "eredivisie", "primeira-liga", "super-lig", "jupiler-pro-league",
+  "saudi-pro-league", "mls", "brasileirao-serie-a", "liga-mx",
+  "j1-league", "k-league-1",
+];
+
+function DiagnoseIngestionCard() {
+  const [league, setLeague] = React.useState("premier-league");
+  const mutation = useMutation({
+    mutationFn: () => api.diagnoseIngestion(league),
+  });
+
+  const data = mutation.data;
+
+  return (
+    <div className="card-neon p-6 space-y-4 border border-amber-500/20">
+      <div className="flex items-center gap-2.5">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10">
+          <AlertTriangle className="h-4 w-4 text-amber-400" />
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-slate-100">
+              Diagnose ingestion (1 league)
+            </h3>
+            <span className="inline-flex items-center rounded-md border border-amber-500/30 bg-amber-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-amber-300">
+              🟡 Diagnostiek
+            </span>
+          </div>
+          <p className="text-xs text-slate-400">
+            Sync één specifieke league synchroon en toont de ruwe
+            API-Football foutmelding. Gebruik deze als "Sync Data" groen
+            is maar de resultaten-pagina geen nieuwe wedstrijden toont.
+            Kost 1 API-Football call.
+          </p>
+        </div>
+      </div>
+      <div className="space-y-1.5">
+        <label className="text-xs font-medium text-slate-400">League</label>
+        <select
+          value={league}
+          onChange={(e) => setLeague(e.target.value)}
+          className="h-9 w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm text-slate-200 outline-none focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/30 transition-colors"
+        >
+          {DIAGNOSE_LEAGUES.map((slug) => (
+            <option key={slug} value={slug} className="bg-[#111827]">
+              {slug}
+            </option>
+          ))}
+        </select>
+      </div>
+      <button
+        onClick={() => mutation.mutate()}
+        disabled={mutation.isPending}
+        className="inline-flex items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2.5 text-sm font-semibold text-amber-200 hover:bg-amber-500/20 disabled:opacity-50"
+      >
+        {mutation.isPending ? (
+          <>
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            Diagnoseren…
+          </>
+        ) : (
+          <>
+            <AlertTriangle className="h-4 w-4" />
+            Diagnose nu
+          </>
+        )}
+      </button>
+      {data && (
+        <div
+          className={cn(
+            "rounded-lg border p-3 space-y-2",
+            data.ok
+              ? "border-emerald-500/30 bg-emerald-500/5"
+              : "border-red-500/30 bg-red-500/5",
+          )}
+        >
+          <div className="grid grid-cols-4 gap-2 text-xs">
+            <div>
+              <p className="text-slate-500">API returned</p>
+              <p className="tabular-nums text-slate-100 text-sm">
+                {data.matches_returned_by_api}
+              </p>
+            </div>
+            <div>
+              <p className="text-slate-500">Created</p>
+              <p className="tabular-nums text-emerald-300 text-sm">
+                {data.created}
+              </p>
+            </div>
+            <div>
+              <p className="text-slate-500">Updated</p>
+              <p className="tabular-nums text-blue-300 text-sm">
+                {data.updated}
+              </p>
+            </div>
+            <div>
+              <p className="text-slate-500">Errors</p>
+              <p
+                className={cn(
+                  "tabular-nums text-sm",
+                  data.errors > 0 ? "text-red-300" : "text-slate-400",
+                )}
+              >
+                {data.errors}
+              </p>
+            </div>
+          </div>
+          {data.error_message && (
+            <div className="border-t border-red-500/20 pt-2 space-y-1">
+              <p className="text-[11px] font-semibold text-red-300">
+                {data.error_type ?? "Error"}
+              </p>
+              <pre className="overflow-x-auto whitespace-pre-wrap break-all text-[11px] font-mono text-red-200/90">
+                {data.error_message}
+              </pre>
+            </div>
+          )}
+          {data.ok && data.matches_returned_by_api === 0 && (
+            <p className="text-[11px] italic text-slate-500">
+              Geen wedstrijden in de komende 14 dagen voor deze league. Dit
+              kan normaal zijn (eind van seizoen, zomerstop) of wijzen op
+              een stille plan/season-mismatch. Probeer een andere league.
+            </p>
+          )}
+        </div>
+      )}
+      {mutation.isError && (
+        <p className="text-xs text-red-400">
+          {mutation.error instanceof Error
+            ? mutation.error.message
+            : "Diagnose failed."}
+        </p>
+      )}
     </div>
   );
 }

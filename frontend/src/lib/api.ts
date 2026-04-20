@@ -563,6 +563,12 @@ class ApiClient {
       { method: "POST" },
     );
   }
+  diagnoseIngestion(leagueSlug: string) {
+    return this.request<import("@/types/api").IngestionDiagnosis>(
+      `/admin/diagnose-ingestion?league_slug=${encodeURIComponent(leagueSlug)}`,
+      { method: "POST" },
+    );
+  }
 
   // Fixture Results
   getFixtureResults(days = 7, league?: string) {

@@ -332,10 +332,27 @@ class DataSyncService:
 
         Returns a summary dict with counts of created/updated records.
         """
+        code, league_slug = self._slug_for_sync()
+        return await self.sync_upcoming_matches_for_slug(db, league_slug, code=code)
+
+    async def sync_upcoming_matches_for_slug(
+        self,
+        db: AsyncSession,
+        league_slug: str,
+        *,
+        code: Optional[str] = None,
+    ) -> dict:
+        """Sync one specific league (no rotation) and surface upstream errors.
+
+        Exposes the per-league sync as a callable from diagnostics. On
+        upstream failure the returned dict includes ``error_type`` and
+        ``error_message`` so an admin endpoint can show the exact
+        API-Football rejection without consulting Railway logs.
+        """
         if not self._adapter:
             raise RuntimeError("Use DataSyncService as an async context manager.")
 
-        code, league_slug = self._slug_for_sync()
+        code = code or league_slug
         self.log.info("sync_upcoming_matches_start", competition=code, league=league_slug)
 
         today = date.today()
@@ -354,7 +371,15 @@ class DataSyncService:
             self.log.error(
                 "sync_upcoming_fetch_failed", competition=code, error=str(exc)
             )
-            return {"competition": code, "created": 0, "updated": 0, "errors": 1}
+            return {
+                "competition": code,
+                "created": 0,
+                "updated": 0,
+                "errors": 1,
+                "api_returned": 0,
+                "error_type": type(exc).__name__,
+                "error_message": str(exc),
+            }
 
         for raw in raw_matches:
             try:
@@ -441,6 +466,7 @@ class DataSyncService:
             "created": created,
             "updated": updated,
             "errors": errors,
+            "api_returned": len(raw_matches),
         }
         self.log.info("sync_upcoming_matches_done", **summary)
         return summary

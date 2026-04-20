@@ -894,6 +894,17 @@ export interface JobTriggerResponse {
   detail?: string | null;
 }
 
+export interface IngestionDiagnosis {
+  league: string;
+  ok: boolean;
+  created: number;
+  updated: number;
+  errors: number;
+  matches_returned_by_api: number;
+  error_type?: string | null;
+  error_message?: string | null;
+}
+
 // Capacity plan (GET /api/admin/capacity-plan)
 export type CapacityStatus = "safe" | "watch" | "tight" | "over";
 
