@@ -25,6 +25,7 @@ import {
   Gauge,
   Quote,
   Download,
+  Star,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -184,6 +185,8 @@ function PublicTierTabs({
   const hasToken = useHasAuthToken();
   const localize = useLocalizedHref();
   const localizedLogin = localize("/login");
+  const { locale } = useTranslations();
+  const isNl = locale === "nl";
 
   return (
     <div className="card-neon card-neon-green rounded-2xl overflow-hidden">
@@ -193,7 +196,8 @@ function PublicTierTabs({
           Model validation per tier
         </span>
         {hasToken ? (
-          <button
+          <div className="flex flex-wrap items-center gap-2">
+            <button
             type="button"
             onClick={async () => {
               // A plain <a href> can't attach the Authorization header
@@ -254,6 +258,59 @@ function PublicTierTabs({
             <Download className="h-3.5 w-3.5" />
             Download CSV
           </button>
+          {/* BotD dedicated CSV — streams the historical Pick-of-the-Day
+              validation picks only (1 row per day). Separate download
+              because users asked for "give me just the BotD history to
+              paste into my own sheet" without wading through every
+              evaluated prediction. */}
+          <button
+            type="button"
+            title={isNl ? "Download alleen Pick of the Day historie als CSV" : "Download only Pick of the Day history as CSV"}
+            onClick={async () => {
+              try {
+                const token =
+                  typeof window !== "undefined"
+                    ? window.localStorage.getItem("betsplug_token")
+                    : null;
+                const resp = await fetch(
+                  `${api}/bet-of-the-day/export.csv`,
+                  {
+                    headers: token
+                      ? { Authorization: `Bearer ${token}` }
+                      : undefined,
+                  }
+                );
+                if (!resp.ok) {
+                  window.alert(
+                    resp.status === 401 || resp.status === 403
+                      ? isNl ? "Log opnieuw in om te downloaden." : "Sign in again to download."
+                      : isNl ? `Download mislukt (${resp.status})` : `Download failed (${resp.status})`,
+                  );
+                  return;
+                }
+                const blob = await resp.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "betsplug-pick-of-the-day.csv";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+              } catch {
+                window.alert(
+                  isNl
+                    ? "Download mislukt, probeer het zo opnieuw."
+                    : "Download failed, try again shortly.",
+                );
+              }
+            }}
+            className="inline-flex items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-[11px] font-semibold text-purple-300 hover:bg-purple-500/20 transition-colors"
+          >
+            <Star className="h-3.5 w-3.5" />
+            {isNl ? "BOTD-CSV" : "BOTD CSV"}
+          </button>
+          </div>
         ) : (
           // B1.1: the CSV endpoint now requires authentication and only
           // serves tiers up to the caller's own. Public visitors can

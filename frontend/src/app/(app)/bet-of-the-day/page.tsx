@@ -872,6 +872,50 @@ export default function BetOfTheDayPage() {
             </div>
           </div>
 
+          {/* ── Live meting explainer — clarifies waarom mensen leeg
+              kunnen zien terwijl er WEL een BotD van vandaag boven
+              staat en terwijl er picks in het @BetsPluggs Telegram
+              kanaal staan. User had dit misverstand; één infokaart
+              lost 't op. */}
+          <div
+            className="rounded-2xl border p-4 text-sm sm:p-5"
+            style={{
+              borderColor: "hsl(var(--accent-blue) / 0.22)",
+              background:
+                "linear-gradient(135deg, hsl(var(--accent-blue) / 0.08) 0%, hsl(230 22% 9% / 0.6) 100%)",
+            }}
+          >
+            <div className="flex items-start gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/15 text-blue-300">
+                <BarChart3 className="h-4 w-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-slate-100">
+                  Wat telt wél / niet in de Live meting hieronder?
+                </p>
+                <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#cbd3e0]">
+                  <li>
+                    <span className="text-emerald-300">✅ Meegerekend:</span>{" "}
+                    1 BotD per dag, vastgezet vóór de aftrap, sinds
+                    18 april 2026, <em>wedstrijd moet afgelopen én
+                    geëvalueerd zijn</em>. De teller begint op 0 en groeit
+                    alleen wanneer een BotD-wedstrijd écht afloopt.
+                  </li>
+                  <li>
+                    <span className="text-amber-300">⏳ Nog niet mee:</span>{" "}
+                    de BotD van vandaag hierboven — die staat pending tot
+                    de wedstrijd gespeeld is.
+                  </li>
+                  <li>
+                    <span className="text-slate-400">↪ Niet hier:</span>{" "}
+                    Telegram @BetsPluggs-picks (dat zijn Free tier
+                    picks — 3 per dag, een andere stream dan BotD).
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
           {/* ── Live meting — strict pre-match picks vanaf 18 april 2026 ──
               The model-validation (verzamelde data) surface now lives on
               /trackrecord so all historical track records are in one place.
