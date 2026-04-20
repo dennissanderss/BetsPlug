@@ -10,13 +10,13 @@ import {
   Eye,
   EyeOff,
   ArrowRight,
-  ShieldCheck,
-  BadgeCheck,
-  RefreshCw,
   LogIn,
   AlertTriangle,
   Loader2,
   CheckCircle2,
+  Crown,
+  Target,
+  Activity,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -171,28 +171,85 @@ export function LoginContent() {
                 </span>
               </h1>
 
-              <p className="mt-5 max-w-md text-base leading-relaxed text-[#a3a9b8]">
-                {t("login.subtitle")}
-              </p>
-
-              <div className="mt-10 grid max-w-md grid-cols-1 gap-3">
-                {[
-                  { icon: ShieldCheck, label: t("login.trust1"), variant: "green" as const },
-                  { icon: BadgeCheck, label: t("login.trust2"), variant: "purple" as const },
-                  { icon: RefreshCw, label: t("login.trust3"), variant: "blue" as const },
-                ].map((item) => (
+              {/* "Klaar voor je dashboard" preview — replaces the old
+                  subtitle + trust-chip trio. Those were visitor-funnel
+                  chips (256-bit SSL, AVG-proof, cancel-anytime) that
+                  belong on /checkout, not on a login screen where the
+                  user has already converted. What a returning subscriber
+                  actually wants to see is what's waiting on the other
+                  side of the login button — today's BotD, fresh picks,
+                  live ROI. Framed as a "dashboard preview" card so it
+                  feels like a glimpse rather than a sales pitch. */}
+              <div className="mt-8 max-w-md">
+                <div
+                  className="relative overflow-hidden rounded-2xl p-5"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, hsl(var(--accent-green) / 0.12) 0%, hsl(230 22% 9% / 0.85) 50%, hsl(var(--accent-purple) / 0.14) 100%)",
+                    border: "1px solid hsl(var(--accent-green) / 0.22)",
+                    boxShadow:
+                      "0 0 0 1px hsl(var(--accent-green) / 0.06) inset, 0 10px 40px rgba(0,0,0,0.35)",
+                  }}
+                >
                   <div
-                    key={item.label}
-                    className="glass-panel flex items-center gap-3 px-4 py-3"
-                  >
-                    <HexBadge variant={item.variant} size="sm" noGlow>
-                      <item.icon className="h-4 w-4" />
-                    </HexBadge>
-                    <span className="text-sm font-medium text-[#cbd3e0]">
-                      {item.label}
-                    </span>
+                    aria-hidden
+                    className="pointer-events-none absolute -right-16 -top-16 h-[220px] w-[220px] rounded-full"
+                    style={{
+                      background: "hsl(var(--accent-green) / 0.22)",
+                      filter: "blur(90px)",
+                    }}
+                  />
+                  <div className="relative">
+                    <div className="mb-4 flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#4ade80]">
+                        {t("login.readyLabel")}
+                      </span>
+                      <Pill className="pill-active">
+                        <span className="live-dot" />
+                        Live
+                      </Pill>
+                    </div>
+                    <ul className="flex flex-col gap-3">
+                      {[
+                        {
+                          icon: Crown,
+                          title: t("login.ready1Title"),
+                          desc: t("login.ready1Desc"),
+                          variant: "green" as const,
+                        },
+                        {
+                          icon: Target,
+                          title: t("login.ready2Title"),
+                          desc: t("login.ready2Desc"),
+                          variant: "purple" as const,
+                        },
+                        {
+                          icon: Activity,
+                          title: t("login.ready3Title"),
+                          desc: t("login.ready3Desc"),
+                          variant: "blue" as const,
+                        },
+                      ].map((item) => (
+                        <li
+                          key={item.title}
+                          className="flex items-start gap-3"
+                        >
+                          <HexBadge variant={item.variant} size="sm" noGlow>
+                            <item.icon className="h-3.5 w-3.5" />
+                          </HexBadge>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-semibold text-[#ededed]">
+                              {item.title}
+                            </p>
+                            <p className="mt-0.5 text-[12px] leading-relaxed text-[#a3a9b8]">
+                              {item.desc}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                ))}
+                </div>
               </div>
             </motion.div>
 
@@ -205,7 +262,10 @@ export function LoginContent() {
             >
               <div className="card-neon-green p-5 sm:p-8 md:p-10">
                 <div className="relative">
-                  {/* Mobile headline */}
+                  {/* Mobile headline — subtitle dropped to match the
+                      desktop redesign; the dashboard-preview panel is
+                      desktop-only because on mobile the form itself is
+                      the immediate next step. */}
                   <div className="mb-6 lg:hidden">
                     <span className="section-label">
                       <LogIn className="h-3 w-3" />
@@ -217,9 +277,6 @@ export function LoginContent() {
                         {t("login.titleHighlight")}
                       </span>
                     </h1>
-                    <p className="mt-3 text-sm text-[#a3a9b8]">
-                      {t("login.subtitle")}
-                    </p>
                   </div>
 
                   <form

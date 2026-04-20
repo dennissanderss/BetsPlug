@@ -1526,6 +1526,15 @@ const en = {
   "login.trust2": "GDPR-compliant",
   "login.trust3": "Cancel anytime",
 
+  /* Login — dashboard preview card (desktop left column) */
+  "login.readyLabel": "Ready on your dashboard",
+  "login.ready1Title": "Today's Pick of the Day",
+  "login.ready1Desc": "Our highest-conviction call of the day, pre-kickoff locked and waiting.",
+  "login.ready2Title": "Fresh picks across every tier",
+  "login.ready2Desc": "Bronze through Platinum — every prediction rebuilt after each fixture completes.",
+  "login.ready3Title": "Live track record & ROI",
+  "login.ready3Desc": "Your running accuracy, hit-rate and ROI updating as results come in.",
+
   /* Dashboard Preview (homepage) */
   "dashPrev.badge": "Your command center",
   "dashPrev.titleA": "Every premium feature,",
@@ -3628,6 +3637,13 @@ const nl: Dictionary = {
   "login.trust1": "256-bit SSL versleuteld",
   "login.trust2": "AVG-proof",
   "login.trust3": "Altijd opzegbaar",
+  "login.readyLabel": "Klaar op je dashboard",
+  "login.ready1Title": "Pick of the Day van vandaag",
+  "login.ready1Desc": "Onze sterkste AI-oproep van vandaag, pre-aftrap vastgezet en wachtend op je klik.",
+  "login.ready2Title": "Verse picks in elke tier",
+  "login.ready2Desc": "Bronze tot Platinum — elke voorspelling opnieuw berekend na iedere wedstrijd.",
+  "login.ready3Title": "Live track record & ROI",
+  "login.ready3Desc": "Je lopende nauwkeurigheid, hit-rate en ROI die update zodra uitslagen binnenkomen.",
 
   "matchPred.bannerBadge": "Alleen voor leden",
   "matchPred.bannerBullet1": "Onbeperkte dagelijkse AI-voorspellingen",
