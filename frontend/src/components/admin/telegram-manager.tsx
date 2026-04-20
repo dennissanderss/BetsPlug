@@ -437,24 +437,42 @@ export default function TelegramManager() {
   const refreshAll = React.useCallback(async () => {
     setLoading(true);
     setErr(null);
-    try {
-      const [h, c, q, sched, hist] = await Promise.all([
-        adminCall<HealthResponse>("/admin/telegram/health"),
-        adminCall<ChannelOverview[]>("/admin/telegram/channels"),
-        adminCall<QueueItem[]>("/admin/telegram/queue"),
-        adminCall<ScheduledSlot[]>("/admin/telegram/schedule?count=6"),
-        adminCall<PostSummary[]>("/admin/telegram/posts?limit=30"),
-      ]);
-      setHealth(h);
-      setChannels(c);
-      setQueue(q.length > 0 ? q[0] : null);
-      setSchedule(sched);
-      setHistory(hist);
-    } catch (e) {
-      setErr(e instanceof Error ? e.message : String(e));
-    } finally {
-      setLoading(false);
+    // Use allSettled so one failing endpoint (e.g. a Railway redeploy
+    // window, a stale JS bundle hitting an old URL, or a brief auth
+    // blip) doesn't tank the whole tab. Each piece of UI gets whatever
+    // data it can, and we surface a combined failure message only if
+    // EVERY call failed.
+    const results = await Promise.allSettled([
+      adminCall<HealthResponse>("/admin/telegram/health"),
+      adminCall<ChannelOverview[]>("/admin/telegram/channels"),
+      adminCall<QueueItem[]>("/admin/telegram/queue"),
+      adminCall<ScheduledSlot[]>("/admin/telegram/schedule?count=6"),
+      adminCall<PostSummary[]>("/admin/telegram/posts?limit=30"),
+    ]);
+
+    const [h, c, q, sched, hist] = results;
+    if (h.status === "fulfilled") setHealth(h.value);
+    if (c.status === "fulfilled") setChannels(c.value);
+    if (q.status === "fulfilled") setQueue(q.value.length > 0 ? q.value[0] : null);
+    if (sched.status === "fulfilled") setSchedule(sched.value);
+    if (hist.status === "fulfilled") setHistory(hist.value);
+
+    const failures = results
+      .map((r, i) => ({ r, name: ["health", "channels", "queue", "schedule", "posts"][i] }))
+      .filter((x) => x.r.status === "rejected");
+    if (failures.length === results.length) {
+      // Everything failed — probably offline or backend down. Show loud error.
+      const first = failures[0].r as PromiseRejectedResult;
+      setErr(
+        first.reason instanceof Error ? first.reason.message : String(first.reason),
+      );
+    } else if (failures.length > 0) {
+      // Partial failure — soft notice so operator knows one section is stale.
+      setErr(
+        `Sommige endpoints faalden: ${failures.map((f) => f.name).join(", ")}`,
+      );
     }
+    setLoading(false);
   }, []);
 
   React.useEffect(() => {
