@@ -56,6 +56,36 @@ class PostSummary(BaseModel):
     post_type: str
     posted_at: datetime
     result_posted_at: Optional[datetime] = None
+    # Optional match context — only populated for pick / result-update posts
+    # so the admin table can show "Stoke City vs Millwall" instead of just
+    # a bare msg_id. null for summaries / promos that aren't tied to a match.
+    match_home: Optional[str] = None
+    match_away: Optional[str] = None
+    match_league: Optional[str] = None
+    match_kickoff: Optional[datetime] = None
+
+
+class ScheduledSlot(BaseModel):
+    """One upcoming scheduled Telegram post slot.
+
+    The scheduler fires pick slots at 11/15/19 CET and a daily summary
+    at 23:00 CET. This shape describes "what is going to happen next",
+    so the admin can see at a glance when the next post goes out.
+    """
+    slot_cet: str = Field(..., description="Wall-clock slot in CET, e.g. '15:00'.")
+    scheduled_at_utc: datetime = Field(
+        ..., description="When the slot fires in UTC (always > now)."
+    )
+    minutes_until: int = Field(
+        ..., description="Minutes from now until the slot fires."
+    )
+    post_type: str = Field(
+        ..., description="'pick' for 11/15/19 slots, 'daily_summary' for 23:00."
+    )
+    day_label: str = Field(
+        ...,
+        description="Relative label: 'today' or 'tomorrow' or ISO date further out.",
+    )
 
 
 class QueueItem(BaseModel):
@@ -268,7 +298,24 @@ async def list_posts(
     channel: Optional[str] = Query(default=None),
     db: AsyncSession = Depends(get_db),
 ) -> list[PostSummary]:
-    stmt = select(TelegramPost).order_by(TelegramPost.posted_at.desc())
+    # Eager-load prediction → match → teams & league so the admin table
+    # can show "Stoke City vs Millwall · Championship" instead of a bare
+    # msg_id. Keeps the query count flat regardless of row count.
+    stmt = (
+        select(TelegramPost)
+        .options(
+            selectinload(TelegramPost.prediction)
+            .selectinload(Prediction.match)
+            .selectinload(Match.home_team),
+            selectinload(TelegramPost.prediction)
+            .selectinload(Prediction.match)
+            .selectinload(Match.away_team),
+            selectinload(TelegramPost.prediction)
+            .selectinload(Prediction.match)
+            .selectinload(Match.league),
+        )
+        .order_by(TelegramPost.posted_at.desc())
+    )
     if post_type:
         stmt = stmt.where(TelegramPost.post_type == post_type)
     if channel:
@@ -276,6 +323,89 @@ async def list_posts(
     stmt = stmt.limit(limit)
     rows = (await db.execute(stmt)).scalars().all()
     return [_post_to_summary(r) for r in rows]
+
+
+@router.get(
+    "/schedule",
+    response_model=list[ScheduledSlot],
+    summary="Upcoming scheduled Telegram slots (today + tomorrow)",
+)
+async def get_schedule(
+    count: int = Query(default=8, ge=1, le=20),
+) -> list[ScheduledSlot]:
+    """Return the next N scheduled auto-poster slots with wall-clock times.
+
+    Pick slots fire at 11:00 / 15:00 / 19:00 CET, daily summary at 23:00
+    CET. We enumerate today's remaining slots and extend into tomorrow
+    until we have ``count`` entries. The admin uses this to know exactly
+    when the next post is going out without grepping scheduler logs.
+    """
+    # CET is either UTC+1 (winter) or UTC+2 (summer, DST). We approximate
+    # by asking Python what CET maps to right now via zoneinfo so the
+    # answer stays correct across the year.
+    try:
+        from zoneinfo import ZoneInfo
+
+        cet = ZoneInfo("Europe/Amsterdam")
+    except Exception:  # noqa: BLE001
+        # Fallback: fixed UTC+1. Acceptable for non-zoneinfo hosts,
+        # will drift an hour during DST but never breaks the endpoint.
+        from datetime import timedelta, timezone as tz
+
+        cet = tz(timedelta(hours=1))
+
+    now_utc = datetime.now(timezone.utc)
+    now_cet = now_utc.astimezone(cet)
+
+    pick_hours = [11, 15, 19]
+    summary_hour = 23
+
+    slots: list[tuple[int, str]] = [
+        *[(h, "pick") for h in pick_hours],
+        (summary_hour, "daily_summary"),
+    ]
+
+    out: list[ScheduledSlot] = []
+    day_offset = 0
+    while len(out) < count and day_offset < 7:
+        base_day = now_cet.date()
+        from datetime import timedelta
+
+        target_day = base_day + timedelta(days=day_offset)
+        day_label = (
+            "today"
+            if day_offset == 0
+            else "tomorrow"
+            if day_offset == 1
+            else target_day.isoformat()
+        )
+        for hour, post_type in slots:
+            slot_cet_dt = datetime(
+                target_day.year,
+                target_day.month,
+                target_day.day,
+                hour,
+                0,
+                tzinfo=cet,
+            )
+            if slot_cet_dt <= now_cet:
+                continue
+            slot_utc = slot_cet_dt.astimezone(timezone.utc)
+            minutes_until = int((slot_utc - now_utc).total_seconds() // 60)
+            out.append(
+                ScheduledSlot(
+                    slot_cet=f"{hour:02d}:00",
+                    scheduled_at_utc=slot_utc,
+                    minutes_until=minutes_until,
+                    post_type=post_type,
+                    day_label=day_label,
+                )
+            )
+            if len(out) >= count:
+                break
+        day_offset += 1
+
+    return out
 
 
 @router.get(
@@ -379,6 +509,21 @@ async def get_channels_overview(
 
 
 def _post_to_summary(post: TelegramPost) -> PostSummary:
+    match_home: Optional[str] = None
+    match_away: Optional[str] = None
+    match_league: Optional[str] = None
+    match_kickoff: Optional[datetime] = None
+
+    match = getattr(getattr(post, "prediction", None), "match", None)
+    if match is not None:
+        if match.home_team is not None:
+            match_home = match.home_team.name
+        if match.away_team is not None:
+            match_away = match.away_team.name
+        if match.league is not None:
+            match_league = match.league.name
+        match_kickoff = match.scheduled_at
+
     return PostSummary(
         id=str(post.id),
         prediction_id=str(post.prediction_id) if post.prediction_id else None,
@@ -387,4 +532,8 @@ def _post_to_summary(post: TelegramPost) -> PostSummary:
         post_type=post.post_type,
         posted_at=post.posted_at,
         result_posted_at=post.result_posted_at,
+        match_home=match_home,
+        match_away=match_away,
+        match_league=match_league,
+        match_kickoff=match_kickoff,
     )

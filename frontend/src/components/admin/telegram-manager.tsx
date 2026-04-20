@@ -23,7 +23,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   Zap,
-  ArrowUpRight,
   ClipboardList,
   Megaphone,
 } from "lucide-react";
@@ -68,6 +67,18 @@ interface PostSummary {
   post_type: string;
   posted_at: string;
   result_posted_at: string | null;
+  match_home: string | null;
+  match_away: string | null;
+  match_league: string | null;
+  match_kickoff: string | null;
+}
+
+interface ScheduledSlot {
+  slot_cet: string;            // "15:00"
+  scheduled_at_utc: string;    // ISO
+  minutes_until: number;
+  post_type: string;           // "pick" | "daily_summary"
+  day_label: string;           // "today" | "tomorrow" | ISO date
 }
 
 interface QueueItem {
@@ -276,12 +287,147 @@ function QueueCard({ item }: { item: QueueItem | null }) {
   );
 }
 
+// ─── Schedule list ──────────────────────────────────────────────────────
+
+function ScheduleList({ slots }: { slots: ScheduledSlot[] }) {
+  if (slots.length === 0) {
+    return (
+      <div className="glass-panel p-5 text-center">
+        <p className="text-sm text-[#a3a9b8]">Planning onbekend.</p>
+      </div>
+    );
+  }
+
+  function humanDuration(minutes: number): string {
+    if (minutes < 60) return `${minutes}m`;
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return m === 0 ? `${h}u` : `${h}u ${m}m`;
+  }
+
+  return (
+    <div className="glass-panel divide-y divide-white/[0.04]">
+      {slots.map((s, idx) => (
+        <div
+          key={`${s.scheduled_at_utc}-${idx}`}
+          className="flex items-center justify-between gap-3 px-4 py-2.5"
+        >
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-sm text-[#ededed]">
+              {s.slot_cet}
+            </span>
+            <span className="text-[11px] uppercase tracking-wider text-[#6b7280]">
+              {s.day_label}
+            </span>
+            <Pill
+              tone={s.post_type === "pick" ? "win" : "draw"}
+              className="!text-[10px]"
+            >
+              {s.post_type === "pick" ? "Pick" : "Summary"}
+            </Pill>
+          </div>
+          <span className="text-xs text-[#a3a9b8]">
+            over {humanDuration(s.minutes_until)}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── Action button + explainer row ──────────────────────────────────────
+
+function ActionRow({
+  onClick,
+  busy,
+  anyBusy,
+  icon,
+  label,
+  desc,
+  variant = "glass",
+}: {
+  onClick: () => void;
+  busy: boolean;
+  anyBusy: boolean;
+  icon: React.ReactNode;
+  label: string;
+  desc: string;
+  variant?: "primary" | "glass";
+}) {
+  return (
+    <div className="space-y-1.5">
+      <button
+        type="button"
+        disabled={anyBusy}
+        onClick={onClick}
+        className={`${
+          variant === "primary" ? "btn-primary" : "btn-glass"
+        } inline-flex w-full items-center justify-center gap-2 disabled:opacity-50`}
+      >
+        {icon}
+        {busy ? "Bezig…" : label}
+      </button>
+      <p className="px-1 text-[11px] leading-snug text-[#6b7280]">{desc}</p>
+    </div>
+  );
+}
+
+// ─── Pending matches summary ───────────────────────────────────────────
+
+function PendingMatches({ history }: { history: PostSummary[] }) {
+  const pending = history.filter(
+    (p) => p.post_type === "pick" && !p.result_posted_at,
+  );
+
+  if (pending.length === 0) {
+    return (
+      <div className="glass-panel flex items-center gap-2 p-4 text-sm text-[#a3a9b8]">
+        <CheckCircle2 className="h-4 w-4 text-[#4ade80]" />
+        Geen pending picks — alle geposte wedstrijden hebben een uitslag.
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <p className="section-label mb-3">
+        <AlertTriangle className="h-3 w-3" /> Pending — wachten op uitslag ({pending.length})
+      </p>
+      <div className="glass-panel divide-y divide-white/[0.04]">
+        {pending.map((p) => (
+          <div
+            key={p.id}
+            className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm"
+          >
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-[#ededed]">
+                {p.match_home && p.match_away
+                  ? `${p.match_home} vs ${p.match_away}`
+                  : `msg_id ${p.telegram_message_id}`}
+              </div>
+              <div className="text-[11px] text-[#6b7280]">
+                {p.match_league ? `${p.match_league} · ` : ""}
+                gepost {formatDT(p.posted_at)}
+                {p.match_kickoff ? ` · aftrap ${formatDT(p.match_kickoff)}` : ""}
+              </div>
+            </div>
+            <Pill tone="draw" className="!text-[10px]">
+              Pending
+            </Pill>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Main component ─────────────────────────────────────────────────────
 
 export default function TelegramManager() {
   const [health, setHealth] = React.useState<HealthResponse | null>(null);
   const [channels, setChannels] = React.useState<ChannelOverview[]>([]);
   const [queue, setQueue] = React.useState<QueueItem | null>(null);
+  const [schedule, setSchedule] = React.useState<ScheduledSlot[]>([]);
   const [history, setHistory] = React.useState<PostSummary[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [err, setErr] = React.useState<string | null>(null);
@@ -292,15 +438,17 @@ export default function TelegramManager() {
     setLoading(true);
     setErr(null);
     try {
-      const [h, c, q, hist] = await Promise.all([
+      const [h, c, q, sched, hist] = await Promise.all([
         adminCall<HealthResponse>("/admin/telegram/health"),
         adminCall<ChannelOverview[]>("/admin/telegram/channels"),
         adminCall<QueueItem[]>("/admin/telegram/queue"),
+        adminCall<ScheduledSlot[]>("/admin/telegram/schedule?count=6"),
         adminCall<PostSummary[]>("/admin/telegram/posts?limit=30"),
       ]);
       setHealth(h);
       setChannels(c);
       setQueue(q.length > 0 ? q[0] : null);
+      setSchedule(sched);
       setHistory(hist);
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
@@ -411,8 +559,8 @@ export default function TelegramManager() {
         )}
       </div>
 
-      {/* Queue + actions */}
-      <div className="grid gap-4 lg:grid-cols-[1fr_auto]">
+      {/* Queue + schedule + actions */}
+      <div className="grid gap-4 lg:grid-cols-[1fr_1fr_auto]">
         <div>
           <p className="section-label mb-3">
             <Clock className="h-3 w-3" /> Queue — volgende slot
@@ -422,12 +570,17 @@ export default function TelegramManager() {
 
         <div>
           <p className="section-label mb-3">
+            <Clock className="h-3 w-3" /> Planning — komende slots
+          </p>
+          <ScheduleList slots={schedule} />
+        </div>
+
+        <div>
+          <p className="section-label mb-3">
             <Zap className="h-3 w-3" /> Acties
           </p>
-          <div className="glass-panel flex flex-col gap-2 p-3">
-            <button
-              type="button"
-              disabled={busyAction !== null}
+          <div className="glass-panel flex flex-col gap-3 p-3">
+            <ActionRow
               onClick={() =>
                 runAction(
                   "post-next",
@@ -440,14 +593,14 @@ export default function TelegramManager() {
                   },
                 )
               }
-              className="btn-primary inline-flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              <Send className="h-3.5 w-3.5" />
-              {busyAction === "post-next" ? "Posting…" : "Post next pick"}
-            </button>
-            <button
-              type="button"
-              disabled={busyAction !== null}
+              busy={busyAction === "post-next"}
+              anyBusy={busyAction !== null}
+              icon={<Send className="h-3.5 w-3.5" />}
+              label="Post next pick"
+              variant="primary"
+              desc="Plaatst nu de eerstvolgende Free-tier pick in @BetsPluggs, zonder te wachten op de 11/15/19 CET cron."
+            />
+            <ActionRow
               onClick={() =>
                 runAction(
                   "summary",
@@ -460,14 +613,13 @@ export default function TelegramManager() {
                   },
                 )
               }
-              className="btn-glass inline-flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              <ClipboardList className="h-3.5 w-3.5" />
-              {busyAction === "summary" ? "Posting…" : "Post daily summary"}
-            </button>
-            <button
-              type="button"
-              disabled={busyAction !== null}
+              busy={busyAction === "summary"}
+              anyBusy={busyAction !== null}
+              icon={<ClipboardList className="h-3.5 w-3.5" />}
+              label="Post daily summary"
+              desc="Post het NL/EN dagoverzicht van vandaag (scheduled 23:00 CET). Skipt als er nog geen picks van vandaag staan."
+            />
+            <ActionRow
               onClick={() =>
                 runAction(
                   "promo",
@@ -478,14 +630,13 @@ export default function TelegramManager() {
                   },
                 )
               }
-              className="btn-glass inline-flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              <Megaphone className="h-3.5 w-3.5" />
-              {busyAction === "promo" ? "Posting…" : "Post tier promo"}
-            </button>
-            <button
-              type="button"
-              disabled={busyAction !== null}
+              busy={busyAction === "promo"}
+              anyBusy={busyAction !== null}
+              icon={<Megaphone className="h-3.5 w-3.5" />}
+              label="Post tier promo"
+              desc="Plaatst een tier-upgrade promo (Silver/Gold/Platinum sell). Gebruik spaarzaam, ~1x per week."
+            />
+            <ActionRow
               onClick={() =>
                 runAction(
                   "sweep",
@@ -498,14 +649,18 @@ export default function TelegramManager() {
                   },
                 )
               }
-              className="btn-glass inline-flex items-center justify-center gap-2 disabled:opacity-50"
-            >
-              <RefreshCw className="h-3.5 w-3.5" />
-              {busyAction === "sweep" ? "Running…" : "Run result sweep"}
-            </button>
+              busy={busyAction === "sweep"}
+              anyBusy={busyAction !== null}
+              icon={<RefreshCw className="h-3.5 w-3.5" />}
+              label="Run result sweep"
+              desc="Loopt alle pending picks na en plaatst een ✅/❌ reply onder eerdere posts zodra de uitslag binnen is. Cron 15 min."
+            />
           </div>
         </div>
       </div>
+
+      {/* Pending matches — quick glance */}
+      <PendingMatches history={history} />
 
       {/* Recent history */}
       <div>
@@ -524,6 +679,7 @@ export default function TelegramManager() {
                   <tr className="border-b border-white/[0.06] text-[10px] uppercase tracking-widest text-[#6b7280]">
                     <th className="px-4 py-3 text-left">When</th>
                     <th className="px-4 py-3 text-left">Type</th>
+                    <th className="px-4 py-3 text-left">Match</th>
                     <th className="px-4 py-3 text-left">Channel</th>
                     <th className="px-4 py-3 text-left">Msg id</th>
                     <th className="px-4 py-3 text-left">Result edit</th>
@@ -540,6 +696,23 @@ export default function TelegramManager() {
                       </td>
                       <td className="px-4 py-3">
                         <PostTypePill type={p.post_type} />
+                      </td>
+                      <td className="px-4 py-3 text-xs text-[#a3a9b8]">
+                        {p.match_home && p.match_away ? (
+                          <div>
+                            <div className="text-[#ededed]">
+                              {p.match_home} <span className="text-[#6b7280]">vs</span> {p.match_away}
+                            </div>
+                            {p.match_league && (
+                              <div className="text-[10px] text-[#6b7280]">
+                                {p.match_league}
+                                {p.match_kickoff ? ` · ${formatDT(p.match_kickoff)}` : ""}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-[#6b7280]">—</span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-[#a3a9b8]">{p.channel}</td>
                       <td className="px-4 py-3 font-mono text-xs text-[#a3a9b8]">
