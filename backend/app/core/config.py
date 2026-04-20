@@ -89,13 +89,61 @@ class Settings(BaseSettings):
     api_football_key: str = ""        # api-football.com (Pro tier, sole data source)
     the_odds_api_key: str = ""        # the-odds-api.com (optional, odds only)
 
-    # SMTP (Hostinger)
-    smtp_host: str = "smtp.hostinger.com"
-    smtp_port: int = 465
-    smtp_user: str = ""
-    smtp_pass: str = ""
-    mail_from_address: str = ""
-    mail_from_name: str = "BetsPlug"
+    # ── SMTP (transactional email via Hostinger) ─────────────────────
+    # History: this block was duplicated earlier (two `smtp_host` lines,
+    # second one winning as empty, which disabled real sends on
+    # production). Consolidated to ONE block below.
+    #
+    # Railway env naming convention is `SMTP_PASS` / `MAIL_FROM_ADDRESS`
+    # / `MAIL_FROM_NAME`, which differs from the Python field names we
+    # want (`smtp_password`, `smtp_from`). `validation_alias` on each
+    # Field tells Pydantic which env var to read, so Railway keeps its
+    # intuitive naming and the code keeps clean field names.
+    smtp_host: str = Field(
+        default="smtp.hostinger.com",
+        validation_alias="SMTP_HOST",
+    )
+    smtp_port: int = Field(default=465, validation_alias="SMTP_PORT")
+    smtp_user: str = Field(default="", validation_alias="SMTP_USER")
+    # Accepts both SMTP_PASS (Railway's current name) and SMTP_PASSWORD
+    # by reading SMTP_PASS as the canonical alias. Users migrating from
+    # either name can continue without touching env config.
+    smtp_password: str = Field(
+        default="",
+        validation_alias="SMTP_PASS",
+    )
+    smtp_from_address: str = Field(
+        default="",
+        validation_alias="MAIL_FROM_ADDRESS",
+    )
+    smtp_from_name: str = Field(
+        default="BetsPlug",
+        validation_alias="MAIL_FROM_NAME",
+    )
+    smtp_use_tls: bool = True
+    # Explicit opt-in: when true, ``send_email`` logs the message to
+    # stdout and returns True without attempting SMTP. The old code
+    # tripped into this branch automatically whenever SMTP_HOST was
+    # empty, which hid production misconfig (empty password → silent
+    # failure was indistinguishable from "dev mode intentional").
+    # Now you must *explicitly* set EMAIL_DEV_MODE=1 for local dev;
+    # production with a broken SMTP config will log a loud error and
+    # return False instead of pretending success.
+    email_dev_mode: bool = Field(
+        default=False,
+        validation_alias="EMAIL_DEV_MODE",
+    )
+
+    @property
+    def smtp_from(self) -> str:
+        """RFC-5322 "Name <address>" formatted From header.
+
+        Falls back to a sane default when MAIL_FROM_ADDRESS is unset so
+        the header never ends up empty (which some SMTP servers reject).
+        """
+        address = self.smtp_from_address or "noreply@betsplug.com"
+        name = self.smtp_from_name or "BetsPlug"
+        return f"{name} <{address}>"
 
     # Abandoned Checkout
     abandoned_checkout_delay_minutes: int = 60   # wait before sending email
@@ -106,15 +154,6 @@ class Settings(BaseSettings):
 
     # Reports
     reports_output_dir: str = "/app/reports"
-
-    # Email (SMTP) — when smtp_host is empty, email bodies are logged to
-    # stdout instead of being sent (dev fallback so tokens can be copied).
-    smtp_host: str = ""
-    smtp_port: int = 587
-    smtp_user: str = ""
-    smtp_password: str = ""
-    smtp_from: str = "BetsPlug <noreply@betsplug.com>"
-    smtp_use_tls: bool = True
 
     # Admin bootstrap — comma-separated list of emails that are promoted
     # to ``Role.ADMIN`` (and auto-marked email_verified=True) on every boot.

@@ -1,9 +1,14 @@
 """Async email service for BetsPlug.
 
 Uses aiosmtplib to send transactional emails (email verification, password
-reset, welcome, payment receipts). When ``settings.smtp_host`` is empty the
-emails are logged to stdout instead of being delivered, so developers can
-copy the verification/reset links straight from the logs.
+reset, welcome, payment receipts).
+
+Dev-mode (``EMAIL_DEV_MODE=1``): messages are logged to stdout instead
+of being delivered, so local development can copy verification/reset
+links straight from the logs without a real SMTP provider. This mode is
+now explicit opt-in — previously any missing SMTP env silently tripped
+the fallback, which masked a production outage caused by duplicated
+config fields. See ``core/config.py`` git history for the incident.
 
 All templates are inline, simple responsive HTML with the BetsPlug brand
 colours and a Dutch + English body so users on either language get a
@@ -38,19 +43,25 @@ async def send_email(
 ) -> bool:
     """Send an email via async SMTP.
 
-    When SMTP is not configured (``smtp_host`` empty) the message is logged
-    to stdout so developers can copy verification or reset links during
-    local development. Always returns ``True`` on the dev path; returns
-    ``False`` on SMTP failures (but never raises) so the calling endpoint
-    can decide whether to surface the error to the user.
+    Behaviour matrix
+    ----------------
+    - ``EMAIL_DEV_MODE=1``: log message + action URL to stdout, return
+      True. Use during local dev so you don't need a real SMTP provider.
+    - Missing/empty ``smtp_host`` OR ``smtp_password``: log a LOUD
+      misconfig error and return False. (Used to silently return True
+      via an implicit dev-mode fallback, which hid a production outage.)
+    - Configured correctly: attempt SMTP, return True on success. On
+      SMTP failure, log the exception and return False (never raises
+      unless ``raise_on_failure`` is set).
 
     Parameters
     ----------
     action_url:
         Optional canonical action URL (e.g. verification or reset link).
-        When supplied and SMTP is in dev-mode, the URL is logged on its
-        own highly-visible line so admins can ``grep '[ACTION URL]'``
-        Railway logs and copy the link directly to the user.
+        When supplied and SMTP is in dev-mode OR misconfigured, the URL
+        is logged on its own highly-visible line so admins can
+        ``grep '[ACTION URL]'`` Railway logs and share the link with
+        the affected user while the SMTP issue is being fixed.
     raise_on_failure:
         When True, the underlying ``aiosmtplib`` exception is re-raised
         instead of being swallowed. Used by the admin diagnostics
@@ -59,27 +70,50 @@ async def send_email(
     """
     settings = get_settings()
 
-    if not settings.smtp_host:
-        # Log a fat banner that's trivial to grep for in Railway logs.
-        # Admin workflow: `railway logs | grep -A 3 "EMAIL DEV MODE"` or
-        # just scroll once and copy the URL from the highlighted block.
+    # Explicit dev-mode opt-in — set EMAIL_DEV_MODE=1 in your local .env
+    # to skip real SMTP and just log the message body.
+    if settings.email_dev_mode:
         banner = "=" * 72
         logger.warning(
-            "\n%s\n[EMAIL DEV MODE] SMTP not configured — NO real email sent\n%s",
+            "\n%s\n[EMAIL DEV MODE] EMAIL_DEV_MODE=1 — NO real email sent\n%s",
             banner, banner,
         )
         logger.warning("  To:      %s", to)
         logger.warning("  Subject: %s", subject)
         if action_url:
             logger.warning("  [ACTION URL] %s", action_url)
-        logger.warning(
-            "  Configure SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASSWORD "
-            "/ SMTP_FROM in Railway env to actually send emails."
-        )
         logger.warning("%s", banner)
         if text:
             logger.info("Text body:\n%s", text)
         return True
+
+    # Production misconfig — loud error, no silent success. Was
+    # previously a silent True via implicit dev-mode, which cost us ~2
+    # weeks of missing verification + password-reset emails.
+    missing = []
+    if not settings.smtp_host:
+        missing.append("SMTP_HOST")
+    if not settings.smtp_password:
+        missing.append("SMTP_PASS (or SMTP_PASSWORD)")
+    if not settings.smtp_user:
+        missing.append("SMTP_USER")
+    if missing:
+        logger.error(
+            "[EMAIL MISCONFIG] Required SMTP env vars missing: %s. "
+            "Email to=%s subject=%r NOT sent. Set EMAIL_DEV_MODE=1 to "
+            "intentionally skip SMTP during local dev.",
+            ", ".join(missing), to, subject,
+        )
+        if action_url:
+            logger.error(
+                "[ACTION URL — SMTP misconfigured, please share manually] %s",
+                action_url,
+            )
+        if raise_on_failure:
+            raise RuntimeError(
+                f"SMTP misconfigured: missing {', '.join(missing)}"
+            )
+        return False
 
     message = EmailMessage()
     message["From"] = settings.smtp_from

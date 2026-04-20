@@ -1,96 +1,33 @@
-"""Email service - sends transactional emails via Hostinger SMTP.
+"""Compatibility shim — delegates to ``app.services.email``.
 
-Uses Python's built-in ``smtplib`` + ``email`` stdlib modules.
-No external dependencies required.
+History
+-------
+``email_service.py`` was a second SMTP implementation (synchronous,
+via stdlib ``smtplib``) that read from a different set of settings
+fields (``settings.smtp_pass``) than the async implementation in
+``email.py`` (``settings.smtp_password``). The duplication caused a
+silent production outage: the config file had two ``smtp_*`` blocks,
+the second one winning and leaving ``smtp_host`` empty, which tripped
+the dev-mode fallback and ate every transactional email.
 
-Usage::
+Resolution: there is now a single SMTP stack (``app.services.email``,
+async, ``aiosmtplib``). This module is kept only to avoid breaking
+``abandoned_checkout_service.py`` which still imports ``send_email``
+and ``send_email_sync`` from here. Both names below forward to the
+canonical implementation.
 
-    from app.services.email_service import send_email
-
-    await send_email(
-        to="user@example.com",
-        subject="Your checkout is waiting",
-        html_body="<h1>Hello</h1>",
-        text_body="Hello",
-    )
-
-The function is async-safe: it runs the blocking SMTP call in a
-thread-pool executor so it never blocks the event loop.
-
-For Celery workers (synchronous context), use ``send_email_sync()``
-which calls SMTP directly without asyncio.
+Do not add new senders here. Use ``app.services.email.send_email``
+directly.
 """
 
 from __future__ import annotations
 
 import asyncio
 import logging
-import smtplib
-import ssl
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from functools import partial
 
-from app.core.config import get_settings
+from app.services.email import send_email as _send_email_async
 
 logger = logging.getLogger(__name__)
-
-
-def send_email_sync(
-    *,
-    to: str,
-    subject: str,
-    html_body: str,
-    text_body: str,
-    reply_to: str | None = None,
-) -> bool:
-    """Send an email synchronously via Hostinger SMTP (SSL on port 465).
-
-    Returns True on success, False on failure (logs the error).
-    """
-    settings = get_settings()
-
-    if not settings.smtp_user or not settings.smtp_pass:
-        logger.error("SMTP credentials not configured - skipping email to %s", to)
-        return False
-
-    msg = MIMEMultipart("alternative")
-    msg["From"] = f"{settings.mail_from_name} <{settings.mail_from_address}>"
-    msg["To"] = to
-    msg["Subject"] = subject
-    if reply_to:
-        msg["Reply-To"] = reply_to
-
-    # Attach plain text first, then HTML (email clients prefer the last part)
-    msg.attach(MIMEText(text_body, "plain", "utf-8"))
-    msg.attach(MIMEText(html_body, "html", "utf-8"))
-
-    try:
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL(
-            settings.smtp_host,
-            settings.smtp_port,
-            context=context,
-            timeout=30,
-        ) as server:
-            server.login(settings.smtp_user, settings.smtp_pass)
-            server.send_message(msg)
-
-        logger.info("Email sent successfully to %s (subject: %s)", to, subject)
-        return True
-
-    except smtplib.SMTPAuthenticationError:
-        logger.error("SMTP authentication failed - check SMTP_USER / SMTP_PASS")
-        return False
-    except smtplib.SMTPRecipientsRefused:
-        logger.error("Recipient refused by SMTP server: %s", to)
-        return False
-    except smtplib.SMTPException as exc:
-        logger.error("SMTP error sending to %s: %s", to, exc)
-        return False
-    except Exception as exc:
-        logger.error("Unexpected error sending email to %s: %s", to, exc)
-        return False
 
 
 async def send_email(
@@ -99,22 +36,48 @@ async def send_email(
     subject: str,
     html_body: str,
     text_body: str,
-    reply_to: str | None = None,
+    reply_to: str | None = None,  # noqa: ARG001 — kept for API compat
 ) -> bool:
-    """Async wrapper around ``send_email_sync``.
+    """Forward to the canonical async sender.
 
-    Runs the blocking SMTP call in a thread-pool executor so it
-    doesn't block the event loop (safe for FastAPI route handlers).
+    ``reply_to`` is ignored — the canonical sender doesn't support it.
+    If we ever need it, add it as an optional kwarg to
+    ``app.services.email.send_email`` instead of re-implementing SMTP
+    here.
     """
-    loop = asyncio.get_event_loop()
-    return await loop.run_in_executor(
-        None,
-        partial(
-            send_email_sync,
-            to=to,
-            subject=subject,
-            html_body=html_body,
-            text_body=text_body,
-            reply_to=reply_to,
-        ),
+    return await _send_email_async(
+        to=to,
+        subject=subject,
+        html=html_body,
+        text=text_body,
     )
+
+
+def send_email_sync(
+    *,
+    to: str,
+    subject: str,
+    html_body: str,
+    text_body: str,
+    reply_to: str | None = None,  # noqa: ARG001 — kept for API compat
+) -> bool:
+    """Synchronous forwarder for Celery tasks.
+
+    Runs the async ``send_email`` in a fresh event loop so the Celery
+    worker (which has no running loop) can call it. Never raises —
+    returns False on failure so the caller can decide whether to retry.
+    """
+    try:
+        return asyncio.run(
+            _send_email_async(
+                to=to,
+                subject=subject,
+                html=html_body,
+                text=text_body,
+            )
+        )
+    except Exception as exc:  # noqa: BLE001 — Celery task must not crash
+        logger.error(
+            "send_email_sync failed: to=%s subject=%r err=%s", to, subject, exc
+        )
+        return False
