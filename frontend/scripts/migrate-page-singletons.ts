@@ -144,11 +144,11 @@ async function main() {
     _id: "aboutPage",
     _type: "aboutPage",
     founders: [
-      { _key: "f1", name: "Cas", initial: "C", role: ls("Co-founder · Engineering & Product"), bio: lt("Lifelong football fan with an ICT background. Builds the systems that keep BetsPlug running and ensures data flows cleanly from source to screen.") },
-      { _key: "f2", name: "Dennis", initial: "D", role: ls("Co-founder · Data Science & Modeling"), bio: lt("Football enthusiast turned data nerd with years of ICT experience. Focuses on the models and statistics that turn match data into actionable insights.") },
+      { _key: "f1", name: "Cas", initial: "C", role: ls("Co-founder · Product & Growth"), bio: lt("Lifelong football fan with an entrepreneurial background, a knack for new ideas and solid marketing + IT skills. Keeps BetsPlug running and makes sure match data flows cleanly from the source all the way to your screen.") },
+      { _key: "f2", name: "Dennis", initial: "D", role: ls("Co-founder · Data & Modelling"), bio: lt("Football enthusiast and data-driven thinker with years of accountancy experience, where numbers and evidence call the shots. Turns probabilities, models and statistics into insights you can actually use.") },
     ],
     stats: [
-      { _key: "s1", value: "20+", label: ls("Combined years in ICT and data engineering") },
+      { _key: "s1", value: "70,000+", label: ls("Historical matches the models are trained on") },
       { _key: "s2", value: "450+", label: ls("Matches analyzed every week") },
       { _key: "s3", value: "1,200+", label: ls("Data points evaluated per match") },
       { _key: "s4", value: "4", label: ls("AI models running in production") },

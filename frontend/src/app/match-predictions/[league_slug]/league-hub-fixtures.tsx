@@ -22,21 +22,29 @@ import {
   FreeSkeleton,
 } from "@/components/match-predictions/match-cards";
 import { FREE_PICKS, LOCKED_PREVIEW } from "@/components/match-predictions/shared";
-import { useFreeMatchIds } from "@/components/match-predictions/use-free-match-ids";
 
 /**
  * League-scoped fixtures block for the /match-predictions/[league_slug]
- * hubs. Mirrors the public teaser layout: 4 stats, 3 free picks
- * (preferred from picks that have an actual model output) and a
- * locked-pool preview. Data is fetched client-side via TanStack
- * Query so the surrounding server component stays cacheable.
+ * hubs. Mirrors the public teaser layout: 4 stats, free picks (this
+ * league's Bronze-tier picks) and a locked-pool preview. Data is
+ * fetched client-side via TanStack Query so the surrounding server
+ * component stays cacheable.
+ *
+ * Free-vs-locked split is driven by the backend tier gate: for an
+ * unauth visitor `user_tier = FREE`, so the fixtures endpoint only
+ * populates `f.prediction` on picks the Bronze tier is allowed to
+ * see. Anything above Bronze comes back with `prediction: null` +
+ * `locked_pick_tier` metadata — those belong in the locked pool.
+ *
+ * Earlier this page intersected per-league fixtures with the global
+ * 3-item `useFreeMatchIds` set from /homepage/free-picks, which meant
+ * most league hubs showed 0 free picks (their picks weren't in the
+ * global top-3). Using the backend's own tier gate fixes that per
+ * league automatically.
  */
 export function LeagueHubFixtures({ leagueSlug }: { leagueSlug: string }) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
-
-  // Global free-pick IDs — single source of truth across all pages
-  const { freeMatchIds, isLoadingFreeIds } = useFreeMatchIds();
 
   const fixturesQuery = useQuery({
     queryKey: ["league-hub-fixtures", leagueSlug, 14],
@@ -63,19 +71,24 @@ export function LeagueHubFixtures({ leagueSlug }: { leagueSlug: string }) {
       );
   }, [fixtures]);
 
-  // Free picks: only fixtures whose match ID is in the global free set
+  // Free picks: fixtures where the backend returned a visible prediction.
+  // Capped at FREE_PICKS so the page doesn't snowball on league-heavy
+  // weekends; the rest flows into the locked pool so visitors still see
+  // the upgrade teaser below.
   const free: Fixture[] = useMemo(
-    () => upcoming.filter((f) => freeMatchIds.has(f.id)),
-    [upcoming, freeMatchIds],
+    () => upcoming.filter((f) => f.prediction !== null).slice(0, FREE_PICKS),
+    [upcoming],
   );
-  // Locked pool: everything else
+  const freeIds = useMemo(() => new Set(free.map((f) => f.id)), [free]);
+  // Locked pool: the rest — both explicitly gated (prediction null with
+  // locked_pick_tier) and any overflow past the FREE_PICKS cap.
   const lockedPool = useMemo(() => {
-    const withPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction !== null);
-    const withoutPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction === null);
+    const withPred = upcoming.filter((f) => !freeIds.has(f.id) && f.prediction !== null);
+    const withoutPred = upcoming.filter((f) => !freeIds.has(f.id) && f.prediction === null);
     return [...withPred, ...withoutPred].slice(0, LOCKED_PREVIEW);
-  }, [upcoming, freeMatchIds]);
+  }, [upcoming, freeIds]);
 
-  const isLoading = fixturesQuery.isLoading || isLoadingFreeIds;
+  const isLoading = fixturesQuery.isLoading;
   const isError = fixturesQuery.isError;
   const hasFree = free.length > 0;
 

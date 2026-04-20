@@ -232,10 +232,12 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
         }
       />
 
-      {/* ───────────── BET OF THE DAY ───────────── */}
-      <BotdSection />
-
       {/* ───────────── STEP 3 ───────────── */}
+      {/* Step 3 follows Step 2 directly now — previously the BotD
+          section slotted between them, which visually broke the
+          1 → 2 → 3 progression ("after step 2 you got Bet of the Day
+          and then step 3, slordig"). BotD gets its own spotlight
+          section further down so it can stand on its own weight. */}
       <StageSection
         badge={t("hiw.step3Badge")}
         title={t("hiw.step3Title")}
@@ -269,6 +271,30 @@ export function HowItWorksContent({ howItWorksPage }: HowItWorksContentProps) {
           </div>
         }
       />
+
+      {/* ───────────── BET OF THE DAY — signature feature ───────────── */}
+      {/* Wrapped in a lifted gradient frame so BotD doesn't read as
+          "just another step" — it's the headline product we want
+          visitors to remember when they leave this page. */}
+      <div className="relative py-8 md:py-12">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 0%, hsl(var(--accent-green) / 0.35) 50%, transparent 100%)",
+          }}
+        />
+        <BotdSection />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-px"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 0%, hsl(var(--accent-purple) / 0.35) 50%, transparent 100%)",
+          }}
+        />
+      </div>
 
       {/* ───────────── INTEGRITY LAYER (NEW) ───────────── */}
       <section className="relative overflow-hidden py-20 md:py-28">
@@ -967,17 +993,19 @@ function BotdSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6 }}
-          className="mx-auto mb-14 max-w-3xl text-center"
+          className="mx-auto mb-16 max-w-3xl text-center"
         >
-          <span className="section-label mb-4 inline-flex items-center gap-2">
-            <Crown className="h-3 w-3" />
-            {t("hiw.botdBadge")}
-          </span>
-          <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#4ade80]/30 bg-[#4ade80]/[0.07] px-4 py-1.5 backdrop-blur-sm">
+            <Crown className="h-3.5 w-3.5 text-[#4ade80]" />
+            <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#4ade80]">
+              {t("hiw.botdBadge")}
+            </span>
+          </div>
+          <h2 className="text-heading text-balance break-words text-4xl text-[#ededed] sm:text-5xl lg:text-6xl">
             {t("hiw.botdTitleA")}{" "}
             <span className="gradient-text-green">{t("hiw.botdTitleB")}</span>
           </h2>
-          <p className="mt-5 text-base leading-relaxed text-[#a3a9b8]">
+          <p className="mt-6 text-base leading-relaxed text-[#a3a9b8] sm:text-lg">
             {t("hiw.botdSubtitle")}
           </p>
         </motion.div>
