@@ -267,13 +267,12 @@ async def get_free_picks(
         _func.coalesce(Prediction.draw_prob, 0.0),
         Prediction.away_win_prob,
     )
-    VISIBLE_WIN_PROB_FLOOR = 0.55
-    # 45-day window so we always have 3 legitimate premium picks to
-    # show — even during quiet end-of-season weeks where European
-    # football only produces a handful of clear favourites. Earlier
-    # 14/21-day windows were dropping to 2 real picks which then
-    # triggered the blank-fixture fallback (rendered as a "0%" row
-    # on the homepage — the exact bug the user reported).
+    # Lowered from 0.55 — when access_filter(FREE) restricts us to the
+    # Free-tier band (conf 0.55-0.65), max_prob sometimes lands in the
+    # low-50s. Keeping a hard 0.55 max_prob floor dropped the list to
+    # 1-2 picks on quiet weeks; 0.50 keeps it at 3 while still excluding
+    # true coin-flips.
+    VISIBLE_WIN_PROB_FLOOR = 0.50
     upcoming_cutoff = now + timedelta(days=45)
     today_stmt = (
         select(Prediction)
@@ -290,17 +289,17 @@ async def get_free_picks(
         .order_by(max_prob_expr.desc())
         .limit(3)
     )
-    # IMPORTANT — use the PLATINUM access scope, not FREE.
-    # access_filter(FREE) means "show only Free-tier picks" (i.e. the
-    # narrow band of confidence 0.55-0.60 that Free users can see), so
-    # it was actively EXCLUDING the Benfica-at-87%-type premium picks
-    # we actually want to tease the visitor with. access_filter(PLATINUM)
-    # returns everything the system has classified as a pick (tier
-    # whitelist + confidence >= 0.55 baseline), which is the superset
-    # the homepage should draw its "strongest of the week" from.
-    # The teams + kickoff are blurred anyway, so no paid-tier data leaks.
+    # Use the FREE access scope — this endpoint powers the public
+    # "gratis voorspellingen" surface (homepage hero + /voorspellingen
+    # page), so it must reflect what an unauth/Bronze user would
+    # actually see on the dashboard. Previously this used PLATINUM
+    # scope which surfaced 85-89% premium picks, making the upsell
+    # nonsensical ("why pay when free looks this good?"). FREE scope
+    # returns picks in the 55-65% Bronze confidence band — honest Free
+    # tier reality, and a real reason to upgrade to Silver/Gold/Platinum
+    # for the 65-80%+ bands.
     if TIER_SYSTEM_ENABLED:
-        today_stmt = today_stmt.where(access_filter(PickTier.PLATINUM))
+        today_stmt = today_stmt.where(access_filter(PickTier.FREE))
     today_rows = (await db.execute(today_stmt)).scalars().unique().all()
     today_picks = [_build_free_pick(p) for p in today_rows]
 

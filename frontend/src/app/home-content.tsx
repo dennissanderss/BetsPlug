@@ -394,13 +394,13 @@ export function HomeContent({
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
                         {locale === "nl"
-                          ? "Top premium picks"
-                          : "Top premium picks"}
+                          ? "Gratis previews · Bronze tier"
+                          : "Free previews · Bronze tier"}
                       </p>
                       <p className="text-sm font-semibold text-[#ededed]">
                         {locale === "nl"
-                          ? "Top-3 voor de komende weken"
-                          : "Top-3 for the coming weeks"}
+                          ? "3 gratis picks voor deze week"
+                          : "3 free picks for this week"}
                       </p>
                     </div>
                   </div>

@@ -197,31 +197,67 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
           style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(140px)" }}
         />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          {/* Tier context banner, makes it unmistakeable that these 3
-              picks are the FREE slice and that higher tiers unlock more. */}
-          <div className="mb-10 flex flex-col gap-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.04] p-5 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-start gap-4 sm:items-center">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-lg ring-1 ring-emerald-400/30">
-                🆓
+          {/* Tier context banner — these are the real Bronze/Free tier
+              picks (55-65% confidence band). The upsell leans on the
+              accuracy delta vs Silver/Gold/Platinum, backed by public
+              backtest numbers that live on /track-record. */}
+          <div
+            className="relative mb-10 overflow-hidden rounded-2xl p-5 sm:p-6"
+            style={{
+              background:
+                "linear-gradient(135deg, hsl(var(--accent-green) / 0.18) 0%, hsl(230 22% 9% / 0.85) 45%, hsl(var(--accent-purple) / 0.22) 100%)",
+              border: "1px solid hsl(var(--accent-purple) / 0.28)",
+              boxShadow:
+                "0 0 0 1px hsl(var(--accent-purple) / 0.08) inset, 0 10px 40px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-20 -top-20 h-[280px] w-[280px] rounded-full"
+              style={{ background: "hsl(var(--accent-purple) / 0.28)", filter: "blur(100px)" }}
+            />
+            <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-start gap-4 sm:items-center">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-lg ring-1 ring-emerald-400/30">
+                  🆓
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">
+                    {isNl
+                      ? "Bronze tier · 55–65% winkans-band"
+                      : "Bronze tier · 55–65% win-prob band"}
+                  </p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-[#ededed] sm:text-base">
+                    {isNl ? (
+                      <>
+                        Dit zijn de échte gratis picks — eerlijke <b className="text-emerald-300">~55% accuratesse</b> op backtests.
+                        Upgrade en ontgrendel <b className="text-[#d8b4fe]">Silver (65%+)</b>, <b className="text-[#fde68a]">Gold (70%+)</b> of <b className="text-[#93c5fd]">Platinum (80%+)</b> — getest op <b>80.000+ historische wedstrijden</b> met publiek track record.
+                      </>
+                    ) : (
+                      <>
+                        These are the real free picks — honest <b className="text-emerald-300">~55% accuracy</b> on backtests.
+                        Upgrade to unlock <b className="text-[#d8b4fe]">Silver (65%+)</b>, <b className="text-[#fde68a]">Gold (70%+)</b> or <b className="text-[#93c5fd]">Platinum (80%+)</b> — tested on <b>80,000+ historical matches</b> with a public track record.
+                      </>
+                    )}
+                  </p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-                  {isNl ? "Free tier · 3 picks per dag" : "Free tier · 3 picks per day"}
-                </p>
-                <p className="mt-1 text-sm leading-relaxed text-[#ededed] sm:text-base">
-                  {isNl
-                    ? "Je kijkt nu naar de 3 gratis voorspellingen van vandaag. Silver (≥ 65% betrouwbaarheid), Gold (≥ 70%) en Platinum (≥ 75%) ontgrendelen alle overige wedstrijden plus hogere nauwkeurigheid per tier."
-                    : "You're viewing today's 3 free predictions. Silver (≥ 65% confidence), Gold (≥ 70%) and Platinum (≥ 75%) unlock every other fixture plus higher accuracy per tier."}
-                </p>
+              <div className="flex flex-col gap-2 sm:items-end">
+                <Link
+                  href={loc("/checkout")}
+                  className="btn-primary group inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap"
+                >
+                  {isNl ? "Ontgrendel hogere winkansen" : "Unlock higher win rates"}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+                <Link
+                  href={loc("/track-record")}
+                  className="text-[11px] font-semibold uppercase tracking-wider text-[#a3a9b8] hover:text-emerald-300"
+                >
+                  {isNl ? "Bekijk publiek track record →" : "See public track record →"}
+                </Link>
               </div>
             </div>
-            <Link
-              href={loc("/checkout")}
-              className="btn-primary inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap"
-            >
-              {isNl ? "Upgrade naar Premium" : "Upgrade to Premium"}
-              <Lock className="h-3.5 w-3.5" />
-            </Link>
           </div>
 
           <div className="mb-12 sm:mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
