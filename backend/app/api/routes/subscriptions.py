@@ -41,6 +41,7 @@ from app.models.subscription import (
 )
 from app.services.email import (
     send_payment_receipt_email,
+    send_subscription_cancelled_email,
     send_welcome_email,
 )
 
@@ -923,6 +924,24 @@ async def cancel_my_subscription(
 
     sub.cancel_at_period_end = True
     await db.flush()
+
+    try:
+        access_until = (
+            sub.current_period_end.strftime("%d %B %Y")
+            if sub.current_period_end
+            else None
+        )
+        await send_subscription_cancelled_email(
+            to=current_user.email,
+            username=current_user.username or current_user.email.split("@")[0],
+            plan=sub.plan_type.value,
+            access_until=access_until,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.error(
+            "Failed to send cancel-confirmation email to %s: %s",
+            current_user.email, exc,
+        )
 
     return MySubscriptionResponse(
         has_subscription=sub.status in (SubscriptionStatus.ACTIVE, SubscriptionStatus.TRIALING)

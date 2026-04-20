@@ -378,3 +378,61 @@ async def send_payment_receipt_email(
       <p style="text-align:center;">{_button("Betalingen bekijken", billing_url)}</p>
     """
     return await send_email(to, subject, _layout("Payment receipt", body), text)
+
+
+async def send_subscription_cancelled_email(
+    to: str,
+    username: str,
+    plan: str,
+    access_until: str | None = None,
+) -> bool:
+    """Send a cancel-confirmation email when the user schedules a cancel.
+
+    Stripe keeps the subscription active until ``current_period_end`` (no
+    further auto-charge). This email confirms that and gives the user
+    clarity on the end date + a way to reactivate.
+    """
+    settings = get_settings()
+    base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
+    subscription_url = f"{base}/subscription"
+
+    subject = "Your BetsPlug cancellation is scheduled / Je opzegging is verwerkt"
+
+    until_en = (
+        f" You keep full access until {access_until}."
+        if access_until
+        else " You keep full access until the end of your current billing period."
+    )
+    until_nl = (
+        f" Je houdt volledige toegang tot {access_until}."
+        if access_until
+        else " Je houdt volledige toegang tot het einde van je huidige factuurperiode."
+    )
+
+    text = (
+        f"Hi {username},\n\n"
+        f"We've scheduled your BetsPlug {plan.title()} subscription for cancellation."
+        f"{until_en} After that we won't charge you again — your card will not be debited.\n\n"
+        f"Changed your mind? You can reactivate at any time before the end date:\n\n"
+        f"{subscription_url}\n\n"
+        "----\n\n"
+        f"Hallo {username},\n\n"
+        f"Je opzegging van BetsPlug {plan.title()} is ingepland."
+        f"{until_nl} Daarna wordt er niets meer automatisch afgeschreven.\n\n"
+        f"Toch twijfel? Je kunt vóór de einddatum nog reactiveren:\n\n"
+        f"{subscription_url}\n\n"
+        "- The BetsPlug team"
+    )
+
+    body = f"""
+      <h2 style="margin:0 0 12px 0;color:#ffffff;font-size:20px;">Cancellation scheduled</h2>
+      <p>Hi {username}, your <strong>BetsPlug {plan.title()}</strong> subscription has been scheduled for cancellation.{until_en} After that date no further automatic payments will be taken.</p>
+      <p>Changed your mind? You can reactivate any time before the end date from your account:</p>
+      <p style="text-align:center;">{_button("Manage subscription", subscription_url)}</p>
+      <hr style="border:none;border-top:1px solid #1f2937;margin:24px 0;">
+      <h3 style="margin:0 0 8px 0;color:#ffffff;font-size:16px;">Nederlands</h3>
+      <p>Je opzegging van <strong>BetsPlug {plan.title()}</strong> is ingepland.{until_nl} Daarna worden er geen automatische betalingen meer gedaan.</p>
+      <p>Toch twijfel? Je kunt vóór de einddatum nog reactiveren in je account.</p>
+      <p style="text-align:center;">{_button("Abonnement beheren", subscription_url)}</p>
+    """
+    return await send_email(to, subject, _layout("Cancellation scheduled", body), text)
