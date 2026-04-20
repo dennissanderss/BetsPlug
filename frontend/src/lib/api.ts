@@ -574,6 +574,12 @@ class ApiClient {
       `/admin/match-status-breakdown?days_back=${daysBack}`,
     );
   }
+  testPredictionGeneration() {
+    return this.request<import("@/types/api").PredictionGenerationTest>(
+      "/admin/test-prediction-generation",
+      { method: "POST" },
+    );
+  }
 
   // Fixture Results
   getFixtureResults(days = 7, league?: string) {

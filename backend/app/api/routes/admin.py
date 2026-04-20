@@ -142,6 +142,28 @@ class MatchStatusBreakdownResponse(BaseModel):
     last_finished_match_day: Optional[str]
 
 
+class PredictionGenerationTestResponse(BaseModel):
+    """Result of a single-match forecast generation attempt.
+
+    Used to surface exceptions from the forecasting pipeline — the
+    APScheduler ``job_generate_predictions`` swallows these as warnings
+    so ``job_sync_data`` + ``job_generate_predictions`` can appear
+    healthy while literally zero predictions are being written.
+    """
+
+    match_id: Optional[str] = None
+    league: Optional[str] = None
+    home_team: Optional[str] = None
+    away_team: Optional[str] = None
+    scheduled_at: Optional[str] = None
+    ok: bool
+    prediction_id: Optional[str] = None
+    confidence: Optional[float] = None
+    error_type: Optional[str] = None
+    error_message: Optional[str] = None
+    traceback: Optional[str] = None
+
+
 class IngestionDiagnosisResponse(BaseModel):
     """Per-league diagnostic for ``sync_upcoming_matches``.
 
@@ -282,6 +304,107 @@ async def match_status_breakdown(
         stuck_scheduled_past_kickoff=stuck,
         last_finished_match_day=last_fin_iso,
     )
+
+
+@router.post(
+    "/test-prediction-generation",
+    response_model=PredictionGenerationTestResponse,
+    summary="Generate one prediction synchronously and return the exact error on failure",
+)
+async def test_prediction_generation(
+    db: AsyncSession = Depends(get_db),
+) -> PredictionGenerationTestResponse:
+    """Pick the first upcoming match without a LIVE prediction and try to
+    generate one synchronously. Returns the full traceback on failure.
+
+    APScheduler's ``job_generate_predictions`` wraps every forecast call
+    in a ``try/except`` that logs a warning and moves on. When every
+    forecast raises (feature-pipeline bug, missing model, schema drift)
+    the scheduler LOOKS healthy but writes zero rows — that's exactly
+    how a 5-day prediction gap hides behind a green scheduler dashboard.
+
+    Use this endpoint to get the actual exception.
+    """
+    import traceback as _tb
+    from datetime import timedelta
+    from sqlalchemy import and_
+    from app.models.match import Match, MatchStatus
+    from app.models.prediction import Prediction
+
+    now = datetime.now(timezone.utc)
+
+    # Find the first upcoming match without a 'live' prediction
+    sub = select(Prediction.match_id).where(
+        Prediction.prediction_source == "live"
+    ).subquery()
+    stmt = (
+        select(Match)
+        .where(
+            and_(
+                Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
+                Match.scheduled_at >= now,
+                Match.scheduled_at <= now + timedelta(days=7),
+                ~Match.id.in_(select(sub.c.match_id)),
+            )
+        )
+        .order_by(Match.scheduled_at)
+        .limit(1)
+    )
+    match = (await db.execute(stmt)).scalar_one_or_none()
+
+    if match is None:
+        return PredictionGenerationTestResponse(
+            ok=False,
+            error_type="NoMatchAvailable",
+            error_message=(
+                "No upcoming match without a live prediction found in the "
+                "next 7 days. Either every upcoming match already has a "
+                "live prediction (generator is working) or the match "
+                "ingestion has produced nothing for this week."
+            ),
+        )
+
+    from app.forecasting.forecast_service import ForecastService
+
+    try:
+        service = ForecastService()
+        prediction = await service.generate_forecast(match.id, db, source="live")
+        await db.commit()
+        return PredictionGenerationTestResponse(
+            match_id=str(match.id),
+            league=(
+                match.league.slug if getattr(match, "league", None) else None
+            ),
+            home_team=(
+                match.home_team.name if getattr(match, "home_team", None) else None
+            ),
+            away_team=(
+                match.away_team.name if getattr(match, "away_team", None) else None
+            ),
+            scheduled_at=match.scheduled_at.isoformat(),
+            ok=True,
+            prediction_id=str(prediction.id),
+            confidence=float(prediction.confidence or 0),
+        )
+    except Exception as exc:
+        await db.rollback()
+        return PredictionGenerationTestResponse(
+            match_id=str(match.id),
+            league=(
+                match.league.slug if getattr(match, "league", None) else None
+            ),
+            home_team=(
+                match.home_team.name if getattr(match, "home_team", None) else None
+            ),
+            away_team=(
+                match.away_team.name if getattr(match, "away_team", None) else None
+            ),
+            scheduled_at=match.scheduled_at.isoformat(),
+            ok=False,
+            error_type=type(exc).__name__,
+            error_message=str(exc),
+            traceback=_tb.format_exc(),
+        )
 
 
 @router.post(

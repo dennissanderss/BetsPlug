@@ -1168,6 +1168,9 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
       {/* Per-day match status breakdown (which day stopped FINISHED-ing?) */}
       <MatchStatusBreakdownCard />
 
+      {/* Test prediction generation (find the real error) */}
+      <PredictionGenerationTestCard />
+
       {/* Retrain models */}
       <div className="card-neon p-6 space-y-4 border border-red-500/15">
         <div className="flex items-center gap-2.5">
@@ -1645,6 +1648,128 @@ function MatchStatusBreakdownCard() {
             </table>
           </div>
         </>
+      )}
+    </div>
+  );
+}
+
+// ─── Prediction Generation Test (find the real forecast-pipeline error) ─────
+
+function PredictionGenerationTestCard() {
+  const mutation = useMutation({
+    mutationFn: () => api.testPredictionGeneration(),
+  });
+
+  const data = mutation.data;
+
+  return (
+    <div className="card-neon p-6 space-y-4 lg:col-span-2 border border-red-500/20">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-500/10">
+            <AlertTriangle className="h-4 w-4 text-red-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-100">
+              Test prediction generation
+              <span className="ml-2 inline-flex items-center rounded-md border border-red-500/30 bg-red-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-red-300">
+                🔴 Kritiek
+              </span>
+            </h3>
+            <p className="text-xs text-slate-400">
+              <strong>Dit is de diagnose die het data-gat ontleedt.</strong>
+              Pakt één upcoming match zonder live-prediction en probeert
+              synchroon een forecast te genereren. Als job_generate_predictions
+              (elke 10 min) silent faalt — wat nu het geval is — zie je hier
+              de echte exception + traceback. Eén klik, binnen seconden
+              antwoord.
+            </p>
+          </div>
+        </div>
+      </div>
+      <button
+        onClick={() => mutation.mutate()}
+        disabled={mutation.isPending}
+        className="inline-flex items-center gap-2 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm font-semibold text-red-200 hover:bg-red-500/20 disabled:opacity-50"
+      >
+        {mutation.isPending ? (
+          <>
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            Genereren…
+          </>
+        ) : (
+          <>
+            <Zap className="h-4 w-4" />
+            Genereer 1 prediction nu
+          </>
+        )}
+      </button>
+      {data && (
+        <div
+          className={cn(
+            "rounded-lg border p-3 space-y-2",
+            data.ok
+              ? "border-emerald-500/30 bg-emerald-500/5"
+              : "border-red-500/30 bg-red-500/5",
+          )}
+        >
+          {data.match_id && (
+            <div className="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <p className="text-slate-500">Match</p>
+                <p className="text-slate-200">
+                  {data.home_team} vs {data.away_team}
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  {data.league} · {data.scheduled_at}
+                </p>
+              </div>
+              <div>
+                <p className="text-slate-500">Resultaat</p>
+                <p
+                  className={cn(
+                    "text-sm font-semibold",
+                    data.ok ? "text-emerald-300" : "text-red-300",
+                  )}
+                >
+                  {data.ok ? "✓ Succesvol gegenereerd" : "✗ Gefaald"}
+                </p>
+                {data.confidence != null && (
+                  <p className="text-[11px] text-slate-500">
+                    confidence: {(data.confidence * 100).toFixed(1)}%
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+          {data.error_message && (
+            <div className="border-t border-red-500/20 pt-2 space-y-1">
+              <p className="text-[11px] font-semibold text-red-300">
+                {data.error_type ?? "Error"}
+              </p>
+              <pre className="overflow-x-auto whitespace-pre-wrap break-all text-[11px] font-mono text-red-200/90">
+                {data.error_message}
+              </pre>
+              {data.traceback && (
+                <details className="mt-2">
+                  <summary className="cursor-pointer text-[11px] font-semibold text-red-300/80 hover:text-red-200">
+                    Show traceback
+                  </summary>
+                  <pre className="mt-2 overflow-x-auto whitespace-pre-wrap break-all rounded bg-black/40 p-2 text-[10px] font-mono text-red-200/80">
+                    {data.traceback}
+                  </pre>
+                </details>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+      {mutation.isError && (
+        <p className="text-xs text-red-400">
+          {mutation.error instanceof Error
+            ? mutation.error.message
+            : "Test call failed."}
+        </p>
       )}
     </div>
   );

@@ -919,6 +919,20 @@ export interface MatchStatusBreakdown {
   last_finished_match_day: string | null;
 }
 
+export interface PredictionGenerationTest {
+  match_id?: string | null;
+  league?: string | null;
+  home_team?: string | null;
+  away_team?: string | null;
+  scheduled_at?: string | null;
+  ok: boolean;
+  prediction_id?: string | null;
+  confidence?: number | null;
+  error_type?: string | null;
+  error_message?: string | null;
+  traceback?: string | null;
+}
+
 // Capacity plan (GET /api/admin/capacity-plan)
 export type CapacityStatus = "safe" | "watch" | "tight" | "over";
 
