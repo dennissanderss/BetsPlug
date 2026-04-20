@@ -2,19 +2,26 @@
 
 /**
  * LockedLivePlaceholder — public-page stand-in for the two "live
- * measurement" surfaces (tier live + BOTD live). The live datasets
- * are intentionally hidden behind a login gate while they grow from
- * zero — showing 0/0 per tier to anonymous visitors would read as
- * "the product doesn't work" instead of "we haven't publicly opened
- * this surface yet". Logged-in users see the real numbers on the
- * authed /trackrecord dashboard.
+ * measurement" surfaces (tier live + BOTD live).
+ *
+ * For anonymous visitors the real zero-from-day-one data would read
+ * as "the product doesn't work", so we show a login gate instead.
+ *
+ * For signed-in users (token present in localStorage) we swap the
+ * gate out for the actual live component — `LiveMeasurementSection`
+ * for tier live, `BotdLiveTrackingSection` for BotD live — so the
+ * /prestaties page shows the full live picture and the user doesn't
+ * have to hop to /trackrecord just to see two numbers.
  */
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { Lock, Activity, ArrowRight } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
+import { LiveMeasurementSection } from "./live-measurement-section";
+import { BotdLiveTrackingSection } from "./botd-live-tracking-section";
 
 interface LockedLivePlaceholderProps {
   /** Visible section number (e.g. "2" or "4"). */
@@ -33,6 +40,27 @@ export function LockedLivePlaceholder({
   const { locale } = useTranslations();
   const isNl = locale === "nl";
   const loc = useLocalizedHref();
+
+  // Auth-aware: signed-in readers get the real live section inline
+  // instead of the lock-screen — they've paid/registered, they're
+  // entitled to see the numbers on the same page without a detour
+  // through /trackrecord in the (app) group.
+  const [hasToken, setHasToken] = useState(false);
+  useEffect(() => {
+    try {
+      setHasToken(Boolean(window.localStorage.getItem("betsplug_token")));
+    } catch {
+      setHasToken(false);
+    }
+  }, []);
+
+  if (hasToken) {
+    return variant === "tier" ? (
+      <LiveMeasurementSection />
+    ) : (
+      <BotdLiveTrackingSection />
+    );
+  }
 
   const title =
     variant === "tier"

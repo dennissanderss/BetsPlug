@@ -173,6 +173,70 @@ function useHasAuthToken(): boolean {
   return hasToken;
 }
 
+// ─── Phase divider ─────────────────────────────────────────────────
+// Grote visuele banner die de pagina splitst in "Backtest" (boven) en
+// "Live meting" (onder). Zonder deze scheiding gaan de vier track-
+// record-blokken (2× per tier, 2× per BotD) visueel door elkaar en
+// begrijpt niemand wat nou simulatie is en wat pre-match meting.
+
+function PhaseDivider({
+  kicker,
+  title,
+  subtitle,
+  accent = "blue",
+}: {
+  kicker: string;
+  title: string;
+  subtitle: string;
+  accent?: "blue" | "emerald";
+}) {
+  const ringVar =
+    accent === "emerald" ? "var(--accent-green)" : "var(--accent-blue)";
+  return (
+    <section className="relative py-10 md:py-14">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-1/2 h-px -translate-y-1/2"
+        style={{
+          background: `linear-gradient(90deg, transparent 0%, hsl(${ringVar} / 0.35) 50%, transparent 100%)`,
+        }}
+      />
+      <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
+        <div
+          className="relative overflow-hidden rounded-2xl p-6 text-center sm:p-8"
+          style={{
+            background: `linear-gradient(135deg, hsl(${ringVar} / 0.12) 0%, hsl(230 22% 9% / 0.9) 55%, hsl(${ringVar} / 0.14) 100%)`,
+            border: `1px solid hsl(${ringVar} / 0.28)`,
+            boxShadow: `0 0 0 1px hsl(${ringVar} / 0.08) inset, 0 20px 60px rgba(0,0,0,0.35)`,
+          }}
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -left-24 -top-24 h-[260px] w-[260px] rounded-full"
+            style={{ background: `hsl(${ringVar} / 0.22)`, filter: "blur(110px)" }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-24 -bottom-24 h-[260px] w-[260px] rounded-full"
+            style={{ background: `hsl(${ringVar} / 0.18)`, filter: "blur(110px)" }}
+          />
+          <div className="relative">
+            <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#4ade80]">
+              {kicker}
+            </span>
+            <h2 className="text-heading mt-3 text-balance break-words text-2xl text-[#ededed] sm:text-3xl lg:text-4xl">
+              {title}
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-[#a3a9b8]">
+              {subtitle}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function PublicTierTabs({
   value,
   onChange,
@@ -698,6 +762,23 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
+      {/* ───────────── DIKKE SCHEIDING: BACKTEST PHASE ─────────────
+          Markeer duidelijk dat alles tussen deze banner en de
+          "Live meting" banner verderop historische simulatie is —
+          niet pre-match meting. User feedback was dat het oude
+          interleaved layout (tier-backtest → tier-live → botd-backtest
+          → botd-live) verwarrend was. */}
+      <PhaseDivider
+        kicker={isNl ? "Backtest — historische simulatie" : "Backtest — historical simulation"}
+        title={isNl ? "Hieronder: wat het model zou hebben gedaan" : "Below — what the model would have done"}
+        subtitle={
+          isNl
+            ? "Alles hieronder is berekend op historische wedstrijden met de regel dat het model alleen data mag gebruiken die vóór de aftrap bekend was. Geen cherry-picking, volledige dataset publiek als CSV."
+            : "Everything below is computed on historical matches under the rule that the model may only use data available before kickoff. No cherry-picking, full dataset public as CSV."
+        }
+        accent="emerald"
+      />
+
       {/* ───────────── KPIs ───────────── */}
       <section id="tier-kpis" className="relative overflow-hidden py-20 md:py-28 scroll-mt-24">
         <div
@@ -774,18 +855,36 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
-      {/* ───────────── 2 · LIVE MEASUREMENT (tier) — LOCKED ─────────────
+      {/* ───────────── BOTD BACKTEST — directly after tier backtest ─────
+          User feedback was dat BotD-backtest als aparte container naast
+          de tier-backtest hoort, zodat alle "historische analyse"
+          onderdelen bij elkaar staan vóór we aan live meting beginnen. */}
+      <BotdTrackRecordSection />
+
+      {/* ───────────── DIKKE SCHEIDING tussen backtest en live meting ───
+          User flagde "ik mis een dikke onderscheid tussen bovenkant
+          (backtest) en onderkant (live)". Deze banner markeert visueel
+          waar de historische simulatie ophoudt en waar de pre-match
+          meetperiode begint. */}
+      <PhaseDivider
+        kicker={isNl ? "Live meting — vanaf 18 april 2026" : "Live measurement — from 18 April 2026"}
+        title={isNl ? "Hieronder meten we in realtime" : "Below — live measurement only"}
+        subtitle={
+          isNl
+            ? "Alles hieronder telt alleen picks die strikt vóór de aftrap zijn vastgezet. De teller begint op 0 en groeit met elke afgelopen wedstrijd — eerlijk, zonder cherry-picking."
+            : "Everything below counts only picks locked strictly before kickoff. The counter starts at 0 and grows with every finished match — honest, no cherry-picking."
+        }
+      />
+
+      {/* ───────────── LIVE MEASUREMENT (tier) — LOCKED ─────────────
           Live tier data is intentionally hidden from anonymous visitors
           while it grows from zero (cut-off 2026-04-16). Showing 0/0 on
           the marketing surface would read as "product doesn't work"
           instead of "warm-up phase". Signed-in users see the real
           numbers on the authed /trackrecord dashboard. */}
-      <LockedLivePlaceholder number="2" variant="tier" id="live-measurement" />
+      <LockedLivePlaceholder number="3" variant="tier" id="live-measurement" />
 
-      {/* ───────────── 3 · BOTD BACKTEST ───────────── */}
-      <BotdTrackRecordSection />
-
-      {/* ───────────── 4 · BOTD LIVE — LOCKED ───────────── */}
+      {/* ───────────── BOTD LIVE — LOCKED ───────────── */}
       <LockedLivePlaceholder number="4" variant="botd" id="botd-live" />
 
       {/* ───────────── PIPELINE ───────────── */}
