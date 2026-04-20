@@ -132,6 +132,23 @@ class Settings(BaseSettings):
     # password is no longer sitting in your Railway config.
     bootstrap_admin_password: str = ""
 
+    # ── Telegram auto-poster ─────────────────────────────────────────
+    # Token comes from @BotFather; set in Railway only — never commit.
+    # When empty the telegram_service logs messages at INFO level
+    # instead of calling the Bot API (dev fallback).
+    telegram_bot_token: str = Field(
+        default="", validation_alias="TELEGRAM_BOT_TOKEN"
+    )
+    telegram_channel_free: str = Field(
+        default="@BetsPlug", validation_alias="TELEGRAM_CHANNEL_FREE"
+    )
+    # Optional separate dev/test channel so staging never pollutes the
+    # public @BetsPlug feed. When set, dev tasks use this instead of
+    # `telegram_channel_free`.
+    telegram_channel_test: str = Field(
+        default="", validation_alias="TELEGRAM_CHANNEL_TEST"
+    )
+
     class Config:
         env_file = ".env"
         extra = "ignore"

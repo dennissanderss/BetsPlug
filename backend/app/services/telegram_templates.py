@@ -1,0 +1,340 @@
+"""Bilingual message templates for the @BetsPlug Telegram channel.
+
+Every public post is EN-top / NL-bottom, separated by a `---` line so the
+two blocks are visually distinct in the Telegram client. Content is
+rendered from ORM objects we already have on the site (``Prediction``
+with its eager-loaded ``match`` + teams + league + result) so the
+Telegram feed stays in lock-step with what a Free-tier visitor sees on
+betsplug.com — no shadow copy, no drift.
+
+The functions here are PURE string formatters. All database IO lives in
+`telegram_service.py`; all scheduling lives in `tasks/telegram_tasks.py`.
+Keeping the boundaries strict makes the templates trivially unit-testable
+(feed a Prediction instance, assert the output string) and safe to tweak
+without touching the posting machinery.
+"""
+
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from typing import Optional
+from zoneinfo import ZoneInfo
+
+from app.models.prediction import Prediction
+
+
+# ---------------------------------------------------------------------------
+# Pick direction mapping — the model's `pick` column is one of {HOME, DRAW,
+# AWAY} (uppercase) or the probability-derived variants in lowercase. The
+# functions below tolerate both so they can be called against both the raw
+# ORM row and synthesized predictions from the API layer.
+# ---------------------------------------------------------------------------
+
+
+def _pick_label_en(pick: Optional[str], home_team: str, away_team: str) -> str:
+    if pick is None:
+        return "—"
+    norm = pick.strip().upper()
+    if norm == "HOME":
+        return f"{home_team} win"
+    if norm == "AWAY":
+        return f"{away_team} win"
+    if norm == "DRAW":
+        return "Draw"
+    return pick
+
+
+def _pick_label_nl(pick: Optional[str], home_team: str, away_team: str) -> str:
+    if pick is None:
+        return "—"
+    norm = pick.strip().upper()
+    if norm == "HOME":
+        return f"{home_team} wint"
+    if norm == "AWAY":
+        return f"{away_team} wint"
+    if norm == "DRAW":
+        return "Gelijkspel"
+    return pick
+
+
+def _infer_pick(prediction: Prediction) -> str:
+    """Return HOME/DRAW/AWAY based on the highest outcome probability.
+
+    Older Prediction rows don't carry an explicit `pick` column; in that
+    case fall back to argmax of the three probs so the template never
+    prints a bare dash.
+    """
+    stored = getattr(prediction, "pick", None)
+    if stored:
+        return stored
+    probs = {
+        "HOME": prediction.home_win_prob or 0.0,
+        "DRAW": prediction.draw_prob or 0.0,
+        "AWAY": prediction.away_win_prob or 0.0,
+    }
+    return max(probs, key=lambda k: probs[k])
+
+
+def _fmt_odds(val: Optional[float]) -> str:
+    if val is None:
+        return "—"
+    return f"{val:.2f}"
+
+
+def _fmt_confidence_pct(conf: Optional[float]) -> str:
+    if conf is None:
+        return "—"
+    return f"{round(conf * 100)}"
+
+
+def _fmt_kickoff_cet(when: datetime) -> str:
+    """Format kickoff in CET (with DST handled by zoneinfo)."""
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=timezone.utc)
+    local = when.astimezone(ZoneInfo("Europe/Amsterdam"))
+    return local.strftime("%a %d %b · %H:%M")
+
+
+def _fmt_kickoff_wib(when: datetime) -> str:
+    """Format kickoff in WIB (UTC+7, Indonesia) for the EN-speaking
+    Asia subscribers that follow the channel."""
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=timezone.utc)
+    local = when.astimezone(ZoneInfo("Asia/Jakarta"))
+    return local.strftime("%a %d %b · %H:%M")
+
+
+def _fmt_date_nl(when: datetime) -> str:
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=timezone.utc)
+    local = when.astimezone(ZoneInfo("Europe/Amsterdam"))
+    return local.strftime("%A %d %B %Y")
+
+
+def _fmt_date_en(when: datetime) -> str:
+    if when.tzinfo is None:
+        when = when.replace(tzinfo=timezone.utc)
+    local = when.astimezone(ZoneInfo("Europe/Amsterdam"))
+    return local.strftime("%A %d %B %Y")
+
+
+# ---------------------------------------------------------------------------
+# Public templates
+# ---------------------------------------------------------------------------
+
+
+def render_pick_message(
+    prediction: Prediction,
+    odds_home: Optional[float] = None,
+    odds_draw: Optional[float] = None,
+    odds_away: Optional[float] = None,
+) -> str:
+    """Return the bilingual pick-announcement block.
+
+    Shape:
+
+        🎯 Free Pick — <Date EN>
+        ⚽ <League>: <Home> vs <Away>
+        🕐 Kickoff: <CET> CET / <WIB> WIB
+        🤖 Prediction: <Pick EN>
+        Confidence: <N>%
+        Pre-match odds: 1: x.xx  X: x.xx  2: x.xx
+        📝 Result follows after the match.
+        ⚠️ Statistical analysis · 18+ · betsplug.com
+        ---
+        🎯 Free Pick — <Datum NL>
+        ⚽ <League>: <Home> vs <Away>
+        🕐 Aftrap: <CET> CET
+        🤖 Voorspelling: <Pick NL>
+        Zekerheid: <N>%
+        Pre-match odds: 1: x.xx  X: x.xx  2: x.xx
+        📝 Uitslag volgt na de wedstrijd.
+        ⚠️ Statistische analyse · 18+ · betsplug.com
+    """
+    match = prediction.match
+    home_name = match.home_team.name if match.home_team else "Home"
+    away_name = match.away_team.name if match.away_team else "Away"
+    league_name = match.league.name if match.league else "—"
+    kickoff = match.scheduled_at
+    pick = _infer_pick(prediction)
+    conf_pct = _fmt_confidence_pct(prediction.confidence)
+    odds_line = (
+        f"1: {_fmt_odds(odds_home)}  "
+        f"X: {_fmt_odds(odds_draw)}  "
+        f"2: {_fmt_odds(odds_away)}"
+    )
+
+    en_block = (
+        f"🎯 Free Pick — {_fmt_date_en(kickoff)}\n"
+        "\n"
+        f"⚽ {league_name}: {home_name} vs {away_name}\n"
+        f"🕐 Kickoff: {_fmt_kickoff_cet(kickoff)} CET · "
+        f"{_fmt_kickoff_wib(kickoff)} WIB\n"
+        "\n"
+        f"🤖 Prediction: {_pick_label_en(pick, home_name, away_name)}\n"
+        f"Confidence: {conf_pct}%\n"
+        "\n"
+        f"Pre-match odds:\n{odds_line}\n"
+        "\n"
+        "📝 Result follows after the match.\n"
+        "⚠️ Statistical analysis · 18+ · betsplug.com"
+    )
+
+    nl_block = (
+        f"🎯 Gratis Pick — {_fmt_date_nl(kickoff)}\n"
+        "\n"
+        f"⚽ {league_name}: {home_name} vs {away_name}\n"
+        f"🕐 Aftrap: {_fmt_kickoff_cet(kickoff)} CET\n"
+        "\n"
+        f"🤖 Voorspelling: {_pick_label_nl(pick, home_name, away_name)}\n"
+        f"Zekerheid: {conf_pct}%\n"
+        "\n"
+        f"Pre-match odds:\n{odds_line}\n"
+        "\n"
+        "📝 Uitslag volgt na de wedstrijd.\n"
+        "⚠️ Statistische analyse · 18+ · betsplug.com"
+    )
+
+    return f"{en_block}\n\n---\n\n{nl_block}"
+
+
+def render_result_update(
+    prediction: Prediction,
+    home_score: int,
+    away_score: int,
+    was_correct: bool,
+    weekly_accuracy_pct: Optional[float] = None,
+) -> str:
+    """Return the bilingual result update for a completed fixture."""
+    match = prediction.match
+    home_name = match.home_team.name if match.home_team else "Home"
+    away_name = match.away_team.name if match.away_team else "Away"
+    pick = _infer_pick(prediction)
+    conf_pct = _fmt_confidence_pct(prediction.confidence)
+    ok_emoji = "✅" if was_correct else "❌"
+    en_verdict = "Correct" if was_correct else "Incorrect"
+    nl_verdict = "Correct" if was_correct else "Mis"
+    weekly_line_en = (
+        f"\n\n📊 Week accuracy: {round(weekly_accuracy_pct)}%"
+        if weekly_accuracy_pct is not None
+        else ""
+    )
+    weekly_line_nl = (
+        f"\n📊 Nauwkeurigheid deze week: {round(weekly_accuracy_pct)}%"
+        if weekly_accuracy_pct is not None
+        else ""
+    )
+
+    en_block = (
+        "✅ Result\n"
+        "\n"
+        f"⚽ {home_name} {home_score} – {away_score} {away_name}\n"
+        "\n"
+        f"🤖 Our pick: {_pick_label_en(pick, home_name, away_name)} "
+        f"({conf_pct}%)\n"
+        f"Result: {ok_emoji} {en_verdict}"
+        f"{weekly_line_en}"
+    )
+
+    nl_block = (
+        "✅ Uitslag\n"
+        "\n"
+        f"⚽ {home_name} {home_score} – {away_score} {away_name}\n"
+        "\n"
+        f"🤖 Onze pick: {_pick_label_nl(pick, home_name, away_name)} "
+        f"({conf_pct}%)\n"
+        f"Resultaat: {ok_emoji} {nl_verdict}"
+        f"{weekly_line_nl}"
+    )
+
+    return f"{en_block}\n\n---\n\n{nl_block}"
+
+
+def render_daily_summary(
+    date_utc: datetime,
+    rows: list[dict],
+    weekly_accuracy_pct: Optional[float] = None,
+) -> str:
+    """Return the bilingual daily summary.
+
+    ``rows`` is a list of dicts with keys::
+        - league       str
+        - home         str
+        - away         str
+        - pick         str   (HOME / DRAW / AWAY)
+        - home_score   Optional[int]
+        - away_score   Optional[int]
+        - was_correct  Optional[bool]   (None when fixture unresolved)
+    """
+    date_en = _fmt_date_en(date_utc)
+    date_nl = _fmt_date_nl(date_utc)
+
+    def _line_en(r: dict) -> str:
+        pick_str = _pick_label_en(r.get("pick"), r["home"], r["away"])
+        if r.get("home_score") is not None and r.get("away_score") is not None:
+            verdict = "✅" if r.get("was_correct") else "❌"
+            return (
+                f"• {r['home']} {r['home_score']}-{r['away_score']} "
+                f"{r['away']} — pick {pick_str} {verdict}"
+            )
+        return f"• {r['home']} vs {r['away']} — pick {pick_str} (pending)"
+
+    def _line_nl(r: dict) -> str:
+        pick_str = _pick_label_nl(r.get("pick"), r["home"], r["away"])
+        if r.get("home_score") is not None and r.get("away_score") is not None:
+            verdict = "✅" if r.get("was_correct") else "❌"
+            return (
+                f"• {r['home']} {r['home_score']}-{r['away_score']} "
+                f"{r['away']} — pick {pick_str} {verdict}"
+            )
+        return f"• {r['home']} vs {r['away']} — pick {pick_str} (volgt)"
+
+    total = len([r for r in rows if r.get("was_correct") is not None])
+    correct = len([r for r in rows if r.get("was_correct") is True])
+    weekly_en = (
+        f"\n📈 This week: {round(weekly_accuracy_pct)}%"
+        if weekly_accuracy_pct is not None
+        else ""
+    )
+    weekly_nl = (
+        f"\n📈 Deze week: {round(weekly_accuracy_pct)}%"
+        if weekly_accuracy_pct is not None
+        else ""
+    )
+    en_rows = "\n".join(_line_en(r) for r in rows) or "(no picks today)"
+    nl_rows = "\n".join(_line_nl(r) for r in rows) or "(geen picks vandaag)"
+
+    en_block = (
+        f"📊 Daily Summary — {date_en}\n"
+        "\n"
+        "Today's picks:\n"
+        f"{en_rows}\n"
+        "\n"
+        f"📈 Score today: {correct}/{total}"
+        f"{weekly_en}\n"
+        "\n"
+        "🔓 More picks + higher accuracy?\n"
+        "→ betsplug.com"
+    )
+
+    nl_block = (
+        f"📊 Dagoverzicht — {date_nl}\n"
+        "\n"
+        "Picks van vandaag:\n"
+        f"{nl_rows}\n"
+        "\n"
+        f"📈 Score vandaag: {correct}/{total}"
+        f"{weekly_nl}\n"
+        "\n"
+        "🔓 Meer picks + hogere accuracy?\n"
+        "→ betsplug.com"
+    )
+
+    return f"{en_block}\n\n---\n\n{nl_block}"
+
+
+__all__ = [
+    "render_pick_message",
+    "render_result_update",
+    "render_daily_summary",
+]
