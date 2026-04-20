@@ -41,6 +41,7 @@ import type { Testimonial } from "@/components/ui/testimonials-section";
 import type { ComparisonRow } from "@/components/ui/comparison-table";
 import { getLocaleValue } from "@/lib/sanity-data";
 import { useBotdTrackRecord } from "@/hooks/use-botd-track-record";
+import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { useBotdHistory } from "@/hooks/use-botd-history";
 import { PRIMARY_LEAGUES, getLeagueName } from "@/data/league-catalog";
 import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
@@ -220,6 +221,7 @@ export function HomeContent({
   const loc = useLocalizedHref();
   const featured = useFeaturedMatch();
   const botd = useBotdTrackRecord();
+  const potd = usePotdNumbers();
   const historySeries = useBotdHistory();
   const { stats, picks } = useHomepageFreePicks();
 
