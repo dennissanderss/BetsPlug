@@ -804,6 +804,82 @@ function DataTransparencyCard({
   );
 }
 
+// ─── SectionPhaseBanner — grote visuele scheiding tussen de twee
+//      hoofd-fases (Backtest bovenin, Live meting daaronder) + een
+//      derde voor de drilldown-sectie. User flagde de oude tab-layout
+//      als "onoverzichtelijk"; deze banners geven elke sectie een
+//      eigen header zodat "een normaal mens" meteen snapt wat volgt.
+
+function SectionPhaseBanner({
+  kicker,
+  title,
+  subtitle,
+  accent,
+}: {
+  kicker: string;
+  title: string;
+  subtitle: string;
+  accent: "emerald" | "blue" | "slate";
+}) {
+  const tint =
+    accent === "emerald"
+      ? "var(--accent-green)"
+      : accent === "blue"
+        ? "var(--accent-blue)"
+        : "230 4% 40%";
+  const kickerClass =
+    accent === "emerald"
+      ? "text-emerald-300"
+      : accent === "blue"
+        ? "text-blue-300"
+        : "text-slate-400";
+  return (
+    <section className="relative py-8 md:py-12">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-1/2 h-px -translate-y-1/2"
+        style={{
+          background: `linear-gradient(90deg, transparent 0%, hsl(${tint} / 0.35) 50%, transparent 100%)`,
+        }}
+      />
+      <div className="relative">
+        <div
+          className="relative overflow-hidden rounded-2xl p-5 text-center sm:p-7"
+          style={{
+            background: `linear-gradient(135deg, hsl(${tint} / 0.12) 0%, hsl(230 22% 9% / 0.9) 55%, hsl(${tint} / 0.14) 100%)`,
+            border: `1px solid hsl(${tint} / 0.28)`,
+            boxShadow: `0 0 0 1px hsl(${tint} / 0.08) inset, 0 10px 40px rgba(0,0,0,0.35)`,
+          }}
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -left-20 -top-20 h-[220px] w-[220px] rounded-full"
+            style={{ background: `hsl(${tint} / 0.22)`, filter: "blur(100px)" }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-20 -bottom-20 h-[220px] w-[220px] rounded-full"
+            style={{ background: `hsl(${tint} / 0.18)`, filter: "blur(100px)" }}
+          />
+          <div className="relative">
+            <span
+              className={`text-[11px] font-bold uppercase tracking-[0.22em] ${kickerClass}`}
+            >
+              {kicker}
+            </span>
+            <h2 className="text-heading mt-2 text-balance break-words text-xl text-[#ededed] sm:text-2xl lg:text-3xl">
+              {title}
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-[#a3a9b8]">
+              {subtitle}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── BOTD tier gate — voor BOTD en BOTD-Live tabs. Gold en Platinum
 //      zien de onderliggende sectie; Free en Silver krijgen een
 //      upgrade-teaser. We lezen tier uit localStorage zodat de admin
@@ -1810,74 +1886,274 @@ export default function TrackrecordPage() {
         </div>
       </div>
 
-      {/* Tab pills — gegroepeerd als Backtest | Live | Anders zodat
-           duidelijk is welke tabs historische simulatie tonen en welke
-           pre-match meting vanaf 18 april 2026. User feedback: "dikke
-           onderscheid tussen backtest bovenin en live onderin". */}
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-400/80">
-            Backtest
-          </span>
-          <div className="h-px flex-1 bg-gradient-to-r from-emerald-500/40 to-transparent" />
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {tabs
-            .filter((t) => t.key === "performance" || t.key === "botd")
-            .map(({ key, label, icon }) => (
-              <TabPill
-                key={key}
-                label={label}
-                icon={icon}
-                active={activeTab === key}
-                onClick={() => setActiveTab(key)}
-              />
-            ))}
+      {/* ═══════════════════════════════════════════════════════════
+           LINEAIRE STRUCTUUR (geen tabs meer).
+           User feedback was dat de tab-layout "onoverzichtelijk" was —
+           "een normaal mens begrijp dit niet". Daarom nu één scrollende
+           pagina met twee duidelijk gescheiden fases en één drilldown:
+             1. BACKTEST  — historische simulatie, per tier uitgesplitst
+             2. LIVE METING — pre-match meting, per tier uitgesplitst
+             3. SEGMENTEN  — drilldown per league/confidence
+           Elk blok heeft een eigen H2 + uitleg, opgeruimd in kaders.
+           ═══════════════════════════════════════════════════════════ */}
+
+      {/* ──────────────── BACKTEST PHASE BANNER ──────────────── */}
+      <SectionPhaseBanner
+        accent="emerald"
+        kicker="1 · Backtest"
+        title="Historische simulatie"
+        subtitle={
+          "Alles in deze sectie is berekend op afgelopen wedstrijden. " +
+          "Het model mag alleen data gebruiken die vóór de aftrap bekend was — " +
+          "geen cherry-picking, volledige dataset downloadbaar."
+        }
+      />
+
+      <div className="space-y-6 animate-slide-up">
+        {/* Accuracy over time */}
+        <ProfitabilityChart monthSegments={monthSegments} loading={monthLoading} />
+
+        {/* Accuracy by league */}
+        <div className="glass-card p-6">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-slate-100">
+              {t("trackrecord.accuracyByLeague")}
+            </h2>
+            <p className="text-sm text-slate-500 mt-0.5">
+              {t("trackrecord.accuracyByLeagueDesc")}
+            </p>
+          </div>
+          <SportAccuracySection filterParams={filterParams} />
         </div>
 
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-400/80">
-            Live meting · vanaf 18 apr 2026
-          </span>
-          <div className="h-px flex-1 bg-gradient-to-r from-blue-500/40 to-transparent" />
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {tabs
-            .filter((t) => t.key === "live" || t.key === "botd-live")
-            .map(({ key, label, icon }) => (
-              <TabPill
-                key={key}
-                label={label}
-                icon={icon}
-                active={activeTab === key}
-                onClick={() => setActiveTab(key)}
-              />
-            ))}
+        {/* Per-tier backtest — KPI tabel per Free/Silver/Gold/Platinum */}
+        <div className="glass-card p-6">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-slate-100">
+              Per tier — accuraatheid backtest
+            </h2>
+            <p className="text-sm text-slate-500 mt-0.5">
+              Zelfde historische data, gesplitst per tier-scope. Wissel
+              bovenaan tussen tiers om alleen één rij te zien.
+            </p>
+          </div>
+          {summaryLoading ? (
+            <div className="space-y-1.5">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-10 w-full rounded-lg bg-white/[0.04] animate-pulse"
+                />
+              ))}
+            </div>
+          ) : summary ? (
+            <PerTierBreakdownTable summary={summary} />
+          ) : (
+            <p className="py-8 text-center text-sm text-slate-500">
+              {t("trackrecord.noSummaryData")}
+            </p>
+          )}
         </div>
 
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-            Drilldown
-          </span>
-          <div className="h-px flex-1 bg-gradient-to-r from-slate-500/40 to-transparent" />
+        {/* Rolling accuracy chart */}
+        <div className="glass-card p-6">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-slate-100">
+              {t("trackrecord.accuracyTrend")}
+            </h2>
+            <p className="text-sm text-slate-500 mt-0.5">
+              {t("trackrecord.accuracyTrendDesc")}
+            </p>
+          </div>
+          {monthLoading ? (
+            <div className="h-72 w-full rounded-xl bg-white/[0.03] animate-pulse" />
+          ) : rollingData.length === 0 ? (
+            <div className="flex h-72 items-center justify-center text-sm text-slate-500">
+              {t("trackrecord.noMonthlyData")}
+            </div>
+          ) : (
+            <RollingAccuracyChart
+              data={rollingData}
+              title=""
+              windowLabel={t("trackrecord.monthlyAccuracy")}
+              showBaseline={false}
+              targetAccuracy={0.6}
+            />
+          )}
         </div>
-        <div className="flex flex-wrap gap-2">
-          {tabs
-            .filter((t) => t.key === "segments")
-            .map(({ key, label, icon }) => (
-              <TabPill
-                key={key}
-                label={label}
-                icon={icon}
-                active={activeTab === key}
-                onClick={() => setActiveTab(key)}
-              />
-            ))}
+
+        {/* Summary stats */}
+        <div className="glass-card p-6">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-slate-100">
+              {t("trackrecord.summaryStatistics")}
+            </h2>
+            <p className="text-sm text-slate-500 mt-0.5">
+              {t("trackrecord.summaryStatisticsDesc")}
+            </p>
+          </div>
+          {summaryLoading ? (
+            <div className="space-y-1.5">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-9 w-full rounded-lg bg-white/[0.04] animate-pulse"
+                />
+              ))}
+            </div>
+          ) : !summary ? (
+            <p className="py-8 text-center text-sm text-slate-500">
+              {t("trackrecord.noSummaryData")}
+            </p>
+          ) : (
+            <SummaryStatsTable summary={summary} />
+          )}
+        </div>
+
+        {/* Pick of the Day — backtest (Gold+ only) */}
+        <div className="glass-card p-6 border border-purple-500/20">
+          <div className="mb-4 flex items-center gap-2">
+            <Trophy className="h-5 w-5 text-purple-300" />
+            <div>
+              <h2 className="text-base font-semibold text-slate-100">
+                Pick of the Day — backtest
+              </h2>
+              <p className="text-sm text-slate-500 mt-0.5">
+                Dagelijkse pick met hoogste confidence, gesimuleerd op historische data.
+              </p>
+            </div>
+          </div>
+          <BotdTierGate>
+            <BotdTrackRecordSection />
+          </BotdTierGate>
+        </div>
+
+        {/* Related pages */}
+        <RelatedLinks
+          title={t("related.title")}
+          links={[
+            { label: t("related.strategyLab"), href: "/strategy", description: t("related.strategyLabDesc"), icon: FlaskConical },
+            { label: t("related.results"), href: "/results", description: t("related.resultsDesc"), icon: Trophy },
+            { label: t("related.predictions"), href: "/predictions", description: t("related.predictionsDesc"), icon: Sparkles },
+          ]}
+        />
+
+        {/* Dataset herkomst */}
+        <TrustFunnel />
+      </div>
+
+      {/* ──────────────── LIVE METING PHASE BANNER ──────────────── */}
+      <SectionPhaseBanner
+        accent="blue"
+        kicker="2 · Live meting · vanaf 18 apr 2026"
+        title="Pre-match meting die dagelijks groeit"
+        subtitle={
+          "Hieronder tellen alleen picks die strikt vóór de aftrap zijn vastgelegd. " +
+          "De teller begint op 0 en groeit met elke afgelopen wedstrijd — de eerlijke " +
+          "track record zonder cherry-picking."
+        }
+      />
+
+      <div className="space-y-6 animate-slide-up">
+        {/* Per-tier live meting */}
+        <div className="glass-card p-6">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-slate-100">
+              Per tier — live accuraatheid
+            </h2>
+            <p className="text-sm text-slate-500 mt-0.5">
+              Strikt pre-match picks sinds 18 april 2026, per tier uitgesplitst.
+              Zolang een tier onder 10 beoordeelde picks zit tonen we "wachten op
+              data" — kleine samples zijn geen conclusie.
+            </p>
+          </div>
+          <LiveMeasurementSection />
+        </div>
+
+        {/* Pick of the Day — live (Gold+ only) */}
+        <div className="glass-card p-6 border border-purple-500/20">
+          <div className="mb-4 flex items-center gap-2">
+            <Trophy className="h-5 w-5 text-purple-300" />
+            <div>
+              <h2 className="text-base font-semibold text-slate-100">
+                Pick of the Day — live meting
+              </h2>
+              <p className="text-sm text-slate-500 mt-0.5">
+                Dagelijkse BOTD pre-match vastgelegd. Gold en Platinum zien dezelfde stream.
+              </p>
+            </div>
+          </div>
+          <BotdTierGate>
+            <BotdLiveTrackingSection />
+          </BotdTierGate>
         </div>
       </div>
 
-      {/* ── Performance Tab ── */}
-      {activeTab === "performance" && (
+      {/* ──────────────── DRILLDOWN SEGMENTEN ──────────────── */}
+      <SectionPhaseBanner
+        accent="slate"
+        kicker="3 · Drilldown"
+        title="Segmenten — per competitie & confidence"
+        subtitle="Optioneel. Diepere breakdown van de backtest per league en per confidence-bucket voor wie zelf wil graven."
+      />
+
+      <div className="space-y-6 animate-slide-up">
+        <div className="glass-card p-6">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-slate-100">
+              {t("trackrecord.performanceByLeague")}
+            </h2>
+            <p className="text-sm text-slate-500 mt-0.5">
+              {t("trackrecord.performanceByLeagueDesc")}
+            </p>
+          </div>
+          <SegmentSection title={t("trackrecord.league")} groupBy="league" filterParams={filterParams} />
+        </div>
+
+        <div className="glass-card p-6">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-slate-100">
+              {t("trackrecord.performanceByConfidence")}
+            </h2>
+            <p className="text-sm text-slate-500 mt-0.5">
+              {t("trackrecord.performanceByConfidenceDesc")}
+            </p>
+          </div>
+          <SegmentSection
+            title={t("trackrecord.confidenceBucket")}
+            groupBy="confidence_bucket"
+            filterParams={filterParams}
+          />
+        </div>
+
+        <div className="glass-card p-5 flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-semibold text-slate-100">
+              {t("trackrecord.exportTitle")}
+            </h3>
+            <p className="text-xs text-slate-500 mt-0.5">
+              {t("trackrecord.exportDesc")}
+            </p>
+          </div>
+          <a
+            href={api.getTrackrecordExportUrl(
+              undefined,
+              pickTier !== "all" ? pickTier : undefined,
+            )}
+            download
+            className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-400 transition-all hover:bg-emerald-500/20"
+          >
+            <Download className="h-4 w-4" />
+            {t("trackrecord.exportCta")}
+          </a>
+        </div>
+      </div>
+
+      {/* ── Legacy tab renderblocks — dead code, tabs zijn verwijderd.
+           Hieronder worden ze niet meer gerenderd (activeTab mag ook
+           niet meer bestaan) maar we houden de no-op guards zodat
+           TypeScript niet klaagt tot de refactor helemaal is opgeschoond. */}
+      {false && activeTab === "performance" && (
         <div className="space-y-6 animate-slide-up">
           {/* Accuracy over time — real data from monthSegments */}
           <ProfitabilityChart monthSegments={monthSegments} loading={monthLoading} />
@@ -1944,7 +2220,7 @@ export default function TrackrecordPage() {
       )}
 
       {/* ── Segments Tab ── */}
-      {activeTab === "segments" && (
+      {false && activeTab === "segments" && (
         <div className="space-y-6 animate-slide-up">
           {/* By League */}
           <div className="glass-card p-6">
@@ -2014,28 +2290,22 @@ export default function TrackrecordPage() {
         </div>
       )}
 
-      {/* ── Pick of the Day Tab ── Gold+ paywall. Free/Silver krijgen
-           een upgrade-teaser; Gold/Platinum de echte sectie. */}
-      {activeTab === "botd" && (
+      {/* Legacy dead code — tab-gated blocks nu uitgezet. Vervangen door
+           de lineaire layout hierboven. Mag opgeruimd worden in een
+           volgende commit zodra de refactor stabiel staat in prod. */}
+      {false && activeTab === "botd" && (
         <div className="space-y-6 animate-slide-up">
           <BotdTierGate>
             <BotdTrackRecordSection />
           </BotdTierGate>
         </div>
       )}
-
-      {/* ── Live Meting Tab ── per-tier live meting is voor alle
-           ingelogde users zichtbaar (ook Free/Silver — het ZIJN hun
-           eigen tier-cijfers). */}
-      {activeTab === "live" && (
+      {false && activeTab === "live" && (
         <div className="space-y-6 animate-slide-up">
           <LiveMeasurementSection />
         </div>
       )}
-
-      {/* ── BOTD Live Tab ── Strict pre-match Pick-of-the-Day stream,
-           óók Gold+ only. Free/Silver zien de upgrade-teaser. */}
-      {activeTab === "botd-live" && (
+      {false && activeTab === "botd-live" && (
         <div className="space-y-6 animate-slide-up">
           <BotdTierGate>
             <BotdLiveTrackingSection />
