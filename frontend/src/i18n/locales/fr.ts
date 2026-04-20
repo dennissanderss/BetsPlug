@@ -2035,5 +2035,5 @@ const fr = {
   "welcomeBanner.stepPrefix": "Étape",
   "welcomeBanner.subtitle": "Notre IA analyse les données du football (forme, face-à-face, classement et force de l'équipe) pour prévoir l'issue la plus probable des matchs à venir.",
   "welcomeBanner.title": "Voici comment fonctionne BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default fr;

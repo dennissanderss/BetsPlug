@@ -2035,5 +2035,5 @@ const de = {
   "welcomeBanner.stepPrefix": "Schritt",
   "welcomeBanner.subtitle": "Unsere KI analysiert Fußballdaten – Form, Kopf-an-Kopf-Rennen, Rangliste und Teamstärke –, um den wahrscheinlichsten Ausgang bevorstehender Spiele vorherzusagen.",
   "welcomeBanner.title": "So funktioniert BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default de;
