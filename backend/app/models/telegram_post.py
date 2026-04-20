@@ -37,6 +37,7 @@ from typing import Optional
 import uuid
 
 from sqlalchemy import (
+    BigInteger,
     DateTime,
     ForeignKey,
     Index,
@@ -61,7 +62,9 @@ class TelegramPost(Base, UUIDPrimaryKey, TimestampMixin):
     )
 
     channel: Mapped[str] = mapped_column(String(128), nullable=False)
-    telegram_message_id: Mapped[int] = mapped_column(nullable=False)
+    # Telegram message IDs are 64-bit ints; keep in sync with the
+    # Alembic migration's sa.BigInteger() column definition.
+    telegram_message_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
 
     # One of: 'pick', 'result_update', 'daily_summary'.
     # Kept as a plain varchar rather than a Postgres ENUM so adding a
