@@ -24,8 +24,8 @@ import { LiveMeasurementSection } from "./live-measurement-section";
 import { BotdLiveTrackingSection } from "./botd-live-tracking-section";
 
 interface LockedLivePlaceholderProps {
-  /** Visible section number (e.g. "2" or "4"). */
-  number: "2" | "4";
+  /** Visible section number (e.g. "2", "3", or "4"). */
+  number: "2" | "3" | "4";
   /** Which data surface this placeholder replaces. */
   variant: "tier" | "botd";
   /** HTML anchor id for TOC links. */
