@@ -676,7 +676,15 @@ async def job_botd_backfill_startup():
     destijds een poisoned-session cascade had of waar de pre-match
     lock gemist is. Thin wrapper around the shared runner in
     admin_backfill._run_botd_backfill — zelfde logic als achter de
-    admin-knop zodat het resultaat identiek is."""
+    admin-knop zodat het resultaat identiek is.
+
+    Chained evaluator: zodra de backfill verse predictions heeft
+    gegenereerd voor al-gespeelde matches, roepen we meteen
+    job_evaluate_predictions aan. Zonder die chain moet de gebruiker
+    tot max 20 min wachten tot de volgende periodieke evaluator-run,
+    waarin de nieuwe rijen ✅/❌ krijgen. Fouten in de chain worden
+    gelogd maar niet opnieuw gegooid — het periodieke eval-job vangt
+    ze daarna alsnog op."""
     log.info("CRON: BOTD backfill starting…")
     try:
         from app.db.session import async_session_factory
@@ -689,6 +697,16 @@ async def job_botd_backfill_startup():
             result.get("backfilled", 0),
             result.get("errors", 0),
         )
+
+        if result.get("backfilled", 0) > 0:
+            try:
+                log.info("CRON: Chaining evaluator after backfill…")
+                await job_evaluate_predictions()
+            except Exception as chain_exc:
+                log.warning(
+                    "CRON: Chained evaluator after backfill failed: %s",
+                    chain_exc,
+                )
     except Exception as exc:
         log.error("CRON: BOTD backfill failed: %s", exc, exc_info=True)
 
