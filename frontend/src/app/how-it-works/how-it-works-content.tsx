@@ -1351,6 +1351,82 @@ function AccuracyVsConfidenceSection() {
           </motion.div>
         </div>
 
+        {/* Practical example — how both numbers work together */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="mt-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 sm:p-6"
+        >
+          <div className="mb-4 flex items-center gap-2">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-[#a3a9b8]">
+              {t("hiw.calibPracticeLabel")}
+            </span>
+            <span className="h-px flex-1 bg-white/[0.06]" />
+          </div>
+          <p className="mb-5 text-sm font-semibold text-[#ededed]">
+            {t("hiw.calibPracticeTitle")}
+          </p>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
+            {/* Step 1 */}
+            <div className="flex-1 rounded-xl border border-[#60a5fa]/20 bg-[#60a5fa]/[0.05] p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#60a5fa]">
+                {t("hiw.calibPracticeStep1Label")}
+              </p>
+              <p className="mt-2 text-sm text-[#ededed]">
+                {t("hiw.calibPracticeStep1Desc")}
+              </p>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="relative h-2 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
+                  <div className="h-full rounded-full bg-[#60a5fa]" style={{ width: "68%" }} />
+                </div>
+                <span className="text-sm font-bold tabular-nums text-[#60a5fa]">68%</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center text-[#6b7280]">
+              <span className="text-xl">→</span>
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex-1 rounded-xl border border-[#4ade80]/20 bg-[#4ade80]/[0.05] p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
+                {t("hiw.calibPracticeStep2Label")}
+              </p>
+              <p className="mt-2 text-sm text-[#ededed]">
+                {t("hiw.calibPracticeStep2Desc")}
+              </p>
+              <div className="mt-3 flex flex-wrap gap-1">
+                {Array.from({ length: 50 }, (_, i) => (
+                  <span
+                    key={i}
+                    className={
+                      "h-2 w-2 rounded-sm " +
+                      (i < 34 ? "bg-[#4ade80]/70" : "bg-red-500/30")
+                    }
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center text-[#6b7280]">
+              <span className="text-xl">→</span>
+            </div>
+
+            {/* Result */}
+            <div className="flex-1 rounded-xl border border-yellow-400/20 bg-yellow-400/[0.05] p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-yellow-400">
+                68% ≈ 68%
+              </p>
+              <p className="mt-2 text-sm text-[#ededed]">
+                {t("hiw.calibPracticeResultDesc")}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
         {/* Bottom calibration note */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

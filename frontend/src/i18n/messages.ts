@@ -1134,6 +1134,14 @@ const en = {
   "hiw.calibBottomDesc":
     "A well-built model has accuracy that mirrors its confidence. If we publish a 70% pick, it should hit ~70% over time. You can check it live on the track record page — every pick, win or loss.",
 
+  "hiw.calibPracticeLabel": "In practice",
+  "hiw.calibPracticeTitle": "How the two numbers come together",
+  "hiw.calibPracticeStep1Label": "Before kick-off",
+  "hiw.calibPracticeStep1Desc": "Model says: Ajax wins — 68% confidence",
+  "hiw.calibPracticeStep2Label": "After 50 similar picks (≈68% confidence)",
+  "hiw.calibPracticeStep2Desc": "34 correct out of 50 = 68% accuracy",
+  "hiw.calibPracticeResultDesc": "68% promised = 68% delivered — model is calibrated ✓",
+
   /* Bet of the Day dedicated section */
   "hiw.botdBadge": "Bet of the Day",
   "hiw.botdTitleA": "One pick a day.",
@@ -3437,6 +3445,13 @@ const nl: Dictionary = {
   "hiw.calibBadge": "Twee cijfers, twee betekenissen",
   "hiw.calibBottomDesc": "Een goed gebouwd model heeft nauwkeurigheid die aansluit bij zijn betrouwbaarheid. Als we een pick van 70% publiceren, moet die over de tijd ~70% kloppen. Je kunt het live controleren op de trackrecord-pagina — elke pick, winst of verlies.",
   "hiw.calibBottomTitle": "Gekalibreerd = de twee lijnen lopen gelijk",
+  "hiw.calibPracticeLabel": "In de praktijk",
+  "hiw.calibPracticeTitle": "Hoe de twee cijfers samenkomen",
+  "hiw.calibPracticeStep1Label": "Vóór de aftrap",
+  "hiw.calibPracticeStep1Desc": "Model zegt: Ajax wint — 68% betrouwbaarheid",
+  "hiw.calibPracticeStep2Label": "Na 50 vergelijkbare picks (≈68% betrouwbaarheid)",
+  "hiw.calibPracticeStep2Desc": "34 goed van de 50 = 68% nauwkeurigheid",
+  "hiw.calibPracticeResultDesc": "68% beloofd = 68% geleverd — model is gekalibreerd ✓",
   "hiw.calibConfDef": "Hoe zeker het model is vóór de wedstrijd — een zelfbeoordeling van 0% tot 100%. De tier-drempel filtert op dit getal.",
   "hiw.calibConfExampleDesc": "Een pick met 75% betrouwbaarheid betekent: over veel vergelijkbare picks, zou deze uitkomst ongeveer 75% van de tijd winnen.",
   "hiw.calibConfExampleLabel": "Voorbeeld · model zegt",
