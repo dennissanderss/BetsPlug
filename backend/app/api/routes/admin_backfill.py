@@ -433,60 +433,118 @@ async def backfill_botd_missed(
     while cursor < today_utc:
         day_end = cursor + timedelta(days=1)
         date_str = cursor.strftime("%Y-%m-%d")
+        log.info("BACKFILL: day=%s — step 1 check", date_str)
 
         # ── Step 1: already have a valid BOTD-eligible live pick for this day? ─
-        has_live = await db.scalar(
-            select(Prediction.id)
-            .join(Match, Match.id == Prediction.match_id)
-            .where(Prediction.prediction_source == "live")
-            .where(Prediction.predicted_at < Match.scheduled_at)
-            .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
-            .where(Match.scheduled_at >= cursor)
-            .where(Match.scheduled_at < day_end)
-            .limit(1)
-        )
+        try:
+            has_live = await db.scalar(
+                select(Prediction.id)
+                .join(Match, Match.id == Prediction.match_id)
+                .where(Prediction.prediction_source == "live")
+                .where(Prediction.predicted_at < Match.scheduled_at)
+                .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+                .where(Match.scheduled_at >= cursor)
+                .where(Match.scheduled_at < day_end)
+                .limit(1)
+            )
+        except Exception as exc:
+            await db.rollback()
+            errors.append(f"{date_str}/step1: {type(exc).__name__}: {exc}")
+            log.error("BACKFILL: day=%s step 1 failed", date_str, exc_info=True)
+            cursor += timedelta(days=1)
+            continue
+
         if has_live:
+            log.info("BACKFILL: day=%s — already covered, skip", date_str)
+            results.append({
+                "date": date_str,
+                "action": "skipped_already_live",
+                "prediction_id": str(has_live),
+                "confidence": 0.0,
+                "original_source": "live",
+            })
             cursor += timedelta(days=1)
             continue
 
         # ── Step 2: find best existing pre-match prediction for any match today ─
-        best_row = await db.execute(
-            select(Prediction)
-            .join(Match, Match.id == Prediction.match_id)
-            .where(Match.scheduled_at >= cursor)
-            .where(Match.scheduled_at < day_end)
-            .where(Prediction.predicted_at < Match.scheduled_at)
-            .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
-            .where(Prediction.created_at >= V81_DEPLOYMENT_CUTOFF)
-            .order_by(Prediction.confidence.desc())
-            .limit(1)
-        )
-        existing_pred = best_row.scalar_one_or_none()
-
-        if existing_pred:
-            # Relabel: was pre-match, just wrong source tag due to scheduler bug
-            await db.execute(
-                sql_update(Prediction)
-                .where(Prediction.id == existing_pred.id)
-                .values(prediction_source="live")
-            )
-            await db.commit()
-            results.append({
-                "date": date_str,
-                "action": "relabelled",
-                "prediction_id": str(existing_pred.id),
-                "confidence": round(existing_pred.confidence * 100, 1),
-                "original_source": existing_pred.prediction_source,
-            })
-        else:
-            # ── Step 3: no pre-match prediction exists — generate a fresh one ─
-            day_matches = (await db.execute(
-                select(Match)
+        try:
+            best_row = await db.execute(
+                select(Prediction)
+                .join(Match, Match.id == Prediction.match_id)
                 .where(Match.scheduled_at >= cursor)
                 .where(Match.scheduled_at < day_end)
-                .where(Match.status == MatchStatus.FINISHED)
-                .limit(20)
-            )).scalars().all()
+                .where(Prediction.predicted_at < Match.scheduled_at)
+                .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+                .where(Prediction.created_at >= V81_DEPLOYMENT_CUTOFF)
+                .order_by(Prediction.confidence.desc())
+                .limit(1)
+            )
+            existing_pred = best_row.scalar_one_or_none()
+        except Exception as exc:
+            await db.rollback()
+            errors.append(f"{date_str}/step2: {type(exc).__name__}: {exc}")
+            log.error("BACKFILL: day=%s step 2 failed", date_str, exc_info=True)
+            cursor += timedelta(days=1)
+            continue
+
+        if existing_pred:
+            log.info(
+                "BACKFILL: day=%s — step 2 relabel pred=%s conf=%.3f source=%s",
+                date_str, existing_pred.id, existing_pred.confidence,
+                existing_pred.prediction_source,
+            )
+            original_source = existing_pred.prediction_source
+            try:
+                await db.execute(
+                    sql_update(Prediction)
+                    .where(Prediction.id == existing_pred.id)
+                    .values(prediction_source="live")
+                )
+                await db.commit()
+                results.append({
+                    "date": date_str,
+                    "action": "relabelled",
+                    "prediction_id": str(existing_pred.id),
+                    "confidence": round(existing_pred.confidence * 100, 1),
+                    "original_source": original_source,
+                })
+            except Exception as exc:
+                await db.rollback()
+                errors.append(
+                    f"{date_str}/relabel/{existing_pred.id}: "
+                    f"{type(exc).__name__}: {exc}"
+                )
+                log.error(
+                    "BACKFILL: day=%s relabel failed", date_str, exc_info=True,
+                )
+        else:
+            log.info("BACKFILL: day=%s — step 3 generate", date_str)
+            # ── Step 3: no pre-match prediction exists — generate a fresh one ─
+            try:
+                day_matches = (await db.execute(
+                    select(Match)
+                    .where(Match.scheduled_at >= cursor)
+                    .where(Match.scheduled_at < day_end)
+                    .where(Match.status == MatchStatus.FINISHED)
+                    .limit(20)
+                )).scalars().all()
+            except Exception as exc:
+                await db.rollback()
+                errors.append(f"{date_str}/step3-load: {type(exc).__name__}: {exc}")
+                log.error("BACKFILL: day=%s step 3 load failed",
+                             date_str, exc_info=True)
+                cursor += timedelta(days=1)
+                continue
+
+            log.info(
+                "BACKFILL: day=%s — %d finished matches available",
+                date_str, len(day_matches),
+            )
+            if not day_matches:
+                errors.append(
+                    f"{date_str}/step3: no FINISHED matches found — "
+                    f"either no matches ingested for this day, or none played yet"
+                )
 
             best_pred_id = None
             best_conf = 0.0
@@ -494,37 +552,61 @@ async def backfill_botd_missed(
 
             for m in day_matches:
                 try:
-                    pred = await forecast_service.generate_forecast(m.id, db, source="live")
+                    pred = await forecast_service.generate_forecast(
+                        m.id, db, source="live"
+                    )
+                    await db.commit()
                     if pred and pred.confidence > best_conf:
                         best_conf = pred.confidence
                         best_pred_id = pred.id
                         best_kickoff = m.scheduled_at
                 except Exception as exc:
-                    errors.append(f"{date_str}/{m.id}: {exc}")
+                    await db.rollback()
+                    errors.append(
+                        f"{date_str}/generate/{m.id}: "
+                        f"{type(exc).__name__}: {exc}"
+                    )
+                    log.error(
+                        "BACKFILL: day=%s generate match=%s failed",
+                        date_str, m.id, exc_info=True,
+                    )
 
             if best_pred_id and best_kickoff:
                 fake_ts = best_kickoff - timedelta(hours=1)
-                await db.execute(
-                    sql_update(Prediction)
-                    .where(Prediction.id == best_pred_id)
-                    .values(
-                        prediction_source="live",
-                        predicted_at=fake_ts,
-                        locked_at=fake_ts,
-                        lead_time_hours=1.0,
+                try:
+                    await db.execute(
+                        sql_update(Prediction)
+                        .where(Prediction.id == best_pred_id)
+                        .values(
+                            prediction_source="live",
+                            predicted_at=fake_ts,
+                            locked_at=fake_ts,
+                            lead_time_hours=1.0,
+                        )
                     )
-                )
-                await db.commit()
-                results.append({
-                    "date": date_str,
-                    "action": "generated",
-                    "prediction_id": str(best_pred_id),
-                    "confidence": round(best_conf * 100, 1),
-                    "original_source": "backtest→live",
-                })
+                    await db.commit()
+                    results.append({
+                        "date": date_str,
+                        "action": "generated",
+                        "prediction_id": str(best_pred_id),
+                        "confidence": round(best_conf * 100, 1),
+                        "original_source": "backtest→live",
+                    })
+                except Exception as exc:
+                    await db.rollback()
+                    errors.append(
+                        f"{date_str}/promote/{best_pred_id}: "
+                        f"{type(exc).__name__}: {exc}"
+                    )
+                    log.error(
+                        "BACKFILL: day=%s promote failed", date_str, exc_info=True,
+                    )
 
         cursor += timedelta(days=1)
 
+    log.info(
+        "BACKFILL: done — %d results, %d errors", len(results), len(errors),
+    )
     return {
         "backfilled": len(results),
         "errors": len(errors),
