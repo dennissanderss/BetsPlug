@@ -64,6 +64,20 @@ CONFIDENCE_GOLD = 0.70           # Gold tier
 CONFIDENCE_PLATINUM = 0.75       # Platinum tier
 
 
+def _botd_league_filter():
+    """SQLAlchemy WHERE: match must be in a Gold-tier league (top 10).
+
+    Centralised so every BOTD-scoped endpoint (main, history,
+    track-record, live-tracking, model-validation, backfill) selects
+    from exactly the same pool. Prevents the historical bug where
+    /live-tracking happily returned CSL/MLS/Brasileirão picks while
+    the main BOTD endpoint — filtering on LEAGUES_GOLD — silently
+    rejected those same rows.
+    """
+    from app.core.tier_leagues import LEAGUES_GOLD
+    return Match.league_id.in_(LEAGUES_GOLD)
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # v6.3: Historical accuracy endpoint for BOTD picks
 # ─────────────────────────────────────────────────────────────────────────────
@@ -105,12 +119,12 @@ async def get_botd_history(
         # v8.1 filter — applied inside 'live' branch too (old pipeline also had
         # prediction_source='live' from pre-fix v8.0 Celery runs)
         .where(trackrecord_filter())
+        .where(_botd_league_filter())
         .order_by(Match.scheduled_at.desc())
     )
-    # access_filter intentionally not applied: BOTD threshold is Silver
-    # (≥0.65) so by definition picks can never be Free. For anonymous
-    # visitors access_filter(FREE) excludes everything ≥ Silver → empty
-    # response. The pick_tier field on each row carries the paywall cue.
+    # access_filter intentionally not applied: BOTD threshold is Gold
+    # (≥0.70) so by definition picks can never be Free. The pick_tier
+    # field on each row carries the paywall cue.
     rows = (await db.execute(stmt)).all()
     if not rows:
         stmt_fallback = (
@@ -120,6 +134,7 @@ async def get_botd_history(
             .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
             # v8.1 filter
             .where(trackrecord_filter())
+            .where(_botd_league_filter())
             .order_by(Match.scheduled_at.desc())
         )
         rows = (await db.execute(stmt_fallback)).all()
@@ -250,8 +265,10 @@ async def _build_botd_section(
         stmt = stmt.where(Prediction.prediction_source == "live")
     if require_pre_match:
         stmt = stmt.where(Prediction.predicted_at < Match.scheduled_at)
+    # Same league pool as main BOTD — top-10 Gold-tier leagues only.
+    stmt = stmt.where(_botd_league_filter())
     # access_filter intentionally not applied: BOTD sections start at
-    # Silver floor (≥0.65), so anon Free-tier users would see nothing.
+    # Gold floor (≥0.70), so anon Free-tier users would see nothing.
 
     rows = (await db.execute(stmt)).all()
 
@@ -505,8 +522,9 @@ async def get_botd_track_record(
             Prediction.confidence >= BOTD_MIN_CONFIDENCE,
             Prediction.prediction_source == "live",
         )
-        # v8.1 filter
+        # v8.1 filter + BOTD league-pool
         .where(trackrecord_filter())
+        .where(_botd_league_filter())
         .order_by(Match.scheduled_at)
     )
     # access_filter intentionally not applied — see note in /history.
@@ -519,8 +537,9 @@ async def get_botd_track_record(
             .join(Match, Match.id == Prediction.match_id)
             .outerjoin(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
             .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
-            # v8.1 filter
+            # v8.1 filter + BOTD league-pool
             .where(trackrecord_filter())
+            .where(_botd_league_filter())
             .order_by(Match.scheduled_at)
         )
         rows = (await db.execute(stmt_fallback)).all()

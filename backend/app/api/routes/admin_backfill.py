@@ -406,6 +406,7 @@ async def _run_botd_backfill(db: AsyncSession) -> dict:
     from sqlalchemy import update as sql_update
     from app.api.routes.betoftheday import LIVE_BOTD_START, BOTD_MIN_CONFIDENCE
     from app.core.prediction_filters import V81_DEPLOYMENT_CUTOFF
+    from app.core.tier_leagues import LEAGUES_GOLD
     from app.forecasting.forecast_service import ForecastService
 
     today_utc = datetime.now(timezone.utc).replace(
@@ -430,6 +431,7 @@ async def _run_botd_backfill(db: AsyncSession) -> dict:
                 .where(Prediction.prediction_source == "live")
                 .where(Prediction.predicted_at < Match.scheduled_at)
                 .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+                .where(Match.league_id.in_(LEAGUES_GOLD))
                 .where(Match.scheduled_at >= cursor)
                 .where(Match.scheduled_at < day_end)
                 .limit(1)
@@ -462,6 +464,7 @@ async def _run_botd_backfill(db: AsyncSession) -> dict:
                 .where(Match.scheduled_at < day_end)
                 .where(Prediction.predicted_at < Match.scheduled_at)
                 .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+                .where(Match.league_id.in_(LEAGUES_GOLD))
                 .where(Prediction.created_at >= V81_DEPLOYMENT_CUTOFF)
                 .order_by(Prediction.confidence.desc())
                 .limit(1)
@@ -513,6 +516,7 @@ async def _run_botd_backfill(db: AsyncSession) -> dict:
                     .where(Match.scheduled_at >= cursor)
                     .where(Match.scheduled_at < day_end)
                     .where(Match.status == MatchStatus.FINISHED)
+                    .where(Match.league_id.in_(LEAGUES_GOLD))
                     .limit(20)
                 )).scalars().all()
             except Exception as exc:
