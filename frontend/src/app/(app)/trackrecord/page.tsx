@@ -1554,74 +1554,20 @@ export default function TrackrecordPage() {
   const { t, locale } = useTranslations();
   const isNl = locale === "nl";
   const [mainTab, setMainTab] = React.useState<"live" | "backtest">("live");
-  const [dateFrom, setDateFrom] = React.useState("");
-  const [dateTo, setDateTo] = React.useState("");
-  const [sportId, setSportId] = React.useState("all");
-  const [leagueId, setLeagueId] = React.useState("all");
-  // v8.3 — public tier selector. "all" means "whatever the caller has
-  // access to"; the other values override access_filter on the backend.
   const [pickTier, setPickTier] = React.useState<
     "all" | "free" | "silver" | "gold" | "platinum"
   >("all");
 
-  // Build filter params for API calls
   const filterParams = React.useMemo(() => {
     const p: Record<string, string> = {};
-    if (dateFrom) p.date_from = dateFrom;
-    if (dateTo) p.date_to = dateTo;
-    if (sportId !== "all") p.sport_id = sportId;
-    if (leagueId !== "all") p.league_id = leagueId;
     if (pickTier !== "all") p.pick_tier = pickTier;
     return p;
-  }, [dateFrom, dateTo, sportId, leagueId, pickTier]);
+  }, [pickTier]);
 
   const { data: summary, isLoading: summaryLoading } = useQuery({
     queryKey: ["trackrecord-summary", filterParams],
     queryFn: () => api.getTrackrecordSummary(filterParams),
   });
-
-  const { data: monthSegments, isLoading: monthLoading } = useQuery({
-    queryKey: ["trackrecord-segments", "month", filterParams],
-    queryFn: () => api.getTrackrecordSegments("month", filterParams),
-  });
-
-  const { data: sports } = useQuery<Sport[]>({
-    queryKey: ["sports"],
-    queryFn: () => api.getSports(),
-  });
-
-  const { data: leagues } = useQuery<League[]>({
-    queryKey: ["leagues", sportId],
-    queryFn: () => api.getLeagues(sportId !== "all" ? sportId : undefined),
-  });
-
-  // BOTD (Pick of the Day) track record — hero stat
-  const { data: botdStats } = useQuery({
-    queryKey: ["botd-track-record-trackrecord"],
-    queryFn: async () => {
-      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-      const resp = await fetch(`${API}/bet-of-the-day/track-record`);
-      if (!resp.ok) return null;
-      return resp.json() as Promise<{
-        accuracy_pct: number;
-        total_picks: number;
-        evaluated: number;
-        correct: number;
-        current_streak: number;
-        avg_confidence: number;
-      }>;
-    },
-  });
-
-  // Transform monthly segments to RollingAccuracyChart format
-  const rollingData: RollingAccuracyPoint[] = React.useMemo(
-    () =>
-      (monthSegments ?? []).map((s: SegmentPerformance) => ({
-        date: s.segment_value,
-        accuracy: s.accuracy,
-      })),
-    [monthSegments]
-  );
 
   return (
     <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
@@ -1678,451 +1624,129 @@ export default function TrackrecordPage() {
         </div>
       </div>
 
-      {/* v8.3 — public tier selector. Lets any visitor audit the track
-          record of any tier (Free can see Platinum's numbers and vice
-          versa). Updates every KPI, chart, segment and CSV export. */}
-      {mainTab === "backtest" && (
-      <TierTabsStrip value={pickTier} onChange={setPickTier} />
-      )}
-
       {/* ──────────────── BACKTEST TAB CONTENT ──────────────── */}
       {mainTab === "backtest" && (<>
 
-      {/* v6.2.1: Data transparency card (replaces the old methodology banner) */}
-      <DataTransparencyCard summary={summary} loading={summaryLoading} pickTier={pickTier} />
-
-      {/* 1. Live Performance Banner — real data only */}
-      <LivePerformanceBanner summary={summary} loading={summaryLoading} />
-
-      {/* KPI row — simplified, user-friendly */}
-      {summaryLoading ? (
-        <KpiSkeletons />
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 animate-slide-up">
-          <KpiCard
-            title="Total Predictions"
-            value={
-              summary && summary.total_predictions > 0
-                ? summary.total_predictions.toLocaleString()
-                : "—"
-            }
-            subtitle="Verified match predictions"
-            icon={Target}
-            accent="blue"
-          />
-          <KpiCard
-            title="Accuracy"
-            value={
-              summary && summary.total_predictions > 0
-                ? formatPercent(summary.accuracy)
-                : "—"
-            }
-            subtitle={
-              summary && summary.total_predictions > 0
-                ? "On all 3-way predictions"
-                : "Awaiting first evaluation"
-            }
-            icon={TrendingUp}
-            accent="green"
-          />
-          <KpiCard
-            title="Pick of the Day"
-            value={
-              !botdStats
-                ? " - "
-                : (botdStats.evaluated ?? 0) > 0
-                  ? `${botdStats.accuracy_pct}%`
-                  : "—"
-            }
-            subtitle={
-              !botdStats
-                ? "Loading..."
-                : (botdStats.evaluated ?? 0) > 0
-                  ? `${botdStats.evaluated} evaluated, ${botdStats.correct} correct`
-                  : `${botdStats.total_picks} picks — awaiting first result`
-            }
-            icon={Star}
-            accent="gold"
-            highlight
-          />
-          <KpiCard
-            title="Matches Analysed"
-            value={summary?.period_start ? "Aug 2024 - Present" : " - "}
-            subtitle="Continuous AI analysis every matchday"
-            icon={Calendar}
-            accent="blue"
-          />
-        </div>
-      )}
-
-      {/* BOTD Highlight Section — hero USP. Only render when there is at
-          least one evaluated pick; otherwise the banner would shout "0%
-          accuracy" while merely waiting for matches to finish. */}
-      {botdStats && botdStats.total_picks > 0 && (botdStats.evaluated ?? 0) > 0 && (
-        <div className="relative overflow-hidden rounded-2xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/[0.08] via-amber-500/[0.05] to-transparent p-6 sm:p-8 animate-slide-up">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/[0.03] rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-          <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-yellow-500/15 ring-1 ring-yellow-500/30">
-              <Trophy className="h-7 w-7 text-yellow-400" />
-            </div>
-            <div className="flex-1 space-y-2">
-              <div className="flex items-center gap-3 flex-wrap">
-                <h2 className="text-xl sm:text-2xl font-bold text-slate-100">
-                  Pick of the Day:{" "}
-                  <span className="text-yellow-400">{botdStats.accuracy_pct}% accuracy</span>
-                </h2>
-                {botdStats.current_streak > 0 && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 text-xs font-semibold text-emerald-400">
-                    <Zap className="h-3 w-3" />
-                    {botdStats.current_streak} streak
-                  </span>
-                )}
-              </div>
-              <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl">
-                {botdStats.correct} correct out of {botdStats.evaluated} evaluated picks.
-                Every day, our AI selects the single match it is most confident about.
-                High-confidence picks only — that is our edge.
-              </p>
-            </div>
-            <Link
-              href="/bet-of-the-day"
-              className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-yellow-500/15 border border-yellow-500/30 px-5 py-2.5 text-sm font-semibold text-yellow-200 hover:bg-yellow-500/25 hover:border-yellow-500/40 transition-colors"
-            >
-              <Star className="h-4 w-4" />
-              View Today&apos;s Pick
-            </Link>
-          </div>
-        </div>
-      )}
-
-      {/* No-data notice when system is new */}
-      {!summaryLoading && (!summary || summary.total_predictions === 0) && (
-        <div className="flex items-start gap-3 rounded-xl border border-blue-500/20 bg-blue-500/[0.04] p-5">
-          <AlertTriangle className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <p className="text-sm font-semibold text-blue-400">{t("trackrecord.noPredictionDataYet")}</p>
-            <p className="text-xs leading-relaxed text-slate-400">
-              {t("trackrecord.noPredictionDataYetDesc")}
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* 2. Recent Predictions Feed — real API data.
-          The tier-tabs only filter AGGREGATE stats (summary, segments,
-          calibration, CSV). The picks feed is always scoped to the
-          caller's subscription via access_filter() on the backend, so
-          clicking "Platinum" while on Free would show Platinum stats
-          but still render the viewer's own Free picks here — that
-          mismatch was confusing users. Hide the feed (with an
-          explanatory card) when a single tier is selected; show it
-          again on "All tiers". */}
-      {pickTier === "all" ? (
-        <RecentPredictionsFeed />
-      ) : (
-        <div className="glass-card p-6 animate-slide-up">
-          <div className="flex items-start gap-3">
-            <Database className="h-5 w-5 text-slate-500 flex-shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-slate-200">
-                {t("trackrecord.recentPicksHiddenTitle")}
-              </p>
-              <p className="text-xs leading-relaxed text-slate-400">
-                {t("trackrecord.recentPicksHiddenDesc")}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Filter bar */}
-      <div className="glass-card p-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 text-slate-400">
-            <Filter className="h-4 w-4" />
-            <span className="text-sm font-medium">{t("trackrecord.filters")}</span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3 flex-1">
-            {/* Date From */}
-            <div className="flex items-center gap-2">
-              <label className="text-xs text-slate-500 whitespace-nowrap">{t("trackrecord.from")}</label>
-              <input
-                type="date"
-                value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
-                className={cn(
-                  "h-8 w-32 sm:w-36 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 sm:px-3 text-xs sm:text-sm text-slate-200",
-                  "placeholder:text-slate-500",
-                  "focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.06]",
-                  "transition-colors [color-scheme:dark]"
-                )}
-              />
-            </div>
-
-            {/* Date To */}
-            <div className="flex items-center gap-2">
-              <label className="text-xs text-slate-500 whitespace-nowrap">{t("trackrecord.to")}</label>
-              <input
-                type="date"
-                value={dateTo}
-                onChange={(e) => setDateTo(e.target.value)}
-                className={cn(
-                  "h-8 w-32 sm:w-36 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 sm:px-3 text-xs sm:text-sm text-slate-200",
-                  "placeholder:text-slate-500",
-                  "focus:outline-none focus:border-blue-500/50 focus:bg-white/[0.06]",
-                  "transition-colors [color-scheme:dark]"
-                )}
-              />
-            </div>
-
-            {/* Sport select */}
-            <Select value={sportId} onValueChange={(v) => { setSportId(v); setLeagueId("all"); }}>
-              <SelectTrigger className="h-8 w-32 sm:w-40 text-xs sm:text-sm border-white/[0.08] bg-white/[0.04] text-slate-200 focus:border-blue-500/50">
-                <SelectValue placeholder={t("trackrecord.allLeagues")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t("trackrecord.allLeagues")}</SelectItem>
-                {(sports ?? []).map((s) => (
-                  <SelectItem key={s.id} value={s.id}>
-                    {s.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {/* League select */}
-            <Select value={leagueId} onValueChange={setLeagueId}>
-              <SelectTrigger className="h-8 w-40 sm:w-48 text-xs sm:text-sm border-white/[0.08] bg-white/[0.04] text-slate-200 focus:border-blue-500/50">
-                <SelectValue placeholder={t("trackrecord.allLeagues")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t("trackrecord.allLeagues")}</SelectItem>
-                {(leagues ?? []).map((l) => (
-                  <SelectItem key={l.id} value={l.id}>
-                    {l.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
-
-      {/* ═══════════════════════════════════════════════════════════
-           LINEAIRE STRUCTUUR (geen tabs meer).
-           User feedback was dat de tab-layout "onoverzichtelijk" was —
-           "een normaal mens begrijp dit niet". Daarom nu één scrollende
-           pagina met twee duidelijk gescheiden fases en één drilldown:
-             1. BACKTEST  — historische simulatie, per tier uitgesplitst
-             2. LIVE METING — pre-match meting, per tier uitgesplitst
-             3. SEGMENTEN  — drilldown per league/confidence
-           Elk blok heeft een eigen H2 + uitleg, opgeruimd in kaders.
-           ═══════════════════════════════════════════════════════════ */}
-
-      {/* ──────────────── BACKTEST PHASE BANNER ──────────────── */}
-      <SectionPhaseBanner
-        accent="emerald"
-        kicker="1 · Backtest"
-        title="Historische simulatie"
-        subtitle={
-          "Alles in deze sectie is berekend op afgelopen wedstrijden. " +
-          "Het model mag alleen data gebruiken die vóór de aftrap bekend was — " +
-          "geen cherry-picking, volledige dataset downloadbaar."
-        }
-      />
-
       <div className="space-y-6 animate-slide-up">
-        {/* Accuracy over time */}
-        <ProfitabilityChart monthSegments={monthSegments} loading={monthLoading} />
 
-        {/* Accuracy by league */}
-        <div className="glass-card p-6">
-          <div className="mb-4">
-            <h2 className="text-base font-semibold text-slate-100">
-              {t("trackrecord.accuracyByLeague")}
-            </h2>
-            <p className="text-sm text-slate-500 mt-0.5">
-              {t("trackrecord.accuracyByLeagueDesc")}
-            </p>
+        {/* ── Container 1: Tier stats dashboard ── */}
+        <div className="glass-card overflow-hidden">
+          <div className="border-b border-white/[0.06] px-6 py-4 flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-base font-semibold text-slate-100">Prestaties per tier</h2>
+              <p className="text-[11px] text-slate-500 mt-0.5">
+                Kies een tier — de statistieken hieronder updaten automatisch.
+              </p>
+            </div>
+            <a
+              href={api.getTrackrecordExportUrl(
+                undefined,
+                pickTier !== "all" ? pickTier : undefined,
+              )}
+              download
+              className="flex shrink-0 items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+            >
+              <Download className="h-4 w-4" />
+              Download CSV
+            </a>
           </div>
-          <SportAccuracySection filterParams={filterParams} />
-        </div>
 
-        {/* Per-tier backtest — KPI tabel per Free/Silver/Gold/Platinum */}
-        <div className="glass-card p-6">
-          <div className="mb-4">
-            <h2 className="text-base font-semibold text-slate-100">
-              Per tier — accuraatheid backtest
-            </h2>
-            <p className="text-sm text-slate-500 mt-0.5">
-              Zelfde historische data, gesplitst per tier-scope. Wissel
-              bovenaan tussen tiers om alleen één rij te zien.
-            </p>
+          {/* Tier buttons */}
+          <div className="flex flex-wrap gap-2 px-5 py-4 border-b border-white/[0.05]">
+            {TIER_TABS.map((tab) => {
+              const active = tab.key === pickTier;
+              return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => setPickTier(tab.key)}
+                  className={`inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-semibold transition-colors ${
+                    active
+                      ? tab.activeClass
+                      : "border-white/[0.08] bg-transparent text-slate-400 hover:border-white/[0.15] hover:text-slate-200"
+                  }`}
+                  aria-pressed={active}
+                >
+                  <span aria-hidden>{tab.emoji}</span>
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
+
+          {/* Dynamic stats */}
           {summaryLoading ? (
-            <div className="space-y-1.5">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 p-6">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="h-10 w-full rounded-lg bg-white/[0.04] animate-pulse"
-                />
+                <div key={i} className="h-20 rounded-xl bg-white/[0.04] animate-pulse" />
               ))}
             </div>
           ) : summary ? (
-            <PerTierBreakdownTable summary={summary} />
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 p-6">
+              <KpiCard
+                title="Voorspellingen"
+                value={summary.total_predictions > 0 ? summary.total_predictions.toLocaleString() : "—"}
+                subtitle="Geëvalueerde wedstrijdvoorspellingen"
+                icon={Target}
+                accent="blue"
+              />
+              <KpiCard
+                title="Nauwkeurigheid"
+                value={summary.total_predictions > 0 ? formatPercent(summary.accuracy) : "—"}
+                subtitle="Op alle 3-uitkomst voorspellingen"
+                icon={TrendingUp}
+                accent="green"
+              />
+              <KpiCard
+                title="Voorspellingskwaliteit"
+                value={fmt(summary.brier_score, 4)}
+                subtitle="Brier score (lager = beter)"
+                icon={BarChart3}
+                accent="amber"
+              />
+              <KpiCard
+                title="Gem. Betrouwbaarheid"
+                value={summary.total_predictions > 0 ? formatPercent(summary.avg_confidence) : "—"}
+                subtitle="Modelconfidentie gemiddeld"
+                icon={Activity}
+                accent="blue"
+              />
+            </div>
           ) : (
-            <p className="py-8 text-center text-sm text-slate-500">
-              {t("trackrecord.noSummaryData")}
-            </p>
+            <p className="py-8 text-center text-sm text-slate-500">Geen data beschikbaar.</p>
           )}
         </div>
 
-        {/* Rolling accuracy chart */}
-        <div className="glass-card p-6">
-          <div className="mb-4">
-            <h2 className="text-base font-semibold text-slate-100">
-              {t("trackrecord.accuracyTrend")}
-            </h2>
-            <p className="text-sm text-slate-500 mt-0.5">
-              {t("trackrecord.accuracyTrendDesc")}
-            </p>
-          </div>
-          {monthLoading ? (
-            <div className="h-72 w-full rounded-xl bg-white/[0.03] animate-pulse" />
-          ) : rollingData.length === 0 ? (
-            <div className="flex h-72 items-center justify-center text-sm text-slate-500">
-              {t("trackrecord.noMonthlyData")}
+        {/* ── Container 2: Bet of the Day ── */}
+        <div className="glass-card overflow-hidden border border-purple-500/20">
+          <div className="border-b border-white/[0.06] px-6 py-4 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-purple-500/10 ring-1 ring-purple-500/20">
+                <Trophy className="h-5 w-5 text-purple-300" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h2 className="text-base font-semibold text-slate-100">
+                    Pick of the Day — backtest
+                  </h2>
+                  <span className="inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2 py-0.5 text-[10px] font-semibold text-yellow-300">
+                    Gold &amp; Platinum
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 mt-0.5">
+                  Dagelijkse pick met hoogste confidence, gesimuleerd op historische data.
+                </p>
+              </div>
             </div>
-          ) : (
-            <RollingAccuracyChart
-              data={rollingData}
-              title=""
-              windowLabel={t("trackrecord.monthlyAccuracy")}
-              showBaseline={false}
-              targetAccuracy={0.6}
-            />
-          )}
-        </div>
-
-        {/* Summary stats */}
-        <div className="glass-card p-6">
-          <div className="mb-4">
-            <h2 className="text-base font-semibold text-slate-100">
-              {t("trackrecord.summaryStatistics")}
-            </h2>
-            <p className="text-sm text-slate-500 mt-0.5">
-              {t("trackrecord.summaryStatisticsDesc")}
-            </p>
+            <BotdCsvDownloadButton />
           </div>
-          {summaryLoading ? (
-            <div className="space-y-1.5">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="h-9 w-full rounded-lg bg-white/[0.04] animate-pulse"
-                />
-              ))}
-            </div>
-          ) : !summary ? (
-            <p className="py-8 text-center text-sm text-slate-500">
-              {t("trackrecord.noSummaryData")}
-            </p>
-          ) : (
-            <SummaryStatsTable summary={summary} />
-          )}
-        </div>
-
-        {/* Pick of the Day — backtest (Gold+ only) */}
-        <div className="glass-card p-6 border border-purple-500/20">
-          <div className="mb-4 flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-purple-300" />
-            <div>
-              <h2 className="text-base font-semibold text-slate-100">
-                Pick of the Day — backtest
-              </h2>
-              <p className="text-sm text-slate-500 mt-0.5">
-                Dagelijkse pick met hoogste confidence, gesimuleerd op historische data.
-              </p>
-            </div>
+          <div className="p-6">
+            <BotdTierGate>
+              <BotdTrackRecordSection />
+            </BotdTierGate>
           </div>
-          <BotdTierGate>
-            <BotdTrackRecordSection />
-          </BotdTierGate>
         </div>
 
-        {/* Related pages */}
-        <RelatedLinks
-          title={t("related.title")}
-          links={[
-            { label: t("related.strategyLab"), href: "/strategy", description: t("related.strategyLabDesc"), icon: FlaskConical },
-            { label: t("related.results"), href: "/results", description: t("related.resultsDesc"), icon: Trophy },
-            { label: t("related.predictions"), href: "/predictions", description: t("related.predictionsDesc"), icon: Sparkles },
-          ]}
-        />
-
-        {/* Dataset herkomst */}
-        <TrustFunnel />
-      </div>
-
-      {/* ──────────────── DRILLDOWN SEGMENTEN (backtest tab) ──────────────── */}
-      <SectionPhaseBanner
-        accent="slate"
-        kicker="3 · Drilldown"
-        title="Segmenten — per competitie & confidence"
-        subtitle="Optioneel. Diepere breakdown van de backtest per league en per confidence-bucket voor wie zelf wil graven."
-      />
-
-      <div className="space-y-6 animate-slide-up">
-        <div className="glass-card p-6">
-          <div className="mb-4">
-            <h2 className="text-base font-semibold text-slate-100">
-              {t("trackrecord.performanceByLeague")}
-            </h2>
-            <p className="text-sm text-slate-500 mt-0.5">
-              {t("trackrecord.performanceByLeagueDesc")}
-            </p>
-          </div>
-          <SegmentSection title={t("trackrecord.league")} groupBy="league" filterParams={filterParams} />
-        </div>
-
-        <div className="glass-card p-6">
-          <div className="mb-4">
-            <h2 className="text-base font-semibold text-slate-100">
-              {t("trackrecord.performanceByConfidence")}
-            </h2>
-            <p className="text-sm text-slate-500 mt-0.5">
-              {t("trackrecord.performanceByConfidenceDesc")}
-            </p>
-          </div>
-          <SegmentSection
-            title={t("trackrecord.confidenceBucket")}
-            groupBy="confidence_bucket"
-            filterParams={filterParams}
-          />
-        </div>
-
-        <div className="glass-card p-5 flex items-center justify-between">
-          <div>
-            <h3 className="text-sm font-semibold text-slate-100">
-              {t("trackrecord.exportTitle")}
-            </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
-              {t("trackrecord.exportDesc")}
-            </p>
-          </div>
-          <a
-            href={api.getTrackrecordExportUrl(
-              undefined,
-              pickTier !== "all" ? pickTier : undefined,
-            )}
-            download
-            className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-400 transition-all hover:bg-emerald-500/20"
-          >
-            <Download className="h-4 w-4" />
-            {t("trackrecord.exportCta")}
-          </a>
-        </div>
       </div>
 
       </>)}
