@@ -1230,27 +1230,27 @@ export default function PredictionsPage() {
   // Live view skips the date filter entirely — all LIVE matches are shown.
   // Results view also skips the date filter — the range selector controls
   // the window and we show every graded match inside it.
+  //
+  // v8.4 — removed the earlier "selectedDate === today → return all" escape
+  // hatch. It preloaded 7 days forward when the user explicitly chose
+  // "Vandaag", so the header correctly said "Today" but the list contained
+  // tomorrow+later matches. Now "Vandaag" means only today's matches; the
+  // upcoming fetch still grabs 7 days ahead for caching but the display
+  // is filtered to the exact selected calendar day in local browser time.
   const upcomingFixtures = useMemo<Fixture[]>(() => {
     const all = fixturesQuery.data?.fixtures ?? [];
     if (isResults) {
       return all;
     }
-    // For "today" and future dates we also keep the default "next 7
-    // days" behaviour when the user hasn't touched the picker, so the
-    // page isn't empty.
-    if (selectedDate === today) {
-      return all;
-    }
     return all.filter((f) => {
       if (!f.scheduled_at) return false;
-      // Compare YYYY-MM-DD in local time.
       const d = new Date(f.scheduled_at);
       const y = d.getFullYear();
       const m = String(d.getMonth() + 1).padStart(2, "0");
       const dd = String(d.getDate()).padStart(2, "0");
       return `${y}-${m}-${dd}` === selectedDate;
     });
-  }, [fixturesQuery.data, selectedDate, today, isResults]);
+  }, [fixturesQuery.data, selectedDate, isResults]);
 
   // ── Derived leagues list for filter tabs ─────────────────────────────────
   // Sort available leagues by popularity rank; unknown leagues go to the end
