@@ -227,6 +227,7 @@ async def _build_botd_section(
     require_live_source: bool,
     created_from: datetime,
     limit: int,
+    match_scheduled_from: datetime | None = None,
 ) -> BOTDSectionResponse:
     """Shared builder for /model-validation and /live-tracking.
 
@@ -240,8 +241,17 @@ async def _build_botd_section(
         the live-tracking section to strip out backtest and batch fills.
     created_from:
         Lower bound on ``Prediction.created_at``. Always at least
-        ``V81_DEPLOYMENT_CUTOFF``; model-validation uses the cutoff
-        directly, live-tracking uses ``LIVE_BOTD_START``.
+        ``V81_DEPLOYMENT_CUTOFF`` (the engine-deployment moment).
+        Model-validation uses this to exclude rows from the broken
+        pre-v8.1 pipeline.
+    match_scheduled_from:
+        Optional lower bound on ``Match.scheduled_at``. Live-tracking
+        passes ``LIVE_BOTD_START`` here so only matches **played on or
+        after** 2026-04-18 surface — independent of when the prediction
+        row was created. Previously live-tracking filtered on
+        ``Prediction.created_at >= LIVE_BOTD_START`` which accidentally
+        excluded valid pre-match live picks whose rows were batch-
+        created before the start date but relabelled to 'live' later.
     limit:
         Maximum number of per-day picks to return (ordered newest first).
     """
@@ -261,6 +271,8 @@ async def _build_botd_section(
         )
         .order_by(Match.scheduled_at.desc())
     )
+    if match_scheduled_from is not None:
+        stmt = stmt.where(Match.scheduled_at >= match_scheduled_from)
     if require_live_source:
         stmt = stmt.where(Prediction.prediction_source == "live")
     if require_pre_match:
@@ -483,7 +495,13 @@ async def get_botd_live_tracking(
         user_tier,
         require_pre_match=True,
         require_live_source=True,
-        created_from=LIVE_BOTD_START,
+        # Live-meting is gedefinieerd door match-datum, niet door prediction
+        # created_at. Predictions in een pre-18-apr batch die later via
+        # backfill naar 'live' zijn gerelabel'd moeten wel zichtbaar zijn —
+        # ze zijn daadwerkelijk vóór de aftrap vastgezet en hun wedstrijd
+        # valt in de live-meting periode.
+        created_from=V81_DEPLOYMENT_CUTOFF,
+        match_scheduled_from=LIVE_BOTD_START,
         limit=limit,
     )
 
