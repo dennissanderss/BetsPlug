@@ -134,7 +134,63 @@ class EvaluationService:
         )
         db.add(evaluation)
         await db.flush()
+
+        # v9: fan-out the outcome to any value_bets row pointing at this
+        # prediction. Without this hook, finished matches leave the
+        # value_bets stats endpoint stuck at whatever the backfill
+        # captured — stale numbers, no ROI progression.
+        try:
+            await self._propagate_to_value_bets(
+                db=db,
+                prediction_id=prediction.id,
+                actual_outcome=actual_outcome,
+                evaluated_at=evaluation.evaluated_at,
+            )
+        except Exception as exc:  # pragma: no cover — defensive
+            # Never block prediction evaluation on a value-bet side-effect.
+            import logging
+            logging.getLogger(__name__).warning(
+                "value_bet fan-out failed for prediction %s: %s",
+                prediction.id, exc,
+            )
+
         return evaluation
+
+    @staticmethod
+    async def _propagate_to_value_bets(
+        *,
+        db: AsyncSession,
+        prediction_id: uuid.UUID,
+        actual_outcome: str,
+        evaluated_at: datetime,
+    ) -> None:
+        """Update every ``value_bets`` row pointing at this prediction.
+
+        Stays in this module so the fan-out happens in the same
+        transaction as the evaluation flush — a single commit either
+        persists both or neither, which avoids the inconsistency class
+        where the evaluation lands but the value-bet row never updates.
+
+        Idempotent under the ``(prediction_id, is_live)`` uniqueness
+        constraint: re-running evaluate_prediction does nothing new
+        because a guard above returns the pre-existing evaluation.
+        """
+        from app.models.value_bet import ValueBet
+
+        stmt = select(ValueBet).where(ValueBet.prediction_id == prediction_id)
+        rows = (await db.execute(stmt)).scalars().all()
+        for vb in rows:
+            if vb.is_evaluated:
+                continue
+            is_correct = (actual_outcome or "").lower() == vb.our_pick
+            pnl = (vb.best_odds_for_pick - 1.0) if is_correct else -1.0
+            vb.is_evaluated = True
+            vb.is_correct = is_correct
+            vb.actual_outcome = actual_outcome
+            vb.profit_loss_units = pnl
+            vb.evaluated_at = evaluated_at
+        if rows:
+            await db.flush()
 
     # ------------------------------------------------------------------ #
     # Batch evaluation                                                     #
