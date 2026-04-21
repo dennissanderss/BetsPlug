@@ -101,7 +101,6 @@ export function SportsHubSidebar({
   const quickLinks = [
     { label: t("dash.nav.predictions"), href: "/predictions", icon: Target },
     { label: t("dash.nav.trackRecord"), href: "/trackrecord", icon: ClipboardList },
-    { label: t("dash.nav.reports"), href: "/reports", icon: FileBarChart2 },
   ];
 
   return (

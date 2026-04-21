@@ -69,7 +69,6 @@ const navSections: NavSection[] = [
     items: [
       { labelKey: "nav.results", fallback: "Results & Analysis", href: "/results", icon: Trophy },
       { labelKey: "nav.trackrecord", fallback: "Track Record", href: "/trackrecord", icon: ClipboardList },
-      { labelKey: "nav.reports", fallback: "Reports", href: "/reports", icon: FileBarChart2 },
     ],
   },
   {
