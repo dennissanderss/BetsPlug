@@ -434,12 +434,13 @@ async def backfill_botd_missed(
         day_end = cursor + timedelta(days=1)
         date_str = cursor.strftime("%Y-%m-%d")
 
-        # ── Step 1: already have a live pick for this day? ────────────────
+        # ── Step 1: already have a valid BOTD-eligible live pick for this day? ─
         has_live = await db.scalar(
             select(Prediction.id)
             .join(Match, Match.id == Prediction.match_id)
             .where(Prediction.prediction_source == "live")
             .where(Prediction.predicted_at < Match.scheduled_at)
+            .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
             .where(Match.scheduled_at >= cursor)
             .where(Match.scheduled_at < day_end)
             .limit(1)
