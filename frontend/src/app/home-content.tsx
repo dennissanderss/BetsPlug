@@ -28,6 +28,7 @@ import {
   RotateCcw,
   XCircle,
   CreditCard,
+  Lock,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -445,6 +446,31 @@ export function HomeContent({
                         <div className="mt-3 h-4 w-3/4 animate-pulse rounded bg-white/[0.05]" />
                       </div>
                     ))}
+                </div>
+
+                {/* Upsell strip */}
+                <div
+                  className="relative flex items-center justify-between gap-3 border-t px-5 py-3"
+                  style={{
+                    borderColor: "hsl(142 71% 45% / 0.18)",
+                    background:
+                      "linear-gradient(90deg, hsl(142 71% 45% / 0.07) 0%, hsl(142 76% 60% / 0.04) 100%)",
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <Lock className="h-3.5 w-3.5 shrink-0 text-[#4ade80]" />
+                    <p className="text-[12px] font-medium leading-tight text-[#d1fae5]">
+                      {locale === "nl"
+                        ? "Sommige picks halen 80%+ — upgrade om ze te zien"
+                        : "Some picks hit 80%+ — upgrade to unlock them"}
+                    </p>
+                  </div>
+                  <Link
+                    href={loc("/pricing")}
+                    className="shrink-0 rounded-md bg-[#22c55e] px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-[#0a0b11] transition-opacity hover:opacity-90"
+                  >
+                    {locale === "nl" ? "Upgrade" : "Upgrade"}
+                  </Link>
                 </div>
 
                 {/* Footer CTA */}
