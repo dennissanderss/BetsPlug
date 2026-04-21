@@ -1171,6 +1171,9 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
       {/* Test prediction generation (find the real error) */}
       <PredictionGenerationTestCard />
 
+      {/* BOTD inventory — zie per dag wat er in de DB staat */}
+      <BotdInventoryCard />
+
       {/* BOTD backfill — hernoem gemiste scheduler-picks (18-20 apr 2026) */}
       <BotdBackfillCard />
 
@@ -1826,30 +1829,70 @@ function BotdBackfillCard() {
         )}
       </button>
       {mutation.isSuccess && data && (
-        <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3 space-y-1.5">
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-            <p className="text-xs font-semibold text-emerald-200">
-              {data.backfilled} dag{data.backfilled !== 1 ? "en" : ""} ingevuld
-            </p>
-          </div>
-          {data.details.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-0.5">
-              {data.details.map((d) => (
-                <span
-                  key={d.date}
-                  className="inline-flex items-center rounded-md bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 font-mono text-[11px] text-emerald-300"
-                  title={`${d.action} · ${d.confidence}% · ${d.original_source}`}
-                >
-                  {d.date}
-                </span>
-              ))}
+        <div className="space-y-2">
+          <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3 space-y-1.5">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+              <p className="text-xs font-semibold text-emerald-200">
+                {data.backfilled} resultat
+                {data.backfilled !== 1 ? "en" : ""} · {data.errors} fout
+                {data.errors !== 1 ? "en" : ""}
+              </p>
             </div>
-          )}
-          {data.backfilled === 0 && (
-            <p className="text-[11px] text-slate-400">
-              Niets te doen — alle dagen zijn al ingevuld of er zijn geen geschikte picks gevonden.
-            </p>
+            {data.details.length > 0 && (
+              <div className="space-y-1 pt-1">
+                {data.details.map((d) => {
+                  const color =
+                    d.action === "skipped_already_live"
+                      ? "text-slate-400 border-slate-600/40 bg-slate-800/40"
+                      : d.action === "relabelled"
+                        ? "text-amber-200 border-amber-500/30 bg-amber-500/10"
+                        : d.action === "generated"
+                          ? "text-emerald-200 border-emerald-500/30 bg-emerald-500/10"
+                          : "text-slate-300 border-white/10 bg-white/[0.03]";
+                  return (
+                    <div
+                      key={`${d.date}-${d.prediction_id}`}
+                      className={`flex items-center justify-between rounded-md border px-2 py-1 text-[11px] ${color}`}
+                    >
+                      <span className="font-mono">{d.date}</span>
+                      <span className="uppercase tracking-wide">{d.action}</span>
+                      <span className="tabular-nums">
+                        {d.confidence > 0 ? `${d.confidence}%` : "—"}
+                      </span>
+                      <span className="font-mono text-[10px] opacity-70">
+                        {d.original_source}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+            {data.backfilled === 0 && data.errors === 0 && (
+              <p className="text-[11px] text-slate-400">
+                Niets te doen — geen dagen in het bereik.
+              </p>
+            )}
+          </div>
+          {data.error_details.length > 0 && (
+            <div className="rounded-lg border border-red-500/30 bg-red-500/5 p-3 space-y-1">
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-red-400 shrink-0" />
+                <p className="text-xs font-semibold text-red-200">
+                  Fouten per dag ({data.error_details.length})
+                </p>
+              </div>
+              <div className="max-h-64 overflow-y-auto space-y-0.5 pt-1">
+                {data.error_details.map((err, i) => (
+                  <p
+                    key={i}
+                    className="font-mono text-[10px] leading-relaxed text-red-300/90 break-all"
+                  >
+                    {err}
+                  </p>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}
@@ -1860,6 +1903,140 @@ function BotdBackfillCard() {
             {mutation.error instanceof Error
               ? mutation.error.message
               : "Backfill call mislukt."}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── BOTD Inventory — per-dag state van matches & predictions ────────────────
+
+function BotdInventoryCard() {
+  const query = useQuery({
+    queryKey: ["admin", "predictions-inventory"],
+    queryFn: () => api.predictionsInventory(14),
+    staleTime: 30_000,
+  });
+
+  const data = query.data;
+
+  return (
+    <div className="card-neon p-6 space-y-4 border border-cyan-500/20">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/10">
+            <BarChart3 className="h-4 w-4 text-cyan-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-100">
+              BOTD Inventory (diagnostisch)
+              <span className="ml-2 inline-flex items-center rounded-md border border-cyan-500/30 bg-cyan-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-cyan-300">
+                Read-only
+              </span>
+            </h3>
+            <p className="text-xs text-slate-400">
+              Per dag (laatste 14): hoeveel matches, hoeveel predictions per
+              source, hoeveel strikt pre-match, en of er een BOTD-eligible
+              live pick staat (≥{" "}
+              {data ? Math.round(data.botd_min_confidence * 100) : 60}%).
+            </p>
+          </div>
+        </div>
+        <button
+          onClick={() => query.refetch()}
+          disabled={query.isFetching}
+          className="inline-flex items-center gap-1.5 rounded-md border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-1 text-[11px] font-semibold text-cyan-200 hover:bg-cyan-500/20 disabled:opacity-50"
+        >
+          <RefreshCw
+            className={`h-3 w-3 ${query.isFetching ? "animate-spin" : ""}`}
+          />
+          Ververs
+        </button>
+      </div>
+      {query.isLoading && (
+        <p className="text-xs text-slate-400">Laden…</p>
+      )}
+      {query.isError && (
+        <div className="flex items-start gap-2 rounded-lg border border-red-500/30 bg-red-500/5 p-3">
+          <AlertTriangle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+          <p className="text-xs text-red-300">
+            {query.error instanceof Error
+              ? query.error.message
+              : "Inventory call mislukt."}
+          </p>
+        </div>
+      )}
+      {data && data.days.length === 0 && (
+        <p className="text-xs text-slate-400">Geen data in venster.</p>
+      )}
+      {data && data.days.length > 0 && (
+        <div className="overflow-x-auto">
+          <table className="w-full text-[11px]">
+            <thead>
+              <tr className="border-b border-white/10 text-left text-slate-400">
+                <th className="py-1.5 pr-2">Datum</th>
+                <th className="py-1.5 px-2 text-right">Matches</th>
+                <th className="py-1.5 px-2 text-right">Preds</th>
+                <th className="py-1.5 px-2 text-right">live</th>
+                <th className="py-1.5 px-2 text-right">backtest</th>
+                <th className="py-1.5 px-2 text-right">batch</th>
+                <th className="py-1.5 px-2 text-right">BOTD-eligible</th>
+                <th className="py-1.5 pl-2 text-right">Max conf.</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.days.map((d) => {
+                const live = d.predictions.by_source["live"];
+                const backtest = d.predictions.by_source["backtest"];
+                const batch = d.predictions.by_source["batch_local_fill"];
+                const eligible = d.botd_eligible.n;
+                const rowClass =
+                  eligible > 0
+                    ? "border-b border-white/5"
+                    : "border-b border-white/5 bg-amber-500/[0.04]";
+                return (
+                  <tr key={d.date} className={rowClass}>
+                    <td className="py-1.5 pr-2 font-mono text-slate-200">
+                      {d.date}
+                    </td>
+                    <td className="py-1.5 px-2 text-right tabular-nums text-slate-300">
+                      {d.matches.total}
+                    </td>
+                    <td className="py-1.5 px-2 text-right tabular-nums text-slate-200">
+                      {d.predictions.total}
+                    </td>
+                    <td className="py-1.5 px-2 text-right tabular-nums text-emerald-300">
+                      {live ? `${live.n}/${live.strict_pre_match}` : "—"}
+                    </td>
+                    <td className="py-1.5 px-2 text-right tabular-nums text-slate-400">
+                      {backtest
+                        ? `${backtest.n}/${backtest.strict_pre_match}`
+                        : "—"}
+                    </td>
+                    <td className="py-1.5 px-2 text-right tabular-nums text-slate-400">
+                      {batch ? `${batch.n}/${batch.strict_pre_match}` : "—"}
+                    </td>
+                    <td
+                      className={`py-1.5 px-2 text-right tabular-nums font-semibold ${
+                        eligible > 0 ? "text-emerald-300" : "text-amber-400"
+                      }`}
+                    >
+                      {eligible}
+                    </td>
+                    <td className="py-1.5 pl-2 text-right tabular-nums text-slate-300">
+                      {d.botd_eligible.max_conf != null
+                        ? `${Math.round(d.botd_eligible.max_conf * 100)}%`
+                        : "—"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <p className="mt-2 text-[10px] leading-relaxed text-slate-500">
+            Format per source: <span className="font-mono">n_totaal / strict_pre_match</span>.
+            Amber rij = dag zonder BOTD-eligible live pick (mogelijk target voor backfill).
           </p>
         </div>
       )}

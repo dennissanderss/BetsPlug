@@ -593,6 +593,26 @@ class ApiClient {
     );
   }
 
+  predictionsInventory(days = 14) {
+    return this.request<{
+      generated_at: string;
+      start_day: string;
+      botd_min_confidence: number;
+      days: Array<{
+        date: string;
+        matches: { total: number; by_status: Record<string, number> };
+        predictions: {
+          total: number;
+          by_source: Record<
+            string,
+            { n: number; strict_pre_match: number; avg_conf: number | null }
+          >;
+        };
+        botd_eligible: { n: number; max_conf: number | null };
+      }>;
+    }>(`/admin/predictions-inventory?days=${days}`);
+  }
+
   // Fixture Results
   getFixtureResults(days = 7, league?: string) {
     const params = new URLSearchParams({ days: String(days) });

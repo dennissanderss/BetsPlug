@@ -21,7 +21,7 @@ from typing import Optional
 import httpx
 from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
-from sqlalchemy import and_, select
+from sqlalchemy import Integer, and_, cast as sql_cast, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
@@ -612,6 +612,143 @@ async def backfill_botd_missed(
         "errors": len(errors),
         "details": results,
         "error_details": errors,
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Predictions inventory — diagnostic endpoint for BOTD debugging
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+@router.get(
+    "/predictions-inventory",
+    summary="Per-day counts of matches and predictions (diagnostic)",
+)
+async def get_predictions_inventory(
+    days: int = 14,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Return a per-day breakdown since N days ago:
+
+    * matches: total + count per status (FINISHED, SCHEDULED, LIVE, ...)
+    * predictions: total + count per source (live, backtest, batch_local_fill)
+    * strict_pre_match: predictions with predicted_at < scheduled_at
+    * botd_eligible: live predictions with conf ≥ 0.60 + strict pre-match
+    * avg_conf per day
+
+    No writes. Safe to call repeatedly. Intended for debugging the
+    BOTD live-tracking pipeline: lets us see exactly how many picks
+    live in each day and why they may or may not surface on
+    /bet-of-the-day/live-tracking.
+    """
+    from sqlalchemy import func as sql_func
+    from app.api.routes.betoftheday import BOTD_MIN_CONFIDENCE
+
+    now = datetime.now(timezone.utc)
+    start_day = (now - timedelta(days=days)).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+
+    # 1) Matches per day per status
+    match_day = sql_func.date_trunc("day", Match.scheduled_at).label("day")
+    match_rows = (await db.execute(
+        select(
+            match_day,
+            Match.status,
+            sql_func.count(Match.id).label("n"),
+        )
+        .where(Match.scheduled_at >= start_day)
+        .group_by(match_day, Match.status)
+        .order_by(match_day.desc())
+    )).all()
+
+    # 2) Predictions per day per source (keyed on match.scheduled_at)
+    pred_day = sql_func.date_trunc("day", Match.scheduled_at).label("day")
+    pred_rows = (await db.execute(
+        select(
+            pred_day,
+            Prediction.prediction_source,
+            sql_func.count(Prediction.id).label("n"),
+            sql_func.sum(
+                sql_cast(
+                    Prediction.predicted_at < Match.scheduled_at,
+                    Integer,
+                )
+            ).label("strict_pre"),
+            sql_func.avg(Prediction.confidence).label("avg_conf"),
+        )
+        .join(Match, Match.id == Prediction.match_id)
+        .where(Match.scheduled_at >= start_day)
+        .group_by(pred_day, Prediction.prediction_source)
+        .order_by(pred_day.desc())
+    )).all()
+
+    # 3) BOTD-eligible live picks per day
+    botd_day = sql_func.date_trunc("day", Match.scheduled_at).label("day")
+    botd_rows = (await db.execute(
+        select(
+            botd_day,
+            sql_func.count(Prediction.id).label("n"),
+            sql_func.max(Prediction.confidence).label("max_conf"),
+        )
+        .join(Match, Match.id == Prediction.match_id)
+        .where(Match.scheduled_at >= start_day)
+        .where(Prediction.prediction_source == "live")
+        .where(Prediction.predicted_at < Match.scheduled_at)
+        .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+        .group_by(botd_day)
+        .order_by(botd_day.desc())
+    )).all()
+
+    by_day: dict[str, dict] = {}
+    for row in match_rows:
+        day_str = row[0].strftime("%Y-%m-%d") if row[0] else "unknown"
+        entry = by_day.setdefault(day_str, {
+            "date": day_str,
+            "matches": {"total": 0, "by_status": {}},
+            "predictions": {"total": 0, "by_source": {}},
+            "botd_eligible": {"n": 0, "max_conf": None},
+        })
+        status = row[1].value if hasattr(row[1], "value") else str(row[1])
+        entry["matches"]["by_status"][status] = row[2]
+        entry["matches"]["total"] += row[2]
+
+    for row in pred_rows:
+        day_str = row[0].strftime("%Y-%m-%d") if row[0] else "unknown"
+        entry = by_day.setdefault(day_str, {
+            "date": day_str,
+            "matches": {"total": 0, "by_status": {}},
+            "predictions": {"total": 0, "by_source": {}},
+            "botd_eligible": {"n": 0, "max_conf": None},
+        })
+        src = row[1] or "unknown"
+        entry["predictions"]["by_source"][src] = {
+            "n": row[2],
+            "strict_pre_match": int(row[3] or 0),
+            "avg_conf": float(row[4]) if row[4] is not None else None,
+        }
+        entry["predictions"]["total"] += row[2]
+
+    for row in botd_rows:
+        day_str = row[0].strftime("%Y-%m-%d") if row[0] else "unknown"
+        entry = by_day.setdefault(day_str, {
+            "date": day_str,
+            "matches": {"total": 0, "by_status": {}},
+            "predictions": {"total": 0, "by_source": {}},
+            "botd_eligible": {"n": 0, "max_conf": None},
+        })
+        entry["botd_eligible"] = {
+            "n": row[1],
+            "max_conf": float(row[2]) if row[2] is not None else None,
+        }
+
+    days_sorted = sorted(by_day.values(), key=lambda x: x["date"], reverse=True)
+
+    return {
+        "generated_at": now.isoformat(),
+        "start_day": start_day.isoformat(),
+        "botd_min_confidence": BOTD_MIN_CONFIDENCE,
+        "days": days_sorted,
     }
 
 
