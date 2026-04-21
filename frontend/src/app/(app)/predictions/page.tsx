@@ -48,6 +48,7 @@ type TierFilter = "All" | PickTierSlug;
 // LiveMatchesStrip; the Predictions page now only switches between
 // Upcoming and Results.
 type ViewMode = "upcoming" | "results";
+type DateRangeFilter = "all" | "today" | "thisWeek" | "thisMonth";
 
 /** Country → leagues mapping with flags, ordered by popularity. */
 const COUNTRY_LEAGUES: { country: string; flag: string; leagues: string[] }[] = [
@@ -1151,23 +1152,6 @@ function todayIsoDate(): string {
   return `${y}-${m}-${day}`;
 }
 
-function addDaysIso(iso: string, delta: number): string {
-  const [y, m, d] = iso.split("-").map(Number);
-  const date = new Date(y, m - 1, d);
-  date.setDate(date.getDate() + delta);
-  const yy = date.getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
-  const dd = String(date.getDate()).padStart(2, "0");
-  return `${yy}-${mm}-${dd}`;
-}
-
-function daysBetweenIso(from: string, to: string): number {
-  const [yF, mF, dF] = from.split("-").map(Number);
-  const [yT, mT, dT] = to.split("-").map(Number);
-  const fromMs = Date.UTC(yF, mF - 1, dF);
-  const toMs = Date.UTC(yT, mT - 1, dT);
-  return Math.round((toMs - fromMs) / (24 * 60 * 60 * 1000));
-}
 
 export default function PredictionsPage() {
   const { t } = useTranslations();
@@ -1182,17 +1166,10 @@ export default function PredictionsPage() {
   // Results-mode range selector: defaults to this week.
   const [resultsRange, setResultsRange] = useState<7 | 14 | 30>(7);
 
-  // v6 B3: date picker state. Default = today. min = 30 days back,
-  // max = 7 days ahead — same bounds Dennis specified.
   const today = useMemo(() => todayIsoDate(), []);
-  const minDate = useMemo(() => addDaysIso(today, -30), [today]);
-  const maxDate = useMemo(() => addDaysIso(today, 7), [today]);
-  const [selectedDate, setSelectedDate] = useState<string>(today);
+  const [dateRangeFilter, setDateRangeFilter] = useState<DateRangeFilter>("today");
 
   const isResults = viewMode === "results";
-  const isHistorical = isResults || selectedDate < today;
-  const daysAhead = Math.max(1, daysBetweenIso(today, selectedDate) + 1);
-  const daysBack = Math.max(1, daysBetweenIso(selectedDate, today) + 1);
 
   // v6 C1: headline counters — reuse existing dashboard metrics
   // endpoint. Cached separately so it doesn't re-fire on date change.
@@ -1202,21 +1179,14 @@ export default function PredictionsPage() {
     staleTime: 5 * 60_000,
   });
 
-  // ── Fetch upcoming / live / results depending on view mode + date ─────────
+  // ── Fetch upcoming / results depending on view mode + date range ─────────
   const fixturesQuery = useQuery({
-    queryKey: ["predictions-view", viewMode, selectedDate, resultsRange],
+    queryKey: ["predictions-view", viewMode, dateRangeFilter, resultsRange],
     queryFn: () => {
-      if (isResults) {
-        // Results tab: fetch the full range (7/14/30 days). Date picker
-        // is hidden in this view; the range selector drives the window.
-        return api.getFixtureResults(resultsRange);
-      }
-      if (selectedDate < today) {
-        return api.getFixtureResults(daysBack);
-      }
-      // Default "upcoming" query wants at least 7 days so the default
-      // experience (user lands on today) still shows a busy list.
-      return api.getFixturesUpcoming(Math.max(7, daysAhead));
+      if (isResults) return api.getFixtureResults(resultsRange);
+      // Fetch enough days to cover the selected range; always ≥7 for caching.
+      const days = dateRangeFilter === "thisMonth" ? 30 : 7;
+      return api.getFixturesUpcoming(days);
     },
     staleTime: 60_000,
     refetchInterval: 60_000,
@@ -1226,31 +1196,39 @@ export default function PredictionsPage() {
   const isLoading = fixturesQuery.isLoading;
   const hasError  = fixturesQuery.isError;
 
-  // ── Filter the returned fixtures to the exact selected date ───────────────
-  // Live view skips the date filter entirely — all LIVE matches are shown.
-  // Results view also skips the date filter — the range selector controls
-  // the window and we show every graded match inside it.
-  //
-  // v8.4 — removed the earlier "selectedDate === today → return all" escape
-  // hatch. It preloaded 7 days forward when the user explicitly chose
-  // "Vandaag", so the header correctly said "Today" but the list contained
-  // tomorrow+later matches. Now "Vandaag" means only today's matches; the
-  // upcoming fetch still grabs 7 days ahead for caching but the display
-  // is filtered to the exact selected calendar day in local browser time.
+  // ── Filter fixtures to the selected date range ────────────────────────────
   const upcomingFixtures = useMemo<Fixture[]>(() => {
     const all = fixturesQuery.data?.fixtures ?? [];
-    if (isResults) {
-      return all;
-    }
+    if (isResults || dateRangeFilter === "all") return all;
+
+    const [ty, tm, td] = today.split("-").map(Number);
+    const todayDate = new Date(ty, tm - 1, td);
+
     return all.filter((f) => {
       if (!f.scheduled_at) return false;
       const d = new Date(f.scheduled_at);
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const dd = String(d.getDate()).padStart(2, "0");
-      return `${y}-${m}-${dd}` === selectedDate;
+      const fDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+      if (dateRangeFilter === "today") {
+        return fDate.getTime() === todayDate.getTime();
+      }
+      if (dateRangeFilter === "thisWeek") {
+        const dow = (todayDate.getDay() + 6) % 7; // 0 = Monday
+        const weekStart = new Date(todayDate);
+        weekStart.setDate(todayDate.getDate() - dow);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        return fDate >= weekStart && fDate <= weekEnd;
+      }
+      if (dateRangeFilter === "thisMonth") {
+        return (
+          d.getFullYear() === todayDate.getFullYear() &&
+          d.getMonth() === todayDate.getMonth()
+        );
+      }
+      return true;
     });
-  }, [fixturesQuery.data, selectedDate, isResults]);
+  }, [fixturesQuery.data, dateRangeFilter, isResults, today]);
 
   // ── Derived leagues list for filter tabs ─────────────────────────────────
   // Sort available leagues by popularity rank; unknown leagues go to the end
@@ -1521,54 +1499,33 @@ export default function PredictionsPage() {
         </div>
       )}
 
-      {/* ── v6 B3: date picker (upcoming/single-day browsing only) ── */}
+      {/* ── Date range filter (upcoming only) ── */}
       {!isResults && (
-        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4">
-          <div className="flex items-center gap-2">
-            <Clock className="h-4 w-4 text-slate-500" />
-            <label htmlFor="predictions-date" className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-              {t("pred.date")}
-            </label>
+        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+          <Clock className="h-4 w-4 shrink-0 text-slate-500" />
+          <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
+            {(
+              [
+                { key: "all",       label: t("pred.all") },
+                { key: "today",     label: t("pred.today") },
+                { key: "thisWeek",  label: t("pred.thisWeek") },
+                { key: "thisMonth", label: t("pred.thisMonth") },
+              ] as { key: DateRangeFilter; label: string }[]
+            ).map(({ key, label }) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setDateRangeFilter(key)}
+                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                  dateRangeFilter === key
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
-          <input
-            id="predictions-date"
-            type="date"
-            value={selectedDate}
-            min={minDate}
-            max={maxDate}
-            onChange={(e) => setSelectedDate(e.target.value || today)}
-            className="rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 text-sm text-slate-100 focus:border-blue-500/50 focus:outline-none"
-          />
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              onClick={() => setSelectedDate((d) => addDaysIso(d, -1))}
-              disabled={selectedDate <= minDate}
-              className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 text-xs font-semibold text-slate-300 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              ← {t("pred.previousDay")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedDate(today)}
-              className="rounded-md border border-blue-500/30 bg-blue-500/10 px-2 py-1 text-xs font-semibold text-blue-300 hover:bg-blue-500/20"
-            >
-              {t("pred.today")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedDate((d) => addDaysIso(d, 1))}
-              disabled={selectedDate >= maxDate}
-              className="rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 text-xs font-semibold text-slate-300 hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              {t("pred.nextDay")} →
-            </button>
-          </div>
-          {isHistorical && (
-            <span className="ml-auto rounded-full border border-slate-500/25 bg-slate-500/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
-              {t("pred.historical")}
-            </span>
-          )}
         </div>
       )}
 

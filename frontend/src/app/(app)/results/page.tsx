@@ -530,13 +530,6 @@ function ResultsPageContent() {
     retry: 1,
   });
 
-  const summaryQuery = useQuery({
-    queryKey: ["weekly-summary", period, tierFilter],
-    queryFn: () => api.getWeeklySummary(period, tierFilter),
-    staleTime: 5 * 60_000,
-    retry: 1,
-  });
-
   // Unwrap the fixtures array from the response
   const allResults: Fixture[] = resultsQuery.data?.fixtures ?? [];
 
@@ -588,6 +581,53 @@ function ResultsPageContent() {
 
     return items;
   }, [allResults, resultFilter, leagueFilter, tierFilter]);
+
+  // ── Summary computed from filtered so stats always match the table ─────────
+  const computedSummary = useMemo<WeeklySummary | null>(() => {
+    if (filtered.length === 0) return null;
+    let won = 0;
+    let plUnits = 0;
+    const leagueStats: Record<string, { total: number; won: number }> = {};
+    for (const f of filtered) {
+      if (!f.prediction || !f.result) continue;
+      const predictedSide = derivePickSide(f.prediction);
+      const { home_score, away_score } = f.result;
+      const actualOutcome =
+        home_score > away_score ? "home" : away_score > home_score ? "away" : "draw";
+      const correct = actualOutcome === predictedSide;
+      if (correct) {
+        won++;
+        const o = f.odds;
+        const raw =
+          o != null
+            ? predictedSide === "home"
+              ? o.home
+              : predictedSide === "away"
+              ? o.away
+              : o.draw
+            : null;
+        plUnits += raw != null ? raw - 1 : 1;
+      } else {
+        plUnits -= 1;
+      }
+      const league = f.league_name || "Unknown";
+      if (!leagueStats[league]) leagueStats[league] = { total: 0, won: 0 };
+      leagueStats[league].total++;
+      if (correct) leagueStats[league].won++;
+    }
+    const performers = Object.entries(leagueStats)
+      .map(([name, s]) => ({ name, accuracy: s.won / s.total, total: s.total }))
+      .sort((a, b) => b.accuracy - a.accuracy || b.total - a.total);
+    return {
+      total_calls: filtered.length,
+      won,
+      lost: filtered.length - won,
+      win_rate: won / filtered.length,
+      pl_units: plUnits,
+      best_performers: performers.slice(0, 3),
+      worst_performers: [...performers].reverse().slice(0, 3),
+    };
+  }, [filtered]);
 
   const isLoading = resultsQuery.isLoading;
   const hasError = resultsQuery.isError;
@@ -648,9 +688,9 @@ function ResultsPageContent() {
 
       {/* ── Weekly Summary ── */}
       <WeeklySummaryCard
-        data={summaryQuery.data}
-        isLoading={summaryQuery.isLoading}
-        isError={summaryQuery.isError}
+        data={computedSummary ?? undefined}
+        isLoading={isLoading}
+        isError={hasError}
       />
 
       {/* ── Streak Stats ── */}
