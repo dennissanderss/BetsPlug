@@ -357,7 +357,7 @@ async def _build_botd_section(
 
 @router.get("/model-validation", response_model=BOTDSectionResponse)
 async def get_botd_model_validation(
-    limit: int = Query(default=30, ge=1, le=100),
+    limit: int = Query(default=30, ge=1, le=1000),
     db: AsyncSession = Depends(get_db),
     user_tier: PickTier = Depends(get_current_tier),
 ) -> BOTDSectionResponse:
