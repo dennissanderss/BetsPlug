@@ -49,14 +49,19 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# v8: Confidence tiering from walk-forward validation (28,838 test picks)
-# Source: docs/V8_ENGINE_REPORT.md
-# BOTD uses ≥60% (67.4% accuracy, ~6,060 qualifying picks historically).
-# Premium tier uses ≥75% for the elite 78.2% accuracy tier.
-BOTD_MIN_CONFIDENCE = 0.60       # BOTD threshold
-CONFIDENCE_SILVER = 0.55         # Silver tier: 63.0% accuracy
-CONFIDENCE_GOLD = 0.65           # Gold tier:   70.6% accuracy
-CONFIDENCE_PLATINUM = 0.75       # Premium:     78.2% accuracy
+# v8.4: BOTD sits at the Silver floor (≥65%). The main BOTD endpoint
+# selects in tier order (Platinum → Gold → Silver) so the surfaced
+# pick is always at or above Silver quality. Free-tier picks
+# (confidence < 0.65) are excluded from every BOTD-scoped endpoint:
+# history, track-record, live-tracking, inventory — one drempel for
+# all of them means the marketing claim and the displayed picks can
+# never diverge. Tier thresholds remain canonical in
+# `app.core.tier_system.CONF_THRESHOLD`; these locals are preserved
+# for callers that import from this module.
+BOTD_MIN_CONFIDENCE = 0.65       # BOTD threshold (= Silver floor)
+CONFIDENCE_SILVER = 0.65         # Silver tier: canonical value
+CONFIDENCE_GOLD = 0.70           # Gold tier
+CONFIDENCE_PLATINUM = 0.75       # Platinum tier
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -688,7 +693,6 @@ async def get_bet_of_the_day(
     base_clauses = [
         Match.scheduled_at >= window_start,
         Match.scheduled_at <= window_end,
-        Prediction.confidence >= BOTD_MIN_CONFIDENCE,
     ]
     if status_filter is not None:
         base_clauses.append(status_filter)
@@ -701,38 +705,69 @@ async def get_bet_of_the_day(
         noload(Prediction.model_version),
     ]
 
-    # Try live predictions first; fall back to any prediction if no live picks exist yet
-    stmt = (
-        select(Prediction)
-        .join(Match, Match.id == Prediction.match_id)
-        .options(*load_opts)
-        .where(and_(*base_clauses, Prediction.prediction_source == "live"))
-        # Deterministic tie-break: if two picks share the top confidence,
-        # always prefer the one with the smallest id so BOTD doesn't
-        # flip between requests within the same day.
-        .order_by(Prediction.confidence.desc(), Prediction.id)
-        .limit(1)
+    # v8.4 — Tier-first BOTD selection. Instead of a flat ≥60% confidence
+    # pick (which could be any Free-tier league), walk the quality tiers
+    # from high to low:
+    #   1. Platinum: top-5 leagues AND conf ≥ 0.75 (~82% historical acc)
+    #   2. Gold:     top-10 leagues AND conf ≥ 0.70 (~70%)
+    #   3. Silver:   top-14 leagues AND conf ≥ 0.65 (~61%)
+    # A Free-tier pick (<0.65) is never promoted to BOTD. If none of the
+    # three tiers yields a candidate, BOTD is genuinely unavailable for
+    # the day — better to say so honestly than to surface a weak pick
+    # under a "best of the day" label. Live source is preferred; the
+    # legacy backtest fallback remains for the model-validation period
+    # before 2026-04-18.
+    from app.core.tier_leagues import (
+        LEAGUES_PLATINUM,
+        LEAGUES_GOLD,
+        LEAGUES_SILVER,
     )
-    if TIER_SYSTEM_ENABLED:
-        stmt = stmt.where(access_filter(user_tier))
+    from app.core.tier_system import CONF_THRESHOLD, PickTier
 
-    result = await db.execute(stmt)
-    prediction = result.unique().scalar_one_or_none()
+    tier_ladder: list[tuple[str, list, float]] = [
+        ("platinum", LEAGUES_PLATINUM, CONF_THRESHOLD[PickTier.PLATINUM]),
+        ("gold", LEAGUES_GOLD, CONF_THRESHOLD[PickTier.GOLD]),
+        ("silver", LEAGUES_SILVER, CONF_THRESHOLD[PickTier.SILVER]),
+    ]
 
-    # Fallback: if no live predictions exist yet, serve backtest predictions
-    if prediction is None:
-        stmt_fallback = (
+    prediction = None
+    for _tier_slug, league_ids, min_conf in tier_ladder:
+        if not league_ids:
+            continue
+        tier_clauses = base_clauses + [
+            Match.league_id.in_(league_ids),
+            Prediction.confidence >= min_conf,
+        ]
+
+        # Live source first
+        stmt_live = (
             select(Prediction)
             .join(Match, Match.id == Prediction.match_id)
             .options(*load_opts)
-            .where(and_(*base_clauses))
+            .where(and_(*tier_clauses, Prediction.prediction_source == "live"))
             .order_by(Prediction.confidence.desc(), Prediction.id)
             .limit(1)
         )
         if TIER_SYSTEM_ENABLED:
-            stmt_fallback = stmt_fallback.where(access_filter(user_tier))
-        result = await db.execute(stmt_fallback)
-        prediction = result.unique().scalar_one_or_none()
+            stmt_live = stmt_live.where(access_filter(user_tier))
+        prediction = (await db.execute(stmt_live)).unique().scalar_one_or_none()
+        if prediction is not None:
+            break
+
+        # Fallback: any source for this tier (model-validation window)
+        stmt_any = (
+            select(Prediction)
+            .join(Match, Match.id == Prediction.match_id)
+            .options(*load_opts)
+            .where(and_(*tier_clauses))
+            .order_by(Prediction.confidence.desc(), Prediction.id)
+            .limit(1)
+        )
+        if TIER_SYSTEM_ENABLED:
+            stmt_any = stmt_any.where(access_filter(user_tier))
+        prediction = (await db.execute(stmt_any)).unique().scalar_one_or_none()
+        if prediction is not None:
+            break
 
     if prediction is None:
         return BetOfTheDayResponse(available=False)
