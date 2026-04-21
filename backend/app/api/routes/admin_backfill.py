@@ -423,7 +423,11 @@ async def _run_botd_backfill(db: AsyncSession) -> dict:
         date_str = cursor.strftime("%Y-%m-%d")
         log.info("BACKFILL: day=%s — step 1 check", date_str)
 
-        # ── Step 1: already have a valid BOTD-eligible live pick for this day? ─
+        # ── Step 1: already have a VALID v8.1-era BOTD-eligible live pick? ──
+        # Also require created_at >= V81_DEPLOYMENT_CUTOFF so pre-v8.1
+        # rows that were relabelled to 'live' in an earlier run don't
+        # block the backfill from generating a fresh v8.1 prediction
+        # (which the live-tracking endpoint actually filters into view).
         try:
             has_live = await db.scalar(
                 select(Prediction.id)
@@ -431,6 +435,7 @@ async def _run_botd_backfill(db: AsyncSession) -> dict:
                 .where(Prediction.prediction_source == "live")
                 .where(Prediction.predicted_at < Match.scheduled_at)
                 .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+                .where(Prediction.created_at >= V81_DEPLOYMENT_CUTOFF)
                 .where(Match.league_id.in_(LEAGUES_GOLD))
                 .where(Match.scheduled_at >= cursor)
                 .where(Match.scheduled_at < day_end)
