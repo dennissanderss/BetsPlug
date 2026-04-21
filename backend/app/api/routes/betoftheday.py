@@ -200,8 +200,9 @@ class BOTDSectionSummary(BaseModel):
     correct: int = 0
     accuracy_pct: float = 0.0
     avg_confidence: float = 0.0
-    current_streak: int = 0
-    best_streak: int = 0
+    current_streak: int = 0           # Positive = correct-run, negative = wrong-run
+    best_streak: int = 0              # Longest consecutive correct picks
+    worst_losing_streak: int = 0      # Longest consecutive incorrect picks
 
 
 class BOTDSectionResponse(BaseModel):
@@ -338,19 +339,30 @@ async def _build_botd_section(
     accuracy_pct = round((correct / evaluated * 100), 1) if evaluated else 0.0
     avg_conf = round(sum(p.confidence for p in picks) / total, 1) if total else 0.0
 
-    best = temp = 0
+    # Streak-berekening — één enkele pass over de oud→nieuw lijst telt
+    # zowel de langste winning als losing run. De huidige reeks kijkt
+    # naar het eind: positief bij laatste correcte picks, negatief bij
+    # laatste verkeerde picks; de UI toont dit als-is.
+    best_win = worst_loss = win_run = loss_run = 0
     for p in evaluated_picks:
         if p.correct:
-            temp += 1
-            best = max(best, temp)
+            win_run += 1
+            loss_run = 0
+            best_win = max(best_win, win_run)
         else:
-            temp = 0
+            loss_run += 1
+            win_run = 0
+            worst_loss = max(worst_loss, loss_run)
+
     current = 0
-    for p in reversed(evaluated_picks):
-        if p.correct:
-            current += 1
-        else:
-            break
+    if evaluated_picks:
+        last_correct = evaluated_picks[-1].correct
+        sign = 1 if last_correct else -1
+        for p in reversed(evaluated_picks):
+            if p.correct == last_correct:
+                current += sign
+            else:
+                break
 
     summary = BOTDSectionSummary(
         total_picks=total,
@@ -359,7 +371,8 @@ async def _build_botd_section(
         accuracy_pct=accuracy_pct,
         avg_confidence=avg_conf,
         current_streak=current,
-        best_streak=best,
+        best_streak=best_win,
+        worst_losing_streak=worst_loss,
     )
 
     # Return newest first, capped to limit.
@@ -635,7 +648,8 @@ class BOTDTrackRecord(BaseModel):
     correct: int = 0
     accuracy_pct: float = 0.0
     current_streak: int = 0          # consecutive correct (positive) or wrong (negative)
-    best_streak: int = 0
+    best_streak: int = 0             # longest consecutive correct
+    worst_losing_streak: int = 0     # longest consecutive incorrect
     avg_confidence: float = 0.0
     last_updated: str | None = None
 
@@ -708,22 +722,30 @@ async def get_botd_track_record(
     accuracy = (correct / evaluated * 100) if evaluated > 0 else 0.0
     avg_conf = sum(p.confidence for p, _ in picks) / total if total > 0 else 0.0
 
-    # Compute streaks
-    current_streak = 0
+    # Compute streaks: win (best_streak), loss (worst_losing_streak),
+    # plus current run (positief = correct, negatief = wrong).
     best_streak = 0
-    temp_streak = 0
+    worst_losing_streak = 0
+    win_run = loss_run = 0
     for _, e in evaluated_picks:
         if e.is_correct:
-            temp_streak += 1
-            best_streak = max(best_streak, temp_streak)
+            win_run += 1
+            loss_run = 0
+            best_streak = max(best_streak, win_run)
         else:
-            temp_streak = 0
-    # Current streak: count from the end
-    for _, e in reversed(evaluated_picks):
-        if e.is_correct:
-            current_streak += 1
-        else:
-            break
+            loss_run += 1
+            win_run = 0
+            worst_losing_streak = max(worst_losing_streak, loss_run)
+
+    current_streak = 0
+    if evaluated_picks:
+        last_correct = evaluated_picks[-1][1].is_correct
+        sign = 1 if last_correct else -1
+        for _, e in reversed(evaluated_picks):
+            if e.is_correct == last_correct:
+                current_streak += sign
+            else:
+                break
 
     last_date = None
     if picks:
@@ -738,6 +760,7 @@ async def get_botd_track_record(
         accuracy_pct=round(accuracy, 1),
         current_streak=current_streak,
         best_streak=best_streak,
+        worst_losing_streak=worst_losing_streak,
         avg_confidence=round(avg_conf * 100, 1),
         last_updated=last_date,
     )
@@ -824,14 +847,18 @@ async def get_bet_of_the_day(
     now = datetime.now(timezone.utc)
 
     # v6 fix: when no target_date is specified we want "the best
-    # pick for the NEXT 72h", not "the best pick from the whole of
+    # pick for the NEXT 7 days", not "the best pick from the whole of
     # today even if it already kicked off". Otherwise the page shows
     # a match with a final score sitting under a "Pick of the Day"
-    # header, which confuses users. When a target_date IS specified
-    # (e.g. browse history), we keep the day-window behaviour.
+    # header, which confuses users.
+    # v8.4.2: 7-dagen venster (was 72h) zodat midden-weekse gaten
+    # zonder Gold-league fixtures niet een "available: false" response
+    # opleveren. De pick van vandaag/morgen wint alsnog op confidence;
+    # de week-horizon is alleen een safety net voor dagen zonder
+    # onmiddellijk-aftrappende topwedstrijd.
     if target_date is None:
         window_start = now
-        window_end = now + timedelta(hours=72)
+        window_end = now + timedelta(days=7)
         status_filter = Match.status == MatchStatus.SCHEDULED
     else:
         day_start = datetime.combine(target_date, time.min, tzinfo=timezone.utc)

@@ -34,6 +34,7 @@ interface BotdSummary {
   accuracy_pct: number;
   current_streak: number;
   best_streak: number;
+  worst_losing_streak: number;
   avg_confidence: number;
 }
 
@@ -138,8 +139,8 @@ export function BotdLiveTrackingSection() {
           </p>
         </motion.div>
 
-        {/* KPI strip */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* KPI strip — 5 stats: accuracy, total, best win, worst loss, avg conf */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <KpiCard
             icon={Target}
             variant="green"
@@ -176,17 +177,34 @@ export function BotdLiveTrackingSection() {
             icon={Flame}
             variant="green"
             value={
-              !awaiting && agg?.current_streak != null
-                ? String(agg.current_streak)
+              !awaiting && agg?.best_streak != null
+                ? String(agg.best_streak)
                 : "—"
             }
-            label={isNl ? "Huidige reeks" : "Current streak"}
+            label={isNl ? "Beste reeks" : "Best streak"}
             note={
               !awaiting && agg
-                ? `${isNl ? "Beste" : "Best"}: ${agg.best_streak}`
+                ? `${isNl ? "Huidig" : "Current"}: ${agg.current_streak}`
                 : isNl
                   ? "Volgt zodra data binnen is"
                   : "Starts once data arrives"
+            }
+            awaiting={awaiting}
+            isNl={isNl}
+          />
+          <KpiCard
+            icon={XCircle}
+            variant="purple"
+            value={
+              !awaiting && agg?.worst_losing_streak != null
+                ? String(agg.worst_losing_streak)
+                : "—"
+            }
+            label={isNl ? "Slechtste reeks" : "Worst loss streak"}
+            note={
+              isNl
+                ? "Max opeenvolgende fout"
+                : "Max consecutive misses"
             }
             awaiting={awaiting}
             isNl={isNl}
@@ -199,7 +217,7 @@ export function BotdLiveTrackingSection() {
                 ? `${agg.avg_confidence.toFixed(1).replace(".", isNl ? "," : ".")}%`
                 : "—"
             }
-            label={isNl ? "Gem. betrouwbaarheid" : "Avg confidence"}
+            label={isNl ? "Gem. conf." : "Avg conf."}
             note={
               isNl ? "Gemiddelde modelscore" : "Average model score"
             }

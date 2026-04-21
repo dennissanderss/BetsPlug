@@ -36,6 +36,7 @@ interface BotdAggregate {
   accuracy_pct: number;
   current_streak: number;
   best_streak: number;
+  worst_losing_streak: number;
   avg_confidence: number;
   last_updated: string;
 }
@@ -82,6 +83,7 @@ export function BotdTrackRecordSection() {
           accuracy_pct: s.accuracy_pct ?? 0,
           current_streak: s.current_streak ?? 0,
           best_streak: s.best_streak ?? 0,
+          worst_losing_streak: s.worst_losing_streak ?? 0,
           avg_confidence: s.avg_confidence ?? 0,
           last_updated: "",
         });
@@ -168,8 +170,8 @@ export function BotdTrackRecordSection() {
           </p>
         </motion.div>
 
-        {/* KPI strip */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* KPI strip — 5 stats: accuracy, total, best win, worst loss, avg conf */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <KpiCard
             icon={Target}
             variant="green"
@@ -210,6 +212,21 @@ export function BotdTrackRecordSection() {
             }
           />
           <KpiCard
+            icon={XCircle}
+            variant="purple"
+            value={
+              agg?.worst_losing_streak != null
+                ? String(agg.worst_losing_streak)
+                : "—"
+            }
+            label={isNl ? "Slechtste reeks" : "Worst loss streak"}
+            note={
+              isNl
+                ? "Max opeenvolgende fout"
+                : "Max consecutive misses"
+            }
+          />
+          <KpiCard
             icon={ShieldCheck}
             variant="blue"
             value={
@@ -217,7 +234,7 @@ export function BotdTrackRecordSection() {
                 ? `${agg.avg_confidence.toFixed(1).replace(".", isNl ? "," : ".")}%`
                 : "—"
             }
-            label={isNl ? "Gem. betrouwbaarheid" : "Avg confidence"}
+            label={isNl ? "Gem. conf." : "Avg conf."}
             note={
               isNl ? "Gemiddelde model-score" : "Average model score"
             }
