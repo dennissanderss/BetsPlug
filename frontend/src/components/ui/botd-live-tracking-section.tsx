@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
   Activity,
+  Calendar,
   CheckCircle2,
   XCircle,
   Target,
@@ -74,6 +75,9 @@ export function BotdLiveTrackingSection() {
   const agg = data?.summary;
   const history = data?.picks ?? null;
   const awaiting = !agg || (agg.evaluated ?? 0) === 0;
+
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
 
   const fmtDate = (iso: string) => {
     try {
@@ -231,7 +235,11 @@ export function BotdLiveTrackingSection() {
                 : "No live-logged BOTD picks yet. The first row appears as soon as a BOTD fixture has been played."}
             </div>
           ) : (
-            history.map((row, i) => (
+            history.map((row, i) => {
+              const matchDate = new Date(row.date);
+              matchDate.setHours(0, 0, 0, 0);
+              const isFuture = matchDate >= todayDate;
+              return (
               <div
                 key={i}
                 className="grid grid-cols-12 items-center gap-2 border-b border-white/[0.04] px-4 py-3 text-xs last:border-b-0"
@@ -269,12 +277,21 @@ export function BotdLiveTrackingSection() {
                     <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                   ) : row.correct === false ? (
                     <XCircle className="h-4 w-4 text-red-400" />
+                  ) : isFuture ? (
+                    <span className="inline-flex items-center gap-0.5 text-[9px] font-medium text-slate-500">
+                      <Calendar className="h-3 w-3 shrink-0" />
+                      {isNl ? "Te spelen" : "Upcoming"}
+                    </span>
                   ) : (
-                    <Clock className="h-4 w-4 text-slate-500" />
+                    <span className="inline-flex items-center gap-0.5 text-[9px] font-medium text-amber-500/80">
+                      <Clock className="h-3 w-3 shrink-0" />
+                      {isNl ? "In beoord." : "Pending"}
+                    </span>
                   )}
                 </span>
               </div>
-            ))
+              );
+            })
           )}
         </div>
 
