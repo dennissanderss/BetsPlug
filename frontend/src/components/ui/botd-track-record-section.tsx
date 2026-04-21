@@ -156,17 +156,6 @@ export function BotdTrackRecordSection() {
             }
           />
           <KpiCard
-            icon={Flame}
-            variant="green"
-            value={agg?.current_streak != null ? String(agg.current_streak) : "—"}
-            label={isNl ? "Huidige reeks" : "Current streak"}
-            note={
-              agg
-                ? `${isNl ? "Beste" : "Best"}: ${agg.best_streak}`
-                : "—"
-            }
-          />
-          <KpiCard
             icon={ShieldCheck}
             variant="blue"
             value={

@@ -1738,7 +1738,6 @@ export default function TrackrecordPage() {
                 </p>
               </div>
             </div>
-            <BotdCsvDownloadButton />
           </div>
           <div className="p-6">
             <BotdTierGate>
