@@ -1072,3 +1072,71 @@ export interface PageSeoScore {
   has_schema: boolean;
   overall_score: number;
 }
+
+// ─── Value Bet engine (v9) ──────────────────────────────────────────────────
+
+export interface ValueBetToday {
+  available: boolean;
+  reason?: string;
+  bet_date?: string;
+  match_id?: string;
+  home_team?: string;
+  away_team?: string;
+  league?: string;
+  scheduled_at?: string;
+  our_pick?: "home" | "draw" | "away";
+  our_probability?: number;
+  bookmaker_implied?: number;
+  fair_implied?: number;
+  edge?: number;
+  expected_value?: number;
+  best_odds?: number;
+  odds_source?: string;
+  our_confidence?: number;
+  prediction_tier?: "free" | "silver" | "gold" | "platinum";
+  prediction_tier_label?: string;
+  is_live?: boolean;
+  disclaimer?: string;
+}
+
+export interface ValueBetStats {
+  scope: "all" | "live" | "backtest";
+  total_picks: number;
+  evaluated_picks: number;
+  correct_picks: number;
+  accuracy: number;
+  avg_odds: number;
+  avg_edge: number;
+  total_units_pnl: number;
+  roi_percentage: number;
+  max_drawdown_units: number;
+  sharpe_ratio: number | null;
+  wilson_ci_lower: number;
+  wilson_ci_upper: number;
+  sample_size_warning: boolean;
+  window_start?: string;
+  window_end?: string;
+}
+
+export interface ValueBetHistoryItem {
+  id: string;
+  bet_date: string;
+  picked_at: string;
+  home_team: string;
+  away_team: string;
+  league: string;
+  our_pick: "home" | "draw" | "away";
+  best_odds: number;
+  edge: number;
+  expected_value: number;
+  prediction_tier?: "free" | "silver" | "gold" | "platinum";
+  is_live: boolean;
+  is_evaluated: boolean;
+  is_correct?: boolean | null;
+  profit_loss_units?: number | null;
+}
+
+export interface ValueBetHistoryResponse {
+  total: number;
+  items: ValueBetHistoryItem[];
+}

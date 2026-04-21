@@ -674,6 +674,36 @@ class ApiClient {
     return this.request<{ status: string; version: string }>("/health");
   }
 
+  // Value Bet engine (v9)
+  getValueBetToday() {
+    return this.request<import("@/types/api").ValueBetToday>(
+      "/value-bets/today",
+    );
+  }
+  getValueBetStats(scope: "all" | "live" | "backtest" = "all") {
+    return this.request<import("@/types/api").ValueBetStats>(
+      `/value-bets/stats?scope=${scope}`,
+    );
+  }
+  getValueBetHistory(params?: {
+    start_date?: string;
+    end_date?: string;
+    is_live?: boolean;
+    limit?: number;
+    offset?: number;
+  }) {
+    const q = new URLSearchParams();
+    if (params?.start_date) q.set("start_date", params.start_date);
+    if (params?.end_date) q.set("end_date", params.end_date);
+    if (params?.is_live !== undefined) q.set("is_live", String(params.is_live));
+    if (params?.limit) q.set("limit", String(params.limit));
+    if (params?.offset) q.set("offset", String(params.offset));
+    const qs = q.toString();
+    return this.request<import("@/types/api").ValueBetHistoryResponse>(
+      `/value-bets/history${qs ? `?${qs}` : ""}`,
+    );
+  }
+
   // Pick of the Day
   getBetOfTheDay(targetDate?: string) {
     const params = targetDate ? `?target_date=${targetDate}` : "";

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useTranslations } from "@/i18n/locale-provider";
@@ -8,6 +9,7 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import { PickReasoningBlock } from "@/components/predictions/PickReasoningBlock";
+import { ValueBetPanel } from "@/components/bet-of-the-day/value-bet-panel";
 import type { PickTierSlug, PredictionDriver } from "@/types/api";
 import {
   Trophy,
@@ -554,8 +556,11 @@ async function fetchBotdWithFallback(): Promise<BetOfTheDay & { target_date?: st
   return api.getBetOfTheDay();
 }
 
+type BotdTab = "single-pick" | "value-bet";
+
 export default function BetOfTheDayPage() {
   const { t } = useTranslations();
+  const [activeTab, setActiveTab] = useState<BotdTab>("single-pick");
   const { data, isLoading, isError } = useQuery<BetOfTheDay & { target_date?: string }>({
     queryKey: ["bet-of-the-day"],
     queryFn: fetchBotdWithFallback,
@@ -649,6 +654,38 @@ export default function BetOfTheDayPage() {
         )}
       </div>
 
+      {/* ── Tabs: Single Pick | Value Bet ── */}
+      <div className="inline-flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
+        <button
+          type="button"
+          onClick={() => setActiveTab("single-pick")}
+          className={`flex items-center gap-2 rounded-md px-4 py-2 text-xs font-semibold transition-all ${
+            activeTab === "single-pick"
+              ? "bg-emerald-600/80 text-white shadow-md shadow-emerald-500/20"
+              : "text-slate-400 hover:text-slate-200"
+          }`}
+        >
+          <Star className="h-3.5 w-3.5" />
+          Single Pick
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("value-bet")}
+          className={`flex items-center gap-2 rounded-md px-4 py-2 text-xs font-semibold transition-all ${
+            activeTab === "value-bet"
+              ? "bg-emerald-600/80 text-white shadow-md shadow-emerald-500/20"
+              : "text-slate-400 hover:text-slate-200"
+          }`}
+        >
+          <BarChart3 className="h-3.5 w-3.5" />
+          Value Bet
+        </button>
+      </div>
+
+      {activeTab === "value-bet" ? (
+        <ValueBetPanel />
+      ) : (
+      <>
       {/* ── Main Card ── */}
       {!hasData ? (
         <div className="glass-card flex flex-col items-center justify-center gap-4 py-20 text-center">
@@ -975,6 +1012,8 @@ export default function BetOfTheDayPage() {
             </div>
           </div>
         </>
+      )}
+      </>
       )}
       </div>
     </div>

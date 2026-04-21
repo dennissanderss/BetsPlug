@@ -274,12 +274,19 @@ async def get_strategy_picks(
     limit: int = Query(default=50, ge=1, le=200, description="Max picks to return"),
     offset: int = Query(default=0, ge=0, description="Pagination offset"),
     db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
 ) -> StrategyPicksResponse:
     """
     Evaluate all recent predictions against the strategy and return matching picks.
 
     Predictions are evaluated in-memory against the strategy rules. Odds-based
     rules are skipped when odds data is not available.
+
+    Tier-scoped: under ``TIER_SYSTEM_ENABLED`` rows are restricted to picks
+    the caller's subscription tier can access — same rule as
+    ``/{id}/today-picks``. Without this gate a Free user hitting the
+    historical ``/picks`` endpoint would see Platinum-scope predictions
+    that the paid-tier funnel is supposed to gate out.
     """
     # Fetch the strategy
     strat_result = await db.execute(
@@ -322,6 +329,8 @@ async def get_strategy_picks(
         .outerjoin(MatchResult, MatchResult.match_id == Match.id)
         .order_by(Match.scheduled_at.desc())
     )
+    if TIER_SYSTEM_ENABLED:
+        q = q.where(access_filter(user_tier))
 
     result = await db.execute(q)
     rows = result.all()

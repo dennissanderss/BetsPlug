@@ -23,7 +23,10 @@ from app.models.elo_history import TeamEloHistory
 from app.models.match_statistics import MatchStatistics
 from app.models.top_scorer import TopScorer
 from app.models.api_usage import ApiUsageLog
+# telegram
 from app.models.telegram_post import TelegramPost
+# Value-bet engine (v9)
+from app.models.value_bet import ValueBet
 
 __all__ = [
     "Sport", "League", "Season", "Team", "Player",
@@ -42,4 +45,6 @@ __all__ = [
     "TeamEloHistory", "MatchStatistics", "TopScorer", "ApiUsageLog",
     # telegram
     "TelegramPost",
+    # v9
+    "ValueBet",
 ]

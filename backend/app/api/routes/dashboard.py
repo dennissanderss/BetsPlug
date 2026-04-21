@@ -82,8 +82,9 @@ async def get_dashboard_metrics(
     from app.core.cache import cache_get, cache_set
 
     # Cache key is tier-aware so each tier sees its own numbers.
-    # Version bump (v2) invalidates stale caches that were computed before
-    # per_tier stopped being access-filtered (Bug 1 fix, 2026-04).
+    # v2 bump: per_tier stopped being access-filtered (Bug 1 fix, 2026-04).
+    # v3 bump: response schema additions; bump the suffix whenever the
+    # aggregation changes so stale caches can't serve inconsistent shapes.
     cache_key = f"dashboard:metrics:v3:{user_tier.name.lower()}"
     cached = await cache_get(cache_key)
     if cached is not None:

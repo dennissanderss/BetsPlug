@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   ClipboardList,
-  FileBarChart2,
   ShieldCheck,
   Sparkles,
   ChevronRight,
@@ -59,7 +58,11 @@ const navSections: NavSection[] = [
     labelKey: "sidebar.predictions",
     fallbackLabel: "Predictions",
     items: [
-      { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy },
+      // Pick of the Day + Reports mirror the PaywallOverlay tiers set on
+      // the pages themselves (bet-of-the-day/page.tsx, reports/page.tsx).
+      // Without this the nav item is clickable for Free users and only
+      // paywalls on arrival — inconsistent state between sidebar and page.
+      { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy, requiredTier: "gold" },
       { labelKey: "nav.predictions", fallback: "All Predictions", href: "/predictions", icon: Sparkles },
     ],
   },
@@ -67,7 +70,7 @@ const navSections: NavSection[] = [
     labelKey: "sidebar.results",
     fallbackLabel: "Results",
     items: [
-      { labelKey: "nav.results", fallback: "Results & Analysis", href: "/results", icon: Trophy },
+      { labelKey: "nav.results", fallback: "Results & Analysis", href: "/results", icon: Trophy, requiredTier: "silver" },
       { labelKey: "nav.trackrecord", fallback: "Track Record", href: "/trackrecord", icon: ClipboardList },
     ],
   },
