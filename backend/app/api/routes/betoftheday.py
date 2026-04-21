@@ -488,6 +488,128 @@ async def get_botd_live_tracking(
     )
 
 
+@router.get(
+    "/debug/missing-days",
+    summary="Per-day explanation of why the live-tracking has no BOTD for a date",
+)
+async def debug_missing_botd_days(
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Public read-only diagnostic. For each day from LIVE_BOTD_START
+    (2026-04-18) up to yesterday, report:
+
+      * gold_matches_total / by status — how many matches in LEAGUES_GOLD
+        existed for that day in the DB
+      * predictions_total — how many predictions we have for those matches
+      * max_confidence — the highest-confidence prediction in Gold leagues
+        that day (any source)
+      * botd_eligible — true if there's at least one live pick
+        ``conf ≥ BOTD_MIN_CONFIDENCE`` with strict pre-match timing
+      * verdict — short plain-language reason why the day is/isn't covered
+    """
+    from sqlalchemy import func as sql_func
+    from app.core.tier_leagues import LEAGUES_GOLD
+
+    now = datetime.now(timezone.utc)
+    today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    days_out: list[dict] = []
+    cursor = LIVE_BOTD_START.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    while cursor < today:
+        day_end = cursor + timedelta(days=1)
+        date_str = cursor.strftime("%Y-%m-%d")
+
+        status_rows = (await db.execute(
+            select(Match.status, sql_func.count(Match.id))
+            .where(Match.league_id.in_(LEAGUES_GOLD))
+            .where(Match.scheduled_at >= cursor)
+            .where(Match.scheduled_at < day_end)
+            .group_by(Match.status)
+        )).all()
+        status_map = {
+            (r[0].value if hasattr(r[0], "value") else str(r[0])): r[1]
+            for r in status_rows
+        }
+        total_matches = sum(status_map.values())
+
+        pred_stats = (await db.execute(
+            select(
+                sql_func.count(Prediction.id),
+                sql_func.max(Prediction.confidence),
+                sql_func.count(Prediction.id).filter(
+                    Prediction.predicted_at < Match.scheduled_at
+                ),
+            )
+            .join(Match, Match.id == Prediction.match_id)
+            .where(Match.league_id.in_(LEAGUES_GOLD))
+            .where(Match.scheduled_at >= cursor)
+            .where(Match.scheduled_at < day_end)
+        )).first()
+        preds_total = pred_stats[0] or 0
+        max_conf = float(pred_stats[1]) if pred_stats[1] is not None else None
+        strict_pre = pred_stats[2] or 0
+
+        eligible = await db.scalar(
+            select(sql_func.count(Prediction.id))
+            .join(Match, Match.id == Prediction.match_id)
+            .where(Prediction.prediction_source == "live")
+            .where(Prediction.predicted_at < Match.scheduled_at)
+            .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+            .where(Match.league_id.in_(LEAGUES_GOLD))
+            .where(Match.scheduled_at >= cursor)
+            .where(Match.scheduled_at < day_end)
+        )
+
+        if eligible:
+            verdict = "✓ BOTD-eligible live pick aanwezig"
+        elif total_matches == 0:
+            verdict = "✗ Geen matches in Gold-leagues op deze dag"
+        elif preds_total == 0:
+            verdict = (
+                "✗ Matches aanwezig maar géén predictions gegenereerd — "
+                "scheduler mist, of forecast faalde"
+            )
+        elif max_conf is not None and max_conf < BOTD_MIN_CONFIDENCE:
+            verdict = (
+                f"✗ Predictions aanwezig maar max confidence "
+                f"{max_conf:.1%} < BOTD-drempel "
+                f"{BOTD_MIN_CONFIDENCE:.0%} — geen pick sterk genoeg"
+            )
+        elif strict_pre == 0:
+            verdict = (
+                "✗ Predictions aanwezig maar geen enkele strict pre-match "
+                "(predicted_at ≥ scheduled_at) — race met aftrap"
+            )
+        else:
+            verdict = (
+                "✗ Predictions ≥ drempel aanwezig, strict pre-match, maar "
+                "prediction_source ≠ 'live' — backfill heeft niet gedraaid "
+                "of is gefaald"
+            )
+
+        days_out.append({
+            "date": date_str,
+            "gold_matches_total": total_matches,
+            "gold_matches_by_status": status_map,
+            "predictions_total": preds_total,
+            "predictions_strict_pre_match": strict_pre,
+            "max_confidence": max_conf,
+            "botd_eligible": bool(eligible),
+            "verdict": verdict,
+        })
+
+        cursor += timedelta(days=1)
+
+    return {
+        "generated_at": now.isoformat(),
+        "live_botd_start": LIVE_BOTD_START.isoformat(),
+        "botd_min_confidence": BOTD_MIN_CONFIDENCE,
+        "gold_leagues_count": len(LEAGUES_GOLD),
+        "days": days_out,
+    }
+
+
 class BOTDTrackRecord(BaseModel):
     """Historical accuracy of the Pick of the Day feature."""
     total_picks: int = 0
