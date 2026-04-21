@@ -582,7 +582,12 @@ class ApiClient {
   }
 
   botdBackfillMissed() {
-    return this.request<{ backfilled: number; dates: string[] }>(
+    return this.request<{
+      backfilled: number;
+      errors: number;
+      details: { date: string; action: string; confidence: number; prediction_id: string; original_source: string }[];
+      error_details: string[];
+    }>(
       "/admin/botd/backfill-missed",
       { method: "POST" },
     );

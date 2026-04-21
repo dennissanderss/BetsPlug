@@ -1833,14 +1833,15 @@ function BotdBackfillCard() {
               {data.backfilled} dag{data.backfilled !== 1 ? "en" : ""} ingevuld
             </p>
           </div>
-          {data.dates.length > 0 && (
+          {data.details.length > 0 && (
             <div className="flex flex-wrap gap-1.5 pt-0.5">
-              {data.dates.map((d) => (
+              {data.details.map((d) => (
                 <span
-                  key={d}
+                  key={d.date}
                   className="inline-flex items-center rounded-md bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 font-mono text-[11px] text-emerald-300"
+                  title={`${d.action} · ${d.confidence}% · ${d.original_source}`}
                 >
-                  {d}
+                  {d.date}
                 </span>
               ))}
             </div>
