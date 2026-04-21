@@ -581,6 +581,13 @@ class ApiClient {
     );
   }
 
+  botdBackfillMissed() {
+    return this.request<{ backfilled: number; dates: string[] }>(
+      "/admin/botd/backfill-missed",
+      { method: "POST" },
+    );
+  }
+
   // Fixture Results
   getFixtureResults(days = 7, league?: string) {
     const params = new URLSearchParams({ days: String(days) });

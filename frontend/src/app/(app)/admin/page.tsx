@@ -1171,6 +1171,9 @@ function ActionsTab({ sources }: { sources: DataSourceHealth[] }) {
       {/* Test prediction generation (find the real error) */}
       <PredictionGenerationTestCard />
 
+      {/* BOTD backfill — hernoem gemiste scheduler-picks (18-20 apr 2026) */}
+      <BotdBackfillCard />
+
       {/* Retrain models */}
       <div className="card-neon p-6 space-y-4 border border-red-500/15">
         <div className="flex items-center gap-2.5">
@@ -1770,6 +1773,94 @@ function PredictionGenerationTestCard() {
             ? mutation.error.message
             : "Test call failed."}
         </p>
+      )}
+    </div>
+  );
+}
+
+// ─── BOTD Backfill — Gemiste picks (apr 18-20 2026) ──────────────────────────
+
+function BotdBackfillCard() {
+  const mutation = useMutation({
+    mutationFn: () => api.botdBackfillMissed(),
+  });
+
+  const data = mutation.data;
+
+  return (
+    <div className="card-neon p-6 space-y-4 border border-blue-500/20">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
+            <RefreshCw className="h-4 w-4 text-blue-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-100">
+              BOTD Backfill — Gemiste picks
+              <span className="ml-2 inline-flex items-center rounded-md border border-blue-500/30 bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-blue-300">
+                🟢 Veilig
+              </span>
+            </h3>
+            <p className="text-xs text-slate-400">
+              Vult de days in waar de scheduler kapot was (18-20 apr 2026).
+              Hernoemt de beste pre-match pick per dag naar &apos;live&apos;. Veilig om meerdere keren uit te voeren.
+            </p>
+          </div>
+        </div>
+      </div>
+      <button
+        onClick={() => mutation.mutate()}
+        disabled={mutation.isPending}
+        className="inline-flex items-center gap-2 rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-2.5 text-sm font-semibold text-blue-200 hover:bg-blue-500/20 disabled:opacity-50"
+      >
+        {mutation.isPending ? (
+          <>
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            Bezig…
+          </>
+        ) : (
+          <>
+            <RefreshCw className="h-4 w-4" />
+            Backfill gemiste BOTD picks
+          </>
+        )}
+      </button>
+      {mutation.isSuccess && data && (
+        <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3 space-y-1.5">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+            <p className="text-xs font-semibold text-emerald-200">
+              {data.backfilled} dag{data.backfilled !== 1 ? "en" : ""} ingevuld
+            </p>
+          </div>
+          {data.dates.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 pt-0.5">
+              {data.dates.map((d) => (
+                <span
+                  key={d}
+                  className="inline-flex items-center rounded-md bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 font-mono text-[11px] text-emerald-300"
+                >
+                  {d}
+                </span>
+              ))}
+            </div>
+          )}
+          {data.backfilled === 0 && (
+            <p className="text-[11px] text-slate-400">
+              Niets te doen — alle dagen zijn al ingevuld of er zijn geen geschikte picks gevonden.
+            </p>
+          )}
+        </div>
+      )}
+      {mutation.isError && (
+        <div className="flex items-start gap-2 rounded-lg border border-red-500/30 bg-red-500/5 p-3">
+          <AlertTriangle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+          <p className="text-xs text-red-300">
+            {mutation.error instanceof Error
+              ? mutation.error.message
+              : "Backfill call mislukt."}
+          </p>
+        </div>
       )}
     </div>
   );
