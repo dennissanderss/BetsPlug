@@ -8,7 +8,6 @@ import {
   BarChart3,
   Filter,
   Activity,
-  Layers,
   CheckCircle2,
   XCircle,
   Clock,
@@ -1552,18 +1551,13 @@ function TierTabsStrip({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function TrackrecordPage() {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
+  const isNl = locale === "nl";
+  const [mainTab, setMainTab] = React.useState<"live" | "backtest">("live");
   const [dateFrom, setDateFrom] = React.useState("");
   const [dateTo, setDateTo] = React.useState("");
   const [sportId, setSportId] = React.useState("all");
   const [leagueId, setLeagueId] = React.useState("all");
-  // Tabs zijn verwijderd — layout is nu lineair. State + array behouden
-  // tot de refactor helemaal is opgeschoond zodat TypeScript niet klaagt
-  // over ongebruikte symbolen; geen render-pad gebruikt ze nog.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [activeTab, setActiveTab] = React.useState("performance");
-  void setActiveTab;
-  void activeTab;
   // v8.3 — public tier selector. "all" means "whatever the caller has
   // access to"; the other values override access_filter on the backend.
   const [pickTier, setPickTier] = React.useState<
@@ -1629,21 +1623,6 @@ export default function TrackrecordPage() {
     [monthSegments]
   );
 
-  // Mirrors the public /prestaties four-surface layout. The public
-  // page numbers sections 1–4 as: tier-backtest / tier-live / botd-
-  // backtest / botd-live. Authed users get the same mental model,
-  // plus the existing "Segmenten" drill-down as an extra 5th tab.
-  // Dead tabs array — laat even staan zodat latere cleanup makkelijk is.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const tabs = [
-    { key: "performance", label: `1 · ${t("trackrecord.performance")}`, icon: TrendingUp },
-    { key: "live", label: `2 · ${t("trackrecord.tabLive")}`, icon: Activity },
-    { key: "botd", label: `3 · ${t("trackrecord.tabBotd")}`, icon: Trophy },
-    { key: "botd-live", label: `4 · ${t("trackrecord.tabBotd")} · ${t("trackrecord.tabLive")}`, icon: Activity },
-    { key: "segments", label: t("trackrecord.segments"), icon: Layers },
-  ];
-  void tabs;
-
   return (
     <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
       <div className="relative space-y-6">
@@ -1669,10 +1648,45 @@ export default function TrackrecordPage() {
         </Pill>
       </div>
 
+      {/* ─── Main tab navigation ─── */}
+      <div className="glass-card overflow-hidden">
+        <div className="flex border-b border-white/[0.06]">
+          {([
+            { key: "live", label: isNl ? "Live meting" : "Live measurement", icon: Activity, accent: "blue" },
+            { key: "backtest", label: "Backtest", icon: BarChart3, accent: "emerald" },
+          ] as const).map(({ key, label, icon: Icon, accent }) => {
+            const active = mainTab === key;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setMainTab(key)}
+                className={`flex items-center gap-2 px-6 py-3.5 text-sm font-semibold transition-colors border-b-2 ${
+                  active
+                    ? accent === "blue"
+                      ? "border-blue-400 bg-blue-500/[0.08] text-blue-300"
+                      : "border-emerald-400 bg-emerald-500/[0.08] text-emerald-300"
+                    : "border-transparent text-slate-400 hover:text-slate-200 hover:border-white/20"
+                }`}
+                aria-selected={active}
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* v8.3 — public tier selector. Lets any visitor audit the track
           record of any tier (Free can see Platinum's numbers and vice
           versa). Updates every KPI, chart, segment and CSV export. */}
+      {mainTab === "backtest" && (
       <TierTabsStrip value={pickTier} onChange={setPickTier} />
+      )}
+
+      {/* ──────────────── BACKTEST TAB CONTENT ──────────────── */}
+      {mainTab === "backtest" && (<>
 
       {/* v6.2.1: Data transparency card (replaces the old methodology banner) */}
       <DataTransparencyCard summary={summary} loading={summaryLoading} pickTier={pickTier} />
@@ -2051,54 +2065,7 @@ export default function TrackrecordPage() {
         <TrustFunnel />
       </div>
 
-      {/* ──────────────── LIVE METING PHASE BANNER ──────────────── */}
-      <SectionPhaseBanner
-        accent="blue"
-        kicker="2 · Live meting · vanaf 18 apr 2026"
-        title="Pre-match meting die dagelijks groeit"
-        subtitle={
-          "Hieronder tellen alleen picks die strikt vóór de aftrap zijn vastgelegd. " +
-          "De teller begint op 0 en groeit met elke afgelopen wedstrijd — de eerlijke " +
-          "track record zonder cherry-picking."
-        }
-      />
-
-      <div className="space-y-6 animate-slide-up">
-        {/* Per-tier live meting */}
-        <div className="glass-card p-6">
-          <div className="mb-4">
-            <h2 className="text-base font-semibold text-slate-100">
-              Per tier — live accuraatheid
-            </h2>
-            <p className="text-sm text-slate-500 mt-0.5">
-              Strikt pre-match picks sinds 18 april 2026, per tier uitgesplitst.
-              Zolang een tier onder 10 beoordeelde picks zit tonen we "wachten op
-              data" — kleine samples zijn geen conclusie.
-            </p>
-          </div>
-          <LiveMeasurementSection />
-        </div>
-
-        {/* Pick of the Day — live (Gold+ only) */}
-        <div className="glass-card p-6 border border-purple-500/20">
-          <div className="mb-4 flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-purple-300" />
-            <div>
-              <h2 className="text-base font-semibold text-slate-100">
-                Pick of the Day — live meting
-              </h2>
-              <p className="text-sm text-slate-500 mt-0.5">
-                Dagelijkse BOTD pre-match vastgelegd. Gold en Platinum zien dezelfde stream.
-              </p>
-            </div>
-          </div>
-          <BotdTierGate>
-            <BotdLiveTrackingSection />
-          </BotdTierGate>
-        </div>
-      </div>
-
-      {/* ──────────────── DRILLDOWN SEGMENTEN ──────────────── */}
+      {/* ──────────────── DRILLDOWN SEGMENTEN (backtest tab) ──────────────── */}
       <SectionPhaseBanner
         accent="slate"
         kicker="3 · Drilldown"
@@ -2157,6 +2124,61 @@ export default function TrackrecordPage() {
           </a>
         </div>
       </div>
+
+      </>)}
+      {/* ─── End backtest tab ─── */}
+
+      {/* ──────────────── LIVE METING TAB CONTENT ──────────────── */}
+      {mainTab === "live" && (<>
+
+      <SectionPhaseBanner
+        accent="blue"
+        kicker="2 · Live meting · vanaf 18 apr 2026"
+        title="Pre-match meting die dagelijks groeit"
+        subtitle={
+          "Hieronder tellen alleen picks die strikt vóór de aftrap zijn vastgelegd. " +
+          "De teller begint op 0 en groeit met elke afgelopen wedstrijd — de eerlijke " +
+          "track record zonder cherry-picking."
+        }
+      />
+
+      <div className="space-y-6 animate-slide-up">
+        {/* Per-tier live meting */}
+        <div className="glass-card p-6">
+          <div className="mb-4">
+            <h2 className="text-base font-semibold text-slate-100">
+              Per tier — live accuraatheid
+            </h2>
+            <p className="text-sm text-slate-500 mt-0.5">
+              Strikt pre-match picks sinds 18 april 2026, per tier uitgesplitst.
+              Zolang een tier onder 10 beoordeelde picks zit tonen we "wachten op
+              data" — kleine samples zijn geen conclusie.
+            </p>
+          </div>
+          <LiveMeasurementSection />
+        </div>
+
+        {/* Pick of the Day — live (Gold+ only) */}
+        <div className="glass-card p-6 border border-purple-500/20">
+          <div className="mb-4 flex items-center gap-2">
+            <Trophy className="h-5 w-5 text-purple-300" />
+            <div>
+              <h2 className="text-base font-semibold text-slate-100">
+                Pick of the Day — live meting
+              </h2>
+              <p className="text-sm text-slate-500 mt-0.5">
+                Dagelijkse BOTD pre-match vastgelegd. Gold en Platinum zien dezelfde stream.
+              </p>
+            </div>
+          </div>
+          <BotdTierGate>
+            <BotdLiveTrackingSection />
+          </BotdTierGate>
+        </div>
+      </div>
+
+      </>)}
+      {/* ─── End live tab ─── */}
 
       </div>
     </div>
