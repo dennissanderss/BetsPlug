@@ -107,8 +107,10 @@ async def get_botd_history(
         .where(trackrecord_filter())
         .order_by(Match.scheduled_at.desc())
     )
-    if TIER_SYSTEM_ENABLED:
-        stmt = stmt.where(access_filter(user_tier))
+    # access_filter intentionally not applied: BOTD threshold is Silver
+    # (≥0.65) so by definition picks can never be Free. For anonymous
+    # visitors access_filter(FREE) excludes everything ≥ Silver → empty
+    # response. The pick_tier field on each row carries the paywall cue.
     rows = (await db.execute(stmt)).all()
     if not rows:
         stmt_fallback = (
@@ -120,8 +122,6 @@ async def get_botd_history(
             .where(trackrecord_filter())
             .order_by(Match.scheduled_at.desc())
         )
-        if TIER_SYSTEM_ENABLED:
-            stmt_fallback = stmt_fallback.where(access_filter(user_tier))
         rows = (await db.execute(stmt_fallback)).all()
 
     # Group by date, keep highest confidence per day
@@ -250,8 +250,8 @@ async def _build_botd_section(
         stmt = stmt.where(Prediction.prediction_source == "live")
     if require_pre_match:
         stmt = stmt.where(Prediction.predicted_at < Match.scheduled_at)
-    if TIER_SYSTEM_ENABLED:
-        stmt = stmt.where(access_filter(user_tier))
+    # access_filter intentionally not applied: BOTD sections start at
+    # Silver floor (≥0.65), so anon Free-tier users would see nothing.
 
     rows = (await db.execute(stmt)).all()
 
@@ -509,8 +509,7 @@ async def get_botd_track_record(
         .where(trackrecord_filter())
         .order_by(Match.scheduled_at)
     )
-    if TIER_SYSTEM_ENABLED:
-        stmt = stmt.where(access_filter(user_tier))
+    # access_filter intentionally not applied — see note in /history.
     rows = (await db.execute(stmt)).all()
 
     # Fallback: if no live predictions yet, use all v8.1 predictions
@@ -524,8 +523,6 @@ async def get_botd_track_record(
             .where(trackrecord_filter())
             .order_by(Match.scheduled_at)
         )
-        if TIER_SYSTEM_ENABLED:
-            stmt_fallback = stmt_fallback.where(access_filter(user_tier))
         rows = (await db.execute(stmt_fallback)).all()
 
     if not rows:
@@ -730,6 +727,14 @@ async def get_bet_of_the_day(
         ("silver", LEAGUES_SILVER, CONF_THRESHOLD[PickTier.SILVER]),
     ]
 
+    # Note: access_filter() is intentionally NOT applied inside the
+    # tier_ladder. It excludes picks that qualify as higher tiers than
+    # the requesting user — which would contradict a loop that is
+    # explicitly looking for Platinum-qualifying picks first. BOTD is a
+    # marketing surface where the paywall is expressed via the
+    # `pick_tier` field on the response (rendered as a badge), not by
+    # hiding the pick. The ladder's league+confidence checks already
+    # enforce quality; no extra filter needed.
     prediction = None
     for _tier_slug, league_ids, min_conf in tier_ladder:
         if not league_ids:
@@ -748,8 +753,6 @@ async def get_bet_of_the_day(
             .order_by(Prediction.confidence.desc(), Prediction.id)
             .limit(1)
         )
-        if TIER_SYSTEM_ENABLED:
-            stmt_live = stmt_live.where(access_filter(user_tier))
         prediction = (await db.execute(stmt_live)).unique().scalar_one_or_none()
         if prediction is not None:
             break
@@ -763,8 +766,6 @@ async def get_bet_of_the_day(
             .order_by(Prediction.confidence.desc(), Prediction.id)
             .limit(1)
         )
-        if TIER_SYSTEM_ENABLED:
-            stmt_any = stmt_any.where(access_filter(user_tier))
         prediction = (await db.execute(stmt_any)).unique().scalar_one_or_none()
         if prediction is not None:
             break
