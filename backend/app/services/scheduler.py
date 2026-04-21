@@ -127,7 +127,13 @@ async def job_generate_predictions():
                 await db.commit()
                 db.expire_all()
 
-            # Collect IDs of upcoming matches that need predictions
+            # Collect IDs of upcoming matches that need predictions.
+            # ORDER BY scheduled_at ASC so matches closest to kickoff get
+            # forecasted first — a 10-min batch that runs out of time
+            # (DB contention, feature-load slow) still covers the
+            # imminent matches. Previously the scheduler could be
+            # halfway through a 7-day horizon when a match 30 min out
+            # silently missed its pre-match lock window.
             now = datetime.now(timezone.utc)
             cutoff = now + timedelta(days=7)
             matches_result = await db.execute(
@@ -135,7 +141,7 @@ async def job_generate_predictions():
                     Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
                     Match.scheduled_at >= now,
                     Match.scheduled_at <= cutoff,
-                ).order_by(Match.scheduled_at)
+                ).order_by(Match.scheduled_at.asc())
             )
             all_match_ids = [row[0] for row in matches_result.all()]
 
