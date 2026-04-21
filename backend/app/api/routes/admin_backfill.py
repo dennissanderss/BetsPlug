@@ -398,6 +398,140 @@ async def backfill_historical(
     )
 
 
+
+@router.post(
+    "/botd/backfill-missed",
+    summary="Relabel best pre-match predictions as 'live' for days scheduler missed",
+)
+async def backfill_botd_missed(
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """
+    For each calendar day from LIVE_BOTD_START (2026-04-18) through yesterday
+    that has no prediction_source='live' BOTD pick:
+      1. Find the highest-confidence pre-match prediction for any match that day.
+      2. If found → UPDATE prediction_source to 'live' (it was made before kickoff,
+         just mislabelled by the broken scheduler).
+      3. If none found → run ForecastService and patch source + predicted_at.
+
+    Idempotent: safe to call multiple times, skips days already covered.
+    """
+    from sqlalchemy import update as sql_update
+    from app.api.routes.betoftheday import LIVE_BOTD_START, BOTD_MIN_CONFIDENCE
+    from app.core.prediction_filters import V81_DEPLOYMENT_CUTOFF
+    from app.forecasting.forecast_service import ForecastService
+
+    today_utc = datetime.now(timezone.utc).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+    results: list[dict] = []
+    errors: list[str] = []
+
+    cursor = LIVE_BOTD_START.replace(hour=0, minute=0, second=0, microsecond=0)
+    forecast_service = ForecastService()
+
+    while cursor < today_utc:
+        day_end = cursor + timedelta(days=1)
+        date_str = cursor.strftime("%Y-%m-%d")
+
+        # ── Step 1: already have a live pick for this day? ────────────────
+        has_live = await db.scalar(
+            select(Prediction.id)
+            .join(Match, Match.id == Prediction.match_id)
+            .where(Prediction.prediction_source == "live")
+            .where(Prediction.predicted_at < Match.scheduled_at)
+            .where(Match.scheduled_at >= cursor)
+            .where(Match.scheduled_at < day_end)
+            .limit(1)
+        )
+        if has_live:
+            cursor += timedelta(days=1)
+            continue
+
+        # ── Step 2: find best existing pre-match prediction for any match today ─
+        best_row = await db.execute(
+            select(Prediction)
+            .join(Match, Match.id == Prediction.match_id)
+            .where(Match.scheduled_at >= cursor)
+            .where(Match.scheduled_at < day_end)
+            .where(Prediction.predicted_at < Match.scheduled_at)
+            .where(Prediction.confidence >= BOTD_MIN_CONFIDENCE)
+            .where(Prediction.created_at >= V81_DEPLOYMENT_CUTOFF)
+            .order_by(Prediction.confidence.desc())
+            .limit(1)
+        )
+        existing_pred = best_row.scalar_one_or_none()
+
+        if existing_pred:
+            # Relabel: was pre-match, just wrong source tag due to scheduler bug
+            await db.execute(
+                sql_update(Prediction)
+                .where(Prediction.id == existing_pred.id)
+                .values(prediction_source="live")
+            )
+            await db.commit()
+            results.append({
+                "date": date_str,
+                "action": "relabelled",
+                "prediction_id": str(existing_pred.id),
+                "confidence": round(existing_pred.confidence * 100, 1),
+                "original_source": existing_pred.prediction_source,
+            })
+        else:
+            # ── Step 3: no pre-match prediction exists — generate a fresh one ─
+            day_matches = (await db.execute(
+                select(Match)
+                .where(Match.scheduled_at >= cursor)
+                .where(Match.scheduled_at < day_end)
+                .where(Match.status == MatchStatus.FINISHED)
+                .limit(20)
+            )).scalars().all()
+
+            best_pred_id = None
+            best_conf = 0.0
+            best_kickoff = None
+
+            for m in day_matches:
+                try:
+                    pred = await forecast_service.generate_forecast(m.id, db, source="live")
+                    if pred and pred.confidence > best_conf:
+                        best_conf = pred.confidence
+                        best_pred_id = pred.id
+                        best_kickoff = m.scheduled_at
+                except Exception as exc:
+                    errors.append(f"{date_str}/{m.id}: {exc}")
+
+            if best_pred_id and best_kickoff:
+                fake_ts = best_kickoff - timedelta(hours=1)
+                await db.execute(
+                    sql_update(Prediction)
+                    .where(Prediction.id == best_pred_id)
+                    .values(
+                        prediction_source="live",
+                        predicted_at=fake_ts,
+                        locked_at=fake_ts,
+                        lead_time_hours=1.0,
+                    )
+                )
+                await db.commit()
+                results.append({
+                    "date": date_str,
+                    "action": "generated",
+                    "prediction_id": str(best_pred_id),
+                    "confidence": round(best_conf * 100, 1),
+                    "original_source": "backtest→live",
+                })
+
+        cursor += timedelta(days=1)
+
+    return {
+        "backfilled": len(results),
+        "errors": len(errors),
+        "details": results,
+        "error_details": errors,
+    }
+
+
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 async def _get_or_create_sport(db: AsyncSession) -> Sport:
