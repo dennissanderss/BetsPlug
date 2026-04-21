@@ -49,17 +49,17 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# v8.4: BOTD sits at the Silver floor (≥65%). The main BOTD endpoint
-# selects in tier order (Platinum → Gold → Silver) so the surfaced
-# pick is always at or above Silver quality. Free-tier picks
-# (confidence < 0.65) are excluded from every BOTD-scoped endpoint:
-# history, track-record, live-tracking, inventory — one drempel for
-# all of them means the marketing claim and the displayed picks can
-# never diverge. Tier thresholds remain canonical in
-# `app.core.tier_system.CONF_THRESHOLD`; these locals are preserved
-# for callers that import from this module.
-BOTD_MIN_CONFIDENCE = 0.65       # BOTD threshold (= Silver floor)
-CONFIDENCE_SILVER = 0.65         # Silver tier: canonical value
+# v8.4.1: BOTD is een paid-tier feature (Gold/Platinum). De main BOTD
+# endpoint loopt Platinum → Gold af; Silver-picks worden NIET als
+# BOTD gelabeld. De drempel voor elke BOTD-scoped aggregate
+# (history, track-record, live-tracking, model-validation, inventory,
+# backfill) staat daarom op de Gold-floor (≥0.70). Daardoor matchen
+# alle endpoints dezelfde kwaliteit-definitie en loopt een bezoeker
+# nooit in een gat tussen marketing-claim ("our BOTD = Gold+") en
+# wat er daadwerkelijk wordt getoond. Canonical tier-drempels leven
+# in `app.core.tier_system.CONF_THRESHOLD`.
+BOTD_MIN_CONFIDENCE = 0.70       # BOTD threshold = Gold floor
+CONFIDENCE_SILVER = 0.65         # Silver tier
 CONFIDENCE_GOLD = 0.70           # Gold tier
 CONFIDENCE_PLATINUM = 0.75       # Platinum tier
 
@@ -702,29 +702,20 @@ async def get_bet_of_the_day(
         noload(Prediction.model_version),
     ]
 
-    # v8.4 — Tier-first BOTD selection. Instead of a flat ≥60% confidence
-    # pick (which could be any Free-tier league), walk the quality tiers
-    # from high to low:
-    #   1. Platinum: top-5 leagues AND conf ≥ 0.75 (~82% historical acc)
+    # v8.4.1 — BOTD = paid-tier feature. Ladder loopt alleen Platinum →
+    # Gold. Silver en lager worden NOOIT als BOTD gelabeld; liever
+    # eerlijk `available=false` dan een zwakkere pick onder het "Pick of
+    # the Day" label.
+    #   1. Platinum: top-5 leagues  AND conf ≥ 0.75 (~82% historical acc)
     #   2. Gold:     top-10 leagues AND conf ≥ 0.70 (~70%)
-    #   3. Silver:   top-14 leagues AND conf ≥ 0.65 (~61%)
-    # A Free-tier pick (<0.65) is never promoted to BOTD. If none of the
-    # three tiers yields a candidate, BOTD is genuinely unavailable for
-    # the day — better to say so honestly than to surface a weak pick
-    # under a "best of the day" label. Live source is preferred; the
-    # legacy backtest fallback remains for the model-validation period
-    # before 2026-04-18.
-    from app.core.tier_leagues import (
-        LEAGUES_PLATINUM,
-        LEAGUES_GOLD,
-        LEAGUES_SILVER,
-    )
+    # Live source first; fallback naar elke v8.1 source voor de
+    # model-validation venster (voor 2026-04-18).
+    from app.core.tier_leagues import LEAGUES_PLATINUM, LEAGUES_GOLD
     from app.core.tier_system import CONF_THRESHOLD, PickTier
 
     tier_ladder: list[tuple[str, list, float]] = [
         ("platinum", LEAGUES_PLATINUM, CONF_THRESHOLD[PickTier.PLATINUM]),
         ("gold", LEAGUES_GOLD, CONF_THRESHOLD[PickTier.GOLD]),
-        ("silver", LEAGUES_SILVER, CONF_THRESHOLD[PickTier.SILVER]),
     ]
 
     # Note: access_filter() is intentionally NOT applied inside the

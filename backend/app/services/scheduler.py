@@ -670,6 +670,29 @@ async def job_backfill_results():
         log.error("CRON: Backfill failed: %s", exc, exc_info=True)
 
 
+async def job_botd_backfill_startup():
+    """One-shot BOTD backfill — runt direct op scheduler-startup en
+    daarna dagelijks om 03:00 UTC. Vult de dagen waar de scheduler
+    destijds een poisoned-session cascade had of waar de pre-match
+    lock gemist is. Thin wrapper around the shared runner in
+    admin_backfill._run_botd_backfill — zelfde logic als achter de
+    admin-knop zodat het resultaat identiek is."""
+    log.info("CRON: BOTD backfill starting…")
+    try:
+        from app.db.session import async_session_factory
+        from app.api.routes.admin_backfill import _run_botd_backfill
+
+        async with async_session_factory() as db:
+            result = await _run_botd_backfill(db)
+        log.info(
+            "CRON: BOTD backfill done — backfilled=%d errors=%d",
+            result.get("backfilled", 0),
+            result.get("errors", 0),
+        )
+    except Exception as exc:
+        log.error("CRON: BOTD backfill failed: %s", exc, exc_info=True)
+
+
 async def job_process_abandoned_checkouts():
     """Find abandoned checkouts and send a single reminder email with a 5% coupon.
 
@@ -1062,6 +1085,33 @@ def start_scheduler():
         name="Backfill stale results",
         replace_existing=True,
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=3),
+    )
+
+    # One-shot BOTD backfill on startup. Idempotent runner — fills the
+    # days between LIVE_BOTD_START (2026-04-18) and yesterday that still
+    # lack a ≥ Gold-floor live pick, by relabeling existing pre-match
+    # predictions or generating fresh ones. Safe to run repeatedly; each
+    # Railway boot will pick up where the previous ended. This removes
+    # the need for a manual admin click when the scheduler had a bad
+    # day and missed its pre-match window.
+    scheduler.add_job(
+        job_botd_backfill_startup,
+        trigger=None,
+        id="botd_backfill_startup",
+        name="BOTD backfill (one-shot on startup)",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=4),
+    )
+
+    # Daily BOTD backfill safety net — draait dagelijks om 03:00 UTC
+    # zodat elke gemiste dag automatisch binnen 24h wordt ingehaald
+    # zonder handmatige admin-actie.
+    scheduler.add_job(
+        job_botd_backfill_startup,
+        trigger=CronTrigger(hour=3, minute=0),
+        id="botd_backfill_daily",
+        name="BOTD backfill (daily safety net)",
+        replace_existing=True,
     )
 
     # ── @BetsPlug Telegram auto-poster ─────────────────────────────

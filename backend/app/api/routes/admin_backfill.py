@@ -399,23 +399,10 @@ async def backfill_historical(
 
 
 
-@router.post(
-    "/botd/backfill-missed",
-    summary="Relabel best pre-match predictions as 'live' for days scheduler missed",
-)
-async def backfill_botd_missed(
-    db: AsyncSession = Depends(get_db),
-) -> dict:
-    """
-    For each calendar day from LIVE_BOTD_START (2026-04-18) through yesterday
-    that has no prediction_source='live' BOTD pick:
-      1. Find the highest-confidence pre-match prediction for any match that day.
-      2. If found → UPDATE prediction_source to 'live' (it was made before kickoff,
-         just mislabelled by the broken scheduler).
-      3. If none found → run ForecastService and patch source + predicted_at.
-
-    Idempotent: safe to call multiple times, skips days already covered.
-    """
+async def _run_botd_backfill(db: AsyncSession) -> dict:
+    """Standalone BOTD-backfill runner — callable from both the HTTP
+    endpoint and from the scheduler (one-shot startup job). See the
+    route docstring below for behaviour."""
     from sqlalchemy import update as sql_update
     from app.api.routes.betoftheday import LIVE_BOTD_START, BOTD_MIN_CONFIDENCE
     from app.core.prediction_filters import V81_DEPLOYMENT_CUTOFF
@@ -613,6 +600,28 @@ async def backfill_botd_missed(
         "details": results,
         "error_details": errors,
     }
+
+
+@router.post(
+    "/botd/backfill-missed",
+    summary="Relabel best pre-match predictions as 'live' for days scheduler missed",
+)
+async def backfill_botd_missed(db: AsyncSession = Depends(get_db)) -> dict:
+    """For each calendar day from LIVE_BOTD_START (2026-04-18) through
+    yesterday that has no BOTD-eligible ``prediction_source='live'`` pick:
+
+      1. Find the highest-confidence pre-match prediction for any match
+         that day at ≥ BOTD_MIN_CONFIDENCE.
+      2. If found → UPDATE ``prediction_source`` to ``'live'`` (it was
+         made before kickoff, just mislabelled by the broken scheduler).
+      3. If none found → run ForecastService and patch source +
+         predicted_at.
+
+    Idempotent: safe to call multiple times, skips days already covered.
+    Thin wrapper over :func:`_run_botd_backfill` so the scheduler can
+    reuse the same runner on startup.
+    """
+    return await _run_botd_backfill(db)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
