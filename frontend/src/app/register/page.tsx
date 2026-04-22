@@ -6,7 +6,7 @@
  */
 
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
 import {
@@ -35,6 +35,17 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const USERNAME_RE = /^[a-zA-Z0-9_.-]{3,32}$/;
 
 export default function RegisterPage() {
+  // `useSearchParams` suspends on first render during static prerender,
+  // which Next.js only permits inside a Suspense boundary. The inner
+  // component holds all the form state so the boundary wraps it once.
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <RegisterForm />
+    </Suspense>
+  );
+}
+
+function RegisterForm() {
   const loc = useLocalizedHref();
   const router = useRouter();
   const params = useSearchParams();
