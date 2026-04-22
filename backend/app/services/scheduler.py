@@ -979,6 +979,187 @@ async def job_telegram_update_results():
         log.error("CRON: Telegram result sweep failed: %s", exc, exc_info=True)
 
 
+async def job_generate_daily_value_bet():
+    """Daily 08:00 CET job — pick the single best value bet for today.
+
+    Scans ``live`` predictions with a populated ``closing_odds_snapshot``
+    for matches scheduled in the next 48 h, applies the
+    ``ValueBetSelector`` filters (edge >= 3%, odds 1.50-5.00, tier in
+    {gold, platinum}) and writes the highest-scoring candidate to
+    ``value_bets`` with ``is_live = True``.
+
+    Idempotent: ``uq_value_bets_prediction_live`` prevents double-insert
+    of the same prediction in the live population.
+
+    No op when no candidate qualifies — logged so the admin can see the
+    reason on dry days.
+    """
+    log.info("CRON: value-bet — starting daily live selection")
+    try:
+        import uuid as _uuid
+        from datetime import date as _date
+        from sqlalchemy import and_, select as _select
+
+        from app.db.session import async_session_factory
+        from app.models.match import Match, MatchStatus
+        from app.models.prediction import Prediction
+        from app.models.value_bet import ValueBet
+        from app.services.value_bet_service import (
+            ValueBetConfig,
+            ValueBetSelector,
+            extract_candidate_from_snapshot,
+        )
+        from app.core.tier_leagues import (
+            LEAGUES_FREE,
+            LEAGUES_GOLD,
+            LEAGUES_PLATINUM,
+            LEAGUES_SILVER,
+        )
+        from app.core.tier_system import CONF_THRESHOLD, PickTier
+
+        selector = ValueBetSelector(ValueBetConfig())
+        now = datetime.now(timezone.utc)
+        window_end = now + timedelta(hours=48)
+        today = now.date()
+
+        def _classify(league_id, conf: float):
+            lid = str(league_id)
+            if lid in LEAGUES_PLATINUM and conf >= CONF_THRESHOLD[PickTier.PLATINUM]:
+                return "platinum"
+            if lid in LEAGUES_GOLD and conf >= CONF_THRESHOLD[PickTier.GOLD]:
+                return "gold"
+            if lid in LEAGUES_SILVER and conf >= CONF_THRESHOLD[PickTier.SILVER]:
+                return "silver"
+            if lid in LEAGUES_FREE and conf >= CONF_THRESHOLD[PickTier.FREE]:
+                return "free"
+            return None
+
+        async with async_session_factory() as db:
+            # Short-circuit: already have a live row for today?
+            already = (
+                await db.execute(
+                    _select(ValueBet).where(
+                        and_(
+                            ValueBet.bet_date == today,
+                            ValueBet.is_live.is_(True),
+                        )
+                    ).limit(1)
+                )
+            ).scalar_one_or_none()
+            if already is not None:
+                log.info(
+                    "CRON: value-bet — already have live pick for %s (vb=%s), skipping",
+                    today, already.id,
+                )
+                return
+
+            stmt = (
+                _select(Prediction, Match)
+                .join(Match, Match.id == Prediction.match_id)
+                .where(
+                    Prediction.prediction_source == "live",
+                    Prediction.closing_odds_snapshot.is_not(None),
+                    Match.scheduled_at >= now,
+                    Match.scheduled_at <= window_end,
+                    Match.status == MatchStatus.SCHEDULED,
+                )
+            )
+            rows = (await db.execute(stmt)).all()
+
+            best = None
+            best_pred = None
+            best_match = None
+            best_score = -float("inf")
+            considered = 0
+            qualified = 0
+            for pred, match in rows:
+                considered += 1
+                snap = pred.closing_odds_snapshot
+                if not snap:
+                    continue
+                tier = _classify(match.league_id, pred.confidence)
+                cand = extract_candidate_from_snapshot(
+                    prediction_id=pred.id,
+                    match_id=pred.match_id,
+                    home_prob=pred.home_win_prob,
+                    draw_prob=pred.draw_prob,
+                    away_prob=pred.away_win_prob,
+                    confidence=pred.confidence,
+                    tier=tier,
+                    snapshot=snap,
+                    selector=selector,
+                    scheduled_at=match.scheduled_at,
+                )
+                if cand is None or not selector.passes_filters(cand):
+                    continue
+                qualified += 1
+                score = selector.score(cand)
+                if score > best_score:
+                    best_score = score
+                    best = cand
+                    best_pred = pred
+                    best_match = match
+
+            if best is None:
+                log.info(
+                    "CRON: value-bet — no qualifying pick (considered=%d, qualified=%d)",
+                    considered, qualified,
+                )
+                return
+
+            vb = ValueBet(
+                id=_uuid.uuid4(),
+                prediction_id=best.prediction_id,
+                match_id=best.match_id,
+                bet_date=(best_match.scheduled_at.date() if best_match else today),
+                picked_at=now,
+                our_pick=best.pick,
+                our_probability=best.our_probability,
+                our_probability_home=best.our_prob_home,
+                our_probability_draw=best.our_prob_draw,
+                our_probability_away=best.our_prob_away,
+                our_confidence=best.confidence,
+                prediction_tier=best.tier,
+                odds_source=best.odds_source,
+                odds_home=best.odds_home,
+                odds_draw=best.odds_draw,
+                odds_away=best.odds_away,
+                odds_snapshot_at=best.odds_snapshot_at,
+                best_odds_for_pick=best.best_odds_for_pick,
+                bookmaker_implied_home=1.0 / best.odds_home,
+                bookmaker_implied_draw=(
+                    1.0 / best.odds_draw if best.odds_draw else None
+                ),
+                bookmaker_implied_away=1.0 / best.odds_away,
+                overround=best.overround,
+                margin=best.margin,
+                fair_implied_home=best.fair_home,
+                fair_implied_draw=best.fair_draw,
+                fair_implied_away=best.fair_away,
+                normalization_method=selector.config.normalization_method,
+                edge=best.edge,
+                expected_value=best.expected_value,
+                kelly_fraction=best.kelly,
+                is_live=True,
+                is_evaluated=False,
+            )
+            db.add(vb)
+            try:
+                await db.commit()
+                log.info(
+                    "CRON: value-bet — LIVE pick created id=%s pick=%s edge=%.2f%% odds=%.2f tier=%s",
+                    vb.id, vb.our_pick, vb.edge * 100, vb.best_odds_for_pick, vb.prediction_tier,
+                )
+            except Exception as exc:
+                await db.rollback()
+                # Uniqueness violation = someone else inserted first; safe to ignore
+                log.warning(
+                    "CRON: value-bet — insert rejected (likely duplicate): %s", exc
+                )
+    except Exception as exc:
+        log.error("CRON: value-bet daily selection failed: %s", exc, exc_info=True)
+
+
 async def job_telegram_post_weekly_promo():
     """Post the bilingual tier-comparison promo to the public channel."""
     log.info("CRON: Telegram — posting weekly promo")
@@ -1177,6 +1358,17 @@ def start_scheduler():
         replace_existing=True,
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=4),
     )
+    # Daily value-bet selection — 08:00 CET so subscribers see today's
+    # pick during morning coffee. Writes to value_bets with is_live=True.
+    # Idempotent (uq_value_bets_prediction_live + same-day short-circuit).
+    scheduler.add_job(
+        job_generate_daily_value_bet,
+        trigger=CronTrigger(hour=8, minute=0, timezone=_CET),
+        id="value_bet_daily",
+        name="Value-bet daily live selection",
+        replace_existing=True,
+    )
+
     # Weekly tier-comparison promo — Sunday 18:00 CET. Placed before
     # prime-time fixtures so it lands when people are actively opening
     # the app, not in the middle of the night.
