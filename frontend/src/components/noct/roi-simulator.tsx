@@ -165,20 +165,20 @@ export function ROISimulator({
               <div className="flex flex-wrap gap-3 text-[11px]">
                 <span>
                   <span className="font-semibold text-emerald-300">{data.real_odds_count}</span>
-                  <span className="text-slate-400"> echte marktodds (API)</span>
+                  <span className="text-slate-400"> echte odds</span>
                 </span>
                 {data.implied_odds_count > 0 && (
                   <span>
                     <span className="font-semibold text-amber-300">{data.implied_odds_count}</span>
-                    <span className="text-slate-400"> berekend uit modelkans</span>
+                    <span className="text-slate-400"> berekend uit winkans</span>
                   </span>
                 )}
               </div>
               {showOddsInfo && (
                 <p className="text-[11px] leading-relaxed text-slate-400 border-t border-white/10 pt-2 mt-2">
-                  Voor <strong className="text-emerald-300">{data.real_odds_count} wedstrijden</strong> zijn echte bookmaker-odds gebruikt uit onze betaalde data-API.
+                  Voor <strong className="text-emerald-300">{data.real_odds_count} wedstrijden</strong> zijn echte bookmaker-odds gebruikt (gemiddelde over alle bookmakers uit onze data-API).
                   {data.implied_odds_count > 0 && (
-                    <> Voor de overige <strong className="text-amber-300">{data.implied_odds_count} picks</strong> waren geen marktodds beschikbaar — hier is een geschatte odd berekend op basis van de modelkans (1 ÷ kans × 0,95). Dit is een benadering, geen echte marktprijs.</>
+                    <> Voor <strong className="text-amber-300">{data.implied_odds_count} picks</strong> waren geen marktodds beschikbaar — daar is een odd ingeschat op basis van de winkans van de engine. Dit is een benadering, geen echte marktprijs.</>
                   )}
                 </p>
               )}
@@ -195,7 +195,7 @@ export function ROISimulator({
               highlight={isProfit ? "green" : "red"}
             />
             <StatCell
-              label="ROI"
+              label="Rendement"
               value={
                 <span className={`flex items-center gap-1 ${isProfit ? "text-emerald-300" : "text-red-300"}`}>
                   {isProfit ? (
@@ -215,11 +215,11 @@ export function ROISimulator({
           <div className="flex items-start gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2.5">
             <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-400" />
             <p className="text-[11px] leading-relaxed text-slate-400">
-              Gesimuleerd op historische data. Toekomstige resultaten kunnen afwijken.
+              Berekend op historische data. Verleden resultaten zijn geen garantie voor de toekomst.
               {realPct < 100 && data.implied_odds_count > 0 && (
-                <> {realPct}% van de picks gebruikt echte marktodds — de rest is een modelschatting.</>
+                <> {realPct}% van de picks gebruikt echte marktodds — de rest is een benadering op basis van de winkans.</>
               )}
-              {" "}Geen financieel advies.
+              {" "}Uitsluitend ter informatie, geen financieel advies.
             </p>
           </div>
         </>

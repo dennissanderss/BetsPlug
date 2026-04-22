@@ -42,6 +42,7 @@ import { TrustFunnel } from "@/components/ui/trust-funnel";
 import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
 import { BotdLiveTrackingSection } from "@/components/ui/botd-live-tracking-section";
 import { LiveMeasurementSection } from "@/components/ui/live-measurement-section";
+import { TierROIGrid } from "@/components/noct/tier-roi-grid";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import type { PickTierSlug } from "@/types/api";
@@ -1717,6 +1718,13 @@ export default function TrackrecordPage() {
           )}
         </div>
 
+        {/* ── Rendement per tier — backtest ── */}
+        <TierROIGrid
+          source="backtest"
+          title="Rendement per tier — Backtest"
+          subtitle="Wat had je verdiend als je elke historische pick had gespeeld?"
+        />
+
         {/* ── Container 2: Bet of the Day ── */}
         <div className="glass-card overflow-hidden border border-purple-500/20">
           <div className="border-b border-white/[0.06] px-6 py-4 flex items-center justify-between gap-4">
@@ -1780,6 +1788,13 @@ export default function TrackrecordPage() {
           </div>
           <LiveMeasurementSection />
         </div>
+
+        {/* Rendement per tier — live meting */}
+        <TierROIGrid
+          source="live"
+          title="Rendement per tier — Live meting"
+          subtitle="Wat had je verdiend op live picks (sinds 16 april)?"
+        />
 
         {/* Pick of the Day — live (Gold+ only) */}
         <div className="glass-card p-6 border border-purple-500/20">

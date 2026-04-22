@@ -2,7 +2,15 @@
 
 import { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { TrendingUp, TrendingDown, Euro, AlertTriangle, RefreshCw, Info } from "lucide-react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Euro,
+  AlertTriangle,
+  RefreshCw,
+  Info,
+  Sparkles,
+} from "lucide-react";
 import { TierEmblem } from "@/components/noct/tier-emblem";
 
 interface TierROIStats {
@@ -27,22 +35,24 @@ interface TierROIResponse {
 const PRESETS = [5, 10, 25, 50, 100] as const;
 
 const TIER_CONFIG = [
-  { slug: "free",     label: "Free",     color: "text-slate-300",   ring: "ring-slate-500/30",  bg: "bg-slate-500/10" },
-  { slug: "silver",   label: "Silver",   color: "text-slate-200",   ring: "ring-slate-400/30",  bg: "bg-slate-400/10" },
-  { slug: "gold",     label: "Gold",     color: "text-amber-300",   ring: "ring-amber-500/30",  bg: "bg-amber-500/10" },
-  { slug: "platinum", label: "Platinum", color: "text-sky-300",     ring: "ring-sky-500/30",    bg: "bg-sky-500/10"   },
+  { slug: "free",     label: "Free",     color: "text-slate-300",  ring: "ring-slate-500/30", bg: "bg-slate-500/10" },
+  { slug: "silver",   label: "Silver",   color: "text-slate-200",  ring: "ring-slate-400/30", bg: "bg-slate-400/10" },
+  { slug: "gold",     label: "Gold",     color: "text-amber-300",  ring: "ring-amber-500/30", bg: "bg-amber-500/10" },
+  { slug: "platinum", label: "Platinum", color: "text-sky-300",    ring: "ring-sky-500/30",   bg: "bg-sky-500/10"   },
 ] as const;
 
 interface TierROIGridProps {
   source?: "all" | "live" | "backtest";
   days?: number;
   title?: string;
+  subtitle?: string;
 }
 
 export function TierROIGrid({
   source = "all",
   days,
   title = "Rendement per tier",
+  subtitle = "Wat had je verdiend als je elke pick had gespeeld?",
 }: TierROIGridProps) {
   const [stake, setStake] = useState(10);
   const [customInput, setCustomInput] = useState("");
@@ -77,6 +87,12 @@ export function TierROIGrid({
   const fmt = (v: number) =>
     v.toLocaleString("nl-NL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+  const all = data?.all;
+  const allProfit = (all?.net_profit ?? 0) >= 0;
+  const realPct = all && all.total_picks > 0
+    ? Math.round((all.real_odds_count / all.total_picks) * 100)
+    : 0;
+
   return (
     <div className="card-neon rounded-2xl p-5 space-y-5">
       {/* Header */}
@@ -87,7 +103,7 @@ export function TierROIGrid({
           </div>
           <div>
             <h3 className="text-sm font-bold text-white">{title}</h3>
-            <p className="text-[11px] text-slate-500">Gesimuleerd rendement per abonnementstier</p>
+            <p className="text-[11px] text-slate-500">{subtitle}</p>
           </div>
         </div>
         <button
@@ -130,23 +146,70 @@ export function TierROIGrid({
         </div>
       </div>
 
-      {/* Tier cards */}
       {isLoading ? (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {TIER_CONFIG.map((t) => (
-            <div key={t.slug} className="h-36 animate-pulse rounded-xl bg-white/5" />
-          ))}
+        <div className="space-y-3">
+          <div className="h-24 animate-pulse rounded-xl bg-white/5" />
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {TIER_CONFIG.map((t) => (
+              <div key={t.slug} className="h-36 animate-pulse rounded-xl bg-white/5" />
+            ))}
+          </div>
         </div>
       ) : isError ? (
         <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-5 text-center space-y-2">
-          <p className="text-sm font-semibold text-red-300">Kan geen data ophalen</p>
-          <p className="text-xs text-slate-500">De backend server is niet bereikbaar of de endpoint bestaat nog niet. Probeer het later opnieuw.</p>
-          <button onClick={() => refetch()} className="mt-2 rounded-lg bg-white/5 px-3 py-1.5 text-xs text-slate-300 hover:bg-white/10 transition-colors">
+          <p className="text-sm font-semibold text-red-300">Kan data niet ophalen</p>
+          <p className="text-xs text-slate-500">
+            De server is tijdelijk niet bereikbaar. Probeer het zo nog eens.
+          </p>
+          <button
+            onClick={() => refetch()}
+            className="mt-2 rounded-lg bg-white/5 px-3 py-1.5 text-xs text-slate-300 hover:bg-white/10 transition-colors"
+          >
             Opnieuw proberen
           </button>
         </div>
+      ) : !all || all.total_picks === 0 ? (
+        <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-6 text-center">
+          <p className="text-sm text-slate-400">Nog geen geëvalueerde picks beschikbaar.</p>
+          <p className="mt-1 text-xs text-slate-600">
+            Zodra wedstrijden afgelopen zijn verschijnen de resultaten hier.
+          </p>
+        </div>
       ) : (
         <>
+          {/* ── Alle tiers samen — hero row ─────────────────── */}
+          <div className={`rounded-xl ring-1 p-4 ${allProfit ? "bg-emerald-500/5 ring-emerald-500/20" : "bg-red-500/5 ring-red-500/20"}`}>
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Sparkles className={`h-4 w-4 ${allProfit ? "text-emerald-400" : "text-red-400"}`} />
+                <span className="text-xs font-bold text-white">Alle tiers samen</span>
+                <span className="text-[10px] text-slate-500">
+                  {all.total_picks} picks · {Math.round(all.accuracy * 100)}% raak
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <p className="text-[10px] text-slate-500">Nettowinst</p>
+                  <p className={`text-sm font-bold ${allProfit ? "text-emerald-300" : "text-red-300"}`}>
+                    {allProfit ? "+" : ""}€{fmt(all.net_profit)}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] text-slate-500">Rendement</p>
+                  <p className={`text-lg font-black flex items-center justify-end gap-1 ${allProfit ? "text-emerald-300" : "text-red-300"}`}>
+                    {allProfit ? (
+                      <TrendingUp className="h-4 w-4" />
+                    ) : (
+                      <TrendingDown className="h-4 w-4" />
+                    )}
+                    {allProfit ? "+" : ""}{all.roi_pct}%
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Per tier grid ────────────────────────────── */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {TIER_CONFIG.map((t) => {
               const stats = data?.tiers[t.slug];
@@ -158,17 +221,15 @@ export function TierROIGrid({
                   key={t.slug}
                   className={`rounded-xl ring-1 p-4 flex flex-col gap-3 ${t.bg} ${t.ring}`}
                 >
-                  {/* Tier label */}
                   <div className="flex items-center gap-2">
                     <TierEmblem tier={t.slug as any} size="sm" />
                     <span className={`text-xs font-bold ${t.color}`}>{t.label}</span>
                   </div>
 
                   {!hasData ? (
-                    <p className="text-[11px] text-slate-400">Geen geëvalueerde picks</p>
+                    <p className="text-[11px] text-slate-400">Nog geen data</p>
                   ) : (
                     <>
-                      {/* ROI — big number */}
                       <div className="flex items-center gap-1">
                         {isProfit ? (
                           <TrendingUp className="h-4 w-4 text-emerald-400 shrink-0" />
@@ -179,8 +240,10 @@ export function TierROIGrid({
                           {isProfit ? "+" : ""}{stats.roi_pct}%
                         </span>
                       </div>
+                      <p className="text-[9px] uppercase tracking-wider text-slate-500 -mt-1">
+                        Rendement
+                      </p>
 
-                      {/* Secondary stats */}
                       <div className="space-y-0.5 text-[10px] text-slate-500">
                         <p>
                           <span className="text-slate-300 font-semibold">{stats.total_picks}</span> picks
@@ -196,16 +259,19 @@ export function TierROIGrid({
                         <p>Gem. odds: <span className="text-slate-300 font-semibold">{stats.avg_odds}x</span></p>
                       </div>
 
-                      {/* Odds source badge */}
-                      {stats.implied_odds_count > 0 && (
-                        <p className="text-[10px] text-amber-400/80">
-                          {stats.real_odds_count > 0
-                            ? `${stats.real_odds_count} echt · ${stats.implied_odds_count} geschat`
-                            : `${stats.implied_odds_count} geschat (modelkans)`}
+                      {stats.implied_odds_count > 0 && stats.real_odds_count > 0 && (
+                        <p className="text-[10px] text-slate-500">
+                          <span className="text-emerald-400">{stats.real_odds_count}</span>
+                          {" echt · "}
+                          <span className="text-amber-400">{stats.implied_odds_count}</span>
+                          {" berekend"}
                         </p>
                       )}
                       {stats.implied_odds_count === 0 && stats.real_odds_count > 0 && (
-                        <p className="text-[10px] text-emerald-400/80">Alle odds echt (API)</p>
+                        <p className="text-[10px] text-emerald-400/80">Alle odds echt</p>
+                      )}
+                      {stats.real_odds_count === 0 && stats.implied_odds_count > 0 && (
+                        <p className="text-[10px] text-amber-400/80">Alle odds berekend</p>
                       )}
                     </>
                   )}
@@ -214,35 +280,74 @@ export function TierROIGrid({
             })}
           </div>
 
-          {/* Odds transparency info */}
+          {/* ── Oddsbron transparantie ──────────────────── */}
           <div className="flex items-start gap-2 rounded-xl border border-blue-500/20 bg-blue-500/5 px-3 py-2.5">
             <button
               onClick={() => setShowInfo((v) => !v)}
               className="mt-0.5 shrink-0 text-blue-400 hover:text-blue-300 transition-colors"
+              aria-label="Uitleg oddsbron"
             >
               <Info className="h-3.5 w-3.5" />
             </button>
-            <div>
-              <p className="text-[11px] text-slate-400">
-                <span className="text-emerald-300 font-semibold">Echte odds</span> komen uit onze betaalde data-API.{" "}
-                <span className="text-amber-300 font-semibold">Geschatte odds</span> zijn berekend via 1 ÷ modelkans × 0,95 — een benadering, geen echte marktprijs.
+            <div className="flex-1">
+              <p className="text-[11px] leading-relaxed text-slate-400">
+                <span className="text-emerald-300 font-semibold">{all.real_odds_count} picks</span>
+                {" gebruiken echte bookmaker-odds uit onze data-API"}
+                {all.implied_odds_count > 0 && (
+                  <>
+                    {", "}
+                    <span className="text-amber-300 font-semibold">{all.implied_odds_count} picks</span>
+                    {" een berekende odd op basis van de winkans"}
+                  </>
+                )}
+                {"."}{" "}
                 {!showInfo && (
-                  <button onClick={() => setShowInfo(true)} className="ml-1 underline text-blue-400 hover:text-blue-300">Meer info</button>
+                  <button onClick={() => setShowInfo(true)} className="underline text-blue-400 hover:text-blue-300">
+                    Waarom?
+                  </button>
                 )}
               </p>
               {showInfo && (
-                <p className="mt-1.5 text-[11px] leading-relaxed text-slate-500 border-t border-white/10 pt-2">
-                  Voor wedstrijden waarbij geen bookmaker-odds beschikbaar zijn in onze database, berekenen we een geschatte odd op basis van de modelkans. Voorbeeld: modelkans 70% → geschatte odd = 1 ÷ 0,70 × 0,95 = 1,36. Dit simuleert wat een gemiddelde bookmaker zou aanbieden. De berekening is eerlijk en herhaalbaar, maar is <strong>geen echte marktprijs</strong>.
-                </p>
+                <div className="mt-2 space-y-2 text-[11px] leading-relaxed text-slate-500 border-t border-white/10 pt-2">
+                  <p>
+                    <span className="text-emerald-300 font-semibold">Echte odds</span> komen uit onze betaalde data-API.
+                    We nemen het gemiddelde over alle bookmakers — dat is de prijs die een gewone speler realistisch krijgt.
+                  </p>
+                  {all.implied_odds_count > 0 && (
+                    <p>
+                      <span className="text-amber-300 font-semibold">Berekende odds</span> gebruiken we alleen als er voor een wedstrijd geen marktdata beschikbaar is. De odd wordt dan ingeschat via de winkans van de engine (bijvoorbeeld: 70% winkans → ongeveer 1,36). Dit is een benadering, niet de echte marktprijs.
+                    </p>
+                  )}
+                  <p className="text-slate-600">
+                    Transparantie is voor ons essentieel — je ziet altijd welk percentage op echte marktprijzen is gebaseerd.
+                  </p>
+                </div>
               )}
             </div>
           </div>
 
-          {/* Disclaimer */}
+          {/* ── Context over wat het getal betekent ──────── */}
+          <div className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2.5">
+            <p className="text-[11px] leading-relaxed text-slate-400">
+              <strong className={allProfit ? "text-emerald-300" : "text-amber-300"}>
+                {allProfit
+                  ? `Positief rendement (+${all.roi_pct}%)`
+                  : `${all.roi_pct >= -5 ? "Breakeven" : "Negatief"} rendement (${all.roi_pct}%)`}
+              </strong>
+              {" — "}
+              {allProfit
+                ? "het model presteert beter dan de markt prijst. Dat betekent een historische edge op deze dataset."
+                : all.roi_pct >= -5
+                ? "het model is netjes gekalibreerd: winkansen komen overeen met werkelijke uitkomsten."
+                : "het model was op dit sample minder nauwkeurig dan de marktprijzen suggereren."}
+            </p>
+          </div>
+
+          {/* ── Disclaimer ──────────────────────────────── */}
           <div className="flex items-start gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2.5">
             <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-400" />
             <p className="text-[11px] leading-relaxed text-slate-400">
-              Gesimuleerd op historische data. Toekomstige resultaten kunnen afwijken. Geen financieel advies.
+              Berekend op historische data. Verleden resultaten zijn geen garantie voor de toekomst. Uitsluitend ter informatie, geen financieel advies.
             </p>
           </div>
         </>

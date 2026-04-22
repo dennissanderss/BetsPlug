@@ -970,8 +970,8 @@ export default function BetOfTheDayPage() {
 
           <ROISimulator
             source="all"
-            title="ROI Simulator — Pick of the Day"
-            subtitle="Hoeveel had je verdiend als je elke BOTD had gevolgd?"
+            title="Rendement — Pick of the Day"
+            subtitle="Wat had je verdiend als je elke BOTD had gespeeld?"
           />
 
           <div className="glass-card p-4 text-sm text-slate-400">

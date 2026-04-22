@@ -309,17 +309,20 @@ async def get_roi_simulation(
 
     oh_alias = OddsHistory.__table__.alias("oh")
 
+    # AVG across all bookmakers + timestamps → realistic "typical" odds
+    # (MAX would be unrealistically optimistic cherry-picking best prices).
     stmt = (
         select(
+            Prediction.id.label("pid"),
             Prediction.match_id,
             Prediction.home_win_prob,
             Prediction.draw_prob,
             Prediction.away_win_prob,
             Prediction.closing_odds_snapshot,
             PredictionEvaluation.is_correct,
-            func.max(oh_alias.c.home_odds).label("oh_home"),
-            func.max(oh_alias.c.draw_odds).label("oh_draw"),
-            func.max(oh_alias.c.away_odds).label("oh_away"),
+            func.avg(oh_alias.c.home_odds).label("oh_home"),
+            func.avg(oh_alias.c.draw_odds).label("oh_draw"),
+            func.avg(oh_alias.c.away_odds).label("oh_away"),
         )
         .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
         .join(Match, Match.id == Prediction.match_id)
@@ -330,6 +333,7 @@ async def get_roi_simulation(
         )
         .where(Prediction.predicted_at < Match.scheduled_at)
         .group_by(
+            Prediction.id,
             Prediction.match_id,
             Prediction.home_win_prob,
             Prediction.draw_prob,
@@ -474,17 +478,21 @@ async def get_roi_per_tier(
     oh_alias = OddsHistory.__table__.alias("oh")
     tier_expr = pick_tier_expression()
 
+    # AVG odds across bookmakers — realistic "typical" market price.
+    # GROUP BY Prediction.id guarantees one row per prediction even if
+    # OddsHistory has many bookmaker rows per match.
     stmt = (
         select(
+            Prediction.id.label("pid"),
             tier_expr.label("tier_int"),
             Prediction.home_win_prob,
             Prediction.draw_prob,
             Prediction.away_win_prob,
             Prediction.closing_odds_snapshot,
             PredictionEvaluation.is_correct,
-            func.max(oh_alias.c.home_odds).label("oh_home"),
-            func.max(oh_alias.c.draw_odds).label("oh_draw"),
-            func.max(oh_alias.c.away_odds).label("oh_away"),
+            func.avg(oh_alias.c.home_odds).label("oh_home"),
+            func.avg(oh_alias.c.draw_odds).label("oh_draw"),
+            func.avg(oh_alias.c.away_odds).label("oh_away"),
         )
         .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
         .join(Match, Match.id == Prediction.match_id)
@@ -495,6 +503,7 @@ async def get_roi_per_tier(
         )
         .where(Prediction.predicted_at < Match.scheduled_at)
         .group_by(
+            Prediction.id,
             tier_expr,
             Prediction.home_win_prob,
             Prediction.draw_prob,

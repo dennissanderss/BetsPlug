@@ -38,7 +38,6 @@ import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { HeroMediaBg } from "@/components/ui/media-bg";
 import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
 import { LockedLivePlaceholder } from "@/components/ui/locked-live-placeholder";
-import { ROISimulator } from "@/components/noct/roi-simulator";
 import { TierROIGrid } from "@/components/noct/tier-roi-grid";
 
 /* ── Live API data hook ─────────────────────────────────── */
@@ -857,21 +856,16 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
-      {/* ───────────── ROI PER TIER — backtest ───────────────────────── */}
-      <section className="mx-auto max-w-7xl px-4 pb-6 sm:px-6">
+      {/* ───────────── RENDEMENT PER TIER — backtest ─────────────────
+          Single source of truth for ROI on the backtest surface: has a
+          stake selector, per-tier cards, an "all tiers" aggregate row
+          and transparent odds-source labelling. Replaces the old
+          standalone ROISimulator which duplicated these controls. */}
+      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
         <TierROIGrid
           source="backtest"
           title="Rendement per tier — Backtest"
-        />
-      </section>
-
-      {/* ───────────── ROI SIMULATOR — backtest (inzet-kiezer) ──────── */}
-      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
-        <ROISimulator
-          pickTier={pickTier !== "all" ? pickTier : undefined}
-          source="backtest"
-          title="ROI Simulator — Backtest"
-          subtitle="Wat had je verdiend op historische picks?"
+          subtitle="Wat had je verdiend als je elke historische pick had gespeeld?"
         />
       </section>
 
@@ -904,20 +898,11 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           numbers on the authed /trackrecord dashboard. */}
       <LockedLivePlaceholder number="3" variant="tier" id="live-measurement" />
 
-      {/* ───────────── ROI PER TIER — live ──────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-4 pb-6 sm:px-6">
+      {/* ───────────── RENDEMENT PER TIER — live ────────────────────── */}
+      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
         <TierROIGrid
           source="live"
           title="Rendement per tier — Live meting"
-        />
-      </section>
-
-      {/* ───────────── ROI SIMULATOR — live (inzet-kiezer) ──────────── */}
-      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
-        <ROISimulator
-          pickTier={pickTier !== "all" ? pickTier : undefined}
-          source="live"
-          title="ROI Simulator — Live meting"
           subtitle="Wat had je verdiend op live picks (sinds 16 april)?"
         />
       </section>
