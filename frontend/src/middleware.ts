@@ -88,7 +88,10 @@ function applyIndexability(res: NextResponse, host: string | null): NextResponse
 
 export function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
-  const host = req.headers.get("host");
+  // Vercel normalises the `host` header to the custom domain even on *.vercel.app
+  // preview URLs; `x-forwarded-host` carries the original public hostname.
+  const host =
+    req.headers.get("x-forwarded-host") ?? req.headers.get("host");
 
   // Skip Next internals, API routes, Sanity Studio and public files
   if (
