@@ -27,7 +27,8 @@ import {
   type LearnPillarLocale,
 } from "@/data/learn-pillars";
 import { fetchLearnPillarSlugs, fetchLearnPillarBySlug } from "@/lib/sanity-data";
-import { getLocalizedAlternates } from "@/lib/seo-helpers";
+import { getLocalizedAlternates, getServerLocale } from "@/lib/seo-helpers";
+import { localizePath } from "@/i18n/routes";
 
 /**
  * Learn pillar — long-form evergreen explainer.
@@ -198,6 +199,8 @@ export default async function LearnPillarPage(props: {
   if (!pillar) notFound();
 
   const editorialLocale = readLocaleFromCookie();
+  const uiLocale = getServerLocale();
+  const lhref = (canonical: string) => localizePath(canonical, uiLocale);
   const jsonLd = buildJsonLd(pillar, editorialLocale);
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
 
@@ -226,11 +229,11 @@ export default async function LearnPillarPage(props: {
               aria-label="Breadcrumb"
               className="mb-6 flex items-center gap-1.5 text-xs text-[#6b7280]"
             >
-              <Link href="/" className="transition hover:text-[#4ade80]">
+              <Link href={lhref("/")} className="transition hover:text-[#4ade80]">
                 BetsPlug
               </Link>
               <ChevronRight className="h-3 w-3" />
-              <Link href="/learn" className="transition hover:text-[#4ade80]">
+              <Link href={lhref("/learn")} className="transition hover:text-[#4ade80]">
                 {t("Learn", "Leren")}
               </Link>
               <ChevronRight className="h-3 w-3" />
@@ -368,7 +371,7 @@ export default async function LearnPillarPage(props: {
                       return (
                         <Link
                           key={p.slug}
-                          href={`/learn/${p.slug}`}
+                          href={lhref(`/learn/${p.slug}`)}
                           className={`card-neon card-neon-${variant} group relative block overflow-hidden p-6 transition-transform duration-300 hover:-translate-y-1`}
                         >
                           <div className="relative flex flex-col gap-3">
@@ -418,11 +421,11 @@ export default async function LearnPillarPage(props: {
                 </p>
 
                 <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                  <Link href="/" className="btn-primary inline-flex items-center gap-2">
+                  <Link href={lhref("/")} className="btn-primary inline-flex items-center gap-2">
                     {t("View predictions", "Bekijk voorspellingen")}
                     <ArrowRight className="h-4 w-4" />
                   </Link>
-                  <Link href="/learn" className="btn-glass inline-flex items-center gap-2">
+                  <Link href={lhref("/learn")} className="btn-glass inline-flex items-center gap-2">
                     {t("All guides", "Alle gidsen")}
                     <ArrowRight className="h-4 w-4" />
                   </Link>

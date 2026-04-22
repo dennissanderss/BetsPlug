@@ -17,7 +17,8 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { UnlockBanner } from "@/components/match-predictions/unlock-banner";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { defaultLocale, isLocale, LOCALE_COOKIE } from "@/i18n/config";
-import { getLocalizedAlternates } from "@/lib/seo-helpers";
+import { localizePath } from "@/i18n/routes";
+import { getLocalizedAlternates, getServerLocale } from "@/lib/seo-helpers";
 import { getLeagueLogoPath } from "@/data/league-logos";
 import { BET_TYPE_HUBS } from "@/data/bet-type-hubs";
 import { COMBO_LEAGUE_SLUGS, LEAGUE_SCORING_PROFILE } from "@/data/bet-type-league-combos";
@@ -192,6 +193,12 @@ export default async function BetTypeLeagueComboPage(props: {
   if (!combo) notFound();
 
   const locale = readLocaleFromCookie();
+  // UI locale (all 8 locales) for URL building; `locale` above is
+  // editorial only (EN + NL). Keeps href generation in the visitor's
+  // actual locale so internal links don't cross-reference the EN
+  // canonical path from e.g. a German user's page.
+  const uiLocale = getServerLocale();
+  const lhref = (canonical: string) => localizePath(canonical, uiLocale);
   const jsonLd = buildJsonLd(combo, locale);
   const leagueLogo = getLeagueLogoPath(league_slug);
   const isNl = locale === "nl";
@@ -236,16 +243,16 @@ export default async function BetTypeLeagueComboPage(props: {
             aria-label="Breadcrumb"
             className="mb-6 flex flex-wrap items-center gap-1.5 text-xs text-[#6b7280]"
           >
-            <Link href="/" className="transition-colors hover:text-[#ededed]">
+            <Link href={lhref("/")} className="transition-colors hover:text-[#ededed]">
               {isNl ? "Home" : "Home"}
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <Link href="/bet-types" className="transition-colors hover:text-[#ededed]">
+            <Link href={lhref("/bet-types")} className="transition-colors hover:text-[#ededed]">
               {isNl ? "Marktsoorten" : "Bet Types"}
             </Link>
             <ChevronRight className="h-3 w-3" />
             <Link
-              href={`/bet-types/${slug}`}
+              href={lhref(`/bet-types/${slug}`)}
               className="transition-colors hover:text-[#ededed]"
             >
               {betTypeName}
@@ -349,7 +356,7 @@ export default async function BetTypeLeagueComboPage(props: {
         {/* Dual CTA */}
         <div className="mt-10 flex flex-wrap items-center gap-3">
           <Link
-            href={`/match-predictions/${league_slug}`}
+            href={lhref(`/match-predictions/${league_slug}`)}
             className="btn-primary inline-flex items-center gap-2"
           >
             {isNl
@@ -358,7 +365,7 @@ export default async function BetTypeLeagueComboPage(props: {
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
-            href={`/bet-types/${slug}`}
+            href={lhref(`/bet-types/${slug}`)}
             className="btn-ghost inline-flex items-center gap-2"
           >
             {isNl ? `Meer over ${betTypeName}` : `More on ${betTypeName}`}
@@ -418,7 +425,7 @@ export default async function BetTypeLeagueComboPage(props: {
             {siblingLeagues.map((l) => (
               <Link
                 key={l.slug}
-                href={`/bet-types/${slug}/${l.slug}`}
+                href={lhref(`/bet-types/${slug}/${l.slug}`)}
                 className="group flex items-center gap-3 rounded-xl border p-4 transition-colors hover:border-[#4ade80]/40"
                 style={{
                   borderColor: "hsl(0 0% 100% / 0.06)",
@@ -462,7 +469,7 @@ export default async function BetTypeLeagueComboPage(props: {
             {siblingMarkets.map((m) => (
               <Link
                 key={m.slug}
-                href={`/bet-types/${m.slug}/${league_slug}`}
+                href={lhref(`/bet-types/${m.slug}/${league_slug}`)}
                 className="group flex items-center gap-3 rounded-xl border p-4 transition-colors hover:border-[#4ade80]/40"
                 style={{
                   borderColor: "hsl(0 0% 100% / 0.06)",

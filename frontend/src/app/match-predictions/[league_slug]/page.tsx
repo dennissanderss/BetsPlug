@@ -33,7 +33,8 @@ import {
 } from "@/lib/sanity-data";
 import { pickHubLocale } from "@/data/league-hubs";
 import { getLeagueLogoPath } from "@/data/league-logos";
-import { getLocalizedAlternates } from "@/lib/seo-helpers";
+import { getLocalizedAlternates, getServerLocale } from "@/lib/seo-helpers";
+import { localizePath } from "@/i18n/routes";
 
 import { LeagueHubFixtures } from "./league-hub-fixtures";
 import { LeagueHubTopPick } from "./league-hub-top-pick";
@@ -243,8 +244,18 @@ export default async function LeagueHubPage(props: {
   if (!hub) notFound();
 
   const editorialLocale = readLocaleFromCookie();
+  // UI locale drives URL localization (all 8 locales). Kept separate
+  // from editorialLocale because copy is only authored for EN + NL
+  // but URL slugs exist for every locale. Without this every
+  // non-EN/NL visitor was getting Dutch/English hrefs (e.g. a German
+  // visitor on /de/spiel-vorhersagen/premier-league would see a
+  // sibling link pointing at /match-predictions/la-liga instead of
+  // /de/spiel-vorhersagen/la-liga — forcing a 308 round-trip and
+  // polluting Google's internal link graph with cross-locale links).
+  const uiLocale = getServerLocale();
   const jsonLd = buildJsonLd(hub, editorialLocale);
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
+  const lhref = (canonical: string) => localizePath(canonical, uiLocale);
   const logoPath = getLeagueLogoPath(hub.slug);
 
   const allHubs = await fetchAllLeagueHubs();
@@ -296,12 +307,12 @@ export default async function LeagueHubPage(props: {
               aria-label="Breadcrumb"
               className="mb-6 flex items-center gap-1.5 text-xs text-[#6b7280]"
             >
-              <Link href="/" className="transition hover:text-[#4ade80]">
+              <Link href={lhref("/")} className="transition hover:text-[#4ade80]">
                 BetsPlug
               </Link>
               <ChevronRight className="h-3 w-3" />
               <Link
-                href="/match-predictions"
+                href={lhref("/match-predictions")}
                 className="transition hover:text-[#4ade80]"
               >
                 {t("Match Predictions", "Wedstrijdvoorspellingen")}
@@ -434,7 +445,7 @@ export default async function LeagueHubPage(props: {
 
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link
-                    href="/track-record"
+                    href={lhref("/track-record")}
                     className="btn-primary inline-flex items-center gap-2"
                   >
                     {t("See our track record", "Bekijk ons trackrecord")}
@@ -506,6 +517,7 @@ export default async function LeagueHubPage(props: {
           currentSlug={hub.slug}
           leagues={siblingList}
           locale={editorialLocale}
+          uiLocale={uiLocale}
         />
 
         {/* ═══ By market — longtail combo cluster ═══
@@ -535,7 +547,7 @@ export default async function LeagueHubPage(props: {
               {BET_TYPE_HUBS.map((bt) => (
                 <Link
                   key={bt.slug}
-                  href={`/bet-types/${bt.slug}/${hub.slug}`}
+                  href={lhref(`/bet-types/${bt.slug}/${hub.slug}`)}
                   className="group flex items-center gap-3 rounded-xl border p-4 transition-colors hover:border-[#4ade80]/40"
                   style={{
                     borderColor: "hsl(0 0% 100% / 0.06)",

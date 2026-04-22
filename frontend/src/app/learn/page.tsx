@@ -17,6 +17,7 @@ import {
 } from "@/data/learn-pillars";
 import { fetchAllLearnPillars } from "@/lib/sanity-data";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { localizePath } from "@/i18n/routes";
 import { PAGE_META } from "@/data/page-meta";
 import { HexBadge } from "@/components/noct/hex-badge";
 
@@ -58,6 +59,8 @@ export const revalidate = 60;
 
 export default async function LearnIndexPage() {
   const editorialLocale = readLocaleFromCookie();
+  const uiLocale = getServerLocale();
+  const lhref = (canonical: string) => localizePath(canonical, uiLocale);
   const pillars = await fetchAllLearnPillars();
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
 
@@ -79,7 +82,7 @@ export default async function LearnIndexPage() {
             aria-label="Breadcrumb"
             className="mb-6 flex items-center gap-1.5 text-xs text-[#6b7280]"
           >
-            <Link href="/" className="transition hover:text-[#4ade80]">
+            <Link href={lhref("/")} className="transition hover:text-[#4ade80]">
               BetsPlug
             </Link>
             <ChevronRight className="h-3 w-3" />
@@ -126,7 +129,7 @@ export default async function LearnIndexPage() {
               return (
                 <Link
                   key={pillar.slug}
-                  href={`/learn/${pillar.slug}`}
+                  href={lhref(`/learn/${pillar.slug}`)}
                   className={`card-neon card-neon-${variant} group relative block overflow-hidden p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-7`}
                 >
                   <div className="relative flex flex-col gap-4">
@@ -189,11 +192,11 @@ export default async function LearnIndexPage() {
               </p>
 
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <Link href="/register" className="btn-primary inline-flex items-center gap-2">
+                <Link href={lhref("/register")} className="btn-primary inline-flex items-center gap-2">
                   {t("Claim €0,01 trial", "Claim €0,01 proefperiode")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link href="/how-it-works" className="btn-glass inline-flex items-center gap-2">
+                <Link href={lhref("/how-it-works")} className="btn-glass inline-flex items-center gap-2">
                   {t("See how the AI works", "Zie hoe de AI werkt")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>

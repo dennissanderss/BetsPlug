@@ -1,13 +1,15 @@
 import type { MetadataRoute } from "next";
 
 /**
- * Dynamic robots.txt — served at /robots.txt (EN-only, 2026-04-22)
+ * Dynamic robots.txt — served at /robots.txt (2026-04-23)
  * ────────────────────────────────────────────────────────────
- * Allows crawlers on the English canonical only. Every /xx/ locale
- * prefix is disallowed as a belt-and-suspenders to the 308 redirect
- * in middleware — some crawlers (notably AI bots that cache
- * aggressively) still re-fetch old hreflang targets for weeks after
- * they disappear.
+ * Allows crawling across the public surface. /xx/ locale URLs
+ * are intentionally NOT disallowed here: they serve translated
+ * UI to visitors but return `X-Robots-Tag: noindex, nofollow`
+ * (see middleware.ts). If we disallow them in robots.txt Google
+ * can't fetch them and can't see the noindex header, which would
+ * leave stale /xx/ URLs in the index. Allow + noindex is the
+ * spec-recommended way to remove a set of URLs.
  */
 
 const SITE_URL = "https://betsplug.com";
@@ -19,16 +21,6 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         disallow: [
-          // Locale-prefixed URLs — always 308-redirect to canonical EN,
-          // but tell crawlers not to even attempt them.
-          "/nl/",
-          "/de/",
-          "/fr/",
-          "/es/",
-          "/it/",
-          "/sw/",
-          "/id/",
-
           // API & admin
           "/api/",
           "/admin/",

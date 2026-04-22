@@ -13,16 +13,29 @@ import Link from "next/link";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Globe } from "lucide-react";
 import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
+import { localizePath } from "@/i18n/routes";
+import type { Locale } from "@/i18n/config";
 
 type SlimLeague = { slug: string; name: string; flag?: string };
 
 interface Props {
   currentSlug: string;
   leagues: SlimLeague[];
+  /** Editorial locale — drives EN/NL copy swap only. */
   locale: "en" | "nl";
+  /** UI locale — drives URL localization. Defaults to "en" so
+   *  existing call-sites keep working; pass the real UI locale
+   *  (e.g. "de", "fr") from the server page to ensure sibling
+   *  links stay on the visitor's current locale. */
+  uiLocale?: Locale;
 }
 
-export function LeagueHubSiblings({ currentSlug, leagues, locale }: Props) {
+export function LeagueHubSiblings({
+  currentSlug,
+  leagues,
+  locale,
+  uiLocale = "en",
+}: Props) {
   const siblings = leagues.filter((l) => l.slug !== currentSlug);
   if (siblings.length === 0) return null;
 
@@ -64,7 +77,7 @@ export function LeagueHubSiblings({ currentSlug, leagues, locale }: Props) {
             return (
               <Link
                 key={league.slug}
-                href={`/match-predictions/${league.slug}`}
+                href={localizePath(`/match-predictions/${league.slug}`, uiLocale)}
                 className="glass-panel-lifted group flex items-center gap-3 px-4 py-3 transition-all"
               >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.04]">

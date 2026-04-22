@@ -1121,37 +1121,3 @@ section:nth-child(even) {
   background: transparent !important;
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   GOOGLE TRANSLATE WIDGET — hide only the chrome (top banner + hover
-   tooltip + host container), never generic `.skiptranslate`. Google
-   Translate wraps untranslated inline text (proper nouns, numbers)
-   in `<font class="skiptranslate">`, so a broad `.skiptranslate {
-   display: none }` rule erases chunks of the translated page. Scope
-   each hide to the specific chrome element.
-   ═══════════════════════════════════════════════════════════════════ */
-.goog-te-banner-frame,
-iframe.goog-te-banner-frame {
-  display: none !important;
-}
-.goog-te-balloon-frame,
-#goog-gt-tt,
-.goog-tooltip,
-.goog-tooltip:hover {
-  display: none !important;
-}
-/* Our nav switcher is the only UI — hide the widget's own host. */
-#google_translate_element {
-  visibility: hidden !important;
-  position: absolute !important;
-  left: -9999px !important;
-  top: -9999px !important;
-  height: 0 !important;
-  width: 0 !important;
-}
-.goog-text-highlight {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-body {
-  top: 0 !important;
-}

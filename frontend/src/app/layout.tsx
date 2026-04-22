@@ -5,8 +5,7 @@ import Script from "next/script";
 import "./globals.css";
 import { AppProviders } from "@/components/layout/providers";
 import { LocaleProvider } from "@/i18n/locale-provider";
-import { getLocalizedAlternates } from "@/lib/seo-helpers";
-import { defaultLocale } from "@/i18n/config";
+import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 
 // Exo 2 — geometric sans with sport/tech feel, loaded via next/font/google
@@ -50,12 +49,15 @@ const OG_IMAGE = {
   type: "image/jpeg",
 } as const;
 
-/* ── EN-only metadata (2026-04-22) ────────────────────────────
-   SSR is English exclusively; visitor-facing translation runs in
-   the browser via Google Translate widget. Canonical is the bare
-   EN URL, no hreflang. */
+/* ── Locale-aware metadata (EN-canonical, 2026-04-23) ─────────
+   `<title>` and `<meta description>` follow the visitor's locale
+   so translated pages show translated tab titles. Canonical stays
+   EN-absolute regardless of locale — /nl/, /de/, … are rewritten
+   to this page and tagged noindex by the middleware, so only the
+   English URL is ever indexable. No hreflang is emitted. */
 export async function generateMetadata(): Promise<Metadata> {
-  const meta = PAGE_META["/"].en;
+  const locale = getServerLocale();
+  const meta = PAGE_META["/"]?.[locale] ?? PAGE_META["/"].en;
   const alternates = getLocalizedAlternates("/");
 
   return {
@@ -102,9 +104,12 @@ export default function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  // SSR is EN-only; Google Translate widget (loaded below) flips
-  // the DOM client-side when the visitor picks a language.
-  const locale = defaultLocale;
+  // Resolve via the shared helper so <html lang> matches the
+  // visitor's active locale — important for screen readers on
+  // translated pages. The URL is still rewritten to the canonical
+  // EN path and tagged noindex, so only the English URL enters
+  // Google's index.
+  const locale = getServerLocale();
 
   return (
     <html
@@ -135,27 +140,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         {/* GA4 is deployed as a tag inside GTM (with CookieYes consent
             trigger), so there's no hardcoded gtag here. */}
-
-        {/* Google Translate widget — loaded once, triggered from
-            the language switcher by setting the `googtrans` cookie
-            and reloading. The hidden host div is still required
-            (Google Translate calls into it to install the engine).
-            The default banner is suppressed via globals.css. */}
-        <div id="google_translate_element" aria-hidden className="sr-only" />
-        <Script id="google-translate-init" strategy="afterInteractive">
-          {`function googleTranslateElementInit(){
-  new google.translate.TranslateElement({
-    pageLanguage: 'en',
-    includedLanguages: 'nl,de,fr,es,it,sw,id',
-    autoDisplay: false,
-    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-  }, 'google_translate_element');
-}`}
-        </Script>
-        <Script
-          src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-          strategy="afterInteractive"
-        />
 
         <LocaleProvider locale={locale}>
           <AppProviders>{children}</AppProviders>

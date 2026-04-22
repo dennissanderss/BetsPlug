@@ -1,13 +1,27 @@
 /**
- * SEO helper utilities (EN-only — 2026-04-22)
+ * SEO helper utilities (EN-indexable, translated UI — 2026-04-23)
  * ────────────────────────────────────────────────────────────
- * Every server render is English. Visitor-facing translation
- * runs in the browser via the Google Translate widget (see
- * `layout.tsx`), so the SSR output Google crawls stays pristine
- * EN with a single canonical per URL.
+ * Every canonical URL emitted here is the English form. The
+ * middleware rewrites /nl/, /de/, … URLs to the canonical path
+ * AND tags the response `X-Robots-Tag: noindex`, so Google only
+ * indexes the English URL space while visitors still see their
+ * chosen language via SSR (not Google Translate).
+ *
+ * `getServerLocale()` IS locale-aware (reads the `x-locale`
+ * request header set by the middleware), so SSR renders the right
+ * language. Canonical URLs built via `getCanonicalUrl()` /
+ * `getLocalizedAlternates()` ignore the active locale and always
+ * return the English URL — that's what goes into
+ * `<link rel="canonical">` and OG `url`.
  */
 
-import { defaultLocale, type Locale } from "@/i18n/config";
+import { cookies, headers } from "next/headers";
+import {
+  LOCALE_COOKIE,
+  isLocale,
+  defaultLocale,
+  type Locale,
+} from "@/i18n/config";
 import { translate } from "@/i18n/messages";
 import { formatMsg } from "@/i18n/format";
 import { POTD_STATS } from "@/data/potd-stats";
@@ -17,11 +31,34 @@ const SITE_URL = "https://betsplug.com";
 /* ── Locale detection ───────────────────────────────────────── */
 
 /**
- * Always returns the default (English) locale — SSR is EN-only.
- * Client-side translation is handled by Google Translate (widget
- * reads the `googtrans` cookie, transforms the DOM post-hydration).
+ * Resolve the active locale for the current server request.
+ *
+ * Checks sources in order:
+ *   1. `x-locale` request header — set by middleware on every
+ *      rewrite so generateMetadata() sees the correct locale on
+ *      the first request.
+ *   2. NEXT_LOCALE cookie — for direct hits that didn't route
+ *      through the /xx/ rewrite path.
+ *   3. defaultLocale (English) fallback.
+ *
+ * The middleware pins `x-locale` to `en` on canonical URLs, so
+ * visitors with a stale NL cookie who type `/match-predictions`
+ * still see English (URL wins over cookie).
  */
 export function getServerLocale(): Locale {
+  try {
+    const h = headers();
+    const hdrLocale = h.get("x-locale");
+    if (isLocale(hdrLocale)) return hdrLocale;
+  } catch {
+    // headers() throws outside a request scope.
+  }
+  try {
+    const raw = cookies().get(LOCALE_COOKIE)?.value;
+    if (isLocale(raw)) return raw;
+  } catch {
+    // same
+  }
   return defaultLocale;
 }
 

@@ -20,7 +20,8 @@ import {
   type BetTypeHubLocale,
 } from "@/lib/sanity-data";
 import { pickBetTypeHubLocale } from "@/data/bet-type-hubs";
-import { getLocalizedAlternates } from "@/lib/seo-helpers";
+import { getLocalizedAlternates, getServerLocale } from "@/lib/seo-helpers";
+import { localizePath } from "@/i18n/routes";
 import { BetTypeHubFixtures } from "./bet-type-hub-fixtures";
 import { HeroMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
@@ -174,6 +175,12 @@ export default async function BetTypeHubPage(props: {
   if (!hub) notFound();
 
   const editorialLocale = readLocaleFromCookie();
+  // UI locale (8 locales) for URL building; editorialLocale is
+  // EN/NL only. Keeps internal link graph on the visitor's locale
+  // so a German user on /de/wett-arten/btts sees sibling links
+  // like /de/wett-arten/over-2-5 instead of the EN canonical.
+  const uiLocale = getServerLocale();
+  const lhref = (canonical: string) => localizePath(canonical, uiLocale);
   const jsonLd = buildJsonLd(hub, editorialLocale);
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
   const allHubs = await fetchAllBetTypeHubs();
@@ -204,7 +211,7 @@ export default async function BetTypeHubPage(props: {
               aria-label="Breadcrumb"
               className="mb-6 flex items-center gap-1.5 text-xs text-[#6b7280]"
             >
-              <Link href="/" className="transition hover:text-[#4ade80]">
+              <Link href={lhref("/")} className="transition hover:text-[#4ade80]">
                 BetsPlug
               </Link>
               <ChevronRight className="h-3 w-3" />
@@ -307,11 +314,11 @@ export default async function BetTypeHubPage(props: {
                   </p>
 
                   <div className="mt-6 flex flex-wrap gap-3">
-                    <Link href="/track-record" className="btn-primary inline-flex items-center gap-2">
+                    <Link href={lhref("/track-record")} className="btn-primary inline-flex items-center gap-2">
                       {t("See our track record", "Bekijk ons trackrecord")}
                       <ArrowRight className="h-4 w-4" />
                     </Link>
-                    <Link href="/match-predictions" className="btn-glass inline-flex items-center gap-2">
+                    <Link href={lhref("/match-predictions")} className="btn-glass inline-flex items-center gap-2">
                       {t("All predictions", "Alle voorspellingen")}
                       <ArrowRight className="h-4 w-4" />
                     </Link>
@@ -384,7 +391,7 @@ export default async function BetTypeHubPage(props: {
                       .map((other) => (
                         <Link
                           key={other.slug}
-                          href={`/bet-types/${other.slug}`}
+                          href={lhref(`/bet-types/${other.slug}`)}
                           className="glass-panel group flex items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-[#ededed] transition hover:text-[#4ade80]"
                         >
                           <span>{other.name[editorialLocale]}</span>
@@ -429,7 +436,7 @@ export default async function BetTypeHubPage(props: {
               return (
                 <Link
                   key={leagueSlug}
-                  href={`/bet-types/${hub.slug}/${leagueSlug}`}
+                  href={lhref(`/bet-types/${hub.slug}/${leagueSlug}`)}
                   className="group flex items-center gap-3 rounded-xl border p-4 transition-colors hover:border-[#4ade80]/40"
                   style={{
                     borderColor: "hsl(0 0% 100% / 0.06)",

@@ -15,6 +15,7 @@
 import { createContext, useCallback, useContext, useMemo } from "react";
 import { defaultLocale, LOCALE_COOKIE, type Locale } from "./config";
 import { translate, type TranslationKey } from "./messages";
+import { translatePath } from "./routes";
 import { formatMsg, type MessageVars } from "./format";
 
 type LocaleContextValue = {
@@ -45,39 +46,18 @@ export function LocaleProvider({
 
   const setLocale = useCallback((next: Locale) => {
     if (typeof document === "undefined") return;
-
-    // Remember the UI choice so the switcher can highlight it
-    // after reload.
+    // 1 year cookie, root path so it applies everywhere.
     document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
 
-    // Drive Google Translate via its `googtrans` cookie. The widget
-    // is loaded once in layout.tsx; on page load it reads this cookie
-    // and transforms the DOM in place — no URL change, no SSR
-    // translation, no SEO surface (Google sees the untranslated EN).
-    //
-    // Setting EN clears the cookie (both host-only + domain-scoped
-    // variants) so reload shows the original source.
-    const clearGoogtrans = () => {
-      document.cookie = "googtrans=; path=/; max-age=0";
-      // Google Translate also sometimes writes to the registrable
-      // domain (e.g. `.betsplug.com`), so clear that variant too.
-      const host = window.location.hostname;
-      const parts = host.split(".");
-      const registrable =
-        parts.length >= 2 ? `.${parts.slice(-2).join(".")}` : `.${host}`;
-      document.cookie = `googtrans=; path=/; domain=${registrable}; max-age=0`;
-    };
-
-    if (next === defaultLocale) {
-      clearGoogtrans();
-    } else {
-      // Google Translate expects /<source>/<target>. Our locale codes
-      // line up with its ISO-639-1 codes (nl, de, fr, es, it, sw, id).
-      document.cookie = `googtrans=/en/${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
-    }
-
-    // Reload so the widget picks up the new cookie on the next paint.
-    window.location.reload();
+    // Navigate to the localized URL so SSR renders the new
+    // language. The middleware rewrites /xx/ to the canonical
+    // page file and sets `x-locale` so generateMetadata + the
+    // page see the right locale. Non-default URLs carry
+    // `X-Robots-Tag: noindex` so the translated URL never lands
+    // in Google's index — only the EN canonical does.
+    const url = new URL(window.location.href);
+    url.pathname = translatePath(url.pathname, next);
+    window.location.href = url.toString();
   }, []);
 
   const value = useMemo<LocaleContextValue>(
@@ -105,16 +85,21 @@ export function useTranslations() {
 }
 
 /**
- * Passthrough href helper kept for call-site compatibility.
+ * Returns a function that takes a canonical (English) internal
+ * href and returns the localized URL for the current locale, so
+ * a visitor on /de/ clicking an internal link stays on /de/ and
+ * the SSR for that route keeps rendering in German.
  *
- * URLs are English-only since 2026-04-22 — the middleware
- * 308-redirects any /xx/ prefix to the canonical EN path and
- * Google Translate handles visitor-facing translation client-
- * side. Every internal href stays on the English URL.
- *
- * External URLs (http…) and hash/query fragments still pass
- * through untouched.
+ * External URLs (http…) and hash/query fragments pass through.
  */
 export function useLocalizedHref() {
-  return useCallback((href: string) => href, []);
+  const { locale } = useTranslations();
+  return useCallback(
+    (href: string) => {
+      if (!href) return href;
+      if (/^(https?:|mailto:|tel:|#)/.test(href)) return href;
+      return translatePath(href, locale);
+    },
+    [locale]
+  );
 }

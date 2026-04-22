@@ -16,6 +16,7 @@ import {
   type BetTypeHubLocale,
 } from "@/data/bet-type-hubs";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { localizePath } from "@/i18n/routes";
 import { PAGE_META } from "@/data/page-meta";
 import { HeroMediaBg } from "@/components/ui/media-bg";
 
@@ -60,6 +61,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function BetTypesIndexPage() {
   const editorialLocale = readLocaleFromCookie();
+  // UI locale drives URL localization so non-EN/NL visitors see
+  // same-locale internal links instead of being redirected back
+  // to the EN canonical via 308.
+  const uiLocale = getServerLocale();
+  const lhref = (canonical: string) => localizePath(canonical, uiLocale);
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
   const hubs = await fetchAllBetTypeHubs();
 
@@ -81,7 +87,7 @@ export default async function BetTypesIndexPage() {
             aria-label="Breadcrumb"
             className="mb-6 flex items-center gap-1.5 text-xs text-[#6b7280]"
           >
-            <Link href="/" className="transition hover:text-[#4ade80]">
+            <Link href={lhref("/")} className="transition hover:text-[#4ade80]">
               BetsPlug
             </Link>
             <ChevronRight className="h-3 w-3" />
@@ -133,7 +139,7 @@ export default async function BetTypesIndexPage() {
               return (
                 <Link
                   key={hub.slug}
-                  href={`/bet-types/${hub.slug}`}
+                  href={lhref(`/bet-types/${hub.slug}`)}
                   className={`card-neon card-neon-${variant} group relative block overflow-hidden p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-7`}
                 >
                   <div className="relative flex flex-col gap-4">
@@ -195,11 +201,11 @@ export default async function BetTypesIndexPage() {
               </p>
 
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                <Link href="/register" className="btn-primary inline-flex items-center gap-2">
+                <Link href={lhref("/register")} className="btn-primary inline-flex items-center gap-2">
                   {t("Claim €0,01 trial", "Claim €0,01 proefperiode")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link href="/match-predictions" className="btn-glass inline-flex items-center gap-2">
+                <Link href={lhref("/match-predictions")} className="btn-glass inline-flex items-center gap-2">
                   {t("Browse today's predictions", "Bekijk vandaag's voorspellingen")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>

@@ -18,6 +18,7 @@ import { Pill } from "@/components/noct/pill";
 import { api } from "@/lib/api";
 import { derivePickSide } from "@/lib/prediction-pick";
 import type { Fixture } from "@/types/api";
+import { useLocalizedHref } from "@/i18n/locale-provider";
 
 function fmtDate(iso: string, locale: string): string {
   try {
@@ -44,6 +45,7 @@ interface Props {
 }
 
 export function LeagueHubRecent({ leagueSlug, locale }: Props) {
+  const loc = useLocalizedHref();
   const q = useQuery({
     queryKey: ["league-hub-recent", leagueSlug, 7],
     queryFn: () => api.getFixtureResults(7, leagueSlug),
@@ -191,7 +193,7 @@ export function LeagueHubRecent({ leagueSlug, locale }: Props) {
             "Alle voorspellingen tijdstempeld vóór de aftrap. Bekijk ons ",
           )}
           <a
-            href="/track-record"
+            href={loc("/track-record")}
             className="underline underline-offset-2 transition hover:text-[#4ade80]"
           >
             {t("full track record", "volledige trackrecord")}
