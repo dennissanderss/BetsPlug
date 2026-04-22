@@ -292,9 +292,9 @@ async def get_roi_simulation(
 ) -> dict:
     """Simulate ROI using pre-match odds for every evaluated prediction.
 
-    Odds are read from ``closing_odds_snapshot`` (frozen at prediction time)
-    and, as a fallback, from the ``OddsHistory`` table.  Only predictions
-    with a valid odds value for the predicted outcome are counted.
+    Odds are sourced from OddsHistory (1x2 market) joined directly, with
+    closing_odds_snapshot as a secondary source. Only predictions with a
+    valid odds value for the predicted outcome are counted.
 
     Formula per pick:
       • Correct  → profit = stake × (odds − 1)
@@ -304,19 +304,39 @@ async def get_roi_simulation(
     from sqlalchemy import or_
     from app.models.odds import OddsHistory
 
-    # ── base query ──────────────────────────────────────────────────────
+    # Single query: join OddsHistory directly so match_id is available
+    # and we don't need a separate fallback round-trip.
+    oh_alias = OddsHistory.__table__.alias("oh")
+
     stmt = (
         select(
+            Prediction.match_id,
             Prediction.home_win_prob,
             Prediction.draw_prob,
             Prediction.away_win_prob,
             Prediction.closing_odds_snapshot,
             PredictionEvaluation.is_correct,
-            Match.scheduled_at.label("match_date"),
+            # best available 1x2 odds from OddsHistory (may be NULL)
+            func.max(oh_alias.c.home_odds).label("oh_home"),
+            func.max(oh_alias.c.draw_odds).label("oh_draw"),
+            func.max(oh_alias.c.away_odds).label("oh_away"),
         )
         .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
         .join(Match, Match.id == Prediction.match_id)
-        .where(Prediction.predicted_at < Match.scheduled_at)  # pre-match lock
+        .outerjoin(
+            oh_alias,
+            (oh_alias.c.match_id == Prediction.match_id)
+            & oh_alias.c.market.in_(["1x2", "1X2"]),
+        )
+        .where(Prediction.predicted_at < Match.scheduled_at)
+        .group_by(
+            Prediction.match_id,
+            Prediction.home_win_prob,
+            Prediction.draw_prob,
+            Prediction.away_win_prob,
+            Prediction.closing_odds_snapshot,
+            PredictionEvaluation.is_correct,
+        )
     )
 
     if source == "live":
@@ -341,56 +361,20 @@ async def get_roi_simulation(
 
     rows = (await db.execute(stmt)).fetchall()
 
-    # Also pull OddsHistory (1x2) as a fallback odds source
-    match_ids = list({r.match_date for r in rows})  # dedup trick not needed — use real ids
-    # Re-query with match IDs for odds fallback
-    stmt2 = (
-        select(
-            Prediction.match_id,
-            OddsHistory.home_odds,
-            OddsHistory.draw_odds,
-            OddsHistory.away_odds,
-        )
-        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
-        .join(Match, Match.id == Prediction.match_id)
-        .join(
-            OddsHistory,
-            (OddsHistory.match_id == Prediction.match_id)
-            & (OddsHistory.market.in_(["1x2", "1X2"])),
-        )
-        .where(Prediction.predicted_at < Match.scheduled_at)
-    )
-    if source == "live":
-        stmt2 = stmt2.where(Prediction.prediction_source == "live")
-        stmt2 = stmt2.where(Prediction.created_at >= LIVE_MEASUREMENT_START)
-    if pick_tier:
-        tier_enum2 = _parse_public_pick_tier(pick_tier)
-        if tier_enum2:
-            stmt2 = stmt2.where(pick_tier_expression() == tier_enum2.value)
-    if days:
-        cutoff2 = datetime.now(timezone.utc) - timedelta(days=days)
-        stmt2 = stmt2.where(Match.scheduled_at >= cutoff2)
-
-    try:
-        oh_rows = (await db.execute(stmt2)).fetchall()
-        oh_map: dict = {r.match_id: {"home": r.home_odds, "draw": r.draw_odds, "away": r.away_odds} for r in oh_rows}
-    except Exception:
-        oh_map = {}
-
     # ── compute ROI ─────────────────────────────────────────────────────
     pnls: list[float] = []
     odds_used: list[float] = []
     correct_count = 0
 
-    for i, row in enumerate(rows):
+    for row in rows:
         probs = {
-            "home": row.home_win_prob or 0.0,
-            "draw": row.draw_prob or 0.0,
-            "away": row.away_win_prob or 0.0,
+            "home": float(row.home_win_prob or 0.0),
+            "draw": float(row.draw_prob or 0.0),
+            "away": float(row.away_win_prob or 0.0),
         }
         pick = max(probs, key=lambda k: probs[k])
 
-        # Try snapshot first, then OddsHistory
+        # 1) closing_odds_snapshot (stored at prediction time)
         odds: float | None = None
         snap = row.closing_odds_snapshot or {}
         book = snap.get("bookmaker_odds") if isinstance(snap, dict) else None
@@ -399,9 +383,11 @@ async def get_roi_simulation(
             if raw and float(raw) > 1.0:
                 odds = float(raw)
 
-        if odds is None and oh_map:
-            # match_id not in this result set — skip OH fallback (different query)
-            pass
+        # 2) OddsHistory fallback (joined above)
+        if odds is None:
+            oh_val = {"home": row.oh_home, "draw": row.oh_draw, "away": row.oh_away}.get(pick)
+            if oh_val and float(oh_val) > 1.0:
+                odds = float(oh_val)
 
         if odds is None or odds <= 1.0:
             continue
