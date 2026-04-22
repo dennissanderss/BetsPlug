@@ -1120,3 +1120,24 @@ section:nth-child(even) {
 [data-app-shell] section:nth-child(even) {
   background: transparent !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   GOOGLE TRANSLATE WIDGET — hide the default UI so only our custom
+   language switcher in the nav is visible. The widget still runs in
+   the background; translations happen when the `googtrans` cookie
+   changes and the page reloads.
+   ═══════════════════════════════════════════════════════════════════ */
+.goog-te-banner-frame,
+.skiptranslate,
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-tooltip {
+  display: none !important;
+}
+.goog-text-highlight {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+body {
+  top: 0 !important;
+}

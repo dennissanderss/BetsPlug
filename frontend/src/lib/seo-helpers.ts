@@ -1,10 +1,10 @@
 /**
- * SEO helper utilities (EN-only — 2026-04-22 i18n rollback)
+ * SEO helper utilities (EN-only — 2026-04-22)
  * ────────────────────────────────────────────────────────────
- * Every helper now assumes the default (English) locale. i18n SEO
- * is rolled back at the middleware + sitemap layer; function
- * signatures are preserved so per-page metadata blocks keep
- * compiling without a page-by-page edit sweep.
+ * Every server render is English. Visitor-facing translation
+ * runs in the browser via the Google Translate widget (see
+ * `layout.tsx`), so the SSR output Google crawls stays pristine
+ * EN with a single canonical per URL.
  */
 
 import { defaultLocale, type Locale } from "@/i18n/config";
@@ -17,14 +17,9 @@ const SITE_URL = "https://betsplug.com";
 /* ── Locale detection ───────────────────────────────────────── */
 
 /**
- * Always returns the default (English) locale.
- *
- * i18n SEO was rolled back on 2026-04-22 after brand-visibility
- * collapsed in Google. Server rendering is now English-only and
- * the middleware 308-redirects every /xx/ prefix to the canonical
- * EN path. Keeping this function returning `Locale` (not a string
- * literal) preserves type compatibility with every call site so
- * the rollback stays a one-file surgical edit here.
+ * Always returns the default (English) locale — SSR is EN-only.
+ * Client-side translation is handled by Google Translate (widget
+ * reads the `googtrans` cookie, transforms the DOM post-hydration).
  */
 export function getServerLocale(): Locale {
   return defaultLocale;

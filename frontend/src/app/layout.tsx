@@ -50,10 +50,10 @@ const OG_IMAGE = {
   type: "image/jpeg",
 } as const;
 
-/* ── EN-only metadata (2026-04-22 i18n rollback) ──────────────
-   Site serves English exclusively; the middleware 308-redirects
-   every /xx/ prefix to the canonical EN path. Canonical always
-   resolves to the EN URL and no hreflang alternates are emitted. */
+/* ── EN-only metadata (2026-04-22) ────────────────────────────
+   SSR is English exclusively; visitor-facing translation runs in
+   the browser via Google Translate widget. Canonical is the bare
+   EN URL, no hreflang. */
 export async function generateMetadata(): Promise<Metadata> {
   const meta = PAGE_META["/"].en;
   const alternates = getLocalizedAlternates("/");
@@ -102,10 +102,8 @@ export default function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  // Site serves English exclusively post-2026-04-22 i18n rollback.
-  // `<html lang>` is hardcoded to the default locale (EN); client
-  // code that still consumes the LocaleProvider (dashboards, etc.)
-  // keeps working via the same literal.
+  // SSR is EN-only; Google Translate widget (loaded below) flips
+  // the DOM client-side when the visitor picks a language.
   const locale = defaultLocale;
 
   return (
@@ -137,6 +135,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         {/* GA4 is deployed as a tag inside GTM (with CookieYes consent
             trigger), so there's no hardcoded gtag here. */}
+
+        {/* Google Translate widget — loaded once, triggered from
+            the language switcher by setting the `googtrans` cookie
+            and reloading. The hidden host div is still required
+            (Google Translate calls into it to install the engine).
+            The default banner is suppressed via globals.css. */}
+        <div id="google_translate_element" aria-hidden className="sr-only" />
+        <Script id="google-translate-init" strategy="afterInteractive">
+          {`function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    includedLanguages: 'nl,de,fr,es,it,sw,id',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+  }, 'google_translate_element');
+}`}
+        </Script>
+        <Script
+          src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          strategy="afterInteractive"
+        />
 
         <LocaleProvider locale={locale}>
           <AppProviders>{children}</AppProviders>

@@ -15,7 +15,6 @@
 import { createContext, useCallback, useContext, useMemo } from "react";
 import { defaultLocale, LOCALE_COOKIE, type Locale } from "./config";
 import { translate, type TranslationKey } from "./messages";
-import { translatePath } from "./routes";
 import { formatMsg, type MessageVars } from "./format";
 
 type LocaleContextValue = {
@@ -46,14 +45,39 @@ export function LocaleProvider({
 
   const setLocale = useCallback((next: Locale) => {
     if (typeof document === "undefined") return;
-    // 1 year cookie, root path so it applies everywhere.
+
+    // Remember the UI choice so the switcher can highlight it
+    // after reload.
     document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
 
-    // Translate the current URL from whatever locale it was in
-    // into the target locale, preserving slugs and query string.
-    const url = new URL(window.location.href);
-    url.pathname = translatePath(url.pathname, next);
-    window.location.href = url.toString();
+    // Drive Google Translate via its `googtrans` cookie. The widget
+    // is loaded once in layout.tsx; on page load it reads this cookie
+    // and transforms the DOM in place — no URL change, no SSR
+    // translation, no SEO surface (Google sees the untranslated EN).
+    //
+    // Setting EN clears the cookie (both host-only + domain-scoped
+    // variants) so reload shows the original source.
+    const clearGoogtrans = () => {
+      document.cookie = "googtrans=; path=/; max-age=0";
+      // Google Translate also sometimes writes to the registrable
+      // domain (e.g. `.betsplug.com`), so clear that variant too.
+      const host = window.location.hostname;
+      const parts = host.split(".");
+      const registrable =
+        parts.length >= 2 ? `.${parts.slice(-2).join(".")}` : `.${host}`;
+      document.cookie = `googtrans=; path=/; domain=${registrable}; max-age=0`;
+    };
+
+    if (next === defaultLocale) {
+      clearGoogtrans();
+    } else {
+      // Google Translate expects /<source>/<target>. Our locale codes
+      // line up with its ISO-639-1 codes (nl, de, fr, es, it, sw, id).
+      document.cookie = `googtrans=/en/${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
+    }
+
+    // Reload so the widget picks up the new cookie on the next paint.
+    window.location.reload();
   }, []);
 
   const value = useMemo<LocaleContextValue>(
@@ -81,21 +105,16 @@ export function useTranslations() {
 }
 
 /**
- * Returns a function that takes a canonical (English) internal
- * href and returns the localized URL for the current locale.
- * Pass as `href` to Next.js <Link> so that clicking navigates
- * to `/nl/voorspellingen` instead of `/predictions` etc.
+ * Passthrough href helper kept for call-site compatibility.
  *
- * External URLs (http…) and hash/query fragments pass through.
+ * URLs are English-only since 2026-04-22 — the middleware
+ * 308-redirects any /xx/ prefix to the canonical EN path and
+ * Google Translate handles visitor-facing translation client-
+ * side. Every internal href stays on the English URL.
+ *
+ * External URLs (http…) and hash/query fragments still pass
+ * through untouched.
  */
 export function useLocalizedHref() {
-  const { locale } = useTranslations();
-  return useCallback(
-    (href: string) => {
-      if (!href) return href;
-      if (/^(https?:|mailto:|tel:|#)/.test(href)) return href;
-      return translatePath(href, locale);
-    },
-    [locale]
-  );
+  return useCallback((href: string) => href, []);
 }

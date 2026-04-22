@@ -3,29 +3,19 @@ import { defaultLocale, locales, isLocale, type Locale } from "@/i18n/config";
 import { parseLocalizedPath } from "@/i18n/routes";
 
 /**
- * EN-only middleware (SEO-stability rollback 2026-04-22)
+ * EN-only middleware (2026-04-22)
  * ────────────────────────────────────────────────────────────
- * Prior versions did full i18n routing: incoming /nl/, /de/ … URLs
- * were rewritten internally and the site served translated SSR
- * content per locale. That setup caused brand-term visibility to
- * collapse in Google (duplicate content, hreflang conflicts,
- * cross-locale link graph pollution).
+ * Server-rendered output is English across every URL. Visitor-
+ * facing translation is handled in the browser via the Google
+ * Translate widget (see `layout.tsx`) — the language switcher
+ * sets the `googtrans` cookie and reloads, Google Translate
+ * rewrites the DOM. No URL changes, no SSR translation, no
+ * hreflang, no duplicate content.
  *
- * This middleware collapses everything to English:
- *   1. Any request with a locale prefix (/nl/…, /de/…, /fr/…, …)
- *      308-redirects to the canonical EN path with the prefix
- *      stripped.
- *   2. Any non-prefixed request whose first segment is a localized
- *      translation slug (e.g. /voorspellingen, /prognosen) also
- *      308-redirects to the canonical EN slug (/predictions).
- *   3. Every surviving request is served with x-locale=en so SSR
- *      renders the English copy exclusively.
- *   4. Non-canonical hosts (*.vercel.app preview deploys) keep the
- *      X-Robots-Tag: noindex, nofollow header.
- *
- * No locale cookie is set. No Accept-Language detection. Client-side
- * translation (if re-introduced later) runs in the browser and is
- * invisible to crawlers.
+ *   1. /xx/... prefixes → 308 to canonical EN path
+ *   2. Bare translated slugs (e.g. /voorspellingen) → 308 to EN
+ *   3. Canonical EN path → served as-is with x-locale=en
+ *   4. Non-canonical host (vercel.app previews) → noindex header
  */
 
 const PUBLIC_FILE = /\.(.*)$/;
@@ -65,7 +55,6 @@ export function middleware(req: NextRequest) {
   const firstSegment = pathname.split("/").filter(Boolean)[0];
   const hasLocalePrefix = isLocale(firstSegment);
 
-  // ── /xx/ prefix → 308 to canonical EN path ───────────────────
   if (hasLocalePrefix) {
     const parsed = parseLocalizedPath(pathname, firstSegment as Locale);
     const url = req.nextUrl.clone();
@@ -74,11 +63,6 @@ export function middleware(req: NextRequest) {
     return applyIndexability(NextResponse.redirect(url, 308), host);
   }
 
-  // ── Non-prefixed localized slug → 308 to canonical ───────────
-  // Catches bare /voorspellingen, /prognosen, /predictions-match,
-  // etc. Any slug that only appears in a non-EN locale's reverse
-  // map redirects to the EN canonical. `parseLocalizedPath` scans
-  // one locale at a time, so loop until a hit.
   for (const l of locales) {
     if (l === defaultLocale) continue;
     const parsed = parseLocalizedPath(pathname, l);
@@ -90,7 +74,6 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // ── Canonical path — serve as-is ─────────────────────────────
   const res = NextResponse.next({
     request: { headers: withEnHeader(req) },
   });
