@@ -38,7 +38,6 @@ import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { HeroMediaBg } from "@/components/ui/media-bg";
 import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
 import { LockedLivePlaceholder } from "@/components/ui/locked-live-placeholder";
-import { TierROIGrid } from "@/components/noct/tier-roi-grid";
 
 /* ── Live API data hook ─────────────────────────────────── */
 interface LiveStats {
@@ -856,19 +855,6 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
-      {/* ───────────── RENDEMENT PER TIER — backtest ─────────────────
-          Single source of truth for ROI on the backtest surface: has a
-          stake selector, per-tier cards, an "all tiers" aggregate row
-          and transparent odds-source labelling. Replaces the old
-          standalone ROISimulator which duplicated these controls. */}
-      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
-        <TierROIGrid
-          source="backtest"
-          title="Rendement per tier — Backtest"
-          subtitle="Wat had je verdiend als je elke historische pick had gespeeld?"
-        />
-      </section>
-
       {/* ───────────── BOTD BACKTEST — directly after tier backtest ─────
           User feedback was dat BotD-backtest als aparte container naast
           de tier-backtest hoort, zodat alle "historische analyse"
@@ -897,15 +883,6 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           instead of "warm-up phase". Signed-in users see the real
           numbers on the authed /trackrecord dashboard. */}
       <LockedLivePlaceholder number="3" variant="tier" id="live-measurement" />
-
-      {/* ───────────── RENDEMENT PER TIER — live ────────────────────── */}
-      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
-        <TierROIGrid
-          source="live"
-          title="Rendement per tier — Live meting"
-          subtitle="Wat had je verdiend op live picks (sinds 16 april)?"
-        />
-      </section>
 
       {/* ───────────── BOTD LIVE — LOCKED ───────────── */}
       <LockedLivePlaceholder number="4" variant="botd" id="botd-live" />
