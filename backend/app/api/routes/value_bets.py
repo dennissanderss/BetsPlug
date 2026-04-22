@@ -28,6 +28,7 @@ from app.services.value_bet_service import (
 )
 
 router = APIRouter()
+admin_router = APIRouter()
 
 
 # ---------------------------------------------------------------------------
@@ -437,4 +438,65 @@ async def get_value_bet_stats(
         sample_size_warning=warn,
         window_start=window_start,
         window_end=window_end,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Admin — manual trigger for the daily cron
+# ---------------------------------------------------------------------------
+class GenerateTodayResponse(BaseModel):
+    status: str
+    value_bet_id: Optional[str] = None
+    message: str
+
+
+@admin_router.post("/generate-today", response_model=GenerateTodayResponse)
+async def admin_generate_today(
+    db: AsyncSession = Depends(get_db),
+) -> GenerateTodayResponse:
+    """Fire the same logic the 08:00 CET cron runs.
+
+    Useful for:
+      - Seeding the first live pick before the cron naturally fires.
+      - Re-running after an odds refresh on the same day (will skip
+        because of the same-day short-circuit unless the existing row
+        is deleted).
+
+    Admin-gated at router registration time (see routes/__init__.py).
+    """
+    from app.services.scheduler import job_generate_daily_value_bet
+
+    # Read today's state before + after so we can report the delta.
+    today = datetime.now(timezone.utc).date()
+    before_stmt = select(ValueBet).where(
+        and_(ValueBet.bet_date == today, ValueBet.is_live.is_(True))
+    ).limit(1)
+    before = (await db.execute(before_stmt)).scalar_one_or_none()
+
+    await job_generate_daily_value_bet()
+
+    after_stmt = select(ValueBet).where(
+        and_(ValueBet.bet_date == today, ValueBet.is_live.is_(True))
+    ).order_by(ValueBet.picked_at.desc()).limit(1)
+    after = (await db.execute(after_stmt)).scalar_one_or_none()
+
+    if after is None:
+        return GenerateTodayResponse(
+            status="no_candidate",
+            message="Geen kwalificerende value bet gevonden voor vandaag.",
+        )
+    if before is not None and before.id == after.id:
+        return GenerateTodayResponse(
+            status="already_exists",
+            value_bet_id=str(after.id),
+            message=f"Value bet voor {today} bestaat al (pick={after.our_pick}).",
+        )
+    return GenerateTodayResponse(
+        status="created",
+        value_bet_id=str(after.id),
+        message=(
+            f"Live value bet geschreven: pick={after.our_pick}, "
+            f"edge={after.edge * 100:.1f}%, odds={after.best_odds_for_pick:.2f}, "
+            f"tier={after.prediction_tier}."
+        ),
     )

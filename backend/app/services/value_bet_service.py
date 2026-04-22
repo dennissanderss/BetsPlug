@@ -56,6 +56,32 @@ class ValueBetConfig:
     confidence_weight: float = 0.5
     tier_bonus: Mapping[str, float] = field(default_factory=lambda: dict(DEFAULT_TIER_BONUS))
     odds_freshness_hours: float = 24.0
+    # Fase 2.4 risk mitigation — if the odds on this pick moved more
+    # than this fraction of their median over the last 24h, assume
+    # late-news has evaporated the edge and drop the candidate.
+    max_line_movement_pct: float = 0.10
+
+
+def line_movement_fraction(snapshots: list[float]) -> float | None:
+    """Return (max - min) / median for a list of recent odds readings.
+
+    Used to detect material late-news line movement. Returns ``None``
+    when fewer than two readings exist — movement is undefined.
+    """
+    if not snapshots or len(snapshots) < 2:
+        return None
+    lo = min(snapshots)
+    hi = max(snapshots)
+    # Simple median to avoid statistics import cost
+    ordered = sorted(snapshots)
+    mid = len(ordered) // 2
+    if len(ordered) % 2:
+        med = ordered[mid]
+    else:
+        med = (ordered[mid - 1] + ordered[mid]) / 2
+    if med <= 0:
+        return None
+    return (hi - lo) / med
 
 
 # ---------------------------------------------------------------------------
@@ -345,5 +371,6 @@ __all__ = [
     "compute_expected_value",
     "kelly_fraction",
     "extract_candidate_from_snapshot",
+    "line_movement_fraction",
     "DEFAULT_TIER_BONUS",
 ]

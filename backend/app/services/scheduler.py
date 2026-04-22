@@ -1008,7 +1008,9 @@ async def job_generate_daily_value_bet():
             ValueBetConfig,
             ValueBetSelector,
             extract_candidate_from_snapshot,
+            line_movement_fraction,
         )
+        from app.models.odds import OddsHistory
         from app.core.tier_leagues import (
             LEAGUES_FREE,
             LEAGUES_GOLD,
@@ -1092,6 +1094,33 @@ async def job_generate_daily_value_bet():
                 )
                 if cand is None or not selector.passes_filters(cand):
                     continue
+                # Fase 2.4 — drop candidate when odds have moved too much
+                # in the last 24h (late injury/news proxy). Reads a small
+                # subquery per candidate; candidate set is already
+                # pre-filtered to just Gold/Platinum + edge >= 3% so
+                # cardinality stays tiny (typically <10 per day).
+                try:
+                    lm_stmt = (
+                        _select(OddsHistory.home_odds, OddsHistory.draw_odds, OddsHistory.away_odds)
+                        .where(
+                            OddsHistory.match_id == pred.match_id,
+                            OddsHistory.market == "1x2",
+                            OddsHistory.recorded_at >= now - timedelta(hours=24),
+                        )
+                        .order_by(OddsHistory.recorded_at)
+                    )
+                    lm_rows = (await db.execute(lm_stmt)).all()
+                    pick_col = {"home": 0, "draw": 1, "away": 2}[cand.pick]
+                    readings = [r[pick_col] for r in lm_rows if r[pick_col]]
+                    frac = line_movement_fraction(readings)
+                    if frac is not None and frac > selector.config.max_line_movement_pct:
+                        log.info(
+                            "CRON: value-bet — dropping prediction %s (line moved %.1f%% > %.1f%% threshold)",
+                            pred.id, frac * 100, selector.config.max_line_movement_pct * 100,
+                        )
+                        continue
+                except Exception as exc:  # pragma: no cover — defensive
+                    log.debug("line-movement check failed (non-fatal): %s", exc)
                 qualified += 1
                 score = selector.score(cand)
                 if score > best_score:

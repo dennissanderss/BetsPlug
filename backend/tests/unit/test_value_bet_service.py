@@ -12,6 +12,7 @@ from app.services.value_bet_service import (
     compute_expected_value,
     extract_candidate_from_snapshot,
     kelly_fraction,
+    line_movement_fraction,
     normalize,
     normalize_proportional,
     overround,
@@ -72,6 +73,24 @@ class TestMath:
 
     def test_kelly_clamps_negative_to_zero(self):
         assert kelly_fraction(0.30, 2.00) == 0.0
+
+
+class TestLineMovement:
+    def test_none_when_too_few_readings(self):
+        assert line_movement_fraction([]) is None
+        assert line_movement_fraction([2.0]) is None
+
+    def test_stable_line_is_near_zero(self):
+        frac = line_movement_fraction([2.00, 2.01, 2.00, 1.99])
+        assert frac is not None and frac < 0.02
+
+    def test_big_swing_exceeds_threshold(self):
+        # 2.00 -> 2.80 late-news scenario
+        frac = line_movement_fraction([2.00, 2.05, 2.40, 2.80])
+        assert frac is not None and frac > 0.10
+
+    def test_zero_median_returns_none(self):
+        assert line_movement_fraction([0.0, 0.0, 0.0]) is None
 
 
 # ---------------------------------------------------------------------------
