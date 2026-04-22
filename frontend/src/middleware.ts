@@ -58,8 +58,37 @@ function withLocaleHeader(req: NextRequest, locale: Locale): Headers {
   return h;
 }
 
+/**
+ * Block search engines on any host other than the canonical apex.
+ *
+ * Vercel gives every deployment a *.vercel.app URL that serves the
+ * same content as the custom domain. Without a noindex gate on those
+ * hosts, Google sees duplicate content and can pick the wrong
+ * canonical (betsplug.com vs bets-plug.vercel.app), which delays
+ * indexation on the real domain.
+ *
+ * The `www` subdomain is already 308-redirected to apex at the
+ * Vercel edge, so it never reaches middleware. We only need to tag
+ * the vercel.app + any preview-branch deploys here.
+ */
+const CANONICAL_HOST = "betsplug.com";
+
+function applyIndexability(res: NextResponse, host: string | null): NextResponse {
+  if (!host) return res;
+  const bare = host.split(":")[0].toLowerCase();
+  if (bare === CANONICAL_HOST || bare === `www.${CANONICAL_HOST}`) {
+    return res;
+  }
+  // Every non-canonical host (preview deploys, *.vercel.app mirrors)
+  // is emphatically not for Google. This header is honored by all
+  // major search engines.
+  res.headers.set("X-Robots-Tag", "noindex, nofollow");
+  return res;
+}
+
 export function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
+  const host = req.headers.get("host");
 
   // Skip Next internals, API routes, Sanity Studio and public files
   if (
@@ -69,7 +98,7 @@ export function middleware(req: NextRequest) {
     pathname.startsWith("/studio") ||
     PUBLIC_FILE.test(pathname)
   ) {
-    return NextResponse.next();
+    return applyIndexability(NextResponse.next(), host);
   }
 
   const firstSegment = pathname.split("/").filter(Boolean)[0];
@@ -93,7 +122,7 @@ export function middleware(req: NextRequest) {
       request: { headers: withLocaleHeader(req, parsed.locale) },
     });
     setLocaleCookie(res, parsed.locale);
-    return res;
+    return applyIndexability(res, host);
   }
 
   // ── Case 2: no locale prefix ────────────────────────────────
@@ -120,7 +149,7 @@ export function middleware(req: NextRequest) {
         url.search = search;
         const res = NextResponse.redirect(url);
         setLocaleCookie(res, preferred);
-        return res;
+        return applyIndexability(res, host);
       }
     }
   }
@@ -135,7 +164,7 @@ export function middleware(req: NextRequest) {
       request: { headers: withLocaleHeader(req, defaultLocale) },
     });
     setLocaleCookie(res, defaultLocale);
-    return res;
+    return applyIndexability(res, host);
   }
 
   // Path already matches filesystem — serve as-is, just refresh cookie.
@@ -149,7 +178,7 @@ export function middleware(req: NextRequest) {
   } else {
     res.headers.set("Content-Language", preferred);
   }
-  return res;
+  return applyIndexability(res, host);
 }
 
 export const config = {
