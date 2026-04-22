@@ -282,7 +282,7 @@ async def get_live_measurement(
     }
 
 
-@router.get("/roi", summary="ROI simulation on evaluated predictions that have odds data")
+@router.get("/roi", summary="ROI simulation — real odds where available, implied odds as fallback")
 async def get_roi_simulation(
     pick_tier: Optional[str] = Query(None, description="Filter to a specific tier"),
     source: str = Query("all", description="'live', 'backtest', or 'all'"),
@@ -290,22 +290,23 @@ async def get_roi_simulation(
     stake: float = Query(10.0, ge=1.0, le=10_000.0, description="Stake per pick in euros"),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    """Simulate ROI using pre-match odds for every evaluated prediction.
+    """Simulate ROI for every evaluated pre-match prediction.
 
-    Odds are sourced from OddsHistory (1x2 market) joined directly, with
-    closing_odds_snapshot as a secondary source. Only predictions with a
-    valid odds value for the predicted outcome are counted.
+    Odds priority per pick:
+      1. closing_odds_snapshot (bookmaker odds stored at prediction time)
+      2. OddsHistory table (1x2 rows ingested from paid API)
+      3. Implied odds: 1 / model_probability × 0.95 (5 % bookmaker margin)
 
-    Formula per pick:
-      • Correct  → profit = stake × (odds − 1)
-      • Incorrect → profit = −stake
+    The response includes ``real_odds_count`` and ``implied_odds_count`` so
+    the frontend can show the user exactly how many picks used real market
+    prices vs. the model-derived fallback.
     """
     from datetime import timedelta
     from sqlalchemy import or_
     from app.models.odds import OddsHistory
 
-    # Single query: join OddsHistory directly so match_id is available
-    # and we don't need a separate fallback round-trip.
+    BOOKMAKER_MARGIN = 0.95  # 5 % cut — standard European average
+
     oh_alias = OddsHistory.__table__.alias("oh")
 
     stmt = (
@@ -316,7 +317,6 @@ async def get_roi_simulation(
             Prediction.away_win_prob,
             Prediction.closing_odds_snapshot,
             PredictionEvaluation.is_correct,
-            # best available 1x2 odds from OddsHistory (may be NULL)
             func.max(oh_alias.c.home_odds).label("oh_home"),
             func.max(oh_alias.c.draw_odds).label("oh_draw"),
             func.max(oh_alias.c.away_odds).label("oh_away"),
@@ -363,8 +363,10 @@ async def get_roi_simulation(
 
     # ── compute ROI ─────────────────────────────────────────────────────
     pnls: list[float] = []
-    odds_used: list[float] = []
+    odds_list: list[float] = []
     correct_count = 0
+    real_odds_count = 0    # picks with real bookmaker odds
+    implied_odds_count = 0  # picks where we fell back to 1/prob
 
     for row in rows:
         probs = {
@@ -373,8 +375,9 @@ async def get_roi_simulation(
             "away": float(row.away_win_prob or 0.0),
         }
         pick = max(probs, key=lambda k: probs[k])
+        pick_prob = probs[pick]
 
-        # 1) closing_odds_snapshot (stored at prediction time)
+        # 1) closing_odds_snapshot
         odds: float | None = None
         snap = row.closing_odds_snapshot or {}
         book = snap.get("bookmaker_odds") if isinstance(snap, dict) else None
@@ -383,16 +386,29 @@ async def get_roi_simulation(
             if raw and float(raw) > 1.0:
                 odds = float(raw)
 
-        # 2) OddsHistory fallback (joined above)
+        # 2) OddsHistory (from paid API, joined above)
         if odds is None:
             oh_val = {"home": row.oh_home, "draw": row.oh_draw, "away": row.oh_away}.get(pick)
             if oh_val and float(oh_val) > 1.0:
                 odds = float(oh_val)
 
-        if odds is None or odds <= 1.0:
+        is_real = odds is not None
+
+        # 3) Implied odds fallback: 1 / prob * bookmaker_margin
+        if odds is None and pick_prob > 0.0:
+            odds = round(1.0 / pick_prob * BOOKMAKER_MARGIN, 3)
+            if odds <= 1.0:
+                odds = None  # degenerate — skip
+
+        if odds is None:
             continue
 
-        odds_used.append(odds)
+        if is_real:
+            real_odds_count += 1
+        else:
+            implied_odds_count += 1
+
+        odds_list.append(odds)
         if row.is_correct:
             pnls.append(stake * (odds - 1.0))
             correct_count += 1
@@ -403,7 +419,10 @@ async def get_roi_simulation(
     if n == 0:
         return {
             "stake_per_pick": stake,
+            "total_picks": 0,
             "picks_with_odds": 0,
+            "real_odds_count": 0,
+            "implied_odds_count": 0,
             "correct_picks": 0,
             "accuracy": 0.0,
             "avg_odds": 0.0,
@@ -417,11 +436,14 @@ async def get_roi_simulation(
     net_profit = round(sum(pnls), 2)
     total_return = round(total_staked + net_profit, 2)
     roi_pct = round((net_profit / total_staked) * 100.0, 1)
-    avg_odds = round(sum(odds_used) / len(odds_used), 2)
+    avg_odds = round(sum(odds_list) / len(odds_list), 2)
 
     return {
         "stake_per_pick": stake,
+        "total_picks": n,
         "picks_with_odds": n,
+        "real_odds_count": real_odds_count,
+        "implied_odds_count": implied_odds_count,
         "correct_picks": correct_count,
         "accuracy": round(correct_count / n, 4),
         "avg_odds": avg_odds,

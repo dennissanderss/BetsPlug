@@ -2,11 +2,14 @@
 
 import { useState, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { TrendingUp, TrendingDown, Euro, AlertTriangle, RefreshCw } from "lucide-react";
+import { TrendingUp, TrendingDown, Euro, AlertTriangle, RefreshCw, Info } from "lucide-react";
 
 export interface ROIData {
   stake_per_pick: number;
+  total_picks: number;
   picks_with_odds: number;
+  real_odds_count: number;
+  implied_odds_count: number;
   correct_picks: number;
   accuracy: number;
   avg_odds: number;
@@ -35,6 +38,7 @@ export function ROISimulator({
 }: ROISimulatorProps) {
   const [stake, setStake] = useState(10);
   const [customInput, setCustomInput] = useState("");
+  const [showOddsInfo, setShowOddsInfo] = useState(false);
 
   const handlePreset = useCallback((p: number) => {
     setStake(p);
@@ -63,13 +67,13 @@ export function ROISimulator({
   });
 
   const isProfit = (data?.net_profit ?? 0) >= 0;
-  const hasPicks = data && data.picks_with_odds > 0;
+  const hasPicks = data && data.total_picks > 0;
+  const realPct = data && data.total_picks > 0
+    ? Math.round((data.real_odds_count / data.total_picks) * 100)
+    : 0;
 
   const fmt = (v: number) =>
-    v.toLocaleString("nl-NL", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
+    v.toLocaleString("nl-NL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   return (
     <div className="card-neon rounded-2xl p-5 space-y-5">
@@ -133,21 +137,14 @@ export function ROISimulator({
         </div>
       ) : !hasPicks ? (
         <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-6 text-center">
-          <p className="text-sm text-slate-400">
-            Geen picks met odds beschikbaar voor deze selectie.
-          </p>
-          <p className="mt-1 text-xs text-slate-600">
-            Odds moeten bij de pick zijn opgeslagen om ROI te kunnen berekenen.
-          </p>
+          <p className="text-sm text-slate-400">Geen geëvalueerde picks beschikbaar.</p>
         </div>
       ) : (
         <>
+          {/* Summary line */}
           <p className="text-[11px] text-slate-500">
-            Gebaseerd op{" "}
-            <span className="font-semibold text-slate-300">
-              {data.picks_with_odds} picks
-            </span>{" "}
-            met odds · gem. odds{" "}
+            <span className="font-semibold text-slate-300">{data.total_picks} picks</span>
+            {" · "}gem. odds{" "}
             <span className="font-semibold text-slate-300">{data.avg_odds}x</span>
             {" · "}nauwkeurigheid{" "}
             <span className="font-semibold text-slate-300">
@@ -155,6 +152,40 @@ export function ROISimulator({
             </span>
           </p>
 
+          {/* Odds source breakdown — transparency badge */}
+          <div className="flex items-start gap-2 rounded-xl border border-blue-500/20 bg-blue-500/5 px-3 py-2.5">
+            <button
+              onClick={() => setShowOddsInfo((v) => !v)}
+              className="mt-0.5 shrink-0 text-blue-400 hover:text-blue-300 transition-colors"
+              title="Meer info over oddsbronnen"
+            >
+              <Info className="h-3.5 w-3.5" />
+            </button>
+            <div className="flex-1 space-y-1">
+              <div className="flex flex-wrap gap-3 text-[11px]">
+                <span>
+                  <span className="font-semibold text-emerald-300">{data.real_odds_count}</span>
+                  <span className="text-slate-400"> echte marktodds (API)</span>
+                </span>
+                {data.implied_odds_count > 0 && (
+                  <span>
+                    <span className="font-semibold text-amber-300">{data.implied_odds_count}</span>
+                    <span className="text-slate-400"> berekend uit modelkans</span>
+                  </span>
+                )}
+              </div>
+              {showOddsInfo && (
+                <p className="text-[11px] leading-relaxed text-slate-400 border-t border-white/10 pt-2 mt-2">
+                  Voor <strong className="text-emerald-300">{data.real_odds_count} wedstrijden</strong> zijn echte bookmaker-odds gebruikt uit onze betaalde data-API.
+                  {data.implied_odds_count > 0 && (
+                    <> Voor de overige <strong className="text-amber-300">{data.implied_odds_count} picks</strong> waren geen marktodds beschikbaar — hier is een geschatte odd berekend op basis van de modelkans (1 ÷ kans × 0,95). Dit is een benadering, geen echte marktprijs.</>
+                  )}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* KPI grid */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <StatCell label="Totaal ingezet" value={`€${fmt(data.total_staked)}`} />
             <StatCell label="Teruggekregen" value={`€${fmt(data.total_return)}`} />
@@ -180,11 +211,15 @@ export function ROISimulator({
             />
           </div>
 
+          {/* Disclaimer */}
           <div className="flex items-start gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2.5">
             <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-400" />
             <p className="text-[11px] leading-relaxed text-slate-400">
               Gesimuleerd op historische data. Toekomstige resultaten kunnen afwijken.
-              Geen financieel advies — uitsluitend ter informatie.
+              {realPct < 100 && data.implied_odds_count > 0 && (
+                <> {realPct}% van de picks gebruikt echte marktodds — de rest is een modelschatting.</>
+              )}
+              {" "}Geen financieel advies.
             </p>
           </div>
         </>
