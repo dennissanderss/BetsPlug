@@ -55,8 +55,7 @@ interface BotdRow {
 }
 
 export function BotdTrackRecordSection() {
-  const { locale } = useTranslations();
-  const isNl = locale === "nl";
+  const { t } = useTranslations();
   const [agg, setAgg] = useState<BotdAggregate | null>(null);
   const [rows, setRows] = useState<BotdRow[] | null>(null);
   const [onlyGraded, setOnlyGraded] = useState(true);
@@ -104,7 +103,7 @@ export function BotdTrackRecordSection() {
 
   const fmtDate = (iso: string) => {
     try {
-      return new Date(iso).toLocaleDateString(isNl ? "nl-NL" : "en-GB", {
+      return new Date(iso).toLocaleDateString(t("botd.trackRecord.dateLocale"), {
         day: "2-digit",
         month: "short",
         year: "2-digit",
@@ -146,27 +145,14 @@ export function BotdTrackRecordSection() {
         >
           <span className="section-label">
             <ShieldCheck className="h-3 w-3" />
-            {isNl
-              ? "3 · Pick van de Dag — historische backtest"
-              : "3 · Pick of the Day — historical backtest"}
+            {t("botd.trackRecord.sectionLabel")}
           </span>
           <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
-            {isNl ? (
-              <>
-                De dagelijkse topper, teruggerekend op{" "}
-                <span className="gradient-text-green">recent afgelopen wedstrijden</span>
-              </>
-            ) : (
-              <>
-                The daily best pick, replayed on{" "}
-                <span className="gradient-text-green">recently finished matches</span>
-              </>
-            )}
+            {t("botd.trackRecord.titleLine1")}{" "}
+            <span className="gradient-text-green">{t("botd.trackRecord.titleHighlight")}</span>
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-[#a3a9b8]">
-            {isNl
-              ? "Onze BOTD-methode (de hoogst-scorende pick per dag) toegepast op matches die inmiddels gespeeld zijn. Dit is backtest-data — een eerlijke proxy voor hoe de feature het in het verleden zou hebben gedaan. De strikt pre-match live versie staat in sectie 4 hieronder."
-              : "Our BOTD method (the highest-confidence pick per day) applied to matches that have since finished. This is backtest data — an honest proxy for how the feature would have performed historically. The strict pre-match live version lives in section 4 below."}
+            {t("botd.trackRecord.lede")}
           </p>
         </motion.div>
 
@@ -177,26 +163,24 @@ export function BotdTrackRecordSection() {
             variant="green"
             value={
               agg?.accuracy_pct != null && agg.evaluated > 0
-                ? `${agg.accuracy_pct.toFixed(1).replace(".", isNl ? "," : ".")}%`
+                ? `${agg.accuracy_pct.toFixed(1).replace(".", t("botd.trackRecord.decimalSep"))}%`
                 : "—"
             }
-            label={isNl ? "Nauwkeurigheid" : "Accuracy"}
+            label={t("botd.trackRecord.kpiAccuracyLabel")}
             note={
               agg && agg.evaluated > 0
-                ? `${agg.correct} / ${agg.evaluated} ${isNl ? "correct" : "correct"}`
-                : isNl
-                ? "Wacht op eerste uitslagen"
-                : "Awaiting first results"
+                ? `${agg.correct} / ${agg.evaluated} ${t("botd.trackRecord.kpiAccuracyCorrect")}`
+                : t("botd.trackRecord.kpiAccuracyEmpty")
             }
           />
           <KpiCard
             icon={Trophy}
             variant="purple"
             value={agg?.total_picks != null ? String(agg.total_picks) : "—"}
-            label={isNl ? "Totaal picks" : "Total picks"}
+            label={t("botd.trackRecord.kpiTotalLabel")}
             note={
               agg
-                ? `${agg.evaluated} ${isNl ? "beoordeeld" : "evaluated"}`
+                ? `${agg.evaluated} ${t("botd.trackRecord.kpiTotalEvaluated")}`
                 : "—"
             }
           />
@@ -204,10 +188,10 @@ export function BotdTrackRecordSection() {
             icon={Flame}
             variant="green"
             value={agg?.best_streak != null ? String(agg.best_streak) : "—"}
-            label={isNl ? "Beste reeks" : "Best streak"}
+            label={t("botd.trackRecord.kpiBestStreakLabel")}
             note={
               agg
-                ? `${isNl ? "Huidig" : "Current"}: ${agg.current_streak}`
+                ? `${t("botd.trackRecord.kpiBestStreakCurrent")}: ${agg.current_streak}`
                 : "—"
             }
           />
@@ -219,25 +203,19 @@ export function BotdTrackRecordSection() {
                 ? String(agg.worst_losing_streak)
                 : "—"
             }
-            label={isNl ? "Slechtste reeks" : "Worst loss streak"}
-            note={
-              isNl
-                ? "Max opeenvolgende fout"
-                : "Max consecutive misses"
-            }
+            label={t("botd.trackRecord.kpiWorstStreakLabel")}
+            note={t("botd.trackRecord.kpiWorstStreakNote")}
           />
           <KpiCard
             icon={ShieldCheck}
             variant="blue"
             value={
               agg?.avg_confidence != null
-                ? `${agg.avg_confidence.toFixed(1).replace(".", isNl ? "," : ".")}%`
+                ? `${agg.avg_confidence.toFixed(1).replace(".", t("botd.trackRecord.decimalSep"))}%`
                 : "—"
             }
-            label={isNl ? "Gem. conf." : "Avg conf."}
-            note={
-              isNl ? "Gemiddelde model-score" : "Average model score"
-            }
+            label={t("botd.trackRecord.kpiAvgConfLabel")}
+            note={t("botd.trackRecord.kpiAvgConfNote")}
           />
         </div>
 
@@ -246,44 +224,20 @@ export function BotdTrackRecordSection() {
           <MethodCard
             icon={Lock}
             variant="blue"
-            title={
-              isNl
-                ? "1. Vooraf vastgelegd"
-                : "1. Locked in advance"
-            }
-            body={
-              isNl
-                ? "Elke pick is één rij in de database met tijdstempel vóór de aftrap. Point-in-time features (Elo, vorm, H2H, standings) — nooit na-datum data."
-                : "Each pick is one row in the database with a timestamp before kickoff. Point-in-time features (Elo, form, H2H, standings) — never post-hoc data."
-            }
+            title={t("botd.trackRecord.methodLockedTitle")}
+            body={t("botd.trackRecord.methodLockedBody")}
           />
           <MethodCard
             icon={Trophy}
             variant="purple"
-            title={
-              isNl
-                ? "2. Hoogste confidence per dag"
-                : "2. Highest-confidence per day"
-            }
-            body={
-              isNl
-                ? "Onze v8.1 engine (XGBoost + gekalibreerde logistiek) rankt alle matches van een dag. De pick met de hoogste waarschijnlijkheid in een Gold-tier competitie wint."
-                : "Our v8.1 engine (XGBoost + calibrated logistic) ranks every match for a day. The pick with the highest probability in a Gold-tier league wins."
-            }
+            title={t("botd.trackRecord.methodConfidenceTitle")}
+            body={t("botd.trackRecord.methodConfidenceBody")}
           />
           <MethodCard
             icon={FileCheck}
             variant="green"
-            title={
-              isNl
-                ? "3. Achteraf beoordeeld"
-                : "3. Graded after the fact"
-            }
-            body={
-              isNl
-                ? "Zodra de uitslag binnenkomt wordt elke pick gelabeld ✅ of ❌. De cijfers hierboven zijn een simpele teller: correct / beoordeeld."
-                : "Once the result arrives each pick is labelled ✅ or ❌. The numbers above are a simple tally: correct / evaluated."
-            }
+            title={t("botd.trackRecord.methodGradedTitle")}
+            body={t("botd.trackRecord.methodGradedBody")}
           />
         </div>
 
@@ -293,19 +247,17 @@ export function BotdTrackRecordSection() {
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] bg-white/[0.02] px-4 py-3">
             <div>
               <p className="text-sm font-semibold text-[#ededed]">
-                {isNl ? "Alle picks" : "All picks"}
+                {t("botd.trackRecord.tableAllPicks")}
                 <span className="ml-2 text-[11px] font-normal text-[#6b7280]">
                   {displayRows == null
                     ? ""
                     : `${displayRows.length}${
-                        rows && onlyGraded ? ` ${isNl ? "van" : "of"} ${rows.length}` : ""
+                        rows && onlyGraded ? ` ${t("botd.trackRecord.tableOf")} ${rows.length}` : ""
                       }`}
                 </span>
               </p>
               <p className="text-[11px] text-[#6b7280]">
-                {isNl
-                  ? "Ruwe data achter de KPI's hierboven. Scroll om alles te zien."
-                  : "Raw data behind the KPIs above. Scroll to see everything."}
+                {t("botd.trackRecord.tableRawDataNote")}
               </p>
             </div>
             <label className="flex items-center gap-2 text-[11px] text-[#a3a9b8] select-none">
@@ -315,30 +267,30 @@ export function BotdTrackRecordSection() {
                 onChange={(e) => setOnlyGraded(e.target.checked)}
                 className="h-3.5 w-3.5 accent-emerald-500"
               />
-              {isNl ? "Alleen beoordeelde" : "Only graded"}
+              {t("botd.trackRecord.tableOnlyGraded")}
             </label>
           </div>
           <div className="max-h-[480px] overflow-auto">
             <table className="w-full text-[11px]">
               <thead className="sticky top-0 z-10 bg-[#0b0d13]/95 backdrop-blur">
                 <tr className="border-b border-white/[0.08] text-left text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
-                  <th className="px-3 py-2.5">{isNl ? "Datum" : "Date"}</th>
-                  <th className="px-3 py-2.5">{isNl ? "Competitie" : "League"}</th>
-                  <th className="px-3 py-2.5">{isNl ? "Wedstrijd" : "Match"}</th>
+                  <th className="px-3 py-2.5">{t("botd.trackRecord.colDate")}</th>
+                  <th className="px-3 py-2.5">{t("botd.trackRecord.colLeague")}</th>
+                  <th className="px-3 py-2.5">{t("botd.trackRecord.colMatch")}</th>
                   <th className="px-3 py-2.5 text-center">
-                    {isNl ? "Pick" : "Pick"}
+                    {t("botd.trackRecord.colPick")}
                   </th>
                   <th className="px-3 py-2.5 text-right">
-                    {isNl ? "Conf." : "Conf."}
+                    {t("botd.trackRecord.colConf")}
                   </th>
                   <th className="px-3 py-2.5 text-right">
-                    {isNl ? "Odds" : "Odds"}
+                    {t("botd.trackRecord.colOdds")}
                   </th>
                   <th className="px-3 py-2.5 text-center">
-                    {isNl ? "Uitslag" : "Score"}
+                    {t("botd.trackRecord.colScore")}
                   </th>
                   <th className="px-3 py-2.5 text-center">
-                    {isNl ? "Resultaat" : "Result"}
+                    {t("botd.trackRecord.colResult")}
                   </th>
                 </tr>
               </thead>
@@ -349,7 +301,7 @@ export function BotdTrackRecordSection() {
                       colSpan={8}
                       className="px-4 py-6 text-center text-[#6b7280]"
                     >
-                      {isNl ? "Laden…" : "Loading…"}
+                      {t("botd.trackRecord.loading")}
                     </td>
                   </tr>
                 ) : displayRows.length === 0 ? (
@@ -358,7 +310,7 @@ export function BotdTrackRecordSection() {
                       colSpan={8}
                       className="px-4 py-6 text-center text-[#6b7280]"
                     >
-                      {isNl ? "Geen picks in de selectie." : "No picks in selection."}
+                      {t("botd.trackRecord.tableEmpty")}
                     </td>
                   </tr>
                 ) : (
@@ -431,14 +383,10 @@ export function BotdTrackRecordSection() {
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold text-[#ededed]">
-                {isNl
-                  ? "Wil je de volledige dataset zelf controleren?"
-                  : "Want to verify the full dataset yourself?"}
+                {t("botd.trackRecord.verifyTitle")}
               </p>
               <p className="mt-1 text-xs leading-relaxed text-[#a3a9b8]">
-                {isNl
-                  ? "De CSV bevat alle picks die in de vier KPI's hierboven worden meegeteld — met datum, wedstrijd, competitie, pick, betrouwbaarheid, uitslag en resultaat. Herbereken de nauwkeurigheid gerust zelf in Excel of Sheets."
-                  : "The CSV contains every pick counted in the four KPIs above — with date, match, league, pick, confidence, score and outcome. Feel free to recompute the accuracy yourself in Excel or Sheets."}
+                {t("botd.trackRecord.verifyBody")}
               </p>
             </div>
             <a
@@ -446,15 +394,13 @@ export function BotdTrackRecordSection() {
               className="btn-primary inline-flex items-center gap-2 whitespace-nowrap self-start md:self-auto"
             >
               <Download className="h-4 w-4" />
-              {isNl ? "Download CSV" : "Download CSV"}
+              {t("botd.trackRecord.downloadCsv")}
             </a>
           </div>
         </div>
 
         <p className="mt-6 text-center text-[11px] leading-relaxed text-[#6b7280]">
-          {isNl
-            ? "Pick van de Dag is een feature voor Gold- en Platinum-abonnees — deze cijfers laten zien hoe die feature historisch zou hebben gepresteerd. Elke pick wordt in productie met tijdstempel vastgezet vóór de aftrap."
-            : "Pick of the Day is a feature for Gold and Platinum subscribers — these numbers show how the feature would have performed historically. In production each pick is timestamped and locked before kick-off."}
+          {t("botd.trackRecord.footnote")}
         </p>
       </div>
     </section>

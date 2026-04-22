@@ -56,8 +56,7 @@ interface BotdLiveResponse {
 }
 
 export function BotdLiveTrackingSection() {
-  const { locale } = useTranslations();
-  const isNl = locale === "nl";
+  const { t } = useTranslations();
   const [data, setData] = useState<BotdLiveResponse | null>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -82,7 +81,7 @@ export function BotdLiveTrackingSection() {
 
   const fmtDate = (iso: string) => {
     try {
-      return new Date(iso).toLocaleDateString(isNl ? "nl-NL" : "en-GB", {
+      return new Date(iso).toLocaleDateString(t("botd.liveTracking.dateLocale"), {
         day: "2-digit",
         month: "short",
       });
@@ -115,27 +114,14 @@ export function BotdLiveTrackingSection() {
         >
           <span className="section-label">
             <Activity className="h-3 w-3" />
-            {isNl
-              ? "4 · Pick van de Dag — live meting"
-              : "4 · Pick of the Day — live measurement"}
+            {t("botd.liveTracking.sectionLabel")}
           </span>
           <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
-            {isNl ? (
-              <>
-                Alleen echte pre-match picks{" "}
-                <span className="gradient-text-green">sinds 18 april 2026</span>
-              </>
-            ) : (
-              <>
-                Only real pre-match picks{" "}
-                <span className="gradient-text-green">since 18 April 2026</span>
-              </>
-            )}
+            {t("botd.liveTracking.titleLine1")}{" "}
+            <span className="gradient-text-green">{t("botd.liveTracking.titleHighlight")}</span>
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-[#a3a9b8]">
-            {isNl
-              ? "De Pick van de Dag, maar alleen wanneer hij door de scheduler voor de aftrap werd vastgezet en daarna werd beoordeeld. Geen backtest, geen retroactieve rijen. Deze meting begint klein en groeit elke dag waarop een BOTD-wedstrijd wordt gespeeld."
-              : "The Pick of the Day, but only when it was locked before kickoff by the live scheduler and graded afterwards. No backtest, no retroactive rows. This measurement starts small and grows every day a BOTD fixture is played."}
+            {t("botd.liveTracking.lede")}
           </p>
         </motion.div>
 
@@ -146,32 +132,30 @@ export function BotdLiveTrackingSection() {
             variant="green"
             value={
               !awaiting && agg
-                ? `${agg.accuracy_pct.toFixed(1).replace(".", isNl ? "," : ".")}%`
+                ? `${agg.accuracy_pct.toFixed(1).replace(".", t("botd.liveTracking.decimalSep"))}%`
                 : "—"
             }
-            label={isNl ? "Nauwkeurigheid" : "Accuracy"}
+            label={t("botd.liveTracking.kpiAccuracyLabel")}
             note={
               !awaiting && agg
-                ? `${agg.correct} / ${agg.evaluated} ${isNl ? "correct" : "correct"}`
-                : isNl
-                  ? "Wacht op eerste beoordeelde BOTD"
-                  : "Awaiting first graded BOTD"
+                ? `${agg.correct} / ${agg.evaluated} ${t("botd.liveTracking.kpiAccuracyCorrect")}`
+                : t("botd.liveTracking.kpiAccuracyEmpty")
             }
             awaiting={awaiting}
-            isNl={isNl}
+            awaitingLabel={t("botd.liveTracking.awaitingData")}
           />
           <KpiCard
             icon={Trophy}
             variant="purple"
             value={agg?.total_picks != null ? String(agg.total_picks) : "—"}
-            label={isNl ? "Totaal picks" : "Total picks"}
+            label={t("botd.liveTracking.kpiTotalLabel")}
             note={
               agg
-                ? `${agg.evaluated} ${isNl ? "beoordeeld" : "evaluated"}`
+                ? `${agg.evaluated} ${t("botd.liveTracking.kpiTotalEvaluated")}`
                 : "—"
             }
             awaiting={awaiting}
-            isNl={isNl}
+            awaitingLabel={t("botd.liveTracking.awaitingData")}
           />
           <KpiCard
             icon={Flame}
@@ -181,16 +165,14 @@ export function BotdLiveTrackingSection() {
                 ? String(agg.best_streak)
                 : "—"
             }
-            label={isNl ? "Beste reeks" : "Best streak"}
+            label={t("botd.liveTracking.kpiBestStreakLabel")}
             note={
               !awaiting && agg
-                ? `${isNl ? "Huidig" : "Current"}: ${agg.current_streak}`
-                : isNl
-                  ? "Volgt zodra data binnen is"
-                  : "Starts once data arrives"
+                ? `${t("botd.liveTracking.kpiBestStreakCurrent")}: ${agg.current_streak}`
+                : t("botd.liveTracking.kpiBestStreakEmpty")
             }
             awaiting={awaiting}
-            isNl={isNl}
+            awaitingLabel={t("botd.liveTracking.awaitingData")}
           />
           <KpiCard
             icon={XCircle}
@@ -200,57 +182,49 @@ export function BotdLiveTrackingSection() {
                 ? String(agg.worst_losing_streak)
                 : "—"
             }
-            label={isNl ? "Slechtste reeks" : "Worst loss streak"}
-            note={
-              isNl
-                ? "Max opeenvolgende fout"
-                : "Max consecutive misses"
-            }
+            label={t("botd.liveTracking.kpiWorstStreakLabel")}
+            note={t("botd.liveTracking.kpiWorstStreakNote")}
             awaiting={awaiting}
-            isNl={isNl}
+            awaitingLabel={t("botd.liveTracking.awaitingData")}
           />
           <KpiCard
             icon={ShieldCheck}
             variant="blue"
             value={
               agg?.avg_confidence != null && agg.total_picks > 0
-                ? `${agg.avg_confidence.toFixed(1).replace(".", isNl ? "," : ".")}%`
+                ? `${agg.avg_confidence.toFixed(1).replace(".", t("botd.liveTracking.decimalSep"))}%`
                 : "—"
             }
-            label={isNl ? "Gem. conf." : "Avg conf."}
-            note={
-              isNl ? "Gemiddelde modelscore" : "Average model score"
-            }
+            label={t("botd.liveTracking.kpiAvgConfLabel")}
+            note={t("botd.liveTracking.kpiAvgConfNote")}
             awaiting={awaiting}
-            isNl={isNl}
+            awaitingLabel={t("botd.liveTracking.awaitingData")}
           />
         </div>
 
         {/* History table (only when at least one pick has been locked) */}
         <div className="mt-10 overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0b0d13]">
           <div className="grid grid-cols-12 gap-2 border-b border-white/[0.06] bg-white/[0.02] px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
-            <span className="col-span-2">{isNl ? "Datum" : "Date"}</span>
-            <span className="col-span-4">{isNl ? "Wedstrijd" : "Match"}</span>
-            <span className="col-span-2">{isNl ? "Competitie" : "League"}</span>
+            <span className="col-span-2">{t("botd.liveTracking.colDate")}</span>
+            <span className="col-span-4">{t("botd.liveTracking.colMatch")}</span>
+            <span className="col-span-2">{t("botd.liveTracking.colLeague")}</span>
             <span className="col-span-2 text-center">
-              {isNl ? "Pick · conf." : "Pick · conf."}
+              {t("botd.liveTracking.colPickConf")}
             </span>
             <span className="col-span-1 text-center">
-              {isNl ? "Uitslag" : "Score"}
+              {t("botd.liveTracking.colScore")}
             </span>
             <span className="col-span-1 text-center">
-              {isNl ? "Resultaat" : "Result"}
+              {t("botd.liveTracking.colResult")}
             </span>
           </div>
           {!loaded ? (
             <div className="px-4 py-8 text-center text-xs text-[#6b7280]">
-              {isNl ? "Laden…" : "Loading…"}
+              {t("botd.liveTracking.loading")}
             </div>
           ) : !history || history.length === 0 ? (
             <div className="px-4 py-10 text-center text-xs text-[#6b7280]">
-              {isNl
-                ? "Nog geen live-gelogde BOTD-picks. Eerste rij verschijnt zodra een BOTD-wedstrijd is gespeeld."
-                : "No live-logged BOTD picks yet. The first row appears as soon as a BOTD fixture has been played."}
+              {t("botd.liveTracking.emptyHistory")}
             </div>
           ) : (
             history.map((row, i) => {
@@ -298,12 +272,12 @@ export function BotdLiveTrackingSection() {
                   ) : isFuture ? (
                     <span className="inline-flex items-center gap-0.5 text-[9px] font-medium text-slate-500">
                       <Calendar className="h-3 w-3 shrink-0" />
-                      {isNl ? "Te spelen" : "Upcoming"}
+                      {t("botd.liveTracking.upcoming")}
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-0.5 text-[9px] font-medium text-amber-500/80">
                       <Clock className="h-3 w-3 shrink-0" />
-                      {isNl ? "In beoord." : "Pending"}
+                      {t("botd.liveTracking.pending")}
                     </span>
                   )}
                 </span>
@@ -314,9 +288,7 @@ export function BotdLiveTrackingSection() {
         </div>
 
         <p className="mt-8 text-center text-[11px] leading-relaxed text-[#6b7280]">
-          {isNl
-            ? "Gebruik deze sectie om te checken hoe de BOTD het doet op wedstrijden waarvoor de pick écht vóór de aftrap werd vastgezet. Voor de bredere backtest, zie sectie 3 hierboven."
-            : "Use this section to judge how BOTD performs on matches where the pick was truly locked before kickoff. For the broader backtest, see section 3 above."}
+          {t("botd.liveTracking.footnote")}
         </p>
       </div>
     </section>
@@ -330,7 +302,7 @@ function KpiCard({
   label,
   note,
   awaiting,
-  isNl,
+  awaitingLabel,
 }: {
   icon: typeof Target;
   variant: "green" | "purple" | "blue";
@@ -338,7 +310,7 @@ function KpiCard({
   label: string;
   note: string;
   awaiting?: boolean;
-  isNl: boolean;
+  awaitingLabel: string;
 }) {
   return (
     <div className={`card-neon card-neon-${variant} rounded-2xl`}>
@@ -350,7 +322,7 @@ function KpiCard({
           {awaiting ? (
             <span className="inline-flex items-center gap-1 rounded-full border border-white/[0.12] bg-white/[0.03] px-2 py-0.5 text-[9px] font-semibold text-slate-400">
               <Clock className="h-2.5 w-2.5" />
-              {isNl ? "Wacht op data" : "Awaiting data"}
+              {awaitingLabel}
             </span>
           ) : null}
         </div>

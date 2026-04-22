@@ -17,6 +17,8 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { UnlockBanner } from "@/components/match-predictions/unlock-banner";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { defaultLocale, isLocale, LOCALE_COOKIE } from "@/i18n/config";
+import { translate } from "@/i18n/messages";
+import { formatMsg } from "@/i18n/format";
 import { localizePath } from "@/i18n/routes";
 import { getLocalizedAlternates, getServerLocale } from "@/lib/seo-helpers";
 import { getLeagueLogoPath } from "@/data/league-logos";
@@ -201,7 +203,6 @@ export default async function BetTypeLeagueComboPage(props: {
   const lhref = (canonical: string) => localizePath(canonical, uiLocale);
   const jsonLd = buildJsonLd(combo, locale);
   const leagueLogo = getLeagueLogoPath(league_slug);
-  const isNl = locale === "nl";
 
   const betTypeName = combo.name.betType[locale];
   const leagueName = combo.name.league[locale];
@@ -244,11 +245,11 @@ export default async function BetTypeLeagueComboPage(props: {
             className="mb-6 flex flex-wrap items-center gap-1.5 text-xs text-[#6b7280]"
           >
             <Link href={lhref("/")} className="transition-colors hover:text-[#ededed]">
-              {isNl ? "Home" : "Home"}
+              {translate(locale, "betTypeCombo.breadcrumbHome")}
             </Link>
             <ChevronRight className="h-3 w-3" />
             <Link href={lhref("/bet-types")} className="transition-colors hover:text-[#ededed]">
-              {isNl ? "Marktsoorten" : "Bet Types"}
+              {translate(locale, "betTypeCombo.breadcrumbBetTypes")}
             </Link>
             <ChevronRight className="h-3 w-3" />
             <Link
@@ -291,7 +292,7 @@ export default async function BetTypeLeagueComboPage(props: {
                 </span>
                 <span className="section-label">
                   <Sparkles className="h-3 w-3" />
-                  {isNl ? "AI-voorspellingen" : "AI predictions"}
+                  {translate(locale, "betTypeCombo.aiPredictions")}
                 </span>
               </div>
               <h1 className="text-heading text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
@@ -299,7 +300,7 @@ export default async function BetTypeLeagueComboPage(props: {
                 <span className="gradient-text-green">
                   {leagueName}
                 </span>{" "}
-                {isNl ? "voorspellingen" : "predictions"}
+                {translate(locale, "betTypeCombo.predictionsSuffix")}
               </h1>
               <p className="mt-3 max-w-2xl text-base text-[#a3a9b8]">
                 {combo.tagline[locale]}
@@ -317,15 +318,15 @@ export default async function BetTypeLeagueComboPage(props: {
               }}
             >
               <StatCell
-                label={isNl ? "Gem. goals / wedstrijd" : "Avg goals / game"}
-                value={profile.avgGoalsPerGame.toFixed(2).replace(".", isNl ? "," : ".")}
+                label={translate(locale, "betTypeCombo.statAvgGoals")}
+                value={profile.avgGoalsPerGame.toFixed(2).replace(".", translate(locale, "betTypeCombo.decimalSep"))}
               />
               <StatCell
-                label={isNl ? "BTTS Ja" : "BTTS Yes"}
+                label={translate(locale, "betTypeCombo.statBtts")}
                 value={`${profile.bttsYesPct}%`}
               />
               <StatCell
-                label={isNl ? "Over 2.5 goals" : "Over 2.5 goals"}
+                label={translate(locale, "betTypeCombo.statOver25")}
                 value={`${profile.over25Pct}%`}
               />
             </div>
@@ -337,19 +338,19 @@ export default async function BetTypeLeagueComboPage(props: {
       <section className="relative mx-auto max-w-3xl px-4 pb-16 sm:px-6">
         <SectionBlock
           icon={<BookOpen className="h-4 w-4" />}
-          title={isNl ? `Hoe wij ${leagueName} ${betTypeName} lezen` : `How we read ${leagueName} ${betTypeName}`}
+          title={formatMsg(translate(locale, "betTypeCombo.howWeRead"), { leagueName, betTypeName })}
           body={combo.intro[locale]}
         />
 
         <SectionBlock
           icon={<Target className="h-4 w-4" />}
-          title={isNl ? "De cijfers van deze competitie" : "The numbers for this competition"}
+          title={translate(locale, "betTypeCombo.theNumbers")}
           body={combo.statsBlock[locale]}
         />
 
         <SectionBlock
           icon={<Lightbulb className="h-4 w-4" />}
-          title={isNl ? "Waar de value zit" : "Where the value hides"}
+          title={translate(locale, "betTypeCombo.valueHides")}
           body={combo.angle[locale]}
         />
 
@@ -359,16 +360,14 @@ export default async function BetTypeLeagueComboPage(props: {
             href={lhref(`/match-predictions/${league_slug}`)}
             className="btn-primary inline-flex items-center gap-2"
           >
-            {isNl
-              ? `Bekijk alle ${leagueName}-picks`
-              : `See all ${leagueName} picks`}
+            {formatMsg(translate(locale, "betTypeCombo.seeAllPicks"), { leagueName })}
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             href={lhref(`/bet-types/${slug}`)}
             className="btn-ghost inline-flex items-center gap-2"
           >
-            {isNl ? `Meer over ${betTypeName}` : `More on ${betTypeName}`}
+            {formatMsg(translate(locale, "betTypeCombo.moreOn"), { betTypeName })}
           </Link>
         </div>
 
@@ -413,12 +412,12 @@ export default async function BetTypeLeagueComboPage(props: {
         <section className="mt-16">
           <span className="section-label mb-4">
             <Sparkles className="h-3 w-3" />
-            {isNl ? "Ook in andere competities" : "Same market, other leagues"}
+            {translate(locale, "betTypeCombo.sameMarketHeader")}
           </span>
           <h2 className="text-heading mb-6 text-2xl text-[#ededed] sm:text-3xl">
             {betTypeName}{" "}
             <span className="gradient-text-green">
-              {isNl ? "per competitie" : "by league"}
+              {translate(locale, "betTypeCombo.byLeague")}
             </span>
           </h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -457,12 +456,12 @@ export default async function BetTypeLeagueComboPage(props: {
         <section className="mt-16">
           <span className="section-label mb-4">
             <Sparkles className="h-3 w-3" />
-            {isNl ? "Andere markten in deze competitie" : "Other markets in this league"}
+            {translate(locale, "betTypeCombo.otherMarketsHeader")}
           </span>
           <h2 className="text-heading mb-6 text-2xl text-[#ededed] sm:text-3xl">
             {leagueName}{" "}
             <span className="gradient-text-green">
-              {isNl ? "marktanalyses" : "market breakdowns"}
+              {translate(locale, "betTypeCombo.marketBreakdowns")}
             </span>
           </h2>
           <div className="grid gap-3 sm:grid-cols-2">

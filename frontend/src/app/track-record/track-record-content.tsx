@@ -249,8 +249,7 @@ function PublicTierTabs({
   const hasToken = useHasAuthToken();
   const localize = useLocalizedHref();
   const localizedLogin = localize("/login");
-  const { locale } = useTranslations();
-  const isNl = locale === "nl";
+  const { t } = useTranslations();
 
   return (
     <div className="card-neon card-neon-green rounded-2xl overflow-hidden">
@@ -329,7 +328,7 @@ function PublicTierTabs({
               evaluated prediction. */}
           <button
             type="button"
-            title={isNl ? "Download alleen Pick of the Day historie als CSV" : "Download only Pick of the Day history as CSV"}
+            title={t("trackRecord.btnBotdCsvTitle")}
             onClick={async () => {
               try {
                 const token =
@@ -347,8 +346,8 @@ function PublicTierTabs({
                 if (!resp.ok) {
                   window.alert(
                     resp.status === 401 || resp.status === 403
-                      ? isNl ? "Log opnieuw in om te downloaden." : "Sign in again to download."
-                      : isNl ? `Download mislukt (${resp.status})` : `Download failed (${resp.status})`,
+                      ? t("trackRecord.dlSigninAgain")
+                      : t("trackRecord.dlFailed", { status: resp.status }),
                   );
                   return;
                 }
@@ -362,17 +361,13 @@ function PublicTierTabs({
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
               } catch {
-                window.alert(
-                  isNl
-                    ? "Download mislukt, probeer het zo opnieuw."
-                    : "Download failed, try again shortly.",
-                );
+                window.alert(t("trackRecord.dlFailedTryAgain"));
               }
             }}
             className="inline-flex items-center gap-2 rounded-lg border border-purple-500/30 bg-purple-500/10 px-3 py-1.5 text-[11px] font-semibold text-purple-300 hover:bg-purple-500/20 transition-colors"
           >
             <Star className="h-3.5 w-3.5" />
-            {isNl ? "BOTD-CSV" : "BOTD CSV"}
+            {t("trackRecord.btnBotdCsv")}
           </button>
           </div>
         ) : (
@@ -457,8 +452,7 @@ function publicTierToTierKey(t: PublicTier): TierKey | null {
  * Track Record, NOCTURNE rebuild.
  */
 export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: React.ReactNode; trackRecordPage?: any }) {
-  const { t, locale } = useTranslations();
-  const isNl = locale === "nl";
+  const { t } = useTranslations();
   const loc = useLocalizedHref();
   const home = loc("/");
   // v8.5, default to Gold tier (70%+) on the public page so first-time
@@ -668,17 +662,13 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           >
             <span className="section-label mb-3 inline-flex items-center gap-2">
               <Eye className="h-3 w-3" />
-              {isNl ? "Wat vind je op deze pagina?" : "What's on this page?"}
+              {t("trackRecord.tocBadge")}
             </span>
             <h2 className="text-heading text-balance text-2xl text-[#ededed] sm:text-3xl">
-              {isNl
-                ? "Vier verschillende meetpunten, allemaal eerlijk gelabeld."
-                : "Four distinct measurements, each honestly labelled."}
+              {t("trackRecord.tocTitle")}
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[#a3a9b8]">
-              {isNl
-                ? "Klik op een blok om direct naar die sectie te springen. Elk blok is óf een historische backtest (groter sample, retroactief) óf een live meting (klein en groeiend, strikt vóór aftrap vastgezet)."
-                : "Click a card to jump to that section. Each one is either a historical backtest (larger sample, retroactive) or a live measurement (small and growing, locked strictly before kickoff)."}
+              {t("trackRecord.tocLede")}
             </p>
           </motion.div>
 
@@ -686,41 +676,33 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             {[
               {
                 n: "1",
-                kind: isNl ? "Backtest" : "Backtest",
-                title: isNl ? "Tier-accuraatheid" : "Tier accuracy",
-                desc: isNl
-                  ? "Free / Silver / Gold / Platinum — historische trefzekerheid per tier."
-                  : "Free / Silver / Gold / Platinum — historical hit rate per tier.",
+                kind: t("trackRecord.tocKindBacktest"),
+                title: t("trackRecord.tocItem1Title"),
+                desc: t("trackRecord.tocItem1Desc"),
                 href: "#tier-kpis",
                 tone: "green",
               },
               {
                 n: "2",
-                kind: isNl ? "Live meting" : "Live measurement",
-                title: isNl ? "Per tier · live 🔒" : "Per tier · live 🔒",
-                desc: isNl
-                  ? "Alleen picks die écht vóór de aftrap werden vastgezet. Zichtbaar na inloggen."
-                  : "Only picks locked strictly before kickoff. Visible after sign-in.",
+                kind: t("trackRecord.tocKindLive"),
+                title: t("trackRecord.tocItem2Title"),
+                desc: t("trackRecord.tocItem2Desc"),
                 href: "#live-measurement",
                 tone: "blue",
               },
               {
                 n: "3",
-                kind: isNl ? "Backtest" : "Backtest",
-                title: isNl ? "Pick van de Dag" : "Pick of the Day",
-                desc: isNl
-                  ? "De dagelijkse topper toegepast op recent afgelopen wedstrijden."
-                  : "The daily top pick applied to recently finished matches.",
+                kind: t("trackRecord.tocKindBacktest"),
+                title: t("trackRecord.tocItem3Title"),
+                desc: t("trackRecord.tocItem3Desc"),
                 href: "#model-validation",
                 tone: "purple",
               },
               {
                 n: "4",
-                kind: isNl ? "Live meting" : "Live measurement",
-                title: isNl ? "Pick van de Dag · live 🔒" : "Pick of the Day · live 🔒",
-                desc: isNl
-                  ? "Strikt pre-match BOTD-picks. Zichtbaar na inloggen."
-                  : "Strictly pre-match BOTD picks. Visible after sign-in.",
+                kind: t("trackRecord.tocKindLive"),
+                title: t("trackRecord.tocItem4Title"),
+                desc: t("trackRecord.tocItem4Desc"),
                 href: "#botd-live",
                 tone: "green",
               },
@@ -737,7 +719,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
                     </span>
                     <span
                       className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest ${
-                        item.kind === (isNl ? "Live meting" : "Live measurement")
+                        item.kind === t("trackRecord.tocKindLive")
                           ? "border-blue-400/30 bg-blue-500/10 text-blue-300"
                           : "border-emerald-400/30 bg-emerald-500/10 text-emerald-300"
                       }`}
@@ -752,7 +734,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
                     {item.desc}
                   </p>
                   <p className="mt-3 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-widest text-[#4ade80] group-hover:gap-2 transition-all">
-                    {isNl ? "Spring erheen" : "Jump to section"}
+                    {t("trackRecord.tocJumpTo")}
                     <ChevronRight className="h-3 w-3" />
                   </p>
                 </div>
@@ -769,13 +751,9 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           interleaved layout (tier-backtest → tier-live → botd-backtest
           → botd-live) verwarrend was. */}
       <PhaseDivider
-        kicker={isNl ? "Backtest — historische simulatie" : "Backtest — historical simulation"}
-        title={isNl ? "Hieronder: wat het model zou hebben gedaan" : "Below — what the model would have done"}
-        subtitle={
-          isNl
-            ? "Alles hieronder is berekend op historische wedstrijden met de regel dat het model alleen data mag gebruiken die vóór de aftrap bekend was. Geen cherry-picking, volledige dataset publiek als CSV."
-            : "Everything below is computed on historical matches under the rule that the model may only use data available before kickoff. No cherry-picking, full dataset public as CSV."
-        }
+        kicker={t("trackRecord.phaseBacktestKicker")}
+        title={t("trackRecord.phaseBacktestTitle")}
+        subtitle={t("trackRecord.phaseBacktestSubtitle")}
         accent="emerald"
       />
 
@@ -796,9 +774,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           >
             <span className="section-label mb-4 inline-flex items-center gap-2">
               <Gauge className="h-3 w-3" />
-              {isNl
-                ? "1 · Tier-accuraatheid (historische backtest)"
-                : "1 · Tier accuracy (historical backtest)"}
+              {t("trackRecord.tierKpisLabel")}
             </span>
             <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               {t("tr.kpisTitle")}
@@ -867,13 +843,9 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           waar de historische simulatie ophoudt en waar de pre-match
           meetperiode begint. */}
       <PhaseDivider
-        kicker={isNl ? "Live meting — vanaf 18 april 2026" : "Live measurement — from 18 April 2026"}
-        title={isNl ? "Hieronder meten we in realtime" : "Below — live measurement only"}
-        subtitle={
-          isNl
-            ? "Alles hieronder telt alleen picks die strikt vóór de aftrap zijn vastgezet. De teller begint op 0 en groeit met elke afgelopen wedstrijd — eerlijk, zonder cherry-picking."
-            : "Everything below counts only picks locked strictly before kickoff. The counter starts at 0 and grows with every finished match — honest, no cherry-picking."
-        }
+        kicker={t("trackRecord.phaseLiveKicker")}
+        title={t("trackRecord.phaseLiveTitle")}
+        subtitle={t("trackRecord.phaseLiveSubtitle")}
       />
 
       {/* ───────────── LIVE MEASUREMENT (tier) — LOCKED ─────────────
