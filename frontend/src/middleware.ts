@@ -118,6 +118,27 @@ export function middleware(req: NextRequest) {
 
     const parsed = parseLocalizedPath(pathname, firstSegment as Locale);
 
+    // Canonical consolidation: if the URL under a non-default locale
+    // uses the English slug instead of the translated one (e.g.
+    // /fr/match-predictions/premier-league instead of
+    // /fr/predictions-match/premier-league), 301 redirect to the
+    // translated form. Both paths resolved to the same page before
+    // (because parseLocalizedPath falls back to the input segment on
+    // miss), which created duplicate content that Google had to
+    // de-dupe via the canonical tag alone. A permanent redirect is
+    // cleaner — Googlebot consolidates the crawl budget onto the
+    // intended localized URL and inbound links with the wrong slug
+    // still land in the right place.
+    const expectedLocalized = localizePath(parsed.canonical, parsed.locale);
+    if (expectedLocalized !== pathname && expectedLocalized !== "/") {
+      const redirectUrl = req.nextUrl.clone();
+      redirectUrl.pathname = expectedLocalized;
+      redirectUrl.search = search;
+      const res = NextResponse.redirect(redirectUrl, 308);
+      setLocaleCookie(res, parsed.locale);
+      return res;
+    }
+
     // Rewrite /nl/voorspellingen → /predictions (internal)
     const url = req.nextUrl.clone();
     url.pathname = parsed.canonical;

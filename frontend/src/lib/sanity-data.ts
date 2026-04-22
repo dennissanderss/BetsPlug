@@ -474,26 +474,50 @@ export async function fetchAllSlugsForSitemap(): Promise<{
   leagueHubs: string[];
   betTypeHubs: string[];
 }> {
+  // ── Leagues / bet-types / learn pillars: always emit the UNION of
+  //    (static catalog + editorial data files + Sanity) so the sitemap
+  //    covers every URL the route handlers actually serve, including
+  //    skeleton-generated league hubs. Previous implementation only
+  //    emitted Sanity entries (or the 7-league LEAGUE_HUBS fallback),
+  //    which left 14 of the 21 advertised league hubs out of the
+  //    sitemap — Google couldn't discover them and impressions on
+  //    their brand + longtail terms dropped. See /data/league-catalog
+  //    for the full list.
+  const { ALL_LEAGUES } = await import("@/data/league-catalog");
+  const leagueSlugs = new Set<string>();
+  ALL_LEAGUES.forEach((l) => leagueSlugs.add(l.slug));
+  LEAGUE_HUBS.forEach((h) => leagueSlugs.add(h.slug));
+
+  const betTypeSlugs = new Set<string>();
+  BET_TYPE_HUBS.forEach((h) => betTypeSlugs.add(h.slug));
+
+  const pillarSlugs = new Set<string>();
+  LEARN_PILLARS.forEach((p) => pillarSlugs.add(p.slug));
+
+  // Articles: Sanity is the source of truth (no static catalog).
+  // Fall back to the hardcoded sample list if Sanity is unreachable.
+  let articles: { slug: string; publishedAt?: string }[] = [];
+
   try {
-    const [articles, pillars, leagues, betTypes] = await Promise.all([
+    const [cmsArticles, cmsPillars, cmsLeagues, cmsBetTypes] = await Promise.all([
       client.fetch<any[]>(`*[_type == "article"]{ "slug": slug.current, publishedAt }`),
       client.fetch<any[]>(`*[_type == "learnPillar"]{ "slug": slug.current }`),
       client.fetch<any[]>(`*[_type == "leagueHub"]{ "slug": slug.current }`),
       client.fetch<any[]>(`*[_type == "betTypeHub"]{ "slug": slug.current }`),
     ]);
 
-    return {
-      articles: (articles ?? []).map((a) => ({ slug: a.slug, publishedAt: a.publishedAt })),
-      learnPillars: (pillars ?? []).map((p) => p.slug),
-      leagueHubs: (leagues ?? []).map((l) => l.slug),
-      betTypeHubs: (betTypes ?? []).map((b) => b.slug),
-    };
+    articles = (cmsArticles ?? []).map((a) => ({ slug: a.slug, publishedAt: a.publishedAt }));
+    (cmsPillars ?? []).forEach((p) => pillarSlugs.add(p.slug));
+    (cmsLeagues ?? []).forEach((l) => leagueSlugs.add(l.slug));
+    (cmsBetTypes ?? []).forEach((b) => betTypeSlugs.add(b.slug));
   } catch {
-    return {
-      articles: hardcodedArticles.map((a) => ({ slug: a.slug, publishedAt: a.publishedAt })),
-      learnPillars: LEARN_PILLARS.map((p) => p.slug),
-      leagueHubs: LEAGUE_HUBS.map((h) => h.slug),
-      betTypeHubs: BET_TYPE_HUBS.map((h) => h.slug),
-    };
+    articles = hardcodedArticles.map((a) => ({ slug: a.slug, publishedAt: a.publishedAt }));
   }
+
+  return {
+    articles,
+    learnPillars: Array.from(pillarSlugs),
+    leagueHubs: Array.from(leagueSlugs),
+    betTypeHubs: Array.from(betTypeSlugs),
+  };
 }
