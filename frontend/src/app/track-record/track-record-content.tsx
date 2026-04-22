@@ -38,6 +38,7 @@ import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { HeroMediaBg } from "@/components/ui/media-bg";
 import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
 import { LockedLivePlaceholder } from "@/components/ui/locked-live-placeholder";
+import { ROISimulator } from "@/components/noct/roi-simulator";
 
 /* ── Live API data hook ─────────────────────────────────── */
 interface LiveStats {
@@ -855,6 +856,16 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
+      {/* ───────────── ROI SIMULATOR — backtest ──────────────────────── */}
+      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
+        <ROISimulator
+          pickTier={pickTier !== "all" ? pickTier : undefined}
+          source="backtest"
+          title="ROI Simulator — Backtest"
+          subtitle="Wat had je verdiend op historische picks?"
+        />
+      </section>
+
       {/* ───────────── BOTD BACKTEST — directly after tier backtest ─────
           User feedback was dat BotD-backtest als aparte container naast
           de tier-backtest hoort, zodat alle "historische analyse"
@@ -883,6 +894,16 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           instead of "warm-up phase". Signed-in users see the real
           numbers on the authed /trackrecord dashboard. */}
       <LockedLivePlaceholder number="3" variant="tier" id="live-measurement" />
+
+      {/* ───────────── ROI SIMULATOR — live ─────────────────────────── */}
+      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
+        <ROISimulator
+          pickTier={pickTier !== "all" ? pickTier : undefined}
+          source="live"
+          title="ROI Simulator — Live meting"
+          subtitle="Wat had je verdiend op live picks (sinds 16 april)?"
+        />
+      </section>
 
       {/* ───────────── BOTD LIVE — LOCKED ───────────── */}
       <LockedLivePlaceholder number="4" variant="botd" id="botd-live" />

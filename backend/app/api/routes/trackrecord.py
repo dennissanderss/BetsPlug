@@ -282,6 +282,170 @@ async def get_live_measurement(
     }
 
 
+@router.get("/roi", summary="ROI simulation on evaluated predictions that have odds data")
+async def get_roi_simulation(
+    pick_tier: Optional[str] = Query(None, description="Filter to a specific tier"),
+    source: str = Query("all", description="'live', 'backtest', or 'all'"),
+    days: Optional[int] = Query(None, description="Limit to the last N days of matches"),
+    stake: float = Query(10.0, ge=1.0, le=10_000.0, description="Stake per pick in euros"),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Simulate ROI using pre-match odds for every evaluated prediction.
+
+    Odds are read from ``closing_odds_snapshot`` (frozen at prediction time)
+    and, as a fallback, from the ``OddsHistory`` table.  Only predictions
+    with a valid odds value for the predicted outcome are counted.
+
+    Formula per pick:
+      • Correct  → profit = stake × (odds − 1)
+      • Incorrect → profit = −stake
+    """
+    from datetime import timedelta
+    from sqlalchemy import or_
+    from app.models.odds import OddsHistory
+
+    # ── base query ──────────────────────────────────────────────────────
+    stmt = (
+        select(
+            Prediction.home_win_prob,
+            Prediction.draw_prob,
+            Prediction.away_win_prob,
+            Prediction.closing_odds_snapshot,
+            PredictionEvaluation.is_correct,
+            Match.scheduled_at.label("match_date"),
+        )
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .join(Match, Match.id == Prediction.match_id)
+        .where(Prediction.predicted_at < Match.scheduled_at)  # pre-match lock
+    )
+
+    if source == "live":
+        stmt = stmt.where(Prediction.prediction_source == "live")
+        stmt = stmt.where(Prediction.created_at >= LIVE_MEASUREMENT_START)
+    elif source == "backtest":
+        stmt = stmt.where(
+            or_(
+                Prediction.prediction_source != "live",
+                Prediction.prediction_source.is_(None),
+            )
+        )
+
+    if pick_tier:
+        tier_enum = _parse_public_pick_tier(pick_tier)
+        if tier_enum:
+            stmt = stmt.where(pick_tier_expression() == tier_enum.value)
+
+    if days:
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+        stmt = stmt.where(Match.scheduled_at >= cutoff)
+
+    rows = (await db.execute(stmt)).fetchall()
+
+    # Also pull OddsHistory (1x2) as a fallback odds source
+    match_ids = list({r.match_date for r in rows})  # dedup trick not needed — use real ids
+    # Re-query with match IDs for odds fallback
+    stmt2 = (
+        select(
+            Prediction.match_id,
+            OddsHistory.home_odds,
+            OddsHistory.draw_odds,
+            OddsHistory.away_odds,
+        )
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .join(Match, Match.id == Prediction.match_id)
+        .join(
+            OddsHistory,
+            (OddsHistory.match_id == Prediction.match_id)
+            & (OddsHistory.market.in_(["1x2", "1X2"])),
+        )
+        .where(Prediction.predicted_at < Match.scheduled_at)
+    )
+    if source == "live":
+        stmt2 = stmt2.where(Prediction.prediction_source == "live")
+        stmt2 = stmt2.where(Prediction.created_at >= LIVE_MEASUREMENT_START)
+    if pick_tier:
+        tier_enum2 = _parse_public_pick_tier(pick_tier)
+        if tier_enum2:
+            stmt2 = stmt2.where(pick_tier_expression() == tier_enum2.value)
+    if days:
+        cutoff2 = datetime.now(timezone.utc) - timedelta(days=days)
+        stmt2 = stmt2.where(Match.scheduled_at >= cutoff2)
+
+    try:
+        oh_rows = (await db.execute(stmt2)).fetchall()
+        oh_map: dict = {r.match_id: {"home": r.home_odds, "draw": r.draw_odds, "away": r.away_odds} for r in oh_rows}
+    except Exception:
+        oh_map = {}
+
+    # ── compute ROI ─────────────────────────────────────────────────────
+    pnls: list[float] = []
+    odds_used: list[float] = []
+    correct_count = 0
+
+    for i, row in enumerate(rows):
+        probs = {
+            "home": row.home_win_prob or 0.0,
+            "draw": row.draw_prob or 0.0,
+            "away": row.away_win_prob or 0.0,
+        }
+        pick = max(probs, key=lambda k: probs[k])
+
+        # Try snapshot first, then OddsHistory
+        odds: float | None = None
+        snap = row.closing_odds_snapshot or {}
+        book = snap.get("bookmaker_odds") if isinstance(snap, dict) else None
+        if isinstance(book, dict):
+            raw = book.get(pick)
+            if raw and float(raw) > 1.0:
+                odds = float(raw)
+
+        if odds is None and oh_map:
+            # match_id not in this result set — skip OH fallback (different query)
+            pass
+
+        if odds is None or odds <= 1.0:
+            continue
+
+        odds_used.append(odds)
+        if row.is_correct:
+            pnls.append(stake * (odds - 1.0))
+            correct_count += 1
+        else:
+            pnls.append(-stake)
+
+    n = len(pnls)
+    if n == 0:
+        return {
+            "stake_per_pick": stake,
+            "picks_with_odds": 0,
+            "correct_picks": 0,
+            "accuracy": 0.0,
+            "avg_odds": 0.0,
+            "total_staked": 0.0,
+            "total_return": 0.0,
+            "net_profit": 0.0,
+            "roi_pct": 0.0,
+        }
+
+    total_staked = round(n * stake, 2)
+    net_profit = round(sum(pnls), 2)
+    total_return = round(total_staked + net_profit, 2)
+    roi_pct = round((net_profit / total_staked) * 100.0, 1)
+    avg_odds = round(sum(odds_used) / len(odds_used), 2)
+
+    return {
+        "stake_per_pick": stake,
+        "picks_with_odds": n,
+        "correct_picks": correct_count,
+        "accuracy": round(correct_count / n, 4),
+        "avg_odds": avg_odds,
+        "total_staked": total_staked,
+        "total_return": total_return,
+        "net_profit": net_profit,
+        "roi_pct": roi_pct,
+    }
+
+
 @router.get(
     "/segments",
     response_model=List[SegmentPerformance],

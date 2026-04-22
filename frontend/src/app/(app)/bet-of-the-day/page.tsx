@@ -10,6 +10,7 @@ import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import { PickReasoningBlock } from "@/components/predictions/PickReasoningBlock";
 import { ValueBetPanel } from "@/components/bet-of-the-day/value-bet-panel";
+import { ROISimulator } from "@/components/noct/roi-simulator";
 import type { PickTierSlug, PredictionDriver } from "@/types/api";
 import {
   Trophy,
@@ -965,6 +966,12 @@ export default function BetOfTheDayPage() {
             emptyCopy="Eerste live BOTD verschijnt zodra er een afgelopen wedstrijd is binnen de live-meting."
             lowSampleThreshold={10}
             lowSampleCopy="Klein sample — de meting loopt nog. Eerlijke accuracy verschijnt zodra we minstens 10 beoordeelde picks hebben."
+          />
+
+          <ROISimulator
+            source="all"
+            title="ROI Simulator — Pick of the Day"
+            subtitle="Hoeveel had je verdiend als je elke BOTD had gevolgd?"
           />
 
           <div className="glass-card p-4 text-sm text-slate-400">
