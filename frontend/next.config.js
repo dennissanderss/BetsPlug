@@ -30,34 +30,28 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // Deleted 2026-04-18 via commit 7efbc3c. The authed /live
-      // scoreboard page was removed but 8 locale variants had been
-      // in routes.ts for 11+ days — Google had crawled them and
-      // still holds them in its index. Without these 301s every
-      // attempted crawl of the old URL returns a hard 404, which
-      // degrades the crawl quality signal for the whole domain.
-      // 301 → /dashboard (authed home; the Live Now widget there
-      // still works, which matches user intent).
+      // Deleted 2026-04-18 via commit 7efbc3c — authed /live scoreboard
+      // was removed. Locale-prefixed variants point straight at
+      // /dashboard (no /xx prefix) now that the i18n middleware
+      // 308-redirects every /xx/ prefix to canonical EN anyway. One-
+      // hop chain instead of two.
       { source: "/live", destination: "/dashboard", permanent: true },
-      { source: "/nl/live", destination: "/nl/dashboard", permanent: true },
-      { source: "/de/live", destination: "/de/dashboard", permanent: true },
-      { source: "/fr/en-direct", destination: "/fr/tableau-de-bord", permanent: true },
-      { source: "/es/en-vivo", destination: "/es/panel", permanent: true },
-      { source: "/it/live", destination: "/it/pannello", permanent: true },
-      { source: "/sw/moja-kwa-moja", destination: "/sw/dashibodi", permanent: true },
-      { source: "/id/langsung", destination: "/id/dasbor", permanent: true },
+      { source: "/nl/live", destination: "/dashboard", permanent: true },
+      { source: "/de/live", destination: "/dashboard", permanent: true },
+      { source: "/fr/en-direct", destination: "/dashboard", permanent: true },
+      { source: "/es/en-vivo", destination: "/dashboard", permanent: true },
+      { source: "/it/live", destination: "/dashboard", permanent: true },
+      { source: "/sw/moja-kwa-moja", destination: "/dashboard", permanent: true },
+      { source: "/id/langsung", destination: "/dashboard", permanent: true },
 
-      // Same story for /settings — removed 2026-04-18 via commit
-      // 188c307, redundant with /myaccount. Only 7 locales had a
-      // translated slug (es fell back to /settings via the shared EN
-      // map), so we redirect 7 localized forms + the EN default.
+      // Same story for /settings — redundant with /myaccount.
       { source: "/settings", destination: "/myaccount", permanent: true },
-      { source: "/nl/instellingen", destination: "/nl/mijn-account", permanent: true },
-      { source: "/de/einstellungen", destination: "/de/mein-konto", permanent: true },
-      { source: "/fr/parametres", destination: "/fr/mon-compte", permanent: true },
-      { source: "/it/impostazioni", destination: "/it/il-mio-account", permanent: true },
-      { source: "/sw/mipangilio", destination: "/sw/akaunti-yangu", permanent: true },
-      { source: "/id/pengaturan", destination: "/id/akun-saya", permanent: true },
+      { source: "/nl/instellingen", destination: "/myaccount", permanent: true },
+      { source: "/de/einstellungen", destination: "/myaccount", permanent: true },
+      { source: "/fr/parametres", destination: "/myaccount", permanent: true },
+      { source: "/it/impostazioni", destination: "/myaccount", permanent: true },
+      { source: "/sw/mipangilio", destination: "/myaccount", permanent: true },
+      { source: "/id/pengaturan", destination: "/myaccount", permanent: true },
     ];
   },
 };

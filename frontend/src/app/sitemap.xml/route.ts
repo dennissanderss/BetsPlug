@@ -1,26 +1,18 @@
 import { fetchAllSlugsForSitemap } from "@/lib/sanity-data";
-import { defaultLocale, locales, localeMeta } from "@/i18n/config";
-import { localizePath } from "@/i18n/routes";
 import { getAllComboSlugs } from "@/data/bet-type-league-combos";
 
 export const revalidate = 60;
 
 /**
- * Custom sitemap route — served at /sitemap.xml
+ * Custom sitemap route — served at /sitemap.xml (EN-only, 2026-04-22)
  * ────────────────────────────────────────────────────────────
- * Replaces the previous Next.js Metadata Route (sitemap.ts) so
- * we can prepend an <?xml-stylesheet?> processing instruction
- * pointing at /sitemap.xsl. The Metadata Route API returns
- * structured objects and offers no hook for the PI, so we
- * serialize the XML by hand here.
+ * Emits a single URL per public page — the English canonical —
+ * with no hreflang `xhtml:link` alternates. Middleware 308-redirects
+ * every /xx/ prefix to the canonical English path so there are no
+ * indexable locale variants to advertise.
  *
- * The URL set, hreflang alternates and priorities are kept
- * identical to the old sitemap.ts so the migration is a pure
- * presentation upgrade — Google sees exactly the same content.
- *
- * Private (authenticated) routes under the (app) group are
- * deliberately excluded, as are funnel pages like /checkout,
- * /login and /welcome that have no organic search value.
+ * Private routes under the (app) group are excluded, as are
+ * funnel pages (/checkout, /login, /welcome) without organic value.
  */
 
 const SITE_URL = "https://betsplug.com";
@@ -39,7 +31,6 @@ type SitemapEntry = {
   lastModified: Date;
   changeFrequency: ChangeFreq;
   priority: number;
-  alternates?: Record<string, string>;
 };
 
 /* ── Canonical public paths ─────────────────────────────────── */
@@ -59,16 +50,11 @@ const PUBLIC_PATHS: Array<{
   { canonical: "/track-record", priority: 0.7, changeFrequency: "weekly" },
   { canonical: "/engine", priority: 0.7, changeFrequency: "monthly" },
   { canonical: "/b2b", priority: 0.6, changeFrequency: "monthly" },
-  // `/about` is the authenticated in-app "about this product" page and lives
-  // under the (app) group. Only `/about-us` is the public SEO canonical here.
   { canonical: "/about-us", priority: 0.6, changeFrequency: "monthly" },
   { canonical: "/responsible-gambling", priority: 0.5, changeFrequency: "yearly" },
   { canonical: "/contact", priority: 0.5, changeFrequency: "yearly" },
 ];
 
-/* ── Localized, non-routed legal pages ──────────────────────── */
-// Legal pages live outside the routeTable because they don't have
-// localized slugs — the same URL serves every locale.
 const LEGAL_PATHS: { path: string; priority: number }[] = [
   { path: "/privacy", priority: 0.3 },
   { path: "/cookies", priority: 0.3 },
@@ -79,16 +65,6 @@ const LEGAL_PATHS: { path: string; priority: number }[] = [
 
 function absoluteUrl(path: string): string {
   return path === "/" ? SITE_URL : `${SITE_URL}${path}`;
-}
-
-function languageAlternatesFor(canonical: string): Record<string, string> {
-  const map: Record<string, string> = {};
-  for (const l of locales) {
-    const tag = localeMeta[l].hreflang;
-    map[tag] = absoluteUrl(localizePath(canonical, l));
-  }
-  map["x-default"] = absoluteUrl(localizePath(canonical, defaultLocale));
-  return map;
 }
 
 function escapeXml(value: string): string {
@@ -119,75 +95,49 @@ async function buildEntries(): Promise<SitemapEntry[]> {
 
   const pageEntries: SitemapEntry[] = PUBLIC_PATHS.map(
     ({ canonical, priority, changeFrequency }) => ({
-      url: absoluteUrl(localizePath(canonical, defaultLocale)),
+      url: absoluteUrl(canonical),
       lastModified: now,
       changeFrequency,
       priority,
-      alternates: languageAlternatesFor(canonical),
     }),
   );
 
-  const leagueHubEntries: SitemapEntry[] = leagueHubs.map((slug) => {
-    const canonical = `/match-predictions/${slug}`;
-    return {
-      url: absoluteUrl(localizePath(canonical, defaultLocale)),
-      lastModified: now,
-      changeFrequency: "daily" as ChangeFreq,
-      priority: 0.85,
-      alternates: languageAlternatesFor(canonical),
-    };
-  });
+  const leagueHubEntries: SitemapEntry[] = leagueHubs.map((slug) => ({
+    url: absoluteUrl(`/match-predictions/${slug}`),
+    lastModified: now,
+    changeFrequency: "daily" as ChangeFreq,
+    priority: 0.85,
+  }));
 
-  const betTypeHubEntries: SitemapEntry[] = betTypeHubs.map((slug) => {
-    const canonical = `/bet-types/${slug}`;
-    return {
-      url: absoluteUrl(localizePath(canonical, defaultLocale)),
-      lastModified: now,
-      changeFrequency: "monthly" as ChangeFreq,
-      priority: 0.75,
-      alternates: languageAlternatesFor(canonical),
-    };
-  });
+  const betTypeHubEntries: SitemapEntry[] = betTypeHubs.map((slug) => ({
+    url: absoluteUrl(`/bet-types/${slug}`),
+    lastModified: now,
+    changeFrequency: "monthly" as ChangeFreq,
+    priority: 0.75,
+  }));
 
-  // Bet-type × league combo pages — longtail SEO cluster.
-  // 4 markets × 9 leagues = 36 pages on this commit; expanded
-  // automatically whenever BET_TYPE_HUBS or COMBO_LEAGUE_SLUGS grows.
   const comboEntries: SitemapEntry[] = getAllComboSlugs().map(
-    ({ betTypeSlug, leagueSlug }) => {
-      const canonical = `/bet-types/${betTypeSlug}/${leagueSlug}`;
-      return {
-        url: absoluteUrl(localizePath(canonical, defaultLocale)),
-        lastModified: now,
-        changeFrequency: "weekly" as ChangeFreq,
-        priority: 0.7,
-        alternates: languageAlternatesFor(canonical),
-      };
-    },
+    ({ betTypeSlug, leagueSlug }) => ({
+      url: absoluteUrl(`/bet-types/${betTypeSlug}/${leagueSlug}`),
+      lastModified: now,
+      changeFrequency: "weekly" as ChangeFreq,
+      priority: 0.7,
+    }),
   );
 
-  const learnPillarEntries: SitemapEntry[] = learnPillars.map((slug) => {
-    const canonical = `/learn/${slug}`;
-    return {
-      url: absoluteUrl(localizePath(canonical, defaultLocale)),
-      lastModified: now,
-      changeFrequency: "monthly" as ChangeFreq,
-      priority: 0.75,
-      alternates: languageAlternatesFor(canonical),
-    };
-  });
+  const learnPillarEntries: SitemapEntry[] = learnPillars.map((slug) => ({
+    url: absoluteUrl(`/learn/${slug}`),
+    lastModified: now,
+    changeFrequency: "monthly" as ChangeFreq,
+    priority: 0.75,
+  }));
 
-  const articleEntries: SitemapEntry[] = articles.map((article) => {
-    const canonical = `/articles/${article.slug}`;
-    return {
-      url: absoluteUrl(canonical),
-      lastModified: article.publishedAt
-        ? new Date(article.publishedAt)
-        : now,
-      changeFrequency: "monthly" as ChangeFreq,
-      priority: 0.6,
-      alternates: languageAlternatesFor(canonical),
-    };
-  });
+  const articleEntries: SitemapEntry[] = articles.map((article) => ({
+    url: absoluteUrl(`/articles/${article.slug}`),
+    lastModified: article.publishedAt ? new Date(article.publishedAt) : now,
+    changeFrequency: "monthly" as ChangeFreq,
+    priority: 0.6,
+  }));
 
   const legalEntries: SitemapEntry[] = LEGAL_PATHS.map(({ path, priority }) => ({
     url: absoluteUrl(path),
@@ -209,31 +159,19 @@ async function buildEntries(): Promise<SitemapEntry[]> {
 
 function serializeXml(entries: SitemapEntry[]): string {
   const urlBlocks = entries
-    .map((e) => {
-      const altLines = e.alternates
-        ? Object.entries(e.alternates)
-            .map(
-              ([lang, href]) =>
-                `    <xhtml:link rel="alternate" hreflang="${escapeXml(
-                  lang,
-                )}" href="${escapeXml(href)}" />`,
-            )
-            .join("\n")
-        : "";
-      return `  <url>
+    .map(
+      (e) => `  <url>
     <loc>${escapeXml(e.url)}</loc>
     <lastmod>${e.lastModified.toISOString()}</lastmod>
     <changefreq>${e.changeFrequency}</changefreq>
-    <priority>${e.priority.toFixed(1)}</priority>${
-        altLines ? "\n" + altLines : ""
-      }
-  </url>`;
-    })
+    <priority>${e.priority.toFixed(1)}</priority>
+  </url>`,
+    )
     .join("\n");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urlBlocks}
 </urlset>
 `;

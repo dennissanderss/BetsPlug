@@ -1,25 +1,13 @@
 /**
- * SEO helper utilities
+ * SEO helper utilities (EN-only — 2026-04-22 i18n rollback)
  * ────────────────────────────────────────────────────────────
- * Shared helpers for building locale-aware canonical URLs,
- * hreflang alternates and translated page metadata across
- * every page in the app.
- *
- * The middleware always sets the NEXT_LOCALE cookie before the
- * page renders, so reading the cookie is the reliable way to
- * determine the active locale during SSR / generateMetadata().
+ * Every helper now assumes the default (English) locale. i18n SEO
+ * is rolled back at the middleware + sitemap layer; function
+ * signatures are preserved so per-page metadata blocks keep
+ * compiling without a page-by-page edit sweep.
  */
 
-import { cookies, headers } from "next/headers";
-import {
-  LOCALE_COOKIE,
-  isLocale,
-  defaultLocale,
-  locales,
-  localeMeta,
-  type Locale,
-} from "@/i18n/config";
-import { localizePath } from "@/i18n/routes";
+import { defaultLocale, type Locale } from "@/i18n/config";
 import { translate } from "@/i18n/messages";
 import { formatMsg } from "@/i18n/format";
 import { POTD_STATS } from "@/data/potd-stats";
@@ -29,95 +17,56 @@ const SITE_URL = "https://betsplug.com";
 /* ── Locale detection ───────────────────────────────────────── */
 
 /**
- * Resolve the active locale for the current server request.
+ * Always returns the default (English) locale.
  *
- * Checks sources in order of trust:
- *   1. `x-locale` request header — set by middleware on every rewrite
- *      so generateMetadata() sees the correct locale on the very
- *      first request (fixes Googlebot seeing /de with EN metadata).
- *   2. NEXT_LOCALE cookie — for requests that didn't go through the
- *      rewrite path (e.g. already-canonical paths with repeat visits).
- *   3. defaultLocale fallback.
+ * i18n SEO was rolled back on 2026-04-22 after brand-visibility
+ * collapsed in Google. Server rendering is now English-only and
+ * the middleware 308-redirects every /xx/ prefix to the canonical
+ * EN path. Keeping this function returning `Locale` (not a string
+ * literal) preserves type compatibility with every call site so
+ * the rollback stays a one-file surgical edit here.
  */
 export function getServerLocale(): Locale {
-  try {
-    const h = headers();
-    const hdrLocale = h.get("x-locale");
-    if (isLocale(hdrLocale)) return hdrLocale;
-  } catch {
-    // headers() throws outside a request scope — fall through.
-  }
-  const cookieStore = cookies();
-  const raw = cookieStore.get(LOCALE_COOKIE)?.value;
-  return isLocale(raw) ? raw : defaultLocale;
+  return defaultLocale;
 }
 
 /* ── Canonical URL ──────────────────────────────────────────── */
 
 /**
- * Build the full canonical URL for a page, localised for the
- * current user's locale.
+ * Build the absolute canonical URL for a page.
+ *
+ * EN-only: every page's canonical is the English URL with no locale
+ * prefix. Non-EN URLs are 308-redirected by the middleware.
  *
  * @param canonicalPath  The canonical (English) path, e.g. "/articles"
- * @returns              Absolute URL, e.g. "https://betsplug.com/nl/artikelen"
+ * @returns              Absolute URL, e.g. "https://betsplug.com/articles"
  */
 export function getCanonicalUrl(canonicalPath: string): string {
-  const locale = getServerLocale();
-  const localised = localizePath(canonicalPath, locale);
-  return `${SITE_URL}${localised === "/" ? "" : localised}`;
+  return `${SITE_URL}${canonicalPath === "/" ? "" : canonicalPath}`;
 }
 
-/* ── hreflang alternates ────────────────────────────────────── */
+/* ── hreflang alternates (disabled) ─────────────────────────── */
 
 /**
- * Build the alternates.languages map for a given canonical path.
+ * Build Next.js `alternates` for a page.
  *
- * Emits one entry per locale (keyed by its BCP-47 hreflang tag)
- * plus x-default pointing to the English URL. `canonical` is an
- * ABSOLUTE URL, LOCALE-AWARE (prefixed with /nl, /de, … when the
- * active request locale isn't English).
+ * With i18n rolled back, every page has a single canonical (the EN
+ * URL) and no hreflang alternates. The `languages` field is kept on
+ * the return type so existing call sites that spread
+ * `languages: alternates.languages` keep compiling — an empty
+ * object tells Next.js to emit no `<link rel="alternate">` tags.
  *
- * ────────────────────────────────────────────────────────────
- * ⚠️  ALWAYS USE THIS FOR `alternates.canonical`. Never do:
- *
- *       alternates: { canonical: `/some/${slug}` }    ❌
- *
- *     That renders as `https://betsplug.com/some/${slug}` on every
- *     locale, making /nl /de /fr all point to the English URL →
- *     Google demotes the localised pages as duplicates.
- *
- *     Instead:
- *
- *       const alt = getLocalizedAlternates(`/some/${slug}`);
- *       alternates: {
- *         canonical: alt.canonical,
- *         languages: alt.languages,
- *       }                                              ✓
- *
- * ────────────────────────────────────────────────────────────
- *
- * @param canonicalPath the ENGLISH canonical path, e.g. "/articles"
- *                      or "/match-predictions/premier-league". Not
- *                      the localised slug.
+ * @param canonicalPath the EN canonical path, e.g. "/articles"
+ *                      or "/match-predictions/premier-league".
  */
 export function getLocalizedAlternates(canonicalPath: string): {
   canonical: string;
   languages: Record<string, string>;
 } {
-  const locale = getServerLocale();
-  const localised = localizePath(canonicalPath, locale);
-  const canonical = `${SITE_URL}${localised === "/" ? "" : localised}`;
-
-  const languages: Record<string, string> = {};
-  for (const l of locales) {
-    const tag = localeMeta[l].hreflang;
-    const path = localizePath(canonicalPath, l);
-    languages[tag] = `${SITE_URL}${path === "/" ? "" : path}`;
-  }
-  const defaultPath = localizePath(canonicalPath, defaultLocale);
-  languages["x-default"] = `${SITE_URL}${defaultPath === "/" ? "" : defaultPath}`;
-
-  return { canonical, languages };
+  return {
+    canonical: getCanonicalUrl(canonicalPath),
+    languages: {},
+  };
 }
 
 /* ── Locale-aware FAQ builder ──────────────────────────────── */
@@ -161,21 +110,19 @@ export function getLocalizedFaq(keys: FaqKeySet) {
 /* ── Locale-aware breadcrumb builder ───────────────────────── */
 
 /**
- * Build locale-aware breadcrumbs with translated names and
- * localized hrefs.
+ * Build EN breadcrumbs with translated names and absolute hrefs.
  *
  * @param items Array of { labelKey, canonicalPath } pairs
- * @returns BreadcrumbItem[] with translated name + localized href
+ * @returns BreadcrumbItem[] with EN name + absolute EN href
  */
 export function getLocalizedBreadcrumbs(
   items: { labelKey: string; canonicalPath: string }[]
 ) {
-  const locale = getServerLocale();
   return items.map(({ labelKey, canonicalPath }) => ({
-    name: translate(locale, labelKey as any),
+    name: translate(defaultLocale, labelKey as any),
     href:
       canonicalPath === "/"
         ? `${SITE_URL}/`
-        : `${SITE_URL}${localizePath(canonicalPath, locale)}`,
+        : `${SITE_URL}${canonicalPath}`,
   }));
 }

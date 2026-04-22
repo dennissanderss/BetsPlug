@@ -5,7 +5,8 @@ import Script from "next/script";
 import "./globals.css";
 import { AppProviders } from "@/components/layout/providers";
 import { LocaleProvider } from "@/i18n/locale-provider";
-import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { getLocalizedAlternates } from "@/lib/seo-helpers";
+import { defaultLocale } from "@/i18n/config";
 import { PAGE_META } from "@/data/page-meta";
 
 // Exo 2 — geometric sans with sport/tech feel, loaded via next/font/google
@@ -49,13 +50,12 @@ const OG_IMAGE = {
   type: "image/jpeg",
 } as const;
 
-/* ── Locale-aware metadata ────────────────────────────────────
-   Reads the NEXT_LOCALE cookie (set by the middleware before
-   every request) and builds canonical + hreflang + translated
-   title/description accordingly. */
+/* ── EN-only metadata (2026-04-22 i18n rollback) ──────────────
+   Site serves English exclusively; the middleware 308-redirects
+   every /xx/ prefix to the canonical EN path. Canonical always
+   resolves to the EN URL and no hreflang alternates are emitted. */
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = getServerLocale();
-  const meta = PAGE_META["/"]?.[locale] ?? PAGE_META["/"].en;
+  const meta = PAGE_META["/"].en;
   const alternates = getLocalizedAlternates("/");
 
   return {
@@ -64,7 +64,6 @@ export async function generateMetadata(): Promise<Metadata> {
     description: meta.description,
     alternates: {
       canonical: alternates.canonical,
-      languages: alternates.languages,
     },
     icons: {
       // Browser tab favicon — served at the right size per viewport
@@ -103,10 +102,11 @@ export default function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  // Resolve via the shared helper so <html lang> matches the locale
-  // that generateMetadata() used. Reads x-locale header first (set by
-  // middleware on every rewrite) then falls back to the cookie.
-  const locale = getServerLocale();
+  // Site serves English exclusively post-2026-04-22 i18n rollback.
+  // `<html lang>` is hardcoded to the default locale (EN); client
+  // code that still consumes the LocaleProvider (dashboards, etc.)
+  // keeps working via the same literal.
+  const locale = defaultLocale;
 
   return (
     <html

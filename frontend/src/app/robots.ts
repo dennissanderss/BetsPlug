@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next";
 
 /**
- * Dynamic robots.txt — served at /robots.txt
+ * Dynamic robots.txt — served at /robots.txt (EN-only, 2026-04-22)
  * ────────────────────────────────────────────────────────────
- * Allows all crawlers on public pages. Blocks authenticated
- * app routes, the API surface and funnel pages that should not
- * be indexed. Points crawlers to the dynamic sitemap.
+ * Allows crawlers on the English canonical only. Every /xx/ locale
+ * prefix is disallowed as a belt-and-suspenders to the 308 redirect
+ * in middleware — some crawlers (notably AI bots that cache
+ * aggressively) still re-fetch old hreflang targets for weeks after
+ * they disappear.
  */
 
 const SITE_URL = "https://betsplug.com";
@@ -17,84 +19,41 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         disallow: [
+          // Locale-prefixed URLs — always 308-redirect to canonical EN,
+          // but tell crawlers not to even attempt them.
+          "/nl/",
+          "/de/",
+          "/fr/",
+          "/es/",
+          "/it/",
+          "/sw/",
+          "/id/",
+
           // API & admin
           "/api/",
           "/admin/",
-          "/*/admin/",
 
           // Sanity Studio — CMS editing interface, no SEO value
           "/studio",
           "/studio/",
-          "/*/studio",
-          "/*/studio/",
 
           // Authenticated app shell
           "/dashboard/",
-          "/*/dashboard/",
 
           // Account / subscription / favorites (authenticated)
           "/myaccount",
-          "/*/mijn-account",
-          "/*/mein-konto",
-          "/*/mon-compte",
-          "/*/mi-cuenta",
-          "/*/il-mio-account",
-          "/*/akaunti-yangu",
-          "/*/akun-saya",
           "/subscription",
-          "/*/abonnement", // nl/de/fr share this slug
-          "/*/suscripcion",
-          "/*/abbonamento",
-          "/*/usajili",
-          "/*/langganan",
           "/favorites",
-          "/*/favorieten",
-          "/*/favoriten",
-          "/*/favoris",
-          "/*/favoritos",
-          "/*/preferiti",
-          "/*/vipendwa",
-          "/*/favorit",
 
           // Authenticated in-app routes that duplicate public canonicals.
           // `$` pins an exact match so siblings like `/about-us` remain
           // crawlable (disallow `/about` would otherwise swallow them).
-          // "/about"   is the in-app product page; public canonical is "/about-us"
           "/about$",
-          "/*/over-ons$",
-          "/*/ueber-uns$",
-          "/*/a-propos$",
-          "/*/sobre-nosotros$",
-          "/*/chi-siamo$",
-          "/*/kuhusu$",
-          "/*/tentang$",
-          // "/predictions"  is the auth'd dashboard; public canonical is "/match-predictions"
           "/predictions/",
-          "/*/voorspellingen/",
-          "/*/prognosen/",
-          "/*/predictions/", // fr reuses en slug
-          "/*/predicciones/",
-          "/*/pronostici/",
-          "/*/utabiri/",
-          "/*/prediksi/",
-          // "/trackrecord"  is the auth'd dashboard; public canonical is "/track-record"
           "/trackrecord",
-          "/*/prestaties",
-          "/*/bilanz",
-          "/*/historique",
-          "/*/historial",
-          "/*/storico",
-          "/*/rekodi",
-          "/*/riwayat",
 
           // Funnel / conversion pages (no organic search value)
           "/checkout",
-          "/*/afrekenen",
-          "/*/kasse",
-          "/*/paiement",
-          "/*/pago",
-          "/*/malipo",
-          "/*/pembayaran",
           "/login",
           "/welcome",
 
