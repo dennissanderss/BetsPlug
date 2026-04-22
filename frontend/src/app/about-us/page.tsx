@@ -7,7 +7,7 @@ import {
   getLocalizedBreadcrumbs,
 } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
-import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { FaqSection } from "@/components/seo/faq-section";
 import { translate } from "@/i18n/messages";
 import { fetchAboutPage, getLocaleValue } from "@/lib/sanity-data";
@@ -77,6 +77,7 @@ export default async function AboutPage() {
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
+      <FaqJsonLd items={faqItems} />
       <AboutContent
         sanityAbout={sanityAbout}
         faqSlot={

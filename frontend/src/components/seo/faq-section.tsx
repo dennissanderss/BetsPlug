@@ -1,11 +1,17 @@
 "use client";
 
 /**
- * FaqSection — NOCTURNE styled FAQ accordion.
+ * FaqSection — NOCTURNE styled FAQ accordion (pure visual).
  * ────────────────────────────────────────────────────────────
- * Renders an accessible, collapsible FAQ block with Schema.org
- * JSON-LD for Google rich results. Used site-wide via `faqSlot`
- * on about, track-record, match-predictions, how-it-works etc.
+ * Renders an accessible, collapsible FAQ block. Used site-wide
+ * via `faqSlot` on about, track-record, match-predictions,
+ * how-it-works etc.
+ *
+ * ⚠️ JSON-LD is the caller's responsibility. Emit <FaqJsonLd /> at
+ * the page level with the same items so Google sees exactly one
+ * FAQPage block per URL — the duplicate FAQPage inside this
+ * component was caught by GSC on 2026-04-22 as "Dubbel veld
+ * 'FAQPage'" and demoted the page from rich results.
  *
  * Design matches the homepage SeoSection FAQ: card-neon wrapper,
  * glass-panel-lifted items that turn card-neon-green when open,
@@ -15,7 +21,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ChevronDown, Sparkles } from "lucide-react";
-import { FaqJsonLd, type FaqItem } from "./json-ld";
+import { type FaqItem } from "./json-ld";
 import { HexBadge } from "@/components/noct/hex-badge";
 
 interface FaqSectionProps {
@@ -35,8 +41,6 @@ export function FaqSection({
 
   return (
     <section className={`relative py-16 md:py-20 ${className}`}>
-      <FaqJsonLd items={items} />
-
       {/* Ambient glow */}
       <div
         aria-hidden
