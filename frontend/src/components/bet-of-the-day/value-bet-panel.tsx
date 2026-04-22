@@ -10,6 +10,11 @@ import {
   Clock,
   BarChart3,
   ArrowUpRight,
+  ChevronDown,
+  ChevronUp,
+  CheckCircle2,
+  XCircle,
+  Info,
 } from "lucide-react";
 
 import { api } from "@/lib/api";
@@ -232,6 +237,180 @@ function StatsCard({
   );
 }
 
+// ─── Sample Funnel Explainer ────────────────────────────────────────────────
+
+function SampleFunnelBox({ proof }: { proof: BacktestProof }) {
+  const f = proof.funnel;
+  const dropOdds = f.live_predictions_evaluated - f.live_evaluated_with_odds;
+  return (
+    <div className="rounded-lg border border-blue-500/20 bg-blue-500/[0.04] p-4">
+      <div className="flex items-start gap-2 mb-2">
+        <Info className="h-4 w-4 text-blue-400 shrink-0 mt-0.5" />
+        <div className="flex-1">
+          <p className="text-xs font-semibold text-blue-300">
+            Waarom maar n={f.live_evaluated_with_odds}?
+          </p>
+          <p className="mt-1 text-[11px] text-slate-400 leading-relaxed">
+            Onze odds-pijplijn is live sinds{" "}
+            <span className="text-slate-300">{f.odds_pipeline_start}</span>.
+            Elke predictie daarvóór heeft geen vastgelegde bookmaker-odds →
+            kan niet in een ROI-backtest. Om leakage te voorkomen gebruiken
+            we uitsluitend live-gelockte predictions (geen retroactieve
+            backtest-picks).
+          </p>
+        </div>
+      </div>
+      <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4 text-center">
+        <div className="rounded bg-white/[0.03] p-2">
+          <p className="text-[9px] uppercase tracking-widest text-slate-500">
+            live preds
+          </p>
+          <p className="mt-0.5 text-lg font-bold tabular-nums text-slate-200">
+            {f.total_live_predictions}
+          </p>
+        </div>
+        <div className="rounded bg-white/[0.03] p-2">
+          <p className="text-[9px] uppercase tracking-widest text-slate-500">
+            evaluated
+          </p>
+          <p className="mt-0.5 text-lg font-bold tabular-nums text-slate-200">
+            {f.live_predictions_evaluated}
+          </p>
+        </div>
+        <div className="rounded bg-white/[0.03] p-2">
+          <p className="text-[9px] uppercase tracking-widest text-slate-500">
+            met odds
+          </p>
+          <p className="mt-0.5 text-lg font-bold tabular-nums text-slate-200">
+            {f.live_predictions_with_odds_snapshot}
+          </p>
+        </div>
+        <div className="rounded bg-emerald-500/10 border border-emerald-500/20 p-2">
+          <p className="text-[9px] uppercase tracking-widest text-emerald-500/80">
+            ROI-pool
+          </p>
+          <p className="mt-0.5 text-lg font-bold tabular-nums text-emerald-400">
+            {f.live_evaluated_with_odds}
+          </p>
+        </div>
+      </div>
+      {proof.accuracy_only_slice.n > 0 && (
+        <p className="mt-3 text-[11px] text-slate-400">
+          <span className="text-slate-300 font-semibold">Extra bewijs:</span>{" "}
+          accuracy-only test op alle{" "}
+          <span className="text-slate-200 tabular-nums">
+            {proof.accuracy_only_slice.n}
+          </span>{" "}
+          live+evaluated predictions (zonder odds-filter) →{" "}
+          <span className="text-emerald-400 font-semibold tabular-nums">
+            {(proof.accuracy_only_slice.accuracy * 100).toFixed(1)}%
+          </span>{" "}
+          accuracy, CI{" "}
+          {(proof.accuracy_only_slice.wilson_ci_lower * 100).toFixed(0)}%–
+          {(proof.accuracy_only_slice.wilson_ci_upper * 100).toFixed(0)}%.
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ─── Matches Table ──────────────────────────────────────────────────────────
+
+function BacktestMatchesTable({ matches }: { matches: BacktestProof["matches"] }) {
+  const [expanded, setExpanded] = React.useState(false);
+  const visible = expanded ? matches : matches.slice(0, 5);
+  const pickLabel = { home: "1", draw: "X", away: "2" } as const;
+
+  if (matches.length === 0) return null;
+
+  return (
+    <div className="mt-4 rounded-lg border border-white/[0.06] bg-white/[0.02] overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
+        <div>
+          <p className="text-xs font-semibold text-slate-200">
+            Gebruikte wedstrijden
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">
+            Alle {matches.length} picks in de @3%-edge backtest
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setExpanded((e) => !e)}
+          className="flex items-center gap-1 text-[11px] font-semibold text-slate-400 hover:text-slate-200"
+        >
+          {expanded ? (
+            <>
+              Toon minder <ChevronUp className="h-3 w-3" />
+            </>
+          ) : (
+            <>
+              Toon alle {matches.length} <ChevronDown className="h-3 w-3" />
+            </>
+          )}
+        </button>
+      </div>
+
+      <div className="divide-y divide-white/[0.04]">
+        <div className="grid grid-cols-12 gap-2 px-4 py-2 text-[9px] uppercase tracking-widest text-slate-600 bg-white/[0.02]">
+          <span className="col-span-2">Datum</span>
+          <span className="col-span-4">Wedstrijd</span>
+          <span className="col-span-2">Liga</span>
+          <span className="col-span-1 text-center">Pick</span>
+          <span className="col-span-1 text-right">Odds</span>
+          <span className="col-span-1 text-right">Edge</span>
+          <span className="col-span-1 text-right">P/L</span>
+        </div>
+        {visible.map((m, i) => (
+          <div
+            key={i}
+            className="grid grid-cols-12 items-center gap-2 px-4 py-2 text-[11px] hover:bg-white/[0.02]"
+            style={{
+              borderLeft: `3px solid ${m.is_correct ? "#10b981" : "#ef4444"}`,
+            }}
+          >
+            <span className="col-span-2 tabular-nums text-slate-500">
+              {m.scheduled_at
+                ? new Date(m.scheduled_at).toLocaleDateString("nl-NL", {
+                    day: "2-digit",
+                    month: "short",
+                  })
+                : "—"}
+            </span>
+            <span className="col-span-4 truncate text-slate-300">
+              {m.home_team} <span className="text-slate-600">vs</span>{" "}
+              {m.away_team}
+            </span>
+            <span className="col-span-2 truncate text-slate-500">{m.league}</span>
+            <span className="col-span-1 text-center font-bold tabular-nums text-slate-200">
+              {pickLabel[m.pick]}
+            </span>
+            <span className="col-span-1 text-right tabular-nums text-slate-300">
+              {m.best_odds.toFixed(2)}
+            </span>
+            <span className="col-span-1 text-right tabular-nums text-emerald-400">
+              +{(m.edge * 100).toFixed(1)}%
+            </span>
+            <span
+              className={`col-span-1 text-right font-semibold tabular-nums flex items-center justify-end gap-1 ${
+                m.is_correct ? "text-emerald-400" : "text-red-400"
+              }`}
+            >
+              {m.is_correct ? (
+                <CheckCircle2 className="h-3 w-3" />
+              ) : (
+                <XCircle className="h-3 w-3" />
+              )}
+              {m.profit_loss_units >= 0 ? "+" : ""}
+              {m.profit_loss_units.toFixed(1)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Backtest Proof Card ────────────────────────────────────────────────────
 
 function BacktestProofCard({ proof, isLoading }: {
@@ -360,6 +539,16 @@ function BacktestProofCard({ proof, isLoading }: {
           </p>
         </div>
       )}
+
+      {/* Sample funnel + why-n explainer */}
+      <div className="relative mt-4">
+        <SampleFunnelBox proof={proof} />
+      </div>
+
+      {/* Individual matches table — full transparency */}
+      <div className="relative">
+        <BacktestMatchesTable matches={proof.matches} />
+      </div>
 
       <p className="relative mt-3 text-[11px] text-slate-500 italic">
         {proof.disclaimer}

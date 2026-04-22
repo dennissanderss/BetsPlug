@@ -1154,11 +1154,36 @@ export interface BacktestProofSlice {
   sharpe_ratio: number | null;
 }
 
+export interface BacktestSampleFunnel {
+  total_live_predictions: number;
+  live_predictions_evaluated: number;
+  live_predictions_with_odds_snapshot: number;
+  live_evaluated_with_odds: number;
+  odds_pipeline_start: string;
+}
+
+export interface BacktestProofMatch {
+  scheduled_at?: string;
+  league?: string;
+  home_team?: string;
+  away_team?: string;
+  pick: "home" | "draw" | "away";
+  best_odds: number;
+  edge: number;
+  tier?: "free" | "silver" | "gold" | "platinum";
+  is_correct: boolean;
+  actual_outcome?: string;
+  profit_loss_units: number;
+}
+
 export interface BacktestProof {
   methodology: string;
   sample_window_start?: string;
   sample_window_end?: string;
   total_live_evaluated_with_odds: number;
+  funnel: BacktestSampleFunnel;
   slices: BacktestProofSlice[];
+  accuracy_only_slice: BacktestProofSlice;
+  matches: BacktestProofMatch[];
   disclaimer: string;
 }

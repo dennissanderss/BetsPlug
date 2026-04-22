@@ -13,7 +13,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import aliased, joinedload
 
 from app.api.deps import get_current_tier, get_db
 from app.core.tier_system import PickTier, TIER_METADATA
@@ -465,21 +465,56 @@ class BacktestProofSlice(BaseModel):
     sharpe_ratio: Optional[float] = None
 
 
+class BacktestProofMatch(BaseModel):
+    """One individual pick used in the backtest aggregation."""
+    scheduled_at: Optional[str] = None
+    league: Optional[str] = None
+    home_team: Optional[str] = None
+    away_team: Optional[str] = None
+    pick: str
+    best_odds: float
+    edge: float
+    tier: Optional[str] = None
+    is_correct: bool
+    actual_outcome: Optional[str] = None
+    profit_loss_units: float
+
+
+class BacktestSampleFunnel(BaseModel):
+    """Explains why the sample is the size it is.
+
+    Lets the UI show a "waarom n=X" explainer box instead of users
+    having to guess whether the filter is too strict or the data is
+    thin.
+    """
+    total_live_predictions: int
+    live_predictions_evaluated: int
+    live_predictions_with_odds_snapshot: int
+    live_evaluated_with_odds: int
+    odds_pipeline_start: str  # ISO date
+
+
 class BacktestProofResponse(BaseModel):
     """Leakage-free backtest over the live-prediction pool.
 
-    Scope: ``prediction_source='live'`` predictions with populated
-    ``closing_odds_snapshot`` that have been evaluated. No ``backtest``
-    source predictions in this calculation — those would pull in the
-    known ``team_seeds.py`` leakage (see CLAUDE.md). The cutoff
-    ``V81_DEPLOYMENT_CUTOFF`` is also respected via the upstream
-    pipeline.
+    Scope: ``prediction_source='live'`` predictions. No ``backtest``
+    source in the calculation — those would pull in the known
+    ``team_seeds.py`` post-hoc-Elo leakage (see CLAUDE.md).
+
+    Two sample sizes:
+      1. ROI backtest: live + populated closing_odds_snapshot + evaluated
+         (smaller but financial-grade — produces ROI/Sharpe)
+      2. Accuracy-only: live + evaluated (larger, no odds filter —
+         produces accuracy + Wilson CI, no ROI)
     """
     methodology: str
     sample_window_start: Optional[str] = None
     sample_window_end: Optional[str] = None
     total_live_evaluated_with_odds: int
+    funnel: BacktestSampleFunnel
     slices: list[BacktestProofSlice]
+    accuracy_only_slice: BacktestProofSlice
+    matches: list[BacktestProofMatch]
     disclaimer: str
 
 
@@ -539,16 +574,31 @@ async def get_backtest_proof(
     The frontend surfaces this on the Value Bet tab as "Methode-bewijs"
     alongside the live-measurement card.
     """
-    from sqlalchemy.orm import selectinload
+    from sqlalchemy.orm import selectinload, joinedload
+    from app.models.team import Team
+    from app.models.league import League
+
+    HomeTeam = aliased(Team)
+    AwayTeam = aliased(Team)
+
     stmt = (
-        select(Prediction, PredictionEvaluation, Match)
+        select(
+            Prediction,
+            PredictionEvaluation,
+            Match,
+            HomeTeam.name.label("home_team_name"),
+            AwayTeam.name.label("away_team_name"),
+            League.name.label("league_name"),
+        )
         .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
         .join(Match, Match.id == Prediction.match_id)
+        .join(HomeTeam, HomeTeam.id == Match.home_team_id)
+        .join(AwayTeam, AwayTeam.id == Match.away_team_id)
+        .join(League, League.id == Match.league_id)
         .where(
             Prediction.prediction_source == "live",
             Prediction.closing_odds_snapshot.is_not(None),
         )
-        .options(selectinload(Prediction.match))
     )
     rows = (await db.execute(stmt)).unique().all()
 
@@ -556,7 +606,7 @@ async def get_backtest_proof(
     records: list[dict] = []
     window_start: Optional[str] = None
     window_end: Optional[str] = None
-    for pred, evaluation, match in rows:
+    for pred, evaluation, match, home_name, away_name, league_name in rows:
         snap = pred.closing_odds_snapshot or {}
         if not isinstance(snap, dict) or not snap.get("bookmaker_odds"):
             continue
@@ -593,6 +643,11 @@ async def get_backtest_proof(
             "edge": edge, "odds": odds, "correct": correct,
             "pnl": pnl, "tier": tier, "confidence": pred.confidence,
             "scheduled_at": match.scheduled_at,
+            "pick": pick,
+            "home_team": home_name,
+            "away_team": away_name,
+            "league": league_name,
+            "actual_outcome": actual,
         })
         if match.scheduled_at:
             iso = match.scheduled_at.isoformat()
@@ -619,6 +674,90 @@ async def get_backtest_proof(
             [r for r in core if r["tier"] == tname],
         ))
 
+    # ── Sample-size funnel: show user WHY n is what it is ──────────
+    funnel_q_total = (
+        await db.execute(
+            select(func.count(Prediction.id))
+            .where(Prediction.prediction_source == "live")
+        )
+    ).scalar_one()
+    funnel_q_eval = (
+        await db.execute(
+            select(func.count(Prediction.id))
+            .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+            .where(Prediction.prediction_source == "live")
+        )
+    ).scalar_one()
+    funnel_q_with_odds = (
+        await db.execute(
+            select(func.count(Prediction.id))
+            .where(
+                Prediction.prediction_source == "live",
+                Prediction.closing_odds_snapshot.is_not(None),
+            )
+        )
+    ).scalar_one()
+    funnel = BacktestSampleFunnel(
+        total_live_predictions=int(funnel_q_total),
+        live_predictions_evaluated=int(funnel_q_eval),
+        live_predictions_with_odds_snapshot=int(funnel_q_with_odds),
+        live_evaluated_with_odds=len(records),
+        odds_pipeline_start="2026-04-15",
+    )
+
+    # ── Accuracy-only pool (larger sample, no odds required) ───────
+    # Pure "did the max-prob pick hit" on every evaluated live pred.
+    acc_stmt = (
+        select(
+            Prediction.home_win_prob,
+            Prediction.draw_prob,
+            Prediction.away_win_prob,
+            PredictionEvaluation.actual_outcome,
+        )
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .where(Prediction.prediction_source == "live")
+    )
+    acc_rows = (await db.execute(acc_stmt)).all()
+    acc_records: list[dict] = []
+    for hp, dp, ap, actual in acc_rows:
+        probs = {"home": hp, "draw": dp or 0.0, "away": ap}
+        pick = max(probs, key=probs.get)  # type: ignore[arg-type]
+        correct = (actual or "").lower() == pick
+        # Flat unit stake at implied odds (1/prob) for ROI approximation
+        implied_odds = 1.0 / max(probs[pick], 1e-6)
+        pnl = (implied_odds - 1.0) if correct else -1.0
+        acc_records.append({
+            "edge": 0.0, "odds": implied_odds,
+            "correct": correct, "pnl": pnl,
+            "tier": None,
+        })
+    accuracy_only = _slice(
+        "accuracy-only (all live evaluated, no odds filter)", acc_records
+    )
+
+    # ── Match-level breakdown (only the picks in the core 3% slice) ─
+    matches_out: list[BacktestProofMatch] = []
+    core_sorted = sorted(
+        core,
+        key=lambda r: r.get("scheduled_at") or datetime.min.replace(tzinfo=timezone.utc),
+        reverse=True,
+    )
+    for r in core_sorted:
+        sched_at = r.get("scheduled_at")
+        matches_out.append(BacktestProofMatch(
+            scheduled_at=sched_at.isoformat() if sched_at else None,
+            league=r.get("league"),
+            home_team=r.get("home_team"),
+            away_team=r.get("away_team"),
+            pick=r["pick"],
+            best_odds=round(r["odds"], 2),
+            edge=round(r["edge"], 4),
+            tier=r.get("tier"),
+            is_correct=r["correct"],
+            actual_outcome=r.get("actual_outcome"),
+            profit_loss_units=round(r["pnl"], 2),
+        ))
+
     return BacktestProofResponse(
         methodology=(
             "Leakage-free: restricted to prediction_source='live' with "
@@ -630,7 +769,10 @@ async def get_backtest_proof(
         sample_window_start=window_start,
         sample_window_end=window_end,
         total_live_evaluated_with_odds=len(records),
+        funnel=funnel,
         slices=slices,
+        accuracy_only_slice=accuracy_only,
+        matches=matches_out,
         disclaimer=(
             "Past performance is not indicative of future results. Sample "
             "sizes below 30 are statistically inconclusive — Wilson 95% CI "
