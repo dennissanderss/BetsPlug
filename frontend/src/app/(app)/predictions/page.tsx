@@ -20,6 +20,7 @@ import {
   ChevronsUpDown,
   Check,
   Search,
+  ShieldCheck,
 } from "lucide-react";
 import { api } from "@/lib/api";
 import type { Fixture, FixturePrediction } from "@/types/api";
@@ -1594,21 +1595,63 @@ export default function PredictionsPage() {
           </p>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
-          <Sparkles className="h-8 w-8 text-slate-600" />
-          <p className="text-base font-medium text-slate-400">{t("pred.noMatchingPredictions")}</p>
-          <p className="text-sm text-slate-600">
-            {t("pred.noMatchingPredictionsDesc")}
-          </p>
-          <p className="text-xs text-slate-500">
-            {t("pred.predictionsAvailable", { count: fixturesWithPrediction.length })}
-          </p>
-          <button
-            onClick={() => { setLeagueFilter("All"); setConfidenceFilter("All"); setTierFilter("All"); }}
-            className="btn-primary mt-2"
-          >
-            {t("pred.clearFilters")}
-          </button>
+        <div className="glass-card flex flex-col items-center justify-center gap-4 py-20 text-center">
+          {tierFilter !== "All" ? (
+            <>
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-400/10 ring-1 ring-emerald-400/20">
+                <ShieldCheck className="h-6 w-6 text-emerald-400" strokeWidth={2} />
+              </div>
+              <div className="space-y-1">
+                <p className="text-base font-semibold text-white capitalize">
+                  No {tierFilter} picks right now
+                </p>
+                <p className="mx-auto max-w-sm text-sm leading-relaxed text-slate-400">
+                  Our engine is being selective — it only picks matches it&apos;s
+                  highly confident about. This is normal and a sign that the
+                  system is working correctly.
+                </p>
+              </div>
+              {tierFilter !== "free" && (
+                <p className="mx-auto max-w-sm rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs leading-relaxed text-slate-400">
+                  Want to see picks now?{" "}
+                  <button
+                    onClick={() => setTierFilter(
+                      tierFilter === "platinum" ? "gold"
+                      : tierFilter === "gold" ? "silver"
+                      : "free"
+                    )}
+                    className="font-semibold text-slate-200 underline underline-offset-2 hover:text-white"
+                  >
+                    Switch to a lower tier
+                  </button>
+                  {" "}— keep in mind accuracy may be slightly lower.
+                </p>
+              )}
+              <button
+                onClick={() => setTierFilter("All")}
+                className="btn-primary mt-1"
+              >
+                Show all picks
+              </button>
+            </>
+          ) : (
+            <>
+              <Sparkles className="h-8 w-8 text-slate-600" />
+              <p className="text-base font-medium text-slate-400">{t("pred.noMatchingPredictions")}</p>
+              <p className="text-sm text-slate-600">
+                {t("pred.noMatchingPredictionsDesc")}
+              </p>
+              <p className="text-xs text-slate-500">
+                {t("pred.predictionsAvailable", { count: fixturesWithPrediction.length })}
+              </p>
+              <button
+                onClick={() => { setLeagueFilter("All"); setConfidenceFilter("All"); setTierFilter("All"); }}
+                className="btn-primary mt-2"
+              >
+                {t("pred.clearFilters")}
+              </button>
+            </>
+          )}
         </div>
       ) : isResults ? (
         // Results view: group by date (newest first) so users can scan
