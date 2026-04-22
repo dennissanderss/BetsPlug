@@ -37,8 +37,7 @@ export function LockedLivePlaceholder({
   variant,
   id,
 }: LockedLivePlaceholderProps) {
-  const { locale } = useTranslations();
-  const isNl = locale === "nl";
+  const { t } = useTranslations();
   const loc = useLocalizedHref();
 
   // Auth + tier-aware: signed-in readers get the real live section
@@ -77,12 +76,8 @@ export function LockedLivePlaceholder({
 
   const title =
     variant === "tier"
-      ? isNl
-        ? `${number} · Live meting per tier`
-        : `${number} · Live measurement per tier`
-      : isNl
-        ? `${number} · Pick van de Dag — live meting`
-        : `${number} · Pick of the Day — live measurement`;
+      ? t("locked.tierTitle", { number })
+      : t("locked.botdTitle", { number });
 
   // For signed-in Free/Silver users hitting the BOTD variant we swap
   // the copy to an upgrade pitch (product rule: BOTD is Gold+ only).
@@ -92,28 +87,14 @@ export function LockedLivePlaceholder({
     hasToken && variant === "botd" && !tierHasBotdAccess;
 
   const headline = isBotdPaywallForSignedIn
-    ? isNl
-      ? "Alleen voor Gold & Platinum abonnees"
-      : "Gold & Platinum subscribers only"
-    : variant === "tier"
-      ? isNl
-        ? "Alleen zichtbaar voor ingelogde gebruikers"
-        : "Visible to signed-in users only"
-      : isNl
-        ? "Alleen zichtbaar voor ingelogde gebruikers"
-        : "Visible to signed-in users only";
+    ? t("locked.botdPaywallHeadline")
+    : t("locked.signInHeadline");
 
   const body = isBotdPaywallForSignedIn
-    ? isNl
-      ? "De Pick of the Day zit op Gold en Platinum — onze enige dagelijkse pick met de hoogste modelconfidence. Free en Silver hebben geen BOTD-toegang omdat we het volume laag en de signaal-kwaliteit hoog willen houden. Upgrade naar Gold (of Platinum voor top-5 competities) om deze live meting en de dagelijkse pick vrij te spelen."
-      : "Pick of the Day lives on Gold and Platinum — our single daily pick with the highest model confidence. Free and Silver don't include BOTD access because we keep the volume low and the signal quality high. Upgrade to Gold (or Platinum for top-5 leagues) to unlock this live measurement and the daily pick."
+    ? t("locked.botdPaywallBody")
     : variant === "tier"
-      ? isNl
-        ? "De live meting per tier is de strikt pre-match dataset die dagelijks groeit vanaf 16 april 2026. We bouwen deze zichtbaar op in het dashboard zodat je per dag kunt volgen hoe elke tier presteert. Omdat dit in de opbouwfase zit, is hij afgeschermd: zo zie je niet per ongeluk een half-gevulde grafiek. Log in om de actuele stand te bekijken op je dashboard."
-        : "The live measurement per tier is the strict pre-match dataset growing daily from April 16 2026. We build this up visibly inside the dashboard so you can track each tier's progress day by day. Because it is in its warm-up phase, it is gated: you won't accidentally read a half-filled chart. Sign in to see today's live numbers on your dashboard."
-      : isNl
-        ? "De live meting voor de Pick van de Dag toont alleen picks die daadwerkelijk voor de aftrap werden vastgezet, sinds 18 april 2026. Hij start klein en groeit elke dag dat een BOTD-wedstrijd wordt gespeeld. Zolang de steekproef nog niet statistisch betekenisvol is, staat deze meting achter een inlog — zo interpreteer je nooit een te klein getal als 'eindbeoordeling'. Log in om de stand van vandaag te zien."
-        : "The BOTD live measurement only includes picks locked before kickoff, since April 18 2026. It starts small and grows each day a BOTD fixture is played. While the sample is too small to read as a final verdict, this measurement is gated behind a login — so you never misread a tiny sample as a conclusion. Sign in to see today's number.";
+      ? t("locked.tierBody")
+      : t("locked.botdBody");
 
   const loginHref = loc("/login");
   const dashboardHref = loc("/trackrecord");
@@ -194,14 +175,14 @@ export function LockedLivePlaceholder({
                         href={loc("/pricing")}
                         className="btn-primary inline-flex items-center gap-2"
                       >
-                        {isNl ? "Upgrade naar Gold" : "Upgrade to Gold"}
+                        {t("locked.upgradeGold")}
                         <ArrowRight className="h-4 w-4" />
                       </Link>
                       <Link
                         href={loc("/bet-of-the-day")}
                         className="btn-glass inline-flex items-center gap-2"
                       >
-                        {isNl ? "Bekijk BOTD-voorbeeld" : "Preview BOTD"}
+                        {t("locked.previewBotd")}
                       </Link>
                     </>
                   ) : (
@@ -210,14 +191,14 @@ export function LockedLivePlaceholder({
                         href={loginHref}
                         className="btn-primary inline-flex items-center gap-2"
                       >
-                        {isNl ? "Log in om te bekijken" : "Sign in to view"}
+                        {t("locked.signIn")}
                         <ArrowRight className="h-4 w-4" />
                       </Link>
                       <Link
                         href={dashboardHref}
                         className="btn-glass inline-flex items-center gap-2"
                       >
-                        {isNl ? "Ga naar dashboard" : "Go to dashboard"}
+                        {t("locked.goToDashboard")}
                       </Link>
                     </>
                   )}
@@ -225,12 +206,8 @@ export function LockedLivePlaceholder({
 
                 <p className="mt-6 text-[11px] leading-relaxed text-[#6b7280]">
                   {isBotdPaywallForSignedIn
-                    ? isNl
-                      ? "Gold en Platinum hebben beiden volledige toegang tot de BOTD — dezelfde stream, dezelfde picks."
-                      : "Gold and Platinum both include full BOTD access — same stream, same picks."
-                    : isNl
-                      ? "Geen account? De backtest-cijfers hierboven (sectie 1 en 3) zijn volledig openbaar — daarvoor hoef je niet in te loggen."
-                      : "No account? The backtest numbers above (sections 1 and 3) are fully public — no sign-in needed for those."}
+                    ? t("locked.footnotePaywall")
+                    : t("locked.footnoteSignedOut")}
                 </p>
               </div>
             </div>

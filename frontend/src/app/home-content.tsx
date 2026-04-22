@@ -394,14 +394,10 @@ export function HomeContent({
                     </HexBadge>
                     <div>
                       <p className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                        {locale === "nl"
-                          ? "Gratis previews · Bronze tier"
-                          : "Free previews · Bronze tier"}
+                        {t("home.freePreviewEyebrow")}
                       </p>
                       <p className="text-sm font-semibold text-[#ededed]">
-                        {locale === "nl"
-                          ? "3 gratis picks voor deze week"
-                          : "3 free picks for this week"}
+                        {t("home.freePreviewTitle")}
                       </p>
                     </div>
                   </div>
@@ -424,10 +420,10 @@ export function HomeContent({
                   }}
                 >
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
-                    {locale === "nl" ? "Competitie · wedstrijd" : "League · match"}
+                    {t("home.picksColLeague")}
                   </span>
                   <span className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
-                    {locale === "nl" ? "Win-kans model" : "Model win probability"}
+                    {t("home.picksColModel")}
                   </span>
                 </div>
 
@@ -460,16 +456,14 @@ export function HomeContent({
                   <div className="flex items-center gap-2">
                     <Lock className="h-3.5 w-3.5 shrink-0 text-[#4ade80]" />
                     <p className="text-[12px] font-medium leading-tight text-[#d1fae5]">
-                      {locale === "nl"
-                        ? "Sommige picks halen 80%+ — upgrade om ze te zien"
-                        : "Some picks hit 80%+ — upgrade to unlock them"}
+                      {t("home.upsellStrip")}
                     </p>
                   </div>
                   <Link
                     href={loc("/pricing")}
                     className="shrink-0 rounded-md bg-[#22c55e] px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-[#0a0b11] transition-opacity hover:opacity-90"
                   >
-                    {locale === "nl" ? "Upgrade" : "Upgrade"}
+                    {t("home.upsellCta")}
                   </Link>
                 </div>
 
@@ -1206,15 +1200,16 @@ export function HomeContent({
  * Only the public marketing surface uses this row; logged-in users
  * see full match details on /predictions and /bet-of-the-day. */
 function HeroPickRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
+  const { t } = useTranslations();
   const maxProb = Math.max(pick.home_prob, pick.draw_prob, pick.away_prob);
   const predicted =
     pick.home_prob === maxProb ? "home" : pick.draw_prob === maxProb ? "draw" : "away";
   const predictedSideLabel =
     predicted === "home"
-      ? locale === "nl" ? "Thuis" : "Home"
+      ? t("home.pickHome")
       : predicted === "away"
-        ? locale === "nl" ? "Uit" : "Away"
-        : locale === "nl" ? "Gelijkspel" : "Draw";
+        ? t("home.pickAway")
+        : t("home.pickDraw");
   const pickPct = Math.max(pick.home_prob, pick.draw_prob, pick.away_prob);
 
   // Blurred style applied to the match-identifying content. CSS blur
@@ -1287,7 +1282,7 @@ function HeroPickRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
 
           {/* Predicted pick label — side only (Home/Draw/Away), not team name */}
           <p className="mt-1.5 text-[11px] text-[#a3a9b8]">
-            {locale === "nl" ? "Keuze" : "Pick"}:{" "}
+            {t("home.pickLabel")}:{" "}
             <span className="font-semibold text-[#ededed]">
               {predictedSideLabel}
             </span>

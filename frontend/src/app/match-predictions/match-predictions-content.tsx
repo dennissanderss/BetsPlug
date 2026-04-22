@@ -223,22 +223,20 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
                 </div>
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-                    {isNl
-                      ? "Bronze tier · 55–65% winkans-band"
-                      : "Bronze tier · 55–65% win-prob band"}
+                    {t("matchPred.bronzeBand")}
                   </p>
                   <p className="mt-1.5 text-sm leading-relaxed text-[#ededed] sm:text-base">
-                    {isNl ? (
-                      <>
-                        Dit zijn de échte gratis picks — eerlijke <b className="text-emerald-300">~55% accuratesse</b> op backtests.
-                        Upgrade en ontgrendel <b className="text-[#d8b4fe]">Silver (65%+)</b>, <b className="text-[#fde68a]">Gold (70%+)</b> of <b className="text-[#93c5fd]">Platinum (80%+)</b> — getest op <b>80.000+ historische wedstrijden</b> met publiek track record.
-                      </>
-                    ) : (
-                      <>
-                        These are the real free picks — honest <b className="text-emerald-300">~55% accuracy</b> on backtests.
-                        Upgrade to unlock <b className="text-[#d8b4fe]">Silver (65%+)</b>, <b className="text-[#fde68a]">Gold (70%+)</b> or <b className="text-[#93c5fd]">Platinum (80%+)</b> — tested on <b>80,000+ historical matches</b> with a public track record.
-                      </>
-                    )}
+                    {t("matchPred.bronzeBody1")}{" "}
+                    <b className="text-emerald-300">{t("matchPred.bronzeBody2")}</b>{" "}
+                    {t("matchPred.bronzeBody3")}{" "}
+                    <b className="text-[#d8b4fe]">{t("matchPred.bronzeBody4")}</b>
+                    {t("matchPred.bronzeBody5")}{" "}
+                    <b className="text-[#fde68a]">{t("matchPred.bronzeBody6")}</b>{" "}
+                    {t("matchPred.bronzeBody7")}{" "}
+                    <b className="text-[#93c5fd]">{t("matchPred.bronzeBody8")}</b>{" "}
+                    {t("matchPred.bronzeBody9")}{" "}
+                    <b>{t("matchPred.bronzeBody10")}</b>{" "}
+                    {t("matchPred.bronzeBody11")}
                   </p>
                 </div>
               </div>
@@ -247,14 +245,14 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
                   href={loc("/checkout")}
                   className="btn-primary group inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap"
                 >
-                  {isNl ? "Ontgrendel hogere winkansen" : "Unlock higher win rates"}
+                  {t("matchPred.unlockHigher")}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
                 <Link
                   href={loc("/track-record")}
                   className="text-[11px] font-semibold uppercase tracking-wider text-[#a3a9b8] hover:text-emerald-300"
                 >
-                  {isNl ? "Bekijk publiek track record →" : "See public track record →"}
+                  {t("matchPred.publicTrackRecord")}
                 </Link>
               </div>
             </div>
@@ -405,17 +403,13 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
           <div className="text-center">
             <span className="section-label mx-auto">
               <Shield className="h-3 w-3" />
-              {isNl ? "Alle competities" : "All leagues"}
+              {t("matchPred.leaguesBadge")}
             </span>
             <h2 className="text-heading mt-3 text-2xl text-[#ededed] sm:text-3xl lg:text-4xl">
-              {isNl
-                ? "AI-voorspellingen per competitie"
-                : "AI predictions by league"}
+              {t("matchPred.leaguesTitle")}
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm text-[#a3a9b8] sm:text-base">
-              {isNl
-                ? "30 competities wereldwijd. Zelfde AI-motor, zelfde openbare trackrecord, klik een competitie voor de gratis picks van deze week."
-                : "30 competitions worldwide. Same AI engine, same public track record, click any league for this week's free picks."}
+              {t("matchPred.leaguesLede")}
             </p>
           </div>
 
@@ -449,7 +443,7 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
                       {name}
                     </p>
                     <p className="text-[11px] uppercase tracking-wider text-[#6b7280]">
-                      {isNl ? "Bekijk voorspellingen" : "View predictions"}
+                      {t("matchPred.leagueCardHint")}
                     </p>
                   </div>
                   <ArrowRight className="h-4 w-4 shrink-0 text-[#6b7280] transition-all group-hover:translate-x-0.5 group-hover:text-[#4ade80]" />

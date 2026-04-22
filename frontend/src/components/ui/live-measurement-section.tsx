@@ -47,8 +47,7 @@ function wilson(correct: number, total: number): { lower: number; upper: number 
 }
 
 export function LiveMeasurementSection() {
-  const { locale } = useTranslations();
-  const isNl = locale === "nl";
+  const { t } = useTranslations();
   const [data, setData] = useState<LiveMeasurementResponse | null>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -65,7 +64,7 @@ export function LiveMeasurementSection() {
   }, []);
 
   const startLabel = data?.start_date
-    ? new Date(data.start_date).toLocaleDateString(isNl ? "nl-NL" : "en-GB", {
+    ? new Date(data.start_date).toLocaleDateString(t("live.dateLocale"), {
         day: "numeric",
         month: "long",
         year: "numeric",
@@ -96,25 +95,14 @@ export function LiveMeasurementSection() {
         >
           <span className="section-label">
             <Activity className="h-3 w-3" />
-            {isNl ? "2 · Live meting per tier" : "2 · Live measurement per tier"}
+            {t("live.sectionLabel")}
           </span>
           <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
-            {isNl ? (
-              <>
-                Apart gelogd sinds{" "}
-                <span className="gradient-text-green">{startLabel}</span>
-              </>
-            ) : (
-              <>
-                Separately logged since{" "}
-                <span className="gradient-text-green">{startLabel}</span>
-              </>
-            )}
+            {t("live.titleLine1")}{" "}
+            <span className="gradient-text-green">{startLabel}</span>
           </h2>
           <p className="mt-4 text-sm leading-relaxed text-[#a3a9b8]">
-            {isNl
-              ? "Vanaf deze datum wordt elke nieuwe voorspelling gemaakt voordat de wedstrijd begint en na afloop geregistreerd. Deze meting staat los van de modelvalidatie hierboven — hij begint klein en groeit dagelijks."
-              : "From this date on every new prediction is made before the match starts and recorded after full time. This measurement is separate from the model validation above — it starts small and grows daily."}
+            {t("live.lede")}
           </p>
         </motion.div>
 
@@ -124,16 +112,13 @@ export function LiveMeasurementSection() {
               key={tier}
               tier={tier}
               bucket={data?.per_tier?.[tier === "bronze" ? "free" : tier]}
-              isNl={isNl}
               loaded={loaded}
             />
           ))}
         </div>
 
         <p className="mt-8 text-center text-[11px] leading-relaxed text-[#6b7280]">
-          {isNl
-            ? "Statistisch betekenisvolle cijfers per tier vereisen circa 200 beoordeelde wedstrijden. Tot die tijd is de live meting een bewegend beeld, geen conclusie."
-            : "Statistically meaningful per-tier numbers require around 200 graded matches. Until then the live measurement is a moving snapshot, not a conclusion."}
+          {t("live.footnote")}
         </p>
       </div>
     </section>
@@ -143,14 +128,13 @@ export function LiveMeasurementSection() {
 function LiveTierCard({
   tier,
   bucket,
-  isNl,
   loaded,
 }: {
   tier: TierKey;
   bucket: TierBucket | undefined;
-  isNl: boolean;
   loaded: boolean;
 }) {
+  const { t } = useTranslations();
   const theme = TIER_THEME[tier];
   const total = bucket?.total ?? 0;
   const correct = bucket?.correct ?? 0;
@@ -180,7 +164,7 @@ function LiveTierCard({
         {awaiting ? (
           <span className="inline-flex items-center gap-1 rounded-full border border-white/[0.12] bg-white/[0.03] px-2 py-0.5 text-[9px] font-semibold text-slate-400">
             <Clock className="h-2.5 w-2.5" />
-            {isNl ? "Wacht op data" : "Awaiting data"}
+            {t("live.awaitingData")}
           </span>
         ) : null}
       </div>
@@ -188,12 +172,12 @@ function LiveTierCard({
       <p className="relative mt-3 text-3xl font-extrabold tabular-nums leading-none text-[#ededed]">
         {total === 0
           ? "—"
-          : `${(bucket!.accuracy * 100).toFixed(1).replace(".", isNl ? "," : ".")}%`}
+          : `${(bucket!.accuracy * 100).toFixed(1).replace(".", t("live.decimalSep"))}%`}
       </p>
       <p className="relative mt-2 text-[11px] text-[#a3a9b8]">
         {loaded ? (
           total === 0 ? (
-            isNl ? "Nog geen beoordeelde picks" : "No graded picks yet"
+            t("live.noGradedPicks")
           ) : (
             <>
               <span className="inline-flex items-center gap-1 text-emerald-300">
@@ -202,11 +186,11 @@ function LiveTierCard({
               </span>
               {" / "}
               <span className="font-semibold text-[#ededed]">{total}</span>{" "}
-              {isNl ? "beoordeeld" : "graded"}
+              {t("live.graded")}
             </>
           )
         ) : (
-          isNl ? "Laden…" : "Loading…"
+          t("live.loading")
         )}
       </p>
       {ci && total >= 10 && (

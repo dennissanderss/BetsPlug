@@ -185,12 +185,10 @@ export function SiteNav() {
                     <div className="mb-3 flex items-center justify-between px-2">
                       <div>
                         <div className="text-[10px] font-semibold uppercase tracking-widest text-[#4ade80]">
-                          {isNl ? "Top competities" : "Top leagues"}
+                          {t("nav.mega.topLeagues")}
                         </div>
                         <div className="mt-0.5 text-[11px] text-[#6b7280]">
-                          {isNl
-                            ? "AI-voorspellingen met openbaar trackrecord"
-                            : "AI predictions with a public track record"}
+                          {t("nav.mega.topLeaguesSubtitle")}
                         </div>
                       </div>
                       <Link
@@ -198,7 +196,7 @@ export function SiteNav() {
                         onClick={() => setPredictionsOpen(false)}
                         className="inline-flex items-center gap-1 rounded-full border border-[#4ade80]/30 bg-[#4ade80]/[0.08] px-3 py-1.5 text-[11px] font-bold text-[#86efac] transition hover:bg-[#4ade80]/[0.14]"
                       >
-                        {isNl ? "Alle competities" : "All leagues"}
+                        {t("nav.mega.allLeagues")}
                         <ArrowRight className="h-3 w-3" />
                       </Link>
                     </div>
@@ -243,7 +241,7 @@ export function SiteNav() {
                       style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
                     >
                       <div className="px-2 text-[10px] font-semibold uppercase tracking-widest text-[#a3a9b8]">
-                        {isNl ? "Overige" : "More leagues"}
+                        {t("nav.mega.moreLeagues")}
                       </div>
                       <div className="mt-2 flex flex-wrap gap-1">
                         {ALL_LEAGUES.filter((l) => l.tier === "secondary").map(

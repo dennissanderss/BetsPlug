@@ -100,7 +100,7 @@ function useTrustData(): TrustData {
 }
 
 export function TrustFunnel() {
-  const { locale } = useTranslations();
+  const { locale, t } = useTranslations();
   const loc = useLocalizedHref();
   const isNl = locale === "nl";
   const live = useTrustData();
@@ -150,25 +150,15 @@ export function TrustFunnel() {
         >
           <span className="section-label mx-auto">
             <ShieldCheck className="h-3 w-3" />
-            {isNl ? "Openbaar trackrecord" : "Public track record"}
+            {t("trust.badge")}
           </span>
           <h2 className="text-heading mt-5 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-            {isNl ? (
-              <>
-                Elke voorspelling{" "}
-                <span className="gradient-text-green">openbaar beoordeeld</span>.
-              </>
-            ) : (
-              <>
-                Every prediction{" "}
-                <span className="gradient-text-green">publicly graded</span>.
-              </>
-            )}
+            {t("trust.titleLine1")}{" "}
+            <span className="gradient-text-green">{t("trust.titleHighlight")}</span>
+            {t("trust.titleLine3")}
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
-            {isNl
-              ? `We publiceren alleen op onze 14 kern-competities. Elke voorspelling wordt pre-match gelockt en na afloop vergeleken met de echte uitslag — geen kersenpluk, geen verborgen verliezers. Hieronder zie je hoe het model presteert per vertrouwensdrempel, over ${fmt(evaluatedTotal)} beoordeelde picks.`
-              : `We only publish on our 14 core competitions. Every prediction is locked pre-match and compared against the real result — no cherry-picking, no hidden losers. Below is how the model performs per confidence threshold, across ${fmt(evaluatedTotal)} graded picks.`}
+            {t("trust.lede", { evaluatedTotal: fmt(evaluatedTotal) })}
           </p>
         </motion.div>
 
@@ -186,7 +176,7 @@ export function TrustFunnel() {
           className="mt-10"
         >
           <p className="mb-4 text-center text-xs font-bold uppercase tracking-widest text-[#6b7280]">
-            {isNl ? "Nauwkeurigheid per tier" : "Accuracy per tier"}
+            {t("trust.accuracyPerTier")}
           </p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <TierBreakdownCard tier="silver" accuracy={silver.accuracy} isNl={isNl} />
@@ -203,7 +193,7 @@ export function TrustFunnel() {
               href={loc("/track-record")}
               className="inline-flex items-center gap-1.5 text-[11px] font-medium text-[#a3a9b8] underline-offset-4 transition-colors hover:text-[#ededed] hover:underline"
             >
-              {isNl ? "Bekijk volledig trackrecord" : "See full track record"}
+              {t("trust.seeFullTrackRecord")}
               <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
@@ -218,23 +208,19 @@ export function TrustFunnel() {
           className="mt-12 text-center"
         >
           <p className="mx-auto max-w-xl text-sm leading-relaxed text-[#a3a9b8]">
-            {isNl
-              ? "De cijfers hierboven komen uit modelvalidatie op 2 jaar historische data. Sinds 16 april 2026 loggen we daarnaast ook een live meting — die groeit dagelijks."
-              : "The numbers above come from model validation on 2 years of historical data. Since 16 April 2026 we also log a separate live measurement — that grows daily."}
+            {t("trust.liveMeasurementNote")}
           </p>
           <p className="mx-auto mt-4 max-w-xl text-[11px] leading-relaxed text-[#6b7280]">
             <span className="font-semibold text-[#a3a9b8]">
-              {isNl ? "Belangrijk:" : "Important:"}
+              {t("trust.importantLabel")}
             </span>{" "}
-            {isNl
-              ? "dit blijven data en kansmodel-berekeningen. Wij geven geen garantie op de uitslag van een individuele wedstrijd, en geen enkel AI-model ter wereld kan dat. Gebruik onze cijfers als informatie, niet als zekerheid."
-              : "these remain data and probability-model calculations. We offer no guarantee on the outcome of any individual match, and no AI model on earth can. Use our numbers as information, not as certainty."}
+            {t("trust.importantBody")}
           </p>
           <Link
             href={loc("/track-record")}
             className="btn-primary mt-6 inline-flex items-center gap-2"
           >
-            {isNl ? "Bekijk de volledige data" : "Inspect the full data"}
+            {t("trust.inspectFullData")}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </motion.div>
@@ -254,8 +240,9 @@ function TierBreakdownCard({
   isNl: boolean;
   highlight?: boolean;
 }) {
+  const { t } = useTranslations();
   const theme = TIER_THEME[tier];
-  const pctStr = `${(accuracy * 100).toFixed(1).replace(".", isNl ? "," : ".")}%`;
+  const pctStr = `${(accuracy * 100).toFixed(1).replace(".", t("trust.decimalSep"))}%`;
 
   return (
     <div
@@ -288,12 +275,12 @@ function TierBreakdownCard({
       {tier === "bronze" ? (
         <div className="relative mt-3 flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-widest text-[#22c55e]">
           <Unlock className="h-3 w-3" />
-          {isNl ? "Gratis tier" : "Free tier"}
+          {t("trust.freeTier")}
         </div>
       ) : (
         <div className="relative mt-3 flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-widest text-[#6b7280]">
           <Lock className="h-3 w-3" />
-          {isNl ? "Premium tier" : "Premium tier"}
+          {t("trust.premiumTier")}
         </div>
       )}
     </div>

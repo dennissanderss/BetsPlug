@@ -292,16 +292,14 @@ export function BetsPlugFooter() {
                 {t("nav.predictions")}
               </div>
               <div className="mt-1 text-[11px] text-[#6b7280]">
-                {isNl
-                  ? "AI-voetbalvoorspellingen per competitie"
-                  : "AI football predictions by league"}
+                {t("footer.leaguesSubtitle")}
               </div>
             </div>
             <Link
               href={loc("/match-predictions")}
               className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#a3a9b8] transition-colors hover:text-[#4ade80]"
             >
-              {isNl ? "Alle competities" : "All leagues"}
+              {t("footer.allLeagues")}
               <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
@@ -362,16 +360,14 @@ export function BetsPlugFooter() {
                   })()}
                 </div>
                 <div className="mt-1 text-[11px] text-[#6b7280]">
-                  {isNl
-                    ? "De wiskunde achter onze voorspellingen"
-                    : "The maths behind every prediction"}
+                  {t("footer.learnSubtitle")}
                 </div>
               </div>
               <Link
                 href={loc("/learn")}
                 className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#a3a9b8] transition-colors hover:text-[#4ade80]"
               >
-                {isNl ? "Alle gidsen" : "All guides"}
+                {t("footer.allGuides")}
                 <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
@@ -412,16 +408,14 @@ export function BetsPlugFooter() {
                   })()}
                 </div>
                 <div className="mt-1 text-[11px] text-[#6b7280]">
-                  {isNl
-                    ? "BTTS, Over/Under, Draw No Bet en meer"
-                    : "BTTS, Over/Under, Draw No Bet and more"}
+                  {t("footer.betMarketsSubtitle")}
                 </div>
               </div>
               <Link
                 href={loc("/bet-types")}
                 className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#a3a9b8] transition-colors hover:text-[#4ade80]"
               >
-                {isNl ? "Alle markten" : "All markets"}
+                {t("footer.allMarkets")}
                 <ArrowRight className="h-3 w-3" />
               </Link>
             </div>

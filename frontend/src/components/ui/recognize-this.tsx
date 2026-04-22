@@ -35,9 +35,8 @@ import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { POTD_STATS } from "@/data/potd-stats";
 
 export function RecognizeThis() {
-  const { locale } = useTranslations();
+  const { t } = useTranslations();
   const loc = useLocalizedHref();
-  const isNl = locale === "nl";
 
   return (
     <section className="relative overflow-hidden py-20 md:py-28">
@@ -69,27 +68,15 @@ export function RecognizeThis() {
         >
           <span className="section-label mx-auto">
             <Sparkles className="h-3 w-3" />
-            {isNl ? "Herken je dit?" : "Sound familiar?"}
+            {t("recognize.badge")}
           </span>
           <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-            {isNl ? (
-              <>
-                Je hebt het{" "}
-                <span className="gradient-text-purple">al eerder geprobeerd</span>
-                . En het werd niet beter.
-              </>
-            ) : (
-              <>
-                You've{" "}
-                <span className="gradient-text-purple">been here before</span>
-                . And it didn't get better.
-              </>
-            )}
+            {t("recognize.titleLine1")}{" "}
+            <span className="gradient-text-purple">{t("recognize.titleHighlight")}</span>
+            {t("recognize.titleLine3")}
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
-            {isNl
-              ? "Zie je dit wel eens voorbij komen? Groepen met 'gegarandeerde' winrates, tips die pas binnenkomen als je er niks meer mee kan, en screenshots waar alle verliezen op mysterieuze wijze ontbreken."
-              : "Seen any of this? Groups with 'guaranteed' hit rates, tips that drop when there's nothing left to do, and screenshots where every loss has mysteriously vanished."}
+            {t("recognize.lede")}
           </p>
         </motion.div>
 
@@ -103,12 +90,12 @@ export function RecognizeThis() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <TipsterChatMockup isNl={isNl} />
+            <TipsterChatMockup />
             {/* Corner label */}
             <div className="absolute -top-3 left-4 z-10 flex items-center gap-1.5 rounded-full bg-red-500/25 px-3 py-1 ring-1 ring-red-400/50 backdrop-blur">
               <AlertTriangle className="h-3 w-3 text-red-300" />
               <span className="text-[10px] font-bold uppercase tracking-widest text-red-200">
-                {isNl ? "Red flag patronen" : "Red flag patterns"}
+                {t("recognize.redFlagPatterns")}
               </span>
             </div>
           </motion.div>
@@ -121,11 +108,11 @@ export function RecognizeThis() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="relative"
           >
-            <BetsPlugCard isNl={isNl} />
+            <BetsPlugCard />
             <div className="absolute -top-3 left-4 z-10 flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 ring-1 ring-emerald-400/40 backdrop-blur">
               <CheckCircle2 className="h-3 w-3 text-emerald-300" />
               <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-200">
-                {isNl ? "Wat BetsPlug toont" : "What BetsPlug shows"}
+                {t("recognize.whatBetsplugShows")}
               </span>
             </div>
           </motion.div>
@@ -135,23 +122,23 @@ export function RecognizeThis() {
         <div className="mt-14 grid gap-3 sm:grid-cols-2">
           <ComparisonRow
             icon={AlertTriangle}
-            pain={isNl ? "'Bet on Madrid, trust me'" : "'Bet on Madrid, trust me'"}
-            answer={isNl ? "Win% + betrouwbaarheid + 4 AI-modellen" : "Win% + confidence + 4 AI models"}
+            pain={t("recognize.painTipster")}
+            answer={t("recognize.answerTipster")}
           />
           <ComparisonRow
             icon={Trash2}
-            pain={isNl ? "Verliezen stil verdwenen" : "Losses quietly removed"}
-            answer={isNl ? "Elke winst én verlies blijft openbaar staan" : "Every win and loss stays public forever"}
+            pain={t("recognize.painLosses")}
+            answer={t("recognize.answerLosses")}
           />
           <ComparisonRow
             icon={Clock3}
-            pain={isNl ? "Tip 5 min voor aftrap" : "Tip 5 min before kickoff"}
-            answer={isNl ? "Uren van tevoren gepubliceerd" : "Published hours in advance"}
+            pain={t("recognize.painTiming")}
+            answer={t("recognize.answerTiming")}
           />
           <ComparisonRow
             icon={Target}
-            pain={isNl ? "€100/maand voor een Excel" : "€100/month for a spreadsheet"}
-            answer={isNl ? "3 picks per dag gratis. €0,01 trial." : "3 picks per day free. €0.01 trial."}
+            pain={t("recognize.painPrice")}
+            answer={t("recognize.answerPrice")}
           />
         </div>
 
@@ -164,15 +151,13 @@ export function RecognizeThis() {
           className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
           <p className="text-center text-sm text-[#a3a9b8] sm:text-left">
-            {isNl
-              ? "Daarom bouwden we BetsPlug precies het omgekeerde."
-              : "That's why we built BetsPlug as the opposite."}
+            {t("recognize.bridge")}
           </p>
           <Link
             href={loc("/how-it-works")}
             className="btn-primary inline-flex items-center gap-2"
           >
-            {isNl ? "Hoe we het anders doen" : "How we do it differently"}
+            {t("recognize.bridgeCta")}
             <ArrowRight className="h-4 w-4" />
           </Link>
         </motion.div>
@@ -185,18 +170,13 @@ export function RecognizeThis() {
    TipsterChatMockup, fake Telegram-style group chat
    ───────────────────────────────────────────────────────────── */
 
-function TipsterChatMockup({ isNl }: { isNl: boolean }) {
-  const flagCopy: Record<"urgent" | "deleted" | "cherry", string> = isNl
-    ? {
-        urgent: "Red flag: te laat om te acteren",
-        cherry: "Red flag: geen verliezen zichtbaar",
-        deleted: "Red flag: verlies stilletjes gewist",
-      }
-    : {
-        urgent: "Red flag: too late to act",
-        cherry: "Red flag: no losses shown",
-        deleted: "Red flag: loss quietly removed",
-      };
+function TipsterChatMockup() {
+  const { t } = useTranslations();
+  const flagCopy: Record<"urgent" | "deleted" | "cherry", string> = {
+    urgent: t("recognize.chat.flagUrgent"),
+    cherry: t("recognize.chat.flagCherry"),
+    deleted: t("recognize.chat.flagDeleted"),
+  };
 
   const messages: {
     body: React.ReactNode;
@@ -208,59 +188,59 @@ function TipsterChatMockup({ isNl }: { isNl: boolean }) {
         <>
           <div className="flex items-center gap-1 text-sm font-bold text-red-200">
             <Flame className="h-3.5 w-3.5 text-red-300" />
-            {isNl ? "🔥🔥 SUREBET ALERT 🔥🔥" : "🔥🔥 SUREBET ALERT 🔥🔥"}
+            {t("recognize.chat.surebetAlert")}
           </div>
           <p className="mt-1 text-base font-black text-white">
-            {isNl ? "BET MADRID WIN NOW" : "BET MADRID WIN NOW"}
+            {t("recognize.chat.betNow")}
           </p>
           <p className="mt-0.5 text-xs text-white/70">
-            {isNl ? "trust me 💯" : "trust me 💯"}
+            {t("recognize.chat.trustMe")}
           </p>
         </>
       ),
-      time: isNl ? "5 min voor aftrap" : "5 min before kickoff",
+      time: t("recognize.chat.beforeKickoff"),
       flag: "urgent",
     },
     {
       body: (
         <>
           <p className="text-sm font-bold text-white">
-            {isNl ? "💰 GUARANTEED PROFIT TONIGHT 💰" : "💰 GUARANTEED PROFIT TONIGHT 💰"}
+            {t("recognize.chat.guaranteedProfit")}
           </p>
           <p className="mt-0.5 text-xs text-white/70">
-            {isNl ? "Screenshot: 95% winrate deze maand 📊" : "Screenshot: 95% winrate this month 📊"}
+            {t("recognize.chat.screenshotWinrate")}
           </p>
         </>
       ),
-      time: isNl ? "gisteren" : "yesterday",
+      time: t("recognize.chat.yesterday"),
       flag: "cherry",
     },
     {
       body: (
         <>
           <p className="text-sm italic text-white/40 line-through">
-            {isNl ? "[bericht verwijderd]" : "[message deleted]"}
+            {t("recognize.chat.messageDeleted")}
           </p>
           <p className="mt-0.5 text-[10px] text-white/50">
-            {isNl ? "(gisteravond, verloren)" : "(last night, lost)"}
+            {t("recognize.chat.lastNightLost")}
           </p>
         </>
       ),
-      time: isNl ? "eergisteren" : "2 days ago",
+      time: t("recognize.chat.twoDaysAgo"),
       flag: "deleted",
     },
     {
       body: (
         <>
           <p className="text-sm font-bold text-white">
-            {isNl ? "VIP Premium €100/maand" : "VIP Premium €100/month"}
+            {t("recognize.chat.vipPremium")}
           </p>
           <p className="mt-0.5 text-xs text-white/70">
-            {isNl ? "→ toegang tot gedeelde sheet" : "→ access to shared sheet"}
+            {t("recognize.chat.sharedSheet")}
           </p>
         </>
       ),
-      time: isNl ? "ma" : "Mon",
+      time: t("recognize.chat.mon"),
     },
   ];
 
@@ -276,12 +256,12 @@ function TipsterChatMockup({ isNl }: { isNl: boolean }) {
             VIP Football Tips 🔥🔥🔥
           </p>
           <p className="truncate text-[11px] text-white/50">
-            {isNl ? "3.247 leden · 92% winrate" : "3,247 members · 92% hit rate"}
+            {t("recognize.chat.memberStats")}
           </p>
         </div>
         <div className="flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          {isNl ? "Online" : "Online"}
+          {t("recognize.chat.online")}
         </div>
       </div>
 
@@ -335,9 +315,7 @@ function TipsterChatMockup({ isNl }: { isNl: boolean }) {
         <div className="flex items-center gap-2 text-[11px] font-semibold text-red-200">
           <AlertTriangle className="h-3.5 w-3.5" />
           <span>
-            {isNl
-              ? "Geen cijfers. Geen uitleg. Geen trackrecord."
-              : "No stats. No reasoning. No track record."}
+            {t("recognize.chat.footer")}
           </span>
         </div>
       </div>
@@ -349,18 +327,19 @@ function TipsterChatMockup({ isNl }: { isNl: boolean }) {
    BetsPlugCard, professional alternative mirror
    ───────────────────────────────────────────────────────────── */
 
-function BetsPlugCard({ isNl }: { isNl: boolean }) {
+function BetsPlugCard() {
+  const { t, locale } = useTranslations();
   const rows: { label: string; value: string; tone: "home" | "draw" | "away" }[] = [
-    { label: isNl ? "Thuis" : "Home", value: "56%", tone: "home" },
-    { label: isNl ? "Gelijk" : "Draw", value: "23%", tone: "draw" },
-    { label: isNl ? "Uit" : "Away", value: "21%", tone: "away" },
+    { label: t("recognize.card.home"), value: "56%", tone: "home" },
+    { label: t("recognize.card.draw"), value: "23%", tone: "draw" },
+    { label: t("recognize.card.away"), value: "21%", tone: "away" },
   ];
 
   const models: { name: string; pick: string; confPct: number }[] = [
-    { name: "Elo", pick: isNl ? "Thuis" : "Home", confPct: 58 },
-    { name: "Poisson", pick: isNl ? "Thuis" : "Home", confPct: 54 },
-    { name: "XGBoost", pick: isNl ? "Thuis" : "Home", confPct: 61 },
-    { name: "Ensemble", pick: isNl ? "Thuis" : "Home", confPct: 65 },
+    { name: "Elo", pick: t("recognize.card.home"), confPct: 58 },
+    { name: "Poisson", pick: t("recognize.card.home"), confPct: 54 },
+    { name: "XGBoost", pick: t("recognize.card.home"), confPct: 61 },
+    { name: "Ensemble", pick: t("recognize.card.home"), confPct: 65 },
   ];
 
   return (
@@ -373,17 +352,17 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
           </HexBadge>
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold uppercase tracking-widest text-[#4ade80]">
-              {isNl ? "Gold-tier pick" : "Gold-tier pick"}
+              {t("recognize.card.goldTierPick")}
             </p>
             <p className="truncate text-base font-bold text-[#ededed]">
               Leeds vs Wolves
             </p>
             <p className="text-[11px] text-[#6b7280]">
-              Premier League · {isNl ? "za 16:00" : "Sat 16:00"}
+              Premier League · {t("recognize.card.kickoffTime")}
             </p>
           </div>
           <Pill tone="active" className="!text-[9px]">
-            {isNl ? "Pre-match locked" : "Pre-match locked"}
+            {t("recognize.card.preMatchLocked")}
           </Pill>
         </div>
 
@@ -391,22 +370,22 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
         <div className="mt-5 flex items-end justify-between gap-3">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
-              {isNl ? "Onze pick" : "Our pick"}
+              {t("recognize.card.ourPick")}
             </p>
             <p className="text-stat mt-1 text-3xl leading-none text-[#ededed]">
-              {isNl ? "Thuis" : "Home"}
+              {t("recognize.card.home")}
             </p>
             <p className="mt-1 text-[11px] text-[#a3a9b8]">Leeds</p>
           </div>
           <div className="text-right">
             <p className="text-[10px] font-bold uppercase tracking-widest text-[#4ade80]">
-              {isNl ? "Vertrouwen" : "Confidence"}
+              {t("recognize.card.confidence")}
             </p>
             <p className="text-stat mt-1 text-3xl leading-none text-[#4ade80]">
               65%
             </p>
             <p className="mt-1 text-[11px] text-[#a3a9b8]">
-              {isNl ? "≥ 70% drempel · Gold" : "≥ 70% threshold · Gold"}
+              {t("recognize.card.thresholdGold")}
             </p>
           </div>
         </div>
@@ -414,7 +393,7 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
         {/* Probability breakdown */}
         <div className="mt-5">
           <p className="text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
-            {isNl ? "Winkansen per uitkomst" : "Win probability breakdown"}
+            {t("recognize.card.winProbBreakdown")}
           </p>
           <div className="mt-3 space-y-2">
             {rows.map((r) => (
@@ -446,11 +425,11 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
         <div className="mt-5 rounded-2xl border border-emerald-400/20 bg-emerald-500/[0.04] p-4">
           <div className="flex items-center justify-between">
             <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-              {isNl ? "Model-consensus" : "Model consensus"}
+              {t("recognize.card.modelConsensus")}
             </p>
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold text-emerald-300 ring-1 ring-emerald-400/30">
               <CheckCircle2 className="h-3 w-3" />
-              4 / 4 {isNl ? "eens" : "agree"}
+              4 / 4 {t("recognize.card.agree")}
             </span>
           </div>
           <div className="mt-3 space-y-1.5">
@@ -482,13 +461,15 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
         {/* Signals */}
         <div className="mt-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
           <p className="text-[10px] font-bold uppercase tracking-widest text-[#6b7280]">
-            {isNl ? "Belangrijkste signalen" : "Key signals"}
+            {t("recognize.card.keySignals")}
           </p>
           <div className="mt-2.5 flex flex-wrap gap-1.5">
-            {(isNl
-              ? ["Elo +14 thuis", "Vorm 3W-1L", "H2H 2-1-0", "xG 1,8 vs 1,2"]
-              : ["Elo +14 home", "Form 3W-1L", "H2H 2-1-0", "xG 1.8 vs 1.2"]
-            ).map((chip) => (
+            {[
+              t("recognize.card.signal1"),
+              t("recognize.card.signal2"),
+              t("recognize.card.signal3"),
+              t("recognize.card.signal4"),
+            ].map((chip) => (
               <span
                 key={chip}
                 className="rounded-full border border-white/[0.06] bg-white/[0.03] px-2.5 py-1 text-[10px] font-medium text-[#a3a9b8]"
@@ -506,12 +487,16 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-              {isNl ? "Historisch · Gold-tier" : "Historical · Gold tier"}
+              {t("recognize.card.historicalGold")}
             </p>
             <p className="mt-0.5 text-[11px] leading-relaxed text-[#a3a9b8]">
-              {isNl
-                ? `${POTD_STATS.accuracyNL}% raak over ${POTD_STATS.totalPicks} beoordeelde Gold-picks. Openbaar, niets verwijderd.`
-                : `${POTD_STATS.accuracy}% hit rate across ${POTD_STATS.totalPicks} graded Gold picks. Public, nothing deleted.`}
+              {t("recognize.card.historicalBody", {
+                accuracy:
+                  locale === "nl"
+                    ? POTD_STATS.accuracyNL
+                    : POTD_STATS.accuracy,
+                totalPicks: POTD_STATS.totalPicks,
+              })}
             </p>
           </div>
         </div>
@@ -520,15 +505,15 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
         <div className="mt-auto grid grid-cols-3 gap-2 border-t border-white/[0.06] pt-4 text-center">
           <div>
             <p className="text-[9px] uppercase tracking-widest text-[#6b7280]">
-              {isNl ? "Timing" : "Timing"}
+              {t("recognize.card.timing")}
             </p>
             <p className="mt-0.5 text-[11px] font-semibold text-[#ededed]">
-              {isNl ? "Pre-match" : "Pre-match"}
+              {t("recognize.card.preMatch")}
             </p>
           </div>
           <div>
             <p className="text-[9px] uppercase tracking-widest text-[#6b7280]">
-              {isNl ? "Tier" : "Tier"}
+              {t("recognize.card.tier")}
             </p>
             <p className="mt-0.5 inline-flex items-center gap-1 text-[11px] font-semibold text-[#4ade80]">
               <Crown className="h-3 w-3" />
@@ -537,10 +522,10 @@ function BetsPlugCard({ isNl }: { isNl: boolean }) {
           </div>
           <div>
             <p className="text-[9px] uppercase tracking-widest text-[#6b7280]">
-              {isNl ? "Resultaat" : "Result"}
+              {t("recognize.card.result")}
             </p>
             <p className="mt-0.5 text-[11px] font-semibold text-[#ededed]">
-              {isNl ? "Automatisch" : "Auto-graded"}
+              {t("recognize.card.autoGraded")}
             </p>
           </div>
         </div>

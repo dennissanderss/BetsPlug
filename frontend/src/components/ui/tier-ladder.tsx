@@ -80,9 +80,8 @@ function useAllTierStats(): Record<TierKey, TierRow> {
 
 export function TierLadder() {
   const stats = useAllTierStats();
-  const { locale } = useTranslations();
+  const { t } = useTranslations();
   const loc = useLocalizedHref();
-  const isNl = locale === "nl";
 
   return (
     <section className="relative overflow-hidden py-16 md:py-24">
@@ -108,27 +107,14 @@ export function TierLadder() {
         >
           <span className="section-label">
             <ShieldCheck className="h-3 w-3" />
-            {isNl
-              ? "Drie tiers, één eerlijk trackrecord"
-              : "Three tiers, one honest track record"}
+            {t("tier.badge")}
           </span>
           <h2 className="text-heading mt-4 text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-            {isNl ? (
-              <>
-                Hoger vertrouwen ={" "}
-                <span className="gradient-text-green">hogere nauwkeurigheid</span>
-              </>
-            ) : (
-              <>
-                Higher confidence ={" "}
-                <span className="gradient-text-green">higher accuracy</span>
-              </>
-            )}
+            {t("tier.titleLine1")}{" "}
+            <span className="gradient-text-green">{t("tier.titleHighlight")}</span>
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#a3a9b8]">
-            {isNl
-              ? "Elke voorspelling krijgt een tier op basis van modelbetrouwbaarheid. Hoe hoger de tier, hoe strenger de drempel en hoe scherper de cijfers."
-              : "Every prediction is labelled with a tier based on model confidence. The higher the tier, the stricter the threshold and the sharper the numbers."}
+            {t("tier.lede")}
           </p>
         </motion.div>
 
@@ -147,7 +133,7 @@ export function TierLadder() {
               row.accuracy != null && row.accuracy > 0
                 ? row.accuracy
                 : FALLBACK[tierKey].accuracy;
-            const accStr = `${(accuracyNum * 100).toFixed(1).replace(".", isNl ? "," : ".")}%`;
+            const accStr = `${(accuracyNum * 100).toFixed(1).replace(".", t("tier.decimalSep"))}%`;
 
             return (
               <motion.div
@@ -188,7 +174,7 @@ export function TierLadder() {
 
                   <div className="mt-4 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-[#6b7280]">
                     <Lock className="h-3 w-3" />
-                    {isNl ? "Premium tier" : "Premium tier"}
+                    {t("tier.premiumTier")}
                   </div>
                 </div>
               </motion.div>
@@ -198,15 +184,13 @@ export function TierLadder() {
 
         <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-between">
           <p className="text-xs text-[#6b7280]">
-            {isNl
-              ? "Live cijfers, rechtstreeks uit onze database."
-              : "Live numbers, straight from our database."}
+            {t("tier.liveNote")}
           </p>
           <Link
             href={loc("/track-record")}
             className="btn-glass inline-flex items-center gap-2 text-sm"
           >
-            {isNl ? "Bekijk volledig trackrecord" : "See full track record"}
+            {t("tier.seeFullTrackRecord")}
           </Link>
         </div>
       </div>
