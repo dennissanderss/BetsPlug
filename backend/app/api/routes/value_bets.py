@@ -19,6 +19,14 @@ from app.api.deps import get_current_tier, get_db
 from app.core.tier_system import PickTier, TIER_METADATA
 from app.models.match import Match
 from app.models.prediction import Prediction
+from app.core.tier_leagues import (
+    LEAGUES_FREE,
+    LEAGUES_GOLD,
+    LEAGUES_PLATINUM,
+    LEAGUES_SILVER,
+)
+from app.core.tier_system import CONF_THRESHOLD
+from app.models.prediction import Prediction, PredictionEvaluation
 from app.models.value_bet import ValueBet
 from app.services.stats_math import max_drawdown, sharpe, wilson_ci
 from app.services.value_bet_service import (
@@ -438,6 +446,196 @@ async def get_value_bet_stats(
         sample_size_warning=warn,
         window_start=window_start,
         window_end=window_end,
+    )
+
+
+# ---------------------------------------------------------------------------
+# GET /backtest-proof — leakage-free method validation
+# ---------------------------------------------------------------------------
+class BacktestProofSlice(BaseModel):
+    label: str
+    n: int
+    accuracy: float
+    wilson_ci_lower: float
+    wilson_ci_upper: float
+    avg_odds: float
+    roi_percentage: float
+    total_units_pnl: float
+    max_drawdown_units: float
+    sharpe_ratio: Optional[float] = None
+
+
+class BacktestProofResponse(BaseModel):
+    """Leakage-free backtest over the live-prediction pool.
+
+    Scope: ``prediction_source='live'`` predictions with populated
+    ``closing_odds_snapshot`` that have been evaluated. No ``backtest``
+    source predictions in this calculation — those would pull in the
+    known ``team_seeds.py`` leakage (see CLAUDE.md). The cutoff
+    ``V81_DEPLOYMENT_CUTOFF`` is also respected via the upstream
+    pipeline.
+    """
+    methodology: str
+    sample_window_start: Optional[str] = None
+    sample_window_end: Optional[str] = None
+    total_live_evaluated_with_odds: int
+    slices: list[BacktestProofSlice]
+    disclaimer: str
+
+
+def _classify_tier_slug(league_id, confidence: float) -> str | None:
+    from app.core.tier_system import PickTier
+    lid = str(league_id)
+    if lid in LEAGUES_PLATINUM and confidence >= CONF_THRESHOLD[PickTier.PLATINUM]:
+        return "platinum"
+    if lid in LEAGUES_GOLD and confidence >= CONF_THRESHOLD[PickTier.GOLD]:
+        return "gold"
+    if lid in LEAGUES_SILVER and confidence >= CONF_THRESHOLD[PickTier.SILVER]:
+        return "silver"
+    if lid in LEAGUES_FREE and confidence >= CONF_THRESHOLD[PickTier.FREE]:
+        return "free"
+    return None
+
+
+def _slice(label: str, recs: list[dict]) -> BacktestProofSlice:
+    n = len(recs)
+    if n == 0:
+        return BacktestProofSlice(
+            label=label, n=0, accuracy=0.0,
+            wilson_ci_lower=0.0, wilson_ci_upper=0.0,
+            avg_odds=0.0, roi_percentage=0.0,
+            total_units_pnl=0.0, max_drawdown_units=0.0,
+            sharpe_ratio=None,
+        )
+    correct = sum(1 for r in recs if r["correct"])
+    pnls = [r["pnl"] for r in recs]
+    wl, wu = wilson_ci(correct, n)
+    total_pnl = sum(pnls)
+    return BacktestProofSlice(
+        label=label,
+        n=n,
+        accuracy=round(correct / n, 4),
+        wilson_ci_lower=round(wl, 4),
+        wilson_ci_upper=round(wu, 4),
+        avg_odds=round(sum(r["odds"] for r in recs) / n, 3),
+        roi_percentage=round(total_pnl / n * 100, 2),
+        total_units_pnl=round(total_pnl, 2),
+        max_drawdown_units=round(max_drawdown(pnls), 2),
+        sharpe_ratio=(round(sharpe(pnls), 3) if sharpe(pnls) is not None else None),
+    )
+
+
+@router.get("/backtest-proof", response_model=BacktestProofResponse)
+async def get_backtest_proof(
+    db: AsyncSession = Depends(get_db),
+) -> BacktestProofResponse:
+    """Leakage-free backtest aggregated on-read from the live pool.
+
+    Public (no auth) — transparency feature. Results cached for
+    ~10 min in the API client side via TanStack Query; server-side we
+    recompute from scratch to always reflect the freshest evaluated
+    data.
+
+    The frontend surfaces this on the Value Bet tab as "Methode-bewijs"
+    alongside the live-measurement card.
+    """
+    from sqlalchemy.orm import selectinload
+    stmt = (
+        select(Prediction, PredictionEvaluation, Match)
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .join(Match, Match.id == Prediction.match_id)
+        .where(
+            Prediction.prediction_source == "live",
+            Prediction.closing_odds_snapshot.is_not(None),
+        )
+        .options(selectinload(Prediction.match))
+    )
+    rows = (await db.execute(stmt)).unique().all()
+
+    # Build flat record list with computed edge/odds/pnl
+    records: list[dict] = []
+    window_start: Optional[str] = None
+    window_end: Optional[str] = None
+    for pred, evaluation, match in rows:
+        snap = pred.closing_odds_snapshot or {}
+        if not isinstance(snap, dict) or not snap.get("bookmaker_odds"):
+            continue
+        book = snap["bookmaker_odds"]
+        oh = book.get("home")
+        od = book.get("draw")
+        oa = book.get("away")
+        if not oh or not oa:
+            continue
+        try:
+            rh = 1.0 / oh
+            ra = 1.0 / oa
+            rd = (1.0 / od) if od else 0.0
+            ov = rh + rd + ra
+            fh = rh / ov
+            fa = ra / ov
+            fd = (rd / ov) if od else None
+        except (ZeroDivisionError, TypeError):
+            continue
+        our = {"home": pred.home_win_prob, "draw": pred.draw_prob or 0.0, "away": pred.away_win_prob}
+        fair = {"home": fh, "draw": fd or 0.0, "away": fa}
+        odds_map = {"home": oh, "draw": od, "away": oa}
+        edges = {k: our[k] - fair[k] for k in ("home", "draw", "away") if odds_map[k]}
+        if not edges:
+            continue
+        pick = max(edges, key=edges.get)  # type: ignore[arg-type]
+        edge = edges[pick]
+        odds = odds_map[pick]
+        actual = (evaluation.actual_outcome or "").lower()
+        correct = actual == pick
+        pnl = (odds - 1.0) if correct else -1.0
+        tier = _classify_tier_slug(match.league_id, pred.confidence)
+        records.append({
+            "edge": edge, "odds": odds, "correct": correct,
+            "pnl": pnl, "tier": tier, "confidence": pred.confidence,
+            "scheduled_at": match.scheduled_at,
+        })
+        if match.scheduled_at:
+            iso = match.scheduled_at.isoformat()
+            window_start = iso if window_start is None or iso < window_start else window_start
+            window_end = iso if window_end is None or iso > window_end else window_end
+
+    # Primary method slices (edge ≥ 3%, odds 1.50-5.00)
+    core = [r for r in records if r["edge"] >= 0.03 and 1.50 <= r["odds"] <= 5.00]
+    prod = [r for r in core if r["tier"] in ("gold", "platinum")]
+
+    # Threshold sweep (all tiers, production odds range)
+    slices = [
+        _slice("method - edge >= 3% (all tiers)", core),
+        _slice("method - edge >= 5% (all tiers)",
+                [r for r in records if r["edge"] >= 0.05 and 1.50 <= r["odds"] <= 5.00]),
+        _slice("method - edge >= 8% (all tiers)",
+                [r for r in records if r["edge"] >= 0.08 and 1.50 <= r["odds"] <= 5.00]),
+        _slice("production filter (gold+platinum, edge >= 3%)", prod),
+    ]
+    # Per-tier @ 3%
+    for tname in ("platinum", "gold", "silver", "free"):
+        slices.append(_slice(
+            f"per-tier @3% — {tname}",
+            [r for r in core if r["tier"] == tname],
+        ))
+
+    return BacktestProofResponse(
+        methodology=(
+            "Leakage-free: restricted to prediction_source='live' with "
+            "populated closing_odds_snapshot and a corresponding evaluated "
+            "MatchResult. No backfill/backtest predictions (which carry "
+            "team_seeds post-hoc bias). Edges computed by proportional "
+            "vig-removal."
+        ),
+        sample_window_start=window_start,
+        sample_window_end=window_end,
+        total_live_evaluated_with_odds=len(records),
+        slices=slices,
+        disclaimer=(
+            "Past performance is not indicative of future results. Sample "
+            "sizes below 30 are statistically inconclusive — Wilson 95% CI "
+            "is shown for every slice. 18+ only."
+        ),
     )
 
 

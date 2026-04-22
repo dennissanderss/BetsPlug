@@ -1140,3 +1140,25 @@ export interface ValueBetHistoryResponse {
   total: number;
   items: ValueBetHistoryItem[];
 }
+
+export interface BacktestProofSlice {
+  label: string;
+  n: number;
+  accuracy: number;
+  wilson_ci_lower: number;
+  wilson_ci_upper: number;
+  avg_odds: number;
+  roi_percentage: number;
+  total_units_pnl: number;
+  max_drawdown_units: number;
+  sharpe_ratio: number | null;
+}
+
+export interface BacktestProof {
+  methodology: string;
+  sample_window_start?: string;
+  sample_window_end?: string;
+  total_live_evaluated_with_odds: number;
+  slices: BacktestProofSlice[];
+  disclaimer: string;
+}

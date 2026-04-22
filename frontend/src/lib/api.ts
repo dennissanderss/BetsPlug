@@ -685,6 +685,11 @@ class ApiClient {
       `/value-bets/stats?scope=${scope}`,
     );
   }
+  getValueBetBacktestProof() {
+    return this.request<import("@/types/api").BacktestProof>(
+      "/value-bets/backtest-proof",
+    );
+  }
   getValueBetHistory(params?: {
     start_date?: string;
     end_date?: string;

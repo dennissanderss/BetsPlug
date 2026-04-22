@@ -16,7 +16,7 @@ import { api } from "@/lib/api";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
-import type { ValueBetStats, ValueBetToday } from "@/types/api";
+import type { BacktestProof, ValueBetStats, ValueBetToday } from "@/types/api";
 
 // Live tracking starts when daily-live pipeline lands. Backfill rows are
 // everything before this date. Kept in sync with backend
@@ -232,6 +232,142 @@ function StatsCard({
   );
 }
 
+// ─── Backtest Proof Card ────────────────────────────────────────────────────
+
+function BacktestProofCard({ proof, isLoading }: {
+  proof?: BacktestProof;
+  isLoading: boolean;
+}) {
+  if (isLoading) {
+    return (
+      <div className="card-neon p-5 animate-pulse">
+        <div className="h-4 w-48 rounded bg-white/[0.06] mb-3" />
+        <div className="h-20 w-full rounded bg-white/[0.04]" />
+      </div>
+    );
+  }
+  if (!proof || proof.slices.length === 0) return null;
+
+  // Primary slice — "method @ 3% all tiers" — this is our public claim
+  const primary =
+    proof.slices.find((s) => s.label.startsWith("method - edge >= 3%")) ??
+    proof.slices[0];
+  const production =
+    proof.slices.find((s) => s.label.startsWith("production filter"));
+
+  return (
+    <div className="card-neon p-5 md:p-6 relative overflow-hidden">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-20 -right-10 h-64 w-64 rounded-full opacity-30 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(59,130,246,0.35), transparent 70%)",
+        }}
+      />
+      <div className="relative flex items-start gap-3">
+        <HexBadge variant="green" size="md">
+          <BarChart3 className="h-5 w-5" />
+        </HexBadge>
+        <div className="flex-1">
+          <span className="section-label">Methode-bewijs (leakage-vrij)</span>
+          <h3 className="text-heading mt-2 text-lg">
+            Historische test op {proof.total_live_evaluated_with_odds} live
+            predictions
+          </h3>
+          <p className="mt-2 text-xs text-slate-400 leading-relaxed">
+            Uitsluitend op predictions die vóór kickoff zijn vastgelegd
+            (geen team_seeds post-hoc bias). Leakage-vrije backtest van
+            dezelfde value-bet logica die in de live pipeline draait.
+          </p>
+        </div>
+      </div>
+
+      <div className="relative mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.05] px-3 py-2.5">
+          <p className="text-[10px] uppercase tracking-widest text-emerald-500/80">
+            ROI
+          </p>
+          <p className="mt-1 text-2xl font-extrabold tabular-nums text-emerald-400">
+            {primary.roi_percentage >= 0 ? "+" : ""}
+            {primary.roi_percentage.toFixed(1)}%
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">
+            over {primary.n} picks
+          </p>
+        </div>
+        <div className="rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
+          <p className="text-[10px] uppercase tracking-widest text-slate-500">
+            Accuracy
+          </p>
+          <p className="mt-1 text-2xl font-extrabold tabular-nums text-slate-200">
+            {(primary.accuracy * 100).toFixed(1)}%
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">
+            CI {(primary.wilson_ci_lower * 100).toFixed(0)}%–
+            {(primary.wilson_ci_upper * 100).toFixed(0)}%
+          </p>
+        </div>
+        <div className="rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
+          <p className="text-[10px] uppercase tracking-widest text-slate-500">
+            Sharpe
+          </p>
+          <p className="mt-1 text-2xl font-extrabold tabular-nums text-slate-200">
+            {primary.sharpe_ratio !== null
+              ? primary.sharpe_ratio.toFixed(2)
+              : "—"}
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">
+            risk-adj return
+          </p>
+        </div>
+        <div className="rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
+          <p className="text-[10px] uppercase tracking-widest text-slate-500">
+            Max drawdown
+          </p>
+          <p className="mt-1 text-2xl font-extrabold tabular-nums text-red-400">
+            {primary.max_drawdown_units.toFixed(1)}u
+          </p>
+          <p className="text-[10px] text-slate-500 mt-0.5">
+            worst run
+          </p>
+        </div>
+      </div>
+
+      {production && production.n > 0 && (
+        <div className="relative mt-4 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
+          <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">
+            Productie-filter (gold + platinum scope)
+          </p>
+          <p className="text-xs text-slate-300">
+            <span className="font-semibold">{production.n} picks</span>,{" "}
+            accuracy {(production.accuracy * 100).toFixed(1)}%, ROI{" "}
+            <span
+              className={
+                production.roi_percentage >= 0
+                  ? "text-emerald-400 font-bold"
+                  : "text-red-400 font-bold"
+              }
+            >
+              {production.roi_percentage >= 0 ? "+" : ""}
+              {production.roi_percentage.toFixed(1)}%
+            </span>
+            {production.n < 30 && (
+              <span className="text-slate-500 italic">
+                {" "}— sample klein, breder bewijs hierboven
+              </span>
+            )}
+          </p>
+        </div>
+      )}
+
+      <p className="relative mt-3 text-[11px] text-slate-500 italic">
+        {proof.disclaimer}
+      </p>
+    </div>
+  );
+}
+
 // ─── Main Panel ─────────────────────────────────────────────────────────────
 
 export function ValueBetPanel() {
@@ -251,6 +387,12 @@ export function ValueBetPanel() {
   const liveStatsQuery = useQuery<ValueBetStats>({
     queryKey: ["value-bet-stats", "live"],
     queryFn: () => api.getValueBetStats("live"),
+    staleTime: 60 * 60_000,
+  });
+
+  const proofQuery = useQuery<BacktestProof>({
+    queryKey: ["value-bet-backtest-proof"],
+    queryFn: () => api.getValueBetBacktestProof(),
     staleTime: 60 * 60_000,
   });
 
@@ -391,11 +533,17 @@ export function ValueBetPanel() {
         </div>
       )}
 
+      {/* ── Methode-bewijs (leakage-free backtest) ── */}
+      <BacktestProofCard
+        proof={proofQuery.data}
+        isLoading={proofQuery.isLoading}
+      />
+
       {/* ── Stats: backtest + live ── */}
       <div className="grid gap-4 md:grid-cols-2">
         <StatsCard
-          title="Modelprestaties (backtest)"
-          subtitle={`Berekend op historische data tot ${LIVE_TRACKING_START}`}
+          title="Geselecteerde value-bets (historisch)"
+          subtitle={`Exacte productie-filter: edge≥3%, odds 1.50-5.00, tier∈{gold,platinum}`}
           stats={backtestStatsQuery.data}
           isLoading={backtestStatsQuery.isLoading}
           scope="backtest"
