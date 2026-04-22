@@ -133,9 +133,12 @@ export function SiteNav() {
               />
             </Link>
 
-            {/* Centred nav pills (desktop) */}
+            {/* Centred nav pills (desktop) — xl: gates the 6-item row to
+                viewports wide enough for the longest French/German labels
+                ("Comment ça marche", "Wie es funktioniert"). Below 1280px
+                the hamburger takes over with a vertical layout. */}
             <div
-              className="hidden flex-1 items-center justify-center gap-1 lg:flex"
+              className="hidden flex-1 items-center justify-center gap-1 xl:flex"
             >
               {/* Match Predictions — mega-menu trigger */}
               <div
@@ -149,7 +152,7 @@ export function SiteNav() {
                   onClick={() => setPredictionsOpen(false)}
                   aria-haspopup="true"
                   aria-expanded={predictionsOpen}
-                  className={`inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                     predictionsOpen
                       ? "bg-white/[0.06] text-[#ededed]"
                       : "text-[#a3a9b8] hover:bg-white/[0.04] hover:text-[#ededed]"
@@ -265,7 +268,7 @@ export function SiteNav() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="rounded-full px-4 py-2 text-sm font-medium text-[#a3a9b8] transition-colors hover:bg-white/[0.04] hover:text-[#ededed]"
+                  className="whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-[#a3a9b8] transition-colors hover:bg-white/[0.04] hover:text-[#ededed]"
                 >
                   {link.label}
                 </Link>
@@ -275,14 +278,14 @@ export function SiteNav() {
             {/* Right actions */}
             <div className="flex items-center gap-2">
               {/* Language switcher (desktop) */}
-              <div className="hidden lg:block">
+              <div className="hidden xl:block">
                 <LanguageSwitcher variant="compact" theme="dark" />
               </div>
 
               {/* Login (desktop) */}
               <Link
                 href={loc("/login")}
-                className="hidden rounded-full px-4 py-2 text-sm font-medium text-[#a3a9b8] transition-colors hover:bg-white/[0.04] hover:text-[#ededed] lg:inline-flex"
+                className="hidden whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-[#a3a9b8] transition-colors hover:bg-white/[0.04] hover:text-[#ededed] xl:inline-flex"
               >
                 {t("nav.login")}
               </Link>
@@ -290,7 +293,7 @@ export function SiteNav() {
               {/* Primary CTA */}
               <Link
                 href={`${loc("/checkout")}?plan=gold`}
-                className="btn-primary hidden items-center gap-1.5 lg:inline-flex"
+                className="btn-primary hidden items-center gap-1.5 whitespace-nowrap xl:inline-flex"
               >
                 {t("nav.startFreeTrial")}
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -299,7 +302,7 @@ export function SiteNav() {
               {/* Mobile CTA (compact) */}
               <Link
                 href={`${loc("/checkout")}?plan=gold`}
-                className="btn-primary inline-flex items-center gap-1 px-3.5 py-2 text-xs lg:hidden"
+                className="btn-primary inline-flex items-center gap-1 whitespace-nowrap px-3.5 py-2 text-xs xl:hidden"
                 style={{ fontSize: "0.75rem" }}
               >
                 {t("nav.startFreeTrial")}
@@ -310,7 +313,7 @@ export function SiteNav() {
                 type="button"
                 onClick={() => setMobileOpen(true)}
                 aria-label="Open menu"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#ededed] transition-colors hover:border-[#4ade80]/50 hover:bg-[#4ade80]/10 lg:hidden"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#ededed] transition-colors hover:border-[#4ade80]/50 hover:bg-[#4ade80]/10 xl:hidden"
               >
                 <Menu className="h-4 w-4" />
               </button>
@@ -321,7 +324,7 @@ export function SiteNav() {
 
       {/* Mobile drawer */}
       <div
-        className={`fixed inset-0 z-[60] lg:hidden ${
+        className={`fixed inset-0 z-[60] xl:hidden ${
           mobileOpen ? "pointer-events-auto" : "pointer-events-none"
         }`}
         aria-hidden={!mobileOpen}
