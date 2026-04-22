@@ -61,16 +61,17 @@ export function TierROIGrid({
 
   const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api";
 
-  const { data, isLoading, refetch } = useQuery<TierROIResponse>({
+  const { data, isLoading, isError, refetch } = useQuery<TierROIResponse>({
     queryKey: ["roi-tiers", stake, source, days],
     queryFn: async () => {
       const p = new URLSearchParams({ stake: String(stake), source });
       if (days) p.append("days", String(days));
       const res = await fetch(`${API}/trackrecord/roi/tiers?${p}`);
-      if (!res.ok) throw new Error("ROI tiers fetch failed");
+      if (!res.ok) throw new Error(`ROI tiers fetch failed: ${res.status}`);
       return res.json();
     },
     staleTime: 10 * 60_000,
+    retry: 1,
   });
 
   const fmt = (v: number) =>
@@ -136,6 +137,14 @@ export function TierROIGrid({
             <div key={t.slug} className="h-36 animate-pulse rounded-xl bg-white/5" />
           ))}
         </div>
+      ) : isError ? (
+        <div className="rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-5 text-center space-y-2">
+          <p className="text-sm font-semibold text-red-300">Kan geen data ophalen</p>
+          <p className="text-xs text-slate-500">De backend server is niet bereikbaar of de endpoint bestaat nog niet. Probeer het later opnieuw.</p>
+          <button onClick={() => refetch()} className="mt-2 rounded-lg bg-white/5 px-3 py-1.5 text-xs text-slate-300 hover:bg-white/10 transition-colors">
+            Opnieuw proberen
+          </button>
+        </div>
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -156,7 +165,7 @@ export function TierROIGrid({
                   </div>
 
                   {!hasData ? (
-                    <p className="text-[11px] text-slate-600">Geen data</p>
+                    <p className="text-[11px] text-slate-400">Geen geëvalueerde picks</p>
                   ) : (
                     <>
                       {/* ROI — big number */}
