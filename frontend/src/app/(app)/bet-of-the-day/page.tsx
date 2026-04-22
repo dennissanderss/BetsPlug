@@ -976,41 +976,6 @@ export default function BetOfTheDayPage() {
             </p>
           </div>
 
-          {/* ── Performance Insights (backtest stats) ── */}
-          <BOTDPerformanceInsights />
-
-          {/* ── Info Cards ── */}
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div className="glass-card p-5">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
-                <TrendingUp className="h-5 w-5 text-blue-400" />
-              </div>
-              <h3 className="text-sm font-bold text-white">{t("botd.valueDetection")}</h3>
-              <p className="mt-1 text-xs text-slate-400 leading-relaxed">
-                {t("botd.valueDetectionDesc")}
-              </p>
-            </div>
-
-            <div className="glass-card p-5">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
-                <Shield className="h-5 w-5 text-emerald-400" />
-              </div>
-              <h3 className="text-sm font-bold text-white">{t("botd.modelsAgree")}</h3>
-              <p className="mt-1 text-xs text-slate-400 leading-relaxed">
-                {t("botd.modelsAgreeDesc")}
-              </p>
-            </div>
-
-            <div className="glass-card p-5">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10">
-                <Star className="h-5 w-5 text-amber-400" />
-              </div>
-              <h3 className="text-sm font-bold text-white">{t("botd.dailySelection")}</h3>
-              <p className="mt-1 text-xs text-slate-400 leading-relaxed">
-                {t("botd.dailySelectionDesc")}
-              </p>
-            </div>
-          </div>
         </>
       )}
       </>

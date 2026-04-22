@@ -1112,24 +1112,8 @@ function FilterBar({
           </div>
         </div>
 
-        {/* Sort */}
+        {/* Result count */}
         <div className="flex items-center gap-2 ml-auto">
-          <ArrowUpDown className="h-3.5 w-3.5 text-slate-500" />
-          <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
-            {sortOptions.map(({ key, label }) => (
-              <button
-                key={key}
-                onClick={() => setSortKey(key)}
-                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                  sortKey === key
-                    ? "bg-white/[0.08] text-slate-100"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
           <span className="text-xs text-slate-500 whitespace-nowrap">
             {total} result{total !== 1 ? "s" : ""}
           </span>
@@ -1427,6 +1411,24 @@ export default function PredictionsPage() {
         })}
       </div>
 
+      {/* ── Upcoming-mode guidance banner ── */}
+      {!isResults && (
+        <div className="flex items-start gap-3 rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
+          <span className="mt-0.5 text-base">💡</span>
+          <p className="text-xs leading-relaxed text-slate-300">
+            <span className="font-semibold text-white">Hoe gebruik je deze picks?</span>{" "}
+            Alle picks zijn beschikbaar om op te wedden. Hoe hoger de{" "}
+            <span className="font-semibold text-amber-300">betrouwbaarheid %</span>, hoe
+            zekerder het model. Wij raden aan: kies picks{" "}
+            <span className="font-semibold text-emerald-300">boven 70%</span> voor de beste
+            kans op succes. Filter op{" "}
+            <span className="font-semibold text-white">Gold</span> of{" "}
+            <span className="font-semibold text-white">Platinum</span> om alleen die picks te
+            zien.
+          </p>
+        </div>
+      )}
+
       {/* ── Results-mode range selector (replaces the single-date picker) ── */}
       {isResults && (
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4">
@@ -1439,7 +1441,11 @@ export default function PredictionsPage() {
             </span>
           </div>
           <div className="flex items-center gap-1">
-            {([7, 14, 30] as const).map((days) => {
+            {([
+              { days: 7,  label: "Afgelopen week" },
+              { days: 14, label: "Afgelopen 14 dagen" },
+              { days: 30, label: "Afgelopen 30 dagen" },
+            ] as const).map(({ days, label }) => {
               const active = resultsRange === days;
               return (
                 <button
@@ -1452,9 +1458,7 @@ export default function PredictionsPage() {
                       : "border-white/[0.08] bg-white/[0.03] text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  {days} {t("pred.rangeDays" as any) === "pred.rangeDays"
-                    ? "dagen"
-                    : t("pred.rangeDays" as any)}
+                  {label}
                 </button>
               );
             })}
