@@ -454,6 +454,170 @@ async def get_roi_simulation(
     }
 
 
+@router.get("/roi/tiers", summary="ROI simulation broken down per tier in one call")
+async def get_roi_per_tier(
+    source: str = Query("all", description="'live', 'backtest', or 'all'"),
+    days: Optional[int] = Query(None, description="Limit to the last N days of matches"),
+    stake: float = Query(10.0, ge=1.0, le=10_000.0, description="Stake per pick in euros"),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Same ROI logic as /roi but returns a breakdown for every tier slug
+    (free, silver, gold, platinum) in a single database round-trip, plus
+    an 'all' aggregate.  Used by the TierROIGrid frontend component."""
+    from datetime import timedelta
+    from sqlalchemy import or_, case
+    from app.models.odds import OddsHistory
+
+    BOOKMAKER_MARGIN = 0.95
+    TIERS = ["free", "silver", "gold", "platinum"]
+
+    oh_alias = OddsHistory.__table__.alias("oh")
+    tier_expr = pick_tier_expression()
+
+    stmt = (
+        select(
+            tier_expr.label("tier_int"),
+            Prediction.home_win_prob,
+            Prediction.draw_prob,
+            Prediction.away_win_prob,
+            Prediction.closing_odds_snapshot,
+            PredictionEvaluation.is_correct,
+            func.max(oh_alias.c.home_odds).label("oh_home"),
+            func.max(oh_alias.c.draw_odds).label("oh_draw"),
+            func.max(oh_alias.c.away_odds).label("oh_away"),
+        )
+        .join(PredictionEvaluation, PredictionEvaluation.prediction_id == Prediction.id)
+        .join(Match, Match.id == Prediction.match_id)
+        .outerjoin(
+            oh_alias,
+            (oh_alias.c.match_id == Prediction.match_id)
+            & oh_alias.c.market.in_(["1x2", "1X2"]),
+        )
+        .where(Prediction.predicted_at < Match.scheduled_at)
+        .group_by(
+            tier_expr,
+            Prediction.home_win_prob,
+            Prediction.draw_prob,
+            Prediction.away_win_prob,
+            Prediction.closing_odds_snapshot,
+            PredictionEvaluation.is_correct,
+        )
+    )
+
+    if source == "live":
+        stmt = stmt.where(Prediction.prediction_source == "live")
+        stmt = stmt.where(Prediction.created_at >= LIVE_MEASUREMENT_START)
+    elif source == "backtest":
+        stmt = stmt.where(
+            or_(
+                Prediction.prediction_source != "live",
+                Prediction.prediction_source.is_(None),
+            )
+        )
+
+    if days:
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+        stmt = stmt.where(Match.scheduled_at >= cutoff)
+
+    rows = (await db.execute(stmt)).fetchall()
+
+    # Accumulate stats per tier slug + "all"
+    buckets: dict[str, dict] = {
+        slug: {"pnls": [], "odds_list": [], "correct": 0, "real": 0, "implied": 0}
+        for slug in [*TIERS, "all"]
+    }
+
+    for row in rows:
+        # Resolve tier slug
+        try:
+            slug = TIER_METADATA[PickTier(int(row.tier_int))]["slug"] if row.tier_int is not None else None
+        except Exception:
+            slug = None
+        if slug not in TIERS:
+            continue  # outside every tier whitelist — skip
+
+        probs = {
+            "home": float(row.home_win_prob or 0.0),
+            "draw": float(row.draw_prob or 0.0),
+            "away": float(row.away_win_prob or 0.0),
+        }
+        pick = max(probs, key=lambda k: probs[k])
+        pick_prob = probs[pick]
+
+        # Odds priority: snapshot → OddsHistory → implied
+        odds: float | None = None
+        snap = row.closing_odds_snapshot or {}
+        book = snap.get("bookmaker_odds") if isinstance(snap, dict) else None
+        if isinstance(book, dict):
+            raw = book.get(pick)
+            if raw and float(raw) > 1.0:
+                odds = float(raw)
+
+        is_real = odds is not None
+
+        if odds is None:
+            oh_val = {"home": row.oh_home, "draw": row.oh_draw, "away": row.oh_away}.get(pick)
+            if oh_val and float(oh_val) > 1.0:
+                odds = float(oh_val)
+                is_real = True
+
+        if odds is None and pick_prob > 0.0:
+            odds = round(1.0 / pick_prob * BOOKMAKER_MARGIN, 3)
+            if odds <= 1.0:
+                continue
+        elif odds is None:
+            continue
+
+        for bucket in (slug, "all"):
+            b = buckets[bucket]
+            b["odds_list"].append(odds)
+            if is_real:
+                b["real"] += 1
+            else:
+                b["implied"] += 1
+            if row.is_correct:
+                b["pnls"].append(stake * (odds - 1.0))
+                b["correct"] += 1
+            else:
+                b["pnls"].append(-stake)
+
+    def _aggregate(b: dict) -> dict:
+        n = len(b["pnls"])
+        if n == 0:
+            return {
+                "total_picks": 0,
+                "real_odds_count": 0,
+                "implied_odds_count": 0,
+                "correct_picks": 0,
+                "accuracy": 0.0,
+                "avg_odds": 0.0,
+                "total_staked": 0.0,
+                "total_return": 0.0,
+                "net_profit": 0.0,
+                "roi_pct": 0.0,
+            }
+        total_staked = round(n * stake, 2)
+        net_profit = round(sum(b["pnls"]), 2)
+        return {
+            "total_picks": n,
+            "real_odds_count": b["real"],
+            "implied_odds_count": b["implied"],
+            "correct_picks": b["correct"],
+            "accuracy": round(b["correct"] / n, 4),
+            "avg_odds": round(sum(b["odds_list"]) / n, 2),
+            "total_staked": total_staked,
+            "total_return": round(total_staked + net_profit, 2),
+            "net_profit": net_profit,
+            "roi_pct": round((net_profit / total_staked) * 100.0, 1) if total_staked else 0.0,
+        }
+
+    return {
+        "stake_per_pick": stake,
+        "tiers": {slug: _aggregate(buckets[slug]) for slug in TIERS},
+        "all": _aggregate(buckets["all"]),
+    }
+
+
 @router.get(
     "/segments",
     response_model=List[SegmentPerformance],

@@ -39,6 +39,7 @@ import { HeroMediaBg } from "@/components/ui/media-bg";
 import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
 import { LockedLivePlaceholder } from "@/components/ui/locked-live-placeholder";
 import { ROISimulator } from "@/components/noct/roi-simulator";
+import { TierROIGrid } from "@/components/noct/tier-roi-grid";
 
 /* ── Live API data hook ─────────────────────────────────── */
 interface LiveStats {
@@ -856,7 +857,15 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
         </div>
       </section>
 
-      {/* ───────────── ROI SIMULATOR — backtest ──────────────────────── */}
+      {/* ───────────── ROI PER TIER — backtest ───────────────────────── */}
+      <section className="mx-auto max-w-7xl px-4 pb-6 sm:px-6">
+        <TierROIGrid
+          source="backtest"
+          title="Rendement per tier — Backtest"
+        />
+      </section>
+
+      {/* ───────────── ROI SIMULATOR — backtest (inzet-kiezer) ──────── */}
       <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
         <ROISimulator
           pickTier={pickTier !== "all" ? pickTier : undefined}
@@ -895,7 +904,15 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           numbers on the authed /trackrecord dashboard. */}
       <LockedLivePlaceholder number="3" variant="tier" id="live-measurement" />
 
-      {/* ───────────── ROI SIMULATOR — live ─────────────────────────── */}
+      {/* ───────────── ROI PER TIER — live ──────────────────────────── */}
+      <section className="mx-auto max-w-7xl px-4 pb-6 sm:px-6">
+        <TierROIGrid
+          source="live"
+          title="Rendement per tier — Live meting"
+        />
+      </section>
+
+      {/* ───────────── ROI SIMULATOR — live (inzet-kiezer) ──────────── */}
       <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
         <ROISimulator
           pickTier={pickTier !== "all" ? pickTier : undefined}
