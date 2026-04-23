@@ -38,6 +38,7 @@ import { usePotdNumbers } from "@/hooks/use-potd-numbers";
 import { HeroMediaBg } from "@/components/ui/media-bg";
 import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
 import { LockedLivePlaceholder } from "@/components/ui/locked-live-placeholder";
+import { AccuracyPlusPreview } from "@/components/noct/accuracy-plus-preview";
 
 /* ── Live API data hook ─────────────────────────────────── */
 interface LiveStats {
@@ -858,6 +859,15 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
 
       {/* ───────────── BOTD LIVE — LOCKED ───────────── */}
       <LockedLivePlaceholder number="4" variant="botd" id="botd-live" />
+
+      {/* ───────────── ACCURACY PLUS (Spoor 2, preview) ──────────────
+          Verbeterde versie van de Accuracy Engine met pre-match odds
+          validatie. Verzamelt sinds 2026-04-16 echte bookmaker odds
+          bij elke pick. Gated met een progress bar — cijfers worden
+          pas zichtbaar bij 100+ picks (verwacht juni 2026). */}
+      <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6">
+        <AccuracyPlusPreview />
+      </section>
 
       {/* ───────────── PIPELINE ───────────── */}
       <section className="relative overflow-hidden py-20 md:py-28">

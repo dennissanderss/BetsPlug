@@ -42,6 +42,7 @@ import { TrustFunnel } from "@/components/ui/trust-funnel";
 import { BotdTrackRecordSection } from "@/components/ui/botd-track-record-section";
 import { BotdLiveTrackingSection } from "@/components/ui/botd-live-tracking-section";
 import { LiveMeasurementSection } from "@/components/ui/live-measurement-section";
+import { AccuracyPlusPreview } from "@/components/noct/accuracy-plus-preview";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import type { PickTierSlug } from "@/types/api";
@@ -1798,6 +1799,9 @@ export default function TrackrecordPage() {
             <BotdLiveTrackingSection />
           </BotdTierGate>
         </div>
+
+        {/* Spoor 2 — Accuracy Plus preview (gelockt tot 100 picks) */}
+        <AccuracyPlusPreview />
       </div>
 
       </>)}
