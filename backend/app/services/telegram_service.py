@@ -116,6 +116,10 @@ async def post_to_channel(
     payload: dict = {
         "chat_id": channel,
         "text": message,
+        # Our templates in `telegram_templates.py` emit MarkdownV2 bold
+        # (`*x*`) for pick/verdict headers and escape reserved chars via
+        # their `_md()` helper. Keep parse_mode in lock-step with that.
+        "parse_mode": "MarkdownV2",
         # `disable_web_page_preview` keeps the betsplug.com mention at
         # the bottom from ballooning into a big link card that buries
         # the pick itself.
@@ -161,6 +165,9 @@ async def update_message(
         "chat_id": channel,
         "message_id": message_id,
         "text": new_text,
+        # Edits must carry the same parse_mode as the original send —
+        # the GRADED banner prepend in `telegram_templates` uses bold.
+        "parse_mode": "MarkdownV2",
         "disable_web_page_preview": True,
     }
     try:
