@@ -46,6 +46,7 @@ from app.models.prediction import Prediction, PredictionEvaluation
 from app.models.telegram_post import TelegramPost
 from app.services.telegram_service import (
     TelegramError,
+    delete_message,
     post_to_channel,
     update_message,
 )
@@ -579,6 +580,59 @@ async def update_all_pending_results(
     return updated
 
 
+async def wipe_channel(
+    db: AsyncSession, channel: Optional[str] = None
+) -> dict[str, int]:
+    """Delete every auto-posted message from the channel + clear the audit.
+
+    Destructive — used by the admin "reset channel" button when the feed
+    needs a clean slate (e.g. during template redesign). Walks every
+    TelegramPost row for ``channel``, calls ``deleteMessage`` against
+    the Bot API, then hard-deletes the DB row so the idempotency guard
+    in ``publish_pick`` won't block a future repost of the same
+    prediction.
+
+    Returns a counter dict: ``{"deleted": N, "missing": M, "db_removed": K}``.
+    ``missing`` counts messages that were already gone from the channel
+    (bot responded "message to delete not found") — we still drop the
+    DB row because the channel state is the source of truth.
+    """
+    target = _resolve_channel(channel)
+    stmt = (
+        select(TelegramPost)
+        .where(TelegramPost.channel == target)
+        .order_by(TelegramPost.posted_at.desc())
+    )
+    rows = (await db.execute(stmt)).scalars().all()
+
+    deleted = 0
+    missing = 0
+    for post in rows:
+        try:
+            ok = await delete_message(target, post.telegram_message_id)
+        except TelegramError as e:
+            logger.error(
+                "telegram: wipe delete failed for msg=%s: %s",
+                post.telegram_message_id,
+                e,
+            )
+            # Keep the DB row so the operator can retry — only remove
+            # rows where we know the Telegram side converged.
+            continue
+        if ok:
+            deleted += 1
+        else:
+            missing += 1
+        await db.delete(post)
+
+    await db.commit()
+    return {
+        "deleted": deleted,
+        "missing": missing,
+        "db_removed": deleted + missing,
+    }
+
+
 __all__ = [
     "publish_pick",
     "publish_scheduled_slot",
@@ -587,4 +641,5 @@ __all__ = [
     "publish_promo",
     "update_all_pending_results",
     "select_next_free_pick",
+    "wipe_channel",
 ]

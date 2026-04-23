@@ -182,6 +182,46 @@ async def update_message(
         raise
 
 
+async def delete_message(channel: str, message_id: int) -> bool:
+    """Delete a single message from the channel via the Bot API.
+
+    Telegram allows a bot to delete its OWN outgoing channel messages
+    at any age as long as the bot retains ``can_post_messages`` admin
+    rights — the 48-hour rule only applies to messages the bot did not
+    author. Returns True on success, False when the message is already
+    gone (Bot API error "message to delete not found") so the caller
+    can treat that as a harmless no-op. Any other failure raises
+    ``TelegramError`` so the operator sees the reason.
+    """
+    token = _token()
+    if not token:
+        logger.info(
+            "telegram: dry-run delete (no token) channel=%s id=%d",
+            channel,
+            message_id,
+        )
+        return True
+
+    payload = {"chat_id": channel, "message_id": message_id}
+    try:
+        await _post_api("deleteMessage", payload)
+        return True
+    except TelegramError as e:
+        msg = str(e).lower()
+        if "message to delete not found" in msg or "message can't be deleted" in msg:
+            # Already deleted or too old to delete — treat as no-op so
+            # the wipe loop keeps going. The DB audit row is still
+            # removed by the caller so the channel-state converges.
+            logger.warning(
+                "telegram: delete skipped (id=%d, channel=%s): %s",
+                message_id,
+                channel,
+                e,
+            )
+            return False
+        raise
+
+
 async def health_probe() -> Optional[dict]:
     """Call `getMe` as a cheap auth/token health check.
 
@@ -203,5 +243,6 @@ __all__ = [
     "TelegramError",
     "post_to_channel",
     "update_message",
+    "delete_message",
     "health_probe",
 ]
