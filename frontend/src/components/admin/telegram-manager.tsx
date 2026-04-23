@@ -110,23 +110,52 @@ async function adminCall<T>(
     typeof window !== "undefined"
       ? window.localStorage.getItem("betsplug_token")
       : null;
-  const res = await fetch(`${API_BASE}${path}`, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}${path}`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch (e) {
+    // Network / CORS failure — fetch rejects before we even get a status
+    // code. Surface the raw error message so the operator sees e.g.
+    // "Failed to fetch" instead of a generic "doesn't do anything".
+    throw new Error(
+      `Network error: ${e instanceof Error ? e.message : String(e)}`,
+    );
+  }
   const text = await res.text();
-  const json = text ? JSON.parse(text) : null;
+  // Railway error pages and CDN 502s return HTML, which crashes
+  // JSON.parse. Guard so the caller gets a legible error including the
+  // status code + a body snippet instead of a cryptic SyntaxError.
+  let json: unknown = null;
+  if (text) {
+    try {
+      json = JSON.parse(text);
+    } catch {
+      if (!res.ok) {
+        throw new Error(
+          `HTTP ${res.status} (non-JSON): ${text.slice(0, 200)}`,
+        );
+      }
+      // Successful response but not JSON — return the raw text so
+      // typed callers can at least see something.
+      return text as unknown as T;
+    }
+  }
   if (!res.ok) {
     const detail =
       json && typeof json === "object" && "detail" in json
         ? (json as { detail?: unknown }).detail
         : json;
     throw new Error(
-      typeof detail === "string" ? detail : `HTTP ${res.status}`,
+      typeof detail === "string"
+        ? `HTTP ${res.status}: ${detail}`
+        : `HTTP ${res.status}${detail ? `: ${JSON.stringify(detail).slice(0, 200)}` : ""}`,
     );
   }
   return json as T;
