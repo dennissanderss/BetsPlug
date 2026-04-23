@@ -56,6 +56,102 @@ interface PlanDetail {
 const AMBER_GLOW_BG =
   "radial-gradient(600px 300px at 0% 0%, rgba(253, 224, 71, 0.12), transparent 55%)";
 
+/**
+ * Per-tier elegant colour treatment for the pricing cards.
+ *
+ * Each tier gets the same "dark tinted background + subtle radial glow
+ * + coloured accents" recipe that the Platinum card already used, but
+ * in its signature colour:
+ *
+ *   Bronze   → metallic copper
+ *   Silver   → metallic silver
+ *   Gold     → metallic gold (was the old amber treatment)
+ *   Platinum → icy diamond blue (top-tier crown)
+ *
+ * Values are pulled close to (not identical to) ``TIER_THEME`` so the
+ * pricing surface can tune contrast for a dark background without
+ * drifting visibly from the badges used elsewhere.
+ */
+interface TierTreatment {
+  /** Dark tinted card background. */
+  bg: string;
+  /** Soft top-left radial glow used via backgroundImage. */
+  glow: string;
+  /** Border colour (low-opacity tier hue). */
+  borderColor: string;
+  /** Primary accent colour for price + CTA + icons. */
+  accent: string;
+  /** Lighter variant for headings. */
+  accentLight: string;
+  /** Muted tier hue for taglines. */
+  accentMuted: string;
+  /** Tinted glass panel background for "best for" block. */
+  panelBg: string;
+  /** Tinted glass panel border. */
+  panelBorder: string;
+  /** Multi-stop gradient used on the CTA button. */
+  ctaGradient: string;
+  /** Text colour for the CTA button (dark). */
+  ctaText: string;
+  /** Shadow colour under the CTA button. */
+  ctaShadow: string;
+}
+
+const TIER_TREATMENT: Record<"bronze" | "silver" | "gold" | "platinum", TierTreatment> = {
+  bronze: {
+    bg: "#0d0704",
+    glow: "radial-gradient(600px 300px at 0% 0%, rgba(232, 168, 100, 0.10), transparent 55%)",
+    borderColor: "rgba(232, 168, 100, 0.30)",
+    accent: "#e8a864",
+    accentLight: "#f7d9b0",
+    accentMuted: "rgba(232, 168, 100, 0.7)",
+    panelBg: "rgba(232, 168, 100, 0.04)",
+    panelBorder: "rgba(232, 168, 100, 0.22)",
+    ctaGradient: "linear-gradient(135deg, #f7d9b0 0%, #e8a864 25%, #b87333 60%, #6d4115 100%)",
+    ctaText: "#1a0e04",
+    ctaShadow: "0 0 24px rgba(232, 168, 100, 0.35)",
+  },
+  silver: {
+    bg: "#0a0b0d",
+    glow: "radial-gradient(600px 300px at 0% 0%, rgba(229, 228, 226, 0.08), transparent 55%)",
+    borderColor: "rgba(229, 228, 226, 0.28)",
+    accent: "#d7d9dc",
+    accentLight: "#f5f5f5",
+    accentMuted: "rgba(229, 228, 226, 0.7)",
+    panelBg: "rgba(229, 228, 226, 0.04)",
+    panelBorder: "rgba(229, 228, 226, 0.20)",
+    ctaGradient: "linear-gradient(135deg, #f5f5f5 0%, #d7d9dc 25%, #8a8d91 70%, #4a4d52 100%)",
+    ctaText: "#0a0b0d",
+    ctaShadow: "0 0 24px rgba(229, 228, 226, 0.30)",
+  },
+  gold: {
+    bg: "#0f0a02",
+    glow: "radial-gradient(600px 300px at 0% 0%, rgba(245, 214, 122, 0.12), transparent 55%)",
+    borderColor: "rgba(245, 214, 122, 0.32)",
+    accent: "#f5d67a",
+    accentLight: "#fde68a",
+    accentMuted: "rgba(245, 214, 122, 0.7)",
+    panelBg: "rgba(245, 214, 122, 0.04)",
+    panelBorder: "rgba(245, 214, 122, 0.25)",
+    ctaGradient: "linear-gradient(135deg, #fef3c7 0%, #f5d67a 25%, #d4af37 55%, #8a6c0b 100%)",
+    ctaText: "#1a1405",
+    ctaShadow: "0 0 24px rgba(245, 214, 122, 0.38)",
+  },
+  platinum: {
+    bg: "#020a0f",
+    glow: "radial-gradient(600px 300px at 0% 0%, rgba(168, 216, 234, 0.10), transparent 55%)",
+    borderColor: "rgba(168, 216, 234, 0.35)",
+    accent: "#a8d8ea",
+    accentLight: "#d9f0ff",
+    accentMuted: "rgba(168, 216, 234, 0.7)",
+    panelBg: "rgba(168, 216, 234, 0.04)",
+    panelBorder: "rgba(168, 216, 234, 0.25)",
+    ctaGradient: "linear-gradient(135deg, #d9f0ff 0%, #a8d8ea 25%, #5eb3d9 60%, #2a6f8f 100%)",
+    ctaText: "#030a0f",
+    ctaShadow: "0 0 24px rgba(168, 216, 234, 0.38)",
+  },
+};
+
 export function PricingContent({ pricingConfig }: PricingContentProps) {
   const loc = useLocalizedHref();
   const { t } = useTranslations();
@@ -342,40 +438,33 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
           <div className="grid gap-5 lg:grid-cols-2">
             {plans.map((plan) => {
               const Icon = plan.icon;
-              const isAmber = plan.variant === "amber";
-              const cardClass = isAmber ? "card-neon" : `card-neon card-neon-${plan.variant}`;
+              const tt = TIER_TREATMENT[plan.id];
               return (
                 <div
                   key={plan.id}
-                  className={`${cardClass} p-7 sm:p-8`}
-                  style={
-                    isAmber
-                      ? {
-                          background: "#0f0a02",
-                          borderColor: "rgba(251, 191, 36, 0.3)",
-                        }
-                      : undefined
-                  }
+                  className="card-neon p-7 sm:p-8"
+                  style={{
+                    background: tt.bg,
+                    borderColor: tt.borderColor,
+                  }}
                 >
                   <div className="relative">
-                    {isAmber && (
-                      <div
-                        aria-hidden
-                        className="pointer-events-none absolute -inset-1"
-                        style={{ backgroundImage: AMBER_GLOW_BG }}
-                      />
-                    )}
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute -inset-1"
+                      style={{ backgroundImage: tt.glow }}
+                    />
                     <div className="relative flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <HexBadge
-                          variant={isAmber ? "green" : (plan.variant as "green" | "purple" | "blue")}
+                          variant={plan.variant as "green" | "purple" | "blue" | "amber"}
                           size="md"
                         >
                           <Icon className="h-5 w-5" strokeWidth={2} />
                         </HexBadge>
                         <span
                           className="text-[10px] font-semibold uppercase tracking-wider"
-                          style={{ color: isAmber ? "#fbbf24" : undefined }}
+                          style={{ color: tt.accent }}
                         >
                           {t("pricingDeep.planPrefix" as any)} {plan.name}
                         </span>
@@ -391,9 +480,9 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                           tone="default"
                           className="gap-1 text-[10px]"
                           style={{
-                            borderColor: "rgba(251, 191, 36, 0.5)",
-                            backgroundColor: "rgba(251, 191, 36, 0.1)",
-                            color: "#fbbf24",
+                            borderColor: tt.borderColor,
+                            backgroundColor: tt.panelBg,
+                            color: tt.accent,
                           }}
                         >
                           <Crown className="h-3 w-3" />
@@ -404,13 +493,13 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
 
                     <h3
                       className="text-display mt-5 break-words text-3xl sm:text-4xl"
-                      style={{ color: isAmber ? "#fde68a" : "#ededed" }}
+                      style={{ color: tt.accentLight }}
                     >
                       {plan.name}
                     </h3>
                     <p
                       className="mt-2 text-sm"
-                      style={{ color: isAmber ? "rgba(253, 230, 138, 0.7)" : "#a3a9b8" }}
+                      style={{ color: tt.accentMuted }}
                     >
                       {plan.tagline}
                     </p>
@@ -418,7 +507,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                     <div className="mt-5 flex items-baseline gap-2">
                       <span
                         className="text-stat text-4xl sm:text-5xl"
-                        style={{ color: isAmber ? "#fbbf24" : "#ededed" }}
+                        style={{ color: tt.accent }}
                       >
                         {plan.price}
                       </span>
@@ -427,14 +516,10 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
 
                     <div
                       className="glass-panel mt-5 p-4"
-                      style={
-                        isAmber
-                          ? {
-                              borderColor: "rgba(251, 191, 36, 0.25)",
-                              backgroundColor: "rgba(251, 191, 36, 0.04)",
-                            }
-                          : undefined
-                      }
+                      style={{
+                        borderColor: tt.panelBorder,
+                        backgroundColor: tt.panelBg,
+                      }}
                     >
                       <span className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
                         Best for
@@ -447,7 +532,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                     <div className="mt-6 space-y-2.5">
                       <p
                         className="text-[10px] font-semibold uppercase tracking-wider"
-                        style={{ color: isAmber ? "#fbbf24" : "#4ade80" }}
+                        style={{ color: tt.accent }}
                       >
                         {t("pricingDeep.included" as any)}
                       </p>
@@ -455,7 +540,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                         <div key={item} className="flex items-start gap-3 text-sm">
                           <CheckCircle2
                             className="mt-0.5 h-4 w-4 flex-shrink-0"
-                            style={{ color: isAmber ? "#fbbf24" : "#4ade80" }}
+                            style={{ color: tt.accent }}
                             strokeWidth={2.5}
                           />
                           <span className="text-[#ededed]">{item}</span>
@@ -482,25 +567,18 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
 
                     <Link
                       href={plan.ctaHref(loc)}
-                      className={`mt-8 inline-flex w-full items-center justify-center gap-2 sm:w-auto ${
-                        isAmber ? "" : "btn-primary"
-                      }`}
-                      style={
-                        isAmber
-                          ? {
-                              background:
-                                "linear-gradient(135deg, #fef3c7 0%, #fde68a 25%, #fbbf24 55%, #d97706 100%)",
-                              color: "#1a1405",
-                              padding: "0.85rem 1.5rem",
-                              borderRadius: "9999px",
-                              fontSize: "0.875rem",
-                              fontWeight: 600,
-                              boxShadow: "0 0 24px rgba(251, 191, 36, 0.4)",
-                            }
-                          : undefined
-                      }
+                      className="mt-8 inline-flex w-full items-center justify-center gap-2 sm:w-auto"
+                      style={{
+                        background: tt.ctaGradient,
+                        color: tt.ctaText,
+                        padding: "0.85rem 1.5rem",
+                        borderRadius: "9999px",
+                        fontSize: "0.875rem",
+                        fontWeight: 600,
+                        boxShadow: tt.ctaShadow,
+                      }}
                     >
-                      <Crown className={`h-4 w-4 ${isAmber ? "" : "hidden"}`} />
+                      <Crown className={`h-4 w-4 ${plan.lifetime ? "" : "hidden"}`} />
                       {plan.cta}
                     </Link>
                   </div>
