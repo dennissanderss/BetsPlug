@@ -457,7 +457,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                     <div className="relative flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <HexBadge
-                          variant={plan.variant as "green" | "purple" | "blue" | "amber"}
+                          variant={plan.variant === "amber" ? "green" : (plan.variant as "green" | "purple" | "blue")}
                           size="md"
                         >
                           <Icon className="h-5 w-5" strokeWidth={2} />
