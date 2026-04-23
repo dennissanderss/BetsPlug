@@ -1,5 +1,10 @@
 import { defineType } from "sanity";
 
+// Keep in lockstep with `src/i18n/config.ts`.
+// Adding a locale here:
+//   1. Add the locale to config.ts locales + localeMeta.
+//   2. Add the row below.
+//   3. Run `node scripts/translate-sanity.mjs` to backfill content.
 const localeFields = [
   { name: "en", title: "English", fieldset: undefined },
   { name: "nl", title: "Dutch", fieldset: "translations" },
@@ -9,6 +14,14 @@ const localeFields = [
   { name: "it", title: "Italian", fieldset: "translations" },
   { name: "sw", title: "Swahili", fieldset: "translations" },
   { name: "id", title: "Indonesian", fieldset: "translations" },
+  { name: "pt", title: "Portuguese", fieldset: "translations" },
+  { name: "tr", title: "Turkish", fieldset: "translations" },
+  { name: "pl", title: "Polish", fieldset: "translations" },
+  { name: "ro", title: "Romanian", fieldset: "translations" },
+  { name: "ru", title: "Russian", fieldset: "translations" },
+  { name: "el", title: "Greek", fieldset: "translations" },
+  { name: "da", title: "Danish", fieldset: "translations" },
+  { name: "sv", title: "Swedish", fieldset: "translations" },
 ] as const;
 
 export const localeString = defineType({

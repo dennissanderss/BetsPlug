@@ -107,21 +107,32 @@ type FaqKeySet = { q: string; a: string }[];
 
 /**
  * Per-locale narrative numbers for SSR placeholder substitution.
- * Uses the comma decimal for NL/DE/FR/ES/IT and point for everything
- * else. These feed `formatMsg()` where FAQ strings contain
+ * Uses the comma decimal for every European locale that formats
+ * numbers with a comma (most continental Europe), point for Anglo-
+ * style locales. These feed `formatMsg()` where FAQ strings contain
  * `{potdAccuracy}` / `{potdPicks}` tokens — keeps JSON-LD markup
  * crawler-friendly with real numbers instead of raw templates.
  */
-const POTD_VARS_BY_LOCALE: Record<Locale, { potdAccuracy: string; potdPicks: string }> = {
-  en: { potdAccuracy: POTD_STATS.accuracy, potdPicks: POTD_STATS.totalPicks },
-  nl: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-  de: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-  fr: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-  es: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-  it: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-  sw: { potdAccuracy: POTD_STATS.accuracy, potdPicks: POTD_STATS.totalPicks },
-  id: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-};
+// Locales that render decimals with a comma (fr, de, nl, es, it,
+// pt, pl, ro, ru, el, da, sv, tr, id); point-style: en, sw.
+const COMMA_DECIMAL_LOCALES: ReadonlySet<Locale> = new Set<Locale>([
+  "nl", "de", "fr", "es", "it",
+  "pt", "tr", "pl", "ro", "ru", "el", "da", "sv", "id",
+]);
+
+const POTD_VARS_BY_LOCALE: Record<Locale, { potdAccuracy: string; potdPicks: string }> =
+  Object.fromEntries(
+    (["en","nl","de","fr","es","it","sw","id","pt","tr","pl","ro","ru","el","da","sv"] as Locale[])
+      .map((l) => [
+        l,
+        {
+          potdAccuracy: COMMA_DECIMAL_LOCALES.has(l)
+            ? POTD_STATS.accuracyNL
+            : POTD_STATS.accuracy,
+          potdPicks: POTD_STATS.totalPicks,
+        },
+      ]),
+  ) as Record<Locale, { potdAccuracy: string; potdPicks: string }>;
 
 /**
  * Build a locale-aware FAQ items array from translation keys.

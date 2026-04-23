@@ -76,15 +76,44 @@ function loc(obj: Record<string, unknown> | undefined, locale: string): string {
   return (obj[locale] as string) ?? (obj.en as string) ?? "";
 }
 
-/** Build a locale record from a Sanity locale object. */
-function locRecord(obj: Record<string, unknown> | undefined): Record<string, string> {
-  if (!obj) return { en: "" };
+/**
+ * Build a locale record from a Sanity locale object. Every locale
+ * in the app (16 after Phase 2 rollout) is guaranteed to resolve
+ * to a non-empty string via EN fallback, so components can do
+ * `hub.name[locale]` without a missing-key guard. Until a
+ * `translate-sanity` run fills the new locales, `/ru` etc. render
+ * the EN copy — which is hidden from Google via middleware noindex
+ * but still visually consistent for the visitor.
+ */
+function locRecord(
+  obj: Record<string, unknown> | undefined,
+): Record<string, string> {
+  const source = obj ?? {};
+  // 1) collect every string value under any locale key
+  const direct: Record<string, string> = {};
+  for (const [k, v] of Object.entries(source)) {
+    if (k !== "_type" && typeof v === "string") direct[k] = v;
+  }
+  // 2) EN fallback — first non-empty wins: en → nl → any → ""
+  const fallback =
+    direct.en ||
+    direct.nl ||
+    Object.values(direct).find((v) => v.length > 0) ||
+    "";
+  // 3) emit all 16 locales, filling absent/empty with the fallback
   const rec: Record<string, string> = {};
-  for (const [k, v] of Object.entries(obj)) {
-    if (k !== "_type" && typeof v === "string") rec[k] = v;
+  for (const l of SANITY_LOCALES) {
+    const v = direct[l];
+    rec[l] = v && v.length > 0 ? v : fallback;
   }
   return rec;
 }
+
+// Phase 2 top-16 locale set. Keep aligned with `src/i18n/config.ts`.
+const SANITY_LOCALES = [
+  "en", "nl", "de", "fr", "es", "it", "sw", "id",
+  "pt", "tr", "pl", "ro", "ru", "el", "da", "sv",
+] as const;
 
 // ── Articles ──────────────────────────────────────────────
 
