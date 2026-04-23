@@ -621,18 +621,38 @@ async def wipe_channel(
     in ``publish_pick`` won't block a future repost of the same
     prediction.
 
-    Returns a counter dict: ``{"deleted": N, "missing": M, "db_removed": K}``.
+    Pinned **welcome** posts are PRESERVED — ``post_type='welcome'``
+    rows are skipped entirely so the channel's intro message (which the
+    operator manually pinned in Telegram) survives a wipe. The audit
+    row stays in the DB so the history table still shows it.
+
+    Returns a counter dict::
+        {"deleted": N, "missing": M, "db_removed": K, "preserved": P}
+
     ``missing`` counts messages that were already gone from the channel
     (bot responded "message to delete not found") — we still drop the
     DB row because the channel state is the source of truth.
+    ``preserved`` counts welcome rows that were intentionally skipped.
     """
     target = _resolve_channel(channel)
     stmt = (
         select(TelegramPost)
-        .where(TelegramPost.channel == target)
+        .where(
+            TelegramPost.channel == target,
+            # Skip the pinned welcome so a wipe doesn't nuke the channel's
+            # intro post. Operator re-running wipe twice still won't lose
+            # the welcome — idempotent on that dimension.
+            TelegramPost.post_type != "welcome",
+        )
         .order_by(TelegramPost.posted_at.desc())
     )
     rows = (await db.execute(stmt)).scalars().all()
+
+    preserved_stmt = select(func.count(TelegramPost.id)).where(
+        TelegramPost.channel == target,
+        TelegramPost.post_type == "welcome",
+    )
+    preserved = int((await db.execute(preserved_stmt)).scalar_one() or 0)
 
     deleted = 0
     missing = 0
@@ -659,6 +679,7 @@ async def wipe_channel(
         "deleted": deleted,
         "missing": missing,
         "db_removed": deleted + missing,
+        "preserved": preserved,
     }
 
 

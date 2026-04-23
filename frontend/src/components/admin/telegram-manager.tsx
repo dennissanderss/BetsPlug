@@ -732,7 +732,9 @@ export default function TelegramManager() {
                 onClick={() => {
                   const ok = window.confirm(
                     "DESTRUCTIVE — this deletes EVERY auto-posted message " +
-                      "from @BetsPluggs and wipes the local post history.\n\n" +
+                      "from @BetsPluggs (picks, results, summaries, promos) " +
+                      "and wipes their audit rows.\n\n" +
+                      "The pinned WELCOME message is preserved.\n\n" +
                       "The Telegram bot needs 'Delete Messages' admin rights " +
                       "or some posts will remain.\n\n" +
                       "A fresh Free-tier pick will be published right after.\n\n" +
@@ -743,17 +745,30 @@ export default function TelegramManager() {
                     "wipe",
                     () =>
                       adminCall<{
-                        wipe: { deleted: number; missing: number; db_removed: number };
+                        wipe: {
+                          deleted: number;
+                          missing: number;
+                          db_removed: number;
+                          preserved: number;
+                        };
                         next_post: PostSummary | null;
                       }>("/admin/telegram/wipe?repost_next=true", "POST"),
                     (r) => {
                       const typed = r as {
-                        wipe: { deleted: number; missing: number; db_removed: number };
+                        wipe: {
+                          deleted: number;
+                          missing: number;
+                          db_removed: number;
+                          preserved: number;
+                        };
                         next_post: PostSummary | null;
                       };
                       const parts = [
                         `${typed.wipe.deleted} verwijderd`,
                         typed.wipe.missing > 0 ? `${typed.wipe.missing} al weg` : null,
+                        typed.wipe.preserved > 0
+                          ? `${typed.wipe.preserved} welcome behouden`
+                          : null,
                         typed.next_post
                           ? `nieuwe pick msg_id ${typed.next_post.telegram_message_id}`
                           : "geen nieuwe pick (niks eligible)",
@@ -768,9 +783,9 @@ export default function TelegramManager() {
                 {busyAction === "wipe" ? "Bezig…" : "Wipe channel + fresh post"}
               </button>
               <p className="px-1 text-[11px] leading-snug text-red-300/70">
-                Verwijdert ALLE auto-berichten uit @BetsPluggs via de Bot API en wist de
-                lokale geschiedenis. Post meteen de eerstvolgende Free-tier pick onder
-                de nieuwe EN-only template. Onomkeerbaar.
+                Verwijdert alle auto-berichten uit @BetsPluggs (picks, results, summaries,
+                promos) via de Bot API en wist hun audit. De gepinde welcome blijft staan.
+                Post meteen de eerstvolgende Free-tier pick onder de nieuwe EN-only template.
               </p>
             </div>
           </div>
