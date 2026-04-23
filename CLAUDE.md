@@ -91,3 +91,22 @@ Windows convenience wrappers: `start.bat`, `stop.bat`, `open.bat`.
 - `backend/models/` holds serialized ML artifacts — do not git-delete; they are loaded at boot and retraining requires direct Railway DB access (credentials are in `scripts/train_local.py`; rotate if exposed).
 - `/api/strategies/{id}/metrics` returns both clamped (`winrate`, `roi`) and raw (`raw_winrate`, `raw_roi`) values plus a `validation_status` enum. The frontend "Profitable" badge logic depends on the clamp — don't remove it.
 - The `docs/v10_progress_*.md` and `docs/V8_ENGINE_REPORT.md` files are working logs from the current engine/UX build; treat as context, not spec.
+
+## i18n — hard rules (2026-04-23)
+
+Non-negotiable after the April 2026 brand-SEO collapse + full Nerdytips-style re-architecture:
+
+1. **No hardcoded locale ternaries in components.** `isNl ? "X" : "Y"` and `locale === "nl" ? "X" : "Y"` are banned for UI strings. Every UI string goes through `t("key")` + the `useTranslations()` hook (client) or `translate(locale, "key")` (server). Pre-commit hook (`frontend/scripts/check-no-hardcoded-strings.mjs`) blocks commits that re-introduce the pattern.
+   - Allowed exceptions: language-code passthroughs (`isNl ? "nl" : "en"`), BCP-47 date codes (`"nl-NL"` / `"en-GB"`), editorial-locale picks on Sanity content (`hub.name[editorialLocale]`). The check whitelists these automatically.
+
+2. **Supported locales are frozen at 16** — `en, nl, de, fr, es, it, sw, id, pt, tr, pl, ro, ru, el, da, sv`. Adding a 17th locale is a deliberate multi-system change (middleware + routeTable + translate.mjs + font fallback + Sanity schema).
+
+3. **`messages.ts` is the source of truth for UI strings.** Add every new key to BOTH the `en` and `nl` blocks. The `npm run translate` script (`scripts/translate.mjs`) fills the other 14 locales via google-translate-api-x and runs automatically via the pre-commit hook when `messages.ts` changes.
+
+4. **Editorial / marketing content (hero copy, league intros, FAQs, blog posts) lives in Sanity**, not in component code. Use `fetchXPage` / `fetchXBySlug` helpers in `src/lib/sanity-data.ts`; Sanity documents have per-locale localised fields. DeepL-powered `scripts/translate-sanity.ts` keeps non-EN locales filled.
+
+5. **Canonical URLs are always the EN form**, regardless of which locale is rendering. `lib/seo-helpers.ts` → `getCanonicalUrl()` returns `https://betsplug.com{canonicalPath}`; individual pages never build their own canonical.
+
+6. **Co-founder workflow:** code changes that add UI strings MUST route through Cas (me). If Denis adds an inline string in a component, the pre-commit hook blocks it — the change needs to land as a key in `messages.ts` first, Cas runs the translator, then Denis rebases on top. This keeps the dictionary consistent and every locale up to date.
+
+7. **Session start:** any new Claude Code session must open with a routine check — `git log` since last session, Vercel deploy status, and a hardcoded-string scan across recently-changed files. That routine lives in `docs/BETSPLUG_STARTUP.md`; the memory system has a pointer to it.

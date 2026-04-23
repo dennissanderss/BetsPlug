@@ -100,7 +100,72 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
       ogDescription:
         "Prediksi sepak bola bertenaga AI dengan probabilitas langsung, peringkat Elo, dan rekam jejak terverifikasi untuk 15+ liga.",
     },
-  },
+  
+    pt: {
+      title: "Previsões de futebol com tecnologia de IA · BetsPlug",
+      description:
+        "Previsões de futebol alimentadas por IA com 4 modelos. Probabilidades ao vivo, classificações Elo e um histórico verificado em mais de 15 ligas. Comece seu teste gratuito hoje.",
+      ogTitle: "Previsões de futebol com tecnologia de IA · BetsPlug",
+      ogDescription:
+        "Previsões de futebol baseadas em IA com probabilidades ao vivo, classificações Elo e um histórico verificado em mais de 15 ligas.",
+    },
+    tr: {
+      title: "Yapay Zeka Destekli Futbol Tahminleri · BetsPlug",
+      description:
+        "4 modelle yapay zeka destekli futbol tahminleri. Canlı olasılıklar, Elo reytingler ve 15'ten fazla ligde doğrulanmış performans geçmişi. Ücretsiz denemenizi bugün başlatın.",
+      ogTitle: "Yapay Zeka Destekli Futbol Tahminleri · BetsPlug",
+      ogDescription:
+        "Canlı olasılıklar, Elo derecelendirmeleri ve 15'ten fazla ligde doğrulanmış geçmiş performansıyla yapay zeka destekli futbol tahminleri.",
+    },
+    pl: {
+      title: "Prognozy piłkarskie oparte na sztucznej inteligencji · BetsPlug",
+      description:
+        "Prognozy piłkarskie oparte na sztucznej inteligencji z 4 modelami. Prawdopodobieństwa na żywo, oceny Elo i potwierdzone osiągnięcia w ponad 15 ligach. Rozpocznij bezpłatny okres próbny już dziś.",
+      ogTitle: "Prognozy piłkarskie oparte na sztucznej inteligencji · BetsPlug",
+      ogDescription:
+        "Prognozy piłkarskie oparte na sztucznej inteligencji z prawdopodobieństwem na żywo, rankingami Elo i zweryfikowanymi osiągnięciami w ponad 15 ligach.",
+    },
+    ro: {
+      title: "Predicții de fotbal bazate pe inteligență artificială · BetsPlug",
+      description:
+        "Predicții de fotbal bazate pe inteligență artificială cu 4 modele. Probabilități live, evaluări Elo și un palmares verificat în peste 15 ligi. Începeți încercarea gratuită astăzi.",
+      ogTitle: "Predicții de fotbal bazate pe inteligență artificială · BetsPlug",
+      ogDescription:
+        "Predicții de fotbal bazate pe inteligență artificială cu probabilități live, evaluări Elo și un palmares verificat în peste 15 ligi.",
+    },
+    ru: {
+      title: "AI-Powered Football Predictions · BetsPlug",
+      description:
+        "AI-powered football predictions with 4 models. Live probabilities, Elo ratings, and a verified track record across 15+ leagues. Start your free trial today.",
+      ogTitle: "AI-Powered Football Predictions · BetsPlug",
+      ogDescription:
+        "AI-powered football predictions with live probabilities, Elo ratings, and a verified track record across 15+ leagues.",
+    },
+    el: {
+      title: "Προβλέψεις ποδοσφαίρου με τεχνητή νοημοσύνη · BetsPlug",
+      description:
+        "Προβλέψεις ποδοσφαίρου με τεχνητή νοημοσύνη με 4 μοντέλα. Ζωντανές πιθανότητες, βαθμολογίες Elo και επαληθευμένο ιστορικό σε 15+ πρωταθλήματα. Ξεκινήστε τη δωρεάν δοκιμή σας σήμερα.",
+      ogTitle: "Προβλέψεις ποδοσφαίρου με τεχνητή νοημοσύνη · BetsPlug",
+      ogDescription:
+        "Προβλέψεις ποδοσφαίρου με τεχνητή νοημοσύνη με ζωντανές πιθανότητες, βαθμολογίες Elo και επαληθευμένο ιστορικό σε 15+ πρωταθλήματα.",
+    },
+    da: {
+      title: "AI-drevet fodboldforudsigelser · BetsPlug",
+      description:
+        "AI-drevne fodboldforudsigelser med 4 modeller. Live-sandsynligheder, Elo-vurderinger og en verificeret track record på tværs af 15+ ligaer. Start din gratis prøveperiode i dag.",
+      ogTitle: "AI-drevet fodboldforudsigelser · BetsPlug",
+      ogDescription:
+        "AI-drevne fodboldforudsigelser med sandsynligheder, Elo-vurderinger og en verificeret track record på tværs af 15+ ligaer.",
+    },
+    sv: {
+      title: "AI-drivna fotbollsförutsägelser · BetsPlug",
+      description:
+        "AI-drivna fotbollsförutsägelser med 4 modeller. Sannolikheter i realtid, Elo-betyg och en verifierad meritlista över 15+ ligor. Starta din kostnadsfria provperiod idag.",
+      ogTitle: "AI-drivna fotbollsförutsägelser · BetsPlug",
+      ogDescription:
+        "AI-drivna fotbollsförutsägelser med sannolikheter i realtid, Elo-betyg och en verifierad meritlista över 15+ ligor.",
+    },
+},
 
   /* ─────────────────────────── ARTICLES ─────────────────────── */
   "/articles": {
@@ -169,6 +234,71 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Prediksi sepak bola AI dan wawasan taruhan berbasis data dari tim riset BetsPlug.",
     },
   
+
+    pt: {
+      title: "Prognósticos e dicas de apostas de futebol da IA ​​· BetsPlug",
+      description:
+        "Notícias de futebol, previsões de jogos de IA e dicas de apostas baseadas em dados em Premier League, La Liga, Bundesliga, Serie A e muito mais da equipe de pesquisa BetsPlug.",
+      ogTitle: "Análise de futebol AI e dicas de apostas · BetsPlug",
+      ogDescription:
+        "Análises de partidas de futebol de IA e dicas de apostas baseadas em dados da equipe de pesquisa BetsPlug.",
+    },
+    tr: {
+      title: "AI Futbol Tahminleri ve Bahis İpuçları · BetsPlug",
+      description:
+        "BetsPlug araştırma ekibinden Premier League, La Liga, Bundesliga, Serie A ve daha fazlası genelinde futbol haberleri, AI maç tahminleri ve veriye dayalı bahis ipuçları.",
+      ogTitle: "AI Futbol Analizi ve Bahis İpuçları · BetsPlug",
+      ogDescription:
+        "BetsPlug araştırma ekibinden AI futbol maçı dökümleri ve veriye dayalı bahis ipuçları.",
+    },
+    pl: {
+      title: "Prognozy piłkarskie AI i wskazówki dotyczące zakładów · BetsPlug",
+      description:
+        "Wiadomości piłkarskie, prognozy meczów AI i oparte na danych wskazówki dotyczące zakładów w Premier League, La Liga, Bundesliga, Serie A i nie tylko, opracowane przez zespół badawczy BetsPlug.",
+      ogTitle: "Analiza piłki nożnej AI i wskazówki dotyczące zakładów · BetsPlug",
+      ogDescription:
+        "Podział meczów piłkarskich AI i wskazówki dotyczące zakładów oparte na danych od zespołu badawczego BetsPlug.",
+    },
+    ro: {
+      title: "Predicții de fotbal AI și sfaturi de pariuri · BetsPlug",
+      description:
+        "Știri despre fotbal, predicții de meciuri AI și sfaturi de pariuri bazate pe date în Premier League, La Liga, Bundesliga, Serie A și multe altele de la echipa de cercetare BetsPlug.",
+      ogTitle: "Analiză AI fotbal și sfaturi de pariuri · BetsPlug",
+      ogDescription:
+        "Defalcări ale meciurilor de fotbal AI și sfaturi de pariuri bazate pe date de la echipa de cercetare BetsPlug.",
+    },
+    ru: {
+      title: "AI Football Predictions & Betting Tips · BetsPlug",
+      description:
+        "Football news, AI match predictions and data-driven betting tips across the Premier League, La Liga, Bundesliga, Serie A and more from the BetsPlug research team.",
+      ogTitle: "AI Football Analysis & Betting Tips · BetsPlug",
+      ogDescription:
+        "AI football match breakdowns and data-driven betting tips from the BetsPlug research team.",
+    },
+    el: {
+      title: "Προβλέψεις ποδοσφαίρου AI και συμβουλές στοιχημάτων · BetsPlug",
+      description:
+        "Ειδήσεις ποδοσφαίρου, προβλέψεις αγώνων τεχνητής νοημοσύνης και συμβουλές στοιχηματισμού βάσει δεδομένων για τα Premier League, La Liga, Bundesliga, Serie A και άλλα από την ερευνητική ομάδα BetsPlug.",
+      ogTitle: "Συμβουλές για ανάλυση και στοιχήματα ποδοσφαίρου AI · BetsPlug",
+      ogDescription:
+        "Αναλύσεις αγώνων ποδοσφαίρου AI και συμβουλές στοιχηματισμού βάσει δεδομένων από την ερευνητική ομάδα BetsPlug.",
+    },
+    da: {
+      title: "AI-fodboldforudsigelser og væddemålstips · BetsPlug",
+      description:
+        "Fodboldnyheder, AI-kampforudsigelser og datadrevne væddemålstips på tværs af Premier League, La Liga, Bundesliga, Serie A og mere fra BetsPlug-forskerteamet.",
+      ogTitle: "AI fodboldanalyse og væddemålstips · BetsPlug",
+      ogDescription:
+        "Opdelinger af AI-fodboldkampe og datadrevne væddemålstips fra BetsPlug-forskningsteamet.",
+    },
+    sv: {
+      title: "AI Fotbollsförutsägelser och vadslagningstips · BetsPlug",
+      description:
+        "Fotbollsnyheter, AI-matchförutsägelser och datadrivna vadslagningstips i Premier League, La Liga, Bundesliga, Serie A och mer från forskarteamet BetsPlug.",
+      ogTitle: "AI fotbollsanalys och vadslagningstips · BetsPlug",
+      ogDescription:
+        "Uppdelningar av AI-fotbollsmatcher och datadrivna vadslagningstips från forskarteamet BetsPlug.",
+    },
 },
 
   /* ─────────────────────────── ABOUT US ─────────────────────── */
@@ -238,6 +368,71 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Dua engineer. Lebih dari 20 tahun pengalaman TI gabungan. Satu obsesi: mengubah data sepak bola menjadi keunggulan terukur.",
     },
   
+
+    pt: {
+      title: "Sobre nós · BetsPlug Equipe de análise de futebol AI",
+      description:
+        "Conheça os dois engenheiros que constroem BetsPlug. Fanáticos por futebol com experiência em TIC, transformando dados brutos de jogos em previsões de futebol transparentes e baseadas em probabilidades.",
+      ogTitle: "Sobre BetsPlug · A equipe por trás do limite",
+      ogDescription:
+        "Dois engenheiros. Mais de 20 anos de experiência combinada em TIC. Uma obsessão: transformar os dados do futebol numa vantagem mensurável.",
+    },
+    tr: {
+      title: "Hakkımızda · BetsPlug Yapay Zeka Futbol Analitik Ekibi",
+      description:
+        "BetsPlug binasındaki iki mühendisle tanışın. BİT geçmişine sahip futbol fanatikleri, ham maç verilerini şeffaf, olasılık odaklı futbol tahminlerine dönüştürüyor.",
+      ogTitle: "BetsPlug Hakkında · Kenarın Arkasındaki Ekip",
+      ogDescription:
+        "İki mühendis. 20 yılı aşkın birleşik BİT deneyimi. Bir takıntım var: Futbol verilerini ölçülebilir bir üstünlüğe dönüştürmek.",
+    },
+    pl: {
+      title: "O nas · BetsPlug Zespół AI Football Analytics",
+      description:
+        "Poznaj dwóch inżynierów budujących BetsPlug. Fanatycy piłki nożnej z doświadczeniem w branży ICT, przekształcający surowe dane meczowe w przejrzyste, oparte na prawdopodobieństwie prognozy piłkarskie.",
+      ogTitle: "O BetsPlug · Zespół za krawędzią",
+      ogDescription:
+        "Dwóch inżynierów. Ponad 20 lat wspólnego doświadczenia w branży ICT. Jedna obsesja: przekształcanie danych piłkarskich w wymierną przewagę.",
+    },
+    ro: {
+      title: "Despre noi · BetsPlug AI Football Analytics Team",
+      description:
+        "Faceți cunoștință cu cei doi ingineri din clădirea BetsPlug. Fanatici ai fotbalului cu un fundal TIC, transformând datele brute despre meci în predicții de fotbal transparente, bazate pe probabilități.",
+      ogTitle: "Despre BetsPlug · Echipa din spatele marginii",
+      ogDescription:
+        "Doi ingineri. Peste 20 de ani de experiență combinată în domeniul TIC. O obsesie: transformarea datelor de fotbal într-un avantaj măsurabil.",
+    },
+    ru: {
+      title: "About Us · BetsPlug AI Football Analytics Team",
+      description:
+        "Meet the two engineers building BetsPlug. Football fanatics with an ICT background, turning raw match data into transparent, probability-driven football predictions.",
+      ogTitle: "About BetsPlug · The Team Behind the Edge",
+      ogDescription:
+        "Two engineers. 20+ years of combined ICT experience. One obsession: turning football data into a measurable edge.",
+    },
+    el: {
+      title: "Σχετικά με εμάς · BetsPlug AI Football Analytics Team",
+      description:
+        "Γνωρίστε το κτίριο των δύο μηχανικών BetsPlug. Φανατικοί του ποδοσφαίρου με υπόβαθρο ΤΠΕ, μετατρέποντας τα ακατέργαστα δεδομένα αγώνων σε διαφανείς προβλέψεις ποδοσφαίρου με γνώμονα τις πιθανότητες.",
+      ogTitle: "Σχετικά με το BetsPlug · The Team Behind the Edge",
+      ogDescription:
+        "Δύο μηχανικοί. 20+ χρόνια συνδυασμένης εμπειρίας στις ΤΠΕ. Μία εμμονή: μετατροπή των ποδοσφαιρικών δεδομένων σε μετρήσιμο πλεονέκτημα.",
+    },
+    da: {
+      title: "Om os · BetsPlug AI Football Analytics Team",
+      description:
+        "Mød de to ingeniører, der bygger BetsPlug. Fodboldfanatikere med en ikt-baggrund, der omdanner rå kampdata til gennemsigtige, sandsynlighedsdrevne fodboldforudsigelser.",
+      ogTitle: "Om BetsPlug · Teamet bag kanten",
+      ogDescription:
+        "To ingeniører. 20+ års kombineret IKT-erfaring. En besættelse: at gøre fodbolddata til en målbar fordel.",
+    },
+    sv: {
+      title: "Om oss · BetsPlug AI Football Analytics Team",
+      description:
+        "Möt de två ingenjörerna som bygger BetsPlug. Fotbollsfanatiker med IKT-bakgrund som förvandlar rå matchdata till transparenta, sannolikhetsdrivna fotbollsförutsägelser.",
+      ogTitle: "Om BetsPlug · Teamet bakom kanten",
+      ogDescription:
+        "Två ingenjörer. 20+ års kombinerad IKT-erfarenhet. En besatthet: att förvandla fotbollsdata till en mätbar fördel.",
+    },
 },
 
   /* ─────────────────────────── PRIVACY ──────────────────────── */
@@ -307,6 +502,71 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Bagaimana BetsPlug mengumpulkan, menggunakan, dan melindungi data pribadi Anda. Sesuai GDPR.",
     },
   
+
+    pt: {
+      title: "Política de Privacidade · BetsPlug",
+      description:
+        "Como o BetsPlug coleta, usa e protege seus dados pessoais. Política de privacidade compatível com GDPR para nossa plataforma de previsões e análises de futebol com IA.",
+      ogTitle: "Política de Privacidade · BetsPlug",
+      ogDescription:
+        "Como o BetsPlug coleta, usa e protege seus dados pessoais. Totalmente compatível com GDPR.",
+    },
+    tr: {
+      title: "Gizlilik Politikası · BetsPlug",
+      description:
+        "BetsPlug kişisel verilerinizi nasıl toplar, kullanır ve korur. Yapay zeka futbol tahminleri ve analiz platformumuz için GDPR uyumlu gizlilik politikası.",
+      ogTitle: "Gizlilik Politikası · BetsPlug",
+      ogDescription:
+        "BetsPlug kişisel verilerinizi nasıl toplar, kullanır ve korur. Tamamen GDPR uyumludur.",
+    },
+    pl: {
+      title: "Polityka prywatności · BetsPlug",
+      description:
+        "Jak BetsPlug gromadzi, wykorzystuje i chroni Twoje dane osobowe. Zgodna z RODO polityka prywatności dotycząca naszej platformy prognoz i analiz piłkarskich AI.",
+      ogTitle: "Polityka prywatności · BetsPlug",
+      ogDescription:
+        "Jak BetsPlug gromadzi, wykorzystuje i chroni Twoje dane osobowe. W pełni zgodne z RODO.",
+    },
+    ro: {
+      title: "Politica de confidențialitate · BetsPlug",
+      description:
+        "Cum BetsPlug colectează, utilizează și vă protejează datele personale. Politica de confidențialitate conformă cu GDPR pentru platforma noastră de analiză și predicții de fotbal AI.",
+      ogTitle: "Politica de confidențialitate · BetsPlug",
+      ogDescription:
+        "Cum BetsPlug colectează, utilizează și vă protejează datele personale. Complet în conformitate cu GDPR.",
+    },
+    ru: {
+      title: "Privacy Policy · BetsPlug",
+      description:
+        "How BetsPlug collects, uses and protects your personal data. GDPR-compliant privacy policy for our AI football predictions and analytics platform.",
+      ogTitle: "Privacy Policy · BetsPlug",
+      ogDescription:
+        "How BetsPlug collects, uses and protects your personal data. Fully GDPR-compliant.",
+    },
+    el: {
+      title: "Πολιτική απορρήτου · BetsPlug",
+      description:
+        "Πώς η BetsPlug συλλέγει, χρησιμοποιεί και προστατεύει τα προσωπικά σας δεδομένα. Συμβατή με το GDPR πολιτική απορρήτου για την πλατφόρμα προβλέψεων και αναλυτικών στοιχείων ποδοσφαίρου AI.",
+      ogTitle: "Πολιτική απορρήτου · BetsPlug",
+      ogDescription:
+        "Πώς η BetsPlug συλλέγει, χρησιμοποιεί και προστατεύει τα προσωπικά σας δεδομένα. Πλήρως συμβατό με το GDPR.",
+    },
+    da: {
+      title: "Privatlivspolitik · BetsPlug",
+      description:
+        "Hvordan BetsPlug indsamler, bruger og beskytter dine personlige data. GDPR-kompatibel privatlivspolitik for vores AI-fodboldforudsigelser og analyseplatform.",
+      ogTitle: "Privatlivspolitik · BetsPlug",
+      ogDescription:
+        "Hvordan BetsPlug indsamler, bruger og beskytter dine personlige data. Fuldstændig GDPR-kompatibel.",
+    },
+    sv: {
+      title: "Sekretesspolicy · BetsPlug",
+      description:
+        "Hur BetsPlug samlar in, använder och skyddar dina personuppgifter. GDPR-kompatibel sekretesspolicy för vår AI-fotbollsförutsägelse och analysplattform.",
+      ogTitle: "Sekretesspolicy · BetsPlug",
+      ogDescription:
+        "Hur BetsPlug samlar in, använder och skyddar dina personuppgifter. Helt GDPR-kompatibel.",
+    },
 },
 
   /* ─────────────────────────── TERMS ────────────────────────── */
@@ -376,6 +636,71 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Syarat dan ketentuan yang berlaku saat Anda menggunakan BetsPlug. Baca sebelum berlangganan.",
     },
   
+
+    pt: {
+      title: "Termos de Serviço · BetsPlug",
+      description:
+        "Os termos e condições que se aplicam quando você usa BetsPlug. Leia-os antes de criar uma conta ou assinar nossa plataforma de análise de futebol com IA.",
+      ogTitle: "Termos de Serviço · BetsPlug",
+      ogDescription:
+        "Os termos e condições que se aplicam quando você usa BetsPlug. Leia antes de assinar.",
+    },
+    tr: {
+      title: "Hizmet Şartları · BetsPlug",
+      description:
+        "BetsPlug kullandığınızda geçerli olan şartlar ve koşullar. Hesap oluşturmadan veya AI futbol analiz platformumuza abone olmadan önce lütfen bunları okuyun.",
+      ogTitle: "Hizmet Şartları · BetsPlug",
+      ogDescription:
+        "BetsPlug kullandığınızda geçerli olan şartlar ve koşullar. Abone olmadan önce okuyun.",
+    },
+    pl: {
+      title: "Warunki korzystania z usługi · BetsPlug",
+      description:
+        "Warunki obowiązujące podczas korzystania z BetsPlug. Przeczytaj je przed utworzeniem konta lub subskrypcją naszej platformy analityki piłkarskiej AI.",
+      ogTitle: "Warunki korzystania z usługi · BetsPlug",
+      ogDescription:
+        "Warunki obowiązujące podczas korzystania z BetsPlug. Przeczytaj zanim zasubskrybujesz.",
+    },
+    ro: {
+      title: "Termeni și condiții · BetsPlug",
+      description:
+        "Termenii și condițiile care se aplică atunci când utilizați BetsPlug. Vă rugăm să le citiți înainte de a vă crea un cont sau de a vă abona la platforma noastră de analiză de fotbal AI.",
+      ogTitle: "Termeni și condiții · BetsPlug",
+      ogDescription:
+        "Termenii și condițiile care se aplică atunci când utilizați BetsPlug. Citiți înainte de a vă abona.",
+    },
+    ru: {
+      title: "Terms of Service · BetsPlug",
+      description:
+        "The terms and conditions that apply when you use BetsPlug. Please read them before creating an account or subscribing to our AI football analytics platform.",
+      ogTitle: "Terms of Service · BetsPlug",
+      ogDescription:
+        "The terms and conditions that apply when you use BetsPlug. Read before subscribing.",
+    },
+    el: {
+      title: "Όροι Παροχής Υπηρεσιών · BetsPlug",
+      description:
+        "Οι όροι και οι προϋποθέσεις που ισχύουν όταν χρησιμοποιείτε το BetsPlug. Διαβάστε τα πριν δημιουργήσετε έναν λογαριασμό ή εγγραφείτε στην πλατφόρμα αναλυτικών στοιχείων ποδοσφαίρου AI.",
+      ogTitle: "Όροι Παροχής Υπηρεσιών · BetsPlug",
+      ogDescription:
+        "Οι όροι και οι προϋποθέσεις που ισχύουν όταν χρησιμοποιείτε το BetsPlug. Διαβάστε πριν εγγραφείτε.",
+    },
+    da: {
+      title: "Servicevilkår · BetsPlug",
+      description:
+        "Vilkår og betingelser, der gælder, når du bruger BetsPlug. Læs dem, før du opretter en konto eller abonnerer på vores AI-fodboldanalyseplatform.",
+      ogTitle: "Servicevilkår · BetsPlug",
+      ogDescription:
+        "Vilkår og betingelser, der gælder, når du bruger BetsPlug. Læs før du tilmelder dig.",
+    },
+    sv: {
+      title: "Användarvillkor · BetsPlug",
+      description:
+        "Villkoren som gäller när du använder BetsPlug. Läs dem innan du skapar ett konto eller prenumererar på vår AI fotbollsanalysplattform.",
+      ogTitle: "Användarvillkor · BetsPlug",
+      ogDescription:
+        "Villkoren som gäller när du använder BetsPlug. Läs innan du prenumererar.",
+    },
 },
 
   /* ─────────────────────────── COOKIES ──────────────────────── */
@@ -445,6 +770,71 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Cookie apa yang digunakan BetsPlug dan bagaimana Anda dapat mengelola preferensi Anda.",
     },
   
+
+    pt: {
+      title: "Política de Cookies · BetsPlug",
+      description:
+        "Quais cookies BetsPlug usa, por que os usamos e como você pode gerenciar suas preferências de cookies em nossa plataforma de previsões e análises de futebol com IA.",
+      ogTitle: "Política de Cookies · BetsPlug",
+      ogDescription:
+        "Quais cookies BetsPlug utiliza, por que os utilizamos e como você pode gerenciar suas preferências.",
+    },
+    tr: {
+      title: "Çerez Politikası · BetsPlug",
+      description:
+        "BetsPlug hangi çerezleri kullanıyor, bunları neden kullanıyoruz ve yapay zeka futbol tahminleri ve analiz platformumuzda çerez tercihlerinizi nasıl yönetebileceğiniz.",
+      ogTitle: "Çerez Politikası · BetsPlug",
+      ogDescription:
+        "BetsPlug hangi çerezleri kullanıyor, bunları neden kullanıyoruz ve tercihlerinizi nasıl yönetebilirsiniz.",
+    },
+    pl: {
+      title: "Polityka plików cookie · BetsPlug",
+      description:
+        "Z jakich plików cookie korzysta BetsPlug, dlaczego ich używamy i w jaki sposób możesz zarządzać preferencjami dotyczącymi plików cookie na naszej platformie prognoz i analiz piłkarskich AI.",
+      ogTitle: "Polityka plików cookie · BetsPlug",
+      ogDescription:
+        "Z jakich plików cookie korzysta BetsPlug, dlaczego ich używamy i jak możesz zarządzać swoimi preferencjami.",
+    },
+    ro: {
+      title: "Politica privind cookie-urile · BetsPlug",
+      description:
+        "Ce cookie-uri folosește BetsPlug, de ce le folosim și cum vă puteți gestiona preferințele cookie-urilor pe platforma noastră de analiză și predicții de fotbal AI.",
+      ogTitle: "Politica privind cookie-urile · BetsPlug",
+      ogDescription:
+        "Ce cookie-uri folosește BetsPlug, de ce le folosim și cum vă puteți gestiona preferințele.",
+    },
+    ru: {
+      title: "Политика использования файлов cookie · BetsPlug",
+      description:
+        "Какие файлы cookie использует BetsPlug, почему мы их используем и как вы можете управлять настройками файлов cookie на нашей платформе футбольных прогнозов и аналитики с использованием искусственного интеллекта.",
+      ogTitle: "Политика использования файлов cookie · BetsPlug",
+      ogDescription:
+        "Какие файлы cookie использует BetsPlug, почему мы их используем и как вы можете управлять своими предпочтениями.",
+    },
+    el: {
+      title: "Πολιτική cookie · BetsPlug",
+      description:
+        "Ποια cookies χρησιμοποιεί η BetsPlug, γιατί τα χρησιμοποιούμε και πώς μπορείτε να διαχειριστείτε τις προτιμήσεις σας για cookie στην πλατφόρμα προβλέψεων και αναλυτικών στοιχείων ποδοσφαίρου AI.",
+      ogTitle: "Πολιτική cookie · BetsPlug",
+      ogDescription:
+        "Ποια cookies χρησιμοποιεί το BetsPlug, γιατί τα χρησιμοποιούμε και πώς μπορείτε να διαχειριστείτε τις προτιμήσεις σας.",
+    },
+    da: {
+      title: "Cookiepolitik · BetsPlug",
+      description:
+        "Hvilke cookies BetsPlug bruger, hvorfor vi bruger dem, og hvordan du kan administrere dine cookiepræferencer på vores AI-fodboldforudsigelser og analyseplatform.",
+      ogTitle: "Cookiepolitik · BetsPlug",
+      ogDescription:
+        "Hvilke cookies BetsPlug bruger, hvorfor vi bruger dem, og hvordan du kan administrere dine præferencer.",
+    },
+    sv: {
+      title: "Cookiepolicy · BetsPlug",
+      description:
+        "Vilka cookies BetsPlug använder, varför vi använder dem och hur du kan hantera dina cookie-preferenser på vår AI-fotbollsförutsägelse och analysplattform.",
+      ogTitle: "Cookiepolicy · BetsPlug",
+      ogDescription:
+        "Vilka cookies BetsPlug använder, varför vi använder dem och hur du kan hantera dina inställningar.",
+    },
 },
 
   /* ─────────────────────── RESPONSIBLE GAMBLING ─────────────── */
@@ -489,7 +879,48 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
       description:
         "BetsPlug bukan situs taruhan. Baca kebijakan perjudian bertanggung jawab kami, kenali tanda-tanda masalah dan temukan bantuan.",
     },
-  },
+  
+    pt: {
+      title: "Maiores de 18 anos Jogue com responsabilidade · BetsPlug",
+      description:
+        "BetsPlug não é um site de apostas. Leia a nossa política de jogo responsável, conheça os sinais de problemas de jogo e encontre recursos de ajuda.",
+    },
+    tr: {
+      title: "18+ Sorumlu Oynayın · BetsPlug",
+      description:
+        "BetsPlug bir bahis sitesi değildir. Sorumlu kumar politikamızı okuyun, sorunlu kumarın belirtilerini öğrenin ve yardım kaynaklarını bulun.",
+    },
+    pl: {
+      title: "18+ Graj odpowiedzialnie · BetsPlug",
+      description:
+        "BetsPlug nie jest witryną zawierającą zakłady. Przeczytaj nasze zasady odpowiedzialnego hazardu, poznaj oznaki problematycznego hazardu i znajdź zasoby pomocy.",
+    },
+    ro: {
+      title: "18+ Joacă responsabil · BetsPlug",
+      description:
+        "BetsPlug nu este un site de pariuri. Citiți politica noastră privind jocurile de noroc responsabile, aflați semnele problemelor legate de jocurile de noroc și găsiți resurse de ajutor.",
+    },
+    ru: {
+      title: "18+ Играйте ответственно · BetsPlug",
+      description:
+        "BetsPlug не является сайтом ставок. Прочтите нашу политику ответственной игры, узнайте признаки проблем с азартными играми и найдите справочные ресурсы.",
+    },
+    el: {
+      title: "18+ Παίξτε Υπεύθυνα · BetsPlug",
+      description:
+        "Το BetsPlug δεν είναι ιστότοπος στοιχημάτων. Διαβάστε την πολιτική μας για τον υπεύθυνο τζόγο, μάθετε τα σημάδια του προβληματικού τζόγου και βρείτε πόρους βοήθειας.",
+    },
+    da: {
+      title: "18+ Spil ansvarligt · BetsPlug",
+      description:
+        "BetsPlug er ikke en bettingside. Læs vores politik for ansvarligt hasardspil, lær tegn på problematisk hasardspil, og find hjælperessourcer.",
+    },
+    sv: {
+      title: "18+ Spela ansvarsfullt · BetsPlug",
+      description:
+        "BetsPlug är inte en bettingsida. Läs vår policy för ansvarsfullt spelande, lär dig tecken på problem med spelande och hitta hjälpresurser.",
+    },
+},
 
   /* ─────────────────────────── HOW IT WORKS ─────────────────── */
   "/how-it-works": {
@@ -554,6 +985,55 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "14 sumber data. 1.200+ fitur. 4 model independen. Setiap prediksi memiliki stempel waktu dan dapat diverifikasi publik.",
     },
   
+
+    pt: {
+      title: "Como funciona · BetsPlug Pulse Previsões de IA",
+      description:
+        "",
+      ogTitle: "Como funciona o BetsPlug · Previsões da Pulse AI",
+    },
+    tr: {
+      title: "Nasıl Çalışır · BetsPlug Pulse Yapay Zeka Tahminleri",
+      description:
+        "",
+      ogTitle: "BetsPlug Nasıl Çalışır · Darbeli Yapay Zeka Tahminleri",
+    },
+    pl: {
+      title: "Jak to działa · BetsPlug Pulse Przewidywania AI",
+      description:
+        "",
+      ogTitle: "Jak działa BetsPlug · Prognozy Pulse AI",
+    },
+    ro: {
+      title: "Cum funcționează · BetsPlug Pulse Predicții AI",
+      description:
+        "",
+      ogTitle: "Cum funcționează BetsPlug · Predicții Pulse AI",
+    },
+    ru: {
+      title: "Как это работает · BetsPlug Pulse Прогнозы AI",
+      description:
+        "",
+      ogTitle: "Как работает BetsPlug · Импульсные прогнозы AI",
+    },
+    el: {
+      title: "Πώς λειτουργεί · BetsPlug Pulse Προβλέψεις AI",
+      description:
+        "",
+      ogTitle: "Πώς λειτουργεί το BetsPlug · Pulse AI Predictions",
+    },
+    da: {
+      title: "Sådan fungerer det · BetsPlug Pulse AI-forudsigelser",
+      description:
+        "",
+      ogTitle: "Sådan fungerer BetsPlug · Pulse AI-forudsigelser",
+    },
+    sv: {
+      title: "Hur det fungerar · BetsPlug Pulse AI-förutsägelser",
+      description:
+        "",
+      ogTitle: "Hur BetsPlug fungerar · Puls AI-förutsägelser",
+    },
 },
 
   /* ─────────────────────────── TRACK RECORD ─────────────────── */
@@ -623,6 +1103,71 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "58,3% tingkat akurasi. +14,6% ROI. 24.180 prediksi dinilai. Setiap prediksi memiliki stempel waktu di register publik.",
     },
   
+
+    pt: {
+      title: "Histórico · Resultados verificados de previsão de IA",
+      description:
+        "Resultados transparentes e auditáveis ​​para cada previsão de futebol BetsPlug AI. Veja como nossos modelos transformam os dados de correspondência em uma vantagem mensurável - documentada semanalmente, nunca escolhida a dedo.",
+      ogTitle: "BetsPlug Histórico · Resultados Auditáveis",
+      ogDescription:
+        "Taxa de acerto de 58,3%. +14,6% de ROI. 24.180 previsões avaliadas. Cada seleção tem carimbo de data e hora e é registrada em um livro-razão público.",
+    },
+    tr: {
+      title: "Geçmiş Performans · Doğrulanmış Yapay Zeka Tahmin Sonuçları",
+      description:
+        "Her BetsPlug AI futbol tahmini için şeffaf, denetlenebilir sonuçlar. Modellerimizin eşleşme verilerini nasıl ölçülebilir bir avantaja dönüştürdüğünü görün; haftalık olarak belgelenir, asla gelişigüzel seçilmez.",
+      ogTitle: "BetsPlug Geçmiş Performans · Denetlenebilir Sonuçlar",
+      ogDescription:
+        "%58,3 isabet oranı. +%14,6 yatırım getirisi. 24.180 derecelendirilmiş tahmin. Her seçime zaman damgası vuruluyor ve halka açık bir deftere kaydediliyor.",
+    },
+    pl: {
+      title: "Historia osiągnięć · Zweryfikowane wyniki prognoz AI",
+      description:
+        "Przejrzyste, podlegające kontroli wyniki każdej prognozy piłkarskiej BetsPlug AI. Zobacz, jak nasze modele przekształcają dane o dopasowaniach w wymierną przewagę — dokumentowane co tydzień i nigdy nie wybrane według własnego uznania.",
+      ogTitle: "BetsPlug Historia · Wyniki podlegające kontroli",
+      ogDescription:
+        "Skuteczność trafień 58,3%. +14,6% zwrotu z inwestycji. 24 180 stopniowanych prognoz. Każdy wybór jest oznaczony znacznikiem czasu i zarejestrowany w publicznej księdze.",
+    },
+    ro: {
+      title: "Înregistrare · Rezultate verificate de predicție AI",
+      description:
+        "Rezultate transparente, auditabile pentru fiecare predicție de fotbal BetsPlug AI. Vedeți cum modelele noastre transformă datele de potrivire într-un avantaj măsurabil - documentat săptămânal, niciodată selectat.",
+      ogTitle: "BetsPlug Înregistrare · Rezultate auditabile",
+      ogDescription:
+        "Rata de lovituri de 58,3%. +14,6% ROI. 24.180 de predicții gradate. Fiecare alegere marcată de timp și înregistrată într-un registru public.",
+    },
+    ru: {
+      title: "Послужной список · Проверенные результаты прогнозов ИИ",
+      description:
+        "Прозрачные, проверяемые результаты для каждого футбольного прогноза BetsPlug AI. Посмотрите, как наши модели превращают данные матчей в измеримое преимущество — документируемое еженедельно, а не тщательно отобранное.",
+      ogTitle: "BetsPlug Послужной список · Результаты, подлежащие проверке",
+      ogDescription:
+        "Показатель попадания 58,3%. +14,6% рентабельности инвестиций. 24 180 оцененных прогнозов. Каждый выбор имеет временную метку и вносится в публичный реестр.",
+    },
+    el: {
+      title: "Εγγραφή παρακολούθησης · ​​Επαληθευμένα αποτελέσματα πρόβλεψης AI",
+      description:
+        "Διαφανή, ελεγχόμενα αποτελέσματα για κάθε πρόβλεψη ποδοσφαίρου BetsPlug AI. Δείτε πώς τα μοντέλα μας μετατρέπουν τα δεδομένα αντιστοίχισης σε ένα μετρήσιμο πλεονέκτημα - τεκμηριωμένη εβδομαδιαία, ποτέ επιλεγμένη.",
+      ogTitle: "BetsPlug Εγγραφή παρακολούθησης · ​​Ελεγχόμενα αποτελέσματα",
+      ogDescription:
+        "Ποσοστό επιτυχίας 58,3%. +14,6% ROI. 24.180 βαθμολογημένες προβλέψεις. Κάθε επιλογή έχει χρονική σήμανση και καταγράφεται σε ένα δημόσιο βιβλίο.",
+    },
+    da: {
+      title: "Track Record · Verificerede AI-forudsigelsesresultater",
+      description:
+        "Gennemsigtige, reviderbare resultater for hver BetsPlug AI fodboldforudsigelse. Se, hvordan vores modeller forvandler matchdata til en målbar fordel - dokumenteret ugentligt, aldrig kirsebærplukket.",
+      ogTitle: "BetsPlug Track Record · Reviderbare resultater",
+      ogDescription:
+        "58,3% hitrate. +14,6 % ROI. 24.180 graderede forudsigelser. Hvert valg er tidsstemplet og logget til en offentlig hovedbog.",
+    },
+    sv: {
+      title: "Track Record · Verifierade AI-förutsägelseresultat",
+      description:
+        "Transparenta, granskningsbara resultat för varje BetsPlug AI fotbollsförutsägelse. Se hur våra modeller förvandlar matchdata till en mätbar fördel - dokumenterad varje vecka, aldrig körsbärsplockad.",
+      ogTitle: "BetsPlug Track Record · Reviderbara resultat",
+      ogDescription:
+        "58,3 % träfffrekvens. +14,6 % ROI. 24 180 graderade förutsägelser. Varje plockning tidsstämplat och loggat till en offentlig reskontra.",
+    },
 },
 
   /* ─────────────────────────── LOGIN ────────────────────────── */
@@ -668,6 +1213,47 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Masuk ke akun BetsPlug Anda untuk melihat prediksi sepak bola AI hari ini, melacak ROI, dan mengelola langganan analisis sepak bola Anda.",
     },
   
+
+    pt: {
+      title: "Entrar · BetsPlug",
+      description:
+        "Faça login em sua conta BetsPlug para ver as previsões de futebol de IA de hoje, acompanhar seu ROI e gerenciar sua assinatura para previsões de jogos e dicas de apostas.",
+    },
+    tr: {
+      title: "Giriş Yap · BetsPlug",
+      description:
+        "Bugünün AI futbol tahminlerini görmek, yatırım getirinizi takip etmek ve maç tahminleri ve bahis ipuçlarına yönelik aboneliğinizi yönetmek için BetsPlug hesabınızda oturum açın.",
+    },
+    pl: {
+      title: "Zaloguj się · BetsPlug",
+      description:
+        "Zaloguj się na swoje konto BetsPlug, aby zobaczyć dzisiejsze prognozy piłkarskie AI, śledzić zwrot z inwestycji i zarządzać subskrypcją prognoz meczów i typów bukmacherskich.",
+    },
+    ro: {
+      title: "Autentificare · BetsPlug",
+      description:
+        "Conectați-vă la contul dvs. BetsPlug pentru a vedea previziunile de fotbal AI de astăzi, pentru a urmări rentabilitatea investiției și pentru a vă gestiona abonamentul pentru predicții de meci și sfaturi de pariuri.",
+    },
+    ru: {
+      title: "Войти · BetsPlug",
+      description:
+        "Войдите в свою учетную запись BetsPlug, чтобы увидеть сегодняшние футбольные прогнозы AI, отслеживать рентабельность инвестиций и управлять подпиской на прогнозы матчей и советы по ставкам.",
+    },
+    el: {
+      title: "Σύνδεση · BetsPlug",
+      description:
+        "Συνδεθείτε στον λογαριασμό σας BetsPlug για να δείτε τις σημερινές προβλέψεις ποδοσφαίρου AI, να παρακολουθήσετε την απόδοση επένδυσης (ROI) και να διαχειριστείτε τη συνδρομή σας για προβλέψεις αγώνων και συμβουλές στοιχημάτων.",
+    },
+    da: {
+      title: "Log ind · BetsPlug",
+      description:
+        "Log ind på din BetsPlug-konto for at se dagens AI-fodboldforudsigelser, spore dit ROI og administrere dit abonnement for kampforudsigelser og tip om væddemål.",
+    },
+    sv: {
+      title: "Logga in · BetsPlug",
+      description:
+        "Logga in på ditt BetsPlug-konto för att se dagens AI-fotbollsförutsägelser, spåra din ROI och hantera din prenumeration för matchförutsägelser och vadslagningstips.",
+    },
 },
 
   /* ─────────────────────── MATCH PREDICTIONS ────────────────── */
@@ -737,6 +1323,71 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Pratinjau 3 prediksi sepak bola AI gratis. Buka sisanya dengan uji coba.",
     },
   
+
+    pt: {
+      title: "Previsões de partidas de IA · Escolhas de futebol grátis · BetsPlug",
+      description:
+        "Visualize 3 previsões gratuitas de futebol de IA com probabilidades de vitória e pontuações de confiança. Desbloqueie a lista completa de previsões de partidas futuras com uma assinatura BetsPlug.",
+      ogTitle: "Previsões de partidas de IA gratuitas · BetsPlug",
+      ogDescription:
+        "Visualize três previsões de partidas gratuitas com tecnologia de IA. Desbloqueie o resto com um teste.",
+    },
+    tr: {
+      title: "AI Maç Tahminleri · Ücretsiz Futbol Tahminleri · BetsPlug",
+      description:
+        "Kazanma olasılıkları ve güven puanları ile 3 ücretsiz AI futbol tahminini önizleyin. BetsPlug aboneliğiyle yaklaşan maç tahminlerinin tüm listesinin kilidini açın.",
+      ogTitle: "Ücretsiz AI Maç Tahminleri · BetsPlug",
+      ogDescription:
+        "Yapay zeka destekli 3 ücretsiz maç tahmininin önizlemesini yapın. Geri kalanın kilidini bir denemeyle açın.",
+    },
+    pl: {
+      title: "Prognozy meczów AI · Darmowe typy piłkarskie · BetsPlug",
+      description:
+        "Przeglądaj 3 bezpłatne prognozy piłkarskie AI z prawdopodobieństwem wygranej i poziomem pewności. Odblokuj pełną gamę prognoz nadchodzących meczów dzięki subskrypcji BetsPlug.",
+      ogTitle: "Darmowe prognozy meczów AI · BetsPlug",
+      ogDescription:
+        "Przejrzyj 3 bezpłatne prognozy meczów oparte na sztucznej inteligencji. Odblokuj resztę w wersji próbnej.",
+    },
+    ro: {
+      title: "Predicții de meci AI · Alegeri gratuite de fotbal · BetsPlug",
+      description:
+        "Previzualizează 3 previziuni gratuite de fotbal AI cu probabilități de câștig și scoruri de încredere. Deblocați lista completă a previziunilor de meciuri viitoare cu un abonament BetsPlug.",
+      ogTitle: "Predicții gratuite de meci AI · BetsPlug",
+      ogDescription:
+        "Previzualizează 3 previziuni gratuite de meci bazate pe inteligență artificială. Deblocați restul cu o încercare.",
+    },
+    ru: {
+      title: "Прогнозы матчей AI · Бесплатные прогнозы на футбол · BetsPlug",
+      description:
+        "Предварительный просмотр 3 бесплатных футбольных прогнозов AI с вероятностью победы и показателями достоверности. Разблокируйте полный список прогнозов на предстоящие матчи с подпиской BetsPlug.",
+      ogTitle: "Бесплатные прогнозы матчей AI · BetsPlug",
+      ogDescription:
+        "Просмотрите 3 бесплатных прогноза матчей на основе искусственного интеллекта. Остальное разблокируйте с помощью пробной версии.",
+    },
+    el: {
+      title: "Προβλέψεις αγώνων AI · Δωρεάν επιλογές ποδοσφαίρου · BetsPlug",
+      description:
+        "Προεπισκόπηση 3 δωρεάν προβλέψεων ποδοσφαίρου AI με πιθανότητες νίκης και σκορ εμπιστοσύνης. Ξεκλειδώστε το πλήρες φυλλάδιο των επερχόμενων προβλέψεων αγώνων με μια συνδρομή BetsPlug.",
+      ogTitle: "Δωρεάν προβλέψεις αγώνων AI · BetsPlug",
+      ogDescription:
+        "Προεπισκόπηση 3 δωρεάν προβλέψεων αγώνων με τεχνητή νοημοσύνη. Ξεκλειδώστε τα υπόλοιπα με μια δοκιμή.",
+    },
+    da: {
+      title: "AI-kampforudsigelser · Gratis fodboldvalg · BetsPlug",
+      description:
+        "Forhåndsvis 3 gratis AI-fodboldforudsigelser med sejrssandsynligheder og selvtillidsscore. Lås op for hele listen af ​​kommende kampforudsigelser med et BetsPlug-abonnement.",
+      ogTitle: "Gratis AI Match Forudsigelser · BetsPlug",
+      ogDescription:
+        "Forhåndsvis 3 gratis AI-drevne kampforudsigelser. Lås resten op med en prøveperiode.",
+    },
+    sv: {
+      title: "AI-matchförutsägelser · Gratis fotbollsval · BetsPlug",
+      description:
+        "Förhandsgranska 3 gratis AI-fotbollsförutsägelser med vinstsannolikheter och självförtroendepoäng. Lås upp hela listan av kommande matchförutsägelser med en BetsPlug-prenumeration.",
+      ogTitle: "Gratis AI-matchförutsägelser · BetsPlug",
+      ogDescription:
+        "Förhandsgranska 3 gratis AI-drivna matchförutsägelser. Lås upp resten med en provversion.",
+    },
 },
 
   /* ─────────────────────────── LEARN ────────────────────────── */
@@ -806,6 +1457,71 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Enam panduan mendalam tentang value betting, xG, Elo, Kelly, Poisson, dan manajemen bankroll.",
     },
   
+
+    pt: {
+      title: "Aprenda apostas em futebol · Valor, xG, Elo · BetsPlug",
+      description:
+        "Guias detalhados sobre a matemática por trás das apostas de futebol precisas - apostas de valor, gols esperados, classificações Elo, critério de Kelly, modelos Poisson e gerenciamento de banca.",
+      ogTitle: "Aprenda Apostas em Futebol · BetsPlug",
+      ogDescription:
+        "Seis guias de pilares detalhados que cobrem apostas de valor, xG, Elo, Kelly, Poisson e gerenciamento de bankroll.",
+    },
+    tr: {
+      title: "Futbol Bahislerini Öğrenin · Değer, xG, Elo · BetsPlug",
+      description:
+        "Keskin futbol bahislerinin arkasındaki matematik hakkında derinlemesine temel kılavuzlar - değerli bahisler, beklenen goller, Elo derecelendirmeleri, Kelly kriteri, Poisson modelleri ve nakit yönetimi.",
+      ogTitle: "Futbol Bahislerini Öğrenin · BetsPlug",
+      ogDescription:
+        "Değerli bahisleri, xG, Elo, Kelly, Poisson ve hazır para yönetimini kapsayan altı ayrıntılı temel kılavuz.",
+    },
+    pl: {
+      title: "Naucz się zakładów na piłkę nożną · Wartość, xG, Elo · BetsPlug",
+      description:
+        "Dogłębne przewodniki po filarach na temat matematyki stojącej za ostrymi zakładami na piłkę nożną – zakłady z wartością, oczekiwane bramki, rankingi Elo, kryterium Kelly’ego, modele Poisson i zarządzanie bankrollem.",
+      ogTitle: "Naucz się zakładów piłkarskich · BetsPlug",
+      ogDescription:
+        "Sześć szczegółowych przewodników po filarach obejmujących zakłady wartościowe, xG, Elo, Kelly, Poisson i zarządzanie bankrollem.",
+    },
+    ro: {
+      title: "Învață pariuri la fotbal · Valoare, xG, Elo · BetsPlug",
+      description:
+        "Ghiduri aprofundate despre matematica din spatele pariurilor ascuțite pe fotbal - pariuri de valoare, goluri așteptate, evaluări Elo, criteriul Kelly, modele Poisson și managementul bankroll-ului.",
+      ogTitle: "Învață pariuri la fotbal · BetsPlug",
+      ogDescription:
+        "Șase ghiduri de pilon de adâncime care acoperă pariurile valorice, xG, Elo, Kelly, Poisson și managementul bankroll-ului.",
+    },
+    ru: {
+      title: "Изучите ставки на футбол · Значение, xG, Elo · BetsPlug",
+      description:
+        "Подробные руководства по математике, лежащей в основе четких ставок на футбол: ставки с перевесом, ожидаемые голы, рейтинги Elo, критерий Келли, модели Poisson и управление банкроллом.",
+      ogTitle: "Изучите ставки на футбол · BetsPlug",
+      ogDescription:
+        "Шесть подробных руководств по ставкам на ценность, xG, Elo, Келли, Poisson и управлению банкроллом.",
+    },
+    el: {
+      title: "Μάθετε στοιχήματα ποδοσφαίρου · Value, xG, Elo · BetsPlug",
+      description:
+        "Σε βάθος οδηγοί πυλώνων σχετικά με τα μαθηματικά πίσω από τα αιχμηρά στοιχήματα ποδοσφαίρου - στοιχήματα αξίας, αναμενόμενα γκολ, βαθμολογίες Elo, το κριτήριο Kelly, μοντέλα Poisson και διαχείριση bankroll.",
+      ogTitle: "Μάθετε στοιχήματα ποδοσφαίρου · BetsPlug",
+      ogDescription:
+        "Έξι οδηγοί πυλώνων βαθιάς κατάδυσης που καλύπτουν στοιχήματα αξίας, xG, Elo, Kelly, Poisson και διαχείριση bankroll.",
+    },
+    da: {
+      title: "Lær fodboldvæddemål · Værdi, xG, Elo · BetsPlug",
+      description:
+        "Dybtgående søjlevejledninger om matematikken bag skarpe fodboldvæddemål - værdivæddemål, forventede mål, Elo-vurderinger, Kelly-kriteriet, Poisson-modeller og bankrollstyring.",
+      ogTitle: "Lær fodboldvæddemål · BetsPlug",
+      ogDescription:
+        "Seks dybe dyk-søjleguider, der dækker værdivæddemål, xG, Elo, Kelly, Poisson og bankroll management.",
+    },
+    sv: {
+      title: "Lär dig vadslagning på fotboll · Värde, xG, Elo · BetsPlug",
+      description:
+        "Fördjupade pelarguider om matematiken bakom skarp fotbollsvadslagning - värdespel, förväntade mål, Elo-betyg, Kelly-kriteriet, Poisson-modeller och bankrullehantering.",
+      ogTitle: "Lär dig vadslagning på fotboll · BetsPlug",
+      ogDescription:
+        "Sex djupdykningsguider som täcker värdespel, xG, Elo, Kelly, Poisson och bankrullehantering.",
+    },
 },
 
   /* ─────────────────────────── BET TYPES ────────────────────── */
@@ -875,6 +1591,71 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Pembahasan mendalam tentang BTTS, Over 2.5, Double Chance, Draw No Bet, dan pasar sepak bola populer lainnya.",
     },
   
+
+    pt: {
+      title: "Tipos de apostas explicados · BTTS, acima de 2,5, DC · BetsPlug",
+      description:
+        "Como funcionam os mercados populares de apostas em futebol, como os livros os avaliam e quando o mercado oferece valor. Explicadores para BTTS, Mais de 2,5 gols, Chance Dupla e Empate Sem Aposta.",
+      ogTitle: "Tipos de apostas explicados · BetsPlug",
+      ogDescription:
+        "Mergulha profundamente em BTTS, Over 2.5, Double Chance, Draw No Bet e mercados de futebol mais populares.",
+    },
+    tr: {
+      title: "Açıklanan Bahis Türleri · BTTS, 2.5 Üstü, DC · BetsPlug",
+      description:
+        "Popüler futbol bahis pazarları nasıl çalışır, kitapların bunları nasıl fiyatlandırdığı ve pazarın ne zaman değer sunduğu. BTTS, 2.5 Gol Üstü, Çifte Şans ve Beraberlik Bahis Yok için açıklayıcılar.",
+      ogTitle: "Açıklanan Bahis Türleri · BetsPlug",
+      ogDescription:
+        "BTTS, 2.5 Üstü, Çifte Şans, Beraberlik Bahissiz ve daha popüler futbol pazarlarına derinlemesine bakış.",
+    },
+    pl: {
+      title: "Wyjaśnienie typów zakładów · BTTS, powyżej 2,5, DC · BetsPlug",
+      description:
+        "Jak działają popularne rynki zakładów na piłkę nożną, jak wyceniają je książki i kiedy rynek oferuje wartość. Wyjaśnienia dotyczące BTTS, powyżej 2,5 gola, podwójnej szansy i remisu bez zakładu.",
+      ogTitle: "Wyjaśnienie typów zakładów · BetsPlug",
+      ogDescription:
+        "Głęboko zagłębiamy się w BTTS, Over 2,5, Double Chance, Draw No Bet i bardziej popularne rynki piłkarskie.",
+    },
+    ro: {
+      title: "Tipuri de pariuri explicate · BTTS, peste 2,5, DC · BetsPlug",
+      description:
+        "Cât de populare funcționează piețele de pariuri pe fotbal, cum le prețuiesc cărțile și când piața oferă valoare. Explicații pentru BTTS, Peste 2,5 goluri, șansă dublă și Draw No Bet.",
+      ogTitle: "Tipuri de pariuri explicate · BetsPlug",
+      ogDescription:
+        "Scufundări profunde în BTTS, Over 2.5, Double Chance, Draw No Bet și mai multe piețe de fotbal populare.",
+    },
+    ru: {
+      title: "Объяснение типов ставок · BTTS, Больше 2,5, DC · BetsPlug",
+      description:
+        "Как работают популярные рынки ставок на футбол, как на них оцениваются книги и когда рынок предлагает ценность. Объяснения для BTTS, «Более 2,5 голов», «Двойной шанс» и «Ничья без ставки».",
+      ogTitle: "Объяснение типов ставок · BetsPlug",
+      ogDescription:
+        "Подробный обзор BTTS, «Более 2,5», «Двойной шанс», «Ничья без ставки» и других популярных футбольных рынков.",
+    },
+    el: {
+      title: "Επεξήγηση τύπων στοιχήματος · BTTS, Πάνω από 2,5, DC · BetsPlug",
+      description:
+        "Πώς λειτουργούν οι δημοφιλείς αγορές στοιχημάτων ποδοσφαίρου, πώς τιμολογούν τα βιβλία και πότε η αγορά προσφέρει αξία. Επεξηγήσεις για BTTS, Over 2,5 γκολ, Διπλή Ευκαιρία και Ισοπαλία Χωρίς Στοίχημα.",
+      ogTitle: "Επεξήγηση των τύπων στοιχημάτων · BetsPlug",
+      ogDescription:
+        "Βαθιές βουτιές σε BTTS, Over 2,5, Double Chance, Draw No Bet και σε πιο δημοφιλείς αγορές ποδοσφαίρου.",
+    },
+    da: {
+      title: "Indsatstyper forklaret · BTTS, over 2,5, DC · BetsPlug",
+      description:
+        "Hvordan populære markeder for fodboldvæddemål fungerer, hvordan bøger prissætter dem, og hvornår markedet tilbyder værdi. Forklaringer til BTTS, Over 2,5 mål, Dobbeltchance og Draw No Bet.",
+      ogTitle: "Indsatstyper forklaret · BetsPlug",
+      ogDescription:
+        "Dyb dyk ned i BTTS, Over 2,5, Double Chance, Draw No Bet og flere populære fodboldmarkeder.",
+    },
+    sv: {
+      title: "Insatstyper förklaras · BTTS, över 2,5, DC · BetsPlug",
+      description:
+        "Hur populära fotbollsspelmarknader fungerar, hur böcker prissätter dem och när marknaden erbjuder värde. Förklaringar för BTTS, Över 2,5 mål, Dubbelchans och Draw No Bet.",
+      ogTitle: "Insatstyper förklaras · BetsPlug",
+      ogDescription:
+        "Djupdykning i BTTS, Över 2,5, Double Chance, Draw No Bet och fler populära fotbollsmarknader.",
+    },
 },
 
   /* ─────────────────────────── WELCOME ──────────────────────── */
@@ -920,6 +1701,47 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Keanggotaan BetsPlug Anda aktif. Masuk untuk melihat prediksi sepak bola AI hari ini, melacak ROI, dan mulai menang lebih cerdas dengan analisis sepak bola kami.",
     },
   
+
+    pt: {
+      title: "Bem-vindo a bordo · BetsPlug",
+      description:
+        "Sua assinatura BetsPlug está ativa. Faça login para ver as previsões de futebol de IA de hoje, acompanhe seu ROI e comece a ganhar de maneira mais inteligente com previsões de partidas baseadas em dados.",
+    },
+    tr: {
+      title: "Aramıza Hoş Geldiniz · BetsPlug",
+      description:
+        "BetsPlug üyeliğiniz aktif. Bugünün yapay zeka futbol tahminlerini görmek, yatırım getirinizi takip etmek ve veriye dayalı maç tahminleriyle daha akıllıca kazanmaya başlamak için giriş yapın.",
+    },
+    pl: {
+      title: "Witamy na pokładzie · BetsPlug",
+      description:
+        "Twoje członkostwo BetsPlug jest aktywne. Zaloguj się, aby zobaczyć dzisiejsze prognozy piłkarskie AI, śledzić zwrot z inwestycji i zacząć wygrywać mądrzej dzięki prognozom meczów opartym na danych.",
+    },
+    ro: {
+      title: "Bun venit la bord · BetsPlug",
+      description:
+        "Abonamentul dvs. BetsPlug este activ. Conectați-vă pentru a vedea previziunile de fotbal AI de astăzi, urmăriți rentabilitatea investiției și începeți să câștigați mai inteligent cu previziunile de meci bazate pe date.",
+    },
+    ru: {
+      title: "Добро пожаловать на борт · BetsPlug",
+      description:
+        "Ваше членство в BetsPlug активно. Войдите в систему, чтобы увидеть сегодняшние футбольные прогнозы AI, отслеживать рентабельность инвестиций и начать выигрывать умнее с помощью прогнозов матчей на основе данных.",
+    },
+    el: {
+      title: "Καλώς ήρθατε στο πλοίο · BetsPlug",
+      description:
+        "Η συνδρομή σας στο BetsPlug είναι ενεργή. Συνδεθείτε για να δείτε τις σημερινές προβλέψεις ποδοσφαίρου με τεχνητή νοημοσύνη, παρακολουθήστε την απόδοση επένδυσης (ROI) σας και ξεκινήστε να κερδίζετε εξυπνότερα με προβλέψεις αγώνων βάσει δεδομένων.",
+    },
+    da: {
+      title: "Velkommen ombord · BetsPlug",
+      description:
+        "Dit BetsPlug-medlemskab er aktivt. Log ind for at se dagens AI-fodboldforudsigelser, spor dit ROI, og begynd at vinde smartere med datadrevne kampforudsigelser.",
+    },
+    sv: {
+      title: "Välkommen ombord · BetsPlug",
+      description:
+        "Ditt BetsPlug-medlemskap är aktivt. Logga in för att se dagens AI-fotbollsförutsägelser, spåra din ROI och börja vinna smartare med datadrivna matchförutsägelser.",
+    },
 },
 
   /* ─────────────────────────── B2B ────────────────────────────── */
@@ -965,6 +1787,47 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Bermitra dengan BetsPlug untuk prediksi sepak bola AI dan analisis sepak bola. Lisensi data, solusi white-label, dan kemitraan afiliasi untuk bisnis.",
     },
   
+
+    pt: {
+      title: "Parcerias B2B · BetsPlug",
+      description:
+        "Faça parceria com BetsPlug para previsões e análises de futebol de IA. Licenciamento de dados, soluções de marca branca e parcerias afiliadas para empresas que buscam dicas de apostas.",
+    },
+    tr: {
+      title: "B2B Ortaklıkları · BetsPlug",
+      description:
+        "Yapay zeka futbol tahminleri ve analizleri için BetsPlug ile ortak olun. Bahis ipuçları arayan işletmeler için veri lisanslama, beyaz etiket çözümleri ve ortaklık ortaklıkları.",
+    },
+    pl: {
+      title: "Partnerstwa B2B · BetsPlug",
+      description:
+        "Współpracuj z BetsPlug w zakresie prognoz i analiz piłkarskich AI. Licencjonowanie danych, rozwiązania typu white-label i partnerstwa partnerskie dla firm poszukujących wskazówek dotyczących zakładów.",
+    },
+    ro: {
+      title: "Parteneriate B2B · BetsPlug",
+      description:
+        "Colaborați cu BetsPlug pentru predicții și analize de fotbal AI. Licențiere de date, soluții cu etichetă albă și parteneriate cu afiliați pentru companiile care caută sfaturi de pariuri.",
+    },
+    ru: {
+      title: "B2B-партнерство · BetsPlug",
+      description:
+        "Сотрудничайте с BetsPlug для прогнозов и аналитики футбола с помощью искусственного интеллекта. Лицензирование данных, решения «white label» и партнерские отношения для компаний, которым нужны советы по ставкам.",
+    },
+    el: {
+      title: "Συνεργασίες B2B · BetsPlug",
+      description:
+        "Συνεργαστείτε με το BetsPlug για προβλέψεις και αναλυτικά στοιχεία ποδοσφαίρου AI. Αδειοδότηση δεδομένων, λύσεις λευκής ετικέτας και συνεργασίες συνεργατών για επιχειρήσεις που αναζητούν συμβουλές για στοιχήματα.",
+    },
+    da: {
+      title: "B2B-partnerskaber · BetsPlug",
+      description:
+        "Partner med BetsPlug for forudsigelser og analyser af AI-fodbold. Datalicenser, white-label-løsninger og affilierede partnerskaber for virksomheder, der søger tip om væddemål.",
+    },
+    sv: {
+      title: "B2B-partnerskap · BetsPlug",
+      description:
+        "Samarbeta med BetsPlug för AI-fotbollsförutsägelser och analyser. Datalicensiering, white-label-lösningar och affiliate-partnerskap för företag som söker vadslagningstips.",
+    },
 },
 
   /* ─────────────────────────── CHECKOUT ─────────────────────── */
@@ -1010,6 +1873,47 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Selesaikan langganan BetsPlug Anda dalam tiga langkah cepat. Dapatkan prediksi sepak bola AI dan analisis sepak bola dengan jaminan uang kembali 14 hari.",
     },
 
+
+    pt: {
+      title: "Finalizar compra · Comece sua assinatura BetsPlug",
+      description:
+        "Conclua sua assinatura BetsPlug em três etapas rápidas. Obtenha previsões de futebol de IA e análises de partidas com garantia de devolução do dinheiro em 14 dias. Cancele a qualquer momento.",
+    },
+    tr: {
+      title: "Ödeme · BetsPlug Aboneliğinizi Başlatın",
+      description:
+        "BetsPlug aboneliğinizi üç hızlı adımda tamamlayın. 14 günlük para iade garantisiyle yapay zeka futbol tahminleri ve maç analizleri alın. İstediğiniz zaman iptal edin.",
+    },
+    pl: {
+      title: "Do kasy · Rozpocznij subskrypcję BetsPlug",
+      description:
+        "Ukończ subskrypcję BetsPlug w trzech szybkich krokach. Otrzymuj prognozy piłkarskie AI i analizy meczów dzięki 14-dniowej gwarancji zwrotu pieniędzy. Anuluj w dowolnym momencie.",
+    },
+    ro: {
+      title: "Finalizare · Începeți abonamentul BetsPlug",
+      description:
+        "Finalizați abonamentul BetsPlug în trei pași rapizi. Obțineți previziuni de fotbal AI și analize de meci cu o garanție de rambursare a banilor de 14 zile. Anulați oricând.",
+    },
+    ru: {
+      title: "Оформить заказ · Начните подписку BetsPlug",
+      description:
+        "Завершите подписку BetsPlug за три быстрых шага. Получайте футбольные прогнозы с помощью искусственного интеллекта и аналитику матчей с 14-дневной гарантией возврата денег. Отмените в любое время.",
+    },
+    el: {
+      title: "Ολοκλήρωση αγοράς · Ξεκινήστε τη συνδρομή σας BetsPlug",
+      description:
+        "Ολοκληρώστε τη συνδρομή σας BetsPlug σε τρία γρήγορα βήματα. Λάβετε προβλέψεις ποδοσφαίρου AI και αναλυτικά στοιχεία αγώνων με εγγύηση επιστροφής χρημάτων 14 ημερών. Ακύρωση ανά πάσα στιγμή.",
+    },
+    da: {
+      title: "Kasse · Start dit BetsPlug-abonnement",
+      description:
+        "Fuldfør dit BetsPlug-abonnement i tre hurtige trin. Få AI-fodboldforudsigelser og kampanalyser med en 14-dages pengene-tilbage-garanti. Annuller til enhver tid.",
+    },
+    sv: {
+      title: "Kassa · Starta din BetsPlug-prenumeration",
+      description:
+        "Slutför din BetsPlug-prenumeration i tre snabba steg. Få AI-fotbollsförutsägelser och matchanalyser med en 14-dagars pengarna-tillbaka-garanti. Avbryt när som helst.",
+    },
 },
 
   /* ─────────────────────────── ENGINE TRANSPARENCY ───────────── */
@@ -1074,6 +1978,71 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
       ogTitle: "Bagaimana BetsPlug mengukur akurasi · Transparansi mesin",
       ogDescription:
         "Empat tingkatan pilihan (Platinum / Emas / Perak / Gratis), masing-masing memiliki keakuratan historisnya sendiri. Metodologi, ukuran sampel, interval kepercayaan Wilson — semuanya bersifat publik.",
+    },
+
+    pt: {
+      title: "Transparência do motor · Metodologia BetsPlug",
+      description:
+        "Como o BetsPlug classifica cada escolha em um nível de qualidade, como medimos a precisão e os resultados ao vivo por nível do nosso mecanismo v8.1.",
+      ogTitle: "Como BetsPlug mede a precisão · Transparência do mecanismo",
+      ogDescription:
+        "Quatro níveis de escolha (Platina/Ouro/Prata/Grátis), cada um com sua própria precisão histórica. Metodologia, tamanhos de amostra, intervalos de confiança de Wilson – todos públicos.",
+    },
+    tr: {
+      title: "Motor Şeffaflığı · BetsPlug Metodoloji",
+      description:
+        "BetsPlug'nin her seçimi bir kalite katmanına nasıl sınıflandırdığı, doğruluğu nasıl ölçtüğümüz ve v8.1 motorumuzdan her aşamaya göre canlı sonuçlar.",
+      ogTitle: "BetsPlug doğruluğu nasıl ölçer · Motor şeffaflığı",
+      ogDescription:
+        "Her biri kendi tarihsel doğruluğuna sahip dört seçim katmanı (Platin / Altın / Gümüş / Ücretsiz). Metodoloji, örneklem büyüklükleri, Wilson güven aralıkları — hepsi halka açık.",
+    },
+    pl: {
+      title: "Przejrzystość silnika · BetsPlug Metodologia",
+      description:
+        "Jak BetsPlug klasyfikuje każdy typ według poziomu jakości, jak mierzymy dokładność i aktualne wyniki dla poszczególnych poziomów z naszego silnika v8.1.",
+      ogTitle: "Jak BetsPlug mierzy dokładność · Przejrzystość silnika",
+      ogDescription:
+        "Cztery poziomy wyboru (Platyna / Złoto / Srebro / Bezpłatny), każdy z własną historyczną dokładnością. Metodologia, wielkość próby, przedziały ufności Wilsona – wszystkie informacje publiczne.",
+    },
+    ro: {
+      title: "Transparența motorului · BetsPlug Metodologie",
+      description:
+        "Cum BetsPlug clasifică fiecare alegere într-un nivel de calitate, cum măsurăm acuratețea și rezultatele live pe nivel din motorul nostru v8.1.",
+      ogTitle: "Cum măsoară BetsPlug acuratețea · Transparența motorului",
+      ogDescription:
+        "Patru niveluri de alegere (Platină / Aur / Argint / Gratuit), fiecare cu acuratețea sa istorică. Metodologie, dimensiunile eșantionului, intervale de încredere Wilson — toate publice.",
+    },
+    ru: {
+      title: "Прозрачность движка · Методология BetsPlug",
+      description:
+        "Как BetsPlug классифицирует каждый выбор по уровню качества, как мы измеряем точность и получаем реальные результаты для каждого уровня с помощью нашего движка версии 8.1.",
+      ogTitle: "Как BetsPlug измеряет точность · Прозрачность движка",
+      ogDescription:
+        "Четыре уровня выбора (Платина/Золото/Серебро/Бесплатно), каждый из которых имеет свою историческую точность. Методология, размеры выборки, доверительные интервалы Вильсона — все общедоступно.",
+    },
+    el: {
+      title: "Διαφάνεια κινητήρα · Μεθοδολογία BetsPlug",
+      description:
+        "Πώς το BetsPlug ταξινομεί κάθε επιλογή σε επίπεδο ποιότητας, πώς μετράμε την ακρίβεια και τα ζωντανά αποτελέσματα ανά βαθμίδα από τον κινητήρα μας v8.1.",
+      ogTitle: "Πώς το BetsPlug μετρά την ακρίβεια · Διαφάνεια κινητήρα",
+      ogDescription:
+        "Τέσσερα επίπεδα επιλογής (Πλατινένιο / Χρυσό / Ασήμι / Δωρεάν), το καθένα με τη δική του ιστορική ακρίβεια. Μεθοδολογία, μεγέθη δείγματος, διαστήματα εμπιστοσύνης Wilson — όλα δημόσια.",
+    },
+    da: {
+      title: "Motorgennemsigtighed · BetsPlug Metodik",
+      description:
+        "Hvordan BetsPlug klassificerer hvert valg i et kvalitetsniveau, hvordan vi måler nøjagtighed og de live per-tier resultater fra vores v8.1-motor.",
+      ogTitle: "Hvordan BetsPlug måler nøjagtighed · Motorgennemsigtighed",
+      ogDescription:
+        "Fire udvalgte niveauer (Platin / Guld / Sølv / Gratis), hver med sin egen historiske nøjagtighed. Metode, stikprøvestørrelser, Wilson-konfidensintervaller - alle offentlige.",
+    },
+    sv: {
+      title: "Motortransparens · BetsPlug Metodik",
+      description:
+        "Hur BetsPlug klassificerar varje val i en kvalitetsnivå, hur vi mäter noggrannhet och liveresultaten per nivå från vår v8.1-motor.",
+      ogTitle: "Hur BetsPlug mäter noggrannhet · Motortransparens",
+      ogDescription:
+        "Fyra valnivåer (Platina / Guld / Silver / Gratis), var och en med sin egen historiska noggrannhet. Metodik, urvalsstorlekar, Wilsons konfidensintervall – allt offentligt.",
     },
 },
 
@@ -1144,7 +2113,72 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
       ogDescription:
         "Perunggu, Perak, Emas, atau Platinum Seumur Hidup — pilih paket yang dibuat untuk gaya taruhan Anda.",
     },
-  },
+  
+    pt: {
+      title: "Planos de preços · Previsões de futebol com IA · BetsPlug",
+      description:
+        "Escolha o plano BetsPlug mais adequado para você: teste Bronze por € 0,01, Silver para usuários casuais, Gold para acesso total ou nível de fundador Platinum Lifetime por € 199 uma vez.",
+      ogTitle: "BetsPlug Preços · Previsões de futebol de IA",
+      ogDescription:
+        "Bronze, Prata, Ouro ou Platina Vitalício — escolha o plano criado para o seu estilo de aposta.",
+    },
+    tr: {
+      title: "Fiyatlandırma Planları · AI Futbol Tahminleri · BetsPlug",
+      description:
+        "Size uygun BetsPlug planını seçin — 0,01 € karşılığında Bronz deneme, sıradan kullanıcılar için Gümüş, tam erişim için Altın veya tek seferlik 199 € karşılığında Platinum Lifetime kurucu kademesi.",
+      ogTitle: "BetsPlug Fiyatlandırma · Yapay Zeka Futbol Tahminleri",
+      ogDescription:
+        "Bronz, Gümüş, Altın veya Platin Ömür Boyu — bahis tarzınıza uygun planı seçin.",
+    },
+    pl: {
+      title: "Plany cenowe · Prognozy piłkarskie AI · BetsPlug",
+      description:
+        "Wybierz plan BetsPlug, który Ci odpowiada — Brązowy okres próbny za 0,01 EUR, Srebrny dla zwykłych użytkowników, Złoty z pełnym dostępem lub Poziom założycielski Platinum Lifetime za 199 EUR jednorazowo.",
+      ogTitle: "BetsPlug Ceny · Prognozy piłkarskie AI",
+      ogDescription:
+        "Dożywotni brąz, srebro, złoto lub platyna — wybierz plan dostosowany do Twojego stylu obstawiania.",
+    },
+    ro: {
+      title: "Planuri de prețuri · Predicții de fotbal AI · BetsPlug",
+      description:
+        "Alegeți planul BetsPlug care vi se potrivește — Probă Bronz pentru 0,01 EUR, Argint pentru utilizatorii ocazionali, Aur pentru acces complet sau Nivelul fondator Platinum Lifetime pentru 199 EUR o dată.",
+      ogTitle: "BetsPlug Prețuri · Predicții de fotbal AI",
+      ogDescription:
+        "Bronz, Argint, Aur sau Platină Lifetime — alege planul creat pentru stilul tău de pariere.",
+    },
+    ru: {
+      title: "Тарифные планы · Прогнозы на футбол с помощью искусственного интеллекта · BetsPlug",
+      description:
+        "Выберите план BetsPlug, который вам подходит — пробная версия Bronze за 0,01 евро, Silver для обычных пользователей, Gold для полного доступа или уровень основателя Platinum Lifetime за 199 евро один раз.",
+      ogTitle: "BetsPlug Цены · Прогнозы на футбол с помощью искусственного интеллекта",
+      ogDescription:
+        "Бронзовый, Серебряный, Золотой или Платиновый пожизненный — выберите план, созданный с учетом вашего стиля ставок.",
+    },
+    el: {
+      title: "Σχέδια τιμολόγησης · ​​Προβλέψεις ποδοσφαίρου AI · BetsPlug",
+      description:
+        "Επιλέξτε το πρόγραμμα BetsPlug που σας ταιριάζει — Δοκιμαστικό Bronze για 0,01 €, Ασημί για περιστασιακούς χρήστες, Χρυσό για πλήρη πρόσβαση ή Platinum Lifetime founder-tier για 199 € μία φορά.",
+      ogTitle: "Τιμολόγηση BetsPlug · Προβλέψεις ποδοσφαίρου AI",
+      ogDescription:
+        "Χάλκινο, ασήμι, χρυσό ή πλατινένιο Lifetime — επιλέξτε το σχέδιο που έχει σχεδιαστεί για το στυλ στοιχήματός σας.",
+    },
+    da: {
+      title: "Prisplaner · AI-fodboldforudsigelser · BetsPlug",
+      description:
+        "Vælg den BetsPlug-plan, der passer til dig – Bronzeprøve for €0,01, Sølv for casual-brugere, Guld for fuld adgang eller Platinum Lifetime-grundlægger-tier for €199 én gang.",
+      ogTitle: "BetsPlug Priser · AI fodbold forudsigelser",
+      ogDescription:
+        "Bronze, sølv, guld eller platin levetid – vælg den plan, der er bygget til din væddemålsstil.",
+    },
+    sv: {
+      title: "Prisplaner · AI fotbollsförutsägelser · BetsPlug",
+      description:
+        "Välj den BetsPlug-plan som passar dig – Bronsprovning för 0,01 €, Silver för tillfälliga användare, Guld för full åtkomst eller Platinum Lifetime-grundarnivå för 199 € en gång.",
+      ogTitle: "BetsPlug Prissättning · AI fotbollsförutsägelser",
+      ogDescription:
+        "Brons, Silver, Guld eller Platinum Lifetime – välj den plan som är byggd för din spelstil.",
+    },
+},
 
   /* ─────────────────────────── CONTACT ─────────────────────────── */
   "/contact": {
@@ -1212,6 +2246,71 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
       ogTitle: "Hubungi BetsPlug",
       ogDescription:
         "Dukungan email, kemitraan, atau pers — kami membalas dalam satu hari kerja.",
+    },
+
+    pt: {
+      title: "Contato BetsPlug · Suporte, parcerias e imprensa",
+      description:
+        "Entre em contato com a equipe BetsPlug. Suporte por e-mail, solicitações de parceria ou perguntas da imprensa — respondemos em um dia útil.",
+      ogTitle: "Contato BetsPlug",
+      ogDescription:
+        "Suporte por e-mail, parcerias ou imprensa — respondemos em um dia útil.",
+    },
+    tr: {
+      title: "İletişim BetsPlug · Destek, ortaklıklar ve basın",
+      description:
+        "BetsPlug ekibiyle iletişime geçin. E-posta desteği, ortaklık talepleri veya basın soruları; bir iş günü içinde yanıt veririz.",
+      ogTitle: "İletişim BetsPlug",
+      ogDescription:
+        "E-posta desteği, ortaklıklar veya basın; bir iş günü içinde yanıt veririz.",
+    },
+    pl: {
+      title: "Kontakt BetsPlug · Wsparcie, partnerstwo i prasa",
+      description:
+        "Skontaktuj się z zespołem BetsPlug. Wsparcie e-mailowe, prośby o współpracę lub zapytania prasowe — odpowiadamy w ciągu jednego dnia roboczego.",
+      ogTitle: "Skontaktuj się z BetsPlug",
+      ogDescription:
+        "Wsparcie e-mailowe, partnerstwa lub prasa — odpowiadamy w ciągu jednego dnia roboczego.",
+    },
+    ro: {
+      title: "Contact BetsPlug · Asistență, parteneriate și presă",
+      description:
+        "Luați legătura cu echipa BetsPlug. Asistență prin e-mail, solicitări de parteneriat sau întrebări de presă - răspundem în termen de o zi lucrătoare.",
+      ogTitle: "Contact BetsPlug",
+      ogDescription:
+        "Asistență prin e-mail, parteneriate sau presă - răspundem în termen de o zi lucrătoare.",
+    },
+    ru: {
+      title: "Контакты BetsPlug · Поддержка, партнерство и пресса",
+      description:
+        "Свяжитесь с командой BetsPlug. Поддержка по электронной почте, запросы на партнерство или запросы прессы — мы отвечаем в течение одного рабочего дня.",
+      ogTitle: "Контакт BetsPlug",
+      ogDescription:
+        "Поддержка по электронной почте, партнерство или пресса — мы отвечаем в течение одного рабочего дня.",
+    },
+    el: {
+      title: "Επικοινωνία BetsPlug · Υποστήριξη, συνεργασίες και τύπος",
+      description:
+        "Επικοινωνήστε με την ομάδα BetsPlug. Υποστήριξη μέσω email, αιτήματα συνεργασίας ή ερωτήσεις τύπου — απαντάμε εντός μιας εργάσιμης ημέρας.",
+      ogTitle: "Επικοινωνία BetsPlug",
+      ogDescription:
+        "Στείλτε υποστήριξη μέσω email, συνεργασίες ή πατήστε — απαντάμε εντός μιας εργάσιμης ημέρας.",
+    },
+    da: {
+      title: "Kontakt BetsPlug · Support, partnerskaber & presse",
+      description:
+        "Kom i kontakt med BetsPlug-teamet. E-mailsupport, partnerskabsanmodninger eller presseforespørgsler – vi svarer inden for en hverdag.",
+      ogTitle: "Kontakt BetsPlug",
+      ogDescription:
+        "E-mail support, partnerskaber eller presse - vi svarer inden for en hverdag.",
+    },
+    sv: {
+      title: "Kontakta BetsPlug · Support, partnerskap & press",
+      description:
+        "Ta kontakt med BetsPlug-teamet. E-postsupport, partnerskapsförfrågningar eller pressförfrågningar – vi svarar inom en arbetsdag.",
+      ogTitle: "Kontakta BetsPlug",
+      ogDescription:
+        "E-postsupport, partnerskap eller press – vi svarar inom en arbetsdag.",
     },
 },
 };
