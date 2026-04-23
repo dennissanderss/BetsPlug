@@ -48,6 +48,67 @@ interface PricingSectionProps {
   pricingConfig?: any;
 }
 
+/**
+ * Per-tier shiny treatment for the homepage pricing cards.
+ *
+ * Gives Bronze/Silver/Gold the same elegant "tinted gradient
+ * background + ambient coloured glow blobs + accent ring" recipe
+ * that the Platinum Lifetime card uses further down the page, but
+ * in each tier's signature metallic colour.
+ */
+interface HomeTierTreatment {
+  bg: string;
+  glowA: string;
+  glowB: string;
+  borderColor: string;
+  innerShadow: string;
+  checkColor: string;
+  checkDrop: string;
+}
+
+const HOME_TIER_TREATMENT: Record<TierKey, HomeTierTreatment> = {
+  bronze: {
+    bg: "linear-gradient(135deg, hsl(26 55% 10%) 0%, hsl(22 45% 6%) 50%, hsl(28 55% 9%) 100%)",
+    glowA: "bg-[#e8a864]/[0.14]",
+    glowB: "bg-[#b87333]/[0.10]",
+    borderColor: "rgba(232, 168, 100, 0.28)",
+    innerShadow:
+      "0 20px 50px -15px rgba(232, 168, 100, 0.30), 0 0 0 1px rgba(232, 168, 100, 0.18) inset",
+    checkColor: "#e8a864",
+    checkDrop: "drop-shadow(0 0 6px rgba(232, 168, 100, 0.55))",
+  },
+  silver: {
+    bg: "linear-gradient(135deg, hsl(220 8% 12%) 0%, hsl(220 6% 7%) 50%, hsl(220 8% 11%) 100%)",
+    glowA: "bg-[#e5e4e2]/[0.10]",
+    glowB: "bg-[#8a8d91]/[0.08]",
+    borderColor: "rgba(229, 228, 226, 0.26)",
+    innerShadow:
+      "0 20px 50px -15px rgba(229, 228, 226, 0.22), 0 0 0 1px rgba(229, 228, 226, 0.18) inset",
+    checkColor: "#e5e4e2",
+    checkDrop: "drop-shadow(0 0 6px rgba(229, 228, 226, 0.55))",
+  },
+  gold: {
+    bg: "linear-gradient(135deg, hsl(42 60% 12%) 0%, hsl(38 55% 7%) 50%, hsl(42 60% 11%) 100%)",
+    glowA: "bg-[#f5d67a]/[0.16]",
+    glowB: "bg-[#b8860b]/[0.10]",
+    borderColor: "rgba(245, 214, 122, 0.30)",
+    innerShadow:
+      "0 20px 50px -15px rgba(245, 214, 122, 0.35), 0 0 0 1px rgba(245, 214, 122, 0.20) inset",
+    checkColor: "#f5d67a",
+    checkDrop: "drop-shadow(0 0 6px rgba(245, 214, 122, 0.60))",
+  },
+  platinum: {
+    bg: "linear-gradient(135deg, hsl(200 55% 14%) 0%, hsl(205 45% 9%) 50%, hsl(210 55% 12%) 100%)",
+    glowA: "bg-sky-300/[0.16]",
+    glowB: "bg-cyan-400/[0.12]",
+    borderColor: "rgba(168, 216, 234, 0.30)",
+    innerShadow:
+      "0 20px 50px -15px rgba(94, 179, 217, 0.38), 0 0 0 1px rgba(217, 240, 255, 0.20) inset",
+    checkColor: "#a8d8ea",
+    checkDrop: "drop-shadow(0 0 6px rgba(168, 216, 234, 0.55))",
+  },
+};
+
 export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
@@ -318,24 +379,26 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
           {plans.map((plan) => {
             const Icon = plan.icon;
             const isHighlight = plan.highlight;
-            const accent = plan.accent;
-            const cardClass =
-              accent === "green"
-                ? "card-neon card-neon-green"
-                : accent === "purple"
-                  ? "card-neon card-neon-purple"
-                  : "card-neon card-neon-blue";
+            const tt = HOME_TIER_TREATMENT[plan.tier];
             return (
               <div
                 key={plan.id}
-                className={`${cardClass} relative flex flex-col p-8 ${
-                  isHighlight ? "halo-green md:-translate-y-4" : ""
+                className={`card-neon relative flex flex-col overflow-hidden p-8 ${
+                  isHighlight ? "md:-translate-y-4" : ""
                 }`}
+                style={{
+                  background: tt.bg,
+                  borderColor: tt.borderColor,
+                  boxShadow: tt.innerShadow,
+                }}
               >
-                {/* Background glow blob for popular */}
-                {isHighlight && (
-                  <div className="pointer-events-none absolute -right-16 -top-16 h-[280px] w-[280px] rounded-full bg-[#4ade80]/[0.08] blur-[100px]" />
-                )}
+                {/* Tier-coloured ambient glow blobs — top-right + bottom-left */}
+                <div
+                  className={`pointer-events-none absolute -right-20 -top-20 h-[320px] w-[320px] rounded-full blur-[120px] ${tt.glowA}`}
+                />
+                <div
+                  className={`pointer-events-none absolute -left-24 -bottom-24 h-[280px] w-[280px] rounded-full blur-[120px] ${tt.glowB}`}
+                />
 
                 <div className="relative flex flex-1 flex-col">
                   {isHighlight && (
@@ -422,8 +485,12 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                         className="flex items-start gap-3 text-sm text-[#ededed]"
                       >
                         <Check
-                          className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#4ade80]"
+                          className="mt-0.5 h-4 w-4 flex-shrink-0"
                           strokeWidth={3}
+                          style={{
+                            color: tt.checkColor,
+                            filter: tt.checkDrop,
+                          }}
                         />
                         <span className="text-[#cfd3dc]">{f}</span>
                       </li>
