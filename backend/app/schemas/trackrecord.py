@@ -15,6 +15,14 @@ class TierBreakdown(BaseModel):
     total: int = Field(ge=0)
     correct: int = Field(ge=0)
     accuracy: float = Field(ge=0.0, le=1.0)
+    wilson_ci_low: Optional[float] = Field(
+        default=None, ge=0.0, le=1.0,
+        description="Wilson 95% confidence interval lower bound.",
+    )
+    wilson_ci_high: Optional[float] = Field(
+        default=None, ge=0.0, le=1.0,
+        description="Wilson 95% confidence interval upper bound.",
+    )
 
 
 class TrackrecordSummary(BaseModel):
@@ -54,6 +62,14 @@ class TrackrecordSummary(BaseModel):
             "Fraction of predictions that were correct (correct / total). "
             "Higher is better; random baseline ≈ 0.45 for 3-way outcomes."
         ),
+    )
+    wilson_ci_low: Optional[float] = Field(
+        default=None, ge=0.0, le=1.0,
+        description="Wilson 95% confidence interval lower bound on accuracy.",
+    )
+    wilson_ci_high: Optional[float] = Field(
+        default=None, ge=0.0, le=1.0,
+        description="Wilson 95% confidence interval upper bound on accuracy.",
     )
 
     # Probabilistic scoring rules

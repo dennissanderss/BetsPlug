@@ -43,6 +43,24 @@ _NUM_CALIBRATION_BUCKETS = 10
 LIVE_MEASUREMENT_START = datetime(2026, 4, 16, 11, 0, 0, tzinfo=timezone.utc)
 
 
+def _wilson_ci(successes: int, n: int, z: float = 1.96) -> tuple[float, float]:
+    """Wilson 95% confidence interval on a Bernoulli proportion.
+
+    Returns (lower_bound, upper_bound) in [0, 1]. When ``n == 0`` returns
+    (0.0, 0.0) so the JSON output stays well-formed. Used on track-record
+    endpoints so the frontend can render "X% accuracy with 95% CI" next to
+    every headline number.
+    """
+    if n <= 0:
+        return (0.0, 0.0)
+    import math
+    p = successes / n
+    denom = 1.0 + z * z / n
+    center = p + z * z / (2.0 * n)
+    spread = z * math.sqrt(p * (1.0 - p) / n + z * z / (4.0 * n * n))
+    return (max(0.0, (center - spread) / denom), min(1.0, (center + spread) / denom))
+
+
 def _parse_public_pick_tier(slug: Optional[str]) -> Optional[PickTier]:
     """Parse the PUBLIC ``?pick_tier=`` query param used by the trackrecord
     page's tier-selector tabs.
@@ -186,17 +204,24 @@ async def get_trackrecord_summary(
             t_int = int(tier_int)
             t_correct_int = int(t_correct or 0)
             slug = TIER_METADATA[PickTier(t_int)]["slug"]
+            tier_lo, tier_hi = _wilson_ci(t_correct_int, total_int)
             per_tier[slug] = {
                 "total": total_int,
                 "correct": t_correct_int,
                 "accuracy": float(t_correct_int / total_int) if total_int else 0.0,
+                "wilson_ci_low": round(tier_lo, 4),
+                "wilson_ci_high": round(tier_hi, 4),
             }
+
+    overall_lo, overall_hi = _wilson_ci(correct, total)
 
     return TrackrecordSummary(
         model_version_id=model_version_id,
         total_predictions=total,
         correct_predictions=correct,
         accuracy=accuracy,
+        wilson_ci_low=round(overall_lo, 4),
+        wilson_ci_high=round(overall_hi, 4),
         brier_score=avg_brier,
         log_loss=avg_log_loss,
         avg_confidence=avg_confidence,

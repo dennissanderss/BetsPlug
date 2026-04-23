@@ -1694,7 +1694,11 @@ export default function TrackrecordPage() {
               <KpiCard
                 title="Nauwkeurigheid"
                 value={summary.total_predictions > 0 ? formatPercent(summary.accuracy) : "—"}
-                subtitle="Op alle 3-uitkomst voorspellingen"
+                subtitle={
+                  summary.total_predictions > 0 && summary.wilson_ci_low != null && summary.wilson_ci_high != null
+                    ? `${(summary.wilson_ci_low * 100).toFixed(1)}% – ${(summary.wilson_ci_high * 100).toFixed(1)}% · 95% betrouwbaar op ${summary.total_predictions.toLocaleString()} picks`
+                    : "Op alle 3-uitkomst voorspellingen"
+                }
                 icon={TrendingUp}
                 accent="green"
               />

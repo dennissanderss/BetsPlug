@@ -44,6 +44,8 @@ import { AccuracyPlusPreview } from "@/components/noct/accuracy-plus-preview";
 interface LiveStats {
   totalPredictions: number | null;
   accuracy: number | null;
+  wilsonLow: number | null;
+  wilsonHigh: number | null;
   brierScore: number | null;
   botdTotal: number | null;
   botdAccuracy: number | null;
@@ -55,6 +57,8 @@ function useLiveTrackRecordStats(pickTier: PublicTier = "all"): LiveStats {
   const [stats, setStats] = useState<LiveStats>({
     totalPredictions: null,
     accuracy: null,
+    wilsonLow: null,
+    wilsonHigh: null,
     brierScore: null,
     botdTotal: null,
     botdAccuracy: null,
@@ -81,6 +85,8 @@ function useLiveTrackRecordStats(pickTier: PublicTier = "all"): LiveStats {
       const next: LiveStats = {
         totalPredictions: null,
         accuracy: null,
+        wilsonLow: null,
+        wilsonHigh: null,
         brierScore: null,
         botdTotal: null,
         botdAccuracy: null,
@@ -89,6 +95,8 @@ function useLiveTrackRecordStats(pickTier: PublicTier = "all"): LiveStats {
         const s = summaryResult.value;
         next.totalPredictions = s.total_predictions ?? null;
         next.accuracy = s.accuracy ?? null;
+        next.wilsonLow = s.wilson_ci_low ?? null;
+        next.wilsonHigh = s.wilson_ci_high ?? null;
         next.brierScore = s.brier_score ?? s.avg_brier_score ?? null;
       }
       if (botdResult.status === "fulfilled" && botdResult.value) {
@@ -469,6 +477,15 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
   // because BOTD is tier-agnostic. The full BOTD stats have their
   // own dedicated section further down the page.
   const showBotdKpi = false;
+  // Kleine "95% CI" subregel onder de Nauwkeurigheid-KPI zodat de
+  // bezoeker naast het percentage ook de betrouwbaarheidsmarge ziet.
+  // Valt terug op de statische tr.kpi1Note als de API geen Wilson CI
+  // levert (bv. lege dataset of endpoint nog niet up-to-date).
+  const accuracyNote =
+    live.accuracy != null && live.wilsonLow != null && live.wilsonHigh != null && live.totalPredictions
+      ? `${(live.wilsonLow * 100).toFixed(1)}% – ${(live.wilsonHigh * 100).toFixed(1)}% (95% betrouwbaarheid, op ${live.totalPredictions.toLocaleString()} predicties)`
+      : t("tr.kpi1Note");
+
   const kpis = [
     {
       icon: Percent,
@@ -477,7 +494,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           ? `${(live.accuracy * 100).toFixed(1)}%`
           : t("tr.kpi1Value"),
       label: t("tr.kpi1Label"),
-      note: t("tr.kpi1Note"),
+      note: accuracyNote,
     },
     ...(showBotdKpi
       ? [
