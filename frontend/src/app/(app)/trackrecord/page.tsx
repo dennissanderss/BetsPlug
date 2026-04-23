@@ -1800,7 +1800,7 @@ export default function TrackrecordPage() {
           </BotdTierGate>
         </div>
 
-        {/* Spoor 2 — Accuracy Plus preview (gelockt tot 100 picks) */}
+        {/* Spoor 2 — Accuracy Pro Engine v2 preview (gelockt tot 100 picks) */}
         <AccuracyPlusPreview />
       </div>
 

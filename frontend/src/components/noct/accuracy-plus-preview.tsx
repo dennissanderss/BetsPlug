@@ -53,10 +53,10 @@ export function AccuracyPlusPreview() {
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-sm font-bold text-white">Accuracy Plus</h3>
+              <h3 className="text-sm font-bold text-white">Accuracy Pro Engine v2</h3>
               <span className="inline-flex items-center gap-1 rounded-full border border-violet-500/30 bg-violet-500/10 px-2 py-0.5 text-[10px] font-semibold text-violet-300">
                 <Lock className="h-2.5 w-2.5" />
-                Preview
+                In ontwikkeling
               </span>
             </div>
             <p className="text-[11px] text-slate-500 mt-0.5">

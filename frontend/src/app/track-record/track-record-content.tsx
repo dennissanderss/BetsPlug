@@ -860,7 +860,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
       {/* ───────────── BOTD LIVE — LOCKED ───────────── */}
       <LockedLivePlaceholder number="4" variant="botd" id="botd-live" />
 
-      {/* ───────────── ACCURACY PLUS (Spoor 2, preview) ──────────────
+      {/* ───────────── ACCURACY PRO ENGINE v2 (Spoor 2, preview) ─────
           Verbeterde versie van de Accuracy Engine met pre-match odds
           validatie. Verzamelt sinds 2026-04-16 echte bookmaker odds
           bij elke pick. Gated met een progress bar — cijfers worden

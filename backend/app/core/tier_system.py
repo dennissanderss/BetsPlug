@@ -3,10 +3,14 @@
 The v8.1 engine classifies every prediction into one of four quality tiers
 based on the league and the model's confidence:
 
-    🟢 Platinum : top  5 leagues + confidence >= 0.75  ~82% historical accuracy
-    🔵 Gold     : top 10 leagues + confidence >= 0.70  ~70%
-    ⚪ Silver   : top 14 leagues + confidence >= 0.65  ~61%
-    ⬜ Free     : anything else  + confidence >= 0.55  ~48%
+    🟢 Platinum : top  5 leagues + confidence >= 0.75  ~86% historical accuracy
+    🔵 Gold     : top 10 leagues + confidence >= 0.70  ~77%
+    ⚪ Silver   : top 14 leagues + confidence >= 0.65  ~71%
+    ⬜ Free     : anything else  + confidence >= 0.55  ~60%
+
+Numbers measured on 3,318 evaluated predictions under
+trackrecord_filter() as of 2026-04-22. Marketing claims (80/70/60/45%+)
+are the conservative floors advertised publicly, not the mean accuracy.
 
 Users see picks from their subscription tier AND all lower tiers, each
 rendered with a visual label (emoji) so they understand the quality hint

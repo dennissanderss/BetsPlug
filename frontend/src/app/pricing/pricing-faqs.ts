@@ -30,7 +30,7 @@ export const PRICING_FAQS: PricingFaq[] = [
   },
   {
     q: "What's the difference between Silver, Gold, and Platinum picks?",
-    a: "Silver unlocks picks in the top 14 competitions with a 60%+ historical hit rate at confidence ≥65%. Gold adds a Data Analyst toolkit (Match Deep Dive, Predictions Explorer, CSV/PDF exports) and higher-conviction 70%+ accuracy picks across the top 10 leagues. Platinum adds elite top-5-league picks at 85%+ historical accuracy, plus lifetime pricing.",
+    a: "Silver unlocks picks in the top 14 competitions with a 60%+ historical hit rate at confidence ≥65%. Gold adds a Data Analyst toolkit (Match Deep Dive, Predictions Explorer, CSV/PDF exports) and higher-conviction 70%+ accuracy picks across the top 10 leagues. Platinum adds elite top-5-league picks at 80%+ historical accuracy, plus lifetime pricing.",
   },
   {
     q: "What if my results don't match the advertised hit rate?",

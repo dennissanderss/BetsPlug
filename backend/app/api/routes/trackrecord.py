@@ -289,7 +289,7 @@ async def get_live_measurement(
 async def get_accuracy_plus_preview(
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    """Spoor 2: 'Accuracy Plus' surface.
+    """Spoor 2: 'Accuracy Pro Engine v2' surface.
 
     Counts evaluated pre-match predictions that have real bookmaker odds
     (closing_odds_snapshot with bookmaker_odds populated), per tier.
@@ -350,7 +350,7 @@ async def get_accuracy_plus_preview(
     unlocked = total_all >= UNLOCK_THRESHOLD
 
     return {
-        "title": "Accuracy Plus",
+        "title": "Accuracy Pro Engine v2",
         "subtitle": "Verbeterde versie van de Accuracy Engine — inclusief pre-match bookmaker-odds validatie",
         "status": "unlocked" if unlocked else "locked",
         "unlock_threshold": UNLOCK_THRESHOLD,
