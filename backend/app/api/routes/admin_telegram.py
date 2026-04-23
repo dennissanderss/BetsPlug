@@ -35,6 +35,7 @@ from app.services.telegram_posting import (
     publish_pick,
     publish_promo,
     publish_scheduled_slot,
+    publish_welcome,
     select_next_free_pick,
     update_all_pending_results,
     wipe_channel,
@@ -231,6 +232,23 @@ async def force_post_promo(
     db: AsyncSession = Depends(get_db),
 ) -> PostSummary:
     post = await publish_promo(db, channel=channel)
+    return _post_to_summary(post)
+
+
+@router.post(
+    "/post-welcome",
+    response_model=PostSummary,
+    summary="Force-post the channel welcome / intro message",
+)
+async def force_post_welcome(
+    channel: Optional[str] = Query(default=None),
+    db: AsyncSession = Depends(get_db),
+) -> PostSummary:
+    """Use after a wipe or when the pinned welcome was accidentally
+    deleted. Pin the resulting message manually in the Telegram client —
+    the bot doesn't assume pin-rights to keep the happy-path minimal.
+    """
+    post = await publish_welcome(db, channel=channel)
     return _post_to_summary(post)
 
 

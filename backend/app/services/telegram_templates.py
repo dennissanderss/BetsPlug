@@ -299,6 +299,69 @@ def render_daily_summary(
     return "\n".join(lines)
 
 
+def render_welcome_message() -> str:
+    """Channel introduction / pinned welcome post.
+
+    Meant to be posted once and pinned — gives a new subscriber the
+    "what am I looking at, when do posts happen, and where do I click
+    for more" summary the channel description can't fit. Intentionally
+    slightly longer than a pick post (it's a one-off) but still fits
+    on a phone screen without scrolling.
+
+    Shape (MarkdownV2)::
+
+        *Welcome to BetsPlug*
+        _Data\\-driven football predictions_
+
+        *What you'll see here*
+        • 3 Free picks/day · 11:00 · 15:00 · 19:00 CET
+        • Each pick replied with ✅/❌ after full\\-time
+        • Daily scoreboard at 23:00 CET
+
+        *How we pick*
+        Every post is a Free \\(Bronze\\) tier call — the 55–65%
+        confidence band of our model\\. Tested on 80,000\\+ historical
+        matches\\.
+
+        *Higher conviction available*
+        🥈 Silver  · ≥65%
+        🥇 Gold    · ≥70%
+        💎 Platinum · ≥75% · top\\-5 leagues
+
+        → betsplug\\.com/pricing
+        → betsplug\\.com/track\\-record \\(live\\)
+
+        18\\+ · Statistical analysis, not betting advice\\.
+    """
+    lines = [
+        "*Welcome to BetsPlug*",
+        "_" + _md("Data-driven football predictions") + "_",
+        "",
+        "*What you'll see here*",
+        _md("• 3 Free picks/day · 11:00 · 15:00 · 19:00 CET"),
+        _md("• Each pick replied with ✅/❌ after full-time"),
+        _md("• Daily scoreboard at 23:00 CET"),
+        "",
+        "*How we pick*",
+        _md(
+            "Every post is a Free (Bronze) tier call — the 55–65% "
+            "confidence band of our model. Tested on 80,000+ "
+            "historical matches."
+        ),
+        "",
+        "*Higher conviction available*",
+        _md("🥈 Silver · ≥65%"),
+        _md("🥇 Gold · ≥70%"),
+        _md("💎 Platinum · ≥75% · top-5 leagues"),
+        "",
+        _md("→ betsplug.com/pricing"),
+        _md("→ betsplug.com/track-record (live)"),
+        "",
+        _md("18+ · Statistical analysis, not betting advice."),
+    ]
+    return "\n".join(lines)
+
+
 def render_promo_message(weekly_accuracy_pct: Optional[float] = None) -> str:
     """Weekly tier-explanation post — the only place we run a CTA.
 
@@ -366,4 +429,5 @@ __all__ = [
     "render_result_update",
     "render_daily_summary",
     "render_promo_message",
+    "render_welcome_message",
 ]

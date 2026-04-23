@@ -56,6 +56,7 @@ from app.services.telegram_templates import (
     render_pick_with_graded_banner,
     render_promo_message,
     render_result_update,
+    render_welcome_message,
 )
 
 
@@ -580,6 +581,34 @@ async def update_all_pending_results(
     return updated
 
 
+async def publish_welcome(
+    db: AsyncSession, channel: Optional[str] = None
+) -> TelegramPost:
+    """Post the channel's welcome/intro message.
+
+    Meant to be pinned manually in the Telegram client after posting —
+    the Bot API's ``pinChatMessage`` requires the bot to have pin
+    rights, which we don't assume here. Using ``post_type='welcome'``
+    so the admin post-history table can distinguish it from picks,
+    summaries and promos.
+    """
+    target = _resolve_channel(channel)
+    body = render_welcome_message()
+    message_id = await post_to_channel(target, body)
+
+    welcome = TelegramPost(
+        prediction_id=None,
+        channel=target,
+        telegram_message_id=message_id,
+        post_type="welcome",
+        posted_at=datetime.now(timezone.utc),
+    )
+    db.add(welcome)
+    await db.commit()
+    await db.refresh(welcome)
+    return welcome
+
+
 async def wipe_channel(
     db: AsyncSession, channel: Optional[str] = None
 ) -> dict[str, int]:
@@ -639,6 +668,7 @@ __all__ = [
     "publish_result_update",
     "publish_daily_summary",
     "publish_promo",
+    "publish_welcome",
     "update_all_pending_results",
     "select_next_free_pick",
     "wipe_channel",

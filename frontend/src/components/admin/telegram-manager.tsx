@@ -26,6 +26,7 @@ import {
   ClipboardList,
   Megaphone,
   Trash2,
+  Sparkles,
 } from "lucide-react";
 
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -150,6 +151,7 @@ function PostTypePill({ type }: { type: string }) {
     result_update: { tone: "info", label: "Result" },
     daily_summary: { tone: "draw", label: "Summary" },
     promo: { tone: "default", label: "Promo" },
+    welcome: { tone: "info", label: "Welcome" },
   };
   const cfg = map[type] ?? { tone: "default" as const, label: type };
   return (
@@ -637,6 +639,23 @@ export default function TelegramManager() {
               icon={<ClipboardList className="h-3.5 w-3.5" />}
               label="Post daily summary"
               desc="Post het NL/EN dagoverzicht van vandaag (scheduled 23:00 CET). Skipt als er nog geen picks van vandaag staan."
+            />
+            <ActionRow
+              onClick={() =>
+                runAction(
+                  "welcome",
+                  () => adminCall<PostSummary>("/admin/telegram/post-welcome", "POST"),
+                  (r) => {
+                    const p = r as PostSummary;
+                    return `Welcome message gepost · msg_id ${p.telegram_message_id} · vergeet niet te pinnen in Telegram`;
+                  },
+                )
+              }
+              busy={busyAction === "welcome"}
+              anyBusy={busyAction !== null}
+              icon={<Sparkles className="h-3.5 w-3.5" />}
+              label="Post welcome message"
+              desc="Plaatst het intro/welkomstbericht van het kanaal. Vergeet niet 'm daarna te pinnen in Telegram (bot heeft geen pin-rechten)."
             />
             <ActionRow
               onClick={() =>
