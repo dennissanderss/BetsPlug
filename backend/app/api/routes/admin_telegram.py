@@ -1,4 +1,4 @@
-"""Admin endpoints for the @BetsPlug Telegram auto-poster.
+"""Admin endpoints for the @BetsPluggs Telegram auto-poster.
 
 Mounted at `/api/admin/telegram`, gated behind ``require_admin`` at the
 router registration level in ``app/api/routes/__init__.py``.
@@ -154,7 +154,7 @@ class ChannelOverview(BaseModel):
 @router.post(
     "/post-pick/{prediction_id}",
     response_model=PostSummary,
-    summary="Force-post a specific prediction to the @BetsPlug channel",
+    summary="Force-post a specific prediction to the @BetsPluggs channel",
 )
 async def force_post_pick(
     prediction_id: UUID,

@@ -3,7 +3,7 @@
 /**
  * Telegram auto-poster admin tab.
  *
- * Single-stop dashboard for the @BetsPlug publisher:
+ * Single-stop dashboard for the @BetsPluggs publisher:
  *   · top strip: bot/token health + per-channel stat cards
  *   · middle : queue preview + four operational buttons
  *   · bottom : recent post history table
@@ -508,7 +508,7 @@ export default function TelegramManager() {
             <Send className="h-4 w-4" />
           </HexBadge>
           <div>
-            <p className="section-label">@BetsPlug auto-poster</p>
+            <p className="section-label">@BetsPluggs auto-poster</p>
             <p className="mt-0.5 text-sm text-[#ededed]">
               {health ? (
                 health.bot ? (
@@ -616,7 +616,7 @@ export default function TelegramManager() {
               icon={<Send className="h-3.5 w-3.5" />}
               label="Post next pick"
               variant="primary"
-              desc="Plaatst nu de eerstvolgende Free-tier pick in @BetsPluggs, zonder te wachten op de 11/15/19 CET cron."
+              desc="Plaatst nu de eerstvolgende Free-tier pick in @BetsPluggsgs, zonder te wachten op de 11/15/19 CET cron."
             />
             <ActionRow
               onClick={() =>

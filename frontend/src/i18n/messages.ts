@@ -768,7 +768,7 @@ const en = {
   "chatbot.replyAccuracy":
     "Every prediction is logged in our public track record with hit-rate, ROI and confidence scores. You can filter by league, market and date range. No cherry-picking, no hidden losses - transparency is the whole point.",
   "chatbot.replyTelegram":
-    "Our Telegram community has 1,200+ active members with daily picks, edge alerts and live Q&A with our analysts. Join at t.me/betsplug - free for Bronze users, VIP channels for Silver/Gold.",
+    "Our Telegram community has 1,200+ active members with daily picks, edge alerts and live Q&A with our analysts. Join at t.me/BetsPluggs - free for Bronze users, VIP channels for Silver/Gold.",
 
   /* About Us page */
   "about.metaTitle":
@@ -3032,7 +3032,7 @@ const nl: Dictionary = {
   "chatbot.replyHello": "Hé daar! 👋 Ik ben de BetsPlug AI. Vraag mij alles over onze modellen, prijzen of voorspellingen - ik zal mijn best doen om je te helpen.",
   "chatbot.replyPricing": "We hebben vier niveaus. Bronze is een symbolische proefversie van € 0,01 - volledige toegang gedurende 7 dagen, echte kaart vereist (dit houdt het platform fraudevrij). Zilver (€ 9,99/maand) is een instapabonnement dat beperkt is tot de top 5 van Europese competities en BetsPlug Pulse keuzes met een vertraging van 2 uur. Goud (€ 14,99/maand) is ons populairste - alle 30 competities wereldwijd, volledige BetsPlug Pulse AI-output, directe keuzes, dagelijks Pick of the Day, Goud Telegram en Strategy Lab (binnenkort beschikbaar). Platinum (€ 199,- eenmalig levenslang) voegt privé Telegram, 1-op-1 onboarding en een levenslang prijsslot toe. Alle betaalde abonnementen worden ondersteund door een EU-geld-terug-garantie van 14 dagen.",
   "chatbot.replyRefund": "Silver- en Gold-plannen kun je op elk moment opzeggen in je dashboard - je behoudt toegang tot het einde van je factureringsperiode. We bieden ook een 14 dagen niet-goed-geld-terug-garantie op alle betaalde plannen conform EU-recht. Platinum Lifetime is final-sale na de 14-dagen.",
-  "chatbot.replyTelegram": "Onze Telegram-community heeft meer dan 1.200 actieve leden met dagelijkse keuzes, edge-alerts en live vraag- en antwoordsessies met onze analisten. Meld je aan via t.me/betsplug - gratis voor Bronze-gebruikers, VIP-kanalen voor Silver/Gold.",
+  "chatbot.replyTelegram": "Onze Telegram-community heeft meer dan 1.200 actieve leden met dagelijkse keuzes, edge-alerts en live vraag- en antwoordsessies met onze analisten. Meld je aan via t.me/BetsPluggs - gratis voor Bronze-gebruikers, VIP-kanalen voor Silver/Gold.",
   "chatbot.suggestion1": "Hoe werkt de Pick of the Day?",
   "chatbot.suggestion2": "Wat is het verschil tussen Silver en Gold?",
   "chatbot.suggestion3": "Hoe nauwkeurig zijn jullie voorspellingen?",

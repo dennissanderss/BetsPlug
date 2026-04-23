@@ -1,4 +1,4 @@
-"""Bilingual message templates for the @BetsPlug Telegram channel.
+"""Bilingual message templates for the @BetsPluggs Telegram channel.
 
 Every public post is EN-top / NL-bottom, separated by a `---` line so the
 two blocks are visually distinct in the Telegram client. Content is
@@ -364,7 +364,7 @@ def render_daily_summary(
 def render_promo_message(weekly_accuracy_pct: Optional[float] = None) -> str:
     """Return the bilingual weekly promo post.
 
-    Explains what a reader on @BetsPluggs is actually looking at (Free
+    Explains what a reader on @BetsPluggsgs is actually looking at (Free
     tier only, 55-65% confidence band) and what the paid tiers unlock.
     Intentionally educational rather than hypey — the audience is
     sceptics burned by tipster channels, not lottery players.

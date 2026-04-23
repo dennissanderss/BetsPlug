@@ -916,12 +916,12 @@ async def job_snapshot_upcoming_odds():
 
 
 # ──────────────────────────────────────────────────────────────────
-# @BetsPlug Telegram auto-poster — scheduler adapters
+# @BetsPluggs Telegram auto-poster — scheduler adapters
 # ──────────────────────────────────────────────────────────────────
 
 
 async def job_telegram_post_scheduled_pick():
-    """Post the best available Free-tier pick to @BetsPlug.
+    """Post the best available Free-tier pick to @BetsPluggs.
 
     Wraps ``publish_scheduled_slot`` with DB session management + a
     broad try/except so one bad post never blows up the scheduler
@@ -1342,7 +1342,7 @@ def start_scheduler():
         replace_existing=True,
     )
 
-    # ── @BetsPlug Telegram auto-poster ─────────────────────────────
+    # ── @BetsPluggs Telegram auto-poster ─────────────────────────────
     # Three Free-tier picks per day at 11 / 15 / 19 CET, one daily
     # summary at 23 CET, plus a result-update sweep every 15 minutes
     # so posted picks flip to ✅/❌ within ~15 min of final whistle.
@@ -1355,35 +1355,35 @@ def start_scheduler():
         job_telegram_post_scheduled_pick,
         trigger=CronTrigger(hour=11, minute=0, timezone=_CET),
         id="telegram_pick_11_cet",
-        name="Telegram @BetsPlug — 11:00 CET pick",
+        name="Telegram @BetsPluggs — 11:00 CET pick",
         replace_existing=True,
     )
     scheduler.add_job(
         job_telegram_post_scheduled_pick,
         trigger=CronTrigger(hour=15, minute=0, timezone=_CET),
         id="telegram_pick_15_cet",
-        name="Telegram @BetsPlug — 15:00 CET pick",
+        name="Telegram @BetsPluggs — 15:00 CET pick",
         replace_existing=True,
     )
     scheduler.add_job(
         job_telegram_post_scheduled_pick,
         trigger=CronTrigger(hour=19, minute=0, timezone=_CET),
         id="telegram_pick_19_cet",
-        name="Telegram @BetsPlug — 19:00 CET pick",
+        name="Telegram @BetsPluggs — 19:00 CET pick",
         replace_existing=True,
     )
     scheduler.add_job(
         job_telegram_post_daily_summary,
         trigger=CronTrigger(hour=23, minute=0, timezone=_CET),
         id="telegram_daily_summary",
-        name="Telegram @BetsPlug — daily summary 23:00 CET",
+        name="Telegram @BetsPluggs — daily summary 23:00 CET",
         replace_existing=True,
     )
     scheduler.add_job(
         job_telegram_update_results,
         trigger=IntervalTrigger(minutes=15),
         id="telegram_update_results",
-        name="Telegram @BetsPlug — result-update sweep",
+        name="Telegram @BetsPluggs — result-update sweep",
         replace_existing=True,
         next_run_time=datetime.now(timezone.utc) + timedelta(minutes=4),
     )
@@ -1405,7 +1405,7 @@ def start_scheduler():
         job_telegram_post_weekly_promo,
         trigger=CronTrigger(day_of_week="sun", hour=18, minute=0, timezone=_CET),
         id="telegram_weekly_promo",
-        name="Telegram @BetsPlug — weekly tier promo",
+        name="Telegram @BetsPluggs — weekly tier promo",
         replace_existing=True,
     )
 

@@ -1,4 +1,4 @@
-"""High-level @BetsPlug publishing orchestration.
+"""High-level @BetsPluggs publishing orchestration.
 
 Sits between the dumb `telegram_service` (HTTP wrapper) and the
 scheduler tasks / admin endpoints. Decides *which* prediction to post
@@ -72,7 +72,7 @@ def _resolve_channel(channel: Optional[str]) -> str:
     """Resolve the target channel: explicit arg > test override > prod default.
 
     The ``TELEGRAM_CHANNEL_TEST`` env var is a safety hatch for staging
-    so a misconfigured job never posts to @BetsPlug by accident. When
+    so a misconfigured job never posts to @BetsPluggs by accident. When
     set, scheduled tasks route there instead of the production handle.
     """
     if channel:

@@ -34,7 +34,7 @@ const socialLinks = [
   { icon: Twitter, label: "Twitter", href: "https://twitter.com/betsplug" },
   { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/betsplug_com" },
   { icon: Youtube, label: "YouTube", href: "https://youtube.com/@betsplug" },
-  { icon: Send, label: "Telegram", href: "https://t.me/betsplug" },
+  { icon: Send, label: "Telegram", href: "https://t.me/BetsPluggs" },
 ];
 
 export function BetsPlugFooter() {
@@ -144,7 +144,7 @@ export function BetsPlugFooter() {
               </div>
             </div>
             <a
-              href="https://t.me/betsplug"
+              href="https://t.me/BetsPluggs"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary shrink-0 gap-2"
@@ -249,7 +249,7 @@ export function BetsPlugFooter() {
               </li>
               <li>
                 <a
-                  href="https://t.me/betsplug"
+                  href="https://t.me/BetsPluggs"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-1.5 text-[#a3a9b8] transition-colors hover:text-[#ededed]"

@@ -1,6 +1,6 @@
 """Thin httpx wrapper around the Telegram Bot HTTP API.
 
-Used by the @BetsPlug auto-poster — no user-management flows, no bot
+Used by the @BetsPluggs auto-poster — no user-management flows, no bot
 commands, just channel posting + message edits. The library choice is
 deliberate: `python-telegram-bot` ships a full update dispatcher we
 don't need for a publisher, and it pulls in ~20 transitive deps; our
@@ -93,7 +93,7 @@ async def post_to_channel(
     dev / tests keep flowing without mocking.
 
     `channel` may be an `@handle` or a numeric chat id. The caller
-    typically passes ``settings.telegram_channel_free`` (= @BetsPlug
+    typically passes ``settings.telegram_channel_free`` (= @BetsPluggs
     by default) or the optional test channel.
 
     Passing ``reply_to_message_id`` posts as a Telegram reply to that

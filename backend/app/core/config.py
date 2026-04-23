@@ -170,10 +170,10 @@ class Settings(BaseSettings):
         default="", validation_alias="TELEGRAM_BOT_TOKEN"
     )
     telegram_channel_free: str = Field(
-        default="@BetsPlug", validation_alias="TELEGRAM_CHANNEL_FREE"
+        default="@BetsPluggs", validation_alias="TELEGRAM_CHANNEL_FREE"
     )
     # Optional separate dev/test channel so staging never pollutes the
-    # public @BetsPlug feed. When set, dev tasks use this instead of
+    # public @BetsPluggs feed. When set, dev tasks use this instead of
     # `telegram_channel_free`.
     telegram_channel_test: str = Field(
         default="", validation_alias="TELEGRAM_CHANNEL_TEST"

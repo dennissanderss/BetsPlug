@@ -37,7 +37,7 @@ const ORGANIZATION = {
     "https://x.com/betsplug",
     "https://instagram.com/betsplug",
     "https://youtube.com/@betsplug",
-    "https://t.me/betsplug",
+    "https://t.me/BetsPluggs",
   ],
   contactPoint: {
     "@type": "ContactPoint",
