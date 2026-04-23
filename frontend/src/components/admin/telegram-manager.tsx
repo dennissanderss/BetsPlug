@@ -25,6 +25,7 @@ import {
   Zap,
   ClipboardList,
   Megaphone,
+  Trash2,
 } from "lucide-react";
 
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -673,6 +674,57 @@ export default function TelegramManager() {
               label="Run result sweep"
               desc="Loopt alle pending picks na en plaatst een ✅/❌ reply onder eerdere posts zodra de uitslag binnen is. Cron 15 min."
             />
+
+            {/* Danger zone — visually separated so a slip of the finger
+                doesn't nuke the channel. Double-confirm below. */}
+            <div className="mt-2 space-y-1.5 border-t border-red-500/20 pt-3">
+              <button
+                type="button"
+                disabled={busyAction !== null}
+                onClick={() => {
+                  const ok = window.confirm(
+                    "DESTRUCTIVE — this deletes EVERY auto-posted message " +
+                      "from @BetsPluggs and wipes the local post history.\n\n" +
+                      "The Telegram bot needs 'Delete Messages' admin rights " +
+                      "or some posts will remain.\n\n" +
+                      "A fresh Free-tier pick will be published right after.\n\n" +
+                      "Continue?",
+                  );
+                  if (!ok) return;
+                  runAction(
+                    "wipe",
+                    () =>
+                      adminCall<{
+                        wipe: { deleted: number; missing: number; db_removed: number };
+                        next_post: PostSummary | null;
+                      }>("/admin/telegram/wipe?repost_next=true", "POST"),
+                    (r) => {
+                      const typed = r as {
+                        wipe: { deleted: number; missing: number; db_removed: number };
+                        next_post: PostSummary | null;
+                      };
+                      const parts = [
+                        `${typed.wipe.deleted} verwijderd`,
+                        typed.wipe.missing > 0 ? `${typed.wipe.missing} al weg` : null,
+                        typed.next_post
+                          ? `nieuwe pick msg_id ${typed.next_post.telegram_message_id}`
+                          : "geen nieuwe pick (niks eligible)",
+                      ].filter(Boolean);
+                      return `Kanaal gereset · ${parts.join(" · ")}`;
+                    },
+                  );
+                }}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2.5 text-sm font-semibold text-red-200 transition hover:border-red-500/70 hover:bg-red-500/20 disabled:opacity-50"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                {busyAction === "wipe" ? "Bezig…" : "Wipe channel + fresh post"}
+              </button>
+              <p className="px-1 text-[11px] leading-snug text-red-300/70">
+                Verwijdert ALLE auto-berichten uit @BetsPluggs via de Bot API en wist de
+                lokale geschiedenis. Post meteen de eerstvolgende Free-tier pick onder
+                de nieuwe EN-only template. Onomkeerbaar.
+              </p>
+            </div>
           </div>
         </div>
       </div>
