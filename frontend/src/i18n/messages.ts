@@ -873,7 +873,7 @@ const en = {
   "tr.heroSubtitle":
     "Most tipster sites show you a winning screenshot. We show you the ledger. Every BetsPlug pick is scored against the official result feed, and published here, winner or loser. This page is the only proof of performance you should accept from anyone selling football predictions.",
   "tr.heroCtaPrimary": "Explore the live results",
-  "tr.heroCtaSecondary": "Start €0,01 trial",
+  "tr.heroCtaSecondary": "Create free account",
 
   /* Headline KPIs */
   "tr.kpisBadge": "Rolling 12-month snapshot",
@@ -2887,6 +2887,10 @@ const en = {
   "trackRecord.phaseBacktestKicker": "Backtest — historical simulation",
   "trackRecord.phaseBacktestTitle": "Below — what the model would have done",
   "trackRecord.phaseBacktestSubtitle": "Everything below is computed on historical matches under the rule that the model may only use data available before kickoff. No cherry-picking, full dataset public as CSV.",
+  "trackRecord.signInLockedBadge": "Full details behind sign-in",
+  "trackRecord.signInLockedTitle": "Want CSV exports and every detail per pick?",
+  "trackRecord.signInLockedLede": "Free Access gets you into the dashboard — no card, no billing. Inside you unlock the full live track record, CSV / JSON export on every prediction, and per-match detail on every call we've ever made.",
+  "trackRecord.signInLockedCta": "Create free account",
   "trackRecord.tierKpisLabel": "1 · Tier accuracy (historical backtest)",
   "trackRecord.phaseLiveKicker": "Live measurement — from 18 April 2026",
   "trackRecord.phaseLiveTitle": "Below — live measurement only",
@@ -5350,6 +5354,10 @@ const nl: Dictionary = {
   "trackRecord.phaseBacktestKicker": "Backtest — historische simulatie",
   "trackRecord.phaseBacktestTitle": "Hieronder: wat het model zou hebben gedaan",
   "trackRecord.phaseBacktestSubtitle": "Alles hieronder is berekend op historische wedstrijden met de regel dat het model alleen data mag gebruiken die vóór de aftrap bekend was. Geen cherry-picking, volledige dataset publiek als CSV.",
+  "trackRecord.signInLockedBadge": "Volledige details achter inlog",
+  "trackRecord.signInLockedTitle": "Wil je CSV-exports en elk detail per pick?",
+  "trackRecord.signInLockedLede": "Met Free Access kom je in het dashboard — geen kaart, geen facturatie. Binnen ontgrendel je het volledige live trackrecord, CSV / JSON-export op elke voorspelling, en per-match details over elke call die we ooit maakten.",
+  "trackRecord.signInLockedCta": "Maak gratis account",
   "trackRecord.tierKpisLabel": "1 · Tier-accuraatheid (historische backtest)",
   "trackRecord.phaseLiveKicker": "Live meting — vanaf 18 april 2026",
   "trackRecord.phaseLiveTitle": "Hieronder meten we in realtime",
