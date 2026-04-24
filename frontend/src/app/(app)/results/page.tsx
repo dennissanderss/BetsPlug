@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useMemo, useEffect } from "react";
+import { Suspense, useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -1374,7 +1374,14 @@ function ResultsPageContent() {
   const searchParams = useSearchParams();
   const initialTier = (() => {
     const q = (searchParams?.get("tier") ?? "").toLowerCase();
-    return (VALID_TIERS as readonly string[]).includes(q) ? (q as TierFilter) : "gold";
+    if ((VALID_TIERS as readonly string[]).includes(q)) return q as TierFilter;
+    // Default to the user's own tier so a Free Access visitor lands on
+    // a tier they can actually see — instead of an unreachable Gold
+    // selection that's locked to them anyway.
+    if (userTier === "free") return "free";
+    if (userTier === "silver") return "silver";
+    if (userTier === "platinum") return "platinum";
+    return "gold";
   })();
   const initialPeriod = (() => {
     const q = Number(searchParams?.get("period"));
@@ -1391,6 +1398,28 @@ function ResultsPageContent() {
   const [tierFilter, setTierFilter] = useState<TierFilter>(initialTier);
   const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(initialPeriod);
   const [stream, setStream] = useState<StreamMode>(initialStream);
+  // useTier() starts as "free" before localStorage hydrates, then
+  // settles on the real subscription tier. Snap tierFilter to that
+  // real tier the very first time it's known — once. Manual tier
+  // clicks afterwards win, and a URL ?tier= deep-link wins
+  // unconditionally.
+  const explicitTierFromUrl = (searchParams?.get("tier") ?? "").toLowerCase();
+  const tierHydrated = useRef(false);
+  useEffect(() => {
+    if (tierHydrated.current) return;
+    if (explicitTierFromUrl) {
+      tierHydrated.current = true;
+      return;
+    }
+    tierHydrated.current = true;
+    const target: TierFilter =
+      userTier === "free" ? "free" :
+      userTier === "silver" ? "silver" :
+      userTier === "platinum" ? "platinum" :
+      "gold";
+    if (target !== tierFilter) setTierFilter(target);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userTier]);
   // BOTD stream is by definition Gold-tier — lock the tier selector
   // when the user flips to BOTD so numbers don't drift.
   useEffect(() => {
