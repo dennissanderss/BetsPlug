@@ -207,6 +207,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
       },
       cta: t("pricing.silverCta"),
       accent: "purple",
+      highlight: true,
       features: [
         t("pricing.silverF1"),
         t("pricing.silverF2"),
@@ -233,7 +234,6 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
         period: t("pricing.perMonth"),
         footnote: t("pricing.billedYearlyGold"),
       },
-      highlight: true,
       cta: t("pricing.goldCta"),
       accent: "green",
       features: [
@@ -403,7 +403,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                 <div className="relative flex flex-1 flex-col">
                   {isHighlight && (
                     <Pill tone="active" className="absolute right-0 top-0">
-                      <Sparkles className="h-3 w-3" /> Popular
+                      <Sparkles className="h-3 w-3" /> {t("pricing.mostChosen")}
                     </Pill>
                   )}
 
@@ -507,6 +507,21 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
           })}
         </div>
 
+        {/* Floating Elite crown badge — eye-catcher above the Platinum card */}
+        <div className="relative mt-16 mb-[-28px] flex justify-center">
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-sky-50 border"
+            style={{
+              background: "linear-gradient(135deg, #5eb3d9 0%, #e0f4ff 50%, #5eb3d9 100%)",
+              borderColor: "rgba(217, 240, 255, 0.5)",
+              color: "#0b3a5a",
+              boxShadow: "0 10px 30px -5px rgba(94, 179, 217, 0.6)",
+            }}
+          >
+            <Crown className="h-3.5 w-3.5" />
+            {t("pricing.eliteBadge")}
+          </span>
+        </div>
         {/* Platinum lifetime card — recoloured from amber/gold to
             diamond-blue so the background palette matches the TierEmblem
             (Roman IV, icy blue) rendered in its top-left and every other
@@ -514,7 +529,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
             was a hold-over from an earlier design that used Crown/gold
             as the Platinum visual language; now both signals agree. */}
         <div
-          className="card-neon relative mt-10 overflow-hidden"
+          className="card-neon relative overflow-hidden"
           style={{
             boxShadow:
               "0 20px 50px -15px rgba(94, 179, 217, 0.38), 0 0 0 1px rgba(217, 240, 255, 0.2) inset",
