@@ -339,6 +339,7 @@ interface PickAggregate {
   returned: number;    // gross returned (stake × odds on wins, 0 on losses)
   profit: number;      // returned - totalStake
   modelCount: number;  // rows where odds were derived from the model, not the book
+  oddsSum: number;     // sum of odds used across all picks (for avg)
 }
 
 function emptyAggregate(): PickAggregate {
@@ -351,6 +352,21 @@ function emptyAggregate(): PickAggregate {
     returned: 0,
     profit: 0,
     modelCount: 0,
+    oddsSum: 0,
+  };
+}
+
+/** Wilson 95% CI half-interval on a Bernoulli proportion. */
+function wilsonCi(correct: number, total: number): { lower: number; upper: number } | null {
+  if (total <= 0) return null;
+  const z = 1.96;
+  const p = correct / total;
+  const denom = 1 + (z * z) / total;
+  const centre = p + (z * z) / (2 * total);
+  const margin = z * Math.sqrt((p * (1 - p) + (z * z) / (4 * total)) / total);
+  return {
+    lower: Math.max(0, (centre - margin) / denom),
+    upper: Math.min(1, (centre + margin) / denom),
   };
 }
 
@@ -419,6 +435,7 @@ function aggregateFixtures(
     }
 
     agg.matches++;
+    agg.oddsSum += oddsUsed;
     if (won) {
       agg.wins++;
       agg.returned += stake * oddsUsed;
@@ -707,6 +724,66 @@ function RoiCalculatorCard({
             </span>
           </div>
         </div>
+
+        {/* Math-transparency band — avg odds, break-even, Wilson CI, sample note */}
+        {headline.matches > 0 && (() => {
+          const avgOdds = headline.oddsSum / headline.matches;
+          const breakEven = avgOdds > 1 ? 1 / avgOdds : null;
+          const winRate = headline.matches > 0 ? headline.wins / headline.matches : 0;
+          const ci = wilsonCi(headline.wins, headline.matches);
+          const smallSample = headline.matches < 30;
+          return (
+            <div className="mb-4 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 text-center mb-2">
+                <div>
+                  <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+                    {t("results.roiCalcWinRate")}
+                  </p>
+                  <p className="text-sm font-bold tabular-nums text-slate-100">
+                    {Math.round(winRate * 100)}%
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+                    {t("results.roiCalcAvgOdds")}
+                  </p>
+                  <p className="text-sm font-bold tabular-nums text-slate-100">
+                    {avgOdds.toFixed(2)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+                    {t("results.roiCalcBreakEven")}
+                  </p>
+                  <p
+                    className="text-sm font-bold tabular-nums"
+                    style={{
+                      color:
+                        breakEven == null ? "#94a3b8" :
+                        winRate >= breakEven ? "#10b981" : "#f59e0b",
+                    }}
+                  >
+                    {breakEven != null ? `${Math.round(breakEven * 100)}%` : "—"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+                    {t("results.roiCalcCi")}
+                  </p>
+                  <p className="text-sm font-bold tabular-nums text-slate-100">
+                    {ci ? `${Math.round(ci.lower * 100)}–${Math.round(ci.upper * 100)}%` : "—"}
+                  </p>
+                </div>
+              </div>
+              {smallSample && (
+                <p className="text-[10px] leading-relaxed text-amber-400/90">
+                  <span className="font-semibold">⚠ {t("results.roiCalcSmallSampleTitle")}: </span>
+                  {t("results.roiCalcSmallSampleHint", { n: headline.matches })}
+                </p>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Per-tier comparison — tap any card to make it the active tier */}
         <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">
