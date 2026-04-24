@@ -268,9 +268,13 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
   // pre-selected and can tick whichever extras they want.
   // (Pick of the Day is still shown as "Included" on Platinum.)
   const [selectedUpsells, setSelectedUpsells] = useState<UpsellId[]>([]);
-  // Trial is the default path (maximises free-trial conversions),
-  // but users who already trust us can pick "Subscribe now".
-  const [startWithTrial, setStartWithTrial] = useState<boolean>(true);
+  // The 7-day free trial concept retired in favour of Free Access:
+  // anyone who wants a no-cost taste creates a Free Access account
+  // instead. Anyone reaching the paid checkout subscribes outright,
+  // so the trial toggle now defaults to OFF and the entire
+  // toggle/copy block is hidden — the value is wired only so the
+  // backend payload stays compatible (`with_trial: false`).
+  const [startWithTrial, setStartWithTrial] = useState<boolean>(false);
   // Already-logged-in visitors skip the Account step entirely —
   // they land straight on Billing. Anonymous visitors start at
   // step 1 as before (though they'll see LoginGate instead of the
@@ -436,12 +440,10 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
     ? []
     : selectedUpsells;
 
-  // Free trial is only offered on recurring plans (not Bronze/free,
-  // not Platinum lifetime).
-  // Trial is only offered on real paid plans — Bronze (€0,01) is
-  // effectively free and already skips most of the pricing friction.
-  const trialAvailable =
-    plan.monthly > 0.5 && plan.oneTime == null;
+  // 7-day free trial retired — Free Access is the no-cost entry
+  // point now. The paid checkout always charges immediately on the
+  // first day. trialAvailable=false hides the trial UI everywhere.
+  const trialAvailable = false;
   const trialActive = trialAvailable && startWithTrial;
 
   /* ── Price derivation (all figures are VAT-inclusive) ─────── */
