@@ -59,6 +59,30 @@ function isLivePick(f: Fixture): boolean {
   if (!Number.isFinite(predMs) || !Number.isFinite(schedMs)) return false;
   return predMs < schedMs && predMs >= LIVE_START_MS;
 }
+
+// Which pick-stream the calculator / table should show. "botd" = the
+// Bet of the Day stream: highest-confidence Gold-tier pick per day.
+type StreamMode = "all" | "botd";
+
+/**
+ * Reduce a fixture list to the Bet of the Day stream: for each
+ * calendar day, keep only the Gold-tier pick with the highest
+ * confidence. Mirrors the backend `/betoftheday` selection rule
+ * (Gold floor 0.70, top Gold-tier leagues, one per day).
+ */
+function filterBotdStream(fixtures: Fixture[]): Fixture[] {
+  const bestByDate = new Map<string, Fixture>();
+  for (const f of fixtures) {
+    if (!f.prediction || !f.result) continue;
+    if (f.prediction.pick_tier !== "gold") continue;
+    const dateKey = f.scheduled_at.slice(0, 10); // YYYY-MM-DD
+    const prev = bestByDate.get(dateKey);
+    const prevConf = prev?.prediction?.confidence ?? -1;
+    const thisConf = f.prediction.confidence ?? 0;
+    if (thisConf > prevConf) bestByDate.set(dateKey, f);
+  }
+  return Array.from(bestByDate.values());
+}
 // v8.6 — "all" tab removed: each tier is a different product (scope +
 // confidence floor), so adding their totals together produced a
 // number users couldn't interpret. Force the view to pick a specific
@@ -429,6 +453,8 @@ function RoiCalculatorCard({
   setCalcTier,
   calcPeriod,
   setCalcPeriod,
+  stream,
+  setStream,
 }: {
   fixtures: Fixture[];
   isLoading: boolean;
@@ -438,8 +464,11 @@ function RoiCalculatorCard({
   setCalcTier: (v: CalcTier) => void;
   calcPeriod: CalcPeriod;
   setCalcPeriod: (v: CalcPeriod) => void;
+  stream: StreamMode;
+  setStream: (v: StreamMode) => void;
 }) {
   const { t } = useTranslations();
+  const botdMode = stream === "botd";
 
   // Aggregate the SELECTED tier at the SELECTED period for the headline card.
   const headline = useMemo(() => {
@@ -494,19 +523,48 @@ function RoiCalculatorCard({
       </div>
       <p className="text-xs text-slate-500 mb-5">{t("results.roiCalcIntro")}</p>
 
-      {/* ── Step 1 — Choose tier ─────────────────────────────── */}
-      <Step number={1} label={t("results.roiCalcStep1")} hint={t("results.roiCalcStep1Hint")}>
+      {/* ── Stream toggle — All predictions vs Bet of the Day ── */}
+      <div className="mb-5 flex flex-wrap items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1 w-fit">
+        {([
+          { key: "all" as const, label: t("results.streamAll") },
+          { key: "botd" as const, label: t("results.streamBotd") },
+        ]).map((opt) => {
+          const active = stream === opt.key;
+          return (
+            <button
+              key={opt.key}
+              type="button"
+              onClick={() => setStream(opt.key)}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
+                active
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+              aria-pressed={active}
+            >
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Step 1 — Choose tier (locked to Gold in BOTD mode) ── */}
+      <Step number={1} label={t("results.roiCalcStep1")} hint={botdMode ? t("results.roiCalcStep1LockedHint") : t("results.roiCalcStep1Hint")}>
         <div className="flex flex-wrap items-center gap-2">
           {CALC_TIERS.map(({ key, label, accent }) => {
             const active = key === calcTier;
+            const disabled = botdMode && key !== "gold";
             return (
               <button
                 key={key}
                 type="button"
-                onClick={() => setCalcTier(key)}
+                disabled={disabled}
+                onClick={() => !disabled && setCalcTier(key)}
                 className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors border ${
                   active
                     ? "text-white border-white/[0.2]"
+                    : disabled
+                    ? "text-slate-600 bg-white/[0.01] border-white/[0.04] cursor-not-allowed"
                     : "text-slate-400 bg-white/[0.02] border-white/[0.06] hover:text-slate-200"
                 }`}
                 style={active ? { background: accent } : undefined}
@@ -515,6 +573,11 @@ function RoiCalculatorCard({
               </button>
             );
           })}
+          {botdMode && (
+            <span className="text-[10px] uppercase tracking-widest text-slate-500 ml-1">
+              {t("results.roiCalcStep1Locked")}
+            </span>
+          )}
         </div>
       </Step>
 
@@ -1116,6 +1179,7 @@ function ResultsPageContent() {
     if (!Number.isFinite(q) || q <= 0) return 30;
     return Math.max(1, Math.min(365, Math.round(q)));
   })();
+  const initialStream: StreamMode = searchParams?.get("stream") === "botd" ? "botd" : "all";
 
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
@@ -1124,6 +1188,12 @@ function ResultsPageContent() {
   // "Platinum" in the calculator also scopes the table.
   const [tierFilter, setTierFilter] = useState<TierFilter>(initialTier);
   const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(initialPeriod);
+  const [stream, setStream] = useState<StreamMode>(initialStream);
+  // BOTD stream is by definition Gold-tier — lock the tier selector
+  // when the user flips to BOTD so numbers don't drift.
+  useEffect(() => {
+    if (stream === "botd" && tierFilter !== "gold") setTierFilter("gold");
+  }, [stream, tierFilter]);
   // Alias — the table's period is driven entirely by the calculator so
   // both surfaces never disagree.
   const period = calcPeriod;
@@ -1160,7 +1230,13 @@ function ResultsPageContent() {
   });
 
   // Unwrap the fixtures array from the response
-  const allResults: Fixture[] = resultsQuery.data?.fixtures ?? [];
+  const rawResults: Fixture[] = resultsQuery.data?.fixtures ?? [];
+  // Scope to the active pick stream — either every prediction or just
+  // the Bet of the Day (highest-confidence Gold-tier pick per day).
+  const allResults: Fixture[] = useMemo(
+    () => (stream === "botd" ? filterBotdStream(rawResults) : rawResults),
+    [rawResults, stream],
+  );
 
   // ── Derived league list — only show leagues that have at least 1 finished fixture with a result ──
   const leagues = useMemo(() => {
@@ -1311,6 +1387,8 @@ function ResultsPageContent() {
         setCalcTier={setTierFilter}
         calcPeriod={calcPeriod}
         setCalcPeriod={setCalcPeriod}
+        stream={stream}
+        setStream={setStream}
       />
 
       {/* ── Weekly Summary ── */}

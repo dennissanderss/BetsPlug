@@ -939,41 +939,26 @@ export default function BetOfTheDayPage() {
             </p>
           </div>
 
-          {/* ── Performance Insights (backtest stats) ── */}
-          <BOTDPerformanceInsights />
-
-          {/* ── Info Cards ── */}
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div className="glass-card p-5">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10">
-                <TrendingUp className="h-5 w-5 text-blue-400" />
+          {/* ── Simulation CTA — full calculator lives on /results?stream=botd ── */}
+          <Link
+            href="/results?stream=botd&period=30"
+            className="group glass-card flex items-center justify-between gap-4 p-5 sm:p-6 border border-emerald-500/20 hover:border-emerald-500/40 transition-colors"
+          >
+            <div className="flex items-start gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10">
+                <BarChart3 className="h-5 w-5 text-emerald-400" />
               </div>
-              <h3 className="text-sm font-bold text-white">{t("botd.valueDetection")}</h3>
-              <p className="mt-1 text-xs text-slate-400 leading-relaxed">
-                {t("botd.valueDetectionDesc")}
-              </p>
-            </div>
-
-            <div className="glass-card p-5">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
-                <Shield className="h-5 w-5 text-emerald-400" />
+              <div>
+                <h3 className="text-sm font-bold text-slate-100">
+                  {t("botd.simulationCtaTitle")}
+                </h3>
+                <p className="mt-1 text-xs text-slate-400 leading-relaxed max-w-2xl">
+                  {t("botd.simulationCtaDesc")}
+                </p>
               </div>
-              <h3 className="text-sm font-bold text-white">{t("botd.modelsAgree")}</h3>
-              <p className="mt-1 text-xs text-slate-400 leading-relaxed">
-                {t("botd.modelsAgreeDesc")}
-              </p>
             </div>
-
-            <div className="glass-card p-5">
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10">
-                <Star className="h-5 w-5 text-amber-400" />
-              </div>
-              <h3 className="text-sm font-bold text-white">{t("botd.dailySelection")}</h3>
-              <p className="mt-1 text-xs text-slate-400 leading-relaxed">
-                {t("botd.dailySelectionDesc")}
-              </p>
-            </div>
-          </div>
+            <ArrowRight className="h-4 w-4 text-slate-400 group-hover:text-emerald-400 transition-colors shrink-0" />
+          </Link>
         </>
       )}
       </div>
