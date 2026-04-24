@@ -1797,10 +1797,16 @@ const en = {
   /* ── Dashboard welcome banner ─────────────────────── */
   "welcomeBanner.label": "Welcome",
   "welcomeBanner.title": "Here's how BetsPlug works",
-  "welcomeBanner.subtitle": "Our AI analyses football data, form, head-to-head, standings and team strength, to forecast the most likely outcome of upcoming matches.",
+  "welcomeBanner.subtitle": "Our AI forecasts football outcomes, publishes a daily Pick of the Day, and tracks every call live. Below, simulate what our picks would have returned at your own stake.",
   "welcomeBanner.stepPrefix": "Step",
   "welcomeBanner.exploreCta": "See the full walkthrough",
   "welcomeBanner.dismiss": "Don't show again",
+  "welcomeBanner.step1Title": "AI reads the match",
+  "welcomeBanner.step1Desc": "Our models examine 43 factors per match: form, head-to-head, standings, team strength and more.",
+  "welcomeBanner.step2Title": "Probability is published",
+  "welcomeBanner.step2Desc": "Every upcoming match gets a home/draw/away probability. High-confidence picks become tiered calls (Bronze → Platinum).",
+  "welcomeBanner.step3Title": "Simulate your returns",
+  "welcomeBanner.step3Desc": "Pick a stake, a period, and see exactly what our live calls would have paid out — using the real pre-match odds stored for each pick.",
 
   /* ── Related links ────────────────────────────────── */
   "related.title": "Explore More",
@@ -5064,8 +5070,14 @@ const nl: Dictionary = {
   "welcomeBanner.exploreCta": "Bekijk de volledige onboarding",
   "welcomeBanner.label": "Welkom",
   "welcomeBanner.stepPrefix": "Stap",
-  "welcomeBanner.subtitle": "Onze AI analyseert voetbaldata, vorm, onderlinge resultaten, competitiestanden en teamsterktes, om de meest waarschijnlijke uitslag van aankomende wedstrijden te voorspellen.",
+  "welcomeBanner.subtitle": "Onze AI voorspelt voetbaluitslagen, plaatst dagelijks een Pick of the Day en houdt elke tip live bij. Hieronder simuleer je wat onze tips bij jouw inzet zouden hebben opgeleverd.",
   "welcomeBanner.title": "Zo werkt BetsPlug",
+  "welcomeBanner.step1Title": "De AI leest de wedstrijd",
+  "welcomeBanner.step1Desc": "Onze modellen bekijken 43 factoren per match: vorm, onderlinge resultaten, stand, teamsterkte en meer.",
+  "welcomeBanner.step2Title": "De kans wordt gepubliceerd",
+  "welcomeBanner.step2Desc": "Elke aankomende wedstrijd krijgt een home/draw/away kans. Picks met hoge confidence krijgen een tier (Bronze → Platinum).",
+  "welcomeBanner.step3Title": "Simuleer je rendement",
+  "welcomeBanner.step3Desc": "Kies inzet en periode, en zie exact wat onze live tips zouden hebben uitbetaald — op basis van de werkelijke pre-match odds per pick.",
 
   /* ── Footer extras (league/learn/bet-market clusters) ──── */
   "footer.leaguesSubtitle": "AI-voetbalvoorspellingen per competitie",

@@ -3,14 +3,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useTranslations } from "@/i18n/locale-provider";
-import { QuickNavStrip } from "@/components/dashboard/QuickNavStrip";
 import { HeroBotdCompact } from "@/components/dashboard/HeroBotdCompact";
 import { LiveMatchesStrip } from "@/components/dashboard/LiveMatchesStrip";
 import { TodayMatchesList } from "@/components/dashboard/TodayMatchesList";
 import { YesterdayResultsStrip } from "@/components/dashboard/YesterdayResultsStrip";
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
-import { TierPerformanceCard } from "@/components/dashboard/TierPerformanceCard";
-import { TierEmptyStateCard } from "@/components/dashboard/TierEmptyStateCard";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { UpgradeNudgeCard } from "@/components/dashboard/UpgradeNudgeCard";
 import { PaywallOverlay } from "@/components/ui/paywall-overlay";
@@ -88,12 +85,9 @@ export default function DashboardPage() {
       <div className="relative grid gap-4 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
         <div className="min-w-0 space-y-4 sm:space-y-5">
           <WelcomeBanner />
-          <QuickNavStrip />
-          {/* BOTD is a Gold+ feature. On the dashboard we used to leak the
-              actual pick to Free/Silver users, who then saw the full page
-              gated on click — confusing. Gate it here too. The inline
-              variant of PaywallOverlay replaces the row with a compact
-              upgrade CTA, matching the row's narrow visual footprint. */}
+          {/* BOTD is a Gold+ feature. Gate the dashboard preview so Free/Silver
+              users see an upgrade CTA instead of the pick they cannot access
+              on click. */}
           <PaywallOverlay
             feature="pick_of_the_day"
             requiredTier="gold"
@@ -103,15 +97,6 @@ export default function DashboardPage() {
           </PaywallOverlay>
           {/* Tier-specific "next step" trigger (null for Platinum). */}
           <UpgradeNudgeCard />
-          {/* Contextual empty-state: renders only when the signed-in
-              user's own tier has zero picks in the current v8.1
-              window. Sits above TierPerformanceCard so the comparison
-              table below reads as the answer to "what would upgrading
-              get me?". */}
-          <TierEmptyStateCard />
-          {/* v8.1 — per-tier historical accuracy with upgrade nudges.
-              Auto-hides when TIER_SYSTEM_ENABLED=false on backend. */}
-          <TierPerformanceCard />
           <LiveMatchesStrip
             data={liveFixtures}
             isLoading={liveLoading}

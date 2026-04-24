@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Brain, TrendingUp, Shield, X, ArrowRight } from "lucide-react";
+import { Brain, TrendingUp, Calculator, X, ArrowRight } from "lucide-react";
 import { HexBadge, type HexVariant } from "@/components/noct/hex-badge";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 
@@ -48,9 +48,9 @@ export function WelcomeBanner() {
   if (!ready || !visible) return null;
 
   const steps = [
-    { icon: Brain, title: t("route.step1Title"), desc: t("route.step1Desc") },
-    { icon: TrendingUp, title: t("route.step2Title"), desc: t("route.step2Desc") },
-    { icon: Shield, title: t("route.step3Title"), desc: t("route.step3Desc") },
+    { icon: Brain, title: t("welcomeBanner.step1Title"), desc: t("welcomeBanner.step1Desc") },
+    { icon: TrendingUp, title: t("welcomeBanner.step2Title"), desc: t("welcomeBanner.step2Desc") },
+    { icon: Calculator, title: t("welcomeBanner.step3Title"), desc: t("welcomeBanner.step3Desc") },
   ];
 
   return (
