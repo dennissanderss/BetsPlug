@@ -486,16 +486,28 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                     );
                   })()}
 
-                  {/* CTA */}
-                  <button
-                    onClick={() => handleStripeCheckout(plan.id)}
-                    disabled={loading === plan.id}
-                    className={`${isHighlight ? "btn-primary" : "btn-glass"} mb-6 w-full justify-center ${
-                      loading === plan.id ? "cursor-wait opacity-50" : ""
-                    }`}
-                  >
-                    {loading === plan.id ? "Redirecting…" : plan.cta}
-                  </button>
+                  {/* CTA — Free Access bypasses Stripe entirely and
+                      drops the visitor straight into /register. The
+                      backend creates the user with tier=free, no
+                      checkout session, no card. */}
+                  {plan.id === "bronze" ? (
+                    <Link
+                      href={loc("/register")}
+                      className={`${isHighlight ? "btn-primary" : "btn-glass"} mb-6 w-full justify-center`}
+                    >
+                      {plan.cta}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => handleStripeCheckout(plan.id)}
+                      disabled={loading === plan.id}
+                      className={`${isHighlight ? "btn-primary" : "btn-glass"} mb-6 w-full justify-center ${
+                        loading === plan.id ? "cursor-wait opacity-50" : ""
+                      }`}
+                    >
+                      {loading === plan.id ? "Redirecting…" : plan.cta}
+                    </button>
+                  )}
 
                   {/* Features */}
                   <ul className="flex flex-col gap-3">

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -246,6 +246,15 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
 
   // Plan from URL (default Gold, the popular plan)
   const planParam = (params?.get("plan") ?? "gold").toLowerCase() as PlanId;
+  // Free Access has no Stripe checkout — redirect any direct hits on
+  // /checkout?plan=bronze straight to /register so the user lands in
+  // the no-card signup flow instead of an empty Stripe form.
+  const router = useRouter();
+  useEffect(() => {
+    if (planParam === "bronze") {
+      router.replace("/register");
+    }
+  }, [planParam, router]);
   const initialPlan =
     PLANS.find((p) => p.id === planParam) ?? PLANS[2]; // default Gold
 

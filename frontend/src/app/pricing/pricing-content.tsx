@@ -182,7 +182,9 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
       ],
       variant: "blue",
       cta: t("pricingDeep.bronzeCta" as any),
-      ctaHref: (l) => `${l("/checkout")}?plan=bronze`,
+      // Free Access skips Stripe — straight to /register. The backend
+      // creates the account with tier=free, no checkout session.
+      ctaHref: (l) => l("/register"),
     },
     {
       id: "silver",
@@ -784,10 +786,10 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               Start Gold
             </Link>
             <Link
-              href={`${loc("/checkout")}?plan=bronze`}
+              href={loc("/register")}
               className="btn-glass inline-flex items-center gap-2"
             >
-              Or try €0,01 first
+              Or start with Free Access
             </Link>
           </div>
         </div>
@@ -961,23 +963,24 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
           <div className="card-neon card-neon-green halo-green p-6 sm:p-10 md:p-16">
             <div className="relative text-center">
               <span className="section-label mb-4">
-                <Sparkles className="h-3 w-3" /> Test the AI against your own bets
+                <Sparkles className="h-3 w-3" /> Try the AI before you spend a cent
               </span>
               <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-                Start for €0,01.{" "}
-                <span className="gradient-text-green">Decide once the numbers land.</span>
+                Start free.{" "}
+                <span className="gradient-text-green">Upgrade once the numbers land.</span>
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
-                Seven days of full Gold access. No auto-upgrade. Cancel in two
-                clicks. Compare our AI football predictions with your own bets
-                for a week, then decide — we'd rather you see results than trust words.
+                Free Access creates an account in seconds — no card, no billing.
+                Browse every prediction, see which picks win or lose, follow the
+                Pick of the Day. Upgrade only when you want odds, simulated
+                returns and the full tier ladder.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
-                  href={`${loc("/checkout")}?plan=bronze`}
+                  href={loc("/register")}
                   className="btn-primary inline-flex items-center gap-2"
                 >
-                  Claim €0,01 trial
+                  Create free account
                 </Link>
                 <Link
                   href={loc("/track-record")}
@@ -987,7 +990,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                 </Link>
               </div>
               <p className="mt-5 text-xs text-[#6b7280]">
-                Secured by Stripe · No hidden fees · Winners &amp; losers published on the track record
+                No card required · No hidden fees · Winners &amp; losers published on the track record
               </p>
             </div>
           </div>
