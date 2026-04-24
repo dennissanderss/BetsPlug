@@ -368,32 +368,15 @@ function formatRoiPct(profit: number, totalStake: number): string {
   return `${sign}${Math.abs(pct).toFixed(1)}%`;
 }
 
-function RoiCalculatorCard({ fixtures, isLoading }: {
+function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
   fixtures: Fixture[];
   isLoading: boolean;
+  stake: number;
+  setStake: (v: number) => void;
 }) {
   const { t } = useTranslations();
-  const [stake, setStake] = useState<number>(10);
   const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(30);
   const [calcTier, setCalcTier] = useState<CalcTier>("gold");
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      const saved = window.localStorage.getItem(STAKE_STORAGE_KEY);
-      if (saved) {
-        const n = Number(saved);
-        if (Number.isFinite(n) && n > 0) setStake(n);
-      }
-    } catch {}
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    try {
-      window.localStorage.setItem(STAKE_STORAGE_KEY, String(stake));
-    } catch {}
-  }, [stake]);
 
   // Aggregate the SELECTED tier at the SELECTED period for the headline card.
   const headline = useMemo(() => {
@@ -739,8 +722,7 @@ function ResultsFilterBar({
 
 // ─── Result Card ──────────────────────────────────────────────────────────────
 
-function ResultCard({ fixture }: { fixture: Fixture }) {
-  const { t } = useTranslations();
+function ResultCard({ fixture, stake }: { fixture: Fixture; stake: number }) {
   const pred = fixture.prediction;
   const hasPrediction = pred !== null;
 
@@ -762,29 +744,25 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
     isCorrect = actualOutcome === predicted;
   }
 
-  // v6 B2: compute realised P/L for this pick using the pre-match
-  // odds from fixture.odds when available. Falls back to a flat 1.90
-  // assumption ONLY if we have no odds row at all — matches the
-  // backend ROI calculator's fallback behaviour.
-  let realisedPnl: number | null = null;
-  let pnlSource: "real" | "estimated" | null = null;
+  // Compute the actual pre-match odds used for the pick side. Fallback
+  // to 1.90 only when no odds row is on file. Return is concrete euros
+  // using the user's selected stake so the table and the headline
+  // calculator always tell the same story.
+  let oddsUsed: number | null = null;
+  let oddsEstimated = false;
+  let returnEuro: number | null = null;
+  let payoutEuro: number | null = null;
   if (isCorrect !== null && predictedSide !== null) {
     const odds = fixture.odds;
-    let oddsUsed: number | null = null;
-    if (odds && predictedSide === "home" && odds.home != null) {
-      oddsUsed = odds.home;
-    } else if (odds && predictedSide === "draw" && odds.draw != null) {
-      oddsUsed = odds.draw;
-    } else if (odds && predictedSide === "away" && odds.away != null) {
-      oddsUsed = odds.away;
-    }
-    if (oddsUsed != null && oddsUsed > 1) {
-      pnlSource = "real";
-    } else {
+    if (odds && predictedSide === "home" && odds.home != null) oddsUsed = odds.home;
+    else if (odds && predictedSide === "draw" && odds.draw != null) oddsUsed = odds.draw;
+    else if (odds && predictedSide === "away" && odds.away != null) oddsUsed = odds.away;
+    if (!(oddsUsed != null && oddsUsed > 1)) {
       oddsUsed = 1.9;
-      pnlSource = "estimated";
+      oddsEstimated = true;
     }
-    realisedPnl = isCorrect ? oddsUsed - 1 : -1;
+    payoutEuro = isCorrect ? stake * oddsUsed : 0;
+    returnEuro = payoutEuro - stake;
   }
 
   const homeScore = fixture.result?.home_score ?? null;
@@ -797,6 +775,19 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
     predictedSide === "away" ? "2" : "—";
 
   const borderColor = isCorrect === true ? "#10b981" : isCorrect === false ? "#ef4444" : "#334155";
+
+  // Human-readable formula shown on hover — makes the return verifiable.
+  const formulaTitle =
+    oddsUsed != null && returnEuro != null
+      ? isCorrect
+        ? `€${stake.toFixed(2)} × ${oddsUsed.toFixed(2)} − €${stake.toFixed(2)} = €${returnEuro.toFixed(2)} profit`
+        : `Lost €${stake.toFixed(2)} stake (odds ${oddsUsed.toFixed(2)} not realised)`
+      : undefined;
+
+  const returnColor =
+    returnEuro == null ? "#64748b" : returnEuro > 0 ? "#10b981" : returnEuro < 0 ? "#ef4444" : "#94a3b8";
+  const returnPrefix = returnEuro == null ? "" : returnEuro > 0 ? "+" : returnEuro < 0 ? "−" : "";
+  const returnAbs = returnEuro == null ? 0 : Math.abs(returnEuro);
 
   return (
     <div
@@ -837,6 +828,38 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
         {pickLabel}
       </span>
 
+      {/* Odds used (hidden on narrow phone) */}
+      <span className="hidden sm:flex w-16 shrink-0 items-center justify-center gap-1">
+        {oddsUsed != null ? (
+          <>
+            <span className="text-xs font-semibold tabular-nums text-slate-300">
+              {oddsUsed.toFixed(2)}
+            </span>
+            {oddsEstimated && (
+              <span
+                title="No pre-match odds on file for this fixture — falls back to a flat 1.90."
+                className="text-[8px] font-bold uppercase rounded px-1 py-[1px] bg-amber-500/15 text-amber-400 border border-amber-500/30"
+              >
+                EST
+              </span>
+            )}
+          </>
+        ) : (
+          <span className="text-xs text-slate-600">—</span>
+        )}
+      </span>
+
+      {/* Return in euro (hidden on narrow phone) */}
+      <span
+        title={formulaTitle}
+        className="hidden sm:inline w-20 text-right text-xs font-bold tabular-nums shrink-0"
+        style={{ color: returnColor }}
+      >
+        {returnEuro != null
+          ? `${returnPrefix}€${returnAbs.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+          : "—"}
+      </span>
+
       {/* Result icon */}
       <span className="w-6 sm:w-8 text-center shrink-0">
         {isCorrect === true ? (
@@ -847,6 +870,54 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
           <span className="text-xs text-slate-600">—</span>
         )}
       </span>
+    </div>
+  );
+}
+
+// ─── Table footer: per-row return totals (verifies headline calculator) ─────
+
+function ResultsTableFooter({ fixtures, stake }: { fixtures: Fixture[]; stake: number }) {
+  let totalStake = 0;
+  let totalPayout = 0;
+  let estimatedCount = 0;
+  for (const f of fixtures) {
+    if (!f.prediction || !f.result) continue;
+    const side = derivePickSide(f.prediction);
+    if (side === null) continue;
+    const { home_score, away_score } = f.result;
+    const actual = home_score > away_score ? "home" : away_score > home_score ? "away" : "draw";
+    const won = actual === side;
+
+    let oddsUsed: number | null = null;
+    const o = f.odds;
+    if (o) {
+      if (side === "home" && o.home != null) oddsUsed = o.home;
+      else if (side === "draw" && o.draw != null) oddsUsed = o.draw;
+      else if (side === "away" && o.away != null) oddsUsed = o.away;
+    }
+    if (!(oddsUsed != null && oddsUsed > 1)) {
+      oddsUsed = 1.9;
+      estimatedCount++;
+    }
+    totalStake += stake;
+    if (won) totalPayout += stake * oddsUsed;
+  }
+  const totalReturn = totalPayout - totalStake;
+  const color = totalReturn > 0 ? "#10b981" : totalReturn < 0 ? "#ef4444" : "#94a3b8";
+  const prefix = totalReturn > 0 ? "+" : totalReturn < 0 ? "−" : "";
+  return (
+    <div className="flex items-center gap-3 px-4 py-2.5 bg-white/[0.02] border-t border-white/[0.05] text-[10px] uppercase tracking-widest">
+      <span className="w-12 sm:w-16 shrink-0 text-slate-500">Total</span>
+      <span className="flex-1 text-slate-500 tabular-nums">
+        {fixtures.length} {fixtures.length === 1 ? "row" : "rows"} · staked €{totalStake.toFixed(2)}
+        {estimatedCount > 0 && (
+          <span className="text-amber-500 ml-1">· {estimatedCount} EST</span>
+        )}
+      </span>
+      <span className="hidden sm:inline w-20 text-right font-bold tabular-nums" style={{ color }}>
+        {prefix}€{Math.abs(totalReturn).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </span>
+      <span className="w-6 sm:w-8" />
     </div>
   );
 }
@@ -893,6 +964,25 @@ function ResultsPageContent() {
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
   const [tierFilter, setTierFilter] = useState<TierFilter>("gold");
+  // Stake is shared between the ROI calculator header and each table
+  // row so the numbers always agree. Persisted to localStorage.
+  const [stake, setStake] = useState<number>(10);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const saved = window.localStorage.getItem(STAKE_STORAGE_KEY);
+      if (saved) {
+        const n = Number(saved);
+        if (Number.isFinite(n) && n > 0) setStake(n);
+      }
+    } catch {}
+  }, []);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(STAKE_STORAGE_KEY, String(stake));
+    } catch {}
+  }, [stake]);
 
   // ── Queries ────────────────────────────────────────────────────────────────
   // Always fetch a full 30 days so the ROI calculator can show per-tier
@@ -1066,7 +1156,12 @@ function ResultsPageContent() {
       </div>
 
       {/* ── ROI Calculator (what would you have made?) ── */}
-      <RoiCalculatorCard fixtures={allResults} isLoading={isLoading} />
+      <RoiCalculatorCard
+        fixtures={allResults}
+        isLoading={isLoading}
+        stake={stake}
+        setStake={setStake}
+      />
 
       {/* ── Weekly Summary ── */}
       <WeeklySummaryCard
@@ -1184,19 +1279,25 @@ function ResultsPageContent() {
         <div className="glass-card overflow-hidden">
           {/* Column headers */}
           <div className="flex items-center gap-3 px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.05] text-[9px] uppercase tracking-widest text-slate-600">
-            <span className="w-16 shrink-0">Date</span>
+            <span className="w-12 sm:w-16 shrink-0">Date</span>
             <span className="flex-1">Home</span>
-            <span className="w-14 text-center">Score</span>
+            <span className="w-10 sm:w-14 text-center">Score</span>
             <span className="flex-1">Away</span>
-            <span className="w-8 text-center">Pick</span>
-            <span className="w-8 text-center">Result</span>
+            <span className="hidden sm:inline w-8 text-center">Pick</span>
+            <span className="hidden sm:inline w-16 text-center">Odds</span>
+            <span className="hidden sm:inline w-20 text-right">
+              Return · €{stake.toFixed(0)}
+            </span>
+            <span className="w-6 sm:w-8 text-center">Result</span>
           </div>
           {/* Rows */}
           <div className="divide-y divide-white/[0.03]">
             {filtered.map((fixture) => (
-              <ResultCard key={fixture.id} fixture={fixture} />
+              <ResultCard key={fixture.id} fixture={fixture} stake={stake} />
             ))}
           </div>
+          {/* Footer: sum of visible rows' returns so the user can verify the headline */}
+          <ResultsTableFooter fixtures={filtered} stake={stake} />
         </div>
       )}
 
