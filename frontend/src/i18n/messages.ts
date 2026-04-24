@@ -28,7 +28,7 @@ const en = {
   /* Top Bar, legacy keys (still used as fallback accuracy copy) */
   "topbar.winRate": "win rate",
   "topbar.picksAnalyzed": "picks analyzed",
-  "topbar.cta": "Try for €0.01",
+  "topbar.cta": "Create free account",
 
   /* Top Bar rotating Cialdini variants ─────────────────────────
      Each variant targets one principle of persuasion. Desktop
@@ -50,7 +50,7 @@ const en = {
 
   "topbar.v.social.text": "1,500+ subscribers across Europe trust BetsPlug every day",
   "topbar.v.social.textMobile": "1,500+ subscribers trust BetsPlug",
-  "topbar.v.social.cta": "Try €0.01 trial",
+  "topbar.v.social.cta": "Create free account",
 
   "topbar.v.fomo.text": "Last month: {hitRate}% hit on Pick of the Day, today's pick is already live",
   "topbar.v.fomo.textMobile": "{hitRate}% hit last month",
@@ -153,7 +153,7 @@ const en = {
   "riskReversal.cancelDesc": "No phone calls. No 'please stay' offers. Settings, Subscription, Cancel. You keep access until the end of your paid period.",
   "riskReversal.noCardTitle": "No card for the free picks",
   "riskReversal.noCardDesc": "Want to see the AI in action before paying anything? The Pick of the Day and today's homepage picks are free. No signup. No card.",
-  "riskReversal.cta": "Claim your 7-day \u20ac0.01 trial",
+  "riskReversal.cta": "Create your free account",
 
   /* Language switcher */
   "lang.label": "Language",
@@ -355,7 +355,7 @@ const en = {
   "finalCta.titleHighlight": "AI football predictions",
   "finalCta.titleB": "today.",
   "finalCta.subtitle": "1,500+ subscribers across Europe already use BetsPlug to find value before the market catches up. Get 7 full days of Gold access, every prediction, the Pick of the Day, the full track record, for just one cent. Cancel in two clicks if it's not for you.",
-  "finalCta.primary": "Claim your 7-day €0.01 trial",
+  "finalCta.primary": "Create your free account",
   "finalCta.secondary": "Browse today's free picks →",
   "finalCta.moneyBack": "14-day money-back guarantee",
   "finalCta.cancelAnytime": "Cancel anytime",
@@ -418,7 +418,7 @@ const en = {
    * pricing-content.tsx and are queued for extraction as part
    * of Fase C framework work.
    */
-  "pricingDeep.trust1": "7-day Gold trial for €0,01",
+  "pricingDeep.trust1": "Free Access tier — no card required",
   "pricingDeep.trust2": "No auto-upgrade after trial",
   "pricingDeep.trust3": "Cancel in two clicks",
   "pricingDeep.trust4": "Stripe-secured checkout",
@@ -524,7 +524,7 @@ const en = {
   "pricingDeep.hero.label": "Less than one bad bet per month",
   "pricingDeep.hero.titleA": "The BetsPlug plan built for",
   "pricingDeep.hero.titleB": "your betting style.",
-  "pricingDeep.hero.subtitle": "Every plan runs on the same AI engine and the same public track record. The higher your tier, the sharper the picks — start with a €0,01 trial and keep going only if it pays for itself.",
+  "pricingDeep.hero.subtitle": "Every plan runs on the same AI engine and the same public track record. The higher your tier, the sharper the picks — start free, upgrade only if it pays for itself.",
   "pricingDeep.hero.subtitleQuality": "quality tier",
 
   "pricingDeep.planPrefix": "Plan ·",
@@ -3673,7 +3673,7 @@ const nl: Dictionary = {
   "finalCta.cancelAnytime": "Annuleer op elk gewenst moment",
   "finalCta.instantAccess": "Directe toegang, geen installaties",
   "finalCta.moneyBack": "14 dagen geld-terug-garantie",
-  "finalCta.primary": "Claim je proefperiode van 7 dagen ter waarde van € 0,01",
+  "finalCta.primary": "Maak je gratis account",
   "finalCta.secondary": "Blader door de gratis keuzes van vandaag →",
   "finalCta.subtitle": "Meer dan 1.500 abonnees in heel Europa gebruiken BetsPlug al om waarde te vinden voordat de markt corrigeert. Krijg 7 volledige dagen toegang tot Goud, elke voorspelling, de Pick of the Day, het volledige trackrecord, voor slechts één cent. Annuleer met twee klikken als het niets voor je is.",
   "finalCta.titleA": "Zie die van morgen",
@@ -4362,7 +4362,7 @@ const nl: Dictionary = {
   "pricingDeep.goldReason3.title": "Community + snelle support",
   "pricingDeep.goldTagline": "Het volledige plan dat de meesten kiezen",
   "pricingDeep.hero.label": "Minder dan één slechte voorspelling per maand",
-  "pricingDeep.hero.subtitle": "Elk plan draait op dezelfde AI-engine en hetzelfde publieke trackrecord. Hoe hoger je tier, hoe scherper de picks — start met een € 0,01 proef en ga alleen verder als het zichzelf terugbetaalt.",
+  "pricingDeep.hero.subtitle": "Elk plan draait op dezelfde AI-engine en hetzelfde publieke trackrecord. Hoe hoger je tier, hoe scherper de picks — start gratis, upgrade alleen als het zichzelf terugbetaalt.",
   "pricingDeep.hero.subtitleQuality": "kwaliteits-tier",
   "pricingDeep.hero.titleA": "Het BetsPlug-plan gemaakt voor",
   "pricingDeep.hero.titleB": "jouw gokstijl.",
@@ -4411,7 +4411,7 @@ const nl: Dictionary = {
   "pricingDeep.silverOut4": "Bet of the Day simulatie-stream",
   "pricingDeep.silverOut5": "Eerste toegang tot nieuwe tools",
   "pricingDeep.silverTagline": "Sterkere picks met een hogere accuratesse-ondergrens",
-  "pricingDeep.trust1": "7-daagse Gold-proef voor € 0,01",
+  "pricingDeep.trust1": "Free Access tier — geen kaart nodig",
   "pricingDeep.trust2": "Geen automatische upgrade na de proef",
   "pricingDeep.trust3": "Annuleer in twee kliks",
   "pricingDeep.trust4": "Stripe-beveiligde checkout",
@@ -4550,7 +4550,7 @@ const nl: Dictionary = {
   "riskReversal.badge": "Geen risico om erachter te komen",
   "riskReversal.cancelDesc": "Geen telefoontjes, geen retentieaanbiedingen, geen 'geef feedback'. Instellingen → Abonnement → Annuleren. De toegang loopt door tot het einde van de periode waarvoor je al betaald heeft.",
   "riskReversal.cancelTitle": "Annuleer in twee klikken",
-  "riskReversal.cta": "Claim je proefperiode van 7 dagen €0,01",
+  "riskReversal.cta": "Maak je gratis account",
   "riskReversal.guaranteeDesc": "Volledige terugbetaling voor elk betaald abonnement als je binnen 14 dagen niet tevreden bent. Eén e-mail. Binnen 48 uur verwerkt.",
   "riskReversal.guaranteeTitle": "14 dagen geld-terug-garantie",
   "riskReversal.noCardDesc": "Wilt je de AI in actie zien voordat je iets betaalt? De keuzes voor Pick of the Day en de startpagina van vandaag zijn gratis. Geen aanmelding. Geen kaart.",
@@ -4735,7 +4735,7 @@ const nl: Dictionary = {
   "testimonials.trusted": "Vertrouwd door meer dan 1.500+ fanatieke betters",
   "testimonials.verified": "Reviews van geverifieerde kopers",
 
-  "topbar.cta": "Probeer het voor € 0,01",
+  "topbar.cta": "Maak gratis account",
   "topbar.picksAnalyzed": "keuzes geanalyseerd",
   "topbar.v.authority.cta": "Zie bewijs",
   "topbar.v.authority.text": "{hitRate}% trefferpercentage · {totalPicks}+ voorspellingen geverifieerd · Openbaar trackrecord",
@@ -4749,7 +4749,7 @@ const nl: Dictionary = {
   "topbar.v.scarcity.cta": "Ontgrendel nu",
   "topbar.v.scarcity.text": "De beste keuzes van vandaag worden bij de aftrap vastgelegd, handel vóór het fluitsignaal",
   "topbar.v.scarcity.textMobile": "Picks vergrendelen bij de aftrap",
-  "topbar.v.social.cta": "Probeer een proefversie van € 0,01",
+  "topbar.v.social.cta": "Maak gratis account",
   "topbar.v.social.text": "Meer dan 1.500 abonnees in heel Europa vertrouwen elke dag op BetsPlug",
   "topbar.v.social.textMobile": "1.500+ abonnees vertrouwen op BetsPlug",
   "topbar.winRate": "winstpercentage",
