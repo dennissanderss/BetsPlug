@@ -66,9 +66,38 @@ If any locale is >50 keys behind EN, run `node scripts/translate.mjs` to catch u
 
 ## 6 — Sanity content gaps (after Nerdytips schema migration)
 
+The Phase 2 Sanity schema is live on `feat/i18n-full-scale`. DeepL
+Free-tier backfill is **partial as of 2026-04-25**: `learnPillar`
+documents got ~3-4 of 6 translated into the 13 DeepL-supported
+locales; every other type (`leagueHub`, `betTypeHub`, `pageMeta`,
+`homepage`, etc.) is still EN-only in Sanity — render falls back to
+EN on /xx/ URLs via `locRecord`.
+
+**Quota resets 1 May.** Either upgrade to DeepL Growth (€23.80/mo
+for 5M chars) to finish immediately, or wait for the monthly
+rollover and complete the remaining types with the 500k allowance.
+
 ```bash
-# TODO after Phase 2 Sanity migration lands — enumerate documents that
-# have EN content but are missing any of the 16 locales, and flag them.
+# Quick gap check — how many documents per type have EN content
+# but are missing at least one non-EN locale. Needs SANITY_API_TOKEN.
+# (script to be added after Growth decision)
+
+# DeepL usage — shows characters consumed this month.
+curl -s -H "Authorization: DeepL-Auth-Key $DEEPL_API_KEY" \
+  https://api-free.deepl.com/v2/usage
+```
+
+When ready to resume:
+```bash
+cd frontend && \
+  DEEPL_API_KEY=xxx SANITY_API_TOKEN=yyy \
+  node scripts/translate-sanity.mjs --force
+```
+
+Budget-aware partial run (top 6 locales only, fits in 500k):
+```bash
+# Edit TARGET_LOCALES in translate-sanity.mjs to ["nl","de","fr","es","it","pt"]
+# before running. Revert afterwards.
 ```
 
 ## 7 — Open the standup to the user

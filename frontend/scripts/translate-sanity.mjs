@@ -1,31 +1,43 @@
 #!/usr/bin/env node
 /**
- * Google-Translate auto-fill for Sanity CMS content
+ * DeepL auto-fill for Sanity CMS content
  * ────────────────────────────────────────────────────────────
- * Uses google-translate-api-x (free, no API key) to fill in
- * empty non-English locales on Sanity documents. Keeps the
- * structure of the original DeepL version but runs on the free
- * tier — matches the `translate.mjs` approach for UI strings.
+ * Uses DeepL's REST API (Free or Pro tier) to fill empty
+ * non-English locales on Sanity documents. Replaces the earlier
+ * google-translate-api-x attempt, which kept hitting aggressive
+ * IP rate-limiting at anything over ~1 RPS.
+ *
+ * DeepL Free tier: 500k chars/month, no credit card, key ends in
+ * `:fx`. Pro tier (paid): no `:fx` suffix. The API endpoint is
+ * chosen automatically from the key suffix.
  *
  * Run:
- *   SANITY_API_TOKEN=xxx node scripts/translate-sanity.mjs
+ *   DEEPL_API_KEY=xxx SANITY_API_TOKEN=yyy node scripts/translate-sanity.mjs
  *   node scripts/translate-sanity.mjs --dry-run
  *   node scripts/translate-sanity.mjs --types leagueHub,learnPillar
- *   node scripts/translate-sanity.mjs --force    # re-translate non-empty fields
+ *   node scripts/translate-sanity.mjs --force    # re-translate non-empty
  */
 import { createClient } from "@sanity/client";
-import translate from "google-translate-api-x";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+const DEEPL_KEY = process.env.DEEPL_API_KEY;
 const SANITY_TOKEN = process.env.SANITY_API_TOKEN;
+if (!DEEPL_KEY) {
+  console.error("❌ DEEPL_API_KEY not set");
+  process.exit(1);
+}
 if (!SANITY_TOKEN) {
   console.error("❌ SANITY_API_TOKEN not set");
   process.exit(1);
 }
+
+const DEEPL_URL = DEEPL_KEY.endsWith(":fx")
+  ? "https://api-free.deepl.com/v2/translate"
+  : "https://api.deepl.com/v2/translate";
 
 const client = createClient({
   projectId: "nk7ioy85",
@@ -41,6 +53,31 @@ const TARGET_LOCALES = [
   "nl", "de", "fr", "es", "it", "sw", "id",
   "pt", "tr", "pl", "ro", "ru", "el", "da", "sv",
 ];
+
+// DeepL language codes. A few differ from our locale codes:
+//   pt → PT-PT (PT-BR also works; PT-PT keeps Iberian spelling)
+//   zh → ZH-HANS (not used here)
+//   nb/no → NB (Norwegian Bokmål; not used here)
+// Unsupported on DeepL (any tier, verified 2026-04):
+//   sw (Swahili), id (Indonesian)
+// Those locales fall back to EN at render-time via `locRecord`.
+const DEEPL_LANG = {
+  nl: "NL",
+  de: "DE",
+  fr: "FR",
+  es: "ES",
+  it: "IT",
+  pt: "PT-PT",
+  tr: "TR",
+  pl: "PL",
+  ro: "RO",
+  ru: "RU",
+  el: "EL",
+  da: "DA",
+  sv: "SV",
+};
+// Locales we can actually translate via DeepL:
+const SUPPORTED_LOCALES = TARGET_LOCALES.filter((l) => l in DEEPL_LANG);
 
 // Sanity localeString/localeText/localeBlockContent content types
 const TYPES_WITH_LOCALE = [
@@ -71,9 +108,13 @@ const GLOSSARY = fs.existsSync(GLOSSARY_PATH)
 const PROTECTED_TERMS = (GLOSSARY.doNotTranslate ?? []).sort(
   (a, b) => b.length - a.length,
 );
+// Opaque-token swap: brand / league / product terms are replaced
+// with a sentinel `⟦BP#⟧` that DeepL treats as an uninterpretable
+// token and passes through verbatim. Survives better than XML
+// tag-handling, which fails on source strings that happen to
+// contain `<` or `&` characters.
 const TOKEN_OPEN = "\u27E6BP";
 const TOKEN_CLOSE = "\u27E7";
-
 function protectGlossary(text) {
   if (typeof text !== "string" || text.length === 0) {
     return { protectedText: text, tokens: [] };
@@ -91,19 +132,15 @@ function protectGlossary(text) {
       return `${TOKEN_OPEN}${idx}${TOKEN_CLOSE}`;
     });
   }
-  // ICU placeholders like {foo} — Google Translate sometimes renames these.
-  out = out.replace(/\{([a-zA-Z][a-zA-Z0-9_]*)\}/g, (match) => {
-    const idx = tokens.length;
-    tokens.push(match);
-    return `${TOKEN_OPEN}${idx}${TOKEN_CLOSE}`;
-  });
   return { protectedText: out, tokens };
 }
-
 function restoreGlossary(text, tokens) {
   let out = text;
   for (let i = 0; i < tokens.length; i++) {
-    const pattern = new RegExp(`\\u27E6?\\s*BP\\s*${i}\\s*\\u27E7?`, "g");
+    const pattern = new RegExp(
+      `\\u27E6?\\s*BP\\s*${i}\\s*\\u27E7?`,
+      "g",
+    );
     out = out.replace(pattern, tokens[i]);
   }
   return out;
@@ -119,13 +156,12 @@ const typesArg =
   (args.includes("--types") ? args[args.indexOf("--types") + 1] : null);
 const typesFilter = typesArg ? typesArg.split(",").map((t) => t.trim()) : null;
 
-// Google Translate's free public endpoint is aggressive about IP-
-// level rate limiting for bulk calls. 1100ms between batched calls
-// got us blacklisted on a 50-doc run. 4000ms + jitter has proven
-// stable for comparable SEO-translation projects — slower, but the
-// job runs unattended so throughput isn't urgent.
-const DELAY_MS_MIN = 3500;
-const DELAY_MS_MAX = 5500;
+// DeepL Free has a per-second request cap that 13-way parallel
+// fan-out blows past. Run calls sequentially with a small pace
+// between them — still completes a full Sanity backfill in ~10
+// minutes, and the Free-tier character budget (not RPS) is what
+// we actually care about conserving.
+const PER_REQUEST_MS = 120;
 
 /* ── Helpers ──────────────────────────────────────────────── */
 
@@ -133,77 +169,68 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-/** Uniform random in [min, max] — jitter keeps the request cadence
- *  off a round number, which Google's rate-limiter is pickier about.
- */
-function jitteredDelay() {
-  return DELAY_MS_MIN + Math.random() * (DELAY_MS_MAX - DELAY_MS_MIN);
-}
-
 /**
- * Translate one EN source string into every target locale in a
- * single batched call. Returns a Record<locale, translatedText>
- * with EN fallback on any individual miss.
+ * Translate one EN source string into every DeepL-supported target
+ * locale. DeepL doesn't accept arrays of target_lang, and the Free
+ * tier has a tight per-second RPS cap that parallel fan-out blows
+ * past. Run sequentially with a small pause per call.
  */
-/**
- * Translate one EN source string into every target locale in a
- * single batched call. On API failure the function returns an
- * empty object so the caller SKIPS the field entirely — writing
- * the EN fallback as a "translation" to Sanity would just mask
- * missing coverage with falsely-branded English content, and
- * overwrite any good translation that already exists.
- */
-async function translateBatch(text, targetLangs) {
+async function translateBatch(text, targetLocales) {
   if (!text) return {};
   const { protectedText, tokens } = protectGlossary(text);
 
-  // Retry on "Too Many Requests" with exponential back-off. Google's
-  // rate-limiter cools off within 30-60s of a stretch of successful
-  // 1-RPS traffic, so a few escalating waits beat giving up entirely.
-  for (let attempt = 0; attempt < 3; attempt++) {
+  const out = {};
+  for (const l of targetLocales) {
+    const res = await translateOne(protectedText, l);
+    if (res !== null) out[l] = restoreGlossary(res, tokens);
+    await sleep(PER_REQUEST_MS);
+  }
+  return out;
+}
+
+async function translateOne(text, locale, retries = 4) {
+  const deeplLang = DEEPL_LANG[locale];
+  if (!deeplLang) return null;
+  for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const res = await translate(protectedText, {
-        from: "en",
-        to: targetLangs,
-        autoCorrect: false,
-        // google-translate-api-x has an over-strict ISO whitelist
-        // that rejects pt/tr/pl/ro/ru/el/da/sv when passed as an
-        // array target. `forceTo: true` bypasses the check.
-        forceTo: true,
+      const res = await fetch(DEEPL_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `DeepL-Auth-Key ${DEEPL_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          text: [text],
+          source_lang: "EN",
+          target_lang: deeplLang,
+          preserve_formatting: true,
+        }),
       });
-      const out = {};
-      if (Array.isArray(res)) {
-        targetLangs.forEach((l, i) => {
-          const t = res[i]?.text;
-          if (t && t !== protectedText) out[l] = restoreGlossary(t, tokens);
-        });
-      } else if (res && typeof res === "object") {
-        for (const l of targetLangs) {
-          const entry = (res)[l];
-          const t = entry?.text ?? entry;
-          if (typeof t === "string" && t && t !== protectedText) {
-            out[l] = restoreGlossary(t, tokens);
-          }
-        }
+      if (res.ok) {
+        const data = await res.json();
+        return data.translations?.[0]?.text ?? null;
       }
-      return out;
-    } catch (err) {
-      const isRateLimit = /too many requests|429/i.test(err.message);
-      if (isRateLimit && attempt < 2) {
-        const wait = 15000 * Math.pow(2, attempt); // 15s, 30s
-        console.error(
-          `      ⏳ rate-limited on "${text.slice(0, 40)}…" — waiting ${Math.round(wait / 1000)}s…`,
-        );
-        await sleep(wait);
+      // DeepL's 429 signals per-second RPS overrun; an escalating
+      // back-off reliably clears it within a second or two.
+      if (res.status === 429 && attempt < retries) {
+        await sleep(500 * (attempt + 1) + Math.random() * 300);
         continue;
       }
+      const errBody = await res.text();
       console.error(
-        `      ⚠ batch-translate "${text.slice(0, 40)}…": ${err.message}`,
+        `      ⚠ DeepL ${locale} (${res.status}): ${errBody.slice(0, 200)}`,
       );
-      return {};
+      return null;
+    } catch (err) {
+      if (attempt < retries) {
+        await sleep(500 * (attempt + 1));
+        continue;
+      }
+      console.error(`      ⚠ DeepL ${locale}: ${err.message}`);
+      return null;
     }
   }
-  return {};
+  return null;
 }
 
 function isLocaleObject(val) {
@@ -214,8 +241,7 @@ function isLocaleObject(val) {
 
 /**
  * Walk every field on a document, find Sanity locale objects, and
- * fill in any empty target locales from EN via Google Translate.
- * Returns the count of fields translated (for logging).
+ * fill in empty target locales from EN via DeepL.
  */
 async function processDocument(doc) {
   let translated = 0;
@@ -224,7 +250,6 @@ async function processDocument(doc) {
   for (const [fieldName, fieldValue] of Object.entries(doc)) {
     if (fieldName.startsWith("_")) continue;
 
-    // Direct locale field
     if (isLocaleObject(fieldValue)) {
       const result = await translateLocaleField(fieldValue);
       if (result.count > 0) {
@@ -233,7 +258,6 @@ async function processDocument(doc) {
       }
     }
 
-    // Array of objects (faqs, sections) — look one level deep
     if (Array.isArray(fieldValue)) {
       let arrayChanged = false;
       const patchedArray = [];
@@ -265,14 +289,12 @@ async function processDocument(doc) {
   if (!dryRun && Object.keys(patches).length > 0) {
     await client.patch(doc._id).set(patches).commit();
   }
-
   return translated;
 }
 
 async function translateLocaleField(field) {
   const patched = { ...field };
-  // Only translate locales that are empty (unless --force).
-  const missing = TARGET_LOCALES.filter((l) => {
+  const missing = SUPPORTED_LOCALES.filter((l) => {
     const have = patched[l];
     return patched.en && (forceAll || !have || String(have).trim() === "");
   });
@@ -287,16 +309,17 @@ async function translateLocaleField(field) {
     }
   }
 
-  // One batched call per source string — pause between sources
-  // with jitter so Google doesn't rate-limit the whole document.
-  await sleep(jitteredDelay());
+  // Per-request pause already happens inside translateBatch;
+  // nothing extra needed between source strings.
   return { patched, count: written };
 }
 
 /* ── Main ─────────────────────────────────────────────────── */
 
 async function main() {
-  console.log("🌍 Google-Translate Sanity Content Fill");
+  console.log("🌍 DeepL Sanity Content Fill");
+  console.log(`   Endpoint: ${DEEPL_URL}`);
+  console.log(`   Target locales: ${SUPPORTED_LOCALES.join(", ")}`);
   if (dryRun) console.log("   (dry-run — no writes)");
   if (forceAll) console.log("   (--force — re-translating non-empty fields)");
   console.log("");
@@ -335,7 +358,10 @@ async function main() {
   }
 
   console.log(
-    `\n🎉 Processed ${totalDocs} documents, translated ${totalTranslated} fields across ${TARGET_LOCALES.length} locales.`,
+    `\n🎉 Processed ${totalDocs} documents, translated ${totalTranslated} fields across ${SUPPORTED_LOCALES.length} DeepL-supported locales.`,
+  );
+  console.log(
+    `   Unsupported on DeepL (render-time EN fallback): ${TARGET_LOCALES.filter((l) => !(l in DEEPL_LANG)).join(", ")}`,
   );
 }
 
