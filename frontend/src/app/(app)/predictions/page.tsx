@@ -22,7 +22,9 @@ import {
   Check,
   Search,
   ShieldCheck,
+  Lock,
 } from "lucide-react";
+import { useTier } from "@/hooks/use-tier";
 import { api } from "@/lib/api";
 import type { Fixture, FixturePrediction } from "@/types/api";
 import { UpsellBanner } from "@/components/ui/upsell-banner";
@@ -781,6 +783,8 @@ interface FilterBarProps {
   availableLeagues: string[];
   /** Map league_name → country (from API fixture data). */
   leagueCountryMap: Map<string, string>;
+  /** Current user's subscription tier — gates higher-tier filter buttons. */
+  userTier: "free" | "silver" | "gold" | "platinum";
 }
 
 function FilterBar({
@@ -795,8 +799,11 @@ function FilterBar({
   total,
   availableLeagues,
   leagueCountryMap,
+  userTier,
 }: FilterBarProps) {
   const { t } = useTranslations();
+  const USER_RANK: Record<string, number> = { free: 0, silver: 1, gold: 2, platinum: 3 };
+  const userRank = USER_RANK[userTier];
   const [leagueDropdownOpen, setLeagueDropdownOpen] = useState(false);
   const [leagueSearch, setLeagueSearch] = useState("");
 
@@ -1050,19 +1057,27 @@ function FilterBar({
           </span>
           <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
             {([
-              { value: "All" as const, label: "All", icon: null },
-              { value: "platinum" as const, label: "Platinum", icon: "🟢" },
-              { value: "gold" as const, label: "Gold", icon: "🔵" },
-              { value: "silver" as const, label: "Silver", icon: "⚪" },
-              { value: "free" as const, label: "Free", icon: "⬜" },
+              { value: "All" as const, label: "All", icon: null, rank: 0 },
+              { value: "platinum" as const, label: "Platinum", icon: "🟢", rank: 3 },
+              { value: "gold" as const, label: "Gold", icon: "🔵", rank: 2 },
+              { value: "silver" as const, label: "Silver", icon: "⚪", rank: 1 },
+              { value: "free" as const, label: "Free", icon: "⬜", rank: 0 },
             ]).map((opt) => {
               const active = tierFilter === opt.value;
+              const locked = opt.value !== "All" && opt.rank > userRank;
+              const unlockLabel =
+                opt.value === "silver" ? "Silver" :
+                opt.value === "gold" ? "Gold" :
+                opt.value === "platinum" ? "Platinum" : "Upgrade";
               return (
                 <button
                   key={opt.value}
-                  onClick={() => setTierFilter(opt.value)}
+                  disabled={locked}
+                  onClick={() => !locked && setTierFilter(opt.value)}
                   className={`flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-semibold transition-all ${
-                    active
+                    locked
+                      ? "text-slate-600 cursor-not-allowed"
+                      : active
                       ? opt.value === "platinum"
                         ? "bg-amber-500/20 text-amber-300 border border-amber-400/40"
                         : opt.value === "gold"
@@ -1074,10 +1089,11 @@ function FilterBar({
                         : "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
                       : "text-slate-400 hover:text-slate-200"
                   }`}
-                  title={opt.value === "All" ? "Show all tiers" : `Show only ${opt.label} picks`}
+                  title={locked ? `Upgrade to ${unlockLabel} to filter these picks` : opt.value === "All" ? "Show all tiers" : `Show only ${opt.label} picks`}
                 >
                   {opt.icon && <span>{opt.icon}</span>}
                   <span>{opt.label}</span>
+                  {locked && <Lock className="h-2.5 w-2.5 text-amber-400/80" />}
                 </button>
               );
             })}
@@ -1141,6 +1157,7 @@ function todayIsoDate(): string {
 
 export default function PredictionsPage() {
   const { t } = useTranslations();
+  const { tier: userTier } = useTier();
   const [leagueFilter,     setLeagueFilter]     = useState<LeagueFilter>("All");
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("All");
   const [tierFilter,       setTierFilter]       = useState<TierFilter>("All");
@@ -1567,6 +1584,7 @@ export default function PredictionsPage() {
         total={filtered.length}
         availableLeagues={availableLeagues}
         leagueCountryMap={leagueCountryMap}
+        userTier={userTier}
       />
 
       {/* ── Content ── */}

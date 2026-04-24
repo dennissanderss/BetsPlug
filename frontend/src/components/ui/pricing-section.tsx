@@ -160,7 +160,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
   const goldSanity = getSanityPlan("gold");
   const platSanity = getSanityPlan("platinum");
 
-  const bronzePrice = bronzeSanity?.monthlyPrice != null ? splitPrice(bronzeSanity.monthlyPrice) : { main: "0", cents: "01" };
+  const bronzePrice = bronzeSanity?.monthlyPrice != null ? splitPrice(bronzeSanity.monthlyPrice) : { main: "0", cents: "00" };
   const silverMonthly = silverSanity?.monthlyPrice != null ? splitPrice(silverSanity.monthlyPrice) : { main: "9", cents: "99" };
   const silverYearly = silverSanity?.yearlyPrice != null ? splitPrice(silverSanity.yearlyPrice) : { main: "7", cents: "99" };
   const goldMonthly = goldSanity?.monthlyPrice != null ? splitPrice(goldSanity.monthlyPrice) : { main: "14", cents: "99" };
@@ -170,7 +170,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
   const plans: Plan[] = [
     {
       id: "bronze",
-      name: "Bronze",
+      name: "Free Access",
       icon: Shield,
       tier: "bronze",
       tagline: t("pricing.bronzeTagline"),

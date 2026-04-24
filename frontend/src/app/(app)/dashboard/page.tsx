@@ -6,7 +6,6 @@ import { useTranslations } from "@/i18n/locale-provider";
 import { HeroBotdCompact } from "@/components/dashboard/HeroBotdCompact";
 import { LiveMatchesStrip } from "@/components/dashboard/LiveMatchesStrip";
 import { TodayMatchesList } from "@/components/dashboard/TodayMatchesList";
-import { YesterdayResultsStrip } from "@/components/dashboard/YesterdayResultsStrip";
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { UpgradeNudgeCard } from "@/components/dashboard/UpgradeNudgeCard";
@@ -31,11 +30,6 @@ export default function DashboardPage() {
   const { data: todayFixtures, isLoading: todayLoading } = useQuery({
     queryKey: ["fixtures-today-hub"],
     queryFn: () => api.getFixturesToday(),
-  });
-
-  const { data: yesterdayResults, isLoading: resultsLoading } = useQuery({
-    queryKey: ["fixtures-results-1"],
-    queryFn: () => api.getFixtureResults(1),
   });
 
   // Sidebar shows two numbers: an all-time cumulative accuracy (the
@@ -103,10 +97,6 @@ export default function DashboardPage() {
             nextKickoff={nextKickoff}
           />
           <TodayMatchesList data={todayFixtures} isLoading={todayLoading} />
-          <YesterdayResultsStrip
-            data={yesterdayResults}
-            isLoading={resultsLoading}
-          />
         </div>
 
         <aside className="hidden xl:block">

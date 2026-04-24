@@ -162,11 +162,11 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
     {
       id: "bronze",
       icon: Shield,
-      name: "Bronze",
+      name: "Free Access",
       tagline: t("pricingDeep.bronzeTagline" as any),
       bestFor: t("pricingDeep.bronzeBestFor" as any),
-      price: "€0,01",
-      period: t("pricingDeep.period.7days" as any),
+      price: "€0",
+      period: t("pricingDeep.period.free" as any),
       includes: [
         t("pricingDeep.bronzeInc1" as any),
         t("pricingDeep.bronzeInc2" as any),
@@ -318,7 +318,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
   ];
 
   const headerCells: { label: string; variant: "green" | "purple" | "blue" | "amber"; color: string }[] = [
-    { label: "Bronze", variant: "blue", color: "#93c5fd" },
+    { label: "Free Access", variant: "blue", color: "#93c5fd" },
     { label: "Silver", variant: "purple", color: "#d8b4fe" },
     { label: "Gold", variant: "green", color: "#4ade80" },
     { label: "Platinum", variant: "amber", color: "#fbbf24" },

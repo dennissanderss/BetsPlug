@@ -50,7 +50,7 @@ export interface TierTheme {
 export const TIER_THEME: Record<TierKey, TierTheme> = {
   // ───────── BRONZE / FREE — metallic copper ─────────
   bronze: {
-    name: "Bronze",
+    name: "Free Access",
     numeral: "I",
     colorHex: "#b87333", // copper
     highlightHex: "#e8a864", // lighter copper

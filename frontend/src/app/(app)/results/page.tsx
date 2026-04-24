@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useState, useMemo, useEffect } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -15,7 +16,9 @@ import {
   ChevronDown,
   Calculator,
   Info,
+  Lock,
 } from "lucide-react";
+import { useTier, TIER_RANK as USER_TIER_RANK, type Tier } from "@/hooks/use-tier";
 import Image from "next/image";
 import { api } from "@/lib/api";
 import { useTranslations } from "@/i18n/locale-provider";
@@ -90,7 +93,7 @@ function filterBotdStream(fixtures: Fixture[]): Fixture[] {
 type TierFilter = "free" | "silver" | "gold" | "platinum";
 
 const TIER_TABS: { key: TierFilter; label: string }[] = [
-  { key: "free", label: "Bronze · 45%+" },
+  { key: "free", label: "Free Access · 45%+" },
   { key: "silver", label: "Silver · 60%+" },
   { key: "gold", label: "Gold · 70%+" },
   { key: "platinum", label: "Platinum · 80%+" },
@@ -321,7 +324,7 @@ type CalcTier = TierFilter;
 type CalcPeriod = PeriodFilter;
 
 const CALC_TIERS: { key: CalcTier; label: string; accent: string }[] = [
-  { key: "free", label: "Bronze", accent: "#b07a3a" },
+  { key: "free", label: "Free Access", accent: "#b07a3a" },
   { key: "silver", label: "Silver", accent: "#9aa3b2" },
   { key: "gold", label: "Gold", accent: "#d4a017" },
   { key: "platinum", label: "Platinum", accent: "#10b981" },
@@ -472,6 +475,7 @@ function RoiCalculatorCard({
   setCalcPeriod,
   stream,
   setStream,
+  userTier,
 }: {
   fixtures: Fixture[];
   isLoading: boolean;
@@ -483,9 +487,14 @@ function RoiCalculatorCard({
   setCalcPeriod: (v: CalcPeriod) => void;
   stream: StreamMode;
   setStream: (v: StreamMode) => void;
+  userTier: Tier;
 }) {
   const { t } = useTranslations();
   const botdMode = stream === "botd";
+  const isFree = userTier === "free";
+  const userRank = USER_TIER_RANK[userTier];
+  const canSelectTier = (target: CalcTier): boolean =>
+    USER_TIER_RANK[target as Tier] <= userRank;
 
   // Aggregate the SELECTED tier at the SELECTED period for the headline card.
   const headline = useMemo(() => {
@@ -543,41 +552,46 @@ function RoiCalculatorCard({
       {/* ── Stream toggle — All predictions vs Bet of the Day ── */}
       <div className="mb-5 flex flex-wrap items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1 w-fit">
         {([
-          { key: "all" as const, label: t("results.streamAll") },
-          { key: "botd" as const, label: t("results.streamBotd") },
+          { key: "all" as const, label: t("results.streamAll"), locked: false },
+          { key: "botd" as const, label: t("results.streamBotd"), locked: isFree },
         ]).map((opt) => {
           const active = stream === opt.key;
           return (
             <button
               key={opt.key}
               type="button"
-              onClick={() => setStream(opt.key)}
-              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
-                active
+              disabled={opt.locked}
+              onClick={() => !opt.locked && setStream(opt.key)}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors flex items-center gap-1.5 ${
+                opt.locked
+                  ? "text-slate-600 cursor-not-allowed"
+                  : active
                   ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                   : "text-slate-400 hover:text-slate-200"
               }`}
               aria-pressed={active}
             >
               {opt.label}
+              {opt.locked && <LockPill requiredTier="gold" className="pointer-events-none" />}
             </button>
           );
         })}
       </div>
 
-      {/* ── Step 1 — Choose tier (locked to Gold in BOTD mode) ── */}
+      {/* ── Step 1 — Choose tier (locked to Gold in BOTD mode, upper tiers gated by user's own tier) ── */}
       <Step number={1} label={t("results.roiCalcStep1")} hint={botdMode ? t("results.roiCalcStep1LockedHint") : t("results.roiCalcStep1Hint")}>
         <div className="flex flex-wrap items-center gap-2">
           {CALC_TIERS.map(({ key, label, accent }) => {
             const active = key === calcTier;
-            const disabled = botdMode && key !== "gold";
+            const tierLocked = !canSelectTier(key);
+            const disabled = (botdMode && key !== "gold") || tierLocked;
             return (
               <button
                 key={key}
                 type="button"
                 disabled={disabled}
                 onClick={() => !disabled && setCalcTier(key)}
-                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors border ${
+                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors border flex items-center gap-1.5 ${
                   active
                     ? "text-white border-white/[0.2]"
                     : disabled
@@ -587,6 +601,7 @@ function RoiCalculatorCard({
                 style={active ? { background: accent } : undefined}
               >
                 {label}
+                {tierLocked && <LockPill requiredTier={key as Tier} className="pointer-events-none" />}
               </button>
             );
           })}
@@ -598,42 +613,58 @@ function RoiCalculatorCard({
         </div>
       </Step>
 
-      {/* ── Step 2 — Stake per pick ──────────────────────────── */}
+      {/* ── Step 2 — Stake per pick (locked for Free Access) ── */}
       <Step number={2} label={t("results.roiCalcStep2")} hint={t("results.roiCalcStep2Hint")}>
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1.5">
-            <span className="text-sm text-slate-400">€</span>
-            <input
-              type="number"
-              inputMode="decimal"
-              min={1}
-              max={10000}
-              step={1}
-              value={stake}
-              onChange={(e) => {
-                const v = Number(e.target.value);
-                if (Number.isFinite(v) && v >= 0) setStake(v);
-              }}
-              className="w-16 bg-transparent text-sm font-semibold text-slate-100 tabular-nums focus:outline-none"
-            />
+        {isFree ? (
+          <LockedSection requiredTier="silver" title="Upgrade to Silver to set a stake and simulate returns">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1.5">
+                <span className="text-sm text-slate-400">€</span>
+                <span className="w-16 text-sm font-semibold text-slate-100 tabular-nums">{stake}</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-1">
+                {STAKE_OPTIONS.map((v) => (
+                  <span key={v} className="rounded-md px-2.5 py-1.5 text-[11px] font-semibold bg-white/[0.03] text-slate-400">€{v}</span>
+                ))}
+              </div>
+            </div>
+          </LockedSection>
+        ) : (
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1.5">
+              <span className="text-sm text-slate-400">€</span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min={1}
+                max={10000}
+                step={1}
+                value={stake}
+                onChange={(e) => {
+                  const v = Number(e.target.value);
+                  if (Number.isFinite(v) && v >= 0) setStake(v);
+                }}
+                className="w-16 bg-transparent text-sm font-semibold text-slate-100 tabular-nums focus:outline-none"
+              />
+            </div>
+            <div className="flex flex-wrap items-center gap-1">
+              {STAKE_OPTIONS.map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setStake(v)}
+                  className={`rounded-md px-2.5 py-1.5 text-[11px] font-semibold transition-colors ${
+                    stake === v
+                      ? "bg-emerald-600/80 text-white"
+                      : "bg-white/[0.03] text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  €{v}
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-1">
-            {STAKE_OPTIONS.map((v) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => setStake(v)}
-                className={`rounded-md px-2.5 py-1.5 text-[11px] font-semibold transition-colors ${
-                  stake === v
-                    ? "bg-emerald-600/80 text-white"
-                    : "bg-white/[0.03] text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                €{v}
-              </button>
-            ))}
-          </div>
-        </div>
+        )}
       </Step>
 
       {/* ── Step 3 — Pick period ─────────────────────────────── */}
@@ -682,8 +713,26 @@ function RoiCalculatorCard({
         </div>
       </Step>
 
-      {/* ── Step 4 — Your return ─────────────────────────────── */}
+      {/* ── Step 4 — Your return (locked for Free Access) ── */}
       <Step number={4} label={t("results.roiCalcStep4")} hint={t("results.roiCalcStep4Hint")}>
+        {isFree ? (
+          <LockedSection
+            requiredTier="silver"
+            title="Upgrade to Silver to see simulated payouts and ROI"
+          >
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-3">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center h-[74px]">
+                  <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-600">—</span>
+                  <span className="text-[10px] font-medium uppercase tracking-widest text-slate-600">
+                    {i === 1 ? t("results.roiCalcPicks") : i === 2 ? t("results.roiCalcStaked") : i === 3 ? t("results.roiCalcPayout") : t("results.roiCalcNetResult")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </LockedSection>
+        ) : null}
+        {!isFree && (<>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-3">
           <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
             <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
@@ -833,6 +882,7 @@ function RoiCalculatorCard({
             );
           })}
         </div>
+        </>)}
       </Step>
 
       {/* Footnote / disclaimer */}
@@ -985,7 +1035,7 @@ function ResultsFilterBar({
 
 // ─── Result Card ──────────────────────────────────────────────────────────────
 
-function ResultCard({ fixture, stake }: { fixture: Fixture; stake: number }) {
+function ResultCard({ fixture, stake, isFree }: { fixture: Fixture; stake: number; isFree: boolean }) {
   const pred = fixture.prediction;
   const hasPrediction = pred !== null;
 
@@ -1084,9 +1134,11 @@ function ResultCard({ fixture, stake }: { fixture: Fixture; stake: number }) {
         {pickLabel}
       </span>
 
-      {/* Odds used (hidden on narrow phone) */}
+      {/* Odds used (hidden on narrow phone, locked for Free Access) */}
       <span className="hidden sm:flex w-20 shrink-0 items-center justify-center gap-1">
-        {oddsUsed != null ? (
+        {isFree ? (
+          <LockPill requiredTier="silver" />
+        ) : oddsUsed != null ? (
           <>
             <span className="text-xs font-semibold tabular-nums text-slate-300">
               {oddsUsed.toFixed(2)}
@@ -1119,13 +1171,15 @@ function ResultCard({ fixture, stake }: { fixture: Fixture; stake: number }) {
         )}
       </span>
 
-      {/* Return in euro (hidden on narrow phone) */}
+      {/* Return in euro (hidden on narrow phone, locked for Free Access) */}
       <span
-        title={formulaTitle}
+        title={isFree ? undefined : formulaTitle}
         className="hidden sm:inline w-20 text-right text-xs font-bold tabular-nums shrink-0"
         style={{ color: returnColor }}
       >
-        {returnEuro != null
+        {isFree ? (
+          <LockPill requiredTier="silver" />
+        ) : returnEuro != null
           ? `${returnPrefix}€${returnAbs.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
           : "—"}
       </span>
@@ -1146,7 +1200,7 @@ function ResultCard({ fixture, stake }: { fixture: Fixture; stake: number }) {
 
 // ─── Table footer: per-row return totals (verifies headline calculator) ─────
 
-function ResultsTableFooter({ fixtures, stake }: { fixtures: Fixture[]; stake: number }) {
+function ResultsTableFooter({ fixtures, stake, isFree }: { fixtures: Fixture[]; stake: number; isFree: boolean }) {
   let totalStake = 0;
   let totalPayout = 0;
   let wins = 0;
@@ -1177,16 +1231,22 @@ function ResultsTableFooter({ fixtures, stake }: { fixtures: Fixture[]; stake: n
         <span className="text-emerald-400">{wins}W</span>
         {" · "}
         <span className="text-red-400">{losses}L</span>
-        {" · staked €"}{totalStake.toFixed(2)}
-        {realCount > 0 && (
-          <span className="text-emerald-500 ml-1">· {realCount} real</span>
-        )}
-        {modelCount > 0 && (
-          <span className="text-sky-400 ml-1">· {modelCount} model</span>
+        {!isFree && (
+          <>
+            {" · staked €"}{totalStake.toFixed(2)}
+            {realCount > 0 && (
+              <span className="text-emerald-500 ml-1">· {realCount} real</span>
+            )}
+            {modelCount > 0 && (
+              <span className="text-sky-400 ml-1">· {modelCount} model</span>
+            )}
+          </>
         )}
       </span>
       <span className="hidden sm:inline w-20 text-right font-bold tabular-nums" style={{ color }}>
-        {prefix}€{Math.abs(totalReturn).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        {isFree
+          ? <LockPill requiredTier="silver" />
+          : `${prefix}€${Math.abs(totalReturn).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
       </span>
       <span className="w-6 sm:w-8" />
     </div>
@@ -1223,18 +1283,80 @@ function SkeletonCard() {
 
 export default function ResultsPage() {
   return (
-    <PaywallOverlay feature="results" requiredTier="silver">
-      <Suspense fallback={null}>
-        <ResultsPageContent />
-      </Suspense>
-    </PaywallOverlay>
+    <Suspense fallback={null}>
+      <ResultsPageContent />
+    </Suspense>
   );
 }
 
 const VALID_TIERS: readonly TierFilter[] = ["free", "silver", "gold", "platinum"] as const;
 
+// ─── Shared lock UI ──────────────────────────────────────────────────────
+// Small inline chip rendered next to a control that's gated. On hover it
+// explains why the control is disabled and where to upgrade.
+function LockPill({
+  requiredTier,
+  className = "",
+}: { requiredTier: Tier; className?: string }) {
+  const label =
+    requiredTier === "silver" ? "Silver" :
+    requiredTier === "gold" ? "Gold" :
+    requiredTier === "platinum" ? "Platinum" :
+    "Upgrade";
+  return (
+    <Link
+      href="/pricing"
+      title={`Upgrade to ${label} to unlock`}
+      className={`inline-flex items-center gap-0.5 rounded px-1 py-0.5 text-[8px] font-bold uppercase tracking-wider bg-white/[0.06] text-slate-400 border border-white/[0.08] hover:text-amber-300 hover:border-amber-500/40 transition-colors ${className}`}
+    >
+      <Lock className="h-2.5 w-2.5" />
+      {label}
+    </Link>
+  );
+}
+
+// Full-panel overlay: blurs children and renders an upgrade CTA on top.
+function LockedSection({
+  requiredTier,
+  children,
+  title,
+}: { requiredTier: Tier; children: React.ReactNode; title?: string }) {
+  const label =
+    requiredTier === "silver" ? "Silver" :
+    requiredTier === "gold" ? "Gold" :
+    requiredTier === "platinum" ? "Platinum" : "Upgrade";
+  return (
+    <div className="relative">
+      <div className="pointer-events-none select-none blur-sm opacity-40">
+        {children}
+      </div>
+      <div className="absolute inset-0 flex items-center justify-center p-4">
+        <Link
+          href="/pricing"
+          className="flex items-center gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-300 hover:bg-amber-500/15 hover:border-amber-500/60 transition-colors"
+        >
+          <Lock className="h-3.5 w-3.5" />
+          <span>{title ?? `Upgrade to ${label} to unlock`}</span>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 function ResultsPageContent() {
   const { t } = useTranslations();
+  const { tier: userTier } = useTier();
+  // Free users keep access but several controls / columns are gated.
+  const isFree = userTier === "free";
+  // Which tiers is the user allowed to actually select in Step 1?
+  // Anything above their own tier is locked.
+  const canSelectTier = (target: CalcTier): boolean => {
+    const userRank = USER_TIER_RANK[userTier];
+    const targetRank = USER_TIER_RANK[target];
+    return targetRank <= userRank;
+  };
+  // Required tier to unlock a given CalcTier button.
+  const unlockTierFor = (target: CalcTier): Tier => target;
   // Deep-link support: /results?tier=silver&period=30 lets the track-record
   // tier cards jump directly to the right slice of data.
   const searchParams = useSearchParams();
@@ -1457,6 +1579,7 @@ function ResultsPageContent() {
         setCalcPeriod={setCalcPeriod}
         stream={stream}
         setStream={setStream}
+        userTier={userTier}
       />
 
       {/* ── Weekly Summary ── */}
@@ -1580,20 +1703,20 @@ function ResultsPageContent() {
             <span className="w-10 sm:w-14 text-center">Score</span>
             <span className="flex-1">Away</span>
             <span className="hidden sm:inline w-8 text-center">Pick</span>
-            <span className="hidden sm:inline w-20 text-center">Odds</span>
+            <span className="hidden sm:inline w-20 text-center">Odds{isFree && <LockPill requiredTier="silver" className="ml-1" />}</span>
             <span className="hidden sm:inline w-20 text-right">
-              Return · €{stake.toFixed(0)}
+              {isFree ? <>Return <LockPill requiredTier="silver" className="ml-1" /></> : `Return · €${stake.toFixed(0)}`}
             </span>
             <span className="w-6 sm:w-8 text-center">Result</span>
           </div>
           {/* Rows */}
           <div className="divide-y divide-white/[0.03]">
             {filtered.map((fixture) => (
-              <ResultCard key={fixture.id} fixture={fixture} stake={stake} />
+              <ResultCard key={fixture.id} fixture={fixture} stake={stake} isFree={isFree} />
             ))}
           </div>
           {/* Footer: sum of visible rows' returns so the user can verify the headline */}
-          <ResultsTableFooter fixtures={filtered} stake={stake} />
+          <ResultsTableFooter fixtures={filtered} stake={stake} isFree={isFree} />
         </div>
       )}
 

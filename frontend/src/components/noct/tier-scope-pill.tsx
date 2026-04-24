@@ -24,7 +24,7 @@ const INFO: Record<
   { label: string; accuracy: string; numeral: string; accent: string }
 > = {
   free: {
-    label: "Bronze",
+    label: "Free Access",
     accuracy: "45%+",
     numeral: "I",
     accent:
