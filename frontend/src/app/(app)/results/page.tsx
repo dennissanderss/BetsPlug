@@ -32,6 +32,32 @@ import { derivePickSide } from "@/lib/prediction-pick";
 
 type PeriodFilter = 7 | 14 | 30;
 type ResultFilter = "All" | "Correct" | "Incorrect";
+// Data source — mirrors the trackrecord live-measurement filter so
+// "live" here shows the same pool of picks as the tier cards on
+// /trackrecord. Everything else (pre-16-Apr picks, post-kickoff
+// predictions) is classed as backtest / model validation.
+type DataSource = "all" | "live" | "backtest";
+
+// Launch date of the strict pre-match live measurement. Matches
+// LIVE_TRACKING_START below and the V81_DEPLOYMENT_CUTOFF on the
+// backend.
+const LIVE_START_MS = Date.UTC(2026, 3, 16); // month is 0-indexed (3 = April)
+
+function classifyDataSource(f: Fixture): "live" | "backtest" {
+  const pred = f.prediction;
+  if (!pred || !pred.predicted_at) return "backtest";
+  const predMs = new Date(pred.predicted_at).getTime();
+  const schedMs = new Date(f.scheduled_at).getTime();
+  if (!Number.isFinite(predMs) || !Number.isFinite(schedMs)) return "backtest";
+  // Live = locked before kickoff AND after the 16-Apr cutover.
+  if (predMs < schedMs && predMs >= LIVE_START_MS) return "live";
+  return "backtest";
+}
+
+function matchesSource(f: Fixture, src: DataSource): boolean {
+  if (src === "all") return true;
+  return classifyDataSource(f) === src;
+}
 // v8.6 — "all" tab removed: each tier is a different product (scope +
 // confidence floor), so adding their totals together produced a
 // number users couldn't interpret. Force the view to pick a specific
@@ -338,6 +364,7 @@ function aggregateFixtures(
   stake: number,
   tier: CalcTier,
   periodDays: CalcPeriod,
+  source: DataSource,
   now: Date,
 ): PickAggregate {
   const cutoffMs = now.getTime() - periodDays * 24 * 60 * 60 * 1000;
@@ -346,6 +373,7 @@ function aggregateFixtures(
   for (const f of fixtures) {
     if (f.status !== "finished" || !f.result || !f.prediction) continue;
     if (f.prediction.pick_tier !== tier) continue;
+    if (!matchesSource(f, source)) continue;
     const scheduled = new Date(f.scheduled_at).getTime();
     if (!Number.isFinite(scheduled) || scheduled < cutoffMs) continue;
 
@@ -357,8 +385,8 @@ function aggregateFixtures(
       home_score > away_score ? "home" : away_score > home_score ? "away" : "draw";
     const won = actual === side;
 
-    const { odds: oddsUsed, source } = oddsForPick(f, side);
-    if (source === "real") {
+    const { odds: oddsUsed, source: oddsSrc } = oddsForPick(f, side);
+    if (oddsSrc === "real") {
       agg.realStake += stake;
     } else {
       agg.modelStake += stake;
@@ -400,6 +428,8 @@ function RoiCalculatorCard({
   setCalcTier,
   calcPeriod,
   setCalcPeriod,
+  dataSource,
+  setDataSource,
 }: {
   fixtures: Fixture[];
   isLoading: boolean;
@@ -409,26 +439,28 @@ function RoiCalculatorCard({
   setCalcTier: (v: CalcTier) => void;
   calcPeriod: CalcPeriod;
   setCalcPeriod: (v: CalcPeriod) => void;
+  dataSource: DataSource;
+  setDataSource: (v: DataSource) => void;
 }) {
   const { t } = useTranslations();
 
   // Aggregate the SELECTED tier at the SELECTED period for the headline card.
   const headline = useMemo(() => {
-    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, new Date());
-  }, [fixtures, stake, calcTier, calcPeriod]);
+    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, dataSource, new Date());
+  }, [fixtures, stake, calcTier, calcPeriod, dataSource]);
 
   // Breakdown across all four tiers at the selected period, so the user can
   // compare what each tier would have paid out.
   const perTier = useMemo(() => {
     const now = new Date();
     const result: Record<CalcTier, PickAggregate> = {
-      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, now),
-      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, now),
-      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, now),
-      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, now),
+      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, dataSource, now),
+      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, dataSource, now),
+      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, dataSource, now),
+      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, dataSource, now),
     };
     return result;
-  }, [fixtures, stake, calcPeriod]);
+  }, [fixtures, stake, calcPeriod, dataSource]);
 
   const headlineTotalStake = headline.realStake + headline.modelStake;
   const profitColor = headline.profit >= 0 ? "#10b981" : "#ef4444";
@@ -495,8 +527,40 @@ function RoiCalculatorCard({
         </div>
       </Step>
 
-      {/* ── Step 2 — Stake per pick ──────────────────────────── */}
-      <Step number={2} label={t("results.roiCalcStep2")} hint={t("results.roiCalcStep2Hint")}>
+      {/* ── Step 2 — Data source ─────────────────────────────── */}
+      <Step number={2} label={t("results.roiCalcStepSource")} hint={t("results.roiCalcStepSourceHint")}>
+        <div className="flex flex-wrap items-center gap-2">
+          {([
+            { key: "live", label: t("results.roiCalcSrcLive"), hint: t("results.roiCalcSrcLiveHint") },
+            { key: "backtest", label: t("results.roiCalcSrcBacktest"), hint: t("results.roiCalcSrcBacktestHint") },
+            { key: "all", label: t("results.roiCalcSrcAll"), hint: t("results.roiCalcSrcAllHint") },
+          ] as const).map((opt) => {
+            const active = dataSource === opt.key;
+            return (
+              <button
+                key={opt.key}
+                type="button"
+                onClick={() => setDataSource(opt.key)}
+                title={opt.hint}
+                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors border ${
+                  active
+                    ? opt.key === "live"
+                      ? "bg-emerald-600/80 text-white border-emerald-500/60"
+                      : opt.key === "backtest"
+                      ? "bg-amber-600/80 text-white border-amber-500/60"
+                      : "bg-blue-600 text-white border-blue-500/60"
+                    : "text-slate-400 bg-white/[0.02] border-white/[0.06] hover:text-slate-200"
+                }`}
+              >
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
+      </Step>
+
+      {/* ── Step 3 — Stake per pick ──────────────────────────── */}
+      <Step number={3} label={t("results.roiCalcStep2")} hint={t("results.roiCalcStep2Hint")}>
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1.5">
             <span className="text-sm text-slate-400">€</span>
@@ -533,8 +597,8 @@ function RoiCalculatorCard({
         </div>
       </Step>
 
-      {/* ── Step 3 — Pick period ─────────────────────────────── */}
-      <Step number={3} label={t("results.roiCalcStep3")} hint={t("results.roiCalcStep3Hint")}>
+      {/* ── Step 4 — Pick period ─────────────────────────────── */}
+      <Step number={4} label={t("results.roiCalcStep3")} hint={t("results.roiCalcStep3Hint")}>
         <div className="inline-flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
           {periodOptions.map(({ value, label }) => (
             <button
@@ -553,8 +617,8 @@ function RoiCalculatorCard({
         </div>
       </Step>
 
-      {/* ── Step 4 — Your return ─────────────────────────────── */}
-      <Step number={4} label={t("results.roiCalcStep4")} hint={t("results.roiCalcStep4Hint")}>
+      {/* ── Step 5 — Your return ─────────────────────────────── */}
+      <Step number={5} label={t("results.roiCalcStep4")} hint={t("results.roiCalcStep4Hint")}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-3">
           <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
             <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
@@ -1070,6 +1134,7 @@ export default function ResultsPage() {
 
 const VALID_TIERS: readonly TierFilter[] = ["free", "silver", "gold", "platinum"] as const;
 const VALID_PERIODS: readonly PeriodFilter[] = [7, 14, 30] as const;
+const VALID_SOURCES: readonly DataSource[] = ["all", "live", "backtest"] as const;
 
 function ResultsPageContent() {
   const { t } = useTranslations();
@@ -1084,15 +1149,20 @@ function ResultsPageContent() {
     const q = Number(searchParams?.get("period"));
     return (VALID_PERIODS as readonly number[]).includes(q) ? (q as PeriodFilter) : 7;
   })();
+  const initialSource = (() => {
+    const q = (searchParams?.get("src") ?? "").toLowerCase();
+    return (VALID_SOURCES as readonly string[]).includes(q) ? (q as DataSource) : "live";
+  })();
 
   const [period, setPeriod] = useState<PeriodFilter>(initialPeriod);
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
-  // Tier + period for the ROI calculator are the single source of truth —
-  // the results table below reuses the same tier so selecting "Platinum"
-  // in step 1 also scopes the table.
+  // Tier + period + data source for the ROI calculator are the single
+  // source of truth — the results table below reuses them so selecting
+  // e.g. "Platinum / Live" in the calculator also scopes the table.
   const [tierFilter, setTierFilter] = useState<TierFilter>(initialTier);
   const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(initialPeriod);
+  const [dataSource, setDataSource] = useState<DataSource>(initialSource);
   // Stake is shared between the ROI calculator header and each table
   // row so the numbers always agree. Persisted to localStorage.
   const [stake, setStake] = useState<number>(10);
@@ -1154,6 +1224,9 @@ function ResultsPageContent() {
     const cutoffMs = Date.now() - period * 24 * 60 * 60 * 1000;
     items = items.filter((f) => new Date(f.scheduled_at).getTime() >= cutoffMs);
 
+    // Data source (live / backtest / all) — matches the calculator.
+    items = items.filter((f) => matchesSource(f, dataSource));
+
     items = items.filter((f) => f.prediction?.pick_tier === tierFilter);
 
     if (leagueFilter) {
@@ -1178,7 +1251,7 @@ function ResultsPageContent() {
     items.sort((a, b) => b.scheduled_at.localeCompare(a.scheduled_at));
 
     return items;
-  }, [allResults, resultFilter, leagueFilter, tierFilter, period]);
+  }, [allResults, resultFilter, leagueFilter, tierFilter, period, dataSource]);
 
   // ── Summary computed from filtered so stats always match the table ─────────
   const computedSummary = useMemo<WeeklySummary | null>(() => {
@@ -1272,6 +1345,8 @@ function ResultsPageContent() {
         setCalcTier={setTierFilter}
         calcPeriod={calcPeriod}
         setCalcPeriod={setCalcPeriod}
+        dataSource={dataSource}
+        setDataSource={setDataSource}
       />
 
       {/* ── Weekly Summary ── */}

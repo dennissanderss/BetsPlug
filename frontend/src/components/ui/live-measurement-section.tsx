@@ -150,7 +150,9 @@ function LiveTierCard({
   const ci = wilson(correct, total);
   const awaiting = total < 10;
 
-  const resultsHref = `/results?tier=${RESULTS_TIER_SLUG[tier]}&period=30`;
+  // src=live guarantees the calculator + table show the exact same pool
+  // of picks as the trackrecord live measurement endpoint.
+  const resultsHref = `/results?tier=${RESULTS_TIER_SLUG[tier]}&period=30&src=live`;
 
   return (
     <Link

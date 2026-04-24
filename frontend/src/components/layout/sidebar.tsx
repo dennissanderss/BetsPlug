@@ -70,7 +70,7 @@ const navSections: NavSection[] = [
     labelKey: "sidebar.results",
     fallbackLabel: "Results",
     items: [
-      { labelKey: "nav.results", fallback: "Results & Analysis", href: "/results", icon: Trophy, requiredTier: "silver" },
+      { labelKey: "nav.results", fallback: "Results & Simulation", href: "/results", icon: Trophy, requiredTier: "silver" },
       { labelKey: "nav.trackrecord", fallback: "Track Record", href: "/trackrecord", icon: ClipboardList },
     ],
   },
