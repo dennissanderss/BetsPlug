@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Trophy,
@@ -12,6 +12,8 @@ import {
   TrendingUp,
   TrendingDown,
   ChevronDown,
+  Calculator,
+  Info,
 } from "lucide-react";
 import Image from "next/image";
 import { api } from "@/lib/api";
@@ -249,6 +251,376 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+// ─── ROI Calculator ───────────────────────────────────────────────────────────
+//
+// "What would you have made?" — turns each evaluated pick into a concrete
+// euro return at a user-chosen stake, using the actual pre-match 1X2 odds
+// stored for that fixture. Missing odds fall back to a flat 1.90 and are
+// flagged as estimated so the headline number remains honest.
+//
+// The component is fed the full 30-day fixture list (regardless of the
+// active table filters) so its own tier/period tabs remain independent.
+
+type CalcTier = TierFilter;
+type CalcPeriod = PeriodFilter;
+
+const CALC_TIERS: { key: CalcTier; label: string; accent: string }[] = [
+  { key: "free", label: "Bronze", accent: "#b07a3a" },
+  { key: "silver", label: "Silver", accent: "#9aa3b2" },
+  { key: "gold", label: "Gold", accent: "#d4a017" },
+  { key: "platinum", label: "Platinum", accent: "#10b981" },
+];
+
+const STAKE_STORAGE_KEY = "betsplug.roiCalc.stake";
+const STAKE_OPTIONS = [5, 10, 25, 50, 100];
+
+interface PickAggregate {
+  matches: number;
+  wins: number;
+  losses: number;
+  realStake: number;      // stake that used real odds
+  estimatedStake: number; // stake that fell back to 1.90
+  returned: number;       // gross returned (stake + profit on wins, 0 on losses)
+  profit: number;         // returned - totalStake
+  estimatedCount: number; // matches with missing odds
+}
+
+function emptyAggregate(): PickAggregate {
+  return {
+    matches: 0,
+    wins: 0,
+    losses: 0,
+    realStake: 0,
+    estimatedStake: 0,
+    returned: 0,
+    profit: 0,
+    estimatedCount: 0,
+  };
+}
+
+function aggregateFixtures(
+  fixtures: Fixture[],
+  stake: number,
+  tier: CalcTier,
+  periodDays: CalcPeriod,
+  now: Date,
+): PickAggregate {
+  const cutoffMs = now.getTime() - periodDays * 24 * 60 * 60 * 1000;
+  const agg = emptyAggregate();
+
+  for (const f of fixtures) {
+    if (f.status !== "finished" || !f.result || !f.prediction) continue;
+    if (f.prediction.pick_tier !== tier) continue;
+    const scheduled = new Date(f.scheduled_at).getTime();
+    if (!Number.isFinite(scheduled) || scheduled < cutoffMs) continue;
+
+    const side = derivePickSide(f.prediction);
+    if (side === null) continue;
+
+    const { home_score, away_score } = f.result;
+    const actual =
+      home_score > away_score ? "home" : away_score > home_score ? "away" : "draw";
+    const won = actual === side;
+
+    let oddsUsed: number | null = null;
+    const o = f.odds;
+    if (o) {
+      if (side === "home" && o.home != null) oddsUsed = o.home;
+      else if (side === "draw" && o.draw != null) oddsUsed = o.draw;
+      else if (side === "away" && o.away != null) oddsUsed = o.away;
+    }
+    const isEstimated = !(oddsUsed != null && oddsUsed > 1);
+    if (isEstimated) {
+      oddsUsed = 1.9;
+      agg.estimatedCount++;
+      agg.estimatedStake += stake;
+    } else {
+      agg.realStake += stake;
+    }
+
+    agg.matches++;
+    if (won) {
+      agg.wins++;
+      agg.returned += stake * (oddsUsed as number);
+    } else {
+      agg.losses++;
+    }
+  }
+  const totalStake = agg.realStake + agg.estimatedStake;
+  agg.profit = agg.returned - totalStake;
+  return agg;
+}
+
+function formatEuro(n: number): string {
+  const sign = n > 0 ? "+" : n < 0 ? "−" : "";
+  const abs = Math.abs(n);
+  return `${sign}€${abs.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+function formatRoiPct(profit: number, totalStake: number): string {
+  if (totalStake <= 0) return "—";
+  const pct = (profit / totalStake) * 100;
+  const sign = pct > 0 ? "+" : pct < 0 ? "−" : "";
+  return `${sign}${Math.abs(pct).toFixed(1)}%`;
+}
+
+function RoiCalculatorCard({ fixtures, isLoading }: {
+  fixtures: Fixture[];
+  isLoading: boolean;
+}) {
+  const { t } = useTranslations();
+  const [stake, setStake] = useState<number>(10);
+  const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(30);
+  const [calcTier, setCalcTier] = useState<CalcTier>("gold");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const saved = window.localStorage.getItem(STAKE_STORAGE_KEY);
+      if (saved) {
+        const n = Number(saved);
+        if (Number.isFinite(n) && n > 0) setStake(n);
+      }
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(STAKE_STORAGE_KEY, String(stake));
+    } catch {}
+  }, [stake]);
+
+  // Aggregate the SELECTED tier at the SELECTED period for the headline card.
+  const headline = useMemo(() => {
+    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, new Date());
+  }, [fixtures, stake, calcTier, calcPeriod]);
+
+  // Breakdown across all four tiers at the selected period, so the user can
+  // compare what each tier would have paid out.
+  const perTier = useMemo(() => {
+    const now = new Date();
+    const result: Record<CalcTier, PickAggregate> = {
+      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, now),
+      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, now),
+      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, now),
+      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, now),
+    };
+    return result;
+  }, [fixtures, stake, calcPeriod]);
+
+  const headlineTotalStake = headline.realStake + headline.estimatedStake;
+  const profitColor = headline.profit >= 0 ? "#10b981" : "#ef4444";
+
+  const periodOptions: { value: CalcPeriod; label: string }[] = [
+    { value: 7, label: t("results.last7Days") },
+    { value: 14, label: t("results.last14Days") },
+    { value: 30, label: t("results.last30Days") },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="glass-card p-6 animate-pulse" style={{ border: "1px solid rgba(16,185,129,0.18)" }}>
+        <div className="h-5 w-56 rounded bg-white/[0.06] mb-4" />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-20 rounded bg-white/[0.06]" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="glass-card p-5 sm:p-6"
+      style={{ border: "1px solid rgba(16,185,129,0.18)" }}
+    >
+      {/* Header */}
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
+          <Calculator className="h-4 w-4 text-emerald-400" />
+        </div>
+        <h2 className="text-sm font-semibold text-slate-200">
+          {t("results.roiCalcTitle")}
+        </h2>
+        <span className="text-[10px] uppercase tracking-widest text-slate-500 ml-auto">
+          {t("results.roiCalcSimulation")}
+        </span>
+      </div>
+
+      {/* Controls row */}
+      <div className="flex flex-wrap items-center gap-3 mb-5">
+        {/* Stake input */}
+        <div className="flex items-center gap-2">
+          <label className="text-[10px] uppercase tracking-widest text-slate-500">
+            {t("results.roiCalcStake")}
+          </label>
+          <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1.5">
+            <span className="text-sm text-slate-400">€</span>
+            <input
+              type="number"
+              inputMode="decimal"
+              min={1}
+              max={10000}
+              step={1}
+              value={stake}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                if (Number.isFinite(v) && v >= 0) setStake(v);
+              }}
+              className="w-16 bg-transparent text-sm font-semibold text-slate-100 tabular-nums focus:outline-none"
+            />
+          </div>
+          <div className="hidden sm:flex items-center gap-1">
+            {STAKE_OPTIONS.map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setStake(v)}
+                className={`rounded-md px-2 py-1 text-[10px] font-semibold transition-colors ${
+                  stake === v
+                    ? "bg-emerald-600/80 text-white"
+                    : "bg-white/[0.03] text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                €{v}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Period */}
+        <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1 ml-auto">
+          {periodOptions.map(({ value, label }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setCalcPeriod(value)}
+              className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                calcPeriod === value
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Headline stats — selected tier × selected period */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-5">
+        <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
+          <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
+            {headline.matches}
+          </span>
+          <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
+            {t("results.roiCalcPicks")}
+          </span>
+        </div>
+        <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
+          <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
+            €{headlineTotalStake.toLocaleString("en-GB", { maximumFractionDigits: 0 })}
+          </span>
+          <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
+            {t("results.roiCalcStaked")}
+          </span>
+        </div>
+        <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
+          <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
+            €{headline.returned.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </span>
+          <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
+            {t("results.roiCalcPayout")}
+          </span>
+        </div>
+        <div
+          className="flex flex-col items-center justify-center gap-1 rounded-lg border py-3 px-2 text-center"
+          style={{
+            background: headline.profit >= 0 ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.08)",
+            borderColor: headline.profit >= 0 ? "rgba(16,185,129,0.25)" : "rgba(239,68,68,0.25)",
+          }}
+        >
+          <span className="text-2xl font-extrabold leading-none tabular-nums" style={{ color: profitColor }}>
+            {formatEuro(headline.profit)}
+          </span>
+          <span className="text-[10px] font-medium uppercase tracking-widest" style={{ color: profitColor }}>
+            {t("results.roiCalcNetResult")} · {formatRoiPct(headline.profit, headlineTotalStake)}
+          </span>
+        </div>
+      </div>
+
+      {/* Per-tier breakdown */}
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4 mb-3">
+        {CALC_TIERS.map(({ key, label, accent }) => {
+          const row = perTier[key];
+          const totalStake = row.realStake + row.estimatedStake;
+          const active = key === calcTier;
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setCalcTier(key)}
+              className={`text-left rounded-lg p-3 border transition-colors ${
+                active
+                  ? "bg-white/[0.06] border-white/[0.14]"
+                  : "bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.04]"
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: accent }}>
+                  {label}
+                </span>
+                <span className="text-[10px] text-slate-500 tabular-nums">
+                  {row.matches} {row.matches === 1 ? t("results.roiCalcPickSingular") : t("results.roiCalcPickPlural")}
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between gap-2">
+                <span
+                  className="text-lg font-extrabold tabular-nums"
+                  style={{ color: row.profit >= 0 ? "#10b981" : row.matches === 0 ? "#64748b" : "#ef4444" }}
+                >
+                  {row.matches === 0 ? "—" : formatEuro(row.profit)}
+                </span>
+                <span
+                  className="text-[11px] font-semibold tabular-nums"
+                  style={{ color: row.profit >= 0 ? "#10b981" : row.matches === 0 ? "#64748b" : "#ef4444" }}
+                >
+                  {row.matches === 0 ? "" : formatRoiPct(row.profit, totalStake)}
+                </span>
+              </div>
+              <div className="text-[10px] text-slate-500 mt-1 tabular-nums">
+                {row.wins}W · {row.losses}L
+                {row.estimatedCount > 0 && (
+                  <span className="ml-1 text-amber-500">· {row.estimatedCount} est.</span>
+                )}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Footnote / disclaimer */}
+      <div className="flex items-start gap-2 text-[11px] text-slate-500 leading-relaxed">
+        <Info className="h-3.5 w-3.5 text-slate-500 mt-0.5 shrink-0" />
+        <p>
+          {t("results.roiCalcDisclaimer")}
+          {headline.estimatedCount > 0 && (
+            <span className="text-amber-500">
+              {" "}
+              {t("results.roiCalcEstimatedNote", {
+                count: headline.estimatedCount,
+                total: headline.matches,
+              })}
+            </span>
+          )}
+        </p>
+      </div>
     </div>
   );
 }
@@ -523,9 +895,12 @@ function ResultsPageContent() {
   const [tierFilter, setTierFilter] = useState<TierFilter>("gold");
 
   // ── Queries ────────────────────────────────────────────────────────────────
+  // Always fetch a full 30 days so the ROI calculator can show per-tier
+  // breakdowns independent of the active table period. The 7/14-day
+  // table views filter the same dataset client-side.
   const resultsQuery = useQuery({
-    queryKey: ["fixture-results", period, leagueFilter],
-    queryFn: () => api.getFixtureResults(period, leagueFilter || undefined),
+    queryKey: ["fixture-results", 30, leagueFilter],
+    queryFn: () => api.getFixtureResults(30, leagueFilter || undefined),
     staleTime: 5 * 60_000,
     retry: 1,
   });
@@ -556,6 +931,10 @@ function ResultsPageContent() {
       (f) => f.status === "finished" && f.result && f.prediction,
     );
 
+    // Period window — client-side since we always fetch 30 days.
+    const cutoffMs = Date.now() - period * 24 * 60 * 60 * 1000;
+    items = items.filter((f) => new Date(f.scheduled_at).getTime() >= cutoffMs);
+
     items = items.filter((f) => f.prediction?.pick_tier === tierFilter);
 
     if (leagueFilter) {
@@ -580,7 +959,7 @@ function ResultsPageContent() {
     items.sort((a, b) => b.scheduled_at.localeCompare(a.scheduled_at));
 
     return items;
-  }, [allResults, resultFilter, leagueFilter, tierFilter]);
+  }, [allResults, resultFilter, leagueFilter, tierFilter, period]);
 
   // ── Summary computed from filtered so stats always match the table ─────────
   const computedSummary = useMemo<WeeklySummary | null>(() => {
@@ -685,6 +1064,9 @@ function ResultsPageContent() {
           </span>
         </div>
       </div>
+
+      {/* ── ROI Calculator (what would you have made?) ── */}
+      <RoiCalculatorCard fixtures={allResults} isLoading={isLoading} />
 
       {/* ── Weekly Summary ── */}
       <WeeklySummaryCard
