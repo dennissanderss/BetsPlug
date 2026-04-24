@@ -766,11 +766,11 @@ function RoiCalculatorCard({
                     {breakEven != null ? `${Math.round(breakEven * 100)}%` : "—"}
                   </p>
                 </div>
-                <div>
+                <div title={t("results.roiCalcCiTooltip")}>
                   <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
                     {t("results.roiCalcCi")}
                   </p>
-                  <p className="text-sm font-bold tabular-nums text-slate-100">
+                  <p className="text-sm font-bold tabular-nums text-slate-100 cursor-help underline decoration-dotted decoration-slate-600 underline-offset-2">
                     {ci ? `${Math.round(ci.lower * 100)}–${Math.round(ci.upper * 100)}%` : "—"}
                   </p>
                 </div>
