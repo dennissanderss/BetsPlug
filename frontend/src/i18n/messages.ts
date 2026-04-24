@@ -1250,7 +1250,7 @@ const en = {
   /* Page heading */
   "checkout.pageTitle": "Unlock your AI football predictions",
   "checkout.pageSubtitle":
-    "One €0,01 card-verify, then full access to all four AI models across 30 leagues. Stripe-secured checkout, cancel in two clicks.",
+    "7-day free trial, then full access to all four AI models across 30 leagues. Stripe-secured checkout, cancel in two clicks.",
 
   /* Stepper labels */
   "checkout.step1": "Account",
@@ -1401,9 +1401,9 @@ const en = {
   "welcome.subtitle":
     "No more tipster Telegram chaos. The BetsPlug AI is now running on every fixture for you, four proven models working together. Data-driven AI football predictions, not hot takes.",
 
-  "welcome.trialTitle": "Your €0,01 trial is active",
+  "welcome.trialTitle": "Your free trial is active",
   "welcome.trialBody":
-    "We charged €0,01 today to verify your card, nothing else. Cancel in two clicks anytime before the trial ends and you won't pay another cent.",
+    "Nothing was charged today — your trial runs free for 7 days. Cancel in two clicks anytime before it ends and you won't pay a cent.",
   "welcome.paidTitle": "Your membership is active",
   "welcome.paidBody":
     "Full unlock. Every AI football prediction, every model diagnostic, every calibration chart, it's all waiting inside the dashboard.",
@@ -3153,7 +3153,7 @@ const nl: Dictionary = {
   "checkout.lastNamePh": "Jansen",
   "checkout.monthly": "Maandelijks",
   "checkout.next": "Doorgaan",
-  "checkout.pageSubtitle": "Eén kaartverificatie van € 0,01 en vervolgens volledige toegang tot alle vier de AI-modellen in meer dan 30 competities. Stripe-beveiligd afrekenen, annuleer in twee klikken.",
+  "checkout.pageSubtitle": "7 dagen gratis proefperiode, daarna volledige toegang tot alle vier de AI-modellen in meer dan 30 competities. Stripe-beveiligd afrekenen, annuleer in twee klikken.",
   "checkout.pageTitle": "Rond je abonnement af",
   "checkout.password": "Wachtwoord",
   "checkout.passwordHint": "Minimaal 8 tekens, 1 cijfer.",
@@ -5076,7 +5076,7 @@ const nl: Dictionary = {
   "welcome.tourProTipTitle": "Pro tip",
   "welcome.tourSubtitle": "Een snelle aanleg van het land. Het dashboard heeft alles georganiseerd in zes eenvoudige gebieden. Dit is wat elk gebied doet, zodat je zich vanaf minuut één thuis voelt.",
   "welcome.tourTitle": "Waar vind je wat, zodra je binnen bent",
-  "welcome.trialBody": "We hebben vandaag € 0,01 in rekening gebracht om je kaart te verifiëren. Verder niets. Annuleer op elk gewenst moment met twee klikken voordat de proefperiode afloopt en je betaalt geen cent meer.",
+  "welcome.trialBody": "Vandaag is er niets afgeschreven — je proefperiode loopt 7 dagen gratis. Annuleer op elk gewenst moment met twee klikken voordat de proefperiode afloopt en je betaalt geen cent.",
   "welcome.trialTitle": "Je 7-daagse gratis proefperiode is actief",
 
   "welcomeBanner.dismiss": "Niet meer tonen",
