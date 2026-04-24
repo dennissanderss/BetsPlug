@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import Link from "next/link";
 import { useTranslations } from "@/i18n/locale-provider";
 import {
   Sparkles,
@@ -1383,32 +1384,28 @@ export default function PredictionsPage() {
         </Pill>
       </div>
 
-      {/* ── v8.6: View Mode Tabs — Upcoming / Results only ── */}
+      {/* ── v8.6: View Mode Tabs — Upcoming here, Results redirects to /results ── */}
       <div className="flex items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1">
-        {(
-          [
-            { key: "upcoming" as const, label: t("pred.upcoming"), icon: CalendarDays },
-            { key: "results" as const, label: t("pred.resultsTab"), icon: Trophy },
-          ]
-        ).map(({ key, label, icon: Icon }) => {
-          const active = viewMode === key;
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setViewMode(key)}
-              className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
-                active
-                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-              aria-pressed={active}
-            >
-              <Icon className="h-4 w-4" />
-              <span>{label}</span>
-            </button>
-          );
-        })}
+        <button
+          type="button"
+          onClick={() => setViewMode("upcoming")}
+          className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
+            viewMode === "upcoming"
+              ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+              : "text-slate-400 hover:text-slate-200"
+          }`}
+          aria-pressed={viewMode === "upcoming"}
+        >
+          <CalendarDays className="h-4 w-4" />
+          <span>{t("pred.upcoming")}</span>
+        </button>
+        <Link
+          href="/results"
+          className="flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-all"
+        >
+          <Trophy className="h-4 w-4" />
+          <span>{t("pred.resultsTab")}</span>
+        </Link>
       </div>
 
       {/* ── Upcoming-mode guidance banner ── */}
