@@ -1,0 +1,205 @@
+{
+  "_docId": "leagueHub-bundesliga",
+  "_type": "leagueHub",
+  "_label": "Bundesliga",
+  "fields": {
+    "country": {
+      "sw": "Ujerumani",
+      "pt": "Alemanha",
+      "tr": "Almanya",
+      "pl": "Niemcy",
+      "ro": "Germania",
+      "ru": "Германия",
+      "el": "Γερμανία",
+      "da": "Tyskland",
+      "sv": "Tyskland"
+    },
+    "name": {
+      "sw": "Bundesliga",
+      "pt": "Bundesliga",
+      "tr": "Bundesliga",
+      "pl": "Bundesliga",
+      "ro": "Bundesliga",
+      "ru": "Bundesliga",
+      "el": "Bundesliga",
+      "da": "Bundesliga",
+      "sv": "Bundesliga"
+    },
+    "tagline": {
+      "sw": "Utabiri wa bure wa AI kwa kila speelronde ya Bundesliga",
+      "pt": "Previsões de IA gratuitas para cada jornada da Bundesliga",
+      "tr": "Her Bundesliga haftası için ücretsiz AI tahminleri",
+      "pl": "Darmowe prognozy AI dla każdej kolejki Bundesligi",
+      "ro": "Predicții AI gratuite pentru fiecare etapă din Bundesliga",
+      "ru": "Бесплатные ИИ-прогнозы на каждый тур Bundesliga",
+      "el": "Δωρεάν AI προβλέψεις για κάθε αγωνιστική της Bundesliga",
+      "da": "Gratis AI-forudsigelser for hver Bundesliga-spillerunde",
+      "sv": "Gratis AI-förutsägelser för varje Bundesliga-omgång"
+    },
+    "metaTitle": {
+      "sw": "Utabiri wa AI wa Bundesliga & Odds 2025/26 · BetsPlug",
+      "pt": "Previsões IA da Bundesliga & Odds 2025/26 · BetsPlug",
+      "tr": "Bundesliga AI Tahminleri ve Oranlar 2025/26 · BetsPlug",
+      "pl": "Prognozy AI Bundesligi i kursy 2025/26 · BetsPlug",
+      "ro": "Predicții AI Bundesliga & Cote 2025/26 · BetsPlug",
+      "ru": "ИИ-прогнозы Bundesliga и коэффициенты 2025/26 · BetsPlug",
+      "el": "AI Προβλέψεις Bundesliga & Αποδόσεις 2025/26 · BetsPlug",
+      "da": "Bundesliga AI-forudsigelser & Odds 2025/26 · BetsPlug",
+      "sv": "Bundesliga AI-förutsägelser & Odds 2025/26 · BetsPlug"
+    },
+    "metaDescription": {
+      "sw": "Utabiri wa bure wa AI wa Bundesliga, uwezekano wa kushinda na matarajio ya goli kwa kila speelronde ya Kijerumani. Imehakikishwa dhidi ya data ya matukio ya OpenLigaDB.",
+      "pt": "Previsões gratuitas com IA da Bundesliga, probabilidades de vitória e expectativas de golos para cada jornada alemã. Cruzado com os dados de eventos do OpenLigaDB.",
+      "tr": "Her Alman futbol haftası için ücretsiz AI Bundesliga tahminleri, galibiyet olasılıkları ve gol beklentileri. OpenLigaDB olay verileriyle çapraz kontrol edildi.",
+      "pl": "Darmowe prognozy Bundesligi oparte na AI, prawdopodobieństwa wygranej i oczekiwania bramkowe dla każdej niemieckiej kolejki. Krzyżowo zweryfikowane z danymi OpenLigaDB.",
+      "ro": "Predicții AI gratuite pentru Bundesliga, probabilități de victorie și așteptări de goluri pentru fiecare etapă germană. Verificat încrucișat cu datele OpenLigaDB.",
+      "ru": "Бесплатные ИИ-прогнозы на Bundesliga, вероятности побед и ожидания по голам на каждый тур Германии. Сверено с event-данными OpenLigaDB.",
+      "el": "Δωρεάν AI προβλέψεις Bundesliga, πιθανότητες νίκης και προσδοκίες γκολ για κάθε γερμανική αγωνιστική. Διασταυρωμένο με δεδομένα OpenLigaDB.",
+      "da": "Gratis AI-drevne Bundesliga-forudsigelser, sejrssandsynligheder og målforventninger for hver tysk spillerunde. Krydstjekket mod OpenLigaDB event-data.",
+      "sv": "Gratis AI-drivna Bundesliga-förutsägelser, vinstsannolikheter och målförväntningar för varje tysk omgång. Korskontrollerat mot OpenLigaDB event-data."
+    },
+    "intro": {
+      "sw": "Bundesliga ndiyo ligi yenye kufunga goli nyingi zaidi kati ya top-five za Ulaya, na volyumu hiyo ya goli ndiyo hasa inayofanya modeli za Poisson kung'aa hapa. Kwa wastani wa goli 3.1 kwa mechi - juu kabisa ya Premier League - mechi za Bundesliga huzalisha makadirio ya lambda yaliyokaa sawa zaidi kwa kila timu. BetsPlug huzifeedisha hizo kwenye ensemble ya modeli nne: mkondo wa Elo unaompa Bayern München dari yake halisi bila kusawazisha kipengele cha mshangao, matarajio ya goli ya Poisson yaliyokaguliwa dhidi ya data ya matukio ya OpenLigaDB, logistic regressor kwa fomu ya muda mfupi na meta-modeli ya XGBoost inayotatua yaliyobaki. Friday Night Bundesliga, dirisha la Jumamosi la Kiingereza na mechi ya jadi ya Jumapili saa 17:30 zote hulisha pipeline hiyo hiyo. Picks tatu zenye edge kali zaidi za kila speelronde huchapishwa hapa bure, na orodha kamili iko ndani ya dashibodi ya member ya BetsPlug ikiwa na Kelly stakes na ufuatiliaji wa closing-line value.",
+      "pt": "A Bundesliga é a mais goleadora das cinco grandes ligas da Europa, e é precisamente esse volume de golos que faz os modelos baseados em Poisson brilhar aqui. Com uma média de 3,1 golos por jogo - acima da Premier League - os duelos da Bundesliga geram estimativas lambda mais apertadas e fiáveis por equipa. A BetsPlug alimenta isso num ensemble de quatro modelos: uma curva Elo que dá ao Bayern de Munique o seu verdadeiro tecto sem achatar o fator surpresa, expectativas de golos Poisson cruzadas com dados de eventos do OpenLigaDB, um regressor logístico para forma de curto prazo e um meta-modelo XGBoost a resolver o resto. O Friday Night Bundesliga, a janela inglesa de sábado e o tradicional jogo de domingo às 17:30 alimentam todos a mesma pipeline. As três edges mais afiadas de cada jornada são publicadas aqui gratuitamente, e o cartaz completo está no dashboard de membros da BetsPlug com Kelly stakes e tracking de closing-line value.",
+      "tr": "Bundesliga, Avrupa'nın en iyi beş liginin en gol yüklüsüdür ve bu gol hacmi tam olarak Poisson tabanlı modellerin burada parlamasını sağlar. Maç başına ortalama 3,1 golle - Premier League'in belirgin şekilde üzerinde - Bundesliga fikstürleri takım başına daha sıkı ve güvenilir lambda tahminleri üretir. BetsPlug bunu dört modelli bir ensemble'a aktarır: Bayern Münih'e sürpriz faktörünü düzleştirmeden gerçek tavanını veren bir Elo eğrisi, OpenLigaDB olay verileriyle çapraz kontrol edilen Poisson gol beklentileri, kısa vadeli form için lojistik bir regressor ve geri kalanı çözen XGBoost meta-modeli. Friday Night Bundesliga, Cumartesi İngilizce yayın penceresi ve geleneksel Pazar 17:30 fikstürü hepsi aynı pipeline'ı besler. Her haftanın en keskin üç edge'i burada ücretsiz yayımlanır; tam liste Kelly stakes ve closing-line value takibiyle BetsPlug üye panosundadır.",
+      "pl": "Bundesliga jest najbardziej bramkostrzelną z pięciu największych lig Europy, a właśnie ten wolumen goli sprawia, że modele oparte na Poissonie błyszczą tutaj najbardziej. Ze średnią 3,1 bramki na mecz - znacząco powyżej Premier League - mecze Bundesligi generują ciaśniejsze, bardziej wiarygodne estymaty lambdy per drużyna. BetsPlug podaje to do ensembli czterech modeli: krzywa Elo dająca Bayernowi Monachium jego prawdziwy sufit bez spłaszczania czynnika zaskoczenia, oczekiwania bramkowe Poissona skonfrontowane z danymi zdarzeń OpenLigaDB, regresor logistyczny dla formy krótkoterminowej i meta-model XGBoost rozstrzygający resztę. Friday Night Bundesliga, sobotnie okno anglojęzyczne i tradycyjna niedziela o 17:30 zasilają tę samą pipeline. Trzy najostrzejsze edge'e każdej kolejki są tu publikowane za darmo, a pełny program znajdziesz w dashboardzie członków BetsPlug z Kelly stakes i trackingiem closing-line value.",
+      "ro": "Bundesliga este cel mai goleador campionat din top cinci al Europei, iar acest volum de goluri este exact ceea ce face modelele bazate pe Poisson să strălucească aici. Cu o medie de 3,1 goluri pe meci - semnificativ peste Premier League - meciurile din Bundesliga generează estimări lambda mai strânse și mai fiabile pe echipă. BetsPlug alimentează acest lucru într-un ensemble de patru modele: o curbă Elo care oferă lui Bayern München tavanul său real fără a aplatiza factorul surpriză, așteptări de goluri Poisson verificate cu datele de evenimente OpenLigaDB, un regresor logistic pentru forma pe termen scurt și un meta-model XGBoost care rezolvă restul. Friday Night Bundesliga, fereastra engleză de sâmbătă și tradiționalul meci de duminică de la 17:30 alimentează toate aceeași pipeline. Cele trei edge-uri cele mai ascuțite din fiecare etapă sunt publicate aici gratuit, iar programul complet se află în dashboard-ul de membri BetsPlug cu Kelly stakes și urmărirea closing-line value.",
+      "ru": "Bundesliga — самая голевая из пяти топ-лиг Европы, и именно этот объём голов заставляет модели на базе Poisson сиять здесь особенно ярко. При среднем показателе 3.1 гола за матч — ощутимо выше Premier League — матчи Bundesliga дают более плотные и надёжные оценки лямбды на команду. BetsPlug подаёт это в ensemble из четырёх моделей: кривая Elo, которая даёт Bayern München его реальный потолок без сглаживания фактора неожиданности, Poisson-ожидания голов, сверенные с event-данными OpenLigaDB, логистический регрессор для краткосрочной формы и мета-модель XGBoost, разрешающая остальное. Friday Night Bundesliga, субботнее англоязычное окно и традиционный воскресный матч в 17:30 — всё это питает один и тот же pipeline. Три самых острых edge каждого тура публикуются здесь бесплатно, полный список с Kelly stakes и отслеживанием closing-line value — в дашборде участников BetsPlug.",
+      "el": "Η Bundesliga είναι η πιο γκολάρα λίγκα από τις top-five της Ευρώπης, και αυτός ακριβώς ο όγκος γκολ κάνει τα μοντέλα Poisson να λάμπουν εδώ. Με μέσο όρο 3,1 γκολ ανά αγώνα - ουσιαστικά πάνω από την Premier League - οι αγώνες της Bundesliga παράγουν πιο στενές και αξιόπιστες εκτιμήσεις lambda ανά ομάδα. Το BetsPlug το τροφοδοτεί σε ένα ensemble τεσσάρων μοντέλων: μια καμπύλη Elo που δίνει στην Bayern Μονάχου το πραγματικό της ταβάνι χωρίς να ισοπεδώνει τον παράγοντα έκπληξης, προσδοκίες γκολ Poisson διασταυρωμένες με δεδομένα γεγονότων OpenLigaDB, έναν λογιστικό regressor για βραχυπρόθεσμη φόρμα και ένα μετα-μοντέλο XGBoost που λύνει τα υπόλοιπα. Το Friday Night Bundesliga, το αγγλόφωνο παράθυρο του Σαββάτου και ο παραδοσιακός αγώνας της Κυριακής στις 17:30 τροφοδοτούν όλα την ίδια pipeline. Οι τρεις πιο κοφτερές edges κάθε αγωνιστικής δημοσιεύονται εδώ δωρεάν, ενώ η πλήρης λίστα βρίσκεται στο dashboard μελών BetsPlug με Kelly stakes και παρακολούθηση closing-line value.",
+      "da": "Bundesligaen er den mest målrige af Europas top-fem ligaer, og netop dette målvolumen er grunden til, at Poisson-baserede modeller skinner her. Med et gennemsnit på 3,1 mål pr. kamp - markant over Premier League - producerer Bundesliga-kampe strammere og mere pålidelige lambda-estimater pr. hold. BetsPlug fører dette ind i et ensemble med fire modeller: en Elo-kurve, der giver Bayern München dens sande loft uden at udjævne overraskelsesfaktoren, Poisson-målforventninger krydstjekket mod OpenLigaDB event-data, en logistisk regressor for kortvarig form og en XGBoost-meta-model, der løser resten. Friday Night Bundesliga, lørdagens engelsksprogede vindue og søndagens traditionelle 17:30-kamp føder alle samme pipeline. De tre skarpeste edges hver spillerunde udgives gratis her, og hele programmet ligger i BetsPlug-medlemsdashboardet med Kelly stakes og closing-line value-tracking.",
+      "sv": "Bundesliga är den mest målrika av Europas fem största ligor, och det är just denna målvolym som gör att Poisson-baserade modeller skiner här. Med i snitt 3,1 mål per match - klart över Premier League - producerar Bundesliga-matcher tätare, mer pålitliga lambda-uppskattningar per lag. BetsPlug matar in detta i en ensemble med fyra modeller: en Elo-kurva som ger Bayern München sitt verkliga tak utan att plana ut överraskningsfaktorn, Poisson-målförväntningar korskontrollerade mot OpenLigaDB event-data, en logistisk regressor för kortsiktig form och en XGBoost-metamodell som löser resten. Friday Night Bundesliga, lördagens engelskspråkiga fönster och söndagens traditionella 17:30-match matar alla samma pipeline. De tre vassaste edge:erna varje omgång publiceras gratis här, hela programmet finns i BetsPlug-medlemsdashboarden med Kelly stakes och closing-line value-uppföljning."
+    },
+    "faqs[faq-0].question": {
+      "sw": "Kwa nini Bayern München mara nyingi huwa favoriti katika modeli yenu?",
+      "pt": "Porque é que o Bayern de Munique é tantas vezes o favorito no vosso modelo?",
+      "tr": "Bayern Münih neden modelinizde bu kadar sık favori?",
+      "pl": "Dlaczego Bayern Monachium jest tak często faworytem w waszym modelu?",
+      "ro": "De ce Bayern München este atât de des favorită în modelul vostru?",
+      "ru": "Почему Bayern München так часто фаворит в вашей модели?",
+      "el": "Γιατί η Bayern Μονάχου είναι τόσο συχνά φαβορί στο μοντέλο σας;",
+      "da": "Hvorfor er Bayern München så ofte favorit i jeres model?",
+      "sv": "Varför är Bayern München så ofta favorit i er modell?"
+    },
+    "faqs[faq-0].answer": {
+      "sw": "Rating ya Elo ya Bayern iko kimuundo pointi 100+ juu ya klabu inayofuata ya Ujerumani, ambayo hujitafsiri kuwa uwezekano mkubwa wa kushinda kabla ya mchezo dhidi ya sehemu kubwa ya ligi. Modeli yetu haiisawazishi dominance kwa njia ya bandia - lakini huinua uwezekano wa sare ugenini na dhidi ya wapinzani wa Champions League, ambako Bayern halisi hupoteza pointi.",
+      "pt": "O Elo do Bayern situa-se estruturalmente 100+ pontos acima do clube alemão seguinte, o que se traduz numa alta probabilidade pré-jogo de vitória contra a maior parte da liga. O nosso modelo não achata artificialmente a dominância - mas aumenta a probabilidade implícita de empate fora e contra adversários da Champions League, que é onde o Bayern realmente larga pontos.",
+      "tr": "Bayern'in Elo puanı yapısal olarak bir sonraki Alman kulübünden 100+ puan yüksektir, bu da ligin büyük çoğunluğuna karşı yüksek bir maç öncesi galibiyet olasılığına dönüşür. Modelimiz dominansı yapay olarak düzleştirmez - ancak deplasmanda ve Champions League rakipleri karşısında zımni beraberlik olasılığını yükseltir, ki Bayern gerçekte puan bıraktığı yer burasıdır.",
+      "pl": "Rating Elo Bayernu leży strukturalnie 100+ punktów powyżej następnego klubu niemieckiego, co przekłada się na wysokie przedmeczowe prawdopodobieństwo wygranej przeciwko większości ligi. Nasz model nie spłaszcza sztucznie dominacji - ale podnosi ukryte prawdopodobieństwo remisu na wyjeździe i przeciwko rywalom z Champions League, bo tam Bayern faktycznie traci punkty.",
+      "ro": "Ratingul Elo al Bayernului se află structural cu 100+ puncte peste următorul club german, ceea ce se traduce într-o probabilitate pre-meci ridicată de victorie împotriva majorității ligii. Modelul nostru nu aplatizează artificial dominanța - dar ridică probabilitatea implicită de egal în deplasare și împotriva adversarilor din Champions League, adică exact acolo unde Bayern pierde puncte cu adevărat.",
+      "ru": "Elo-рейтинг Bayern структурно на 100+ очков выше следующего немецкого клуба, что транслируется в высокую предматчевую вероятность победы против большинства лиги. Наша модель не сглаживает доминирование искусственно, но поднимает скрытую вероятность ничьей на выезде и против соперников по Champions League — именно там Bayern реально теряет очки.",
+      "el": "Η βαθμολογία Elo της Bayern βρίσκεται δομικά 100+ πόντους πάνω από τον επόμενο γερμανικό σύλλογο, κάτι που μεταφράζεται σε υψηλή προ-αγωνιστική πιθανότητα νίκης απέναντι στο μεγαλύτερο μέρος της λίγκας. Το μοντέλο μας δεν ισοπεδώνει τεχνητά την κυριαρχία - ανεβάζει όμως την τεκμαρτή πιθανότητα ισοπαλίας εκτός έδρας και απέναντι σε αντιπάλους της Champions League, εκεί δηλαδή που η Bayern πραγματικά χάνει βαθμούς.",
+      "da": "Bayerns Elo-rating ligger strukturelt 100+ point over den næste tyske klub, hvilket oversættes til en høj præ-kamps sejrssandsynlighed mod det meste af ligaen. Vores model udjævner ikke dominans kunstigt - men hæver den implicitte uafgjort-sandsynlighed ude og mod Champions League-modstandere, hvor Bayern faktisk taber point.",
+      "sv": "Bayerns Elo-rating ligger strukturellt 100+ poäng över nästa tyska klubb, vilket översätts till hög vinstsannolikhet före match mot större delen av ligan. Vår modell plattar inte artificiellt ut dominans - men höjer den implicita sannolikheten för oavgjort på bortaplan och mot Champions League-motståndare, det är där Bayern faktiskt tappar poäng."
+    },
+    "faqs[faq-1].question": {
+      "sw": "Mnashughulikiaje jumla kubwa ya goli za Bundesliga?",
+      "pt": "Como lidam com os totais de golos mais altos da Bundesliga?",
+      "tr": "Bundesliga'nın daha yüksek gol toplamlarını nasıl ele alıyorsunuz?",
+      "pl": "Jak radzicie sobie z wyższą sumą bramek w Bundeslidze?",
+      "ro": "Cum gestionați totalurile mai mari de goluri din Bundesliga?",
+      "ru": "Как вы обрабатываете более высокие суммы голов в Bundesliga?",
+      "el": "Πώς χειρίζεστε τα υψηλότερα σύνολα γκολ της Bundesliga;",
+      "da": "Hvordan håndterer I Bundesligaens højere målsummer?",
+      "sv": "Hur hanterar ni Bundesligas högre måltotaler?"
+    },
+    "faqs[faq-1].answer": {
+      "sw": "Modeli yetu ya Poisson ni ligi-ambaye. Mechi za Bundesliga hupata lambda ya msingi kubwa zaidi kuliko ya Premier League, ambayo huongeza uwezekano wa over-2.5 na hupunguza mzunguko wa sare - yote mawili yakithibitishwa kwa ushahidi dhidi ya msimu 10 uliopita wa data ya kihistoria.",
+      "pt": "O nosso modelo Poisson é league-aware. Os jogos da Bundesliga recebem um lambda base superior aos da Premier League, o que aumenta as probabilidades de over-2.5 e reduz a frequência de empates - ambos validados empiricamente contra as últimas 10 temporadas de dados históricos.",
+      "tr": "Poisson modelimiz lig bilinçlidir. Bundesliga maçları Premier League'den daha yüksek bir baz lambda alır, bu da over-2.5 olasılıklarını artırır ve beraberlik sıklığını azaltır - ikisi de son 10 sezonluk tarihsel verilere karşı ampirik olarak doğrulanmıştır.",
+      "pl": "Nasz model Poissona jest świadomy ligi. Mecze Bundesligi dostają wyższą lambdę bazową niż Premier League, co zwiększa prawdopodobieństwa over-2.5 i zmniejsza częstość remisów - oba empirycznie zweryfikowane na ostatnich 10 sezonach danych historycznych.",
+      "ro": "Modelul nostru Poisson este conștient de ligă. Meciurile din Bundesliga primesc o lambda de bază mai mare decât cele din Premier League, ceea ce crește probabilitățile de over-2.5 și reduce frecvența egalurilor - ambele validate empiric pe ultimele 10 sezoane de date istorice.",
+      "ru": "Наша Poisson-модель лига-осведомлённая. Матчи Bundesliga получают более высокую базовую лямбду, чем Premier League, что увеличивает вероятности over-2.5 и уменьшает частоту ничьих — оба эмпирически валидированы на 10 последних сезонах исторических данных.",
+      "el": "Το μοντέλο Poisson μας είναι league-aware. Οι αγώνες Bundesliga παίρνουν υψηλότερο base lambda από τους αντίστοιχους της Premier League, κάτι που αυξάνει τις πιθανότητες over-2.5 και μειώνει τη συχνότητα ισοπαλίας - και τα δύο επικυρωμένα εμπειρικά σε 10 σεζόν ιστορικών δεδομένων.",
+      "da": "Vores Poisson-model er liga-bevidst. Bundesliga-kampe får en højere base-lambda end Premier League-kampe, hvilket øger over-2.5-sandsynlighederne og reducerer uafgjort-frekvensen - begge empirisk valideret mod de seneste 10 sæsoners historiske data.",
+      "sv": "Vår Poisson-modell är ligamedveten. Bundesliga-matcher får en högre baslambda än Premier League-matcher, vilket ökar sannolikheterna för over-2.5 och minskar frekvensen oavgjort - båda empiriskt validerade mot de senaste 10 säsongernas historiska data."
+    },
+    "faqs[faq-2].question": {
+      "sw": "Mnaangalia goli kwa OpenLigaDB pia?",
+      "pt": "Fazem cross-check dos golos com o OpenLigaDB?",
+      "tr": "Golleri OpenLigaDB ile çapraz kontrol ediyor musunuz?",
+      "pl": "Czy sprawdzacie bramki w OpenLigaDB?",
+      "ro": "Verificați golurile încrucișat cu OpenLigaDB?",
+      "ru": "Вы сверяете голы с OpenLigaDB?",
+      "el": "Κάνετε διασταύρωση γκολ με το OpenLigaDB;",
+      "da": "Krydstjekker I mål med OpenLigaDB?",
+      "sv": "Korskontrollerar ni mål mot OpenLigaDB?"
+    },
+    "faqs[faq-2].answer": {
+      "sw": "Ndio - pamoja na football-data.org tuna-sync timestamps za matukio ya goli kutoka OpenLigaDB. Wakati vyanzo hivyo viwili havikubaliani juu ya matokeo, tunaweka flag kwenye mechi na kushikilia model run hadi kurekebishwa. Hii hupunguza athari za marekebisho ya muda wa mwisho kwa picks zilizoshughulikiwa.",
+      "pt": "Sim - para além do football-data.org fazemos sincronização dos timestamps de eventos de golo do OpenLigaDB. Quando as duas fontes discordam num resultado marcamos o jogo e seguramos a model run até à reconciliação. Isto reduz o impacto de correções tardias em picks já liquidados.",
+      "tr": "Evet - football-data.org'a ek olarak OpenLigaDB'den gol olay zaman damgalarını senkronize ediyoruz. İki kaynak bir sonuçta anlaşmadığında fikstürü flag'liyoruz ve mutabakat sağlanana kadar model run'ı tutuyoruz. Bu, çözülmüş picks üzerinde geç düzeltmelerin etkisini azaltır.",
+      "pl": "Tak - oprócz football-data.org synchronizujemy znaczniki czasowe zdarzeń bramkowych z OpenLigaDB. Gdy dwa źródła nie zgadzają się co do wyniku, flagujemy mecz i wstrzymujemy model run do rekoncyliacji. To ogranicza wpływ późnych poprawek na rozliczone picki.",
+      "ro": "Da - pe lângă football-data.org sincronizăm timestamp-urile evenimentelor de goluri din OpenLigaDB. Când cele două surse nu sunt de acord asupra unui rezultat, marcăm fixtura și reținem model run-ul până la reconciliere. Acest lucru reduce impactul corecțiilor târzii asupra pick-urilor decontate.",
+      "ru": "Да — помимо football-data.org мы синхронизируем timestamp'ы голевых событий из OpenLigaDB. Когда два источника расходятся по результату, мы помечаем матч и удерживаем model run до reconciliation. Это снижает влияние поздних корректировок на уже рассчитанные picks.",
+      "el": "Ναι - πέρα από το football-data.org συγχρονίζουμε timestamps γεγονότων γκολ από το OpenLigaDB. Όταν οι δύο πηγές διαφωνούν σε ένα αποτέλεσμα, flag-άρουμε τον αγώνα και κρατάμε το model run μέχρι την εξισορρόπηση. Αυτό μειώνει την επίδραση των καθυστερημένων διορθώσεων σε διευθετημένες picks.",
+      "da": "Ja - ud over football-data.org synkroniserer vi mål-event-tidsstempler fra OpenLigaDB. Når de to kilder er uenige om et resultat, flagger vi kampen og holder model run'et tilbage indtil afstemning. Det reducerer effekten af sene rettelser på afviklede picks.",
+      "sv": "Ja - utöver football-data.org synkar vi tidsstämplar för målhändelser från OpenLigaDB. När de två källorna inte är överens om ett resultat flaggar vi matchen och håller model run tills avstämning. Det minskar effekten av sena korrigeringar på avräknade tips."
+    },
+    "faqs[faq-3].question": {
+      "sw": "Utabiri wa 2. Bundesliga na DFB-Pokal pia unafunikwa?",
+      "pt": "As previsões da 2. Bundesliga e da DFB-Pokal também são cobertas?",
+      "tr": "2. Bundesliga ve DFB-Pokal tahminleri de kapsanıyor mu?",
+      "pl": "Czy obejmujecie też prognozy 2. Bundesligi i DFB-Pokal?",
+      "ro": "Sunt acoperite și predicțiile 2. Bundesliga și DFB-Pokal?",
+      "ru": "Прогнозы 2. Bundesliga и DFB-Pokal тоже покрываются?",
+      "el": "Καλύπτονται και οι προβλέψεις 2. Bundesliga και DFB-Pokal;",
+      "da": "Dækker I også 2. Bundesliga og DFB-Pokal?",
+      "sv": "Täcks även 2. Bundesliga och DFB-Pokal?"
+    },
+    "faqs[faq-3].answer": {
+      "sw": "Bado si kwenye hub hii. Zimepandwa kwenye database yetu lakini si kwenye mzunguko wetu wa automatic, ikimaanisha picks za mashindano hayo bado sio za kuaminika vya kutosha kuchapishwa. Tutaziongeza wakati sync task ya OpenLigaDB iko katika production.",
+      "pt": "Ainda não neste hub. Estão sementeadas na nossa base de dados mas não na rotação automatizada, o que significa que as picks para essas competições ainda não são suficientemente fiáveis para publicar. Vamos adicioná-las quando a sync task do OpenLigaDB estiver em produção.",
+      "tr": "Henüz bu hub'da değil. Veritabanımızda tohumlandılar ancak otomatik rotasyonumuzda yok, yani bu yarışmalar için picks henüz yayımlamak için yeterince güvenilir değil. OpenLigaDB sync task'ı production'a alındığında ekleyeceğiz.",
+      "pl": "Jeszcze nie na tym hubie. Są zasiane w naszej bazie danych, ale nie w automatycznej rotacji - oznacza to, że picki dla tych rozgrywek nie są jeszcze wystarczająco wiarygodne do publikacji. Dodamy je, gdy sync task OpenLigaDB będzie w produkcji.",
+      "ro": "Încă nu pe acest hub. Sunt seed-uite în baza noastră de date, dar nu în rotația automatizată, ceea ce înseamnă că pick-urile pentru aceste competiții nu sunt încă suficient de fiabile pentru a fi publicate. Le vom adăuga când sync task-ul OpenLigaDB va fi în producție.",
+      "ru": "Пока не на этом хабе. Они засеяны в базе, но не в автоматической ротации — значит, picks по этим соревнованиям пока недостаточно надёжны для публикации. Добавим их, когда sync task OpenLigaDB окажется в production.",
+      "el": "Όχι ακόμη σε αυτό το hub. Είναι seed-αρισμένες στη βάση δεδομένων μας αλλά όχι στην αυτοματοποιημένη ρουτίνα, οπότε οι picks για αυτές τις διοργανώσεις δεν είναι ακόμη αρκετά αξιόπιστες για δημοσίευση. Θα τις προσθέσουμε όταν το sync task του OpenLigaDB είναι σε production.",
+      "da": "Endnu ikke på dette hub. De er seedet i vores database, men ikke i den automatiserede rotation, hvilket betyder, at picks for disse turneringer endnu ikke er pålidelige nok til udgivelse. Vi tilføjer dem, når OpenLigaDB sync task er i production.",
+      "sv": "Inte än på denna hub. De är seedade i vår databas men inte i den automatiserade rotationen, vilket betyder att tips för dessa tävlingar inte är tillräckligt tillförlitliga för publicering. Vi lägger till dem när OpenLigaDB sync-tasken är i produktion."
+    },
+    "faqs[faq-4].question": {
+      "sw": "Utabiri wenu wa Bundesliga ni sahihi kiasi gani?",
+      "pt": "Qual é a precisão das vossas previsões da Bundesliga?",
+      "tr": "Bundesliga tahminleriniz ne kadar doğru?",
+      "pl": "Jak dokładne są wasze prognozy Bundesligi?",
+      "ro": "Cât de precise sunt predicțiile voastre pentru Bundesliga?",
+      "ru": "Насколько точны ваши прогнозы на Bundesliga?",
+      "el": "Πόσο ακριβείς είναι οι προβλέψεις σας για τη Bundesliga;",
+      "da": "Hvor præcise er jeres Bundesliga-forudsigelser?",
+      "sv": "Hur exakta är era Bundesliga-förutsägelser?"
+    },
+    "faqs[faq-4].answer": {
+      "sw": "Kalibrasho ya Bundesliga imekuwa moja ya uso wetu wenye nguvu zaidi - kawaida 71-76% kwenye soko la favoriti-kushinda kwa windows za rolling za siku 30, ikisaidiwa na samples kubwa za goli kwa kila mechi. Breakdown kamili iko kwenye /track-record.",
+      "pt": "A calibração da Bundesliga tem sido uma das nossas superfícies mais fortes - tipicamente 71-76% no mercado de favorito-a-vencer em janelas rolling de 30 dias, ajudada pelas amostras de golos maiores por jogo. Breakdown completo em /track-record.",
+      "tr": "Bundesliga kalibrasyonu daha güçlü yüzeylerimizden biri olmuştur - 30 günlük rolling pencerelerde favori-kazanır pazarında tipik olarak %71-76, maç başına daha büyük gol örneklemleriyle desteklenmiştir. Tam döküm /track-record'da.",
+      "pl": "Kalibracja Bundesligi jest jedną z naszych najsilniejszych powierzchni - zazwyczaj 71-76% na rynku faworyta-do-wygranej w krocząsych oknach 30-dniowych, wspierane większymi próbami bramek na mecz. Pełny breakdown na /track-record.",
+      "ro": "Calibrarea Bundesliga a fost una dintre cele mai puternice suprafețe ale noastre - de regulă 71-76% pe piața favorit-pentru-victorie în ferestre rolling de 30 de zile, ajutată de eșantioanele mai mari de goluri pe meci. Breakdown complet la /track-record.",
+      "ru": "Калибровка Bundesliga — одна из наших самых сильных поверхностей: обычно 71-76% на рынке «фаворит побеждает» в 30-дневных rolling-окнах, чему помогают бо́льшие выборки голов на матч. Полный разбор на /track-record.",
+      "el": "Η καλιμπράρισμα Bundesliga είναι μία από τις πιο δυνατές μας επιφάνειες - συνήθως 71-76% στην αγορά φαβορί-για-νίκη σε rolling παράθυρα 30 ημερών, με τη βοήθεια των μεγαλύτερων δειγμάτων γκολ ανά αγώνα. Πλήρης ανάλυση στο /track-record.",
+      "da": "Bundesliga-kalibrering har været en af vores stærkeste flader - typisk 71-76% på favorit-til-sejr-markedet over rullende 30-dages vinduer, hjulpet af de større målprøver pr. kamp. Fuld opdeling på /track-record.",
+      "sv": "Bundesliga-kalibrering har varit en av våra starkaste ytor - typiskt 71-76% på favorit-vinner-marknaden över rullande 30-dagarsfönster, tack vare större målsampel per match. Fullständig uppdelning på /track-record."
+    },
+    "faqs[faq-5].question": {
+      "sw": "Mnarekebisha kwa Englische Woche?",
+      "pt": "Ajustam para a Englische Woche?",
+      "tr": "Englische Woche için ayarlama yapıyor musunuz?",
+      "pl": "Czy uwzględniacie Englische Woche?",
+      "ro": "Ajustați pentru Englische Woche?",
+      "ru": "Вы корректируете под Englische Woche?",
+      "el": "Κάνετε προσαρμογή για την Englische Woche;",
+      "da": "Justerer I for Englische Woche?",
+      "sv": "Justerar ni för Englische Woche?"
+    },
+    "faqs[faq-5].answer": {
+      "sw": "Ndio. Majukumu ya Ulaya ya kati ya wiki kwa klabu katika Champions / Europa / Conference League huvuta chini rating yetu ya fomu ya muda mfupi kwa wikendi inayofuata, na logistic regressor yetu huweka uzito kwa safari za hivi karibuni + dakika. Hii ni moja ya marekebisho yenye athari zaidi yanayohusu Bundesliga.",
+      "pt": "Sim. Os compromissos europeus a meio da semana para clubes em Champions / Europa / Conference League empurram para baixo o nosso rating de forma de curto prazo para o fim-de-semana seguinte, e o nosso regressor logístico pondera viagens recentes + minutos. Este é um dos ajustes específicos da Bundesliga com mais impacto.",
+      "tr": "Evet. Şampiyonlar / Avrupa / Konferans Ligi'ndeki kulüpler için hafta içi Avrupa görevleri, sonraki hafta sonu için kısa vadeli form puanımızı aşağı çeker ve lojistik regressor'umuz son seyahat + dakikaları ağırlıklandırır. Bu, Bundesliga'ya özel daha etkili ayarlamalardan biridir.",
+      "pl": "Tak. Środtygodniowe obowiązki europejskie dla klubów w Champions / Europa / Conference League obniżają nasz rating formy krótkoterminowej na kolejny weekend, a nasz regresor logistyczny waży ostatnie podróże + minuty. To jedno z bardziej wpływowych dostosowań specyficznych dla Bundesligi.",
+      "ro": "Da. Obligațiile europene de la mijlocul săptămânii pentru cluburile din Champions / Europa / Conference League coboară ratingul nostru de formă pe termen scurt pentru weekendul următor, iar regresorul nostru logistic ponderează călătoriile + minutele recente. Aceasta este una dintre cele mai influente ajustări specifice Bundesligii.",
+      "ru": "Да. Европейские обязательства в середине недели для клубов из Champions / Europa / Conference League тянут вниз наш краткосрочный form-рейтинг на следующий weekend, а логистический регрессор взвешивает свежие переезды + минуты. Это одна из самых влиятельных специфичных для Bundesliga корректировок.",
+      "el": "Ναι. Οι μεσοβδόμαδες ευρωπαϊκές υποχρεώσεις για συλλόγους σε Champions / Europa / Conference League πιέζουν προς τα κάτω το βαθμό φόρμας βραχυπρόθεσμης μας για το επόμενο σαββατοκύριακο, και ο λογιστικός regressor μας ζυγίζει πρόσφατες μετακινήσεις + λεπτά. Αυτή είναι μία από τις πιο σημαντικές προσαρμογές ειδικές για τη Bundesliga.",
+      "da": "Ja. Europæiske midtugeforpligtelser for klubber i Champions / Europa / Conference League trækker vores korttids-formrating ned for den følgende weekend, og vores logistiske regressor vægter nylige rejser + minutter. Dette er en af de mest indvirkningsfulde Bundesliga-specifikke justeringer.",
+      "sv": "Ja. Mittveckans europeiska åtaganden för klubbar i Champions / Europa / Conference League drar ned vår kortsiktiga formrating för kommande helg, och vår logistiska regressor viktar senaste resor + minuter. Detta är en av de mer impactfulla Bundesliga-specifika justeringarna."
+    }
+  }
+}

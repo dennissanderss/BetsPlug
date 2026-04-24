@@ -1,0 +1,205 @@
+{
+  "_docId": "leagueHub-ligue-1",
+  "_type": "leagueHub",
+  "_label": "Ligue 1",
+  "fields": {
+    "country": {
+      "sw": "Ufaransa",
+      "pt": "França",
+      "tr": "Fransa",
+      "pl": "Francja",
+      "ro": "Franța",
+      "ru": "Франция",
+      "el": "Γαλλία",
+      "da": "Frankrig",
+      "sv": "Frankrike"
+    },
+    "name": {
+      "sw": "Ligue 1",
+      "pt": "Ligue 1",
+      "tr": "Ligue 1",
+      "pl": "Ligue 1",
+      "ro": "Ligue 1",
+      "ru": "Ligue 1",
+      "el": "Ligue 1",
+      "da": "Ligue 1",
+      "sv": "Ligue 1"
+    },
+    "tagline": {
+      "sw": "Utabiri wa bure wa AI kwa kila speelronde ya Ligue 1",
+      "pt": "Previsões de IA gratuitas para cada jornada da Ligue 1",
+      "tr": "Her Ligue 1 haftası için ücretsiz AI tahminleri",
+      "pl": "Darmowe prognozy AI dla każdej kolejki Ligue 1",
+      "ro": "Predicții AI gratuite pentru fiecare etapă din Ligue 1",
+      "ru": "Бесплатные ИИ-прогнозы на каждый тур Ligue 1",
+      "el": "Δωρεάν AI προβλέψεις για κάθε αγωνιστική της Ligue 1",
+      "da": "Gratis AI-forudsigelser for hver Ligue 1-spillerunde",
+      "sv": "Gratis AI-förutsägelser för varje Ligue 1-omgång"
+    },
+    "metaTitle": {
+      "sw": "Utabiri wa AI wa Ligue 1 & Odds 2025/26 · BetsPlug",
+      "pt": "Previsões IA da Ligue 1 & Odds 2025/26 · BetsPlug",
+      "tr": "Ligue 1 AI Tahminleri ve Oranlar 2025/26 · BetsPlug",
+      "pl": "Prognozy AI Ligue 1 i kursy 2025/26 · BetsPlug",
+      "ro": "Predicții AI Ligue 1 & Cote 2025/26 · BetsPlug",
+      "ru": "ИИ-прогнозы Ligue 1 и коэффициенты 2025/26 · BetsPlug",
+      "el": "AI Προβλέψεις Ligue 1 & Αποδόσεις 2025/26 · BetsPlug",
+      "da": "Ligue 1 AI-forudsigelser & Odds 2025/26 · BetsPlug",
+      "sv": "Ligue 1 AI-förutsägelser & Odds 2025/26 · BetsPlug"
+    },
+    "metaDescription": {
+      "sw": "Utabiri wa bure wa AI wa Ligue 1, uwezekano wa kushinda na alama za imani kwa kila speelronde ya Ufaransa. Kalibrasho inayojua PSG na ufuatiliaji wa odds wa moja kwa moja.",
+      "pt": "Previsões gratuitas com IA da Ligue 1, probabilidades de vitória e scores de confiança para cada jornada francesa. Calibração PSG-aware e tracking de odds ao vivo.",
+      "tr": "Her Fransız futbol haftası için ücretsiz AI Ligue 1 tahminleri, galibiyet olasılıkları ve güven skorları. PSG-aware kalibrasyon ve canlı oran takibi.",
+      "pl": "Darmowe prognozy Ligue 1 oparte na AI, prawdopodobieństwa wygranej i wskaźniki pewności dla każdej francuskiej kolejki. Kalibracja świadoma PSG i live tracking kursów.",
+      "ro": "Predicții AI gratuite pentru Ligue 1, probabilități de victorie și scoruri de încredere pentru fiecare etapă franceză. Calibrare conștientă de PSG și tracking cote live.",
+      "ru": "Бесплатные ИИ-прогнозы Ligue 1, вероятности побед и confidence-score для каждого французского тура. PSG-aware калибровка и отслеживание live-коэффициентов.",
+      "el": "Δωρεάν AI προβλέψεις Ligue 1, πιθανότητες νίκης και σκορ εμπιστοσύνης για κάθε γαλλική αγωνιστική. PSG-aware καλιμπράρισμα και live παρακολούθηση αποδόσεων.",
+      "da": "Gratis AI-drevne Ligue 1-forudsigelser, sejrssandsynligheder og confidence-scores til hver fransk spillerunde. PSG-bevidst kalibrering og live odds-tracking.",
+      "sv": "Gratis AI-drivna Ligue 1-förutsägelser, vinstsannolikheter och konfidensscore för varje fransk omgång. PSG-medveten kalibrering och live odds-tracking."
+    },
+    "intro": {
+      "sw": "Ligue 1 ndiyo scheve zaidi ya top five - Paris Saint-Germain imeitawala mbio za ubingwa kihistoria kwa njia ambayo England, Hispania, Italia wala Ujerumani haiwezi kulingana. Hiyo hufanya changamoto ya modeling kuwa ya kuvutia: mechi za PSG zinahitaji Elo prior nzito yenye correction maalum ya overconfidence, wakati ligi iliyobaki iko wazi. BetsPlug huichukulia Ligue 1 katika nusu mbili: mechi za PSG zinatumia kalibrasho tofauti iliyofunzwa kwenye data ya kihistoria ya \"dominant favourite\" (ambapo uwezekano wa kushinda uliotafsiriwa huwa juu sana), na mechi zisizo za PSG zinatumia ensemble ya kawaida ya modeli nne pamoja na marekebisho madogo ya juu ya sare. Format mpya ya ligi na ratiba ya matangazo (marquee ya Jumapili usiku, opener ya Ijumaa, Jumamosi alasiri spread) zote zinatatiliwa kupitia pipeline yetu ya football-data.org. Picks tatu za bure kwa speelronde zinaonekana hapa; orodha kamili ikijumuisha Trophée des Champions iko kwenye dashibodi ya member.",
+      "pt": "A Ligue 1 é a mais desequilibrada das cinco grandes - o Paris Saint-Germain dominou historicamente a corrida ao título de uma forma que nem Inglaterra, Espanha, Itália ou Alemanha conseguem igualar. Isso torna o desafio de modelação interessante: jogos do PSG precisam de um Elo prior pesado com uma correção de overconfidence específica, enquanto o resto da liga está completamente em aberto. A BetsPlug trata a Ligue 1 em duas metades: jogos do PSG usam uma calibração separada treinada em jogos históricos \"dominant favourite\" (onde a probabilidade de vitória implícita tende a ser demasiado alta), e jogos não-PSG usam o ensemble padrão de quatro modelos com um ligeiro ajuste de empate em alta. O novo formato da liga e o calendário de transmissão (marquee de domingo à noite, abertura de sexta-feira, spread de sábado à tarde) são todos sincronizados através da nossa pipeline football-data.org. Três picks gratuitas por jornada aparecem aqui; o cartaz completo incluindo o Trophée des Champions está no dashboard de membros.",
+      "tr": "Ligue 1, ilk beşin en dengesizidir - Paris Saint-Germain, İngiltere, İspanya, İtalya veya Almanya'nın erişemediği bir şekilde şampiyonluk yarışına tarihsel olarak hükmetmiştir. Bu, modelleme zorluğunu ilginç kılar: PSG maçları, özel bir overconfidence düzeltmesiyle ağır bir Elo prior gerektirirken ligin geri kalanı tamamen açıktır. BetsPlug Ligue 1'i iki yarıda ele alır: PSG maçları tarihsel \"dominant favourite\" fikstürleri (zımni kazanç olasılığının çok yüksek olma eğiliminde olduğu yer) üzerinde eğitilmiş ayrı bir kalibrasyon kullanır ve PSG dışı maçlar hafif yukarı beraberlik ayarlı standart dört modelli ensemble kullanır. Yeni lig formatı ve yayın programı (Pazar gecesi marquee, Cuma açılışı, Cumartesi öğleden sonra spread) hepsi football-data.org pipeline'ımız üzerinden senkronize edilir. Her hafta üç ücretsiz pick burada görünür; Trophée des Champions dahil tam program üye panosundadır.",
+      "pl": "Ligue 1 jest najbardziej niezrównoważoną z pięciu największych - Paris Saint-Germain dominował historycznie w wyścigu po tytuł w sposób, którego ani Anglia, ani Hiszpania, ani Włochy, ani Niemcy nie są w stanie dorównać. To sprawia, że wyzwanie modelowania jest interesujące: mecze PSG wymagają ciężkiego Elo prior ze specjalną korektą overconfidence, podczas gdy reszta ligi jest szeroko otwarta. BetsPlug traktuje Ligue 1 w dwóch połowach: mecze PSG używają osobnej kalibracji trenowanej na historycznych meczach \"dominant favourite\" (gdzie implikowane prawdopodobieństwo wygranej bywa zbyt wysokie), a mecze bez PSG używają standardowego ensemble czterech modeli z lekką korektą remisu w górę. Nowy format ligi i harmonogram transmisji (marquee niedzielnego wieczoru, piątkowy opener, sobotni popołudniowy spread) są synchronizowane przez naszą pipeline football-data.org. Trzy darmowe picki na kolejkę pojawiają się tutaj; pełny program włącznie z Trophée des Champions znajduje się w dashboardzie członkowskim.",
+      "ro": "Ligue 1 este cel mai dezechilibrat campionat din top cinci - Paris Saint-Germain a dominat istoric cursa pentru titlu într-un mod cu care Anglia, Spania, Italia sau Germania nu se pot compara. Acest lucru face provocarea de modelare interesantă: meciurile PSG au nevoie de un Elo prior greu cu o corecție specifică de overconfidence, în timp ce restul ligii este larg deschis. BetsPlug tratează Ligue 1 în două jumătăți: meciurile PSG folosesc o calibrare separată antrenată pe meciuri istorice \"dominant favourite\" (unde probabilitatea implicită de victorie tinde să fie prea mare), iar meciurile non-PSG folosesc ensemble-ul standard de patru modele cu o mică ajustare în sus pentru egal. Noul format de ligă și programul de transmisie (marquee-ul de duminică seara, deschiderea de vineri, spread-ul de sâmbătă după-amiază) sunt toate sincronizate prin pipeline-ul nostru football-data.org. Trei pick-uri gratuite pe etapă apar aici; programul complet inclusiv Trophée des Champions se află în dashboard-ul de membri.",
+      "ru": "Ligue 1 — самая неровная из топ-пяти: Paris Saint-Germain доминирует в чемпионской гонке исторически так, как не могут Англия, Испания, Италия или Германия. Это делает вызов моделирования интересным: матчам PSG нужен тяжёлый Elo prior со специальной overconfidence-корректировкой, тогда как остальная часть лиги широко открыта. BetsPlug рассматривает Ligue 1 в двух половинах: матчи PSG используют отдельную калибровку, обученную на исторических \"dominant favourite\" фикстурах (где неявная вероятность победы обычно завышена), а матчи без PSG — стандартный ensemble из четырёх моделей с небольшой корректировкой ничьей вверх. Новый формат лиги и вещательное расписание (вечерний воскресный marquee, пятничный opener, субботний дневной spread) — всё синхронизировано через наш football-data.org pipeline. Три бесплатных picks за тур появляются здесь; полный список, включая Trophée des Champions, — в дашборде участников.",
+      "el": "Η Ligue 1 είναι η πιο ανισομερής από τις top-five - η Paris Saint-Germain έχει κυριαρχήσει ιστορικά στην κούρσα του τίτλου με τρόπο που Αγγλία, Ισπανία, Ιταλία και Γερμανία δεν μπορούν να συγκρίνουν. Αυτό κάνει την πρόκληση μοντελοποίησης ενδιαφέρουσα: οι αγώνες της PSG χρειάζονται ένα βαρύ Elo prior με ειδική διόρθωση overconfidence, ενώ το υπόλοιπο της λίγκας είναι εντελώς ανοικτό. Το BetsPlug αντιμετωπίζει τη Ligue 1 σε δύο μισά: οι αγώνες της PSG χρησιμοποιούν ξεχωριστή καλιμπράρισμα εκπαιδευμένη σε ιστορικούς αγώνες \"dominant favourite\" (όπου η τεκμαρτή πιθανότητα νίκης τείνει να είναι πολύ υψηλή), και οι αγώνες εκτός PSG χρησιμοποιούν το πρότυπο ensemble τεσσάρων μοντέλων με ελαφριά ανοδική προσαρμογή ισοπαλίας. Η νέα μορφή της λίγκας και το πρόγραμμα μετάδοσης (marquee Κυριακής βραδιού, opener Παρασκευής, spread Σαββάτου απογεύματος) είναι όλα συγχρονισμένα μέσω της pipeline football-data.org. Τρεις δωρεάν picks ανά αγωνιστική εμφανίζονται εδώ· η πλήρης λίστα περιλαμβανομένου του Trophée des Champions βρίσκεται στο dashboard μελών.",
+      "da": "Ligue 1 er den mest skæve af top-fem - Paris Saint-Germain har historisk domineret titelkampen på en måde, som hverken England, Spanien, Italien eller Tyskland kan matche. Det gør modelleringsudfordringen interessant: PSG-kampe kræver en tung Elo prior med en specifik overconfidence-korrektion, mens resten af ligaen er vidt åben. BetsPlug behandler Ligue 1 i to halvdele: PSG-kampe bruger en separat kalibrering trænet på historiske \"dominant favourite\"-kampe (hvor den implicitte vinderssandsynlighed plejer at være for høj), og ikke-PSG-kampe bruger standard fire-modellers ensemble med en lille opadgående uafgjort-justering. Det nye ligaformat og sendeskemaet (søndag aftens marquee, fredags-opener, lørdag eftermiddags-spread) er alle synkroniseret gennem vores football-data.org pipeline. Tre gratis picks pr. spillerunde dukker op her; hele programmet inklusive Trophée des Champions ligger i medlemsdashboardet.",
+      "sv": "Ligue 1 är den mest ojämna av topp-fem - Paris Saint-Germain har historiskt dominerat titeljakten på ett sätt som varken England, Spanien, Italien eller Tyskland kan matcha. Det gör modelleringsutmaningen intressant: PSG-matcher behöver en tung Elo-prior med specifik overconfidence-korrigering, medan resten av ligan är vidöppen. BetsPlug hanterar Ligue 1 i två halvor: PSG-matcher använder en separat kalibrering tränad på historiska \"dominant favourite\"-matcher (där den implicita vinstsannolikheten tenderar att vara för hög), och icke-PSG-matcher använder standardensemblen med fyra modeller med en liten uppåtgående oavgjortjustering. Det nya ligaformatet och sändningsschemat (söndagskvällens marquee, fredagens opener, lördagseftermiddagens spread) är alla synkroniserade via vår football-data.org pipeline. Tre gratis tips per omgång dyker upp här; hela programmet inklusive Trophée des Champions finns i medlemsdashboarden."
+    },
+    "faqs[faq-0].question": {
+      "sw": "PSG inaathirije utabiri wenu wa Ligue 1?",
+      "pt": "Como é que o PSG afeta as vossas previsões da Ligue 1?",
+      "tr": "PSG Ligue 1 tahminlerinizi nasıl etkiliyor?",
+      "pl": "Jak PSG wpływa na wasze prognozy Ligue 1?",
+      "ro": "Cum afectează PSG predicțiile voastre pentru Ligue 1?",
+      "ru": "Как PSG влияет на ваши прогнозы на Ligue 1?",
+      "el": "Πώς επηρεάζει η PSG τις προβλέψεις σας για τη Ligue 1;",
+      "da": "Hvordan påvirker PSG jeres Ligue 1-forudsigelser?",
+      "sv": "Hur påverkar PSG era Ligue 1-förutsägelser?"
+    },
+    "faqs[faq-0].answer": {
+      "sw": "Mechi za PSG hutumia kalibrasho head tofauti iliyofunzwa kwenye data ya kihistoria ya \"dominant favourite\", kwa sababu umma + soko la bookmaker huweka thamani kubwa zaidi kwa ushindi wa nyumbani wa PSG mara kwa mara. Modeli yetu hupunguza uwezekano wa kushinda uliotafsiriwa kwa pointi 3-5 za asilimia ikilinganishwa na closing line, ambayo ni moja ya vyanzo imara zaidi vya edge katika Ligue 1.",
+      "pt": "Os jogos do PSG usam uma cabeça de calibração separada treinada em dados históricos de \"dominant favourite\", porque o público + mercado bookmaker consistentemente sobrevaloriza as vitórias em casa do PSG. O nosso modelo corta a probabilidade de vitória implícita em 3-5 pontos percentuais em relação à closing line, o que é uma das fontes mais constantes de edge na Ligue 1.",
+      "tr": "PSG maçları tarihsel \"dominant favourite\" verileri üzerinde eğitilmiş ayrı bir kalibrasyon kafası kullanır, çünkü kamuoyu + bookmaker pazarı PSG ev sahibi galibiyetlerini sürekli olarak aşırı fiyatlandırır. Modelimiz zımni galibiyet olasılığını closing line'a göre 3-5 yüzde puanı kısar, bu Ligue 1'deki en istikrarlı edge kaynaklarından biridir.",
+      "pl": "Mecze PSG używają osobnej głowy kalibracyjnej trenowanej na historycznych danych \"dominant favourite\", ponieważ publiczność + rynek bukmacherski konsekwentnie zawyżają ceny domowych zwycięstw PSG. Nasz model przycina ukryte prawdopodobieństwo wygranej o 3-5 punktów procentowych w stosunku do closing line, co jest jednym z najstabilniejszych źródeł edge w Ligue 1.",
+      "ro": "Meciurile PSG folosesc un cap de calibrare separat antrenat pe date istorice \"dominant favourite\", pentru că publicul + piața bookmaker supraprețuiesc constant victoriile acasă ale PSG. Modelul nostru reduce probabilitatea implicită de victorie cu 3-5 puncte procentuale față de closing line, ceea ce este una dintre cele mai stabile surse de edge din Ligue 1.",
+      "ru": "Матчи PSG используют отдельную калибровочную голову, обученную на исторических \"dominant favourite\" данных, потому что публика + букмекерский рынок стабильно переоценивают домашние победы PSG. Наша модель подрезает неявную вероятность победы на 3-5 процентных пунктов относительно closing line — это один из самых стабильных источников edge в Ligue 1.",
+      "el": "Οι αγώνες της PSG χρησιμοποιούν ξεχωριστή κεφαλή καλιμπραρίσματος εκπαιδευμένη σε ιστορικά δεδομένα \"dominant favourite\", επειδή το κοινό + η αγορά bookmaker σταθερά υπερτιμούν τις εντός έδρας νίκες της PSG. Το μοντέλο μας κόβει την τεκμαρτή πιθανότητα νίκης κατά 3-5 ποσοστιαίες μονάδες σε σχέση με το closing line, που είναι μία από τις πιο σταθερές πηγές edge στη Ligue 1.",
+      "da": "PSG-kampe bruger et separat kalibreringshoved trænet på historiske \"dominant favourite\"-data, fordi publikum + bookmaker-markedet konsekvent overpriser PSG-hjemmesejre. Vores model trimmer den implicitte vinderssandsynlighed med 3-5 procentpoint i forhold til closing line, hvilket er en af de mere stabile kilder til edge i Ligue 1.",
+      "sv": "PSG-matcher använder en separat kalibreringshead tränad på historiska \"dominant favourite\"-data, eftersom publiken + bookmaker-marknaden konsekvent överprissätter PSG-hemmavinster. Vår modell trimmar den implicita vinstsannolikheten med 3-5 procentenheter relativt closing line, vilket är en av de stabilaste edge-källorna i Ligue 1."
+    },
+    "faqs[faq-1].question": {
+      "sw": "Format mpya ya Ligue 1 inaonyeshwa kwenye sync yenu?",
+      "pt": "O novo formato da Ligue 1 está refletido na vossa sincronização?",
+      "tr": "Yeni Ligue 1 formatı sync'inize yansıtılıyor mu?",
+      "pl": "Czy nowy format Ligue 1 jest odzwierciedlony w waszej synchronizacji?",
+      "ro": "Este reflectat noul format Ligue 1 în sincronizarea voastră?",
+      "ru": "Новый формат Ligue 1 отражён в вашей sync?",
+      "el": "Αντικατοπτρίζεται η νέα μορφή της Ligue 1 στο sync σας;",
+      "da": "Afspejles det nye Ligue 1-format i jeres sync?",
+      "sv": "Återspeglas det nya Ligue 1-formatet i er sync?"
+    },
+    "faqs[faq-1].answer": {
+      "sw": "Ndio. Format ya sasa ya timu 18 na ratiba ya matangazo huvutwa kutoka football-data.org na kila muda wa kuanza wa mechi umesawazishwa kila dakika 5 wakati wa dirisha hai. Hakuna kuingiza ratiba kwa mkono - ikiwa Ligue de Football Professionnel inasasisha slot, modeli yetu huipiga kiotomatiki.",
+      "pt": "Sim. O atual formato de 18 equipas e o calendário de transmissão são puxados do football-data.org com o horário de apito inicial de cada jogo sincronizado a cada 5 minutos durante a janela ativa. Sem entrada manual de horário - se a Ligue de Football Professionnel atualizar o slot, o nosso modelo capta-o automaticamente.",
+      "tr": "Evet. Mevcut 18 takımlı format ve yayın programı, her fikstürün başlama saati aktif pencere boyunca 5 dakikada bir senkronize edilerek football-data.org'dan çekilir. Manuel program girişi yok - Ligue de Football Professionnel slot'u güncellerse modelimiz bunu otomatik olarak alır.",
+      "pl": "Tak. Obecny format 18 drużyn i harmonogram transmisji są pobierane z football-data.org, a czas rozpoczęcia każdego meczu jest synchronizowany co 5 minut w aktywnym oknie. Bez ręcznego wprowadzania harmonogramu - jeśli Ligue de Football Professionnel aktualizuje slot, nasz model wychwytuje to automatycznie.",
+      "ro": "Da. Formatul actual cu 18 echipe și programul de transmisie sunt preluate de pe football-data.org, cu ora de început a fiecărui meci sincronizată la fiecare 5 minute în fereastra activă. Fără introducere manuală a programului - dacă Ligue de Football Professionnel actualizează slot-ul, modelul nostru îl preia automat.",
+      "ru": "Да. Текущий формат из 18 команд и вещательное расписание подтягиваются из football-data.org, время начала каждого матча синхронизируется каждые 5 минут в активном окне. Никакого ручного ввода расписания — если Ligue de Football Professionnel обновляет слот, наша модель ловит это автоматически.",
+      "el": "Ναι. Η τρέχουσα μορφή 18 ομάδων και το πρόγραμμα μετάδοσης τραβιούνται από το football-data.org, με την ώρα εκκίνησης κάθε αγώνα συγχρονισμένη κάθε 5 λεπτά στο ενεργό παράθυρο. Καμία χειροκίνητη καταχώρηση προγράμματος - εάν η Ligue de Football Professionnel ενημερώσει το slot, το μοντέλο μας το πιάνει αυτόματα.",
+      "da": "Ja. Det nuværende 18-holds format og sendeskemaet hentes fra football-data.org med hver kamps kampstart synkroniseret hvert 5. minut i det aktive vindue. Ingen manuel indtastning af program - hvis Ligue de Football Professionnel opdaterer slot'et, opfanger vores model det automatisk.",
+      "sv": "Ja. Nuvarande 18-lagsformat och sändningsschema hämtas från football-data.org med varje matchs avsparkstid synkroniserad var 5:e minut i det aktiva fönstret. Ingen manuell schemainmatning - om Ligue de Football Professionnel uppdaterar slot:en fångar vår modell upp det automatiskt."
+    },
+    "faqs[faq-2].question": {
+      "sw": "Mnatabiri mechi za Coupe de France?",
+      "pt": "Preveem os jogos da Coupe de France?",
+      "tr": "Coupe de France maçlarını tahmin ediyor musunuz?",
+      "pl": "Czy prognozujecie mecze Coupe de France?",
+      "ro": "Preziceți meciurile Coupe de France?",
+      "ru": "Вы прогнозируете матчи Coupe de France?",
+      "el": "Προβλέπετε τους αγώνες του Coupe de France;",
+      "da": "Forudsiger I Coupe de France-kampe?",
+      "sv": "Förutspår ni Coupe de France-matcher?"
+    },
+    "faqs[faq-2].answer": {
+      "sw": "Si kwenye hub hii. Cup ties ni soka la knock-out na changamoto zao za kalibrasho (extra time, penalti shootouts, wapinzani wa tier ya chini) na tungependelea kutochapisha utabiri hadi tuwe na msimu kamili wa data ya kihistoria ya kombe kupitia modeli.",
+      "pt": "Não neste hub. Os jogos da taça são futebol de knock-out com os seus próprios desafios de calibração (prolongamento, grandes penalidades, adversários de escalões inferiores) e preferimos não publicar previsões até termos uma temporada completa de dados históricos da taça através do modelo.",
+      "tr": "Bu hub'da değil. Kupa maçları kendi kalibrasyon zorlukları olan elemeli futboldur (uzatma, penaltı atışları, alt lig rakipleri) ve model üzerinden tam bir sezonluk tarihsel kupa verisi elde edene kadar tahmin yayımlamamayı tercih ediyoruz.",
+      "pl": "Nie na tym hubie. Mecze pucharowe to piłka pucharowa z własnymi wyzwaniami kalibracyjnymi (dogrywka, rzuty karne, rywale z niższych lig) i wolimy nie publikować prognoz, dopóki nie będziemy mieli pełnego sezonu historycznych danych pucharowych przez model.",
+      "ro": "Nu pe acest hub. Meciurile de cupă sunt fotbal cu eliminare directă cu propriile lor provocări de calibrare (prelungiri, loviturile de departajare, adversari din eșaloane inferioare) și am prefera să nu publicăm predicții până nu avem un sezon complet de date istorice de cupă prin model.",
+      "ru": "Не на этом хабе. Кубковые матчи — это knock-out футбол со своими calibration-вызовами (extra time, пенальти, соперники из нижних дивизионов), и мы предпочитаем не публиковать прогнозы, пока у нас не будет полного сезона исторических кубковых данных через модель.",
+      "el": "Όχι σε αυτό το hub. Οι αγώνες κυπέλλου είναι knock-out ποδόσφαιρο με τις δικές τους προκλήσεις καλιμπραρίσματος (παράταση, διαδικασία πέναλτι, αντίπαλοι χαμηλότερων κατηγοριών) και προτιμούμε να μη δημοσιεύουμε προβλέψεις έως ότου έχουμε μια ολόκληρη σεζόν ιστορικών κυπέλλου μέσα από το μοντέλο.",
+      "da": "Ikke på dette hub. Pokalkampe er knockout-fodbold med deres egne kalibreringsudfordringer (forlænget spilletid, straffesparkskonkurrence, modstandere fra lavere rækker), og vi foretrækker ikke at udgive forudsigelser, før vi har en hel sæson med historiske pokal-data gennem modellen.",
+      "sv": "Inte på denna hub. Cupmatcher är knockout-fotboll med egna kalibreringsutmaningar (förlängning, straffsparksavgörande, motståndare från lägre divisioner) och vi föredrar att inte publicera förutsägelser förrän vi har en hel säsong med historiska cup-data genom modellen."
+    },
+    "faqs[faq-3].question": {
+      "sw": "Utabiri wenu wa Ligue 1 ni sahihi kiasi gani?",
+      "pt": "Qual é a precisão das vossas previsões da Ligue 1?",
+      "tr": "Ligue 1 tahminleriniz ne kadar doğru?",
+      "pl": "Jak dokładne są wasze prognozy Ligue 1?",
+      "ro": "Cât de precise sunt predicțiile voastre pentru Ligue 1?",
+      "ru": "Насколько точны ваши прогнозы на Ligue 1?",
+      "el": "Πόσο ακριβείς είναι οι προβλέψεις σας για τη Ligue 1;",
+      "da": "Hvor præcise er jeres Ligue 1-forudsigelser?",
+      "sv": "Hur exakta är era Ligue 1-förutsägelser?"
+    },
+    "faqs[faq-3].answer": {
+      "sw": "Kalibrasho ya rolling ya siku 30 kwenye soko la favoriti-kushinda iko kati ya 70% na 75% - kwa kiasi kikubwa linalolingana na Premier League, ikisaidiwa na edge ya kimuundo dhidi ya PSG over-pricing. Breakdown kamili kwenye /track-record.",
+      "pt": "A calibração rolling de 30 dias no mercado de favorito-a-vencer situa-se entre 70% e 75% - amplamente comparável à Premier League, ajudada pela vantagem estrutural contra o over-pricing do PSG. Breakdown completo em /track-record.",
+      "tr": "Favori-kazanır pazarında 30 günlük rolling kalibrasyon %70 ile %75 arasındadır - PSG over-pricing'e karşı yapısal edge ile desteklenerek geniş çapta Premier League ile karşılaştırılabilir. Tam döküm /track-record'da.",
+      "pl": "Krocząca kalibracja 30-dniowa na rynku faworyta-do-wygrania wynosi 70%-75% - mniej więcej porównywalna z Premier League, wspierana strukturalną przewagą przeciwko over-pricingowi PSG. Pełny breakdown na /track-record.",
+      "ro": "Calibrarea rolling de 30 de zile pe piața favorit-pentru-victorie se situează între 70% și 75% - larg comparabilă cu Premier League, ajutată de edge-ul structural împotriva over-pricing-ului PSG. Breakdown complet la /track-record.",
+      "ru": "Rolling-калибровка 30 дней на рынке «фаворит побеждает» держится в диапазоне 70-75% — в целом сопоставимо с Premier League, чему помогает структурный edge против over-pricing PSG. Полный разбор на /track-record.",
+      "el": "Η rolling καλιμπράρισμα 30 ημερών στην αγορά φαβορί-για-νίκη κυμαίνεται μεταξύ 70% και 75% - ευρέως συγκρίσιμη με την Premier League, με τη βοήθεια του δομικού edge απέναντι στο over-pricing της PSG. Πλήρης ανάλυση στο /track-record.",
+      "da": "Rullende 30-dages kalibrering på favorit-til-sejr-markedet ligger mellem 70% og 75% - bredt sammenlignelig med Premier League, hjulpet af den strukturelle edge mod PSG over-pricing. Fuld opdeling på /track-record.",
+      "sv": "Rullande 30-dagarskalibrering på favorit-vinner-marknaden ligger mellan 70% och 75% - i stort jämförbar med Premier League, hjälpt av den strukturella edge:en mot PSG-överprissättning. Fullständig uppdelning på /track-record."
+    },
+    "faqs[faq-4].question": {
+      "sw": "Ni masoko yapi ya kubeti mnayayofunika kwa Ligue 1?",
+      "pt": "Que mercados de apostas cobrem para a Ligue 1?",
+      "tr": "Ligue 1 için hangi bahis pazarlarını kapsıyorsunuz?",
+      "pl": "Jakie rynki bukmacherskie obejmujecie dla Ligue 1?",
+      "ro": "Ce piețe de pariuri acoperiți pentru Ligue 1?",
+      "ru": "Какие рынки ставок вы охватываете в Ligue 1?",
+      "el": "Ποιες αγορές στοιχημάτων καλύπτετε για τη Ligue 1;",
+      "da": "Hvilke betting-markeder dækker I for Ligue 1?",
+      "sv": "Vilka bettingmarknader täcker ni för Ligue 1?"
+    },
+    "faqs[faq-4].answer": {
+      "sw": "Preview ya bure huonyesha soko la 1X2. Members hupata over/under 2.5 goals, BTTS, Asian handicap na mapendekezo ya Kelly stake kwa kila pick.",
+      "pt": "A preview gratuita mostra o mercado 1X2. Os membros obtêm over/under 2,5 golos, BTTS, Asian handicap e uma recomendação de Kelly stake por pick.",
+      "tr": "Ücretsiz önizleme 1X2 pazarını gösterir. Üyeler her seçim için over/under 2,5 gol, BTTS, Asya handikap ve Kelly stake önerisi alır.",
+      "pl": "Darmowa preview pokazuje rynek 1X2. Członkowie otrzymują over/under 2.5 gola, BTTS, Asian handicap i rekomendację Kelly stake na typ.",
+      "ro": "Preview-ul gratuit arată piața 1X2. Membrii primesc over/under 2.5 goluri, BTTS, Asian handicap și o recomandare de Kelly stake per pick.",
+      "ru": "Бесплатный превью показывает рынок 1X2. Участники получают over/under 2.5 голов, BTTS, азиатский гандикап и рекомендацию Kelly stake к каждому прогнозу.",
+      "el": "Η δωρεάν preview δείχνει την αγορά 1X2. Τα μέλη λαμβάνουν over/under 2,5 γκολ, BTTS, Ασιατικό handicap και σύσταση Kelly stake ανά pick.",
+      "da": "Den gratis preview viser 1X2-markedet. Medlemmer får over/under 2.5 mål, BTTS, Asian handicap og en Kelly stake-anbefaling pr. pick.",
+      "sv": "Den gratis previewn visar 1X2-marknaden. Medlemmar får over/under 2.5 mål, BTTS, asiatisk handicap och en Kelly stake-rekommendation per tips."
+    },
+    "faqs[faq-5].question": {
+      "sw": "Mnashughulikiaje klabu zenye majukumu ya Ulaya?",
+      "pt": "Como lidam com clubes com obrigações europeias?",
+      "tr": "Avrupa görevleri olan kulüpleri nasıl ele alıyorsunuz?",
+      "pl": "Jak radzicie sobie z klubami mającymi europejskie zobowiązania?",
+      "ro": "Cum gestionați cluburile cu obligații europene?",
+      "ru": "Как вы обрабатываете клубы с европейскими обязательствами?",
+      "el": "Πώς χειρίζεστε συλλόγους με ευρωπαϊκές υποχρεώσεις;",
+      "da": "Hvordan håndterer I klubber med europæiske forpligtelser?",
+      "sv": "Hur hanterar ni klubbar med europeiska åtaganden?"
+    },
+    "faqs[faq-5].answer": {
+      "sw": "Klabu katika Champions / Europa / Conference League hupata uzito wa fomu ya muda mfupi unaojua uchovu. Logistic regressor yetu hupunguza uwezekano wa kushinda uliotafsiriwa kwa wikendi baada ya mechi ya kati ya wiki ya Ulaya, ambayo kwa kiasi kikubwa huathiri PSG, Marseille, Monaco na Lyon.",
+      "pt": "Clubes em Champions / Europa / Conference League recebem uma ponderação de forma de curto prazo consciente do cansaço. O nosso regressor logístico reduz a probabilidade implícita de vitória para o fim-de-semana após um jogo europeu a meio da semana, afetando maioritariamente PSG, Marselha, Monaco e Lyon.",
+      "tr": "Champions / Europa / Conference League'deki kulüpler yorgunluk bilincine sahip kısa vadeli form ağırlığı alır. Lojistik regressor'umuz hafta ortası Avrupa maçı sonrası hafta sonu için zımni galibiyet olasılığını azaltır ki bu çoğunlukla PSG, Marsilya, Monaco ve Lyon'u etkiler.",
+      "pl": "Kluby w Champions / Europa / Conference League dostają ważenie formy krótkoterminowej świadome zmęczenia. Nasz regresor logistyczny redukuje implikowane prawdopodobieństwo wygranej dla weekendu po środtygodniowym meczu europejskim, co głównie dotyczy PSG, Marsylii, Monaco i Lyonu.",
+      "ro": "Cluburile din Champions / Europa / Conference League primesc o ponderare a formei pe termen scurt conștientă de oboseală. Regresorul nostru logistic reduce probabilitatea implicită de victorie pentru weekendul de după un meci european de la mijlocul săptămânii, afectând în principal PSG, Marseille, Monaco și Lyon.",
+      "ru": "Клубы в Champions / Europa / Conference League получают fatigue-aware короткосрочное взвешивание формы. Наш логистический регрессор снижает неявную вероятность победы на weekend после среднедельного европейского матча — в основном это затрагивает PSG, Marseille, Monaco и Lyon.",
+      "el": "Οι σύλλογοι σε Champions / Europa / Conference League λαμβάνουν μια στάθμιση φόρμας βραχυπρόθεσμης με επίγνωση κόπωσης. Ο λογιστικός regressor μας μειώνει την τεκμαρτή πιθανότητα νίκης για το σαββατοκύριακο μετά από έναν μεσοβδόμαδο ευρωπαϊκό αγώνα, κάτι που επηρεάζει κυρίως PSG, Μασσαλία, Monaco και Lyon.",
+      "da": "Klubber i Champions / Europa / Conference League får en træthedsbevidst kortsigtet formvægtning. Vores logistiske regressor reducerer den implicitte vinderssandsynlighed for weekenden efter en europæisk midtugekamp, hvilket mest påvirker PSG, Marseille, Monaco og Lyon.",
+      "sv": "Klubbar i Champions / Europa / Conference League får en trötthetsmedveten kortsiktig formviktning. Vår logistiska regressor minskar den implicita vinstsannolikheten för helgen efter en europeisk mittveckomatch, vilket främst påverkar PSG, Marseille, Monaco och Lyon."
+    }
+  }
+}
