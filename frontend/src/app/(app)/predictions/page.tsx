@@ -315,7 +315,7 @@ function formatDateShort(iso: string): string {
   }
 }
 
-function CompactMatchRow({ fixture }: { fixture: Fixture }) {
+function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolean }) {
   const { t } = useTranslations();
   const pred: FixturePrediction | null = fixture.prediction ?? null;
   const hasPrediction = pred !== null && typeof pred.confidence === "number";
@@ -452,11 +452,24 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
           )}
         </div>
 
-        {/* Odds — col 4 (desktop only) */}
+        {/* Odds — col 4 (desktop only). Locked for Free Access. */}
         <div className="hidden sm:flex col-span-3 items-center justify-center gap-1.5">
-          <OddButton label="1" value={fixture.odds?.home ?? null} highlighted={modelPick === "home"} />
-          <OddButton label="X" value={fixture.odds?.draw ?? null} highlighted={modelPick === "draw"} />
-          <OddButton label="2" value={fixture.odds?.away ?? null} highlighted={modelPick === "away"} />
+          {isFree ? (
+            <Link
+              href="/pricing"
+              title="Upgrade to Silver to view pre-match odds"
+              className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:text-amber-300 hover:border-amber-500/40 transition-colors"
+            >
+              <Lock className="h-3 w-3" />
+              Silver
+            </Link>
+          ) : (
+            <>
+              <OddButton label="1" value={fixture.odds?.home ?? null} highlighted={modelPick === "home"} />
+              <OddButton label="X" value={fixture.odds?.draw ?? null} highlighted={modelPick === "draw"} />
+              <OddButton label="2" value={fixture.odds?.away ?? null} highlighted={modelPick === "away"} />
+            </>
+          )}
         </div>
 
         {/* Confidence bar + correctness */}
@@ -543,10 +556,12 @@ function LeagueSection({
   leagueName,
   fixtures,
   defaultOpen = true,
+  isFree,
 }: {
   leagueName: string;
   fixtures: Fixture[];
   defaultOpen?: boolean;
+  isFree: boolean;
 }) {
   const { t } = useTranslations();
   const [open, setOpen] = useState(defaultOpen);
@@ -594,7 +609,7 @@ function LeagueSection({
             <span className="col-span-2">{t("pred.colConfidence")}</span>
           </div>
           {fixtures.map((f) => (
-            <CompactMatchRow key={f.id} fixture={f} />
+            <CompactMatchRow key={f.id} fixture={f} isFree={isFree} />
           ))}
         </div>
       )}
@@ -609,9 +624,11 @@ function DateSection({
   dateIso,
   fixtures,
   defaultOpen = true,
+  isFree,
 }: {
   dateIso: string;
   fixtures: Fixture[];
+  isFree: boolean;
   defaultOpen?: boolean;
 }) {
   const { t, locale } = useTranslations();
@@ -701,7 +718,7 @@ function DateSection({
             <span className="col-span-2">{t("pred.colConfidence")}</span>
           </div>
           {fixtures.map((f) => (
-            <CompactMatchRow key={f.id} fixture={f} />
+            <CompactMatchRow key={f.id} fixture={f} isFree={isFree} />
           ))}
         </div>
       )}
@@ -1158,6 +1175,7 @@ function todayIsoDate(): string {
 export default function PredictionsPage() {
   const { t } = useTranslations();
   const { tier: userTier } = useTier();
+  const isFree = userTier === "free";
   const [leagueFilter,     setLeagueFilter]     = useState<LeagueFilter>("All");
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("All");
   const [tierFilter,       setTierFilter]       = useState<TierFilter>("All");
@@ -1682,6 +1700,7 @@ export default function PredictionsPage() {
               dateIso={group.date}
               fixtures={group.fixtures}
               defaultOpen={i < 3}
+              isFree={isFree}
             />
           ))}
         </div>
@@ -1694,6 +1713,7 @@ export default function PredictionsPage() {
               leagueName={group.name}
               fixtures={group.fixtures}
               defaultOpen
+              isFree={isFree}
             />
           ))}
         </div>
