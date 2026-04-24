@@ -12,7 +12,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { Activity, CheckCircle2, XCircle, Clock } from "lucide-react";
+import { Activity, Clock } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { useTranslations } from "@/i18n/locale-provider";
 import { TIER_THEME, TIER_ORDER, type TierKey } from "@/components/noct/tier-theme";
@@ -174,27 +174,42 @@ function LiveTierCard({
           ? "—"
           : `${(bucket!.accuracy * 100).toFixed(1).replace(".", t("live.decimalSep"))}%`}
       </p>
-      <p className="relative mt-2 text-[11px] text-[#a3a9b8]">
-        {loaded ? (
-          total === 0 ? (
-            t("live.noGradedPicks")
-          ) : (
-            <>
-              <span className="inline-flex items-center gap-1 text-emerald-300">
-                <CheckCircle2 className="h-3 w-3" />
-                {correct}
-              </span>
-              {" / "}
-              <span className="font-semibold text-[#ededed]">{total}</span>{" "}
-              {t("live.graded")}
-            </>
-          )
-        ) : (
-          t("live.loading")
-        )}
-      </p>
+
+      {loaded && total > 0 ? (
+        <div className="relative mt-3 grid grid-cols-3 gap-2">
+          <div className="rounded-md border border-white/[0.06] bg-white/[0.02] px-2 py-1.5 text-center">
+            <p className="text-base font-extrabold tabular-nums leading-none text-[#ededed]">
+              {total}
+            </p>
+            <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-widest text-[#6b7280]">
+              {t("live.played")}
+            </p>
+          </div>
+          <div className="rounded-md border border-emerald-500/20 bg-emerald-500/[0.06] px-2 py-1.5 text-center">
+            <p className="text-base font-extrabold tabular-nums leading-none text-emerald-300">
+              {correct}
+            </p>
+            <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-widest text-emerald-500/80">
+              {t("live.won")}
+            </p>
+          </div>
+          <div className="rounded-md border border-red-500/20 bg-red-500/[0.06] px-2 py-1.5 text-center">
+            <p className="text-base font-extrabold tabular-nums leading-none text-red-300">
+              {total - correct}
+            </p>
+            <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-widest text-red-500/80">
+              {t("live.lost")}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <p className="relative mt-2 text-[11px] text-[#a3a9b8]">
+          {loaded ? t("live.noGradedPicks") : t("live.loading")}
+        </p>
+      )}
+
       {ci && total >= 10 && (
-        <p className="relative mt-1 text-[10px] text-[#6b7280] tabular-nums">
+        <p className="relative mt-2 text-[10px] text-[#6b7280] tabular-nums">
           95% CI {(ci.lower * 100).toFixed(0)}–{(ci.upper * 100).toFixed(0)}%
         </p>
       )}

@@ -282,11 +282,11 @@ interface PickAggregate {
   matches: number;
   wins: number;
   losses: number;
-  realStake: number;      // stake that used real odds
-  estimatedStake: number; // stake that fell back to 1.90
-  returned: number;       // gross returned (stake + profit on wins, 0 on losses)
-  profit: number;         // returned - totalStake
-  estimatedCount: number; // matches with missing odds
+  realStake: number;   // stake backed by real pre-match odds
+  modelStake: number;  // stake backed by model-implied odds (1/prob)
+  returned: number;    // gross returned (stake × odds on wins, 0 on losses)
+  profit: number;      // returned - totalStake
+  modelCount: number;  // rows where odds were derived from the model, not the book
 }
 
 function emptyAggregate(): PickAggregate {
@@ -295,11 +295,41 @@ function emptyAggregate(): PickAggregate {
     wins: 0,
     losses: 0,
     realStake: 0,
-    estimatedStake: 0,
+    modelStake: 0,
     returned: 0,
     profit: 0,
-    estimatedCount: 0,
+    modelCount: 0,
   };
+}
+
+/**
+ * Pick the odds used for a given fixture + pick side. Returns real
+ * pre-match 1X2 odds when available, otherwise derives a fair odd
+ * from the prediction's own probability (implied = 1 / prob). Flat
+ * 1.90 is only used when neither is available — which in practice
+ * should never fire because every counted fixture has a prediction.
+ */
+function oddsForPick(fixture: Fixture, side: "home" | "draw" | "away"): {
+  odds: number;
+  source: "real" | "model" | "flat";
+} {
+  const o = fixture.odds;
+  const real =
+    side === "home" ? o?.home :
+    side === "away" ? o?.away :
+    o?.draw;
+  if (real != null && real > 1) return { odds: real, source: "real" };
+
+  const p = fixture.prediction;
+  const prob =
+    p == null ? null :
+    side === "home" ? p.home_win_prob :
+    side === "away" ? p.away_win_prob :
+    (p.draw_prob ?? null);
+  if (prob != null && prob > 0 && prob < 1) {
+    return { odds: 1 / prob, source: "model" };
+  }
+  return { odds: 1.9, source: "flat" };
 }
 
 function aggregateFixtures(
@@ -326,31 +356,23 @@ function aggregateFixtures(
       home_score > away_score ? "home" : away_score > home_score ? "away" : "draw";
     const won = actual === side;
 
-    let oddsUsed: number | null = null;
-    const o = f.odds;
-    if (o) {
-      if (side === "home" && o.home != null) oddsUsed = o.home;
-      else if (side === "draw" && o.draw != null) oddsUsed = o.draw;
-      else if (side === "away" && o.away != null) oddsUsed = o.away;
-    }
-    const isEstimated = !(oddsUsed != null && oddsUsed > 1);
-    if (isEstimated) {
-      oddsUsed = 1.9;
-      agg.estimatedCount++;
-      agg.estimatedStake += stake;
-    } else {
+    const { odds: oddsUsed, source } = oddsForPick(f, side);
+    if (source === "real") {
       agg.realStake += stake;
+    } else {
+      agg.modelStake += stake;
+      agg.modelCount++;
     }
 
     agg.matches++;
     if (won) {
       agg.wins++;
-      agg.returned += stake * (oddsUsed as number);
+      agg.returned += stake * oddsUsed;
     } else {
       agg.losses++;
     }
   }
-  const totalStake = agg.realStake + agg.estimatedStake;
+  const totalStake = agg.realStake + agg.modelStake;
   agg.profit = agg.returned - totalStake;
   return agg;
 }
@@ -396,7 +418,7 @@ function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
     return result;
   }, [fixtures, stake, calcPeriod]);
 
-  const headlineTotalStake = headline.realStake + headline.estimatedStake;
+  const headlineTotalStake = headline.realStake + headline.modelStake;
   const profitColor = headline.profit >= 0 ? "#10b981" : "#ef4444";
 
   const periodOptions: { value: CalcPeriod; label: string }[] = [
@@ -542,7 +564,7 @@ function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4 mb-3">
         {CALC_TIERS.map(({ key, label, accent }) => {
           const row = perTier[key];
-          const totalStake = row.realStake + row.estimatedStake;
+          const totalStake = row.realStake + row.modelStake;
           const active = key === calcTier;
           return (
             <button
@@ -579,8 +601,13 @@ function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
               </div>
               <div className="text-[10px] text-slate-500 mt-1 tabular-nums">
                 {row.wins}W · {row.losses}L
-                {row.estimatedCount > 0 && (
-                  <span className="ml-1 text-amber-500">· {row.estimatedCount} est.</span>
+                {row.modelCount > 0 && (
+                  <span
+                    className="ml-1 text-sky-400"
+                    title={`${row.modelCount} pick${row.modelCount === 1 ? "" : "s"} priced with model-implied odds (no bookmaker odds on file).`}
+                  >
+                    · {row.modelCount} model
+                  </span>
                 )}
               </div>
             </button>
@@ -593,11 +620,11 @@ function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
         <Info className="h-3.5 w-3.5 text-slate-500 mt-0.5 shrink-0" />
         <p>
           {t("results.roiCalcDisclaimer")}
-          {headline.estimatedCount > 0 && (
-            <span className="text-amber-500">
+          {headline.modelCount > 0 && (
+            <span className="text-sky-400">
               {" "}
-              {t("results.roiCalcEstimatedNote", {
-                count: headline.estimatedCount,
+              {t("results.roiCalcModelNote", {
+                count: headline.modelCount,
                 total: headline.matches,
               })}
             </span>
@@ -744,25 +771,18 @@ function ResultCard({ fixture, stake }: { fixture: Fixture; stake: number }) {
     isCorrect = actualOutcome === predicted;
   }
 
-  // Compute the actual pre-match odds used for the pick side. Fallback
-  // to 1.90 only when no odds row is on file. Return is concrete euros
-  // using the user's selected stake so the table and the headline
-  // calculator always tell the same story.
+  // Compute odds used for the pick: real pre-match 1X2 odds if on file,
+  // else model-implied fair odds (1 / prob), else flat 1.90 as a last
+  // resort. Return is concrete euros at the user's selected stake so
+  // the table always agrees with the headline calculator.
   let oddsUsed: number | null = null;
-  let oddsEstimated = false;
+  let oddsSource: "real" | "model" | "flat" | null = null;
   let returnEuro: number | null = null;
-  let payoutEuro: number | null = null;
   if (isCorrect !== null && predictedSide !== null) {
-    const odds = fixture.odds;
-    if (odds && predictedSide === "home" && odds.home != null) oddsUsed = odds.home;
-    else if (odds && predictedSide === "draw" && odds.draw != null) oddsUsed = odds.draw;
-    else if (odds && predictedSide === "away" && odds.away != null) oddsUsed = odds.away;
-    if (!(oddsUsed != null && oddsUsed > 1)) {
-      oddsUsed = 1.9;
-      oddsEstimated = true;
-    }
-    payoutEuro = isCorrect ? stake * oddsUsed : 0;
-    returnEuro = payoutEuro - stake;
+    const picked = oddsForPick(fixture, predictedSide);
+    oddsUsed = picked.odds;
+    oddsSource = picked.source;
+    returnEuro = isCorrect ? stake * oddsUsed - stake : -stake;
   }
 
   const homeScore = fixture.result?.home_score ?? null;
@@ -829,18 +849,32 @@ function ResultCard({ fixture, stake }: { fixture: Fixture; stake: number }) {
       </span>
 
       {/* Odds used (hidden on narrow phone) */}
-      <span className="hidden sm:flex w-16 shrink-0 items-center justify-center gap-1">
+      <span className="hidden sm:flex w-20 shrink-0 items-center justify-center gap-1">
         {oddsUsed != null ? (
           <>
             <span className="text-xs font-semibold tabular-nums text-slate-300">
               {oddsUsed.toFixed(2)}
             </span>
-            {oddsEstimated && (
+            {oddsSource === "real" ? (
               <span
-                title="No pre-match odds on file for this fixture — falls back to a flat 1.90."
+                title="Pre-match 1X2 odds from the bookmaker snapshot stored for this fixture."
+                className="text-[8px] font-bold uppercase rounded px-1 py-[1px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+              >
+                REAL
+              </span>
+            ) : oddsSource === "model" ? (
+              <span
+                title="No bookmaker odds on file — fair odds implied by the model's probability (1 / prob)."
+                className="text-[8px] font-bold uppercase rounded px-1 py-[1px] bg-sky-500/15 text-sky-400 border border-sky-500/30"
+              >
+                MODEL
+              </span>
+            ) : (
+              <span
+                title="Neither bookmaker nor model odds available — flat 1.90 fallback."
                 className="text-[8px] font-bold uppercase rounded px-1 py-[1px] bg-amber-500/15 text-amber-400 border border-amber-500/30"
               >
-                EST
+                FLAT
               </span>
             )}
           </>
@@ -879,7 +913,10 @@ function ResultCard({ fixture, stake }: { fixture: Fixture; stake: number }) {
 function ResultsTableFooter({ fixtures, stake }: { fixtures: Fixture[]; stake: number }) {
   let totalStake = 0;
   let totalPayout = 0;
-  let estimatedCount = 0;
+  let wins = 0;
+  let losses = 0;
+  let realCount = 0;
+  let modelCount = 0;
   for (const f of fixtures) {
     if (!f.prediction || !f.result) continue;
     const side = derivePickSide(f.prediction);
@@ -887,20 +924,12 @@ function ResultsTableFooter({ fixtures, stake }: { fixtures: Fixture[]; stake: n
     const { home_score, away_score } = f.result;
     const actual = home_score > away_score ? "home" : away_score > home_score ? "away" : "draw";
     const won = actual === side;
-
-    let oddsUsed: number | null = null;
-    const o = f.odds;
-    if (o) {
-      if (side === "home" && o.home != null) oddsUsed = o.home;
-      else if (side === "draw" && o.draw != null) oddsUsed = o.draw;
-      else if (side === "away" && o.away != null) oddsUsed = o.away;
-    }
-    if (!(oddsUsed != null && oddsUsed > 1)) {
-      oddsUsed = 1.9;
-      estimatedCount++;
-    }
+    const { odds, source } = oddsForPick(f, side);
+    if (source === "real") realCount++;
+    else modelCount++;
     totalStake += stake;
-    if (won) totalPayout += stake * oddsUsed;
+    if (won) { wins++; totalPayout += stake * odds; }
+    else losses++;
   }
   const totalReturn = totalPayout - totalStake;
   const color = totalReturn > 0 ? "#10b981" : totalReturn < 0 ? "#ef4444" : "#94a3b8";
@@ -909,9 +938,15 @@ function ResultsTableFooter({ fixtures, stake }: { fixtures: Fixture[]; stake: n
     <div className="flex items-center gap-3 px-4 py-2.5 bg-white/[0.02] border-t border-white/[0.05] text-[10px] uppercase tracking-widest">
       <span className="w-12 sm:w-16 shrink-0 text-slate-500">Total</span>
       <span className="flex-1 text-slate-500 tabular-nums">
-        {fixtures.length} {fixtures.length === 1 ? "row" : "rows"} · staked €{totalStake.toFixed(2)}
-        {estimatedCount > 0 && (
-          <span className="text-amber-500 ml-1">· {estimatedCount} EST</span>
+        <span className="text-emerald-400">{wins}W</span>
+        {" · "}
+        <span className="text-red-400">{losses}L</span>
+        {" · staked €"}{totalStake.toFixed(2)}
+        {realCount > 0 && (
+          <span className="text-emerald-500 ml-1">· {realCount} real</span>
+        )}
+        {modelCount > 0 && (
+          <span className="text-sky-400 ml-1">· {modelCount} model</span>
         )}
       </span>
       <span className="hidden sm:inline w-20 text-right font-bold tabular-nums" style={{ color }}>
@@ -1284,7 +1319,7 @@ function ResultsPageContent() {
             <span className="w-10 sm:w-14 text-center">Score</span>
             <span className="flex-1">Away</span>
             <span className="hidden sm:inline w-8 text-center">Pick</span>
-            <span className="hidden sm:inline w-16 text-center">Odds</span>
+            <span className="hidden sm:inline w-20 text-center">Odds</span>
             <span className="hidden sm:inline w-20 text-right">
               Return · €{stake.toFixed(0)}
             </span>

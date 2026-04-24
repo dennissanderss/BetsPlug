@@ -2170,6 +2170,7 @@ const en = {
   "results.roiCalcPickPlural": "picks",
   "results.roiCalcDisclaimer": "Return calculated with the actual pre-match 1X2 odds stored for each fixture. Flat stake, one unit per pick, no compounding. Educational simulation — not financial or betting advice.",
   "results.roiCalcEstimatedNote": "Note: {count} of {total} picks had no odds on file and use a flat 1.90 fallback.",
+  "results.roiCalcModelNote": "Note: {count} of {total} picks had no bookmaker odds on file — fair odds were derived from the model probability (1 / prob).",
 
   /* ── WeeklyReport page ───────────────────────────────────── */
   "weeklyReport.title": "Weekly Report",
@@ -2700,6 +2701,9 @@ const en = {
   "live.noGradedPicks": "No graded picks yet",
   "live.graded": "graded",
   "live.loading": "Loading…",
+  "live.played": "Played",
+  "live.won": "Won",
+  "live.lost": "Lost",
   "live.footnote": "Statistically meaningful per-tier numbers require around 200 graded matches. Until then the live measurement is a moving snapshot, not a conclusion.",
   "live.decimalSep": ".",
   "live.dateLocale": "en-GB",
@@ -4450,6 +4454,7 @@ const nl: Dictionary = {
   "results.roiCalcPickPlural": "tips",
   "results.roiCalcDisclaimer": "Berekend met de werkelijke voorwedstrijd 1X2-odds per wedstrijd. Vaste inzet, één eenheid per tip, geen herinzet. Educatieve simulatie — geen financieel of wedadvies.",
   "results.roiCalcEstimatedNote": "Let op: {count} van de {total} tips hadden geen odds op file en gebruiken een vaste 1,90 als schatting.",
+  "results.roiCalcModelNote": "Let op: voor {count} van de {total} tips waren geen bookmaker-odds beschikbaar — de odds zijn afgeleid uit de modelkans (1 / kans).",
 
   "riskReversal.badge": "Geen risico om erachter te komen",
   "riskReversal.cancelDesc": "Geen telefoontjes, geen retentieaanbiedingen, geen 'geef feedback'. Instellingen → Abonnement → Annuleren. De toegang loopt door tot het einde van de periode waarvoor je al betaald heeft.",
@@ -5110,6 +5115,9 @@ const nl: Dictionary = {
   "live.noGradedPicks": "Nog geen beoordeelde picks",
   "live.graded": "beoordeeld",
   "live.loading": "Laden…",
+  "live.played": "Gespeeld",
+  "live.won": "Gewonnen",
+  "live.lost": "Verloren",
   "live.footnote": "Statistisch betekenisvolle cijfers per tier vereisen circa 200 beoordeelde wedstrijden. Tot die tijd is de live meting een bewegend beeld, geen conclusie.",
   "live.decimalSep": ",",
   "live.dateLocale": "nl-NL",
