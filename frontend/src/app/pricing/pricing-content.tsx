@@ -179,6 +179,8 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
         t("pricingDeep.bronzeOut1" as any),
         t("pricingDeep.bronzeOut2" as any),
         t("pricingDeep.bronzeOut3" as any),
+        t("pricingDeep.bronzeOut4" as any),
+        t("pricingDeep.bronzeOut5" as any),
       ],
       variant: "blue",
       cta: t("pricingDeep.bronzeCta" as any),
