@@ -119,17 +119,25 @@ const typesArg =
   (args.includes("--types") ? args[args.indexOf("--types") + 1] : null);
 const typesFilter = typesArg ? typesArg.split(",").map((t) => t.trim()) : null;
 
-// Google Translate tolerates ~1 req/sec reliably on the free tier.
-// We batch ALL 15 target locales into ONE call per EN source (the
-// library accepts `to: [...]`), so a document with 10 localised
-// fields costs 10 calls instead of 150 — drops rate-limit risk by
-// an order of magnitude.
-const DELAY_MS = 1100;
+// Google Translate's free public endpoint is aggressive about IP-
+// level rate limiting for bulk calls. 1100ms between batched calls
+// got us blacklisted on a 50-doc run. 4000ms + jitter has proven
+// stable for comparable SEO-translation projects — slower, but the
+// job runs unattended so throughput isn't urgent.
+const DELAY_MS_MIN = 3500;
+const DELAY_MS_MAX = 5500;
 
 /* ── Helpers ──────────────────────────────────────────────── */
 
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
+}
+
+/** Uniform random in [min, max] — jitter keeps the request cadence
+ *  off a round number, which Google's rate-limiter is pickier about.
+ */
+function jitteredDelay() {
+  return DELAY_MS_MIN + Math.random() * (DELAY_MS_MAX - DELAY_MS_MIN);
 }
 
 /**
@@ -148,39 +156,54 @@ function sleep(ms) {
 async function translateBatch(text, targetLangs) {
   if (!text) return {};
   const { protectedText, tokens } = protectGlossary(text);
-  try {
-    const res = await translate(protectedText, {
-      from: "en",
-      to: targetLangs,
-      autoCorrect: false,
-      // google-translate-api-x has an over-strict ISO whitelist that
-      // rejects pt / tr / pl / ro / ru / el / da / sv when passed as
-      // an array target. `forceTo: true` bypasses the client-side
-      // validation — Google itself supports all of these.
-      forceTo: true,
-    });
-    const out = {};
-    if (Array.isArray(res)) {
-      targetLangs.forEach((l, i) => {
-        const t = res[i]?.text;
-        if (t && t !== protectedText) out[l] = restoreGlossary(t, tokens);
+
+  // Retry on "Too Many Requests" with exponential back-off. Google's
+  // rate-limiter cools off within 30-60s of a stretch of successful
+  // 1-RPS traffic, so a few escalating waits beat giving up entirely.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await translate(protectedText, {
+        from: "en",
+        to: targetLangs,
+        autoCorrect: false,
+        // google-translate-api-x has an over-strict ISO whitelist
+        // that rejects pt/tr/pl/ro/ru/el/da/sv when passed as an
+        // array target. `forceTo: true` bypasses the check.
+        forceTo: true,
       });
-    } else if (res && typeof res === "object") {
-      for (const l of targetLangs) {
-        const entry = (res)[l];
-        const t = entry?.text ?? entry;
-        if (typeof t === "string" && t && t !== protectedText) {
-          out[l] = restoreGlossary(t, tokens);
+      const out = {};
+      if (Array.isArray(res)) {
+        targetLangs.forEach((l, i) => {
+          const t = res[i]?.text;
+          if (t && t !== protectedText) out[l] = restoreGlossary(t, tokens);
+        });
+      } else if (res && typeof res === "object") {
+        for (const l of targetLangs) {
+          const entry = (res)[l];
+          const t = entry?.text ?? entry;
+          if (typeof t === "string" && t && t !== protectedText) {
+            out[l] = restoreGlossary(t, tokens);
+          }
         }
       }
+      return out;
+    } catch (err) {
+      const isRateLimit = /too many requests|429/i.test(err.message);
+      if (isRateLimit && attempt < 2) {
+        const wait = 15000 * Math.pow(2, attempt); // 15s, 30s
+        console.error(
+          `      ⏳ rate-limited on "${text.slice(0, 40)}…" — waiting ${Math.round(wait / 1000)}s…`,
+        );
+        await sleep(wait);
+        continue;
+      }
+      console.error(
+        `      ⚠ batch-translate "${text.slice(0, 40)}…": ${err.message}`,
+      );
+      return {};
     }
-    return out;
-  } catch (err) {
-    console.error(
-      `      ⚠ batch-translate "${text.slice(0, 40)}…": ${err.message}`,
-    );
-    return {};
   }
+  return {};
 }
 
 function isLocaleObject(val) {
@@ -264,9 +287,9 @@ async function translateLocaleField(field) {
     }
   }
 
-  // One batched call per source string — pause between sources so
-  // Google doesn't rate-limit the whole document.
-  await sleep(DELAY_MS);
+  // One batched call per source string — pause between sources
+  // with jitter so Google doesn't rate-limit the whole document.
+  await sleep(jitteredDelay());
   return { patched, count: written };
 }
 
