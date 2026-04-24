@@ -1,0 +1,205 @@
+{
+  "_docId": "leagueHub-premier-league",
+  "_type": "leagueHub",
+  "_label": "Premier League",
+  "fields": {
+    "country": {
+      "sw": "Uingereza",
+      "pt": "Inglaterra",
+      "tr": "İngiltere",
+      "pl": "Anglia",
+      "ro": "Anglia",
+      "ru": "Англия",
+      "el": "Αγγλία",
+      "da": "England",
+      "sv": "England"
+    },
+    "name": {
+      "sw": "Premier League",
+      "pt": "Premier League",
+      "tr": "Premier League",
+      "pl": "Premier League",
+      "ro": "Premier League",
+      "ru": "Premier League",
+      "el": "Premier League",
+      "da": "Premier League",
+      "sv": "Premier League"
+    },
+    "tagline": {
+      "sw": "Utabiri wa bure wa AI kwa kila mchezo wa Premier League",
+      "pt": "Previsões de IA gratuitas para cada jogo da Premier League",
+      "tr": "Her Premier League maçı için ücretsiz AI tahminleri",
+      "pl": "Darmowe prognozy AI dla każdego meczu Premier League",
+      "ro": "Predicții AI gratuite pentru fiecare meci din Premier League",
+      "ru": "Бесплатные ИИ-прогнозы на каждый матч Premier League",
+      "el": "Δωρεάν AI προβλέψεις για κάθε αγώνα της Premier League",
+      "da": "Gratis AI-forudsigelser for hver Premier League-kamp",
+      "sv": "Gratis AI-förutsägelser för varje Premier League-match"
+    },
+    "metaTitle": {
+      "sw": "Utabiri wa AI wa Premier League & Odds 2025/26 · BetsPlug",
+      "pt": "Previsões IA da Premier League & Odds 2025/26 · BetsPlug",
+      "tr": "Premier League AI Tahminleri ve Oranlar 2025/26 · BetsPlug",
+      "pl": "Prognozy AI Premier League i kursy 2025/26 · BetsPlug",
+      "ro": "Predicții AI Premier League & Cote 2025/26 · BetsPlug",
+      "ru": "ИИ-прогнозы Premier League и коэффициенты 2025/26 · BetsPlug",
+      "el": "AI Προβλέψεις Premier League & Αποδόσεις 2025/26 · BetsPlug",
+      "da": "Premier League AI-forudsigelser & Odds 2025/26 · BetsPlug",
+      "sv": "Premier League AI-förutsägelser & Odds 2025/26 · BetsPlug"
+    },
+    "metaDescription": {
+      "sw": "Utabiri wa bure wa AI wa Premier League, uwezekano wa kushinda na alama za imani kwa kila speelronde ijayo. Imejengwa juu ya mifano ya Elo, Poisson na XGBoost.",
+      "pt": "Previsões gratuitas com IA da Premier League, probabilidades de vitória e scores de confiança para cada jornada. Construído com modelos Elo, Poisson e XGBoost.",
+      "tr": "Her Premier League haftası için ücretsiz AI destekli tahminler, galibiyet olasılıkları ve güven skorları. Elo, Poisson ve XGBoost modelleriyle üretildi.",
+      "pl": "Darmowe prognozy Premier League oparte na AI, prawdopodobieństwa wygranej i wskaźniki pewności dla każdej kolejki. Zbudowane na modelach Elo, Poisson i XGBoost.",
+      "ro": "Predicții AI gratuite pentru Premier League, probabilități de victorie și scoruri de încredere pentru fiecare etapă. Construite pe modele Elo, Poisson și XGBoost.",
+      "ru": "Бесплатные ИИ-прогнозы на Premier League, вероятности побед и confidence-score для каждого тура. Построено на моделях Elo, Poisson и XGBoost.",
+      "el": "Δωρεάν AI προβλέψεις Premier League, πιθανότητες νίκης και σκορ εμπιστοσύνης για κάθε αγωνιστική. Με μοντέλα Elo, Poisson και XGBoost.",
+      "da": "Gratis AI-drevne Premier League-forudsigelser, sejrsssandsynligheder og confidence-scores til hver spillerunde. Bygget på Elo, Poisson og XGBoost.",
+      "sv": "Gratis AI-drivna Premier League-förutsägelser, vinstsannolikheter och konfidensscore för varje omgång. Byggt på Elo-, Poisson- och XGBoost-modeller."
+    },
+    "intro": {
+      "sw": "Premier League ndio shindano la mpira wa miguu lililochambuliwa zaidi duniani - na pia mojawapo ya magumu zaidi kushinda. Timu ishirini, mechi 380, na wastani wa matukio tisa ya goli kwa mchezo hutoa aina ya data ambayo ensemble yetu iliundwa kwa ajili yake. BetsPlug huendesha kila mchezo kupitia mifano minne huru - Elo kwa nguvu ya muda mrefu, Poisson kwa matarajio ya goli, logistic regression kwa fomu ya muda mfupi, na modeli meta ya XGBoost inayotatua tofauti zao. Matokeo ni uwezekano uliohakiki wa ushindi wa nyumbani, sare na ushindi wa ugenini, pamoja na alama ya imani tunayotumia kupima kila pick. Mechi tatu zenye edge ya juu zaidi kwa kila speelronde huchapishwa hapa bure, zikisasishwa moja kwa moja kadri timu, majeraha au mabadiliko ya odds yanavyoingia kwenye pipeline yetu. Members hupata orodha kamili, Kelly stakes na ripoti ya closing-line value.",
+      "pt": "A Premier League é a competição de futebol mais analisada do planeta - e também uma das mais difíceis de bater. Vinte equipas, 380 jogos e uma média de nove momentos de golo por partida produzem exatamente o tipo de dataset para que o nosso ensemble foi construído. A BetsPlug passa cada jogo por quatro modelos independentes - Elo para a força de longo prazo, Poisson para expectativa de golos, regressão logística para forma de curto prazo, e um meta-modelo XGBoost que resolve as divergências. O resultado é uma probabilidade calibrada para vitória em casa, empate e vitória fora, mais um score de confiança que usamos para classificar cada escolha. Os três jogos com maior edge esperado em cada jornada são publicados aqui gratuitamente, atualizados automaticamente sempre que novas alinhamentos, lesões ou movimentos de odds alimentam o nosso pipeline. Os membros recebem a lista completa, as Kelly stakes e o relatório de closing-line value.",
+      "tr": "Premier League gezegendeki en çok modellenmiş futbol ligidir - ve aynı zamanda yenilmesi en zor olanlarından biri. Yirmi takım, 380 maç ve maç başına ortalama dokuz gol olayı, tam olarak ensemble'ımızın inşa edildiği veri kümesini oluşturur. BetsPlug her maçı dört bağımsız modelden geçirir: uzun vadeli güç için Elo, gol beklentisi için Poisson, kısa vadeli form için lojistik regresyon ve uyuşmazlıkları çözen bir XGBoost meta-modeli. Çıktı; iç saha galibiyeti, beraberlik ve deplasman galibiyeti için kalibre edilmiş olasılıktır ve her seçimi derecelendirmek için kullandığımız güven skorudur. Her hafta en yüksek beklenen edge'e sahip üç maç burada ücretsiz yayımlanır; yeni kadrolar, sakatlıklar veya oran hareketleri pipeline'ımızı beslediğinde otomatik olarak güncellenir. Üyeler tüm listeyi, Kelly stake'lerini ve closing-line value raporunu alır.",
+      "pl": "Premier League to najbardziej modelowana liga piłkarska na świecie - i jedna z najtrudniejszych do pokonania. Dwadzieścia drużyn, 380 meczów i średnio dziewięć sytuacji bramkowych na mecz tworzą dokładnie taki zbiór danych, dla którego zbudowano nasz ensemble. BetsPlug przepuszcza każdy mecz przez cztery niezależne modele - Elo dla długoterminowej siły, Poisson dla oczekiwanej liczby goli, regresja logistyczna dla krótkoterminowej formy oraz meta-model XGBoost rozstrzygający rozbieżności. Wynik to skalibrowane prawdopodobieństwo wygranej gospodarzy, remisu i wygranej gości oraz wskaźnik pewności, którym oceniamy każdy typ. Trzy mecze z najwyższym oczekiwanym edge'em w każdej kolejce publikujemy tutaj za darmo, odświeżając automatycznie za każdym razem, gdy nowe składy, kontuzje lub ruchy kursów trafiają do naszego pipeline'u. Członkowie otrzymują pełną listę, Kelly stakes i raport closing-line value.",
+      "ro": "Premier League este cea mai modelată competiție de fotbal de pe planetă - și una dintre cele mai greu de bătut. Douăzeci de echipe, 380 de meciuri și o medie de nouă momente de gol pe partidă produc exact tipul de set de date pentru care a fost construit ensemble-ul nostru. BetsPlug trece fiecare meci prin patru modele independente - Elo pentru forța pe termen lung, Poisson pentru așteptarea de goluri, regresie logistică pentru forma pe termen scurt și un meta-model XGBoost care rezolvă neconcordanțele. Rezultatul este o probabilitate calibrată pentru victoria gazdelor, egal și victoria oaspeților, plus un scor de încredere folosit pentru a clasifica fiecare selecție. Cele trei meciuri cu cel mai mare edge așteptat din fiecare etapă sunt publicate aici gratuit, actualizate automat de fiecare dată când noi echipe de start, accidentări sau mișcări de cote alimentează pipeline-ul nostru. Membrii primesc lista completă, Kelly stakes și raportul closing-line value.",
+      "ru": "Premier League — самая тщательно моделируемая футбольная лига на планете и одна из самых сложных для обыгрывания. Двадцать команд, 380 матчей и в среднем девять голевых моментов за игру дают ровно тот набор данных, под который создан наш ensemble. BetsPlug прогоняет каждый матч через четыре независимые модели: Elo для долгосрочной силы, Poisson для ожидания голов, логистическая регрессия для краткосрочной формы и мета-модель XGBoost, разрешающая их разногласия. На выходе — откалиброванные вероятности победы дома, ничьей и победы в гостях плюс confidence-score для оценки каждого прогноза. Три матча с самым высоким ожидаемым edge за тур публикуются здесь бесплатно, автоматически обновляясь при каждом новом составе, травме или движении коэффициентов. Участники получают полный список, Kelly stakes и отчёт closing-line value.",
+      "el": "Η Premier League είναι η πιο μοντελοποιημένη ποδοσφαιρική διοργάνωση του πλανήτη - και μία από τις πιο δύσκολες να νικηθεί. Είκοσι ομάδες, 380 αγώνες και μέσος όρος εννέα στιγμιότυπων γκολ ανά αγώνα δημιουργούν ακριβώς το είδος dataset για το οποίο χτίστηκε το ensemble μας. Το BetsPlug περνά κάθε αγώνα από τέσσερα ανεξάρτητα μοντέλα - Elo για τη μακροπρόθεσμη δύναμη, Poisson για την προσδοκία γκολ, λογιστική παλινδρόμηση για τη βραχυπρόθεσμη φόρμα και ένα μετα-μοντέλο XGBoost που επιλύει τις διαφωνίες τους. Το αποτέλεσμα είναι βαθμονομημένη πιθανότητα για νίκη γηπεδούχου, ισοπαλία και νίκη φιλοξενούμενης, συν ένα confidence score που χρησιμοποιούμε για να βαθμολογούμε κάθε επιλογή. Οι τρεις αγώνες με το μεγαλύτερο αναμενόμενο edge κάθε αγωνιστικής δημοσιεύονται δωρεάν εδώ, ενημερώνονται αυτόματα κάθε φορά που νέες ενδεκάδες, τραυματισμοί ή κινήσεις αποδόσεων τροφοδοτούν το pipeline μας. Τα μέλη παίρνουν τη πλήρη λίστα, τα Kelly stakes και την αναφορά closing-line value.",
+      "da": "Premier League er den mest modellerede fodboldturnering på planeten - og også en af de sværeste at slå. Tyve hold, 380 kampe og et gennemsnit på ni målchancer pr. kamp producerer præcis den slags datasæt, som vores ensemble er bygget til. BetsPlug kører hver kamp gennem fire uafhængige modeller - Elo for langsigtet styrke, Poisson for målforventning, logistisk regression for kortsigtet form og en XGBoost-metamodel, der løser uenighederne. Outputtet er en kalibreret sandsynlighed for hjemmesejr, uafgjort og udesejr, plus en confidence score, vi bruger til at gradere hver pick. De tre kampe med det højeste forventede edge hver spillerunde offentliggøres her gratis og opdateres automatisk, hver gang nye startopstillinger, skader eller odds-bevægelser fodrer vores pipeline. Medlemmer får hele programmet, Kelly stakes og closing-line value-rapporten.",
+      "sv": "Premier League är den mest modellerade fotbollstävlingen på planeten - och också en av de svåraste att slå. Tjugo lag, 380 matcher och i snitt nio målchanser per match ger precis den typ av dataset som vårt ensemble är byggt för. BetsPlug kör varje match genom fyra oberoende modeller - Elo för långsiktig styrka, Poisson för målförväntan, logistisk regression för kortsiktig form och en XGBoost-metamodell som löser deras oenigheter. Resultatet är en kalibrerad sannolikhet för hemmaseger, oavgjort och bortaseger, plus en konfidensscore vi använder för att gradera varje tips. De tre matcherna med högst förväntad edge varje omgång publiceras här gratis och uppdateras automatiskt när nya startelvor, skador eller oddsrörelser matar vår pipeline. Medlemmar får hela listan, Kelly stakes och closing-line value-rapporten."
+    },
+    "faqs[faq-0].question": {
+      "sw": "Utabiri wenu wa Premier League ni sahihi kiasi gani?",
+      "pt": "Qual é a precisão das vossas previsões da Premier League?",
+      "tr": "Premier League tahminleriniz ne kadar doğru?",
+      "pl": "Jak dokładne są wasze prognozy Premier League?",
+      "ro": "Cât de precise sunt predicțiile voastre pentru Premier League?",
+      "ru": "Насколько точны ваши прогнозы на Premier League?",
+      "el": "Πόσο ακριβείς είναι οι προβλέψεις σας για την Premier League;",
+      "da": "Hvor præcise er jeres Premier League-forudsigelser?",
+      "sv": "Hur exakta är era Premier League-förutsägelser?"
+    },
+    "faqs[faq-0].answer": {
+      "sw": "Kalibrasho yetu ya siku 30 ya Premier League iko kati ya 70% na 75% kwenye soko la kipendwa-kushinda. Tunachapisha rekodi kamili kwenye /track-record ili uweze kuona kila pick iliyosuluhishwa na closing-line value tuliyoondoa.",
+      "pt": "A nossa calibração rolling de 30 dias em jogos da Premier League situa-se entre 70% e 75% no mercado de favorito-para-vencer. Publicamos o histórico completo em /track-record para veres cada escolha finalizada e o closing-line value que extraímos.",
+      "tr": "Premier League maçlarındaki 30 günlük rolling kalibrasyonumuz favori-kazanır pazarında %70-75 arasındadır. Tüm sicili /track-record'da yayımlıyoruz; böylece her kapalı seçimi ve çıkardığımız closing-line value'yu görebilirsin.",
+      "pl": "Nasza krocząca kalibracja 30-dniowa na meczach Premier League wynosi od 70% do 75% na rynku faworyta-do-wygrania. Pełny bilans publikujemy na /track-record, więc możesz zobaczyć każdy zamknięty typ i wyciągnięty closing-line value.",
+      "ro": "Calibrarea noastră rolling pe 30 de zile la meciurile Premier League este între 70% și 75% pe piața favorit-pentru-victorie. Publicăm istoricul complet la /track-record, ca să poți vedea fiecare selecție decontată și valoarea closing-line extrasă.",
+      "ru": "Наша rolling-калибровка за 30 дней на матчах Premier League держится в диапазоне 70–75% на рынке «фаворит побеждает». Полную историю публикуем на /track-record — видно каждый закрытый прогноз и извлечённый closing-line value.",
+      "el": "Η rolling καλιμπράρισμα 30 ημερών σε αγώνες Premier League κυμαίνεται μεταξύ 70% και 75% στην αγορά φαβορί-να-κερδίσει. Δημοσιεύουμε το πλήρες ιστορικό στο /track-record ώστε να βλέπεις κάθε κλειστή επιλογή και το closing-line value που εξάγαμε.",
+      "da": "Vores rullende 30-dages kalibrering på Premier League-kampe ligger mellem 70% og 75% på favorit-til-sejr-markedet. Vi offentliggør hele track recorden på /track-record, så du kan se hver afgjort pick og den closing-line value, vi udvandt.",
+      "sv": "Vår rullande 30-dagarskalibrering på Premier League-matcher ligger mellan 70% och 75% på favorit-vinner-marknaden. Vi publicerar hela meritförteckningen på /track-record så du kan se varje avslutat tips och det closing-line value vi extraherade."
+    },
+    "faqs[faq-1].question": {
+      "sw": "Mnafunika kila mechi ya Premier League?",
+      "pt": "Cobrem todos os jogos da Premier League?",
+      "tr": "Her Premier League maçını kapsıyor musunuz?",
+      "pl": "Czy obejmujecie każdy mecz Premier League?",
+      "ro": "Acoperiți fiecare meci din Premier League?",
+      "ru": "Вы охватываете все матчи Premier League?",
+      "el": "Καλύπτετε κάθε αγώνα της Premier League;",
+      "da": "Dækker I hver Premier League-kamp?",
+      "sv": "Täcker ni varje Premier League-match?"
+    },
+    "faqs[faq-1].answer": {
+      "sw": "Ndio - kila moja ya mechi 380 hupata model run mara tu muundo wa timu unapotabirika. Mechi tatu zenye edge ya juu zaidi kwa kila speelronde huonyeshwa bure kwenye ukurasa huu; zilizobaki zinapatikana kwa members wa BetsPlug.",
+      "pt": "Sim - cada um dos 380 jogos é processado pelos modelos assim que os alinhamentos se tornam previsíveis. Os três jogos com o maior edge do modelo em cada jornada são mostrados gratuitamente nesta página; os restantes ficam disponíveis para membros BetsPlug.",
+      "tr": "Evet - 380 maçın her biri, kadroların tahmin edilebilir hale gelmesiyle model run'ından geçer. Her hafta en yüksek model edge'ine sahip üç maç bu sayfada ücretsiz gösterilir; gerisi BetsPlug üyelerine açıktır.",
+      "pl": "Tak - każdy z 380 meczów przechodzi model run, gdy tylko składy stają się przewidywalne. Trzy mecze z najwyższym edge'em modelu w każdej kolejce są pokazywane za darmo na tej stronie; reszta jest dostępna dla członków BetsPlug.",
+      "ro": "Da - fiecare dintre cele 380 de meciuri primește un model run de îndată ce echipele devin previzibile. Cele trei meciuri cu cel mai mare edge al modelului din fiecare etapă sunt afișate gratuit pe această pagină; restul sunt disponibile pentru membrii BetsPlug.",
+      "ru": "Да — каждый из 380 матчей проходит через модели, как только составы становятся предсказуемыми. Три матча с самым высоким edge за тур показываем на этой странице бесплатно; остальные доступны участникам BetsPlug.",
+      "el": "Ναι - κάθε ένας από τους 380 αγώνες περνά από model run μόλις οι ενδεκάδες γίνουν προβλέψιμες. Οι τρεις αγώνες με το μεγαλύτερο edge μοντέλου κάθε αγωνιστική εμφανίζονται δωρεάν σε αυτή τη σελίδα· οι υπόλοιποι είναι διαθέσιμοι στα μέλη του BetsPlug.",
+      "da": "Ja - hver eneste af de 380 kampe får et model run, så snart startopstillingerne bliver forudsigelige. De tre kampe med det højeste modeledge hver spillerunde vises gratis på denne side; resten er tilgængelige for BetsPlug-medlemmer.",
+      "sv": "Ja - varje av de 380 matcherna får en model run så snart startelvorna blir förutsägbara. De tre matcherna med högst modelledge varje omgång visas gratis på den här sidan; resten är tillgängliga för BetsPlug-medlemmar."
+    },
+    "faqs[faq-2].question": {
+      "sw": "Ni masoko yapi ya kubeti mnayayotabiri?",
+      "pt": "Que mercados de apostas preveem?",
+      "tr": "Hangi bahis pazarlarını tahmin ediyorsunuz?",
+      "pl": "Jakie rynki bukmacherskie prognozujecie?",
+      "ro": "Ce piețe de pariuri prevedeți?",
+      "ru": "Какие рынки ставок вы прогнозируете?",
+      "el": "Ποιες αγορές στοιχημάτων προβλέπετε;",
+      "da": "Hvilke betting-markeder forudsiger I?",
+      "sv": "Vilka bettingmarknader förutspår ni?"
+    },
+    "faqs[faq-2].answer": {
+      "sw": "Preview ya bure inafunika soko la 1X2 (nyumbani / sare / ugenini). Members pia hupata over/under 2.5 goals, BTTS, Asian handicap na mapendekezo ya Kelly stake kwa kila pick.",
+      "pt": "A preview gratuita cobre o mercado 1X2 (casa / empate / fora). Os membros também recebem over/under 2,5 golos, BTTS, Asian handicap e recomendação de Kelly stake por escolha.",
+      "tr": "Ücretsiz önizleme 1X2 (ev sahibi / beraberlik / deplasman) pazarını kapsar. Üyeler ayrıca over/under 2.5 gol, BTTS, Asya handikap ve her seçim için Kelly stake önerisi alır.",
+      "pl": "Darmowa preview obejmuje rynek 1X2 (gospodarz / remis / gość). Członkowie otrzymują dodatkowo over/under 2.5 gola, BTTS, Asian handicap i rekomendację Kelly stake dla każdego typu.",
+      "ro": "Preview-ul gratuit acoperă piața 1X2 (gazdă / egal / oaspete). Membrii primesc în plus over/under 2.5 goluri, BTTS, Asian handicap și recomandare Kelly stake pentru fiecare selecție.",
+      "ru": "Бесплатный превью покрывает рынок 1X2 (хозяева / ничья / гости). Участники получают также over/under 2.5 голов, BTTS, азиатский гандикап и рекомендацию по Kelly stake к каждому прогнозу.",
+      "el": "Η δωρεάν preview καλύπτει την αγορά 1X2 (γηπεδούχος / ισοπαλία / φιλοξενούμενος). Τα μέλη λαμβάνουν επίσης over/under 2.5 γκολ, BTTS, Ασιατικό handicap και σύσταση Kelly stake για κάθε επιλογή.",
+      "da": "Den gratis preview dækker 1X2-markedet (hjemme / uafgjort / ude). Medlemmer får desuden over/under 2.5 mål, BTTS, Asian handicap og en Kelly stake-anbefaling pr. pick.",
+      "sv": "Den gratis previewen täcker 1X2-marknaden (hemma / oavgjort / borta). Medlemmar får även over/under 2.5 mål, BTTS, asiatisk handicap och en Kelly stake-rekommendation per tips."
+    },
+    "faqs[faq-3].question": {
+      "sw": "Utabiri unasasishwa mara ngapi?",
+      "pt": "Com que frequência as previsões são atualizadas?",
+      "tr": "Tahminler ne sıklıkla güncellenir?",
+      "pl": "Jak często prognozy są aktualizowane?",
+      "ro": "Cât de des sunt actualizate predicțiile?",
+      "ru": "Как часто обновляются прогнозы?",
+      "el": "Πόσο συχνά ενημερώνονται οι προβλέψεις;",
+      "da": "Hvor ofte opdateres forudsigelserne?",
+      "sv": "Hur ofta uppdateras förutsägelserna?"
+    },
+    "faqs[faq-3].answer": {
+      "sw": "Mifano hutaretainwa baada ya kila speelronde. Utabiri wa kila mchezo huhesabiwa tena wakati muundo wa timu, ripoti ya jeraha au mabadiliko ya odds yanaposababisha sync task yetu - kawaida kila dakika 5 wakati wa dirisha la matchday.",
+      "pt": "Os modelos são re-treinados após cada jornada. As previsões de cada jogo são recalculadas sempre que um alinhamento, relatório de lesão ou movimento de odds dispara o nosso sync task - normalmente a cada 5 minutos durante a janela do matchday.",
+      "tr": "Modeller her haftadan sonra yeniden eğitilir. Her maç tahmini; kadro, sakatlık raporu veya oran hareketi sync task'ımızı tetiklediğinde yeniden hesaplanır - maç günü penceresinde genellikle her 5 dakikada bir.",
+      "pl": "Modele są retrenowane po każdej kolejce. Prognozy poszczególnych meczów są przeliczane, gdy skład, raport o kontuzjach lub ruch kursów uruchamia nasze sync task - zwykle co 5 minut w oknie matchday.",
+      "ro": "Modelele sunt reantrenate după fiecare etapă. Predicțiile individuale sunt recalculate ori de câte ori un 11, un raport de accidentare sau o mișcare de cote declanșează sync task-ul - de obicei la fiecare 5 minute în fereastra de matchday.",
+      "ru": "Модели переобучаются после каждого тура. Прогнозы отдельных матчей пересчитываются при каждом новом составе, сообщении о травме или значимом движении коэффициентов — обычно каждые 5 минут в окне matchday.",
+      "el": "Τα μοντέλα επανεκπαιδεύονται μετά από κάθε αγωνιστική. Οι προβλέψεις για κάθε αγώνα επαναυπολογίζονται κάθε φορά που μια ενδεκάδα, μια αναφορά τραυματισμού ή μια κίνηση αποδόσεων πυροδοτεί το sync task μας - συνήθως κάθε 5 λεπτά στο παράθυρο του matchday.",
+      "da": "Modellerne retrænes efter hver spillerunde. Individuelle kampforudsigelser genberegnes, hver gang en startopstilling, skadesrapport eller odds-bevægelse trigger vores sync task - typisk hvert 5. minut i matchday-vinduet.",
+      "sv": "Modellerna tränas om efter varje omgång. Enskilda matchförutsägelser räknas om varje gång en startelva, skaderapport eller oddsrörelse triggar vår sync task - vanligtvis var 5:e minut under matchday-fönstret."
+    },
+    "faqs[faq-4].question": {
+      "sw": "Mnatumia data gani?",
+      "pt": "Que dados usam?",
+      "tr": "Hangi verileri kullanıyorsunuz?",
+      "pl": "Z jakich danych korzystacie?",
+      "ro": "Ce date folosiți?",
+      "ru": "Какие данные вы используете?",
+      "el": "Τι δεδομένα χρησιμοποιείτε;",
+      "da": "Hvilke data bruger I?",
+      "sv": "Vilka data använder ni?"
+    },
+    "faqs[faq-4].answer": {
+      "sw": "Tunavuta mechi, matokeo, muundo wa timu na takwimu za kiwango cha timu kutoka football-data.org na kuthibitisha nyakati za matukio ya goli dhidi ya OpenLigaDB. Hakuna scraping ya data ya kibinafsi na hakuna taarifa za ndani - kila input inaweza kuthibitishwa kwa umma.",
+      "pt": "Puxamos jogos, resultados, alinhamentos e estatísticas ao nível de equipa do football-data.org e cruzamos timestamps de eventos de golo com o OpenLigaDB. Não há scraping de dados privados nem informação privilegiada - cada input é publicamente verificável.",
+      "tr": "Maçları, sonuçları, kadroları ve takım seviyesindeki istatistikleri football-data.org'dan çekiyor ve gol olay zamanlarını OpenLigaDB ile çapraz kontrol ediyoruz. Özel veri kazıma yok, içeriden bilgi yok - her girdi kamuya açık şekilde doğrulanabilir.",
+      "pl": "Pobieramy mecze, wyniki, składy i statystyki drużynowe z football-data.org i weryfikujemy znaczniki czasu zdarzeń bramkowych z OpenLigaDB. Żadnego scrapowania prywatnych danych, żadnych informacji insiderskich - każdy input można publicznie zweryfikować.",
+      "ro": "Extragem meciurile, rezultatele, echipele de start și statisticile la nivel de echipă din football-data.org și verificăm timestamp-urile evenimentelor de gol cu OpenLigaDB. Fără scraping de date private și fără informații insider - fiecare input este verificabil public.",
+      "ru": "Матчи, результаты, составы и командные показатели мы получаем из football-data.org, а таймстемпы голов сверяем с OpenLigaDB. Никакого скрейпинга приватных данных и никаких инсайдов — каждый источник публично верифицируем.",
+      "el": "Τραβάμε αγώνες, αποτελέσματα, ενδεκάδες και στατιστικά επιπέδου ομάδας από το football-data.org και διασταυρώνουμε τα timestamps γκολ με το OpenLigaDB. Κανένα scraping ιδιωτικών δεδομένων και καμία προνομιακή πληροφορία - κάθε input είναι δημόσια επαληθεύσιμο.",
+      "da": "Vi trækker kampe, resultater, startopstillinger og hold-statistik fra football-data.org og krydstjekker målbegivenhedernes tidsstempler mod OpenLigaDB. Ingen scraping af private data og ingen insiderinformation - hvert input er offentligt verificerbart.",
+      "sv": "Vi hämtar matcher, resultat, startelvor och lagnivåstatistik från football-data.org och dubbelkollar målhändelsernas tidsstämplar mot OpenLigaDB. Ingen skrapning av privata data och ingen insiderinformation - varje input är offentligt verifierbar."
+    },
+    "faqs[faq-5].question": {
+      "sw": "BetsPlug ni halali UK na EU?",
+      "pt": "A BetsPlug é legal no Reino Unido e UE?",
+      "tr": "BetsPlug, Birleşik Krallık ve AB'de yasal mı?",
+      "pl": "Czy BetsPlug jest legalny w Wielkiej Brytanii i UE?",
+      "ro": "BetsPlug este legal în Regatul Unit și UE?",
+      "ru": "Законен ли BetsPlug в Великобритании и ЕС?",
+      "el": "Είναι νόμιμο το BetsPlug σε ΗΒ και ΕΕ;",
+      "da": "Er BetsPlug lovlig i UK og EU?",
+      "sv": "Är BetsPlug lagligt i Storbritannien och EU?"
+    },
+    "faqs[faq-5].answer": {
+      "sw": "BetsPlug ni jukwaa la uchanganuzi, si bookmaker - hatupokei dau wala tushughulikii wagers. Uko huru kutumia utabiri wetu mahali popote ambapo kubeti mpira wa miguu ni halali katika eneo lako. Daima angalia mdhibiti wako wa ndani na kamari kwa kuwajibika.",
+      "pt": "A BetsPlug é uma plataforma de análise, não um bookmaker - não aceitamos apostas nem processamos wagers. Podes usar as nossas previsões onde quer que as apostas de futebol sejam legais na tua jurisdição. Verifica sempre o regulador local e joga de forma responsável.",
+      "tr": "BetsPlug bir analiz platformudur, bir bahisçi değil - bahis almıyoruz veya oynatmıyoruz. Tahminlerimizi, futbol bahsinin yasal olduğu her yargı alanında kullanabilirsin. Her zaman yerel düzenleyicini kontrol et ve sorumlu kumar oyna.",
+      "pl": "BetsPlug to platforma analityczna, nie bukmacher - nie przyjmujemy zakładów ani nie przetwarzamy wagerów. Możesz używać naszych prognoz wszędzie tam, gdzie obstawianie meczów piłkarskich jest legalne w twojej jurysdykcji. Zawsze sprawdź lokalnego regulatora i graj odpowiedzialnie.",
+      "ro": "BetsPlug este o platformă de analiză, nu un bookmaker - nu primim pariuri și nu procesăm wager-uri. Poți folosi predicțiile noastre oriunde pariurile pe fotbal sunt legale în jurisdicția ta. Verifică întotdeauna autoritatea locală de reglementare și joacă responsabil.",
+      "ru": "BetsPlug — аналитическая платформа, а не букмекер: мы не принимаем ставки и не обрабатываем wagers. Вы вправе использовать наши прогнозы там, где футбольные ставки легальны в вашей юрисдикции. Всегда сверяйтесь с местным регулятором и играйте ответственно.",
+      "el": "Το BetsPlug είναι πλατφόρμα ανάλυσης, όχι bookmaker - δεν δεχόμαστε στοιχήματα ούτε επεξεργαζόμαστε wagers. Μπορείς να χρησιμοποιήσεις τις προβλέψεις μας οπουδήποτε το στοίχημα ποδοσφαίρου είναι νόμιμο στη δικαιοδοσία σου. Πάντα ελέγχει τον τοπικό ρυθμιστή και παίζε υπεύθυνα.",
+      "da": "BetsPlug er en analyseplatform, ikke en bookmaker - vi tager ikke imod væddemål og behandler ikke wagers. Du er velkommen til at bruge vores forudsigelser overalt, hvor fodboldbetting er lovligt i din jurisdiktion. Tjek altid din lokale myndighed og spil ansvarligt.",
+      "sv": "BetsPlug är en analysplattform, inte en bookmaker - vi tar inte emot spel och hanterar inte wagers. Du får använda våra förutsägelser överallt där fotbollsbetting är lagligt i din jurisdiktion. Kontrollera alltid din lokala regulator och spela ansvarsfullt."
+    }
+  }
+}
