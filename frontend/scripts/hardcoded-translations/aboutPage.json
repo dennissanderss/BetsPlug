@@ -1,0 +1,183 @@
+{
+  "_docId": "aboutPage",
+  "_type": "aboutPage",
+  "_label": "aboutPage",
+  "fields": {
+    "founders[f1].bio": {
+      "sw": "Shabiki wa soka wa muda wote mwenye background ya kujiajiri, uwezo wa mawazo mapya na ujuzi thabiti wa marketing + IT. Anahakikisha BetsPlug inaendesha na kwamba data ya mechi inapita vizuri kutoka chanzo hadi skrini yako.",
+      "pt": "Fã de futebol de sempre com background empreendedor, talento para ideias novas e competências sólidas em marketing + IT. Mantém a BetsPlug a funcionar e garante que os dados de jogo fluem limpos da origem até ao teu ecrã.",
+      "tr": "Girişimci geçmişe sahip ömür boyu futbol hayranı, yeni fikirler için bir yeteneği ve sağlam marketing + IT becerileri olan. BetsPlug'ı çalışır durumda tutar ve maç verilerinin kaynaktan ekranınıza temiz bir şekilde akmasını sağlar.",
+      "pl": "Dożywotni fan piłki nożnej z przedsiębiorczym doświadczeniem, talentem do nowych pomysłów i solidnymi umiejętnościami marketingowymi + IT. Utrzymuje BetsPlug w ruchu i dba, żeby dane meczowe płynęły czysto ze źródła aż na twój ekran.",
+      "ro": "Fan de fotbal de-o viață cu un background antreprenorial, un talent pentru idei noi și competențe solide de marketing + IT. Menține BetsPlug în funcțiune și se asigură că datele meciurilor circulă curate de la sursă până pe ecranul tău.",
+      "ru": "Пожизненный футбольный фанат с предпринимательским бэкграундом, нюхом на новые идеи и крепкими marketing + IT навыками. Держит BetsPlug в работе и следит, чтобы данные матчей текли чисто от источника до твоего экрана.",
+      "el": "Δια βίου οπαδός του ποδοσφαίρου με επιχειρηματικό background, ταλέντο για νέες ιδέες και γερές δεξιότητες marketing + IT. Κρατά το BetsPlug να τρέχει και εξασφαλίζει ότι τα δεδομένα αγώνων ρέουν καθαρά από την πηγή μέχρι την οθόνη σου.",
+      "da": "Livslang fodboldfan med en iværksætterbaggrund, et godt øje for nye idéer og solide marketing + IT-færdigheder. Holder BetsPlug kørende og sørger for, at kampdata flyder rent fra kilden hele vejen til din skærm.",
+      "sv": "Livslång fotbollssupporter med entreprenörsbakgrund, ett öga för nya idéer och solida marketing + IT-kunskaper. Håller BetsPlug igång och ser till att matchdata flödar rent från källan hela vägen till din skärm."
+    },
+    "founders[f1].role": {
+      "sw": "Muasisi mwenza · Product & Ukuaji",
+      "pt": "Cofundador · Produto & Crescimento",
+      "tr": "Kurucu Ortak · Ürün & Büyüme",
+      "pl": "Współzałożyciel · Produkt & Wzrost",
+      "ro": "Co-fondator · Produs & Creștere",
+      "ru": "Со-основатель · Product & Рост",
+      "el": "Συνιδρυτής · Product & Ανάπτυξη",
+      "da": "Medstifter · Produkt & Vækst",
+      "sv": "Medgrundare · Produkt & Tillväxt"
+    },
+    "founders[f2].bio": {
+      "sw": "Mpenzi wa soka na mfikiri anayeongozwa na data mwenye miaka ya uzoefu wa accountancy, ambapo namba na ushahidi huamuru. Hubadilisha probabilities, modeli na takwimu kuwa insights unaweza kutumia kwa vitendo.",
+      "pt": "Apaixonado por futebol e pensador orientado por dados com anos de experiência em contabilidade, onde números e evidências mandam. Transforma probabilidades, modelos e estatísticas em insights que podes mesmo usar.",
+      "tr": "Futbol tutkunu ve veri odaklı düşünür, rakamların ve kanıtların söz sahibi olduğu accountancy alanında yıllarca deneyime sahip. Olasılıkları, modelleri ve istatistikleri gerçekten kullanabileceğiniz iç görülere dönüştürür.",
+      "pl": "Entuzjasta piłki nożnej i myśliciel oparty na danych z wieloletnim doświadczeniem w księgowości, gdzie liczby i dowody rządzą. Zamienia prawdopodobieństwa, modele i statystyki w insights, których naprawdę możesz użyć.",
+      "ro": "Entuziast al fotbalului și gânditor bazat pe date cu ani de experiență în contabilitate, unde cifrele și dovezile dau tonul. Transformă probabilități, modele și statistici în insights pe care chiar le poți folosi.",
+      "ru": "Футбольный энтузиаст и data-driven мыслитель с многолетним опытом в accountancy, где цифры и evidence принимают решения. Превращает вероятности, модели и статистику в insights, которые реально можно использовать.",
+      "el": "Λάτρης του ποδοσφαίρου και data-driven στοχαστής με χρόνια εμπειρίας στη λογιστική, όπου οι αριθμοί και τα στοιχεία αποφασίζουν. Μετατρέπει πιθανότητες, μοντέλα και στατιστικά σε insights που μπορείς πραγματικά να χρησιμοποιήσεις.",
+      "da": "Fodboldentusiast og data-drevet tænker med års erfaring fra revision, hvor tal og beviser bestemmer. Forvandler sandsynligheder, modeller og statistik til indsigter, du rent faktisk kan bruge.",
+      "sv": "Fotbollsentusiast och datadriven tänkare med flera års revisionserfarenhet, där siffror och evidens bestämmer. Förvandlar sannolikheter, modeller och statistik till insikter du faktiskt kan använda."
+    },
+    "founders[f2].role": {
+      "sw": "Muasisi mwenza · Data & Modeling",
+      "pt": "Cofundador · Dados & Modelação",
+      "tr": "Kurucu Ortak · Veri & Modelleme",
+      "pl": "Współzałożyciel · Dane & Modelowanie",
+      "ro": "Co-fondator · Date & Modelare",
+      "ru": "Со-основатель · Data & Моделирование",
+      "el": "Συνιδρυτής · Data & Μοντελοποίηση",
+      "da": "Medstifter · Data & Modellering",
+      "sv": "Medgrundare · Data & Modellering"
+    },
+    "stats[s1].label": {
+      "sw": "Mechi za kihistoria ambazo modeli zimefundishwa juu yake",
+      "pt": "Jogos históricos em que os modelos são treinados",
+      "tr": "Modellerin eğitildiği tarihsel maçlar",
+      "pl": "Historyczne mecze, na których modele są trenowane",
+      "ro": "Meciuri istorice pe care sunt antrenate modelele",
+      "ru": "Исторические матчи, на которых обучены модели",
+      "el": "Ιστορικοί αγώνες στους οποίους εκπαιδεύονται τα μοντέλα",
+      "da": "Historiske kampe, som modellerne trænes på",
+      "sv": "Historiska matcher som modellerna tränas på"
+    },
+    "stats[s2].label": {
+      "sw": "Mechi zinazochambuliwa kila wiki",
+      "pt": "Jogos analisados todas as semanas",
+      "tr": "Her hafta analiz edilen maçlar",
+      "pl": "Mecze analizowane co tydzień",
+      "ro": "Meciuri analizate în fiecare săptămână",
+      "ru": "Матчи, анализируемые каждую неделю",
+      "el": "Αγώνες που αναλύονται κάθε εβδομάδα",
+      "da": "Kampe analyseret hver uge",
+      "sv": "Matcher analyserade varje vecka"
+    },
+    "stats[s3].label": {
+      "sw": "Pointi za data zinazothaminiwa kwa kila mechi",
+      "pt": "Pontos de dados avaliados por jogo",
+      "tr": "Maç başına değerlendirilen veri noktaları",
+      "pl": "Punkty danych oceniane na mecz",
+      "ro": "Puncte de date evaluate pe meci",
+      "ru": "Точки данных, оцениваемые за матч",
+      "el": "Σημεία δεδομένων που αξιολογούνται ανά αγώνα",
+      "da": "Datapunkter evalueret pr. kamp",
+      "sv": "Datapunkter utvärderade per match"
+    },
+    "stats[s4].label": {
+      "sw": "Modeli za AI zinazoendesha katika production",
+      "pt": "Modelos de IA em produção",
+      "tr": "Üretimde çalışan AI modelleri",
+      "pl": "Modele AI działające w produkcji",
+      "ro": "Modele AI care rulează în producție",
+      "ru": "ИИ-модели, работающие в production",
+      "el": "Μοντέλα AI σε λειτουργία production",
+      "da": "AI-modeller, der kører i produktion",
+      "sv": "AI-modeller i produktion"
+    },
+    "values[v1].title": {
+      "sw": "Data juu ya hisia ya tumbo",
+      "pt": "Dados acima da intuição",
+      "tr": "Veri, iç hissin üstünde",
+      "pl": "Dane ponad intuicję",
+      "ro": "Date în loc de intuiție",
+      "ru": "Данные важнее интуиции",
+      "el": "Δεδομένα πάνω από το ένστικτο",
+      "da": "Data frem for mavefornemmelse",
+      "sv": "Data över magkänsla"
+    },
+    "values[v1].description": {
+      "sw": "Kila utabiri unategemea modeli za kitakwimu, si maoni.",
+      "pt": "Cada previsão é suportada por modelos estatísticos, não por opiniões.",
+      "tr": "Her tahmin görüşlerle değil, istatistiksel modellerle desteklenir.",
+      "pl": "Każda prognoza jest oparta na modelach statystycznych, a nie na opiniach.",
+      "ro": "Fiecare predicție este susținută de modele statistice, nu de opinii.",
+      "ru": "Каждый прогноз подкреплён статистическими моделями, а не мнениями.",
+      "el": "Κάθε πρόβλεψη υποστηρίζεται από στατιστικά μοντέλα, όχι από απόψεις.",
+      "da": "Hver forudsigelse er underbygget af statistiske modeller, ikke af meninger.",
+      "sv": "Varje förutsägelse stöds av statistiska modeller, inte åsikter."
+    },
+    "values[v2].title": {
+      "sw": "Uwazi kamili",
+      "pt": "Transparência total",
+      "tr": "Tam şeffaflık",
+      "pl": "Pełna przejrzystość",
+      "ro": "Transparență deplină",
+      "ru": "Полная прозрачность",
+      "el": "Πλήρης διαφάνεια",
+      "da": "Fuld transparens",
+      "sv": "Full transparens"
+    },
+    "values[v2].description": {
+      "sw": "Rekodi yetu ni ya umma. Kila pick imeandikwa, hakuna kinachofichwa.",
+      "pt": "O nosso histórico é público. Cada pick registada, nada escondido.",
+      "tr": "Geçmiş performansımız kamuya açıktır. Her seçim kayıt altında, hiçbir şey gizli değil.",
+      "pl": "Nasz bilans jest publiczny. Każdy pick zarejestrowany, nic ukryte.",
+      "ro": "Istoricul nostru este public. Fiecare pick înregistrat, nimic ascuns.",
+      "ru": "Наш track record публичный. Каждый pick залогирован, ничего не скрыто.",
+      "el": "Το ιστορικό μας είναι δημόσιο. Κάθε pick καταγράφεται, τίποτα δεν κρύβεται.",
+      "da": "Vores track record er offentlig. Hvert pick logget, intet skjult.",
+      "sv": "Vår meritlista är offentlig. Varje tips loggat, inget dolt."
+    },
+    "values[v3].title": {
+      "sw": "Uboreshaji endelevu",
+      "pt": "Melhoria contínua",
+      "tr": "Sürekli iyileştirme",
+      "pl": "Ciągłe doskonalenie",
+      "ro": "Îmbunătățire continuă",
+      "ru": "Непрерывное улучшение",
+      "el": "Συνεχής βελτίωση",
+      "da": "Løbende forbedring",
+      "sv": "Kontinuerlig förbättring"
+    },
+    "values[v3].description": {
+      "sw": "Modeli zinatrainiwa tena na kukalibrishwa upya baada ya kila speelronde.",
+      "pt": "Os modelos são retreinados e recalibrados após cada jornada.",
+      "tr": "Modeller her hafta sonrası yeniden eğitilir ve yeniden kalibre edilir.",
+      "pl": "Modele są ponownie trenowane i rekalibrowane po każdej kolejce.",
+      "ro": "Modelele sunt reantrenate și recalibrate după fiecare etapă.",
+      "ru": "Модели переобучаются и рекалибруются после каждого тура.",
+      "el": "Τα μοντέλα επανεκπαιδεύονται και επανακαλιμπράρονται μετά από κάθε αγωνιστική.",
+      "da": "Modellerne bliver genoptrænet og rekalibreret efter hver spillerunde.",
+      "sv": "Modellerna tränas om och omkalibreras efter varje omgång."
+    },
+    "values[v4].title": {
+      "sw": "Haki na uaminifu",
+      "pt": "Justo e honesto",
+      "tr": "Adil ve dürüst",
+      "pl": "Uczciwie i sprawiedliwie",
+      "ro": "Corect și onest",
+      "ru": "Честно и справедливо",
+      "el": "Δίκαιο και ειμικανικό",
+      "da": "Fair og ærlig",
+      "sv": "Rättvist och ärligt"
+    },
+    "values[v4].description": {
+      "sw": "Hakuna hype, hakuna uhakikisho wa uwongo. Tu probabilities na expected value.",
+      "pt": "Sem hype, sem garantias falsas. Apenas probabilidades e expected value.",
+      "tr": "Hype yok, sahte garantiler yok. Yalnızca olasılıklar ve expected value.",
+      "pl": "Bez hype'u, bez fałszywych gwarancji. Tylko prawdopodobieństwa i expected value.",
+      "ro": "Fără hype, fără garanții false. Doar probabilități și expected value.",
+      "ru": "Без hype, без фальшивых гарантий. Только вероятности и expected value.",
+      "el": "Χωρίς hype, χωρίς ψεύτικες εγγυήσεις. Μόνο πιθανότητες και expected value.",
+      "da": "Ingen hype, ingen falske garantier. Bare sandsynligheder og expected value.",
+      "sv": "Ingen hype, inga falska garantier. Bara sannolikheter och expected value."
+    }
+  }
+}
