@@ -725,16 +725,15 @@ function RoiCalculatorCard({
           </div>
         </div>
 
-        {/* Math-transparency band — avg odds, break-even, Wilson CI, sample note */}
+        {/* Math-transparency band — plain stats + sample warning */}
         {headline.matches > 0 && (() => {
           const avgOdds = headline.oddsSum / headline.matches;
           const breakEven = avgOdds > 1 ? 1 / avgOdds : null;
-          const winRate = headline.matches > 0 ? headline.wins / headline.matches : 0;
-          const ci = wilsonCi(headline.wins, headline.matches);
+          const winRate = headline.wins / headline.matches;
           const smallSample = headline.matches < 30;
           return (
             <div className="mb-4 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 text-center mb-2">
+              <div className="grid grid-cols-3 gap-3 text-center mb-2">
                 <div>
                   <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
                     {t("results.roiCalcWinRate")}
@@ -743,20 +742,20 @@ function RoiCalculatorCard({
                     {Math.round(winRate * 100)}%
                   </p>
                 </div>
-                <div>
+                <div title={t("results.roiCalcAvgOddsTooltip")}>
                   <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
                     {t("results.roiCalcAvgOdds")}
                   </p>
-                  <p className="text-sm font-bold tabular-nums text-slate-100">
+                  <p className="text-sm font-bold tabular-nums text-slate-100 cursor-help underline decoration-dotted decoration-slate-600 underline-offset-2">
                     {avgOdds.toFixed(2)}
                   </p>
                 </div>
-                <div>
+                <div title={t("results.roiCalcBreakEvenTooltip")}>
                   <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
                     {t("results.roiCalcBreakEven")}
                   </p>
                   <p
-                    className="text-sm font-bold tabular-nums"
+                    className="text-sm font-bold tabular-nums cursor-help underline decoration-dotted decoration-slate-600 underline-offset-2"
                     style={{
                       color:
                         breakEven == null ? "#94a3b8" :
@@ -764,14 +763,6 @@ function RoiCalculatorCard({
                     }}
                   >
                     {breakEven != null ? `${Math.round(breakEven * 100)}%` : "—"}
-                  </p>
-                </div>
-                <div title={t("results.roiCalcCiTooltip")}>
-                  <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
-                    {t("results.roiCalcCi")}
-                  </p>
-                  <p className="text-sm font-bold tabular-nums text-slate-100 cursor-help underline decoration-dotted decoration-slate-600 underline-offset-2">
-                    {ci ? `${Math.round(ci.lower * 100)}–${Math.round(ci.upper * 100)}%` : "—"}
                   </p>
                 </div>
               </div>
