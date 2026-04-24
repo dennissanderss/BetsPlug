@@ -540,7 +540,13 @@ function RoiCalculatorCard({
               <button
                 key={opt.key}
                 type="button"
-                onClick={() => setDataSource(opt.key)}
+                onClick={() => {
+                  setDataSource(opt.key);
+                  // Widen to 30d whenever the user flips source so the
+                  // window actually spans the relevant regime — 7d
+                  // post-launch contains zero backtest data, for example.
+                  setCalcPeriod(30);
+                }}
                 title={opt.hint}
                 className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors border ${
                   active
@@ -1154,7 +1160,6 @@ function ResultsPageContent() {
     return (VALID_SOURCES as readonly string[]).includes(q) ? (q as DataSource) : "live";
   })();
 
-  const [period, setPeriod] = useState<PeriodFilter>(initialPeriod);
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
   // Tier + period + data source for the ROI calculator are the single
@@ -1163,6 +1168,10 @@ function ResultsPageContent() {
   const [tierFilter, setTierFilter] = useState<TierFilter>(initialTier);
   const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(initialPeriod);
   const [dataSource, setDataSource] = useState<DataSource>(initialSource);
+  // Alias — the table's period is driven entirely by the calculator so
+  // both surfaces never disagree.
+  const period = calcPeriod;
+  const setPeriod = setCalcPeriod;
   // Stake is shared between the ROI calculator header and each table
   // row so the numbers always agree. Persisted to localStorage.
   const [stake, setStake] = useState<number>(10);
@@ -1450,16 +1459,33 @@ function ResultsPageContent() {
       ) : filtered.length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
           <Trophy className="h-8 w-8 text-slate-600" />
-          <p className="text-base font-medium text-slate-400">{t("results.noResultsMatchFilters")}</p>
-          <p className="text-sm text-slate-600">
-            {t("results.noResultsMatchFiltersHint")}
-          </p>
-          <button
-            onClick={() => { setResultFilter("All"); setLeagueFilter(""); }}
-            className="btn-primary mt-2"
-          >
-            {t("results.clearFilters")}
-          </button>
+          {dataSource === "backtest" ? (
+            <>
+              <p className="text-base font-medium text-slate-400">{t("results.noBacktestTitle")}</p>
+              <p className="text-sm text-slate-600 max-w-md">
+                {t("results.noBacktestHint")}
+              </p>
+              <button
+                onClick={() => { setDataSource("live"); setCalcPeriod(30); }}
+                className="btn-primary mt-2"
+              >
+                {t("results.switchToLive")}
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="text-base font-medium text-slate-400">{t("results.noResultsMatchFilters")}</p>
+              <p className="text-sm text-slate-600">
+                {t("results.noResultsMatchFiltersHint")}
+              </p>
+              <button
+                onClick={() => { setResultFilter("All"); setLeagueFilter(""); }}
+                className="btn-primary mt-2"
+              >
+                {t("results.clearFilters")}
+              </button>
+            </>
+          )}
         </div>
       ) : (
         <div className="glass-card overflow-hidden">
