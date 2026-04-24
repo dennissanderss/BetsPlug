@@ -137,46 +137,50 @@ function sleep(ms) {
  * single batched call. Returns a Record<locale, translatedText>
  * with EN fallback on any individual miss.
  */
+/**
+ * Translate one EN source string into every target locale in a
+ * single batched call. On API failure the function returns an
+ * empty object so the caller SKIPS the field entirely — writing
+ * the EN fallback as a "translation" to Sanity would just mask
+ * missing coverage with falsely-branded English content, and
+ * overwrite any good translation that already exists.
+ */
 async function translateBatch(text, targetLangs) {
-  const out = {};
-  if (!text) {
-    for (const l of targetLangs) out[l] = text;
-    return out;
-  }
+  if (!text) return {};
   const { protectedText, tokens } = protectGlossary(text);
   try {
     const res = await translate(protectedText, {
       from: "en",
       to: targetLangs,
       autoCorrect: false,
+      // google-translate-api-x has an over-strict ISO whitelist that
+      // rejects pt / tr / pl / ro / ru / el / da / sv when passed as
+      // an array target. `forceTo: true` bypasses the client-side
+      // validation — Google itself supports all of these.
+      forceTo: true,
     });
-    // API returns: array<{ text }> when to is array, each position
-    // aligned with targetLangs. Older versions return an object keyed
-    // by locale — tolerate both.
+    const out = {};
     if (Array.isArray(res)) {
       targetLangs.forEach((l, i) => {
-        out[l] = restoreGlossary(res[i]?.text ?? text, tokens);
-      });
-    } else if (res && typeof res === "object" && "text" in res) {
-      // Single result — shouldn't happen with array `to`, but fall back.
-      targetLangs.forEach((l) => {
-        out[l] = restoreGlossary(res.text, tokens);
+        const t = res[i]?.text;
+        if (t && t !== protectedText) out[l] = restoreGlossary(t, tokens);
       });
     } else if (res && typeof res === "object") {
       for (const l of targetLangs) {
-        const entry = res[l];
-        out[l] = restoreGlossary(entry?.text ?? text, tokens);
+        const entry = (res)[l];
+        const t = entry?.text ?? entry;
+        if (typeof t === "string" && t && t !== protectedText) {
+          out[l] = restoreGlossary(t, tokens);
+        }
       }
-    } else {
-      for (const l of targetLangs) out[l] = text;
     }
+    return out;
   } catch (err) {
     console.error(
       `      ⚠ batch-translate "${text.slice(0, 40)}…": ${err.message}`,
     );
-    for (const l of targetLangs) out[l] = text;
+    return {};
   }
-  return out;
 }
 
 function isLocaleObject(val) {
@@ -252,12 +256,18 @@ async function translateLocaleField(field) {
   if (missing.length === 0) return { patched, count: 0 };
 
   const translations = await translateBatch(patched.en, missing);
-  for (const l of missing) patched[l] = translations[l];
+  let written = 0;
+  for (const l of missing) {
+    if (typeof translations[l] === "string" && translations[l].length > 0) {
+      patched[l] = translations[l];
+      written++;
+    }
+  }
 
   // One batched call per source string — pause between sources so
   // Google doesn't rate-limit the whole document.
   await sleep(DELAY_MS);
-  return { patched, count: missing.length };
+  return { patched, count: written };
 }
 
 /* ── Main ─────────────────────────────────────────────────── */
