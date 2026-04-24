@@ -1,18 +1,25 @@
 import { fetchAllSlugsForSitemap } from "@/lib/sanity-data";
 import { getAllComboSlugs } from "@/data/bet-type-league-combos";
+import { locales, defaultLocale, localeMeta, type Locale } from "@/i18n/config";
+import { localizePath } from "@/i18n/routes";
 
 export const revalidate = 60;
 
 /**
- * Custom sitemap route — served at /sitemap.xml (EN-only, 2026-04-22)
+ * 16-locale sitemap — Nerdytips pattern (2026-04-24)
  * ────────────────────────────────────────────────────────────
- * Emits a single URL per public page — the English canonical —
- * with no hreflang `xhtml:link` alternates. Middleware 308-redirects
- * every /xx/ prefix to the canonical English path so there are no
- * indexable locale variants to advertise.
+ * Every canonical URL is enumerated across all 16 locales. Each
+ * entry carries its own <xhtml:link rel="alternate" hreflang=…>
+ * cluster pointing at every sibling locale + x-default, which
+ * tells Google: "these are the same content in different
+ * languages, index all of them, serve the matching one per
+ * user".
  *
  * Private routes under the (app) group are excluded, as are
- * funnel pages (/checkout, /login, /welcome) without organic value.
+ * funnel pages (/checkout, /login, /welcome) without organic
+ * value. Legal pages (/privacy, /cookies, /terms) are only
+ * emitted in the default locale since content is identical
+ * across locales.
  */
 
 const SITE_URL = "https://betsplug.com";
@@ -27,7 +34,10 @@ type ChangeFreq =
   | "never";
 
 type SitemapEntry = {
+  /** Absolute URL for this locale × path combo. */
   url: string;
+  /** Map of hreflang → absolute URL for every sibling locale. */
+  alternates: Record<string, string>;
   lastModified: Date;
   changeFrequency: ChangeFreq;
   priority: number;
@@ -67,6 +77,45 @@ function absoluteUrl(path: string): string {
   return path === "/" ? SITE_URL : `${SITE_URL}${path}`;
 }
 
+function buildAbsolute(canonicalPath: string, locale: Locale): string {
+  return absoluteUrl(localizePath(canonicalPath, locale));
+}
+
+/** Build the hreflang alternate cluster for a canonical path. */
+function alternatesFor(canonicalPath: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const l of locales) {
+    const tag = localeMeta[l].hreflang;
+    out[tag] = buildAbsolute(canonicalPath, l);
+  }
+  out["x-default"] = buildAbsolute(canonicalPath, defaultLocale);
+  return out;
+}
+
+/**
+ * Emit 16 entries (one per locale) for a single canonical path,
+ * each with the same hreflang cluster. The cluster is what tells
+ * Google the 16 URLs are siblings of the same content.
+ */
+function expandAcrossLocales(
+  canonicalPath: string,
+  opts: {
+    priority: number;
+    changeFrequency: ChangeFreq;
+    lastModified?: Date;
+  },
+): SitemapEntry[] {
+  const alternates = alternatesFor(canonicalPath);
+  const when = opts.lastModified ?? new Date();
+  return locales.map((l) => ({
+    url: buildAbsolute(canonicalPath, l),
+    alternates,
+    lastModified: when,
+    changeFrequency: opts.changeFrequency,
+    priority: opts.priority,
+  }));
+}
+
 function escapeXml(value: string): string {
   return value.replace(/[<>&'"]/g, (c) => {
     switch (c) {
@@ -93,54 +142,55 @@ async function buildEntries(): Promise<SitemapEntry[]> {
   const { articles, learnPillars, leagueHubs, betTypeHubs } =
     await fetchAllSlugsForSitemap();
 
-  const pageEntries: SitemapEntry[] = PUBLIC_PATHS.map(
-    ({ canonical, priority, changeFrequency }) => ({
-      url: absoluteUrl(canonical),
+  const pageEntries = PUBLIC_PATHS.flatMap(({ canonical, priority, changeFrequency }) =>
+    expandAcrossLocales(canonical, { priority, changeFrequency, lastModified: now }),
+  );
+
+  const leagueHubEntries = leagueHubs.flatMap((slug) =>
+    expandAcrossLocales(`/match-predictions/${slug}`, {
+      priority: 0.85,
+      changeFrequency: "daily",
       lastModified: now,
-      changeFrequency,
-      priority,
     }),
   );
 
-  const leagueHubEntries: SitemapEntry[] = leagueHubs.map((slug) => ({
-    url: absoluteUrl(`/match-predictions/${slug}`),
-    lastModified: now,
-    changeFrequency: "daily" as ChangeFreq,
-    priority: 0.85,
-  }));
-
-  const betTypeHubEntries: SitemapEntry[] = betTypeHubs.map((slug) => ({
-    url: absoluteUrl(`/bet-types/${slug}`),
-    lastModified: now,
-    changeFrequency: "monthly" as ChangeFreq,
-    priority: 0.75,
-  }));
-
-  const comboEntries: SitemapEntry[] = getAllComboSlugs().map(
-    ({ betTypeSlug, leagueSlug }) => ({
-      url: absoluteUrl(`/bet-types/${betTypeSlug}/${leagueSlug}`),
+  const betTypeHubEntries = betTypeHubs.flatMap((slug) =>
+    expandAcrossLocales(`/bet-types/${slug}`, {
+      priority: 0.75,
+      changeFrequency: "monthly",
       lastModified: now,
-      changeFrequency: "weekly" as ChangeFreq,
+    }),
+  );
+
+  const comboEntries = getAllComboSlugs().flatMap(({ betTypeSlug, leagueSlug }) =>
+    expandAcrossLocales(`/bet-types/${betTypeSlug}/${leagueSlug}`, {
       priority: 0.7,
+      changeFrequency: "weekly",
+      lastModified: now,
     }),
   );
 
-  const learnPillarEntries: SitemapEntry[] = learnPillars.map((slug) => ({
-    url: absoluteUrl(`/learn/${slug}`),
-    lastModified: now,
-    changeFrequency: "monthly" as ChangeFreq,
-    priority: 0.75,
-  }));
+  const learnPillarEntries = learnPillars.flatMap((slug) =>
+    expandAcrossLocales(`/learn/${slug}`, {
+      priority: 0.75,
+      changeFrequency: "monthly",
+      lastModified: now,
+    }),
+  );
 
-  const articleEntries: SitemapEntry[] = articles.map((article) => ({
-    url: absoluteUrl(`/articles/${article.slug}`),
-    lastModified: article.publishedAt ? new Date(article.publishedAt) : now,
-    changeFrequency: "monthly" as ChangeFreq,
-    priority: 0.6,
-  }));
+  const articleEntries = articles.flatMap((article) =>
+    expandAcrossLocales(`/articles/${article.slug}`, {
+      priority: 0.6,
+      changeFrequency: "monthly",
+      lastModified: article.publishedAt ? new Date(article.publishedAt) : now,
+    }),
+  );
 
+  // Legal pages: identical content across locales — emit default
+  // locale only, no hreflang cluster needed.
   const legalEntries: SitemapEntry[] = LEGAL_PATHS.map(({ path, priority }) => ({
     url: absoluteUrl(path),
+    alternates: {},
     lastModified: now,
     changeFrequency: "yearly" as ChangeFreq,
     priority,
@@ -159,19 +209,29 @@ async function buildEntries(): Promise<SitemapEntry[]> {
 
 function serializeXml(entries: SitemapEntry[]): string {
   const urlBlocks = entries
-    .map(
-      (e) => `  <url>
+    .map((e) => {
+      const alternateLines = Object.entries(e.alternates)
+        .map(
+          ([tag, url]) =>
+            `    <xhtml:link rel="alternate" hreflang="${escapeXml(
+              tag,
+            )}" href="${escapeXml(url)}" />`,
+        )
+        .join("\n");
+      return `  <url>
     <loc>${escapeXml(e.url)}</loc>
     <lastmod>${e.lastModified.toISOString()}</lastmod>
     <changefreq>${e.changeFrequency}</changefreq>
-    <priority>${e.priority.toFixed(1)}</priority>
-  </url>`,
-    )
+    <priority>${e.priority.toFixed(1)}</priority>${
+        alternateLines ? "\n" + alternateLines : ""
+      }
+  </url>`;
+    })
     .join("\n");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urlBlocks}
 </urlset>
 `;

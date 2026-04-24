@@ -1,18 +1,11 @@
 /**
- * SEO helper utilities (EN-indexable, translated UI — 2026-04-23)
+ * SEO helper utilities (16-locale Nerdytips pattern — 2026-04-24)
  * ────────────────────────────────────────────────────────────
- * Every canonical URL emitted here is the English form. The
- * middleware rewrites /nl/, /de/, … URLs to the canonical path
- * AND tags the response `X-Robots-Tag: noindex`, so Google only
- * indexes the English URL space while visitors still see their
- * chosen language via SSR (not Google Translate).
- *
- * `getServerLocale()` IS locale-aware (reads the `x-locale`
- * request header set by the middleware), so SSR renders the right
- * language. Canonical URLs built via `getCanonicalUrl()` /
- * `getLocalizedAlternates()` ignore the active locale and always
- * return the English URL — that's what goes into
- * `<link rel="canonical">` and OG `url`.
+ * Phase 4: every locale URL is indexable with its own
+ * self-canonical + a full hreflang cluster (17 tags = x-default +
+ * 16 locales). `getServerLocale()` reads the `x-locale` header set
+ * by middleware so SSR renders the right language; canonical
+ * + alternates are built off that locale.
  */
 
 import { cookies, headers } from "next/headers";
@@ -20,8 +13,11 @@ import {
   LOCALE_COOKIE,
   isLocale,
   defaultLocale,
+  locales,
+  localeMeta,
   type Locale,
 } from "@/i18n/config";
+import { localizePath } from "@/i18n/routes";
 import { translate } from "@/i18n/messages";
 import { formatMsg } from "@/i18n/format";
 import { POTD_STATS } from "@/data/potd-stats";
@@ -65,28 +61,35 @@ export function getServerLocale(): Locale {
 /* ── Canonical URL ──────────────────────────────────────────── */
 
 /**
- * Build the absolute canonical URL for a page.
- *
- * EN-only: every page's canonical is the English URL with no locale
- * prefix. Non-EN URLs are 308-redirected by the middleware.
+ * Build the absolute canonical URL for a page in the ACTIVE
+ * locale — Nerdytips pattern. Each locale URL is its own
+ * indexable entity with a self-canonical, so `/de/…` canonicals
+ * to itself, NOT the EN URL.
  *
  * @param canonicalPath  The canonical (English) path, e.g. "/articles"
- * @returns              Absolute URL, e.g. "https://betsplug.com/articles"
+ * @returns              Absolute URL in the active locale, e.g.
+ *                       "https://betsplug.com/de/spiel-vorhersagen"
  */
 export function getCanonicalUrl(canonicalPath: string): string {
-  return `${SITE_URL}${canonicalPath === "/" ? "" : canonicalPath}`;
+  const locale = getServerLocale();
+  return buildAbsoluteUrl(canonicalPath, locale);
 }
 
-/* ── hreflang alternates (disabled) ─────────────────────────── */
+function buildAbsoluteUrl(canonicalPath: string, locale: Locale): string {
+  const localised = localizePath(canonicalPath, locale);
+  return `${SITE_URL}${localised === "/" ? "" : localised}`;
+}
+
+/* ── hreflang alternates ────────────────────────────────────── */
 
 /**
- * Build Next.js `alternates` for a page.
+ * Build Next.js `alternates` for a page with self-canonical and
+ * a full hreflang cluster across all 16 locales + `x-default`.
  *
- * With i18n rolled back, every page has a single canonical (the EN
- * URL) and no hreflang alternates. The `languages` field is kept on
- * the return type so existing call sites that spread
- * `languages: alternates.languages` keep compiling — an empty
- * object tells Next.js to emit no `<link rel="alternate">` tags.
+ * Consumers pass the CANONICAL (English) path — we build the
+ * localized URL for every locale via the `routeTable` + emit them
+ * in the `languages` map keyed by BCP-47 tag. The self-canonical
+ * points at the ACTIVE locale's URL.
  *
  * @param canonicalPath the EN canonical path, e.g. "/articles"
  *                      or "/match-predictions/premier-league".
@@ -95,10 +98,17 @@ export function getLocalizedAlternates(canonicalPath: string): {
   canonical: string;
   languages: Record<string, string>;
 } {
-  return {
-    canonical: getCanonicalUrl(canonicalPath),
-    languages: {},
-  };
+  const locale = getServerLocale();
+  const canonical = buildAbsoluteUrl(canonicalPath, locale);
+
+  const languages: Record<string, string> = {};
+  for (const l of locales) {
+    const tag = localeMeta[l].hreflang;
+    languages[tag] = buildAbsoluteUrl(canonicalPath, l);
+  }
+  languages["x-default"] = buildAbsoluteUrl(canonicalPath, defaultLocale);
+
+  return { canonical, languages };
 }
 
 /* ── Locale-aware FAQ builder ──────────────────────────────── */

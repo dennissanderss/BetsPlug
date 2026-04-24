@@ -1,15 +1,14 @@
 import type { MetadataRoute } from "next";
 
 /**
- * Dynamic robots.txt — served at /robots.txt (2026-04-23)
+ * Dynamic robots.txt — served at /robots.txt (2026-04-24)
  * ────────────────────────────────────────────────────────────
- * Allows crawling across the public surface. /xx/ locale URLs
- * are intentionally NOT disallowed here: they serve translated
- * UI to visitors but return `X-Robots-Tag: noindex, nofollow`
- * (see middleware.ts). If we disallow them in robots.txt Google
- * can't fetch them and can't see the noindex header, which would
- * leave stale /xx/ URLs in the index. Allow + noindex is the
- * spec-recommended way to remove a set of URLs.
+ * Allows crawling across the public surface in ALL 16 locales.
+ * Each /xx/ URL is now indexable (Phase 4 Nerdytips rollout)
+ * with a self-canonical + hreflang cluster in <head>, so Google
+ * is welcome to crawl and rank them as per-locale siblings.
+ *
+ * Only authed / funnel / private API paths are disallowed.
  */
 
 const SITE_URL = "https://betsplug.com";
