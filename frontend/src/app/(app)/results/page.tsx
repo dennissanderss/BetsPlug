@@ -169,10 +169,11 @@ function formatPredictedOutcome(
 
 // ─── Weekly Summary Card ──────────────────────────────────────────────────────
 
-function WeeklySummaryCard({ data, isLoading, isError }: {
+function WeeklySummaryCard({ data, isLoading, isError, isFree }: {
   data: WeeklySummary | undefined;
   isLoading: boolean;
   isError: boolean;
+  isFree: boolean;
 }) {
   const { t } = useTranslations();
   if (isLoading) {
@@ -236,22 +237,33 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
 
       {/* Stats row */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-5 mb-5">
-        {statItems.map(({ label, value, color }) => (
+        {statItems.map(({ label, value, color }) => {
+          // Free Access: lock the Net P/L tile since it's a monetary
+          // simulation output. Total calls, wins, losses, win rate stay
+          // open so the track record itself is still visible.
+          const isPLTile = label === t("results.statPLUnits");
+          const lockedTile = isFree && isPLTile;
+          return (
           <div
             key={label}
             className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center"
           >
+            {lockedTile ? (
+              <LockPill requiredTier="silver" />
+            ) : (
             <span
               className="text-2xl font-extrabold leading-none tabular-nums"
               style={{ color }}
             >
               {value}
             </span>
+            )}
             <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
               {label}
             </span>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Performers */}
@@ -1587,6 +1599,7 @@ function ResultsPageContent() {
         data={computedSummary ?? undefined}
         isLoading={isLoading}
         isError={hasError}
+        isFree={isFree}
       />
 
       {/* ── Streak Stats ── */}
