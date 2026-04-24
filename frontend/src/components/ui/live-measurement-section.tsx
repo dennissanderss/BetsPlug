@@ -11,12 +11,21 @@
  */
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion } from "motion/react";
-import { Activity, Clock } from "lucide-react";
+import { Activity, Clock, ArrowRight } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { useTranslations } from "@/i18n/locale-provider";
 import { TIER_THEME, TIER_ORDER, type TierKey } from "@/components/noct/tier-theme";
 import { TierEmblem } from "@/components/noct/tier-emblem";
+
+// Results page uses "free" for the Bronze tier (matches the backend slug).
+const RESULTS_TIER_SLUG: Record<TierKey, string> = {
+  bronze: "free",
+  silver: "silver",
+  gold: "gold",
+  platinum: "platinum",
+};
 
 interface TierBucket {
   total: number;
@@ -141,9 +150,12 @@ function LiveTierCard({
   const ci = wilson(correct, total);
   const awaiting = total < 10;
 
+  const resultsHref = `/results?tier=${RESULTS_TIER_SLUG[tier]}&period=30`;
+
   return (
-    <div
-      className="relative overflow-hidden rounded-2xl border p-5"
+    <Link
+      href={resultsHref}
+      className="group relative overflow-hidden rounded-2xl border p-5 block transition-transform hover:-translate-y-0.5 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
       style={{
         borderColor: theme.ringHex,
         background: `linear-gradient(180deg, ${theme.bgTintHex}, rgba(15,20,32,0.6))`,
@@ -213,7 +225,13 @@ function LiveTierCard({
           95% CI {(ci.lower * 100).toFixed(0)}–{(ci.upper * 100).toFixed(0)}%
         </p>
       )}
-    </div>
+
+      {/* CTA — clicking the card takes the user to Results pre-filtered to this tier */}
+      <div className="relative mt-3 pt-3 border-t border-white/[0.05] flex items-center justify-between text-[10px] font-semibold uppercase tracking-widest text-slate-500 group-hover:text-slate-300 transition-colors">
+        <span>{t("live.viewMatches")}</span>
+        <ArrowRight className="h-3 w-3" />
+      </div>
+    </Link>
   );
 }
 

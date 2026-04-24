@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { Suspense, useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import {
   Trophy,
@@ -1060,21 +1061,38 @@ function SkeletonCard() {
 export default function ResultsPage() {
   return (
     <PaywallOverlay feature="results" requiredTier="silver">
-      <ResultsPageContent />
+      <Suspense fallback={null}>
+        <ResultsPageContent />
+      </Suspense>
     </PaywallOverlay>
   );
 }
 
+const VALID_TIERS: readonly TierFilter[] = ["free", "silver", "gold", "platinum"] as const;
+const VALID_PERIODS: readonly PeriodFilter[] = [7, 14, 30] as const;
+
 function ResultsPageContent() {
   const { t } = useTranslations();
-  const [period, setPeriod] = useState<PeriodFilter>(7);
+  // Deep-link support: /results?tier=silver&period=30 lets the track-record
+  // tier cards jump directly to the right slice of data.
+  const searchParams = useSearchParams();
+  const initialTier = (() => {
+    const q = (searchParams?.get("tier") ?? "").toLowerCase();
+    return (VALID_TIERS as readonly string[]).includes(q) ? (q as TierFilter) : "gold";
+  })();
+  const initialPeriod = (() => {
+    const q = Number(searchParams?.get("period"));
+    return (VALID_PERIODS as readonly number[]).includes(q) ? (q as PeriodFilter) : 7;
+  })();
+
+  const [period, setPeriod] = useState<PeriodFilter>(initialPeriod);
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
   // Tier + period for the ROI calculator are the single source of truth —
   // the results table below reuses the same tier so selecting "Platinum"
   // in step 1 also scopes the table.
-  const [tierFilter, setTierFilter] = useState<TierFilter>("gold");
-  const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(30);
+  const [tierFilter, setTierFilter] = useState<TierFilter>(initialTier);
+  const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(initialPeriod);
   // Stake is shared between the ROI calculator header and each table
   // row so the numbers always agree. Persisted to localStorage.
   const [stake, setStake] = useState<number>(10);
