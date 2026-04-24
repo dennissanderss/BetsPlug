@@ -390,15 +390,26 @@ function formatRoiPct(profit: number, totalStake: number): string {
   return `${sign}${Math.abs(pct).toFixed(1)}%`;
 }
 
-function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
+function RoiCalculatorCard({
+  fixtures,
+  isLoading,
+  stake,
+  setStake,
+  calcTier,
+  setCalcTier,
+  calcPeriod,
+  setCalcPeriod,
+}: {
   fixtures: Fixture[];
   isLoading: boolean;
   stake: number;
   setStake: (v: number) => void;
+  calcTier: CalcTier;
+  setCalcTier: (v: CalcTier) => void;
+  calcPeriod: CalcPeriod;
+  setCalcPeriod: (v: CalcPeriod) => void;
 }) {
   const { t } = useTranslations();
-  const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(30);
-  const [calcTier, setCalcTier] = useState<CalcTier>("gold");
 
   // Aggregate the SELECTED tier at the SELECTED period for the headline card.
   const headline = useMemo(() => {
@@ -446,7 +457,7 @@ function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
       style={{ border: "1px solid rgba(16,185,129,0.18)" }}
     >
       {/* Header */}
-      <div className="flex flex-wrap items-center gap-2 mb-4">
+      <div className="flex flex-wrap items-center gap-2 mb-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
           <Calculator className="h-4 w-4 text-emerald-400" />
         </div>
@@ -457,14 +468,35 @@ function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
           {t("results.roiCalcSimulation")}
         </span>
       </div>
+      <p className="text-xs text-slate-500 mb-5">{t("results.roiCalcIntro")}</p>
 
-      {/* Controls row */}
-      <div className="flex flex-wrap items-center gap-3 mb-5">
-        {/* Stake input */}
-        <div className="flex items-center gap-2">
-          <label className="text-[10px] uppercase tracking-widest text-slate-500">
-            {t("results.roiCalcStake")}
-          </label>
+      {/* ── Step 1 — Choose tier ─────────────────────────────── */}
+      <Step number={1} label={t("results.roiCalcStep1")} hint={t("results.roiCalcStep1Hint")}>
+        <div className="flex flex-wrap items-center gap-2">
+          {CALC_TIERS.map(({ key, label, accent }) => {
+            const active = key === calcTier;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setCalcTier(key)}
+                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors border ${
+                  active
+                    ? "text-white border-white/[0.2]"
+                    : "text-slate-400 bg-white/[0.02] border-white/[0.06] hover:text-slate-200"
+                }`}
+                style={active ? { background: accent } : undefined}
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      </Step>
+
+      {/* ── Step 2 — Stake per pick ──────────────────────────── */}
+      <Step number={2} label={t("results.roiCalcStep2")} hint={t("results.roiCalcStep2Hint")}>
+        <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1.5">
             <span className="text-sm text-slate-400">€</span>
             <input
@@ -481,13 +513,13 @@ function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
               className="w-16 bg-transparent text-sm font-semibold text-slate-100 tabular-nums focus:outline-none"
             />
           </div>
-          <div className="hidden sm:flex items-center gap-1">
+          <div className="flex flex-wrap items-center gap-1">
             {STAKE_OPTIONS.map((v) => (
               <button
                 key={v}
                 type="button"
                 onClick={() => setStake(v)}
-                className={`rounded-md px-2 py-1 text-[10px] font-semibold transition-colors ${
+                className={`rounded-md px-2.5 py-1.5 text-[11px] font-semibold transition-colors ${
                   stake === v
                     ? "bg-emerald-600/80 text-white"
                     : "bg-white/[0.03] text-slate-400 hover:text-slate-200"
@@ -498,9 +530,11 @@ function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
             ))}
           </div>
         </div>
+      </Step>
 
-        {/* Period */}
-        <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1 ml-auto">
+      {/* ── Step 3 — Pick period ─────────────────────────────── */}
+      <Step number={3} label={t("results.roiCalcStep3")} hint={t("results.roiCalcStep3Hint")}>
+        <div className="inline-flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
           {periodOptions.map(({ value, label }) => (
             <button
               key={value}
@@ -516,107 +550,112 @@ function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
             </button>
           ))}
         </div>
-      </div>
+      </Step>
 
-      {/* Headline stats — selected tier × selected period */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-5">
-        <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
-          <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
-            {headline.matches}
-          </span>
-          <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
-            {t("results.roiCalcPicks")}
-          </span>
+      {/* ── Step 4 — Your return ─────────────────────────────── */}
+      <Step number={4} label={t("results.roiCalcStep4")} hint={t("results.roiCalcStep4Hint")}>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-3">
+          <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
+            <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
+              {headline.matches}
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
+              {t("results.roiCalcPicks")}
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
+            <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
+              €{headlineTotalStake.toLocaleString("en-GB", { maximumFractionDigits: 0 })}
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
+              {t("results.roiCalcStaked")}
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
+            <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
+              €{headline.returned.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
+              {t("results.roiCalcPayout")}
+            </span>
+          </div>
+          <div
+            className="flex flex-col items-center justify-center gap-1 rounded-lg border py-3 px-2 text-center"
+            style={{
+              background: headline.profit >= 0 ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.08)",
+              borderColor: headline.profit >= 0 ? "rgba(16,185,129,0.25)" : "rgba(239,68,68,0.25)",
+            }}
+          >
+            <span className="text-2xl font-extrabold leading-none tabular-nums" style={{ color: profitColor }}>
+              {formatEuro(headline.profit)}
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-widest" style={{ color: profitColor }}>
+              {t("results.roiCalcNetResult")} · {formatRoiPct(headline.profit, headlineTotalStake)}
+            </span>
+          </div>
         </div>
-        <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
-          <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
-            €{headlineTotalStake.toLocaleString("en-GB", { maximumFractionDigits: 0 })}
-          </span>
-          <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
-            {t("results.roiCalcStaked")}
-          </span>
-        </div>
-        <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
-          <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
-            €{headline.returned.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </span>
-          <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
-            {t("results.roiCalcPayout")}
-          </span>
-        </div>
-        <div
-          className="flex flex-col items-center justify-center gap-1 rounded-lg border py-3 px-2 text-center"
-          style={{
-            background: headline.profit >= 0 ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.08)",
-            borderColor: headline.profit >= 0 ? "rgba(16,185,129,0.25)" : "rgba(239,68,68,0.25)",
-          }}
-        >
-          <span className="text-2xl font-extrabold leading-none tabular-nums" style={{ color: profitColor }}>
-            {formatEuro(headline.profit)}
-          </span>
-          <span className="text-[10px] font-medium uppercase tracking-widest" style={{ color: profitColor }}>
-            {t("results.roiCalcNetResult")} · {formatRoiPct(headline.profit, headlineTotalStake)}
-          </span>
-        </div>
-      </div>
 
-      {/* Per-tier breakdown */}
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4 mb-3">
-        {CALC_TIERS.map(({ key, label, accent }) => {
-          const row = perTier[key];
-          const totalStake = row.realStake + row.modelStake;
-          const active = key === calcTier;
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setCalcTier(key)}
-              className={`text-left rounded-lg p-3 border transition-colors ${
-                active
-                  ? "bg-white/[0.06] border-white/[0.14]"
-                  : "bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.04]"
-              }`}
-            >
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: accent }}>
-                  {label}
-                </span>
-                <span className="text-[10px] text-slate-500 tabular-nums">
-                  {row.matches} {row.matches === 1 ? t("results.roiCalcPickSingular") : t("results.roiCalcPickPlural")}
-                </span>
-              </div>
-              <div className="flex items-baseline justify-between gap-2">
-                <span
-                  className="text-lg font-extrabold tabular-nums"
-                  style={{ color: row.profit >= 0 ? "#10b981" : row.matches === 0 ? "#64748b" : "#ef4444" }}
-                >
-                  {row.matches === 0 ? "—" : formatEuro(row.profit)}
-                </span>
-                <span
-                  className="text-[11px] font-semibold tabular-nums"
-                  style={{ color: row.profit >= 0 ? "#10b981" : row.matches === 0 ? "#64748b" : "#ef4444" }}
-                >
-                  {row.matches === 0 ? "" : formatRoiPct(row.profit, totalStake)}
-                </span>
-              </div>
-              <div className="text-[10px] text-slate-500 mt-1 tabular-nums">
-                {row.wins}W · {row.losses}L
-                {row.modelCount > 0 && (
-                  <span
-                    className="ml-1 text-sky-400"
-                    title={`${row.modelCount} pick${row.modelCount === 1 ? "" : "s"} priced with model-implied odds (no bookmaker odds on file).`}
-                  >
-                    · {row.modelCount} model
+        {/* Per-tier comparison — tap any card to make it the active tier */}
+        <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">
+          {t("results.roiCalcCompareAllTiers")}
+        </p>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {CALC_TIERS.map(({ key, label, accent }) => {
+            const row = perTier[key];
+            const totalStake = row.realStake + row.modelStake;
+            const active = key === calcTier;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setCalcTier(key)}
+                className={`text-left rounded-lg p-3 border transition-colors ${
+                  active
+                    ? "bg-white/[0.06] border-white/[0.14]"
+                    : "bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.04]"
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: accent }}>
+                    {label}
                   </span>
-                )}
-              </div>
-            </button>
-          );
-        })}
-      </div>
+                  <span className="text-[10px] text-slate-500 tabular-nums">
+                    {row.matches} {row.matches === 1 ? t("results.roiCalcPickSingular") : t("results.roiCalcPickPlural")}
+                  </span>
+                </div>
+                <div className="flex items-baseline justify-between gap-2">
+                  <span
+                    className="text-lg font-extrabold tabular-nums"
+                    style={{ color: row.profit >= 0 ? "#10b981" : row.matches === 0 ? "#64748b" : "#ef4444" }}
+                  >
+                    {row.matches === 0 ? "—" : formatEuro(row.profit)}
+                  </span>
+                  <span
+                    className="text-[11px] font-semibold tabular-nums"
+                    style={{ color: row.profit >= 0 ? "#10b981" : row.matches === 0 ? "#64748b" : "#ef4444" }}
+                  >
+                    {row.matches === 0 ? "" : formatRoiPct(row.profit, totalStake)}
+                  </span>
+                </div>
+                <div className="text-[10px] text-slate-500 mt-1 tabular-nums">
+                  {row.wins}W · {row.losses}L
+                  {row.modelCount > 0 && (
+                    <span
+                      className="ml-1 text-sky-400"
+                      title={`${row.modelCount} pick${row.modelCount === 1 ? "" : "s"} priced with model-implied odds (no bookmaker odds on file).`}
+                    >
+                      · {row.modelCount} model
+                    </span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </Step>
 
       {/* Footnote / disclaimer */}
-      <div className="flex items-start gap-2 text-[11px] text-slate-500 leading-relaxed">
+      <div className="mt-4 flex items-start gap-2 text-[11px] text-slate-500 leading-relaxed">
         <Info className="h-3.5 w-3.5 text-slate-500 mt-0.5 shrink-0" />
         <p>
           {t("results.roiCalcDisclaimer")}
@@ -631,6 +670,39 @@ function RoiCalculatorCard({ fixtures, isLoading, stake, setStake }: {
           )}
         </p>
       </div>
+    </div>
+  );
+}
+
+// Numbered-step wrapper — uniform visual for each config row.
+function Step({
+  number,
+  label,
+  hint,
+  children,
+}: {
+  number: number;
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="mb-4 pb-4 border-b border-white/[0.04] last:mb-0 last:pb-0 last:border-b-0">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-[10px] font-bold text-emerald-400 tabular-nums">
+          {number}
+        </span>
+        <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-300">
+          {label}
+        </span>
+        {hint && (
+          <span className="text-[11px] text-slate-500 hidden sm:inline">— {hint}</span>
+        )}
+      </div>
+      {hint && (
+        <p className="text-[11px] text-slate-500 sm:hidden mb-2">{hint}</p>
+      )}
+      {children}
     </div>
   );
 }
@@ -998,7 +1070,11 @@ function ResultsPageContent() {
   const [period, setPeriod] = useState<PeriodFilter>(7);
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
+  // Tier + period for the ROI calculator are the single source of truth —
+  // the results table below reuses the same tier so selecting "Platinum"
+  // in step 1 also scopes the table.
   const [tierFilter, setTierFilter] = useState<TierFilter>("gold");
+  const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(30);
   // Stake is shared between the ROI calculator header and each table
   // row so the numbers always agree. Persisted to localStorage.
   const [stake, setStake] = useState<number>(10);
@@ -1158,36 +1234,14 @@ function ResultsPageContent() {
         </div>
       </div>
 
-      {/* ── Tier scope strip + live-tracking-since label ── */}
-      <div className="glass-card px-4 py-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[10px] uppercase tracking-widest text-slate-500 mr-2">
-            Scope
+      {/* ── Live-tracking-since chip (the scope selector lives inside the calculator) ── */}
+      <div className="flex items-center justify-end">
+        <span className="text-[10px] uppercase tracking-widest text-slate-500">
+          Live tracking since{" "}
+          <span className="text-slate-300 font-semibold tabular-nums">
+            {LIVE_TRACKING_START}
           </span>
-          {TIER_TABS.map((tab) => {
-            const active = tab.key === tierFilter;
-            return (
-              <button
-                key={tab.key}
-                type="button"
-                onClick={() => setTierFilter(tab.key)}
-                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
-                  active
-                    ? "bg-emerald-600/80 text-white"
-                    : "bg-white/[0.03] text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-          <span className="ml-auto text-[10px] uppercase tracking-widest text-slate-500">
-            Live tracking since{" "}
-            <span className="text-slate-300 font-semibold tabular-nums">
-              {LIVE_TRACKING_START}
-            </span>
-          </span>
-        </div>
+        </span>
       </div>
 
       {/* ── ROI Calculator (what would you have made?) ── */}
@@ -1196,6 +1250,10 @@ function ResultsPageContent() {
         isLoading={isLoading}
         stake={stake}
         setStake={setStake}
+        calcTier={tierFilter}
+        setCalcTier={setTierFilter}
+        calcPeriod={calcPeriod}
+        setCalcPeriod={setCalcPeriod}
       />
 
       {/* ── Weekly Summary ── */}
