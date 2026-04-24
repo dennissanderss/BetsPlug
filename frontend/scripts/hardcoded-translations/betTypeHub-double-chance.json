@@ -1,0 +1,227 @@
+{
+  "_docId": "betTypeHub-double-chance",
+  "_type": "betTypeHub",
+  "_label": "Double Chance",
+  "fields": {
+    "name": {
+      "sw": "Double Chance",
+      "pt": "Hipótese Dupla",
+      "tr": "Çifte Şans",
+      "pl": "Podwójna Szansa",
+      "ro": "Șansă Dublă",
+      "ru": "Двойной Шанс",
+      "el": "Διπλή Ευκαιρία",
+      "da": "Dobbelt Chance",
+      "sv": "Dubbelchans"
+    },
+    "tagline": {
+      "sw": "Njia ya variance ndogo ya kubeti favoriti bila hofu ya sare",
+      "pt": "Uma forma de baixa variância de apostar no favorito sem temer o empate",
+      "tr": "Beraberlikten korkmadan favoriyi desteklemenin düşük varyanslı yolu",
+      "pl": "Niskowarjan cyjny sposób obstawiania faworyta bez obaw o remis",
+      "ro": "O modalitate cu varianță redusă de a paria pe favorit fără a te teme de egal",
+      "ru": "Менее рискованный способ поставить на фаворита, не боясь ничьей",
+      "el": "Ένας τρόπος χαμηλής διακύμανσης να στοιχηματίσεις στο φαβορί χωρίς να φοβάσαι ισοπαλία",
+      "da": "En lav-varians måde at holde med favoritten uden at frygte uafgjort",
+      "sv": "Ett lågvarianssätt att backa favoriten utan att frukta oavgjort"
+    },
+    "explainer": {
+      "sw": "Double Chance inakuruhusu kubeti kwenye mbili kati ya matokeo matatu yanayowezekana ya 1X2 kwa stake moja. Varianti tatu ni 1X (ushindi wa nyumbani au sare), X2 (ushindi wa ugeni au sare), na 12 (ushindi wa nyumbani au ushindi wa ugeni - kwa maana 'hakuna sare'). Unaanguka variance: badala ya kuhitaji matokeo maalum, unahitaji mbili kati ya tatu. Biashara ni bei. Ikiwa timu ya nyumbani ina 55% nafasi iliyotafsiriwa ya kushinda na sare ni 25%, basi 1X inamaanisha 80% - na odds zenye haki zinakaa karibu 1.25. Books wanaweka margin yao juu, kwa hivyo unaona bei za 1X kawaida katika range ya 1.15 – 1.30. Soko ni maarufu kati ya watumiaji wa burudani wanaotaka 'kuweka' favoriti lakini hawatumaini bei ya 1X2. Pia ni njia salama zaidi ya kubeti underdog: X2 kwenye safari ya ugeni hadi timu ya top-three mara nyingi hupanga karibu 1.40 wakati soko mbichi la uwon wa ugeni linakaa 5.50+.",
+      "pt": "A Hipótese Dupla permite-te apostar em duas das três possíveis saídas 1X2 com uma única aposta. As três variantes são 1X (vitória em casa ou empate), X2 (vitória fora ou empate), e 12 (vitória em casa ou vitória fora - efetivamente 'sem empate'). Estás a comprimir a variância: em vez de precisares de um resultado específico, precisas de dois em três. O compromisso é o preço. Se a equipa da casa tem 55% de hipótese implícita de ganhar e o empate é 25%, então 1X implica 80% - e as odds justas aterram em torno de 1,25. As casas adicionam a sua margem por cima, então normalmente vês preços de 1X no intervalo 1,15 – 1,30. O mercado é popular entre utilizadores recreativos que querem 'fixar' um favorito mas não confiam no preço de 1X2. É também a forma mais segura de apostar num underdog: X2 numa deslocação a uma equipa do top três normalmente cota em torno de 1,40 quando o mercado bruto de vitória fora está em 5,50+.",
+      "tr": "Çifte Şans, üç olası 1X2 sonuçtan ikisine tek bahisle bahis oynamanıza olanak tanır. Üç varyant 1X (ev sahibi kazanır veya beraberlik), X2 (deplasman kazanır veya beraberlik) ve 12 (ev sahibi kazanır veya deplasman kazanır - etkin olarak 'beraberlik yok'). Varyansı daraltıyorsunuz: belirli bir sonuç yerine üçte ikisine ihtiyacınız var. Takas, fiyattır. Ev sahibi takımın %55 zımni kazanma şansı varsa ve beraberlik %25 ise, 1X %80'i ima eder - ve adil oranlar 1,25 civarındadır. Kitaplar üzerine kar marjlarını ekler, bu yüzden genellikle 1X fiyatlarını 1,15 – 1,30 aralığında görürsünüz. Pazar, favoriyi 'kilitlemek' isteyen ancak 1X2 fiyatına güvenmeyen sıradan kullanıcılar arasında popülerdir. Ayrıca underdog'ı desteklemenin en güvenli yoludur: top-three bir takıma yapılan bir deplasman yolculuğundaki X2 tipik olarak 1,40 civarında fiyatlandırılır, ham deplasman-kazanma pazarı 5,50+ değerinde otururken.",
+      "pl": "Podwójna Szansa pozwala ci obstawić dwa z trzech możliwych wyników 1X2 jednym zakładem. Trzy warianty to 1X (wygrana gospodarzy lub remis), X2 (wygrana gości lub remis) i 12 (wygrana gospodarzy lub wygrana gości - faktycznie 'brak remisu'). Redukujesz wariancję: zamiast konkretnego wyniku potrzebujesz dwóch z trzech. Kompromisem jest cena. Jeśli drużyna gospodarzy ma 55% implikowanej szansy na wygraną, a remis 25%, to 1X implikuje 80% - a uczciwe kursy lądują w okolicach 1,25. Bukmacherzy dodają swoją marżę, więc zwykle widzisz ceny 1X w przedziale 1,15 – 1,30. Rynek jest popularny wśród rekreacyjnych użytkowników, którzy chcą 'zablokować' faworyta, ale nie ufają cenie 1X2. To także najbezpieczniejszy sposób obstawiania underdoga: X2 na wyjeździe u drużyny z top trójki zwykle wycenia w okolicach 1,40, gdy surowy rynek wyjazdowy wynosi 5,50+.",
+      "ro": "Șansa Dublă îți permite să pariezi pe două din cele trei rezultate 1X2 posibile cu o singură miză. Cele trei variante sunt 1X (victorie gazdă sau egal), X2 (victorie oaspete sau egal) și 12 (victorie gazdă sau victorie oaspete - efectiv 'fără egal'). Restrângi varianța: în loc să ai nevoie de un rezultat specific, ai nevoie de două din trei. Compromisul este prețul. Dacă echipa gazdă are 55% șansă implicită de câștig și egalul este 25%, atunci 1X implică 80% - iar cotele echitabile aterizează în jurul 1,25. Casele adaugă marja lor deasupra, așa că de obicei vezi prețuri 1X în intervalul 1,15 – 1,30. Piața este populară printre utilizatorii casual care vor să 'blocheze' un favorit, dar nu au încredere în prețul 1X2. Este și cel mai sigur mod de a paria pe un outsider: X2 într-o deplasare la o echipă din top trei cotează de obicei în jurul 1,40 când piața brută de victorie în deplasare stă la 5,50+.",
+      "ru": "Двойной Шанс позволяет ставить на два из трёх возможных исходов 1X2 одной ставкой. Три варианта: 1X (победа хозяев или ничья), X2 (победа гостей или ничья) и 12 (победа хозяев или гостей — фактически 'без ничьей'). Ты сжимаешь variance: вместо конкретного исхода тебе нужны два из трёх. Компромисс — цена. Если у хозяев 55% implied chance победы и ничья 25%, то 1X подразумевает 80% — и справедливые odds ложатся около 1.25. Buki добавляют маржу сверху, так что обычно видишь цены 1X в диапазоне 1.15 – 1.30. Рынок популярен у recreational-игроков, которые хотят 'зафиксировать' фаворита, но не доверяют 1X2 цене. Это также самый безопасный способ поставить на андердога: X2 в выездном матче против топ-тройки обычно около 1.40, когда raw away-win рынок стоит 5.50+.",
+      "el": "Η Διπλή Ευκαιρία σας επιτρέπει να στοιχηματίσετε σε δύο από τα τρία πιθανά αποτελέσματα 1X2 με ένα μόνο πονταρίσμα. Οι τρεις παραλλαγές είναι 1X (νίκη γηπεδούχου ή ισοπαλία), X2 (νίκη αντιπάλου ή ισοπαλία) και 12 (νίκη γηπεδούχου ή νίκη αντιπάλου - ουσιαστικά 'χωρίς ισοπαλία'). Συμπιέζετε τη διακύμανση: αντί να χρειάζεστε ένα συγκεκριμένο αποτέλεσμα, χρειάζεστε δύο στα τρία. Ο συμβιβασμός είναι η τιμή. Αν η γηπεδούχος έχει 55% τεκμαρτή πιθανότητα νίκης και η ισοπαλία είναι 25%, τότε το 1X υπονοεί 80% - και οι δίκαιες αποδόσεις προσγειώνονται γύρω στο 1,25. Τα γραφεία προσθέτουν το περιθώριό τους από πάνω, οπότε συνήθως βλέπετε τιμές 1X στην περιοχή 1,15 – 1,30. Η αγορά είναι δημοφιλής μεταξύ casual χρηστών που θέλουν να 'κλειδώσουν' ένα φαβορί αλλά δεν εμπιστεύονται την τιμή 1X2. Είναι επίσης ο ασφαλέστερος τρόπος να στοιχηματίσεις σε underdog: X2 σε εκτός έδρας ταξίδι σε ομάδα του top-three τιμολογείται τυπικά γύρω στο 1,40 όταν η ακατέργαστη αγορά εκτός έδρας νίκης βρίσκεται στο 5,50+.",
+      "da": "Dobbelt Chance lader dig spille på to af de tre mulige 1X2-udfald med en enkelt indsats. De tre varianter er 1X (hjemmesejr eller uafgjort), X2 (udesejr eller uafgjort) og 12 (hjemmesejr eller udesejr - effektivt 'ingen uafgjort'). Du komprimerer variansen: i stedet for at have brug for et specifikt udfald, har du brug for to ud af tre. Afvejningen er prisen. Hvis hjemmeholdet har 55% implicit chance for at vinde og uafgjort er 25%, implicerer 1X 80% - og fair odds lander omkring 1,25. Bogmagere lægger deres margin ovenpå, så du normalt ser 1X-priser i intervallet 1,15 – 1,30. Markedet er populært blandt casuale brugere, der vil 'låse' en favorit men ikke stoler på 1X2-prisen. Det er også den sikreste måde at holde med en underdog: X2 på en udetur til et top-tre-hold prissættes typisk omkring 1,40, når det rå udesejrs-marked ligger på 5,50+.",
+      "sv": "Dubbelchans låter dig satsa på två av de tre möjliga 1X2-utfallen med en enda insats. De tre varianterna är 1X (hemmavinst eller oavgjort), X2 (bortavinst eller oavgjort) och 12 (hemmavinst eller bortavinst - i praktiken 'ingen oavgjort'). Du komprimerar variansen: istället för ett specifikt utfall behöver du två av tre. Avvägningen är priset. Om hemmalaget har 55% implicit chans att vinna och oavgjort är 25%, innebär 1X 80% - och rättvisa odds landar runt 1,25. Bokmakare lägger sin marginal ovanpå, så du ser vanligtvis 1X-priser i intervallet 1,15 – 1,30. Marknaden är populär bland casual-användare som vill 'låsa' en favorit men inte litar på 1X2-priset. Det är också det säkraste sättet att stödja en underdog: X2 på en bortaresa till ett topp-tre-lag prissätts typiskt runt 1,40 när den råa bortavinst-marknaden ligger på 5,50+."
+    },
+    "strategy": {
+      "sw": "Double Chance ni ya muhimu zaidi wakati bei mbichi za 1X2 hupanga sare vibaya. Ligi zenye kiwango kikubwa cha sare (Serie A iko karibu 27%, La Liga karibu 25%) hufanya wedstrijden za X2 na 1X kuwa za kuvutia kimuundo kwa sababu chunk ya sare inakuwa nono zaidi. Lakini sare pia ni pale recreational money inapowekwa juu ya favoriti, ambayo hupunguza bei ya 1X kuelekea eneo la bila value. Play yenye ukali zaidi ni kubeti X2 kwenye pande za ugeni zilizokadiriwa chini: books hujua umma huchukia uit-favoriti kwa sababu ya hasara ya safari inayodhaniwa, kwa hivyo bei za X2 mara nyingi hukaa 3-5% juu ya kile Poisson safi ingependekeza. Kwa members wa BetsPlug, confidence score ni filter ya muhimu - chukua Double Chance tu wakati confidence ya 1X2 kwa leg unayoiongeza inapokuwa juu ya 70%. Hii huzuia anti-pattern ya kuchukua 1X kwenye mechi ambapo sare ndiyo favoriti halisi.",
+      "pt": "A Hipótese Dupla é mais útil quando os preços 1X2 brutos cotam mal o empate. Ligas com altas taxas de empates (Serie A ~27%, La Liga ~25%) tornam apostas X2 e 1X estruturalmente atractivas porque o chunk do empate fica mais gordo. Mas o empate é também onde o dinheiro recreativo se empilha no favorito, deprimindo o preço de 1X para terreno sem valor. A jogada mais afiada é apostar X2 em visitantes subestimados: as casas sabem que o público detesta favoritos à deslocação devido à desvantagem percebida da viagem, portanto os preços X2 ficam frequentemente 3-5% acima do que Poisson puro sugeriria. Para membros BetsPlug, o confidence score é um filtro útil - só leva Hipótese Dupla quando a confiança 1X2 da perna que estás a 'adicionar' está acima de 70%. Isso previne o anti-padrão de apostar 1X num jogo onde o empate é o verdadeiro favorito.",
+      "tr": "Çifte Şans, ham 1X2 fiyatları beraberliği yanlış fiyatlandırdığında en kullanışlıdır. Yüksek beraberlik oranlarına sahip ligler (Serie A ~%27, La Liga ~%25) X2 ve 1X bahislerini yapısal olarak çekici kılar çünkü beraberlik parçası şişkinleşir. Ancak beraberlik aynı zamanda recreational paranın favoriye yığıldığı yerdir, bu da 1X fiyatını değersiz bölgeye doğru düşürür. Daha keskin oyun, hafife alınan deplasman takımlarında X2 oynamaktır: kitaplar, algılanan seyahat dezavantajı nedeniyle kamuoyunun deplasman favorilerini sevmediğini bilir, bu yüzden X2 fiyatları genellikle saf Poisson'un önerdiğinden %3-5 yüksek oturur. BetsPlug üyeleri için confidence skoru yararlı bir filtredir - yalnızca bahis için 'eklediğiniz' ayağın 1X2 güveni %70 üzerinde olduğunda Çifte Şans alın. Bu, beraberliğin gerçek favori olduğu bir maçta 1X almanın anti-pattern'ini önler.",
+      "pl": "Podwójna Szansa jest najbardziej przydatna, gdy surowe ceny 1X2 błędnie wyceniają remis. Ligi o wysokim odsetku remisów (Serie A ~27%, La Liga ~25%) czynią zakłady X2 i 1X strukturalnie atrakcyjnymi, bo chunk remisu staje się grubszy. Ale remis to także miejsce, gdzie rekreacyjne pieniądze piętrzą się na faworycie, co obniża cenę 1X do terytorium bez wartości. Ostrzejsza gra to obstawianie X2 na niedoszacowanych gościach: bukmacherzy wiedzą, że publiczność nie znosi wyjazdowych faworytów z powodu postrzeganej niekorzyści podróży, więc ceny X2 często siedzą 3-5% powyżej tego, co sugerowałby czysty Poisson. Dla członków BetsPlug confidence score to przydatny filtr - bierz Podwójną Szansę tylko wtedy, gdy pewność 1X2 dla nogi, którą 'dodajesz' do zakładu, przekracza 70%. To zapobiega anty-wzorcowi brania 1X w meczu, w którym remis jest prawdziwym faworytem.",
+      "ro": "Șansa Dublă este cea mai utilă atunci când prețurile brute 1X2 cotează greșit egalul. Ligile cu rate mari de egal (Serie A ~27%, La Liga ~25%) fac pariurile X2 și 1X structural atractive, deoarece bucata de egal devine mai grasă. Dar egalul este și acolo unde banii recreativi se îngrămădesc pe favorit, deprimand prețul 1X către zona fără valoare. Jocul mai ascuțit este să pariezi X2 pe oaspeții subestimați: casele știu că publicul urăște favoriții în deplasare din cauza dezavantajului perceput al călătoriei, așa că prețurile X2 stau frecvent cu 3-5% peste ceea ce ar sugera Poisson pur. Pentru membrii BetsPlug, scorul de încredere este un filtru util - ia Șansa Dublă doar când încrederea 1X2 pentru piciorul pe care îl 'adaugi' este peste 70%. Asta previne anti-pattern-ul de a lua 1X într-un meci în care egalul este adevăratul favorit.",
+      "ru": "Двойной Шанс полезнее всего, когда сырые 1X2 цены неверно ставят ничью. Лиги с высоким % ничьих (Serie A ~27%, La Liga ~25%) делают X2 и 1X ставки структурно привлекательными, потому что draw chunk становится толще. Но ничья — также место, куда recreational деньги наваливаются на фаворита, что давит цену 1X к зоне без value. Острая игра — ставить X2 на недооценённых гостей: buki знают, что публика не любит away-фаворитов из-за воспринимаемого travel disadvantage, так что цены X2 часто на 3-5% выше того, что предложил бы чистый Poisson. Для участников BetsPlug confidence score — полезный фильтр: бери Двойной Шанс только когда 1X2 confidence для 'добавляемой' ноги выше 70%. Это предотвращает anti-pattern брать 1X в матче, где ничья — реальный фаворит.",
+      "el": "Η Διπλή Ευκαιρία είναι πιο χρήσιμη όταν οι ακατέργαστες τιμές 1X2 τιμολογούν λάθος την ισοπαλία. Λίγκες με υψηλά ποσοστά ισοπαλίας (Serie A ~27%, La Liga ~25%) καθιστούν τα στοιχήματα X2 και 1X δομικά ελκυστικά επειδή το κομμάτι της ισοπαλίας γίνεται πιο χοντρό. Αλλά η ισοπαλία είναι επίσης όπου τα recreational χρήματα στοιβάζονται στο φαβορί, πιέζοντας την τιμή 1X προς περιοχή χωρίς αξία. Το πιο κοφτερό παιχνίδι είναι να ποντάρεις X2 σε υποτιμημένες εκτός έδρας πλευρές: τα γραφεία γνωρίζουν ότι το κοινό μισεί τα εκτός έδρας φαβορί λόγω του αντιληπτού μειονεκτήματος ταξιδιού, οπότε οι τιμές X2 συχνά κάθονται 3-5% πάνω από ό,τι θα πρότεινε το καθαρό Poisson. Για τα μέλη BetsPlug, το confidence score είναι ένα χρήσιμο φίλτρο - πάρε Διπλή Ευκαιρία μόνο όταν η 1X2 confidence για το σκέλος που 'προσθέτεις' στο στοίχημα είναι πάνω από 70%. Αυτό αποτρέπει το αντι-μοτίβο να πάρεις 1X σε αγώνα όπου η ισοπαλία είναι το πραγματικό φαβορί.",
+      "da": "Dobbelt Chance er mest brugbar, når de rå 1X2-priser fejlprissætter uafgjort. Ligaer med høje uafgjort-rater (Serie A ~27%, La Liga ~25%) gør X2- og 1X-spil strukturelt attraktive, fordi uafgjort-chunk'en bliver federe. Men uafgjort er også, hvor recreational penge stables på favoritten, hvilket presser 1X-prisen mod ingen-værdi territorium. Det skarpere spil er at spille X2 på undervurderede udehold: bogmagere ved, at publikum hader ude-favoritter på grund af den opfattede rejseulempe, så X2-priser sidder ofte 3-5% over det, ren Poisson ville foreslå. For BetsPlug-medlemmer er confidence score et nyttigt filter - tag kun Dobbelt Chance, når 1X2-confidence for det ben, du 'tilføjer' til spillet, er over 70%. Det forhindrer anti-mønsteret at tage 1X på en kamp, hvor uafgjort er den egentlige favorit.",
+      "sv": "Dubbelchans är mest användbar när de råa 1X2-priserna felprissätter oavgjort. Ligor med höga oavgjort-frekvenser (Serie A ~27%, La Liga ~25%) gör X2- och 1X-spel strukturellt attraktiva eftersom oavgjort-biten blir fetare. Men oavgjort är också där recreational pengar travas på favoriten, vilket pressar ner 1X-priset mot icke-värde-territorium. Det skarpare spelet är att satsa X2 på underskattade bortasidor: bokmakare vet att publiken avskyr bortafavoriter på grund av den upplevda resenackdelen, så X2-priser sitter ofta 3-5% över vad ren Poisson skulle föreslå. För BetsPlug-medlemmar är konfidenspoängen ett användbart filter - ta Dubbelchans bara när 1X2-konfidensen för benet du 'lägger till' är över 70%. Det förhindrar antimönstret att ta 1X i en match där oavgjort är den verkliga favoriten."
+    },
+    "matchesHeading": {
+      "sw": "Mechi zenye ujasiri wa juu zaidi leo",
+      "pt": "Jogos de maior confiança hoje",
+      "tr": "Bugünün en yüksek güvenilirlikteki fikstürleri",
+      "pl": "Dzisiejsze mecze o najwyższej pewności",
+      "ro": "Meciurile cu cea mai mare încredere azi",
+      "ru": "Самые уверенные матчи сегодня",
+      "el": "Αγώνες υψηλότερης εμπιστοσύνης σήμερα",
+      "da": "Højeste-confidence kampe i dag",
+      "sv": "Dagens matcher med högst konfidens"
+    },
+    "matchesSub": {
+      "sw": "Mechi 3 bora ambapo confidence ya 1X2 ya ensemble yetu iko juu zaidi - mahali pa kuaminika pa kuanzia research ya Double Chance value.",
+      "pt": "Top 3 jogos onde a confiança 1X2 do nosso ensemble é a mais alta - um ponto de partida fiável para research de valor em Hipótese Dupla.",
+      "tr": "Ensemble'imizin 1X2 güveninin en yüksek olduğu ilk 3 maç - Çifte Şans değer araştırması için güvenilir bir başlangıç noktası.",
+      "pl": "Top 3 mecze, gdzie pewność 1X2 naszego ensemble jest najwyższa - wiarygodny punkt wyjścia do researchu wartości Podwójnej Szansy.",
+      "ro": "Primele 3 meciuri unde încrederea 1X2 a ensemble-ului nostru este cea mai mare - un punct de plecare fiabil pentru cercetarea valorii Șansei Duble.",
+      "ru": "Топ-3 матча, где 1X2-confidence нашего ensemble наивысшая — надёжная стартовая точка для Double Chance value research.",
+      "el": "Τα 3 κορυφαία παιχνίδια όπου η 1X2 confidence του ensemble μας είναι η υψηλότερη - ένα αξιόπιστο σημείο εκκίνησης για έρευνα αξίας Διπλής Ευκαιρίας.",
+      "da": "Top 3 kampe, hvor vores ensembles 1X2-confidence er højest - et pålideligt udgangspunkt for Dobbelt Chance-værdiresearch.",
+      "sv": "Topp 3-matcher där vår ensembles 1X2-konfidens är högst - en pålitlig startpunkt för Dubbelchans-värderesearch."
+    },
+    "metaTitle": {
+      "sw": "Utabiri wa Double Chance Uliofafanuliwa (1X, X2, 12) · BetsPlug",
+      "pt": "Previsões Hipótese Dupla Explicadas (1X, X2, 12) · BetsPlug",
+      "tr": "Çifte Şans Tahminleri Açıklandı (1X, X2, 12) · BetsPlug",
+      "pl": "Prognozy Podwójnej Szansy Wyjaśnione (1X, X2, 12) · BetsPlug",
+      "ro": "Predicții Șansă Dublă Explicate (1X, X2, 12) · BetsPlug",
+      "ru": "Прогнозы Двойного Шанса (1X, X2, 12) · BetsPlug",
+      "el": "Προβλέψεις Διπλής Ευκαιρίας Εξηγήσεις (1X, X2, 12) · BetsPlug",
+      "da": "Dobbelt Chance-forudsigelser Forklaret (1X, X2, 12) · BetsPlug",
+      "sv": "Dubbelchans-förutsägelser Förklarade (1X, X2, 12) · BetsPlug"
+    },
+    "metaDescription": {
+      "sw": "Jinsi Double Chance inavyofanya kazi, kwa nini bei za 1X na X2 ni vile zilivyo, na wakati soko linapopanga sare vibaya. Pamoja na mechi za leo zenye ujasiri wa juu zaidi.",
+      "pt": "Como funciona a Hipótese Dupla, porque é que os preços 1X e X2 aparecem assim, e quando o mercado cota mal o empate. Mais os jogos de hoje com maior confiança.",
+      "tr": "Çifte Şans bahisin nasıl çalıştığı, 1X ve X2 fiyatlarının neden göründüğü gibi olduğu ve pazarın beraberliği ne zaman yanlış fiyatlandırdığı. Artı bugünün en güvenilir fikstürleri.",
+      "pl": "Jak działa Podwójna Szansa, dlaczego ceny 1X i X2 wyglądają tak jak wyglądają, i kiedy rynek błędnie wycenia remis. Plus dzisiejsze mecze o najwyższej pewności.",
+      "ro": "Cum funcționează pariul Șansă Dublă, de ce prețurile 1X și X2 arată așa cum arată, și când piața cotează greșit egalul. Plus meciurile de azi cu cea mai mare încredere.",
+      "ru": "Как работает Двойной Шанс, почему цены 1X и X2 выглядят так, как выглядят, и когда рынок неверно ставит ничью. Плюс самые уверенные матчи сегодня.",
+      "el": "Πώς λειτουργεί το στοίχημα Διπλής Ευκαιρίας, γιατί οι τιμές 1X και X2 μοιάζουν έτσι, και πότε η αγορά τιμολογεί λάθος την ισοπαλία. Συν οι αγώνες υψηλότερης εμπιστοσύνης σήμερα.",
+      "da": "Hvordan Dobbelt Chance-spil fungerer, hvorfor 1X- og X2-priserne ser ud, som de gør, og hvornår markedet fejlprissætter uafgjort. Plus dagens højeste-confidence kampe.",
+      "sv": "Hur Dubbelchans-spel fungerar, varför 1X- och X2-priserna ser ut som de gör, och när marknaden felprissätter oavgjort. Plus dagens matcher med högst konfidens."
+    },
+    "faqs[faq-0].question": {
+      "sw": "1X, X2 na 12 zinamaanisha nini?",
+      "pt": "O que significam 1X, X2 e 12?",
+      "tr": "1X, X2 ve 12 ne anlama geliyor?",
+      "pl": "Co oznaczają 1X, X2 i 12?",
+      "ro": "Ce înseamnă 1X, X2 și 12?",
+      "ru": "Что означают 1X, X2 и 12?",
+      "el": "Τι σημαίνουν τα 1X, X2 και 12;",
+      "da": "Hvad betyder 1X, X2 og 12?",
+      "sv": "Vad betyder 1X, X2 och 12?"
+    },
+    "faqs[faq-0].answer": {
+      "sw": "1 = ushindi wa nyumbani, X = sare, 2 = ushindi wa ugeni. 1X inamaanisha 'ushindi wa nyumbani au sare - upande wa ugeni lazima usishinde ili ukusanye'. X2 inamaanisha 'ushindi wa ugeni au sare - upande wa nyumbani lazima usishinde'. 12 inamaanisha 'nyumbani au ugeni - mechi lazima isiwe sare'.",
+      "pt": "1 = vitória em casa, X = empate, 2 = vitória fora. 1X significa 'vitória em casa ou empate - o visitante não pode ganhar para tu cobrares'. X2 significa 'vitória fora ou empate - o lado da casa não pode ganhar'. 12 significa 'casa ou fora - o jogo não pode ser um empate'.",
+      "tr": "1 = ev sahibi kazanır, X = beraberlik, 2 = deplasman kazanır. 1X 'ev sahibi kazanır veya beraberlik - kazanmak için deplasmanın kazanmaması gerekir' anlamına gelir. X2 'deplasman kazanır veya beraberlik - ev sahibinin kazanmaması gerekir' anlamına gelir. 12 'ev veya deplasman - maç beraberlikle bitmemelidir' anlamına gelir.",
+      "pl": "1 = wygrana gospodarzy, X = remis, 2 = wygrana gości. 1X oznacza 'wygrana gospodarzy lub remis - goście nie mogą wygrać, żebyś zebrał'. X2 oznacza 'wygrana gości lub remis - gospodarze nie mogą wygrać'. 12 oznacza 'gospodarze lub goście - mecz nie może zakończyć się remisem'.",
+      "ro": "1 = victorie gazdă, X = egal, 2 = victorie oaspete. 1X înseamnă 'victorie gazdă sau egal - echipa oaspete nu trebuie să câștige pentru a colecta'. X2 înseamnă 'victorie oaspete sau egal - echipa gazdă nu trebuie să câștige'. 12 înseamnă 'gazdă sau oaspete - meciul nu trebuie să fie egal'.",
+      "ru": "1 = победа хозяев, X = ничья, 2 = победа гостей. 1X означает 'победа хозяев или ничья — гости не должны победить, чтобы ты получил'. X2 означает 'победа гостей или ничья — хозяева не должны победить'. 12 означает 'хозяева или гости — матч не должен закончиться ничьёй'.",
+      "el": "1 = νίκη γηπεδούχου, X = ισοπαλία, 2 = νίκη εκτός έδρας. Το 1X σημαίνει 'νίκη γηπεδούχου ή ισοπαλία - η φιλοξενούμενη δεν πρέπει να κερδίσει για να εισπράξεις'. Το X2 σημαίνει 'νίκη εκτός έδρας ή ισοπαλία - η γηπεδούχος δεν πρέπει να κερδίσει'. Το 12 σημαίνει 'γηπεδούχος ή εκτός έδρας - ο αγώνας δεν πρέπει να είναι ισοπαλία'.",
+      "da": "1 = hjemmesejr, X = uafgjort, 2 = udesejr. 1X betyder 'hjemmesejr eller uafgjort - udeholdet må ikke vinde, for at du kan få gevinst'. X2 betyder 'udesejr eller uafgjort - hjemmeholdet må ikke vinde'. 12 betyder 'hjemme eller ude - kampen må ikke være uafgjort'.",
+      "sv": "1 = hemmavinst, X = oavgjort, 2 = bortavinst. 1X betyder 'hemmavinst eller oavgjort - bortalaget får inte vinna för att du ska få utdelning'. X2 betyder 'bortavinst eller oavgjort - hemmalaget får inte vinna'. 12 betyder 'hemma eller borta - matchen får inte sluta oavgjort'."
+    },
+    "faqs[faq-1].question": {
+      "sw": "Je Double Chance ni salama zaidi kuliko 1X2?",
+      "pt": "A Hipótese Dupla é mais segura que 1X2?",
+      "tr": "Çifte Şans 1X2'den daha mı güvenli?",
+      "pl": "Czy Podwójna Szansa jest bezpieczniejsza niż 1X2?",
+      "ro": "Șansa Dublă este mai sigură decât 1X2?",
+      "ru": "Двойной Шанс безопаснее, чем 1X2?",
+      "el": "Είναι η Διπλή Ευκαιρία ασφαλέστερη από το 1X2;",
+      "da": "Er Dobbelt Chance sikrere end 1X2?",
+      "sv": "Är Dubbelchans säkrare än 1X2?"
+    },
+    "faqs[faq-1].answer": {
+      "sw": "Ndio - lakini 'salama zaidi' kawaida inamaanisha 'rejesho ya chini'. Double Chance hukandamiza kiwango cha ushindi lakini pia hukandamiza bei. Yield ya lange-termijn kwa mtumiaji wa DC mwenye nidhamu kawaida ni sawa na ya mtumiaji wa 1X2 mwenye nidhamu, lakini variance ni ya chini sana. Hilo hufanya DC kuwa maarufu kati ya wachezaji wanaojali bankroll.",
+      "pt": "Sim - mas 'mais segura' normalmente significa 'retorno mais baixo'. A Hipótese Dupla comprime a taxa de vitória mas também comprime o preço. O yield de longo prazo para um utilizador disciplinado de DC é normalmente semelhante ao de um utilizador disciplinado de 1X2, mas a variância é muito mais baixa. Isso torna DC popular entre jogadores que são conscientes do bankroll.",
+      "tr": "Evet - ancak 'daha güvenli' genellikle 'daha düşük getiri' anlamına gelir. Çifte Şans kazanma oranını sıkıştırır ama fiyatı da sıkıştırır. Disiplinli bir DC kullanıcısının uzun vadeli getirisi genellikle disiplinli bir 1X2 kullanıcısınınkine benzer, ancak varyans çok daha düşüktür. Bu, DC'yi bankroll-bilinci olan oyuncular arasında popüler kılar.",
+      "pl": "Tak - ale 'bezpieczniejsza' zwykle oznacza 'niższy zwrot'. Podwójna Szansa kompresuje wskaźnik wygranych, ale kompresuje też cenę. Długoterminowy yield dla zdyscyplinowanego użytkownika DC jest zwykle podobny do zdyscyplinowanego użytkownika 1X2, ale wariancja jest znacznie niższa. To sprawia, że DC jest popularne wśród graczy świadomych bankrolla.",
+      "ro": "Da - dar 'mai sigură' înseamnă de obicei 'randament mai mic'. Șansa Dublă comprimă rata de câștig, dar comprimă și prețul. Randamentul pe termen lung pentru un utilizator DC disciplinat este de obicei similar cu al unui utilizator 1X2 disciplinat, dar varianța este mult mai mică. Asta face DC popular printre jucătorii conștienți de bankroll.",
+      "ru": "Да — но 'безопаснее' обычно значит 'ниже return'. Двойной Шанс сжимает win rate, но и сжимает цену. Долгосрочный yield дисциплинированного DC-игрока обычно сопоставим с дисциплинированным 1X2-игроком, но variance гораздо ниже. Это делает DC популярным среди bankroll-conscious игроков.",
+      "el": "Ναι - αλλά 'ασφαλέστερη' συνήθως σημαίνει 'χαμηλότερη απόδοση'. Η Διπλή Ευκαιρία συμπιέζει το ποσοστό νίκης αλλά συμπιέζει και την τιμή. Η μακροπρόθεσμη απόδοση για έναν πειθαρχημένο χρήστη DC είναι συνήθως παρόμοια με έναν πειθαρχημένο χρήστη 1X2, αλλά η διακύμανση είναι πολύ χαμηλότερη. Αυτό κάνει το DC δημοφιλές μεταξύ των παικτών με συνείδηση bankroll.",
+      "da": "Ja - men 'sikrere' betyder normalt 'lavere afkast'. Dobbelt Chance komprimerer sejrsraten men komprimerer også prisen. Langsigtet afkast for en disciplineret DC-bruger er normalt svarende til en disciplineret 1X2-bruger, men variansen er meget lavere. Det gør DC populært blandt bankroll-bevidste spillere.",
+      "sv": "Ja - men 'säkrare' betyder oftast 'lägre avkastning'. Dubbelchans komprimerar vinstfrekvensen men komprimerar också priset. Långsiktig yield för en disciplinerad DC-användare är vanligen liknande en disciplinerad 1X2-användare, men variansen är mycket lägre. Det gör DC populärt bland bankroll-medvetna spelare."
+    },
+    "faqs[faq-2].question": {
+      "sw": "Ni lini Double Chance inazidi kupiga 1X2?",
+      "pt": "Quando é que a Hipótese Dupla supera o 1X2?",
+      "tr": "Çifte Şans 1X2'den ne zaman daha iyi performans gösterir?",
+      "pl": "Kiedy Podwójna Szansa przewyższa 1X2?",
+      "ro": "Când depășește Șansa Dublă 1X2?",
+      "ru": "Когда Двойной Шанс превосходит 1X2?",
+      "el": "Πότε η Διπλή Ευκαιρία υπερέχει του 1X2;",
+      "da": "Hvornår overgår Dobbelt Chance 1X2?",
+      "sv": "När överträffar Dubbelchans 1X2?"
+    },
+    "faqs[faq-2].answer": {
+      "sw": "Wakati una ushawishi mkubwa juu ya nani HATASHINDI lakini ushawishi dhaifu juu ya sare dhidi ya favoriti. Mfano: ukihakikisha upande wa ugeni huko Anfield hautashinda, 1X kwa 1.18 mara nyingi ni bora kuliko kujaribu kuchagua kati ya 1 (kwa 1.60) na X (kwa 4.20). Value inayotarajiwa ya muda mrefu ni sawa, lakini hit rate huingia 85%+.",
+      "pt": "Quando tens convicção forte sobre quem NÃO vai ganhar mas convicção mais fraca no empate vs o favorito. Exemplo: se tens a certeza que o visitante em Anfield não vai ganhar, 1X a 1,18 é frequentemente melhor que tentar escolher entre 1 (a 1,60) e X (a 4,20). O valor esperado de longo prazo é semelhante, mas a hit rate dispara para 85%+.",
+      "tr": "Kimin KAZANAMAYACAĞI konusunda güçlü kanaatiniz varken beraberlik ile favori arasında daha zayıf kanaatiniz olduğunda. Örnek: Anfield'daki deplasman tarafının kazanamayacağından eminseniz, 1,18'deki 1X genellikle 1 (1,60'ta) ve X (4,20'de) arasında seçim yapmaya çalışmaktan daha iyidir. Uzun vadeli beklenen değer benzerdir, ancak isabet oranı %85+'ye fırlar.",
+      "pl": "Gdy masz silne przekonanie, kto NIE wygra, ale słabsze przekonanie co do remisu vs faworyta. Przykład: jeśli jesteś pewien, że gość na Anfield nie wygra, 1X po 1,18 jest często lepsze niż próbowanie wybierania między 1 (po 1,60) a X (po 4,20). Długoterminowa oczekiwana wartość jest podobna, ale hit rate strzela do 85%+.",
+      "ro": "Când ai convingere puternică despre cine NU va câștiga, dar convingere mai slabă despre egal vs favorit. Exemplu: dacă ești sigur că partea oaspete la Anfield nu va câștiga, 1X la 1,18 este adesea mai bun decât să încerci să alegi între 1 (la 1,60) și X (la 4,20). Valoarea așteptată pe termen lung este similară, dar rata de succes sare la 85%+.",
+      "ru": "Когда у тебя сильное убеждение, кто НЕ выиграет, но более слабое убеждение о ничьей против фаворита. Пример: если уверен, что гости на Anfield не победят, 1X по 1.18 часто лучше, чем пытаться выбрать между 1 (по 1.60) и X (по 4.20). Долгосрочный expected value схож, но hit rate взлетает к 85%+.",
+      "el": "Όταν έχεις ισχυρή πεποίθηση για το ποιος ΔΕΝ θα κερδίσει αλλά ασθενέστερη πεποίθηση για την ισοπαλία έναντι του φαβορί. Παράδειγμα: αν είσαι βέβαιος ότι η φιλοξενούμενη στο Anfield δεν θα κερδίσει, το 1X στο 1,18 είναι συχνά καλύτερο από το να προσπαθείς να επιλέξεις μεταξύ 1 (στο 1,60) και X (στο 4,20). Η μακροπρόθεσμη αναμενόμενη αξία είναι παρόμοια, αλλά το ποσοστό επιτυχίας εκτοξεύεται στο 85%+.",
+      "da": "Når du har stærk overbevisning om, hvem der IKKE vil vinde, men svagere overbevisning om uafgjort vs favoritten. Eksempel: hvis du er sikker på, at udeholdet på Anfield ikke vinder, er 1X til 1,18 ofte bedre end at forsøge at vælge mellem 1 (til 1,60) og X (til 4,20). Den langsigtede forventede værdi er ens, men hit-raten skyder op til 85%+.",
+      "sv": "När du har stark övertygelse om vem som INTE kommer vinna men svagare övertygelse om oavgjort vs favoriten. Exempel: om du är säker på att bortalaget på Anfield inte kommer vinna är 1X till 1,18 ofta bättre än att försöka välja mellan 1 (till 1,60) och X (till 4,20). Den långsiktiga förväntade värden är liknande, men träffprocenten skjuter upp till 85%+."
+    },
+    "faqs[faq-3].question": {
+      "sw": "Nini upande mbaya wa Double Chance?",
+      "pt": "Qual é a desvantagem da Hipótese Dupla?",
+      "tr": "Çifte Şansın dezavantajı nedir?",
+      "pl": "Jaka jest wada Podwójnej Szansy?",
+      "ro": "Care este dezavantajul Șansei Duble?",
+      "ru": "В чём минус Двойного Шанса?",
+      "el": "Ποιο είναι το μειονέκτημα της Διπλής Ευκαιρίας;",
+      "da": "Hvad er ulempen ved Dobbelt Chance?",
+      "sv": "Vad är nackdelen med Dubbelchans?"
+    },
+    "faqs[faq-3].answer": {
+      "sw": "Huwezi 'kujenga' stakes kama unavyoweza kwa 1X2 moja kwa moja. Bet ya 1X kwa 1.20 huweka 83% ya stake yako kwa hatari ili kushinda 17% - ambayo inamaanisha unahitaji ~85% hit rate ili tu kuvunja baada ya margin. Wiki moja mbaya ya matokeo ya kushangaza yaweza kuondoa mwezi mzima wa faida za DC thabiti.",
+      "pt": "Não podes 'acumular' apostas como com 1X2 direto. Uma aposta 1X a 1,20 coloca 83% da tua stake em risco para ganhar 17% - o que significa que precisas ~85% de hit rate só para ficar em break-even após a margem. Uma má semana de resultados surpreendentes pode apagar um mês inteiro de lucros DC estáveis.",
+      "tr": "Doğrudan 1X2'de yapabildiğiniz gibi bahisleri 'yığamazsınız'. 1,20'de bir 1X bahsi, %17 kazanmak için stake'inizin %83'ünü riske atar - bu da kenardan sonra başa baş gelmek için ~%85 isabet oranına ihtiyacınız olduğu anlamına gelir. Şaşırtıcı sonuçlarla kötü geçen bir hafta, tüm bir ay sürekli DC karını silebilir.",
+      "pl": "Nie możesz 'podwyższać' stawek tak jak przy prostym 1X2. Zakład 1X po 1,20 stawia 83% twojej stawki na ryzyko, by wygrać 17% - co oznacza, że potrzebujesz ~85% hit rate, by wyjść na zero po marży. Jeden zły tydzień zaskakujących wyników może wymazać cały miesiąc stabilnych zysków DC.",
+      "ro": "Nu poți să 'ridici' mizele așa cum poți cu 1X2 direct. Un pariu 1X la 1,20 pune 83% din miza ta la risc pentru a câștiga 17% - ceea ce înseamnă că ai nevoie de ~85% rată de succes doar pentru a ieși la zero după marjă. O săptămână proastă cu rezultate surprinzătoare poate șterge o lună întreagă de profituri DC stabile.",
+      "ru": "Нельзя 'наращивать' ставки, как с прямым 1X2. Ставка 1X по 1.20 рискует 83% stake чтобы выиграть 17% — нужен ~85% hit rate, чтобы просто выйти в ноль после маржи. Одна плохая неделя неожиданных результатов может стереть месяц стабильной DC-прибыли.",
+      "el": "Δεν μπορείς να 'συσσωρεύσεις' ποντάρισμα όπως με το απευθείας 1X2. Ένα στοίχημα 1X στο 1,20 βάζει το 83% του ποντάρισματός σου σε κίνδυνο για να κερδίσεις το 17% - που σημαίνει ότι χρειάζεσαι ~85% ποσοστό επιτυχίας μόνο για να βγεις break-even μετά το περιθώριο. Μια κακή εβδομάδα από εκπληκτικά αποτελέσματα μπορεί να σβήσει έναν ολόκληρο μήνα σταθερών DC κερδών.",
+      "da": "Du kan ikke 'opbygge' indsatser på samme måde som med direkte 1X2. Et 1X-spil til 1,20 sætter 83% af din indsats på spil for at vinde 17% - hvilket betyder, at du har brug for ~85% hit-rate bare for at gå break-even efter marginen. En dårlig uge med overraskende resultater kan viske en hel måneds stabile DC-fortjenester ud.",
+      "sv": "Du kan inte 'bygga upp' insatser som med rak 1X2. En 1X-insats till 1,20 sätter 83% av din stake på spel för att vinna 17% - vilket innebär att du behöver ~85% träffprocent bara för att gå break-even efter marginalen. En dålig vecka med överraskande resultat kan sudda ut en hel månads stabila DC-vinster."
+    },
+    "faqs[faq-4].question": {
+      "sw": "Je BetsPlug huchapisha confidence score ya Double Chance?",
+      "pt": "O BetsPlug publica um confidence score de Hipótese Dupla?",
+      "tr": "BetsPlug bir Çifte Şans confidence skoru yayımlıyor mu?",
+      "pl": "Czy BetsPlug publikuje confidence score Podwójnej Szansy?",
+      "ro": "BetsPlug publică un scor de încredere pentru Șansa Dublă?",
+      "ru": "BetsPlug публикует confidence score для Двойного Шанса?",
+      "el": "Δημοσιεύει το BetsPlug confidence score Διπλής Ευκαιρίας;",
+      "da": "Udgiver BetsPlug et Dobbelt Chance-confidence score?",
+      "sv": "Publicerar BetsPlug en konfidenspoäng för Dubbelchans?"
+    },
+    "faqs[faq-4].answer": {
+      "sw": "Si kama nambari tofauti. Unaweza kuichukua moja kwa moja kutoka kwa 1X2 output yetu: confidence ya 1X = P(nyumbani) + P(sare), X2 = P(ugeni) + P(sare), 12 = 1 − P(sare). Preview ya bure inaonyesha tu confidence ya uhakika wa juu, lakini members wanaweza kuona triple kamili ya uwezekano.",
+      "pt": "Não como número separado. Podes derivá-lo directamente do nosso output 1X2: confiança 1X = P(casa) + P(empate), X2 = P(fora) + P(empate), 12 = 1 − P(empate). A preview gratuita mostra apenas a confiança do top-outcome, mas os membros podem ver o triplo completo de probabilidades.",
+      "tr": "Ayrı bir sayı olarak değil. Doğrudan 1X2 çıktımızdan türetebilirsiniz: 1X güveni = P(ev) + P(beraberlik), X2 = P(deplasman) + P(beraberlik), 12 = 1 − P(beraberlik). Ücretsiz önizleme yalnızca en yüksek sonuç güvenini gösterir, ancak üyeler tam olasılık üçlüsünü görebilir.",
+      "pl": "Nie jako osobny numer. Możesz wywnioskować to bezpośrednio z naszego outputu 1X2: pewność 1X = P(gospodarz) + P(remis), X2 = P(gość) + P(remis), 12 = 1 − P(remis). Darmowa preview pokazuje tylko pewność wyniku wiodącego, ale członkowie mogą zobaczyć pełną trójkę prawdopodobieństw.",
+      "ro": "Nu ca număr separat. Poți deriva direct din output-ul nostru 1X2: încredere 1X = P(gazdă) + P(egal), X2 = P(oaspete) + P(egal), 12 = 1 − P(egal). Preview-ul gratuit arată doar încrederea pentru rezultatul de top, dar membrii pot vedea tripla completă de probabilități.",
+      "ru": "Не как отдельное число. Можно вывести напрямую из нашего 1X2-output: 1X confidence = P(home) + P(draw), X2 = P(away) + P(draw), 12 = 1 − P(draw). Бесплатный превью показывает только top-outcome confidence, но участники видят полную тройку вероятностей.",
+      "el": "Όχι ως ξεχωριστό αριθμό. Μπορείς να το αντλήσεις απευθείας από το output 1X2 μας: confidence 1X = P(γηπεδούχου) + P(ισοπαλίας), X2 = P(φιλοξενούμενης) + P(ισοπαλίας), 12 = 1 − P(ισοπαλίας). Η δωρεάν preview δείχνει μόνο τη confidence του κορυφαίου αποτελέσματος, αλλά τα μέλη μπορούν να δουν την πλήρη τριάδα πιθανοτήτων.",
+      "da": "Ikke som et separat tal. Du kan udlede det direkte fra vores 1X2-output: 1X-confidence = P(hjemme) + P(uafgjort), X2 = P(ude) + P(uafgjort), 12 = 1 − P(uafgjort). Den gratis preview viser kun top-udfald-confidence, men medlemmer kan se den fulde sandsynlighedstripel.",
+      "sv": "Inte som separat siffra. Du kan härleda det direkt från vår 1X2-output: 1X-konfidens = P(hemma) + P(oavgjort), X2 = P(borta) + P(oavgjort), 12 = 1 − P(oavgjort). Den gratis previewn visar bara toppresultatets konfidens, men medlemmar kan se hela sannolikhetstripeln."
+    },
+    "faqs[faq-5].question": {
+      "sw": "Ni ligi zipi zinazotoa value zaidi ya Double Chance?",
+      "pt": "Que ligas oferecem mais valor de Hipótese Dupla?",
+      "tr": "Hangi ligler en fazla Çifte Şans değeri sunar?",
+      "pl": "Które ligi oferują najwięcej wartości Podwójnej Szansy?",
+      "ro": "Ce ligi oferă cea mai mare valoare Șansă Dublă?",
+      "ru": "В каких лигах больше всего Double Chance value?",
+      "el": "Ποιες λίγκες προσφέρουν την περισσότερη αξία Διπλής Ευκαιρίας;",
+      "da": "Hvilke ligaer tilbyder mest Dobbelt Chance-værdi?",
+      "sv": "Vilka ligor erbjuder mest Dubbelchans-värde?"
+    },
+    "faqs[faq-5].answer": {
+      "sw": "Serie A na La Liga kwa sababu ya kiwango chao cha juu zaidi cha sare (~27% na ~25% respectively). Mass ya ziada ya sare inamaanisha varianti zenye X hupanga kwa kuvutia zaidi kuliko katika Premier League au Bundesliga, ambapo kiwango cha sare kinakaa karibu 22%.",
+      "pt": "Serie A e La Liga por causa das suas taxas mais altas de empates (~27% e ~25% respectivamente). A massa extra de empates significa que as variantes X-inclusivas cotam mais atractivamente do que na Premier League ou Bundesliga, onde as taxas de empates ficam mais perto de 22%.",
+      "tr": "Yüksek beraberlik oranları nedeniyle Serie A ve La Liga (sırasıyla ~%27 ve ~%25). Ekstra beraberlik kütlesi, X içeren varyantların Premier League veya Bundesliga'dan daha cazip fiyatlandırıldığı anlamına gelir; orada beraberlik oranları %22'ye daha yakındır.",
+      "pl": "Serie A i La Liga z powodu wyższych odsetek remisów (~27% i ~25% odpowiednio). Dodatkowa masa remisu oznacza, że warianty z X wyceniają się atrakcyjniej niż w Premier League lub Bundeslidze, gdzie odsetki remisów są bliższe 22%.",
+      "ro": "Serie A și La Liga din cauza ratelor lor mai mari de egal (~27% și ~25% respectiv). Masa suplimentară de egal înseamnă că variantele care includ X cotează mai atractiv decât în Premier League sau Bundesliga, unde ratele de egal stau mai aproape de 22%.",
+      "ru": "Serie A и La Liga из-за их более высокой доли ничьих (~27% и ~25% соответственно). Дополнительная масса ничьих означает, что X-варианты ставятся привлекательнее, чем в Premier League или Bundesliga, где ничья держится ближе к 22%.",
+      "el": "Serie A και La Liga λόγω των υψηλότερων ποσοστών ισοπαλίας τους (~27% και ~25% αντίστοιχα). Η επιπλέον μάζα ισοπαλίας σημαίνει ότι οι παραλλαγές που περιλαμβάνουν X τιμολογούνται πιο ελκυστικά από ό,τι στην Premier League ή την Bundesliga, όπου τα ποσοστά ισοπαλίας κάθονται πιο κοντά στο 22%.",
+      "da": "Serie A og La Liga på grund af deres højere uafgjort-rater (~27% og ~25% henholdsvis). Den ekstra uafgjort-masse betyder, at X-inklusive varianter prissættes mere attraktivt end i Premier League eller Bundesligaen, hvor uafgjort-raterne ligger tættere på 22%.",
+      "sv": "Serie A och La Liga på grund av deras högre oavgjort-frekvens (~27% och ~25% respektive). Extra oavgjort-massan innebär att X-inkluderande varianter prissätts mer attraktivt än i Premier League eller Bundesliga, där oavgjort-frekvenser ligger närmare 22%."
+    }
+  }
+}

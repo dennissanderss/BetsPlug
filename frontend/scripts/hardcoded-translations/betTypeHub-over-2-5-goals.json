@@ -1,0 +1,227 @@
+{
+  "_docId": "betTypeHub-over-2-5-goals",
+  "_type": "betTypeHub",
+  "_label": "Over 2.5 Goals",
+  "fields": {
+    "name": {
+      "sw": "Zaidi ya 2.5 Goli",
+      "pt": "Mais de 2,5 Golos",
+      "tr": "2,5 Üstü Gol",
+      "pl": "Powyżej 2.5 Bramki",
+      "ro": "Peste 2.5 Goluri",
+      "ru": "Больше 2.5 Голов",
+      "el": "Άνω των 2.5 Γκολ",
+      "da": "Over 2,5 Mål",
+      "sv": "Över 2,5 Mål"
+    },
+    "tagline": {
+      "sw": "Wakati soko la goli linapopangwa juu ya kile Poisson inavyopendekeza",
+      "pt": "Quando o mercado de golos é cotado acima do que a distribuição Poisson sugere",
+      "tr": "Gol pazarı Poisson dağılımının önerdiğinden daha yüksek fiyatlandırıldığında",
+      "pl": "Kiedy rynek goli jest wyceniany wyżej, niż sugeruje rozkład Poissona",
+      "ro": "Când piața de goluri este cotată mai mare decât sugerează distribuția Poisson",
+      "ru": "Когда голевой рынок оценён выше, чем предполагает Poisson-распределение",
+      "el": "Όταν η αγορά γκολ τιμολογείται υψηλότερα από ότι προτείνει η κατανομή Poisson",
+      "da": "Når målmarkedet prissættes højere, end Poisson-fordelingen antyder",
+      "sv": "När målmarknaden prissätts högre än Poisson-fördelningen antyder"
+    },
+    "explainer": {
+      "sw": "Over 2.5 goals ni nanga ya soko la jumla ya goli katika soka. Unashinda voorspelling ikiwa matokeo ya mwisho ya jumla ni 3 au zaidi - kila 3-0, 2-1, 4-2, 3-3 hukaa Over 2.5 Ndio. Hesabu ya msingi ni safi kuliko 1X2: unahitaji tu jumla ya goli, na joint Poisson distribution ya xG ya nyumbani + xG ya ugenini hukupa uwezekano halisi kwa kila jumla inayowezekana. Mechi yenye jumla ya xG ya 2.7 kawaida hupanga Over 2.5 karibu na 1.75 / Under 2.5 karibu na 2.05 katika soko lenye usawa. Kinachofanya soko hili kuwa la kuvutia ni kwamba ugawaji wa goli-jumla ni fat-tailed: karibu 33% ya mechi huisha na goli 2 haswa (kesi ya mpaka), kwa hivyo mabadiliko madogo katika inputs za xG husogea odds zilizotafsiriwa kwa kasi. Mabadiliko kutoka 2.5 jumla ya xG hadi 2.9 jumla ya xG husogeza Over 2.5 kutoka 52% hadi 62% - mabadiliko ya 20% ya jamaa katika thamani iliyotafsiriwa.",
+      "pt": "Mais de 2,5 golos é a âncora do mercado de total de golos no futebol. Ganhas a aposta se o resultado final combinado for 3 ou mais - qualquer 3-0, 2-1, 4-2, 3-3 liquida Over 2,5 Sim. A matemática subjacente é mais limpa que a de 1X2: só precisas do total de golos, e a distribuição Poisson conjunta de xG casa + xG fora dá-te a probabilidade exata para cada total possível. Um jogo com xG combinado de 2,7 cota tipicamente Over 2,5 em torno de 1,75 / Under 2,5 em torno de 2,05 num mercado equilibrado. O que torna este mercado interessante é que a distribuição de total de golos é fat-tailed: cerca de 33% dos jogos terminam com exatamente 2 golos (o caso limite), pelo que pequenas alterações nos inputs de xG movem as odds implícitas drasticamente. Uma variação de 2,5 xG combinado para 2,9 xG combinado move Over 2,5 de 52% para 62% - uma mudança relativa de 20% no valor implícito.",
+      "tr": "2,5 üstü gol, futbolda toplam gol pazarının çapasıdır. Nihai birleşik skor 3 veya daha fazla ise bahsi kazanırsınız - herhangi bir 3-0, 2-1, 4-2, 3-3 Üst 2,5 Evet'i çözer. Altta yatan matematik 1X2'den daha temizdir: yalnızca toplam gol sayısına ihtiyacınız vardır ve ev sahibi xG + deplasman xG'nin joint Poisson dağılımı, olası her toplam için kesin olasılığı verir. Birleşik xG'si 2,7 olan bir maç, dengeli bir pazarda 2,5 üstünü tipik olarak 1,75 / 2,5 altını 2,05 civarında fiyatlandırır. Bu pazarı ilginç kılan şey, gol toplam dağılımının şişman kuyruklu olmasıdır: maçların yaklaşık %33'ü tam olarak 2 golle biter (sınır durum), bu yüzden xG girdilerindeki küçük değişiklikler zımni oranları dramatik biçimde hareket ettirir. Birleşik xG'nin 2,5'tan 2,9'a kayması 2,5 üstünü %52'den %62'ye taşır - zımni değerde %20'lik göreli bir kayma.",
+      "pl": "Powyżej 2.5 bramek to kotwica rynku łącznej liczby bramek w piłce. Wygrywasz zakład, jeśli końcowa łączna suma bramek wynosi 3 lub więcej - każde 3-0, 2-1, 4-2, 3-3 rozstrzyga Powyżej 2.5 Tak. Matematyka bazowa jest czystsza niż 1X2: potrzebujesz tylko łącznej liczby bramek, a łączny rozkład Poissona xG gospodarzy + xG gości daje dokładne prawdopodobieństwo dla każdej możliwej sumy. Mecz z łącznym xG 2,7 zwykle wycenia Powyżej 2.5 w okolicach 1,75 / Poniżej 2.5 w okolicach 2,05 na zrównoważonym rynku. To, co czyni ten rynek interesującym, to fakt, że rozkład sumy bramek jest fat-tailed: około 33% meczów kończy się dokładnie 2 bramkami (przypadek graniczny), więc niewielkie zmiany w inputach xG dramatycznie przesuwają implikowane kursy. Przesunięcie z 2,5 łącznego xG do 2,9 łącznego xG przesuwa Powyżej 2.5 z 52% na 62% - 20% względna zmiana w implikowanej wartości.",
+      "ro": "Peste 2,5 goluri este ancora pieței de total goluri din fotbal. Câștigi pariul dacă scorul final combinat este 3 sau mai mult - orice 3-0, 2-1, 4-2, 3-3 decontează Peste 2,5 Da. Matematica subiacentă este mai curată decât 1X2: ai nevoie doar de numărul total de goluri, iar distribuția Poisson comună a xG gazdă + xG oaspete îți oferă probabilitatea exactă pentru fiecare total posibil. Un meci cu xG combinat de 2,7 cotează de obicei Peste 2,5 în jurul 1,75 / Sub 2,5 în jurul 2,05 pe o piață echilibrată. Ceea ce face această piață interesantă este că distribuția totalului de goluri este fat-tailed: aproximativ 33% dintre meciuri se termină cu exact 2 goluri (cazul limită), deci mici modificări la input-urile xG mișcă cotele implicite dramatic. O variație de la 2,5 xG combinat la 2,9 xG combinat mișcă Peste 2,5 de la 52% la 62% - o schimbare relativă de 20% în valoarea implicită.",
+      "ru": "Больше 2.5 голов — якорь рынка тоталов в футболе. Выигрываешь ставку, если итоговый суммарный счёт 3 или больше — любой 3-0, 2-1, 4-2, 3-3 закрывает Больше 2.5 Да. Базовая математика чище, чем у 1X2: нужна лишь сумма голов, а joint Poisson-распределение домашнего xG + гостевого xG даёт точную вероятность для каждого возможного тотала. Матч с суммарным xG 2.7 обычно даёт Больше 2.5 около 1.75 / Меньше 2.5 около 2.05 на сбалансированном рынке. Интересен этот рынок тем, что распределение тоталов fat-tailed: около 33% матчей заканчиваются ровно 2 голами (пограничный случай), поэтому малые изменения xG-входов резко двигают неявные коэффициенты. Сдвиг с 2.5 суммарного xG до 2.9 двигает Больше 2.5 с 52% до 62% — 20% относительное изменение в implied value.",
+      "el": "Τα άνω των 2,5 γκολ είναι η άγκυρα της αγοράς συνολικών γκολ στο ποδόσφαιρο. Κερδίζεις το στοίχημα αν το τελικό συνδυασμένο σκορ είναι 3 ή περισσότερα - οποιοδήποτε 3-0, 2-1, 4-2, 3-3 διευθετεί Άνω 2,5 Ναι. Τα υποκείμενα μαθηματικά είναι πιο καθαρά από το 1X2: χρειάζεσαι μόνο τον συνολικό αριθμό γκολ, και η κοινή κατανομή Poisson του xG γηπεδούχου + xG φιλοξενούμενης σου δίνει την ακριβή πιθανότητα για κάθε δυνατό σύνολο. Ένας αγώνας με συνδυασμένο xG 2,7 τυπικά τιμολογεί Άνω 2,5 γύρω στο 1,75 / Κάτω 2,5 γύρω στο 2,05 σε μια ισορροπημένη αγορά. Αυτό που κάνει αυτή την αγορά ενδιαφέρουσα είναι ότι η κατανομή συνολικών γκολ είναι fat-tailed: περίπου το 33% των αγώνων τελειώνει με ακριβώς 2 γκολ (οριακή περίπτωση), οπότε μικρές αλλαγές στα xG inputs κινούν τις τεκμαρτές αποδόσεις δραματικά. Μια αλλαγή από 2,5 συνδυασμένο xG σε 2,9 συνδυασμένο xG κινεί Άνω 2,5 από 52% σε 62% - σχετική αλλαγή 20% στην τεκμαρτή αξία.",
+      "da": "Over 2,5 mål er ankeret i det totale målmarked i fodbold. Du vinder spillet, hvis det endelige kombinerede resultat er 3 eller mere - ethvert 3-0, 2-1, 4-2, 3-3 afgør Over 2,5 Ja. Den underliggende matematik er renere end 1X2: du har kun brug for det samlede antal mål, og den fælles Poisson-fordeling af hjemme-xG + ude-xG giver dig den eksakte sandsynlighed for hvert muligt total. En kamp med et kombineret xG på 2,7 prissætter typisk Over 2,5 omkring 1,75 / Under 2,5 omkring 2,05 på et balanceret marked. Det, der gør dette marked interessant, er, at fordelingen af totalmål er fat-tailed: omkring 33% af kampene slutter med præcis 2 mål (grænsetilfældet), så små ændringer i xG-inputtene flytter de implicitte odds dramatisk. Et skifte fra 2,5 kombineret xG til 2,9 kombineret xG flytter Over 2,5 fra 52% til 62% - et relativt skift på 20% i implicit værdi.",
+      "sv": "Över 2,5 mål är ankaret i totalmålmarknaden i fotboll. Du vinner spelet om det slutliga kombinerade resultatet är 3 eller mer - vilket som helst 3-0, 2-1, 4-2, 3-3 avgör Över 2,5 Ja. Den underliggande matematiken är renare än 1X2: du behöver bara det totala antalet mål, och den gemensamma Poisson-fördelningen av hemma-xG + borta-xG ger dig den exakta sannolikheten för varje möjlig total. En match med kombinerat xG på 2,7 prissätter typiskt Över 2,5 runt 1,75 / Under 2,5 runt 2,05 på en balanserad marknad. Det som gör denna marknad intressant är att målfördelningen är fat-tailed: cirka 33% av matcherna slutar med exakt 2 mål (gränsfallet), så små förändringar i xG-input flyttar implicita odds dramatiskt. En svängning från 2,5 kombinerat xG till 2,9 kombinerat xG flyttar Över 2,5 från 52% till 62% - en 20% relativ förändring i implicit värde."
+    },
+    "strategy": {
+      "sw": "Soko la Over 2.5 ni la faida zaidi wakati umepata mismatch kati ya makadirio ya jumla ya xG na uwezekano uliotafsiriwa wa soko. Maeneo mazuri ya kutafuta: mechi kati ya pande mbili za top-six (books mara nyingi hupanga Over 2.5 karibu kama coinflip kwa sababu vifadhila vyote viwili ni vyenye mpangilio, lakini talanta ya mashambulizi kwa pande zote hupeleka joint Poisson distribution juu zaidi), na mechi za katikati baada ya raundi ya kati ya wiki yenye goli nyingi (mtazamo wa umma huvuta prijs chini kwa sababu watu hukumbuka mechi zenye goli kidogo kwa ukubwa zaidi). Maeneo mabaya: derby ambapo warefa kihistoria ni waangalifu na pande zote huvutia bus, na mechi zinazohusisha timu zilizopandishwa katika speelronde tano za kwanza ambapo inputs za xG ni noisy. Filter rahisi zaidi ya value: ikiwa jumla ya xG iko juu ya 2.8 na bei ya Over 2.5 iko juu ya 1.85, huo kawaida ni edge mdogo lakini thabiti.",
+      "pt": "O mercado Over 2,5 é mais rentável quando identificaste uma divergência entre a estimativa conjunta de xG e a probabilidade implícita do mercado. Bons locais para procurar: jogos entre duas equipas do top-six (as casas frequentemente cotam Over 2,5 quase como coinflip porque ambas as defesas estão organizadas, mas o talento ofensivo em ambos os lados inclina a distribuição Poisson verdadeira para cima), e jogos do meio da tabela após uma jornada intersemanal com muitos golos (a perceção pública arrasta o preço para baixo porque as pessoas lembram-se desproporcionalmente de jogos com poucos golos). Maus locais: dérbis onde os árbitros são historicamente cautelosos e ambos os lados estacionam o autocarro, e jogos envolvendo equipas promovidas nas cinco primeiras jornadas onde os inputs de xG são ruidosos. O filtro de valor mais simples: se o xG combinado está acima de 2,8 e o preço Over 2,5 está acima de 1,85, isso normalmente é uma edge pequena mas consistente.",
+      "tr": "2,5 üstü pazarı, birleşik xG tahmini ile pazarın zımni olasılığı arasında bir uyumsuzluk bulduğunuzda en karlıdır. Arama için iyi yerler: iki top-six takımı arasındaki maçlar (her iki savunma da organize olduğu için kitaplar sık sık 2,5 üstünü neredeyse coinflip olarak fiyatlandırır, ancak her iki taraftaki hücum yeteneği gerçek Poisson dağılımını yukarı doğru eğer) ve çok gollü bir hafta ortası turundan sonra orta sıra fikstürleri (insanlar düşük gollü maçları orantısız olarak hatırladığından kamuoyu algısı fiyatı aşağı çeker). Kötü yerler: hakemlerin tarihsel olarak temkinli olduğu ve her iki tarafın otobüsü park ettiği derbi maçları ve açılış beş maç haftasında xG girdilerinin gürültülü olduğu yeni çıkan takımları içeren maçlar. En basit değer filtresi: birleşik xG 2,8'in üzerinde ise ve 2,5 üstü fiyatı 1,85'in üzerinde ise, bu genellikle küçük ama tutarlı bir edge'dir.",
+      "pl": "Rynek Powyżej 2.5 jest najbardziej opłacalny, gdy zidentyfikowałeś rozbieżność między szacunkiem łącznego xG a implikowanym prawdopodobieństwem rynku. Dobre miejsca do szukania: mecze między dwiema drużynami top-six (bukmacherzy często wyceniają Powyżej 2.5 jako niemal coinflip, bo obie obrony są zorganizowane, ale talent ofensywny po obu stronach przesuwa prawdziwy rozkład Poissona wyżej), i mecze środka tabeli po bramkostrzelnej środtygodniowej kolejce (percepcja publiczna ciągnie cenę w dół, bo ludzie nieproporcjonalnie pamiętają mecze z małą liczbą bramek). Złe miejsca: derby, w których sędziowie są historycznie ostrożni i obie strony parkują autobus, oraz mecze z beniaminkami w pierwszych pięciu kolejkach, w których inputy xG są hałaśliwe. Najprostszy filtr wartości: jeśli łączne xG jest powyżej 2,8 i cena Powyżej 2.5 powyżej 1,85, to zwykle mała, ale konsekwentna edge.",
+      "ro": "Piața Peste 2,5 este cea mai profitabilă când ai identificat o nepotrivire între estimarea combinată xG și probabilitatea implicită a pieței. Locuri bune de căutat: meciuri între două echipe din top-six (casele cotează adesea Peste 2,5 aproape ca o aruncare la sorți deoarece ambele apărări sunt organizate, dar talentul ofensiv din ambele părți înclină distribuția Poisson adevărată în sus) și meciuri de mijlocul clasamentului după o etapă intersăptămânală plină de goluri (percepția publică trage prețul în jos pentru că oamenii își amintesc disproporționat meciurile cu puține goluri). Locuri rele: derby-urile unde arbitrii sunt istoric precauți și ambele părți parchează autobuzul, și meciurile implicând echipe promovate în primele cinci etape unde input-urile xG sunt zgomotoase. Cel mai simplu filtru de valoare: dacă xG-ul combinat este peste 2,8 și prețul Peste 2,5 este peste 1,85, de obicei este un edge mic, dar consistent.",
+      "ru": "Рынок Больше 2.5 наиболее прибылен, когда ты нашёл расхождение между суммарной оценкой xG и implied probability рынка. Хорошие места поискать: матчи между двумя топ-шестёрочными командами (buki часто оценивают Больше 2.5 почти как coinflip, потому что обе обороны организованы, но атакующий талант с обеих сторон склоняет истинное Poisson-распределение вверх) и матчи середины таблицы после результативного среднедельного тура (публичное восприятие тянет цену вниз, потому что люди непропорционально помнят низкорезультативные матчи). Плохие места: дерби, где арбитры исторически осторожны и обе стороны паркуют автобус, и матчи с новичками в первые пять туров, где xG-входы шумные. Простейший value-фильтр: если суммарный xG выше 2.8 и цена Больше 2.5 выше 1.85 — это обычно небольшой, но устойчивый edge.",
+      "el": "Η αγορά Άνω 2,5 είναι πιο κερδοφόρα όταν έχεις εντοπίσει μια αναντιστοιχία μεταξύ της συνδυασμένης εκτίμησης xG και της τεκμαρτής πιθανότητας της αγοράς. Καλά σημεία για έρευνα: αγώνες μεταξύ δύο ομάδων του top-six (τα γραφεία τιμολογούν συχνά το Άνω 2,5 σχεδόν σαν coinflip επειδή και οι δύο αμυντικές γραμμές είναι οργανωμένες, αλλά το επιθετικό ταλέντο και στις δύο πλευρές γέρνει την αληθινή κατανομή Poisson προς τα πάνω) και αγώνες μεσαίας κατάταξης μετά από έναν μεσοβδόμαδο γύρο με πολλά γκολ (η δημόσια αντίληψη σύρει την τιμή προς τα κάτω επειδή ο κόσμος θυμάται δυσανάλογα αγώνες με λίγα γκολ). Κακά σημεία: ντέρμπι όπου οι διαιτητές είναι ιστορικά προσεκτικοί και και οι δύο πλευρές παρκάρουν το λεωφορείο, και αγώνες με νεοανεβασμένες ομάδες στις πρώτες πέντε αγωνιστικές όπου τα xG inputs είναι θορυβώδη. Ο απλούστερος φίλτρο αξίας: αν το συνδυασμένο xG είναι πάνω από 2,8 και η τιμή Άνω 2,5 πάνω από 1,85, αυτό συνήθως είναι μικρό αλλά σταθερό edge.",
+      "da": "Over 2,5-markedet er mest rentabelt, når du har identificeret en forskel mellem det kombinerede xG-estimat og markedets implicitte sandsynlighed. Gode steder at kigge: kampe mellem to top-seks-sider (bogmagere prissætter ofte Over 2,5 næsten som et lodtrækning, fordi begge forsvar er organiserede, men det offensive talent på begge sider skævvrider den sande Poisson-fordeling højere), og midterhold-kampe efter en målrig midtugerunde (den offentlige opfattelse trækker prisen ned, fordi folk uforholdsmæssigt husker lav-målrige kampe). Dårlige steder: derby-kampe, hvor dommerne historisk er forsigtige og begge sider parkerer bussen, og kampe der involverer oprykkede sider i de første fem spillerunder, hvor xG-inputtene er støjende. Det enkleste værdifilter: hvis det kombinerede xG er over 2,8 og Over 2,5-prisen er over 1,85, er det typisk en lille men konsistent edge.",
+      "sv": "Över 2,5-marknaden är mest lönsam när du har identifierat en missanpassning mellan det kombinerade xG-estimatet och marknadens implicita sannolikhet. Bra ställen att leta: matcher mellan två topp-sex-lag (bokmakare prissätter ofta Över 2,5 nästan som coinflip eftersom båda försvaren är organiserade, men den offensiva talangen på båda sidor lutar den sanna Poisson-fördelningen högre) och mittentabellsmatcher efter en målrik mittveckomgång (den allmänna uppfattningen drar ner priset eftersom folk oproportionerligt minns mållösa matcher). Dåliga ställen: derbymatcher där domare historiskt är försiktiga och båda sidor parkerar bussen, och matcher som involverar nykomlingar under de första fem omgångarna där xG-input är brusigt. Det enklaste värdefiltret: om kombinerat xG är över 2,8 och priset på Över 2,5 är över 1,85, är det typiskt ett litet men konsekvent edge."
+    },
+    "matchesHeading": {
+      "sw": "Mechi za leo zenye ujasiri mkubwa",
+      "pt": "Jogos de alta confiança de hoje",
+      "tr": "Bugünün yüksek güvenilirlikteki fikstürleri",
+      "pl": "Dzisiejsze mecze o wysokiej pewności",
+      "ro": "Meciurile de azi cu încredere ridicată",
+      "ru": "Сегодняшние матчи с высокой confidence",
+      "el": "Αγώνες υψηλής εμπιστοσύνης σήμερα",
+      "da": "Dagens kampe med høj confidence",
+      "sv": "Dagens matcher med hög konfidens"
+    },
+    "matchesSub": {
+      "sw": "Mechi 3 bora ambapo ensemble yetu ina ujasiri wa jumla wa juu zaidi - orodha muhimu ya research ya soko la totals.",
+      "pt": "Top 3 jogos onde o nosso ensemble tem a confiança geral mais alta - uma shortlist útil para research de totais.",
+      "tr": "Ensemble'imizin en yüksek genel güvene sahip olduğu ilk 3 maç - totals pazarı araştırması için yararlı bir kısa liste.",
+      "pl": "Top 3 mecze, w których nasz ensemble ma najwyższą ogólną pewność - użyteczna shortlista do researchu totals.",
+      "ro": "Primele 3 meciuri unde ensemble-ul nostru are cea mai mare încredere generală - o listă utilă pentru cercetarea pieței de totaluri.",
+      "ru": "Топ-3 матча с наивысшей общей confidence нашей ensemble — полезный шорт-лист для totals-research.",
+      "el": "Τα 3 κορυφαία παιχνίδια όπου το ensemble μας έχει τη μεγαλύτερη συνολική εμπιστοσύνη - μια χρήσιμη shortlist για έρευνα totals.",
+      "da": "Top 3 kampe, hvor vores ensemble har den højeste samlede confidence - en nyttig kortliste til totals-markedsresearch.",
+      "sv": "Topp 3-matcher där vår ensemble har högst total konfidens - en användbar shortlist för totals-marknadsresearch."
+    },
+    "metaTitle": {
+      "sw": "Utabiri wa Over 2.5 Goli & Tips za Leo · BetsPlug",
+      "pt": "Previsões Mais de 2,5 Golos & Dicas Hoje · BetsPlug",
+      "tr": "2,5 Üstü Gol Tahminleri & Bugünün İpuçları · BetsPlug",
+      "pl": "Prognozy Powyżej 2.5 Bramek & Typy Dzisiaj · BetsPlug",
+      "ro": "Predicții Peste 2,5 Goluri & Ponturi Azi · BetsPlug",
+      "ru": "Прогнозы Больше 2.5 Голов и советы на сегодня · BetsPlug",
+      "el": "Προβλέψεις Άνω 2,5 Γκολ & Tips Σήμερα · BetsPlug",
+      "da": "Over 2,5 Mål-forudsigelser & Tips i Dag · BetsPlug",
+      "sv": "Över 2,5 Mål-förutsägelser & Tips Idag · BetsPlug"
+    },
+    "metaDescription": {
+      "sw": "Utabiri wa bure wa Over 2.5 goli na hoja ya modeli. Jinsi pricing ya totals kulingana na Poisson inavyofanya kazi na wakati soko linapowareact kwa simulizi za low-scoring.",
+      "pt": "Previsões gratuitas Mais de 2,5 golos e raciocínio do modelo. Como funciona a pricing Poisson-based de totais e quando o mercado sobrerreage a narrativas de poucos golos.",
+      "tr": "Ücretsiz 2,5 üstü gol tahminleri ve model mantığı. Poisson tabanlı totals fiyatlandırmanın nasıl çalıştığı ve pazarın düşük skorlu anlatılara ne zaman aşırı tepki verdiği.",
+      "pl": "Darmowe prognozy Powyżej 2.5 bramek i uzasadnienie modelu. Jak działa wycena totals oparta na Poissonie i kiedy rynek przereaguje na niskie wyniki.",
+      "ro": "Predicții gratuite Peste 2,5 goluri și raționamentul modelului. Cum funcționează cotarea totalurilor bazată pe Poisson și când reacționează excesiv piața la narațiuni cu puține goluri.",
+      "ru": "Бесплатные прогнозы Больше 2.5 голов и логика модели. Как работает Poisson-based totals pricing и когда рынок перереагирует на low-scoring нарративы.",
+      "el": "Δωρεάν προβλέψεις Άνω 2,5 γκολ και συλλογιστική μοντέλου. Πώς λειτουργεί η τιμολόγηση totals βασισμένη στο Poisson και πότε η αγορά αντιδρά υπερβολικά σε αφηγήσεις χαμηλών γκολ.",
+      "da": "Gratis Over 2,5 mål-forudsigelser og modelbegrundelse. Hvordan Poisson-baseret totals-prissætning fungerer, og hvornår markedet overreagerer på lav-målrige fortællinger.",
+      "sv": "Gratis Över 2,5 mål-förutsägelser och modellresonemang. Hur Poisson-baserad totals-prissättning fungerar och när marknaden överreagerar på lågresultats-berättelser."
+    },
+    "faqs[faq-0].question": {
+      "sw": "Je 2.5 inamaanisha goli 3 au goli 2?",
+      "pt": "2,5 significa 3 golos ou 2 golos?",
+      "tr": "2,5, 3 gol mü yoksa 2 gol mü demek?",
+      "pl": "Czy 2.5 oznacza 3 bramki czy 2 bramki?",
+      "ro": "2,5 înseamnă 3 goluri sau 2 goluri?",
+      "ru": "2.5 означает 3 гола или 2 гола?",
+      "el": "Το 2,5 σημαίνει 3 γκολ ή 2 γκολ;",
+      "da": "Betyder 2,5 3 mål eller 2 mål?",
+      "sv": "Betyder 2,5 3 mål eller 2 mål?"
+    },
+    "faqs[faq-0].answer": {
+      "sw": "Over 2.5 inashinda ikiwa jumla ya mwisho ni 3 au zaidi. Under 2.5 inashinda ikiwa jumla ya mwisho ni 2 au chini. Goli ya nusu ni mkataba wa bookmaker kuhakikisha hakuna push - matokeo daima ni Over au Under.",
+      "pt": "Over 2,5 ganha se o total final for 3 ou mais. Under 2,5 ganha se o total final for 2 ou menos. O meio-golo é uma convenção de bookmaker para garantir que nunca há push - o resultado é sempre Over ou Under.",
+      "tr": "2,5 üstü, nihai toplam 3 veya daha fazla ise kazanır. 2,5 altı, nihai toplam 2 veya daha az ise kazanır. Yarım gol, hiçbir zaman push olmamasını garanti etmek için bir bookmaker kuralıdır - sonuç her zaman Üst veya Alt'tır.",
+      "pl": "Powyżej 2.5 wygrywa, jeśli końcowa suma wynosi 3 lub więcej. Poniżej 2.5 wygrywa, jeśli końcowa suma wynosi 2 lub mniej. Pół bramki to konwencja bukmacherska gwarantująca, że nigdy nie ma pusha - wynik jest zawsze Powyżej lub Poniżej.",
+      "ro": "Peste 2,5 câștigă dacă totalul final este 3 sau mai mare. Sub 2,5 câștigă dacă totalul final este 2 sau mai puțin. Jumătatea de gol este o convenție bookmaker pentru a garanta că nu există niciodată push - rezultatul este întotdeauna Peste sau Sub.",
+      "ru": "Больше 2.5 выигрывает, если итоговый тотал 3 или больше. Меньше 2.5 — если 2 или меньше. Полугол — букмекерская конвенция, гарантирующая, что не бывает возврата: результат всегда либо Больше, либо Меньше.",
+      "el": "Το Άνω 2,5 κερδίζει αν το τελικό σύνολο είναι 3 ή περισσότερα. Το Κάτω 2,5 κερδίζει αν το τελικό σύνολο είναι 2 ή λιγότερα. Το μισό γκολ είναι μια σύμβαση bookmaker για να εγγυηθεί ότι δεν υπάρχει ποτέ push - το αποτέλεσμα είναι πάντα είτε Άνω είτε Κάτω.",
+      "da": "Over 2,5 vinder, hvis det endelige total er 3 eller mere. Under 2,5 vinder, hvis det endelige total er 2 eller færre. Halvmålet er en bogmager-konvention for at garantere, at der aldrig er push - resultatet er altid enten Over eller Under.",
+      "sv": "Över 2,5 vinner om slutsumman är 3 eller mer. Under 2,5 vinner om slutsumman är 2 eller färre. Halvmålet är en bokmakarkonvention för att garantera att det aldrig blir push - resultatet är alltid antingen Över eller Under."
+    },
+    "faqs[faq-1].question": {
+      "sw": "Jinsi gani pricing ya Over 2.5 inavyohesabiwa?",
+      "pt": "Como é calculada a pricing de Over 2,5?",
+      "tr": "2,5 üstü fiyatlandırması nasıl hesaplanır?",
+      "pl": "Jak jest obliczana wycena Powyżej 2.5?",
+      "ro": "Cum se calculează cotarea Peste 2,5?",
+      "ru": "Как рассчитывается pricing Больше 2.5?",
+      "el": "Πώς υπολογίζεται η τιμολόγηση Άνω 2,5;",
+      "da": "Hvordan beregnes Over 2,5-prissætningen?",
+      "sv": "Hur beräknas Över 2,5-prissättningen?"
+    },
+    "faqs[faq-1].answer": {
+      "sw": "Books huanza na joint Poisson distribution ya home xG + away xG na kuunganisha tail kutoka goli 3 na juu. Katika vitendo wanatumia correlated goal models ambazo hupunguza kidogo upper-tail probability dhidi ya independent Poisson, kwa sababu katika mechi halisi upande unaopoteza mara nyingi hufuata goli mwishoni na kuinua tail.",
+      "pt": "As casas começam com a distribuição Poisson conjunta de xG casa + xG fora e integram a cauda a partir de 3 golos para cima. Na prática usam modelos de golos correlacionados que reduzem ligeiramente a probabilidade da cauda superior vs Poisson independente, porque em jogos reais o lado que está a perder costuma ir à caça de golos no final e inflaciona a cauda.",
+      "tr": "Kitaplar ev xG + deplasman xG'nin joint Poisson dağılımıyla başlar ve 3 gol ve üzerinden kuyruğu entegre eder. Pratikte, bağımsız Poisson'a karşı üst-kuyruk olasılığını hafifçe azaltan korele gol modelleri kullanırlar, çünkü gerçek maçlarda kaybeden taraf genellikle geç gollerin peşine düşer ve kuyruğu şişirir.",
+      "pl": "Bukmacherzy zaczynają od łącznego rozkładu Poissona xG gospodarzy + xG gości i całkują ogon od 3 bramek w górę. W praktyce używają modeli skorelowanych bramek, które lekko redukują prawdopodobieństwo górnego ogona w porównaniu z niezależnym Poissonem, bo w prawdziwych meczach przegrywająca strona często goni bramki późno i nadmuchuje ogon.",
+      "ro": "Casele încep cu distribuția Poisson comună a xG gazdă + xG oaspete și integrează coada de la 3 goluri în sus. În practică folosesc modele de goluri corelate care reduc ușor probabilitatea cozii superioare față de Poisson independent, deoarece în meciurile reale partea care pierde urmărește adesea golurile târziu și umflă coada.",
+      "ru": "Buki начинают с joint Poisson-распределения home xG + away xG и интегрируют хвост от 3 голов и выше. На практике они используют correlated goal models, которые слегка снижают upper-tail probability против независимого Poisson, потому что в реальных матчах проигрывающая сторона часто гонится за голами под конец и раздувает хвост.",
+      "el": "Τα γραφεία ξεκινούν με την κοινή κατανομή Poisson του xG γηπεδούχου + xG φιλοξενούμενης και ολοκληρώνουν την ουρά από 3 γκολ και πάνω. Στην πράξη χρησιμοποιούν συσχετισμένα μοντέλα γκολ που μειώνουν ελαφρώς την πιθανότητα της άνω ουράς σε σύγκριση με το ανεξάρτητο Poisson, επειδή σε πραγματικούς αγώνες η ομάδα που χάνει συχνά κυνηγά γκολ αργά και διογκώνει την ουρά.",
+      "da": "Bogmagere starter med den fælles Poisson-fordeling af hjemme-xG + ude-xG og integrerer halen fra 3 mål og opefter. I praksis bruger de korrelerede målmodeller, der let reducerer øvre-hale-sandsynligheden vs uafhængig Poisson, fordi i rigtige kampe jagter den tabende side ofte mål sent og oppuster halen.",
+      "sv": "Bokmakare börjar med den gemensamma Poisson-fördelningen av hemma-xG + borta-xG och integrerar svansen från 3 mål och uppåt. I praktiken använder de korrelerade målmodeller som något minskar övre-svans-sannolikheten jämfört med oberoende Poisson, eftersom i verkliga matcher jagar den förlorande sidan ofta mål sent och blåser upp svansen."
+    },
+    "faqs[faq-2].question": {
+      "sw": "Kwa nini mechi za Eredivisie hupangwa juu sana kwenye Over 2.5?",
+      "pt": "Porque é que os jogos da Eredivisie cotam tão alto em Over 2,5?",
+      "tr": "Eredivisie maçları neden 2,5 üstünde bu kadar yüksek fiyatlandırılır?",
+      "pl": "Dlaczego mecze Eredivisie wyceniają tak wysoko na Powyżej 2.5?",
+      "ro": "De ce meciurile din Eredivisie cotează atât de sus la Peste 2,5?",
+      "ru": "Почему матчи Eredivisie так высоко оцениваются на Больше 2.5?",
+      "el": "Γιατί οι αγώνες Eredivisie τιμολογούνται τόσο ψηλά στο Άνω 2,5;",
+      "da": "Hvorfor prissættes Eredivisie-kampe så højt på Over 2,5?",
+      "sv": "Varför prissätts Eredivisie-matcher så högt på Över 2,5?"
+    },
+    "faqs[faq-2].answer": {
+      "sw": "Eredivisie huendesha wastani wa goli ~3.2 kwa mechi - kubwa zaidi ya top-ten za Ulaya - kwa hivyo Poisson distribution huanza na mass zaidi juu ya 2.5. Books huonyesha hilo kwa kupanga Over 2.5 kama favoriti katika ~65% ya mechi za Eredivisie dhidi ya ~50% katika Serie A.",
+      "pt": "A Eredivisie tem uma média de ~3,2 golos por jogo - a mais alta das top-ten europeias - portanto a distribuição Poisson começa com mais massa acima de 2,5. As casas refletem isso cotando Over 2,5 como favorito em ~65% dos jogos da Eredivisie versus ~50% na Serie A.",
+      "tr": "Eredivisie maç başına ~3,2 gol ortalamasına sahiptir - top-ten Avrupa liglerinin en yükseği - bu yüzden Poisson dağılımı 2,5'un üzerinde daha fazla kütleyle başlar. Kitaplar bunu Eredivisie fikstürlerinin ~%65'inde 2,5 üstünü favori olarak fiyatlandırarak yansıtır; Serie A'da ~%50'dir.",
+      "pl": "Eredivisie ma średnio ~3,2 bramki na mecz - najwięcej z top-ten europejskich - więc rozkład Poissona startuje z większą masą powyżej 2,5. Bukmacherzy odzwierciedlają to, wyceniając Powyżej 2.5 jako faworyta w ~65% meczów Eredivisie wobec ~50% w Serie A.",
+      "ro": "Eredivisie are o medie de ~3,2 goluri pe meci - cea mai mare dintre top-ten europene - deci distribuția Poisson începe cu mai multă masă peste 2,5. Casele reflectă asta cotând Peste 2,5 ca favorit în ~65% din meciurile Eredivisie versus ~50% în Serie A.",
+      "ru": "Eredivisie в среднем ~3.2 гола за матч — самая результативная из топ-десяти европейских — поэтому Poisson-распределение стартует с большей массой выше 2.5. Buki это отражают, ставя Больше 2.5 фаворитом в ~65% матчей Eredivisie против ~50% в Serie A.",
+      "el": "Η Eredivisie έχει μέσο όρο ~3,2 γκολ ανά αγώνα - το υψηλότερο από τις top-ten ευρωπαϊκές - οπότε η κατανομή Poisson ξεκινά με περισσότερη μάζα πάνω από το 2,5. Τα γραφεία το αντικατοπτρίζουν αυτό τιμολογώντας Άνω 2,5 ως φαβορί στο ~65% των αγώνων Eredivisie έναντι ~50% στη Serie A.",
+      "da": "Eredivisie har et gennemsnit på ~3,2 mål pr. kamp - det højeste af de top-ti europæiske ligaer - så Poisson-fordelingen starter med mere masse over 2,5. Bogmagere afspejler det ved at prissætte Over 2,5 som favorit i ~65% af Eredivisie-kampene mod ~50% i Serie A.",
+      "sv": "Eredivisie har ett snitt på ~3,2 mål per match - högst av de tio bästa europeiska - så Poisson-fördelningen börjar med mer massa över 2,5. Bokmakare speglar det genom att prissätta Över 2,5 som favorit i ~65% av Eredivisie-matcherna mot ~50% i Serie A."
+    },
+    "faqs[faq-3].question": {
+      "sw": "Goli za mwisho ni tatizo kwa waliojisajili wa Over 2.5?",
+      "pt": "Os golos tardios são um problema para os subscritores de Over 2,5?",
+      "tr": "Geç goller 2,5 üstü abone için bir sorun mu?",
+      "pl": "Czy późne bramki to problem dla subskrybentów Powyżej 2.5?",
+      "ro": "Golurile târzii sunt o problemă pentru abonații Peste 2,5?",
+      "ru": "Поздние голы — проблема для подписчиков Больше 2.5?",
+      "el": "Τα όψιμα γκολ είναι πρόβλημα για τους συνδρομητές Άνω 2,5;",
+      "da": "Er sent-mål et problem for Over 2,5-abonnenter?",
+      "sv": "Är sena mål ett problem för Över 2,5-prenumeranter?"
+    },
+    "faqs[faq-3].answer": {
+      "sw": "Hukusaidia, kwa kweli. Athari ya 'garbage goal' ya dakika ya 90 inamaanisha soko la Over 2.5 hushinda mara nyingi zaidi kuliko independent Poisson ingependekeza, kwa sababu pande zinazopoteza huchukua hatari mwishoni na upande unaoshinda mara nyingi hupata goli la counter. Hii ni moja ya edges ndogo ambazo waliojisajili wenye uzoefu huexploit kwenye mchezo wa closing-line-value.",
+      "pt": "Ajudam, na verdade. O efeito 'garbage goal' ao minuto 90 significa que o mercado Over 2,5 vence mais vezes do que o Poisson independente sugeriria, porque os lados que estão a perder assumem riscos no final e o lado vencedor marca frequentemente um golo de contra-ataque. Esta é uma das pequenas edges que subscritores experientes exploram no jogo de closing-line-value.",
+      "tr": "Aslında yardım ederler. 90. dakika 'çöp gol' etkisi, 2,5 üstü pazarının bağımsız Poisson'un öngöreceğinden daha sık kazandığı anlamına gelir, çünkü kaybeden taraflar geç risk alır ve kazanan taraf genellikle bir kontra golü alır. Bu, deneyimli abonelerin closing-line-value oyununda istismar ettiği küçük edge'lerden biridir.",
+      "pl": "Pomagają, prawdę mówiąc. Efekt 'garbage goal' w 90. minucie oznacza, że rynek Powyżej 2.5 wygrywa częściej, niż sugerowałby niezależny Poisson, bo strony przegrywające podejmują ryzyko późno, a wygrywająca strona często strzela z kontrataku. To jedna z małych edge, które doświadczeni subskrybenci wykorzystują w grze closing-line-value.",
+      "ro": "Ajută, de fapt. Efectul 'garbage goal' la minutul 90 înseamnă că piața Peste 2,5 câștigă mai des decât ar sugera Poisson-ul independent, pentru că părțile care pierd își asumă riscuri târziu și partea care câștigă obține adesea un gol de contraatac. Acesta este unul dintre micile edge-uri pe care abonații experimentați le exploatează în jocul de closing-line-value.",
+      "ru": "На самом деле помогают. Эффект «garbage goal» на 90-й минуте означает, что рынок Больше 2.5 выигрывает чаще, чем предположил бы независимый Poisson, потому что проигрывающие команды рискуют в концовке, а выигрывающая часто получает контратаку. Это один из мелких edges, которые опытные подписчики эксплуатируют в closing-line-value игре.",
+      "el": "Βοηθούν, στην πραγματικότητα. Το φαινόμενο 'σκουπιδογκόλ' του 90ού λεπτού σημαίνει ότι η αγορά Άνω 2,5 κερδίζει πιο συχνά από ό,τι θα πρότεινε το ανεξάρτητο Poisson, επειδή οι ομάδες που χάνουν αναλαμβάνουν κινδύνους αργά και η ομάδα που κερδίζει συχνά παίρνει γκολ από κόντρα. Αυτό είναι ένα από τα μικρά edges που εκμεταλλεύονται έμπειροι συνδρομητές στο παιχνίδι closing-line-value.",
+      "da": "De hjælper, faktisk. '90. minut garbage goal'-effekten betyder, at Over 2,5-markedet vinder oftere, end uafhængig Poisson ville antyde, fordi tabende sider tager risici sent, og den vindende side ofte får et kontringsmål. Dette er en af de små edges, som erfarne abonnenter udnytter i closing-line-value-spillet.",
+      "sv": "De hjälper faktiskt. 90:e-minuten-'garbage goal'-effekten innebär att Över 2,5-marknaden vinner oftare än oberoende Poisson skulle föreslå, eftersom förlorande sidor tar risker sent och den vinnande sidan ofta får ett kontringsmål. Detta är en av de små edges som erfarna prenumeranter utnyttjar i closing-line-value-spelet."
+    },
+    "faqs[faq-4].question": {
+      "sw": "Ni masoko yapi ya BetsPlug mnayatoa kwa totals?",
+      "pt": "Que mercados BetsPlug expõem para totais?",
+      "tr": "Totals için hangi BetsPlug pazarlarını ortaya çıkarıyorsunuz?",
+      "pl": "Jakie rynki BetsPlug eksponujecie dla totals?",
+      "ro": "Ce piețe BetsPlug expuneți pentru totaluri?",
+      "ru": "Какие BetsPlug-рынки вы открываете для тоталов?",
+      "el": "Ποιες αγορές BetsPlug εκθέτετε για totals;",
+      "da": "Hvilke BetsPlug-markeder udstiller I for totals?",
+      "sv": "Vilka BetsPlug-marknader exponerar ni för totals?"
+    },
+    "faqs[faq-4].answer": {
+      "sw": "Preview ya bure inaonyesha 1X2 confidence. Members wanapata Over/Under 2.5 na Over/Under 3.5 uwezekano uliotafsiriwa ulipotokana na Poisson head ya ensemble yetu. Uwezekano wa moja kwa moja kwa kila mechi kwa soko la goli uko kwenye roadmap.",
+      "pt": "A preview gratuita mostra confiança 1X2. Os membros obtêm Over/Under 2,5 e Over/Under 3,5 probabilidades implícitas derivadas da Poisson head do nosso ensemble. Probabilidades diretas por jogo para o mercado de golos estão no roadmap.",
+      "tr": "Ücretsiz önizleme 1X2 confidence'ı gösterir. Üyeler ensemble'imizin Poisson head'inden türetilen Alt/Üst 2,5 ve Alt/Üst 3,5 zımni olasılıkları alır. Gol pazarı için doğrudan fikstür başına olasılıklar roadmap'tedir.",
+      "pl": "Darmowa preview pokazuje pewność 1X2. Członkowie dostają Powyżej/Poniżej 2.5 i Powyżej/Poniżej 3.5 implikowane prawdopodobieństwa wyprowadzone z głowy Poissona naszego ensemble. Bezpośrednie prawdopodobieństwa per mecz dla rynku goli są w roadmapie.",
+      "ro": "Preview-ul gratuit arată încrederea 1X2. Membrii primesc probabilități implicite Peste/Sub 2,5 și Peste/Sub 3,5 derivate din capul Poisson al ensemble-ului nostru. Probabilități directe per meci pentru piața de goluri se află pe roadmap.",
+      "ru": "Бесплатный превью показывает 1X2 confidence. Участники получают Больше/Меньше 2.5 и Больше/Меньше 3.5 неявные вероятности, выведенные из Poisson head нашего ensemble. Прямые вероятности по каждому матчу для голевого рынка в roadmap.",
+      "el": "Η δωρεάν preview δείχνει confidence 1X2. Τα μέλη λαμβάνουν Άνω/Κάτω 2,5 και Άνω/Κάτω 3,5 τεκμαρτές πιθανότητες που προέρχονται από την Poisson head του ensemble μας. Άμεσες πιθανότητες ανά αγώνα για την αγορά γκολ είναι στο roadmap.",
+      "da": "Den gratis preview viser 1X2-confidence. Medlemmer får Over/Under 2,5 og Over/Under 3,5 implicitte sandsynligheder afledt fra Poisson-hovedet i vores ensemble. Direkte sandsynligheder pr. kamp for målmarkedet er på roadmappen.",
+      "sv": "Den gratis previewn visar 1X2-konfidens. Medlemmar får Över/Under 2,5 och Över/Under 3,5 implicita sannolikheter härledda från Poisson-huvudet i vår ensemble. Direkta sannolikheter per match för målmarknaden finns på roadmappen."
+    },
+    "faqs[faq-5].question": {
+      "sw": "Over 2.5 ni soko nzuri kwa combo?",
+      "pt": "Over 2,5 é um bom mercado para acumuladores?",
+      "tr": "2,5 üstü akümülatörler için iyi bir pazar mı?",
+      "pl": "Czy Powyżej 2.5 to dobry rynek na akumulatory?",
+      "ro": "Peste 2,5 este o piață bună pentru acumulatoare?",
+      "ru": "Больше 2.5 — хороший рынок для экспрессов?",
+      "el": "Είναι το Άνω 2,5 καλή αγορά για συνδυαστικά;",
+      "da": "Er Over 2,5 et godt marked til akkumulatorer?",
+      "sv": "Är Över 2,5 en bra marknad för ackumulatorer?"
+    },
+    "faqs[faq-5].answer": {
+      "sw": "Ndio - inapendwa kwa accas kwa sababu bei hukusanyika karibu 1.70-1.90 na matukio ni dhaifu yasiyo na correlation. Acca ya miguu 4 ya Over 2.5 kwa wastani wa bei 1.80 hutoa odds ~10.5 kwa picks nne huru ambazo kila moja hupiga 55% - return iliyotafsiriwa karibu 1.70× stake, ambayo kwa kweli ni expectation nzuri ya lange-termijn kwa legs zilizochaguliwa vizuri.",
+      "pt": "Sim - é popular para acas porque os preços clusteram em torno de 1,70-1,90 e os eventos estão apenas fracamente correlacionados. Uma acca de quatro pernas de Over 2,5 a um preço médio de 1,80 dá ~10,5 odds para quatro picks independentes que cada um acerta 55% - um retorno implícito em torno de 1,70× aposta, que na verdade é uma expectativa justa de longo prazo em pernas bem escolhidas.",
+      "tr": "Evet - akümülatörler için popülerdir çünkü fiyatlar 1,70-1,90 civarında kümelenir ve olaylar yalnızca zayıf korelasyonludur. Ortalama fiyat 1,80 olan dört ayaklı bir 2,5 üstü acca, her biri %55 isabet eden dört bağımsız pick için ~10,5 oran verir - zımni getiri bahsin ~1,70×'i kadar, bu aslında iyi seçilmiş bacaklar üzerinde adil bir uzun vadeli beklentidir.",
+      "pl": "Tak - jest popularny dla akumulatorów, bo ceny klastrują wokół 1,70-1,90 a zdarzenia są tylko słabo skorelowane. Czteronożny akumulator Powyżej 2.5 przy średniej cenie 1,80 daje ~10,5 kursu dla czterech niezależnych picków, z których każdy trafia 55% - implikowany zwrot około 1,70× stawki, co jest faktycznie uczciwym oczekiwaniem długoterminowym na dobrze dobranych nogach.",
+      "ro": "Da - este popular pentru acumulatoare, pentru că prețurile se grupează în jurul 1,70-1,90 și evenimentele sunt doar slab corelate. Un acumulator cu patru etape Peste 2,5 la prețul mediu de 1,80 oferă ~10,5 cote pentru patru pick-uri independente care lovesc fiecare 55% - un randament implicit în jur de 1,70× miză, ceea ce este de fapt o așteptare echitabilă pe termen lung pe etape bine alese.",
+      "ru": "Да — популярен для экспрессов, потому что цены кластеризуются вокруг 1.70-1.90 и события слабо коррелированы. Четырёхплечный Больше 2.5 экспресс при средней цене 1.80 даёт ~10.5 коэффициент для четырёх независимых picks, каждый из которых проходит 55% — implied return около 1.70× ставки, что на самом деле честное долгосрочное expectation на хорошо подобранных ногах.",
+      "el": "Ναι - είναι δημοφιλές για accas επειδή οι τιμές συγκεντρώνονται γύρω στο 1,70-1,90 και τα γεγονότα είναι μόνο ασθενώς συσχετισμένα. Ένα τετρασκελές acca Άνω 2,5 στη μέση τιμή 1,80 δίνει ~10,5 αποδόσεις για τέσσερα ανεξάρτητα picks που πετυχαίνουν το καθένα 55% - μια τεκμαρτή απόδοση γύρω στο 1,70× πονταρίσματος, που στην πραγματικότητα είναι μια δίκαιη μακροπρόθεσμη προσδοκία σε καλά επιλεγμένα σκέλη.",
+      "da": "Ja - det er populært til akkumulatorer, fordi priserne klustrer sig omkring 1,70-1,90 og begivenhederne kun er svagt korrelerede. En firebens Over 2,5-acca til gennemsnitspris 1,80 giver ~10,5 odds for fire uafhængige picks, der hver rammer 55% - et implicit afkast omkring 1,70× indsats, hvilket faktisk er en rimelig langsigtet forventning på velvalgte ben.",
+      "sv": "Ja - det är populärt för ackumulatorer eftersom priserna klustras runt 1,70-1,90 och händelserna är bara svagt korrelerade. En fyrbenig Över 2,5-acca till snittpris 1,80 ger ~10,5 odds för fyra oberoende tips som var och en träffar 55% - en implicit avkastning runt 1,70× insats, vilket faktiskt är en rättvis långsiktig förväntning på välvalda ben."
+    }
+  }
+}
