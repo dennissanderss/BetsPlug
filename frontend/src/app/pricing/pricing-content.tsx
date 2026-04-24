@@ -442,12 +442,29 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               return (
                 <div
                   key={plan.id}
-                  className="card-neon p-7 sm:p-8"
+                  className="card-neon relative p-7 sm:p-8"
                   style={{
                     background: tt.bg,
                     borderColor: tt.borderColor,
                   }}
                 >
+                  {plan.popular && (
+                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20">
+                      <span
+                        className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-xs font-extrabold uppercase tracking-[0.2em] text-white whitespace-nowrap"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #10b981 0%, #34d399 50%, #10b981 100%)",
+                          border: "1px solid rgba(134, 239, 172, 0.6)",
+                          boxShadow:
+                            "0 10px 30px -5px rgba(16, 185, 129, 0.55), 0 0 0 3px rgba(16, 185, 129, 0.15)",
+                        }}
+                      >
+                        <Star className="h-3.5 w-3.5" />
+                        {t("pricingDeep.pillPopular" as any)}
+                      </span>
+                    </div>
+                  )}
                   <div className="relative">
                     <div
                       aria-hidden
@@ -469,12 +486,6 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                           {t("pricingDeep.planPrefix" as any)} {plan.name}
                         </span>
                       </div>
-                      {plan.popular && (
-                        <Pill tone="active" className="gap-1 text-[10px]">
-                          <Star className="h-3 w-3" />
-                          {t("pricingDeep.pillPopular" as any)}
-                        </Pill>
-                      )}
                       {plan.lifetime && (
                         <Pill
                           tone="default"

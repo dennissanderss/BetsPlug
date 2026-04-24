@@ -386,7 +386,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
             return (
               <div
                 key={plan.id}
-                className={`card-neon relative flex flex-col overflow-hidden p-8 ${
+                className={`card-neon relative flex flex-col p-8 ${
                   isHighlight ? "md:-translate-y-4" : ""
                 }`}
                 style={{
@@ -395,6 +395,28 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                   boxShadow: tt.innerShadow,
                 }}
               >
+                {/* Most-chosen ribbon — big, centred, half-outside the card
+                    top edge so it jumps out of the grid. Uses emerald
+                    gradient so it reads as a primary-action accent
+                    regardless of the Silver card's cooler palette. */}
+                {isHighlight && (
+                  <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20">
+                    <span
+                      className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-xs font-extrabold uppercase tracking-[0.2em] text-white whitespace-nowrap"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, #10b981 0%, #34d399 50%, #10b981 100%)",
+                        border: "1px solid rgba(134, 239, 172, 0.6)",
+                        boxShadow:
+                          "0 10px 30px -5px rgba(16, 185, 129, 0.55), 0 0 0 3px rgba(16, 185, 129, 0.15)",
+                      }}
+                    >
+                      <Sparkles className="h-3.5 w-3.5" />
+                      {t("pricing.mostChosen")}
+                    </span>
+                  </div>
+                )}
+
                 {/* Tier-coloured ambient glow blobs — top-right + bottom-left */}
                 <div
                   className={`pointer-events-none absolute -right-20 -top-20 h-[320px] w-[320px] rounded-full blur-[120px] ${tt.glowA}`}
@@ -404,11 +426,6 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                 />
 
                 <div className="relative flex flex-1 flex-col">
-                  {isHighlight && (
-                    <Pill tone="active" className="absolute right-0 top-0">
-                      <Sparkles className="h-3 w-3" /> {t("pricing.mostChosen")}
-                    </Pill>
-                  )}
 
                   {/* Plan icon — TierEmblem renders the Roman numeral
                       in the authentic metallic tier colour (bronze =
@@ -510,21 +527,6 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
           })}
         </div>
 
-        {/* Floating Elite crown badge — eye-catcher above the Platinum card */}
-        <div className="relative mt-16 mb-[-28px] flex justify-center">
-          <span
-            className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-sky-50 border"
-            style={{
-              background: "linear-gradient(135deg, #5eb3d9 0%, #e0f4ff 50%, #5eb3d9 100%)",
-              borderColor: "rgba(217, 240, 255, 0.5)",
-              color: "#0b3a5a",
-              boxShadow: "0 10px 30px -5px rgba(94, 179, 217, 0.6)",
-            }}
-          >
-            <Crown className="h-3.5 w-3.5" />
-            {t("pricing.eliteBadge")}
-          </span>
-        </div>
         {/* Platinum lifetime card — recoloured from amber/gold to
             diamond-blue so the background palette matches the TierEmblem
             (Roman IV, icy blue) rendered in its top-left and every other
@@ -532,7 +534,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
             was a hold-over from an earlier design that used Crown/gold
             as the Platinum visual language; now both signals agree. */}
         <div
-          className="card-neon relative overflow-hidden"
+          className="card-neon relative mt-10 overflow-hidden"
           style={{
             boxShadow:
               "0 20px 50px -15px rgba(94, 179, 217, 0.38), 0 0 0 1px rgba(217, 240, 255, 0.2) inset",
