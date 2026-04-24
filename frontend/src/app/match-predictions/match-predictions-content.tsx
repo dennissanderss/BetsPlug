@@ -17,6 +17,7 @@ import {
   Eye,
   RefreshCw,
   AlertTriangle,
+  UserPlus,
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
@@ -82,8 +83,12 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
   // (tier-scope mismatch with /homepage/free-picks) synthesize a minimal
   // prediction object from the free-picks response so the FreeMatchCard
   // always renders win-probs + confidence instead of an empty bar.
+  // If the backend marks fewer than FREE_PICKS as 'free' for today,
+  // pad with the next upcoming fixtures that already carry a prediction
+  // so the page never shows "Your 3 free picks" with only 1 card —
+  // the public funnel needs to honour the headline count.
   const free: Fixture[] = useMemo(() => {
-    return upcoming
+    const primary = upcoming
       .filter((f) => freeMatchIds.has(f.id))
       .map((f) => {
         if (f.prediction) return f;
@@ -108,12 +113,23 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
           },
         } as Fixture;
       });
+
+    if (primary.length >= FREE_PICKS) return primary;
+
+    // Pad with the next chronological upcoming fixtures that have a
+    // prediction (and aren't already in `primary`).
+    const usedIds = new Set(primary.map((f) => f.id));
+    const padding = upcoming
+      .filter((f) => !usedIds.has(f.id) && f.prediction !== null)
+      .slice(0, FREE_PICKS - primary.length);
+    return [...primary, ...padding];
   }, [upcoming, freeMatchIds, freePickMap]);
   const lockedPool = useMemo(() => {
-    const withPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction !== null);
-    const withoutPred = upcoming.filter((f) => !freeMatchIds.has(f.id) && f.prediction === null);
+    const freeIds = new Set(free.map((f) => f.id));
+    const withPred = upcoming.filter((f) => !freeIds.has(f.id) && f.prediction !== null);
+    const withoutPred = upcoming.filter((f) => !freeIds.has(f.id) && f.prediction === null);
     return [...withPred, ...withoutPred].slice(0, LOCKED_PREVIEW);
-  }, [upcoming, freeMatchIds]);
+  }, [upcoming, free]);
 
   const isLoading = fixturesQuery.isLoading || isLoadingFreeIds;
   const isError = fixturesQuery.isError;
@@ -343,11 +359,39 @@ export function MatchPredictionsContent({ faqSlot }: { faqSlot?: React.ReactNode
           )}
 
           {!isLoading && hasFree && (
-            <div className="flex flex-col gap-3">
-              {free.map((f) => (
-                <FreeMatchCard key={f.id} fixture={f} />
-              ))}
-            </div>
+            <>
+              <div className="flex flex-col gap-3">
+                {free.map((f) => (
+                  <FreeMatchCard key={f.id} fixture={f} />
+                ))}
+              </div>
+
+              {/* Register-free CTA — sits directly below the 3 free
+                  picks and tells anonymous visitors what they unlock
+                  by signing up. Free Access is the no-cost path. */}
+              <div className="mt-6 card-neon card-neon-green relative overflow-hidden rounded-2xl">
+                <div className="relative flex flex-col items-center gap-4 p-6 text-center sm:flex-row sm:items-center sm:gap-6 sm:text-left">
+                  <HexBadge variant="green" size="md">
+                    <UserPlus className="h-5 w-5" />
+                  </HexBadge>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-base font-semibold text-[#ededed]">
+                      {t("matchPred.registerCtaTitle")}
+                    </p>
+                    <p className="mt-1 text-sm leading-relaxed text-[#a3a9b8]">
+                      {t("matchPred.registerCtaSubtitle")}
+                    </p>
+                  </div>
+                  <Link
+                    href={loc("/register")}
+                    className="btn-primary inline-flex items-center gap-2 whitespace-nowrap"
+                  >
+                    {t("matchPred.registerCta")}
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </section>

@@ -1621,7 +1621,11 @@ const en = {
     "Full win probabilities, confidence scores and the AI's recommended bet type. No email needed, no paywall.",
   "matchPred.lockedHeading": "More match predictions, members only",
   "matchPred.lockedSub":
-    "Every other AI football prediction for the next 7 days. Gold unlocks all 30 leagues. The €0,01 trial gives you full access for a week.",
+    "Every other AI football prediction for the next 7 days. Free Access shows all picks with team and confidence; Silver+ unlocks pre-match odds and the simulator.",
+  "matchPred.registerCtaTitle": "Want to see all predictions?",
+  "matchPred.registerCtaSubtitle":
+    "Create a free account in seconds — no card, no billing. Browse every upcoming AI prediction, follow Pick of the Day and check the live track record.",
+  "matchPred.registerCta": "Create free account",
   "matchPred.bannerBadge": "Members only",
   "matchPred.bannerTitle": "Unlock every match prediction",
   "matchPred.bannerDesc":
@@ -4100,7 +4104,10 @@ const nl: Dictionary = {
   "matchPred.loadingTitle": "Aankomende wedstrijden laden…",
   "matchPred.lockedHeading": "Premium wedstrijdpool",
   "matchPred.lockedLabel": "Vergrendeld",
-  "matchPred.lockedSub": "Elke andere AI-voetbalvoorspelling die we voor de komende zeven dagen hebben gegenereerd. Goud ontgrendelt alle 30 competities; de proefperiode van € 0,01 ontgrendelt alles voor een week.",
+  "matchPred.lockedSub": "Elke andere AI-voetbalvoorspelling voor de komende 7 dagen. Free Access toont alle picks met team en betrouwbaarheid; Silver+ ontgrendelt pre-match odds en de simulator.",
+  "matchPred.registerCtaTitle": "Wil je alle voorspellingen zien?",
+  "matchPred.registerCtaSubtitle": "Maak in enkele seconden een gratis account aan — geen kaart, geen facturatie. Bekijk elke aankomende AI-voorspelling, volg Pick of the Day en bekijk het live trackrecord.",
+  "matchPred.registerCta": "Maak gratis account",
   "matchPred.metaDesc": "Bekijk de AI-voetbalvoorspellingen van vandaag voor Premier League, La Liga, Bundesliga en nog 27+ competities, elke dag drie volledige keuzes gratis, ontgrendeld met een proefperiode van € 0,01.",
   "matchPred.metaTitle": "AI Wedstrijdvoorspellingen · Gratis Picks · BetsPlug",
   "matchPred.refresh": "Vernieuwen",
