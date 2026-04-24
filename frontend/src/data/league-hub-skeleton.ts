@@ -17,6 +17,7 @@
 
 import type { LeagueCatalogEntry } from "./league-catalog";
 import type { LeagueHub } from "./league-hubs";
+import { expandStringLocales, expandArrayLocales } from "@/i18n/expand";
 
 type CompType = "domestic" | "uefa-cup" | "continental-cup";
 
@@ -99,30 +100,7 @@ export function buildSkeletonHub(entry: LeagueCatalogEntry): LeagueHub {
           : "nationale competitie",
   } as const;
 
-  return {
-    slug: entry.slug,
-    sportSlug: "football",
-    countryCode: code,
-    countryFlag: entry.flag,
-    name: n,
-    country,
-    tagline: {
-      en: `Free AI predictions for every ${n.en} fixture`,
-      nl: `Gratis AI-voorspellingen voor elke ${n.nl}-wedstrijd`,
-    },
-    intro: {
-      en: `${n.en} is one of the ${ctx.en}s covered by BetsPlug. Every fixture is analysed by three models — an Elo-style team strength rating, a Poisson-style scoreline predictor and a pattern-recognition model — and blended into a single probability for home win, draw and away win. Every prediction is timestamped before kick-off and graded against the result automatically, so the track record stays public and verifiable. Three picks per gameweek are free on this page; members unlock the full slate, Kelly stakes and closing-line reports.`,
-      nl: `${n.nl} is een van de ${ctx.nl}s die BetsPlug dekt. Elke wedstrijd wordt geanalyseerd door drie modellen — een Elo-achtige teamsterkte-rating, een Poisson-achtige scoreline-voorspeller en een patroonherkenner — en gecombineerd tot één kans voor thuiswinst, gelijkspel en uitwinst. Elke voorspelling wordt vóór de aftrap tijdstempeld en automatisch beoordeeld, zodat het trackrecord openbaar en verifieerbaar blijft. Drie picks per speelronde zijn hier gratis; members krijgen het volledige programma, Kelly-inzetten en closing-line rapporten.`,
-    },
-    metaTitle: {
-      en: `${n.en} AI Predictions, Tips & Odds · BetsPlug`,
-      nl: `${n.nl} AI-voorspellingen, tips & odds · BetsPlug`,
-    },
-    metaDescription: {
-      en: `Free AI-powered ${n.en} predictions, win probabilities and confidence scores for every upcoming matchday. Built on calibrated Elo, Poisson and pattern-recognition models with a public track record.`,
-      nl: `Gratis AI-voorspellingen voor ${n.nl}: winstkansen, confidence-scores en odds voor elke speelronde. Gebouwd op Elo-, Poisson- en patroonherkenningsmodellen met een openbaar trackrecord.`,
-    },
-    faqs: {
+  const faqsSeed = {
       en: [
         {
           q: `How accurate are your ${n.en} predictions?`,
@@ -167,6 +145,31 @@ export function buildSkeletonHub(entry: LeagueCatalogEntry): LeagueHub {
           a: `Nee. BetsPlug is een analytics-platform — we accepteren geen voorspellingen en beheren geen klantgelden. Voorspellingen zijn voor informatieve en educatieve doeleinden. Check altijd je lokale toezichthouder en gok verantwoord.`,
         },
       ],
-    },
+  };
+
+  return {
+    slug: entry.slug,
+    sportSlug: "football",
+    countryCode: code,
+    countryFlag: entry.flag,
+    name: expandStringLocales(n),
+    country: expandStringLocales(country),
+    tagline: expandStringLocales({
+      en: `Free AI predictions for every ${n.en} fixture`,
+      nl: `Gratis AI-voorspellingen voor elke ${n.nl}-wedstrijd`,
+    }),
+    intro: expandStringLocales({
+      en: `${n.en} is one of the ${ctx.en}s covered by BetsPlug. Every fixture is analysed by three models — an Elo-style team strength rating, a Poisson-style scoreline predictor and a pattern-recognition model — and blended into a single probability for home win, draw and away win. Every prediction is timestamped before kick-off and graded against the result automatically, so the track record stays public and verifiable. Three picks per gameweek are free on this page; members unlock the full slate, Kelly stakes and closing-line reports.`,
+      nl: `${n.nl} is een van de ${ctx.nl}s die BetsPlug dekt. Elke wedstrijd wordt geanalyseerd door drie modellen — een Elo-achtige teamsterkte-rating, een Poisson-achtige scoreline-voorspeller en een patroonherkenner — en gecombineerd tot één kans voor thuiswinst, gelijkspel en uitwinst. Elke voorspelling wordt vóór de aftrap tijdstempeld en automatisch beoordeeld, zodat het trackrecord openbaar en verifieerbaar blijft. Drie picks per speelronde zijn hier gratis; members krijgen het volledige programma, Kelly-inzetten en closing-line rapporten.`,
+    }),
+    metaTitle: expandStringLocales({
+      en: `${n.en} AI Predictions, Tips & Odds · BetsPlug`,
+      nl: `${n.nl} AI-voorspellingen, tips & odds · BetsPlug`,
+    }),
+    metaDescription: expandStringLocales({
+      en: `Free AI-powered ${n.en} predictions, win probabilities and confidence scores for every upcoming matchday. Built on calibrated Elo, Poisson and pattern-recognition models with a public track record.`,
+      nl: `Gratis AI-voorspellingen voor ${n.nl}: winstkansen, confidence-scores en odds voor elke speelronde. Gebouwd op Elo-, Poisson- en patroonherkenningsmodellen met een openbaar trackrecord.`,
+    }),
+    faqs: expandArrayLocales(faqsSeed),
   };
 }

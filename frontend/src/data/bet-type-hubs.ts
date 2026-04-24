@@ -14,41 +14,51 @@
  * back to EN until handwritten translations land.
  */
 
-export type BetTypeHubLocale = "en" | "nl";
+import { isLocale, type Locale } from "@/i18n/config";
+import { expandStringLocales, expandArrayLocales } from "@/i18n/expand";
+
+// Phase 3: widened from `"en" | "nl"` to full 16-locale.
+export type BetTypeHubLocale = Locale;
 
 export type BetTypeHubFaq = {
   q: string;
   a: string;
 };
 
-export type BetTypeHub = {
-  /** URL slug under /bet-types/ */
+type SeedLocalizedString = Partial<Record<Locale, string>>;
+type SeedLocalizedFaqs = Partial<Record<Locale, BetTypeHubFaq[]>>;
+
+type SeedBetTypeHub = {
   slug: string;
-  /** Display name per locale */
-  name: Record<BetTypeHubLocale, string>;
-  /** Market short code for display (e.g. "BTTS", "O2.5") */
   shortCode: string;
-  /** Short tagline shown under H1 */
+  name: SeedLocalizedString;
+  tagline: SeedLocalizedString;
+  explainer: SeedLocalizedString;
+  strategy: SeedLocalizedString;
+  matchesHeading: SeedLocalizedString;
+  matchesSub: SeedLocalizedString;
+  metaTitle: SeedLocalizedString;
+  metaDescription: SeedLocalizedString;
+  faqs: SeedLocalizedFaqs;
+};
+
+export type BetTypeHub = {
+  slug: string;
+  name: Record<BetTypeHubLocale, string>;
+  shortCode: string;
   tagline: Record<BetTypeHubLocale, string>;
-  /** Full explainer paragraph (~200 words) - the "what is it" intro */
   explainer: Record<BetTypeHubLocale, string>;
-  /** Strategy section (~200 words) - when to use, when to avoid */
   strategy: Record<BetTypeHubLocale, string>;
-  /** Heading for the "matches today" block */
   matchesHeading: Record<BetTypeHubLocale, string>;
-  /** Subheading under the matches block */
   matchesSub: Record<BetTypeHubLocale, string>;
-  /** Page <title> per locale */
   metaTitle: Record<BetTypeHubLocale, string>;
-  /** Meta description per locale */
   metaDescription: Record<BetTypeHubLocale, string>;
-  /** Handwritten FAQ - emitted as FAQPage JSON-LD + visible accordion */
   faqs: Record<BetTypeHubLocale, BetTypeHubFaq[]>;
 };
 
 /* ── Hubs ─────────────────────────────────────────────────── */
 
-export const BET_TYPE_HUBS: BetTypeHub[] = [
+const _SEED_BET_TYPE_HUBS: SeedBetTypeHub[] = [
   {
     slug: "both-teams-to-score",
     shortCode: "BTTS",
@@ -411,6 +421,25 @@ export const BET_TYPE_HUBS: BetTypeHub[] = [
   },
 ];
 
+function expandSeedBetType(seed: SeedBetTypeHub): BetTypeHub {
+  return {
+    slug: seed.slug,
+    shortCode: seed.shortCode,
+    name: expandStringLocales(seed.name),
+    tagline: expandStringLocales(seed.tagline),
+    explainer: expandStringLocales(seed.explainer),
+    strategy: expandStringLocales(seed.strategy),
+    matchesHeading: expandStringLocales(seed.matchesHeading),
+    matchesSub: expandStringLocales(seed.matchesSub),
+    metaTitle: expandStringLocales(seed.metaTitle),
+    metaDescription: expandStringLocales(seed.metaDescription),
+    faqs: expandArrayLocales(seed.faqs),
+  };
+}
+
+export const BET_TYPE_HUBS: BetTypeHub[] =
+  _SEED_BET_TYPE_HUBS.map(expandSeedBetType);
+
 /* ── Lookup helpers ───────────────────────────────────────── */
 
 export function getBetTypeHub(slug: string): BetTypeHub | undefined {
@@ -422,10 +451,9 @@ export function getAllBetTypeHubSlugs(): string[] {
 }
 
 /**
- * Map a UI locale (en/nl/de/fr/es/it/sw/id) to the subset of
- * locales we have handwritten bet-type content for. Non-English
- * non-Dutch locales fall back to English until we translate.
+ * Editorial locale pass-through. All 16 locales resolve via EN
+ * fallback now that bet-type seed data is expanded at init.
  */
 export function pickBetTypeHubLocale(uiLocale: string): BetTypeHubLocale {
-  return uiLocale === "nl" ? "nl" : "en";
+  return isLocale(uiLocale) ? uiLocale : "en";
 }

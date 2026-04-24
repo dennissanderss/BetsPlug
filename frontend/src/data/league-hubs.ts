@@ -13,11 +13,36 @@
  * list (PL, La Liga, Bundesliga, Serie A, Ligue 1, UCL).
  */
 
-export type LeagueHubLocale = "en" | "nl";
+import { isLocale, type Locale } from "@/i18n/config";
+import { expandStringLocales, expandArrayLocales } from "@/i18n/expand";
+
+// Phase 3: widened from `"en" | "nl"` to full 16-locale. Hand-
+// written seeds still carry only EN + NL entries; the `.map()`
+// below expands each hub to 16 locales via EN fallback at
+// module-init time, so `hub.name[editorialLocale]` always resolves
+// to a non-empty string regardless of which locale is rendering.
+export type LeagueHubLocale = Locale;
 
 export type LeagueHubFaq = {
   q: string;
   a: string;
+};
+
+type SeedLocalizedString = Partial<Record<Locale, string>>;
+type SeedLocalizedFaqs = Partial<Record<Locale, LeagueHubFaq[]>>;
+
+type SeedLeagueHub = {
+  slug: string;
+  sportSlug: "football";
+  countryCode: string;
+  countryFlag: string;
+  name: SeedLocalizedString;
+  country: SeedLocalizedString;
+  tagline: SeedLocalizedString;
+  intro: SeedLocalizedString;
+  metaTitle: SeedLocalizedString;
+  metaDescription: SeedLocalizedString;
+  faqs: SeedLocalizedFaqs;
 };
 
 export type LeagueHub = {
@@ -29,7 +54,7 @@ export type LeagueHub = {
   countryCode: string;
   /** Emoji flag for inline display */
   countryFlag: string;
-  /** Display name per locale */
+  /** Display name per locale (fully populated — EN fallback for missing) */
   name: Record<LeagueHubLocale, string>;
   /** Country / region label per locale */
   country: Record<LeagueHubLocale, string>;
@@ -47,7 +72,7 @@ export type LeagueHub = {
 
 /* ── Hubs ─────────────────────────────────────────────────── */
 
-export const LEAGUE_HUBS: LeagueHub[] = [
+const _SEED_LEAGUE_HUBS: SeedLeagueHub[] = [
   {
     slug: "premier-league",
     sportSlug: "football",
@@ -638,6 +663,30 @@ export const LEAGUE_HUBS: LeagueHub[] = [
   },
 ];
 
+/**
+ * Expand each hand-authored seed (EN + NL only) to the full
+ * 16-locale shape with EN fallback on every missing key.
+ * Runtime consumers can safely do `hub.name[anyLocale]` without a
+ * missing-key guard.
+ */
+function expandSeedHub(seed: SeedLeagueHub): LeagueHub {
+  return {
+    slug: seed.slug,
+    sportSlug: seed.sportSlug,
+    countryCode: seed.countryCode,
+    countryFlag: seed.countryFlag,
+    name: expandStringLocales(seed.name),
+    country: expandStringLocales(seed.country),
+    tagline: expandStringLocales(seed.tagline),
+    intro: expandStringLocales(seed.intro),
+    metaTitle: expandStringLocales(seed.metaTitle),
+    metaDescription: expandStringLocales(seed.metaDescription),
+    faqs: expandArrayLocales(seed.faqs),
+  };
+}
+
+export const LEAGUE_HUBS: LeagueHub[] = _SEED_LEAGUE_HUBS.map(expandSeedHub);
+
 /* ── Lookup helpers ───────────────────────────────────────── */
 
 export function getLeagueHub(slug: string): LeagueHub | undefined {
@@ -649,10 +698,12 @@ export function getAllLeagueHubSlugs(): string[] {
 }
 
 /**
- * Pick the editorial locale for a given UI locale.
- * Today we only ship handwritten EN + NL - everything else
- * falls back to EN until translations land.
+ * Editorial locale pass-through — now that all 16 locales are
+ * populated (EN fallback under the hood), a visitor on /de gets
+ * the German key if Sanity/human copy exists for it, otherwise
+ * the EN copy. The pick function is a thin wrapper around
+ * `isLocale()` for type-safety at call sites.
  */
 export function pickHubLocale(uiLocale: string): LeagueHubLocale {
-  return uiLocale === "nl" ? "nl" : "en";
+  return isLocale(uiLocale) ? uiLocale : "en";
 }

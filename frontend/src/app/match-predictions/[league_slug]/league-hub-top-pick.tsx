@@ -25,7 +25,7 @@ import type { Fixture } from "@/types/api";
 interface Props {
   leagueSlug: string;
   leagueName: string;
-  locale: "en" | "nl";
+  locale: import("@/i18n/config").Locale;
 }
 
 function timeUntil(iso: string, locale: string): string | null {

@@ -50,6 +50,7 @@ import {
 } from "@/data/bet-type-hubs";
 import { PAGE_META, type PageMeta } from "@/data/page-meta";
 import type { Locale } from "@/i18n/config";
+import { expandArrayLocales } from "@/i18n/expand";
 
 // Re-export types so consumers import from one place
 export type {
@@ -186,10 +187,13 @@ export async function fetchArticleSlugs(): Promise<string[]> {
 // ── Learn Pillars ─────────────────────────────────────────
 
 function transformLearnPillar(raw: any): LearnPillar {
-  const faqs: Record<LearnPillarLocale, LearnPillarFaq[]> = { en: [], nl: [] };
+  const faqsSeed: Partial<Record<string, LearnPillarFaq[]>> = {
+    en: [],
+    nl: [],
+  };
   for (const f of raw.faqs ?? []) {
-    faqs.en.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
-    faqs.nl.push({
+    faqsSeed.en!.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
+    faqsSeed.nl!.push({
       q: loc(f.question, "nl") || loc(f.question, "en"),
       a: loc(f.answer, "nl") || loc(f.answer, "en"),
     });
@@ -204,12 +208,12 @@ function transformLearnPillar(raw: any): LearnPillar {
     intro: locRecord(raw.intro) as Record<LearnPillarLocale, string>,
     sections: (raw.sections ?? []).map((s: any): LearnPillarSection => ({
       heading: locRecord(s.heading) as Record<LearnPillarLocale, string>,
-      body: {
+      body: expandArrayLocales({
         en: (loc(s.body, "en") || "").split("\n\n").filter(Boolean),
         nl: (loc(s.body, "nl") || loc(s.body, "en") || "").split("\n\n").filter(Boolean),
-      },
+      }),
     })),
-    faqs,
+    faqs: expandArrayLocales(faqsSeed),
     related: (raw.related ?? []).map((r: any) => r.slug?.current ?? r._ref?.replace("learnPillar-", "") ?? ""),
   };
 }
@@ -257,10 +261,10 @@ export async function fetchLearnPillarSlugs(): Promise<string[]> {
 // ── League Hubs ───────────────────────────────────────────
 
 function transformLeagueHub(raw: any): LeagueHub {
-  const faqs: Record<LeagueHubLocale, LeagueHubFaq[]> = { en: [], nl: [] };
+  const faqsSeed: Partial<Record<string, LeagueHubFaq[]>> = { en: [], nl: [] };
   for (const f of raw.faqs ?? []) {
-    faqs.en.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
-    faqs.nl.push({
+    faqsSeed.en!.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
+    faqsSeed.nl!.push({
       q: loc(f.question, "nl") || loc(f.question, "en"),
       a: loc(f.answer, "nl") || loc(f.answer, "en"),
     });
@@ -277,7 +281,7 @@ function transformLeagueHub(raw: any): LeagueHub {
     intro: locRecord(raw.intro) as Record<LeagueHubLocale, string>,
     metaTitle: locRecord(raw.metaTitle) as Record<LeagueHubLocale, string>,
     metaDescription: locRecord(raw.metaDescription) as Record<LeagueHubLocale, string>,
-    faqs,
+    faqs: expandArrayLocales(faqsSeed),
   };
 }
 
@@ -346,10 +350,13 @@ export async function fetchLeagueHubSlugs(): Promise<string[]> {
 // ── Bet Type Hubs ─────────────────────────────────────────
 
 function transformBetTypeHub(raw: any): BetTypeHub {
-  const faqs: Record<BetTypeHubLocale, BetTypeHubFaq[]> = { en: [], nl: [] };
+  const faqsSeed: Partial<Record<string, BetTypeHubFaq[]>> = {
+    en: [],
+    nl: [],
+  };
   for (const f of raw.faqs ?? []) {
-    faqs.en.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
-    faqs.nl.push({
+    faqsSeed.en!.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
+    faqsSeed.nl!.push({
       q: loc(f.question, "nl") || loc(f.question, "en"),
       a: loc(f.answer, "nl") || loc(f.answer, "en"),
     });
@@ -366,7 +373,7 @@ function transformBetTypeHub(raw: any): BetTypeHub {
     matchesSub: locRecord(raw.matchesSub) as Record<BetTypeHubLocale, string>,
     metaTitle: locRecord(raw.metaTitle) as Record<BetTypeHubLocale, string>,
     metaDescription: locRecord(raw.metaDescription) as Record<BetTypeHubLocale, string>,
-    faqs,
+    faqs: expandArrayLocales(faqsSeed),
   };
 }
 

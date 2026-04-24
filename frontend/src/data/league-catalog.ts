@@ -63,10 +63,12 @@ export const PRIMARY_LEAGUES = LEAGUE_CATALOG.filter((l) => l.tier === "primary"
 /** Full list — for footer cluster + index grid. */
 export const ALL_LEAGUES = LEAGUE_CATALOG;
 
-/** Returns the display name for a locale with EN fallback. */
+/** Returns the display name for a locale with EN fallback. League
+ *  names are mostly proper nouns (brand entities) so non-EN/NL
+ *  locales get the EN copy — Nerdytips-style keyword preservation. */
 export function getLeagueName(
   entry: LeagueCatalogEntry,
-  locale: "en" | "nl",
+  locale: string,
 ): string {
-  return entry.name[locale] ?? entry.name.en;
+  return (entry.name as Record<string, string>)[locale] ?? entry.name.en;
 }

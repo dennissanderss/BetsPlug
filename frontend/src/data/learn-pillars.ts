@@ -16,7 +16,11 @@
  * back to EN until handwritten translations land.
  */
 
-export type LearnPillarLocale = "en" | "nl";
+import { isLocale, type Locale } from "@/i18n/config";
+import { expandStringLocales, expandArrayLocales } from "@/i18n/expand";
+
+// Phase 3: widened from `"en" | "nl"` to full 16-locale.
+export type LearnPillarLocale = Locale;
 
 export type LearnPillarFaq = {
   q: string;
@@ -30,30 +34,41 @@ export type LearnPillarSection = {
   body: Record<LearnPillarLocale, string[]>;
 };
 
-export type LearnPillar = {
-  /** URL slug under /learn/ */
+// Seed types (EN + NL optional) — expanded at module-init.
+type SeedLocalizedString = Partial<Record<Locale, string>>;
+type SeedLocalizedFaqs = Partial<Record<Locale, LearnPillarFaq[]>>;
+type SeedLocalizedStringArray = Partial<Record<Locale, string[]>>;
+type SeedLearnPillarSection = {
+  heading: SeedLocalizedString;
+  body: SeedLocalizedStringArray;
+};
+type SeedLearnPillar = {
   slug: string;
-  /** Display title per locale */
+  title: SeedLocalizedString;
+  tagline: SeedLocalizedString;
+  metaTitle: SeedLocalizedString;
+  metaDescription: SeedLocalizedString;
+  intro: SeedLocalizedString;
+  sections: SeedLearnPillarSection[];
+  faqs: SeedLocalizedFaqs;
+  related: string[];
+};
+
+export type LearnPillar = {
+  slug: string;
   title: Record<LearnPillarLocale, string>;
-  /** Short tagline shown under H1 */
   tagline: Record<LearnPillarLocale, string>;
-  /** Page <title> per locale */
   metaTitle: Record<LearnPillarLocale, string>;
-  /** Meta description per locale */
   metaDescription: Record<LearnPillarLocale, string>;
-  /** Opening paragraph (intro before any H2) */
   intro: Record<LearnPillarLocale, string>;
-  /** Body sections (each with its own H2) */
   sections: LearnPillarSection[];
-  /** Handwritten FAQ - emitted as FAQPage JSON-LD + visible accordion */
   faqs: Record<LearnPillarLocale, LearnPillarFaq[]>;
-  /** Slugs of related pillars to surface at the bottom */
   related: string[];
 };
 
 /* ── Pillars ──────────────────────────────────────────────── */
 
-export const LEARN_PILLARS: LearnPillar[] = [
+const _SEED_LEARN_PILLARS: SeedLearnPillar[] = [
   {
     slug: "what-is-value-betting",
     title: {
@@ -956,6 +971,30 @@ export const LEARN_PILLARS: LearnPillar[] = [
   },
 ];
 
+function expandSeedSection(s: SeedLearnPillarSection): LearnPillarSection {
+  return {
+    heading: expandStringLocales(s.heading),
+    body: expandArrayLocales(s.body),
+  };
+}
+
+function expandSeedPillar(seed: SeedLearnPillar): LearnPillar {
+  return {
+    slug: seed.slug,
+    title: expandStringLocales(seed.title),
+    tagline: expandStringLocales(seed.tagline),
+    metaTitle: expandStringLocales(seed.metaTitle),
+    metaDescription: expandStringLocales(seed.metaDescription),
+    intro: expandStringLocales(seed.intro),
+    sections: seed.sections.map(expandSeedSection),
+    faqs: expandArrayLocales(seed.faqs),
+    related: seed.related,
+  };
+}
+
+export const LEARN_PILLARS: LearnPillar[] =
+  _SEED_LEARN_PILLARS.map(expandSeedPillar);
+
 /* ── Lookup helpers ───────────────────────────────────────── */
 
 export function getLearnPillar(slug: string): LearnPillar | undefined {
@@ -967,10 +1006,10 @@ export function getAllLearnPillarSlugs(): string[] {
 }
 
 /**
- * Map a UI locale (en/nl/de/fr/es/it/sw/id) to the subset of
- * locales we have handwritten pillar content for. Non-English
- * non-Dutch locales fall back to English until we translate.
+ * Editorial locale pass-through. With the Phase 3 widening, all
+ * 16 locales resolve to populated content (EN fallback for keys
+ * without handwritten / translated copy).
  */
 export function pickLearnPillarLocale(uiLocale: string): LearnPillarLocale {
-  return uiLocale === "nl" ? "nl" : "en";
+  return isLocale(uiLocale) ? uiLocale : "en";
 }
