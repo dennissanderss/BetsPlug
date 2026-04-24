@@ -17,8 +17,8 @@ export interface PricingFaq {
 
 export const PRICING_FAQS: PricingFaq[] = [
   {
-    q: "How long is the Bronze trial?",
-    a: "Bronze is a 7-day trial for €0.01 with full Gold access. It does not auto-convert to a paid plan — if you do nothing, it simply ends. Upgrade manually from inside the app if you want to continue with Silver, Gold, or Platinum.",
+    q: "How does Free Access work?",
+    a: "Free Access is a real, free tier — €0 forever, no card required. Create an account and you get full app access at the Free tier: every upcoming prediction, the public track record, live agenda + scores. There is nothing to cancel because there is nothing being charged. Upgrade to Silver, Gold or Platinum any time you want pre-match odds, the simulation calculator, daily Pick of the Day or our elite top-5 picks.",
   },
   {
     q: "Can I cancel at any time?",

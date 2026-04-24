@@ -86,13 +86,13 @@ export default function TermsOfServicePage() {
         existing subscribers will keep their current price for the remainder of
         their billing cycle.
       </p>
-      <h3>Free trials</h3>
+      <h3>Free Access tier</h3>
       <p>
-        Some plans offer a free trial. To start a trial we charge a symbolic{" "}
-        <strong>€0.01</strong> to verify your card is valid - this is a
-        fraud-prevention measure, not a real charge of the plan price. The
-        full subscription price is only charged when the trial ends, unless
-        you cancel before then.
+        We offer a Free Access tier at <strong>€0</strong> with no card and
+        no billing. Account creation alone grants Free-tier access to the
+        app. Upgrading to Silver, Gold or Platinum charges the plan price
+        immediately at checkout — there is no separate trial flow with a
+        verification charge.
       </p>
       <h3>Recurring billing</h3>
       <p>

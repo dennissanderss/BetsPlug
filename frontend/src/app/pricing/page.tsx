@@ -90,7 +90,7 @@ export default async function PricingPage() {
       <BreadcrumbJsonLd items={breadcrumbs} />
       <PricingProductJsonLd
         name="BetsPlug AI football predictions — subscription plans"
-        description="Four tiers of AI football picks — 7-day Bronze trial at €0.01, Silver, Gold, and a Platinum lifetime plan. Every pick tracked publicly."
+        description="Four tiers of AI football picks — Free Access at €0, Silver, Gold, and a Platinum lifetime plan. Every pick tracked publicly."
         offers={pricingOffers}
         aggregateRating={{
           ratingValue: "4.6",
