@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { Suspense, useState, useMemo, useEffect, useRef } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import {
   Trophy,
@@ -12,7 +14,11 @@ import {
   TrendingUp,
   TrendingDown,
   ChevronDown,
+  Calculator,
+  Info,
+  Lock,
 } from "lucide-react";
+import { useTier, TIER_RANK as USER_TIER_RANK, type Tier } from "@/hooks/use-tier";
 import Image from "next/image";
 import { api } from "@/lib/api";
 import { useTranslations } from "@/i18n/locale-provider";
@@ -27,8 +33,59 @@ import { derivePickSide } from "@/lib/prediction-pick";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type PeriodFilter = 7 | 14 | 30;
+// Now a plain integer — the user can freely dial how far back to
+// look (presets: 7 / 14 / 30; custom: any value within the backend
+// cap). The calculator is Live-only by design, since backtest
+// fixtures don't carry reliable pre-match odds and simulated
+// returns against model-implied odds would overstate performance.
+type PeriodFilter = number;
 type ResultFilter = "All" | "Correct" | "Incorrect";
+
+// Backend currently caps /fixtures/results at 365 days. Anything beyond
+// needs a dedicated historical endpoint (planned).
+const PERIOD_MIN = 1;
+const PERIOD_MAX = 365;
+const PERIOD_PRESETS: number[] = [7, 14, 30, 90];
+
+// Launch date of the strict pre-match live measurement. Matches
+// LIVE_TRACKING_START below and the V81_DEPLOYMENT_CUTOFF on the
+// backend. Fixtures with a prediction locked before kickoff on or
+// after this date are counted in the simulator; everything else is
+// backtest / model validation and kept out of simulated returns.
+const LIVE_START_MS = Date.UTC(2026, 3, 16); // month is 0-indexed (3 = April)
+
+function isLivePick(f: Fixture): boolean {
+  const pred = f.prediction;
+  if (!pred || !pred.predicted_at) return false;
+  const predMs = new Date(pred.predicted_at).getTime();
+  const schedMs = new Date(f.scheduled_at).getTime();
+  if (!Number.isFinite(predMs) || !Number.isFinite(schedMs)) return false;
+  return predMs < schedMs && predMs >= LIVE_START_MS;
+}
+
+// Which pick-stream the calculator / table should show. "botd" = the
+// Bet of the Day stream: highest-confidence Gold-tier pick per day.
+type StreamMode = "all" | "botd";
+
+/**
+ * Reduce a fixture list to the Bet of the Day stream: for each
+ * calendar day, keep only the Gold-tier pick with the highest
+ * confidence. Mirrors the backend `/betoftheday` selection rule
+ * (Gold floor 0.70, top Gold-tier leagues, one per day).
+ */
+function filterBotdStream(fixtures: Fixture[]): Fixture[] {
+  const bestByDate = new Map<string, Fixture>();
+  for (const f of fixtures) {
+    if (!f.prediction || !f.result) continue;
+    if (f.prediction.pick_tier !== "gold") continue;
+    const dateKey = f.scheduled_at.slice(0, 10); // YYYY-MM-DD
+    const prev = bestByDate.get(dateKey);
+    const prevConf = prev?.prediction?.confidence ?? -1;
+    const thisConf = f.prediction.confidence ?? 0;
+    if (thisConf > prevConf) bestByDate.set(dateKey, f);
+  }
+  return Array.from(bestByDate.values());
+}
 // v8.6 — "all" tab removed: each tier is a different product (scope +
 // confidence floor), so adding their totals together produced a
 // number users couldn't interpret. Force the view to pick a specific
@@ -36,7 +93,7 @@ type ResultFilter = "All" | "Correct" | "Incorrect";
 type TierFilter = "free" | "silver" | "gold" | "platinum";
 
 const TIER_TABS: { key: TierFilter; label: string }[] = [
-  { key: "free", label: "Bronze · 45%+" },
+  { key: "free", label: "Free Access · 45%+" },
   { key: "silver", label: "Silver · 60%+" },
   { key: "gold", label: "Gold · 70%+" },
   { key: "platinum", label: "Platinum · 80%+" },
@@ -112,10 +169,11 @@ function formatPredictedOutcome(
 
 // ─── Weekly Summary Card ──────────────────────────────────────────────────────
 
-function WeeklySummaryCard({ data, isLoading, isError }: {
+function WeeklySummaryCard({ data, isLoading, isError, isFree }: {
   data: WeeklySummary | undefined;
   isLoading: boolean;
   isError: boolean;
+  isFree: boolean;
 }) {
   const { t } = useTranslations();
   if (isLoading) {
@@ -179,22 +237,33 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
 
       {/* Stats row */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-5 mb-5">
-        {statItems.map(({ label, value, color }) => (
+        {statItems.map(({ label, value, color }) => {
+          // Free Access: lock the Net P/L tile since it's a monetary
+          // simulation output. Total calls, wins, losses, win rate stay
+          // open so the track record itself is still visible.
+          const isPLTile = label === t("results.statPLUnits");
+          const lockedTile = isFree && isPLTile;
+          return (
           <div
             key={label}
             className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center"
           >
+            {lockedTile ? (
+              <LockPill requiredTier="silver" />
+            ) : (
             <span
               className="text-2xl font-extrabold leading-none tabular-nums"
               style={{ color }}
             >
               {value}
             </span>
+            )}
             <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
               {label}
             </span>
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Performers */}
@@ -253,6 +322,634 @@ function WeeklySummaryCard({ data, isLoading, isError }: {
   );
 }
 
+// ─── ROI Calculator ───────────────────────────────────────────────────────────
+//
+// "What would you have made?" — turns each evaluated pick into a concrete
+// euro return at a user-chosen stake, using the actual pre-match 1X2 odds
+// stored for that fixture. Missing odds fall back to a flat 1.90 and are
+// flagged as estimated so the headline number remains honest.
+//
+// The component is fed the full 30-day fixture list (regardless of the
+// active table filters) so its own tier/period tabs remain independent.
+
+type CalcTier = TierFilter;
+type CalcPeriod = PeriodFilter;
+
+const CALC_TIERS: { key: CalcTier; label: string; accent: string }[] = [
+  { key: "free", label: "Free Access", accent: "#b07a3a" },
+  { key: "silver", label: "Silver", accent: "#9aa3b2" },
+  { key: "gold", label: "Gold", accent: "#d4a017" },
+  { key: "platinum", label: "Platinum", accent: "#10b981" },
+];
+
+const STAKE_STORAGE_KEY = "betsplug.roiCalc.stake";
+const STAKE_OPTIONS = [5, 10, 25, 50, 100];
+
+interface PickAggregate {
+  matches: number;
+  wins: number;
+  losses: number;
+  realStake: number;   // stake backed by real pre-match odds
+  modelStake: number;  // stake backed by model-implied odds (1/prob)
+  returned: number;    // gross returned (stake × odds on wins, 0 on losses)
+  profit: number;      // returned - totalStake
+  modelCount: number;  // rows where odds were derived from the model, not the book
+  oddsSum: number;     // sum of odds used across all picks (for avg)
+}
+
+function emptyAggregate(): PickAggregate {
+  return {
+    matches: 0,
+    wins: 0,
+    losses: 0,
+    realStake: 0,
+    modelStake: 0,
+    returned: 0,
+    profit: 0,
+    modelCount: 0,
+    oddsSum: 0,
+  };
+}
+
+/** Wilson 95% CI half-interval on a Bernoulli proportion. */
+function wilsonCi(correct: number, total: number): { lower: number; upper: number } | null {
+  if (total <= 0) return null;
+  const z = 1.96;
+  const p = correct / total;
+  const denom = 1 + (z * z) / total;
+  const centre = p + (z * z) / (2 * total);
+  const margin = z * Math.sqrt((p * (1 - p) + (z * z) / (4 * total)) / total);
+  return {
+    lower: Math.max(0, (centre - margin) / denom),
+    upper: Math.min(1, (centre + margin) / denom),
+  };
+}
+
+/**
+ * Pick the odds used for a given fixture + pick side. Returns real
+ * pre-match 1X2 odds when available, otherwise derives a fair odd
+ * from the prediction's own probability (implied = 1 / prob). Flat
+ * 1.90 is only used when neither is available — which in practice
+ * should never fire because every counted fixture has a prediction.
+ */
+function oddsForPick(fixture: Fixture, side: "home" | "draw" | "away"): {
+  odds: number;
+  source: "real" | "model" | "flat";
+} {
+  const o = fixture.odds;
+  const real =
+    side === "home" ? o?.home :
+    side === "away" ? o?.away :
+    o?.draw;
+  if (real != null && real > 1) return { odds: real, source: "real" };
+
+  const p = fixture.prediction;
+  const prob =
+    p == null ? null :
+    side === "home" ? p.home_win_prob :
+    side === "away" ? p.away_win_prob :
+    (p.draw_prob ?? null);
+  if (prob != null && prob > 0 && prob < 1) {
+    return { odds: 1 / prob, source: "model" };
+  }
+  return { odds: 1.9, source: "flat" };
+}
+
+function aggregateFixtures(
+  fixtures: Fixture[],
+  stake: number,
+  tier: CalcTier,
+  periodDays: CalcPeriod,
+  now: Date,
+): PickAggregate {
+  const cutoffMs = now.getTime() - periodDays * 24 * 60 * 60 * 1000;
+  const agg = emptyAggregate();
+
+  for (const f of fixtures) {
+    if (f.status !== "finished" || !f.result || !f.prediction) continue;
+    if (f.prediction.pick_tier !== tier) continue;
+    // Live-only simulator — backtest fixtures lack reliable pre-match odds.
+    if (!isLivePick(f)) continue;
+    const scheduled = new Date(f.scheduled_at).getTime();
+    if (!Number.isFinite(scheduled) || scheduled < cutoffMs) continue;
+
+    const side = derivePickSide(f.prediction);
+    if (side === null) continue;
+
+    const { home_score, away_score } = f.result;
+    const actual =
+      home_score > away_score ? "home" : away_score > home_score ? "away" : "draw";
+    const won = actual === side;
+
+    const { odds: oddsUsed, source: oddsSrc } = oddsForPick(f, side);
+    if (oddsSrc === "real") {
+      agg.realStake += stake;
+    } else {
+      agg.modelStake += stake;
+      agg.modelCount++;
+    }
+
+    agg.matches++;
+    agg.oddsSum += oddsUsed;
+    if (won) {
+      agg.wins++;
+      agg.returned += stake * oddsUsed;
+    } else {
+      agg.losses++;
+    }
+  }
+  const totalStake = agg.realStake + agg.modelStake;
+  agg.profit = agg.returned - totalStake;
+  return agg;
+}
+
+function formatEuro(n: number): string {
+  const sign = n > 0 ? "+" : n < 0 ? "−" : "";
+  const abs = Math.abs(n);
+  return `${sign}€${abs.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+function formatRoiPct(profit: number, totalStake: number): string {
+  if (totalStake <= 0) return "—";
+  const pct = (profit / totalStake) * 100;
+  const sign = pct > 0 ? "+" : pct < 0 ? "−" : "";
+  return `${sign}${Math.abs(pct).toFixed(1)}%`;
+}
+
+function RoiCalculatorCard({
+  fixtures,
+  isLoading,
+  stake,
+  setStake,
+  calcTier,
+  setCalcTier,
+  calcPeriod,
+  setCalcPeriod,
+  stream,
+  setStream,
+  userTier,
+}: {
+  fixtures: Fixture[];
+  isLoading: boolean;
+  stake: number;
+  setStake: (v: number) => void;
+  calcTier: CalcTier;
+  setCalcTier: (v: CalcTier) => void;
+  calcPeriod: CalcPeriod;
+  setCalcPeriod: (v: CalcPeriod) => void;
+  stream: StreamMode;
+  setStream: (v: StreamMode) => void;
+  userTier: Tier;
+}) {
+  const { t } = useTranslations();
+  const botdMode = stream === "botd";
+  const isFree = userTier === "free";
+  const userRank = USER_TIER_RANK[userTier];
+  const canSelectTier = (target: CalcTier): boolean =>
+    USER_TIER_RANK[target as Tier] <= userRank;
+
+  // Aggregate the SELECTED tier at the SELECTED period for the headline card.
+  const headline = useMemo(() => {
+    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, new Date());
+  }, [fixtures, stake, calcTier, calcPeriod]);
+
+  // Breakdown across all four tiers at the selected period, so the user can
+  // compare what each tier would have paid out.
+  const perTier = useMemo(() => {
+    const now = new Date();
+    const result: Record<CalcTier, PickAggregate> = {
+      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, now),
+      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, now),
+      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, now),
+      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, now),
+    };
+    return result;
+  }, [fixtures, stake, calcPeriod]);
+
+  const headlineTotalStake = headline.realStake + headline.modelStake;
+  const profitColor = headline.profit >= 0 ? "#10b981" : "#ef4444";
+
+  if (isLoading) {
+    return (
+      <div className="glass-card p-6 animate-pulse" style={{ border: "1px solid rgba(16,185,129,0.18)" }}>
+        <div className="h-5 w-56 rounded bg-white/[0.06] mb-4" />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-20 rounded bg-white/[0.06]" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="glass-card p-5 sm:p-6"
+      style={{ border: "1px solid rgba(16,185,129,0.18)" }}
+    >
+      {/* Header */}
+      <div className="flex flex-wrap items-center gap-2 mb-2">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
+          <Calculator className="h-4 w-4 text-emerald-400" />
+        </div>
+        <h2 className="text-sm font-semibold text-slate-200">
+          {t("results.roiCalcTitle")}
+        </h2>
+        <span className="text-[10px] uppercase tracking-widest text-slate-500 ml-auto">
+          {t("results.roiCalcSimulation")}
+        </span>
+      </div>
+      <p className="text-xs text-slate-500 mb-5">{t("results.roiCalcIntro")}</p>
+
+      {/* ── Stream toggle — All predictions vs Bet of the Day ── */}
+      <div className="mb-5 flex flex-wrap items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1 w-fit">
+        {([
+          { key: "all" as const, label: t("results.streamAll"), locked: false },
+          { key: "botd" as const, label: t("results.streamBotd"), locked: isFree },
+        ]).map((opt) => {
+          const active = stream === opt.key;
+          return (
+            <button
+              key={opt.key}
+              type="button"
+              disabled={opt.locked}
+              onClick={() => !opt.locked && setStream(opt.key)}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors flex items-center gap-1.5 ${
+                opt.locked
+                  ? "text-slate-600 cursor-not-allowed"
+                  : active
+                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+              aria-pressed={active}
+            >
+              {opt.label}
+              {opt.locked && <LockPill requiredTier="gold" className="pointer-events-none" />}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Step 1 — Choose tier (locked to Gold in BOTD mode, upper tiers gated by user's own tier) ── */}
+      <Step number={1} label={t("results.roiCalcStep1")} hint={botdMode ? t("results.roiCalcStep1LockedHint") : t("results.roiCalcStep1Hint")}>
+        <div className="flex flex-wrap items-center gap-2">
+          {CALC_TIERS.map(({ key, label, accent }) => {
+            const active = key === calcTier;
+            const tierLocked = !canSelectTier(key);
+            const disabled = (botdMode && key !== "gold") || tierLocked;
+            return (
+              <button
+                key={key}
+                type="button"
+                disabled={disabled}
+                onClick={() => !disabled && setCalcTier(key)}
+                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors border flex items-center gap-1.5 ${
+                  active
+                    ? "text-white border-white/[0.2]"
+                    : disabled
+                    ? "text-slate-600 bg-white/[0.01] border-white/[0.04] cursor-not-allowed"
+                    : "text-slate-400 bg-white/[0.02] border-white/[0.06] hover:text-slate-200"
+                }`}
+                style={active ? { background: accent } : undefined}
+              >
+                {label}
+                {tierLocked && <LockPill requiredTier={key as Tier} className="pointer-events-none" />}
+              </button>
+            );
+          })}
+          {botdMode && (
+            <span className="text-[10px] uppercase tracking-widest text-slate-500 ml-1">
+              {t("results.roiCalcStep1Locked")}
+            </span>
+          )}
+        </div>
+      </Step>
+
+      {/* ── Step 2 — Stake per pick (locked for Free Access) ── */}
+      <Step number={2} label={t("results.roiCalcStep2")} hint={t("results.roiCalcStep2Hint")}>
+        {isFree ? (
+          <LockedSection requiredTier="silver" title="Upgrade to Silver to set a stake and simulate returns">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1.5">
+                <span className="text-sm text-slate-400">€</span>
+                <span className="w-16 text-sm font-semibold text-slate-100 tabular-nums">{stake}</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-1">
+                {STAKE_OPTIONS.map((v) => (
+                  <span key={v} className="rounded-md px-2.5 py-1.5 text-[11px] font-semibold bg-white/[0.03] text-slate-400">€{v}</span>
+                ))}
+              </div>
+            </div>
+          </LockedSection>
+        ) : (
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1.5">
+              <span className="text-sm text-slate-400">€</span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min={1}
+                max={10000}
+                step={1}
+                value={stake}
+                onChange={(e) => {
+                  const v = Number(e.target.value);
+                  if (Number.isFinite(v) && v >= 0) setStake(v);
+                }}
+                className="w-16 bg-transparent text-sm font-semibold text-slate-100 tabular-nums focus:outline-none"
+              />
+            </div>
+            <div className="flex flex-wrap items-center gap-1">
+              {STAKE_OPTIONS.map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setStake(v)}
+                  className={`rounded-md px-2.5 py-1.5 text-[11px] font-semibold transition-colors ${
+                    stake === v
+                      ? "bg-emerald-600/80 text-white"
+                      : "bg-white/[0.03] text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  €{v}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </Step>
+
+      {/* ── Step 3 — Pick period ─────────────────────────────── */}
+      <Step number={3} label={t("results.roiCalcStep3")} hint={t("results.roiCalcStep3Hint")}>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
+            {PERIOD_PRESETS.map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setCalcPeriod(value)}
+                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                  calcPeriod === value
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                {value}d
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1.5">
+            <label className="text-[10px] uppercase tracking-widest text-slate-500">
+              {t("results.roiCalcCustomDays")}
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={PERIOD_MIN}
+              max={PERIOD_MAX}
+              step={1}
+              value={calcPeriod}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                if (!Number.isFinite(v)) return;
+                const clamped = Math.max(PERIOD_MIN, Math.min(PERIOD_MAX, Math.round(v)));
+                setCalcPeriod(clamped);
+              }}
+              className="w-14 bg-transparent text-sm font-semibold text-slate-100 tabular-nums focus:outline-none"
+            />
+            <span className="text-[10px] text-slate-500">{t("results.roiCalcDaysUnit")}</span>
+          </div>
+          <span className="text-[10px] text-slate-500">
+            {t("results.roiCalcMaxHint", { max: PERIOD_MAX })}
+          </span>
+        </div>
+      </Step>
+
+      {/* ── Step 4 — Your return (locked for Free Access) ── */}
+      <Step number={4} label={t("results.roiCalcStep4")} hint={t("results.roiCalcStep4Hint")}>
+        {isFree ? (
+          <LockedSection
+            requiredTier="silver"
+            title="Upgrade to Silver to see simulated payouts and ROI"
+          >
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-3">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center h-[74px]">
+                  <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-600">—</span>
+                  <span className="text-[10px] font-medium uppercase tracking-widest text-slate-600">
+                    {i === 1 ? t("results.roiCalcPicks") : i === 2 ? t("results.roiCalcStaked") : i === 3 ? t("results.roiCalcPayout") : t("results.roiCalcNetResult")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </LockedSection>
+        ) : null}
+        {!isFree && (<>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-3">
+          <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
+            <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
+              {headline.matches}
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
+              {t("results.roiCalcPicks")}
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
+            <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
+              €{headlineTotalStake.toLocaleString("en-GB", { maximumFractionDigits: 0 })}
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
+              {t("results.roiCalcStaked")}
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
+            <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
+              €{headline.returned.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-widest text-slate-500">
+              {t("results.roiCalcPayout")}
+            </span>
+          </div>
+          <div
+            className="flex flex-col items-center justify-center gap-1 rounded-lg border py-3 px-2 text-center"
+            style={{
+              background: headline.profit >= 0 ? "rgba(16,185,129,0.08)" : "rgba(239,68,68,0.08)",
+              borderColor: headline.profit >= 0 ? "rgba(16,185,129,0.25)" : "rgba(239,68,68,0.25)",
+            }}
+          >
+            <span className="text-2xl font-extrabold leading-none tabular-nums" style={{ color: profitColor }}>
+              {formatEuro(headline.profit)}
+            </span>
+            <span className="text-[10px] font-medium uppercase tracking-widest" style={{ color: profitColor }}>
+              {t("results.roiCalcNetResult")} · {formatRoiPct(headline.profit, headlineTotalStake)}
+            </span>
+          </div>
+        </div>
+
+        {/* Math-transparency band — plain stats + sample warning */}
+        {headline.matches > 0 && (() => {
+          const avgOdds = headline.oddsSum / headline.matches;
+          const breakEven = avgOdds > 1 ? 1 / avgOdds : null;
+          const winRate = headline.wins / headline.matches;
+          const smallSample = headline.matches < 30;
+          return (
+            <div className="mb-4 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
+              <div className="grid grid-cols-3 gap-3 text-center mb-2">
+                <div>
+                  <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+                    {t("results.roiCalcWinRate")}
+                  </p>
+                  <p className="text-sm font-bold tabular-nums text-slate-100">
+                    {Math.round(winRate * 100)}%
+                  </p>
+                </div>
+                <div title={t("results.roiCalcAvgOddsTooltip")}>
+                  <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+                    {t("results.roiCalcAvgOdds")}
+                  </p>
+                  <p className="text-sm font-bold tabular-nums text-slate-100 cursor-help underline decoration-dotted decoration-slate-600 underline-offset-2">
+                    {avgOdds.toFixed(2)}
+                  </p>
+                </div>
+                <div title={t("results.roiCalcBreakEvenTooltip")}>
+                  <p className="text-[9px] uppercase tracking-widest text-slate-500 mb-0.5">
+                    {t("results.roiCalcBreakEven")}
+                  </p>
+                  <p
+                    className="text-sm font-bold tabular-nums cursor-help underline decoration-dotted decoration-slate-600 underline-offset-2"
+                    style={{
+                      color:
+                        breakEven == null ? "#94a3b8" :
+                        winRate >= breakEven ? "#10b981" : "#f59e0b",
+                    }}
+                  >
+                    {breakEven != null ? `${Math.round(breakEven * 100)}%` : "—"}
+                  </p>
+                </div>
+              </div>
+              {smallSample && (
+                <p className="text-[10px] leading-relaxed text-amber-400/90">
+                  <span className="font-semibold">⚠ {t("results.roiCalcSmallSampleTitle")}: </span>
+                  {t("results.roiCalcSmallSampleHint", { n: headline.matches })}
+                </p>
+              )}
+            </div>
+          );
+        })()}
+
+        {/* Per-tier comparison — tap any card to make it the active tier */}
+        <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1.5">
+          {t("results.roiCalcCompareAllTiers")}
+        </p>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {CALC_TIERS.map(({ key, label, accent }) => {
+            const row = perTier[key];
+            const totalStake = row.realStake + row.modelStake;
+            const active = key === calcTier;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setCalcTier(key)}
+                className={`text-left rounded-lg p-3 border transition-colors ${
+                  active
+                    ? "bg-white/[0.06] border-white/[0.14]"
+                    : "bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.04]"
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: accent }}>
+                    {label}
+                  </span>
+                  <span className="text-[10px] text-slate-500 tabular-nums">
+                    {row.matches} {row.matches === 1 ? t("results.roiCalcPickSingular") : t("results.roiCalcPickPlural")}
+                  </span>
+                </div>
+                <div className="flex items-baseline justify-between gap-2">
+                  <span
+                    className="text-lg font-extrabold tabular-nums"
+                    style={{ color: row.profit >= 0 ? "#10b981" : row.matches === 0 ? "#64748b" : "#ef4444" }}
+                  >
+                    {row.matches === 0 ? "—" : formatEuro(row.profit)}
+                  </span>
+                  <span
+                    className="text-[11px] font-semibold tabular-nums"
+                    style={{ color: row.profit >= 0 ? "#10b981" : row.matches === 0 ? "#64748b" : "#ef4444" }}
+                  >
+                    {row.matches === 0 ? "" : formatRoiPct(row.profit, totalStake)}
+                  </span>
+                </div>
+                <div className="text-[10px] text-slate-500 mt-1 tabular-nums">
+                  {row.wins}W · {row.losses}L
+                  {row.modelCount > 0 && (
+                    <span
+                      className="ml-1 text-sky-400"
+                      title={`${row.modelCount} pick${row.modelCount === 1 ? "" : "s"} priced with model-implied odds (no bookmaker odds on file).`}
+                    >
+                      · {row.modelCount} model
+                    </span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+        </>)}
+      </Step>
+
+      {/* Footnote / disclaimer */}
+      <div className="mt-4 flex items-start gap-2 text-[11px] text-slate-500 leading-relaxed">
+        <Info className="h-3.5 w-3.5 text-slate-500 mt-0.5 shrink-0" />
+        <p>
+          {t("results.roiCalcDisclaimer")}
+          {headline.modelCount > 0 && (
+            <span className="text-sky-400">
+              {" "}
+              {t("results.roiCalcModelNote", {
+                count: headline.modelCount,
+                total: headline.matches,
+              })}
+            </span>
+          )}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// Numbered-step wrapper — uniform visual for each config row.
+function Step({
+  number,
+  label,
+  hint,
+  children,
+}: {
+  number: number;
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="mb-4 pb-4 border-b border-white/[0.04] last:mb-0 last:pb-0 last:border-b-0">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-[10px] font-bold text-emerald-400 tabular-nums">
+          {number}
+        </span>
+        <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-300">
+          {label}
+        </span>
+        {hint && (
+          <span className="text-[11px] text-slate-500 hidden sm:inline">— {hint}</span>
+        )}
+      </div>
+      {hint && (
+        <p className="text-[11px] text-slate-500 sm:hidden mb-2">{hint}</p>
+      )}
+      {children}
+    </div>
+  );
+}
+
 // ─── Filter Bar ───────────────────────────────────────────────────────────────
 
 interface FilterBarProps {
@@ -277,11 +974,6 @@ function ResultsFilterBar({
   total,
 }: FilterBarProps) {
   const { t } = useTranslations();
-  const periods: { value: PeriodFilter; label: string }[] = [
-    { value: 7,  label: t("results.last7Days") },
-    { value: 14, label: t("results.last14Days") },
-    { value: 30, label: t("results.last30Days") },
-  ];
 
   const resultOptions: { value: ResultFilter; label: string }[] = [
     { value: "All", label: t("results.filterAll") },
@@ -293,22 +985,10 @@ function ResultsFilterBar({
     <div className="glass-card p-4">
       <div className="flex flex-wrap items-center gap-3">
 
-        {/* Period */}
-        <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
-          {periods.map(({ value, label }) => (
-            <button
-              key={value}
-              onClick={() => setPeriod(value)}
-              className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                period === value
-                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        {/* Period badge — the period control itself lives in Step 3 of the calculator */}
+        <span className="text-[10px] uppercase tracking-widest text-slate-500 mr-1">
+          {t("results.filterShowingLast", { days: period })}
+        </span>
 
         {/* Result filter */}
         <div className="flex items-center gap-1.5">
@@ -367,8 +1047,7 @@ function ResultsFilterBar({
 
 // ─── Result Card ──────────────────────────────────────────────────────────────
 
-function ResultCard({ fixture }: { fixture: Fixture }) {
-  const { t } = useTranslations();
+function ResultCard({ fixture, stake, isFree }: { fixture: Fixture; stake: number; isFree: boolean }) {
   const pred = fixture.prediction;
   const hasPrediction = pred !== null;
 
@@ -390,29 +1069,18 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
     isCorrect = actualOutcome === predicted;
   }
 
-  // v6 B2: compute realised P/L for this pick using the pre-match
-  // odds from fixture.odds when available. Falls back to a flat 1.90
-  // assumption ONLY if we have no odds row at all — matches the
-  // backend ROI calculator's fallback behaviour.
-  let realisedPnl: number | null = null;
-  let pnlSource: "real" | "estimated" | null = null;
+  // Compute odds used for the pick: real pre-match 1X2 odds if on file,
+  // else model-implied fair odds (1 / prob), else flat 1.90 as a last
+  // resort. Return is concrete euros at the user's selected stake so
+  // the table always agrees with the headline calculator.
+  let oddsUsed: number | null = null;
+  let oddsSource: "real" | "model" | "flat" | null = null;
+  let returnEuro: number | null = null;
   if (isCorrect !== null && predictedSide !== null) {
-    const odds = fixture.odds;
-    let oddsUsed: number | null = null;
-    if (odds && predictedSide === "home" && odds.home != null) {
-      oddsUsed = odds.home;
-    } else if (odds && predictedSide === "draw" && odds.draw != null) {
-      oddsUsed = odds.draw;
-    } else if (odds && predictedSide === "away" && odds.away != null) {
-      oddsUsed = odds.away;
-    }
-    if (oddsUsed != null && oddsUsed > 1) {
-      pnlSource = "real";
-    } else {
-      oddsUsed = 1.9;
-      pnlSource = "estimated";
-    }
-    realisedPnl = isCorrect ? oddsUsed - 1 : -1;
+    const picked = oddsForPick(fixture, predictedSide);
+    oddsUsed = picked.odds;
+    oddsSource = picked.source;
+    returnEuro = isCorrect ? stake * oddsUsed - stake : -stake;
   }
 
   const homeScore = fixture.result?.home_score ?? null;
@@ -425,6 +1093,19 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
     predictedSide === "away" ? "2" : "—";
 
   const borderColor = isCorrect === true ? "#10b981" : isCorrect === false ? "#ef4444" : "#334155";
+
+  // Human-readable formula shown on hover — makes the return verifiable.
+  const formulaTitle =
+    oddsUsed != null && returnEuro != null
+      ? isCorrect
+        ? `€${stake.toFixed(2)} × ${oddsUsed.toFixed(2)} − €${stake.toFixed(2)} = €${returnEuro.toFixed(2)} profit`
+        : `Lost €${stake.toFixed(2)} stake (odds ${oddsUsed.toFixed(2)} not realised)`
+      : undefined;
+
+  const returnColor =
+    returnEuro == null ? "#64748b" : returnEuro > 0 ? "#10b981" : returnEuro < 0 ? "#ef4444" : "#94a3b8";
+  const returnPrefix = returnEuro == null ? "" : returnEuro > 0 ? "+" : returnEuro < 0 ? "−" : "";
+  const returnAbs = returnEuro == null ? 0 : Math.abs(returnEuro);
 
   return (
     <div
@@ -465,6 +1146,56 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
         {pickLabel}
       </span>
 
+      {/* Odds used (hidden on narrow phone, locked for Free Access) */}
+      <span className="hidden sm:flex w-20 shrink-0 items-center justify-center gap-1">
+        {isFree ? (
+          <LockPill requiredTier="silver" />
+        ) : oddsUsed != null ? (
+          <>
+            <span className="text-xs font-semibold tabular-nums text-slate-300">
+              {oddsUsed.toFixed(2)}
+            </span>
+            {oddsSource === "real" ? (
+              <span
+                title="Pre-match 1X2 odds from the bookmaker snapshot stored for this fixture."
+                className="text-[8px] font-bold uppercase rounded px-1 py-[1px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+              >
+                REAL
+              </span>
+            ) : oddsSource === "model" ? (
+              <span
+                title="No bookmaker odds on file — fair odds implied by the model's probability (1 / prob)."
+                className="text-[8px] font-bold uppercase rounded px-1 py-[1px] bg-sky-500/15 text-sky-400 border border-sky-500/30"
+              >
+                MODEL
+              </span>
+            ) : (
+              <span
+                title="Neither bookmaker nor model odds available — flat 1.90 fallback."
+                className="text-[8px] font-bold uppercase rounded px-1 py-[1px] bg-amber-500/15 text-amber-400 border border-amber-500/30"
+              >
+                FLAT
+              </span>
+            )}
+          </>
+        ) : (
+          <span className="text-xs text-slate-600">—</span>
+        )}
+      </span>
+
+      {/* Return in euro (hidden on narrow phone, locked for Free Access) */}
+      <span
+        title={isFree ? undefined : formulaTitle}
+        className="hidden sm:inline w-20 text-right text-xs font-bold tabular-nums shrink-0"
+        style={{ color: returnColor }}
+      >
+        {isFree ? (
+          <LockPill requiredTier="silver" />
+        ) : returnEuro != null
+          ? `${returnPrefix}€${returnAbs.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+          : "—"}
+      </span>
+
       {/* Result icon */}
       <span className="w-6 sm:w-8 text-center shrink-0">
         {isCorrect === true ? (
@@ -475,6 +1206,61 @@ function ResultCard({ fixture }: { fixture: Fixture }) {
           <span className="text-xs text-slate-600">—</span>
         )}
       </span>
+    </div>
+  );
+}
+
+// ─── Table footer: per-row return totals (verifies headline calculator) ─────
+
+function ResultsTableFooter({ fixtures, stake, isFree }: { fixtures: Fixture[]; stake: number; isFree: boolean }) {
+  let totalStake = 0;
+  let totalPayout = 0;
+  let wins = 0;
+  let losses = 0;
+  let realCount = 0;
+  let modelCount = 0;
+  for (const f of fixtures) {
+    if (!f.prediction || !f.result) continue;
+    const side = derivePickSide(f.prediction);
+    if (side === null) continue;
+    const { home_score, away_score } = f.result;
+    const actual = home_score > away_score ? "home" : away_score > home_score ? "away" : "draw";
+    const won = actual === side;
+    const { odds, source } = oddsForPick(f, side);
+    if (source === "real") realCount++;
+    else modelCount++;
+    totalStake += stake;
+    if (won) { wins++; totalPayout += stake * odds; }
+    else losses++;
+  }
+  const totalReturn = totalPayout - totalStake;
+  const color = totalReturn > 0 ? "#10b981" : totalReturn < 0 ? "#ef4444" : "#94a3b8";
+  const prefix = totalReturn > 0 ? "+" : totalReturn < 0 ? "−" : "";
+  return (
+    <div className="flex items-center gap-3 px-4 py-2.5 bg-white/[0.02] border-t border-white/[0.05] text-[10px] uppercase tracking-widest">
+      <span className="w-12 sm:w-16 shrink-0 text-slate-500">Total</span>
+      <span className="flex-1 text-slate-500 tabular-nums">
+        <span className="text-emerald-400">{wins}W</span>
+        {" · "}
+        <span className="text-red-400">{losses}L</span>
+        {!isFree && (
+          <>
+            {" · staked €"}{totalStake.toFixed(2)}
+            {realCount > 0 && (
+              <span className="text-emerald-500 ml-1">· {realCount} real</span>
+            )}
+            {modelCount > 0 && (
+              <span className="text-sky-400 ml-1">· {modelCount} model</span>
+            )}
+          </>
+        )}
+      </span>
+      <span className="hidden sm:inline w-20 text-right font-bold tabular-nums" style={{ color }}>
+        {isFree
+          ? <LockPill requiredTier="silver" />
+          : `${prefix}€${Math.abs(totalReturn).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+      </span>
+      <span className="w-6 sm:w-8" />
     </div>
   );
 }
@@ -509,29 +1295,179 @@ function SkeletonCard() {
 
 export default function ResultsPage() {
   return (
-    <PaywallOverlay feature="results" requiredTier="silver">
+    <Suspense fallback={null}>
       <ResultsPageContent />
-    </PaywallOverlay>
+    </Suspense>
+  );
+}
+
+const VALID_TIERS: readonly TierFilter[] = ["free", "silver", "gold", "platinum"] as const;
+
+// ─── Shared lock UI ──────────────────────────────────────────────────────
+// Small inline chip rendered next to a control that's gated. On hover it
+// explains why the control is disabled and where to upgrade.
+function LockPill({
+  requiredTier,
+  className = "",
+}: { requiredTier: Tier; className?: string }) {
+  const label =
+    requiredTier === "silver" ? "Silver" :
+    requiredTier === "gold" ? "Gold" :
+    requiredTier === "platinum" ? "Platinum" :
+    "Upgrade";
+  return (
+    <Link
+      href="/pricing"
+      title={`Upgrade to ${label} to unlock`}
+      className={`inline-flex items-center gap-0.5 rounded px-1 py-0.5 text-[8px] font-bold uppercase tracking-wider bg-white/[0.06] text-slate-400 border border-white/[0.08] hover:text-amber-300 hover:border-amber-500/40 transition-colors ${className}`}
+    >
+      <Lock className="h-2.5 w-2.5" />
+      {label}
+    </Link>
+  );
+}
+
+// Full-panel overlay: blurs children and renders an upgrade CTA on top.
+function LockedSection({
+  requiredTier,
+  children,
+  title,
+}: { requiredTier: Tier; children: React.ReactNode; title?: string }) {
+  const label =
+    requiredTier === "silver" ? "Silver" :
+    requiredTier === "gold" ? "Gold" :
+    requiredTier === "platinum" ? "Platinum" : "Upgrade";
+  return (
+    <div className="relative">
+      <div className="pointer-events-none select-none blur-sm opacity-40">
+        {children}
+      </div>
+      <div className="absolute inset-0 flex items-center justify-center p-4">
+        <Link
+          href="/pricing"
+          className="flex items-center gap-2 rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-xs font-semibold text-amber-300 hover:bg-amber-500/15 hover:border-amber-500/60 transition-colors"
+        >
+          <Lock className="h-3.5 w-3.5" />
+          <span>{title ?? `Upgrade to ${label} to unlock`}</span>
+        </Link>
+      </div>
+    </div>
   );
 }
 
 function ResultsPageContent() {
   const { t } = useTranslations();
-  const [period, setPeriod] = useState<PeriodFilter>(7);
+  const { tier: userTier } = useTier();
+  // Free users keep access but several controls / columns are gated.
+  const isFree = userTier === "free";
+  // Which tiers is the user allowed to actually select in Step 1?
+  // Anything above their own tier is locked.
+  const canSelectTier = (target: CalcTier): boolean => {
+    const userRank = USER_TIER_RANK[userTier];
+    const targetRank = USER_TIER_RANK[target];
+    return targetRank <= userRank;
+  };
+  // Required tier to unlock a given CalcTier button.
+  const unlockTierFor = (target: CalcTier): Tier => target;
+  // Deep-link support: /results?tier=silver&period=30 lets the track-record
+  // tier cards jump directly to the right slice of data.
+  const searchParams = useSearchParams();
+  const initialTier = (() => {
+    const q = (searchParams?.get("tier") ?? "").toLowerCase();
+    if ((VALID_TIERS as readonly string[]).includes(q)) return q as TierFilter;
+    // Default to the user's own tier so a Free Access visitor lands on
+    // a tier they can actually see — instead of an unreachable Gold
+    // selection that's locked to them anyway.
+    if (userTier === "free") return "free";
+    if (userTier === "silver") return "silver";
+    if (userTier === "platinum") return "platinum";
+    return "gold";
+  })();
+  const initialPeriod = (() => {
+    const q = Number(searchParams?.get("period"));
+    if (!Number.isFinite(q) || q <= 0) return 30;
+    return Math.max(1, Math.min(365, Math.round(q)));
+  })();
+  const initialStream: StreamMode = searchParams?.get("stream") === "botd" ? "botd" : "all";
+
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
-  const [tierFilter, setTierFilter] = useState<TierFilter>("gold");
+  // Tier + period for the ROI calculator are the single source of
+  // truth — the results table below reuses them so selecting e.g.
+  // "Platinum" in the calculator also scopes the table.
+  const [tierFilter, setTierFilter] = useState<TierFilter>(initialTier);
+  const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(initialPeriod);
+  const [stream, setStream] = useState<StreamMode>(initialStream);
+  // useTier() starts as "free" before localStorage hydrates, then
+  // settles on the real subscription tier. Snap tierFilter to that
+  // real tier the very first time it's known — once. Manual tier
+  // clicks afterwards win, and a URL ?tier= deep-link wins
+  // unconditionally.
+  const explicitTierFromUrl = (searchParams?.get("tier") ?? "").toLowerCase();
+  const tierHydrated = useRef(false);
+  useEffect(() => {
+    if (tierHydrated.current) return;
+    if (explicitTierFromUrl) {
+      tierHydrated.current = true;
+      return;
+    }
+    tierHydrated.current = true;
+    const target: TierFilter =
+      userTier === "free" ? "free" :
+      userTier === "silver" ? "silver" :
+      userTier === "platinum" ? "platinum" :
+      "gold";
+    if (target !== tierFilter) setTierFilter(target);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userTier]);
+  // BOTD stream is by definition Gold-tier — lock the tier selector
+  // when the user flips to BOTD so numbers don't drift.
+  useEffect(() => {
+    if (stream === "botd" && tierFilter !== "gold") setTierFilter("gold");
+  }, [stream, tierFilter]);
+  // Alias — the table's period is driven entirely by the calculator so
+  // both surfaces never disagree.
+  const period = calcPeriod;
+  const setPeriod = setCalcPeriod;
+  // Stake is shared between the ROI calculator header and each table
+  // row so the numbers always agree. Persisted to localStorage.
+  const [stake, setStake] = useState<number>(10);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const saved = window.localStorage.getItem(STAKE_STORAGE_KEY);
+      if (saved) {
+        const n = Number(saved);
+        if (Number.isFinite(n) && n > 0) setStake(n);
+      }
+    } catch {}
+  }, []);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(STAKE_STORAGE_KEY, String(stake));
+    } catch {}
+  }, [stake]);
 
   // ── Queries ────────────────────────────────────────────────────────────────
+  // Always fetch a full 365 days so the ROI calculator can support a
+  // custom days-back filter up to the backend cap. Shorter windows
+  // filter the same cached dataset client-side.
   const resultsQuery = useQuery({
-    queryKey: ["fixture-results", period, leagueFilter],
-    queryFn: () => api.getFixtureResults(period, leagueFilter || undefined),
+    queryKey: ["fixture-results", 365, leagueFilter],
+    queryFn: () => api.getFixtureResults(365, leagueFilter || undefined),
     staleTime: 5 * 60_000,
     retry: 1,
   });
 
   // Unwrap the fixtures array from the response
-  const allResults: Fixture[] = resultsQuery.data?.fixtures ?? [];
+  const rawResults: Fixture[] = resultsQuery.data?.fixtures ?? [];
+  // Scope to the active pick stream — either every prediction or just
+  // the Bet of the Day (highest-confidence Gold-tier pick per day).
+  const allResults: Fixture[] = useMemo(
+    () => (stream === "botd" ? filterBotdStream(rawResults) : rawResults),
+    [rawResults, stream],
+  );
 
   // ── Derived league list — only show leagues that have at least 1 finished fixture with a result ──
   const leagues = useMemo(() => {
@@ -555,6 +1491,14 @@ function ResultsPageContent() {
     items = items.filter(
       (f) => f.status === "finished" && f.result && f.prediction,
     );
+
+    // Period window — client-side since we always fetch 365 days.
+    const cutoffMs = Date.now() - period * 24 * 60 * 60 * 1000;
+    items = items.filter((f) => new Date(f.scheduled_at).getTime() >= cutoffMs);
+
+    // Live-only — simulator is only valid for picks locked pre-kickoff
+    // since launch, because backtest fixtures lack reliable pre-match odds.
+    items = items.filter((f) => isLivePick(f));
 
     items = items.filter((f) => f.prediction?.pick_tier === tierFilter);
 
@@ -580,7 +1524,7 @@ function ResultsPageContent() {
     items.sort((a, b) => b.scheduled_at.localeCompare(a.scheduled_at));
 
     return items;
-  }, [allResults, resultFilter, leagueFilter, tierFilter]);
+  }, [allResults, resultFilter, leagueFilter, tierFilter, period]);
 
   // ── Summary computed from filtered so stats always match the table ─────────
   const computedSummary = useMemo<WeeklySummary | null>(() => {
@@ -654,43 +1598,37 @@ function ResultsPageContent() {
         </div>
       </div>
 
-      {/* ── Tier scope strip + live-tracking-since label ── */}
-      <div className="glass-card px-4 py-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[10px] uppercase tracking-widest text-slate-500 mr-2">
-            Scope
+      {/* ── Live-tracking-since chip (the scope selector lives inside the calculator) ── */}
+      <div className="flex items-center justify-end">
+        <span className="text-[10px] uppercase tracking-widest text-slate-500">
+          Live tracking since{" "}
+          <span className="text-slate-300 font-semibold tabular-nums">
+            {LIVE_TRACKING_START}
           </span>
-          {TIER_TABS.map((tab) => {
-            const active = tab.key === tierFilter;
-            return (
-              <button
-                key={tab.key}
-                type="button"
-                onClick={() => setTierFilter(tab.key)}
-                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors ${
-                  active
-                    ? "bg-emerald-600/80 text-white"
-                    : "bg-white/[0.03] text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-          <span className="ml-auto text-[10px] uppercase tracking-widest text-slate-500">
-            Live tracking since{" "}
-            <span className="text-slate-300 font-semibold tabular-nums">
-              {LIVE_TRACKING_START}
-            </span>
-          </span>
-        </div>
+        </span>
       </div>
+
+      {/* ── ROI Calculator (what would you have made?) ── */}
+      <RoiCalculatorCard
+        fixtures={allResults}
+        isLoading={isLoading}
+        stake={stake}
+        setStake={setStake}
+        calcTier={tierFilter}
+        setCalcTier={setTierFilter}
+        calcPeriod={calcPeriod}
+        setCalcPeriod={setCalcPeriod}
+        stream={stream}
+        setStream={setStream}
+        userTier={userTier}
+      />
 
       {/* ── Weekly Summary ── */}
       <WeeklySummaryCard
         data={computedSummary ?? undefined}
         isLoading={isLoading}
         isError={hasError}
+        isFree={isFree}
       />
 
       {/* ── Streak Stats ── */}
@@ -802,19 +1740,25 @@ function ResultsPageContent() {
         <div className="glass-card overflow-hidden">
           {/* Column headers */}
           <div className="flex items-center gap-3 px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.05] text-[9px] uppercase tracking-widest text-slate-600">
-            <span className="w-16 shrink-0">Date</span>
+            <span className="w-12 sm:w-16 shrink-0">Date</span>
             <span className="flex-1">Home</span>
-            <span className="w-14 text-center">Score</span>
+            <span className="w-10 sm:w-14 text-center">Score</span>
             <span className="flex-1">Away</span>
-            <span className="w-8 text-center">Pick</span>
-            <span className="w-8 text-center">Result</span>
+            <span className="hidden sm:inline w-8 text-center">Pick</span>
+            <span className="hidden sm:inline w-20 text-center">Odds{isFree && <LockPill requiredTier="silver" className="ml-1" />}</span>
+            <span className="hidden sm:inline w-20 text-right">
+              {isFree ? <>Return <LockPill requiredTier="silver" className="ml-1" /></> : `Return · €${stake.toFixed(0)}`}
+            </span>
+            <span className="w-6 sm:w-8 text-center">Result</span>
           </div>
           {/* Rows */}
           <div className="divide-y divide-white/[0.03]">
             {filtered.map((fixture) => (
-              <ResultCard key={fixture.id} fixture={fixture} />
+              <ResultCard key={fixture.id} fixture={fixture} stake={stake} isFree={isFree} />
             ))}
           </div>
+          {/* Footer: sum of visible rows' returns so the user can verify the headline */}
+          <ResultsTableFooter fixtures={filtered} stake={stake} isFree={isFree} />
         </div>
       )}
 

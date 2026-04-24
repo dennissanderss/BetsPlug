@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 import { NavStateProvider } from "@/components/layout/nav-state-context";
+import { AuthGuard } from "@/components/layout/auth-guard";
 
 export const metadata: Metadata = {
   robots: {
@@ -13,7 +14,8 @@ export const metadata: Metadata = {
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <NavStateProvider>
+    <AuthGuard>
+      <NavStateProvider>
       <div data-app-shell className="relative flex h-screen overflow-hidden">
         {/* Ambient glow blobs on the whole shell — span the full viewport
             behind the sidebar, header and main so the dashboard never
@@ -52,6 +54,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </main>
         </div>
       </div>
-    </NavStateProvider>
+      </NavStateProvider>
+    </AuthGuard>
   );
 }

@@ -213,7 +213,7 @@ export function LeagueHubTopPick({ leagueSlug, leagueName, locale }: Props) {
                   className="btn-primary inline-flex items-center gap-2"
                 >
                   <Lock className="h-4 w-4" />
-                  {t("Unlock this pick — €0.01 trial", "Ontgrendel deze pick — €0,01 proef")}
+                  {t("Create free account to unlock", "Maak gratis account om te ontgrendelen")}
                 </Link>
                 <Link
                   href={loc("/how-it-works")}

@@ -310,11 +310,15 @@ export interface TierBreakdown {
   total: number;
   correct: number;
   accuracy: number;
+  wilson_ci_low?: number | null;
+  wilson_ci_high?: number | null;
 }
 
 export interface TrackrecordSummary {
   total_predictions: number;
   accuracy: number;
+  wilson_ci_low?: number | null;
+  wilson_ci_high?: number | null;
   brier_score: number;
   log_loss: number;
   avg_confidence: number;

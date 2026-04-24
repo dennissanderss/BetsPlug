@@ -1,6 +1,6 @@
 """Thin httpx wrapper around the Telegram Bot HTTP API.
 
-Used by the @BetsPlug auto-poster — no user-management flows, no bot
+Used by the @BetsPluggs auto-poster — no user-management flows, no bot
 commands, just channel posting + message edits. The library choice is
 deliberate: `python-telegram-bot` ships a full update dispatcher we
 don't need for a publisher, and it pulls in ~20 transitive deps; our
@@ -93,7 +93,7 @@ async def post_to_channel(
     dev / tests keep flowing without mocking.
 
     `channel` may be an `@handle` or a numeric chat id. The caller
-    typically passes ``settings.telegram_channel_free`` (= @BetsPlug
+    typically passes ``settings.telegram_channel_free`` (= @BetsPluggs
     by default) or the optional test channel.
 
     Passing ``reply_to_message_id`` posts as a Telegram reply to that
@@ -116,6 +116,10 @@ async def post_to_channel(
     payload: dict = {
         "chat_id": channel,
         "text": message,
+        # Our templates in `telegram_templates.py` emit MarkdownV2 bold
+        # (`*x*`) for pick/verdict headers and escape reserved chars via
+        # their `_md()` helper. Keep parse_mode in lock-step with that.
+        "parse_mode": "MarkdownV2",
         # `disable_web_page_preview` keeps the betsplug.com mention at
         # the bottom from ballooning into a big link card that buries
         # the pick itself.
@@ -161,6 +165,9 @@ async def update_message(
         "chat_id": channel,
         "message_id": message_id,
         "text": new_text,
+        # Edits must carry the same parse_mode as the original send —
+        # the GRADED banner prepend in `telegram_templates` uses bold.
+        "parse_mode": "MarkdownV2",
         "disable_web_page_preview": True,
     }
     try:
@@ -172,6 +179,46 @@ async def update_message(
         if "message is not modified" in str(e).lower():
             return
         logger.error("telegram: editMessageText failed: %s", e)
+        raise
+
+
+async def delete_message(channel: str, message_id: int) -> bool:
+    """Delete a single message from the channel via the Bot API.
+
+    Telegram allows a bot to delete its OWN outgoing channel messages
+    at any age as long as the bot retains ``can_post_messages`` admin
+    rights — the 48-hour rule only applies to messages the bot did not
+    author. Returns True on success, False when the message is already
+    gone (Bot API error "message to delete not found") so the caller
+    can treat that as a harmless no-op. Any other failure raises
+    ``TelegramError`` so the operator sees the reason.
+    """
+    token = _token()
+    if not token:
+        logger.info(
+            "telegram: dry-run delete (no token) channel=%s id=%d",
+            channel,
+            message_id,
+        )
+        return True
+
+    payload = {"chat_id": channel, "message_id": message_id}
+    try:
+        await _post_api("deleteMessage", payload)
+        return True
+    except TelegramError as e:
+        msg = str(e).lower()
+        if "message to delete not found" in msg or "message can't be deleted" in msg:
+            # Already deleted or too old to delete — treat as no-op so
+            # the wipe loop keeps going. The DB audit row is still
+            # removed by the caller so the channel-state converges.
+            logger.warning(
+                "telegram: delete skipped (id=%d, channel=%s): %s",
+                message_id,
+                channel,
+                e,
+            )
+            return False
         raise
 
 
@@ -196,5 +243,6 @@ __all__ = [
     "TelegramError",
     "post_to_channel",
     "update_message",
+    "delete_message",
     "health_probe",
 ]

@@ -44,7 +44,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
       title: t("contact.card2Title"),
       desc: t("contact.card2Desc"),
       cta: t("contact.card2Cta"),
-      href: "https://t.me/betsplug",
+      href: "https://t.me/BetsPluggs",
       external: true,
       variant: "green" as const,
     },
@@ -414,7 +414,7 @@ export function ContactContent({ contactPage }: ContactContentProps) {
                       support@betsplug.com
                     </a>
                     <a
-                      href="https://t.me/betsplug"
+                      href="https://t.me/BetsPluggs"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-ghost inline-flex items-center gap-2"

@@ -54,7 +54,14 @@ interface BotdRow {
   odds_used: number | null;
 }
 
-export function BotdTrackRecordSection() {
+/**
+ * @param publicMode  When true, skip the raw picks table + 'Want to verify
+ *                    the full dataset' CSV download block. The public
+ *                    /track-record page sets this so anonymous visitors
+ *                    only see the KPI summary; the full table + CSV are
+ *                    reserved for the authed app under /trackrecord.
+ */
+export function BotdTrackRecordSection({ publicMode = false }: { publicMode?: boolean } = {}) {
   const { t } = useTranslations();
   const [agg, setAgg] = useState<BotdAggregate | null>(null);
   const [rows, setRows] = useState<BotdRow[] | null>(null);
@@ -243,6 +250,7 @@ export function BotdTrackRecordSection() {
 
         {/* Volledige picks-tabel — laat alle rijen zien die in de KPI's
             worden meegeteld zodat gebruikers zelf kunnen narekenen. */}
+        {!publicMode && (<>
         <div className="mt-10 overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0b0d13]">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] bg-white/[0.02] px-4 py-3">
             <div>
@@ -398,6 +406,7 @@ export function BotdTrackRecordSection() {
             </a>
           </div>
         </div>
+        </>)}
 
         <p className="mt-6 text-center text-[11px] leading-relaxed text-[#6b7280]">
           {t("botd.trackRecord.footnote")}

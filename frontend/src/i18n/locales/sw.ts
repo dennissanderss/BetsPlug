@@ -267,7 +267,7 @@ const sw = {
   "chatbot.replyHello": "Hujambo! 👋 Mimi ndiye BetsPlug AI. Niulize chochote kuhusu miundo yetu, bei au ubashiri - nitafanya niwezavyo kusaidia.",
   "chatbot.replyPricing": "Tuna tabaka nne. Shaba ni jaribio la mfano la €0.01 - ufikiaji kamili kwa siku 7, kadi halisi inahitajika (hii hulinda mfumo bila ulaghai). Fedha (€9.99/mo) ni mpango wa ngazi ya kuingia pekee kwa ligi 5 bora za Ulaya na BetsPlug Pulse chaguo na kuchelewa kwa saa 2. Dhahabu (€14.99/mo) ndiyo maarufu zaidi - ligi zote 30+ duniani kote, zimejaa BetsPlug Pulse AI zinazotoa matokeo, chaguo za papo hapo, kila siku Pick of the Day, Dhahabu Telegram na Strategy Lab (inakuja hivi karibuni). Platinum (€199 ya maisha ya mara moja) huongeza Telegram ya faragha, upandaji wa 1-kwa-1 na kufuli ya bei ya maisha yote. Mipango yote inayolipwa inaungwa mkono na hakikisho la siku 14 la kurejeshewa pesa la EU.",
   "chatbot.replyRefund": "Mipango yote ya Fedha na Dhahabu inaweza kughairiwa wakati wowote kwenye dashibodi yako - utaendelea na ufikiaji hadi mwisho wa kipindi chako cha bili. Pia tunatoa hakikisho la kurejesha pesa kwa siku 14 kwa mipango yote inayolipwa chini ya sheria ya watumiaji wa EU. Platinum Lifetime inauzwa mwisho baada ya dirisha la siku 14 la kurejesha pesa.",
-  "chatbot.replyTelegram": "Jumuiya yetu ya Telegram ina wanachama 1,200+ wanaofanya kazi wanaochagua kila siku, arifa za makali na Maswali na Majibu ya moja kwa moja na wachambuzi wetu. Jiunge katika t.me/betsplug - bila malipo kwa watumiaji wa Bronze, chaneli za VIP za Silver/Gold.",
+  "chatbot.replyTelegram": "Jumuiya yetu ya Telegram ina wanachama 1,200+ wanaofanya kazi wanaochagua kila siku, arifa za makali na Maswali na Majibu ya moja kwa moja na wachambuzi wetu. Jiunge katika t.me/BetsPluggs - bila malipo kwa watumiaji wa Bronze, chaneli za VIP za Silver/Gold.",
   "chatbot.suggestion1": "Je, Pick of the Day hufanya kazi vipi?",
   "chatbot.suggestion2": "Kuna tofauti gani kati ya Silver na Gold?",
   "chatbot.suggestion3": "Je, utabiri wako ni sahihi kwa kiasi gani?",
@@ -2421,5 +2421,5 @@ const sw = {
   "welcomeBanner.stepPrefix": "Hatua",
   "welcomeBanner.subtitle": "AI yetu huchanganua data ya kandanda - fomu, uso kwa uso, msimamo na nguvu ya timu - ili kutabiri matokeo yanayowezekana zaidi ya mechi zijazo.",
   "welcomeBanner.title": "Hivi ndivyo BetsPlug inavyofanya kazi",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default sw;

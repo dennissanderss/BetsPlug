@@ -427,7 +427,8 @@ export function HomeContent({
                   </span>
                 </div>
 
-                {/* 3 pick rows */}
+                {/* 3 pick rows + 2 locked higher-tier teasers so visitors
+                    see there's a longer list behind sign-up */}
                 <div className="relative divide-y" style={{ borderColor: "hsl(0 0% 100% / 0.05)" }}>
                   {picks.slice(0, 3).map((p, i) => (
                     <HeroPickRow key={i} pick={p} locale={locale} />
@@ -442,6 +443,11 @@ export function HomeContent({
                         <div className="mt-3 h-4 w-3/4 animate-pulse rounded bg-white/[0.05]" />
                       </div>
                     ))}
+                  {/* Two locked Gold-tier preview rows — fully blurred,
+                      static placeholders. Sole purpose is showing the
+                      visitor the list is longer than 3 picks. */}
+                  <LockedHeroPickRow pct={78} />
+                  <LockedHeroPickRow pct={82} />
                 </div>
 
                 {/* Upsell strip */}
@@ -487,140 +493,39 @@ export function HomeContent({
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          1a2 · RECOGNIZE-THIS, empathy-first pain section. Shows the
-          Telegram-tipster frustrations the visitor has already lived
-          through, so they feel understood before we pitch the solution.
-          Placed right after the hero so the flow is:
-             Hero (promise) → Pain ("yes that's me") → Proof → Ladder → ...
-         ══════════════════════════════════════════════════════════════ */}
-      <RecognizeThis />
-
-      {/* 1b · LIVE PROOF STRIP + standalone TierLadder removed — the
-          TrustFunnel below now carries the per-tier accuracy breakdown
-          (incl. Bronze), so the ladder would be duplicate content. */}
-
-      {/* ══════════════════════════════════════════════════════════════
-          1c · TRUST FUNNEL, "from 55k matches to 1.65k honest picks",
-          plain-language explanation of why the advertised volume looks
-          smaller than the raw database count. Turns the "why only 8k?"
-          visitor question into a conversion-oriented honesty story.
-         ══════════════════════════════════════════════════════════════ */}
-      <TrustFunnel />
-
-      {/* ══════════════════════════════════════════════════════════════
-          2 · LEAGUES TICKER
+          1b · LEAGUES TICKER, sits directly under the hero so the
+          first thing the visitor sees after the promise is the breadth
+          of competitions covered.
          ══════════════════════════════════════════════════════════════ */}
       <LeaguesTicker />
 
       {/* ══════════════════════════════════════════════════════════════
-          2b · PAS, problem/agitate/solve block
-          Frame the real pain (sports fans lose) BEFORE we present
-          BetsPlug as the answer. Numbers are industry-standard and
-          intentionally non-BetsPlug so the claim is credible.
+          1c · INTRO VIDEO PLACEHOLDER — slot reserved for the
+          onboarding clip explaining how to use the app. Static
+          'video coming soon' card until the asset ships.
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden py-20 md:py-24">
+      <section className="relative overflow-hidden py-16 md:py-24">
         <div
           aria-hidden
-          className="pointer-events-none absolute right-0 top-1/2 h-[360px] w-[360px] -translate-y-1/2 rounded-full"
-          style={{ background: "hsl(var(--accent-red, 0 72% 60%) / 0.12)", filter: "blur(140px)" }}
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{ background: "hsl(var(--accent-green) / 0.08)", filter: "blur(160px)" }}
         />
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="mb-10 max-w-3xl">
-            <span className="section-label">
-              <AlertTriangle className="h-3 w-3" />
-              {t("pas.badge")}
-            </span>
-            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-              {t("pas.titleA")}{" "}
-              <span className="gradient-text-green">{t("pas.titleB")}</span>
-            </h2>
-            <p className="mt-4 text-base text-[#a3a9b8]">{t("pas.subtitle")}</p>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-3">
-            <PasStatCard
-              icon={TrendingDown}
-              value={t("pas.stat1Value")}
-              label={t("pas.stat1Label")}
-              desc={t("pas.stat1Desc")}
-            />
-            <PasStatCard
-              icon={BarChart3}
-              value={t("pas.stat2Value")}
-              label={t("pas.stat2Label")}
-              desc={t("pas.stat2Desc")}
-            />
-            <PasStatCard
-              icon={AlertTriangle}
-              value={t("pas.stat3Value")}
-              label={t("pas.stat3Label")}
-              desc={t("pas.stat3Desc")}
-            />
-          </div>
-
-          <div className="mt-10 grid items-center gap-5 rounded-2xl border p-6 md:grid-cols-[1fr_auto] md:p-8"
-            style={{ borderColor: "hsl(0 0% 100% / 0.06)", background: "hsl(0 0% 100% / 0.02)" }}>
-            <p className="text-base leading-relaxed text-[#ededed]">
-              {t("pas.solve")}
-            </p>
-            <Link
-              href={loc("/how-it-works")}
-              className="btn-primary inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
-            >
-              {t("pas.cta")} <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
-          3 · FEATURES, 3 premium feature cards
-         ══════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden py-20 md:py-28">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-0 top-1/2 h-[400px] w-[400px] -translate-y-1/2 rounded-full"
-          style={{ background: "hsl(var(--accent-green) / 0.1)", filter: "blur(140px)" }}
-        />
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="mb-12 max-w-3xl">
-            <span className="section-label">
-              <Sparkles className="h-3 w-3" /> {t("trusted.titleHighlight")}
-            </span>
-            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-              {t("trusted.titleA")}{" "}
-              <span className="gradient-text-green">{t("trusted.titleHighlight")}</span>{" "}
-              {t("trusted.titleB")}
-            </h2>
-            <p className="mt-4 text-base text-[#a3a9b8]">{t("trusted.subtitle")}</p>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-3">
-            <BigFeatureCard
-              variant="green"
-              icon={Shield}
-              tag={t("trusted.card1Title") ? "Trust" : "Trust"}
-              title={t("trusted.card1Title")}
-              desc={t("trusted.card1Desc")}
-            />
-            <BigFeatureCard
-              variant="purple"
-              icon={Brain}
-              tag="AI Core"
-              title={t("trusted.card2Title")}
-              desc={t("trusted.card2Desc")}
-              href={loc("/track-record")}
-              cta={t("trusted.learnMore")}
-            />
-            <BigFeatureCard
-              variant="blue"
-              icon={CheckCircle2}
-              tag="Proof"
-              title={t("trusted.card3Title")}
-              desc={t("trusted.card3Desc")}
-            />
+        <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
+          <div className="card-neon card-neon-green relative overflow-hidden rounded-3xl">
+            <div className="relative flex aspect-video flex-col items-center justify-center p-10 text-center">
+              <HexBadge variant="green" size="lg">
+                <Sparkles className="h-6 w-6" />
+              </HexBadge>
+              <h3 className="text-heading mt-5 text-balance text-2xl text-[#ededed] sm:text-3xl">
+                {t("home.introVideoTitle")}
+              </h3>
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-[#a3a9b8]">
+                {t("home.introVideoSubtitle")}
+              </p>
+              <span className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-300">
+                {t("home.introVideoBadge")}
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -687,200 +592,6 @@ export function HomeContent({
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════
-          5 · TRACK RECORD, animated chart + stats
-         ══════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden py-20 md:py-28">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-0 bottom-0 h-[400px] w-[500px] rounded-full"
-          style={{ background: "hsl(var(--accent-green) / 0.12)", filter: "blur(140px)" }}
-        />
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.15fr]">
-            {/* Left, copy + stats strip + CTAs */}
-            <div>
-              <span className="section-label">
-                <Shield className="h-3 w-3" />
-                {t("track.badge")}
-              </span>
-              <h2 className="text-heading text-balance break-words text-2xl text-[#ededed] sm:text-3xl lg:text-5xl">
-                {t("track.titleA")}{" "}
-                <span className="gradient-text-green">{t("track.titleHighlight")}</span>{" "}
-                {t("track.titleB")}
-              </h2>
-              <p className="mt-4 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
-                {t("track.desc1")}
-              </p>
-
-              {/* Mini stat strip */}
-              {(() => {
-                const hasLive = stats && stats.total > 0 && stats.winrate > 0;
-                const displayAcc = hasLive ? `${Math.round(stats.winrate * 1000) / 10}%` : ",";
-                const displayTotal = hasLive ? stats.total.toLocaleString(locale) : ",";
-                return (
-                  <div className="mt-8 grid grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-stat text-2xl text-[#ededed] sm:text-3xl">{displayAcc}</p>
-                      <p className="mt-1 text-xs text-[#6b7280]">{t("track.accuracy")}</p>
-                    </div>
-                    <div>
-                      <p className="text-stat text-2xl text-[#ededed] sm:text-3xl">{displayTotal}</p>
-                      <p className="mt-1 text-xs text-[#6b7280]">{t("track.metricPredictions")}</p>
-                    </div>
-                    <div>
-                      <p className="text-stat text-2xl text-[#ededed] sm:text-3xl">30</p>
-                      <p className="mt-1 text-xs text-[#6b7280]">{t("track.metricLeagues")}</p>
-                    </div>
-                  </div>
-                );
-              })()}
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link href={loc("/track-record")} className="btn-primary inline-flex items-center gap-1.5">
-                  {t("track.cta")} <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link href={loc("/predictions")} className="btn-glass">
-                  {t("home.freePredCta")}
-                </Link>
-              </div>
-            </div>
-
-            {/* Right, animated line chart + floating badges */}
-            <motion.div
-              initial={{ opacity: 0, y: 24, scale: 0.98 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.8 }}
-              className="relative overflow-hidden sm:overflow-visible"
-            >
-              <div className="card-neon card-neon-green halo-green relative overflow-hidden">
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute -right-12 -top-12 h-[200px] w-[200px] rounded-full"
-                  style={{ background: "hsl(var(--accent-green) / 0.2)", filter: "blur(80px)" }}
-                />
-                <div className="relative aspect-[16/10] sm:aspect-[16/9]">
-                  <TrackRecordChart data={historySeries} stats={stats} />
-                </div>
-              </div>
-
-              {/* Floating badge, top-left: accuracy */}
-              <div
-                className="card-neon card-neon-green absolute -left-6 -top-5 hidden -rotate-[4deg] p-3 sm:block"
-                style={{ width: 190 }}
-              >
-                <div className="flex items-center gap-2.5">
-                  <HexBadge variant="green" size="sm" noGlow>
-                    <Target className="h-3.5 w-3.5" />
-                  </HexBadge>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                      {t("track.accuracy")}
-                    </p>
-                    <p className="text-stat text-sm text-[#4ade80]">
-                      {stats && stats.winrate > 0 ? `${Math.round(stats.winrate * 1000) / 10}%` : ","}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating badge, bottom-right: total predictions */}
-              <div
-                className="card-neon card-neon-purple absolute -bottom-4 -right-4 hidden rotate-[4deg] p-3 sm:block"
-                style={{ width: 190 }}
-              >
-                <div className="flex items-center gap-2.5">
-                  <HexBadge variant="purple" size="sm" noGlow>
-                    <BarChart3 className="h-3.5 w-3.5" />
-                  </HexBadge>
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
-                      {t("track.metricPredictions")}
-                    </p>
-                    <p className="text-stat text-sm text-[#c4b5fd]">
-                      {stats && stats.total > 0 ? stats.total.toLocaleString(locale) : ","}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
-          5b · PERSONA SEGMENTATION, 'who BetsPlug is for'
-          Three persona cards. Same platform, different habits.
-          Each card has its own CTA that routes to the most relevant
-          entry point for that persona, reducing friction vs a single
-          one-size-fits-all CTA.
-         ══════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden py-20 md:py-28">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute right-1/2 top-10 h-[420px] w-[420px] translate-x-1/2 rounded-full"
-          style={{ background: "hsl(var(--accent-purple) / 0.14)", filter: "blur(150px)" }}
-        />
-
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="mb-12 max-w-3xl">
-            <span className="section-label">
-              <Sparkles className="h-3 w-3" />
-              {t("persona.badge")}
-            </span>
-            <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-              {t("persona.titleA")}{" "}
-              <span className="gradient-text-green">{t("persona.titleB")}</span>
-            </h2>
-            <p className="mt-4 text-base text-[#a3a9b8]">{t("persona.subtitle")}</p>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-3">
-            <PersonaCard
-              variant="green"
-              icon={Smartphone}
-              title={t("persona.casualTitle")}
-              pitch={t("persona.casualPitch")}
-              features={[
-                t("persona.casualFeature1"),
-                t("persona.casualFeature2"),
-                t("persona.casualFeature3"),
-              ]}
-              ctaLabel={t("persona.casualCta")}
-              ctaHref={loc("/match-predictions")}
-            />
-            <PersonaCard
-              variant="purple"
-              icon={Calculator}
-              title={t("persona.seriousTitle")}
-              pitch={t("persona.seriousPitch")}
-              features={[
-                t("persona.seriousFeature1"),
-                t("persona.seriousFeature2"),
-                t("persona.seriousFeature3"),
-              ]}
-              ctaLabel={t("persona.seriousCta")}
-              ctaHref={`${loc("/checkout")}?plan=gold`}
-              highlight
-            />
-            <PersonaCard
-              variant="blue"
-              icon={Database}
-              title={t("persona.quantTitle")}
-              pitch={t("persona.quantPitch")}
-              features={[
-                t("persona.quantFeature1"),
-                t("persona.quantFeature2"),
-                t("persona.quantFeature3"),
-              ]}
-              ctaLabel={t("persona.quantCta")}
-              ctaHref={loc("/track-record")}
-            />
-          </div>
-        </div>
-      </section>
 
       {/* ══════════════════════════════════════════════════════════════
           5b · POPULAR LEAGUES, SEO hub + conversion gateway
@@ -968,11 +679,6 @@ export function HomeContent({
       {testimonials.length > 0 && (
         <TestimonialsSection testimonials={testimonials} />
       )}
-
-      {/* ══════════════════════════════════════════════════════════════
-          7 · COMPARISON TABLE, BetsPlug vs Others
-         ══════════════════════════════════════════════════════════════ */}
-      <ComparisonTable rows={comparisonRows} />
 
       {/* ══════════════════════════════════════════════════════════════
           8 · PRICING, 3 plans + Platinum Lifetime (shared component)
@@ -1292,6 +998,50 @@ function HeroPickRow({ pick, locale }: { pick: UpcomingPick; locale: string }) {
         {/* Probability chip — stays visible, this is the value we sell */}
         <DataChip tone="win" className="flex-shrink-0">
           {pickPct}%
+        </DataChip>
+      </div>
+    </div>
+  );
+}
+
+/** LockedHeroPickRow — static blurred row teasing higher-tier picks
+ *  (e.g. 78%, 82% confidence). Same visual footprint as HeroPickRow
+ *  so the list reads as "there are more, just signed-out". */
+function LockedHeroPickRow({ pct }: { pct: number }) {
+  const blurStyle: React.CSSProperties = {
+    filter: "blur(6px)",
+    userSelect: "none",
+  };
+  return (
+    <div className="relative p-4">
+      <div className="flex items-center justify-between gap-2">
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider">
+            <span className="truncate text-[#4ade80]" style={blurStyle} aria-hidden>
+              Premier League
+            </span>
+            <span className="text-[3a3f4a]">·</span>
+            <span className="flex items-center gap-1 text-[#6b7280]" style={blurStyle} aria-hidden>
+              <Clock className="h-2.5 w-2.5" />
+              20:45
+            </span>
+          </div>
+          <div className="mt-1.5 flex min-w-0 items-center gap-2" style={blurStyle} aria-hidden>
+            <span className="min-w-0 truncate text-sm font-semibold text-[#ededed]">
+              Team A
+            </span>
+            <span className="flex-shrink-0 text-[10px] text-[#6b7280]">vs</span>
+            <span className="min-w-0 truncate text-sm font-semibold text-[#ededed]">
+              Team B
+            </span>
+          </div>
+          <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] text-[#a3a9b8]">
+            <Lock className="h-3 w-3 text-[#4ade80]" />
+            <span className="font-semibold text-[#4ade80]">Locked pick · sign in to view</span>
+          </p>
+        </div>
+        <DataChip tone="win" className="flex-shrink-0">
+          {pct}%
         </DataChip>
       </div>
     </div>

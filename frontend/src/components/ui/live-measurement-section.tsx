@@ -11,12 +11,21 @@
  */
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion } from "motion/react";
-import { Activity, CheckCircle2, XCircle, Clock } from "lucide-react";
+import { Activity, Clock, ArrowRight } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { useTranslations } from "@/i18n/locale-provider";
 import { TIER_THEME, TIER_ORDER, type TierKey } from "@/components/noct/tier-theme";
 import { TierEmblem } from "@/components/noct/tier-emblem";
+
+// Results page uses "free" for the Bronze tier (matches the backend slug).
+const RESULTS_TIER_SLUG: Record<TierKey, string> = {
+  bronze: "free",
+  silver: "silver",
+  gold: "gold",
+  platinum: "platinum",
+};
 
 interface TierBucket {
   total: number;
@@ -141,9 +150,14 @@ function LiveTierCard({
   const ci = wilson(correct, total);
   const awaiting = total < 10;
 
+  // src=live guarantees the calculator + table show the exact same pool
+  // of picks as the trackrecord live measurement endpoint.
+  const resultsHref = `/results?tier=${RESULTS_TIER_SLUG[tier]}&period=30&src=live`;
+
   return (
-    <div
-      className="relative overflow-hidden rounded-2xl border p-5"
+    <Link
+      href={resultsHref}
+      className="group relative overflow-hidden rounded-2xl border p-5 block transition-transform hover:-translate-y-0.5 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-emerald-500/40"
       style={{
         borderColor: theme.ringHex,
         background: `linear-gradient(180deg, ${theme.bgTintHex}, rgba(15,20,32,0.6))`,
@@ -174,31 +188,52 @@ function LiveTierCard({
           ? "—"
           : `${(bucket!.accuracy * 100).toFixed(1).replace(".", t("live.decimalSep"))}%`}
       </p>
-      <p className="relative mt-2 text-[11px] text-[#a3a9b8]">
-        {loaded ? (
-          total === 0 ? (
-            t("live.noGradedPicks")
-          ) : (
-            <>
-              <span className="inline-flex items-center gap-1 text-emerald-300">
-                <CheckCircle2 className="h-3 w-3" />
-                {correct}
-              </span>
-              {" / "}
-              <span className="font-semibold text-[#ededed]">{total}</span>{" "}
-              {t("live.graded")}
-            </>
-          )
-        ) : (
-          t("live.loading")
-        )}
-      </p>
+
+      {loaded && total > 0 ? (
+        <div className="relative mt-3 grid grid-cols-3 gap-2">
+          <div className="rounded-md border border-white/[0.06] bg-white/[0.02] px-2 py-1.5 text-center">
+            <p className="text-base font-extrabold tabular-nums leading-none text-[#ededed]">
+              {total}
+            </p>
+            <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-widest text-[#6b7280]">
+              {t("live.played")}
+            </p>
+          </div>
+          <div className="rounded-md border border-emerald-500/20 bg-emerald-500/[0.06] px-2 py-1.5 text-center">
+            <p className="text-base font-extrabold tabular-nums leading-none text-emerald-300">
+              {correct}
+            </p>
+            <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-widest text-emerald-500/80">
+              {t("live.won")}
+            </p>
+          </div>
+          <div className="rounded-md border border-red-500/20 bg-red-500/[0.06] px-2 py-1.5 text-center">
+            <p className="text-base font-extrabold tabular-nums leading-none text-red-300">
+              {total - correct}
+            </p>
+            <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-widest text-red-500/80">
+              {t("live.lost")}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <p className="relative mt-2 text-[11px] text-[#a3a9b8]">
+          {loaded ? t("live.noGradedPicks") : t("live.loading")}
+        </p>
+      )}
+
       {ci && total >= 10 && (
-        <p className="relative mt-1 text-[10px] text-[#6b7280] tabular-nums">
+        <p className="relative mt-2 text-[10px] text-[#6b7280] tabular-nums">
           95% CI {(ci.lower * 100).toFixed(0)}–{(ci.upper * 100).toFixed(0)}%
         </p>
       )}
-    </div>
+
+      {/* CTA — clicking the card takes the user to Results pre-filtered to this tier */}
+      <div className="relative mt-3 pt-3 border-t border-white/[0.05] flex items-center justify-between text-[10px] font-semibold uppercase tracking-widest text-slate-500 group-hover:text-slate-300 transition-colors">
+        <span>{t("live.viewMatches")}</span>
+        <ArrowRight className="h-3 w-3" />
+      </div>
+    </Link>
   );
 }
 

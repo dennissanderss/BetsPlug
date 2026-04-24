@@ -141,7 +141,7 @@ function RegisterForm() {
             >
               <span className="section-label">
                 <UserPlus className="h-3 w-3" />
-                Start your €0,01 trial
+                Free Access · no card required
               </span>
 
               <h1 className="text-display mt-3 max-w-xl text-balance break-words text-4xl text-[#ededed] xl:text-5xl">
@@ -150,14 +150,14 @@ function RegisterForm() {
               </h1>
 
               <p className="mt-5 max-w-md text-base leading-relaxed text-[#a3a9b8]">
-                Just €0,01 to start. Get full access to every AI prediction, the Pick of the Day and live results across 30 leagues. Cancel in two clicks — no awkward phone call.
+                Free Access — no card, no billing. Browse every prediction, follow Pick of the Day, see which calls won and lost. Upgrade only when you want odds, simulated returns and the full tier ladder.
               </p>
 
               <div className="mt-10 grid max-w-md grid-cols-1 gap-3">
                 {[
-                  { icon: ShieldCheck, label: "Stripe-secured · safe checkout", variant: "green" as const },
-                  { icon: BadgeCheck, label: "€0,01 today · no hidden charges", variant: "purple" as const },
-                  { icon: RefreshCw, label: "Cancel or upgrade in two clicks", variant: "blue" as const },
+                  { icon: ShieldCheck, label: "Free forever — no card required", variant: "green" as const },
+                  { icon: BadgeCheck, label: "Full app access on day one", variant: "purple" as const },
+                  { icon: RefreshCw, label: "Upgrade or stay free, your choice", variant: "blue" as const },
                 ].map((item) => (
                   <div
                     key={item.label}
@@ -187,14 +187,14 @@ function RegisterForm() {
                   <div className="mb-6 lg:hidden">
                     <span className="section-label">
                       <UserPlus className="h-3 w-3" />
-                      Start your €0,01 trial
+                      Free Access · no card required
                     </span>
                     <h1 className="text-heading mt-2 text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
                       Unlock today&apos;s{" "}
                       <span className="gradient-text-green">AI football predictions.</span>
                     </h1>
                     <p className="mt-3 text-sm text-[#a3a9b8]">
-                      €0,01 to start, full access to every prediction, cancel in two clicks.
+                      Free Access. No card, no billing. Upgrade only when you want to.
                     </p>
                   </div>
 

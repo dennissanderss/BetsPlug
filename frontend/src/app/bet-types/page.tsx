@@ -202,7 +202,7 @@ export default async function BetTypesIndexPage() {
 
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <Link href={lhref("/register")} className="btn-primary inline-flex items-center gap-2">
-                  {t("Claim €0,01 trial", "Claim €0,01 proefperiode")}
+                  {t("Create free account", "Maak gratis account")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link href={lhref("/match-predictions")} className="btn-glass inline-flex items-center gap-2">

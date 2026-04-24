@@ -186,14 +186,14 @@ export default async function LearnIndexPage() {
               </h2>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
                 {t(
-                  "Reading about betting theory is one thing — watching the AI apply it to tonight's matches is where it clicks. Start your €0,01 trial and test what you've learned against real AI football predictions.",
-                  "Lezen over wedtheorie is één ding — de AI het zien toepassen op vanavonds wedstrijden is waar het klikt. Start je €0,01 proefperiode en test wat je hebt geleerd tegen echte AI-voetbalvoorspellingen.",
+                  "Reading about betting theory is one thing — watching the AI apply it to tonight's matches is where it clicks. Create a free account and test what you've learned against real AI football predictions.",
+                  "Lezen over wedtheorie is één ding — de AI het zien toepassen op vanavonds wedstrijden is waar het klikt. Maak een gratis account en test wat je hebt geleerd tegen echte AI-voetbalvoorspellingen.",
                 )}
               </p>
 
               <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
                 <Link href={lhref("/register")} className="btn-primary inline-flex items-center gap-2">
-                  {t("Claim €0,01 trial", "Claim €0,01 proefperiode")}
+                  {t("Create free account", "Maak gratis account")}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link href={lhref("/how-it-works")} className="btn-glass inline-flex items-center gap-2">

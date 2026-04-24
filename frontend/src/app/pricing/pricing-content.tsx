@@ -56,6 +56,102 @@ interface PlanDetail {
 const AMBER_GLOW_BG =
   "radial-gradient(600px 300px at 0% 0%, rgba(253, 224, 71, 0.12), transparent 55%)";
 
+/**
+ * Per-tier elegant colour treatment for the pricing cards.
+ *
+ * Each tier gets the same "dark tinted background + subtle radial glow
+ * + coloured accents" recipe that the Platinum card already used, but
+ * in its signature colour:
+ *
+ *   Bronze   → metallic copper
+ *   Silver   → metallic silver
+ *   Gold     → metallic gold (was the old amber treatment)
+ *   Platinum → icy diamond blue (top-tier crown)
+ *
+ * Values are pulled close to (not identical to) ``TIER_THEME`` so the
+ * pricing surface can tune contrast for a dark background without
+ * drifting visibly from the badges used elsewhere.
+ */
+interface TierTreatment {
+  /** Dark tinted card background. */
+  bg: string;
+  /** Soft top-left radial glow used via backgroundImage. */
+  glow: string;
+  /** Border colour (low-opacity tier hue). */
+  borderColor: string;
+  /** Primary accent colour for price + CTA + icons. */
+  accent: string;
+  /** Lighter variant for headings. */
+  accentLight: string;
+  /** Muted tier hue for taglines. */
+  accentMuted: string;
+  /** Tinted glass panel background for "best for" block. */
+  panelBg: string;
+  /** Tinted glass panel border. */
+  panelBorder: string;
+  /** Multi-stop gradient used on the CTA button. */
+  ctaGradient: string;
+  /** Text colour for the CTA button (dark). */
+  ctaText: string;
+  /** Shadow colour under the CTA button. */
+  ctaShadow: string;
+}
+
+const TIER_TREATMENT: Record<"bronze" | "silver" | "gold" | "platinum", TierTreatment> = {
+  bronze: {
+    bg: "#0d0704",
+    glow: "radial-gradient(600px 300px at 0% 0%, rgba(232, 168, 100, 0.10), transparent 55%)",
+    borderColor: "rgba(232, 168, 100, 0.30)",
+    accent: "#e8a864",
+    accentLight: "#f7d9b0",
+    accentMuted: "rgba(232, 168, 100, 0.7)",
+    panelBg: "rgba(232, 168, 100, 0.04)",
+    panelBorder: "rgba(232, 168, 100, 0.22)",
+    ctaGradient: "linear-gradient(135deg, #f7d9b0 0%, #e8a864 25%, #b87333 60%, #6d4115 100%)",
+    ctaText: "#1a0e04",
+    ctaShadow: "0 0 24px rgba(232, 168, 100, 0.35)",
+  },
+  silver: {
+    bg: "#0a0b0d",
+    glow: "radial-gradient(600px 300px at 0% 0%, rgba(229, 228, 226, 0.08), transparent 55%)",
+    borderColor: "rgba(229, 228, 226, 0.28)",
+    accent: "#d7d9dc",
+    accentLight: "#f5f5f5",
+    accentMuted: "rgba(229, 228, 226, 0.7)",
+    panelBg: "rgba(229, 228, 226, 0.04)",
+    panelBorder: "rgba(229, 228, 226, 0.20)",
+    ctaGradient: "linear-gradient(135deg, #f5f5f5 0%, #d7d9dc 25%, #8a8d91 70%, #4a4d52 100%)",
+    ctaText: "#0a0b0d",
+    ctaShadow: "0 0 24px rgba(229, 228, 226, 0.30)",
+  },
+  gold: {
+    bg: "#0f0a02",
+    glow: "radial-gradient(600px 300px at 0% 0%, rgba(245, 214, 122, 0.12), transparent 55%)",
+    borderColor: "rgba(245, 214, 122, 0.32)",
+    accent: "#f5d67a",
+    accentLight: "#fde68a",
+    accentMuted: "rgba(245, 214, 122, 0.7)",
+    panelBg: "rgba(245, 214, 122, 0.04)",
+    panelBorder: "rgba(245, 214, 122, 0.25)",
+    ctaGradient: "linear-gradient(135deg, #fef3c7 0%, #f5d67a 25%, #d4af37 55%, #8a6c0b 100%)",
+    ctaText: "#1a1405",
+    ctaShadow: "0 0 24px rgba(245, 214, 122, 0.38)",
+  },
+  platinum: {
+    bg: "#020a0f",
+    glow: "radial-gradient(600px 300px at 0% 0%, rgba(168, 216, 234, 0.10), transparent 55%)",
+    borderColor: "rgba(168, 216, 234, 0.35)",
+    accent: "#a8d8ea",
+    accentLight: "#d9f0ff",
+    accentMuted: "rgba(168, 216, 234, 0.7)",
+    panelBg: "rgba(168, 216, 234, 0.04)",
+    panelBorder: "rgba(168, 216, 234, 0.25)",
+    ctaGradient: "linear-gradient(135deg, #d9f0ff 0%, #a8d8ea 25%, #5eb3d9 60%, #2a6f8f 100%)",
+    ctaText: "#030a0f",
+    ctaShadow: "0 0 24px rgba(168, 216, 234, 0.38)",
+  },
+};
+
 export function PricingContent({ pricingConfig }: PricingContentProps) {
   const loc = useLocalizedHref();
   const { t } = useTranslations();
@@ -66,11 +162,11 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
     {
       id: "bronze",
       icon: Shield,
-      name: "Bronze",
+      name: "Free Access",
       tagline: t("pricingDeep.bronzeTagline" as any),
       bestFor: t("pricingDeep.bronzeBestFor" as any),
-      price: "€0,01",
-      period: t("pricingDeep.period.7days" as any),
+      price: "€0",
+      period: t("pricingDeep.period.free" as any),
       includes: [
         t("pricingDeep.bronzeInc1" as any),
         t("pricingDeep.bronzeInc2" as any),
@@ -83,10 +179,14 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
         t("pricingDeep.bronzeOut1" as any),
         t("pricingDeep.bronzeOut2" as any),
         t("pricingDeep.bronzeOut3" as any),
+        t("pricingDeep.bronzeOut4" as any),
+        t("pricingDeep.bronzeOut5" as any),
       ],
       variant: "blue",
       cta: t("pricingDeep.bronzeCta" as any),
-      ctaHref: (l) => `${l("/checkout")}?plan=bronze`,
+      // Free Access skips Stripe — straight to /register. The backend
+      // creates the account with tier=free, no checkout session.
+      ctaHref: (l) => l("/register"),
     },
     {
       id: "silver",
@@ -113,6 +213,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
         t("pricingDeep.silverOut5" as any),
       ],
       variant: "purple",
+      popular: true,
       cta: t("pricingDeep.silverCta" as any),
       ctaHref: (l) => `${l("/checkout")}?plan=silver`,
     },
@@ -140,7 +241,6 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
         t("pricingDeep.goldOut3" as any),
       ],
       variant: "green",
-      popular: true,
       cta: t("pricingDeep.goldCta" as any),
       ctaHref: (l) => `${l("/checkout")}?plan=gold`,
     },
@@ -222,7 +322,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
   ];
 
   const headerCells: { label: string; variant: "green" | "purple" | "blue" | "amber"; color: string }[] = [
-    { label: "Bronze", variant: "blue", color: "#93c5fd" },
+    { label: "Free Access", variant: "blue", color: "#93c5fd" },
     { label: "Silver", variant: "purple", color: "#d8b4fe" },
     { label: "Gold", variant: "green", color: "#4ade80" },
     { label: "Platinum", variant: "amber", color: "#fbbf24" },
@@ -342,58 +442,62 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
           <div className="grid gap-5 lg:grid-cols-2">
             {plans.map((plan) => {
               const Icon = plan.icon;
-              const isAmber = plan.variant === "amber";
-              const cardClass = isAmber ? "card-neon" : `card-neon card-neon-${plan.variant}`;
+              const tt = TIER_TREATMENT[plan.id];
               return (
                 <div
                   key={plan.id}
-                  className={`${cardClass} p-7 sm:p-8`}
-                  style={
-                    isAmber
-                      ? {
-                          background: "#0f0a02",
-                          borderColor: "rgba(251, 191, 36, 0.3)",
-                        }
-                      : undefined
-                  }
+                  className="card-neon relative p-7 sm:p-8"
+                  style={{
+                    background: tt.bg,
+                    borderColor: tt.borderColor,
+                  }}
                 >
+                  {plan.popular && (
+                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20">
+                      <span
+                        className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-xs font-extrabold uppercase tracking-[0.2em] text-white whitespace-nowrap"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #10b981 0%, #34d399 50%, #10b981 100%)",
+                          border: "1px solid rgba(134, 239, 172, 0.6)",
+                          boxShadow:
+                            "0 10px 30px -5px rgba(16, 185, 129, 0.55), 0 0 0 3px rgba(16, 185, 129, 0.15)",
+                        }}
+                      >
+                        <Star className="h-3.5 w-3.5" />
+                        {t("pricingDeep.pillPopular" as any)}
+                      </span>
+                    </div>
+                  )}
                   <div className="relative">
-                    {isAmber && (
-                      <div
-                        aria-hidden
-                        className="pointer-events-none absolute -inset-1"
-                        style={{ backgroundImage: AMBER_GLOW_BG }}
-                      />
-                    )}
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute -inset-1"
+                      style={{ backgroundImage: tt.glow }}
+                    />
                     <div className="relative flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <HexBadge
-                          variant={isAmber ? "green" : (plan.variant as "green" | "purple" | "blue")}
+                          variant={plan.variant === "amber" ? "green" : (plan.variant as "green" | "purple" | "blue")}
                           size="md"
                         >
                           <Icon className="h-5 w-5" strokeWidth={2} />
                         </HexBadge>
                         <span
                           className="text-[10px] font-semibold uppercase tracking-wider"
-                          style={{ color: isAmber ? "#fbbf24" : undefined }}
+                          style={{ color: tt.accent }}
                         >
                           {t("pricingDeep.planPrefix" as any)} {plan.name}
                         </span>
                       </div>
-                      {plan.popular && (
-                        <Pill tone="active" className="gap-1 text-[10px]">
-                          <Star className="h-3 w-3" />
-                          {t("pricingDeep.pillPopular" as any)}
-                        </Pill>
-                      )}
                       {plan.lifetime && (
                         <Pill
                           tone="default"
                           className="gap-1 text-[10px]"
                           style={{
-                            borderColor: "rgba(251, 191, 36, 0.5)",
-                            backgroundColor: "rgba(251, 191, 36, 0.1)",
-                            color: "#fbbf24",
+                            borderColor: tt.borderColor,
+                            backgroundColor: tt.panelBg,
+                            color: tt.accent,
                           }}
                         >
                           <Crown className="h-3 w-3" />
@@ -404,13 +508,13 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
 
                     <h3
                       className="text-display mt-5 break-words text-3xl sm:text-4xl"
-                      style={{ color: isAmber ? "#fde68a" : "#ededed" }}
+                      style={{ color: tt.accentLight }}
                     >
                       {plan.name}
                     </h3>
                     <p
                       className="mt-2 text-sm"
-                      style={{ color: isAmber ? "rgba(253, 230, 138, 0.7)" : "#a3a9b8" }}
+                      style={{ color: tt.accentMuted }}
                     >
                       {plan.tagline}
                     </p>
@@ -418,7 +522,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                     <div className="mt-5 flex items-baseline gap-2">
                       <span
                         className="text-stat text-4xl sm:text-5xl"
-                        style={{ color: isAmber ? "#fbbf24" : "#ededed" }}
+                        style={{ color: tt.accent }}
                       >
                         {plan.price}
                       </span>
@@ -427,14 +531,10 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
 
                     <div
                       className="glass-panel mt-5 p-4"
-                      style={
-                        isAmber
-                          ? {
-                              borderColor: "rgba(251, 191, 36, 0.25)",
-                              backgroundColor: "rgba(251, 191, 36, 0.04)",
-                            }
-                          : undefined
-                      }
+                      style={{
+                        borderColor: tt.panelBorder,
+                        backgroundColor: tt.panelBg,
+                      }}
                     >
                       <span className="text-[10px] font-semibold uppercase tracking-wider text-[#6b7280]">
                         Best for
@@ -447,7 +547,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                     <div className="mt-6 space-y-2.5">
                       <p
                         className="text-[10px] font-semibold uppercase tracking-wider"
-                        style={{ color: isAmber ? "#fbbf24" : "#4ade80" }}
+                        style={{ color: tt.accent }}
                       >
                         {t("pricingDeep.included" as any)}
                       </p>
@@ -455,7 +555,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                         <div key={item} className="flex items-start gap-3 text-sm">
                           <CheckCircle2
                             className="mt-0.5 h-4 w-4 flex-shrink-0"
-                            style={{ color: isAmber ? "#fbbf24" : "#4ade80" }}
+                            style={{ color: tt.accent }}
                             strokeWidth={2.5}
                           />
                           <span className="text-[#ededed]">{item}</span>
@@ -482,25 +582,18 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
 
                     <Link
                       href={plan.ctaHref(loc)}
-                      className={`mt-8 inline-flex w-full items-center justify-center gap-2 sm:w-auto ${
-                        isAmber ? "" : "btn-primary"
-                      }`}
-                      style={
-                        isAmber
-                          ? {
-                              background:
-                                "linear-gradient(135deg, #fef3c7 0%, #fde68a 25%, #fbbf24 55%, #d97706 100%)",
-                              color: "#1a1405",
-                              padding: "0.85rem 1.5rem",
-                              borderRadius: "9999px",
-                              fontSize: "0.875rem",
-                              fontWeight: 600,
-                              boxShadow: "0 0 24px rgba(251, 191, 36, 0.4)",
-                            }
-                          : undefined
-                      }
+                      className="mt-8 inline-flex w-full items-center justify-center gap-2 sm:w-auto"
+                      style={{
+                        background: tt.ctaGradient,
+                        color: tt.ctaText,
+                        padding: "0.85rem 1.5rem",
+                        borderRadius: "9999px",
+                        fontSize: "0.875rem",
+                        fontWeight: 600,
+                        boxShadow: tt.ctaShadow,
+                      }}
                     >
-                      <Crown className={`h-4 w-4 ${isAmber ? "" : "hidden"}`} />
+                      <Crown className={`h-4 w-4 ${plan.lifetime ? "" : "hidden"}`} />
                       {plan.cta}
                     </Link>
                   </div>
@@ -695,10 +788,10 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               Start Gold
             </Link>
             <Link
-              href={`${loc("/checkout")}?plan=bronze`}
+              href={loc("/register")}
               className="btn-glass inline-flex items-center gap-2"
             >
-              Or try €0,01 first
+              Or start with Free Access
             </Link>
           </div>
         </div>
@@ -872,23 +965,24 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
           <div className="card-neon card-neon-green halo-green p-6 sm:p-10 md:p-16">
             <div className="relative text-center">
               <span className="section-label mb-4">
-                <Sparkles className="h-3 w-3" /> Test the AI against your own bets
+                <Sparkles className="h-3 w-3" /> Try the AI before you spend a cent
               </span>
               <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
-                Start for €0,01.{" "}
-                <span className="gradient-text-green">Decide once the numbers land.</span>
+                Start free.{" "}
+                <span className="gradient-text-green">Upgrade once the numbers land.</span>
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
-                Seven days of full Gold access. No auto-upgrade. Cancel in two
-                clicks. Compare our AI football predictions with your own bets
-                for a week, then decide — we'd rather you see results than trust words.
+                Free Access creates an account in seconds — no card, no billing.
+                Browse every prediction, see which picks win or lose, follow the
+                Pick of the Day. Upgrade only when you want odds, simulated
+                returns and the full tier ladder.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
-                  href={`${loc("/checkout")}?plan=bronze`}
+                  href={loc("/register")}
                   className="btn-primary inline-flex items-center gap-2"
                 >
-                  Claim €0,01 trial
+                  Create free account
                 </Link>
                 <Link
                   href={loc("/track-record")}
@@ -898,7 +992,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
                 </Link>
               </div>
               <p className="mt-5 text-xs text-[#6b7280]">
-                Secured by Stripe · No hidden fees · Winners &amp; losers published on the track record
+                No card required · No hidden fees · Winners &amp; losers published on the track record
               </p>
             </div>
           </div>

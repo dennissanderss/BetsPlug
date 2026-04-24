@@ -1009,8 +1009,8 @@ async def get_results(
     days: int = Query(
         default=7,
         ge=1,
-        le=90,
-        description="How many days back to retrieve results (1–90).",
+        le=365,
+        description="How many days back to retrieve results (1–365).",
     ),
     league_slug: Optional[str] = Query(
         default=None, description="Filter by league slug."

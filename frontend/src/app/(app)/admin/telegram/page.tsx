@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Admin UI for the @BetsPlug Telegram auto-poster.
+ * Admin UI for the @BetsPluggs Telegram auto-poster.
  *
  * Lives inside the authed `(app)` route group so `api.ts` already
  * attaches the admin bearer token automatically — no DevTools Console
@@ -125,7 +125,7 @@ export default function TelegramAdminPage() {
     <div className="mx-auto max-w-4xl p-6 sm:p-8">
       <div className="mb-8">
         <h1 className="text-heading text-3xl text-[#ededed]">
-          Telegram · <span className="gradient-text-green">@BetsPluggs auto-poster</span>
+          Telegram · <span className="gradient-text-green">@BetsPluggsgs auto-poster</span>
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-[#a3a9b8]">
           Test, force, en observeer de Telegram publisher. De scheduler draait
@@ -172,7 +172,7 @@ export default function TelegramAdminPage() {
         <JsonBlock data={queue} />
       </Section>
 
-      <Section title="3 · Force post — nu een Free pick naar @BetsPluggs sturen">
+      <Section title="3 · Force post — nu een Free pick naar @BetsPluggsgs sturen">
         <p className="mb-3 text-sm text-[#a3a9b8]">
           <strong className="text-amber-300">Let op:</strong> dit post écht naar het
           publieke kanaal. Gebruik eerst Health + Queue om te verifiëren dat alles klopt.

@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
+import Link from "next/link";
 import { useTranslations } from "@/i18n/locale-provider";
 import {
   Sparkles,
@@ -21,7 +22,9 @@ import {
   Check,
   Search,
   ShieldCheck,
+  Lock,
 } from "lucide-react";
+import { useTier } from "@/hooks/use-tier";
 import { api } from "@/lib/api";
 import type { Fixture, FixturePrediction } from "@/types/api";
 import { UpsellBanner } from "@/components/ui/upsell-banner";
@@ -312,7 +315,7 @@ function formatDateShort(iso: string): string {
   }
 }
 
-function CompactMatchRow({ fixture }: { fixture: Fixture }) {
+function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolean }) {
   const { t } = useTranslations();
   const pred: FixturePrediction | null = fixture.prediction ?? null;
   const hasPrediction = pred !== null && typeof pred.confidence === "number";
@@ -449,11 +452,24 @@ function CompactMatchRow({ fixture }: { fixture: Fixture }) {
           )}
         </div>
 
-        {/* Odds — col 4 (desktop only) */}
+        {/* Odds — col 4 (desktop only). Locked for Free Access. */}
         <div className="hidden sm:flex col-span-3 items-center justify-center gap-1.5">
-          <OddButton label="1" value={fixture.odds?.home ?? null} highlighted={modelPick === "home"} />
-          <OddButton label="X" value={fixture.odds?.draw ?? null} highlighted={modelPick === "draw"} />
-          <OddButton label="2" value={fixture.odds?.away ?? null} highlighted={modelPick === "away"} />
+          {isFree ? (
+            <Link
+              href="/pricing"
+              title="Upgrade to Silver to view pre-match odds"
+              className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:text-amber-300 hover:border-amber-500/40 transition-colors"
+            >
+              <Lock className="h-3 w-3" />
+              Silver
+            </Link>
+          ) : (
+            <>
+              <OddButton label="1" value={fixture.odds?.home ?? null} highlighted={modelPick === "home"} />
+              <OddButton label="X" value={fixture.odds?.draw ?? null} highlighted={modelPick === "draw"} />
+              <OddButton label="2" value={fixture.odds?.away ?? null} highlighted={modelPick === "away"} />
+            </>
+          )}
         </div>
 
         {/* Confidence bar + correctness */}
@@ -540,10 +556,12 @@ function LeagueSection({
   leagueName,
   fixtures,
   defaultOpen = true,
+  isFree,
 }: {
   leagueName: string;
   fixtures: Fixture[];
   defaultOpen?: boolean;
+  isFree: boolean;
 }) {
   const { t } = useTranslations();
   const [open, setOpen] = useState(defaultOpen);
@@ -591,7 +609,7 @@ function LeagueSection({
             <span className="col-span-2">{t("pred.colConfidence")}</span>
           </div>
           {fixtures.map((f) => (
-            <CompactMatchRow key={f.id} fixture={f} />
+            <CompactMatchRow key={f.id} fixture={f} isFree={isFree} />
           ))}
         </div>
       )}
@@ -606,9 +624,11 @@ function DateSection({
   dateIso,
   fixtures,
   defaultOpen = true,
+  isFree,
 }: {
   dateIso: string;
   fixtures: Fixture[];
+  isFree: boolean;
   defaultOpen?: boolean;
 }) {
   const { t, locale } = useTranslations();
@@ -698,7 +718,7 @@ function DateSection({
             <span className="col-span-2">{t("pred.colConfidence")}</span>
           </div>
           {fixtures.map((f) => (
-            <CompactMatchRow key={f.id} fixture={f} />
+            <CompactMatchRow key={f.id} fixture={f} isFree={isFree} />
           ))}
         </div>
       )}
@@ -780,6 +800,8 @@ interface FilterBarProps {
   availableLeagues: string[];
   /** Map league_name → country (from API fixture data). */
   leagueCountryMap: Map<string, string>;
+  /** Current user's subscription tier — gates higher-tier filter buttons. */
+  userTier: "free" | "silver" | "gold" | "platinum";
 }
 
 function FilterBar({
@@ -794,8 +816,11 @@ function FilterBar({
   total,
   availableLeagues,
   leagueCountryMap,
+  userTier,
 }: FilterBarProps) {
   const { t } = useTranslations();
+  const USER_RANK: Record<string, number> = { free: 0, silver: 1, gold: 2, platinum: 3 };
+  const userRank = USER_RANK[userTier];
   const [leagueDropdownOpen, setLeagueDropdownOpen] = useState(false);
   const [leagueSearch, setLeagueSearch] = useState("");
 
@@ -1049,19 +1074,27 @@ function FilterBar({
           </span>
           <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
             {([
-              { value: "All" as const, label: "All", icon: null },
-              { value: "platinum" as const, label: "Platinum", icon: "🟢" },
-              { value: "gold" as const, label: "Gold", icon: "🔵" },
-              { value: "silver" as const, label: "Silver", icon: "⚪" },
-              { value: "free" as const, label: "Free", icon: "⬜" },
+              { value: "All" as const, label: "All", icon: null, rank: 0 },
+              { value: "platinum" as const, label: "Platinum", icon: "🟢", rank: 3 },
+              { value: "gold" as const, label: "Gold", icon: "🔵", rank: 2 },
+              { value: "silver" as const, label: "Silver", icon: "⚪", rank: 1 },
+              { value: "free" as const, label: "Free", icon: "⬜", rank: 0 },
             ]).map((opt) => {
               const active = tierFilter === opt.value;
+              const locked = opt.value !== "All" && opt.rank > userRank;
+              const unlockLabel =
+                opt.value === "silver" ? "Silver" :
+                opt.value === "gold" ? "Gold" :
+                opt.value === "platinum" ? "Platinum" : "Upgrade";
               return (
                 <button
                   key={opt.value}
-                  onClick={() => setTierFilter(opt.value)}
+                  disabled={locked}
+                  onClick={() => !locked && setTierFilter(opt.value)}
                   className={`flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-semibold transition-all ${
-                    active
+                    locked
+                      ? "text-slate-600 cursor-not-allowed"
+                      : active
                       ? opt.value === "platinum"
                         ? "bg-amber-500/20 text-amber-300 border border-amber-400/40"
                         : opt.value === "gold"
@@ -1073,10 +1106,11 @@ function FilterBar({
                         : "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
                       : "text-slate-400 hover:text-slate-200"
                   }`}
-                  title={opt.value === "All" ? "Show all tiers" : `Show only ${opt.label} picks`}
+                  title={locked ? `Upgrade to ${unlockLabel} to filter these picks` : opt.value === "All" ? "Show all tiers" : `Show only ${opt.label} picks`}
                 >
                   {opt.icon && <span>{opt.icon}</span>}
                   <span>{opt.label}</span>
+                  {locked && <Lock className="h-2.5 w-2.5 text-amber-400/80" />}
                 </button>
               );
             })}
@@ -1140,6 +1174,8 @@ function todayIsoDate(): string {
 
 export default function PredictionsPage() {
   const { t } = useTranslations();
+  const { tier: userTier } = useTier();
+  const isFree = userTier === "free";
   const [leagueFilter,     setLeagueFilter]     = useState<LeagueFilter>("All");
   const [confidenceFilter, setConfidenceFilter] = useState<ConfidenceFilter>("All");
   const [tierFilter,       setTierFilter]       = useState<TierFilter>("All");
@@ -1383,32 +1419,28 @@ export default function PredictionsPage() {
         </Pill>
       </div>
 
-      {/* ── v8.6: View Mode Tabs — Upcoming / Results only ── */}
+      {/* ── v8.6: View Mode Tabs — Upcoming here, Results redirects to /results ── */}
       <div className="flex items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1">
-        {(
-          [
-            { key: "upcoming" as const, label: t("pred.upcoming"), icon: CalendarDays },
-            { key: "results" as const, label: t("results.title"), icon: Trophy },
-          ]
-        ).map(({ key, label, icon: Icon }) => {
-          const active = viewMode === key;
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setViewMode(key)}
-              className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
-                active
-                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-              aria-pressed={active}
-            >
-              <Icon className="h-4 w-4" />
-              <span>{label}</span>
-            </button>
-          );
-        })}
+        <button
+          type="button"
+          onClick={() => setViewMode("upcoming")}
+          className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
+            viewMode === "upcoming"
+              ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+              : "text-slate-400 hover:text-slate-200"
+          }`}
+          aria-pressed={viewMode === "upcoming"}
+        >
+          <CalendarDays className="h-4 w-4" />
+          <span>{t("pred.upcoming")}</span>
+        </button>
+        <Link
+          href="/results"
+          className="flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-all"
+        >
+          <Trophy className="h-4 w-4" />
+          <span>{t("pred.resultsTab")}</span>
+        </Link>
       </div>
 
       {/* ── Upcoming-mode guidance banner ── */}
@@ -1570,6 +1602,7 @@ export default function PredictionsPage() {
         total={filtered.length}
         availableLeagues={availableLeagues}
         leagueCountryMap={leagueCountryMap}
+        userTier={userTier}
       />
 
       {/* ── Content ── */}
@@ -1667,6 +1700,7 @@ export default function PredictionsPage() {
               dateIso={group.date}
               fixtures={group.fixtures}
               defaultOpen={i < 3}
+              isFree={isFree}
             />
           ))}
         </div>
@@ -1679,6 +1713,7 @@ export default function PredictionsPage() {
               leagueName={group.name}
               fixtures={group.fixtures}
               defaultOpen
+              isFree={isFree}
             />
           ))}
         </div>

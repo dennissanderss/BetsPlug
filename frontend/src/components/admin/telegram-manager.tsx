@@ -3,7 +3,7 @@
 /**
  * Telegram auto-poster admin tab.
  *
- * Single-stop dashboard for the @BetsPlug publisher:
+ * Single-stop dashboard for the @BetsPluggs publisher:
  *   · top strip: bot/token health + per-channel stat cards
  *   · middle : queue preview + four operational buttons
  *   · bottom : recent post history table
@@ -25,6 +25,8 @@ import {
   Zap,
   ClipboardList,
   Megaphone,
+  Trash2,
+  Sparkles,
 } from "lucide-react";
 
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -108,23 +110,52 @@ async function adminCall<T>(
     typeof window !== "undefined"
       ? window.localStorage.getItem("betsplug_token")
       : null;
-  const res = await fetch(`${API_BASE}${path}`, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}${path}`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch (e) {
+    // Network / CORS failure — fetch rejects before we even get a status
+    // code. Surface the raw error message so the operator sees e.g.
+    // "Failed to fetch" instead of a generic "doesn't do anything".
+    throw new Error(
+      `Network error: ${e instanceof Error ? e.message : String(e)}`,
+    );
+  }
   const text = await res.text();
-  const json = text ? JSON.parse(text) : null;
+  // Railway error pages and CDN 502s return HTML, which crashes
+  // JSON.parse. Guard so the caller gets a legible error including the
+  // status code + a body snippet instead of a cryptic SyntaxError.
+  let json: unknown = null;
+  if (text) {
+    try {
+      json = JSON.parse(text);
+    } catch {
+      if (!res.ok) {
+        throw new Error(
+          `HTTP ${res.status} (non-JSON): ${text.slice(0, 200)}`,
+        );
+      }
+      // Successful response but not JSON — return the raw text so
+      // typed callers can at least see something.
+      return text as unknown as T;
+    }
+  }
   if (!res.ok) {
     const detail =
       json && typeof json === "object" && "detail" in json
         ? (json as { detail?: unknown }).detail
         : json;
     throw new Error(
-      typeof detail === "string" ? detail : `HTTP ${res.status}`,
+      typeof detail === "string"
+        ? `HTTP ${res.status}: ${detail}`
+        : `HTTP ${res.status}${detail ? `: ${JSON.stringify(detail).slice(0, 200)}` : ""}`,
     );
   }
   return json as T;
@@ -149,6 +180,7 @@ function PostTypePill({ type }: { type: string }) {
     result_update: { tone: "info", label: "Result" },
     daily_summary: { tone: "draw", label: "Summary" },
     promo: { tone: "default", label: "Promo" },
+    welcome: { tone: "info", label: "Welcome" },
   };
   const cfg = map[type] ?? { tone: "default" as const, label: type };
   return (
@@ -508,7 +540,7 @@ export default function TelegramManager() {
             <Send className="h-4 w-4" />
           </HexBadge>
           <div>
-            <p className="section-label">@BetsPlug auto-poster</p>
+            <p className="section-label">@BetsPluggs auto-poster</p>
             <p className="mt-0.5 text-sm text-[#ededed]">
               {health ? (
                 health.bot ? (
@@ -616,7 +648,7 @@ export default function TelegramManager() {
               icon={<Send className="h-3.5 w-3.5" />}
               label="Post next pick"
               variant="primary"
-              desc="Plaatst nu de eerstvolgende Free-tier pick in @BetsPluggs, zonder te wachten op de 11/15/19 CET cron."
+              desc="Plaatst nu de eerstvolgende Free-tier pick in @BetsPluggsgs, zonder te wachten op de 11/15/19 CET cron."
             />
             <ActionRow
               onClick={() =>
@@ -636,6 +668,23 @@ export default function TelegramManager() {
               icon={<ClipboardList className="h-3.5 w-3.5" />}
               label="Post daily summary"
               desc="Post het NL/EN dagoverzicht van vandaag (scheduled 23:00 CET). Skipt als er nog geen picks van vandaag staan."
+            />
+            <ActionRow
+              onClick={() =>
+                runAction(
+                  "welcome",
+                  () => adminCall<PostSummary>("/admin/telegram/post-welcome", "POST"),
+                  (r) => {
+                    const p = r as PostSummary;
+                    return `Welcome message gepost · msg_id ${p.telegram_message_id} · vergeet niet te pinnen in Telegram`;
+                  },
+                )
+              }
+              busy={busyAction === "welcome"}
+              anyBusy={busyAction !== null}
+              icon={<Sparkles className="h-3.5 w-3.5" />}
+              label="Post welcome message"
+              desc="Plaatst het intro/welkomstbericht van het kanaal. Vergeet niet 'm daarna te pinnen in Telegram (bot heeft geen pin-rechten)."
             />
             <ActionRow
               onClick={() =>
@@ -673,6 +722,72 @@ export default function TelegramManager() {
               label="Run result sweep"
               desc="Loopt alle pending picks na en plaatst een ✅/❌ reply onder eerdere posts zodra de uitslag binnen is. Cron 15 min."
             />
+
+            {/* Danger zone — visually separated so a slip of the finger
+                doesn't nuke the channel. Double-confirm below. */}
+            <div className="mt-2 space-y-1.5 border-t border-red-500/20 pt-3">
+              <button
+                type="button"
+                disabled={busyAction !== null}
+                onClick={() => {
+                  const ok = window.confirm(
+                    "DESTRUCTIVE — this deletes EVERY auto-posted message " +
+                      "from @BetsPluggs (picks, results, summaries, promos) " +
+                      "and wipes their audit rows.\n\n" +
+                      "The pinned WELCOME message is preserved.\n\n" +
+                      "The Telegram bot needs 'Delete Messages' admin rights " +
+                      "or some posts will remain.\n\n" +
+                      "A fresh Free-tier pick will be published right after.\n\n" +
+                      "Continue?",
+                  );
+                  if (!ok) return;
+                  runAction(
+                    "wipe",
+                    () =>
+                      adminCall<{
+                        wipe: {
+                          deleted: number;
+                          missing: number;
+                          db_removed: number;
+                          preserved: number;
+                        };
+                        next_post: PostSummary | null;
+                      }>("/admin/telegram/wipe?repost_next=true", "POST"),
+                    (r) => {
+                      const typed = r as {
+                        wipe: {
+                          deleted: number;
+                          missing: number;
+                          db_removed: number;
+                          preserved: number;
+                        };
+                        next_post: PostSummary | null;
+                      };
+                      const parts = [
+                        `${typed.wipe.deleted} verwijderd`,
+                        typed.wipe.missing > 0 ? `${typed.wipe.missing} al weg` : null,
+                        typed.wipe.preserved > 0
+                          ? `${typed.wipe.preserved} welcome behouden`
+                          : null,
+                        typed.next_post
+                          ? `nieuwe pick msg_id ${typed.next_post.telegram_message_id}`
+                          : "geen nieuwe pick (niks eligible)",
+                      ].filter(Boolean);
+                      return `Kanaal gereset · ${parts.join(" · ")}`;
+                    },
+                  );
+                }}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2.5 text-sm font-semibold text-red-200 transition hover:border-red-500/70 hover:bg-red-500/20 disabled:opacity-50"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                {busyAction === "wipe" ? "Bezig…" : "Wipe channel + fresh post"}
+              </button>
+              <p className="px-1 text-[11px] leading-snug text-red-300/70">
+                Verwijdert alle auto-berichten uit @BetsPluggs (picks, results, summaries,
+                promos) via de Bot API en wist hun audit. De gepinde welcome blijft staan.
+                Post meteen de eerstvolgende Free-tier pick onder de nieuwe EN-only template.
+              </p>
+            </div>
           </div>
         </div>
       </div>

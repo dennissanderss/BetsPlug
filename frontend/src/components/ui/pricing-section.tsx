@@ -48,6 +48,67 @@ interface PricingSectionProps {
   pricingConfig?: any;
 }
 
+/**
+ * Per-tier shiny treatment for the homepage pricing cards.
+ *
+ * Gives Bronze/Silver/Gold the same elegant "tinted gradient
+ * background + ambient coloured glow blobs + accent ring" recipe
+ * that the Platinum Lifetime card uses further down the page, but
+ * in each tier's signature metallic colour.
+ */
+interface HomeTierTreatment {
+  bg: string;
+  glowA: string;
+  glowB: string;
+  borderColor: string;
+  innerShadow: string;
+  checkColor: string;
+  checkDrop: string;
+}
+
+const HOME_TIER_TREATMENT: Record<TierKey, HomeTierTreatment> = {
+  bronze: {
+    bg: "linear-gradient(135deg, hsl(26 55% 10%) 0%, hsl(22 45% 6%) 50%, hsl(28 55% 9%) 100%)",
+    glowA: "bg-[#e8a864]/[0.14]",
+    glowB: "bg-[#b87333]/[0.10]",
+    borderColor: "rgba(232, 168, 100, 0.28)",
+    innerShadow:
+      "0 20px 50px -15px rgba(232, 168, 100, 0.30), 0 0 0 1px rgba(232, 168, 100, 0.18) inset",
+    checkColor: "#e8a864",
+    checkDrop: "drop-shadow(0 0 6px rgba(232, 168, 100, 0.55))",
+  },
+  silver: {
+    bg: "linear-gradient(135deg, hsl(220 8% 12%) 0%, hsl(220 6% 7%) 50%, hsl(220 8% 11%) 100%)",
+    glowA: "bg-[#e5e4e2]/[0.10]",
+    glowB: "bg-[#8a8d91]/[0.08]",
+    borderColor: "rgba(229, 228, 226, 0.26)",
+    innerShadow:
+      "0 20px 50px -15px rgba(229, 228, 226, 0.22), 0 0 0 1px rgba(229, 228, 226, 0.18) inset",
+    checkColor: "#e5e4e2",
+    checkDrop: "drop-shadow(0 0 6px rgba(229, 228, 226, 0.55))",
+  },
+  gold: {
+    bg: "linear-gradient(135deg, hsl(42 60% 12%) 0%, hsl(38 55% 7%) 50%, hsl(42 60% 11%) 100%)",
+    glowA: "bg-[#f5d67a]/[0.16]",
+    glowB: "bg-[#b8860b]/[0.10]",
+    borderColor: "rgba(245, 214, 122, 0.30)",
+    innerShadow:
+      "0 20px 50px -15px rgba(245, 214, 122, 0.35), 0 0 0 1px rgba(245, 214, 122, 0.20) inset",
+    checkColor: "#f5d67a",
+    checkDrop: "drop-shadow(0 0 6px rgba(245, 214, 122, 0.60))",
+  },
+  platinum: {
+    bg: "linear-gradient(135deg, hsl(200 55% 14%) 0%, hsl(205 45% 9%) 50%, hsl(210 55% 12%) 100%)",
+    glowA: "bg-sky-300/[0.16]",
+    glowB: "bg-cyan-400/[0.12]",
+    borderColor: "rgba(168, 216, 234, 0.30)",
+    innerShadow:
+      "0 20px 50px -15px rgba(94, 179, 217, 0.38), 0 0 0 1px rgba(217, 240, 255, 0.20) inset",
+    checkColor: "#a8d8ea",
+    checkDrop: "drop-shadow(0 0 6px rgba(168, 216, 234, 0.55))",
+  },
+};
+
 export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
@@ -99,7 +160,10 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
   const goldSanity = getSanityPlan("gold");
   const platSanity = getSanityPlan("platinum");
 
-  const bronzePrice = bronzeSanity?.monthlyPrice != null ? splitPrice(bronzeSanity.monthlyPrice) : { main: "0", cents: "01" };
+  // Free Access is always €0 — Sanity CMS still carries the legacy
+  // €0.01 trial value, which would otherwise surface as "€ 0,01 forever".
+  // Hardcode the display so the promise on the site can't drift.
+  const bronzePrice = { main: "0", cents: "00" };
   const silverMonthly = silverSanity?.monthlyPrice != null ? splitPrice(silverSanity.monthlyPrice) : { main: "9", cents: "99" };
   const silverYearly = silverSanity?.yearlyPrice != null ? splitPrice(silverSanity.yearlyPrice) : { main: "7", cents: "99" };
   const goldMonthly = goldSanity?.monthlyPrice != null ? splitPrice(goldSanity.monthlyPrice) : { main: "14", cents: "99" };
@@ -109,7 +173,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
   const plans: Plan[] = [
     {
       id: "bronze",
-      name: "Bronze",
+      name: "Free Access",
       icon: Shield,
       tier: "bronze",
       tagline: t("pricing.bronzeTagline"),
@@ -146,6 +210,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
       },
       cta: t("pricing.silverCta"),
       accent: "purple",
+      highlight: true,
       features: [
         t("pricing.silverF1"),
         t("pricing.silverF2"),
@@ -172,7 +237,6 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
         period: t("pricing.perMonth"),
         footnote: t("pricing.billedYearlyGold"),
       },
-      highlight: true,
       cta: t("pricing.goldCta"),
       accent: "green",
       features: [
@@ -318,31 +382,50 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
           {plans.map((plan) => {
             const Icon = plan.icon;
             const isHighlight = plan.highlight;
-            const accent = plan.accent;
-            const cardClass =
-              accent === "green"
-                ? "card-neon card-neon-green"
-                : accent === "purple"
-                  ? "card-neon card-neon-purple"
-                  : "card-neon card-neon-blue";
+            const tt = HOME_TIER_TREATMENT[plan.tier];
             return (
               <div
                 key={plan.id}
-                className={`${cardClass} relative flex flex-col p-8 ${
-                  isHighlight ? "halo-green md:-translate-y-4" : ""
+                className={`card-neon relative flex flex-col p-8 ${
+                  isHighlight ? "md:-translate-y-4" : ""
                 }`}
+                style={{
+                  background: tt.bg,
+                  borderColor: tt.borderColor,
+                  boxShadow: tt.innerShadow,
+                }}
               >
-                {/* Background glow blob for popular */}
+                {/* Most-chosen ribbon — big, centred, half-outside the card
+                    top edge so it jumps out of the grid. Uses emerald
+                    gradient so it reads as a primary-action accent
+                    regardless of the Silver card's cooler palette. */}
                 {isHighlight && (
-                  <div className="pointer-events-none absolute -right-16 -top-16 h-[280px] w-[280px] rounded-full bg-[#4ade80]/[0.08] blur-[100px]" />
+                  <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20">
+                    <span
+                      className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-xs font-extrabold uppercase tracking-[0.2em] text-white whitespace-nowrap"
+                      style={{
+                        background:
+                          "linear-gradient(135deg, #10b981 0%, #34d399 50%, #10b981 100%)",
+                        border: "1px solid rgba(134, 239, 172, 0.6)",
+                        boxShadow:
+                          "0 10px 30px -5px rgba(16, 185, 129, 0.55), 0 0 0 3px rgba(16, 185, 129, 0.15)",
+                      }}
+                    >
+                      <Sparkles className="h-3.5 w-3.5" />
+                      {t("pricing.mostChosen")}
+                    </span>
+                  </div>
                 )}
 
+                {/* Tier-coloured ambient glow blobs — top-right + bottom-left */}
+                <div
+                  className={`pointer-events-none absolute -right-20 -top-20 h-[320px] w-[320px] rounded-full blur-[120px] ${tt.glowA}`}
+                />
+                <div
+                  className={`pointer-events-none absolute -left-24 -bottom-24 h-[280px] w-[280px] rounded-full blur-[120px] ${tt.glowB}`}
+                />
+
                 <div className="relative flex flex-1 flex-col">
-                  {isHighlight && (
-                    <Pill tone="active" className="absolute right-0 top-0">
-                      <Sparkles className="h-3 w-3" /> Popular
-                    </Pill>
-                  )}
 
                   {/* Plan icon — TierEmblem renders the Roman numeral
                       in the authentic metallic tier colour (bronze =
@@ -403,16 +486,28 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                     );
                   })()}
 
-                  {/* CTA */}
-                  <button
-                    onClick={() => handleStripeCheckout(plan.id)}
-                    disabled={loading === plan.id}
-                    className={`${isHighlight ? "btn-primary" : "btn-glass"} mb-6 w-full justify-center ${
-                      loading === plan.id ? "cursor-wait opacity-50" : ""
-                    }`}
-                  >
-                    {loading === plan.id ? "Redirecting…" : plan.cta}
-                  </button>
+                  {/* CTA — Free Access bypasses Stripe entirely and
+                      drops the visitor straight into /register. The
+                      backend creates the user with tier=free, no
+                      checkout session, no card. */}
+                  {plan.id === "bronze" ? (
+                    <Link
+                      href={loc("/register")}
+                      className={`${isHighlight ? "btn-primary" : "btn-glass"} mb-6 w-full justify-center`}
+                    >
+                      {plan.cta}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => handleStripeCheckout(plan.id)}
+                      disabled={loading === plan.id}
+                      className={`${isHighlight ? "btn-primary" : "btn-glass"} mb-6 w-full justify-center ${
+                        loading === plan.id ? "cursor-wait opacity-50" : ""
+                      }`}
+                    >
+                      {loading === plan.id ? "Redirecting…" : plan.cta}
+                    </button>
+                  )}
 
                   {/* Features */}
                   <ul className="flex flex-col gap-3">
@@ -422,8 +517,12 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
                         className="flex items-start gap-3 text-sm text-[#ededed]"
                       >
                         <Check
-                          className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#4ade80]"
+                          className="mt-0.5 h-4 w-4 flex-shrink-0"
                           strokeWidth={3}
+                          style={{
+                            color: tt.checkColor,
+                            filter: tt.checkDrop,
+                          }}
                         />
                         <span className="text-[#cfd3dc]">{f}</span>
                       </li>

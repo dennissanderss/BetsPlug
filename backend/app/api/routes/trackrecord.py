@@ -43,6 +43,24 @@ _NUM_CALIBRATION_BUCKETS = 10
 LIVE_MEASUREMENT_START = datetime(2026, 4, 16, 11, 0, 0, tzinfo=timezone.utc)
 
 
+def _wilson_ci(successes: int, n: int, z: float = 1.96) -> tuple[float, float]:
+    """Wilson 95% confidence interval on a Bernoulli proportion.
+
+    Returns (lower_bound, upper_bound) in [0, 1]. When ``n == 0`` returns
+    (0.0, 0.0) so the JSON output stays well-formed. Used on track-record
+    endpoints so the frontend can render "X% accuracy with 95% CI" next to
+    every headline number.
+    """
+    if n <= 0:
+        return (0.0, 0.0)
+    import math
+    p = successes / n
+    denom = 1.0 + z * z / n
+    center = p + z * z / (2.0 * n)
+    spread = z * math.sqrt(p * (1.0 - p) / n + z * z / (4.0 * n * n))
+    return (max(0.0, (center - spread) / denom), min(1.0, (center + spread) / denom))
+
+
 def _parse_public_pick_tier(slug: Optional[str]) -> Optional[PickTier]:
     """Parse the PUBLIC ``?pick_tier=`` query param used by the trackrecord
     page's tier-selector tabs.
@@ -186,17 +204,24 @@ async def get_trackrecord_summary(
             t_int = int(tier_int)
             t_correct_int = int(t_correct or 0)
             slug = TIER_METADATA[PickTier(t_int)]["slug"]
+            tier_lo, tier_hi = _wilson_ci(t_correct_int, total_int)
             per_tier[slug] = {
                 "total": total_int,
                 "correct": t_correct_int,
                 "accuracy": float(t_correct_int / total_int) if total_int else 0.0,
+                "wilson_ci_low": round(tier_lo, 4),
+                "wilson_ci_high": round(tier_hi, 4),
             }
+
+    overall_lo, overall_hi = _wilson_ci(correct, total)
 
     return TrackrecordSummary(
         model_version_id=model_version_id,
         total_predictions=total,
         correct_predictions=correct,
         accuracy=accuracy,
+        wilson_ci_low=round(overall_lo, 4),
+        wilson_ci_high=round(overall_hi, 4),
         brier_score=avg_brier,
         log_loss=avg_log_loss,
         avg_confidence=avg_confidence,
@@ -278,6 +303,87 @@ async def get_live_measurement(
         "total": total_all,
         "correct": correct_all,
         "accuracy": (correct_all / total_all) if total_all else 0.0,
+        "per_tier": per_tier,
+    }
+
+
+@router.get(
+    "/accuracy-plus",
+    summary="Preview of the odds-verified accuracy engine — locked until threshold",
+)
+async def get_accuracy_plus_preview(
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Spoor 2: 'Accuracy Pro Engine v2' surface.
+
+    Counts evaluated pre-match predictions that have real bookmaker odds
+    (closing_odds_snapshot with bookmaker_odds populated), per tier.
+    Returns a progress dict so the frontend can render a locked preview
+    with a live-growing counter. Only when total_picks >= UNLOCK_THRESHOLD
+    will the frontend unlock the per-tier numbers.
+
+    Dataset starts at 2026-04-16 and grows daily.
+    """
+    from sqlalchemy import Integer as _Int
+    from sqlalchemy import or_
+
+    UNLOCK_THRESHOLD = 100
+
+    tier_expr = pick_tier_expression() if TIER_SYSTEM_ENABLED else None
+
+    base_where = [
+        Prediction.predicted_at <= Match.scheduled_at,
+        Prediction.created_at >= LIVE_MEASUREMENT_START,
+        Prediction.closing_odds_snapshot.is_not(None),
+    ]
+
+    stmt = (
+        select(
+            tier_expr.label("tier") if tier_expr is not None else Prediction.match_id,
+            func.count(PredictionEvaluation.id).label("total"),
+            func.sum(func.cast(PredictionEvaluation.is_correct, _Int)).label("correct"),
+        )
+        .join(Prediction, Prediction.id == PredictionEvaluation.prediction_id)
+        .join(Match, Match.id == Prediction.match_id)
+    )
+    for w in base_where:
+        stmt = stmt.where(w)
+    if tier_expr is not None:
+        stmt = stmt.group_by(tier_expr)
+
+    rows = (await db.execute(stmt)).all()
+
+    per_tier: dict = {}
+    total_all = 0
+    correct_all = 0
+    for r in rows:
+        t = int(r.total or 0)
+        c = int(r.correct or 0)
+        total_all += t
+        correct_all += c
+        if tier_expr is not None and r.tier is not None:
+            try:
+                slug = TIER_METADATA[PickTier(int(r.tier))]["slug"]
+            except Exception:
+                continue
+            per_tier[slug] = {"total": t, "correct": c, "accuracy": (c / t) if t else 0.0}
+
+    if TIER_SYSTEM_ENABLED:
+        for slug in ("free", "silver", "gold", "platinum"):
+            per_tier.setdefault(slug, {"total": 0, "correct": 0, "accuracy": 0.0})
+
+    unlocked = total_all >= UNLOCK_THRESHOLD
+
+    return {
+        "title": "Accuracy Pro Engine v2",
+        "subtitle": "Verbeterde versie van de Accuracy Engine — inclusief pre-match bookmaker-odds validatie",
+        "status": "unlocked" if unlocked else "locked",
+        "unlock_threshold": UNLOCK_THRESHOLD,
+        "start_date": LIVE_MEASUREMENT_START.date().isoformat(),
+        "current_picks": total_all,
+        "correct_picks": correct_all,
+        "accuracy": (correct_all / total_all) if total_all else 0.0,
+        "progress_pct": min(100.0, round(total_all / UNLOCK_THRESHOLD * 100.0, 1)),
         "per_tier": per_tier,
     }
 

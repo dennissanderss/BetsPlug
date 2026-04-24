@@ -390,7 +390,7 @@ function ThankYouContent({
           >
             <span className="section-label">
               <CheckCircle2 className="h-3 w-3" />
-              {isTrial ? "€0,01 trial charged · Welcome aboard" : "Payment confirmed · Welcome aboard"}
+              {isTrial ? "Free trial active · Welcome aboard" : "Payment confirmed · Welcome aboard"}
             </span>
           </motion.div>
 

@@ -1,4 +1,4 @@
-"""High-level @BetsPlug publishing orchestration.
+"""High-level @BetsPluggs publishing orchestration.
 
 Sits between the dumb `telegram_service` (HTTP wrapper) and the
 scheduler tasks / admin endpoints. Decides *which* prediction to post
@@ -46,6 +46,7 @@ from app.models.prediction import Prediction, PredictionEvaluation
 from app.models.telegram_post import TelegramPost
 from app.services.telegram_service import (
     TelegramError,
+    delete_message,
     post_to_channel,
     update_message,
 )
@@ -55,6 +56,7 @@ from app.services.telegram_templates import (
     render_pick_with_graded_banner,
     render_promo_message,
     render_result_update,
+    render_welcome_message,
 )
 
 
@@ -72,7 +74,7 @@ def _resolve_channel(channel: Optional[str]) -> str:
     """Resolve the target channel: explicit arg > test override > prod default.
 
     The ``TELEGRAM_CHANNEL_TEST`` env var is a safety hatch for staging
-    so a misconfigured job never posts to @BetsPlug by accident. When
+    so a misconfigured job never posts to @BetsPluggs by accident. When
     set, scheduled tasks route there instead of the production handle.
     """
     if channel:
@@ -579,12 +581,116 @@ async def update_all_pending_results(
     return updated
 
 
+async def publish_welcome(
+    db: AsyncSession, channel: Optional[str] = None
+) -> TelegramPost:
+    """Post the channel's welcome/intro message.
+
+    Meant to be pinned manually in the Telegram client after posting —
+    the Bot API's ``pinChatMessage`` requires the bot to have pin
+    rights, which we don't assume here. Using ``post_type='welcome'``
+    so the admin post-history table can distinguish it from picks,
+    summaries and promos.
+    """
+    target = _resolve_channel(channel)
+    body = render_welcome_message()
+    message_id = await post_to_channel(target, body)
+
+    welcome = TelegramPost(
+        prediction_id=None,
+        channel=target,
+        telegram_message_id=message_id,
+        post_type="welcome",
+        posted_at=datetime.now(timezone.utc),
+    )
+    db.add(welcome)
+    await db.commit()
+    await db.refresh(welcome)
+    return welcome
+
+
+async def wipe_channel(
+    db: AsyncSession, channel: Optional[str] = None
+) -> dict[str, int]:
+    """Delete every auto-posted message from the channel + clear the audit.
+
+    Destructive — used by the admin "reset channel" button when the feed
+    needs a clean slate (e.g. during template redesign). Walks every
+    TelegramPost row for ``channel``, calls ``deleteMessage`` against
+    the Bot API, then hard-deletes the DB row so the idempotency guard
+    in ``publish_pick`` won't block a future repost of the same
+    prediction.
+
+    Pinned **welcome** posts are PRESERVED — ``post_type='welcome'``
+    rows are skipped entirely so the channel's intro message (which the
+    operator manually pinned in Telegram) survives a wipe. The audit
+    row stays in the DB so the history table still shows it.
+
+    Returns a counter dict::
+        {"deleted": N, "missing": M, "db_removed": K, "preserved": P}
+
+    ``missing`` counts messages that were already gone from the channel
+    (bot responded "message to delete not found") — we still drop the
+    DB row because the channel state is the source of truth.
+    ``preserved`` counts welcome rows that were intentionally skipped.
+    """
+    target = _resolve_channel(channel)
+    stmt = (
+        select(TelegramPost)
+        .where(
+            TelegramPost.channel == target,
+            # Skip the pinned welcome so a wipe doesn't nuke the channel's
+            # intro post. Operator re-running wipe twice still won't lose
+            # the welcome — idempotent on that dimension.
+            TelegramPost.post_type != "welcome",
+        )
+        .order_by(TelegramPost.posted_at.desc())
+    )
+    rows = (await db.execute(stmt)).scalars().all()
+
+    preserved_stmt = select(func.count(TelegramPost.id)).where(
+        TelegramPost.channel == target,
+        TelegramPost.post_type == "welcome",
+    )
+    preserved = int((await db.execute(preserved_stmt)).scalar_one() or 0)
+
+    deleted = 0
+    missing = 0
+    for post in rows:
+        try:
+            ok = await delete_message(target, post.telegram_message_id)
+        except TelegramError as e:
+            logger.error(
+                "telegram: wipe delete failed for msg=%s: %s",
+                post.telegram_message_id,
+                e,
+            )
+            # Keep the DB row so the operator can retry — only remove
+            # rows where we know the Telegram side converged.
+            continue
+        if ok:
+            deleted += 1
+        else:
+            missing += 1
+        await db.delete(post)
+
+    await db.commit()
+    return {
+        "deleted": deleted,
+        "missing": missing,
+        "db_removed": deleted + missing,
+        "preserved": preserved,
+    }
+
+
 __all__ = [
     "publish_pick",
     "publish_scheduled_slot",
     "publish_result_update",
     "publish_daily_summary",
     "publish_promo",
+    "publish_welcome",
     "update_all_pending_results",
     "select_next_free_pick",
+    "wipe_channel",
 ]

@@ -1,4 +1,4 @@
-"""Admin endpoints for the @BetsPlug Telegram auto-poster.
+"""Admin endpoints for the @BetsPluggs Telegram auto-poster.
 
 Mounted at `/api/admin/telegram`, gated behind ``require_admin`` at the
 router registration level in ``app/api/routes/__init__.py``.
@@ -35,8 +35,10 @@ from app.services.telegram_posting import (
     publish_pick,
     publish_promo,
     publish_scheduled_slot,
+    publish_welcome,
     select_next_free_pick,
     update_all_pending_results,
+    wipe_channel,
 )
 from app.services.telegram_service import health_probe as telegram_health
 
@@ -154,7 +156,7 @@ class ChannelOverview(BaseModel):
 @router.post(
     "/post-pick/{prediction_id}",
     response_model=PostSummary,
-    summary="Force-post a specific prediction to the @BetsPlug channel",
+    summary="Force-post a specific prediction to the @BetsPluggs channel",
 )
 async def force_post_pick(
     prediction_id: UUID,
@@ -234,6 +236,23 @@ async def force_post_promo(
 
 
 @router.post(
+    "/post-welcome",
+    response_model=PostSummary,
+    summary="Force-post the channel welcome / intro message",
+)
+async def force_post_welcome(
+    channel: Optional[str] = Query(default=None),
+    db: AsyncSession = Depends(get_db),
+) -> PostSummary:
+    """Use after a wipe or when the pinned welcome was accidentally
+    deleted. Pin the resulting message manually in the Telegram client —
+    the bot doesn't assume pin-rights to keep the happy-path minimal.
+    """
+    post = await publish_welcome(db, channel=channel)
+    return _post_to_summary(post)
+
+
+@router.post(
     "/update-results",
     summary="Run a result-update sweep across unresolved pick posts",
 )
@@ -243,6 +262,40 @@ async def force_update_results(
 ) -> dict[str, Any]:
     count = await update_all_pending_results(db, channel=channel)
     return {"updated": count}
+
+
+@router.post(
+    "/wipe",
+    summary="Delete every auto-posted message on the channel and clear the audit",
+)
+async def force_wipe_channel(
+    channel: Optional[str] = Query(default=None),
+    repost_next: bool = Query(
+        default=False,
+        description=(
+            "When true, immediately run publish_scheduled_slot after the "
+            "wipe so the channel isn't empty."
+        ),
+    ),
+    db: AsyncSession = Depends(get_db),
+) -> dict[str, Any]:
+    """Destructive — use only when redesigning the feed from scratch.
+
+    Iterates every row in ``telegram_posts`` for the target channel,
+    calls the Bot API's ``deleteMessage``, and drops the audit row so
+    the idempotency guard won't block a future repost of the same
+    prediction. Set ``repost_next=true`` to chain a fresh scheduled-slot
+    post right after the wipe.
+    """
+    result = await wipe_channel(db, channel=channel)
+    next_post: Optional[PostSummary] = None
+    if repost_next:
+        post = await publish_scheduled_slot(db, channel=channel)
+        next_post = _post_to_summary(post) if post is not None else None
+    return {
+        "wipe": result,
+        "next_post": next_post.model_dump(mode="json") if next_post else None,
+    }
 
 
 # ---------------------------------------------------------------------------

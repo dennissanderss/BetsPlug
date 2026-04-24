@@ -267,7 +267,7 @@ const it = {
   "chatbot.replyHello": "Ehilà! 👋 Sono l'IA di BetsPlug. Chiedimi qualsiasi cosa sui nostri modelli, prezzi o previsioni: farò del mio meglio per aiutarti.",
   "chatbot.replyPricing": "Abbiamo quattro livelli. Bronze è una prova simbolica da € 0,01: accesso completo per 7 giorni, è richiesta una carta reale (questo mantiene la piattaforma esente da frodi). Silver (€9,99/mese) è un piano entry-level limitato ai primi 5 campionati europei e scelte BetsPlug Pulse con 2 ore di ritardo. Gold (€14,99/mese) è il nostro più popolare: tutti gli oltre 30 campionati in tutto il mondo, output AI BetsPlug Pulse completo, scelte istantanee, Pick of the Day giornaliero, Gold Telegram e Strategy Lab (disponibile a breve). Platinum (€ 199 una tantum a vita) aggiunge Telegram privato, onboarding individuale e un blocco del prezzo a vita. Tutti i piani a pagamento sono coperti da una garanzia di rimborso UE di 14 giorni.",
   "chatbot.replyRefund": "Tutti i piani Silver e Gold possono essere annullati in qualsiasi momento dalla tua dashboard: mantieni l'accesso fino alla fine del periodo di fatturazione. Offriamo inoltre una garanzia di rimborso di 14 giorni su tutti i piani a pagamento ai sensi del diritto dei consumatori dell'UE. Platinum Lifetime è la vendita finale dopo la finestra di rimborso di 14 giorni.",
-  "chatbot.replyTelegram": "La nostra community Telegram conta oltre 1.200 membri attivi con scelte giornaliere, avvisi sui margini e domande e risposte in tempo reale con i nostri analisti. Iscriviti su t.me/betsplug: gratuito per gli utenti Bronzo, canali VIP per Argento/Oro.",
+  "chatbot.replyTelegram": "La nostra community Telegram conta oltre 1.200 membri attivi con scelte giornaliere, avvisi sui margini e domande e risposte in tempo reale con i nostri analisti. Iscriviti su t.me/BetsPluggs: gratuito per gli utenti Bronzo, canali VIP per Argento/Oro.",
   "chatbot.suggestion1": "Come funziona il Pick of the Day?",
   "chatbot.suggestion2": "Qual è la differenza tra Argento e Oro?",
   "chatbot.suggestion3": "Quanto sono accurate le tue previsioni?",
@@ -2421,5 +2421,5 @@ const it = {
   "welcomeBanner.stepPrefix": "Fare un passo",
   "welcomeBanner.subtitle": "La nostra intelligenza artificiale analizza i dati calcistici (forma, testa a testa, classifica e forza della squadra) per prevedere il risultato più probabile delle prossime partite.",
   "welcomeBanner.title": "Ecco come funziona BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default it;

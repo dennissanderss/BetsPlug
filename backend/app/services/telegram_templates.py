@@ -1,17 +1,24 @@
-"""Bilingual message templates for the @BetsPlug Telegram channel.
+"""English-only message templates for the @BetsPluggs Telegram channel.
 
-Every public post is EN-top / NL-bottom, separated by a `---` line so the
-two blocks are visually distinct in the Telegram client. Content is
-rendered from ORM objects we already have on the site (``Prediction``
-with its eager-loaded ``match`` + teams + league + result) so the
-Telegram feed stays in lock-step with what a Free-tier visitor sees on
-betsplug.com — no shadow copy, no drift.
+Design goals (v2, 2026-04):
+    - ONE language per post (EN) — bilingual bodies doubled scroll length
+      without measurable reach gain.
+    - Every post fits on a phone screen without scrolling: pick posts
+      are capped at ~8 lines, result replies at ~4.
+    - Hierarchy via bold headers (Telegram MarkdownV2), not via stacking
+      emojis on every line.
+    - Section emojis only where they add meaning (✅/❌ verdict, ⏳
+      pending). No decorative spam.
+    - Disclaimers (18+, "statistical analysis") live in the channel
+      description — NOT on every single pick post.
+    - No ASCII rules (`━━━`) — they render fine on desktop but break
+      lines on mobile Telegram clients.
 
-The functions here are PURE string formatters. All database IO lives in
-`telegram_service.py`; all scheduling lives in `tasks/telegram_tasks.py`.
-Keeping the boundaries strict makes the templates trivially unit-testable
-(feed a Prediction instance, assert the output string) and safe to tweak
-without touching the posting machinery.
+The functions are PURE string formatters producing MarkdownV2-safe text.
+Callers MUST send the result with ``parse_mode="MarkdownV2"`` — the
+helper ``_md`` below escapes the reserved MarkdownV2 characters so
+team/league names with `.`, `-`, `(`, `!` etc. don't trigger a 400 from
+the Bot API.
 """
 
 from __future__ import annotations
@@ -23,15 +30,38 @@ from zoneinfo import ZoneInfo
 from app.models.prediction import Prediction
 
 
+_CET = ZoneInfo("Europe/Amsterdam")
+
+# MarkdownV2 reserved characters that MUST be backslash-escaped when
+# appearing as literal text (not as formatting). See
+# https://core.telegram.org/bots/api#markdownv2-style.
+_MDV2_RESERVED = r"_*[]()~`>#+-=|{}.!"
+
+
+def _md(text: str) -> str:
+    """Escape a string for safe inclusion in MarkdownV2 text.
+
+    Leaves bold/italic markers to the caller — this helper is for
+    literal values (team names, league names, numbers) that must not
+    be interpreted as formatting.
+    """
+    if text is None:
+        return ""
+    out = []
+    for ch in str(text):
+        if ch in _MDV2_RESERVED:
+            out.append("\\" + ch)
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
 # ---------------------------------------------------------------------------
-# Pick direction mapping — the model's `pick` column is one of {HOME, DRAW,
-# AWAY} (uppercase) or the probability-derived variants in lowercase. The
-# functions below tolerate both so they can be called against both the raw
-# ORM row and synthesized predictions from the API layer.
+# Pick direction — argmax fallback for older rows without `pick` column
 # ---------------------------------------------------------------------------
 
 
-def _pick_label_en(pick: Optional[str], home_team: str, away_team: str) -> str:
+def _pick_label(pick: Optional[str], home_team: str, away_team: str) -> str:
     if pick is None:
         return "—"
     norm = pick.strip().upper()
@@ -41,19 +71,6 @@ def _pick_label_en(pick: Optional[str], home_team: str, away_team: str) -> str:
         return f"{away_team} win"
     if norm == "DRAW":
         return "Draw"
-    return pick
-
-
-def _pick_label_nl(pick: Optional[str], home_team: str, away_team: str) -> str:
-    if pick is None:
-        return "—"
-    norm = pick.strip().upper()
-    if norm == "HOME":
-        return f"{home_team} wint"
-    if norm == "AWAY":
-        return f"{away_team} wint"
-    if norm == "DRAW":
-        return "Gelijkspel"
     return pick
 
 
@@ -88,34 +105,18 @@ def _fmt_confidence_pct(conf: Optional[float]) -> str:
 
 
 def _fmt_kickoff_cet(when: datetime) -> str:
-    """Format kickoff in CET (with DST handled by zoneinfo)."""
+    """Compact kickoff format: 'Thu 23 Apr · 20:00 CET'."""
     if when.tzinfo is None:
         when = when.replace(tzinfo=timezone.utc)
-    local = when.astimezone(ZoneInfo("Europe/Amsterdam"))
-    return local.strftime("%a %d %b · %H:%M")
+    local = when.astimezone(_CET)
+    return local.strftime("%a %d %b · %H:%M CET")
 
 
-def _fmt_kickoff_wib(when: datetime) -> str:
-    """Format kickoff in WIB (UTC+7, Indonesia) for the EN-speaking
-    Asia subscribers that follow the channel."""
+def _fmt_date(when: datetime) -> str:
     if when.tzinfo is None:
         when = when.replace(tzinfo=timezone.utc)
-    local = when.astimezone(ZoneInfo("Asia/Jakarta"))
-    return local.strftime("%a %d %b · %H:%M")
-
-
-def _fmt_date_nl(when: datetime) -> str:
-    if when.tzinfo is None:
-        when = when.replace(tzinfo=timezone.utc)
-    local = when.astimezone(ZoneInfo("Europe/Amsterdam"))
-    return local.strftime("%A %d %B %Y")
-
-
-def _fmt_date_en(when: datetime) -> str:
-    if when.tzinfo is None:
-        when = when.replace(tzinfo=timezone.utc)
-    local = when.astimezone(ZoneInfo("Europe/Amsterdam"))
-    return local.strftime("%A %d %B %Y")
+    local = when.astimezone(_CET)
+    return local.strftime("%a %d %b")
 
 
 # ---------------------------------------------------------------------------
@@ -129,27 +130,18 @@ def render_pick_message(
     odds_draw: Optional[float] = None,
     odds_away: Optional[float] = None,
 ) -> str:
-    """Return the bilingual pick-announcement block.
+    """Render a compact pick announcement (MarkdownV2, ~7 lines).
 
-    Shape:
+    Shape::
 
-        🎯 Free Pick — <Date EN>
-        ⚽ <League>: <Home> vs <Away>
-        🕐 Kickoff: <CET> CET / <WIB> WIB
-        🤖 Prediction: <Pick EN>
-        Confidence: <N>%
-        Pre-match odds: 1: x.xx  X: x.xx  2: x.xx
-        📝 Result follows after the match.
-        ⚠️ Statistical analysis · 18+ · betsplug.com
-        ---
-        🎯 Free Pick — <Datum NL>
-        ⚽ <League>: <Home> vs <Away>
-        🕐 Aftrap: <CET> CET
-        🤖 Voorspelling: <Pick NL>
-        Zekerheid: <N>%
-        Pre-match odds: 1: x.xx  X: x.xx  2: x.xx
-        📝 Uitslag volgt na de wedstrijd.
-        ⚠️ Statistische analyse · 18+ · betsplug.com
+        *Arsenal vs Chelsea*
+        Premier League · Thu 23 Apr · 20:00 CET
+
+        *Pick:* Arsenal win
+        *Confidence:* 62%
+        *Odds:* 1.95 / 3.40 / 4.20
+
+        _Result posted below after full-time_
     """
     match = prediction.match
     home_name = match.home_team.name if match.home_team else "Home"
@@ -157,47 +149,29 @@ def render_pick_message(
     league_name = match.league.name if match.league else "—"
     kickoff = match.scheduled_at
     pick = _infer_pick(prediction)
+    pick_str = _pick_label(pick, home_name, away_name)
     conf_pct = _fmt_confidence_pct(prediction.confidence)
-    odds_line = (
-        f"1: {_fmt_odds(odds_home)}  "
-        f"X: {_fmt_odds(odds_draw)}  "
-        f"2: {_fmt_odds(odds_away)}"
+
+    odds_str = (
+        f"{_fmt_odds(odds_home)} / "
+        f"{_fmt_odds(odds_draw)} / "
+        f"{_fmt_odds(odds_away)}"
     )
 
-    en_block = (
-        f"🎯 Free Pick — {_fmt_date_en(kickoff)}\n"
-        "\n"
-        f"⚽ {league_name}: {home_name} vs {away_name}\n"
-        f"🕐 Kickoff: {_fmt_kickoff_cet(kickoff)} CET · "
-        f"{_fmt_kickoff_wib(kickoff)} WIB\n"
-        "\n"
-        f"🤖 Prediction: {_pick_label_en(pick, home_name, away_name)}\n"
-        f"Confidence: {conf_pct}%\n"
-        "\n"
-        f"Pre-match odds:\n{odds_line}\n"
-        "\n"
-        "📝 Result auto-posted here as a reply after full-time.\n"
-        "🎁 Free tier pick · Silver/Gold/Platinum = higher confidence → betsplug.com\n"
-        "⚠️ Statistical analysis · 18+"
-    )
-
-    nl_block = (
-        f"🎯 Gratis Pick — {_fmt_date_nl(kickoff)}\n"
-        "\n"
-        f"⚽ {league_name}: {home_name} vs {away_name}\n"
-        f"🕐 Aftrap: {_fmt_kickoff_cet(kickoff)} CET\n"
-        "\n"
-        f"🤖 Voorspelling: {_pick_label_nl(pick, home_name, away_name)}\n"
-        f"Zekerheid: {conf_pct}%\n"
-        "\n"
-        f"Pre-match odds:\n{odds_line}\n"
-        "\n"
-        "📝 Uitslag komt automatisch hieronder als reply na de wedstrijd.\n"
-        "🎁 Gratis tier pick · Silver/Gold/Platinum = hogere zekerheid → betsplug.com\n"
-        "⚠️ Statistische analyse · 18+"
-    )
-
-    return f"{en_block}\n\n---\n\n{nl_block}"
+    # Build MarkdownV2 body. Bold wraps the *label*, the value is escaped
+    # plain text. Star characters inside bold are literal — they are the
+    # Markdown delimiter, not content, so they don't get escaped.
+    lines = [
+        f"*{_md(home_name)} vs {_md(away_name)}*",
+        f"{_md(league_name)} · {_md(_fmt_kickoff_cet(kickoff))}",
+        "",
+        f"*Pick:* {_md(pick_str)}",
+        f"*Confidence:* {_md(conf_pct)}%",
+        f"*Odds:* {_md(odds_str)}",
+        "",
+        "_Result posted below after full\\-time_",
+    ]
+    return "\n".join(lines)
 
 
 def render_result_update(
@@ -207,52 +181,37 @@ def render_result_update(
     was_correct: bool,
     weekly_accuracy_pct: Optional[float] = None,
 ) -> str:
-    """Short bilingual result body — posted as a REPLY under the original pick.
+    """Short result body — posted as a REPLY under the original pick.
 
-    Kept terse on purpose: users see this in the channel scroll days
-    after the pick was published, so the message must convey
-    "verdict + score + accuracy trend" without repeating what's already
-    in the reply-preview that Telegram auto-generates above it.
+    Telegram auto-renders a quote-preview of the parent pick above the
+    reply, so we only need the verdict + final score + accuracy trend.
+
+    Shape::
+
+        ✅ *CORRECT*
+        Arsenal 2–1 Chelsea
+        Pick: Arsenal win (62%) · Week: 58%
     """
     match = prediction.match
     home_name = match.home_team.name if match.home_team else "Home"
     away_name = match.away_team.name if match.away_team else "Away"
     pick = _infer_pick(prediction)
+    pick_str = _pick_label(pick, home_name, away_name)
     conf_pct = _fmt_confidence_pct(prediction.confidence)
     ok_emoji = "✅" if was_correct else "❌"
-    en_verdict = "CORRECT" if was_correct else "MISS"
-    nl_verdict = "CORRECT" if was_correct else "MIS"
+    verdict = "CORRECT" if was_correct else "MISS"
 
-    weekly_line_en = (
-        f"\n📊 Week accuracy: {round(weekly_accuracy_pct)}%"
-        if weekly_accuracy_pct is not None
-        else ""
-    )
-    weekly_line_nl = (
-        f"\n📊 Deze week: {round(weekly_accuracy_pct)}%"
-        if weekly_accuracy_pct is not None
-        else ""
-    )
+    score_line = f"{home_name} {home_score}–{away_score} {away_name}"
+    trailer = f"Pick: {pick_str} ({conf_pct}%)"
+    if weekly_accuracy_pct is not None:
+        trailer += f" · Week: {round(weekly_accuracy_pct)}%"
 
-    en_block = (
-        f"{ok_emoji} RESULT · {en_verdict}\n"
-        "\n"
-        f"⚽ {home_name} {home_score} – {away_score} {away_name}\n"
-        f"🤖 Our pick: {_pick_label_en(pick, home_name, away_name)} "
-        f"({conf_pct}%)"
-        f"{weekly_line_en}"
-    )
-
-    nl_block = (
-        f"{ok_emoji} UITSLAG · {nl_verdict}\n"
-        "\n"
-        f"⚽ {home_name} {home_score} – {away_score} {away_name}\n"
-        f"🤖 Onze pick: {_pick_label_nl(pick, home_name, away_name)} "
-        f"({conf_pct}%)"
-        f"{weekly_line_nl}"
-    )
-
-    return f"{en_block}\n\n---\n\n{nl_block}"
+    lines = [
+        f"{ok_emoji} *{verdict}*",
+        _md(score_line),
+        _md(trailer),
+    ]
+    return "\n".join(lines)
 
 
 def render_pick_with_graded_banner(
@@ -261,20 +220,17 @@ def render_pick_with_graded_banner(
     away_score: int,
     was_correct: bool,
 ) -> str:
-    """Prepend a GRADED banner to the original pick body for in-place edit.
+    """Prepend a single bold verdict header to the original pick body.
 
-    The pick post is ALSO edited when its fixture resolves so anyone
-    scrolling back through history sees the verdict without needing
-    to tap the reply thread. Shorter than `render_result_update`
-    because the full result body is carried by the reply message.
+    Called when we edit the already-published pick in place so anyone
+    scrolling back sees the outcome on the pick itself (not only in the
+    reply thread below). Deliberately minimal — the full result body
+    lives in the reply.
     """
     ok_emoji = "✅" if was_correct else "❌"
-    en = "CORRECT" if was_correct else "MISS"
-    nl = "CORRECT" if was_correct else "MIS"
-    banner = (
-        f"{ok_emoji} GRADED · {home_score}–{away_score} · {en} / {nl}\n"
-        "━━━━━━━━━━━━━━━━━━━━\n\n"
-    )
+    verdict = "CORRECT" if was_correct else "MISS"
+    score = f"{home_score}–{away_score}"
+    banner = f"{ok_emoji} *GRADED · {_md(score)} · {verdict}*\n\n"
     return banner + original_body
 
 
@@ -283,9 +239,9 @@ def render_daily_summary(
     rows: list[dict],
     weekly_accuracy_pct: Optional[float] = None,
 ) -> str:
-    """Return the bilingual daily summary.
+    """Render the end-of-day scoreboard.
 
-    ``rows`` is a list of dicts with keys::
+    ``rows`` contains dicts with::
         - league       str
         - home         str
         - away         str
@@ -293,132 +249,178 @@ def render_daily_summary(
         - home_score   Optional[int]
         - away_score   Optional[int]
         - was_correct  Optional[bool]   (None when fixture unresolved)
+
+    Shape::
+
+        *Scoreboard · Thu 23 Apr*
+
+        ✅ Arsenal 2–1 Chelsea — Arsenal win
+        ❌ PSG 0–0 Marseille — PSG win
+        ⏳ Ajax vs Feyenoord — Ajax win (pending)
+
+        *Today:* 1/2 · *Week:* 58%
+        betsplug\\.com/track\\-record
     """
-    date_en = _fmt_date_en(date_utc)
-    date_nl = _fmt_date_nl(date_utc)
+    date_str = _fmt_date(date_utc)
 
-    def _line_en(r: dict) -> str:
-        pick_str = _pick_label_en(r.get("pick"), r["home"], r["away"])
+    def _line(r: dict) -> str:
+        pick_str = _pick_label(r.get("pick"), r["home"], r["away"])
         if r.get("home_score") is not None and r.get("away_score") is not None:
             verdict = "✅" if r.get("was_correct") else "❌"
-            return (
-                f"• {r['home']} {r['home_score']}-{r['away_score']} "
-                f"{r['away']} — pick {pick_str} {verdict}"
+            body = (
+                f"{verdict} {r['home']} {r['home_score']}–{r['away_score']} "
+                f"{r['away']} — {pick_str}"
             )
-        return f"• {r['home']} vs {r['away']} — pick {pick_str} (pending)"
+            return _md(body)
+        # Unresolved fixture: whole body through _md() — it escapes the
+        # parens of "(pending)" along with everything else consistently.
+        body = f"⏳ {r['home']} vs {r['away']} — {pick_str} (pending)"
+        return _md(body)
 
-    def _line_nl(r: dict) -> str:
-        pick_str = _pick_label_nl(r.get("pick"), r["home"], r["away"])
-        if r.get("home_score") is not None and r.get("away_score") is not None:
-            verdict = "✅" if r.get("was_correct") else "❌"
-            return (
-                f"• {r['home']} {r['home_score']}-{r['away_score']} "
-                f"{r['away']} — pick {pick_str} {verdict}"
-            )
-        return f"• {r['home']} vs {r['away']} — pick {pick_str} (volgt)"
+    graded = [r for r in rows if r.get("was_correct") is not None]
+    correct = sum(1 for r in graded if r.get("was_correct") is True)
+    total = len(graded)
 
-    total = len([r for r in rows if r.get("was_correct") is not None])
-    correct = len([r for r in rows if r.get("was_correct") is True])
-    weekly_en = (
-        f"\n📈 This week: {round(weekly_accuracy_pct)}%"
-        if weekly_accuracy_pct is not None
-        else ""
-    )
-    weekly_nl = (
-        f"\n📈 Deze week: {round(weekly_accuracy_pct)}%"
-        if weekly_accuracy_pct is not None
-        else ""
-    )
-    en_rows = "\n".join(_line_en(r) for r in rows) or "(no picks today)"
-    nl_rows = "\n".join(_line_nl(r) for r in rows) or "(geen picks vandaag)"
+    body_rows = "\n".join(_line(r) for r in rows) if rows else "_No picks today_"
 
-    en_block = (
-        f"📊 Daily Summary — {date_en}\n"
-        "\n"
-        "Today's picks:\n"
-        f"{en_rows}\n"
-        "\n"
-        f"📈 Score today: {correct}/{total}"
-        f"{weekly_en}\n"
-        "\n"
-        "🔓 More picks + higher accuracy?\n"
-        "→ betsplug.com"
-    )
+    footer_parts = [f"*Today:* {correct}/{total}"]
+    if weekly_accuracy_pct is not None:
+        footer_parts.append(f"*Week:* {round(weekly_accuracy_pct)}%")
+    footer = " · ".join(footer_parts)
 
-    nl_block = (
-        f"📊 Dagoverzicht — {date_nl}\n"
-        "\n"
-        "Picks van vandaag:\n"
-        f"{nl_rows}\n"
-        "\n"
-        f"📈 Score vandaag: {correct}/{total}"
-        f"{weekly_nl}\n"
-        "\n"
-        "🔓 Meer picks + hogere accuracy?\n"
-        "→ betsplug.com"
-    )
+    lines = [
+        f"*Scoreboard · {_md(date_str)}*",
+        "",
+        body_rows,
+        "",
+        footer,
+        _md("betsplug.com/track-record"),
+    ]
+    return "\n".join(lines)
 
-    return f"{en_block}\n\n---\n\n{nl_block}"
+
+def render_welcome_message() -> str:
+    """Channel introduction / pinned welcome post.
+
+    Meant to be posted once and pinned — gives a new subscriber the
+    "what am I looking at, when do posts happen, and where do I click
+    for more" summary the channel description can't fit. Intentionally
+    slightly longer than a pick post (it's a one-off) but still fits
+    on a phone screen without scrolling.
+
+    Shape (MarkdownV2)::
+
+        *Welcome to BetsPlug*
+        _Data\\-driven football predictions_
+
+        *What you'll see here*
+        • 3 Free picks/day · 11:00 · 15:00 · 19:00 CET
+        • Each pick replied with ✅/❌ after full\\-time
+        • Daily scoreboard at 23:00 CET
+
+        *How we pick*
+        Every post is a Free \\(Bronze\\) tier call — the 55–65%
+        confidence band of our model\\. Tested on 80,000\\+ historical
+        matches\\.
+
+        *Higher conviction available*
+        🥈 Silver  · ≥65%
+        🥇 Gold    · ≥70%
+        💎 Platinum · ≥75% · top\\-5 leagues
+
+        → betsplug\\.com/pricing
+        → betsplug\\.com/track\\-record \\(live\\)
+
+        18\\+ · Statistical analysis, not betting advice\\.
+    """
+    lines = [
+        "*Welcome to BetsPlug*",
+        "_" + _md("Data-driven football predictions") + "_",
+        "",
+        "*What you'll see here*",
+        _md("• 3 Free picks/day · 11:00 · 15:00 · 19:00 CET"),
+        _md("• Each pick replied with ✅/❌ after full-time"),
+        _md("• Daily scoreboard at 23:00 CET"),
+        "",
+        "*How we pick*",
+        _md(
+            "Every post is a Free (Bronze) tier call — the 55–65% "
+            "confidence band of our model. Tested on 80,000+ "
+            "historical matches."
+        ),
+        "",
+        "*Higher conviction available*",
+        _md("🥈 Silver · ≥65%"),
+        _md("🥇 Gold · ≥70%"),
+        _md("💎 Platinum · ≥75% · top-5 leagues"),
+        "",
+        _md("→ betsplug.com/pricing"),
+        _md("→ betsplug.com/track-record (live)"),
+        "",
+        _md("18+ · Statistical analysis, not betting advice."),
+    ]
+    return "\n".join(lines)
 
 
 def render_promo_message(weekly_accuracy_pct: Optional[float] = None) -> str:
-    """Return the bilingual weekly promo post.
+    """Weekly tier-explanation post — the only place we run a CTA.
 
-    Explains what a reader on @BetsPluggs is actually looking at (Free
-    tier only, 55-65% confidence band) and what the paid tiers unlock.
-    Intentionally educational rather than hypey — the audience is
-    sceptics burned by tipster channels, not lottery players.
+    Fires Sunday 18:00 CET. Kept educational (not hypey) — audience is
+    sceptics, not lottery players. This is the ONE post where we allow
+    more than 10 lines.
+
+    Shape::
+
+        *What you're seeing here*
+
+        Every pick in this channel is a Free \\(Bronze\\) tier call —
+        the 55–65% confidence band of our model\\.
+
+        *Last 7 days · Free accuracy:* 58%
+
+        *Paid tiers unlock higher conviction:*
+        🥈 Silver · ≥65% confidence
+        🥇 Gold · ≥70% confidence
+        💎 Platinum · ≥75% · top\\-5 leagues
+
+        Every pick is tested on 80,000\\+ historical matches\\.
+        → betsplug\\.com/pricing
     """
-    weekly_en = (
-        f"\n📊 Last 7 days — Free tier accuracy: {round(weekly_accuracy_pct)}%"
-        if weekly_accuracy_pct is not None
-        else ""
-    )
-    weekly_nl = (
-        f"\n📊 Afgelopen 7 dagen — Free-tier accuracy: {round(weekly_accuracy_pct)}%"
+    weekly_line = (
+        f"*Last 7 days · Free accuracy:* {round(weekly_accuracy_pct)}%"
         if weekly_accuracy_pct is not None
         else ""
     )
 
-    en_block = (
-        "🔓 What you're seeing here\n"
-        "\n"
-        "Every pick in this channel is a BRONZE (Free) tier prediction —\n"
-        "the 55–65% confidence band of our model. Honest, modest, free."
-        f"{weekly_en}\n"
-        "\n"
-        "Paid tiers unlock higher-conviction calls:\n"
-        "🥈 Silver    · ≥ 65% confidence\n"
-        "🥇 Gold      · ≥ 70% confidence\n"
-        "💎 Platinum · ≥ 75% confidence · top-5 leagues only\n"
-        "\n"
-        "Every pick — Free or paid — is tested on 80,000+ historical\n"
-        "matches with a public, tamper-proof track record.\n"
-        "\n"
-        "→ Upgrade: betsplug.com/pricing\n"
-        "→ Track record: betsplug.com/track-record"
-    )
+    lines = [
+        "*What you're seeing here*",
+        "",
+        _md(
+            "Every pick in this channel is a Free (Bronze) tier call — "
+            "the 55–65% confidence band of our model."
+        ),
+    ]
+    if weekly_line:
+        lines.append("")
+        lines.append(weekly_line)
 
-    nl_block = (
-        "🔓 Wat je hier ziet\n"
-        "\n"
-        "Elke pick in dit kanaal is een BRONZE (gratis) tier voorspelling —\n"
-        "de 55–65% zekerheidsband van ons model. Eerlijk, bescheiden, gratis."
-        f"{weekly_nl}\n"
-        "\n"
-        "Betaalde tiers ontgrendelen sterkere calls:\n"
-        "🥈 Silver    · ≥ 65% zekerheid\n"
-        "🥇 Gold      · ≥ 70% zekerheid\n"
-        "💎 Platinum · ≥ 75% zekerheid · alleen top-5 competities\n"
-        "\n"
-        "Elke pick — gratis of betaald — wordt getest op 80.000+ historische\n"
-        "wedstrijden met een publiek, niet-bewerkbaar trackrecord.\n"
-        "\n"
-        "→ Upgraden: betsplug.com/pricing\n"
-        "→ Trackrecord: betsplug.com/track-record"
+    lines.extend(
+        [
+            "",
+            "*Paid tiers unlock higher conviction:*",
+            _md("🥈 Silver · ≥65% confidence"),
+            _md("🥇 Gold · ≥70% confidence"),
+            _md("💎 Platinum · ≥75% · top-5 leagues"),
+            "",
+            _md(
+                "Every pick is tested on 80,000+ historical matches "
+                "with a public track record."
+            ),
+            _md("→ betsplug.com/pricing"),
+            _md("→ betsplug.com/track-record"),
+        ]
     )
-
-    return f"{en_block}\n\n---\n\n{nl_block}"
+    return "\n".join(lines)
 
 
 __all__ = [
@@ -427,4 +429,5 @@ __all__ = [
     "render_result_update",
     "render_daily_summary",
     "render_promo_message",
+    "render_welcome_message",
 ]
