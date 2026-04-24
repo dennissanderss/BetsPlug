@@ -30,33 +30,34 @@ import { derivePickSide } from "@/lib/prediction-pick";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type PeriodFilter = 7 | 14 | 30;
+// Now a plain integer — the user can freely dial how far back to
+// look (presets: 7 / 14 / 30; custom: any value within the backend
+// cap). The calculator is Live-only by design, since backtest
+// fixtures don't carry reliable pre-match odds and simulated
+// returns against model-implied odds would overstate performance.
+type PeriodFilter = number;
 type ResultFilter = "All" | "Correct" | "Incorrect";
-// Data source — mirrors the trackrecord live-measurement filter so
-// "live" here shows the same pool of picks as the tier cards on
-// /trackrecord. Everything else (pre-16-Apr picks, post-kickoff
-// predictions) is classed as backtest / model validation.
-type DataSource = "all" | "live" | "backtest";
+
+// Backend currently caps /fixtures/results at 365 days. Anything beyond
+// needs a dedicated historical endpoint (planned).
+const PERIOD_MIN = 1;
+const PERIOD_MAX = 365;
+const PERIOD_PRESETS: number[] = [7, 14, 30, 90];
 
 // Launch date of the strict pre-match live measurement. Matches
 // LIVE_TRACKING_START below and the V81_DEPLOYMENT_CUTOFF on the
-// backend.
+// backend. Fixtures with a prediction locked before kickoff on or
+// after this date are counted in the simulator; everything else is
+// backtest / model validation and kept out of simulated returns.
 const LIVE_START_MS = Date.UTC(2026, 3, 16); // month is 0-indexed (3 = April)
 
-function classifyDataSource(f: Fixture): "live" | "backtest" {
+function isLivePick(f: Fixture): boolean {
   const pred = f.prediction;
-  if (!pred || !pred.predicted_at) return "backtest";
+  if (!pred || !pred.predicted_at) return false;
   const predMs = new Date(pred.predicted_at).getTime();
   const schedMs = new Date(f.scheduled_at).getTime();
-  if (!Number.isFinite(predMs) || !Number.isFinite(schedMs)) return "backtest";
-  // Live = locked before kickoff AND after the 16-Apr cutover.
-  if (predMs < schedMs && predMs >= LIVE_START_MS) return "live";
-  return "backtest";
-}
-
-function matchesSource(f: Fixture, src: DataSource): boolean {
-  if (src === "all") return true;
-  return classifyDataSource(f) === src;
+  if (!Number.isFinite(predMs) || !Number.isFinite(schedMs)) return false;
+  return predMs < schedMs && predMs >= LIVE_START_MS;
 }
 // v8.6 — "all" tab removed: each tier is a different product (scope +
 // confidence floor), so adding their totals together produced a
@@ -364,7 +365,6 @@ function aggregateFixtures(
   stake: number,
   tier: CalcTier,
   periodDays: CalcPeriod,
-  source: DataSource,
   now: Date,
 ): PickAggregate {
   const cutoffMs = now.getTime() - periodDays * 24 * 60 * 60 * 1000;
@@ -373,7 +373,8 @@ function aggregateFixtures(
   for (const f of fixtures) {
     if (f.status !== "finished" || !f.result || !f.prediction) continue;
     if (f.prediction.pick_tier !== tier) continue;
-    if (!matchesSource(f, source)) continue;
+    // Live-only simulator — backtest fixtures lack reliable pre-match odds.
+    if (!isLivePick(f)) continue;
     const scheduled = new Date(f.scheduled_at).getTime();
     if (!Number.isFinite(scheduled) || scheduled < cutoffMs) continue;
 
@@ -428,8 +429,6 @@ function RoiCalculatorCard({
   setCalcTier,
   calcPeriod,
   setCalcPeriod,
-  dataSource,
-  setDataSource,
 }: {
   fixtures: Fixture[];
   isLoading: boolean;
@@ -439,37 +438,29 @@ function RoiCalculatorCard({
   setCalcTier: (v: CalcTier) => void;
   calcPeriod: CalcPeriod;
   setCalcPeriod: (v: CalcPeriod) => void;
-  dataSource: DataSource;
-  setDataSource: (v: DataSource) => void;
 }) {
   const { t } = useTranslations();
 
   // Aggregate the SELECTED tier at the SELECTED period for the headline card.
   const headline = useMemo(() => {
-    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, dataSource, new Date());
-  }, [fixtures, stake, calcTier, calcPeriod, dataSource]);
+    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, new Date());
+  }, [fixtures, stake, calcTier, calcPeriod]);
 
   // Breakdown across all four tiers at the selected period, so the user can
   // compare what each tier would have paid out.
   const perTier = useMemo(() => {
     const now = new Date();
     const result: Record<CalcTier, PickAggregate> = {
-      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, dataSource, now),
-      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, dataSource, now),
-      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, dataSource, now),
-      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, dataSource, now),
+      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, now),
+      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, now),
+      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, now),
+      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, now),
     };
     return result;
-  }, [fixtures, stake, calcPeriod, dataSource]);
+  }, [fixtures, stake, calcPeriod]);
 
   const headlineTotalStake = headline.realStake + headline.modelStake;
   const profitColor = headline.profit >= 0 ? "#10b981" : "#ef4444";
-
-  const periodOptions: { value: CalcPeriod; label: string }[] = [
-    { value: 7, label: t("results.last7Days") },
-    { value: 14, label: t("results.last14Days") },
-    { value: 30, label: t("results.last30Days") },
-  ];
 
   if (isLoading) {
     return (
@@ -527,46 +518,8 @@ function RoiCalculatorCard({
         </div>
       </Step>
 
-      {/* ── Step 2 — Data source ─────────────────────────────── */}
-      <Step number={2} label={t("results.roiCalcStepSource")} hint={t("results.roiCalcStepSourceHint")}>
-        <div className="flex flex-wrap items-center gap-2">
-          {([
-            { key: "live", label: t("results.roiCalcSrcLive"), hint: t("results.roiCalcSrcLiveHint") },
-            { key: "backtest", label: t("results.roiCalcSrcBacktest"), hint: t("results.roiCalcSrcBacktestHint") },
-            { key: "all", label: t("results.roiCalcSrcAll"), hint: t("results.roiCalcSrcAllHint") },
-          ] as const).map((opt) => {
-            const active = dataSource === opt.key;
-            return (
-              <button
-                key={opt.key}
-                type="button"
-                onClick={() => {
-                  setDataSource(opt.key);
-                  // Widen to 30d whenever the user flips source so the
-                  // window actually spans the relevant regime — 7d
-                  // post-launch contains zero backtest data, for example.
-                  setCalcPeriod(30);
-                }}
-                title={opt.hint}
-                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-colors border ${
-                  active
-                    ? opt.key === "live"
-                      ? "bg-emerald-600/80 text-white border-emerald-500/60"
-                      : opt.key === "backtest"
-                      ? "bg-amber-600/80 text-white border-amber-500/60"
-                      : "bg-blue-600 text-white border-blue-500/60"
-                    : "text-slate-400 bg-white/[0.02] border-white/[0.06] hover:text-slate-200"
-                }`}
-              >
-                {opt.label}
-              </button>
-            );
-          })}
-        </div>
-      </Step>
-
-      {/* ── Step 3 — Stake per pick ──────────────────────────── */}
-      <Step number={3} label={t("results.roiCalcStep2")} hint={t("results.roiCalcStep2Hint")}>
+      {/* ── Step 2 — Stake per pick ──────────────────────────── */}
+      <Step number={2} label={t("results.roiCalcStep2")} hint={t("results.roiCalcStep2Hint")}>
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1.5">
             <span className="text-sm text-slate-400">€</span>
@@ -603,28 +556,54 @@ function RoiCalculatorCard({
         </div>
       </Step>
 
-      {/* ── Step 4 — Pick period ─────────────────────────────── */}
-      <Step number={4} label={t("results.roiCalcStep3")} hint={t("results.roiCalcStep3Hint")}>
-        <div className="inline-flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
-          {periodOptions.map(({ value, label }) => (
-            <button
-              key={value}
-              type="button"
-              onClick={() => setCalcPeriod(value)}
-              className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                calcPeriod === value
-                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
+      {/* ── Step 3 — Pick period ─────────────────────────────── */}
+      <Step number={3} label={t("results.roiCalcStep3")} hint={t("results.roiCalcStep3Hint")}>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
+            {PERIOD_PRESETS.map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setCalcPeriod(value)}
+                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
+                  calcPeriod === value
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                {value}d
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1.5">
+            <label className="text-[10px] uppercase tracking-widest text-slate-500">
+              {t("results.roiCalcCustomDays")}
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={PERIOD_MIN}
+              max={PERIOD_MAX}
+              step={1}
+              value={calcPeriod}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                if (!Number.isFinite(v)) return;
+                const clamped = Math.max(PERIOD_MIN, Math.min(PERIOD_MAX, Math.round(v)));
+                setCalcPeriod(clamped);
+              }}
+              className="w-14 bg-transparent text-sm font-semibold text-slate-100 tabular-nums focus:outline-none"
+            />
+            <span className="text-[10px] text-slate-500">{t("results.roiCalcDaysUnit")}</span>
+          </div>
+          <span className="text-[10px] text-slate-500">
+            {t("results.roiCalcMaxHint", { max: PERIOD_MAX })}
+          </span>
         </div>
       </Step>
 
-      {/* ── Step 5 — Your return ─────────────────────────────── */}
-      <Step number={5} label={t("results.roiCalcStep4")} hint={t("results.roiCalcStep4Hint")}>
+      {/* ── Step 4 — Your return ─────────────────────────────── */}
+      <Step number={4} label={t("results.roiCalcStep4")} hint={t("results.roiCalcStep4Hint")}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-3">
           <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
             <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
@@ -802,11 +781,6 @@ function ResultsFilterBar({
   total,
 }: FilterBarProps) {
   const { t } = useTranslations();
-  const periods: { value: PeriodFilter; label: string }[] = [
-    { value: 7,  label: t("results.last7Days") },
-    { value: 14, label: t("results.last14Days") },
-    { value: 30, label: t("results.last30Days") },
-  ];
 
   const resultOptions: { value: ResultFilter; label: string }[] = [
     { value: "All", label: t("results.filterAll") },
@@ -818,22 +792,10 @@ function ResultsFilterBar({
     <div className="glass-card p-4">
       <div className="flex flex-wrap items-center gap-3">
 
-        {/* Period */}
-        <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
-          {periods.map(({ value, label }) => (
-            <button
-              key={value}
-              onClick={() => setPeriod(value)}
-              className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                period === value
-                  ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        {/* Period badge — the period control itself lives in Step 3 of the calculator */}
+        <span className="text-[10px] uppercase tracking-widest text-slate-500 mr-1">
+          {t("results.filterShowingLast", { days: period })}
+        </span>
 
         {/* Result filter */}
         <div className="flex items-center gap-1.5">
@@ -1139,8 +1101,6 @@ export default function ResultsPage() {
 }
 
 const VALID_TIERS: readonly TierFilter[] = ["free", "silver", "gold", "platinum"] as const;
-const VALID_PERIODS: readonly PeriodFilter[] = [7, 14, 30] as const;
-const VALID_SOURCES: readonly DataSource[] = ["all", "live", "backtest"] as const;
 
 function ResultsPageContent() {
   const { t } = useTranslations();
@@ -1153,21 +1113,17 @@ function ResultsPageContent() {
   })();
   const initialPeriod = (() => {
     const q = Number(searchParams?.get("period"));
-    return (VALID_PERIODS as readonly number[]).includes(q) ? (q as PeriodFilter) : 7;
-  })();
-  const initialSource = (() => {
-    const q = (searchParams?.get("src") ?? "").toLowerCase();
-    return (VALID_SOURCES as readonly string[]).includes(q) ? (q as DataSource) : "live";
+    if (!Number.isFinite(q) || q <= 0) return 30;
+    return Math.max(1, Math.min(365, Math.round(q)));
   })();
 
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
-  // Tier + period + data source for the ROI calculator are the single
-  // source of truth — the results table below reuses them so selecting
-  // e.g. "Platinum / Live" in the calculator also scopes the table.
+  // Tier + period for the ROI calculator are the single source of
+  // truth — the results table below reuses them so selecting e.g.
+  // "Platinum" in the calculator also scopes the table.
   const [tierFilter, setTierFilter] = useState<TierFilter>(initialTier);
   const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(initialPeriod);
-  const [dataSource, setDataSource] = useState<DataSource>(initialSource);
   // Alias — the table's period is driven entirely by the calculator so
   // both surfaces never disagree.
   const period = calcPeriod;
@@ -1193,12 +1149,12 @@ function ResultsPageContent() {
   }, [stake]);
 
   // ── Queries ────────────────────────────────────────────────────────────────
-  // Always fetch a full 30 days so the ROI calculator can show per-tier
-  // breakdowns independent of the active table period. The 7/14-day
-  // table views filter the same dataset client-side.
+  // Always fetch a full 365 days so the ROI calculator can support a
+  // custom days-back filter up to the backend cap. Shorter windows
+  // filter the same cached dataset client-side.
   const resultsQuery = useQuery({
-    queryKey: ["fixture-results", 30, leagueFilter],
-    queryFn: () => api.getFixtureResults(30, leagueFilter || undefined),
+    queryKey: ["fixture-results", 365, leagueFilter],
+    queryFn: () => api.getFixtureResults(365, leagueFilter || undefined),
     staleTime: 5 * 60_000,
     retry: 1,
   });
@@ -1229,12 +1185,13 @@ function ResultsPageContent() {
       (f) => f.status === "finished" && f.result && f.prediction,
     );
 
-    // Period window — client-side since we always fetch 30 days.
+    // Period window — client-side since we always fetch 365 days.
     const cutoffMs = Date.now() - period * 24 * 60 * 60 * 1000;
     items = items.filter((f) => new Date(f.scheduled_at).getTime() >= cutoffMs);
 
-    // Data source (live / backtest / all) — matches the calculator.
-    items = items.filter((f) => matchesSource(f, dataSource));
+    // Live-only — simulator is only valid for picks locked pre-kickoff
+    // since launch, because backtest fixtures lack reliable pre-match odds.
+    items = items.filter((f) => isLivePick(f));
 
     items = items.filter((f) => f.prediction?.pick_tier === tierFilter);
 
@@ -1260,7 +1217,7 @@ function ResultsPageContent() {
     items.sort((a, b) => b.scheduled_at.localeCompare(a.scheduled_at));
 
     return items;
-  }, [allResults, resultFilter, leagueFilter, tierFilter, period, dataSource]);
+  }, [allResults, resultFilter, leagueFilter, tierFilter, period]);
 
   // ── Summary computed from filtered so stats always match the table ─────────
   const computedSummary = useMemo<WeeklySummary | null>(() => {
@@ -1354,8 +1311,6 @@ function ResultsPageContent() {
         setCalcTier={setTierFilter}
         calcPeriod={calcPeriod}
         setCalcPeriod={setCalcPeriod}
-        dataSource={dataSource}
-        setDataSource={setDataSource}
       />
 
       {/* ── Weekly Summary ── */}
@@ -1459,33 +1414,16 @@ function ResultsPageContent() {
       ) : filtered.length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
           <Trophy className="h-8 w-8 text-slate-600" />
-          {dataSource === "backtest" ? (
-            <>
-              <p className="text-base font-medium text-slate-400">{t("results.noBacktestTitle")}</p>
-              <p className="text-sm text-slate-600 max-w-md">
-                {t("results.noBacktestHint")}
-              </p>
-              <button
-                onClick={() => { setDataSource("live"); setCalcPeriod(30); }}
-                className="btn-primary mt-2"
-              >
-                {t("results.switchToLive")}
-              </button>
-            </>
-          ) : (
-            <>
-              <p className="text-base font-medium text-slate-400">{t("results.noResultsMatchFilters")}</p>
-              <p className="text-sm text-slate-600">
-                {t("results.noResultsMatchFiltersHint")}
-              </p>
-              <button
-                onClick={() => { setResultFilter("All"); setLeagueFilter(""); }}
-                className="btn-primary mt-2"
-              >
-                {t("results.clearFilters")}
-              </button>
-            </>
-          )}
+          <p className="text-base font-medium text-slate-400">{t("results.noResultsMatchFilters")}</p>
+          <p className="text-sm text-slate-600">
+            {t("results.noResultsMatchFiltersHint")}
+          </p>
+          <button
+            onClick={() => { setResultFilter("All"); setLeagueFilter(""); }}
+            className="btn-primary mt-2"
+          >
+            {t("results.clearFilters")}
+          </button>
         </div>
       ) : (
         <div className="glass-card overflow-hidden">

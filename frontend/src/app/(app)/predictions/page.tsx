@@ -1388,7 +1388,7 @@ export default function PredictionsPage() {
         {(
           [
             { key: "upcoming" as const, label: t("pred.upcoming"), icon: CalendarDays },
-            { key: "results" as const, label: t("results.title"), icon: Trophy },
+            { key: "results" as const, label: t("pred.resultsTab"), icon: Trophy },
           ]
         ).map(({ key, label, icon: Icon }) => {
           const active = viewMode === key;
