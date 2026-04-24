@@ -753,7 +753,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
           User feedback was dat BotD-backtest als aparte container naast
           de tier-backtest hoort, zodat alle "historische analyse"
           onderdelen bij elkaar staan vóór we aan live meting beginnen. */}
-      <BotdTrackRecordSection />
+      <BotdTrackRecordSection publicMode />
 
       {/* Full details + CSV export + live measurement per tier are
           intentionally gated to the authenticated app — Free Access
