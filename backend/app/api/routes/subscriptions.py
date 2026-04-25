@@ -953,3 +953,73 @@ async def cancel_my_subscription(
         cancel_at_period_end=sub.cancel_at_period_end,
         stripe_customer_id=sub.stripe_customer_id,
     )
+
+
+# ─── Billing Portal ────────────────────────────────────────────────────────
+
+
+class BillingPortalResponse(BaseModel):
+    """Stripe-hosted self-service URL the frontend should redirect to."""
+
+    url: str
+
+
+@router.post("/billing-portal", response_model=BillingPortalResponse)
+async def create_billing_portal_session(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> BillingPortalResponse:
+    """Create a Stripe Billing Portal session for the current user.
+
+    The portal lets customers update their payment method, change plan,
+    download past invoices, and cancel — all on a Stripe-hosted page.
+    The frontend should redirect the browser to the returned URL.
+
+    Stripe redirects the user back to ``{frontend_url}/subscription``
+    when they're done in the portal.
+    """
+    result = await db.execute(
+        select(Subscription).where(Subscription.user_id == current_user.id)
+    )
+    sub = result.scalar_one_or_none()
+    if sub is None or not sub.stripe_customer_id:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "No Stripe customer on file. Subscribe to a paid plan first "
+                "before opening the billing portal."
+            ),
+        )
+
+    settings = get_settings()
+    stripe_key = getattr(settings, "stripe_secret_key", None)
+    if not stripe_key or stripe_key == "sk_test_placeholder":
+        raise HTTPException(
+            status_code=503,
+            detail="Stripe is not configured on the server.",
+        )
+
+    return_url = (
+        (settings.frontend_url or "https://betsplug.com").rstrip("/")
+        + "/subscription"
+    )
+
+    try:
+        import stripe
+
+        stripe.api_key = stripe_key
+        portal_session = stripe.billing_portal.Session.create(
+            customer=sub.stripe_customer_id,
+            return_url=return_url,
+        )
+    except Exception as exc:  # noqa: BLE001
+        logger.error(
+            "Failed to create Stripe billing portal session for user=%s: %s",
+            current_user.id, exc,
+        )
+        raise HTTPException(
+            status_code=502,
+            detail="Could not open the Stripe billing portal. Please try again.",
+        ) from exc
+
+    return BillingPortalResponse(url=portal_session.url)

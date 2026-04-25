@@ -263,6 +263,19 @@ class ApiClient {
     );
   }
 
+  /**
+   * Create a Stripe Billing Portal session and return its URL.
+   * The caller should redirect the browser to that URL — Stripe
+   * hosts the page where the customer can update their payment
+   * method, change plan, download invoices, or cancel.
+   */
+  createBillingPortalSession() {
+    return this.request<{ url: string }>(
+      "/subscriptions/billing-portal",
+      { method: "POST" }
+    );
+  }
+
   /* ── Admin Finance ────────────────────────────────────────── */
 
   adminFinanceOverview(params?: { period?: string; months?: number }) {

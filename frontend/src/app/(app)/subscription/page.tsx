@@ -195,6 +195,25 @@ export default function SubscriptionPage() {
   const queryClient = useQueryClient();
   const [cancelOpen, setCancelOpen] = React.useState(false);
   const [copied, setCopied] = React.useState(false);
+  const [portalLoading, setPortalLoading] = React.useState(false);
+  const [portalError, setPortalError] = React.useState<string | null>(null);
+
+  const openBillingPortal = async () => {
+    if (portalLoading) return;
+    setPortalError(null);
+    setPortalLoading(true);
+    try {
+      const { url } = await api.createBillingPortalSession();
+      window.location.href = url;
+    } catch (err) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "Could not open billing portal. Please try again.";
+      setPortalError(msg);
+      setPortalLoading(false);
+    }
+  };
 
   const { data, isLoading, error, refetch } = useQuery<MySubscription>({
     queryKey: ["my-subscription"],
@@ -351,6 +370,18 @@ export default function SubscriptionPage() {
                       Upgrade to Platinum
                     </button>
                   )}
+                  {data.stripe_customer_id && (
+                    <button
+                      onClick={openBillingPortal}
+                      disabled={portalLoading}
+                      className="btn-glass disabled:opacity-60"
+                    >
+                      <CreditCard className="h-3.5 w-3.5" />
+                      {portalLoading
+                        ? "Opening portal…"
+                        : "Manage billing & payment"}
+                    </button>
+                  )}
                   {!data.is_lifetime && !data.cancel_at_period_end && (
                     <button
                       onClick={() => setCancelOpen(true)}
@@ -370,6 +401,10 @@ export default function SubscriptionPage() {
                     </button>
                   )}
                 </div>
+
+                {portalError && (
+                  <p className="mt-3 text-xs text-[#ff6b6b]">{portalError}</p>
+                )}
               </div>
             </div>
 
