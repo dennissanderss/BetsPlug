@@ -200,8 +200,13 @@ async def send_email(
 # ---------------------------------------------------------------------------
 
 
+_LOGO_URL = "https://betsplug.com/logo-email.png"
+
+
 def _layout(title: str, body_html: str) -> str:
     """Wrap a block of HTML in the responsive BetsPlug email shell."""
+    settings = get_settings()
+    site = (settings.frontend_url or "https://betsplug.com").rstrip("/")
     return f"""\
 <!doctype html>
 <html lang="en">
@@ -216,9 +221,10 @@ def _layout(title: str, body_html: str) -> str:
       <td align="center">
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;background:#111827;border-radius:12px;overflow:hidden;border:1px solid #1f2937;">
           <tr>
-            <td style="padding:28px 32px 16px 32px;text-align:center;background:linear-gradient(135deg,#4ade80 0%,#22c55e 100%);">
-              <h1 style="margin:0;font-size:24px;line-height:1.2;color:#ffffff;">BetsPlug</h1>
-              <p style="margin:4px 0 0 0;font-size:13px;color:#ecfdf5;">AI football predictions that actually deliver</p>
+            <td style="padding:32px 32px 24px 32px;text-align:center;background:#0f172a;border-bottom:1px solid #1f2937;">
+              <a href="{site}" style="text-decoration:none;">
+                <img src="{_LOGO_URL}" width="180" alt="BetsPlug" style="display:block;margin:0 auto;border:0;outline:none;text-decoration:none;max-width:180px;height:auto;">
+              </a>
             </td>
           </tr>
           <tr>
@@ -228,8 +234,11 @@ def _layout(title: str, body_html: str) -> str:
           </tr>
           <tr>
             <td style="padding:20px 32px;text-align:center;background:#0f172a;border-top:1px solid #1f2937;font-size:12px;color:#9ca3af;">
-              &copy; BetsPlug &middot; <a href="https://betsplug.com" style="color:#4ade80;text-decoration:none;">betsplug.com</a>
-              <br>You are receiving this email because of activity on your BetsPlug account.
+              <a href="{site}" style="color:#4ade80;text-decoration:none;">betsplug.com</a>
+              &nbsp;&middot;&nbsp;
+              <a href="{site}/subscription" style="color:#4ade80;text-decoration:none;">Manage subscription</a>
+              <br><br>
+              &copy; BetsPlug &middot; You are receiving this email because of activity on your BetsPlug account.
             </td>
           </tr>
         </table>
@@ -255,43 +264,77 @@ def _button(label: str, url: str) -> str:
 
 
 async def send_verification_email(to: str, token: str, username: str) -> bool:
-    """Send the post-registration email verification message."""
+    """Send the post-registration welcome + verification message."""
     settings = get_settings()
     base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
     verify_url = f"{base}/verify-email?token={token}"
+    site_url = base
+    account_url = f"{base}/subscription"
 
-    subject = "Verify your BetsPlug account / Verifieer je BetsPlug-account"
+    subject = f"Welcome to BetsPlug, {username} — verify your email"
 
     text = (
         f"Hi {username},\n\n"
-        "Welcome to BetsPlug! Please verify your email address by opening "
-        f"the link below:\n\n{verify_url}\n\n"
+        "Welcome to BetsPlug — AI-powered football predictions backed by data, "
+        "not guesswork.\n\n"
+        f"Please verify your email address to activate your account:\n\n{verify_url}\n\n"
         "This link is valid for 24 hours.\n\n"
+        f"After verifying, you can browse predictions at {site_url} and "
+        f"manage your account at {account_url}.\n\n"
         "----\n\n"
         f"Hallo {username},\n\n"
-        "Welkom bij BetsPlug! Verifieer je e-mailadres door op onderstaande "
-        f"link te klikken:\n\n{verify_url}\n\n"
+        "Welkom bij BetsPlug — AI-voetbalvoorspellingen op basis van data, "
+        "niet op gevoel.\n\n"
+        f"Verifieer je e-mailadres om je account te activeren:\n\n{verify_url}\n\n"
         "Deze link is 24 uur geldig.\n\n"
+        f"Daarna kun je voorspellingen bekijken op {site_url} en je account "
+        f"beheren via {account_url}.\n\n"
         "- The BetsPlug team"
     )
 
     body = f"""
-      <h2 style="margin:0 0 12px 0;color:#ffffff;font-size:20px;">Welcome, {username}!</h2>
-      <p>Thanks for signing up for BetsPlug. Please confirm your email address to activate your account.</p>
-      <p style="text-align:center;">{_button("Verify email", verify_url)}</p>
-      <p style="font-size:13px;color:#9ca3af;">Or copy this link into your browser:<br>
-      <a href="{verify_url}" style="color:#4ade80;word-break:break-all;">{verify_url}</a></p>
-      <p style="font-size:13px;color:#9ca3af;">This link is valid for 24 hours.</p>
-      <hr style="border:none;border-top:1px solid #1f2937;margin:24px 0;">
-      <h3 style="margin:0 0 8px 0;color:#ffffff;font-size:16px;">Nederlands</h3>
-      <p>Bedankt voor je aanmelding bij BetsPlug. Bevestig je e-mailadres om je account te activeren.</p>
-      <p style="text-align:center;">{_button("E-mail bevestigen", verify_url)}</p>
-      <p style="font-size:13px;color:#9ca3af;">Deze link is 24 uur geldig.</p>
+      <h2 style="margin:0 0 12px 0;color:#ffffff;font-size:22px;">Welcome to BetsPlug, {username}!</h2>
+      <p style="margin:0 0 16px 0;">Thanks for joining — you now have access to AI-powered football predictions, daily picks and our full track record.</p>
+      <p style="margin:0 0 12px 0;">One last step: verify your email to unlock your full account and start receiving picks.</p>
+      <p style="text-align:center;margin:24px 0;">{_button("Verify my email", verify_url)}</p>
+      <p style="font-size:13px;color:#9ca3af;margin:0 0 4px 0;">Or copy this link into your browser:</p>
+      <p style="font-size:13px;color:#9ca3af;margin:0 0 16px 0;word-break:break-all;">
+        <a href="{verify_url}" style="color:#4ade80;word-break:break-all;">{verify_url}</a>
+      </p>
+      <p style="font-size:13px;color:#9ca3af;margin:0 0 24px 0;">This link is valid for 24 hours.</p>
+
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;background:#0f172a;border-radius:8px;border:1px solid #1f2937;">
+        <tr>
+          <td style="padding:18px 20px;">
+            <p style="margin:0 0 8px 0;color:#ffffff;font-weight:600;">While you're here</p>
+            <p style="margin:0 0 6px 0;font-size:14px;">
+              &rarr; <a href="{site_url}" style="color:#4ade80;text-decoration:none;">Browse today's free predictions</a>
+            </p>
+            <p style="margin:0;font-size:14px;">
+              &rarr; <a href="{account_url}" style="color:#4ade80;text-decoration:none;">Choose a plan or manage your account</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+
+      <hr style="border:none;border-top:1px solid #1f2937;margin:28px 0;">
+
+      <h3 style="margin:0 0 8px 0;color:#ffffff;font-size:18px;">Nederlands</h3>
+      <p style="margin:0 0 12px 0;">Welkom, {username}! Je hebt nu toegang tot AI-voetbalvoorspellingen, dagelijkse picks en ons volledige track record.</p>
+      <p style="margin:0 0 12px 0;">Nog &eacute;&eacute;n stap: bevestig je e-mailadres om je account volledig te activeren.</p>
+      <p style="text-align:center;margin:24px 0;">{_button("E-mail bevestigen", verify_url)}</p>
+      <p style="font-size:13px;color:#9ca3af;margin:0 0 12px 0;">Deze link is 24 uur geldig.</p>
+      <p style="font-size:14px;margin:12px 0 4px 0;">
+        &rarr; <a href="{site_url}" style="color:#4ade80;text-decoration:none;">Bekijk gratis voorspellingen</a>
+      </p>
+      <p style="font-size:14px;margin:0 0 4px 0;">
+        &rarr; <a href="{account_url}" style="color:#4ade80;text-decoration:none;">Kies een abonnement of beheer je account</a>
+      </p>
     """
     return await send_email(
         to,
         subject,
-        _layout("Verify your email", body),
+        _layout("Welcome to BetsPlug", body),
         text,
         action_url=verify_url,
     )
@@ -343,37 +386,104 @@ async def send_password_reset_email(to: str, token: str, username: str) -> bool:
     )
 
 
-async def send_welcome_email(to: str, username: str, plan: str) -> bool:
-    """Send a welcome email after a user successfully subscribes."""
+async def send_welcome_email(
+    to: str,
+    username: str,
+    plan: str,
+    *,
+    amount: float | None = None,
+    currency: str = "eur",
+    next_billing_date: str | None = None,
+    is_lifetime: bool = False,
+) -> bool:
+    """Send a "subscription activated" email after a successful first payment.
+
+    Combines the warm welcome + branded plan summary + manage-subscription
+    link in a single mail. Stripe still sends its own PDF invoice for the
+    actual charge — this mail covers the relational side (what you bought,
+    when the next charge is, how to cancel).
+    """
     settings = get_settings()
     base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
     dashboard_url = f"{base}/dashboard"
+    subscription_url = f"{base}/subscription"
 
-    subject = f"Welcome to BetsPlug {plan.title()} / Welkom bij BetsPlug {plan.title()}"
+    plan_title = plan.title()
+    currency_upper = (currency or "EUR").upper()
+    amount_str = f"{amount:.2f} {currency_upper}" if amount else None
+
+    if is_lifetime:
+        next_charge_en = "Lifetime access — no recurring charges."
+        next_charge_nl = "Levenslange toegang — geen herhaalbetalingen."
+    elif next_billing_date:
+        next_charge_en = f"Next charge: {next_billing_date}"
+        next_charge_nl = f"Volgende afschrijving: {next_billing_date}"
+    else:
+        next_charge_en = "Renews automatically each billing period."
+        next_charge_nl = "Wordt automatisch elke factuurperiode verlengd."
+
+    subject = f"Your BetsPlug {plan_title} plan is active"
 
     text = (
         f"Hi {username},\n\n"
-        f"Your BetsPlug {plan.title()} plan is now active. "
-        f"Head over to your dashboard to get started:\n\n{dashboard_url}\n\n"
+        f"Your BetsPlug {plan_title} plan is active. {next_charge_en}\n\n"
+        f"Dashboard: {dashboard_url}\n"
+        f"Manage or cancel your subscription: {subscription_url}\n\n"
+        "Stripe will email you a PDF invoice for every payment, separately.\n\n"
         "----\n\n"
         f"Hallo {username},\n\n"
-        f"Je BetsPlug {plan.title()}-abonnement is nu actief. "
-        f"Ga naar je dashboard om te beginnen:\n\n{dashboard_url}\n\n"
+        f"Je BetsPlug {plan_title}-abonnement is actief. {next_charge_nl}\n\n"
+        f"Dashboard: {dashboard_url}\n"
+        f"Abonnement beheren of opzeggen: {subscription_url}\n\n"
+        "Stripe stuurt je per betaling een PDF-factuur — apart van deze mail.\n\n"
         "- The BetsPlug team"
     )
 
+    amount_row = (
+        f"""
+        <tr>
+          <td style="padding:10px 12px;color:#9ca3af;border-top:1px solid #1f2937;">Amount paid</td>
+          <td style="padding:10px 12px;color:#ffffff;text-align:right;border-top:1px solid #1f2937;"><strong>{amount_str}</strong></td>
+        </tr>
+        """
+        if amount_str
+        else ""
+    )
+
     body = f"""
-      <h2 style="margin:0 0 12px 0;color:#ffffff;font-size:20px;">You're in, {username}!</h2>
-      <p>Your <strong>BetsPlug {plan.title()}</strong> plan is now active. Thanks for joining —
-      we're excited to help you make smarter picks with data-driven predictions, strategy
-      backtesting and daily insights.</p>
-      <p style="text-align:center;">{_button("Go to dashboard", dashboard_url)}</p>
-      <hr style="border:none;border-top:1px solid #1f2937;margin:24px 0;">
-      <h3 style="margin:0 0 8px 0;color:#ffffff;font-size:16px;">Nederlands</h3>
-      <p>Je <strong>BetsPlug {plan.title()}</strong>-abonnement is nu actief. Bedankt voor je aanmelding!</p>
-      <p style="text-align:center;">{_button("Naar dashboard", dashboard_url)}</p>
+      <h2 style="margin:0 0 12px 0;color:#ffffff;font-size:22px;">You're in, {username}!</h2>
+      <p style="margin:0 0 16px 0;">Your <strong>BetsPlug {plan_title}</strong> plan is now active. Thanks for joining — let's make smarter picks together.</p>
+
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0f172a;border-radius:8px;border:1px solid #1f2937;margin:20px 0;">
+        <tr>
+          <td style="padding:10px 12px;color:#9ca3af;">Plan</td>
+          <td style="padding:10px 12px;color:#ffffff;text-align:right;"><strong>BetsPlug {plan_title}</strong></td>
+        </tr>
+        {amount_row}
+        <tr>
+          <td colspan="2" style="padding:12px;color:#9ca3af;border-top:1px solid #1f2937;font-size:13px;">{next_charge_en}</td>
+        </tr>
+      </table>
+
+      <p style="text-align:center;margin:20px 0 8px 0;">{_button("Go to dashboard", dashboard_url)}</p>
+      <p style="text-align:center;margin:0 0 20px 0;font-size:14px;">
+        <a href="{subscription_url}" style="color:#4ade80;text-decoration:none;">Manage or cancel your subscription &rarr;</a>
+      </p>
+
+      <p style="font-size:13px;color:#9ca3af;margin:24px 0 0 0;">A separate PDF invoice for this payment will be emailed by Stripe.</p>
+
+      <hr style="border:none;border-top:1px solid #1f2937;margin:28px 0;">
+
+      <h3 style="margin:0 0 8px 0;color:#ffffff;font-size:18px;">Nederlands</h3>
+      <p style="margin:0 0 12px 0;">Je <strong>BetsPlug {plan_title}</strong>-abonnement is actief. Bedankt voor je aanmelding!</p>
+      <p style="margin:0 0 16px 0;font-size:13px;color:#9ca3af;">{next_charge_nl}</p>
+      <p style="text-align:center;margin:20px 0 8px 0;">{_button("Naar dashboard", dashboard_url)}</p>
+      <p style="text-align:center;margin:0 0 12px 0;font-size:14px;">
+        <a href="{subscription_url}" style="color:#4ade80;text-decoration:none;">Abonnement beheren of opzeggen &rarr;</a>
+      </p>
+      <p style="font-size:13px;color:#9ca3af;margin:16px 0 0 0;">Stripe stuurt je per betaling een PDF-factuur — apart van deze mail.</p>
     """
-    return await send_email(to, subject, _layout("Welcome to BetsPlug", body), text)
+    return await send_email(to, subject, _layout("Subscription activated", body), text)
 
 
 async def send_payment_receipt_email(

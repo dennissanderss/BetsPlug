@@ -40,7 +40,6 @@ from app.models.subscription import (
     SubscriptionStatus,
 )
 from app.services.email import (
-    send_payment_receipt_email,
     send_subscription_cancelled_email,
     send_welcome_email,
 )
@@ -669,27 +668,28 @@ async def stripe_webhook(
                 user.email, plan, checkout_session_id,
             )
 
-            # Fire-and-forget notification emails. Any failure here is
-            # swallowed so the webhook still returns 200.
+            # Fire-and-forget notification email. Any failure is swallowed
+            # so the webhook still returns 200.
+            #
+            # We send a single branded "subscription activated" email that
+            # combines the welcome + plan summary + manage-subscription link.
+            # Stripe sends its own PDF invoice receipt for the actual charge,
+            # so a second receipt mail from us would just be duplicate noise.
             try:
+                next_billing_str = (
+                    period_end.strftime("%d %B %Y") if period_end else None
+                )
                 await send_welcome_email(
                     to=user.email,
                     username=user.username,
                     plan=plan_type.value,
+                    amount=float(amount_total) / 100.0 if amount_total else None,
+                    currency=currency,
+                    next_billing_date=next_billing_str,
+                    is_lifetime=is_lifetime,
                 )
             except Exception as email_exc:  # noqa: BLE001
                 logger.error("Welcome email failed: %s", email_exc)
-            try:
-                if amount_total:
-                    await send_payment_receipt_email(
-                        to=user.email,
-                        username=user.username,
-                        plan=plan_type.value,
-                        amount=float(amount_total) / 100.0,
-                        currency=currency,
-                    )
-            except Exception as email_exc:  # noqa: BLE001
-                logger.error("Receipt email failed: %s", email_exc)
         except Exception as outer_exc:  # noqa: BLE001
             logger.error(
                 "checkout.session.completed handler failed: %s",
