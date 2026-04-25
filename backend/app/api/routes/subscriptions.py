@@ -621,12 +621,46 @@ async def stripe_webhook(
             existing_sub = result.scalar_one_or_none()
 
             if existing_sub:
+                # Upgrading from a recurring plan (Silver/Gold) to lifetime
+                # Platinum kills the new subscription_id (one-time payments
+                # have none) and orphans the old Stripe subscription, which
+                # would otherwise keep billing the customer monthly. Cancel
+                # the old subscription on Stripe before we overwrite the
+                # column.
+                if (
+                    is_lifetime
+                    and existing_sub.stripe_subscription_id
+                    and existing_sub.stripe_subscription_id != subscription_id
+                ):
+                    stripe_key = getattr(settings, "stripe_secret_key", None)
+                    if stripe_key and stripe_key != "sk_test_placeholder":
+                        try:
+                            import stripe
+
+                            stripe.api_key = stripe_key
+                            stripe.Subscription.cancel(
+                                existing_sub.stripe_subscription_id
+                            )
+                            logger.info(
+                                "Cancelled prior Stripe subscription %s for "
+                                "user=%s upgrading to lifetime Platinum",
+                                existing_sub.stripe_subscription_id, user.id,
+                            )
+                        except Exception as cancel_exc:  # noqa: BLE001
+                            logger.error(
+                                "Failed to cancel prior Stripe sub %s on "
+                                "Platinum upgrade for user=%s: %s",
+                                existing_sub.stripe_subscription_id,
+                                user.id, cancel_exc,
+                            )
+
                 existing_sub.plan_type = plan_type
                 existing_sub.status = initial_status
                 existing_sub.stripe_customer_id = customer_id
                 existing_sub.stripe_subscription_id = subscription_id
                 existing_sub.is_lifetime = is_lifetime
                 existing_sub.current_period_start = now_utc
+                existing_sub.cancel_at_period_end = False
                 if period_end is not None:
                     existing_sub.current_period_end = period_end
             else:
