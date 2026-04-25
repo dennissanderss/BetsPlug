@@ -137,6 +137,8 @@ async def send_email(
     }
     if text:
         payload["text"] = text
+    if settings.email_reply_to:
+        payload["reply_to"] = settings.email_reply_to
 
     headers = {
         "Authorization": f"Bearer {settings.resend_api_key}",

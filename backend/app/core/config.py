@@ -116,6 +116,15 @@ class Settings(BaseSettings):
         default="BetsPlug",
         validation_alias="MAIL_FROM_NAME",
     )
+    # Reply-To header — when a recipient hits "Reply" in their mail
+    # client, the response goes here instead of the (unattended)
+    # noreply From address. Default points at the Hostinger-hosted
+    # support inbox so customer replies land in the same mailbox the
+    # team already monitors.
+    email_reply_to: str = Field(
+        default="support@betsplug.com",
+        validation_alias="MAIL_REPLY_TO",
+    )
     # Explicit opt-in: when true, ``send_email`` logs the message body
     # to stdout and returns True without calling Resend. Production
     # must NEVER set this — missing RESEND_API_KEY on production
