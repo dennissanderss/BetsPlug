@@ -258,7 +258,7 @@ async def send_verification_email(to: str, token: str, username: str) -> bool:
     """Send the post-registration email verification message."""
     settings = get_settings()
     base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
-    verify_url = f"{base}/auth/verify-email?token={token}"
+    verify_url = f"{base}/verify-email?token={token}"
 
     subject = "Verify your BetsPlug account / Verifieer je BetsPlug-account"
 
@@ -301,7 +301,7 @@ async def send_password_reset_email(to: str, token: str, username: str) -> bool:
     """Send the forgot-password reset link."""
     settings = get_settings()
     base = (settings.frontend_url or "http://localhost:3000").rstrip("/")
-    reset_url = f"{base}/auth/reset-password?token={token}"
+    reset_url = f"{base}/reset-password?token={token}"
 
     subject = "Reset your BetsPlug password / Reset je BetsPlug-wachtwoord"
 
