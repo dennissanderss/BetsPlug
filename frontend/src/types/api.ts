@@ -34,6 +34,16 @@ export interface MySubscription {
   stripe_customer_id: string | null;
 }
 
+export interface MyPayment {
+  id: string;
+  created_at: string;
+  amount: number;
+  currency: string;
+  status: string;
+  plan: string;
+  description: string | null;
+}
+
 // ─── Admin Finance ───────────────────────────────────────────
 
 export interface AdminExpense {

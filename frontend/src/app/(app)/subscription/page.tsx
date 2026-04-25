@@ -221,6 +221,12 @@ export default function SubscriptionPage() {
     retry: false,
   });
 
+  const { data: payments } = useQuery<import("@/types/api").MyPayment[]>({
+    queryKey: ["my-payments"],
+    queryFn: () => api.getMyPayments(),
+    retry: false,
+  });
+
   const cancelMutation = useMutation({
     mutationFn: () => api.cancelMySubscription(),
     onSuccess: (updated) => {
@@ -486,6 +492,79 @@ export default function SubscriptionPage() {
                       : "Recurring"}
                   </InfoRow>
                 </div>
+
+                {/* Past payments */}
+                {payments && payments.length > 0 && (
+                  <div className="mt-6 border-t border-white/[0.08] pt-5">
+                    <p className="mb-3 text-[10px] font-semibold uppercase tracking-wider text-[#a3a9b8]">
+                      Past payments
+                    </p>
+                    <div className="overflow-hidden rounded-xl border border-white/[0.08]">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-white/[0.08] bg-white/[0.02] text-left text-[10px] uppercase tracking-wider text-[#a3a9b8]">
+                            <th className="px-4 py-2.5 font-semibold">Date</th>
+                            <th className="px-4 py-2.5 font-semibold">Plan</th>
+                            <th className="px-4 py-2.5 text-right font-semibold">
+                              Amount
+                            </th>
+                            <th className="px-4 py-2.5 font-semibold">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {payments.map((p) => (
+                            <tr
+                              key={p.id}
+                              className="border-b border-white/[0.06] last:border-0"
+                            >
+                              <td className="px-4 py-3 text-[#ededed]">
+                                {formatDate(p.created_at)}
+                              </td>
+                              <td className="px-4 py-3 capitalize text-[#a3a9b8]">
+                                {p.plan}
+                              </td>
+                              <td className="px-4 py-3 text-right font-mono text-[#ededed]">
+                                {p.amount.toFixed(2)}{" "}
+                                {p.currency.toUpperCase()}
+                              </td>
+                              <td className="px-4 py-3">
+                                <Pill
+                                  tone={
+                                    p.status === "succeeded"
+                                      ? "win"
+                                      : p.status === "refunded"
+                                      ? "purple"
+                                      : p.status === "failed"
+                                      ? "loss"
+                                      : "default"
+                                  }
+                                >
+                                  {p.status}
+                                </Pill>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <p className="mt-3 text-[11px] text-[#a3a9b8]">
+                      For tax-compliant PDF invoices, open{" "}
+                      <button
+                        onClick={openBillingPortal}
+                        className="text-[#4ade80] hover:underline"
+                      >
+                        Manage billing &amp; payment
+                      </button>{" "}
+                      &mdash; Stripe hosts the official invoices.
+                    </p>
+                  </div>
+                )}
+                {payments && payments.length === 0 && (
+                  <p className="mt-6 border-t border-white/[0.08] pt-5 text-sm text-[#a3a9b8]">
+                    No past payments yet. Your first invoice will appear here
+                    after Stripe processes your subscription.
+                  </p>
+                )}
               </div>
             </div>
 

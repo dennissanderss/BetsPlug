@@ -723,6 +723,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
           <div className="mt-12">
             <ActiveSubscriptionNotice
               planName={mySub.data.plan ?? ""}
+              targetPlan={planParam}
               loc={loc}
             />
           </div>
@@ -2204,14 +2205,18 @@ function LoginGate({
  */
 function ActiveSubscriptionNotice({
   planName,
+  targetPlan,
   loc,
 }: {
   planName: string;
+  targetPlan: string;
   loc: (path: string) => string;
 }) {
   const prettyPlan = planName
     ? planName.charAt(0).toUpperCase() + planName.slice(1)
     : "";
+  const isPlatinumUpgrade = targetPlan === "platinum";
+
   return (
     <div className="mx-auto max-w-2xl">
       <motion.div
@@ -2225,34 +2230,72 @@ function ActiveSubscriptionNotice({
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#4ade80]/30 bg-[#4ade80]/[0.08]0/[0.12]">
             <CheckCircle2 className="h-6 w-6 text-green-400" />
           </div>
-          <h2 className="mt-6 text-balance break-words text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-            You already have an active{" "}
-            {prettyPlan && (
-              <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
-                {prettyPlan}
-              </span>
-            )}{" "}
-            subscription
-          </h2>
-          <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#6b7280]">
-            Manage it — change plan, update payment, or cancel — from
-            your subscription page.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
-              href={loc("/subscription")}
-              className="btn-primary inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40 sm:w-auto"
-            >
-              Go to my subscription
-              <ChevronRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href={loc("/dashboard")}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3 text-sm font-bold text-white transition-all hover:border-white/[0.25] hover:bg-white/[0.04]/[0.08] sm:w-auto"
-            >
-              Open dashboard
-            </Link>
-          </div>
+
+          {isPlatinumUpgrade ? (
+            <>
+              <h2 className="mt-6 text-balance break-words text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                Switching to{" "}
+                <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
+                  Platinum
+                </span>
+                ?
+              </h2>
+              <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#6b7280]">
+                Platinum is a one-time lifetime purchase, not a monthly
+                plan — Stripe can&apos;t auto-switch a recurring{" "}
+                {prettyPlan || "subscription"} to it. To upgrade, please
+                cancel your current {prettyPlan || "subscription"} from
+                your subscription page first, then come back here to buy
+                Platinum.
+              </p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Link
+                  href={loc("/subscription")}
+                  className="btn-primary inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40 sm:w-auto"
+                >
+                  Cancel current subscription
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href={loc("/dashboard")}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3 text-sm font-bold text-white transition-all hover:border-white/[0.25] hover:bg-white/[0.04]/[0.08] sm:w-auto"
+                >
+                  Back to dashboard
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className="mt-6 text-balance break-words text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                You already have an active{" "}
+                {prettyPlan && (
+                  <span className="bg-gradient-to-br from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
+                    {prettyPlan}
+                  </span>
+                )}{" "}
+                subscription
+              </h2>
+              <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[#6b7280]">
+                Manage it — change plan, update payment, or cancel — from
+                your subscription page.
+              </p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Link
+                  href={loc("/subscription")}
+                  className="btn-primary inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-extrabold tracking-tight text-black shadow-lg shadow-green-500/20 transition-all hover:shadow-green-500/40 sm:w-auto"
+                >
+                  Go to my subscription
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href={loc("/dashboard")}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-6 py-3 text-sm font-bold text-white transition-all hover:border-white/[0.25] hover:bg-white/[0.04]/[0.08] sm:w-auto"
+                >
+                  Open dashboard
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </motion.div>
     </div>

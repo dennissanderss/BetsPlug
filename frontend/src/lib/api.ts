@@ -276,6 +276,13 @@ class ApiClient {
     );
   }
 
+  /** Past payments for the authenticated user, newest first. */
+  getMyPayments() {
+    return this.request<import("@/types/api").MyPayment[]>(
+      "/subscriptions/me/payments"
+    );
+  }
+
   /* ── Admin Finance ────────────────────────────────────────── */
 
   adminFinanceOverview(params?: { period?: string; months?: number }) {

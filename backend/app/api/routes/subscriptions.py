@@ -610,8 +610,33 @@ async def stripe_webhook(
             if is_bronze_trial:
                 period_end = now_utc + timedelta(days=7)
                 initial_status = SubscriptionStatus.TRIALING
+            elif subscription_id:
+                # Recurring plan — fetch period_end from Stripe directly
+                # instead of waiting for a customer.subscription.updated
+                # webhook. Without this, the /subscription page renders
+                # "—" for renewal date until Stripe gets around to firing
+                # that event (sometimes minutes, sometimes never if the
+                # webhook event isn't subscribed in dashboard).
+                period_end = None
+                stripe_key_for_fetch = getattr(settings, "stripe_secret_key", None)
+                if stripe_key_for_fetch and stripe_key_for_fetch != "sk_test_placeholder":
+                    try:
+                        import stripe
+
+                        stripe.api_key = stripe_key_for_fetch
+                        stripe_sub = stripe.Subscription.retrieve(subscription_id)
+                        cpe = getattr(stripe_sub, "current_period_end", None)
+                        if cpe:
+                            period_end = datetime.fromtimestamp(cpe, tz=timezone.utc)
+                    except Exception as fetch_exc:  # noqa: BLE001
+                        logger.warning(
+                            "Could not fetch Stripe subscription %s for "
+                            "period_end on checkout.session.completed: %s",
+                            subscription_id, fetch_exc,
+                        )
+                initial_status = SubscriptionStatus.ACTIVE
             else:
-                period_end = None  # recurring plans: Stripe sets this via invoice webhooks
+                period_end = None
                 initial_status = SubscriptionStatus.ACTIVE
 
             # Upsert subscription for the resolved user
@@ -987,6 +1012,52 @@ async def cancel_my_subscription(
         cancel_at_period_end=sub.cancel_at_period_end,
         stripe_customer_id=sub.stripe_customer_id,
     )
+
+
+# ─── Payment history ───────────────────────────────────────────────────────
+
+
+class MyPaymentEntry(BaseModel):
+    """One row in the authenticated user's payment history."""
+
+    id: str
+    created_at: datetime
+    amount: float
+    currency: str
+    status: str
+    plan: str
+    description: str | None = None
+
+
+@router.get("/me/payments", response_model=list[MyPaymentEntry])
+async def list_my_payments(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> list[MyPaymentEntry]:
+    """Return the authenticated user's payment history, newest first.
+
+    Used by the /subscription page to render the billing history block:
+    purchase date, plan, amount and status per past payment.
+    """
+    result = await db.execute(
+        select(Payment)
+        .where(Payment.user_id == current_user.id)
+        .order_by(Payment.created_at.desc())
+    )
+    rows = result.scalars().all()
+
+    return [
+        MyPaymentEntry(
+            id=str(row.id),
+            created_at=row.created_at,
+            amount=float(row.amount),
+            currency=(row.currency or "eur").lower(),
+            status=row.status.value,
+            plan=row.plan_type.value,
+            description=row.description,
+        )
+        for row in rows
+    ]
 
 
 # ─── Billing Portal ────────────────────────────────────────────────────────
