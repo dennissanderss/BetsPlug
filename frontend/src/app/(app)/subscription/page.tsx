@@ -35,10 +35,10 @@ type PlanKey = "bronze" | "silver" | "gold" | "platinum";
 function normalizePlan(plan: string | null): PlanKey | null {
   if (!plan) return null;
   const p = plan.toLowerCase();
-  if (p.includes("platinum")) return "platinum";
-  if (p.includes("gold")) return "gold";
-  if (p.includes("silver")) return "silver";
-  if (p.includes("bronze")) return "bronze";
+  if (p.includes("platinum") || p.includes("lifetime")) return "platinum";
+  if (p.includes("gold") || p.includes("premium")) return "gold";
+  if (p.includes("silver") || p.includes("standard")) return "silver";
+  if (p.includes("bronze") || p.includes("basic")) return "bronze";
   return null;
 }
 
@@ -415,7 +415,7 @@ export default function SubscriptionPage() {
             </div>
 
             {/* Usage stats */}
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2">
               <KpiTile
                 label="Plan tier"
                 value={planLabel}
@@ -427,18 +427,6 @@ export default function SubscriptionPage() {
                 value={status.label}
                 variant="green"
                 icon={<ShieldCheck className="h-5 w-5" />}
-              />
-              <KpiTile
-                label={data.cancel_at_period_end ? "Cancels" : "Renewal"}
-                value={
-                  data.is_lifetime
-                    ? "Never"
-                    : data.current_period_end
-                    ? formatDate(data.current_period_end)
-                    : "—"
-                }
-                variant="purple"
-                icon={<Calendar className="h-5 w-5" />}
               />
             </div>
 
@@ -454,48 +442,9 @@ export default function SubscriptionPage() {
                   </h2>
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <InfoRow
-                    icon={<Calendar className="h-3.5 w-3.5" />}
-                    label={
-                      data.cancel_at_period_end ? "Cancels on" : "Next renewal"
-                    }
-                  >
-                    {data.is_lifetime ? (
-                      <span className="text-[#a3a9b8]">Never — lifetime plan</span>
-                    ) : data.current_period_end ? (
-                      formatDate(data.current_period_end)
-                    ) : (
-                      "—"
-                    )}
-                  </InfoRow>
-                  <InfoRow
-                    icon={<ShieldCheck className="h-3.5 w-3.5" />}
-                    label="Status"
-                  >
-                    <Pill tone={status.tone}>{status.label}</Pill>
-                  </InfoRow>
-                  <InfoRow
-                    icon={<Crown className="h-3.5 w-3.5" />}
-                    label="Plan"
-                  >
-                    {planLabel}
-                  </InfoRow>
-                  <InfoRow
-                    icon={<CreditCard className="h-3.5 w-3.5" />}
-                    label="Billing"
-                  >
-                    {data.is_lifetime
-                      ? "Lifetime (paid)"
-                      : data.cancel_at_period_end
-                      ? "No future renewals"
-                      : "Recurring"}
-                  </InfoRow>
-                </div>
-
                 {/* Past payments */}
                 {payments && payments.length > 0 && (
-                  <div className="mt-6 border-t border-white/[0.08] pt-5">
+                  <div>
                     <p className="mb-3 text-[10px] font-semibold uppercase tracking-wider text-[#a3a9b8]">
                       Past payments
                     </p>
@@ -560,7 +509,7 @@ export default function SubscriptionPage() {
                   </div>
                 )}
                 {payments && payments.length === 0 && (
-                  <p className="mt-6 border-t border-white/[0.08] pt-5 text-sm text-[#a3a9b8]">
+                  <p className="text-sm text-[#a3a9b8]">
                     No past payments yet. Your first invoice will appear here
                     after Stripe processes your subscription.
                   </p>
