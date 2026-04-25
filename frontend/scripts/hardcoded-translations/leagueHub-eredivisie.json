@@ -1,0 +1,205 @@
+{
+  "_docId": "leagueHub-eredivisie",
+  "_type": "leagueHub",
+  "_label": "Eredivisie",
+  "fields": {
+    "country": {
+      "sw": "Uholanzi",
+      "pt": "Países Baixos",
+      "tr": "Hollanda",
+      "pl": "Holandia",
+      "ro": "Țările de Jos",
+      "ru": "Нидерланды",
+      "el": "Ολλανδία",
+      "da": "Holland",
+      "sv": "Nederländerna"
+    },
+    "name": {
+      "sw": "Eredivisie",
+      "pt": "Eredivisie",
+      "tr": "Eredivisie",
+      "pl": "Eredivisie",
+      "ro": "Eredivisie",
+      "ru": "Eredivisie",
+      "el": "Eredivisie",
+      "da": "Eredivisie",
+      "sv": "Eredivisie"
+    },
+    "tagline": {
+      "sw": "Utabiri wa bure wa AI kwa kila speelronde ya Eredivisie",
+      "pt": "Previsões de IA gratuitas para cada jornada da Eredivisie",
+      "tr": "Her Eredivisie haftası için ücretsiz AI tahminleri",
+      "pl": "Darmowe prognozy AI dla każdej kolejki Eredivisie",
+      "ro": "Predicții AI gratuite pentru fiecare etapă din Eredivisie",
+      "ru": "Бесплатные ИИ-прогнозы на каждый тур Eredivisie",
+      "el": "Δωρεάν AI προβλέψεις για κάθε αγωνιστική της Eredivisie",
+      "da": "Gratis AI-forudsigelser for hver Eredivisie-spillerunde",
+      "sv": "Gratis AI-förutsägelser för varje Eredivisie-omgång"
+    },
+    "metaTitle": {
+      "sw": "Utabiri wa AI wa Eredivisie & Odds 2025/26 · BetsPlug",
+      "pt": "Previsões IA da Eredivisie & Odds 2025/26 · BetsPlug",
+      "tr": "Eredivisie AI Tahminleri ve Oranlar 2025/26 · BetsPlug",
+      "pl": "Prognozy AI Eredivisie i kursy 2025/26 · BetsPlug",
+      "ro": "Predicții AI Eredivisie & Cote 2025/26 · BetsPlug",
+      "ru": "ИИ-прогнозы Eredivisie и коэффициенты 2025/26 · BetsPlug",
+      "el": "AI Προβλέψεις Eredivisie & Αποδόσεις 2025/26 · BetsPlug",
+      "da": "Eredivisie AI-forudsigelser & Odds 2025/26 · BetsPlug",
+      "sv": "Eredivisie AI-förutsägelser & Odds 2025/26 · BetsPlug"
+    },
+    "metaDescription": {
+      "sw": "Utabiri wa bure wa AI wa Eredivisie, uwezekano wa kushinda na alama za imani kwa kila speelronde ya Uholanzi. Imejengwa Uholanzi juu ya modeli za Elo, Poisson na XGBoost.",
+      "pt": "Previsões gratuitas com IA da Eredivisie, probabilidades de vitória e scores de confiança para cada jornada holandesa. Construído nos Países Baixos sobre modelos Elo, Poisson e XGBoost.",
+      "tr": "Her Hollanda futbol haftası için ücretsiz AI destekli Eredivisie tahminleri, galibiyet olasılıkları ve güven skorları. Hollanda'da Elo, Poisson ve XGBoost modelleri üzerine inşa edildi.",
+      "pl": "Darmowe prognozy Eredivisie oparte na AI, prawdopodobieństwa wygranej i wskaźniki pewności dla każdej holenderskiej kolejki. Zbudowane w Holandii na modelach Elo, Poisson i XGBoost.",
+      "ro": "Predicții AI gratuite pentru Eredivisie, probabilități de victorie și scoruri de încredere pentru fiecare etapă olandeză. Construit în Olanda pe modele Elo, Poisson și XGBoost.",
+      "ru": "Бесплатные ИИ-прогнозы Eredivisie, вероятности побед и confidence-score для каждого тура Нидерландов. Построено в Нидерландах на моделях Elo, Poisson и XGBoost.",
+      "el": "Δωρεάν AI προβλέψεις Eredivisie, πιθανότητες νίκης και σκορ εμπιστοσύνης για κάθε ολλανδική αγωνιστική. Χτισμένο στην Ολλανδία πάνω σε μοντέλα Elo, Poisson και XGBoost.",
+      "da": "Gratis AI-drevne Eredivisie-forudsigelser, sejrssandsynligheder og confidence-scores til hver hollandsk spillerunde. Bygget i Holland på Elo, Poisson og XGBoost-modeller.",
+      "sv": "Gratis AI-drivna Eredivisie-förutsägelser, vinstsannolikheter och konfidensscore för varje holländsk omgång. Byggt i Nederländerna på Elo, Poisson och XGBoost-modeller."
+    },
+    "intro": {
+      "sw": "Eredivisie ni ligi yetu ya nyumbani - BetsPlug imejengwa Uholanzi na kalenda ya Dutch ya soka ndiyo tunayoiangalia kwa karibu zaidi na research desk yetu. Pia ni moja ya ligi za kuvutia zaidi Ulaya za kumodelisha: ya mashambulizi, yenye goli nyingi, press-hard, na inayodominishwa na klabu chache sana zinazochezaji tofauti kabisa na meza iliyobaki. Ensemble yetu inawatembelea PSV, Ajax na Feyenoord kwa kalibrasho tofauti kwa sababu uzalishaji wao wa xG uko juu sana ya wastani wa ligi kiasi kwamba lambda moja ingeharibu kila mechi nyingine. Tunavuta data live kupitia API-Football, tunaiipia upya kila dakika tano wakati wa matchday-window, na tunaendesha ensemble ile ile ya modeli nne tunayoitumia kwa Premier League. Mechi tatu zenye edge ya juu zaidi kwa kila speelronde huchapishwa hapa bure; members wanapata orodha kamili pamoja na Kelly stakes na ripoti ya closing-line value.",
+      "pt": "A Eredivisie é a nossa liga de casa - a BetsPlug foi construída nos Países Baixos e o calendário futebolístico holandês é o que a nossa research desk acompanha mais de perto. É também uma das ligas mais interessantes da Europa para modelar: ofensiva, com muitos golos, pressionada a fundo e dominada por um punhado de clubes que jogam de forma completamente diferente do resto da tabela. O nosso ensemble dá ao PSV, Ajax e Feyenoord uma cabeça de calibração separada porque o seu output de xG está tão acima da média da liga que uma única lambda distorceria todos os outros jogos. Puxamos dados ao vivo via API-Football, atualizamos de cinco em cinco minutos durante a janela de matchday, e corremos o mesmo ensemble de quatro modelos que usamos para a Premier League. Os três jogos com maior edge esperada em cada speelronde são publicados aqui gratuitamente; os membros obtêm o cartaz completo mais Kelly stakes e o relatório de closing-line value.",
+      "tr": "Eredivisie bizim ev ligimizdir - BetsPlug Hollanda'da inşa edildi ve Hollanda futbol takvimi research desk'imizin en yakından takip ettiği takvimdir. Aynı zamanda modellemesi Avrupa'nın en ilginç liglerinden biridir: hücumcu, gol yüklü, sert pres yapan ve tablonun geri kalanından tamamen farklı oynayan bir avuç kulüp tarafından hakim olunan. Ensemble'imiz PSV, Ajax ve Feyenoord'a ayrı bir kalibrasyon kafası verir çünkü xG çıktıları lig ortalamasının çok üzerindedir ve tek bir lambda diğer her fikstürü çarpıtırdı. Canlı verileri API-Football üzerinden çekiyoruz, matchday penceresi boyunca her beş dakikada bir yeniliyoruz ve Premier League için kullandığımız aynı dört modelli ensemble'ı çalıştırıyoruz. Her speelronde'nin en yüksek beklenen edge'ine sahip üç maçı burada ücretsiz yayımlanır; üyeler Kelly stakes ve closing-line value raporuyla tam programı alır.",
+      "pl": "Eredivisie to nasza domowa liga - BetsPlug został zbudowany w Holandii i holenderski kalendarz piłkarski jest tym, który nasz research desk śledzi najuważniej. Jest też jedną z najbardziej interesujących lig Europy do modelowania: ofensywna, bramkostrzelna, mocno pressingowana i zdominowana przez garstkę klubów grających zupełnie inaczej niż reszta tabeli. Nasz ensemble daje PSV, Ajaxowi i Feyenoordowi osobną głowę kalibracyjną, bo ich output xG jest tak daleko powyżej średniej ligowej, że pojedyncza lambda zniekształciłaby każdy inny mecz. Dane live pobieramy przez API-Football, odświeżamy co pięć minut w oknie matchday i uruchamiamy ten sam ensemble czterech modeli co dla Premier League. Trzy mecze z najwyższym oczekiwanym edge'em na speelronde publikujemy tu za darmo; członkowie dostają pełny program plus Kelly stakes i raport closing-line value.",
+      "ro": "Eredivisie este liga noastră de acasă - BetsPlug a fost construit în Olanda și calendarul fotbalistic olandez este cel pe care research desk-ul nostru îl urmărește cel mai îndeaproape. Este, de asemenea, una dintre cele mai interesante ligi din Europa de modelat: ofensivă, cu multe goluri, cu presing intens și dominată de o mână de cluburi care joacă complet diferit de restul clasamentului. Ensemble-ul nostru oferă lui PSV, Ajax și Feyenoord un cap de calibrare separat, deoarece output-ul lor xG este atât de departe peste media ligii încât o singură lambda ar distorsiona fiecare alt meci. Tragem date live prin API-Football, reîmprospătăm la fiecare cinci minute în fereastra de matchday și rulăm același ensemble cu patru modele pe care îl folosim pentru Premier League. Cele trei meciuri cu cel mai mare edge așteptat în fiecare speelronde sunt publicate gratuit aici; membrii primesc programul complet plus Kelly stakes și raportul de closing-line value.",
+      "ru": "Eredivisie — наша домашняя лига: BetsPlug построен в Нидерландах, и именно голландский футбольный календарь наша research-команда отслеживает внимательнее всего. Это также одна из самых интересных для моделирования лиг Европы: атакующая, с большим количеством голов, с жёстким прессингом, доминируемая несколькими клубами, играющими совершенно иначе, чем остальная часть таблицы. Наш ensemble даёт PSV, Ajax и Feyenoord отдельную калибровочную голову, потому что их xG-output настолько выше среднего по лиге, что единая лямбда исказила бы все остальные матчи. Live-данные подтягиваются через API-Football, обновляются каждые пять минут в окне matchday, и мы запускаем тот же ensemble из четырёх моделей, что и для Premier League. Три матча с наибольшим ожидаемым edge на speelronde публикуются здесь бесплатно; участники получают полный список плюс Kelly stakes и отчёт closing-line value.",
+      "el": "Η Eredivisie είναι η σπιτική μας λίγκα - η BetsPlug χτίστηκε στην Ολλανδία και το ολλανδικό ποδοσφαιρικό ημερολόγιο είναι αυτό που η research desk μας παρακολουθεί πιο στενά. Είναι επίσης μία από τις πιο ενδιαφέρουσες λίγκες της Ευρώπης για μοντελοποίηση: επιθετική, πολύ γκολτζίδικη, με έντονο πρέσινγκ και κυριαρχούμενη από μια χούφτα συλλόγους που παίζουν εντελώς διαφορετικά από τους υπόλοιπους του πίνακα. Το ensemble μας δίνει στους PSV, Ajax και Feyenoord μια ξεχωριστή κεφαλή καλιμπραρίσματος επειδή το xG output τους είναι τόσο πάνω από τον μέσο όρο της λίγκας που μια ενιαία lambda θα παραμόρφωνε κάθε άλλο αγώνα. Τραβάμε live δεδομένα μέσω API-Football, ανανεώνουμε κάθε πέντε λεπτά στο παράθυρο matchday και τρέχουμε το ίδιο ensemble τεσσάρων μοντέλων που χρησιμοποιούμε για την Premier League. Οι τρεις αγώνες με το μεγαλύτερο αναμενόμενο edge σε κάθε speelronde δημοσιεύονται εδώ δωρεάν· τα μέλη λαμβάνουν τη πλήρη λίστα καθώς και Kelly stakes και την αναφορά closing-line value.",
+      "da": "Eredivisie er vores hjemmebaneliga - BetsPlug er bygget i Holland, og den hollandske fodboldkalender er den, vores research desk følger tættest. Det er også en af Europas mest interessante ligaer at modellere: angribende, målrig, med hård pres og domineret af en håndfuld klubber, der spiller fuldstændig anderledes end resten af tabellen. Vores ensemble giver PSV, Ajax og Feyenoord et separat kalibreringshoved, fordi deres xG-output ligger så langt over ligagennemsnittet, at en enkelt lambda ville forvrænge enhver anden kamp. Vi henter live-data via API-Football, opdaterer hvert femte minut i matchday-vinduet og kører det samme ensemble med fire modeller, som vi bruger til Premier League. De tre kampe med den højeste forventede edge hver speelronde udgives gratis her; medlemmer får hele programmet plus Kelly stakes og closing-line value-rapporten.",
+      "sv": "Eredivisie är vår hemmaliga - BetsPlug är byggt i Nederländerna och den holländska fotbollskalendern är den som vår research desk följer tätast. Det är också en av Europas mest intressanta ligor att modellera: offensiv, målrik, hårt pressad och dominerad av en handfull klubbar som spelar helt annorlunda än resten av tabellen. Vår ensemble ger PSV, Ajax och Feyenoord ett separat kalibreringshuvud eftersom deras xG-output ligger så långt över ligasnittet att en enda lambda skulle förvränga varje annan match. Vi hämtar live-data via API-Football, uppdaterar var femte minut i matchday-fönstret och kör samma ensemble med fyra modeller som vi använder för Premier League. De tre matcherna med högst förväntad edge varje speelronde publiceras gratis här; medlemmar får hela programmet plus Kelly stakes och closing-line value-rapporten."
+    },
+    "faqs[faq-0].question": {
+      "sw": "Kwa nini Eredivisie inahitaji kalibrasho tofauti ya modeli?",
+      "pt": "Porque é que a Eredivisie precisa de uma calibração de modelo diferente?",
+      "tr": "Eredivisie neden farklı bir model kalibrasyonuna ihtiyaç duyuyor?",
+      "pl": "Dlaczego Eredivisie wymaga innej kalibracji modelu?",
+      "ro": "De ce are nevoie Eredivisie de o calibrare de model diferită?",
+      "ru": "Почему Eredivisie нужна отдельная калибровка модели?",
+      "el": "Γιατί η Eredivisie χρειάζεται διαφορετικό καλιμπράρισμα μοντέλου;",
+      "da": "Hvorfor har Eredivisie brug for en anden model-kalibrering?",
+      "sv": "Varför behöver Eredivisie en annan modellkalibrering?"
+    },
+    "faqs[faq-0].answer": {
+      "sw": "Eredivisie huweka wastani wa goli 3.2 kwa mechi - kwa starehe ya juu kabisa ya ligi kumi za juu Ulaya - na klabu tatu (PSV, Ajax, Feyenoord) ziko kwenye nambari za xG ambazo zingekuwa outliers popote pengine. Lambda moja ya ligi-nzima ya Poisson ingekadiria goli kupita kiasi katika nusu ya chini na kupunguza kukadiriwa kwa juu, kwa hivyo tuna-fit head tofauti kwa top three na nyingine kwa wafuata-wadogo.",
+      "pt": "A Eredivisie tem uma média de cerca de 3,2 golos por jogo - confortavelmente a mais alta das dez melhores ligas da Europa - e três clubes (PSV, Ajax, Feyenoord) têm números de xG que seriam outliers em qualquer outro lugar. Um único lambda Poisson para toda a liga sobrestimaria golos na metade inferior e subestimaria no topo, por isso treinamos uma cabeça separada para os três de cima e outra para o pelotão que os persegue.",
+      "tr": "Eredivisie maç başına yaklaşık 3,2 gol ortalamasında - rahatlıkla Avrupa'nın en iyi on ligi arasındaki en yüksek - ve üç kulüp (PSV, Ajax, Feyenoord) başka hiçbir yerde outlier sayılacak xG rakamlarında oturuyor. Tek bir lig çapında Poisson lambdası alt yarıda golleri abartır ve tepede küçümserdi, bu yüzden top üçlü için ayrı bir kafa ve takip eden grup için başka bir kafa fit ediyoruz.",
+      "pl": "Eredivisie ma średnio około 3,2 bramki na mecz - zdecydowanie najwięcej z dziesięciu czołowych lig Europy - a trzy kluby (PSV, Ajax, Feyenoord) siedzą na liczbach xG, które gdziekolwiek indziej byłyby outlierami. Pojedyncza ogólnoligowa lambda Poissona przeszacowałaby bramki w dolnej połowie i niedoszacowała na szczycie, więc fitujemy osobną głowę dla top trójki i kolejną dla pościgu.",
+      "ro": "Eredivisie are o medie de aproximativ 3,2 goluri pe meci - confortabil cea mai mare din primele zece ligi ale Europei - și trei cluburi (PSV, Ajax, Feyenoord) se află pe cifre xG care ar fi outlier oriunde altundeva. O singură lambda Poisson la nivelul întregii ligi ar supraestima golurile în jumătatea inferioară și le-ar subestima la vârf, așa că fitim un cap separat pentru primele trei și altul pentru plutonul urmăritor.",
+      "ru": "Eredivisie в среднем 3.2 гола за матч — уверенно самая результативная из десяти ведущих лиг Европы — и три клуба (PSV, Ajax, Feyenoord) имеют xG, которые в любом другом месте были бы выбросами. Единая общелиговая лямбда Poisson переоценила бы голы в нижней половине и недооценила на вершине, поэтому мы фитим отдельную голову для топ-тройки и другую для преследующей группы.",
+      "el": "Η Eredivisie έχει μέσο όρο περίπου 3,2 γκολ ανά αγώνα - άνετα το υψηλότερο από τις δέκα κορυφαίες λίγκες της Ευρώπης - και τρεις σύλλογοι (PSV, Ajax, Feyenoord) κάθονται σε νούμερα xG που θα ήταν outliers οπουδήποτε αλλού. Μια ενιαία lambda Poisson για όλη τη λίγκα θα υπερεκτιμούσε γκολ στη κάτω μισή και θα υποτιμούσε στην κορυφή, οπότε fitάρουμε ξεχωριστή κεφαλή για τους top τρεις και άλλη για την ομάδα που κυνηγάει.",
+      "da": "Eredivisie har i gennemsnit ca. 3,2 mål pr. kamp - komfortabelt det højeste af Europas top-ti ligaer - og tre klubber (PSV, Ajax, Feyenoord) sidder på xG-tal, der ville være outliers alle andre steder. En enkelt liga-dækkende Poisson-lambda ville overvurdere mål i den nederste halvdel og undervurdere dem i toppen, så vi fitter et separat hoved til de tre øverste og et andet til forfølgergruppen.",
+      "sv": "Eredivisie har i snitt cirka 3,2 mål per match - bekvämt den högsta av Europas topp-tio ligor - och tre klubbar (PSV, Ajax, Feyenoord) ligger på xG-tal som skulle vara outliers på någon annan plats. En enda liga-omfattande Poisson-lambda skulle överskatta mål i den nedre halvan och underskatta dem i toppen, så vi fittar ett separat huvud för topp-tre och ett annat för jaktgruppen."
+    },
+    "faqs[faq-1].question": {
+      "sw": "Mnafunika kila mechi ya Eredivisie?",
+      "pt": "Cobrem todos os jogos da Eredivisie?",
+      "tr": "Her Eredivisie maçını kapsıyor musunuz?",
+      "pl": "Czy obejmujecie każdy mecz Eredivisie?",
+      "ro": "Acoperiți fiecare meci din Eredivisie?",
+      "ru": "Вы покрываете каждый матч Eredivisie?",
+      "el": "Καλύπτετε κάθε αγώνα της Eredivisie;",
+      "da": "Dækker I hver Eredivisie-kamp?",
+      "sv": "Täcker ni varje Eredivisie-match?"
+    },
+    "faqs[faq-1].answer": {
+      "sw": "Ndio - mechi zote 306 kwa msimu hupata ensemble run kamili mara tu opstellingen zinapokuwa zinatabirika. Mechi tatu zenye edge kali zaidi kwa speelronde zinaonyeshwa hapa bure; zilizobaki ziko ndani ya dashibodi ya members ya BetsPlug.",
+      "pt": "Sim - todos os 306 jogos por época recebem uma ensemble run completa assim que os onzes ficam previsíveis. Os três jogos com a edge de modelo mais afiada por speelronde são mostrados aqui gratuitamente; o resto está dentro do dashboard de membros BetsPlug.",
+      "tr": "Evet - sezon başına 306 maç, kadrolar tahmin edilebilir hale gelir gelmez tam ensemble run alır. Her speelronde başına en keskin model edge'ine sahip üç fikstür burada ücretsiz gösterilir; geri kalanı BetsPlug üye panosunun içinde yer alır.",
+      "pl": "Tak - wszystkie 306 meczów na sezon dostają pełny ensemble run, jak tylko składy stają się przewidywalne. Trzy mecze z najostrzejszym edge modelu na speelronde są tutaj pokazywane za darmo; reszta znajduje się wewnątrz dashboardu członkowskiego BetsPlug.",
+      "ro": "Da - toate cele 306 meciuri pe sezon primesc un ensemble run complet imediat ce formațiile devin previzibile. Cele trei meciuri cu cel mai ascuțit edge de model per speelronde sunt arătate aici gratuit; restul se află în dashboard-ul de membri BetsPlug.",
+      "ru": "Да — все 306 матчей за сезон получают полный ensemble run, как только составы становятся предсказуемы. Три матча с самым острым edge модели за speelronde показываются здесь бесплатно; остальное — внутри дашборда участников BetsPlug.",
+      "el": "Ναι - όλοι οι 306 αγώνες ανά σεζόν λαμβάνουν ένα πλήρες ensemble run μόλις οι ενδεκάδες γίνουν προβλέψιμες. Οι τρεις αγώνες με το πιο κοφτερό model edge ανά speelronde δείχνονται εδώ δωρεάν· οι υπόλοιποι βρίσκονται μέσα στο dashboard μελών BetsPlug.",
+      "da": "Ja - alle 306 kampe pr. sæson får et komplet ensemble run, så snart startopstillingerne bliver forudsigelige. De tre kampe med den skarpeste model-edge pr. speelronde vises gratis her; resten ligger inde i BetsPlug medlemsdashboardet.",
+      "sv": "Ja - alla 306 matcher per säsong får en fullständig ensemble run så snart startelvorna blir förutsägbara. De tre matcherna med den vassaste modell-edgen per speelronde visas gratis här; resten finns i BetsPlug-medlemsdashboarden."
+    },
+    "faqs[faq-2].question": {
+      "sw": "Utabiri wenu wa Eredivisie ni sahihi kiasi gani?",
+      "pt": "Qual é a precisão das vossas previsões da Eredivisie?",
+      "tr": "Eredivisie tahminleriniz ne kadar doğru?",
+      "pl": "Jak dokładne są wasze prognozy Eredivisie?",
+      "ro": "Cât de precise sunt predicțiile voastre pentru Eredivisie?",
+      "ru": "Насколько точны ваши прогнозы на Eredivisie?",
+      "el": "Πόσο ακριβείς είναι οι προβλέψεις σας για την Eredivisie;",
+      "da": "Hvor præcise er jeres Eredivisie-forudsigelser?",
+      "sv": "Hur exakta är era Eredivisie-förutsägelser?"
+    },
+    "faqs[faq-2].answer": {
+      "sw": "Kalibrasho ya rolling ya siku 30 kwenye soko la favoriti-kushinda iko kati ya 72% na 76% - kidogo juu ya Premier League, kwa sababu PSV, Ajax na Feyenoord hushinda sehemu kubwa zaidi ya mechi zao za nyumbani kuliko big six ya Premier League. Breakdown kamili imechapishwa kwenye /track-record.",
+      "pt": "A calibração rolling de 30 dias no mercado de favorito-a-vencer situa-se entre 72% e 76% - ligeiramente acima da Premier League, porque PSV, Ajax e Feyenoord ganham uma maior fatia dos seus jogos em casa do que os big six da Premier League. O breakdown completo é publicado em /track-record.",
+      "tr": "Favori-kazanır pazarında 30 günlük rolling kalibrasyon %72 ile %76 arasındadır - Premier League'in hafif üzerinde, çünkü PSV, Ajax ve Feyenoord ev maçlarının daha büyük bir payını Premier League big six'ten daha fazla kazanır. Tam döküm /track-record'da yayımlanır.",
+      "pl": "Krocząca kalibracja 30-dniowa na rynku faworyta-do-wygrania wynosi 72%-76% - nieco powyżej Premier League, ponieważ PSV, Ajax i Feyenoord wygrywają większą część swoich meczów domowych niż big six Premier League. Pełny breakdown jest publikowany na /track-record.",
+      "ro": "Calibrarea rolling de 30 de zile pe piața favorit-pentru-victorie se situează între 72% și 76% - ușor peste Premier League, pentru că PSV, Ajax și Feyenoord câștigă o cotă mai mare din meciurile lor acasă decât big six din Premier League. Breakdown-ul complet este publicat la /track-record.",
+      "ru": "Rolling-калибровка 30 дней на рынке «фаворит побеждает» держится 72-76% — чуть выше Premier League, потому что PSV, Ajax и Feyenoord выигрывают бо́льшую долю домашних матчей, чем Premier League big six. Полный разбор публикуется на /track-record.",
+      "el": "Η rolling καλιμπράρισμα 30 ημερών στην αγορά φαβορί-για-νίκη βρίσκεται μεταξύ 72% και 76% - ελαφρώς πάνω από την Premier League, επειδή PSV, Ajax και Feyenoord κερδίζουν μεγαλύτερο μερίδιο των εντός έδρας αγώνων τους από το big six της Premier League. Η πλήρης ανάλυση δημοσιεύεται στο /track-record.",
+      "da": "Rullende 30-dages kalibrering på favorit-til-sejr-markedet ligger mellem 72% og 76% - lidt over Premier League, fordi PSV, Ajax og Feyenoord vinder en større andel af deres hjemmekampe end Premier League's big six. Hele opdelingen er offentliggjort på /track-record.",
+      "sv": "Rullande 30-dagarskalibrering på favorit-vinner-marknaden ligger mellan 72% och 76% - något över Premier League, eftersom PSV, Ajax och Feyenoord vinner en större andel av sina hemmamatcher än Premier Leagues big six. Hela uppdelningen publiceras på /track-record."
+    },
+    "faqs[faq-3].question": {
+      "sw": "Mnashughulikiaje uchovu wa wiki ya kati wa klabu kama AZ na Twente?",
+      "pt": "Como lidam com o cansaço de meio da semana dos europeus de clubes como AZ e Twente?",
+      "tr": "AZ ve Twente gibi kulüpler için Avrupa hafta ortası yorgunluğunu nasıl ele alıyorsunuz?",
+      "pl": "Jak radzicie sobie ze środtygodniowym zmęczeniem europejskim klubów takich jak AZ i Twente?",
+      "ro": "Cum gestionați oboseala europeană de la mijlocul săptămânii pentru cluburi precum AZ și Twente?",
+      "ru": "Как вы обрабатываете европейскую усталость середины недели для клубов вроде AZ и Twente?",
+      "el": "Πώς χειρίζεστε την ευρωπαϊκή μεσοβδόμαδη κόπωση για συλλόγους όπως ο AZ και ο Twente;",
+      "da": "Hvordan håndterer I europæisk midtugetræthed for klubber som AZ og Twente?",
+      "sv": "Hur hanterar ni europeisk mittveckström för klubbar som AZ och Twente?"
+    },
+    "faqs[faq-3].answer": {
+      "sw": "Logistic regressor yetu hutumia short-term-form decay kwa klabu yoyote inayocheza Conference au Europa League katika saa 72 kabla ya aftrap ya Eredivisie. Athari huwa kubwa zaidi kwa squads zenye rotation depth kidogo, ambayo kawaida ni AZ, FC Twente, Utrecht na Heerenveen.",
+      "pt": "O nosso regressor logístico aplica um decay de forma de curto prazo para qualquer clube que jogue um tie da Conference ou Europa League nas 72 horas antes de um apito inicial da Eredivisie. O efeito é maior para plantéis com menos profundidade de rotação, o que geralmente é AZ, FC Twente, Utrecht e Heerenveen.",
+      "tr": "Lojistik regressor'umuz, bir Eredivisie başlama vuruşundan önceki 72 saat içinde Konferans veya Avrupa Ligi maçı oynayan herhangi bir kulüp için kısa vadeli form decay uygular. Etki, daha az rotasyon derinliğine sahip kadrolar için daha büyüktür ki bu genellikle AZ, FC Twente, Utrecht ve Heerenveen'dir.",
+      "pl": "Nasz regresor logistyczny stosuje spadek formy krótkoterminowej dla każdego klubu rozgrywającego mecz Ligi Konferencji lub Ligi Europy w ciągu 72 godzin przed aftrapem Eredivisie. Efekt jest większy dla kadr z mniejszą głębokością rotacji - zwykle AZ, FC Twente, Utrecht i Heerenveen.",
+      "ro": "Regresorul nostru logistic aplică un decay de formă pe termen scurt pentru orice club care joacă un meci din Conference sau Europa League în cele 72 de ore dinaintea unui aftrap Eredivisie. Efectul este mai mare pentru loturile cu mai puțină adâncime de rotație, adică de obicei AZ, FC Twente, Utrecht și Heerenveen.",
+      "ru": "Наш логистический регрессор применяет short-term-form decay для любого клуба, играющего в Conference или Europa League в 72-часовом окне перед aftrap Eredivisie. Эффект больше для составов с меньшей rotation depth — обычно это AZ, FC Twente, Utrecht и Heerenveen.",
+      "el": "Ο λογιστικός regressor μας εφαρμόζει μια φθορά φόρμας βραχυπρόθεσμης για οποιονδήποτε σύλλογο παίζει αγώνα Conference ή Europa League τις 72 ώρες πριν από μια εναρκτήρια σέντρα Eredivisie. Η επίδραση είναι μεγαλύτερη για ρόστερ με λιγότερο βάθος ρότας, που είναι συνήθως AZ, FC Twente, Utrecht και Heerenveen.",
+      "da": "Vores logistiske regressor anvender et kortvarigt form-decay for enhver klub, der spiller en Conference- eller Europa League-kamp i de 72 timer før en Eredivisie-aftrap. Effekten er større for trupper med mindre rotationsdybde, hvilket normalt er AZ, FC Twente, Utrecht og Heerenveen.",
+      "sv": "Vår logistiska regressor applicerar ett kortsiktigt formdecay för alla klubbar som spelar en Conference- eller Europa League-match under 72 timmar före en Eredivisie-aftrap. Effekten är större för trupper med mindre rotationsdjup, vilket oftast är AZ, FC Twente, Utrecht och Heerenveen."
+    },
+    "faqs[faq-4].question": {
+      "sw": "Ni masoko yapi ya kubeti mnayafunika kwa Eredivisie?",
+      "pt": "Que mercados de apostas cobrem para a Eredivisie?",
+      "tr": "Eredivisie için hangi bahis pazarlarını kapsıyorsunuz?",
+      "pl": "Jakie rynki bukmacherskie obejmujecie dla Eredivisie?",
+      "ro": "Ce piețe de pariuri acoperiți pentru Eredivisie?",
+      "ru": "Какие рынки ставок вы охватываете в Eredivisie?",
+      "el": "Ποιες αγορές στοιχημάτων καλύπτετε για την Eredivisie;",
+      "da": "Hvilke betting-markeder dækker I for Eredivisie?",
+      "sv": "Vilka bettingmarknader täcker ni för Eredivisie?"
+    },
+    "faqs[faq-4].answer": {
+      "sw": "Preview ya bure inaonyesha soko la 1X2 (thuis / gelijk / uit). Members pia hupata over/under 2.5 goals, BTTS, Asian handicap na mapendekezo ya Kelly stake kwa kila pick.",
+      "pt": "A preview gratuita mostra o mercado 1X2 (thuis / gelijk / uit). Os membros também obtêm over/under 2,5 golos, BTTS, Asian handicap e uma recomendação de Kelly stake por pick.",
+      "tr": "Ücretsiz önizleme 1X2 pazarını gösterir (thuis / gelijk / uit). Üyeler ayrıca her seçim için over/under 2,5 gol, BTTS, Asya handikap ve Kelly stake önerisi alır.",
+      "pl": "Darmowa preview pokazuje rynek 1X2 (thuis / gelijk / uit). Członkowie dostają również over/under 2.5 gola, BTTS, Asian handicap i rekomendację Kelly stake na typ.",
+      "ro": "Preview-ul gratuit arată piața 1X2 (thuis / gelijk / uit). Membrii primesc și over/under 2.5 goluri, BTTS, Asian handicap și o recomandare de Kelly stake per pick.",
+      "ru": "Бесплатный превью показывает рынок 1X2 (thuis / gelijk / uit). Участники также получают over/under 2.5 голов, BTTS, азиатский гандикап и рекомендацию Kelly stake к каждому прогнозу.",
+      "el": "Η δωρεάν preview δείχνει την αγορά 1X2 (thuis / gelijk / uit). Τα μέλη λαμβάνουν επίσης over/under 2,5 γκολ, BTTS, Ασιατικό handicap και σύσταση Kelly stake ανά pick.",
+      "da": "Den gratis preview viser 1X2-markedet (thuis / gelijk / uit). Medlemmer får også over/under 2.5 mål, BTTS, Asian handicap og en Kelly stake-anbefaling pr. pick.",
+      "sv": "Den gratis previewn visar 1X2-marknaden (thuis / gelijk / uit). Medlemmar får också over/under 2.5 mål, BTTS, asiatisk handicap och en Kelly stake-rekommendation per tips."
+    },
+    "faqs[faq-5].question": {
+      "sw": "Naweza kutumia BetsPlug kutoka Uholanzi?",
+      "pt": "Posso usar o BetsPlug a partir dos Países Baixos?",
+      "tr": "Hollanda'dan BetsPlug kullanabilir miyim?",
+      "pl": "Czy mogę używać BetsPlug z Holandii?",
+      "ro": "Pot folosi BetsPlug din Olanda?",
+      "ru": "Могу ли я использовать BetsPlug из Нидерландов?",
+      "el": "Μπορώ να χρησιμοποιήσω το BetsPlug από την Ολλανδία;",
+      "da": "Kan jeg bruge BetsPlug fra Holland?",
+      "sv": "Kan jag använda BetsPlug från Nederländerna?"
+    },
+    "faqs[faq-5].answer": {
+      "sw": "Ndio - BetsPlug ni platform ya uchambuzi, si bookmaker, kwa hivyo hatupokei bets. Uholanzi unaweza kuweka bet kisheria tu kwa operators walio na leseni ya Kansspelautoriteit. Utabiri wetu hukusaidia kuamua jinsi ya kugawa bankroll yako mara tu uko kwenye tovuti yenye leseni. Cheza kwa uwajibikaji.",
+      "pt": "Sim - a BetsPlug é uma plataforma de analytics, não uma casa de apostas, por isso não aceitamos apostas. Nos Países Baixos só é legal apostar em operadores licenciados pela Kansspelautoriteit. As nossas previsões ajudam-te a decidir como alocar a tua bankroll assim que estiveres num site licenciado. Joga com responsabilidade.",
+      "tr": "Evet - BetsPlug bir analytics platformudur, bookmaker değildir, bu yüzden bahis almıyoruz. Hollanda'da yalnızca Kansspelautoriteit lisanslı operatörlerde yasal olarak bahis oynayabilirsiniz. Tahminlerimiz, lisanslı bir sitede olduğunuzda bankroll'unuzu nasıl tahsis edeceğinize karar vermenize yardımcı olur. Sorumlu oynayın.",
+      "pl": "Tak - BetsPlug to platforma analityczna, nie bukmacher, więc nie przyjmujemy zakładów. W Holandii zakłady możesz legalnie zawierać tylko u operatorów posiadających licencję Kansspelautoriteit. Nasze prognozy pomagają ci zdecydować, jak podzielić bankroll, gdy już jesteś na licencjonowanej stronie. Graj odpowiedzialnie.",
+      "ro": "Da - BetsPlug este o platformă de analiză, nu un bookmaker, așa că nu acceptăm pariuri. În Olanda poți paria legal doar la operatorii licențiați de Kansspelautoriteit. Predicțiile noastre te ajută să decizi cum să îți aloci bankroll-ul odată ce ești pe un site licențiat. Joacă responsabil.",
+      "ru": "Да — BetsPlug это analytics-платформа, не bookmaker, поэтому мы не принимаем ставки. В Нидерландах делать ставки можно легально только у операторов с лицензией Kansspelautoriteit. Наши прогнозы помогают решить, как распределить bankroll, когда вы уже на лицензированном сайте. Играйте ответственно.",
+      "el": "Ναι - το BetsPlug είναι μια πλατφόρμα analytics, όχι bookmaker, οπότε δεν δεχόμαστε στοιχήματα. Στην Ολλανδία μπορείτε να στοιχηματίσετε νόμιμα μόνο σε επιχειρήσεις με άδεια της Kansspelautoriteit. Οι προβλέψεις μας σας βοηθούν να αποφασίσετε πώς να κατανείμετε το bankroll σας μόλις βρίσκεστε σε έναν αδειοδοτημένο ιστότοπο. Παίξτε υπεύθυνα.",
+      "da": "Ja - BetsPlug er en analytics-platform, ikke en bookmaker, så vi tager ikke imod bets. I Holland kan du kun lovligt spille hos operatører med Kansspelautoriteit-licens. Vores forudsigelser hjælper dig med at beslutte, hvordan du fordeler din bankroll, når du er på en licenseret side. Spil ansvarligt.",
+      "sv": "Ja - BetsPlug är en analysplattform, inte en bookmaker, så vi tar inte emot spel. I Nederländerna kan du endast lagligt spela hos operatörer med Kansspelautoriteit-licens. Våra förutsägelser hjälper dig att bestämma hur du fördelar din bankroll när du väl är på en licensierad sida. Spela ansvarsfullt."
+    }
+  }
+}

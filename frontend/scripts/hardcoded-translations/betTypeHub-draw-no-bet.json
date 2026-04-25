@@ -1,0 +1,227 @@
+{
+  "_docId": "betTypeHub-draw-no-bet",
+  "_type": "betTypeHub",
+  "_label": "Draw No Bet",
+  "fields": {
+    "name": {
+      "sw": "Draw No Bet",
+      "pt": "Empate Anula Aposta",
+      "tr": "Beraberlikte İade",
+      "pl": "Remis Zwrot Stawki",
+      "ro": "Egal Pariu Anulat",
+      "ru": "Ничья — Возврат",
+      "el": "Ισοπαλία Επιστροφή",
+      "da": "Uafgjort Uden Spil",
+      "sv": "Oavgjort Återbetalning"
+    },
+    "tagline": {
+      "sw": "Bima juu ya sare, iliyopangwa kati ya 1X2 na Double Chance",
+      "pt": "Seguro contra o empate, cotado entre 1X2 e Hipótese Dupla",
+      "tr": "Beraberliğe karşı sigorta, 1X2 ile Çifte Şans arasında fiyatlandırılmış",
+      "pl": "Ubezpieczenie od remisu, wyceniane między 1X2 a Podwójną Szansą",
+      "ro": "Asigurare împotriva egalului, cotat între 1X2 și Șansă Dublă",
+      "ru": "Страховка от ничьей, цена между 1X2 и Двойным Шансом",
+      "el": "Ασφάλιση στην ισοπαλία, τιμολογημένη μεταξύ 1X2 και Διπλής Ευκαιρίας",
+      "da": "Forsikring mod uafgjort, prissat mellem 1X2 og Dobbelt Chance",
+      "sv": "Försäkring mot oavgjort, prissatt mellan 1X2 och Dubbelchans"
+    },
+    "explainer": {
+      "sw": "Draw No Bet (DNB) inakurejeshea stake yako ikiwa mechi inaisha kwa sare. Unachagua nyumbani au ugeni; ikiwa timu hiyo itashinda unakusanya payout, ikiwa watashindwa unapoteza stake yako, na ikiwa mechi ni sare unapata pesa zako tena. Bei inakaa kimuundo kati ya 1X2 mbichi na Double Chance. Ikiwa timu ya nyumbani inapangwa 2.00 kushinda na X kwa 3.40, DNB Nyumbani kawaida hupanga karibu 1.55 - chini kidogo kuliko 1X (1.30) lakini kwa maana juu zaidi kuliko bei mbichi ya 1 (2.00). Kimathematical, DNB Nyumbani = 1 / (P(nyumbani) / (1 − P(sare))). Ni bet yenye masharti: unalipwa kana kwamba sare haijawahi kuwepo. Soko ni la muhimu zaidi wakati una ushawishi juu ya upande gani ni bora lakini huwezi kukataa 0-0 au 1-1 yenye tahadhari - ni ya kawaida katika knock-out ties, mechi zinazoamua titul, na mechi zinazohusisha timu za katikati zilizopangwa kidefensive.",
+      "pt": "Draw No Bet (DNB) reembolsa-te a stake se o jogo acabar em empate. Escolhes casa ou fora; se essa equipa ganhar cobras o payout, se perder perdes a stake, e se o jogo for empate recebes o teu dinheiro de volta. O preço situa-se estruturalmente entre 1X2 bruto e Hipótese Dupla. Se a equipa da casa está a 2,00 para ganhar e o X a 3,40, DNB Casa cota tipicamente em torno de 1,55 - ligeiramente mais baixo que 1X (1,30) mas significativamente mais alto que o preço bruto de 1 (2,00). Matematicamente, DNB Casa = 1 / (P(casa) / (1 − P(empate))). É uma aposta condicional: és pago como se o empate nunca tivesse existido. O mercado é mais útil quando tens convicção sobre que lado é melhor mas não consegues excluir um 0-0 ou 1-1 cauteloso - comum em knock-outs, jogos decisivos pelo título e jogos envolvendo equipas do meio da tabela defensivamente organizadas.",
+      "tr": "Draw No Bet (DNB), maç beraberlikle biterse stake'inizi iade eder. Ev sahibi veya deplasmanı seçersiniz; o takım kazanırsa payout'u alırsınız, kaybederse stake'inizi kaybedersiniz ve maç beraberlikse paranız geri gelir. Fiyat yapısal olarak ham 1X2 ile Çifte Şans arasında oturur. Ev sahibi takım kazanmak için 2,00'de ve X 3,40'ta fiyatlandırıldığında, DNB Ev tipik olarak 1,55 civarında fiyatlandırılır - 1X'ten (1,30) biraz daha düşük ama ham 1 fiyatından (2,00) belirgin şekilde daha yüksek. Matematiksel olarak DNB Ev = 1 / (P(ev) / (1 − P(beraberlik))). Koşullu bir bahistir: sanki beraberlik hiç yokmuş gibi ödeme alırsınız. Pazar, hangi tarafın daha iyi olduğu konusunda kanaatiniz olduğunda ancak temkinli bir 0-0 veya 1-1'i dışlayamadığınızda en kullanışlıdır - elemeli maçlarda, şampiyonluk belirleyici maçlarda ve defansif organize orta sıra takımları içeren maçlarda yaygındır.",
+      "pl": "Draw No Bet (DNB) zwraca twoją stawkę, jeśli mecz skończy się remisem. Wybierasz gospodarza lub gościa; jeśli ta drużyna wygra, zbierasz wypłatę, jeśli przegra, tracisz stawkę, a jeśli jest remis, dostajesz pieniądze z powrotem. Cena leży strukturalnie między surowym 1X2 a Podwójną Szansą. Jeśli gospodarz jest po 2,00 na wygraną, a X po 3,40, DNB Gospodarze wycenia się zwykle w okolicach 1,55 - nieco niżej niż 1X (1,30), ale znacząco wyżej niż surowa cena 1 (2,00). Matematycznie DNB Gospodarze = 1 / (P(gospodarz) / (1 − P(remis))). To zakład warunkowy: jesteś opłacany, jakby remis nigdy nie istniał. Rynek jest najużyteczniejszy, gdy masz przekonanie, która strona jest lepsza, ale nie możesz wykluczyć ostrożnego 0-0 lub 1-1 - częste w meczach pucharowych, decydujących o tytule i meczach z defensywnie zorganizowanymi drużynami ze środka tabeli.",
+      "ro": "Draw No Bet (DNB) îți rambursează miza dacă meciul se termină la egal. Alegi gazdă sau oaspete; dacă acea echipă câștigă, colectezi câștigul, dacă pierde, îți pierzi miza, iar dacă meciul este egal, primești banii înapoi. Prețul se situează structural între 1X2 brut și Șansă Dublă. Dacă echipa gazdă este cotată la 2,00 pentru victorie și X la 3,40, DNB Gazdă cotează de obicei în jurul 1,55 - ușor sub 1X (1,30), dar semnificativ peste prețul brut 1 (2,00). Matematic, DNB Gazdă = 1 / (P(gazdă) / (1 − P(egal))). Este un pariu condițional: ești plătit ca și cum egalul nu ar fi existat niciodată. Piața este cea mai utilă atunci când ai convingere despre care parte este mai bună, dar nu poți exclude un 0-0 sau 1-1 precaut - comun în meciurile eliminatorii, meciurile decisive pentru titlu și meciurile cu echipe de mijlocul clasamentului organizate defensiv.",
+      "ru": "Draw No Bet (DNB) возвращает твой stake, если матч закончится ничьёй. Выбираешь хозяев или гостей: если команда победит — получаешь payout, если проиграет — теряешь stake, а если ничья — деньги возвращаются. Цена структурно между сырым 1X2 и Двойным Шансом. Если хозяева стоят 2.00 на победу, а X на 3.40, DNB Хозяева обычно около 1.55 — чуть ниже 1X (1.30), но ощутимо выше raw цены 1 (2.00). Математически DNB Хозяева = 1 / (P(хозяева) / (1 − P(ничья))). Это условная ставка: тебе платят, как будто ничьи не существовало. Рынок полезнее всего, когда у тебя есть убеждение, какая сторона лучше, но нельзя исключить осторожные 0-0 или 1-1 — типично в плей-офф, матчах за титул и матчах с дисциплинированно-оборонительными середняками.",
+      "el": "Το Draw No Bet (DNB) σου επιστρέφει το ποντάρισμα αν ο αγώνας λήξει ισόπαλος. Επιλέγεις γηπεδούχο ή φιλοξενούμενη· αν αυτή η ομάδα κερδίσει εισπράττεις το payout, αν χάσει χάνεις το ποντάρισμα, και αν ο αγώνας είναι ισόπαλος παίρνεις τα χρήματά σου πίσω. Η τιμή κάθεται δομικά μεταξύ του ακατέργαστου 1X2 και της Διπλής Ευκαιρίας. Αν η γηπεδούχος τιμολογείται στο 2,00 για νίκη και το X στο 3,40, το DNB Γηπεδούχου τιμολογεί τυπικά γύρω στο 1,55 - ελαφρώς χαμηλότερα από το 1X (1,30) αλλά ουσιαστικά υψηλότερα από την ακατέργαστη τιμή 1 (2,00). Μαθηματικά, DNB Γηπεδούχου = 1 / (P(γηπεδούχου) / (1 − P(ισοπαλίας))). Είναι στοίχημα υπό όρους: πληρώνεσαι σαν να μην υπήρχε ποτέ η ισοπαλία. Η αγορά είναι πιο χρήσιμη όταν έχεις πεποίθηση για το ποια πλευρά είναι καλύτερη αλλά δεν μπορείς να αποκλείσεις ένα προσεκτικό 0-0 ή 1-1 - κοινό σε νοκ-άουτ, αγώνες που κρίνουν τον τίτλο και αγώνες που περιλαμβάνουν αμυντικά οργανωμένες ομάδες μεσαίας κατάταξης.",
+      "da": "Draw No Bet (DNB) refunderer din indsats, hvis kampen ender uafgjort. Du vælger hjemme eller ude; hvis det hold vinder, får du udbetalingen, hvis de taber, mister du din indsats, og hvis kampen er uafgjort, får du dine penge tilbage. Prisen sidder strukturelt mellem rå 1X2 og Dobbelt Chance. Hvis hjemmeholdet er prissat til 2,00 for at vinde og X til 3,40, prissættes DNB Hjemme typisk omkring 1,55 - lidt under 1X (1,30) men markant højere end den rå 1-pris (2,00). Matematisk er DNB Hjemme = 1 / (P(hjemme) / (1 − P(uafgjort))). Det er et betinget spil: du bliver betalt, som om uafgjort aldrig eksisterede. Markedet er mest nyttigt, når du har overbevisning om, hvilken side der er bedre, men ikke kan udelukke et forsigtigt 0-0 eller 1-1 - almindeligt i knockout-opgør, titel-afgørende kampe og kampe med defensivt organiserede midter-hold.",
+      "sv": "Draw No Bet (DNB) återbetalar din insats om matchen slutar oavgjort. Du väljer hemma eller borta; om det laget vinner får du utdelningen, om de förlorar förlorar du din insats, och om matchen blir oavgjort får du tillbaka dina pengar. Priset sitter strukturellt mellan rå 1X2 och Dubbelchans. Om hemmalaget är prissatt till 2,00 för vinst och X till 3,40, prissätts DNB Hemma typiskt runt 1,55 - något under 1X (1,30) men betydligt över det råa 1-priset (2,00). Matematiskt är DNB Hemma = 1 / (P(hemma) / (1 − P(oavgjort))). Det är ett villkorat spel: du blir betald som om oavgjort aldrig existerade. Marknaden är mest användbar när du har övertygelse om vilken sida som är bättre men inte kan utesluta en försiktig 0-0 eller 1-1 - vanligt i utslagsmatcher, titelavgörande matcher och matcher med defensivt organiserade mittentabellag."
+    },
+    "strategy": {
+      "sw": "DNB inang'aa katika hali mbili maalum. Kwanza, mechi za knock-out ambapo upande unaopoteza unaweza kufunga kwa extra time au penalties - books hupanga sare ya dakika 90 kwa usahihi, lakini hisia za umma kwenye soko mbichi la 1 au 2 kawaida hukosea juu ya mara ngapi soka la tahadhari linatoa mshindi. Pili, mechi za ligi ya ndani ya katikati ambapo favoriti ni upande wa mashambulizi wenye ulinzi wa tuhuma (Leverkusen, Atalanta, Brighton). Ikiwa unafikiri watazalisha nafasi na kushinda lakini una wasiwasi juu ya 1-1 katika usiku mbaya wa xG, DNB ni salama zaidi kuliko 1X (ambayo pia hukusanya wakati sare inapotokea) na nafuu kuliko bet mbichi ya 1. Epuka DNB katika mechi ambapo sare ni favoriti halisi ya modeli - unalipa premium kwa bima juu ya matokeo ambayo haukuweza kutabiri hata hivyo. Angalia confidence ya 1X2 kwanza: ikiwa uwezekano wa uwon wa nyumbani uko chini ya 40%, bima ya sare si nafuu ya kutosha.",
+      "pt": "DNB brilha em duas situações específicas. Primeiro, jogos a eliminar onde o lado perdedor pode fechar a loja para prolongamento ou penáltis - as casas cotam o empate aos 90 minutos correctamente, mas o sentimento público no mercado bruto de 1 ou 2 costuma estar errado sobre com que frequência o futebol cauteloso entrega um vencedor. Segundo, jogos domésticos de meio da tabela onde o favorito é um lado atacante defensivamente suspeito (Leverkusen, Atalanta, Brighton). Se achas que vão criar oportunidades e vencer mas preocupa-te um 1-1 numa má noite de xG, DNB é mais seguro que 1X (que também cobra quando há empate) e mais barato que uma aposta directa em 1. Evita DNB em jogos onde o empate é o verdadeiro favorito do modelo - estás a pagar um prémio por seguro num resultado que não conseguias prever de qualquer forma. Verifica primeiro a confiança 1X2: se a probabilidade de vitória em casa estiver abaixo de 40%, o seguro do empate não é suficientemente barato.",
+      "tr": "DNB iki belirli durumda parlar. İlk olarak, kaybeden tarafın uzatma veya penaltılar için dükkanı kapatabileceği elemeli maçlarda - kitaplar 90 dakikalık beraberliği doğru fiyatlandırır, ancak ham 1 veya 2 pazarındaki kamuoyu duygusu, temkinli futbolun aslında ne sıklıkla bir kazanan ortaya çıkardığı konusunda genellikle yanılır. İkinci olarak, favori defansif olarak şüpheli bir hücum tarafı olan orta sıra ev içi maçlarda (Leverkusen, Atalanta, Brighton). Fırsat yaratıp kazanacaklarını düşünüyorsanız ancak kötü bir xG gecesinde 1-1 endişeleniyorsanız, DNB 1X'ten daha güvenlidir (ki o beraberlikte de ödeme alır) ve doğrudan 1 bahsinden daha ucuzdur. Beraberliğin gerçek model favorisi olduğu maçlarda DNB'den kaçının - zaten tahmin edemeyeceğiniz bir sonuç için sigorta primi ödüyorsunuz. Önce 1X2 güvenini kontrol edin: ev sahibi kazanma olasılığı %40'ın altındaysa beraberlik sigortası yeterince ucuz değildir.",
+      "pl": "DNB świeci w dwóch konkretnych sytuacjach. Po pierwsze, mecze pucharowe, w których przegrywająca strona może się zamknąć na dogrywkę lub rzuty karne - bukmacherzy wyceniają remis w 90 minutach poprawnie, ale sentyment publiczny na surowym rynku 1 lub 2 zwykle myli się co do tego, jak często ostrożny futbol faktycznie dostarcza zwycięzcę. Po drugie, krajowe mecze środka tabeli, gdzie faworyt jest ofensywną drużyną z defensywnymi wątpliwościami (Leverkusen, Atalanta, Brighton). Jeśli myślisz, że stworzą szanse i wygrają, ale martwisz się o 1-1 w kiepski wieczór xG, DNB jest bezpieczniejsze niż 1X (który też zbiera przy remisie) i tańsze niż surowy zakład na 1. Unikaj DNB w meczach, w których remis jest prawdziwym faworytem modelu - płacisz premię za ubezpieczenie wyniku, którego i tak nie mogłeś przewidzieć. Najpierw sprawdź pewność 1X2: jeśli prawdopodobieństwo wygranej u gospodarza jest poniżej 40%, ubezpieczenie remisu nie jest wystarczająco tanie.",
+      "ro": "DNB strălucește în două situații specifice. Prima, meciuri eliminatorii unde echipa care pierde poate închide magazinul pentru prelungiri sau lovituri de departajare - casele cotează egalul la 90 de minute corect, dar sentimentul public pe piața brută de 1 sau 2 este de obicei greșit cu privire la cât de des fotbalul precaut oferă de fapt un câștigător. A doua, meciuri interne de mijlocul clasamentului unde favoritul este o echipă ofensivă cu suspiciuni defensive (Leverkusen, Atalanta, Brighton). Dacă crezi că vor crea ocazii și vor câștiga, dar te îngrijorează un 1-1 într-o seară proastă de xG, DNB este mai sigur decât 1X (care colectează și când se întâmplă egalul) și mai ieftin decât un pariu direct pe 1. Evită DNB în meciurile în care egalul este adevăratul favorit al modelului - plătești o primă pentru asigurare pe un rezultat pe care nu l-ai fi putut prezice oricum. Verifică mai întâi încrederea 1X2: dacă probabilitatea de victorie acasă este sub 40%, asigurarea pentru egal nu este suficient de ieftină.",
+      "ru": "DNB сияет в двух конкретных ситуациях. Первая — плей-офф матчи, где проигрывающая сторона может закрыть магазин ради extra time или пенальти: buki ставят 90-минутную ничью корректно, но публичное sentiment на сыром 1 или 2 рынке обычно ошибается в том, как часто осторожный футбол даёт победителя. Вторая — внутренние матчи середины таблицы, где фаворит — атакующая сторона с defensive suspects (Leverkusen, Atalanta, Brighton). Если считаешь, что они создадут моменты и победят, но опасаешься 1-1 в плохой xG-вечер, DNB безопаснее 1X (который тоже проходит при ничьей) и дешевле прямой ставки на 1. Избегай DNB в матчах, где ничья — реальный фаворит модели: платишь премию за страховку на исход, который всё равно нельзя было предсказать. Сначала проверь 1X2 confidence: если вероятность победы хозяев ниже 40%, страховка от ничьей недостаточно дёшева.",
+      "el": "Το DNB λάμπει σε δύο συγκεκριμένες καταστάσεις. Πρώτον, αγώνες νοκ-άουτ όπου η ομάδα που χάνει μπορεί να κλείσει το μαγαζί για παράταση ή πέναλτι - τα γραφεία τιμολογούν την ισοπαλία 90 λεπτών σωστά, αλλά η δημόσια αίσθηση στην ακατέργαστη αγορά 1 ή 2 συνήθως κάνει λάθος για το πόσο συχνά το προσεκτικό ποδόσφαιρο παραδίδει πραγματικά νικητή. Δεύτερον, εγχώριοι αγώνες μεσαίας κατάταξης όπου το φαβορί είναι μια επιθετική πλευρά με αμυντικές υποψίες (Leverkusen, Atalanta, Brighton). Αν πιστεύεις ότι θα δημιουργήσουν ευκαιρίες και θα κερδίσουν αλλά ανησυχείς για ένα 1-1 σε μια κακή βραδιά xG, το DNB είναι ασφαλέστερο από το 1X (που επίσης εισπράττει όταν η ισοπαλία συμβαίνει) και φθηνότερο από ένα απευθείας 1 στοίχημα. Απόφυγε το DNB σε αγώνες όπου η ισοπαλία είναι το πραγματικό φαβορί του μοντέλου - πληρώνεις premium για ασφάλιση σε ένα αποτέλεσμα που ούτως ή άλλως δεν θα μπορούσες να προβλέψεις. Έλεγξε πρώτα τη confidence 1X2: αν η πιθανότητα νίκης γηπεδούχου είναι κάτω από 40%, η ασφάλιση ισοπαλίας δεν είναι αρκετά φθηνή.",
+      "da": "DNB skinner i to specifikke situationer. For det første knockout-kampe, hvor den tabende side måske lukker forretningen for forlænget spilletid eller straffespark - bogmagere prissætter 90-minutters uafgjort korrekt, men den offentlige følelse på det rå 1- eller 2-marked tager normalt fejl om, hvor ofte forsigtig fodbold faktisk leverer en vinder. For det andet mellem-holds hjemlige kampe, hvor favoritten er en angribende side med defensive tvivl (Leverkusen, Atalanta, Brighton). Hvis du tror, de skaber chancer og vinder, men bekymrer dig om en 1-1 på en dårlig xG-aften, er DNB sikrere end 1X (som også indkasserer, når uafgjort sker) og billigere end en direkte 1-indsats. Undgå DNB i kampe, hvor uafgjort er modellens egentlige favorit - du betaler en præmie for forsikring på et udfald, du alligevel ikke kunne forudsige. Tjek først 1X2-confidence: hvis hjemmesejrs-sandsynligheden er under 40%, er uafgjort-forsikringen ikke billig nok.",
+      "sv": "DNB lyser i två specifika situationer. För det första utslagsmatcher där den förlorande sidan kan stänga butiken inför förlängning eller straffar - bokmakare prissätter 90-minuters oavgjort korrekt, men den allmänna känslan på den råa 1- eller 2-marknaden har vanligen fel om hur ofta försiktig fotboll faktiskt levererar en vinnare. För det andra mittentabells inhemska matcher där favoriten är en offensiv sida med defensivt tvivel (Leverkusen, Atalanta, Brighton). Om du tror att de skapar chanser och vinner men oroar dig för en 1-1 på en dålig xG-kväll är DNB säkrare än 1X (som också ger utdelning vid oavgjort) och billigare än en rak 1-insats. Undvik DNB i matcher där oavgjort är modellens verkliga favorit - du betalar premie för försäkring på ett utfall du ändå inte kunde förutsäga. Kontrollera först 1X2-konfidensen: om hemmavinstsannolikheten är under 40%, är oavgjort-försäkringen inte tillräckligt billig."
+    },
+    "matchesHeading": {
+      "sw": "Mechi za leo zenye ujasiri wa juu zaidi",
+      "pt": "Jogos de hoje com maior confiança",
+      "tr": "Bugünün en yüksek güvenilirlikteki fikstürleri",
+      "pl": "Dzisiejsze mecze o najwyższej pewności",
+      "ro": "Meciurile de azi cu cea mai mare încredere",
+      "ru": "Сегодняшние самые уверенные матчи",
+      "el": "Οι σημερινοί αγώνες με τη μεγαλύτερη εμπιστοσύνη",
+      "da": "Dagens højeste-confidence kampe",
+      "sv": "Dagens matcher med högst konfidens"
+    },
+    "matchesSub": {
+      "sw": "Mechi 3 bora ambapo ensemble yetu ina ujasiri wa jumla wa juu zaidi - wagombea bora wa Draw No Bet value plays.",
+      "pt": "Top 3 jogos onde o nosso ensemble tem a confiança geral mais alta - os melhores candidatos para jogadas de valor Draw No Bet.",
+      "tr": "Ensemble'imizin en yüksek genel güvene sahip olduğu ilk 3 maç - Draw No Bet değer oyunları için en iyi adaylar.",
+      "pl": "Top 3 mecze, w których nasz ensemble ma najwyższą ogólną pewność - najlepsi kandydaci na wartościowe gry Draw No Bet.",
+      "ro": "Primele 3 meciuri unde ensemble-ul nostru are cea mai mare încredere generală - cei mai buni candidați pentru jocuri de valoare Draw No Bet.",
+      "ru": "Топ-3 матча с наивысшей общей confidence нашей ensemble — лучшие кандидаты на Draw No Bet value plays.",
+      "el": "Τα 3 κορυφαία παιχνίδια όπου το ensemble μας έχει τη μεγαλύτερη συνολική εμπιστοσύνη - οι καλύτεροι υποψήφιοι για Draw No Bet value plays.",
+      "da": "Top 3 kampe, hvor vores ensemble har den højeste samlede confidence - de bedste kandidater til Draw No Bet-værdispil.",
+      "sv": "Topp 3-matcher där vår ensemble har högst total konfidens - de bästa kandidaterna för Draw No Bet-värdespel."
+    },
+    "metaTitle": {
+      "sw": "Draw No Bet Imefafanuliwa · DNB Tips za Leo · BetsPlug",
+      "pt": "Draw No Bet Explicado · Dicas DNB Hoje · BetsPlug",
+      "tr": "Beraberlikte İade Açıklandı · DNB İpuçları Bugün · BetsPlug",
+      "pl": "Draw No Bet Wyjaśnione · Typy DNB Dzisiaj · BetsPlug",
+      "ro": "Draw No Bet Explicat · Ponturi DNB Azi · BetsPlug",
+      "ru": "Ничья — Возврат · Советы DNB на сегодня · BetsPlug",
+      "el": "Draw No Bet Εξηγήσεις · DNB Tips Σήμερα · BetsPlug",
+      "da": "Uafgjort Uden Spil Forklaret · DNB-tips i Dag · BetsPlug",
+      "sv": "Oavgjort Återbetalning Förklarat · DNB-tips Idag · BetsPlug"
+    },
+    "metaDescription": {
+      "sw": "Nini Draw No Bet inamaanisha, jinsi inavyopangwa dhidi ya 1X2 na Double Chance, na wakati soko linapotoa DNB value. Pamoja na mechi zenye ujasiri zaidi leo.",
+      "pt": "O que significa Draw No Bet, como é cotado versus 1X2 e Hipótese Dupla, e quando o mercado dá valor DNB. Mais os jogos mais confiantes de hoje.",
+      "tr": "Beraberlikte İade'nin ne anlama geldiği, 1X2 ve Çifte Şans'a göre nasıl fiyatlandırıldığı ve pazarın DNB değeri ne zaman verdiği. Artı bugünün en güvenilir fikstürleri.",
+      "pl": "Co oznacza Draw No Bet, jak jest wyceniany w porównaniu z 1X2 i Podwójną Szansą, i kiedy rynek daje DNB wartość. Plus dzisiejsze najbardziej pewne mecze.",
+      "ro": "Ce înseamnă Draw No Bet, cum este cotat față de 1X2 și Șansă Dublă, și când piața oferă valoare DNB. Plus meciurile cele mai încredere de azi.",
+      "ru": "Что означает Draw No Bet, как он оценивается против 1X2 и Двойного Шанса, и когда рынок даёт DNB value. Плюс самые уверенные матчи сегодня.",
+      "el": "Τι σημαίνει Draw No Bet, πώς τιμολογείται σε σχέση με 1X2 και Διπλή Ευκαιρία, και πότε η αγορά δίνει DNB αξία. Συν οι πιο σίγουροι αγώνες σήμερα.",
+      "da": "Hvad Uafgjort Uden Spil betyder, hvordan det prissættes versus 1X2 og Dobbelt Chance, og hvornår markedet giver DNB-værdi. Plus dagens mest overbeviste kampe.",
+      "sv": "Vad Oavgjort Återbetalning betyder, hur det prissätts mot 1X2 och Dubbelchans, och när marknaden ger DNB-värde. Plus dagens säkraste matcher."
+    },
+    "faqs[faq-0].question": {
+      "sw": "Je nini hutokea kwa DNB bet yangu ikiwa mechi ni sare?",
+      "pt": "O que acontece à minha aposta DNB se o jogo for empate?",
+      "tr": "Maç beraberlikse DNB bahsim ne olur?",
+      "pl": "Co dzieje się z moim zakładem DNB, jeśli mecz kończy się remisem?",
+      "ro": "Ce se întâmplă cu pariul meu DNB dacă meciul se termină la egal?",
+      "ru": "Что будет с моей DNB-ставкой, если матч закончится ничьёй?",
+      "el": "Τι συμβαίνει με το DNB στοίχημα μου αν ο αγώνας είναι ισόπαλος;",
+      "da": "Hvad sker der med mit DNB-spil, hvis kampen er uafgjort?",
+      "sv": "Vad händer med mitt DNB-spel om matchen slutar oavgjort?"
+    },
+    "faqs[faq-0].answer": {
+      "sw": "Stake yako inarejeshwa kwa ukamilifu. Hushindi wala hupotezi - bet inabatilishwa na pesa yako inarudi kwenye account yako. Hii ndiyo 'bima' inayoitofautisha DNB na bet mbichi ya 1X2.",
+      "pt": "A tua stake é reembolsada na totalidade. Não ganhas nem perdes - a aposta é anulada e o teu dinheiro volta para a conta. Este é o 'seguro' que diferencia DNB de uma aposta 1X2 directa.",
+      "tr": "Stake'iniz tamamen iade edilir. Ne kazanır ne kaybedersiniz - bahis iptal edilir ve paranız hesabınıza geri döner. Bu, DNB'yi doğrudan bir 1X2 bahsinden ayıran 'sigortadır'.",
+      "pl": "Twoja stawka jest zwracana w całości. Nie wygrywasz ani nie przegrywasz - zakład jest unieważniony, a twoje pieniądze wracają na konto. To jest 'ubezpieczenie', które odróżnia DNB od prostego zakładu 1X2.",
+      "ro": "Miza ta este rambursată integral. Nici nu câștigi, nici nu pierzi - pariul este anulat și banii tăi se întorc în cont. Aceasta este 'asigurarea' care diferențiază DNB de un pariu 1X2 direct.",
+      "ru": "Твой stake возвращается полностью. Ты не выигрываешь и не проигрываешь — ставка аннулируется, деньги возвращаются на счёт. Это 'страховка', которая отличает DNB от прямой 1X2-ставки.",
+      "el": "Το ποντάρισμά σου επιστρέφεται πλήρως. Ούτε κερδίζεις ούτε χάνεις - το στοίχημα ακυρώνεται και τα χρήματά σου γυρνούν στον λογαριασμό σου. Αυτή είναι η 'ασφάλιση' που διαφοροποιεί το DNB από ένα απευθείας 1X2 στοίχημα.",
+      "da": "Din indsats refunderes fuldt ud. Du hverken vinder eller taber - spillet annulleres, og dine penge går tilbage til din konto. Dette er 'forsikringen', der adskiller DNB fra et direkte 1X2-spil.",
+      "sv": "Din insats återbetalas i sin helhet. Du varken vinner eller förlorar - spelet ogiltigförklaras och dina pengar går tillbaka till ditt konto. Detta är 'försäkringen' som skiljer DNB från ett rakt 1X2-spel."
+    },
+    "faqs[faq-1].question": {
+      "sw": "Jinsi gani pricing ya DNB inavyohesabiwa?",
+      "pt": "Como é calculada a pricing de DNB?",
+      "tr": "DNB fiyatlandırması nasıl hesaplanır?",
+      "pl": "Jak jest obliczana wycena DNB?",
+      "ro": "Cum se calculează cotarea DNB?",
+      "ru": "Как рассчитывается pricing DNB?",
+      "el": "Πώς υπολογίζεται η τιμολόγηση DNB;",
+      "da": "Hvordan beregnes DNB-prissætningen?",
+      "sv": "Hur beräknas DNB-prissättningen?"
+    },
+    "faqs[faq-1].answer": {
+      "sw": "DNB Nyumbani = 1 / (P(uwon wa nyumbani) / (1 − P(sare))). Kwa maneno: chukua uwezekano wa uwon wa nyumbani, gawanya kwa mass isiyo ya sare, na inverti. Books huweka margin yao juu. Kwa mechi yenye P(nyumbani) = 50%, P(sare) = 25%, DNB Nyumbani yenye haki ni 1 / (0.50 / 0.75) = 1.50.",
+      "pt": "DNB Casa = 1 / (P(vitória em casa) / (1 − P(empate))). Em palavras: pega na probabilidade de vitória em casa, divide pela massa não-empate, e inverte. As casas adicionam a sua margem por cima. Para um jogo com P(casa) = 50%, P(empate) = 25%, DNB Casa justa é 1 / (0,50 / 0,75) = 1,50.",
+      "tr": "DNB Ev = 1 / (P(ev sahibi kazanır) / (1 − P(beraberlik))). Sözlü olarak: ev sahibi kazanma olasılığını alın, beraberlik olmayan kütleye bölün ve ters çevirin. Kitaplar üzerine kar marjlarını ekler. P(ev) = %50, P(beraberlik) = %25 olan bir maç için adil DNB Ev 1 / (0,50 / 0,75) = 1,50'dir.",
+      "pl": "DNB Gospodarze = 1 / (P(wygrana gospodarzy) / (1 − P(remis))). Słownie: weź prawdopodobieństwo wygranej gospodarzy, podziel przez masę nie-remisową i odwróć. Bukmacherzy dodają swoją marżę. Dla meczu z P(gospodarz) = 50%, P(remis) = 25% sprawiedliwe DNB Gospodarze to 1 / (0,50 / 0,75) = 1,50.",
+      "ro": "DNB Gazdă = 1 / (P(victorie gazdă) / (1 − P(egal))). În cuvinte: ia probabilitatea de victorie gazdă, împarte la masa non-egal, și inversează. Casele adaugă marja lor deasupra. Pentru un meci cu P(gazdă) = 50%, P(egal) = 25%, DNB Gazdă echitabilă este 1 / (0,50 / 0,75) = 1,50.",
+      "ru": "DNB Хозяева = 1 / (P(победа хозяев) / (1 − P(ничья))). Словами: берёшь вероятность победы хозяев, делишь на non-draw массу и инвертируешь. Buki добавляют маржу сверху. Для матча с P(хозяева) = 50%, P(ничья) = 25% fair DNB Хозяева = 1 / (0.50 / 0.75) = 1.50.",
+      "el": "DNB Γηπεδούχου = 1 / (P(νίκη γηπεδούχου) / (1 − P(ισοπαλίας))). Με λόγια: πάρε την πιθανότητα νίκης γηπεδούχου, διαίρεσε με τη μάζα μη-ισοπαλίας και αντίστρεψε. Τα γραφεία προσθέτουν το περιθώριό τους από πάνω. Για αγώνα με P(γηπεδούχου) = 50%, P(ισοπαλίας) = 25%, δίκαιο DNB Γηπεδούχου είναι 1 / (0,50 / 0,75) = 1,50.",
+      "da": "DNB Hjemme = 1 / (P(hjemmesejr) / (1 − P(uafgjort))). I ord: tag hjemmesejrs-sandsynligheden, divider med ikke-uafgjort-massen, og inverter. Bogmagere lægger deres margin ovenpå. For en kamp med P(hjemme) = 50%, P(uafgjort) = 25% er fair DNB Hjemme 1 / (0,50 / 0,75) = 1,50.",
+      "sv": "DNB Hemma = 1 / (P(hemmavinst) / (1 − P(oavgjort))). Med ord: ta hemmavinst-sannolikheten, dela med icke-oavgjort-massan och invertera. Bokmakare lägger sin marginal ovanpå. För en match med P(hemma) = 50%, P(oavgjort) = 25% är rättvis DNB Hemma 1 / (0,50 / 0,75) = 1,50."
+    },
+    "faqs[faq-2].question": {
+      "sw": "Je DNB ni sawa na Asian Handicap 0 line?",
+      "pt": "DNB é o mesmo que a linha Asian Handicap 0?",
+      "tr": "DNB, Asian Handicap 0 çizgisiyle aynı mıdır?",
+      "pl": "Czy DNB to to samo, co linia Asian Handicap 0?",
+      "ro": "Este DNB același lucru cu linia Asian Handicap 0?",
+      "ru": "DNB — это то же самое, что Asian Handicap 0?",
+      "el": "Είναι το DNB το ίδιο με τη γραμμή Asian Handicap 0;",
+      "da": "Er DNB det samme som Asian Handicap 0-linjen?",
+      "sv": "Är DNB detsamma som Asian Handicap 0-linjen?"
+    },
+    "faqs[faq-2].answer": {
+      "sw": "Ndio - AH 0 na DNB hukaa kwa usawa. Bookmakers wa Kiasia mara nyingi hutoa margins bora kidogo kwa AH 0 kwa sababu ya ushindani mkubwa katika masoko ya Kiasia, kwa hivyo ikiwa una starehe na istilahi ya handicap inafaa kulinganisha bei zote mbili.",
+      "pt": "Sim - AH 0 e DNB liquidam de forma idêntica. Bookmakers asiáticos oferecem frequentemente margens ligeiramente melhores em AH 0 devido à concorrência mais apertada nos mercados asiáticos, portanto se estás confortável com terminologia de handicap vale a pena comparar preços de ambos.",
+      "tr": "Evet - AH 0 ve DNB aynı şekilde çözülür. Asyalı bookmaker'lar genellikle Asya pazarlarındaki daha sıkı rekabet nedeniyle AH 0'da biraz daha iyi marjlar sunar, bu yüzden handicap terminolojisi konusunda rahatsanız her ikisinin fiyatını karşılaştırmaya değer.",
+      "pl": "Tak - AH 0 i DNB rozliczają się identycznie. Bukmacherzy azjatyccy często oferują nieco lepsze marże na AH 0 z powodu ciaśniejszej konkurencji na rynkach azjatyckich, więc jeśli czujesz się komfortowo z terminologią handicapową, warto porównać ceny obu.",
+      "ro": "Da - AH 0 și DNB se decontează identic. Bookmaker-ii asiatici oferă adesea marje ușor mai bune pe AH 0 din cauza concurenței mai strânse pe piețele asiatice, deci dacă ești confortabil cu terminologia handicap, merită să compari prețurile ambelor.",
+      "ru": "Да — AH 0 и DNB рассчитываются идентично. Азиатские buki часто предлагают чуть лучшие margins на AH 0 из-за более плотной конкуренции на азиатских рынках, так что если вы комфортно с handicap-терминологией, стоит сравнить цены обоих.",
+      "el": "Ναι - AH 0 και DNB διευθετούνται πανομοιότυπα. Οι ασιατικοί bookmakers προσφέρουν συχνά ελαφρώς καλύτερα περιθώρια στο AH 0 λόγω του πιο σφιχτού ανταγωνισμού στις ασιατικές αγορές, οπότε αν είστε άνετοι με την ορολογία handicap αξίζει να συγκρίνετε τις τιμές και των δύο.",
+      "da": "Ja - AH 0 og DNB afgøres identisk. Asiatiske bogmagere tilbyder ofte lidt bedre margins på AH 0 på grund af tættere konkurrence på asiatiske markeder, så hvis du er fortrolig med handicap-terminologi, er det værd at sammenligne begges priser.",
+      "sv": "Ja - AH 0 och DNB avgörs identiskt. Asiatiska bokmakare erbjuder ofta något bättre marginaler på AH 0 på grund av tätare konkurrens på asiatiska marknader, så om du är bekväm med handicap-terminologi är det värt att jämföra priser för båda."
+    },
+    "faqs[faq-3].question": {
+      "sw": "Ni lini DNB ni mbaya zaidi kuliko Double Chance?",
+      "pt": "Quando é que DNB é pior que Hipótese Dupla?",
+      "tr": "DNB, Çifte Şans'tan ne zaman daha kötüdür?",
+      "pl": "Kiedy DNB jest gorsze od Podwójnej Szansy?",
+      "ro": "Când este DNB mai rău decât Șansa Dublă?",
+      "ru": "Когда DNB хуже Двойного Шанса?",
+      "el": "Πότε είναι το DNB χειρότερο από τη Διπλή Ευκαιρία;",
+      "da": "Hvornår er DNB værre end Dobbelt Chance?",
+      "sv": "När är DNB sämre än Dubbelchans?"
+    },
+    "faqs[faq-3].answer": {
+      "sw": "Wakati unataka kukusanya kwenye sare yenyewe. DC 1X inakulipa ikiwa sare inatokea; DNB inarejeshea tu. Ikiwa edge yako inatoka kwa sare iliyoppriced chini (ambayo hutokea katika Serie A na La Liga), DC ni play yenye ukali zaidi.",
+      "pt": "Quando queres cobrar no próprio empate. DC 1X paga-te se o empate acontece; DNB apenas reembolsa. Se a tua edge vem do empate estar subvalorizado (o que acontece em Serie A e La Liga), DC é a jogada mais afiada.",
+      "tr": "Beraberliğin kendisinden kazanmak istediğinizde. DC 1X, beraberlik gerçekleşirse size ödeme yapar; DNB yalnızca iade eder. Edge'iniz beraberliğin yetersiz fiyatlandırılmasından geliyorsa (Serie A ve La Liga'da olur), DC daha keskin oyundur.",
+      "pl": "Gdy chcesz zebrać z samego remisu. DC 1X płaci ci, gdy remis się wydarzy; DNB tylko zwraca. Jeśli twoja edge pochodzi z tego, że remis jest zaniżony (co zdarza się w Serie A i La Lidze), DC jest ostrzejszą grą.",
+      "ro": "Când vrei să colectezi pe egalul în sine. DC 1X îți plătește dacă egalul se întâmplă; DNB doar rambursează. Dacă edge-ul tău vine din egalul fiind subcotat (ceea ce se întâmplă în Serie A și La Liga), DC este jocul mai ascuțit.",
+      "ru": "Когда хочешь получать с самой ничьи. DC 1X платит, если ничья случается; DNB только возвращает. Если твой edge идёт от недооценённой ничьи (случается в Serie A и La Liga), DC — более острая игра.",
+      "el": "Όταν θέλεις να εισπράξεις από την ίδια την ισοπαλία. Το DC 1X σε πληρώνει αν συμβεί η ισοπαλία· το DNB επιστρέφει μόνο. Αν το edge σου προέρχεται από την υποτίμηση της ισοπαλίας (που συμβαίνει σε Serie A και La Liga), το DC είναι το πιο κοφτερό παιχνίδι.",
+      "da": "Når du vil indkassere på selve uafgjort. DC 1X betaler dig, hvis uafgjort sker; DNB refunderer kun. Hvis din edge kommer fra, at uafgjort er underprissat (hvilket sker i Serie A og La Liga), er DC det skarpere spil.",
+      "sv": "När du vill få utdelning på själva oavgjort. DC 1X betalar dig om oavgjort händer; DNB återbetalar bara. Om din edge kommer från att oavgjort är underprissatt (vilket händer i Serie A och La Liga) är DC det vassare spelet."
+    },
+    "faqs[faq-4].question": {
+      "sw": "Ni lini DNB ni bora kuliko bet mbichi ya 1X2?",
+      "pt": "Quando é que DNB é melhor que uma aposta 1X2 directa?",
+      "tr": "DNB ham 1X2 bahsinden ne zaman daha iyidir?",
+      "pl": "Kiedy DNB jest lepsze od surowego zakładu 1X2?",
+      "ro": "Când este DNB mai bun decât un pariu 1X2 brut?",
+      "ru": "Когда DNB лучше, чем сырая 1X2-ставка?",
+      "el": "Πότε είναι το DNB καλύτερο από ένα ακατέργαστο στοίχημα 1X2;",
+      "da": "Hvornår er DNB bedre end et rå 1X2-spil?",
+      "sv": "När är DNB bättre än ett rått 1X2-spel?"
+    },
+    "faqs[faq-4].answer": {
+      "sw": "Wakati bei ya favoriti ni fupi ya kutosha kwamba sare moja ya bahati mbaya huondoa run yako. Ikiwa unapenda timu ya nyumbani kwa 1.90 lakini kiwango cha sare cha ligi ni 25%, DNB Nyumbani kwa 1.55 ina hit rate ya 62% dhidi ya bei ya 1.90 kwa 50% - equity curve laini zaidi yenye return inayotarajiwa ya chini kidogo tu.",
+      "pt": "Quando o preço do favorito é curto o suficiente para que um único empate de azar apague a tua run. Se gostas da equipa da casa a 1,90 mas a taxa de empates da liga é 25%, DNB Casa a 1,55 tem 62% de hit rate versus o preço de 1,90 a 50% - uma curva de equidade mais suave com apenas modestamente menor retorno esperado.",
+      "tr": "Favorinin fiyatı, tek bir şanssız beraberliğin serinizi silmeye yetecek kadar kısa olduğunda. Ev sahibini 1,90'da beğeniyorsanız ancak lig beraberlik oranı %25 ise, 1,55'teki DNB Ev, %50'deki 1,90 fiyatına karşı %62 isabet oranına sahiptir - yalnızca mütevazı şekilde daha düşük beklenen getirili daha pürüzsüz bir öz sermaye eğrisi.",
+      "pl": "Gdy cena faworyta jest na tyle krótka, że jeden pechowy remis wymazuje twoją serię. Jeśli lubisz gospodarza po 1,90, ale odsetek remisów w lidze wynosi 25%, DNB Gospodarze po 1,55 ma 62% hit rate w porównaniu z ceną 1,90 po 50% - gładsza krzywa kapitałowa z jedynie skromnie niższym oczekiwanym zwrotem.",
+      "ro": "Când prețul favoritei este suficient de scurt încât un singur egal neșansos îți șterge seria. Dacă îți place echipa gazdă la 1,90, dar rata de egaluri din ligă este 25%, DNB Gazdă la 1,55 are o rată de succes de 62% față de prețul de 1,90 la 50% - o curbă a capitalului mai netedă cu doar modest mai puțin randament așteptat.",
+      "ru": "Когда цена фаворита достаточно короткая, чтобы одна неудачная ничья стёрла твой run. Если ты любишь хозяев по 1.90, но лиговый draw rate 25%, DNB Хозяева по 1.55 имеет hit rate 62% против цены 1.90 на 50% — более гладкая equity curve с только умеренно меньшим expected return.",
+      "el": "Όταν η τιμή του φαβορί είναι αρκετά κοντή ώστε μια άτυχη ισοπαλία να σβήσει τη σειρά σου. Αν σου αρέσει η γηπεδούχος στο 1,90 αλλά το ποσοστό ισοπαλίας της λίγκας είναι 25%, το DNB Γηπεδούχου στο 1,55 έχει 62% ποσοστό επιτυχίας έναντι της τιμής 1,90 στο 50% - μια πιο ομαλή καμπύλη equity με μόνο μέτρια χαμηλότερη αναμενόμενη απόδοση.",
+      "da": "Når favoritens pris er kort nok til, at et enkelt uheldigt uafgjort udsletter din serie. Hvis du kan lide hjemmeholdet til 1,90, men ligaens uafgjort-rate er 25%, har DNB Hjemme til 1,55 en 62% hit-rate vs 1,90-prisen ved 50% - en mere jævn equity-kurve med kun moderat lavere forventet afkast.",
+      "sv": "När favoritens pris är kort nog att en enda oturlig oavgjort suddar ut din serie. Om du gillar hemmalaget på 1,90 men ligans oavgjort-frekvens är 25%, har DNB Hemma på 1,55 en 62% träffprocent mot 1,90-priset på 50% - en mjukare equity-kurva med endast måttligt lägre förväntad avkastning."
+    },
+    "faqs[faq-5].question": {
+      "sw": "Je BetsPlug huonyesha uwezekano maalum wa DNB?",
+      "pt": "O BetsPlug expõe probabilidades específicas DNB?",
+      "tr": "BetsPlug DNB'ye özel olasılıkları yüzeye çıkarır mı?",
+      "pl": "Czy BetsPlug wystawia prawdopodobieństwa specyficzne dla DNB?",
+      "ro": "BetsPlug expune probabilități specifice DNB?",
+      "ru": "Открывает ли BetsPlug специфичные для DNB вероятности?",
+      "el": "Εκθέτει το BetsPlug πιθανότητες ειδικές για DNB;",
+      "da": "Udstiller BetsPlug DNB-specifikke sandsynligheder?",
+      "sv": "Exponerar BetsPlug DNB-specifika sannolikheter?"
+    },
+    "faqs[faq-5].answer": {
+      "sw": "Bado si kama nambari ya moja kwa moja. Unaweza kuichukua kutoka kwa 1X2 triple mbichi ambayo modeli yetu inawaonyesha members. Odds maalum za DNB kwa kila mechi inayokuja ziko kwenye roadmap pamoja na Asian handicap na over/under surfaces.",
+      "pt": "Ainda não como número directo. Podes derivá-lo do triplo 1X2 bruto que o nosso modelo expõe aos membros. Odds DNB-específicas em cada jogo a caminho estão no roadmap a par de Asian handicap e superfícies over/under.",
+      "tr": "Henüz doğrudan bir sayı olarak değil. Modelimizin üyelere sunduğu ham 1X2 üçlüsünden türetebilirsiniz. Her yaklaşan maçta DNB'ye özel oranlar, Asya handikap ve alt/üst yüzeyleriyle birlikte roadmap'tedir.",
+      "pl": "Jeszcze nie jako bezpośredni numer. Możesz wywnioskować z surowej trójki 1X2, którą nasz model udostępnia członkom. DNB-specyficzne kursy na każdy nadchodzący mecz są w roadmapie wraz z Asian handicap i powierzchniami over/under.",
+      "ro": "Încă nu ca număr direct. Poți deriva din tripla 1X2 brută pe care modelul nostru o expune membrilor. Cotele specifice DNB pe fiecare meci viitor se află pe roadmap alături de Asian handicap și suprafețe over/under.",
+      "ru": "Пока не как прямое число. Можно вывести из сырой 1X2-тройки, которую наша модель показывает участникам. Специфичные для DNB odds на каждый предстоящий матч в roadmap вместе с Asian handicap и over/under поверхностями.",
+      "el": "Όχι ακόμη ως άμεσος αριθμός. Μπορείς να την παράγεις από την ακατέργαστη τριάδα 1X2 που το μοντέλο μας εκθέτει στα μέλη. Αποδόσεις ειδικές για DNB σε κάθε επερχόμενο αγώνα είναι στο roadmap παράλληλα με Asian handicap και επιφάνειες over/under.",
+      "da": "Endnu ikke som direkte tal. Du kan udlede det fra den rå 1X2-tripel, som vores model udstiller for medlemmer. DNB-specifikke odds på hver kommende kamp er på roadmappen sammen med Asian handicap og over/under-flader.",
+      "sv": "Inte än som direkt siffra. Du kan härleda det från den råa 1X2-tripeln som vår modell exponerar för medlemmar. DNB-specifika odds på varje kommande match finns på roadmappen tillsammans med asiatisk handicap och over/under-ytor."
+    }
+  }
+}

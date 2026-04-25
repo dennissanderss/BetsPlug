@@ -1,0 +1,51 @@
+{
+  "_docId": "b2bPage",
+  "_type": "b2bPage",
+  "_label": "b2bPage",
+  "fields": {
+    "usps[u1].label": {
+      "sw": "Modeli za AI katika production",
+      "pt": "Modelos de IA em produção",
+      "tr": "Üretimde olan AI modelleri",
+      "pl": "Modele AI w produkcji",
+      "ro": "Modele AI în producție",
+      "ru": "ИИ-модели в production",
+      "el": "Μοντέλα AI σε production",
+      "da": "AI-modeller i produktion",
+      "sv": "AI-modeller i produktion"
+    },
+    "usps[u2].label": {
+      "sw": "Ligi za soka zinazofunikwa",
+      "pt": "Ligas de futebol cobertas",
+      "tr": "Kapsanan futbol ligleri",
+      "pl": "Obsługiwane ligi piłkarskie",
+      "ro": "Ligi de fotbal acoperite",
+      "ru": "Покрываемые футбольные лиги",
+      "el": "Καλυπτόμενες ποδοσφαιρικές λίγκες",
+      "da": "Dækkede fodboldligaer",
+      "sv": "Täckta fotbollsligor"
+    },
+    "usps[u3].label": {
+      "sw": "Waliojisajili hai",
+      "pt": "Subscritores activos",
+      "tr": "Aktif aboneler",
+      "pl": "Aktywni subskrybenci",
+      "ro": "Abonați activi",
+      "ru": "Активные подписчики",
+      "el": "Ενεργοί συνδρομητές",
+      "da": "Aktive abonnenter",
+      "sv": "Aktiva prenumeranter"
+    },
+    "usps[u4].label": {
+      "sw": "Rekodi ya wazi",
+      "pt": "Histórico transparente",
+      "tr": "Şeffaf performans geçmişi",
+      "pl": "Przejrzysty bilans wyników",
+      "ro": "Istoric transparent",
+      "ru": "Прозрачный track record",
+      "el": "Διαφανές ιστορικό αποτελεσμάτων",
+      "da": "Transparent track record",
+      "sv": "Transparent meritlista"
+    }
+  }
+}

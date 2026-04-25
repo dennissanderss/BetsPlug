@@ -32,8 +32,11 @@
 import { BET_TYPE_HUBS } from "./bet-type-hubs";
 import { LEAGUE_CATALOG, getLeagueName } from "./league-catalog";
 import type { LeagueCatalogEntry } from "./league-catalog";
+import { isLocale, type Locale } from "@/i18n/config";
+import { expandStringLocales, expandArrayLocales } from "@/i18n/expand";
 
-export type ComboLocale = "en" | "nl";
+// Phase 3: widened from `"en" | "nl"` to full 16-locale.
+export type ComboLocale = Locale;
 
 /** Historical scoring profile per top league — used to give each
  *  combo page a unique number-laden paragraph. Numbers are rounded
@@ -320,18 +323,29 @@ export function buildCombo(
     },
   ];
 
+  // Expand the en/nl pair to the full 16-locale Record via EN fallback
+  // so `combo.intro[anyLocale]` resolves to non-empty content on /ru,
+  // /pt, /el etc. Handwritten en+nl copy stays intact; other locales
+  // inherit the EN fallback until Sanity- or translator-fed per-locale
+  // content lands.
   return {
     betTypeSlug,
     leagueSlug,
     shortCode: betType.shortCode,
-    name: { betType: betTypeName, league: leagueName },
-    tagline: { en: tagline_en, nl: tagline_nl },
-    intro: { en: intro_en, nl: intro_nl },
-    statsBlock: { en: statsBlock_en, nl: statsBlock_nl },
-    angle: { en: angle_en, nl: angle_nl },
-    metaTitle: { en: metaTitle_en, nl: metaTitle_nl },
-    metaDescription: { en: metaDescription_en, nl: metaDescription_nl },
-    faqs: { en: faqs_en, nl: faqs_nl },
+    name: {
+      betType: expandStringLocales(betTypeName),
+      league: expandStringLocales(leagueName),
+    },
+    tagline: expandStringLocales({ en: tagline_en, nl: tagline_nl }),
+    intro: expandStringLocales({ en: intro_en, nl: intro_nl }),
+    statsBlock: expandStringLocales({ en: statsBlock_en, nl: statsBlock_nl }),
+    angle: expandStringLocales({ en: angle_en, nl: angle_nl }),
+    metaTitle: expandStringLocales({ en: metaTitle_en, nl: metaTitle_nl }),
+    metaDescription: expandStringLocales({
+      en: metaDescription_en,
+      nl: metaDescription_nl,
+    }),
+    faqs: expandArrayLocales({ en: faqs_en, nl: faqs_nl }),
     hasScoringProfile: hasProfile,
   };
 }

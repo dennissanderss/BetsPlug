@@ -1,0 +1,205 @@
+{
+  "_docId": "leagueHub-serie-a",
+  "_type": "leagueHub",
+  "_label": "Serie A",
+  "fields": {
+    "country": {
+      "sw": "Italia",
+      "pt": "Itália",
+      "tr": "İtalya",
+      "pl": "Włochy",
+      "ro": "Italia",
+      "ru": "Италия",
+      "el": "Ιταλία",
+      "da": "Italien",
+      "sv": "Italien"
+    },
+    "name": {
+      "sw": "Serie A",
+      "pt": "Serie A",
+      "tr": "Serie A",
+      "pl": "Serie A",
+      "ro": "Serie A",
+      "ru": "Serie A",
+      "el": "Serie A",
+      "da": "Serie A",
+      "sv": "Serie A"
+    },
+    "tagline": {
+      "sw": "Utabiri wa bure wa AI kwa kila speelronde ya Serie A",
+      "pt": "Previsões de IA gratuitas para cada jornada da Serie A",
+      "tr": "Her Serie A haftası için ücretsiz AI tahminleri",
+      "pl": "Darmowe prognozy AI dla każdej kolejki Serie A",
+      "ro": "Predicții AI gratuite pentru fiecare etapă din Serie A",
+      "ru": "Бесплатные ИИ-прогнозы на каждый тур Serie A",
+      "el": "Δωρεάν AI προβλέψεις για κάθε αγωνιστική της Serie A",
+      "da": "Gratis AI-forudsigelser for hver Serie A-spillerunde",
+      "sv": "Gratis AI-förutsägelser för varje Serie A-omgång"
+    },
+    "metaTitle": {
+      "sw": "Utabiri wa AI wa Serie A & Odds 2025/26 · BetsPlug",
+      "pt": "Previsões IA da Serie A & Odds 2025/26 · BetsPlug",
+      "tr": "Serie A AI Tahminleri ve Oranlar 2025/26 · BetsPlug",
+      "pl": "Prognozy AI Serie A i kursy 2025/26 · BetsPlug",
+      "ro": "Predicții AI Serie A & Cote 2025/26 · BetsPlug",
+      "ru": "ИИ-прогнозы Serie A и коэффициенты 2025/26 · BetsPlug",
+      "el": "AI Προβλέψεις Serie A & Αποδόσεις 2025/26 · BetsPlug",
+      "da": "Serie A AI-forudsigelser & Odds 2025/26 · BetsPlug",
+      "sv": "Serie A AI-förutsägelser & Odds 2025/26 · BetsPlug"
+    },
+    "metaDescription": {
+      "sw": "Utabiri wa bure wa AI wa Serie A, uwezekano wa kushinda na alama za imani kwa kila speelronde ya Italia. Imekalibrishwa kwa wastani wa chini wa goli wa Serie A.",
+      "pt": "Previsões gratuitas com IA da Serie A, probabilidades de vitória e scores de confiança para cada jornada italiana. Calibrado para as médias mais baixas de golos da Serie A.",
+      "tr": "Her İtalyan futbol haftası için ücretsiz AI Serie A tahminleri, galibiyet olasılıkları ve güven skorları. Serie A'nın daha düşük gol ortalamalarına göre kalibre edildi.",
+      "pl": "Darmowe prognozy Serie A oparte na AI, prawdopodobieństwa wygranej i wskaźniki pewności dla każdej włoskiej kolejki. Skalibrowane pod niższe średnie bramek Serie A.",
+      "ro": "Predicții AI gratuite pentru Serie A, probabilități de victorie și scoruri de încredere pentru fiecare etapă italiană. Calibrate pentru mediile mai mici de goluri din Serie A.",
+      "ru": "Бесплатные ИИ-прогнозы на Serie A, вероятности побед и confidence-score на каждый итальянский тур. Откалибровано под более низкие голевые средние Serie A.",
+      "el": "Δωρεάν AI προβλέψεις Serie A, πιθανότητες νίκης και σκορ εμπιστοσύνης για κάθε ιταλική αγωνιστική. Καλιμπραρισμένες για τους χαμηλότερους μέσους όρους γκολ της Serie A.",
+      "da": "Gratis AI-drevne Serie A-forudsigelser, sejrssandsynligheder og confidence-scores til hver italiensk spillerunde. Kalibreret til Serie A's lavere målgennemsnit.",
+      "sv": "Gratis AI-drivna Serie A-förutsägelser, vinstsannolikheter och konfidensscore för varje italiensk omgång. Kalibrerat för Serie A:s lägre målgenomsnitt."
+    },
+    "intro": {
+      "sw": "Serie A ndiyo ligi ya chini zaidi kwa kufunga goli kati ya top-five - na ni hasa sababu AI models hujipatia riziki yao hapa. Soka la Italia bado hulipa nidhamu ya kimkakati juu ya mabadiliko ya wazi, ambayo humaanisha matokeo mengi ya chini ya 2.5, 1-0 nyingi zaidi na kiwango cha juu kimuundo cha sare kuliko Premier League au Bundesliga. BetsPlug hukalibrishwa kwa hilo wazi: Poisson lambdas zetu huendesha chini kwa mechi za Italia, Elo yetu hutoa edge inayostahiki-lakini-isiyovimbishwa kwa top three, na logistic regressor yetu huweka uzito kwa metriki za ulinzi (xGA, kiwango cha clean-sheet, goalkeeper xG-prevented) kwa ukali zaidi kuliko ligi nyingine yoyote. Matokeo ni modeli ambayo kimuundo huwapiga books kwenye masoko ya sare na under-2.5 ambapo hu-overcorrect kuelekea mapenzi ya umma ya goli. Picks tatu za bure kwa speelronde huchapishwa hapa; orodha kamili ya Calcio pamoja na mechi za Coppa Italia ziko kwenye dashibodi ya members.",
+      "pt": "A Serie A é a menos goleadora das cinco grandes - e é exatamente por isso que os modelos de IA se justificam aqui. O futebol italiano continua a recompensar a disciplina tática sobre transições abertas, o que significa mais finais abaixo de 2,5 golos, mais 1-0 e uma taxa estrutural de empates mais alta do que a Premier League ou a Bundesliga. A BetsPlug calibra explicitamente para isso: os nossos lambdas Poisson correm mais baixos em jogos italianos, o nosso Elo dá uma vantagem merecida-mas-não-inflada aos top três, e o nosso regressor logístico pondera métricas defensivas (xGA, taxa de clean-sheet, xG evitado pelo guarda-redes) de forma mais agressiva do que para qualquer outra liga. O resultado é um modelo que bate sistematicamente as casas nos mercados de empate e under-2.5, onde elas sobrecorrigem para o amor do público por golos. Três picks gratuitas por jornada são publicadas aqui; o cartaz completo do Calcio mais os jogos da Coppa Italia ficam no dashboard de membros.",
+      "tr": "Serie A, ilk beşin en az goleyen ligidir - ve AI modelleri tam da burada ekmeğini kazanır. İtalyan futbolu hâlâ açık geçişler yerine taktiksel disiplini ödüllendirir, bu da 2,5 altı bitimlerin, daha fazla 1-0 sonucunun ve Premier League veya Bundesliga'dan yapısal olarak daha yüksek beraberlik oranının ortaya çıkması demektir. BetsPlug bunun için açıkça kalibre eder: Poisson lambda'larımız İtalyan fikstürlerinde daha düşük çalışır, Elo'muz top üçe hak ettiği-ama-şişirilmemiş bir edge verir ve lojistik regressor'umuz defansif metrikleri (xGA, clean-sheet oranı, kaleci xG-önlenen) diğer hiçbir ligden daha agresif ağırlıklandırır. Sonuç, halkın gol sevgisine karşı aşırı düzelten bookmaker'ları beraberlik ve under-2.5 pazarlarında sistematik olarak geçen bir modeldir. Hafta başına üç ücretsiz pick burada yayımlanır; tam Calcio programı artı Coppa Italia maçları üye panosundadır.",
+      "pl": "Serie A jest najmniej bramkostrzelną z top pięciu - i właśnie dlatego modele AI zarabiają tu na siebie. Włoska piłka nadal premiuje dyscyplinę taktyczną nad otwarte przejścia, co oznacza więcej końcówek poniżej 2,5 gola, więcej 1-0 i strukturalnie wyższy odsetek remisów niż Premier League czy Bundesliga. BetsPlug kalibruje to jawnie: nasze lambdy Poissona pracują niżej w meczach włoskich, nasze Elo daje zasłużoną-ale-nie-napompowaną przewagę top trójce, a nasz regresor logistyczny waży metryki defensywne (xGA, współczynnik clean-sheet, xG-prevented bramkarza) agresywniej niż w jakiejkolwiek innej lidze. Efektem jest model, który systematycznie pokonuje bukmacherów na rynkach remisu i under-2.5, gdzie ci przereagowują w stronę publicznej miłości do goli. Trzy darmowe picki na kolejkę publikujemy tutaj; pełny program Calcio plus mecze Coppa Italia znajdziesz w dashboardzie członkowskim.",
+      "ro": "Serie A este cel mai puțin goleador campionat din top cinci - și exact de aceea modelele AI își câștigă pâinea aici. Fotbalul italian încă recompensează disciplina tactică în locul tranzițiilor deschise, ceea ce înseamnă mai multe meciuri sub 2,5 goluri, mai multe 1-0 și o rată structural mai mare de egal decât Premier League sau Bundesliga. BetsPlug calibrează explicit pentru asta: lambdele noastre Poisson rulează mai jos pentru meciurile italiene, Elo-ul nostru oferă un edge meritat-dar-neumflat primelor trei, iar regresorul nostru logistic ponderează metricile defensive (xGA, rata clean-sheet, xG-prevented al portarului) mai agresiv decât în orice altă ligă. Rezultatul este un model care bate sistematic casele pe piețele de egal și under-2,5, unde acestea supracorectează spre dragostea publicului pentru goluri. Trei pick-uri gratuite pe etapă sunt publicate aici; programul complet Calcio plus meciurile Coppa Italia se află în dashboard-ul membrilor.",
+      "ru": "Serie A — самая низко забивающая из топ-пяти, и именно поэтому AI-модели здесь оправдывают себя. Итальянский футбол по-прежнему вознаграждает тактическую дисциплину, а не открытые переходы, что означает больше концовок ниже 2.5 голов, больше 1-0 и структурно более высокую долю ничьих, чем в Premier League или Bundesliga. BetsPlug калибрует это явно: наши Poisson-лямбды ниже на итальянских матчах, Elo даёт заслуженный-но-не-раздутый edge топ-тройке, а логистический регрессор агрессивнее любой другой лиги взвешивает defensive-метрики (xGA, рейт clean-sheet, xG-prevented вратаря). В итоге модель системно бьёт buki на ничейном и under-2.5 рынках, где они перекоррелируют в сторону публичной любви к голам. Три бесплатных picks за тур публикуются здесь; полный Calcio-список плюс матчи Coppa Italia — в дашборде участников.",
+      "el": "Η Serie A είναι η λιγότερο γκολάρα λίγκα από τις top-five - και γι' αυτό ακριβώς τα μοντέλα AI βγάζουν εδώ το μεροκάματό τους. Το ιταλικό ποδόσφαιρο ανταμείβει ακόμη την τακτική πειθαρχία έναντι των ανοικτών μεταβάσεων, πράγμα που σημαίνει περισσότερες καταλήξεις κάτω από 2,5, περισσότερα 1-0 και δομικά υψηλότερο ποσοστό ισοπαλίας από την Premier League ή τη Bundesliga. Το BetsPlug καλιμπράρει ρητά για αυτό: τα Poisson lambdas μας τρέχουν χαμηλότερα για ιταλικούς αγώνες, το Elo μας δίνει αξιοπρεπές-αλλά-όχι-φουσκωμένο edge στους top τρεις, και ο λογιστικός regressor μας ζυγίζει αμυντικά metrics (xGA, ποσοστό clean-sheet, xG-prevented τερματοφύλακα) πιο επιθετικά από οποιαδήποτε άλλη λίγκα. Το αποτέλεσμα είναι ένα μοντέλο που χτυπά συστηματικά τις εταιρείες στις αγορές ισοπαλίας και under-2,5, εκεί που αυτές υπερδιορθώνουν προς την αγάπη του κοινού για γκολ. Τρεις δωρεάν picks ανά αγωνιστική δημοσιεύονται εδώ· η πλήρης λίστα Calcio συν αγώνες Coppa Italia βρίσκεται στο dashboard μελών.",
+      "da": "Serie A er den mindst målrige af top-fem - og det er præcis derfor, AI-modellerne tjener deres plads her. Italiensk fodbold belønner stadig taktisk disciplin over åbne omstillinger, hvilket betyder flere afslutninger under 2,5 mål, flere 1-0 og en strukturelt højere uafgjort-rate end Premier League eller Bundesligaen. BetsPlug kalibrerer eksplicit for det: vores Poisson-lambdas kører lavere for italienske kampe, vores Elo giver en fortjent-men-ikke-oppustet edge til top tre, og vores logistiske regressor vægter defensive metrics (xGA, clean-sheet-rate, målmand xG-prevented) mere aggressivt end for nogen anden liga. Resultatet er en model, der systematisk slår bookmakerne på uafgjort- og under-2,5-markederne, hvor de overkorrigerer mod publikums kærlighed til mål. Tre gratis picks pr. spillerunde udgives her; hele Calcio-programmet plus Coppa Italia-kampe sidder i medlemsdashboardet.",
+      "sv": "Serie A är den minst målrika av topp-fem - och det är just därför AI-modellerna förtjänar sin plats här. Italiensk fotboll belönar fortfarande taktisk disciplin framför öppna omställningar, vilket betyder fler avslut under 2,5 mål, fler 1-0 och en strukturellt högre oavgjortfrekvens än Premier League eller Bundesliga. BetsPlug kalibrerar explicit för detta: våra Poisson-lambdas går lägre för italienska matcher, vårt Elo ger en förtjänad-men-inte-uppblåst edge till topp tre, och vår logistiska regressor viktar defensiva mätvärden (xGA, clean-sheet-frekvens, målvakt xG-prevented) mer aggressivt än för någon annan liga. Resultatet är en modell som systematiskt slår bookmakers på oavgjort- och under-2.5-marknaderna, där de överkompenserar mot publikens kärlek till mål. Tre gratis tips per omgång publiceras här; hela Calcio-programmet plus Coppa Italia-matcher finns i medlemsdashboarden."
+    },
+    "faqs[faq-0].question": {
+      "sw": "Kwa nini modeli yenu hutabiri sare nyingi zaidi katika Serie A?",
+      "pt": "Porque é que o vosso modelo prevê mais empates na Serie A?",
+      "tr": "Modeliniz Serie A'da neden daha fazla beraberlik tahmin ediyor?",
+      "pl": "Dlaczego wasz model prognozuje więcej remisów w Serie A?",
+      "ro": "De ce modelul vostru prezice mai multe egaluri în Serie A?",
+      "ru": "Почему ваша модель предсказывает больше ничьих в Serie A?",
+      "el": "Γιατί το μοντέλο σας προβλέπει περισσότερες ισοπαλίες στη Serie A;",
+      "da": "Hvorfor forudsiger jeres model flere uafgjort i Serie A?",
+      "sv": "Varför förutspår er modell fler oavgjort i Serie A?"
+    },
+    "faqs[faq-0].answer": {
+      "sw": "Soka la Italia limezalisha kihistoria ~25-27% za sare ikilinganishwa na ~22-24% katika Premier League. Modeli yetu ya Poisson huchukua hii moja kwa moja kupitia lambda ya chini ya ligi-nzima, kwa hivyo uwezekano wa sare hutoka 2-4 procentpunten juu zaidi kwa kila mechi. Hatuongezi fudge factor ya mkono juu yake.",
+      "pt": "O futebol italiano tem historicamente produzido ~25-27% de empates em comparação com ~22-24% na Premier League. O nosso modelo Poisson capta isso diretamente através do lambda de golos mais baixo em toda a liga, pelo que as probabilidades de empate saem 2-4 pontos percentuais mais altas por jogo. Não adicionamos um fudge factor manual por cima.",
+      "tr": "İtalyan futbolu tarihsel olarak Premier League'deki ~%22-24'e kıyasla ~%25-27 beraberlik üretmiştir. Poisson modelimiz bunu doğrudan daha düşük lig-geneli gol lambda'sı üzerinden yakalar, bu yüzden beraberlik olasılıkları maç başına 2-4 yüzde puanı daha yüksek çıkar. Üzerine manuel fudge factor eklemiyoruz.",
+      "pl": "Włoska piłka historycznie produkowała ~25-27% remisów w porównaniu do ~22-24% w Premier League. Nasz model Poissona wyłapuje to bezpośrednio przez niższą ogólnoligową lambdę bramkową, więc prawdopodobieństwa remisu wychodzą 2-4 punkty procentowe wyżej na mecz. Nie dodajemy ręcznego fudge factora.",
+      "ro": "Fotbalul italian a produs istoric ~25-27% egaluri comparativ cu ~22-24% în Premier League. Modelul nostru Poisson prinde asta direct prin lambda de goluri mai mică la nivelul întregii ligi, așa că probabilitățile de egal ies cu 2-4 puncte procentuale mai mari pe meci. Nu adăugăm un fudge factor manual peste.",
+      "ru": "Итальянский футбол исторически даёт ~25-27% ничьих против ~22-24% в Premier League. Наша Poisson-модель ловит это напрямую через более низкую общелиговую лямбду голов, поэтому вероятности ничьих выходят на 2-4 процентных пункта выше за матч. Никакого ручного fudge factor сверху мы не добавляем.",
+      "el": "Το ιταλικό ποδόσφαιρο έχει παραγάγει ιστορικά ~25-27% ισοπαλίες σε σύγκριση με ~22-24% στην Premier League. Το μοντέλο Poisson μας το πιάνει αυτό άμεσα μέσω του χαμηλότερου lambda γκολ συνολικά στη λίγκα, οπότε οι πιθανότητες ισοπαλίας βγαίνουν 2-4 ποσοστιαίες μονάδες υψηλότερες ανά αγώνα. Δεν προσθέτουμε χειροκίνητο fudge factor από πάνω.",
+      "da": "Italiensk fodbold har historisk produceret ~25-27% uafgjort sammenlignet med ~22-24% i Premier League. Vores Poisson-model opfanger dette direkte via den lavere liga-dækkende mål-lambda, så uafgjort-sandsynlighederne kommer 2-4 procentpoint højere pr. kamp. Vi lægger ikke en manuel fudge factor ovenpå.",
+      "sv": "Italiensk fotboll har historiskt producerat ~25-27% oavgjort jämfört med ~22-24% i Premier League. Vår Poisson-modell fångar detta direkt via den lägre liga-omfattande mål-lambdan, så sannolikheterna för oavgjort kommer ut 2-4 procentenheter högre per match. Vi lägger inte på någon manuell fudge factor."
+    },
+    "faqs[faq-1].question": {
+      "sw": "Mnafunika mechi za Coppa Italia?",
+      "pt": "Cobrem jogos da Coppa Italia?",
+      "tr": "Coppa Italia maçlarını kapsıyor musunuz?",
+      "pl": "Czy obejmujecie mecze Coppa Italia?",
+      "ro": "Acoperiți meciurile Coppa Italia?",
+      "ru": "Вы покрываете матчи Coppa Italia?",
+      "el": "Καλύπτετε αγώνες Coppa Italia;",
+      "da": "Dækker I Coppa Italia-kampe?",
+      "sv": "Täcker ni Coppa Italia-matcher?"
+    },
+    "faqs[faq-1].answer": {
+      "sw": "Mechi za Coppa Italia zimepandwa kwenye database lakini bado si kwenye hub hii. Soka la knock-out linahitaji kalibrasho tofauti (extra time, penalti shootouts) ambayo tutaongeza kwenye dynamic route mara tu tutakapokuwa na msimu kamili wa historia ya Coppa.",
+      "pt": "Os jogos da Coppa Italia estão sementeados na base de dados mas ainda não neste hub. O futebol de knock-out exige uma calibração diferente (prolongamento, grandes penalidades) que vamos adicionar à rota dinâmica assim que tivermos uma temporada completa de dados históricos da Coppa.",
+      "tr": "Coppa Italia maçları veritabanına tohumlanmış durumda ancak henüz bu hub'da değil. Elemeli futbol farklı bir kalibrasyon gerektirir (uzatma, penaltı atışları) ve tam bir sezonluk tarihsel Coppa verisi elde ettiğimizde dinamik rotaya ekleyeceğiz.",
+      "pl": "Mecze Coppa Italia są zasiane w bazie danych, ale nie na tym hubie. Piłka pucharowa wymaga innej kalibracji (dogrywka, rzuty karne), którą dodamy do dynamicznej trasy, gdy będziemy mieć pełny sezon historycznych danych Coppa.",
+      "ro": "Meciurile Coppa Italia sunt seed-uite în baza de date, dar nu încă pe acest hub. Fotbalul cu eliminare directă necesită o calibrare diferită (prelungiri, loviturile de departajare) pe care o vom adăuga rutei dinamice odată ce vom avea un sezon complet de date istorice Coppa.",
+      "ru": "Матчи Coppa Italia засеяны в базе, но пока не на этом хабе. Кубковый футбол требует другой калибровки (extra time, серии пенальти), которую мы добавим в динамический route, как только получим полный сезон исторических Coppa-данных.",
+      "el": "Οι αγώνες Coppa Italia είναι seed-αρισμένοι στη βάση δεδομένων αλλά όχι ακόμη σε αυτό το hub. Το knock-out ποδόσφαιρο απαιτεί διαφορετικό καλιμπράρισμα (παράταση, διαδικασία πέναλτι) που θα προσθέσουμε στο δυναμικό route μόλις έχουμε μια ολόκληρη σεζόν ιστορικών δεδομένων Coppa.",
+      "da": "Coppa Italia-kampe er seedet i databasen men endnu ikke på dette hub. Knockout-fodbold kræver en anden kalibrering (forlænget spilletid, straffesparkskonkurrence), som vi tilføjer til den dynamiske rute, så snart vi har en hel sæson med historiske Coppa-data.",
+      "sv": "Coppa Italia-matcher är seedade i databasen men ännu inte på denna hub. Cupfotboll kräver en annan kalibrering (förlängning, straffsparksavgörande) som vi lägger till den dynamiska rutten när vi har en hel säsong med historiska Coppa-data."
+    },
+    "faqs[faq-2].question": {
+      "sw": "Mnashughulikiaje vita vya degradisho mwisho wa msimu?",
+      "pt": "Como lidam com as lutas pela permanência no final da época?",
+      "tr": "Sezon sonunda küme düşme savaşlarını nasıl ele alıyorsunuz?",
+      "pl": "Jak radzicie sobie z walką o utrzymanie pod koniec sezonu?",
+      "ro": "Cum gestionați luptele pentru evitarea retrogradării la finalul sezonului?",
+      "ru": "Как вы обрабатываете борьбу за выживание в конце сезона?",
+      "el": "Πώς χειρίζεστε τις μάχες για την παραμονή στο τέλος της σεζόν;",
+      "da": "Hvordan håndterer I nedrykningskampe sent i sæsonen?",
+      "sv": "Hur hanterar ni nedflyttningsstrid sent på säsongen?"
+    },
+    "faqs[faq-2].answer": {
+      "sw": "Mechi za mwisho wa msimu zinazohusisha klabu zilizo na tishio la kudhibitiwa hupata marekebisho tofauti ya motisha. Logistic regressor yetu huweka uzito wa xG ya hivi karibuni zaidi kuliko Elo kwa mechi hizi, kwa sababu klabu zinazopambana mara nyingi hushinda rating yao ya muda mrefu kwenye run-in.",
+      "pt": "Os jogos do final da época envolvendo clubes ameaçados com a descida recebem um ajuste de motivação separado. O nosso regressor logístico pondera o xG recente com mais peso do que o Elo para estes jogos, porque clubes em dificuldades superam frequentemente o seu rating de longo prazo na reta final.",
+      "tr": "Küme düşme tehlikesiyle karşı karşıya olan kulüpleri içeren sezon sonu maçları ayrı bir motivasyon ayarı alır. Lojistik regressor'umuz bu maçlar için son xG'yi Elo'dan daha fazla ağırlıklandırır, çünkü mücadele eden kulüpler sezon finalinde genellikle uzun vadeli reytingini aşar.",
+      "pl": "Mecze pod koniec sezonu z klubami zagrożonymi spadkiem dostają osobną korektę motywacyjną. Nasz regresor logistyczny waży niedawne xG mocniej niż Elo dla tych meczów, ponieważ walczące kluby często przekraczają swój długoterminowy rating na finiszu.",
+      "ro": "Meciurile de la finalul sezonului care implică cluburi amenințate cu retrogradarea primesc o ajustare separată de motivație. Regresorul nostru logistic ponderează xG-ul recent mai puternic decât Elo pentru aceste meciuri, pentru că cluburile care luptă depășesc adesea ratingul lor pe termen lung în finalul de sezon.",
+      "ru": "Матчи конца сезона с клубами под угрозой вылета получают отдельную motivation-корректировку. Логистический регрессор для этих матчей взвешивает свежий xG сильнее Elo, потому что борющиеся клубы часто превосходят свой долгосрочный рейтинг в концовке.",
+      "el": "Οι αγώνες τέλους σεζόν που περιλαμβάνουν συλλόγους απειλούμενους με υποβιβασμό παίρνουν ξεχωριστή προσαρμογή κινήτρου. Ο λογιστικός regressor μας ζυγίζει το πρόσφατο xG πιο βαριά από το Elo για αυτούς τους αγώνες, επειδή οι πιεζόμενοι σύλλογοι συχνά ξεπερνούν το μακροπρόθεσμο rating τους στο run-in.",
+      "da": "Sent-sæson-kampe med nedrykningstruede klubber får en separat motivationsjustering. Vores logistiske regressor vægter nylig xG tungere end Elo for disse kampe, fordi kæmpende klubber ofte overpræsterer deres langsigtede rating i afslutningen.",
+      "sv": "Sent-säsong-matcher som involverar nedflyttningshotade klubbar får en separat motivationsjustering. Vår logistiska regressor viktar färsk xG tyngre än Elo för dessa matcher, eftersom kämpande klubbar ofta överträffar sin långsiktiga rating i slutspurten."
+    },
+    "faqs[faq-3].question": {
+      "sw": "Ni masoko yapi yanatabiriwa kwa Serie A?",
+      "pt": "Que mercados são previstos para a Serie A?",
+      "tr": "Serie A için hangi pazarlar tahmin ediliyor?",
+      "pl": "Jakie rynki są przewidywane dla Serie A?",
+      "ro": "Ce piețe sunt prezise pentru Serie A?",
+      "ru": "Какие рынки прогнозируются для Serie A?",
+      "el": "Ποιες αγορές προβλέπονται για τη Serie A;",
+      "da": "Hvilke markeder forudsiges for Serie A?",
+      "sv": "Vilka marknader förutsägs för Serie A?"
+    },
+    "faqs[faq-3].answer": {
+      "sw": "Preview ya bure huonyesha soko la 1X2. Members pia hupata over/under 2.5 goals (ambapo Serie A ni ya kupendeza kimuundo kwa sababu ya under-2.5 edge), BTTS, Asian handicap na mapendekezo ya Kelly stake.",
+      "pt": "A preview gratuita cobre o mercado 1X2. Os membros também obtêm over/under 2,5 golos (onde a Serie A é estruturalmente interessante devido à vantagem de under-2,5), BTTS, Asian handicap e uma recomendação de Kelly stake.",
+      "tr": "Ücretsiz önizleme 1X2 pazarını kapsar. Üyeler ayrıca over/under 2,5 gol (Serie A'nın under-2,5 edge nedeniyle yapısal olarak ilgi çekici olduğu yer), BTTS, Asya handikap ve Kelly stake önerisi alır.",
+      "pl": "Darmowa preview obejmuje rynek 1X2. Członkowie dostają również over/under 2.5 gola (gdzie Serie A jest strukturalnie ciekawa ze względu na under-2.5 edge), BTTS, Asian handicap i rekomendację Kelly stake.",
+      "ro": "Preview-ul gratuit acoperă piața 1X2. Membrii primesc și over/under 2.5 goluri (unde Serie A este structural interesantă datorită edge-ului de under-2.5), BTTS, Asian handicap și o recomandare de Kelly stake.",
+      "ru": "Бесплатный превью покрывает рынок 1X2. Участники также получают over/under 2.5 голов (где Serie A структурно интересна благодаря under-2.5 edge), BTTS, азиатский гандикап и рекомендацию Kelly stake.",
+      "el": "Η δωρεάν preview καλύπτει την αγορά 1X2. Τα μέλη λαμβάνουν επίσης over/under 2,5 γκολ (όπου η Serie A είναι δομικά ενδιαφέρουσα λόγω του edge στο under-2,5), BTTS, Ασιατικό handicap και σύσταση Kelly stake.",
+      "da": "Den gratis preview dækker 1X2-markedet. Medlemmer får også over/under 2.5 mål (hvor Serie A er strukturelt interessant på grund af under-2.5-edge), BTTS, Asian handicap og en Kelly stake-anbefaling.",
+      "sv": "Den gratis previewn täcker 1X2-marknaden. Medlemmar får också over/under 2.5 mål (där Serie A är strukturellt intressant på grund av under-2.5-edge), BTTS, asiatisk handicap och en Kelly stake-rekommendation."
+    },
+    "faqs[faq-4].question": {
+      "sw": "Utabiri wenu wa Serie A ni sahihi kiasi gani?",
+      "pt": "Qual é a precisão das vossas previsões da Serie A?",
+      "tr": "Serie A tahminleriniz ne kadar doğru?",
+      "pl": "Jak dokładne są wasze prognozy Serie A?",
+      "ro": "Cât de precise sunt predicțiile voastre pentru Serie A?",
+      "ru": "Насколько точны ваши прогнозы на Serie A?",
+      "el": "Πόσο ακριβείς είναι οι προβλέψεις σας για τη Serie A;",
+      "da": "Hvor præcise er jeres Serie A-forudsigelser?",
+      "sv": "Hur exakta är era Serie A-förutsägelser?"
+    },
+    "faqs[faq-4].answer": {
+      "sw": "Kalibrasho kwenye soko la favoriti-kushinda kawaida iko 67-72% - chini kidogo ya Premier League kwa sababu ya kiwango kikubwa zaidi cha sare, lakini usahihi wetu wa soko la under-2.5 ni moja ya uso bora zaidi wa ligi-nzima. Breakdown kamili kwenye /track-record.",
+      "pt": "A calibração no mercado de favorito-a-vencer situa-se tipicamente em 67-72% - ligeiramente abaixo da Premier League devido à taxa de empates mais alta, mas a precisão no mercado under-2,5 é uma das nossas melhores superfícies em toda a liga. Breakdown completo em /track-record.",
+      "tr": "Favori-kazanır pazarında kalibrasyon genellikle %67-72'dedir - daha yüksek beraberlik oranı nedeniyle Premier League'in biraz altındadır, ancak under-2,5 pazar doğruluğumuz lig genelindeki en iyi yüzeylerimizden biridir. Tam döküm /track-record'da.",
+      "pl": "Kalibracja na rynku faworyta-do-wygrania zwykle wynosi 67-72% - nieco poniżej Premier League z powodu wyższego odsetka remisów, ale nasza dokładność na rynku under-2.5 to jedna z najlepszych powierzchni w skali całej ligi. Pełny breakdown na /track-record.",
+      "ro": "Calibrarea pe piața favorit-pentru-victorie se situează de obicei la 67-72% - ușor sub Premier League din cauza ratei mai mari de egal, dar acuratețea pe piața under-2,5 este una dintre cele mai bune suprafețe ale noastre la nivelul întregii ligi. Breakdown complet la /track-record.",
+      "ru": "Калибровка на рынке «фаворит побеждает» обычно 67-72% — чуть ниже Premier League из-за более высокой доли ничьих, но наша точность на under-2.5 рынке — одна из лучших поверхностей в целом по лигам. Полный разбор на /track-record.",
+      "el": "Η καλιμπράρισμα στην αγορά φαβορί-για-νίκη βρίσκεται συνήθως στο 67-72% - ελαφρώς κάτω από την Premier League λόγω του υψηλότερου ποσοστού ισοπαλίας, αλλά η ακρίβειά μας στην αγορά under-2,5 είναι μία από τις καλύτερες επιφάνειές μας συνολικά στις λίγκες. Πλήρης ανάλυση στο /track-record.",
+      "da": "Kalibrering på favorit-til-sejr-markedet ligger typisk på 67-72% - lidt under Premier League på grund af den højere uafgjort-rate, men vores under-2.5-markedsnøjagtighed er en af vores bedste flader liga-bredt. Fuld opdeling på /track-record.",
+      "sv": "Kalibrering på favorit-vinner-marknaden ligger typiskt på 67-72% - något under Premier League på grund av högre oavgjort-frekvens, men vår under-2.5-marknadsträffsäkerhet är en av våra bästa ytor liga-övergripande. Fullständig uppdelning på /track-record."
+    },
+    "faqs[faq-5].question": {
+      "sw": "Mnatoa hesabu kwa tabia za warefa wa Italia?",
+      "pt": "Têm em conta as tendências dos árbitros italianos?",
+      "tr": "İtalyan hakem eğilimlerini hesaba katıyor musunuz?",
+      "pl": "Czy uwzględniacie tendencje włoskich sędziów?",
+      "ro": "Țineți cont de tendințele arbitrilor italieni?",
+      "ru": "Вы учитываете тенденции итальянских арбитров?",
+      "el": "Λαμβάνετε υπόψη τις τάσεις των Ιταλών διαιτητών;",
+      "da": "Tager I højde for italienske dommeres tendenser?",
+      "sv": "Tar ni hänsyn till italienska domares tendenser?"
+    },
+    "faqs[faq-5].answer": {
+      "sw": "Kwa njia isiyo ya moja kwa moja - utambulisho wa refa hulisha module yetu ya kadi-na-makosa ambayo humpa taarifa soko la over/under 2.5 kadi kwa members. Hatujadai kutabiri maamuzi ya refa wakati halisi, lakini profaili za kihistoria za refa huinformisha matarajio ya goli ya pre-match kidogo.",
+      "pt": "Indiretamente - a identidade do árbitro alimenta o nosso módulo de cartões-e-faltas que informa o mercado de over/under 2,5 cartões para os membros. Não alegamos prever decisões arbitrais em tempo real, mas os perfis históricos dos árbitros informam ligeiramente as expectativas de golos pré-jogo.",
+      "tr": "Dolaylı olarak - hakem kimliği, üyeler için over/under 2,5 kart pazarını besleyen kart-ve-faul modülümüze akar. Hakem kararlarını gerçek zamanlı tahmin ettiğimizi iddia etmiyoruz, ancak tarihsel hakem profilleri maç öncesi gol beklentilerini hafifçe bilgilendirir.",
+      "pl": "Pośrednio - tożsamość sędziego trafia do naszego modułu kartek-i-fauli, który informuje rynek over/under 2.5 kartek dla członków. Nie twierdzimy, że przewidujemy decyzje sędziowskie w czasie rzeczywistym, ale historyczne profile sędziów lekko informują przedmeczowe oczekiwania bramkowe.",
+      "ro": "Indirect - identitatea arbitrului alimentează modulul nostru cartonașe-și-faulturi care informează piața over/under 2,5 cartonașe pentru membri. Nu pretindem să prezicem deciziile arbitrale în timp real, dar profilurile istorice ale arbitrilor informează ușor așteptările de goluri pre-meci.",
+      "ru": "Косвенно — идентичность арбитра попадает в наш модуль карточек-и-фолов, который информирует рынок over/under 2.5 карточек для участников. Мы не утверждаем, что предсказываем арбитражные решения в реальном времени, но исторические профили арбитров слегка информируют предматчевые ожидания голов.",
+      "el": "Έμμεσα - η ταυτότητα του διαιτητή τροφοδοτεί τη μονάδα καρτών-και-φάουλ μας που πληροφορεί την αγορά over/under 2,5 καρτών για τα μέλη. Δεν ισχυριζόμαστε ότι προβλέπουμε διαιτητικές αποφάσεις σε πραγματικό χρόνο, αλλά τα ιστορικά προφίλ διαιτητών πληροφορούν ελαφρώς τις προ-αγωνιστικές προσδοκίες γκολ.",
+      "da": "Indirekte - dommerens identitet fødes ind i vores kort-og-frispark-modul, der informerer over/under 2,5-kort-markedet for medlemmer. Vi hævder ikke at forudsige dommerkendelser i realtid, men historiske dommerprofiler informerer en smule præ-kamp målforventningerne.",
+      "sv": "Indirekt - domarens identitet matas in i vår kort-och-frisparksmodul som informerar over/under 2.5-kortmarknaden för medlemmar. Vi påstår inte att vi förutsäger domarbeslut i realtid, men historiska domarprofiler informerar lätt målförväntningar före match."
+    }
+  }
+}

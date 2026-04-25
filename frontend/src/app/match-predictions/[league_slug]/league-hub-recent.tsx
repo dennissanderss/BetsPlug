@@ -41,7 +41,7 @@ function computeOutcome(f: Fixture): "correct" | "wrong" | "na" {
 
 interface Props {
   leagueSlug: string;
-  locale: "en" | "nl";
+  locale: import("@/i18n/config").Locale;
 }
 
 export function LeagueHubRecent({ leagueSlug, locale }: Props) {

@@ -1,0 +1,227 @@
+{
+  "_docId": "betTypeHub-both-teams-to-score",
+  "_type": "betTypeHub",
+  "_label": "Both Teams To Score",
+  "fields": {
+    "name": {
+      "sw": "Beide Timu Kufunga",
+      "pt": "Ambas as Equipas Marcam",
+      "tr": "Her İki Takım Da Gol Atar",
+      "pl": "Obie Drużyny Strzelą",
+      "ro": "Ambele Echipe Marchează",
+      "ru": "Обе Команды Забьют",
+      "el": "Και οι Δύο Ομάδες Σκοράρουν",
+      "da": "Begge Hold Scorer",
+      "sv": "Båda Lagen Gör Mål"
+    },
+    "tagline": {
+      "sw": "Jinsi odds za BTTS zinavyopangwa na jinsi modeli yetu inavyozisoma",
+      "pt": "Como as odds de BTTS são calculadas e como o nosso modelo as lê",
+      "tr": "BTTS oranları nasıl fiyatlanır ve modelimiz bunları nasıl okur",
+      "pl": "Jak kursy BTTS są wyceniane i jak nasz model je czyta",
+      "ro": "Cum sunt calculate cotele BTTS și cum le citește modelul nostru",
+      "ru": "Как формируются коэффициенты BTTS и как их читает наша модель",
+      "el": "Πώς τιμολογούνται οι αποδόσεις BTTS και πώς τις διαβάζει το μοντέλο μας",
+      "da": "Hvordan BTTS-odds prissættes, og hvordan vores model læser dem",
+      "sv": "Hur BTTS-odds prissätts och hur vår modell läser dem"
+    },
+    "explainer": {
+      "sw": "Both Teams To Score (BTTS) ni moja ya masoko safi zaidi ya binary katika soka: unabeti Ndio ikiwa unatarajia pande zote mbili kupata net, na Hapana ikiwa unatarajia angalau clean sheet moja. Soko hupangwa kutoka kwa joint probability kwamba kila timu inafunga angalau mara moja, ambayo nayo hutokana na Poisson distributions mbili za kujitegemea - moja kwa xG ya timu ya nyumbani na moja kwa ya kukaribisha. Mechi kati ya pande mbili zenye xG za 1.6 na 1.4 kwa kawaida hupanga BTTS Ndio karibu na 1.62 / BTTS Hapana karibu na 2.30 katika soko lenye usawa. Mvuto wa BTTS ni kwamba hutoa ugumu wa kutabiri mshindi: kama nyumbani inashinda 3-1 au wageni wanashinda 2-1 haina maana - matokeo yote mawili hukaa BTTS Ndio. Upande mbaya ni correlation: ligi ambapo upande mmoja mara nyingi hudominisha possession na kufunga mapema (kisha kusimamia mechi) huwa hudeliver BTTS Ndio chini ya kile Poisson huru kingependekeza.",
+      "pt": "Both Teams To Score (BTTS) é um dos mercados binários mais limpos no futebol: apostas Sim se esperas que ambos os lados marquem, e Não se esperas pelo menos uma clean sheet. O mercado é calculado a partir da probabilidade conjunta de cada equipa marcar pelo menos uma vez, que por sua vez vem de duas distribuições Poisson independentes - uma para os golos esperados (xG) da equipa da casa e outra para os da equipa visitante. Um jogo entre duas equipas com xG de 1,6 e 1,4 normalmente cota BTTS Sim em torno de 1,62 / BTTS Não em torno de 2,30 num mercado equilibrado. O atractivo do BTTS é que retira a dificuldade de prever o vencedor: seja a casa a ganhar 3-1 ou o visitante 2-1 é irrelevante - ambos os resultados liquidam BTTS Sim. A desvantagem é a correlação: ligas onde um lado domina frequentemente a posse de bola e marca cedo (depois faz a gestão do jogo) tendem a entregar menos BTTS Sim do que o Poisson independente sugeriria.",
+      "tr": "Both Teams To Score (BTTS) futboldaki en temiz ikili pazarlardan biridir: her iki tarafın da ağları bulmasını bekliyorsanız Evet'e, en az bir clean sheet bekliyorsanız Hayır'a bahis yaparsınız. Pazar, her takımın en az bir kez gol atma ortak olasılığından fiyatlandırılır ve bu da iki bağımsız Poisson dağılımından gelir - biri ev sahibinin beklenen golleri (xG) için, diğeri deplasman için. xG'si 1,6 ve 1,4 olan iki takım arasındaki bir maç dengeli bir pazarda BTTS Evet'i tipik olarak 1,62 / BTTS Hayır'ı 2,30 civarında fiyatlandırır. BTTS'in cazibesi, kazananı tahmin etme zorluğunu ortadan kaldırmasıdır: ev sahibinin 3-1 kazanması veya deplasmanın 2-1 kazanması önemsizdir - her iki sonuç da BTTS Evet'i çözer. Dezavantajı korelasyondur: bir tarafın sıklıkla topa hakim olup erken gol attığı (sonra maçı yönettiği) ligler, bağımsız Poisson'un öngöreceğinden daha az BTTS Evet üretir.",
+      "pl": "Both Teams To Score (BTTS) to jeden z najczystszych rynków binarnych w piłce nożnej: obstawiasz Tak, jeśli oczekujesz, że obie drużyny trafią do siatki, i Nie, jeśli spodziewasz się przynajmniej jednej clean sheet. Rynek jest wyceniany z łącznego prawdopodobieństwa, że każda drużyna strzeli co najmniej raz, które z kolei pochodzi z dwóch niezależnych rozkładów Poissona - jeden dla oczekiwanych bramek (xG) gospodarzy i jeden dla gości. Mecz między dwiema drużynami z xG 1,6 i 1,4 zwykle wycenia BTTS Tak w okolicach 1,62 / BTTS Nie w okolicach 2,30 na zrównoważonym rynku. Atrakcyjność BTTS polega na tym, że omija trudność przewidywania zwycięzcy: czy gospodarze wygrają 3-1 czy goście 2-1 jest nieistotne - oba wyniki rozstrzygają BTTS Tak na korzyść. Wadą jest korelacja: ligi, w których jedna strona często dominuje posiadanie i strzela wcześnie (a potem kontroluje mecz), dostarczają mniej BTTS Tak niż sugerowałby niezależny Poisson.",
+      "ro": "Both Teams To Score (BTTS) este una dintre cele mai curate piețe binare din fotbal: pariezi Da dacă te aștepți ca ambele echipe să găsească plasa și Nu dacă te aștepți la cel puțin un clean sheet. Piața este calculată pe baza probabilității comune ca fiecare echipă să marcheze cel puțin o dată, care la rândul său provine din două distribuții Poisson independente - una pentru golurile așteptate (xG) ale echipei gazdă și una pentru cea oaspete. Un meci între două echipe cu xG de 1,6 și 1,4 cotează de obicei BTTS Da în jurul 1,62 / BTTS Nu în jurul 2,30 într-o piață echilibrată. Atracția BTTS este că elimină dificultatea de a prezice învingătorul: dacă echipa gazdă câștigă 3-1 sau echipa oaspete câștigă 2-1 este irelevant - ambele rezultate decontează BTTS Da. Dezavantajul este corelația: ligile în care o parte domină frecvent posesia și marchează devreme (apoi gestionează meciul) tind să livreze mai puțin BTTS Da decât ar sugera Poisson-ul independent.",
+      "ru": "Both Teams To Score (BTTS) — один из самых чистых бинарных рынков в футболе: ставишь Да, если ожидаешь, что обе стороны найдут сетку, и Нет, если ожидаешь хотя бы один clean sheet. Рынок формируется из совместной вероятности того, что каждая команда забьёт хотя бы раз, что в свою очередь выводится из двух независимых Poisson-распределений — одного для xG хозяев, другого для гостей. Матч между двумя командами с xG 1.6 и 1.4 обычно даёт BTTS Да около 1.62 / BTTS Нет около 2.30 на сбалансированном рынке. Привлекательность BTTS в том, что он убирает сложность предсказания победителя: выиграют хозяева 3-1 или гости 2-1 — неважно, оба исхода закрывают BTTS Да. Минус — корреляция: лиги, где одна сторона часто доминирует по владению и забивает рано (а потом управляет матчем), склонны давать меньше BTTS Да, чем предполагал бы независимый Poisson.",
+      "el": "Το Both Teams To Score (BTTS) είναι μία από τις πιο καθαρές δυαδικές αγορές στο ποδόσφαιρο: ποντάρεις Ναι αν περιμένεις και τις δύο πλευρές να βρουν τα δίχτυα, και Όχι αν περιμένεις τουλάχιστον ένα clean sheet. Η αγορά τιμολογείται από την κοινή πιθανότητα κάθε ομάδα να σκοράρει τουλάχιστον μία φορά, η οποία με τη σειρά της προέρχεται από δύο ανεξάρτητες κατανομές Poisson - μία για τα αναμενόμενα γκολ (xG) της γηπεδούχου και μία για την αντίπαλη. Ένας αγώνας μεταξύ δύο πλευρών με αριθμούς xG 1,6 και 1,4 τυπικά τιμολογεί BTTS Ναι γύρω στο 1,62 / BTTS Όχι γύρω στο 2,30 σε μια ισορροπημένη αγορά. Η γοητεία του BTTS είναι ότι αφαιρεί τη δυσκολία πρόβλεψης του νικητή: αν η γηπεδούχος νικήσει 3-1 ή η φιλοξενούμενη 2-1 είναι άσχετο - και τα δύο αποτελέσματα διευθετούν BTTS Ναι. Το μειονέκτημα είναι η συσχέτιση: λίγκες όπου η μία πλευρά συχνά κυριαρχεί στην κατοχή και σκοράρει νωρίς (και μετά διαχειρίζεται τον αγώνα) τείνουν να παραδίδουν λιγότερο BTTS Ναι από ότι θα πρότεινε το ανεξάρτητο Poisson.",
+      "da": "Both Teams To Score (BTTS) er et af de reneste binære markeder i fodbold: du spiller Ja, hvis du forventer, at begge sider finder nettet, og Nej, hvis du forventer mindst et clean sheet. Markedet prissættes ud fra den fælles sandsynlighed for, at hvert hold scorer mindst én gang, som igen kommer fra to uafhængige Poisson-fordelinger - en for hjemmeholdets forventede mål (xG) og en for udeholdets. En kamp mellem to sider med xG-tal på 1,6 og 1,4 prissætter typisk BTTS Ja omkring 1,62 / BTTS Nej omkring 2,30 i et balanceret marked. Attraktionen ved BTTS er, at det fjerner vanskeligheden ved at forudsige vinderen: om hjemmeholdet vinder 3-1 eller udeholdet 2-1 er irrelevant - begge udfald afgør BTTS Ja. Ulempen er korrelation: ligaer, hvor den ene side ofte dominerer boldbesiddelsen og scorer tidligt (for derefter at styre kampen), tenderer mod at levere mindre BTTS Ja end uafhængig Poisson ville antyde.",
+      "sv": "Both Teams To Score (BTTS) är en av de renaste binära marknaderna inom fotboll: du satsar Ja om du förväntar dig att båda sidorna hittar nätet, och Nej om du förväntar dig minst en clean sheet. Marknaden prissätts utifrån den gemensamma sannolikheten att varje lag gör mål minst en gång, som i sin tur kommer från två oberoende Poisson-fördelningar - en för hemmalagets förväntade mål (xG) och en för bortalagets. En match mellan två sidor med xG-siffror på 1,6 och 1,4 prissätter typiskt BTTS Ja runt 1,62 / BTTS Nej runt 2,30 på en balanserad marknad. Dragningskraften med BTTS är att det tar bort svårigheten med att förutse vinnaren: om hemmalaget vinner 3-1 eller bortalaget 2-1 är irrelevant - båda utfallen avgör BTTS Ja. Nackdelen är korrelation: ligor där den ena sidan ofta dominerar bollinnehav och gör mål tidigt (och sedan hanterar matchen) tenderar att leverera mindre BTTS Ja än oberoende Poisson skulle föreslå."
+    },
+    "strategy": {
+      "sw": "Value ya BTTS huwa imejificha katika mechi ambapo mtazamo wa umma unahamia sana kuelekea shambulio la upande mmoja. Wakati timu ya katikati inapokea timu ya top-three, watumiaji wa kawaida huruka kwenye BTTS Ndio kwa sababu timu kubwa itafunga wazi - na kusahau kuwa timu ya nyumbani inaweza kuwa haifungui. Kinyume chake ni kweli kwa mechi kati ya klabu mbili za katikati zinazopangwa kidefensive: books mara nyingi hupanga BTTS Hapana karibu na 1.80 kwa sababu soko la kawaida hukumbuka simulizi ya 0-0, lakini hesabu ya goli huru huonyesha pande zote bado zina >60% nafasi ya kupata net. Tafuta BTTS edge katika mechi ambapo xG ya timu moja iko juu ya 1.0 na nyingine kati ya 0.9 na 1.3 - hiyo ndiyo range ambapo Poisson huru hutoa BTTS Ndio 58–68% uwezekano uliotafsiriwa, na soko mara nyingi hupanga 55% au chini. BetsPlug hupeperusha flag kwa mechi hizi kiotomatiki wakati 1X2 confidence ya chini inakuwa juu ya kutosha kwamba tunaamini inputs za xG.",
+      "pt": "O value do BTTS tende a esconder-se em jogos onde a perceção pública se inclina fortemente para o ataque de um lado. Quando uma equipa do meio da tabela recebe um dos três de cima, os utilizadores casuais saltam para BTTS Sim porque a equipa grande obviamente marca - e esquecem-se que a equipa da casa pode não marcar. O inverso é verdadeiro para jogos entre dois clubes do meio da tabela organizados defensivamente: as casas frequentemente cotam BTTS Não em torno de 1,80 porque o mercado casual recorda a narrativa de 0-0, mas a matemática de golos independentes diz que ambos os lados ainda têm >60% de hipóteses de marcar. Procura BTTS edge em jogos onde o xG de uma equipa está acima de 1,0 e o da outra está entre 0,9 e 1,3 - essa é a zona onde o Poisson independente dá ao BTTS Sim uma probabilidade implícita de 58-68%, e o mercado frequentemente cota em 55% ou menos. A BetsPlug marca estes jogos automaticamente quando a confiança 1X2 subjacente é alta o suficiente para confiarmos nos inputs de xG.",
+      "tr": "BTTS değeri, kamuoyu algısının bir tarafın hücumuna doğru ağır bir şekilde eğildiği maçlarda saklanma eğilimindedir. Orta sıra bir takım, üst üçlüden bir takıma ev sahipliği yaptığında, sıradan kullanıcılar BTTS Evet'e atlarlar çünkü büyük taraf açıkça gol atacaktır - ve ev sahibinin gol atamayabileceğini unuturlar. Savunma açısından organize iki orta sıra kulüp arasındaki maçlar için tersi geçerlidir: kitaplar sıradan pazar 0-0 anlatısını hatırladığı için sık sık BTTS Hayır'ı 1,80 civarında fiyatlandırır, ancak bağımsız-gol matematiği her iki tarafın da ağları bulma %60'tan fazla şansı olduğunu söyler. Bir takımın beklenen gollerinin (xG) 1,0'ın üzerinde ve diğerinin 0,9 ile 1,3 arasında olduğu maçlarda BTTS edge arayın - bu, bağımsız Poisson'un BTTS Evet'e %58-68 zımni olasılık verdiği aralıktır ve pazar genellikle bunu %55 veya daha düşük fiyatlandırır. BetsPlug, altta yatan 1X2 güven seviyesi xG girdilerine güvenecek kadar yüksek olduğunda bu maçları otomatik olarak işaretler.",
+      "pl": "Value BTTS zwykle chowa się w meczach, w których percepcja publiczna silnie przechyla się w stronę ataku jednej strony. Gdy drużyna ze środka tabeli gości drużynę z top trójki, casualowi użytkownicy skaczą na BTTS Tak, bo wielka drużyna oczywiście strzeli - i zapominają, że gospodarze mogą nie strzelić. Odwrotnie jest w meczach między dwiema defensywnie zorganizowanymi drużynami ze środka tabeli: bukmacherzy często wyceniają BTTS Nie w okolicach 1,80, bo rynek casualowy pamięta narrację o 0-0, a matematyka niezależnych bramek mówi, że obie strony nadal mają >60% szans na trafienie do siatki. Szukaj BTTS edge w meczach, w których xG jednej drużyny jest powyżej 1,0, a drugiej między 0,9 a 1,3 - to zakres, w którym niezależny Poisson daje BTTS Tak 58-68% implikowanego prawdopodobieństwa, a rynek często wycenia je na 55% lub niżej. BetsPlug automatycznie flaguje takie mecze, gdy bazowa pewność 1X2 jest na tyle wysoka, że ufamy inputom xG.",
+      "ro": "Valoarea BTTS tinde să se ascundă în meciurile în care percepția publică înclină puternic spre atacul unei laturi. Când o echipă de mijlocul clasamentului primește vizita uneia din primele trei, utilizatorii casual sar pe BTTS Da pentru că echipa mare va marca evident - și uită că echipa gazdă ar putea să nu marcheze. Opusul este valabil pentru meciurile între două cluburi de mijlocul clasamentului organizate defensiv: casele cotează frecvent BTTS Nu în jurul 1,80, pentru că piața casual își amintește narațiunea 0-0, dar matematica golurilor independente spune că ambele părți au încă >60% șanse să găsească plasa. Caută BTTS edge în meciurile în care xG-ul unei echipe este peste 1,0 și al celeilalte între 0,9 și 1,3 - acesta este intervalul în care Poisson-ul independent oferă BTTS Da o probabilitate implicită de 58-68%, iar piața cotează adesea la 55% sau mai puțin. BetsPlug marchează aceste meciuri automat atunci când încrederea 1X2 subiacentă este suficient de mare pentru a avea încredere în input-urile xG.",
+      "ru": "Value в BTTS обычно прячется в матчах, где восприятие публики сильно склоняется к атаке одной стороны. Когда команда из середины таблицы принимает кого-то из топ-трёх, casual-игроки прыгают на BTTS Да, потому что большая команда очевидно забьёт — и забывают, что хозяева могут и не забить. Противоположное верно для матчей между двумя дисциплинированно-оборонительными клубами из середины таблицы: buki часто ставят BTTS Нет около 1.80, потому что casual-рынок помнит 0-0 narrative, тогда как независимая goals-математика говорит, что у обеих сторон всё ещё >60% шанс забить. Ищи BTTS edge в фикстурах, где xG одной команды выше 1.0, а другой — между 0.9 и 1.3: это диапазон, где независимый Poisson даёт BTTS Да 58-68% вероятность, а рынок часто ставит 55% или ниже. BetsPlug автоматически помечает такие матчи, когда базовая 1X2 confidence достаточно высокая, чтобы доверять xG-входам.",
+      "el": "Η αξία του BTTS τείνει να κρύβεται σε αγώνες όπου η δημόσια αντίληψη γέρνει έντονα προς την επίθεση της μίας πλευράς. Όταν μια ομάδα μεσαίας κατάταξης φιλοξενεί μία από τις τρεις κορυφαίες, οι casual χρήστες πηδούν στο BTTS Ναι επειδή η μεγάλη πλευρά προφανώς θα σκοράρει - και ξεχνούν ότι η γηπεδούχος μπορεί να μην σκοράρει. Το αντίθετο ισχύει για αγώνες μεταξύ δύο αμυντικά οργανωμένων συλλόγων μεσαίας κατάταξης: τα γραφεία συχνά τιμολογούν BTTS Όχι γύρω στο 1,80 επειδή η casual αγορά θυμάται την αφήγηση 0-0, αλλά τα μαθηματικά των ανεξάρτητων γκολ λένε ότι και οι δύο πλευρές έχουν ακόμη >60% πιθανότητα να βρουν τα δίχτυα. Αναζήτησε BTTS edge σε αγώνες όπου το xG της μίας ομάδας είναι πάνω από 1,0 και της άλλης μεταξύ 0,9 και 1,3 - αυτή είναι η ζώνη όπου το ανεξάρτητο Poisson δίνει στο BTTS Ναι 58-68% τεκμαρτή πιθανότητα, ενώ η αγορά συχνά το τιμολογεί στο 55% ή χαμηλότερα. Το BetsPlug σημαίνει αυτούς τους αγώνες αυτόματα όταν η υποκείμενη 1X2 confidence είναι αρκετά υψηλή ώστε να εμπιστευόμαστε τα xG inputs.",
+      "da": "BTTS-værdi plejer at gemme sig i kampe, hvor den offentlige opfattelse skævert kraftigt mod den ene sides angreb. Når et midterhold er vært for et top-tre-hold, hopper casuale brugere på BTTS Ja, fordi det store hold naturligvis vil score - og glemmer, at hjemmeholdet måske ikke gør det. Det modsatte gælder for kampe mellem to defensivt organiserede midter-klubber: bogmagere prissætter ofte BTTS Nej omkring 1,80, fordi det casuale marked husker 0-0-fortællingen, men den uafhængige-mål matematik siger, at begge sider stadig har >60% chance for at finde nettet. Led efter BTTS-edge i kampe, hvor det ene holds forventede mål (xG) er over 1,0 og det andet mellem 0,9 og 1,3 - det er det område, hvor uafhængig Poisson giver BTTS Ja en 58-68% implicit sandsynlighed, og markedet ofte prissætter det til 55% eller lavere. BetsPlug markerer disse kampe automatisk, når den underliggende 1X2-confidence er høj nok til, at vi stoler på xG-input.",
+      "sv": "BTTS-värde tenderar att gömma sig i matcher där den allmänna uppfattningen lutar starkt mot ena sidans anfall. När ett mittentabellag är värd för ett topp-tre-lag hoppar casual-användare på BTTS Ja eftersom det stora laget uppenbarligen kommer göra mål - och glömmer att hemmalaget kanske inte gör det. Motsatsen gäller för matcher mellan två defensivt organiserade mittentabellklubbar: bokmakare prissätter ofta BTTS Nej runt 1,80 eftersom casual-marknaden minns 0-0-berättelsen, men den oberoende målmatematiken säger att båda sidor fortfarande har >60% chans att hitta nätet. Leta efter BTTS-edge i matcher där ett lags förväntade mål (xG) är över 1,0 och det andra mellan 0,9 och 1,3 - det är intervallet där oberoende Poisson ger BTTS Ja en 58-68% implicit sannolikhet, och marknaden ofta prissätter den till 55% eller lägre. BetsPlug flaggar dessa matcher automatiskt när den underliggande 1X2-konfidensen är tillräckligt hög för att vi ska lita på xG-inputen."
+    },
+    "matchesHeading": {
+      "sw": "Mechi za leo zenye ujasiri mkubwa zaidi",
+      "pt": "Os jogos de hoje com maior confiança",
+      "tr": "Bugünün en güvenilir fikstürleri",
+      "pl": "Dzisiejsze mecze z najwyższą pewnością",
+      "ro": "Meciurile de azi cu cea mai mare încredere",
+      "ru": "Самые уверенные матчи дня",
+      "el": "Οι σημερινοί αγώνες με τη μεγαλύτερη αυτοπεποίθηση",
+      "da": "Dagens mest overbeviste kampe",
+      "sv": "Dagens säkraste matcher"
+    },
+    "matchesSub": {
+      "sw": "Mechi 3 bora ambapo ensemble yetu ina ujasiri wa jumla wa juu zaidi - orodha muhimu ya research ya BTTS.",
+      "pt": "Top 3 jogos onde o nosso ensemble tem a confiança geral mais alta - uma shortlist útil para research de BTTS.",
+      "tr": "Ensemble'imizin en yüksek genel güvene sahip olduğu ilk 3 maç - BTTS araştırması için yararlı bir kısa liste.",
+      "pl": "Top 3 mecze, w których nasz ensemble ma najwyższą ogólną pewność - użyteczna shortlista do researchu BTTS.",
+      "ro": "Primele 3 meciuri în care ensemble-ul nostru are cea mai mare încredere generală - o listă utilă pentru cercetare BTTS.",
+      "ru": "Топ-3 матча с наивысшей общей confidence нашей ensemble — полезный шорт-лист для BTTS-research.",
+      "el": "Τα 3 κορυφαία παιχνίδια όπου το ensemble μας έχει τη μεγαλύτερη συνολική εμπιστοσύνη - μια χρήσιμη shortlist για έρευνα BTTS.",
+      "da": "Top 3 kampe, hvor vores ensemble har den højeste samlede confidence - en nyttig kortliste til BTTS-research.",
+      "sv": "Topp 3-matcher där vår ensemble har högst total konfidens - en användbar shortlist för BTTS-research."
+    },
+    "metaTitle": {
+      "sw": "Utabiri wa Both Teams To Score & BTTS Tips · BetsPlug",
+      "pt": "Previsões Ambas as Equipas Marcam & Dicas BTTS · BetsPlug",
+      "tr": "Her İki Takım Da Gol Atar Tahminleri ve BTTS İpuçları · BetsPlug",
+      "pl": "Prognozy Obie Drużyny Strzelą & Typy BTTS · BetsPlug",
+      "ro": "Predicții Ambele Echipe Marchează & Ponturi BTTS · BetsPlug",
+      "ru": "Прогнозы Обе Команды Забьют и советы BTTS · BetsPlug",
+      "el": "Προβλέψεις Και οι Δύο Ομάδες Σκοράρουν & Tips BTTS · BetsPlug",
+      "da": "Begge Hold Scorer-forudsigelser & BTTS-tips · BetsPlug",
+      "sv": "Båda Lagen Gör Mål-förutsägelser & BTTS-tips · BetsPlug"
+    },
+    "metaDescription": {
+      "sw": "Utabiri wa bure wa BTTS, hoja ya modeli na orodha ya mechi za leo zenye ujasiri mkubwa zaidi. Jinsi Both Teams To Score inavyopangwa na wakati soko linapowareact.",
+      "pt": "Previsões BTTS gratuitas, raciocínio do modelo e uma shortlist dos jogos de hoje com maior confiança. Como Ambas as Equipas Marcam é calculado e quando o mercado sobrerreage.",
+      "tr": "Ücretsiz BTTS tahminleri, model mantığı ve bugünün en güvenilir fikstürlerinin kısa listesi. Her İki Takım Da Gol Atar'ın nasıl fiyatlandırıldığı ve pazarın ne zaman aşırı tepki verdiği.",
+      "pl": "Darmowe prognozy BTTS, uzasadnienie modelu i shortlista najbardziej pewnych meczów dzisiaj. Jak wyceniana jest Obie Drużyny Strzelą i kiedy rynek przereaguje.",
+      "ro": "Predicții BTTS gratuite, raționamentul modelului și o listă scurtă a meciurilor de azi cu cea mai mare încredere. Cum este calculată Ambele Echipe Marchează și când reacționează excesiv piața.",
+      "ru": "Бесплатные BTTS-прогнозы, логика модели и шорт-лист самых уверенных матчей дня. Как формируется Обе Команды Забьют и когда рынок переигрывает.",
+      "el": "Δωρεάν προβλέψεις BTTS, συλλογιστική μοντέλου και shortlist των σημερινών αγώνων με τη μεγαλύτερη εμπιστοσύνη. Πώς τιμολογείται το Και οι Δύο Ομάδες Σκοράρουν και πότε η αγορά αντιδρά υπερβολικά.",
+      "da": "Gratis BTTS-forudsigelser, modelbegrundelse og en kortliste over dagens mest overbeviste kampe. Hvordan Begge Hold Scorer prissættes, og hvornår markedet overreagerer.",
+      "sv": "Gratis BTTS-förutsägelser, modellresonemang och en shortlist över dagens säkraste matcher. Hur Båda Lagen Gör Mål prissätts och när marknaden överreagerar."
+    },
+    "faqs[faq-0].question": {
+      "sw": "BTTS inamaanisha nini?",
+      "pt": "O que significa BTTS?",
+      "tr": "BTTS ne anlama geliyor?",
+      "pl": "Co oznacza BTTS?",
+      "ro": "Ce înseamnă BTTS?",
+      "ru": "Что означает BTTS?",
+      "el": "Τι σημαίνει BTTS;",
+      "da": "Hvad står BTTS for?",
+      "sv": "Vad betyder BTTS?"
+    },
+    "faqs[faq-0].answer": {
+      "sw": "BTTS inasimama kwa Both Teams To Score - soko la ndio/hapana ambapo unashinda ikiwa pande zote mbili zinapata net angalau mara moja wakati wa mechi (au unapoteza ikiwa angalau timu moja inashindwa kufunga).",
+      "pt": "BTTS significa Both Teams To Score (Ambas as Equipas Marcam) - um mercado sim/não onde ganhas se ambas as equipas encontrarem a rede pelo menos uma vez durante o jogo (ou perdes se pelo menos uma equipa não marcar).",
+      "tr": "BTTS, Both Teams To Score (Her İki Takım Da Gol Atar) anlamına gelir - maç sırasında her iki takım da ağları en az bir kez bulursa kazandığınız (veya en az bir takım gol atamazsa kaybettiğiniz) evet/hayır pazarıdır.",
+      "pl": "BTTS oznacza Both Teams To Score (Obie Drużyny Strzelą) - rynek tak/nie, w którym wygrywasz, jeśli obie drużyny trafią do siatki co najmniej raz w trakcie meczu (lub przegrywasz, jeśli przynajmniej jedna drużyna nie strzeli).",
+      "ro": "BTTS înseamnă Both Teams To Score (Ambele Echipe Marchează) - o piață da/nu în care câștigi dacă ambele echipe găsesc plasa cel puțin o dată pe parcursul meciului (sau pierzi dacă cel puțin o echipă nu reușește să marcheze).",
+      "ru": "BTTS расшифровывается как Both Teams To Score (Обе Команды Забьют) — рынок да/нет, где ты выигрываешь, если обе команды находят сетку хотя бы раз за матч (или проигрываешь, если хотя бы одна команда не забьёт).",
+      "el": "Το BTTS σημαίνει Both Teams To Score (Και οι Δύο Ομάδες Σκοράρουν) - μια αγορά ναι/όχι όπου κερδίζεις εάν και οι δύο ομάδες βρουν τα δίχτυα τουλάχιστον μία φορά κατά τη διάρκεια του αγώνα (ή χάνεις εάν τουλάχιστον μία ομάδα αποτύχει να σκοράρει).",
+      "da": "BTTS står for Both Teams To Score (Begge Hold Scorer) - et ja/nej-marked, hvor du vinder, hvis begge hold finder nettet mindst én gang i løbet af kampen (eller taber, hvis mindst ét hold ikke scorer).",
+      "sv": "BTTS står för Both Teams To Score (Båda Lagen Gör Mål) - en ja/nej-marknad där du vinner om båda lagen hittar nätet minst en gång under matchen (eller förlorar om minst ett lag misslyckas med att göra mål)."
+    },
+    "faqs[faq-1].question": {
+      "sw": "Jinsi gani pricing ya BTTS inavyohesabiwa?",
+      "pt": "Como é calculada a pricing de BTTS?",
+      "tr": "BTTS fiyatlandırması nasıl hesaplanır?",
+      "pl": "Jak jest obliczana wycena BTTS?",
+      "ro": "Cum este calculată cotarea BTTS?",
+      "ru": "Как рассчитывается pricing BTTS?",
+      "el": "Πώς υπολογίζεται η τιμολόγηση BTTS;",
+      "da": "Hvordan beregnes BTTS-prissætningen?",
+      "sv": "Hur beräknas BTTS-prissättningen?"
+    },
+    "faqs[faq-1].answer": {
+      "sw": "Books huchukua BTTS Ndio kama 1 − P(clean sheet nyumbani) − P(clean sheet ugenini) + P(zote mbili clean sheets). Na inputs huru za Poisson hiyo huanguka hadi (1 − exp(−λH)) × (1 − exp(−λA)), ambapo λ ni goli yanayotarajiwa ya kila upande. Kwa hivyo timu mbili zenye xG 1.4 na 1.2 zinamaanisha ~54% BTTS Ndio.",
+      "pt": "As casas derivam BTTS Sim como 1 − P(clean sheet em casa) − P(clean sheet fora) + P(ambos clean sheets). Com inputs Poisson independentes isso colapsa para (1 − exp(−λH)) × (1 − exp(−λA)), onde λ é o xG de cada lado. Portanto duas equipas com xG 1,4 e 1,2 implicam ~54% BTTS Sim.",
+      "tr": "Kitaplar BTTS Evet'i 1 − P(ev sahibi clean sheet) − P(deplasman clean sheet) + P(her ikisi clean sheet) olarak türetir. Bağımsız Poisson girdileriyle bu (1 − exp(−λH)) × (1 − exp(−λA))'ya indirgenir, burada λ her takımın beklenen golleridir. Yani xG 1,4 ve 1,2 olan iki takım ~%54 BTTS Evet ima eder.",
+      "pl": "Bukmacherzy wyprowadzają BTTS Tak jako 1 − P(clean sheet u gospodarza) − P(clean sheet u gości) + P(oba clean sheets). Z niezależnymi inputami Poissona sprowadza się to do (1 − exp(−λH)) × (1 − exp(−λA)), gdzie λ to oczekiwane bramki każdej strony. Więc dwie drużyny z xG 1,4 i 1,2 implikują ~54% BTTS Tak.",
+      "ro": "Casele derivă BTTS Da ca 1 − P(clean sheet gazdă) − P(clean sheet oaspete) + P(ambele clean sheets). Cu input-uri Poisson independente, asta se reduce la (1 − exp(−λH)) × (1 − exp(−λA)), unde λ este golurile așteptate ale fiecărei echipe. Deci două echipe cu xG 1,4 și 1,2 implică ~54% BTTS Da.",
+      "ru": "Buki выводят BTTS Да как 1 − P(clean sheet дома) − P(clean sheet в гостях) + P(оба clean sheets). С независимыми Poisson-входами это сворачивается в (1 − exp(−λH)) × (1 − exp(−λA)), где λ — ожидаемые голы каждой стороны. Так что две команды с xG 1.4 и 1.2 дают ~54% BTTS Да.",
+      "el": "Τα γραφεία παράγουν το BTTS Ναι ως 1 − P(clean sheet γηπεδούχου) − P(clean sheet αντιπάλου) + P(και τα δύο clean sheets). Με ανεξάρτητες Poisson εισόδους αυτό καταρρέει σε (1 − exp(−λH)) × (1 − exp(−λA)), όπου λ είναι τα αναμενόμενα γκολ κάθε πλευράς. Έτσι δύο ομάδες με xG 1,4 και 1,2 υπονοούν ~54% BTTS Ναι.",
+      "da": "Bogmagere udleder BTTS Ja som 1 − P(hjemme clean sheet) − P(ude clean sheet) + P(begge clean sheets). Med uafhængige Poisson-input reduceres det til (1 − exp(−λH)) × (1 − exp(−λA)), hvor λ er hver sides forventede mål. Så to hold med xG 1,4 og 1,2 implicerer ~54% BTTS Ja.",
+      "sv": "Bokmakare härleder BTTS Ja som 1 − P(hemma clean sheet) − P(borta clean sheet) + P(båda clean sheets). Med oberoende Poisson-input kollapsar detta till (1 − exp(−λH)) × (1 − exp(−λA)), där λ är varje sidas förväntade mål. Så två lag med xG 1,4 och 1,2 implicerar ~54% BTTS Ja."
+    },
+    "faqs[faq-2].question": {
+      "sw": "BetsPlug huchapisha uwezekano maalum wa BTTS?",
+      "pt": "O BetsPlug publica probabilidades específicas de BTTS?",
+      "tr": "BetsPlug BTTS'e özel olasılıklar yayımlıyor mu?",
+      "pl": "Czy BetsPlug publikuje prawdopodobieństwa specyficzne dla BTTS?",
+      "ro": "BetsPlug publică probabilități specifice BTTS?",
+      "ru": "BetsPlug публикует специфичные для BTTS вероятности?",
+      "el": "Δημοσιεύει το BetsPlug πιθανότητες ειδικές για BTTS;",
+      "da": "Udgiver BetsPlug BTTS-specifikke sandsynligheder?",
+      "sv": "Publicerar BetsPlug BTTS-specifika sannolikheter?"
+    },
+    "faqs[faq-2].answer": {
+      "sw": "Bado siyo kama headline number - pipeline ya sasa inachapisha 1X2 confidence. Tunatumia confidence hiyo kushortlist mechi ambapo xG ya chini inaaminika, ambayo ni proxy nzuri kwa mechi zinazofaa BTTS. Kichwa maalum cha BTTS kiko kwenye roadmap.",
+      "pt": "Ainda não como número de destaque - a pipeline atual publica confiança 1X2. Usamos essa confiança para fazer shortlist de jogos onde o xG subjacente é fiável, o que é uma boa proxy para jogos dignos de BTTS. Uma cabeça BTTS dedicada está no roadmap.",
+      "tr": "Henüz başlık numarası olarak değil - mevcut pipeline 1X2 confidence yayımlıyor. Bu confidence'ı altta yatan xG'nin güvenilir olduğu maçları kısa listeye almak için kullanıyoruz ki bu BTTS'e değer fikstürler için iyi bir proxy'dir. Özel bir BTTS kafası roadmap'te.",
+      "pl": "Jeszcze nie jako liczba nagłówkowa - obecna pipeline publikuje pewność 1X2. Używamy tej pewności do shortlisty meczów, w których bazowe xG jest wiarygodne, co jest dobrym proxy dla meczów wartych BTTS. Dedykowana głowa BTTS jest w roadmapie.",
+      "ro": "Încă nu ca număr de bază - pipeline-ul actual publică încrederea 1X2. Folosim această încredere pentru a face shortlist la meciurile în care xG-ul subiacent este fiabil, ceea ce este un proxy bun pentru meciuri demne de BTTS. Un cap BTTS dedicat se află pe roadmap.",
+      "ru": "Пока не как headline-число — текущий pipeline публикует 1X2 confidence. Мы используем эту confidence, чтобы составить шорт-лист матчей, где базовый xG надёжен, а это хороший прокси для BTTS-достойных фикстур. Отдельная BTTS-голова в roadmap.",
+      "el": "Όχι ακόμη ως κύριος αριθμός - η τρέχουσα pipeline δημοσιεύει 1X2 confidence. Χρησιμοποιούμε αυτή τη confidence για να κάνουμε shortlist αγώνων όπου το υποκείμενο xG είναι αξιόπιστο, κάτι που είναι καλό proxy για αγώνες που αξίζουν BTTS. Ένα αποκλειστικό BTTS head βρίσκεται στο roadmap.",
+      "da": "Endnu ikke som overskriftstal - den nuværende pipeline udgiver 1X2-confidence. Vi bruger den confidence til at kortliste kampe, hvor det underliggende xG er pålideligt, hvilket er en god proxy for BTTS-værdige kampe. Et dedikeret BTTS-hoved er på roadmappen.",
+      "sv": "Inte än som rubriksiffra - nuvarande pipeline publicerar 1X2-konfidens. Vi använder den konfidensen för att kortlista matcher där det underliggande xG är tillförlitligt, vilket är en bra proxy för BTTS-värda matcher. Ett dedikerat BTTS-huvud finns på roadmappen."
+    },
+    "faqs[faq-3].question": {
+      "sw": "Ni ligi zipi zina kiwango cha juu zaidi cha BTTS hit?",
+      "pt": "Que ligas têm a maior taxa de acerto em BTTS?",
+      "tr": "Hangi ligler en yüksek BTTS isabet oranına sahip?",
+      "pl": "Które ligi mają najwyższy wskaźnik trafień BTTS?",
+      "ro": "Ce ligi au cea mai mare rată de succes BTTS?",
+      "ru": "В каких лигах самый высокий BTTS hit rate?",
+      "el": "Ποιες λίγκες έχουν το υψηλότερο BTTS hit rate;",
+      "da": "Hvilke ligaer har den højeste BTTS-rammerate?",
+      "sv": "Vilka ligor har högst BTTS-träffprocent?"
+    },
+    "faqs[faq-3].answer": {
+      "sw": "Eredivisie na Bundesliga zinakaa juu na BTTS Ndio ~60% katika msimu kamili, iliyochochwa na soka la mashambulizi wazi na wastani wa juu wa ligi (~3.0+ goli kwa mechi). Serie A na La Liga kawaida huendesha karibu 50% kwa sababu ya miundo ya ulinzi imara.",
+      "pt": "A Eredivisie e a Bundesliga estão no topo com cerca de 60% BTTS Sim ao longo de uma época completa, impulsionadas pelo futebol ofensivo e pelas médias altas das ligas (~3,0+ golos por jogo). A Serie A e La Liga tipicamente correm em torno de 50% por causa de estruturas defensivas mais apertadas.",
+      "tr": "Eredivisie ve Bundesliga, tam sezon boyunca yaklaşık %60 BTTS Evet ile zirvede yer alır, bu açık hücum futbolu ve yüksek lig ortalamaları (~3,0+ maç başına gol) ile desteklenir. Serie A ve La Liga, daha sıkı savunma yapılarından dolayı genellikle ~%50 civarında çalışır.",
+      "pl": "Eredivisie i Bundesliga zasiadają na szczycie z około 60% BTTS Tak w pełnym sezonie, napędzane otwartą ofensywną piłką i wysokimi średnimi ligowymi (~3,0+ bramki na mecz). Serie A i La Liga zwykle chodzą w okolicach 50% ze względu na ciaśniejsze struktury defensywne.",
+      "ro": "Eredivisie și Bundesliga se află în frunte cu aproximativ 60% BTTS Da pe parcursul unui sezon complet, determinat de fotbal ofensiv deschis și medii ligă ridicate (~3,0+ goluri pe meci). Serie A și La Liga rulează de obicei în jur de 50% din cauza structurilor defensive mai strânse.",
+      "ru": "Eredivisie и Bundesliga сидят на вершине с примерно 60% BTTS Да за полный сезон, что обусловлено открытым атакующим футболом и высокими лиговыми средними (~3.0+ голов за матч). Serie A и La Liga обычно крутятся около 50% из-за более плотных defensive-структур.",
+      "el": "Η Eredivisie και η Bundesliga βρίσκονται στην κορυφή με περίπου 60% BTTS Ναι σε μια πλήρη σεζόν, τροφοδοτούμενες από ανοικτό επιθετικό ποδόσφαιρο και υψηλούς μέσους όρους λίγκας (~3,0+ γκολ ανά αγώνα). Serie A και La Liga τυπικά τρέχουν γύρω στο 50% λόγω πιο σφιχτών αμυντικών δομών.",
+      "da": "Eredivisie og Bundesligaen ligger i toppen med omkring 60% BTTS Ja over en hel sæson, drevet af åben angribende fodbold og høje liga-gennemsnit (~3,0+ mål pr. kamp). Serie A og La Liga kører typisk omkring 50% på grund af strammere defensive strukturer.",
+      "sv": "Eredivisie och Bundesliga sitter i toppen med cirka 60% BTTS Ja över en hel säsong, drivet av öppen offensiv fotboll och höga ligagenomsnitt (~3,0+ mål per match). Serie A och La Liga kör typiskt runt 50% på grund av tätare defensiva strukturer."
+    },
+    "faqs[faq-4].question": {
+      "sw": "BTTS ni soko la +EV kwa watumiaji wa kawaida?",
+      "pt": "O BTTS é um mercado +EV para utilizadores casuais?",
+      "tr": "BTTS sıradan kullanıcılar için +EV bir pazar mı?",
+      "pl": "Czy BTTS to rynek +EV dla casualowych użytkowników?",
+      "ro": "Este BTTS o piață +EV pentru utilizatorii casual?",
+      "ru": "Является ли BTTS +EV рынком для casual-игроков?",
+      "el": "Είναι το BTTS μια +EV αγορά για casual χρήστες;",
+      "da": "Er BTTS et +EV-marked for casuale brugere?",
+      "sv": "Är BTTS en +EV-marknad för casual-användare?"
+    },
+    "faqs[faq-4].answer": {
+      "sw": "Inaweza kuwa, ikiwa unalenga zone ya mid-pricing (1.75 – 2.00) katika ligi ambapo soko linadhani kupita kiasi simulizi za ulinzi. BTTS-favoriti chini ya 1.60 kawaida haitoi value baada ya margin ya bookmaker; bei ndefu sana za BTTS Hapana juu ya 2.40 zinaashiria hatari halisi ya shambulio la upande mmoja ambayo soko tayari limepanga.",
+      "pt": "Pode ser, se focares na zona de mid-pricing (1,75 – 2,00) em ligas onde o mercado sobrevaloriza narrativas defensivas. Favoritos de BTTS abaixo de 1,60 normalmente não oferecem valor após a margem da casa; preços muito longos de BTTS Não acima de 2,40 estão a sinalizar risco real de ataque unilateral que o mercado já calculou.",
+      "tr": "Olabilir, eğer pazarın savunma anlatılarını aşırı değerlediği liglerde orta fiyatlama bölgesine (1,75 – 2,00) odaklanırsanız. 1,60 altındaki BTTS favorileri genellikle bookmaker marjından sonra değer sunmaz; 2,40 üzerindeki çok uzun BTTS Hayır fiyatları, pazarın zaten fiyatlandırdığı gerçek tek-taraflı saldırı riskini işaret eder.",
+      "pl": "Może być, jeśli skupisz się na strefie mid-pricing (1,75 – 2,00) w ligach, gdzie rynek przewartościuje narracje defensywne. Faworyci BTTS poniżej 1,60 zwykle nie oferują wartości po marży bukmacherskiej; bardzo długie ceny BTTS Nie powyżej 2,40 sygnalizują rzeczywiste ryzyko jednostronnego ataku, które rynek już wycenił.",
+      "ro": "Poate fi, dacă te concentrezi pe zona de prețuri medii (1,75 – 2,00) în ligile unde piața supraevaluează narațiunile defensive. Favoriții BTTS sub 1,60 de obicei nu oferă valoare după marja casei; prețurile foarte lungi BTTS Nu peste 2,40 semnalează un risc real de atac unilateral pe care piața l-a prețuit deja.",
+      "ru": "Может быть, если сфокусируешься на mid-pricing зоне (1.75 – 2.00) в лигах, где рынок переоценивает defensive-нарративы. BTTS-favourites ниже 1.60 обычно не дают value после букмекерской маржи; очень длинные BTTS Нет цены выше 2.40 сигнализируют реальный one-sided-attack риск, который рынок уже ставит в цену.",
+      "el": "Μπορεί να είναι, εάν εστιάσεις στη ζώνη μέσης τιμολόγησης (1,75 – 2,00) σε λίγκες όπου η αγορά υπερτιμά τις αμυντικές αφηγήσεις. Τα φαβορί BTTS κάτω από 1,60 συνήθως δεν προσφέρουν αξία μετά το περιθώριο bookmaker· πολύ μακριές τιμές BTTS Όχι πάνω από 2,40 σηματοδοτούν πραγματικό κίνδυνο επίθεσης μιας πλευράς που η αγορά έχει ήδη τιμολογήσει.",
+      "da": "Det kan være det, hvis du fokuserer på mid-pricing-zonen (1,75 – 2,00) i ligaer, hvor markedet overvurderer defensive fortællinger. BTTS-favoritter under 1,60 tilbyder normalt ingen værdi efter bogmagerens margin; meget lange BTTS Nej-priser over 2,40 signalerer reel ensidig-angreb-risiko, som markedet allerede har prissat.",
+      "sv": "Det kan vara det, om du fokuserar på mellanprisssegmentet (1,75 – 2,00) i ligor där marknaden övervärderar defensiva berättelser. BTTS-favoriter under 1,60 erbjuder vanligtvis inget värde efter bokmakarens marginal; mycket långa BTTS Nej-priser över 2,40 signalerar verklig ensidig-anfallsrisk som marknaden redan har prissatt."
+    },
+    "faqs[faq-5].question": {
+      "sw": "Naweza kuchanganya BTTS na masoko mengine?",
+      "pt": "Posso combinar BTTS com outros mercados?",
+      "tr": "BTTS'i diğer pazarlarla birleştirebilir miyim?",
+      "pl": "Czy mogę łączyć BTTS z innymi rynkami?",
+      "ro": "Pot combina BTTS cu alte piețe?",
+      "ru": "Могу ли я комбинировать BTTS с другими рынками?",
+      "el": "Μπορώ να συνδυάσω το BTTS με άλλες αγορές;",
+      "da": "Kan jeg kombinere BTTS med andre markeder?",
+      "sv": "Kan jag kombinera BTTS med andra marknader?"
+    },
+    "faqs[faq-5].answer": {
+      "sw": "Ndio - BTTS + Over 2.5 goals ni combo maarufu kwa sababu matukio hayo mawili yanafungamana vyema. Lakini kumbuka: parlays zilizofungamana hupangwa tofauti na parlays huru, kwa hivyo usidhani unaweza kuzidisha uwezekano mbili pamoja. Tools za members ndani ya dashibodi ya BetsPlug zinaonyesha odds za pamoja zilizotafsiriwa.",
+      "pt": "Sim - BTTS + Over 2,5 golos é um combo popular porque os dois eventos estão fortemente correlacionados positivamente. Mas lembra-te: parlays correlacionados são calculados de forma diferente dos parlays independentes, por isso não assumas que podes multiplicar as duas probabilidades. As ferramentas de membros dentro do dashboard BetsPlug mostram as odds implícitas correlacionadas.",
+      "tr": "Evet - BTTS + Over 2,5 gol popüler bir kombodur çünkü iki olay güçlü şekilde pozitif korelasyonludur. Ancak unutmayın: korele edilmiş parlay'ler bağımsız parlay'lerden farklı fiyatlandırılır, bu yüzden iki olasılığı birbiriyle çarpabileceğinizi varsaymayın. BetsPlug dashboard'u içindeki üye araçları korele edilmiş zımni oranları gösterir.",
+      "pl": "Tak - BTTS + Over 2,5 gola to popularna kombinacja, ponieważ oba zdarzenia są silnie pozytywnie skorelowane. Ale pamiętaj: skorelowane parlays są wyceniane inaczej niż niezależne parlays, więc nie zakładaj, że możesz pomnożyć dwa prawdopodobieństwa. Narzędzia dla członków w dashboardzie BetsPlug pokazują skorelowane implikowane kursy.",
+      "ro": "Da - BTTS + Over 2,5 goluri este un combo popular, deoarece cele două evenimente sunt puternic corelate pozitiv. Dar reține: parlay-urile corelate sunt cotate diferit față de parlay-urile independente, deci nu presupune că poți multiplica cele două probabilități. Instrumentele pentru membri din dashboard-ul BetsPlug afișează cotele implicite corelate.",
+      "ru": "Да — BTTS + Over 2.5 голов — популярная комбинация, потому что эти два события сильно положительно коррелированы. Но помни: correlated parlays оцениваются иначе, чем независимые parlays, так что нельзя просто перемножить две вероятности. Инструменты для участников в дашборде BetsPlug показывают коррелированные неявные odds.",
+      "el": "Ναι - BTTS + Over 2,5 γκολ είναι ένα δημοφιλές combo επειδή τα δύο γεγονότα είναι ισχυρά θετικά συσχετισμένα. Αλλά θυμηθείτε: τα συσχετισμένα parlays τιμολογούνται διαφορετικά από τα ανεξάρτητα parlays, οπότε μην υποθέσετε ότι μπορείτε να πολλαπλασιάσετε τις δύο πιθανότητες. Τα εργαλεία μελών μέσα στο dashboard BetsPlug δείχνουν τις συσχετισμένες τεκμαρτές αποδόσεις.",
+      "da": "Ja - BTTS + Over 2,5 mål er en populær combo, fordi de to begivenheder er stærkt positivt korrelerede. Men husk: korrelerede parlays prissættes anderledes end uafhængige parlays, så gå ikke ud fra, at du kan gange de to sandsynligheder sammen. Medlemsværktøjer inde i BetsPlug-dashboardet viser de korrelerede implicitte odds.",
+      "sv": "Ja - BTTS + Over 2,5 mål är en populär kombo eftersom de två händelserna är starkt positivt korrelerade. Men kom ihåg: korrelerade parlays prissätts annorlunda än oberoende parlays, så anta inte att du kan multiplicera de två sannolikheterna. Medlemsverktyg inuti BetsPlug-dashboarden visar de korrelerade implicita oddsen."
+    }
+  }
+}

@@ -50,6 +50,7 @@ import {
 } from "@/data/bet-type-hubs";
 import { PAGE_META, type PageMeta } from "@/data/page-meta";
 import type { Locale } from "@/i18n/config";
+import { expandArrayLocales } from "@/i18n/expand";
 
 // Re-export types so consumers import from one place
 export type {
@@ -76,15 +77,44 @@ function loc(obj: Record<string, unknown> | undefined, locale: string): string {
   return (obj[locale] as string) ?? (obj.en as string) ?? "";
 }
 
-/** Build a locale record from a Sanity locale object. */
-function locRecord(obj: Record<string, unknown> | undefined): Record<string, string> {
-  if (!obj) return { en: "" };
+/**
+ * Build a locale record from a Sanity locale object. Every locale
+ * in the app (16 after Phase 2 rollout) is guaranteed to resolve
+ * to a non-empty string via EN fallback, so components can do
+ * `hub.name[locale]` without a missing-key guard. Until a
+ * `translate-sanity` run fills the new locales, `/ru` etc. render
+ * the EN copy — which is hidden from Google via middleware noindex
+ * but still visually consistent for the visitor.
+ */
+function locRecord(
+  obj: Record<string, unknown> | undefined,
+): Record<string, string> {
+  const source = obj ?? {};
+  // 1) collect every string value under any locale key
+  const direct: Record<string, string> = {};
+  for (const [k, v] of Object.entries(source)) {
+    if (k !== "_type" && typeof v === "string") direct[k] = v;
+  }
+  // 2) EN fallback — first non-empty wins: en → nl → any → ""
+  const fallback =
+    direct.en ||
+    direct.nl ||
+    Object.values(direct).find((v) => v.length > 0) ||
+    "";
+  // 3) emit all 16 locales, filling absent/empty with the fallback
   const rec: Record<string, string> = {};
-  for (const [k, v] of Object.entries(obj)) {
-    if (k !== "_type" && typeof v === "string") rec[k] = v;
+  for (const l of SANITY_LOCALES) {
+    const v = direct[l];
+    rec[l] = v && v.length > 0 ? v : fallback;
   }
   return rec;
 }
+
+// Phase 2 top-16 locale set. Keep aligned with `src/i18n/config.ts`.
+const SANITY_LOCALES = [
+  "en", "nl", "de", "fr", "es", "it", "sw", "id",
+  "pt", "tr", "pl", "ro", "ru", "el", "da", "sv",
+] as const;
 
 // ── Articles ──────────────────────────────────────────────
 
@@ -157,10 +187,13 @@ export async function fetchArticleSlugs(): Promise<string[]> {
 // ── Learn Pillars ─────────────────────────────────────────
 
 function transformLearnPillar(raw: any): LearnPillar {
-  const faqs: Record<LearnPillarLocale, LearnPillarFaq[]> = { en: [], nl: [] };
+  const faqsSeed: Partial<Record<string, LearnPillarFaq[]>> = {
+    en: [],
+    nl: [],
+  };
   for (const f of raw.faqs ?? []) {
-    faqs.en.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
-    faqs.nl.push({
+    faqsSeed.en!.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
+    faqsSeed.nl!.push({
       q: loc(f.question, "nl") || loc(f.question, "en"),
       a: loc(f.answer, "nl") || loc(f.answer, "en"),
     });
@@ -175,12 +208,12 @@ function transformLearnPillar(raw: any): LearnPillar {
     intro: locRecord(raw.intro) as Record<LearnPillarLocale, string>,
     sections: (raw.sections ?? []).map((s: any): LearnPillarSection => ({
       heading: locRecord(s.heading) as Record<LearnPillarLocale, string>,
-      body: {
+      body: expandArrayLocales({
         en: (loc(s.body, "en") || "").split("\n\n").filter(Boolean),
         nl: (loc(s.body, "nl") || loc(s.body, "en") || "").split("\n\n").filter(Boolean),
-      },
+      }),
     })),
-    faqs,
+    faqs: expandArrayLocales(faqsSeed),
     related: (raw.related ?? []).map((r: any) => r.slug?.current ?? r._ref?.replace("learnPillar-", "") ?? ""),
   };
 }
@@ -228,10 +261,10 @@ export async function fetchLearnPillarSlugs(): Promise<string[]> {
 // ── League Hubs ───────────────────────────────────────────
 
 function transformLeagueHub(raw: any): LeagueHub {
-  const faqs: Record<LeagueHubLocale, LeagueHubFaq[]> = { en: [], nl: [] };
+  const faqsSeed: Partial<Record<string, LeagueHubFaq[]>> = { en: [], nl: [] };
   for (const f of raw.faqs ?? []) {
-    faqs.en.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
-    faqs.nl.push({
+    faqsSeed.en!.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
+    faqsSeed.nl!.push({
       q: loc(f.question, "nl") || loc(f.question, "en"),
       a: loc(f.answer, "nl") || loc(f.answer, "en"),
     });
@@ -248,7 +281,7 @@ function transformLeagueHub(raw: any): LeagueHub {
     intro: locRecord(raw.intro) as Record<LeagueHubLocale, string>,
     metaTitle: locRecord(raw.metaTitle) as Record<LeagueHubLocale, string>,
     metaDescription: locRecord(raw.metaDescription) as Record<LeagueHubLocale, string>,
-    faqs,
+    faqs: expandArrayLocales(faqsSeed),
   };
 }
 
@@ -317,10 +350,13 @@ export async function fetchLeagueHubSlugs(): Promise<string[]> {
 // ── Bet Type Hubs ─────────────────────────────────────────
 
 function transformBetTypeHub(raw: any): BetTypeHub {
-  const faqs: Record<BetTypeHubLocale, BetTypeHubFaq[]> = { en: [], nl: [] };
+  const faqsSeed: Partial<Record<string, BetTypeHubFaq[]>> = {
+    en: [],
+    nl: [],
+  };
   for (const f of raw.faqs ?? []) {
-    faqs.en.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
-    faqs.nl.push({
+    faqsSeed.en!.push({ q: loc(f.question, "en"), a: loc(f.answer, "en") });
+    faqsSeed.nl!.push({
       q: loc(f.question, "nl") || loc(f.question, "en"),
       a: loc(f.answer, "nl") || loc(f.answer, "en"),
     });
@@ -337,7 +373,7 @@ function transformBetTypeHub(raw: any): BetTypeHub {
     matchesSub: locRecord(raw.matchesSub) as Record<BetTypeHubLocale, string>,
     metaTitle: locRecord(raw.metaTitle) as Record<BetTypeHubLocale, string>,
     metaDescription: locRecord(raw.metaDescription) as Record<BetTypeHubLocale, string>,
-    faqs,
+    faqs: expandArrayLocales(faqsSeed),
   };
 }
 

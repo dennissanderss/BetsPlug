@@ -66,6 +66,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: meta.description,
     alternates: {
       canonical: alternates.canonical,
+      languages: alternates.languages,
     },
     icons: {
       // Browser tab favicon — served at the right size per viewport

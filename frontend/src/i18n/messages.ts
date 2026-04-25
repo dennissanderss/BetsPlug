@@ -5414,6 +5414,14 @@ import esDict from "./locales/es";
 import itDict from "./locales/it";
 import swDict from "./locales/sw";
 import idDict from "./locales/id";
+import ptDict from "./locales/pt";
+import trDict from "./locales/tr";
+import plDict from "./locales/pl";
+import roDict from "./locales/ro";
+import ruDict from "./locales/ru";
+import elDict from "./locales/el";
+import daDict from "./locales/da";
+import svDict from "./locales/sv";
 
 export const messages: Record<string, Dictionary> = {
   en,
@@ -5424,6 +5432,14 @@ export const messages: Record<string, Dictionary> = {
   it: itDict,
   sw: swDict,
   id: idDict,
+  pt: ptDict,
+  tr: trDict,
+  pl: plDict,
+  ro: roDict,
+  ru: ruDict,
+  el: elDict,
+  da: daDict,
+  sv: svDict,
 };
 
 export function translate(locale: string, key: TranslationKey): string {

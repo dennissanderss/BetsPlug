@@ -1,18 +1,11 @@
 /**
- * SEO helper utilities (EN-indexable, translated UI — 2026-04-23)
+ * SEO helper utilities (16-locale Nerdytips pattern — 2026-04-24)
  * ────────────────────────────────────────────────────────────
- * Every canonical URL emitted here is the English form. The
- * middleware rewrites /nl/, /de/, … URLs to the canonical path
- * AND tags the response `X-Robots-Tag: noindex`, so Google only
- * indexes the English URL space while visitors still see their
- * chosen language via SSR (not Google Translate).
- *
- * `getServerLocale()` IS locale-aware (reads the `x-locale`
- * request header set by the middleware), so SSR renders the right
- * language. Canonical URLs built via `getCanonicalUrl()` /
- * `getLocalizedAlternates()` ignore the active locale and always
- * return the English URL — that's what goes into
- * `<link rel="canonical">` and OG `url`.
+ * Phase 4: every locale URL is indexable with its own
+ * self-canonical + a full hreflang cluster (17 tags = x-default +
+ * 16 locales). `getServerLocale()` reads the `x-locale` header set
+ * by middleware so SSR renders the right language; canonical
+ * + alternates are built off that locale.
  */
 
 import { cookies, headers } from "next/headers";
@@ -20,8 +13,11 @@ import {
   LOCALE_COOKIE,
   isLocale,
   defaultLocale,
+  locales,
+  localeMeta,
   type Locale,
 } from "@/i18n/config";
+import { localizePath } from "@/i18n/routes";
 import { translate } from "@/i18n/messages";
 import { formatMsg } from "@/i18n/format";
 import { POTD_STATS } from "@/data/potd-stats";
@@ -65,28 +61,35 @@ export function getServerLocale(): Locale {
 /* ── Canonical URL ──────────────────────────────────────────── */
 
 /**
- * Build the absolute canonical URL for a page.
- *
- * EN-only: every page's canonical is the English URL with no locale
- * prefix. Non-EN URLs are 308-redirected by the middleware.
+ * Build the absolute canonical URL for a page in the ACTIVE
+ * locale — Nerdytips pattern. Each locale URL is its own
+ * indexable entity with a self-canonical, so `/de/…` canonicals
+ * to itself, NOT the EN URL.
  *
  * @param canonicalPath  The canonical (English) path, e.g. "/articles"
- * @returns              Absolute URL, e.g. "https://betsplug.com/articles"
+ * @returns              Absolute URL in the active locale, e.g.
+ *                       "https://betsplug.com/de/spiel-vorhersagen"
  */
 export function getCanonicalUrl(canonicalPath: string): string {
-  return `${SITE_URL}${canonicalPath === "/" ? "" : canonicalPath}`;
+  const locale = getServerLocale();
+  return buildAbsoluteUrl(canonicalPath, locale);
 }
 
-/* ── hreflang alternates (disabled) ─────────────────────────── */
+function buildAbsoluteUrl(canonicalPath: string, locale: Locale): string {
+  const localised = localizePath(canonicalPath, locale);
+  return `${SITE_URL}${localised === "/" ? "" : localised}`;
+}
+
+/* ── hreflang alternates ────────────────────────────────────── */
 
 /**
- * Build Next.js `alternates` for a page.
+ * Build Next.js `alternates` for a page with self-canonical and
+ * a full hreflang cluster across all 16 locales + `x-default`.
  *
- * With i18n rolled back, every page has a single canonical (the EN
- * URL) and no hreflang alternates. The `languages` field is kept on
- * the return type so existing call sites that spread
- * `languages: alternates.languages` keep compiling — an empty
- * object tells Next.js to emit no `<link rel="alternate">` tags.
+ * Consumers pass the CANONICAL (English) path — we build the
+ * localized URL for every locale via the `routeTable` + emit them
+ * in the `languages` map keyed by BCP-47 tag. The self-canonical
+ * points at the ACTIVE locale's URL.
  *
  * @param canonicalPath the EN canonical path, e.g. "/articles"
  *                      or "/match-predictions/premier-league".
@@ -95,10 +98,17 @@ export function getLocalizedAlternates(canonicalPath: string): {
   canonical: string;
   languages: Record<string, string>;
 } {
-  return {
-    canonical: getCanonicalUrl(canonicalPath),
-    languages: {},
-  };
+  const locale = getServerLocale();
+  const canonical = buildAbsoluteUrl(canonicalPath, locale);
+
+  const languages: Record<string, string> = {};
+  for (const l of locales) {
+    const tag = localeMeta[l].hreflang;
+    languages[tag] = buildAbsoluteUrl(canonicalPath, l);
+  }
+  languages["x-default"] = buildAbsoluteUrl(canonicalPath, defaultLocale);
+
+  return { canonical, languages };
 }
 
 /* ── Locale-aware FAQ builder ──────────────────────────────── */
@@ -107,21 +117,32 @@ type FaqKeySet = { q: string; a: string }[];
 
 /**
  * Per-locale narrative numbers for SSR placeholder substitution.
- * Uses the comma decimal for NL/DE/FR/ES/IT and point for everything
- * else. These feed `formatMsg()` where FAQ strings contain
+ * Uses the comma decimal for every European locale that formats
+ * numbers with a comma (most continental Europe), point for Anglo-
+ * style locales. These feed `formatMsg()` where FAQ strings contain
  * `{potdAccuracy}` / `{potdPicks}` tokens — keeps JSON-LD markup
  * crawler-friendly with real numbers instead of raw templates.
  */
-const POTD_VARS_BY_LOCALE: Record<Locale, { potdAccuracy: string; potdPicks: string }> = {
-  en: { potdAccuracy: POTD_STATS.accuracy, potdPicks: POTD_STATS.totalPicks },
-  nl: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-  de: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-  fr: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-  es: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-  it: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-  sw: { potdAccuracy: POTD_STATS.accuracy, potdPicks: POTD_STATS.totalPicks },
-  id: { potdAccuracy: POTD_STATS.accuracyNL, potdPicks: POTD_STATS.totalPicks },
-};
+// Locales that render decimals with a comma (fr, de, nl, es, it,
+// pt, pl, ro, ru, el, da, sv, tr, id); point-style: en, sw.
+const COMMA_DECIMAL_LOCALES: ReadonlySet<Locale> = new Set<Locale>([
+  "nl", "de", "fr", "es", "it",
+  "pt", "tr", "pl", "ro", "ru", "el", "da", "sv", "id",
+]);
+
+const POTD_VARS_BY_LOCALE: Record<Locale, { potdAccuracy: string; potdPicks: string }> =
+  Object.fromEntries(
+    (["en","nl","de","fr","es","it","sw","id","pt","tr","pl","ro","ru","el","da","sv"] as Locale[])
+      .map((l) => [
+        l,
+        {
+          potdAccuracy: COMMA_DECIMAL_LOCALES.has(l)
+            ? POTD_STATS.accuracyNL
+            : POTD_STATS.accuracy,
+          potdPicks: POTD_STATS.totalPicks,
+        },
+      ]),
+  ) as Record<Locale, { potdAccuracy: string; potdPicks: string }>;
 
 /**
  * Build a locale-aware FAQ items array from translation keys.

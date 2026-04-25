@@ -1,7 +1,7 @@
 #!/bin/sh
 # ─────────────────────────────────────────────────────────────
-# Setup git hooks for auto-translation
-# Run once after cloning: sh frontend/scripts/setup-hooks.sh
+# Setup git hooks for auto-translation + hardcoded-string check.
+# Run once after cloning:  sh frontend/scripts/setup-hooks.sh
 # ─────────────────────────────────────────────────────────────
 
 HOOK_DIR="$(git rev-parse --show-toplevel)/.git/hooks"
@@ -9,6 +9,34 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 cat > "$HOOK_DIR/pre-commit" << 'HOOK'
 #!/bin/sh
+# 1. Block commits that introduce hardcoded isNl/locale ternaries —
+#    those bypass the i18n dictionary and were the root cause of the
+#    April 2026 brand-SEO collapse.
+# 2. If messages.ts or page-meta.ts changed, auto-run the translator
+#    so missing locales are filled before the commit lands.
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+
+# ── Guard: hardcoded UI strings in STAGED files ──────────────────
+# Pass only staged .ts/.tsx files to the checker so pre-existing
+# violations in untouched files don't block an unrelated commit.
+cd "$REPO_ROOT/frontend" || exit 1
+STAGED=$(git diff --cached --name-only --diff-filter=ACM -- \
+           'frontend/src/**/*.ts' 'frontend/src/**/*.tsx' 2>/dev/null \
+           | sed 's|^frontend/||')
+if [ -n "$STAGED" ]; then
+  # shellcheck disable=SC2086
+  if ! node scripts/check-no-hardcoded-strings.mjs $STAGED; then
+    echo ""
+    echo "  ✗ pre-commit: hardcoded locale ternary in a staged file —"
+    echo "    commit blocked. Extract each string to messages.ts and"
+    echo "    use t(\"key\") via useTranslations() instead."
+    echo "    See CLAUDE.md § i18n for the full convention."
+    exit 1
+  fi
+fi
+
+# ── Auto-translate if dictionary or page-meta changed ──────────
 MESSAGES_CHANGED=""
 PAGEMETA_CHANGED=""
 
@@ -31,21 +59,15 @@ if [ -n "$MESSAGES_CHANGED" ] || [ -n "$PAGEMETA_CHANGED" ]; then
     TRANSLATE_FLAGS="--skip-page-meta"
   fi
 
-  cd frontend && node scripts/translate.mjs $TRANSLATE_FLAGS 2>&1
+  node scripts/translate.mjs $TRANSLATE_FLAGS 2>&1
   if [ $? -eq 0 ]; then
-    git add src/i18n/locales/de.ts \
-            src/i18n/locales/fr.ts \
-            src/i18n/locales/es.ts \
-            src/i18n/locales/it.ts \
-            src/i18n/locales/sw.ts \
-            src/i18n/locales/id.ts 2>/dev/null
+    git add src/i18n/locales/*.ts 2>/dev/null
     git add src/i18n/messages.ts 2>/dev/null
     git add src/data/page-meta.ts 2>/dev/null
     echo ""
     echo "  i18n: All translation files auto-staged ✓"
     echo ""
   fi
-  cd ..
 fi
 HOOK
 

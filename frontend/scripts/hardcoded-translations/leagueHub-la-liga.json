@@ -1,0 +1,205 @@
+{
+  "_docId": "leagueHub-la-liga",
+  "_type": "leagueHub",
+  "_label": "La Liga",
+  "fields": {
+    "country": {
+      "sw": "Hispania",
+      "pt": "Espanha",
+      "tr": "İspanya",
+      "pl": "Hiszpania",
+      "ro": "Spania",
+      "ru": "Испания",
+      "el": "Ισπανία",
+      "da": "Spanien",
+      "sv": "Spanien"
+    },
+    "name": {
+      "sw": "La Liga",
+      "pt": "La Liga",
+      "tr": "La Liga",
+      "pl": "La Liga",
+      "ro": "La Liga",
+      "ru": "La Liga",
+      "el": "La Liga",
+      "da": "La Liga",
+      "sv": "La Liga"
+    },
+    "tagline": {
+      "sw": "Utabiri wa bure wa AI kwa kila speelronde ya La Liga",
+      "pt": "Previsões de IA gratuitas para cada jornada de La Liga",
+      "tr": "Her La Liga haftası için ücretsiz AI tahminleri",
+      "pl": "Darmowe prognozy AI dla każdej kolejki La Liga",
+      "ro": "Predicții AI gratuite pentru fiecare etapă din La Liga",
+      "ru": "Бесплатные ИИ-прогнозы на каждый тур La Liga",
+      "el": "Δωρεάν AI προβλέψεις για κάθε αγωνιστική της La Liga",
+      "da": "Gratis AI-forudsigelser for hver La Liga-spillerunde",
+      "sv": "Gratis AI-förutsägelser för varje La Liga-omgång"
+    },
+    "metaTitle": {
+      "sw": "Utabiri wa AI wa La Liga & Odds 2025/26 · BetsPlug",
+      "pt": "Previsões IA da La Liga & Odds 2025/26 · BetsPlug",
+      "tr": "La Liga AI Tahminleri ve Oranlar 2025/26 · BetsPlug",
+      "pl": "Prognozy AI La Liga i kursy 2025/26 · BetsPlug",
+      "ro": "Predicții AI La Liga & Cote 2025/26 · BetsPlug",
+      "ru": "ИИ-прогнозы La Liga и коэффициенты 2025/26 · BetsPlug",
+      "el": "AI Προβλέψεις La Liga & Αποδόσεις 2025/26 · BetsPlug",
+      "da": "La Liga AI-forudsigelser & Odds 2025/26 · BetsPlug",
+      "sv": "La Liga AI-förutsägelser & Odds 2025/26 · BetsPlug"
+    },
+    "metaDescription": {
+      "sw": "Utabiri wa bure wa AI wa La Liga, uwezekano wa kushinda na alama za imani kwa kila speelronde ya Hispania. Imejengwa juu ya mifano ya Elo, Poisson na XGBoost.",
+      "pt": "Previsões gratuitas com IA da La Liga, probabilidades de vitória e scores de confiança para cada jornada espanhola. Construído com modelos Elo, Poisson e XGBoost.",
+      "tr": "Her İspanyol futbol haftası için ücretsiz AI La Liga tahminleri, galibiyet olasılıkları ve güven skorları. Elo, Poisson ve XGBoost modelleriyle üretildi.",
+      "pl": "Darmowe prognozy La Liga oparte na AI, prawdopodobieństwa wygranej i wskaźniki pewności dla każdej hiszpańskiej kolejki. Zbudowane na modelach Elo, Poisson i XGBoost.",
+      "ro": "Predicții AI gratuite pentru La Liga, probabilități de victorie și scoruri de încredere pentru fiecare etapă spaniolă. Construite pe modele Elo, Poisson și XGBoost.",
+      "ru": "Бесплатные ИИ-прогнозы на La Liga, вероятности побед и confidence-score для каждого испанского тура. Построено на моделях Elo, Poisson и XGBoost.",
+      "el": "Δωρεάν AI προβλέψεις La Liga, πιθανότητες νίκης και σκορ εμπιστοσύνης για κάθε ισπανική αγωνιστική. Με μοντέλα Elo, Poisson και XGBoost.",
+      "da": "Gratis AI-drevne La Liga-forudsigelser, sejrssandsynligheder og confidence-scores til hver spansk spillerunde. Bygget på Elo, Poisson og XGBoost.",
+      "sv": "Gratis AI-drivna La Liga-förutsägelser, vinstsannolikheter och konfidensscore för varje spansk omgång. Byggt på Elo-, Poisson- och XGBoost-modeller."
+    },
+    "intro": {
+      "sw": "La Liga ni ligi yenye utofauti mkubwa wa kimkakati katika modeli yetu - Real Madrid na Barcelona huvuta wastani juu, lakini nusu ya chini mara kwa mara huzalisha vurugu za goli chini ya 2.0 ambapo xG na Elo hutofautiana zaidi. BetsPlug huchukulia kila mchezo wa Kihispania kama tatizo lake la kibinafsi: tunaendesha modeli ya Poisson iliyofunzwa kwenye baseline ya chini ya kupiga goli ya ligi, mkondo wa Elo unaokadiria top-six kando na mengine, na logistic regressor inayojua athari za siku za mapumziko na usafiri (Sevilla, Cadiz, Visiwa vya Canary). Meta-modeli yetu ya XGBoost hutatua tofauti na hutoa uwezekano uliosanifishwa wa home / sare / away. Utabiri wa siku ya mechi huvutwa kutoka feed ile ile ya football-data.org inayotumiwa na timu yetu ya utafiti, na hufanywa upya kila dakika 5 katika dirisha hai. Picks tatu zenye edge ya juu zaidi za kila speelronde huingia hapa bure; members wanaona orodha kamili na ripoti ya closing-line value.",
+      "pt": "A La Liga é o campeonato mais tacticamente diverso do nosso modelo - Real Madrid e Barcelona puxam as médias para cima, mas a metade inferior produz rotineiramente jogos de menos de 2,0 golos onde xG e Elo discordam mais. A BetsPlug trata cada jogo espanhol como um micro-problema: corremos um modelo Poisson treinado na baseline de golos mais baixa da liga, uma curva Elo que classifica o top-seis separadamente do resto, e um regressor logístico que capta efeitos de descanso e viagem (Sevilla, Cádiz, Ilhas Canárias). O nosso meta-modelo XGBoost resolve as divergências e produz probabilidades calibradas para casa / empate / fora. As previsões do dia de jogo vêm do mesmo feed football-data.org que o nosso research desk usa, atualizado a cada 5 minutos durante a janela ativa. As três escolhas com maior edge de cada jornada ficam aqui gratuitas; membros veem a lista completa e o relatório de closing-line value.",
+      "tr": "La Liga, modelimizin taktik açıdan en çeşitli ligidir - Real Madrid ve Barcelona ortalamaları yukarı çekerken, alt yarı düzenli olarak xG ve Elo'nun en çok anlaşamadığı 2.0 altı gol maçları üretir. BetsPlug her İspanyol maçını kendi mikro-problemi olarak ele alır: ligin daha düşük gol baseline'ı üzerinde eğitilmiş bir Poisson modeli, top-six'i geri kalandan ayrı derecelendiren bir Elo eğrisi ve dinlenme günü ile seyahat etkilerini yakalayan lojistik bir regressor çalıştırıyoruz (Sevilla, Cádiz, Kanarya Adaları). XGBoost meta-modelimiz uyuşmazlıkları çözer ve iç saha / beraberlik / deplasman için kalibre edilmiş olasılıklar üretir. Maç günü tahminleri, araştırma ekibimizin kullandığı aynı football-data.org akışından çekilir ve aktif pencere boyunca her 5 dakikada bir yenilenir. Her haftanın en yüksek edge'li üç seçimi burada ücretsizdir; üyeler tüm listeyi ve closing-line value raporunu alır.",
+      "pl": "La Liga to najbardziej zróżnicowana taktycznie liga w naszym modelu - Real Madrid i Barcelona ciągną średnie w górę, ale dolna połowa regularnie produkuje mecze poniżej 2,0 bramek, gdzie xG i Elo najbardziej się różnią. BetsPlug traktuje każdy mecz hiszpański jako osobny mikro-problem: uruchamiamy model Poissona trenowany na niższym baseline'ie goli, krzywą Elo osobno dla top-six i reszty, oraz regresor logistyczny wychwytujący efekty dni wolnych i podróży (Sevilla, Cádiz, Wyspy Kanaryjskie). Meta-model XGBoost rozstrzyga rozbieżności i produkuje skalibrowane prawdopodobieństwa dla gospodarzy / remisu / gości. Prognozy dnia meczowego pochodzą z tego samego feedu football-data.org, którego używa nasz research desk, i są odświeżane co 5 minut w oknie aktywnym. Trzy typy z najwyższym edge'em każdej kolejki są tu za darmo; członkowie widzą pełną listę i raport closing-line value.",
+      "ro": "La Liga este cel mai divers campionat din punct de vedere tactic din modelul nostru - Real Madrid și Barcelona trag mediile în sus, dar jumătatea inferioară produce constant meciuri sub 2,0 goluri unde xG și Elo sunt cel mai mult în dezacord. BetsPlug tratează fiecare meci spaniol ca pe o micro-problemă separată: rulăm un model Poisson antrenat pe baseline-ul de goluri mai scăzut al ligii, o curbă Elo care notează top-six separat de rest și un regressor logistic care prinde efectele de zile de odihnă și deplasare (Sevilla, Cádiz, Insulele Canare). Meta-modelul nostru XGBoost rezolvă divergențele și produce probabilități calibrate pentru gazde / egal / oaspeți. Predicțiile zilei meciului sunt trase din același feed football-data.org folosit de research desk-ul nostru și sunt reîmprospătate la fiecare 5 minute în fereastra activă. Cele trei selecții cu cel mai mare edge din fiecare etapă apar aici gratuit; membrii văd lista completă și raportul closing-line value.",
+      "ru": "La Liga — самая тактически разнообразная лига в нашей модели: Real Madrid и Barcelona тянут средние вверх, а нижняя половина регулярно выдаёт матчи ниже 2.0 голов, где xG и Elo расходятся сильнее всего. BetsPlug относится к каждому испанскому матчу как к отдельной микро-задаче: запускаем Poisson, обученный на более низком голевом baseline лиги, кривую Elo, где top-six оцениваются отдельно от остальных, и логистический регрессор, который ловит эффекты отдыха и переездов (Sevilla, Cádiz, Канарские острова). Мета-модель XGBoost разрешает расхождения и даёт откалиброванные вероятности home / draw / away. Прогнозы в день матча подтягиваются из того же football-data.org feed, которым пользуется наша research-команда, и обновляются каждые 5 минут в активном окне. Три прогноза с самым высоким edge за тур публикуются здесь бесплатно; участники получают полный список и отчёт closing-line value.",
+      "el": "Η La Liga είναι η πιο τακτικά ποικίλη λίγκα στο μοντέλο μας - η Real Madrid και η Barcelona ανεβάζουν τους μέσους όρους, αλλά το κάτω μισό παράγει συχνά παιχνίδια κάτω από 2,0 γκολ όπου xG και Elo διαφωνούν περισσότερο. Το BetsPlug αντιμετωπίζει κάθε ισπανικό αγώνα ως ξεχωριστό μικρο-πρόβλημα: τρέχουμε ένα μοντέλο Poisson εκπαιδευμένο στο χαμηλότερο baseline γκολ της λίγκας, μια καμπύλη Elo που βαθμολογεί το top-six χωριστά από τους υπόλοιπους και έναν λογιστικό regressor που πιάνει επιδράσεις ημερών ανάπαυσης και ταξιδιού (Sevilla, Cádiz, Κανάριες Νήσοι). Το μετα-μοντέλο XGBoost μας επιλύει τις διαφωνίες και παράγει βαθμονομημένες πιθανότητες για έδρα / ισοπαλία / εκτός. Οι προβλέψεις ημέρας αγώνα τραβιούνται από το ίδιο feed του football-data.org που χρησιμοποιεί η ερευνητική μας ομάδα, ανανεώνονται κάθε 5 λεπτά στο ενεργό παράθυρο. Οι τρεις επιλογές με το μεγαλύτερο edge κάθε αγωνιστικής ανεβαίνουν εδώ δωρεάν· τα μέλη βλέπουν τη πλήρη λίστα και την αναφορά closing-line value.",
+      "da": "La Liga er den taktisk mest diverse liga i vores model - Real Madrid og Barcelona trækker gennemsnittene opad, men den nederste halvdel producerer rutinemæssigt kampe under 2,0 mål, hvor xG og Elo er mest uenige. BetsPlug behandler hver spansk kamp som sit eget mikro-problem: vi kører en Poisson-model trænet på ligaens lavere mål-baseline, en Elo-kurve der rangerer top-six adskilt fra resten og en logistisk regressor, der fanger hvile- og rejseeffekter (Sevilla, Cádiz, De Kanariske Øer). Vores XGBoost-metamodel løser uenighederne og producerer kalibrerede sandsynligheder for hjemme / uafgjort / ude. Kampdag-forudsigelser hentes fra samme football-data.org-feed, som vores research desk bruger, opdateret hvert 5. minut i det aktive vindue. De tre picks med det højeste edge hver spillerunde kommer gratis her; medlemmer ser hele listen og closing-line value-rapporten.",
+      "sv": "La Liga är den taktiskt mest varierade ligan i vår modell - Real Madrid och Barcelona drar upp snitten, men den nedre halvan producerar regelbundet matcher under 2,0 mål där xG och Elo är mest oense. BetsPlug behandlar varje spansk match som ett eget mikroproblem: vi kör en Poisson-modell tränad på ligans lägre målbaseline, en Elo-kurva som rankar top-six separat från resten och en logistisk regressor som fångar vilo- och resedagseffekter (Sevilla, Cádiz, Kanarieöarna). Vår XGBoost-metamodell löser oenigheterna och producerar kalibrerade sannolikheter för hemma / oavgjort / borta. Matchdagsförutsägelser hämtas från samma football-data.org-feed som vår research desk använder, uppdateras var 5:e minut i det aktiva fönstret. De tre tipsen med högst edge varje omgång kommer gratis här; medlemmar ser hela listan och closing-line value-rapporten."
+    },
+    "faqs[faq-0].question": {
+      "sw": "Kwa nini utabiri wa La Liga wakati mwingine huonekana tofauti na wa Premier League?",
+      "pt": "Porque é que as previsões da La Liga às vezes parecem diferentes das da Premier League?",
+      "tr": "La Liga tahminleri neden bazen Premier League tahminlerinden farklı görünüyor?",
+      "pl": "Dlaczego prognozy La Liga czasem wyglądają inaczej niż te dla Premier League?",
+      "ro": "De ce uneori predicțiile din La Liga arată diferit față de cele din Premier League?",
+      "ru": "Почему прогнозы La Liga иногда выглядят иначе, чем на Premier League?",
+      "el": "Γιατί οι προβλέψεις La Liga μερικές φορές φαίνονται διαφορετικές από αυτές της Premier League;",
+      "da": "Hvorfor ser La Liga-forudsigelser nogle gange anderledes ud end Premier League-forudsigelser?",
+      "sv": "Varför ser La Liga-förutsägelser ibland annorlunda ut än Premier League-förutsägelser?"
+    },
+    "faqs[faq-0].answer": {
+      "sw": "La Liga ina wastani wa goli 0.3 chini kwa kila mchezo kuliko Premier League, kwa hivyo Poisson lambda yetu huendesha chini na uwezekano wa sare hukaa pointi chache juu. Modeli hujirekebisha kiotomatiki kwa kila ligi badala ya kutumia tuning moja ya kimataifa.",
+      "pt": "La Liga tem em média cerca de 0,3 golos menos por jogo do que a Premier League, pelo que o nosso lambda Poisson roda mais baixo e as probabilidades de empate ficam alguns pontos acima. O modelo reequilibra-se automaticamente por liga em vez de usar um tuning global único.",
+      "tr": "La Liga, Premier League'e kıyasla maç başına ortalama 0,3 daha az gol atar, bu yüzden Poisson lambdamız daha düşük çalışır ve beraberlik olasılıkları birkaç puan daha yüksek olur. Model, tek bir küresel tuning kullanmak yerine her lig için otomatik olarak kendini dengeler.",
+      "pl": "La Liga ma średnio o około 0,3 gola mniej na mecz niż Premier League, więc nasza lambda Poissona jest niższa, a prawdopodobieństwa remisu są o kilka punktów wyższe. Model sam równoważy się per liga zamiast używać jednego globalnego tuningu.",
+      "ro": "La Liga are în medie cu aproximativ 0,3 goluri mai puține pe meci decât Premier League, așa că lambda Poisson rulează mai jos și probabilitățile de egal sunt cu câteva puncte mai mari. Modelul se reechilibrează automat per ligă în loc să folosească un tuning global.",
+      "ru": "La Liga в среднем забивает примерно на 0,3 гола меньше за матч, чем Premier League, поэтому наша лямбда Poisson ниже, а вероятности ничьей на несколько пунктов выше. Модель автоматически ребалансируется под каждую лигу, а не использует единый глобальный tuning.",
+      "el": "Η La Liga έχει μέσο όρο περίπου 0,3 γκολ λιγότερα ανά αγώνα από την Premier League, οπότε το Poisson lambda μας τρέχει χαμηλότερα και οι πιθανότητες ισοπαλίας ανεβαίνουν κατά μερικούς πόντους. Το μοντέλο εξισορροπείται αυτόματα ανά λίγκα αντί να χρησιμοποιεί ένα καθολικό tuning.",
+      "da": "La Liga har i gennemsnit ca. 0,3 mål færre pr. kamp end Premier League, så vores Poisson-lambda kører lavere, og uafgjort-sandsynlighederne ligger et par point højere. Modellen rebalancerer automatisk per liga i stedet for at bruge én global tuning.",
+      "sv": "La Liga har i snitt ungefär 0,3 färre mål per match än Premier League, så vår Poisson-lambda går lägre och sannolikheterna för oavgjort ligger några punkter högre. Modellen balanserar om sig automatiskt per liga istället för att använda en global tuning."
+    },
+    "faqs[faq-1].question": {
+      "sw": "Mnafunika mechi za kiwango cha El Clásico za Real Madrid na Barcelona?",
+      "pt": "Cobrem jogos de nível Clásico do Real Madrid e Barcelona?",
+      "tr": "Real Madrid ve Barcelona'nın El Clásico düzeyindeki maçlarını kapsıyor musunuz?",
+      "pl": "Czy obejmujecie mecze El Clásico Realu Madryt i Barcelony?",
+      "ro": "Acoperiți meciurile de nivel El Clásico dintre Real Madrid și Barcelona?",
+      "ru": "Вы покрываете матчи уровня Эль Класико между Real Madrid и Barcelona?",
+      "el": "Καλύπτετε αγώνες επιπέδου Clásico μεταξύ Real Madrid και Barcelona;",
+      "da": "Dækker I Clásico-niveau kampe mellem Real Madrid og Barcelona?",
+      "sv": "Täcker ni Clásico-nivåmatcher mellan Real Madrid och Barcelona?"
+    },
+    "faqs[faq-1].answer": {
+      "sw": "Ndio - kila Clásico, derbi madrileño na derby ya Sevilla hupata ensemble run kamili pamoja na ukaguzi wa mkono wa research desk yetu siku ya mchezo. Mechi kubwa huwekwa juu ya preview ya bure wanapostahiki.",
+      "pt": "Sim - cada Clásico, derbi madrileño e derby de Sevilla recebe o ensemble completo mais uma sanity-check manual do nosso research desk no próprio dia do jogo. Os grandes jogos ficam fixados no topo da preview gratuita quando qualificam.",
+      "tr": "Evet - her Clásico, derbi madrileño ve Sevilla derbisi tam ensemble run'ın yanı sıra maç günü araştırma masamızdan manuel bir sanity-check alır. Büyük maçlar şartları sağladığında ücretsiz preview'un en üstüne sabitlenir.",
+      "pl": "Tak - każdy Clásico, derbi madrileño i derby Sewilli przechodzi pełny ensemble run plus ręczną kontrolę przez nasz research desk w dniu meczu. Wielkie mecze są przypinane na górze darmowej preview, gdy się kwalifikują.",
+      "ro": "Da - fiecare Clásico, derbi madrileño și derby sevilian primește ensemble-ul complet plus un sanity-check manual din partea research desk-ului nostru în ziua meciului. Meciurile mari sunt fixate în partea de sus a preview-ului gratuit când se califică.",
+      "ru": "Да — каждое Эль Класико, derbi madrileño и дерби Севильи проходит полный ensemble run плюс ручную sanity-check от нашей research-команды в день матча. Топ-матчи закрепляются вверху бесплатного превью, когда проходят квалификацию.",
+      "el": "Ναι - κάθε Clásico, derbi madrileño και ντέρμπι Σεβίλλης περνά από πλήρες ensemble run συν χειροκίνητο sanity-check από το research desk μας την ίδια μέρα του αγώνα. Τα μεγάλα παιχνίδια καρφιτσώνονται στην κορυφή της δωρεάν preview όταν πληρούν τα κριτήρια.",
+      "da": "Ja - hver Clásico, derbi madrileño og Sevilla-derby får det fulde ensemble run plus et manuelt sanity-check fra vores research desk på selve kampdagen. Store kampe bliver pinnet øverst i den gratis preview, når de kvalificerer.",
+      "sv": "Ja - varje Clásico, derbi madrileño och Sevilla-derby får full ensemble run plus en manuell sanity-check från vår research desk på själva matchdagen. Stora matcher fästs längst upp i den gratis previewn när de kvalificerar."
+    },
+    "faqs[faq-2].question": {
+      "sw": "Mnashughulikiaje timu zilizopandishwa bila historia ya ligi ya juu?",
+      "pt": "Como lidam com equipas promovidas sem histórico na primeira divisão?",
+      "tr": "Üst lig geçmişi olmayan yeni çıkma takımları nasıl ele alıyorsunuz?",
+      "pl": "Jak radzicie sobie z beniaminkami bez historii w ekstraklasie?",
+      "ro": "Cum gestionați echipele nou-promovate fără istoric în prima ligă?",
+      "ru": "Как вы обрабатываете только что вышедшие в высший дивизион команды без истории выступлений?",
+      "el": "Πώς χειρίζεστε ομάδες που ανέβηκαν χωρίς ιστορικό στην πρώτη κατηγορία;",
+      "da": "Hvordan håndterer I oprykkede hold uden top-flight-historik?",
+      "sv": "Hur hanterar ni nykomlingar utan erfarenhet från högstaligan?"
+    },
+    "faqs[faq-2].answer": {
+      "sw": "Timu zilizopandishwa huanza kila msimu na Bayesian prior iliyotokana na Elo yao ya mwisho ya Segunda División pamoja na marekebisho ya regression-to-mean. Baada ya mechi 5 za La Liga, prior hubadilishwa na matokeo halisi, ndio maana utabiri wa mwanzo wa msimu kwa klabu zilizopandishwa huwa na alama ya imani chini kidogo.",
+      "pt": "As equipas promovidas começam cada temporada com um Bayesian prior derivado do seu Elo final da Segunda División mais um ajuste de regressão à média. Após 5 jogos da La Liga, o prior é substituído por resultados ao vivo - daí as previsões no início da época para clubes promovidos terem um score de confiança ligeiramente mais baixo.",
+      "tr": "Yeni çıkan takımlar her sezona Segunda División'daki son Elo'larından türetilmiş Bayesian prior artı regression-to-mean düzeltmesiyle başlar. 5 La Liga maçı sonrasında prior canlı sonuçlarla değiştirilir; bu yüzden sezon başı tahminleri yeni çıkan kulüpler için biraz daha düşük güven skoru taşır.",
+      "pl": "Beniaminki zaczynają każdy sezon z Bayesian prior pochodzącym z ich końcowego Elo w Segunda División plus korekta regresji do średniej. Po 5 meczach La Liga prior jest zastępowany przez wyniki bieżące - dlatego prognozy początku sezonu dla beniaminków mają nieco niższy wskaźnik pewności.",
+      "ro": "Echipele nou-promovate încep fiecare sezon cu un Bayesian prior derivat din Elo-ul lor final din Segunda División plus o corecție de regresie la medie. După 5 meciuri în La Liga, prior-ul este înlocuit de rezultate live - de aceea predicțiile de început de sezon pentru cluburile promovate au un scor de încredere ușor mai mic.",
+      "ru": "Только что вышедшие в элиту команды начинают сезон с Bayesian prior, выведенного из их финального Elo в Segunda División, плюс корректировка regression-to-mean. После 5 матчей La Liga prior заменяется живыми результатами — поэтому прогнозы начала сезона для новичков несут чуть меньший confidence-score.",
+      "el": "Οι νεοανεβασμένες ομάδες ξεκινούν κάθε σεζόν με ένα Bayesian prior που προκύπτει από το τελικό τους Elo στη Segunda División συν μια διόρθωση regression-to-mean. Μετά από 5 αγώνες στη La Liga, το prior αντικαθίσταται από live αποτελέσματα - γι' αυτό οι προβλέψεις αρχής σεζόν για νεοανεβασμένους συλλόγους έχουν ελαφρώς χαμηλότερο confidence score.",
+      "da": "Oprykkede hold starter hver sæson med en Bayesian prior afledt af deres afsluttende Segunda División Elo plus en regression-to-mean-justering. Efter 5 La Liga-kampe erstattes prior'en af live-resultater - derfor bærer tidlige sæsonforudsigelser for oprykkede klubber en lidt lavere confidence score.",
+      "sv": "Nykomlingar startar varje säsong med en Bayesian prior härledd från deras avslutande Segunda División-Elo plus en regression-to-mean-justering. Efter 5 La Liga-matcher ersätts prior:n av live-resultat - därför bär tidiga säsongsförutsägelser för uppflyttade klubbar en något lägre konfidensscore."
+    },
+    "faqs[faq-3].question": {
+      "sw": "Ni masoko yapi ya kubeti mnayayofunika kwa La Liga?",
+      "pt": "Que mercados de apostas cobrem para a La Liga?",
+      "tr": "La Liga için hangi bahis pazarlarını kapsıyorsunuz?",
+      "pl": "Jakie rynki bukmacherskie obejmujecie dla La Liga?",
+      "ro": "Ce piețe de pariuri acoperiți pentru La Liga?",
+      "ru": "Какие рынки ставок вы охватываете в La Liga?",
+      "el": "Ποιες αγορές στοιχημάτων καλύπτετε για τη La Liga;",
+      "da": "Hvilke betting-markeder dækker I for La Liga?",
+      "sv": "Vilka bettingmarknader täcker ni för La Liga?"
+    },
+    "faqs[faq-3].answer": {
+      "sw": "Preview ya bure inaonyesha soko la 1X2. Members wanapata over/under 2.5 goals, BTTS, Asian handicap na mapendekezo ya Kelly stake kwa kila pick.",
+      "pt": "A preview gratuita mostra o mercado 1X2. Os membros recebem over/under 2,5 golos, BTTS, Asian handicap e recomendação de Kelly stake por escolha.",
+      "tr": "Ücretsiz önizleme 1X2 pazarını gösterir. Üyeler over/under 2.5 gol, BTTS, Asya handikap ve her seçim için Kelly stake önerisi alır.",
+      "pl": "Darmowa preview pokazuje rynek 1X2. Członkowie otrzymują over/under 2.5 gola, BTTS, Asian handicap i rekomendację Kelly stake na typ.",
+      "ro": "Preview-ul gratuit arată piața 1X2. Membrii primesc over/under 2.5 goluri, BTTS, Asian handicap și recomandare Kelly stake per selecție.",
+      "ru": "Бесплатный превью показывает рынок 1X2. Участники получают over/under 2.5 голов, BTTS, азиатский гандикап и рекомендацию Kelly stake к каждому прогнозу.",
+      "el": "Η δωρεάν preview δείχνει την αγορά 1X2. Τα μέλη λαμβάνουν over/under 2.5 γκολ, BTTS, Ασιατικό handicap και σύσταση Kelly stake ανά επιλογή.",
+      "da": "Den gratis preview viser 1X2-markedet. Medlemmer får over/under 2.5 mål, BTTS, Asian handicap og en Kelly stake-anbefaling pr. pick.",
+      "sv": "Den gratis previewn visar 1X2-marknaden. Medlemmar får over/under 2.5 mål, BTTS, asiatisk handicap och en Kelly stake-rekommendation per tips."
+    },
+    "faqs[faq-4].question": {
+      "sw": "Utabiri wenu wa La Liga ni sahihi kiasi gani?",
+      "pt": "Qual é a precisão das vossas previsões da La Liga?",
+      "tr": "La Liga tahminleriniz ne kadar doğru?",
+      "pl": "Jak dokładne są wasze prognozy La Liga?",
+      "ro": "Cât de precise sunt predicțiile voastre pentru La Liga?",
+      "ru": "Насколько точны ваши прогнозы на La Liga?",
+      "el": "Πόσο ακριβείς είναι οι προβλέψεις σας για τη La Liga;",
+      "da": "Hvor præcise er jeres La Liga-forudsigelser?",
+      "sv": "Hur exakta är era La Liga-förutsägelser?"
+    },
+    "faqs[faq-4].answer": {
+      "sw": "Kalibrasho ya rolling ya siku 30 kwenye soko la kipendwa-kushinda kawaida iko kati ya 68% na 73% - chini kidogo ya Premier League kwa sababu ya kiwango kikubwa cha sare. Uchanganuzi kamili umechapishwa kwenye /track-record.",
+      "pt": "A calibração rolling de 30 dias no mercado de favorito-para-vencer situa-se tipicamente entre 68% e 73% - ligeiramente abaixo da Premier League devido à taxa de empates mais elevada. O breakdown completo está publicado em /track-record.",
+      "tr": "Favori-kazanır pazarında 30 günlük rolling kalibrasyon genellikle %68 ile %73 arasındadır - daha yüksek beraberlik oranı nedeniyle Premier League'in biraz altındadır. Tüm döküm /track-record'da yayımlanır.",
+      "pl": "Krocząca kalibracja 30-dniowa na rynku faworyta-do-wygrania zwykle wynosi 68%-73% - nieco poniżej Premier League ze względu na wyższy odsetek remisów. Pełny breakdown jest na /track-record.",
+      "ro": "Calibrarea rolling de 30 de zile pe piața favorit-pentru-victorie se situează de obicei între 68% și 73% - ușor sub Premier League din cauza ratei mai mari de egal. Breakdown-ul complet este publicat la /track-record.",
+      "ru": "Rolling-калибровка за 30 дней на рынке «фаворит побеждает» обычно держится в диапазоне 68–73% — чуть ниже Premier League из-за более высокой доли ничьих. Полный разбор публикуем на /track-record.",
+      "el": "Η rolling καλιμπράρισμα 30 ημερών στην αγορά φαβορί-να-κερδίσει κυμαίνεται συνήθως μεταξύ 68% και 73% - ελαφρώς κάτω από την Premier League λόγω του υψηλότερου ποσοστού ισοπαλιών. Η πλήρης ανάλυση δημοσιεύεται στο /track-record.",
+      "da": "Rullende 30-dages kalibrering på favorit-til-sejr-markedet ligger typisk mellem 68% og 73% - lidt under Premier League på grund af højere uafgjort-rate. Hele breakdownet er offentliggjort på /track-record.",
+      "sv": "Rullande 30-dagarskalibrering på favorit-vinner-marknaden ligger typiskt mellan 68% och 73% - något under Premier League på grund av högre oavgjort-frekvens. Hela sammanställningen är publicerad på /track-record."
+    },
+    "faqs[faq-5].question": {
+      "sw": "Utabiri wenu unaathiriwa na maamuzi ya VAR na mabadiliko ya dakika za mwisho ya muundo wa timu?",
+      "pt": "As vossas previsões são afetadas por decisões do VAR e mudanças tardias de alinhamento?",
+      "tr": "Tahminleriniz VAR kararları ve geç kadro değişikliklerinden etkileniyor mu?",
+      "pl": "Czy wasze prognozy są wrażliwe na decyzje VAR i późne zmiany w składzie?",
+      "ro": "Predicțiile voastre sunt afectate de deciziile VAR și de schimbările de ultim moment ale echipei?",
+      "ru": "Влияют ли на ваши прогнозы решения VAR и поздние изменения составов?",
+      "el": "Επηρεάζονται οι προβλέψεις σας από αποφάσεις VAR και αργές αλλαγές ενδεκάδας;",
+      "da": "Påvirkes jeres forudsigelser af VAR-afgørelser og sene ændringer i startopstillingen?",
+      "sv": "Påverkas era förutsägelser av VAR-beslut och sena startelva-ändringar?"
+    },
+    "faqs[faq-5].answer": {
+      "sw": "Mabadiliko ya muundo wa timu (hasa wa golikipa) huingia kwenye modeli hadi dakika 60 kabla ya kuanza kwa mchezo kupitia sync task yetu. Mabadiliko ya matokeo yanayoendeshwa na VAR yanaonyeshwa baada ya mechi kwenye rekodi, lakini hatujaribu kutabiri maamuzi ya refa.",
+      "pt": "Alterações de alinhamento (especialmente guarda-redes) alimentam o modelo até 60 minutos antes do apito inicial através do nosso sync task. Oscilações de resultado impulsionadas pelo VAR aparecem no histórico após o jogo, mas não tentamos prever decisões de árbitro.",
+      "tr": "Kadro değişiklikleri (özellikle kaleciler) sync task'ımız aracılığıyla düdüğe 60 dakika kalaya kadar modele geri beslenir. VAR kaynaklı sonuç dönüşleri maç sonrası sicile yansıtılır, ancak hakem kararlarını tahmin etmeye çalışmıyoruz.",
+      "pl": "Zmiany składu (szczególnie bramkarzy) trafiają do modelu do 60 minut przed pierwszym gwizdkiem przez nasze sync task. Odwrócenia wyników napędzane przez VAR są pokazywane po meczu w bilansie, ale nie próbujemy przewidywać decyzji sędziego.",
+      "ro": "Schimbările de echipă (mai ales ale portarilor) se întorc în model până cu 60 de minute înaintea fluierului de start prin sync task-ul nostru. Răsturnările de rezultat provocate de VAR sunt afișate post-meci în istoric, dar nu încercăm să prezicem decizii de arbitru.",
+      "ru": "Изменения составов (особенно вратарей) попадают в модель за 60 минут до стартового свистка через наш sync task. VAR-переломы результатов отражаются в истории после матча, но мы не пытаемся предсказывать решения арбитра.",
+      "el": "Οι αλλαγές ενδεκάδας (ειδικά τερματοφυλάκων) τροφοδοτούν το μοντέλο έως 60 λεπτά πριν από το αρχικό σφύριγμα μέσω του sync task μας. Οι ανατροπές αποτελέσματος λόγω VAR εμφανίζονται μετά τον αγώνα στο ιστορικό, αλλά δεν προσπαθούμε να προβλέψουμε αποφάσεις διαιτητή.",
+      "da": "Ændringer i startopstillingen (især målmænd) føres tilbage til modellen op til 60 minutter før kampstart via vores sync task. VAR-drevne resultatsving vises efter kampen i track recorden, men vi forsøger ikke at forudsige dommerkendelser.",
+      "sv": "Startelva-ändringar (särskilt målvakter) matas tillbaka in i modellen upp till 60 minuter före avspark via vår sync task. VAR-drivna resultatsvängningar visas efter matchen i meritförteckningen, men vi försöker inte förutsäga domarbeslut."
+    }
+  }
+}

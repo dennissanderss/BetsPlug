@@ -97,17 +97,32 @@ function restoreGlossary(text, tokens) {
 
 /* ── Config ────────────────────────────────────────────────── */
 
-const TARGET_LOCALES = ["de", "fr", "es", "it", "sw", "id"];
-const ALL_LOCALES = ["nl", "de", "fr", "es", "it", "sw", "id"];
+// Top-16 locale expansion (Phase 2, 2026-04-23): added pt, tr, pl,
+// ro, ru, el, da, sv to reach Nerdytips-style coverage of the high-
+// value football-betting markets. Keep NL inline in messages.ts;
+// everything else lives in src/i18n/locales/*.ts.
+const TARGET_LOCALES = [
+  "de", "fr", "es", "it", "sw", "id",
+  "pt", "tr", "pl", "ro", "ru", "el", "da", "sv",
+];
+const ALL_LOCALES = ["nl", ...TARGET_LOCALES];
 
 const LOCALE_CODES = {
+  nl: "nl",
   de: "de",
   fr: "fr",
   es: "es",
   it: "it",
   sw: "sw",
   id: "id",
-  nl: "nl",
+  pt: "pt",
+  tr: "tr",
+  pl: "pl",
+  ro: "ro",
+  ru: "ru",
+  el: "el",
+  da: "da",
+  sv: "sv",
 };
 
 // Google Translate rate limiting
@@ -402,7 +417,10 @@ async function translateBatch(texts, targetLang) {
 
 /* ── page-meta.ts helpers ─────────────────────────────────── */
 
-const PAGE_META_LOCALES = ["en", "nl", "de", "fr", "es", "it", "sw", "id"];
+const PAGE_META_LOCALES = [
+  "en", "nl", "de", "fr", "es", "it", "sw", "id",
+  "pt", "tr", "pl", "ro", "ru", "el", "da", "sv",
+];
 
 /**
  * Parse page-meta.ts and return a structured representation.

@@ -1,0 +1,62 @@
+{
+  "_docId": "pricingConfig",
+  "_type": "pricingConfig",
+  "_label": "pricingConfig",
+  "fields": {
+    "plans[bronze].name": {
+      "sw": "Bronze",
+      "pt": "Bronze",
+      "tr": "Bronze",
+      "pl": "Bronze",
+      "ro": "Bronze",
+      "ru": "Bronze",
+      "el": "Bronze",
+      "da": "Bronze",
+      "sv": "Brons"
+    },
+    "plans[silver].name": {
+      "sw": "Silver",
+      "pt": "Silver",
+      "tr": "Silver",
+      "pl": "Silver",
+      "ro": "Silver",
+      "ru": "Silver",
+      "el": "Silver",
+      "da": "Silver",
+      "sv": "Silver"
+    },
+    "plans[gold].name": {
+      "sw": "Gold",
+      "pt": "Gold",
+      "tr": "Gold",
+      "pl": "Gold",
+      "ro": "Gold",
+      "ru": "Gold",
+      "el": "Gold",
+      "da": "Gold",
+      "sv": "Gold"
+    },
+    "plans[gold].badge": {
+      "sw": "Maarufu Zaidi",
+      "pt": "Mais Popular",
+      "tr": "En Popüler",
+      "pl": "Najpopularniejszy",
+      "ro": "Cel Mai Popular",
+      "ru": "Самый популярный",
+      "el": "Το πιο δημοφιλές",
+      "da": "Mest populær",
+      "sv": "Mest populär"
+    },
+    "plans[platinum].name": {
+      "sw": "Platinum Lifetime",
+      "pt": "Platinum Vitalício",
+      "tr": "Platinum Ömür Boyu",
+      "pl": "Platinum Dożywotni",
+      "ro": "Platinum Pe Viață",
+      "ru": "Platinum Пожизненный",
+      "el": "Platinum Ισόβιο",
+      "da": "Platinum Livstid",
+      "sv": "Platinum Livstid"
+    }
+  }
+}

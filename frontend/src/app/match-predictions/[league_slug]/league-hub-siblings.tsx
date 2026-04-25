@@ -22,7 +22,7 @@ interface Props {
   currentSlug: string;
   leagues: SlimLeague[];
   /** Editorial locale — drives EN/NL copy swap only. */
-  locale: "en" | "nl";
+  locale: import("@/i18n/config").Locale;
   /** UI locale — drives URL localization. Defaults to "en" so
    *  existing call-sites keep working; pass the real UI locale
    *  (e.g. "de", "fr") from the server page to ensure sibling

@@ -14,7 +14,7 @@ import { HexBadge } from "@/components/noct/hex-badge";
 
 interface Props {
   leagueName: string;
-  locale: "en" | "nl";
+  locale: import("@/i18n/config").Locale;
 }
 
 export function LeagueHubMethodology({ leagueName, locale }: Props) {
