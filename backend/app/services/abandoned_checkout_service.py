@@ -40,9 +40,13 @@ settings = get_settings()
 # Plan names for the email template
 PLAN_NAMES = {
     "bronze": "Bronze",
+    "basic": "Bronze",
     "silver": "Silver",
+    "standard": "Silver",
     "gold": "Gold",
+    "premium": "Gold",
     "platinum": "Platinum",
+    "lifetime": "Platinum",
 }
 
 
@@ -360,7 +364,10 @@ def _process_single_session(db, session: AbandonedCheckout) -> None:
 
     # 6. Render email (locale-aware)
     locale = session.locale
-    plan_name = PLAN_NAMES.get(session.plan_id, session.plan_id.title())
+    plan_name = PLAN_NAMES.get(
+        (session.plan_id or "").strip().lower(),
+        (session.plan_id or "").title(),
+    )
     discount_pct = str(int(settings.coupon_discount_percent))
     expiry_date = coupon.expires_at.strftime("%-d %B %Y")
 

@@ -203,6 +203,30 @@ async def send_email(
 _LOGO_URL = "https://betsplug.com/logo-email.png"
 
 
+# Tier names in the database still use the legacy enum values
+# (basic / standard / premium / lifetime) but every customer-facing
+# touchpoint — pricing page, dashboard, checkout — uses the new names
+# (Bronze / Silver / Gold / Platinum). Map them here so the mails
+# stay consistent with the rest of the product.
+_PLAN_DISPLAY = {
+    "basic": "Bronze",
+    "bronze": "Bronze",
+    "standard": "Silver",
+    "silver": "Silver",
+    "premium": "Gold",
+    "gold": "Gold",
+    "lifetime": "Platinum",
+    "platinum": "Platinum",
+}
+
+
+def _pretty_plan(plan: str | None) -> str:
+    """Convert any internal plan key to the customer-facing tier name."""
+    if not plan:
+        return "BetsPlug"
+    return _PLAN_DISPLAY.get(plan.strip().lower(), plan.title())
+
+
 def _layout(title: str, body_html: str) -> str:
     """Wrap a block of HTML in the responsive BetsPlug email shell."""
     settings = get_settings()
@@ -408,7 +432,7 @@ async def send_welcome_email(
     dashboard_url = f"{base}/dashboard"
     subscription_url = f"{base}/subscription"
 
-    plan_title = plan.title()
+    plan_title = _pretty_plan(plan)
     currency_upper = (currency or "EUR").upper()
     amount_str = f"{amount:.2f} {currency_upper}" if amount else None
 
@@ -505,11 +529,11 @@ async def send_payment_receipt_email(
 
     text = (
         f"Hi {username},\n\n"
-        f"We received your payment of {amount_str} for the BetsPlug {plan.title()} plan.\n\n"
+        f"We received your payment of {amount_str} for the BetsPlug {_pretty_plan(plan)} plan.\n\n"
         f"View your billing history: {billing_url}\n\n"
         "----\n\n"
         f"Hallo {username},\n\n"
-        f"We hebben je betaling van {amount_str} ontvangen voor het BetsPlug {plan.title()}-abonnement.\n\n"
+        f"We hebben je betaling van {amount_str} ontvangen voor het BetsPlug {_pretty_plan(plan)}-abonnement.\n\n"
         f"Bekijk je betalingsgeschiedenis: {billing_url}\n\n"
         "- The BetsPlug team"
     )
@@ -518,13 +542,13 @@ async def send_payment_receipt_email(
       <h2 style="margin:0 0 12px 0;color:#ffffff;font-size:20px;">Payment received</h2>
       <p>Hi {username}, thanks for your payment. Here are the details:</p>
       <table role="presentation" cellpadding="8" cellspacing="0" style="width:100%;background:#0f172a;border-radius:8px;margin:12px 0;">
-        <tr><td style="color:#9ca3af;">Plan</td><td style="color:#ffffff;text-align:right;"><strong>{plan.title()}</strong></td></tr>
+        <tr><td style="color:#9ca3af;">Plan</td><td style="color:#ffffff;text-align:right;"><strong>{_pretty_plan(plan)}</strong></td></tr>
         <tr><td style="color:#9ca3af;">Amount</td><td style="color:#ffffff;text-align:right;"><strong>{amount_str}</strong></td></tr>
       </table>
       <p style="text-align:center;">{_button("View billing", billing_url)}</p>
       <hr style="border:none;border-top:1px solid #1f2937;margin:24px 0;">
       <h3 style="margin:0 0 8px 0;color:#ffffff;font-size:16px;">Nederlands</h3>
-      <p>Bedankt voor je betaling van <strong>{amount_str}</strong> voor het BetsPlug {plan.title()}-abonnement.</p>
+      <p>Bedankt voor je betaling van <strong>{amount_str}</strong> voor het BetsPlug {_pretty_plan(plan)}-abonnement.</p>
       <p style="text-align:center;">{_button("Betalingen bekijken", billing_url)}</p>
     """
     return await send_email(to, subject, _layout("Payment receipt", body), text)
@@ -556,13 +580,13 @@ async def send_subscription_cancelled_email(
 
     text = (
         f"Hi {username},\n\n"
-        f"We've scheduled your BetsPlug {plan.title()} subscription for cancellation."
+        f"We've scheduled your BetsPlug {_pretty_plan(plan)} subscription for cancellation."
         f"{until_en} After that we won't charge you again — your card will not be debited.\n\n"
         f"Changed your mind? You can reactivate at any time before the end date:\n\n"
         f"{subscription_url}\n\n"
         "----\n\n"
         f"Hallo {username},\n\n"
-        f"Je opzegging van BetsPlug {plan.title()} is ingepland."
+        f"Je opzegging van BetsPlug {_pretty_plan(plan)} is ingepland."
         f"{until_nl} Daarna wordt er niets meer automatisch afgeschreven.\n\n"
         f"Toch twijfel? Je kunt vóór de einddatum nog reactiveren:\n\n"
         f"{subscription_url}\n\n"
@@ -571,12 +595,12 @@ async def send_subscription_cancelled_email(
 
     body = f"""
       <h2 style="margin:0 0 12px 0;color:#ffffff;font-size:20px;">Cancellation scheduled</h2>
-      <p>Hi {username}, your <strong>BetsPlug {plan.title()}</strong> subscription has been scheduled for cancellation.{until_en} After that date no further automatic payments will be taken.</p>
+      <p>Hi {username}, your <strong>BetsPlug {_pretty_plan(plan)}</strong> subscription has been scheduled for cancellation.{until_en} After that date no further automatic payments will be taken.</p>
       <p>Changed your mind? You can reactivate any time before the end date from your account:</p>
       <p style="text-align:center;">{_button("Manage subscription", subscription_url)}</p>
       <hr style="border:none;border-top:1px solid #1f2937;margin:24px 0;">
       <h3 style="margin:0 0 8px 0;color:#ffffff;font-size:16px;">Nederlands</h3>
-      <p>Je opzegging van <strong>BetsPlug {plan.title()}</strong> is ingepland.{until_nl} Daarna worden er geen automatische betalingen meer gedaan.</p>
+      <p>Je opzegging van <strong>BetsPlug {_pretty_plan(plan)}</strong> is ingepland.{until_nl} Daarna worden er geen automatische betalingen meer gedaan.</p>
       <p>Toch twijfel? Je kunt vóór de einddatum nog reactiveren in je account.</p>
       <p style="text-align:center;">{_button("Abonnement beheren", subscription_url)}</p>
     """
