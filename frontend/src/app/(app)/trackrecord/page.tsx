@@ -1599,7 +1599,7 @@ export default function TrackrecordPage() {
       <div className="glass-card overflow-hidden">
         <div className="flex border-b border-white/[0.06]">
           {([
-            { key: "live", label: isNl ? "Live meting" : "Live measurement", icon: Activity, accent: "blue" },
+            { key: "live", label: t("trackRecord.liveMeasurement"), icon: Activity, accent: "blue" },
             { key: "backtest", label: "Backtest", icon: BarChart3, accent: "emerald" },
           ] as const).map(({ key, label, icon: Icon, accent }) => {
             const active = mainTab === key;

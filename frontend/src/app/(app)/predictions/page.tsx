@@ -645,6 +645,9 @@ function DateSection({
   const pending = fixtures.length - hits - misses;
 
   // Friendly day label: "Today", "Yesterday", or day-month.
+  // BCP-47: pass the locale directly — Intl.DateTimeFormat accepts
+  // every supported locale code and picks the regional format
+  // (Polish "pn." abbreviations, German weekday-month order, etc).
   const dateLabel = (() => {
     const [y, m, d] = dateIso.split("-").map(Number);
     const dt = new Date(y, m - 1, d);
@@ -653,10 +656,9 @@ function DateSection({
     const yest = new Date(now);
     yest.setDate(now.getDate() - 1);
     const isYest = dt.toDateString() === yest.toDateString();
-    const bcp = locale === "nl" ? "nl-NL" : "en-GB";
-    if (isToday) return locale === "nl" ? "Vandaag" : "Today";
-    if (isYest) return locale === "nl" ? "Gisteren" : "Yesterday";
-    return dt.toLocaleDateString(bcp, {
+    if (isToday) return t("date.today");
+    if (isYest) return t("date.yesterday");
+    return dt.toLocaleDateString(locale, {
       weekday: "long",
       day: "numeric",
       month: "short",

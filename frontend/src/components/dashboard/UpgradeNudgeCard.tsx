@@ -15,19 +15,23 @@
 import Link from "next/link";
 import { ArrowRight, Crown, Sparkles } from "lucide-react";
 import { useTier, type Tier } from "@/hooks/use-tier";
-import { useLocalizedHref } from "@/i18n/locale-provider";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 type UpgradableTier = Exclude<Tier, "platinum">;
 
+/** Static tier-step data: tier names + numeric accuracy thresholds +
+ *  visual accent classes. Copy (benefit bullets, headings) lives in
+ *  `messages.ts` so every locale gets a real translation through the
+ *  dictionary instead of an `isNl ? "X" : "Y"` ternary that ships
+ *  English to non-NL locales. */
 interface TierStep {
-  /** The tier the user is currently on. */
   current: Tier;
-  /** Next tier up they should upgrade to. */
   next: Exclude<Tier, "free">;
   currentAccuracy: string;
   nextAccuracy: string;
   nextLabel: string;
-  benefits: string[];
+  /** Benefit-bullet message-keys (3 per tier). */
+  benefitKeys: readonly [string, string, string];
   accent: {
     gradient: string;
     border: string;
@@ -45,11 +49,11 @@ const STEPS: Record<UpgradableTier, TierStep> = {
     currentAccuracy: "45%+",
     nextAccuracy: "60%+",
     nextLabel: "Silver",
-    benefits: [
-      "Top-14 leagues (vs all leagues, noisy)",
-      "Confidence ≥65% (vs 55% baseline)",
-      "Historical accuracy jumps 15 points",
-    ],
+    benefitKeys: [
+      "upgradeNudge.free.b1",
+      "upgradeNudge.free.b2",
+      "upgradeNudge.free.b3",
+    ] as const,
     accent: {
       gradient: "from-slate-200/20 via-slate-200/10 to-transparent",
       border: "border-slate-300/30",
@@ -65,11 +69,11 @@ const STEPS: Record<UpgradableTier, TierStep> = {
     currentAccuracy: "60%+",
     nextAccuracy: "70%+",
     nextLabel: "Gold",
-    benefits: [
-      "Top-10 leagues only — premium competitions",
-      "Confidence ≥70% — sharper edge per pick",
-      "Unlocks Pick of the Day + Reports",
-    ],
+    benefitKeys: [
+      "upgradeNudge.silver.b1",
+      "upgradeNudge.silver.b2",
+      "upgradeNudge.silver.b3",
+    ] as const,
     accent: {
       gradient: "from-amber-500/25 via-amber-500/10 to-transparent",
       border: "border-amber-400/40",
@@ -85,11 +89,11 @@ const STEPS: Record<UpgradableTier, TierStep> = {
     currentAccuracy: "70%+",
     nextAccuracy: "80%+",
     nextLabel: "Platinum",
-    benefits: [
-      "Top-5 elite leagues — only the sharpest markets",
-      "Confidence ≥75% — highest-signal picks only",
-      "80%+ historical — our top-of-the-funnel tier",
-    ],
+    benefitKeys: [
+      "upgradeNudge.gold.b1",
+      "upgradeNudge.gold.b2",
+      "upgradeNudge.gold.b3",
+    ] as const,
     accent: {
       gradient: "from-emerald-500/25 via-cyan-400/10 to-transparent",
       border: "border-emerald-400/40",
@@ -104,6 +108,7 @@ const STEPS: Record<UpgradableTier, TierStep> = {
 export function UpgradeNudgeCard() {
   const { tier, ready } = useTier();
   const loc = useLocalizedHref();
+  const { t } = useTranslations();
 
   // Hydration safety: render nothing until tier is known.
   if (!ready) return null;
@@ -139,26 +144,37 @@ export function UpgradeNudgeCard() {
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
             <span className="rounded-md border border-white/[0.12] bg-white/[0.04] px-2 py-0.5 text-slate-300">
-              Your tier: {step.current} · {step.currentAccuracy}
+              {t("upgradeNudge.yourTier", {
+                tier: step.current,
+                accuracy: step.currentAccuracy,
+              })}
             </span>
             <ArrowRight className="h-3 w-3 text-slate-500" />
             <span
               className={`rounded-md border px-2 py-0.5 ${step.accent.border} ${step.accent.text}`}
             >
-              Next: {step.nextLabel} · {step.nextAccuracy}
+              {t("upgradeNudge.nextTier", {
+                tier: step.nextLabel,
+                accuracy: step.nextAccuracy,
+              })}
             </span>
           </div>
           <h3 className="text-lg font-extrabold text-white sm:text-xl">
-            Upgrade to {step.nextLabel} for {step.nextAccuracy} accuracy
+            {t("upgradeNudge.heading", {
+              tier: step.nextLabel,
+              accuracy: step.nextAccuracy,
+            })}
           </h3>
           <ul className="space-y-0.5 text-xs text-slate-300 sm:text-sm">
-            {step.benefits.map((b, i) => (
+            {step.benefitKeys.map((key, i) => (
               <li key={i} className="flex items-start gap-2">
                 <span
                   aria-hidden
                   className={`mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full ${step.accent.text.replace("text-", "bg-")}`}
                 />
-                <span className="leading-relaxed">{b}</span>
+                <span className="leading-relaxed">
+                  {t(key as "upgradeNudge.free.b1")}
+                </span>
               </li>
             ))}
           </ul>
@@ -169,7 +185,7 @@ export function UpgradeNudgeCard() {
           className={`inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-sm font-black tracking-tight transition-transform hover:scale-[1.03] ${step.accent.btn}`}
         >
           <Sparkles className="h-4 w-4" />
-          Upgrade
+          {t("upgradeNudge.cta")}
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>

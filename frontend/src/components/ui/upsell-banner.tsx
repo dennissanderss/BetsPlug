@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useLocalizedHref } from "@/i18n/locale-provider";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { Sparkles, ArrowRight, Trophy, Lock } from "lucide-react";
 
 interface UpsellBannerProps {
@@ -49,6 +49,7 @@ export function UpsellBanner({
   variant = "banner",
 }: UpsellBannerProps) {
   const loc = useLocalizedHref();
+  const { t } = useTranslations();
   const style = TIER_STYLES[targetTier];
   const checkoutHref = loc(`/checkout?plan=${targetTier}`);
 
@@ -82,7 +83,7 @@ export function UpsellBanner({
               <p className="text-base font-bold text-slate-100">{headline}</p>
               {subtext && <p className="text-sm text-slate-400 mt-1">{subtext}</p>}
               <span className={`mt-3 inline-flex items-center gap-1.5 rounded-lg ${style.btn} px-4 py-2 text-sm font-bold text-white shadow-lg group-hover:shadow-xl transition-shadow`}>
-                Upgrade naar {style.label} <ArrowRight className="h-4 w-4" />
+                {t("upgrade.toTier", { tier: style.label })} <ArrowRight className="h-4 w-4" />
               </span>
             </div>
           </div>

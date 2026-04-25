@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Lock, Sparkles, Crown } from "lucide-react";
+import { useTranslations } from "@/i18n/locale-provider";
 
 interface PaywallOverlayProps {
   feature: string;
@@ -82,6 +83,7 @@ function UpgradeCard({
 }) {
   const accent = TIER_ACCENT[tierKey];
   const isCompact = size === "compact";
+  const { t } = useTranslations();
 
   return (
     <div
@@ -121,7 +123,7 @@ function UpgradeCard({
             isCompact ? "text-lg" : "text-xl"
           }`}
         >
-          Upgrade to {tierLabel}
+          {t("upgrade.toTier", { tier: tierLabel })}
         </h3>
 
         {/* Subtitle */}
@@ -130,7 +132,7 @@ function UpgradeCard({
             isCompact ? "text-xs" : "text-sm"
           }`}
         >
-          This feature requires a {tierLabel} subscription or higher.
+          {t("upgrade.featureRequires", { tier: tierLabel })}
         </p>
 
         {/* CTA button */}
@@ -141,7 +143,7 @@ function UpgradeCard({
           }`}
         >
           <Sparkles className={isCompact ? "h-3.5 w-3.5" : "h-4 w-4"} />
-          Upgrade Now
+          {t("upgrade.now")}
           {/* Shimmer sweep on hover */}
           <div
             className="pointer-events-none absolute inset-0 translate-x-[-200%] bg-gradient-to-r from-transparent via-[#0f1420]/40 to-transparent transition-transform duration-1000 group-hover/btn:translate-x-[200%]"

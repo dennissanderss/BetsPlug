@@ -7,50 +7,23 @@ import { ShieldCheck, ChevronDown } from "lucide-react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { useTier, type Tier } from "@/hooks/use-tier";
-import { useLocalizedHref } from "@/i18n/locale-provider";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
-interface TierCopy {
-  heading: string;
-  body: string;
-  lowerTierLabel: string;
-  lowerTierHref: string;
-  upgradeLabel?: string;
-}
-
-const COPY: Record<Tier, TierCopy> = {
-  platinum: {
-    heading: "No Platinum picks right now",
-    body: "Our engine is selective by design — it only flags matches it's highly confident about. There are currently no matches meeting the Platinum standard. This is normal and means your subscription is working as intended.",
-    lowerTierLabel: "Browse Gold picks (slightly lower accuracy)",
-    lowerTierHref: "/predictions?tier=gold",
-  },
-  gold: {
-    heading: "No Gold picks right now",
-    body: "Our engine is selective by design — it only flags matches it's highly confident about. There are currently no matches meeting the Gold standard. This is normal and means your subscription is working as intended.",
-    lowerTierLabel: "Browse Silver picks (slightly lower accuracy)",
-    lowerTierHref: "/predictions?tier=silver",
-    upgradeLabel: "Upgrade to Platinum",
-  },
-  silver: {
-    heading: "No Silver picks right now",
-    body: "Our engine is selective by design — it only flags matches it's highly confident about. There are currently no matches meeting the Silver standard. This is normal and means your subscription is working as intended.",
-    lowerTierLabel: "Browse Free picks (slightly lower accuracy)",
-    lowerTierHref: "/predictions?tier=free",
-    upgradeLabel: "Upgrade to Gold",
-  },
-  free: {
-    heading: "No picks available right now",
-    body: "Our engine is selective by design — it only flags matches it's highly confident about. There are currently no matches meeting our confidence threshold. Check back tomorrow.",
-    lowerTierLabel: "",
-    lowerTierHref: "",
-    upgradeLabel: "Upgrade to Silver for better picks",
-  },
+/** Static-only fields (URLs don't translate). Copy lives in messages.ts
+ *  so every locale gets a real translation through the dictionary,
+ *  not an `isNl ? "X" : "Y"` ternary that ships English to PL/RU/etc. */
+const TIER_HREF: Record<Tier, { lowerTierHref: string }> = {
+  platinum: { lowerTierHref: "/predictions?tier=gold" },
+  gold: { lowerTierHref: "/predictions?tier=silver" },
+  silver: { lowerTierHref: "/predictions?tier=free" },
+  free: { lowerTierHref: "" },
 };
 
 export function TierEmptyStateCard() {
   const { tier, ready } = useTier();
   const { user } = useAuth();
   const loc = useLocalizedHref();
+  const { t } = useTranslations();
 
   const { data, isLoading } = useQuery({
     queryKey: ["dashboard-metrics-tier"],
@@ -66,7 +39,19 @@ export function TierEmptyStateCard() {
   if (ownTierTotal === null) return null;
   if (ownTierTotal > 0) return null;
 
-  const copy = COPY[tier];
+  const lowerTierHref = TIER_HREF[tier].lowerTierHref;
+  const heading = t(`tierEmpty.${tier}.heading` as "tierEmpty.gold.heading");
+  const body = t(`tierEmpty.${tier}.body` as "tierEmpty.gold.body");
+  // free has no lower tier; platinum has no upgrade target.
+  const lowerLabel =
+    tier === "free"
+      ? ""
+      : t(`tierEmpty.${tier}.lowerLabel` as "tierEmpty.gold.lowerLabel");
+  const upgradeLabel =
+    tier === "platinum"
+      ? ""
+      : t(`tierEmpty.${tier}.upgradeLabel` as "tierEmpty.gold.upgradeLabel");
+
   const pricingHref = loc("/pricing");
 
   return (
@@ -83,31 +68,31 @@ export function TierEmptyStateCard() {
 
           <div className="min-w-0 flex-1 space-y-2">
             <h3 className="text-sm font-bold text-white sm:text-base">
-              {copy.heading}
+              {heading}
             </h3>
             <p className="text-xs leading-relaxed text-slate-400 sm:text-sm">
-              {copy.body}
+              {body}
             </p>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-3 pl-0 sm:pl-14">
-          {copy.lowerTierLabel && (
+          {lowerLabel && lowerTierHref && (
             <Link
-              href={loc(copy.lowerTierHref)}
+              href={loc(lowerTierHref)}
               className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-slate-300 transition-colors hover:bg-white/10 hover:text-white"
             >
               <ChevronDown className="h-3.5 w-3.5" />
-              {copy.lowerTierLabel}
+              {lowerLabel}
             </Link>
           )}
 
-          {copy.upgradeLabel && (
+          {upgradeLabel && (
             <Link
               href={pricingHref}
               className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 px-4 py-2 text-xs font-black tracking-tight text-[#1a1408] transition-transform hover:scale-[1.03]"
             >
-              {copy.upgradeLabel}
+              {upgradeLabel}
             </Link>
           )}
         </div>

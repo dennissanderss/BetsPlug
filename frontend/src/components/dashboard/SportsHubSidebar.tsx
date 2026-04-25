@@ -50,7 +50,6 @@ export function SportsHubSidebar({
 }: SportsHubSidebarProps) {
   const { t, locale } = useTranslations();
   const lHref = useLocalizedHref();
-  const isNl = locale === "nl";
   const tierLabel = userTierSlug
     ? userTierSlug.charAt(0).toUpperCase() + userTierSlug.slice(1)
     : null;
@@ -96,7 +95,13 @@ export function SportsHubSidebar({
 
   const backtestHref = lHref("/trackrecord") + "#model-validation";
   const liveHref = lHref("/trackrecord") + "#live-measurement";
-  const fmtPct = (p: number) => p.toFixed(1).replace(".", isNl ? "," : ".");
+  // Locale-aware decimal separator — NL/DE/PL/RU/etc. use comma,
+  // EN/SW/ID use point. `toLocaleString` picks the right one per BCP-47.
+  const fmtPct = (p: number) =>
+    p.toLocaleString(locale, {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1,
+    });
 
   const quickLinks = [
     { label: t("dash.nav.predictions"), href: "/predictions", icon: Target },
@@ -113,14 +118,10 @@ export function SportsHubSidebar({
         <div className="flex items-center gap-2 border-b border-white/[0.05] px-4 py-3">
           <BarChart3 className="h-4 w-4 text-emerald-400" />
           <h3 className="text-sm font-semibold text-slate-200">
-            {isNl ? "Jouw tier-nauwkeurigheid" : "Your tier accuracy"}
+            {t("sidebar.tierAccuracy")}
           </h3>
           <span className="ml-auto text-[10px] uppercase tracking-wider text-slate-500">
-            {tierLabel
-              ? tierLabel
-              : isNl
-              ? "Alle tiers"
-              : "All tiers"}
+            {tierLabel ? tierLabel : t("tier.allTiers")}
           </span>
         </div>
         <div className="divide-y divide-white/[0.05]">
@@ -132,10 +133,10 @@ export function SportsHubSidebar({
             <div className="mb-2 flex items-center gap-1.5">
               <FlaskConical className="h-3.5 w-3.5 text-emerald-400" />
               <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                {isNl ? "Modelvalidatie" : "Model validation"}
+                {t("sidebar.modelValidation")}
               </span>
               <span className="text-[10px] text-slate-500">
-                {isNl ? "· alle v8.1 picks" : "· all v8.1 picks"}
+                {t("sidebar.allV81Picks")}
               </span>
               <ArrowRight className="ml-auto h-3 w-3 text-slate-600 transition-all group-hover:translate-x-0.5 group-hover:text-emerald-300" />
             </div>
@@ -143,9 +144,7 @@ export function SportsHubSidebar({
               <div className="h-10 animate-pulse rounded-lg bg-white/[0.04]" />
             ) : cumulativePct == null ? (
               <p className="text-xs text-slate-500">
-                {isNl
-                  ? "Nog geen data voor deze tier"
-                  : "No data for this tier yet"}
+                {t("sidebar.noTierData")}
               </p>
             ) : (
               <div className="flex items-end justify-between gap-3">
@@ -154,7 +153,7 @@ export function SportsHubSidebar({
                     {fmtPct(cumulativePct)}%
                   </p>
                   <p className="mt-0.5 text-[10px] uppercase tracking-wider text-slate-500">
-                    {isNl ? "Nauwkeurigheid" : "Accuracy"}
+                    {t("sidebar.accuracy")}
                   </p>
                 </div>
                 {cumulativeTotal != null && cumulativeCorrect != null && (
@@ -164,7 +163,7 @@ export function SportsHubSidebar({
                       {cumulativeTotal.toLocaleString(locale)}
                     </p>
                     <p className="mt-0.5 text-[10px] uppercase tracking-wider text-slate-500">
-                      {isNl ? "correct / totaal" : "correct / total"}
+                      {t("sidebar.correctTotal")}
                     </p>
                   </div>
                 )}
@@ -180,10 +179,10 @@ export function SportsHubSidebar({
             <div className="mb-2 flex items-center gap-1.5">
               <Activity className="h-3.5 w-3.5 text-sky-400" />
               <span className="text-[10px] font-bold uppercase tracking-wider text-sky-400">
-                {isNl ? "Live meting" : "Live tracking"}
+                {t("sidebar.liveTracking")}
               </span>
               <span className="text-[10px] text-slate-500">
-                {isNl ? "· sinds 16 apr 2026" : "· since Apr 16, 2026"}
+                {t("sidebar.sinceApr16")}
               </span>
               <ArrowRight className="ml-auto h-3 w-3 text-slate-600 transition-all group-hover:translate-x-0.5 group-hover:text-sky-300" />
             </div>
@@ -191,9 +190,7 @@ export function SportsHubSidebar({
               <div className="h-10 animate-pulse rounded-lg bg-white/[0.04]" />
             ) : !liveBucket || liveBucket.total === 0 ? (
               <p className="text-xs text-slate-500">
-                {isNl
-                  ? "Nog geen live-gemeten wedstrijden"
-                  : "No live-measured matches yet"}
+                {t("sidebar.noLiveMeasured")}
               </p>
             ) : (
               <div className="flex items-end justify-between gap-3">
@@ -202,7 +199,7 @@ export function SportsHubSidebar({
                     {livePct != null ? `${fmtPct(livePct)}%` : "—"}
                   </p>
                   <p className="mt-0.5 text-[10px] uppercase tracking-wider text-slate-500">
-                    {isNl ? "Nauwkeurigheid" : "Accuracy"}
+                    {t("sidebar.accuracy")}
                   </p>
                 </div>
                 <div className="text-right">
@@ -211,7 +208,7 @@ export function SportsHubSidebar({
                     {liveBucket.total.toLocaleString(locale)}
                   </p>
                   <p className="mt-0.5 text-[10px] uppercase tracking-wider text-slate-500">
-                    {isNl ? "correct / totaal" : "correct / total"}
+                    {t("sidebar.correctTotal")}
                   </p>
                 </div>
               </div>
@@ -222,7 +219,7 @@ export function SportsHubSidebar({
           {!isLoading && summary && (
             <div className="flex items-center gap-3 px-4 py-3">
               <span className="text-[10px] uppercase tracking-wider text-slate-500">
-                {isNl ? "Laatste 7 dagen" : "Last 7 days"}
+                {t("sidebar.last7Days")}
               </span>
               <span className="inline-flex items-center gap-1 text-[11px] tabular-nums text-emerald-300">
                 <CheckCircle2 className="h-3 w-3" />
