@@ -23,6 +23,7 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { useNavState } from "@/components/layout/nav-state-context";
 import { useTier } from "@/hooks/use-tier";
+import { HeaderSearch } from "@/components/layout/header-search";
 
 interface HeaderProps {
   className?: string;
@@ -37,10 +38,8 @@ export function Header({ className }: HeaderProps) {
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const { toggleMobile, mobileOpen } = useNavState();
-  const [query, setQuery] = React.useState("");
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
   const [notifOpen, setNotifOpen] = React.useState(false);
-  const [searchFocused, setSearchFocused] = React.useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = React.useState(false);
   const { tier: tierSlug, ready: tierReady } = useTier();
   // Keep the existing string-or-null shape so the rest of the component
@@ -48,7 +47,6 @@ export function Header({ className }: HeaderProps) {
   const tier = tierReady ? tierSlug : null;
   const userMenuRef = React.useRef<HTMLDivElement>(null);
   const notifRef = React.useRef<HTMLDivElement>(null);
-  const mobileSearchRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -62,21 +60,6 @@ export function Header({ className }: HeaderProps) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
-    if (query.trim()) {
-      router.push(`${loc("/search")}?q=${encodeURIComponent(query.trim())}`);
-      setMobileSearchOpen(false);
-    }
-  }
-
-  // Focus the mobile search input the moment it expands.
-  React.useEffect(() => {
-    if (mobileSearchOpen) {
-      requestAnimationFrame(() => mobileSearchRef.current?.focus());
-    }
-  }, [mobileSearchOpen]);
 
   const navigate = (path: string) => {
     setUserMenuOpen(false);
@@ -135,34 +118,13 @@ export function Header({ className }: HeaderProps) {
         </Pill>
       </div>
 
-      {/* Desktop search bar (sm+) — expanded pill */}
-      <form
-        onSubmit={handleSearch}
-        className="hidden sm:block flex-1 min-w-0 max-w-sm md:ml-0"
-      >
-        <div
-          className={cn(
-            "search-pill flex items-center",
-            searchFocused && "border-[#4ade80]/60"
-          )}
-        >
-          <Search
-            className={cn(
-              "h-3.5 w-3.5 mr-2 transition-colors duration-150",
-              searchFocused ? "text-[#4ade80]" : "text-[#6b7280]"
-            )}
-          />
-          <input
-            type="search"
-            placeholder={t("header.searchPlaceholder" as any)}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => setSearchFocused(true)}
-            onBlur={() => setSearchFocused(false)}
-            className="flex-1 bg-transparent text-sm text-[#ededed] placeholder:text-[#6b7280] outline-none"
-          />
-        </div>
-      </form>
+      {/* Desktop search bar (sm+) — live-suggest dropdown */}
+      <div className="hidden sm:block flex-1 min-w-0 max-w-sm md:ml-0">
+        <HeaderSearch
+          variant="desktop"
+          placeholder={t("header.searchPlaceholder" as any)}
+        />
+      </div>
 
       {/* Mobile search icon (below sm) — expands into an overlay input */}
       <button
@@ -335,31 +297,14 @@ export function Header({ className }: HeaderProps) {
           >
             <X className="h-4 w-4" />
           </button>
-          <form onSubmit={handleSearch} className="flex-1 min-w-0">
-            <div
-              className={cn(
-                "search-pill flex items-center",
-                searchFocused && "border-[#4ade80]/60"
-              )}
-            >
-              <Search
-                className={cn(
-                  "h-3.5 w-3.5 mr-2 transition-colors duration-150 shrink-0",
-                  searchFocused ? "text-[#4ade80]" : "text-[#6b7280]"
-                )}
-              />
-              <input
-                ref={mobileSearchRef}
-                type="search"
-                placeholder={t("header.searchPlaceholder" as any)}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setSearchFocused(false)}
-                className="flex-1 bg-transparent text-sm text-[#ededed] placeholder:text-[#6b7280] outline-none"
-              />
-            </div>
-          </form>
+          <div className="flex-1 min-w-0">
+            <HeaderSearch
+              variant="mobile"
+              placeholder={t("header.searchPlaceholder" as any)}
+              autoFocus
+              onClose={() => setMobileSearchOpen(false)}
+            />
+          </div>
         </div>
       )}
     </header>

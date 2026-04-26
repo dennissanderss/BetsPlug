@@ -356,13 +356,18 @@ class ApiClient {
     );
   }
 
-  // Search
+  // Search — uses trailing slash to avoid the 307 redirect FastAPI emits
+  // for prefixed routers mounted at "/" (the redirect costs ~100 ms on
+  // every keystroke when the bar live-suggests).
   search(q: string, sport?: string, limit = 20) {
     const params = new URLSearchParams({ q, limit: String(limit) });
     if (sport) params.set("sport", sport);
-    return this.request<{ groups: import("@/types/api").SearchResultGroup[] }>(
-      `/search?${params}`
-    );
+    return this.request<{
+      query: string;
+      groups: import("@/types/api").SearchResultGroup[];
+      total_hits: number;
+      took_ms: number;
+    }>(`/search/?${params}`);
   }
 
   // Sports
