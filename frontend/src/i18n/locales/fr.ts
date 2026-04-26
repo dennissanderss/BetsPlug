@@ -2837,5 +2837,12 @@ const fr = {
   "footer.liveChat": "Chat en direct",
   "thankYou.aiFootballPredictions": "Prédictions football IA",
 
+  /* vbet table columns */
+  "vbet.col.date": "Date",
+  "vbet.col.match": "Match",
+  "vbet.col.league": "Ligue",
+  "vbet.col.pick": "Pronostic",
+  "vbet.col.odds": "Cote",
+
 } as Partial<Record<TranslationKey, string>>;
 export default fr;

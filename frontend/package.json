@@ -10,6 +10,9 @@
     "translate": "node scripts/translate.mjs",
     "translate:force": "node scripts/translate.mjs --force",
     "translate:dry": "node scripts/translate.mjs --dry-run",
+    "i18n:check": "node scripts/i18n-check.mjs --no-detect",
+    "i18n:check:full": "node scripts/i18n-check.mjs",
+    "i18n:forensics": "node scripts/i18n-forensics.mjs",
     "migrate:homepage": "tsx --env-file=.env.local scripts/migrate-homepage-to-sanity.ts",
     "migrate:homepage:dry": "tsx scripts/migrate-homepage-to-sanity.ts --dry-run",
     "postinstall": "sh scripts/setup-hooks.sh 2>/dev/null || true"

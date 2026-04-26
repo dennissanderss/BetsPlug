@@ -2837,5 +2837,12 @@ const de = {
   "footer.liveChat": "Live-Chat",
   "thankYou.aiFootballPredictions": "KI-Fußballvorhersagen",
 
+  /* vbet table columns */
+  "vbet.col.date": "Datum",
+  "vbet.col.match": "Spiel",
+  "vbet.col.league": "Liga",
+  "vbet.col.pick": "Tipp",
+  "vbet.col.odds": "Quote",
+
 } as Partial<Record<TranslationKey, string>>;
 export default de;

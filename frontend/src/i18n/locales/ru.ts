@@ -2637,6 +2637,11 @@ const ru = {
   "upgradeNudge.silver.b3": "Открывает Pick of the Day + Reports",
   "upgradeNudge.yourTier": "Твой тир: {tier} · {accuracy}",
 
+  "vbet.col.date": "Дата",
+  "vbet.col.league": "Лига",
+  "vbet.col.match": "Соответствовать",
+  "vbet.col.odds": "Шансы",
+  "vbet.col.pick": "Выбирать",
   "vbet.extraEvidence": "Дополнительные доказательства:",
   "vbet.histSelection": "Выбранные ставки с перевесом (исторические)",
   "vbet.liveMeasurement": "Живое измерение",

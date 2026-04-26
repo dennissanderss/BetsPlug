@@ -2637,6 +2637,11 @@ const da = {
   "upgradeNudge.silver.b3": "Låser op for Pick of the Day + Reports",
   "upgradeNudge.yourTier": "Din tier: {tier} · {accuracy}",
 
+  "vbet.col.date": "Dato",
+  "vbet.col.league": "Liga",
+  "vbet.col.match": "Kamp",
+  "vbet.col.odds": "Odds",
+  "vbet.col.pick": "Plukke",
   "vbet.extraEvidence": "Ekstra bevis:",
   "vbet.histSelection": "Valgte værdi væddemål (historiske)",
   "vbet.liveMeasurement": "Live måling",

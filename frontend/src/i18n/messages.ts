@@ -32,6 +32,11 @@ const en = {
   "vbet.ourProbability": "Our probability",
   "vbet.histSelection": "Selected value bets (historical)",
   "vbet.liveMeasurement": "Live measurement",
+  "vbet.col.date": "Date",
+  "vbet.col.match": "Match",
+  "vbet.col.league": "League",
+  "vbet.col.pick": "Pick",
+  "vbet.col.odds": "Odds",
 
   /* Accuracy Pro Engine v2 preview — extracted from hardcoded NL */
   "accPlus.title": "Accuracy Pro Engine v2",
@@ -5466,6 +5471,11 @@ const nl: Dictionary = {
   "vbet.ourProbability": "Onze kans",
   "vbet.histSelection": "Geselecteerde value-bets (historisch)",
   "vbet.liveMeasurement": "Live meting",
+  "vbet.col.date": "Datum",
+  "vbet.col.match": "Wedstrijd",
+  "vbet.col.league": "Liga",
+  "vbet.col.pick": "Pick",
+  "vbet.col.odds": "Odds",
 
   /* Accuracy Pro Engine v2 preview (NL) */
   "accPlus.title": "Accuracy Pro Engine v2",

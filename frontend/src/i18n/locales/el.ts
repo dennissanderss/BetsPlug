@@ -2637,6 +2637,11 @@ const el = {
   "upgradeNudge.silver.b3": "Ξεκλειδώνει Pick of the Day + Reports",
   "upgradeNudge.yourTier": "Το tier σου: {tier} · {accuracy}",
 
+  "vbet.col.date": "Ημερομηνία",
+  "vbet.col.league": "Σύνδεσμος",
+  "vbet.col.match": "Αγώνας",
+  "vbet.col.odds": "Πιθανότητα",
+  "vbet.col.pick": "Διαλέγω",
   "vbet.extraEvidence": "Επιπλέον στοιχεία:",
   "vbet.histSelection": "Επιλεγμένα στοιχήματα αξίας (ιστορικά)",
   "vbet.liveMeasurement": "Ζωντανή μέτρηση",

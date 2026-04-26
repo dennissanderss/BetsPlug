@@ -2687,6 +2687,11 @@ const id = {
   "upgradeNudge.silver.b3": "Membuka Pick of the Day + Reports",
   "upgradeNudge.yourTier": "Tier kamu: {tier} · {accuracy}",
 
+  "vbet.col.date": "Tanggal",
+  "vbet.col.league": "Liga",
+  "vbet.col.match": "Cocok",
+  "vbet.col.odds": "Kemungkinan",
+  "vbet.col.pick": "Memilih",
   "vbet.extraEvidence": "Bukti tambahan:",
   "vbet.histSelection": "Taruhan nilai yang dipilih (historis)",
   "vbet.liveMeasurement": "Pengukuran langsung",

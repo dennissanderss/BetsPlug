@@ -2637,6 +2637,11 @@ const pt = {
   "upgradeNudge.silver.b3": "Desbloqueia Pick of the Day + Reports",
   "upgradeNudge.yourTier": "O teu tier: {tier} · {accuracy}",
 
+  "vbet.col.date": "Data",
+  "vbet.col.league": "Liga",
+  "vbet.col.match": "Corresponder",
+  "vbet.col.odds": "Chances",
+  "vbet.col.pick": "Escolha",
   "vbet.extraEvidence": "Evidências extras:",
   "vbet.histSelection": "Apostas de valor selecionadas (históricas)",
   "vbet.liveMeasurement": "Medição ao vivo",

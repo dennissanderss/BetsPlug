@@ -2637,6 +2637,11 @@ const ro = {
   "upgradeNudge.silver.b3": "Deblochează Pick of the Day + Reports",
   "upgradeNudge.yourTier": "Tier-ul tău: {tier} · {accuracy}",
 
+  "vbet.col.date": "Data",
+  "vbet.col.league": "Ligă",
+  "vbet.col.match": "Meci",
+  "vbet.col.odds": "Cote",
+  "vbet.col.pick": "Alege",
   "vbet.extraEvidence": "Dovezi suplimentare:",
   "vbet.histSelection": "Pariuri valorice selectate (istorice)",
   "vbet.liveMeasurement": "Măsurare în direct",

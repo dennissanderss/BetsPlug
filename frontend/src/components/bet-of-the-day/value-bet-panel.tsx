@@ -319,6 +319,7 @@ function SampleFunnelBox({ proof }: { proof: BacktestProof }) {
 // ─── Matches Table ──────────────────────────────────────────────────────────
 
 function BacktestMatchesTable({ matches }: { matches: BacktestProof["matches"] }) {
+  const { t } = useTranslations();
   const [expanded, setExpanded] = React.useState(false);
   const visible = expanded ? matches : matches.slice(0, 5);
   const pickLabel = { home: "1", draw: "X", away: "2" } as const;
@@ -355,11 +356,11 @@ function BacktestMatchesTable({ matches }: { matches: BacktestProof["matches"] }
 
       <div className="divide-y divide-white/[0.04]">
         <div className="grid grid-cols-12 gap-2 px-4 py-2 text-[9px] uppercase tracking-widest text-slate-600 bg-white/[0.02]">
-          <span className="col-span-2">Datum</span>
-          <span className="col-span-4">Wedstrijd</span>
-          <span className="col-span-2">Liga</span>
-          <span className="col-span-1 text-center">Pick</span>
-          <span className="col-span-1 text-right">Odds</span>
+          <span className="col-span-2">{t("vbet.col.date")}</span>
+          <span className="col-span-4">{t("vbet.col.match")}</span>
+          <span className="col-span-2">{t("vbet.col.league")}</span>
+          <span className="col-span-1 text-center">{t("vbet.col.pick")}</span>
+          <span className="col-span-1 text-right">{t("vbet.col.odds")}</span>
           <span className="col-span-1 text-right">Edge</span>
           <span className="col-span-1 text-right">P/L</span>
         </div>

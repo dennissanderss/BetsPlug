@@ -2637,6 +2637,11 @@ const tr = {
   "upgradeNudge.silver.b3": "Pick of the Day + Reports'u açar",
   "upgradeNudge.yourTier": "Tier'ın: {tier} · {accuracy}",
 
+  "vbet.col.date": "Tarih",
+  "vbet.col.league": "Lig",
+  "vbet.col.match": "Kibrit",
+  "vbet.col.odds": "Oranlar",
+  "vbet.col.pick": "Seçmek",
   "vbet.extraEvidence": "Ekstra kanıt:",
   "vbet.histSelection": "Seçilmiş değerli bahisler (tarihsel)",
   "vbet.liveMeasurement": "Canlı ölçüm",

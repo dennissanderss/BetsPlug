@@ -2687,6 +2687,11 @@ const sw = {
   "upgradeNudge.silver.b3": "Hufungua Pick of the Day + Reports",
   "upgradeNudge.yourTier": "Tier yako: {tier} · {accuracy}",
 
+  "vbet.col.date": "Tarehe",
+  "vbet.col.league": "Ligi",
+  "vbet.col.match": "Mechi",
+  "vbet.col.odds": "Odd",
+  "vbet.col.pick": "Chagua",
   "vbet.extraEvidence": "Ushahidi wa ziada:",
   "vbet.histSelection": "dau za thamani zilizochaguliwa (za kihistoria)",
   "vbet.liveMeasurement": "Kipimo cha moja kwa moja",
