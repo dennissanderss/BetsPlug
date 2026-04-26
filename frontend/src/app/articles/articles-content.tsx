@@ -15,6 +15,7 @@ import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { Article, Sport } from "@/data/articles";
+import { pickLocalized } from "@/data/articles";
 import { SportIcon, SportBadge, CoverArt } from "./article-visuals";
 import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
@@ -239,7 +240,7 @@ function ArticleCard({
   article: Article;
   variant: Variant;
 }) {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   return (
     <Link
@@ -258,10 +259,10 @@ function ArticleCard({
         <div className="flex flex-1 flex-col gap-4 p-6 sm:p-7">
           <SportBadge sport={article.sport} />
           <h3 className="text-heading text-lg text-[#ededed] transition-colors group-hover:text-[#4ade80] sm:text-xl">
-            {article.title}
+            {pickLocalized(article.title, locale)}
           </h3>
           <p className="line-clamp-2 flex-1 text-sm leading-relaxed text-[#a3a9b8]">
-            {article.excerpt}
+            {pickLocalized(article.excerpt, locale)}
           </p>
           <div className="mt-2 flex items-center gap-3 border-t border-white/[0.06] pt-4 text-xs text-[#6b7280]">
             <span>{formatDate(article.publishedAt)}</span>

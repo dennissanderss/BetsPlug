@@ -10,6 +10,10 @@
     "translate": "node scripts/translate.mjs",
     "translate:force": "node scripts/translate.mjs --force",
     "translate:dry": "node scripts/translate.mjs --dry-run",
+    "articles:translate": "node scripts/articles-translate.mjs",
+    "articles:translate:all": "node scripts/articles-translate.mjs --all",
+    "articles:translate:dry": "node scripts/articles-translate.mjs --dry-run",
+    "articles:check": "node scripts/articles-check.mjs",
     "migrate:homepage": "tsx --env-file=.env.local scripts/migrate-homepage-to-sanity.ts",
     "migrate:homepage:dry": "tsx scripts/migrate-homepage-to-sanity.ts --dry-run",
     "postinstall": "sh scripts/setup-hooks.sh 2>/dev/null || true"

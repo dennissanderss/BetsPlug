@@ -5,7 +5,8 @@ import {
   fetchArticleBySlug,
   type Article,
 } from "@/lib/sanity-data";
-import { getLocalizedAlternates } from "@/lib/seo-helpers";
+import { pickLocalized } from "@/data/articles";
+import { getLocalizedAlternates, getServerLocale } from "@/lib/seo-helpers";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { ArticleTemplate } from "../article-template";
 
@@ -49,17 +50,20 @@ export async function generateMetadata(props: {
 
   const ogImage = absoluteCoverImage(article);
   const alternates = getLocalizedAlternates(`/articles/${article.slug}`);
+  const locale = getServerLocale();
+  const metaTitle = pickLocalized(article.metaTitle, locale);
+  const metaDescription = pickLocalized(article.metaDescription, locale);
 
   return {
-    title: article.metaTitle,
-    description: article.metaDescription,
+    title: metaTitle,
+    description: metaDescription,
     alternates: {
       canonical: alternates.canonical,
       languages: alternates.languages,
     },
     openGraph: {
-      title: article.metaTitle,
-      description: article.metaDescription,
+      title: metaTitle,
+      description: metaDescription,
       type: "article",
       publishedTime: article.publishedAt,
       modifiedTime: article.updatedAt ?? article.publishedAt,
@@ -68,8 +72,8 @@ export async function generateMetadata(props: {
     },
     twitter: {
       card: "summary_large_image",
-      title: article.metaTitle,
-      description: article.metaDescription,
+      title: metaTitle,
+      description: metaDescription,
       ...(ogImage ? { images: [ogImage] } : {}),
     },
   };
@@ -77,15 +81,17 @@ export async function generateMetadata(props: {
 
 /* ── JSON-LD builder ─────────────────────────────────────── */
 
-function buildArticleJsonLd(article: Article) {
+function buildArticleJsonLd(article: Article, locale: string) {
   const url = `${SITE_URL}/articles/${article.slug}`;
   const image = absoluteCoverImage(article);
+  const headline = pickLocalized(article.title, locale as any);
+  const description = pickLocalized(article.metaDescription, locale as any);
 
   return {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: article.title,
-    description: article.metaDescription,
+    headline,
+    description,
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": url,
@@ -108,7 +114,7 @@ function buildArticleJsonLd(article: Article) {
       },
     },
     ...(image ? { image: [image] } : {}),
-    inLanguage: "en",
+    inLanguage: locale,
     articleSection: article.sport,
   };
 }
@@ -120,7 +126,8 @@ export default async function SingleArticlePage(props: {
   const article = await fetchArticleBySlug(slug);
   if (!article) notFound();
 
-  const jsonLd = buildArticleJsonLd(article);
+  const locale = getServerLocale();
+  const jsonLd = buildArticleJsonLd(article, locale);
 
   // Breadcrumb schema so Google can render breadcrumb rich snippets
   // in SERPs (the visual breadcrumb lives inside ArticleTemplate but
@@ -128,7 +135,7 @@ export default async function SingleArticlePage(props: {
   const breadcrumbItems = [
     { name: "BetsPlug", href: "/" },
     { name: "Articles", href: "/articles" },
-    { name: article.title, href: `/articles/${article.slug}` },
+    { name: pickLocalized(article.title, locale), href: `/articles/${article.slug}` },
   ];
 
   return (

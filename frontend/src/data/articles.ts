@@ -1,29 +1,52 @@
 /**
  * Articles data source
  * ────────────────────────────────────────────────────────────
- * Static content for the public /articles archive and the
- * /articles/[slug] single-post template. Each article defines
- * its own SEO metadata (metaTitle + metaDescription), sport
- * category, hero gradient and long-form body content.
+ * Static, hardcoded blog posts for /articles + /articles/[slug].
+ * One TS object per post, all locale variants in the same record
+ * so a writer ships a translated post with a single commit.
  *
- * Content is rendered by a single reusable template so every
- * post has an identical layout, typography and CTA banner.
+ * Authoring workflow (2026-04-27 i18n overhaul):
+ *   1. Append a new entry to `articles[]` with EN-only fields:
+ *      title: "…", excerpt: "…", blocks: [{ type, text }, …]
+ *      (other locales omitted — fallback resolves to EN).
+ *   2. Run `npm run articles:translate <slug>` to populate
+ *      nl/de/fr/es/it via the configured translator (Anthropic,
+ *      DeepL or Google — see scripts/articles-translate.mjs).
+ *   3. Commit. CI (`npm run articles:check`) gates that every
+ *      published article has all 6 locales filled.
+ *
+ * The frontend reads a localized field via `pickLocalized(field,
+ * locale)` so both shapes work transparently:
+ *   "title": "EN string"                     → fallback to EN everywhere
+ *   "title": { en: "…", nl: "…", de: "…", … } → per-locale lookup
  */
+
+import type { Locale } from "@/i18n/config";
 
 export type Sport = "football";
 
+/**
+ * A field that can be a single (EN-only) string or an object with
+ * one entry per locale. The reader (`pickLocalized`) resolves to
+ * the active locale, then falls back to EN, then to the raw value.
+ */
+export type LocalizedString = string | Partial<Record<Locale, string>>;
+export type LocalizedStringArray =
+  | string[]
+  | Partial<Record<Locale, string[]>>;
+
 export type ArticleBlock =
-  | { type: "paragraph"; text: string }
-  | { type: "heading"; text: string }
-  | { type: "quote"; text: string; cite?: string }
-  | { type: "list"; items: string[] };
+  | { type: "paragraph"; text: LocalizedString }
+  | { type: "heading"; text: LocalizedString }
+  | { type: "quote"; text: LocalizedString; cite?: string }
+  | { type: "list"; items: LocalizedStringArray };
 
 export type Article = {
   slug: string;
-  title: string;
-  excerpt: string;
-  metaTitle: string;
-  metaDescription: string;
+  title: LocalizedString;
+  excerpt: LocalizedString;
+  metaTitle: LocalizedString;
+  metaDescription: LocalizedString;
   sport: Sport;
   /** Author display name shown in byline */
   author: string;
@@ -55,9 +78,46 @@ export type Article = {
   /** Optional alt text for the raster cover image */
   coverImageAlt?: string;
   /** Optional pull-quote to surface in the article header */
-  tldr?: string;
+  tldr?: LocalizedString;
   blocks: ArticleBlock[];
 };
+
+/* ── Localized-field readers ───────────────────────────────────
+   Used by the article template + cards + JSON-LD. Always returns
+   a string in the visitor's active locale, with EN fallback. */
+
+export function pickLocalized(
+  field: LocalizedString | undefined,
+  locale: Locale,
+): string {
+  if (field === undefined || field === null) return "";
+  if (typeof field === "string") return field;
+  return field[locale] ?? field.en ?? Object.values(field)[0] ?? "";
+}
+
+export function pickLocalizedArray(
+  field: LocalizedStringArray | undefined,
+  locale: Locale,
+): string[] {
+  if (!field) return [];
+  if (Array.isArray(field)) return field;
+  return field[locale] ?? field.en ?? Object.values(field)[0] ?? [];
+}
+
+/**
+ * Render a block's text in the active locale. Convenience helper
+ * for the template — handles both flat (string) and per-locale
+ * (Record) shapes uniformly.
+ */
+export function blockText(block: ArticleBlock, locale: Locale): string {
+  if (block.type === "list") return ""; // lists use blockItems
+  return pickLocalized(block.text, locale);
+}
+
+export function blockItems(block: ArticleBlock, locale: Locale): string[] {
+  if (block.type !== "list") return [];
+  return pickLocalizedArray(block.items, locale);
+}
 
 export const SPORTS: {
   id: Sport | "all";

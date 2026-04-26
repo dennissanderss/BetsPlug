@@ -19,6 +19,9 @@ import {
   type ArticleBlock,
   getAdjacentArticles,
   getRelatedArticles,
+  pickLocalized,
+  blockText,
+  blockItems,
 } from "@/data/articles";
 import { CoverArt, SportBadge } from "./article-visuals";
 import { CtaMediaBg } from "@/components/ui/media-bg";
@@ -34,10 +37,14 @@ type Variant = "green" | "purple" | "blue";
 const CYCLE: Variant[] = ["green", "purple", "blue"];
 
 export function ArticleTemplate({ article }: { article: Article }) {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
   const related = getRelatedArticles(article, 3);
   const { prev, next } = getAdjacentArticles(article);
+
+  // Resolve every localized field once so render-paths read plain strings.
+  const title = pickLocalized(article.title, locale);
+  const tldr = pickLocalized(article.tldr, locale);
 
   return (
     <div className="relative min-h-screen overflow-x-clip bg-background text-[#ededed]">
@@ -65,7 +72,7 @@ export function ArticleTemplate({ article }: { article: Article }) {
               {t("articles.breadcrumbBlog")}
             </Link>
             <span className="text-[#3a3f4a]">/</span>
-            <span className="truncate text-[#a3a9b8]">{article.title}</span>
+            <span className="truncate text-[#a3a9b8]">{title}</span>
           </nav>
 
           {/* Back link */}
@@ -92,7 +99,7 @@ export function ArticleTemplate({ article }: { article: Article }) {
                   <SportBadge sport={article.sport} />
                 </div>
                 <h1 className="text-display text-3xl leading-[1.1] text-[#ededed] sm:text-4xl md:text-5xl">
-                  {article.title}
+                  {title}
                 </h1>
                 <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[#6b7280]">
                   <span>
@@ -122,12 +129,12 @@ export function ArticleTemplate({ article }: { article: Article }) {
                   sport={article.sport}
                   size="lg"
                   imageUrl={article.coverImage}
-                  imageAlt={article.coverImageAlt ?? article.title}
+                  imageAlt={article.coverImageAlt ?? title}
                 />
               </motion.div>
 
               {/* TL;DR */}
-              {article.tldr && (
+              {tldr && (
                 <motion.aside
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -140,7 +147,7 @@ export function ArticleTemplate({ article }: { article: Article }) {
                       {t("articles.tldr")}
                     </span>
                     <p className="text-base leading-relaxed text-[#ededed]">
-                      {article.tldr}
+                      {tldr}
                     </p>
                   </div>
                 </motion.aside>
@@ -149,7 +156,7 @@ export function ArticleTemplate({ article }: { article: Article }) {
               {/* Body */}
               <div className="space-y-6 text-base leading-[1.8] text-[#ededed] sm:text-[17px]">
                 {article.blocks.map((block, i) => (
-                  <BlockRenderer key={i} block={block} />
+                  <BlockRenderer key={i} block={block} locale={locale} />
                 ))}
               </div>
 
@@ -166,7 +173,7 @@ export function ArticleTemplate({ article }: { article: Article }) {
                   <span className="font-semibold text-[#4ade80]">
                     {t("articles.share")}
                   </span>
-                  <ShareButtons title={article.title} slug={article.slug} />
+                  <ShareButtons title={title} slug={article.slug} />
                 </div>
               </div>
             </article>
@@ -211,7 +218,7 @@ export function ArticleTemplate({ article }: { article: Article }) {
                       <div className="flex flex-1 flex-col gap-3 p-6">
                         <SportBadge sport={a.sport} />
                         <h3 className="text-heading text-base text-[#ededed] transition-colors group-hover:text-[#4ade80] sm:text-lg">
-                          {a.title}
+                          {pickLocalized(a.title, locale)}
                         </h3>
                         <div className="mt-auto flex items-center gap-3 border-t border-white/[0.06] pt-3 text-xs text-[#6b7280]">
                           <span>{formatDate(a.publishedAt)}</span>
@@ -332,18 +339,24 @@ export function ArticleTemplate({ article }: { article: Article }) {
 
 /* ── Block renderer ───────────────────────────────────────── */
 
-function BlockRenderer({ block }: { block: ArticleBlock }) {
+function BlockRenderer({
+  block,
+  locale,
+}: {
+  block: ArticleBlock;
+  locale: import("@/i18n/config").Locale;
+}) {
   switch (block.type) {
     case "heading":
       return (
         <h2 className="text-heading mt-10 text-2xl text-[#ededed] sm:text-3xl">
-          {block.text}
+          {blockText(block, locale)}
         </h2>
       );
     case "paragraph":
       return (
         <p>
-          <RichText text={block.text} />
+          <RichText text={blockText(block, locale)} />
         </p>
       );
     case "quote":
@@ -353,7 +366,7 @@ function BlockRenderer({ block }: { block: ArticleBlock }) {
             <QuoteIcon className="h-6 w-6 shrink-0 text-[#d8b4fe]" strokeWidth={1.5} />
             <div className="flex-1">
               <p className="text-lg font-medium italic leading-relaxed text-[#ededed]">
-                &ldquo;<RichText text={block.text} />&rdquo;
+                &ldquo;<RichText text={blockText(block, locale)} />&rdquo;
               </p>
               {block.cite && (
                 <div className="mt-4">
@@ -367,7 +380,7 @@ function BlockRenderer({ block }: { block: ArticleBlock }) {
     case "list":
       return (
         <ul className="space-y-3 pl-1">
-          {block.items.map((item, i) => (
+          {blockItems(block, locale).map((item, i) => (
             <li key={i} className="flex items-start gap-3">
               <CheckCircle2
                 className="mt-1 h-4 w-4 flex-shrink-0 text-[#4ade80]"
@@ -543,7 +556,7 @@ function PrevNextNav({
   prev?: Article;
   next?: Article;
 }) {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
 
   if (!prev && !next) {
@@ -594,7 +607,7 @@ function PrevNextNav({
               {t("articles.prevPost")}
             </span>
             <h3 className="text-heading text-base text-[#ededed] transition-colors group-hover:text-[#4ade80] sm:text-lg">
-              {prev.title}
+              {pickLocalized(prev.title, locale)}
             </h3>
             <div className="mt-auto flex items-center gap-3 border-t border-white/[0.06] pt-3 text-xs text-[#6b7280]">
               <SportBadge sport={prev.sport} />
@@ -620,7 +633,7 @@ function PrevNextNav({
               <ArrowRight className="h-3 w-3" />
             </span>
             <h3 className="text-heading text-base text-[#ededed] transition-colors group-hover:text-[#d8b4fe] sm:text-lg">
-              {next.title}
+              {pickLocalized(next.title, locale)}
             </h3>
             <div className="mt-auto flex items-center gap-3 border-t border-white/[0.06] pt-3 text-xs text-[#6b7280]">
               <SportBadge sport={next.sport} />

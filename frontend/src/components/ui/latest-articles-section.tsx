@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { ArrowRight, Clock, Newspaper } from "lucide-react";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { Article } from "@/data/articles";
+import { pickLocalized } from "@/data/articles";
 import { CoverArt, SportBadge } from "@/app/articles/article-visuals";
 
 /**
@@ -26,7 +27,7 @@ interface LatestArticlesSectionProps {
 }
 
 export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) {
-  const { t } = useTranslations();
+  const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
 
   const latest = [...articles]
@@ -101,10 +102,10 @@ export function LatestArticlesSection({ articles }: LatestArticlesSectionProps) 
               <div className="flex flex-1 flex-col gap-4 p-6">
                 <SportBadge sport={article.sport} />
                 <h3 className="text-display text-lg text-white transition-colors group-hover:text-[#4ade80] sm:text-xl">
-                  {article.title}
+                  {pickLocalized(article.title, locale)}
                 </h3>
                 <p className="line-clamp-2 flex-1 text-sm leading-relaxed text-[#a3a3a3]">
-                  {article.excerpt}
+                  {pickLocalized(article.excerpt, locale)}
                 </p>
                 <div className="mt-2 flex items-center gap-3 border-t border-white/[0.08] pt-4 font-mono text-[10px] uppercase tracking-widest text-[#707070]">
                   <span>{formatDate(article.publishedAt)}</span>

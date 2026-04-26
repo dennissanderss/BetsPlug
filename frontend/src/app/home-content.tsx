@@ -38,6 +38,7 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill, DataChip } from "@/components/noct/pill";
 import { HowItWorksDemo } from "@/components/marketing/how-it-works-demo";
 import type { Article } from "@/data/articles";
+import { pickLocalized } from "@/data/articles";
 import type { Testimonial } from "@/components/ui/testimonials-section";
 import type { ComparisonRow } from "@/components/ui/comparison-table";
 import { getLocaleValue } from "@/lib/sanity-data";
@@ -777,9 +778,9 @@ export function HomeContent({
                           {a.sport}
                         </span>
                         <h3 className="text-heading mt-2 text-base text-[#ededed] transition-colors group-hover:text-[#4ade80]">
-                          {a.title}
+                          {pickLocalized(a.title, locale)}
                         </h3>
-                        <p className="mt-2 line-clamp-2 text-xs text-[#a3a9b8]">{a.excerpt}</p>
+                        <p className="mt-2 line-clamp-2 text-xs text-[#a3a9b8]">{pickLocalized(a.excerpt, locale)}</p>
                         <div
                           className="mt-3 flex items-center gap-3 border-t pt-3 text-[11px] text-[#6b7280]"
                           style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
