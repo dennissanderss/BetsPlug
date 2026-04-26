@@ -478,27 +478,6 @@ export function LoginContent() {
                         </>
                       )}
                     </button>
-
-                    {/* Divider */}
-                    <div className="flex items-center gap-3">
-                      <div className="h-px flex-1 bg-white/[0.08]" />
-                      <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#8a93a6]">
-                        {t("login.orDivider")}
-                      </span>
-                      <div className="h-px flex-1 bg-white/[0.08]" />
-                    </div>
-
-                    {/* Social buttons */}
-                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                      <button type="button" className="btn-glass">
-                        <GoogleMark />
-                        {t("login.google")}
-                      </button>
-                      <button type="button" className="btn-glass">
-                        <AppleMark />
-                        {t("login.apple")}
-                      </button>
-                    </div>
                   </form>
 
                   {/* Footer */}
@@ -531,37 +510,6 @@ export function LoginContent() {
 
       <BetsPlugFooter />
     </div>
-  );
-}
-
-function GoogleMark() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden>
-      <path
-        fill="#4285F4"
-        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.75h3.57c2.08-1.92 3.28-4.74 3.28-8.07z"
-      />
-      <path
-        fill="#34A853"
-        d="M12 23c2.97 0 5.46-.98 7.28-2.67l-3.57-2.75c-.99.66-2.26 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-      />
-      <path
-        fill="#FBBC05"
-        d="M5.84 14.11c-.22-.66-.35-1.36-.35-2.11s.13-1.45.35-2.11V7.05H2.18A10.99 10.99 0 0 0 1 12c0 1.78.43 3.46 1.18 4.95l3.66-2.84z"
-      />
-      <path
-        fill="#EA4335"
-        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.05l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"
-      />
-    </svg>
-  );
-}
-
-function AppleMark() {
-  return (
-    <svg viewBox="0 0 24 24" className="h-4 w-4 text-[#ededed]" fill="currentColor" aria-hidden>
-      <path d="M16.365 1.43c0 1.14-.42 2.23-1.26 3.05-.91.9-2.01 1.47-3.16 1.36-.12-1.09.43-2.22 1.21-3.04.85-.92 2.21-1.52 3.21-1.37zM20.4 17.14c-.57 1.28-.85 1.86-1.59 3-1.03 1.6-2.49 3.59-4.3 3.61-1.61.02-2.03-1.05-4.22-1.04-2.19.01-2.65 1.06-4.27 1.04-1.82-.02-3.19-1.82-4.23-3.41C.57 16.3.1 10.6 2.32 7.72c1.49-1.92 3.84-3.04 6.04-3.04 2.25 0 3.66 1.23 5.52 1.23 1.81 0 2.91-1.24 5.51-1.24 1.96 0 4.04 1.07 5.52 2.92-4.85 2.66-4.05 9.6-.51 9.55z" />
-    </svg>
   );
 }
 
