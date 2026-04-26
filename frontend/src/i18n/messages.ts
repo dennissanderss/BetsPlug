@@ -3009,6 +3009,7 @@ const en = {
   "upgradeNudge.nextTier": "Next: {tier} · {accuracy}",
   "upgradeNudge.heading": "Upgrade to {tier} for {accuracy} accuracy",
   "upgradeNudge.cta": "Upgrade",
+  "upgradeNudge.dismiss": "Dismiss upgrade banner",
   "upgradeNudge.free.b1": "Top-14 leagues (vs all leagues, noisy)",
   "upgradeNudge.free.b2": "Confidence ≥65% (vs 55% baseline)",
   "upgradeNudge.free.b3": "Historical accuracy jumps 15 points",
@@ -5635,6 +5636,7 @@ const nl: Dictionary = {
   "upgradeLock.defaultBlurb": "Deze functie hoort bij {tier} en hogere abonnementen.",
 
   "upgradeNudge.cta": "Upgrade",
+  "upgradeNudge.dismiss": "Verberg upgrade-banner",
   "upgradeNudge.free.b1": "Top-14 competities (vs alle competities, ruisig)",
   "upgradeNudge.free.b2": "Confidence ≥65% (vs 55% basislijn)",
   "upgradeNudge.free.b3": "Historische nauwkeurigheid stijgt 15 punten",

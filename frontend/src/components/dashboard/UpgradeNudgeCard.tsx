@@ -3,21 +3,32 @@
 /**
  * UpgradeNudgeCard — prominent "next step" trigger on the dashboard.
  *
- * Shows a big, tier-accented card nudging the user to the NEXT tier
- * above their current one. Free → Silver, Silver → Gold, Gold →
- * Platinum. Platinum users see nothing (they're already at the top).
+ * Shows a tier-accented card nudging Free or Silver users to upgrade
+ * to the next tier. Gold and Platinum users see nothing — Gold is
+ * the conversion ceiling we care about and Platinum is already top
+ * of the funnel; both should not be pestered.
  *
- * Lives next to (not instead of) the existing TierPerformanceCard,
- * which acts as the transparency widget. The nudge card is the call
- * to action.
+ * Dismissible: a × close button writes the current timestamp to
+ * localStorage; the banner stays hidden for the cooldown window
+ * defined in `lib/upsell-banner.ts` (3 days by default). Reappears
+ * automatically once the window passes.
+ *
+ * SSR-safe: the dismissed-state check runs in a useEffect after
+ * mount so the server-rendered HTML doesn't include any localStorage
+ * state and we avoid hydration mismatch warnings on first render.
  */
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Crown, Sparkles } from "lucide-react";
+import { ArrowRight, Crown, Sparkles, X } from "lucide-react";
 import { useTier, type Tier } from "@/hooks/use-tier";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { isUpsellDismissed, dismissUpsell } from "@/lib/upsell-banner";
 
-type UpgradableTier = Exclude<Tier, "platinum">;
+/** Tiers we still nudge to upgrade. Per spec the banner must NEVER
+ *  show for Gold or Platinum users — Gold is our conversion ceiling
+ *  and Platinum is already the top tier. */
+type NudgeableTier = Exclude<Tier, "gold" | "platinum">;
 
 /** Static tier-step data: tier names + numeric accuracy thresholds +
  *  visual accent classes. Copy (benefit bullets, headings) lives in
@@ -42,7 +53,7 @@ interface TierStep {
   };
 }
 
-const STEPS: Record<UpgradableTier, TierStep> = {
+const STEPS: Record<NudgeableTier, TierStep> = {
   free: {
     current: "free",
     next: "silver",
@@ -83,26 +94,9 @@ const STEPS: Record<UpgradableTier, TierStep> = {
       text: "text-amber-100",
     },
   },
-  gold: {
-    current: "gold",
-    next: "platinum",
-    currentAccuracy: "70%+",
-    nextAccuracy: "80%+",
-    nextLabel: "Platinum",
-    benefitKeys: [
-      "upgradeNudge.gold.b1",
-      "upgradeNudge.gold.b2",
-      "upgradeNudge.gold.b3",
-    ] as const,
-    accent: {
-      gradient: "from-emerald-500/25 via-cyan-400/10 to-transparent",
-      border: "border-emerald-400/40",
-      glow: "shadow-[0_0_48px_rgba(74,222,128,0.18)]",
-      ring: "ring-emerald-300/40",
-      btn: "bg-gradient-to-r from-emerald-300 via-cyan-300 to-emerald-400 text-[#062019]",
-      text: "text-emerald-100",
-    },
-  },
+  // The "gold → platinum" step that previously lived here was
+  // removed deliberately: per the latest dashboard cleanup brief,
+  // Gold users are not nudged toward Platinum from this surface.
 };
 
 export function UpgradeNudgeCard() {
@@ -110,13 +104,33 @@ export function UpgradeNudgeCard() {
   const loc = useLocalizedHref();
   const { t } = useTranslations();
 
-  // Hydration safety: render nothing until tier is known.
-  if (!ready) return null;
-  // Top-tier users don't need an upsell.
-  if (tier === "platinum") return null;
+  // Mounted flag guards localStorage reads in dismissed-state. The
+  // server can't read localStorage, so we render `null` on first
+  // paint and only flip `mounted=true` after hydration. This avoids
+  // a hydration mismatch where the server says "show" but the client
+  // says "user dismissed" (or vice-versa) on the same DOM node.
+  const [mounted, setMounted] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
+  useEffect(() => {
+    setDismissed(isUpsellDismissed());
+    setMounted(true);
+  }, []);
+
+  // Hydration safety: render nothing until tier is known AND we're
+  // past first paint, so localStorage reads can't desync the DOM.
+  if (!ready || !mounted) return null;
+  // Gold and Platinum users are never nudged from this surface.
+  if (tier === "gold" || tier === "platinum") return null;
+  // User clicked × within the cooldown window.
+  if (dismissed) return null;
 
   const step = STEPS[tier];
   const pricingHref = loc("/pricing");
+
+  const handleDismiss = () => {
+    dismissUpsell();
+    setDismissed(true);
+  };
 
   return (
     <div
@@ -132,6 +146,19 @@ export function UpgradeNudgeCard() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
       />
+
+      {/* Dismiss button — sits on top of the absolute hairline + the
+          gradient wash. Subtle by default, fades to full opacity on
+          hover. The cooldown logic in lib/upsell-banner.ts decides
+          when the banner is allowed to come back. */}
+      <button
+        type="button"
+        onClick={handleDismiss}
+        aria-label={t("upgradeNudge.dismiss")}
+        className="absolute right-3 top-3 z-10 inline-flex h-6 w-6 items-center justify-center rounded-full text-slate-400 opacity-60 transition-all hover:bg-white/[0.06] hover:text-white hover:opacity-100"
+      >
+        <X className="h-3.5 w-3.5" strokeWidth={2.4} />
+      </button>
 
       <div className="relative flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:p-6">
         {/* Crown emblem */}

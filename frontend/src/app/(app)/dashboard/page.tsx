@@ -9,7 +9,6 @@ import { TodayMatchesList } from "@/components/dashboard/TodayMatchesList";
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { UpgradeNudgeCard } from "@/components/dashboard/UpgradeNudgeCard";
-import { PaywallOverlay } from "@/components/ui/paywall-overlay";
 import { useTier } from "@/hooks/use-tier";
 
 export default function DashboardPage() {
@@ -79,17 +78,21 @@ export default function DashboardPage() {
       <div className="relative grid gap-4 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
         <div className="min-w-0 space-y-4 sm:space-y-5">
           <WelcomeBanner />
-          {/* BOTD is a Gold+ feature. Gate the dashboard preview so Free/Silver
-              users see an upgrade CTA instead of the pick they cannot access
-              on click. */}
-          <PaywallOverlay
-            feature="pick_of_the_day"
-            requiredTier="gold"
-            variant="inline"
-          >
+          {/* BOTD is a Gold+ feature. We used to wrap the preview in
+              a PaywallOverlay that rendered a big "Upgrade to Gold"
+              card for Free/Silver users — but that ended up stacked
+              right on top of the UpgradeNudgeCard below, two upsells
+              for the same outcome. We now render the BOTD preview
+              ONLY for users who can actually click into it; Free/
+              Silver visitors see a single, dismissible upsell via
+              UpgradeNudgeCard underneath. PaywallOverlay still lives
+              in components/ui/ — it's used by /bet-of-the-day,
+              /results, /reports, /strategy and the sidebar. */}
+          {(userTierSlug === "gold" || userTierSlug === "platinum") && (
             <HeroBotdCompact botd={botd} isLoading={botdLoading} />
-          </PaywallOverlay>
-          {/* Tier-specific "next step" trigger (null for Platinum). */}
+          )}
+          {/* Tier-specific "next step" trigger. Renders only for Free
+              and Silver — Gold/Platinum users see nothing here. */}
           <UpgradeNudgeCard />
           <LiveMatchesStrip
             data={liveFixtures}
