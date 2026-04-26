@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useMemo, useEffect, useRef } from "react";
+import { Suspense, useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -1524,19 +1524,21 @@ function ResultsPageContent() {
   const [stream, setStream] = useState<StreamMode>(initialStream);
   const [dataSource, setDataSource] = useState<DataSource>(initialDataSource);
   // useTier() starts as "free" before localStorage hydrates, then
-  // settles on the real subscription tier. Snap tierFilter to that
-  // real tier the very first time it's known — once. Manual tier
-  // clicks afterwards win, and a URL ?tier= deep-link wins
-  // unconditionally.
+  // settles on the real subscription tier asynchronously after
+  // /subscriptions/me resolves. Earlier we snapped tierFilter once
+  // on first effect run (via a useRef "hydrated" flag), but that
+  // ran with userTier === "free" at first paint and then refused to
+  // re-snap when the API responded with "silver" — so paid users
+  // landed on Free Access with their own tier locked. Now the
+  // snap re-runs whenever the server-confirmed tier changes, and
+  // only stops once the user has manually clicked a tier button
+  // (or arrived with an explicit ?tier= deep-link).
   const explicitTierFromUrl = (searchParams?.get("tier") ?? "").toLowerCase();
-  const tierHydrated = useRef(false);
+  const [manualTierOverride, setManualTierOverride] = useState(
+    Boolean(explicitTierFromUrl),
+  );
   useEffect(() => {
-    if (tierHydrated.current) return;
-    if (explicitTierFromUrl) {
-      tierHydrated.current = true;
-      return;
-    }
-    tierHydrated.current = true;
+    if (manualTierOverride) return;
     const target: TierFilter =
       userTier === "free" ? "free" :
       userTier === "silver" ? "silver" :
@@ -1544,7 +1546,7 @@ function ResultsPageContent() {
       "gold";
     if (target !== tierFilter) setTierFilter(target);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userTier]);
+  }, [userTier, manualTierOverride]);
   // BOTD stream is by definition Gold-tier — lock the tier selector
   // when the user flips to BOTD so numbers don't drift.
   useEffect(() => {
@@ -1744,7 +1746,12 @@ function ResultsPageContent() {
         stake={stake}
         setStake={setStake}
         calcTier={tierFilter}
-        setCalcTier={setTierFilter}
+        setCalcTier={(v) => {
+          // Any manual click freezes the auto-snap effect so the
+          // user's choice wins over the server-confirmed default.
+          setManualTierOverride(true);
+          setTierFilter(v);
+        }}
         calcPeriod={calcPeriod}
         setCalcPeriod={setCalcPeriod}
         stream={stream}
