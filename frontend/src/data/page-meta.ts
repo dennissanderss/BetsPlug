@@ -134,12 +134,12 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Predicții de fotbal bazate pe inteligență artificială cu probabilități live, evaluări Elo și un palmares verificat în peste 15 ligi.",
     },
     ru: {
-      title: "AI-Powered Football Predictions · BetsPlug",
+      title: "Футбольная аналитика на базе ИИ · BetsPlug",
       description:
-        "AI-powered football predictions with 4 models. Live probabilities, Elo ratings, and a verified track record across 15+ leagues. Start your free trial today.",
-      ogTitle: "AI-Powered Football Predictions · BetsPlug",
+        "Образовательная платформа футбольной аналитики на основе ИИ с 4 моделями. Вероятности в реальном времени, рейтинги Эло и проверяемая история результатов в 15+ лигах.",
+      ogTitle: "Футбольная аналитика на базе ИИ · BetsPlug",
       ogDescription:
-        "AI-powered football predictions with live probabilities, Elo ratings, and a verified track record across 15+ leagues.",
+        "Футбольная аналитика на базе ИИ с вероятностями в реальном времени, рейтингами Эло и проверяемой историей результатов в 15+ лигах.",
     },
     el: {
       title: "Προβλέψεις ποδοσφαίρου με τεχνητή νοημοσύνη · BetsPlug",
@@ -268,12 +268,12 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Defalcări ale meciurilor de fotbal AI și sfaturi de pariuri bazate pe date de la echipa de cercetare BetsPlug.",
     },
     ru: {
-      title: "AI Football Predictions & Betting Tips · BetsPlug",
+      title: "Футбольная аналитика ИИ и аналитические статьи · BetsPlug",
       description:
-        "Football news, AI match predictions and data-driven betting tips across the Premier League, La Liga, Bundesliga, Serie A and more from the BetsPlug research team.",
-      ogTitle: "AI Football Analysis & Betting Tips · BetsPlug",
+        "Футбольные новости, прогнозы матчей на основе ИИ и аналитические материалы на основе данных по Премьер-лиге, Ла Лиге, Бундеслиге, Серии А и другим лигам от исследовательской команды BetsPlug.",
+      ogTitle: "Анализ ИИ и аналитические статьи · BetsPlug",
       ogDescription:
-        "AI football match breakdowns and data-driven betting tips from the BetsPlug research team.",
+        "Разборы футбольных матчей на основе ИИ и аналитические материалы на основе данных от исследовательской команды BetsPlug.",
     },
     el: {
       title: "Προβλέψεις ποδοσφαίρου AI και συμβουλές στοιχημάτων · BetsPlug",
@@ -402,12 +402,12 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Doi ingineri. Peste 20 de ani de experiență combinată în domeniul TIC. O obsesie: transformarea datelor de fotbal într-un avantaj măsurabil.",
     },
     ru: {
-      title: "About Us · BetsPlug AI Football Analytics Team",
+      title: "О нас · команда BetsPlug по футбольной аналитике на базе ИИ",
       description:
-        "Meet the two engineers building BetsPlug. Football fanatics with an ICT background, turning raw match data into transparent, probability-driven football predictions.",
-      ogTitle: "About BetsPlug · The Team Behind the Edge",
+        "Знакомьтесь с двумя инженерами, создающими BetsPlug. Футбольные фанатики с опытом в ИТ, превращающие необработанные данные матчей в прозрачные, вероятностные прогнозы.",
+      ogTitle: "О BetsPlug · команда, стоящая за платформой",
       ogDescription:
-        "Two engineers. 20+ years of combined ICT experience. One obsession: turning football data into a measurable edge.",
+        "Два инженера. Более 20 лет совокупного ИТ-опыта. Одна цель: превращать футбольные данные в измеримое преимущество.",
     },
     el: {
       title: "Σχετικά με εμάς · BetsPlug AI Football Analytics Team",
@@ -536,12 +536,12 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Cum BetsPlug colectează, utilizează și vă protejează datele personale. Complet în conformitate cu GDPR.",
     },
     ru: {
-      title: "Privacy Policy · BetsPlug",
+      title: "Политика конфиденциальности · BetsPlug",
       description:
-        "How BetsPlug collects, uses and protects your personal data. GDPR-compliant privacy policy for our AI football predictions and analytics platform.",
-      ogTitle: "Privacy Policy · BetsPlug",
+        "Как BetsPlug собирает, использует и защищает ваши персональные данные. Политика конфиденциальности, соответствующая GDPR, для нашей образовательной платформы футбольной аналитики на базе ИИ.",
+      ogTitle: "Политика конфиденциальности · BetsPlug",
       ogDescription:
-        "How BetsPlug collects, uses and protects your personal data. Fully GDPR-compliant.",
+        "Как BetsPlug собирает, использует и защищает ваши персональные данные. Полное соответствие GDPR.",
     },
     el: {
       title: "Πολιτική απορρήτου · BetsPlug",
@@ -670,12 +670,12 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
         "Termenii și condițiile care se aplică atunci când utilizați BetsPlug. Citiți înainte de a vă abona.",
     },
     ru: {
-      title: "Terms of Service · BetsPlug",
+      title: "Условия использования · BetsPlug",
       description:
-        "The terms and conditions that apply when you use BetsPlug. Please read them before creating an account or subscribing to our AI football analytics platform.",
-      ogTitle: "Terms of Service · BetsPlug",
+        "Положения и условия, применимые при использовании BetsPlug. Прочтите их перед созданием аккаунта или подпиской на нашу образовательную платформу футбольной аналитики на базе ИИ.",
+      ogTitle: "Условия использования · BetsPlug",
       ogDescription:
-        "The terms and conditions that apply when you use BetsPlug. Read before subscribing.",
+        "Положения и условия, применимые при использовании BetsPlug. Прочтите перед оформлением подписки.",
     },
     el: {
       title: "Όροι Παροχής Υπηρεσιών · BetsPlug",
@@ -989,50 +989,66 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
     pt: {
       title: "Como funciona · BetsPlug Pulse Previsões de IA",
       description:
-        "",
+        "Veja como o BetsPlug Pulse analisa cada partida, entrega uma Pick of the Day diária e permite acompanhar cada previsão de forma transparente.",
       ogTitle: "Como funciona o BetsPlug · Previsões da Pulse AI",
+      ogDescription:
+        "Um motor de IA. 70+ ligas. Cada previsão registada com data e verificável publicamente.",
     },
     tr: {
       title: "Nasıl Çalışır · BetsPlug Pulse Yapay Zeka Tahminleri",
       description:
-        "",
-      ogTitle: "BetsPlug Nasıl Çalışır · Darbeli Yapay Zeka Tahminleri",
+        "BetsPlug Pulse'un her maçı nasıl analiz ettiğini, her gün bir Pick of the Day sunduğunu ve her tahmini şeffaf bir şekilde takip etmenizi nasıl sağladığını görün.",
+      ogTitle: "BetsPlug Nasıl Çalışır · Pulse Yapay Zeka Tahminleri",
+      ogDescription:
+        "Tek bir yapay zeka motoru. 70+ lig. Her tahmin zaman damgalı ve herkese açık olarak doğrulanabilir.",
     },
     pl: {
-      title: "Jak to działa · BetsPlug Pulse Przewidywania AI",
+      title: "Jak to działa · BetsPlug Pulse Prognozy AI",
       description:
-        "",
+        "Zobacz, jak BetsPlug Pulse analizuje każdy mecz, dostarcza codzienny Pick of the Day i pozwala śledzić każdą prognozę w sposób przejrzysty.",
       ogTitle: "Jak działa BetsPlug · Prognozy Pulse AI",
+      ogDescription:
+        "Jeden silnik AI. Ponad 70 lig. Każda prognoza opatrzona znacznikiem czasu i publicznie weryfikowalna.",
     },
     ro: {
       title: "Cum funcționează · BetsPlug Pulse Predicții AI",
       description:
-        "",
+        "Vezi cum BetsPlug Pulse analizează fiecare meci, livrează zilnic un Pick of the Day și îți permite să urmărești fiecare predicție în mod transparent.",
       ogTitle: "Cum funcționează BetsPlug · Predicții Pulse AI",
+      ogDescription:
+        "Un singur motor AI. Peste 70 de ligi. Fiecare predicție are marcaj temporal și este verificabilă public.",
     },
     ru: {
-      title: "Как это работает · BetsPlug Pulse Прогнозы AI",
+      title: "Как это работает · аналитика BetsPlug Pulse на базе ИИ",
       description:
-        "",
-      ogTitle: "Как работает BetsPlug · Импульсные прогнозы AI",
+        "Узнайте, как BetsPlug Pulse анализирует каждый матч, ежедневно публикует Pick of the Day и позволяет прозрачно отслеживать каждую модельную оценку.",
+      ogTitle: "Как работает BetsPlug · аналитика Pulse на базе ИИ",
+      ogDescription:
+        "Один ИИ-движок. 70+ лиг. Каждая оценка имеет временную метку и доступна для публичной проверки.",
     },
     el: {
       title: "Πώς λειτουργεί · BetsPlug Pulse Προβλέψεις AI",
       description:
-        "",
+        "Δείτε πώς το BetsPlug Pulse αναλύει κάθε αγώνα, δημοσιεύει καθημερινά ένα Pick of the Day και σας επιτρέπει να παρακολουθείτε διαφανώς κάθε πρόβλεψη.",
       ogTitle: "Πώς λειτουργεί το BetsPlug · Pulse AI Predictions",
+      ogDescription:
+        "Μία μηχανή AI. Πάνω από 70 πρωταθλήματα. Κάθε πρόβλεψη φέρει χρονοσήμανση και είναι δημόσια επαληθεύσιμη.",
     },
     da: {
       title: "Sådan fungerer det · BetsPlug Pulse AI-forudsigelser",
       description:
-        "",
+        "Se hvordan BetsPlug Pulse analyserer hver kamp, leverer en daglig Pick of the Day og lader dig følge hver forudsigelse transparent.",
       ogTitle: "Sådan fungerer BetsPlug · Pulse AI-forudsigelser",
+      ogDescription:
+        "Én AI-motor. 70+ ligaer. Hver forudsigelse har tidsstempel og er offentligt verificerbar.",
     },
     sv: {
       title: "Hur det fungerar · BetsPlug Pulse AI-förutsägelser",
       description:
-        "",
+        "Se hur BetsPlug Pulse analyserar varje match, levererar ett dagligt Pick of the Day och låter dig följa varje förutsägelse transparent.",
       ogTitle: "Hur BetsPlug fungerar · Puls AI-förutsägelser",
+      ogDescription:
+        "En AI-motor. 70+ ligor. Varje förutsägelse har tidsstämpel och är offentligt verifierbar.",
     },
 },
 
@@ -2068,115 +2084,115 @@ export const PAGE_META: Record<string, PageMetaByLocale> = {
     de: {
       title: "Preispläne · KI-Fußballvorhersagen · BetsPlug",
       description:
-        "Wählen Sie den BetsPlug-Plan, der zu Ihnen passt – Bronze-Testversion für 0,01 €, Silber für Gelegenheitswettende, Gold für vollen Zugriff oder Platinum Lifetime-Gründerstufe für einmalig 199 €.",
+        "Wählen Sie den BetsPlug-Plan, der zu Ihnen passt — Free Access für 0 €, Silber für Gelegenheitsnutzer, Gold für vollen Zugriff oder Platinum Lifetime-Gründerstufe für einmalig 199 €.",
       ogTitle: "BetsPlug-Preise · KI-Fußballvorhersagen",
       ogDescription:
-        "Bronze, Silber, Gold oder Platin auf Lebenszeit – wählen Sie den Plan, der zu Ihrem Wettstil passt.",
+        "Free Access, Silber, Gold oder Platin auf Lebenszeit — wählen Sie den Plan, der zu Ihrem Analysestil passt.",
     },
     fr: {
       title: "Plans tarifaires · Prédictions de football IA · BetsPlug",
       description:
-        "Choisissez le plan BetsPlug qui vous convient : essai Bronze pour 0,01 €, Argent pour les parieurs occasionnels, Or pour un accès complet ou niveau fondateur Platinum Lifetime pour 199 € une fois.",
+        "Choisissez le plan BetsPlug qui vous convient : Free Access à 0 €, Argent pour les utilisateurs occasionnels, Or pour un accès complet ou niveau fondateur Platinum Lifetime pour 199 € une fois.",
       ogTitle: "Tarifs BetsPlug · Prédictions de football IA",
       ogDescription:
-        "Bronze, Argent, Or ou Platine à vie : choisissez le plan adapté à votre style de pari.",
+        "Free Access, Argent, Or ou Platine à vie : choisissez le plan adapté à votre style d’analyse.",
     },
     es: {
       title: "Planes de precios · Predicciones de fútbol con IA · BetsPlug",
       description:
-        "Elija el plan BetsPlug que más le convenga: prueba Bronce por 0,01 €, Plata para apostadores ocasionales, Oro para acceso completo o nivel fundador Platino vitalicio por 199 € una vez.",
+        "Elige el plan BetsPlug que más te convenga: Free Access a 0 €, Silver para usuarios ocasionales, Gold para acceso completo o nivel fundador Platinum Lifetime por 199 € una vez.",
       ogTitle: "Precios de BetsPlug · Predicciones de fútbol con IA",
       ogDescription:
-        "Bronce, Plata, Oro o Platino de por vida: elija el plan diseñado para su estilo de apuestas.",
+        "Free Access, Silver, Gold o Platinum de por vida: elige el plan diseñado para tu estilo de análisis.",
     },
     it: {
       title: "Piani tariffari · Pronostici di calcio AI · BetsPlug",
       description:
-        "Scegli il piano BetsPlug adatto a te: prova Bronzo per 0,01 €, Argento per scommettitori occasionali, Oro per accesso completo o Livello fondatore Platinum Lifetime per 199 € una volta.",
+        "Scegli il piano BetsPlug adatto a te: Free Access a 0 €, Silver per utenti occasionali, Gold per accesso completo o Livello fondatore Platinum Lifetime per 199 € una volta.",
       ogTitle: "Prezzi BetsPlug · Pronostici calcistici AI",
       ogDescription:
-        "Bronzo, Argento, Oro o Platino a vita: scegli il piano creato per il tuo stile di scommessa.",
+        "Free Access, Silver, Gold o Platinum a vita: scegli il piano creato per il tuo stile di analisi.",
     },
     sw: {
       title: "Mipango ya Bei · Utabiri wa Soka wa AI · BetsPlug",
       description:
-        "Chagua mpango wa BetsPlug unaokufaa — Jaribio la Shaba kwa €0.01, Fedha kwa waweka dau wa kawaida, Dhahabu kwa ufikiaji kamili au mwanzilishi wa kiwango cha Platinum Lifetime kwa €199 mara moja.",
+        "Chagua mpango wa BetsPlug unaokufaa — Free Access kwa €0, Silver kwa watumiaji wa kawaida, Gold kwa ufikiaji kamili, au mwanzilishi wa kiwango cha Platinum Lifetime kwa €199 mara moja.",
       ogTitle: "Bei ya BetsPlug · Utabiri wa Soka wa AI",
       ogDescription:
-        "Shaba, Fedha, Dhahabu au Platinamu Maishani - chagua mpango ulioundwa kwa mtindo wako wa kamari.",
+        "Free Access, Silver, Gold au Platinum Maishani — chagua mpango ulioundwa kwa mtindo wako wa uchambuzi.",
     },
     id: {
       title: "Paket Harga · Prediksi Sepak Bola AI · BetsPlug",
       description:
-        "Pilih paket BetsPlug yang cocok untuk Anda — Uji coba perunggu seharga €0,01, Perak untuk petaruh biasa, Emas untuk akses penuh, atau tingkat pendiri Platinum Lifetime seharga €199 satu kali.",
+        "Pilih paket BetsPlug yang cocok untuk Anda — Free Access seharga €0, Silver untuk pengguna biasa, Gold untuk akses penuh, atau tingkat pendiri Platinum Lifetime seharga €199 satu kali.",
       ogTitle: "Harga BetsPlug · Prediksi Sepak Bola AI",
       ogDescription:
-        "Perunggu, Perak, Emas, atau Platinum Seumur Hidup — pilih paket yang dibuat untuk gaya taruhan Anda.",
+        "Free Access, Silver, Gold, atau Platinum Seumur Hidup — pilih paket yang dibuat untuk gaya analisis Anda.",
     },
   
     pt: {
       title: "Planos de preços · Previsões de futebol com IA · BetsPlug",
       description:
-        "Escolha o plano BetsPlug mais adequado para você: teste Bronze por € 0,01, Silver para usuários casuais, Gold para acesso total ou nível de fundador Platinum Lifetime por € 199 uma vez.",
+        "Escolha o plano BetsPlug mais adequado para você: Free Access por € 0, Silver para usuários casuais, Gold para acesso total ou nível de fundador Platinum Lifetime por € 199 uma vez.",
       ogTitle: "BetsPlug Preços · Previsões de futebol de IA",
       ogDescription:
-        "Bronze, Prata, Ouro ou Platina Vitalício — escolha o plano criado para o seu estilo de aposta.",
+        "Free Access, Silver, Gold ou Platinum Vitalício — escolha o plano criado para o seu estilo de análise.",
     },
     tr: {
       title: "Fiyatlandırma Planları · AI Futbol Tahminleri · BetsPlug",
       description:
-        "Size uygun BetsPlug planını seçin — 0,01 € karşılığında Bronz deneme, sıradan kullanıcılar için Gümüş, tam erişim için Altın veya tek seferlik 199 € karşılığında Platinum Lifetime kurucu kademesi.",
+        "Size uygun BetsPlug planını seçin — 0 € karşılığında Free Access, sıradan kullanıcılar için Silver, tam erişim için Gold veya tek seferlik 199 € karşılığında Platinum Lifetime kurucu kademesi.",
       ogTitle: "BetsPlug Fiyatlandırma · Yapay Zeka Futbol Tahminleri",
       ogDescription:
-        "Bronz, Gümüş, Altın veya Platin Ömür Boyu — bahis tarzınıza uygun planı seçin.",
+        "Free Access, Silver, Gold veya Platinum Ömür Boyu — analiz tarzınıza uygun planı seçin.",
     },
     pl: {
       title: "Plany cenowe · Prognozy piłkarskie AI · BetsPlug",
       description:
-        "Wybierz plan BetsPlug, który Ci odpowiada — Brązowy okres próbny za 0,01 EUR, Srebrny dla zwykłych użytkowników, Złoty z pełnym dostępem lub Poziom założycielski Platinum Lifetime za 199 EUR jednorazowo.",
+        "Wybierz plan BetsPlug, który Ci odpowiada — Free Access za 0 EUR, Silver dla zwykłych użytkowników, Gold z pełnym dostępem lub Poziom założycielski Platinum Lifetime za 199 EUR jednorazowo.",
       ogTitle: "BetsPlug Ceny · Prognozy piłkarskie AI",
       ogDescription:
-        "Dożywotni brąz, srebro, złoto lub platyna — wybierz plan dostosowany do Twojego stylu obstawiania.",
+        "Free Access, Silver, Gold lub Platinum Lifetime — wybierz plan dostosowany do Twojego stylu analizy.",
     },
     ro: {
       title: "Planuri de prețuri · Predicții de fotbal AI · BetsPlug",
       description:
-        "Alegeți planul BetsPlug care vi se potrivește — Probă Bronz pentru 0,01 EUR, Argint pentru utilizatorii ocazionali, Aur pentru acces complet sau Nivelul fondator Platinum Lifetime pentru 199 EUR o dată.",
+        "Alegeți planul BetsPlug care vi se potrivește — Free Access pentru 0 EUR, Silver pentru utilizatorii ocazionali, Gold pentru acces complet sau Nivelul fondator Platinum Lifetime pentru 199 EUR o dată.",
       ogTitle: "BetsPlug Prețuri · Predicții de fotbal AI",
       ogDescription:
-        "Bronz, Argint, Aur sau Platină Lifetime — alege planul creat pentru stilul tău de pariere.",
+        "Free Access, Silver, Gold sau Platinum Lifetime — alege planul creat pentru stilul tău de analiză.",
     },
     ru: {
-      title: "Тарифные планы · Прогнозы на футбол с помощью искусственного интеллекта · BetsPlug",
+      title: "Тарифные планы · образовательная футбольная аналитика на базе ИИ · BetsPlug",
       description:
-        "Выберите план BetsPlug, который вам подходит — пробная версия Bronze за 0,01 евро, Silver для обычных пользователей, Gold для полного доступа или уровень основателя Platinum Lifetime за 199 евро один раз.",
-      ogTitle: "BetsPlug Цены · Прогнозы на футбол с помощью искусственного интеллекта",
+        "Выберите план BetsPlug, который вам подходит — Free Access за 0 евро, Silver для обычных пользователей, Gold для полного доступа или уровень основателя Platinum Lifetime за 199 евро один раз.",
+      ogTitle: "BetsPlug Цены · футбольная аналитика на базе ИИ",
       ogDescription:
-        "Бронзовый, Серебряный, Золотой или Платиновый пожизненный — выберите план, созданный с учетом вашего стиля ставок.",
+        "Free Access, Silver, Gold или пожизненный Platinum — выберите план, созданный с учётом вашего стиля анализа.",
     },
     el: {
       title: "Σχέδια τιμολόγησης · ​​Προβλέψεις ποδοσφαίρου AI · BetsPlug",
       description:
-        "Επιλέξτε το πρόγραμμα BetsPlug που σας ταιριάζει — Δοκιμαστικό Bronze για 0,01 €, Ασημί για περιστασιακούς χρήστες, Χρυσό για πλήρη πρόσβαση ή Platinum Lifetime founder-tier για 199 € μία φορά.",
+        "Επιλέξτε το πρόγραμμα BetsPlug που σας ταιριάζει — Free Access για 0 €, Silver για περιστασιακούς χρήστες, Gold για πλήρη πρόσβαση ή Platinum Lifetime founder-tier για 199 € μία φορά.",
       ogTitle: "Τιμολόγηση BetsPlug · Προβλέψεις ποδοσφαίρου AI",
       ogDescription:
-        "Χάλκινο, ασήμι, χρυσό ή πλατινένιο Lifetime — επιλέξτε το σχέδιο που έχει σχεδιαστεί για το στυλ στοιχήματός σας.",
+        "Free Access, Silver, Gold ή πλατινένιο Lifetime — επιλέξτε το σχέδιο που έχει σχεδιαστεί για το στυλ ανάλυσής σας.",
     },
     da: {
       title: "Prisplaner · AI-fodboldforudsigelser · BetsPlug",
       description:
-        "Vælg den BetsPlug-plan, der passer til dig – Bronzeprøve for €0,01, Sølv for casual-brugere, Guld for fuld adgang eller Platinum Lifetime-grundlægger-tier for €199 én gang.",
+        "Vælg den BetsPlug-plan, der passer til dig — Free Access for €0, Silver for casual-brugere, Gold for fuld adgang eller Platinum Lifetime-grundlægger-tier for €199 én gang.",
       ogTitle: "BetsPlug Priser · AI fodbold forudsigelser",
       ogDescription:
-        "Bronze, sølv, guld eller platin levetid – vælg den plan, der er bygget til din væddemålsstil.",
+        "Free Access, Silver, Gold eller platin levetid — vælg den plan, der er bygget til din analysestil.",
     },
     sv: {
       title: "Prisplaner · AI fotbollsförutsägelser · BetsPlug",
       description:
-        "Välj den BetsPlug-plan som passar dig – Bronsprovning för 0,01 €, Silver för tillfälliga användare, Guld för full åtkomst eller Platinum Lifetime-grundarnivå för 199 € en gång.",
+        "Välj den BetsPlug-plan som passar dig — Free Access för 0 €, Silver för tillfälliga användare, Gold för full åtkomst eller Platinum Lifetime-grundarnivå för 199 € en gång.",
       ogTitle: "BetsPlug Prissättning · AI fotbollsförutsägelser",
       ogDescription:
-        "Brons, Silver, Guld eller Platinum Lifetime – välj den plan som är byggd för din spelstil.",
+        "Free Access, Silver, Gold eller Platinum Lifetime — välj den plan som är byggd för din analysstil.",
     },
 },
 
