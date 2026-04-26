@@ -36,6 +36,7 @@ import { HeroMediaBg } from "@/components/ui/media-bg";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill, DataChip } from "@/components/noct/pill";
+import { HowItWorksDemo } from "@/components/marketing/how-it-works-demo";
 import type { Article } from "@/data/articles";
 import type { Testimonial } from "@/components/ui/testimonials-section";
 import type { ComparisonRow } from "@/components/ui/comparison-table";
@@ -500,35 +501,11 @@ export function HomeContent({
       <LeaguesTicker />
 
       {/* ══════════════════════════════════════════════════════════════
-          1c · INTRO VIDEO PLACEHOLDER — slot reserved for the
-          onboarding clip explaining how to use the app. Static
-          'video coming soon' card until the asset ships.
+          1c · HOW IT WORKS DEMO — 5-scene auto-cycling animated
+          explainer (no video file, pure React + Framer Motion).
+          Replaces the prior 'video coming soon' placeholder.
          ══════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden py-16 md:py-24">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{ background: "hsl(var(--accent-green) / 0.08)", filter: "blur(160px)" }}
-        />
-        <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
-          <div className="card-neon card-neon-green relative overflow-hidden rounded-3xl">
-            <div className="relative flex aspect-video flex-col items-center justify-center p-10 text-center">
-              <HexBadge variant="green" size="lg">
-                <Sparkles className="h-6 w-6" />
-              </HexBadge>
-              <h3 className="text-heading mt-5 text-balance text-2xl text-[#ededed] sm:text-3xl">
-                {t("home.introVideoTitle")}
-              </h3>
-              <p className="mt-3 max-w-md text-sm leading-relaxed text-[#a3a9b8]">
-                {t("home.introVideoSubtitle")}
-              </p>
-              <span className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-300">
-                {t("home.introVideoBadge")}
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HowItWorksDemo />
 
       {/* ══════════════════════════════════════════════════════════════
           4 · HOW IT WORKS, 3 premium step cards

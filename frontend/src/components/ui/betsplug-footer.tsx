@@ -464,6 +464,21 @@ export function BetsPlugFooter() {
         </Pill>
       </div>
 
+      {/* ═══ Educational disclaimer ═══
+          Sitewide reminder that BetsPlug is an educational analytics
+          platform. Reinforces the schema.org EducationalOrganization
+          framing and the responsible-gambling positioning across every
+          page. Plain text, no CTA — this is a legal/positioning
+          statement, not a marketing block. */}
+      <div className="relative z-10 mx-auto mt-10 max-w-6xl px-4 sm:px-6">
+        <div
+          className="rounded-lg border px-4 py-3 text-[11px] leading-relaxed text-[#6b7280] sm:text-xs"
+          style={{ borderColor: "hsl(0 0% 100% / 0.06)", background: "hsl(0 0% 100% / 0.02)" }}
+        >
+          {t("footer.educationalDisclaimer")}
+        </div>
+      </div>
+
       {/* ═══ Bottom copyright ═══ */}
       <div className="relative z-10 mx-auto mt-8 max-w-6xl px-4 sm:px-6">
         <div

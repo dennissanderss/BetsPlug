@@ -27,10 +27,9 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  Activity,
-  Brain,
-  Cpu,
-  Network,
+  Sparkles,
+  LayoutDashboard,
+  Trophy,
   CheckCircle2,
   Eye,
   TrendingUp,
@@ -39,6 +38,9 @@ import {
   ChevronRight,
   Pause,
   Play,
+  Target,
+  ClipboardList,
+  Activity,
 } from "lucide-react";
 import Link from "next/link";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
@@ -225,17 +227,15 @@ export function HowItWorksDemo() {
 }
 
 /* ────────────────────────────────────────────────────────────
- * Scene 1 — Match data ingestion
- * Shows: a Premier League fixture card materializing with five
- * data signals (xG, Form, Elo, H2H, Lineups) sliding in around it.
+ * Scene 1 — Pitch slide ("What is BetsPlug")
+ * Shows: brand mark, one-line value-prop, three live KPIs.
+ * Goal: visitor knows in 4 seconds what BetsPlug is about.
  * ──────────────────────────────────────────────────────────── */
 function Scene1({ t }: { t: (k: any, vars?: any) => string }) {
-  const signals = [
-    { label: "xG", x: -180, y: -30 },
-    { label: "Form", x: 200, y: -20 },
-    { label: "Elo", x: -200, y: 60 },
-    { label: "H2H", x: 180, y: 80 },
-    { label: t("demo.s1.lineups"), x: -10, y: -110 },
+  const stats = [
+    { label: t("demo.s1.stat1Label"), value: "30+", color: "#4ade80" },
+    { label: t("demo.s1.stat2Label"), value: "60%+", color: "#4ade80" },
+    { label: t("demo.s1.stat3Label"), value: "1.5K+", color: "#4ade80" },
   ];
   return (
     <motion.div
@@ -251,58 +251,80 @@ function Scene1({ t }: { t: (k: any, vars?: any) => string }) {
           eyebrow={t("demo.s1.eyebrow")}
           title={t("demo.s1.title")}
           body={t("demo.s1.body")}
-          icon={<Activity className="h-4 w-4" strokeWidth={2.4} />}
+          icon={<Sparkles className="h-4 w-4" strokeWidth={2.4} />}
         />
       </div>
-      <div className="relative h-[260px]">
-        {/* Central match card */}
+      <div className="relative">
+        {/* Big brand-style number stack */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.45 }}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl border border-white/10 bg-[#0d1321]/80 px-5 py-4 backdrop-blur-md shadow-[0_0_48px_rgba(74,222,128,0.18)]"
-          style={{ minWidth: 220 }}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="rounded-2xl border border-[#4ade80]/30 bg-[#0d1321]/80 p-6 backdrop-blur-md shadow-[0_0_48px_rgba(74,222,128,0.18)]"
         >
-          <div className="text-[10px] font-bold uppercase tracking-widest text-[#4ade80]">
-            Premier League
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#4ade80]/30 bg-[#4ade80]/[0.08] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#86efac]">
+              <span className="live-dot" />
+              {t("demo.s1.liveBadge")}
+            </span>
+            <span className="text-[10px] text-slate-500">
+              {t("demo.s1.updatedDaily")}
+            </span>
           </div>
-          <div className="mt-2 flex items-center justify-between gap-4">
-            <span className="text-sm font-semibold text-[#ededed]">Arsenal</span>
-            <span className="text-[10px] text-slate-500">20:00</span>
-            <span className="text-sm font-semibold text-[#ededed]">Liverpool</span>
+          <div className="mt-5 grid grid-cols-3 gap-4">
+            {stats.map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.2 + i * 0.12 }}
+                className="text-center"
+              >
+                <div
+                  className="text-3xl sm:text-4xl font-extrabold tabular-nums"
+                  style={{ color: s.color }}
+                >
+                  {s.value}
+                </div>
+                <div className="mt-1 text-[10px] uppercase tracking-widest text-slate-500">
+                  {s.label}
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
-        {/* Floating signal pills */}
-        {signals.map((s, i) => (
           <motion.div
-            key={s.label}
-            initial={{ opacity: 0, x: 0, y: 0, scale: 0.7 }}
-            animate={{ opacity: 1, x: s.x, y: s.y, scale: 1 }}
-            transition={{
-              duration: 0.5,
-              delay: 0.3 + i * 0.12,
-              type: "spring",
-              stiffness: 110,
-              damping: 14,
-            }}
-            className="absolute left-1/2 top-1/2 inline-flex items-center gap-1.5 rounded-full border border-[#4ade80]/30 bg-[#4ade80]/10 px-3 py-1 text-xs font-semibold text-[#86efac] backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            className="mt-5 flex items-center gap-2 rounded-lg bg-white/[0.03] px-3 py-2 text-xs text-slate-300"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#4ade80]" />
-            {s.label}
+            <CheckCircle2 className="h-3.5 w-3.5 text-[#4ade80] shrink-0" />
+            <span>{t("demo.s1.tagline")}</span>
           </motion.div>
-        ))}
+        </motion.div>
       </div>
     </motion.div>
   );
 }
 
 /* ────────────────────────────────────────────────────────────
- * Scene 2 — Ensemble AI processes
- * Shows: 4 model nodes (Elo, Poisson, Logistic, XGBoost) feeding
- * into a central "Ensemble" node, with pulsing connection lines.
+ * Scene 2 — The dashboard you get
+ * Shows: a miniature dashboard mock with sidebar + match-row
+ * stack animating in. Goal: visitor sees concrete UI before
+ * they sign up.
  * ──────────────────────────────────────────────────────────── */
 function Scene2({ t }: { t: (k: any, vars?: any) => string }) {
-  const models = ["Elo", "Poisson", "Logistic", "XGBoost"];
+  const navItems = [
+    { icon: LayoutDashboard, label: t("demo.s2.navOverview"), active: true },
+    { icon: Target, label: t("demo.s2.navPredictions") },
+    { icon: ClipboardList, label: t("demo.s2.navTrackRecord") },
+    { icon: Trophy, label: t("demo.s2.navPotd") },
+  ];
+  const matches = [
+    { league: "Premier League", home: "Arsenal", away: "Liverpool", conf: 78, pick: "1" },
+    { league: "La Liga", home: "Real Madrid", away: "Sevilla", conf: 82, pick: "1" },
+    { league: "Serie A", home: "Inter", away: "Juventus", conf: 71, pick: "X" },
+  ];
   return (
     <motion.div
       key="s2"
@@ -317,98 +339,89 @@ function Scene2({ t }: { t: (k: any, vars?: any) => string }) {
           eyebrow={t("demo.s2.eyebrow")}
           title={t("demo.s2.title")}
           body={t("demo.s2.body")}
-          icon={<Brain className="h-4 w-4" strokeWidth={2.4} />}
+          icon={<LayoutDashboard className="h-4 w-4" strokeWidth={2.4} />}
         />
       </div>
-      <div className="relative h-[260px]">
-        {/* SVG with connection lines */}
-        <svg
-          className="absolute inset-0 h-full w-full"
-          viewBox="0 0 400 260"
-          preserveAspectRatio="none"
-        >
-          {[
-            { x: 60, y: 50 },
-            { x: 60, y: 210 },
-            { x: 340, y: 50 },
-            { x: 340, y: 210 },
-          ].map((src, i) => (
-            <motion.line
-              key={i}
-              x1={src.x}
-              y1={src.y}
-              x2={200}
-              y2={130}
-              stroke="#4ade80"
-              strokeWidth={1.5}
-              strokeDasharray="3 4"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: [0, 0.7, 0.4, 0.7] }}
-              transition={{
-                pathLength: { duration: 0.6, delay: 0.2 + i * 0.1 },
-                opacity: { duration: 2, delay: 0.8 + i * 0.1, repeat: Infinity },
-              }}
-            />
-          ))}
-        </svg>
-
-        {/* Four model nodes */}
-        {models.map((m, i) => {
-          const positions = [
-            { left: "8%", top: "10%" },
-            { left: "8%", bottom: "10%" },
-            { right: "8%", top: "10%" },
-            { right: "8%", bottom: "10%" },
-          ];
-          return (
-            <motion.div
-              key={m}
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.1 + i * 0.1 }}
-              className="absolute inline-flex items-center gap-2 rounded-lg border border-white/10 bg-[#0d1321]/80 px-3 py-2 text-xs font-semibold text-[#ededed] backdrop-blur-sm"
-              style={positions[i]}
-            >
-              <Cpu className="h-3.5 w-3.5 text-[#4ade80]" />
-              {m}
-            </motion.div>
-          );
-        })}
-
-        {/* Central ensemble node — bigger, pulsing */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.7 }}
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        >
-          <div className="relative">
-            <motion.div
-              animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.2, 0.5] }}
-              transition={{ duration: 2.4, repeat: Infinity }}
-              className="absolute inset-0 rounded-full bg-[#4ade80] blur-2xl"
-            />
-            <div className="relative inline-flex items-center gap-2 rounded-full border border-[#4ade80]/40 bg-[#0d1321] px-4 py-2.5 text-sm font-bold text-[#4ade80] shadow-[0_0_32px_rgba(74,222,128,0.4)]">
-              <Network className="h-4 w-4" />
-              {t("demo.s2.ensemble")}
+      {/* Mini dashboard mock */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.4 }}
+        className="rounded-xl border border-white/10 bg-[#0d1321]/70 p-3 backdrop-blur-md overflow-hidden"
+      >
+        <div className="grid gap-2 grid-cols-[110px_1fr] sm:grid-cols-[140px_1fr]">
+          {/* Sidebar */}
+          <div className="space-y-1 border-r border-white/[0.04] pr-2">
+            <div className="px-2 pb-1 text-[8px] font-bold uppercase tracking-widest text-slate-500">
+              {t("demo.s2.menuLabel")}
             </div>
+            {navItems.map((item, i) => (
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.15 + i * 0.08 }}
+                className={`flex items-center gap-1.5 rounded-md px-2 py-1.5 ${
+                  item.active
+                    ? "bg-[#4ade80]/[0.12] text-[#86efac]"
+                    : "text-slate-400"
+                }`}
+              >
+                <item.icon className="h-3 w-3 shrink-0" />
+                <span className="text-[10px] sm:text-[11px] font-semibold truncate">
+                  {item.label}
+                </span>
+              </motion.div>
+            ))}
           </div>
-        </motion.div>
-      </div>
+          {/* Main content — match rows */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between px-1 pb-1">
+              <span className="text-[10px] font-bold text-[#86efac]">
+                {t("demo.s2.feedTitle")}
+              </span>
+              <span className="text-[8px] uppercase tracking-widest text-slate-500">
+                {t("demo.s2.confLabel")}
+              </span>
+            </div>
+            {matches.map((m, i) => (
+              <motion.div
+                key={m.home}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 + i * 0.15 }}
+                className="rounded-md border border-white/[0.06] bg-white/[0.02] px-2.5 py-1.5"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[8px] uppercase tracking-widest text-slate-500">
+                    {m.league}
+                  </span>
+                  <span className="text-[10px] font-bold tabular-nums text-[#4ade80]">
+                    {m.conf}%
+                  </span>
+                </div>
+                <div className="mt-1 flex items-center justify-between text-[10px] text-[#ededed]">
+                  <span className="truncate font-semibold">{m.home}</span>
+                  <span className="mx-2 inline-flex h-4 w-4 items-center justify-center rounded bg-[#4ade80]/[0.15] text-[8px] font-bold text-[#4ade80]">
+                    {m.pick}
+                  </span>
+                  <span className="truncate text-right text-slate-400">{m.away}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
 
 /* ────────────────────────────────────────────────────────────
- * Scene 3 — Probability output
- * Shows: three horizontal bars filling to Home/Draw/Away %.
+ * Scene 3 — Free Pick of the Day
+ * Shows: one big "today's free pick" card with confidence,
+ * model output, and a "no card needed" reassurance.
  * ──────────────────────────────────────────────────────────── */
 function Scene3({ t }: { t: (k: any, vars?: any) => string }) {
-  const probs = [
-    { label: t("demo.s3.home"), pct: 58, color: "#4ade80" },
-    { label: t("demo.s3.draw"), pct: 24, color: "#a3a9b8" },
-    { label: t("demo.s3.away"), pct: 18, color: "#a3a9b8" },
-  ];
   return (
     <motion.div
       key="s3"
@@ -423,60 +436,82 @@ function Scene3({ t }: { t: (k: any, vars?: any) => string }) {
           eyebrow={t("demo.s3.eyebrow")}
           title={t("demo.s3.title")}
           body={t("demo.s3.body")}
-          icon={<TrendingUp className="h-4 w-4" strokeWidth={2.4} />}
+          icon={<Trophy className="h-4 w-4" strokeWidth={2.4} />}
         />
       </div>
-      <div className="rounded-xl border border-white/10 bg-[#0d1321]/60 p-6 backdrop-blur-md">
-        <div className="mb-4 flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-300">
-            Arsenal vs Liverpool
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45 }}
+        className="relative rounded-2xl border border-[#4ade80]/30 bg-[#0d1321]/85 p-6 backdrop-blur-md shadow-[0_0_56px_rgba(74,222,128,0.22)]"
+      >
+        {/* Free badge top-right */}
+        <div className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full border border-[#4ade80]/40 bg-[#4ade80]/[0.12] px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-[#86efac]">
+          <Sparkles className="h-2.5 w-2.5" />
+          {t("demo.s3.freeBadge")}
+        </div>
+        <div className="text-[10px] font-bold uppercase tracking-widest text-[#4ade80]">
+          {t("demo.s3.kicker")}
+        </div>
+        <div className="mt-2 text-base font-bold text-[#ededed]">
+          Premier League
+        </div>
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <span className="text-lg font-extrabold text-[#ededed]">
+            Real Madrid
           </span>
-          <span className="text-[10px] uppercase tracking-widest text-[#4ade80]">
-            {t("demo.s3.modelOutput")}
+          <span className="text-xs text-slate-500">21:00</span>
+          <span className="text-lg font-extrabold text-[#ededed]">
+            Barcelona
           </span>
         </div>
-        <div className="space-y-3">
-          {probs.map((p, i) => (
-            <div key={p.label}>
-              <div className="mb-1 flex items-center justify-between text-xs">
-                <span className="font-semibold text-[#ededed]">{p.label}</span>
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 + i * 0.15 }}
-                  className="font-bold tabular-nums"
-                  style={{ color: p.color }}
-                >
-                  {p.pct}%
-                </motion.span>
-              </div>
-              <div className="h-2.5 overflow-hidden rounded-full bg-white/[0.04]">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${p.pct}%` }}
-                  transition={{ duration: 0.9, delay: 0.2 + i * 0.15, ease: "easeOut" }}
-                  className="h-full rounded-full"
-                  style={{
-                    background: `linear-gradient(90deg, ${p.color}, ${p.color}cc)`,
-                    boxShadow: i === 0 ? `0 0 16px ${p.color}80` : undefined,
-                  }}
-                />
-              </div>
-            </div>
-          ))}
+        {/* Confidence meter */}
+        <div className="mt-5">
+          <div className="mb-1.5 flex items-center justify-between text-[10px] uppercase tracking-widest">
+            <span className="font-semibold text-slate-400">
+              {t("demo.s3.confLabel")}
+            </span>
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="font-bold tabular-nums text-[#4ade80]"
+            >
+              78%
+            </motion.span>
+          </div>
+          <div className="h-3 overflow-hidden rounded-full bg-white/[0.04]">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: "78%" }}
+              transition={{ duration: 1.0, delay: 0.2, ease: "easeOut" }}
+              className="h-full rounded-full"
+              style={{
+                background: "linear-gradient(90deg, #4ade80, #22c55e)",
+                boxShadow: "0 0 16px rgba(74, 222, 128, 0.55)",
+              }}
+            />
+          </div>
         </div>
+        {/* Pick row */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0 }}
-          className="mt-5 flex items-center justify-between rounded-lg border border-[#4ade80]/20 bg-[#4ade80]/[0.06] px-3 py-2"
+          transition={{ delay: 0.7 }}
+          className="mt-5 flex items-center justify-between rounded-lg border border-[#4ade80]/30 bg-[#4ade80]/[0.08] px-3 py-2.5"
         >
-          <span className="text-[11px] uppercase tracking-widest text-[#86efac]">
-            {t("demo.s3.edge")}
+          <span className="text-[10px] uppercase tracking-widest text-[#86efac]">
+            {t("demo.s3.modelPick")}
           </span>
-          <span className="text-sm font-bold text-[#4ade80] tabular-nums">+8.2%</span>
+          <span className="text-sm font-bold text-[#4ade80]">
+            Real Madrid · {t("demo.s3.toWin")}
+          </span>
         </motion.div>
-      </div>
+        <div className="mt-3 inline-flex items-center gap-1.5 text-[10px] text-slate-500">
+          <CheckCircle2 className="h-3 w-3 text-[#4ade80]" />
+          {t("demo.s3.noCardNote")}
+        </div>
+      </motion.div>
     </motion.div>
   );
 }

@@ -20,7 +20,7 @@ const en = {
   "nav.about": "About",
   "nav.articles": "Articles",
   "nav.login": "Login",
-  "nav.startFreeTrial": "Start Winning",
+  "nav.startFreeTrial": "Explore the data",
   "nav.menu": "Menu",
   "nav.getStarted": "Get Started",
   "nav.joinBlurb": "Join 1,500+ subscribers getting smarter picks every day.",
@@ -237,6 +237,8 @@ const en = {
   "footer.pciCompliant": "PCI DSS compliant",
   "footer.copyright":
     "All rights reserved. BetsPlug is a data & analytics platform - not a gambling operator.",
+  "footer.educationalDisclaimer":
+    "BetsPlug provides statistical data and analysis for educational and informational purposes only. We are not a bookmaker, do not provide betting advice, do not facilitate wagering, and do not encourage betting. Any decision you make based on the information on this site is your own responsibility. Predictions are model outputs, not guarantees of future results. 18+ — play responsibly.",
   "footer.responsible": "18+ Play responsibly",
   "footer.aboutUs": "About Us",
   "footer.ourModels": "Our Models",
@@ -4116,6 +4118,8 @@ const nl: Dictionary = {
   "footer.contact": "Contact",
   "footer.cookiePolicy": "Cookiebeleid",
   "footer.copyright": "Alle rechten voorbehouden. BetsPlug is een data- en analyseplatform, geen gokoperator.",
+  "footer.educationalDisclaimer":
+    "BetsPlug biedt statistische data en analyses uitsluitend voor educatieve en informatieve doeleinden. Wij zijn geen bookmaker, geven geen gokadvies, faciliteren geen weddenschappen en moedigen gokken niet aan. Beslissingen die je neemt op basis van de informatie op deze site zijn je eigen verantwoordelijkheid. Voorspellingen zijn modelresultaten, geen garantie voor toekomstige uitkomsten. 18+ — speel verantwoord.",
   "footer.joinCta": "Word lid van de Premium Groep",
   "footer.leaguesSubtitle": "AI-voetbalvoorspellingen per competitie",
   "footer.learn": "Leren",
@@ -4628,7 +4632,7 @@ const nl: Dictionary = {
   "nav.results": "Results & Simulation",
   "nav.search": "Zoeken",
   "nav.settings": "Instellingen",
-  "nav.startFreeTrial": "Gratis proberen",
+  "nav.startFreeTrial": "Bekijk de data",
   "nav.strategy_lab": "Strategy Lab",
   "nav.trackRecord": "Track Record",
   "nav.trackrecord": "Trackrecord",
