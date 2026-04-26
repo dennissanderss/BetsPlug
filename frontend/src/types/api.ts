@@ -63,16 +63,21 @@ export interface FinancePoint {
   expenses: number;
   profit: number;
   payments_count: number;
+  subscribers: number;
+  new_subscribers: number;
 }
 
 export interface FinanceOverview {
   range_start: string;
   range_end: string;
-  granularity: "day" | "week" | "month";
+  granularity: "day" | "week" | "month" | "year";
   total_revenue: number;
   total_expenses: number;
   total_profit: number;
   currency: string;
+  total_subscribers: number;
+  subscribers_in_range: number;
+  new_subscribers_in_range: number;
   timeline: FinancePoint[];
   by_plan: Record<string, number>;
   expenses_by_category: Record<string, number>;

@@ -15,7 +15,7 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.dependencies import require_admin
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-Granularity = Literal["day", "week", "month"]
+Granularity = Literal["day", "week", "month", "year"]
 
 
 # ---------------------------------------------------------------------------
@@ -54,11 +54,13 @@ class ExpenseOut(ExpenseIn):
 
 
 class FinancePoint(BaseModel):
-    period: str  # "2026-04" / "2026-W15" / "2026-04-10"
+    period: str  # "2026" / "2026-04" / "2026-W15" / "2026-04-10"
     revenue: float
     expenses: float
     profit: float
     payments_count: int
+    subscribers: int  # distinct paying users in this period
+    new_subscribers: int  # users whose first-ever paid payment falls in this period
 
 
 class FinanceOverview(BaseModel):
@@ -69,6 +71,13 @@ class FinanceOverview(BaseModel):
     total_expenses: float
     total_profit: float
     currency: str
+    # Subscriber tallies — "subscriber" = distinct user with at least one
+    # SUCCEEDED payment. `total_subscribers` is all-time and ignores the
+    # selected range; `subscribers_in_range` and `new_subscribers_in_range`
+    # respect it.
+    total_subscribers: int
+    subscribers_in_range: int
+    new_subscribers_in_range: int
     timeline: list[FinancePoint]
     by_plan: dict[str, float]
     expenses_by_category: dict[str, float]
@@ -86,6 +95,8 @@ def _bucket_key(dt: date, granularity: Granularity) -> str:
     if granularity == "week":
         iso = dt.isocalendar()
         return f"{iso.year}-W{iso.week:02d}"
+    if granularity == "year":
+        return f"{dt.year:04d}"
     # month
     return f"{dt.year:04d}-{dt.month:02d}"
 
@@ -115,6 +126,11 @@ def _enumerate_periods(
             cur += timedelta(days=7)
         return out
 
+    if granularity == "year":
+        for y in range(start.year, end.year + 1):
+            out.append(f"{y:04d}")
+        return out
+
     # month
     y, m = start.year, start.month
     ey, em = end.year, end.month
@@ -129,7 +145,7 @@ def _enumerate_periods(
 
 def _period_range_for_months(months: int, today: date) -> tuple[date, date]:
     """Return (start, end) covering the last ``months`` months inclusive."""
-    months = max(1, min(months, 60))
+    months = max(1, min(months, 120))
     end = today
     # Start at the first day of the month ``months - 1`` behind today
     y = today.year
@@ -152,7 +168,7 @@ async def get_finance_overview(
         default="month", description="Time bucket for the timeline"
     ),
     months: int = Query(
-        default=12, ge=1, le=60, description="How many months back to include"
+        default=12, ge=1, le=120, description="How many months back to include"
     ),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(require_admin),
@@ -182,6 +198,20 @@ async def get_finance_overview(
     payments_result = await db.execute(payments_stmt)
     payments = payments_result.scalars().all()
 
+    # ── First-payment-per-user (all-time) — used for `new_subscribers`
+    # and `total_subscribers`. Keep as a single grouped query so the
+    # cost stays bounded as the payments table grows.
+    first_paid_stmt = (
+        select(Payment.user_id, func.min(Payment.created_at).label("first_at"))
+        .where(Payment.status == PaymentStatus.SUCCEEDED)
+        .group_by(Payment.user_id)
+    )
+    first_paid_rows = (await db.execute(first_paid_stmt)).all()
+    first_paid_at: dict[uuid.UUID, datetime] = {
+        row.user_id: row.first_at for row in first_paid_rows
+    }
+    total_subscribers = len(first_paid_at)
+
     # ── Expenses ────────────────────────────────────────────────────────
     exp_stmt = (
         select(ManualExpense)
@@ -193,23 +223,43 @@ async def get_finance_overview(
 
     # ── Aggregate ───────────────────────────────────────────────────────
     periods = _enumerate_periods(range_start, range_end, period)
-    timeline_map: dict[str, dict[str, float]] = {
-        p: {"revenue": 0.0, "expenses": 0.0, "payments_count": 0} for p in periods
-    }
+
+    def _empty_bucket() -> dict:
+        return {
+            "revenue": 0.0,
+            "expenses": 0.0,
+            "payments_count": 0,
+            "subscriber_ids": set(),
+            "new_subscriber_ids": set(),
+        }
+
+    timeline_map: dict[str, dict] = {p: _empty_bucket() for p in periods}
     by_plan: dict[str, float] = {}
     by_category: dict[str, float] = {}
     total_revenue = 0.0
     total_expenses = 0.0
     currency_votes: dict[str, int] = {}
+    subscribers_in_range: set[uuid.UUID] = set()
+    new_subscribers_in_range: set[uuid.UUID] = set()
 
     for p in payments:
         key = _bucket_key_dt(p.created_at, period)
-        if key not in timeline_map:
-            timeline_map[key] = {"revenue": 0.0, "expenses": 0.0, "payments_count": 0}
+        bucket = timeline_map.setdefault(key, _empty_bucket())
         amount = float(p.amount or 0)
-        timeline_map[key]["revenue"] += amount
-        timeline_map[key]["payments_count"] += 1
+        bucket["revenue"] += amount
+        bucket["payments_count"] += 1
+        bucket["subscriber_ids"].add(p.user_id)
+        subscribers_in_range.add(p.user_id)
         total_revenue += amount
+
+        # First-ever payment for this user falls in this period?
+        first_at = first_paid_at.get(p.user_id)
+        if first_at is not None and _bucket_key_dt(first_at, period) == key:
+            # Only count if the first-payment also falls within the selected
+            # range; otherwise it's a returning subscriber from before.
+            if range_start_dt <= first_at < range_end_dt:
+                bucket["new_subscriber_ids"].add(p.user_id)
+                new_subscribers_in_range.add(p.user_id)
 
         plan_name = p.plan_type.value if p.plan_type else "unknown"
         by_plan[plan_name] = by_plan.get(plan_name, 0.0) + amount
@@ -218,10 +268,9 @@ async def get_finance_overview(
 
     for e in expenses:
         key = _bucket_key(e.expense_date, period)
-        if key not in timeline_map:
-            timeline_map[key] = {"revenue": 0.0, "expenses": 0.0, "payments_count": 0}
+        bucket = timeline_map.setdefault(key, _empty_bucket())
         amount = float(e.amount or 0)
-        timeline_map[key]["expenses"] += amount
+        bucket["expenses"] += amount
         total_expenses += amount
 
         cat = e.category or "other"
@@ -235,6 +284,8 @@ async def get_finance_overview(
             expenses=round(timeline_map[p]["expenses"], 2),
             profit=round(timeline_map[p]["revenue"] - timeline_map[p]["expenses"], 2),
             payments_count=int(timeline_map[p]["payments_count"]),
+            subscribers=len(timeline_map[p]["subscriber_ids"]),
+            new_subscribers=len(timeline_map[p]["new_subscriber_ids"]),
         )
         for p in sorted(timeline_map.keys())
     ]
@@ -252,6 +303,9 @@ async def get_finance_overview(
         total_expenses=round(total_expenses, 2),
         total_profit=round(total_revenue - total_expenses, 2),
         currency=currency.lower(),
+        total_subscribers=total_subscribers,
+        subscribers_in_range=len(subscribers_in_range),
+        new_subscribers_in_range=len(new_subscribers_in_range),
         timeline=ordered,
         by_plan={k: round(v, 2) for k, v in by_plan.items()},
         expenses_by_category={k: round(v, 2) for k, v in by_category.items()},

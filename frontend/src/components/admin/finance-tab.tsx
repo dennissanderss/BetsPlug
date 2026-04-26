@@ -39,7 +39,7 @@ import type { AdminExpense, FinanceOverview, FinancePoint } from "@/types/api";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Granularity = "day" | "week" | "month";
+type Granularity = "day" | "week" | "month" | "year";
 
 interface RangeOption {
   id: string;
@@ -52,6 +52,7 @@ const RANGE_OPTIONS: RangeOption[] = [
   { id: "30d", label: "Last 30 days", months: 1, granularity: "day" },
   { id: "6m", label: "Last 6 months", months: 6, granularity: "week" },
   { id: "12m", label: "Last 12 months", months: 12, granularity: "month" },
+  { id: "5y", label: "Last 5 years", months: 60, granularity: "year" },
 ];
 
 const EXPENSE_CATEGORIES = [
@@ -103,6 +104,11 @@ function formatCount(value: number): string {
 }
 
 function formatPeriodLabel(period: string, granularity: Granularity): string {
+  if (granularity === "year") {
+    // Backend ships year buckets as plain "YYYY" — Date() would parse as 1 Jan UTC,
+    // which renders as the prior year in negative-offset locales. Just return raw.
+    return period;
+  }
   try {
     const d = new Date(period);
     if (Number.isNaN(d.getTime())) return period;
@@ -318,6 +324,21 @@ function CustomTooltip({ active, label, payload, granularity, currency }: Custom
             {formatCurrency(point.profit, currency)}
           </span>
         </div>
+        <div className="flex items-center justify-between gap-4 border-t border-white/[0.06] pt-1">
+          <span className="flex items-center gap-1.5 text-slate-400">
+            <span className="h-2 w-2 rounded-full bg-purple-400" />
+            Subscribers
+          </span>
+          <span className="font-semibold tabular-nums text-purple-300">
+            {formatCount(point.subscribers)}
+          </span>
+        </div>
+        {point.new_subscribers > 0 && (
+          <div className="flex items-center justify-between gap-4 text-slate-500">
+            <span>New subscribers</span>
+            <span className="tabular-nums">+{formatCount(point.new_subscribers)}</span>
+          </div>
+        )}
         <div className="flex items-center justify-between gap-4 text-slate-500">
           <span>Payments</span>
           <span className="tabular-nums">{formatCount(point.payments_count)}</span>
@@ -372,6 +393,7 @@ function TimelineChart({ data, granularity, currency }: TimelineChartProps) {
           tickLine={false}
         />
         <YAxis
+          yAxisId="left"
           tick={{ fontSize: 11, fill: "#94a3b8" }}
           axisLine={{ stroke: "#ffffff", strokeOpacity: 0.08 }}
           tickLine={false}
@@ -380,11 +402,21 @@ function TimelineChart({ data, granularity, currency }: TimelineChartProps) {
           }
           width={50}
         />
+        <YAxis
+          yAxisId="right"
+          orientation="right"
+          tick={{ fontSize: 11, fill: "#a78bfa" }}
+          axisLine={{ stroke: "#ffffff", strokeOpacity: 0.08 }}
+          tickLine={false}
+          allowDecimals={false}
+          width={36}
+        />
         <Tooltip
           cursor={{ fill: "rgba(255,255,255,0.03)" }}
           content={<CustomTooltip granularity={granularity} currency={currency} />}
         />
         <Bar
+          yAxisId="left"
           dataKey="revenue"
           name="Revenue"
           fill="url(#revenueGradient)"
@@ -392,6 +424,7 @@ function TimelineChart({ data, granularity, currency }: TimelineChartProps) {
           maxBarSize={32}
         />
         <Bar
+          yAxisId="left"
           dataKey="expenses"
           name="Expenses"
           fill="url(#expensesGradient)"
@@ -399,6 +432,7 @@ function TimelineChart({ data, granularity, currency }: TimelineChartProps) {
           maxBarSize={32}
         />
         <Line
+          yAxisId="left"
           type="monotone"
           dataKey="profit"
           name="Profit"
@@ -406,6 +440,17 @@ function TimelineChart({ data, granularity, currency }: TimelineChartProps) {
           strokeWidth={2.5}
           dot={{ r: 3, fill: "#60a5fa", strokeWidth: 0 }}
           activeDot={{ r: 5, fill: "#60a5fa", strokeWidth: 2, stroke: "#0b1220" }}
+        />
+        <Line
+          yAxisId="right"
+          type="monotone"
+          dataKey="subscribers"
+          name="Subscribers"
+          stroke="#a78bfa"
+          strokeWidth={2}
+          strokeDasharray="4 3"
+          dot={{ r: 2.5, fill: "#a78bfa", strokeWidth: 0 }}
+          activeDot={{ r: 4.5, fill: "#a78bfa", strokeWidth: 2, stroke: "#0b1220" }}
         />
       </ComposedChart>
     </ResponsiveContainer>
@@ -827,20 +872,6 @@ export default function FinanceTab() {
     };
   }, [data]);
 
-  // ── Paying users derivation ────────────────────────────────────────────────
-  const payingUsers = React.useMemo(() => {
-    if (!data) return null;
-    const planCount = Object.keys(data.by_plan || {}).length;
-    // We don't know exact count, but total non-zero plan revenue slices as indicator
-    return planCount > 0 ? planCount : null;
-  }, [data]);
-
-  // ── Totals from overview ───────────────────────────────────────────────────
-  const totalPayments = React.useMemo(() => {
-    if (!data) return 0;
-    return data.timeline.reduce((sum, p) => sum + (p.payments_count || 0), 0);
-  }, [data]);
-
   // ── Breakdown entries ──────────────────────────────────────────────────────
   const planEntries = React.useMemo<BreakdownEntry[]>(() => {
     if (!data?.by_plan) return [];
@@ -897,7 +928,7 @@ export default function FinanceTab() {
         <div className="flex flex-wrap items-center gap-2">
           {/* Granularity pills */}
           <div className="flex rounded-lg border border-white/10 bg-white/[0.04] p-1">
-            {(["day", "week", "month"] as Granularity[]).map((g) => (
+            {(["day", "week", "month", "year"] as Granularity[]).map((g) => (
               <button
                 key={g}
                 onClick={() => setGranularityOverride(g)}
@@ -1022,13 +1053,17 @@ export default function FinanceTab() {
               deltaLabel="vs prev period"
             />
             <KpiCard
-              label="Paying plans"
-              value={payingUsers != null ? formatCount(payingUsers) : "\u2014"}
+              label="Subscribers"
+              value={formatCount(data?.total_subscribers ?? 0)}
               icon={Users}
               accent="purple"
-              subText={`${formatCount(totalPayments)} payment${
-                totalPayments === 1 ? "" : "s"
-              } in range`}
+              subText={
+                data
+                  ? `+${formatCount(data.new_subscribers_in_range)} new \u00b7 ${formatCount(
+                      data.subscribers_in_range
+                    )} active in range`
+                  : undefined
+              }
             />
           </>
         )}
@@ -1055,6 +1090,10 @@ export default function FinanceTab() {
             <div className="flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full bg-blue-400" />
               <span className="text-slate-400">Profit</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-purple-400" />
+              <span className="text-slate-400">Subscribers</span>
             </div>
           </div>
         </div>
