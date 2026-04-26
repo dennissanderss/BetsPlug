@@ -2723,5 +2723,5 @@ const tr = {
   "welcomeBanner.stepPrefix": "Adım",
   "welcomeBanner.subtitle": "Yapay zekamız, yaklaşan maçların en olası sonuçlarını tahmin etmek için futbol verilerini, formu, kafa kafaya maçları, sıralamaları ve takım gücünü analiz ediyor.",
   "welcomeBanner.title": "BetsPlug şu şekilde çalışır",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default tr;

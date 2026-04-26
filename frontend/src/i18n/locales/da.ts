@@ -2723,5 +2723,5 @@ const da = {
   "welcomeBanner.stepPrefix": "Trin",
   "welcomeBanner.subtitle": "Vores AI analyserer fodbolddata, form, head-to-head, stilling og holdstyrke for at forudsige det mest sandsynlige udfald af kommende kampe.",
   "welcomeBanner.title": "Sådan fungerer BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default da;

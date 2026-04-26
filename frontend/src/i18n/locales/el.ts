@@ -2723,5 +2723,5 @@ const el = {
   "welcomeBanner.stepPrefix": "Βήμα",
   "welcomeBanner.subtitle": "Η τεχνητή νοημοσύνη μας αναλύει δεδομένα ποδοσφαίρου, φόρμα, αντιμέτωπες, βαθμολογίες και δύναμη της ομάδας, για να προβλέψει το πιο πιθανό αποτέλεσμα των προσεχών αγώνων.",
   "welcomeBanner.title": "Δείτε πώς λειτουργεί το BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default el;

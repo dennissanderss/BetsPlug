@@ -2723,5 +2723,5 @@ const pt = {
   "welcomeBanner.stepPrefix": "Etapa",
   "welcomeBanner.subtitle": "Nossa IA analisa dados de futebol, forma, confronto direto, classificação e força da equipe para prever o resultado mais provável das próximas partidas.",
   "welcomeBanner.title": "Veja como BetsPlug funciona",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default pt;

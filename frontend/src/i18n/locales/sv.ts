@@ -2723,5 +2723,5 @@ const sv = {
   "welcomeBanner.stepPrefix": "Steg",
   "welcomeBanner.subtitle": "Vår AI analyserar fotbollsdata, form, head-to-head, ställning och lagstyrka, för att förutsäga det mest sannolika resultatet av kommande matcher.",
   "welcomeBanner.title": "Så här fungerar BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default sv;

@@ -2723,5 +2723,5 @@ const ro = {
   "welcomeBanner.stepPrefix": "Pas",
   "welcomeBanner.subtitle": "AI-ul nostru analizează datele fotbalistice, forma, cap la cap, clasamentul și puterea echipei, pentru a prognoza rezultatul cel mai probabil al meciurilor viitoare.",
   "welcomeBanner.title": "Iată cum funcționează BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default ro;
