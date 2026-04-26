@@ -90,13 +90,8 @@ export default async function PricingPage() {
       <BreadcrumbJsonLd items={breadcrumbs} />
       <PricingProductJsonLd
         name="BetsPlug AI football predictions — subscription plans"
-        description="Four tiers of AI football picks — Free Access at €0, Silver, Gold, and a Platinum lifetime plan. Every pick tracked publicly."
+        description="Four tiers of AI football analytics — Free Access at €0, Silver, Gold, and a Platinum lifetime plan. Every prediction tracked publicly."
         offers={pricingOffers}
-        aggregateRating={{
-          ratingValue: "4.6",
-          ratingCount: "312",
-          bestRating: "5",
-        }}
       />
       <FaqJsonLd
         items={PRICING_FAQS.map((f) => ({ question: f.q, answer: f.a }))}

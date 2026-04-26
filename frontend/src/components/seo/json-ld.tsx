@@ -23,16 +23,27 @@ export function JsonLd({ data }: JsonLdProps) {
 /* ── Organization ─────────────────────────────────────────── */
 
 const ORGANIZATION = {
-  "@type": "Organization",
+  "@type": ["Organization", "EducationalOrganization"],
   "@id": "https://betsplug.com/#organization",
   name: "BetsPlug",
   url: "https://betsplug.com",
+  description:
+    "BetsPlug is an educational sports analytics platform. We provide statistical data, probabilistic models and verified historical performance for football matches. We are not a bookmaker and do not facilitate wagering.",
   logo: {
     "@type": "ImageObject",
     url: "https://betsplug.com/logo.webp",
     width: 512,
     height: 512,
   },
+  knowsAbout: [
+    "Football statistics",
+    "Sports analytics",
+    "Probabilistic modeling",
+    "Elo rating systems",
+    "Poisson goal models",
+    "Machine learning for sports",
+    "Bankroll management education",
+  ],
   sameAs: [
     "https://x.com/betsplug",
     "https://instagram.com/betsplug",
@@ -43,7 +54,7 @@ const ORGANIZATION = {
     "@type": "ContactPoint",
     email: "support@betsplug.com",
     contactType: "customer support",
-    availableLanguage: ["English", "Dutch", "German", "French", "Spanish", "Italian", "Swahili", "Indonesian"],
+    availableLanguage: ["English", "Dutch", "German", "French", "Spanish", "Italian"],
   },
 };
 
@@ -167,16 +178,10 @@ export function PricingProductJsonLd({
   name,
   description,
   offers,
-  aggregateRating,
 }: {
   name: string;
   description: string;
   offers: PricingPlanOffer[];
-  aggregateRating?: {
-    ratingValue: string;
-    ratingCount: string;
-    bestRating?: string;
-  };
 }) {
   const offerObjects = offers.map((o) => {
     const base: Record<string, unknown> = {
@@ -200,28 +205,25 @@ export function PricingProductJsonLd({
     return base;
   });
 
-  const data: Record<string, unknown> = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name,
-    description,
-    brand: { "@type": "Brand", name: "BetsPlug" },
-    offers: offerObjects,
-  };
-
-  if (aggregateRating) {
-    data.aggregateRating = {
-      "@type": "AggregateRating",
-      ratingValue: aggregateRating.ratingValue,
-      ratingCount: aggregateRating.ratingCount,
-      bestRating: aggregateRating.bestRating ?? "5",
-    };
-  }
-
-  return <JsonLd data={data} />;
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name,
+        description,
+        brand: { "@type": "Brand", name: "BetsPlug" },
+        offers: offerObjects,
+      }}
+    />
+  );
 }
 
-/* ── SoftwareApplication / Service ────────────────────────── */
+/* ── SoftwareApplication / Service ──────────────────────────
+   Educational analytics application — no AggregateRating (none of the
+   ratings are independently verified, so per Google's structured-data
+   guidelines they MUST NOT be emitted). Pricing offers live on /pricing
+   via PricingProductJsonLd, so no AggregateOffer here either. */
 
 export function ServiceJsonLd() {
   return (
@@ -233,20 +235,7 @@ export function ServiceJsonLd() {
         applicationCategory: "SportsApplication",
         operatingSystem: "Web",
         description:
-          "AI-powered football prediction platform combining Elo ratings, Poisson distribution, and machine learning across 15+ leagues.",
-        offers: {
-          "@type": "AggregateOffer",
-          priceCurrency: "USD",
-          lowPrice: "0.01",
-          highPrice: "29.99",
-          offerCount: 3,
-        },
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: "4.6",
-          ratingCount: "312",
-          bestRating: "5",
-        },
+          "Educational football analytics application. Combines Elo ratings, Poisson distribution and machine learning to publish probabilistic match forecasts and a verified historical track record across 15+ leagues. For informational purposes only — not a bookmaker.",
         publisher: { "@id": "https://betsplug.com/#organization" },
       }}
     />
