@@ -650,7 +650,7 @@ export function TrackRecordContent({ faqSlot, trackRecordPage }: { faqSlot?: Rea
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.25 }}
-            aria-label="Breadcrumb"
+            aria-label={t("a11y.breadcrumb")}
             className="mt-10 flex items-center justify-center gap-2 text-xs text-[#a3a9b8]"
           >
             <Link href={home} className="transition-colors hover:text-[#4ade80]">

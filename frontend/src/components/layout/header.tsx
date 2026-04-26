@@ -181,7 +181,7 @@ export function Header({ className }: HeaderProps) {
         <div className="relative" ref={notifRef}>
           <button
             onClick={() => setNotifOpen((prev) => !prev)}
-            aria-label="Notifications"
+            aria-label={t("a11y.notifications")}
             className="btn-ghost relative h-9 w-9 inline-flex items-center justify-center !px-0 !py-0 rounded-lg"
           >
             <Bell className="h-4 w-4" />
@@ -222,7 +222,7 @@ export function Header({ className }: HeaderProps) {
         <div className="relative" ref={userMenuRef}>
           <button
             onClick={() => setUserMenuOpen((prev) => !prev)}
-            aria-label="User menu"
+            aria-label={t("a11y.userMenu")}
             className={cn(
               "flex items-center gap-2 px-2 py-1 rounded-lg transition-all duration-150",
               "text-[#a3a9b8] hover:text-[#ededed] hover:bg-white/[0.06]",
@@ -330,7 +330,7 @@ export function Header({ className }: HeaderProps) {
           <button
             type="button"
             onClick={() => setMobileSearchOpen(false)}
-            aria-label="Close search"
+            aria-label={t("a11y.closeSearch")}
             className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.04] text-[#ededed]"
           >
             <X className="h-4 w-4" />

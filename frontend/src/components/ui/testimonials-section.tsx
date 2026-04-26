@@ -171,14 +171,14 @@ export const TestimonialsSection = ({
                   <button
                     onClick={prev}
                     className="btn-glass flex h-10 w-10 items-center justify-center rounded-xl p-0"
-                    aria-label="Previous testimonial"
+                    aria-label={t("a11y.previousTestimonial")}
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </button>
                   <button
                     onClick={next}
                     className="btn-glass flex h-10 w-10 items-center justify-center rounded-xl p-0"
-                    aria-label="Next testimonial"
+                    aria-label={t("a11y.nextTestimonial")}
                   >
                     <ChevronRight className="h-4 w-4" />
                   </button>

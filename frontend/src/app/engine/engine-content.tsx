@@ -99,7 +99,7 @@ export function EngineContent() {
 
           {/* Sub-nav anchors */}
           <nav
-            aria-label="Engine sections"
+            aria-label={t("a11y.engineSections")}
             className="mt-10 flex flex-wrap items-center justify-center gap-2"
           >
             {SECTION_KEYS.map(({ id, key, icon: Icon }) => (

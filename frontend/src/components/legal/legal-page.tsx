@@ -5,6 +5,7 @@ import { ChevronRight, FileText } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { Pill } from "@/components/noct/pill";
+import { useTranslations } from "@/i18n/locale-provider";
 
 /**
  * Shared layout for all legal pages (privacy, cookies, terms,
@@ -24,6 +25,7 @@ export function LegalPage({
   breadcrumb: string;
   children: React.ReactNode;
 }) {
+  const { t } = useTranslations();
   return (
     <div className="relative min-h-screen overflow-x-clip bg-background text-[#ededed]">
       <SiteNav />
@@ -50,7 +52,7 @@ export function LegalPage({
           </p>
 
           <nav
-            aria-label="Breadcrumb"
+            aria-label={t("a11y.breadcrumb")}
             className="mt-7 flex items-center justify-center gap-2 text-xs font-medium text-[#8a93a6]"
           >
             <Link href="/" className="transition-colors hover:text-[#4ade80]">

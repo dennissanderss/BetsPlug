@@ -25,6 +25,52 @@ const en = {
   "nav.getStarted": "Get Started",
   "nav.joinBlurb": "Join 1,500+ subscribers getting smarter picks every day.",
 
+  /* Value Bet panel — extracted from hardcoded NL on 2026-04-27 */
+  "vbet.title": "Value Bet of the Day",
+  "vbet.extraEvidence": "Extra evidence:",
+  "vbet.methodEvidence": "Method evidence (leakage-free)",
+  "vbet.ourProbability": "Our probability",
+  "vbet.histSelection": "Selected value bets (historical)",
+  "vbet.liveMeasurement": "Live measurement",
+
+  /* Accuracy Pro Engine v2 preview — extracted from hardcoded NL */
+  "accPlus.title": "Accuracy Pro Engine v2",
+  "accPlus.statusError": "Could not fetch status.",
+  "accPlus.datasetProgress": "Dataset progress",
+  "accPlus.whatWeMeasure": "What are we measuring exactly?",
+
+  /* Pricing copy — extracted from hardcoded EN */
+  "pricing.platinumUnbeatable": "Platinum unbeatable.",
+  "pricing.upgradeOnceLanded": "Upgrade once the numbers land.",
+
+  /* Footer extras — extracted from hardcoded EN */
+  "footer.freeToJoin": "Free to join",
+  "footer.dailyPicks": "Daily picks",
+  "footer.liveChat": "Live chat",
+
+  /* Thank-you page */
+  "thankYou.aiFootballPredictions": "AI football predictions",
+
+  /* Accessibility labels (aria-label, alt). Extracted 2026-04-27. */
+  "a11y.breadcrumb": "Breadcrumb",
+  "a11y.openMenu": "Open menu",
+  "a11y.closeMenu": "Close menu",
+  "a11y.notifications": "Notifications",
+  "a11y.userMenu": "User menu",
+  "a11y.closeSearch": "Close search",
+  "a11y.previousPage": "Previous page",
+  "a11y.nextPage": "Next page",
+  "a11y.previousTestimonial": "Previous testimonial",
+  "a11y.nextTestimonial": "Next testimonial",
+  "a11y.dismissDisclaimer": "Dismiss disclaimer",
+  "a11y.billingPeriod": "Billing period",
+  "a11y.toggleBillingPeriod": "Toggle billing period",
+  "a11y.engineSections": "Engine sections",
+  "a11y.filterArticlesByCategory": "Filter articles by category",
+  "common.allCountries": "All countries",
+  "common.comingSoon": "Coming soon",
+  "common.noDataYet": "No data yet",
+
   /* Top Bar, legacy keys (still used as fallback accuracy copy) */
   "topbar.winRate": "win rate",
   "topbar.picksAnalyzed": "picks analyzed",
@@ -5412,6 +5458,52 @@ const nl: Dictionary = {
   "topbar.v.social.text": "Meer dan 1.500 abonnees in heel Europa vertrouwen elke dag op BetsPlug",
   "topbar.v.social.textMobile": "1.500+ abonnees vertrouwen op BetsPlug",
   "topbar.winRate": "winstpercentage",
+
+  /* Value Bet panel (NL) */
+  "vbet.title": "Value Bet of the Day",
+  "vbet.extraEvidence": "Extra bewijs:",
+  "vbet.methodEvidence": "Methode-bewijs (leakage-vrij)",
+  "vbet.ourProbability": "Onze kans",
+  "vbet.histSelection": "Geselecteerde value-bets (historisch)",
+  "vbet.liveMeasurement": "Live meting",
+
+  /* Accuracy Pro Engine v2 preview (NL) */
+  "accPlus.title": "Accuracy Pro Engine v2",
+  "accPlus.statusError": "Kan status niet ophalen.",
+  "accPlus.datasetProgress": "Voortgang dataset",
+  "accPlus.whatWeMeasure": "Wat meten we hier precies?",
+
+  /* Pricing copy (NL) */
+  "pricing.platinumUnbeatable": "Platinum onverslaanbaar.",
+  "pricing.upgradeOnceLanded": "Upgrade zodra de cijfers binnenrollen.",
+
+  /* Footer extras (NL) */
+  "footer.freeToJoin": "Gratis om mee te doen",
+  "footer.dailyPicks": "Dagelijkse picks",
+  "footer.liveChat": "Live chat",
+
+  /* Thank-you page (NL) */
+  "thankYou.aiFootballPredictions": "AI voetbalvoorspellingen",
+
+  /* Accessibility (NL) */
+  "a11y.breadcrumb": "Kruimelpad",
+  "a11y.openMenu": "Menu openen",
+  "a11y.closeMenu": "Menu sluiten",
+  "a11y.notifications": "Notificaties",
+  "a11y.userMenu": "Gebruikersmenu",
+  "a11y.closeSearch": "Zoeken sluiten",
+  "a11y.previousPage": "Vorige pagina",
+  "a11y.nextPage": "Volgende pagina",
+  "a11y.previousTestimonial": "Vorige testimonial",
+  "a11y.nextTestimonial": "Volgende testimonial",
+  "a11y.dismissDisclaimer": "Disclaimer sluiten",
+  "a11y.billingPeriod": "Betalingsperiode",
+  "a11y.toggleBillingPeriod": "Betalingsperiode wisselen",
+  "a11y.engineSections": "Engine-secties",
+  "a11y.filterArticlesByCategory": "Filter artikelen op categorie",
+  "common.allCountries": "Alle landen",
+  "common.comingSoon": "Binnenkort beschikbaar",
+  "common.noDataYet": "Nog geen data",
 
   "tr.breadcrumbHome": "Home",
   "tr.breadcrumbTrack": "Track Record",

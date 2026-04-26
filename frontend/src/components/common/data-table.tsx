@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTranslations } from "@/i18n/locale-provider";
 
 export interface Column<T> {
   label: string;
@@ -41,6 +42,7 @@ export function DataTable<T>({
   className,
   rowKey,
 }: DataTableProps<T>) {
+  const { t } = useTranslations();
   const [page, setPage] = React.useState(1);
 
   const totalPages = Math.max(1, Math.ceil(data.length / pageSize));
@@ -149,7 +151,7 @@ export function DataTable<T>({
               className="h-8 w-8"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              aria-label="Previous page"
+              aria-label={t("a11y.previousPage")}
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -162,7 +164,7 @@ export function DataTable<T>({
               className="h-8 w-8"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              aria-label="Next page"
+              aria-label={t("a11y.nextPage")}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>

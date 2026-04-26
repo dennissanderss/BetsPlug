@@ -3,6 +3,7 @@
 import * as React from "react";
 import { AlertTriangle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "@/i18n/locale-provider";
 
 interface DisclaimerBannerProps {
   message?: string;
@@ -13,6 +14,7 @@ export function DisclaimerBanner({
   message = "For personal analysis and educational purposes only. Not financial advice.",
   className,
 }: DisclaimerBannerProps) {
+  const { t } = useTranslations();
   const [dismissed, setDismissed] = React.useState(false);
 
   if (dismissed) return null;
@@ -44,7 +46,7 @@ export function DisclaimerBanner({
 
       <button
         onClick={() => setDismissed(true)}
-        aria-label="Dismiss disclaimer"
+        aria-label={t("a11y.dismissDisclaimer")}
         className="shrink-0 flex h-5 w-5 items-center justify-center rounded text-amber-600 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"
       >
         <X className="h-3 w-3" />

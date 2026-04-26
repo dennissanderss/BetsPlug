@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { Lock, Sparkles, TrendingUp, Info } from "lucide-react";
+import { useTranslations } from "@/i18n/locale-provider";
 
 interface TierStats {
   total: number;
@@ -30,6 +31,7 @@ const TIER_LABELS = [
 ] as const;
 
 export function AccuracyPlusPreview() {
+  const { t } = useTranslations();
   const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api";
 
   const { data, isLoading, isError } = useQuery<AccuracyPlusData>({
@@ -53,7 +55,7 @@ export function AccuracyPlusPreview() {
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-sm font-bold text-white">Accuracy Pro Engine v2</h3>
+              <h3 className="text-sm font-bold text-white">{t("accPlus.title")}</h3>
               <span className="inline-flex items-center gap-1 rounded-full border border-violet-500/30 bg-violet-500/10 px-2 py-0.5 text-[10px] font-semibold text-violet-300">
                 <Lock className="h-2.5 w-2.5" />
                 In ontwikkeling
@@ -82,7 +84,7 @@ export function AccuracyPlusPreview() {
         <div className="h-24 animate-pulse rounded-xl bg-white/5" />
       ) : isError || !data ? (
         <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-5 text-center">
-          <p className="text-sm text-slate-400">Kan status niet ophalen.</p>
+          <p className="text-sm text-slate-400">{t("accPlus.statusError")}</p>
         </div>
       ) : (
         <>
@@ -91,7 +93,7 @@ export function AccuracyPlusPreview() {
             <div className="flex items-center justify-between gap-3 flex-wrap">
               <div className="flex items-center gap-2">
                 <TrendingUp className="h-4 w-4 text-violet-300" />
-                <span className="text-xs font-semibold text-white">Voortgang dataset</span>
+                <span className="text-xs font-semibold text-white">{t("accPlus.datasetProgress")}</span>
               </div>
               <span className="text-[11px] text-slate-500">
                 start: {new Date(data.start_date).toLocaleDateString("nl-NL", { day: "numeric", month: "long", year: "numeric" })}
@@ -126,17 +128,17 @@ export function AccuracyPlusPreview() {
 
           {/* Per tier — locked or unlocked */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {TIER_LABELS.map((t) => {
-              const stats = data.per_tier[t.slug];
+            {TIER_LABELS.map((tier) => {
+              const stats = data.per_tier[tier.slug];
               const hasEnough = data.status === "unlocked" && stats && stats.total >= 10;
 
               return (
                 <div
-                  key={t.slug}
-                  className={`rounded-xl ring-1 p-3 flex flex-col gap-2 ${t.bg} ${t.ring} ${!hasEnough ? "opacity-60" : ""}`}
+                  key={tier.slug}
+                  className={`rounded-xl ring-1 p-3 flex flex-col gap-2 ${tier.bg} ${tier.ring} ${!hasEnough ? "opacity-60" : ""}`}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-slate-200">{t.label}</span>
+                    <span className="text-xs font-bold text-slate-200">{tier.label}</span>
                     {!hasEnough && (
                       <Lock className="h-3 w-3 text-slate-500" />
                     )}
@@ -169,7 +171,7 @@ export function AccuracyPlusPreview() {
           {/* Context footer */}
           <div className="rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2.5 text-[11px] leading-relaxed text-slate-500">
             <p>
-              <strong className="text-slate-300">Wat meten we hier precies?</strong> Voor elke pick die
+              <strong className="text-slate-300">{t("accPlus.whatWeMeasure")}</strong> Voor elke pick die
               het model vanaf {new Date(data.start_date).toLocaleDateString("nl-NL", { day: "numeric", month: "long" })} produceert, slaan we de pre-match
               bookmaker-odds op. Zodra de wedstrijd is afgelopen wordt de pick beoordeeld
               <em> samen met</em> de odds-context. Zo zie je straks niet alleen hoe vaak het model raak

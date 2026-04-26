@@ -103,7 +103,7 @@ export function ArticlesContent({ articles }: ArticlesContentProps) {
           >
             <div
               role="tablist"
-              aria-label="Filter articles by category"
+              aria-label={t("a11y.filterArticlesByCategory")}
               className="no-scrollbar flex w-full max-w-full items-center gap-2 overflow-x-auto sm:w-auto"
             >
               {tabs.map((tab) => {

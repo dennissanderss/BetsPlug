@@ -22,6 +22,7 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import type { BacktestProof, ValueBetStats, ValueBetToday } from "@/types/api";
+import { useTranslations } from "@/i18n/locale-provider";
 
 // Live tracking starts when daily-live pipeline lands. Backfill rows are
 // everything before this date. Kept in sync with backend
@@ -240,6 +241,7 @@ function StatsCard({
 // ─── Sample Funnel Explainer ────────────────────────────────────────────────
 
 function SampleFunnelBox({ proof }: { proof: BacktestProof }) {
+  const { t } = useTranslations();
   const f = proof.funnel;
   const dropOdds = f.live_predictions_evaluated - f.live_evaluated_with_odds;
   return (
@@ -296,7 +298,7 @@ function SampleFunnelBox({ proof }: { proof: BacktestProof }) {
       </div>
       {proof.accuracy_only_slice.n > 0 && (
         <p className="mt-3 text-[11px] text-slate-400">
-          <span className="text-slate-300 font-semibold">Extra bewijs:</span>{" "}
+          <span className="text-slate-300 font-semibold">{t("vbet.extraEvidence")}</span>{" "}
           accuracy-only test op alle{" "}
           <span className="text-slate-200 tabular-nums">
             {proof.accuracy_only_slice.n}
@@ -417,6 +419,7 @@ function BacktestProofCard({ proof, isLoading }: {
   proof?: BacktestProof;
   isLoading: boolean;
 }) {
+  const { t } = useTranslations();
   if (isLoading) {
     return (
       <div className="card-neon p-5 animate-pulse">
@@ -449,7 +452,7 @@ function BacktestProofCard({ proof, isLoading }: {
           <BarChart3 className="h-5 w-5" />
         </HexBadge>
         <div className="flex-1">
-          <span className="section-label">Methode-bewijs (leakage-vrij)</span>
+          <span className="section-label">{t("vbet.methodEvidence")}</span>
           <h3 className="text-heading mt-2 text-lg">
             Historische test op {proof.total_live_evaluated_with_odds} live
             predictions
@@ -560,6 +563,7 @@ function BacktestProofCard({ proof, isLoading }: {
 // ─── Main Panel ─────────────────────────────────────────────────────────────
 
 export function ValueBetPanel() {
+  const { t } = useTranslations();
   const todayQuery = useQuery<ValueBetToday>({
     queryKey: ["value-bet-today"],
     queryFn: () => api.getValueBetToday(),
@@ -626,7 +630,7 @@ export function ValueBetPanel() {
                 <Sparkles className="h-5 w-5" />
               </HexBadge>
               <div>
-                <span className="section-label">Value Bet of the Day</span>
+                <span className="section-label">{t("vbet.title")}</span>
                 <h2 className="text-heading mt-2 text-2xl">
                   {today.home_team}{" "}
                   <span className="text-slate-500 text-lg">vs</span>{" "}
@@ -671,7 +675,7 @@ export function ValueBetPanel() {
               </Pill>
               <div className="mt-4">
                 <ProbDelta
-                  label="Onze kans"
+                  label={t("vbet.ourProbability")}
                   ours={today.our_probability ?? 0}
                   implied={today.bookmaker_implied ?? 0}
                   variant="large"
@@ -731,14 +735,14 @@ export function ValueBetPanel() {
       {/* ── Stats: backtest + live ── */}
       <div className="grid gap-4 md:grid-cols-2">
         <StatsCard
-          title="Geselecteerde value-bets (historisch)"
+          title={t("vbet.histSelection")}
           subtitle={`Exacte productie-filter: edge≥3%, odds 1.50-5.00, tier∈{gold,platinum}`}
           stats={backtestStatsQuery.data}
           isLoading={backtestStatsQuery.isLoading}
           scope="backtest"
         />
         <StatsCard
-          title="Live meting"
+          title={t("vbet.liveMeasurement")}
           subtitle={`Live gemeten vanaf ${LIVE_TRACKING_START}`}
           stats={liveStatsQuery.data}
           isLoading={liveStatsQuery.isLoading}

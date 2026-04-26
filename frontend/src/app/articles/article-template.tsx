@@ -54,7 +54,7 @@ export function ArticleTemplate({ article }: { article: Article }) {
         <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
           {/* Breadcrumbs */}
           <nav
-            aria-label="Breadcrumb"
+            aria-label={t("a11y.breadcrumb")}
             className="mb-6 flex items-center gap-2 text-xs text-[#6b7280]"
           >
             <Link href={loc("/")} className="transition-colors hover:text-[#4ade80]">

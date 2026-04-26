@@ -153,7 +153,7 @@ export function Sidebar() {
         <div
           key={item.href}
           className="glass-panel group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#6b7280] cursor-not-allowed opacity-70"
-          title="Coming Soon"
+          title={t("common.comingSoon")}
         >
           <Icon className="h-4 w-4 shrink-0 text-[#6b7280]" />
           <span className="flex-1">{getLabel(item)}</span>
