@@ -45,6 +45,7 @@ import { LiveMeasurementSection } from "@/components/ui/live-measurement-section
 import { AccuracyPlusPreview } from "@/components/noct/accuracy-plus-preview";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
+import { useTier } from "@/hooks/use-tier";
 import type { PickTierSlug } from "@/types/api";
 import type {
   TrackrecordSummary,
@@ -882,22 +883,14 @@ function SectionPhaseBanner({
 
 // ─── BOTD tier gate — voor BOTD en BOTD-Live tabs. Gold en Platinum
 //      zien de onderliggende sectie; Free en Silver krijgen een
-//      upgrade-teaser. We lezen tier uit localStorage zodat de admin
-//      tier-switcher in /admin ("Test as Tier") ook hier doorwerkt en
-//      je kunt valideren hoe de paywall eruit ziet zonder echt account.
+//      upgrade-teaser. Tier komt uit useTier() zodat de waarde altijd
+//      gesynchroniseerd is met /subscriptions/me en de admin tier-
+//      switcher meteen doorwerkt zonder page refresh.
 
 function BotdTierGate({ children }: { children: React.ReactNode }) {
-  const [userTier, setUserTier] = React.useState<string | null>(null);
-  React.useEffect(() => {
-    try {
-      setUserTier(window.localStorage.getItem("betsplug_tier"));
-    } catch {
-      setUserTier(null);
-    }
-  }, []);
-
-  const hasAccess = userTier === "gold" || userTier === "platinum";
-  if (hasAccess) return <>{children}</>;
+  const { hasAccess: hasTierAccess, ready } = useTier();
+  if (!ready) return null;
+  if (hasTierAccess("gold")) return <>{children}</>;
 
   return (
     <div

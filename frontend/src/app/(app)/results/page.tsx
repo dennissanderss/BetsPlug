@@ -723,6 +723,9 @@ function RoiCalculatorCard({
             {t("results.roiCalcMaxHint", { max: PERIOD_MAX })}
           </span>
         </div>
+        <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
+          {t("results.roiCalcLiveStartNote")}
+        </p>
       </Step>
 
       {/* ── Step 4 — Your return (locked for Free Access) ── */}

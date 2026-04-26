@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { api } from "@/lib/api";
 
 export type Tier = "free" | "silver" | "gold" | "platinum";
 
@@ -12,17 +13,18 @@ export const TIER_RANK: Record<Tier, number> = {
 };
 
 const TIER_KEY = "betsplug_tier";
+const TOKEN_KEY = "betsplug_token";
 const USER_KEY = "betsplug_user";
 const TESTING_KEY = "betsplug_admin_testing_tier";
 
-// Maps the `plan` string returned by /subscriptions/status to the tier slug
+// Maps the `plan` string returned by /subscriptions/me to the tier slug
 // used in the UI. The API returns legacy enum values (basic/standard/premium/
 // lifetime) but the pricing promise for each tier is:
 //   basic   <- bronze checkout   -> Gold access (7-day trial)
 //   standard<- silver checkout   -> Silver access
 //   premium <- gold   checkout   -> Gold access
 //   lifetime<- platinum checkout -> Platinum access
-// Also accept the new-naming slugs in case /status ever returns them directly.
+// Also accept the new-naming slugs in case the API ever returns them directly.
 const API_TIER_MAP: Record<string, Tier> = {
   basic: "gold",
   bronze: "gold",
@@ -75,24 +77,26 @@ export function useTier(): UseTierResult {
     hydrate();
     try {
       const rawUser = window.localStorage.getItem(USER_KEY);
-      if (!rawUser) return;
+      const token = window.localStorage.getItem(TOKEN_KEY);
+      if (!rawUser || !token) return;
       const user = JSON.parse(rawUser);
       if (user.role === "admin") return;
       if (window.localStorage.getItem(TESTING_KEY)) return;
 
-      const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-      const resp = await fetch(
-        `${API}/subscriptions/status?email=${encodeURIComponent(user.email || "")}`,
-      );
-      if (!resp.ok) return;
-      const data = await resp.json();
-      if (data.plan) {
-        const mapped = API_TIER_MAP[data.plan] ?? "free";
-        window.localStorage.setItem(TIER_KEY, mapped);
-        setTier(mapped);
-      }
+      // Authenticated /subscriptions/me is the source of truth — looking up
+      // by email could miss the row entirely (email mismatch, guest checkout)
+      // and would also accept a "plan" value from cancelled/expired rows.
+      // /me's `has_subscription` flag already excludes expired rows.
+      const sub = await api.getMySubscription();
+      const effective: Tier =
+        sub.has_subscription && sub.plan
+          ? (API_TIER_MAP[sub.plan.toLowerCase()] ?? "free")
+          : "free";
+      window.localStorage.setItem(TIER_KEY, effective);
+      setTier(effective);
     } catch {
-      // network/parse error — keep whatever localStorage had
+      // network/parse/401 — keep whatever localStorage had so the UI
+      // doesn't downgrade a paid user during a transient outage.
     }
   }, [hydrate]);
 
@@ -110,13 +114,10 @@ export function useTier(): UseTierResult {
     const onTierChange = () => hydrate();
     window.addEventListener("betsplug:tier-changed", onTierChange);
 
-    // Kick off a one-shot API refresh so free-tier users get their real tier
-    const stored = typeof window !== "undefined"
-      ? window.localStorage.getItem(TIER_KEY)
-      : null;
-    if (!stored || stored === "free") {
-      void refresh();
-    }
+    // Always refresh on mount so a stale "free" cached after a fresh
+    // signup, or a stale "silver" after a downgrade, gets corrected
+    // against the authenticated server view.
+    void refresh();
 
     return () => {
       window.removeEventListener("storage", onStorage);

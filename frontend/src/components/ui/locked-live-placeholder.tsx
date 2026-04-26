@@ -20,6 +20,7 @@ import { motion } from "motion/react";
 import { Lock, Activity, ArrowRight } from "lucide-react";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
+import { useTier } from "@/hooks/use-tier";
 import { LiveMeasurementSection } from "./live-measurement-section";
 import { BotdLiveTrackingSection } from "./botd-live-tracking-section";
 
@@ -47,19 +48,18 @@ export function LockedLivePlaceholder({
   // teaser here. Tier variant has no BOTD lock and just needs a
   // signed-in session.
   const [hasToken, setHasToken] = useState(false);
-  const [userTier, setUserTier] = useState<string | null>(null);
   useEffect(() => {
     try {
       setHasToken(Boolean(window.localStorage.getItem("betsplug_token")));
-      setUserTier(window.localStorage.getItem("betsplug_tier"));
     } catch {
       setHasToken(false);
-      setUserTier(null);
     }
   }, []);
 
-  const tierHasBotdAccess =
-    userTier === "gold" || userTier === "platinum";
+  // useTier handles its own /subscriptions/me sync so the BOTD gate
+  // immediately reflects upgrades the moment the API responds.
+  const { hasAccess: hasTierAccess } = useTier();
+  const tierHasBotdAccess = hasTierAccess("gold");
 
   if (hasToken) {
     if (variant === "tier") {

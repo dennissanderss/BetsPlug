@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Lock, Sparkles, Crown } from "lucide-react";
 import { useTranslations } from "@/i18n/locale-provider";
+import { useTier } from "@/hooks/use-tier";
 
 interface PaywallOverlayProps {
   feature: string;
@@ -20,8 +20,6 @@ interface PaywallOverlayProps {
    */
   variant?: "overlay" | "inline";
 }
-
-const TIER_RANK: Record<string, number> = { free: 0, silver: 1, gold: 2, platinum: 3 };
 
 const TIER_LABELS = {
   silver: "Silver",
@@ -159,85 +157,19 @@ export function PaywallOverlay({
   children,
   variant = "overlay",
 }: PaywallOverlayProps) {
-  const [hasAccess, setHasAccess] = useState(false);
-  const [checked, setChecked] = useState(false);
-  const [userTier, setUserTier] = useState("free");
-
-  useEffect(() => {
-    const requiredRank = TIER_RANK[requiredTier] ?? 0;
-
-    // Admin users bypass ALL paywalls — unless they are actively
-    // testing a specific tier via the admin tier switcher.
-    try {
-      const raw = localStorage.getItem("betsplug_user");
-      if (raw) {
-        const user = JSON.parse(raw);
-        if (user.role === "admin") {
-          const testingTier = localStorage.getItem("betsplug_admin_testing_tier");
-          if (testingTier) {
-            // Admin is testing as a specific tier — skip the bypass
-            // and let normal tier logic below handle it using the
-            // betsplug_tier value that the admin page already sets.
-          } else {
-            setHasAccess(true);
-            setUserTier("platinum");
-            setChecked(true);
-            return;
-          }
-        }
-      }
-    } catch {
-      // Corrupted localStorage — continue with normal flow
-    }
-
-    // First check localStorage (set by admin or after login)
-    const stored = localStorage.getItem("betsplug_tier");
-    if (stored) {
-      setUserTier(stored);
-      const userRank = TIER_RANK[stored] ?? 0;
-      if (userRank >= requiredRank) setHasAccess(true);
-      setChecked(true);
-      // If admin is testing a tier, DON'T let the subscription API
-      // overwrite it — return early.
-      const testingTier = localStorage.getItem("betsplug_admin_testing_tier");
-      if (testingTier) return;
-      if (stored !== "free") return; // Only check API if tier is free/unset
-    }
-
-    // Then check API for subscription status
-    const checkSubscription = async () => {
-      try {
-        const raw = localStorage.getItem("betsplug_user");
-        if (!raw) {
-          setChecked(true);
-          return;
-        }
-        const user = JSON.parse(raw);
-        const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
-        const resp = await fetch(`${API}/subscriptions/status?email=${encodeURIComponent(user.email || "")}`);
-        const data = await resp.json();
-        if (data.plan) {
-          const tierMap: Record<string, string> = { basic: "silver", standard: "silver", premium: "gold", lifetime: "platinum" };
-          const tier = tierMap[data.plan] || "free";
-          setUserTier(tier);
-          localStorage.setItem("betsplug_tier", tier);
-          const userRank = TIER_RANK[tier] ?? 0;
-          if (userRank >= requiredRank) setHasAccess(true);
-        }
-      } catch {
-        // Keep free tier on error
-      }
-      setChecked(true);
-    };
-    checkSubscription();
-  }, [requiredTier]);
+  // Single source of truth for the user's tier — useTier syncs against
+  // the authenticated /subscriptions/me endpoint and writes back to
+  // localStorage so paid users never see "Upgrade to <their own tier>"
+  // because of a stale email-based lookup or a missed Stripe webhook.
+  const { hasAccess: hasTierAccess, ready } = useTier();
+  const hasAccess = hasTierAccess(requiredTier);
 
   // Render a neutral placeholder while we figure out access. Earlier
   // versions returned the unlocked children here, which caused gated
   // content to flash for 0.5-1s before the paywall took over (clearly
   // visible on slow networks and on /bet-of-the-day for Free users).
   // A frosted skeleton is the safer default — no paid content leaks.
-  if (!checked) {
+  if (!ready) {
     if (variant === "inline") {
       return (
         <div

@@ -22,6 +22,7 @@ import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { useNavState } from "@/components/layout/nav-state-context";
+import { useTier } from "@/hooks/use-tier";
 
 interface HeaderProps {
   className?: string;
@@ -41,18 +42,13 @@ export function Header({ className }: HeaderProps) {
   const [notifOpen, setNotifOpen] = React.useState(false);
   const [searchFocused, setSearchFocused] = React.useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = React.useState(false);
-  const [tier, setTier] = React.useState<string | null>(null);
+  const { tier: tierSlug, ready: tierReady } = useTier();
+  // Keep the existing string-or-null shape so the rest of the component
+  // (tierLabel / isPlatinum below) can keep using it unchanged.
+  const tier = tierReady ? tierSlug : null;
   const userMenuRef = React.useRef<HTMLDivElement>(null);
   const notifRef = React.useRef<HTMLDivElement>(null);
   const mobileSearchRef = React.useRef<HTMLInputElement>(null);
-
-  React.useEffect(() => {
-    try {
-      setTier(window.localStorage.getItem("betsplug_tier"));
-    } catch {
-      setTier(null);
-    }
-  }, [userMenuOpen]);
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
