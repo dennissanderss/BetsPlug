@@ -453,11 +453,21 @@ def _build_fixture_item(
         if pick_tier_enum is not None:
             meta = tier_info(pick_tier_enum)
 
+        # Only lock picks for matches that haven't finished yet — once a
+        # match is settled the pick is public history (it shows on
+        # /trackrecord and feeds /trackrecord/live-measurement). Hiding
+        # finished Platinum/Gold picks from lower-tier callers also
+        # broke the public what-if calculator on /results, which needs
+        # the prediction body to simulate payouts per tier.
+        is_finished = match.status == MatchStatus.FINISHED or (
+            isinstance(match.status, str) and match.status == "finished"
+        )
         is_locked = (
             TIER_SYSTEM_ENABLED
             and user_tier is not None
             and pick_tier_enum is not None
             and int(pick_tier_enum) > int(user_tier)
+            and not is_finished
         )
 
         if is_locked:
