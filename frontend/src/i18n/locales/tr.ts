@@ -2663,5 +2663,5 @@ const tr = {
   "admin.matchesColumn": "Maçlar",
   "admin.predsColumn": "Tah.",
   "results.roiCalcLiveStartNote": "Canlı veriler 16 Nis 2026'da başlar — daha uzun pencereler şimdilik aynı seti döndürür, ta ki daha fazla gün kaydedilene kadar.",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default tr;

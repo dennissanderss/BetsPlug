@@ -2713,5 +2713,5 @@ const id = {
   "admin.matchesColumn": "Pertandingan",
   "admin.predsColumn": "Prediksi",
   "results.roiCalcLiveStartNote": "Data live mulai 16 Apr 2026 — jendela lebih panjang sementara mengembalikan set yang sama sampai lebih banyak hari dicatat.",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default id;

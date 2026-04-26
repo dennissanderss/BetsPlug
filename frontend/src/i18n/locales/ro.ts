@@ -2663,5 +2663,5 @@ const ro = {
   "admin.matchesColumn": "Meciuri",
   "admin.predsColumn": "Pred.",
   "results.roiCalcLiveStartNote": "Datele live încep pe 16 apr. 2026 — ferestrele mai lungi returnează deocamdată același set până sunt înregistrate mai multe zile.",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default ro;

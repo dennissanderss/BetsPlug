@@ -2663,5 +2663,5 @@ const el = {
   "admin.matchesColumn": "Αγώνες",
   "admin.predsColumn": "Προβλ.",
   "results.roiCalcLiveStartNote": "Τα live δεδομένα ξεκινούν στις 16 Απρ 2026 — μεγαλύτερα παράθυρα επιστρέφουν προς το παρόν το ίδιο σύνολο μέχρι να καταγραφούν περισσότερες μέρες.",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default el;

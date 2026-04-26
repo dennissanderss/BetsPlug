@@ -2663,5 +2663,5 @@ const sv = {
   "admin.matchesColumn": "Matcher",
   "admin.predsColumn": "Förutsäg.",
   "results.roiCalcLiveStartNote": "Live-data startar 16 apr 2026 — längre fönster returnerar tills vidare samma uppsättning tills fler dagar är registrerade.",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default sv;

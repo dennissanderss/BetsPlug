@@ -2713,5 +2713,5 @@ const sw = {
   "admin.matchesColumn": "Mechi",
   "admin.predsColumn": "Utabiri",
   "results.roiCalcLiveStartNote": "Data ya live huanza 16 Apr 2026 — madirisha marefu kwa sasa hurudisha seti hiyohiyo hadi siku zaidi zirekodiwe.",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default sw;

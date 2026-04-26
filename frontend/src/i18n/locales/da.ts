@@ -2663,5 +2663,5 @@ const da = {
   "admin.matchesColumn": "Kampe",
   "admin.predsColumn": "Forudsig.",
   "results.roiCalcLiveStartNote": "Live-data starter 16. apr. 2026 — længere vinduer returnerer indtil videre det samme sæt, indtil flere dage er registreret.",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default da;
