@@ -9,7 +9,7 @@ import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import { useTier } from "@/hooks/use-tier";
-import { useLocalizedHref } from "@/i18n/locale-provider";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import type { PickTierSlug, TierBreakdown } from "@/types/api";
 
 /**
@@ -45,6 +45,7 @@ function TierRow({
   isUserTier: boolean;
   onUpgradeHref: string;
 }) {
+  const { t } = useTranslations();
   const total = breakdown?.total ?? 0;
   const correct = breakdown?.correct ?? 0;
   const accuracy = breakdown?.accuracy ?? 0;
@@ -87,7 +88,7 @@ function TierRow({
               Upgrade to unlock
             </div>
           ) : (
-            <div className="text-[11px] text-slate-500">No data yet</div>
+            <div className="text-[11px] text-slate-500">{t("common.noDataYet")}</div>
           )}
         </div>
       </div>

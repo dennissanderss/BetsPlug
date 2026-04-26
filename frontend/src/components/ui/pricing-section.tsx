@@ -305,7 +305,7 @@ export function PricingSection({ pricingConfig }: PricingSectionProps = {}) {
         <div className="mb-12 flex flex-col items-center gap-3">
           <div
             role="tablist"
-            aria-label="Billing period"
+            aria-label={t("a11y.billingPeriod")}
             className="glass-panel-lifted relative inline-flex items-center rounded-full p-1"
             style={{ borderColor: "hsl(0 0% 100% / 0.1)" }}
           >

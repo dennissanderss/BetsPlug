@@ -13,7 +13,13 @@
  */
 
 import { createContext, useCallback, useContext, useMemo } from "react";
-import { defaultLocale, LOCALE_COOKIE, type Locale } from "./config";
+import {
+  defaultLocale,
+  ENABLED_LOCALES,
+  LOCALE_COOKIE,
+  isEnabledLocale,
+  type Locale,
+} from "./config";
 import { translate, type TranslationKey } from "./messages";
 import { translatePath } from "./routes";
 import { formatMsg, type MessageVars } from "./format";
@@ -46,15 +52,26 @@ export function LocaleProvider({
 
   const setLocale = useCallback((next: Locale) => {
     if (typeof document === "undefined") return;
+
+    // Hard guard: only ENABLED_LOCALES are user-selectable. The
+    // language switcher already filters its options to this set,
+    // but a programmatic call (or stale cookie) could otherwise
+    // pin a parked locale that has no maintained translations.
+    if (!isEnabledLocale(next)) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `[i18n] setLocale("${next}") rejected — not in ENABLED_LOCALES (${ENABLED_LOCALES.join(", ")}). Falling back to default.`,
+      );
+      return;
+    }
+
     // 1 year cookie, root path so it applies everywhere.
     document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
 
     // Navigate to the localized URL so SSR renders the new
     // language. The middleware rewrites /xx/ to the canonical
     // page file and sets `x-locale` so generateMetadata + the
-    // page see the right locale. Non-default URLs carry
-    // `X-Robots-Tag: noindex` so the translated URL never lands
-    // in Google's index — only the EN canonical does.
+    // page see the right locale.
     const url = new URL(window.location.href);
     url.pathname = translatePath(url.pathname, next);
     window.location.href = url.toString();

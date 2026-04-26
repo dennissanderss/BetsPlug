@@ -457,7 +457,7 @@ function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolea
           {isFree ? (
             <Link
               href="/pricing"
-              title="Upgrade to Silver to view pre-match odds"
+              title={t("pred.oddsLockTooltip")}
               className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:text-amber-300 hover:border-amber-500/40 transition-colors"
             >
               <Lock className="h-3 w-3" />
@@ -1016,7 +1016,7 @@ function FilterBar({
                         : "text-slate-100 hover:bg-slate-700/50"
                     }`}
                   >
-                    <span>All Leagues</span>
+                    <span>{t("pred.allLeagues")}</span>
                     {leagueFilter === "All" && (
                       <Check className="h-4 w-4 text-blue-400" />
                     )}
@@ -1139,9 +1139,9 @@ function FilterBar({
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                {opt === "High"   ? "High (>75%)"
-                 : opt === "Medium" ? "Med (50–75%)"
-                 : opt === "Low"    ? "Low (<50%)"
+                {opt === "High"   ? t("pred.threshold.high")
+                 : opt === "Medium" ? t("pred.threshold.medium")
+                 : opt === "Low"    ? t("pred.threshold.low")
                  : opt}
               </button>
             ))}
@@ -1404,7 +1404,7 @@ export default function PredictionsPage() {
             <Sparkles className="h-6 w-6" />
           </HexBadge>
           <div>
-            <span className="section-label">All predictions</span>
+            <span className="section-label">{t("pred.sectionLabel")}</span>
             <h1 className="text-heading mt-3">{t("pred.title")}</h1>
             <p className="mt-2 text-sm text-slate-400">
               {t("pred.subtitle")}
@@ -1450,15 +1450,14 @@ export default function PredictionsPage() {
         <div className="flex items-start gap-3 rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
           <span className="mt-0.5 text-base">💡</span>
           <p className="text-xs leading-relaxed text-slate-300">
-            <span className="font-semibold text-white">Hoe gebruik je deze picks?</span>{" "}
-            Alle picks zijn beschikbaar om op te wedden. Hoe hoger de{" "}
-            <span className="font-semibold text-amber-300">betrouwbaarheid %</span>, hoe
-            zekerder het model. Wij raden aan: kies picks{" "}
-            <span className="font-semibold text-emerald-300">boven 70%</span> voor de beste
-            kans op succes. Filter op{" "}
-            <span className="font-semibold text-white">Gold</span> of{" "}
-            <span className="font-semibold text-white">Platinum</span> om alleen die picks te
-            zien.
+            <span className="font-semibold text-white">{t("pred.banner.title")}</span>{" "}
+            {t("pred.banner.intro")}{" "}
+            <span className="font-semibold text-amber-300">{t("pred.banner.confidenceTerm")}</span>
+            {t("pred.banner.middle")}{" "}
+            <span className="font-semibold text-emerald-300">{t("pred.banner.threshold")}</span>{" "}
+            {t("pred.banner.tail")}{" "}
+            <span className="font-semibold text-white">Gold</span> {t("pred.banner.linkOr")}{" "}
+            <span className="font-semibold text-white">Platinum</span> {t("pred.banner.suffix")}
           </p>
         </div>
       )}
@@ -1469,16 +1468,14 @@ export default function PredictionsPage() {
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 text-slate-500" />
             <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-              {t("pred.rangeLabel" as any) === "pred.rangeLabel"
-                ? "Periode"
-                : t("pred.rangeLabel" as any)}
+              {t("pred.rangeLabel")}
             </span>
           </div>
           <div className="flex items-center gap-1">
             {([
-              { days: 7,  label: "Afgelopen week" },
-              { days: 14, label: "Afgelopen 14 dagen" },
-              { days: 30, label: "Afgelopen 30 dagen" },
+              { days: 7,  label: t("pred.range.week") },
+              { days: 14, label: t("pred.range.fortnight") },
+              { days: 30, label: t("pred.range.month") },
             ] as const).map(({ days, label }) => {
               const active = resultsRange === days;
               return (

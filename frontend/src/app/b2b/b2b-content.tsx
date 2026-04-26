@@ -148,7 +148,7 @@ export function B2BContent({ b2bPage }: B2BContentProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            aria-label="Breadcrumb"
+            aria-label={t("a11y.breadcrumb")}
             className="mt-8 flex items-center justify-center gap-2 text-xs text-[#6b7280]"
           >
             <Link href={home} className="transition-colors hover:text-[#4ade80]">

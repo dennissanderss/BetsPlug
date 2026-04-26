@@ -69,6 +69,22 @@ if [ -n "$MESSAGES_CHANGED" ] || [ -n "$PAGEMETA_CHANGED" ]; then
     echo ""
   fi
 fi
+
+# ── Final gate: full i18n:check (coverage + new hardcoded scan) ─
+# Skips language-detect (slow, run via npm run i18n:check:full
+# manually or in CI). Catches:
+#   • missing keys in any of the 6 ENABLED_LOCALES
+#   • new hardcoded JSX strings on pages outside the .i18nignore
+#     baseline
+echo "  i18n: running coverage + hardcoded-string check..."
+if ! node scripts/i18n-check.mjs --no-detect; then
+  echo ""
+  echo "  ✗ pre-commit: i18n:check failed — see output above."
+  echo "    Either add the missing translations or, if the new"
+  echo "    hardcoded string is genuinely deferred work, add the"
+  echo "    file:line to frontend/.i18nignore (with comment)."
+  exit 1
+fi
 HOOK
 
 chmod +x "$HOOK_DIR/pre-commit"

@@ -25,6 +25,57 @@ const en = {
   "nav.getStarted": "Get Started",
   "nav.joinBlurb": "Join 1,500+ subscribers getting smarter picks every day.",
 
+  /* Value Bet panel — extracted from hardcoded NL on 2026-04-27 */
+  "vbet.title": "Value Bet of the Day",
+  "vbet.extraEvidence": "Extra evidence:",
+  "vbet.methodEvidence": "Method evidence (leakage-free)",
+  "vbet.ourProbability": "Our probability",
+  "vbet.histSelection": "Selected value bets (historical)",
+  "vbet.liveMeasurement": "Live measurement",
+  "vbet.col.date": "Date",
+  "vbet.col.match": "Match",
+  "vbet.col.league": "League",
+  "vbet.col.pick": "Pick",
+  "vbet.col.odds": "Odds",
+
+  /* Accuracy Pro Engine v2 preview — extracted from hardcoded NL */
+  "accPlus.title": "Accuracy Pro Engine v2",
+  "accPlus.statusError": "Could not fetch status.",
+  "accPlus.datasetProgress": "Dataset progress",
+  "accPlus.whatWeMeasure": "What are we measuring exactly?",
+
+  /* Pricing copy — extracted from hardcoded EN */
+  "pricing.platinumUnbeatable": "Platinum unbeatable.",
+  "pricing.upgradeOnceLanded": "Upgrade once the numbers land.",
+
+  /* Footer extras — extracted from hardcoded EN */
+  "footer.freeToJoin": "Free to join",
+  "footer.dailyPicks": "Daily picks",
+  "footer.liveChat": "Live chat",
+
+  /* Thank-you page */
+  "thankYou.aiFootballPredictions": "AI football predictions",
+
+  /* Accessibility labels (aria-label, alt). Extracted 2026-04-27. */
+  "a11y.breadcrumb": "Breadcrumb",
+  "a11y.openMenu": "Open menu",
+  "a11y.closeMenu": "Close menu",
+  "a11y.notifications": "Notifications",
+  "a11y.userMenu": "User menu",
+  "a11y.closeSearch": "Close search",
+  "a11y.previousPage": "Previous page",
+  "a11y.nextPage": "Next page",
+  "a11y.previousTestimonial": "Previous testimonial",
+  "a11y.nextTestimonial": "Next testimonial",
+  "a11y.dismissDisclaimer": "Dismiss disclaimer",
+  "a11y.billingPeriod": "Billing period",
+  "a11y.toggleBillingPeriod": "Toggle billing period",
+  "a11y.engineSections": "Engine sections",
+  "a11y.filterArticlesByCategory": "Filter articles by category",
+  "common.allCountries": "All countries",
+  "common.comingSoon": "Coming soon",
+  "common.noDataYet": "No data yet",
+
   /* Top Bar, legacy keys (still used as fallback accuracy copy) */
   "topbar.winRate": "win rate",
   "topbar.picksAnalyzed": "picks analyzed",
@@ -2085,6 +2136,29 @@ const en = {
   "pred.upcoming": "Upcoming",
   "pred.resultsTab": "Results",
   "pred.correctSoFar": "Correct so far",
+
+  /* /predictions guidance banner + filter labels (extracted from
+     hardcoded JSX during the 2026-04-27 i18n overhaul). */
+  "pred.sectionLabel": "All predictions",
+  "pred.allLeagues": "All Leagues",
+  "pred.threshold.high": "High (>75%)",
+  "pred.threshold.medium": "Med (50–75%)",
+  "pred.threshold.low": "Low (<50%)",
+  "pred.oddsLockTooltip": "Upgrade to Silver to view pre-match odds",
+  "pred.banner.title": "How do you use these picks?",
+  "pred.banner.intro": "All picks are available to bet on. The higher the",
+  "pred.banner.confidenceTerm": "confidence %",
+  "pred.banner.middle": ", the more confident the model. We recommend: pick predictions",
+  "pred.banner.threshold": "above 70%",
+  "pred.banner.tail": "for the best chance of success. Filter by",
+  "pred.banner.linkOr": "or",
+  "pred.banner.suffix": "to see only those picks.",
+  "pred.rangeLabel": "Period",
+  "pred.range.week": "Past week",
+  "pred.range.fortnight": "Past 14 days",
+  "pred.range.month": "Past 30 days",
+
+
   "pred.today": "Today",
   "pred.all": "All",
   "pred.thisWeek": "This week",
@@ -4738,6 +4812,24 @@ const nl: Dictionary = {
   "pred.predictionsAvailable": "{count} voorspellingen beschikbaar zonder filters",
   "pred.predictionsReady": "Voorspellingen klaar",
   "pred.resultsTab": "Resultaten",
+  "pred.sectionLabel": "Alle voorspellingen",
+  "pred.allLeagues": "Alle competities",
+  "pred.threshold.high": "Hoog (>75%)",
+  "pred.threshold.medium": "Gem (50–75%)",
+  "pred.threshold.low": "Laag (<50%)",
+  "pred.oddsLockTooltip": "Upgrade naar Silver om pre-match odds te bekijken",
+  "pred.banner.title": "Hoe gebruik je deze picks?",
+  "pred.banner.intro": "Alle picks zijn beschikbaar om op te wedden. Hoe hoger de",
+  "pred.banner.confidenceTerm": "betrouwbaarheid %",
+  "pred.banner.middle": ", hoe zekerder het model. Wij raden aan: kies picks",
+  "pred.banner.threshold": "boven 70%",
+  "pred.banner.tail": "voor de beste kans op succes. Filter op",
+  "pred.banner.linkOr": "of",
+  "pred.banner.suffix": "om alleen die picks te zien.",
+  "pred.rangeLabel": "Periode",
+  "pred.range.week": "Afgelopen week",
+  "pred.range.fortnight": "Afgelopen 14 dagen",
+  "pred.range.month": "Afgelopen 30 dagen",
   "pred.searchLeague": "Zoek competitie...",
   "pred.sortConfidence": "Betrouwbaarheid",
   "pred.sortLeague": "Competitie",
@@ -5371,6 +5463,57 @@ const nl: Dictionary = {
   "topbar.v.social.text": "Meer dan 1.500 abonnees in heel Europa vertrouwen elke dag op BetsPlug",
   "topbar.v.social.textMobile": "1.500+ abonnees vertrouwen op BetsPlug",
   "topbar.winRate": "winstpercentage",
+
+  /* Value Bet panel (NL) */
+  "vbet.title": "Value Bet of the Day",
+  "vbet.extraEvidence": "Extra bewijs:",
+  "vbet.methodEvidence": "Methode-bewijs (leakage-vrij)",
+  "vbet.ourProbability": "Onze kans",
+  "vbet.histSelection": "Geselecteerde value-bets (historisch)",
+  "vbet.liveMeasurement": "Live meting",
+  "vbet.col.date": "Datum",
+  "vbet.col.match": "Wedstrijd",
+  "vbet.col.league": "Liga",
+  "vbet.col.pick": "Pick",
+  "vbet.col.odds": "Odds",
+
+  /* Accuracy Pro Engine v2 preview (NL) */
+  "accPlus.title": "Accuracy Pro Engine v2",
+  "accPlus.statusError": "Kan status niet ophalen.",
+  "accPlus.datasetProgress": "Voortgang dataset",
+  "accPlus.whatWeMeasure": "Wat meten we hier precies?",
+
+  /* Pricing copy (NL) */
+  "pricing.platinumUnbeatable": "Platinum onverslaanbaar.",
+  "pricing.upgradeOnceLanded": "Upgrade zodra de cijfers binnenrollen.",
+
+  /* Footer extras (NL) */
+  "footer.freeToJoin": "Gratis om mee te doen",
+  "footer.dailyPicks": "Dagelijkse picks",
+  "footer.liveChat": "Live chat",
+
+  /* Thank-you page (NL) */
+  "thankYou.aiFootballPredictions": "AI voetbalvoorspellingen",
+
+  /* Accessibility (NL) */
+  "a11y.breadcrumb": "Kruimelpad",
+  "a11y.openMenu": "Menu openen",
+  "a11y.closeMenu": "Menu sluiten",
+  "a11y.notifications": "Notificaties",
+  "a11y.userMenu": "Gebruikersmenu",
+  "a11y.closeSearch": "Zoeken sluiten",
+  "a11y.previousPage": "Vorige pagina",
+  "a11y.nextPage": "Volgende pagina",
+  "a11y.previousTestimonial": "Vorige testimonial",
+  "a11y.nextTestimonial": "Volgende testimonial",
+  "a11y.dismissDisclaimer": "Disclaimer sluiten",
+  "a11y.billingPeriod": "Betalingsperiode",
+  "a11y.toggleBillingPeriod": "Betalingsperiode wisselen",
+  "a11y.engineSections": "Engine-secties",
+  "a11y.filterArticlesByCategory": "Filter artikelen op categorie",
+  "common.allCountries": "Alle landen",
+  "common.comingSoon": "Binnenkort beschikbaar",
+  "common.noDataYet": "Nog geen data",
 
   "tr.breadcrumbHome": "Home",
   "tr.breadcrumbTrack": "Track Record",
@@ -6035,7 +6178,50 @@ export const messages: Record<string, Dictionary> = {
   sv: svDict,
 };
 
+/**
+ * Look up a translation. Behaviour:
+ *   - Found in target locale → return that.
+ *   - Missing in target locale → return EN value as fallback. In
+ *     development, log a console.error so the developer sees the
+ *     gap immediately. In production, silent fallback (no UX
+ *     regression).
+ *   - Key missing in EN too → return the key itself, surrounded
+ *     with `[i18n:missing]…[/i18n:missing]` so it stands out in
+ *     the rendered HTML and any QA tool. This catches `as any`
+ *     casts that name keys that never existed.
+ *
+ * The dev console.error is throttled per (locale, key) so a single
+ * missing key doesn't flood the logs.
+ */
+const _seenMissing = new Set<string>();
+
 export function translate(locale: string, key: TranslationKey): string {
   const dict = messages[locale];
-  return dict?.[key] ?? en[key];
+  const v = dict?.[key];
+  if (v !== undefined) return v;
+
+  const enValue = en[key];
+  if (enValue !== undefined) {
+    if (process.env.NODE_ENV !== "production") {
+      const tag = `${locale}:${key}`;
+      if (!_seenMissing.has(tag)) {
+        _seenMissing.add(tag);
+        // eslint-disable-next-line no-console
+        console.error(
+          `[i18n] missing key '${key}' in locale '${locale}'. Falling back to EN: "${String(enValue).slice(0, 80)}"`,
+        );
+      }
+    }
+    return enValue;
+  }
+
+  // Key doesn't exist in EN either — almost always an `as any` cast
+  // that names a non-existent key. Make this LOUD: the fallback
+  // string is wrapped so it shows up as garbage in any QA pass.
+  if (process.env.NODE_ENV !== "production") {
+    // eslint-disable-next-line no-console
+    console.error(`[i18n] unknown key '${key}' (no entry in EN dict either)`);
+    return `[i18n:missing]${key}[/i18n:missing]`;
+  }
+  return key;
 }

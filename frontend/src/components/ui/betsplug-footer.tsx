@@ -137,9 +137,9 @@ export function BetsPlugFooter() {
                     1,200+ members online
                   </span>
                   <span>·</span>
-                  <span>Free to join</span>
+                  <span>{t("footer.freeToJoin")}</span>
                   <span>·</span>
-                  <span>Daily picks</span>
+                  <span>{t("footer.dailyPicks")}</span>
                 </div>
               </div>
             </div>
@@ -254,7 +254,7 @@ export function BetsPlugFooter() {
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-1.5 text-[#a3a9b8] transition-colors hover:text-[#ededed]"
                 >
-                  <span>Live chat</span>
+                  <span>{t("footer.liveChat")}</span>
                   <span className="relative flex h-2 w-2">
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#4ade80] opacity-75" />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-[#4ade80]" />

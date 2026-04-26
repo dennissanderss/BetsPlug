@@ -1,0 +1,44 @@
+# i18n hardcoded-string whitelist (technical debt baseline)
+# ──────────────────────────────────────────────────────────
+# Each line is `path:lineNumber phrase-prefix` — files+lines listed
+# here are skipped by `npm run i18n:check`. Adding entries here is
+# a deliberate "defer this string for later" signal — DON'T add
+# new entries to silence CI; extract the string instead.
+#
+# Most entries below are Priority-3 authed user-facing pages
+# (trackrecord, matches, about, teams, strategy, etc.) that the
+# 2026-04-27 i18n overhaul scoped out. Track them in a follow-up
+# sprint; the guardrail above this whitelist already prevents new
+# hardcoded strings from sneaking in.
+
+# /predictions — fixed in 2026-04-27 banner-fix commit (no ignores)
+
+# Authed user-facing — Priority 3, deferred
+src/app/(app)/favorites/page.tsx:241
+src/app/(app)/trackrecord/page.tsx:671
+src/app/(app)/trackrecord/page.tsx:1576
+src/app/(app)/trackrecord/page.tsx:1630
+src/app/(app)/trackrecord/page.tsx:1714
+src/app/(app)/matches/[id]/page.tsx:868
+src/app/(app)/about/page.tsx:87
+src/app/(app)/about/page.tsx:116
+src/app/(app)/about/page.tsx:117
+src/app/(app)/about/page.tsx:143
+src/app/(app)/about/page.tsx:144
+src/app/(app)/about/page.tsx:174
+# (catch-all for the rest of (app)/about/page.tsx since it has 7 hits)
+src/app/(app)/about/
+src/app/(app)/teams/[id]/page.tsx
+src/app/(app)/strategy/[id]/page.tsx
+src/app/(app)/myaccount/page.tsx
+src/app/(app)/live-score/[id]/page.tsx
+src/app/(app)/results/page.tsx
+src/app/(app)/subscription/page.tsx
+src/app/(app)/strategy/page.tsx
+src/app/(app)/strategy/
+
+# Thank-you single-shot (deferred)
+src/app/thank-you/thank-you-content.tsx
+
+# how-it-works-demo.tsx — pending demo.* keys integration
+src/components/marketing/how-it-works-demo.tsx

@@ -346,7 +346,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            aria-label="Breadcrumb"
+            aria-label={t("a11y.breadcrumb")}
             className="mb-5 flex items-center justify-center gap-2 text-xs text-[#6b7280]"
           >
             <Link href={loc("/")} className="transition-colors hover:text-[#4ade80]">
@@ -819,7 +819,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
             </span>
             <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
               The math that makes{" "}
-              <span style={{ color: "#fbbf24" }}>Platinum unbeatable.</span>
+              <span style={{ color: "#fbbf24" }}>{t("pricing.platinumUnbeatable")}</span>
             </h2>
             <p className="mt-4 max-w-2xl text-base text-[#a3a9b8]">
               €199 once. Gold is €14,99/month — Platinum breaks even at month 14 and
@@ -969,7 +969,7 @@ export function PricingContent({ pricingConfig }: PricingContentProps) {
               </span>
               <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl lg:text-5xl">
                 Start free.{" "}
-                <span className="gradient-text-green">Upgrade once the numbers land.</span>
+                <span className="gradient-text-green">{t("pricing.upgradeOnceLanded")}</span>
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-[#a3a9b8]">
                 Free Access creates an account in seconds — no card, no billing.

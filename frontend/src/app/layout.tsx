@@ -5,6 +5,7 @@ import Script from "next/script";
 import "./globals.css";
 import { AppProviders } from "@/components/layout/providers";
 import { LocaleProvider } from "@/i18n/locale-provider";
+import { LocaleSanityCheck } from "@/components/dev/LocaleSanityCheck";
 import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 
@@ -144,6 +145,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <LocaleProvider locale={locale}>
           <AppProviders>{children}</AppProviders>
+          {/* Dev-only sanity check that flags pages whose body
+              text reads as a different language than the URL
+              locale. Renders nothing in production. */}
+          <LocaleSanityCheck locale={locale} />
         </LocaleProvider>
       </body>
     </html>

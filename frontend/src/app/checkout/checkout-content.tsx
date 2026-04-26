@@ -996,7 +996,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                                   </option>
                                 ))}
                             </optgroup>
-                            <optgroup label="All countries">
+                            <optgroup label={t("common.allCountries")}>
                               {countryOptions
                                 .slice(popularCount)
                                 .map((c) => (
@@ -1633,7 +1633,7 @@ function OrderSummary({
                     ? "border-green-500/60 bg-[#4ade80]/[0.08]0/20"
                     : "border-white/[0.1] bg-white/[0.04]"
                 }`}
-                aria-label="Toggle billing period"
+                aria-label={t("a11y.toggleBillingPeriod")}
               >
                 <span
                   className={`inline-block h-4 w-4 transform rounded-full bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.6)] transition-transform ${

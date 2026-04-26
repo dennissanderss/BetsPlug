@@ -336,7 +336,7 @@ export function SiteNav() {
               <button
                 type="button"
                 onClick={() => setMobileOpen(true)}
-                aria-label="Open menu"
+                aria-label={t("a11y.openMenu")}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#ededed] transition-colors hover:border-[#4ade80]/50 hover:bg-[#4ade80]/10 xl:hidden"
               >
                 <Menu className="h-4 w-4" />
@@ -400,7 +400,7 @@ export function SiteNav() {
             <button
               type="button"
               onClick={() => setMobileOpen(false)}
-              aria-label="Close menu"
+              aria-label={t("a11y.closeMenu")}
               className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-[#a3a9b8] transition-colors hover:border-[#4ade80]/50 hover:text-[#ededed]"
             >
               <X className="h-4 w-4" />
