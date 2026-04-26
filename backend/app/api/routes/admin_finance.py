@@ -21,6 +21,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.auth.dependencies import require_admin
 from app.db.session import get_db
 from app.models.manual_expense import ManualExpense
+from app.models.prediction import Prediction
 from app.models.subscription import Payment, PaymentStatus
 from app.models.user import User
 
@@ -309,6 +310,95 @@ async def get_finance_overview(
         timeline=ordered,
         by_plan={k: round(v, 2) for k, v in by_plan.items()},
         expenses_by_category={k: round(v, 2) for k, v in by_category.items()},
+    )
+
+
+# ---------------------------------------------------------------------------
+# GET /admin/finance/today — at-a-glance daily snapshot
+# ---------------------------------------------------------------------------
+
+
+class TodayOverview(BaseModel):
+    date: date
+    new_users: int
+    new_subscribers: int  # users whose first-ever SUCCEEDED payment is today
+    revenue: float
+    payments: int
+    predictions_published: int
+    currency: str
+
+
+@router.get("/today", response_model=TodayOverview)
+async def get_today_overview(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_admin),
+) -> TodayOverview:
+    """Return a small at-a-glance snapshot for today (UTC)."""
+
+    today = datetime.now(timezone.utc).date()
+    start_dt = datetime.combine(today, datetime.min.time(), tzinfo=timezone.utc)
+    end_dt = start_dt + timedelta(days=1)
+
+    # New users today
+    new_users = (
+        await db.execute(
+            select(func.count(User.id))
+            .where(User.created_at >= start_dt)
+            .where(User.created_at < end_dt)
+        )
+    ).scalar_one()
+
+    # Today's payments — sum + count + currency vote
+    todays_pay_rows = (
+        await db.execute(
+            select(Payment.amount, Payment.currency, Payment.user_id)
+            .where(Payment.status == PaymentStatus.SUCCEEDED)
+            .where(Payment.created_at >= start_dt)
+            .where(Payment.created_at < end_dt)
+        )
+    ).all()
+
+    revenue = sum(float(r.amount or 0) for r in todays_pay_rows)
+    payments_count = len(todays_pay_rows)
+    todays_payer_ids = {r.user_id for r in todays_pay_rows}
+    currency_votes: dict[str, int] = {}
+    for r in todays_pay_rows:
+        cur = (r.currency or "eur").lower()
+        currency_votes[cur] = currency_votes.get(cur, 0) + 1
+    currency = max(currency_votes, key=currency_votes.get) if currency_votes else "eur"
+
+    # New subscribers today: distinct users whose first-ever SUCCEEDED payment is today
+    new_subscribers = 0
+    if todays_payer_ids:
+        first_pay_rows = (
+            await db.execute(
+                select(Payment.user_id, func.min(Payment.created_at).label("first_at"))
+                .where(Payment.status == PaymentStatus.SUCCEEDED)
+                .where(Payment.user_id.in_(todays_payer_ids))
+                .group_by(Payment.user_id)
+            )
+        ).all()
+        new_subscribers = sum(
+            1 for row in first_pay_rows if start_dt <= row.first_at < end_dt
+        )
+
+    # Predictions created today
+    predictions_published = (
+        await db.execute(
+            select(func.count(Prediction.id))
+            .where(Prediction.created_at >= start_dt)
+            .where(Prediction.created_at < end_dt)
+        )
+    ).scalar_one()
+
+    return TodayOverview(
+        date=today,
+        new_users=int(new_users or 0),
+        new_subscribers=int(new_subscribers),
+        revenue=round(revenue, 2),
+        payments=int(payments_count),
+        predictions_published=int(predictions_published or 0),
+        currency=currency,
     )
 
 

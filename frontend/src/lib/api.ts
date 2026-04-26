@@ -289,6 +289,12 @@ class ApiClient {
 
   /* ── Admin Finance ────────────────────────────────────────── */
 
+  adminTodayOverview() {
+    return this.request<import("@/types/api").AdminTodayOverview>(
+      "/admin/finance/today"
+    );
+  }
+
   adminFinanceOverview(params?: { period?: string; months?: number }) {
     const qs = new URLSearchParams();
     if (params?.period) qs.set("period", params.period);

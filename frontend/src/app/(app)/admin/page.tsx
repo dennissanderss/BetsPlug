@@ -15,9 +15,7 @@ import {
   Search,
   BarChart3,
   ClipboardList,
-  FlaskConical,
   DollarSign,
-  Mail,
   Globe,
   Eye,
   RotateCcw,
@@ -25,6 +23,10 @@ import {
   ArrowUpRight,
   Send,
   BookOpen,
+  UserPlus,
+  Sparkles,
+  TrendingUp,
+  Target,
 } from "lucide-react";
 
 import { useRouter } from "next/navigation";
@@ -45,8 +47,6 @@ import FinanceTab from "@/components/admin/finance-tab";
 import SeoDashboard from "@/components/admin/seo-dashboard";
 import AnalyticsSettings from "@/components/admin/analytics-settings";
 import GoalsNotesTab from "@/components/admin/goals-notes-tab";
-import StrategyTiersTab from "@/components/admin/strategy-tiers-tab";
-import EmailDiagnosticsTab from "@/components/admin/email-diagnostics-tab";
 import SeoMetaEditor from "@/components/admin/seo-meta-editor";
 import TelegramManager from "@/components/admin/telegram-manager";
 import SystemInfoTab from "@/components/admin/system-info";
@@ -2370,6 +2370,140 @@ function TierSwitcher() {
   );
 }
 
+// ─── Today overview card ──────────────────────────────────────────────────────
+
+function formatEUR(amount: number, currency: string): string {
+  try {
+    return new Intl.NumberFormat("en-EU", {
+      style: "currency",
+      currency: (currency || "EUR").toUpperCase(),
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    }).format(amount);
+  } catch {
+    return `${(currency || "EUR").toUpperCase()} ${amount.toFixed(0)}`;
+  }
+}
+
+function TodayCard() {
+  const todayQuery = useQuery({
+    queryKey: ["admin-today-overview"],
+    queryFn: () => api.adminTodayOverview(),
+    refetchInterval: 60_000,
+  });
+
+  const data = todayQuery.data;
+  const isLoading = todayQuery.isLoading;
+  const isError = todayQuery.isError;
+
+  const dateLabel = React.useMemo(() => {
+    const d = data?.date ? new Date(data.date) : new Date();
+    return d.toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "2-digit",
+      month: "long",
+    });
+  }, [data?.date]);
+
+  const items: Array<{
+    label: string;
+    value: string;
+    icon: React.ElementType;
+    accent: string;
+    bg: string;
+  }> = [
+    {
+      label: "New users",
+      value: data ? data.new_users.toLocaleString("en-EU") : "—",
+      icon: UserPlus,
+      accent: "text-blue-300",
+      bg: "bg-blue-500/15",
+    },
+    {
+      label: "New subscribers",
+      value: data ? data.new_subscribers.toLocaleString("en-EU") : "—",
+      icon: Sparkles,
+      accent: "text-purple-300",
+      bg: "bg-purple-500/15",
+    },
+    {
+      label: "Revenue",
+      value: data ? formatEUR(data.revenue, data.currency) : "—",
+      icon: TrendingUp,
+      accent: "text-emerald-300",
+      bg: "bg-emerald-500/15",
+    },
+    {
+      label: "Picks published",
+      value: data ? data.predictions_published.toLocaleString("en-EU") : "—",
+      icon: Target,
+      accent: "text-amber-300",
+      bg: "bg-amber-500/15",
+    },
+  ];
+
+  return (
+    <div className="card-neon rounded-xl border border-white/[0.06] p-5 sm:p-6">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <p className="section-label">Today</p>
+          <p className="text-sm text-slate-300">{dateLabel}</p>
+        </div>
+        <button
+          onClick={() => todayQuery.refetch()}
+          disabled={todayQuery.isFetching}
+          className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-slate-400 transition-colors hover:bg-white/[0.08] hover:text-slate-200 disabled:opacity-60"
+          title="Refresh"
+        >
+          <RefreshCw className={cn("h-3.5 w-3.5", todayQuery.isFetching && "animate-spin")} />
+        </button>
+      </div>
+
+      {isError && (
+        <div className="mb-3 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">
+          Could not load today&apos;s overview.
+        </div>
+      )}
+
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {items.map((it) => {
+          const Icon = it.icon;
+          return (
+            <div
+              key={it.label}
+              className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4"
+            >
+              <div className="flex items-center gap-3">
+                <div className={cn("flex h-10 w-10 items-center justify-center rounded-lg", it.bg)}>
+                  <Icon className={cn("h-5 w-5", it.accent)} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                    {it.label}
+                  </p>
+                  {isLoading ? (
+                    <Skeleton className="mt-1 h-7 w-20 bg-white/[0.06]" />
+                  ) : (
+                    <p className={cn("mt-0.5 text-2xl font-bold tabular-nums", it.accent)}>
+                      {it.value}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {data && data.payments > 0 && (
+        <p className="mt-3 text-[11px] text-slate-500">
+          {data.payments} payment{data.payments === 1 ? "" : "s"} today.
+        </p>
+      )}
+    </div>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AdminPage() {
@@ -2446,16 +2580,6 @@ export default function AdminPage() {
       icon: ClipboardList,
     },
     {
-      id: "strategy-tiers",
-      label: "Strategy Tiers",
-      icon: FlaskConical,
-    },
-    {
-      id: "email-diagnostics",
-      label: "Email Diagnostics",
-      icon: Mail,
-    },
-    {
       id: "telegram",
       label: "Telegram",
       icon: Send,
@@ -2502,6 +2626,11 @@ export default function AdminPage() {
         </div>
       </div>
 
+      {/* Today snapshot */}
+      <div className="animate-slide-up">
+        <TodayCard />
+      </div>
+
       {/* KPI strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
@@ -2533,8 +2662,6 @@ export default function AdminPage() {
         {activeTab === "users" && <UserManager />}
         {activeTab === "finance" && <FinanceTab />}
         {activeTab === "goals" && <GoalsNotesTab />}
-        {activeTab === "strategy-tiers" && <StrategyTiersTab />}
-        {activeTab === "email-diagnostics" && <EmailDiagnosticsTab />}
         {activeTab === "telegram" && <TelegramManager />}
         {activeTab === "system-info" && <SystemInfoTab />}
       </div>

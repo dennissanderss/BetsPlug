@@ -83,6 +83,16 @@ export interface FinanceOverview {
   expenses_by_category: Record<string, number>;
 }
 
+export interface AdminTodayOverview {
+  date: string; // ISO yyyy-mm-dd
+  new_users: number;
+  new_subscribers: number;
+  revenue: number;
+  payments: number;
+  predictions_published: number;
+  currency: string;
+}
+
 export interface Sport {
   id: string;
   name: string;
