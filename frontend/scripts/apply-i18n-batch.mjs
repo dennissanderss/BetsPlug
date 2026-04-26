@@ -99,8 +99,17 @@ for (const locale of locales) {
       content = content.replace(lineRx, newLine);
       patched++;
     } else {
-      // Append before the closing `};`
-      content = content.replace(/};\s*$/, `${newLine}\n};\n`);
+      // Append before the closing brace. Locale files end with
+      //   } as Record<TranslationKey, string>;
+      // while messages.ts uses plain `};`. Handle both.
+      const closingRx = /\n(\}\s*(?:as\s+[^;]+)?;)/;
+      const before = content;
+      content = content.replace(closingRx, `\n${newLine}\n$1`);
+      if (content === before) {
+        console.warn(
+          `  ⚠️  ${locale}: could not find closing brace for key "${key}"`,
+        );
+      }
       added++;
     }
   }

@@ -32,6 +32,7 @@ import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { cn, formatDateTime } from "@/lib/utils";
+import { useTranslations } from "@/i18n/locale-provider";
 import type { DataSourceHealth, IngestionRun } from "@/types/api";
 
 import { Skeleton } from "@/components/ui/skeleton";
@@ -1471,6 +1472,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 function MatchStatusBreakdownCard() {
+  const { t } = useTranslations();
   const [days, setDays] = React.useState(14);
   const query = useQuery({
     queryKey: ["admin-match-status-breakdown", days],
@@ -1593,13 +1595,13 @@ function MatchStatusBreakdownCard() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/[0.06] bg-white/[0.02] text-[10px] uppercase tracking-wider text-slate-500">
-                  <th className="px-3 py-2 text-left font-semibold">Datum</th>
-                  <th className="px-3 py-2 text-right font-semibold">Scheduled</th>
-                  <th className="px-3 py-2 text-right font-semibold">Live</th>
-                  <th className="px-3 py-2 text-right font-semibold">Finished</th>
-                  <th className="px-3 py-2 text-right font-semibold">Postponed</th>
-                  <th className="px-3 py-2 text-right font-semibold">Cancelled</th>
-                  <th className="px-3 py-2 text-right font-semibold">Totaal</th>
+                  <th className="px-3 py-2 text-left font-semibold">{t("admin.dateColumn")}</th>
+                  <th className="px-3 py-2 text-right font-semibold">{t("admin.statusScheduled")}</th>
+                  <th className="px-3 py-2 text-right font-semibold">{t("admin.statusLive")}</th>
+                  <th className="px-3 py-2 text-right font-semibold">{t("admin.statusFinished")}</th>
+                  <th className="px-3 py-2 text-right font-semibold">{t("admin.statusPostponed")}</th>
+                  <th className="px-3 py-2 text-right font-semibold">{t("admin.statusCancelled")}</th>
+                  <th className="px-3 py-2 text-right font-semibold">{t("admin.totalColumn")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -1913,6 +1915,7 @@ function BotdBackfillCard() {
 // ─── BOTD Inventory — per-dag state van matches & predictions ────────────────
 
 function BotdInventoryCard() {
+  const { t } = useTranslations();
   const query = useQuery({
     queryKey: ["admin", "predictions-inventory"],
     queryFn: () => api.predictionsInventory(14),
@@ -1975,9 +1978,9 @@ function BotdInventoryCard() {
           <table className="w-full text-[11px]">
             <thead>
               <tr className="border-b border-white/10 text-left text-slate-400">
-                <th className="py-1.5 pr-2">Datum</th>
-                <th className="py-1.5 px-2 text-right">Matches</th>
-                <th className="py-1.5 px-2 text-right">Preds</th>
+                <th className="py-1.5 pr-2">{t("admin.dateColumn")}</th>
+                <th className="py-1.5 px-2 text-right">{t("admin.matchesColumn")}</th>
+                <th className="py-1.5 px-2 text-right">{t("admin.predsColumn")}</th>
                 <th className="py-1.5 px-2 text-right">live</th>
                 <th className="py-1.5 px-2 text-right">backtest</th>
                 <th className="py-1.5 px-2 text-right">batch</th>

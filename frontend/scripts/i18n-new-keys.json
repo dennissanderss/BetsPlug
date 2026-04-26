@@ -1,0 +1,606 @@
+{
+  "hero.titleLine1": {
+    "en": "",
+    "nl": ""
+  },
+  "auth.oneMoment": {
+    "en": "One moment…",
+    "nl": "Eén ogenblik…"
+  },
+  "login.errorVerifyEmail": {
+    "en": "Please verify your email address before signing in.",
+    "nl": "Bevestig eerst je e-mailadres voordat je inlogt."
+  },
+  "login.verifyEmailTitle": {
+    "en": "Verify your email",
+    "nl": "Bevestig je e-mail"
+  },
+  "login.verifyEmailBody": {
+    "en": "We sent a verification link to {email}. Click it to finish activating your account.",
+    "nl": "We hebben een bevestigingslink gestuurd naar {email}. Klik erop om je account te activeren."
+  },
+  "login.resendVerification": {
+    "en": "Resend verification email",
+    "nl": "Stuur opnieuw een bevestigingsmail"
+  },
+  "login.resendSent": {
+    "en": "Sent",
+    "nl": "Verstuurd"
+  },
+  "login.resendTryAgain": {
+    "en": "Try again",
+    "nl": "Probeer opnieuw"
+  },
+  "login.secureLogin": {
+    "en": "Secure login",
+    "nl": "Veilig inloggen"
+  },
+  "login.encrypted": {
+    "en": "Encrypted",
+    "nl": "Versleuteld"
+  },
+  "register.badge": {
+    "en": "Free Access · no card required",
+    "nl": "Free Access · geen kaart nodig"
+  },
+  "register.title": {
+    "en": "Unlock today's",
+    "nl": "Ontgrendel vandaag"
+  },
+  "register.titleHighlight": {
+    "en": "AI football predictions.",
+    "nl": "AI-voetbalvoorspellingen."
+  },
+  "register.subtitle": {
+    "en": "Free Access — no card, no billing. Browse every prediction, follow Pick of the Day, see which calls won and lost. Upgrade only when you want odds, simulated returns and the full tier ladder.",
+    "nl": "Free Access — geen kaart, geen facturatie. Bekijk elke voorspelling, volg Pick of the Day, en zie welke calls wonnen of verloren. Upgrade pas wanneer je odds, gesimuleerde rendementen en de volledige tier-ladder wilt."
+  },
+  "register.subtitleMobile": {
+    "en": "Free Access. No card, no billing. Upgrade only when you want to.",
+    "nl": "Free Access. Geen kaart, geen facturatie. Upgrade pas wanneer jij dat wilt."
+  },
+  "register.trust1": {
+    "en": "Free forever — no card required",
+    "nl": "Voor altijd gratis — geen kaart nodig"
+  },
+  "register.trust2": {
+    "en": "Full app access on day one",
+    "nl": "Volledige toegang tot de app vanaf dag één"
+  },
+  "register.trust3": {
+    "en": "Upgrade or stay free, your choice",
+    "nl": "Upgraden of gratis blijven, jouw keuze"
+  },
+  "register.errorTitle": {
+    "en": "We couldn't create your account",
+    "nl": "We konden je account niet aanmaken"
+  },
+  "register.errorEmailTaken": {
+    "en": "An account with that email already exists. Try logging in instead.",
+    "nl": "Er bestaat al een account met dit e-mailadres. Probeer in te loggen."
+  },
+  "register.errorUsernameTaken": {
+    "en": "That username is already taken. Please pick another one.",
+    "nl": "Die gebruikersnaam is al in gebruik. Kies een andere."
+  },
+  "register.errorWeakPassword": {
+    "en": "Your password is too weak. Use at least 8 characters.",
+    "nl": "Je wachtwoord is te zwak. Gebruik minimaal 8 tekens."
+  },
+  "register.errorGeneric": {
+    "en": "We couldn't create your account. Please try again.",
+    "nl": "We konden je account niet aanmaken. Probeer het opnieuw."
+  },
+  "register.errorGenericRetry": {
+    "en": "We couldn't create your account. Please try again in a moment.",
+    "nl": "We konden je account niet aanmaken. Probeer het zo nog een keer."
+  },
+  "register.emailLabel": {
+    "en": "Email",
+    "nl": "E-mail"
+  },
+  "register.emailPh": {
+    "en": "you@email.com",
+    "nl": "jij@email.nl"
+  },
+  "register.emailError": {
+    "en": "Please enter a valid email address.",
+    "nl": "Vul een geldig e-mailadres in."
+  },
+  "register.usernameLabel": {
+    "en": "Username",
+    "nl": "Gebruikersnaam"
+  },
+  "register.usernamePh": {
+    "en": "your-handle",
+    "nl": "jouw-handle"
+  },
+  "register.usernameError": {
+    "en": "3 to 32 characters; letters, digits, dot, dash, underscore.",
+    "nl": "3 tot 32 tekens; letters, cijfers, punt, streepje, underscore."
+  },
+  "register.fullNameLabel": {
+    "en": "Full name",
+    "nl": "Volledige naam"
+  },
+  "register.fullNameOptional": {
+    "en": "(optional)",
+    "nl": "(optioneel)"
+  },
+  "register.fullNamePh": {
+    "en": "Jane Doe",
+    "nl": "Jan Janssen"
+  },
+  "register.passwordLabel": {
+    "en": "Password",
+    "nl": "Wachtwoord"
+  },
+  "register.passwordPh": {
+    "en": "At least 8 characters",
+    "nl": "Minimaal 8 tekens"
+  },
+  "register.passwordError": {
+    "en": "Password must be at least 8 characters long.",
+    "nl": "Wachtwoord moet minimaal 8 tekens lang zijn."
+  },
+  "register.showPassword": {
+    "en": "Show password",
+    "nl": "Wachtwoord tonen"
+  },
+  "register.hidePassword": {
+    "en": "Hide password",
+    "nl": "Wachtwoord verbergen"
+  },
+  "register.confirmLabel": {
+    "en": "Confirm password",
+    "nl": "Bevestig wachtwoord"
+  },
+  "register.confirmPh": {
+    "en": "Repeat your password",
+    "nl": "Herhaal je wachtwoord"
+  },
+  "register.confirmError": {
+    "en": "Passwords do not match.",
+    "nl": "Wachtwoorden komen niet overeen."
+  },
+  "register.submit": {
+    "en": "Create account",
+    "nl": "Account aanmaken"
+  },
+  "register.submitting": {
+    "en": "Creating account…",
+    "nl": "Account aanmaken…"
+  },
+  "register.termsPrefix": {
+    "en": "By creating an account you agree to our",
+    "nl": "Door een account aan te maken ga je akkoord met onze"
+  },
+  "register.termsLink": {
+    "en": "Terms",
+    "nl": "Voorwaarden"
+  },
+  "register.termsAnd": {
+    "en": "and",
+    "nl": "en"
+  },
+  "register.privacyLink": {
+    "en": "Privacy Policy",
+    "nl": "Privacybeleid"
+  },
+  "register.termsSuffix": {
+    "en": ".",
+    "nl": "."
+  },
+  "register.haveAccount": {
+    "en": "Already have an account?",
+    "nl": "Heb je al een account?"
+  },
+  "register.logInLink": {
+    "en": "Log in",
+    "nl": "Log in"
+  },
+  "forgotPassword.badge": {
+    "en": "Password reset",
+    "nl": "Wachtwoord resetten"
+  },
+  "forgotPassword.title": {
+    "en": "Forgot your",
+    "nl": "Wachtwoord"
+  },
+  "forgotPassword.titleHighlight": {
+    "en": "password?",
+    "nl": "vergeten?"
+  },
+  "forgotPassword.subtitle": {
+    "en": "Enter the email address for your BetsPlug account and we'll send you a link to reset your password.",
+    "nl": "Vul het e-mailadres van je BetsPlug-account in en we sturen je een link om je wachtwoord te resetten."
+  },
+  "forgotPassword.emailLabel": {
+    "en": "Email",
+    "nl": "E-mail"
+  },
+  "forgotPassword.emailPh": {
+    "en": "you@email.com",
+    "nl": "jij@email.nl"
+  },
+  "forgotPassword.emailError": {
+    "en": "Please enter a valid email address.",
+    "nl": "Vul een geldig e-mailadres in."
+  },
+  "forgotPassword.submit": {
+    "en": "Send reset link",
+    "nl": "Verstuur reset-link"
+  },
+  "forgotPassword.submitting": {
+    "en": "Sending…",
+    "nl": "Versturen…"
+  },
+  "forgotPassword.errorGeneric": {
+    "en": "Something went wrong. Please try again.",
+    "nl": "Er ging iets mis. Probeer het opnieuw."
+  },
+  "forgotPassword.backToLogin": {
+    "en": "← Back to login",
+    "nl": "← Terug naar inloggen"
+  },
+  "forgotPassword.sentTitle": {
+    "en": "Check your inbox",
+    "nl": "Check je inbox"
+  },
+  "forgotPassword.sentBody": {
+    "en": "If an account with that email exists, we've sent a password reset link to it. It may take a minute to arrive — don't forget to check your spam folder.",
+    "nl": "Als er een account met dit e-mailadres bestaat, hebben we een link gestuurd om je wachtwoord te resetten. Het kan even duren — vergeet niet je spam-map te checken."
+  },
+  "resetPassword.badge": {
+    "en": "Reset password",
+    "nl": "Wachtwoord resetten"
+  },
+  "resetPassword.title": {
+    "en": "Choose a new",
+    "nl": "Kies een nieuw"
+  },
+  "resetPassword.titleHighlight": {
+    "en": "password",
+    "nl": "wachtwoord"
+  },
+  "resetPassword.subtitle": {
+    "en": "Pick something you haven't used before — at least 8 characters.",
+    "nl": "Kies iets dat je nog niet eerder hebt gebruikt — minimaal 8 tekens."
+  },
+  "resetPassword.newLabel": {
+    "en": "New password",
+    "nl": "Nieuw wachtwoord"
+  },
+  "resetPassword.newPh": {
+    "en": "At least 8 characters",
+    "nl": "Minimaal 8 tekens"
+  },
+  "resetPassword.passwordError": {
+    "en": "Password must be at least 8 characters long.",
+    "nl": "Wachtwoord moet minimaal 8 tekens lang zijn."
+  },
+  "resetPassword.confirmLabel": {
+    "en": "Confirm new password",
+    "nl": "Bevestig nieuw wachtwoord"
+  },
+  "resetPassword.confirmPh": {
+    "en": "Repeat your new password",
+    "nl": "Herhaal je nieuwe wachtwoord"
+  },
+  "resetPassword.confirmError": {
+    "en": "Passwords do not match.",
+    "nl": "Wachtwoorden komen niet overeen."
+  },
+  "resetPassword.showPassword": {
+    "en": "Show password",
+    "nl": "Wachtwoord tonen"
+  },
+  "resetPassword.hidePassword": {
+    "en": "Hide password",
+    "nl": "Wachtwoord verbergen"
+  },
+  "resetPassword.submit": {
+    "en": "Reset password",
+    "nl": "Wachtwoord resetten"
+  },
+  "resetPassword.submitting": {
+    "en": "Updating…",
+    "nl": "Bijwerken…"
+  },
+  "resetPassword.errorInvalidLink": {
+    "en": "This reset link is invalid or expired.",
+    "nl": "Deze reset-link is ongeldig of verlopen."
+  },
+  "resetPassword.errorExpired": {
+    "en": "This reset link has expired or is invalid. Please request a new one.",
+    "nl": "Deze reset-link is verlopen of ongeldig. Vraag een nieuwe aan."
+  },
+  "resetPassword.errorGeneric": {
+    "en": "We couldn't reset your password. Please try again.",
+    "nl": "We konden je wachtwoord niet resetten. Probeer het opnieuw."
+  },
+  "resetPassword.backToLogin": {
+    "en": "← Back to login",
+    "nl": "← Terug naar inloggen"
+  },
+  "resetPassword.successTitle": {
+    "en": "Password reset",
+    "nl": "Wachtwoord gereset"
+  },
+  "resetPassword.successBody": {
+    "en": "Your password has been updated. Redirecting you to the login page…",
+    "nl": "Je wachtwoord is bijgewerkt. We sturen je door naar de inlogpagina…"
+  },
+  "resetPassword.redirecting": {
+    "en": "Redirecting",
+    "nl": "Doorsturen"
+  },
+  "verifyEmail.loadingTitle": {
+    "en": "Verifying your email…",
+    "nl": "Je e-mail wordt geverifieerd…"
+  },
+  "verifyEmail.loadingBody": {
+    "en": "Hang on a moment while we confirm your account.",
+    "nl": "Even geduld terwijl we je account bevestigen."
+  },
+  "verifyEmail.successTitle": {
+    "en": "Email verified!",
+    "nl": "E-mail bevestigd!"
+  },
+  "verifyEmail.successBody": {
+    "en": "Your account is active. Taking you to your dashboard…",
+    "nl": "Je account is actief. We brengen je nu naar je dashboard…"
+  },
+  "verifyEmail.redirecting": {
+    "en": "Redirecting",
+    "nl": "Doorsturen"
+  },
+  "verifyEmail.missingTitle": {
+    "en": "Verification link missing",
+    "nl": "Verificatielink ontbreekt"
+  },
+  "verifyEmail.missingBody": {
+    "en": "This page needs a verification token. Please use the link from the email we sent you.",
+    "nl": "Deze pagina heeft een verificatietoken nodig. Gebruik de link uit de e-mail die we je hebben gestuurd."
+  },
+  "verifyEmail.backToLoginCta": {
+    "en": "Back to login",
+    "nl": "Terug naar inloggen"
+  },
+  "verifyEmail.errorTitle": {
+    "en": "Link expired or invalid",
+    "nl": "Link verlopen of ongeldig"
+  },
+  "verifyEmail.errorExpired": {
+    "en": "This verification link has expired or is invalid.",
+    "nl": "Deze verificatielink is verlopen of ongeldig."
+  },
+  "verifyEmail.errorGeneric": {
+    "en": "We couldn't verify your email.",
+    "nl": "We konden je e-mail niet verifiëren."
+  },
+  "verifyEmail.errorFallback": {
+    "en": "This verification link can no longer be used.",
+    "nl": "Deze verificatielink kan niet meer worden gebruikt."
+  },
+  "verifyEmail.errorPrompt": {
+    "en": "Enter your email below and we'll send a new one.",
+    "nl": "Vul hieronder je e-mailadres in en we sturen je een nieuwe."
+  },
+  "verifyEmail.emailPh": {
+    "en": "you@email.com",
+    "nl": "jij@email.nl"
+  },
+  "verifyEmail.sending": {
+    "en": "Sending…",
+    "nl": "Versturen…"
+  },
+  "verifyEmail.sendNewLink": {
+    "en": "Send a new link",
+    "nl": "Stuur een nieuwe link"
+  },
+  "verifyEmail.resendSuccess": {
+    "en": "Check your inbox.",
+    "nl": "Check je inbox."
+  },
+  "verifyEmail.resendError": {
+    "en": "We couldn't send the email. Please try again.",
+    "nl": "We konden de e-mail niet versturen. Probeer het opnieuw."
+  },
+  "verifyEmail.backToLogin": {
+    "en": "← Back to login",
+    "nl": "← Terug naar inloggen"
+  },
+  "botd.accuracy": {
+    "en": "Accuracy",
+    "nl": "Accuracy"
+  },
+  "botd.correctSuffix": {
+    "en": "correct",
+    "nl": "correct"
+  },
+  "botd.waitingResults": {
+    "en": "awaiting results",
+    "nl": "wachten op uitslagen"
+  },
+  "botd.picks": {
+    "en": "Picks",
+    "nl": "Picks"
+  },
+  "botd.evaluated": {
+    "en": "evaluated",
+    "nl": "beoordeeld"
+  },
+  "botd.streak": {
+    "en": "Streak",
+    "nl": "Reeks"
+  },
+  "botd.bestPrefix": {
+    "en": "best:",
+    "nl": "best:"
+  },
+  "botd.avgConf": {
+    "en": "Avg conf.",
+    "nl": "Avg conf."
+  },
+  "botd.modelScore": {
+    "en": "model score",
+    "nl": "model-score"
+  },
+  "botd.dateColumn": {
+    "en": "Date",
+    "nl": "Datum"
+  },
+  "botd.matchColumn": {
+    "en": "Match",
+    "nl": "Wedstrijd"
+  },
+  "botd.pickColumn": {
+    "en": "Pick",
+    "nl": "Pick"
+  },
+  "botd.scoreColumn": {
+    "en": "Score",
+    "nl": "Uitslag"
+  },
+  "botd.resultColumn": {
+    "en": "Result",
+    "nl": "Resultaat"
+  },
+  "botd.correctLabel": {
+    "en": "Correct",
+    "nl": "Correct"
+  },
+  "botd.incorrectLabel": {
+    "en": "Incorrect",
+    "nl": "Fout"
+  },
+  "botd.pendingLabel": {
+    "en": "pending",
+    "nl": "wacht"
+  },
+  "botd.liveMeasurementTitle": {
+    "en": "What does and doesn't count in the Live measurement below?",
+    "nl": "Wat telt wél / niet in de Live meting hieronder?"
+  },
+  "botd.includedPrefix": {
+    "en": "✅ Included:",
+    "nl": "✅ Meegerekend:"
+  },
+  "botd.includedBody": {
+    "en": "1 BotD per day, locked in before kickoff, since 18 April 2026, the match must be finished and evaluated. The counter starts at 0 and only grows when a BotD match actually finishes.",
+    "nl": "1 BotD per dag, vastgezet vóór de aftrap, sinds 18 april 2026, de wedstrijd moet afgelopen én geëvalueerd zijn. De teller begint op 0 en groeit alleen wanneer een BotD-wedstrijd écht afloopt."
+  },
+  "botd.notYetPrefix": {
+    "en": "⏳ Not yet counted:",
+    "nl": "⏳ Nog niet mee:"
+  },
+  "botd.notYetBody": {
+    "en": "today's BotD above — it stays pending until the match is played.",
+    "nl": "de BotD van vandaag hierboven — die staat pending tot de wedstrijd gespeeld is."
+  },
+  "botd.notHerePrefix": {
+    "en": "↪ Not here:",
+    "nl": "↪ Niet hier:"
+  },
+  "botd.notHereBody": {
+    "en": "Telegram @BetsPluggs picks (those are Free tier picks — 3 per day, a different stream than BotD).",
+    "nl": "Telegram @BetsPluggs-picks (dat zijn Free tier picks — 3 per dag, een andere stream dan BotD)."
+  },
+  "botd.liveSectionTitle": {
+    "en": "Live measurement since 18 April 2026",
+    "nl": "Live meting sinds 18 april 2026"
+  },
+  "botd.liveSectionDesc": {
+    "en": "Only picks that were strictly locked before kickoff. This measurement grows daily. This is the honest pre-match track record of our BOTD.",
+    "nl": "Alleen picks die strikt vóór de aftrap zijn vastgelegd. Deze meting groeit dagelijks. Dit is de eerlijke pre-match track record van onze BOTD."
+  },
+  "botd.liveSectionEmpty": {
+    "en": "The first live BOTD will appear as soon as a finished match falls within the live measurement.",
+    "nl": "Eerste live BOTD verschijnt zodra er een afgelopen wedstrijd is binnen de live-meting."
+  },
+  "botd.liveSectionLowSample": {
+    "en": "Small sample — the measurement is still building. Honest accuracy will appear once we have at least 10 evaluated picks.",
+    "nl": "Klein sample — de meting loopt nog. Eerlijke accuracy verschijnt zodra we minstens 10 beoordeelde picks hebben."
+  },
+  "botd.historicalLinkLead": {
+    "en": "Looking for the historical model validation of the Pick of the Day?",
+    "nl": "Op zoek naar de historische modelvalidatie van de Pick of the Day?"
+  },
+  "botd.historicalLinkCta": {
+    "en": "View 'Model validation — Pick of the Day' on Track Record →",
+    "nl": "Bekijk 'Modelvalidatie — Pick of the Day' op Track Record →"
+  },
+  "results.totalLabel": {
+    "en": "Total",
+    "nl": "Totaal"
+  },
+  "results.dateColumn": {
+    "en": "Date",
+    "nl": "Datum"
+  },
+  "results.homeColumn": {
+    "en": "Home",
+    "nl": "Thuis"
+  },
+  "results.scoreColumn": {
+    "en": "Score",
+    "nl": "Score"
+  },
+  "results.awayColumn": {
+    "en": "Away",
+    "nl": "Uit"
+  },
+  "results.pickColumn": {
+    "en": "Pick",
+    "nl": "Pick"
+  },
+  "results.oddsColumn": {
+    "en": "Odds",
+    "nl": "Odds"
+  },
+  "results.returnColumn": {
+    "en": "Return",
+    "nl": "Return"
+  },
+  "results.resultColumn": {
+    "en": "Result",
+    "nl": "Resultaat"
+  },
+  "admin.dateColumn": {
+    "en": "Date",
+    "nl": "Datum"
+  },
+  "admin.totalColumn": {
+    "en": "Total",
+    "nl": "Totaal"
+  },
+  "admin.statusScheduled": {
+    "en": "Scheduled",
+    "nl": "Gepland"
+  },
+  "admin.statusLive": {
+    "en": "Live",
+    "nl": "Live"
+  },
+  "admin.statusFinished": {
+    "en": "Finished",
+    "nl": "Afgelopen"
+  },
+  "admin.statusPostponed": {
+    "en": "Postponed",
+    "nl": "Uitgesteld"
+  },
+  "admin.statusCancelled": {
+    "en": "Cancelled",
+    "nl": "Afgelast"
+  },
+  "admin.matchesColumn": {
+    "en": "Matches",
+    "nl": "Wedstrijden"
+  },
+  "admin.predsColumn": {
+    "en": "Preds",
+    "nl": "Preds"
+  }
+}

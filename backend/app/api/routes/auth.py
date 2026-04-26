@@ -30,7 +30,7 @@ import time
 import uuid
 from datetime import datetime, timedelta, timezone
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy import func, or_, select
@@ -100,9 +100,20 @@ async def get_current_user(
 # ---------------------------------------------------------------------------
 
 
-def _issue_token(user: User) -> Token:
+def _issue_token(user: User, *, remember: bool = False) -> Token:
+    """Issue a signed JWT for ``user``.
+
+    Default lifetime is ``settings.access_token_expire_minutes`` (60 min
+    today). When ``remember=True`` — i.e. the visitor ticked "Remember
+    this device" on the login form — the token is instead issued with a
+    30-day TTL. Both are still finite; there is no "stay signed in
+    forever" mode. Other auth paths (register, oauth, refresh) keep the
+    short default so a stolen device session can't outlive its window.
+    """
     settings = get_settings()
-    expire_minutes = settings.access_token_expire_minutes
+    expire_minutes = (
+        60 * 24 * 30 if remember else settings.access_token_expire_minutes
+    )
     access_token = create_access_token(
         data={
             "sub": str(user.id),
@@ -284,6 +295,7 @@ async def _send_password_reset_email_safe(
 )
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
+    remember: bool = Form(False),
     db: AsyncSession = Depends(get_db),
 ) -> LoginTokenResponse:
     """Authenticate with username or email + password, return JWT + user.
@@ -295,6 +307,11 @@ async def login(
 
     The ``email_verified`` flag is still returned on the ``user`` object
     so the frontend can render a "please verify" reminder banner.
+
+    When the form field ``remember=true`` is sent, the issued JWT lives
+    for 30 days instead of the default 60 minutes (see ``_issue_token``).
+    The frontend wires this to the "Remember this device" checkbox on
+    the login form.
     """
     # Support login by username OR email
     result = await db.execute(
@@ -320,7 +337,7 @@ async def login(
     user.last_login_at = datetime.now(timezone.utc)
     await db.flush()
 
-    token = _issue_token(user)
+    token = _issue_token(user, remember=remember)
     return LoginTokenResponse(
         access_token=token.access_token,
         token_type=token.token_type,

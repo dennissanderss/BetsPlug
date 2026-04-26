@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
-import { useLocalizedHref } from "@/i18n/locale-provider";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { useAuth } from "@/lib/auth";
 import { api, ApiError } from "@/lib/api";
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -46,6 +46,7 @@ export default function RegisterPage() {
 }
 
 function RegisterForm() {
+  const { t } = useTranslations();
   const loc = useLocalizedHref();
   const router = useRouter();
   const params = useSearchParams();
@@ -87,26 +88,16 @@ function RegisterForm() {
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.detail === "email_taken") {
-          setServerError(
-            "An account with that email already exists. Try logging in instead."
-          );
+          setServerError(t("register.errorEmailTaken"));
         } else if (err.detail === "username_taken") {
-          setServerError(
-            "That username is already taken. Please pick another one."
-          );
+          setServerError(t("register.errorUsernameTaken"));
         } else if (err.detail === "weak_password") {
-          setServerError(
-            "Your password is too weak. Use at least 8 characters."
-          );
+          setServerError(t("register.errorWeakPassword"));
         } else {
-          setServerError(
-            err.detail || "We couldn't create your account. Please try again."
-          );
+          setServerError(err.detail || t("register.errorGeneric"));
         }
       } else {
-        setServerError(
-          "We couldn't create your account. Please try again in a moment."
-        );
+        setServerError(t("register.errorGenericRetry"));
       }
     } finally {
       setSubmitting(false);
@@ -141,23 +132,23 @@ function RegisterForm() {
             >
               <span className="section-label">
                 <UserPlus className="h-3 w-3" />
-                Free Access · no card required
+                {t("register.badge")}
               </span>
 
               <h1 className="text-display mt-3 max-w-xl text-balance break-words text-4xl text-[#ededed] xl:text-5xl">
-                Unlock today&apos;s{" "}
-                <span className="gradient-text-green">AI football predictions.</span>
+                {t("register.title")}{" "}
+                <span className="gradient-text-green">{t("register.titleHighlight")}</span>
               </h1>
 
               <p className="mt-5 max-w-md text-base leading-relaxed text-[#a3a9b8]">
-                Free Access — no card, no billing. Browse every prediction, follow Pick of the Day, see which calls won and lost. Upgrade only when you want odds, simulated returns and the full tier ladder.
+                {t("register.subtitle")}
               </p>
 
               <div className="mt-10 grid max-w-md grid-cols-1 gap-3">
                 {[
-                  { icon: ShieldCheck, label: "Free forever — no card required", variant: "green" as const },
-                  { icon: BadgeCheck, label: "Full app access on day one", variant: "purple" as const },
-                  { icon: RefreshCw, label: "Upgrade or stay free, your choice", variant: "blue" as const },
+                  { icon: ShieldCheck, label: t("register.trust1"), variant: "green" as const },
+                  { icon: BadgeCheck, label: t("register.trust2"), variant: "purple" as const },
+                  { icon: RefreshCw, label: t("register.trust3"), variant: "blue" as const },
                 ].map((item) => (
                   <div
                     key={item.label}
@@ -187,14 +178,14 @@ function RegisterForm() {
                   <div className="mb-6 lg:hidden">
                     <span className="section-label">
                       <UserPlus className="h-3 w-3" />
-                      Free Access · no card required
+                      {t("register.badge")}
                     </span>
                     <h1 className="text-heading mt-2 text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
-                      Unlock today&apos;s{" "}
-                      <span className="gradient-text-green">AI football predictions.</span>
+                      {t("register.title")}{" "}
+                      <span className="gradient-text-green">{t("register.titleHighlight")}</span>
                     </h1>
                     <p className="mt-3 text-sm text-[#a3a9b8]">
-                      Free Access. No card, no billing. Upgrade only when you want to.
+                      {t("register.subtitleMobile")}
                     </p>
                   </div>
 
@@ -208,7 +199,7 @@ function RegisterForm() {
                         <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
                         <div>
                           <p className="text-xs font-semibold text-red-300">
-                            We couldn&apos;t create your account
+                            {t("register.errorTitle")}
                           </p>
                           <p className="mt-0.5 text-xs text-red-300/80">
                             {serverError}
@@ -222,7 +213,7 @@ function RegisterForm() {
                         htmlFor="register-email"
                         className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a93a6]"
                       >
-                        Email
+                        {t("register.emailLabel")}
                       </label>
                       <div className="relative">
                         <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
@@ -231,7 +222,7 @@ function RegisterForm() {
                           type="email"
                           autoComplete="email"
                           inputMode="email"
-                          placeholder="you@email.com"
+                          placeholder={t("register.emailPh")}
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           className={inputCls(tried && !emailOk)}
@@ -239,7 +230,7 @@ function RegisterForm() {
                       </div>
                       {tried && !emailOk && (
                         <p className="mt-1.5 text-xs text-red-400">
-                          Please enter a valid email address.
+                          {t("register.emailError")}
                         </p>
                       )}
                     </div>
@@ -249,7 +240,7 @@ function RegisterForm() {
                         htmlFor="register-username"
                         className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a93a6]"
                       >
-                        Username
+                        {t("register.usernameLabel")}
                       </label>
                       <div className="relative">
                         <AtSign className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
@@ -257,7 +248,7 @@ function RegisterForm() {
                           id="register-username"
                           type="text"
                           autoComplete="username"
-                          placeholder="your-handle"
+                          placeholder={t("register.usernamePh")}
                           value={username}
                           onChange={(e) => setUsername(e.target.value)}
                           className={inputCls(tried && !usernameOk)}
@@ -265,8 +256,7 @@ function RegisterForm() {
                       </div>
                       {tried && !usernameOk && (
                         <p className="mt-1.5 text-xs text-red-400">
-                          3 to 32 characters; letters, digits, dot, dash,
-                          underscore.
+                          {t("register.usernameError")}
                         </p>
                       )}
                     </div>
@@ -276,9 +266,9 @@ function RegisterForm() {
                         htmlFor="register-name"
                         className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a93a6]"
                       >
-                        Full name{" "}
+                        {t("register.fullNameLabel")}{" "}
                         <span className="font-normal normal-case text-[#6b7280]">
-                          (optional)
+                          {t("register.fullNameOptional")}
                         </span>
                       </label>
                       <div className="relative">
@@ -287,7 +277,7 @@ function RegisterForm() {
                           id="register-name"
                           type="text"
                           autoComplete="name"
-                          placeholder="Jane Doe"
+                          placeholder={t("register.fullNamePh")}
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
                           className={inputCls(false)}
@@ -300,7 +290,7 @@ function RegisterForm() {
                         htmlFor="register-password"
                         className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a93a6]"
                       >
-                        Password
+                        {t("register.passwordLabel")}
                       </label>
                       <div className="relative">
                         <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
@@ -308,7 +298,7 @@ function RegisterForm() {
                           id="register-password"
                           type={showPassword ? "text" : "password"}
                           autoComplete="new-password"
-                          placeholder="At least 8 characters"
+                          placeholder={t("register.passwordPh")}
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           className={`${inputCls(tried && !passwordOk)} pr-12`}
@@ -316,7 +306,7 @@ function RegisterForm() {
                         <button
                           type="button"
                           aria-label={
-                            showPassword ? "Hide password" : "Show password"
+                            showPassword ? t("register.hidePassword") : t("register.showPassword")
                           }
                           onClick={() => setShowPassword((v) => !v)}
                           className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-[#6b7280] transition-colors hover:bg-white/[0.04] hover:text-[#ededed]"
@@ -330,7 +320,7 @@ function RegisterForm() {
                       </div>
                       {tried && !passwordOk && (
                         <p className="mt-1.5 text-xs text-red-400">
-                          Password must be at least 8 characters long.
+                          {t("register.passwordError")}
                         </p>
                       )}
                     </div>
@@ -340,7 +330,7 @@ function RegisterForm() {
                         htmlFor="register-confirm"
                         className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a93a6]"
                       >
-                        Confirm password
+                        {t("register.confirmLabel")}
                       </label>
                       <div className="relative">
                         <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
@@ -348,7 +338,7 @@ function RegisterForm() {
                           id="register-confirm"
                           type={showPassword ? "text" : "password"}
                           autoComplete="new-password"
-                          placeholder="Repeat your password"
+                          placeholder={t("register.confirmPh")}
                           value={confirm}
                           onChange={(e) => setConfirm(e.target.value)}
                           className={inputCls(tried && !confirmOk)}
@@ -356,7 +346,7 @@ function RegisterForm() {
                       </div>
                       {tried && !confirmOk && (
                         <p className="mt-1.5 text-xs text-red-400">
-                          Passwords do not match.
+                          {t("register.confirmError")}
                         </p>
                       )}
                     </div>
@@ -369,45 +359,45 @@ function RegisterForm() {
                       {submitting ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          Creating account…
+                          {t("register.submitting")}
                         </>
                       ) : (
                         <>
                           <UserPlus className="h-4 w-4" />
-                          Create account
+                          {t("register.submit")}
                           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </>
                       )}
                     </button>
 
                     <p className="text-center text-[11px] leading-relaxed text-[#8a93a6]">
-                      By creating an account you agree to our{" "}
+                      {t("register.termsPrefix")}{" "}
                       <Link
                         href={loc("/terms")}
                         className="font-medium text-[#4ade80] hover:text-[#86efac]"
                       >
-                        Terms
+                        {t("register.termsLink")}
                       </Link>{" "}
-                      and{" "}
+                      {t("register.termsAnd")}{" "}
                       <Link
                         href={loc("/privacy")}
                         className="font-medium text-[#4ade80] hover:text-[#86efac]"
                       >
-                        Privacy Policy
+                        {t("register.privacyLink")}
                       </Link>
-                      .
+                      {t("register.termsSuffix")}
                     </p>
                   </form>
 
                   <div className="mt-7 border-t border-white/[0.08] pt-5 text-center">
                     <span className="text-sm text-[#a3a9b8]">
-                      Already have an account?{" "}
+                      {t("register.haveAccount")}{" "}
                     </span>
                     <Link
                       href={loc("/login")}
                       className="text-sm font-semibold text-[#4ade80] transition-colors hover:text-[#86efac]"
                     >
-                      Log in
+                      {t("register.logInLink")}
                     </Link>
                   </div>
                 </div>

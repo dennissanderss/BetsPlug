@@ -1,0 +1,16 @@
+{
+  "de": { "auth.oneMoment": "Einen Moment…" },
+  "fr": { "auth.oneMoment": "Un instant…" },
+  "es": { "auth.oneMoment": "Un momento…" },
+  "it": { "auth.oneMoment": "Un momento…" },
+  "sw": { "auth.oneMoment": "Subiri kidogo…" },
+  "id": { "auth.oneMoment": "Sebentar…" },
+  "pt": { "auth.oneMoment": "Um momento…" },
+  "tr": { "auth.oneMoment": "Bir saniye…" },
+  "pl": { "auth.oneMoment": "Chwileczkę…" },
+  "ro": { "auth.oneMoment": "Un moment…" },
+  "ru": { "auth.oneMoment": "Минуту…" },
+  "el": { "auth.oneMoment": "Μια στιγμή…" },
+  "da": { "auth.oneMoment": "Et øjeblik…" },
+  "sv": { "auth.oneMoment": "Ett ögonblick…" }
+}

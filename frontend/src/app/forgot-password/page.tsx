@@ -22,13 +22,14 @@ import {
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
-import { useLocalizedHref } from "@/i18n/locale-provider";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { api, ApiError } from "@/lib/api";
 import { HexBadge } from "@/components/noct/hex-badge";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function ForgotPasswordPage() {
+  const { t } = useTranslations();
   const loc = useLocalizedHref();
 
   const [email, setEmail] = useState("");
@@ -51,9 +52,9 @@ export default function ForgotPasswordPage() {
       setSent(true);
     } catch (err) {
       if (err instanceof ApiError) {
-        setServerError(err.detail || "Something went wrong. Please try again.");
+        setServerError(err.detail || t("forgotPassword.errorGeneric"));
       } else {
-        setServerError("Something went wrong. Please try again.");
+        setServerError(t("forgotPassword.errorGeneric"));
       }
     } finally {
       setSubmitting(false);
@@ -92,15 +93,14 @@ export default function ForgotPasswordPage() {
                       <HexBadge variant="blue" size="md">
                         <KeyRound className="h-5 w-5" />
                       </HexBadge>
-                      <span className="section-label !mb-0">Password reset</span>
+                      <span className="section-label !mb-0">{t("forgotPassword.badge")}</span>
                     </div>
                     <h1 className="text-heading text-balance break-words text-2xl text-[#ededed] sm:text-3xl">
-                      Forgot your{" "}
-                      <span className="gradient-text-cyan">password?</span>
+                      {t("forgotPassword.title")}{" "}
+                      <span className="gradient-text-cyan">{t("forgotPassword.titleHighlight")}</span>
                     </h1>
                     <p className="mt-3 text-sm text-[#a3a9b8]">
-                      Enter the email address for your BetsPlug account and
-                      we&apos;ll send you a link to reset your password.
+                      {t("forgotPassword.subtitle")}
                     </p>
                   </div>
 
@@ -121,7 +121,7 @@ export default function ForgotPasswordPage() {
                         htmlFor="forgot-email"
                         className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a93a6]"
                       >
-                        Email
+                        {t("forgotPassword.emailLabel")}
                       </label>
                       <div className="relative">
                         <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
@@ -130,7 +130,7 @@ export default function ForgotPasswordPage() {
                           type="email"
                           autoComplete="email"
                           inputMode="email"
-                          placeholder="you@email.com"
+                          placeholder={t("forgotPassword.emailPh")}
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           className={inputCls(tried && !emailOk)}
@@ -138,7 +138,7 @@ export default function ForgotPasswordPage() {
                       </div>
                       {tried && !emailOk && (
                         <p className="mt-1.5 text-xs text-red-400">
-                          Please enter a valid email address.
+                          {t("forgotPassword.emailError")}
                         </p>
                       )}
                     </div>
@@ -151,12 +151,12 @@ export default function ForgotPasswordPage() {
                       {submitting ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          Sending…
+                          {t("forgotPassword.submitting")}
                         </>
                       ) : (
                         <>
                           <KeyRound className="h-4 w-4" />
-                          Send reset link
+                          {t("forgotPassword.submit")}
                           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </>
                       )}
@@ -168,7 +168,7 @@ export default function ForgotPasswordPage() {
                       href={loc("/login")}
                       className="text-sm font-medium text-[#4ade80] transition-colors hover:text-[#86efac]"
                     >
-                      ← Back to login
+                      {t("forgotPassword.backToLogin")}
                     </Link>
                   </div>
                 </>
@@ -182,19 +182,17 @@ export default function ForgotPasswordPage() {
                     </HexBadge>
                   </div>
                   <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
-                    Check your inbox
+                    {t("forgotPassword.sentTitle")}
                   </h1>
                   <p className="text-sm leading-relaxed text-[#a3a9b8]">
-                    If an account with that email exists, we&apos;ve sent a
-                    password reset link to it. It may take a minute to arrive —
-                    don&apos;t forget to check your spam folder.
+                    {t("forgotPassword.sentBody")}
                   </p>
                   <div className="border-t border-white/[0.08] pt-5">
                     <Link
                       href={loc("/login")}
                       className="text-sm font-medium text-[#4ade80] transition-colors hover:text-[#86efac]"
                     >
-                      ← Back to login
+                      {t("forgotPassword.backToLogin")}
                     </Link>
                   </div>
                 </div>

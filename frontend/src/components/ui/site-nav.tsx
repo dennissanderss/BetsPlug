@@ -7,6 +7,7 @@ import { Menu, X, ArrowRight, ChevronRight, ChevronDown } from "lucide-react";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { TopBar } from "@/components/ui/top-bar";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
+import { useAuth } from "@/lib/auth";
 import {
   PRIMARY_LEAGUES,
   ALL_LEAGUES,
@@ -20,11 +21,19 @@ import { LEAGUE_LOGO_PATH } from "@/data/league-logos";
  * Translucent dark glass bar pinned to the top. Logo on the left,
  * centred nav pills, right-aligned language + login + primary CTA.
  * Mobile collapses the pills into a glass drawer.
+ *
+ * Auth-aware: signed-in users see a "Dashboard" CTA instead of the
+ * "Login"/"Start" pair, so the public site no longer contradicts the
+ * /checkout flow (which already reads useAuth) — same browser session
+ * showed "Login" on `/` while showing "switch plan" on /checkout
+ * before this fix landed.
  */
 
 export function SiteNav() {
   const { t, locale } = useTranslations();
   const loc = useLocalizedHref();
+  const { user, ready: authReady } = useAuth();
+  const isAuthed = authReady && !!user;
   const home = loc("/");
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -280,30 +289,47 @@ export function SiteNav() {
                 <LanguageSwitcher variant="compact" theme="dark" />
               </div>
 
-              {/* Login (desktop) */}
-              <Link
-                href={loc("/login")}
-                className="hidden whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-[#a3a9b8] transition-colors hover:bg-white/[0.04] hover:text-[#ededed] xl:inline-flex"
-              >
-                {t("nav.login")}
-              </Link>
+              {isAuthed ? (
+                /* Authed: single Dashboard CTA replaces Login + Start
+                   so a signed-in subscriber doesn't see "Login" on the
+                   public site (which used to ship even while
+                   /checkout knew they were logged in). */
+                <Link
+                  href={loc("/dashboard")}
+                  className="btn-primary hidden items-center gap-1.5 whitespace-nowrap xl:inline-flex"
+                >
+                  {t("nav.dashboard")}
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              ) : (
+                <>
+                  {/* Login (desktop) */}
+                  <Link
+                    href={loc("/login")}
+                    className="hidden whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-[#a3a9b8] transition-colors hover:bg-white/[0.04] hover:text-[#ededed] xl:inline-flex"
+                  >
+                    {t("nav.login")}
+                  </Link>
 
-              {/* Primary CTA */}
-              <Link
-                href={`${loc("/checkout")}?plan=gold`}
-                className="btn-primary hidden items-center gap-1.5 whitespace-nowrap xl:inline-flex"
-              >
-                {t("nav.startFreeTrial")}
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
+                  {/* Primary CTA */}
+                  <Link
+                    href={`${loc("/checkout")}?plan=gold`}
+                    className="btn-primary hidden items-center gap-1.5 whitespace-nowrap xl:inline-flex"
+                  >
+                    {t("nav.startFreeTrial")}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </>
+              )}
 
-              {/* Mobile CTA (compact) */}
+              {/* Mobile CTA (compact) — Dashboard for authed users,
+                  signup CTA otherwise. */}
               <Link
-                href={`${loc("/checkout")}?plan=gold`}
+                href={isAuthed ? loc("/dashboard") : `${loc("/checkout")}?plan=gold`}
                 className="btn-primary inline-flex items-center gap-1 whitespace-nowrap px-3.5 py-2 text-xs xl:hidden"
                 style={{ fontSize: "0.75rem" }}
               >
-                {t("nav.startFreeTrial")}
+                {isAuthed ? t("nav.dashboard") : t("nav.startFreeTrial")}
               </Link>
 
               {/* Hamburger */}
@@ -436,29 +462,32 @@ export function SiteNav() {
             </div>
 
             <Link
-              href={loc("/login")}
+              href={isAuthed ? loc("/dashboard") : loc("/login")}
               onClick={() => setMobileOpen(false)}
               className="mt-4 flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3.5 text-sm font-medium text-[#a3a9b8] transition-colors hover:border-[#4ade80]/40 hover:text-[#ededed]"
             >
-              <span>{t("nav.login")}</span>
+              <span>{isAuthed ? t("nav.dashboard") : t("nav.login")}</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </nav>
 
-          {/* Bottom CTA */}
-          <div
-            className="relative border-t px-4 py-5"
-            style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
-          >
-            <Link
-              href={`${loc("/checkout")}?plan=gold`}
-              onClick={() => setMobileOpen(false)}
-              className="btn-primary flex w-full items-center justify-center gap-2"
+          {/* Bottom CTA — hidden for authed users, who already have a
+              Dashboard link directly above. */}
+          {!isAuthed && (
+            <div
+              className="relative border-t px-4 py-5"
+              style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
             >
-              {t("nav.startFreeTrial")}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
+              <Link
+                href={`${loc("/checkout")}?plan=gold`}
+                onClick={() => setMobileOpen(false)}
+                className="btn-primary flex w-full items-center justify-center gap-2"
+              >
+                {t("nav.startFreeTrial")}
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          )}
         </aside>
       </div>
     </>

@@ -1213,6 +1213,7 @@ function ResultCard({ fixture, stake, isFree }: { fixture: Fixture; stake: numbe
 // ─── Table footer: per-row return totals (verifies headline calculator) ─────
 
 function ResultsTableFooter({ fixtures, stake, isFree }: { fixtures: Fixture[]; stake: number; isFree: boolean }) {
+  const { t } = useTranslations();
   let totalStake = 0;
   let totalPayout = 0;
   let wins = 0;
@@ -1238,7 +1239,7 @@ function ResultsTableFooter({ fixtures, stake, isFree }: { fixtures: Fixture[]; 
   const prefix = totalReturn > 0 ? "+" : totalReturn < 0 ? "−" : "";
   return (
     <div className="flex items-center gap-3 px-4 py-2.5 bg-white/[0.02] border-t border-white/[0.05] text-[10px] uppercase tracking-widest">
-      <span className="w-12 sm:w-16 shrink-0 text-slate-500">Total</span>
+      <span className="w-12 sm:w-16 shrink-0 text-slate-500">{t("results.totalLabel")}</span>
       <span className="flex-1 text-slate-500 tabular-nums">
         <span className="text-emerald-400">{wins}W</span>
         {" · "}
@@ -1740,16 +1741,16 @@ function ResultsPageContent() {
         <div className="glass-card overflow-hidden">
           {/* Column headers */}
           <div className="flex items-center gap-3 px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.05] text-[9px] uppercase tracking-widest text-slate-600">
-            <span className="w-12 sm:w-16 shrink-0">Date</span>
-            <span className="flex-1">Home</span>
-            <span className="w-10 sm:w-14 text-center">Score</span>
-            <span className="flex-1">Away</span>
-            <span className="hidden sm:inline w-8 text-center">Pick</span>
-            <span className="hidden sm:inline w-20 text-center">Odds{isFree && <LockPill requiredTier="silver" className="ml-1" />}</span>
+            <span className="w-12 sm:w-16 shrink-0">{t("results.dateColumn")}</span>
+            <span className="flex-1">{t("results.homeColumn")}</span>
+            <span className="w-10 sm:w-14 text-center">{t("results.scoreColumn")}</span>
+            <span className="flex-1">{t("results.awayColumn")}</span>
+            <span className="hidden sm:inline w-8 text-center">{t("results.pickColumn")}</span>
+            <span className="hidden sm:inline w-20 text-center">{t("results.oddsColumn")}{isFree && <LockPill requiredTier="silver" className="ml-1" />}</span>
             <span className="hidden sm:inline w-20 text-right">
-              {isFree ? <>Return <LockPill requiredTier="silver" className="ml-1" /></> : `Return · €${stake.toFixed(0)}`}
+              {isFree ? <>{t("results.returnColumn")} <LockPill requiredTier="silver" className="ml-1" /></> : `${t("results.returnColumn")} · €${stake.toFixed(0)}`}
             </span>
-            <span className="w-6 sm:w-8 text-center">Result</span>
+            <span className="w-6 sm:w-8 text-center">{t("results.resultColumn")}</span>
           </div>
           {/* Rows */}
           <div className="divide-y divide-white/[0.03]">

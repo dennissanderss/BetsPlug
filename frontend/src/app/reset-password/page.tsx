@@ -24,11 +24,12 @@ import {
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
-import { useLocalizedHref } from "@/i18n/locale-provider";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { api, ApiError } from "@/lib/api";
 import { HexBadge } from "@/components/noct/hex-badge";
 
 function ResetPasswordInner() {
+  const { t } = useTranslations();
   const loc = useLocalizedHref();
   const router = useRouter();
   const params = useSearchParams();
@@ -52,7 +53,7 @@ function ResetPasswordInner() {
     setTried(true);
     setServerError(null);
     if (!formOk) {
-      if (!token) setServerError("This reset link is invalid or expired.");
+      if (!token) setServerError(t("resetPassword.errorInvalidLink"));
       return;
     }
 
@@ -70,16 +71,12 @@ function ResetPasswordInner() {
           err.detail === "invalid_token" ||
           err.detail === "expired_token"
         ) {
-          setServerError(
-            "This reset link has expired or is invalid. Please request a new one."
-          );
+          setServerError(t("resetPassword.errorExpired"));
         } else {
-          setServerError(
-            err.detail || "We couldn't reset your password. Please try again."
-          );
+          setServerError(err.detail || t("resetPassword.errorGeneric"));
         }
       } else {
-        setServerError("We couldn't reset your password. Please try again.");
+        setServerError(t("resetPassword.errorGeneric"));
       }
     } finally {
       setSubmitting(false);
@@ -118,15 +115,14 @@ function ResetPasswordInner() {
                       <HexBadge variant="blue" size="md">
                         <KeyRound className="h-5 w-5" />
                       </HexBadge>
-                      <span className="section-label !mb-0">Reset password</span>
+                      <span className="section-label !mb-0">{t("resetPassword.badge")}</span>
                     </div>
                     <h1 className="text-heading text-balance break-words text-2xl text-[#ededed] sm:text-3xl">
-                      Choose a new{" "}
-                      <span className="gradient-text-cyan">password</span>
+                      {t("resetPassword.title")}{" "}
+                      <span className="gradient-text-cyan">{t("resetPassword.titleHighlight")}</span>
                     </h1>
                     <p className="mt-3 text-sm text-[#a3a9b8]">
-                      Pick something you haven&apos;t used before — at least 8
-                      characters.
+                      {t("resetPassword.subtitle")}
                     </p>
                   </div>
 
@@ -147,7 +143,7 @@ function ResetPasswordInner() {
                         htmlFor="reset-password"
                         className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a93a6]"
                       >
-                        New password
+                        {t("resetPassword.newLabel")}
                       </label>
                       <div className="relative">
                         <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
@@ -155,7 +151,7 @@ function ResetPasswordInner() {
                           id="reset-password"
                           type={showPassword ? "text" : "password"}
                           autoComplete="new-password"
-                          placeholder="At least 8 characters"
+                          placeholder={t("resetPassword.newPh")}
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           className={`${inputCls(tried && !passwordOk)} pr-12`}
@@ -163,7 +159,7 @@ function ResetPasswordInner() {
                         <button
                           type="button"
                           aria-label={
-                            showPassword ? "Hide password" : "Show password"
+                            showPassword ? t("resetPassword.hidePassword") : t("resetPassword.showPassword")
                           }
                           onClick={() => setShowPassword((v) => !v)}
                           className="absolute right-3 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg text-[#6b7280] transition-colors hover:bg-white/[0.04] hover:text-[#ededed]"
@@ -177,7 +173,7 @@ function ResetPasswordInner() {
                       </div>
                       {tried && !passwordOk && (
                         <p className="mt-1.5 text-xs text-red-400">
-                          Password must be at least 8 characters long.
+                          {t("resetPassword.passwordError")}
                         </p>
                       )}
                     </div>
@@ -187,7 +183,7 @@ function ResetPasswordInner() {
                         htmlFor="reset-confirm"
                         className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8a93a6]"
                       >
-                        Confirm new password
+                        {t("resetPassword.confirmLabel")}
                       </label>
                       <div className="relative">
                         <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
@@ -195,7 +191,7 @@ function ResetPasswordInner() {
                           id="reset-confirm"
                           type={showPassword ? "text" : "password"}
                           autoComplete="new-password"
-                          placeholder="Repeat your new password"
+                          placeholder={t("resetPassword.confirmPh")}
                           value={confirm}
                           onChange={(e) => setConfirm(e.target.value)}
                           className={inputCls(tried && !confirmOk)}
@@ -203,7 +199,7 @@ function ResetPasswordInner() {
                       </div>
                       {tried && !confirmOk && (
                         <p className="mt-1.5 text-xs text-red-400">
-                          Passwords do not match.
+                          {t("resetPassword.confirmError")}
                         </p>
                       )}
                     </div>
@@ -216,12 +212,12 @@ function ResetPasswordInner() {
                       {submitting ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          Updating…
+                          {t("resetPassword.submitting")}
                         </>
                       ) : (
                         <>
                           <KeyRound className="h-4 w-4" />
-                          Reset password
+                          {t("resetPassword.submit")}
                           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </>
                       )}
@@ -233,7 +229,7 @@ function ResetPasswordInner() {
                       href={loc("/login")}
                       className="text-sm font-medium text-[#4ade80] transition-colors hover:text-[#86efac]"
                     >
-                      ← Back to login
+                      {t("resetPassword.backToLogin")}
                     </Link>
                   </div>
                 </>
@@ -247,15 +243,14 @@ function ResetPasswordInner() {
                     </HexBadge>
                   </div>
                   <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
-                    Password reset
+                    {t("resetPassword.successTitle")}
                   </h1>
                   <p className="text-sm leading-relaxed text-[#a3a9b8]">
-                    Your password has been updated. Redirecting you to the
-                    login page…
+                    {t("resetPassword.successBody")}
                   </p>
                   <div className="inline-flex items-center gap-2 text-xs text-[#8a93a6]">
                     <Loader2 className="h-3 w-3 animate-spin" />
-                    Redirecting
+                    {t("resetPassword.redirecting")}
                   </div>
                 </div>
               )}

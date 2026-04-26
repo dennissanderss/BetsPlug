@@ -94,7 +94,7 @@ export function LoginContent() {
     }
 
     try {
-      const res = await api.login(email.trim(), password);
+      const res = await api.login(email.trim(), password, remember);
       auth.login(res.access_token, res.user);
       const next = params?.get("next");
       router.push(next || loc("/dashboard"));
@@ -102,9 +102,7 @@ export function LoginContent() {
       if (err instanceof ApiError) {
         if (err.status === 403 && err.detail === "email_not_verified") {
           setNeedsVerification(true);
-          setServerError(
-            "Please verify your email address before signing in."
-          );
+          setServerError(t("login.errorVerifyEmail"));
         } else if (err.status === 401 || err.status === 400) {
           setServerError(t("login.errorGeneric"));
         } else {
@@ -305,11 +303,10 @@ export function LoginContent() {
                           <Mail className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
                           <div className="flex-1">
                             <p className="text-xs font-semibold text-amber-200">
-                              Verify your email
+                              {t("login.verifyEmailTitle")}
                             </p>
                             <p className="mt-0.5 text-xs text-amber-200/80">
-                              We sent a verification link to {email.trim()}.
-                              Click it to finish activating your account.
+                              {t("login.verifyEmailBody", { email: email.trim() })}
                             </p>
                           </div>
                         </div>
@@ -325,17 +322,17 @@ export function LoginContent() {
                             ) : (
                               <RefreshCw className="h-3 w-3" />
                             )}
-                            Resend verification email
+                            {t("login.resendVerification")}
                           </button>
                           {resendStatus === "success" && (
                             <span className="inline-flex items-center gap-1 text-xs text-[#4ade80]">
                               <CheckCircle2 className="h-3 w-3" />
-                              Sent
+                              {t("login.resendSent")}
                             </span>
                           )}
                           {resendStatus === "error" && (
                             <span className="text-xs text-red-400">
-                              Try again
+                              {t("login.resendTryAgain")}
                             </span>
                           )}
                         </div>
@@ -523,9 +520,9 @@ export function LoginContent() {
               <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
                 <Pill>
                   <Lock className="h-3 w-3" />
-                  Secure login
+                  {t("login.secureLogin")}
                 </Pill>
-                <Pill tone="purple">Encrypted</Pill>
+                <Pill tone="purple">{t("login.encrypted")}</Pill>
               </div>
             </motion.div>
           </div>

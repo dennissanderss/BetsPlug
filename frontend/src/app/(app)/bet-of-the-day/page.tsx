@@ -74,6 +74,7 @@ function BotdPicksSection({
   lowSampleThreshold?: number;
   lowSampleCopy?: string;
 }) {
+  const { t } = useTranslations();
   const { data, isLoading } = useQuery<BotdSectionResponse>({
     queryKey: [`botd-${endpoint}`],
     queryFn: async () => {
@@ -137,48 +138,48 @@ function BotdPicksSection({
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
           <p className="mb-1 text-[9px] uppercase tracking-widest text-slate-500">
-            Accuracy
+            {t("botd.accuracy")}
           </p>
           <p className={`text-2xl font-extrabold tabular-nums ${accColor}`}>
             {hasEvaluations ? `${s!.accuracy_pct}%` : "—"}
           </p>
           <p className="mt-0.5 text-[10px] text-slate-500">
             {hasEvaluations
-              ? `${s!.correct} / ${s!.evaluated} correct`
-              : "wachten op uitslagen"}
+              ? `${s!.correct} / ${s!.evaluated} ${t("botd.correctSuffix")}`
+              : t("botd.waitingResults")}
           </p>
         </div>
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
           <p className="mb-1 text-[9px] uppercase tracking-widest text-slate-500">
-            Picks
+            {t("botd.picks")}
           </p>
           <p className="text-2xl font-extrabold tabular-nums text-blue-400">
             {s?.total_picks ?? 0}
           </p>
           <p className="mt-0.5 text-[10px] text-slate-500">
-            {s?.evaluated ?? 0} beoordeeld
+            {s?.evaluated ?? 0} {t("botd.evaluated")}
           </p>
         </div>
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
           <p className="mb-1 text-[9px] uppercase tracking-widest text-slate-500">
-            Reeks
+            {t("botd.streak")}
           </p>
           <p className="text-2xl font-extrabold tabular-nums text-slate-100">
             {s?.current_streak ?? 0}
           </p>
           <p className="mt-0.5 text-[10px] text-slate-500">
-            best: {s?.best_streak ?? 0}
+            {t("botd.bestPrefix")} {s?.best_streak ?? 0}
           </p>
         </div>
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 text-center">
           <p className="mb-1 text-[9px] uppercase tracking-widest text-slate-500">
-            Avg conf.
+            {t("botd.avgConf")}
           </p>
           <p className="text-2xl font-extrabold tabular-nums text-slate-100">
             {s?.avg_confidence ?? 0}%
           </p>
           <p className="mt-0.5 text-[10px] text-slate-500">
-            model-score
+            {t("botd.modelScore")}
           </p>
         </div>
       </div>
@@ -197,11 +198,11 @@ function BotdPicksSection({
       ) : (
         <div className="space-y-1">
           <div className="grid grid-cols-12 gap-2 border-b border-white/[0.05] px-3 py-2 text-[10px] uppercase tracking-widest text-slate-600">
-            <span className="col-span-2">Datum</span>
-            <span className="col-span-4">Wedstrijd</span>
-            <span className="col-span-2 text-center">Pick</span>
-            <span className="col-span-2 text-center">Uitslag</span>
-            <span className="col-span-2 text-center">Resultaat</span>
+            <span className="col-span-2">{t("botd.dateColumn")}</span>
+            <span className="col-span-4">{t("botd.matchColumn")}</span>
+            <span className="col-span-2 text-center">{t("botd.pickColumn")}</span>
+            <span className="col-span-2 text-center">{t("botd.scoreColumn")}</span>
+            <span className="col-span-2 text-center">{t("botd.resultColumn")}</span>
           </div>
           {picks.map((p, i) => (
             <div
@@ -233,14 +234,14 @@ function BotdPicksSection({
               <span className="col-span-2 text-center">
                 {p.correct === true ? (
                   <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400">
-                    <CheckCircle2 className="h-3.5 w-3.5" /> Correct
+                    <CheckCircle2 className="h-3.5 w-3.5" /> {t("botd.correctLabel")}
                   </span>
                 ) : p.correct === false ? (
                   <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-red-400">
-                    <XCircle className="h-3.5 w-3.5" /> Fout
+                    <XCircle className="h-3.5 w-3.5" /> {t("botd.incorrectLabel")}
                   </span>
                 ) : (
-                  <span className="text-[10px] text-slate-500">wacht</span>
+                  <span className="text-[10px] text-slate-500">{t("botd.pendingLabel")}</span>
                 )}
               </span>
             </div>
@@ -891,25 +892,20 @@ export default function BetOfTheDayPage() {
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-slate-100">
-                  Wat telt wél / niet in de Live meting hieronder?
+                  {t("botd.liveMeasurementTitle")}
                 </p>
                 <ul className="mt-2 space-y-1 text-xs leading-relaxed text-[#cbd3e0]">
                   <li>
-                    <span className="text-emerald-300">✅ Meegerekend:</span>{" "}
-                    1 BotD per dag, vastgezet vóór de aftrap, sinds
-                    18 april 2026, <em>wedstrijd moet afgelopen én
-                    geëvalueerd zijn</em>. De teller begint op 0 en groeit
-                    alleen wanneer een BotD-wedstrijd écht afloopt.
+                    <span className="text-emerald-300">{t("botd.includedPrefix")}</span>{" "}
+                    {t("botd.includedBody")}
                   </li>
                   <li>
-                    <span className="text-amber-300">⏳ Nog niet mee:</span>{" "}
-                    de BotD van vandaag hierboven — die staat pending tot
-                    de wedstrijd gespeeld is.
+                    <span className="text-amber-300">{t("botd.notYetPrefix")}</span>{" "}
+                    {t("botd.notYetBody")}
                   </li>
                   <li>
-                    <span className="text-slate-400">↪ Niet hier:</span>{" "}
-                    Telegram @BetsPluggs-picks (dat zijn Free tier
-                    picks — 3 per dag, een andere stream dan BotD).
+                    <span className="text-slate-400">{t("botd.notHerePrefix")}</span>{" "}
+                    {t("botd.notHereBody")}
                   </li>
                 </ul>
               </div>
@@ -922,19 +918,19 @@ export default function BetOfTheDayPage() {
               This page is the canonical home of the live BOTD stream. */}
           <BotdPicksSection
             endpoint="live-tracking"
-            title="Live meting sinds 18 april 2026"
-            description="Alleen picks die strikt vóór de aftrap zijn vastgelegd. Deze meting groeit dagelijks. Dit is de eerlijke pre-match track record van onze BOTD."
+            title={t("botd.liveSectionTitle")}
+            description={t("botd.liveSectionDesc")}
             accentColor="text-emerald-400"
-            emptyCopy="Eerste live BOTD verschijnt zodra er een afgelopen wedstrijd is binnen de live-meting."
+            emptyCopy={t("botd.liveSectionEmpty")}
             lowSampleThreshold={10}
-            lowSampleCopy="Klein sample — de meting loopt nog. Eerlijke accuracy verschijnt zodra we minstens 10 beoordeelde picks hebben."
+            lowSampleCopy={t("botd.liveSectionLowSample")}
           />
 
           <div className="glass-card p-4 text-sm text-slate-400">
             <p>
-              Op zoek naar de historische modelvalidatie van de Pick of the Day?{" "}
+              {t("botd.historicalLinkLead")}{" "}
               <Link href="/trackrecord" className="text-emerald-400 hover:underline">
-                Bekijk &apos;Modelvalidatie — Pick of the Day&apos; op Track Record →
+                {t("botd.historicalLinkCta")}
               </Link>
             </p>
           </div>

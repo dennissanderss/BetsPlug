@@ -194,16 +194,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   /* ── auth:expired event listener ────────────────────────
      api.ts dispatches this whenever any request returns 401.
-     We clear the in-memory session and bounce to /login so
-     the user can re-authenticate. We guard against loops by
-     only redirecting when we still had a user. */
+     We clear the in-memory session, but ONLY redirect to /login
+     when the visitor is actually inside an authed area. A 401
+     from a background fetch on the homepage / pricing / articles
+     used to bounce every visitor to /login indiscriminately —
+     that produced the "open the site, get yeeted to login"
+     symptom. Public pages now silently clear stale state and
+     let the SiteNav render the logged-out CTAs (it reads useAuth
+     too) without any navigation surprise. */
   useEffect(() => {
     const onExpired = () => {
       setToken((prev) => {
         if (prev) {
           setUser(null);
-          // Use replace so the back button doesn't loop.
-          router.replace("/login");
+          // Strip the locale prefix so the prefix list can stay
+          // canonical. e.g. "/pl/dashboard" → "/dashboard".
+          const raw = window.location.pathname.replace(
+            /^\/(en|nl|de|fr|es|it|sw|id|pt|tr|pl|ro|ru|el|da|sv)(?=\/|$)/,
+            "",
+          ) || "/";
+          // Authed-area path prefixes that DO bounce on session
+          // expiry. Anything outside this list is a public page
+          // and should not redirect on a stray 401.
+          const AUTHED_PREFIXES = [
+            "/dashboard",
+            "/predictions",
+            "/trackrecord",
+            "/results",
+            "/myaccount",
+            "/subscription",
+            "/admin",
+            "/favorites",
+            "/reports",
+            "/strategy",
+            "/teams",
+            "/matches",
+            "/live-score",
+            "/bet-of-the-day",
+            "/weekly-report",
+            "/checkout",
+          ];
+          if (AUTHED_PREFIXES.some((p) => raw.startsWith(p))) {
+            router.replace("/login");
+          }
         }
         return null;
       });

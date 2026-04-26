@@ -181,10 +181,14 @@ class ApiClient {
    * `password` fields — the username may actually be an email
    * address.
    */
-  login(username: string, password: string) {
+  login(username: string, password: string, remember: boolean = false) {
     const body = new URLSearchParams();
     body.set("username", username);
     body.set("password", password);
+    // When the visitor ticked "Remember this device" the backend
+    // issues a 30-day JWT instead of the default 60-min one. The
+    // backend reads this as a Form field so it has to be url-encoded.
+    if (remember) body.set("remember", "true");
     return this.request<import("@/types/api").AuthTokenResponse>(
       "/auth/login",
       {

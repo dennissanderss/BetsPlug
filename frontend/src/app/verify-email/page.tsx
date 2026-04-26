@@ -31,7 +31,7 @@ import {
 } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
-import { useLocalizedHref } from "@/i18n/locale-provider";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { api, ApiError } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -41,6 +41,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 type VerifyState = "loading" | "success" | "error" | "missing-token";
 
 function VerifyEmailInner() {
+  const { t } = useTranslations();
   const loc = useLocalizedHref();
   const router = useRouter();
   const params = useSearchParams();
@@ -81,11 +82,11 @@ function VerifyEmailInner() {
         if (err instanceof ApiError) {
           setErrorMessage(
             err.detail === "invalid_token" || err.detail === "expired_token"
-              ? "This verification link has expired or is invalid."
-              : err.detail || "We couldn't verify your email."
+              ? t("verifyEmail.errorExpired")
+              : err.detail || t("verifyEmail.errorGeneric")
           );
         } else {
-          setErrorMessage("We couldn't verify your email.");
+          setErrorMessage(t("verifyEmail.errorGeneric"));
         }
       }
     };
@@ -141,10 +142,10 @@ function VerifyEmailInner() {
                     </HexBadge>
                   </div>
                   <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
-                    Verifying your email…
+                    {t("verifyEmail.loadingTitle")}
                   </h1>
                   <p className="text-sm text-[#a3a9b8]">
-                    Hang on a moment while we confirm your account.
+                    {t("verifyEmail.loadingBody")}
                   </p>
                 </div>
               )}
@@ -157,14 +158,14 @@ function VerifyEmailInner() {
                     </HexBadge>
                   </div>
                   <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
-                    Email verified!
+                    {t("verifyEmail.successTitle")}
                   </h1>
                   <p className="text-sm text-[#a3a9b8]">
-                    Your account is active. Taking you to your dashboard…
+                    {t("verifyEmail.successBody")}
                   </p>
                   <div className="inline-flex items-center gap-2 text-xs text-[#8a93a6]">
                     <Loader2 className="h-3 w-3 animate-spin" />
-                    Redirecting
+                    {t("verifyEmail.redirecting")}
                   </div>
                 </div>
               )}
@@ -177,17 +178,16 @@ function VerifyEmailInner() {
                     </HexBadge>
                   </div>
                   <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
-                    Verification link missing
+                    {t("verifyEmail.missingTitle")}
                   </h1>
                   <p className="text-sm text-[#a3a9b8]">
-                    This page needs a verification token. Please use the link
-                    from the email we sent you.
+                    {t("verifyEmail.missingBody")}
                   </p>
                   <Link
                     href={loc("/login")}
                     className="inline-flex items-center gap-2 text-sm font-medium text-[#4ade80] hover:text-[#86efac]"
                   >
-                    Back to login
+                    {t("verifyEmail.backToLoginCta")}
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
@@ -201,12 +201,11 @@ function VerifyEmailInner() {
                     </HexBadge>
                   </div>
                   <h1 className="text-heading text-balance break-words text-2xl text-[#ededed]">
-                    Link expired or invalid
+                    {t("verifyEmail.errorTitle")}
                   </h1>
                   <p className="text-sm text-[#a3a9b8]">
-                    {errorMessage ||
-                      "This verification link can no longer be used."}{" "}
-                    Enter your email below and we&apos;ll send a new one.
+                    {errorMessage || t("verifyEmail.errorFallback")}{" "}
+                    {t("verifyEmail.errorPrompt")}
                   </p>
 
                   <form
@@ -218,7 +217,7 @@ function VerifyEmailInner() {
                       <Mail className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7280]" />
                       <input
                         type="email"
-                        placeholder="you@email.com"
+                        placeholder={t("verifyEmail.emailPh")}
                         value={resendEmail}
                         onChange={(e) => setResendEmail(e.target.value)}
                         className="w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-3 pl-11 text-sm text-[#ededed] placeholder:text-[#6b7280] outline-none transition-all focus:border-[#4ade80]/60 focus:ring-2 focus:ring-[#4ade80]/20"
@@ -232,24 +231,24 @@ function VerifyEmailInner() {
                       {resending ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          Sending…
+                          {t("verifyEmail.sending")}
                         </>
                       ) : (
                         <>
                           <RefreshCw className="h-4 w-4" />
-                          Send a new link
+                          {t("verifyEmail.sendNewLink")}
                         </>
                       )}
                     </button>
                     {resendStatus === "success" && (
                       <div className="flex items-center justify-center gap-1 text-xs text-[#4ade80]">
                         <CheckCircle2 className="h-3 w-3" />
-                        Check your inbox.
+                        {t("verifyEmail.resendSuccess")}
                       </div>
                     )}
                     {resendStatus === "error" && (
                       <div className="text-center text-xs text-red-400">
-                        We couldn&apos;t send the email. Please try again.
+                        {t("verifyEmail.resendError")}
                       </div>
                     )}
                   </form>
@@ -259,7 +258,7 @@ function VerifyEmailInner() {
                       href={loc("/login")}
                       className="text-sm font-medium text-[#4ade80] transition-colors hover:text-[#86efac]"
                     >
-                      ← Back to login
+                      {t("verifyEmail.backToLogin")}
                     </Link>
                   </div>
                 </div>
