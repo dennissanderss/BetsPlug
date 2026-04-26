@@ -2662,5 +2662,5 @@ const el = {
   "admin.statusCancelled": "Ακυρώθηκε",
   "admin.matchesColumn": "Αγώνες",
   "admin.predsColumn": "Preds",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default el;

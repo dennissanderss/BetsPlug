@@ -2712,5 +2712,5 @@ const id = {
   "admin.statusCancelled": "Dibatalkan",
   "admin.matchesColumn": "Pertandingan",
   "admin.predsColumn": "Preds",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default id;

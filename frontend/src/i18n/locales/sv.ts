@@ -2662,5 +2662,5 @@ const sv = {
   "admin.statusCancelled": "Inställd",
   "admin.matchesColumn": "Matcher",
   "admin.predsColumn": "Preds",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default sv;

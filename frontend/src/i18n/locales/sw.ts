@@ -2712,5 +2712,5 @@ const sw = {
   "admin.statusCancelled": "Imefutwa",
   "admin.matchesColumn": "Mechi",
   "admin.predsColumn": "Preds",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default sw;

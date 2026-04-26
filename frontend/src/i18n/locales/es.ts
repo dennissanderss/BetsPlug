@@ -2712,5 +2712,5 @@ const es = {
   "admin.statusCancelled": "Cancelado",
   "admin.matchesColumn": "Partidos",
   "admin.predsColumn": "Preds",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default es;

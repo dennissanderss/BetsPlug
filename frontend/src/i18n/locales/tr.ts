@@ -2662,5 +2662,5 @@ const tr = {
   "admin.statusCancelled": "İptal edildi",
   "admin.matchesColumn": "Maçlar",
   "admin.predsColumn": "Preds",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default tr;

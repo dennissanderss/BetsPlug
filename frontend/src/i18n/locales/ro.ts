@@ -2662,5 +2662,5 @@ const ro = {
   "admin.statusCancelled": "Anulat",
   "admin.matchesColumn": "Meciuri",
   "admin.predsColumn": "Preds",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>>;
 export default ro;
