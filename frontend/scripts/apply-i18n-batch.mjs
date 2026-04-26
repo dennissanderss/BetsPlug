@@ -41,6 +41,7 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const LOCALES_DIR = path.join(__dirname, "..", "src", "i18n", "locales");
+const MESSAGES_FILE = path.join(__dirname, "..", "src", "i18n", "messages.ts");
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
@@ -71,7 +72,16 @@ let totalPatched = 0;
 let totalAdded = 0;
 
 for (const locale of locales) {
-  const filePath = path.join(LOCALES_DIR, `${locale}.ts`);
+  // NL is the only locale that lives inline inside messages.ts (the
+  // other 14 sit in src/i18n/locales/<loc>.ts). Patch the right file
+  // accordingly. The NL block in messages.ts is delimited by:
+  //   const nl: Dictionary = { … };
+  // followed by the locale-dictionaries import section. We do an
+  // edit confined to that block so EN keys aren't touched.
+  const isNl = locale === "nl";
+  const filePath = isNl
+    ? MESSAGES_FILE
+    : path.join(LOCALES_DIR, `${locale}.ts`);
   if (!fs.existsSync(filePath)) {
     console.warn(`  ⏭️  ${locale}: locale file does not exist, skipping`);
     continue;
@@ -79,6 +89,28 @@ for (const locale of locales) {
 
   let content = fs.readFileSync(filePath, "utf-8");
   const translations = batch[locale];
+
+  // Confine NL edits to the NL block so EN keys aren't accidentally
+  // overwritten. Slice the block out, patch it, splice it back.
+  let nlBlockStart = -1, nlBlockEnd = -1, prefix = "", suffix = "", nlBlock = "";
+  if (isNl) {
+    const startMarker = "const nl: Dictionary = {";
+    nlBlockStart = content.indexOf(startMarker);
+    if (nlBlockStart < 0) {
+      console.warn(`  ⏭️  nl: NL block not found in messages.ts`);
+      continue;
+    }
+    nlBlockEnd = content.indexOf("};\n", nlBlockStart);
+    if (nlBlockEnd < 0) {
+      console.warn(`  ⏭️  nl: NL block end not found in messages.ts`);
+      continue;
+    }
+    nlBlockEnd += 2; // include "};"
+    prefix = content.slice(0, nlBlockStart);
+    nlBlock = content.slice(nlBlockStart, nlBlockEnd);
+    suffix = content.slice(nlBlockEnd);
+    content = nlBlock;
+  }
   let patched = 0;
   let added = 0;
 
@@ -114,6 +146,10 @@ for (const locale of locales) {
     }
   }
 
+  if (isNl) {
+    // Splice the patched NL block back into messages.ts.
+    content = prefix + content + suffix;
+  }
   if (!dryRun) fs.writeFileSync(filePath, content);
   console.log(
     `  ${dryRun ? "📝" : "✅"} ${locale}: ${patched} replaced + ${added} added`,

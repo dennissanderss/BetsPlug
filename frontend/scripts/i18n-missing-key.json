@@ -1,0 +1,16 @@
+{
+  "de": { "results.roiCalcLiveStartNote": "Live-Daten beginnen am 16. Apr 2026 — längere Zeiträume liefern derzeit dieselben Daten, bis mehr Tage erfasst sind." },
+  "fr": { "results.roiCalcLiveStartNote": "Les données live commencent le 16 avr. 2026 — des fenêtres plus longues renvoient pour l'instant le même ensemble jusqu'à ce que plus de jours soient enregistrés." },
+  "es": { "results.roiCalcLiveStartNote": "Los datos en vivo comienzan el 16 abr 2026 — las ventanas más largas devuelven temporalmente el mismo conjunto hasta que se registren más días." },
+  "it": { "results.roiCalcLiveStartNote": "I dati live iniziano il 16 apr 2026 — le finestre più ampie restituiscono temporaneamente lo stesso set finché non vengono registrati più giorni." },
+  "pt": { "results.roiCalcLiveStartNote": "Os dados live começam a 16 abr 2026 — janelas mais longas devolvem por agora o mesmo conjunto até serem registados mais dias." },
+  "tr": { "results.roiCalcLiveStartNote": "Canlı veriler 16 Nis 2026'da başlar — daha uzun pencereler şimdilik aynı seti döndürür, ta ki daha fazla gün kaydedilene kadar." },
+  "pl": { "results.roiCalcLiveStartNote": "Dane live startują 16 kwi 2026 — dłuższe okna na razie zwracają ten sam zestaw, aż więcej dni zostanie zarejestrowanych." },
+  "ro": { "results.roiCalcLiveStartNote": "Datele live încep pe 16 apr. 2026 — ferestrele mai lungi returnează deocamdată același set până sunt înregistrate mai multe zile." },
+  "ru": { "results.roiCalcLiveStartNote": "Live-данные начинаются 16 апр. 2026 — более длинные окна пока возвращают тот же набор, пока не будет записано больше дней." },
+  "el": { "results.roiCalcLiveStartNote": "Τα live δεδομένα ξεκινούν στις 16 Απρ 2026 — μεγαλύτερα παράθυρα επιστρέφουν προς το παρόν το ίδιο σύνολο μέχρι να καταγραφούν περισσότερες μέρες." },
+  "da": { "results.roiCalcLiveStartNote": "Live-data starter 16. apr. 2026 — længere vinduer returnerer indtil videre det samme sæt, indtil flere dage er registreret." },
+  "sv": { "results.roiCalcLiveStartNote": "Live-data startar 16 apr 2026 — längre fönster returnerar tills vidare samma uppsättning tills fler dagar är registrerade." },
+  "sw": { "results.roiCalcLiveStartNote": "Data ya live huanza 16 Apr 2026 — madirisha marefu kwa sasa hurudisha seti hiyohiyo hadi siku zaidi zirekodiwe." },
+  "id": { "results.roiCalcLiveStartNote": "Data live mulai 16 Apr 2026 — jendela lebih panjang sementara mengembalikan set yang sama sampai lebih banyak hari dicatat." }
+}
