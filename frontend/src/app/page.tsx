@@ -5,7 +5,7 @@ import {
   ServiceJsonLd,
   FaqJsonLd,
 } from "@/components/seo/json-ld";
-import { fetchAllArticles, fetchAllTestimonials, fetchHomepage, fetchPricingConfig } from "@/lib/sanity-data";
+import { fetchAllTestimonials, fetchHomepage, fetchPricingConfig } from "@/lib/sanity-data";
 import { getHomeFaqJsonLdItems } from "@/data/home-faq";
 import { getServerLocale } from "@/lib/seo-helpers";
 
@@ -24,8 +24,7 @@ export const revalidate = 60;
  */
 
 export default async function HomePage() {
-  const [articles, sanityTestimonials, homepage, pricingConfig] = await Promise.all([
-    fetchAllArticles(),
+  const [sanityTestimonials, homepage, pricingConfig] = await Promise.all([
     fetchAllTestimonials(),
     fetchHomepage(),
     fetchPricingConfig(),
@@ -52,7 +51,7 @@ export default async function HomePage() {
       <FaqJsonLd items={faqItems} />
 
       {/* Client-rendered landing page content */}
-      <HomeContent articles={articles} testimonials={testimonials} homepage={homepage} pricingConfig={pricingConfig} />
+      <HomeContent testimonials={testimonials} homepage={homepage} pricingConfig={pricingConfig} />
     </>
   );
 }

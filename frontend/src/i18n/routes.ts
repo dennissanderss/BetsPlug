@@ -290,24 +290,8 @@ export const routeTable = {
     da: "/login",
     sv: "/login",
   },
-  "/articles": {
-    en: "/articles",
-    nl: "/artikelen",
-    de: "/artikel",
-    fr: "/articles",
-    es: "/articulos",
-    it: "/articoli",
-    sw: "/makala",
-    id: "/artikel",
-    pt: "/articles",
-    tr: "/articles",
-    pl: "/articles",
-    ro: "/articles",
-    ru: "/articles",
-    el: "/articles",
-    da: "/articles",
-    sv: "/articles",
-  },
+  // /articles removed 2026-04-27 — blog discontinued; all old slugs
+  // 301 → /learn via next.config.js redirects.
   "/deals": {
     en: "/deals",
     nl: "/aanbiedingen",

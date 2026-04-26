@@ -26,7 +26,6 @@ export const structure = (S: StructureBuilder) =>
           S.list()
             .title("Editorial")
             .items([
-              S.documentTypeListItem("article").title("Articles"),
               S.documentTypeListItem("learnPillar").title("Learn Pillars"),
             ]),
         ),

@@ -39,7 +39,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 
-import BlogManager from "@/components/admin/blog-manager";
 import UserManager from "@/components/admin/user-manager";
 import FinanceTab from "@/components/admin/finance-tab";
 import SeoDashboard from "@/components/admin/seo-dashboard";

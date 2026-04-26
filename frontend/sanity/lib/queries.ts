@@ -1,22 +1,5 @@
 import { groq } from "next-sanity";
 
-// ── Articles ──────────────────────────────────────────────
-export const allArticlesQuery = groq`
-  *[_type == "article"] | order(publishedAt desc) {
-    _id, title, slug, excerpt, sport, author, publishedAt,
-    readingMinutes, coverGradient, coverPattern, coverImage, coverImageAlt
-  }
-`;
-
-export const articleBySlugQuery = groq`
-  *[_type == "article" && slug.current == $slug][0] {
-    _id, title, slug, excerpt, metaTitle, metaDescription,
-    sport, author, publishedAt, updatedAt, readingMinutes,
-    coverGradient, coverPattern, coverImage, coverImageAlt,
-    tldr, blocks
-  }
-`;
-
 // ── Learn Pillars ─────────────────────────────────────────
 export const allLearnPillarsQuery = groq`
   *[_type == "learnPillar"] | order(title.en asc) {

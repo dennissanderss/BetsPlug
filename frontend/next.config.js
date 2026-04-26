@@ -52,6 +52,30 @@ const nextConfig = {
       { source: "/it/impostazioni", destination: "/myaccount", permanent: true },
       { source: "/sw/mipangilio", destination: "/myaccount", permanent: true },
       { source: "/id/pengaturan", destination: "/myaccount", permanent: true },
+
+      // Blog removed 2026-04-27 — every /articles* URL plus its 6
+      // localized slug variants 301 → /learn so any inbound link or
+      // search-engine entry preserves intent (educational guides on
+      // football analytics) instead of a dead 404. Catch-all `:slug*`
+      // covers /articles/foo, /articles/foo/bar, etc.
+      { source: "/articles", destination: "/learn", permanent: true },
+      { source: "/articles/:slug*", destination: "/learn", permanent: true },
+      { source: "/nl/artikelen", destination: "/nl/leren", permanent: true },
+      { source: "/nl/artikelen/:slug*", destination: "/nl/leren", permanent: true },
+      { source: "/de/artikel", destination: "/de/lernen", permanent: true },
+      { source: "/de/artikel/:slug*", destination: "/de/lernen", permanent: true },
+      { source: "/fr/articles", destination: "/fr/apprendre", permanent: true },
+      { source: "/fr/articles/:slug*", destination: "/fr/apprendre", permanent: true },
+      { source: "/es/articulos", destination: "/es/aprender", permanent: true },
+      { source: "/es/articulos/:slug*", destination: "/es/aprender", permanent: true },
+      { source: "/it/articoli", destination: "/it/impara", permanent: true },
+      { source: "/it/articoli/:slug*", destination: "/it/impara", permanent: true },
+      { source: "/sw/makala", destination: "/sw/jifunze", permanent: true },
+      { source: "/sw/makala/:slug*", destination: "/sw/jifunze", permanent: true },
+      { source: "/id/artikel", destination: "/id/belajar", permanent: true },
+      { source: "/id/artikel/:slug*", destination: "/id/belajar", permanent: true },
+      // Parked locales (pt/tr/pl/ro/ru/el/da/sv) used the EN slug
+      // /articles, so the catch-all above already covers them.
     ];
   },
 };
