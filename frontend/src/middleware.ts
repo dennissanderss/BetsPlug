@@ -4,40 +4,40 @@ import {
   locales,
   LOCALE_COOKIE,
   isLocale,
+  isIndexableLocale,
   type Locale,
 } from "@/i18n/config";
 import { parseLocalizedPath } from "@/i18n/routes";
 
 /**
- * Full 16-locale indexable routing (Nerdytips pattern — 2026-04-24)
+ * 6-locale indexable routing (recovery — 2026-04-26)
  * ────────────────────────────────────────────────────────────
- * Phase 4 of the i18n rollout. Previously `/xx/` URLs were tagged
- * `X-Robots-Tag: noindex` so only the EN canonical could rank. The
- * Nerdytips architecture flips that: every locale URL is indexable
- * with its own self-canonical + a full hreflang cluster pointing
- * at all 16 sibling URLs.
+ * After the brand-term ranking collapse following the 16-locale
+ * "indexable everywhere" experiment, only 6 locales (en, nl, de,
+ * fr, es, it) are now indexable — they have translated URL slugs,
+ * hand-authored PAGE_META, hand-translated Sanity content and a
+ * UI dictionary at ≥95% unique-translation coverage.
  *
- *   1. `/en/...`  → 308 redirect to the canonical unprefixed URL
- *      (the default locale must only exist in one shape).
- *   2. `/nl/...`, `/de/...`, `/fr/...`, `/es/...`, `/it/...`,
- *      `/sw/...`, `/id/...`, `/pt/…`, `/tr/…`, `/pl/…`, `/ro/…`,
- *      `/ru/…`, `/el/…`, `/da/…`, `/sv/…` → internal rewrite to
- *      the canonical EN path so the Next.js page file resolves,
- *      plus `x-locale` header + cookie so SSR renders in the
- *      visitor's language. The response is INDEXABLE — no
- *      noindex — so Google can rank the translated URL.
- *   3. Bare translated slugs (e.g. `/voorspellingen`, `/prognosen`
- *      without a locale prefix) → 308 to the canonical EN path.
- *   4. Canonical EN paths → serve as-is, `x-locale` pinned to EN.
+ * The 10 parked locales (sw, id, pt, tr, pl, ro, ru, el, da, sv)
+ * keep working for visitors but Google sees them as `noindex,
+ * follow`. They will be re-activated one by one once their
+ * content reaches parity (criteria documented in
+ * src/i18n/config.ts INDEXABLE_LOCALES + seo-audit/09-handoff.md).
  *
- * Canonical tags in <head> are self-referential per locale (see
- * `lib/seo-helpers.ts`), hreflang alternates are emitted for all
- * 16 locales + x-default, and the sitemap-index enumerates every
- * URL × locale combination.
+ * Routing rules:
+ *   1. `/en/...`  → 308 → canonical unprefixed URL.
+ *   2. `/<indexable>/...` (nl/de/fr/es/it) → internal rewrite to
+ *      the canonical EN path with `x-locale` header — INDEXABLE.
+ *   3. `/<parked>/...` (sw/id/pt/tr/pl/ro/ru/el/da/sv) → same
+ *      rewrite, but response gets `X-Robots-Tag: noindex, follow`
+ *      so Google drops the URL from its index while still
+ *      following internal links to discover new pages.
+ *   4. Bare translated slugs (e.g. `/voorspellingen`) → 308 to
+ *      canonical EN path.
+ *   5. Canonical EN paths → serve as-is, `x-locale` pinned to EN.
  *
  * Non-canonical hosts (*.vercel.app preview deploys) still get
- * blanket noindex on every path to protect production rankings
- * from duplicate-content penalties.
+ * blanket noindex on every path.
  */
 
 const PUBLIC_FILE = /\.(.*)$/;
@@ -50,6 +50,17 @@ function applyIndexability(res: NextResponse, host: string | null): NextResponse
     return res;
   }
   res.headers.set("X-Robots-Tag", "noindex, nofollow");
+  return res;
+}
+
+function applyParkedLocaleNoindex(res: NextResponse, locale: Locale): NextResponse {
+  // `noindex, follow` so Google drops the parked-locale URL from its
+  // index but still crawls outbound links for graph discovery. Once
+  // a locale becomes indexable (added to INDEXABLE_LOCALES in
+  // src/i18n/config.ts) this header simply stops being set.
+  if (!isIndexableLocale(locale)) {
+    res.headers.set("X-Robots-Tag", "noindex, follow");
+  }
   return res;
 }
 
@@ -98,9 +109,9 @@ export function middleware(req: NextRequest) {
   // ── /xx/ prefix (15 non-default locales) ──────────────────
   // Rewrite to the canonical EN path so Next.js resolves the
   // matching page file, then render in the visitor's language.
-  // Response is INDEXABLE — Google picks up the translated URL
-  // and ranks it per locale thanks to the self-canonical +
-  // hreflang cluster emitted in <head>.
+  // Indexable locales get a self-canonical + hreflang cluster;
+  // parked locales additionally get `X-Robots-Tag: noindex,
+  // follow` so Google drops them from its index.
   if (hasLocalePrefix) {
     const parsed = parseLocalizedPath(pathname, firstSegment as Locale);
     const url = req.nextUrl.clone();
@@ -110,6 +121,7 @@ export function middleware(req: NextRequest) {
       request: { headers: withLocaleHeader(req, parsed.locale) },
     });
     setLocaleCookie(res, parsed.locale);
+    applyParkedLocaleNoindex(res, parsed.locale);
     return applyIndexability(res, host);
   }
 

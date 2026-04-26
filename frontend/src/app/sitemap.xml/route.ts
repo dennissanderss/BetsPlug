@@ -1,19 +1,18 @@
 import { fetchAllSlugsForSitemap } from "@/lib/sanity-data";
 import { getAllComboSlugs } from "@/data/bet-type-league-combos";
-import { locales, defaultLocale, localeMeta, type Locale } from "@/i18n/config";
+import { INDEXABLE_LOCALES, defaultLocale, localeMeta, type Locale } from "@/i18n/config";
 import { localizePath } from "@/i18n/routes";
 
 export const revalidate = 60;
 
 /**
- * 16-locale sitemap — Nerdytips pattern (2026-04-24)
+ * 6-locale sitemap (recovery — 2026-04-26)
  * ────────────────────────────────────────────────────────────
- * Every canonical URL is enumerated across all 16 locales. Each
- * entry carries its own <xhtml:link rel="alternate" hreflang=…>
- * cluster pointing at every sibling locale + x-default, which
- * tells Google: "these are the same content in different
- * languages, index all of them, serve the matching one per
- * user".
+ * Only the 6 INDEXABLE_LOCALES (en, nl, de, fr, es, it) are
+ * enumerated. The 10 parked locales are absent — Google should
+ * neither discover them via the sitemap nor see them as siblings
+ * via hreflang. Each indexable URL ships an alternate cluster
+ * pointing at the 6 indexable siblings + x-default → EN.
  *
  * Private routes under the (app) group are excluded, as are
  * funnel pages (/checkout, /login, /welcome) without organic
@@ -84,7 +83,7 @@ function buildAbsolute(canonicalPath: string, locale: Locale): string {
 /** Build the hreflang alternate cluster for a canonical path. */
 function alternatesFor(canonicalPath: string): Record<string, string> {
   const out: Record<string, string> = {};
-  for (const l of locales) {
+  for (const l of INDEXABLE_LOCALES) {
     const tag = localeMeta[l].hreflang;
     out[tag] = buildAbsolute(canonicalPath, l);
   }
@@ -93,9 +92,9 @@ function alternatesFor(canonicalPath: string): Record<string, string> {
 }
 
 /**
- * Emit 16 entries (one per locale) for a single canonical path,
- * each with the same hreflang cluster. The cluster is what tells
- * Google the 16 URLs are siblings of the same content.
+ * Emit one entry per INDEXABLE locale (6 entries, post-recovery)
+ * for a single canonical path, each carrying the same alternate
+ * cluster.
  */
 function expandAcrossLocales(
   canonicalPath: string,
@@ -107,7 +106,7 @@ function expandAcrossLocales(
 ): SitemapEntry[] {
   const alternates = alternatesFor(canonicalPath);
   const when = opts.lastModified ?? new Date();
-  return locales.map((l) => ({
+  return INDEXABLE_LOCALES.map((l) => ({
     url: buildAbsolute(canonicalPath, l),
     alternates,
     lastModified: when,

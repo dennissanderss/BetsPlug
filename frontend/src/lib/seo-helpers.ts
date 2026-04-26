@@ -1,11 +1,14 @@
 /**
- * SEO helper utilities (16-locale Nerdytips pattern — 2026-04-24)
+ * SEO helper utilities (6-locale recovery — 2026-04-26)
  * ────────────────────────────────────────────────────────────
- * Phase 4: every locale URL is indexable with its own
- * self-canonical + a full hreflang cluster (17 tags = x-default +
- * 16 locales). `getServerLocale()` reads the `x-locale` header set
- * by middleware so SSR renders the right language; canonical
- * + alternates are built off that locale.
+ * Only the 6 INDEXABLE_LOCALES (en, nl, de, fr, es, it) get a
+ * self-canonical + hreflang cluster. The 10 parked locales render
+ * for visitors but are hidden from Google via `X-Robots-Tag:
+ * noindex, follow` (set by middleware), are absent from the
+ * sitemap, and are absent from the hreflang cluster — both as
+ * source URL (no canonical/alternates emitted from a parked
+ * locale) and as target URL (no hreflang pointing to them from
+ * the indexable locales).
  */
 
 import { cookies, headers } from "next/headers";
@@ -13,7 +16,8 @@ import {
   LOCALE_COOKIE,
   isLocale,
   defaultLocale,
-  locales,
+  INDEXABLE_LOCALES,
+  isIndexableLocale,
   localeMeta,
   type Locale,
 } from "@/i18n/config";
@@ -61,17 +65,19 @@ export function getServerLocale(): Locale {
 /* ── Canonical URL ──────────────────────────────────────────── */
 
 /**
- * Build the absolute canonical URL for a page in the ACTIVE
- * locale — Nerdytips pattern. Each locale URL is its own
- * indexable entity with a self-canonical, so `/de/…` canonicals
- * to itself, NOT the EN URL.
+ * Build the absolute canonical URL for a page.
  *
- * @param canonicalPath  The canonical (English) path, e.g. "/articles"
- * @returns              Absolute URL in the active locale, e.g.
- *                       "https://betsplug.com/de/spiel-vorhersagen"
+ * For INDEXABLE locales: self-canonical (e.g. `/de/spiel-vorhersagen`
+ * canonicals to itself).
+ * For PARKED locales: canonical points at the EN equivalent so any
+ * stray index entry consolidates onto the EN URL while the parked
+ * URL itself is also tagged `noindex` by middleware. Belt-and-braces.
  */
 export function getCanonicalUrl(canonicalPath: string): string {
   const locale = getServerLocale();
+  if (!isIndexableLocale(locale)) {
+    return buildAbsoluteUrl(canonicalPath, defaultLocale);
+  }
   return buildAbsoluteUrl(canonicalPath, locale);
 }
 
@@ -83,13 +89,15 @@ function buildAbsoluteUrl(canonicalPath: string, locale: Locale): string {
 /* ── hreflang alternates ────────────────────────────────────── */
 
 /**
- * Build Next.js `alternates` for a page with self-canonical and
- * a full hreflang cluster across all 16 locales + `x-default`.
+ * Build Next.js `alternates` for a page.
  *
- * Consumers pass the CANONICAL (English) path — we build the
- * localized URL for every locale via the `routeTable` + emit them
- * in the `languages` map keyed by BCP-47 tag. The self-canonical
- * points at the ACTIVE locale's URL.
+ * - From an INDEXABLE locale: self-canonical + hreflang cluster
+ *   for the 6 indexable locales + `x-default` → EN.
+ * - From a PARKED locale: canonical → EN, NO hreflang cluster.
+ *   We don't want to advertise parked URLs to Google as siblings
+ *   of indexable ones, since the parked content is partial /
+ *   stale. The middleware sets `X-Robots-Tag: noindex, follow`
+ *   on this response so the parked URL is dropped anyway.
  *
  * @param canonicalPath the EN canonical path, e.g. "/articles"
  *                      or "/match-predictions/premier-league".
@@ -99,10 +107,17 @@ export function getLocalizedAlternates(canonicalPath: string): {
   languages: Record<string, string>;
 } {
   const locale = getServerLocale();
-  const canonical = buildAbsoluteUrl(canonicalPath, locale);
+  const indexable = isIndexableLocale(locale);
+  const canonical = indexable
+    ? buildAbsoluteUrl(canonicalPath, locale)
+    : buildAbsoluteUrl(canonicalPath, defaultLocale);
+
+  if (!indexable) {
+    return { canonical, languages: {} };
+  }
 
   const languages: Record<string, string> = {};
-  for (const l of locales) {
+  for (const l of INDEXABLE_LOCALES) {
     const tag = localeMeta[l].hreflang;
     languages[tag] = buildAbsoluteUrl(canonicalPath, l);
   }
