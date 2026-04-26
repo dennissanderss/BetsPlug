@@ -42,7 +42,12 @@ function readTierFromStorage(): { tier: Tier; isAdmin: boolean } {
     const user = rawUser ? JSON.parse(rawUser) : null;
     const isAdmin = user?.role === "admin";
 
-    const testing = window.localStorage.getItem(TESTING_KEY) as Tier | null;
+    // TESTING_KEY only counts when the *current* user is admin.
+    // Otherwise a stale key left over from a previous admin session
+    // (or a role downgrade) would silently freeze the tier.
+    const testing = isAdmin
+      ? (window.localStorage.getItem(TESTING_KEY) as Tier | null)
+      : null;
     if (isAdmin && !testing) return { tier: "platinum", isAdmin: true };
 
     const stored = window.localStorage.getItem(TIER_KEY) as Tier | null;
@@ -80,8 +85,14 @@ export function useTier(): UseTierResult {
       const token = window.localStorage.getItem(TOKEN_KEY);
       if (!rawUser || !token) return;
       const user = JSON.parse(rawUser);
-      if (user.role === "admin") return;
-      if (window.localStorage.getItem(TESTING_KEY)) return;
+      const isCurrentlyAdmin = user?.role === "admin";
+      // Admins keep the localStorage-driven test-mode behaviour
+      // (Platinum by default, or whatever betsplug_admin_testing_tier
+      // is set to). For non-admins we ALWAYS hit /subscriptions/me —
+      // a stale TESTING_KEY left over from a previous admin session
+      // would otherwise freeze the user on whatever tier was last
+      // tested, even after they upgraded for real.
+      if (isCurrentlyAdmin) return;
 
       // Authenticated /subscriptions/me is the source of truth — looking up
       // by email could miss the row entirely (email mismatch, guest checkout)
