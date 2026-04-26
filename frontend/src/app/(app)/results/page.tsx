@@ -50,9 +50,12 @@ const PERIOD_PRESETS: number[] = [7, 14, 30, 90];
 // Launch date of the strict pre-match live measurement. Matches
 // LIVE_TRACKING_START below and the V81_DEPLOYMENT_CUTOFF on the
 // backend. Fixtures with a prediction locked before kickoff on or
-// after this date are counted in the simulator; everything else is
-// backtest / model validation and kept out of simulated returns.
+// after this date are counted in the live simulator; older fixtures
+// are model-validation backtest data — same picks, but odds are
+// reconstructed instead of stored pre-match, so payouts are
+// estimates rather than what you would have actually won.
 const LIVE_START_MS = Date.UTC(2026, 3, 16); // month is 0-indexed (3 = April)
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 function isLivePick(f: Fixture): boolean {
   const pred = f.prediction;
@@ -62,6 +65,18 @@ function isLivePick(f: Fixture): boolean {
   if (!Number.isFinite(predMs) || !Number.isFinite(schedMs)) return false;
   return predMs < schedMs && predMs >= LIVE_START_MS;
 }
+
+/** Whole days elapsed since the live-measurement launched. */
+function daysOfLiveData(now: number = Date.now()): number {
+  return Math.max(0, Math.floor((now - LIVE_START_MS) / ONE_DAY_MS));
+}
+
+// Which dataset the calculator + table draws from.
+//   "live"     — strict pre-match picks since LIVE_START_MS (default).
+//   "backtest" — model-validation picks from before LIVE_START_MS,
+//                with reconstructed odds. Lets users explore long
+//                periods (>10 days at launch) and is clearly labelled.
+type DataSource = "live" | "backtest";
 
 // Which pick-stream the calculator / table should show. "botd" = the
 // Bet of the Day stream: highest-confidence Gold-tier pick per day.
@@ -421,6 +436,7 @@ function aggregateFixtures(
   tier: CalcTier,
   periodDays: CalcPeriod,
   now: Date,
+  dataSource: DataSource = "live",
 ): PickAggregate {
   const cutoffMs = now.getTime() - periodDays * 24 * 60 * 60 * 1000;
   const agg = emptyAggregate();
@@ -428,8 +444,10 @@ function aggregateFixtures(
   for (const f of fixtures) {
     if (f.status !== "finished" || !f.result || !f.prediction) continue;
     if (f.prediction.pick_tier !== tier) continue;
-    // Live-only simulator — backtest fixtures lack reliable pre-match odds.
-    if (!isLivePick(f)) continue;
+    // In live mode only count picks that were locked pre-kickoff
+    // since LIVE_START_MS. Backtest mode drops that constraint and
+    // simulates against the full model-validation history.
+    if (dataSource === "live" && !isLivePick(f)) continue;
     const scheduled = new Date(f.scheduled_at).getTime();
     if (!Number.isFinite(scheduled) || scheduled < cutoffMs) continue;
 
@@ -487,6 +505,8 @@ function RoiCalculatorCard({
   setCalcPeriod,
   stream,
   setStream,
+  dataSource,
+  setDataSource,
   userTier,
 }: {
   fixtures: Fixture[];
@@ -499,6 +519,8 @@ function RoiCalculatorCard({
   setCalcPeriod: (v: CalcPeriod) => void;
   stream: StreamMode;
   setStream: (v: StreamMode) => void;
+  dataSource: DataSource;
+  setDataSource: (v: DataSource) => void;
   userTier: Tier;
 }) {
   const { t } = useTranslations();
@@ -510,21 +532,28 @@ function RoiCalculatorCard({
 
   // Aggregate the SELECTED tier at the SELECTED period for the headline card.
   const headline = useMemo(() => {
-    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, new Date());
-  }, [fixtures, stake, calcTier, calcPeriod]);
+    return aggregateFixtures(fixtures, stake, calcTier, calcPeriod, new Date(), dataSource);
+  }, [fixtures, stake, calcTier, calcPeriod, dataSource]);
 
   // Breakdown across all four tiers at the selected period, so the user can
   // compare what each tier would have paid out.
   const perTier = useMemo(() => {
     const now = new Date();
     const result: Record<CalcTier, PickAggregate> = {
-      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, now),
-      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, now),
-      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, now),
-      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, now),
+      free: aggregateFixtures(fixtures, stake, "free", calcPeriod, now, dataSource),
+      silver: aggregateFixtures(fixtures, stake, "silver", calcPeriod, now, dataSource),
+      gold: aggregateFixtures(fixtures, stake, "gold", calcPeriod, now, dataSource),
+      platinum: aggregateFixtures(fixtures, stake, "platinum", calcPeriod, now, dataSource),
     };
     return result;
-  }, [fixtures, stake, calcPeriod]);
+  }, [fixtures, stake, calcPeriod, dataSource]);
+
+  // Window-aware messaging for the live-data cap. When the user has
+  // dialled the period beyond what live measurement can actually
+  // serve, we show a banner and (optionally) a one-click switch to
+  // backtest so the picks line and table aren't silently capped.
+  const liveDays = daysOfLiveData();
+  const overshootingLiveWindow = dataSource === "live" && calcPeriod > liveDays;
 
   const headlineTotalStake = headline.realStake + headline.modelStake;
   const profitColor = headline.profit >= 0 ? "#10b981" : "#ef4444";
@@ -560,6 +589,50 @@ function RoiCalculatorCard({
         </span>
       </div>
       <p className="text-xs text-slate-500 mb-5">{t("results.roiCalcIntro")}</p>
+
+      {/* ── Data-source toggle — Live measurement vs Backtest ──
+          "Live" = strict pre-match picks since LIVE_START_MS (the
+          honest simulator). "Backtest" drops that constraint and
+          uses the full model-validation history with reconstructed
+          odds, so users can explore long periods even though live
+          tracking is only a few days deep. The two modes never mix
+          in the numbers — switching here re-runs aggregation. */}
+      <div className="mb-3 flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1 w-fit">
+          {([
+            { key: "live" as const, label: t("results.sourceLive") },
+            { key: "backtest" as const, label: t("results.sourceBacktest") },
+          ]).map((opt) => {
+            const active = dataSource === opt.key;
+            return (
+              <button
+                key={opt.key}
+                type="button"
+                onClick={() => setDataSource(opt.key)}
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors flex items-center gap-1.5 ${
+                  active
+                    ? opt.key === "live"
+                      ? "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
+                      : "bg-amber-500 text-[#1a1408] shadow-md shadow-amber-500/30"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+                aria-pressed={active}
+              >
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
+        {dataSource === "live" ? (
+          <span className="text-[11px] text-slate-500">
+            {t("results.sourceLiveHint", { days: liveDays })}
+          </span>
+        ) : (
+          <span className="text-[11px] font-semibold uppercase tracking-widest text-amber-400">
+            {t("results.sourceBacktestHint")}
+          </span>
+        )}
+      </div>
 
       {/* ── Stream toggle — All predictions vs Bet of the Day ── */}
       <div className="mb-5 flex flex-wrap items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1 w-fit">
@@ -723,9 +796,30 @@ function RoiCalculatorCard({
             {t("results.roiCalcMaxHint", { max: PERIOD_MAX })}
           </span>
         </div>
-        <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
-          {t("results.roiCalcLiveStartNote")}
-        </p>
+        {overshootingLiveWindow ? (
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/[0.06] px-3 py-2 text-[11px] leading-relaxed text-amber-200">
+            <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-amber-400" />
+            <span>
+              {t("results.roiCalcLiveCapNote", {
+                requested: calcPeriod,
+                live: liveDays,
+              })}
+            </span>
+            <button
+              type="button"
+              onClick={() => setDataSource("backtest")}
+              className="ml-auto rounded-md border border-amber-400/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-amber-200 hover:bg-amber-500/20"
+            >
+              {t("results.roiCalcSwitchToBacktest")}
+            </button>
+          </div>
+        ) : (
+          <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
+            {dataSource === "live"
+              ? t("results.roiCalcLiveStartNote")
+              : t("results.roiCalcBacktestNote")}
+          </p>
+        )}
       </Step>
 
       {/* ── Step 4 — Your return (locked for Free Access) ── */}
@@ -964,6 +1058,7 @@ interface FilterBarProps {
   setLeagueFilter: (v: string) => void;
   leagues: string[];
   total: number;
+  dataSource: DataSource;
 }
 
 function ResultsFilterBar({
@@ -975,6 +1070,7 @@ function ResultsFilterBar({
   setLeagueFilter,
   leagues,
   total,
+  dataSource,
 }: FilterBarProps) {
   const { t } = useTranslations();
 
@@ -984,14 +1080,36 @@ function ResultsFilterBar({
     { value: "Incorrect", label: t("results.filterIncorrect") },
   ];
 
+  // Real-world cutoff so users can verify the period filter is honest
+  // (avoids the "I asked for 4 days but I see older matches" question).
+  const fmtDate = (d: Date) =>
+    d.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+    });
+  const cutoffDate = new Date(Date.now() - period * 24 * 60 * 60 * 1000);
+  const todayDate = new Date();
+
   return (
     <div className="glass-card p-4">
       <div className="flex flex-wrap items-center gap-3">
 
         {/* Period badge — the period control itself lives in Step 3 of the calculator */}
-        <span className="text-[10px] uppercase tracking-widest text-slate-500 mr-1">
-          {t("results.filterShowingLast", { days: period })}
-        </span>
+        <div className="flex flex-col gap-0.5 mr-1">
+          <span className="text-[10px] uppercase tracking-widest text-slate-500">
+            {t("results.filterShowingRange", {
+              from: fmtDate(cutoffDate),
+              to: fmtDate(todayDate),
+            })}
+          </span>
+          <span className={`text-[9px] font-bold uppercase tracking-widest ${
+            dataSource === "live" ? "text-emerald-400" : "text-amber-400"
+          }`}>
+            {dataSource === "live"
+              ? t("results.sourceLive")
+              : t("results.sourceBacktest")}
+          </span>
+        </div>
 
         {/* Result filter */}
         <div className="flex items-center gap-1.5">
@@ -1393,6 +1511,8 @@ function ResultsPageContent() {
     return Math.max(1, Math.min(365, Math.round(q)));
   })();
   const initialStream: StreamMode = searchParams?.get("stream") === "botd" ? "botd" : "all";
+  const initialDataSource: DataSource =
+    searchParams?.get("source") === "backtest" ? "backtest" : "live";
 
   const [resultFilter, setResultFilter] = useState<ResultFilter>("All");
   const [leagueFilter, setLeagueFilter] = useState<string>("");
@@ -1402,6 +1522,7 @@ function ResultsPageContent() {
   const [tierFilter, setTierFilter] = useState<TierFilter>(initialTier);
   const [calcPeriod, setCalcPeriod] = useState<CalcPeriod>(initialPeriod);
   const [stream, setStream] = useState<StreamMode>(initialStream);
+  const [dataSource, setDataSource] = useState<DataSource>(initialDataSource);
   // useTier() starts as "free" before localStorage hydrates, then
   // settles on the real subscription tier. Snap tierFilter to that
   // real tier the very first time it's known — once. Manual tier
@@ -1500,9 +1621,13 @@ function ResultsPageContent() {
     const cutoffMs = Date.now() - period * 24 * 60 * 60 * 1000;
     items = items.filter((f) => new Date(f.scheduled_at).getTime() >= cutoffMs);
 
-    // Live-only — simulator is only valid for picks locked pre-kickoff
-    // since launch, because backtest fixtures lack reliable pre-match odds.
-    items = items.filter((f) => isLivePick(f));
+    // Live mode = strict pre-kickoff picks since LIVE_START_MS.
+    // Backtest mode = the full model-validation history (no live-pick
+    // constraint), so users can explore long lookbacks even when live
+    // tracking is only a few days old.
+    if (dataSource === "live") {
+      items = items.filter((f) => isLivePick(f));
+    }
 
     items = items.filter((f) => f.prediction?.pick_tier === tierFilter);
 
@@ -1528,7 +1653,7 @@ function ResultsPageContent() {
     items.sort((a, b) => b.scheduled_at.localeCompare(a.scheduled_at));
 
     return items;
-  }, [allResults, resultFilter, leagueFilter, tierFilter, period]);
+  }, [allResults, resultFilter, leagueFilter, tierFilter, period, dataSource]);
 
   // ── Summary computed from filtered so stats always match the table ─────────
   const computedSummary = useMemo<WeeklySummary | null>(() => {
@@ -1624,6 +1749,8 @@ function ResultsPageContent() {
         setCalcPeriod={setCalcPeriod}
         stream={stream}
         setStream={setStream}
+        dataSource={dataSource}
+        setDataSource={setDataSource}
         userTier={userTier}
       />
 
@@ -1690,6 +1817,7 @@ function ResultsPageContent() {
         setLeagueFilter={setLeagueFilter}
         leagues={leagues}
         total={filtered.length}
+        dataSource={dataSource}
       />
 
       {/* ── Error banner ── */}
