@@ -76,6 +76,39 @@ export function isIndexableLocale(locale: Locale): boolean {
   return (INDEXABLE_LOCALES as readonly Locale[]).includes(locale);
 }
 
+/**
+ * Locales that are user-selectable in the language switcher.
+ * ────────────────────────────────────────────────────────────
+ * Set per the 2026-04-27 i18n overhaul. Only the 6 locales for
+ * which we hand-translate hardcoded strings + maintain meta-tag
+ * parity are surfaced to users. The other 10 stay in `locales`
+ * (so their .ts files keep loading and parked URLs keep working
+ * for direct visits) but are hidden from the switcher.
+ *
+ * Promotion criteria (a parked locale graduates to ENABLED when
+ * each is green — see docs/i18n.md):
+ *   1. URL slugs translated in src/i18n/routes.ts
+ *   2. PAGE_META block hand-translated for the locale (no EN
+ *      copy-paste, no DeepL fallback)
+ *   3. Hardcoded EN strings in homepage/footer/pricing/predictions
+ *      routed through t() with a translation in this locale
+ *   4. Sanity content for homepage + 5 league hubs + 4 bet-type
+ *      hubs hand-translated
+ *   5. `npm run i18n:check` passes
+ */
+export const ENABLED_LOCALES: readonly Locale[] = [
+  "en",
+  "nl",
+  "de",
+  "fr",
+  "es",
+  "it",
+] as const;
+
+export function isEnabledLocale(locale: Locale): boolean {
+  return (ENABLED_LOCALES as readonly Locale[]).includes(locale);
+}
+
 /** Human-readable label + flag for each locale (used by the switcher). */
 export const localeMeta: Record<
   Locale,

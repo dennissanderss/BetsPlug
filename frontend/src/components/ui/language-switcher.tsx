@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, Globe, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { locales, localeMeta, type Locale } from "@/i18n/config";
+import { ENABLED_LOCALES, localeMeta, type Locale } from "@/i18n/config";
 import { useTranslations } from "@/i18n/locale-provider";
 
 type Variant = "compact" | "full";
@@ -92,7 +92,7 @@ export function LanguageSwitcher({
               variant === "compact" ? "right-0" : "left-0 right-0"
             }`}
           >
-            {locales.map((l) => {
+            {ENABLED_LOCALES.map((l) => {
               const m = localeMeta[l];
               const active = l === locale;
               return (

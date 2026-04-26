@@ -6035,7 +6035,50 @@ export const messages: Record<string, Dictionary> = {
   sv: svDict,
 };
 
+/**
+ * Look up a translation. Behaviour:
+ *   - Found in target locale → return that.
+ *   - Missing in target locale → return EN value as fallback. In
+ *     development, log a console.error so the developer sees the
+ *     gap immediately. In production, silent fallback (no UX
+ *     regression).
+ *   - Key missing in EN too → return the key itself, surrounded
+ *     with `[i18n:missing]…[/i18n:missing]` so it stands out in
+ *     the rendered HTML and any QA tool. This catches `as any`
+ *     casts that name keys that never existed.
+ *
+ * The dev console.error is throttled per (locale, key) so a single
+ * missing key doesn't flood the logs.
+ */
+const _seenMissing = new Set<string>();
+
 export function translate(locale: string, key: TranslationKey): string {
   const dict = messages[locale];
-  return dict?.[key] ?? en[key];
+  const v = dict?.[key];
+  if (v !== undefined) return v;
+
+  const enValue = en[key];
+  if (enValue !== undefined) {
+    if (process.env.NODE_ENV !== "production") {
+      const tag = `${locale}:${key}`;
+      if (!_seenMissing.has(tag)) {
+        _seenMissing.add(tag);
+        // eslint-disable-next-line no-console
+        console.error(
+          `[i18n] missing key '${key}' in locale '${locale}'. Falling back to EN: "${String(enValue).slice(0, 80)}"`,
+        );
+      }
+    }
+    return enValue;
+  }
+
+  // Key doesn't exist in EN either — almost always an `as any` cast
+  // that names a non-existent key. Make this LOUD: the fallback
+  // string is wrapped so it shows up as garbage in any QA pass.
+  if (process.env.NODE_ENV !== "production") {
+    // eslint-disable-next-line no-console
+    console.error(`[i18n] unknown key '${key}' (no entry in EN dict either)`);
+    return `[i18n:missing]${key}[/i18n:missing]`;
+  }
+  return key;
 }

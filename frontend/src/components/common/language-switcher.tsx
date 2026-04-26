@@ -4,7 +4,7 @@ import * as React from "react";
 import { ChevronDown, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "@/i18n/locale-provider";
-import { locales, localeMeta, type Locale } from "@/i18n/config";
+import { ENABLED_LOCALES, localeMeta, type Locale } from "@/i18n/config";
 
 export function LanguageSwitcher() {
   const { locale, t, setLocale } = useTranslations();
@@ -78,7 +78,7 @@ export function LanguageSwitcher() {
             </p>
           </div>
 
-          {locales.map((code) => {
+          {ENABLED_LOCALES.map((code) => {
             const meta = localeMeta[code];
             const isSelected = code === locale;
             return (
