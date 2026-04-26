@@ -1660,6 +1660,8 @@ const pt = {
   "pred.threshold.medium": "Médio (50–75%)",
   "pred.title": "Previsões",
   "pred.today": "Hoje",
+  "pred.trackrecordNoticeBody": "Cada escolha nesta página é a mesma que contamos nas estatísticas de vitórias/derrotas do seu nível. Sem escolhas ocultas, sem lista separada – vitórias e derrotas nessas partidas vão direto para o seu histórico.",
+  "pred.trackrecordNoticeTitle": "O que você vê é o que é medido",
   "pred.upcoming": "Por vir",
   "pred.upcomingMatches": "Próximos jogos",
   "pred.upgradePrompt": "Veja todas as previsões com nosso plano Silver ou superior.",
@@ -2624,6 +2626,7 @@ const pt = {
   "upgradeLock.defaultBlurb": "Este recurso faz parte de planos {tier} e superiores.",
 
   "upgradeNudge.cta": "Upgrade",
+  "upgradeNudge.dismiss": "Ocultar banner de upgrade",
   "upgradeNudge.free.b1": "Top 14 ligas (vs todas as ligas, com mais ruído)",
   "upgradeNudge.free.b2": "Confidence ≥65 % (vs baseline de 55 %)",
   "upgradeNudge.free.b3": "Precisão histórica sobe 15 pontos",
@@ -2792,6 +2795,5 @@ const pt = {
   "welcomeBanner.stepPrefix": "Etapa",
   "welcomeBanner.subtitle": "Nossa IA analisa dados de futebol, forma, confronto direto, classificação e força da equipe para prever o resultado mais provável das próximas partidas.",
   "welcomeBanner.title": "Veja como BetsPlug funciona",
-  "upgradeNudge.dismiss": "Ocultar banner de upgrade",
 } as Record<TranslationKey, string>;
 export default pt;

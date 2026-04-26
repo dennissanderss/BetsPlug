@@ -1660,6 +1660,8 @@ const da = {
   "pred.threshold.medium": "Med (50-75 %)",
   "pred.title": "Forudsigelser",
   "pred.today": "I dag",
+  "pred.trackrecordNoticeBody": "Hvert valg på denne side er det samme valg, som vi tæller med i dit niveaus sejr/tab-statistik. Ingen skjulte valg, ingen separat liste - sejre og tab fra disse kampe går direkte ind i din trackrecord.",
+  "pred.trackrecordNoticeTitle": "Det, du ser, er det, der bliver målt",
   "pred.upcoming": "Kommende",
   "pred.upcomingMatches": "Kommende kampe",
   "pred.upgradePrompt": "Se alle forudsigelser med vores Silver-plan eller højere.",
@@ -2624,6 +2626,7 @@ const da = {
   "upgradeLock.defaultBlurb": "Denne funktion er en del af {tier} og højere planer.",
 
   "upgradeNudge.cta": "Opgrader",
+  "upgradeNudge.dismiss": "Skjul opgraderingsbanner",
   "upgradeNudge.free.b1": "Top 14 ligaer (vs alle ligaer, mere støj)",
   "upgradeNudge.free.b2": "Confidence ≥65 % (vs 55 % baseline)",
   "upgradeNudge.free.b3": "Historisk præcision stiger 15 point",
@@ -2792,6 +2795,5 @@ const da = {
   "welcomeBanner.stepPrefix": "Trin",
   "welcomeBanner.subtitle": "Vores AI analyserer fodbolddata, form, head-to-head, stilling og holdstyrke for at forudsige det mest sandsynlige udfald af kommende kampe.",
   "welcomeBanner.title": "Sådan fungerer BetsPlug",
-  "upgradeNudge.dismiss": "Skjul opgraderingsbanner",
 } as Record<TranslationKey, string>;
 export default da;

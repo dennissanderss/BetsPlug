@@ -1660,6 +1660,8 @@ const sv = {
   "pred.threshold.medium": "Medel (50–75 %)",
   "pred.title": "Förutsägelser",
   "pred.today": "I dag",
+  "pred.trackrecordNoticeBody": "Varje val på den här sidan är samma val som vi räknar med i din nivås vinst/förluststatistik. Inga dolda val, ingen separat lista – vinster och förluster från dessa matcher går direkt in i ditt meritlista.",
+  "pred.trackrecordNoticeTitle": "Det du ser är det som mäts",
   "pred.upcoming": "Kommande",
   "pred.upcomingMatches": "Kommande matcher",
   "pred.upgradePrompt": "Se alla förutsägelser med vår Silverplan eller högre.",
@@ -2624,6 +2626,7 @@ const sv = {
   "upgradeLock.defaultBlurb": "Den här funktionen är en del av {tier} och högre planer.",
 
   "upgradeNudge.cta": "Uppgradera",
+  "upgradeNudge.dismiss": "Dölj uppgraderingsbanner",
   "upgradeNudge.free.b1": "Topp 14 ligor (mot alla ligor, mer brus)",
   "upgradeNudge.free.b2": "Confidence ≥65 % (mot 55 % baseline)",
   "upgradeNudge.free.b3": "Historisk träffsäkerhet stiger 15 punkter",
@@ -2792,6 +2795,5 @@ const sv = {
   "welcomeBanner.stepPrefix": "Steg",
   "welcomeBanner.subtitle": "Vår AI analyserar fotbollsdata, form, head-to-head, ställning och lagstyrka, för att förutsäga det mest sannolika resultatet av kommande matcher.",
   "welcomeBanner.title": "Så här fungerar BetsPlug",
-  "upgradeNudge.dismiss": "Dölj uppgraderingsbanner",
 } as Record<TranslationKey, string>;
 export default sv;

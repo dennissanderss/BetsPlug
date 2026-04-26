@@ -1463,6 +1463,17 @@ export default function PredictionsPage() {
         </div>
       )}
 
+      {/* ── Trackrecord transparency notice — same picks shown here go into the tier stats ── */}
+      {!isResults && (
+        <div className="flex items-start gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
+          <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-400" />
+          <p className="text-xs leading-relaxed text-slate-300">
+            <span className="font-semibold text-white">{t("pred.trackrecordNoticeTitle")}</span>{" "}
+            {t("pred.trackrecordNoticeBody")}
+          </p>
+        </div>
+      )}
+
       {/* ── Results-mode range selector (replaces the single-date picker) ── */}
       {isResults && (
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-4">

@@ -1660,6 +1660,8 @@ const tr = {
   "pred.threshold.medium": "Orta (%50-75)",
   "pred.title": "Tahminler",
   "pred.today": "Bugün",
+  "pred.trackrecordNoticeBody": "Bu sayfadaki her tahmin, seviyenizin galibiyet/mağlubiyet istatistiklerinde saydığımız tahminin aynısıdır. Gizli tahmin yok, ayrı bir liste yok; bu maçlardaki galibiyet ve kayıplar doğrudan geçmiş performansınıza yansıyor.",
+  "pred.trackrecordNoticeTitle": "Ne görüyorsan o ölçülür",
   "pred.upcoming": "Yaklaşan",
   "pred.upcomingMatches": "Yaklaşan Maçlar",
   "pred.upgradePrompt": "Gümüş planımız veya üzeri ile tüm tahminleri görün.",
@@ -2624,6 +2626,7 @@ const tr = {
   "upgradeLock.defaultBlurb": "Bu özellik {tier} ve daha yüksek planların bir parçasıdır.",
 
   "upgradeNudge.cta": "Yükselt",
+  "upgradeNudge.dismiss": "Yükseltme bildirimini gizle",
   "upgradeNudge.free.b1": "İlk 14 lig (tüm liglere karşı, gürültülü)",
   "upgradeNudge.free.b2": "Confidence ≥%65 (%55 baseline'a karşı)",
   "upgradeNudge.free.b3": "Tarihsel isabet 15 puan artıyor",
@@ -2792,6 +2795,5 @@ const tr = {
   "welcomeBanner.stepPrefix": "Adım",
   "welcomeBanner.subtitle": "Yapay zekamız, yaklaşan maçların en olası sonuçlarını tahmin etmek için futbol verilerini, formu, kafa kafaya maçları, sıralamaları ve takım gücünü analiz ediyor.",
   "welcomeBanner.title": "BetsPlug şu şekilde çalışır",
-  "upgradeNudge.dismiss": "Yükseltme bildirimini gizle",
 } as Record<TranslationKey, string>;
 export default tr;

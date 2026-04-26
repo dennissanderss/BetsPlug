@@ -1660,6 +1660,8 @@ const pl = {
   "pred.threshold.medium": "Średnie (50–75%)",
   "pred.title": "Prognozy",
   "pred.today": "Dzisiaj",
+  "pred.trackrecordNoticeBody": "Każdy wybór na tej stronie jest tym samym wyborem, który uwzględniamy w statystykach wygranych/przegranych Twojego poziomu. Żadnych ukrytych typów, żadnej osobnej listy – zwycięstwa i porażki z tych meczów zapisują się bezpośrednio w Twoich wynikach.",
+  "pred.trackrecordNoticeTitle": "To, co widzisz, jest mierzone",
   "pred.upcoming": "Nadchodzące",
   "pred.upcomingMatches": "Nadchodzące mecze",
   "pred.upgradePrompt": "Zobacz wszystkie prognozy z naszym planem Silver lub wyższym.",
@@ -2624,6 +2626,7 @@ const pl = {
   "upgradeLock.defaultBlurb": "Ta funkcja jest częścią planów {tier} i wyższych.",
 
   "upgradeNudge.cta": "Ulepsz",
+  "upgradeNudge.dismiss": "Ukryj baner upgrade'u",
   "upgradeNudge.free.b1": "Top 14 lig (zamiast wszystkich, więcej szumu)",
   "upgradeNudge.free.b2": "Confidence ≥65% (wobec 55% baseline)",
   "upgradeNudge.free.b3": "Skuteczność historyczna rośnie o 15 punktów",
@@ -2792,6 +2795,5 @@ const pl = {
   "welcomeBanner.stepPrefix": "Krok",
   "welcomeBanner.subtitle": "Nasza sztuczna inteligencja analizuje dane piłkarskie, formę, pojedynki bezpośrednie, tabele i siłę drużyny, aby przewidzieć najbardziej prawdopodobny wynik nadchodzących meczów.",
   "welcomeBanner.title": "Oto jak działa BetsPlug",
-  "upgradeNudge.dismiss": "Ukryj baner upgrade'u",
 } as Record<TranslationKey, string>;
 export default pl;

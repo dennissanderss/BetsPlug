@@ -1660,6 +1660,8 @@ const ru = {
   "pred.threshold.medium": "Мед (50–75%)",
   "pred.title": "Прогнозы",
   "pred.today": "Сегодня",
+  "pred.trackrecordNoticeBody": "Каждый выбор на этой странице — это тот же выбор, который мы учитываем в статистике побед/проигрышей вашего уровня. Никаких скрытых выборов, никакого отдельного списка — победы и поражения в этих матчах попадают прямо в ваш послужной список.",
+  "pred.trackrecordNoticeTitle": "То, что вы видите, это то, что измеряется",
   "pred.upcoming": "Предстоящие",
   "pred.upcomingMatches": "Предстоящие матчи",
   "pred.upgradePrompt": "Посмотрите все прогнозы с нашим планом Silver или выше.",
@@ -2624,6 +2626,7 @@ const ru = {
   "upgradeLock.defaultBlurb": "Эта функция является частью планов {tier} и выше.",
 
   "upgradeNudge.cta": "Улучшить",
+  "upgradeNudge.dismiss": "Скрыть баннер апгрейда",
   "upgradeNudge.free.b1": "Топ-14 лиг (против всех лиг, шумнее)",
   "upgradeNudge.free.b2": "Confidence ≥65% (против baseline 55%)",
   "upgradeNudge.free.b3": "Историческая точность растёт на 15 пунктов",
@@ -2792,6 +2795,5 @@ const ru = {
   "welcomeBanner.stepPrefix": "Шаг",
   "welcomeBanner.subtitle": "Наш ИИ анализирует футбольные данные, форму, личные встречи, турнирную таблицу и силу команды, чтобы спрогнозировать наиболее вероятный исход предстоящих матчей.",
   "welcomeBanner.title": "Вот как работает BetsPlug",
-  "upgradeNudge.dismiss": "Скрыть баннер апгрейда",
 } as Record<TranslationKey, string>;
 export default ru;

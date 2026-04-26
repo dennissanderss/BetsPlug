@@ -1660,6 +1660,8 @@ const el = {
   "pred.threshold.medium": "Med (50–75%)",
   "pred.title": "Προβλέψεις",
   "pred.today": "Σήμερα",
+  "pred.trackrecordNoticeBody": "Κάθε επιλογή σε αυτήν τη σελίδα είναι η ίδια επιλογή που υπολογίζουμε στα στατιστικά νίκης/ήττας της βαθμίδας σας. Χωρίς κρυφές επιλογές, χωρίς ξεχωριστή λίστα — οι νίκες και οι ήττες από αυτούς τους αγώνες πηγαίνουν κατευθείαν στο ιστορικό σας.",
+  "pred.trackrecordNoticeTitle": "Αυτό που βλέπετε είναι αυτό που μετριέται",
   "pred.upcoming": "Ανερχόμενος",
   "pred.upcomingMatches": "Προσεχείς Αγώνες",
   "pred.upgradePrompt": "Δείτε όλες τις προβλέψεις με το πρόγραμμα Silver ή υψηλότερο.",
@@ -2624,6 +2626,7 @@ const el = {
   "upgradeLock.defaultBlurb": "Αυτή η δυνατότητα αποτελεί μέρος των προγραμμάτων {tier} και ανώτερων.",
 
   "upgradeNudge.cta": "Αναβάθμιση",
+  "upgradeNudge.dismiss": "Απόκρυψη banner αναβάθμισης",
   "upgradeNudge.free.b1": "Top-14 πρωταθλήματα (έναντι όλων των πρωταθλημάτων, με θόρυβο)",
   "upgradeNudge.free.b2": "Confidence ≥65% (έναντι baseline 55%)",
   "upgradeNudge.free.b3": "Η ιστορική ακρίβεια ανεβαίνει 15 μονάδες",
@@ -2792,6 +2795,5 @@ const el = {
   "welcomeBanner.stepPrefix": "Βήμα",
   "welcomeBanner.subtitle": "Η τεχνητή νοημοσύνη μας αναλύει δεδομένα ποδοσφαίρου, φόρμα, αντιμέτωπες, βαθμολογίες και δύναμη της ομάδας, για να προβλέψει το πιο πιθανό αποτέλεσμα των προσεχών αγώνων.",
   "welcomeBanner.title": "Δείτε πώς λειτουργεί το BetsPlug",
-  "upgradeNudge.dismiss": "Απόκρυψη banner αναβάθμισης",
 } as Record<TranslationKey, string>;
 export default el;

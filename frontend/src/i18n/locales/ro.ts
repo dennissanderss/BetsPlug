@@ -1660,6 +1660,8 @@ const ro = {
   "pred.threshold.medium": "Med (50–75%)",
   "pred.title": "Previziuni",
   "pred.today": "Astăzi",
+  "pred.trackrecordNoticeBody": "Fiecare alegere de pe această pagină este aceeași alegere pe care o considerăm în statisticile de câștig/înfrângere ale nivelului tău. Fără alegeri ascunse, fără listă separată - câștigurile și pierderile din aceste meciuri intră direct în palmaresul tău.",
+  "pred.trackrecordNoticeTitle": "Ceea ce vezi este ceea ce se măsoară",
   "pred.upcoming": "În viitor",
   "pred.upcomingMatches": "Meciuri viitoare",
   "pred.upgradePrompt": "Vedeți toate predicțiile cu planul nostru Silver sau mai mare.",
@@ -2624,6 +2626,7 @@ const ro = {
   "upgradeLock.defaultBlurb": "Această caracteristică face parte din planurile {tier} și mai mari.",
 
   "upgradeNudge.cta": "Upgrade",
+  "upgradeNudge.dismiss": "Ascunde bannerul de upgrade",
   "upgradeNudge.free.b1": "Top 14 ligi (vs toate ligile, mai zgomotos)",
   "upgradeNudge.free.b2": "Confidence ≥65% (vs baseline de 55%)",
   "upgradeNudge.free.b3": "Acuratețea istorică crește cu 15 puncte",
@@ -2792,6 +2795,5 @@ const ro = {
   "welcomeBanner.stepPrefix": "Pas",
   "welcomeBanner.subtitle": "AI-ul nostru analizează datele fotbalistice, forma, cap la cap, clasamentul și puterea echipei, pentru a prognoza rezultatul cel mai probabil al meciurilor viitoare.",
   "welcomeBanner.title": "Iată cum funcționează BetsPlug",
-  "upgradeNudge.dismiss": "Ascunde bannerul de upgrade",
 } as Record<TranslationKey, string>;
 export default ro;

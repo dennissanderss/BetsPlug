@@ -1664,6 +1664,8 @@ const id = {
   "pred.threshold.medium": "Medis (50–75%)",
   "pred.title": "Prediksi",
   "pred.today": "Hari ini",
+  "pred.trackrecordNoticeBody": "Setiap pilihan di halaman ini adalah pilihan yang sama yang kami hitung dalam statistik menang/kalah tingkatan Anda. Tidak ada pilihan tersembunyi, tidak ada daftar terpisah — kemenangan dan kekalahan dari pertandingan ini langsung masuk ke rekam jejak Anda.",
+  "pred.trackrecordNoticeTitle": "Apa yang Anda lihat itulah yang diukur",
   "pred.upcoming": "Mendatang",
   "pred.upcomingMatches": "Pertandingan Mendatang",
   "pred.upgradePrompt": "Lihat semua prediksi dengan paket Silver kami atau lebih tinggi.",
@@ -2674,6 +2676,7 @@ const id = {
   "upgradeLock.defaultBlurb": "Fitur ini adalah bagian dari {tier} dan paket yang lebih tinggi.",
 
   "upgradeNudge.cta": "Upgrade",
+  "upgradeNudge.dismiss": "Sembunyikan banner upgrade",
   "upgradeNudge.free.b1": "14 liga teratas (vs semua liga, lebih banyak noise)",
   "upgradeNudge.free.b2": "Confidence ≥65 % (vs baseline 55 %)",
   "upgradeNudge.free.b3": "Akurasi historis naik 15 poin",
@@ -2842,6 +2845,5 @@ const id = {
   "welcomeBanner.stepPrefix": "Melangkah",
   "welcomeBanner.subtitle": "AI kami menganalisis data sepak bola — bentuk, head-to-head, klasemen, dan kekuatan tim — untuk memperkirakan hasil yang paling mungkin terjadi pada pertandingan mendatang.",
   "welcomeBanner.title": "Begini cara kerja BetsPlug",
-  "upgradeNudge.dismiss": "Sembunyikan banner upgrade",
 } as Record<TranslationKey, string>;
 export default id;

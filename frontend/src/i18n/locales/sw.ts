@@ -1664,6 +1664,8 @@ const sw = {
   "pred.threshold.medium": "Med (50-75%)",
   "pred.title": "Utabiri",
   "pred.today": "Leo",
+  "pred.trackrecordNoticeBody": "Kila chaguo kwenye ukurasa huu ni chaguo sawa tunalohesabu katika takwimu za kiwango chako cha kushinda/kupoteza. Hakuna chaguo zilizofichwa, hakuna orodha tofauti - ushindi na hasara kutoka kwa mechi hizi huenda moja kwa moja kwenye rekodi yako ya wimbo.",
+  "pred.trackrecordNoticeTitle": "Unachokiona ndicho kinapimwa",
   "pred.upcoming": "Ijayo",
   "pred.upcomingMatches": "Mechi Zinazokuja",
   "pred.upgradePrompt": "Tazama utabiri wote ukitumia mpango wetu wa Fedha au toleo jipya zaidi.",
@@ -2674,6 +2676,7 @@ const sw = {
   "upgradeLock.defaultBlurb": "Kipengele hiki ni sehemu ya {tier} na mipango ya juu zaidi.",
 
   "upgradeNudge.cta": "Pandisha",
+  "upgradeNudge.dismiss": "Ficha banner ya upgrade",
   "upgradeNudge.free.b1": "Ligi 14 bora (dhidi ya ligi zote, zenye kelele)",
   "upgradeNudge.free.b2": "Confidence ≥65 % (dhidi ya baseline ya 55 %)",
   "upgradeNudge.free.b3": "Usahihi wa kihistoria unapanda pointi 15",
@@ -2842,6 +2845,5 @@ const sw = {
   "welcomeBanner.stepPrefix": "Hatua",
   "welcomeBanner.subtitle": "AI yetu huchanganua data ya kandanda - fomu, uso kwa uso, msimamo na nguvu ya timu - ili kutabiri matokeo yanayowezekana zaidi ya mechi zijazo.",
   "welcomeBanner.title": "Hivi ndivyo BetsPlug inavyofanya kazi",
-  "upgradeNudge.dismiss": "Ficha banner ya upgrade",
 } as Record<TranslationKey, string>;
 export default sw;
