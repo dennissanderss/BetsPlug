@@ -93,7 +93,6 @@ const id = {
   "admin.statusScheduled": "Terjadwal",
   "admin.totalColumn": "Total",
 
-
   "auth.oneMoment": "Sebentar…",
 
   "b2b.affiliate": "Program Afiliasi",
@@ -986,6 +985,14 @@ const id = {
   "footer.secureDesc": "Checkout terenkripsi SSL 256-bit",
   "footer.secureTitle": "Pembayaran aman",
   "footer.termsOfService": "Syarat Layanan",
+  "footer.tg.badge": "Kiat eksklusif",
+  "footer.tg.cta": "Bergabunglah dengan Telegram",
+  "footer.tg.dailyPicks": "Pilihan harian",
+  "footer.tg.freeToJoin": "Gratis untuk bergabung",
+  "footer.tg.membersOnline": "1.200+ anggota daring",
+  "footer.tg.subtitle": "Dapatkan pemberitahuan nilai secara real-time, pilihan terbaik, dan obrolan langsung dengan analis AI kami. Jadilah orang pertama yang mengetahui kapan pertandingan bernilai tinggi akan terjadi.",
+  "footer.tg.titleAccent": "pilihan harian gratis",
+  "footer.tg.titleLead": "Bergabunglah dengan Telegram kami untuk",
   "footer.viewAll": "Lihat semua",
 
   "forgotPassword.backToLogin": "← Kembali ke login",

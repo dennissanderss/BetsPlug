@@ -93,7 +93,6 @@ const tr = {
   "admin.statusScheduled": "Planlandı",
   "admin.totalColumn": "Toplam",
 
-
   "auth.oneMoment": "Bir saniye…",
 
   "b2b.affiliate": "Ortaklık ve yönlendirme programı",
@@ -986,6 +985,14 @@ const tr = {
   "footer.secureDesc": "256 bit SSL şifreli ödeme",
   "footer.secureTitle": "Güvenli ödemeler",
   "footer.termsOfService": "Hizmet Şartları",
+  "footer.tg.badge": "Özel ipuçları",
+  "footer.tg.cta": "Telegram'a katılın",
+  "footer.tg.dailyPicks": "Günlük seçimler",
+  "footer.tg.freeToJoin": "Katılmak ücretsiz",
+  "footer.tg.membersOnline": "Çevrimiçi 1.200'den fazla üye",
+  "footer.tg.subtitle": "Yapay zeka analistlerimizle gerçek zamanlı değer uyarıları, en iyi seçimler ve canlı sohbet alın. Yüksek değerli bir maçın tahtaya çarptığını ilk öğrenen siz olun.",
+  "footer.tg.titleAccent": "ücretsiz günlük seçimler",
+  "footer.tg.titleLead": "Telegram'ımıza katılın",
   "footer.viewAll": "Tümünü görüntüle",
 
   "forgotPassword.backToLogin": "← Girişe dön",

@@ -93,7 +93,6 @@ const sw = {
   "admin.statusScheduled": "Imepangwa",
   "admin.totalColumn": "Jumla",
 
-
   "auth.oneMoment": "Subiri kidogo…",
 
   "b2b.affiliate": "Mpango Mshirika",
@@ -986,6 +985,14 @@ const sw = {
   "footer.secureDesc": "Malipo ya usimbaji fiche ya 256-bit SSL",
   "footer.secureTitle": "Malipo salama",
   "footer.termsOfService": "Masharti ya Huduma",
+  "footer.tg.badge": "Vidokezo vya kipekee",
+  "footer.tg.cta": "Jiunge Telegram",
+  "footer.tg.dailyPicks": "Chaguzi za kila siku",
+  "footer.tg.freeToJoin": "Bure kujiunga",
+  "footer.tg.membersOnline": "Wanachama 1,200+ mtandaoni",
+  "footer.tg.subtitle": "Pata arifa za thamani za wakati halisi, chaguo bora na gumzo la moja kwa moja na wachambuzi wetu wa AI. Kuwa wa kwanza kujua wakati mechi ya thamani ya juu inapogonga ubao.",
+  "footer.tg.titleAccent": "chaguzi za bure za kila siku",
+  "footer.tg.titleLead": "Jiunge na Telegram yetu kwa",
   "footer.viewAll": "Tazama zote",
 
   "forgotPassword.backToLogin": "← Rudi kwenye kuingia",

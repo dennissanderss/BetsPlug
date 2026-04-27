@@ -120,25 +120,24 @@ export function BetsPlugFooter() {
               <div>
                 <Pill tone="active" className="mb-3">
                   <Sparkles className="h-3 w-3" />
-                  Exclusive tips
+                  {t("footer.tg.badge")}
                 </Pill>
                 <h3 className="text-heading text-xl text-[#ededed] sm:text-2xl">
-                  Join our Telegram for{" "}
-                  <span className="gradient-text-green">free daily picks</span>
+                  {t("footer.tg.titleLead")}{" "}
+                  <span className="gradient-text-green">{t("footer.tg.titleAccent")}</span>
                 </h3>
                 <p className="mt-2 max-w-md text-sm text-[#a3a9b8]">
-                  Get real-time value alerts, edge picks and live chat with our AI analysts.
-                  Be the first to know when a high-value match hits the board.
+                  {t("footer.tg.subtitle")}
                 </p>
                 <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#6b7280]">
                   <span className="flex items-center gap-1">
                     <span className="live-dot" />
-                    1,200+ members online
+                    {t("footer.tg.membersOnline")}
                   </span>
                   <span>·</span>
-                  <span>Free to join</span>
+                  <span>{t("footer.tg.freeToJoin")}</span>
                   <span>·</span>
-                  <span>Daily picks</span>
+                  <span>{t("footer.tg.dailyPicks")}</span>
                 </div>
               </div>
             </div>
@@ -149,7 +148,7 @@ export function BetsPlugFooter() {
               className="btn-primary shrink-0 gap-2"
             >
               <Send className="h-4 w-4" />
-              Join Telegram
+              {t("footer.tg.cta")}
               <ArrowRight className="h-4 w-4" />
             </a>
           </div>

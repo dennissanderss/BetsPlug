@@ -238,6 +238,18 @@ const en = {
     "All rights reserved. BetsPlug is a data & analytics platform - not a gambling operator.",
   "footer.educationalDisclaimer":
     "BetsPlug provides statistical data and analysis for educational and informational purposes only. We are not a bookmaker, do not provide betting advice, do not facilitate wagering, and do not encourage betting. Any decision you make based on the information on this site is your own responsibility. Predictions are model outputs, not guarantees of future results. 18+ — play responsibly.",
+
+  /* Footer Telegram banner — extracted 2026-04-27 from hardcoded EN */
+  "footer.tg.badge": "Exclusive tips",
+  "footer.tg.titleLead": "Join our Telegram for",
+  "footer.tg.titleAccent": "free daily picks",
+  "footer.tg.subtitle":
+    "Get real-time value alerts, edge picks and live chat with our AI analysts. Be the first to know when a high-value match hits the board.",
+  "footer.tg.membersOnline": "1,200+ members online",
+  "footer.tg.freeToJoin": "Free to join",
+  "footer.tg.dailyPicks": "Daily picks",
+  "footer.tg.cta": "Join Telegram",
+
   "footer.responsible": "18+ Play responsibly",
   "footer.aboutUs": "About Us",
   "footer.ourModels": "Our Models",
@@ -4056,6 +4068,18 @@ const nl: Dictionary = {
   "footer.copyright": "Alle rechten voorbehouden. BetsPlug is een data- en analyseplatform, geen gokoperator.",
   "footer.educationalDisclaimer":
     "BetsPlug biedt statistische data en analyses uitsluitend voor educatieve en informatieve doeleinden. Wij zijn geen bookmaker, geven geen gokadvies, faciliteren geen weddenschappen en moedigen gokken niet aan. Beslissingen die je neemt op basis van de informatie op deze site zijn je eigen verantwoordelijkheid. Voorspellingen zijn modelresultaten, geen garantie voor toekomstige uitkomsten. 18+ — speel verantwoord.",
+
+  /* Footer Telegram banner (NL) */
+  "footer.tg.badge": "Exclusieve tips",
+  "footer.tg.titleLead": "Word lid van onze Telegram voor",
+  "footer.tg.titleAccent": "gratis dagelijkse picks",
+  "footer.tg.subtitle":
+    "Krijg realtime value-meldingen, edge picks en livechat met onze AI-analisten. Wees als eerste op de hoogte zodra een match met hoge waarde verschijnt.",
+  "footer.tg.membersOnline": "1.200+ leden online",
+  "footer.tg.freeToJoin": "Gratis lid worden",
+  "footer.tg.dailyPicks": "Dagelijkse picks",
+  "footer.tg.cta": "Join Telegram",
+
   "footer.joinCta": "Word lid van de Premium Groep",
   "footer.leaguesSubtitle": "AI-voetbalvoorspellingen per competitie",
   "footer.learn": "Leren",

@@ -93,7 +93,6 @@ const ru = {
   "admin.statusScheduled": "Запланирован",
   "admin.totalColumn": "Итого",
 
-
   "auth.oneMoment": "Минутку…",
 
   "b2b.affiliate": "Партнерская и реферальная программа",
@@ -986,6 +985,14 @@ const ru = {
   "footer.secureDesc": "Оплата с 256-битным SSL-шифрованием",
   "footer.secureTitle": "Безопасные платежи",
   "footer.termsOfService": "Условия использования",
+  "footer.tg.badge": "Эксклюзивные советы",
+  "footer.tg.cta": "Присоединяйтесь к Telegram",
+  "footer.tg.dailyPicks": "Ежедневные выборы",
+  "footer.tg.freeToJoin": "Бесплатно присоединиться",
+  "footer.tg.membersOnline": "1200+ участников онлайн",
+  "footer.tg.subtitle": "Получайте оповещения о стоимости в режиме реального времени, выбор преимуществ и общайтесь в чате с нашими аналитиками ИИ. Узнайте первым, когда на доске появится ценное совпадение.",
+  "footer.tg.titleAccent": "бесплатные ежедневные подборки",
+  "footer.tg.titleLead": "Присоединяйтесь к нашему Telegram, чтобы",
   "footer.viewAll": "Посмотреть все",
 
   "forgotPassword.backToLogin": "← Назад ко входу",
