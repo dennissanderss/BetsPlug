@@ -37,7 +37,6 @@ import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill, DataChip } from "@/components/noct/pill";
 import { HowItWorksDemo } from "@/components/marketing/how-it-works-demo";
-import type { Article } from "@/data/articles";
 import type { Testimonial } from "@/components/ui/testimonials-section";
 import type { ComparisonRow } from "@/components/ui/comparison-table";
 import { getLocaleValue } from "@/lib/sanity-data";
@@ -204,7 +203,6 @@ function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: stri
    ═══════════════════════════════════════════════════════════════ */
 
 interface HomeContentProps {
-  articles: Article[];
   testimonials?: Testimonial[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   homepage?: any;
@@ -213,7 +211,6 @@ interface HomeContentProps {
 }
 
 export function HomeContent({
-  articles,
   testimonials = [],
   homepage,
   pricingConfig,
@@ -237,10 +234,6 @@ export function HomeContent({
         note: getLocaleValue(r.note, locale) || undefined,
       }))
     : undefined;
-
-  const latestArticles = [...(articles ?? [])]
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
-    .slice(0, 3);
 
   const homeProb = featured?.available ? Math.round((featured.home_win_prob ?? 0.52) * 100) : 52;
   const drawProb = featured?.available ? Math.round((featured.draw_prob ?? 0.24) * 100) : 24;
@@ -727,82 +720,10 @@ export function HomeContent({
          ══════════════════════════════════════════════════════════════ */}
       <SeoSection />
 
-      {/* ══════════════════════════════════════════════════════════════
-          7 · ARTICLES
-         ══════════════════════════════════════════════════════════════ */}
-      {latestArticles.length > 0 && (
-        <section className="relative overflow-hidden py-20 md:py-24">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <div className="mb-10 flex flex-wrap items-end justify-between gap-3">
-              <div>
-                <span className="section-label">{t("articles.badge")}</span>
-                <h2 className="text-heading text-balance break-words text-3xl text-[#ededed] sm:text-4xl">
-                  {t("articles.title")}
-                </h2>
-                <p className="mt-3 max-w-xl text-sm text-[#a3a9b8]">{t("articles.subtitle")}</p>
-              </div>
-              <Link href={loc("/articles")} className="btn-glass inline-flex items-center gap-1.5">
-                {t("articles.checkAll")} <ChevronRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {latestArticles.map((a, idx) => {
-                const variant = (["green", "purple", "blue"][idx % 3]) as "green" | "purple" | "blue";
-                return (
-                  <Link key={a.slug} href={loc(`/articles/${a.slug}`)} className="group block">
-                    <div className={`card-neon card-neon-${variant} overflow-hidden`}>
-                      <div
-                        className="relative aspect-[16/9]"
-                        style={{
-                          background:
-                            variant === "green"
-                              ? "linear-gradient(135deg, hsl(var(--accent-green)/0.4), hsl(var(--accent-green)/0.05))"
-                              : variant === "purple"
-                              ? "linear-gradient(135deg, hsl(var(--accent-purple)/0.45), hsl(var(--accent-purple)/0.08))"
-                              : "linear-gradient(135deg, hsl(var(--accent-blue)/0.35), hsl(var(--accent-blue)/0.05))",
-                        }}
-                      >
-                        <div
-                          className="absolute inset-0"
-                          style={{
-                            backgroundImage:
-                              "radial-gradient(circle at 50% 50%, hsl(0 0% 100%/0.05) 2px, transparent 2px)",
-                            backgroundSize: "22px 22px",
-                          }}
-                        />
-                      </div>
-                      <div className="p-5">
-                        <span className="text-[10px] font-semibold uppercase tracking-wider text-[#4ade80]">
-                          {a.sport}
-                        </span>
-                        <h3 className="text-heading mt-2 text-base text-[#ededed] transition-colors group-hover:text-[#4ade80]">
-                          {a.title}
-                        </h3>
-                        <p className="mt-2 line-clamp-2 text-xs text-[#a3a9b8]">{a.excerpt}</p>
-                        <div
-                          className="mt-3 flex items-center gap-3 border-t pt-3 text-[11px] text-[#6b7280]"
-                          style={{ borderColor: "hsl(0 0% 100% / 0.06)" }}
-                        >
-                          <span>{new Date(a.publishedAt).toLocaleDateString(locale)}</span>
-                          <span>·</span>
-                          <span className="inline-flex items-center gap-1">
-                            <Clock className="h-3 w-3" />
-                            {a.readingMinutes} min
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      )}
+      {/* Articles section removed 2026-04-27 — blog discontinued. */}
 
       {/* ══════════════════════════════════════════════════════════════
-          8 · FINAL CTA
+          7 · FINAL CTA
          ══════════════════════════════════════════════════════════════ */}
       <section className="relative overflow-hidden py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">

@@ -54,7 +54,6 @@ const PUBLIC_PATHS: Array<{
   { canonical: "/pricing", priority: 0.9, changeFrequency: "monthly" },
   { canonical: "/bet-types", priority: 0.8, changeFrequency: "monthly" },
   { canonical: "/learn", priority: 0.8, changeFrequency: "monthly" },
-  { canonical: "/articles", priority: 0.8, changeFrequency: "weekly" },
   { canonical: "/how-it-works", priority: 0.7, changeFrequency: "monthly" },
   { canonical: "/track-record", priority: 0.7, changeFrequency: "weekly" },
   { canonical: "/engine", priority: 0.7, changeFrequency: "monthly" },
@@ -138,7 +137,7 @@ function escapeXml(value: string): string {
 
 async function buildEntries(): Promise<SitemapEntry[]> {
   const now = new Date();
-  const { articles, learnPillars, leagueHubs, betTypeHubs } =
+  const { learnPillars, leagueHubs, betTypeHubs } =
     await fetchAllSlugsForSitemap();
 
   const pageEntries = PUBLIC_PATHS.flatMap(({ canonical, priority, changeFrequency }) =>
@@ -177,14 +176,6 @@ async function buildEntries(): Promise<SitemapEntry[]> {
     }),
   );
 
-  const articleEntries = articles.flatMap((article) =>
-    expandAcrossLocales(`/articles/${article.slug}`, {
-      priority: 0.6,
-      changeFrequency: "monthly",
-      lastModified: article.publishedAt ? new Date(article.publishedAt) : now,
-    }),
-  );
-
   // Legal pages: identical content across locales — emit default
   // locale only, no hreflang cluster needed.
   const legalEntries: SitemapEntry[] = LEGAL_PATHS.map(({ path, priority }) => ({
@@ -201,7 +192,6 @@ async function buildEntries(): Promise<SitemapEntry[]> {
     ...betTypeHubEntries,
     ...comboEntries,
     ...learnPillarEntries,
-    ...articleEntries,
     ...legalEntries,
   ];
 }

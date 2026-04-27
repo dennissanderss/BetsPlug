@@ -101,53 +101,6 @@ const PAGES: PageDef[] = [
       },
     },
   },
-  /* ─────────────────────────── ARTICLES ─────────────────────── */
-  {
-    path: "/articles",
-    label: "Articles",
-    recommendations: {
-      en: {
-        title: "Football Analysis & AI Betting Articles · BetsPlug",
-        description:
-          "In-depth football analysis, AI match breakdowns and data-driven betting insights across Premier League, La Liga, Bundesliga, Serie A and more.",
-      },
-      nl: {
-        title: "Voetbalanalyse & AI Wedtips Artikelen · BetsPlug",
-        description:
-          "Diepgaande voetbalanalyse, AI-wedstrijdanalyses en datagedreven wedtips voor de Premier League, La Liga, Bundesliga, Serie A en meer.",
-      },
-      de: {
-        title: "Fussballanalyse & KI-Wettartikel · BetsPlug",
-        description:
-          "Tiefgehende Fussballanalysen, KI-Spielanalysen und datenbasierte Wett-Einblicke fur Premier League, La Liga, Bundesliga, Serie A und mehr.",
-      },
-      fr: {
-        title: "Analyse Football & Articles Paris IA · BetsPlug",
-        description:
-          "Analyses football approfondies, decryptages IA et insights de paris sportifs pour la Premier League, La Liga, Bundesliga, Serie A et plus.",
-      },
-      es: {
-        title: "Analisis de Futbol & Articulos IA · BetsPlug",
-        description:
-          "Analisis de futbol en profundidad, desglose de partidos con IA e insights de apuestas basados en datos para Premier League, La Liga y mas.",
-      },
-      it: {
-        title: "Analisi Calcio & Articoli Scommesse IA · BetsPlug",
-        description:
-          "Analisi calcistiche approfondite, analisi partite IA e insights sulle scommesse basati sui dati per Premier League, La Liga, Bundesliga e altro.",
-      },
-      sw: {
-        title: "Uchambuzi wa Soka & Makala za AI · BetsPlug",
-        description:
-          "Uchambuzi wa kina wa soka, uchambuzi wa mechi kwa AI na maarifa yanayotokana na data kwa ligi kuu za Ulaya.",
-      },
-      id: {
-        title: "Analisis Sepak Bola & Artikel AI · BetsPlug",
-        description:
-          "Analisis sepak bola mendalam, breakdown pertandingan AI, dan wawasan taruhan berbasis data untuk liga-liga top Eropa.",
-      },
-    },
-  },
   /* ─────────────────────────── ABOUT US ─────────────────────── */
   {
     path: "/about-us",

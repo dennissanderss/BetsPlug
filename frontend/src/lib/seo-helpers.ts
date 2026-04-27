@@ -99,7 +99,7 @@ function buildAbsoluteUrl(canonicalPath: string, locale: Locale): string {
  *   stale. The middleware sets `X-Robots-Tag: noindex, follow`
  *   on this response so the parked URL is dropped anyway.
  *
- * @param canonicalPath the EN canonical path, e.g. "/articles"
+ * @param canonicalPath the EN canonical path, e.g. "/learn"
  *                      or "/match-predictions/premier-league".
  */
 export function getLocalizedAlternates(canonicalPath: string): {

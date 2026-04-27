@@ -50,7 +50,6 @@ export function BetsPlugFooter() {
   ];
   const companyLinks = [
     { text: t("footer.aboutUs"), href: loc("/about-us") },
-    { text: t("nav.articles"), href: loc("/articles") },
     { text: t("footer.contact"), href: loc("/contact") },
     { text: t("b2b.badge"), href: loc("/b2b") },
   ];

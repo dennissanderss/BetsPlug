@@ -32,8 +32,6 @@ export type PageImageKey =
   | "contact"
   | "b2b"
   | "welcome"
-  | "articles"
-  | "article"
   | "match-predictions"
   | "learn"
   | "bet-types"
@@ -111,18 +109,6 @@ export const PAGE_IMAGES: Record<PageImageKey, PageImagePair> = {
     cta: "/cta/football-captain-lifting-trophy.jpg",
     alt: "Football captain lifting the trophy",
     pattern: "vertical",
-  },
-  articles: {
-    hero: CANONICAL_HERO,
-    cta: "/cta/football-match-action-shot.jpg",
-    alt: "Dynamic football match action shot",
-    pattern: "dotgrid",
-  },
-  article: {
-    hero: CANONICAL_HERO,
-    cta: "/cta/football-winning-moment-crowd.jpg",
-    alt: "Winning moment at a packed football stadium",
-    pattern: "dashes",
   },
   "match-predictions": {
     hero: CANONICAL_HERO,

@@ -9,8 +9,6 @@
  */
 import { client } from "../../sanity/lib/client";
 import {
-  allArticlesQuery,
-  articleBySlugQuery,
   allLearnPillarsQuery,
   learnPillarBySlugQuery,
   allLeagueHubsQuery,
@@ -23,12 +21,6 @@ import {
 } from "../../sanity/lib/queries";
 
 // Fallback imports
-import {
-  articles as hardcodedArticles,
-  getArticleBySlug as hardcodedGetArticleBySlug,
-  type Article,
-  type ArticleBlock,
-} from "@/data/articles";
 import {
   LEARN_PILLARS,
   type LearnPillar,
@@ -54,8 +46,6 @@ import { expandArrayLocales } from "@/i18n/expand";
 
 // Re-export types so consumers import from one place
 export type {
-  Article,
-  ArticleBlock,
   LearnPillar,
   LearnPillarLocale,
   LearnPillarSection,
@@ -116,73 +106,8 @@ const SANITY_LOCALES = [
   "pt", "tr", "pl", "ro", "ru", "el", "da", "sv",
 ] as const;
 
-// ── Articles ──────────────────────────────────────────────
-
-function transformArticle(raw: any): Article {
-  return {
-    slug: raw.slug?.current ?? raw.slug ?? "",
-    title: raw.title ?? "",
-    excerpt: raw.excerpt ?? "",
-    metaTitle: raw.metaTitle ?? "",
-    metaDescription: raw.metaDescription ?? "",
-    sport: raw.sport ?? "football",
-    author: raw.author ?? "The BetsPlug Team",
-    publishedAt: raw.publishedAt ?? "",
-    updatedAt: raw.updatedAt ?? undefined,
-    readingMinutes: raw.readingMinutes ?? 5,
-    coverGradient: raw.coverGradient ?? "",
-    coverPattern: raw.coverPattern ?? undefined,
-    coverImage: raw.coverImage
-      ? `https://cdn.sanity.io/images/nk7ioy85/production/${raw.coverImage.asset?._ref
-          ?.replace("image-", "")
-          .replace("-jpg", ".jpg")
-          .replace("-png", ".png")
-          .replace("-webp", ".webp")}`
-      : undefined,
-    coverImageAlt: raw.coverImageAlt ?? undefined,
-    tldr: raw.tldr ?? undefined,
-    blocks: (raw.blocks ?? []).map((b: any): ArticleBlock => {
-      if (b.blockType === "list") return { type: "list", items: b.items ?? [] };
-      if (b.blockType === "quote")
-        return { type: "quote", text: b.text ?? "", cite: b.cite ?? undefined };
-      return { type: b.blockType ?? "paragraph", text: b.text ?? "" } as ArticleBlock;
-    }),
-  };
-}
-
-export async function fetchAllArticles(): Promise<Article[]> {
-  try {
-    const raw = await client.fetch(allArticlesQuery);
-    if (!raw?.length) return hardcodedArticles;
-    return raw.map(transformArticle);
-  } catch {
-    return hardcodedArticles;
-  }
-}
-
-export async function fetchArticleBySlug(
-  slug: string,
-): Promise<Article | undefined> {
-  try {
-    const raw = await client.fetch(articleBySlugQuery, { slug });
-    if (!raw) return hardcodedGetArticleBySlug(slug);
-    return transformArticle(raw);
-  } catch {
-    return hardcodedGetArticleBySlug(slug);
-  }
-}
-
-export async function fetchArticleSlugs(): Promise<string[]> {
-  try {
-    const raw: { slug: { current: string } }[] = await client.fetch(
-      `*[_type == "article"]{ slug }`,
-    );
-    if (!raw?.length) return hardcodedArticles.map((a) => a.slug);
-    return raw.map((r) => r.slug.current);
-  } catch {
-    return hardcodedArticles.map((a) => a.slug);
-  }
-}
+// ── Articles: removed 2026-04-27 (blog discontinued).
+//    All /articles* URLs 301 → /learn via next.config.js redirects.
 
 // ── Learn Pillars ─────────────────────────────────────────
 
@@ -505,20 +430,13 @@ export function getLocaleValue(
 // ── Sitemap helpers ───────────────────────────────────────
 
 export async function fetchAllSlugsForSitemap(): Promise<{
-  articles: { slug: string; publishedAt?: string }[];
   learnPillars: string[];
   leagueHubs: string[];
   betTypeHubs: string[];
 }> {
-  // ── Leagues / bet-types / learn pillars: always emit the UNION of
-  //    (static catalog + editorial data files + Sanity) so the sitemap
-  //    covers every URL the route handlers actually serve, including
-  //    skeleton-generated league hubs. Previous implementation only
-  //    emitted Sanity entries (or the 7-league LEAGUE_HUBS fallback),
-  //    which left 14 of the 21 advertised league hubs out of the
-  //    sitemap — Google couldn't discover them and impressions on
-  //    their brand + longtail terms dropped. See /data/league-catalog
-  //    for the full list.
+  // Leagues / bet-types / learn pillars: emit the UNION of static
+  // catalogs + Sanity so the sitemap covers every URL the route
+  // handlers actually serve.
   const { ALL_LEAGUES } = await import("@/data/league-catalog");
   const leagueSlugs = new Set<string>();
   ALL_LEAGUES.forEach((l) => leagueSlugs.add(l.slug));
@@ -530,28 +448,21 @@ export async function fetchAllSlugsForSitemap(): Promise<{
   const pillarSlugs = new Set<string>();
   LEARN_PILLARS.forEach((p) => pillarSlugs.add(p.slug));
 
-  // Articles: Sanity is the source of truth (no static catalog).
-  // Fall back to the hardcoded sample list if Sanity is unreachable.
-  let articles: { slug: string; publishedAt?: string }[] = [];
-
   try {
-    const [cmsArticles, cmsPillars, cmsLeagues, cmsBetTypes] = await Promise.all([
-      client.fetch<any[]>(`*[_type == "article"]{ "slug": slug.current, publishedAt }`),
+    const [cmsPillars, cmsLeagues, cmsBetTypes] = await Promise.all([
       client.fetch<any[]>(`*[_type == "learnPillar"]{ "slug": slug.current }`),
       client.fetch<any[]>(`*[_type == "leagueHub"]{ "slug": slug.current }`),
       client.fetch<any[]>(`*[_type == "betTypeHub"]{ "slug": slug.current }`),
     ]);
 
-    articles = (cmsArticles ?? []).map((a) => ({ slug: a.slug, publishedAt: a.publishedAt }));
     (cmsPillars ?? []).forEach((p) => pillarSlugs.add(p.slug));
     (cmsLeagues ?? []).forEach((l) => leagueSlugs.add(l.slug));
     (cmsBetTypes ?? []).forEach((b) => betTypeSlugs.add(b.slug));
   } catch {
-    articles = hardcodedArticles.map((a) => ({ slug: a.slug, publishedAt: a.publishedAt }));
+    // Static fallbacks already populated above.
   }
 
   return {
-    articles,
     learnPillars: Array.from(pillarSlugs),
     leagueHubs: Array.from(leagueSlugs),
     betTypeHubs: Array.from(betTypeSlugs),
