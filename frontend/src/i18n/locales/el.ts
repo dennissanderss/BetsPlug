@@ -93,7 +93,6 @@ const el = {
   "admin.statusScheduled": "Προγραμματισμένο",
   "admin.totalColumn": "Σύνολο",
 
-
   "auth.oneMoment": "Μια στιγμή…",
 
   "b2b.affiliate": "Πρόγραμμα συνεργατών και παραπομπών",
@@ -986,6 +985,14 @@ const el = {
   "footer.secureDesc": "Ταμείο 256-bit κρυπτογραφημένο SSL",
   "footer.secureTitle": "Ασφαλείς πληρωμές",
   "footer.termsOfService": "Όροι Παροχής Υπηρεσιών",
+  "footer.tg.badge": "Αποκλειστικές συμβουλές",
+  "footer.tg.cta": "Εγγραφείτε στο Telegram",
+  "footer.tg.dailyPicks": "Καθημερινές επιλογές",
+  "footer.tg.freeToJoin": "Δωρεάν συμμετοχή",
+  "footer.tg.membersOnline": "1.200+ μέλη online",
+  "footer.tg.subtitle": "Λάβετε ειδοποιήσεις αξίας σε πραγματικό χρόνο, επιλογές άκρων και ζωντανή συνομιλία με τους αναλυτές μας AI. Γίνετε ο πρώτος που θα μάθετε πότε ένας αγώνας υψηλής αξίας χτυπάει στον πίνακα.",
+  "footer.tg.titleAccent": "δωρεάν καθημερινές επιλογές",
+  "footer.tg.titleLead": "Εγγραφείτε στο Telegram για",
   "footer.viewAll": "Προβολή όλων",
 
   "forgotPassword.backToLogin": "← Πίσω στη σύνδεση",

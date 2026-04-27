@@ -93,7 +93,6 @@ const pt = {
   "admin.statusScheduled": "Agendado",
   "admin.totalColumn": "Total",
 
-
   "auth.oneMoment": "Um momento…",
 
   "b2b.affiliate": "Programa de afiliados e referências",
@@ -986,6 +985,14 @@ const pt = {
   "footer.secureDesc": "Check-out criptografado SSL de 256 bits",
   "footer.secureTitle": "Pagamentos seguros",
   "footer.termsOfService": "Termos de Serviço",
+  "footer.tg.badge": "Dicas exclusivas",
+  "footer.tg.cta": "Junte-se ao Telegram",
+  "footer.tg.dailyPicks": "Escolhas diárias",
+  "footer.tg.freeToJoin": "Livre para participar",
+  "footer.tg.membersOnline": "Mais de 1.200 membros on-line",
+  "footer.tg.subtitle": "Receba alertas de valor em tempo real, escolhas avançadas e chat ao vivo com nossos analistas de IA. Seja o primeiro a saber quando uma partida de alto valor chegar ao tabuleiro.",
+  "footer.tg.titleAccent": "escolhas diárias gratuitas",
+  "footer.tg.titleLead": "Junte-se ao nosso Telegram para",
   "footer.viewAll": "Ver tudo",
 
   "forgotPassword.backToLogin": "← Voltar ao login",

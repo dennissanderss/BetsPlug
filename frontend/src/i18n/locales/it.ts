@@ -2811,5 +2811,15 @@ const it = {
   "welcomeBanner.stepPrefix": "Fare un passo",
   "welcomeBanner.subtitle": "La nostra intelligenza artificiale analizza i dati calcistici (forma, testa a testa, classifica e forza della squadra) per prevedere il risultato più probabile delle prossime partite.",
   "welcomeBanner.title": "Ecco come funziona BetsPlug",
-} as Record<TranslationKey, string>;
+  /* Footer Telegram banner (added 2026-04-27) */
+  "footer.tg.badge": "Pronostici esclusivi",
+  "footer.tg.titleLead": "Unisciti al nostro Telegram per",
+  "footer.tg.titleAccent": "pronostici gratuiti ogni giorno",
+  "footer.tg.subtitle": "Ricevi avvisi di valore in tempo reale, pronostici di valore aggiunto e chat dal vivo con i nostri analisti IA. Sii il primo a sapere quando arriva una partita ad alto valore.",
+  "footer.tg.membersOnline": "1.200+ membri online",
+  "footer.tg.freeToJoin": "Iscrizione gratuita",
+  "footer.tg.dailyPicks": "Pronostici giornalieri",
+  "footer.tg.cta": "Unisciti a Telegram",
+
+} as Partial<Record<TranslationKey, string>>;
 export default it;

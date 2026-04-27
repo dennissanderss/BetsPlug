@@ -93,7 +93,6 @@ const ro = {
   "admin.statusScheduled": "Programat",
   "admin.totalColumn": "Total",
 
-
   "auth.oneMoment": "O clipă…",
 
   "b2b.affiliate": "Program de afiliere și recomandare",
@@ -986,6 +985,14 @@ const ro = {
   "footer.secureDesc": "Finalizare criptată SSL pe 256 de biți",
   "footer.secureTitle": "Plăți sigure",
   "footer.termsOfService": "Termeni și condiții",
+  "footer.tg.badge": "Sfaturi exclusive",
+  "footer.tg.cta": "Alăturați-vă Telegram",
+  "footer.tg.dailyPicks": "Alegeri zilnice",
+  "footer.tg.freeToJoin": "Liber să se alăture",
+  "footer.tg.membersOnline": "Peste 1.200 de membri online",
+  "footer.tg.subtitle": "Obțineți alerte de valoare în timp real, alegeri de vârf și chat live cu analiștii noștri AI. Fii primul care știe când un meci de mare valoare ajunge pe tablă.",
+  "footer.tg.titleAccent": "alegeri zilnice gratuite",
+  "footer.tg.titleLead": "Alăturați-vă Telegram noastre pentru",
   "footer.viewAll": "Vezi toate",
 
   "forgotPassword.backToLogin": "← Înapoi la conectare",

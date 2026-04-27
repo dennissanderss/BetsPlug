@@ -93,7 +93,6 @@ const sv = {
   "admin.statusScheduled": "Planerad",
   "admin.totalColumn": "Totalt",
 
-
   "auth.oneMoment": "Ett ögonblick…",
 
   "b2b.affiliate": "Affiliate & remissprogram",
@@ -986,6 +985,14 @@ const sv = {
   "footer.secureDesc": "256-bitars SSL-krypterad utcheckning",
   "footer.secureTitle": "Säkra betalningar",
   "footer.termsOfService": "Användarvillkor",
+  "footer.tg.badge": "Exklusiva tips",
+  "footer.tg.cta": "Gå med i Telegram",
+  "footer.tg.dailyPicks": "Dagliga val",
+  "footer.tg.freeToJoin": "Gratis att gå med",
+  "footer.tg.membersOnline": "1 200+ medlemmar online",
+  "footer.tg.subtitle": "Få värdevarningar i realtid, kantval och livechatt med våra AI-analytiker. Var den första att veta när en högvärdig match träffar brädet.",
+  "footer.tg.titleAccent": "gratis dagliga val",
+  "footer.tg.titleLead": "Gå med i vår Telegram för",
   "footer.viewAll": "Visa alla",
 
   "forgotPassword.backToLogin": "← Tillbaka till inloggning",

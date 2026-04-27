@@ -2811,5 +2811,15 @@ const de = {
   "welcomeBanner.stepPrefix": "Schritt",
   "welcomeBanner.subtitle": "Unsere KI analysiert Fußballdaten – Form, Kopf-an-Kopf-Rennen, Rangliste und Teamstärke –, um den wahrscheinlichsten Ausgang bevorstehender Spiele vorherzusagen.",
   "welcomeBanner.title": "So funktioniert BetsPlug",
-} as Record<TranslationKey, string>;
+  /* Footer Telegram banner (added 2026-04-27) */
+  "footer.tg.badge": "Exklusive Tipps",
+  "footer.tg.titleLead": "Tritt unserem Telegram bei für",
+  "footer.tg.titleAccent": "tägliche Gratis-Tipps",
+  "footer.tg.subtitle": "Erhalte Echtzeit-Value-Alerts, Edge-Tipps und Live-Chat mit unseren KI-Analysten. Erfahre als Erster, wenn ein hochwertiges Match auftaucht.",
+  "footer.tg.membersOnline": "1.200+ Mitglieder online",
+  "footer.tg.freeToJoin": "Kostenlos beitreten",
+  "footer.tg.dailyPicks": "Tägliche Tipps",
+  "footer.tg.cta": "Telegram beitreten",
+
+} as Partial<Record<TranslationKey, string>>;
 export default de;

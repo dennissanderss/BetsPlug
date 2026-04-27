@@ -93,7 +93,6 @@ const da = {
   "admin.statusScheduled": "Planlagt",
   "admin.totalColumn": "I alt",
 
-
   "auth.oneMoment": "Et øjeblik…",
 
   "b2b.affiliate": "Affiliate & henvisningsprogram",
@@ -986,6 +985,14 @@ const da = {
   "footer.secureDesc": "256-bit SSL-krypteret checkout",
   "footer.secureTitle": "Sikre betalinger",
   "footer.termsOfService": "Servicevilkår",
+  "footer.tg.badge": "Eksklusive tips",
+  "footer.tg.cta": "Tilmeld dig Telegram",
+  "footer.tg.dailyPicks": "Daglige valg",
+  "footer.tg.freeToJoin": "Gratis at deltage",
+  "footer.tg.membersOnline": "1.200+ medlemmer online",
+  "footer.tg.subtitle": "Få værdialarmer i realtid, kantvalg og live chat med vores AI-analytikere. Vær den første til at vide, hvornår en kamp af høj værdi rammer brættet.",
+  "footer.tg.titleAccent": "gratis daglige valg",
+  "footer.tg.titleLead": "Tilmeld dig vores Telegram for",
   "footer.viewAll": "Se alle",
 
   "forgotPassword.backToLogin": "← Tilbage til login",
