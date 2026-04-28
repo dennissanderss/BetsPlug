@@ -851,9 +851,9 @@ class ApiClient {
   }
 
   // Admin Users
-  getAdminUsers(limit = 200, offset = 0) {
+  getAdminUsers(limit = 200, offset = 0, verifiedOnly = true) {
     return this.request<import("@/types/api").AdminUser[]>(
-      `/admin/users/?limit=${limit}&offset=${offset}`
+      `/admin/users/?limit=${limit}&offset=${offset}&verified_only=${verifiedOnly}`
     );
   }
   updateAdminUserStatus(userId: string, isActive: boolean) {

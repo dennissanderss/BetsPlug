@@ -16,6 +16,7 @@ import {
   Crown,
   AlertTriangle,
   X,
+  MailCheck,
 } from "lucide-react";
 import type { AdminUser } from "@/types/api";
 
@@ -257,9 +258,12 @@ export default function UserManager() {
   const [planFilter, setPlanFilter] = useState<PlanFilter>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "suspended">("all");
 
+  // Admin > Users is hard-locked to verified-email accounts only. Bots
+  // and abandoned signups never finish the email-confirmation step, so
+  // filtering them out at the source keeps this view free of noise.
   const { data: users, isLoading, error } = useQuery<AdminUser[]>({
-    queryKey: ["admin-users"],
-    queryFn: () => api.getAdminUsers(200, 0),
+    queryKey: ["admin-users", { verifiedOnly: true }],
+    queryFn: () => api.getAdminUsers(200, 0, true),
   });
 
   const statusMutation = useMutation({
@@ -373,7 +377,7 @@ export default function UserManager() {
           </span>
         </div>
         <p className="text-xs text-slate-500">
-          Showing {filtered.length} of {users?.length ?? 0} users
+          Showing {filtered.length} of {users?.length ?? 0} verified users
         </p>
       </div>
 
@@ -389,6 +393,16 @@ export default function UserManager() {
             className="h-9 w-full rounded-lg border border-white/10 bg-white/[0.04] pl-9 pr-3 text-sm text-slate-200 placeholder:text-slate-500 outline-none focus:border-blue-500/60 focus:ring-1 focus:ring-blue-500/30 transition-colors"
           />
         </div>
+
+        {/* Verified-only indicator (non-interactive — admin view is
+            permanently scoped to confirmed-email accounts) */}
+        <span
+          className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-300"
+          title="Admin > Users only lists accounts that confirmed their email. Bots can't pass this gate."
+        >
+          <MailCheck className="h-3.5 w-3.5" />
+          Verified only
+        </span>
 
         {/* Status filter */}
         <div className="flex rounded-lg border border-white/10 bg-white/[0.04] p-1">

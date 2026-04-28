@@ -51,6 +51,7 @@ class AdminUserItem(BaseModel):
     full_name: Optional[str] = None
     role: str
     is_active: bool
+    email_verified: bool = False
     created_at: datetime
     updated_at: datetime
     subscription: Optional[UserSubscriptionInfo] = None
@@ -243,12 +244,30 @@ async def create_user(
 async def list_users(
     limit: int = Query(200, ge=1, le=1000),
     offset: int = Query(0, ge=0),
+    verified_only: bool = Query(
+        True,
+        description=(
+            "Hide users that haven't confirmed their email. Defaults to True "
+            "so the admin panel filters out the bot/throwaway noise — set "
+            "to False to inspect unverified rows (e.g. when debugging the "
+            "verify-email flow)."
+        ),
+    ),
     db: AsyncSession = Depends(get_db),
 ):
-    """List all users with subscription + payment summary, newest first."""
+    """List users with subscription + payment summary, newest first.
+
+    By default only verified users are returned: the public signup flow
+    forces every real user through an email confirmation, so unverified
+    rows are almost always abandoned signups or scripted bots and just
+    pollute the admin view. Pass ``verified_only=false`` to see them.
+    """
     # 1. Fetch users (paginated)
+    user_query = select(User)
+    if verified_only:
+        user_query = user_query.where(User.email_verified.is_(True))
     user_query = (
-        select(User).order_by(User.created_at.desc()).limit(limit).offset(offset)
+        user_query.order_by(User.created_at.desc()).limit(limit).offset(offset)
     )
     user_result = await db.execute(user_query)
     users = list(user_result.scalars().all())
@@ -336,6 +355,7 @@ async def list_users(
                 full_name=getattr(user, "full_name", None),
                 role=user.role.value if hasattr(user.role, "value") else str(user.role),
                 is_active=user.is_active,
+                email_verified=bool(getattr(user, "email_verified", False)),
                 created_at=user.created_at,
                 updated_at=user.updated_at,
                 subscription=sub_info,
