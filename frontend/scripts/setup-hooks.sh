@@ -12,12 +12,16 @@ cat > "$HOOK_DIR/pre-commit" << 'HOOK'
 # 1. Block commits that introduce hardcoded isNl/locale ternaries —
 #    those bypass the i18n dictionary and were the root cause of the
 #    April 2026 brand-SEO collapse.
-# 2. If messages.ts or page-meta.ts changed, auto-run the translator
+# 2. Block commits that introduce raw Dutch UI text (JSX text node or
+#    common JSX prop) anywhere in src/, including the authed (app)
+#    routes that the ternary-only check skips. Pre-existing leaks
+#    are tolerated (--diff-only); only NEW Dutch is blocked.
+# 3. If messages.ts or page-meta.ts changed, auto-run the translator
 #    so missing locales are filled before the commit lands.
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 
-# ── Guard: hardcoded UI strings in STAGED files ──────────────────
+# ── Guard 1: hardcoded isNl / locale ternaries (STAGED files) ────
 # Pass only staged .ts/.tsx files to the checker so pre-existing
 # violations in untouched files don't block an unrelated commit.
 cd "$REPO_ROOT/frontend" || exit 1
@@ -32,6 +36,22 @@ if [ -n "$STAGED" ]; then
     echo "    commit blocked. Extract each string to messages.ts and"
     echo "    use t(\"key\") via useTranslations() instead."
     echo "    See CLAUDE.md § i18n for the full convention."
+    exit 1
+  fi
+fi
+
+# ── Guard 2: raw Dutch UI text in NEW lines of staged files ──────
+# Diff-only mode: only flags Dutch strings the staged change
+# introduces. A pre-existing backlog of Dutch leaks in src/app/(app)
+# does not block unrelated commits — but every NEW Dutch leak does.
+if [ -n "$STAGED" ]; then
+  # shellcheck disable=SC2086
+  if ! node scripts/check-no-dutch-leaks.mjs --diff-only $STAGED; then
+    echo ""
+    echo "  ✗ pre-commit: NEW hardcoded Dutch UI text in a staged file —"
+    echo "    commit blocked. Add the string to messages.ts (en + nl) and"
+    echo "    use t(\"key\") via useTranslations(); the translator (or"
+    echo "    apply-i18n-batch.mjs) will fill the other 14 locales."
     exit 1
   fi
 fi
