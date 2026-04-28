@@ -716,6 +716,12 @@ class ApiClient {
     );
   }
 
+  getComboStats(scope: "backtest" | "live") {
+    return this.request<import("@/types/api").ComboStats>(
+      `/value-bets/combo-stats?scope=${scope}`
+    );
+  }
+
   getValueBetToday() {
     return this.request<import("@/types/api").ValueBetToday>(
       "/value-bets/today",

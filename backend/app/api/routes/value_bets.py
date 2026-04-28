@@ -811,6 +811,22 @@ COMBO_MIN_CONFIDENCE = 0.70
 COMBO_MIN_LEG_ODDS = 1.40
 COMBO_MAX_LEG_ODDS = 4.00
 
+# Master kill-switch — Combi van de Dag is locked behind a "coming soon"
+# overlay until the product is fully validated against backtest + live
+# samples. Set to True in env / deploy config when ready to launch. The
+# /combo-today endpoint returns `coming_soon=true, locked=true` while
+# this flag is False, regardless of the caller's tier (admins can still
+# preview via ?preview=1).
+COMBO_PUBLIC_LAUNCH = False
+
+# Live tracking starts at the v8.1 deploy cut-off — same date as
+# /api/trackrecord/live-measurement. Combos before this date count as
+# backtest; combos on/after as live measurements.
+COMBO_LIVE_TRACKING_START = date(2026, 4, 16)
+# Cap the backtest replay window so the on-the-fly aggregator stays
+# responsive (≈365 days × ~50 predictions/day ≈ 18k rows).
+COMBO_BACKTEST_DAYS = 365
+
 
 class ComboLeg(BaseModel):
     match_id: str
@@ -842,6 +858,7 @@ class ComboOfTheDay(BaseModel):
     expected_value_per_unit: float = 0.0
     requires_tier: str = "platinum"
     locked: bool = False
+    coming_soon: bool = False  # global launch gate
     disclaimer: str = (
         "Combinatie-tip op basis van statistische analyse over onze v8.1 "
         "predictions. Eén verliezende leg = combinatie verloren. Niet-"
@@ -870,16 +887,29 @@ def _format_pick_label(home_team: str, away_team: str, pick: str) -> str:
 async def get_combo_of_the_day(
     db: AsyncSession = Depends(get_db),
     user_tier: PickTier = Depends(get_current_tier),
+    preview: int = Query(default=0, include_in_schema=False),
 ) -> ComboOfTheDay:
-    """Return today's 3-leg accumulator for Platinum subscribers.
+    """Return today's 3-leg accumulator.
 
-    Non-Platinum users receive ``locked=true`` with all leg fields blanked
-    so the frontend can render an upgrade prompt without leaking which
-    matches were selected.
+    Currently behind a global ``COMBO_PUBLIC_LAUNCH`` gate — every
+    caller receives ``coming_soon=true`` and a blanked payload until
+    the product is validated against the backtest + live samples.
+    Once launched, the endpoint will be Platinum-tier only.
     """
     today = datetime.now(timezone.utc).date()
 
-    # Tier gate — Platinum-only product.
+    # Master kill-switch — feature is hidden behind an "in ontwikkeling"
+    # overlay for everyone except admins doing a preview.
+    if not COMBO_PUBLIC_LAUNCH and not preview:
+        return ComboOfTheDay(
+            available=False,
+            reason="coming_soon",
+            bet_date=today.isoformat(),
+            locked=True,
+            coming_soon=True,
+        )
+
+    # Tier gate — Platinum-only product (only fires post-launch).
     if user_tier != PickTier.PLATINUM:
         return ComboOfTheDay(
             available=False,
@@ -1029,6 +1059,250 @@ async def get_combo_of_the_day(
         combined_bookmaker_implied=round(combined_book_implied, 4),
         combined_edge=round(combined_edge, 4),
         expected_value_per_unit=round(expected_value_per_unit, 4),
+    )
+
+
+# ---------------------------------------------------------------------------
+# Combi van de Dag — backtest + live measurement aggregator
+# ---------------------------------------------------------------------------
+class ComboStats(BaseModel):
+    scope: str  # 'backtest' | 'live'
+    window_start: str
+    window_end: str
+    total_combos: int
+    evaluated_combos: int  # combos where every leg has been graded
+    hit_combos: int
+    accuracy: float  # hit / evaluated
+    avg_combined_odds: float
+    avg_legs_per_combo: float
+    total_units_pnl: float  # at €1 stake per combo
+    roi_percentage: float
+    wilson_ci_lower: float
+    wilson_ci_upper: float
+    sample_size_warning: bool
+    explainer: str
+
+
+def _select_combo_legs_from_predictions(
+    preds: list[Prediction],
+) -> list[dict] | None:
+    """Replay the live combo selector over a list of predictions whose
+    matches are scheduled within the same daily window. Returns the
+    chosen 3 legs as plain dicts (for in-memory aggregation), or None
+    when fewer than 3 candidates pass.
+
+    Mirrors the filters in :func:`get_combo_of_the_day` so backtest +
+    live measurement use the exact same selection rule.
+    """
+    candidates: list[tuple[float, dict]] = []
+    for p in preds:
+        match = p.match
+        if match is None or match.home_team is None or match.away_team is None:
+            continue
+        if (p.confidence or 0) < COMBO_MIN_CONFIDENCE:
+            continue
+        snap = p.closing_odds_snapshot or {}
+        book = snap.get("bookmaker_odds") if isinstance(snap, dict) else None
+        if not isinstance(book, dict):
+            continue
+        sides = [
+            ("home", float(p.home_win_prob or 0.0), book.get("home")),
+            ("draw", float(p.draw_prob or 0.0) if p.draw_prob is not None else 0.0, book.get("draw")),
+            ("away", float(p.away_win_prob or 0.0), book.get("away")),
+        ]
+        sides_with_odds = [
+            (s, prob, float(o)) for s, prob, o in sides if o is not None and float(o) > 1.0
+        ]
+        if not sides_with_odds:
+            continue
+        sides_with_odds.sort(key=lambda t: t[1], reverse=True)
+        pick_side, our_prob, leg_odds = sides_with_odds[0]
+        if leg_odds < COMBO_MIN_LEG_ODDS or leg_odds > COMBO_MAX_LEG_ODDS:
+            continue
+        tier = _classify_tier(match.league_id, p.confidence)
+        if tier not in ("gold", "platinum"):
+            continue
+        odds_h = book.get("home")
+        odds_d = book.get("draw")
+        odds_a = book.get("away")
+        try:
+            ov = (1.0 / float(odds_h) if odds_h else 0.0) + (
+                1.0 / float(odds_a) if odds_a else 0.0
+            )
+            if odds_d is not None:
+                ov += 1.0 / float(odds_d)
+            if ov <= 0:
+                continue
+            raw_implied = 1.0 / leg_odds
+            fair_implied = raw_implied / ov
+        except Exception:
+            continue
+        leg_edge = our_prob - fair_implied
+        if leg_edge <= 0:
+            continue
+        tier_bonus = PLATINUM_TIER_BONUS if tier == "platinum" else GOLD_TIER_BONUS
+        score = float(p.confidence or 0.0) * tier_bonus * (1.0 + leg_edge)
+        candidates.append(
+            (
+                score,
+                {
+                    "match_id": match.id,
+                    "league_id": str(match.league_id),
+                    "pick": pick_side,
+                    "leg_odds": leg_odds,
+                },
+            )
+        )
+    candidates.sort(key=lambda t: t[0], reverse=True)
+    chosen: list[dict] = []
+    seen: set[str] = set()
+    for _, leg in candidates:
+        if leg["league_id"] in seen:
+            continue
+        chosen.append(leg)
+        seen.add(leg["league_id"])
+        if len(chosen) >= COMBO_LEG_COUNT:
+            break
+    return chosen if len(chosen) >= COMBO_LEG_COUNT else None
+
+
+@router.get("/combo-stats", response_model=ComboStats)
+async def get_combo_stats(
+    scope: str = Query(default="backtest", pattern="^(backtest|live)$"),
+    db: AsyncSession = Depends(get_db),
+) -> ComboStats:
+    """Replay the combo selector over historical or live-tracking data.
+
+    `scope=backtest` walks the previous 365 days up to (but excluding)
+    the v8.1 launch on 2026-04-16. `scope=live` walks from 2026-04-16
+    onwards. Both apply the *exact* same selection rules as the live
+    /combo-today endpoint.
+
+    Stats are computed on the fly — there is no combo_bets table yet.
+    Each daily replay is one Python loop over the predictions for that
+    day, so the work scales linearly with the window size.
+    """
+    today = datetime.now(timezone.utc).date()
+
+    if scope == "live":
+        window_start = COMBO_LIVE_TRACKING_START
+        window_end = today
+        explainer = (
+            "Live meting van Combi van de Dag — replays vanaf 2026-04-16, "
+            "elke dag opnieuw de selector toegepast op de op dat moment "
+            "beschikbare predictions. n=0 tot het cron-pad dagelijks rijen "
+            "wegschrijft, maar de aantallen hieronder zijn de *werkelijke* "
+            "uitkomst die de selector zou hebben gegeven."
+        )
+    else:
+        window_start = COMBO_LIVE_TRACKING_START - timedelta(days=COMBO_BACKTEST_DAYS)
+        window_end = COMBO_LIVE_TRACKING_START - timedelta(days=1)
+        explainer = (
+            f"Backtest over de afgelopen {COMBO_BACKTEST_DAYS} dagen vóór de "
+            "v8.1 deploy. Voor elke dag hebben we de selector laten lopen "
+            "alsof we hem live hadden draaien, en de combinatie geëvalueerd "
+            "tegen de echte uitslag. Geen vooruitkijken: alleen predictions "
+            "die strikt vóór kickoff waren vastgelegd."
+        )
+
+    # Pull all predictions whose match is scheduled in the window with
+    # closing_odds_snapshot populated and confidence ≥ 0.70 (selector
+    # minimum) — one query, group in Python.
+    window_start_dt = datetime.combine(window_start, datetime.min.time(), tzinfo=timezone.utc)
+    window_end_dt = datetime.combine(window_end + timedelta(days=1), datetime.min.time(), tzinfo=timezone.utc)
+
+    pred_stmt = (
+        select(Prediction)
+        .options(
+            joinedload(Prediction.match).joinedload(Match.home_team),
+            joinedload(Prediction.match).joinedload(Match.away_team),
+            joinedload(Prediction.match).joinedload(Match.league),
+            joinedload(Prediction.evaluation),
+        )
+        .join(Match, Match.id == Prediction.match_id)
+        .where(
+            Prediction.closing_odds_snapshot.is_not(None),
+            Prediction.confidence >= COMBO_MIN_CONFIDENCE,
+            Prediction.predicted_at <= Match.scheduled_at,
+            Match.scheduled_at >= window_start_dt,
+            Match.scheduled_at <= window_end_dt,
+        )
+    )
+    preds = (await db.execute(pred_stmt)).unique().scalars().all()
+
+    # Group predictions by the day the match takes place — each calendar
+    # day produces at most one combo (matches the live cron behaviour
+    # described in /combo-today).
+    by_day: dict[date, list[Prediction]] = {}
+    for p in preds:
+        if p.match is None or p.match.scheduled_at is None:
+            continue
+        d = p.match.scheduled_at.astimezone(timezone.utc).date()
+        by_day.setdefault(d, []).append(p)
+
+    total_combos = 0
+    evaluated_combos = 0
+    hit_combos = 0
+    sum_combined_odds = 0.0
+    legs_total = 0
+    pnl_units = 0.0  # at €1 per combo
+
+    for d in sorted(by_day.keys()):
+        legs = _select_combo_legs_from_predictions(by_day[d])
+        if not legs:
+            continue
+        total_combos += 1
+        legs_total += len(legs)
+        combined_odds = 1.0
+        for leg in legs:
+            combined_odds *= leg["leg_odds"]
+        sum_combined_odds += combined_odds
+
+        # Evaluate combo: every leg must have a graded evaluation AND
+        # is_correct=True. If any leg is ungraded we treat the combo as
+        # not-yet-evaluated (won't count in evaluated_combos).
+        match_id_to_pred: dict = {p.match_id: p for p in by_day[d]}
+        all_evaluated = True
+        all_won = True
+        for leg in legs:
+            p = match_id_to_pred.get(leg["match_id"])
+            if p is None or p.evaluation is None:
+                all_evaluated = False
+                break
+            if not p.evaluation.is_correct:
+                all_won = False
+        if not all_evaluated:
+            continue
+        evaluated_combos += 1
+        if all_won:
+            hit_combos += 1
+            pnl_units += combined_odds - 1.0
+        else:
+            pnl_units -= 1.0
+
+    accuracy = (hit_combos / evaluated_combos) if evaluated_combos else 0.0
+    avg_combined_odds = (sum_combined_odds / total_combos) if total_combos else 0.0
+    avg_legs = (legs_total / total_combos) if total_combos else 0.0
+    roi_pct = (pnl_units / evaluated_combos * 100.0) if evaluated_combos else 0.0
+    wilson_low, wilson_high = wilson_ci(hit_combos, evaluated_combos) if evaluated_combos else (0.0, 0.0)
+    sample_warning = evaluated_combos < LIVE_SAMPLE_WARNING_THRESHOLD
+
+    return ComboStats(
+        scope=scope,
+        window_start=window_start.isoformat(),
+        window_end=window_end.isoformat(),
+        total_combos=total_combos,
+        evaluated_combos=evaluated_combos,
+        hit_combos=hit_combos,
+        accuracy=round(accuracy, 4),
+        avg_combined_odds=round(avg_combined_odds, 2),
+        avg_legs_per_combo=round(avg_legs, 2),
+        total_units_pnl=round(pnl_units, 2),
+        roi_percentage=round(roi_pct, 2),
+        wilson_ci_lower=round(wilson_low, 4),
+        wilson_ci_upper=round(wilson_high, 4),
+        sample_size_warning=sample_warning,
+        explainer=explainer,
     )
 
 

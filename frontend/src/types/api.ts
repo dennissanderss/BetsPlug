@@ -1136,7 +1136,26 @@ export interface ComboOfTheDay {
   expected_value_per_unit: number;
   requires_tier: "platinum";
   locked: boolean;
+  coming_soon: boolean;
   disclaimer?: string;
+}
+
+export interface ComboStats {
+  scope: "backtest" | "live";
+  window_start: string;
+  window_end: string;
+  total_combos: number;
+  evaluated_combos: number;
+  hit_combos: number;
+  accuracy: number;
+  avg_combined_odds: number;
+  avg_legs_per_combo: number;
+  total_units_pnl: number;
+  roi_percentage: number;
+  wilson_ci_lower: number;
+  wilson_ci_upper: number;
+  sample_size_warning: boolean;
+  explainer: string;
 }
 
 // ─── Value Bet engine (v9) ──────────────────────────────────────────────────
