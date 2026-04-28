@@ -389,7 +389,9 @@ function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolea
           {isLive ? (
             <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-red-500/15 px-2 py-0.5 text-[9px] font-bold text-red-400">
               <span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" />
-              {(fixture as any).live_score?.elapsed ? `${(fixture as any).live_score.elapsed}'` : "LIVE"}
+              {((fixture as any).live_score?.elapsed != null && (fixture as any).live_score.elapsed > 0)
+                ? `${(fixture as any).live_score.elapsed}'`
+                : "LIVE"}
             </span>
           ) : isFinished ? (
             <span className="mt-1 text-[9px] font-bold text-slate-500">FT</span>
@@ -402,7 +404,12 @@ function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolea
 
         {/* Teams — col 2 */}
         <div className="col-span-5 sm:col-span-4 min-w-0 overflow-hidden">
-          {/* Home team */}
+          {/* Home team — score comes from live_score.home_goals when the
+              real-time cache has it, otherwise from result.home_score
+              (the DB MatchResult that the live scheduler also writes,
+              and which outlives the 45s Redis cache TTL). For live mode
+              we always show a number — defaulting to 0 — so "LIVE 0–0"
+              before the first goal isn't a blank row. */}
           <div className="flex items-center gap-2">
             {fixture.home_team_logo && (
               <Image src={fixture.home_team_logo} alt="" width={16} height={16} className="rounded-full shrink-0" />
@@ -410,12 +417,17 @@ function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolea
             <span className={`text-sm font-semibold truncate ${modelPick === "home" ? "text-emerald-300" : "text-slate-100"}`}>
               {fixture.home_team_name}
             </span>
-            {isLive && (fixture as any).live_score?.home_goals != null && (
-              <span className="text-sm font-bold tabular-nums text-red-300">{(fixture as any).live_score.home_goals}</span>
-            )}
-            {isFinished && fixture.result && (
-              <span className="text-sm font-bold tabular-nums text-slate-400">{fixture.result.home_score}</span>
-            )}
+            {(() => {
+              const liveScore = (fixture as any).live_score?.home_goals;
+              const resultScore = fixture.result?.home_score;
+              const display = liveScore != null ? liveScore : resultScore != null ? resultScore : (isLive ? 0 : null);
+              if (display == null) return null;
+              return (
+                <span className={`text-sm font-bold tabular-nums ${isLive ? "text-red-300" : "text-slate-400"}`}>
+                  {display}
+                </span>
+              );
+            })()}
           </div>
           {/* Away team */}
           <div className="flex items-center gap-2 mt-0.5">
@@ -425,12 +437,17 @@ function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolea
             <span className={`text-sm font-semibold truncate ${modelPick === "away" ? "text-emerald-300" : "text-slate-100"}`}>
               {fixture.away_team_name}
             </span>
-            {isLive && (fixture as any).live_score?.away_goals != null && (
-              <span className="text-sm font-bold tabular-nums text-red-300">{(fixture as any).live_score.away_goals}</span>
-            )}
-            {isFinished && fixture.result && (
-              <span className="text-sm font-bold tabular-nums text-slate-400">{fixture.result.away_score}</span>
-            )}
+            {(() => {
+              const liveScore = (fixture as any).live_score?.away_goals;
+              const resultScore = fixture.result?.away_score;
+              const display = liveScore != null ? liveScore : resultScore != null ? resultScore : (isLive ? 0 : null);
+              if (display == null) return null;
+              return (
+                <span className={`text-sm font-bold tabular-nums ${isLive ? "text-red-300" : "text-slate-400"}`}>
+                  {display}
+                </span>
+              );
+            })()}
           </div>
         </div>
 
