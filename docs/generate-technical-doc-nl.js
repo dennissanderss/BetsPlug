@@ -78,7 +78,7 @@ const doc = new Document({
           children: [new TextRun({ text: "Uitsluitend voor technische belanghebbenden", size: 20, font: "Arial", color: "666666" })] }),
         new Paragraph({ spacing: { before: 600 } }),
         new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Versie 8.1  |  April 2026", size: 22, font: "Arial", color: "444444" })] }),
-        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 100 }, children: [new TextRun({ text: "BetsPlug B.V.", size: 22, bold: true, font: "Arial", color: BLUE })] }),
+        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 100 }, children: [new TextRun({ text: "Sanders Capital (BetsPlug) — KvK 96286008", size: 22, bold: true, font: "Arial", color: BLUE })] }),
       ],
     },
     {
@@ -94,7 +94,7 @@ const doc = new Document({
       footers: { default: new Footer({ children: [new Paragraph({
         border: { top: { style: BorderStyle.SINGLE, size: 2, color: "cccccc", space: 4 } },
         children: [
-          new TextRun({ text: "Vertrouwelijk \u2014 BetsPlug B.V.", size: 16, font: "Arial", color: "999999" }),
+          new TextRun({ text: "Vertrouwelijk \u2014 Sanders Capital (BetsPlug) — KvK 96286008", size: 16, font: "Arial", color: "999999" }),
           new TextRun({ text: "\tPagina " }),
           new TextRun({ children: [PageNumber.CURRENT], size: 16, font: "Arial", color: "999999" }),
         ],
@@ -307,9 +307,14 @@ const doc = new Document({
         h1("9. Technisch Contact"),
         table2col([
           ["Onderdeel", "Details"],
-          ["Rechtspersoon", "BetsPlug B.V."],
+          ["Handelsnaam", "BetsPlug"],
+          ["Exploiterende onderneming", "Sanders Capital (eenmanszaak)"],
+          ["KvK-nummer", "96286008"],
+          ["Vestigingsnummer", "000061622141"],
+          ["Land", "Nederland"],
           ["Website", "https://betsplug.com"],
-          ["Technisch contact", "Via de contactpagina op de website"],
+          ["Technisch contact", "support@betsplug.com"],
+          ["Betalingsverwerker", "Stripe Payments Europe, Ltd. (PCI-DSS L1, live)"],
           ["Documentversie", "8.1 (april 2026)"],
           ["Laatste validatie", "April 2026 (walk-forward op 28.838 picks)"],
         ]),

@@ -28,29 +28,37 @@ export default function TermsOfServicePage() {
     <LegalPage
       title="Terms of Service"
       intro="The agreement between you and BetsPlug. Plain language where possible, legal clarity where it matters — read before you create an account."
-      lastUpdated="April 16, 2026"
+      lastUpdated="April 28, 2026"
       breadcrumb="Terms"
     >
       <h2>1. Who we are</h2>
       <p>
-        BetsPlug is operated from the Netherlands. References to &quot;we&quot;,
-        &quot;us&quot; and &quot;our&quot; mean BetsPlug. References to
-        &quot;you&quot; mean the person using the service. By creating an
-        account or otherwise using BetsPlug you agree to be bound by these
-        terms.
+        BetsPlug is a service operated by{" "}
+        <strong>Sanders Capital</strong>, a sole proprietorship
+        (eenmanszaak) registered with the Dutch Chamber of Commerce
+        (Kamer van Koophandel) under <strong>KvK number 96286008</strong>{" "}
+        (establishment number 000061622141), with its principal place of
+        business in the Netherlands. References to &quot;we&quot;,
+        &quot;us&quot; and &quot;our&quot; mean Sanders Capital trading as
+        BetsPlug. References to &quot;you&quot; mean the person using the
+        service. By creating an account or otherwise using BetsPlug you
+        agree to be bound by these terms.
       </p>
 
       <h2>2. What BetsPlug is - and what it isn&apos;t</h2>
       <p>
-        BetsPlug is an AI-driven football analytics platform. We use statistical
-        models to surface probability-weighted predictions for football
-        competitions worldwide.
+        BetsPlug is an <strong>AI-driven football data-analytics platform</strong>{" "}
+        for educational and research purposes. We use statistical models to
+        surface probability-weighted predictions for football competitions
+        worldwide. The product is content and analysis — not a betting service.
       </p>
       <p>
-        <strong>BetsPlug is not a bookmaker.</strong> We do not accept bets, we
-        do not handle any betting funds, and we are not affiliated with any
-        sportsbook. Our predictions are informational only - they are not
-        financial advice and they are not a guarantee of any outcome.
+        <strong>BetsPlug is not a gambling website and is not a bookmaker.</strong>{" "}
+        We do not accept bets, we do not handle any wagering funds, we do not
+        organise gambling activities, and we are not affiliated with any
+        sportsbook or licensed gambling operator. Our predictions are
+        informational only — they are not financial, betting, or investment
+        advice, and they are not a guarantee of any outcome.
       </p>
       <p>
         Football outcomes are inherently uncertain. Past performance of our
@@ -77,13 +85,16 @@ export default function TermsOfServicePage() {
         for fraud.
       </p>
 
-      <h2>5. Subscriptions, billing &amp; trials</h2>
+      <h2>5. Subscriptions, billing &amp; payments</h2>
       <h3>Plans and pricing</h3>
       <p>
-        BetsPlug offers monthly and yearly subscription plans. The price you
+        BetsPlug offers four access tiers: <strong>Free Access</strong>{" "}
+        (Bronze, €0), <strong>Silver</strong> and <strong>Gold</strong>{" "}
+        (recurring monthly subscriptions), and <strong>Platinum</strong>{" "}
+        (a one-time lifetime purchase that does not renew). The price you
         pay is the price displayed on the pricing page at the moment of
         checkout. We may change prices for new subscriptions at any time;
-        existing subscribers will keep their current price for the remainder of
+        existing subscribers keep their current price for the remainder of
         their billing cycle.
       </p>
       <h3>Free Access tier</h3>
@@ -94,12 +105,42 @@ export default function TermsOfServicePage() {
         immediately at checkout — there is no separate trial flow with a
         verification charge.
       </p>
+      <h3>Payment processing — Stripe</h3>
+      <p>
+        All paid plans are processed through{" "}
+        <strong>Stripe Payments Europe, Ltd.</strong>, our sole payment
+        processor. The Stripe integration is fully tested and operational
+        in live mode for both recurring subscriptions and one-time lifetime
+        purchases. Stripe is PCI-DSS Level 1 certified; full card numbers,
+        CVC codes and bank details are entered directly into Stripe&apos;s
+        secure environment and never reach BetsPlug servers. By
+        subscribing you also agree to{" "}
+        <a
+          href="https://stripe.com/legal/consumer"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Stripe&apos;s consumer terms
+        </a>
+        .
+      </p>
       <h3>Recurring billing</h3>
       <p>
-        Subscriptions renew automatically at the end of each billing cycle
-        until you cancel. You authorise us to charge your payment method on
-        each renewal. You can cancel at any time from your account settings - 
-        cancellation takes effect at the end of the current billing cycle.
+        Silver and Gold subscriptions renew automatically at the end of
+        each monthly cycle until you cancel. You authorise Stripe, on our
+        behalf, to charge your saved payment method on each renewal. You
+        can manage, upgrade, downgrade or cancel your subscription at any
+        time via the in-app <strong>Stripe Billing Portal</strong> linked
+        from your subscription page. Cancellation takes effect at the end
+        of the current billing cycle.
+      </p>
+      <h3>Lifetime Platinum</h3>
+      <p>
+        Platinum is sold as a single one-off lifetime payment. It does not
+        auto-renew. If you upgrade from a recurring Silver or Gold plan to
+        lifetime Platinum, your prior recurring subscription is
+        automatically cancelled in the same checkout flow so you are never
+        charged twice.
       </p>
       <h3>Refunds</h3>
       <p>
@@ -107,7 +148,7 @@ export default function TermsOfServicePage() {
         2011/83/EU. By starting to use the predictions content during the
         14-day period, you expressly waive this right (as permitted by the
         Directive for digital content). Outside that exception, refunds are
-        handled case by case - contact support if you have a problem.
+        handled case by case — contact support if you have a problem.
       </p>
 
       <h2>6. Acceptable use</h2>
@@ -185,7 +226,9 @@ export default function TermsOfServicePage() {
       <h2>13. Contact</h2>
       <p>
         Questions about these terms? Email{" "}
-        <a href="mailto:support@betsplug.com">support@betsplug.com</a>.
+        <a href="mailto:support@betsplug.com">support@betsplug.com</a>. For
+        formal legal correspondence, write to: Sanders Capital
+        (BetsPlug), KvK 96286008, the Netherlands.
       </p>
     </LegalPage>
   );

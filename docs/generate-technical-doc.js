@@ -130,7 +130,7 @@ const doc = new Document({
         new Paragraph({ alignment: AlignmentType.CENTER,
           children: [new TextRun({ text: "Version 8.1  |  April 2026", size: 22, font: "Arial", color: "444444" })] }),
         new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 100 },
-          children: [new TextRun({ text: "BetsPlug B.V.", size: 22, bold: true, font: "Arial", color: BLUE })] }),
+          children: [new TextRun({ text: "Sanders Capital (BetsPlug) — KvK 96286008", size: 22, bold: true, font: "Arial", color: BLUE })] }),
       ],
     },
 
@@ -151,7 +151,7 @@ const doc = new Document({
         default: new Footer({ children: [new Paragraph({
           border: { top: { style: BorderStyle.SINGLE, size: 2, color: "cccccc", space: 4 } },
           children: [
-            new TextRun({ text: "Confidential \u2014 BetsPlug B.V.", size: 16, font: "Arial", color: "999999" }),
+            new TextRun({ text: "Confidential \u2014 Sanders Capital (BetsPlug) — KvK 96286008", size: 16, font: "Arial", color: "999999" }),
             new TextRun({ text: "\tPage " }),
             new TextRun({ children: [PageNumber.CURRENT], size: 16, font: "Arial", color: "999999" }),
           ],
@@ -377,9 +377,14 @@ const doc = new Document({
         h1("9. Technical Contact"),
         table2col([
           ["Item", "Details"],
-          ["Legal entity", "BetsPlug B.V."],
+          ["Trading name", "BetsPlug"],
+          ["Operating entity", "Sanders Capital (eenmanszaak / sole proprietorship)"],
+          ["KvK number", "96286008"],
+          ["Establishment number", "000061622141"],
+          ["Country", "Netherlands"],
           ["Website", "https://betsplug.com"],
-          ["Technical contact", "Via contact page on website"],
+          ["Technical contact", "support@betsplug.com"],
+          ["Payment processor", "Stripe Payments Europe, Ltd. (PCI-DSS L1, live)"],
           ["Document version", "8.1 (April 2026)"],
           ["Last validation", "April 2026 (walk-forward on 28,838 picks)"],
         ]),

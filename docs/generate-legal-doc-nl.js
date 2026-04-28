@@ -87,7 +87,7 @@ const doc = new Document({
           children: [new TextRun({ text: "Uitsluitend voor juridische & compliance belanghebbenden", size: 20, font: "Arial", color: "666666" })] }),
         new Paragraph({ spacing: { before: 600 } }),
         new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Versie 8.1  |  April 2026", size: 22, font: "Arial", color: "444444" })] }),
-        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 100 }, children: [new TextRun({ text: "BetsPlug B.V.", size: 22, bold: true, font: "Arial", color: BLUE })] }),
+        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 100 }, children: [new TextRun({ text: "Sanders Capital (BetsPlug) — KvK 96286008", size: 22, bold: true, font: "Arial", color: BLUE })] }),
       ],
     },
     {
@@ -103,7 +103,7 @@ const doc = new Document({
       footers: { default: new Footer({ children: [new Paragraph({
         border: { top: { style: BorderStyle.SINGLE, size: 2, color: "cccccc", space: 4 } },
         children: [
-          new TextRun({ text: "Vertrouwelijk \u2014 BetsPlug B.V.", size: 16, font: "Arial", color: "999999" }),
+          new TextRun({ text: "Vertrouwelijk \u2014 Sanders Capital (BetsPlug) — KvK 96286008", size: 16, font: "Arial", color: "999999" }),
           new TextRun({ text: "\tPagina " }),
           new TextRun({ children: [PageNumber.CURRENT], size: 16, font: "Arial", color: "999999" }),
         ],
@@ -178,7 +178,7 @@ const doc = new Document({
         h1("5. Privacy & Gegevensbescherming (AVG)"),
 
         h2("5.1 Verwerkingsverantwoordelijke"),
-        p("BetsPlug B.V. is de verwerkingsverantwoordelijke voor persoonsgegevens die via het platform worden verwerkt. Contact: via de contactpagina op de website."),
+        p("Sanders Capital (BetsPlug) — KvK 96286008 is de verwerkingsverantwoordelijke voor persoonsgegevens die via het platform worden verwerkt. Contact: via de contactpagina op de website."),
 
         h2("5.2 Verzamelde Gegevens"),
         table2col([
@@ -292,11 +292,16 @@ const doc = new Document({
         h1("9. Contact & Organisatie"),
         table2col([
           ["Onderdeel", "Details"],
-          ["Rechtspersoon", "BetsPlug B.V."],
+          ["Handelsnaam", "BetsPlug"],
+          ["Exploiterende onderneming", "Sanders Capital (eenmanszaak)"],
+          ["Activiteit", "Administratieve dienstverlening; prop trader in beleggingen"],
+          ["KvK-nummer", "96286008"],
+          ["Vestigingsnummer", "000061622141"],
           ["Statutaire vestiging", "Nederland"],
           ["Website", "https://betsplug.com"],
-          ["Algemeen contact", "Via de contactpagina op de website"],
-          ["Privacy/AVG verzoeken", "Via contactpagina (tag: 'AVG' of 'GDPR')"],
+          ["Algemeen contact", "support@betsplug.com"],
+          ["Betalingsverwerker", "Stripe Payments Europe, Ltd. (PCI-DSS Level 1, volledig live getest)"],
+          ["Privacy/AVG verzoeken", "support@betsplug.com (onderwerp: 'AVG')"],
           ["Functionaris Gegevensbescherming", "Aan te wijzen wanneer gebruikersbestand AVG Art. 37 drempel overschrijdt"],
           ["Bevoegde toezichthouder", "Autoriteit Persoonsgegevens (NL)"],
           ["Documentversie", "8.1 (april 2026)"],

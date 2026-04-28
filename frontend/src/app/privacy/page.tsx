@@ -28,14 +28,18 @@ export default function PrivacyPolicyPage() {
     <LegalPage
       title="Privacy Policy"
       intro="Plain-English explanation of what BetsPlug collects, why, and the GDPR rights you have over it. No dark patterns, no ad trackers, no selling your data."
-      lastUpdated="April 16, 2026"
+      lastUpdated="April 28, 2026"
       breadcrumb="Privacy Policy"
     >
       <h2>1. Who we are</h2>
       <p>
-        BetsPlug (&quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is an AI-driven football analytics
-        platform operated from the Netherlands. We are the data controller for
-        the personal information described in this policy. You can reach us at{" "}
+        BetsPlug is an AI-driven football data-analytics platform operated by{" "}
+        <strong>Sanders Capital</strong>, a sole proprietorship
+        (eenmanszaak) registered with the Dutch Chamber of Commerce
+        (KvK number <strong>96286008</strong>, establishment number
+        000061622141), based in the Netherlands. Sanders Capital, trading
+        as BetsPlug, is the <strong>data controller</strong> for the
+        personal information described in this policy. You can reach us at{" "}
         <a href="mailto:support@betsplug.com">support@betsplug.com</a>.
       </p>
 
@@ -54,14 +58,22 @@ export default function PrivacyPolicyPage() {
       <h3>Payment data</h3>
       <ul>
         <li>
-          Payment is handled by <strong>Stripe</strong> and{" "}
-          <strong>PayPal</strong>. We never see or store your full card number,
-          CVC or bank details - these go directly to our payment processors.
+          All payments are handled exclusively by{" "}
+          <strong>Stripe Payments Europe, Ltd.</strong> Stripe is PCI-DSS
+          Level 1 certified. We never see or store your full card number,
+          CVC, or bank details — those fields are entered directly into
+          Stripe&apos;s secure environment and never reach our servers.
         </li>
         <li>
-          We do store the last four digits of your card, the card brand, and a
-          tokenised reference so we can show your saved method and process
-          recurring charges.
+          From Stripe we receive only a tokenised reference plus the last
+          four digits of the card and the card brand, so we can show your
+          saved method on your subscription page and process recurring
+          charges or refunds.
+        </li>
+        <li>
+          For accounting and tax purposes we keep the invoice metadata
+          (amount, plan, currency, country, VAT, transaction ID) for the
+          retention period required by Dutch tax law.
         </li>
       </ul>
       <h3>Usage data</h3>
@@ -78,8 +90,8 @@ export default function PrivacyPolicyPage() {
           notifications, customer support.
         </li>
         <li>
-          <strong>To process payments</strong> - recurring subscription billing
-          via Stripe and PayPal.
+          <strong>To process payments</strong> — subscription billing and
+          one-off lifetime purchases via Stripe.
         </li>
         <li>
           <strong>To improve the product</strong> - anonymised analytics on
@@ -98,19 +110,24 @@ export default function PrivacyPolicyPage() {
       </p>
       <ul>
         <li>
-          <strong>Stripe</strong> &amp; <strong>PayPal</strong> - payment
-          processing
+          <strong>Stripe Payments Europe, Ltd.</strong> — payment
+          processing for subscriptions and lifetime purchases
         </li>
         <li>
-          <strong>Vercel</strong> - hosting and edge delivery (data center in
-          Frankfurt, EU)
+          <strong>Vercel</strong> — frontend hosting and edge delivery
+          (EU region)
         </li>
         <li>
-          <strong>Cloudflare</strong> - DDoS protection and CDN
+          <strong>Railway</strong> — backend, database and Redis hosting
+          (EU region)
         </li>
         <li>
-          <strong>Sendgrid / Postmark</strong> - transactional email (account
-          confirmations, receipts)
+          <strong>Resend</strong> — transactional email (account
+          verification, password reset, billing receipts)
+        </li>
+        <li>
+          <strong>API-Football Pro</strong> — sports fixtures, results and
+          standings data feed (no personal data shared)
         </li>
       </ul>
       <p>
