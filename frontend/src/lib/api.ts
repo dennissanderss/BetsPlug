@@ -710,6 +710,12 @@ class ApiClient {
   }
 
   // Value Bet engine (v9)
+  getComboOfTheDay() {
+    return this.request<import("@/types/api").ComboOfTheDay>(
+      "/value-bets/combo-today"
+    );
+  }
+
   getValueBetToday() {
     return this.request<import("@/types/api").ValueBetToday>(
       "/value-bets/today",

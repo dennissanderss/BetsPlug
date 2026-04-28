@@ -327,7 +327,11 @@ function writeLocaleFile(locale, translations) {
     lines.push(`  "${key}": "${escaped}",`);
   }
 
-  lines.push(`} as Record<TranslationKey, string>;`);
+  // Aux locales are EN+NL-first-class per CLAUDE.md i18n hard rules. Cast
+  // through Partial so the type system tolerates a temporarily-missing key
+  // on a non-EN/NL locale (e.g. when a new key lands in messages.ts before
+  // the next translation run completes).
+  lines.push(`} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;`);
   lines.push(`export default ${locale};`);
   lines.push(""); // trailing newline
 

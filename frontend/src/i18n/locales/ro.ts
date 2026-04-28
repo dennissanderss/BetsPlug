@@ -1476,6 +1476,7 @@ const ro = {
   "nav.admin": "Admin",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Combiul zilei",
   "nav.contact": "Contact",
   "nav.dashboard": "Bord",
   "nav.deals": "Oferte",
@@ -2769,5 +2770,5 @@ const ro = {
   "welcomeBanner.stepPrefix": "Pas",
   "welcomeBanner.subtitle": "AI-ul nostru analizează datele fotbalistice, forma, cap la cap, clasamentul și puterea echipei, pentru a prognoza rezultatul cel mai probabil al meciurilor viitoare.",
   "welcomeBanner.title": "Iată cum funcționează BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default ro;

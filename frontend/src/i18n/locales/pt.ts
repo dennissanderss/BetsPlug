@@ -1476,6 +1476,7 @@ const pt = {
   "nav.admin": "Administrador",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Combinado do dia",
   "nav.contact": "Contato",
   "nav.dashboard": "Painel",
   "nav.deals": "Ofertas",
@@ -2769,5 +2770,5 @@ const pt = {
   "welcomeBanner.stepPrefix": "Etapa",
   "welcomeBanner.subtitle": "Nossa IA analisa dados de futebol, forma, confronto direto, classificação e força da equipe para prever o resultado mais provável das próximas partidas.",
   "welcomeBanner.title": "Veja como BetsPlug funciona",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default pt;

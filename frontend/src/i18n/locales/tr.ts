@@ -1476,6 +1476,7 @@ const tr = {
   "nav.admin": "Yönetici",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Günün Kombini",
   "nav.contact": "Temas etmek",
   "nav.dashboard": "Kontrol Paneli",
   "nav.deals": "Fırsatlar",
@@ -2769,5 +2770,5 @@ const tr = {
   "welcomeBanner.stepPrefix": "Adım",
   "welcomeBanner.subtitle": "Yapay zekamız, yaklaşan maçların en olası sonuçlarını tahmin etmek için futbol verilerini, formu, kafa kafaya maçları, sıralamaları ve takım gücünü analiz ediyor.",
   "welcomeBanner.title": "BetsPlug şu şekilde çalışır",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default tr;

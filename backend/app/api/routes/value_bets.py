@@ -782,6 +782,257 @@ async def get_backtest_proof(
 
 
 # ---------------------------------------------------------------------------
+# Combi van de Dag — Platinum-only accumulator (3-leg) over today's slate
+# ---------------------------------------------------------------------------
+#
+# Product spec:
+#   - 3 distinct picks per day, bundled as one accumulator
+#   - Each leg: a high-confidence pick (≥0.70 model confidence) on a Gold or
+#     Platinum tier match scheduled in the next 48h with bookmaker odds on
+#     file (closing_odds_snapshot populated)
+#   - Per-leg odds restricted to 1.40–4.00 so the combined odds land in a
+#     credible 3–10× range and a single 8.0 outlier doesn't blow up the math
+#   - Diversity: at most one leg per league
+#   - Combined odds = product of per-leg odds; combined model probability =
+#     product of per-leg pick probabilities (independent assumption — noted
+#     in the disclaimer)
+#   - Combined edge = combined_model_prob × combined_odds − 1
+#   - Selection score per leg: confidence × tier_bonus (platinum 1.2 / gold
+#     1.0). Top-3 by score after de-duplication on league.
+#
+# Persistence is intentionally OUT OF SCOPE for this MVP — we compute on
+# the fly. A daily cron + dedicated combo_bets table follows in a later
+# pass once we have a few weeks of live data to evaluate.
+
+PLATINUM_TIER_BONUS = 1.2
+GOLD_TIER_BONUS = 1.0
+COMBO_LEG_COUNT = 3
+COMBO_MIN_CONFIDENCE = 0.70
+COMBO_MIN_LEG_ODDS = 1.40
+COMBO_MAX_LEG_ODDS = 4.00
+
+
+class ComboLeg(BaseModel):
+    match_id: str
+    home_team: str
+    away_team: str
+    league: str
+    league_id: str
+    scheduled_at: str
+    our_pick: str  # 'home' | 'draw' | 'away'
+    our_pick_label: str  # human label e.g. 'Manchester City wint'
+    our_probability: float
+    bookmaker_implied: float
+    fair_implied: float
+    leg_odds: float
+    leg_edge: float
+    confidence: float
+    prediction_tier: str
+
+
+class ComboOfTheDay(BaseModel):
+    available: bool
+    reason: Optional[str] = None
+    bet_date: Optional[str] = None
+    legs: list[ComboLeg] = []
+    combined_odds: float = 0.0
+    combined_model_probability: float = 0.0
+    combined_bookmaker_implied: float = 0.0
+    combined_edge: float = 0.0
+    expected_value_per_unit: float = 0.0
+    requires_tier: str = "platinum"
+    locked: bool = False
+    disclaimer: str = (
+        "Combinatie-tip op basis van statistische analyse over onze v8.1 "
+        "predictions. Eén verliezende leg = combinatie verloren. Niet-"
+        "gecorreleerde wedstrijden worden bewust gebundeld; afhankelijke "
+        "uitkomsten zijn een aanname en kunnen de werkelijke kans iets "
+        "overschatten. Geen gokadvies. 18+."
+    )
+
+
+PICK_LABEL_NL: dict[str, str] = {
+    "home": "thuis wint",
+    "draw": "gelijkspel",
+    "away": "uit wint",
+}
+
+
+def _format_pick_label(home_team: str, away_team: str, pick: str) -> str:
+    if pick == "home":
+        return f"{home_team} wint"
+    if pick == "away":
+        return f"{away_team} wint"
+    return "Gelijkspel"
+
+
+@router.get("/combo-today", response_model=ComboOfTheDay)
+async def get_combo_of_the_day(
+    db: AsyncSession = Depends(get_db),
+    user_tier: PickTier = Depends(get_current_tier),
+) -> ComboOfTheDay:
+    """Return today's 3-leg accumulator for Platinum subscribers.
+
+    Non-Platinum users receive ``locked=true`` with all leg fields blanked
+    so the frontend can render an upgrade prompt without leaking which
+    matches were selected.
+    """
+    today = datetime.now(timezone.utc).date()
+
+    # Tier gate — Platinum-only product.
+    if user_tier != PickTier.PLATINUM:
+        return ComboOfTheDay(
+            available=False,
+            reason="locked",
+            bet_date=today.isoformat(),
+            locked=True,
+        )
+
+    now = datetime.now(timezone.utc)
+    window_end = now + timedelta(hours=48)
+
+    pred_stmt = (
+        select(Prediction)
+        .options(
+            joinedload(Prediction.match).joinedload(Match.home_team),
+            joinedload(Prediction.match).joinedload(Match.away_team),
+            joinedload(Prediction.match).joinedload(Match.league),
+        )
+        .join(Match, Match.id == Prediction.match_id)
+        .where(
+            Prediction.prediction_source == "live",
+            Prediction.closing_odds_snapshot.is_not(None),
+            Prediction.confidence >= COMBO_MIN_CONFIDENCE,
+            Match.scheduled_at >= now,
+            Match.scheduled_at <= window_end,
+        )
+    )
+    preds = (await db.execute(pred_stmt)).unique().scalars().all()
+
+    candidates: list[tuple[float, ComboLeg]] = []
+    for p in preds:
+        match = p.match
+        if match is None or match.home_team is None or match.away_team is None:
+            continue
+        snap = p.closing_odds_snapshot or {}
+        book = snap.get("bookmaker_odds") if isinstance(snap, dict) else None
+        if not isinstance(book, dict):
+            continue
+
+        # Pick the side with the highest model probability — that's the
+        # "best" leg for accumulator purposes.
+        sides = [
+            ("home", float(p.home_win_prob or 0.0), book.get("home")),
+            ("draw", float(p.draw_prob or 0.0) if p.draw_prob is not None else 0.0, book.get("draw")),
+            ("away", float(p.away_win_prob or 0.0), book.get("away")),
+        ]
+        sides_with_odds = [
+            (side, prob, float(o)) for side, prob, o in sides if o is not None and float(o) > 1.0
+        ]
+        if not sides_with_odds:
+            continue
+        sides_with_odds.sort(key=lambda t: t[1], reverse=True)
+        pick_side, our_prob, leg_odds = sides_with_odds[0]
+
+        if leg_odds < COMBO_MIN_LEG_ODDS or leg_odds > COMBO_MAX_LEG_ODDS:
+            continue
+
+        tier = _classify_tier(match.league_id, p.confidence)
+        if tier not in ("gold", "platinum"):
+            continue
+
+        # Bookmaker-implied (raw 1/odds) and fair-implied (overround-removed)
+        odds_h = book.get("home")
+        odds_d = book.get("draw")
+        odds_a = book.get("away")
+        try:
+            ov = (1.0 / float(odds_h) if odds_h else 0.0) + (
+                1.0 / float(odds_a) if odds_a else 0.0
+            )
+            if odds_d is not None:
+                ov += 1.0 / float(odds_d)
+            if ov <= 0:
+                continue
+            raw_implied = 1.0 / leg_odds
+            fair_implied = raw_implied / ov
+        except Exception:
+            continue
+
+        leg_edge = our_prob - fair_implied
+        if leg_edge <= 0:
+            # Combo bet leaning into a leg with negative edge dilutes the
+            # whole accumulator. Skip those — the combined-odds story only
+            # holds if every leg is at least neutral.
+            continue
+
+        tier_bonus = PLATINUM_TIER_BONUS if tier == "platinum" else GOLD_TIER_BONUS
+        score = float(p.confidence or 0.0) * tier_bonus * (1.0 + max(leg_edge, 0.0))
+
+        leg = ComboLeg(
+            match_id=str(match.id),
+            home_team=match.home_team.name,
+            away_team=match.away_team.name,
+            league=match.league.name if match.league else "",
+            league_id=str(match.league_id),
+            scheduled_at=match.scheduled_at.isoformat() if match.scheduled_at else "",
+            our_pick=pick_side,
+            our_pick_label=_format_pick_label(
+                match.home_team.name, match.away_team.name, pick_side
+            ),
+            our_probability=our_prob,
+            bookmaker_implied=raw_implied,
+            fair_implied=fair_implied,
+            leg_odds=leg_odds,
+            leg_edge=leg_edge,
+            confidence=float(p.confidence or 0.0),
+            prediction_tier=tier,
+        )
+        candidates.append((score, leg))
+
+    candidates.sort(key=lambda t: t[0], reverse=True)
+
+    # League diversity — keep at most one leg per league
+    chosen: list[ComboLeg] = []
+    seen_leagues: set[str] = set()
+    for _, leg in candidates:
+        if leg.league_id in seen_leagues:
+            continue
+        chosen.append(leg)
+        seen_leagues.add(leg.league_id)
+        if len(chosen) >= COMBO_LEG_COUNT:
+            break
+
+    if len(chosen) < COMBO_LEG_COUNT:
+        return ComboOfTheDay(
+            available=False,
+            reason=f"Niet genoeg kandidaat-legs vandaag (gevonden: {len(chosen)} van {COMBO_LEG_COUNT}). Probeer later opnieuw — er moet minstens één Gold/Platinum-pick met odds 1.40–4.00 in de top-{COMBO_LEG_COUNT} competities staan.",
+            bet_date=today.isoformat(),
+        )
+
+    combined_odds = 1.0
+    combined_model_prob = 1.0
+    combined_book_implied = 1.0
+    for leg in chosen:
+        combined_odds *= leg.leg_odds
+        combined_model_prob *= leg.our_probability
+        combined_book_implied *= leg.bookmaker_implied
+
+    combined_edge = combined_model_prob * combined_odds - 1.0
+    expected_value_per_unit = combined_edge  # EV per 1 unit staked
+
+    return ComboOfTheDay(
+        available=True,
+        bet_date=today.isoformat(),
+        legs=chosen,
+        combined_odds=round(combined_odds, 2),
+        combined_model_probability=round(combined_model_prob, 4),
+        combined_bookmaker_implied=round(combined_book_implied, 4),
+        combined_edge=round(combined_edge, 4),
+        expected_value_per_unit=round(expected_value_per_unit, 4),
+    )
+
+
+# ---------------------------------------------------------------------------
 # Admin — manual trigger for the daily cron
 # ---------------------------------------------------------------------------
 class GenerateTodayResponse(BaseModel):

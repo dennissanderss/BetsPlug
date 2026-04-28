@@ -1476,6 +1476,7 @@ const sw = {
   "nav.admin": "Msimamizi",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Mchanganyiko wa Siku",
   "nav.contact": "Wasiliana",
   "nav.dashboard": "Dashibodi",
   "nav.deals": "Ofa",
@@ -2819,5 +2820,5 @@ const sw = {
   "welcomeBanner.stepPrefix": "Hatua",
   "welcomeBanner.subtitle": "AI yetu huchanganua data ya kandanda - fomu, uso kwa uso, msimamo na nguvu ya timu - ili kutabiri matokeo yanayowezekana zaidi ya mechi zijazo.",
   "welcomeBanner.title": "Hivi ndivyo BetsPlug inavyofanya kazi",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default sw;

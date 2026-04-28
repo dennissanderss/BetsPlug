@@ -1476,6 +1476,7 @@ const ru = {
   "nav.admin": "Админ",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Комби дня",
   "nav.contact": "Контакт",
   "nav.dashboard": "Панель управления",
   "nav.deals": "Специальные предложения",
@@ -2769,5 +2770,5 @@ const ru = {
   "welcomeBanner.stepPrefix": "Шаг",
   "welcomeBanner.subtitle": "Наш ИИ анализирует футбольные данные, форму, личные встречи, турнирную таблицу и силу команды, чтобы спрогнозировать наиболее вероятный исход предстоящих матчей.",
   "welcomeBanner.title": "Вот как работает BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default ru;

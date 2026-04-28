@@ -14,6 +14,7 @@ import {
   MapPin,
   Lock,
   Radio,
+  Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
@@ -63,6 +64,7 @@ const navSections: NavSection[] = [
       // Without this the nav item is clickable for Free users and only
       // paywalls on arrival — inconsistent state between sidebar and page.
       { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy, requiredTier: "gold" },
+      { labelKey: "nav.combo_of_the_day", fallback: "Combi of the Day", href: "/combo-of-the-day", icon: Layers, requiredTier: "platinum" },
       { labelKey: "nav.predictions", fallback: "All Predictions", href: "/predictions", icon: Sparkles },
     ],
   },

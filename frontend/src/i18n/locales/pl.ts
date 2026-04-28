@@ -1476,6 +1476,7 @@ const pl = {
   "nav.admin": "Administrator",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Kombinacja dnia",
   "nav.contact": "Kontakt",
   "nav.dashboard": "Panel",
   "nav.deals": "Oferty",
@@ -2769,5 +2770,5 @@ const pl = {
   "welcomeBanner.stepPrefix": "Krok",
   "welcomeBanner.subtitle": "Nasza sztuczna inteligencja analizuje dane piłkarskie, formę, pojedynki bezpośrednie, tabele i siłę drużyny, aby przewidzieć najbardziej prawdopodobny wynik nadchodzących meczów.",
   "welcomeBanner.title": "Oto jak działa BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default pl;

@@ -1476,6 +1476,7 @@ const da = {
   "nav.admin": "Admin",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Dagens kombi",
   "nav.contact": "Kontakte",
   "nav.dashboard": "Dashboard",
   "nav.deals": "Tilbud",
@@ -2769,5 +2770,5 @@ const da = {
   "welcomeBanner.stepPrefix": "Trin",
   "welcomeBanner.subtitle": "Vores AI analyserer fodbolddata, form, head-to-head, stilling og holdstyrke for at forudsige det mest sandsynlige udfald af kommende kampe.",
   "welcomeBanner.title": "Sådan fungerer BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default da;

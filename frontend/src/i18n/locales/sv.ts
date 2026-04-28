@@ -1476,6 +1476,7 @@ const sv = {
   "nav.admin": "Administration",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Dagens kombi",
   "nav.contact": "Kontakta",
   "nav.dashboard": "Instrumentbräda",
   "nav.deals": "Erbjudanden",
@@ -2769,5 +2770,5 @@ const sv = {
   "welcomeBanner.stepPrefix": "Steg",
   "welcomeBanner.subtitle": "Vår AI analyserar fotbollsdata, form, head-to-head, ställning och lagstyrka, för att förutsäga det mest sannolika resultatet av kommande matcher.",
   "welcomeBanner.title": "Så här fungerar BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default sv;

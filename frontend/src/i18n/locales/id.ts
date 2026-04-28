@@ -1476,6 +1476,7 @@ const id = {
   "nav.admin": "Admin",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Kombinasi Hari Ini",
   "nav.contact": "Kontak",
   "nav.dashboard": "Dasbor",
   "nav.deals": "Penawaran",
@@ -2819,5 +2820,5 @@ const id = {
   "welcomeBanner.stepPrefix": "Melangkah",
   "welcomeBanner.subtitle": "AI kami menganalisis data sepak bola — bentuk, head-to-head, klasemen, dan kekuatan tim — untuk memperkirakan hasil yang paling mungkin terjadi pada pertandingan mendatang.",
   "welcomeBanner.title": "Begini cara kerja BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default id;

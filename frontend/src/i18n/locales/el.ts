@@ -1476,6 +1476,7 @@ const el = {
   "nav.admin": "Διαχειρ",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Συνδυασμός της ημέρας",
   "nav.contact": "Επαφή",
   "nav.dashboard": "Ταμπλό",
   "nav.deals": "Προσφορές",
@@ -2769,5 +2770,5 @@ const el = {
   "welcomeBanner.stepPrefix": "Βήμα",
   "welcomeBanner.subtitle": "Η τεχνητή νοημοσύνη μας αναλύει δεδομένα ποδοσφαίρου, φόρμα, αντιμέτωπες, βαθμολογίες και δύναμη της ομάδας, για να προβλέψει το πιο πιθανό αποτέλεσμα των προσεχών αγώνων.",
   "welcomeBanner.title": "Δείτε πώς λειτουργεί το BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default el;

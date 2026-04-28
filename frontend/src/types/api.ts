@@ -1104,6 +1104,41 @@ export interface PageSeoScore {
   overall_score: number;
 }
 
+// ─── Combi van de Dag — 3-leg accumulator (Platinum-only) ────────────────────
+
+export interface ComboLeg {
+  match_id: string;
+  home_team: string;
+  away_team: string;
+  league: string;
+  league_id: string;
+  scheduled_at: string;
+  our_pick: "home" | "draw" | "away";
+  our_pick_label: string;
+  our_probability: number;
+  bookmaker_implied: number;
+  fair_implied: number;
+  leg_odds: number;
+  leg_edge: number;
+  confidence: number;
+  prediction_tier: "gold" | "platinum";
+}
+
+export interface ComboOfTheDay {
+  available: boolean;
+  reason?: string;
+  bet_date?: string;
+  legs: ComboLeg[];
+  combined_odds: number;
+  combined_model_probability: number;
+  combined_bookmaker_implied: number;
+  combined_edge: number;
+  expected_value_per_unit: number;
+  requires_tier: "platinum";
+  locked: boolean;
+  disclaimer?: string;
+}
+
 // ─── Value Bet engine (v9) ──────────────────────────────────────────────────
 
 export interface ValueBetToday {
