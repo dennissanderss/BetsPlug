@@ -23,6 +23,7 @@ import {
   Search,
   ShieldCheck,
   Lock,
+  Radio,
 } from "lucide-react";
 import { useTier } from "@/hooks/use-tier";
 import { api } from "@/lib/api";
@@ -46,12 +47,13 @@ type LeagueFilter = "All" | string;
 type ConfidenceFilter = "All" | ConfidenceLevel;
 /** v8.1: "All" = no filter, or a specific PickTierSlug to show ONLY that tier. */
 type TierFilter = "All" | PickTierSlug;
-// v8.6 — "live" tab removed: the engine publishes pre-match predictions,
-// so a live-scores-only view was off-strategy and produced nearly-empty
-// pages. Live scores still surface inside match detail and the dashboard
-// LiveMatchesStrip; the Predictions page now only switches between
-// Upcoming and Results.
-type ViewMode = "upcoming" | "results";
+// v8.6 → re-introduced "live" tab in v10:
+// users were losing track of matches that had kicked off (e.g. opening
+// /predictions during PSV-Bayern and finding nothing because the match
+// disappeared from "Komend" once it went live). The Live tab queries
+// /fixtures/live so the engine's pre-match pick stays reachable while
+// the match is in play.
+type ViewMode = "upcoming" | "live" | "results";
 type DateRangeFilter = "all" | "today" | "thisWeek" | "thisMonth";
 
 /** Country → leagues mapping with flags, ordered by popularity. */
@@ -1193,26 +1195,22 @@ export default function PredictionsPage() {
   const [dateRangeFilter, setDateRangeFilter] = useState<DateRangeFilter>("today");
 
   const isResults = viewMode === "results";
+  const isLive    = viewMode === "live";
 
-  // v6 C1: headline counters — reuse existing dashboard metrics
-  // endpoint. Cached separately so it doesn't re-fire on date change.
-  const metricsQuery = useQuery({
-    queryKey: ["dashboard-metrics-headline"],
-    queryFn: () => api.getDashboardMetrics(),
-    staleTime: 5 * 60_000,
-  });
-
-  // ── Fetch upcoming / results depending on view mode + date range ─────────
+  // ── Fetch upcoming / live / results depending on view mode + date range ──
+  // Live polls more aggressively (30s) since the score and elapsed minute
+  // change in real time; upcoming/results only need a 60s cadence.
   const fixturesQuery = useQuery({
     queryKey: ["predictions-view", viewMode, dateRangeFilter, resultsRange],
     queryFn: () => {
       if (isResults) return api.getFixtureResults(resultsRange);
+      if (isLive)    return api.getFixturesLive();
       // Fetch enough days to cover the selected range; always ≥7 for caching.
       const days = dateRangeFilter === "thisMonth" ? 30 : 7;
       return api.getFixturesUpcoming(days);
     },
-    staleTime: 60_000,
-    refetchInterval: 60_000,
+    staleTime: isLive ? 15_000 : 60_000,
+    refetchInterval: isLive ? 30_000 : 60_000,
     retry: 2,
   });
 
@@ -1220,9 +1218,11 @@ export default function PredictionsPage() {
   const hasError  = fixturesQuery.isError;
 
   // ── Filter fixtures to the selected date range ────────────────────────────
+  // Live mode bypasses the date-range filter: every match returned by
+  // /fixtures/live is by definition currently in play and should be shown.
   const upcomingFixtures = useMemo<Fixture[]>(() => {
     const all = fixturesQuery.data?.fixtures ?? [];
-    if (isResults || dateRangeFilter === "all") return all;
+    if (isResults || isLive || dateRangeFilter === "all") return all;
 
     const [ty, tm, td] = today.split("-").map(Number);
     const todayDate = new Date(ty, tm - 1, td);
@@ -1233,6 +1233,10 @@ export default function PredictionsPage() {
       const fDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
       if (dateRangeFilter === "today") {
+        // Live matches always belong in "Today" even if their kickoff date
+        // (UTC) doesn't equal the user's local today — keep them visible
+        // until the backend marks them FINISHED.
+        if (f.status === "live") return true;
         return fDate.getTime() === todayDate.getTime();
       }
       if (dateRangeFilter === "thisWeek") {
@@ -1386,13 +1390,6 @@ export default function PredictionsPage() {
     return { hits, misses, pending, total: filtered.length };
   }, [filtered, isResults]);
 
-  // ── Auto-refresh indicator ────────────────────────────────────────────────
-  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
-  useEffect(() => {
-    const id = setInterval(() => setLastRefresh(new Date()), 60_000);
-    return () => clearInterval(id);
-  }, []);
-
   return (
     <div className="relative mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 animate-fade-in overflow-hidden">
       <div className="relative space-y-6">
@@ -1421,7 +1418,9 @@ export default function PredictionsPage() {
         </Pill>
       </div>
 
-      {/* ── v8.6: View Mode Tabs — Upcoming here, Results redirects to /results ── */}
+      {/* ── View Mode Tabs — Upcoming · Live · Results ──
+           Live is in-page (queries /fixtures/live); Results still redirects
+           to the dedicated /results screen. */}
       <div className="flex items-center gap-1 rounded-xl border border-white/[0.06] bg-white/[0.02] p-1">
         <button
           type="button"
@@ -1436,6 +1435,22 @@ export default function PredictionsPage() {
           <CalendarDays className="h-4 w-4" />
           <span>{t("pred.upcoming")}</span>
         </button>
+        <button
+          type="button"
+          onClick={() => setViewMode("live")}
+          className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
+            viewMode === "live"
+              ? "bg-red-600 text-white shadow-md shadow-red-500/20"
+              : "text-slate-400 hover:text-slate-200"
+          }`}
+          aria-pressed={viewMode === "live"}
+        >
+          <span className="relative flex h-2 w-2">
+            <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${viewMode === "live" ? "bg-white animate-ping" : "bg-red-400 animate-ping"}`} />
+            <span className={`relative inline-flex h-2 w-2 rounded-full ${viewMode === "live" ? "bg-white" : "bg-red-400"}`} />
+          </span>
+          <span>{t("pred.live")}</span>
+        </button>
         <Link
           href="/results"
           className="flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-all"
@@ -1446,7 +1461,7 @@ export default function PredictionsPage() {
       </div>
 
       {/* ── Upcoming-mode guidance banner ── */}
-      {!isResults && (
+      {!isResults && !isLive && (
         <div className="flex items-start gap-3 rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
           <span className="mt-0.5 text-base">💡</span>
           <p className="text-xs leading-relaxed text-slate-300">
@@ -1463,8 +1478,19 @@ export default function PredictionsPage() {
         </div>
       )}
 
+      {/* ── Live-mode banner: makes clear we show the pre-match pick, not a live recommendation ── */}
+      {isLive && (
+        <div className="flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3">
+          <Radio className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-400" />
+          <p className="text-xs leading-relaxed text-slate-300">
+            <span className="font-semibold text-white">Wedstrijden die nu lopen.</span>{" "}
+            Wat je hier ziet is de voorspelling die <span className="font-semibold text-white">vóór</span> de aftrap is gelockt — handig om te checken wat de engine per tier verwachtte. We passen de pick niet meer aan tijdens de wedstrijd.
+          </p>
+        </div>
+      )}
+
       {/* ── Trackrecord transparency notice — same picks shown here go into the tier stats ── */}
-      {!isResults && (
+      {!isResults && !isLive && (
         <div className="flex items-start gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
           <ShieldCheck className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-400" />
           <p className="text-xs leading-relaxed text-slate-300">
@@ -1550,7 +1576,7 @@ export default function PredictionsPage() {
       )}
 
       {/* ── Date range filter (upcoming only) ── */}
-      {!isResults && (
+      {!isResults && !isLive && (
         <div className="flex flex-wrap items-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
           <Clock className="h-4 w-4 shrink-0 text-slate-500" />
           <div className="flex items-center gap-1 rounded-lg border border-white/[0.06] bg-white/[0.03] p-1">
@@ -1625,10 +1651,16 @@ export default function PredictionsPage() {
         </div>
       ) : upcomingFixtures.length === 0 ? (
         <div className="glass-card flex flex-col items-center justify-center gap-3 py-20 text-center">
-          <Sparkles className="h-8 w-8 text-slate-600" />
-          <p className="text-base font-medium text-slate-400">{t("pred.noUpcomingMatches")}</p>
+          {isLive ? (
+            <Radio className="h-8 w-8 text-slate-600" />
+          ) : (
+            <Sparkles className="h-8 w-8 text-slate-600" />
+          )}
+          <p className="text-base font-medium text-slate-400">
+            {isLive ? t("pred.noLiveMatches") : t("pred.noUpcomingMatches")}
+          </p>
           <p className="text-sm text-slate-600 max-w-md">
-            {t("pred.noUpcomingMatchesDesc")}
+            {isLive ? t("pred.noLiveMatchesDesc") : t("pred.noUpcomingMatchesDesc")}
           </p>
         </div>
       ) : fixturesWithPrediction.length === 0 ? (

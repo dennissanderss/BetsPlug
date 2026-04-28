@@ -752,13 +752,23 @@ async def get_upcoming_fixtures(
     now = datetime.now(timezone.utc)
     cutoff = now + timedelta(days=days)
 
+    # SCHEDULED matches must be in the future window; LIVE matches kicked off
+    # in the past must still appear here so users can find the prediction
+    # while a match is in play (e.g. open the predictions page during PSV–Bayern
+    # and still see the engine's pick). Without the OR, `scheduled_at >= now`
+    # silently excluded every live fixture.
     stmt = (
         select(Match)
         .where(
             and_(
-                Match.status.in_([MatchStatus.SCHEDULED, MatchStatus.LIVE]),
-                Match.scheduled_at >= now,
                 Match.scheduled_at <= cutoff,
+                or_(
+                    Match.status == MatchStatus.LIVE,
+                    and_(
+                        Match.status == MatchStatus.SCHEDULED,
+                        Match.scheduled_at >= now,
+                    ),
+                ),
             )
         )
         .order_by(Match.scheduled_at)
