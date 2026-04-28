@@ -1476,6 +1476,7 @@ const pt = {
   "nav.admin": "Administrador",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Combinado do dia",
   "nav.contact": "Contato",
   "nav.dashboard": "Painel",
   "nav.deals": "Ofertas",
@@ -2025,6 +2026,7 @@ const pt = {
   "results.roiCalcIntro": "Segue os quatro passos para veres o que os nossos picks ao vivo teriam rendido com a tua própria stake. A simulação corre contra odds estritamente pré-jogo a partir de 16 de abril de 2026.",
   "results.roiCalcLiveCapNote": "Você escolheu {requested} dias, mas a medição ao vivo tem apenas {live} dias de profundidade. Mude para Backtest para usar o histórico completo de validação de modelo.",
   "results.roiCalcLiveStartNote": "Os dados live começam a 16 abr 2026 — janelas mais longas devolvem por agora o mesmo conjunto até serem registados mais dias.",
+  "results.roiCalcLockedHint": "Inscreva-se para desbloquear retornos simulados para este nível",
   "results.roiCalcMaxHint": "máx {max} dias",
   "results.roiCalcModelNote": "Nota: {count} de {total} picks não tinham odds da casa em ficheiro — odds justas foram derivadas da probabilidade do modelo (1 / prob).",
   "results.roiCalcNetResult": "Resultado líquido",
@@ -2768,5 +2770,5 @@ const pt = {
   "welcomeBanner.stepPrefix": "Etapa",
   "welcomeBanner.subtitle": "Nossa IA analisa dados de futebol, forma, confronto direto, classificação e força da equipe para prever o resultado mais provável das próximas partidas.",
   "welcomeBanner.title": "Veja como BetsPlug funciona",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default pt;

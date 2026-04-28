@@ -1476,6 +1476,7 @@ const tr = {
   "nav.admin": "Yönetici",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Günün Kombini",
   "nav.contact": "Temas etmek",
   "nav.dashboard": "Kontrol Paneli",
   "nav.deals": "Fırsatlar",
@@ -2025,6 +2026,7 @@ const tr = {
   "results.roiCalcIntro": "Canlı pick'lerimizin kendi bahis miktarınla ne kadar geri getireceğini görmek için dört adımı takip et. Simülasyon, 16 Nisan 2026'dan itibaren kesin maç öncesi oranlara karşı çalışır.",
   "results.roiCalcLiveCapNote": "{requested} gün seçtiniz ancak canlı ölçüm yalnızca {live} gün derinliğinde. Tam model doğrulama geçmişini kullanmak için Backtest'e geçin.",
   "results.roiCalcLiveStartNote": "Canlı veriler 16 Nis 2026'da başlar — daha uzun pencereler şimdilik aynı seti döndürür, ta ki daha fazla gün kaydedilene kadar.",
+  "results.roiCalcLockedHint": "Bu seviye için simüle edilmiş getirilerin kilidini açmak için abone olun",
   "results.roiCalcMaxHint": "maks {max} gün",
   "results.roiCalcModelNote": "Not: {total} pickin {count} tanesinde dosyada bahis bürosu oranı yoktu — adil oranlar model olasılığından (1 / prob) türetildi.",
   "results.roiCalcNetResult": "Net sonuç",
@@ -2768,5 +2770,5 @@ const tr = {
   "welcomeBanner.stepPrefix": "Adım",
   "welcomeBanner.subtitle": "Yapay zekamız, yaklaşan maçların en olası sonuçlarını tahmin etmek için futbol verilerini, formu, kafa kafaya maçları, sıralamaları ve takım gücünü analiz ediyor.",
   "welcomeBanner.title": "BetsPlug şu şekilde çalışır",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default tr;

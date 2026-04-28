@@ -1476,6 +1476,7 @@ const el = {
   "nav.admin": "Διαχειρ",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Συνδυασμός της ημέρας",
   "nav.contact": "Επαφή",
   "nav.dashboard": "Ταμπλό",
   "nav.deals": "Προσφορές",
@@ -2025,6 +2026,7 @@ const el = {
   "results.roiCalcIntro": "Ακολούθησε τα τέσσερα βήματα για να δεις τι θα είχαν αποδώσει οι live επιλογές μας με δικό σου ποντάρισμα. Η προσομοίωση τρέχει με αυστηρές προ-αγωνιστικές αποδόσεις από τις 16 Απριλίου 2026 και μετά.",
   "results.roiCalcLiveCapNote": "Επιλέξατε {requested} ημέρες, αλλά η ζωντανή μέτρηση έχει βάθος μόνο {live} ημέρες. Μεταβείτε στο Backtest για να χρησιμοποιήσετε το πλήρες ιστορικό επικύρωσης μοντέλου.",
   "results.roiCalcLiveStartNote": "Τα live δεδομένα ξεκινούν στις 16 Απρ 2026 — μεγαλύτερα παράθυρα επιστρέφουν προς το παρόν το ίδιο σύνολο μέχρι να καταγραφούν περισσότερες μέρες.",
+  "results.roiCalcLockedHint": "Εγγραφείτε για να ξεκλειδώσετε προσομοιωμένες επιστροφές για αυτό το επίπεδο",
   "results.roiCalcMaxHint": "μέγιστο {max} ημέρες",
   "results.roiCalcModelNote": "Σημείωση: {count} από {total} επιλογές δεν είχαν αποδόσεις bookmaker — οι δίκαιες αποδόσεις προήλθαν από την πιθανότητα του μοντέλου (1 / πιθ.).",
   "results.roiCalcNetResult": "Καθαρό αποτέλεσμα",
@@ -2768,5 +2770,5 @@ const el = {
   "welcomeBanner.stepPrefix": "Βήμα",
   "welcomeBanner.subtitle": "Η τεχνητή νοημοσύνη μας αναλύει δεδομένα ποδοσφαίρου, φόρμα, αντιμέτωπες, βαθμολογίες και δύναμη της ομάδας, για να προβλέψει το πιο πιθανό αποτέλεσμα των προσεχών αγώνων.",
   "welcomeBanner.title": "Δείτε πώς λειτουργεί το BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default el;

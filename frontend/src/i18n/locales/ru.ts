@@ -1476,6 +1476,7 @@ const ru = {
   "nav.admin": "Админ",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Комби дня",
   "nav.contact": "Контакт",
   "nav.dashboard": "Панель управления",
   "nav.deals": "Специальные предложения",
@@ -2025,6 +2026,7 @@ const ru = {
   "results.roiCalcIntro": "Пройди четыре шага, чтобы увидеть, сколько наши живые пики принесли бы при твоей собственной ставке. Симуляция работает на строгих предматчевых коэффициентах с 16 апреля 2026.",
   "results.roiCalcLiveCapNote": "Вы выбрали {requested} дней, но глубина измерения в реальном времени составляет всего {live} дней. Переключитесь на Backtest, чтобы использовать полную историю проверки модели.",
   "results.roiCalcLiveStartNote": "Live-данные начинаются 16 апр. 2026 — более длинные окна пока возвращают тот же набор, пока не будет записано больше дней.",
+  "results.roiCalcLockedHint": "Подпишитесь, чтобы разблокировать моделируемую доходность для этого уровня.",
   "results.roiCalcMaxHint": "макс {max} дней",
   "results.roiCalcModelNote": "Примечание: {count} из {total} пиков не имели букмекерских коэффициентов в файле — справедливые коэффициенты выведены из вероятности модели (1 / prob).",
   "results.roiCalcNetResult": "Чистый результат",
@@ -2768,5 +2770,5 @@ const ru = {
   "welcomeBanner.stepPrefix": "Шаг",
   "welcomeBanner.subtitle": "Наш ИИ анализирует футбольные данные, форму, личные встречи, турнирную таблицу и силу команды, чтобы спрогнозировать наиболее вероятный исход предстоящих матчей.",
   "welcomeBanner.title": "Вот как работает BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default ru;

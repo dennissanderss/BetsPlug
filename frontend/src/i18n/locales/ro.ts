@@ -1476,6 +1476,7 @@ const ro = {
   "nav.admin": "Admin",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Combiul zilei",
   "nav.contact": "Contact",
   "nav.dashboard": "Bord",
   "nav.deals": "Oferte",
@@ -2025,6 +2026,7 @@ const ro = {
   "results.roiCalcIntro": "Urmează cei patru pași pentru a vedea ce ar fi întors pick-urile noastre live la propria ta miză. Simularea rulează pe cote stricte dinaintea meciului începând cu 16 aprilie 2026.",
   "results.roiCalcLiveCapNote": "Ai ales {requested} zile, dar măsurarea în direct are o adâncime de doar {live} zile. Comutați la Backtest pentru a utiliza istoricul complet al validării modelului.",
   "results.roiCalcLiveStartNote": "Datele live încep pe 16 apr. 2026 — ferestrele mai lungi returnează deocamdată același set până sunt înregistrate mai multe zile.",
+  "results.roiCalcLockedHint": "Abonați-vă pentru a debloca returnări simulate pentru acest nivel",
   "results.roiCalcMaxHint": "max {max} zile",
   "results.roiCalcModelNote": "Notă: {count} din {total} pick-uri nu aveau cote ale casei de pariuri înregistrate — cotele corecte au fost derivate din probabilitatea modelului (1 / prob).",
   "results.roiCalcNetResult": "Rezultat net",
@@ -2768,5 +2770,5 @@ const ro = {
   "welcomeBanner.stepPrefix": "Pas",
   "welcomeBanner.subtitle": "AI-ul nostru analizează datele fotbalistice, forma, cap la cap, clasamentul și puterea echipei, pentru a prognoza rezultatul cel mai probabil al meciurilor viitoare.",
   "welcomeBanner.title": "Iată cum funcționează BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default ro;

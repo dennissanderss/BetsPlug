@@ -93,7 +93,6 @@ const es = {
   "admin.statusScheduled": "Programado",
   "admin.totalColumn": "Total",
 
-
   "auth.oneMoment": "Un momento…",
 
   "b2b.affiliate": "Programa de afiliados",
@@ -986,6 +985,14 @@ const es = {
   "footer.secureDesc": "Pago cifrado SSL de 256 bits",
   "footer.secureTitle": "Pagos seguros",
   "footer.termsOfService": "Términos de servicio",
+  "footer.tg.badge": "Picks exclusivos",
+  "footer.tg.cta": "Unirse a Telegram",
+  "footer.tg.dailyPicks": "Picks diarios",
+  "footer.tg.freeToJoin": "Registro gratuito",
+  "footer.tg.membersOnline": "1.200+ miembros en línea",
+  "footer.tg.subtitle": "Recibe alertas de valor en tiempo real, picks con ventaja y chat en vivo con nuestros analistas de IA. Sé el primero en saber cuándo aparece un partido de alto valor.",
+  "footer.tg.titleAccent": "picks diarios gratis",
+  "footer.tg.titleLead": "Únete a nuestro Telegram para",
   "footer.viewAll": "Ver todo",
 
   "forgotPassword.backToLogin": "← Volver al inicio de sesión",
@@ -1469,6 +1476,7 @@ const es = {
   "nav.admin": "Administradora",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "combinada del dia",
   "nav.contact": "Contacto",
   "nav.dashboard": "Panel",
   "nav.deals": "Ofertas",
@@ -2022,6 +2030,7 @@ const es = {
   "results.roiCalcIntro": "Sigue los cuatro pasos para ver lo que nuestros picks live habrían devuelto con tu propia apuesta. La simulación se ejecuta contra cuotas pre-partido estrictas a partir del 16 de abril de 2026.",
   "results.roiCalcLiveCapNote": "Seleccionó {requested} días, pero la medición en vivo tiene solo {live} días de profundidad. Cambie a Backtest para utilizar el historial completo de validación del modelo.",
   "results.roiCalcLiveStartNote": "Los datos en vivo comienzan el 16 abr 2026 — las ventanas más largas devuelven temporalmente el mismo conjunto hasta que se registren más días.",
+  "results.roiCalcLockedHint": "Suscríbete para desbloquear devoluciones simuladas para este nivel",
   "results.roiCalcMaxHint": "máx. {max} días",
   "results.roiCalcModelNote": "Nota: {count} de {total} picks no tenían cuotas de casa registradas — las cuotas justas se derivan de la probabilidad del modelo (1 / prob).",
   "results.roiCalcNetResult": "Resultado neto",
@@ -2811,15 +2820,5 @@ const es = {
   "welcomeBanner.stepPrefix": "Paso",
   "welcomeBanner.subtitle": "Nuestra IA analiza datos de fútbol (forma, enfrentamientos directos, clasificaciones y fuerza del equipo) para pronosticar el resultado más probable de los próximos partidos.",
   "welcomeBanner.title": "Así es como funciona BetsPlug",
-  /* Footer Telegram banner (added 2026-04-27) */
-  "footer.tg.badge": "Picks exclusivos",
-  "footer.tg.titleLead": "Únete a nuestro Telegram para",
-  "footer.tg.titleAccent": "picks diarios gratis",
-  "footer.tg.subtitle": "Recibe alertas de valor en tiempo real, picks con ventaja y chat en vivo con nuestros analistas de IA. Sé el primero en saber cuándo aparece un partido de alto valor.",
-  "footer.tg.membersOnline": "1.200+ miembros en línea",
-  "footer.tg.freeToJoin": "Registro gratuito",
-  "footer.tg.dailyPicks": "Picks diarios",
-  "footer.tg.cta": "Unirse a Telegram",
-
-} as Partial<Record<TranslationKey, string>>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default es;

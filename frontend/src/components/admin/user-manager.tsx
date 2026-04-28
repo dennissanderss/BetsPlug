@@ -17,6 +17,9 @@ import {
   AlertTriangle,
   X,
   MailCheck,
+  Bot,
+  MailWarning,
+  CircleCheck,
 } from "lucide-react";
 import type { AdminUser } from "@/types/api";
 
@@ -64,6 +67,82 @@ function formatExpiry(sub: AdminUser["subscription"]): string {
   if (sub.is_lifetime) return "Lifetime";
   if (!sub.current_period_end) return "\u2014";
   return new Date(sub.current_period_end).toLocaleDateString();
+}
+
+// \u2500\u2500\u2500 Suspicious-account heuristics \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+// Pure client-side scoring based on the fields the admin endpoint already
+// returns. Designed to be conservative \u2014 every signal alone is weak, but
+// stacked they describe the typical bot signup: gmail/disposable address,
+// username with trailing digits, never verified, never logged in after
+// signup, never paid, registered in a recent burst.
+
+interface SuspicionResult {
+  score: number; // 0..5
+  reasons: string[];
+}
+
+function classifySuspicion(user: AdminUser, allUsers: AdminUser[]): SuspicionResult {
+  const reasons: string[] = [];
+  let score = 0;
+
+  // 1. Username pattern: lowercase letters followed by 2+ digits
+  // (e.g. "mikeygreat20", "olukotunseg79", "sean.morrow18")
+  if (/^[a-z][a-z0-9._]*\d{2,}$/.test(user.username)) {
+    score += 1;
+    reasons.push("digit-suffix username");
+  }
+
+  // 2. Free-mail provider with digit-suffix local part
+  // (typical of disposable / generated addresses)
+  const emailLocal = user.email.split("@")[0] ?? "";
+  const emailDomain = (user.email.split("@")[1] ?? "").toLowerCase();
+  const freeMailDomains = ["gmail.com", "outlook.com", "hotmail.com", "yahoo.com", "live.com", "live.nl"];
+  if (freeMailDomains.includes(emailDomain) && /\d{2,}/.test(emailLocal)) {
+    score += 1;
+    reasons.push("digit-suffix free-mail");
+  }
+
+  // 3. Email never verified
+  if (!user.email_verified) {
+    score += 1;
+    reasons.push("email not verified");
+  }
+
+  // 4. Never logged in (or login timestamp = registration timestamp)
+  if (!user.last_login_at) {
+    score += 1;
+    reasons.push("never logged in");
+  } else {
+    const loginMs = new Date(user.last_login_at).getTime();
+    const createdMs = new Date(user.created_at).getTime();
+    if (Math.abs(loginMs - createdMs) < 60_000) {
+      score += 1;
+      reasons.push("login = signup time");
+    }
+  }
+
+  // 5. Signup burst: \u22654 users (excluding self) registered within \u00b110 minutes
+  const createdMs = new Date(user.created_at).getTime();
+  const windowMs = 10 * 60 * 1000;
+  const burst = allUsers.filter((u) => {
+    if (u.id === user.id) return false;
+    const t = new Date(u.created_at).getTime();
+    return Math.abs(t - createdMs) <= windowMs;
+  }).length;
+  if (burst >= 4) {
+    score += 1;
+    reasons.push(`signup burst (${burst} within 10 min)`);
+  }
+
+  return { score: Math.min(score, 5), reasons };
+}
+
+function isSuspicious(user: AdminUser, allUsers: AdminUser[]): boolean {
+  // Only flag genuinely-free, never-paid accounts. Anyone who paid is
+  // never marked suspicious regardless of pattern matches.
+  if (user.payment && (user.payment.total_paid ?? 0) > 0) return false;
+  if (user.role.toLowerCase() !== "viewer") return false; // admins/analysts excluded
+  return classifySuspicion(user, allUsers).score >= 3;
 }
 
 // ─── Badges ──────────────────────────────────────────────────────────────────
@@ -119,7 +198,7 @@ function PlanBadge({ user }: { user: AdminUser }) {
 }
 
 function SubscriptionStatusBadge({ status }: { status: string | null }) {
-  if (!status) return <span className="text-xs text-slate-600">\u2014</span>;
+  if (!status) return <span className="text-xs text-slate-600">—</span>;
   const colorMap: Record<string, string> = {
     active: "bg-green-500/15 text-green-400",
     trialing: "bg-blue-500/15 text-blue-400",
@@ -257,6 +336,8 @@ export default function UserManager() {
   const [search, setSearch] = useState("");
   const [planFilter, setPlanFilter] = useState<PlanFilter>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "suspended">("all");
+  const [paymentFilter, setPaymentFilter] = useState<"all" | "paid" | "unpaid">("all");
+  const [suspiciousOnly, setSuspiciousOnly] = useState(false);
 
   // Admin > Users is hard-locked to verified-email accounts only. Bots
   // and abandoned signups never finish the email-confirmation step, so
@@ -302,6 +383,21 @@ export default function UserManager() {
     return { counts, revenue };
   }, [users]);
 
+  // ── Suspicious-account flagging ───────────────────────────────────────────
+  const suspiciousMap = useMemo(() => {
+    const list = users ?? [];
+    const map = new Map<string, SuspicionResult>();
+    for (const u of list) {
+      if (u.payment && (u.payment.total_paid ?? 0) > 0) continue;
+      if (u.role.toLowerCase() !== "viewer") continue;
+      const result = classifySuspicion(u, list);
+      if (result.score >= 3) map.set(u.id, result);
+    }
+    return map;
+  }, [users]);
+
+  const suspiciousCount = suspiciousMap.size;
+
   // ── Filtering ─────────────────────────────────────────────────────────────
   const filtered = useMemo(() => {
     const list = users ?? [];
@@ -310,13 +406,16 @@ export default function UserManager() {
       if (planFilter !== "all" && planKey(u) !== planFilter) return false;
       if (statusFilter === "active" && !u.is_active) return false;
       if (statusFilter === "suspended" && u.is_active) return false;
+      if (paymentFilter === "paid" && !(u.payment && (u.payment.total_paid ?? 0) > 0)) return false;
+      if (paymentFilter === "unpaid" && u.payment && (u.payment.total_paid ?? 0) > 0) return false;
+      if (suspiciousOnly && !suspiciousMap.has(u.id)) return false;
       if (q) {
         const hay = [u.email, u.username, u.full_name ?? ""].join(" ").toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;
     });
-  }, [users, search, planFilter, statusFilter]);
+  }, [users, search, planFilter, statusFilter, paymentFilter, suspiciousOnly, suspiciousMap]);
 
   // ── Render ────────────────────────────────────────────────────────────────
   return (
@@ -421,6 +520,50 @@ export default function UserManager() {
             </button>
           ))}
         </div>
+
+        {/* Payment filter */}
+        <div className="flex rounded-lg border border-white/10 bg-white/[0.04] p-1">
+          {(
+            [
+              { k: "all", label: "Any payment" },
+              { k: "paid", label: "Paid" },
+              { k: "unpaid", label: "Never paid" },
+            ] as const
+          ).map(({ k, label }) => (
+            <button
+              key={k}
+              onClick={() => setPaymentFilter(k)}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-xs font-semibold transition-colors",
+                paymentFilter === k
+                  ? "bg-emerald-600 text-white shadow"
+                  : "text-slate-400 hover:text-slate-200"
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Suspicious toggle */}
+        <button
+          onClick={() => setSuspiciousOnly((v) => !v)}
+          className={cn(
+            "inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors",
+            suspiciousOnly
+              ? "border-amber-500/60 bg-amber-500/15 text-amber-300"
+              : "border-white/10 bg-white/[0.04] text-slate-400 hover:text-slate-200"
+          )}
+          title="Show only accounts flagged as likely bots / fake signups"
+        >
+          <Bot className="h-3.5 w-3.5" />
+          Suspicious only
+          {suspiciousCount > 0 && (
+            <span className="rounded-full bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-amber-200">
+              {suspiciousCount}
+            </span>
+          )}
+        </button>
       </div>
 
       {/* Table card */}
@@ -486,6 +629,7 @@ export default function UserManager() {
                   "Total Paid",
                   "Expires",
                   "Status",
+                  "Signals",
                   "Joined",
                   "Actions",
                 ].map((h) => (
@@ -505,7 +649,7 @@ export default function UserManager() {
               {isLoading ? (
                 Array.from({ length: 8 }).map((_, i) => (
                   <tr key={i} className="border-b border-white/[0.04]">
-                    {Array.from({ length: 10 }).map((__, j) => (
+                    {Array.from({ length: 11 }).map((__, j) => (
                       <td key={j} className="px-5 py-3">
                         <Skeleton className="h-4 w-full bg-white/[0.04]" />
                       </td>
@@ -514,13 +658,13 @@ export default function UserManager() {
                 ))
               ) : error ? (
                 <tr>
-                  <td colSpan={10} className="px-5 py-12 text-center text-sm text-red-400">
+                  <td colSpan={11} className="px-5 py-12 text-center text-sm text-red-400">
                     {error instanceof Error ? error.message : "Failed to load users."}
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="px-5 py-12 text-center">
+                  <td colSpan={11} className="px-5 py-12 text-center">
                     <div className="flex flex-col items-center justify-center">
                       <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white/[0.04]">
                         <Users className="h-6 w-6 text-slate-500" />
@@ -576,7 +720,7 @@ export default function UserManager() {
                           )}
                         </div>
                       ) : (
-                        <span className="text-xs text-slate-600">\u2014</span>
+                        <span className="text-xs text-slate-600">—</span>
                       )}
                     </td>
                     {/* Total Paid */}
@@ -592,7 +736,7 @@ export default function UserManager() {
                           </p>
                         </div>
                       ) : (
-                        <span className="text-xs text-slate-600">\u2014</span>
+                        <span className="text-xs text-slate-600">—</span>
                       )}
                     </td>
                     {/* Expires */}
@@ -609,6 +753,43 @@ export default function UserManager() {
                     {/* Status */}
                     <td className="px-5 py-3">
                       <StatusPill status={user.is_active ? "active" : "suspended"} />
+                    </td>
+                    {/* Signals */}
+                    <td className="px-5 py-3 whitespace-nowrap">
+                      {(() => {
+                        const susp = suspiciousMap.get(user.id);
+                        if (susp) {
+                          return (
+                            <span
+                              className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold text-amber-300"
+                              title={`Possible bot — ${susp.reasons.join("; ")}`}
+                            >
+                              <Bot className="h-3 w-3" />
+                              Suspicious · {susp.score}
+                            </span>
+                          );
+                        }
+                        if (!user.email_verified) {
+                          return (
+                            <span
+                              className="inline-flex items-center gap-1 rounded-full bg-slate-500/15 px-2 py-0.5 text-[10px] font-medium text-slate-400"
+                              title="Email address has not been verified"
+                            >
+                              <MailWarning className="h-3 w-3" />
+                              Unverified
+                            </span>
+                          );
+                        }
+                        return (
+                          <span
+                            className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-300/80"
+                            title="Email verified"
+                          >
+                            <CircleCheck className="h-3 w-3" />
+                            OK
+                          </span>
+                        );
+                      })()}
                     </td>
                     {/* Joined */}
                     <td className="px-5 py-3 whitespace-nowrap">

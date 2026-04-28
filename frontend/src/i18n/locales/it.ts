@@ -93,7 +93,6 @@ const it = {
   "admin.statusScheduled": "Programmata",
   "admin.totalColumn": "Totale",
 
-
   "auth.oneMoment": "Un momento…",
 
   "b2b.affiliate": "Programma di affiliazione",
@@ -986,6 +985,14 @@ const it = {
   "footer.secureDesc": "Pagamento crittografato SSL a 256 bit",
   "footer.secureTitle": "Pagamenti sicuri",
   "footer.termsOfService": "Termini di servizio",
+  "footer.tg.badge": "Pronostici esclusivi",
+  "footer.tg.cta": "Unisciti a Telegram",
+  "footer.tg.dailyPicks": "Pronostici giornalieri",
+  "footer.tg.freeToJoin": "Iscrizione gratuita",
+  "footer.tg.membersOnline": "1.200+ membri online",
+  "footer.tg.subtitle": "Ricevi avvisi di valore in tempo reale, pronostici di valore aggiunto e chat dal vivo con i nostri analisti IA. Sii il primo a sapere quando arriva una partita ad alto valore.",
+  "footer.tg.titleAccent": "pronostici gratuiti ogni giorno",
+  "footer.tg.titleLead": "Unisciti al nostro Telegram per",
   "footer.viewAll": "Visualizza tutto",
 
   "forgotPassword.backToLogin": "← Torna all'accesso",
@@ -1469,6 +1476,7 @@ const it = {
   "nav.admin": "Ammin",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Combinazione del giorno",
   "nav.contact": "Contatto",
   "nav.dashboard": "Pannello di controllo",
   "nav.deals": "Offerte",
@@ -2022,6 +2030,7 @@ const it = {
   "results.roiCalcIntro": "Segui i quattro passaggi per vedere quanto avrebbero reso i nostri pick live con la tua puntata. La simulazione si svolge su quote pre-partita rigorose dal 16 aprile 2026.",
   "results.roiCalcLiveCapNote": "Hai scelto {requested} giorni ma la misurazione in tempo reale è profonda solo {live} giorni. Passa a Backtest per utilizzare la cronologia completa di convalida del modello.",
   "results.roiCalcLiveStartNote": "I dati live iniziano il 16 apr 2026 — le finestre più ampie restituiscono temporaneamente lo stesso set finché non vengono registrati più giorni.",
+  "results.roiCalcLockedHint": "Iscriviti per sbloccare resi simulati per questo livello",
   "results.roiCalcMaxHint": "max {max} giorni",
   "results.roiCalcModelNote": "Nota: {count} pick su {total} non avevano quote bookmaker registrate — le quote eque sono state derivate dalla probabilità del modello (1 / prob).",
   "results.roiCalcNetResult": "Risultato netto",
@@ -2811,15 +2820,5 @@ const it = {
   "welcomeBanner.stepPrefix": "Fare un passo",
   "welcomeBanner.subtitle": "La nostra intelligenza artificiale analizza i dati calcistici (forma, testa a testa, classifica e forza della squadra) per prevedere il risultato più probabile delle prossime partite.",
   "welcomeBanner.title": "Ecco come funziona BetsPlug",
-  /* Footer Telegram banner (added 2026-04-27) */
-  "footer.tg.badge": "Pronostici esclusivi",
-  "footer.tg.titleLead": "Unisciti al nostro Telegram per",
-  "footer.tg.titleAccent": "pronostici gratuiti ogni giorno",
-  "footer.tg.subtitle": "Ricevi avvisi di valore in tempo reale, pronostici di valore aggiunto e chat dal vivo con i nostri analisti IA. Sii il primo a sapere quando arriva una partita ad alto valore.",
-  "footer.tg.membersOnline": "1.200+ membri online",
-  "footer.tg.freeToJoin": "Iscrizione gratuita",
-  "footer.tg.dailyPicks": "Pronostici giornalieri",
-  "footer.tg.cta": "Unisciti a Telegram",
-
-} as Partial<Record<TranslationKey, string>>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default it;

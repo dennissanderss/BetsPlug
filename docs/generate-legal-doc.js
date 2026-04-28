@@ -87,7 +87,7 @@ const doc = new Document({
           children: [new TextRun({ text: "For Legal & Compliance Stakeholders Only", size: 20, font: "Arial", color: "666666" })] }),
         new Paragraph({ spacing: { before: 600 } }),
         new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Version 8.1  |  April 2026", size: 22, font: "Arial", color: "444444" })] }),
-        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 100 }, children: [new TextRun({ text: "BetsPlug B.V.", size: 22, bold: true, font: "Arial", color: BLUE })] }),
+        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 100 }, children: [new TextRun({ text: "Sanders Capital (BetsPlug) — KvK 96286008", size: 22, bold: true, font: "Arial", color: BLUE })] }),
       ],
     },
     {
@@ -103,7 +103,7 @@ const doc = new Document({
       footers: { default: new Footer({ children: [new Paragraph({
         border: { top: { style: BorderStyle.SINGLE, size: 2, color: "cccccc", space: 4 } },
         children: [
-          new TextRun({ text: "Confidential \u2014 BetsPlug B.V.", size: 16, font: "Arial", color: "999999" }),
+          new TextRun({ text: "Confidential \u2014 Sanders Capital (BetsPlug) — KvK 96286008", size: 16, font: "Arial", color: "999999" }),
           new TextRun({ text: "\tPage " }),
           new TextRun({ children: [PageNumber.CURRENT], size: 16, font: "Arial", color: "999999" }),
         ],
@@ -178,7 +178,7 @@ const doc = new Document({
         h1("5. Privacy & Data Protection (GDPR)"),
 
         h2("5.1 Data Controller"),
-        p("BetsPlug B.V. is the data controller for personal data processed through the platform. Contact: via the contact page on the website."),
+        p("Sanders Capital (BetsPlug) — KvK 96286008 is the data controller for personal data processed through the platform. Contact: via the contact page on the website."),
 
         h2("5.2 Data Collected"),
         table2col([
@@ -245,10 +245,13 @@ const doc = new Document({
         h1("7. Terms of Use"),
 
         h2("7.1 Subscription Model"),
-        bullet("Tiered subscriptions (Bronze, Silver, Gold, Platinum) with different feature access"),
-        bullet("Monthly or annual billing via Stripe"),
-        bullet("Automatic renewal unless cancelled"),
-        bullet("Cancellation: effective at end of current billing period; no refund for unused portion"),
+        bullet("Tiered access: Free Access (Bronze, no charge), Silver, Gold, and Platinum (lifetime)"),
+        bullet("Silver and Gold are recurring monthly subscriptions billed via Stripe"),
+        bullet("Platinum is sold as a single one-off lifetime payment via Stripe; it does not renew"),
+        bullet("Recurring plans renew automatically until cancelled by the customer"),
+        bullet("Customers can manage, upgrade, downgrade, or cancel their subscription at any time via the in-app Stripe Billing Portal"),
+        bullet("Cancellation: effective at the end of the current billing period; no pro-rata refund for unused days"),
+        bullet("Upgrading from a recurring plan to lifetime Platinum automatically cancels the prior recurring subscription so the customer is never charged twice"),
         bullet("Price changes: 30-day notice required"),
 
         h2("7.2 Acceptable Use"),
@@ -289,11 +292,16 @@ const doc = new Document({
         h1("9. Contact & Organisation"),
         table2col([
           ["Item", "Details"],
-          ["Legal entity", "BetsPlug B.V."],
+          ["Trading name", "BetsPlug"],
+          ["Operating entity", "Sanders Capital (eenmanszaak / sole proprietorship)"],
+          ["Activity", "Administrative services; proprietary trader in investments"],
+          ["KvK number", "96286008"],
+          ["Establishment number", "000061622141"],
           ["Registered office", "Netherlands"],
           ["Website", "https://betsplug.com"],
-          ["General contact", "Via contact page on website"],
-          ["Privacy/GDPR requests", "Via contact page (tag: 'AVG' or 'GDPR')"],
+          ["General contact", "support@betsplug.com"],
+          ["Payment processor", "Stripe Payments Europe, Ltd. (PCI-DSS Level 1, fully tested live)"],
+          ["Privacy/GDPR requests", "support@betsplug.com (subject: 'GDPR')"],
           ["Data Protection Officer", "To be designated when user base exceeds GDPR Art. 37 threshold"],
           ["Competent data authority", "Autoriteit Persoonsgegevens (NL)"],
           ["Document version", "8.1 (April 2026)"],

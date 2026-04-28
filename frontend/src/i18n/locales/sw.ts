@@ -1476,6 +1476,7 @@ const sw = {
   "nav.admin": "Msimamizi",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Mchanganyiko wa Siku",
   "nav.contact": "Wasiliana",
   "nav.dashboard": "Dashibodi",
   "nav.deals": "Ofa",
@@ -2029,6 +2030,7 @@ const sw = {
   "results.roiCalcIntro": "Fuata hatua nne kuona kile picks zetu za live zingetoa kwa dau lako mwenyewe. Iga inaendeshwa dhidi ya odds kali za kabla ya mchezo kuanzia tarehe 16 Aprili 2026.",
   "results.roiCalcLiveCapNote": "Umechagua siku {requested} lakini kipimo cha moja kwa moja kina kina cha siku {live} pekee. Badili hadi Backtest ili utumie historia kamili ya uthibitishaji wa kielelezo.",
   "results.roiCalcLiveStartNote": "Data ya live huanza 16 Apr 2026 — madirisha marefu kwa sasa hurudisha seti hiyohiyo hadi siku zaidi zirekodiwe.",
+  "results.roiCalcLockedHint": "Jisajili ili upate urejeshaji ulioiga wa kiwango hiki",
   "results.roiCalcMaxHint": "kiwango cha juu siku {max}",
   "results.roiCalcModelNote": "Tahadhari: picks {count} kati ya {total} hazikuwa na odds za bookmaker — odds za haki zilipatikana kutoka uwezekano wa modeli (1 / uwez.).",
   "results.roiCalcNetResult": "Matokeo halisi",
@@ -2818,5 +2820,5 @@ const sw = {
   "welcomeBanner.stepPrefix": "Hatua",
   "welcomeBanner.subtitle": "AI yetu huchanganua data ya kandanda - fomu, uso kwa uso, msimamo na nguvu ya timu - ili kutabiri matokeo yanayowezekana zaidi ya mechi zijazo.",
   "welcomeBanner.title": "Hivi ndivyo BetsPlug inavyofanya kazi",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default sw;

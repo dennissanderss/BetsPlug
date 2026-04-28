@@ -61,7 +61,11 @@ export function BetsPlugFooter() {
   ];
   const contactInfo = [
     { icon: Mail, text: "support@betsplug.com", href: "mailto:support@betsplug.com" },
-    { icon: MapPin, text: "Netherlands", isAddress: true },
+    {
+      icon: MapPin,
+      text: "Sanders Capital · KvK 96286008 · Netherlands",
+      isAddress: true,
+    },
   ];
 
   return (

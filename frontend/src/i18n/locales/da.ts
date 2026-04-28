@@ -1476,6 +1476,7 @@ const da = {
   "nav.admin": "Admin",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Dagens kombi",
   "nav.contact": "Kontakte",
   "nav.dashboard": "Dashboard",
   "nav.deals": "Tilbud",
@@ -2025,6 +2026,7 @@ const da = {
   "results.roiCalcIntro": "Følg de fire trin for at se, hvad vores live picks ville have givet i afkast med din egen indsats. Simuleringen kører mod strikte før-kamp odds fra 16. april 2026 og frem.",
   "results.roiCalcLiveCapNote": "Du valgte {requested} dage, men direkte måling er kun {live} dage dyb. Skift til Backtest for at bruge den fulde modelvalideringshistorik.",
   "results.roiCalcLiveStartNote": "Live-data starter 16. apr. 2026 — længere vinduer returnerer indtil videre det samme sæt, indtil flere dage er registreret.",
+  "results.roiCalcLockedHint": "Abonner for at låse op for simulerede afkast for dette niveau",
   "results.roiCalcMaxHint": "maks {max} dage",
   "results.roiCalcModelNote": "Bemærk: {count} af {total} picks havde ingen bookmaker-odds gemt — fair odds blev udledt af modelsandsynligheden (1 / sands).",
   "results.roiCalcNetResult": "Nettoresultat",
@@ -2768,5 +2770,5 @@ const da = {
   "welcomeBanner.stepPrefix": "Trin",
   "welcomeBanner.subtitle": "Vores AI analyserer fodbolddata, form, head-to-head, stilling og holdstyrke for at forudsige det mest sandsynlige udfald af kommende kampe.",
   "welcomeBanner.title": "Sådan fungerer BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default da;

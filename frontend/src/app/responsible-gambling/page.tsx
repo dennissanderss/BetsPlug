@@ -29,22 +29,31 @@ export default function ResponsibleGamblingPage() {
   return (
     <LegalPage
       title="18+ Play Responsibly"
-      intro="BetsPlug is an analytics platform, not a bookmaker. Our AI football predictions are educational — and we take problem gambling seriously. Read this before you place a single bet."
-      lastUpdated="April 16, 2026"
+      intro="BetsPlug is a data-analytics platform, not a gambling site. Our AI football predictions are educational — and we take problem gambling seriously. Read this before you place a single bet on any external bookmaker."
+      lastUpdated="April 28, 2026"
       breadcrumb="Responsible Gambling"
     >
       <h2>1. What BetsPlug is — and what it is not</h2>
       <p>
-        BetsPlug is an <strong>AI-driven sports analytics platform</strong>. We
-        use multiple AI models to analyse team data and generate match
-        predictions and probability estimates. We do <strong>not</strong> accept bets, process wagers, hold
-        customer funds, or operate as a bookmaker or gambling operator in any
-        jurisdiction.
+        BetsPlug is an{" "}
+        <strong>AI-driven sports data-analytics platform</strong> for
+        educational and research purposes, operated by Sanders Capital
+        (KvK 96286008, the Netherlands). We use multiple AI models to
+        analyse team data and generate match predictions and probability
+        estimates.
       </p>
       <p>
-        Our predictions are provided for <strong>informational, educational,
-        and entertainment purposes only</strong>. Any decision to make a pick
-        with a licensed bookmaker is entirely your own responsibility.
+        <strong>BetsPlug is not a gambling site.</strong> We do not accept
+        bets, process wagers, hold customer funds, or operate as a
+        bookmaker or licensed gambling operator in any jurisdiction. We
+        sell access to data and analysis — nothing else.
+      </p>
+      <p>
+        Our predictions are provided for{" "}
+        <strong>informational, educational, and entertainment purposes
+        only</strong>. If you choose to act on them by placing a bet with
+        an external licensed bookmaker, that decision is entirely your own
+        responsibility — which is why this page exists.
       </p>
 
       <h2>2. Age restriction — 18+</h2>

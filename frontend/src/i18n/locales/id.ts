@@ -1476,6 +1476,7 @@ const id = {
   "nav.admin": "Admin",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Kombinasi Hari Ini",
   "nav.contact": "Kontak",
   "nav.dashboard": "Dasbor",
   "nav.deals": "Penawaran",
@@ -2029,6 +2030,7 @@ const id = {
   "results.roiCalcIntro": "Ikuti empat langkah untuk melihat berapa hasil picks live kami dengan taruhan kamu sendiri. Simulasi berjalan terhadap odds pra-pertandingan ketat sejak 16 April 2026.",
   "results.roiCalcLiveCapNote": "Anda memilih {requested} hari tetapi pengukuran langsung hanya {live} hari. Beralih ke Backtest untuk menggunakan riwayat validasi model lengkap.",
   "results.roiCalcLiveStartNote": "Data live mulai 16 Apr 2026 — jendela lebih panjang sementara mengembalikan set yang sama sampai lebih banyak hari dicatat.",
+  "results.roiCalcLockedHint": "Berlangganan untuk membuka simulasi pengembalian untuk tingkat ini",
   "results.roiCalcMaxHint": "maks {max} hari",
   "results.roiCalcModelNote": "Catatan: {count} dari {total} picks tidak memiliki odds bookmaker — odds wajar diturunkan dari probabilitas model (1 / prob).",
   "results.roiCalcNetResult": "Hasil bersih",
@@ -2818,5 +2820,5 @@ const id = {
   "welcomeBanner.stepPrefix": "Melangkah",
   "welcomeBanner.subtitle": "AI kami menganalisis data sepak bola — bentuk, head-to-head, klasemen, dan kekuatan tim — untuk memperkirakan hasil yang paling mungkin terjadi pada pertandingan mendatang.",
   "welcomeBanner.title": "Begini cara kerja BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default id;

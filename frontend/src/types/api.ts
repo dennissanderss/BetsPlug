@@ -1078,6 +1078,7 @@ export interface AdminUser {
   role: string;
   is_active: boolean;
   email_verified: boolean;
+  last_login_at: string | null;
   created_at: string;
   updated_at: string;
   subscription: AdminUserSubscription | null;
@@ -1101,6 +1102,60 @@ export interface PageSeoScore {
   has_og_tags: boolean;
   has_schema: boolean;
   overall_score: number;
+}
+
+// ─── Combi van de Dag — 3-leg accumulator (Platinum-only) ────────────────────
+
+export interface ComboLeg {
+  match_id: string;
+  home_team: string;
+  away_team: string;
+  league: string;
+  league_id: string;
+  scheduled_at: string;
+  our_pick: "home" | "draw" | "away";
+  our_pick_label: string;
+  our_probability: number;
+  bookmaker_implied: number;
+  fair_implied: number;
+  leg_odds: number;
+  leg_edge: number;
+  confidence: number;
+  prediction_tier: "gold" | "platinum";
+}
+
+export interface ComboOfTheDay {
+  available: boolean;
+  reason?: string;
+  bet_date?: string;
+  legs: ComboLeg[];
+  combined_odds: number;
+  combined_model_probability: number;
+  combined_bookmaker_implied: number;
+  combined_edge: number;
+  expected_value_per_unit: number;
+  requires_tier: "platinum";
+  locked: boolean;
+  coming_soon: boolean;
+  disclaimer?: string;
+}
+
+export interface ComboStats {
+  scope: "backtest" | "live";
+  window_start: string;
+  window_end: string;
+  total_combos: number;
+  evaluated_combos: number;
+  hit_combos: number;
+  accuracy: number;
+  avg_combined_odds: number;
+  avg_legs_per_combo: number;
+  total_units_pnl: number;
+  roi_percentage: number;
+  wilson_ci_lower: number;
+  wilson_ci_upper: number;
+  sample_size_warning: boolean;
+  explainer: string;
 }
 
 // ─── Value Bet engine (v9) ──────────────────────────────────────────────────

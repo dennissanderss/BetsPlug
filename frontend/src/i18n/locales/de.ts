@@ -93,7 +93,6 @@ const de = {
   "admin.statusScheduled": "Geplant",
   "admin.totalColumn": "Gesamt",
 
-
   "auth.oneMoment": "Einen Moment…",
 
   "b2b.affiliate": "Partnerprogramm",
@@ -986,6 +985,14 @@ const de = {
   "footer.secureDesc": "256-Bit-SSL-verschlüsselter Checkout",
   "footer.secureTitle": "Sichere Zahlungen",
   "footer.termsOfService": "Nutzungsbedingungen",
+  "footer.tg.badge": "Exklusive Tipps",
+  "footer.tg.cta": "Telegram beitreten",
+  "footer.tg.dailyPicks": "Tägliche Tipps",
+  "footer.tg.freeToJoin": "Kostenlos beitreten",
+  "footer.tg.membersOnline": "1.200+ Mitglieder online",
+  "footer.tg.subtitle": "Erhalte Echtzeit-Value-Alerts, Edge-Tipps und Live-Chat mit unseren KI-Analysten. Erfahre als Erster, wenn ein hochwertiges Match auftaucht.",
+  "footer.tg.titleAccent": "tägliche Gratis-Tipps",
+  "footer.tg.titleLead": "Tritt unserem Telegram bei für",
   "footer.viewAll": "Alle anzeigen",
 
   "forgotPassword.backToLogin": "← Zurück zur Anmeldung",
@@ -1469,6 +1476,7 @@ const de = {
   "nav.admin": "Admin",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Kombi des Tages",
   "nav.contact": "Kontakt",
   "nav.dashboard": "Armaturenbrett",
   "nav.deals": "Angebote",
@@ -2022,6 +2030,7 @@ const de = {
   "results.roiCalcIntro": "Folge den vier Schritten und sieh, was unsere Live-Picks bei deinem eigenen Einsatz eingebracht hätten. Die Simulation läuft strikt gegen Pre-Match-Quoten ab dem 16. April 2026.",
   "results.roiCalcLiveCapNote": "Sie haben {requested} Tage ausgewählt, aber die Live-Messung ist nur {live} Tage tief. Wechseln Sie zu Backtest, um den vollständigen Modellvalidierungsverlauf zu verwenden.",
   "results.roiCalcLiveStartNote": "Live-Daten beginnen am 16. Apr 2026 — längere Zeiträume liefern derzeit dieselben Daten, bis mehr Tage erfasst sind.",
+  "results.roiCalcLockedHint": "Abonnieren Sie, um simulierte Rücksendungen für diese Stufe freizuschalten",
   "results.roiCalcMaxHint": "max. {max} Tage",
   "results.roiCalcModelNote": "Hinweis: Bei {count} von {total} Picks lagen keine Buchmacher-Quoten vor — faire Quoten wurden aus der Modellwahrscheinlichkeit (1 / prob) abgeleitet.",
   "results.roiCalcNetResult": "Nettoergebnis",
@@ -2811,15 +2820,5 @@ const de = {
   "welcomeBanner.stepPrefix": "Schritt",
   "welcomeBanner.subtitle": "Unsere KI analysiert Fußballdaten – Form, Kopf-an-Kopf-Rennen, Rangliste und Teamstärke –, um den wahrscheinlichsten Ausgang bevorstehender Spiele vorherzusagen.",
   "welcomeBanner.title": "So funktioniert BetsPlug",
-  /* Footer Telegram banner (added 2026-04-27) */
-  "footer.tg.badge": "Exklusive Tipps",
-  "footer.tg.titleLead": "Tritt unserem Telegram bei für",
-  "footer.tg.titleAccent": "tägliche Gratis-Tipps",
-  "footer.tg.subtitle": "Erhalte Echtzeit-Value-Alerts, Edge-Tipps und Live-Chat mit unseren KI-Analysten. Erfahre als Erster, wenn ein hochwertiges Match auftaucht.",
-  "footer.tg.membersOnline": "1.200+ Mitglieder online",
-  "footer.tg.freeToJoin": "Kostenlos beitreten",
-  "footer.tg.dailyPicks": "Tägliche Tipps",
-  "footer.tg.cta": "Telegram beitreten",
-
-} as Partial<Record<TranslationKey, string>>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default de;

@@ -52,6 +52,7 @@ class AdminUserItem(BaseModel):
     role: str
     is_active: bool
     email_verified: bool = False
+    last_login_at: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
     subscription: Optional[UserSubscriptionInfo] = None
@@ -356,6 +357,7 @@ async def list_users(
                 role=user.role.value if hasattr(user.role, "value") else str(user.role),
                 is_active=user.is_active,
                 email_verified=bool(getattr(user, "email_verified", False)),
+                last_login_at=getattr(user, "last_login_at", None),
                 created_at=user.created_at,
                 updated_at=user.updated_at,
                 subscription=sub_info,

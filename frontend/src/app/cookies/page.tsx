@@ -28,7 +28,7 @@ export default function CookiePolicyPage() {
     <LegalPage
       title="Cookie Policy"
       intro="The short list: what cookies BetsPlug sets, why each one exists, and how to switch the optional ones off. No marketing trackers. No third-party ad pixels."
-      lastUpdated="April 16, 2026"
+      lastUpdated="April 28, 2026"
       breadcrumb="Cookies"
     >
       <h2>1. What are cookies?</h2>
@@ -105,17 +105,15 @@ export default function CookiePolicyPage() {
       </p>
       <ul>
         <li>
-          <strong>Stripe</strong> - fraud prevention and payment processing on
-          the checkout page only
-        </li>
-        <li>
-          <strong>PayPal</strong> - fraud prevention and payment processing on
-          the checkout page only
+          <strong>Stripe</strong> — fraud prevention and payment processing
+          on the checkout page and the in-app Stripe Billing Portal only.
+          Stripe is our sole payment processor.
         </li>
       </ul>
       <p>
-        These cookies are governed by the respective providers&apos; privacy
-        policies and are only set when you actually use their checkout flows.
+        These cookies are governed by Stripe&apos;s privacy policy and are
+        only set when you actually use the checkout flow or the Billing
+        Portal.
       </p>
 
       <h2>4. How long they last</h2>

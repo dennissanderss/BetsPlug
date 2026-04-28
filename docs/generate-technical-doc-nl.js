@@ -78,7 +78,7 @@ const doc = new Document({
           children: [new TextRun({ text: "Uitsluitend voor technische belanghebbenden", size: 20, font: "Arial", color: "666666" })] }),
         new Paragraph({ spacing: { before: 600 } }),
         new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: "Versie 8.1  |  April 2026", size: 22, font: "Arial", color: "444444" })] }),
-        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 100 }, children: [new TextRun({ text: "BetsPlug B.V.", size: 22, bold: true, font: "Arial", color: BLUE })] }),
+        new Paragraph({ alignment: AlignmentType.CENTER, spacing: { after: 100 }, children: [new TextRun({ text: "Sanders Capital (BetsPlug) — KvK 96286008", size: 22, bold: true, font: "Arial", color: BLUE })] }),
       ],
     },
     {
@@ -94,7 +94,7 @@ const doc = new Document({
       footers: { default: new Footer({ children: [new Paragraph({
         border: { top: { style: BorderStyle.SINGLE, size: 2, color: "cccccc", space: 4 } },
         children: [
-          new TextRun({ text: "Vertrouwelijk \u2014 BetsPlug B.V.", size: 16, font: "Arial", color: "999999" }),
+          new TextRun({ text: "Vertrouwelijk \u2014 Sanders Capital (BetsPlug) — KvK 96286008", size: 16, font: "Arial", color: "999999" }),
           new TextRun({ text: "\tPagina " }),
           new TextRun({ children: [PageNumber.CURRENT], size: 16, font: "Arial", color: "999999" }),
         ],
@@ -208,7 +208,7 @@ const doc = new Document({
           ["\u2265 70%", "2.473", "74,4%"],
           ["\u2265 75% (Premium)", "1.497", "78,2%"],
         ]),
-        p("Live v8.1 nauwkeurigheid per tier op de post-deploy ge\u00ebvalueerde set (continu bijgewerkt via /api/pricing/comparison):"),
+        p("Nauwkeurigheid per tier geprojecteerd vanuit de walk-forward set, gefilterd op de competitie-whitelist en confidence-floor van iedere tier:"),
         table2col([
           ["Tier", "Competities", "Confidence floor", "Steekproef", "Nauwkeurigheid"],
           ["Platinum", "Top 5 elite", "\u2265 0,75", "840", "82,5%"],
@@ -216,7 +216,8 @@ const doc = new Document({
           ["Silver", "Top 14",     "\u2265 0,65", "3.004", "60%+"],
           ["Bronze (Free)", "Top 14", "\u2265 0,55", "3.763", "48,4%"],
         ]),
-        p("Interpretatie: ruwe nauwkeurigheid is bescheiden omdat voetbal 1X2 moeilijk is (33% willekeurig, ~50% best case). Echte waarde ligt in confidence filtering \u2014 het model onthoudt zich bij onzekere wedstrijden. Bij \u2265 75% confidence levert 78,2% walk-forward / 82,5% live-v8.1 nauwkeurigheid een echte edge op."),
+        p("Live tracking startte bij de v8.1 deploy op 2026-04-16 11:00 UTC. Strikt pre-match, evaluator-beoordeelde picks worden continu opgebouwd via /api/trackrecord/live-measurement. De live tier-breakdowns op de publieke Trackrecord-pagina worden uit deze stream berekend en convergeren naar de geprojecteerde nauwkeurigheden hierboven naarmate de steekproef groeit."),
+        p("Interpretatie: ruwe nauwkeurigheid is bescheiden omdat voetbal 1X2 moeilijk is (33% willekeurig, ~50% best case). Echte waarde ligt in confidence filtering \u2014 het model onthoudt zich bij onzekere wedstrijden. Bij \u2265 75% confidence levert 78,2% walk-forward (1.497 picks) een echte edge op; het overeenkomende live-segment is de Platinum-tier (top 5 competities op \u2265 0,75 confidence)."),
 
         h1("5. Deployment & Operations"),
 
@@ -306,9 +307,14 @@ const doc = new Document({
         h1("9. Technisch Contact"),
         table2col([
           ["Onderdeel", "Details"],
-          ["Rechtspersoon", "BetsPlug B.V."],
+          ["Handelsnaam", "BetsPlug"],
+          ["Exploiterende onderneming", "Sanders Capital (eenmanszaak)"],
+          ["KvK-nummer", "96286008"],
+          ["Vestigingsnummer", "000061622141"],
+          ["Land", "Nederland"],
           ["Website", "https://betsplug.com"],
-          ["Technisch contact", "Via de contactpagina op de website"],
+          ["Technisch contact", "support@betsplug.com"],
+          ["Betalingsverwerker", "Stripe Payments Europe, Ltd. (PCI-DSS L1, live)"],
           ["Documentversie", "8.1 (april 2026)"],
           ["Laatste validatie", "April 2026 (walk-forward op 28.838 picks)"],
         ]),

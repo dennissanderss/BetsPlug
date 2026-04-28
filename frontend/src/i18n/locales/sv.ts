@@ -1476,6 +1476,7 @@ const sv = {
   "nav.admin": "Administration",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Dagens kombi",
   "nav.contact": "Kontakta",
   "nav.dashboard": "Instrumentbräda",
   "nav.deals": "Erbjudanden",
@@ -2025,6 +2026,7 @@ const sv = {
   "results.roiCalcIntro": "Följ de fyra stegen för att se vad våra live-picks skulle ha gett i avkastning med din egen insats. Simuleringen körs mot strikta odds före match från 16 april 2026 och framåt.",
   "results.roiCalcLiveCapNote": "Du valde {requested} dagar men livemätning är bara {live} dagar djup. Byt till Backtest för att använda hela modellvalideringshistoriken.",
   "results.roiCalcLiveStartNote": "Live-data startar 16 apr 2026 — längre fönster returnerar tills vidare samma uppsättning tills fler dagar är registrerade.",
+  "results.roiCalcLockedHint": "Prenumerera för att låsa upp simulerade returer för denna nivå",
   "results.roiCalcMaxHint": "max {max} dagar",
   "results.roiCalcModelNote": "Obs: {count} av {total} picks saknade bookmaker-odds — rättvisa odds härleddes från modellens sannolikhet (1 / sann).",
   "results.roiCalcNetResult": "Nettoresultat",
@@ -2768,5 +2770,5 @@ const sv = {
   "welcomeBanner.stepPrefix": "Steg",
   "welcomeBanner.subtitle": "Vår AI analyserar fotbollsdata, form, head-to-head, ställning och lagstyrka, för att förutsäga det mest sannolika resultatet av kommande matcher.",
   "welcomeBanner.title": "Så här fungerar BetsPlug",
-} as Record<TranslationKey, string>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default sv;

@@ -93,7 +93,6 @@ const fr = {
   "admin.statusScheduled": "Programmé",
   "admin.totalColumn": "Total",
 
-
   "auth.oneMoment": "Un instant…",
 
   "b2b.affiliate": "Programme d'affiliation",
@@ -986,6 +985,14 @@ const fr = {
   "footer.secureDesc": "Paiement crypté SSL 256 bits",
   "footer.secureTitle": "Paiements sécurisés",
   "footer.termsOfService": "Conditions d'utilisation",
+  "footer.tg.badge": "Pronostics exclusifs",
+  "footer.tg.cta": "Rejoindre Telegram",
+  "footer.tg.dailyPicks": "Pronostics quotidiens",
+  "footer.tg.freeToJoin": "Inscription gratuite",
+  "footer.tg.membersOnline": "1 200+ membres en ligne",
+  "footer.tg.subtitle": "Recevez des alertes de valeur en temps réel, des pronostics à fort edge et un chat en direct avec nos analystes IA. Soyez le premier informé quand un match à forte valeur arrive.",
+  "footer.tg.titleAccent": "pronostics gratuits chaque jour",
+  "footer.tg.titleLead": "Rejoignez notre Telegram pour des",
   "footer.viewAll": "Voir tout",
 
   "forgotPassword.backToLogin": "← Retour à la connexion",
@@ -1469,6 +1476,7 @@ const fr = {
   "nav.admin": "Administratrice",
   "nav.analyst_hub": "Analyst Hub",
   "nav.bet_of_the_day": "Pick of the Day",
+  "nav.combo_of_the_day": "Combi du jour",
   "nav.contact": "Contact",
   "nav.dashboard": "Tableau de bord",
   "nav.deals": "Offres",
@@ -2022,6 +2030,7 @@ const fr = {
   "results.roiCalcIntro": "Suis les quatre étapes pour voir ce que nos picks live auraient rapporté avec ta propre mise. La simulation tourne sur les cotes pre-match strictes à partir du 16 avril 2026.",
   "results.roiCalcLiveCapNote": "Vous avez sélectionné {requested} jours, mais la mesure en direct ne dure que {live} jours. Passez à Backtest pour utiliser l’historique complet de validation du modèle.",
   "results.roiCalcLiveStartNote": "Les données live commencent le 16 avr. 2026 — des fenêtres plus longues renvoient pour l'instant le même ensemble jusqu'à ce que plus de jours soient enregistrés.",
+  "results.roiCalcLockedHint": "Abonnez-vous pour débloquer des retours simulés pour ce niveau",
   "results.roiCalcMaxHint": "max {max} jours",
   "results.roiCalcModelNote": "Note : {count} picks sur {total} n'avaient pas de cotes bookmaker enregistrées — les cotes équitables ont été déduites de la probabilité du modèle (1 / prob).",
   "results.roiCalcNetResult": "Résultat net",
@@ -2811,15 +2820,5 @@ const fr = {
   "welcomeBanner.stepPrefix": "Étape",
   "welcomeBanner.subtitle": "Notre IA analyse les données du football (forme, face-à-face, classement et force de l'équipe) pour prévoir l'issue la plus probable des matchs à venir.",
   "welcomeBanner.title": "Voici comment fonctionne BetsPlug",
-  /* Footer Telegram banner (added 2026-04-27) */
-  "footer.tg.badge": "Pronostics exclusifs",
-  "footer.tg.titleLead": "Rejoignez notre Telegram pour des",
-  "footer.tg.titleAccent": "pronostics gratuits chaque jour",
-  "footer.tg.subtitle": "Recevez des alertes de valeur en temps réel, des pronostics à fort edge et un chat en direct avec nos analystes IA. Soyez le premier informé quand un match à forte valeur arrive.",
-  "footer.tg.membersOnline": "1 200+ membres en ligne",
-  "footer.tg.freeToJoin": "Inscription gratuite",
-  "footer.tg.dailyPicks": "Pronostics quotidiens",
-  "footer.tg.cta": "Rejoindre Telegram",
-
-} as Partial<Record<TranslationKey, string>>;
+} as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default fr;
