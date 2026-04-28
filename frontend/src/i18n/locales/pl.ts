@@ -2025,6 +2025,7 @@ const pl = {
   "results.roiCalcIntro": "Wykonaj cztery kroki, aby zobaczyć, co nasze picki na żywo przyniosłyby przy Twojej własnej stawce. Symulacja działa na ścisłych przedmeczowych kursach od 16 kwietnia 2026.",
   "results.roiCalcLiveCapNote": "Wybrałeś {requested} dni, ale pomiar na żywo obejmuje tylko {live} dni. Przejdź do testu wstecznego, aby skorzystać z pełnej historii walidacji modelu.",
   "results.roiCalcLiveStartNote": "Dane live startują 16 kwi 2026 — dłuższe okna na razie zwracają ten sam zestaw, aż więcej dni zostanie zarejestrowanych.",
+  "results.roiCalcLockedHint": "Zasubskrybuj, aby odblokować symulowane zwroty dla tego poziomu",
   "results.roiCalcMaxHint": "maks {max} dni",
   "results.roiCalcModelNote": "Uwaga: {count} z {total} pickow nie miało zapisanych kursów bukmacherskich — uczciwe kursy zostały wyprowadzone z prawdopodobieństwa modelu (1 / prob).",
   "results.roiCalcNetResult": "Wynik netto",

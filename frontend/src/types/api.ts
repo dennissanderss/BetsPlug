@@ -1077,6 +1077,8 @@ export interface AdminUser {
   full_name: string | null;
   role: string;
   is_active: boolean;
+  email_verified: boolean;
+  last_login_at: string | null;
   created_at: string;
   updated_at: string;
   subscription: AdminUserSubscription | null;

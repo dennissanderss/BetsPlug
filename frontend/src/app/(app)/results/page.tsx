@@ -841,7 +841,24 @@ function RoiCalculatorCard({
             </div>
           </LockedSection>
         ) : null}
-        {!isFree && (<>
+        {!isFree && !canSelectTier(calcTier) && (
+          <LockedSection
+            requiredTier={calcTier}
+            title={`Upgrade to ${calcTier.charAt(0).toUpperCase() + calcTier.slice(1)} to simulate this tier`}
+          >
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-3">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center h-[74px]">
+                  <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-600">—</span>
+                  <span className="text-[10px] font-medium uppercase tracking-widest text-slate-600">
+                    {i === 1 ? t("results.roiCalcPicks") : i === 2 ? t("results.roiCalcStaked") : i === 3 ? t("results.roiCalcPayout") : t("results.roiCalcNetResult")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </LockedSection>
+        )}
+        {!isFree && canSelectTier(calcTier) && (<>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-3">
           <div className="flex flex-col items-center justify-center gap-1 rounded-lg bg-white/[0.03] border border-white/[0.06] py-3 px-2 text-center">
             <span className="text-2xl font-extrabold leading-none tabular-nums text-slate-100">
@@ -943,6 +960,29 @@ function RoiCalculatorCard({
             const row = perTier[key];
             const totalStake = row.realStake + row.modelStake;
             const active = key === calcTier;
+            const tierGated = !canSelectTier(key);
+            if (tierGated) {
+              return (
+                <Link
+                  key={key}
+                  href="/pricing"
+                  className="text-left rounded-lg p-3 border border-amber-500/30 bg-amber-500/[0.04] hover:bg-amber-500/[0.08] transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[10px] uppercase tracking-widest font-bold" style={{ color: accent }}>
+                      {label}
+                    </span>
+                    <Lock className="h-3 w-3 text-amber-400" />
+                  </div>
+                  <div className="text-sm font-semibold text-amber-300">
+                    {`Upgrade to ${label.split(" ")[0]}`}
+                  </div>
+                  <div className="text-[10px] text-slate-500 mt-1">
+                    {t("results.roiCalcLockedHint" as any)}
+                  </div>
+                </Link>
+              );
+            }
             return (
               <button
                 key={key}

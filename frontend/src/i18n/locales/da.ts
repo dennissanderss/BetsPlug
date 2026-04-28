@@ -2025,6 +2025,7 @@ const da = {
   "results.roiCalcIntro": "Følg de fire trin for at se, hvad vores live picks ville have givet i afkast med din egen indsats. Simuleringen kører mod strikte før-kamp odds fra 16. april 2026 og frem.",
   "results.roiCalcLiveCapNote": "Du valgte {requested} dage, men direkte måling er kun {live} dage dyb. Skift til Backtest for at bruge den fulde modelvalideringshistorik.",
   "results.roiCalcLiveStartNote": "Live-data starter 16. apr. 2026 — længere vinduer returnerer indtil videre det samme sæt, indtil flere dage er registreret.",
+  "results.roiCalcLockedHint": "Abonner for at låse op for simulerede afkast for dette niveau",
   "results.roiCalcMaxHint": "maks {max} dage",
   "results.roiCalcModelNote": "Bemærk: {count} af {total} picks havde ingen bookmaker-odds gemt — fair odds blev udledt af modelsandsynligheden (1 / sands).",
   "results.roiCalcNetResult": "Nettoresultat",
