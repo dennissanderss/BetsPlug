@@ -3016,5 +3016,17 @@ const fr = {
   "welcomeBanner.stepPrefix": "Étape",
   "welcomeBanner.subtitle": "Notre IA analyse les données du football (forme, face-à-face, classement et force de l'équipe) pour prévoir l'issue la plus probable des matchs à venir.",
   "welcomeBanner.title": "Voici comment fonctionne BetsPlug",
+  "trackrecord.live.kicker": "2 · Mesure live · depuis le 18 avr. 2026",
+  "trackrecord.live.title": "Mesure pré-match qui grandit chaque jour",
+  "trackrecord.live.subtitle": "Seuls les picks verrouillés strictement avant le coup d'envoi sont comptés ci-dessous. Le compteur démarre à 0 et grandit à chaque match terminé — le track record honnête, sans cherry-picking.",
+  "trackrecord.live.perTierTitle": "Par tier — précision live",
+  "trackrecord.live.perTierSubtitle": "Picks pré-match stricts depuis le 18 avril 2026, ventilés par tier. Tant qu'un tier reste sous 10 picks évalués, nous affichons « en attente de données » — un petit échantillon n'est pas une conclusion.",
+  "trackrecord.live.botdTitle": "Pick of the Day — mesure live",
+  "trackrecord.live.botdSubtitle": "BOTD quotidien verrouillé avant le coup d'envoi. Gold et Platinum voient le même flux.",
+  "trackrecord.botdGate.heading": "Réservé aux abonnés Gold & Platinum",
+  "trackrecord.botdGate.body": "Le Pick of the Day est sur Gold et Platinum — notre unique pick quotidien avec la plus haute confiance du modèle. Free et Silver n'ont pas accès au BOTD parce que nous gardons le volume bas et la qualité du signal haute. Passez à Gold (ou Platinum pour les top-5 ligues) pour débloquer ce track record et le pick quotidien. Gold et Platinum voient le même flux BOTD — picks identiques.",
+  "trackrecord.botdGate.upgradeCta": "Passer à Gold",
+  "trackrecord.botdGate.exampleCta": "Voir l'exemple BOTD",
+  "trackrecord.botdGate.adminHint": "Vous testez en admin ? Ouvrez /admin → « Test as Tier » → Gold / Platinum pour débloquer cette section.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default fr;

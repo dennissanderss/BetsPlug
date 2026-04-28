@@ -2966,5 +2966,17 @@ const ro = {
   "welcomeBanner.stepPrefix": "Pas",
   "welcomeBanner.subtitle": "AI-ul nostru analizează datele fotbalistice, forma, cap la cap, clasamentul și puterea echipei, pentru a prognoza rezultatul cel mai probabil al meciurilor viitoare.",
   "welcomeBanner.title": "Iată cum funcționează BetsPlug",
+  "trackrecord.live.kicker": "2 · Măsurătoare live · de la 18 apr. 2026",
+  "trackrecord.live.title": "Măsurătoare pre-meci care crește zilnic",
+  "trackrecord.live.subtitle": "Mai jos sunt numărate doar pick-urile blocate strict înainte de fluierul de start. Contorul pornește de la 0 și crește cu fiecare meci terminat — track record-ul onest, fără cherry-picking.",
+  "trackrecord.live.perTierTitle": "Per tier — acuratețe live",
+  "trackrecord.live.perTierSubtitle": "Pick-uri strict pre-meci din 18 aprilie 2026, defalcate pe tier. Atâta timp cât un tier are sub 10 pick-uri evaluate afișăm „așteptăm date\" — mostrele mici nu sunt o concluzie.",
+  "trackrecord.live.botdTitle": "Pick of the Day — măsurătoare live",
+  "trackrecord.live.botdSubtitle": "BOTD zilnic blocat pre-meci. Gold și Platinum văd același flux.",
+  "trackrecord.botdGate.heading": "Doar pentru abonații Gold și Platinum",
+  "trackrecord.botdGate.body": "Pick of the Day este pe Gold și Platinum — singurul nostru pick zilnic cu cea mai mare încredere a modelului. Free și Silver nu au acces la BOTD pentru că păstrăm volumul mic și calitatea semnalului mare. Fă upgrade la Gold (sau Platinum pentru top-5 ligi) pentru a debloca acest track record și pick-ul zilnic. Gold și Platinum văd același flux BOTD — pick-uri identice.",
+  "trackrecord.botdGate.upgradeCta": "Upgrade la Gold",
+  "trackrecord.botdGate.exampleCta": "Vezi exemplu BOTD",
+  "trackrecord.botdGate.adminHint": "Testezi ca admin? Deschide /admin → „Test as Tier\" → Gold / Platinum pentru a debloca această secțiune.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default ro;

@@ -3016,5 +3016,17 @@ const es = {
   "welcomeBanner.stepPrefix": "Paso",
   "welcomeBanner.subtitle": "Nuestra IA analiza datos de fútbol (forma, enfrentamientos directos, clasificaciones y fuerza del equipo) para pronosticar el resultado más probable de los próximos partidos.",
   "welcomeBanner.title": "Así es como funciona BetsPlug",
+  "trackrecord.live.kicker": "2 · Medición en vivo · desde el 18 abr. 2026",
+  "trackrecord.live.title": "Medición pre-partido que crece a diario",
+  "trackrecord.live.subtitle": "Solo se cuentan abajo los picks bloqueados estrictamente antes del saque inicial. El contador empieza en 0 y crece con cada partido terminado — el track record honesto, sin cherry-picking.",
+  "trackrecord.live.perTierTitle": "Por tier — precisión en vivo",
+  "trackrecord.live.perTierSubtitle": "Picks estrictamente pre-partido desde el 18 de abril de 2026, desglosados por tier. Mientras un tier esté por debajo de 10 picks evaluados, mostramos «esperando datos» — una muestra pequeña no es una conclusión.",
+  "trackrecord.live.botdTitle": "Pick of the Day — medición en vivo",
+  "trackrecord.live.botdSubtitle": "BOTD diario bloqueado antes del partido. Gold y Platinum ven el mismo flujo.",
+  "trackrecord.botdGate.heading": "Solo para suscriptores Gold y Platinum",
+  "trackrecord.botdGate.body": "El Pick of the Day está en Gold y Platinum — nuestro único pick diario con la mayor confianza del modelo. Free y Silver no tienen acceso a BOTD porque mantenemos el volumen bajo y la calidad de la señal alta. Mejora a Gold (o Platinum para las 5 grandes ligas) para desbloquear este track record y el pick diario. Gold y Platinum ven el mismo flujo BOTD — picks idénticos.",
+  "trackrecord.botdGate.upgradeCta": "Mejorar a Gold",
+  "trackrecord.botdGate.exampleCta": "Ver ejemplo BOTD",
+  "trackrecord.botdGate.adminHint": "¿Probando como admin? Abre /admin → «Test as Tier» → Gold / Platinum para desbloquear esta sección.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default es;

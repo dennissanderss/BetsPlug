@@ -3016,5 +3016,17 @@ const de = {
   "welcomeBanner.stepPrefix": "Schritt",
   "welcomeBanner.subtitle": "Unsere KI analysiert Fußballdaten – Form, Kopf-an-Kopf-Rennen, Rangliste und Teamstärke –, um den wahrscheinlichsten Ausgang bevorstehender Spiele vorherzusagen.",
   "welcomeBanner.title": "So funktioniert BetsPlug",
+  "trackrecord.live.kicker": "2 · Live-Messung · seit 18. Apr. 2026",
+  "trackrecord.live.title": "Vorab-Messung, die täglich wächst",
+  "trackrecord.live.subtitle": "Nur Picks, die strikt vor dem Anpfiff fixiert sind, zählen unten. Der Zähler beginnt bei 0 und wächst mit jedem beendeten Spiel — der ehrliche Track Record, ohne Cherry-Picking.",
+  "trackrecord.live.perTierTitle": "Pro Tier — Live-Genauigkeit",
+  "trackrecord.live.perTierSubtitle": "Strikte Vor-Anpfiff-Picks seit 18. April 2026, nach Tier aufgeschlüsselt. Solange ein Tier unter 10 ausgewerteten Picks liegt, zeigen wir „warten auf Daten\" — kleine Stichproben sind keine Schlussfolgerung.",
+  "trackrecord.live.botdTitle": "Pick of the Day — Live-Messung",
+  "trackrecord.live.botdSubtitle": "Tägliches BOTD vor Anpfiff fixiert. Gold und Platin sehen denselben Stream.",
+  "trackrecord.botdGate.heading": "Nur für Gold- & Platin-Abonnenten",
+  "trackrecord.botdGate.body": "Pick of the Day läuft auf Gold und Platin — unser einziger täglicher Pick mit der höchsten Modellsicherheit. Free und Silber haben keinen BOTD-Zugang, weil wir das Volumen niedrig und die Signalqualität hoch halten. Upgrade auf Gold (oder Platin für die Top-5-Ligen), um diesen Track Record und den täglichen Pick freizuschalten. Gold und Platin sehen denselben BOTD-Stream — identische Picks.",
+  "trackrecord.botdGate.upgradeCta": "Auf Gold upgraden",
+  "trackrecord.botdGate.exampleCta": "BOTD-Beispiel ansehen",
+  "trackrecord.botdGate.adminHint": "Als Admin testen? Öffne /admin → „Test as Tier\" → Gold / Platin, um diesen Bereich freizuschalten.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default de;

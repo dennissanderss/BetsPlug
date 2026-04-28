@@ -2966,5 +2966,17 @@ const ru = {
   "welcomeBanner.stepPrefix": "Шаг",
   "welcomeBanner.subtitle": "Наш ИИ анализирует футбольные данные, форму, личные встречи, турнирную таблицу и силу команды, чтобы спрогнозировать наиболее вероятный исход предстоящих матчей.",
   "welcomeBanner.title": "Вот как работает BetsPlug",
+  "trackrecord.live.kicker": "2 · Live-замер · с 18 апр. 2026",
+  "trackrecord.live.title": "Прематч-замер, растущий каждый день",
+  "trackrecord.live.subtitle": "Ниже учитываются только пики, зафиксированные строго до стартового свистка. Счётчик начинается с 0 и растёт с каждым завершённым матчем — честный track record без cherry-picking.",
+  "trackrecord.live.perTierTitle": "По тиру — live-точность",
+  "trackrecord.live.perTierSubtitle": "Строго прематч-пики с 18 апреля 2026, в разбивке по тирам. Пока тир ниже 10 оценённых пиков, мы показываем «ждём данных» — малая выборка — не вывод.",
+  "trackrecord.live.botdTitle": "Pick of the Day — live-замер",
+  "trackrecord.live.botdSubtitle": "Ежедневный BOTD зафиксирован до матча. Gold и Platinum видят один и тот же поток.",
+  "trackrecord.botdGate.heading": "Только для подписчиков Gold и Platinum",
+  "trackrecord.botdGate.body": "Pick of the Day доступен на Gold и Platinum — наш единственный ежедневный пик с наивысшей уверенностью модели. У Free и Silver нет доступа к BOTD, потому что мы держим объём низким, а качество сигнала — высоким. Перейдите на Gold (или Platinum для топ-5 лиг), чтобы открыть этот track record и ежедневный пик. Gold и Platinum видят один и тот же поток BOTD — те же самые пики.",
+  "trackrecord.botdGate.upgradeCta": "Перейти на Gold",
+  "trackrecord.botdGate.exampleCta": "Посмотреть пример BOTD",
+  "trackrecord.botdGate.adminHint": "Тестируете как админ? Откройте /admin → «Test as Tier» → Gold / Platinum, чтобы открыть этот раздел.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default ru;

@@ -2966,5 +2966,17 @@ const da = {
   "welcomeBanner.stepPrefix": "Trin",
   "welcomeBanner.subtitle": "Vores AI analyserer fodbolddata, form, head-to-head, stilling og holdstyrke for at forudsige det mest sandsynlige udfald af kommende kampe.",
   "welcomeBanner.title": "Sådan fungerer BetsPlug",
+  "trackrecord.live.kicker": "2 · Live-måling · siden 18. apr. 2026",
+  "trackrecord.live.title": "Pre-match måling, der vokser hver dag",
+  "trackrecord.live.subtitle": "Nedenfor tæller kun picks, der er låst strengt før kickoff. Tælleren starter på 0 og vokser med hver afsluttet kamp — det ærlige track record, uden cherry-picking.",
+  "trackrecord.live.perTierTitle": "Per tier — live-præcision",
+  "trackrecord.live.perTierSubtitle": "Strenge pre-match picks siden 18. april 2026, opdelt pr. tier. Så længe et tier ligger under 10 evaluerede picks viser vi „venter på data\" — små stikprøver er ikke en konklusion.",
+  "trackrecord.live.botdTitle": "Pick of the Day — live-måling",
+  "trackrecord.live.botdSubtitle": "Daglig BOTD låst pre-match. Gold og Platinum ser samme stream.",
+  "trackrecord.botdGate.heading": "Kun for Gold- & Platinum-abonnenter",
+  "trackrecord.botdGate.body": "Pick of the Day ligger på Gold og Platinum — vores eneste daglige pick med højeste modeltillid. Free og Silver har ikke BOTD-adgang, fordi vi holder volumen lavt og signalkvaliteten højt. Opgrader til Gold (eller Platinum for top-5-ligaerne) for at låse dette track record og det daglige pick op. Gold og Platinum ser samme BOTD-stream — identiske picks.",
+  "trackrecord.botdGate.upgradeCta": "Opgrader til Gold",
+  "trackrecord.botdGate.exampleCta": "Se BOTD-eksempel",
+  "trackrecord.botdGate.adminHint": "Tester du som admin? Åbn /admin → „Test as Tier\" → Gold / Platinum for at låse denne sektion op.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default da;
