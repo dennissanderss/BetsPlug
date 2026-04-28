@@ -2773,5 +2773,17 @@ const el = {
   "welcomeBanner.stepPrefix": "Βήμα",
   "welcomeBanner.subtitle": "Η τεχνητή νοημοσύνη μας αναλύει δεδομένα ποδοσφαίρου, φόρμα, αντιμέτωπες, βαθμολογίες και δύναμη της ομάδας, για να προβλέψει το πιο πιθανό αποτέλεσμα των προσεχών αγώνων.",
   "welcomeBanner.title": "Δείτε πώς λειτουργεί το BetsPlug",
+  "trackrecord.live.kicker": "2 · Ζωντανή μέτρηση · από 18 Απρ 2026",
+  "trackrecord.live.title": "Προ-αγώνα μέτρηση που μεγαλώνει καθημερινά",
+  "trackrecord.live.subtitle": "Παρακάτω μετρούν μόνο τα picks που κλειδώθηκαν αυστηρά πριν τη σέντρα. Ο μετρητής ξεκινά από 0 και μεγαλώνει με κάθε αγώνα που τελειώνει — το ειλικρινές track record, χωρίς cherry-picking.",
+  "trackrecord.live.perTierTitle": "Ανά tier — ζωντανή ακρίβεια",
+  "trackrecord.live.perTierSubtitle": "Αυστηρά προ-αγώνα picks από 18 Απριλίου 2026, ανά tier. Όσο ένα tier είναι κάτω από 10 αξιολογημένα picks δείχνουμε «αναμονή δεδομένων» — μικρά δείγματα δεν είναι συμπέρασμα.",
+  "trackrecord.live.botdTitle": "Pick of the Day — ζωντανή μέτρηση",
+  "trackrecord.live.botdSubtitle": "Καθημερινό BOTD κλειδωμένο προ-αγώνα. Gold και Platinum βλέπουν την ίδια ροή.",
+  "trackrecord.botdGate.heading": "Μόνο για συνδρομητές Gold & Platinum",
+  "trackrecord.botdGate.body": "Το Pick of the Day βρίσκεται σε Gold και Platinum — το μοναδικό μας καθημερινό pick με την υψηλότερη εμπιστοσύνη μοντέλου. Free και Silver δεν έχουν πρόσβαση σε BOTD επειδή κρατάμε χαμηλό όγκο και υψηλή ποιότητα σήματος. Αναβαθμίστε σε Gold (ή Platinum για τις top-5 λίγκες) για να ξεκλειδώσετε αυτό το track record και το καθημερινό pick. Gold και Platinum βλέπουν την ίδια ροή BOTD — ίδια picks.",
+  "trackrecord.botdGate.upgradeCta": "Αναβάθμιση σε Gold",
+  "trackrecord.botdGate.exampleCta": "Δείτε παράδειγμα BOTD",
+  "trackrecord.botdGate.adminHint": "Δοκιμάζετε ως admin; Ανοίξτε /admin → «Test as Tier» → Gold / Platinum για να ξεκλειδώσετε αυτή την ενότητα.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default el;

@@ -2773,5 +2773,17 @@ const tr = {
   "welcomeBanner.stepPrefix": "Adım",
   "welcomeBanner.subtitle": "Yapay zekamız, yaklaşan maçların en olası sonuçlarını tahmin etmek için futbol verilerini, formu, kafa kafaya maçları, sıralamaları ve takım gücünü analiz ediyor.",
   "welcomeBanner.title": "BetsPlug şu şekilde çalışır",
+  "trackrecord.live.kicker": "2 · Canlı ölçüm · 18 Nis 2026'dan beri",
+  "trackrecord.live.title": "Her gün büyüyen maç öncesi ölçüm",
+  "trackrecord.live.subtitle": "Aşağıda yalnızca kesinlikle ilk vuruştan önce kilitlenen seçimler sayılır. Sayaç 0'dan başlar ve biten her maçla büyür — dürüst track record, kiraz toplama yok.",
+  "trackrecord.live.perTierTitle": "Tier'a göre — canlı doğruluk",
+  "trackrecord.live.perTierSubtitle": "18 Nisan 2026'dan beri kesin maç öncesi seçimleri, tier'a göre ayrıştırılmış. Bir tier 10 değerlendirilen seçimin altında olduğu sürece „veri bekleniyor\" gösteriyoruz — küçük örnekler sonuç değildir.",
+  "trackrecord.live.botdTitle": "Pick of the Day — canlı ölçüm",
+  "trackrecord.live.botdSubtitle": "Günlük BOTD maç öncesi kilitli. Gold ve Platinum aynı akışı görür.",
+  "trackrecord.botdGate.heading": "Yalnızca Gold ve Platinum aboneleri için",
+  "trackrecord.botdGate.body": "Pick of the Day, Gold ve Platinum'dadır — en yüksek model güvenine sahip tek günlük seçimimiz. Free ve Silver'da BOTD erişimi yoktur çünkü hacmi düşük ve sinyal kalitesini yüksek tutuyoruz. Bu track record'u ve günlük seçimi açmak için Gold'a (veya top-5 ligler için Platinum'a) yükseltin. Gold ve Platinum aynı BOTD akışını görür — birebir aynı seçimler.",
+  "trackrecord.botdGate.upgradeCta": "Gold'a yükselt",
+  "trackrecord.botdGate.exampleCta": "BOTD örneğini gör",
+  "trackrecord.botdGate.adminHint": "Admin olarak mı test ediyorsun? /admin → „Test as Tier\" → Gold / Platinum ile bu bölümü aç.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default tr;

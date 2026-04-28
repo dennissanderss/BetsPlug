@@ -889,6 +889,7 @@ function SectionPhaseBanner({
 
 function BotdTierGate({ children }: { children: React.ReactNode }) {
   const { hasAccess: hasTierAccess, ready } = useTier();
+  const { t } = useTranslations();
   if (!ready) return null;
   if (hasTierAccess("gold")) return <>{children}</>;
 
@@ -917,34 +918,27 @@ function BotdTierGate({ children }: { children: React.ReactNode }) {
         </div>
         <div className="min-w-0 flex-1">
           <h3 className="text-xl font-bold text-[#ededed] sm:text-2xl">
-            Alleen voor Gold & Platinum abonnees
+            {t("trackrecord.botdGate.heading")}
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-[#c8cdd6]">
-            De Pick of the Day zit op <strong className="text-[#fde68a]">Gold</strong>{" "}
-            en <strong className="text-[#93c5fd]">Platinum</strong> — onze enige
-            dagelijkse pick met de hoogste modelconfidence. Free en Silver hebben geen
-            BOTD-toegang omdat we het volume laag en de signaal-kwaliteit hoog willen
-            houden. Upgrade naar Gold (of Platinum voor top-5 competities) om deze
-            track record en de dagelijkse pick vrij te spelen. Gold en Platinum zien
-            beide dezelfde BOTD stream — dezelfde picks.
+            {t("trackrecord.botdGate.body")}
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <Link
               href="/pricing"
               className="btn-primary inline-flex items-center gap-2"
             >
-              Upgrade naar Gold
+              {t("trackrecord.botdGate.upgradeCta")}
             </Link>
             <Link
               href="/bet-of-the-day"
               className="btn-glass inline-flex items-center gap-2"
             >
-              Bekijk BOTD-voorbeeld
+              {t("trackrecord.botdGate.exampleCta")}
             </Link>
           </div>
           <p className="mt-3 text-[11px] text-[#6b7280]">
-            Admin aan het testen? Open <code className="rounded bg-white/[0.06] px-1">/admin</code>{" "}
-            → "Test as Tier" → Gold / Platinum om deze sectie vrij te spelen.
+            {t("trackrecord.botdGate.adminHint")}
           </p>
         </div>
       </div>
@@ -1754,13 +1748,9 @@ export default function TrackrecordPage() {
 
       <SectionPhaseBanner
         accent="blue"
-        kicker="2 · Live meting · vanaf 18 apr 2026"
-        title="Pre-match meting die dagelijks groeit"
-        subtitle={
-          "Hieronder tellen alleen picks die strikt vóór de aftrap zijn vastgelegd. " +
-          "De teller begint op 0 en groeit met elke afgelopen wedstrijd — de eerlijke " +
-          "track record zonder cherry-picking."
-        }
+        kicker={t("trackrecord.live.kicker")}
+        title={t("trackrecord.live.title")}
+        subtitle={t("trackrecord.live.subtitle")}
       />
 
       <div className="space-y-6 animate-slide-up">
@@ -1768,12 +1758,10 @@ export default function TrackrecordPage() {
         <div className="glass-card p-6">
           <div className="mb-4">
             <h2 className="text-base font-semibold text-slate-100">
-              Per tier — live accuraatheid
+              {t("trackrecord.live.perTierTitle")}
             </h2>
             <p className="text-sm text-slate-500 mt-0.5">
-              Strikt pre-match picks sinds 18 april 2026, per tier uitgesplitst.
-              Zolang een tier onder 10 beoordeelde picks zit tonen we "wachten op
-              data" — kleine samples zijn geen conclusie.
+              {t("trackrecord.live.perTierSubtitle")}
             </p>
           </div>
           <LiveMeasurementSection />
@@ -1785,10 +1773,10 @@ export default function TrackrecordPage() {
             <Trophy className="h-5 w-5 text-purple-300" />
             <div>
               <h2 className="text-base font-semibold text-slate-100">
-                Pick of the Day — live meting
+                {t("trackrecord.live.botdTitle")}
               </h2>
               <p className="text-sm text-slate-500 mt-0.5">
-                Dagelijkse BOTD pre-match vastgelegd. Gold en Platinum zien dezelfde stream.
+                {t("trackrecord.live.botdSubtitle")}
               </p>
             </div>
           </div>

@@ -2823,5 +2823,17 @@ const id = {
   "welcomeBanner.stepPrefix": "Melangkah",
   "welcomeBanner.subtitle": "AI kami menganalisis data sepak bola — bentuk, head-to-head, klasemen, dan kekuatan tim — untuk memperkirakan hasil yang paling mungkin terjadi pada pertandingan mendatang.",
   "welcomeBanner.title": "Begini cara kerja BetsPlug",
+  "trackrecord.live.kicker": "2 · Pengukuran langsung · sejak 18 Apr 2026",
+  "trackrecord.live.title": "Pengukuran pra-pertandingan yang tumbuh setiap hari",
+  "trackrecord.live.subtitle": "Hanya pick yang dikunci ketat sebelum kick-off yang dihitung di bawah. Penghitung dimulai dari 0 dan bertambah setiap pertandingan selesai — track record yang jujur, tanpa cherry-picking.",
+  "trackrecord.live.perTierTitle": "Per tier — akurasi langsung",
+  "trackrecord.live.perTierSubtitle": "Pick pra-pertandingan ketat sejak 18 April 2026, dipecah per tier. Selama satu tier di bawah 10 pick yang dievaluasi, kami menampilkan „menunggu data\" — sampel kecil bukan kesimpulan.",
+  "trackrecord.live.botdTitle": "Pick of the Day — pengukuran langsung",
+  "trackrecord.live.botdSubtitle": "BOTD harian dikunci sebelum pertandingan. Gold dan Platinum melihat aliran yang sama.",
+  "trackrecord.botdGate.heading": "Khusus pelanggan Gold & Platinum",
+  "trackrecord.botdGate.body": "Pick of the Day ada di Gold dan Platinum — pick harian tunggal kami dengan kepercayaan model tertinggi. Free dan Silver tidak memiliki akses BOTD karena kami menjaga volume rendah dan kualitas sinyal tinggi. Upgrade ke Gold (atau Platinum untuk 5 liga teratas) untuk membuka track record ini dan pick harian. Gold dan Platinum melihat aliran BOTD yang sama — pick identik.",
+  "trackrecord.botdGate.upgradeCta": "Upgrade ke Gold",
+  "trackrecord.botdGate.exampleCta": "Lihat contoh BOTD",
+  "trackrecord.botdGate.adminHint": "Mengetes sebagai admin? Buka /admin → „Test as Tier\" → Gold / Platinum untuk membuka bagian ini.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default id;
