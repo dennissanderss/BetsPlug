@@ -16,6 +16,7 @@
  */
 
 import * as React from "react";
+import { useTranslations } from "@/i18n/locale-provider";
 
 export default function Error({
   error,
@@ -24,6 +25,8 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const { t } = useTranslations();
+
   React.useEffect(() => {
     // Log to the console for dev inspection. Intentionally no
     // side effects on auth / localStorage / analytics.
@@ -35,11 +38,10 @@ export default function Error({
     <div className="min-h-[60vh] flex items-center justify-center p-6">
       <div className="max-w-md w-full rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6 space-y-4">
         <h2 className="text-lg font-semibold text-slate-100">
-          Er ging iets mis op deze pagina
+          {t("error.heading")}
         </h2>
         <p className="text-sm text-slate-400">
-          De pagina kon niet worden geladen. Je blijft ingelogd — probeer het
-          opnieuw of ga terug naar de vorige pagina.
+          {t("error.body")}
         </p>
         {process.env.NODE_ENV === "development" && (
           <pre className="text-xs text-red-400 overflow-x-auto p-2 bg-black/40 rounded">
@@ -52,7 +54,7 @@ export default function Error({
             onClick={() => reset()}
             className="flex-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-sm py-2 transition-colors"
           >
-            Probeer opnieuw
+            {t("error.tryAgain")}
           </button>
           <button
             onClick={() => {
@@ -62,7 +64,7 @@ export default function Error({
             }}
             className="flex-1 rounded-lg border border-white/[0.12] text-slate-200 hover:bg-white/[0.04] text-sm py-2 transition-colors"
           >
-            Terug
+            {t("error.back")}
           </button>
         </div>
       </div>

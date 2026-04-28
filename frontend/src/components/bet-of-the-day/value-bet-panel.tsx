@@ -22,12 +22,20 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import type { BacktestProof, ValueBetStats, ValueBetToday } from "@/types/api";
+import { useTranslations } from "@/i18n/locale-provider";
 
 // Live tracking starts when daily-live pipeline lands. Backfill rows are
 // everything before this date. Kept in sync with backend
 // LIVE_TRACKING_START in app/api/routes/value_bets.py.
 const LIVE_TRACKING_START = "2026-04-22";
 const LIVE_SAMPLE_MIN = 30;
+
+const LOCALE_TO_BCP47: Record<string, string> = {
+  en: "en-GB", nl: "nl-NL", de: "de-DE", fr: "fr-FR", es: "es-ES",
+  it: "it-IT", sw: "sw-KE", id: "id-ID", pt: "pt-PT", tr: "tr-TR",
+  pl: "pl-PL", ro: "ro-RO", ru: "ru-RU", el: "el-GR", da: "da-DK",
+  sv: "sv-SE",
+};
 
 // ─── Sub-components ─────────────────────────────────────────────────────────
 
@@ -117,6 +125,7 @@ function StatsCard({
   isLoading: boolean;
   scope: "backtest" | "live";
 }) {
+  const { t } = useTranslations();
   if (isLoading) {
     return (
       <div className="card-neon p-5 animate-pulse">
@@ -143,7 +152,7 @@ function StatsCard({
         </div>
         {insufficient && (
           <Pill tone="draw" className="text-[10px]">
-            meting loopt
+            {t("valueBet.measuringInProgress")}
           </Pill>
         )}
       </div>
@@ -152,15 +161,15 @@ function StatsCard({
         <>
           <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
             <StatCell
-              label="picks"
+              label={t("valueBet.statPicks")}
               value={String(stats.total_picks)}
             />
             <StatCell
-              label="geëvalueerd"
+              label={t("valueBet.statEvaluated")}
               value={String(stats.evaluated_picks)}
             />
             <StatCell
-              label="accuracy"
+              label={t("valueBet.statAccuracy")}
               value={
                 stats.evaluated_picks > 0
                   ? `${(stats.accuracy * 100).toFixed(1)}%`
@@ -169,15 +178,15 @@ function StatsCard({
               accent={stats.accuracy > 0.5}
             />
             <StatCell
-              label="avg edge"
+              label={t("valueBet.statAvgEdge")}
               value={`${(stats.avg_edge * 100).toFixed(1)}%`}
             />
             <StatCell
-              label="avg odds"
+              label={t("valueBet.statAvgOdds")}
               value={stats.avg_odds.toFixed(2)}
             />
             <StatCell
-              label="ROI"
+              label={t("valueBet.statRoi")}
               value={
                 stats.evaluated_picks > 0
                   ? `${stats.roi_percentage >= 0 ? "+" : ""}${stats.roi_percentage.toFixed(1)}%`
@@ -187,7 +196,7 @@ function StatsCard({
               danger={stats.roi_percentage < 0}
             />
             <StatCell
-              label="P/L units"
+              label={t("valueBet.statPlUnits")}
               value={
                 stats.evaluated_picks > 0
                   ? `${stats.total_units_pnl >= 0 ? "+" : ""}${stats.total_units_pnl.toFixed(1)}u`
@@ -197,7 +206,7 @@ function StatsCard({
               danger={stats.total_units_pnl < 0}
             />
             <StatCell
-              label="max drawdown"
+              label={t("valueBet.statMaxDrawdown")}
               value={
                 stats.evaluated_picks > 0
                   ? `${stats.max_drawdown_units.toFixed(1)}u`
@@ -206,7 +215,7 @@ function StatsCard({
               danger={stats.max_drawdown_units < 0}
             />
             <StatCell
-              label="Sharpe"
+              label={t("valueBet.statSharpe")}
               value={
                 stats.sharpe_ratio !== null && stats.sharpe_ratio !== undefined
                   ? stats.sharpe_ratio.toFixed(2)
@@ -216,7 +225,7 @@ function StatsCard({
           </div>
           {stats.evaluated_picks > 0 && (
             <p className="mt-3 text-[11px] text-slate-500">
-              95% Wilson CI voor accuracy:{" "}
+              {t("valueBet.wilsonCiLabel")}{" "}
               <span className="tabular-nums text-slate-400">
                 {(stats.wilson_ci_lower * 100).toFixed(1)}% –{" "}
                 {(stats.wilson_ci_upper * 100).toFixed(1)}%
@@ -228,8 +237,8 @@ function StatsCard({
         <div className="mt-4 rounded-lg border border-dashed border-white/10 p-4 text-center">
           <p className="text-xs text-slate-500">
             {scope === "live"
-              ? "Eerste live value bet verschijnt na evaluatie"
-              : "Nog geen historische value bets beschikbaar"}
+              ? t("valueBet.emptyLive")
+              : t("valueBet.emptyHistorical")}
           </p>
         </div>
       )}
@@ -240,30 +249,27 @@ function StatsCard({
 // ─── Sample Funnel Explainer ────────────────────────────────────────────────
 
 function SampleFunnelBox({ proof }: { proof: BacktestProof }) {
+  const { t } = useTranslations();
   const f = proof.funnel;
-  const dropOdds = f.live_predictions_evaluated - f.live_evaluated_with_odds;
   return (
     <div className="rounded-lg border border-blue-500/20 bg-blue-500/[0.04] p-4">
       <div className="flex items-start gap-2 mb-2">
         <Info className="h-4 w-4 text-blue-400 shrink-0 mt-0.5" />
         <div className="flex-1">
           <p className="text-xs font-semibold text-blue-300">
-            Waarom maar n={f.live_evaluated_with_odds}?
+            {t("valueBet.funnelTitle", { n: String(f.live_evaluated_with_odds) })}
           </p>
           <p className="mt-1 text-[11px] text-slate-400 leading-relaxed">
-            Onze odds-pijplijn is live sinds{" "}
-            <span className="text-slate-300">{f.odds_pipeline_start}</span>.
-            Elke predictie daarvóór heeft geen vastgelegde bookmaker-odds →
-            kan niet in een ROI-backtest. Om leakage te voorkomen gebruiken
-            we uitsluitend live-gelockte predictions (geen retroactieve
-            backtest-picks).
+            {t("valueBet.funnelBodyBefore")}{" "}
+            <span className="text-slate-300">{f.odds_pipeline_start}</span>.{" "}
+            {t("valueBet.funnelBodyAfter")}
           </p>
         </div>
       </div>
       <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4 text-center">
         <div className="rounded bg-white/[0.03] p-2">
           <p className="text-[9px] uppercase tracking-widest text-slate-500">
-            live preds
+            {t("valueBet.funnelLivePreds")}
           </p>
           <p className="mt-0.5 text-lg font-bold tabular-nums text-slate-200">
             {f.total_live_predictions}
@@ -271,7 +277,7 @@ function SampleFunnelBox({ proof }: { proof: BacktestProof }) {
         </div>
         <div className="rounded bg-white/[0.03] p-2">
           <p className="text-[9px] uppercase tracking-widest text-slate-500">
-            evaluated
+            {t("valueBet.funnelEvaluated")}
           </p>
           <p className="mt-0.5 text-lg font-bold tabular-nums text-slate-200">
             {f.live_predictions_evaluated}
@@ -279,7 +285,7 @@ function SampleFunnelBox({ proof }: { proof: BacktestProof }) {
         </div>
         <div className="rounded bg-white/[0.03] p-2">
           <p className="text-[9px] uppercase tracking-widest text-slate-500">
-            met odds
+            {t("valueBet.funnelWithOdds")}
           </p>
           <p className="mt-0.5 text-lg font-bold tabular-nums text-slate-200">
             {f.live_predictions_with_odds_snapshot}
@@ -287,7 +293,7 @@ function SampleFunnelBox({ proof }: { proof: BacktestProof }) {
         </div>
         <div className="rounded bg-emerald-500/10 border border-emerald-500/20 p-2">
           <p className="text-[9px] uppercase tracking-widest text-emerald-500/80">
-            ROI-pool
+            {t("valueBet.funnelRoiPool")}
           </p>
           <p className="mt-0.5 text-lg font-bold tabular-nums text-emerald-400">
             {f.live_evaluated_with_odds}
@@ -296,18 +302,13 @@ function SampleFunnelBox({ proof }: { proof: BacktestProof }) {
       </div>
       {proof.accuracy_only_slice.n > 0 && (
         <p className="mt-3 text-[11px] text-slate-400">
-          <span className="text-slate-300 font-semibold">Extra bewijs:</span>{" "}
-          accuracy-only test op alle{" "}
-          <span className="text-slate-200 tabular-nums">
-            {proof.accuracy_only_slice.n}
-          </span>{" "}
-          live+evaluated predictions (zonder odds-filter) →{" "}
-          <span className="text-emerald-400 font-semibold tabular-nums">
-            {(proof.accuracy_only_slice.accuracy * 100).toFixed(1)}%
-          </span>{" "}
-          accuracy, CI{" "}
-          {(proof.accuracy_only_slice.wilson_ci_lower * 100).toFixed(0)}%–
-          {(proof.accuracy_only_slice.wilson_ci_upper * 100).toFixed(0)}%.
+          <span className="text-slate-300 font-semibold">{t("valueBet.extraProofLabel")}</span>{" "}
+          {t("valueBet.extraProofBody", {
+            n: String(proof.accuracy_only_slice.n),
+            accuracy: (proof.accuracy_only_slice.accuracy * 100).toFixed(1),
+            lo: (proof.accuracy_only_slice.wilson_ci_lower * 100).toFixed(0),
+            hi: (proof.accuracy_only_slice.wilson_ci_upper * 100).toFixed(0),
+          })}
         </p>
       )}
     </div>
@@ -317,6 +318,8 @@ function SampleFunnelBox({ proof }: { proof: BacktestProof }) {
 // ─── Matches Table ──────────────────────────────────────────────────────────
 
 function BacktestMatchesTable({ matches }: { matches: BacktestProof["matches"] }) {
+  const { t, locale } = useTranslations();
+  const bcp47 = LOCALE_TO_BCP47[locale] ?? "en-GB";
   const [expanded, setExpanded] = React.useState(false);
   const visible = expanded ? matches : matches.slice(0, 5);
   const pickLabel = { home: "1", draw: "X", away: "2" } as const;
@@ -328,10 +331,10 @@ function BacktestMatchesTable({ matches }: { matches: BacktestProof["matches"] }
       <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
         <div>
           <p className="text-xs font-semibold text-slate-200">
-            Gebruikte wedstrijden
+            {t("valueBet.matchesUsed")}
           </p>
           <p className="text-[10px] text-slate-500 mt-0.5">
-            Alle {matches.length} picks in de @3%-edge backtest
+            {t("valueBet.allPicksInBacktest", { n: String(matches.length) })}
           </p>
         </div>
         <button
@@ -341,11 +344,11 @@ function BacktestMatchesTable({ matches }: { matches: BacktestProof["matches"] }
         >
           {expanded ? (
             <>
-              Toon minder <ChevronUp className="h-3 w-3" />
+              {t("valueBet.showLess")} <ChevronUp className="h-3 w-3" />
             </>
           ) : (
             <>
-              Toon alle {matches.length} <ChevronDown className="h-3 w-3" />
+              {t("valueBet.showAll", { n: String(matches.length) })} <ChevronDown className="h-3 w-3" />
             </>
           )}
         </button>
@@ -353,13 +356,13 @@ function BacktestMatchesTable({ matches }: { matches: BacktestProof["matches"] }
 
       <div className="divide-y divide-white/[0.04]">
         <div className="grid grid-cols-12 gap-2 px-4 py-2 text-[9px] uppercase tracking-widest text-slate-600 bg-white/[0.02]">
-          <span className="col-span-2">Datum</span>
-          <span className="col-span-4">Wedstrijd</span>
-          <span className="col-span-2">Liga</span>
-          <span className="col-span-1 text-center">Pick</span>
-          <span className="col-span-1 text-right">Odds</span>
-          <span className="col-span-1 text-right">Edge</span>
-          <span className="col-span-1 text-right">P/L</span>
+          <span className="col-span-2">{t("valueBet.colDate")}</span>
+          <span className="col-span-4">{t("valueBet.colMatch")}</span>
+          <span className="col-span-2">{t("valueBet.colLeague")}</span>
+          <span className="col-span-1 text-center">{t("valueBet.colPick")}</span>
+          <span className="col-span-1 text-right">{t("valueBet.colOdds")}</span>
+          <span className="col-span-1 text-right">{t("valueBet.colEdge")}</span>
+          <span className="col-span-1 text-right">{t("valueBet.colPl")}</span>
         </div>
         {visible.map((m, i) => (
           <div
@@ -371,7 +374,7 @@ function BacktestMatchesTable({ matches }: { matches: BacktestProof["matches"] }
           >
             <span className="col-span-2 tabular-nums text-slate-500">
               {m.scheduled_at
-                ? new Date(m.scheduled_at).toLocaleDateString("nl-NL", {
+                ? new Date(m.scheduled_at).toLocaleDateString(bcp47, {
                     day: "2-digit",
                     month: "short",
                   })
@@ -417,6 +420,7 @@ function BacktestProofCard({ proof, isLoading }: {
   proof?: BacktestProof;
   isLoading: boolean;
 }) {
+  const { t } = useTranslations();
   if (isLoading) {
     return (
       <div className="card-neon p-5 animate-pulse">
@@ -449,15 +453,12 @@ function BacktestProofCard({ proof, isLoading }: {
           <BarChart3 className="h-5 w-5" />
         </HexBadge>
         <div className="flex-1">
-          <span className="section-label">Methode-bewijs (leakage-vrij)</span>
+          <span className="section-label">{t("valueBet.proofKicker")}</span>
           <h3 className="text-heading mt-2 text-lg">
-            Historische test op {proof.total_live_evaluated_with_odds} live
-            predictions
+            {t("valueBet.proofTitle", { n: String(proof.total_live_evaluated_with_odds) })}
           </h3>
           <p className="mt-2 text-xs text-slate-400 leading-relaxed">
-            Uitsluitend op predictions die vóór kickoff zijn vastgelegd
-            (geen team_seeds post-hoc bias). Leakage-vrije backtest van
-            dezelfde value-bet logica die in de live pipeline draait.
+            {t("valueBet.proofBody")}
           </p>
         </div>
       </div>
@@ -472,12 +473,12 @@ function BacktestProofCard({ proof, isLoading }: {
             {primary.roi_percentage.toFixed(1)}%
           </p>
           <p className="text-[10px] text-slate-500 mt-0.5">
-            over {primary.n} picks
+            {t("valueBet.proofOverNPicks", { n: String(primary.n) })}
           </p>
         </div>
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
           <p className="text-[10px] uppercase tracking-widest text-slate-500">
-            Accuracy
+            {t("valueBet.proofAccuracyLabel")}
           </p>
           <p className="mt-1 text-2xl font-extrabold tabular-nums text-slate-200">
             {(primary.accuracy * 100).toFixed(1)}%
@@ -489,7 +490,7 @@ function BacktestProofCard({ proof, isLoading }: {
         </div>
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
           <p className="text-[10px] uppercase tracking-widest text-slate-500">
-            Sharpe
+            {t("valueBet.proofSharpeLabel")}
           </p>
           <p className="mt-1 text-2xl font-extrabold tabular-nums text-slate-200">
             {primary.sharpe_ratio !== null
@@ -497,18 +498,18 @@ function BacktestProofCard({ proof, isLoading }: {
               : "—"}
           </p>
           <p className="text-[10px] text-slate-500 mt-0.5">
-            risk-adj return
+            {t("valueBet.proofRiskAdj")}
           </p>
         </div>
         <div className="rounded-lg border border-white/[0.06] bg-white/[0.03] px-3 py-2.5">
           <p className="text-[10px] uppercase tracking-widest text-slate-500">
-            Max drawdown
+            {t("valueBet.proofMaxDrawdownLabel")}
           </p>
           <p className="mt-1 text-2xl font-extrabold tabular-nums text-red-400">
             {primary.max_drawdown_units.toFixed(1)}u
           </p>
           <p className="text-[10px] text-slate-500 mt-0.5">
-            worst run
+            {t("valueBet.proofWorstRun")}
           </p>
         </div>
       </div>
@@ -516,11 +517,11 @@ function BacktestProofCard({ proof, isLoading }: {
       {production && production.n > 0 && (
         <div className="relative mt-4 rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
           <p className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">
-            Productie-filter (gold + platinum scope)
+            {t("valueBet.productionFilterLabel")}
           </p>
           <p className="text-xs text-slate-300">
-            <span className="font-semibold">{production.n} picks</span>,{" "}
-            accuracy {(production.accuracy * 100).toFixed(1)}%, ROI{" "}
+            <span className="font-semibold">{t("valueBet.nPicks", { n: String(production.n) })}</span>,{" "}
+            {t("valueBet.accuracyShort")} {(production.accuracy * 100).toFixed(1)}%, ROI{" "}
             <span
               className={
                 production.roi_percentage >= 0
@@ -533,7 +534,7 @@ function BacktestProofCard({ proof, isLoading }: {
             </span>
             {production.n < 30 && (
               <span className="text-slate-500 italic">
-                {" "}— sample klein, breder bewijs hierboven
+                {t("valueBet.smallSampleNote")}
               </span>
             )}
           </p>
@@ -560,6 +561,9 @@ function BacktestProofCard({ proof, isLoading }: {
 // ─── Main Panel ─────────────────────────────────────────────────────────────
 
 export function ValueBetPanel() {
+  const { t, locale } = useTranslations();
+  const bcp47 = LOCALE_TO_BCP47[locale] ?? "en-GB";
+
   const todayQuery = useQuery<ValueBetToday>({
     queryKey: ["value-bet-today"],
     queryFn: () => api.getValueBetToday(),
@@ -587,10 +591,10 @@ export function ValueBetPanel() {
 
   const today = todayQuery.data;
   const pickLabelMap = {
-    home: "Thuis wint",
-    draw: "Gelijkspel",
-    away: "Uit wint",
-  } as const;
+    home: t("valueBet.pickHomeWin"),
+    draw: t("valueBet.pickDraw"),
+    away: t("valueBet.pickAwayWin"),
+  };
 
   return (
     <div className="space-y-6">
@@ -605,7 +609,7 @@ export function ValueBetPanel() {
         <div className="card-neon p-8 text-center">
           <AlertTriangle className="mx-auto h-8 w-8 text-red-400" />
           <p className="mt-3 text-sm text-slate-400">
-            Kon value bet niet laden. Probeer later opnieuw.
+            {t("valueBet.todayLoadError")}
           </p>
         </div>
       ) : today && today.available ? (
@@ -639,7 +643,7 @@ export function ValueBetPanel() {
                       <span className="text-slate-700">•</span>
                       <Clock className="h-3 w-3 text-slate-500" />
                       <span>
-                        {new Date(today.scheduled_at).toLocaleString("nl-NL", {
+                        {new Date(today.scheduled_at).toLocaleString(bcp47, {
                           weekday: "short",
                           day: "2-digit",
                           month: "short",
@@ -667,11 +671,11 @@ export function ValueBetPanel() {
             <div>
               <Pill tone="active" className="text-xs">
                 <ArrowUpRight className="h-3 w-3" />
-                Onze pick: {pickLabelMap[today.our_pick ?? "home"]}
+                {t("valueBet.ourPickLabel")} {pickLabelMap[today.our_pick ?? "home"]}
               </Pill>
               <div className="mt-4">
                 <ProbDelta
-                  label="Onze kans"
+                  label={t("valueBet.ourChance")}
                   ours={today.our_probability ?? 0}
                   implied={today.bookmaker_implied ?? 0}
                   variant="large"
@@ -681,16 +685,16 @@ export function ValueBetPanel() {
 
             <div className="grid grid-cols-2 gap-2 content-start">
               <StatCell
-                label="beste odds"
+                label={t("valueBet.bestOdds")}
                 value={(today.best_odds ?? 0).toFixed(2)}
                 accent
               />
               <StatCell
-                label="bookmaker"
+                label={t("valueBet.bookmaker")}
                 value={today.odds_source ?? "—"}
               />
               <StatCell
-                label="expected value"
+                label={t("valueBet.expectedValue")}
                 value={`${(today.expected_value ?? 0) >= 0 ? "+" : ""}${(
                   (today.expected_value ?? 0) * 100
                 ).toFixed(1)}%`}
@@ -698,26 +702,24 @@ export function ValueBetPanel() {
                 danger={(today.expected_value ?? 0) < 0}
               />
               <StatCell
-                label="model-conf"
+                label={t("valueBet.modelConf")}
                 value={`${((today.our_confidence ?? 0) * 100).toFixed(0)}%`}
               />
             </div>
           </div>
 
           <p className="relative mt-6 text-[11px] text-slate-500 italic">
-            {today.disclaimer ??
-              "Statistische analyse, geen gokadvies. 18+. Odds vastgelegd op voorspelmoment, niet op slotkoers."}
+            {today.disclaimer ?? t("valueBet.disclaimerDefault")}
           </p>
         </div>
       ) : (
         <div className="card-neon p-8 text-center">
           <BarChart3 className="mx-auto h-8 w-8 text-slate-500" />
           <h3 className="mt-3 text-sm font-bold text-slate-300">
-            Geen value bet vandaag
+            {t("valueBet.noneToday")}
           </h3>
           <p className="mt-2 max-w-md mx-auto text-xs text-slate-500">
-            {today?.reason ??
-              "Geen kwalificerende edge ≥ 3% gevonden in Gold/Platinum scope. Nieuwe kandidaten verschijnen zodra er pre-match odds beschikbaar zijn."}
+            {today?.reason ?? t("valueBet.noneTodayReason")}
           </p>
         </div>
       )}
@@ -731,15 +733,15 @@ export function ValueBetPanel() {
       {/* ── Stats: backtest + live ── */}
       <div className="grid gap-4 md:grid-cols-2">
         <StatsCard
-          title="Geselecteerde value-bets (historisch)"
-          subtitle={`Exacte productie-filter: edge≥3%, odds 1.50-5.00, tier∈{gold,platinum}`}
+          title={t("valueBet.cardBacktestTitle")}
+          subtitle={t("valueBet.cardBacktestSubtitle")}
           stats={backtestStatsQuery.data}
           isLoading={backtestStatsQuery.isLoading}
           scope="backtest"
         />
         <StatsCard
-          title="Live meting"
-          subtitle={`Live gemeten vanaf ${LIVE_TRACKING_START}`}
+          title={t("valueBet.cardLiveTitle")}
+          subtitle={t("valueBet.cardLiveSubtitle", { date: LIVE_TRACKING_START })}
           stats={liveStatsQuery.data}
           isLoading={liveStatsQuery.isLoading}
           scope="live"
@@ -747,10 +749,9 @@ export function ValueBetPanel() {
       </div>
 
       <p className="text-[11px] text-slate-500 italic text-center">
-        Methode: proportional vig-removal • edge-drempel 3% • odds 1.50–5.00 •
-        tier-filter Gold/Platinum. Zie{" "}
+        {t("valueBet.methodFooterBefore")}{" "}
         <span className="text-slate-400">docs/value_bet_data_analysis.md</span>{" "}
-        voor volledige kalibratie-meting.
+        {t("valueBet.methodFooterAfter")}
       </p>
     </div>
   );

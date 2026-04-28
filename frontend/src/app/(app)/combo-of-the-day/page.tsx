@@ -20,19 +20,27 @@ import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import type { ComboOfTheDay, ComboStats, ComboHistoryItem } from "@/types/api";
 import { useAuth } from "@/lib/auth";
+import { useTranslations } from "@/i18n/locale-provider";
+
+const LOCALE_TO_BCP47: Record<string, string> = {
+  en: "en-GB", nl: "nl-NL", de: "de-DE", fr: "fr-FR", es: "es-ES",
+  it: "it-IT", sw: "sw-KE", id: "id-ID", pt: "pt-PT", tr: "tr-TR",
+  pl: "pl-PL", ro: "ro-RO", ru: "ru-RU", el: "el-GR", da: "da-DK",
+  sv: "sv-SE",
+};
 
 function pct(n: number, digits = 1): string {
   return `${(n * 100).toFixed(digits)}%`;
 }
 
-function formatRange(start: string, end: string): string {
+function formatRange(start: string, end: string, bcp47: string): string {
   try {
-    const s = new Date(start).toLocaleDateString("nl-NL", {
+    const s = new Date(start).toLocaleDateString(bcp47, {
       day: "2-digit",
       month: "short",
       year: "numeric",
     });
-    const e = new Date(end).toLocaleDateString("nl-NL", {
+    const e = new Date(end).toLocaleDateString(bcp47, {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -43,10 +51,10 @@ function formatRange(start: string, end: string): string {
   }
 }
 
-function formatTime(iso: string): string {
+function formatTime(iso: string, bcp47: string): string {
   try {
     const d = new Date(iso);
-    return d.toLocaleString("nl-NL", {
+    return d.toLocaleString(bcp47, {
       weekday: "short",
       day: "2-digit",
       month: "short",
@@ -94,6 +102,8 @@ function StatsCard({
   title: string;
   scope: "backtest" | "live";
 }) {
+  const { t, locale } = useTranslations();
+  const bcp47 = LOCALE_TO_BCP47[locale] ?? "en-GB";
   const { data, isLoading, isError } = useQuery<ComboStats>({
     queryKey: ["combo-stats", scope],
     queryFn: () => api.getComboStats(scope),
@@ -107,13 +117,13 @@ function StatsCard({
           <p className="section-label">{title}</p>
           {data && (
             <p className="mt-1 text-[11px] text-slate-500">
-              {formatRange(data.window_start, data.window_end)}
+              {formatRange(data.window_start, data.window_end, bcp47)}
             </p>
           )}
         </div>
         {data?.sample_size_warning && (
           <Pill tone="draw" className="!text-[10px]">
-            <AlertTriangle className="h-3 w-3" /> kleine sample
+            <AlertTriangle className="h-3 w-3" /> {t("combo.smallSample")}
           </Pill>
         )}
       </div>
@@ -127,29 +137,29 @@ function StatsCard({
       )}
 
       {isError && (
-        <p className="text-sm text-red-400">Kon statistieken niet laden.</p>
+        <p className="text-sm text-red-400">{t("combo.statsLoadError")}</p>
       )}
 
       {data && !isLoading && (
         <>
           <div className="grid grid-cols-2 gap-5 sm:grid-cols-4">
             <StatBlock
-              label="Combi's"
-              value={data.total_combos.toLocaleString("nl-NL")}
-              hint={`${data.evaluated_combos} geëvalueerd`}
+              label={t("combo.statCombos")}
+              value={data.total_combos.toLocaleString(bcp47)}
+              hint={t("combo.statEvaluatedHint", { n: String(data.evaluated_combos) })}
             />
             <StatBlock
-              label="Hit rate"
+              label={t("combo.statHitRate")}
               value={data.evaluated_combos ? pct(data.accuracy, 1) : "—"}
               hint={
                 data.evaluated_combos
                   ? `${data.hit_combos}/${data.evaluated_combos}`
-                  : "geen evaluaties"
+                  : t("combo.statNoEvaluations")
               }
               accent="emerald"
             />
             <StatBlock
-              label="Gem. combined odds"
+              label={t("combo.statAvgCombinedOdds")}
               value={
                 data.total_combos
                   ? `${data.avg_combined_odds.toFixed(2)}×`
@@ -158,7 +168,7 @@ function StatsCard({
               accent="purple"
             />
             <StatBlock
-              label="ROI per €1"
+              label={t("combo.statRoi")}
               value={
                 data.evaluated_combos
                   ? `${data.roi_percentage >= 0 ? "+" : ""}${data.roi_percentage.toFixed(1)}%`
@@ -166,7 +176,7 @@ function StatsCard({
               }
               hint={
                 data.evaluated_combos
-                  ? `${data.total_units_pnl.toFixed(2)} units P/L`
+                  ? t("combo.statRoiHint", { units: data.total_units_pnl.toFixed(2) })
                   : undefined
               }
               accent={data.roi_percentage >= 0 ? "emerald" : "amber"}
@@ -174,7 +184,7 @@ function StatsCard({
           </div>
           {data.evaluated_combos >= 1 && (
             <p className="mt-4 text-[11px] text-slate-500">
-              95% Wilson interval:{" "}
+              {t("combo.wilsonLabel")}{" "}
               <span className="font-semibold text-slate-300 tabular-nums">
                 {pct(data.wilson_ci_lower, 1)} – {pct(data.wilson_ci_upper, 1)}
               </span>
@@ -190,6 +200,8 @@ function StatsCard({
 }
 
 function HistoryList() {
+  const { t, locale } = useTranslations();
+  const bcp47 = LOCALE_TO_BCP47[locale] ?? "en-GB";
   const { data, isLoading, isError } = useQuery<ComboHistoryItem[]>({
     queryKey: ["combo-history"],
     queryFn: () => api.getComboHistory(20),
@@ -208,25 +220,31 @@ function HistoryList() {
   if (isError) {
     return (
       <div className="card-neon p-6">
-        <p className="text-sm text-red-400">Kon historie niet laden.</p>
+        <p className="text-sm text-red-400">{t("combo.historyLoadError")}</p>
       </div>
     );
   }
   if (!data || data.length === 0) {
     return (
       <div className="card-neon p-6 text-center text-sm text-slate-400">
-        Nog geen combi's vastgelegd. Zodra de daily-cron rijen wegschrijft
-        verschijnen ze hier.
+        {t("combo.historyEmpty")}
       </div>
     );
   }
+  const headers = [
+    t("combo.colDate"),
+    t("combo.colCombinedOdds"),
+    t("combo.colLegs"),
+    t("combo.colOutcome"),
+    t("combo.colPl"),
+  ];
   return (
     <div className="card-neon overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-white/[0.06]">
-              {["Datum", "Combined odds", "Legs", "Outcome", "P/L"].map((h) => (
+              {headers.map((h) => (
                 <th
                   key={h}
                   className="px-5 py-3 text-left text-xs font-medium uppercase tracking-wide text-slate-500"
@@ -239,10 +257,10 @@ function HistoryList() {
           <tbody>
             {data.map((c) => {
               const outcomeLabel = !c.is_evaluated
-                ? "Pending"
+                ? t("combo.outcomePending")
                 : c.is_correct
-                ? "WIN"
-                : "LOSS";
+                ? t("combo.outcomeWin")
+                : t("combo.outcomeLoss");
               const outcomeColor = !c.is_evaluated
                 ? "text-slate-400"
                 : c.is_correct
@@ -254,7 +272,7 @@ function HistoryList() {
                   className="border-b border-white/[0.04] hover:bg-white/[0.02]"
                 >
                   <td className="px-5 py-3 whitespace-nowrap text-slate-200">
-                    {new Date(c.bet_date).toLocaleDateString("nl-NL", {
+                    {new Date(c.bet_date).toLocaleDateString(bcp47, {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",
@@ -295,30 +313,32 @@ function HistoryList() {
 }
 
 function LiveComboCard({ data }: { data: ComboOfTheDay }) {
+  const { t, locale } = useTranslations();
+  const bcp47 = LOCALE_TO_BCP47[locale] ?? "en-GB";
   return (
     <>
       <div className="card-neon card-neon-green halo-green relative overflow-hidden p-6 md:p-8">
         <div className="grid gap-6 md:grid-cols-4">
           <div>
-            <p className="section-label">Combined odds</p>
+            <p className="section-label">{t("combo.metric.combinedOdds")}</p>
             <p className="mt-2 text-4xl font-extrabold tabular-nums text-emerald-400">
               {data.combined_odds.toFixed(2)}×
             </p>
             <p className="mt-1 text-[11px] text-slate-500">
-              €10 inzet → €{(10 * data.combined_odds).toFixed(2)} bij hit
+              {t("combo.metric.payoutHint", { payout: (10 * data.combined_odds).toFixed(2) })}
             </p>
           </div>
           <div>
-            <p className="section-label">Model winrate</p>
+            <p className="section-label">{t("combo.metric.modelWinrate")}</p>
             <p className="mt-2 text-4xl font-extrabold tabular-nums text-slate-100">
               {pct(data.combined_model_probability, 1)}
             </p>
             <p className="mt-1 text-[11px] text-slate-500">
-              Bookmaker: {pct(data.combined_bookmaker_implied, 1)}
+              {t("combo.metric.bookmakerLabel")} {pct(data.combined_bookmaker_implied, 1)}
             </p>
           </div>
           <div>
-            <p className="section-label">Edge</p>
+            <p className="section-label">{t("combo.metric.edge")}</p>
             <p
               className={`mt-2 text-4xl font-extrabold tabular-nums ${
                 data.combined_edge >= 0 ? "text-emerald-400" : "text-red-400"
@@ -328,16 +348,16 @@ function LiveComboCard({ data }: { data: ComboOfTheDay }) {
               {pct(data.combined_edge, 1)}
             </p>
             <p className="mt-1 text-[11px] text-slate-500">
-              EV per €1 inzet: €{data.expected_value_per_unit.toFixed(2)}
+              {t("combo.metric.evHint", { ev: data.expected_value_per_unit.toFixed(2) })}
             </p>
           </div>
           <div>
-            <p className="section-label">Legs</p>
+            <p className="section-label">{t("combo.metric.legs")}</p>
             <p className="mt-2 text-4xl font-extrabold tabular-nums text-slate-100">
               {data.legs.length}
             </p>
             <p className="mt-1 text-[11px] text-slate-500">
-              max 1 per competitie
+              {t("combo.metric.legsHint")}
             </p>
           </div>
         </div>
@@ -345,7 +365,7 @@ function LiveComboCard({ data }: { data: ComboOfTheDay }) {
 
       <div className="space-y-3">
         <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-          De drie legs
+          {t("combo.threeLegsLabel")}
         </p>
         {data.legs.map((leg, idx) => (
           <div
@@ -365,7 +385,7 @@ function LiveComboCard({ data }: { data: ComboOfTheDay }) {
                 </Pill>
                 <span className="text-[11px] text-slate-500 inline-flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  {formatTime(leg.scheduled_at)}
+                  {formatTime(leg.scheduled_at, bcp47)}
                 </span>
                 <span className="text-[11px] text-slate-500">· {leg.league}</span>
               </div>
@@ -374,7 +394,7 @@ function LiveComboCard({ data }: { data: ComboOfTheDay }) {
                 {leg.away_team}
               </p>
               <p className="mt-1 text-sm">
-                <span className="text-slate-400">Onze pick: </span>
+                <span className="text-slate-400">{t("combo.legOurPick")} </span>
                 <span className="font-semibold text-emerald-400">
                   {leg.our_pick_label}
                 </span>
@@ -383,7 +403,7 @@ function LiveComboCard({ data }: { data: ComboOfTheDay }) {
             <div className="flex items-center gap-4 md:justify-end">
               <div className="text-right">
                 <p className="text-[10px] uppercase tracking-widest text-slate-500">
-                  Confidence
+                  {t("combo.legConfidence")}
                 </p>
                 <p className="text-sm font-bold tabular-nums text-slate-100">
                   {pct(leg.confidence, 0)}
@@ -391,7 +411,7 @@ function LiveComboCard({ data }: { data: ComboOfTheDay }) {
               </div>
               <div className="text-right">
                 <p className="text-[10px] uppercase tracking-widest text-slate-500">
-                  Edge
+                  {t("combo.legEdge")}
                 </p>
                 <p className="text-sm font-bold tabular-nums text-emerald-400">
                   +{pct(leg.leg_edge, 1)}
@@ -399,7 +419,7 @@ function LiveComboCard({ data }: { data: ComboOfTheDay }) {
               </div>
               <div className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-center min-w-[64px]">
                 <p className="text-[10px] uppercase tracking-widest text-slate-500">
-                  Odds
+                  {t("combo.legOdds")}
                 </p>
                 <p className="text-base font-extrabold tabular-nums text-emerald-400">
                   {leg.leg_odds.toFixed(2)}
@@ -423,6 +443,7 @@ function LiveComboCard({ data }: { data: ComboOfTheDay }) {
 }
 
 function ComingSoonOverlay() {
+  const { t } = useTranslations();
   return (
     <div className="card-neon p-6 md:p-8 border border-amber-500/30 bg-amber-500/[0.04]">
       <div className="flex items-start gap-4">
@@ -431,20 +452,17 @@ function ComingSoonOverlay() {
         </div>
         <div className="min-w-0 flex-1">
           <h2 className="text-lg font-bold text-slate-100">
-            Combi van de Dag — coming soon
+            {t("combo.comingSoonTitle")}
           </h2>
           <p className="mt-2 text-sm text-slate-400 max-w-3xl leading-relaxed">
-            We zetten deze tool nog niet open voor publiek. Eerst willen we een
-            grote backtest-sample bouwen, een paar weken live meten, en de
-            resultaten transparant tonen voordat de tool écht klikbaar wordt
-            voor Platinum-abonnees.
+            {t("combo.comingSoonBody")}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Pill tone="info" className="!text-[10px]">
-              <Lock className="h-3 w-3" /> Platinum-only bij launch
+              <Lock className="h-3 w-3" /> {t("combo.platinumOnlyAtLaunch")}
             </Pill>
             <Pill tone="default" className="!text-[10px]">
-              Geen impact op Pick of the Day of Predictions
+              {t("combo.noImpact")}
             </Pill>
           </div>
         </div>
@@ -456,6 +474,7 @@ function ComingSoonOverlay() {
 export default function ComboOfTheDayPage() {
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
+  const { t } = useTranslations();
 
   const todayQuery = useQuery<ComboOfTheDay>({
     queryKey: ["combo-of-the-day"],
@@ -486,14 +505,12 @@ export default function ComboOfTheDayPage() {
               <Layers className="h-6 w-6" />
             </HexBadge>
             <div>
-              <span className="section-label">Combi van de Dag</span>
+              <span className="section-label">{t("combo.pageKicker")}</span>
               <h1 className="text-heading mt-3">
-                <span className="gradient-text-green">3-Leg Accumulator</span>
+                <span className="gradient-text-green">{t("combo.pageTitle")}</span>
               </h1>
               <p className="mt-2 text-sm text-slate-400 max-w-2xl">
-                Drie high-confidence picks per dag, gebundeld als één combinatie.
-                Hogere odds dan een enkele pick — één verliezende leg betekent
-                de hele combi verloren.
+                {t("combo.pageSubtitle")}
               </p>
             </div>
           </div>
@@ -501,12 +518,12 @@ export default function ComboOfTheDayPage() {
           {isAdmin ? (
             <Pill tone="info" className="inline-flex items-center gap-1.5">
               <ShieldCheck className="h-3 w-3" />
-              Admin preview
+              {t("combo.adminPreview")}
             </Pill>
           ) : (
             <Pill tone="draw" className="inline-flex items-center gap-1.5">
               <Construction className="h-3 w-3" />
-              In ontwikkeling
+              {t("combo.developmentBadge")}
             </Pill>
           )}
         </div>
@@ -521,11 +538,10 @@ export default function ComboOfTheDayPage() {
               <Info className="h-5 w-5 text-slate-500" />
             </div>
             <p className="text-sm font-semibold text-slate-100">
-              Vandaag geen combi beschikbaar
+              {t("combo.noneToday")}
             </p>
             <p className="mt-2 text-xs text-slate-400 max-w-md mx-auto">
-              {today?.reason ??
-                "Niet genoeg kandidaat-legs vandaag — er moeten minstens drie hoge-vertrouwen Gold/Platinum picks met geschikte odds zijn."}
+              {today?.reason ?? t("combo.noneTodayReason")}
             </p>
           </div>
         )}
@@ -541,10 +557,7 @@ export default function ComboOfTheDayPage() {
               <p className="text-sm font-semibold text-slate-100">Pick of the Day</p>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              <span className="font-semibold text-slate-300">Eén</span> wedstrijd per
-              dag — de hoogst-confidente Gold-tier pick. Odds typisch{" "}
-              <span className="text-slate-300">1.5–2.5×</span>, beoogde winrate
-              ~70%. Beschikbaar vanaf Gold.
+              {t("combo.compare.botd")}
             </p>
           </div>
 
@@ -554,23 +567,17 @@ export default function ComboOfTheDayPage() {
               <p className="text-sm font-semibold text-slate-100">Predictions</p>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Volledige lijst van <span className="font-semibold text-slate-300">alle</span>{" "}
-              v8.1 voorspellingen, filterbaar per tier en competitie. Geen
-              bundel — losse picks om zelf uit te kiezen.
+              {t("combo.compare.predictions")}
             </p>
           </div>
 
           <div className="card-neon p-5 border border-purple-500/25">
             <div className="flex items-center gap-2 mb-2">
               <Layers className="h-4 w-4 text-purple-300" />
-              <p className="text-sm font-semibold text-slate-100">Combi van de Dag</p>
+              <p className="text-sm font-semibold text-slate-100">{t("combo.pageKicker")}</p>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              <span className="font-semibold text-slate-300">Drie</span> picks gebundeld
-              als één combinatie. Combined odds typisch{" "}
-              <span className="text-slate-300">3–10×</span>, beoogde hit rate
-              30–50%. Spectaculairder als hij hit, maar volatieler.
-              Platinum-only bij launch.
+              {t("combo.compare.combo")}
             </p>
           </div>
         </div>
@@ -582,20 +589,13 @@ export default function ComboOfTheDayPage() {
           </div>
           <div className="min-w-0 flex-1 space-y-2">
             <p className="text-sm font-semibold text-slate-100">
-              Geen aparte engine — zelfde v8.1 als de rest van het platform
+              {t("combo.sameEngineTitle")}
             </p>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Combi van de Dag draait op exact{" "}
-              <span className="font-semibold text-slate-300">dezelfde</span> v8.1
-              prediction engine (XGBoost + gekalibreerde logistic) als Pick of
-              the Day en Predictions. Wat anders is: de
-              <span className="font-semibold text-slate-300"> selectie-laag</span>.
+              {t("combo.sameEngineBody1")}
             </p>
             <p className="text-xs text-slate-400 leading-relaxed">
-              De selector kiest per dag de top 3 picks die voldoen aan: ≥70%
-              modelvertrouwen, Gold/Platinum competitie, odds tussen 1.40–4.00,
-              positieve edge ten opzichte van de bookmaker, en max één pick per
-              competitie. Vervolgens combineert hij die als één accumulator.
+              {t("combo.sameEngineBody2")}
             </p>
           </div>
         </div>
@@ -603,23 +603,23 @@ export default function ComboOfTheDayPage() {
         {/* Backtest stats */}
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-            Backtest — historische prestatie
+            {t("combo.sectionBacktestKicker")}
           </p>
-          <StatsCard title="Backtest" scope="backtest" />
+          <StatsCard title={t("combo.statsCardBacktestTitle")} scope="backtest" />
         </div>
 
         {/* Live stats */}
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-            Live meting · sinds 2026-04-16
+            {t("combo.sectionLiveKicker")}
           </p>
-          <StatsCard title="Live meting (v8.1 deploy)" scope="live" />
+          <StatsCard title={t("combo.statsCardLiveTitle")} scope="live" />
         </div>
 
         {/* History list */}
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-            Laatste combi's
+            {t("combo.sectionHistoryKicker")}
           </p>
           <HistoryList />
         </div>

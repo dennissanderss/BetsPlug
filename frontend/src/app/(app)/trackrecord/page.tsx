@@ -718,12 +718,16 @@ function DataTransparencyCard({
   loading: boolean;
   pickTier?: string;
 }) {
+  const { t, locale } = useTranslations();
+  const bcp47 = ({ en: "en-GB", nl: "nl-NL", de: "de-DE", fr: "fr-FR", es: "es-ES",
+    it: "it-IT", sw: "sw-KE", id: "id-ID", pt: "pt-PT", tr: "tr-TR",
+    pl: "pl-PL", ro: "ro-RO", ru: "ru-RU", el: "el-GR", da: "da-DK", sv: "sv-SE" } as Record<string, string>)[locale] ?? "en-GB";
   const total = summary?.total_predictions ?? null;
   const periodStart = summary?.period_start ? new Date(summary.period_start) : null;
   const periodEnd = summary?.period_end ? new Date(summary.period_end) : null;
   const fmtDate = (d: Date | null) =>
     d
-      ? d.toLocaleDateString("nl-NL", { day: "numeric", month: "short", year: "numeric" })
+      ? d.toLocaleDateString(bcp47, { day: "numeric", month: "short", year: "numeric" })
       : "—";
 
   const exportUrl = api.getTrackrecordExportUrl(
@@ -792,11 +796,11 @@ function DataTransparencyCard({
             href={exportUrl}
             download
             className="inline-flex items-center gap-2 rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-2.5 text-sm font-semibold text-blue-200 hover:bg-blue-500/20 hover:border-blue-500/50 transition-colors"
-            aria-label="Download alle voorspellingen als CSV"
-            title="Alle evaluated predictions van de actieve tier-scope"
+            aria-label={t("trackrecord.csv.downloadAllAria")}
+            title={t("trackrecord.csv.downloadAllTitle")}
           >
             <Download className="h-4 w-4" />
-            Download CSV
+            {t("trackrecord.csv.downloadCta")}
           </a>
           <BotdCsvDownloadButton />
         </div>
@@ -1264,7 +1268,7 @@ function RecentPredictionsFeed() {
                   {/* Fallback when nothing is populated */}
                   {!reasoning && factorsFor.length === 0 && factorsAgainst.length === 0 && (
                     <p className="text-xs text-slate-500 italic text-center py-2">
-                      Geen expliciete verklaring beschikbaar voor deze pick.
+                      {t("trackrecord.noExplanation")}
                     </p>
                   )}
                 </div>
@@ -1621,9 +1625,9 @@ export default function TrackrecordPage() {
         <div className="glass-card overflow-hidden">
           <div className="border-b border-white/[0.06] px-6 py-4 flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-base font-semibold text-slate-100">Prestaties per tier</h2>
+              <h2 className="text-base font-semibold text-slate-100">{t("trackrecord.backtest.tierStatsTitle")}</h2>
               <p className="text-[11px] text-slate-500 mt-0.5">
-                Kies een tier — de statistieken hieronder updaten automatisch.
+                {t("trackrecord.backtest.tierStatsHelper")}
               </p>
             </div>
             <a
@@ -1635,7 +1639,7 @@ export default function TrackrecordPage() {
               className="flex shrink-0 items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20 transition-colors"
             >
               <Download className="h-4 w-4" />
-              Download CSV
+              {t("trackrecord.csv.downloadCta")}
             </a>
           </div>
 
@@ -1672,40 +1676,44 @@ export default function TrackrecordPage() {
           ) : summary ? (
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 p-6">
               <KpiCard
-                title="Voorspellingen"
+                title={t("trackrecord.kpi.predictions")}
                 value={summary.total_predictions > 0 ? summary.total_predictions.toLocaleString() : "—"}
-                subtitle="Geëvalueerde wedstrijdvoorspellingen"
+                subtitle={t("trackrecord.kpi.predictionsSubtitle")}
                 icon={Target}
                 accent="blue"
               />
               <KpiCard
-                title="Nauwkeurigheid"
+                title={t("trackrecord.kpi.accuracy")}
                 value={summary.total_predictions > 0 ? formatPercent(summary.accuracy) : "—"}
                 subtitle={
                   summary.total_predictions > 0 && summary.wilson_ci_low != null && summary.wilson_ci_high != null
-                    ? `${(summary.wilson_ci_low * 100).toFixed(1)}% – ${(summary.wilson_ci_high * 100).toFixed(1)}% · 95% betrouwbaar op ${summary.total_predictions.toLocaleString()} picks`
-                    : "Op alle 3-uitkomst voorspellingen"
+                    ? t("trackrecord.kpi.accuracyConf", {
+                        lo: (summary.wilson_ci_low * 100).toFixed(1),
+                        hi: (summary.wilson_ci_high * 100).toFixed(1),
+                        n: summary.total_predictions.toLocaleString(),
+                      })
+                    : t("trackrecord.kpi.accuracyAllOutcomes")
                 }
                 icon={TrendingUp}
                 accent="green"
               />
               <KpiCard
-                title="Voorspellingskwaliteit"
+                title={t("trackrecord.kpi.predictionQuality")}
                 value={fmt(summary.brier_score, 4)}
-                subtitle="Brier score (lager = beter)"
+                subtitle={t("trackrecord.kpi.brierSubtitle")}
                 icon={BarChart3}
                 accent="amber"
               />
               <KpiCard
-                title="Gem. Betrouwbaarheid"
+                title={t("trackrecord.kpi.avgConfidence")}
                 value={summary.total_predictions > 0 ? formatPercent(summary.avg_confidence) : "—"}
-                subtitle="Modelconfidentie gemiddeld"
+                subtitle={t("trackrecord.kpi.avgConfidenceSubtitle")}
                 icon={Activity}
                 accent="blue"
               />
             </div>
           ) : (
-            <p className="py-8 text-center text-sm text-slate-500">Geen data beschikbaar.</p>
+            <p className="py-8 text-center text-sm text-slate-500">{t("trackrecord.noDataAvailable")}</p>
           )}
         </div>
 
@@ -1719,14 +1727,14 @@ export default function TrackrecordPage() {
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <h2 className="text-base font-semibold text-slate-100">
-                    Pick of the Day — backtest
+                    {t("trackrecord.botd.backtestTitle")}
                   </h2>
                   <span className="inline-flex items-center rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2 py-0.5 text-[10px] font-semibold text-yellow-300">
                     Gold &amp; Platinum
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-500 mt-0.5">
-                  Dagelijkse pick met hoogste confidence, gesimuleerd op historische data.
+                  {t("trackrecord.botd.backtestSubtitle")}
                 </p>
               </div>
             </div>
