@@ -321,6 +321,12 @@ function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolea
   const { t } = useTranslations();
   const pred: FixturePrediction | null = fixture.prediction ?? null;
   const hasPrediction = pred !== null && typeof pred.confidence === "number";
+  // Backend marks a pick "locked" when the user's tier is below the pick's
+  // tier — `prediction` is null but `locked_pick_tier` carries the slug.
+  const lockedTier = (fixture as any).locked_pick_tier as
+    | "silver" | "gold" | "platinum" | null | undefined;
+  const isLocked = !hasPrediction && !!lockedTier;
+  const lockedTierLabel = (fixture as any).locked_pick_tier_label as string | null | undefined;
 
   const isLive = fixture.status === "live";
   const isFinished = fixture.status === "finished";
@@ -430,7 +436,14 @@ function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolea
 
         {/* Prediction pick badge — col 3 */}
         <div className="col-span-1 flex flex-col items-center gap-1 min-w-0">
-          {pickLabel && (
+          {isLocked ? (
+            <span
+              className="inline-flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-md sm:rounded-lg bg-white/[0.04] border border-white/[0.08]"
+              title={`Upgrade to ${lockedTierLabel ?? lockedTier} to see this pick`}
+            >
+              <Lock className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-slate-500" />
+            </span>
+          ) : pickLabel && (
             <span
               className="inline-flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-md sm:rounded-lg text-[10px] sm:text-xs font-bold"
               style={{
@@ -442,11 +455,11 @@ function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolea
               {pickLabel}
             </span>
           )}
-          {/* v8.1 tier shield — shows at a glance which tier this pick belongs
-              to. Shield-only (no label) to fit the dense row layout. */}
-          {pickTier && (
+          {/* Tier shield — show locked tier when locked, otherwise the
+              pick's classified tier. */}
+          {(isLocked ? lockedTier : pickTier) && (
             <PickTierBadge
-              tier={pickTier}
+              tier={(isLocked ? lockedTier : pickTier) as PickTierSlug}
               size="sm"
               showLabel={false}
               showAccuracy={false}
@@ -454,9 +467,20 @@ function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolea
           )}
         </div>
 
-        {/* Odds — col 4 (desktop only). Locked for Free Access. */}
+        {/* Odds — col 4 (desktop only). Locked for Free Access OR for
+            tier-locked picks (probabilities aren't visible so neither
+            should the implied edge they map to). */}
         <div className="hidden sm:flex col-span-3 items-center justify-center gap-1.5">
-          {isFree ? (
+          {isLocked ? (
+            <Link
+              href="/pricing"
+              title={`Upgrade to ${lockedTierLabel ?? lockedTier} to unlock this pick`}
+              className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-white/[0.04] text-slate-400 border border-white/[0.08] hover:text-amber-300 hover:border-amber-500/40 transition-colors"
+            >
+              <Lock className="h-3 w-3" />
+              {lockedTierLabel ?? lockedTier}
+            </Link>
+          ) : isFree ? (
             <Link
               href="/pricing"
               title="Upgrade to Silver to view pre-match odds"
@@ -476,7 +500,12 @@ function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolea
 
         {/* Confidence bar + correctness */}
         <div className="col-span-3 sm:col-span-2 flex items-center gap-2" title={t("pred.confidenceTooltip")}>
-          {isCorrect !== null ? (
+          {isLocked ? (
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+              <span className="hidden sm:inline">Upgrade to unlock</span>
+              <span className="sm:hidden">Locked</span>
+            </span>
+          ) : isCorrect !== null ? (
             <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
               isCorrect
                 ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
@@ -1085,20 +1114,17 @@ function FilterBar({
               { value: "free" as const, label: "Free", icon: "⬜", rank: 0 },
             ]).map((opt) => {
               const active = tierFilter === opt.value;
-              const locked = opt.value !== "All" && opt.rank > userRank;
-              const unlockLabel =
-                opt.value === "silver" ? "Silver" :
-                opt.value === "gold" ? "Gold" :
-                opt.value === "platinum" ? "Platinum" : "Upgrade";
+              // Higher tiers are always selectable — selecting "Platinum"
+              // as a Silver user shows the locked Platinum picks instead
+              // of disabling the chip. The lock icon stays so users
+              // understand they'll see locked variants when they pick it.
+              const aboveTier = opt.value !== "All" && opt.rank > userRank;
               return (
                 <button
                   key={opt.value}
-                  disabled={locked}
-                  onClick={() => !locked && setTierFilter(opt.value)}
+                  onClick={() => setTierFilter(opt.value)}
                   className={`flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-semibold transition-all ${
-                    locked
-                      ? "text-slate-600 cursor-not-allowed"
-                      : active
+                    active
                       ? opt.value === "platinum"
                         ? "bg-amber-500/20 text-amber-300 border border-amber-400/40"
                         : opt.value === "gold"
@@ -1110,11 +1136,17 @@ function FilterBar({
                         : "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
                       : "text-slate-400 hover:text-slate-200"
                   }`}
-                  title={locked ? `Upgrade to ${unlockLabel} to filter these picks` : opt.value === "All" ? "Show all tiers" : `Show only ${opt.label} picks`}
+                  title={
+                    opt.value === "All"
+                      ? "Show all tiers"
+                      : aboveTier
+                      ? `Show ${opt.label} picks (locked — upgrade to unlock probabilities)`
+                      : `Show only ${opt.label} picks`
+                  }
                 >
                   {opt.icon && <span>{opt.icon}</span>}
                   <span>{opt.label}</span>
-                  {locked && <Lock className="h-2.5 w-2.5 text-amber-400/80" />}
+                  {aboveTier && <Lock className="h-2.5 w-2.5 text-amber-400/80" />}
                 </button>
               );
             })}
@@ -1287,9 +1319,15 @@ export default function PredictionsPage() {
     return m;
   }, [upcomingFixtures]);
 
-  // ── Split into with/without prediction so the empty state can be honest ─
+  // ── Keep fixtures that EITHER have a visible prediction OR a locked
+  // pick (above the user's tier). The locked variant renders with a
+  // shield + upgrade hint, so users can still see *that* a higher tier
+  // has a pick on this match — they just can't see the probabilities.
   const fixturesWithPrediction = useMemo(
-    () => upcomingFixtures.filter((f) => f.prediction != null),
+    () =>
+      upcomingFixtures.filter(
+        (f) => f.prediction != null || (f as any).locked_pick_tier != null,
+      ),
     [upcomingFixtures],
   );
 
@@ -1303,16 +1341,20 @@ export default function PredictionsPage() {
 
     if (confidenceFilter !== "All") {
       items = items.filter((f) => {
+        // Locked picks have no visible confidence — skip when a confidence
+        // band is selected. They reappear under "All".
         if (!f.prediction) return false;
         const score = Math.round(f.prediction.confidence * 100);
         return getConfidenceLevel(score) === confidenceFilter;
       });
     }
 
-    // v8.1: tier filter — prefers the backend-classified tier from the API
-    // response, falls back to frontend mirror only when absent.
+    // Tier filter — also matches locked picks via locked_pick_tier so a
+    // Silver user filtering "Platinum" sees the locked Platinum picks.
     if (tierFilter !== "All") {
       items = items.filter((f) => {
+        const lockedTier = (f as any).locked_pick_tier as string | null | undefined;
+        if (lockedTier) return lockedTier === tierFilter;
         if (!f.prediction) return false;
         const classified =
           (f.prediction as any).pick_tier ??

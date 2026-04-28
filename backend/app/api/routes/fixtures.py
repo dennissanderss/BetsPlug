@@ -752,23 +752,16 @@ async def get_upcoming_fixtures(
     now = datetime.now(timezone.utc)
     cutoff = now + timedelta(days=days)
 
-    # SCHEDULED matches must be in the future window; LIVE matches kicked off
-    # in the past must still appear here so users can find the prediction
-    # while a match is in play (e.g. open the predictions page during PSV–Bayern
-    # and still see the engine's pick). Without the OR, `scheduled_at >= now`
-    # silently excluded every live fixture.
+    # Upcoming = SCHEDULED only. Live matches belong on /fixtures/live so
+    # the Komend tab on the predictions page only ever lists matches that
+    # have not yet kicked off.
     stmt = (
         select(Match)
         .where(
             and_(
+                Match.status == MatchStatus.SCHEDULED,
+                Match.scheduled_at >= now,
                 Match.scheduled_at <= cutoff,
-                or_(
-                    Match.status == MatchStatus.LIVE,
-                    and_(
-                        Match.status == MatchStatus.SCHEDULED,
-                        Match.scheduled_at >= now,
-                    ),
-                ),
             )
         )
         .order_by(Match.scheduled_at)
@@ -824,41 +817,111 @@ async def get_live_fixtures(
     # ── 1. Read live score cache (populated by job_sync_live_fixtures) ──
     live_cache = await cache_get("live:fixtures") or []
 
-    # ── 2. Also fetch LIVE matches from DB (for predictions + odds) ────
-    stmt = (
+    # ── 2. Match cache entries against DB rows ──────────────────────────
+    # The live-cache scheduler only stamps status=LIVE on rows whose
+    # external_id starts with `apifb_match_*`. football-data.org rows
+    # (Champions League, Premier League, etc. — most fd_org sourced
+    # leagues) never get their status bumped, so the naive
+    # `Match.status == LIVE` query silently dropped them.
+    #
+    # Fix: union of three result sets:
+    #   (a) DB matches with explicit status=LIVE (apifb-sourced).
+    #   (b) DB matches with status=SCHEDULED whose team-name pair
+    #       matches a cache entry — these are fd_org matches the
+    #       scheduler couldn't update.
+    #   (c) Cache-only entries with no DB match at all (rare, returned
+    #       as lightweight items without prediction).
+
+    # Build a quick (home_lower, away_lower) → cache lookup.
+    def _norm(s: str) -> str:
+        return (s or "").strip().lower()
+
+    cache_by_team_pair: dict[tuple[str, str], dict] = {}
+    for entry in live_cache:
+        key = (_norm(entry.get("home_team", "")), _norm(entry.get("away_team", "")))
+        if key[0] and key[1]:
+            cache_by_team_pair[key] = entry
+
+    # (a) status=LIVE in DB
+    stmt_live = (
         select(Match)
         .where(Match.status == MatchStatus.LIVE)
         .order_by(Match.scheduled_at)
     )
     if league_slug:
-        stmt = stmt.join(League, League.id == Match.league_id).where(
+        stmt_live = stmt_live.join(League, League.id == Match.league_id).where(
             League.slug == league_slug
         )
 
-    raw_matches = (await db.execute(stmt)).scalars().all()
-    matches = _dedup_fixtures(raw_matches)
+    # (b) SCHEDULED matches kicked off in the last 4h that may be live
+    # but weren't bumped (fd_org rows). Window keeps the result tight.
+    window_start = datetime.now(timezone.utc) - timedelta(hours=4)
+    window_end = datetime.now(timezone.utc) + timedelta(minutes=30)
+    stmt_recent = (
+        select(Match)
+        .where(
+            and_(
+                Match.status == MatchStatus.SCHEDULED,
+                Match.scheduled_at >= window_start,
+                Match.scheduled_at <= window_end,
+            )
+        )
+        .order_by(Match.scheduled_at)
+    )
+    if league_slug:
+        stmt_recent = stmt_recent.join(League, League.id == Match.league_id).where(
+            League.slug == league_slug
+        )
+
+    raw_live = (await db.execute(stmt_live)).scalars().all()
+    raw_recent = (await db.execute(stmt_recent)).scalars().all()
+
+    # Filter (b) to rows that have a cache hit — i.e. they ARE live
+    # right now even though their status row says SCHEDULED.
+    matched_recent: list = []
+    for m in raw_recent:
+        home = _norm(m.home_team.name if m.home_team else "")
+        away = _norm(m.away_team.name if m.away_team else "")
+        if (home, away) in cache_by_team_pair:
+            matched_recent.append(m)
+
+    matches = _dedup_fixtures(list(raw_live) + matched_recent)
     match_ids = [m.id for m in matches]
     # Do NOT filter out live matches without predictions — show the match
     # regardless. Tier-gating applies only to the prediction field.
     pred_map = await _load_latest_predictions(match_ids, db, user_tier)
     odds_map = await _load_latest_odds(match_ids, db)
 
-    # ── 3. Build a lookup from api_football_id → live score data ───────
+    # api_football_id → cache lookup (for apifb-sourced matches)
     live_score_map: dict[str, dict] = {}
     for entry in live_cache:
         afid = str(entry.get("api_football_id", ""))
         if afid:
             live_score_map[afid] = entry
 
-    # ── 4. Build response, enriching each fixture with live_score ──────
+    # ── 3. Build response, enriching each fixture with live_score ──────
     fixtures = []
+    matched_team_pairs: set[tuple[str, str]] = set()
     for m in matches:
         item = _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id), user_tier=user_tier)
 
-        # Try to attach live score from cache
+        # Force status=live on the response so the frontend renders the
+        # live UI even when the DB row still says SCHEDULED.
+        item.status = "live"
+
+        # Try cache lookup by api_football_id first (apifb rows), then
+        # by team-name pair (fd_org rows).
         eid = m.external_id or ""
-        afid = eid.replace("apifb_match_", "") if eid.startswith("apifb_match_") else ""
-        cached = live_score_map.get(afid)
+        cached = None
+        if eid.startswith("apifb_match_"):
+            cached = live_score_map.get(eid.replace("apifb_match_", ""))
+        if cached is None:
+            home = _norm(m.home_team.name if m.home_team else "")
+            away = _norm(m.away_team.name if m.away_team else "")
+            cached = cache_by_team_pair.get((home, away))
+            if cached:
+                matched_team_pairs.add((home, away))
+
         if cached:
             item.live_score = {
                 "home_goals": cached.get("home_goals"),
@@ -870,14 +933,6 @@ async def get_live_fixtures(
             }
 
         fixtures.append(item)
-
-    # Also include any matches from the cache that aren't in our DB yet
-    # (e.g., leagues we track via API-Football but not football-data.org)
-    db_afids = set()
-    for m in matches:
-        eid = m.external_id or ""
-        if eid.startswith("apifb_match_"):
-            db_afids.add(eid.replace("apifb_match_", ""))
 
     return {"count": len(fixtures), "fixtures": fixtures, "disclaimer": _SIMULATION_DISCLAIMER}
 
