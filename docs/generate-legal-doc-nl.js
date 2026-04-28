@@ -245,10 +245,13 @@ const doc = new Document({
         h1("7. Gebruiksvoorwaarden"),
 
         h2("7.1 Abonnementsmodel"),
-        bullet("Gelaagde abonnementen (Bronze, Silver, Gold, Platinum) met verschillende feature toegang"),
-        bullet("Maandelijkse of jaarlijkse facturering via Stripe"),
-        bullet("Automatische verlenging tenzij opgezegd"),
-        bullet("Opzegging: effectief aan het einde van de huidige factureringsperiode; geen terugbetaling voor ongebruikt deel"),
+        bullet("Gelaagde toegang: Free Access (Bronze, gratis), Silver, Gold en Platinum (lifetime)"),
+        bullet("Silver en Gold zijn maandelijks terugkerende abonnementen, gefactureerd via Stripe"),
+        bullet("Platinum is een eenmalige lifetime-betaling via Stripe; deze wordt niet automatisch verlengd"),
+        bullet("Doorlopende abonnementen worden automatisch verlengd totdat de klant opzegt"),
+        bullet("Klanten kunnen hun abonnement op elk moment beheren, upgraden, downgraden of opzeggen via de in-app Stripe Billing Portal"),
+        bullet("Opzegging: effectief aan het einde van de huidige factureringsperiode; geen pro-rata terugbetaling voor ongebruikte dagen"),
+        bullet("Bij upgraden van een doorlopend abonnement naar Platinum lifetime wordt het lopende abonnement automatisch opgezegd zodat de klant nooit dubbel betaalt"),
         bullet("Prijswijzigingen: 30 dagen opzegtermijn vereist"),
 
         h2("7.2 Acceptabel Gebruik"),

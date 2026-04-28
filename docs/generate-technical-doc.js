@@ -272,7 +272,7 @@ const doc = new Document({
           ["\u2265 70%", "2,473", "74.4%"],
           ["\u2265 75% (Premium)", "1,497", "78.2%"],
         ]),
-        p("Live v8.1 per-tier accuracy on the post-deploy evaluated set (updated continuously via /api/pricing/comparison):"),
+        p("Per-tier accuracy projected from the walk-forward set, filtered by each tier's league whitelist and confidence floor:"),
         table2col([
           ["Tier", "League scope", "Confidence floor", "Sample", "Accuracy"],
           ["Platinum", "Top 5 elite", "\u2265 0.75", "840", "82.5%"],
@@ -280,7 +280,8 @@ const doc = new Document({
           ["Silver", "Top 14",    "\u2265 0.65", "3,004", "60%+"],
           ["Bronze (Free)", "Top 14", "\u2265 0.55", "3,763", "48.4%"],
         ]),
-        p("Interpretation: raw accuracy is modest because football 1X2 is hard (33% random baseline, ~50% best-case for all picks). Real value lies in confidence filtering \u2014 the model correctly abstains on uncertain matches. At \u2265 75% confidence, 78.2% walk-forward / 82.5% live-v8.1 accuracy represents a genuine edge."),
+        p("Live tracking started at the v8.1 deploy on 2026-04-16 11:00 UTC. Strictly pre-match, evaluator-graded picks accumulate continuously via /api/trackrecord/live-measurement. The live tier breakdowns shown on the public Trackrecord page are computed from this stream and converge towards the projected accuracies above as the sample grows."),
+        p("Interpretation: raw accuracy is modest because football 1X2 is hard (33% random baseline, ~50% best-case for all picks). Real value lies in confidence filtering \u2014 the model correctly abstains on uncertain matches. At \u2265 75% confidence, walk-forward accuracy is 78.2% (1,497 picks); the matching live segment is the Platinum tier (top 5 leagues at \u2265 0.75 confidence)."),
 
         // 5. Deployment & Operations
         h1("5. Deployment & Operations"),

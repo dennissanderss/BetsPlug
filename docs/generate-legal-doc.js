@@ -245,10 +245,13 @@ const doc = new Document({
         h1("7. Terms of Use"),
 
         h2("7.1 Subscription Model"),
-        bullet("Tiered subscriptions (Bronze, Silver, Gold, Platinum) with different feature access"),
-        bullet("Monthly or annual billing via Stripe"),
-        bullet("Automatic renewal unless cancelled"),
-        bullet("Cancellation: effective at end of current billing period; no refund for unused portion"),
+        bullet("Tiered access: Free Access (Bronze, no charge), Silver, Gold, and Platinum (lifetime)"),
+        bullet("Silver and Gold are recurring monthly subscriptions billed via Stripe"),
+        bullet("Platinum is sold as a single one-off lifetime payment via Stripe; it does not renew"),
+        bullet("Recurring plans renew automatically until cancelled by the customer"),
+        bullet("Customers can manage, upgrade, downgrade, or cancel their subscription at any time via the in-app Stripe Billing Portal"),
+        bullet("Cancellation: effective at the end of the current billing period; no pro-rata refund for unused days"),
+        bullet("Upgrading from a recurring plan to lifetime Platinum automatically cancels the prior recurring subscription so the customer is never charged twice"),
         bullet("Price changes: 30-day notice required"),
 
         h2("7.2 Acceptable Use"),
