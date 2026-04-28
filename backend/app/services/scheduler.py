@@ -437,23 +437,91 @@ async def job_sync_live_fixtures():
                     "halftime_away": ht.get("away"),
                 })
 
-                # ── Update DB: find the match by apifb external_id ───
+                # ── Update DB ────────────────────────────────────────
+                # Find the apifb-sourced match row plus any fd_org row for
+                # the same fixture. Both must be flipped to LIVE/FINISHED
+                # so predictions tied to either get evaluated and counted
+                # in /live-measurement per tier.
+                from sqlalchemy.orm import selectinload as _selin
+
                 external_id = f"apifb_match_{api_id}"
-                match_row = (
+                rows: list = []
+                apifb_row = (
                     await db.execute(
-                        select(Match).where(Match.external_id == external_id)
+                        select(Match)
+                        .options(_selin(Match.home_team), _selin(Match.away_team))
+                        .where(Match.external_id == external_id)
                     )
                 ).scalar_one_or_none()
+                if apifb_row is not None:
+                    # Apifb is authoritative when present — don't also
+                    # update a fd_org duplicate (would double-count when
+                    # the same match has predictions on both rows).
+                    rows.append(apifb_row)
+                else:
+                    # No apifb row — try a fuzzy fd_org match so legacy
+                    # rows still get LIVE/FINISHED + a result. Without
+                    # this, predictions on those rows never evaluate and
+                    # never count toward /live-measurement per tier.
+                    import re as _re
+                    _SX = _re.compile(r"\b(fc|cf|afc|bfc|sc|bsc|ac|sk|sv|ssc|cd|fk|fck|fcm)\b", _re.I)
+                    def _fuzzy(s: str) -> str:
+                        if not s:
+                            return ""
+                        return _re.sub(r"[^a-z0-9]", "", _SX.sub(" ", s.lower()))
 
-                if match_row is None:
-                    continue  # Match not in our DB — skip
+                    home_fuzzy = _fuzzy(home_name)
+                    away_fuzzy = _fuzzy(away_name)
+                    kickoff_iso = (fixture.get("date") or "")
+                    kickoff_dt = None
+                    if kickoff_iso:
+                        try:
+                            kickoff_dt = datetime.fromisoformat(kickoff_iso.replace("Z", "+00:00"))
+                        except Exception:
+                            kickoff_dt = None
+                    if kickoff_dt is not None and home_fuzzy and away_fuzzy:
+                        win_lo = kickoff_dt - timedelta(hours=2)
+                        win_hi = kickoff_dt + timedelta(hours=2)
+                        candidates = (
+                            await db.execute(
+                                select(Match)
+                                .options(_selin(Match.home_team), _selin(Match.away_team))
+                                .where(
+                                    and_(
+                                        Match.scheduled_at >= win_lo,
+                                        Match.scheduled_at <= win_hi,
+                                    )
+                                )
+                            )
+                        ).scalars().all()
+                        for cand in candidates:
+                            chome = _fuzzy(cand.home_team.name if cand.home_team else "")
+                            caway = _fuzzy(cand.away_team.name if cand.away_team else "")
+                            if chome == home_fuzzy and caway == away_fuzzy:
+                                rows.append(cand)
+                                break  # Take the first match only
 
-                # Update status
-                if match_row.status != match_status:
-                    match_row.status = match_status
+                if not rows:
+                    continue  # Match not in our DB at all — skip
 
-                # Upsert live score into MatchResult
-                if home_goals is not None and away_goals is not None:
+                ht_home = ht.get("home")
+                ht_away = ht.get("away")
+                winner = None
+                if match_status == MatchStatus.FINISHED and home_goals is not None and away_goals is not None:
+                    if home_goals > away_goals:
+                        winner = "home"
+                    elif away_goals > home_goals:
+                        winner = "away"
+                    else:
+                        winner = "draw"
+
+                for match_row in rows:
+                    if match_row.status != match_status:
+                        match_row.status = match_status
+
+                    if home_goals is None or away_goals is None:
+                        continue
+
                     result_row = (
                         await db.execute(
                             select(MatchResult).where(
@@ -461,17 +529,6 @@ async def job_sync_live_fixtures():
                             )
                         )
                     ).scalar_one_or_none()
-
-                    ht_home = ht.get("home")
-                    ht_away = ht.get("away")
-                    winner = None
-                    if match_status == MatchStatus.FINISHED:
-                        if home_goals > away_goals:
-                            winner = "home"
-                        elif away_goals > home_goals:
-                            winner = "away"
-                        else:
-                            winner = "draw"
 
                     if result_row is None:
                         result_row = MatchResult(

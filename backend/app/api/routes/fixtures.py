@@ -817,30 +817,32 @@ async def get_live_fixtures(
     # ── 1. Read live score cache (populated by job_sync_live_fixtures) ──
     live_cache = await cache_get("live:fixtures") or []
 
-    # ── 2. Match cache entries against DB rows ──────────────────────────
-    # The live-cache scheduler only stamps status=LIVE on rows whose
-    # external_id starts with `apifb_match_*`. football-data.org rows
-    # (Champions League, Premier League, etc. — most fd_org sourced
-    # leagues) never get their status bumped, so the naive
-    # `Match.status == LIVE` query silently dropped them.
-    #
-    # Fix: union of three result sets:
-    #   (a) DB matches with explicit status=LIVE (apifb-sourced).
-    #   (b) DB matches with status=SCHEDULED whose team-name pair
-    #       matches a cache entry — these are fd_org matches the
-    #       scheduler couldn't update.
-    #   (c) Cache-only entries with no DB match at all (rare, returned
-    #       as lightweight items without prediction).
+    # Fuzzy team-name comparison: lowercase + strip everything that's not
+    # a-z0-9 + drop common club suffixes that football-data.org carries
+    # but API-Football usually doesn't ("FC", "CF", "AFC", "BSC", ...).
+    # "Paris Saint-Germain FC" → "parissaintgermain"; matches the cache
+    # entry "Paris Saint Germain" → "parissaintgermain".
+    import re as _re
+    _SUFFIX_RX = _re.compile(r"\b(fc|cf|afc|bfc|sc|bsc|ac|sk|sv|ssc|cd|fk|fck|fcm)\b", _re.I)
 
-    # Build a quick (home_lower, away_lower) → cache lookup.
-    def _norm(s: str) -> str:
-        return (s or "").strip().lower()
+    def _fuzzy(s: str) -> str:
+        if not s:
+            return ""
+        cleaned = _SUFFIX_RX.sub(" ", s)
+        return _re.sub(r"[^a-z0-9]", "", cleaned.lower())
 
+    # Build cache lookup tables: by api_football_id (apifb) and by
+    # fuzzy team-pair (fd_org fallback).
+    live_score_map: dict[str, dict] = {}
     cache_by_team_pair: dict[tuple[str, str], dict] = {}
     for entry in live_cache:
-        key = (_norm(entry.get("home_team", "")), _norm(entry.get("away_team", "")))
-        if key[0] and key[1]:
-            cache_by_team_pair[key] = entry
+        afid = str(entry.get("api_football_id", ""))
+        if afid:
+            live_score_map[afid] = entry
+        fhome = _fuzzy(entry.get("home_team", ""))
+        faway = _fuzzy(entry.get("away_team", ""))
+        if fhome and faway:
+            cache_by_team_pair[(fhome, faway)] = entry
 
     # (a) status=LIVE in DB
     stmt_live = (
@@ -880,28 +882,41 @@ async def get_live_fixtures(
     # right now even though their status row says SCHEDULED.
     matched_recent: list = []
     for m in raw_recent:
-        home = _norm(m.home_team.name if m.home_team else "")
-        away = _norm(m.away_team.name if m.away_team else "")
+        home = _fuzzy(m.home_team.name if m.home_team else "")
+        away = _fuzzy(m.away_team.name if m.away_team else "")
         if (home, away) in cache_by_team_pair:
             matched_recent.append(m)
 
-    matches = _dedup_fixtures(list(raw_live) + matched_recent)
+    # Custom dedup: when both an apifb_match_* and a fd_org row exist for
+    # the same match, prefer the apifb row here because its external_id
+    # gives us a direct cache lookup. The default _dedup_fixtures helper
+    # prefers fd_org which then forces a fuzzy-name fallback.
+    combined = list(raw_live) + matched_recent
+    by_key: dict[tuple, object] = {}
+    for m in combined:
+        eid = (m.external_id or "")
+        bucket = None
+        if m.scheduled_at:
+            bucket = int(m.scheduled_at.timestamp() // 7200)
+        key = (str(m.league_id), bucket, _fuzzy(m.home_team.name if m.home_team else ""))
+        existing = by_key.get(key)
+        if existing is None:
+            by_key[key] = m
+            continue
+        existing_eid = (existing.external_id or "")
+        # Prefer apifb_match_* for live-scoring (direct id lookup).
+        if eid.startswith("apifb_match_") and not existing_eid.startswith("apifb_match_"):
+            by_key[key] = m
+    matches = list(by_key.values())
+
     match_ids = [m.id for m in matches]
     # Do NOT filter out live matches without predictions — show the match
     # regardless. Tier-gating applies only to the prediction field.
     pred_map = await _load_latest_predictions(match_ids, db, user_tier)
     odds_map = await _load_latest_odds(match_ids, db)
 
-    # api_football_id → cache lookup (for apifb-sourced matches)
-    live_score_map: dict[str, dict] = {}
-    for entry in live_cache:
-        afid = str(entry.get("api_football_id", ""))
-        if afid:
-            live_score_map[afid] = entry
-
     # ── 3. Build response, enriching each fixture with live_score ──────
     fixtures = []
-    matched_team_pairs: set[tuple[str, str]] = set()
     for m in matches:
         item = _build_fixture_item(m, pred_map.get(m.id), odds_map.get(m.id), user_tier=user_tier)
 
@@ -910,17 +925,15 @@ async def get_live_fixtures(
         item.status = "live"
 
         # Try cache lookup by api_football_id first (apifb rows), then
-        # by team-name pair (fd_org rows).
+        # by fuzzy team-name pair (fd_org rows).
         eid = m.external_id or ""
         cached = None
         if eid.startswith("apifb_match_"):
             cached = live_score_map.get(eid.replace("apifb_match_", ""))
         if cached is None:
-            home = _norm(m.home_team.name if m.home_team else "")
-            away = _norm(m.away_team.name if m.away_team else "")
+            home = _fuzzy(m.home_team.name if m.home_team else "")
+            away = _fuzzy(m.away_team.name if m.away_team else "")
             cached = cache_by_team_pair.get((home, away))
-            if cached:
-                matched_team_pairs.add((home, away))
 
         if cached:
             item.live_score = {
