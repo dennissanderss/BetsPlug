@@ -27,6 +27,8 @@ from app.models.api_usage import ApiUsageLog
 from app.models.telegram_post import TelegramPost
 # Value-bet engine (v9)
 from app.models.value_bet import ValueBet
+# Combi van de Dag (v9.1) — 3-leg accumulator
+from app.models.combo_bet import ComboBet, ComboBetLeg
 
 __all__ = [
     "Sport", "League", "Season", "Team", "Player",
@@ -47,4 +49,6 @@ __all__ = [
     "TelegramPost",
     # v9
     "ValueBet",
+    # v9.1
+    "ComboBet", "ComboBetLeg",
 ]

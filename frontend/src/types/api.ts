@@ -1158,6 +1158,19 @@ export interface ComboStats {
   explainer: string;
 }
 
+export interface ComboHistoryItem {
+  id: string;
+  bet_date: string;
+  is_live: boolean;
+  is_evaluated: boolean;
+  is_correct: boolean | null;
+  leg_count: number;
+  combined_odds: number;
+  combined_edge: number;
+  profit_loss_units: number | null;
+  leg_summary: string;
+}
+
 // ─── Value Bet engine (v9) ──────────────────────────────────────────────────
 
 export interface ValueBetToday {

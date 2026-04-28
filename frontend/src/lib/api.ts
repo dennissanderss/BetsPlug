@@ -722,6 +722,22 @@ class ApiClient {
     );
   }
 
+  getComboHistory(limit = 20) {
+    return this.request<import("@/types/api").ComboHistoryItem[]>(
+      `/value-bets/combo-history?limit=${limit}`
+    );
+  }
+
+  adminGenerateCombo() {
+    return this.request<{
+      status: "created" | "already_exists" | "no_candidate";
+      combo_id?: string;
+      combined_odds?: number;
+      leg_count?: number;
+      message: string;
+    }>(`/admin/value-bets/combo-generate-today`, { method: "POST" });
+  }
+
   getValueBetToday() {
     return this.request<import("@/types/api").ValueBetToday>(
       "/value-bets/today",

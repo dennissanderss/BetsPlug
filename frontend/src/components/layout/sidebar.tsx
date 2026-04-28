@@ -150,7 +150,9 @@ export function Sidebar() {
       pathname.startsWith(localizedHref + "/");
     const Icon = item.icon;
 
-    if (item.comingSoon) {
+    // Coming-soon items are unclickable for regular users but admins
+    // always get a working link so they can QA in-development tools.
+    if (item.comingSoon && !isAdmin) {
       return (
         <div
           key={item.href}

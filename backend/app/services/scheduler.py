@@ -979,6 +979,47 @@ async def job_telegram_update_results():
         log.error("CRON: Telegram result sweep failed: %s", exc, exc_info=True)
 
 
+async def job_generate_daily_combo():
+    """Daily 08:05 CET job — pick today's 3-leg combo and persist it.
+
+    Writes to ``combo_bets`` + ``combo_bet_legs`` with ``is_live=True``.
+    Idempotent: ``uq_combo_bets_date_live`` plus a same-day short-
+    circuit prevents duplicate inserts when the cron re-fires.
+    """
+    log.info("CRON: combi-van-de-dag — starting daily live selection")
+    try:
+        from app.db.session import async_session_factory
+        from app.services.combo_bet_service import persist_daily_combo
+
+        today = datetime.now(timezone.utc).date()
+        async with async_session_factory() as db:
+            combo = await persist_daily_combo(db, today, is_live=True)
+            if combo is None:
+                log.info("CRON: combi-van-de-dag — no qualifying combo for %s", today)
+            else:
+                log.info(
+                    "CRON: combi-van-de-dag — persisted combo for %s (id=%s)",
+                    today, combo.id,
+                )
+    except Exception:
+        log.exception("CRON: combi-van-de-dag — failed")
+
+
+async def job_evaluate_combos():
+    """Periodic combo evaluator — grades any combo whose legs are
+    all evaluated. Cheap, idempotent. Runs every 30 min."""
+    log.info("CRON: combi-evaluator — sweep")
+    try:
+        from app.db.session import async_session_factory
+        from app.services.combo_bet_service import evaluate_pending_combos
+
+        async with async_session_factory() as db:
+            graded = await evaluate_pending_combos(db)
+            log.info("CRON: combi-evaluator — graded %d combos", graded)
+    except Exception:
+        log.exception("CRON: combi-evaluator — failed")
+
+
 async def job_generate_daily_value_bet():
     """Daily 08:00 CET job — pick the single best value bet for today.
 
@@ -1396,6 +1437,29 @@ def start_scheduler():
         id="value_bet_daily",
         name="Value-bet daily live selection",
         replace_existing=True,
+    )
+
+    # Daily Combi-van-de-Dag selection — 08:05 CET (5 min after the
+    # single-pick value bet). Writes to combo_bets with is_live=True.
+    # Idempotent (uq_combo_bets_date_live + same-day short-circuit).
+    scheduler.add_job(
+        job_generate_daily_combo,
+        trigger=CronTrigger(hour=8, minute=5, timezone=_CET),
+        id="combo_bet_daily",
+        name="Combi van de Dag — daily live selection",
+        replace_existing=True,
+    )
+
+    # Combi evaluator — every 30 min, grade any combo whose legs are
+    # all evaluated. Cheap idempotent sweep; updates is_correct +
+    # profit_loss_units when match outcomes have rolled in.
+    scheduler.add_job(
+        job_evaluate_combos,
+        trigger=IntervalTrigger(minutes=30),
+        id="combo_bet_evaluator",
+        name="Combi van de Dag — evaluator sweep",
+        replace_existing=True,
+        next_run_time=datetime.now(timezone.utc) + timedelta(minutes=2),
     )
 
     # Weekly tier-comparison promo — Sunday 18:00 CET. Placed before

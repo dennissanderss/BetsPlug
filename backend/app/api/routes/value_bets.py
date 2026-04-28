@@ -16,7 +16,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased, joinedload
 
 from app.api.deps import get_current_tier, get_db
+from app.auth.tier import get_current_user_optional
 from app.core.tier_system import PickTier, TIER_METADATA
+from app.models.combo_bet import ComboBet, ComboBetLeg
+from app.models.user import Role, User
 from app.models.match import Match
 from app.models.prediction import Prediction
 from app.core.tier_leagues import (
@@ -887,20 +890,24 @@ def _format_pick_label(home_team: str, away_team: str, pick: str) -> str:
 async def get_combo_of_the_day(
     db: AsyncSession = Depends(get_db),
     user_tier: PickTier = Depends(get_current_tier),
+    user: Optional[User] = Depends(get_current_user_optional),
     preview: int = Query(default=0, include_in_schema=False),
 ) -> ComboOfTheDay:
     """Return today's 3-leg accumulator.
 
-    Currently behind a global ``COMBO_PUBLIC_LAUNCH`` gate — every
-    caller receives ``coming_soon=true`` and a blanked payload until
-    the product is validated against the backtest + live samples.
-    Once launched, the endpoint will be Platinum-tier only.
+    Currently behind a global ``COMBO_PUBLIC_LAUNCH`` gate. Admins
+    always see the live combo (so they can QA the tool before launch).
+    Non-admin callers get ``coming_soon=true`` until the product is
+    validated against backtest + live samples. After launch the gate
+    drops and the endpoint is Platinum-tier only.
     """
     today = datetime.now(timezone.utc).date()
+    is_admin = user is not None and user.role == Role.ADMIN
 
-    # Master kill-switch — feature is hidden behind an "in ontwikkeling"
-    # overlay for everyone except admins doing a preview.
-    if not COMBO_PUBLIC_LAUNCH and not preview:
+    # Master kill-switch — non-admin callers get the construction
+    # overlay until COMBO_PUBLIC_LAUNCH flips. Admins (and ?preview=1
+    # callers) bypass and see the live combi for QA.
+    if not COMBO_PUBLIC_LAUNCH and not preview and not is_admin:
         return ComboOfTheDay(
             available=False,
             reason="coming_soon",
@@ -909,8 +916,9 @@ async def get_combo_of_the_day(
             coming_soon=True,
         )
 
-    # Tier gate — Platinum-only product (only fires post-launch).
-    if user_tier != PickTier.PLATINUM:
+    # Tier gate — Platinum-only product (admins always pass; only
+    # fires for paying users post-launch).
+    if not is_admin and user_tier != PickTier.PLATINUM:
         return ComboOfTheDay(
             available=False,
             reason="locked",
@@ -1060,6 +1068,86 @@ async def get_combo_of_the_day(
         combined_edge=round(combined_edge, 4),
         expected_value_per_unit=round(expected_value_per_unit, 4),
     )
+
+
+# ---------------------------------------------------------------------------
+# Combi van de Dag — history list (recent persisted combos)
+# ---------------------------------------------------------------------------
+class ComboHistoryItem(BaseModel):
+    id: str
+    bet_date: str
+    is_live: bool
+    is_evaluated: bool
+    is_correct: Optional[bool] = None
+    leg_count: int
+    combined_odds: float
+    combined_edge: float
+    profit_loss_units: Optional[float] = None
+    leg_summary: str  # human "Man City wint · BVB wint · Roma wint"
+
+
+@router.get("/combo-history", response_model=list[ComboHistoryItem])
+async def get_combo_history(
+    limit: int = Query(default=20, ge=1, le=100),
+    db: AsyncSession = Depends(get_db),
+) -> list[ComboHistoryItem]:
+    """Return the most recent persisted combos (live + backfill mixed),
+    newest first. Drives the history table on /combo-of-the-day."""
+    from sqlalchemy.orm import selectinload
+
+    stmt = (
+        select(ComboBet)
+        .options(selectinload(ComboBet.legs))
+        .order_by(ComboBet.bet_date.desc(), ComboBet.picked_at.desc())
+        .limit(limit)
+    )
+    rows = (await db.execute(stmt)).scalars().unique().all()
+
+    out: list[ComboHistoryItem] = []
+    for combo in rows:
+        # Build a short, scannable leg summary like "Man City W · BVB W · Roma W"
+        # Include team names by re-fetching the matches + teams.
+        leg_match_ids = [leg.match_id for leg in combo.legs]
+        match_lookup: dict = {}
+        if leg_match_ids:
+            mstmt = (
+                select(Match)
+                .options(
+                    joinedload(Match.home_team),
+                    joinedload(Match.away_team),
+                )
+                .where(Match.id.in_(leg_match_ids))
+            )
+            for m in (await db.execute(mstmt)).unique().scalars().all():
+                match_lookup[m.id] = m
+
+        labels = []
+        for leg in sorted(combo.legs, key=lambda l: l.leg_index):
+            m = match_lookup.get(leg.match_id)
+            if not m or not m.home_team or not m.away_team:
+                labels.append(leg.our_pick)
+                continue
+            if leg.our_pick == "home":
+                labels.append(m.home_team.name)
+            elif leg.our_pick == "away":
+                labels.append(m.away_team.name)
+            else:
+                labels.append(f"{m.home_team.name} – {m.away_team.name} draw")
+        out.append(
+            ComboHistoryItem(
+                id=str(combo.id),
+                bet_date=combo.bet_date.isoformat(),
+                is_live=combo.is_live,
+                is_evaluated=combo.is_evaluated,
+                is_correct=combo.is_correct,
+                leg_count=combo.leg_count,
+                combined_odds=combo.combined_odds,
+                combined_edge=combo.combined_edge,
+                profit_loss_units=combo.profit_loss_units,
+                leg_summary=" · ".join(labels),
+            )
+        )
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -1363,5 +1451,60 @@ async def admin_generate_today(
             f"Live value bet geschreven: pick={after.our_pick}, "
             f"edge={after.edge * 100:.1f}%, odds={after.best_odds_for_pick:.2f}, "
             f"tier={after.prediction_tier}."
+        ),
+    )
+
+
+class GenerateComboResponse(BaseModel):
+    status: str  # 'created' | 'already_exists' | 'no_candidate'
+    combo_id: Optional[str] = None
+    combined_odds: Optional[float] = None
+    leg_count: Optional[int] = None
+    message: str
+
+
+@admin_router.post("/combo-generate-today", response_model=GenerateComboResponse)
+async def admin_combo_generate_today(
+    db: AsyncSession = Depends(get_db),
+) -> GenerateComboResponse:
+    """Manually generate today's combi (admin only).
+
+    Same logic as the 08:05 CET cron. Idempotent — returns
+    ``already_exists`` when the day already has a live combo on file.
+    """
+    from app.services.combo_bet_service import persist_daily_combo
+
+    today = datetime.now(timezone.utc).date()
+    before_stmt = (
+        select(ComboBet)
+        .where(and_(ComboBet.bet_date == today, ComboBet.is_live.is_(True)))
+        .limit(1)
+    )
+    before = (await db.execute(before_stmt)).scalar_one_or_none()
+
+    combo = await persist_daily_combo(db, today, is_live=True)
+
+    if combo is None:
+        return GenerateComboResponse(
+            status="no_candidate",
+            message=f"Geen kwalificerende combi voor {today}.",
+        )
+    if before is not None and before.id == combo.id:
+        return GenerateComboResponse(
+            status="already_exists",
+            combo_id=str(combo.id),
+            combined_odds=combo.combined_odds,
+            leg_count=combo.leg_count,
+            message=f"Combi voor {today} bestaat al ({combo.leg_count} legs, odds {combo.combined_odds:.2f}×).",
+        )
+    return GenerateComboResponse(
+        status="created",
+        combo_id=str(combo.id),
+        combined_odds=combo.combined_odds,
+        leg_count=combo.leg_count,
+        message=(
+            f"Combi geschreven voor {today}: "
+            f"{combo.leg_count} legs, combined odds {combo.combined_odds:.2f}×, "
+            f"edge {combo.combined_edge * 100:.1f}%."
         ),
     )
