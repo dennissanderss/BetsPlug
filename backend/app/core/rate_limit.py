@@ -6,13 +6,25 @@ takes the API offline.
 
 Route rules (evaluated top-to-bottom, first match wins):
 
-    /api/auth/login        →  5 req / min
-    /api/auth/register     →  5 req / min
-    /api/admin/            → 10 req / min
-    /api/predictions       → 30 req / min
-    /api/                  → 60 req / min
+    /api/auth/login        →   5 req / min   (brute-force defence)
+    /api/auth/register     →   5 req / min   (signup spam defence)
+    /api/admin/            → 600 req / min   (10 req/sec — see comment below)
+    /api/predictions       →  30 req / min
+    /api/                  →  60 req / min
 
 Health / ping endpoints are always exempt.
+
+**Why /api/admin/ is 600/min, not the obvious "10":**
+The admin dashboard fires ~10–15 concurrent queries on every page load
+(`data-sources`, `admin-errors`, `admin-today-overview`, `finance-overview`,
+`system-info`, etc.), several of them with `refetchInterval: 60_000`.
+A 10/min cap means the second a refetch wave overlaps the initial load
+the user gets a flood of 429s rendering as "Failed to fetch" / "Could not
+load …" everywhere. Since every `/api/admin/*` path is already gated by
+`Depends(require_admin)`, the rate limit is purely a safety net against
+bugs and accidental loops — not a defence against unauthenticated abuse.
+600/min is comfortably above the dashboard's burst pattern while still
+catching pathological loops.
 """
 
 import logging
@@ -33,7 +45,9 @@ log = logging.getLogger(__name__)
 RATE_LIMIT_RULES: List[Tuple[str, int, int]] = [
     ("/api/auth/login", 5, 60),
     ("/api/auth/register", 5, 60),
-    ("/api/admin/", 10, 60),
+    # Admin: high cap because the dashboard fires ~15 concurrent queries on
+    # load + refetches every 60s. Already protected by require_admin.
+    ("/api/admin/", 600, 60),
     ("/api/predictions", 30, 60),
     ("/api/", 60, 60),
 ]
