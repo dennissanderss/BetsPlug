@@ -2966,17 +2966,5 @@ const pt = {
   "welcomeBanner.stepPrefix": "Etapa",
   "welcomeBanner.subtitle": "Nossa IA analisa dados de futebol, forma, confronto direto, classificação e força da equipe para prever o resultado mais provável das próximas partidas.",
   "welcomeBanner.title": "Veja como BetsPlug funciona",
-  "trackrecord.live.kicker": "2 · Medição ao vivo · desde 18 abr. 2026",
-  "trackrecord.live.title": "Medição pré-jogo que cresce diariamente",
-  "trackrecord.live.subtitle": "Apenas picks bloqueados estritamente antes do apito inicial são contados abaixo. O contador começa em 0 e cresce a cada jogo terminado — o track record honesto, sem cherry-picking.",
-  "trackrecord.live.perTierTitle": "Por tier — precisão ao vivo",
-  "trackrecord.live.perTierSubtitle": "Picks estritamente pré-jogo desde 18 de abril de 2026, divididos por tier. Enquanto um tier estiver abaixo de 10 picks avaliados mostramos «a aguardar dados» — amostras pequenas não são uma conclusão.",
-  "trackrecord.live.botdTitle": "Pick of the Day — medição ao vivo",
-  "trackrecord.live.botdSubtitle": "BOTD diário bloqueado pré-jogo. Gold e Platinum veem o mesmo fluxo.",
-  "trackrecord.botdGate.heading": "Apenas para subscritores Gold e Platinum",
-  "trackrecord.botdGate.body": "O Pick of the Day está em Gold e Platinum — o nosso único pick diário com a maior confiança do modelo. Free e Silver não têm acesso ao BOTD porque mantemos o volume baixo e a qualidade do sinal alta. Faça upgrade para Gold (ou Platinum para as 5 maiores ligas) para desbloquear este track record e o pick diário. Gold e Platinum veem o mesmo fluxo BOTD — picks idênticos.",
-  "trackrecord.botdGate.upgradeCta": "Fazer upgrade para Gold",
-  "trackrecord.botdGate.exampleCta": "Ver exemplo BOTD",
-  "trackrecord.botdGate.adminHint": "A testar como admin? Abre /admin → «Test as Tier» → Gold / Platinum para desbloquear esta secção.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default pt;
