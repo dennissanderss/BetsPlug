@@ -29,11 +29,17 @@ from datetime import date, datetime, time, timedelta, timezone
 from typing import Any, Optional
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import and_, func, select
+from sqlalchemy import and_, func, not_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.config import get_settings
+from app.core.tier_leagues import (
+    LEAGUES_FREE,
+    LEAGUES_GOLD,
+    LEAGUES_PLATINUM,
+    LEAGUES_SILVER,
+)
 from app.core.tier_system import (
     CONF_THRESHOLD,
     PickTier,
@@ -70,17 +76,41 @@ CET = ZoneInfo("Europe/Amsterdam")
 # ---------------------------------------------------------------------------
 
 
-def _resolve_channel(channel: Optional[str]) -> str:
-    """Resolve the target channel: explicit arg > test override > prod default.
+def _channel_for_tier(tier: PickTier) -> str:
+    """Return the configured Telegram channel handle for a given tier.
+
+    Empty string when the tier's channel env var isn't set yet — callers
+    should treat that as "not configured, skip silently" rather than
+    posting somewhere wrong.
+    """
+    settings = get_settings()
+    by_tier: dict[PickTier, str] = {
+        PickTier.FREE: settings.telegram_channel_free,
+        PickTier.SILVER: settings.telegram_channel_silver,
+        PickTier.GOLD: settings.telegram_channel_gold,
+        PickTier.PLATINUM: settings.telegram_channel_platinum,
+    }
+    return by_tier.get(tier, "") or ""
+
+
+def _resolve_channel(
+    channel: Optional[str],
+    tier: PickTier = PickTier.FREE,
+) -> str:
+    """Resolve the target channel: explicit arg > test override > tier default.
 
     The ``TELEGRAM_CHANNEL_TEST`` env var is a safety hatch for staging
-    so a misconfigured job never posts to @BetsPluggs by accident. When
-    set, scheduled tasks route there instead of the production handle.
+    so a misconfigured job never posts to a public channel by accident.
+    When set, scheduled tasks route there instead of the production
+    handle for *every* tier — that way one env flip on Railway gives a
+    clean dry-run path across all tiers without touching code.
     """
     if channel:
         return channel
     settings = get_settings()
-    return settings.telegram_channel_test or settings.telegram_channel_free
+    if settings.telegram_channel_test:
+        return settings.telegram_channel_test
+    return _channel_for_tier(tier)
 
 
 async def _load_prediction(
@@ -167,22 +197,62 @@ async def _already_posted(
 
 
 # ---------------------------------------------------------------------------
-# Selection — next Free-tier pick for the scheduled slot
+# Selection — next pick eligible for the scheduled slot, per tier
 # ---------------------------------------------------------------------------
 
 
-async def select_next_free_pick(
-    db: AsyncSession, channel: str
+def _exact_tier_filter(tier: PickTier):
+    """SQLAlchemy WHERE expression: prediction is classified EXACTLY as ``tier``.
+
+    Mirrors the logic of ``pick_tier_expression()`` from ``tier_system``,
+    but as a boolean instead of a CASE — qualifies for the requested tier
+    AND does not qualify for any higher tier. Used by the per-tier
+    Telegram channels so each tier's feed only carries its own
+    classified picks (a Silver-classified pick goes to the Silver
+    channel only, never echoed on Free).
+    """
+    qual_pl = and_(
+        Match.league_id.in_(LEAGUES_PLATINUM),
+        Prediction.confidence >= CONF_THRESHOLD[PickTier.PLATINUM],
+    )
+    qual_gd = and_(
+        Match.league_id.in_(LEAGUES_GOLD),
+        Prediction.confidence >= CONF_THRESHOLD[PickTier.GOLD],
+    )
+    qual_sl = and_(
+        Match.league_id.in_(LEAGUES_SILVER),
+        Prediction.confidence >= CONF_THRESHOLD[PickTier.SILVER],
+    )
+    qual_fr = and_(
+        Match.league_id.in_(LEAGUES_FREE),
+        Prediction.confidence >= CONF_THRESHOLD[PickTier.FREE],
+    )
+
+    if tier == PickTier.PLATINUM:
+        return qual_pl
+    if tier == PickTier.GOLD:
+        return and_(qual_gd, not_(qual_pl))
+    if tier == PickTier.SILVER:
+        return and_(qual_sl, not_(qual_pl), not_(qual_gd))
+    # FREE
+    return and_(qual_fr, not_(qual_pl), not_(qual_gd), not_(qual_sl))
+
+
+async def select_next_tier_pick(
+    db: AsyncSession,
+    channel: str,
+    tier: PickTier = PickTier.FREE,
 ) -> Optional[Prediction]:
-    """Return the next Free-tier prediction eligible for posting, or None.
+    """Return the next prediction classified as ``tier`` and eligible to post.
 
     Filters:
-        - FREE access scope (LEAGUES_FREE + conf >= 0.55, no Silver+).
+        - Pick is classified exactly as ``tier`` (not bumped to a higher
+          tier; not below the tier's confidence floor).
         - Match scheduled in the next 48h.
         - Not already posted to ``channel`` with post_type='pick'.
 
     Sort: greatest(home, draw, away) probability DESC, so the first
-    slot of the day gets the best available Free pick.
+    slot of the day gets the best available pick for that tier.
     """
     from sqlalchemy import func as sfunc
 
@@ -219,8 +289,7 @@ async def select_next_free_pick(
                 Match.status == MatchStatus.SCHEDULED,
                 Match.scheduled_at >= now,
                 Match.scheduled_at <= cutoff,
-                Prediction.confidence
-                >= CONF_THRESHOLD[PickTier.FREE],
+                Prediction.confidence >= CONF_THRESHOLD[tier],
                 ~Prediction.id.in_(posted_subq),
             )
         )
@@ -228,8 +297,23 @@ async def select_next_free_pick(
         .limit(1)
     )
     if TIER_SYSTEM_ENABLED:
-        stmt = stmt.where(access_filter(PickTier.FREE))
+        # Pre-tier-system rollback path: skip the strict classifier so a
+        # rollback environment still posts something sensible. With the
+        # flag on (default), every tier's channel sees only its own
+        # classified picks.
+        stmt = stmt.where(_exact_tier_filter(tier))
     return (await db.execute(stmt)).scalar_one_or_none()
+
+
+async def select_next_free_pick(
+    db: AsyncSession, channel: str
+) -> Optional[Prediction]:
+    """Backward-compatible alias — Free-tier slot selector.
+
+    Existing callers (admin queue endpoint, scheduler job) keep working
+    while new tier-aware code calls ``select_next_tier_pick`` directly.
+    """
+    return await select_next_tier_pick(db, channel, PickTier.FREE)
 
 
 # ---------------------------------------------------------------------------
@@ -241,14 +325,20 @@ async def publish_pick(
     prediction_id: Any,
     db: AsyncSession,
     channel: Optional[str] = None,
+    tier: PickTier = PickTier.FREE,
 ) -> TelegramPost:
     """Post a specific prediction to Telegram + record in `telegram_posts`.
 
     Idempotent: if we've already posted this (prediction_id, 'pick',
     channel) tuple we return the existing row untouched. Used by both
     the scheduled slot tasks and the admin "force post" endpoint.
+
+    ``tier`` only affects channel resolution when ``channel`` is None —
+    once a channel is chosen, the same prediction body is rendered for
+    every tier (the tier signal is in *which channel* it lands on, not
+    in the message itself).
     """
-    target = _resolve_channel(channel)
+    target = _resolve_channel(channel, tier)
     existing = await _already_posted(prediction_id, target, "pick", db)
     if existing:
         logger.info(
@@ -287,19 +377,30 @@ async def publish_pick(
 
 
 async def publish_scheduled_slot(
-    db: AsyncSession, channel: Optional[str] = None
+    db: AsyncSession,
+    channel: Optional[str] = None,
+    tier: PickTier = PickTier.FREE,
 ) -> Optional[TelegramPost]:
-    """Pick the best eligible Free prediction and post it.
+    """Pick the best eligible prediction for ``tier`` and post it.
 
     Returns the created TelegramPost, or None when there's nothing
-    eligible (e.g. all Free picks of the day already posted).
+    eligible (e.g. all picks of the day already posted, or the tier's
+    channel isn't configured yet).
     """
-    target = _resolve_channel(channel)
-    candidate = await select_next_free_pick(db, target)
-    if candidate is None:
-        logger.info("telegram: no eligible Free pick to post right now")
+    target = _resolve_channel(channel, tier)
+    if not target:
+        logger.info(
+            "telegram: tier=%s channel not configured, skipping slot",
+            tier.name,
+        )
         return None
-    return await publish_pick(candidate.id, db, channel=target)
+    candidate = await select_next_tier_pick(db, target, tier)
+    if candidate is None:
+        logger.info(
+            "telegram: no eligible %s pick to post right now", tier.name
+        )
+        return None
+    return await publish_pick(candidate.id, db, channel=target, tier=tier)
 
 
 async def publish_result_update(
@@ -428,13 +529,20 @@ async def publish_daily_summary(
     db: AsyncSession,
     target_date: Optional[date] = None,
     channel: Optional[str] = None,
+    tier: PickTier = PickTier.FREE,
 ) -> Optional[TelegramPost]:
     """Post the bilingual daily summary for ``target_date`` (CET).
 
     Returns None when no pick-type posts exist for that date — we don't
     publish an empty summary.
     """
-    target_ch = _resolve_channel(channel)
+    target_ch = _resolve_channel(channel, tier)
+    if not target_ch:
+        logger.info(
+            "telegram: tier=%s channel not configured, skipping summary",
+            tier.name,
+        )
+        return None
     if target_date is None:
         target_date = datetime.now(CET).date()
 
@@ -519,18 +627,26 @@ async def publish_daily_summary(
 
 
 async def publish_promo(
-    db: AsyncSession, channel: Optional[str] = None
-) -> TelegramPost:
+    db: AsyncSession,
+    channel: Optional[str] = None,
+    tier: PickTier = PickTier.FREE,
+) -> Optional[TelegramPost]:
     """Post the bilingual tier-explanation promo to the channel.
 
     Fires weekly from the scheduler (Sunday 18:00 CET) and can be
     triggered on-demand from the admin UI. Includes the last-7-day
-    Free-tier accuracy as a credibility anchor so the reader sees a
-    real number next to the upgrade pitch.
+    accuracy as a credibility anchor so the reader sees a real number
+    next to the upgrade pitch.
     """
-    target = _resolve_channel(channel)
+    target = _resolve_channel(channel, tier)
+    if not target:
+        logger.info(
+            "telegram: tier=%s channel not configured, skipping promo",
+            tier.name,
+        )
+        return None
     weekly = await _weekly_accuracy_pct(db)
-    body = render_promo_message(weekly_accuracy_pct=weekly)
+    body = render_promo_message(weekly_accuracy_pct=weekly, tier=tier)
     message_id = await post_to_channel(target, body)
 
     promo = TelegramPost(
@@ -547,14 +663,18 @@ async def publish_promo(
 
 
 async def update_all_pending_results(
-    db: AsyncSession, channel: Optional[str] = None
+    db: AsyncSession,
+    channel: Optional[str] = None,
+    tier: PickTier = PickTier.FREE,
 ) -> int:
     """Iterate over every unresolved pick post and update any that are done.
 
     Returns the number of posts we actually edited. Callers can use the
     count for dashboards / logs; the scheduler ignores it.
     """
-    target = _resolve_channel(channel)
+    target = _resolve_channel(channel, tier)
+    if not target:
+        return 0
     stmt = (
         select(TelegramPost)
         .where(
@@ -582,8 +702,10 @@ async def update_all_pending_results(
 
 
 async def publish_welcome(
-    db: AsyncSession, channel: Optional[str] = None
-) -> TelegramPost:
+    db: AsyncSession,
+    channel: Optional[str] = None,
+    tier: PickTier = PickTier.FREE,
+) -> Optional[TelegramPost]:
     """Post the channel's welcome/intro message.
 
     Meant to be pinned manually in the Telegram client after posting —
@@ -592,8 +714,14 @@ async def publish_welcome(
     so the admin post-history table can distinguish it from picks,
     summaries and promos.
     """
-    target = _resolve_channel(channel)
-    body = render_welcome_message()
+    target = _resolve_channel(channel, tier)
+    if not target:
+        logger.info(
+            "telegram: tier=%s channel not configured, skipping welcome",
+            tier.name,
+        )
+        return None
+    body = render_welcome_message(tier=tier)
     message_id = await post_to_channel(target, body)
 
     welcome = TelegramPost(
@@ -610,7 +738,9 @@ async def publish_welcome(
 
 
 async def wipe_channel(
-    db: AsyncSession, channel: Optional[str] = None
+    db: AsyncSession,
+    channel: Optional[str] = None,
+    tier: PickTier = PickTier.FREE,
 ) -> dict[str, int]:
     """Delete every auto-posted message from the channel + clear the audit.
 
@@ -634,7 +764,9 @@ async def wipe_channel(
     DB row because the channel state is the source of truth.
     ``preserved`` counts welcome rows that were intentionally skipped.
     """
-    target = _resolve_channel(channel)
+    target = _resolve_channel(channel, tier)
+    if not target:
+        return {"deleted": 0, "missing": 0, "db_removed": 0, "preserved": 0}
     stmt = (
         select(TelegramPost)
         .where(
@@ -692,5 +824,7 @@ __all__ = [
     "publish_welcome",
     "update_all_pending_results",
     "select_next_free_pick",
+    "select_next_tier_pick",
     "wipe_channel",
+    "_channel_for_tier",
 ]

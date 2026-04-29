@@ -37,12 +37,37 @@ import { Pill } from "@/components/noct/pill";
 interface HealthResponse {
   configured: boolean;
   channel: string;
+  channels: Record<string, string>;
   bot: {
     id: number;
     username?: string;
     first_name?: string;
     is_bot?: boolean;
   } | null;
+}
+
+type TierSlug = "free" | "silver" | "gold" | "platinum";
+
+const TIER_LABEL: Record<TierSlug, string> = {
+  free: "Free",
+  silver: "Silver",
+  gold: "Gold",
+  platinum: "Platinum",
+};
+
+const TIER_EMOJI: Record<TierSlug, string> = {
+  free: "⬜",
+  silver: "🥈",
+  gold: "🥇",
+  platinum: "💎",
+};
+
+const TIER_ORDER: TierSlug[] = ["free", "silver", "gold", "platinum"];
+
+function withTier(path: string, tier: TierSlug): string {
+  // Append `tier=` query param; respect any existing `?` in the path.
+  const sep = path.includes("?") ? "&" : "?";
+  return `${path}${sep}tier=${tier}`;
 }
 
 interface ChannelOverview {
@@ -204,7 +229,15 @@ function ChannelCard({ ch }: { ch: ChannelOverview }) {
     ? "info"
     : "default";
 
-  const tierLabel = ch.tier === "free" ? "Bronze / Free" : ch.tier;
+  const tierDisplay: Record<string, string> = {
+    free: "Bronze / Free",
+    silver: "Silver",
+    gold: "Gold",
+    platinum: "Platinum",
+    test: "Test override",
+    unknown: "Archived",
+  };
+  const tierLabel = tierDisplay[ch.tier] ?? ch.tier;
   const pendingTone = ch.picks_pending_result > 0 ? "text-amber-300" : "text-slate-400";
 
   return (
@@ -456,6 +489,7 @@ function PendingMatches({ history }: { history: PostSummary[] }) {
 // ─── Main component ─────────────────────────────────────────────────────
 
 export default function TelegramManager() {
+  const [activeTier, setActiveTier] = React.useState<TierSlug>("free");
   const [health, setHealth] = React.useState<HealthResponse | null>(null);
   const [channels, setChannels] = React.useState<ChannelOverview[]>([]);
   const [queue, setQueue] = React.useState<QueueItem | null>(null);
@@ -474,12 +508,20 @@ export default function TelegramManager() {
     // blip) doesn't tank the whole tab. Each piece of UI gets whatever
     // data it can, and we surface a combined failure message only if
     // EVERY call failed.
+    //
+    // The four tier-scoped endpoints are filtered with `?tier=`, so
+    // switching tabs reloads the tier-specific queue / schedule /
+    // history without leaking other tiers' data into the view.
     const results = await Promise.allSettled([
       adminCall<HealthResponse>("/admin/telegram/health"),
       adminCall<ChannelOverview[]>("/admin/telegram/channels"),
-      adminCall<QueueItem[]>("/admin/telegram/queue"),
-      adminCall<ScheduledSlot[]>("/admin/telegram/schedule?count=6"),
-      adminCall<PostSummary[]>("/admin/telegram/posts?limit=30"),
+      adminCall<QueueItem[]>(withTier("/admin/telegram/queue", activeTier)),
+      adminCall<ScheduledSlot[]>(
+        withTier("/admin/telegram/schedule?count=6", activeTier),
+      ),
+      adminCall<PostSummary[]>(
+        withTier("/admin/telegram/posts?limit=30", activeTier),
+      ),
     ]);
 
     const [h, c, q, sched, hist] = results;
@@ -505,11 +547,16 @@ export default function TelegramManager() {
       );
     }
     setLoading(false);
-  }, []);
+  }, [activeTier]);
 
   React.useEffect(() => {
     refreshAll();
   }, [refreshAll]);
+
+  const activeChannelHandle =
+    health?.channels?.[activeTier] ??
+    (activeTier === "free" ? health?.channel : undefined);
+  const tierConfigured = Boolean(activeChannelHandle);
 
   async function runAction(
     tag: string,
@@ -578,6 +625,50 @@ export default function TelegramManager() {
         </button>
       </div>
 
+      {/* Tier tabs — one click switches every tier-scoped panel below. */}
+      <div className="glass-panel flex flex-wrap items-center gap-2 p-2">
+        {TIER_ORDER.map((slug) => {
+          const handle =
+            health?.channels?.[slug] ??
+            (slug === "free" ? health?.channel : undefined);
+          const isActive = activeTier === slug;
+          const isConfigured = Boolean(handle);
+          return (
+            <button
+              key={slug}
+              type="button"
+              onClick={() => setActiveTier(slug)}
+              className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition ${
+                isActive
+                  ? "bg-[#4ade80]/[0.12] text-[#4ade80] ring-1 ring-[#4ade80]/40"
+                  : "text-[#a3a9b8] hover:bg-white/[0.04] hover:text-[#ededed]"
+              }`}
+            >
+              <span className="text-base">{TIER_EMOJI[slug]}</span>
+              <span className="font-semibold">{TIER_LABEL[slug]}</span>
+              <span
+                className={`text-[10px] uppercase tracking-wider ${
+                  isConfigured ? "text-[#6b7280]" : "text-amber-400"
+                }`}
+              >
+                {isConfigured ? handle : "not set"}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {!tierConfigured && (
+        <div className="glass-panel border border-amber-500/30 bg-amber-500/[0.06] p-3 text-xs text-amber-200">
+          <AlertTriangle className="mr-1.5 inline h-3 w-3" />
+          {TIER_LABEL[activeTier]} channel is nog niet geconfigureerd. Zet{" "}
+          <code className="rounded bg-white/[0.06] px-1 py-0.5">
+            TELEGRAM_CHANNEL_{activeTier.toUpperCase()}
+          </code>{" "}
+          in Railway env vars en herstart de pod om dit kanaal te activeren.
+        </div>
+      )}
+
       {err && (
         <div className="glass-panel border border-red-500/30 bg-red-500/[0.06] p-3 text-xs text-red-300">
           <AlertTriangle className="mr-1.5 inline h-3 w-3" />
@@ -634,27 +725,38 @@ export default function TelegramManager() {
               onClick={() =>
                 runAction(
                   "post-next",
-                  () => adminCall<PostSummary>("/admin/telegram/post-next", "POST"),
+                  () =>
+                    adminCall<PostSummary>(
+                      withTier("/admin/telegram/post-next", activeTier),
+                      "POST",
+                    ),
                   (r) => {
                     const p = r as PostSummary | null;
                     return p
-                      ? `Pick gepost · msg_id ${p.telegram_message_id}`
-                      : "Geen eligible pick — slot overgeslagen.";
+                      ? `${TIER_LABEL[activeTier]} pick gepost · msg_id ${p.telegram_message_id}`
+                      : `Geen eligible ${TIER_LABEL[activeTier]} pick — slot overgeslagen.`;
                   },
                 )
               }
               busy={busyAction === "post-next"}
-              anyBusy={busyAction !== null}
+              anyBusy={busyAction !== null || !tierConfigured}
               icon={<Send className="h-3.5 w-3.5" />}
-              label="Post next pick"
+              label={`Post next ${TIER_LABEL[activeTier]} pick`}
               variant="primary"
-              desc="Plaatst nu de eerstvolgende Free-tier pick in @BetsPluggsgs, zonder te wachten op de 11/15/19 CET cron."
+              desc={`Plaatst nu de eerstvolgende ${TIER_LABEL[activeTier]}-tier pick in ${
+                activeChannelHandle ?? "het kanaal"
+              }, zonder te wachten op de 11/15/19 CET cron.`}
             />
             <ActionRow
               onClick={() =>
                 runAction(
                   "summary",
-                  () => adminCall<PostSummary>("/admin/telegram/post-summary", "POST", {}),
+                  () =>
+                    adminCall<PostSummary>(
+                      withTier("/admin/telegram/post-summary", activeTier),
+                      "POST",
+                      {},
+                    ),
                   (r) => {
                     const p = r as PostSummary | null;
                     return p
@@ -664,63 +766,82 @@ export default function TelegramManager() {
                 )
               }
               busy={busyAction === "summary"}
-              anyBusy={busyAction !== null}
+              anyBusy={busyAction !== null || !tierConfigured}
               icon={<ClipboardList className="h-3.5 w-3.5" />}
               label="Post daily summary"
-              desc="Post het NL/EN dagoverzicht van vandaag (scheduled 23:00 CET). Skipt als er nog geen picks van vandaag staan."
+              desc={`Post het dagoverzicht van vandaag voor het ${TIER_LABEL[activeTier]} kanaal (scheduled 23:00 CET). Skipt als er nog geen picks van vandaag staan.`}
             />
             <ActionRow
               onClick={() =>
                 runAction(
                   "welcome",
-                  () => adminCall<PostSummary>("/admin/telegram/post-welcome", "POST"),
+                  () =>
+                    adminCall<PostSummary>(
+                      withTier("/admin/telegram/post-welcome", activeTier),
+                      "POST",
+                    ),
                   (r) => {
-                    const p = r as PostSummary;
-                    return `Welcome message gepost · msg_id ${p.telegram_message_id} · vergeet niet te pinnen in Telegram`;
+                    const p = r as PostSummary | null;
+                    return p
+                      ? `Welcome message gepost · msg_id ${p.telegram_message_id} · vergeet niet te pinnen in Telegram`
+                      : "Kanaal niet geconfigureerd — niks gepost.";
                   },
                 )
               }
               busy={busyAction === "welcome"}
-              anyBusy={busyAction !== null}
+              anyBusy={busyAction !== null || !tierConfigured}
               icon={<Sparkles className="h-3.5 w-3.5" />}
               label="Post welcome message"
-              desc="Plaatst het intro/welkomstbericht van het kanaal. Vergeet niet 'm daarna te pinnen in Telegram (bot heeft geen pin-rechten)."
+              desc={`Plaatst het tier-specifieke intro/welkomstbericht voor ${TIER_LABEL[activeTier]}. Vergeet niet 'm daarna te pinnen in Telegram (bot heeft geen pin-rechten).`}
             />
             <ActionRow
               onClick={() =>
                 runAction(
                   "promo",
-                  () => adminCall<PostSummary>("/admin/telegram/post-promo", "POST"),
+                  () =>
+                    adminCall<PostSummary>(
+                      withTier("/admin/telegram/post-promo", activeTier),
+                      "POST",
+                    ),
                   (r) => {
-                    const p = r as PostSummary;
-                    return `Tier-promo gepost · msg_id ${p.telegram_message_id}`;
+                    const p = r as PostSummary | null;
+                    return p
+                      ? `${TIER_LABEL[activeTier]} promo gepost · msg_id ${p.telegram_message_id}`
+                      : "Kanaal niet geconfigureerd — niks gepost.";
                   },
                 )
               }
               busy={busyAction === "promo"}
-              anyBusy={busyAction !== null}
+              anyBusy={busyAction !== null || !tierConfigured}
               icon={<Megaphone className="h-3.5 w-3.5" />}
               label="Post tier promo"
-              desc="Plaatst een tier-upgrade promo (Silver/Gold/Platinum sell). Gebruik spaarzaam, ~1x per week."
+              desc={`Plaatst de wekelijkse promo voor ${TIER_LABEL[activeTier]} (Free draait een upsell-ladder, paid-tiers reinforced de claim met testing-stats). Gebruik spaarzaam.`}
             />
             <ActionRow
               onClick={() =>
                 runAction(
                   "sweep",
-                  () => adminCall<{ updated: number }>("/admin/telegram/update-results", "POST"),
+                  () =>
+                    adminCall<{ updated: number }>(
+                      withTier(
+                        "/admin/telegram/update-results",
+                        activeTier,
+                      ),
+                      "POST",
+                    ),
                   (r) => {
                     const { updated } = r as { updated: number };
                     return updated > 0
-                      ? `${updated} pick-post(s) bijgewerkt met uitslag.`
-                      : "Geen pending picks met uitslag — niks te updaten.";
+                      ? `${updated} ${TIER_LABEL[activeTier]} pick-post(s) bijgewerkt met uitslag.`
+                      : `Geen pending ${TIER_LABEL[activeTier]} picks met uitslag — niks te updaten.`;
                   },
                 )
               }
               busy={busyAction === "sweep"}
-              anyBusy={busyAction !== null}
+              anyBusy={busyAction !== null || !tierConfigured}
               icon={<RefreshCw className="h-3.5 w-3.5" />}
               label="Run result sweep"
-              desc="Loopt alle pending picks na en plaatst een ✅/❌ reply onder eerdere posts zodra de uitslag binnen is. Cron 15 min."
+              desc={`Loopt alle pending ${TIER_LABEL[activeTier]} picks na en plaatst een ✅/❌ reply onder eerdere posts zodra de uitslag binnen is. Cron 15 min.`}
             />
 
             {/* Danger zone — visually separated so a slip of the finger
@@ -728,16 +849,18 @@ export default function TelegramManager() {
             <div className="mt-2 space-y-1.5 border-t border-red-500/20 pt-3">
               <button
                 type="button"
-                disabled={busyAction !== null}
+                disabled={busyAction !== null || !tierConfigured}
                 onClick={() => {
                   const ok = window.confirm(
-                    "DESTRUCTIVE — this deletes EVERY auto-posted message " +
-                      "from @BetsPluggs (picks, results, summaries, promos) " +
-                      "and wipes their audit rows.\n\n" +
+                    `DESTRUCTIVE — this deletes EVERY auto-posted message ` +
+                      `from the ${TIER_LABEL[activeTier]} channel (${
+                        activeChannelHandle ?? "—"
+                      }) ` +
+                      "(picks, results, summaries, promos) and wipes their audit rows.\n\n" +
                       "The pinned WELCOME message is preserved.\n\n" +
                       "The Telegram bot needs 'Delete Messages' admin rights " +
                       "or some posts will remain.\n\n" +
-                      "A fresh Free-tier pick will be published right after.\n\n" +
+                      `A fresh ${TIER_LABEL[activeTier]}-tier pick will be published right after.\n\n` +
                       "Continue?",
                   );
                   if (!ok) return;
@@ -752,7 +875,13 @@ export default function TelegramManager() {
                           preserved: number;
                         };
                         next_post: PostSummary | null;
-                      }>("/admin/telegram/wipe?repost_next=true", "POST"),
+                      }>(
+                        withTier(
+                          "/admin/telegram/wipe?repost_next=true",
+                          activeTier,
+                        ),
+                        "POST",
+                      ),
                     (r) => {
                       const typed = r as {
                         wipe: {

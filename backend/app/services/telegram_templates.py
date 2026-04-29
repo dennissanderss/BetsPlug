@@ -27,6 +27,7 @@ from datetime import datetime, timezone
 from typing import Optional
 from zoneinfo import ZoneInfo
 
+from app.core.tier_system import CONF_THRESHOLD, PickTier
 from app.models.prediction import Prediction
 
 
@@ -299,7 +300,36 @@ def render_daily_summary(
     return "\n".join(lines)
 
 
-def render_welcome_message() -> str:
+# Per-tier copy used by the welcome / promo templates. Kept inline here
+# (instead of importing from `tier_system`) because the wording is
+# marketing copy specific to the channel feed — it intentionally diverges
+# from the in-app TIER_METADATA labels (which carry roman numerals etc.
+# that don't make sense on a Telegram phone screen).
+_TIER_CHANNEL_COPY: dict[PickTier, dict[str, str]] = {
+    PickTier.FREE: {
+        "name": "Free (Bronze)",
+        "emoji": "⬜",
+        "conf_band": "55–65%",
+    },
+    PickTier.SILVER: {
+        "name": "Silver",
+        "emoji": "🥈",
+        "conf_band": "65–70%",
+    },
+    PickTier.GOLD: {
+        "name": "Gold",
+        "emoji": "🥇",
+        "conf_band": "70–75%",
+    },
+    PickTier.PLATINUM: {
+        "name": "Platinum",
+        "emoji": "💎",
+        "conf_band": "75%+ · top-5 leagues",
+    },
+}
+
+
+def render_welcome_message(tier: PickTier = PickTier.FREE) -> str:
     """Channel introduction / pinned welcome post.
 
     Meant to be posted once and pinned — gives a new subscriber the
@@ -333,36 +363,56 @@ def render_welcome_message() -> str:
 
         18\\+ · Statistical analysis, not betting advice\\.
     """
+    copy = _TIER_CHANNEL_COPY[tier]
+    tier_label = f"{copy['emoji']} {copy['name']}"
+    cadence_line = (
+        f"• 3 {copy['name']} picks/day · 11:00 · 15:00 · 19:00 CET"
+    )
+    pick_method_line = (
+        f"Every post is a {copy['name']} tier call — the "
+        f"{copy['conf_band']} confidence band of our model. "
+        "Tested on 80,000+ historical matches."
+    )
+
     lines = [
-        "*Welcome to BetsPlug*",
+        f"*Welcome to BetsPlug · {_md(tier_label)}*",
         "_" + _md("Data-driven football predictions") + "_",
         "",
         "*What you'll see here*",
-        _md("• 3 Free picks/day · 11:00 · 15:00 · 19:00 CET"),
+        _md(cadence_line),
         _md("• Each pick replied with ✅/❌ after full-time"),
         _md("• Daily scoreboard at 23:00 CET"),
         "",
         "*How we pick*",
-        _md(
-            "Every post is a Free (Bronze) tier call — the 55–65% "
-            "confidence band of our model. Tested on 80,000+ "
-            "historical matches."
-        ),
-        "",
-        "*Higher conviction available*",
-        _md("🥈 Silver · ≥65%"),
-        _md("🥇 Gold · ≥70%"),
-        _md("💎 Platinum · ≥75% · top-5 leagues"),
+        _md(pick_method_line),
+    ]
+
+    # Only Free shows the upsell ladder — paid-tier subscribers already
+    # get conviction picks, dangling another tier in front of them is
+    # noise (and the public pricing page covers cross-sells anyway).
+    if tier == PickTier.FREE:
+        lines.extend([
+            "",
+            "*Higher conviction available*",
+            _md("🥈 Silver · ≥65%"),
+            _md("🥇 Gold · ≥70%"),
+            _md("💎 Platinum · ≥75% · top-5 leagues"),
+        ])
+
+    lines.extend([
         "",
         _md("→ betsplug.com/pricing"),
         _md("→ betsplug.com/track-record (live)"),
         "",
         _md("18+ · Statistical analysis, not betting advice."),
-    ]
+    ])
     return "\n".join(lines)
 
 
-def render_promo_message(weekly_accuracy_pct: Optional[float] = None) -> str:
+def render_promo_message(
+    weekly_accuracy_pct: Optional[float] = None,
+    tier: PickTier = PickTier.FREE,
+) -> str:
     """Weekly tier-explanation post — the only place we run a CTA.
 
     Fires Sunday 18:00 CET. Kept educational (not hypey) — audience is
@@ -386,31 +436,44 @@ def render_promo_message(weekly_accuracy_pct: Optional[float] = None) -> str:
         Every pick is tested on 80,000\\+ historical matches\\.
         → betsplug\\.com/pricing
     """
+    copy = _TIER_CHANNEL_COPY[tier]
+    weekly_label = f"Last 7 days · {copy['name']} accuracy"
     weekly_line = (
-        f"*Last 7 days · Free accuracy:* {round(weekly_accuracy_pct)}%"
+        f"*{weekly_label}:* {round(weekly_accuracy_pct)}%"
         if weekly_accuracy_pct is not None
         else ""
+    )
+
+    pick_band_line = (
+        f"Every pick in this channel is a {copy['name']} tier call — "
+        f"the {copy['conf_band']} confidence band of our model."
     )
 
     lines = [
         "*What you're seeing here*",
         "",
-        _md(
-            "Every pick in this channel is a Free (Bronze) tier call — "
-            "the 55–65% confidence band of our model."
-        ),
+        _md(pick_band_line),
     ]
     if weekly_line:
         lines.append("")
         lines.append(weekly_line)
 
+    # Free is the only feed that still has tiers above it to upsell.
+    # Paid-tier promos drop the upsell ladder and just reinforce the
+    # claim with the testing numbers + track-record link.
+    if tier == PickTier.FREE:
+        lines.extend(
+            [
+                "",
+                "*Paid tiers unlock higher conviction:*",
+                _md("🥈 Silver · ≥65% confidence"),
+                _md("🥇 Gold · ≥70% confidence"),
+                _md("💎 Platinum · ≥75% · top-5 leagues"),
+            ]
+        )
+
     lines.extend(
         [
-            "",
-            "*Paid tiers unlock higher conviction:*",
-            _md("🥈 Silver · ≥65% confidence"),
-            _md("🥇 Gold · ≥70% confidence"),
-            _md("💎 Platinum · ≥75% · top-5 leagues"),
             "",
             _md(
                 "Every pick is tested on 80,000+ historical matches "

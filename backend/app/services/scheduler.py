@@ -977,61 +977,129 @@ async def job_snapshot_upcoming_odds():
 # ──────────────────────────────────────────────────────────────────
 
 
-async def job_telegram_post_scheduled_pick():
-    """Post the best available Free-tier pick to @BetsPluggs.
+def _telegram_pick_job_for_tier(tier_name: str):
+    """Build a tier-scoped ``publish_scheduled_slot`` adapter.
 
-    Wraps ``publish_scheduled_slot`` with DB session management + a
-    broad try/except so one bad post never blows up the scheduler
-    (which would block every other cron on the process).
+    Returned coroutine matches the no-arg signature APScheduler expects.
+    Each adapter logs with the tier name so the scheduler audit trail is
+    legible across multiple tier channels.
     """
-    log.info("CRON: Telegram — posting scheduled Free pick")
-    try:
-        from app.db.session import async_session_factory
-        from app.services.telegram_posting import publish_scheduled_slot
+    async def _job():
+        log.info("CRON: Telegram — posting scheduled %s pick", tier_name)
+        try:
+            from app.core.tier_system import PickTier
+            from app.db.session import async_session_factory
+            from app.services.telegram_posting import publish_scheduled_slot
 
-        async with async_session_factory() as db:
-            post = await publish_scheduled_slot(db)
-            if post is None:
-                log.info("CRON: Telegram — no eligible pick, skipping slot")
-            else:
-                log.info(
-                    "CRON: Telegram — posted pick id=%s msg_id=%s",
-                    post.id, post.telegram_message_id,
-                )
-    except Exception as exc:
-        log.error("CRON: Telegram scheduled pick failed: %s", exc, exc_info=True)
+            tier = PickTier[tier_name.upper()]
+            async with async_session_factory() as db:
+                post = await publish_scheduled_slot(db, tier=tier)
+                if post is None:
+                    log.info(
+                        "CRON: Telegram — no eligible %s pick, skipping slot",
+                        tier_name,
+                    )
+                else:
+                    log.info(
+                        "CRON: Telegram — posted %s pick id=%s msg_id=%s",
+                        tier_name, post.id, post.telegram_message_id,
+                    )
+        except Exception as exc:
+            log.error(
+                "CRON: Telegram %s scheduled pick failed: %s",
+                tier_name, exc, exc_info=True,
+            )
+    return _job
 
 
-async def job_telegram_post_daily_summary():
-    """Post the bilingual daily summary for today (CET)."""
-    log.info("CRON: Telegram — posting daily summary")
-    try:
-        from app.db.session import async_session_factory
-        from app.services.telegram_posting import publish_daily_summary
+def _telegram_summary_job_for_tier(tier_name: str):
+    async def _job():
+        log.info("CRON: Telegram — posting %s daily summary", tier_name)
+        try:
+            from app.core.tier_system import PickTier
+            from app.db.session import async_session_factory
+            from app.services.telegram_posting import publish_daily_summary
 
-        async with async_session_factory() as db:
-            post = await publish_daily_summary(db)
-            if post is None:
-                log.info("CRON: Telegram — no picks today, summary skipped")
-            else:
-                log.info(
-                    "CRON: Telegram — daily summary posted msg_id=%s",
-                    post.telegram_message_id,
-                )
-    except Exception as exc:
-        log.error("CRON: Telegram daily summary failed: %s", exc, exc_info=True)
+            tier = PickTier[tier_name.upper()]
+            async with async_session_factory() as db:
+                post = await publish_daily_summary(db, tier=tier)
+                if post is None:
+                    log.info(
+                        "CRON: Telegram — no %s picks today, summary skipped",
+                        tier_name,
+                    )
+                else:
+                    log.info(
+                        "CRON: Telegram — %s daily summary posted msg_id=%s",
+                        tier_name, post.telegram_message_id,
+                    )
+        except Exception as exc:
+            log.error(
+                "CRON: Telegram %s daily summary failed: %s",
+                tier_name, exc, exc_info=True,
+            )
+    return _job
+
+
+def _telegram_promo_job_for_tier(tier_name: str):
+    async def _job():
+        log.info("CRON: Telegram — posting %s weekly promo", tier_name)
+        try:
+            from app.core.tier_system import PickTier
+            from app.db.session import async_session_factory
+            from app.services.telegram_posting import publish_promo
+
+            tier = PickTier[tier_name.upper()]
+            async with async_session_factory() as db:
+                post = await publish_promo(db, tier=tier)
+                if post is None:
+                    log.info(
+                        "CRON: Telegram — %s channel not configured, promo skipped",
+                        tier_name,
+                    )
+                else:
+                    log.info(
+                        "CRON: Telegram — %s weekly promo posted msg_id=%s",
+                        tier_name, post.telegram_message_id,
+                    )
+        except Exception as exc:
+            log.error(
+                "CRON: Telegram %s weekly promo failed: %s",
+                tier_name, exc, exc_info=True,
+            )
+    return _job
+
+
+# Backward-compatible Free-tier adapters — kept as module-level callables
+# because some tests / older imports reference them by name.
+job_telegram_post_scheduled_pick = _telegram_pick_job_for_tier("free")
+job_telegram_post_daily_summary = _telegram_summary_job_for_tier("free")
 
 
 async def job_telegram_update_results():
-    """Sweep pick posts whose fixtures have resolved and edit in the score."""
+    """Sweep pick posts whose fixtures have resolved and edit in the score.
+
+    Runs across every configured tier channel — the result-update flow
+    is purely per-channel (looks up unresolved posts in
+    ``telegram_posts``) so we just iterate.
+    """
     try:
+        from app.core.tier_system import PickTier
         from app.db.session import async_session_factory
         from app.services.telegram_posting import update_all_pending_results
 
         async with async_session_factory() as db:
-            updated = await update_all_pending_results(db)
-            if updated:
-                log.info("CRON: Telegram — %d pick posts updated with result", updated)
+            total = 0
+            for tier in (
+                PickTier.FREE, PickTier.SILVER, PickTier.GOLD, PickTier.PLATINUM
+            ):
+                updated = await update_all_pending_results(db, tier=tier)
+                total += updated
+            if total:
+                log.info(
+                    "CRON: Telegram — %d pick posts updated with result (all tiers)",
+                    total,
+                )
     except Exception as exc:
         log.error("CRON: Telegram result sweep failed: %s", exc, exc_info=True)
 
@@ -1287,21 +1355,7 @@ async def job_generate_daily_value_bet():
         log.error("CRON: value-bet daily selection failed: %s", exc, exc_info=True)
 
 
-async def job_telegram_post_weekly_promo():
-    """Post the bilingual tier-comparison promo to the public channel."""
-    log.info("CRON: Telegram — posting weekly promo")
-    try:
-        from app.db.session import async_session_factory
-        from app.services.telegram_posting import publish_promo
-
-        async with async_session_factory() as db:
-            post = await publish_promo(db)
-            log.info(
-                "CRON: Telegram — weekly promo posted msg_id=%s",
-                post.telegram_message_id,
-            )
-    except Exception as exc:
-        log.error("CRON: Telegram weekly promo failed: %s", exc, exc_info=True)
+job_telegram_post_weekly_promo = _telegram_promo_job_for_tier("free")
 
 
 def start_scheduler():
@@ -1529,6 +1583,58 @@ def start_scheduler():
         name="Telegram @BetsPluggs — weekly tier promo",
         replace_existing=True,
     )
+
+    # ── Paid-tier Telegram channels (silver / gold / platinum) ────────
+    # Each tier registers the same 3 picks/day + daily summary + weekly
+    # promo cadence as Free, but only when its channel env var is set.
+    # That gives a clean "configure once on Railway and it lights up"
+    # path for adding new channels without code changes.
+    from app.core.config import get_settings as _get_settings
+
+    _settings = _get_settings()
+    _tier_channels: list[tuple[str, str]] = [
+        ("silver", _settings.telegram_channel_silver),
+        ("gold", _settings.telegram_channel_gold),
+        ("platinum", _settings.telegram_channel_platinum),
+    ]
+    for _tier_name, _channel in _tier_channels:
+        if not _channel:
+            log.info(
+                "CRON: Telegram %s channel not set — skipping cron registration",
+                _tier_name,
+            )
+            continue
+        _pick_job = _telegram_pick_job_for_tier(_tier_name)
+        _summary_job = _telegram_summary_job_for_tier(_tier_name)
+        _promo_job = _telegram_promo_job_for_tier(_tier_name)
+        for _hour in (11, 15, 19):
+            scheduler.add_job(
+                _pick_job,
+                trigger=CronTrigger(hour=_hour, minute=0, timezone=_CET),
+                id=f"telegram_{_tier_name}_pick_{_hour:02d}_cet",
+                name=f"Telegram {_tier_name} — {_hour:02d}:00 CET pick",
+                replace_existing=True,
+            )
+        scheduler.add_job(
+            _summary_job,
+            trigger=CronTrigger(hour=23, minute=0, timezone=_CET),
+            id=f"telegram_{_tier_name}_daily_summary",
+            name=f"Telegram {_tier_name} — daily summary 23:00 CET",
+            replace_existing=True,
+        )
+        scheduler.add_job(
+            _promo_job,
+            trigger=CronTrigger(
+                day_of_week="sun", hour=18, minute=0, timezone=_CET,
+            ),
+            id=f"telegram_{_tier_name}_weekly_promo",
+            name=f"Telegram {_tier_name} — weekly promo",
+            replace_existing=True,
+        )
+        log.info(
+            "CRON: Telegram %s scheduler registered (channel=%s)",
+            _tier_name, _channel,
+        )
 
     scheduler.start()
     log.info("CRON: Scheduler started with %d jobs.", len(scheduler.get_jobs()))

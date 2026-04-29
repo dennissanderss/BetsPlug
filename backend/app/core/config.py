@@ -181,6 +181,19 @@ class Settings(BaseSettings):
     telegram_channel_free: str = Field(
         default="@BetsPluggs", validation_alias="TELEGRAM_CHANNEL_FREE"
     )
+    # Paid-tier channels. When empty the auto-poster + scheduler treat
+    # the tier as "not configured yet" and skip its slots — no posts go
+    # out, no admin button errors. Set the @handle (or numeric chat id)
+    # in Railway as you provision each channel.
+    telegram_channel_silver: str = Field(
+        default="", validation_alias="TELEGRAM_CHANNEL_SILVER"
+    )
+    telegram_channel_gold: str = Field(
+        default="", validation_alias="TELEGRAM_CHANNEL_GOLD"
+    )
+    telegram_channel_platinum: str = Field(
+        default="", validation_alias="TELEGRAM_CHANNEL_PLATINUM"
+    )
     # Optional separate dev/test channel so staging never pollutes the
     # public @BetsPluggs feed. When set, dev tasks use this instead of
     # `telegram_channel_free`.

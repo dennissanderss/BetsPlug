@@ -26,21 +26,48 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.core.config import get_settings
+from app.core.tier_system import PickTier
 from app.db.session import get_db
 from app.models.match import Match
 from app.models.prediction import Prediction
 from app.models.telegram_post import TelegramPost
 from app.services.telegram_posting import (
+    _channel_for_tier,
     publish_daily_summary,
     publish_pick,
     publish_promo,
     publish_scheduled_slot,
     publish_welcome,
-    select_next_free_pick,
+    select_next_tier_pick,
     update_all_pending_results,
     wipe_channel,
 )
 from app.services.telegram_service import health_probe as telegram_health
+
+
+# ---------------------------------------------------------------------------
+# Tier query-param parsing
+# ---------------------------------------------------------------------------
+
+
+def _parse_tier(value: Optional[str]) -> PickTier:
+    """Parse the ``?tier=`` query param to a PickTier enum.
+
+    Defaults to FREE when not provided so existing single-channel admin
+    URLs keep working unchanged.
+    """
+    if not value:
+        return PickTier.FREE
+    try:
+        return PickTier[value.strip().upper()]
+    except KeyError:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "Unknown tier — expected one of: "
+                "free, silver, gold, platinum."
+            ),
+        )
 
 router = APIRouter()
 
@@ -108,7 +135,16 @@ class HealthResponse(BaseModel):
     configured: bool = Field(
         ..., description="True when TELEGRAM_BOT_TOKEN is set."
     )
-    channel: str
+    channel: str = Field(
+        ..., description="Free-tier channel handle (back-compat field)."
+    )
+    channels: dict[str, str] = Field(
+        default_factory=dict,
+        description=(
+            "Per-tier configured channel handles "
+            "(missing keys = tier not configured)."
+        ),
+    )
     bot: Optional[dict] = Field(
         None, description="Raw `getMe` response when the token is valid."
     )
@@ -156,18 +192,25 @@ class ChannelOverview(BaseModel):
 @router.post(
     "/post-pick/{prediction_id}",
     response_model=PostSummary,
-    summary="Force-post a specific prediction to the @BetsPluggs channel",
+    summary="Force-post a specific prediction to a tier channel",
 )
 async def force_post_pick(
     prediction_id: UUID,
     channel: Optional[str] = Query(
         default=None,
-        description="Override channel (defaults to TELEGRAM_CHANNEL_FREE).",
+        description="Override channel (defaults to the configured tier channel).",
+    ),
+    tier: Optional[str] = Query(
+        default=None,
+        description="Tier scope: free | silver | gold | platinum (default free).",
     ),
     db: AsyncSession = Depends(get_db),
 ) -> PostSummary:
+    tier_enum = _parse_tier(tier)
     try:
-        post = await publish_pick(prediction_id, db, channel=channel)
+        post = await publish_pick(
+            prediction_id, db, channel=channel, tier=tier_enum
+        )
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     return _post_to_summary(post)
@@ -176,15 +219,20 @@ async def force_post_pick(
 @router.post(
     "/post-next",
     response_model=Optional[PostSummary],
-    summary="Run the next scheduled-slot selection + post",
+    summary="Run the next scheduled-slot selection + post for a tier",
 )
 async def force_post_next(
     channel: Optional[str] = Query(default=None),
+    tier: Optional[str] = Query(
+        default=None,
+        description="Tier scope: free | silver | gold | platinum (default free).",
+    ),
     db: AsyncSession = Depends(get_db),
 ) -> Optional[PostSummary]:
     """Equivalent to the cron that runs at 11/15/19 CET. Posts the best
-    available Free pick right now, or returns null if nothing qualifies."""
-    post = await publish_scheduled_slot(db, channel=channel)
+    available pick for the requested tier, or returns null if nothing qualifies."""
+    tier_enum = _parse_tier(tier)
+    post = await publish_scheduled_slot(db, channel=channel, tier=tier_enum)
     return _post_to_summary(post) if post is not None else None
 
 
@@ -205,6 +253,7 @@ class PostSummaryBody(BaseModel):
 async def force_post_summary(
     body: PostSummaryBody,
     channel: Optional[str] = Query(default=None),
+    tier: Optional[str] = Query(default=None),
     db: AsyncSession = Depends(get_db),
 ) -> Optional[PostSummary]:
     target_date: Optional[date] = None
@@ -216,40 +265,45 @@ async def force_post_summary(
                 status_code=400,
                 detail="date must be YYYY-MM-DD",
             )
+    tier_enum = _parse_tier(tier)
     post = await publish_daily_summary(
-        db, target_date=target_date, channel=channel
+        db, target_date=target_date, channel=channel, tier=tier_enum,
     )
     return _post_to_summary(post) if post is not None else None
 
 
 @router.post(
     "/post-promo",
-    response_model=PostSummary,
+    response_model=Optional[PostSummary],
     summary="Force-post the bilingual tier-comparison promo",
 )
 async def force_post_promo(
     channel: Optional[str] = Query(default=None),
+    tier: Optional[str] = Query(default=None),
     db: AsyncSession = Depends(get_db),
-) -> PostSummary:
-    post = await publish_promo(db, channel=channel)
-    return _post_to_summary(post)
+) -> Optional[PostSummary]:
+    tier_enum = _parse_tier(tier)
+    post = await publish_promo(db, channel=channel, tier=tier_enum)
+    return _post_to_summary(post) if post is not None else None
 
 
 @router.post(
     "/post-welcome",
-    response_model=PostSummary,
+    response_model=Optional[PostSummary],
     summary="Force-post the channel welcome / intro message",
 )
 async def force_post_welcome(
     channel: Optional[str] = Query(default=None),
+    tier: Optional[str] = Query(default=None),
     db: AsyncSession = Depends(get_db),
-) -> PostSummary:
+) -> Optional[PostSummary]:
     """Use after a wipe or when the pinned welcome was accidentally
     deleted. Pin the resulting message manually in the Telegram client —
     the bot doesn't assume pin-rights to keep the happy-path minimal.
     """
-    post = await publish_welcome(db, channel=channel)
-    return _post_to_summary(post)
+    tier_enum = _parse_tier(tier)
+    post = await publish_welcome(db, channel=channel, tier=tier_enum)
+    return _post_to_summary(post) if post is not None else None
 
 
 @router.post(
@@ -258,9 +312,13 @@ async def force_post_welcome(
 )
 async def force_update_results(
     channel: Optional[str] = Query(default=None),
+    tier: Optional[str] = Query(default=None),
     db: AsyncSession = Depends(get_db),
 ) -> dict[str, Any]:
-    count = await update_all_pending_results(db, channel=channel)
+    tier_enum = _parse_tier(tier)
+    count = await update_all_pending_results(
+        db, channel=channel, tier=tier_enum
+    )
     return {"updated": count}
 
 
@@ -270,6 +328,7 @@ async def force_update_results(
 )
 async def force_wipe_channel(
     channel: Optional[str] = Query(default=None),
+    tier: Optional[str] = Query(default=None),
     repost_next: bool = Query(
         default=False,
         description=(
@@ -287,10 +346,13 @@ async def force_wipe_channel(
     prediction. Set ``repost_next=true`` to chain a fresh scheduled-slot
     post right after the wipe.
     """
-    result = await wipe_channel(db, channel=channel)
+    tier_enum = _parse_tier(tier)
+    result = await wipe_channel(db, channel=channel, tier=tier_enum)
     next_post: Optional[PostSummary] = None
     if repost_next:
-        post = await publish_scheduled_slot(db, channel=channel)
+        post = await publish_scheduled_slot(
+            db, channel=channel, tier=tier_enum,
+        )
         next_post = _post_to_summary(post) if post is not None else None
     return {
         "wipe": result,
@@ -306,19 +368,27 @@ async def force_wipe_channel(
 @router.get(
     "/queue",
     response_model=list[QueueItem],
-    summary="Preview the next Free pick the scheduler would post",
+    summary="Preview the next pick the scheduler would post for a tier",
 )
 async def get_queue(
     channel: Optional[str] = Query(default=None),
+    tier: Optional[str] = Query(default=None),
     db: AsyncSession = Depends(get_db),
 ) -> list[QueueItem]:
-    """Returns 0 or 1 items — the prediction `publish_scheduled_slot`
-    would pick if called right now. Useful for verifying that a new
-    Free pick is available before the next cron runs.
+    """Returns 0 or 1 items — the prediction the scheduler would pick
+    for the requested tier right now. Useful for verifying that a new
+    pick is available before the next cron runs.
     """
     settings = get_settings()
-    target = channel or settings.telegram_channel_test or settings.telegram_channel_free
-    pred = await select_next_free_pick(db, target)
+    tier_enum = _parse_tier(tier)
+    target = (
+        channel
+        or settings.telegram_channel_test
+        or _channel_for_tier(tier_enum)
+    )
+    if not target:
+        return []
+    pred = await select_next_tier_pick(db, target, tier_enum)
     if pred is None:
         return []
     match = pred.match
@@ -349,8 +419,24 @@ async def list_posts(
     limit: int = Query(default=50, ge=1, le=500),
     post_type: Optional[str] = Query(default=None),
     channel: Optional[str] = Query(default=None),
+    tier: Optional[str] = Query(
+        default=None,
+        description=(
+            "When set, scopes the listing to that tier's configured "
+            "channel. Ignored when ``channel`` is provided explicitly."
+        ),
+    ),
     db: AsyncSession = Depends(get_db),
 ) -> list[PostSummary]:
+    if not channel and tier:
+        tier_enum = _parse_tier(tier)
+        configured = _channel_for_tier(tier_enum)
+        if configured:
+            channel = configured
+        else:
+            # Tier requested but its channel isn't configured yet — return
+            # an empty history rather than dumping everything.
+            return []
     # Eager-load prediction → match → teams & league so the admin table
     # can show "Stoke City vs Millwall · Championship" instead of a bare
     # msg_id. Keeps the query count flat regardless of row count.
@@ -385,7 +471,20 @@ async def list_posts(
 )
 async def get_schedule(
     count: int = Query(default=8, ge=1, le=20),
+    tier: Optional[str] = Query(
+        default=None,
+        description=(
+            "Tier scope — when its channel isn't configured, returns []."
+        ),
+    ),
 ) -> list[ScheduledSlot]:
+    # Tiers without a configured channel have no scheduled cron jobs
+    # registered, so the upcoming-slots preview must return an empty list
+    # for them — otherwise the admin panel would show phantom 11:00/15:00
+    # slots that will never fire.
+    tier_enum = _parse_tier(tier)
+    if not _channel_for_tier(tier_enum):
+        return []
     """Return the next N scheduled auto-poster slots with wall-clock times.
 
     Pick slots fire at 11:00 / 15:00 / 19:00 CET, daily summary at 23:00
@@ -471,9 +570,19 @@ async def get_health() -> HealthResponse:
     bot = None
     if settings.telegram_bot_token:
         bot = await telegram_health()
+    tier_channels: dict[str, str] = {}
+    for slug, handle in (
+        ("free", settings.telegram_channel_free),
+        ("silver", settings.telegram_channel_silver),
+        ("gold", settings.telegram_channel_gold),
+        ("platinum", settings.telegram_channel_platinum),
+    ):
+        if handle:
+            tier_channels[slug] = handle
     return HealthResponse(
         configured=bool(settings.telegram_bot_token),
         channel=settings.telegram_channel_free,
+        channels=tier_channels,
         bot=bot,
     )
 
@@ -495,11 +604,22 @@ async def get_channels_overview(
     """
     settings = get_settings()
 
-    configured = []
-    if settings.telegram_channel_free:
-        configured.append((settings.telegram_channel_free, "free", True, False))
+    # Each entry is (handle, tier_slug, is_primary, is_test). One primary
+    # row per configured tier-channel + one optional test override.
+    configured: list[tuple[str, str, bool, bool]] = []
+    tier_channel_pairs = [
+        ("free", settings.telegram_channel_free),
+        ("silver", settings.telegram_channel_silver),
+        ("gold", settings.telegram_channel_gold),
+        ("platinum", settings.telegram_channel_platinum),
+    ]
+    for tier_slug, handle in tier_channel_pairs:
+        if handle:
+            configured.append((handle, tier_slug, True, False))
     if settings.telegram_channel_test:
-        configured.append((settings.telegram_channel_test, "free", False, True))
+        configured.append(
+            (settings.telegram_channel_test, "test", False, True)
+        )
 
     # Pull every channel we've ever posted to from the audit table so
     # stale handles don't disappear from the dashboard.
