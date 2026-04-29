@@ -270,7 +270,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
       currency: "EUR",
       content_id: planParam,
       content_name: `${planParam} ${billingParam}`,
-      content_type: "subscription",
+      content_type: "product",
     });
   }, [planParam, billingParam]);
 

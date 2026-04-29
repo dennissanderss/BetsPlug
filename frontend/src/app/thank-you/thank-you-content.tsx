@@ -325,7 +325,7 @@ function ThankYouContent({
       currency: "EUR",
       content_id: planKey,
       content_name: `${planKey} ${billing}${isTrial ? " trial" : ""}`,
-      content_type: "subscription",
+      content_type: "product",
     };
     trackTikTok(isTrial ? "StartTrial" : "Subscribe", params_);
     if (!isTrial) trackTikTok("CompletePayment", params_);
