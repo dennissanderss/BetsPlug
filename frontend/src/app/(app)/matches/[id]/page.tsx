@@ -1187,6 +1187,7 @@ function LockedPickUpsellCard({
   label?: string;
   accuracy?: string;
 }) {
+  const { t } = useTranslations();
   const TIER_COPY = {
     silver: {
       title: "Silver-tier pick available",
@@ -1233,12 +1234,10 @@ function LockedPickUpsellCard({
               Locked · {resolvedLabel} tier · {resolvedAccuracy}
             </p>
             <p className="mt-1 text-base font-bold text-[#ededed]">
-              We hebben een voorspelling voor deze wedstrijd
+              {t("matches.lockedPick.heading")}
             </p>
             <p className="mt-1 max-w-md text-xs leading-relaxed text-[#a3a9b8]">
-              Deze pick zit in {resolvedLabel} ({resolvedAccuracy} historische
-              nauwkeurigheid). Upgrade om de confidence, waarschijnlijkheden,
-              odds en top-drivers te zien.
+              {t("matches.lockedPick.body", { label: resolvedLabel, accuracy: resolvedAccuracy })}
             </p>
           </div>
         </div>
@@ -1246,7 +1245,7 @@ function LockedPickUpsellCard({
           href="/pricing"
           className="btn-primary inline-flex shrink-0 items-center gap-2"
         >
-          Upgrade naar {resolvedLabel}
+          {t("matches.lockedPick.upgradeCta", { label: resolvedLabel })}
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>

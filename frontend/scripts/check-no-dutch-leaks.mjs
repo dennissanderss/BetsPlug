@@ -75,6 +75,13 @@ const EXCLUDE_PATHS = [
   path.join(SRC_DIR, "app/api"),
   path.join(SRC_DIR, "app/studio"),
   path.join(SRC_DIR, "data/page-meta.ts"),     // localized meta dictionary
+  // Admin-internal surfaces. Only Cas / Denis ever see these — they
+  // contain technical diagnostics with internal identifiers (cron
+  // names, scheduler queues, sync_recent_results, etc.) where
+  // translating to 16 locales would just add maintenance churn for
+  // no user benefit. Treat the Dutch prose here as intentional.
+  path.join(SRC_DIR, "app/(app)/admin"),
+  path.join(SRC_DIR, "components/admin"),
 ];
 const EXCLUDE_FILE_RX = /\.(test|spec|stories)\.(tsx?|ts)$/;
 
@@ -147,6 +154,24 @@ const DUTCH_WORDS = [
   "huidige",
   "kleine",
   "volledige",
+  // Single-word triggers (Dutch-only / very high precision)
+  "geen",        // "no/none"
+  "niet",        // "not"
+  "voortgang",   // "progress"
+  "drempel",     // "threshold"
+  "ontwikkeling",// "in development"
+  "verbeterde",  // "improved"
+  "ophalen",     // "fetch"
+  "verzameld",   // "collected"
+  "bewijs",      // "proof/evidence"
+  "loopt",       // "runs/active"
+  "uitsluitend", // "exclusively"
+  "leakage-vrij",// internal phrase
+  "toon",        // "show"
+  "alle",        // "all" (Dutch, !=EN "all" by case + context)
+  "ontgrendelt", // "unlocks"
+  "samen met",   // "together with"
+
   // Multi-word phrasal triggers (high-precision, no word-boundary needed)
   // NOTE: "log in" is intentionally NOT here — it's identical EN+NL.
   "wachten op data",
@@ -159,6 +184,25 @@ const DUTCH_WORDS = [
   "log opnieuw",
   "naar Gold",
   "naar Platinum",
+  "kan niet",
+  "kon niet",
+  "te zien",
+  "niet laden",
+  "niet ophalen",
+  "Toon minder",
+  "Toon alle",
+  "vóór kickoff",
+  "vóór de aftrap",
+  "zit in",
+  "om te",
+  "Voor elke",
+  "voor elke",
+  "die nu lopen",
+  "deze meetlaag",
+  "meting loopt",
+  "geen evaluaties",
+  "verschijnen ze",
+  "Beschikbaar vanaf",
 ];
 
 // Pre-compile word-boundary regexes for the single-word triggers

@@ -1524,15 +1524,14 @@ export default function PredictionsPage() {
         <div className="flex items-start gap-3 rounded-xl border border-blue-500/20 bg-blue-500/5 px-4 py-3">
           <span className="mt-0.5 text-base">💡</span>
           <p className="text-xs leading-relaxed text-slate-300">
-            <span className="font-semibold text-white">Hoe gebruik je deze picks?</span>{" "}
-            Alle picks zijn beschikbaar om op te wedden. Hoe hoger de{" "}
-            <span className="font-semibold text-amber-300">betrouwbaarheid %</span>, hoe
-            zekerder het model. Wij raden aan: kies picks{" "}
-            <span className="font-semibold text-emerald-300">boven 70%</span> voor de beste
-            kans op succes. Filter op{" "}
-            <span className="font-semibold text-white">Gold</span> of{" "}
-            <span className="font-semibold text-white">Platinum</span> om alleen die picks te
-            zien.
+            <span className="font-semibold text-white">{t("pred.upcomingGuidance.title")}</span>{" "}
+            {t("pred.upcomingGuidance.bodyBefore")}{" "}
+            <span className="font-semibold text-amber-300">{t("pred.upcomingGuidance.confidenceLabel")}</span>{t("pred.upcomingGuidance.bodyAfterConfidence")}{" "}
+            <span className="font-semibold text-emerald-300">{t("pred.upcomingGuidance.recommend")}</span>{" "}
+            {t("pred.upcomingGuidance.bodyAfterRecommend")}{" "}
+            <span className="font-semibold text-white">Gold</span>{" "}{t("pred.upcomingGuidance.or")}{" "}
+            <span className="font-semibold text-white">Platinum</span>{" "}
+            {t("pred.upcomingGuidance.bodyTail")}
           </p>
         </div>
       )}
@@ -1542,8 +1541,8 @@ export default function PredictionsPage() {
         <div className="flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3">
           <Radio className="mt-0.5 h-4 w-4 flex-shrink-0 text-red-400" />
           <p className="text-xs leading-relaxed text-slate-300">
-            <span className="font-semibold text-white">Wedstrijden die nu lopen.</span>{" "}
-            Wat je hier ziet is de voorspelling die <span className="font-semibold text-white">vóór</span> de aftrap is gelockt — handig om te checken wat de engine per tier verwachtte. We passen de pick niet meer aan tijdens de wedstrijd.
+            <span className="font-semibold text-white">{t("pred.live.bannerTitle")}</span>{" "}
+            {t("pred.live.bannerBodyBefore")}{" "}<span className="font-semibold text-white">{t("pred.live.bannerEmphasis")}</span>{" "}{t("pred.live.bannerBodyAfter")}
           </p>
         </div>
       )}
@@ -1565,9 +1564,7 @@ export default function PredictionsPage() {
           <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 text-slate-500" />
             <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-              {t("pred.rangeLabel" as any) === "pred.rangeLabel"
-                ? "Periode"
-                : t("pred.rangeLabel" as any)}
+              {t("pred.rangeLabel")}
             </span>
           </div>
           <div className="flex items-center gap-1">
