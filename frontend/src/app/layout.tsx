@@ -139,8 +139,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
 
-        {/* GA4 is deployed as a tag inside GTM (with CookieYes consent
-            trigger), so there's no hardcoded gtag here. */}
+        {/* GA4 + TikTok Pixel are deployed as tags inside GTM (both behind
+            the CookieYes consent trigger), so there's no hardcoded analytics
+            script here. */}
+
 
         <LocaleProvider locale={locale}>
           <AppProviders>{children}</AppProviders>

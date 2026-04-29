@@ -51,6 +51,7 @@ import {
   POPULAR_COUNTRY_CODES,
 } from "@/lib/countries";
 import { HeroMediaBg } from "@/components/ui/media-bg";
+import { trackTikTok, getPlanValueEur } from "@/lib/tiktok-pixel";
 
 /* ── Abandoned checkout tracking ─────────────────────────────
    Fire-and-forget API calls that never block the checkout UX.
@@ -261,6 +262,17 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
   const billingParam = (params?.get("billing") ?? "monthly") as Billing;
   const initialBilling: Billing =
     billingParam === "yearly" ? "yearly" : "monthly";
+
+  useEffect(() => {
+    if (planParam === "bronze") return;
+    trackTikTok("InitiateCheckout", {
+      value: getPlanValueEur(planParam, billingParam, false),
+      currency: "EUR",
+      content_id: planParam,
+      content_name: `${planParam} ${billingParam}`,
+      content_type: "subscription",
+    });
+  }, [planParam, billingParam]);
 
   const [plan, setPlan] = useState<PlanDef>(initialPlan);
   const [billing, setBilling] = useState<Billing>(initialBilling);

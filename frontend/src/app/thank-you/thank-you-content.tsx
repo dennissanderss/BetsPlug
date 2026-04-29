@@ -29,6 +29,7 @@ import { PAGE_IMAGES } from "@/data/page-images";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
 import { TelegramInviteCard } from "@/components/telegram/invite-card";
+import { trackTikTok, getPlanValueEur } from "@/lib/tiktok-pixel";
 
 /**
  * /thank-you — post-purchase landing page
@@ -303,6 +304,32 @@ function ThankYouContent({
       // Private mode or storage disabled — silently ignore.
     }
   }, [activated, planKey]);
+
+  // De-duplicate the conversion event — Stripe sends users back
+  // here with a stable session_id; if the user refreshes we don't
+  // want a second TikTok event for the same purchase. We mark the
+  // session_id as fired in localStorage and skip subsequent mounts.
+  useEffect(() => {
+    if (!activated) return;
+    const sessionId = params?.get("session_id") ?? "";
+    const dedupeKey = `tt_fired_${sessionId || `${planKey}-${billing}-${isTrial ? "t" : "p"}`}`;
+    try {
+      if (window.localStorage.getItem(dedupeKey) === "1") return;
+      window.localStorage.setItem(dedupeKey, "1");
+    } catch {
+      // localStorage unavailable — fire anyway, accept possible duplicate.
+    }
+    const value = getPlanValueEur(planKey, billing, isTrial);
+    const params_ = {
+      value,
+      currency: "EUR",
+      content_id: planKey,
+      content_name: `${planKey} ${billing}${isTrial ? " trial" : ""}`,
+      content_type: "subscription",
+    };
+    trackTikTok(isTrial ? "StartTrial" : "Subscribe", params_);
+    if (!isTrial) trackTikTok("CompletePayment", params_);
+  }, [activated, planKey, billing, isTrial, params]);
 
   const headlineSuffix = useMemo(() => {
     if (isTrial) return `${planCopy.label} trial`;

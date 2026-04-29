@@ -39,6 +39,7 @@ import { HeroMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 import { HexBadge, type HexVariant } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { trackTikTok } from "@/lib/tiktok-pixel";
 
 interface WelcomeContentProps {
   welcomePage?: any;
@@ -53,6 +54,13 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
   useEffect(() => {
     const timer = setTimeout(() => setBurst(false), 2400);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    trackTikTok("CompleteRegistration", {
+      content_name: "Free Access signup",
+      content_type: "registration",
+    });
   }, []);
 
   const displayName =
