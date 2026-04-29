@@ -484,9 +484,19 @@ export default function ComboOfTheDayPage() {
   });
 
   const today = todayQuery.data;
-  const showLiveCombo = today?.available && today.legs.length > 0;
-  const showComingSoon = today?.coming_soon;
+  // Combi van de Dag is still in development. Non-admins (including
+  // Platinum subscribers, the only paid tier this would otherwise be
+  // available to) ALWAYS see the coming-soon overlay regardless of
+  // what the API returns — this guards against direct-URL navigation
+  // bypassing the sidebar's "SOON" gating, and against an accidental
+  // backend flag flip showing unfinished output to paying users.
+  // Admins still get the live preview via ``isAdmin`` so QA stays
+  // unblocked.
+  const showLiveCombo =
+    isAdmin && today?.available && today.legs.length > 0;
+  const showComingSoon = !isAdmin || Boolean(today?.coming_soon);
   const showNoCombo =
+    isAdmin &&
     today && !today.available && !today.coming_soon && !today.locked;
 
   return (
@@ -600,29 +610,38 @@ export default function ComboOfTheDayPage() {
           </div>
         </div>
 
-        {/* Backtest stats */}
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-            {t("combo.sectionBacktestKicker")}
-          </p>
-          <StatsCard title={t("combo.statsCardBacktestTitle")} scope="backtest" />
-        </div>
+        {/* Backtest stats — admin-only while the feature is in
+            development so non-admins don't see preliminary numbers
+            tied to an unfinished pipeline. */}
+        {isAdmin && (
+          <div className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+              {t("combo.sectionBacktestKicker")}
+            </p>
+            <StatsCard title={t("combo.statsCardBacktestTitle")} scope="backtest" />
+          </div>
+        )}
 
-        {/* Live stats */}
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-            {t("combo.sectionLiveKicker")}
-          </p>
-          <StatsCard title={t("combo.statsCardLiveTitle")} scope="live" />
-        </div>
+        {/* Live stats — admin-only, same reason as backtest above. */}
+        {isAdmin && (
+          <div className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+              {t("combo.sectionLiveKicker")}
+            </p>
+            <StatsCard title={t("combo.statsCardLiveTitle")} scope="live" />
+          </div>
+        )}
 
-        {/* History list */}
-        <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
-            {t("combo.sectionHistoryKicker")}
-          </p>
-          <HistoryList />
-        </div>
+        {/* History list — admin-only while combi-of-the-day is still
+            in development. */}
+        {isAdmin && (
+          <div className="space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">
+              {t("combo.sectionHistoryKicker")}
+            </p>
+            <HistoryList />
+          </div>
+        )}
 
         {/* Honest framing */}
         <div className="rounded-lg border border-amber-500/20 bg-amber-500/[0.04] p-4">
