@@ -222,6 +222,65 @@ async def delete_message(channel: str, message_id: int) -> bool:
         raise
 
 
+async def create_chat_invite_link(
+    chat_id: str,
+    name: Optional[str] = None,
+    member_limit: int = 1,
+    expire_seconds: Optional[int] = None,
+) -> dict:
+    """Create a single-use invite link for a private channel.
+
+    Wraps the Bot API ``createChatInviteLink`` method. Defaults to
+    ``member_limit=1`` so the returned link expires the moment one
+    person joins — a leaked link cannot admit a second freeloader.
+
+    Returns the raw ``ChatInviteLink`` dict (``invite_link``,
+    ``expire_date``, ``member_limit`` etc). Raises ``TelegramError`` on
+    any non-OK response so the caller can decide whether to surface or
+    swallow.
+
+    When the bot token is absent (local dev / tests), returns a
+    synthetic dry-run dict containing a placeholder ``invite_link`` so
+    the rest of the flow can be exercised without hitting the network.
+    """
+    token = _token()
+    if not token:
+        logger.info(
+            "telegram: dry-run createChatInviteLink (no token) chat_id=%s name=%s",
+            chat_id,
+            name,
+        )
+        return {
+            "invite_link": f"https://t.me/+dryrun-{name or 'noname'}",
+            "expire_date": None,
+            "member_limit": member_limit,
+            "name": name or "",
+        }
+
+    payload: dict = {
+        "chat_id": chat_id,
+        "member_limit": member_limit,
+        # Per Telegram docs, name is shown to the channel admin so we
+        # can spot-check which subscribers got which link from inside
+        # the Telegram client itself ("invite link manage" view).
+        "creates_join_request": False,
+    }
+    if name:
+        payload["name"] = name[:32]  # Bot API caps at 32 chars
+    if expire_seconds is not None:
+        from datetime import datetime as _dt, timezone as _tz
+        payload["expire_date"] = int(
+            (_dt.now(_tz.utc).timestamp()) + expire_seconds
+        )
+
+    try:
+        result = await _post_api("createChatInviteLink", payload)
+    except TelegramError as e:
+        logger.error("telegram: createChatInviteLink failed: %s", e)
+        raise
+    return result
+
+
 async def health_probe() -> Optional[dict]:
     """Call `getMe` as a cheap auth/token health check.
 
@@ -244,5 +303,6 @@ __all__ = [
     "post_to_channel",
     "update_message",
     "delete_message",
+    "create_chat_invite_link",
     "health_probe",
 ]

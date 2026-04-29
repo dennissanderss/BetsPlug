@@ -9,6 +9,7 @@ import { TodayMatchesList } from "@/components/dashboard/TodayMatchesList";
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 import { WelcomeBanner } from "@/components/dashboard/WelcomeBanner";
 import { UpgradeNudgeCard } from "@/components/dashboard/UpgradeNudgeCard";
+import { TelegramInviteCard } from "@/components/telegram/invite-card";
 import { useTier } from "@/hooks/use-tier";
 
 export default function DashboardPage() {
@@ -94,6 +95,19 @@ export default function DashboardPage() {
           {/* Tier-specific "next step" trigger. Renders only for Free
               and Silver — Gold/Platinum users see nothing here. */}
           <UpgradeNudgeCard />
+          {/* Personal Telegram invite link for paid-tier users. The
+              card returns null for users without that tier (server
+              gates the link by the active subscription), so this
+              renders nothing for Free users — no UI noise. We pick
+              the highest tier the user has access to so a Platinum
+              subscriber sees the Platinum card, not the Silver one. */}
+          {userTierSlug === "platinum" ? (
+            <TelegramInviteCard tier="platinum" />
+          ) : userTierSlug === "gold" ? (
+            <TelegramInviteCard tier="gold" />
+          ) : userTierSlug === "silver" ? (
+            <TelegramInviteCard tier="silver" />
+          ) : null}
           <LiveMatchesStrip
             data={liveFixtures}
             isLoading={liveLoading}

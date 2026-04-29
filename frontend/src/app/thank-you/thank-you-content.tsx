@@ -28,6 +28,7 @@ import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
+import { TelegramInviteCard } from "@/components/telegram/invite-card";
 
 /**
  * /thank-you — post-purchase landing page
@@ -529,6 +530,32 @@ function ThankYouContent({
           </div>
           </div>
         </section>
+
+        {/* ── Telegram invite card ─────────────────────────────────────
+            Appears once the subscription poll has confirmed activation.
+            Backend gates the actual link by the user's paid tier — this
+            component returns null for users without access, so a
+            tampered planKey query param can't reveal a link they
+            didn't pay for. Bronze ⇒ silver invite (Bronze maps to
+            BASIC plan_type which the backend treats as Gold-tier
+            access; we still issue the *Silver* invite as a softer
+            entry point so trial users join the Silver community
+            channel rather than the more selective Gold one). */}
+        {activated && planKey !== "bronze" && (
+          <section className="relative py-8 md:py-12">
+            <div className="mx-auto max-w-2xl px-4 sm:px-6">
+              <TelegramInviteCard
+                tier={
+                  planKey === "platinum"
+                    ? "platinum"
+                    : planKey === "gold"
+                    ? "gold"
+                    : "silver"
+                }
+              />
+            </div>
+          </section>
+        )}
 
         {/* Verification status */}
         <section className="relative py-12 md:py-16">

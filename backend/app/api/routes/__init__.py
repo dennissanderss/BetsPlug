@@ -39,6 +39,7 @@ from app.api.routes.route import router as route_router
 from app.api.routes.admin_api_usage import router as admin_api_usage_router
 from app.api.routes.admin_v5 import router as admin_v5_router
 from app.api.routes.admin_telegram import router as admin_telegram_router
+from app.api.routes.telegram import router as telegram_router
 # Value-bet engine (v9)
 from app.api.routes.value_bets import router as value_bets_router, admin_router as value_bets_admin_router
 
@@ -88,6 +89,7 @@ router.include_router(route_router, prefix="/route", tags=["route"])
 router.include_router(admin_api_usage_router, prefix="/admin", tags=["admin-api-usage"], dependencies=_ADMIN_AUTH)
 router.include_router(admin_v5_router, prefix="/admin/v5", tags=["admin-v5"], dependencies=_ADMIN_AUTH)
 router.include_router(admin_telegram_router, prefix="/admin/telegram", tags=["admin-telegram"], dependencies=_ADMIN_AUTH)
+router.include_router(telegram_router, prefix="/telegram", tags=["telegram"])
 # Value-bet engine (v9)
 router.include_router(value_bets_router, prefix="/value-bets", tags=["value-bets"])
 router.include_router(value_bets_admin_router, prefix="/admin/value-bets", tags=["admin-value-bets"], dependencies=_ADMIN_AUTH)

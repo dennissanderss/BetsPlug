@@ -25,6 +25,7 @@ from app.models.top_scorer import TopScorer
 from app.models.api_usage import ApiUsageLog
 # telegram
 from app.models.telegram_post import TelegramPost
+from app.models.telegram_invite import TelegramInvite
 # Value-bet engine (v9)
 from app.models.value_bet import ValueBet
 # Combi van de Dag (v9.1) — 3-leg accumulator
@@ -47,6 +48,7 @@ __all__ = [
     "TeamEloHistory", "MatchStatistics", "TopScorer", "ApiUsageLog",
     # telegram
     "TelegramPost",
+    "TelegramInvite",
     # v9
     "ValueBet",
     # v9.1

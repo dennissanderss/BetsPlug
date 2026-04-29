@@ -727,6 +727,39 @@ async def stripe_webhook(
                 user.email, plan, checkout_session_id,
             )
 
+            # Pre-warm a personal Telegram invite link for the paid tier
+            # the user just bought. This is best-effort: if the bot is
+            # down or the channel isn't configured we just log and move
+            # on — the user will still see their link the moment the
+            # frontend calls /api/telegram/my-invite/<tier>, which will
+            # generate the same link on first hit. Doing it here keeps
+            # the thank-you page render path zero-latency.
+            try:
+                from app.auth.tier import PLAN_TO_TIER
+                from app.core.tier_system import PickTier
+                from app.services.telegram_invites import get_or_create_invite
+
+                paid_tier = PLAN_TO_TIER.get(plan_type, PickTier.FREE)
+                if paid_tier != PickTier.FREE:
+                    invite = await get_or_create_invite(db, user, paid_tier)
+                    if invite is not None:
+                        logger.info(
+                            "Telegram invite prewarmed: user=%s tier=%s",
+                            user.email, paid_tier.name,
+                        )
+                    else:
+                        # Channel env not configured yet — operator action
+                        # needed but we don't fail the checkout flow.
+                        logger.warning(
+                            "Telegram invite skipped (channel not configured): "
+                            "user=%s tier=%s", user.email, paid_tier.name,
+                        )
+            except Exception as invite_exc:  # noqa: BLE001
+                logger.error(
+                    "Telegram invite prewarm failed for user=%s: %s",
+                    user.email, invite_exc,
+                )
+
             # Fire-and-forget notification email. Any failure is swallowed
             # so the webhook still returns 200.
             #
