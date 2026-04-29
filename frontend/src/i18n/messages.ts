@@ -3226,6 +3226,20 @@ const en = {
   "admin.statusCancelled": "Cancelled",
   "admin.matchesColumn": "Matches",
   "admin.predsColumn": "Preds",
+
+  /* ── Trackrecord page — live measurement tab + BOTD gate ── */
+  "trackrecord.live.kicker": "2 · Live measurement · since 18 Apr 2026",
+  "trackrecord.live.title": "Pre-match measurement that grows daily",
+  "trackrecord.live.subtitle": "Only picks locked strictly before kickoff are counted below. The counter starts at 0 and grows with every finished match — the honest track record, no cherry-picking.",
+  "trackrecord.live.perTierTitle": "Per tier — live accuracy",
+  "trackrecord.live.perTierSubtitle": "Strict pre-match picks since 18 April 2026, broken down by tier. While a tier sits below 10 evaluated picks we show \"waiting for data\" — small samples are not a conclusion.",
+  "trackrecord.live.botdTitle": "Pick of the Day — live measurement",
+  "trackrecord.live.botdSubtitle": "Daily BOTD locked pre-match. Gold and Platinum see the same stream.",
+  "trackrecord.botdGate.heading": "For Gold & Platinum subscribers only",
+  "trackrecord.botdGate.body": "The Pick of the Day is on Gold and Platinum — our single daily pick with the highest model confidence. Free and Silver have no BOTD access because we keep the volume low and the signal quality high. Upgrade to Gold (or Platinum for the top-5 leagues) to unlock this track record and the daily pick. Gold and Platinum see the same BOTD stream — identical picks.",
+  "trackrecord.botdGate.upgradeCta": "Upgrade to Gold",
+  "trackrecord.botdGate.exampleCta": "View BOTD example",
+  "trackrecord.botdGate.adminHint": "Testing as admin? Open /admin → \"Test as Tier\" → Gold / Platinum to unlock this section.",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -5963,6 +5977,20 @@ const nl: Dictionary = {
   "admin.statusCancelled": "Afgelast",
   "admin.matchesColumn": "Wedstrijden",
   "admin.predsColumn": "Voorsp.",
+
+  /* ── Trackrecord page — live meting tab + BOTD gate ── */
+  "trackrecord.live.kicker": "2 · Live meting · vanaf 18 apr 2026",
+  "trackrecord.live.title": "Pre-match meting die dagelijks groeit",
+  "trackrecord.live.subtitle": "Hieronder tellen alleen picks die strikt vóór de aftrap zijn vastgelegd. De teller begint op 0 en groeit met elke afgelopen wedstrijd — de eerlijke track record zonder cherry-picking.",
+  "trackrecord.live.perTierTitle": "Per tier — live accuraatheid",
+  "trackrecord.live.perTierSubtitle": "Strikt pre-match picks sinds 18 april 2026, per tier uitgesplitst. Zolang een tier onder 10 beoordeelde picks zit tonen we \"wachten op data\" — kleine samples zijn geen conclusie.",
+  "trackrecord.live.botdTitle": "Pick of the Day — live meting",
+  "trackrecord.live.botdSubtitle": "Dagelijkse BOTD pre-match vastgelegd. Gold en Platinum zien dezelfde stream.",
+  "trackrecord.botdGate.heading": "Alleen voor Gold & Platinum abonnees",
+  "trackrecord.botdGate.body": "De Pick of the Day zit op Gold en Platinum — onze enige dagelijkse pick met de hoogste modelconfidence. Free en Silver hebben geen BOTD-toegang omdat we het volume laag en de signaal-kwaliteit hoog willen houden. Upgrade naar Gold (of Platinum voor top-5 competities) om deze track record en de dagelijkse pick vrij te spelen. Gold en Platinum zien beide dezelfde BOTD stream — dezelfde picks.",
+  "trackrecord.botdGate.upgradeCta": "Upgrade naar Gold",
+  "trackrecord.botdGate.exampleCta": "Bekijk BOTD-voorbeeld",
+  "trackrecord.botdGate.adminHint": "Admin aan het testen? Open /admin → \"Test as Tier\" → Gold / Platinum om deze sectie vrij te spelen.",
 };
 
 

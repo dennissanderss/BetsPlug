@@ -251,20 +251,6 @@ export function BetsPlugFooter() {
               </li>
               <li>
                 <a
-                  href="https://t.me/BetsPluggs"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-1.5 text-[#a3a9b8] transition-colors hover:text-[#ededed]"
-                >
-                  <span>Live chat</span>
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#4ade80] opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-[#4ade80]" />
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
                   href="mailto:support@betsplug.com"
                   className="text-[#a3a9b8] transition-colors hover:text-[#ededed]"
                 >
