@@ -965,7 +965,6 @@ const it = {
   "footer.learnSubtitle": "I calcoli dietro ogni previsione",
   "footer.legal": "Legale",
   "footer.limited": "Posti limitati · Solo membri",
-  "footer.liveChat": "Chat live",
   "footer.onlineNow": "Oltre 1.200 membri online",
   "footer.ourModels": "I nostri modelli",
   "footer.pciCompliant": "Conforme allo standard PCI DSS",

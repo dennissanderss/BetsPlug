@@ -965,7 +965,6 @@ const tr = {
   "footer.learnSubtitle": "Her tahminin ardındaki matematik",
   "footer.legal": "Yasal",
   "footer.limited": "Sınırlı kontenjan · Yalnızca üyelere özel",
-  "footer.liveChat": "Canlı sohbet",
   "footer.onlineNow": "Çevrimiçi 1.200'den fazla üye",
   "footer.ourModels": "Modellerimiz",
   "footer.pciCompliant": "PCI DSS uyumlu",

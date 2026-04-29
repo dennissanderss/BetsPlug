@@ -965,7 +965,6 @@ const ru = {
   "footer.learnSubtitle": "Математика, лежащая в основе каждого прогноза",
   "footer.legal": "Юридический",
   "footer.limited": "Количество мест ограничено · Только для участников",
-  "footer.liveChat": "Живой чат",
   "footer.onlineNow": "1200+ участников онлайн",
   "footer.ourModels": "Наши модели",
   "footer.pciCompliant": "Соответствие PCI DSS",

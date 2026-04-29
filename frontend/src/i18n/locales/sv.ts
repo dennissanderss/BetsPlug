@@ -965,7 +965,6 @@ const sv = {
   "footer.learnSubtitle": "Matematiken bakom varje förutsägelse",
   "footer.legal": "Rättslig",
   "footer.limited": "Begränsat antal platser · Endast medlemmar",
-  "footer.liveChat": "Livechatt",
   "footer.onlineNow": "1 200+ medlemmar online",
   "footer.ourModels": "Våra modeller",
   "footer.pciCompliant": "PCI DSS-kompatibel",

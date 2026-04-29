@@ -965,7 +965,6 @@ const pt = {
   "footer.learnSubtitle": "A matemática por trás de cada previsão",
   "footer.legal": "Jurídica",
   "footer.limited": "Vagas limitadas · Somente para membros",
-  "footer.liveChat": "Bate-papo ao vivo",
   "footer.onlineNow": "Mais de 1.200 membros on-line",
   "footer.ourModels": "Nossos modelos",
   "footer.pciCompliant": "Compatível com PCI DSS",

@@ -965,7 +965,6 @@ const id = {
   "footer.learnSubtitle": "Matematika di balik setiap prediksi",
   "footer.legal": "Hukum",
   "footer.limited": "Tempat terbatas · Hanya anggota",
-  "footer.liveChat": "Obrolan langsung",
   "footer.onlineNow": "1.200+ anggota online",
   "footer.ourModels": "Model Kami",
   "footer.pciCompliant": "Sesuai PCI DSS",

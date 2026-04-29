@@ -965,7 +965,6 @@ const sw = {
   "footer.learnSubtitle": "Hisabati nyuma ya kila utabiri",
   "footer.legal": "Kisheria",
   "footer.limited": "Nafasi chache · Wanachama pekee",
-  "footer.liveChat": "Gumzo la moja kwa moja",
   "footer.onlineNow": "Wanachama 1,200+ mtandaoni",
   "footer.ourModels": "Wanamitindo Wetu",
   "footer.pciCompliant": "PCI DSS inavyotakikana",

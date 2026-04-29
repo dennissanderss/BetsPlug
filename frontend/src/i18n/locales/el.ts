@@ -965,7 +965,6 @@ const el = {
   "footer.learnSubtitle": "Τα μαθηματικά πίσω από κάθε πρόβλεψη",
   "footer.legal": "Νομικός",
   "footer.limited": "Περιορισμένες θέσεις · Μόνο μέλη",
-  "footer.liveChat": "Ζωντανή συνομιλία",
   "footer.onlineNow": "1.200+ μέλη online",
   "footer.ourModels": "Τα μοντέλα μας",
   "footer.pciCompliant": "Συμβατό με PCI DSS",

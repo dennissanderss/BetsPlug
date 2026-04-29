@@ -965,7 +965,6 @@ const pl = {
   "footer.learnSubtitle": "Matematyka stojąca za każdą prognozą",
   "footer.legal": "Prawny",
   "footer.limited": "Liczba miejsc ograniczona · Tylko dla członków",
-  "footer.liveChat": "Czat na żywo",
   "footer.onlineNow": "Ponad 1200 członków online",
   "footer.ourModels": "Nasze modele",
   "footer.pciCompliant": "Zgodny z PCI DSS",

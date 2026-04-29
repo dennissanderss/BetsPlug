@@ -965,7 +965,6 @@ const da = {
   "footer.learnSubtitle": "Matematikken bag hver forudsigelse",
   "footer.legal": "Legal",
   "footer.limited": "Begrænsede pladser · Kun medlemmer",
-  "footer.liveChat": "Live chat",
   "footer.onlineNow": "1.200+ medlemmer online",
   "footer.ourModels": "Vores modeller",
   "footer.pciCompliant": "PCI DSS-kompatibel",

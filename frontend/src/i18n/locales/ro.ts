@@ -965,7 +965,6 @@ const ro = {
   "footer.learnSubtitle": "Matematica din spatele fiecărei predicții",
   "footer.legal": "Legal",
   "footer.limited": "Locuri limitate · Numai pentru membri",
-  "footer.liveChat": "Chat live",
   "footer.onlineNow": "Peste 1.200 de membri online",
   "footer.ourModels": "Modelele noastre",
   "footer.pciCompliant": "Conform PCI DSS",

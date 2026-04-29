@@ -965,7 +965,6 @@ const de = {
   "footer.learnSubtitle": "Die Mathematik hinter jeder Vorhersage",
   "footer.legal": "Legal",
   "footer.limited": "Begrenzte Plätze · Nur für Mitglieder",
-  "footer.liveChat": "Live-Chat",
   "footer.onlineNow": "Über 1.200 Mitglieder online",
   "footer.ourModels": "Unsere Modelle",
   "footer.pciCompliant": "PCI DSS-konform",
