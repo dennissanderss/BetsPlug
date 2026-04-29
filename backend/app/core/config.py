@@ -181,18 +181,28 @@ class Settings(BaseSettings):
     telegram_channel_free: str = Field(
         default="@BetsPluggs", validation_alias="TELEGRAM_CHANNEL_FREE"
     )
-    # Paid-tier channels. When empty the auto-poster + scheduler treat
-    # the tier as "not configured yet" and skip its slots — no posts go
-    # out, no admin button errors. Set the @handle (or numeric chat id)
-    # in Railway as you provision each channel.
+    # Paid-tier channels.
+    #
+    # Defaults below are the live numeric chat IDs of the private
+    # @BetsPluggSilver/Gold/Platinum channels. They are NOT secrets:
+    # without the bot being admin (which it is) AND the bot token
+    # (which lives in env), the chat-ID alone grants nothing. We bake
+    # the IDs in as defaults because we hit a Railway env-propagation
+    # quirk where Variables UI showed all three set but the container
+    # only ever loaded TELEGRAM_CHANNEL_SILVER — the others stayed
+    # empty in both Pydantic Settings AND raw os.getenv(), even
+    # across multiple redeploys. Hard-coded defaults bypass the
+    # propagation entirely; if/when Railway delivers the env var, the
+    # `validation_alias` makes Pydantic prefer the env over the
+    # default, so a future channel-rotation via env still works.
     telegram_channel_silver: str = Field(
-        default="", validation_alias="TELEGRAM_CHANNEL_SILVER"
+        default="-1003981118247", validation_alias="TELEGRAM_CHANNEL_SILVER"
     )
     telegram_channel_gold: str = Field(
-        default="", validation_alias="TELEGRAM_CHANNEL_GOLD"
+        default="-1003994857010", validation_alias="TELEGRAM_CHANNEL_GOLD"
     )
     telegram_channel_platinum: str = Field(
-        default="", validation_alias="TELEGRAM_CHANNEL_PLATINUM"
+        default="-1003855410763", validation_alias="TELEGRAM_CHANNEL_PLATINUM"
     )
     # Optional separate dev/test channel so staging never pollutes the
     # public @BetsPluggs feed. When set, dev tasks use this instead of

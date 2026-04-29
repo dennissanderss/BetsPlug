@@ -577,6 +577,13 @@ async def debug_env() -> dict[str, Any]:
     import os
 
     settings = get_settings()
+    # Enumerate every TELEGRAM-prefixed key actually present in
+    # os.environ so we can spot whitespace-corrupted variants the
+    # operator can't see in the Railway UI (e.g. " TELEGRAM_CHANNEL_GOLD"
+    # with a leading space, or non-breaking-space copy-paste residue).
+    telegram_env_keys = sorted(
+        k for k in os.environ.keys() if k.upper().startswith("TELEGRAM")
+    )
     return {
         "settings_silver": settings.telegram_channel_silver,
         "settings_gold": settings.telegram_channel_gold,
@@ -584,8 +591,9 @@ async def debug_env() -> dict[str, Any]:
         "env_silver": os.getenv("TELEGRAM_CHANNEL_SILVER", ""),
         "env_gold": os.getenv("TELEGRAM_CHANNEL_GOLD", ""),
         "env_platinum": os.getenv("TELEGRAM_CHANNEL_PLATINUM", ""),
-        # Also expose the resolved values that channel-resolution will
-        # actually use, so the operator sees the final answer.
+        "all_telegram_env_keys": telegram_env_keys,
+        # Resolved values that channel-resolution will actually use —
+        # this is the source of truth the scheduler / publisher follow.
         "resolved_silver": _channel_for_tier(PickTier.SILVER),
         "resolved_gold": _channel_for_tier(PickTier.GOLD),
         "resolved_platinum": _channel_for_tier(PickTier.PLATINUM),
