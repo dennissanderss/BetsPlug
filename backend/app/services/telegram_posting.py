@@ -82,15 +82,39 @@ def _channel_for_tier(tier: PickTier) -> str:
     Empty string when the tier's channel env var isn't set yet — callers
     should treat that as "not configured, skip silently" rather than
     posting somewhere wrong.
+
+    Reads via Pydantic Settings first, then falls back to a raw
+    ``os.getenv()`` lookup. The fallback exists because we hit a case
+    on Railway where Settings had loaded ``TELEGRAM_CHANNEL_SILVER`` at
+    boot but not ``_GOLD`` / ``_PLATINUM`` even though Railway's
+    Variables UI showed all three set — likely an env propagation or
+    invisible-whitespace edge case in the host's Variables editor. The
+    raw ``os.getenv()`` reads from the live process env and bypasses
+    whatever Pydantic missed, so a fresh redeploy or a Variables edit
+    is reflected immediately without code changes.
     """
+    import os
+
     settings = get_settings()
-    by_tier: dict[PickTier, str] = {
+    pyd_by_tier: dict[PickTier, str] = {
         PickTier.FREE: settings.telegram_channel_free,
         PickTier.SILVER: settings.telegram_channel_silver,
         PickTier.GOLD: settings.telegram_channel_gold,
         PickTier.PLATINUM: settings.telegram_channel_platinum,
     }
-    return by_tier.get(tier, "") or ""
+    env_by_tier: dict[PickTier, str] = {
+        PickTier.FREE: "TELEGRAM_CHANNEL_FREE",
+        PickTier.SILVER: "TELEGRAM_CHANNEL_SILVER",
+        PickTier.GOLD: "TELEGRAM_CHANNEL_GOLD",
+        PickTier.PLATINUM: "TELEGRAM_CHANNEL_PLATINUM",
+    }
+    primary = pyd_by_tier.get(tier, "") or ""
+    if primary:
+        return primary.strip()
+    env_name = env_by_tier.get(tier, "")
+    if not env_name:
+        return ""
+    return (os.getenv(env_name, "") or "").strip()
 
 
 def _resolve_channel(

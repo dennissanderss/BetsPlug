@@ -561,6 +561,38 @@ async def get_schedule(
 
 
 @router.get(
+    "/debug-env",
+    summary="Diagnostic: raw env vs Pydantic Settings for tier channels",
+)
+async def debug_env() -> dict[str, Any]:
+    """Return the live process env vs what Pydantic Settings loaded.
+
+    Diagnostic-only — admin-gated. Use to confirm whether a Railway
+    env var has actually propagated to the running container after a
+    redeploy. If the ``env_*`` value is set but the ``settings_*``
+    value is empty, you've hit a Pydantic validation_alias edge case
+    and the defensive fallback in ``_channel_for_tier`` should still
+    use the env value.
+    """
+    import os
+
+    settings = get_settings()
+    return {
+        "settings_silver": settings.telegram_channel_silver,
+        "settings_gold": settings.telegram_channel_gold,
+        "settings_platinum": settings.telegram_channel_platinum,
+        "env_silver": os.getenv("TELEGRAM_CHANNEL_SILVER", ""),
+        "env_gold": os.getenv("TELEGRAM_CHANNEL_GOLD", ""),
+        "env_platinum": os.getenv("TELEGRAM_CHANNEL_PLATINUM", ""),
+        # Also expose the resolved values that channel-resolution will
+        # actually use, so the operator sees the final answer.
+        "resolved_silver": _channel_for_tier(PickTier.SILVER),
+        "resolved_gold": _channel_for_tier(PickTier.GOLD),
+        "resolved_platinum": _channel_for_tier(PickTier.PLATINUM),
+    }
+
+
+@router.get(
     "/health",
     response_model=HealthResponse,
     summary="Verify bot token + channel configuration",

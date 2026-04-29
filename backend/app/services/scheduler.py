@@ -1590,12 +1590,38 @@ def start_scheduler():
     # That gives a clean "configure once on Railway and it lights up"
     # path for adding new channels without code changes.
     from app.core.config import get_settings as _get_settings
+    import os as _os
 
     _settings = _get_settings()
+    # Read via Pydantic Settings first, fall back to raw os.getenv. The
+    # fallback covers Railway env-propagation edge cases (we observed a
+    # case where Settings loaded SILVER but not GOLD/PLATINUM at boot
+    # despite all three being set in Railway's Variables UI). The
+    # process env still has them, so os.getenv() picks up the slack
+    # without requiring further code or env-edit ceremony.
+    def _resolve_tier_env(pyd_value: str, env_name: str) -> str:
+        return (pyd_value or _os.getenv(env_name, "") or "").strip()
+
     _tier_channels: list[tuple[str, str]] = [
-        ("silver", _settings.telegram_channel_silver),
-        ("gold", _settings.telegram_channel_gold),
-        ("platinum", _settings.telegram_channel_platinum),
+        (
+            "silver",
+            _resolve_tier_env(
+                _settings.telegram_channel_silver, "TELEGRAM_CHANNEL_SILVER"
+            ),
+        ),
+        (
+            "gold",
+            _resolve_tier_env(
+                _settings.telegram_channel_gold, "TELEGRAM_CHANNEL_GOLD"
+            ),
+        ),
+        (
+            "platinum",
+            _resolve_tier_env(
+                _settings.telegram_channel_platinum,
+                "TELEGRAM_CHANNEL_PLATINUM",
+            ),
+        ),
     ]
     for _tier_name, _channel in _tier_channels:
         if not _channel:
