@@ -13,7 +13,47 @@ const nextConfig = {
     ],
   },
   async headers() {
+    // ─ Site-wide security headers ─────────────────────────────
+    // Conservative defaults that don't break the site:
+    //   • HSTS with 2-year max-age + preload eligibility (HTTPS-only,
+    //     prevents protocol-downgrade attacks that intercept first
+    //     visits before they get the redirect to https).
+    //   • X-Content-Type-Options: nosniff — prevent MIME-confusion
+    //     attacks (e.g. a .json response sniffed as <script>).
+    //   • Referrer-Policy: strict-origin-when-cross-origin — strip
+    //     URL paths from cross-origin Referer headers (privacy +
+    //     prevents leaking auth tokens via Referer).
+    //   • X-Frame-Options: SAMEORIGIN — same as the embed-protection
+    //     supported by every modern browser.
+    //   • Permissions-Policy: explicitly deny browser APIs we don't
+    //     need (camera, microphone, geolocation, FLoC interest cohort).
+    //
+    // Deliberately NOT set:
+    //   • Content-Security-Policy — would need a per-deploy nonce or
+    //     hash for inline GTM/Stripe scripts; deserves its own PR.
+    //     Track via Report-Only first.
+    //   • X-XSS-Protection — deprecated, ignored by modern browsers.
+    const securityHeaders = [
+      {
+        key: "Strict-Transport-Security",
+        value: "max-age=63072000; includeSubDomains; preload",
+      },
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      { key: "X-Frame-Options", value: "SAMEORIGIN" },
+      {
+        key: "Permissions-Policy",
+        value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+      },
+    ];
+
     return [
+      {
+        // Apply security headers to every route except the static
+        // asset pipeline (which Vercel already optimizes).
+        source: "/:path*",
+        headers: securityHeaders,
+      },
       {
         // Browsers only apply the XSLT transform reliably when the
         // stylesheet is served with an XML-y MIME type. Next.js's

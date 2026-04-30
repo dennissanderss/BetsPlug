@@ -1,0 +1,5 @@
+Contact: mailto:support@betsplug.com
+Expires: 2027-05-01T00:00:00.000Z
+Preferred-Languages: en, nl
+Canonical: https://betsplug.com/.well-known/security.txt
+Policy: https://betsplug.com/privacy
