@@ -11,9 +11,7 @@ import {
   Sparkles,
   ChevronRight,
   Trophy,
-  MapPin,
   Lock,
-  Radio,
   Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -22,6 +20,7 @@ import { Pill } from "@/components/noct/pill";
 import { useTier, type Tier } from "@/hooks/use-tier";
 import { useAuth } from "@/lib/auth";
 import { UpgradeLockModal } from "@/components/noct/upgrade-lock-modal";
+import { ComingSoonModal } from "@/components/noct/coming-soon-modal";
 import { useNavState } from "@/components/layout/nav-state-context";
 
 interface NavItem {
@@ -32,6 +31,12 @@ interface NavItem {
   badge?: string;
   badgeColor?: string;
   comingSoon?: boolean;
+  /** i18n key for the modal headline shown when a coming-soon item is clicked. Defaults to the item label. */
+  comingSoonTitleKey?: string;
+  /** i18n key for the modal body shown when a coming-soon item is clicked. */
+  comingSoonBodyKey?: string;
+  /** i18n key for the small pill ("In development") shown in the modal. */
+  comingSoonBadgeKey?: string;
   /** Minimum tier needed to access. Lower tiers see a locked item. */
   requiredTier?: Tier;
   /** i18n key for the short one-liner shown in the upgrade modal. */
@@ -52,19 +57,30 @@ const navSections: NavSection[] = [
     fallbackLabel: "Overview",
     items: [
       { labelKey: "nav.dashboard", fallback: "Dashboard", href: "/dashboard", icon: LayoutDashboard, badge: "START" },
-      { labelKey: "nav.live_score", fallback: "Live Score", href: "/live-score", icon: Radio },
     ],
   },
   {
     labelKey: "sidebar.predictions",
     fallbackLabel: "Predictions",
     items: [
-      // Pick of the Day + Reports mirror the PaywallOverlay tiers set on
-      // the pages themselves (bet-of-the-day/page.tsx, reports/page.tsx).
-      // Without this the nav item is clickable for Free users and only
-      // paywalls on arrival — inconsistent state between sidebar and page.
+      // Pick of the Day mirrors the PaywallOverlay tier on the page
+      // itself (bet-of-the-day/page.tsx). Without this the nav item is
+      // clickable for Free users and only paywalls on arrival —
+      // inconsistent state between sidebar and page.
       { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy, requiredTier: "gold" },
-      { labelKey: "nav.combo_of_the_day", fallback: "Combi of the Day", href: "/combo-of-the-day", icon: Layers, requiredTier: "platinum", comingSoon: true },
+      // Combi of the Day is hard-locked while we build out the
+      // backtest. Click opens a small "Coming Soon" teaser instead of
+      // the page so non-admins never see preliminary numbers.
+      {
+        labelKey: "nav.combo_of_the_day",
+        fallback: "Combi of the Day",
+        href: "/combo-of-the-day",
+        icon: Layers,
+        comingSoon: true,
+        comingSoonTitleKey: "combo.comingSoonTitle",
+        comingSoonBodyKey: "combo.comingSoonBody",
+        comingSoonBadgeKey: "combo.developmentBadge",
+      },
       { labelKey: "nav.predictions", fallback: "All Predictions", href: "/predictions", icon: Sparkles },
     ],
   },
@@ -74,13 +90,6 @@ const navSections: NavSection[] = [
     items: [
       { labelKey: "nav.results", fallback: "Results & Simulation", href: "/results", icon: Trophy },
       { labelKey: "nav.trackrecord", fallback: "Track Record", href: "/trackrecord", icon: ClipboardList },
-    ],
-  },
-  {
-    labelKey: "sidebar.help",
-    fallbackLabel: "Help",
-    items: [
-      { labelKey: "nav.jouwRoute", fallback: "How It Works", href: "/how-it-works", icon: MapPin },
     ],
   },
 ];
@@ -96,6 +105,12 @@ type LockedFeature = {
   benefits?: string[];
 };
 
+type ComingSoonFeature = {
+  label: string;
+  body: string;
+  badge?: string;
+};
+
 /**
  * Sidebar — NOCTURNE glass-panel surface with ambient green glow.
  */
@@ -107,6 +122,8 @@ export function Sidebar() {
   const { mobileOpen, setMobileOpen } = useNavState();
   const [lockedFeature, setLockedFeature] =
     React.useState<LockedFeature | null>(null);
+  const [comingSoonFeature, setComingSoonFeature] =
+    React.useState<ComingSoonFeature | null>(null);
   const { t } = useTranslations();
   const loc = useLocalizedHref();
   const { hasAccess, ready: tierReady } = useTier();
@@ -141,6 +158,20 @@ export function Sidebar() {
     });
   };
 
+  const openComingSoonFor = (item: NavItem) => {
+    const titleKey = item.comingSoonTitleKey;
+    const bodyKey = item.comingSoonBodyKey;
+    const badgeKey = item.comingSoonBadgeKey;
+    const title = titleKey ? t(titleKey as any) : undefined;
+    const body = bodyKey ? t(bodyKey as any) : undefined;
+    const badge = badgeKey ? t(badgeKey as any) : undefined;
+    setComingSoonFeature({
+      label: title && title !== titleKey ? title : getLabel(item),
+      body: body && body !== bodyKey ? body : "",
+      badge: badge && badge !== badgeKey ? badge : undefined,
+    });
+  };
+
   const renderItem = (item: NavItem) => {
     const localizedHref = loc(item.href);
     const isActive =
@@ -150,19 +181,26 @@ export function Sidebar() {
       pathname.startsWith(localizedHref + "/");
     const Icon = item.icon;
 
-    // Coming-soon items are unclickable for regular users but admins
-    // always get a working link so they can QA in-development tools.
+    // Coming-soon items open a small teaser modal for regular users
+    // explaining the feature is in development. Admins always get a
+    // working link so they can QA in-development tools.
     if (item.comingSoon && !isAdmin) {
       return (
-        <div
+        <button
           key={item.href}
-          className="glass-panel group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#6b7280] cursor-not-allowed opacity-70"
+          type="button"
+          onClick={() => {
+            setMobileOpen(false);
+            openComingSoonFor(item);
+          }}
+          className="nav-item group flex w-full items-center gap-3 text-sm font-medium text-[#6b7280] hover:text-[#a3a9b8]"
           title="Coming Soon"
         >
-          <Icon className="h-4 w-4 shrink-0 text-[#6b7280]" />
-          <span className="flex-1">{getLabel(item)}</span>
+          <Icon className="h-4 w-4 shrink-0 text-[#6b7280] group-hover:text-[#a3a9b8] transition-colors" />
+          <span className="flex-1 text-left">{getLabel(item)}</span>
+          <Lock className="h-3.5 w-3.5 text-[#6b7280] group-hover:text-[#a3a9b8]" />
           <Pill tone="default" className="text-[9px]">SOON</Pill>
-        </div>
+        </button>
       );
     }
 
@@ -338,6 +376,18 @@ export function Sidebar() {
         requiredTier={lockedFeature?.requiredTier ?? "gold"}
         blurb={lockedFeature?.blurb}
         benefits={lockedFeature?.benefits}
+      />
+
+      {/* Coming-soon teaser — fired by sidebar items flagged comingSoon */}
+      <ComingSoonModal
+        open={comingSoonFeature !== null}
+        onOpenChange={(open) => {
+          if (!open) setComingSoonFeature(null);
+        }}
+        feature={comingSoonFeature?.label ?? ""}
+        body={comingSoonFeature?.body ?? ""}
+        badge={comingSoonFeature?.badge}
+        closeLabel={t("common.close" as any)}
       />
     </>
   );
