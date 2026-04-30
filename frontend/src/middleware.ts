@@ -91,6 +91,9 @@ function withLocaleHeader(req: NextRequest, locale: Locale): Headers {
 const STATIC_LOCALE_ROUTES: ReadonlySet<string> = new Set([
   "/", // homepage — every locale is statically pre-rendered at /[locale]/page
   "/learn", // pillar hub index
+  "/how-it-works",
+  "/pricing",
+  "/track-record",
 ]);
 
 const STATIC_LOCALE_ROUTE_PREFIXES: ReadonlyArray<string> = [

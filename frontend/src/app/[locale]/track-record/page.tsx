@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { TrackRecordContent } from "./track-record-content";
 import {
-  getServerLocale,
   getLocalizedAlternates,
   getLocalizedFaq,
   getLocalizedBreadcrumbs,
@@ -12,8 +12,16 @@ import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { FaqSection } from "@/components/seo/faq-section";
 import { translate } from "@/i18n/messages";
 import { fetchTrackRecordPage } from "@/lib/sanity-data";
+import { isLocale, locales, type Locale } from "@/i18n/config";
 
+export const dynamic = "force-static";
 export const revalidate = 60;
+
+type Params = { locale: string };
+
+export async function generateStaticParams(): Promise<Params[]> {
+  return locales.map((locale) => ({ locale }));
+}
 
 const TRACK_FAQ_KEYS = [
   { q: "faq.track.q1", a: "faq.track.a1" },
@@ -24,11 +32,18 @@ const TRACK_FAQ_KEYS = [
   { q: "faq.track.q6", a: "faq.track.a6" },
 ];
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = getServerLocale();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const locale: Locale = rawLocale;
+
   const meta = PAGE_META["/track-record"]?.[locale] ?? PAGE_META["/track-record"].en;
-  const alternates = getLocalizedAlternates("/track-record");
-const og = getOpenGraphLocales();
+  const alternates = getLocalizedAlternates("/track-record", undefined, locale);
+  const og = getOpenGraphLocales(locale);
   return {
     title: meta.title,
     description: meta.description,
@@ -46,10 +61,17 @@ const og = getOpenGraphLocales();
   };
 }
 
-export default async function TrackRecordPage() {
+export default async function TrackRecordPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale: Locale = rawLocale;
+
   const [trackRecordPage] = await Promise.all([fetchTrackRecordPage()]);
-  const locale = getServerLocale();
-  const faqItems = getLocalizedFaq(TRACK_FAQ_KEYS);
+  const faqItems = getLocalizedFaq(TRACK_FAQ_KEYS, locale);
   const breadcrumbs = getLocalizedBreadcrumbs([
     { labelKey: "bc.home", canonicalPath: "/" },
     { labelKey: "bc.trackRecord", canonicalPath: "/track-record" },
@@ -58,9 +80,6 @@ export default async function TrackRecordPage() {
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbs} />
-      {/* FAQPage JSON-LD — same items as the visible FaqSection so
-          Google can match them to eligible featured-snippet queries
-          ("is BetsPlug verified?", "how is the track record calculated?"). */}
       <FaqJsonLd items={faqItems} />
       <TrackRecordContent
         trackRecordPage={trackRecordPage}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { HowItWorksContent } from "./how-it-works-content";
 import {
-  getServerLocale,
   getLocalizedAlternates,
   getLocalizedFaq,
   getLocalizedBreadcrumbs,
@@ -10,8 +10,16 @@ import {
 import { PAGE_META } from "@/data/page-meta";
 import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
 import { fetchHowItWorksPage } from "@/lib/sanity-data";
+import { isLocale, locales, type Locale } from "@/i18n/config";
 
+export const dynamic = "force-static";
 export const revalidate = 60;
+
+type Params = { locale: string };
+
+export async function generateStaticParams(): Promise<Params[]> {
+  return locales.map((locale) => ({ locale }));
+}
 
 const HOW_FAQ_KEYS = [
   { q: "faq.how.q1", a: "faq.how.a1" },
@@ -22,11 +30,18 @@ const HOW_FAQ_KEYS = [
   { q: "faq.how.q6", a: "faq.how.a6" },
 ];
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = getServerLocale();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const locale: Locale = rawLocale;
+
   const meta = PAGE_META["/how-it-works"]?.[locale] ?? PAGE_META["/how-it-works"].en;
-  const alternates = getLocalizedAlternates("/how-it-works");
-const og = getOpenGraphLocales();
+  const alternates = getLocalizedAlternates("/how-it-works", undefined, locale);
+  const og = getOpenGraphLocales(locale);
   return {
     title: meta.title,
     description: meta.description,
@@ -44,9 +59,17 @@ const og = getOpenGraphLocales();
   };
 }
 
-export default async function HowItWorksPage() {
+export default async function HowItWorksPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale: Locale = rawLocale;
+
   const [howItWorksPage] = await Promise.all([fetchHowItWorksPage()]);
-  const faqItems = getLocalizedFaq(HOW_FAQ_KEYS);
+  const faqItems = getLocalizedFaq(HOW_FAQ_KEYS, locale);
   const breadcrumbs = getLocalizedBreadcrumbs([
     { labelKey: "bc.home", canonicalPath: "/" },
     { labelKey: "bc.howItWorks", canonicalPath: "/how-it-works" },
