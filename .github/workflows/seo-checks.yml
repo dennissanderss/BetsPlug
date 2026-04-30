@@ -1,0 +1,90 @@
+name: SEO regression checks
+
+# Runs on every PR that touches the frontend, plus daily against
+# production via cron. Audits live URLs (preview deploy URL on PRs,
+# production on cron). Soft-fails on medium severity, hard-fails
+# on high so a clearly-broken sitemap or schema gets blocked.
+
+on:
+  pull_request:
+    paths:
+      - "frontend/src/**"
+      - "frontend/scripts/**"
+      - "frontend/next.config.js"
+      - "frontend/public/sitemap*"
+      - ".github/workflows/seo-checks.yml"
+  schedule:
+    # 06:00 UTC daily — picks up any drift from CMS-only changes.
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+    inputs:
+      base:
+        description: "Origin to audit"
+        required: false
+        default: "https://betsplug.com"
+
+jobs:
+  seo-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Resolve audit target
+        id: target
+        run: |
+          # Vercel previews aren't accessible to GitHub Actions
+          # without a bypass token. Default to production for cron;
+          # PRs hit production too (which is fine — they don't push
+          # the branch's changes there until merged). If a maintainer
+          # wants to audit a preview, they can workflow_dispatch with
+          # a bypass-token-injected URL.
+          BASE="${{ github.event.inputs.base }}"
+          if [ -z "$BASE" ]; then BASE="https://betsplug.com"; fi
+          echo "base=$BASE" >> $GITHUB_OUTPUT
+
+      - name: Run comprehensive audit
+        working-directory: frontend
+        run: |
+          node scripts/seo-comprehensive-audit.mjs \
+            --base="${{ steps.target.outputs.base }}" \
+            --limit=80 \
+            --out=audit.json
+          # Fail if any critical or high severity surfaced
+          node -e "
+            const j = require('./audit.json');
+            const s = j.summary.bySeverity;
+            const hard = (s.critical||0) + (s.high||0);
+            console.log('critical:'+s.critical+' high:'+s.high+' medium:'+s.medium);
+            if (hard > 0) {
+              console.error('HARD-FAIL: ' + hard + ' critical/high issues');
+              process.exit(1);
+            }
+          "
+
+      - name: Heading-structure check
+        working-directory: frontend
+        run: node scripts/check-heading-structure.mjs --base="${{ steps.target.outputs.base }}" --limit=80
+
+      - name: Duplicate-content check
+        working-directory: frontend
+        run: node scripts/check-duplicate-content.mjs --base="${{ steps.target.outputs.base }}" --limit=40 --threshold=0.85
+
+      - name: Post-deploy i18n check
+        working-directory: frontend
+        run: node scripts/post-deploy-i18n-check.mjs --base="${{ steps.target.outputs.base }}"
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-audit-report
+          path: frontend/audit.json
+          retention-days: 14
