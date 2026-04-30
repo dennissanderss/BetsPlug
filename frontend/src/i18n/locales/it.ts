@@ -1651,6 +1651,7 @@ const it = {
   "phrase.simulation_disclaimer": "I risultati mostrati si basano sui risultati del modello simulato.",
   "phrase.view_all": "Visualizza tutto",
 
+  "pred.advancedSimulationLink": "Visualizza la simulazione avanzata →",
   "pred.all": "Tutto",
   "pred.allLeagues": "Tutti i campionati",
   "pred.analysisPending": "Analisi in attesa",

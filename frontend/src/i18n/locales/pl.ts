@@ -1651,6 +1651,7 @@ const pl = {
   "phrase.simulation_disclaimer": "Przedstawione wyniki opierają się na symulowanych przewidywaniach.",
   "phrase.view_all": "Zobacz wszystkie",
 
+  "pred.advancedSimulationLink": "Zobacz zaawansowaną symulację →",
   "pred.all": "Wszystko",
   "pred.allLeagues": "Wszystkie ligi",
   "pred.analysisPending": "Analiza w toku",

@@ -1651,6 +1651,7 @@ const ru = {
   "phrase.simulation_disclaimer": "Показанные результаты основаны на смоделированных прогнозах.",
   "phrase.view_all": "Посмотреть все",
 
+  "pred.advancedSimulationLink": "Посмотреть расширенное моделирование →",
   "pred.all": "Все",
   "pred.allLeagues": "Все лиги",
   "pred.analysisPending": "Ожидается анализ",

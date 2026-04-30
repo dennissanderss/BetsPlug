@@ -1651,6 +1651,7 @@ const tr = {
   "phrase.simulation_disclaimer": "Gösterilen sonuçlar simüle edilmiş tahminlere dayanmaktadır.",
   "phrase.view_all": "Tümünü görüntüle",
 
+  "pred.advancedSimulationLink": "Gelişmiş simülasyonu görüntüle →",
   "pred.all": "Tüm",
   "pred.allLeagues": "Tüm Ligler",
   "pred.analysisPending": "Analiz bekleniyor",

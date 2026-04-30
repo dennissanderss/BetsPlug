@@ -1651,6 +1651,7 @@ const sv = {
   "phrase.simulation_disclaimer": "Resultaten som visas är baserade på simulerade förutsägelser.",
   "phrase.view_all": "Visa alla",
 
+  "pred.advancedSimulationLink": "Visa avancerad simulering →",
   "pred.all": "Alla",
   "pred.allLeagues": "Alla ligor",
   "pred.analysisPending": "Analys pågår",

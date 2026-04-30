@@ -1651,6 +1651,7 @@ const fr = {
   "phrase.simulation_disclaimer": "Les résultats présentés sont basés sur les sorties du modèle simulé.",
   "phrase.view_all": "Voir tout",
 
+  "pred.advancedSimulationLink": "Voir la simulation avancée →",
   "pred.all": "Toute",
   "pred.allLeagues": "Toutes les ligues",
   "pred.analysisPending": "Analyse en attente",

@@ -1651,6 +1651,7 @@ const sw = {
   "phrase.simulation_disclaimer": "Matokeo yanayoonyeshwa yanatokana na mifano ya mifano iliyoigwa.",
   "phrase.view_all": "Tazama zote",
 
+  "pred.advancedSimulationLink": "Tazama uigaji wa hali ya juu →",
   "pred.all": "Wote",
   "pred.allLeagues": "Ligi zote",
   "pred.analysisPending": "Uchambuzi unasubiri",

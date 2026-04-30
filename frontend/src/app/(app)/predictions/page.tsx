@@ -35,9 +35,77 @@ import { Pill } from "@/components/noct/pill";
 import { TierScopePill } from "@/components/noct/tier-scope-pill";
 import { PickTierBadge } from "@/components/noct/pick-tier-badge";
 import { PickReasoningBlock } from "@/components/predictions/PickReasoningBlock";
-import { classifyPickTier } from "@/lib/pick-tier";
+import { classifyPickTier, TIER_RANK } from "@/lib/pick-tier";
 import { derivePickSide } from "@/lib/prediction-pick";
 import type { PickTierSlug } from "@/types/api";
+
+// ─── Per-tier scope helpers ──────────────────────────────────────────────────
+// Determine whether a finished match's pick falls within a given tier's
+// scope. Cumulative: a pick classified as "gold" is in scope for gold,
+// silver, free; not for platinum. Returns false when the pick has no
+// classified tier (confidence below 0.55 or league not whitelisted for
+// any tier above free).
+function tierIncludes(tier: PickTierSlug, classified: PickTierSlug | null): boolean {
+  if (!classified) return false;
+  return TIER_RANK[classified] >= TIER_RANK[tier];
+}
+
+const PER_TIER_ROW: { slug: PickTierSlug; letter: string; chipClass: string }[] = [
+  { slug: "free",     letter: "F", chipClass: "bg-[#b87333]/15 text-[#e8a864] border-[#b87333]/30" },
+  { slug: "silver",   letter: "S", chipClass: "bg-[#c0c0c0]/15 text-[#e5e4e2] border-[#c0c0c0]/30" },
+  { slug: "gold",     letter: "G", chipClass: "bg-[#d4af37]/15 text-[#f5d67a] border-[#d4af37]/30" },
+  { slug: "platinum", letter: "P", chipClass: "bg-[#a8d8ea]/15 text-[#d9f0ff] border-[#a8d8ea]/35" },
+];
+
+function PerTierScopeStrip({ fixture }: { fixture: Fixture }) {
+  const pred = fixture.prediction;
+  if (!pred) return null;
+
+  const classified: PickTierSlug | null =
+    (pred as any).pick_tier ??
+    classifyPickTier({
+      leagueId: (fixture as any).league_id ?? null,
+      leagueName: fixture.league_name ?? null,
+      confidence: pred.confidence,
+    });
+
+  // Correctness — only meaningful once the result is in.
+  let outcome: "correct" | "incorrect" | "pending" = "pending";
+  if (fixture.result?.winner) {
+    const predicted = derivePickSide(pred);
+    outcome = predicted && predicted === fixture.result.winner ? "correct" : "incorrect";
+  }
+
+  return (
+    <div className="flex flex-wrap items-center gap-1.5 px-2 sm:px-4 pb-3 pt-1">
+      <span className="text-[9px] uppercase tracking-widest text-slate-500 mr-1">
+        Per tier
+      </span>
+      {PER_TIER_ROW.map(({ slug, letter, chipClass }) => {
+        const inScope = tierIncludes(slug, classified);
+        const symbol = !inScope ? "⊘" : outcome === "correct" ? "✅" : outcome === "incorrect" ? "❌" : "—";
+        const opacity = inScope ? "" : "opacity-40";
+        const title = !inScope
+          ? `${slug} — niet in scope`
+          : outcome === "pending"
+            ? `${slug} — open`
+            : outcome === "correct"
+              ? `${slug} — correct`
+              : `${slug} — incorrect`;
+        return (
+          <span
+            key={slug}
+            title={title}
+            className={`inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px] tabular-nums ${chipClass} ${opacity}`}
+          >
+            <span className="font-bold">{letter}</span>
+            <span className="text-[10px]">{symbol}</span>
+          </span>
+        );
+      })}
+    </div>
+  );
+}
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -317,7 +385,7 @@ function formatDateShort(iso: string): string {
   }
 }
 
-function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolean }) {
+function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fixture; isFree: boolean; showPerTier?: boolean }) {
   const { t } = useTranslations();
   const pred: FixturePrediction | null = fixture.prediction ?? null;
   const hasPrediction = pred !== null && typeof pred.confidence === "number";
@@ -559,6 +627,13 @@ function CompactMatchRow({ fixture, isFree }: { fixture: Fixture; isFree: boolea
         </div>
       )}
 
+      {/* Per-tier scope strip — only on the Results tab. Shows whether
+          this match's pick was in scope for each of the four tiers and,
+          for finished matches, whether it was correct. Cumulative tier
+          model: a pick classified "gold" is in scope for gold/silver/
+          free, not platinum. */}
+      {showPerTier && <PerTierScopeStrip fixture={fixture} />}
+
     </div>
   );
 }
@@ -768,7 +843,7 @@ function DateSection({
             <span className="col-span-2">{t("pred.colConfidence")}</span>
           </div>
           {fixtures.map((f) => (
-            <CompactMatchRow key={f.id} fixture={f} isFree={isFree} />
+            <CompactMatchRow key={f.id} fixture={f} isFree={isFree} showPerTier />
           ))}
         </div>
       )}
@@ -1267,11 +1342,23 @@ export default function PredictionsPage() {
   const hasError  = fixturesQuery.isError;
 
   // ── Filter fixtures to the selected date range ────────────────────────────
-  // Live mode bypasses the date-range filter: every match returned by
-  // /fixtures/live is by definition currently in play and should be shown.
+  // Live mode bypasses the date-range filter, but we still drop "live"
+  // rows whose kickoff is more than two hours in the past or still in
+  // the future. The backend occasionally lags on flipping LIVE →
+  // FINISHED, and without this guard those rows leak into the strip.
   const upcomingFixtures = useMemo<Fixture[]>(() => {
     const all = fixturesQuery.data?.fixtures ?? [];
-    if (isResults || isLive || dateRangeFilter === "all") return all;
+    if (isLive) {
+      const now = Date.now();
+      const TWO_HOURS = 120 * 60 * 1000;
+      return all.filter((f) => {
+        const kickoff = new Date(f.scheduled_at).getTime();
+        if (!Number.isFinite(kickoff)) return false;
+        if (kickoff > now) return false;
+        return now - kickoff <= TWO_HOURS;
+      });
+    }
+    if (isResults || dateRangeFilter === "all") return all;
 
     const [ty, tm, td] = today.split("-").map(Number);
     const todayDate = new Date(ty, tm - 1, td);
@@ -1510,13 +1597,19 @@ export default function PredictionsPage() {
           </span>
           <span>{t("pred.live")}</span>
         </button>
-        <Link
-          href="/results"
-          className="flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-all"
+        <button
+          type="button"
+          onClick={() => setViewMode("results")}
+          className={`flex-1 flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold transition-all ${
+            viewMode === "results"
+              ? "bg-emerald-600 text-white shadow-md shadow-emerald-500/20"
+              : "text-slate-400 hover:text-slate-200"
+          }`}
+          aria-pressed={viewMode === "results"}
         >
           <Trophy className="h-4 w-4" />
           <span>{t("pred.resultsTab")}</span>
-        </Link>
+        </button>
       </div>
 
       {/* ── Upcoming-mode guidance banner ── */}
@@ -1804,6 +1897,23 @@ export default function PredictionsPage() {
               isFree={isFree}
             />
           ))}
+
+          {/* Cross-link to the deeper /results screen (Deel 5). The
+              tab here is the simple per-match overview with per-tier
+              ✅/❌ — power users who want ROI/simulation drill-downs
+              go through to the dedicated page. */}
+          {groupedByDate.length > 0 && (
+            <div className="flex justify-center pt-2">
+              <Link
+                href="/results"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-emerald-300 transition-colors"
+              >
+                {t("pred.advancedSimulationLink" as any) === "pred.advancedSimulationLink"
+                  ? "View advanced simulation →"
+                  : t("pred.advancedSimulationLink" as any)}
+              </Link>
+            </div>
+          )}
         </div>
       ) : (
         // v6.2: grouped-by-league accordion view (upcoming mode)

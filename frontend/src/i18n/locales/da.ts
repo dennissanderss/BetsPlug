@@ -1651,6 +1651,7 @@ const da = {
   "phrase.simulation_disclaimer": "De viste resultater er baseret på simulerede forudsigelser.",
   "phrase.view_all": "Se alle",
 
+  "pred.advancedSimulationLink": "Se avanceret simulering →",
   "pred.all": "Alle",
   "pred.allLeagues": "Alle ligaer",
   "pred.analysisPending": "Analyse afventer",

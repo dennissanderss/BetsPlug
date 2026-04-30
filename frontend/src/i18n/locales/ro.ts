@@ -1651,6 +1651,7 @@ const ro = {
   "phrase.simulation_disclaimer": "Rezultatele afișate se bazează pe predicții simulate.",
   "phrase.view_all": "Vezi toate",
 
+  "pred.advancedSimulationLink": "Vizualizați simularea avansată →",
   "pred.all": "Toate",
   "pred.allLeagues": "Toate ligile",
   "pred.analysisPending": "Analiza în așteptare",

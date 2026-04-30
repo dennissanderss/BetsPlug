@@ -1651,6 +1651,7 @@ const id = {
   "phrase.simulation_disclaimer": "Hasil yang ditampilkan berdasarkan output model simulasi.",
   "phrase.view_all": "Lihat semua",
 
+  "pred.advancedSimulationLink": "Lihat simulasi lanjutan →",
   "pred.all": "Semua",
   "pred.allLeagues": "Semua Liga",
   "pred.analysisPending": "Analisis tertunda",

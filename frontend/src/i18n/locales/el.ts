@@ -1651,6 +1651,7 @@ const el = {
   "phrase.simulation_disclaimer": "Τα αποτελέσματα που εμφανίζονται βασίζονται σε προσομοιωμένες προβλέψεις.",
   "phrase.view_all": "Προβολή όλων",
 
+  "pred.advancedSimulationLink": "Προβολή προηγμένης προσομοίωσης →",
   "pred.all": "Ολοι",
   "pred.allLeagues": "Όλα τα πρωταθλήματα",
   "pred.analysisPending": "Η ανάλυση εκκρεμεί",
