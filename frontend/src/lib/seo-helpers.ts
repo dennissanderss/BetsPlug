@@ -101,23 +101,43 @@ function buildAbsoluteUrl(canonicalPath: string, locale: Locale): string {
  *
  * @param canonicalPath the EN canonical path, e.g. "/learn"
  *                      or "/match-predictions/premier-league".
+ * @param contentLocales optional whitelist of locales that have
+ *                      hand-translated content for THIS page. Locales
+ *                      outside this set behave like parked: canonical
+ *                      → EN to consolidate duplicate-content signals,
+ *                      and they're omitted from the hreflang cluster.
+ *                      Use this when a page falls back to EN copy in
+ *                      most locales (e.g. learn pillars only have
+ *                      en+nl), so Google doesn't treat each non-
+ *                      translated locale as a duplicate of the EN URL.
  */
-export function getLocalizedAlternates(canonicalPath: string): {
+export function getLocalizedAlternates(
+  canonicalPath: string,
+  contentLocales?: readonly Locale[],
+): {
   canonical: string;
   languages: Record<string, string>;
 } {
   const locale = getServerLocale();
   const indexable = isIndexableLocale(locale);
-  const canonical = indexable
+  const hasTranslation =
+    !contentLocales || contentLocales.includes(locale);
+  const selfCanonicalAllowed = indexable && hasTranslation;
+
+  const canonical = selfCanonicalAllowed
     ? buildAbsoluteUrl(canonicalPath, locale)
     : buildAbsoluteUrl(canonicalPath, defaultLocale);
 
-  if (!indexable) {
+  if (!selfCanonicalAllowed) {
     return { canonical, languages: {} };
   }
 
+  const cluster = contentLocales
+    ? INDEXABLE_LOCALES.filter((l) => contentLocales.includes(l))
+    : INDEXABLE_LOCALES;
+
   const languages: Record<string, string> = {};
-  for (const l of INDEXABLE_LOCALES) {
+  for (const l of cluster) {
     const tag = localeMeta[l].hreflang;
     languages[tag] = buildAbsoluteUrl(canonicalPath, l);
   }

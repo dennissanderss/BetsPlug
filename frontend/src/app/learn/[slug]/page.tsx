@@ -20,6 +20,7 @@ import {
   defaultLocale,
   isLocale,
   LOCALE_COOKIE,
+  type Locale,
 } from "@/i18n/config";
 import {
   pickLearnPillarLocale,
@@ -29,6 +30,20 @@ import {
 import { fetchLearnPillarSlugs, fetchLearnPillarBySlug } from "@/lib/sanity-data";
 import { getLocalizedAlternates, getServerLocale } from "@/lib/seo-helpers";
 import { localizePath } from "@/i18n/routes";
+
+// Pillars are hand-authored in EN + NL; every other locale falls
+// back to EN copy via expandStringLocales. To avoid Google flagging
+// the EN-fallback URLs (de/fr/es/it/...) as duplicate-content of the
+// canonical EN page, we restrict the hreflang cluster + self-canonical
+// to the locales whose pillar text is actually translated. Detected
+// dynamically per pillar so future hand-translations widen the set
+// without code changes.
+function detectTranslatedLocales(pillar: LearnPillar): Locale[] {
+  const enTitle = pillar.title.en;
+  return (Object.keys(pillar.title) as Locale[]).filter(
+    (l) => l === "en" || pillar.title[l] !== enTitle,
+  );
+}
 
 /**
  * Learn pillar — long-form evergreen explainer.
@@ -82,7 +97,11 @@ export async function generateMetadata(props: {
   const editorialLocale = readLocaleFromCookie();
   const title = pillar.metaTitle[editorialLocale];
   const description = pillar.metaDescription[editorialLocale];
-  const alternates = getLocalizedAlternates(`/learn/${pillar.slug}`);
+  const translatedLocales = detectTranslatedLocales(pillar);
+  const alternates = getLocalizedAlternates(
+    `/learn/${pillar.slug}`,
+    translatedLocales,
+  );
 
   return {
     title,
