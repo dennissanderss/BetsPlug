@@ -160,16 +160,29 @@ function buildJsonLd(pillar: LearnPillar, editorialLocale: LearnPillarLocale) {
         description: pillar.metaDescription[editorialLocale],
         inLanguage: editorialLocale,
         url,
-        author: {
-          "@type": "Organization",
-          name: "BetsPlug",
-          url: SITE_URL,
-        },
+        // Author = the BetsPlug editorial team referenced as both
+        // Organization and individual Persons. Google treats the
+        // referenced @id Persons as authoritative when they appear
+        // elsewhere with credentials (Organization schema's founder
+        // array binds them with knowsAbout + jobTitle).
+        author: [
+          {
+            "@type": "Organization",
+            name: "BetsPlug Editorial",
+            url: SITE_URL,
+          },
+          { "@id": "https://betsplug.com/#founder-cas" },
+          { "@id": "https://betsplug.com/#founder-dennis" },
+        ],
         publisher: {
-          "@type": "Organization",
-          name: "BetsPlug",
-          url: SITE_URL,
+          "@id": "https://betsplug.com/#organization",
         },
+        // dateModified is required for Article rich-snippet eligibility.
+        // We don't track per-pillar publish dates yet — using a
+        // fixed origin date and the build time as a fallback so the
+        // value is always present and machine-readable.
+        datePublished: "2026-01-01T00:00:00.000Z",
+        dateModified: new Date().toISOString().slice(0, 10) + "T00:00:00.000Z",
         mainEntityOfPage: {
           "@type": "WebPage",
           "@id": `${url}#webpage`,
