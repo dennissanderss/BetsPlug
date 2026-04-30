@@ -5,6 +5,7 @@ import { ChevronRight, FileText } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { Pill } from "@/components/noct/pill";
+import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
 /**
  * Shared layout for all legal pages (privacy, cookies, terms,
@@ -24,6 +25,8 @@ export function LegalPage({
   breadcrumb: string;
   children: React.ReactNode;
 }) {
+  const loc = useLocalizedHref();
+  const { t } = useTranslations();
   return (
     <div className="relative min-h-screen overflow-x-clip bg-background text-[#ededed]">
       <SiteNav />
@@ -53,8 +56,8 @@ export function LegalPage({
             aria-label="Breadcrumb"
             className="mt-7 flex items-center justify-center gap-2 text-xs font-medium text-[#8a93a6]"
           >
-            <Link href="/" className="transition-colors hover:text-[#4ade80]">
-              Home
+            <Link href={loc("/")} className="transition-colors hover:text-[#4ade80]">
+              {t("bc.home")}
             </Link>
             <ChevronRight className="h-3 w-3" />
             <span className="text-[#cbd3e0]">{breadcrumb}</span>

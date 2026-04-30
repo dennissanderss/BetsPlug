@@ -164,7 +164,7 @@ export function EngineContent() {
           {isError && (
             <div className="mt-6 rounded-xl border border-amber-400/30 bg-amber-500/[0.06] p-4 text-sm text-amber-200">
               {t("engine.perTier.errorBannerPrefix" as any)}{" "}
-              <a href="/track-record" className="underline">{t("engine.perTier.errorBannerLink" as any)}</a>{" "}
+              <a href={loc("/track-record")} className="underline">{t("engine.perTier.errorBannerLink" as any)}</a>{" "}
               {t("engine.perTier.errorBannerSuffix" as any)}
             </div>
           )}
