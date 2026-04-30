@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { CheckoutContent } from "./checkout-content";
-import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { getServerLocale, getLocalizedAlternates,
+  getOpenGraphLocales,
+} from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 import { fetchCheckoutPage } from "@/lib/sanity-data";
 
@@ -11,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
   const meta = PAGE_META["/checkout"]?.[locale] ?? PAGE_META["/checkout"].en;
   const alternates = getLocalizedAlternates("/checkout");
-
+const og = getOpenGraphLocales();
   return {
     title: meta.title,
     description: meta.description,

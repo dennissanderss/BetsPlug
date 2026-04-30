@@ -15,7 +15,9 @@ import {
   pickBetTypeHubLocale,
   type BetTypeHubLocale,
 } from "@/data/bet-type-hubs";
-import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { getServerLocale, getLocalizedAlternates,
+  getOpenGraphLocales,
+} from "@/lib/seo-helpers";
 import { localizePath } from "@/i18n/routes";
 import { PAGE_META } from "@/data/page-meta";
 import { HeroMediaBg } from "@/components/ui/media-bg";
@@ -42,7 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
   const meta = PAGE_META["/bet-types"]?.[locale] ?? PAGE_META["/bet-types"].en;
   const alternates = getLocalizedAlternates("/bet-types");
-
+const og = getOpenGraphLocales();
   return {
     title: meta.title,
     description: meta.description,
@@ -55,6 +57,8 @@ export async function generateMetadata(): Promise<Metadata> {
       description: meta.ogDescription ?? meta.description,
       type: "website",
       url: alternates.canonical,
+      locale: og.locale,
+      alternateLocale: og.alternateLocales,
     },
   };
 }

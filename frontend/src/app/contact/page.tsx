@@ -5,6 +5,7 @@ import {
   getServerLocale,
   getLocalizedAlternates,
   getLocalizedBreadcrumbs,
+  getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import { fetchContactPage } from "@/lib/sanity-data";
 import { PAGE_META } from "@/data/page-meta";
@@ -16,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const meta =
     PAGE_META["/contact"]?.[locale] ?? PAGE_META["/contact"].en;
   const alternates = getLocalizedAlternates("/contact");
+const og = getOpenGraphLocales();
   return {
     title: meta.title,
     description: meta.description,
@@ -27,6 +29,8 @@ export async function generateMetadata(): Promise<Metadata> {
       title: meta.ogTitle ?? meta.title,
       description: meta.ogDescription ?? meta.description,
       type: "website",
+      locale: og.locale,
+      alternateLocale: og.alternateLocales,
     },
   };
 }

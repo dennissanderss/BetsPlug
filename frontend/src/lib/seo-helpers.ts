@@ -146,6 +146,44 @@ export function getLocalizedAlternates(
   return { canonical, languages };
 }
 
+/* ── Open Graph locale tags ─────────────────────────────────── */
+
+/**
+ * Build `og:locale` + `og:locale:alternate` values for the active page.
+ *
+ * - `locale`: BCP-47-with-region (e.g. `nl_NL`, `de_DE`) for the
+ *   current locale. Goes into Open Graph as `og:locale`.
+ * - `alternateLocales`: same format for every OTHER indexable locale,
+ *   so social-graph crawlers know translated versions exist.
+ *
+ * Parked locales fall back to EN's `og:locale` (and don't emit
+ * alternates from a parked URL — they shouldn't be advertised as
+ * indexable siblings).
+ *
+ * Pass the result into Next.js `Metadata.openGraph.locale` and
+ * `Metadata.openGraph.alternateLocale`.
+ */
+export function getOpenGraphLocales(): {
+  locale: string;
+  alternateLocales: string[];
+} {
+  const active = getServerLocale();
+  const indexable = isIndexableLocale(active);
+  const localeTag = indexable
+    ? localeMeta[active].ogLocale
+    : localeMeta[defaultLocale].ogLocale;
+
+  if (!indexable) {
+    return { locale: localeTag, alternateLocales: [] };
+  }
+
+  const alternateLocales = INDEXABLE_LOCALES
+    .filter((l) => l !== active)
+    .map((l) => localeMeta[l].ogLocale);
+
+  return { locale: localeTag, alternateLocales };
+}
+
 /* ── Locale-aware FAQ builder ──────────────────────────────── */
 
 type FaqKeySet = { q: string; a: string }[];

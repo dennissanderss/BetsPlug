@@ -76,32 +76,40 @@ export function isIndexableLocale(locale: Locale): boolean {
   return (INDEXABLE_LOCALES as readonly Locale[]).includes(locale);
 }
 
-/** Human-readable label + flag for each locale (used by the switcher). */
+/** Human-readable label + flag for each locale (used by the switcher).
+ *
+ * `ogLocale` is the BCP-47-with-region tag that Open Graph expects
+ * (e.g. `en_GB`, `nl_NL`, `de_DE`). Per-locale OG tags help Facebook,
+ * LinkedIn, WhatsApp and crawlers index translated pages with the
+ * correct language signal. The choice of region pair follows the
+ * dominant football market for that language (e.g. `pt_PT` over
+ * `pt_BR`, `es_ES` over `es_MX`). */
 export const localeMeta: Record<
   Locale,
-  { label: string; native: string; flag: string; hreflang: string }
+  { label: string; native: string; flag: string; hreflang: string; ogLocale: string }
 > = {
-  en: { label: "English", native: "English", flag: "🇬🇧", hreflang: "en" },
-  nl: { label: "Dutch", native: "Nederlands", flag: "🇳🇱", hreflang: "nl" },
-  de: { label: "German", native: "Deutsch", flag: "🇩🇪", hreflang: "de" },
-  fr: { label: "French", native: "Français", flag: "🇫🇷", hreflang: "fr" },
-  es: { label: "Spanish", native: "Español", flag: "🇪🇸", hreflang: "es" },
-  it: { label: "Italian", native: "Italiano", flag: "🇮🇹", hreflang: "it" },
-  sw: { label: "Swahili", native: "Kiswahili", flag: "🇰🇪", hreflang: "sw" },
+  en: { label: "English", native: "English", flag: "🇬🇧", hreflang: "en", ogLocale: "en_GB" },
+  nl: { label: "Dutch", native: "Nederlands", flag: "🇳🇱", hreflang: "nl", ogLocale: "nl_NL" },
+  de: { label: "German", native: "Deutsch", flag: "🇩🇪", hreflang: "de", ogLocale: "de_DE" },
+  fr: { label: "French", native: "Français", flag: "🇫🇷", hreflang: "fr", ogLocale: "fr_FR" },
+  es: { label: "Spanish", native: "Español", flag: "🇪🇸", hreflang: "es", ogLocale: "es_ES" },
+  it: { label: "Italian", native: "Italiano", flag: "🇮🇹", hreflang: "it", ogLocale: "it_IT" },
+  sw: { label: "Swahili", native: "Kiswahili", flag: "🇰🇪", hreflang: "sw", ogLocale: "sw_KE" },
   id: {
     label: "Indonesian",
     native: "Bahasa Indonesia",
     flag: "🇮🇩",
     hreflang: "id",
+    ogLocale: "id_ID",
   },
-  pt: { label: "Portuguese", native: "Português", flag: "🇵🇹", hreflang: "pt" },
-  tr: { label: "Turkish", native: "Türkçe", flag: "🇹🇷", hreflang: "tr" },
-  pl: { label: "Polish", native: "Polski", flag: "🇵🇱", hreflang: "pl" },
-  ro: { label: "Romanian", native: "Română", flag: "🇷🇴", hreflang: "ro" },
-  ru: { label: "Russian", native: "Русский", flag: "🇷🇺", hreflang: "ru" },
-  el: { label: "Greek", native: "Ελληνικά", flag: "🇬🇷", hreflang: "el" },
-  da: { label: "Danish", native: "Dansk", flag: "🇩🇰", hreflang: "da" },
-  sv: { label: "Swedish", native: "Svenska", flag: "🇸🇪", hreflang: "sv" },
+  pt: { label: "Portuguese", native: "Português", flag: "🇵🇹", hreflang: "pt", ogLocale: "pt_PT" },
+  tr: { label: "Turkish", native: "Türkçe", flag: "🇹🇷", hreflang: "tr", ogLocale: "tr_TR" },
+  pl: { label: "Polish", native: "Polski", flag: "🇵🇱", hreflang: "pl", ogLocale: "pl_PL" },
+  ro: { label: "Romanian", native: "Română", flag: "🇷🇴", hreflang: "ro", ogLocale: "ro_RO" },
+  ru: { label: "Russian", native: "Русский", flag: "🇷🇺", hreflang: "ru", ogLocale: "ru_RU" },
+  el: { label: "Greek", native: "Ελληνικά", flag: "🇬🇷", hreflang: "el", ogLocale: "el_GR" },
+  da: { label: "Danish", native: "Dansk", flag: "🇩🇰", hreflang: "da", ogLocale: "da_DK" },
+  sv: { label: "Swedish", native: "Svenska", flag: "🇸🇪", hreflang: "sv", ogLocale: "sv_SE" },
 };
 
 export const LOCALE_COOKIE = "NEXT_LOCALE";

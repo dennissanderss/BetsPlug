@@ -20,7 +20,9 @@ import { defaultLocale, isLocale, LOCALE_COOKIE } from "@/i18n/config";
 import { translate } from "@/i18n/messages";
 import { formatMsg } from "@/i18n/format";
 import { localizePath } from "@/i18n/routes";
-import { getLocalizedAlternates, getServerLocale } from "@/lib/seo-helpers";
+import { getLocalizedAlternates, getServerLocale,
+  getOpenGraphLocales,
+} from "@/lib/seo-helpers";
 import { getLeagueLogoPath } from "@/data/league-logos";
 import { BET_TYPE_HUBS } from "@/data/bet-type-hubs";
 import { COMBO_LEAGUE_SLUGS, LEAGUE_SCORING_PROFILE } from "@/data/bet-type-league-combos";
@@ -90,7 +92,7 @@ export async function generateMetadata(props: {
   const alternates = getLocalizedAlternates(
     `/bet-types/${slug}/${league_slug}`,
   );
-
+const og = getOpenGraphLocales();
   return {
     title,
     description,
@@ -103,6 +105,8 @@ export async function generateMetadata(props: {
       description,
       type: "article",
       url: `${SITE_URL}/bet-types/${slug}/${league_slug}`,
+      locale: og.locale,
+      alternateLocale: og.alternateLocales,
     },
     twitter: {
       card: "summary_large_image",

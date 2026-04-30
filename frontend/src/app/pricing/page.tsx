@@ -3,6 +3,7 @@ import {
   getServerLocale,
   getLocalizedAlternates,
   getLocalizedBreadcrumbs,
+  getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import {
   BreadcrumbJsonLd,
@@ -21,6 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const meta =
     PAGE_META["/pricing"]?.[locale] ?? PAGE_META["/pricing"].en;
   const alternates = getLocalizedAlternates("/pricing");
+const og = getOpenGraphLocales();
   return {
     title: meta.title,
     description: meta.description,
@@ -32,6 +34,8 @@ export async function generateMetadata(): Promise<Metadata> {
       title: meta.ogTitle ?? meta.title,
       description: meta.ogDescription ?? meta.description,
       type: "website",
+      locale: og.locale,
+      alternateLocale: og.alternateLocales,
     },
   };
 }

@@ -5,6 +5,7 @@ import {
   getLocalizedAlternates,
   getLocalizedFaq,
   getLocalizedBreadcrumbs,
+  getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 import { BreadcrumbJsonLd, FaqJsonLd } from "@/components/seo/json-ld";
@@ -24,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
   const meta = PAGE_META["/match-predictions"]?.[locale] ?? PAGE_META["/match-predictions"].en;
   const alternates = getLocalizedAlternates("/match-predictions");
-
+const og = getOpenGraphLocales();
   return {
     title: meta.title,
     description: meta.description,
@@ -36,6 +37,8 @@ export async function generateMetadata(): Promise<Metadata> {
       title: meta.ogTitle ?? meta.title,
       description: meta.ogDescription ?? meta.description,
       type: "website",
+      locale: og.locale,
+      alternateLocale: og.alternateLocales,
     },
   };
 }

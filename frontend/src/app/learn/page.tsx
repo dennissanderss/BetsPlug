@@ -16,7 +16,9 @@ import {
   type LearnPillarLocale,
 } from "@/data/learn-pillars";
 import { fetchAllLearnPillars } from "@/lib/sanity-data";
-import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { getServerLocale, getLocalizedAlternates,
+  getOpenGraphLocales,
+} from "@/lib/seo-helpers";
 import { localizePath } from "@/i18n/routes";
 import { PAGE_META } from "@/data/page-meta";
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -38,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
   const meta = PAGE_META["/learn"]?.[locale] ?? PAGE_META["/learn"].en;
   const alternates = getLocalizedAlternates("/learn");
-
+const og = getOpenGraphLocales();
   return {
     title: meta.title,
     description: meta.description,
@@ -51,6 +53,8 @@ export async function generateMetadata(): Promise<Metadata> {
       description: meta.ogDescription ?? meta.description,
       type: "website",
       url: alternates.canonical,
+      locale: og.locale,
+      alternateLocale: og.alternateLocales,
     },
   };
 }

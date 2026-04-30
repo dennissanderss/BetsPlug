@@ -28,7 +28,9 @@ import {
   type LearnPillarLocale,
 } from "@/data/learn-pillars";
 import { fetchLearnPillarSlugs, fetchLearnPillarBySlug } from "@/lib/sanity-data";
-import { getLocalizedAlternates, getServerLocale } from "@/lib/seo-helpers";
+import { getLocalizedAlternates, getServerLocale,
+  getOpenGraphLocales,
+} from "@/lib/seo-helpers";
 import { localizePath } from "@/i18n/routes";
 
 // Pillars are hand-authored in EN + NL; every other locale falls
@@ -102,7 +104,7 @@ export async function generateMetadata(props: {
     `/learn/${pillar.slug}`,
     translatedLocales,
   );
-
+const og = getOpenGraphLocales();
   return {
     title,
     description,
@@ -115,6 +117,8 @@ export async function generateMetadata(props: {
       description,
       type: "article",
       url: alternates.canonical,
+      locale: og.locale,
+      alternateLocale: og.alternateLocales,
     },
     twitter: {
       card: "summary_large_image",

@@ -20,7 +20,9 @@ import {
   type BetTypeHubLocale,
 } from "@/lib/sanity-data";
 import { pickBetTypeHubLocale } from "@/data/bet-type-hubs";
-import { getLocalizedAlternates, getServerLocale } from "@/lib/seo-helpers";
+import { getLocalizedAlternates, getServerLocale,
+  getOpenGraphLocales,
+} from "@/lib/seo-helpers";
 import { localizePath } from "@/i18n/routes";
 import { BetTypeHubFixtures } from "./bet-type-hub-fixtures";
 import { HeroMediaBg } from "@/components/ui/media-bg";
@@ -81,7 +83,7 @@ export async function generateMetadata(props: {
   const title = hub.metaTitle[editorialLocale];
   const description = hub.metaDescription[editorialLocale];
   const alternates = getLocalizedAlternates(`/bet-types/${hub.slug}`);
-
+const og = getOpenGraphLocales();
   return {
     title,
     description,
@@ -94,6 +96,8 @@ export async function generateMetadata(props: {
       description,
       type: "article",
       url: alternates.canonical,
+      locale: og.locale,
+      alternateLocale: og.alternateLocales,
     },
     twitter: {
       card: "summary_large_image",

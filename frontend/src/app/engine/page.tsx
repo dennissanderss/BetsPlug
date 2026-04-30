@@ -4,6 +4,7 @@ import {
   getServerLocale,
   getLocalizedAlternates,
   getLocalizedBreadcrumbs,
+  getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { PAGE_META } from "@/data/page-meta";
@@ -25,6 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const meta =
     PAGE_META["/engine"]?.[locale] ?? PAGE_META["/engine"].en;
   const alternates = getLocalizedAlternates("/engine");
+const og = getOpenGraphLocales();
   return {
     title: meta.title,
     description: meta.description,
@@ -36,6 +38,8 @@ export async function generateMetadata(): Promise<Metadata> {
       title: meta.ogTitle ?? meta.title,
       description: meta.ogDescription ?? meta.description,
       type: "article",
+      locale: og.locale,
+      alternateLocale: og.alternateLocales,
     },
   };
 }

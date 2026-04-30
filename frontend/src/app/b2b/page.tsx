@@ -4,6 +4,7 @@ import {
   getServerLocale,
   getLocalizedAlternates,
   getLocalizedBreadcrumbs,
+  getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 import { BreadcrumbJsonLd } from "@/components/seo/json-ld";
@@ -15,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
   const meta = PAGE_META["/b2b"]?.[locale] ?? PAGE_META["/b2b"].en;
   const alternates = getLocalizedAlternates("/b2b");
-
+const og = getOpenGraphLocales();
   return {
     title: meta.title,
     description: meta.description,
