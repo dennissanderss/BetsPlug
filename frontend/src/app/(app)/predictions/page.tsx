@@ -391,9 +391,13 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
   const hasPrediction = pred !== null && typeof pred.confidence === "number";
   // Backend marks a pick "locked" when the user's tier is below the pick's
   // tier — `prediction` is null but `locked_pick_tier` carries the slug.
+  // The Resultaten tab (showPerTier) is intentionally transparent: every
+  // tier's pick is visible regardless of subscription so users can audit
+  // hit-rate themselves. Upgrade nudges only fire on Upcoming/Live.
   const lockedTier = (fixture as any).locked_pick_tier as
     | "silver" | "gold" | "platinum" | null | undefined;
-  const isLocked = !hasPrediction && !!lockedTier;
+  const isLocked = !showPerTier && !hasPrediction && !!lockedTier;
+  const hideFreeUpsell = showPerTier;
   const lockedTierLabel = (fixture as any).locked_pick_tier_label as string | null | undefined;
 
   const isLive = fixture.status === "live";
@@ -541,8 +545,11 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
             </span>
           )}
           {/* Tier shield — show locked tier when locked, otherwise the
-              pick's classified tier. */}
-          {(isLocked ? lockedTier : pickTier) && (
+              pick's classified tier. Suppressed on the Resultaten tab
+              because the per-tier strip below already shows tier
+              transparency for every row, and a small shield icon next
+              to the pick reads as a lock to first-time users. */}
+          {!showPerTier && (isLocked ? lockedTier : pickTier) && (
             <PickTierBadge
               tier={(isLocked ? lockedTier : pickTier) as PickTierSlug}
               size="sm"
@@ -565,7 +572,7 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
               <Lock className="h-3 w-3" />
               {lockedTierLabel ?? lockedTier}
             </Link>
-          ) : isFree ? (
+          ) : isFree && !hideFreeUpsell ? (
             <Link
               href="/pricing"
               title="Upgrade to Silver to view pre-match odds"
