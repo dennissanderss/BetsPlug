@@ -35,5 +35,22 @@ export default async function LocaleLayout({
   if (!isLocale(rawLocale)) notFound();
   const locale: Locale = rawLocale;
 
-  return <LocaleProvider locale={locale}>{children}</LocaleProvider>;
+  return (
+    <LocaleProvider locale={locale}>
+      {/* Skip-to-content link — sr-only by default, becomes visible
+          on keyboard focus. WCAG 2.4.1 (Bypass Blocks) and meets
+          screen-reader user expectation. The id="main" lives on
+          the implicit <main> wrapper Next emits for [locale] pages
+          via the rendered children's first <main>/<section>. We
+          place the link at the start of the locale subtree so it
+          appears first in the tab order on every public page. */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-[#0d1321] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-[#ededed] focus:ring-2 focus:ring-[#4ade80]"
+      >
+        Skip to main content
+      </a>
+      <main id="main">{children}</main>
+    </LocaleProvider>
+  );
 }
