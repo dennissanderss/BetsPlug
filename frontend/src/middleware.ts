@@ -80,6 +80,22 @@ function withLocaleHeader(req: NextRequest, locale: Locale): Headers {
 }
 
 
+// Routes that have been migrated to the static `app/[locale]/...`
+// segment. For these, middleware does NOT rewrite to a canonical EN
+// path — instead it lets Next.js handle `/<locale>/<path>` directly
+// so the pre-rendered static HTML is served. As more routes get
+// migrated, add their canonical EN pathnames here.
+//
+// IMPORTANT: each entry must match the EN canonical that
+// `parseLocalizedPath()` returns for that route family.
+const STATIC_LOCALE_ROUTES: ReadonlySet<string> = new Set([
+  "/", // homepage — every locale is statically pre-rendered at /[locale]/page
+]);
+
+function isStaticLocaleRoute(canonicalPath: string): boolean {
+  return STATIC_LOCALE_ROUTES.has(canonicalPath);
+}
+
 export function middleware(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
   const host =
@@ -98,6 +114,22 @@ export function middleware(req: NextRequest) {
   const firstSegment = pathname.split("/").filter(Boolean)[0];
   const hasLocalePrefix = isLocale(firstSegment);
 
+  // ── /  →  internal rewrite to /en  ─────────────────────────
+  // The bare canonical homepage URL stays "/" in the address bar
+  // but the response comes from the statically pre-rendered
+  // `app/[locale]/page.tsx` with locale=en. This is what unlocks
+  // CDN caching for the EN homepage.
+  if (pathname === "/") {
+    const url = req.nextUrl.clone();
+    url.pathname = `/${defaultLocale}`;
+    url.search = search;
+    const res = NextResponse.rewrite(url, {
+      request: { headers: withLocaleHeader(req, defaultLocale) },
+    });
+    res.headers.set("Content-Language", defaultLocale);
+    return applyIndexability(res, host);
+  }
+
   // ── /en/... → 308 redirect to canonical unprefixed URL ─────
   if (hasLocalePrefix && firstSegment === defaultLocale) {
     const url = req.nextUrl.clone();
@@ -107,13 +139,28 @@ export function middleware(req: NextRequest) {
   }
 
   // ── /xx/ prefix (15 non-default locales) ──────────────────
-  // Rewrite to the canonical EN path so Next.js resolves the
-  // matching page file, then render in the visitor's language.
-  // Indexable locales get a self-canonical + hreflang cluster;
-  // parked locales additionally get `X-Robots-Tag: noindex,
-  // follow` so Google drops them from its index.
+  // Two paths:
+  //   A. The canonical-EN target is already migrated to the
+  //      static [locale] segment (homepage today). DO NOT rewrite —
+  //      let Next.js route the request to app/[locale]/page.tsx so
+  //      the pre-rendered static HTML is served, full CDN cache.
+  //   B. Otherwise: rewrite to the canonical EN path so Next.js
+  //      resolves the legacy app/<route>/page.tsx file, render in
+  //      the visitor's language. Indexable locales get a self-
+  //      canonical + hreflang cluster; parked locales additionally
+  //      get `X-Robots-Tag: noindex, follow`.
   if (hasLocalePrefix) {
     const parsed = parseLocalizedPath(pathname, firstSegment as Locale);
+
+    if (isStaticLocaleRoute(parsed.canonical)) {
+      const res = NextResponse.next({
+        request: { headers: withLocaleHeader(req, parsed.locale) },
+      });
+      setLocaleCookie(res, parsed.locale);
+      applyParkedLocaleNoindex(res, parsed.locale);
+      return applyIndexability(res, host);
+    }
+
     const url = req.nextUrl.clone();
     url.pathname = parsed.canonical;
     url.search = search;

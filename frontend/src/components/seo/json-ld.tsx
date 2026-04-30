@@ -69,9 +69,10 @@ function buildOrganization(locale: Locale) {
 }
 
 /** Organization schema — add to the homepage or root layout.
- *  Description is rendered in the active locale. */
-export function OrganizationJsonLd() {
-  const locale = getServerLocale();
+ *  Description is rendered in the active locale. SSG callers
+ *  pass `locale` directly to avoid headers()/cookies() reads. */
+export function OrganizationJsonLd({ locale: localeProp }: { locale?: Locale } = {}) {
+  const locale = getServerLocale(localeProp);
   return (
     <JsonLd
       data={{
@@ -84,8 +85,8 @@ export function OrganizationJsonLd() {
 
 /* ── WebSite (with SearchAction) ──────────────────────────── */
 
-export function WebSiteJsonLd() {
-  const locale = getServerLocale();
+export function WebSiteJsonLd({ locale: localeProp }: { locale?: Locale } = {}) {
+  const locale = getServerLocale(localeProp);
   return (
     <JsonLd
       data={{
@@ -239,8 +240,8 @@ export function PricingProductJsonLd({
    guidelines they MUST NOT be emitted). Pricing offers live on /pricing
    via PricingProductJsonLd, so no AggregateOffer here either. */
 
-export function ServiceJsonLd() {
-  const locale = getServerLocale();
+export function ServiceJsonLd({ locale: localeProp }: { locale?: Locale } = {}) {
+  const locale = getServerLocale(localeProp);
   return (
     <JsonLd
       data={{
