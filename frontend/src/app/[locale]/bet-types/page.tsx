@@ -1,50 +1,50 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, ChevronRight, Sparkles, Target } from "lucide-react";
 import { CtaMediaBg } from "@/components/ui/media-bg";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
-import {
-  defaultLocale,
-  isLocale,
-  LOCALE_COOKIE,
-} from "@/i18n/config";
+import { isLocale, locales, type Locale } from "@/i18n/config";
 import { fetchAllBetTypeHubs } from "@/lib/sanity-data";
 import {
   pickBetTypeHubLocale,
   type BetTypeHubLocale,
 } from "@/data/bet-type-hubs";
-import { getServerLocale, getLocalizedAlternates,
+import {
+  getLocalizedAlternates,
   getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import { localizePath } from "@/i18n/routes";
 import { PAGE_META } from "@/data/page-meta";
 import { HeroMediaBg } from "@/components/ui/media-bg";
-
 import { PAGE_IMAGES } from "@/data/page-images";
 import { HexBadge } from "@/components/noct/hex-badge";
 
+export const dynamic = "force-static";
 export const revalidate = 60;
 
 type Variant = "green" | "purple" | "blue";
 const CYCLE: Variant[] = ["green", "purple", "blue"];
 
-/**
- * /bet-types — NOCTURNE hub index.
- */
+type Params = { locale: string };
 
-function readLocaleFromCookie(): BetTypeHubLocale {
-  const raw = cookies().get(LOCALE_COOKIE)?.value;
-  const uiLocale = isLocale(raw) ? raw : defaultLocale;
-  return pickBetTypeHubLocale(uiLocale);
+export async function generateStaticParams(): Promise<Params[]> {
+  return locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = getServerLocale();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const locale: Locale = rawLocale;
+
   const meta = PAGE_META["/bet-types"]?.[locale] ?? PAGE_META["/bet-types"].en;
-  const alternates = getLocalizedAlternates("/bet-types");
-const og = getOpenGraphLocales();
+  const alternates = getLocalizedAlternates("/bet-types", undefined, locale);
+  const og = getOpenGraphLocales(locale);
   return {
     title: meta.title,
     description: meta.description,
@@ -63,12 +63,15 @@ const og = getOpenGraphLocales();
   };
 }
 
-export default async function BetTypesIndexPage() {
-  const editorialLocale = readLocaleFromCookie();
-  // UI locale drives URL localization so non-EN/NL visitors see
-  // same-locale internal links instead of being redirected back
-  // to the EN canonical via 308.
-  const uiLocale = getServerLocale();
+export default async function BetTypesIndexPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const uiLocale: Locale = rawLocale;
+  const editorialLocale: BetTypeHubLocale = pickBetTypeHubLocale(uiLocale);
   const lhref = (canonical: string) => localizePath(canonical, uiLocale);
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
   const hubs = await fetchAllBetTypeHubs();

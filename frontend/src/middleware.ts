@@ -99,11 +99,13 @@ const STATIC_LOCALE_ROUTES: ReadonlySet<string> = new Set([
   "/engine",
   "/contact",
   "/match-predictions",
+  "/bet-types",
 ]);
 
 const STATIC_LOCALE_ROUTE_PREFIXES: ReadonlyArray<string> = [
   "/learn/", // /learn/[slug] — pre-rendered for every (locale × pillar slug)
   "/match-predictions/", // /match-predictions/[league_slug]
+  "/bet-types/", // /bet-types/[slug] + /bet-types/[slug]/[league_slug]
 ];
 
 function isStaticLocaleRoute(canonicalPath: string): boolean {

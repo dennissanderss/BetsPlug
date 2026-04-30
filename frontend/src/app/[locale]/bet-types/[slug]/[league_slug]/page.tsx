@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -16,11 +15,12 @@ import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { UnlockBanner } from "@/components/match-predictions/unlock-banner";
 import { HexBadge } from "@/components/noct/hex-badge";
-import { defaultLocale, isLocale, LOCALE_COOKIE } from "@/i18n/config";
+import { isLocale, locales, type Locale } from "@/i18n/config";
 import { translate } from "@/i18n/messages";
 import { formatMsg } from "@/i18n/format";
 import { localizePath } from "@/i18n/routes";
-import { getLocalizedAlternates, getServerLocale,
+import {
+  getLocalizedAlternates,
   getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import { getLeagueLogoPath } from "@/data/league-logos";
@@ -34,6 +34,7 @@ import {
   type BetTypeLeagueCombo,
 } from "@/data/bet-type-league-combos";
 
+export const dynamic = "force-static";
 export const revalidate = 3600;
 
 /**
@@ -51,23 +52,22 @@ export const revalidate = 3600;
 
 const SITE_URL = "https://betsplug.com";
 
-type Params = { slug: string; league_slug: string };
+type Params = { locale: string; slug: string; league_slug: string };
 
-/* ── Static params ────────────────────────────────────────── */
+/* ── Static params: 16 locales × all bet-type×league combos ─ */
 
 export async function generateStaticParams(): Promise<Params[]> {
-  return getAllComboSlugs().map(({ betTypeSlug, leagueSlug }) => ({
-    slug: betTypeSlug,
-    league_slug: leagueSlug,
-  }));
+  const combos = getAllComboSlugs();
+  const out: Params[] = [];
+  for (const locale of locales) {
+    for (const { betTypeSlug, leagueSlug } of combos) {
+      out.push({ locale, slug: betTypeSlug, league_slug: leagueSlug });
+    }
+  }
+  return out;
 }
 
-/* ── Helpers ──────────────────────────────────────────────── */
-
-function readLocaleFromCookie(): ComboLocale {
-  const raw = cookies().get(LOCALE_COOKIE)?.value;
-  const uiLocale = isLocale(raw) ? raw : defaultLocale;
-  // Combo content is EN + NL only; everything else falls back to EN.
+function pickComboLocale(uiLocale: Locale): ComboLocale {
   return uiLocale === "nl" ? "nl" : "en";
 }
 
@@ -76,7 +76,10 @@ function readLocaleFromCookie(): ComboLocale {
 export async function generateMetadata(props: {
   params: Promise<Params>;
 }): Promise<Metadata> {
-  const { slug, league_slug } = await props.params;
+  const { locale: rawLocale, slug, league_slug } = await props.params;
+  if (!isLocale(rawLocale)) return {};
+  const uiLocale: Locale = rawLocale;
+
   const combo = buildCombo(slug, league_slug);
   if (!combo) {
     return {
@@ -86,13 +89,15 @@ export async function generateMetadata(props: {
     };
   }
 
-  const locale = readLocaleFromCookie();
+  const locale = pickComboLocale(uiLocale);
   const title = combo.metaTitle[locale];
   const description = combo.metaDescription[locale];
   const alternates = getLocalizedAlternates(
     `/bet-types/${slug}/${league_slug}`,
+    undefined,
+    uiLocale,
   );
-const og = getOpenGraphLocales();
+  const og = getOpenGraphLocales(uiLocale);
   return {
     title,
     description,
@@ -194,16 +199,14 @@ function buildJsonLd(combo: BetTypeLeagueCombo, locale: ComboLocale) {
 export default async function BetTypeLeagueComboPage(props: {
   params: Promise<Params>;
 }) {
-  const { slug, league_slug } = await props.params;
+  const { locale: rawLocale, slug, league_slug } = await props.params;
+  if (!isLocale(rawLocale)) notFound();
+  const uiLocale: Locale = rawLocale;
+
   const combo = buildCombo(slug, league_slug);
   if (!combo) notFound();
 
-  const locale = readLocaleFromCookie();
-  // UI locale (all 8 locales) for URL building; `locale` above is
-  // editorial only (EN + NL). Keeps href generation in the visitor's
-  // actual locale so internal links don't cross-reference the EN
-  // canonical path from e.g. a German user's page.
-  const uiLocale = getServerLocale();
+  const locale = pickComboLocale(uiLocale);
   const lhref = (canonical: string) => localizePath(canonical, uiLocale);
   const jsonLd = buildJsonLd(combo, locale);
   const leagueLogo = getLeagueLogoPath(league_slug);

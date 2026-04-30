@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, ChevronRight, Sparkles, Target, BookOpen, Lightbulb, HelpCircle } from "lucide-react";
@@ -7,11 +6,7 @@ import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { UnlockBanner } from "@/components/match-predictions/unlock-banner";
 import { HexBadge } from "@/components/noct/hex-badge";
-import {
-  defaultLocale,
-  isLocale,
-  LOCALE_COOKIE,
-} from "@/i18n/config";
+import { isLocale, locales, type Locale } from "@/i18n/config";
 import {
   fetchBetTypeHubSlugs,
   fetchBetTypeHubBySlug,
@@ -20,7 +15,8 @@ import {
   type BetTypeHubLocale,
 } from "@/lib/sanity-data";
 import { pickBetTypeHubLocale } from "@/data/bet-type-hubs";
-import { getLocalizedAlternates, getServerLocale,
+import {
+  getLocalizedAlternates,
   getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import { localizePath } from "@/i18n/routes";
@@ -32,6 +28,7 @@ import { COMBO_LEAGUE_SLUGS } from "@/data/bet-type-league-combos";
 import { LEAGUE_CATALOG, getLeagueName as getCatalogLeagueName } from "@/data/league-catalog";
 import { getLeagueLogoPath } from "@/data/league-logos";
 
+export const dynamic = "force-static";
 export const revalidate = 60;
 
 /**
@@ -47,21 +44,19 @@ export const revalidate = 60;
 
 const SITE_URL = "https://betsplug.com";
 
-type Params = { slug: string };
+type Params = { locale: string; slug: string };
 
-/* ── Static params ────────────────────────────────────────── */
+/* ── Static params: 16 locales × N bet-type slugs ───────── */
 
 export async function generateStaticParams(): Promise<Params[]> {
   const slugs = await fetchBetTypeHubSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
-
-/* ── Helpers ──────────────────────────────────────────────── */
-
-function readLocaleFromCookie(): BetTypeHubLocale {
-  const raw = cookies().get(LOCALE_COOKIE)?.value;
-  const uiLocale = isLocale(raw) ? raw : defaultLocale;
-  return pickBetTypeHubLocale(uiLocale);
+  const out: Params[] = [];
+  for (const locale of locales) {
+    for (const slug of slugs) {
+      out.push({ locale, slug });
+    }
+  }
+  return out;
 }
 
 /* ── Metadata ─────────────────────────────────────────────── */
@@ -69,7 +64,10 @@ function readLocaleFromCookie(): BetTypeHubLocale {
 export async function generateMetadata(props: {
   params: Promise<Params>;
 }): Promise<Metadata> {
-  const { slug } = await props.params;
+  const { locale: rawLocale, slug } = await props.params;
+  if (!isLocale(rawLocale)) return {};
+  const locale: Locale = rawLocale;
+
   const hub = await fetchBetTypeHubBySlug(slug);
   if (!hub) {
     return {
@@ -79,11 +77,15 @@ export async function generateMetadata(props: {
     };
   }
 
-  const editorialLocale = readLocaleFromCookie();
+  const editorialLocale: BetTypeHubLocale = pickBetTypeHubLocale(locale);
   const title = hub.metaTitle[editorialLocale];
   const description = hub.metaDescription[editorialLocale];
-  const alternates = getLocalizedAlternates(`/bet-types/${hub.slug}`);
-const og = getOpenGraphLocales();
+  const alternates = getLocalizedAlternates(
+    `/bet-types/${hub.slug}`,
+    undefined,
+    locale,
+  );
+  const og = getOpenGraphLocales(locale);
   return {
     title,
     description,
@@ -174,16 +176,14 @@ function buildJsonLd(hub: BetTypeHub, editorialLocale: BetTypeHubLocale) {
 export default async function BetTypeHubPage(props: {
   params: Promise<Params>;
 }) {
-  const { slug } = await props.params;
+  const { locale: rawLocale, slug } = await props.params;
+  if (!isLocale(rawLocale)) notFound();
+  const uiLocale: Locale = rawLocale;
+  const editorialLocale: BetTypeHubLocale = pickBetTypeHubLocale(uiLocale);
+
   const hub = await fetchBetTypeHubBySlug(slug);
   if (!hub) notFound();
 
-  const editorialLocale = readLocaleFromCookie();
-  // UI locale (8 locales) for URL building; editorialLocale is
-  // EN/NL only. Keeps internal link graph on the visitor's locale
-  // so a German user on /de/wett-arten/btts sees sibling links
-  // like /de/wett-arten/over-2-5 instead of the EN canonical.
-  const uiLocale = getServerLocale();
   const lhref = (canonical: string) => localizePath(canonical, uiLocale);
   const jsonLd = buildJsonLd(hub, editorialLocale);
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
