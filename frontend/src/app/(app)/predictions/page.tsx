@@ -598,13 +598,24 @@ function CompactMatchRow({ fixture, isFree, showPerTier = false }: { fixture: Fi
               <span className="sm:hidden">Locked</span>
             </span>
           ) : isCorrect !== null ? (
-            <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-              isCorrect
-                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
-                : "bg-red-500/15 text-red-400 border border-red-500/25"
-            }`}>
-              {isCorrect ? "Correct" : "Incorrect"}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                isCorrect
+                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25"
+                  : "bg-red-500/15 text-red-400 border border-red-500/25"
+              }`}>
+                {isCorrect ? "Correct" : "Incorrect"}
+              </span>
+              {confScore != null && (
+                <span
+                  className="text-[11px] font-bold tabular-nums shrink-0"
+                  style={{ color: confColor }}
+                  title={`Pre-match confidence ${confScore}%`}
+                >
+                  {confScore}%
+                </span>
+              )}
+            </div>
           ) : confScore != null ? (
             <>
               <div className="flex-1 h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
