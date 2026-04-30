@@ -1,0 +1,138 @@
+---
+// Server-rendered free-picks grid. Calls the existing FastAPI
+// backend at build (or request) time so the marketing homepage
+// ships pure HTML — no client-side React, no hydration cost,
+// instant LCP on mobile. Falls back gracefully if the API is
+// down so a backend hiccup never breaks the marketing site.
+const API_BASE =
+  import.meta.env.PUBLIC_API_BASE ?? "https://api.betsplug.com";
+
+interface FreePick {
+  match_id: string;
+  league_name: string;
+  home_team_name: string;
+  away_team_name: string;
+  scheduled_at: string;
+  pick: "HOME" | "DRAW" | "AWAY";
+  confidence: number;
+}
+
+interface FreePicksResponse {
+  picks?: FreePick[];
+}
+
+let picks: FreePick[] = [];
+let loadError = false;
+
+try {
+  const res = await fetch(`${API_BASE}/api/homepage/free-picks`, {
+    headers: { Accept: "application/json" },
+    // Build-time fetch — fine to fail; we render an empty state
+    signal: AbortSignal.timeout(4000),
+  });
+  if (res.ok) {
+    const data = (await res.json()) as FreePicksResponse;
+    picks = (data.picks ?? []).slice(0, 3);
+  } else {
+    loadError = true;
+  }
+} catch {
+  loadError = true;
+}
+
+function pickLabel(p: FreePick): string {
+  if (p.pick === "HOME") return p.home_team_name;
+  if (p.pick === "AWAY") return p.away_team_name;
+  return "Draw";
+}
+
+function formatKickoff(iso: string): string {
+  try {
+    return new Date(iso).toLocaleString("en-GB", {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  } catch {
+    return iso;
+  }
+}
+---
+
+<section class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+  <div
+    aria-hidden
+    class="glow-blob"
+    style="top:-40px;left:10%;width:360px;height:360px;background:hsl(142 71% 45% / 0.18);"
+  >
+  </div>
+
+  <div class="relative">
+    <div class="mb-6 flex items-end justify-between gap-4">
+      <div>
+        <p
+          class="text-[11px] font-semibold uppercase tracking-widest text-[var(--color-text-faint)]"
+        >
+          Free picks · today
+        </p>
+        <h2 class="mt-2 text-2xl font-extrabold text-white sm:text-3xl">
+          Three picks, on the house.
+        </h2>
+        <p class="mt-2 max-w-xl text-sm text-[var(--color-text-muted)]">
+          Our AI's highest-confidence calls of the day. No login. No card.
+          Live track record on every match.
+        </p>
+      </div>
+      <a href="/pricing" class="btn-ghost shrink-0 text-xs">See all picks →</a>
+    </div>
+
+    {
+      loadError && picks.length === 0 ? (
+        <div class="card-neon p-8 text-center text-sm text-[var(--color-text-muted)]">
+          Picks are warming up. Refresh in a moment, or jump straight into the{" "}
+          <a href="/pricing" class="underline hover:text-white">
+            full predictions feed
+          </a>
+          .
+        </div>
+      ) : picks.length === 0 ? (
+        <div class="card-neon p-8 text-center text-sm text-[var(--color-text-muted)]">
+          No free picks scheduled right now — fresh slate every morning.
+        </div>
+      ) : (
+        <div class="grid gap-4 md:grid-cols-3">
+          {picks.map((p) => (
+            <a
+              href="/pricing"
+              class="card-neon card-neon-green block p-5 transition-transform hover:-translate-y-0.5"
+            >
+              <p class="text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
+                {p.league_name}
+              </p>
+              <div class="mt-3 space-y-1 text-sm font-semibold text-white">
+                <div>{p.home_team_name}</div>
+                <div>{p.away_team_name}</div>
+              </div>
+              <div class="mt-4 flex items-center justify-between border-t border-white/[0.06] pt-3">
+                <span class="text-[10px] text-[var(--color-text-muted)]">
+                  {formatKickoff(p.scheduled_at)}
+                </span>
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px] font-semibold text-[var(--color-accent-green-bright)]">
+                    {pickLabel(p)}
+                  </span>
+                  <span class="rounded-full bg-[hsl(142_71%_45%/0.15)] px-2 py-0.5 text-[11px] font-bold tabular-nums text-[var(--color-accent-green-bright)]">
+                    {Math.round(p.confidence * 100)}%
+                  </span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>

@@ -1,0 +1,87 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import FreePicksGrid from "../components/FreePicksGrid.astro";
+---
+
+<Layout
+  title="BetsPlug — AI football predictions, public track record"
+  description="One AI engine. One daily Pick of the Day. One public track record you can verify. No black boxes. Educational simulation only — 18+, no financial advice."
+>
+  <SiteNav />
+
+  <main>
+    {/* Hero ───────────────────────────────────────────────────── */}
+    <section
+      class="relative mx-auto max-w-7xl px-4 pt-16 pb-12 sm:px-6 sm:pt-24 lg:px-8"
+    >
+      <div
+        aria-hidden
+        class="glow-blob"
+        style="top:80px;right:-80px;width:520px;height:520px;background:hsl(271 91% 55% / 0.18);"
+      >
+      </div>
+      <div
+        aria-hidden
+        class="glow-blob"
+        style="top:160px;left:-100px;width:480px;height:480px;background:hsl(142 71% 45% / 0.22);"
+      >
+      </div>
+
+      <div class="relative max-w-3xl">
+        <p
+          class="text-[11px] font-semibold uppercase tracking-widest text-[var(--color-accent-green-bright)]"
+        >
+          Sports intelligence platform
+        </p>
+        <h1
+          class="mt-4 text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl md:text-6xl"
+        >
+          AI football predictions, with a
+          <span class="gradient-text-green">track record you can verify</span>.
+        </h1>
+        <p
+          class="mt-5 max-w-2xl text-base text-[var(--color-text-muted)] sm:text-lg"
+        >
+          One engine. One daily Pick of the Day. Every prediction logged before
+          kickoff and graded afterwards. Free picks on this page — no login, no
+          card. Pricing starts when you want odds, simulation, and the full
+          feed.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href="/pricing" class="btn-primary">Start free</a>
+          <a href="/engine" class="btn-ghost"
+            >How the engine works →</a
+          >
+        </div>
+
+        <p
+          class="mt-6 text-xs leading-relaxed text-[var(--color-text-faint)]"
+        >
+          Educational simulation only. 18+. No financial or betting advice.
+        </p>
+      </div>
+    </section>
+
+    {/* Free picks — pulled live from the FastAPI backend ──────── */}
+    <FreePicksGrid />
+
+    {/* Footer ─────────────────────────────────────────────────── */}
+    <footer class="mt-16 border-t border-white/[0.06]">
+      <div
+        class="mx-auto flex max-w-7xl flex-col items-start gap-3 px-4 py-8 text-xs text-[var(--color-text-faint)] sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8"
+      >
+        <p>© {new Date().getFullYear()} BetsPlug. All rights reserved.</p>
+        <div class="flex flex-wrap gap-4">
+          <a href="/terms" class="hover:text-white">Terms</a>
+          <a href="/privacy" class="hover:text-white">Privacy</a>
+          <a href="/cookies" class="hover:text-white">Cookies</a>
+          <a href="/responsible-gambling" class="hover:text-white"
+            >Responsible play</a
+          >
+        </div>
+      </div>
+    </footer>
+  </main>
+</Layout>
