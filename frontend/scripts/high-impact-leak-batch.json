@@ -1,0 +1,52 @@
+{
+  "de": {
+    "engine.val.liveBody": "Ab dem 16. April 2026 wird jede neue Vorhersage vor Spielbeginn erzeugt und das Ergebnis nach Schlusspfiff erfasst. Dieser separate Stream wird im Live-Tab von /track-record geführt. Er beginnt klein und wächst täglich; statistisch belastbare Tier-Zahlen erfordern ca. 200 ausgewertete Picks pro Tier.",
+    "engine.val.liveHeader": "Live-Messung",
+    "engine.val.liveTitle": "Separat erfasst seit 16. April 2026",
+    "engine.val.modelBody": "Wir wenden das aktuelle Modell auf historische Spiele an und nutzen ausschließlich Informationen, die zum Zeitpunkt des Anpfiffs verfügbar waren (Formkurve, Elo, H2H, Tabellenstand). So testen wir, ob das Modell allgemeine Muster gelernt hat – nicht spezifische Ergebnisse auswendig. Jede Tier-Genauigkeit auf dieser Seite stammt aus diesem Datensatz.",
+    "engine.val.modelHeader": "Modellvalidierung",
+    "engine.val.modelTitle": "Was die Headline-Zahlen bedeuten",
+    "faq.about.a4": "BetsPlug erzielt Einnahmen über Premium-Abonnements, die vollständigen Zugriff auf unsere KI-Vorhersage-Engine, fortgeschrittene Analyse-Dashboards und tiefgehende Value-Bet-Insights für alle unterstützten Ligen freischalten.",
+    "faq.home.a3": "Unser KI-Modell konzentriert sich ausschließlich auf Fußball und deckt Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Champions League und mehr ab. Neue Ligen kommen regelmäßig hinzu, sobald die Modelle dafür trainiert und validiert sind.",
+    "faq.how.a2": "Jeden Tag wählt BetsPlug Pulse das Spiel mit dem stärksten Konfidenz-Signal. Das ist unser Pick of the Day – derzeit bei {potdAccuracy}% Genauigkeit. Du kannst auch alle anderen Vorhersagen auf der Plattform durchsuchen.",
+    "faq.how.a4": "Wir decken über 70 Fußballwettbewerbe weltweit ab, darunter Premier League, La Liga, Bundesliga, Serie A, Ligue 1, Eredivisie und alle großen UEFA-Wettbewerbe.",
+    "faq.how.a5": "Strategy Lab ist eine kommende Funktion, mit der du Vorhersagen anhand von Backtest-Strategien filtern kannst. Sie ist aktuell gesperrt und als Coming Soon markiert.",
+    "faq.how.q2": "Was ist Pick of the Day?",
+    "faq.how.q5": "Was ist Strategy Lab?",
+    "faq.pred.a1": "Unsere Engine kombiniert Elo-Ratings, Expected Goals (xG), aktuelle Form und Dutzende Kontextmerkmale. Eine Machine-Learning-Pipeline verarbeitet diese Eingaben und liefert kalibrierte KI-Vorhersagen für jedes Spiel.",
+    "faq.pred.a3": "KI-Vorhersagen sind in der Regel 24–48 Stunden vor Anpfiff verfügbar, sobald Aufstellungs-News und die neuesten Elo-Ratings eingeflossen sind. Quoten und Value-Flags aktualisieren sich bis zum Anpfiff.",
+    "footer.legal": "Rechtliches",
+    "pricing.ctaUpgrade": "Upgrade durchführen"
+  },
+  "fr": {
+    "engine.val.liveBody": "À partir du 16 avril 2026, chaque nouvelle prédiction est générée avant le coup d'envoi du match et le résultat est enregistré après le coup de sifflet final. Il s'agit d'un flux séparé suivi dans l'onglet Live de /track-record. Il démarre modestement et s'enrichit chaque jour ; des statistiques par tier exploitables exigent environ 200 picks notés par tier.",
+    "engine.val.liveHeader": "Mesure en direct",
+    "engine.val.liveTitle": "Enregistré séparément depuis le 16 avril 2026",
+    "engine.val.modelBody": "Nous appliquons le modèle actuel à des matchs historiques en n'utilisant que les informations disponibles au moment du coup d'envoi (forme, Elo, H2H, classement). Cela teste si le modèle a appris des schémas généraux plutôt que mémorisé des résultats précis. Chaque précision par tier sur ce site provient de ce jeu de données.",
+    "engine.val.modelHeader": "Validation du modèle",
+    "engine.val.modelTitle": "Ce que représentent les chiffres affichés",
+    "footer.bottomCookies": "Cookies",
+    "footer.contact": "Contact",
+    "nav.contact": "Contact",
+    "nav.menu": "Menu"
+  },
+  "es": {
+    "engine.val.liveBody": "Desde el 16 de abril de 2026, cada nueva predicción se genera antes del inicio del partido y el resultado se registra tras el pitido final. Es un flujo independiente, registrado en la pestaña Live de /track-record. Empieza pequeño y crece a diario; las cifras por tier estadísticamente significativas requieren ~200 picks evaluados por tier.",
+    "engine.val.liveHeader": "Medición en vivo",
+    "engine.val.liveTitle": "Registrado por separado desde el 16 de abril de 2026",
+    "engine.val.modelBody": "Aplicamos el modelo actual a partidos históricos usando únicamente la información disponible en el momento del saque inicial (forma del equipo, Elo, H2H, clasificación). Así probamos si el modelo aprendió patrones generales en vez de memorizar resultados concretos. Toda la precisión por tier que ves en este sitio procede de este conjunto de datos.",
+    "engine.val.modelHeader": "Validación del modelo",
+    "engine.val.modelTitle": "Qué representan las cifras destacadas",
+    "footer.legal": "Aviso legal"
+  },
+  "it": {
+    "engine.val.liveBody": "Dal 16 aprile 2026 in poi, ogni nuova previsione viene generata prima dell'inizio della partita e l'esito viene registrato a fine partita. È uno stream separato, tracciato nel tab Live di /track-record. Parte da numeri piccoli e cresce ogni giorno; cifre per tier statisticamente significative richiedono circa 200 pick valutati per tier.",
+    "engine.val.liveHeader": "Misurazione live",
+    "engine.val.liveTitle": "Registrato separatamente dal 16 aprile 2026",
+    "engine.val.modelBody": "Applichiamo il modello attuale a partite storiche usando solo le informazioni disponibili al momento del fischio d'inizio (forma, Elo, H2H, classifica). Questo verifica se il modello ha appreso schemi generali invece di memorizzare risultati specifici. Ogni accuratezza per tier mostrata su questo sito proviene da questo dataset.",
+    "engine.val.modelHeader": "Validazione del modello",
+    "engine.val.modelTitle": "Cosa rappresentano i numeri evidenziati",
+    "footer.bottomPrivacy": "Privacy",
+    "nav.menu": "Menu"
+  }
+}
