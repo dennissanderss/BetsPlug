@@ -31,11 +31,50 @@ export function JsonLd({ data }: JsonLdProps) {
 
 /* ── Organization ─────────────────────────────────────────── */
 
+// Person schemas for the two BetsPlug founders. Drives the
+// `founder` field of the Organization schema (E-E-A-T signal —
+// Google associates the brand with verifiable humans). Bios stay
+// EN to avoid drift with the on-site /about-us copy; translation
+// of bios is a content-team task, not a translator task.
+const FOUNDERS = [
+  {
+    "@type": "Person",
+    "@id": "https://betsplug.com/#founder-cas",
+    name: "Cas Sanders",
+    givenName: "Cas",
+    familyName: "Sanders",
+    jobTitle: "Co-founder",
+    worksFor: { "@id": "https://betsplug.com/#organization" },
+    knowsAbout: [
+      "Sports analytics",
+      "Football statistics",
+      "Machine learning",
+      "Frontend engineering",
+    ],
+  },
+  {
+    "@type": "Person",
+    "@id": "https://betsplug.com/#founder-dennis",
+    name: "Dennis Sanders",
+    givenName: "Dennis",
+    familyName: "Sanders",
+    jobTitle: "Co-founder",
+    worksFor: { "@id": "https://betsplug.com/#organization" },
+    knowsAbout: [
+      "Probabilistic modeling",
+      "Elo rating systems",
+      "Poisson distribution",
+      "Backend engineering",
+    ],
+  },
+];
+
 function buildOrganization(locale: Locale) {
   return {
     "@type": ["Organization", "EducationalOrganization"],
     "@id": "https://betsplug.com/#organization",
     name: "BetsPlug",
+    legalName: "Sanders Capital",
     url: "https://betsplug.com",
     description: translate(locale, "schema.org.description"),
     logo: {
@@ -43,6 +82,19 @@ function buildOrganization(locale: Locale) {
       url: "https://betsplug.com/logo.webp",
       width: 512,
       height: 512,
+    },
+    foundingDate: "2024",
+    founder: FOUNDERS,
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "NL",
+    },
+    // KvK number is the Dutch Chamber of Commerce identifier — Google
+    // and other knowledge graphs use this as a verifiable trust signal.
+    identifier: {
+      "@type": "PropertyValue",
+      propertyID: "KvK",
+      value: "96286008",
     },
     knowsAbout: [
       "Football statistics",
