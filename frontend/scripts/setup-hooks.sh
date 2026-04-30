@@ -56,6 +56,26 @@ if [ -n "$STAGED" ]; then
   fi
 fi
 
+# ── Guard 3: raw ES/DE/FR/IT UI text in NEW lines of staged files ──
+# Sister check to guard 2 but for the other 4 indexable locales.
+# A developer occasionally pastes copy from a translation tool or
+# the design doc directly into JSX — those strings then ship
+# untranslated to every visitor. Diff-only mode means only NEW
+# leaks block the commit; pre-existing backlog (currently empty)
+# is documented separately.
+if [ -n "$STAGED" ]; then
+  # shellcheck disable=SC2086
+  if ! node scripts/check-no-foreign-leaks.mjs --diff-only $STAGED; then
+    echo ""
+    echo "  ✗ pre-commit: NEW hardcoded foreign-language UI text —"
+    echo "    commit blocked. Move the string to messages.ts (en + nl)"
+    echo "    and let the translator / apply-i18n-batch.mjs fill the"
+    echo "    target locale. Brand/league/team names that incidentally"
+    echo "    trigger should go into ALLOWLIST_SUBSTRINGS."
+    exit 1
+  fi
+fi
+
 # ── Auto-translate if dictionary or page-meta changed ──────────
 MESSAGES_CHANGED=""
 PAGEMETA_CHANGED=""
