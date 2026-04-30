@@ -679,6 +679,17 @@ const da = {
   "dash.wonLabel": "Vandt",
   "dash.yesterdayResults": "Gårsdagens resultater",
 
+  "dashHero.cta": "Udforsk dagens valg",
+  "dashHero.greeting.afternoon": "God eftermiddag",
+  "dashHero.greeting.evening": "God aften",
+  "dashHero.greeting.morning": "Godmorgen",
+  "dashHero.subtitleHasPicks": "{count} kampe på dagens tavle for {tier}.",
+  "dashHero.subtitleLoading": "Trækker dagens forudsigelser for dit niveau...",
+  "dashHero.subtitleNoPicks": "Ingen kampe i din række i dag – tjek tilbage i morgen.",
+  "dashHero.upcomingEmpty": "Ingen kommende valg i dit niveau endnu.",
+  "dashHero.upcomingTitle": "Topvalg for de kommende dage",
+  "dashHero.viewAll": "Se alle",
+
   "dashPrev.badge": "Dit kommandocenter",
   "dashPrev.cta": "Udforsk dashboardet",
   "dashPrev.feature1Desc": "Se dagens forudsigelser med højeste tillid i det øjeblik, du logger ind - sorteret efter kant, selvtillid og kick-off tid.",
@@ -2219,6 +2230,9 @@ const da = {
   "route.trackRecordDesc": "Historisk modelnøjagtighed, kalibrering og nedbrydning pr. niveau",
   "route.trackRecordTitle": "Track Record",
 
+  "schema.app.description": "Uddannelsesfokuseret fodboldanalyseapplikation. Kombinerer Elo-ratings, Poisson-fordeling og maskinlæring til at offentliggøre sandsynlighedsbaserede kampforudsigelser og en verificeret historisk track record i 15+ ligaer. Kun til informationsformål — ikke et bookmakerselskab.",
+  "schema.org.description": "BetsPlug er en uddannelsesfokuseret sportsanalyseplatform. Vi leverer statistiske data, sandsynlighedsmodeller og verificeret historisk performance for fodboldkampe. Vi er ikke et bookmakerselskab og formidler ikke væddemål.",
+
   "search.for": "for",
   "search.noResultsFound": "Ingen resultater fundet",
   "search.noResultsInCategory": "Ingen resultater i denne kategori.",
@@ -2967,7 +2981,5 @@ const da = {
   "welcomeBanner.stepPrefix": "Trin",
   "welcomeBanner.subtitle": "Vores AI analyserer fodbolddata, form, head-to-head, stilling og holdstyrke for at forudsige det mest sandsynlige udfald af kommende kampe.",
   "welcomeBanner.title": "Sådan fungerer BetsPlug",
-  "schema.org.description": "BetsPlug er en uddannelsesfokuseret sportsanalyseplatform. Vi leverer statistiske data, sandsynlighedsmodeller og verificeret historisk performance for fodboldkampe. Vi er ikke et bookmakerselskab og formidler ikke væddemål.",
-  "schema.app.description": "Uddannelsesfokuseret fodboldanalyseapplikation. Kombinerer Elo-ratings, Poisson-fordeling og maskinlæring til at offentliggøre sandsynlighedsbaserede kampforudsigelser og en verificeret historisk track record i 15+ ligaer. Kun til informationsformål — ikke et bookmakerselskab.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default da;

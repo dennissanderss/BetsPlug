@@ -51,6 +51,10 @@ from app.core.tier_leagues import (
     LEAGUES_PLATINUM,
     LEAGUES_SILVER,
 )
+from app.core.tier_live_extras import (
+    LIVE_EXTRAS_CUTOFF,
+    _live_extras_league_ids,
+)
 from app.models.match import Match
 from app.models.prediction import Prediction
 
@@ -146,6 +150,18 @@ def pick_tier_expression() -> ColumnElement:
     The result column is labeled ``pick_tier``. It is NOT a stored column
     — the classification happens in the SELECT list every query.
     """
+    # Live-only extras (e.g. Conference League) are admitted into the
+    # tier funnel but ONLY for ``prediction_source = 'live'`` rows
+    # generated on/after the v8.1 deploy cutoff. Backtest rows in those
+    # leagues fall through to ``else_=None`` so historical aggregates
+    # don't shift retroactively.
+    live_extras_ids = _live_extras_league_ids()
+    live_extras_match = and_(
+        Match.league_id.in_(live_extras_ids),
+        Prediction.prediction_source == "live",
+        Prediction.predicted_at >= LIVE_EXTRAS_CUTOFF,
+    )
+
     return case(
         (
             and_(
@@ -169,12 +185,29 @@ def pick_tier_expression() -> ColumnElement:
             PickTier.SILVER.value,
         ),
         (
+            # Live-only extras qualifying for Silver (conf >= 0.65).
+            and_(
+                live_extras_match,
+                Prediction.confidence >= CONF_THRESHOLD[PickTier.SILVER],
+            ),
+            PickTier.SILVER.value,
+        ),
+        (
             # Explicit Free branch: picks in LEAGUES_FREE with conf >= 0.55.
             # Below that (or outside the whitelist) we fall through to
             # else_=NULL so conf<0.55 rows and off-scope leagues are
             # excluded from every tier query automatically.
             and_(
                 Match.league_id.in_(LEAGUES_FREE),
+                Prediction.confidence >= CONF_THRESHOLD[PickTier.FREE],
+            ),
+            PickTier.FREE.value,
+        ),
+        (
+            # Live-only extras not strong enough for Silver but still in
+            # Free territory (0.55 <= conf < 0.65).
+            and_(
+                live_extras_match,
                 Prediction.confidence >= CONF_THRESHOLD[PickTier.FREE],
             ),
             PickTier.FREE.value,
@@ -218,7 +251,19 @@ def access_filter(user_tier: PickTier) -> ColumnElement:
     # anyone must live in LEAGUES_FREE (which by default equals
     # LEAGUES_SILVER, the top-14 set). Narrow LEAGUES_FREE in
     # tier_leagues.py to tighten the funnel further.
-    free_whitelist = Match.league_id.in_(LEAGUES_FREE)
+    #
+    # Live-only extras (Conference League etc.) are admitted via an OR
+    # branch — only when the prediction is from the live source and on or
+    # after the v8.1 cutoff, so backtest aggregates stay locked to the
+    # canonical whitelist.
+    free_whitelist = or_(
+        Match.league_id.in_(LEAGUES_FREE),
+        and_(
+            Match.league_id.in_(_live_extras_league_ids()),
+            Prediction.prediction_source == "live",
+            Prediction.predicted_at >= LIVE_EXTRAS_CUTOFF,
+        ),
+    )
     min_conf = Prediction.confidence >= CONF_THRESHOLD[PickTier.FREE]
     baseline = and_(free_whitelist, min_conf)
 

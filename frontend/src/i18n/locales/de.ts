@@ -679,6 +679,17 @@ const de = {
   "dash.wonLabel": "Gewonnen",
   "dash.yesterdayResults": "Ergebnisse gestern",
 
+  "dashHero.cta": "Entdecken Sie die heutigen Tipps",
+  "dashHero.greeting.afternoon": "Guten Tag",
+  "dashHero.greeting.evening": "Guten Abend",
+  "dashHero.greeting.morning": "Guten Morgen",
+  "dashHero.subtitleHasPicks": "{count} stimmt auf der heutigen Liste mit {tier} überein.",
+  "dashHero.subtitleLoading": "Rufen Sie die heutigen Vorhersagen für Ihre Stufe ab ...",
+  "dashHero.subtitleNoPicks": "Heute gibt es keine Übereinstimmungen in Ihrer Stufe. Schauen Sie morgen noch einmal vorbei.",
+  "dashHero.upcomingEmpty": "Es gibt noch keine bevorstehenden Tipps für Ihr Level.",
+  "dashHero.upcomingTitle": "Top-Tipps für die kommenden Tage",
+  "dashHero.viewAll": "Alle anzeigen",
+
   "dashPrev.badge": "Ihre Kommandozentrale",
   "dashPrev.cta": "Entdecken Sie das Dashboard",
   "dashPrev.feature1Desc": "Sehen Sie sich sofort nach der Anmeldung die aktuellen Vorhersagen mit der höchsten Konfidenz an – sortiert nach Vorsprung, Konfidenz und Anstoßzeit.",
@@ -2269,6 +2280,9 @@ const de = {
   "route.trackRecordDesc": "Historische Modellgenauigkeit, Kalibrierung und Aufschlüsselung nach Tieren",
   "route.trackRecordTitle": "Erfolgsbilanz",
 
+  "schema.app.description": "Bildungsorientierte Fußball-Analytik-Anwendung. Kombiniert Elo-Ratings, Poisson-Verteilung und Machine Learning zur Veröffentlichung probabilistischer Spielvorhersagen und einer verifizierten historischen Bilanz für 15+ Ligen. Nur zu Informationszwecken — kein Buchmacher.",
+  "schema.org.description": "BetsPlug ist eine bildungsorientierte Sportanalyse-Plattform. Wir liefern statistische Daten, Wahrscheinlichkeitsmodelle und eine verifizierte historische Performance für Fußballspiele. Wir sind kein Buchmacher und vermitteln keine Wetteinsätze.",
+
   "search.for": "für",
   "search.noResultsFound": "Keine Ergebnisse gefunden",
   "search.noResultsInCategory": "Keine Ergebnisse in dieser Kategorie.",
@@ -3017,7 +3031,5 @@ const de = {
   "welcomeBanner.stepPrefix": "Schritt",
   "welcomeBanner.subtitle": "Unsere KI analysiert Fußballdaten – Form, Kopf-an-Kopf-Rennen, Rangliste und Teamstärke –, um den wahrscheinlichsten Ausgang bevorstehender Spiele vorherzusagen.",
   "welcomeBanner.title": "So funktioniert BetsPlug",
-  "schema.org.description": "BetsPlug ist eine bildungsorientierte Sportanalyse-Plattform. Wir liefern statistische Daten, Wahrscheinlichkeitsmodelle und eine verifizierte historische Performance für Fußballspiele. Wir sind kein Buchmacher und vermitteln keine Wetteinsätze.",
-  "schema.app.description": "Bildungsorientierte Fußball-Analytik-Anwendung. Kombiniert Elo-Ratings, Poisson-Verteilung und Machine Learning zur Veröffentlichung probabilistischer Spielvorhersagen und einer verifizierten historischen Bilanz für 15+ Ligen. Nur zu Informationszwecken — kein Buchmacher.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default de;

@@ -7,14 +7,16 @@ import { api } from "@/lib/api";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { HeroBotdCompact } from "@/components/dashboard/HeroBotdCompact";
 import { LiveMatchesStrip } from "@/components/dashboard/LiveMatchesStrip";
-import { TodayMatchesList } from "@/components/dashboard/TodayMatchesList";
+import { UpcomingPicksStrip } from "@/components/dashboard/UpcomingPicksStrip";
 import { YesterdayResultsStrip } from "@/components/dashboard/YesterdayResultsStrip";
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 import { UpgradeNudgeCard } from "@/components/dashboard/UpgradeNudgeCard";
+import { DashboardHero } from "@/components/dashboard/DashboardHero";
 import { TelegramInviteCard } from "@/components/telegram/invite-card";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { useTier } from "@/hooks/use-tier";
-import type { Fixture, FixturesResponse } from "@/types/api";
+import { classifyPickTier, TIER_RANK } from "@/lib/pick-tier";
+import type { Fixture, FixturesResponse, PickTierSlug } from "@/types/api";
 
 // Same window as LiveMatchesStrip uses internally — kept in sync so the
 // page-level "show the section?" check matches what the strip will
@@ -68,6 +70,15 @@ export default function DashboardPage() {
   const { data: todayFixtures, isLoading: todayLoading } = useQuery({
     queryKey: ["fixtures-today-hub"],
     queryFn: () => api.getFixturesToday(),
+  });
+
+  // Upcoming fixtures for the new dashboard hero strip — pulls
+  // 7 days ahead so we can rank by confidence rather than show only
+  // tonight's earliest kickoffs.
+  const { data: upcomingFixtures, isLoading: upcomingLoading } = useQuery({
+    queryKey: ["fixtures-upcoming-hub"],
+    queryFn: () => api.getFixturesUpcoming(7),
+    staleTime: 5 * 60_000,
   });
 
   // Yesterday's results — pull last 48h of finished fixtures and trim
@@ -130,10 +141,34 @@ export default function DashboardPage() {
   const liveCount = (liveFixtures?.fixtures ?? []).filter((f) => isTrulyLive(f, now)).length;
   const showLiveSection = liveLoading || liveCount > 0;
 
+  // How many of today's fixtures are in the user's tier scope and
+  // still scheduled? Drives the hero subtitle. Null while loading.
+  const userRank = userTierSlug
+    ? TIER_RANK[userTierSlug as PickTierSlug] ?? 0
+    : 0;
+  const todayPickCount: number | null = todayLoading
+    ? null
+    : (todayFixtures?.fixtures ?? []).filter((f) => {
+        if (!f.prediction || f.status !== "scheduled") return false;
+        const tier: PickTierSlug | null =
+          (f.prediction as any).pick_tier ??
+          classifyPickTier({
+            leagueId: (f as any).league_id ?? null,
+            leagueName: f.league_name ?? null,
+            confidence: f.prediction.confidence,
+          });
+        return tier ? TIER_RANK[tier] >= userRank : false;
+      }).length;
+
   return (
     <div className="relative animate-fade-in mx-auto max-w-7xl px-0 sm:px-2 py-4 sm:py-6 md:py-8 overflow-hidden">
       <div className="relative grid gap-4 sm:gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
         <div className="min-w-0 space-y-4 sm:space-y-5">
+          {/* Section 0 — Welcome / marketing banner. Sets the tone
+              for the page; warm greeting + tier-aware subtitle so
+              users see what's in store without parsing a list. */}
+          <DashboardHero tier={userTierSlug} todayPickCount={todayPickCount} />
+
           {/* Section 1 — Pick of the Day prominent. BOTD is a Gold+
               feature; Free/Silver users see the upsell card below
               instead, never the BOTD preview itself. */}
@@ -159,8 +194,14 @@ export default function DashboardPage() {
             <TelegramInviteCard tier="silver" />
           ) : null}
 
-          {/* Section 3 — Today's matches for the user's tier. */}
-          <TodayMatchesList data={todayFixtures} isLoading={todayLoading} />
+          {/* Section 3 — Top 4 upcoming picks for the user's tier,
+              ranked by confidence rather than kickoff time so the
+              strongest calls surface above tonight's fillers. */}
+          <UpcomingPicksStrip
+            data={upcomingFixtures}
+            isLoading={upcomingLoading}
+            userTier={userTierSlug}
+          />
 
           {/* Section 4 — Live now. Hidden entirely when nothing is in
               play (the strip's own filter and the page filter agree on

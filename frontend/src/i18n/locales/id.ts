@@ -679,6 +679,17 @@ const id = {
   "dash.wonLabel": "Menang",
   "dash.yesterdayResults": "Hasil kemarin",
 
+  "dashHero.cta": "Jelajahi pilihan hari ini",
+  "dashHero.greeting.afternoon": "Selamat siang",
+  "dashHero.greeting.evening": "Selamat malam",
+  "dashHero.greeting.morning": "Selamat pagi",
+  "dashHero.subtitleHasPicks": "{count} cocok dengan jadwal hari ini untuk {tier}.",
+  "dashHero.subtitleLoading": "Menarik prediksi hari ini untuk tingkatan Anda...",
+  "dashHero.subtitleNoPicks": "Tidak ada kecocokan di tingkatan Anda hari ini — periksa kembali besok.",
+  "dashHero.upcomingEmpty": "Belum ada pilihan berikutnya di tingkatan Anda.",
+  "dashHero.upcomingTitle": "Pilihan teratas untuk hari-hari mendatang",
+  "dashHero.viewAll": "Lihat semuanya",
+
   "dashPrev.badge": "Command center Anda",
   "dashPrev.cta": "Jelajahi dashboard",
   "dashPrev.feature1Desc": "Lihat prediksi kepercayaan tertinggi hari ini saat Anda masuk - diurutkan berdasarkan edge, kepercayaan, dan waktu kick-off.",
@@ -2269,6 +2280,9 @@ const id = {
   "route.trackRecordDesc": "Akurasi model historis, kalibrasi, dan perincian per tingkat",
   "route.trackRecordTitle": "Rekam Jejak",
 
+  "schema.app.description": "Aplikasi edukatif analisis sepak bola. Menggabungkan rating Elo, distribusi Poisson, dan machine learning untuk menerbitkan prediksi pertandingan probabilistik dan rekam jejak historis terverifikasi di 15+ liga. Hanya untuk tujuan informasi — bukan bandar judi.",
+  "schema.org.description": "BetsPlug adalah platform analisis olahraga edukatif. Kami menyediakan data statistik, model probabilistik, dan kinerja historis terverifikasi untuk pertandingan sepak bola. Kami bukan bandar judi dan tidak memfasilitasi taruhan.",
+
   "search.for": "untuk",
   "search.noResultsFound": "Tidak ada hasil yang ditemukan",
   "search.noResultsInCategory": "Tidak ada hasil dalam kategori ini.",
@@ -3017,7 +3031,5 @@ const id = {
   "welcomeBanner.stepPrefix": "Melangkah",
   "welcomeBanner.subtitle": "AI kami menganalisis data sepak bola — bentuk, head-to-head, klasemen, dan kekuatan tim — untuk memperkirakan hasil yang paling mungkin terjadi pada pertandingan mendatang.",
   "welcomeBanner.title": "Begini cara kerja BetsPlug",
-  "schema.org.description": "BetsPlug adalah platform analisis olahraga edukatif. Kami menyediakan data statistik, model probabilistik, dan kinerja historis terverifikasi untuk pertandingan sepak bola. Kami bukan bandar judi dan tidak memfasilitasi taruhan.",
-  "schema.app.description": "Aplikasi edukatif analisis sepak bola. Menggabungkan rating Elo, distribusi Poisson, dan machine learning untuk menerbitkan prediksi pertandingan probabilistik dan rekam jejak historis terverifikasi di 15+ liga. Hanya untuk tujuan informasi — bukan bandar judi.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default id;

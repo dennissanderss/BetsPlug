@@ -679,6 +679,17 @@ const fr = {
   "dash.wonLabel": "Gagnes",
   "dash.yesterdayResults": "Resultats d'hier",
 
+  "dashHero.cta": "Découvrez les choix du jour",
+  "dashHero.greeting.afternoon": "Bon après-midi",
+  "dashHero.greeting.evening": "Bonne soirée",
+  "dashHero.greeting.morning": "Bonjour",
+  "dashHero.subtitleHasPicks": "{count} correspond à la liste d'aujourd'hui pour {tier}.",
+  "dashHero.subtitleLoading": "Extraction des prédictions d'aujourd'hui pour votre niveau...",
+  "dashHero.subtitleNoPicks": "Aucun match dans votre niveau aujourd'hui – revenez demain.",
+  "dashHero.upcomingEmpty": "Aucun choix à venir dans votre niveau pour l'instant.",
+  "dashHero.upcomingTitle": "Les meilleurs choix pour les jours à venir",
+  "dashHero.viewAll": "Voir tout",
+
   "dashPrev.badge": "Votre centre de commande",
   "dashPrev.cta": "Explorez le tableau de bord",
   "dashPrev.feature1Desc": "Consultez les prédictions les plus fiables du jour dès que vous vous connectez - classées par avantage, confiance et heure du coup d'envoi.",
@@ -2269,6 +2280,9 @@ const fr = {
   "route.trackRecordDesc": "Précision du modèle historique, calibrage et répartition par niveau",
   "route.trackRecordTitle": "Historique",
 
+  "schema.app.description": "Application d'analyse de football à but éducatif. Combine les classements Elo, la distribution de Poisson et le machine learning pour publier des prévisions probabilistes de matchs et un historique vérifié sur 15+ championnats. À titre informatif uniquement — pas un bookmaker.",
+  "schema.org.description": "BetsPlug est une plateforme d'analyse sportive à vocation éducative. Nous fournissons des données statistiques, des modèles probabilistes et un historique de performance vérifié pour les matchs de football. Nous ne sommes pas un bookmaker et ne facilitons pas les paris.",
+
   "search.for": "pour",
   "search.noResultsFound": "Aucun résultat trouvé",
   "search.noResultsInCategory": "Aucun résultat dans cette catégorie.",
@@ -3017,7 +3031,5 @@ const fr = {
   "welcomeBanner.stepPrefix": "Étape",
   "welcomeBanner.subtitle": "Notre IA analyse les données du football (forme, face-à-face, classement et force de l'équipe) pour prévoir l'issue la plus probable des matchs à venir.",
   "welcomeBanner.title": "Voici comment fonctionne BetsPlug",
-  "schema.org.description": "BetsPlug est une plateforme d'analyse sportive à vocation éducative. Nous fournissons des données statistiques, des modèles probabilistes et un historique de performance vérifié pour les matchs de football. Nous ne sommes pas un bookmaker et ne facilitons pas les paris.",
-  "schema.app.description": "Application d'analyse de football à but éducatif. Combine les classements Elo, la distribution de Poisson et le machine learning pour publier des prévisions probabilistes de matchs et un historique vérifié sur 15+ championnats. À titre informatif uniquement — pas un bookmaker.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default fr;

@@ -54,14 +54,32 @@ from app.models.team import Team
 router = APIRouter()
 
 
-def _classify_pick_tier(league_id: Any, confidence: float) -> Optional[PickTier]:
+def _classify_pick_tier(
+    league_id: Any,
+    confidence: float,
+    league_name: Optional[str] = None,
+    prediction_source: Optional[str] = None,
+    predicted_at: Optional[datetime] = None,
+) -> Optional[PickTier]:
     """Python mirror of ``pick_tier_expression`` SQL CASE.
 
     Returns the highest tier the prediction qualifies for, or ``None``
     if it falls below every tier's threshold (conf < 0.55 or league
     outside LEAGUES_FREE). Same ordering rule as the SQL side —
     Platinum is checked first, then Gold, Silver, Free.
+
+    Live-only extras (Conference League etc., see
+    ``app.core.tier_live_extras``) qualify too, but only when the
+    optional ``league_name`` / ``prediction_source`` / ``predicted_at``
+    arguments confirm the row is a live pick on/after the cutoff.
+    Older callers that don't pass those simply skip the extras check
+    and behave exactly as before.
     """
+    from app.core.tier_live_extras import (
+        LIVE_ONLY_LEAGUE_NAMES,
+        LIVE_EXTRAS_CUTOFF,
+    )
+
     league_str = str(league_id)
     if league_str in LEAGUES_PLATINUM and confidence >= CONF_THRESHOLD[PickTier.PLATINUM]:
         return PickTier.PLATINUM
@@ -69,7 +87,20 @@ def _classify_pick_tier(league_id: Any, confidence: float) -> Optional[PickTier]
         return PickTier.GOLD
     if league_str in LEAGUES_SILVER and confidence >= CONF_THRESHOLD[PickTier.SILVER]:
         return PickTier.SILVER
+
+    is_live_extra = (
+        league_name is not None
+        and league_name in LIVE_ONLY_LEAGUE_NAMES
+        and prediction_source == "live"
+        and predicted_at is not None
+        and predicted_at >= LIVE_EXTRAS_CUTOFF
+    )
+    if is_live_extra and confidence >= CONF_THRESHOLD[PickTier.SILVER]:
+        return PickTier.SILVER
+
     if league_str in LEAGUES_FREE and confidence >= CONF_THRESHOLD[PickTier.FREE]:
+        return PickTier.FREE
+    if is_live_extra and confidence >= CONF_THRESHOLD[PickTier.FREE]:
         return PickTier.FREE
     return None
 
@@ -443,7 +474,11 @@ def _build_fixture_item(
         # skip the full PredictionSummary so sensitive probs/pick are
         # never serialised.
         pick_tier_enum = _classify_pick_tier(
-            match.league_id, latest_prediction.confidence or 0.0
+            match.league_id,
+            latest_prediction.confidence or 0.0,
+            league_name=match.league.name if match.league else None,
+            prediction_source=getattr(latest_prediction, "prediction_source", None),
+            predicted_at=latest_prediction.predicted_at,
         )
         meta: Dict[str, Optional[str]] = {
             "pick_tier": None,
@@ -656,10 +691,25 @@ async def _load_latest_predictions(
     # to anonymous callers with no tier classification — picks that
     # were never part of any paid tier's scope per tier_system_plan.md.
     if TIER_SYSTEM_ENABLED:
+        # Admit live-only-extras leagues (Conference League etc.) but
+        # only on prediction_source='live' rows ≥ v8.1 cutoff. Backtest
+        # rows in those leagues stay excluded so historical numbers
+        # don't shift. See app/core/tier_live_extras.py.
+        from app.core.tier_live_extras import (
+            LIVE_EXTRAS_CUTOFF as _LIVE_X_CUTOFF,
+            _live_extras_league_ids,
+        )
         stmt = (
             stmt
             .join(Match, Match.id == Prediction.match_id)
-            .where(Match.league_id.in_(LEAGUES_FREE))
+            .where(or_(
+                Match.league_id.in_(LEAGUES_FREE),
+                and_(
+                    Match.league_id.in_(_live_extras_league_ids()),
+                    Prediction.prediction_source == "live",
+                    Prediction.predicted_at >= _LIVE_X_CUTOFF,
+                ),
+            ))
             .where(trackrecord_filter())
         )
     rows = (await db.execute(stmt)).scalars().all()

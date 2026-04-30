@@ -679,6 +679,17 @@ const pl = {
   "dash.wonLabel": "Wygrał",
   "dash.yesterdayResults": "Wczorajsze wyniki",
 
+  "dashHero.cta": "Poznaj dzisiejsze typy",
+  "dashHero.greeting.afternoon": "Dzień dobry",
+  "dashHero.greeting.evening": "Dobry wieczór",
+  "dashHero.greeting.morning": "Dzień dobry",
+  "dashHero.subtitleHasPicks": "{count} mecze w dzisiejszym zestawie dla {tier}.",
+  "dashHero.subtitleLoading": "Pobieram dzisiejsze prognozy dla Twojego poziomu...",
+  "dashHero.subtitleNoPicks": "Brak dopasowań na Twoim poziomie dzisiaj — sprawdź jutro.",
+  "dashHero.upcomingEmpty": "Nie ma jeszcze nadchodzących wyborów na Twoim poziomie.",
+  "dashHero.upcomingTitle": "Najlepsze typy na nadchodzące dni",
+  "dashHero.viewAll": "Zobacz wszystkie",
+
   "dashPrev.badge": "Twoje centrum dowodzenia",
   "dashPrev.cta": "Przeglądaj pulpit nawigacyjny",
   "dashPrev.feature1Desc": "Zobacz dzisiejsze prognozy o najwyższej pewności w momencie zalogowania się - posortowane według przewagi, pewności i godziny rozpoczęcia.",
@@ -2219,6 +2230,9 @@ const pl = {
   "route.trackRecordDesc": "Dokładność modelu historycznego, kalibracja i podział na poziomy",
   "route.trackRecordTitle": "Rekord trasy",
 
+  "schema.app.description": "Edukacyjna aplikacja analizy piłki nożnej. Łączy rankingi Elo, rozkład Poissona i uczenie maszynowe, aby publikować probabilistyczne prognozy meczów i zweryfikowane wyniki historyczne w ponad 15 ligach. Wyłącznie w celach informacyjnych — nie jest to bukmacher.",
+  "schema.org.description": "BetsPlug to edukacyjna platforma analizy sportowej. Dostarczamy dane statystyczne, modele probabilistyczne i zweryfikowane historyczne wyniki meczów piłkarskich. Nie jesteśmy bukmacherem i nie pośredniczymy w zakładach.",
+
   "search.for": "Do",
   "search.noResultsFound": "Nie znaleziono żadnych wyników",
   "search.noResultsInCategory": "Brak wyników w tej kategorii.",
@@ -2967,7 +2981,5 @@ const pl = {
   "welcomeBanner.stepPrefix": "Krok",
   "welcomeBanner.subtitle": "Nasza sztuczna inteligencja analizuje dane piłkarskie, formę, pojedynki bezpośrednie, tabele i siłę drużyny, aby przewidzieć najbardziej prawdopodobny wynik nadchodzących meczów.",
   "welcomeBanner.title": "Oto jak działa BetsPlug",
-  "schema.org.description": "BetsPlug to edukacyjna platforma analizy sportowej. Dostarczamy dane statystyczne, modele probabilistyczne i zweryfikowane historyczne wyniki meczów piłkarskich. Nie jesteśmy bukmacherem i nie pośredniczymy w zakładach.",
-  "schema.app.description": "Edukacyjna aplikacja analizy piłki nożnej. Łączy rankingi Elo, rozkład Poissona i uczenie maszynowe, aby publikować probabilistyczne prognozy meczów i zweryfikowane wyniki historyczne w ponad 15 ligach. Wyłącznie w celach informacyjnych — nie jest to bukmacher.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default pl;

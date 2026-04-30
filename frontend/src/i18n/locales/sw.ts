@@ -679,6 +679,17 @@ const sw = {
   "dash.wonLabel": "Kushinda",
   "dash.yesterdayResults": "Matokeo ya jana",
 
+  "dashHero.cta": "Chunguza chaguo za leo",
+  "dashHero.greeting.afternoon": "Habari za mchana",
+  "dashHero.greeting.evening": "Habari za jioni",
+  "dashHero.greeting.morning": "Habari za asubuhi",
+  "dashHero.subtitleHasPicks": "{count} mechi kwenye ukurasa wa leo wa {tier}.",
+  "dashHero.subtitleLoading": "Inavuta ubashiri wa leo wa kiwango chako...",
+  "dashHero.subtitleNoPicks": "Hakuna mechi katika kiwango chako leo - angalia tena kesho.",
+  "dashHero.upcomingEmpty": "Bado hakuna chaguo zijazo katika safu yako.",
+  "dashHero.upcomingTitle": "Chaguo bora kwa siku zijazo",
+  "dashHero.viewAll": "Tazama zote",
+
   "dashPrev.badge": "Kituo chako cha amri",
   "dashPrev.cta": "Chunguza dashibodi",
   "dashPrev.feature1Desc": "Tazama utabiri wa leo wa kutumainiwa zaidi pindi unapoingia - ukipangwa kwa ukingo, kujiamini na wakati wa kuanza.",
@@ -2269,6 +2280,9 @@ const sw = {
   "route.trackRecordDesc": "Usahihi wa muundo wa kihistoria, urekebishaji na uchanganuzi wa kila ngazi",
   "route.trackRecordTitle": "Rekodi ya Wimbo",
 
+  "schema.app.description": "Programu ya elimu ya uchambuzi wa mpira wa miguu. Inachanganya viwango vya Elo, usambazaji wa Poisson na ujifunzaji wa mashine ili kuchapisha utabiri wa uwezekano wa mechi na rekodi ya historia iliyothibitishwa katika ligi 15+. Kwa madhumuni ya habari pekee — si bukmeika.",
+  "schema.org.description": "BetsPlug ni jukwaa la elimu la uchambuzi wa michezo. Tunatoa data ya takwimu, mifano ya uwezekano, na utendaji wa historia uliothibitishwa kwa mechi za mpira wa miguu. Sisi si bukmeika na hatuwezeshi kuweka dau.",
+
   "search.for": "kwa",
   "search.noResultsFound": "Hakuna matokeo yaliyopatikana",
   "search.noResultsInCategory": "Hakuna matokeo katika kategoria hii.",
@@ -3017,7 +3031,5 @@ const sw = {
   "welcomeBanner.stepPrefix": "Hatua",
   "welcomeBanner.subtitle": "AI yetu huchanganua data ya kandanda - fomu, uso kwa uso, msimamo na nguvu ya timu - ili kutabiri matokeo yanayowezekana zaidi ya mechi zijazo.",
   "welcomeBanner.title": "Hivi ndivyo BetsPlug inavyofanya kazi",
-  "schema.org.description": "BetsPlug ni jukwaa la elimu la uchambuzi wa michezo. Tunatoa data ya takwimu, mifano ya uwezekano, na utendaji wa historia uliothibitishwa kwa mechi za mpira wa miguu. Sisi si bukmeika na hatuwezeshi kuweka dau.",
-  "schema.app.description": "Programu ya elimu ya uchambuzi wa mpira wa miguu. Inachanganya viwango vya Elo, usambazaji wa Poisson na ujifunzaji wa mashine ili kuchapisha utabiri wa uwezekano wa mechi na rekodi ya historia iliyothibitishwa katika ligi 15+. Kwa madhumuni ya habari pekee — si bukmeika.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default sw;

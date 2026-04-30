@@ -679,6 +679,17 @@ const es = {
   "dash.wonLabel": "Ganados",
   "dash.yesterdayResults": "Resultados de ayer",
 
+  "dashHero.cta": "Explora las selecciones de hoy",
+  "dashHero.greeting.afternoon": "Buenas tardes",
+  "dashHero.greeting.evening": "Buenas noches",
+  "dashHero.greeting.morning": "Buen día",
+  "dashHero.subtitleHasPicks": "Partidos de {count} en la pizarra de hoy para {tier}.",
+  "dashHero.subtitleLoading": "Sacando las predicciones de hoy para tu nivel...",
+  "dashHero.subtitleNoPicks": "No hay coincidencias en tu nivel hoy; vuelve a consultar mañana.",
+  "dashHero.upcomingEmpty": "Aún no hay próximas selecciones en tu nivel.",
+  "dashHero.upcomingTitle": "Las mejores opciones para los próximos días",
+  "dashHero.viewAll": "Ver todo",
+
   "dashPrev.badge": "Tu centro de mando",
   "dashPrev.cta": "Explora el panel",
   "dashPrev.feature1Desc": "Vea las predicciones de mayor confianza de hoy en el momento en que inicie sesión, ordenadas por ventaja, confianza y hora de inicio.",
@@ -2269,6 +2280,9 @@ const es = {
   "route.trackRecordDesc": "Precisión histórica del modelo, calibración y desglose por nivel",
   "route.trackRecordTitle": "Historial",
 
+  "schema.app.description": "Aplicación educativa de análisis de fútbol. Combina ratings Elo, distribución de Poisson y aprendizaje automático para publicar pronósticos probabilísticos de partidos y un historial verificado en 15+ ligas. Solo con fines informativos — no es una casa de apuestas.",
+  "schema.org.description": "BetsPlug es una plataforma educativa de análisis deportivo. Proporcionamos datos estadísticos, modelos probabilísticos y un rendimiento histórico verificado para partidos de fútbol. No somos una casa de apuestas ni facilitamos apuestas.",
+
   "search.for": "para",
   "search.noResultsFound": "No se encontraron resultados",
   "search.noResultsInCategory": "No hay resultados en esta categoría.",
@@ -3017,7 +3031,5 @@ const es = {
   "welcomeBanner.stepPrefix": "Paso",
   "welcomeBanner.subtitle": "Nuestra IA analiza datos de fútbol (forma, enfrentamientos directos, clasificaciones y fuerza del equipo) para pronosticar el resultado más probable de los próximos partidos.",
   "welcomeBanner.title": "Así es como funciona BetsPlug",
-  "schema.org.description": "BetsPlug es una plataforma educativa de análisis deportivo. Proporcionamos datos estadísticos, modelos probabilísticos y un rendimiento histórico verificado para partidos de fútbol. No somos una casa de apuestas ni facilitamos apuestas.",
-  "schema.app.description": "Aplicación educativa de análisis de fútbol. Combina ratings Elo, distribución de Poisson y aprendizaje automático para publicar pronósticos probabilísticos de partidos y un historial verificado en 15+ ligas. Solo con fines informativos — no es una casa de apuestas.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default es;

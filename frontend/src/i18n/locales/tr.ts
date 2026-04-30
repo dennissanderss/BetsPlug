@@ -679,6 +679,17 @@ const tr = {
   "dash.wonLabel": "Kazanmak",
   "dash.yesterdayResults": "Dünkü Sonuçlar",
 
+  "dashHero.cta": "Bugünün seçtiklerini keşfedin",
+  "dashHero.greeting.afternoon": "Tünaydın",
+  "dashHero.greeting.evening": "İyi akşamlar",
+  "dashHero.greeting.morning": "Günaydın",
+  "dashHero.subtitleHasPicks": "{count} bugünün listesinde {tier} ile eşleşiyor.",
+  "dashHero.subtitleLoading": "Seviyeniz için bugünün tahminleri alınıyor...",
+  "dashHero.subtitleNoPicks": "Bugün seviyenizde eşleşme yok; yarın tekrar kontrol edin.",
+  "dashHero.upcomingEmpty": "Henüz seviyenizde yaklaşan bir seçim yok.",
+  "dashHero.upcomingTitle": "Önümüzdeki günlerin en iyi seçimleri",
+  "dashHero.viewAll": "Tümünü görüntüle",
+
   "dashPrev.badge": "Komuta merkeziniz",
   "dashPrev.cta": "Kontrol panelini keşfedin",
   "dashPrev.feature1Desc": "Oturum açtığınız anda günümüzün en yüksek güven düzeyine sahip tahminlerini, üstünlüğe, güvene ve başlama zamanına göre sıralanmış olarak görün.",
@@ -2219,6 +2230,9 @@ const tr = {
   "route.trackRecordDesc": "Geçmiş model doğruluğu, kalibrasyon ve katman bazında döküm",
   "route.trackRecordTitle": "Takip Kaydı",
 
+  "schema.app.description": "Eğitim odaklı futbol analiz uygulaması. Elo derecelerini, Poisson dağılımını ve makine öğrenmesini birleştirerek 15'ten fazla ligde olasılıksal maç tahminleri ve doğrulanmış geçmiş istatistikleri yayınlar. Yalnızca bilgilendirme amaçlıdır — bahis şirketi değildir.",
+  "schema.org.description": "BetsPlug, eğitim odaklı bir spor analiz platformudur. Futbol maçları için istatistiksel veriler, olasılık modelleri ve doğrulanmış geçmiş performans sağlıyoruz. Bahis şirketi değiliz ve bahis kabul etmiyoruz.",
+
   "search.for": "için",
   "search.noResultsFound": "Sonuç bulunamadı",
   "search.noResultsInCategory": "Bu kategoride sonuç yok.",
@@ -2967,7 +2981,5 @@ const tr = {
   "welcomeBanner.stepPrefix": "Adım",
   "welcomeBanner.subtitle": "Yapay zekamız, yaklaşan maçların en olası sonuçlarını tahmin etmek için futbol verilerini, formu, kafa kafaya maçları, sıralamaları ve takım gücünü analiz ediyor.",
   "welcomeBanner.title": "BetsPlug şu şekilde çalışır",
-  "schema.org.description": "BetsPlug, eğitim odaklı bir spor analiz platformudur. Futbol maçları için istatistiksel veriler, olasılık modelleri ve doğrulanmış geçmiş performans sağlıyoruz. Bahis şirketi değiliz ve bahis kabul etmiyoruz.",
-  "schema.app.description": "Eğitim odaklı futbol analiz uygulaması. Elo derecelerini, Poisson dağılımını ve makine öğrenmesini birleştirerek 15'ten fazla ligde olasılıksal maç tahminleri ve doğrulanmış geçmiş istatistikleri yayınlar. Yalnızca bilgilendirme amaçlıdır — bahis şirketi değildir.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default tr;

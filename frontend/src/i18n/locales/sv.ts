@@ -679,6 +679,17 @@ const sv = {
   "dash.wonLabel": "Won",
   "dash.yesterdayResults": "Gårdagens resultat",
 
+  "dashHero.cta": "Utforska dagens val",
+  "dashHero.greeting.afternoon": "God eftermiddag",
+  "dashHero.greeting.evening": "God afton",
+  "dashHero.greeting.morning": "God morgon",
+  "dashHero.subtitleHasPicks": "{count} matcher på dagens tavla för {tier}.",
+  "dashHero.subtitleLoading": "Hämtar dagens prognoser för din nivå...",
+  "dashHero.subtitleNoPicks": "Inga matcher i din nivå idag – kom tillbaka imorgon.",
+  "dashHero.upcomingEmpty": "Inga kommande val i din nivå ännu.",
+  "dashHero.upcomingTitle": "Toppval för de kommande dagarna",
+  "dashHero.viewAll": "Visa alla",
+
   "dashPrev.badge": "Din kommandocentral",
   "dashPrev.cta": "Utforska instrumentpanelen",
   "dashPrev.feature1Desc": "Se dagens förutsägelser med högsta förtroende i det ögonblick du loggar in - sorterade efter kant, självförtroende och avsparkstid.",
@@ -2219,6 +2230,9 @@ const sv = {
   "route.trackRecordDesc": "Historisk modellnoggrannhet, kalibrering och uppdelning per nivå",
   "route.trackRecordTitle": "Track Record",
 
+  "schema.app.description": "Utbildningsfokuserad fotbollsanalysapplikation. Kombinerar Elo-betyg, Poisson-fördelning och maskininlärning för att publicera sannolikhetsbaserade matchprognoser och en verifierad historisk track record i 15+ ligor. Endast för informationssyfte — inte ett spelbolag.",
+  "schema.org.description": "BetsPlug är en utbildningsfokuserad plattform för sportanalys. Vi tillhandahåller statistiska data, sannolikhetsmodeller och verifierad historisk prestation för fotbollsmatcher. Vi är inte ett spelbolag och förmedlar inte spel.",
+
   "search.for": "för",
   "search.noResultsFound": "Inga resultat hittades",
   "search.noResultsInCategory": "Inga resultat i denna kategori.",
@@ -2967,7 +2981,5 @@ const sv = {
   "welcomeBanner.stepPrefix": "Steg",
   "welcomeBanner.subtitle": "Vår AI analyserar fotbollsdata, form, head-to-head, ställning och lagstyrka, för att förutsäga det mest sannolika resultatet av kommande matcher.",
   "welcomeBanner.title": "Så här fungerar BetsPlug",
-  "schema.org.description": "BetsPlug är en utbildningsfokuserad plattform för sportanalys. Vi tillhandahåller statistiska data, sannolikhetsmodeller och verifierad historisk prestation för fotbollsmatcher. Vi är inte ett spelbolag och förmedlar inte spel.",
-  "schema.app.description": "Utbildningsfokuserad fotbollsanalysapplikation. Kombinerar Elo-betyg, Poisson-fördelning och maskininlärning för att publicera sannolikhetsbaserade matchprognoser och en verifierad historisk track record i 15+ ligor. Endast för informationssyfte — inte ett spelbolag.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default sv;

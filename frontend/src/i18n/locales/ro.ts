@@ -679,6 +679,17 @@ const ro = {
   "dash.wonLabel": "Won",
   "dash.yesterdayResults": "Rezultatele de ieri",
 
+  "dashHero.cta": "Explorați alegerile de astăzi",
+  "dashHero.greeting.afternoon": "Bună ziua",
+  "dashHero.greeting.evening": "Bună seara",
+  "dashHero.greeting.morning": "Bună dimineaţa",
+  "dashHero.subtitleHasPicks": "{count} meciuri pe lista de astăzi pentru {tier}.",
+  "dashHero.subtitleLoading": "Trag previziunile de astăzi pentru nivelul tău...",
+  "dashHero.subtitleNoPicks": "Nu există potriviri la nivelul dvs. astăzi - reveniți mâine.",
+  "dashHero.upcomingEmpty": "Încă nu există alegeri viitoare în nivelul dvs.",
+  "dashHero.upcomingTitle": "Cele mai bune alegeri pentru zilele următoare",
+  "dashHero.viewAll": "Vezi toate",
+
   "dashPrev.badge": "Centrul tău de comandă",
   "dashPrev.cta": "Explorați tabloul de bord",
   "dashPrev.feature1Desc": "Vedeți previziunile de azi cu cea mai mare încredere în momentul în care vă conectați - sortate după limită, încredere și ora de lansare.",
@@ -2219,6 +2230,9 @@ const ro = {
   "route.trackRecordDesc": "Precizia modelului istoric, calibrare și defalcare pe nivel",
   "route.trackRecordTitle": "Track Record",
 
+  "schema.app.description": "Aplicație educațională de analiză fotbalistică. Combină ratinguri Elo, distribuția Poisson și machine learning pentru a publica prognoze probabilistice ale meciurilor și un istoric verificat în 15+ ligi. Doar în scop informativ — nu este o casă de pariuri.",
+  "schema.org.description": "BetsPlug este o platformă educațională de analiză sportivă. Oferim date statistice, modele probabilistice și performanță istorică verificată pentru meciurile de fotbal. Nu suntem casă de pariuri și nu facilităm pariuri.",
+
   "search.for": "pentru",
   "search.noResultsFound": "Nu s-au găsit rezultate",
   "search.noResultsInCategory": "Nu există rezultate în această categorie.",
@@ -2967,7 +2981,5 @@ const ro = {
   "welcomeBanner.stepPrefix": "Pas",
   "welcomeBanner.subtitle": "AI-ul nostru analizează datele fotbalistice, forma, cap la cap, clasamentul și puterea echipei, pentru a prognoza rezultatul cel mai probabil al meciurilor viitoare.",
   "welcomeBanner.title": "Iată cum funcționează BetsPlug",
-  "schema.org.description": "BetsPlug este o platformă educațională de analiză sportivă. Oferim date statistice, modele probabilistice și performanță istorică verificată pentru meciurile de fotbal. Nu suntem casă de pariuri și nu facilităm pariuri.",
-  "schema.app.description": "Aplicație educațională de analiză fotbalistică. Combină ratinguri Elo, distribuția Poisson și machine learning pentru a publica prognoze probabilistice ale meciurilor și un istoric verificat în 15+ ligi. Doar în scop informativ — nu este o casă de pariuri.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default ro;
