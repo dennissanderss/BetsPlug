@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -19,11 +18,7 @@ import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { UnlockBanner } from "@/components/match-predictions/unlock-banner";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { Pill } from "@/components/noct/pill";
-import {
-  defaultLocale,
-  isLocale,
-  LOCALE_COOKIE,
-} from "@/i18n/config";
+import { isLocale, locales, type Locale } from "@/i18n/config";
 import {
   fetchLeagueHubSlugs,
   fetchLeagueHubBySlug,
@@ -33,7 +28,8 @@ import {
 } from "@/lib/sanity-data";
 import { pickHubLocale } from "@/data/league-hubs";
 import { getLeagueLogoPath } from "@/data/league-logos";
-import { getLocalizedAlternates, getServerLocale,
+import {
+  getLocalizedAlternates,
   getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import { localizePath } from "@/i18n/routes";
@@ -46,6 +42,7 @@ import { LeagueHubSiblings } from "./league-hub-siblings";
 import { BET_TYPE_HUBS } from "@/data/bet-type-hubs";
 import { COMBO_LEAGUE_SLUGS } from "@/data/bet-type-league-combos";
 
+export const dynamic = "force-static";
 export const revalidate = 60;
 
 /**
@@ -70,22 +67,22 @@ export const revalidate = 60;
 
 const SITE_URL = "https://betsplug.com";
 
-type Params = { league_slug: string };
+type Params = { locale: string; league_slug: string };
 
-/* ── Static params ────────────────────────────────────────── */
+/* ── Static params: 16 locales × N league slugs ───────────── */
 
 export async function generateStaticParams(): Promise<Params[]> {
   const slugs = await fetchLeagueHubSlugs();
-  return slugs.map((slug) => ({ league_slug: slug }));
+  const out: Params[] = [];
+  for (const locale of locales) {
+    for (const slug of slugs) {
+      out.push({ locale, league_slug: slug });
+    }
+  }
+  return out;
 }
 
 /* ── Helpers ──────────────────────────────────────────────── */
-
-function readLocaleFromCookie(): LeagueHubLocale {
-  const raw = cookies().get(LOCALE_COOKIE)?.value;
-  const uiLocale = isLocale(raw) ? raw : defaultLocale;
-  return pickHubLocale(uiLocale);
-}
 
 function currentGameweekLabel(locale: LeagueHubLocale): string {
   // Quick-n-dirty freshness signal. Not the real gameweek but a
@@ -102,7 +99,10 @@ function currentGameweekLabel(locale: LeagueHubLocale): string {
 export async function generateMetadata(props: {
   params: Promise<Params>;
 }): Promise<Metadata> {
-  const { league_slug } = await props.params;
+  const { locale: rawLocale, league_slug } = await props.params;
+  if (!isLocale(rawLocale)) return {};
+  const locale: Locale = rawLocale;
+
   const hub = await fetchLeagueHubBySlug(league_slug);
   if (!hub) {
     return {
@@ -112,11 +112,15 @@ export async function generateMetadata(props: {
     };
   }
 
-  const editorialLocale = readLocaleFromCookie();
+  const editorialLocale: LeagueHubLocale = pickHubLocale(locale);
   const title = hub.metaTitle[editorialLocale];
   const description = hub.metaDescription[editorialLocale];
-  const alternates = getLocalizedAlternates(`/match-predictions/${hub.slug}`);
-const og = getOpenGraphLocales();
+  const alternates = getLocalizedAlternates(
+    `/match-predictions/${hub.slug}`,
+    undefined,
+    locale,
+  );
+  const og = getOpenGraphLocales(locale);
   return {
     title,
     description,
@@ -243,20 +247,14 @@ function buildJsonLd(hub: LeagueHub, editorialLocale: LeagueHubLocale) {
 export default async function LeagueHubPage(props: {
   params: Promise<Params>;
 }) {
-  const { league_slug } = await props.params;
+  const { locale: rawLocale, league_slug } = await props.params;
+  if (!isLocale(rawLocale)) notFound();
+  const uiLocale: Locale = rawLocale;
+  const editorialLocale: LeagueHubLocale = pickHubLocale(uiLocale);
+
   const hub = await fetchLeagueHubBySlug(league_slug);
   if (!hub) notFound();
 
-  const editorialLocale = readLocaleFromCookie();
-  // UI locale drives URL localization (all 8 locales). Kept separate
-  // from editorialLocale because copy is only authored for EN + NL
-  // but URL slugs exist for every locale. Without this every
-  // non-EN/NL visitor was getting Dutch/English hrefs (e.g. a German
-  // visitor on /de/spiel-vorhersagen/premier-league would see a
-  // sibling link pointing at /match-predictions/la-liga instead of
-  // /de/spiel-vorhersagen/la-liga — forcing a 308 round-trip and
-  // polluting Google's internal link graph with cross-locale links).
-  const uiLocale = getServerLocale();
   const jsonLd = buildJsonLd(hub, editorialLocale);
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
   const lhref = (canonical: string) => localizePath(canonical, uiLocale);
