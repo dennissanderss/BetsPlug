@@ -12,7 +12,6 @@ import {
   ChevronRight,
   Trophy,
   Lock,
-  Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
@@ -68,19 +67,6 @@ const navSections: NavSection[] = [
       // clickable for Free users and only paywalls on arrival —
       // inconsistent state between sidebar and page.
       { labelKey: "nav.bet_of_the_day", fallback: "Pick of the Day", href: "/bet-of-the-day", icon: Trophy, requiredTier: "gold" },
-      // Combi of the Day is hard-locked while we build out the
-      // backtest. Click opens a small "Coming Soon" teaser instead of
-      // the page so non-admins never see preliminary numbers.
-      {
-        labelKey: "nav.combo_of_the_day",
-        fallback: "Combi of the Day",
-        href: "/combo-of-the-day",
-        icon: Layers,
-        comingSoon: true,
-        comingSoonTitleKey: "combo.comingSoonTitle",
-        comingSoonBodyKey: "combo.comingSoonBody",
-        comingSoonBadgeKey: "combo.developmentBadge",
-      },
       { labelKey: "nav.predictions", fallback: "All Predictions", href: "/predictions", icon: Sparkles },
     ],
   },
