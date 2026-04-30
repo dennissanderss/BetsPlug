@@ -110,10 +110,23 @@ function LiveMatchCard({ fixture }: { fixture: Fixture }) {
   );
 }
 
+// Window after kickoff during which a match can still legitimately be
+// "live". Anything past this is an upstream status-update miss — drop
+// it from the strip so we don't show finished matches as in-play.
+const LIVE_WINDOW_MS = 120 * 60 * 1000;
+
 export function LiveMatchesStrip({ data, isLoading, nextKickoff }: LiveMatchesStripProps) {
   const { t } = useTranslations();
 
-  const liveMatches = (data?.fixtures ?? []).filter((f) => f.status === "live");
+  const now = Date.now();
+  const liveMatches = (data?.fixtures ?? []).filter((f) => {
+    if (f.status !== "live") return false;
+    const kickoff = new Date(f.scheduled_at).getTime();
+    if (!Number.isFinite(kickoff)) return false;
+    if (kickoff > now) return false; // kickoff still in the future
+    if (now - kickoff > LIVE_WINDOW_MS) return false; // stale "live" flag
+    return true;
+  });
   const count = liveMatches.length;
 
   return (
