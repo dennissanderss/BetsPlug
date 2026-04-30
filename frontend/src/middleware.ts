@@ -100,6 +100,10 @@ const STATIC_LOCALE_ROUTES: ReadonlySet<string> = new Set([
   "/contact",
   "/match-predictions",
   "/bet-types",
+  "/privacy",
+  "/terms",
+  "/cookies",
+  "/responsible-gambling",
 ]);
 
 const STATIC_LOCALE_ROUTE_PREFIXES: ReadonlyArray<string> = [

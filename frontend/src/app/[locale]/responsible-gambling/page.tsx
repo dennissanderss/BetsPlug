@@ -1,17 +1,34 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/legal/legal-page";
-import { getServerLocale, getLocalizedAlternates,
+import {
+  getLocalizedAlternates,
   getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
+import { isLocale, locales, type Locale } from "@/i18n/config";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = getServerLocale();
+export const dynamic = "force-static";
+
+type Params = { locale: string };
+
+export async function generateStaticParams(): Promise<Params[]> {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const locale: Locale = rawLocale;
+
   const meta =
     PAGE_META["/responsible-gambling"]?.[locale] ??
     PAGE_META["/responsible-gambling"].en;
-  const alternates = getLocalizedAlternates("/responsible-gambling");
-const og = getOpenGraphLocales();
+  const alternates = getLocalizedAlternates("/responsible-gambling", undefined, locale);
+  const og = getOpenGraphLocales(locale);
   return {
     title: meta.title,
     description: meta.description,
