@@ -1,0 +1,58 @@
+{
+  "de": {
+    "schema.org.description": "BetsPlug ist eine bildungsorientierte Sportanalyse-Plattform. Wir liefern statistische Daten, Wahrscheinlichkeitsmodelle und eine verifizierte historische Performance für Fußballspiele. Wir sind kein Buchmacher und vermitteln keine Wetteinsätze.",
+    "schema.app.description": "Bildungsorientierte Fußball-Analytik-Anwendung. Kombiniert Elo-Ratings, Poisson-Verteilung und Machine Learning zur Veröffentlichung probabilistischer Spielvorhersagen und einer verifizierten historischen Bilanz für 15+ Ligen. Nur zu Informationszwecken — kein Buchmacher."
+  },
+  "fr": {
+    "schema.org.description": "BetsPlug est une plateforme d'analyse sportive à vocation éducative. Nous fournissons des données statistiques, des modèles probabilistes et un historique de performance vérifié pour les matchs de football. Nous ne sommes pas un bookmaker et ne facilitons pas les paris.",
+    "schema.app.description": "Application d'analyse de football à but éducatif. Combine les classements Elo, la distribution de Poisson et le machine learning pour publier des prévisions probabilistes de matchs et un historique vérifié sur 15+ championnats. À titre informatif uniquement — pas un bookmaker."
+  },
+  "es": {
+    "schema.org.description": "BetsPlug es una plataforma educativa de análisis deportivo. Proporcionamos datos estadísticos, modelos probabilísticos y un rendimiento histórico verificado para partidos de fútbol. No somos una casa de apuestas ni facilitamos apuestas.",
+    "schema.app.description": "Aplicación educativa de análisis de fútbol. Combina ratings Elo, distribución de Poisson y aprendizaje automático para publicar pronósticos probabilísticos de partidos y un historial verificado en 15+ ligas. Solo con fines informativos — no es una casa de apuestas."
+  },
+  "it": {
+    "schema.org.description": "BetsPlug è una piattaforma educativa di analisi sportiva. Forniamo dati statistici, modelli probabilistici e una performance storica verificata per le partite di calcio. Non siamo un bookmaker e non facilitiamo scommesse.",
+    "schema.app.description": "Applicazione educativa di analisi calcistica. Combina rating Elo, distribuzione di Poisson e machine learning per pubblicare pronostici probabilistici delle partite e uno storico verificato su 15+ campionati. Solo a scopo informativo — non è un bookmaker."
+  },
+  "sw": {
+    "schema.org.description": "BetsPlug ni jukwaa la elimu la uchambuzi wa michezo. Tunatoa data ya takwimu, mifano ya uwezekano, na utendaji wa historia uliothibitishwa kwa mechi za mpira wa miguu. Sisi si bukmeika na hatuwezeshi kuweka dau.",
+    "schema.app.description": "Programu ya elimu ya uchambuzi wa mpira wa miguu. Inachanganya viwango vya Elo, usambazaji wa Poisson na ujifunzaji wa mashine ili kuchapisha utabiri wa uwezekano wa mechi na rekodi ya historia iliyothibitishwa katika ligi 15+. Kwa madhumuni ya habari pekee — si bukmeika."
+  },
+  "id": {
+    "schema.org.description": "BetsPlug adalah platform analisis olahraga edukatif. Kami menyediakan data statistik, model probabilistik, dan kinerja historis terverifikasi untuk pertandingan sepak bola. Kami bukan bandar judi dan tidak memfasilitasi taruhan.",
+    "schema.app.description": "Aplikasi edukatif analisis sepak bola. Menggabungkan rating Elo, distribusi Poisson, dan machine learning untuk menerbitkan prediksi pertandingan probabilistik dan rekam jejak historis terverifikasi di 15+ liga. Hanya untuk tujuan informasi — bukan bandar judi."
+  },
+  "pt": {
+    "schema.org.description": "BetsPlug é uma plataforma educacional de análise desportiva. Fornecemos dados estatísticos, modelos probabilísticos e um desempenho histórico verificado para jogos de futebol. Não somos uma casa de apostas e não facilitamos apostas.",
+    "schema.app.description": "Aplicação educacional de análise de futebol. Combina ratings Elo, distribuição de Poisson e machine learning para publicar previsões probabilísticas de jogos e um histórico verificado em mais de 15 ligas. Apenas para fins informativos — não é uma casa de apostas."
+  },
+  "tr": {
+    "schema.org.description": "BetsPlug, eğitim odaklı bir spor analiz platformudur. Futbol maçları için istatistiksel veriler, olasılık modelleri ve doğrulanmış geçmiş performans sağlıyoruz. Bahis şirketi değiliz ve bahis kabul etmiyoruz.",
+    "schema.app.description": "Eğitim odaklı futbol analiz uygulaması. Elo derecelerini, Poisson dağılımını ve makine öğrenmesini birleştirerek 15'ten fazla ligde olasılıksal maç tahminleri ve doğrulanmış geçmiş istatistikleri yayınlar. Yalnızca bilgilendirme amaçlıdır — bahis şirketi değildir."
+  },
+  "pl": {
+    "schema.org.description": "BetsPlug to edukacyjna platforma analizy sportowej. Dostarczamy dane statystyczne, modele probabilistyczne i zweryfikowane historyczne wyniki meczów piłkarskich. Nie jesteśmy bukmacherem i nie pośredniczymy w zakładach.",
+    "schema.app.description": "Edukacyjna aplikacja analizy piłki nożnej. Łączy rankingi Elo, rozkład Poissona i uczenie maszynowe, aby publikować probabilistyczne prognozy meczów i zweryfikowane wyniki historyczne w ponad 15 ligach. Wyłącznie w celach informacyjnych — nie jest to bukmacher."
+  },
+  "ro": {
+    "schema.org.description": "BetsPlug este o platformă educațională de analiză sportivă. Oferim date statistice, modele probabilistice și performanță istorică verificată pentru meciurile de fotbal. Nu suntem casă de pariuri și nu facilităm pariuri.",
+    "schema.app.description": "Aplicație educațională de analiză fotbalistică. Combină ratinguri Elo, distribuția Poisson și machine learning pentru a publica prognoze probabilistice ale meciurilor și un istoric verificat în 15+ ligi. Doar în scop informativ — nu este o casă de pariuri."
+  },
+  "ru": {
+    "schema.org.description": "BetsPlug — образовательная платформа спортивной аналитики. Мы предоставляем статистические данные, вероятностные модели и проверенные исторические результаты футбольных матчей. Мы не букмекерская контора и не принимаем ставки.",
+    "schema.app.description": "Образовательное приложение для футбольной аналитики. Объединяет рейтинги Эло, распределение Пуассона и машинное обучение для публикации вероятностных прогнозов матчей и проверенного исторического результата в 15+ лигах. Только в информационных целях — не букмекерская контора."
+  },
+  "el": {
+    "schema.org.description": "Το BetsPlug είναι μια εκπαιδευτική πλατφόρμα αθλητικής ανάλυσης. Παρέχουμε στατιστικά δεδομένα, πιθανοτικά μοντέλα και επαληθευμένη ιστορική απόδοση για αγώνες ποδοσφαίρου. Δεν είμαστε στοιχηματική εταιρεία και δεν διευκολύνουμε στοιχήματα.",
+    "schema.app.description": "Εκπαιδευτική εφαρμογή ανάλυσης ποδοσφαίρου. Συνδυάζει βαθμολογίες Elo, κατανομή Poisson και μηχανική μάθηση για τη δημοσίευση πιθανοτικών προβλέψεων αγώνων και επαληθευμένου ιστορικού σε 15+ πρωταθλήματα. Μόνο για ενημερωτικούς σκοπούς — όχι στοιχηματική εταιρεία."
+  },
+  "da": {
+    "schema.org.description": "BetsPlug er en uddannelsesfokuseret sportsanalyseplatform. Vi leverer statistiske data, sandsynlighedsmodeller og verificeret historisk performance for fodboldkampe. Vi er ikke et bookmakerselskab og formidler ikke væddemål.",
+    "schema.app.description": "Uddannelsesfokuseret fodboldanalyseapplikation. Kombinerer Elo-ratings, Poisson-fordeling og maskinlæring til at offentliggøre sandsynlighedsbaserede kampforudsigelser og en verificeret historisk track record i 15+ ligaer. Kun til informationsformål — ikke et bookmakerselskab."
+  },
+  "sv": {
+    "schema.org.description": "BetsPlug är en utbildningsfokuserad plattform för sportanalys. Vi tillhandahåller statistiska data, sannolikhetsmodeller och verifierad historisk prestation för fotbollsmatcher. Vi är inte ett spelbolag och förmedlar inte spel.",
+    "schema.app.description": "Utbildningsfokuserad fotbollsanalysapplikation. Kombinerar Elo-betyg, Poisson-fördelning och maskininlärning för att publicera sannolikhetsbaserade matchprognoser och en verifierad historisk track record i 15+ ligor. Endast för informationssyfte — inte ett spelbolag."
+  }
+}

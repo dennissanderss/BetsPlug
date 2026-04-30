@@ -33,19 +33,25 @@ const SITE_URL = "https://betsplug.com";
 /**
  * Resolve the active locale for the current server request.
  *
- * Checks sources in order:
- *   1. `x-locale` request header — set by middleware on every
+ * Resolution order:
+ *   1. `override` argument — passed by static-page render flows
+ *      where the locale comes from the URL `params.locale`. This
+ *      lets the call site avoid triggering Next.js dynamic
+ *      rendering by NOT touching headers()/cookies(), which is
+ *      what we need for SSG.
+ *   2. `x-locale` request header — set by middleware on every
  *      rewrite so generateMetadata() sees the correct locale on
- *      the first request.
- *   2. NEXT_LOCALE cookie — for direct hits that didn't route
- *      through the /xx/ rewrite path.
- *   3. defaultLocale (English) fallback.
+ *      the first request. Triggers dynamic rendering.
+ *   3. NEXT_LOCALE cookie — last-resort fallback for direct hits
+ *      that didn't route through the /xx/ rewrite path. Also
+ *      triggers dynamic rendering.
+ *   4. defaultLocale (English).
  *
- * The middleware pins `x-locale` to `en` on canonical URLs, so
- * visitors with a stale NL cookie who type `/match-predictions`
- * still see English (URL wins over cookie).
+ * SSG callers MUST pass `override` — otherwise the page degrades
+ * to dynamic SSR even if `dynamic = "force-static"` is set.
  */
-export function getServerLocale(): Locale {
+export function getServerLocale(override?: Locale | string | null): Locale {
+  if (override && isLocale(override)) return override;
   try {
     const h = headers();
     const hdrLocale = h.get("x-locale");
@@ -73,8 +79,11 @@ export function getServerLocale(): Locale {
  * stray index entry consolidates onto the EN URL while the parked
  * URL itself is also tagged `noindex` by middleware. Belt-and-braces.
  */
-export function getCanonicalUrl(canonicalPath: string): string {
-  const locale = getServerLocale();
+export function getCanonicalUrl(
+  canonicalPath: string,
+  localeOverride?: Locale | string | null,
+): string {
+  const locale = getServerLocale(localeOverride);
   if (!isIndexableLocale(locale)) {
     return buildAbsoluteUrl(canonicalPath, defaultLocale);
   }
@@ -114,11 +123,12 @@ function buildAbsoluteUrl(canonicalPath: string, locale: Locale): string {
 export function getLocalizedAlternates(
   canonicalPath: string,
   contentLocales?: readonly Locale[],
+  localeOverride?: Locale | string | null,
 ): {
   canonical: string;
   languages: Record<string, string>;
 } {
-  const locale = getServerLocale();
+  const locale = getServerLocale(localeOverride);
   const indexable = isIndexableLocale(locale);
   const hasTranslation =
     !contentLocales || contentLocales.includes(locale);
@@ -144,6 +154,44 @@ export function getLocalizedAlternates(
   languages["x-default"] = buildAbsoluteUrl(canonicalPath, defaultLocale);
 
   return { canonical, languages };
+}
+
+/* ── Open Graph locale tags ─────────────────────────────────── */
+
+/**
+ * Build `og:locale` + `og:locale:alternate` values for the active page.
+ *
+ * - `locale`: BCP-47-with-region (e.g. `nl_NL`, `de_DE`) for the
+ *   current locale. Goes into Open Graph as `og:locale`.
+ * - `alternateLocales`: same format for every OTHER indexable locale,
+ *   so social-graph crawlers know translated versions exist.
+ *
+ * Parked locales fall back to EN's `og:locale` (and don't emit
+ * alternates from a parked URL — they shouldn't be advertised as
+ * indexable siblings).
+ *
+ * Pass the result into Next.js `Metadata.openGraph.locale` and
+ * `Metadata.openGraph.alternateLocale`.
+ */
+export function getOpenGraphLocales(localeOverride?: Locale | string | null): {
+  locale: string;
+  alternateLocales: string[];
+} {
+  const active = getServerLocale(localeOverride);
+  const indexable = isIndexableLocale(active);
+  const localeTag = indexable
+    ? localeMeta[active].ogLocale
+    : localeMeta[defaultLocale].ogLocale;
+
+  if (!indexable) {
+    return { locale: localeTag, alternateLocales: [] };
+  }
+
+  const alternateLocales = INDEXABLE_LOCALES
+    .filter((l) => l !== active)
+    .map((l) => localeMeta[l].ogLocale);
+
+  return { locale: localeTag, alternateLocales };
 }
 
 /* ── Locale-aware FAQ builder ──────────────────────────────── */
@@ -186,8 +234,11 @@ const POTD_VARS_BY_LOCALE: Record<Locale, { potdAccuracy: string; potdPicks: str
  * using the static `POTD_STATS` snapshot so JSON-LD ships real
  * numbers to crawlers without a client fetch.
  */
-export function getLocalizedFaq(keys: FaqKeySet) {
-  const locale = getServerLocale();
+export function getLocalizedFaq(
+  keys: FaqKeySet,
+  localeOverride?: Locale | string | null,
+) {
+  const locale = getServerLocale(localeOverride);
   const vars = POTD_VARS_BY_LOCALE[locale];
   return keys.map(({ q, a }) => ({
     question: formatMsg(translate(locale, q as any), vars),

@@ -2966,5 +2966,7 @@ const sv = {
   "welcomeBanner.stepPrefix": "Steg",
   "welcomeBanner.subtitle": "Vår AI analyserar fotbollsdata, form, head-to-head, ställning och lagstyrka, för att förutsäga det mest sannolika resultatet av kommande matcher.",
   "welcomeBanner.title": "Så här fungerar BetsPlug",
+  "schema.org.description": "BetsPlug är en utbildningsfokuserad plattform för sportanalys. Vi tillhandahåller statistiska data, sannolikhetsmodeller och verifierad historisk prestation för fotbollsmatcher. Vi är inte ett spelbolag och förmedlar inte spel.",
+  "schema.app.description": "Utbildningsfokuserad fotbollsanalysapplikation. Kombinerar Elo-betyg, Poisson-fördelning och maskininlärning för att publicera sannolikhetsbaserade matchprognoser och en verifierad historisk track record i 15+ ligor. Endast för informationssyfte — inte ett spelbolag.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default sv;

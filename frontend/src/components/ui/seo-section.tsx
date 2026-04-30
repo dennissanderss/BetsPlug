@@ -111,7 +111,7 @@ export function SeoSection() {
               result: AI betting predictions that quantify win probability,
               draw probability, expected goals and edge over the bookmaker line
               - all in a single dashboard. Dive into our{" "}
-              <Link href="/predictions" className={linkCls}>
+              <Link href={loc("/predictions")} className={linkCls}>
                 AI predictions hub
               </Link>{" "}
               to see every upcoming match our models have processed.
@@ -124,12 +124,12 @@ export function SeoSection() {
               Looking for{" "}
               <strong className="font-semibold text-[#ededed]">free AI football picks</strong>?
               Every day we publish a highest-confidence{" "}
-              <Link href="/bet-of-the-day" className={linkCls}>
+              <Link href={loc("/bet-of-the-day")} className={linkCls}>
                 Pick of the Day
               </Link>{" "}
               - a single curated AI pick our algorithm rates as the best value
               across all monitored leagues. Want to go deeper? Browse the full{" "}
-              <Link href="/predictions" className={linkCls}>
+              <Link href={loc("/predictions")} className={linkCls}>
                 predictions list
               </Link>{" "}
               to see every upcoming match with probabilities, confidence score
@@ -143,7 +143,7 @@ export function SeoSection() {
               Most football prediction websites hide their losses. We don&apos;t.
               Every AI football pick, every Pick of the Day, every confidence
               score is logged publicly in our{" "}
-              <Link href="/trackrecord" className={linkCls}>
+              <Link href={loc("/trackrecord")} className={linkCls}>
                 verified track record
               </Link>
               . You can filter by league, market, confidence tier and date
@@ -168,7 +168,7 @@ export function SeoSection() {
               job is to give you the data, probabilities and machine-learning
               outputs; the decision to make a pick (and with whom) is entirely
               yours. Learn more{" "}
-              <Link href="/about-us" className={linkCls}>
+              <Link href={loc("/about-us")} className={linkCls}>
                 about our mission
               </Link>{" "}
               or browse{" "}

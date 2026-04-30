@@ -3016,5 +3016,7 @@ const id = {
   "welcomeBanner.stepPrefix": "Melangkah",
   "welcomeBanner.subtitle": "AI kami menganalisis data sepak bola — bentuk, head-to-head, klasemen, dan kekuatan tim — untuk memperkirakan hasil yang paling mungkin terjadi pada pertandingan mendatang.",
   "welcomeBanner.title": "Begini cara kerja BetsPlug",
+  "schema.org.description": "BetsPlug adalah platform analisis olahraga edukatif. Kami menyediakan data statistik, model probabilistik, dan kinerja historis terverifikasi untuk pertandingan sepak bola. Kami bukan bandar judi dan tidak memfasilitasi taruhan.",
+  "schema.app.description": "Aplikasi edukatif analisis sepak bola. Menggabungkan rating Elo, distribusi Poisson, dan machine learning untuk menerbitkan prediksi pertandingan probabilistik dan rekam jejak historis terverifikasi di 15+ liga. Hanya untuk tujuan informasi — bukan bandar judi.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default id;

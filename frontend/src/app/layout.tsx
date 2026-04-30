@@ -5,7 +5,7 @@ import Script from "next/script";
 import "./globals.css";
 import { AppProviders } from "@/components/layout/providers";
 import { LocaleProvider } from "@/i18n/locale-provider";
-import { getServerLocale, getLocalizedAlternates } from "@/lib/seo-helpers";
+import { getServerLocale, getLocalizedAlternates, getOpenGraphLocales } from "@/lib/seo-helpers";
 import { PAGE_META } from "@/data/page-meta";
 
 // Exo 2 — geometric sans with sport/tech feel, loaded via next/font/google
@@ -59,6 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = getServerLocale();
   const meta = PAGE_META["/"]?.[locale] ?? PAGE_META["/"].en;
   const alternates = getLocalizedAlternates("/");
+  const og = getOpenGraphLocales();
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -88,6 +89,8 @@ export async function generateMetadata(): Promise<Metadata> {
       title: meta.ogTitle ?? meta.title,
       description: meta.ogDescription ?? meta.description,
       images: [OG_IMAGE],
+      locale: og.locale,
+      alternateLocale: og.alternateLocales,
     },
     twitter: {
       card: "summary_large_image",

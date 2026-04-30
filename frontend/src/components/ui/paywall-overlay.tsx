@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Lock, Sparkles, Crown } from "lucide-react";
-import { useTranslations } from "@/i18n/locale-provider";
+import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { useTier } from "@/hooks/use-tier";
 
 interface PaywallOverlayProps {
@@ -82,6 +82,7 @@ function UpgradeCard({
   const accent = TIER_ACCENT[tierKey];
   const isCompact = size === "compact";
   const { t } = useTranslations();
+  const loc = useLocalizedHref();
 
   return (
     <div
@@ -135,7 +136,7 @@ function UpgradeCard({
 
         {/* CTA button */}
         <Link
-          href="/checkout"
+          href={loc("/checkout")}
           className={`group/btn relative mt-5 inline-flex items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r ${accent.btnFrom} ${accent.btnVia} ${accent.btnTo} ${accent.text} ${accent.glow} ${accent.glowHover} font-black tracking-tight transition-all hover:scale-[1.03] ${
             isCompact ? "px-5 py-2.5 text-xs" : "px-6 py-3 text-sm"
           }`}

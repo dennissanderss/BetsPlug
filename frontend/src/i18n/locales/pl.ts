@@ -2966,5 +2966,7 @@ const pl = {
   "welcomeBanner.stepPrefix": "Krok",
   "welcomeBanner.subtitle": "Nasza sztuczna inteligencja analizuje dane piłkarskie, formę, pojedynki bezpośrednie, tabele i siłę drużyny, aby przewidzieć najbardziej prawdopodobny wynik nadchodzących meczów.",
   "welcomeBanner.title": "Oto jak działa BetsPlug",
+  "schema.org.description": "BetsPlug to edukacyjna platforma analizy sportowej. Dostarczamy dane statystyczne, modele probabilistyczne i zweryfikowane historyczne wyniki meczów piłkarskich. Nie jesteśmy bukmacherem i nie pośredniczymy w zakładach.",
+  "schema.app.description": "Edukacyjna aplikacja analizy piłki nożnej. Łączy rankingi Elo, rozkład Poissona i uczenie maszynowe, aby publikować probabilistyczne prognozy meczów i zweryfikowane wyniki historyczne w ponad 15 ligach. Wyłącznie w celach informacyjnych — nie jest to bukmacher.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default pl;
