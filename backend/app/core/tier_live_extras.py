@@ -31,6 +31,7 @@ from app.models.prediction import Prediction
 # every league here counts toward the live-measurement accuracy display.
 LIVE_ONLY_LEAGUE_NAMES: frozenset[str] = frozenset({
     "Conference League",
+    "Europa League",
 })
 
 # Earliest predicted_at a live-only-extras row may carry. Aligns with the
