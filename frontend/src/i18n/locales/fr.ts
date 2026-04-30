@@ -3016,5 +3016,7 @@ const fr = {
   "welcomeBanner.stepPrefix": "Étape",
   "welcomeBanner.subtitle": "Notre IA analyse les données du football (forme, face-à-face, classement et force de l'équipe) pour prévoir l'issue la plus probable des matchs à venir.",
   "welcomeBanner.title": "Voici comment fonctionne BetsPlug",
+  "schema.org.description": "BetsPlug est une plateforme d'analyse sportive à vocation éducative. Nous fournissons des données statistiques, des modèles probabilistes et un historique de performance vérifié pour les matchs de football. Nous ne sommes pas un bookmaker et ne facilitons pas les paris.",
+  "schema.app.description": "Application d'analyse de football à but éducatif. Combine les classements Elo, la distribution de Poisson et le machine learning pour publier des prévisions probabilistes de matchs et un historique vérifié sur 15+ championnats. À titre informatif uniquement — pas un bookmaker.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default fr;

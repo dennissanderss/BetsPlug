@@ -3016,5 +3016,7 @@ const de = {
   "welcomeBanner.stepPrefix": "Schritt",
   "welcomeBanner.subtitle": "Unsere KI analysiert Fußballdaten – Form, Kopf-an-Kopf-Rennen, Rangliste und Teamstärke –, um den wahrscheinlichsten Ausgang bevorstehender Spiele vorherzusagen.",
   "welcomeBanner.title": "So funktioniert BetsPlug",
+  "schema.org.description": "BetsPlug ist eine bildungsorientierte Sportanalyse-Plattform. Wir liefern statistische Daten, Wahrscheinlichkeitsmodelle und eine verifizierte historische Performance für Fußballspiele. Wir sind kein Buchmacher und vermitteln keine Wetteinsätze.",
+  "schema.app.description": "Bildungsorientierte Fußball-Analytik-Anwendung. Kombiniert Elo-Ratings, Poisson-Verteilung und Machine Learning zur Veröffentlichung probabilistischer Spielvorhersagen und einer verifizierten historischen Bilanz für 15+ Ligen. Nur zu Informationszwecken — kein Buchmacher.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default de;

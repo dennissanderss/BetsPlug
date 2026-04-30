@@ -4,7 +4,16 @@
  * Drop these into any server component page to emit schema.org
  * markup. Google uses this for rich results, knowledge panels,
  * and FAQ rich snippets.
+ *
+ * Locale-aware: descriptions on Organization / WebSite /
+ * SoftwareApplication are rendered in the active server locale
+ * via translate(), so /es, /de, /fr crawlers see Spanish, German,
+ * and French structured data instead of English fallback. This
+ * is a hard requirement for rich-snippets ranking in non-EN SERPs.
  */
+import { translate } from "@/i18n/messages";
+import { getServerLocale } from "@/lib/seo-helpers";
+import type { Locale } from "@/i18n/config";
 
 interface JsonLdProps {
   data: Record<string, unknown> | Record<string, unknown>[];
@@ -22,49 +31,52 @@ export function JsonLd({ data }: JsonLdProps) {
 
 /* ── Organization ─────────────────────────────────────────── */
 
-const ORGANIZATION = {
-  "@type": ["Organization", "EducationalOrganization"],
-  "@id": "https://betsplug.com/#organization",
-  name: "BetsPlug",
-  url: "https://betsplug.com",
-  description:
-    "BetsPlug is an educational sports analytics platform. We provide statistical data, probabilistic models and verified historical performance for football matches. We are not a bookmaker and do not facilitate wagering.",
-  logo: {
-    "@type": "ImageObject",
-    url: "https://betsplug.com/logo.webp",
-    width: 512,
-    height: 512,
-  },
-  knowsAbout: [
-    "Football statistics",
-    "Sports analytics",
-    "Probabilistic modeling",
-    "Elo rating systems",
-    "Poisson goal models",
-    "Machine learning for sports",
-    "Bankroll management education",
-  ],
-  sameAs: [
-    "https://x.com/betsplug",
-    "https://instagram.com/betsplug",
-    "https://youtube.com/@betsplug",
-    "https://t.me/BetsPluggs",
-  ],
-  contactPoint: {
-    "@type": "ContactPoint",
-    email: "support@betsplug.com",
-    contactType: "customer support",
-    availableLanguage: ["English", "Dutch", "German", "French", "Spanish", "Italian"],
-  },
-};
+function buildOrganization(locale: Locale) {
+  return {
+    "@type": ["Organization", "EducationalOrganization"],
+    "@id": "https://betsplug.com/#organization",
+    name: "BetsPlug",
+    url: "https://betsplug.com",
+    description: translate(locale, "schema.org.description"),
+    logo: {
+      "@type": "ImageObject",
+      url: "https://betsplug.com/logo.webp",
+      width: 512,
+      height: 512,
+    },
+    knowsAbout: [
+      "Football statistics",
+      "Sports analytics",
+      "Probabilistic modeling",
+      "Elo rating systems",
+      "Poisson goal models",
+      "Machine learning for sports",
+      "Bankroll management education",
+    ],
+    sameAs: [
+      "https://x.com/betsplug",
+      "https://instagram.com/betsplug",
+      "https://youtube.com/@betsplug",
+      "https://t.me/BetsPluggs",
+    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: "support@betsplug.com",
+      contactType: "customer support",
+      availableLanguage: ["English", "Dutch", "German", "French", "Spanish", "Italian"],
+    },
+  };
+}
 
-/** Organization schema — add to the homepage or root layout. */
+/** Organization schema — add to the homepage or root layout.
+ *  Description is rendered in the active locale. */
 export function OrganizationJsonLd() {
+  const locale = getServerLocale();
   return (
     <JsonLd
       data={{
         "@context": "https://schema.org",
-        ...ORGANIZATION,
+        ...buildOrganization(locale),
       }}
     />
   );
@@ -73,6 +85,7 @@ export function OrganizationJsonLd() {
 /* ── WebSite (with SearchAction) ──────────────────────────── */
 
 export function WebSiteJsonLd() {
+  const locale = getServerLocale();
   return (
     <JsonLd
       data={{
@@ -81,6 +94,7 @@ export function WebSiteJsonLd() {
         "@id": "https://betsplug.com/#website",
         name: "BetsPlug",
         url: "https://betsplug.com",
+        inLanguage: locale,
         publisher: { "@id": "https://betsplug.com/#organization" },
         potentialAction: {
           "@type": "SearchAction",
@@ -226,6 +240,7 @@ export function PricingProductJsonLd({
    via PricingProductJsonLd, so no AggregateOffer here either. */
 
 export function ServiceJsonLd() {
+  const locale = getServerLocale();
   return (
     <JsonLd
       data={{
@@ -234,9 +249,9 @@ export function ServiceJsonLd() {
         name: "BetsPlug",
         applicationCategory: "SportsApplication",
         operatingSystem: "Web",
-        description:
-          "Educational football analytics application. Combines Elo ratings, Poisson distribution and machine learning to publish probabilistic match forecasts and a verified historical track record across 15+ leagues. For informational purposes only — not a bookmaker.",
+        description: translate(locale, "schema.app.description"),
         publisher: { "@id": "https://betsplug.com/#organization" },
+        inLanguage: locale,
       }}
     />
   );

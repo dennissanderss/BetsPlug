@@ -2966,5 +2966,7 @@ const tr = {
   "welcomeBanner.stepPrefix": "Adım",
   "welcomeBanner.subtitle": "Yapay zekamız, yaklaşan maçların en olası sonuçlarını tahmin etmek için futbol verilerini, formu, kafa kafaya maçları, sıralamaları ve takım gücünü analiz ediyor.",
   "welcomeBanner.title": "BetsPlug şu şekilde çalışır",
+  "schema.org.description": "BetsPlug, eğitim odaklı bir spor analiz platformudur. Futbol maçları için istatistiksel veriler, olasılık modelleri ve doğrulanmış geçmiş performans sağlıyoruz. Bahis şirketi değiliz ve bahis kabul etmiyoruz.",
+  "schema.app.description": "Eğitim odaklı futbol analiz uygulaması. Elo derecelerini, Poisson dağılımını ve makine öğrenmesini birleştirerek 15'ten fazla ligde olasılıksal maç tahminleri ve doğrulanmış geçmiş istatistikleri yayınlar. Yalnızca bilgilendirme amaçlıdır — bahis şirketi değildir.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default tr;

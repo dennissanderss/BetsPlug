@@ -3434,6 +3434,12 @@ const en = {
   "trackrecord.botd.backtestTitle": "Pick of the Day — backtest",
   "trackrecord.botd.backtestSubtitle": "Daily pick with highest confidence, simulated on historical data.",
   "trackrecord.noExplanation": "No explicit explanation available for this pick.",
+
+  /* Schema.org JSON-LD descriptions (locale-aware structured data) */
+  "schema.org.description":
+    "BetsPlug is an educational sports analytics platform. We provide statistical data, probabilistic models and verified historical performance for football matches. We are not a bookmaker and do not facilitate wagering.",
+  "schema.app.description":
+    "Educational football analytics application. Combines Elo ratings, Poisson distribution and machine learning to publish probabilistic match forecasts and a verified historical track record across 15+ leagues. For informational purposes only — not a bookmaker.",
 } as const;
 
 export type TranslationKey = keyof typeof en;
@@ -6379,6 +6385,12 @@ const nl: Dictionary = {
   "trackrecord.botd.backtestTitle": "Pick of the Day — backtest",
   "trackrecord.botd.backtestSubtitle": "Dagelijkse pick met hoogste confidence, gesimuleerd op historische data.",
   "trackrecord.noExplanation": "Geen expliciete verklaring beschikbaar voor deze pick.",
+
+  /* Schema.org JSON-LD descriptions (locale-aware structured data) */
+  "schema.org.description":
+    "BetsPlug is een educatief sport-analyseplatform. We leveren statistische data, kansmodellen en een geverifieerde historische prestatie voor voetbalwedstrijden. We zijn geen bookmaker en faciliteren geen wedinzetten.",
+  "schema.app.description":
+    "Educatieve voetbal-analyseapplicatie. Combineert Elo-ratings, Poisson-distributie en machine learning om kansgebaseerde wedstrijdvoorspellingen en een geverifieerd track record over 15+ competities te publiceren. Uitsluitend voor informatieve doeleinden — geen bookmaker.",
 };
 
 

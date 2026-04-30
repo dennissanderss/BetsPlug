@@ -3016,5 +3016,7 @@ const sw = {
   "welcomeBanner.stepPrefix": "Hatua",
   "welcomeBanner.subtitle": "AI yetu huchanganua data ya kandanda - fomu, uso kwa uso, msimamo na nguvu ya timu - ili kutabiri matokeo yanayowezekana zaidi ya mechi zijazo.",
   "welcomeBanner.title": "Hivi ndivyo BetsPlug inavyofanya kazi",
+  "schema.org.description": "BetsPlug ni jukwaa la elimu la uchambuzi wa michezo. Tunatoa data ya takwimu, mifano ya uwezekano, na utendaji wa historia uliothibitishwa kwa mechi za mpira wa miguu. Sisi si bukmeika na hatuwezeshi kuweka dau.",
+  "schema.app.description": "Programu ya elimu ya uchambuzi wa mpira wa miguu. Inachanganya viwango vya Elo, usambazaji wa Poisson na ujifunzaji wa mashine ili kuchapisha utabiri wa uwezekano wa mechi na rekodi ya historia iliyothibitishwa katika ligi 15+. Kwa madhumuni ya habari pekee — si bukmeika.",
 } as Partial<Record<TranslationKey, string>> as Record<TranslationKey, string>;
 export default sw;
