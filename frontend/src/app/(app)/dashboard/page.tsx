@@ -8,7 +8,6 @@ import { useTranslations, useLocalizedHref } from "@/i18n/locale-provider";
 import { HeroBotdCompact } from "@/components/dashboard/HeroBotdCompact";
 import { LiveMatchesStrip } from "@/components/dashboard/LiveMatchesStrip";
 import { UpcomingPicksStrip } from "@/components/dashboard/UpcomingPicksStrip";
-import { YesterdayResultsStrip } from "@/components/dashboard/YesterdayResultsStrip";
 import { SportsHubSidebar } from "@/components/dashboard/SportsHubSidebar";
 import { UpgradeNudgeCard } from "@/components/dashboard/UpgradeNudgeCard";
 import { DashboardHero } from "@/components/dashboard/DashboardHero";
@@ -16,7 +15,7 @@ import { TelegramInviteCard } from "@/components/telegram/invite-card";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { useTier } from "@/hooks/use-tier";
 import { classifyPickTier, TIER_RANK } from "@/lib/pick-tier";
-import type { Fixture, FixturesResponse, PickTierSlug } from "@/types/api";
+import type { Fixture, PickTierSlug } from "@/types/api";
 
 // Same window as LiveMatchesStrip uses internally — kept in sync so the
 // page-level "show the section?" check matches what the strip will
@@ -29,26 +28,6 @@ function isTrulyLive(f: Fixture, now: number): boolean {
   if (!Number.isFinite(kickoff)) return false;
   if (kickoff > now) return false;
   return now - kickoff <= LIVE_WINDOW_MS;
-}
-
-function startOfDay(d: Date): number {
-  const copy = new Date(d);
-  copy.setHours(0, 0, 0, 0);
-  return copy.getTime();
-}
-
-// Yesterday window in the user's local timezone — anything kicked off
-// in the previous calendar day (00:00–24:00 local) counts.
-function pickYesterdayFixtures(resp: FixturesResponse | undefined): FixturesResponse | undefined {
-  if (!resp) return resp;
-  const now = new Date();
-  const yesterdayStart = startOfDay(new Date(now.getTime() - 24 * 60 * 60 * 1000));
-  const todayStart = startOfDay(now);
-  const fixtures = resp.fixtures.filter((f) => {
-    const t = new Date(f.scheduled_at).getTime();
-    return Number.isFinite(t) && t >= yesterdayStart && t < todayStart;
-  });
-  return { ...resp, fixtures };
 }
 
 export default function DashboardPage() {
@@ -80,17 +59,6 @@ export default function DashboardPage() {
     queryFn: () => api.getFixturesUpcoming(7),
     staleTime: 5 * 60_000,
   });
-
-  // Yesterday's results — pull last 48h of finished fixtures and trim
-  // client-side to the previous calendar day. Two days of headroom
-  // keeps the section populated even when it's still early morning
-  // and yesterday's late kickoffs are the only finished matches.
-  const { data: recentResults, isLoading: yesterdayLoading } = useQuery({
-    queryKey: ["fixtures-results-yesterday"],
-    queryFn: () => api.getFixtureResults(2),
-    staleTime: 5 * 60_000,
-  });
-  const yesterdayFixtures = pickYesterdayFixtures(recentResults);
 
   // Sidebar shows two numbers: an all-time cumulative accuracy (the
   // number on the homepage the user actually paid for) and a small
@@ -214,9 +182,6 @@ export default function DashboardPage() {
               nextKickoff={nextKickoff}
             />
           )}
-
-          {/* Section 5 — Yesterday's results summary. */}
-          <YesterdayResultsStrip data={yesterdayFixtures} isLoading={yesterdayLoading} />
 
           {/* Section 6 — Slim quick link. Trackrecord only; everything
               else lives in the sidebar already. */}
