@@ -90,10 +90,16 @@ function withLocaleHeader(req: NextRequest, locale: Locale): Headers {
 // `parseLocalizedPath()` returns for that route family.
 const STATIC_LOCALE_ROUTES: ReadonlySet<string> = new Set([
   "/", // homepage — every locale is statically pre-rendered at /[locale]/page
+  "/learn", // pillar hub index
 ]);
 
+const STATIC_LOCALE_ROUTE_PREFIXES: ReadonlyArray<string> = [
+  "/learn/", // /learn/[slug] — pre-rendered for every (locale × pillar slug)
+];
+
 function isStaticLocaleRoute(canonicalPath: string): boolean {
-  return STATIC_LOCALE_ROUTES.has(canonicalPath);
+  if (STATIC_LOCALE_ROUTES.has(canonicalPath)) return true;
+  return STATIC_LOCALE_ROUTE_PREFIXES.some((p) => canonicalPath.startsWith(p));
 }
 
 export function middleware(req: NextRequest) {
@@ -130,6 +136,22 @@ export function middleware(req: NextRequest) {
     return applyIndexability(res, host);
   }
 
+  // ── /<canonical-en-route> → /en/<canonical-en-route> ───────
+  // For migrated routes accessed bare (no locale prefix), rewrite
+  // internally to the EN-prefixed [locale] static path so the
+  // address bar stays canonical and the response is statically
+  // cached. Same trick as "/" → "/en" but for the migrated routes.
+  if (!hasLocalePrefix && isStaticLocaleRoute(pathname)) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/${defaultLocale}${pathname}`;
+    url.search = search;
+    const res = NextResponse.rewrite(url, {
+      request: { headers: withLocaleHeader(req, defaultLocale) },
+    });
+    res.headers.set("Content-Language", defaultLocale);
+    return applyIndexability(res, host);
+  }
+
   // ── /en/... → 308 redirect to canonical unprefixed URL ─────
   if (hasLocalePrefix && firstSegment === defaultLocale) {
     const url = req.nextUrl.clone();
@@ -153,7 +175,25 @@ export function middleware(req: NextRequest) {
     const parsed = parseLocalizedPath(pathname, firstSegment as Locale);
 
     if (isStaticLocaleRoute(parsed.canonical)) {
-      const res = NextResponse.next({
+      // Migrated route. Rewrite to the locale-prefixed EN-canonical
+      // path (e.g. /nl/leren → /nl/learn) so the static
+      // app/[locale]/<route>/page.tsx HTML is served. URL stays in
+      // the visitor's localized form for SEO.
+      const targetPath = `/${parsed.locale}${parsed.canonical === "/" ? "" : parsed.canonical}`;
+      if (targetPath === pathname) {
+        // Already on the canonical-EN slug variant (e.g. /nl/learn).
+        // Just pass through; Next.js routes directly to [locale]/...
+        const res = NextResponse.next({
+          request: { headers: withLocaleHeader(req, parsed.locale) },
+        });
+        setLocaleCookie(res, parsed.locale);
+        applyParkedLocaleNoindex(res, parsed.locale);
+        return applyIndexability(res, host);
+      }
+      const url = req.nextUrl.clone();
+      url.pathname = targetPath;
+      url.search = search;
+      const res = NextResponse.rewrite(url, {
         request: { headers: withLocaleHeader(req, parsed.locale) },
       });
       setLocaleCookie(res, parsed.locale);

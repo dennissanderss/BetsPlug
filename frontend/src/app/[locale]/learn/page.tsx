@@ -1,22 +1,19 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ArrowRight, BookOpen, ChevronRight, GraduationCap, Sparkles } from "lucide-react";
 import { SiteNav } from "@/components/ui/site-nav";
 import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { PAGE_IMAGES } from "@/data/page-images";
-import {
-  defaultLocale,
-  isLocale,
-  LOCALE_COOKIE,
-} from "@/i18n/config";
+import { isLocale, locales, type Locale } from "@/i18n/config";
 import {
   pickLearnPillarLocale,
   type LearnPillarLocale,
 } from "@/data/learn-pillars";
 import { fetchAllLearnPillars } from "@/lib/sanity-data";
-import { getServerLocale, getLocalizedAlternates,
+import {
+  getLocalizedAlternates,
   getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import { localizePath } from "@/i18n/routes";
@@ -27,20 +24,33 @@ type Variant = "green" | "purple" | "blue";
 const CYCLE: Variant[] = ["green", "purple", "blue"];
 
 /**
- * /learn — NOCTURNE evergreen pillar hub.
+ * /[locale]/learn — NOCTURNE evergreen pillar hub.
+ * Statically pre-rendered for all 16 locales. Locale comes from
+ * params, NOT cookies/headers, so the page stays SSG and the CDN
+ * can serve it without a hot SSR per request.
  */
 
-function readLocaleFromCookie(): LearnPillarLocale {
-  const raw = cookies().get(LOCALE_COOKIE)?.value;
-  const uiLocale = isLocale(raw) ? raw : defaultLocale;
-  return pickLearnPillarLocale(uiLocale);
+export const dynamic = "force-static";
+export const revalidate = 60;
+
+type Params = { locale: string };
+
+export async function generateStaticParams(): Promise<Params[]> {
+  return locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = getServerLocale();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const locale: Locale = rawLocale;
+
   const meta = PAGE_META["/learn"]?.[locale] ?? PAGE_META["/learn"].en;
-  const alternates = getLocalizedAlternates("/learn");
-const og = getOpenGraphLocales();
+  const alternates = getLocalizedAlternates("/learn", undefined, locale);
+  const og = getOpenGraphLocales(locale);
   return {
     title: meta.title,
     description: meta.description,
@@ -59,12 +69,16 @@ const og = getOpenGraphLocales();
   };
 }
 
-export const revalidate = 60;
-
-export default async function LearnIndexPage() {
-  const editorialLocale = readLocaleFromCookie();
-  const uiLocale = getServerLocale();
-  const lhref = (canonical: string) => localizePath(canonical, uiLocale);
+export default async function LearnIndexPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale: Locale = rawLocale;
+  const editorialLocale: LearnPillarLocale = pickLearnPillarLocale(locale);
+  const lhref = (canonical: string) => localizePath(canonical, locale);
   const pillars = await fetchAllLearnPillars();
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
 

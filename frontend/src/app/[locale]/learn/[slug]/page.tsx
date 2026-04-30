@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -16,30 +15,39 @@ import { UnlockBanner } from "@/components/match-predictions/unlock-banner";
 import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
 import { HexBadge } from "@/components/noct/hex-badge";
 import { PAGE_IMAGES } from "@/data/page-images";
-import {
-  defaultLocale,
-  isLocale,
-  LOCALE_COOKIE,
-  type Locale,
-} from "@/i18n/config";
+import { isLocale, locales, type Locale } from "@/i18n/config";
 import {
   pickLearnPillarLocale,
   type LearnPillar,
   type LearnPillarLocale,
 } from "@/data/learn-pillars";
 import { fetchLearnPillarSlugs, fetchLearnPillarBySlug } from "@/lib/sanity-data";
-import { getLocalizedAlternates, getServerLocale,
+import {
+  getLocalizedAlternates,
   getOpenGraphLocales,
 } from "@/lib/seo-helpers";
 import { localizePath } from "@/i18n/routes";
 
-// Pillars are hand-authored in EN + NL; every other locale falls
-// back to EN copy via expandStringLocales. To avoid Google flagging
-// the EN-fallback URLs (de/fr/es/it/...) as duplicate-content of the
-// canonical EN page, we restrict the hreflang cluster + self-canonical
-// to the locales whose pillar text is actually translated. Detected
-// dynamically per pillar so future hand-translations widen the set
-// without code changes.
+const SITE_URL = "https://betsplug.com";
+
+export const dynamic = "force-static";
+export const revalidate = 60;
+
+type Params = { locale: string; slug: string };
+
+/* ── Static params: 16 locales × N pillars ─────────────────── */
+
+export async function generateStaticParams(): Promise<Params[]> {
+  const slugs = await fetchLearnPillarSlugs();
+  const out: Params[] = [];
+  for (const locale of locales) {
+    for (const slug of slugs) {
+      out.push({ locale, slug });
+    }
+  }
+  return out;
+}
+
 function detectTranslatedLocales(pillar: LearnPillar): Locale[] {
   const enTitle = pillar.title.en;
   return (Object.keys(pillar.title) as Locale[]).filter(
@@ -47,47 +55,17 @@ function detectTranslatedLocales(pillar: LearnPillar): Locale[] {
   );
 }
 
-/**
- * Learn pillar — long-form evergreen explainer.
- * URL: /learn/[slug]
- *
- * Each pillar is ~1200–1500 words of handwritten content covering
- * one foundational concept (value betting, xG, Elo, Kelly, Poisson,
- * bankroll). These are the internal-link targets for the Phase 3
- * automated blog feed: every blog post should link to at least one
- * pillar to concentrate PageRank on these evergreen URLs.
- *
- * Server-rendered for SEO with WebPage + BreadcrumbList + FAQPage
- * JSON-LD. Localized EN + NL today; other locales fall back to EN.
- */
-
-const SITE_URL = "https://betsplug.com";
-
-export const revalidate = 60;
-
-type Params = { slug: string };
-
-/* ── Static params ────────────────────────────────────────── */
-
-export async function generateStaticParams(): Promise<Params[]> {
-  const slugs = await fetchLearnPillarSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
-
-/* ── Helpers ──────────────────────────────────────────────── */
-
-function readLocaleFromCookie(): LearnPillarLocale {
-  const raw = cookies().get(LOCALE_COOKIE)?.value;
-  const uiLocale = isLocale(raw) ? raw : defaultLocale;
-  return pickLearnPillarLocale(uiLocale);
-}
-
 /* ── Metadata ─────────────────────────────────────────────── */
 
-export async function generateMetadata(props: {
+export async function generateMetadata({
+  params,
+}: {
   params: Promise<Params>;
 }): Promise<Metadata> {
-  const { slug } = await props.params;
+  const { locale: rawLocale, slug } = await params;
+  if (!isLocale(rawLocale)) return {};
+  const locale: Locale = rawLocale;
+
   const pillar = await fetchLearnPillarBySlug(slug);
   if (!pillar) {
     return {
@@ -96,15 +74,16 @@ export async function generateMetadata(props: {
     };
   }
 
-  const editorialLocale = readLocaleFromCookie();
+  const editorialLocale: LearnPillarLocale = pickLearnPillarLocale(locale);
   const title = pillar.metaTitle[editorialLocale];
   const description = pillar.metaDescription[editorialLocale];
   const translatedLocales = detectTranslatedLocales(pillar);
   const alternates = getLocalizedAlternates(
     `/learn/${pillar.slug}`,
     translatedLocales,
+    locale,
   );
-const og = getOpenGraphLocales();
+  const og = getOpenGraphLocales(locale);
   return {
     title,
     description,
@@ -214,16 +193,20 @@ function buildJsonLd(pillar: LearnPillar, editorialLocale: LearnPillarLocale) {
 
 /* ── Page ─────────────────────────────────────────────────── */
 
-export default async function LearnPillarPage(props: {
+export default async function LearnPillarPage({
+  params,
+}: {
   params: Promise<Params>;
 }) {
-  const { slug } = await props.params;
+  const { locale: rawLocale, slug } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale: Locale = rawLocale;
+  const editorialLocale: LearnPillarLocale = pickLearnPillarLocale(locale);
+
   const pillar = await fetchLearnPillarBySlug(slug);
   if (!pillar) notFound();
 
-  const editorialLocale = readLocaleFromCookie();
-  const uiLocale = getServerLocale();
-  const lhref = (canonical: string) => localizePath(canonical, uiLocale);
+  const lhref = (canonical: string) => localizePath(canonical, locale);
   const jsonLd = buildJsonLd(pillar, editorialLocale);
   const t = (en: string, nl: string) => (editorialLocale === "nl" ? nl : en);
 
