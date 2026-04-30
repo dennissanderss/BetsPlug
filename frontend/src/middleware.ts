@@ -94,6 +94,10 @@ const STATIC_LOCALE_ROUTES: ReadonlySet<string> = new Set([
   "/how-it-works",
   "/pricing",
   "/track-record",
+  "/about-us",
+  "/b2b",
+  "/engine",
+  "/contact",
 ]);
 
 const STATIC_LOCALE_ROUTE_PREFIXES: ReadonlyArray<string> = [
