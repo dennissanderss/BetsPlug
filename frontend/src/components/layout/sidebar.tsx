@@ -262,7 +262,7 @@ export function Sidebar() {
 
       {/* Logo */}
       <div className="relative flex items-center px-4 py-3 border-b border-white/[0.06]">
-        <Link href="/dashboard" onClick={() => setMobileOpen(false)}>
+        <Link href="https://betsplug.com" onClick={() => setMobileOpen(false)}>
           <Image
             src="/logo.webp"
             alt="BetsPlug logo"
