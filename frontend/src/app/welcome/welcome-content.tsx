@@ -30,8 +30,6 @@ import {
   Command,
   ChevronRight,
 } from "lucide-react";
-import { SiteNav } from "@/components/ui/site-nav";
-import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { useAuth } from "@/lib/auth";
 import { getLocaleValue } from "@/lib/sanity-data";
@@ -111,7 +109,6 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-background text-[#ededed]">
-      <SiteNav />
 
       {/* Confetti burst */}
       {burst && (
@@ -458,7 +455,6 @@ export function WelcomeContent({ welcomePage }: WelcomeContentProps) {
         </section>
       </main>
 
-      <BetsPlugFooter />
     </div>
   );
 }

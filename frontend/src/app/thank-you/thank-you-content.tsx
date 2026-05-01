@@ -20,8 +20,6 @@ import {
   Trophy,
   Zap,
 } from "lucide-react";
-import { SiteNav } from "@/components/ui/site-nav";
-import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref } from "@/i18n/locale-provider";
 import { api } from "@/lib/api";
 import { HeroMediaBg, CtaMediaBg } from "@/components/ui/media-bg";
@@ -346,7 +344,6 @@ function ThankYouContent({
         <div className="absolute left-1/2 top-0 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-[#4ade80]/[0.06] blur-[140px]" />
       </div>
 
-      <SiteNav />
 
       {/* ── Confetti burst ── */}
       {burst && (
@@ -675,7 +672,6 @@ function ThankYouContent({
         </section>
       </main>
 
-      <BetsPlugFooter />
     </div>
   );
 }

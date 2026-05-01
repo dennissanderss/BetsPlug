@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { ChevronRight, FileText } from "lucide-react";
-import { SiteNav } from "@/components/ui/site-nav";
-import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { Pill } from "@/components/noct/pill";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 
@@ -29,7 +27,6 @@ export function LegalPage({
   const { t } = useTranslations();
   return (
     <div className="relative min-h-screen overflow-x-clip bg-background text-[#ededed]">
-      <SiteNav />
 
       {/* Hero */}
       <section className="relative pt-32 pb-12 md:pt-40 md:pb-16">
@@ -93,7 +90,6 @@ export function LegalPage({
         </div>
       </section>
 
-      <BetsPlugFooter />
     </div>
   );
 }

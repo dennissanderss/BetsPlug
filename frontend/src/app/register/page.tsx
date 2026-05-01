@@ -24,8 +24,6 @@ import {
   UserPlus,
   RefreshCw,
 } from "lucide-react";
-import { SiteNav } from "@/components/ui/site-nav";
-import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { useAuth } from "@/lib/auth";
 import { api, ApiError } from "@/lib/api";
@@ -118,7 +116,6 @@ function RegisterForm() {
         <div className="absolute -right-40 bottom-40 h-[540px] w-[540px] rounded-full bg-[#a855f7]/[0.07] blur-[160px]" />
       </div>
 
-      <SiteNav />
 
       <main className="relative z-10 pt-32 pb-24 sm:pt-40">
         <section className="mx-auto max-w-6xl px-6">
@@ -409,7 +406,6 @@ function RegisterForm() {
         </section>
       </main>
 
-      <BetsPlugFooter />
     </div>
   );
 }

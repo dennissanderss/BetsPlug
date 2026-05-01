@@ -22,8 +22,6 @@ import {
   CheckCircle2,
   KeyRound,
 } from "lucide-react";
-import { SiteNav } from "@/components/ui/site-nav";
-import { BetsPlugFooter } from "@/components/ui/betsplug-footer";
 import { useLocalizedHref, useTranslations } from "@/i18n/locale-provider";
 import { api, ApiError } from "@/lib/api";
 import { HexBadge } from "@/components/noct/hex-badge";
@@ -97,7 +95,6 @@ function ResetPasswordInner() {
         <div className="absolute -right-40 bottom-40 h-[500px] w-[500px] rounded-full bg-[#4ade80]/[0.06] blur-[160px]" />
       </div>
 
-      <SiteNav />
 
       <main className="relative z-10 flex min-h-[70vh] items-center justify-center px-6 pt-32 pb-24 sm:pt-40">
         <motion.div
@@ -259,7 +256,6 @@ function ResetPasswordInner() {
         </motion.div>
       </main>
 
-      <BetsPlugFooter />
     </div>
   );
 }
