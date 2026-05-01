@@ -2,6 +2,75 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Multi-developer setup (READ FIRST)
+
+The repo is shared between two people, both using Claude Code:
+
+- **Dennis** (`@dennissanderss`) — primarily owns `frontend/` (the Next.js
+  dashboard at `app.betsplug.com`) and `backend/` (FastAPI on Railway).
+- **Cas** — primarily owns `marketing/` (the Astro public site at
+  `betsplug.com`).
+
+Either person may edit any folder when needed; the split above is a default,
+not a hard wall.
+
+### Three folders, three deploys, one repo
+
+| Folder | Stack | Lives on | Auto-deploys via |
+|--------|-------|----------|------------------|
+| `marketing/` | Astro 4 + Tailwind v4 | `betsplug.com` | Vercel project `betsplug-marketing` |
+| `frontend/` | Next.js 14 + React 18 | `app.betsplug.com` | Vercel project `bets-plug` |
+| `backend/` | FastAPI + Postgres + Redis | `betsplug-production.up.railway.app` | Railway |
+
+A push to `main` only rebuilds the project whose files changed. Touching
+`marketing/foo.astro` does not trigger a Next.js or Railway build. So the
+folders stay independent at deploy time even when both developers push to
+the same branch.
+
+### Plain-language scope hints from the user
+
+When the user names a folder by short label, route it to the right code:
+
+- "in marketing" / "the public site" / "homepage" / "pricing" / "/about-us"
+  / "/learn" → work in `marketing/`
+- "in app" / "in dashboard" / "the authed side" / "/predictions" /
+  "/trackrecord" / "/admin" → work in `frontend/`
+- "in backend" / "the API" / "the engine" / "/api/..." → work in `backend/`
+
+If the user is ambiguous, ask which one — don't guess across the boundary
+since a `/pricing` page exists in both `marketing/` and (legacy) `frontend/`.
+
+### Workflow rules — keep this lightweight
+
+1. **Always pull before you start.** First action of every session:
+   `git pull origin main`. Skipping this is the #1 cause of merge conflicts
+   between the two developers.
+2. **Push direct to `main`.** No branches, no PRs — the team is small and
+   the folder split keeps interference low. Treat `main` as the working
+   branch.
+3. **Stay in your default folder unless the user explicitly asks to cross
+   over.** Cas working on the dashboard is fine if Cas asks; Claude
+   shouldn't volunteer `frontend/` changes when Cas asked about marketing
+   copy.
+4. **Commit prefixes** make `git log` skimmable: `feat(marketing): ...`,
+   `fix(app): ...`, `feat(backend): ...`, `docs: ...`, `chore: ...`.
+5. **NOCTURNE design tokens are mirrored** between `frontend/src/app/globals.css`
+   and `marketing/src/styles/global.css`. When colours change in one, mirror
+   the change in the other so the marketing site and dashboard stay
+   visually identical.
+
+### What can go wrong (rare, fixable)
+
+- **Push rejected — "remote has commits you don't have":** the other person
+  pushed while you were working. Run `git pull --rebase origin main`, then
+  push again.
+- **Build fails on Vercel:** site keeps the previous version live, so users
+  are unaffected. Push a fix-up commit. No rollback drama needed.
+- **Same file, same line edited by both:** git will flag it during the
+  rebase. Pick the right version, commit the resolution, push.
+
+---
+
 > **Session handoff:** at the start of any new session, first read
 > `docs/SESSION_HANDOFF.md` for the current state of Fase A/B/C,
 > recent commits, open follow-ups, canonical tier facts and
