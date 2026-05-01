@@ -157,7 +157,7 @@ export function TierPerformanceCard() {
     return null;
   }
 
-  const pricingHref = loc("/pricing");
+  const pricingHref = "https://betsplug.com/pricing";
   const loginHref = loc("/login");
 
   return (

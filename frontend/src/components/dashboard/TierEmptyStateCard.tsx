@@ -52,7 +52,7 @@ export function TierEmptyStateCard() {
       ? ""
       : t(`tierEmpty.${tier}.upgradeLabel` as "tierEmpty.gold.upgradeLabel");
 
-  const pricingHref = loc("/pricing");
+  const pricingHref = "https://betsplug.com/pricing";
 
   return (
     <div className="relative overflow-hidden rounded-2xl border border-emerald-400/20 bg-[#0a0c14]">

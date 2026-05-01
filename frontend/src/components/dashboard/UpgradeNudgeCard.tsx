@@ -125,7 +125,7 @@ export function UpgradeNudgeCard() {
   if (dismissed) return null;
 
   const step = STEPS[tier];
-  const pricingHref = loc("/pricing");
+  const pricingHref = "https://betsplug.com/pricing";
 
   const handleDismiss = () => {
     dismissUpsell();
