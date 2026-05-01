@@ -179,13 +179,13 @@ export function Sidebar() {
             setMobileOpen(false);
             openComingSoonFor(item);
           }}
-          className="nav-item group flex w-full items-center gap-3 text-sm font-medium text-[#6b7280] hover:text-[#a3a9b8]"
+          className="sidebar-item w-full !text-[hsl(var(--text-muted))] hover:!text-[hsl(var(--text-secondary))]"
           title="Coming Soon"
         >
-          <Icon className="h-4 w-4 shrink-0 text-[#6b7280] group-hover:text-[#a3a9b8] transition-colors" />
+          <Icon className="h-4 w-4 shrink-0" />
           <span className="flex-1 text-left">{getLabel(item)}</span>
-          <Lock className="h-3.5 w-3.5 text-[#6b7280] group-hover:text-[#a3a9b8]" />
-          <Pill tone="default" className="text-[9px]">SOON</Pill>
+          <Lock className="h-3.5 w-3.5" />
+          <Pill tone="default" className="!text-[9px]">SOON</Pill>
         </button>
       );
     }
@@ -207,11 +207,11 @@ export function Sidebar() {
             setMobileOpen(false);
             openLockFor(item);
           }}
-          className="nav-item group flex w-full items-center gap-3 text-sm font-medium text-[#6b7280] hover:text-[#a3a9b8]"
+          className="sidebar-item w-full !text-[hsl(var(--text-muted))] hover:!text-[hsl(var(--text-secondary))]"
         >
-          <Icon className="h-4 w-4 shrink-0 text-[#6b7280] group-hover:text-[#a3a9b8] transition-colors" />
+          <Icon className="h-4 w-4 shrink-0" />
           <span className="flex-1 text-left">{getLabel(item)}</span>
-          <Lock className="h-3.5 w-3.5 text-[#6b7280] group-hover:text-[#a3a9b8]" />
+          <Lock className="h-3.5 w-3.5" />
         </button>
       );
     }
@@ -222,30 +222,18 @@ export function Sidebar() {
         href={localizedHref}
         onClick={() => setMobileOpen(false)}
         className={cn(
-          "nav-item group flex items-center gap-3 text-sm font-medium",
-          isActive ? "nav-active" : "text-[#a3a9b8]"
+          "sidebar-item",
+          isActive && "sidebar-item-active"
         )}
       >
-        <Icon
-          className={cn(
-            "h-4 w-4 shrink-0 transition-colors",
-            isActive ? "text-[#4ade80]" : "text-[#a3a9b8] group-hover:text-[#ededed]"
-          )}
-        />
-        <span
-          className={cn(
-            "flex-1",
-            isActive ? "text-[#4ade80]" : "group-hover:text-[#ededed]"
-          )}
-        >
-          {getLabel(item)}
-        </span>
+        <Icon className="h-4 w-4 shrink-0" />
+        <span className="flex-1">{getLabel(item)}</span>
 
-        {item.badge === "START" && <Pill tone="active">START</Pill>}
-        {item.badge === "HOT" && <Pill tone="loss">HOT</Pill>}
+        {item.badge === "START" && <Pill tone="active" className="!text-[9px]">START</Pill>}
+        {item.badge === "HOT" && <Pill tone="loss" className="!text-[9px]">HOT</Pill>}
 
         {isActive && !item.badge && (
-          <ChevronRight className="h-3.5 w-3.5 text-[#4ade80]/60" />
+          <ChevronRight className="h-3.5 w-3.5 opacity-60" />
         )}
       </Link>
     );
@@ -276,10 +264,8 @@ export function Sidebar() {
       <nav className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-4 pt-3">
         {navSections.map((section, sIdx) => (
           <div key={section.labelKey}>
-            {sIdx > 0 && <div className="mx-2 my-3 border-t border-white/[0.06]" />}
-
-            <div className="px-2 pb-2 pt-1">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
+            <div className="sidebar-section-label" style={{ marginTop: sIdx === 0 ? 0 : undefined }}>
+              <span>
                 {getSectionLabel(section)}
               </span>
             </div>
@@ -290,9 +276,8 @@ export function Sidebar() {
 
         {visibleBottomNavItems.length > 0 && (
           <>
-            <div className="mx-2 my-3 border-t border-white/[0.06]" />
-            <div className="px-2 pb-2 pt-1">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6b7280]">
+            <div className="sidebar-section-label">
+              <span>
                 {(() => {
                   const v = t("sidebar.system" as any);
                   return v === "sidebar.system" ? "System" : v;
