@@ -306,12 +306,19 @@ def create_app() -> FastAPI:
     if settings.frontend_url and settings.frontend_url not in origins:
         origins.append(settings.frontend_url)
 
-    # Always allow known frontend origins
+    # Always allow known frontend origins. Includes the marketing/app
+    # split: marketing.betsplug.com is the test alias for the Astro
+    # site, app.betsplug.com is where the authenticated dashboard
+    # lives once we cut over from the apex.
     _known = [
         "https://bets-plug.vercel.app",
+        "https://betsplug-marketing.vercel.app",
         "https://betsplug.com",
         "https://www.betsplug.com",
+        "https://app.betsplug.com",
+        "https://marketing.betsplug.com",
         "http://localhost:3000",
+        "http://localhost:4321",
     ]
     for o in _known:
         if o not in origins:
