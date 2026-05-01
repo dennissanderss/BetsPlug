@@ -57,6 +57,8 @@
     --r-md: 10px;       /* buttons */
     --r-lg: 14px;       /* cards */
     --r-xl: 20px;       /* large panels */
+    --r-2xl: 24px;      /* hero / welcome banners (post-2026-05 redesign) */
+    --r-3xl: 32px;      /* full-width feature cards */
     --r-pill: 999px;
 
     /* ── SHADOWS ─────────────────────────────────────────────── */
@@ -1120,4 +1122,155 @@ section:nth-child(even) {
 [data-app-shell] section:nth-child(even) {
   background: transparent !important;
 }
+
+/* ──────────────────────────────────────────────────────────────
+   2026-05 DASHBOARD REDESIGN TOKENS
+   Three new component classes layered on top of the existing
+   NOCTURNE primitives — same visual language, larger radii,
+   sharper green halo for hero/feature surfaces.
+   ────────────────────────────────────────────────────────────── */
+
+/* Welcome banner — top-of-page hero card. Larger radius, brighter
+   green border gradient, soft halo. Single-line use only on the
+   first card of a page (dashboard, /pick-of-the-day, /welcome). */
+.welcome-card {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--accent-green) / 0.10) 0%,
+    hsl(230 22% 9% / 0.92) 50%,
+    hsl(var(--accent-green) / 0.06) 100%
+  );
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border-radius: var(--r-2xl);
+  box-shadow:
+    0 1px 0 hsl(0 0% 100% / 0.06) inset,
+    0 0 0 1px hsl(var(--accent-green) / 0.18) inset,
+    0 16px 48px rgba(0, 0, 0, 0.5),
+    0 0 80px hsl(var(--accent-green) / 0.10);
+}
+
+.welcome-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    hsl(var(--accent-green) / 0.65) 0%,
+    hsl(var(--accent-green) / 0.10) 50%,
+    hsl(var(--accent-green) / 0.40) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Strip card — full-width single-row card used for inline CTAs
+   like "Pick of the Day" preview link or trackrecord shortcut.
+   Less prominent than a welcome-card, more prominent than the
+   default card-neon. */
+.strip-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: hsl(230 22% 9% / 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid hsl(0 0% 100% / 0.06);
+  border-radius: var(--r-xl);
+  padding: 1rem 1.5rem;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+
+.strip-card:hover {
+  border-color: hsl(var(--accent-green) / 0.30);
+  transform: translateY(-1px);
+}
+
+.strip-card-green {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--accent-green) / 0.08) 0%,
+    hsl(230 22% 9% / 0.85) 50%
+  );
+  border-color: hsl(var(--accent-green) / 0.22);
+}
+
+/* KPI card — square-ish stat tile for dashboard / trackrecord
+   horizontal rows. Slightly tighter padding than card-neon and
+   uses the new --r-2xl. */
+.kpi-card {
+  position: relative;
+  background: hsl(var(--glass-2));
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid hsl(0 0% 100% / 0.06);
+  border-radius: var(--r-xl);
+  padding: 1.25rem;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+
+.kpi-card:hover {
+  border-color: hsl(var(--accent-green) / 0.22);
+  transform: translateY(-1px);
+}
+
+/* Sidebar nav — dedicated tokens for the redesign. The active
+   state is a green left-border + soft tinted background (like
+   modern SaaS dashboards). */
+.sidebar-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: hsl(var(--text-muted));
+  padding: 0 0.75rem;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+
+.sidebar-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--r-md);
+  font-size: 13px;
+  font-weight: 500;
+  color: hsl(var(--text-secondary));
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-item:hover {
+  background: hsl(0 0% 100% / 0.04);
+  color: hsl(var(--text-primary));
+}
+
+.sidebar-item-active {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--accent-green) / 0.12) 0%,
+    hsl(var(--accent-green) / 0.02) 100%
+  );
+  color: hsl(var(--accent-green-bright));
+}
+
+.sidebar-item-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  border-radius: 2px;
+  background: hsl(var(--accent-green-bright));
+}
+
 
