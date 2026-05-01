@@ -1,0 +1,84 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Footer from "../components/Footer.astro";
+import PageHeader from "../components/PageHeader.astro";
+import Prose from "../components/Prose.astro";
+---
+
+<Layout
+  title="About BetsPlug — sports intelligence with a public track record"
+  description="We build AI football predictions and publish every result. No black boxes, no edited highlight reel — just a model with its homework on display."
+>
+  <SiteNav />
+
+  <main>
+    <PageHeader
+      kicker="About BetsPlug"
+      title="Sports intelligence, with the <span class='gradient-text-green'>homework on display</span>."
+      subtitle="One AI engine. One daily Pick of the Day. Every prediction logged before kickoff and graded afterwards. Educational simulation only — 18+, no financial advice."
+    />
+
+    <Prose>
+      <h2>Why we exist</h2>
+      <p>
+        Most "tipster" platforms hide their results — they show you yesterday's
+        winners and quietly drop the losers from the slate. BetsPlug is built
+        the other way around. Every prediction the engine makes is timestamped
+        before kickoff, stored in a public database, and graded once the
+        match ends. The number you see on our pricing page is the number our
+        own server saw.
+      </p>
+
+      <h2>How it works</h2>
+      <p>
+        Our v8.1 engine combines XGBoost with a calibrated logistic model
+        across <strong>30+ football competitions worldwide</strong>. It
+        ingests Elo ratings, recent form, head-to-head history, league
+        standings, and betting-market odds. For every fixture it outputs a
+        win/draw/loss probability and a single confidence score.
+      </p>
+      <p>
+        Picks are then bucketed into four tiers (Free, Silver, Gold,
+        Platinum) based on the league quality and how confident the engine
+        is. Higher tier = stricter filter = fewer picks per day, but a
+        higher historical hit rate.
+      </p>
+
+      <h2>What we don't do</h2>
+      <ul>
+        <li>
+          We don't take bets, hold deposits, or process wagers. We are not a
+          bookmaker.
+        </li>
+        <li>
+          We don't give financial or betting advice. Our forecasts are
+          probabilistic estimates published for educational and research
+          purposes only.
+        </li>
+        <li>We don't promise that you'll make money. Past model performance
+          is not indicative of future results.</li>
+        <li>We don't hide the misses. Every graded prediction lives on the
+          public track record, including the ones the engine got wrong.</li>
+      </ul>
+
+      <h2>Who runs this</h2>
+      <p>
+        BetsPlug is built and operated by a small Dutch team that ships
+        every week. We're independently funded — no investor pressure to
+        chase a tipster narrative. Every commit is on GitHub; our model
+        artefacts live in the same repo as our pricing page.
+      </p>
+
+      <h2>Get in touch</h2>
+      <p>
+        Question, partnership, press? Drop us a note at <a
+          href="mailto:hello@betsplug.com">hello@betsplug.com</a> or via the{" "}
+        <a href="/contact">contact page</a>. We answer everything within
+        two working days.
+      </p>
+    </Prose>
+
+    <Footer />
+  </main>
+</Layout>

@@ -1,0 +1,97 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Footer from "../components/Footer.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+interface Step {
+  num: string;
+  title: string;
+  body: string;
+}
+
+const steps: Step[] = [
+  {
+    num: "01",
+    title: "We ingest the matches",
+    body:
+      "Every morning the platform pulls fresh fixtures from 30+ football competitions worldwide — Premier League, Champions League, La Liga, Serie A, all the way down to MLS and J1 League. Team form, Elo ratings, head-to-head history and bookmaker odds are stitched together as a single feature vector per fixture.",
+  },
+  {
+    num: "02",
+    title: "The engine forecasts probabilities",
+    body:
+      "Our v8.1 engine — an XGBoost classifier paired with a calibrated logistic model — scores each match on win / draw / loss probability and outputs a single confidence number. Confidence below 0.55 is dropped: the engine has nothing useful to say there.",
+  },
+  {
+    num: "03",
+    title: "Picks are bucketed into tiers",
+    body:
+      "Each surviving prediction lands in one of four tiers: Free (45%+ historical accuracy), Silver (60%+), Gold (70%+), Platinum (85%+). The bucket depends on the league's quality and how confident the engine is. You always see picks at or below your tier — never the inverse.",
+  },
+  {
+    num: "04",
+    title: "Predictions lock before kickoff",
+    body:
+      "The instant a pick is generated it's timestamped and stored. After kickoff that row is read-only. No retroactive edits, no quiet deletions of misses — the bar we set ourselves and the bar we report is exactly the same row.",
+  },
+  {
+    num: "05",
+    title: "Match settles, evaluation runs",
+    body:
+      "When a match finishes our scheduler grades the prediction against the real result. ✅ or ❌. The numbers on the pricing page, the dashboard, and the public track record all read from this same evaluation table.",
+  },
+  {
+    num: "06",
+    title: "You see it, you can verify it",
+    body:
+      "Free users get three picks a day on the homepage. Paid users get the full feed with pre-match odds, the Pick of the Day, the simulation tool and (Platinum) a private Telegram channel. The public track record is always free to scroll.",
+  },
+];
+---
+
+<Layout
+  title="How BetsPlug works — six steps from raw fixtures to a graded pick"
+  description="Six steps from a raw football fixture to a graded prediction on your dashboard. Pure pipeline transparency — no marketing fluff."
+>
+  <SiteNav />
+
+  <main>
+    <PageHeader
+      kicker="How it works"
+      title="From fixture list to graded pick — <span class='gradient-text-green'>six steps</span>."
+      subtitle="No tipster mystery. Every prediction follows the same six-step pipeline. Same engine for free users and Platinum subscribers — only the strictness of the filter changes."
+    />
+
+    <section class="relative mx-auto max-w-4xl px-4 pb-12 sm:px-6 lg:px-8">
+      <ol class="space-y-4">
+        {
+          steps.map((step) => (
+            <li class="card-neon flex gap-5 p-6">
+              <div class="shrink-0">
+                <span class="text-3xl font-extrabold tabular-nums text-[var(--color-accent-green-bright)]">
+                  {step.num}
+                </span>
+              </div>
+              <div class="min-w-0">
+                <h2 class="text-base font-bold text-white sm:text-lg">
+                  {step.title}
+                </h2>
+                <p class="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+                  {step.body}
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
+        <a href="/pricing" class="btn-primary">See the tiers</a>
+        <a href="/engine" class="btn-ghost">Engine internals →</a>
+      </div>
+    </section>
+
+    <Footer />
+  </main>
+</Layout>

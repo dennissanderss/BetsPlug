@@ -1,0 +1,163 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Footer from "../components/Footer.astro";
+import PageHeader from "../components/PageHeader.astro";
+import Prose from "../components/Prose.astro";
+
+interface Resource {
+  region: string;
+  org: string;
+  url: string;
+  hours: string;
+}
+
+const resources: Resource[] = [
+  {
+    region: "Netherlands",
+    org: "AGOG (Anonieme Gokkers Omgeving Gokkers)",
+    url: "https://www.agog.nl",
+    hours: "24/7",
+  },
+  {
+    region: "Netherlands",
+    org: "Loket Kansspel — government helpline",
+    url: "https://www.loketkansspel.nl",
+    hours: "Office hours",
+  },
+  {
+    region: "United Kingdom",
+    org: "GamCare",
+    url: "https://www.gamcare.org.uk",
+    hours: "24/7",
+  },
+  {
+    region: "Germany",
+    org: "Bundeszentrale für gesundheitliche Aufklärung",
+    url: "https://www.spielen-mit-verantwortung.de",
+    hours: "Helpline 8–24",
+  },
+  {
+    region: "International",
+    org: "BeGambleAware",
+    url: "https://www.begambleaware.org",
+    hours: "Online resources",
+  },
+];
+
+interface SignRow {
+  text: string;
+}
+
+const warningSigns: SignRow[] = [
+  { text: "You're staking more money than you can comfortably afford to lose." },
+  { text: "You're betting to chase losses or recover from a bad run." },
+  { text: "You're hiding the size or frequency of your stakes from people close to you." },
+  { text: "You feel anxious, irritable, or depressed when you're not betting." },
+  { text: "You're borrowing money or selling possessions to fund stakes." },
+  { text: "You've tried to cut down and couldn't." },
+];
+---
+
+<Layout
+  title="Responsible play — BetsPlug"
+  description="BetsPlug is for educational simulation. If betting is no longer fun for you, please reach out to a national support service."
+>
+  <SiteNav />
+
+  <main>
+    <PageHeader
+      kicker="Important"
+      title="Bet for fun, <span class='gradient-text-green'>not for hope</span>."
+      subtitle="BetsPlug publishes statistical forecasts for educational purposes. Real-money betting carries real risk. If it's stopped being fun, the resources below can help."
+    />
+
+    <section class="mx-auto max-w-3xl px-4 pb-8 sm:px-6 lg:px-8">
+      <div
+        class="card-neon p-6"
+        style="border-color: rgba(245,158,11,0.30); background: linear-gradient(180deg, rgba(245,158,11,0.06), transparent 60%);"
+      >
+        <h2 class="text-base font-bold text-amber-300">Our position</h2>
+        <p class="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+          BetsPlug is <strong class="text-white">not a bookmaker</strong>.
+          We publish statistical forecasts for educational and research
+          purposes only. Past model performance is not indicative of
+          future results. Always play within applicable laws and within
+          your means. You must be 18+ to use this site.
+        </p>
+      </div>
+    </section>
+
+    <Prose>
+      <h2>Warning signs</h2>
+      <ul>
+        {warningSigns.map((row) => <li>{row.text}</li>)}
+      </ul>
+
+      <p>
+        If two or more of these feel familiar, talk to one of the support
+        services below. Reaching out is free, confidential, and
+        non-judgemental.
+      </p>
+
+      <h2>Where to get help</h2>
+    </Prose>
+
+    <div class="mx-auto mb-10 max-w-3xl px-4 sm:px-6 lg:px-8">
+      <div class="card-neon overflow-hidden">
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="border-b border-white/[0.06] text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
+              <th class="px-4 py-3 font-semibold">Region</th>
+              <th class="px-4 py-3 font-semibold">Organisation</th>
+              <th class="px-4 py-3 font-semibold">Available</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              resources.map((r) => (
+                <tr class="border-b border-white/[0.04] last:border-b-0">
+                  <td class="px-4 py-3 text-[var(--color-text-muted)]">
+                    {r.region}
+                  </td>
+                  <td class="px-4 py-3 text-white">
+                    <a
+                      href={r.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-[var(--color-accent-green-bright)] underline decoration-[var(--color-accent-green-bright)]/40 underline-offset-2 hover:text-white"
+                    >
+                      {r.org}
+                    </a>
+                  </td>
+                  <td class="px-4 py-3 text-[var(--color-text-muted)]">
+                    {r.hours}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <Prose>
+      <h2>Practical safeguards</h2>
+      <ul>
+        <li>Set a monthly budget for stakes <em>before</em> the month starts and treat it as spent.</li>
+        <li>Never use credit cards or borrowed money to fund a stake.</li>
+        <li>Take a break of at least 24 hours after any losing streak.</li>
+        <li>Use bookmakers' built-in deposit limits and self-exclusion tools.</li>
+        <li>Talk about your betting with someone you trust. Secrecy is the warning sign.</li>
+      </ul>
+
+      <p>
+        If you'd rather not see BetsPlug content while you take a break,
+        email <a href="mailto:hello@betsplug.com">hello@betsplug.com</a>{" "}
+        and we'll close your account on request — no questions, same day.
+      </p>
+    </Prose>
+
+    <Footer />
+  </main>
+</Layout>

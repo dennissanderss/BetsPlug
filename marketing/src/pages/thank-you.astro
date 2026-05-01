@@ -1,0 +1,55 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Footer from "../components/Footer.astro";
+
+const APP_URL =
+  import.meta.env.PUBLIC_APP_URL ?? "https://app.betsplug.com";
+---
+
+<Layout
+  title="Thank you — BetsPlug"
+  description="Your subscription is active. Head into the dashboard to start exploring today's predictions."
+>
+  <SiteNav />
+
+  <main class="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8">
+    <div
+      aria-hidden
+      class="glow-blob"
+      style="top:80px;left:50%;transform:translateX(-50%);width:480px;height:480px;background:hsl(142 71% 45% / 0.20);"
+    >
+    </div>
+
+    <div class="relative">
+      <p
+        class="text-[11px] font-semibold uppercase tracking-widest text-[var(--color-accent-green-bright)]"
+      >
+        Subscription confirmed
+      </p>
+      <h1
+        class="mt-3 text-4xl font-extrabold tracking-tight text-white sm:text-5xl"
+      >
+        Welcome to BetsPlug.
+      </h1>
+      <p class="mt-4 text-base text-[var(--color-text-muted)] sm:text-lg">
+        Stripe just confirmed your payment. Your tier is active and the
+        full feed is unlocked. Head into the dashboard — today's picks
+        are waiting.
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <a href={`${APP_URL}/dashboard`} class="btn-primary">Open dashboard</a>
+        <a href="/" class="btn-ghost">Back to home</a>
+      </div>
+
+      <p class="mt-6 text-xs text-[var(--color-text-faint)]">
+        Need help? Email <a
+          class="underline hover:text-white"
+          href="mailto:hello@betsplug.com">hello@betsplug.com</a>.
+      </p>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
