@@ -1,0 +1,77 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SiteNav from "../../components/SiteNav.astro";
+import Footer from "../../components/Footer.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import { sanity, localised } from "../../lib/sanity";
+
+const allBetTypeHubsQuery = `
+  *[_type == "betTypeHub"] | order(name.en asc) {
+    _id, name, slug, shortCode, tagline
+  }
+`;
+
+interface BetTypeHub {
+  _id: string;
+  name: any;
+  slug: { current: string };
+  shortCode?: string;
+  tagline?: any;
+}
+
+let hubs: BetTypeHub[] = [];
+try {
+  hubs = await sanity.fetch<BetTypeHub[]>(allBetTypeHubsQuery);
+} catch {}
+---
+
+<Layout
+  title="Bet types — football markets explained"
+  description="1×2, BTTS, over/under, Asian handicaps and more — every market explained, with the model's edge per type."
+>
+  <SiteNav />
+
+  <main>
+    <PageHeader
+      kicker="Bet types"
+      title="Markets the engine <span class='gradient-text-green'>has an edge on</span>."
+      subtitle="Every football market we cover, with a plain-English explanation and the model's historical accuracy on that exact bet type."
+    />
+
+    <section class="relative mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      {hubs.length === 0 ? (
+        <div class="card-neon p-8 text-center text-sm text-[var(--color-text-muted)]">
+          Bet-type guides are loading. Try again in a moment.
+        </div>
+      ) : (
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {hubs.map((h) => (
+            <a
+              href={`/bet-types/${h.slug.current}`}
+              class="card-neon block p-5 transition-transform hover:-translate-y-0.5"
+            >
+              <div class="flex items-baseline justify-between gap-3">
+                <h2 class="text-base font-bold text-white">
+                  {localised(h.name)}
+                </h2>
+                {h.shortCode && (
+                  <span class="rounded-full border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 text-[10px] font-mono uppercase tracking-widest text-[var(--color-text-faint)]">
+                    {h.shortCode}
+                  </span>
+                )}
+              </div>
+              <p class="mt-2 text-sm text-[var(--color-text-muted)]">
+                {localised(h.tagline)}
+              </p>
+              <span class="mt-4 inline-flex text-xs text-[var(--color-accent-green-bright)]">
+                Read guide →
+              </span>
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
+
+    <Footer />
+  </main>
+</Layout>

@@ -1,0 +1,134 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SiteNav from "../../components/SiteNav.astro";
+import Footer from "../../components/Footer.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import Prose from "../../components/Prose.astro";
+import {
+  sanity,
+  localised,
+  renderPortableText,
+} from "../../lib/sanity";
+
+const allLeagueHubsQuery = `
+  *[_type == "leagueHub"] {
+    _id, slug
+  }
+`;
+
+const leagueHubBySlugQuery = `
+  *[_type == "leagueHub" && slug.current == $slug][0] {
+    _id, name, slug, sportSlug, countryCode, countryFlag,
+    country, tagline, intro, metaTitle, metaDescription, faqs
+  }
+`;
+
+interface LeagueHubFull {
+  _id: string;
+  name: any;
+  slug: { current: string };
+  countryCode?: string;
+  countryFlag?: string;
+  country?: any;
+  tagline?: any;
+  intro?: any;
+  metaTitle?: any;
+  metaDescription?: any;
+  faqs?: Array<{ _key: string; question?: any; answer?: any }>;
+}
+
+export async function getStaticPaths() {
+  let hubs: Array<{ slug: { current: string } }> = [];
+  try {
+    hubs = await sanity.fetch(allLeagueHubsQuery);
+  } catch {
+    // empty list — no pages will be built
+  }
+  return hubs.map((h) => ({ params: { slug: h.slug.current } }));
+}
+
+const { slug } = Astro.params;
+
+let hub: LeagueHubFull | null = null;
+try {
+  hub = await sanity.fetch<LeagueHubFull | null>(leagueHubBySlugQuery, {
+    slug,
+  });
+} catch {
+  hub = null;
+}
+
+if (!hub) {
+  return Astro.redirect("/match-predictions", 302);
+}
+
+const title = localised(hub.name);
+const tagline = localised(hub.tagline);
+const country = localised(hub.country);
+const metaTitle =
+  localised(hub.metaTitle) || `${title} predictions — BetsPlug`;
+const metaDescription = localised(hub.metaDescription) || tagline;
+
+function localisedPortableText(value: any, locale = "en"): unknown {
+  if (!value) return null;
+  if (Array.isArray(value)) return value;
+  return value[locale] ?? value.en ?? null;
+}
+---
+
+<Layout title={metaTitle} description={metaDescription}>
+  <SiteNav />
+
+  <main>
+    <PageHeader
+      kicker={country ? `${country} · Football` : "Football"}
+      title={`${hub.countryFlag ? hub.countryFlag + " " : ""}${title}`}
+      subtitle={tagline}
+    />
+
+    {hub.intro && (
+      <Prose>
+        <Fragment
+          set:html={renderPortableText(localisedPortableText(hub.intro))}
+        />
+      </Prose>
+    )}
+
+    <section class="mx-auto max-w-3xl px-4 pb-8 sm:px-6 lg:px-8">
+      <div class="card-neon p-6">
+        <h2 class="text-base font-bold text-white">
+          See {title} picks live
+        </h2>
+        <p class="mt-2 text-sm text-[var(--color-text-muted)]">
+          The full prediction feed for {title} is in the dashboard.
+          Free users get the headline pick of the day; Silver+ adds
+          pre-match odds and historical accuracy per row.
+        </p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <a href="/pricing" class="btn-primary">See the tiers</a>
+          <a href="/match-predictions" class="btn-ghost">All leagues →</a>
+        </div>
+      </div>
+    </section>
+
+    {hub.faqs && hub.faqs.length > 0 && (
+      <section class="mx-auto max-w-3xl px-4 pb-12 sm:px-6 lg:px-8">
+        <h2 class="mb-4 text-xl font-bold text-white">FAQ</h2>
+        <div class="space-y-3">
+          {hub.faqs.map((faq) => (
+            <details class="card-neon p-4">
+              <summary class="cursor-pointer text-sm font-semibold text-white">
+                {localised(faq.question)}
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+                {localised(faq.answer)}
+              </p>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <Footer />
+  </main>
+</Layout>

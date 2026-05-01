@@ -1,0 +1,85 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Footer from "../components/Footer.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+interface Offer {
+  title: string;
+  body: string;
+}
+
+const offers: Offer[] = [
+  {
+    title: "API access",
+    body:
+      "Pull every prediction the engine generates as JSON. Authenticated endpoints, predictable rate limits, no hidden delays. Same data the dashboard reads.",
+  },
+  {
+    title: "White-label widgets",
+    body:
+      "Embed the live free-picks strip or the public track record on your own site. CSS-themable, server-rendered, zero JavaScript footprint on your users.",
+  },
+  {
+    title: "Custom league integration",
+    body:
+      "We currently track 30+ competitions. Need one we don't cover? Send us the fixture source and we'll spin up an ingestion adapter.",
+  },
+  {
+    title: "Co-branded reporting",
+    body:
+      "Weekly / monthly accuracy reports for affiliate partners — branded PDF and CSV with the picks, results, and Wilson lower-bound numbers.",
+  },
+];
+---
+
+<Layout
+  title="Partnerships — BetsPlug for B2B"
+  description="API access, white-label widgets, custom league integrations and co-branded reporting for affiliates and media partners."
+>
+  <SiteNav />
+
+  <main>
+    <PageHeader
+      kicker="B2B"
+      title="Pick the model that <span class='gradient-text-green'>fits your product</span>."
+      subtitle="BetsPlug runs as a service for end-users, but the same engine, dataset and track record can plug into yours. Pricing is per-volume — no five-figure floor for testing."
+    />
+
+    <section class="relative mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      <div class="grid gap-4 md:grid-cols-2">
+        {
+          offers.map((o) => (
+            <article class="card-neon p-6">
+              <h2 class="text-base font-bold text-white">{o.title}</h2>
+              <p class="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+                {o.body}
+              </p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-3xl px-4 pb-12 sm:px-6 lg:px-8">
+      <div class="card-neon card-neon-green p-6">
+        <h2 class="text-base font-bold text-white">Talk to us</h2>
+        <p class="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+          Tell us what you'd like to integrate. We answer every B2B
+          email within two working days with a concrete plan and a
+          rough quote.
+        </p>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <a
+            href="mailto:press@betsplug.com?subject=Partnership%20enquiry"
+            class="btn-primary"
+            >Email partnerships</a
+          >
+          <a href="/engine" class="btn-ghost">See engine internals →</a>
+        </div>
+      </div>
+    </section>
+
+    <Footer />
+  </main>
+</Layout>

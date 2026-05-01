@@ -1,0 +1,80 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SiteNav from "../../components/SiteNav.astro";
+import Footer from "../../components/Footer.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import { sanity, localised } from "../../lib/sanity";
+
+const allLeagueHubsQuery = `
+  *[_type == "leagueHub"] | order(name.en asc) {
+    _id, name, slug, countryCode, countryFlag, country, tagline
+  }
+`;
+
+interface LeagueHub {
+  _id: string;
+  name: { en?: string; [k: string]: string | undefined };
+  slug: { current: string };
+  countryCode?: string;
+  countryFlag?: string;
+  country?: { en?: string; [k: string]: string | undefined };
+  tagline?: { en?: string; [k: string]: string | undefined };
+}
+
+let hubs: LeagueHub[] = [];
+try {
+  hubs = await sanity.fetch<LeagueHub[]>(allLeagueHubsQuery);
+} catch {
+  // Sanity unreachable — empty state.
+}
+---
+
+<Layout
+  title="Football match predictions — every league we cover"
+  description="AI predictions across 30+ football competitions worldwide. Pick a league for upcoming fixtures, the model's call, and pre-match odds context."
+>
+  <SiteNav />
+
+  <main>
+    <PageHeader
+      kicker="Match predictions"
+      title="Pick a <span class='gradient-text-green'>competition</span>."
+      subtitle="Same engine across every league. Free picks on every page, paid tiers unlock pre-match odds, the simulation tool, and the daily Pick of the Day."
+    />
+
+    <section class="relative mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      {hubs.length === 0 ? (
+        <div class="card-neon p-8 text-center text-sm text-[var(--color-text-muted)]">
+          League hubs are loading. Try again in a moment.
+        </div>
+      ) : (
+        <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {hubs.map((h) => (
+            <a
+              href={`/match-predictions/${h.slug.current}`}
+              class="card-neon flex items-center gap-3 p-4 transition-transform hover:-translate-y-0.5"
+            >
+              {h.countryFlag && (
+                <span class="text-2xl shrink-0" aria-hidden>
+                  {h.countryFlag}
+                </span>
+              )}
+              <div class="min-w-0">
+                <p class="text-sm font-bold text-white truncate">
+                  {localised(h.name)}
+                </p>
+                {h.country && (
+                  <p class="text-[11px] text-[var(--color-text-faint)]">
+                    {localised(h.country)}
+                  </p>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </section>
+
+    <Footer />
+  </main>
+</Layout>
