@@ -1,0 +1,231 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Footer from "../components/Footer.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+const API_BASE =
+  import.meta.env.PUBLIC_API_BASE ?? "https://api.betsplug.com";
+const APP_URL =
+  import.meta.env.PUBLIC_APP_URL ?? "https://app.betsplug.com";
+
+interface PricingTier {
+  pick_tier: "free" | "silver" | "gold" | "platinum";
+  pick_tier_label: string;
+  accuracy_pct: number;
+  wilson_ci_lower_pct: number;
+  sample_size: number;
+}
+
+interface LiveMeasurement {
+  start_date: string;
+  total: number;
+  correct: number;
+  accuracy: number;
+  per_tier: Record<
+    "free" | "silver" | "gold" | "platinum",
+    { total: number; correct: number; accuracy: number }
+  >;
+}
+
+let liveTiers: PricingTier[] = [];
+let liveMeasurement: LiveMeasurement | null = null;
+
+try {
+  const [pricingRes, liveRes] = await Promise.all([
+    fetch(`${API_BASE}/api/pricing/comparison`, {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(4000),
+    }),
+    fetch(`${API_BASE}/api/trackrecord/live-measurement`, {
+      headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(4000),
+    }),
+  ]);
+  if (pricingRes.ok) liveTiers = await pricingRes.json();
+  if (liveRes.ok) liveMeasurement = await liveRes.json();
+} catch {
+  // Marketing surface — fail silent, render the page with empty
+  // numbers rather than breaking SEO.
+}
+
+const tierAccent: Record<PricingTier["pick_tier"], string> = {
+  platinum: "text-[#d9f0ff]",
+  gold: "text-[#f5d67a]",
+  silver: "text-[#d7d9dc]",
+  free: "text-[#e8a864]",
+};
+
+const tierOrder: PricingTier["pick_tier"][] = [
+  "platinum",
+  "gold",
+  "silver",
+  "free",
+];
+---
+
+<Layout
+  title="Public track record — every BetsPlug prediction, graded"
+  description="Two surfaces, both public: the model-validation dataset (28k+ graded historical fixtures) and the live measurement (every prediction logged before kickoff since v8.1 deploy)."
+>
+  <SiteNav />
+
+  <main>
+    <PageHeader
+      kicker="Track record"
+      title="Every prediction, <span class='gradient-text-green'>graded in public</span>."
+      subtitle="No edited highlight reel. Two views: the historical model-validation dataset (28k+ graded fixtures) and the live measurement that started the day v8.1 went live."
+    />
+
+    {/* Model validation — historical accuracy per tier ─────── */}
+    <section
+      class="relative mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8"
+    >
+      <div class="mb-4 flex items-baseline justify-between gap-4">
+        <h2 class="text-xl font-bold text-white sm:text-2xl">
+          Model validation · per tier
+        </h2>
+        <p class="text-[11px] uppercase tracking-widest text-[var(--color-text-faint)]">
+          v8.1 evaluated set
+        </p>
+      </div>
+
+      {liveTiers.length === 0 ? (
+        <div class="card-neon p-6 text-center text-sm text-[var(--color-text-muted)]">
+          Numbers are warming up. Check back in a moment.
+        </div>
+      ) : (
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {tierOrder
+            .map((slug) => liveTiers.find((t) => t.pick_tier === slug))
+            .filter((t): t is PricingTier => Boolean(t))
+            .map((t) => (
+              <div class="card-neon p-5">
+                <p class="text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
+                  {t.pick_tier_label}
+                </p>
+                <p
+                  class={`mt-2 text-3xl font-extrabold tabular-nums ${tierAccent[t.pick_tier]}`}
+                >
+                  {t.accuracy_pct.toFixed(1)}%
+                </p>
+                <p class="mt-1 text-[11px] text-[var(--color-text-muted)]">
+                  {t.sample_size.toLocaleString()} graded picks
+                </p>
+                <p class="mt-2 text-[10px] text-[var(--color-text-faint)]">
+                  Wilson lower bound: {t.wilson_ci_lower_pct.toFixed(1)}%
+                </p>
+              </div>
+            ))}
+        </div>
+      )}
+    </section>
+
+    {/* Live measurement — strict pre-match, since v8.1 deploy ─ */}
+    <section
+      class="relative mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8"
+    >
+      <div class="mb-4 flex items-baseline justify-between gap-4">
+        <h2 class="text-xl font-bold text-white sm:text-2xl">
+          Live measurement
+        </h2>
+        {liveMeasurement && (
+          <p class="text-[11px] uppercase tracking-widest text-[var(--color-text-faint)]">
+            Since {liveMeasurement.start_date}
+          </p>
+        )}
+      </div>
+
+      {!liveMeasurement ? (
+        <div class="card-neon p-6 text-center text-sm text-[var(--color-text-muted)]">
+          Measurement data is loading.
+        </div>
+      ) : liveMeasurement.total === 0 ? (
+        <div class="card-neon p-6 text-center text-sm text-[var(--color-text-muted)]">
+          0 / 0 graded so far — the live measurement starts at zero
+          on deploy day and grows every match.
+        </div>
+      ) : (
+        <div class="card-neon p-6">
+          <div
+            class="grid gap-6 border-b border-white/[0.05] pb-6 sm:grid-cols-3"
+          >
+            <div>
+              <p class="text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
+                Overall accuracy
+              </p>
+              <p class="mt-2 text-3xl font-extrabold tabular-nums text-[var(--color-accent-green-bright)]">
+                {(liveMeasurement.accuracy * 100).toFixed(1)}%
+              </p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
+                Picks graded
+              </p>
+              <p class="mt-2 text-3xl font-extrabold tabular-nums text-white">
+                {liveMeasurement.total.toLocaleString()}
+              </p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]">
+                Correct
+              </p>
+              <p class="mt-2 text-3xl font-extrabold tabular-nums text-white">
+                {liveMeasurement.correct.toLocaleString()}
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6 grid gap-3 sm:grid-cols-4">
+            {tierOrder.map((slug) => {
+              const t = liveMeasurement!.per_tier[slug];
+              if (!t) return null;
+              return (
+                <div class="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
+                  <p class={`text-[10px] uppercase tracking-widest ${tierAccent[slug]}`}>
+                    {slug}
+                  </p>
+                  <p class="mt-1 text-lg font-bold tabular-nums text-white">
+                    {(t.accuracy * 100).toFixed(1)}%
+                  </p>
+                  <p class="text-[10px] text-[var(--color-text-faint)]">
+                    {t.correct} / {t.total}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </section>
+
+    {/* CTA ──────────────────────────────────────────────────── */}
+    <section class="mx-auto max-w-3xl px-4 pb-12 sm:px-6 lg:px-8">
+      <div class="card-neon card-neon-green p-6">
+        <h2 class="text-base font-bold text-white">
+          Audit it yourself
+        </h2>
+        <p class="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+          The full per-pick history (with date, league, prediction,
+          confidence, score and outcome) is in the dashboard. Free to
+          scroll, free to export as CSV.
+        </p>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <a href={`${APP_URL}/trackrecord`} class="btn-primary"
+            >Open public history</a
+          >
+          <a href="/engine" class="btn-ghost">How the engine works →</a>
+        </div>
+      </div>
+    </section>
+
+    <p
+      class="mx-auto max-w-3xl px-4 pb-12 text-center text-xs text-[var(--color-text-faint)] sm:px-6 lg:px-8"
+    >
+      Educational simulation only. 18+. Past model performance is not
+      indicative of future results. No financial or betting advice.
+    </p>
+
+    <Footer />
+  </main>
+</Layout>
