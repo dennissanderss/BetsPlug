@@ -96,7 +96,7 @@ export function UnlockBanner() {
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
             <Link
-              href={loc("/pricing")}
+              href="https://betsplug.com/pricing"
               className="btn-glass inline-flex items-center justify-center gap-2"
             >
               {t("matchPred.bannerCtaSecondary")}

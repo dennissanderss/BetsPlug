@@ -172,7 +172,7 @@ export function LockedLivePlaceholder({
                   {isBotdPaywallForSignedIn ? (
                     <>
                       <Link
-                        href={loc("/pricing")}
+                        href="https://betsplug.com/pricing"
                         className="btn-primary inline-flex items-center gap-2"
                       >
                         {t("locked.upgradeGold")}

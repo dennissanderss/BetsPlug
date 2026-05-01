@@ -82,7 +82,7 @@ export function PickReasoningBlock({
             </p>
           </div>
           <Link
-            href={loc("/pricing")}
+            href="https://betsplug.com/pricing"
             className="shrink-0 inline-flex items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-[11px] font-bold text-amber-200 hover:bg-amber-500/20 transition-colors"
           >
             <Sparkles className="h-3 w-3" />

@@ -373,14 +373,16 @@ function RegisterForm() {
                     <p className="text-center text-[11px] leading-relaxed text-[#8a93a6]">
                       {t("register.termsPrefix")}{" "}
                       <Link
-                        href={loc("/terms")}
+                        href="https://betsplug.com/terms"
+                        target="_blank"
                         className="font-medium text-[#4ade80] hover:text-[#86efac]"
                       >
                         {t("register.termsLink")}
                       </Link>{" "}
                       {t("register.termsAnd")}{" "}
                       <Link
-                        href={loc("/privacy")}
+                        href="https://betsplug.com/privacy"
+                        target="_blank"
                         className="font-medium text-[#4ade80] hover:text-[#86efac]"
                       >
                         {t("register.privacyLink")}

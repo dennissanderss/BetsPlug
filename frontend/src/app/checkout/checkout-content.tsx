@@ -1267,7 +1267,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                         <span className="text-xs leading-relaxed text-[#8a93a6]">
                           {t("checkout.agreeTerms")}{" "}
                           <Link
-                            href={loc("/terms")}
+                            href="https://betsplug.com/terms"
                             target="_blank"
                             className="font-semibold text-[#4ade80] hover:text-[#4ade80]"
                           >
@@ -1275,7 +1275,7 @@ export function CheckoutContent({ checkoutPage }: CheckoutContentProps = {}) {
                           </Link>{" "}
                           {t("checkout.and")}{" "}
                           <Link
-                            href={loc("/privacy")}
+                            href="https://betsplug.com/privacy"
                             target="_blank"
                             className="font-semibold text-[#4ade80] hover:text-[#4ade80]"
                           >
