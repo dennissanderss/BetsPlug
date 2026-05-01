@@ -1,0 +1,98 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Footer from "../components/Footer.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+interface ContactRow {
+  label: string;
+  email: string;
+  description: string;
+}
+
+const contacts: ContactRow[] = [
+  {
+    label: "General questions",
+    email: "hello@betsplug.com",
+    description: "Anything about the product, the engine, or your account.",
+  },
+  {
+    label: "Privacy + data rights",
+    email: "privacy@betsplug.com",
+    description: "GDPR access requests, data deletion, complaints.",
+  },
+  {
+    label: "Press + partnerships",
+    email: "press@betsplug.com",
+    description: "Interviews, B2B integrations, white-label conversations.",
+  },
+];
+---
+
+<Layout
+  title="Contact — BetsPlug"
+  description="Get in touch with the BetsPlug team — product questions, privacy requests, press and partnerships."
+>
+  <SiteNav />
+
+  <main>
+    <PageHeader
+      kicker="Contact"
+      title="Talk to the <span class='gradient-text-green'>actual team</span>."
+      subtitle="No chat-bots, no support queue overseas. Email lands directly with one of us. We answer everything within two working days."
+    />
+
+    <section
+      class="relative mx-auto max-w-3xl px-4 pb-12 sm:px-6 lg:px-8"
+    >
+      <div class="grid gap-4 sm:grid-cols-1">
+        {
+          contacts.map((c) => (
+            <a
+              href={`mailto:${c.email}`}
+              class="card-neon flex items-start justify-between gap-4 p-5 transition-transform hover:-translate-y-0.5"
+            >
+              <div class="min-w-0">
+                <p class="text-[11px] uppercase tracking-widest text-[var(--color-text-faint)]">
+                  {c.label}
+                </p>
+                <p class="mt-1 font-mono text-base font-semibold text-white">
+                  {c.email}
+                </p>
+                <p class="mt-2 text-sm text-[var(--color-text-muted)]">
+                  {c.description}
+                </p>
+              </div>
+              <span class="self-center text-2xl text-[var(--color-text-faint)]">
+                →
+              </span>
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="card-neon mt-6 p-5">
+        <p class="text-[11px] uppercase tracking-widest text-[var(--color-text-faint)]">
+          Response time
+        </p>
+        <p class="mt-2 text-sm text-[var(--color-text-muted)]">
+          Two working days for everything. If it's urgent (lost
+          login, billing issue, accidental subscription) email{" "}
+          <a
+            href="mailto:hello@betsplug.com"
+            class="text-[var(--color-accent-green-bright)] underline decoration-[var(--color-accent-green-bright)]/40 underline-offset-2"
+            >hello@betsplug.com</a
+          >
+          and put <strong class="text-white">URGENT</strong> in the subject —
+          we triage those first.
+        </p>
+      </div>
+
+      <p class="mt-8 text-xs text-[var(--color-text-faint)]">
+        Postal address (NL): available on request.
+      </p>
+    </section>
+
+    <Footer />
+  </main>
+</Layout>

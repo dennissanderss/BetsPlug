@@ -1,0 +1,184 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import Footer from "../components/Footer.astro";
+import PageHeader from "../components/PageHeader.astro";
+
+const API_BASE =
+  import.meta.env.PUBLIC_API_BASE ?? "https://api.betsplug.com";
+
+interface PricingTier {
+  pick_tier: "free" | "silver" | "gold" | "platinum";
+  pick_tier_label: string;
+  accuracy_pct: number;
+  wilson_ci_lower_pct: number;
+  sample_size: number;
+  confidence_threshold: number;
+  leagues_count: number;
+}
+
+let liveTiers: PricingTier[] = [];
+try {
+  const res = await fetch(`${API_BASE}/api/pricing/comparison`, {
+    headers: { Accept: "application/json" },
+    signal: AbortSignal.timeout(4000),
+  });
+  if (res.ok) {
+    liveTiers = (await res.json()) as PricingTier[];
+  }
+} catch {
+  // API unreachable — fall back to static text below.
+}
+
+const tierOrder: PricingTier["pick_tier"][] = [
+  "platinum",
+  "gold",
+  "silver",
+  "free",
+];
+const sortedTiers = tierOrder
+  .map((slug) => liveTiers.find((t) => t.pick_tier === slug))
+  .filter((t): t is PricingTier => t !== undefined);
+
+const tierAccent: Record<PricingTier["pick_tier"], string> = {
+  platinum: "text-[#d9f0ff]",
+  gold: "text-[#f5d67a]",
+  silver: "text-[#d7d9dc]",
+  free: "text-[#e8a864]",
+};
+---
+
+<Layout
+  title="Engine — how the BetsPlug forecaster actually works"
+  description="The v8.1 BetsPlug engine — XGBoost + calibrated logistic across 30+ leagues. Live tier accuracy from the same evaluation table as the dashboard."
+>
+  <SiteNav />
+
+  <main>
+    <PageHeader
+      kicker="Engine"
+      title="The model, in <span class='gradient-text-green'>plain English</span>."
+      subtitle="No black-box mystery. The same engine drives Free picks and Platinum calls — only the strictness of the tier filter changes. Numbers below are pulled live from the public evaluation table."
+    />
+
+    {/* Live tier-accuracy strip ─────────────────────────────── */}
+    <section class="relative mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+      {sortedTiers.length === 0 ? (
+        <div class="card-neon p-6 text-center text-sm text-[var(--color-text-muted)]">
+          Live numbers are warming up. Refresh in a moment.
+        </div>
+      ) : (
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {sortedTiers.map((t) => (
+            <div class="card-neon p-5">
+              <p
+                class="text-[10px] uppercase tracking-widest text-[var(--color-text-faint)]"
+              >
+                {t.pick_tier_label}
+              </p>
+              <p
+                class={`mt-2 text-3xl font-extrabold tabular-nums ${tierAccent[t.pick_tier]}`}
+              >
+                {t.accuracy_pct.toFixed(1)}%
+              </p>
+              <p class="mt-1 text-[11px] text-[var(--color-text-muted)]">
+                {t.sample_size.toLocaleString()} graded picks ·
+                conf ≥ {t.confidence_threshold.toFixed(2)}
+              </p>
+              <p class="mt-2 text-[10px] text-[var(--color-text-faint)]">
+                Wilson lower bound: {t.wilson_ci_lower_pct.toFixed(1)}%
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+
+    {/* The model ────────────────────────────────────────────── */}
+    <section class="mx-auto max-w-4xl px-4 pb-12 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-white sm:text-3xl">
+        What's under the hood
+      </h2>
+
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        <article class="card-neon p-5">
+          <h3 class="text-sm font-semibold text-[var(--color-accent-green-bright)]">
+            v8.1 ensemble
+          </h3>
+          <p class="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            An XGBoost classifier paired with a calibrated logistic
+            model. The two outputs are blended so the published
+            probability matches the empirical hit rate — no overconfident
+            70% calls that hit at 55%.
+          </p>
+        </article>
+
+        <article class="card-neon p-5">
+          <h3 class="text-sm font-semibold text-[var(--color-accent-green-bright)]">
+            Point-in-time features
+          </h3>
+          <p class="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            Elo ratings, last-N form, head-to-head history, league
+            standings, and bookmaker odds. Every feature is materialised
+            at kickoff time — no post-hoc data leaks into the prediction.
+          </p>
+        </article>
+
+        <article class="card-neon p-5">
+          <h3 class="text-sm font-semibold text-[var(--color-accent-green-bright)]">
+            30+ competitions
+          </h3>
+          <p class="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            Premier League, Champions League, La Liga, Serie A, all the
+            way down to MLS, J1 League and Saudi Pro League. Each league
+            shares the same engine; the tier filter decides which
+            confidence bands surface to which subscriber tier.
+          </p>
+        </article>
+
+        <article class="card-neon p-5">
+          <h3 class="text-sm font-semibold text-[var(--color-accent-green-bright)]">
+            Pre-match lock + grading
+          </h3>
+          <p class="mt-2 text-sm leading-relaxed text-[var(--color-text-muted)]">
+            Predictions are timestamped and stored before kickoff. After
+            the match, an automated scheduler grades them against the
+            real result and writes to the public evaluation table — the
+            same table this page reads from.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    {/* Walk-forward validation ─────────────────────────────── */}
+    <section class="mx-auto max-w-4xl px-4 pb-12 sm:px-6 lg:px-8">
+      <div class="card-neon p-6">
+        <h2 class="text-xl font-bold text-white">
+          Walk-forward validation
+        </h2>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--color-text-muted)]">
+          The engine was validated using strict walk-forward — for every
+          test fixture, only data observable strictly before kickoff is
+          used as input. No model knows the future. Out-of-sample
+          accuracy on 28,838 historical fixtures matches the live
+          numbers above within tolerance, which is the test that
+          matters: a model whose backtest beats reality is a model
+          that's leaking data.
+        </p>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+          <a href="/pricing" class="btn-primary">See the tiers</a>
+          <a href="/how-it-works" class="btn-ghost">Six-step pipeline →</a>
+        </div>
+      </div>
+    </section>
+
+    <p
+      class="mx-auto max-w-3xl px-4 pb-12 text-center text-xs text-[var(--color-text-faint)] sm:px-6 lg:px-8"
+    >
+      Educational simulation only. 18+. Past model performance is not
+      indicative of future results. No financial or betting advice.
+    </p>
+
+    <Footer />
+  </main>
+</Layout>
