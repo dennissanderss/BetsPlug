@@ -1,0 +1,45 @@
+---
+/**
+ * BetsPlug Container — responsive max-width wrapper with consistent
+ * horizontal padding. Centers content. Sizes match container tokens
+ * in docs/specs/04-design-system.md → "CONTAINER WIDTHS".
+ *
+ * @prop {"sm"|"md"|"lg"|"xl"|"2xl"=} size    Default "lg" (1024px).
+ * @prop {"div"|"section"|"article"|"main"|"nav"|"header"|"footer"=} as  Tag name. Default "div".
+ * @prop {string=}                    class   Extra utility classes.
+ *
+ * Slot: default — wrapped content.
+ */
+type Size = "sm" | "md" | "lg" | "xl" | "2xl";
+type Tag  = "div" | "section" | "article" | "main" | "nav" | "header" | "footer";
+
+interface Props {
+  size?: Size;
+  as?: Tag;
+  class?: string;
+}
+
+const {
+  size = "lg",
+  as: Tag = "div",
+  class: extraClass = "",
+} = Astro.props as Props;
+
+const sizeClasses: Record<Size, string> = {
+  sm:    "max-w-[640px]",
+  md:    "max-w-[768px]",
+  lg:    "max-w-[1024px]",
+  xl:    "max-w-[1280px]",
+  "2xl": "max-w-[1536px]",
+};
+
+const cls = [
+  "mx-auto w-full px-4 sm:px-6 lg:px-8",
+  sizeClasses[size],
+  extraClass,
+].join(" ");
+---
+
+<Tag class={cls}>
+  <slot />
+</Tag>

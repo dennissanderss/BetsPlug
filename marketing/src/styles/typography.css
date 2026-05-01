@@ -1,0 +1,139 @@
+/* ──────────────────────────────────────────────────────────────
+   Typography
+   Variable Inter (sans) + JetBrains Mono (data display).
+   Weights: 400 / 500 / 600 / 700.
+   See docs/specs/04-design-system.md → "TYPOGRAPHY" + "TYPE SCALE".
+
+   Inter is preloaded in BaseLayout (eager). JetBrains Mono uses
+   font-display: optional so it never blocks first paint — it's
+   only used for stat blocks.
+   ────────────────────────────────────────────────────────────── */
+
+@import "@fontsource-variable/inter/index.css";
+@import "@fontsource-variable/jetbrains-mono/index.css";
+
+html {
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Heading scale ──────────────────────────────────────────────
+   Implemented as a class system so any element can adopt the size
+   without forcing a tag. Tag-level defaults below set H1/H2 etc.
+   ────────────────────────────────────────────────────────────── */
+
+.text-h1,
+h1 {
+  font-size: 36px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+@media (min-width: 768px) {
+  .text-h1, h1 { font-size: 48px; line-height: 1.05; }
+}
+@media (min-width: 1024px) {
+  .text-h1, h1 { font-size: 64px; line-height: 1.0; }
+}
+
+.text-h2,
+h2 {
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+@media (min-width: 768px) {
+  .text-h2, h2 { font-size: 36px; }
+}
+@media (min-width: 1024px) {
+  .text-h2, h2 { font-size: 44px; }
+}
+
+.text-h3,
+h3 {
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+@media (min-width: 768px) {
+  .text-h3, h3 { font-size: 26px; }
+}
+@media (min-width: 1024px) {
+  .text-h3, h3 { font-size: 28px; }
+}
+
+.text-h4,
+h4 {
+  font-size: 18px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+/* ── Body scale ─────────────────────────────────────────────── */
+
+.text-body-lg {
+  font-size: 18px;
+  line-height: 1.6;
+}
+@media (min-width: 1024px) {
+  .text-body-lg { font-size: 20px; }
+}
+
+.text-body {
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.text-body-sm {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.text-micro {
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Data display (mono) ────────────────────────────────────── */
+
+.text-data-lg {
+  font-family: var(--font-mono);
+  font-size: 40px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.text-data {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.text-data-inline {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Default body baseline ───────────────────────────────────── */
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--color-charcoal-900);
+}
+
+/* On dark surfaces the wrapping component sets `text-white-soft` etc.
+   No global dark/light mode toggle: each section opts in via class. */

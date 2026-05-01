@@ -1,0 +1,123 @@
+/* ──────────────────────────────────────────────────────────────
+   BetsPlug Marketing Site — Design Tokens
+   See docs/specs/04-design-system.md.
+
+   Tailwind v4 reads color/font/radius/etc. from `@theme` and emits
+   the matching utilities (e.g. `bg-pitch-green-500`, `font-mono`,
+   `rounded-xl`). Anything that has to be a raw CSS custom-property
+   (gradients, shadows that need composition, motion timings) lives
+   in :root underneath.
+   ────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* ── Colors ────────────────────────────────────────────────── */
+
+  /* Pitch green — primary CTA, success, positive */
+  --color-pitch-green-100: #e0f7eb;
+  --color-pitch-green-400: #1fe07f;
+  --color-pitch-green-500: #00d26a;
+  --color-pitch-green-600: #00b85a;
+  --color-pitch-green-900: #003d1f;
+
+  /* Deep navy — dark surfaces */
+  --color-deep-navy-600: #252b3d;
+  --color-deep-navy-700: #1a1f2e;
+  --color-deep-navy-800: #131829;
+  --color-deep-navy-900: #0a0e1f;
+  --color-deep-navy-950: #050811;
+
+  /* Stadium white — light surfaces */
+  --color-stadium-white-50:  #fafaf9;
+  --color-stadium-white-100: #f4f4f2;
+  --color-stadium-white-200: #e8e8e5;
+
+  /* Charcoal — text on light */
+  --color-charcoal-300: #9ba3b5;
+  --color-charcoal-500: #5a6478;
+  --color-charcoal-700: #2a3140;
+  --color-charcoal-900: #0f1419;
+
+  /* Inverse — text on dark */
+  --color-white-pure:  #ffffff;
+  --color-white-soft:  #e8eaef;
+  --color-white-muted: #9ba3b5;
+  --color-white-faded: #5a6478;
+
+  /* Plasma blue — secondary accent */
+  --color-plasma-blue-300: #93c5fd;
+  --color-plasma-blue-500: #3b82f6;
+
+  /* Semantic */
+  --color-success: #00d26a;
+  --color-warning: #f59e0b;
+  --color-danger:  #dc2626;
+  --color-info:    #3b82f6;
+
+  /* ── Typography ─────────────────────────────────────────────── */
+
+  --font-sans: "Inter Variable", "Inter", system-ui, -apple-system,
+               "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono",
+               ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* ── Border radius ──────────────────────────────────────────── */
+
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  24px;
+  --radius-full: 9999px;
+
+  /* ── Container widths ───────────────────────────────────────── */
+
+  --container-sm:  640px;
+  --container-md:  768px;
+  --container-lg:  1024px;
+  --container-xl:  1280px;
+  --container-2xl: 1536px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Non-utility tokens — gradients, shadows that need composition,
+   motion timings used by animations.css.
+   ────────────────────────────────────────────────────────────── */
+:root {
+  /* Gradients */
+  --gradient-pitch:        linear-gradient(135deg, #00d26a 0%, #00b85a 100%);
+  --gradient-hero-dark:    radial-gradient(ellipse at top, #1a1f2e 0%, #050811 70%);
+  --gradient-conversion:   linear-gradient(180deg, #131829 0%, #050811 100%);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(15, 20, 25, 0.05);
+  --shadow-md: 0 4px 6px rgba(15, 20, 25, 0.10),
+               0 2px 4px rgba(15, 20, 25, 0.06);
+  --shadow-lg: 0 10px 15px rgba(15, 20, 25, 0.10),
+               0 4px 6px rgba(15, 20, 25, 0.05);
+  --shadow-xl: 0 20px 25px rgba(15, 20, 25, 0.10);
+  --shadow-glow-pitch: 0 0 0 1px rgba(0, 210, 106, 0.10),
+                       0 4px 16px rgba(0, 210, 106, 0.40);
+
+  /* Focus ring — WCAG 2.1 AA, 2px pitch-green at 50% opacity */
+  --focus-ring: 0 0 0 2px rgba(0, 210, 106, 0.50);
+  --focus-ring-offset: 2px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   LEGACY NOCTURNE tokens (DEPRECATED)
+   Kept temporarily so existing pages that haven't been migrated to
+   the BetsPlug system (homepage, pricing, etc.) still render during
+   the rebuild. To be removed once every page uses BetsPlug tokens.
+   ────────────────────────────────────────────────────────────── */
+:root {
+  --color-bg-base: hsl(234 17% 6%);
+  --color-bg-elev: hsl(230 22% 8%);
+  --color-text-primary: #ededed;
+  --color-text-muted: #a3a9b8;
+  --color-text-faint: #6b7280;
+  --color-accent-green: hsl(142 71% 45%);
+  --color-accent-green-bright: hsl(142 76% 60%);
+  --color-accent-green-soft: hsl(142 71% 70%);
+  --color-accent-purple: hsl(271 91% 55%);
+  --color-accent-blue: hsl(217 91% 55%);
+}

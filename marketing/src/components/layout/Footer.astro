@@ -1,0 +1,223 @@
+---
+/**
+ * Marketing Footer — 4-column grid (Brand / Product / Resources /
+ * Legal) with mandatory disclaimer block. See
+ * docs/specs/04-design-system.md → "FOOTER" and
+ * docs/specs/00-context-and-goals.md → "FOOTER DISCLAIMER".
+ *
+ * The disclaimer must appear on every page. It explicitly states
+ * BetsPlug is not a bookmaker — required by the compliance
+ * positioning in the spec.
+ */
+import {
+  defaultLocale,
+  getLocalizedPath,
+  isLocale,
+  type Locale,
+} from "@/lib/i18n";
+
+interface Props {
+  locale?: Locale;
+}
+
+const localsLocale = (Astro.locals as { locale?: unknown })?.locale;
+const locale: Locale =
+  Astro.props.locale ?? (isLocale(localsLocale) ? localsLocale : defaultLocale);
+
+const year = new Date().getFullYear();
+
+// Per-locale footer copy — minimal dictionary for foundation pass.
+// Will be replaced by getContent("shared/footer", locale) once that
+// content file exists.
+type FooterDict = {
+  product: string; resources: string; legal: string;
+  predictions: string; pricing: string; howItWorks: string; trackRecord: string;
+  methodology: string; freeVsPaid: string; telegram: string;
+  learn: string; about: string; faq: string; contact: string;
+  privacy: string; terms: string; cookies: string; responsibleGambling: string;
+  disclaimer: string;
+  copyright: string;
+};
+
+const dict: Record<Locale, FooterDict> = {
+  en: {
+    product: "Product", resources: "Resources", legal: "Legal",
+    predictions: "Predictions", pricing: "Pricing", howItWorks: "How it works", trackRecord: "Track record",
+    methodology: "Methodology", freeVsPaid: "Free vs paid", telegram: "Telegram",
+    learn: "Learn", about: "About", faq: "FAQ", contact: "Contact",
+    privacy: "Privacy", terms: "Terms", cookies: "Cookies", responsibleGambling: "Responsible play",
+    disclaimer: "BetsPlug provides statistical data and analysis for educational and informational purposes only. We are not a bookmaker, do not provide betting advice, do not facilitate wagering, and do not encourage betting. Any decision you make based on the information on this site is your own responsibility. Predictions are model outputs, not guarantees of future results. 18+ — play responsibly.",
+    copyright: "© {year} BetsPlug. All rights reserved.",
+  },
+  nl: {
+    product: "Product", resources: "Bronnen", legal: "Juridisch",
+    predictions: "Voorspellingen", pricing: "Prijzen", howItWorks: "Hoe het werkt", trackRecord: "Track record",
+    methodology: "Methodologie", freeVsPaid: "Gratis vs betaald", telegram: "Telegram",
+    learn: "Leren", about: "Over ons", faq: "Veelgestelde vragen", contact: "Contact",
+    privacy: "Privacy", terms: "Voorwaarden", cookies: "Cookies", responsibleGambling: "Verantwoord spelen",
+    disclaimer: "BetsPlug biedt statistische data en analyse uitsluitend voor educatieve en informatieve doeleinden. Wij zijn geen bookmaker, geven geen gokadvies, faciliteren geen weddenschappen en moedigen gokken niet aan. Beslissingen op basis van informatie op deze site zijn je eigen verantwoordelijkheid. Voorspellingen zijn modeluitkomsten, geen garanties op toekomstige resultaten. 18+ — speel verantwoord.",
+    copyright: "© {year} BetsPlug. Alle rechten voorbehouden.",
+  },
+  de: {
+    product: "Produkt", resources: "Ressourcen", legal: "Rechtliches",
+    predictions: "Vorhersagen", pricing: "Preise", howItWorks: "Wie es funktioniert", trackRecord: "Track Record",
+    methodology: "Methodik", freeVsPaid: "Kostenlos vs. bezahlt", telegram: "Telegram",
+    learn: "Lernen", about: "Über uns", faq: "Häufige Fragen", contact: "Kontakt",
+    privacy: "Datenschutz", terms: "AGB", cookies: "Cookies", responsibleGambling: "Verantwortungsvolles Spielen",
+    disclaimer: "BetsPlug stellt statistische Daten und Analysen ausschließlich zu Bildungs- und Informationszwecken bereit. Wir sind kein Buchmacher, geben keine Wettberatung, vermitteln keine Wetten und ermutigen nicht zum Glücksspiel. Entscheidungen auf Basis dieser Informationen liegen in Ihrer eigenen Verantwortung. Vorhersagen sind Modellergebnisse, keine Garantien für zukünftige Ergebnisse. 18+ — spielen Sie verantwortungsbewusst.",
+    copyright: "© {year} BetsPlug. Alle Rechte vorbehalten.",
+  },
+  fr: {
+    product: "Produit", resources: "Ressources", legal: "Mentions légales",
+    predictions: "Pronostics", pricing: "Tarifs", howItWorks: "Comment ça marche", trackRecord: "Track record",
+    methodology: "Méthodologie", freeVsPaid: "Gratuit vs payant", telegram: "Telegram",
+    learn: "Apprendre", about: "À propos", faq: "FAQ", contact: "Contact",
+    privacy: "Confidentialité", terms: "Conditions", cookies: "Cookies", responsibleGambling: "Jeu responsable",
+    disclaimer: "BetsPlug fournit des données et analyses statistiques uniquement à des fins éducatives et informatives. Nous ne sommes pas un bookmaker, ne donnons pas de conseils de pari, ne facilitons pas de mises et n'encourageons pas le jeu. Toute décision prise sur la base des informations de ce site relève de votre seule responsabilité. Les prédictions sont des résultats de modèle, pas des garanties. 18+ — jouez responsable.",
+    copyright: "© {year} BetsPlug. Tous droits réservés.",
+  },
+  es: {
+    product: "Producto", resources: "Recursos", legal: "Legal",
+    predictions: "Pronósticos", pricing: "Precios", howItWorks: "Cómo funciona", trackRecord: "Track record",
+    methodology: "Metodología", freeVsPaid: "Gratis vs pago", telegram: "Telegram",
+    learn: "Aprender", about: "Sobre nosotros", faq: "Preguntas frecuentes", contact: "Contacto",
+    privacy: "Privacidad", terms: "Términos", cookies: "Cookies", responsibleGambling: "Juego responsable",
+    disclaimer: "BetsPlug ofrece datos y análisis estadísticos únicamente con fines educativos e informativos. No somos una casa de apuestas, no damos consejos de apuestas, no facilitamos apuestas ni fomentamos el juego. Cualquier decisión basada en la información de este sitio es responsabilidad tuya. Los pronósticos son resultados de modelos, no garantías. 18+ — juega responsable.",
+    copyright: "© {year} BetsPlug. Todos los derechos reservados.",
+  },
+  it: {
+    product: "Prodotto", resources: "Risorse", legal: "Legale",
+    predictions: "Pronostici", pricing: "Prezzi", howItWorks: "Come funziona", trackRecord: "Track record",
+    methodology: "Metodologia", freeVsPaid: "Gratis vs a pagamento", telegram: "Telegram",
+    learn: "Imparare", about: "Chi siamo", faq: "FAQ", contact: "Contatti",
+    privacy: "Privacy", terms: "Termini", cookies: "Cookie", responsibleGambling: "Gioco responsabile",
+    disclaimer: "BetsPlug fornisce dati e analisi statistiche solo a scopo educativo e informativo. Non siamo un bookmaker, non forniamo consigli sulle scommesse, non facilitiamo scommesse e non incoraggiamo il gioco. Qualsiasi decisione presa in base alle informazioni di questo sito è di tua esclusiva responsabilità. I pronostici sono output di modelli, non garanzie. 18+ — gioca responsabilmente.",
+    copyright: "© {year} BetsPlug. Tutti i diritti riservati.",
+  },
+};
+
+const t = dict[locale];
+
+const productLinks = [
+  { href: getLocalizedPath("predictions",  locale), label: t.predictions },
+  { href: getLocalizedPath("pricing",       locale), label: t.pricing },
+  { href: getLocalizedPath("how-it-works",  locale), label: t.howItWorks },
+  { href: getLocalizedPath("track-record",  locale), label: t.trackRecord },
+  { href: getLocalizedPath("methodology",   locale), label: t.methodology },
+  { href: getLocalizedPath("free-vs-paid",  locale), label: t.freeVsPaid },
+  { href: getLocalizedPath("telegram",      locale), label: t.telegram },
+];
+
+const resourceLinks = [
+  { href: getLocalizedPath("learn",   locale), label: t.learn },
+  { href: getLocalizedPath("about",   locale), label: t.about },
+  { href: getLocalizedPath("faq",     locale), label: t.faq },
+  { href: getLocalizedPath("contact", locale), label: t.contact },
+];
+
+const legalLinks = [
+  { href: getLocalizedPath("privacy",              locale), label: t.privacy },
+  { href: getLocalizedPath("terms",                locale), label: t.terms },
+  { href: getLocalizedPath("cookies",              locale), label: t.cookies },
+  { href: getLocalizedPath("responsible-gambling", locale), label: t.responsibleGambling },
+];
+---
+
+<footer class="bg-deep-navy-950 text-white-muted">
+  <div class="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8 py-16">
+    <!-- 4-column grid ─────────────────────────────────────── -->
+    <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <!-- Brand column -->
+      <div class="space-y-4">
+        <a
+          href={locale === defaultLocale ? "/" : `/${locale}/`}
+          class="inline-flex items-center"
+          aria-label="BetsPlug home"
+        >
+          <img src="/logo.webp" alt="BetsPlug" width="140" height="56" class="h-9 w-auto" />
+        </a>
+        <p class="text-sm leading-relaxed text-white-muted max-w-xs">
+          AI football predictions with a public, verifiable track record.
+        </p>
+      </div>
+
+      <!-- Product -->
+      <nav aria-label={t.product} class="space-y-3">
+        <h2 class="text-micro text-white-muted">{t.product}</h2>
+        <ul class="space-y-2 text-sm">
+          {productLinks.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                class="text-white-muted hover:text-white-pure transition-colors duration-150
+                       focus-visible:outline-none focus-visible:ring-2
+                       focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
+                       focus-visible:ring-offset-deep-navy-950 rounded-sm"
+              >
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <!-- Resources -->
+      <nav aria-label={t.resources} class="space-y-3">
+        <h2 class="text-micro text-white-muted">{t.resources}</h2>
+        <ul class="space-y-2 text-sm">
+          {resourceLinks.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                class="text-white-muted hover:text-white-pure transition-colors duration-150
+                       focus-visible:outline-none focus-visible:ring-2
+                       focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
+                       focus-visible:ring-offset-deep-navy-950 rounded-sm"
+              >
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <!-- Legal -->
+      <nav aria-label={t.legal} class="space-y-3">
+        <h2 class="text-micro text-white-muted">{t.legal}</h2>
+        <ul class="space-y-2 text-sm">
+          {legalLinks.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                class="text-white-muted hover:text-white-pure transition-colors duration-150
+                       focus-visible:outline-none focus-visible:ring-2
+                       focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
+                       focus-visible:ring-offset-deep-navy-950 rounded-sm"
+              >
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Disclaimer ────────────────────────────────────────── -->
+    <div class="mt-12 pt-8 border-t border-white-pure/10">
+      <p class="text-xs leading-relaxed text-white-muted max-w-4xl">
+        {t.disclaimer}
+      </p>
+    </div>
+
+    <!-- Bottom strip ──────────────────────────────────────── -->
+    <div class="mt-6 flex flex-col gap-2 text-xs text-white-muted sm:flex-row sm:items-center sm:justify-between">
+      <p>{t.copyright.replace("{year}", String(year))}</p>
+      <p
+        aria-label="18 plus"
+        class="inline-flex h-6 w-fit items-center rounded-full border border-white-pure/15 px-2 font-bold tracking-wider"
+      >
+        18+
+      </p>
+    </div>
+  </div>
+</footer>

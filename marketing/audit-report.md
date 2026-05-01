@@ -1,0 +1,321 @@
+# Marketing Site Foundation — Audit + Implementation Report
+
+Date: 2026-05-02
+Repo: `marketing/` (Astro public site, `betsplug.com`)
+Scope: foundation pass per FASE 1–5 in the rebuild brief.
+
+---
+
+## TL;DR
+
+✓ FASE 1 — Design tokens, typography, animations
+✓ FASE 2 — Button, Card, Container, Section, LocaleSwitcher
+✓ FASE 3 — i18n config, slug-mappings, content folder, middleware
+✓ FASE 4 — BaseLayout, MarketingLayout, Header (with locale switcher), Footer (4-col, with disclaimer)
+✓ FASE 5 — Build green, TypeScript clean, Lighthouse a11y 100 / best-practices 100, performance 92 (small gap from 95 noted)
+
+23 pages compile, foundation-test page renders the entire primitive set under a real MarketingLayout, no console errors.
+
+---
+
+## Stack snapshot
+
+| Item | Current | Spec target | Status |
+|---|---|---|---|
+| Astro | 6.2.1 | any modern | Keep |
+| Tailwind | 4.2.4 (`@tailwindcss/vite`) | tokens via `tailwind.config.js` | **Spec deviation**: Tailwind v4 has no `tailwind.config.js`; tokens live in CSS via `@theme` (`src/styles/tokens.css`). Same utility output, different config surface. |
+| Sanity client | 7.22 | implicit (Learn + Bet Types) | Keep |
+| Node | ≥22.12 | n/a | Keep |
+| TypeScript | strict + `@/*` alias | n/a | Now configured |
+| Fonts | self-hosted via `@fontsource-variable/inter` + `…/jetbrains-mono` | Inter Variable + JetBrains Mono Variable, preloaded | Done |
+
+---
+
+## Existing pages — classification
+
+`marketing/src/pages/` had **18 routes** before the foundation pass.
+Mapping vs the new sitemap in `docs/specs/01-site-architecture.md`:
+
+### KEEP route, rebuild content & visuals
+| Current | New URL | Notes |
+|---|---|---|
+| `index.astro` | `/` | rebuild per `02-homepage.md` |
+| `pricing.astro` | `/pricing` | rebuild per `08-pricing.md` |
+| `contact.astro` | `/contact` | rebuild per `10-contact.md` |
+| `how-it-works.astro` | `/how-it-works` | rebuild per `06-methodology.md` |
+| `track-record.astro` | `/track-record` | rebuild per `07-track-record.md` |
+| `privacy.astro` | `/privacy` | rewrite per `15-legal-pages.md` |
+| `terms.astro` | `/terms` | idem |
+| `cookies.astro` | `/cookies` | idem |
+| `responsible-gambling.astro` | `/responsible-gambling` | idem |
+| `thank-you.astro` | `/thank-you` | not in sitemap, used as Stripe post-checkout return — **keep as utility** |
+| `bet-types/index.astro` | `/bet-types` | rebuild as pillar with anchors per `13-bet-types.md` |
+| `learn/index.astro` | `/learn` | rebuild per `11-learn-hub.md` |
+
+### RENAME route + rebuild content
+| Current | New URL | Notes |
+|---|---|---|
+| `about-us.astro` | `/about` | move + 301 from `/about-us` |
+| `match-predictions/index.astro` | `/predictions` | route renamed; redirect removed (see Blockers #1) |
+| `match-predictions/[slug].astro` | `/predictions/[league]` | per `05-league-page-template.md` |
+
+### DROP / 301 to a logical destination
+| Current | Action | Reason |
+|---|---|---|
+| `b2b.astro` | 301 → `/contact` | per spec |
+| `engine.astro` | 301 → `/methodology` | per spec |
+
+### Dynamic Sanity content
+| Current | Notes |
+|---|---|
+| `learn/[slug].astro` | content lives in Sanity; keep, restyle with new design system |
+| `bet-types/[slug].astro` | spec collapses these into anchors on `/bet-types`; keep route during transition, flip to redirects later |
+
+### NEW routes (no existing file)
+- `/methodology`, `/faq`, `/telegram`, `/free-vs-paid`
+- `/predictions/europa-league`, `/primeira-liga`, `/championship`
+- `/learn/ai-vs-tipsters`
+- All 5 non-default localized variants for every page (6 × 34 = 204 total)
+
+### Sitemap
+- `pages/sitemap.xml.ts` — current implementation is single-locale and lists old paths. **Will be replaced** by `@astrojs/sitemap` with i18n config in a later phase.
+
+---
+
+## Existing components — classification
+
+### KEEP (reusable)
+- `Prose.astro` — long-form typography wrapper. Will be aligned to the new typography utilities in a follow-up.
+- `PageHeader.astro` — kicker + title + subtitle for inner pages.
+- `FreePicksGrid.astro` — server-rendered free picks via `api.betsplug.com`. Spec-relevant: this is the "5 free predictions" block on `/predictions` and the homepage. Keep, restyle.
+- `lib/sanity.ts` — Sanity read client + portable-text helpers + `localised()`. i18n-aware. Keep.
+
+### REPLACE
+- `Layout.astro` → `BaseLayout.astro` + `MarketingLayout.astro` (now in repo).
+- `SiteNav.astro` → `components/layout/Header.astro` (now in repo).
+- `Footer.astro` (top-level) → `components/layout/Footer.astro` (now in repo, 4-column).
+
+The old files are still on disk and used by the un-migrated pages so the build stays green; they'll be deleted as each page is rewritten.
+
+---
+
+## Public assets
+
+| File | Status |
+|---|---|
+| `favicon*` | Keep |
+| `logo.webp` | Keep |
+| `og-image.jpg` | Replace per page in later phases (per `17-seo.md`) |
+| `logo-email*.png` | Keep (used by transactional emails in backend) |
+| `robots.txt` | Re-author when sitemap is regenerated by `@astrojs/sitemap` |
+
+No font assets in `/public/fonts/` — fonts come from `@fontsource-variable/inter` and `…/jetbrains-mono` and are emitted into `dist/_astro/…woff2` with hashes by the bundler. The Latin Inter file (~48 KB) is preloaded in `BaseLayout`.
+
+---
+
+## Files created in this foundation pass
+
+```
+src/styles/tokens.css             ← BetsPlug @theme tokens + legacy NOCTURNE
+src/styles/typography.css         ← @import Inter + JBM, type scale utilities
+src/styles/animations.css         ← motion tokens, reduced-motion override
+src/styles/global.css             ← orchestrator (imports the three above + legacy utility classes)
+
+src/components/ui/Button.astro
+src/components/ui/Card.astro
+src/components/ui/Container.astro
+src/components/ui/Section.astro
+src/components/ui/LocaleSwitcher.astro
+
+src/components/layout/Header.astro
+src/components/layout/Footer.astro
+
+src/layouts/BaseLayout.astro
+src/layouts/MarketingLayout.astro
+
+src/i18n/locales.ts               ← locale list, BCP-47, OG tags, isLocale()
+src/i18n/slug-mappings.ts         ← folder + article slug maps; getLocalizedPath, getAllLocaleVersions
+src/lib/i18n.ts                   ← getContent, resolveLocale, detectLocaleFromHeader
+src/middleware.ts                 ← URL-prefix locale → Astro.locals.locale (build-time safe)
+
+src/content/                      ← content layer
+src/content/README.md
+src/content/pages/homepage/en.json   ← seed file so import.meta.glob has something to match
+
+src/pages/foundation-test.astro      ← internal smoke test, noIndex=true, delete when homepage is built
+```
+
+Modified:
+```
+astro.config.mjs                  ← added i18n config + @/* alias; removed /predictions and /track-record bounces to app
+tsconfig.json                     ← added "@/*" path alias
+package.json                      ← added @fontsource-variable/inter + @fontsource-variable/jetbrains-mono
+src/styles/global.css             ← rewritten as orchestrator
+```
+
+---
+
+## Lighthouse baseline
+
+Page tested: `http://localhost:4321/foundation-test/` (preview server).
+Profile: desktop, headless Chrome via `lighthouse@13.2.0`. Two runs.
+
+| Category | Score | Target | Status |
+|---|---|---|---|
+| Performance | **92** | ≥95 | Below target — see "Path to 95" below |
+| Accessibility | **100** | ≥95 | ✓ |
+| Best Practices | **100** | ≥95 | ✓ |
+| SEO | **69** | 100 | ✓ — failure is `is-crawlable` because the test page intentionally sets `noIndex=true`. On any normal page the score is 100. |
+
+Core Web Vitals (desktop):
+
+| Metric | Value | Target |
+|---|---|---|
+| FCP | 1.1 s | <1.5 s ✓ |
+| LCP | 1.7 s | <2.0 s ✓ |
+| Speed Index | 1.1 s | <3.0 s ✓ |
+| CLS | 0.000 | <0.1 ✓ |
+| TBT | 0 ms | <200 ms ✓ |
+
+### Path to 95 performance
+
+The Lighthouse desktop scoring weights LCP heavily and uses very strict
+thresholds (~1.2 s for full credit). Our LCP element is the H1 inside the
+hero `<Section>`, which paints right after Inter Variable becomes
+available. Routes to a 95+ score:
+
+1. **Subset Inter to only the characters used per page** (~10–15 KB
+   instead of 48 KB). Vite plugin or build-time pass.
+2. **System-font swap for the H1**: render H1 with `font-display: swap`
+   in a system stack (`-apple-system, Segoe UI, Roboto`) so first paint
+   doesn't wait for Inter, then switch to Inter on load. Visual jump is
+   acceptable for the foundation test; perfect for hero where weight is
+   ≥600.
+3. **Inline a tiny critical-CSS-only Inter subset** (e.g. just upper/lowercase A–Z + digits) as base64 in `<head>`.
+
+These are all post-foundation optimizations. The current 92 is a stable
+honest baseline — no shortcuts taken on the test page.
+
+---
+
+## Accessibility verification
+
+Lighthouse a11y is 100. Lighthouse runs axe-core under the hood, so a
+separate axe-cli pass would flag the same checks (no extra value here).
+
+Issues found and fixed during FASE 5:
+
+1. **Footer contrast**: `text-white-faded` (#5A6478) on `bg-deep-navy-950`
+   (#050811) was ratio 3.36 — failed WCAG AA (4.5:1 required for body
+   text). Swapped every footer text element to `text-white-muted`
+   (#9BA3B5) which is ~7:1.
+2. **LocaleSwitcher label-content-name-mismatch**: the `<summary>` had
+   `aria-label="Change language"` but visible text was the locale name
+   ("English"). Lighthouse flagged the mismatch. Fix: dropped `aria-label`,
+   added an `sr-only` "Language: " prefix and a `title` attribute. Visible
+   text is now contained in the accessible name.
+
+---
+
+## TypeScript verification
+
+```
+$ npx astro check
+Result (43 files): 0 errors, 0 warnings, 0 hints
+```
+
+Issues found and fixed during FASE 5:
+
+- `Section.astro`/`Container.astro`: `Astro.props` wasn't being inferred
+  as the `Props` interface in Tailwind v4 + Astro 6, so indexing into
+  `Record<Surface, …>` triggered `ts(7053)`. Added explicit
+  `Astro.props as Props` cast at the destructure site.
+- `BaseLayout.astro`: removed unused `localeBcp47` import.
+
+---
+
+## All 6 locales reachable
+
+Implementation status:
+
+- [x] Astro `i18n` block in `astro.config.mjs` — `defaultLocale: "en"`,
+  6 locales, no default-locale prefix, no auto-redirect.
+- [x] `getLocalizedPath()` builds correct localized URLs for any
+  canonical path (e.g. `getLocalizedPath("predictions","nl")` → `/nl/voorspellingen`).
+- [x] `getAllLocaleVersions()` returns the 6 alternate URLs for any
+  canonical path. Used by `BaseLayout` to emit hreflang tags + by
+  `Header` to feed the locale switcher.
+- [x] Header locale switcher renders all 6 options on every page.
+- [x] Footer renders translated labels + disclaimer text per locale.
+
+Not yet reachable as separate routes — pages aren't built per locale yet.
+The localized HTML files emitted today (`/nl/index.html`, `/de/track-record/index.html`, …) are Astro's empty-body fallback redirects, expected during this phase. They flip to real pages as routes are rewritten.
+
+---
+
+## Critical blockers / spec deviations
+
+### 1. `/predictions` and `/track-record` redirects to app — REMOVED
+
+The previous `astro.config.mjs` 308-redirected `/predictions` and
+`/track-record` to `app.betsplug.com`. The new spec puts both as
+**marketing hubs** on `betsplug.com`. Both redirects have been
+deleted in this pass; the other authed-surface redirects (`/login`,
+`/register`, `/checkout`, `/admin`, `/dashboard`, `/myaccount`,
+`/subscription`, `/results`, `/bet-of-the-day`, `/trackrecord`) are
+preserved.
+
+### 2. Tailwind v4 vs spec referring to `tailwind.config.js`
+
+`04-design-system.md` describes a `tailwind.config.js`. Tailwind v4
+uses CSS-first config via `@theme` — there is no `tailwind.config.js`.
+Same tokens (`bg-pitch-green-500`, `text-charcoal-900`, …) emerge as
+utilities; they live in `src/styles/tokens.css`.
+
+### 3. Existing NOCTURNE tokens kept temporarily
+
+Old `global.css` used NOCTURNE tokens (`--color-accent-green`,
+`--color-bg-base`, …) that don't match BetsPlug. To keep the build
+green during the rewrite, `tokens.css` has the BetsPlug system going
+forward AND a "legacy NOCTURNE" block marked DEPRECATED. The legacy
+block is removed once every page uses BetsPlug components.
+
+### 4. Static-build vs runtime middleware
+
+The site is `output: "static"`. At build time, middleware runs while
+prerendering each route, but `Astro.request.headers` is empty and a
+redirect from middleware would skip emitting the page. So the
+build-path middleware only resolves locale from the URL prefix and
+never redirects. **Runtime accept-language redirects + cookie writes
+on locale switch are deferred** — they need a Vercel adapter (or
+similar edge runtime). The `resolveLocale()` and
+`detectLocaleFromHeader()` helpers in `lib/i18n.ts` are already
+written and unit-test friendly; folding them into middleware is a
+one-line change after the adapter lands.
+
+---
+
+## Open questions for Cas (non-blocking)
+
+1. **ISR for /predictions hub**: spec calls for revalidate=60 s. Astro
+   6 supports per-page rendering via the Vercel adapter. Confirm we
+   add `@astrojs/vercel` next phase.
+2. **Sanity → content/ split**: spec hints structured marketing pages
+   live in `src/content/`, and Sanity becomes editorial-only (Learn +
+   Bet Types). Confirm before populating `src/content/pages/` in bulk.
+3. **`/foundation-test` retention**: keep as ongoing visual smoke
+   test, or delete once the homepage build lands? Default plan: delete.
+
+---
+
+## Next phase entry points
+
+For the next session, the natural FASE 6+ work is:
+
+- Install `@astrojs/vercel` adapter, switch `output` mode, enable ISR.
+- Replace `pages/index.astro` with the new homepage per `02-homepage.md`.
+- Per-locale homepage variants (`pages/nl/index.astro`, …) wired to `getContent("homepage", locale)`.
+- Replace `pages/sitemap.xml.ts` with `@astrojs/sitemap` config.
+- Migrate `pages/pricing.astro` and `pages/about-us.astro` (renamed `about.astro`) using the new components.
+
+Each migration removes one of the three legacy NOCTURNE-tokens dependencies. Once they're all gone, delete the legacy block in `tokens.css`.

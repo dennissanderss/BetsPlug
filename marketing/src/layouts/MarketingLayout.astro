@@ -1,0 +1,50 @@
+---
+/**
+ * MarketingLayout — wraps BaseLayout with the public-site Header
+ * and Footer. Use this for every marketing page (homepage,
+ * predictions, pricing, learn, etc.).
+ *
+ * Pages that don't need the standard chrome (post-checkout
+ * thank-you, custom 404) can use BaseLayout directly.
+ *
+ * @prop  Inherits all BaseLayout props (title, description, canonical, …).
+ *
+ * Slots:
+ *   default - main content. Wrap in <Container> for max-width control.
+ *   head    - extra <head> entries (per-page schema.org JSON-LD).
+ */
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer.astro";
+import {
+  defaultLocale,
+  isLocale,
+  type Locale,
+} from "@/lib/i18n";
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  canonicalPath?: string;
+  noIndex?: boolean;
+}
+
+const { canonicalPath = "/", ...rest } = Astro.props;
+
+const localsLocale = (Astro.locals as { locale?: unknown })?.locale;
+const locale: Locale = isLocale(localsLocale) ? localsLocale : defaultLocale;
+---
+
+<BaseLayout {...rest} canonicalPath={canonicalPath}>
+  <slot name="head" slot="head" />
+
+  <Header locale={locale} canonicalPath={canonicalPath} />
+
+  <main id="main">
+    <slot />
+  </main>
+
+  <Footer locale={locale} />
+</BaseLayout>

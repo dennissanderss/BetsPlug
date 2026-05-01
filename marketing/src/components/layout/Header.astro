@@ -1,0 +1,201 @@
+---
+/**
+ * Marketing Header — sticky top, deep-navy + backdrop-blur, with
+ * primary nav, locale switcher, and primary CTA. See
+ * docs/specs/04-design-system.md → "NAVIGATION HEADER".
+ *
+ * The component derives the locale from Astro.locals (set by
+ * middleware) or props, then builds nav links + locale-switcher
+ * versions using lib/i18n.ts. All paths in the rendered HTML are
+ * already-localized — the component is the only place that knows
+ * about per-locale slugs.
+ *
+ * Mobile: a JS-free <details> reveals the nav as a vertical sheet.
+ */
+import {
+  defaultLocale,
+  getAllLocaleVersions,
+  getLocalizedPath,
+  isLocale,
+  type Locale,
+} from "@/lib/i18n";
+import LocaleSwitcher from "@/components/ui/LocaleSwitcher.astro";
+import Button from "@/components/ui/Button.astro";
+
+interface Props {
+  /** Override the locale detected from Astro.locals. */
+  locale?: Locale;
+  /** Canonical (EN) path of the current page, e.g. "/predictions". */
+  canonicalPath?: string;
+}
+
+const localsLocale = (Astro.locals as { locale?: unknown })?.locale;
+const locale: Locale =
+  Astro.props.locale ?? (isLocale(localsLocale) ? localsLocale : defaultLocale);
+
+const canonicalPath = Astro.props.canonicalPath ?? "/";
+const localeVersions = getAllLocaleVersions(canonicalPath);
+
+// Nav labels — minimal in-component dictionary for the foundation
+// pass. Once shared/header.json content files exist (FASE 3+ work),
+// this will be replaced with `getContent("shared/header", locale)`.
+const navLabels: Record<Locale, Record<string, string>> = {
+  en: { predictions: "Predictions", howItWorks: "How it works", pricing: "Pricing", trackRecord: "Track record", learn: "Learn", login: "Log in", cta: "Get started" },
+  nl: { predictions: "Voorspellingen", howItWorks: "Hoe het werkt", pricing: "Prijzen", trackRecord: "Track record", learn: "Leren", login: "Inloggen", cta: "Aan de slag" },
+  de: { predictions: "Vorhersagen", howItWorks: "Wie es funktioniert", pricing: "Preise", trackRecord: "Track Record", learn: "Lernen", login: "Anmelden", cta: "Loslegen" },
+  fr: { predictions: "Pronostics", howItWorks: "Comment ça marche", pricing: "Tarifs", trackRecord: "Track record", learn: "Apprendre", login: "Connexion", cta: "Commencer" },
+  es: { predictions: "Pronósticos", howItWorks: "Cómo funciona", pricing: "Precios", trackRecord: "Track record", learn: "Aprender", login: "Iniciar sesión", cta: "Empezar" },
+  it: { predictions: "Pronostici", howItWorks: "Come funziona", pricing: "Prezzi", trackRecord: "Track record", learn: "Imparare", login: "Accedi", cta: "Inizia" },
+};
+
+const t = navLabels[locale];
+
+const navItems = [
+  { href: getLocalizedPath("predictions", locale),  label: t.predictions },
+  { href: getLocalizedPath("how-it-works", locale), label: t.howItWorks },
+  { href: getLocalizedPath("pricing", locale),       label: t.pricing },
+  { href: getLocalizedPath("track-record", locale),  label: t.trackRecord },
+  { href: getLocalizedPath("learn", locale),         label: t.learn },
+];
+
+const homeHref = locale === defaultLocale ? "/" : `/${locale}/`;
+const pricingHref = getLocalizedPath("pricing", locale);
+---
+
+<header
+  class="sticky top-0 z-40 w-full border-b border-white-pure/10
+         bg-deep-navy-900/80 backdrop-blur-md
+         supports-[backdrop-filter]:bg-deep-navy-900/70"
+>
+  <div class="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <!-- Brand ─────────────────────────────────────────────── -->
+    <a
+      href={homeHref}
+      class="inline-flex shrink-0 items-center gap-2
+             focus-visible:outline-none focus-visible:ring-2
+             focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
+             focus-visible:ring-offset-deep-navy-900 rounded-md"
+      aria-label="BetsPlug home"
+    >
+      <img
+        src="/logo.webp"
+        alt=""
+        width="140"
+        height="56"
+        class="h-8 w-auto sm:h-9"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <span class="sr-only">BetsPlug</span>
+    </a>
+
+    <!-- Desktop nav ─────────────────────────────────────────── -->
+    <nav
+      aria-label="Primary"
+      class="hidden lg:flex items-center gap-1"
+    >
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class="px-3 py-2 text-sm font-medium text-white-soft
+                 hover:text-white-pure rounded-md
+                 transition-colors duration-150
+                 focus-visible:outline-none focus-visible:ring-2
+                 focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
+                 focus-visible:ring-offset-deep-navy-900"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Right cluster ───────────────────────────────────────── -->
+    <div class="flex items-center gap-2">
+      <LocaleSwitcher
+        currentLocale={locale}
+        versions={localeVersions}
+        surface="dark"
+        class="hidden md:block"
+      />
+
+      <a
+        href="https://app.betsplug.com/login"
+        class="hidden md:inline-flex items-center h-11 px-3 text-sm
+               font-medium text-white-soft hover:text-white-pure
+               rounded-md transition-colors duration-150
+               focus-visible:outline-none focus-visible:ring-2
+               focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
+               focus-visible:ring-offset-deep-navy-900"
+      >
+        {t.login}
+      </a>
+
+      <Button href={pricingHref} variant="primary" size="sm" surface="dark">
+        {t.cta}
+      </Button>
+
+      <!-- Mobile menu trigger ─────────────────────────────── -->
+      <details class="lg:hidden relative">
+        <summary
+          class="list-none cursor-pointer inline-flex h-11 w-11 items-center
+                 justify-center rounded-md border border-white-pure/15
+                 text-white-soft hover:text-white-pure
+                 hover:border-white-pure/30 transition-colors
+                 focus-visible:outline-none focus-visible:ring-2
+                 focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2
+                 focus-visible:ring-offset-deep-navy-900"
+          aria-label="Open navigation menu"
+          aria-haspopup="true"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </summary>
+
+        <div
+          class="absolute right-0 top-[calc(100%+8px)] w-[calc(100vw-2rem)]
+                 max-w-[320px] rounded-xl border border-deep-navy-600
+                 bg-deep-navy-800 shadow-[var(--shadow-xl)] p-4 space-y-1"
+        >
+          <nav aria-label="Mobile" class="flex flex-col gap-1">
+            {navItems.map((item) => (
+              <a
+                href={item.href}
+                class="px-3 py-3 text-sm font-medium text-white-soft
+                       hover:text-white-pure hover:bg-white-pure/5 rounded-md"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          <div class="border-t border-deep-navy-600 my-2" />
+
+          <div class="md:hidden">
+            <LocaleSwitcher
+              currentLocale={locale}
+              versions={localeVersions}
+              surface="dark"
+              class="w-full"
+            />
+          </div>
+
+          <a
+            href="https://app.betsplug.com/login"
+            class="block px-3 py-3 text-sm font-medium text-white-soft
+                   hover:text-white-pure hover:bg-white-pure/5 rounded-md"
+          >
+            {t.login}
+          </a>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <style>
+    details > summary::-webkit-details-marker { display: none; }
+    details > summary::marker { content: ""; }
+  </style>
+</header>

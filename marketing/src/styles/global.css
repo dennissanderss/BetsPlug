@@ -1,43 +1,81 @@
+/* ──────────────────────────────────────────────────────────────
+   BetsPlug Marketing Site — global.css
+   Orchestrator. Loads design tokens, typography, animations.
+   See:
+     - docs/specs/04-design-system.md
+     - src/styles/tokens.css
+     - src/styles/typography.css
+     - src/styles/animations.css
+   ────────────────────────────────────────────────────────────── */
+
 @import "tailwindcss";
 
+@import "./tokens.css";
+@import "./typography.css";
+@import "./animations.css";
+
 /* ──────────────────────────────────────────────────────────────
-   NOCTURNE design tokens — kept in sync with frontend/src/app/globals.css
-   so the marketing site looks identical to the dashboard surface.
+   Document baseline
    ────────────────────────────────────────────────────────────── */
-@theme {
-  --color-bg-base: hsl(234 17% 6%);
-  --color-bg-elev: hsl(230 22% 8%);
-  --color-text-primary: #ededed;
-  --color-text-muted: #a3a9b8;
-  --color-text-faint: #6b7280;
 
-  --color-accent-green: hsl(142 71% 45%);          /* #22c55e */
-  --color-accent-green-bright: hsl(142 76% 60%);   /* #4ade80 */
-  --color-accent-green-soft: hsl(142 71% 70%);     /* #86efac */
-  --color-accent-purple: hsl(271 91% 55%);
-  --color-accent-blue: hsl(217 91% 55%);
-}
-
-/* Page background — radial blobs straight from NOCTURNE */
 html, body {
-  background: hsl(234 17% 6%);
-  color: var(--color-text-primary);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-feature-settings: "ss01", "cv11";
-  text-rendering: optimizeLegibility;
-}
-
-body {
-  background-image:
-    radial-gradient(ellipse 90% 55% at 5% -5%, hsl(142 71% 45% / 0.28), transparent 55%),
-    radial-gradient(ellipse 70% 75% at 100% 25%, hsl(271 91% 55% / 0.26), transparent 60%),
-    radial-gradient(ellipse 90% 45% at 50% 105%, hsl(217 91% 55% / 0.14), transparent 60%),
-    radial-gradient(ellipse 60% 40% at 20% 85%, hsl(142 71% 45% / 0.08), transparent 65%);
-  background-attachment: fixed;
+  background: var(--color-deep-navy-900);
+  color: var(--color-white-soft);
   min-height: 100vh;
 }
 
-/* Glass-panel surface — used on cards across NOCTURNE */
+body {
+  /* NOCTURNE-style ambient gradients still used by un-migrated pages.
+     Will move to per-section glow-blobs in BetsPlug components. */
+  background-image:
+    radial-gradient(ellipse 90% 55% at 5% -5%,  hsl(142 71% 45% / 0.18), transparent 55%),
+    radial-gradient(ellipse 70% 75% at 100% 25%, hsl(271 91% 55% / 0.16), transparent 60%),
+    radial-gradient(ellipse 90% 45% at 50% 105%, hsl(217 91% 55% / 0.10), transparent 60%);
+  background-attachment: fixed;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Skip-to-content link (a11y)
+   First focusable element on every page. Visually hidden until
+   focused via keyboard.
+   ────────────────────────────────────────────────────────────── */
+
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 16px;
+  background: var(--color-pitch-green-500);
+  color: var(--color-deep-navy-950);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  z-index: 100;
+  transition: top var(--motion-fast) var(--ease-out);
+}
+
+.skip-to-content:focus {
+  top: 16px;
+  outline: 2px solid var(--color-white-pure);
+  outline-offset: 2px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   Default focus ring — WCAG 2.1 AA
+   ────────────────────────────────────────────────────────────── */
+
+*:focus-visible {
+  outline: 2px solid var(--color-pitch-green-500);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: 2px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   LEGACY UTILITIES (DEPRECATED)
+   Kept until existing pages are migrated to BetsPlug components.
+   New code should use the Button / Card / etc. components in
+   src/components/ui/ instead of these classes.
+   ────────────────────────────────────────────────────────────── */
+
 .card-neon {
   position: relative;
   background: hsl(0 0% 100% / 0.04);
@@ -79,7 +117,6 @@ body {
   border: 1px solid hsl(142 76% 60%);
   transition: all 0.15s ease;
 }
-
 .btn-primary:hover {
   background: hsl(142 71% 70%);
   transform: translateY(-1px);
@@ -100,15 +137,12 @@ body {
   border: 1px solid hsl(0 0% 100% / 0.08);
   transition: all 0.15s ease;
 }
-
 .btn-ghost:hover {
   background: hsl(0 0% 100% / 0.04);
   color: var(--color-text-primary);
   border-color: hsl(0 0% 100% / 0.14);
 }
 
-/* Ambient glow blob — drop this with `aria-hidden` behind a section
-   to get the NOCTURNE colored mist look. */
 .glow-blob {
   position: absolute;
   pointer-events: none;

@@ -1,0 +1,112 @@
+/* ──────────────────────────────────────────────────────────────
+   Motion tokens + animation primitives
+   See docs/specs/04-design-system.md → "MOTION".
+
+   Athletic-fast motion. No slow elegant fades. Every animation
+   honors prefers-reduced-motion.
+   ────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Durations */
+  --motion-instant: 100ms;
+  --motion-fast:    150ms;  /* button hover */
+  --motion-default: 200ms;  /* card hover */
+  --motion-medium:  300ms;  /* accordion */
+  --motion-slow:    500ms;  /* page entry */
+
+  /* Easings */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Confidence bar ─────────────────────────────────────────── */
+
+@keyframes confidence-fill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(var(--confidence, 1)); }
+}
+
+.confidence-bar-fill {
+  transform-origin: left center;
+  animation: confidence-fill 800ms var(--ease-spring) forwards;
+}
+
+/* ── Live indicator pulse ───────────────────────────────────── */
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+
+.live-pulse {
+  animation: live-pulse 2s ease-in-out infinite;
+}
+
+/* ── Chevron slide ──────────────────────────────────────────── */
+
+.chevron-slide {
+  transition: transform var(--motion-fast) var(--ease-out);
+}
+
+.group:hover .chevron-slide,
+.peer:hover ~ .chevron-slide {
+  transform: translateX(4px);
+}
+
+/* ── Card hover ─────────────────────────────────────────────── */
+
+.card-hoverable {
+  transition:
+    transform     var(--motion-default) var(--ease-out),
+    border-color  var(--motion-default) var(--ease-out),
+    box-shadow    var(--motion-default) var(--ease-out);
+}
+
+.card-hoverable:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Button hover ───────────────────────────────────────────── */
+
+.btn-hoverable {
+  transition:
+    transform   var(--motion-fast) var(--ease-out),
+    filter      var(--motion-fast) var(--ease-out),
+    box-shadow  var(--motion-fast) var(--ease-out),
+    background  var(--motion-fast) var(--ease-out),
+    border-color var(--motion-fast) var(--ease-out);
+}
+
+.btn-hoverable:hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
+
+.btn-hoverable:active {
+  transform: scale(0.99);
+  filter: brightness(0.95);
+}
+
+/* ── Reduced motion override ────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .btn-hoverable:hover,
+  .card-hoverable:hover {
+    transform: none;
+  }
+
+  .live-pulse,
+  .confidence-bar-fill {
+    animation: none;
+  }
+}

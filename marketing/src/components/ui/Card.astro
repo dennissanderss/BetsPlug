@@ -1,0 +1,81 @@
+---
+/**
+ * BetsPlug Card — surface primitive.
+ * See docs/specs/04-design-system.md → "CARD".
+ *
+ * @prop {"dark"|"light"=}  surface   Default "dark". Determines bg + border palette.
+ * @prop {string=}          href      When set, the card itself becomes a link with hover affordance.
+ * @prop {boolean=}         hoverable When true (default if href), adds the card-hoverable transition + lift.
+ * @prop {"sm"|"md"|"lg"=}  padding   Default "md" → p-6.
+ * @prop {string=}          class     Extra utility classes.
+ * @prop {string=}          ariaLabel For link-cards with non-text-only content.
+ *
+ * Slot: default — card body.
+ */
+type Surface = "dark" | "light";
+type Padding = "sm" | "md" | "lg";
+
+interface Props {
+  surface?: Surface;
+  href?: string;
+  hoverable?: boolean;
+  padding?: Padding;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  surface = "dark",
+  href,
+  hoverable,
+  padding = "md",
+  class: extraClass = "",
+  ariaLabel,
+} = Astro.props;
+
+const isLink = Boolean(href);
+const shouldHover = hoverable ?? isLink;
+
+const surfaceClasses: Record<Surface, string> = {
+  dark:
+    "bg-charcoal-700 border border-deep-navy-600 text-white-soft " +
+    "shadow-[var(--shadow-sm)] " +
+    (shouldHover
+      ? "hover:border-pitch-green-500/40 hover:shadow-[var(--shadow-md)]"
+      : ""),
+  light:
+    "bg-stadium-white-50 border border-stadium-white-200 text-charcoal-900 " +
+    "shadow-[var(--shadow-sm)] " +
+    (shouldHover
+      ? "hover:border-pitch-green-500/40 hover:shadow-[var(--shadow-md)]"
+      : ""),
+};
+
+const paddingClasses: Record<Padding, string> = {
+  sm: "p-4",
+  md: "p-6",
+  lg: "p-8",
+};
+
+const cls = [
+  "block rounded-xl",
+  surfaceClasses[surface],
+  paddingClasses[padding],
+  shouldHover ? "card-hoverable" : "",
+  isLink
+    ? "focus-visible:outline-none focus-visible:ring-2 " +
+      "focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2"
+    : "",
+  extraClass,
+].join(" ");
+---
+
+{isLink ? (
+  <a href={href} class={cls} aria-label={ariaLabel}>
+    <slot />
+  </a>
+) : (
+  <div class={cls}>
+    <slot />
+  </div>
+)}

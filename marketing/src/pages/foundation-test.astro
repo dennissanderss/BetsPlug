@@ -1,0 +1,122 @@
+---
+/**
+ * Foundation smoke-test page.
+ *
+ * Exercises every primitive that landed in FASE 1–4 so the build
+ * verifies the design system + layouts compile and render. NOT
+ * linked from anywhere; underscore prefix keeps it out of the live
+ * sitemap and search-engine discovery is blocked by robots.txt
+ * indirectly (no inbound links + future explicit Disallow line).
+ *
+ * Delete or fold into the homepage build once FASE 6+ work begins.
+ */
+import MarketingLayout from "@/layouts/MarketingLayout.astro";
+import Container from "@/components/ui/Container.astro";
+import Section   from "@/components/ui/Section.astro";
+import Card      from "@/components/ui/Card.astro";
+import Button    from "@/components/ui/Button.astro";
+---
+
+<MarketingLayout
+  title="Foundation test — BetsPlug"
+  description="Internal smoke test for the design system."
+  canonicalPath="/foundation-test"
+  noIndex={true}
+>
+  <Section surface="hero" spacing="xl" glow={true}>
+    <Container size="xl">
+      <p class="text-micro text-pitch-green-400">Foundation test</p>
+      <h1 class="mt-3 max-w-3xl text-white-pure">Design system primitives</h1>
+      <p class="mt-5 max-w-xl text-body-lg text-white-muted">
+        This page renders every component in <code class="font-mono text-white-soft">src/components/ui</code>
+        so the build validates the full token + layout chain.
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <Button variant="primary"   size="md" surface="dark">Primary CTA</Button>
+        <Button variant="secondary" size="md" surface="dark">Secondary</Button>
+        <Button variant="ghost"     size="md" surface="dark">Ghost</Button>
+      </div>
+    </Container>
+  </Section>
+
+  <Section surface="light" spacing="lg">
+    <Container size="lg">
+      <h2 class="text-charcoal-900">Cards on light</h2>
+      <p class="mt-2 text-body text-charcoal-700 max-w-xl">
+        Three Card variants with hover affordance.
+      </p>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Card surface="light">
+          <h3 class="text-h4 text-charcoal-900">Standard card</h3>
+          <p class="mt-2 text-body-sm text-charcoal-700">
+            Light surface. Use inside light-mode sections.
+          </p>
+        </Card>
+        <Card surface="light" href="/_foundation-test">
+          <h3 class="text-h4 text-charcoal-900">Link card</h3>
+          <p class="mt-2 text-body-sm text-charcoal-700">
+            Hoverable, focus-ring on tab.
+          </p>
+        </Card>
+        <Card surface="light" padding="lg">
+          <h3 class="text-h4 text-charcoal-900">Padded card</h3>
+          <p class="mt-2 text-body-sm text-charcoal-700">
+            <code class="text-data-inline text-charcoal-900">padding="lg"</code> = p-8.
+          </p>
+        </Card>
+      </div>
+
+      <div class="mt-10 flex flex-wrap gap-3">
+        <Button variant="primary"   size="sm" surface="light">Primary sm</Button>
+        <Button variant="secondary" size="md" surface="light">Secondary md</Button>
+        <Button variant="ghost"     size="lg" surface="light">Ghost lg</Button>
+      </div>
+    </Container>
+  </Section>
+
+  <Section surface="dark" spacing="lg">
+    <Container size="lg">
+      <h2 class="text-white-pure">Cards on dark</h2>
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Card surface="dark">
+          <p class="text-micro text-pitch-green-400">Stat</p>
+          <p class="mt-2 text-data-lg text-white-pure">30+</p>
+          <p class="text-body-sm text-white-muted">Leagues covered</p>
+        </Card>
+        <Card surface="dark">
+          <p class="text-micro text-pitch-green-400">Stat</p>
+          <p class="mt-2 text-data-lg text-white-pure">6</p>
+          <p class="text-body-sm text-white-muted">Languages</p>
+        </Card>
+        <Card surface="dark">
+          <p class="text-micro text-pitch-green-400">Stat</p>
+          <p class="mt-2 text-data-lg text-white-pure">100%</p>
+          <p class="text-body-sm text-white-muted">Public track record</p>
+        </Card>
+      </div>
+    </Container>
+  </Section>
+
+  <Section surface="conversion" spacing="xl">
+    <Container size="md">
+      <h2 class="text-white-pure">Type scale check</h2>
+      <p class="mt-2 text-body-lg text-white-muted">
+        H1, H2, H3, body, micro and data display side by side.
+      </p>
+
+      <div class="mt-8 space-y-3">
+        <h1 class="text-white-pure">H1 hero size</h1>
+        <h2 class="text-white-pure">H2 section size</h2>
+        <h3 class="text-white-pure">H3 subsection size</h3>
+        <h4 class="text-white-pure">H4 small heading</h4>
+        <p class="text-body-lg text-white-soft">Body large — section intros.</p>
+        <p class="text-body text-white-soft">Body — default running text.</p>
+        <p class="text-body-sm text-white-muted">Body small — captions and meta.</p>
+        <p class="text-micro text-pitch-green-400">Micro · uppercase eyebrow</p>
+        <p class="text-data-lg text-white-pure">42</p>
+        <p class="text-data text-white-pure">1,247</p>
+        <p class="text-data-inline text-white-soft">99.9%</p>
+      </div>
+    </Container>
+  </Section>
+</MarketingLayout>

@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "title": "AI Football Predictions | BetsPlug",
+    "description": "AI football predictions with a transparent, public track record. 30+ leagues, statistical models, predictions locked before kickoff.",
+    "ogImage": "/og-images/homepage-en.jpg"
+  },
+  "hero": {
+    "kicker": "Sports intelligence platform",
+    "title": "AI football predictions with a track record you can verify",
+    "subtitle": "One engine. One daily Pick of the Day. Every prediction logged before kickoff and graded afterwards.",
+    "primaryCta": { "label": "See today's predictions", "href": "/predictions" },
+    "secondaryCta": { "label": "How it works", "href": "/how-it-works" }
+  },
+  "_note": "Schema is provisional — fleshed out in the homepage build phase per docs/specs/02-homepage.md. This file exists so the i18n loader has something to glob."
+}

@@ -1,0 +1,157 @@
+---
+/**
+ * BaseLayout — bare HTML skeleton with meta + SEO + hreflang.
+ * Used by every page. MarketingLayout wraps this with header + footer.
+ *
+ * See:
+ *   - docs/specs/17-seo.md  → meta, OG, robots
+ *   - docs/specs/16-i18n.md → hreflang, locale OG tag
+ *   - docs/specs/18-performance.md → preload critical font
+ *
+ * @prop {string} title              <title> + og:title.
+ * @prop {string=} description       Meta description + OG. Falls back to global default.
+ * @prop {string=} canonical         Absolute canonical URL. If absent, derived from current
+ *                                   path. Per spec the EN form is canonical for every locale.
+ * @prop {string=} ogImage           Absolute or root-relative OG image URL (1200×630).
+ * @prop {string=} canonicalPath     Canonical (English) path of the current page, with leading
+ *                                   slash. Used to build hreflang tags. Defaults to "/" when
+ *                                   omitted — pass it on every page that has localized siblings.
+ * @prop {boolean=} noIndex          When true, sets robots="noindex,follow".
+ *
+ * Slots:
+ *   default - main page body.
+ *   head    - extra <head> entries (per-page schema.org JSON-LD, etc.).
+ */
+import "@/styles/global.css";
+import {
+  defaultLocale,
+  getAllLocaleVersions,
+  isLocale,
+  type Locale,
+} from "@/lib/i18n";
+import { localeOgTag } from "@/i18n/locales";
+
+// Resolve the bundled URL for the Inter Variable Latin WOFF2.
+// Vite emits the file with a hashed name and gives us back the
+// public path; we then preload it to cut the LCP cost.
+import interLatinUrl from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
+
+interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  canonicalPath?: string;
+  noIndex?: boolean;
+}
+
+const {
+  title,
+  description = "AI football predictions, daily Pick of the Day, and a public track record. Statistical analysis only — not a bookmaker. 18+, play responsibly.",
+  canonical,
+  ogImage = "/og-image.jpg",
+  canonicalPath = "/",
+  noIndex = false,
+} = Astro.props;
+
+// Locale comes from middleware (Astro.locals) when running on the
+// server. In static-build mode pages can also pass it explicitly via
+// `Astro.props`. Default to "en".
+const localsLocale = (Astro.locals as { locale?: unknown })?.locale;
+const locale: Locale = isLocale(localsLocale) ? localsLocale : defaultLocale;
+
+const SITE = "https://betsplug.com";
+
+// Per spec, canonical always points to the EN URL form regardless
+// of which locale is rendering. Build it from canonicalPath.
+const canonicalUrl =
+  canonical ?? `${SITE}${canonicalPath}`;
+
+// Resolve absolute OG image URL.
+const ogImageUrl = ogImage.startsWith("http") ? ogImage : `${SITE}${ogImage}`;
+
+// All locale alternates for hreflang.
+const localeVersions = getAllLocaleVersions(canonicalPath, SITE);
+const xDefaultUrl =
+  localeVersions.find((v) => v.locale === defaultLocale)?.url ?? canonicalUrl;
+
+const robotsContent = noIndex
+  ? "noindex, follow"
+  : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+---
+
+<!doctype html>
+<html lang={locale} dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#0A0E1F" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robotsContent} />
+
+    <!-- Canonical (always EN form per spec) -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Hreflang alternates -->
+    {localeVersions.map((v) => (
+      <link rel="alternate" hreflang={v.locale} href={v.url} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="BetsPlug — AI football predictions" />
+    <meta property="og:site_name" content="BetsPlug" />
+    <meta property="og:locale" content={localeOgTag[locale]} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:site" content="@betsplug" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+
+    <!-- Preconnect (Sanity CDN for portable-text images, API origin) -->
+    <link rel="preconnect" href="https://cdn.sanity.io" crossorigin />
+    <link rel="dns-prefetch" href="https://api.betsplug.com" />
+
+    <!-- Critical font preload (Inter Variable, Latin subset). -->
+    <link
+      rel="preload"
+      href={interLatinUrl}
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
+
+    <slot name="head" />
+
+    <!-- Locale used in current document, exposed for client scripts -->
+    <meta name="bp-locale" content={locale} />
+    <meta name="bp-canonical-path" content={canonicalPath} />
+  </head>
+  <body data-locale={locale} class="text-[16px] antialiased">
+    <a href="#main" class="skip-to-content">Skip to content</a>
+    <slot />
+  </body>
+</html>
+<style>
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>

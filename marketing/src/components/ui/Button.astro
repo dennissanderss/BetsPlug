@@ -1,0 +1,130 @@
+---
+/**
+ * BetsPlug Button — primary CTA element.
+ * See docs/specs/04-design-system.md → "BUTTON".
+ *
+ * @prop {string=}                                href     Renders as <a> when provided, <button> otherwise.
+ * @prop {"primary"|"secondary"|"ghost"=}        variant  Default "primary".
+ * @prop {"sm"|"md"|"lg"=}                       size     Default "md" (44px).
+ * @prop {"dark"|"light"=}                       surface  Surface the button sits on. "dark" (default) = on deep-navy. "light" = on stadium-white.
+ * @prop {"button"|"submit"|"reset"=}            type     Native button type when href is absent.
+ * @prop {boolean=}                              disabled
+ * @prop {boolean=}                              external Adds target=_blank + rel=noopener noreferrer when href is set.
+ * @prop {string=}                               class    Extra utility classes.
+ * @prop {string=}                               ariaLabel Override aria-label (use when text is icon-only).
+ *
+ * Slots:
+ *   default  - button label (text + optional inline icon).
+ *   leading  - icon before text (e.g. <Lock>).
+ *   trailing - icon after text (e.g. <ChevronRight>).
+ */
+type Variant = "primary" | "secondary" | "ghost";
+type Size    = "sm" | "md" | "lg";
+type Surface = "dark" | "light";
+
+interface Props {
+  href?: string;
+  variant?: Variant;
+  size?: Size;
+  surface?: Surface;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+  external?: boolean;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variant = "primary",
+  size = "md",
+  surface = "dark",
+  type = "button",
+  disabled = false,
+  external = false,
+  class: extraClass = "",
+  ariaLabel,
+} = Astro.props;
+
+const sizeClasses: Record<Size, string> = {
+  sm: "h-9  px-3   text-sm",     // 36px
+  md: "h-11 px-5   text-sm",     // 44px — WCAG min touch target
+  lg: "h-13 px-6   text-base",   // 52px
+};
+
+const baseClasses =
+  "btn-hoverable inline-flex items-center justify-center gap-2 " +
+  "font-semibold rounded-md whitespace-nowrap select-none " +
+  "focus-visible:outline-none focus-visible:ring-2 " +
+  "focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2 " +
+  "disabled:opacity-50 disabled:pointer-events-none";
+
+// Variant matrix — surface-aware so contrast stays correct on both
+// dark heroes and light content sections.
+const variantClasses: Record<Surface, Record<Variant, string>> = {
+  dark: {
+    primary:
+      "text-white-pure shadow-[var(--shadow-glow-pitch)] " +
+      "[background:var(--gradient-pitch)] " +
+      "focus-visible:ring-offset-deep-navy-900",
+    secondary:
+      "bg-transparent text-white-pure border border-white-pure/30 " +
+      "hover:border-white-pure/50 hover:bg-white-pure/5 " +
+      "focus-visible:ring-offset-deep-navy-900",
+    ghost:
+      "bg-transparent text-white-soft hover:text-white-pure " +
+      "hover:bg-white-pure/5 " +
+      "focus-visible:ring-offset-deep-navy-900",
+  },
+  light: {
+    primary:
+      "text-white-pure shadow-[var(--shadow-glow-pitch)] " +
+      "[background:var(--gradient-pitch)] " +
+      "focus-visible:ring-offset-stadium-white-50",
+    secondary:
+      "bg-transparent text-charcoal-900 border border-charcoal-900/20 " +
+      "hover:border-charcoal-900/40 hover:bg-charcoal-900/5 " +
+      "focus-visible:ring-offset-stadium-white-50",
+    ghost:
+      "bg-transparent text-charcoal-700 hover:text-charcoal-900 " +
+      "hover:bg-charcoal-900/5 " +
+      "focus-visible:ring-offset-stadium-white-50",
+  },
+};
+
+const cls = [
+  baseClasses,
+  sizeClasses[size],
+  variantClasses[surface][variant],
+  extraClass,
+].join(" ");
+
+const externalAttrs = external && href
+  ? { target: "_blank", rel: "noopener noreferrer" }
+  : {};
+---
+
+{href ? (
+  <a
+    href={href}
+    class={cls}
+    aria-label={ariaLabel}
+    aria-disabled={disabled || undefined}
+    {...externalAttrs}
+  >
+    <slot name="leading" />
+    <slot />
+    <slot name="trailing" />
+  </a>
+) : (
+  <button
+    type={type}
+    class={cls}
+    disabled={disabled}
+    aria-label={ariaLabel}
+  >
+    <slot name="leading" />
+    <slot />
+    <slot name="trailing" />
+  </button>
+)}

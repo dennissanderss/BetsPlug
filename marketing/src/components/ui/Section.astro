@@ -1,0 +1,84 @@
+---
+/**
+ * BetsPlug Section — full-bleed page section with light or dark
+ * surface, optional ambient glow blob, and consistent vertical
+ * spacing. Wrap content in a <Container> for max-width control.
+ *
+ * See docs/specs/04-design-system.md → "DEFAULT MODE: MIXED LIGHT/DARK"
+ * and "SPACING SYSTEM".
+ *
+ * @prop {"dark"|"light"|"hero"|"conversion"=}  surface  Default "light".
+ *   - "light"      → stadium-white-50 + charcoal-900 text
+ *   - "dark"       → deep-navy-900 + white-soft text
+ *   - "hero"       → radial gradient (deep-navy-700 → deep-navy-950)
+ *   - "conversion" → linear gradient (deep-navy-800 → deep-navy-950)
+ * @prop {"sm"|"md"|"lg"|"xl"=}  spacing  Vertical padding. Default "lg".
+ * @prop {boolean=}              glow     Adds a pitch-green ambient blob in the top-right.
+ * @prop {"section"|"div"|"article"|"aside"=} as  Default "section".
+ * @prop {string=}               class    Extra utility classes.
+ * @prop {string=}               ariaLabelledby  ID of an element that labels this section.
+ *
+ * Slot: default — section content.
+ */
+type Surface = "light" | "dark" | "hero" | "conversion";
+type Spacing = "sm" | "md" | "lg" | "xl";
+type Tag     = "section" | "div" | "article" | "aside";
+
+interface Props {
+  surface?: Surface;
+  spacing?: Spacing;
+  glow?: boolean;
+  as?: Tag;
+  class?: string;
+  ariaLabelledby?: string;
+}
+
+const {
+  surface = "light",
+  spacing = "lg",
+  glow = false,
+  as: Tag = "section",
+  class: extraClass = "",
+  ariaLabelledby,
+} = Astro.props as Props;
+
+const surfaceClasses: Record<Surface, string> = {
+  light:
+    "bg-stadium-white-50 text-charcoal-900",
+  dark:
+    "bg-deep-navy-900 text-white-soft",
+  hero:
+    "text-white-soft [background:var(--gradient-hero-dark)]",
+  conversion:
+    "text-white-soft [background:var(--gradient-conversion)]",
+};
+
+// 04-design-system → SPACING (mobile-first):
+// 16 (64px) mobile / 24 (96px) desktop is the default rhythm.
+const spacingClasses: Record<Spacing, string> = {
+  sm: "py-12 md:py-16",
+  md: "py-16 md:py-20",
+  lg: "py-16 md:py-24",
+  xl: "py-20 md:py-32",
+};
+
+const cls = [
+  "relative w-full overflow-hidden",
+  surfaceClasses[surface],
+  spacingClasses[spacing],
+  extraClass,
+].join(" ");
+---
+
+<Tag class={cls} aria-labelledby={ariaLabelledby}>
+  {glow && (
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute -top-32 right-[-10%] h-[480px] w-[480px] rounded-full opacity-40 blur-[80px]"
+      style="background: radial-gradient(circle, rgba(0,210,106,0.45) 0%, rgba(0,210,106,0) 70%);"
+    />
+  )}
+  <div class="relative">
+    <slot />
+  </div>
+</Tag>

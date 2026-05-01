@@ -1,0 +1,195 @@
+---
+/**
+ * BetsPlug LocaleSwitcher — native <details>/<summary> dropdown.
+ * Zero-JS. Each option is a real <a href>, so the swap also works
+ * with JavaScript disabled. See docs/specs/16-i18n.md → "LOCALE
+ * SWITCHER COMPONENT".
+ *
+ * Logic — computing the localized URL for each locale — lives in
+ * src/lib/i18n.ts → getAllLocaleVersions(). The header passes the
+ * resolved list in so this component stays presentation-only.
+ *
+ * @prop {string}                    currentLocale  e.g. "en"
+ * @prop {Array<{locale,url,name?}>} versions       One entry per locale.
+ *                                                  `name` is the human-readable label
+ *                                                  (e.g. "English", "Nederlands"). If
+ *                                                  omitted, falls back to the localeNames map below.
+ * @prop {"dark"|"light"=}           surface        Default "dark".
+ * @prop {string=}                   class
+ *
+ * Accessibility:
+ *   - <summary> is the disclosure trigger (44px tap target enforced).
+ *   - aria-current="true" on the active locale link.
+ *   - aria-label on the trigger names the action ("Change language").
+ *   - hreflang on each link declares the destination's language.
+ */
+interface LocaleVersion {
+  locale: string;
+  url: string;
+  name?: string;
+}
+
+type Surface = "dark" | "light";
+
+interface Props {
+  currentLocale: string;
+  versions: LocaleVersion[];
+  surface?: Surface;
+  class?: string;
+}
+
+const {
+  currentLocale,
+  versions,
+  surface = "dark",
+  class: extraClass = "",
+} = Astro.props;
+
+const localeNames: Record<string, string> = {
+  en: "English",
+  nl: "Nederlands",
+  de: "Deutsch",
+  fr: "Français",
+  es: "Español",
+  it: "Italiano",
+};
+
+const currentName =
+  versions.find((v) => v.locale === currentLocale)?.name
+  ?? localeNames[currentLocale]
+  ?? currentLocale.toUpperCase();
+
+const triggerClasses: Record<Surface, string> = {
+  dark:
+    "text-white-soft hover:text-white-pure border-white-pure/15 " +
+    "hover:border-white-pure/30 bg-deep-navy-800/60",
+  light:
+    "text-charcoal-700 hover:text-charcoal-900 border-charcoal-900/15 " +
+    "hover:border-charcoal-900/30 bg-stadium-white-50",
+};
+
+const panelClasses: Record<Surface, string> = {
+  dark:
+    "bg-deep-navy-800 border border-deep-navy-600 text-white-soft " +
+    "shadow-[var(--shadow-lg)]",
+  light:
+    "bg-stadium-white-50 border border-stadium-white-200 text-charcoal-900 " +
+    "shadow-[var(--shadow-lg)]",
+};
+---
+
+<details
+  class:list={[
+    "locale-switcher relative inline-block group",
+    extraClass,
+  ]}
+>
+  <summary
+    aria-haspopup="listbox"
+    title="Change language"
+    class:list={[
+      "list-none cursor-pointer select-none",
+      "inline-flex items-center gap-2 h-11 px-3 min-w-[44px]",
+      "text-sm font-medium rounded-md border",
+      "transition-colors duration-150",
+      "focus-visible:outline-none focus-visible:ring-2 " +
+        "focus-visible:ring-pitch-green-400 focus-visible:ring-offset-2",
+      triggerClasses[surface],
+    ]}
+  >
+    <svg
+      aria-hidden="true"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M2 12h20" />
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
+    <span class="sr-only">Language: </span>
+    <span>{currentName}</span>
+    <svg
+      aria-hidden="true"
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="transition-transform duration-200 group-open:rotate-180"
+    >
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </summary>
+
+  <ul
+    role="listbox"
+    aria-label="Available languages"
+    class:list={[
+      "absolute right-0 top-[calc(100%+8px)] z-50",
+      "min-w-[180px] py-1 rounded-lg",
+      panelClasses[surface],
+    ]}
+  >
+    {versions.map((v) => {
+      const label = v.name ?? localeNames[v.locale] ?? v.locale.toUpperCase();
+      const isActive = v.locale === currentLocale;
+      return (
+        <li role="none">
+          <a
+            href={v.url}
+            hreflang={v.locale}
+            role="option"
+            aria-current={isActive ? "true" : undefined}
+            aria-selected={isActive ? "true" : "false"}
+            class:list={[
+              "flex items-center justify-between gap-3 px-4 py-2.5",
+              "text-sm transition-colors duration-150",
+              "focus-visible:outline-none focus-visible:bg-pitch-green-500/10",
+              isActive
+                ? "font-semibold text-pitch-green-400"
+                : surface === "dark"
+                  ? "hover:bg-white-pure/5"
+                  : "hover:bg-charcoal-900/5",
+            ]}
+          >
+            <span>{label}</span>
+            {isActive && (
+              <svg
+                aria-hidden="true"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            )}
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</details>
+
+<style>
+  /* Hide the default disclosure marker on every browser. */
+  .locale-switcher > summary::-webkit-details-marker {
+    display: none;
+  }
+  .locale-switcher > summary::marker {
+    content: "";
+  }
+</style>
