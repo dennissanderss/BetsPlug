@@ -1,18 +1,16 @@
 import type { MetadataRoute } from "next";
 
 /**
- * Dynamic robots.txt — served at /robots.txt (2026-04-26 recovery)
+ * robots.txt for the Next.js project (app.betsplug.com).
  * ────────────────────────────────────────────────────────────
- * Indexability decisions:
- *   - 6 locale prefixes (en/nl/de/fr/es/it via root + /nl, /de, /fr,
- *     /es, /it) get full crawl access. EN sits unprefixed.
- *   - 10 parked locale prefixes get `noindex, follow` via the
- *     X-Robots-Tag header set in middleware. We do NOT block them
- *     here in robots.txt — Google needs to crawl the response to
- *     see the noindex header.
- *   - Authed / funnel paths are disallowed across ALL locale
- *     prefixes via `*` wildcards so a stray `/de/dashboard/` or
- *     `/ru/myaccount` is not crawled either.
+ * After the marketing/app split (2026-05-01) this Next.js project
+ * only serves the authenticated dashboard at app.betsplug.com.
+ * Marketing SEO is owned by the Astro project at betsplug.com,
+ * which ships its own /robots.txt and /sitemap.xml.
+ *
+ * Therefore we tell crawlers to stay out of everything here:
+ * Disallow: /. Saves crawl budget, prevents the dashboard surface
+ * from appearing in SERPs as duplicate content of betsplug.com.
  */
 
 const SITE_URL = "https://betsplug.com";
@@ -66,14 +64,16 @@ function withLocaleWildcards(paths: string[]): string[] {
 }
 
 export default function robots(): MetadataRoute.Robots {
+  // Block crawlers from the entire app.betsplug.com surface — the
+  // marketing project at betsplug.com is the canonical SEO target.
+  // The PRIVATE_PATHS list above is kept for archival reasons and
+  // in case this app ever serves public content again.
   return {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        disallow: withLocaleWildcards(PRIVATE_PATHS),
+        disallow: "/",
       },
     ],
-    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

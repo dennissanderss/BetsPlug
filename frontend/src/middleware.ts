@@ -42,6 +42,50 @@ import { parseLocalizedPath } from "@/i18n/routes";
 
 const PUBLIC_FILE = /\.(.*)$/;
 const CANONICAL_HOST = "betsplug.com";
+const APP_HOST = "app.betsplug.com";
+
+// Marketing paths that should NOT exist on the Next.js app anymore —
+// they live in the Astro project at betsplug.com after the
+// 2026-05-01 split. Visitors who land here (old bookmark, stale
+// search-engine result, accidental logo-click) get a 308 redirect
+// to the canonical Astro page.
+//
+// Match strategy:
+//   - exact: the leading path segment matches one of these names
+//   - includes locale prefix tolerance: /pricing AND /nl/pricing
+//   - subroute tolerance: /learn/foo, /match-predictions/bar
+const MARKETING_LEAFS = new Set<string>([
+  "about-us",
+  "b2b",
+  "bet-types",
+  "contact",
+  "cookies",
+  "engine",
+  "how-it-works",
+  "learn",
+  "match-predictions",
+  "pricing",
+  "privacy",
+  "responsible-gambling",
+  "terms",
+  "track-record",
+]);
+
+function marketingRedirectTarget(pathname: string): string | null {
+  // Strip optional locale prefix so /nl/pricing is treated as /pricing.
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments.length === 0) return null;
+  let head = segments[0];
+  let rest = segments.slice(1);
+  if (isLocale(head) && rest.length > 0) {
+    head = rest[0];
+    rest = rest.slice(1);
+  }
+  if (!MARKETING_LEAFS.has(head)) return null;
+  // Reconstruct without locale prefix → canonical Astro path.
+  const tail = rest.length ? `/${rest.join("/")}` : "";
+  return `https://${CANONICAL_HOST}/${head}${tail}`;
+}
 
 function applyIndexability(res: NextResponse, host: string | null): NextResponse {
   if (!host) return res;
@@ -130,6 +174,26 @@ export function middleware(req: NextRequest) {
     PUBLIC_FILE.test(pathname)
   ) {
     return applyIndexability(NextResponse.next(), host);
+  }
+
+  // ── Marketing paths on app.betsplug.com → 308 to betsplug.com ──
+  // After the marketing/app split the public site lives in the Astro
+  // project. The Next.js app should only serve the auth funnel +
+  // dashboard; any marketing path that slips through (old bookmark,
+  // stale logo-link, search index lag) hard-redirects to the Astro
+  // equivalent so users never see two competing brand surfaces.
+  // We apply this on the app subdomain AND the bare Vercel preview
+  // URLs so the test deploys behave the same way.
+  const bareHost = (host ?? "").split(":")[0].toLowerCase();
+  const isAppSurface =
+    bareHost === APP_HOST || bareHost.endsWith(".vercel.app");
+  if (isAppSurface) {
+    const target = marketingRedirectTarget(pathname);
+    if (target) {
+      const url = new URL(target);
+      url.search = search;
+      return NextResponse.redirect(url, 308);
+    }
   }
 
   const firstSegment = pathname.split("/").filter(Boolean)[0];
