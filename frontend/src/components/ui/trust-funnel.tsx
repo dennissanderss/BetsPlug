@@ -190,7 +190,7 @@ export function TrustFunnel() {
           </div>
           <div className="mt-4 flex justify-center">
             <Link
-              href={loc("/track-record")}
+              href="https://betsplug.com/track-record"
               className="inline-flex items-center gap-1.5 text-[11px] font-medium text-[#a3a9b8] underline-offset-4 transition-colors hover:text-[#ededed] hover:underline"
             >
               {t("trust.seeFullTrackRecord")}
@@ -217,7 +217,7 @@ export function TrustFunnel() {
             {t("trust.importantBody")}
           </p>
           <Link
-            href={loc("/track-record")}
+            href="https://betsplug.com/track-record"
             className="btn-primary mt-6 inline-flex items-center gap-2"
           >
             {t("trust.inspectFullData")}
